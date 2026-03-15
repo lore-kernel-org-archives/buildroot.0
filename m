@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB59F3027F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB1C6F3028C
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 135856147E;
-	Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71BE561489;
+	Sun, 15 Mar 2026 22:19:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JfPZ0fvW1jTO; Sun, 15 Mar 2026 22:19:52 +0000 (UTC)
+ id T5XZRbMhVJNf; Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A2061453
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 067A26147B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613189;
-	bh=VNcTeFHFPDnAstJ5cl361uL+OPUlf9a/owpBZckorws=;
+	s=default; t=1773613194;
+	bh=DacOf6ZkrUe98zddi/woPlErplv9i/8x9edzzdQ9c5o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EANdlJEvqYPgWomzuk452+v74GOcf0d/ovgMTJqR2iB9NkzsQAIxwwK4MdRxBvpn6
-	 5UZdINdJeRjCpUZhKg/nOBaSTvuRvoN2l2ZZmaeDLG7vVwRUxH84UUs+EH5TKBp3Wv
-	 KaRQiiDGIBzDuTenoAtUrRepXZpvQObYEc9lgUmdSDUAprWZtZb6NtpRXnhd9lZnpA
-	 3n6d/DE0glFZ2VzxXceJ5THcJAwXvWRmIu6f4zF72/iTYnMesuglvo6n3JtAc1xaZs
-	 70uZF0W7AzOCF+I0VAND8OrWkmr4qGYyNfV2Opu4KRq4o108UiMeY2AGmHO4QLJmWb
-	 CjtmTNvCG1MDA==
+	b=Bw+tt+LrZmwqtKGtsKC7/laaTNgx2EV9n4+4x7Sp4iyp5K+hdZ4Gmp5FWjxJHkmKF
+	 cLUxZp+VwG26vUAFU5CWA2NGAEMDxxbn7/grRI/RYohoSDtH3WrHSysKfcWeilbuXS
+	 s105E4Ixhs9+R2wck98U+bdDPeRphS9ROtws8Y/X2bl7evYM2WZQTNDHbYyvxQT1k5
+	 4jxm+mHSS6Sc+0y7BbtLquwdV8Ggvr/QRV70kL+bA8cHRQxi8nbBtr6UFw0HLrCa2d
+	 a6J7pRvgtNsRLzSazvgVWMhCWqGGtu1zlJxe9SKFFrq6lB6K30yad3xTzoF9MK9nYY
+	 H5CRIh+jpblZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3A2061453;
-	Sun, 15 Mar 2026 22:19:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 062CF1B2
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 067A26147B;
+	Sun, 15 Mar 2026 22:19:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E81C357
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF9D040B22
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 946B1610F7
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MDRtq2zS2qS6 for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EV_LWKzwHzAE for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23F0740B24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47FD861145
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23F0740B24
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47FD861145
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65FB08226F; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
+ id 8A85A82642; Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 351f4543cb5d9997bd66a1919ebd55e77cd7405e
-X-Git-Newrev: 48c3146af2a16480929e81f6e5250ed53c5e971b
+X-Git-Oldrev: 84e7b632d9a9afb24e787304d1c7d121a55d502b
+X-Git-Newrev: e974de86e26baef2aee47670e620eb124b0d7651
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221805.65FB08226F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-yamllint: bump version to
- 1.38.0
+Message-Id: <20260315221805.8A85A82642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zopfli: bump version to
+ 0.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48c3146af2a16480929e81f6e5250ed53c5e971b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e974de86e26baef2aee47670e620eb124b0d7651
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/adrienverge/yamllint/blob/v1.38.0/CHANGELOG.rst
-
-Tarball hashes were computed by scanpypi.
+https://github.com/fonttools/py-zopfli/releases/tag/v0.4.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-yamllint/python-yamllint.hash | 4 +++-
- package/python-yamllint/python-yamllint.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/python-zopfli/python-zopfli.hash | 4 ++--
+ package/python-zopfli/python-zopfli.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-yamllint/python-yamllint.hash b/package/python-yamllint/python-yamllint.hash
-index 3287d4f2b2..d087e4906d 100644
---- a/package/python-yamllint/python-yamllint.hash
-+++ b/package/python-yamllint/python-yamllint.hash
-@@ -1,3 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/yamllint/json
-+md5  dff4ef2d07d5b185c9d74256b42e9122  yamllint-1.38.0.tar.gz
-+sha256  09e5f29531daab93366bb061e76019d5e91691ef0a40328f04c927387d1d364d  yamllint-1.38.0.tar.gz
+diff --git a/package/python-zopfli/python-zopfli.hash b/package/python-zopfli/python-zopfli.hash
+index f452e2bdfe..6cbde60ae8 100644
+--- a/package/python-zopfli/python-zopfli.hash
++++ b/package/python-zopfli/python-zopfli.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/zopfli/json
+-md5  c744c18043764ab6aa82443cee243038  zopfli-0.4.0.tar.gz
+-sha256  a8ee992b2549e090cd3f0178bf606dd41a29e0613a04cdf5054224662c72dce6  zopfli-0.4.0.tar.gz
++md5  ea5d84d9e8c5d02e7835691667e0890d  zopfli-0.4.1.tar.gz
++sha256  07a5cdc5d1aaa6c288c5d9f5a5383042ba743641abf8e2fd898dcad622d8a38e  zopfli-0.4.1.tar.gz
  # Locally computed sha256 checksums
--sha256  81f7c0c5559becc8049470d86046b36e96113637bcbe4753ecef06977c00245d  yamllint-1.37.1.tar.gz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/python-yamllint/python-yamllint.mk b/package/python-yamllint/python-yamllint.mk
-index 835ee2ffb2..9b79d1766f 100644
---- a/package/python-yamllint/python-yamllint.mk
-+++ b/package/python-yamllint/python-yamllint.mk
+ sha256  018b1cb87efdf7a04c2fcc13d57ed63f62149113fb207b27ea13430d64f13513  COPYING
+diff --git a/package/python-zopfli/python-zopfli.mk b/package/python-zopfli/python-zopfli.mk
+index d2816364a2..e914e1dae9 100644
+--- a/package/python-zopfli/python-zopfli.mk
++++ b/package/python-zopfli/python-zopfli.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_YAMLLINT_VERSION = 1.37.1
-+PYTHON_YAMLLINT_VERSION = 1.38.0
- PYTHON_YAMLLINT_SOURCE = yamllint-$(PYTHON_YAMLLINT_VERSION).tar.gz
--PYTHON_YAMLLINT_SITE = https://files.pythonhosted.org/packages/46/f2/cd8b7584a48ee83f0bc94f8a32fea38734cefcdc6f7324c4d3bfc699457b
-+PYTHON_YAMLLINT_SITE = https://files.pythonhosted.org/packages/28/a0/8fc2d68e132cf918f18273fdc8a1b8432b60d75ac12fdae4b0ef5c9d2e8d
- PYTHON_YAMLLINT_SETUP_TYPE = setuptools
- PYTHON_YAMLLINT_LICENSE = GPL-3.0
- PYTHON_YAMLLINT_LICENSE_FILES = LICENSE
+-PYTHON_ZOPFLI_VERSION = 0.4.0
++PYTHON_ZOPFLI_VERSION = 0.4.1
+ PYTHON_ZOPFLI_SOURCE = zopfli-$(PYTHON_ZOPFLI_VERSION).tar.gz
+-PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/be/4c/efa0760686d4cc69e68a8f284d3c6c5884722c50f810af0e277fb7d61621
++PYTHON_ZOPFLI_SITE = https://files.pythonhosted.org/packages/0a/4d/a8cc1768b2eda3c0c7470bf8059dcb94ef96d45dd91fc6edd29430d44072
+ PYTHON_ZOPFLI_SETUP_TYPE = setuptools
+ PYTHON_ZOPFLI_LICENSE = Apache-2.0
+ PYTHON_ZOPFLI_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
