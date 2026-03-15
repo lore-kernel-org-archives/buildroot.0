@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 593AAF3027F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E93F3028C
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C51741456;
-	Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ADCF612DA;
+	Sun, 15 Mar 2026 22:18:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sxj7-ooviWPv; Sun, 15 Mar 2026 22:18:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tbi4_66RFBFl; Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6024441457
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D01B610AC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613131;
-	bh=EDXTXQDZRvFg8UEgtEzBjHt08AGTvRKJFrZzlTAW3wg=;
+	s=default; t=1773613132;
+	bh=D8ARLBFeQ06O7sDy1BzQ9hD+CYeRxBhcdR7bQVWBpfc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QD4ZwlOvPNdLlLkY+fqzCCjS2pLbe+dr+dNc9C2m5Q/mIW+IAHu4sWZNvg6Yk3WOI
-	 6SomGj74YpBpsG/inFYOwEjQE4DBx5Bxk/M68ajEkjiDV6rAfWywSs5x3IZm7Wv3Pq
-	 qP03qTkCY/cSYcTus+CO5dzz0auZ32rO1Q3/T/4MDvD7QmI0M3WAWbDdjZltFWFxTv
-	 9bOw8YoggtUlhY0K1WMWZro4ozPuoqN5wWFg4cYyrQIsLa0XxjuEVaOFqhTKFqokuY
-	 vfrjnWfrjxoV3le2OLad393hFFnAKow2wYq+SxbD0M539Yg9iY8sLR/1xsIqM5iCFN
-	 pYfAeF4rMvLvg==
+	b=F5VWVtdbDw+gjVyFEYbU8CS2e5q6uyd4/Fj63MhwpUvok7wwfR+vEXBFQStsGtmQw
+	 t1we+3RJuKmymgw2ayvXd2J1gkIvryHVaiOqbcJUH7TAxXqqFp1KAQLZqmYZFywTrp
+	 lsuEl7oUftZBWjCbJEvAv+uu9U1En0AsPsgOg6UQhmYVDP7IgqqpamdddmnR4wo/r6
+	 2OWFGE3utoQ8oN0aI2aXFpxxQq3wzfC3Q1HT+7bqV9InceBgneC3prB6tySSPZ4iuU
+	 CcYF50MkjctUVy1bTTUG3d+6K3dNyhkprmUjH0GiwfdIX667GnQMSTRshatmuPknTp
+	 8qD/00IolJhWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6024441457;
-	Sun, 15 Mar 2026 22:18:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D01B610AC;
+	Sun, 15 Mar 2026 22:18:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 03E321B4
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0290D1B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40B51610D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69546610E0
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id er80tb6wQQxC for <buildroot@buildroot.org>;
+ id P0UywP6h6-lj for <buildroot@buildroot.org>;
  Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33BB86108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FBA56108A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33BB86108C
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FBA56108A
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75F4F83F4D; Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
+ id D275283F4D; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:38 +0100
+Date: Sun, 15 Mar 2026 21:33:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4e8a593456aca733674d1433bde4c693705ecd7
-X-Git-Newrev: 256359467cc43999cb47a7ffbdb3db573d581e46
+X-Git-Oldrev: de96f9aefed303b1af822d17c964b537d77b511d
+X-Git-Newrev: d5d17fc404bc04a0f4af5d217412bac740193efa
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221802.75F4F83F4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pdm-backend: bump version
- to 2.4.7
+Message-Id: <20260315221801.D275283F4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-immutabledict: bump version
+ to 4.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/256359467cc43999cb47a7ffbdb3db573d581e46
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5d17fc404bc04a0f4af5d217412bac740193efa
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/pdm-project/pdm-backend/releases/tag/2.4.7
+https://github.com/corenting/immutabledict/blob/v4.3.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pdm-backend/python-pdm-backend.hash | 4 ++--
- package/python-pdm-backend/python-pdm-backend.mk   | 4 ++--
+ package/python-immutabledict/python-immutabledict.hash | 4 ++--
+ package/python-immutabledict/python-immutabledict.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pdm-backend/python-pdm-backend.hash b/package/python-pdm-backend/python-pdm-backend.hash
-index 83e275c032..c856d1e818 100644
---- a/package/python-pdm-backend/python-pdm-backend.hash
-+++ b/package/python-pdm-backend/python-pdm-backend.hash
+diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
+index f917e43702..b7182a48a7 100644
+--- a/package/python-immutabledict/python-immutabledict.hash
++++ b/package/python-immutabledict/python-immutabledict.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pdm-backend/json
--md5  63dd231ba6206cc834b205694208df40  pdm_backend-2.4.6.tar.gz
--sha256  5dd9cd581a4f18d57ff506a5b3aad7c8df31e5949b6fd854bbc34c38107e4532  pdm_backend-2.4.6.tar.gz
-+md5  f51ca7c104f47dac6b31dc51255fab19  pdm_backend-2.4.7.tar.gz
-+sha256  a509d083850378ce919d41e7a2faddfc57a1764d376913c66731125d6b14110f  pdm_backend-2.4.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/immutabledict/json
+-md5  2ddeb671f200618365b11b997d50368f  immutabledict-4.2.2.tar.gz
+-sha256  cb6ed3090df593148f94cb407d218ca526fd2639694afdb553dc4f50ce6feeca  immutabledict-4.2.2.tar.gz
++md5  8ed06e3692bae4d1df1a8818d9013ba2  immutabledict-4.3.1.tar.gz
++sha256  f844a669106cfdc73f47b1a9da003782fb17dc955a54c80972e0d93d1c63c514  immutabledict-4.3.1.tar.gz
  # Locally computed sha256 checksums
- sha256  1da058ed0440fea5df1765b19a1418800439b18fd6f1c13c7d429cb81e9c6d47  LICENSE
-diff --git a/package/python-pdm-backend/python-pdm-backend.mk b/package/python-pdm-backend/python-pdm-backend.mk
-index 4f30f8a909..c3cfeb6f73 100644
---- a/package/python-pdm-backend/python-pdm-backend.mk
-+++ b/package/python-pdm-backend/python-pdm-backend.mk
+ sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
+diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
+index 4a886b1607..1e8cbd7e7b 100644
+--- a/package/python-immutabledict/python-immutabledict.mk
++++ b/package/python-immutabledict/python-immutabledict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PDM_BACKEND_VERSION = 2.4.6
-+PYTHON_PDM_BACKEND_VERSION = 2.4.7
- PYTHON_PDM_BACKEND_SOURCE = pdm_backend-$(PYTHON_PDM_BACKEND_VERSION).tar.gz
--PYTHON_PDM_BACKEND_SITE = https://files.pythonhosted.org/packages/71/fc/15b83c93a8e7929b62debaad63a3e89b8ce7f8a86075bda0d81e42c3cad5
-+PYTHON_PDM_BACKEND_SITE = https://files.pythonhosted.org/packages/e2/38/d22c1050130b8cdf16fef76c99c59968086802744947f2813d45c69cca52
- PYTHON_PDM_BACKEND_SETUP_TYPE = pep517
- PYTHON_PDM_BACKEND_LICENSE = MIT
- PYTHON_PDM_BACKEND_LICENSE_FILES = LICENSE
+-PYTHON_IMMUTABLEDICT_VERSION = 4.2.2
++PYTHON_IMMUTABLEDICT_VERSION = 4.3.1
+ PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
+-PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/ce/12/1da8e1a9050d0603ba65fb1796ed8860a705b906701c96e77f85cc7490be
++PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/1d/e6/718471048fea0366c3e3d1df3acfd914ca66d571cdffcf6d37bbcd725708
+ PYTHON_IMMUTABLEDICT_SETUP_TYPE = poetry
+ PYTHON_IMMUTABLEDICT_LICENSE = MIT
+ PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
