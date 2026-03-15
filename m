@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04784F3026D
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 15:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C90BF3026D
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 15:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CDC882661;
-	Sun, 15 Mar 2026 15:18:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B0B98268F;
+	Sun, 15 Mar 2026 15:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YowEOUjSFWoo; Sun, 15 Mar 2026 15:18:49 +0000 (UTC)
+ id 8qnsglq9J3AD; Sun, 15 Mar 2026 15:18:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8862B825B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92FE582662
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773587929;
-	bh=7mIUkaRccMMzQ3TwFwPnuqyI7WFxmi9FdqjjaBZ6DoU=;
+	s=default; t=1773587930;
+	bh=b+vv6J8tBksNzrRF99+/7YpHPXtccCZJAjCTrYMJcPU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oIUu4RBWReM6f5TUWpBvT4uAHoClfsaoGjgvxEtWbod4ficHl+oUuDw0OndU6fXkE
-	 YS1ZdQXsO169qr4hP90V/G35b/Uj71BPNORGHpi3z3d0a5Juqoc9oIbEFFJ1ZwmVAz
-	 o7cB6GgkTUBZ2ejJs7hd7slK3ODxb4mtVgiQarED5txaU4CemXNURETU+kt3+AZ8+F
-	 HKzdF5XrSEuhV7xx+HyLeibhMkv6RiFOOWJidMAiiKmiM64XjLejn4UnTQQeWlhoIC
-	 I++k60ZiX99pHO4GHgI2ujX7iDn2hIkss4NlWUXsMwR2YKsqKnxmb2NiYNsvRhPLhW
-	 V7ZiZ9mD1AonQ==
+	b=GVd3K3kMw8Qe0l+MYIXKriaCh/6NsW8wDDbzN0q09scZpSebZBvroG21N2eriMChf
+	 KijTfwiaiS3iZoJGzKffVfFvsvVv4/1ODXgl+Wgine1FZNqxH1I4q41FnA8UUlj4Yn
+	 JG/YI9g4b2np75G0XIGS5kJXYSgx+IMKDIkAIeB1nL0qJCIpXu8L7oDGaN55pYypQ4
+	 0c2ASXGsVngWoalPtElTYW2WhKYKiLKURYkLBO//WREOvg1J6FC8sT1WDDFA5uM0bt
+	 mcfurT8mxOq1DWGJIklXrQ6gwEkIi7H32aw/SPP4xc8aGX4qGyC77dYmBs0Al99tZS
+	 1wjLgHoM6qTjQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8862B825B1;
-	Sun, 15 Mar 2026 15:18:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D7071B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92FE582662;
+	Sun, 15 Mar 2026 15:18:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F9B7201
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 15:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2ED1860AFE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25CFD40AF0
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 15:18:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v53q6a-X0PWQ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rYBlyDffcZxT for <buildroot@buildroot.org>;
  Sun, 15 Mar 2026 15:18:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2668460AEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 168C740ACC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2668460AEF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 168C740ACC
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 15:18:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58E1884FBA; Sun, 15 Mar 2026 15:18:46 +0000 (UTC)
+ id 522CC84CF1; Sun, 15 Mar 2026 15:18:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 14:21:59 +0100
+Date: Sun, 15 Mar 2026 14:17:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d413d61792724877bfd886fe3ba519fb5259566
-X-Git-Newrev: 8cb765faa68a4ea7abf6445009f0586063aa4d4a
+X-Git-Oldrev: 2ee9ccae5d761e8d75923da9367e995c22fff0a9
+X-Git-Newrev: 8d413d61792724877bfd886fe3ba519fb5259566
 X-Patchwork-Hint: ignore
-Message-Id: <20260315151846.58E1884FBA@busybox.osuosl.org>
+Message-Id: <20260315151846.522CC84CF1@busybox.osuosl.org>
 Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-arm-aarch64-be: bump to
+ toolchain/toolchain-external/toolchain-external-arm-aarch64: bump to
  15.2.rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -78,10 +78,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8cb765faa68a4ea7abf6445009f0586063aa4d4a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8d413d61792724877bfd886fe3ba519fb5259566
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Update the ARM aarch64-be external toolchains to the latest 15.2.rel1
+Update the ARM aarch64 external toolchain to the latest 15.2.rel1
 release from ARM.
 
 This involves:
@@ -89,25 +89,26 @@ This involves:
 - Updating the SHA256 hash in .hash
 - Updating the display name and GCC version dependency in Config.in
 
+Verified by booting on a default Qemu configuration.
+
 Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
-[Julien: add newline at end of file to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../toolchain-external-arm-aarch64-be/Config.in                   | 8 ++++----
- .../toolchain-external-arm-aarch64-be.hash                        | 4 ++--
- .../toolchain-external-arm-aarch64-be.mk                          | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../toolchain-external/toolchain-external-arm-aarch64/Config.in   | 8 ++++----
+ .../toolchain-external-arm-aarch64.hash                           | 8 ++++----
+ .../toolchain-external-arm-aarch64.mk                             | 2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index 3a71e1356b..c3592b9d20 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 8582fe0ec8..ae1298bfe2 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
 @@ -1,13 +1,13 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
--	bool "Arm AArch64 BE 14.2.rel1"
-+	bool "Arm AArch64 BE 15.2.rel1"
- 	depends on BR2_aarch64_be
- 	depends on BR2_HOSTARCH = "x86_64"
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 14.2.rel1"
++	bool "Arm AArch64 15.2.rel1"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
 -	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
 +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
@@ -120,28 +121,32 @@ index 3a71e1356b..c3592b9d20 100644
  	select BR2_TOOLCHAIN_HAS_FORTRAN
  	select BR2_TOOLCHAIN_HAS_OPENMP
  	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-index 317fc10a09..8ba94f415d 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-@@ -1,2 +1,2 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
--sha256  0ea5d00d0ba4c5d16bc8e140d434c54367516b568a146d724936c589a2f56aaf  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
-+sha256  f848f5b15d49217fbe8b3d72e1cc44eac06b096e6b66fa892898fa9c710a3c05  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-index 381a591932..264e8bff71 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index 3f9c9cea71..9913974643 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  47aeefc02b0ee39f6d4d1812110952975542d365872a7474b5306924bca4faa1  arm-gnu-toolchain-14.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
+-sha256  299c56db1644c135670afabbf801b97a42e5ef6069d73157ab869458cbda2096  arm-gnu-toolchain-14.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  9a685b335bd709d683a8c782253c37e8c36c10e6924e59e39d4769b02132eb43  arm-gnu-toolchain-15.2.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz.sha256asc
++sha256  97e3f600c00413088bb21109475443f9a1c57b4f75336a6e820acd43b065f875  arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index cbc923bee5..5ddb5e10c1 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 14.2.rel1
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 15.2.rel1
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 14.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 15.2.rel1
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
  
- TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-$(HOSTARCH)-aarch64-none-linux-gnu.tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
