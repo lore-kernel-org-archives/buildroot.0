@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA89F3028D
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 101ACF3028A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1B1561354;
-	Sun, 15 Mar 2026 22:19:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB1936135F;
+	Sun, 15 Mar 2026 22:19:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aYrUaTSW_0V8; Sun, 15 Mar 2026 22:19:10 +0000 (UTC)
+ id 6cVqlelwlxUD; Sun, 15 Mar 2026 22:19:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7795761347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8DCB61350
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613150;
-	bh=NOM2hvTYXhxJNgCM+IQl+RvE+vtWc5M0Aer8R2n64p8=;
+	s=default; t=1773613151;
+	bh=Srir5GmIGpCPfsnB00TOTIJk9s9MCA0gIStQ5N2uoWc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=remna6f3vZvjSgyzvwbUFIKANdpmzkPngJp8/Y+rbiqWye7BRQWQz9nyOHCdoXOU+
-	 h1I7PNvN+eVX4trU33jv8ze23gi9eEZDI0qmukqpLnYuPWk1qA8oqbyf9lmmr/diK/
-	 MwkL/6bY1F8dCpv7HIaPean/B6OybFuEkAggVu+Mo7/5/gqQ3yJmtV7hghEIssxSLW
-	 kQm0bUc+abKD+vQ0aSg4DbLCx1mnKtNuvp5l1QWxczNd7iozvRjqV7wPb0ML1Dwv3f
-	 WNxRCaAPltIgPQ4oGmDBxWyY5UW0fGD2TpSpDbiR0DJ7lZsUlJ3zMYOuovtoemdwn1
-	 NtUJw4M/ShOJg==
+	b=iKHZXf/lTj73C+mJdBfnIhlfHnR3MeCT4O/TzX20WF/9aMmPeJggWSp7InPmvjFl2
+	 IGP5kcFYXAUpMu/WNJ+P+ySl5k5ClT/f3tV8v8U/NVbm0SO75IsdNeG7aHyaEmxeKX
+	 yLbkOXSS867G6LNu8/x9vCZr+vo8hUwe7qasr0MWGr16A3NGLvrOFBiaKV1zgr+Y2Y
+	 4B/LKu9+LhR9SYiNDCRMnL8IX5mnZzTTIKErqJJuCDSsE18L7UskvqGcJH88jIUgfd
+	 tDhiQcgoEWRobA6VOBN4KDN2BpByYRu4fYrCi4AlO5sYSfBRMYc/OEF7v0Ax4B5/23
+	 82M9lTKJwTUnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7795761347;
-	Sun, 15 Mar 2026 22:19:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 165D9357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8DCB61350;
+	Sun, 15 Mar 2026 22:19:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 102F31B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A1F840930
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05176610A4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8tTR0jjAnGuB for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LRC_mKSiPmn8 for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E85040A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD736108D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E85040A9D
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAD736108D
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D036380FBC; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id 391C783F4D; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:39 +0100
+Date: Sun, 15 Mar 2026 16:21:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8c4e2c944ff43e7d28e930332251956f35f40a80
-X-Git-Newrev: a7ace0430270b339fb837dbaf2fc5e29dc07dd45
+X-Git-Oldrev: 9b0a90c10c03c66109b4bfcf64eb6461ecfd64b3
+X-Git-Newrev: 8d0906b77f224a988a49109902be6565d829e2c6
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221803.D036380FBC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-regex: bump version to
- 2026.2.28
+Message-Id: <20260315221801.391C783F4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cssselect2: bump version to
+ 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a7ace0430270b339fb837dbaf2fc5e29dc07dd45
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8d0906b77f224a988a49109902be6565d829e2c6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/mrabarnett/mrab-regex/blob/2026.2.28/changelog.txt
+https://github.com/Kozea/cssselect2/releases/tag/0.9.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-regex/python-regex.hash | 4 ++--
- package/python-regex/python-regex.mk   | 4 ++--
+ package/python-cssselect2/python-cssselect2.hash | 4 ++--
+ package/python-cssselect2/python-cssselect2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
-index 0b1bf1a350..3251993d45 100644
---- a/package/python-regex/python-regex.hash
-+++ b/package/python-regex/python-regex.hash
+diff --git a/package/python-cssselect2/python-cssselect2.hash b/package/python-cssselect2/python-cssselect2.hash
+index 214be0a5fb..65319e4ac8 100644
+--- a/package/python-cssselect2/python-cssselect2.hash
++++ b/package/python-cssselect2/python-cssselect2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/regex/json
--md5  23b45104a418985aa934ce00b094ec5a  regex-2025.11.3.tar.gz
--sha256  1fedc720f9bb2494ce31a58a1631f9c82df6a09b49c19517ea5cc280b4541e01  regex-2025.11.3.tar.gz
-+md5  d0ce2a36afe1d6fe7b6e188963db1b22  regex-2026.2.28.tar.gz
-+sha256  a729e47d418ea11d03469f321aaf67cdee8954cde3ff2cf8403ab87951ad10f2  regex-2026.2.28.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cssselect2/json
+-md5  45b5f89f2934fbcb52490483367c3997  cssselect2-0.8.0.tar.gz
+-sha256  7674ffb954a3b46162392aee2a3a0aedb2e14ecf99fcc28644900f4e6e3e9d3a  cssselect2-0.8.0.tar.gz
++md5  2aa3610000b7aeabe8da9cad3c390078  cssselect2-0.9.0.tar.gz
++sha256  759aa22c216326356f65e62e791d66160a0f9c91d1424e8d8adc5e74dddfc6fb  cssselect2-0.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
-diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
-index a6a8d6e3fc..281a0e83a1 100644
---- a/package/python-regex/python-regex.mk
-+++ b/package/python-regex/python-regex.mk
+ sha256  6fd97229a1d1b0f6a8b41e109f413426dbc0874b1e03746d66cc33282601c2c2  LICENSE
+diff --git a/package/python-cssselect2/python-cssselect2.mk b/package/python-cssselect2/python-cssselect2.mk
+index 7a4e2a2342..3644bdca18 100644
+--- a/package/python-cssselect2/python-cssselect2.mk
++++ b/package/python-cssselect2/python-cssselect2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REGEX_VERSION = 2025.11.3
-+PYTHON_REGEX_VERSION = 2026.2.28
- PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
--PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/cc/a9/546676f25e573a4cf00fe8e119b78a37b6a8fe2dc95cda877b30889c9c45
-+PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/8b/71/41455aa99a5a5ac1eaf311f5d8efd9ce6433c03ac1e0962de163350d0d97
- PYTHON_REGEX_SETUP_TYPE = setuptools
- PYTHON_REGEX_LICENSE = Apache-2.0
- PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
+-PYTHON_CSSSELECT2_VERSION = 0.8.0
++PYTHON_CSSSELECT2_VERSION = 0.9.0
+ PYTHON_CSSSELECT2_SOURCE = cssselect2-$(PYTHON_CSSSELECT2_VERSION).tar.gz
+-PYTHON_CSSSELECT2_SITE = https://files.pythonhosted.org/packages/9f/86/fd7f58fc498b3166f3a7e8e0cddb6e620fe1da35b02248b1bd59e95dbaaa
++PYTHON_CSSSELECT2_SITE = https://files.pythonhosted.org/packages/e0/20/92eaa6b0aec7189fa4b75c890640e076e9e793095721db69c5c81142c2e1
+ PYTHON_CSSSELECT2_SETUP_TYPE = flit
+ PYTHON_CSSSELECT2_LICENSE = BSD-3-Clause
+ PYTHON_CSSSELECT2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
