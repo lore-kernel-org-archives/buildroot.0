@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E54B1F3028A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E4CF3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE5126127B;
-	Sun, 15 Mar 2026 22:19:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7245A613FE;
+	Sun, 15 Mar 2026 22:19:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zBDnF2XNiQwr; Sun, 15 Mar 2026 22:19:33 +0000 (UTC)
+ id yCvpWT4Hpw1c; Sun, 15 Mar 2026 22:19:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E47C8613E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03EE5611C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613173;
-	bh=U+BkA7XMsmco95RpgoCY1A7vPz5PhTqj+U/vDQSkwCY=;
+	s=default; t=1773613174;
+	bh=b842G7WOOoBpfzhcFkXQPBEIGVaBSqjt1+4PIssHUxk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hZ+vnqbnzS7hKnarLyVJlSCrjXq/9aNsGLlysG8fawua8fK8/lO2trbshKuAk7+xu
-	 EwNhYNNt2fSSEh7qqDPkJpA1WO5glASDwkapjwXUmPEsQtXZI829SmPhWQb7A2e7j0
-	 wgGKAT10VNvLOzpYtcDMuWxKTLG/nWBsyd3h6NPPb819kWzFo5DPzaAK/CY0SXUG2W
-	 SzxsXhhY2mKIx6uaS3Lnpuu/uNoXUlMlhELYdMgrr4ChBaaq3Rek3viYFV9tTY+AOF
-	 a4u19kFva/BTyf0cQ3MlgUAMb2XyteKlJElBqud57Y+sxUpL5lN+NDzlrwWqszL4Nw
-	 VIwDTNB3Zd+UA==
+	b=E1Fl8cGxvtZV20Q3qJgtIAAMRMw4f+yyKSllZPNLF8HyzUICoD7LaDV6udsasJLs/
+	 8mARYc28XU93WoY341YLNYmuBop+fP2X4FoKrLHx76Wlh5WRGDuzkv+THC7I06tJRw
+	 QSXFXis+dmxqkaX7YmuR8PnUX00WM6/jwFJ8XgRp9rmGTC9uKpOMvSZbfszvkkaCg+
+	 kG08te+aob/Jp3m9Ycv14VzpyHgBn6uqbOFM7D9heXdnSCsMeyrDpNz4wonvpVIR5x
+	 wiZALN0GT9dNKnYhncpzsyBQ4nuKaZAM/Kf3y8zk0JAcLHyfEljPNPz6MYW0dI4oHL
+	 qx3yptHXWMRKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E47C8613E5;
-	Sun, 15 Mar 2026 22:19:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FBC4357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03EE5611C1;
+	Sun, 15 Mar 2026 22:19:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0889F1B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5119E61087
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26C1F40A04
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pDZFKpaHf1TQ for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GcCk755qJi-I for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6368B610A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CD5940A1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6368B610A1
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CD5940A1F
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A58A485C3A; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id DED2E80FBC; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d0fdd3358c1ddcc73bab5f8de08ab0d5dfa112f
-X-Git-Newrev: 881805a63a3147b636680e6d5cafa7bfb7fd70c0
+X-Git-Oldrev: 507242b6632e5a28acfcf52ff882ecebb47bf6ea
+X-Git-Newrev: d26060f11033a24552a9adea1d594cdbc3a99e48
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221803.A58A485C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyspnego: bump version to
- 0.12.1
+Message-Id: <20260315221804.DED2E80FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-types-setuptools: bump
+ version to 82.0.0.20260210
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/881805a63a3147b636680e6d5cafa7bfb7fd70c0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d26060f11033a24552a9adea1d594cdbc3a99e48
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/jborean93/pyspnego/blob/v0.12.1/CHANGELOG.md
+https://github.com/typeshed-internal/stub_uploader/blob/main/data/changelogs/setuptools.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pyspnego/python-pyspnego.hash | 4 ++--
- package/python-pyspnego/python-pyspnego.mk   | 4 ++--
+ package/python-types-setuptools/python-types-setuptools.hash | 4 ++--
+ package/python-types-setuptools/python-types-setuptools.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyspnego/python-pyspnego.hash b/package/python-pyspnego/python-pyspnego.hash
-index 1feca5d305..f74e9c2aa5 100644
---- a/package/python-pyspnego/python-pyspnego.hash
-+++ b/package/python-pyspnego/python-pyspnego.hash
+diff --git a/package/python-types-setuptools/python-types-setuptools.hash b/package/python-types-setuptools/python-types-setuptools.hash
+index 8283b8ec10..c0b0867998 100644
+--- a/package/python-types-setuptools/python-types-setuptools.hash
++++ b/package/python-types-setuptools/python-types-setuptools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyspnego/json
--md5  f1e4eb073641fc00dfd0ce053963c73b  pyspnego-0.12.0.tar.gz
--sha256  e1d9cd3520a87a1d6db8d68783b17edc4e1464eae3d51ead411a51c82dbaae67  pyspnego-0.12.0.tar.gz
-+md5  bdbd0013e9f7bd8d076c339af9c9a73b  pyspnego-0.12.1.tar.gz
-+sha256  ff4fb6df38202a012ea2a0f43091ae9680878443f0ea61c9ea0e2e8152a4b810  pyspnego-0.12.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/types-setuptools/json
+-md5  64117c464d8fbeca5851c08a5c22fd56  types_setuptools-80.9.0.20251223.tar.gz
+-sha256  d3411059ae2f5f03985217d86ac6084efea2c9e9cacd5f0869ef950f308169b2  types_setuptools-80.9.0.20251223.tar.gz
++md5  156a454caa6bb356bdab546a1cfa2526  types_setuptools-82.0.0.20260210.tar.gz
++sha256  d9719fbbeb185254480ade1f25327c4654f8c00efda3fec36823379cebcdee58  types_setuptools-82.0.0.20260210.tar.gz
  # Locally computed sha256 checksums
- sha256  286517c93031c343f809f64b38563a783614b762e1367242af6cdd4107335471  LICENSE
-diff --git a/package/python-pyspnego/python-pyspnego.mk b/package/python-pyspnego/python-pyspnego.mk
-index 5e982ac7cf..ebe74bd879 100644
---- a/package/python-pyspnego/python-pyspnego.mk
-+++ b/package/python-pyspnego/python-pyspnego.mk
+ sha256  295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe  LICENSE
+diff --git a/package/python-types-setuptools/python-types-setuptools.mk b/package/python-types-setuptools/python-types-setuptools.mk
+index 4ad09791d6..4759fae2cb 100644
+--- a/package/python-types-setuptools/python-types-setuptools.mk
++++ b/package/python-types-setuptools/python-types-setuptools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSPNEGO_VERSION = 0.12.0
-+PYTHON_PYSPNEGO_VERSION = 0.12.1
- PYTHON_PYSPNEGO_SOURCE = pyspnego-$(PYTHON_PYSPNEGO_VERSION).tar.gz
--PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/f9/e4/8b32a91aeba6fbc6943a630c44b2fe038615e5c7dec8814316fafdcf4bf4
-+PYTHON_PYSPNEGO_SITE = https://files.pythonhosted.org/packages/7d/84/58577bd1b14293650879de0579ec263a1d8350f1d6d227226cf776b5a6a6
- PYTHON_PYSPNEGO_SETUP_TYPE = setuptools
- PYTHON_PYSPNEGO_LICENSE = MIT
- PYTHON_PYSPNEGO_LICENSE_FILES = LICENSE
+-PYTHON_TYPES_SETUPTOOLS_VERSION = 80.9.0.20251223
++PYTHON_TYPES_SETUPTOOLS_VERSION = 82.0.0.20260210
+ PYTHON_TYPES_SETUPTOOLS_SOURCE = types_setuptools-$(PYTHON_TYPES_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_TYPES_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/00/07/d1b605230730990de20477150191d6dccf6aecc037da94c9960a5d563bc8
++PYTHON_TYPES_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/4b/90/796ac8c774a7f535084aacbaa6b7053d16fff5c630eff87c3ecff7896c37
+ PYTHON_TYPES_SETUPTOOLS_SETUP_TYPE = setuptools
+ PYTHON_TYPES_SETUPTOOLS_LICENSE = Apache-2.0
+ PYTHON_TYPES_SETUPTOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
