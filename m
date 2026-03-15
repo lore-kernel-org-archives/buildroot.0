@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44305D58B1A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 10:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5786D58B18
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 10:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC403606E7;
-	Sun, 15 Mar 2026 10:26:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C8818261C;
+	Sun, 15 Mar 2026 10:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VQUAlNtEEZ-W; Sun, 15 Mar 2026 10:26:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BlFZzHaTUbNb; Sun, 15 Mar 2026 10:27:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062D960718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16D2F825D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773570415;
-	bh=HitPY2wpFXDrRx3AsXHWrIiGIsS6UbnhswHWiUPFqOs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Eedr1RuDsq4VjeLddiM2L2kV7d8UsYiE/EV83jItZ2Gpfie2XRdVJaKh6XP3C9ICO
-	 wI48hrvlF6u3GYC7JsA1XT7NWLsday7pf9UAPjHnms9iXgbZpoNgCWl6HL3AAIiwT8
-	 SzMv6XCFvJxgSyfGmpFlgeC2BxkuBU+bjEBrkpSvA0YYuwgT1ObkVgrmkRjB2gvApY
-	 lLXiO4bDBXGvSCiiDPI4ZYDM+0Fg2XiXF4ETEx8U8N34aqsdare3vKecLCsikQBPSe
-	 k1hWJ7UkuPGf3lPauiisqDz/m9T6e4BBtZdQzP9oFp0gllLLuDnqDQESQ9F2xboKYc
-	 holG+C8HnI1CA==
+	s=default; t=1773570433;
+	bh=yvmODM5JDGJ+bghT4bbzMQqjIos/3k5eE65aBX2mxiI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=edITwGIJ6ySn9wnH0UIKwuzYdwMDFy4AAh1W4UhYLGBGXVosOXZRvgiYnr9N3W74p
+	 5J6rDbDjtVDSXrUHI2w4cPOiOgcG3NME+jvfgaCSz0je8hDYaRSo4KxpsRyWo5DHHk
+	 MaTY54XSf/a9DUyGbhYNKqrF/DrAwgmwDbpCus63kquM5+ql9NKkAWlwjL2QFcSU0n
+	 5r6kQWU3tCLGIiYMDWEsgpoOxG4yHk4ZAzgwfJSJggR8P+1RsfG1wxEvpHWyoHxp5D
+	 cM1lN8X8NjXST6q5jlr/uqijtbuWCNJM3nBOyEURONqii9kJpyxx7MJqj3yGE+6L/Y
+	 7Un1O13dqbVyA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 062D960718;
-	Sun, 15 Mar 2026 10:26:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 88C68357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16D2F825D3;
+	Sun, 15 Mar 2026 10:27:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4ACDC1B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A6E540264
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:26:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 307B840264
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:27:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EzkzxgtDwXr1 for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 10:26:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8188B400DA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8188B400DA
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:26:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2F9C85584; Sun, 15 Mar 2026 10:26:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 11:20:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e2d0389188681a5bedac73b8fb9ba6147e48887
-X-Git-Newrev: 04473f555909284ad9ea65c384fdd26d073a0780
-X-Patchwork-Hint: ignore
-Message-Id: <20260315102652.A2F9C85584@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/sqlite: bump version to
+ id ObvnWYE5ZqeN for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 10:27:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2F6E5400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F6E5400DA
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2F6E5400DA
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 10:27:10 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 527BEB0051E;
+ Sun, 15 Mar 2026 11:27:06 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Mar 2026 11:27:06 +0100
+MIME-Version: 1.0
+Date: Sun, 15 Mar 2026 11:27:06 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260315074850.8072-1-bernd@kuhls.net>
+References: <20260315074850.8072-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <fe862ed9419e212836c0ea5593bbb209@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1773570427;
+ bh=AL5iCJAul0dsxhtVPu95tUZkzlZPKxTkTzX7azfJq9U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XwFVuQOMS2KlWjInm+GiN2Mcuk4WH2bCnhGOSQpHBTrut6wog8ppxuERnzZlJnM1R
+ 3pW31RlbArEOqZVbL8KhYgfFJvpCJ+Vy3lV89h6R+ZB81rq5gZ58x0GYhF3OK1dnZy
+ dkpjK0oAGhrl6A7vdabSlwKY1hddeVNzzM4Trd6gCBIx8CK7C1qP6urxZgqIljqlnw
+ SyGEoi1Cr8kyvDfJ2P7f38X37gsB7M3hRglLebVXbUw2AOlKJPUiHnclcNxl8Pxh2a
+ gbJ573HtKrZ+yryk3ov3XrvsaR/u6RgVHoFFRFPQcCsK6yn93L8fgJNe/XF1lxv9WR
+ 3A5L/xJ2OfDGQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XwFVuQOM
+Subject: Re: [Buildroot] [PATCH 1/2] Revert "package/sqlite: bump version to
  3.52.0"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,54 +95,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/04473f555909284ad9ea65c384fdd26d073a0780
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 15/03/2026 08:48, Bernd Kuhls wrote:
+> This reverts commit 04dbf7a38f4e83a1c6444b910209a0e3a350b14c.
+> 
+> Upstream withdrew this release:
+> https://www.sqlite.org/releaselog/3_52_0.html
+> 
+> "Due to backwards-compatibility issues associated with some new
+>  features, the 3.52.0 release has been withdrawn."
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-This reverts commit 04dbf7a38f4e83a1c6444b910209a0e3a350b14c.
-
-Upstream withdrew this release:
-https://www.sqlite.org/releaselog/3_52_0.html
-
-"Due to backwards-compatibility issues associated with some new
- features, the 3.52.0 release has been withdrawn."
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 9ed3781dca..055e935a4e 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f  sqlite-autoconf-3520000.tar.gz
-+sha256  fbd89f866b1403bb66a143065440089dd76100f2238314d92274a082d4f2b7bb  sqlite-autoconf-3510200.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 4b334714ff..795bc32dbf 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3.52.0
--SQLITE_TAR_VERSION = 3520000
-+SQLITE_VERSION = 3.51.2
-+SQLITE_TAR_VERSION = 3510200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2026
- SQLITE_LICENSE = blessing
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
