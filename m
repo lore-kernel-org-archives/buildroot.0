@@ -1,112 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3F40D58B0F
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 06:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A5EED58B16
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 07:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86DE6412E2;
-	Sun, 15 Mar 2026 06:44:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hL5L9HEMgFVG; Sun, 15 Mar 2026 06:44:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1BCD412AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773557050;
-	bh=ML2tgoDQBnr9pfcIaxihleesSBfV+9+Po4azHOET2oE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=GPnue+zgmisX6jOTKFY5Fvp4g//usMYsVb24mZEi6DgPp0Ods1DloaA9B4ex+v71o
-	 3SMwtOXPkGLzpFSqUaJwK0XRG0YJDlxcRYMghjgYKwBloTurIkPhgdvmiieUeZVhvo
-	 X9TN2FlCFb9bVLD9sADLO9MzlLAV+nMB96hfV9w7JXu0T0pQCE7XKRg/6ztyuzs+z0
-	 qpSuC0cJjxIQ0dWqZ16QjzIPtNdswDncy+qJdVfqMOC2v8QVu0L2POamaV2jiHvmN4
-	 Gy+PBELWvRtcZe/Q+UzCFjNafGJ5TiK3ELHSExZ866lvDBCZpD0WJvAjJqR6FedY5K
-	 W9fyZbCtK8L6A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1BCD412AE;
-	Sun, 15 Mar 2026 06:44:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BD8C71B2
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 06:44:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A349960FC0
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 06:44:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A2D86103C;
+	Sun, 15 Mar 2026 07:49:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rOb_Bq4iqkow for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 06:44:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8CFCD608F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CFCD608F0
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8CFCD608F0
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 06:44:07 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-35b85613f3fso971837a91.1
- for <buildroot@buildroot.org>; Sat, 14 Mar 2026 23:44:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773557046; x=1774161846;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=OF3+OaEFhiPGY8kJ26XnjEVmak69ENN2fi/NFIvWA7Q=;
- b=FZA0ZKa3Cfb6umJwH3CUtYKtlm2UQOYipjFYEZdEhYyHUJxEqIXMxyI1q5ndGSuP46
- qMJDNPjlSsSgZyCoRB0KS2S9tNieDNyQVIcC3UesMhp0kTMiH/xpmzOr5AT4BdiILDXs
- g6m1YSfzGNUnrdpzyuyuGxdZbaCmGxl+TbAixC+Aowxgwq3djIOa4fd0lEm46PK1q0X2
- 6egXwfwMABDD9PfuEIQ6Eucr8Eq5GOKT9NCek47MNYBQLWpa5/qiJSUnSTH57HBaPfWI
- UOIcnYutzt4dRjikr9T0moVkzoQ0Rp30LbRDZlyr5j6Vkqdydfwc/Jf6P5c5517/R5wi
- F+tQ==
-X-Gm-Message-State: AOJu0YwrnM4SfYyg6yfZjHLTWiNsXqYi/H3ngSyKaAPZCFeZ5lqyW9BR
- V61b/1vVgiqsh2pPRnaG6T0PFD4b3EvsGHeukurZJbbuVqqP+CNbRPpzOPqNKg==
-X-Gm-Gg: ATEYQzwDQbk5xa0LOV78JC2h5yclUzmc/ExJAgiX4TKlpP7AUtf6uk1ioqV+S6Jz0nc
- 69Rj+E2KPlESJWSkJjoHqZRJkyOgySCepu+p+LYUflegDXKb/MvP0C97mlU9FY3Syas47oTwIpt
- /m9ZetkdvEiTFm5xHsHMN4tlP+nN89WdTbKF+MYTHYU6lsN4ueK11Kemj4PlLNckd5UFb1kqlKd
- 0Ar65qxcAoXNhT+luZQfmzgNNc+p4mNTHGQ0JcU1Gn1I1oVcnyD9fB7Wg2YhHnmbizhYXhK5c0e
- 4Azkj/razOSPV9wnmg2OebQF5paPKu9kRAnFhQrjkCReaG0F/erH0D76RXOg1kuCb8U9lyXf0Te
- llW18BHTHnNBn8sbZ9BE5WMFlHAYj951NczgEXf/QxiUPdUSqkIiWWvIe4GCSaW2q4TMMxaJjwT
- NQN+aSmNJWYT3xiPfNOssqvjq+k0lQfdYa9+g=
-X-Received: by 2002:a17:90b:2689:b0:34c:99d6:175d with SMTP id
- 98e67ed59e1d1-35a21e30c0emr8059915a91.2.1773557046177; 
- Sat, 14 Mar 2026 23:44:06 -0700 (PDT)
-Received: from fedora ([2409:4064:e94:4c4c:eaf4:8a92:f628:ad1d])
- by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-35a17be605asm11619598a91.17.2026.03.14.23.44.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Mar 2026 23:44:05 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ id T0W2a46-W8qG; Sun, 15 Mar 2026 07:48:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B27BB61038
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773560938;
+	bh=rW9yMOqGwvyPdj3ScswUnWGAV399UWGxxRv8AGN3v+Y=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=UYN3IxRDmmFZcz1+opuMNnG788aOwfY8ncBA/NjtoXmfjZt7eiZJzoA0naR6cNuty
+	 mpH/RFh8AFp1aDo2u3QFf27mr9l9Rw+5KUY+YThEoOotIu18ZutAZzYXph04ZdLGBI
+	 wjH/PYaruQzkdQmPbRW23oOOOPnb3D1zmJWGOfUzvJ16DeW6Xlkti3cQuzJaT7jRHW
+	 XSJ6dLThlOfMJ3TOszlO1HtnXm8acOhaWcepTmOGS0t5U1SK25Dt2jIswgqFKUXRrg
+	 r5i1d5KmrWgU+UBaH07kzcdRbKN/Lvqb0hcCtIJYTPoSWaNS/jTXg1wN5b7NG318Pk
+	 41LqUTJTvSZ+g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B27BB61038;
+	Sun, 15 Mar 2026 07:48:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C13311B2
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 07:48:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7295405F5
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 07:48:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3gr-TsYcyMbN for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 07:48:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3C94A4022B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C94A4022B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C94A4022B
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 07:48:54 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1bc8b.dip0.t-ipconnect.de [84.161.188.139])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D61EAA4C11D8
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 08:48:50 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48274)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1w1gDS-0000000088n-0HJH
+ for buildroot@buildroot.org; Sun, 15 Mar 2026 07:48:50 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sun, 15 Mar 2026 12:13:48 +0530
-Message-ID: <20260315064349.10601-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Date: Sun, 15 Mar 2026 08:48:48 +0100
+Message-ID: <20260315074850.8072-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1773557046; x=1774161846; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OF3+OaEFhiPGY8kJ26XnjEVmak69ENN2fi/NFIvWA7Q=;
- b=QOcW/EF/06BIlVro7t6GQ6iqo+9WZ8bEmGZtoL2mQEjQBvyOFiJNBSDo3F/LHKLJLx
- grybWWZsN89phUDBXhgsUZEofflzxUk4QGGEq6N+aKLnDl3ckyfGtE3lkdrfj1awbern
- NhiexFJAb1ssUmpNsdSPIAVXLr0x36x8P8FHiPnN5SCsmkTyyI+mJNlSSQw8Rr/82Ium
- UP9IB3b5nL5s/5BwBUrXhV2xJR1gTXSdwel0huFugsXGbj9zOXU/FZtkVUmQHTZpRFNW
- ZYUQwQOlf87t++CouZFRynGmtXDQvjyOYuDi3EvBToeK4XpkvvDlgx14hD0RAOSkA0G+
- 6Iag==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1773560930;
+ bh=lkQpRbr6mQxk6uMSjOMlDQjRFOYPjkrgRCedkE3/JNg=;
+ h=From:To:Subject:Date:From;
+ b=YQEEi/FatrSFI1Nqu9GmtjNWNvH/qjJ6kxsw1SRpZhYSBrckasRSXmzeSEbX2+tIg
+ NzywRxeebgURrvxe3QYzP+m54hmlZ8x5qF4c8L4DIfmt34q8ouyBn4rObOxLduv2nO
+ wRmPRKVeg0mxKOErQdGzL9/qllfuDQQKdKh8vwOdLu0LTTavicR2N8TvjZvysj2svA
+ JYRVqXrcHCSx4rjlajhP6fB49xOWaEHEQ3uYsD1iABgjnsKzlQzBB+v7UE+bgCp6/s
+ LI2KqgY0AJcnKtPGGKd28eSgypT33ACUCRdTm7rRVPW6ccjT77cF1xrEmaB5yUAzjk
+ RZWt4ZQ6Tf1MQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=QOcW/EF/
-Subject: [Buildroot] [PATCH] ulogd: Bumped version to 4.0.9
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=YQEEi/Fa
+Subject: [Buildroot] [PATCH 1/2] Revert "package/sqlite: bump version to
+ 3.52.0"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,41 +97,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
- package/ulogd/ulogd.hash | 4 ++--
- package/ulogd/ulogd.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This reverts commit 04dbf7a38f4e83a1c6444b910209a0e3a350b14c.
 
-diff --git a/package/ulogd/ulogd.hash b/package/ulogd/ulogd.hash
-index 8d729aeb8a..7a0a1f3f6a 100644
---- a/package/ulogd/ulogd.hash
-+++ b/package/ulogd/ulogd.hash
-@@ -1,5 +1,5 @@
--# From https://www.netfilter.org/projects/ulogd/files/ulogd-2.0.8.tar.bz2.sha256sum
--sha256  4ead6c3970c3f57fa1e89fe2d7cc483ba6fe2bd1b08701521e0b3afd667df291  ulogd-2.0.8.tar.bz2
-+# From https://www.netfilter.org/projects/ulogd/files/ulogd-2.0.9.tar.xz.sha256sum
-+sha256  523a651fe0a9f25b0cd87d5d35fc37d9382e7eecfcf61e48d5505ff3cf80eda5  ulogd-2.0.9.tar.xz
- 
- # Locally calculated
- sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 8ef8ec5701..be460a6947 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
+Upstream withdrew this release:
+https://www.sqlite.org/releaselog/3_52_0.html
+
+"Due to backwards-compatibility issues associated with some new
+ features, the 3.52.0 release has been withdrawn."
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 9ed3781dca..055e935a4e 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f  sqlite-autoconf-3520000.tar.gz
++sha256  fbd89f866b1403bb66a143065440089dd76100f2238314d92274a082d4f2b7bb  sqlite-autoconf-3510200.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 4b334714ff..795bc32dbf 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ULOGD_VERSION = 2.0.8
--ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
-+ULOGD_VERSION = 2.0.9
-+ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.xz
- ULOGD_SITE = https://www.netfilter.org/projects/ulogd/files
- ULOGD_DEPENDENCIES = host-pkgconf \
- 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+-SQLITE_VERSION = 3.52.0
+-SQLITE_TAR_VERSION = 3520000
++SQLITE_VERSION = 3.51.2
++SQLITE_TAR_VERSION = 3510200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2026
+ SQLITE_LICENSE = blessing
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
