@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50FDF3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BEE2F3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2EC06130E;
-	Sun, 15 Mar 2026 22:19:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D8E3414C1;
+	Sun, 15 Mar 2026 22:19:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wKeeriydm8qN; Sun, 15 Mar 2026 22:19:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nfESK33NdqGd; Sun, 15 Mar 2026 22:19:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC25E61302
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E70F4414C2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613140;
-	bh=1C7gWRTrMa+PIY2PnR4EVS6KyLT0VHjiKGwjckP7s2U=;
+	s=default; t=1773613141;
+	bh=UFniDsbVN7GUmchc1/wdslynfaIDd3D3KBiWe/t9qdA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EZCAXR2Zdo9ttwOPdoASSCZRI9hWTUkx7BnGkd4cP+fsHbuJJskinyUFAE5bULEi6
-	 fG+/PJdwGje+fSU8SQYD1rB2ybSinP9HGa6Y1KQgXdjzCaygvfkx7gqXgilJ4Enel7
-	 bOGj/iNsCpSwmWtnOPdFmdMHcvnfze8MQfSHy4uBYbsQ1I9vHtbF7iZdzfivoqoxcb
-	 cTgT0vTDv7iVvKJ6A586jpqYAJfm22o3cz8kJ6DdtMp3Ahp7EpKVcxmUrBguTVeakl
-	 nyFNRm9LnHMATuDXpjHz+d3k/Shqv8ykKr4y1VYGLcjzmvDoS3nq8viD/7wtnH80rs
-	 +hHUbOhuH9yqg==
+	b=YqwbYGNVKp4fhtIJMm9rQgmglM+RKBYFF1zoM3n7rxNsWvBN7NTER+18l4y+9mw0a
+	 5RSy1AtGhQJJfQR8NjcMk4lRfbGX2ZJTPuCNy1vwFu+PRJ0rrZn1lEaK78i6B8xyhl
+	 SzO4D8LyVoYf1UBhyXj23WBGlvXrwADC3gc52tA3e4ha+xILp0Pj/2a/fjyC3iAxfV
+	 pHE2NO4McCJ+pCCxjd/wfoNpEeYJ0FDwvwseApH3XsoPvuM0Ftxw04AA1nUjBDfqC9
+	 GpkuUbt6xM1OOatDInaRyg0vsBmwaQIFYuG/9vWTvf+tt6aM7EyFHHRY6dSGa8360c
+	 zaGVurRDq6YVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC25E61302;
-	Sun, 15 Mar 2026 22:18:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E70F4414C2;
+	Sun, 15 Mar 2026 22:19:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E133357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EBD71B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CE9840ACB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1993D40910
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Giy3uZE31Ru for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id ciL4NtHb0qz3 for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39417409C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D16A40919
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39417409C6
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D16A40919
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7AECC85BFF; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id DFF4485BFF; Sun, 15 Mar 2026 22:18:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:38 +0100
+Date: Sun, 15 Mar 2026 21:33:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1d10043435e21ea8132be3645ecbd6ec3eb1aee
-X-Git-Newrev: 0e9c36ae9aea00643adc820d8f5c56db113770a5
+X-Git-Oldrev: d5d17fc404bc04a0f4af5d217412bac740193efa
+X-Git-Newrev: b2990809a2062f5b4a640ed1ffd1f6269b2cf495
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221803.7AECC85BFF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pypika-tortoise: bump
- version to 0.6.5
+Message-Id: <20260315221801.DFF4485BFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-iterable-io: bump version
+ to 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e9c36ae9aea00643adc820d8f5c56db113770a5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b2990809a2062f5b4a640ed1ffd1f6269b2cf495
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/tortoise/pypika-tortoise/blob/v0.6.5/CHANGELOG.md
+https://github.com/pR0Ps/iterable-io/blob/v1.0.1/CHANGELOG.md
+
+Updated license hash due to upstream typo fix:
+https://github.com/pR0Ps/iterable-io/commit/b9e785c76399612bfa13e69f0aa7167c803a915d
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pypika-tortoise/python-pypika-tortoise.hash | 4 ++--
- package/python-pypika-tortoise/python-pypika-tortoise.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-iterable-io/python-iterable-io.hash | 6 +++---
+ package/python-iterable-io/python-iterable-io.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.hash b/package/python-pypika-tortoise/python-pypika-tortoise.hash
-index 9dc7ea9aa0..9e8c096c9e 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.hash
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.hash
+diff --git a/package/python-iterable-io/python-iterable-io.hash b/package/python-iterable-io/python-iterable-io.hash
+index aae6ad547e..1407153935 100644
+--- a/package/python-iterable-io/python-iterable-io.hash
++++ b/package/python-iterable-io/python-iterable-io.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pypika-tortoise/json
--md5  21a08e348b537e745964323874f5a6fc  pypika_tortoise-0.6.3.tar.gz
--sha256  6e17f00e77e78468836cb5c63eb6dc01445f83b1167e4f29f1c678949179c079  pypika_tortoise-0.6.3.tar.gz
-+md5  59bd939b42834b622e14aba292d8ec32  pypika_tortoise-0.6.5.tar.gz
-+sha256  64d96c9b88450f6360ad22a7063933b6a90961a7317f04b2b63c98fd5d705506  pypika_tortoise-0.6.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/iterable-io/json
+-md5  d6027af37f8e15edd346bdff6d5c5e3c  iterable-io-1.0.0.tar.gz
+-sha256  fb9e1b739587a9ba0d5c60a3e1eb71246761583bc9f18b3c35bb112b44b18c3c  iterable-io-1.0.0.tar.gz
++md5  242753419dc0cfbf09bd0fc0fa09e322  iterable_io-1.0.1.tar.gz
++sha256  55db222c5914097a8508dc722f8db6112f636a04a8acb94ee6589d9b14bd4bb7  iterable_io-1.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-pypika-tortoise/python-pypika-tortoise.mk b/package/python-pypika-tortoise/python-pypika-tortoise.mk
-index 72669f36b2..9b920e75a3 100644
---- a/package/python-pypika-tortoise/python-pypika-tortoise.mk
-+++ b/package/python-pypika-tortoise/python-pypika-tortoise.mk
+-sha256  5de72116ec3738168bbaea5bd3405d161246ac542456470dc074f23d336252c0  README.md
++sha256  1965c87639963d053bce1b662b86e04ce22f53d2c39f39ee416745b1fa9e6b2f  README.md
+diff --git a/package/python-iterable-io/python-iterable-io.mk b/package/python-iterable-io/python-iterable-io.mk
+index e59c7d6455..485dcc9231 100644
+--- a/package/python-iterable-io/python-iterable-io.mk
++++ b/package/python-iterable-io/python-iterable-io.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPIKA_TORTOISE_VERSION = 0.6.3
-+PYTHON_PYPIKA_TORTOISE_VERSION = 0.6.5
- PYTHON_PYPIKA_TORTOISE_SOURCE = pypika_tortoise-$(PYTHON_PYPIKA_TORTOISE_VERSION).tar.gz
--PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/cc/28/86ec1bccb2609d20349def444ef9dfe84aeccc984caa62f4634d50fee164
-+PYTHON_PYPIKA_TORTOISE_SITE = https://files.pythonhosted.org/packages/c2/06/89fe5fff93c5a01dbdeb9f3d843a7e997dc6e3a87222a260a164ff91fb81
- PYTHON_PYPIKA_TORTOISE_SETUP_TYPE = pep517
- PYTHON_PYPIKA_TORTOISE_LICENSE = Apache-2.0
- PYTHON_PYPIKA_TORTOISE_LICENSE_FILES = LICENSE
+-PYTHON_ITERABLE_IO_VERSION = 1.0.0
+-PYTHON_ITERABLE_IO_SOURCE = iterable-io-$(PYTHON_ITERABLE_IO_VERSION).tar.gz
+-PYTHON_ITERABLE_IO_SITE = https://files.pythonhosted.org/packages/40/be/27d59b5c1d74ecbd26c1142f84b61d6cb04f0d0337697149645f34406b2d
++PYTHON_ITERABLE_IO_VERSION = 1.0.1
++PYTHON_ITERABLE_IO_SOURCE = iterable_io-$(PYTHON_ITERABLE_IO_VERSION).tar.gz
++PYTHON_ITERABLE_IO_SITE = https://files.pythonhosted.org/packages/9e/ad/cc53869e3357520033e3ab9a7d6043045bcdd666da427583678efdbb446e
+ PYTHON_ITERABLE_IO_SETUP_TYPE = setuptools
+ PYTHON_ITERABLE_IO_LICENSE = LGPL-3.0
+ PYTHON_ITERABLE_IO_LICENSE_FILES = README.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
