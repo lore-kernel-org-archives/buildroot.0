@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F6DF3028C
-	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7377F3027F
+	for <buildroot@archiver.kernel.org>; Sun, 15 Mar 2026 22:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEA1E415D8;
-	Sun, 15 Mar 2026 22:19:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9038415DA;
+	Sun, 15 Mar 2026 22:19:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ngq5Nej5TlMl; Sun, 15 Mar 2026 22:19:35 +0000 (UTC)
+ id IEAyYRYrZ3cs; Sun, 15 Mar 2026 22:19:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E245415BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5816415E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773613175;
-	bh=FXA3i218WD8lxegM/TSHSrDJ/MrNbKTdzpDppQJt8ik=;
+	s=default; t=1773613177;
+	bh=KjPEi2QLRjVwAWf9nPSf0NkFLD+4gemnXKdSAPmS93k=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SlSw5mSWw1aGGYfHTzcz/jXXV00iuWDsH3vCKK3Ko7vNtqElPJ8swi7mW1IXgwbQV
-	 F2dRXfYkDZ9dnqt6cIL8cTeCBWxdb5nxFVHu6feLnnqBSdfCRp8SoKnj2bf6/jlmof
-	 yDRZP9Sbaf6n6vAsaVlJDbG/3UXcBaZb47uhGVL098xpG6/y7SK4cWrvQFFU0dDfel
-	 Fatp+DuZ7W8Jk92cXDxoFY8pwE/aGT93bTae2pGm/aoof+sC2lL7Dv/nniUvm8gsbh
-	 U63Jv7RA9rpFxlJoOQi/iBPyxWpdDg/0IRF6MZZWkFb03jQuh2TLSQcxlk4/hNVShu
-	 aFEkjmE1PuGrA==
+	b=ExX2x8sflbgPbtXJkzKeMsUbdNASmVf0jf5il+h2D+t8n8SPmCShOMqwJ0MY36Smi
+	 xxVnnzLw0W3XxsW7p4XmnQ9p0OqrwRg1zmqniDXt82VganqtaPw1CVAgknZ5/MkCfI
+	 sokuPv1Zdd6eu78l2+bMTzGT1h4l/UdJ485yU1YUWr2jSLGayxm75pACvyBnJwXmPX
+	 ye1jqtxboVfxKn1p5DyOsdyxUe1RFuyCOBbNi+q9fZ8A8V6TDAO68H2CSzxAGXhMnX
+	 yFCEyJaQReDC9IDngH36sQYigxpbXVq/LPZuuvHhwGwMYIRJ6QcAs/bx9f76lBoxpH
+	 hq4t02PKRPTvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E245415BA;
-	Sun, 15 Mar 2026 22:19:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5816415E2;
+	Sun, 15 Mar 2026 22:19:37 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E9C5357
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D1611B4
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 673B0610A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E1C161192
  for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JN0gqrNCoZK1 for <buildroot@buildroot.org>;
- Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
+ id 9o9KZl3fYKqX for <buildroot@buildroot.org>;
+ Sun, 15 Mar 2026 22:18:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A896610BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A87DC61102
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A896610BE
- for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A87DC61102
+ for <buildroot@buildroot.org>; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CDC885C3A; Sun, 15 Mar 2026 22:18:03 +0000 (UTC)
+ id EA66C82642; Sun, 15 Mar 2026 22:18:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Mar 2026 21:34:38 +0100
+Date: Sun, 15 Mar 2026 21:34:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a8be79402986d71bb917e7f486a6c863c27ef74
-X-Git-Newrev: b1d10043435e21ea8132be3645ecbd6ec3eb1aee
+X-Git-Oldrev: d26060f11033a24552a9adea1d594cdbc3a99e48
+X-Git-Newrev: c479ac460172be6203b543de30c83f98055aa54b
 X-Patchwork-Hint: ignore
-Message-Id: <20260315221803.6CDC885C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyparsing: bump version to
- 3.3.2
+Message-Id: <20260315221804.EA66C82642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ujson: bump version to
+ 5.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b1d10043435e21ea8132be3645ecbd6ec3eb1aee
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c479ac460172be6203b543de30c83f98055aa54b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/pyparsing/pyparsing/blob/3.3.2/CHANGES
+https://github.com/ultrajson/ultrajson/releases/tag/5.12.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pyparsing/python-pyparsing.hash | 4 ++--
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ package/python-ujson/python-ujson.hash | 4 ++--
+ package/python-ujson/python-ujson.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index b5cfebef68..509813d777 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
+index b4b0a4906e..58fa1b611f 100644
+--- a/package/python-ujson/python-ujson.hash
++++ b/package/python-ujson/python-ujson.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyparsing/json
--md5  2b7937d58eb818a33687e3ddef860638  pyparsing-3.3.1.tar.gz
--sha256  47fad0f17ac1e2cad3de3b458570fbc9b03560aa029ed5e16ee5554da9a2251c  pyparsing-3.3.1.tar.gz
-+md5  ca3bea68cd1a84584b68cd7bed679464  pyparsing-3.3.2.tar.gz
-+sha256  c777f4d763f140633dcb6d8a3eda953bf7a214dc4eff598413c070bcdc117cbc  pyparsing-3.3.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/ujson/json
+-md5  dfe38201fc1cdbb6f9e0bdf135173a6a  ujson-5.11.0.tar.gz
+-sha256  e204ae6f909f099ba6b6b942131cee359ddda2b6e4ea39c12eb8b991fe2010e0  ujson-5.11.0.tar.gz
++md5  a1104b826ed8414130553e4482bd714d  ujson-5.12.0.tar.gz
++sha256  14b2e1eb528d77bc0f4c5bd1a7ebc05e02b5b41beefb7e8567c9675b8b13bcf4  ujson-5.12.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a5425f9dc14ac74d4c5f0b679e941f2442e32cca7452a4418d5b1a49893ebe4e  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 743e361b59..316b864302 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+ sha256  36866344f0a486541bd9800f1a407a056c0c214a82c658f059694daf3dc394d2  LICENSE.txt
+diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
+index 88e6c736b9..3893a205c8 100644
+--- a/package/python-ujson/python-ujson.mk
++++ b/package/python-ujson/python-ujson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 3.3.1
-+PYTHON_PYPARSING_VERSION = 3.3.2
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/33/c1/1d9de9aeaa1b89b0186e5fe23294ff6517fce1bc69149185577cd31016b2
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/f3/91/9c6ee907786a473bf81c5f53cf703ba0957b23ab84c264080fb5a450416f
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = flit
+-PYTHON_UJSON_VERSION = 5.11.0
++PYTHON_UJSON_VERSION = 5.12.0
+ PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
+-PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/43/d9/3f17e3c5773fb4941c68d9a37a47b1a79c9649d6c56aefbed87cc409d18a
++PYTHON_UJSON_SITE = https://files.pythonhosted.org/packages/cb/3e/c35530c5ffc25b71c59ae0cd7b8f99df37313daa162ce1e2f7925f7c2877
+ PYTHON_UJSON_SETUP_TYPE = setuptools
+ PYTHON_UJSON_LICENSE = BSD-3-Clause, TCL
+ PYTHON_UJSON_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
