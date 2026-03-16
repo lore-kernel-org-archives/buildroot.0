@@ -1,102 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E09F013C5
-	for <buildroot@archiver.kernel.org>; Mon, 16 Mar 2026 08:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85FCCF013C5
+	for <buildroot@archiver.kernel.org>; Mon, 16 Mar 2026 08:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B85A82D12;
-	Mon, 16 Mar 2026 08:09:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9417260F1A;
+	Mon, 16 Mar 2026 08:09:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aTlbcUApjVS1; Mon, 16 Mar 2026 08:09:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bty2u4sBgpfJ; Mon, 16 Mar 2026 08:09:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E989782C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CE1760E69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773648542;
-	bh=b9xzt2dhEFcQzs95fbPyA2P61siujtkAJlcShO3HhPE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=sTOntFSiFP3J7CmJQ1zTVJ0+ugJwVkbn85ABWCyTdTOFzYuuduBPRdVcr1JNYB7D/
-	 veMHXOOPs+V/md6L0V6wlKQ+zIh1y+IIBdcwu5hO/DYHFqoaeLrUMwkXXGz3JzL0mM
-	 +bDBBZ4zeSNBwECQaKD5Yk0/DsN2hYXs8RYYYR7g+ZlYyIDR+7B4I/n4f1ZY3XwpQ0
-	 XEaAX/japVQkEjWHp2KqeMjRL/gR05LH8B7Kzyp8zagWGKzRd5GIKRiHD+Mv/S3l/f
-	 2BMcTWEL7V1U7RBz8BZRtdAB7mwuGjwqUZMiOi9rmcLOy7rqgtB0+/r239ZpMkzIxU
-	 N4Xnadz96r8Dw==
+	s=default; t=1773648570;
+	bh=VNhlWbzoY36LKrvfW3SPZk3ceYwaYwKOKRawhuNP0gA=;
+	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Reply-To:Cc:From;
+	b=e4eYk62id73EieFpcqt5KBHryznOrOUQnpgchZbcg0vBQaYVQfSL3vjMy1BuojWD1
+	 8Td3m4NvZQltO07DyyQZ4s1PEZYamt4x42QgVmduMOzq2wDFyRbKjayLOWdKc6vxpI
+	 ZWGvI0PBVKqcSDy8yXlkj0LpaQQilgu57amTPrevbtDFeEHEPkW4bBuwuaz07lIlDZ
+	 9Q/nSW3POBKoDqc1eobhUNGG8a5JR29Vs34W+vvhZy1jQwZ2TfAM6ezf6nS2cgap7i
+	 67eKu/NUqRzJAy3hrhJX+t/ZYLUQcH7z0PXOSEGWlfAsOLO4NDazBN6aHgOdALB8HZ
+	 Zt/xBLEAn4uIA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E989782C99;
-	Mon, 16 Mar 2026 08:09:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 43CA4D3
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:09:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CE1760E69;
+	Mon, 16 Mar 2026 08:09:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09B87D3
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2957B40558
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:09:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3B47407EB
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:09:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pj4wJr61tnnU for <buildroot@buildroot.org>;
- Mon, 16 Mar 2026 08:09:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5DEDF4052B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DEDF4052B
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5DEDF4052B
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:08:59 +0000 (UTC)
-X-CSE-ConnectionGUID: NaCLm9OdRF6H/HTXN/e3vw==
-X-CSE-MsgGUID: sRzqZT/oSmClReFBFKoN7g==
-Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 16 Mar 2026 09:08:55 +0100
-Received: from unknown (HELO OPE16NORMBX604.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2026 09:08:55 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX604.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Mon, 16 Mar 2026 09:08:53 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 16 Mar 2026 09:08:53 +0100
-X-CSE-ConnectionGUID: GHjT9xl5QY2FID243VPb5w==
-X-CSE-MsgGUID: qbpIx/AtRVC21bkQ/aAATg==
-X-IronPort-AV: E=Sophos;i="6.23,123,1770591600"; d="scan'208";a="402192180"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Mon, 16 Mar 2026 09:08:53 +0100
-Message-ID: <3bfde226697ff5b0d34d1f4620a98e6b60a63288.1773648533.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OZ-n-cmbAh31 for <buildroot@buildroot.org>;
+ Mon, 16 Mar 2026 08:09:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D1539405DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1539405DB
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D1539405DB
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 08:09:27 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-43b3cfc38edso1534856f8f.3
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 01:09:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1773648566; x=1774253366;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=CkqOrHI0pA0aa9c4wVceDBxDBQs3wiDzTQkv9mKqqbM=;
+ b=Dnsy9KmEPFuljdqj5ArFWJqS5XISNBWygCy/S8I3C5JFOMXkGUmmz75Fnrdl79fF9+
+ RBGvWgAH1fB+x5oXQo3BZkK5UcR4pjH0XRw+JJzke/ilrtwoja2vN2JCwhTy6GAQXCEe
+ J7aE/L55SeKhp/XqL3xvW2FJwSgC7bhk6cnublCMHbzVGIC7yLptHLplxh12P7uPxORT
+ FgDmhHqgAMzMwHS6fYV+n2RdyRNIrFvRi+F6M6UqLBaspIAcc0X01mlsdkrGeuEj5qAQ
+ 1suc4OEPWkGubDSJ021sM3jnMcQKtA0XhIoCTvyGxATwL23oppHNTgtXQcwYwoJO8lfC
+ xlhQ==
+X-Gm-Message-State: AOJu0YwYTyK9Ld2rlNjnjm2R1tR5Am6ugDSHELosXUrBvikER++Ejd20
+ Apj5+9exsFs2uqy11bazkbzUt1JWtlgAoTjY1iFRW7IS0iXFiZpT3LwzM4jaCwaL
+X-Gm-Gg: ATEYQzx6mDahxfU97iTS7tGbpaDJww8XqpZ1I5TVgfkOCZtW2TJVQ7zoWC0AmIA+5+Z
+ a52+RDjSmfJZf4zIrYi9k+fXufNA70eeXDsBnwGUTne5OfVyeWJ6AdnjRXkr469XxBipYTVZwaT
+ Md7BI8dHyuoFZCoZyF1k3WWLzY5uNWEV2jp3VQEKx3F27tOm0RsRBG5ARHRNRg2HuTkQBBmoSbo
+ fI5uPc1imdlSex4CKkp6C4tlm1OK0w1MXOmQ8+Ro6eOSgTA+798xViGuK709dsepUmEit10W3+P
+ 7av8Zcp+EtXIw3LgSCppOv/NE5cfjkxVemRuU/hv9NrHlgbNwuklNGLp00OfvxdS8KJV4308Bi2
+ CbylbvPJpmlKmySghvtwmMMiGK9Mg/GNGXAF+lPhlReDyFiFT1uyxdv3Z4reyiETcZ1Njzhzkoy
+ OG6KJw/TFzI8vkqUsW0CshmmGrQqgYp3PU14NyUNjxdTCQqc453q4n0pYg+D5q
+X-Received: by 2002:a05:6000:420c:b0:439:b3d2:3766 with SMTP id
+ ffacd0b85a97d-43a04d87c82mr21848991f8f.19.1773648565520; 
+ Mon, 16 Mar 2026 01:09:25 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43b3a09e453sm18528323f8f.0.2026.03.16.01.09.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 16 Mar 2026 01:09:25 -0700 (PDT)
+Date: Mon, 16 Mar 2026 09:09:22 +0100
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Message-ID: <20260316080922.GB288451@pevik>
+References: <20260203224414.192218-1-petr.vorel@gmail.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26) To OPE16NORMBX604.corporate.adroot.infra.ftgroup
- (10.115.26.32)
+Content-Disposition: inline
+In-Reply-To: <20260203224414.192218-1-petr.vorel@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1773648539; x=1805184539;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=o6CMQVXL9DvwvS9B8umtxGu90Fs05Lm4w07SVk6jnww=;
- b=aKmLMs/1biWaERROlIx8qDqMZS95AsIkwTktlUM3Yt1RNyJ9McQ/91Nj
- Elc9FAEZ6evyjx1FYVx6YQTIh9jmBZgJB9GETz67WygtICd0Np2MEk+jT
- 7pyzjMJv5mhoIpcybqwbq6bbEFa0OM1n7zSdee6weg5jK+TwhKDDVu1mk
- VHTK/nERx2ppdv0VM6Xjxw1wET9vrOosu64ZqYF/Vj9UKw6IAeP2tlHLP
- 03e7qt9Gd0ZGwFSrE+t05ExlyIZTwFgztjxxEgHGTjenuDmZt1V3FOqLj
- hY6tXeN0IF42cMxDVHhaY8sDZ5JexDfd08+7e5NjEHpJdO8KRsLQOEbtG
- A==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1773648566; x=1774253366; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=CkqOrHI0pA0aa9c4wVceDBxDBQs3wiDzTQkv9mKqqbM=;
+ b=Zk1NLUxLMD6ToEfkaZ+4sM2YTs3FtXJ05+YczCy+b+lHvlhpikOqQhSObCQqXhS1bq
+ 47jXrsXVxvVWJl1kV0NY5LXKsfG8eYwXqNLOuSDMc1QTJVpqPaJn46Yzl7MBN9BMt7TM
+ wZ7v7ogu5LOoEiMJI0hiOiqoWdJRHxj0nmhdhglLkOuHMumAz7YCZ37jQnbSS/5UImwA
+ GQiJ9Wj9mNF1Lu2imrYVhbOx63UBiN9ZjkIT8rP4d/281G4DOTXnOcdBRO8XufRIO2zT
+ J15GY9SOZ7CP/L+rgx+jDzbuxHjvsmH/TahE7vZLK814PmCrEiD6iINNWjUAHrQJsoAo
+ GpcQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=aKmLMs/1
-Subject: [Buildroot] [PATCH v2] package/python-humanfriendly: new package
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Zk1NLUxL
+Subject: Re: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Always require
+ host-pkgconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,140 +121,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, yann.morin@orange.com,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Hi all,
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Require host-pkgconf only for libtirpc is not enough because libmnl
+> requires as well.
 
----
-Changes v1 -> v2:
-  - add runtime test  (Romain)
----
- package/Config.in                                |  1 +
- package/python-humanfriendly/Config.in           |  7 +++++++
- .../python-humanfriendly.hash                    |  3 +++
- .../python-humanfriendly/python-humanfriendly.mk | 16 ++++++++++++++++
- .../tests/package/sample_python_humanfriendly.py |  6 ++++++
- .../tests/package/test_python_humanfriendly.py   | 12 ++++++++++++
- 6 files changed, 45 insertions(+)
- create mode 100644 package/python-humanfriendly/Config.in
- create mode 100644 package/python-humanfriendly/python-humanfriendly.hash
- create mode 100644 package/python-humanfriendly/python-humanfriendly.mk
- create mode 100644 support/testing/tests/package/sample_python_humanfriendly.py
- create mode 100644 support/testing/tests/package/test_python_humanfriendly.py
+> Upstream added it since 20200515 commit
+> 553ca8ea3b ("net/route: Add netlink based route change tests")
+> using it in m4/ltp-libmnl.m4.
 
-diff --git a/package/Config.in b/package/Config.in
-index fab482c52f..49ff5e957c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1153,6 +1153,7 @@ menu "External python modules"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-httpx/Config.in"
- 	source "package/python-huepy/Config.in"
-+	source "package/python-humanfriendly/Config.in"
- 	source "package/python-humanize/Config.in"
- 	source "package/python-hwdata/Config.in"
- 	source "package/python-hyperframe/Config.in"
-diff --git a/package/python-humanfriendly/Config.in b/package/python-humanfriendly/Config.in
-new file mode 100644
-index 0000000000..06197843b3
---- /dev/null
-+++ b/package/python-humanfriendly/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_HUMANFRIENDLY
-+	bool "python-humanfriendly"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Human friendly input/output for text interfaces using Python.
-+
-+	  https://github.com/xolox/python-humanfriendly/
-diff --git a/package/python-humanfriendly/python-humanfriendly.hash b/package/python-humanfriendly/python-humanfriendly.hash
-new file mode 100644
-index 0000000000..35f9395325
---- /dev/null
-+++ b/package/python-humanfriendly/python-humanfriendly.hash
-@@ -0,0 +1,3 @@
-+# From https://pypi.org/project/humanfriendly/#humanfriendly-10.0.tar.gz
-+sha256  6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc  humanfriendly-10.0.tar.gz
-+sha256  4ac48f4117809f2734066150450f120b3bb110ac1d3b32170795e0560dbbc1f5  LICENSE.txt
-diff --git a/package/python-humanfriendly/python-humanfriendly.mk b/package/python-humanfriendly/python-humanfriendly.mk
-new file mode 100644
-index 0000000000..fcf3b47924
---- /dev/null
-+++ b/package/python-humanfriendly/python-humanfriendly.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-humanfriendly
-+#
-+################################################################################
-+
-+PYTHON_HUMANFRIENDLY_VERSION = 10.0
-+PYTHON_HUMANFRIENDLY_SOURCE = humanfriendly-$(PYTHON_HUMANFRIENDLY_VERSION).tar.gz
-+PYTHON_HUMANFRIENDLY_SITE = https://files.pythonhosted.org/packages/cc/3f/2c29224acb2e2df4d2046e4c73ee2662023c58ff5b113c4c1adac0886c43
-+
-+PYTHON_HUMANFRIENDLY_LICENSE = MIT
-+PYTHON_HUMANFRIENDLY_LICENSE_FILES = LICENSE.txt
-+
-+PYTHON_HUMANFRIENDLY_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_humanfriendly.py b/support/testing/tests/package/sample_python_humanfriendly.py
-new file mode 100644
-index 0000000000..31269a58f4
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_humanfriendly.py
-@@ -0,0 +1,6 @@
-+import humanfriendly as hf
-+
-+
-+h_size = "16MiB"
-+b_size = hf.parse_size(h_size)
-+assert b_size == 16*1024*1024
-diff --git a/support/testing/tests/package/test_python_humanfriendly.py b/support/testing/tests/package/test_python_humanfriendly.py
-new file mode 100644
-index 0000000000..adb317b014
---- /dev/null
-+++ b/support/testing/tests/package/test_python_humanfriendly.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Crc(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON3_CURSES=y
-+        BR2_PACKAGE_PYTHON_HUMANFRIENDLY=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_humanfriendly.py"]
--- 
-2.34.1
+> Later, in 20210524 in commit
+> 6e17e2ba13 ("configure: Improve error message on missing pkg-config")
+> configure.ac required it explicitly:
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+> m4_ifndef([PKG_CHECK_EXISTS],
+> 	[m4_fatal([must install pkg-config or pkgconfig and pkg.m4 macro (usual dependency), see INSTALL])])
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+> This fixes error:
+> checking pkg-config is at least version 0.9.0... ./configure: line 7419: br-mips64r6-el-hf-glibc/host/bin/pkg-config: No such file or directory
 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Hi all,
+
+> It fixes failures on these old toolchains:
+> * br-mips64r6-el-hf-glibc [33/35]: FAILED
+> * br-powerpc64-power7-glibc [35/35]: FAILED
+
+> Although both removed in 8bab0acff6 and 573a113edd it's a valid change.
+
+Gently ping about this commit. It fixes build errors.
+
+Kind regards,
+Petr
+
+>  package/ltp-testsuite/ltp-testsuite.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index e4e3ff8717..12db8f2d3b 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -11,6 +11,8 @@ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download
+>  LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+>  LTP_TESTSUITE_LICENSE_FILES = COPYING
+
+> +LTP_TESTSUITE_DEPENDENCIES += host-pkgconf
+> +
+>  LTP_TESTSUITE_CONF_OPTS += --disable-metadata
+
+>  ifeq ($(BR2_PACKAGE_LTP_TESTSUITE_OPEN_POSIX),y)
+> @@ -51,7 +53,7 @@ LTP_TESTSUITE_CFLAGS = $(TARGET_CFLAGS)
+>  LTP_TESTSUITE_LIBS =
+
+>  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> -LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
+> +LTP_TESTSUITE_DEPENDENCIES += libtirpc
+>  LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+>  LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+>  endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
