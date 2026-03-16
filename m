@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 645D6F53D9E
-	for <buildroot@archiver.kernel.org>; Mon, 16 Mar 2026 21:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBEDF53D9F
+	for <buildroot@archiver.kernel.org>; Mon, 16 Mar 2026 21:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1688F4075F;
-	Mon, 16 Mar 2026 21:16:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A5598242D;
+	Mon, 16 Mar 2026 21:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ykDLj3VJN9_f; Mon, 16 Mar 2026 21:16:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h5hNk-7XmkMq; Mon, 16 Mar 2026 21:17:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30D8D40760
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3413382435
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773695815;
-	bh=KdhVrYKvVkZG4nWoTL/lv2SGkSNt9h7ZGbOiugDH2Ak=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lpIY08HYhJcBbEGfeOoMuOe7uA1G2AtSG0IQtu888+mULunoPRydcerSsMrLZ/7uh
-	 cn3D9ibhrVshnGwY+i0GzhVDMBx+3cC50DutXfYgYTW6HLAVyQe1XoLY9ArJrJ7kQz
-	 fXhZx77AdKqKiCcdxB0YM7KinCu0JiAVZGdEcrqrr0qlhyln8fyiqtjH6gYQpNs160
-	 93wFeYO9W2SAVzVl7Nb/ZjiHSuye9rBljajJceyVjfwLusL+8g3pJBt4vn3S8VCNco
-	 8ey/GXfRrnsr0+pmmf9sCHZITHMDePVKYs+0McIjL+2wf/tpi7tio1ZNIkfZQeGiZ5
-	 TGCrmDmcOpYfg==
+	s=default; t=1773695841;
+	bh=+2zKqNLV+3/KeCWjV+sf6bCYrSXs1NbrflrNe2p37tE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=cfXQwjzqYQ1KcEwbGvr0+zu5nS2+G2O01HtlC6Ft7QD1dCq0WBKtDCSPN3qU7Fht2
+	 fSJ25CzkW+0uowLkmJZXG9hOFEMIMvxAL88+zT12i2RUnS1ucJkzVAAjHBUVmW/aNO
+	 z421gxiM4vy3xDoL9rxq7Kdcql2zA2scrJxiEWRgm6WCsAkz5kJWKCumfv2Prv0vkU
+	 nnywvokAH3sIL7t0inqiBQDDmfHtGnpr+kyWhKva7vKnAQ+IoyLLg8mZCettrcvLwV
+	 1wZYA35ZzPa/tXmRN6btS4exqPVLTEdTnFC2Q6HuGRSRtEx+8Gk0yZUYY5/k/ADRRH
+	 T8SwylN0UVizQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30D8D40760;
-	Mon, 16 Mar 2026 21:16:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CDDB3C6
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:16:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3413382435;
+	Mon, 16 Mar 2026 21:17:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A86043C6
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79DE560A6B
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:16:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A7874094A
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:17:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id koEvCtwqSEmW for <buildroot@buildroot.org>;
- Mon, 16 Mar 2026 21:16:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6B4160852
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6B4160852
- for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:16:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFA4783D5B; Mon, 16 Mar 2026 21:16:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 16 Mar 2026 21:59:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b6884913ae5e342e6ab3c8926447bde158e62de9
-X-Git-Newrev: 84bc50c82d020b09e55ac866a929c86247b73455
-X-Patchwork-Hint: ignore
-Message-Id: <20260316211652.EFA4783D5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: bump to 1.0.57
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gwLuqWqVdpw8 for <buildroot@buildroot.org>;
+ Mon, 16 Mar 2026 21:17:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DCBF140173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCBF140173
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DCBF140173
+ for <buildroot@buildroot.org>; Mon, 16 Mar 2026 21:17:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id BE78913F89C;
+ Mon, 16 Mar 2026 22:17:15 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 16 Mar 2026 22:17:15 +0100
+MIME-Version: 1.0
+Date: Mon, 16 Mar 2026 22:17:15 +0100
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
+References: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.13
+Message-ID: <e95244bf881f2090c51223b458dff34d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1773695836;
+ bh=p1FuHiVLrItjM9SZ2ZDUD4kqs4uMTslf84C9Q5Ls1Bc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YEyxMR1DU14Xal2qx6jAnszkDO1lCeptgVIfXwLNNEyBXMVAE7Xq/auSCJNBhjjqJ
+ DkEpmL8Duwd9uH1tLSY/435xPcdR2PwDteGeg8N4wVCBAXQlW02f4TRX498DwJyh27
+ rJrAjRYVjYhYcUNr6gL4ud1qOgh7rgPT9NyiI9ZjQ2HhVkds99yObM/+eSuAhKdKCv
+ HGNUCz8gaOQDGRF/dDtCkJXTbV9/+dueIEObtR+KrGHi4UcqlMe8egE62P9VzFLxGV
+ WPvwdqOGUtCZa60Rus3jHK0SnxYAhvLnOeLJQF1gnF14gyCwdehcVSOaWXEq/ywcqj
+ 170H1uw4YVc2w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YEyxMR1D
+Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,61 +94,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/84bc50c82d020b09e55ac866a929c86247b73455
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 01/03/2026 13:42, Waldemar Brodkorb wrote:
+> Following changes made it into the release:
+> 
+> Joris van Rantwijk (1):
+>       Fix adjtimex() with TIME64
+> 
+> Waldemar Brodkorb (8):
+>       sys/stat.h: remove _STAT_VER/_MKNOD_VER
+>       fix gettid() declaration
+>       add statx syscall wrapper
+>       sparc: add optimize build support for leon3
+>       sparc: sync with Linux kernel definition, fixes gdb compile
+>       fix compile error on earlier Kernels predating statx
+>       select: fix compilation failure with very old kernel
+>       bump version for 1.0.57 release
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Following changes made it into the release:
-
-Joris van Rantwijk (1):
-      Fix adjtimex() with TIME64
-
-Waldemar Brodkorb (8):
-      sys/stat.h: remove _STAT_VER/_MKNOD_VER
-      fix gettid() declaration
-      add statx syscall wrapper
-      sparc: add optimize build support for leon3
-      sparc: sync with Linux kernel definition, fixes gdb compile
-      fix compile error on earlier Kernels predating statx
-      select: fix compilation failure with very old kernel
-      bump version for 1.0.57 release
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 6a96e57069..e0dba1b6b4 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.56/uClibc-ng-1.0.56.tar.xz.sha256
--sha256  23c9cab54c113e020fb20b9dc06be4a49560df791b78fcbc2ca899a6e8f213dd  uClibc-ng-1.0.56.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
-+sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
- # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 69eb73510e..0c91a176fa 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.56
-+UCLIBC_VERSION = 1.0.57
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
