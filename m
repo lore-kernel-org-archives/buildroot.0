@@ -1,106 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EEAFED9E8
-	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 16:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B2FFED9EC
+	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 16:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33C64836F1;
-	Tue, 17 Mar 2026 16:27:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66B6040C85;
+	Tue, 17 Mar 2026 16:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uNV-uMhunNSb; Tue, 17 Mar 2026 16:27:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sMQCcqWFq5RN; Tue, 17 Mar 2026 16:27:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC5082207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50D4C40A14
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773764829;
-	bh=gqGa79IwBwCsBXkk5ZuVnuHKgWfGB93IQw1j2dQ7n0c=;
+	s=default; t=1773764832;
+	bh=HoJJvZCWbJ3TnKol0hKiIDl+abKZEFvLh5wB/yziQEQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=YyuJwCiSeaqlZpdx3zPuJxpRCtJAi7ilyDKiBDnW7ZuIQRgHUUbMmIs/jfZRw208T
-	 i8L944OyvuGaJUpboGl/hb7MjETd+6d9FE5IYs66K5fRmg0nN+dfB8oO6mbrTNVhSW
-	 omLhNJSte+iTapjIl2UJxpg4HQZtlZjzPqSh1kXbXBB09DgjLsEml1ZM1wOdkYaCUl
-	 3lvkDXpoUmxNApzxwxkmanwyR+5ifLz7cjoJn9g9sdyHMnD7oCxyjgPbV4u0HcSYUH
-	 DTPoK5cQaUdTDSU1rfYgUGI68T7x8UXBpfgCBacuzloR6v9NwZktYP7r/EQI8FEe3p
-	 RI/gCgFnIt2nQ==
+	b=W2FCahspn8gZhxLLKKAjp4Aq4BCusxBfybX4ndtHTFRJRcxD3s7Xf3MiG8IOLffiI
+	 eGapXAO4QAo/Zaw0PtA14MH/d1f0CzZ0wk066OoDuSykD3Y3+7VzUDjQvIDe1W5X9o
+	 izKIfm6b1OLFNet5HKvt3xqe94/GI6sTxjm0AlT3NqeSECVel+Z6VuTNHVZPdfLjdu
+	 eaFIXx3yUOOfQHus5jg7C0L1I2p+woOFNcohsyx3eSP9t3GLfMeBnaV1gjIFAeS5rJ
+	 Nujtbs0CqMKqIbtGxrqpwBejYmxC0fyrXq0ct1vBVH3hV9DFNdFUsos0E9LKENZr0b
+	 oQPFZY2GILXnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AC5082207;
-	Tue, 17 Mar 2026 16:27:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with UTF8SMTP id 52D98D3
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 16:27:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50D4C40A14;
+	Tue, 17 Mar 2026 16:27:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with UTF8SMTP id 634CAD3
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 16:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with UTF8SMTP id 50AFB613A3
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 16:27:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with UTF8SMTP id 47A0983DA7
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 16:27:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id M1f5B4n7xlih for <buildroot@buildroot.org>;
- Tue, 17 Mar 2026 16:27:07 +0000 (UTC)
-X-Greylist: delayed 453 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 17 Mar 2026 16:27:06 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F1C3611FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F1C3611FE
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.233;
- helo=out203-205-221-233.mail.qq.com; envelope-from=wangdong115@foxmail.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id iSfUFFgD1eCS for <buildroot@buildroot.org>;
+ Tue, 17 Mar 2026 16:27:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=162.62.57.87;
+ helo=out162-62-57-87.mail.qq.com; envelope-from=wangdong115@foxmail.com;
  receiver=<UNKNOWN> 
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com
- [203.205.221.233])
- by smtp3.osuosl.org (Postfix) with UTF8SMTPS id 8F1C3611FE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B48D82207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B48D82207
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com
+ [162.62.57.87])
+ by smtp1.osuosl.org (Postfix) with UTF8SMTPS id 2B48D82207
  for <buildroot@buildroot.org>; Tue, 17 Mar 2026 16:27:06 +0000 (UTC)
 Received: from DW-MiBook.lan ([240e:305:188b:e000:8bad:9e8a:6182:9856])
  by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
  id 4D9122CF; Wed, 18 Mar 2026 00:19:25 +0800
-X-QQ-mid: xmsmtpt1773764379tl8em527s
-Message-ID: <tencent_1DED7324378D3602186E5421849804FA3809@qq.com>
-X-QQ-XMAILINFO: NkCoAnNrHf2NQPBHguDlYRH5twW2JAWQT+l+NPbHlPHdY1b//IiShdbeKNu/Cy
- rxKgp8PfN2X4mCWWWiLJ8FPTI9HxSv3cobOnFVS5NpOPqVcOk+zRhUntlD+4d3dwYd5bYwSIqqUB
- T6OLwlMMfx7hCKbOORTjYnaYf7jpLmdBXUQdJxqE9WxDZU1rZsZzUKoYkGS3MFk2fYaxuqJye0AA
- YiTGxZk/nEYng2Tahxuie5YTOcXLnIsQ15uuLvK+aYC3eDv2j8/lsUdOmU0OpV8qYOn+Pc5Dea+T
- oHWyreE7f2mTT9edAiY5lhCYGldUbozdebqvJDXnKBnLciP3BipdRYglfqPEa7mrlWiS0iIYJylt
- bsCzMrW1abxCvMtkqF2hMc5VRIpTA9YGwiTTCd3v8rAee6/+I/OeU1O6kAlY8bFgvtmsFx1uaa90
- H/qu4myVZ0AexWFX0dI6YnIt2BLRyv6whVgsIHtW9WH+tvKlHtcd3d+CiBajF7DsNHtafjCNgVpu
- PsQt/HJl1tgAcqebhpmVtlNySnwWI03ofpkNbuGTx9Eh1yrKXtrDXP81Du4vJ2PdU4B+g7mXFHx7
- Z+NLErBUamVW5TGWBWXdEN9QZHjaRijhEAjXE2hOkk0jxtfksG0riu8+69MLIrSyc26KybJGviJs
- LmGYxcqSzLgHS2Sg8zD3DmEz1U78Ik+Ruacxl/NbcxCF2lthf9wbHPcsA+25SXfB6E0JNXqBxlIq
- IIwo8fZaKDvFZwIhHye8AcqilUuiXdD6oRgFFZAu2+r3C/Q4ctBMZkgedZ+r6zvJGodq4yFmEReQ
- 6OEa8iUS/dosb8qK6lzNwM2zlf6YztT7gQVNO+umQ+ohrdvLiyb2njwnVcA/XiUKdVvUTwNv4V7K
- Ydb2/ejFWG27tPu0tbhLuXcul+wOM7EavA3CQfhf0AZ1p+UwpUda91+ACLNQot4n3O4u5cRSJ32X
- aRFpFZmB6szm//Gha0Hdc/itwlRdItQ9P3W8dZDJd/I6S+YBp7N8NgGwX5aYPBXtPU/+tHy3F9EO
- ikWK6/6Y46lMxqD2ENQQo4rz2eOusNjQ8T+e/tn9eRwpzEwueY9Jt6fzcMa8nE5Nyag3k8SE/WTZ
- gJkTgUZNvQpVUqGgdOM+wzG8/ltM8riXb/ubJ2d0UkBLq5RLiTRNFvfDNH/SEvyyLoXnHq1HOLSj
- MYHa3jSNv2AADywg==
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-mid: xmsmtpt1773764366tqrl3kkdh
+Message-ID: <tencent_050C53AA1542B502959C63391A9BC01BC208@qq.com>
+X-QQ-XMAILINFO: OeJ9zRfntlNPUK9l/Z9xiC73Srt6CAr4D9S4G6Nz9NDJ3+tgzzGDdRPssRKDlW
+ QltjhWK685P9aqjTuHdYD+83LM84b892kP5qmlWA24PgpQuiXt6QGaDdtR226n7mVwzCCEINea6P
+ cDoTDwQSKm39uCaPTPAqqKxEBm6slj9I477j9I/9mqToULe5sTqoq4EACC0T1MLfIPQw3OGm1z+O
+ rsdyISzi5XLWl73yaE/ziK7eHz4HUmafsEruZwnI4YSSmh6TMwfebH4NqNo1kohnuyM4Z/4g12pQ
+ g6RiN7xc/QMiwZbIaUSQCo8su2QmJosvvmOy7MRjSw2hWA7z43f4EYXmmiJ6b1T7iQwuOQELgMod
+ kLti2VZ0rtPAh1PWTJGaAEGkzJ7Uj2G9sdDi1laST5yF44dM+f3/kzkxeHhVPxswv1X6VTRFnraZ
+ fsovDojSrNWTXXGL4fyaS7kGq0x4K6mZGvWuTwWp+c8328SHd5Ubc/MEsFLY9hJElgqsH4ucLYvR
+ QL8P5SauzlEexXNFRI7yvLEHaLCjQK+zStStmJfPJYHmcenaj8lM2PtpyNbbEoa6EY9XxfojzskS
+ gAEX819WJRQcIRKmQrZvzmhKNrDntE187R1gF3f4cIhepLJiJp5X0AHnNqaDN2anvrGlXj4m6Mex
+ lN2m8VriciZx+hdDUDmw43/leW6nAT5iciigG0TwqwDnhHClGfb2DXvUU8i+AyrrxYP2cD9Cq2t+
+ oMPHGQ61Aqyu4285uNoLYet6cyQO4hYp31jYQBjp021fFrJKEytEeweDf2jDfyr+G7WqWBvPRVQu
+ EApp+6ht/AZdjg/Z/Pscg2vJKWTZRHauoBltfPKsGqjxQ2cNb4BK2YZuHO/oIZFrQsMnUulaeknv
+ 6lwAcVeSQPnQbYTxF2dSj7QwFCIKdWWRRlLXhnQ6CZNUvMrbOLDIO2nebbM7FGdRbViGPI9HoELp
+ +cjGXOmGQQorLQoHHHQ/H9bQ34AFu2v9jXBwrgpIp8vzWIwqjUCE4NCY5NaLBrdeDMY5Or9RNiqy
+ Tm23PiQpwoqkkC9hr26b1nC43fjg9boB6P+o8r5BBuPXakbaDMa5ontF738RpYTYf/pKBxOM1nKg
+ XTtRbHDC8uZRWEohJEZRdHvUAGzeAwbD3LtSg1JQX7xlg7Teh+Jozo6rWmKSMeSekefIrgqhcQDa
+ n+77A=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
 From: Dong Wang <wangdong115@foxmail.com>
 To: buildroot@buildroot.org
 Cc: Dong Wang <wangdong115@foxmail.com>, Gilles Talis <gilles.talis@gmail.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2026 00:17:59 +0800
-X-OQ-MSGID: <20260317161759.36050-3-wangdong115@foxmail.com>
+Date: Wed, 18 Mar 2026 00:17:58 +0800
+X-OQ-MSGID: <20260317161759.36050-2-wangdong115@foxmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260317161759.36050-1-wangdong115@foxmail.com>
 References: <20260317161759.36050-1-wangdong115@foxmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=foxmail.com; s=s201512; t=1773764823;
- bh=tSKzCBLzri6BdGQVZ5xoRHfcolmHodUycgv9edFf61g=;
+ d=foxmail.com; s=s201512; t=1773764822;
+ bh=+WI/K6bF+9ftKrFQaMCLp2SCh29ZM+MkC342Sr/sIJo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=zSjKpn55TvIWusQuG9b5WW7zMR8vSRJHeiScnNyKOT45iMvlwW+oDIlOMAqbu9NQP
- XzULKffF5UrfQNVcLbRLRQS3OGL/FdOxA6ZhZImAccaWorp2KBzSK5uQkgzJwvNZQT
- CPwdlBPbAlV/onZG8h08cdOe/9svFZBCzeX6H440=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=y0slM8OoItMd6A4mH3pmjuDqEC5rnPHkVVKd5a7SNT87Tu9phPyfz2zfnqzW7E4ep
+ sSEmbksvN6a+F1p/xcTjkd/4ZccNeEs8EJEQ6/YvhxJQbnhXX2AaRjQNYGGgOhYtrP
+ EsnUBarUVGOpFXsiNCcRvMr9Ep2e0ZYb6ZfBEQ6A=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=foxmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
- header.s=s201512 header.b=zSjKpn55
-Subject: [Buildroot] [PATCH 2/2] configs/friendlyarm_nanopi_r2s: bump to
+ header.s=s201512 header.b=y0slM8Oo
+Subject: [Buildroot] [PATCH 1/2] configs/friendlyarm_nanopi_neo: bump to
  kernel 6.18.18 and U-Boot 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -122,81 +120,78 @@ This commit:
 - bumps the Linux kernel to 6.18.18
 - bumps the U-Boot to 2026.01
 - switches to a stable glibc Bootlin external toolchain
-- enables force hashes check
-- enlarge the rootfs size to 256M
 
 The updated U-Boot should also fix the CI build of the board.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/13458392713
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/13458392712
 
 Run-tested on the board.
 
 Signed-off-by: Dong Wang <wangdong115@foxmail.com>
 ---
- .../friendlyarm/nanopi-r2s/patches/linux/linux.hash  |  2 ++
- board/friendlyarm/nanopi-r2s/patches/uboot.hash      |  2 ++
- configs/friendlyarm_nanopi_r2s_defconfig             | 12 ++++++++----
- 3 files changed, 12 insertions(+), 4 deletions(-)
- create mode 100644 board/friendlyarm/nanopi-r2s/patches/linux/linux.hash
- create mode 100644 board/friendlyarm/nanopi-r2s/patches/uboot.hash
+ .../nanopi-neo/patches/linux-headers/linux-headers.hash   | 1 -
+ board/friendlyarm/nanopi-neo/patches/linux/linux.hash     | 4 ++--
+ board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash     | 2 +-
+ configs/friendlyarm_nanopi_neo_defconfig                  | 8 +++++---
+ 4 files changed, 8 insertions(+), 7 deletions(-)
+ delete mode 120000 board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
 
-diff --git a/board/friendlyarm/nanopi-r2s/patches/linux/linux.hash b/board/friendlyarm/nanopi-r2s/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..020dc72386
---- /dev/null
-+++ b/board/friendlyarm/nanopi-r2s/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
+diff --git a/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash b/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/friendlyarm/nanopi-neo/patches/linux/linux.hash b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
+index ecff37638a..020dc72386 100644
+--- a/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
++++ b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256  93218296934915636fe6ba08e125948424cc270fd8948502c0ab91087a9fccd8  linux-6.6.44.tar.xz
 +# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
 +sha256  f4855f382c1b735c84072bdef36db5bcd5dc7b0c37e42f5104317149a0a486ef  linux-6.18.18.tar.xz
-diff --git a/board/friendlyarm/nanopi-r2s/patches/uboot.hash b/board/friendlyarm/nanopi-r2s/patches/uboot.hash
-new file mode 100644
-index 0000000000..b6a925ea4e
---- /dev/null
-+++ b/board/friendlyarm/nanopi-r2s/patches/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
+diff --git a/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
+index fe9b4f53dc..b6a925ea4e 100644
+--- a/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
++++ b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
 +sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/configs/friendlyarm_nanopi_r2s_defconfig b/configs/friendlyarm_nanopi_r2s_defconfig
-index 547d9d5f59..6250237707 100644
---- a/configs/friendlyarm_nanopi_r2s_defconfig
-+++ b/configs/friendlyarm_nanopi_r2s_defconfig
-@@ -1,6 +1,10 @@
- BR2_aarch64=y
+diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
+index 9aed25b30c..4874a144eb 100644
+--- a/configs/friendlyarm_nanopi_neo_defconfig
++++ b/configs/friendlyarm_nanopi_neo_defconfig
+@@ -1,7 +1,9 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
 +BR2_TOOLCHAIN_EXTERNAL=y
 +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-r2s/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="rk3328-nanopi-r2s"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Nanopi R2S RK3328"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-r2s/post-build.sh"
-@@ -8,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-r2s/genimage.cfg"
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+ BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-neo/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
+@@ -11,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.13"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.44"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.18"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-nanopi-r2s"
-@@ -16,7 +20,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-@@ -26,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-nanopi-neo"
+@@ -21,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-r2s-rk3328"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
