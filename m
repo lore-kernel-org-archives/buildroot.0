@@ -4,110 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C38CBF33809
-	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 07:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ABB4F3380B
+	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 07:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D88261421;
-	Tue, 17 Mar 2026 07:49:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6530E6147A;
+	Tue, 17 Mar 2026 07:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mgWvrcQks9u5; Tue, 17 Mar 2026 07:49:42 +0000 (UTC)
+ id yMx5iKoUTWo9; Tue, 17 Mar 2026 07:53:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A25A61456
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEE796145A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773733782;
-	bh=QHt3sw48D0tgSDV8CU207D1bH4kWiexy/dyp8Bh9hjk=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=QNDeJJVrke/KaEZXTZh1ZQyEsssG4oxjYngvk0uR/7Bm0p4zSi9W7LAUpYd8kGqAe
-	 SHsNyVEcW08u6ed85nLDuSJkUXp1j+M2BM1FdinSOhAZ9dq/MpEOdEcpqFeI+/icMP
-	 I6dxwj7UZsmTDhlqdE42j6jo5r/EvfX71P+kIApcQZPBnbNZR2CSR7b48bqZx5XiTQ
-	 3BepJvWNvXJLolpNGRZgexfabP7821G3B7dRomPkjMaXW3K2O8L71Qg2V+TJwXzjMx
-	 jgVbxJ9q7l3hpoNXlI8qA1R9wkPUkwPb9tN87ZCCgOxsUTNo+g4oIhmum5yof+uL2V
-	 E6ZJZbCYN/mJg==
+	s=default; t=1773733997;
+	bh=hWsPOWMwh2GJpNPZBqXwBPfu/gvQbyhU1TP05TuV2I8=;
+	h=From:Date:To:CC:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=EkpMSKNnXGBvZ9MRVf5D9nP/i14XTbs8wkWFZTQFL3gNMubAAKwORIvjngqalOlZ6
+	 zAnZB/1I03lCSJhkFLixwLDLSKr2ufwORl/BWNwcTQHJAZcZ/s8utgZOczeO7hbUqX
+	 wFFlRW/FQGSlOHS239zxJW/alfNYnYfWOUIHTswmqEBxfIcqN8HFLWJ3A2t0Wl98Ms
+	 btHq5rFEAkXYOien2ynVQv4m2ayLr/493KZupV6jLHrh3W2AVQaLtXbGizyKqIKLa5
+	 2zZSO1jPF+He2pwXJB9NqWK2V5PvkOeXN/vfESiwyeHS6AiBsED0fLwcue7S/Q4BCI
+	 OXUpPHU4kSpIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A25A61456;
-	Tue, 17 Mar 2026 07:49:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4BC2F3BE
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:49:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEE796145A;
+	Tue, 17 Mar 2026 07:53:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E76171B6
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31BDC40BA7
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:49:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9A4183E55
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ikmDxMPyUTzh for <buildroot@buildroot.org>;
- Tue, 17 Mar 2026 07:49:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::429; helo=mail-pf1-x429.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 651A94004D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 651A94004D
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
- [IPv6:2607:f8b0:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 651A94004D
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:49:39 +0000 (UTC)
-Received: by mail-pf1-x429.google.com with SMTP id
- d2e1a72fcca58-829abaaa92bso3517423b3a.1
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 00:49:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1773733778; x=1774338578;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=J7liIWebpdQdu9FlSV+vEAAwfjfAmjZJME47doEu9U8=;
- b=Y1rvYEFH9ewrHaAO+wc/0K0GUOYPVozCGUukPvPmjopQVNkdZYhMZzC0lfCwiU0kj4
- FfMBdAfywEaNlHsXJzCNxByofh4y6gC9EZbuFhlFJvEmMqaIRarTWgRc4UM2tBuqoP9p
- Dd9n/uhYS804eGnOhQR0mmhmMBVvT2kUAcLYBbd6JPHLPC5g2+aCKYfc5UNck48DJhdj
- IF5NG6T0eCDMEYhzwZS0+42SYNWLmHVDXEA4izp81JpIMN9cO2E1yrnvjEu+68j5tw7i
- ZJf+66bpXYJyYprqYtZJWNlE6+mi2WuQaEcBRtgfB6ZyTEsBI7YF2IGBXY+b47B2HF9E
- ykfg==
-X-Gm-Message-State: AOJu0YyXgmPpDiLTuvbmqbrZxaXFn/jnjEfX7Xtj1UbSDPdflay9FG+D
- KIsrNpZRi9Fs551YrLOkiwQ69jzOUjR+zgEppMg4GdYumnlEkvhOykerqogsvw==
-X-Gm-Gg: ATEYQzxwAawQdEXxPihGunXPP/y4UxP7hv3q94e719khb334KE8itTURwcCWKXU9RKH
- vxENJyZePPtC2kniu3DWZ01/fdRleAVVDTie7hKYBK9JyfzQ8sWZ9bOB8Vcd13VxGzeHqCHTzGp
- xGIuPU/hOFRzDWLPWMLwspqeWBBQ+DR6sjWwrt7MgzV/HvI3vMkiJJw0o4VdpMfeM8iBcmj29A5
- YZHN5cysrY4/CQaFIuxiPHLq0MOuzdvDivrkqr3QDw6fGagGvxR0PeltFMTSCug3jb31ddXDZI5
- xsB/FwFVrezMtpBlWjHUW5tCVqJVxu02lZAdkL5g49GQwOkjCQXhoD798j+AgOCdeeXkOrTOqCy
- pz5lTop9R//czVVZv6hnGc0YTIgIt6hLd9eq8qFEDX3vEVGLQ+fVHw/NibhoHfXVnu7cSKAYhWH
- 1mi5Br0Kxm4OuXoYT3usrmgPHAisshZIS4zFnr7eh8K+SSXw==
-X-Received: by 2002:a05:6a00:2986:b0:827:4343:4c1 with SMTP id
- d2e1a72fcca58-82a19875917mr14583799b3a.29.1773733777758; 
- Tue, 17 Mar 2026 00:49:37 -0700 (PDT)
-Received: from fedora ([2409:40e5:1052:9a56:3b6f:933a:89fd:e530])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82a07365090sm15445636b3a.46.2026.03.17.00.49.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Mar 2026 00:49:37 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Tue, 17 Mar 2026 13:19:19 +0530
-Message-ID: <20260317074923.981623-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XEVwjmshnNFI for <buildroot@buildroot.org>;
+ Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C96B083E28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C96B083E28
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C96B083E28
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:13 +0000 (UTC)
+X-CSE-ConnectionGUID: RKZM+SK+TRmrOh18LHSEGw==
+X-CSE-MsgGUID: GMr1c/THRXGQk0XNJJToIQ==
+Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 17 Mar 2026 08:53:11 +0100
+Received: from unknown (HELO OPE16NORMBX604.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 08:53:10 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX604.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Tue, 17 Mar 2026 08:53:09 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 17 Mar 2026 08:53:08 +0100
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: 1SmG3GU4QvmqVux9CBK4Ag==
+X-CSE-MsgGUID: SxacqM2NQAu6iyehZXzrig==
+X-IronPort-AV: E=Sophos;i="6.23,124,1770591600"; d="scan'208";a="404665662"
+Date: Tue, 17 Mar 2026 08:53:08 +0100
+To: Julien Olivain <ju.o@free.fr>
+CC: <buildroot@buildroot.org>, Romain Naour <romain.naour@smile.fr>, James
+ Hilliard <james.hilliard1@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Message-ID: <abkIZBFYRwfpMLcG@yd-6wlzhs3>
+References: <3bfde226697ff5b0d34d1f4620a98e6b60a63288.1773648533.git.yann.morin@orange.com>
+ <33c1ec4f90b02c847bec97bc80d48174@free.fr>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <33c1ec4f90b02c847bec97bc80d48174@free.fr>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX504.corporate.adroot.infra.ftgroup
+ (10.115.26.28) To OPE16NORMBX604.corporate.adroot.infra.ftgroup
+ (10.115.26.32)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1773733778; x=1774338578; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=J7liIWebpdQdu9FlSV+vEAAwfjfAmjZJME47doEu9U8=;
- b=E77sRix5EB53DupGFPO3mahw9WAdMeYGfAk/uGdTBWfWBNQNqyqUfqHcQQDzQTEN/b
- slyRT2mE/XdhEl9KCXucnm5nfzYGy/K7aPgAT7tv8J2/E5oMcpwsQGXoXqH8NvsJF7h7
- Ghp6AnoyyNaSzhDTETRPjhzzD9LN0NVVBrdcqwKwhcaf6l8w6Lk87TllkEjvDzmGUaJ2
- O+HhMRY8Z8VhUX5LfvDflEQ3aywBtZPypY+y1A89eODJiCsL89OyQH1ll0dKVGLrYgIx
- iPhCYCr1U6Ed3KO8ucEa7CAkqMdAK2Jfc4dcMYN10DQUe1bP30O2TSdQiKb/rBB/TcLW
- vwkA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1773733994; x=1805269994;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=Jr2tR+K7mSGrf3MmQ0ds1+OEhl/kTmi2CLhF9FUm0xI=;
+ b=WxemCIZi6VurUuZ+Jkg4QmPdBVKtfIHtnicZuhNJqYUY47/vOGCWjCxV
+ uEDzi1rDE+8bZXmFUde59Gwk8tSB5So/qoakgB5dsJ/X4nPfVpB0UGkov
+ ezvfUc5wETtPR0hGXbUkIIYdxKS370m3DTETle+k65Ge/PlsiJCmO/qgD
+ asOo5ds+cwx6EDvZc3lyFuaHmtxi0pLfe4zvNDwTITvcwnKiC2BNdZHgx
+ qd2ui3AaVKFYWNSRsPyonFQ+HlthlaC7lSKkHgrivSJqWHf6B6Zg1wUxQ
+ qiZ9j6y8U89TFa3xPwvEY4QfxLxBuJYyxe8tWc1h76EjyfYwG533LG5pc
+ w==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E77sRix5
-Subject: [Buildroot] [PATCH] package/pkg-generic: add support for
- uninstalling packages
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=WxemCIZi
+Subject: Re: [Buildroot] [PATCH v2] package/python-humanfriendly: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,173 +120,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot currently does not track which files are installed by each
-package in output/staging, output/target, output/host, and
-output/images directories. This makes it impossible to cleanly remove
-a package without performing a full rebuild.
+Julien, All,
 
-This commit adds:
+On 2026-03-16 22:44 +0100, Julien Olivain spake thusly:
+> Applied to master, thanks.
+> I also added the DEVELOPERS entry, since you said in [1] you
+> forgot to add it. I also fixed the test class name. See [2].
 
-1. A new Python script (support/scripts/pkg-uninstall.py) that reads
-   manifest files (.files-list*.txt) tracking package file installations
-   and removes all files belonging to a specified package from a given
-   directory.
+Ah, damned. Thanks!
 
-   The script handles:
-   - Regular files and symlinks (both to files and directories)
-   - Broken symlinks
-   - Empty directory cleanup (deepest first)
-   - Safe removal that prevents deletion outside the base directory
-   - Graceful handling of missing manifests
+Regards,
+Yann E. MORIN.
 
-2. A new 'make <pkg>-uninstall' target in pkg-generic.mk that:
-   - Displays an "Uninstalling" message
-   - Removes the package's install stamp files
-   - Calls pkg-uninstall.py for each output directory:
-     * TARGET_DIR (target rootfs)
-     * STAGING_DIR (staging for libraries/headers)
-     * HOST_DIR (host tools)
-     * BINARIES_DIR (images like kernel/bootloader)
-   - Updates size tracking baselines for each directory
-   - Cleans up the manifest files after uninstallation
-
-Usage:
-  make <package-name>-uninstall
-
-This enables selective package removal without requiring a complete
-rebuild of the entire system.
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
- package/pkg-generic.mk           | 26 +++++++++++-
- support/scripts/pkg-uninstall.py | 71 ++++++++++++++++++++++++++++++++
- 2 files changed, 96 insertions(+), 1 deletion(-)
- create mode 100755 support/scripts/pkg-uninstall.py
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index dd440e4062..db058b86a3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1043,6 +1043,29 @@ $(1)-all-legal-info:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-lega
- 
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
-+$(1)-uninstall: PKG=$(2)
-+$(1)-uninstall:
-+	@$$(call MESSAGE,"Uninstalling")
-+	# Remove stamps first (fault-tolerant ordering)
-+	rm -f $$($(2)_TARGET_INSTALL)
-+	rm -f $$($(2)_TARGET_INSTALL_STAGING)
-+	rm -f $$($(2)_TARGET_INSTALL_TARGET)
-+	rm -f $$($(2)_TARGET_INSTALL_IMAGES)
-+	rm -f $$($(2)_TARGET_INSTALL_HOST)
-+	# Uninstall files from all locations
-+	$$(Q)support/scripts/pkg-uninstall.py -p $$($(2)_NAME) -d $$(TARGET_DIR) -l $$($(2)_DIR)/.files-list.txt
-+	$$(Q)support/scripts/pkg-uninstall.py -p $$($(2)_NAME) -d $$(STAGING_DIR) -l $$($(2)_DIR)/.files-list-staging.txt
-+	$$(Q)support/scripts/pkg-uninstall.py -p $$($(2)_NAME) -d $$(HOST_DIR) -l $$($(2)_DIR)/.files-list-host.txt
-+	$$(Q)support/scripts/pkg-uninstall.py -p $$($(2)_NAME) -d $$(BINARIES_DIR) -l $$($(2)_DIR)/.files-list-images.txt
-+	# Update baselines to reflect post-uninstall state
-+	@$$(call pkg_size_before,$$(TARGET_DIR))
-+	@$$(call pkg_size_before,$$(STAGING_DIR),-staging)
-+	@$$(call pkg_size_before,$$(HOST_DIR),-host)
-+	@$$(call pkg_size_before,$$(BINARIES_DIR),-images)
-+	# Clean up manifests
-+	rm -f $$($(2)_DIR)/.files-list.txt $$($(2)_DIR)/.files-list-staging.txt $$($(2)_DIR)/.files-list-host.txt $$($(2)_DIR)/.files-list-images.txt
-+
-+
- $(1)-clean-for-reinstall:
- ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 			rm -f $$($(2)_TARGET_RSYNC)
-@@ -1304,7 +1327,8 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-system-dependency,$$($(2)_SOURCE))
- 	$(1)-show-depends \
- 	$(1)-show-info \
- 	$(1)-show-version \
--	$(1)-source
-+	$(1)-source \
-+	$(1)-uninstall
- 
- ifneq ($$($(2)_SOURCE),)
- ifeq ($$($(2)_SITE),)
-diff --git a/support/scripts/pkg-uninstall.py b/support/scripts/pkg-uninstall.py
-new file mode 100755
-index 0000000000..3ef3f7bd7c
---- /dev/null
-+++ b/support/scripts/pkg-uninstall.py
-@@ -0,0 +1,71 @@
-+#!/usr/bin/env python3
-+
-+import sys
-+import os
-+import argparse
-+
-+def main():
-+    parser = argparse.ArgumentParser(description="Cleanly uninstall a package's files")
-+    parser.add_argument("-p", "--package", required=True, help="Package name")
-+    parser.add_argument("-d", "--dir", required=True, help="Base directory (e.g. output/target)")
-+    parser.add_argument("-l", "--list", required=True, help="Path to .files-list.txt")
-+    
-+    args = parser.parse_args()
-+    
-+    if not os.path.exists(args.list):
-+        # We don't error out because a package might not install files in all locations
-+        # (e.g. no staging or no images), but we print a notice for debugging.
-+        print(f"Notice: Manifest not found, skipping: {args.list}")
-+        return
-+        
-+    with open(args.list, "r") as f:
-+        lines = f.readlines()
-+        
-+    directories = set()
-+    
-+    # Remove files
-+    for line in lines:
-+        line = line.strip()
-+        if not line:
-+            continue
-+            
-+        parts = line.split(",", 1)
-+        if len(parts) != 2:
-+            continue
-+            
-+        pkg, rel_path = parts
-+        if pkg != args.package:
-+            continue
-+            
-+        if rel_path.startswith("./"):
-+            rel_path = rel_path[2:]
-+            
-+        full_path = os.path.join(args.dir, rel_path)
-+        
-+        if os.path.lexists(full_path) and (not os.path.isdir(full_path) or os.path.islink(full_path)):
-+            try:
-+                os.remove(full_path)
-+                print(f"Removed: {full_path}")
-+                directories.add(os.path.dirname(full_path))
-+            except OSError as e:
-+                print(f"Failed to remove {full_path}: {e}", file=sys.stderr)
-+        elif not os.path.lexists(full_path):
-+            # If it doesn't exist, we still might want to clean up its parent dir
-+            directories.add(os.path.dirname(full_path))
-+                
-+    # Remove empty directories, deeper first
-+    sorted_dirs = sorted(list(directories), key=len, reverse=True)
-+    for d in sorted_dirs:
-+        # Don't try to remove the base dir or outside it
-+        if not d or d == args.dir or not os.path.abspath(d).startswith(os.path.abspath(args.dir)):
-+            continue
-+        try:
-+            # Atomic attempt to remove directory if empty
-+            os.rmdir(d)
-+            print(f"Removed empty dir: {d}")
-+        except OSError:
-+            # Directory not empty or other error, safe to ignore
-+            pass
-+
-+if __name__ == "__main__":
-+    main()
 -- 
-2.53.0
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
