@@ -4,106 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ABB4F3380B
-	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 07:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43A2DF33809
+	for <buildroot@archiver.kernel.org>; Tue, 17 Mar 2026 07:59:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6530E6147A;
-	Tue, 17 Mar 2026 07:53:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1B4661469;
+	Tue, 17 Mar 2026 07:59:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yMx5iKoUTWo9; Tue, 17 Mar 2026 07:53:17 +0000 (UTC)
+ id TObjZxBVm5zH; Tue, 17 Mar 2026 07:59:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEE796145A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10B2C6146B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773733997;
-	bh=hWsPOWMwh2GJpNPZBqXwBPfu/gvQbyhU1TP05TuV2I8=;
-	h=From:Date:To:CC:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1773734345;
+	bh=S7+o+CqhN8z9JFH+8ViXse2fUYy4ny1qt58Ra084Dbs=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=EkpMSKNnXGBvZ9MRVf5D9nP/i14XTbs8wkWFZTQFL3gNMubAAKwORIvjngqalOlZ6
-	 zAnZB/1I03lCSJhkFLixwLDLSKr2ufwORl/BWNwcTQHJAZcZ/s8utgZOczeO7hbUqX
-	 wFFlRW/FQGSlOHS239zxJW/alfNYnYfWOUIHTswmqEBxfIcqN8HFLWJ3A2t0Wl98Ms
-	 btHq5rFEAkXYOien2ynVQv4m2ayLr/493KZupV6jLHrh3W2AVQaLtXbGizyKqIKLa5
-	 2zZSO1jPF+He2pwXJB9NqWK2V5PvkOeXN/vfESiwyeHS6AiBsED0fLwcue7S/Q4BCI
-	 OXUpPHU4kSpIQ==
+	 From:Reply-To:From;
+	b=LPK5uV8FRstVjR44uDLGIyeYrgRd4B4x98FaBVQHivVzNO+obpOk6tuQ0es0abGkF
+	 Xi5mqnGiNqI6hHFpuywRLQNYcT1GhWdvUrtKMdcS1gbEjAeJBUF6tNXgMbUpPapPK5
+	 XH2YxBnwnFHfAIpsp00B9JVfileijcYgxnBa/bu9xjy8bFhAX0UdeIfJQhz+USnYQl
+	 Zvmnp4LBGgEkKzQ96cuHPbOchhLqZ0ZiFFoxUF5Fox5JEPosd6sPAjYucY4ZcQAEGm
+	 FqbcJktKQt3qqL7xY/UmtVNtbEN2VyIRK6TkD8y7pl3k2+XSM5IdyWxUEAUUaKc2HA
+	 00I3dujxeG8cQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEE796145A;
-	Tue, 17 Mar 2026 07:53:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E76171B6
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10B2C6146B;
+	Tue, 17 Mar 2026 07:59:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 437DA1B6
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:59:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9A4183E55
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2938040BAE
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XEVwjmshnNFI for <buildroot@buildroot.org>;
- Tue, 17 Mar 2026 07:53:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T3q_31L2_vqw for <buildroot@buildroot.org>;
+ Tue, 17 Mar 2026 07:59:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C96B083E28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C96B083E28
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C96B083E28
- for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:53:13 +0000 (UTC)
-X-CSE-ConnectionGUID: RKZM+SK+TRmrOh18LHSEGw==
-X-CSE-MsgGUID: GMr1c/THRXGQk0XNJJToIQ==
-Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 17 Mar 2026 08:53:11 +0100
-Received: from unknown (HELO OPE16NORMBX604.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2026 08:53:10 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX604.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Tue, 17 Mar 2026 08:53:09 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 17 Mar 2026 08:53:08 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: 1SmG3GU4QvmqVux9CBK4Ag==
-X-CSE-MsgGUID: SxacqM2NQAu6iyehZXzrig==
-X-IronPort-AV: E=Sophos;i="6.23,124,1770591600"; d="scan'208";a="404665662"
-Date: Tue, 17 Mar 2026 08:53:08 +0100
-To: Julien Olivain <ju.o@free.fr>
-CC: <buildroot@buildroot.org>, Romain Naour <romain.naour@smile.fr>, James
- Hilliard <james.hilliard1@gmail.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-Message-ID: <abkIZBFYRwfpMLcG@yd-6wlzhs3>
-References: <3bfde226697ff5b0d34d1f4620a98e6b60a63288.1773648533.git.yann.morin@orange.com>
- <33c1ec4f90b02c847bec97bc80d48174@free.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 315A44004D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315A44004D
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 315A44004D
+ for <buildroot@buildroot.org>; Tue, 17 Mar 2026 07:59:02 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 4B6614E42629;
+ Tue, 17 Mar 2026 07:59:00 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 1B0175FC9A;
+ Tue, 17 Mar 2026 07:59:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id F11E310450421; Tue, 17 Mar 2026 08:58:57 +0100 (CET)
+Date: Tue, 17 Mar 2026 08:58:57 +0100
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <abkJYg9QXlB-Lrii@windsurf>
+References: <20260317074923.981623-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <33c1ec4f90b02c847bec97bc80d48174@free.fr>
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX504.corporate.adroot.infra.ftgroup
- (10.115.26.28) To OPE16NORMBX604.corporate.adroot.infra.ftgroup
- (10.115.26.32)
+In-Reply-To: <20260317074923.981623-1-chakrabortyshubham66@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1773733994; x=1805269994;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=Jr2tR+K7mSGrf3MmQ0ds1+OEhl/kTmi2CLhF9FUm0xI=;
- b=WxemCIZi6VurUuZ+Jkg4QmPdBVKtfIHtnicZuhNJqYUY47/vOGCWjCxV
- uEDzi1rDE+8bZXmFUde59Gwk8tSB5So/qoakgB5dsJ/X4nPfVpB0UGkov
- ezvfUc5wETtPR0hGXbUkIIYdxKS370m3DTETle+k65Ge/PlsiJCmO/qgD
- asOo5ds+cwx6EDvZc3lyFuaHmtxi0pLfe4zvNDwTITvcwnKiC2BNdZHgx
- qd2ui3AaVKFYWNSRsPyonFQ+HlthlaC7lSKkHgrivSJqWHf6B6Zg1wUxQ
- qiZ9j6y8U89TFa3xPwvEY4QfxLxBuJYyxe8tWc1h76EjyfYwG533LG5pc
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1773734339; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=Qbm23N/z3gqHnNC0LbfZv2twt/0XNflDlCu2094gNXc=;
+ b=WvsVNaSDS7vneKpJ78u+QDUEbnpPQRpgwBSd/PgSZoLsqpy/BG+VGmja//aDdfIfXbaZFP
+ MbNXnbiB7tJhx1Ox4rL4KWYbkJ1EzsgnW2y4rKGWvPVQS2z+tatR79RblEMjY9OQQ0B42t
+ PVUrT4vfRRd1Acdayr6OY8D04gPzDkjmaROsYosqcHlSkt5f82LYUNEK50guQY24yB/Sgq
+ vtwufcha2p9pdQwDeTGO70NTFWFLi5P+LqwIerYU4OtkBY1scqcNj6QdXYPVVsjbeFNliY
+ 4eX2wHMbo9Z9CtJe+HZirOOpLx6U19Av93ET3FVcS7LJVwp5nKgOPin1KEAS+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=WxemCIZi
-Subject: Re: [Buildroot] [PATCH v2] package/python-humanfriendly: new package
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=WvsVNaSD
+Subject: Re: [Buildroot] [PATCH] package/pkg-generic: add support for
+ uninstalling packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,43 +95,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+Hello,
 
-On 2026-03-16 22:44 +0100, Julien Olivain spake thusly:
-> Applied to master, thanks.
-> I also added the DEVELOPERS entry, since you said in [1] you
-> forgot to add it. I also fixed the test class name. See [2].
+On Tue, Mar 17, 2026 at 01:19:19PM +0530, Shubham Chakraborty wrote:
+> Buildroot currently does not track which files are installed by each
+> package in output/staging, output/target, output/host, and
+> output/images directories. This makes it impossible to cleanly remove
+> a package without performing a full rebuild.
+> 
+> This commit adds:
+> 
+> 1. A new Python script (support/scripts/pkg-uninstall.py) that reads
+>    manifest files (.files-list*.txt) tracking package file installations
+>    and removes all files belonging to a specified package from a given
+>    directory.
 
-Ah, damned. Thanks!
+Thanks for your patch. Unfortunately there's a reason why this hasn't
+been implemented, because it simply doesn't work. Think about the
+following scenario:
 
-Regards,
-Yann E. MORIN.
+1. Make a build with BR2_PACKAGE_NTP=y, BR2_PACKAGE_OPENSSL=y
 
+2. Run "make openssl-uninstall"
+
+3. ntp is now broken on the target, because the ntp binary is linked
+   against libopenssl.so, but libopenssl.so is no longer on the target
+
+Best regards,
+
+Thomas
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
