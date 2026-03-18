@@ -1,113 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46E09FF6E8C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 08:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F6C510854DB
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 09:28:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97E3683BFE;
-	Wed, 18 Mar 2026 08:39:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB72B40A52;
+	Wed, 18 Mar 2026 09:28:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5dWKqsDP8Nz0; Wed, 18 Mar 2026 08:39:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wOY20U3bogey; Wed, 18 Mar 2026 09:28:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA20A83BB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004D340C1B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773823140;
-	bh=JgDzurbv7zsdUoFIZXNbIiIlTnk6V6GYiDWwqFbdHTg=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=nXHjymSBukNfC5X3+AIBzER59vLhjas9tuu6M+ObPgSrdsh8byavW6A0vRW0kUmcL
-	 TDqIbXBNDoGV95rcTlSMlNGr+01latezhC/aLAfLimvNSztJ86NufZFBHSgliIceHj
-	 bGMJeJdluOa2IWWarqq80r0kmZoF2gT8yRSAnhpsXdHIe9SMpQSjBQDfk/m+8GL35/
-	 MRxzqyDDlRye+Ket2yyjho2ae2o9R+t48tjlTTirPVBHUU7ZSj9ngSL08dFU/wZQcE
-	 +MI+hjgSZeyfyhhA3uPJKA8Rop3hFfYeXsyERigAJ+v6/rZLmJVOtcxcSONq6nmVFz
-	 DwQK6Ob/klD9Q==
+	s=default; t=1773826129;
+	bh=a+SRflKBIheTixwNgJfTfF4RG09XerMULqSC6vAXMGA=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Z+1jsQvrEWEkjBA+QEtNVSz0eaU/1hvAZRPLdOAKUWVvjS6iPKE3W2Ua8lXFDJ7KZ
+	 IotymB4cHQvxe5zXLZ+BHw4EWBMFrkREjOVoa9+byEk62mU5zDvyfsJf37WQMJWW/b
+	 26QtN5frCf63HR19W5mhy3dob/+q7tFMcWk7e6/o5mFmY6wPlM/bKPR78T1zk0M1v6
+	 ryZ9ZOlSx8/QBGK0kbyVM4wN+58xaPaFeEp+YOXByyNhiRjZruCCBSfw4/UI05/L1J
+	 DeR048TvHanwBOxJoBZqMkjZ6UwPZSur3kEIjg/kaOGg13Ug7SaE+GP8IysM1THam6
+	 NrClZbyRDhuYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA20A83BB1;
-	Wed, 18 Mar 2026 08:39:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 004D340C1B;
+	Wed, 18 Mar 2026 09:28:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 940FC1B6
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 08:38:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 40B271BD
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79983608BA
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 08:38:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26D7D608EA
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:28:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xOICIxZ17H3K for <buildroot@buildroot.org>;
- Wed, 18 Mar 2026 08:38:54 +0000 (UTC)
-Received-SPF: Temperror (mailfrom) identity=mailfrom; client-ip=109.202.192.35;
- helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 803E3608B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 803E3608B9
-Received: from mail.codelabs.ch (mail.codelabs.ch [109.202.192.35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 803E3608B9
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 08:37:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id E8FC65A0005;
- Wed, 18 Mar 2026 09:37:31 +0100 (CET)
-Received: from mail.codelabs.ch ([127.0.0.1])
- by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FGvhctYDLb5P; Wed, 18 Mar 2026 09:37:30 +0100 (CET)
-Received: from [10.6.32.204] (unknown [185.12.128.224])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 81F6F5A0004;
- Wed, 18 Mar 2026 09:37:30 +0100 (CET)
-Message-ID: <36f45eeb35bb33fa068060c77ba22b06fc34550a.camel@strongswan.org>
-From: Martin Willi <martin@strongswan.org>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Wed, 18 Mar 2026 09:37:30 +0100
-In-Reply-To: <20260311081838.23403-1-thomas.perale@mind.be>
-References: <20260305115752.1861153-9-martin@strongswan.org>
- <20260311081838.23403-1-thomas.perale@mind.be>
-Autocrypt: addr=martin@strongswan.org; prefer-encrypt=mutual;
- keydata=mQENBEhbeIwBCADbKW4rqhkBsvQumeWTAfy+Q+YciIbbqLvxwRZPKpxz19nxJQPbWF7pG
- oiPb3TWLK3TitWVKKZuNILStsKTGiR4RqLUs8n3sESPoz5HmRqsijm6yJDzzPAE3/B7IWHBeAOssV
- TWS7b9ROz4iFI+fNLnqMqE22zMEItC2r9zi6GpDmi/QP3CcxHFzPMF5iQkMPp6QJMwOdPvYR9kBb1
- x1ubDOjsfWqI41neJTGlv3EVFc5nkv0s7PfoYxMkf8/VStd29pMe4csKJUaPDkLqenLl8Omq8Z3F+
- sbjdo+hcim4i3EsROYh59kA4/UuMFfI0hxaIaoW6UAb6gyqOHkS6vC+VABEBAAG0Jk1hcnRpbiBXa
- WxsaSA8bWFydGluLndpbGxpQHJldm9zZWMuY2g+iQE4BBMBAgAiBQJRsHoSAhsvBgsJCAcDAgYVCA
- IJCgsEFgIDAQIeAQIXgAAKCRAQGu6ewTL0wxf8B/9EThZXuVqNTK2nH2QuRi2zQntFXkK2QbU11sv
- zkfZV8xDfWKHdq67LLako/FOE1dXN6iurWFChgMexs0bSMzaftCmHGSSgGaQhBhANSObKu8M+UyHd
- bes88zNpQKdwVd9guIo6oRrX33IYkb63ifZReChcBffu6cjXQky7/79kpnl6f3qlP5ZluyNGX9Iwe
- z1EpmG2zHkJlc+3oPQbsQbFKjUOdR1hfyKbcVVQHs1ddv830Z0cpM6QbcknR81VsCQ7FYBrH5Hw3N
- AKhrfbIaZMvwBgQfXIgc7mwPZFg2oONZMzauzX6EpZ29Z+kCsy3AArnZssVAwxk+ydRJhUWlZmtCR
- NYXJ0aW4gV2lsbGkgPG1hcnRpbkBzdHJvbmdzd2FuLm9yZz6JATYEEwECACAFAkhbeIwCGy8GCwkI
- BwMCBBUCCAMEFgIDAQIeAQIXgAAKCRAQGu6ewTL0w9ruCADDGN0JgrImHOPGgsJwdP2nKwBytO8mM
- Z/Z/folgH20zqiMqyNR4lOZW9L3DF4rz83fKXQFbP7nCf6GZ/tmjmrImiTZBkKwr37ZsaBRaCz3i9
- rYITY94njenYp7jy6roMcvlBMhNjSI04AvLjaA/hcPuSexqqso+qoNTa7+VplF7OpikB8vKPt+fMp
- XuGP8TF/q8v9TrY+gcVv0c8ZOrGDnI5vJt1Fp0PvoH/vXFx3Jy90g+hRUYFbLW2S76geiGVML9AeK
- IQKjEpp2bxsd+JYGo91MeKBqjlllonxZ17eKNtlA+X+iluwcDJZzdabB19EQG7ZEf0jAy6Sy09au6
- MYFtCBNYXJ0aW4gV2lsbGkgPG1hcnRpbkByZXZvc2VjLmNoPokBNgQTAQIAIAUCSzjspgIbLwYLCQ
- gHAwIEFQIIAwQWAgMBAh4BAheAAAoJEBAa7p7BMvTDaP4IALJRUmUEagBRrdAi1SrxxcsgPDr5vo8
- 1UrPADXKnMdf6KXPqfPMN4hIeS4zbFyC/FA9cg0T9680pVk8hLmcD3iCRMMnL9d38hOQmMxw2TYnd
- 7rth1LuoDRhIwI1bfADw3EJGEMsTy49zVtVl1KwmqBZDDk3PGHvukHYawleOrTRVitOEvavg0vfgg
- CgqvSeSBy3tkX2EIlagC/5eXpYLguj1iI84xG01M4bZ9PU+PuzZADaHL+a9iPelBvk0uNjwKvKjPx
- OPDfaxsmEgjNG7M9gZjBkjSjvclRUlLMpe+3qHhGEYf2yKsv72hCLYy8my5jRnu59eZq72lX9YWVs
- jlXU=
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+ id 1MIQZnGOKsI9 for <buildroot@buildroot.org>;
+ Wed, 18 Mar 2026 09:28:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:67c:2050:102:465::206; helo=mout-b-206.mailbox.org;
+ envelope-from=manuel.diener@oss.othermo.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E7A3608FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E7A3608FB
+Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org
+ [IPv6:2001:67c:2050:102:465::206])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E7A3608FB
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:28:44 +0000 (UTC)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4fbNmj6yT1z9xmk;
+ Wed, 18 Mar 2026 10:28:37 +0100 (CET)
+From: Manuel Diener <manuel.diener@oss.othermo.de>
+To: buildroot@buildroot.org
+Cc: Manuel Diener <manuel.diener@oss.othermo.de>
+Date: Wed, 18 Mar 2026 10:27:08 +0100
+Message-ID: <20260318092709.987316-1-manuel.diener@oss.othermo.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=strongswan.org; s=default; t=1773823050;
- bh=2RFrvoiec/G8MO7NjkUvsJapECpvl6PMc3RTUXhIh7Y=;
- h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
- b=qMQ5dwXlxQdepGhXqzB4sT7oIZhqIbF/oRAqiT7/g9c5lWytZVuuRMCgQiceVui7U
- vQro3qKwqLsOkaSBxUPZqNHtCE3RdfTikWkLjv4XEV+g231zY1a/aKeacFM86CwQ6I
- 7BFtcokyYQWQIsWcQ4Tgo9X+TrppmO2MfvZQrXCtcM35c9L7BYwKtzTHAYPXzz+uxy
- j7qAsLXXfPORa0d1mVrVKHqANvmENlX28S+TkI1veXMKo9s3QKriZwGmcLrbnoDODR
- kMQZgKKL/HDM8pXhcTfxlRf1Yp3pujtwdRN3sNX6KBMi/evKZQOe+58IL+mB63tO9f
- P8eYBq23/+rRA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oss.othermo.de; s=MBO0001; t=1773826118;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=VrD2CTJiyuSisEbyLGIGDSLOKPB2puL6gz/r1+DuHl0=;
+ b=adWPKhedpsvJ6+I8TvENmAmvm7zWwIJPuaLWzUC+S8NIUScgRH8LvzH8GHwK65K5HKQxoR
+ DaBTbnbpn5H+3CDY/rJga6o04IZD2XaRmZ0LTosjREshTsF/vWzUjNFc4v0Bxlb0o534Ko
+ XWiWC6IkS6+u8kPzWgo0/kybrbNvYL03h15VZJe/M0KHuITlfZ0Xk4A6YISLzcWuguvMwy
+ xQo8nKZfJuPAvgfzB8P684efJBMmMKkqsLDmqn6TsCix7RvpQXlm3L5OKABYmwgOhulpG+
+ Vrvi55uJD/mZrxyp+/3k3NUysx7qF5S6ZQbvcOLVe/+nhVC6xfn6QZXUyirjMQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=strongswan.org
-Subject: Re: [Buildroot] [PATCH v2 8/8] utils/generate-cyclonedx: add hashes
- from .hash files to externalReferences
+ dmarc=pass (p=none dis=none)
+ header.from=oss.othermo.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=oss.othermo.de header.i=@oss.othermo.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=adWPKhed
+Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,22 +91,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKPiA+ICvCoMKgwqAgcGF0aCA9IGJycGF0aCAvIGNvbXBbInBhY2thZ2VfZGly
-Il0gLyBmIntwa2duYW1lfS5oYXNoIgo+IAo+IEJ5IHVzaW5nIHRoaXMgcGF0aCB5b3Ugd2lsbCBt
-aXNzIHNvbWUgc3BlY2lhbCBjYXNlcyBmb3IgdGhlIGhhc2gKPiBmaWxlcy4gWy4uLl0gWW91IHNo
-b3VsZCBmaXJzdCBleHBvc2UgdGhlIGhhc2ggZmlsZXMgZnJvbSB0aGUgc2hvdwo+IGluZm8gb3V0
-cHV0CgpUaGFua3MgZm9yIHRoZSBzdWdnZXN0aW9uLCBtYWtlcyBzZW5zZS4gSSd2ZSBpbnRlZ3Jh
-dGVkIHRoaXMgYXBwcm9hY2gKd2l0aCBBcm5vdXQncyBhZGRpdGlvbiBhbmQgaXQgc2VlbXMgdG8g
-d29yayBmaW5lLgoKV2hhdCBpcyBhIHdheSBmb3J3YXJkIHdpdGggdGhpcyBhbmQgdGhlIG90aGVy
-IHNlcmllcyBbMV0/CgogKiBBcmUgdGhlcmUgY29udHJvdmVyc2lhbCBwYXJ0cyBJIHNob3VsZCBk
-cm9wPwogKiBTaGFsbCBJIHJlYmFzZSAgb24gdG9wIG9mIHlvdXIgQ3ljbG9uZURYIDEuNyBwYXRj
-aGVzPwoKVGhhbmtzLApNYXJ0aW4KClsxXSBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlw
-ZXJtYWlsL2J1aWxkcm9vdC8yMDI2LU1hcmNoLzc5ODExMS5odG1sCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+---
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 7b71e2d948..39b894fe9a 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 1135fb9c03..fa0b6aba78 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2025.10
++UBOOT_TOOLS_VERSION = 2026.01
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = https://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
