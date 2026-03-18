@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A0B10775FE
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3EBD10775F9
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 793DA60BD1;
-	Wed, 18 Mar 2026 18:21:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56F3C60C14;
+	Wed, 18 Mar 2026 18:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftegXN8wzA0I; Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
+ id iTDQS_vOfQlA; Wed, 18 Mar 2026 18:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD5A60BF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D16A260BED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773858113;
-	bh=eSupoNQlF3caoE5OwDlfgXfAJOSPIF14r9Vf2zHwSFI=;
+	s=default; t=1773858114;
+	bh=5tcsP+0wiBYciB3F/I5TiD48MA0yjfahWz64IFtYUfU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sIoRz8GX0+dqcWEa15Xvw3Xc1Uf42TYnjVwPJpnGyJrD3NbFHyQiFDATWDMCI5syC
-	 dZKoWM8XF10NrZ2UxUy+T5Sr7J7rs1q3kvnSNslDP/QLUviQR/go35z4nNMLQMDU/9
-	 He5jMoZfrmORryN17nOaH1ivOROqKfR4ZmuWmmwm2euUzG6OxAq/MKCIbgaRJXu+zu
-	 LiMpuxg+A83PPb4eDAKrALpZNC3VMN02vn+p8r7Hp+byyYKErtdO0Bbmj3qwaSLoWj
-	 z+FzcOOZEXFjCdOX2k17y/Apiz8MTarJML68uD4/FOhGQn/WrNOw0myAVxYdb+wszn
-	 XfycQxL3eyhTA==
+	b=gor59UocOsWVJWW9KZpvyzO0oQ9JFi5KuuHetRLFTRTFg0NuipaEZR1ftmrXkNu6/
+	 NjlFJLBapCXPFyPrDgkaLtZrwnLWCGX6eq/mvPP/u5dp2Jj29AokCLEv+F91KWo0z0
+	 /A8BFP87GQcDUZbHt+sV5cw2VKIEyAa5xRwSpw/IUu6tJBGNOhb0kF42VRmAb/Bix/
+	 LVKPEvT6UpU95Z3Vpnu3u0V2ygcDHjEFVHyvxnLw5GkekcJfEgUhIJGo9ghsWQ9ehK
+	 bk28PQ6yPE4zVEOSwB1V32PTYz80tchnuDtn4xjA/+KyflDjkJ6UnNZSwoxFqRPW37
+	 0CVAtH0B4ANqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD5A60BF8;
-	Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 317D51BD
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D16A260BED;
+	Wed, 18 Mar 2026 18:21:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A2521B6
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28064400C5
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4354181061
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HQbOHR2PTW6A for <buildroot@buildroot.org>;
- Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RBPM9dTN8ZNt for <buildroot@buildroot.org>;
+ Wed, 18 Mar 2026 18:21:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C2DC404A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63BD68104D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C2DC404A4
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63BD68104D
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F98C84ABE; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
+ id 69EEF84AC2; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Mar 2026 19:03:05 +0100
+Date: Wed, 18 Mar 2026 19:06:55 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de7bd5034b38b69c631b1d1a3299942513051267
-X-Git-Newrev: c26a70b5240f7ab79ece130668950fbfb61d93fd
+X-Git-Oldrev: c26a70b5240f7ab79ece130668950fbfb61d93fd
+X-Git-Newrev: 0e8739fab27e8a7b9850c936d95c1cdaca3ea0f9
 X-Patchwork-Hint: ignore
-Message-Id: <20260318182146.5F98C84ABE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uboot-tools: bump to version
- 2026.01
+Message-Id: <20260318182146.69EEF84AC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xen: fix armv7 build with gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,44 +71,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6573077518883388416=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c26a70b5240f7ab79ece130668950fbfb61d93fd
+--===============6573077518883388416==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e8739fab27e8a7b9850c936d95c1cdaca3ea0f9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+Backport a patch from Xen 4.21 to fix the following build errors for Arm v7
+with gcc-15:
+
+  xen-4.14.6/xen/include/asm/platforms/midway.h:1: error: header guard '__ASM_ARM_PLATFORMS_MIDWAY_H' followed by '#define' of a different macro [-Werror=header-guard]
+  xen-4.14.6/xen/include/asm/platforms/omap5.h:1: error: header guard '__ASM_ARM_PLATFORMS_OMAP5_H' followed by '#define' of a different macro [-Werror=header-guard]
+
+Since the external 32b arm toolchain has been updated to a version based on
+gcc-15, the tests.package.test_xen.TestXenArmv7 python test does not build
+anymore.
+Adding the patch repairs it.
+
+Link: https://gitlab.com/buildroot.org/buildroot/-/jobs/13518318473
+Fixes: 86d453a7dc08 ("toolchain/toolchain-external/toolchain-external-arm-arm: bump to 15.2.rel1")
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Alistair Francis <alistair@alistair23.me>
+Cc: Dowan Gullient <dowan.gullient@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0009-Arm-platforms-fix-build-with-gcc15.patch  | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 7b71e2d948..39b894fe9a 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
-+sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 1135fb9c03..fa0b6aba78 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2025.10
-+UBOOT_TOOLS_VERSION = 2026.01
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = https://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
+diff --git a/package/xen/0009-Arm-platforms-fix-build-with-gcc15.patch b/package/xen/0009-Arm-platforms-fix-build-with-gcc15.patch
+new file mode 100644
+index 0000000000..fb95ca9fa5
+--- /dev/null
++++ b/package/xen/0009-Arm-platforms-fix-build-with-gcc15.patch
+@@ -0,0 +1,46 @@
++From d12666d74dc742bb06c30b96d6b874a3e14c6b46 Mon Sep 17 00:00:00 2001
++From: Jan Beulich <jbeulich@suse.com>
++Date: Tue, 26 Aug 2025 08:41:18 +0200
++Subject: [PATCH] Arm/platforms: fix build with gcc15
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++For two of the headers gcc15 complains "header guard ... followed by
++'#define' of a different macro". Misra certainly wouldn't have liked
++this either, if these headers were covered by a scan.
++
++Signed-off-by: Jan Beulich <jbeulich@suse.com>
++Acked-by: Michal Orzel <michal.orzel@amd.com>
++Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=39f95089e2ba15c5438ce904c0cbbd8d79d3e6e7
++Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
++---
++ xen/include/asm-arm/platforms/midway.h | 2 +-
++ xen/include/asm-arm/platforms/omap5.h  | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/xen/include/asm-arm/platforms/midway.h b/xen/include/asm-arm/platforms/midway.h
++index 099e435..6914393 100644
++--- a/xen/include/asm-arm/platforms/midway.h
+++++ b/xen/include/asm-arm/platforms/midway.h
++@@ -1,5 +1,5 @@
++ #ifndef __ASM_ARM_PLATFORMS_MIDWAY_H
++-#define __ASM_ASM_PLATFORMS_MIDWAY_H
+++#define __ASM_ARM_PLATFORMS_MIDWAY_H
++ 
++ /* addresses of SREG registers for resetting the SoC */
++ #define MW_SREG_PWR_REQ             0xfff3cf00
++diff --git a/xen/include/asm-arm/platforms/omap5.h b/xen/include/asm-arm/platforms/omap5.h
++index c559c84..8867b45 100644
++--- a/xen/include/asm-arm/platforms/omap5.h
+++++ b/xen/include/asm-arm/platforms/omap5.h
++@@ -1,5 +1,5 @@
++ #ifndef __ASM_ARM_PLATFORMS_OMAP5_H
++-#define __ASM_ASM_PLATFORMS_OMAP5_H
+++#define __ASM_ARM_PLATFORMS_OMAP5_H
++ 
++ #define REALTIME_COUNTER_BASE                   0x48243200
++ #define INCREMENTER_NUMERATOR_OFFSET            0x10
++-- 
++2.53.0
++
+
+--===============6573077518883388416==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6573077518883388416==--
