@@ -4,167 +4,139 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEA710854DB
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 09:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 401D7FCD0A6
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 10:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6385D60745;
-	Wed, 18 Mar 2026 09:30:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF4F860802;
+	Wed, 18 Mar 2026 10:11:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r_kba1ZlSh1Y; Wed, 18 Mar 2026 09:30:39 +0000 (UTC)
+ id tTa1cywqdUSA; Wed, 18 Mar 2026 10:11:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54838608EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D420608BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773826239;
-	bh=gkMmYDC0Ybhn++RTezOjD+Ztoj+KLqjR++CGj8oi/g0=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qm/L6P2oibTGkt+AqGLLFM8avoFYDYOlbmZnA+nuU5KiGWb/qmJWN2uZEdgeCuGmk
-	 z1w7zPInecBaOkdF9AwtE1bj6QXM+ccVnu0afd+toeRLuEPzGab9j/q059lYZEFWbT
-	 n1koPb8lO2V/gN8Q0gtcXst1g8KvSxbCPk9OgwklqTTmqAW75GUnsjmexOWn1POKQc
-	 5/JzKrBXoZxHO7M/HEk072cpx5/H1LLcFwaffAS/SlIHNakHOyNXD17/si+Mi3HFs3
-	 liNUaNmOkHTktKY65fPBgEm3lyymF2giF3//WNOvrxk8Z4BQY35ZRBxaQ5BlTZ4JmY
-	 Kc8u3QuS1nRcQ==
+	s=default; t=1773828664;
+	bh=D0uv9Wdtx2b9BhRj9DTNvLl1+KHb7WPLSpn47kxYhQU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=guH23Lw7HS+eIhu3nYyKvVPhgNt0wA6/ynJPDaB1VG2GP/2JWlTaPPZLZX5HNXFbo
+	 HhZptXPm1ggbfshoAi5uJAvqGh1hJZpw/qOvG97IFszBcd4CJ9NZi69XSIvI/YtRf9
+	 EIEK8Ha0QtcCa6RCaYhgpngslHra/WLS/ZNWSoPisGWeQSBhCjjlp/vosZu6nOVgXo
+	 ALLATx9/Y3i8q3ghdPKqMAnK6m9jb28yn1CTnOaoKh1Jd1DWImk9wXvIfY7YvDkDK2
+	 eII60p/0MBqN+RtxSUj5vfJs4MPd1VW20OnDbcIGse4NAbMHPKBovMe8OpncMI3pMi
+	 wB1o4yQt6DNmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54838608EA;
-	Wed, 18 Mar 2026 09:30:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C33B1AD
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:30:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D420608BD;
+	Wed, 18 Mar 2026 10:11:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 415AA1B6
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 10:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DACA838C9
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:30:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32831608BD
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 10:11:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NUDPeq0aeGEm for <buildroot@buildroot.org>;
- Wed, 18 Mar 2026 09:30:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NVSZ417jaKeX for <buildroot@buildroot.org>;
+ Wed, 18 Mar 2026 10:11:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c10d::3;
- helo=sn4pr0501cu005.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c111::5;
+ helo=dm1pr04cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E1E0381094
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1E0381094
-Received: from SN4PR0501CU005.outbound.protection.outlook.com
- (mail-southcentralusazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c10d::3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E1E0381094
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 09:30:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 40B8C60802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40B8C60802
+Received: from DM1PR04CU001.outbound.protection.outlook.com
+ (mail-centralusazlp170100005.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c111::5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 40B8C60802
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 10:11:00 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bJMb6XpNRF38y9nZdYwASuu8iLQ/4iGWjwdWT01xijHwiJfBIx26TxGCE5NTrFPJ6HRGCmcc3Cy3r6nxw7y5euM8CyiSbImaqwZZaHuQuNIkQ2HjteWujhJBqQgoG1SWhUUYnu4orCGawANSqVIa1XQ5jYWiIKp3nf1vp3N2wimlebR0WxdevjJhVXDFvhrJdziHvLZS33EVHBNl/HqHh+f497ejjLOvHGOxe0G8WQ+UORc/usFBOQE89vJMlVQllMbrCyGU4bk1GaJhHRNLi2Mb+s4nA5zR5MkyfDsOeyVexi8rEU4DLtzdKwqkvSi6d4GJHTJJct1rLG1rOjdLmQ==
+ b=eDBXGDODcYr7FL1OK+TRvVCUKSyVD7Ikoyav/QKP1Wid/xdNXLZJuASRCvVLWTzWbX/f/Dl8UQSlDd+yXH0WAX6Zohh35BQ3riEkPNUGRoSCKMq03RcOHrO/2Va2BQsiZ+rftEPpMpd3N08zr7fKBgUQ6LB01Nd4kVCbpM4UrkbRK1y+m+cfObCoUJIGT5vQzrWi5F0SbO34GqIFmjoK9YURrr69Zl3511qAvn231GHAYyeFxYVbei72PNj3fA/2Jsbm3Mj5skw7G+IlaYxC5HqFsipB6V9UHzZ/ENvSFtDNAm9RqaXOylyEbUuENrWuruPt0eiwUyjZcV7mAIFuTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7dtwnqkDVdGcXcboxE0HEy9W17hUUsfMpv/VAhN4hio=;
- b=alh8uGlT1CEsZcX04MLZg3X6M9z7BkP4uYUPGAeI7NUX6zpImE2/w+8Srqxc3EMaVYX6vJZ7RzQz5l8Lsz1dHytI1T0WLDh/O6eedgaM3om3+ot+WdB9zShqijUKd6EunFbWjaj2FOlUrQpsH1QzgK4nVhDq+ntk4lNz5Wsr7QLUd8X6iz9V/LAg0yCehSxoao2b9HkKF/d2SpkRa0sNxkhI1mt/+HNsEUWqXK90WjcTxfF3bjDg+nLrI/c7krSbqryiq3yI/sL2/jYIkn0smY9DrAicNN3irjsn7ddCksEkkaXjLH3teYkrf1XheMTkVMh9rHoB3Idy0QKyjOUIgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
- by PH7PR12MB7869.namprd12.prod.outlook.com (2603:10b6:510:27e::7)
+ bh=i5xn7oQm+bcXgTGBFZWKcNOWwQaz7teuP6bHJHP/JNc=;
+ b=s3+NKR8eqQPVsfrOxZCq1jN83hr+ZexNzYU6QyHvKbSZW/ednOFp88uzrfhd+pvIdbRoJEfnv88IYG6qAVQeIDsbnzQAZirdhwIVbbTjgP+v8KSAMzGBUKRi5ZJ841bUDo3YN8c4nLWhIb1WyApErFtFe87JqTumLintNDZTfGnm3EI+T8q9BCCE2lEqozbdw9TD6e7t3Bvpl7rXjKJvMd10T7I2d77/lNRYIpEM6K38Aykx1DT70jcY6IlVIs+M5rguqaJbnD78h2qFtv14BFO+rN9BrhniFV9TzRdosvUNIS4hga2UDmfu0KWt2IOiuqlFFjZLJKNCokzL01FRUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from SJ2PR07CA0012.namprd07.prod.outlook.com (2603:10b6:a03:505::13)
+ by LV8PR12MB9667.namprd12.prod.outlook.com (2603:10b6:408:297::6)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Wed, 18 Mar
- 2026 09:30:29 +0000
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d%5]) with mapi id 15.20.9745.007; Wed, 18 Mar 2026
- 09:30:29 +0000
-To: "Hill, Steven " <steven.hill@collins.com>, Peter Korsgaard
- <peter@korsgaard.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle <arnout@rnout.be>, Julien Olivain <ju.o@free.fr>, Romain
- Naour <romain.naour@smile.fr>, Luca Ceresoli <luca.ceresoli@bootlin.com>
-CC: Neal Frager via buildroot <buildroot@buildroot.org>
-Thread-Topic: buildroot: conflict between host-flex and host-bootgen packages
-Thread-Index: AQHctrnbFcMTNUAtcUS2hemE3tcmqg==
-Date: Wed, 18 Mar 2026 09:30:28 +0000
-Message-ID: <BL1PR12MB5032AF04B5E49FFD2A3BE55FF04EA@BL1PR12MB5032.namprd12.prod.outlook.com>
-References: <BN0P110MB2020C1A7861CBC35249850D2FD41A@BN0P110MB2020.NAMP110.PROD.OUTLOOK.COM>
- <BL1PR12MB503230F5A4525872321E07E4F041A@BL1PR12MB5032.namprd12.prod.outlook.com>
- <BN0P110MB20208E49672D992D38DADF09FD41A@BN0P110MB2020.NAMP110.PROD.OUTLOOK.COM>
-In-Reply-To: <BN0P110MB20208E49672D992D38DADF09FD41A@BN0P110MB2020.NAMP110.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2026-03-17T05:54:59.0000000Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|PH7PR12MB7869:EE_
-x-ms-office365-filtering-correlation-id: 01378ade-f0f9-4414-69d3-08de84d0fe6d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|376014|1800799024|18002099003|22082099003|56012099003|38070700021|41080700001;
-x-microsoft-antispam-message-info: 6GpwWNhMUjB0Yrl79I3f9SsKXozvF73TBWcV1RGrCosc2likKNdSUqxf8TPUCzUdebBR8BOksNsCCwDFNRcoawHOax6I/muSSqL3Ah4mO6n/sqhh346A8PrcweQzL9ySDHxoNuO6ZLoYGX73OKCjw93eayduW/u77RzIPA7CyG+yuZbjDG1JDlgKeAKd4+SFL2F2LKqyxGm8JWFarqCIWCeDmC1edZa5hGkOR0Kdvk+J5F9FqEZDjdWYz4yMUFPv3vOXHBWVel9FC57JsxTxsMqJgc2K7HcRkXoNTucOvOxAaaaJheUQx0fbkdZuwI4ITUSnUN0DbBkyPNnitjtZMamDGhm5YR+rUVqk0ixpeFzHRFYLcTouQ1F7mYePUNKBFVlI9xBM4o7T1XD+nqetJHdWFa2Lum7EqUiSfD2Ga3ad/p9Lc9fJeSTZX9Fk0nKxtGU4OcruzY2Ze2Bm3tv15CjxnJuDrNDwVYoIz4viaXUxBKEDb1BVtafkXzhpidhdZwxNwjn9Lcr5ro7588xmntUxh18jctFNp0xJ07SqXuYKEOTanz3e/v093MAKCgg3HKIx/ceavWF2ctMV/FHbYBJMv00Prvr9WVJ8ksQjuvuwEgX6n72WBQDCjdEF89DZCBoU4I0qjAl1BDjsyugJwb3xAwtRpbZ+67Qr+v0I+x0q/lgdNvVXI1fPGYh+RWLyCq/pxXjtaex/1pySdGNdhrZzlgePgGI6SCwyKBWvK1EnEGu6rqlgTxzzWCZdYqWcFYuqhelVcafyU9aF82qN8jFCpNVB1RAoFZYPeSOHJEcd+W5Lv/Yuqwa5Sj9nxSsoPxQAnGCK/EfUJvjm/yfaOw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(376014)(1800799024)(18002099003)(22082099003)(56012099003)(38070700021)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?COQmE3b5ezp6aubuuxIEjHM+6oVE4HqSiBzlFHMM/uat+b1yIMFGb9a8Hw?=
- =?iso-8859-1?Q?zT4l+42wYjadlLDpUQnQAk254/3yeiwDjJ06t+xcuOr39ltUmnmGq9zgAY?=
- =?iso-8859-1?Q?/l5NNL2yiEKbyePtQhA2Re5VzOd3gxnlkPcXGNHlN4rZ18g/fPiiEi6rmA?=
- =?iso-8859-1?Q?x4ZRztJi1lPmz93RPfvz/GAIS8SnJzDcDhkq0lRjGGbGXDbKY9Rl/xGGgt?=
- =?iso-8859-1?Q?LXSjQIEXjjc0l2h3Dv9ce1k2gbR7Zcazjnx/PIsyzdPmGnmXqMI/vvx9Qy?=
- =?iso-8859-1?Q?ZoOKnLXLGhNIJTGdJ+xRB5kk77VYCMzOfM6Pc+LkNFC98CUqGVTmw047x+?=
- =?iso-8859-1?Q?zagvL0GCoIKnXMtFZXNCSFYmJaIbPloWiZf8vT0xkeBJBLS7DODoQevW5i?=
- =?iso-8859-1?Q?nptHLS9/il7QDh3MIN+GFIHND49i3kJjHARNhZCzw0mL0EKVnCUExwPh6Z?=
- =?iso-8859-1?Q?EqR8Nta1zYKJOd74IoOQqooyEUaJ9XLtLrd4tsf4THiEXQqyQrtv2YjeVq?=
- =?iso-8859-1?Q?bhOs6FONzY+4AKcSQDM9OtB+7x+N3/jT+WCP29Xo6yQ6tJTpFaUkyBV4Dm?=
- =?iso-8859-1?Q?tbnU+Q+gciDG1/mH8sAilDh+coaoDdS8Urh80gLs+0NQ/ZloUWWBkg3KCH?=
- =?iso-8859-1?Q?4BUi+kRFMhyQE1XfRbYONNI42sti879Nsqes3fktWnt+RohpMX3Vx7CYCy?=
- =?iso-8859-1?Q?TKTViGsuDBZuJ0pvMJrDWB7Y3V32RZqGwMTDjc/HjKQN2nujbAeCgsw79y?=
- =?iso-8859-1?Q?RYXzQFsOQ/9TXgQAp27QF6l1uqa05YuMVSIQiDXpP36KWaS+uNGUWzzi34?=
- =?iso-8859-1?Q?d5kV2DCT4HwD0rc8LEB1euJ5w8bX88mMYcDctsAA2F80eAft7RAAD8wu5l?=
- =?iso-8859-1?Q?3MPoctk2XpiBPBnid6Z1PSPemnMIdRovHB1NuKRpoLML48ymcsLqc0wTOH?=
- =?iso-8859-1?Q?m2S0WfgnCX+nhUnhmxNA2wGqD9xMihQOhHNN4JlWxf90dXUtjFEnLZvPdl?=
- =?iso-8859-1?Q?qhTUXSgmcWIz88hKtXdaxqmtjk0K0X3fBTSgRv2dUWXYdQUAs6EHA8KbKA?=
- =?iso-8859-1?Q?POiVcaUOsd9IaCfnOTd7uPOaC2EuHkISoan74HwynVIhsQuxOl1EwTrq3c?=
- =?iso-8859-1?Q?3LT8pzm9gzYgRJVeFyduB2xtMsNtp7sjRGyuiz/hlX1gUbvBAxX0qqcY8l?=
- =?iso-8859-1?Q?imdJsbwBkT66B8J2MSYRhQQZ3yQShzXqvZALmXo528YtQDwRozICNoX/Xs?=
- =?iso-8859-1?Q?0l9qHEewtJpYlZpH/sknxnfSt7pf3ejueYS7FH1ZFhQM8m0x8C6pAzsMgM?=
- =?iso-8859-1?Q?QzUDU9rMTDA8bHXUqP7a8FvSUU2XdNj2oTZI/LV6eRjVBtGI8LHFQ/EUSy?=
- =?iso-8859-1?Q?G2MYRnrefFcQo0vYVDL68gMWsgbCMN33RCzSsvxXlxM3jNwgfybyWoXlF8?=
- =?iso-8859-1?Q?yLrDiPlJR//AXX94LevTx3ti9FcTB7Qr0S/C3d7eRjSi3fNi1k2qwnqgY3?=
- =?iso-8859-1?Q?Aunc6BI7DtGKVgopvMt7bc9MrTEVBuxj9GD3NM73h7wMYRs6Ue8gIqj1rX?=
- =?iso-8859-1?Q?e2OSp0O+EGr/HUq0yOEpbpyT976oDsCBXlNQ0dvSf/L17E7LHjonqm6AbQ?=
- =?iso-8859-1?Q?5oSxj6maX/kaOm8x/r5ct7lgByqqZ9zi0+M3tbP34n8dxBfhR6fHq8beI6?=
- =?iso-8859-1?Q?C0jSPSvSK0x4aw3fe1njo0Ny4p9+a6o3LB4Hxol9SkSva1MaP+I/TyuWOh?=
- =?iso-8859-1?Q?sIn1WwUIuMH8v2zTYNYR/yIGyWWtPtBm1MQeZbBuyodH8B?=
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.16; Wed, 18 Mar
+ 2026 10:10:54 +0000
+Received: from MWH0EPF000C6194.namprd02.prod.outlook.com
+ (2603:10b6:a03:505:cafe::68) by SJ2PR07CA0012.outlook.office365.com
+ (2603:10b6:a03:505::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.27 via Frontend Transport; Wed,
+ 18 Mar 2026 10:10:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ MWH0EPF000C6194.mail.protection.outlook.com (10.167.249.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9700.17 via Frontend Transport; Wed, 18 Mar 2026 10:10:53 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 18 Mar
+ 2026 05:10:41 -0500
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 18 Mar
+ 2026 03:05:02 -0700
+Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 18 Mar 2026 05:05:01 -0500
+To: <buildroot@buildroot.org>
+Date: Wed, 18 Mar 2026 10:04:57 +0000
+Message-ID: <20260318100457.1838670-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000C6194:EE_|LV8PR12MB9667:EE_
+X-MS-Office365-Filtering-Correlation-Id: 374e4eea-92ef-46e8-08bf-08de84d6a3d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|1800799024|36860700016|82310400026|7416014|376014|18002099003|56012099003|41080700001;
+X-Microsoft-Antispam-Message-Info: m+JL5hpc1qyQnI7KvTocgElJj0s4k2xABupzXCOIhzQcuv+xeA7Xx4r1pdaMqxW6YA+gQIw6mbjtNz7sicGGk6dSv5YOVFj3bl7v2MbvuT0sn1DChYqiU0LoHO3ifiwTj1jiCV8PxuQVowesngYvN7UgfhE5Uu+NiYcF0EGgJ9/wHX+3u5xIPPJkskvuW1GSWqJLWUBoT5syjWODQOuRdlKL2+ZFldDP1cGVzJnOOCq9ct8tGiZntu7eq4HPUF933KQ27ZbREuErYT1l4Cmh4cDBmiFlE6L16mgMfOe0Ow6o+u+4QbOh68mne8tEL3hMC6oSW8odBQI7ryQjBemB1Pl/D2OdG67Fk3Gy4oVSqKiCfHCdvafToTC4zpRwAMjDC3yi3wfLeblx9vMTTAX0GkRvsfMLCNbPNipB5FbJdNuBbQGDnUJ/Y9lXRJR1/gAcHC/ZFJ9Y5ZxbQGpIBWXW3Af41pGrUTNACOW8yzBkMoRYrKgBgWfhyErC/Ab5l4dX1wd/f96w6t4kmoyvsvOEhdshhpYaVAUdLK2adov/lGXCbQvWgXVJ2t3JeDGO2Gq4aU1o8qnnjvvZNIK23+H04YHOnUQVs+rRSDcbNqlKDvQj/PZps71wKEuuewh3apf/ybPRivxNeAqvZC+fGl+YVB/yFhpnzMQjD3yrfgBTZdXQvkxvN10V7d/h5sJ/wGNBA0tbx5YtvKl0b3EBrC8Mq6moc44Imra++LAWXPsL/looaL+t2RkkVWitMFl7y8+Txlc5fu3pFQ1H7w2Vz5yQMavyVMm+XVQAPR1I82yfrfdZxizOWY7dZFdNbFzs4fuq
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(1800799024)(36860700016)(82310400026)(7416014)(376014)(18002099003)(56012099003)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: kIXDPA/DIwLrz3kfin/H/Vqo5vA1l4wWeFZ+a8hSI5SxL19egUHv+gR9y6rpMDh4ARvW67f91x1GVhsuKBvCJ7EViXNZNGCS/kQ9HmEQDtOXXO/gc6Fn/1GS6YIeHL30szr3oexs2g4EZpcPx040g2f/JcVG0MTYlki0JHZZsmXTt3iyr8E86F3oYW7VZVZJzYl8PvjB++tz1MVUGdSoPr6HX+Hb+RpClIaZ1NracBnnn/kKeW/sT+b4QUqLhQEY5oR2lebqhuWGhPELE+Dv0/CGJgUm+vmg86TKpzUBIYHlsEIaHYjNCDDizLkvgyjp+6GwfwJUpyrozQEJVKzFiia7szvgHc8A3uebPIjfhcHRClKiVHrabba5qKK8vMaQdcfO3jbLTZHdAc4Si/7KmBuwE1Mle/QMsRbZu2eyAlV658fPiMRqh8GFHA3ioALW
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01378ade-f0f9-4414-69d3-08de84d0fe6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2026 09:30:28.9791 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P9C+/r/PPDdns/XM/StorIRSriSnxFAIyBsQYNPsvebLGL5eyHTXJvLI2Mvyptkz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7869
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2026 10:10:53.8336 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 374e4eea-92ef-46e8-08bf-08de84d6a3d5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000C6194.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9667
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7dtwnqkDVdGcXcboxE0HEy9W17hUUsfMpv/VAhN4hio=;
- b=5kGGYvaMPy1kGcASdvw9EVVFiztVwmCbFdLr7NHkmkneXLu9YedqmJKUbZ7fhlOmyT9K8Im5/WC37FBbROO3WfPBNKkjBRA2j0W3oUJmTJtF/CtEDToFtsc7ubv0A9bWkVX8OGZbkSYi7ct1wVQttX6JfgR6STKWD9wV2rlszPE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=i5xn7oQm+bcXgTGBFZWKcNOWwQaz7teuP6bHJHP/JNc=;
+ b=zVY305eNro36MAhb5PuoiF/+fKQqh5N00YMkyqIkX2pSVHJIoTdzInOWVif4sjKZi03l1qk/hZwvU6qr9twoLFg2FqFLTrFP0ii854gutyvCE56VNeCA4hTXjYKMDP0TiF0f7GAY6y562X4Oh3Nw0FbkLsojUvT7lwmxG5wP8tY=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=5kGGYvaM
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: [Buildroot] buildroot: conflict between host-flex and host-bootgen
- packages
+ header.s=selector1 header.b=zVY305eN
+Subject: [Buildroot] [PATCH v1 1/1] package/bootgen: fix build issue if
+ host-flex already built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,109 +148,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, steven.hill@collins.com,
+ luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
+ fiona.klute@gmx.de, ju.o@free.fr, Neal Frager <neal.frager@amd.com>,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[AMD Official Use Only - AMD Internal Distribution Only]
+Fix a silent build issue with the host-bootgen package if host-flex is already
+built. The host-flex package will install a version of the flexlexer.h header
+file that is not compatible with the version embedded in bootgen.
 
-Hi Steve,
+While the build will still 'succeed', the binary will not be correct. This
+can be seen by just running the binary that is built. By default, running
+bootgen without any parameters should print the help menu, but if the wrong
+version of flexlexer.h is used, it will print the following instead:
 
-I have managed to duplicate the issue, so I am copying some buildroot
-maintainers on this message so that they can have a look.
-
-Simply running the following as the first build is insufficient:
-make host-bootgen
-
-If you only build host-bootgen with its dependencies, you can rebuild
-host-libopenssl and host-bootgen all you want without any issues.
-
-However, if you complete the build with all the packages that build after
-host-bootgen, then you can duplicate the issue where rebuilding bootgen
-creates an image that fails.
-
-It appears that the issue is coming from the host-flex package.  Once the
-host-flex package is built (happens after host-bootgen), it is no longer
-possible to build host-bootgen correctly.
-
-To duplicate the issue:
-
-Step1: clean build
-$ git clone https://gitlab.com/buildroot.org/buildroot.git
-$ cd buildroot
-$ cat > .config<<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_PACKAGE_HOST_DTC=y
-BR2_PACKAGE_HOST_BOOTGEN=y
-EOF
-$ make olddefconfig
-$ make
-
-Step2: correct output of bootgen shows help menu
-$ output/host/bin/bootgen
-
-****** Bootgen v2025.1-Merged
-  **** Build date : Mar  6 2026-09:20:49
-    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
-    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-
-------------------------------------------------------------------------------+
-                       COMMAND LINE OPTIONS                                   |
-------------------------------------------------------------------------------+
- arch              - Device Architecture                                      |
- bif_help          - Print the BIF help summary                               |
- dual_ospi_mode    - Generate 2 output files for Dual OSPI                    |
- dual_qspi_mode    - Generate 2 output files for Dual QSPI                    |
- dump              - Dumps components from PDI as bin files                   |
- dump_dir          - Dumps components in specified directory                  |
- efuseppkbits      - Generate PPK hash for e-fuse                             |
- encrypt           - AES Key storage on device                                |
- encryption_dump   - Generate encryption log file                             |
- fill              - Fill byte for padding                                    |
- generate_hashes   - Generate SHA hashes (PKCS#1v1.5)                         |
- generate_keys     - Generate authentication keys                             |
- help              - Print the help summary                                   |
- image             - Input Boot Image File (.bif)                             |
- log               - Generate log file                                        |
- nonbooting        - Generate an intermediate boot image                      |
- o                 - Output filename in MCS/BIN format                        |
- overlay_cdo       - Overlay CDO files of Boot Image File                     |
- p                 - Part name for generating nky file                        |
- padimageheader    - Pad header tables                                        |
- process_bitstream - Outputs bitstream in bin/mcs format                      |
- read              - Dumps the header tables in human readable form           |
- authenticatedjtag - Generate a Image to authenticate PSK and enable jtag     |
- split             - Split partitions to diff files                           |
- spksignature      - Generate SPK signature file                              |
- verify            - Verify BootImage authentication                          |
- verify_kdf        - Verify AES key generation                                |
- w                 - Overwrite mode                                           |
- zynqmpes1         - Generate boot image for ZynqMP ES1                       |
-------------------------------------------------------------------------------+
- Note    : Some options are valid only for specific architectures.            |
-           Help for such options include a list of supported architectures.   |
-           If an option is supported for all architectures, this list is not  |
-           included in help                                                   |
- Example : Supported architectures : zynqmp, versal                           |
-------------------------------------------------------------------------------+
- For more information on bootgen options, use the command                     |
-           bootgen -help <option>                                             |
- Example : bootgen -help efuseppkbits                                         |
-------------------------------------------------------------------------------+
-
-Step 3: clean bootgen dir and rebuild
-$ cd output/build/host-bootgen-xilinx_v2025.2/
-$ make clean
-$ cd ../../..
-$ make host-bootgen-reconfigure
-
-Step 4: bootgen image is now incorrect
 $ output/host/bin/bootgen
 
 ****** Bootgen v2025.1-Merged
@@ -289,12 +179,101 @@ $ output/host/bin/bootgen
 ERROR: syntax error
 -h
 
+Add a patch to the bootgen package that corrects the issue.
 
-[ERROR]  : Command line parsing failed with code 1
+Upstream: CR to AMD jira
 
-Best regards,
-Neal Frager
-AMD
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ ...use-embedded-win_include-flexlexer.h.patch | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+
+diff --git a/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch b/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+new file mode 100644
+index 0000000000..1de9a91223
+--- /dev/null
++++ b/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+@@ -0,0 +1,76 @@
++From dfe45e10791a171c3c79699257d3d3a978ec30eb Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Wed, 18 Mar 2026 09:51:58 +0000
++Subject: [PATCH] flexlexer: use embedded win_include/flexlexer.h
++
++bootgen embeds an old version of flex. If the host machine has a newer version
++of flex, the bootgen binary that is built will have errors such as the
++following, if the wrong version of flexlexer.h is used.
++
++$ output/host/bin/bootgen
++
++****** Bootgen v2025.1-Merged
++  **** Build date : Mar 18 2026-07:08:01
++    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
++    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
++
++ERROR: syntax error
++-h
++
++Running the bootgen binary should print the help menu by default and should
++not have a syntax error.
++
++Correct the path to the flexlexer.h header files, such that no host version
++of these files can cause a silent build failure.
++
++Upstream: CR to AMD jira
++
++Signed-off-by: Neal Frager <neal.frager@amd.com>
++---
++ common/include/bifscanner.h        | 2 +-
++ common/include/cmdoptionsscanner.h | 2 +-
++ common/include/reginitscanner.h    | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/common/include/bifscanner.h b/common/include/bifscanner.h
++index 9683416..9aa72a5 100755
++--- a/common/include/bifscanner.h
+++++ b/common/include/bifscanner.h
++@@ -29,7 +29,7 @@
++ #if ! defined(yyFlexLexerOnce)
++ #undef yyFlexLexer
++ #define yyFlexLexer bifFlexLexer
++-#include "FlexLexer.h"
+++#include "../../win_include/FlexLexer.h"
++ #endif
++ 
++ // Override the interface for yylex since we namespaced it
++diff --git a/common/include/cmdoptionsscanner.h b/common/include/cmdoptionsscanner.h
++index aa2f474..78fa7cf 100755
++--- a/common/include/cmdoptionsscanner.h
+++++ b/common/include/cmdoptionsscanner.h
++@@ -30,7 +30,7 @@
++ 
++ #undef yyFlexLexer
++ #define yyFlexLexer reginitFlexLexer
++-#include "FlexLexer.h"
+++#include "../../win_include/FlexLexer.h"
++ #endif
++ 
++ // Override the interface for yylex since we namespaced it
++diff --git a/common/include/reginitscanner.h b/common/include/reginitscanner.h
++index 74463e6..d8152a6 100755
++--- a/common/include/reginitscanner.h
+++++ b/common/include/reginitscanner.h
++@@ -30,7 +30,7 @@
++ 
++ #undef yyFlexLexer
++ #define yyFlexLexer reginitFlexLexer
++-#include "FlexLexer.h"
+++#include "../../win_include/FlexLexer.h"
++ #endif
++ 
++ // Override the interface for yylex since we namespaced it
++-- 
++2.25.1
++
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
