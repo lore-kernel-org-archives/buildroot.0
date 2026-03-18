@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 820E710775FE
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92BA510775F9
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 514AB60872;
-	Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6082C40662;
+	Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bXcrvNaic3sW; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LSrOpRrZfNI9; Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96E9B60BAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B4E640677
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773858109;
-	bh=ZBdLrqmRS2x9Iv6HO8NeQogwa6lRS6OKSchgz8Cpv/c=;
+	s=default; t=1773858112;
+	bh=jwtfPmfIcuSUfxQEhUwCg9ILXvL0tlH9Bh7mD+wjRYw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GJUKnKQDRXidg1xpY4383MEwhhMIlQdsEy72sh9hrjMlrLJQNQ4TeIA3uX7+GiGAN
-	 B4YU3lkiCYG+s8sY1vfjF06GMr8qwk1GvYXpISip6SC0h1ey9IA2OH8vZH4fv9iQmh
-	 chULNdkC0hnDkDASWvF/qSYZN/aAr7QgLYCqhe7am/Q+4rxfE4EAdolcD2SFm5Okdx
-	 CZhEQgYwpodRmLXDlNCWl3sjaHjH+LB0Boe/KR9QoYEgkEjBitYpxxijkIq3w8ve4Y
-	 Rc6KQLbfThVbkXudC6H5Z7zOBj4K0Q9r3mXeFD2fKsPVw/uJWzuQAFMDRkXiufATGJ
-	 qts+hgG6/aMQQ==
+	b=a+TDcuC3w19rLU9Yi/NVh+SlMKqk4FonkNkI0TNRqcg7hsY4Q3pBK33BGEg7SituV
+	 qto/eeJ0QK8xutMpLbHIhxYGlrXFhfu+FlHeu3QggMEue1H0rxXdv4XM6B8SdZy+uL
+	 4W53O4JJNnel+VDE70ts/V3hC70fayN5BSFZ4w59ZyicnUFjYEen3cv1qk5sfJK5ov
+	 QQA///0+R2hfKwa3UaXKTvoSDyg+UyAZZXIVe8yZmrY2ATVrwIDpZzNdw7VOmSE3qv
+	 WtZu4m2BNfDXAS089N5nZhOrx1akylCbi5Z2HJDkk7vjh9Xhn/JPAFnaC1Y2Dh9FeH
+	 K2a5gf/WxH7cA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96E9B60BAF;
-	Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B4E640677;
+	Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7115D1B6
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24CD21BD
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55C50404A5
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AD2740369
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YZ7xsBNo3S_D for <buildroot@buildroot.org>;
+ id HCkZHrh26nhy for <buildroot@buildroot.org>;
  Wed, 18 Mar 2026 18:21:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D6E040369
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 513D7400C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D6E040369
+ by smtp2.osuosl.org (Postfix) with ESMTP id 513D7400C5
  for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7561184AC4; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
+ id 5324984A17; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 18 Mar 2026 19:09:45 +0100
+Date: Wed, 18 Mar 2026 19:03:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e8739fab27e8a7b9850c936d95c1cdaca3ea0f9
-X-Git-Newrev: 8c475011a82c32d465603c4cf73078a4e631a448
+X-Git-Oldrev: b538bf02183aae9f6cb1390f0bd73d7218fd7932
+X-Git-Newrev: de7bd5034b38b69c631b1d1a3299942513051267
 X-Patchwork-Hint: ignore
-Message-Id: <20260318182146.7561184AC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janet: bump to version 1.41.2
+Message-Id: <20260318182146.5324984A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Manuel Diener to several
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,49 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8c475011a82c32d465603c4cf73078a4e631a448
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de7bd5034b38b69c631b1d1a3299942513051267
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-For release notes, see:
-https://github.com/janet-lang/janet/releases/tag/v1.41.1
-https://github.com/janet-lang/janet/releases/tag/v1.41.2
+Add myself to packages recently orphaned which I am going to continue.
 
-This commit also updates the LICENCE hash, after year update:
-https://github.com/janet-lang/janet/commit/6e4b0b92592860493c89243c2f0ff2c97a8784dc
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add info in commit log]
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/janet/janet.hash | 4 ++--
- package/janet/janet.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/janet/janet.hash b/package/janet/janet.hash
-index 02dc550dbe..0ddc8ced77 100644
---- a/package/janet/janet.hash
-+++ b/package/janet/janet.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  e7fdcb7ccc83a3be6181f7d7d71f0ea027a000e0eefe9bba3b8373c05eb5764a  janet-1.40.1.tar.gz
-+sha256  168e97e1b790f6e9d1e43685019efecc4ee473d6b9f8c421b49c195336c0b725  janet-1.41.2.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b722b5fd51..8c9b89c249 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2210,6 +2210,29 @@ F:	package/ffmpeg/
+ F:	package/mpv/
+ F:	package/rpi-firmware/
  
- # Locally calculated
--sha256  805858acec1df54018879efc78ee3ff7bab5e69908c58e46bbc2d94520f29023  LICENSE
-+sha256  16e31703a3ab5c4d3e35aa8bd607551911a9d981fbf0b5fbd832fe6eed4b70ca  LICENSE
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index dd2283e5a9..bca7ff0500 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANET_VERSION = 1.40.1
-+JANET_VERSION = 1.41.2
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
++N:	Manuel Diener <manuel.diener@oss.othermo.de>
++F:	package/pico-sdk/
++F:	package/picotool/
++F:	package/python-annotated-doc/
++F:	package/python-apscheduler/
++F:	package/python-crc/
++F:	package/python-diskcache/
++F:	package/python-django/
++F:	package/python-gpiod/
++F:	package/python-immutabledict/
++F:	package/python-jc/
++F:	package/python-log-rate-limit/
++F:	package/python-pydantic/
++F:	package/python-pydantic-core/
++F:	package/python-pydantic-settings/
++F:	package/python-typing-inspection/
++F:	package/python-tzlocal/
++F:	package/python-sdbus-modemmanager/
++F:	package/python-sdbus-systemd/
++F:	package/python-varlink/
++F:	package/python-waitress/
++F:	package/python-whitenoise/
++
+ N:	Marcin Bis <marcin@bis.org.pl>
+ F:	package/bluez5_utils/
+ F:	package/cc-tool/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
