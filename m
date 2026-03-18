@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92BA510775F9
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A0B10775FE
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:21:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6082C40662;
-	Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 793DA60BD1;
+	Wed, 18 Mar 2026 18:21:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LSrOpRrZfNI9; Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ftegXN8wzA0I; Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B4E640677
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD5A60BF8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773858112;
-	bh=jwtfPmfIcuSUfxQEhUwCg9ILXvL0tlH9Bh7mD+wjRYw=;
+	s=default; t=1773858113;
+	bh=eSupoNQlF3caoE5OwDlfgXfAJOSPIF14r9Vf2zHwSFI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a+TDcuC3w19rLU9Yi/NVh+SlMKqk4FonkNkI0TNRqcg7hsY4Q3pBK33BGEg7SituV
-	 qto/eeJ0QK8xutMpLbHIhxYGlrXFhfu+FlHeu3QggMEue1H0rxXdv4XM6B8SdZy+uL
-	 4W53O4JJNnel+VDE70ts/V3hC70fayN5BSFZ4w59ZyicnUFjYEen3cv1qk5sfJK5ov
-	 QQA///0+R2hfKwa3UaXKTvoSDyg+UyAZZXIVe8yZmrY2ATVrwIDpZzNdw7VOmSE3qv
-	 WtZu4m2BNfDXAS089N5nZhOrx1akylCbi5Z2HJDkk7vjh9Xhn/JPAFnaC1Y2Dh9FeH
-	 K2a5gf/WxH7cA==
+	b=sIoRz8GX0+dqcWEa15Xvw3Xc1Uf42TYnjVwPJpnGyJrD3NbFHyQiFDATWDMCI5syC
+	 dZKoWM8XF10NrZ2UxUy+T5Sr7J7rs1q3kvnSNslDP/QLUviQR/go35z4nNMLQMDU/9
+	 He5jMoZfrmORryN17nOaH1ivOROqKfR4ZmuWmmwm2euUzG6OxAq/MKCIbgaRJXu+zu
+	 LiMpuxg+A83PPb4eDAKrALpZNC3VMN02vn+p8r7Hp+byyYKErtdO0Bbmj3qwaSLoWj
+	 z+FzcOOZEXFjCdOX2k17y/Apiz8MTarJML68uD4/FOhGQn/WrNOw0myAVxYdb+wszn
+	 XfycQxL3eyhTA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B4E640677;
-	Wed, 18 Mar 2026 18:21:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD5A60BF8;
+	Wed, 18 Mar 2026 18:21:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 24CD21BD
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 317D51BD
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AD2740369
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28064400C5
  for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HCkZHrh26nhy for <buildroot@buildroot.org>;
- Wed, 18 Mar 2026 18:21:47 +0000 (UTC)
+ id HQbOHR2PTW6A for <buildroot@buildroot.org>;
+ Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 513D7400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C2DC404A4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 513D7400C5
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C2DC404A4
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:21:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5324984A17; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
+ id 5F98C84ABE; Wed, 18 Mar 2026 18:21:46 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 18 Mar 2026 19:03:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b538bf02183aae9f6cb1390f0bd73d7218fd7932
-X-Git-Newrev: de7bd5034b38b69c631b1d1a3299942513051267
+X-Git-Oldrev: de7bd5034b38b69c631b1d1a3299942513051267
+X-Git-Newrev: c26a70b5240f7ab79ece130668950fbfb61d93fd
 X-Patchwork-Hint: ignore
-Message-Id: <20260318182146.5324984A17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add Manuel Diener to several
- packages
+Message-Id: <20260318182146.5F98C84ABE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uboot-tools: bump to version
+ 2026.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de7bd5034b38b69c631b1d1a3299942513051267
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c26a70b5240f7ab79ece130668950fbfb61d93fd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Add myself to packages recently orphaned which I am going to continue.
 
 Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b722b5fd51..8c9b89c249 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2210,6 +2210,29 @@ F:	package/ffmpeg/
- F:	package/mpv/
- F:	package/rpi-firmware/
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 7b71e2d948..39b894fe9a 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
++sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 1135fb9c03..fa0b6aba78 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Manuel Diener <manuel.diener@oss.othermo.de>
-+F:	package/pico-sdk/
-+F:	package/picotool/
-+F:	package/python-annotated-doc/
-+F:	package/python-apscheduler/
-+F:	package/python-crc/
-+F:	package/python-diskcache/
-+F:	package/python-django/
-+F:	package/python-gpiod/
-+F:	package/python-immutabledict/
-+F:	package/python-jc/
-+F:	package/python-log-rate-limit/
-+F:	package/python-pydantic/
-+F:	package/python-pydantic-core/
-+F:	package/python-pydantic-settings/
-+F:	package/python-typing-inspection/
-+F:	package/python-tzlocal/
-+F:	package/python-sdbus-modemmanager/
-+F:	package/python-sdbus-systemd/
-+F:	package/python-varlink/
-+F:	package/python-waitress/
-+F:	package/python-whitenoise/
-+
- N:	Marcin Bis <marcin@bis.org.pl>
- F:	package/bluez5_utils/
- F:	package/cc-tool/
+-UBOOT_TOOLS_VERSION = 2025.10
++UBOOT_TOOLS_VERSION = 2026.01
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = https://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
