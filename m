@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABFB103E169
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 12:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C88103E16A
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 12:09:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0789B40AAD;
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED6ED608D5;
 	Wed, 18 Mar 2026 12:09:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ls9W5zN0Z_dl; Wed, 18 Mar 2026 12:09:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9HQPgGhYr92X; Wed, 18 Mar 2026 12:09:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2030540BA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10AD9608E3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773835778;
-	bh=EWK5p7YOD7Q5XfkkaZ8/gXhjklnilX4fIi20lgCWd7U=;
+	s=default; t=1773835779;
+	bh=1KbFs1GKhZs3M9g/BUEj6VvBYJEqupAy2p8S7CYRN+A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cwSVtsucjC5NNIE++BdCTNT3rt5IREptzCnujIrnA5NwEqgOHamN7q8wZ2e76Fd5z
-	 ntyRVCocFOtZ52C3nEsIxFohAUp1o03IXmpQKSQvBC1iO4UfnI5Cq37atB1qKA6WC9
-	 1kM9EyL/PhEbesIAVWS5aB91e/GX/ZvggUBlclz5U3uWrkcg91RH0SlukbyZ11nPln
-	 N6Mbo2znfacSEHA1NoBHnxof41o1H0mOMBhM2neEqX/gMhYXzty8m9/mxLEz9efEAU
-	 LlUGkwMr1TOESbO9E+cLFHJm+y3bbcX4j9xE2egZOzh4BpeRYB7cyNgsnEgZwsJIkI
-	 l1/5PKohmPE6w==
+	b=XduedzeMKa0bpjS5KE/Ac/MByuiRT7qmNM0cIpNWTBxo2eLK4SmL2BMKXCH18whb9
+	 1/GY9wBXSwEunK6l21HapsZp1biI2twa5sFOWXPe0Gi6Kf/7qSOjTH9Q6Amvp8B42G
+	 nNaBjFmz4K3xltd946XXRnSCauofa/4lNlQbySFeGNZoJRTWXgXwf5+drJBa+Fz0+O
+	 pcxJN6w085m9thSlmkmv4m4DbDh1JB+L2MBfdiPJ7QFNuizz9nwh/Oie1uw634/TmH
+	 UMHFsD9fF1kag8DCjT9QsxhwG4Gx5bN/UtE7GPBbphegkBDrATCBUUEZiTZisnzNq5
+	 nao5ew6I+aRAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2030540BA8;
-	Wed, 18 Mar 2026 12:09:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B6173BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10AD9608E3;
+	Wed, 18 Mar 2026 12:09:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23BB93DB
  for <buildroot@buildroot.org>; Wed, 18 Mar 2026 12:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09D3F40BA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0905A4039A
  for <buildroot@buildroot.org>; Wed, 18 Mar 2026 12:09:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tC5Ijh-lNnuu for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qnZGmkXPOk56 for <buildroot@buildroot.org>;
  Wed, 18 Mar 2026 12:09:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0526B40AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1384C4009E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0526B40AAD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1384C4009E
  for <buildroot@buildroot.org>; Wed, 18 Mar 2026 12:09:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B06C84180; Wed, 18 Mar 2026 12:09:33 +0000 (UTC)
+ id 2CF7A842BE; Wed, 18 Mar 2026 12:09:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 18 Mar 2026 13:01:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c89743874276426f6542f5b98cae5e3ee4564749
-X-Git-Newrev: 916331b9172a9aca28edf8492f323bbcf1996c30
+X-Git-Oldrev: 367e9bb04bc301fced2846f0f81b0440cc10b317
+X-Git-Newrev: ec58c67e5f112c89616c3d1cfdecce29b06ac908
 X-Patchwork-Hint: ignore
-Message-Id: <20260318120933.1B06C84180@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/friendlyarm_nanopi_neo: bump to
- kernel 6.18.18 and U-Boot 2026.01
+Message-Id: <20260318120933.2CF7A842BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imxrt1050-evk: bump u-boot to fix
+ the build and bump linux too
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,93 +77,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/916331b9172a9aca28edf8492f323bbcf1996c30
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ec58c67e5f112c89616c3d1cfdecce29b06ac908
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This commit:
-- bumps the Linux kernel to 6.18.18
-- bumps the U-Boot to 2026.01
-- switches to a stable glibc Bootlin external toolchain
+Python setuptools has removed the obsolete pkg_resources python module in
+v82.0.0. This module is used by the binman command in U-Boot until
+v2025.10.
+Since the python-setuptools package has been updated to v82.0.0 in
+Buildroot, the imxrt1050-evk_defconfig (using U-Boot v2025.07 and
+binman) fails to build with the following error [1]:
 
-The updated U-Boot should also fix the CI build of the board.
+  ModuleNotFoundError: No module named 'pkg_resources'
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/13458392712
+Update the defconfig to use a more recent U-Boot v2026.01, to fix the
+build and at the same time bump Linux to version 6.18.18.
 
-Run-tested on the board.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/13476922027
 
-Signed-off-by: Dong Wang <wangdong115@foxmail.com>
-[Julien: add missing BR2_TARGET_UBOOT_NEEDS_GNUTLS=y]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: fix defconfig name in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../nanopi-neo/patches/linux-headers/linux-headers.hash          | 1 -
- board/friendlyarm/nanopi-neo/patches/linux/linux.hash            | 4 ++--
- board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash            | 2 +-
- configs/friendlyarm_nanopi_neo_defconfig                         | 9 ++++++---
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ board/freescale/imxrt1050evk/patches/linux/linux.hash | 2 +-
+ board/freescale/imxrt1050evk/patches/uboot/uboot.hash | 2 +-
+ configs/imxrt1050-evk_defconfig                       | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash b/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
-deleted file mode 120000
-index 5808d92afe..0000000000
---- a/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/friendlyarm/nanopi-neo/patches/linux/linux.hash b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
-index ecff37638a..020dc72386 100644
---- a/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
-+++ b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
+diff --git a/board/freescale/imxrt1050evk/patches/linux/linux.hash b/board/freescale/imxrt1050evk/patches/linux/linux.hash
+index 216d9b9d39..020dc72386 100644
+--- a/board/freescale/imxrt1050evk/patches/linux/linux.hash
++++ b/board/freescale/imxrt1050evk/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
--# Locally calculated
--sha256  93218296934915636fe6ba08e125948424cc270fd8948502c0ab91087a9fccd8  linux-6.6.44.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  0fcbbbbcd456e87bbbfc8bf37af541fda62ccfcce76903503424fd101ef7bdee  linux-6.12.43.tar.xz
 +sha256  f4855f382c1b735c84072bdef36db5bcd5dc7b0c37e42f5104317149a0a486ef  linux-6.18.18.tar.xz
-diff --git a/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
-index fe9b4f53dc..b6a925ea4e 100644
---- a/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
-+++ b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
+diff --git a/board/freescale/imxrt1050evk/patches/uboot/uboot.hash b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
+index 440526977b..b6a925ea4e 100644
+--- a/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
++++ b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+-sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
 +sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
-diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
-index 9aed25b30c..07be41cbf1 100644
---- a/configs/friendlyarm_nanopi_neo_defconfig
-+++ b/configs/friendlyarm_nanopi_neo_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-neo/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
-@@ -11,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+index 7a70c42afa..813be65e52 100644
+--- a/configs/imxrt1050-evk_defconfig
++++ b/configs/imxrt1050-evk_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.44"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.18"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-nanopi-neo"
-@@ -21,11 +23,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
+@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
