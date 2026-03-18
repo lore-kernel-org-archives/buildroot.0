@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5D741077604
-	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E1431077605
+	for <buildroot@archiver.kernel.org>; Wed, 18 Mar 2026 18:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B397A41745;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18D1360F96;
 	Wed, 18 Mar 2026 18:41:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T856fobJbTL5; Wed, 18 Mar 2026 18:41:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03F9641710
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1773859283;
-	bh=B89LEdqZzRCSYfBLfHc7YZSsOfKdC1Pq3ynYCryflAM=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=EKVMz1wR/AQgm8eaqC68Qf9oHD4R1STVWyHUTzzRRdcpDK/hEi4yUYWxvrjitEMPX
-	 n7gGVtbu3XkU9oVs9qWhpKa3zMohbIgA+SoE8qYDQ3zT0LfmhZIhBBLCZdel4ezBlF
-	 W+8VNh14ZOr11/zTxZr0TRFqSNsxidKLdWAv5CPACPwS0Llj5eKWEz8DjFgg53iZFI
-	 XFt2WL/o7GBkKGaa6yMV5v8+fhvYiyV96ABSS6IGZLqfYfsr1bAYnSWczJGoZT8woq
-	 cLqXnpTUDeZ4aavrtIEsioQyPEOQ5NGm8GWvpylLG6tbKkIdqvjbvi1uYdAJ7GK/7o
-	 nY6iWsUhPVGGg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03F9641710;
-	Wed, 18 Mar 2026 18:41:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 004041B6
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9FA660C19
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jnSA_uezfxc for <buildroot@buildroot.org>;
+ id A6VsPTR2sI0z; Wed, 18 Mar 2026 18:41:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1712460C27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1773859281;
+	bh=ZgBnkTqQPBzhXVTHP6JPvolvcxSG987Mf9DcBbpcrnM=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=px13SrnOxHtPwPBfbHcL/px0Q9g85YJMeZ5LrA/LBh5LsavibyUcpnbLABB6L0Ipp
+	 KjBOLCy2lall2pxemR/3ldkI366sNVDcCichfOowi0k53UMWfFvk5KdsmLq2yBW1hl
+	 J4HvOWvXulF89e/wDXJa5apl0yrSjNYlPNXJmhkqk4sW3WMPBZjUzyKXe6D5yJjO4/
+	 7CNQpLAJO21SgVRskSDSxR6iKvtrMkIwwpop1CQOCFuLBCczswj/YRCM1JAZr0kwsG
+	 mU+0zBCqP38GI+EapIuKofaj6NJnikJGyKTGCTx/wOKQzLHpD9IlAySOfhSMBNXqCG
+	 H6bruSH9W7Hhg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1712460C27;
+	Wed, 18 Mar 2026 18:41:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE35C264
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BB81404A5
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f3ljWow1drS7 for <buildroot@buildroot.org>;
  Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.11.138.130;
  helo=gloria.sntech.de; envelope-from=heiko@sntech.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 368A860C11
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 368A860C11
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CCB9340494
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCB9340494
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 368A860C11
- for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CCB9340494
+ for <buildroot@buildroot.org>; Wed, 18 Mar 2026 18:41:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
  Quentin Schulz <quentin.schulz@cherry.de>, heiko@sntech.de,
  Heiko Stuebner <heiko.stuebner@cherry.de>
-Date: Wed, 18 Mar 2026 19:41:09 +0100
-Message-ID: <20260318184110.2121178-3-heiko@sntech.de>
+Date: Wed, 18 Mar 2026 19:41:10 +0100
+Message-ID: <20260318184110.2121178-4-heiko@sntech.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260318184110.2121178-1-heiko@sntech.de>
 References: <20260318184110.2121178-1-heiko@sntech.de>
@@ -62,19 +62,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=sntech.de; 
  s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
  In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type;
- bh=yKO+yIgGDlzeJhrx51ZB6CKeIcZsbt83GRPmxGgTMM4=; b=uZ86xEoLT7vqc6r9Sa5wsjv0yB
- mhLTFTVO0LVwUk6+1Pr0oS1nU9tY5xPxylZLAs/WVx7g4PmqZ4yTTjV1aeCQVkfweGDs+w+3utnhr
- OHnzy2VDNCWZ71xTBKTHexDwmBvIP5wU5AeV7lkmsAsR1Y9mYsdmvTMzjjjCJZ4DzC93jyHMdzyCk
- XuCG4i9uQ5TS0bWc5l6wDmHdI+IBpILbqRg+yJJqNfr+3pepzKiOntg3d9XjUkOZYXJvdDU8XYqmL
- fvfP202QNT14TjqrwwtLeb6t81RPyByz5JU4rW+dKBEJ6Q6Uni/2VW/AMWhw34sHJ7gzejP1iOdS/
- JNdarlFA==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=2F7n9UTu9Pe4c+jkhzJRin9rMpnFzAgusFqsTSArK2s=; b=wu6JcDxy6VIk64hLlCGn6fNA43
+ PK07YUJcWM2crN7Dd6PQ4AheJgR4vlze8uV+FnQnyc49A4AKpcP8kSzDY3nAHCa+OLQDhI26OTZmH
+ wiyeWLHCp/AGuTVyJiTHOWZinMB6TTj6LSAe/tXeDeHzL3EJRVHruVQ0bvqTrxDGCzz3Ct/jPOEut
+ 3/oqS8FFdcEboP6hopbshTFGM95H4dnRrpySGN6yrk548Rbw5V906K+kWBR7JO4ljp4I9C/osp+g9
+ tjAnAZDLZ7f6O10O20VeS7n0UZi/fbgsW/Jrd82sdV5kz0o236y+weBCk4C60XgwMlVFGGv6nhO48
+ 25TMVVwg==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=sntech.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de
- header.a=rsa-sha256 header.s=gloria202408 header.b=uZ86xEoL
-Subject: [Buildroot] [PATCH v2 2/3] boot/uboot: add option to override the
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256
+ header.s=gloria202408 header.b=wu6JcDxy
+Subject: [Buildroot] [PATCH v2 3/3] linux: add option to override the
  CPE_ID_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -109,21 +110,22 @@ CPE_ID_VERSION if needed.
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
 ---
- boot/uboot/Config.in | 11 +++++++++++
- boot/uboot/uboot.mk  |  3 +++
- 2 files changed, 14 insertions(+)
+ linux/Config.in | 12 ++++++++++++
+ linux/linux.mk  |  3 +++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 3331b81e8c..410ad60e9c 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -83,6 +83,17 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 44f8b08e71..84f7abddab 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -139,6 +139,18 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 	help
+ 	  Include git submodules in the kernel source tree.
  
- endif
- 
-+config BR2_TARGET_UBOOT_CUSTOM_CPE_ID_VERSION
-+	string "Set custom U-Boot CPE_VERSION"
-+	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL || BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
++config BR2_LINUX_KERNEL_CUSTOM_CPE_ID_VERSION
++	string "Set custom Linux-Kernel CPE_ID_VERSION"
++	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL || BR2_LINUX_KERNEL_CUSTOM_GIT || \
++		   BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
 +	help
 +	  CPE_ID_VERSION defaults to the package version, but when using
 +	  custom tarballs or custom repository revisions, the version of
@@ -132,23 +134,23 @@ index 3331b81e8c..410ad60e9c 100644
 +	  Allow to set a separate CPE_ID_VERSION, that will generate
 +	  more accurate CPE entries for the software-version used.
 +
- config BR2_TARGET_UBOOT_VERSION
+ config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "2026.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 5b3f46ac74..795bfd6c00 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -11,6 +11,9 @@ UBOOT_LICENSE = GPL-2.0+
- UBOOT_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_LICENSE_FILES))
- UBOOT_CPE_ID_VENDOR = denx
- UBOOT_CPE_ID_PRODUCT = u-boot
-+ifneq ($(BR2_TARGET_UBOOT_CUSTOM_CPE_ID_VERSION),)
-+UBOOT_CPE_ID_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CPE_ID_VERSION))
+ 	default "6.19.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c61089bfe0..35418373df 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -11,6 +11,9 @@ LINUX_LICENSE_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_LICENSE_FILES))
+ LINUX_CPE_ID_VENDOR = linux
+ LINUX_CPE_ID_PRODUCT = linux_kernel
+ LINUX_CPE_ID_PREFIX = cpe:2.3:o
++ifneq ($(BR2_LINUX_KERNEL_CUSTOM_CPE_ID_VERSION),)
++LINUX_CPE_ID_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CPE_ID_VERSION))
 +endif
  
- UBOOT_INSTALL_IMAGES = YES
- 
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
 -- 
 2.51.0
 
