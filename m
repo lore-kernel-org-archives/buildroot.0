@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D87F483D7
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55487F483E7
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8039D40BF0;
-	Mon, 23 Mar 2026 19:47:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2285D60828;
+	Mon, 23 Mar 2026 19:47:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n8vDx41yt1wK; Mon, 23 Mar 2026 19:47:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1f4Ia-hU4CvJ; Mon, 23 Mar 2026 19:47:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF5640BE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BA7D60851
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774295248;
-	bh=Ma53Gh0rbXO/5OA5PwPNe4NTaiBhNZcWSgQPlBWgfwM=;
+	s=default; t=1774295251;
+	bh=y4KB2cyMlnpcJE1iYy7+DM0zGO917SHYIKRczeXF1MM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hH88psIcGVYQfSbOtal5WDH9tVQh+Z5qtFJ9qtI4Cpt8gbu4C1XHi7irdbz02msJe
-	 7UfYazHRr5/JjU1zI2oGw8DPo5zareOb0RXIMrFZI9+L/zDVzUOQwqkVSEsjN2nLRP
-	 lbDUHQUJXCYzdhMipQnnxVUXDVTbevIdhybGXuJreg2N3fSQBXyq1Hg0fzUtpD6sBx
-	 VcnxpKoMqITIkBLkssHErfYmv5sOJ0yPO38rZVn92U/D4o6+CKV64ey8ReOWX2BM9L
-	 WKPoIvbArrhzgA7+uxV8zYTIaZvw4h9+w61UtmbGhhzXWeDRxK5y/X61Q+4um6wCt5
-	 PIGKTmGcaiWQw==
+	b=VUQENkViMbsHtVArDW5pbYK5o21K6+1mu+mVm6F8XOtA6seCt8qUE8H8he8FmUduX
+	 0wYzUh7SPGYOrs/OwfgW/FovMrOE4YeOJxV7VWUq3qBRiCnmuJ5LvU62yNabaxK0Lv
+	 MZmbMPxABpgH9xudtxm0qQ6sWF0tT09q7vV0p5x7IQrWkzmT7Mc+39jpuJoMMl+JcY
+	 f1BdEnBlVnabiZXvrSaNVfjO/ak0WwqW81RmRliI+gpHY1VhK1nNnBIJjFeWNa0nQS
+	 NfmdGJEQn0vPx4FXSWIZBD5A1JNyH6sc8ApfyY/GF/ffVPJlO1ilvkuIC4BlbF0LAk
+	 ji7cl5J/BpOeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFF5640BE9;
-	Mon, 23 Mar 2026 19:47:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA7D60851;
+	Mon, 23 Mar 2026 19:47:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D984F4
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FC95353
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEF6F40BBB
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56264405EE
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZlB4HMqF6t_0 for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 19:47:15 +0000 (UTC)
+ id osZEEPiWlCVn for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 19:47:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD18B405D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AE40405A4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD18B405D6
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AE40405A4
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1A7784C28; Mon, 23 Mar 2026 19:47:13 +0000 (UTC)
+ id A9A3B84C53; Mon, 23 Mar 2026 19:47:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:51:54 +0100
+Date: Fri, 20 Mar 2026 16:52:23 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ba2393e088d3a13c507bdaa38c0df89bf4b67b16
-X-Git-Newrev: 60c8ad4b008b955570b6ce732ac2908efd1277d1
+X-Git-Oldrev: 14f401ee7882c5da2cdd353d53ce4ee3495a2d86
+X-Git-Newrev: 6a18f50e52f30b4029addf7e50a92d72ef2d9d9b
 X-Patchwork-Hint: ignore
-Message-Id: <20260323194713.F1A7784C28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove Marcus
- Hoffmann from no longer used packages
+Message-Id: <20260323194714.A9A3B84C53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-pyasn1:
+ security bump version to 0.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,53 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60c8ad4b008b955570b6ce732ac2908efd1277d1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6a18f50e52f30b4029addf7e50a92d72ef2d9d9b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Remove myself from packages that I'm no longer personally interested in.
+https://github.com/pyasn1/pyasn1/blob/v0.6.2/CHANGES.rst
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Fixes CVE-2026-23490: https://nvd.nist.gov/vuln/detail/CVE-2026-23490
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1210e4efeb88b4e6c298ce20fb8fc4f660fafc8d)
+(cherry picked from commit 517cdc8e13068cca524da33c3c5bab3b507c70c0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 15 ---------------
- 1 file changed, 15 deletions(-)
+ package/python-pyasn1/python-pyasn1.hash | 4 ++--
+ package/python-pyasn1/python-pyasn1.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c6b384f935..d9fbca8898 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2214,29 +2214,14 @@ F:	utils/diffconfig
+diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
+index 4268d82c38..4977abf4bd 100644
+--- a/package/python-pyasn1/python-pyasn1.hash
++++ b/package/python-pyasn1/python-pyasn1.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyasn1/json
+-md5  75cdc260597f112fdfefec85379e710d  pyasn1-0.6.1.tar.gz
+-sha256  6f580d2bdd84365380830acf45550f2511469f673cb4a5ae3857a3170128b034  pyasn1-0.6.1.tar.gz
++md5  93dbc09023fbd1b724fd8233ffe2a343  pyasn1-0.6.2.tar.gz
++sha256  9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b  pyasn1-0.6.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd  LICENSE.rst
+diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
+index 7a5cde40fb..2dc9470ef0 100644
+--- a/package/python-pyasn1/python-pyasn1.mk
++++ b/package/python-pyasn1/python-pyasn1.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Marcus Hoffmann <bubu@bubu1.eu>
- F:	package/nethogs/
--F:	package/pico-sdk/
--F:	package/picotool/
- F:	package/python-django/
--F:	package/python-immutabledict/
- F:	package/python-jc/
--F:	package/python-pydantic/
--F:	package/python-pydantic-core/
--F:	package/python-pydantic-settings/
--F:	package/python-ruamel-yaml-clib/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_django.py
--F:	support/testing/tests/package/test_python_fastapi.py
--F:	support/testing/tests/package/test_python_pydantic.py
--F:	support/testing/tests/package/test_python_pydantic_settings.py
- F:	support/testing/tests/package/test_python_requests.py
--F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/sample_python_django.py
--F:	support/testing/tests/package/sample_python_fastapi.py
--F:	support/testing/tests/package/sample_python_pydantic.py
--F:	support/testing/tests/package/sample_python_pydantic_settings.py
- F:	support/testing/tests/package/sample_python_requests.py
--F:	support/testing/tests/package/sample_python_ruamel_yaml.py
- 
- N:	Marek Belisko <marek.belisko@open-nandra.com>
- F:	package/libatasmart/
+-PYTHON_PYASN1_VERSION = 0.6.1
++PYTHON_PYASN1_VERSION = 0.6.2
+ PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
+-PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/ba/e9/01f1a64245b89f039897cb0130016d79f77d52669aae6ee7b159a6c4c018
++PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/fe/b6/6e630dff89739fcd427e3f72b3d905ce0acb85a45d4ec3e2678718a3487f
+ PYTHON_PYASN1_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
