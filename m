@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 406361098797
-	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C99110987A1
+	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1749841E77;
-	Fri, 20 Mar 2026 15:55:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 342418486E;
+	Fri, 20 Mar 2026 15:55:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DSC8hsTZml10; Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6T1nFMlo-TKw; Fri, 20 Mar 2026 15:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D42D41E81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59D998487E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774022107;
-	bh=qGWDiXdYl2phzusQ8Bw820ikU7GekdR+5aVypuuWj/8=;
+	s=default; t=1774022109;
+	bh=1LA9d91mBZfVnoxmHhQ8Pi2EdGd7HNdZPYYMCFqGaWo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Okn61L+MGLb35MEer3qeXz2ce9fA7yGqPo9WfmDB1TDzrPHUn5ILlhceORZVicqmp
-	 rlCMyvU+QqpGJJzlQ+sPBiz+gFt/pJNWBq6TCMLDfvEsYsliOMoLlcXMS2aO0B3Ijc
-	 m58ozyTc6frUTYfx7y1+tQRbY5j9Xb68h3F2ccG4r8MkK5vO4LQS7LFC28FOXePyQd
-	 4tybMrdOPhke7JBScLxwWoa3GWp5chuCRCSkEWxzjNswGPzrYxKVuTtvN77RNbuS+M
-	 t/cQwQmsPj4DDOTq2fabAjXpZG5Q7HK7QXug3dGvRZdk9Bj5+fzWn6/n8vxhUbovkN
-	 2M7futubf7cBQ==
+	b=kk7xRpoc3Vokb6JrU19Yfri7GwxtdIVsq4MJ2Wp5cmFimpWblby1I0+aI1eRbtfuH
+	 +Qn/g/sKceJJ6wRGh+NZJg4f7SAvc0aooz1aiU1pCBQACWiYSg2vJGpv55PdH+6MWn
+	 AmEuI/acKDynPmJrQ9Tkw/usmMthMJ8zIdtEimOp5xaZIJFtcRtUmkJYyjrGOY+V1c
+	 6TdHzxTHT17OSfFmYMhlPMiHxKtw0UmE7IUorzOUrzMCRj+k1bGKnmKJetYEN0rZzt
+	 pKMJ8XsAGXi8z/gIA4OdIWzvNcRe5IykRvfntYelEWrQBGv9fzbOOybhDNf7fLTajL
+	 A7eWBa0i5EmNw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D42D41E81;
-	Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CC7725C
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59D998487E;
+	Fri, 20 Mar 2026 15:55:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A25E325C
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DD0D61B71
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87FCB403A1
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v9fbPn8a9QiU for <buildroot@buildroot.org>;
- Fri, 20 Mar 2026 15:55:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oNrfiJ5gWHqv for <buildroot@buildroot.org>;
+ Fri, 20 Mar 2026 15:55:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 345D761B7D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 345D761B7D
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 345D761B7D
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:04 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-485410a0a8aso6284245e9.2
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:03 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6257040336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6257040336
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6257040336
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:06 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-48540d21f7dso9145075e9.0
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774022102; x=1774626902;
+ d=1e100.net; s=20251104; t=1774022104; x=1774626904;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=G1UaeGA0IHeGkNqZ2vhVF97OgSp0rMesrpRAXR7yaRo=;
- b=Xx+gjpZK+KsCoKOOBkEF2qvLjjfCvr1lyyaGJ43wMUqD9/O97ldVJcfv8Iqnj3/9b6
- uYKq9+iOV6LRJ7d56BfL8I/hacOwkizZg2Wi3hlNUCcKP1xEnfbHpihWOmouo5nTz5CG
- WqlE54Jxy1bSCLF/29rNfiiXFvhjR7qS5z5QcrR1V4fdhwVQ4BCcfBFV72yuExSUqRJw
- EuqaKO9YWmdnnu0Rsy/zA/4vK8HHpw8dm7HURwSzilgX10lU/jyTENDOWwhxGYo3MRF5
- R+dRs73zUeyQmPyCkmMXqj4wdKKhPMTbVsaXND2v6f1FDPVoiOO2n4dMSWvUf7DFyKK4
- l8SQ==
+ bh=/CohLt0q5zfr/OpHj+48c0nCY5elpfVw/AXcE9TT7x0=;
+ b=hNEet4B+db8BCOZzINU6pq/rieSA2qMXnu+gOnotHhnXpBqYwVdi3KzoUwURVMXpU0
+ QYIgEYFqtqSE56pN5xOrGLj5Fd9QW1uTeq09pUXGpEhIIWNmL1dwUSLMP/1xaJZca7j/
+ VIU+dD44V4Qp2bkhyygIOfQJF9FFTdxf7rbI6SoLFJE+irjwWRu68uvxZ+NsuSeRooT4
+ 0WK1zHpB2NY8VYOgFw1vRYSPCYWXmadlz4QIUqbKI06r3W/4wxOEOFGF1g3O5G9RNDxr
+ u6dU1WF2s5hth+d3g76yyyZhKwhAigWbWefZkUWYDL5/LyVdLycbZW0Mh3ZSi9kT+k7Z
+ iV+Q==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWmM58685dcs2+2/fia2Xk7yomhp3as3L7hZPea33i7QeLRgeFQe7TEa2hMqvxMJ1ntEzpfhpvkpMg=@buildroot.org
-X-Gm-Message-State: AOJu0YylPjsdWWyIVBCgAvIS2w48th53SCrzWkObJ2wUIBPNMXTRGU1f
- 2Oeen5pqR3H3ZDASwVeOx7xU6fGiWG99c+F9RfeVRavAJxQYweg3yTWSEt/pnk0OjsNZ5rT3prG
- /a6NumIs=
-X-Gm-Gg: ATEYQzyJ5bv/DIdsbmzn/npDh+j3auKODT5DVWwoZbAZ4TM+LfTxMmNtIm5S3WVF5SX
- GlwD/bQWI9K2/TPZDpU/URUv5K5/D4OCyHE7c9Q43B49+2C2jaXccyDi63WpfJ7o+PPVrLCC7of
- SETXDhHI+IgaU0fu0cJiKneIxY7LqvhFC/a4wfVr0RY22Ji/D+rEAhgk35zVxayQubp9/CNZAR8
- 9y07dUP1nRi8v7/NIXfqQpSEVE0IZs+j1LpsP4X5S+7xVLiu3q2TEvTmPIFI9/KvCFAIdpBQaSU
- WET585qA1nE6Nsig+qA2cZ7HzrKnsMTiUCOduqynKrHrnc4FPJAifYGR2tOcW2mGjqny0JNgR0Q
- bYmsxK/Q9497+p9pT+gQ3WGIKO2aa8pyi7b+9ASTrp5d7AFgHwYyaiUH+w8jF0WQBK4dtQOnifJ
- l3UglPlPK18NRYy950
-X-Received: by 2002:a05:600c:c16e:b0:485:9a50:3370 with SMTP id
- 5b1f17b1804b1-486fedb9497mr49722335e9.8.1774022102005; 
- Fri, 20 Mar 2026 08:55:02 -0700 (PDT)
+ AJvYcCWEHwoAiOD3MaoNsrnkYysnA9d6ZRviGD0zsvM+PbL5twlFxj4/78ZqwKWaDDGt78f0TibbnMffU0Q=@buildroot.org
+X-Gm-Message-State: AOJu0YwwaxtWhH/mIgwunHnCiwBB+Ad9zZDinnbSQtgj9QoWB+61qBbq
+ tFvYj0GcmHmaHWRj2mVx53ayHCbblpLbCeaG2CCsTW2SyMa5MHmvfBLyeO++ngMi2v0=
+X-Gm-Gg: ATEYQzzKnkHlH3lfU4YFZPTazTyw4vBo+PQDIQedvEJRQ8u1kNFoKyqpqR/8pIay+8j
+ +DE56lXJ3ji+NcgbtyTrn/TRyas4FZre2nu4sngwimEcgxTlYjjICqkNcqvlcuA3GO9rQblug90
+ CrDLjvl/Ry7iTIEU9Gjvx+04RCcvjmFvrSJI5cfVcBMAj1ltyixVorzZaiaXxTxu+PJC8fKBjum
+ YDdYLGyrULTtk4cXdlUd+1+LnM6gLqqNlh4CFz8OgCsX2w7hQiEKmV3FAGMuZI29IifHDZxf7Lv
+ pVaF4YbnxfIWxj375bkbFnEPPzyEb5ebFn7bzytZIX8JQAn3rbiwmcZubmHzMO2cCpPFHUWVPrE
+ YKnUOEC0UX4+1wO04nf0kP+OZngJGZcxpXHh7j3xvIVuhlPZqdPDnDwvRVVy/SyH1vIyGyC91Cl
+ /t3MO5GDrJ1JWabAu77r1Ai9hPF+g=
+X-Received: by 2002:a05:600c:828d:b0:47e:e48b:506d with SMTP id
+ 5b1f17b1804b1-486ff0291ccmr54040655e9.16.1774022104253; 
+ Fri, 20 Mar 2026 08:55:04 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-486fe7d6c54sm172411175e9.4.2026.03.20.08.55.01
+ 5b1f17b1804b1-486ff1db4aesm24187335e9.7.2026.03.20.08.55.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Mar 2026 08:55:01 -0700 (PDT)
+ Fri, 20 Mar 2026 08:55:03 -0700 (PDT)
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:55:01 +0100
-Message-ID: <20260320155501.176423-1-thomas.perale@mind.be>
+Date: Fri, 20 Mar 2026 16:55:03 +0100
+Message-ID: <20260320155503.176524-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <3bf503a96d4ef1a70f0f95b6c6872129143d5fa1.1770155657.git.yann.morin.1998@free.fr>
-References: <3bf503a96d4ef1a70f0f95b6c6872129143d5fa1.1770155657.git.yann.morin.1998@free.fr>
+In-Reply-To: <7afd223643ad94c36adc4ff486197aba5f073d0d.1770155657.git.yann.morin.1998@free.fr>
+References: <7afd223643ad94c36adc4ff486197aba5f073d0d.1770155657.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774022102; x=1774626902; darn=buildroot.org;
+ d=mind.be; s=google; t=1774022104; x=1774626904; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=G1UaeGA0IHeGkNqZ2vhVF97OgSp0rMesrpRAXR7yaRo=;
- b=ZDPZIGPqOsAXDj9zFlqSXVD124HhLM8ZH2RYUTLjhowVHPWQ860wehw6hzCIAKNJ/o
- /M34lOrmRTg2YrK5qb+euX6fTjOvkXVUcD2mnycgCSUDk5DiJp3sNKEM35S3V0rXZnAY
- tVQVFbaVFj8eLSNcKhqmVIzfpgCy+bIG1bzsy3NrFvGKH7Zt2USEstVRcBZ203OA2aYr
- WoHcPIHkH3jHPHt+JJsDdG1e1l2ocfttgiYE00T4RdSYn/MYNeg2S9c+B8T4BEmWxX/r
- wV92SjwQ4Vr8Kel6UWmfiUjB3z8vXYyoT5tl0m640Lk9JakZZ3X5rZWErGrEpJDdOjB+
- GCCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/CohLt0q5zfr/OpHj+48c0nCY5elpfVw/AXcE9TT7x0=;
+ b=SpNCyFZ9bECgj/U3s6bO1VBHCe3SxWkrmm5MKaeAUtRt5atT6IYlZjb12zRHzjZBOS
+ EmsXQlAxFG5b7CIBsbeV7NXQU2oKeXVTxcyaRD+2o4/RBl09n+5Xf+Uy/Yw27on7sawH
+ OEKhaobHdnBJAC+RYwQ+VJZSRoVv9cZFGGf680IbQeB8z3GglgsBXM+7AWFb7kq4mXRP
+ zuxsXr6SvbgRqwQoin/y1HBZ48nd89e3ipSe0AaZtFxs7erPgyiq89s45C/9qe43qTyC
+ J07FDFEQ4JcVh6vBuPGOY0KaxaRnIJJU8d9zIrLgL0mHl0SXnUelnmAflnRz12WEj2t8
+ U9sg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZDPZIGPq
-Subject: Re: [Buildroot] [PATCH 3/3 v4] docs/manual: use space-separated
- list for BR2_EXTERNAL
+ header.a=rsa-sha256 header.s=google header.b=SpNCyFZ9
+Subject: Re: [Buildroot] [PATCH 1/3 v4] support/br2-external: remove
+ leftover trap
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,108 +131,70 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Specifying a list of br2-external trees is poorly documented, and the
-> only example uses a colon to separate the br2-external paths.
+> The trap was initially introduced in c5fa9308ea4e (core/br2-external:
+> properly report unexpected errors), in 2017, to catch all unexpected
+> errors, back when a single file was generated, and errors emitted to
+> stderr.
 > 
-> Adding the support for colon-separated list is the biggest mistake that
-> was made when introducing support for multiple br2-external [0]. Indeed,
-> both space and colon can be used to separate entries in the list, and it
-> is also possible to mix the two. However, internally, the list is stored
-> as a space-separated list, and all the code will split on spaces.
+> Since commit d027cd75d098 (core: generate all br2-external files in
+> one go), in 2019 the single output file 'ofile' is no longer created,
+> as multiple output files were then introduced, while messages for
+> *expected errors* were redirected to a Makefile variable assignment
+> emitted on stdout, at which point the script just exits (in error);
+> expected failures only occur in do_validate().
 > 
-> Besides, all other lists in Buildroot are a space-separated:
->     BR2_ROOTFS_DEVICE_TABLE
->     BR2_ROOTFS_STATIC_DEVICE_TABLE
->     BR2_TARGET_TZ_ZONELIST
->     BR2_ROOTFS_USERS_TABLES
->     BR2_ROOTFS_OVERLAY
->     BR2_ROOTFS_PRE_BUILD_SCRIPT
->     BR2_ROOTFS_POST_BUILD_SCRIPT
->     BR2_ROOTFS_POST_FAKEROOT_SCRIPT
->     BR2_ROOTFS_POST_IMAGE_SCRIPT
->     ...
+> Unexpected errors can only occur on failure to create, or write to,
+> output files, either '.br2-external.mk' in do_validate() or do_mk(),
+> or any of the kconfig fragments in do_kconfig(). Cause for failure to
+> create those can only be a no-space-left-on-device condition, as they
+> are created in a directory that was just created by the script earlier
+> in main(), and thus has the necessary mode; failure to create that
+> directory is now caught explicitly.
 > 
-> So, using colons is odd.
+> A trap on ERR is not called when the shell exits explicitly with a call
+> to 'exit', thus, only failures to create or write to output file would
+> be caught. In that case, we are better off not trying to write to those
+> files anyway: failure to create the file would already be reported by
+> the shell on stderr, while disk-full would not allow to store the output
+> anyway...
 > 
-> The fact that BR2_EXTERNAL is pqssed on the command line rather than
-> being a Kconfig item is not a reason enough to justify that it be
-> colon-separated.
+> In any case, the script exits in error, which is going to be caught by
+> the caller, which will terminate.
 > 
-> Change the documentation to only mention using a space-separated list.
+> So, drop the trap altogether.
 > 
-> Of course, for backward compatibility, we keep the code as-is to accept
-> a colon-separated list, but we just do not advertise it.
+> As a side effect, that squelches a shellcheck error.
 > 
-> Note that keeping the split on colons means that colons are not accepted
-> in pathnames of br2-external trees; in practice, this is not a new
-> restriction, or one that could lift as usign colons in Makefiles are
-> problematic anyway.
-> 
-> [0] in 20cd49738781 core: add support for multiple br2-external trees
-> 
-> Reported-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> Reported-by: Brandon Maier <Brandon.Maier@collins.com>
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
-> Note: support/scripts/br2-external has shellcheck issues; this commit
-> does not try to address those on purpose, as it only adds a comment.
-> 
+> Note: remaining shellcheck errors will be addressed separately in the
+> following patch.
 > ---
-> Changes v3 -> v4:
->   - add an extract of all other list variables from [1]
->   - sumarise and include Arnout's comments from [2]
->   - fix typo
+>  support/scripts/br2-external | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20240904205354.504964-1-yann.morin.1998@free.fr/#3375145
-> [2] https://patchwork.ozlabs.org/project/buildroot/patch/20240904205354.504964-1-yann.morin.1998@free.fr/#3375416
-> 
-> Changes v2 -> v3:
->   - add comment in support/scripts/br2-external  (Fiona)
-> 
-> Changes v1 -> v2:
->   - fix typoes
-> ---
->  docs/manual/customize-outside-br.adoc | 5 +++--
->  support/scripts/br2-external          | 3 +++
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/customize-outside-br.adoc b/docs/manual/customize-outside-br.adoc
-> index 78065489d4..8a76f3a998 100644
-> --- a/docs/manual/customize-outside-br.adoc
-> +++ b/docs/manual/customize-outside-br.adoc
-> @@ -58,10 +58,11 @@ We can switch to another br2-external tree at any time:
->  buildroot/ $ make BR2_EXTERNAL=/where/we/have/bar xconfig
->  ----
->  
-> -We can also use multiple br2-external trees:
-> +We can also use multiple br2-external trees, by specifying a space-separated
-> +list of paths to use:
->  
->  ----
-> -buildroot/ $ make BR2_EXTERNAL=/path/to/foo:/where/we/have/bar menuconfig
-> +buildroot/ $ make BR2_EXTERNAL="/path/to/foo /where/we/have/bar" menuconfig
->  ----
->  
->  Or disable the usage of any br2-external tree:
 > diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 474feaded7..641f8e18ae 100755
+> index 8aea479d20..6d4fc1a791 100755
 > --- a/support/scripts/br2-external
 > +++ b/support/scripts/br2-external
-> @@ -34,6 +34,9 @@ main() {
->          error "Cannot create output directory '%s'\n" "${outputdir}"
+> @@ -30,10 +30,10 @@ main() {
+>          error "no output directory specified (-d)\n"
 >      fi
 >  
-> +    # Historically, BR2_EXTERNAL could also be colon-separated, so for
-> +    # backward compatibility, keep splitting on colons (in addition to
-> +    # spaces).
->      # shellcheck disable=SC2068  # We do want to split on spaces
+> -    # Trap any unexpected error to generate a meaningful error message
+> -    trap "error 'unexpected error while generating ${ofile}\n'" ERR
+> +    if ! mkdir -p "${outputdir}"; then
+> +        error "Cannot create output directory '%s'\n" "${outputdir}"
+> +    fi
+>  
+> -    mkdir -p "${outputdir}"
 >      do_validate "${outputdir}" ${@//:/ }
 >      do_mk "${outputdir}"
+>      do_kconfig "${outputdir}"
 > -- 
 > 2.52.0
 > 
