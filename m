@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 889EFF483EC
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5DEDF483D7
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5816D821D9;
-	Mon, 23 Mar 2026 19:47:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wzpP2Z2_lt51; Mon, 23 Mar 2026 19:47:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56881821F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774295253;
-	bh=mMXApZWOI48OX1TirGbBA3F3lPu2cKfiXg+DcEGHnws=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KcXIztzbQ4x5G3XSeZ16MLdkO2oakfE5C4kpcwtct/bjKFxx9TTIpwy/JpvIF5tpa
-	 PvimgYp15HACZp6vk03JZFopRd4rCpdDVLG/TNEscGqW7jKbLMYrDNZug5rxTGTTE2
-	 fyeDFtBxGJ265fJYXi30+mExvahmdKZnZfyQT6BXzBB3CBqHWpmdOFrBz8l5mS2yVW
-	 At4/jWbtxvXlTmetjoKwLfTbzBRmk//Ips2bo/Hj/CPTK2Y0sbAcpv6l/RJYb/qUTq
-	 +/38mhPd1eeVFOgo2caQoRGdf4VJ/B1mPQ++bNe5ruhHsHhi9M19W9dNCFchs+mHty
-	 6TLNPvq06MzVQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56881821F5;
-	Mon, 23 Mar 2026 19:47:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03715F4
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A79CF405A4
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77EC740BEA;
+	Mon, 23 Mar 2026 19:47:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FUo5PMn2O0rl for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 19:47:16 +0000 (UTC)
+ id hiI2sLjS3TR6; Mon, 23 Mar 2026 19:47:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CD4440BF1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774295255;
+	bh=0Nirvta+Oa+F/SP0U1j+68d3tD0lQ66/gwU7G9Xh678=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hSsMPhg0OPLO3P61v+5jbTUgCrzRvGH5KOGKT7DnKq17i2ObpCe6FQp6vvJNuO9YM
+	 r6FUxhYvyFudVNMCLFNHxWxGeNkUlhd/5PD3PBnsXu59izf7xCLuk4//NCRktY3YlA
+	 9Ppiuudgy68UR9qtX9kHZAPEvQ/sV2QzTnL6R5jW1+qDoHHv8V1jOqdkiUvs2FEG6e
+	 58YiWAxcKEc1pBjQg7bnUXUK7CHPfbCQVoYxNpcn993s7jg4mfD6Aq9B7sYmZqF4eE
+	 HaH8iSJgFLOSbFq6etkzrze/6ZDDR6xBfatvpnR9K8GxGHPK1qSn4BtHcGW8Y5QpcL
+	 pA3KKSrGjX3Tw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CD4440BF1;
+	Mon, 23 Mar 2026 19:47:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 025C3353
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5817406B3
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cJrZg4-cnVNf for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 19:47:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 445BB406A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AC9B40BC2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 445BB406A8
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AC9B40BC2
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82DB484C28; Mon, 23 Mar 2026 19:47:14 +0000 (UTC)
+ id D498F84BD0; Mon, 23 Mar 2026 19:47:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:52:16 +0100
+Date: Fri, 20 Mar 2026 16:51:50 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ac6772493597fc6c44ec8633daa016aa2ed4886f
-X-Git-Newrev: 6b9796ee55b5f0db54e2068341cc8f717d1c88a3
+X-Git-Oldrev: ec9080f997ef75835d5a8bffa1dbb02629ccf094
+X-Git-Newrev: b7c4b154354354035533fe0adc0f66b65dddd060
 X-Patchwork-Hint: ignore
-Message-Id: <20260323194714.82DB484C28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-flask:
- bump version to 3.1.2
+Message-Id: <20260323194713.D498F84BD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/nfs-utils: bump
+ version to 2.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b9796ee55b5f0db54e2068341cc8f717d1c88a3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b7c4b154354354035533fe0adc0f66b65dddd060
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/pallets/flask/releases/tag/3.1.2
+Release announce:
+https://lore.kernel.org/linux-nfs/fdf3631f-e924-4e4c-bd9f-db5b40a90bfe@redhat.com/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+With patch [1] option nfsv41 required to be renamed to blkmapd.
+
+[1]: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=59e85671e59f7ccbf66dcf72ce7462bf4932cc78
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 68eb98b6fecf50bc5a59a69a3fc9dfcee29b0b74)
+(cherry picked from commit e7928fef42fc190d51864c4b14df618751325167)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-flask/python-flask.hash | 4 ++--
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nfs-utils/nfs-utils.hash | 4 ++--
+ package/nfs-utils/nfs-utils.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 17564e8587..ec2e5d39f9 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/flask/json
--md5  59dc1b0772bab098aff83e8008e97af6  flask-3.1.1.tar.gz
--sha256  284c7b8f2f58cb737f0cf1c30fd7eaf0ccfcde196099d24ecede3fc2005aa59e  flask-3.1.1.tar.gz
-+md5  62ae81cf2e91a376af909a2bc8939e15  flask-3.1.2.tar.gz
-+sha256  bf656c15c80190ed628ad08cdfd3aaa35beb087855e2f494910aa3774cc4fd87  flask-3.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
- sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index 2269b05d29..8000489366 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index fb5c03d917..9aa9151ebb 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.4/sha256sums.asc
+-sha256  11c4cc598a434d7d340bad3e072a373ba1dcc2c49f855d44b202222b78ecdbf5  nfs-utils-2.8.4.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.5/sha256sums.asc
++sha256  b13ca4a9df44186bdbe107514b22732d4243f785f95daf2fb86afc1edba15bbb  nfs-utils-2.8.5.tar.xz
+ # Locally computed
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index e7d82b10ba..ba87ef813e 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FLASK_VERSION = 3.1.1
-+PYTHON_FLASK_VERSION = 3.1.2
- PYTHON_FLASK_SOURCE = flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/c0/de/e47735752347f4128bcf354e0da07ef311a78244eba9e3dc1d4a5ab21a98
-+PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/dc/6d/cfe3c0fcc5e477df242b98bfe186a4c34357b4847e87ecaef04507332dab
- PYTHON_FLASK_SETUP_TYPE = flit
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.txt docs/license.rst
+-NFS_UTILS_VERSION = 2.8.4
++NFS_UTILS_VERSION = 2.8.5
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
+@@ -28,7 +28,7 @@ HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqli
+ HOST_NFS_UTILS_CONF_OPTS = \
+ 	--enable-tirpc \
+ 	--disable-nfsv4 \
+-	--disable-nfsv41 \
++	--disable-blkmapd \
+ 	--disable-gss \
+ 	--disable-uuid \
+ 	--disable-ipv6 \
+@@ -50,10 +50,10 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
+ 	usr/sbin/fsidd usr/lib/systemd/system/fsidd.service
+ 
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_NFSV4),y)
+-NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-nfsv41
++NFS_UTILS_CONF_OPTS += --enable-nfsv4 --enable-blkmapd
+ NFS_UTILS_DEPENDENCIES += keyutils lvm2
+ else
+-NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-nfsv41
++NFS_UTILS_CONF_OPTS += --disable-nfsv4 --disable-blkmapd
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NFS_UTILS_GSS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
