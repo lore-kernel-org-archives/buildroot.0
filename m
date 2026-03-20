@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3781DF483D7
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E49F483EB
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9343560829;
-	Mon, 23 Mar 2026 19:47:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFC8C40BBB;
+	Mon, 23 Mar 2026 19:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4kkoRA1Qf-gf; Mon, 23 Mar 2026 19:47:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j8ssjvHniS0X; Mon, 23 Mar 2026 19:47:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC8E960838
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E667840BC2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774295240;
-	bh=mYgzPqSgF+uRXfW/1BNmlHcaC86S4n49wMzkqyP+1f8=;
+	s=default; t=1774295242;
+	bh=XKJXJ22Xr3f49h7iDIVfDF5eqUS3+Psu81CBhukixyo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kv3ApDH4hJ9dAUB1X0CrR41GBvtYwpj2rZ86OlWL7eR1T7Pm1BKhrZZ8ryLbc9vxE
-	 35WfyDxeTJDBTbhqcgxeJqzAkFO56X+uEondDIIVEvkgB8fBlcFPaOjt4HEmYYzUgI
-	 sPkWSqA51EtJGG0qZbmU+J0Gx1n3RehD9Ic+3d1hElFIlQ0OiI50YDh8j6h0XQ6QhV
-	 g8Deyo/n7VVzZlvGObpWUIb2ksC4HDQjV8e6u3aRjRztk/Wl7ixrMM7E0DZcTtD/7e
-	 DE9J8rb6SlgZrQyrsGjQQbJL3qPxvMn2W6VEwdaS6xvZH4Y+OuR6JEs7I5DkRmi49o
-	 jLuOOIJiRFxqg==
+	b=BN7+UUa+RiklUuV9ESTBn9San/6enMMl2naJSUolLAZWQ6+x1cVWxXwhqOOTYqAJS
+	 5FJjauMx+a2JIxQXUVcJ4VKZDm14mP9bpeup83B4aFD644QJOh76oWYxOPXDtdm8cL
+	 nWEtB+Jm5cNUO5j2RBFOY3A3T/3GvIklo/hQJrSvRv41izHYRRio2LX8sEpgPrW/3P
+	 rZtil5gK+S6tOAyeW7ZnmXpUswplvBMs8KQc4oE29rE31bPOZ0eU4nuuxSNTKHDLIg
+	 U1sF4A+fqZRGbyP5rTSikm72FSlxJLcZsrEI1hyycT9raTc3VJbsUF1XRgA83LqWkc
+	 BgAiR54aA0S7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC8E960838;
-	Mon, 23 Mar 2026 19:47:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C9E9F4
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E667840BC2;
+	Mon, 23 Mar 2026 19:47:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F114353
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EDF781CEF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 993AC40971
  for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dxm7xSTudbiJ for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nBdss7Lh_Zma for <buildroot@buildroot.org>;
  Mon, 23 Mar 2026 19:47:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 897A281A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CE9440640
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 897A281A81
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CE9440640
  for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6D5784BCB; Mon, 23 Mar 2026 19:47:13 +0000 (UTC)
+ id 6B2AD84C28; Mon, 23 Mar 2026 19:47:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:51:46 +0100
+Date: Fri, 20 Mar 2026 16:52:11 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 137a566bf5353831d97c068a4c22e6df5b4d07a0
-X-Git-Newrev: 041e9d289ebaf14d7a7a4f60da9c97e3d78c4cca
+X-Git-Oldrev: cecf369586d7d2456d8fd8dbd26da3b29a52aba0
+X-Git-Newrev: 5ab801853981163bf7a2eb378c0779d583401298
 X-Patchwork-Hint: ignore
-Message-Id: <20260323194713.B6D5784BCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x series
+Message-Id: <20260323194714.6B2AD84C28@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] docs/manual: use
+ space-separated list for BR2_EXTERNAL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/041e9d289ebaf14d7a7a4f60da9c97e3d78c4cca
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5ab801853981163bf7a2eb378c0779d583401298
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Update the latest kernel releases to:
- - 6.12.73 -> 6.12.77
- - 6.6.126 -> 6.6.129
- - 6.1.163 -> 6.1.166
- - 5.15.200 -> 5.15.202
- - 5.10.250 -> 5.10.252
+Specifying a list of br2-external trees is poorly documented, and the
+only example uses a colon to separate the br2-external paths.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Adding the support for colon-separated list is the biggest mistake that
+was made when introducing support for multiple br2-external [0]. Indeed,
+both space and colon can be used to separate entries in the list, and it
+is also possible to mix the two. However, internally, the list is stored
+as a space-separated list, and all the code will split on spaces.
+
+Besides, all other lists in Buildroot are a space-separated:
+    BR2_ROOTFS_DEVICE_TABLE
+    BR2_ROOTFS_STATIC_DEVICE_TABLE
+    BR2_TARGET_TZ_ZONELIST
+    BR2_ROOTFS_USERS_TABLES
+    BR2_ROOTFS_OVERLAY
+    BR2_ROOTFS_PRE_BUILD_SCRIPT
+    BR2_ROOTFS_POST_BUILD_SCRIPT
+    BR2_ROOTFS_POST_FAKEROOT_SCRIPT
+    BR2_ROOTFS_POST_IMAGE_SCRIPT
+    ...
+
+So, using colons is odd.
+
+The fact that BR2_EXTERNAL is passed on the command line rather than
+being a Kconfig item is not a reason enough to justify that it be
+colon-separated.
+
+Change the documentation to only mention using a space-separated list.
+
+Of course, for backward compatibility, we keep the code as-is to accept
+a colon-separated list, but we just do not advertise it.
+
+Note that keeping the split on colons means that colons are not accepted
+in pathnames of br2-external trees; in practice, this is not a new
+restriction, or one that could lift as usign colons in Makefiles are
+problematic anyway.
+
+[0] in 20cd49738781 core: add support for multiple br2-external trees
+
+Reported-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Reported-by: Brandon Maier <Brandon.Maier@collins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit f9cdca48a57f24f2babb8f72652e099e08a59cd5)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ docs/manual/customize-outside-br.adoc | 5 +++--
+ support/scripts/br2-external          | 3 +++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 976892aba4..a2b09c4e5e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/docs/manual/customize-outside-br.adoc b/docs/manual/customize-outside-br.adoc
+index 78065489d4..8a76f3a998 100644
+--- a/docs/manual/customize-outside-br.adoc
++++ b/docs/manual/customize-outside-br.adoc
+@@ -58,10 +58,11 @@ We can switch to another br2-external tree at any time:
+ buildroot/ $ make BR2_EXTERNAL=/where/we/have/bar xconfig
+ ----
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.12.73" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.12.77" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 56a7b436e0..fb495841cc 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -2,12 +2,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  4059d394cbf8e9548df36d37e0b8a80c4409ac4e14ecc5019a72a770ef7b41ba  linux-6.12.73.tar.xz
--sha256  16742f4e78abfec8cc9205fb3cf79d63c7e819c33bfc691402683402c350ee2f  linux-6.6.126.tar.xz
--sha256  fd2d033321bd15e0ad5669208b6e43f3f93ccecb059a512ca6b913ca940c38ea  linux-6.1.163.tar.xz
-+sha256  358836ebe5caef41e7ae9492e7fbcdf5be6e53ee43c99752aebda81e1b2cff67  linux-6.12.77.tar.xz
-+sha256  caa08f0122224fbbfab177e2a37cc2a94a0046bd2e7e87f03f8913f2b812448a  linux-6.6.129.tar.xz
-+sha256  818dfc742158d18f70a6abccd77b7e4366cb7f26a88687f94dae392a9f089449  linux-6.1.166.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  fce4b1c86688880932ba8f755880cbf390a89453464bfd90b9a1b01a121c2998  linux-5.15.200.tar.xz
--sha256  47754da223a9f264b917be5d575a4dae03fc8777aa9e1b00473e973ee997d529  linux-5.10.250.tar.xz
-+sha256  0bc1bdf74957e276793691865ffb71505809706d9243a42e9704aad0f128cdd4  linux-5.15.202.tar.xz
-+sha256  34b3fbe2c9eeb767fc7eea4b9516e0dd44b79401ceb13e41713096b8eb270afb  linux-5.10.252.tar.xz
- sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
- # Locally computed
- sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 12e68b5edd..058a15b066 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -429,11 +429,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.250"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.200"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.163"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.126"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.73"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.10.252"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.202"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.166"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.129"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.77"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-We can also use multiple br2-external trees:
++We can also use multiple br2-external trees, by specifying a space-separated
++list of paths to use:
+ 
+ ----
+-buildroot/ $ make BR2_EXTERNAL=/path/to/foo:/where/we/have/bar menuconfig
++buildroot/ $ make BR2_EXTERNAL="/path/to/foo /where/we/have/bar" menuconfig
+ ----
+ 
+ Or disable the usage of any br2-external tree:
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 474feaded7..641f8e18ae 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -34,6 +34,9 @@ main() {
+         error "Cannot create output directory '%s'\n" "${outputdir}"
+     fi
+ 
++    # Historically, BR2_EXTERNAL could also be colon-separated, so for
++    # backward compatibility, keep splitting on colons (in addition to
++    # spaces).
+     # shellcheck disable=SC2068  # We do want to split on spaces
+     do_validate "${outputdir}" ${@//:/ }
+     do_mk "${outputdir}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
