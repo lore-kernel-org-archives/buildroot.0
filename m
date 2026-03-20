@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DB5510987A1
-	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83AF910987A2
+	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49D1C41E77;
-	Fri, 20 Mar 2026 15:55:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5408F61B89;
+	Fri, 20 Mar 2026 15:55:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o5QR5TZ7Npzp; Fri, 20 Mar 2026 15:55:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JaJJ1pDgUWMy; Fri, 20 Mar 2026 15:55:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7023341E81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 637EC61B99
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774022118;
-	bh=oTI/bhpYC5pGf1pQe5CR8r/jDi49MkVWXVycA5O/IZI=;
+	s=default; t=1774022119;
+	bh=PBV+z/DwU0TURiZu7XFfPcWSOLNMf0xyI7sX+GKIgu0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=AQEY7rPa9igJgA9ytnHUlja28t98nz/DY0Srl4LMs26E0ZilGwjko8tIvwJ4pVBQf
-	 b9BvSejptNbEBMyP2WYMwoUdrK3xHrVcXWPYb2a7YOH5AEaV+7FEXYBWuIrzWla5JA
-	 MKXyyDfH2bLgJquN56PakiSK5BmtY//MnWLl44yV89paC77s2sGp0Do1gKY92MmW87
-	 XGLn/C6vet0SOdbRmyugSELG6gD77U7LmlA2RU4viPThQJRqC8tzCWec6dgI3uldZb
-	 80xwMa1DP+0McJYNu3r8JBwWBHPoZ9xGlvi0jGRUMbynk6sqT8xRE3PyWJLT+rh66N
-	 84TnZT103nptw==
+	b=EfrA6eD2F31YLMlcsuWX5JODh+0fmYHRqVT9PXqe9oEjxJw4bw3pm171bYOfzOdg6
+	 7v9YDbcbciSGiUmrTviCzlNzRWbwuVcJ+uo7VUDTTzSDiOs2TRha9ph0J3l61g8Pci
+	 Lbcy8gm2e4Dw2AKF5iuD7k0jTQ+EzD9FlFnfwgYwabiWegwwxbkLc/TPOlwD4duigT
+	 H0SHJcLgulcTUDFE5EgxiOnOpolqkFbgqnh3ys8Vr4rJflZrFdTUEoF1oEGlh/q9/3
+	 9UNF105G70drhs7+IK8MBEw1WBDakoC3/RpJoqOfeOKgEdMmScwzVBdQhLVK/LYQNl
+	 OQ0cSHtuo0o4w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7023341E81;
-	Fri, 20 Mar 2026 15:55:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BC5501B6
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 637EC61B99;
+	Fri, 20 Mar 2026 15:55:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 036721B6
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC46F40336
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E964684894
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3RzX2I0WagHr for <buildroot@buildroot.org>;
- Fri, 20 Mar 2026 15:55:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hPJFTEApKpfe for <buildroot@buildroot.org>;
+ Fri, 20 Mar 2026 15:55:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C6BB8403A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6BB8403A1
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C6BB8403A1
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:10 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-48700b1ba53so6701115e9.1
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF7B884895
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF7B884895
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DF7B884895
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:11 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48557c8ad47so17071255e9.0
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774022109; x=1774626909;
+ d=1e100.net; s=20251104; t=1774022110; x=1774626910;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=f9cyPVNSCCgQkT2Fwpl6ESatr0LD8GoHYmErkSsqD90=;
- b=ohEtdJuQONXYs2bZHz9DCs2hmjNaMMoHSh72bFoJoMdsPgSCQUKjlKTATfsg/ycKNI
- R1Pb7jPdE5PAPLj1FhKY8DBjGwdRVsCA2Js3WhS39CyBbKZGFdXnJDrV8uIDXuMZdgXi
- 7H+viEI1Nzp9Zs0a1yoHuwMsA0snHTKXI513Qg9O1JMAvd93fvGiDnyKYeHTDgJ7ehA4
- hXCqtV+jJeP5SAWmKdeFWG+NcjvURWz4RWwHR2noyN2RamY/2zDlU6zzWBEx5oYT2H0e
- h1OwBcctMERH5vruj2u965Gt5q104lvnbLwkBR7Ew7eiZIOrzC+qquDR4M2nju+BUjBs
- /i7A==
+ bh=b3d4sHwbq62BaH+FgKAlCI/5j3myh5LEpOJuy0VA8ws=;
+ b=iD8X/OFMtEcfT1KsTVPL7zFa5MIkzBRxgb2YX8sAxKEW1x5uy2eX0nGnoNdf8LlmYp
+ VqnarT2YnRrUAy1lm1COpWHSTuNu8hJhfvUoePCg74dEoU//YfaNmPDRMI4ztzDRDsX4
+ v9Hf0QCEz9WaA4MBFgNHDfXXJ1Ef8uwbZGyaUNKq+oSpOVWeYORts5YFBeXMhLigySHS
+ kgnNwAYviyBVr3oOi1RN7GPn5pR5Z/cA355f/ITLC/p38o4kluk6YynVGTGNpJDMFMIm
+ mjpBkili3oL7Rx4LgszGJfEVpgJFRvKl8Fosjr9h6N4uuX+VTbRPF/f6OBUNdj6MenLT
+ YekQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUZ5R5vyDBUBTLXiSGQla59bQHSNFuceeZMvxFFWoB/esbxD2bUcxZvUVPmUmj7iVR2WvL+Lbo/Xco=@buildroot.org
-X-Gm-Message-State: AOJu0Yy3o/g587qN4rbqhQe5NeLKTGdidaUQAdh42sBDk8XiFiboJWA6
- ib5DAqZbVTH+J7ofKyJIam1QrN1GN7fmerg1EKpSXOh94KWO6NegzqVe1TWTxPKpx/HCiaOGSw4
- QdTxOnWI=
-X-Gm-Gg: ATEYQzxkrePkN1K2JvByC52y2JJ5Z/tt7oMhRju0/pKKuk7dhLQzzi/XZgGP4ByqcCf
- 51XU5YSZAjS9leBaharwD8cpiGTXYB9cDhbWEOpZh40/SNswiu2gG7rtcJl5Zk8VG7fd+a9nLYi
- DSEQwHKCCWHkeRFEVFHcF07NczNWfKcFc7HAsNBlez/m7kGnM4Bg5WGHMNaU+UNhTtbw2YoyFQd
- EXWhmY4PS3MximtCu2D6RCIq7DSMT4hyGFXw1YTm85JzBYxirTzvrdDZmvEGMyoHTVAS9vr/lXz
- Nn9A7sZBrIfXo4ebg5HG5JU6gcaAJPRSmzO97RKjbhqaZ6Aperl6SKfVHN30HO0tUIn+D0NbYc+
- GKxodNQDB2KJwBxvI8NuXrdqUGx9B3LAjrnRUier53jka2nXJ3Ae36qcZl2OBPSJue/JLsUNGSv
- gf9cMA2bu4oIcrc21L7FRWvEuo5no=
-X-Received: by 2002:a05:600c:698e:b0:480:3ad0:93bf with SMTP id
- 5b1f17b1804b1-486fee1af00mr46177735e9.24.1774022108663; 
- Fri, 20 Mar 2026 08:55:08 -0700 (PDT)
+ AJvYcCX1bwYmC4M9z62DLcLx9Pi4lIBYFofzP167MPknO4LMpyWlcKqd92gm7riEriYIqkpwubHqSgpbpYY=@buildroot.org
+X-Gm-Message-State: AOJu0Yz3xhXWTkSDq+X1pdseXnv69SBCsEcUXd95Y/XgNWLPRruYFOX9
+ a04SXLJ96f/l/9AycXvJVIfPgZuXm9BRA7rYH863WkOgIGGb+d/XN1Fswyyb21AbZ+w=
+X-Gm-Gg: ATEYQzz04Zu8GswR9hmta3HCN3ZlvZuPmX3TtaRTf/PenrOy70LgVIUWN6DPVmOZfWk
+ dZcCY1ddI258zTSpKwLQy9S6+oM+XMD2b9S1zVsH8bxLZ/RAL+5oxVEImz5AqZzItz+n3WeyI7G
+ t+wgfklOh9xS3lw5LXmxKltrbvw4QUNUnoRPAE7fIc4jmfTqOGT92s+PzHGlbUhN5PBCpcIPiPw
+ t54mBzyVFZ8qa7EOmMvdxkO1PBGNxvOTHCMQRP1+c1TqIGRo94OtbzDyieDFItmzHt4i/+PwQdH
+ wmZx/qOLMMkrtWHg8QroIu3peXJQVxvdjSfovtYeZl3lhUTb7QXmnm8yA+XRkwfP5325VdoXRcU
+ MoaM7TjDrpcCVWw5pjYqsnEX2zr5CDPIqcG1cnDJi27Eu3FhlkxauaBBB0Q8egBo+War/yQ+2Fj
+ UNBpAQz7P6WLpqPIaf
+X-Received: by 2002:a05:600c:8b66:b0:486:f9d0:aac8 with SMTP id
+ 5b1f17b1804b1-486fee0f835mr50570915e9.18.1774022109671; 
+ Fri, 20 Mar 2026 08:55:09 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-486ff1db3absm17425605e9.36.2026.03.20.08.55.08
+ 5b1f17b1804b1-486fe85e4d3sm20447495e9.2.2026.03.20.08.55.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Mar 2026 08:55:08 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Fri, 20 Mar 2026 08:55:09 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:55:07 +0100
-Message-ID: <20260320155507.176738-1-thomas.perale@mind.be>
+Date: Fri, 20 Mar 2026 16:55:08 +0100
+Message-ID: <20260320155508.176793-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260304213528.1380898-1-romain.naour@smile.fr>
-References: <20260304213528.1380898-1-romain.naour@smile.fr>
+In-Reply-To: <20260309083104.3500964-1-giulio.benetti@benettiengineering.com>
+References: <20260309083104.3500964-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774022109; x=1774626909; darn=buildroot.org;
+ d=mind.be; s=google; t=1774022110; x=1774626910; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=f9cyPVNSCCgQkT2Fwpl6ESatr0LD8GoHYmErkSsqD90=;
- b=GrkeSEYIcG7+wen2vGiSQkK9HtmM6kTa7lJO4fd7OYmmt2az+SO5Xn5cZ4M+oEoixs
- /3e6JugsaotCXZPeLOf+0SmhJzZ3EFGh8j8UIJ00uqtCSXYgHCRwi1m7sO5bfjEckTsc
- ZGOGDeQYBcyqHmeoUbg++VcTQfj8ZBVBEbnjy4PNkpwWAqm7igwl5/RSaCX6GGKL7zGw
- ty/WPAs7k/liy9e1xd2faKECvLHOE6Vonxis7o10NHi5hg6/LlN/xKGVudmjAAfadm2L
- ijyHdIsnebiK6q2jFA6oDk32cmeL3Qt031l9Qyyadjf7L2OFdRgZO6eXoUX6FOsQRIEI
- WLmw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=b3d4sHwbq62BaH+FgKAlCI/5j3myh5LEpOJuy0VA8ws=;
+ b=B55IkpoKZ6sw7/lfTaFDmdcZT/DYIGRq6XRNLylociwwdfzS5Ahl4n0XbJhHFzsNdw
+ 2CJLO65MM2vSpQMrIzpR34ypCufu6MH/a8rXRFqhY89TnoZ2WPTHU4fTAqKURF/5Xa4V
+ 2GAORZjS82kOdb0KTkzLojk7AQj2okfHzQhbSrUAJFO96oeynj/eMECmZ9cxBLlKxuvm
+ j+rgpaXXi/t9WTz5iDrHWQeikcs+7Tm9oBqDALg7Je/4ZS2QN3paQyRbEvWq+9PE2ggM
+ Hil1P5JlZUlpKq+0W/UrQmcsxfxUux9n55hut51+SakC+9R5E20UEFZhrxOvwni2rXCC
+ mriQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GrkeSEYI
-Subject: Re: [Buildroot] [PATCH 1/3] boot/uboot: improve U-Boot OP-TEE TEE
- format options help text
+ header.a=rsa-sha256 header.s=google header.b=B55IkpoK
+Subject: Re: [Buildroot] [PATCH] package/nfs-utils: security bump version to
+ 2.8.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,53 +131,46 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> OP-TEE generates a few binaries that can be used by u-boot on some
-> platforms (Rockchip, Texas Instruments K3) using TEE variable.
+> Release announce:
+> https://lore.kernel.org/linux-nfs/4d58bf28-a3e0-4496-bae8-05387da27054@redhat.com/
 > 
-> Add a link to the OP-TEE documentation were we can find easily the
-> desciption for each TEE format that can be used by u-boot.
+> This update fixes CVE-2025-12801.
 > 
-> For convenience, copy tee.elf and tee.bin description in each option
-> choice help text.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  boot/uboot/Config.in | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  package/nfs-utils/nfs-utils.hash | 4 ++--
+>  package/nfs-utils/nfs-utils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 47ce24ee76..17b7f95f50 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -295,15 +295,23 @@ choice
->  	  Since this version, the TEE in binary format must be used as
->  	  it contains important meta-data.
+> diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+> index 9aa9151ebb..bf7c4b61b6 100644
+> --- a/package/nfs-utils/nfs-utils.hash
+> +++ b/package/nfs-utils/nfs-utils.hash
+> @@ -1,4 +1,4 @@
+> -# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.5/sha256sums.asc
+> -sha256  b13ca4a9df44186bdbe107514b22732d4243f785f95daf2fb86afc1edba15bbb  nfs-utils-2.8.5.tar.xz
+> +# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.6/sha256sums.asc
+> +sha256  2bd7b34e809a7eff2f4bc5fc5fd96ebcd66a5458b471a270cbd2dc169b011550  nfs-utils-2.8.6.tar.xz
+>  # Locally computed
+>  sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> index ba87ef813e..7ac0b549cf 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +	  https://optee.readthedocs.io/en/4.9.0/architecture/porting_guidelines.html#binaries
-> +
->  config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_ELF
->  	bool "tee.elf"
->  	help
-> +	  The main OP-TEE ELF file. All other OP-TEE binaries are
-> +	  created with this as input.
-> +
->  	  ELF format may be used only for OP-TEE versions before
->  	  3.8.0.
->  
->  config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE_BIN
->  	bool "tee.bin"
->  	help
-> +	  The original OP-TEE binary with a header (v1) and combined
-> +	  init, paged, and unpaged parts.
-> +
->  	  Binary format must be used for OP-TEE versions since 3.8.0.
->  
->  endchoice
+> -NFS_UTILS_VERSION = 2.8.5
+> +NFS_UTILS_VERSION = 2.8.6
+>  NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+>  NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+>  NFS_UTILS_LICENSE = GPL-2.0+
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
