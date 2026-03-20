@@ -4,115 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE7610987A1
-	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8EBF1098797
+	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD99C84880;
-	Fri, 20 Mar 2026 15:55:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C27B784897;
+	Fri, 20 Mar 2026 15:55:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tq_003S4nAkW; Fri, 20 Mar 2026 15:55:23 +0000 (UTC)
+ id LMsycKThmqvL; Fri, 20 Mar 2026 15:55:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1C2984898
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A76708486F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774022123;
-	bh=e0kDx9lCcx5OoflkqL1OOGKxcuM+HJ84QhBdffezql4=;
+	s=default; t=1774022120;
+	bh=f/rBRLcT3mKEnMkiDVskZHwMn8H24XVYfzDTeLqN900=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=bR7qFRIDTJ8ANZup0nfetFwOIOHgsA9DnUNvz5tkAtbw9k9WSzaTqboPTO1K0WM71
-	 dcUVZd5UjVOHgCx0S6ONaX0Oj9lrJxrPkMzD5rh/kl7NtQvu4L/O4HmBqjQ1kuWXUa
-	 I11PKUmiiUM9Nk8ZulerIXfdb1NGJhw7bPIb6l3edx+bjn7k/7wDNa4T1jdLXev6AJ
-	 Nm0TZXf0vD3vcN58gtPs4tqe6X4HiMo1RoSE4EMCjW/GLOAqtCa/5sW56Ucuwk2/gT
-	 UfGoSm+jUrKhaIluq3IfywLOc61SBfCmCYx70i87EKUSC2bBYOTlLqnmWD2Y2H8TQg
-	 EOlg+SS0FzbXg==
+	b=EchR/J1bglU9054TRp+PsPmu8Uplkqcg6XGSkvdusN6ZDK3QNL2b1COH/FdIwd2yb
+	 L/adEzV3tMygISaUiOJINXHmhQY2gP/M2G17gLeo/UsdoeFx344+jGIDY701R/dXhP
+	 yMsFGWMUxjYjG2BLYmH0UJQX881IV8opkCShOr1VHb9qRAJ0PaOmNn5Wz6T9+gCamu
+	 yYXOuSSJdkMPJDKsng3Ljh+3+LxtH3wkWlj3oLjXHPiUn614w91WyoBk7sm/kYzXG6
+	 sNzrMnrXzFfx0FcpjBAGTRpWBIteYyJQnsF7xgvbpVeJy1rXY4YlwBt0CafrHKoNrW
+	 WrNnVF7g1S7UQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1C2984898;
-	Fri, 20 Mar 2026 15:55:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E90B1B6
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 055A8414E4
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jN3G7A4h_Cur for <buildroot@buildroot.org>;
- Fri, 20 Mar 2026 15:55:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0CD5140139
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CD5140139
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0CD5140139
+	by smtp1.osuosl.org (Postfix) with ESMTP id A76708486F;
+	Fri, 20 Mar 2026 15:55:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 444371B6
  for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:14 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-48374014a77so19862135e9.3
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A35C84896
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WZe98DycnvOd for <buildroot@buildroot.org>;
+ Fri, 20 Mar 2026 15:55:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 195E784894
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 195E784894
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 195E784894
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:13 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-486fb439299so16095745e9.0
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774022113; x=1774626913;
+ d=1e100.net; s=20251104; t=1774022111; x=1774626911;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=GSWwzSJ4BIF8TR8piFQt+aGDeD5ucn2qe71YQ1WwpAU=;
- b=ikEC68l0jDg2uL9+24f13RB6EbYkXffpclKS7jmNdbvSwnfkSWIrJftNFwI8dlMago
- RGd33EX5vboTG0WHXMXpjYhQAT7sRTkSdO4atK5q7kzXv8sya0N5JRLNBiKXf1528IsV
- P6dzR11CPiy7RVOIO7A21GlVCZ8wD+NOD/yRcOcRowj7bYqbCHPy1+q+mQ1tPKw3uO93
- qxMrIuxYXuhkLkMeoiotVAq4cVeop/z7oYv8BJjhbFONhHpjpwyTX1Jvxs+7sR+5Ub3L
- h06yWgZ4IyedN1UGMHmDN01woLEeYNDZwIMbWuY/+B8GL9VBrmdxYhuOa1uRJgcvID5T
- fMrg==
+ bh=ZWBnKQ3gaMEAT+z1S1mQXGK6MLfIpd5P01mB4yaZiZI=;
+ b=msZsPwzInQiB+eKeDNdtCATiEWMaF1dI9FSntrogTqo8tR4mbLNIJZF18DKFSGZjES
+ lj2Nui/M0t5eDIrg8L6Swgj5FqoVfJW1op5UvCJkL0NZ/Wf5Ino1y1c6F6EZkjIRRWgq
+ OB8q11QJzjhMURIYbfB7TK5G7lWk2fwzmdEnF2geFe8G9u1ui4bXYsbqTWqr/JQH7e9d
+ RZ1gD/tzl91Kc9GzCL+nJ61kW5YnO6B8emWmM7ujAQfwO4lHRoNq+R+VuVRuJG/jw7bz
+ 8tTE++FzYeNgzhO5OTx1/04FH7HHeMYq1wDCJuAEvZnlAEgrZ3k/Mdg2CMdEvvQCp13J
+ Y4mA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCU3RwDmyjJ6J6eaLBeHCg/FIZDWHBTV7IJLB3eXJLZxN33AhjOM4OzHTlto22iL4p4Zm8MNCyhfFLc=@buildroot.org
-X-Gm-Message-State: AOJu0YynYF2ykZaqdZaNZ+7Yp3V7LSXgMikmmoDSPk3OY9gU6iWBcjZN
- 8gmiRa54ujSSOUgqV+hRuqL0yABiaLNGMgxzA0pR80now8Aq6vlUtA4Cjgi7X5q5Gt64Rw/33Nj
- yh2019Xs=
-X-Gm-Gg: ATEYQzysNwfFkjHlUz1xSHzO1ckow0zLN0T0RhWdwSx1oCJD8047W8ok8qLIczZrMhW
- wu9OBagItbYIwxZX2C0IZ5kK7fBYuoJ1fPEvtiIZr0GhrXUJ4v0aTWWiX+4JD/4Tkfa2DOAmAL/
- tQlk8FKRBR+x4lpu49eNJRlR/gRN5YL12+2NIYz4JZcIWTwKr4Ph/f9wA13xc4QZVXYQ4FLvYEi
- /l25c/CVIH2peVFnQQ2TvZ+EzLEZ/rryK0v4/OS959X9w6FfuVE1cd7y9iDHOUpNrTfbeJvX0Z8
- 8wmFY/M4hQxK6CZuVMXC9HfKSGuZNkeyqi/kxYBh3Hb2lhsnMry/Q/GiPjGEiYpvMx+JHc4SwZL
- eHtKBwcavjSvtpH0gfYBXlz4mbCjInqCckg1uJb7k0JXt/n2+NlxIU40kcf4bLbQmgwcpDIbmkw
- OaCxyrHN32bL2rqLlj
-X-Received: by 2002:a05:600c:3490:b0:487:300:d9ca with SMTP id
- 5b1f17b1804b1-4870300db54mr7122965e9.31.1774022112988; 
- Fri, 20 Mar 2026 08:55:12 -0700 (PDT)
+ AJvYcCU0zBBDEfoVRn3yPpLJfUHtWdFZ8do4x5PVO7+BRtfV0uJgm2sO56uqGPyjBgS9EuPu+O/awOzjaII=@buildroot.org
+X-Gm-Message-State: AOJu0Yxr+XtKuF5Eeu1VPq87tVkTrO6l960GzOw2MKSs86eHHE90fPXz
+ nePm/7TOJWa/Yn/vcSFX1reG+uZXPvDEt0mw1KpjtQc7ueXb3gbsbU85KyQQ7UHsIkg=
+X-Gm-Gg: ATEYQzwJZA+gLSXXVR+urm1raFrX6eH0Z60kHR6+XPFF1FrSltncaonnrDzu06Mb8MY
+ u97wr5PivjY6HU/bq9dcjeZJNqVxTizk7lUAI0AmvKrVdN1FhkNuWHcR9lDBa/Y3ZCLwjYyDE7R
+ mm0XAaNh+ymyltqjmmHEuBETg//m9B7RogIR8PDa/LuRPoKJ0pPfIhnxCU7K4TMHO4HCnPqjCLF
+ W07PcGAku4TcDDJH75yXc6oQ9rKTW59FCqwiADZ1maNxAI2RhwiQrpdw3Zdv1q+UfJAZwdjk/on
+ vUdwFLJMhUpcdQrdMj0T/8HtKaQRL78BpuDOVp1Wq4XIPtjVITAtySLnY3l3mKxhMvMZjpYo8fx
+ WMeejP2z3d8WE/moKwVvCAqXCBSTyXSptdRpkI5VjTcVBlg6ejZeit9lgPUHlEkIKLb8OExlXtG
+ lp+MoSjiidVk33gdhm
+X-Received: by 2002:a05:600c:12d6:b0:487:1c2:6a4f with SMTP id
+ 5b1f17b1804b1-48701c26bdamr19738015e9.31.1774022110962; 
+ Fri, 20 Mar 2026 08:55:10 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-486ff1d35cfsm17750455e9.31.2026.03.20.08.55.12
+ 5b1f17b1804b1-48700512087sm23315045e9.4.2026.03.20.08.55.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Mar 2026 08:55:12 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 20 Mar 2026 08:55:10 -0700 (PDT)
+To: Marcus Hoffmann <buildroot@bubu1.eu>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:55:12 +0100
-Message-ID: <20260320155512.176951-1-thomas.perale@mind.be>
+Date: Fri, 20 Mar 2026 16:55:10 +0100
+Message-ID: <20260320155510.176842-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260312164456.3185719-2-bernd@kuhls.net>
-References: <20260312164456.3185719-2-bernd@kuhls.net>
+In-Reply-To: <20260310101037.470940-1-buildroot@bubu1.eu>
+References: <20260310101037.470940-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774022113; x=1774626913; darn=buildroot.org;
+ d=mind.be; s=google; t=1774022111; x=1774626911; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GSWwzSJ4BIF8TR8piFQt+aGDeD5ucn2qe71YQ1WwpAU=;
- b=YWf9Bc2mPAaxOMRNLce/oMU9VV6KyzDFkHBAqiwbE+eO5wrAgjwYSRTp3JJMpLHUUE
- bFWBZwjaCUAujE3tyAM393w/K7z9seEFk+pBTnRQIUHo5hEq95RU+4liTAT9kxY9YGsH
- 9gOHFNQupb7CjdzFC/Ck9PvDn31Vq2bJW7v8jP12KY9XxFf/biFgyGyP/domovUMtd7G
- How+zcYfuoX2EEITPlcsk2QVaIKWEwuR5ilFn5gzr41vT7Iv4O6NBgkVYI+XVDS6f/Us
- KP+9v/TjIElChd1fiW4qblUOPrK93+PwWklMtSWYHPbZcSfdhAJX4yPxL2eU+/72AZsD
- hWPg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ZWBnKQ3gaMEAT+z1S1mQXGK6MLfIpd5P01mB4yaZiZI=;
+ b=MMPQ+ro2mLw1gP6mVKAaVn8RxL6yNgRqjVIN23vgGuaeS9cRO7k/nsV/cy+7T2I0Pr
+ NFAcRpxFEYviFrxyB8WvKZ7byODUgNsA4h87FuyE8hcuJziftK/V+hwInKii0lYmFHRG
+ lA0s3OBzIICIMfaiK07wBnD1XNFa0LrJWpHbPPDjGN0eRr9XEce9Fdz5uFnqwe7hOI1v
+ 2FWbdbxVoJj8t0CbDAB1FFnJfXF7uaRCPGJJ7ec0RHJFlsn9hHxvojFrm2ilQH7wJY3N
+ eOIe7yIpbGxfnD+cmS40CFixmlsI6HuXeHpbx50NppuuiZiZA8geTdxfCPHskiAr7W/F
+ ABAQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YWf9Bc2m
-Subject: Re: [Buildroot] [PATCH 2/2] package/libcurl: security bump to
- version 8.19.0
+ header.a=rsa-sha256 header.s=google header.b=MMPQ+ro2
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Marcus Hoffmann from no
+ longer used packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,59 +131,78 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://curl.se/ch/8.19.0.html
-> https://curl.se/docs/security.html
+> Remove myself from packages that I'm no longer personally interested in.
 > 
-> Fixes the following CVEs:
-> 
-> CVE-2026-3805: use after free in SMB connection reuse
-> CVE-2026-3784: wrong proxy connection reuse with credentials
-> CVE-2026-3783: token leak with redirect and netrc
-> CVE-2026-1965: bad reuse of HTTP Negotiate connection
-> 
-> Switch to sha256 tarball hash provided by upstream.
-> 
-> Updated license hash due to copyright year bump:
-> https://github.com/curl/curl/commit/e83c82f05f9b714086e62db9fe2ea9be522239bc
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/libcurl/libcurl.hash | 9 ++++-----
->  package/libcurl/libcurl.mk   | 2 +-
->  2 files changed, 5 insertions(+), 6 deletions(-)
+>  DEVELOPERS | 35 -----------------------------------
+>  1 file changed, 35 deletions(-)
 > 
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index de3f2402e9..5aec080ef9 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
-> @@ -1,5 +1,4 @@
-> -# Locally calculated after checking pgp signature
-> -# https://curl.se/download/curl-8.18.0.tar.xz.asc
-> -# signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-> -sha256  40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946  curl-8.18.0.tar.xz
-> -sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-> +# From https://github.com/curl/curl/releases/tag/curl-8_19_0
-> +sha256  4eb41489790d19e190d7ac7e18e82857cdd68af8f4e66b292ced562d333f11df  curl-8.19.0.tar.xz
-> +# Locally computed
-> +sha256  82f2f4427d6545ee5aaac4f0b80428da6cc8ba41c2cf5da3a03680ec327b9681  COPYING
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 7ebf26c3b1..3d00a4a33a 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 106510ea84..b7d19bc299 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2266,55 +2266,20 @@ F:	utils/diffconfig
 >  
-> -LIBCURL_VERSION = 8.18.0
-> +LIBCURL_VERSION = 8.19.0
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
->  LIBCURL_SITE = https://curl.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
+>  N:	Marcus Hoffmann <bubu@bubu1.eu>
+>  F:	package/nethogs/
+> -F:	package/pico-sdk/
+> -F:	package/picotool/
+> -F:	package/python-annotated-doc/
+> -F:	package/python-apscheduler/
+> -F:	package/python-crc/
+> -F:	package/python-diskcache/
+>  F:	package/python-django/
+>  F:	package/python-gpiod/
+> -F:	package/python-immutabledict/
+>  F:	package/python-jc/
+> -F:	package/python-log-rate-limit/
+> -F:	package/python-pydantic/
+> -F:	package/python-pydantic-core/
+> -F:	package/python-pydantic-settings/
+> -F:	package/python-ruamel-yaml-clib/
+> -F:	package/python-typing-inspection/
+> -F:	package/python-tzlocal/
+> -F:	package/python-sdbus-modemmanager/
+> -F:	package/python-sdbus-systemd/
+>  F:	package/python-varlink/
+>  F:	package/python-waitress/
+>  F:	package/python-whitenoise/
+> -F:	support/testing/tests/package/test_python_apscheduler.py
+> -F:	support/testing/tests/package/test_python_crc.py
+> -F:	support/testing/tests/package/test_python_diskcache.py
+>  F:	support/testing/tests/package/test_python_django.py
+> -F:	support/testing/tests/package/test_python_fastapi.py
+> -F:	support/testing/tests/package/test_python_pydantic.py
+> -F:	support/testing/tests/package/test_python_pydantic_settings.py
+>  F:	support/testing/tests/package/test_python_requests.py
+> -F:	support/testing/tests/package/test_python_ruamel_yaml.py
+> -F:	support/testing/tests/package/test_python_sdbus_modemmanager.py
+> -F:	support/testing/tests/package/test_python_sdbus_systemd.py
+> -F:	support/testing/tests/package/test_python_tzlocal.py
+>  F:	support/testing/tests/package/test_python_varlink.py
+>  F:	support/testing/tests/package/test_python_varlink/
+>  F:	support/testing/tests/package/test_python_waitress.py
+>  F:	support/testing/tests/package/test_python_whitenoise.py
+> -F:	support/testing/tests/package/sample_python_apscheduler.py
+> -F:	support/testing/tests/package/sample_python_crc.py
+> -F:	support/testing/tests/package/sample_python_diskcache.py
+>  F:	support/testing/tests/package/sample_python_django.py
+> -F:	support/testing/tests/package/sample_python_fastapi.py
+> -F:	support/testing/tests/package/sample_python_pydantic.py
+> -F:	support/testing/tests/package/sample_python_pydantic_settings.py
+>  F:	support/testing/tests/package/sample_python_requests.py
+> -F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+> -F:	support/testing/tests/package/sample_python_sdbus_modemmanager.py
+> -F:	support/testing/tests/package/sample_python_sdbus_systemd.py
+>  
+>  N:	Marek Belisko <marek.belisko@open-nandra.com>
+>  F:	package/libatasmart/
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
