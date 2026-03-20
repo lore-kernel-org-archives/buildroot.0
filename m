@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C99110987A1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C674A10987A2
 	for <buildroot@archiver.kernel.org>; Fri, 20 Mar 2026 15:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 342418486E;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FA5861B7D;
 	Fri, 20 Mar 2026 15:55:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6T1nFMlo-TKw; Fri, 20 Mar 2026 15:55:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ceoub474f-Wd; Fri, 20 Mar 2026 15:55:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59D998487E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46DAE61B86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774022109;
-	bh=1LA9d91mBZfVnoxmHhQ8Pi2EdGd7HNdZPYYMCFqGaWo=;
+	s=default; t=1774022108;
+	bh=6HQv4ojNXTee0y5ufwMZPVb022yv0nSP5JoHimvzCLA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=kk7xRpoc3Vokb6JrU19Yfri7GwxtdIVsq4MJ2Wp5cmFimpWblby1I0+aI1eRbtfuH
-	 +Qn/g/sKceJJ6wRGh+NZJg4f7SAvc0aooz1aiU1pCBQACWiYSg2vJGpv55PdH+6MWn
-	 AmEuI/acKDynPmJrQ9Tkw/usmMthMJ8zIdtEimOp5xaZIJFtcRtUmkJYyjrGOY+V1c
-	 6TdHzxTHT17OSfFmYMhlPMiHxKtw0UmE7IUorzOUrzMCRj+k1bGKnmKJetYEN0rZzt
-	 pKMJ8XsAGXi8z/gIA4OdIWzvNcRe5IykRvfntYelEWrQBGv9fzbOOybhDNf7fLTajL
-	 A7eWBa0i5EmNw==
+	b=ZnWWLiZTBPKzu8JKLrvnGP2aHYlGZ1qPjyzQ+p50OIzuchSwi+ZEwB9uPK38PYo5U
+	 laMIjByo8qGIzDAAMmpQpKKC5EaarsMJ873LP9WqE10VJgzLXw/yPZHez2Ab9yB8LS
+	 uc0rs58WsPsAiw/7meE/ZVhhDDzEBzxyEdJ5IT27vr+Ebd42p3TnA46sHCBaZp13Rg
+	 aVV5idusjHrOLeD2Isykz1/231QbxR61MVQDu2BjBfkJEIJJebdqXaIBMRpfJV0hyM
+	 rTmM5tnXoossn8ZO9SKl1kWIYfxFgc6OXL0WIbhauAZ8D5gM3Q6sqCkjyR1WI6GtTO
+	 nsy1wd7pNr15A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59D998487E;
-	Fri, 20 Mar 2026 15:55:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A25E325C
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87FCB403A1
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oNrfiJ5gWHqv for <buildroot@buildroot.org>;
- Fri, 20 Mar 2026 15:55:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6257040336
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6257040336
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6257040336
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46DAE61B86;
+	Fri, 20 Mar 2026 15:55:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1ABCF1B6
  for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:06 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-48540d21f7dso9145075e9.0
- for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C63E41E6F
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HrPhiw5isK3Q for <buildroot@buildroot.org>;
+ Fri, 20 Mar 2026 15:55:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F0E8441E81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0E8441E81
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F0E8441E81
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 15:55:04 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-48334ee0aeaso18425195e9.1
+ for <buildroot@buildroot.org>; Fri, 20 Mar 2026 08:55:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774022104; x=1774626904;
+ d=1e100.net; s=20251104; t=1774022103; x=1774626903;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=/CohLt0q5zfr/OpHj+48c0nCY5elpfVw/AXcE9TT7x0=;
- b=hNEet4B+db8BCOZzINU6pq/rieSA2qMXnu+gOnotHhnXpBqYwVdi3KzoUwURVMXpU0
- QYIgEYFqtqSE56pN5xOrGLj5Fd9QW1uTeq09pUXGpEhIIWNmL1dwUSLMP/1xaJZca7j/
- VIU+dD44V4Qp2bkhyygIOfQJF9FFTdxf7rbI6SoLFJE+irjwWRu68uvxZ+NsuSeRooT4
- 0WK1zHpB2NY8VYOgFw1vRYSPCYWXmadlz4QIUqbKI06r3W/4wxOEOFGF1g3O5G9RNDxr
- u6dU1WF2s5hth+d3g76yyyZhKwhAigWbWefZkUWYDL5/LyVdLycbZW0Mh3ZSi9kT+k7Z
- iV+Q==
+ bh=jwgCM/tdjiWbMt/wBZzcpm31hHXqwr6JiX7JWuExrKo=;
+ b=YK3eAMvX300wicRMW5jYAU7p1YgHtWu9C+XXz73cUgMcWo7b16BjqluRcu3D3x9i/1
+ 9opBofkbebysmmAioWKVNWuR2qnM5t/pdO9EyMSwFuRBFs+/ihDBt2kdwmYBl780mI/A
+ ndgoF/bYwtYUvnE/YQSEEM2PbF3Y91B0wafI4JxA4+EXcUQSFz/lUPezFw/nR5ZLsAry
+ heA1kw18eCyvOR4TbTVnIdZ20omADSUH34ZRvWCcWKtNeyTdn5ReKVLq7Ck+O4HsVs26
+ hgYxZYlSDO3nGKJDiHpxGxxt/4UVM5aNiOFoyPPZtclKFyBKBQYy+EE1VAqL/jBeHvoZ
+ q1cw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWEHwoAiOD3MaoNsrnkYysnA9d6ZRviGD0zsvM+PbL5twlFxj4/78ZqwKWaDDGt78f0TibbnMffU0Q=@buildroot.org
-X-Gm-Message-State: AOJu0YwwaxtWhH/mIgwunHnCiwBB+Ad9zZDinnbSQtgj9QoWB+61qBbq
- tFvYj0GcmHmaHWRj2mVx53ayHCbblpLbCeaG2CCsTW2SyMa5MHmvfBLyeO++ngMi2v0=
-X-Gm-Gg: ATEYQzzKnkHlH3lfU4YFZPTazTyw4vBo+PQDIQedvEJRQ8u1kNFoKyqpqR/8pIay+8j
- +DE56lXJ3ji+NcgbtyTrn/TRyas4FZre2nu4sngwimEcgxTlYjjICqkNcqvlcuA3GO9rQblug90
- CrDLjvl/Ry7iTIEU9Gjvx+04RCcvjmFvrSJI5cfVcBMAj1ltyixVorzZaiaXxTxu+PJC8fKBjum
- YDdYLGyrULTtk4cXdlUd+1+LnM6gLqqNlh4CFz8OgCsX2w7hQiEKmV3FAGMuZI29IifHDZxf7Lv
- pVaF4YbnxfIWxj375bkbFnEPPzyEb5ebFn7bzytZIX8JQAn3rbiwmcZubmHzMO2cCpPFHUWVPrE
- YKnUOEC0UX4+1wO04nf0kP+OZngJGZcxpXHh7j3xvIVuhlPZqdPDnDwvRVVy/SyH1vIyGyC91Cl
- /t3MO5GDrJ1JWabAu77r1Ai9hPF+g=
-X-Received: by 2002:a05:600c:828d:b0:47e:e48b:506d with SMTP id
- 5b1f17b1804b1-486ff0291ccmr54040655e9.16.1774022104253; 
- Fri, 20 Mar 2026 08:55:04 -0700 (PDT)
+ AJvYcCX8BtdIz9ko4WDJ7X+7AJiAjYLdips3Z13cD+hzyatvJqs/el6igU4gxLy6BD8p7LCs2oSFwcxVvKs=@buildroot.org
+X-Gm-Message-State: AOJu0YyMBAdHjBLMRp/h/pMHq941iIllhGJTnCFasd1X4U1csANWohkD
+ BJBv9TsQQoR37LZxp63KBsjRRXhsYU7xwpgK0JYvAabaLuHOqfZq6SMbixYClruXuEfZ2zg8tjK
+ zpXnI8jg=
+X-Gm-Gg: ATEYQzzkd9zrK2qNwcTNWdIjC1J7WwmRS1WpAHRLY66Cd7MHl4sM9wbve2JpvItQ9pV
+ XU3Wn5Zp8En3q2coWgJMKTM2lJRkivx8Iakat+6kONBzPYc7RoOpmcPMPzrM/ybFF50HXCJ/GH7
+ WnL1QSFO+lm36qDFjQdAdWS4SlaGlWQOQroiY7jvfeQCulf65uGrmPMpB+htvG5XbuxZk29ABkK
+ KUASLetThbG9UqMNxWlfcm2rhcn2jwWqfBAdhnPscw/pHtBWxXVXdsrhGEO8WLAh6Qu4lapnswG
+ uvElB8A7vxwSieCuQWOUoIwI8JCJyM7PoRQXJJayCmVv+EN5PGF5AdoCP7xHoFeqoUvpu+NQxmc
+ 3PVouhfsgzJhUuKE1JsaxtCdA64YWkeJ1/p0HM3RsyfH6Wggj9Sh1yNE11cStk9lJFTyAVrrcIa
+ 3A6JBgjYjIPdD0cFhn+SmEsVPlaqI=
+X-Received: by 2002:a05:600c:c10b:b0:471:700:f281 with SMTP id
+ 5b1f17b1804b1-486ff0307d3mr41725565e9.25.1774022102861; 
+ Fri, 20 Mar 2026 08:55:02 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-486ff1db4aesm24187335e9.7.2026.03.20.08.55.03
+ 5b1f17b1804b1-486fe82ae69sm66440945e9.9.2026.03.20.08.55.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Mar 2026 08:55:03 -0700 (PDT)
+ Fri, 20 Mar 2026 08:55:02 -0700 (PDT)
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 20 Mar 2026 16:55:03 +0100
-Message-ID: <20260320155503.176524-1-thomas.perale@mind.be>
+Date: Fri, 20 Mar 2026 16:55:02 +0100
+Message-ID: <20260320155502.176473-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <7afd223643ad94c36adc4ff486197aba5f073d0d.1770155657.git.yann.morin.1998@free.fr>
-References: <7afd223643ad94c36adc4ff486197aba5f073d0d.1770155657.git.yann.morin.1998@free.fr>
+In-Reply-To: <194a25b4dce8f83d709dec1003427c8a1f39d71a.1770155657.git.yann.morin.1998@free.fr>
+References: <194a25b4dce8f83d709dec1003427c8a1f39d71a.1770155657.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774022104; x=1774626904; darn=buildroot.org;
+ d=mind.be; s=google; t=1774022103; x=1774626903; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/CohLt0q5zfr/OpHj+48c0nCY5elpfVw/AXcE9TT7x0=;
- b=SpNCyFZ9bECgj/U3s6bO1VBHCe3SxWkrmm5MKaeAUtRt5atT6IYlZjb12zRHzjZBOS
- EmsXQlAxFG5b7CIBsbeV7NXQU2oKeXVTxcyaRD+2o4/RBl09n+5Xf+Uy/Yw27on7sawH
- OEKhaobHdnBJAC+RYwQ+VJZSRoVv9cZFGGf680IbQeB8z3GglgsBXM+7AWFb7kq4mXRP
- zuxsXr6SvbgRqwQoin/y1HBZ48nd89e3ipSe0AaZtFxs7erPgyiq89s45C/9qe43qTyC
- J07FDFEQ4JcVh6vBuPGOY0KaxaRnIJJU8d9zIrLgL0mHl0SXnUelnmAflnRz12WEj2t8
- U9sg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jwgCM/tdjiWbMt/wBZzcpm31hHXqwr6JiX7JWuExrKo=;
+ b=QM+pUnHiYwJrh93/NdzTfNoMHSSV1seh+GBWP+SRgwbb/HGMh3+VLnG6ckSi8KWq7x
+ +VIt0/dAjnBm1g2alyAwY7q7rVnsiIO4APRoqBrCEJ4CI/M8/FR60uXgNhcetDhIsiAo
+ KM6pph9ocdF2qCvLhLjZDmicHa9AyGU8ptym2TswqDnpggRLAmOQiAvV4O5ech2L1gYS
+ s62lfQOpoQXdduHpPIL+uvpRp5yq8gKYSSBgqtsodjkEqcmkV2saIBI2u3ndCC0ur9rT
+ uxQTVhNwnRP+htdmOyWG/Io0WB+3l3rLEf/aXlrUAnc8Zd7toFLas6r5Zd0W+G/ykL2A
+ Bf/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SpNCyFZ9
-Subject: Re: [Buildroot] [PATCH 1/3 v4] support/br2-external: remove
- leftover trap
+ header.a=rsa-sha256 header.s=google header.b=QM+pUnHi
+Subject: Re: [Buildroot] [PATCH 2/3 v4] support/br2-external: fix remaining
+ shellcheck errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,70 +132,73 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The trap was initially introduced in c5fa9308ea4e (core/br2-external:
-> properly report unexpected errors), in 2017, to catch all unexpected
-> errors, back when a single file was generated, and errors emitted to
-> stderr.
-> 
-> Since commit d027cd75d098 (core: generate all br2-external files in
-> one go), in 2019 the single output file 'ofile' is no longer created,
-> as multiple output files were then introduced, while messages for
-> *expected errors* were redirected to a Makefile variable assignment
-> emitted on stdout, at which point the script just exits (in error);
-> expected failures only occur in do_validate().
-> 
-> Unexpected errors can only occur on failure to create, or write to,
-> output files, either '.br2-external.mk' in do_validate() or do_mk(),
-> or any of the kconfig fragments in do_kconfig(). Cause for failure to
-> create those can only be a no-space-left-on-device condition, as they
-> are created in a directory that was just created by the script earlier
-> in main(), and thus has the necessary mode; failure to create that
-> directory is now caught explicitly.
-> 
-> A trap on ERR is not called when the shell exits explicitly with a call
-> to 'exit', thus, only failures to create or write to output file would
-> be caught. In that case, we are better off not trying to write to those
-> files anyway: failure to create the file would already be reported by
-> the shell on stderr, while disk-full would not allow to store the output
-> anyway...
-> 
-> In any case, the script exits in error, which is going to be caught by
-> the caller, which will terminate.
-> 
-> So, drop the trap altogether.
-> 
-> As a side effect, that squelches a shellcheck error.
+> Boring changes: either do what shellcheck suggested, or comment why we
+> don't want to fix the code.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
-> Note: remaining shellcheck errors will be addressed separately in the
-> following patch.
-> ---
->  support/scripts/br2-external | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  .checkpackageignore          |  1 -
+>  support/scripts/br2-external | 11 ++++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 > 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 16a0d5b511..67e531512e 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -1085,7 +1085,6 @@ support/libtool/buildroot-libtool-v2.4.4.patch lib_patch.ApplyOrder lib_patch.Up
+>  support/libtool/buildroot-libtool-v2.4.patch lib_patch.ApplyOrder lib_patch.Sob lib_patch.Upstream
+>  support/misc/relocate-sdk.sh Shellcheck
+>  support/scripts/apply-patches.sh Shellcheck
+> -support/scripts/br2-external Shellcheck
+>  support/scripts/check-bin-arch Shellcheck
+>  support/scripts/check-host-rpath Shellcheck
+>  support/scripts/expunge-gconv-modules Shellcheck
 > diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 8aea479d20..6d4fc1a791 100755
+> index 6d4fc1a791..474feaded7 100755
 > --- a/support/scripts/br2-external
 > +++ b/support/scripts/br2-external
-> @@ -30,10 +30,10 @@ main() {
->          error "no output directory specified (-d)\n"
+> @@ -34,6 +34,7 @@ main() {
+>          error "Cannot create output directory '%s'\n" "${outputdir}"
 >      fi
 >  
-> -    # Trap any unexpected error to generate a meaningful error message
-> -    trap "error 'unexpected error while generating ${ofile}\n'" ERR
-> +    if ! mkdir -p "${outputdir}"; then
-> +        error "Cannot create output directory '%s'\n" "${outputdir}"
-> +    fi
->  
-> -    mkdir -p "${outputdir}"
+> +    # shellcheck disable=SC2068  # We do want to split on spaces
 >      do_validate "${outputdir}" ${@//:/ }
 >      do_mk "${outputdir}"
 >      do_kconfig "${outputdir}"
+> @@ -71,7 +72,7 @@ do_validate_one() {
+>      if [ ! -d "${br2_ext}" ]; then
+>          error "'%s': no such file or directory\n" "${br2_ext}"
+>      fi
+> -    if [ ! -r "${br2_ext}" -o ! -x "${br2_ext}" ]; then
+> +    if [ ! -r "${br2_ext}" ] || [ ! -x "${br2_ext}" ]; then
+>          error "'%s': permission denied\n" "${br2_ext}"
+>      fi
+>      if [ ! -f "${br2_ext}/external.desc" ]; then
+> @@ -106,9 +107,9 @@ do_validate_one() {
+>      br2_ext="$( cd "${br2_ext}"; pwd )"
+>      br2_ver="$( support/scripts/setlocalversion "${br2_ext}" )"
+>      BR2_EXT_NAMES+=( "${br2_name}" )
+> -    eval BR2_EXT_PATHS_${br2_name}="\"\${br2_ext}\""
+> -    eval BR2_EXT_VERS_${br2_name}="\"\${br2_ver}\""
+> -    eval BR2_EXT_DESCS_${br2_name}="\"\${br2_desc:-\${br2_name}}\""
+> +    eval "BR2_EXT_PATHS_${br2_name}=\"\${br2_ext}\""
+> +    eval "BR2_EXT_VERS_${br2_name}=\"\${br2_ver}\""
+> +    eval "BR2_EXT_DESCS_${br2_name}=\"\${br2_desc:-\${br2_name}}\""
+>  }
+>  
+>  # Generate the .mk snippet that defines makefile variables
+> @@ -272,7 +273,7 @@ do_kconfig() {
+>      printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
+>  }
+>  
+> +# shellcheck disable=SC2059  # fmt *is* a format
+>  error() { local fmt="${1}"; shift; printf "BR2_EXTERNAL_ERROR = ${fmt}" "${@}"; exit 1; }
+>  
+> -my_name="${0##*/}"
+>  main "${@}"
 > -- 
 > 2.52.0
 > 
