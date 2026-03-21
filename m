@@ -1,84 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 748FC109448A
-	for <buildroot@archiver.kernel.org>; Sat, 21 Mar 2026 18:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB4A5109448A
+	for <buildroot@archiver.kernel.org>; Sat, 21 Mar 2026 18:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7D1B611A2;
-	Sat, 21 Mar 2026 18:00:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FXgFwt71Ozc2; Sat, 21 Mar 2026 18:00:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA6E06115B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774116034;
-	bh=23wgrwdCq5ZOyEFplVw+itFha6OUT/O6oFDZIDzqmF0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=OEyXMWfCWnH4RCbt0Erc7ntWHgdrxlsQqab8Uh39j7nGZt4lLxaSeo8yLBZOP3Qfz
-	 T1yrQIVturYpvSI+3nZKS5sm4e7w3y1mYhzDjz+5GWKSZw2X/QSsrqaDWIQGyGmanF
-	 Z/p+pJzQjwtNOoybghC7rJ2cLKPBJNr5tnGmAEEnGbHYNXnenxwuuigy5VDLHlAVm3
-	 1WUiryd3/K3niw5VLZw0hJ+fgeU3rC2Fga6z3t3ZKTtac9XBfvvFfApuCeLv+mh1oV
-	 yx7cZTi276Wkyo7oe34ACeXRdKVDmW6q87Ec3KLVHnegzObFcrYlni8Rx+68QF2gek
-	 SOa0inoLMC0EQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA6E06115B;
-	Sat, 21 Mar 2026 18:00:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1565934C
- for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07038846AD
- for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50DD48473A;
+	Sat, 21 Mar 2026 18:01:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jfWHHFqHoAge for <buildroot@buildroot.org>;
- Sat, 21 Mar 2026 18:00:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.42;
- helo=smtpcmd0642.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C91C846A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C91C846A2
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C91C846A2
- for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:29 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 40cbwPgOcdarQ40cbw5umu; Sat, 21 Mar 2026 19:00:25 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id 0bCno8qkFaqf; Sat, 21 Mar 2026 18:01:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C8C6846AD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774116061;
+	bh=PhM6TAcsjXqPY1XSLoh51ixR/POdCODoAUA2IJ3CN8g=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ay6BitZVONGFeudKg/Or7D8wEUxyHNQ0ZZyrCQCr6XYnwP5B9O/Y0n9sJAw2TmRTh
+	 v03jmYLUl784zNjiOY7z3uWgbfL4ED58mjaEK0riQCBAGljhPJCaNUGHNQy6i4z5t6
+	 tMoOKxVr9ZfjEq4+/SbTMRGMusHO/6MDFHUBCsjnjn6lJ53HMA618Yc/HQEt4EdbW+
+	 bqDXb6hg9U4Qke04mQCQakfWmvFyO1nArp0gBbfim+4JgjU+13kiOo1Ihr/ees04kv
+	 j7oLxIGsuPIfmDAQf3jwgY0sUUO9JNRpjTiqeMV9gkRUXntBP7BDMe3wzi9tSKOvq2
+	 p56pBeWTwBjMQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C8C6846AD;
+	Sat, 21 Mar 2026 18:01:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEEDC265
+ for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF69C611A2
+ for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dbPR8sWCEjFS for <buildroot@buildroot.org>;
+ Sat, 21 Mar 2026 18:00:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 71C1D6115B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71C1D6115B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71C1D6115B
+ for <buildroot@buildroot.org>; Sat, 21 Mar 2026 18:00:57 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6ce09.dip0.t-ipconnect.de [79.214.206.9])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 51334A4C0DF5
+ for <buildroot@buildroot.org>; Sat, 21 Mar 2026 19:00:54 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37348)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1w40d2-0000000071T-3hMr
+ for buildroot@buildroot.org; Sat, 21 Mar 2026 18:00:53 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 21 Mar 2026 19:00:02 +0100
-Message-ID: <20260321180002.2450859-1-giulio.benetti@benettiengineering.com>
+Date: Sat, 21 Mar 2026 19:00:53 +0100
+Message-ID: <20260321180053.448107-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfL4fShg+YpiSnopv3PwNMUlWboV/tiNQojqhGfNDMDZ2nylHMU/WwYe2iv4MPVXhelucyXvl6r4ccBENrY2MSHg3TpLfGXqTno9TcV3jqJxZkekNETZw
- fln4g2aH28adm2vb8EYjnMi2qnQHi7csVqgGwEC9PoC6544FsxcKR1AhLW5jOoJFbzH/UACCkvMmEi1DU3Dnj6iqEuQRMl4sm6KjQrRg2hjbwKxGlLs23A5C
- l3+YVehcmUdQge7aahcTtLEIbt9/N/BpoiE0PFJ6+u0=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1774116025; bh=0OJEMKCowiviEBqbyVxTrw4wkO2Z+tZxHjsH6c5jBeQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=MFk8nCyYMN7SxiCISrfA/B+ci0tQrV/uEyYn0xAvIJLp6Uj6QUUBvjKEPn9gbjifv
- UJshbx+RnkVFS/Tqku99qRTzQ4acOD5/3fCX6jvKvyiM5wTMIvq8HNFjJ10e/4x7g9
- 8NaeHNr9/IJQTBj5J3xI1Zxq8VA/YrtK3m5PcIXH6wOGxghlTgFh70ZLhH5f5iS3z7
- 7Ax/3GiUcppkE4G2Shrnl9Fi9mSWU6jBRvdicK+MSY7XxckvIB0dF6me1xmt5SMtZ9
- mOYWPaOzAJB6iI97nzSgl0SGOxe6UH4DcY/q/DNPbNsbRAuOz1YNkvEqEzXzx/mezR
- 1R6Qg1Fo1j9zA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: -
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1774116054;
+ bh=rUad2SkIxdJszhVghowYENyZWSQxb+Qe2JEzjzNRFGo=;
+ h=From:To:Subject:Date:From;
+ b=XrKCwgcOCVDuWQ86K63EK2VzvJSir7p09bdmDAFXFC/EtdGLC/WFhKye2VF8krfxS
+ /CxwcpLhMcJ7vKMr2zn7MKHf47MtFSRZiz3AIMvgisPgND++U2LxGPxhZyKQ31HR1h
+ E6qjUejMCJM1ukeX5bgc4iXNitFxIVIBDzjYD92BqV9yxmEmo/Bj97hlQzI/g4n9GU
+ lZboNlVEc4CZSiG8XmwvhZIFFjDgei2xmmO9FYHoVfZ04GK9oT89VtEOZEloU0NLpj
+ 2s4j3g4MfBByXQrISU/Wnd+4BSuvoxucOrxZokmpBr6c0QyroVj6fAgqV04EcrkHDV
+ V6nIVkdKTD2RA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=MFk8nCyY
-Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.2
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=XrKCwgcO
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
+ 21.0.6-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,43 +97,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=b308564a1ff6530f9fd3e7dd7b19aabae32ed375
+https://github.com/rbuehlma/pvr.zattoo/releases/tag/21.0.6-Omega
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dash/dash.hash | 6 +++---
- package/dash/dash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dash/dash.hash b/package/dash/dash.hash
-index 85f8f3bf82..7ed0f0d3da 100644
---- a/package/dash/dash.hash
-+++ b/package/dash/dash.hash
-@@ -1,7 +1,7 @@
--# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.1.tar.gz.sha512sum
-+# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.13.2.tar.gz.sha512sum
- # After checking pgp signature
- # using key 9F9D45FE50AE361530983792C7271D0A49B18BA7
--sha512  6b3d67f76e74853349fe99121b2ee96d32da9863042744e03984eb6a01bf437eee2f2e81fbdd0436090abfecacc2f5589960820c3d0d5f3dd580948d38d5dc1d  dash-0.5.13.1.tar.gz
-+sha512  7e9a06409eec925fc83c81192cab420a76ec25821f0a4cec8db4a93b00e51d343438b8cfe56069b4d7fb185f529d1b5171a7603525de00a7852298425b2f433f  dash-0.5.13.2.tar.gz
- # Locally calculated
--sha256  d9271bce09c127d9866e25c011582ddc75ab988958a04bc4d8553a3b8f30e370  dash-0.5.13.1.tar.gz
-+sha256  e7136826b1eed6ce3193e8affa2f70b1b2b9168dd91ffa7ddb4f46e9e62054fe  dash-0.5.13.2.tar.gz
- sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 143972f01a..547fe8c9b0 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index e4930b9fb5..ecec000e3d 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b9bf700f0ee93f0d6b87952e9420e277c384cf0d3b07dc2849f5496304104af9  kodi-pvr-zattoo-21.0.5-Omega.tar.gz
++sha256  f6df1fa29ec3778f591281f57190099bf5a510c293c711ea978497556765352f  kodi-pvr-zattoo-21.0.6-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 8171939c60..2de33b26b5 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DASH_VERSION = 0.5.13.1
-+DASH_VERSION = 0.5.13.2
- DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
+-KODI_PVR_ZATTOO_VERSION = 21.0.5-Omega
++KODI_PVR_ZATTOO_VERSION = 21.0.6-Omega
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
