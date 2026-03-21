@@ -4,87 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38253F483E7
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1F2DF483D7
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0266960844;
-	Mon, 23 Mar 2026 19:50:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCE5260829;
+	Mon, 23 Mar 2026 19:55:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id heIRgkdZ0FMj; Mon, 23 Mar 2026 19:50:23 +0000 (UTC)
+ id 0h_hMhG0uhY3; Mon, 23 Mar 2026 19:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01E836078F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD2126082B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774295423;
-	bh=Twf47Q4mGA/SCdbSOV9FeuzgIDhJA6dsyfQ9W/cmbe8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YtSh5jkD27yLR5QaNOVVlDkv6oOXATQCyoxZIXxSj0NSNS+TUsdf9gZTOWQJ3+Xz1
-	 XmJqyoP0WSccB2SXL7++IJkCXKWWIerlFGzT83JEgACDU3Im4jN8Vs0rxf/IFRKzAA
-	 io3MD+01grcU5vasclxp4EEhhICrQJDL/4YwRgz8GgWacQvSxUw+qVOo+Ujh59BMrz
-	 nmImphokOhZApPGhiJGgaex2OD6azixcsz4KAj0rF/XznykM0ils6AffkaNrCr6107
-	 lIdrWKjWMG556hGadv9HaWn0KL3pUiWH/wlx/xOmV7V63/IS1Z64H8LCgZc4RczCep
-	 uT186F3iFjbfg==
+	s=default; t=1774295709;
+	bh=UG8WTVQhxx6qP0YlpN7d0HOm1crYSVBeJjc0Jf0zYFU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=sBOB84fUNW70Xr1euS0nC6q1E4RBpXnmHljpiyTOZmPD78K+yEv0V66U/VTb3GhPh
+	 ZvAN8X+oJPOOwQkd5daGAr8h8o0g6dtLO20+jmxVaqA84gQx/TW378ka4a05tTXL/S
+	 I8VeBDZtrqAGgoVLPX5IGMMNcMMxJyGY3Z5rYKA3QwX7wBZ+9W5hbUUEgf3kAqVzzV
+	 /why2jfP/LTxYwkP1EIA4SLB0rlPr2SxuXay3a/OoILx5IV8WCzPFDdA3QJSrPJI3i
+	 63UgnOmbq2l3WiSGeR/YVqQs9xnqEIMy7mwVCJZ8geBRBsLg4XM3PZNTFKfSWT2TUD
+	 +71oT0p5nA31Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01E836078F;
-	Mon, 23 Mar 2026 19:50:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B6C5353
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:50:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD2126082B;
+	Mon, 23 Mar 2026 19:55:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7DF1356
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60C744027F
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:50:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9CB540287
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:55:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EXll1d4lx3gB for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 19:50:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D99B54007D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D99B54007D
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D99B54007D
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:50:19 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 65A0620039E;
- Mon, 23 Mar 2026 20:50:15 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 23 Mar 2026 20:50:15 +0100
-MIME-Version: 1.0
-Date: Mon, 23 Mar 2026 20:50:15 +0100
-To: Vincent Cruz <mooz@blockos.org>
-Cc: buildroot <buildroot@buildroot.org>, Danomi Manchego
- <danomimanchego123@gmail.com>
-In-Reply-To: <944599437.25075953.1774262079707.JavaMail.zimbra@blockos.org>
-References: <20260323102609.711228-1-mooz@blockos.org>
- <944599437.25075953.1774262079707.JavaMail.zimbra@blockos.org>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <56e9059f2e25572923f1beae15b7b1d7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1774295417;
- bh=pKjme3gZ3a71OPf1eBLexeKV6dHEkTBR/Z3ZgQlrnIA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mTtzeyAZ/YVr5jVgfS0JCuql62E2ulk+h+yhnGoG/9C9r6TIn2CTMThQrsvgY9l+c
- lgldspDR+sEpYwHfcOVww1NXqEjP7HwnlLaiu/RQ9oddo7qplxF6MHpVgd1j7Fs+7x
- 6BsoBE2TZIlJmiYC9uRI9xuH3cYefYttOmXf6/jfShyKGj7N09/UHxvxv1mNarTGeY
- pPcAA6WZEVg2k0AP3bY5NYOVWhca5eHp4pzYhQA/MHc0LwdbZNXh9YUSYvouLMOYZp
- M03f9iTT37vp3bnYSUwe2c6lKQ9hYYeKh/ykZAK4HrvJxEe6twdeXCX6vRwxhLOskA
- ss1CKN3pQUIJg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mTtzeyAZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libwebsockets: bump version to
- 4.5.7
+ id mwlC5bRqAuok for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 19:55:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F07A4027F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F07A4027F
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:55:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AB23F846FD; Mon, 23 Mar 2026 19:47:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 21 Mar 2026 21:23:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9f2ff71c749eb48ca950f331b5f9a25058456404
+X-Git-Newrev: 4f5f360350ec98ebbe775323d50b532e500d9915
+X-Patchwork-Hint: ignore
+Message-Id: <20260323194745.AB23F846FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpqxx: switch to CMake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,30 +70,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/03/2026 11:34, Vincent Cruz wrote:
-> Hi,
-> 
-> Sorry for the inconvenience, but I managed to send the patch without 
-> the changelog link.
-> Here it is...
-> 
-> Changelog:
-> https://github.com/warmcat/libwebsockets/blob/v4.5.7/changelog
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f5f360350ec98ebbe775323d50b532e500d9915
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, after adding this mention in the commit log.
-Thanks.
+The upcoming version bump of gerbera includes optional PostgreSQL
+support using libpqxx which will only be detected if libpqxx was built
+with CMake:
 
-> Best regards,
-> Vincent
+Quoting the error message with libpqxx being built with autoconf:
 
-Best regards,
+CMake Error at CMakeLists.txt:685 (find_package):
+  By not providing "Findlibpqxx.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "libpqxx", but
+  CMake did not find one.
 
-Julien.
+  Could not find a package configuration file provided by "libpqxx" with any
+  of the following names:
+
+    libpqxxConfig.cmake
+    libpqxx-config.cmake
+
+  Add the installation prefix of "libpqxx" to CMAKE_PREFIX_PATH or set
+  "libpqxx_DIR" to a directory containing one of the above files.  If
+  "libpqxx" provides a separate development package or SDK, be sure it has
+  been installed.
+
+usr/lib/pkgconfig/libpqxx.pc is still provided by the CMake build system.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libpqxx/libpqxx.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+index f19420dc41..492370f7f5 100644
+--- a/package/libpqxx/libpqxx.mk
++++ b/package/libpqxx/libpqxx.mk
+@@ -11,8 +11,4 @@ LIBPQXX_DEPENDENCIES = postgresql
+ LIBPQXX_LICENSE = BSD-3-Clause
+ LIBPQXX_LICENSE_FILES = COPYING
+ 
+-LIBPQXX_CONF_ENV = \
+-	ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config \
+-	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++17"
+-
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
