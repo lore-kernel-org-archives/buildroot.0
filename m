@@ -4,81 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DBEEC01C0
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 10:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29CD1EC01C8
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 10:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4938C82377;
-	Mon, 23 Mar 2026 10:24:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D91A080B48;
+	Mon, 23 Mar 2026 10:41:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tS41FIrEznKU; Mon, 23 Mar 2026 10:24:42 +0000 (UTC)
+ id hHMk_5eYnBLc; Mon, 23 Mar 2026 10:41:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA03C8236F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75EA5809EB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774261482;
-	bh=TCbpkB/v5dGZ923zSHQiDHE5uCbolt3tdkIqG4jEzVI=;
+	s=default; t=1774262501;
+	bh=C0okWZF64fCHzw1OavgQJknycmTj+ESkiTK5TsaBuFI=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=X1gKKpA76OzA5C2qPLnt52JbDKjMXuxua0HdoEm9wFpvRf2VyWL8Id/z9lJ6jRVSD
-	 DPljrNvT87kkH8xYudVVF/lAchKb6fOY9OEFO+iBOM+bScnhUaF3K/1Xqjx+Icm/xg
-	 17hjR5F4rsgnfK87Dfm8Ryu82Rlnd5v0nTTovr+PH3yOpsCIA1YJ/ChZA9QIAJy+a6
-	 mr8e7Yga1+FOQriXrILwpz+elqGjttFeqI5f1p/lzLbTmRRYRMj7cLw55l5p6wtbOk
-	 5DtDXbpRG9B1gIEoQJYPKti8B9mZnfGqkx24mEnheQW7ErV4ONtJXJ0RtKmKOmcd22
-	 aKkbWiEKN25tA==
+	b=Dikyk3o/vo59mgDbAE2uP4qeISyP1dIFTSPyOt1NuW+AhsN+ww9CrzQt/gC0Lfd2j
+	 N9Ot2Su5uZBU3b6lvMCLpbF8qUmFWNsAHbSqXLFGP6s4VXxkd8Rn/5+XG/AQOxijAL
+	 tEnVq/7W/JNHBMkIm1LdPdPTXmnYjaKOGMrKTZ7z4VhrR75w9Q+IofCZJOeYsPlowI
+	 OS2UBqsq7vRkOzHq0uTxu0CBeIGg8it5qh/3CIbWT8/vwC0nYGMAQZ+eVfABO9F6QJ
+	 I4VqGNwdS2OLfJtW2LIO8KN9gRXv70mecG2R5ubXwtnjA6fYPIWJdYiLf+a4YxFy2d
+	 KcZUrUmrg0jDQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA03C8236F;
-	Mon, 23 Mar 2026 10:24:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A91FC1D3
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:24:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75EA5809EB;
+	Mon, 23 Mar 2026 10:41:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BF031D3
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99F7E6076C
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:24:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D67B40CFD
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:41:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kZHUeFHc8IXx for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 10:24:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
- helo=smtpcmd12132.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C19FF60769
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C19FF60769
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C19FF60769
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:24:36 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 4cSWwH9ymP2aD4cSWw0ZQK; Mon, 23 Mar 2026 11:24:32 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HM2LpcMj9Eod for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 10:41:39 +0000 (UTC)
+X-Greylist: delayed 415 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 23 Mar 2026 10:41:37 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CA5FB40CEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA5FB40CEC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=51.210.94.139;
+ helo=smtpout2.mo533.mail-out.ovh.net; envelope-from=mooz@blockos.org;
+ receiver=<UNKNOWN> 
+Received: from smtpout2.mo533.mail-out.ovh.net
+ (smtpout2.mo533.mail-out.ovh.net [51.210.94.139])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CA5FB40CEC
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 10:41:37 +0000 (UTC)
+Received: from director4.derp.mail-out.ovh.net
+ (director4.derp.mail-out.ovh.net [79.137.60.37])
+ by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4ffTps3yxzz64sQ;
+ Mon, 23 Mar 2026 10:26:13 +0000 (UTC)
+Received: from director4.derp.mail-out.ovh.net
+ (director4.derp.mail-out.ovh.net. [127.0.0.1])
+ by director4.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Mon, 23 Mar 2026 10:26:13 +0000 (UTC)
+Received: from mta10.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.118.150])
+ by director4.derp.mail-out.ovh.net (Postfix) with ESMTPS id 4ffTps231cz1y0P;
+ Mon, 23 Mar 2026 10:26:13 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.10])
+ (Authenticated sender: mooz@blockos.org)
+ by mta10.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id D4F5B7814DE;
+ Mon, 23 Mar 2026 10:26:12 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 23 Mar 2026 11:24:31 +0100
-Message-ID: <20260323102431.250660-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Vincent Cruz <mooz@blockos.org>,
+ Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 23 Mar 2026 11:24:59 +0100
+Message-ID: <20260323102609.711228-1-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGlJN5c7IeLZiyCYlc+Xjp1ir9CC7/Tee5HfE4N+e5SwBwaUs9mwgpLedKmNIeKRVRq/q5GsCV8mzYNXNQxNAQVzQVzJY3f60UVjsndTA5tePGLPqiMH
- yiVziFwj+gSrBc5S0evvPN3mg0OKdGMnIiCe9UEKkKxK2Cks558jjNLqWX6gggzczX1WotjbR0xwIxKwWnxefRvsoVigKOjSxzWVUireN/qtPsiLpLkvI9mt
- TwgcEJzgpQo329aNy+vmc3NuuOo0h7ObUSE60ThFOlg=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1774261473; bh=4EgH4omMDMW9tsDVgGKVMX3u5mY4VQxP5Kl/H+qUwjo=;
- h=From:To:Subject:Date:MIME-Version;
- b=X0XGIE7yw+/WSYNQepzMyH0EIJmvyD4LB8HWlsijsIorFbjiZqaw5ZAqyQm2Quz1x
- xC4dQELe9/DxQFg0v3S+6VT1uHYU7esSLpa92ekC9qvC7odMRoKeKPJMwUmCX8pmZw
- AquAXdTT8TkZvHV32KV+ZPTHYES0D9lln2Cx6dhlPt+tp+YFLbQkSRoT1BHs76ycIk
- YC3TnyNzlZAfEixnLk1rz0R1Qpc8W+xGnUqALtmFCfSiuebILD18RBpvKLSRXn1XVA
- HBZ1JG/8NdnD7g+wTq4geXTcTGdGAxpr1Zd8/de8L3oVT2oplYlx9vnbCjxs6pkbNU
- F5DjLugwbNpKQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=X0XGIE7y
-Subject: [Buildroot] [PATCH] package/libfuse3: bump to version 3.18.2
+x-ovh-tracer-id: 1532631249080994663
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTGk6SRYITzyWNt6IpIDry7AYvpCHNIQTY7DRmSXNDKqI40MgID5hRyIrgo0WmcEM6H15UKvOByzft9Y6/3UjtQsA2+36hw21FqZU2GExXVctuN60Z5YQLUdd9f6hK3KhaGXydopuC8Pe/G7EkuTxuoGdbrnTz3HbuZv0j1Du671OEOsFVjP00dwNFKk+eqjyZ7X5T0y7n9wIgvYWLPt6884bK/5TVD/nu9d1GLlq9ZUQgeqmmdv+nfkV+94OiWRuMQB/ILTH+dHRD5OBwwdy11V2CZMslC+RSoqpXDgkERjaPdHghkJoSxm+Pr7bQhh3VsHP7g7GuMB3pIEI1DyiRw4T67tA9zdEEppKhxTuP1E6sz932QUpcdRGSCw+1o/a5tBt2KuBM2mddtmyfE5i9rVqKR4TmtYu6756dxrf9AUMex8lphkGmAnheEOO26iQ/yqCuHxUFJky6pzIUWUtbYtR5fNmZxBbNQdmFBa5YnPOF25WfyrZ9GFxDv8ZXknXuLjbOmIgCQzZutcyEvgGgtCNd4NmS93pY6tJn/RL5I5aQctkBrGY/HVN8cMM6wjtdBKPHLib6cNPS68nqKmcXAt7ei3vShYwcR021cRXcrGdyVyVXA08uq58lotnevZhYe6tvF0eh7ju0y57UG6JRjy4eUqvjaCA7Nnw6Pd22Dhtg
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-105G0062ae81871-4887-438c-9918-1099547752b9,
+ B96BBED5B883732238E7412D88ABDF21B2506028) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: bump version to 4.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,39 +102,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libfuse/libfuse/releases/tag/fuse-3.18.2
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
 ---
- package/libfuse3/libfuse3.hash | 2 +-
- package/libfuse3/libfuse3.mk   | 2 +-
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index e80d39ac56..0274d179fb 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 1466c8d9a2..6d708135d5 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
 @@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  adb6b7eed09331d72cbbe6d5ef3597024ab46a1d61c6ca7cdd495e51600f8957  libfuse3-3.18.1.tar.gz
-+sha256  55a97cfd8661a9b42ff0123b44af52cac49feaec36987f4d968c046f93b42e1d  libfuse3-3.18.2.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 6418c5798b..5492d997c3 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
+ # Locally computed:
+-sha256  472e6cfa77b6f80ff2cc176bc59f6cb2856df7e30e8f31afcbd1fc94ffd2f828  libwebsockets-4.4.1.tar.gz
++sha256  d08df7634da0a377a4e077400ed6b2d1d25cf0b239e89397cd39432c5eb437ac  libwebsockets-4.5.7.tar.gz
+ sha256  6ff2868dd9d9e251de27574342663f4773a8c2f954128899eb6f3c2ba9d9a245  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 2d3395c5dd..3c7e778ccc 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE3_VERSION = 3.18.1
-+LIBFUSE3_VERSION = 3.18.2
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+-LIBWEBSOCKETS_VERSION = 4.4.1
++LIBWEBSOCKETS_VERSION = 4.5.7
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = MIT with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.51.0
 
 _______________________________________________
 buildroot mailing list
