@@ -4,81 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39171F46137
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 15:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77B7EF4613B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 15:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C86AD8230B;
-	Mon, 23 Mar 2026 15:03:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20C188230B;
+	Mon, 23 Mar 2026 15:05:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eUbmfDLCME65; Mon, 23 Mar 2026 15:03:36 +0000 (UTC)
+ id x6xjJKfcZKjf; Mon, 23 Mar 2026 15:05:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B82A68230D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CA788230D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774278216;
-	bh=ky4Ui65thBpEFNTWaibjWUlKJsQ53fDxwW5Xg/ADPaY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=m8gudPFTt1/dC/6/QQ6f/XDQJ/TCQE/maDy3px0kedXursOpujr0rui6B91SgigDO
-	 5ncwzs0p3vJopElar34WsVfjPP4K16y1CgHe1Ymo8oqZIlqL9z1RIz4L/AGKP18HWX
-	 qzijZxBxM42nN9+nSHcs8oqMGnBDmRUCAdVi8ZpTVbSg8ZAEKbrxj130Y7A7tpogSF
-	 /QTIrBRY2YuzOQV08ce/196itEpDSCY6SKnciZ5mXTwwrRG4inIOyULZxzq4E6PJTs
-	 VLiWr/ztxBpwZEAypxx0ShSPJoFa6+yS2PXbVqBxBLXVoC4dsbroSHtBMM7U4aQrL5
-	 Ahvlx9zpr9sUw==
+	s=default; t=1774278335;
+	bh=EgBps3ddieXMbv5G8cFcRYCD+ruETIxjddm+REiTtoE=;
+	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=DKulv9uJ2uexJSZpQ7vFdO93uRDqJujjW/ChTYI9D8g2AC8RbhvsV5152gdV8LrJE
+	 0oArl8TBmUwfY1jifGXOW9iAeHWfB5Si9Inp374ra2Q7HQMqvj09XZOgQC6tosJd7H
+	 gEhnB+WKYzqTf1eRgKYs7kBYG6OQ2V2UKX+nfJL/nUKUD+4qeDVb+RXPm8iC7+pZRu
+	 ZglJX8fAaqc7yb6uBCbpgpbg6ipwe99DZl/AnzNNcPOJEPF4zK8CTnqdh8O6/+wxsw
+	 0Ki9NAs1fDgFjSL0N96Onw96fS1Ih/31zDQkWWUoAtmrNoGlHEdn9EhECoI/f0dK0i
+	 kNH45YupSlhHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B82A68230D;
-	Mon, 23 Mar 2026 15:03:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DD45E1D3
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:03:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CA788230D;
+	Mon, 23 Mar 2026 15:05:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0ACAF4
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE5088230D
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:03:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADC6740A7E
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:05:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yl21w3e4X5ib for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 15:03:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mi3XdxJVWRsF for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 15:05:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.57;
  helo=smtpcmd0757.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F9E88230B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F9E88230B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 01A0B40A20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01A0B40A20
 Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F9E88230B
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:03:30 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 4goQwRpFEtpTf4goRwvkD8; Mon, 23 Mar 2026 16:03:27 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 23 Mar 2026 16:03:24 +0100
-Message-ID: <20260323150325.670050-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 01A0B40A20
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 15:05:31 +0000 (UTC)
+Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id 4gqNwRqkbtpTf4gqPwvlHn; Mon, 23 Mar 2026 16:05:29 +0100
+Message-ID: <4fba4768-ffa3-4fe5-9801-5f1dc391951c@benettiengineering.com>
+Date: Mon, 23 Mar 2026 16:05:26 +0100
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfF4Z/hEy/fabx46rTVyBI30vc6jeiVz73H5wlZ/MGfBddQnMnDwdvrVShAUx5xKIeTI3KEqpp9K6LYFu8tngNP11Ngq38gX9tPwUQkPZNQbKHvn1FQ9E
- RiJfz+2X8MQnRcGhLuz+fkUnOIgjXu1X9GIktBjUiGV6aUvBVPumj2ZyGItjeyA1GtnuNcOUIpxCCoMtNg4nbSn+SukQLigbpBFX6j9a+0vhH4nBYXX7m/2+
- 7YwvT6JAbwHiZZswYdbM1lBkKiIc6ApVfoPLF5X6mNY=
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+References: <20260121011429.1442015-1-james.hilliard1@gmail.com>
+ <70549457-9F2A-412B-9756-3E45D724B853@benettiengineering.com>
+ <CADvTj4r0Q9AOjL3zaSj3LMRKpHcuMMUC1-uKi93YaPGThOUgMw@mail.gmail.com>
+ <3e0e22ca-c0f3-4e34-989d-df032f6b7b7e@benettiengineering.com>
+ <CADvTj4o6J808cKawjdhaVPkaJDL_Yk29exLsEs_zxwEKMjgh8Q@mail.gmail.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <CADvTj4o6J808cKawjdhaVPkaJDL_Yk29exLsEs_zxwEKMjgh8Q@mail.gmail.com>
+X-CMAE-Envelope: MS4xfAn0XEuVgzHjdlmxxx06+cNApBLAyr54QT2yRjDtqzmKnrU1p1LpxaNrsTq7f1KzhI0mFy/tGhd8cSuJSfDcvIKjd7V91giYWZM1qco/UNUhoO/cUFA2
+ /9KXlfcICiI3FsD9Y6yPj9DH4acrhGMzPtRu1mkER7bpbmfyrdSZtezuMIj51Jp6dyZfsjMdXq4oQNnSkGxVWIDQsyp9sNek3k1lJ9Q6uv1fZoZBYnu1Q2O4
+ nTbiQHx7tPwJFMmj9OwyLA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1774278207; bh=lE/ttrtFoU4tDjk5sKD4Cc6uEmrx5K92xLqulHRxeGk=;
- h=From:To:Subject:Date:MIME-Version;
- b=lfQan2gYmtN81ysTHtr2m6oEmueeH9eajr69YMIhg7r/EmjvGSH7N0C8MR619FexN
- aqjssW2C72TWw0PwiTmQuMwXnNiE1G4KdXGosO1X8XkVyCB9f7cYy7gXdr3kfJ0A19
- cBShFivGGg8U1msqSRoxDd/APs4PpzqbTX24LhAKxt9BKmNcbjJC4+kKm484MPOQvH
- qyTGnFRJ3UcwKe0yQo2JoMwkidlYgyw3U2yV36iaofgWJ+CKlNIHcrHKt9BVrkmkV4
- XUEmeHXVIKf/JGC3D+MmraJZq/pgqqjZeDcSpzF7IAJ170rPzRjD50Ahx6isOjL+Bx
- gh8fgu/MvCY8g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1774278329; bh=g+j32RKtPwe+cNiaJXhQAwjaU1HONOh+AR0uiDA8sUo=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=jH5r1otvWvabl9VWKNnnnWNA3J8XmEt9vo58cMiE8zEacq9cI0AbAljrChsS8pAhC
+ dTNuSAuznXP9yERgFL9BRJhaxGFPpZ1SPC6ayx0qu8bXqz7YUMAqGU3LyG7HO4WWdY
+ 5J26b8Yu3x+IImNOALLYQT/VRfJDoqI5yBKu4LHmQKThBACld9jVLhaU3PNmj3qKQV
+ HLRZbkNOYtcrLQQtjmuIqmCbvtyRYeycgSN1gfniiqN22nQlBOPvjcguQG6OtbRtzl
+ sgxmUrUcanvsrXn8xzDVCVivVNfeXguf6nw3WGjzVJHfr94PqN9ING7m30DkGlMuw+
+ YK/pIfA28bnbA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=lfQan2gY
-Subject: [Buildroot] [PATCH] packge/swupdate: bump to version 2025.12
+ header.s=a1 header.b=jH5r1otv
+Subject: Re: [Buildroot] [PATCH 1/1] package/swupdate: bump to version
+ 2025.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,191 +98,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* libconfig is required by default so let's select it
-* from this version crypto is required to let's add Backends:
-  Openssl(by default), WolfSSL, MbedTLS
-* align swupdate.config to the most basic one
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/swupdate/Config.in       | 25 +++++++++++++++++++++++--
- package/swupdate/swupdate.config |  6 ++----
- package/swupdate/swupdate.hash   |  2 +-
- package/swupdate/swupdate.mk     | 17 +++++------------
- 4 files changed, 31 insertions(+), 19 deletions(-)
-
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 3708df0881..cdfbf35345 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -5,7 +5,9 @@ config BR2_PACKAGE_SWUPDATE
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBCONFIG
- 	select BR2_PACKAGE_LIBUBOOTENV
-+	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_WOLFSSL)
- 	help
- 	  swupdate provides a reliable way to update the software on
- 	  an embedded system.
-@@ -25,8 +27,6 @@ config BR2_PACKAGE_SWUPDATE
- 	    want to have Lua support.
- 	  * Select BR2_PACKAGE_LIBCURL if you want to use the download
- 	    feature.
--	  * Select BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS if you
--	    want to add encryption support.
- 	  * Select BR2_PACKAGE_MTD if you want to use swupdate with
- 	    UBI partitions.
- 	  * Select BR2_PACKAGE_ZLIB if you want to deal with gzip
-@@ -83,6 +83,27 @@ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
- 	  This is necessary if you want to run swupdate with the
- 	  embedded webserver and do not provide an own website to be
- 	  installed to /var/www/swupdate.
-+
-+choice
-+	prompt "Crypto Backends"
-+	help
-+	  Select crypto libraries to be used in swupdate.
-+
-+config BR2_PACKAGE_SWUPDATE_OPENSSL
-+	bool "openssl"
-+	default y
-+	depends on BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_SWUPDATE_WOLFSSL
-+	bool "wolfssl"
-+	depends on BR2_PACKAGE_WOLFSSL
-+
-+config BR2_PACKAGE_SWUPDATE_MBEDTLS
-+	bool "mbedtls"
-+	depends on BR2_PACKAGE_MBEDTLS
-+
-+endchoice
-+
- endif
- 
- comment "swupdate needs a toolchain w/ dynamic library, threads"
-diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-index a6b7a74948..da795cfb63 100644
---- a/package/swupdate/swupdate.config
-+++ b/package/swupdate/swupdate.config
-@@ -2,7 +2,6 @@
- # Automatically generated file; DO NOT EDIT.
- # Swupdate Configuration
- #
--CONFIG_HAVE_DOT_CONFIG=y
- 
- #
- # Swupdate Settings
-@@ -24,7 +23,6 @@ CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
- #
- CONFIG_SOCKET_CTRL_PATH="/tmp/sockinstctrl"
- CONFIG_SOCKET_PROGRESS_PATH="/tmp/swupdateprog"
--CONFIG_SOCKET_REMOTE_HANDLER_DIRECTORY="/tmp/"
- 
- #
- # MTD support needs libmtd
-@@ -60,7 +58,7 @@ CONFIG_BOOTLOADER_NONE=y
- #
- # U-Boot support needs libubootenv, libz
- #
--CONFIG_SSL_IMPL_NONE=y
-+CONFIG_SSL_IMPL_OPENSSL=y
- 
- #
- # Image downloading support needs libcurl
-@@ -105,7 +103,7 @@ CONFIG_PARSERROOT=""
- # ubivol support needs libubi
- #
- # CONFIG_DISKPART is not set
--CONFIG_RAW=y
-+# CONFIG_RAW is not set
- # CONFIG_RDIFFHANDLER is not set
- # CONFIG_SHELLSCRIPTHANDLER is not set
- 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index bc911d1820..b3f43648f8 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  678b47fd2419727c4d0abf5c9f3bc0dc4b67e95951132bd1c8f5603e88947779  swupdate-2025.05.tar.gz
-+sha256  8517f3730eeb66e20e651b881dd4b9c10ca9ae05e3883db59b5df18ab1eaa533  swupdate-2025.12.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 05329d13b8..154b2dcf86 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2025.05
-+SWUPDATE_VERSION = 2025.12
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-@@ -18,7 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
- 	LICENSES/MIT.txt \
- 	LICENSES/OFL-1.1.txt
- SWUPDATE_INSTALL_STAGING = YES
--SWUPDATE_DEPENDENCIES = json-c libubootenv
-+SWUPDATE_DEPENDENCIES = json-c libconfig libubootenv
- 
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
-@@ -51,13 +51,6 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBBLKID=n
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
--SWUPDATE_DEPENDENCIES += libconfig
--SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=y
--else
--SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=n
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- SWUPDATE_DEPENDENCIES += libcurl
- SWUPDATE_MAKE_ENV += HAVE_LIBCURL=y
-@@ -107,7 +100,7 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LUA=n
- endif
- 
--ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+ifeq ($(BR2_PACKAGE_SWUPDATE_MBEDTLS),y)
- SWUPDATE_DEPENDENCIES += mbedtls
- SWUPDATE_MAKE_ENV += HAVE_MBEDTLS=y
- else
-@@ -123,7 +116,7 @@ SWUPDATE_MAKE_ENV += HAVE_LIBMTD=n
- SWUPDATE_MAKE_ENV += HAVE_LIBUBI=n
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ifeq ($(BR2_PACKAGE_SWUPDATE_OPENSSL),y)
- SWUPDATE_DEPENDENCIES += openssl
- SWUPDATE_MAKE_ENV += HAVE_LIBSSL=y
- SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=y
-@@ -152,7 +145,7 @@ define SWUPDATE_SET_SYSTEMD
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+ifeq ($(BR2_PACKAGE_SWUPDATE_WOLFSSL),y)
- SWUPDATE_DEPENDENCIES += wolfssl
- SWUPDATE_MAKE_ENV += HAVE_WOLFSSL=y
- else
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFtZXMsCgpPbiAyMy8wMS8yMDI2IDE4OjI5LCBKYW1lcyBIaWxsaWFyZCB3cm90ZToKPiBP
+biBGcmksIEphbiAyMywgMjAyNiBhdCAxMDoxNOKAr0FNIEdpdWxpbyBCZW5ldHRpCj4gPGdpdWxp
+by5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+IHdyb3RlOgo+Pgo+PiBPbiAxLzIxLzI2
+IDE3OjI0LCBKYW1lcyBIaWxsaWFyZCB3cm90ZToKPj4+IE9uIFdlZCwgSmFuIDIxLCAyMDI2IGF0
+IDEyOjQy4oCvQU0gR2l1bGlvIEJlbmV0dGkKPj4+IDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
+aW5lZXJpbmcuY29tCj4+PiA8bWFpbHRvOmdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmlu
+Zy5jb20+PiB3cm90ZToKPj4+Cj4+PiAgICAgIEhpIEphbWVzLAo+Pj4KPj4+ICAgICAgSSB3YXMg
+d29ya2luZyBvbiBpdCB0b28uCj4+PiAgICAgIEFzIGlzIHRoZSBwYXRjaCBkb2VzbuKAmXQgd29y
+ayBvbiBteSBzaWRlLgo+Pj4gICAgICBJdCBzZWVtcyBsaWtlIGF0IGxlYXN0IG9uZSBjcnlwdG8g
+aXMgbmVlZGVkIHdpdGggdGhpcyB2ZXJzaW9uLCBzbyBJCj4+PiAgICAgIHdhcyBkZWZhdWx0aW5n
+IHRvIE9wZW5TU0wgYW5kIGFkZGluZyBhIGNob2ljZSBiZXR3ZWVuIGl0LCBXb2xmc3NsIGV0Yy4K
+Pj4+Cj4+Pgo+Pj4gWWVhaCwgSSB0aGluayBvbmUgY3J5cHRvIHByb3ZpZGVyIG1pZ2h0IGJlIHJl
+cXVpcmVkIHRvIGJlIHNlbGVjdGVkCj4+PiBvciBzb21ldGhpbmcgaW4gdGhlIHN3dXBkYXRlIG1l
+bnVjb25maWcsIGJ1dCB0aGF0J3MgbWF5YmUgbW9yZQo+Pj4gb2YgYW4gaXNzdWUgdG8gZml4IHVw
+c3RyZWFtPyBNeSBidWlsZHMgaGF2ZSBzaWduYXR1cmUgdmVyaWZpY2F0aW9uCj4+PiBlbmFibGVk
+IHNvIEkgdGhpbmsgSSBhbHdheXMgZW5hYmxlIHRoYXQuCj4+Cj4+IEl0IHNlZW1zIHNvIHllcywg
+YnV0IGhlcmUgd2UgbmVlZCBhIHBhY2thZ2UgdGhhdCBidWlsZHMgb3V0IG9mIHRoZSBib3gsCj4g
+Cj4gSG1tLCBJIGd1ZXNzIHdlIG5lZWQgdG8gZml4IHRoaXMgdXBzdHJlYW0gdGhlbj8KPiAKPj4K
+Pj4+Cj4+PiBUaGVyZSB3YXMgYXQgbGVhc3Qgb25lIHJ1bnRpbWUgc2VnZmF1bHQgSSByYW4gaW50
+byBiZWZvcmUgSSBmaXhlZCBteQo+Pj4gc3d1cGRhdGUgY29uZmlnIGJ1dCBJIHRoaW5rIHRoYXQn
+cyBhIHNsaWdodGx5IGRpZmZlcmVudCBpc3N1ZShTSUdBTEcpOgo+Pj4gaHR0cHM6Ly9wYXRjaHdv
+cmsub3psYWJzLm9yZy9wcm9qZWN0L3N3dXBkYXRlLwo+Pj4gcGF0Y2gvMjAyNjAxMjAyMjAyMTku
+NzE0MzA0LTEtamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8gPGh0dHBzOi8vCj4+PiBwYXRjaHdv
+cmsub3psYWJzLm9yZy9wcm9qZWN0L3N3dXBkYXRlL3BhdGNoLzIwMjYwMTIwMjIwMjE5LjcxNDMw
+NC0xLQo+Pj4gamFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8+Cj4+Cj4+IFNvIGl0IG1ha2VzIHNl
+bnNlIHRvIG1lIHRvIGFkZCBpdCBhcyBsb2NhbCBwYXRjaAo+IAo+IE1heWJlLCBidXQgdGhpcyBz
+ZWdmYXVsdCBvbmx5IGhhcHBlbnMgd2l0aCBhbiBpbnZhbGlkIGNvbmZpZyBBRkFJVQo+IHdoaWNo
+IGlzIHdoeSBJIGRpZG4ndCByZWFsbHkgYm90aGVyIGFkZGluZyBpdCwgYWxzbyB3YW50ZWQgdG8g
+d2FpdCBmb3IKPiBpdCB0byBiZSBtZXJnZWQgdXBzdHJlYW0gaWYgd2UgZG8gd2FudCBpdC4KPiAK
+Pj4KPj4KPj4+Cj4+Pgo+Pj4gICAgICBBcmUgeW91IHN1cmUgaXQgYnVpbGRzIGFzIGlzPwo+Pj4g
+ICAgICBPdGhlcndpc2UgY2FuIHlvdSBwbGVhc2UgZml4IHRoZSBwYXRjaD8KPj4+Cj4+Pgo+Pj4g
+SSdtIHVzaW5nIHRoaXMgZm9yIG15IHN3dXBkYXRlIGNvbmZpZyB3aGljaCBzZWVtcyB0byBidWls
+ZC9ydW4gZmluZToKPj4+IENPTkZJR19TWVNURU1EPXkKPj4+IENPTkZJR19IV19DT01QQVRJQklM
+SVRZPXkKPj4+IENPTkZJR19TT0NLRVRfQ1RSTF9QQVRIPSIvdG1wL3NvY2tpbnN0Y3RybCIKPj4+
+IENPTkZJR19TT0NLRVRfUFJPR1JFU1NfUEFUSD0iL3RtcC9zd3VwZGF0ZXByb2ciCj4+PiBDT05G
+SUdfTFVBUEtHPSJsdWEiCj4+PiBDT05GSUdfVUJPT1Q9eQo+Pj4gQ09ORklHX0JPT1RMT0FERVJf
+REVGQVVMVF9OT05FPXkKPj4+IENPTkZJR19ET1dOTE9BRD15Cj4+PiBDT05GSUdfRE9XTkxPQURf
+U1NMPXkKPj4+IENPTkZJR19XRUJTRVJWRVI9eQo+Pj4gQ09ORklHX01PTkdPT1NFU1NMPXkKPj4+
+IENPTkZJR19TSUdORURfSU1BR0VTPXkKPj4+IENPTkZJR19TSUdBTEdfUkFXUlNBPXkKPj4+IENP
+TkZJR19FTkNSWVBURURfSU1BR0VTPXkKPj4+IENPTkZJR19MVUFFWFRFUk5BTD15Cj4+PiBDT05G
+SUdfQVJDSElWRT15Cj4+PiBDT05GSUdfQk9PVExPQURFUkhBTkRMRVI9eQo+Pj4gQ09ORklHX0NG
+ST15Cj4+PiBDT05GSUdfQ0ZJSEFNTUlORzE9eQo+Pj4gQ09ORklHX0NPUFk9eQo+Pj4gQ09ORklH
+X0RJU0tQQVJUPXkKPj4+IENPTkZJR19ESVNLUEFSVF9GT1JNQVQ9eQo+Pj4gQ09ORklHX0RJU0tG
+T1JNQVRfSEFORExFUj15Cj4+PiBDT05GSUdfRkFUX0ZJTEVTWVNURU09eQo+Pj4gQ09ORklHX0xV
+QVNDUklQVEhBTkRMRVI9eQo+Pj4gQ09ORklHX0VNTUNfSEFORExFUj15Cj4+PiBDT05GSUdfUkFX
+PXkKPj4+IENPTkZJR19SRElGRkhBTkRMRVI9eQo+Pj4gQ09ORklHX1JFQURCQUNLSEFORExFUj15
+Cj4+PiBDT05GSUdfU0hFTExTQ1JJUFRIQU5ETEVSPXkKPj4+IENPTkZJR19TV1VGT1JXQVJERVJf
+SEFORExFUj15Cj4+PiBDT05GSUdfU1NCTFNXSVRDSD15Cj4+PiBDT05GSUdfVUJJVk9MPXkKPj4+
+IENPTkZJR19VQklCTEFDS0xJU1Q9IjAgMSAyIDMgNCA1Igo+Pj4gQ09ORklHX1VCSVdISVRFTElT
+VD0iNiIKPj4+IENPTkZJR19VTklRVUVVVUlEPXkKPj4KPj4gU28gdGhpcyBzaG91bGQgYmUgdGhl
+IGxvY2FsIHN3dXBkYXRlLmNvbmZpZywgcHJvYmFibHkgd2l0aCBsZXNzIG9wdGlvbgo+PiBlbmFi
+bGVkLiBJIHdvdWxkIGRpZmYgdGhpcyBhbmQgdGhlIGFjdHVhbCBzd3VwZGF0ZS5jb25maWcgcmVz
+dWx0aW5nIGludG8KPj4gYSB3b3JraW5nIHN3dXBkYXRlLmNvbmZpZyB3aXRoIGFzIGxlc3MgYXMg
+cG9zc2libGUgb3B0aW9ucyBlbmFibGVkLgo+Pgo+PiBDYW4geW91IHJld29yayBpdCBhbmQgc2Vu
+ZCBWMj8KPiAKPiBJcyB0aGUgaXNzdWUgd2hlcmUgYSBjcnlwdG8gcHJvdmlkZXIgaXMgcmVxdWly
+ZWQgYW4gdXBzdHJlYW0gYnVnCj4gbWF5YmU/IEkgZ3Vlc3MgdGhhdCBtaWdodCBuZWVkIHRvIGJl
+IGZpeGVkIGluIG9yZGVyIHRvIGdldCBhIHdvcmtpbmcKPiBtaW5pbWFsIGNvbmZpZyBzaW5jZSB0
+aGUgY3J5cHRvIGxpYnJhcmllcyBhcmUgY29uZGl0aW9uYWwgZGVwZW5kZW5jaWVzCj4gc28gd2Ug
+Y2FuJ3QgcmVhbGx5IGluY2x1ZGUgdGhlbSBpbiBhIG1pbmltYWwgY29uZmlnLgo+IAoKU29ycnkg
+Zm9yIHRoZSBsYXRlIHJlcGx5LiBJJ3ZlIGp1c3Qgc2VudCBhIHBhdGNoIHRvIGJ1bXAgdG8gMjAy
+NS4xMjoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRj
+aC8yMDI2MDMyMzE1MDMyNS42NzAwNTAtMS1naXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJp
+bmcuY29tLwoKQ2FuIHlvdSBwbGVhc2UgdGFrZSBhIGxvb2s/CgpCZXN0IHJlZ2FyZHMKR2l1bGlv
+Cgo+Pgo+PiBUaGFuayB5b3UhCj4+IEJlc3QgcmVnYXJkcwo+PiBHaXVsaW8KPj4KPj4+Cj4+Pgo+
+Pj4gICAgICBUaGFuayB5b3UKPj4+ICAgICAgR2l1bGlvCj4+Pgo+Pj4gICAgICAgPiBJbCBnaW9y
+bm8gMjEgZ2VuIDIwMjYsIGFsbGUgb3JlIDAyOjE0LCBKYW1lcyBIaWxsaWFyZAo+Pj4gICAgICA8
+amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbSA8bWFpbHRvOmphbWVzLmhpbGxpYXJkMUBnbWFpbC5j
+b20+PiBoYQo+Pj4gICAgICBzY3JpdHRvOgo+Pj4gICAgICAgPgo+Pj4gICAgICAgPiDvu79TaWdu
+ZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbQo+Pj4g
+ICAgICA8bWFpbHRvOmphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Pgo+Pj4gICAgICAgPiAtLS0K
+Pj4+ICAgICAgID4gcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5oYXNoIHwgMiArLQo+Pj4gICAg
+ICAgPiBwYWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLm1rIDxodHRwOi8vc3d1cGRhdGUubWs+ICAg
+fCAyICstCj4+PiAgICAgICA+IDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRl
+bGV0aW9ucygtKQo+Pj4gICAgICAgPgo+Pj4gICAgICAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9z
+d3VwZGF0ZS9zd3VwZGF0ZS5oYXNoIGIvcGFja2FnZS9zd3VwZGF0ZS8KPj4+ICAgICAgc3d1cGRh
+dGUuaGFzaAo+Pj4gICAgICAgPiBpbmRleCBiYzkxMWQxODIwLi5iM2Y0MzY0OGY4IDEwMDY0NAo+
+Pj4gICAgICAgPiAtLS0gYS9wYWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLmhhc2gKPj4+ICAgICAg
+ID4gKysrIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5oYXNoCj4+PiAgICAgICA+IEBAIC0x
+LDUgKzEsNSBAQAo+Pj4gICAgICAgPiAjIExvY2FsbHkgY2FsY3VsYXRlZAo+Pj4gICAgICAgPiAt
+c2hhMjU2Cj4+PiAgICAgIDY3OGI0N2ZkMjQxOTcyN2M0ZDBhYmY1YzlmM2JjMGRjNGI2N2U5NTk1
+MTEzMmJkMWM4ZjU2MDNlODg5NDc3NzkKPj4+ICAgICAgc3d1cGRhdGUtMjAyNS4wNS50YXIuZ3oK
+Pj4+ICAgICAgID4gK3NoYTI1Ngo+Pj4gICAgICA4NTE3ZjM3MzBlZWI2NmUyMGU2NTFiODgxZGQ0
+YjljMTBjYTlhZTA1ZTM4ODNkYjU5YjVkZjE4YWIxZWFhNTMzCj4+PiAgICAgIHN3dXBkYXRlLTIw
+MjUuMTIudGFyLmd6Cj4+PiAgICAgICA+IHNoYTI1Ngo+Pj4gICAgICA0Y2YwNGVkMzRmZjBlYmJm
+NWM3MTM0NWI1NmU2YWY1MDkzZmMxNzIwNjM2NGNjYTBlYmJhZTkyZWYzOTQwNjgzCj4+PiAgICAg
+IExJQ0VOU0VTL0JTRC0xLUNsYXVzZS50eHQKPj4+ICAgICAgID4gc2hhMjU2Cj4+PiAgICAgIGUy
+N2EzZTg3NzA2YjNhYTVmZjJlNTBlYWFmZTJlNmVkNTM5N2ZiZjJkNzY3OWVhZjQ0NGE2ZDAwMDUx
+OGEzYTYKPj4+ICAgICAgTElDRU5TRVMvQlNELTMtQ2xhdXNlLnR4dAo+Pj4gICAgICAgPiBzaGEy
+NTYKPj4+ICAgICAgMDU1ODEwMTk4NDU1MGZhODRkMWQxM2MyYWYxMWQxMTZjMjAwNzlkMmJlNTg3
+MTFlOGQ5OWNhZGNlNzAwOTE5Mgo+Pj4gICAgICBMSUNFTlNFUy9DQzAtMS4wLnR4dAo+Pj4gICAg
+ICAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5tayA8aHR0cDovL3N3
+dXBkYXRlLm1rPiBiLwo+Pj4gICAgICBwYWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLm1rIDxodHRw
+Oi8vc3d1cGRhdGUubWs+Cj4+PiAgICAgICA+IGluZGV4IDA1MzI5ZDEzYjguLjg2NGM4NzZlNDAg
+MTAwNjQ0Cj4+PiAgICAgICA+IC0tLSBhL3BhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUubWsgPGh0
+dHA6Ly9zd3VwZGF0ZS5taz4KPj4+ICAgICAgID4gKysrIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3Vw
+ZGF0ZS5tayA8aHR0cDovL3N3dXBkYXRlLm1rPgo+Pj4gICAgICAgPiBAQCAtNCw3ICs0LDcgQEAK
+Pj4+ICAgICAgID4gIwo+Pj4gICAgICAgPgo+Pj4gICAgICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Iwo+Pj4gICAgICAgPgo+Pj4gICAgICAgPiAtU1dVUERBVEVfVkVSU0lPTiA9IDIwMjUuMDUKPj4+
+ICAgICAgID4gK1NXVVBEQVRFX1ZFUlNJT04gPSAyMDI1LjEyCj4+PiAgICAgICA+IFNXVVBEQVRF
+X1NJVEUgPSAkKGNhbGwgZ2l0aHViLHNiYWJpYyxzd3VwZGF0ZSwkKFNXVVBEQVRFX1ZFUlNJT04p
+KQo+Pj4gICAgICAgPiBTV1VQREFURV9MSUNFTlNFID0gR1BMLTIuMCwgR1BMLTIuMCssIExHUEwt
+Mi4xKywgTUlULCBJU0MsIEJTRC0xLQo+Pj4gICAgICBDbGF1c2UsIEJTRC0zLUNsYXVzZSwgQ0Mw
+LTEuMCwgQ0MtQlktU0EtNC4wLCBPRkwtMS4xCj4+PiAgICAgICA+IFNXVVBEQVRFX0xJQ0VOU0Vf
+RklMRVMgPSBMSUNFTlNFUy9CU0QtMS1DbGF1c2UudHh0IFwKPj4+ICAgICAgID4gLS0KPj4+ICAg
+ICAgID4gMi40My4wCj4+PiAgICAgICA+Cj4+Pgo+Pgo+PgoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
