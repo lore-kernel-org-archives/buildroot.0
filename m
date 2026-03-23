@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14EDBF483EB
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14DA6F483E7
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 19:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D49D740C8A;
-	Mon, 23 Mar 2026 19:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE89C82265;
+	Mon, 23 Mar 2026 19:48:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TcfDhld-hS9N; Mon, 23 Mar 2026 19:48:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QhFskffVLdBX; Mon, 23 Mar 2026 19:48:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14C3F40D27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19516822EC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774295298;
-	bh=yIMw5u4NRQMI2JoqpdPnO8BZ4Y8oYYr7Q7Xa7vCjNWA=;
+	s=default; t=1774295299;
+	bh=OC5e8TM/8oTE1KVHsQWuCDDgDrNP+siWlA3D/ji48bU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Kl8w4dGWaUt5DmU3jtQAVyqkabXQDtKBZGLbuQgn6qcDJEe0nFOeVSRg3bd7Te5fP
-	 lL3peRzGkQNK5KOQMMW+1AZnJLsc1YxZNxpLDTrjSP3NUJNmICup8d/PdR/h1zvKT6
-	 odcPdH5pKD3pb2ioKkcUm+xcCqSHv9h5JrksI4lFxMxbfIm6fr8W11M5UqgJ2J9lXL
-	 y2A2MOkFrdKMfyncZioprheVFYs2LsOkhEz+2ynKEM1wLSRUPjZWsZckYo0Nr/S6Ex
-	 DI4I9eBpOUmpI8deJRY0B1Ek4HXfNukrj/mXPoPyVJnomX56GKijuGjLcNVzizf2U2
-	 +DmMUcc9tJsRQ==
+	b=AQdApkxhaj0YcKXC/d9nMBRzOiFCbKJs1tI+DLpewkaQsbUCJDd8XcyZ50YX7Uhl7
+	 w61+JSfS0XhK+KY4udvEOOW3R+dUQICGbaGEUO//uPrYJAzbjGMC6uU36Gr52PpgG/
+	 aiCeZluWUwiKgqb2HFF6Q+xnqp33XyUGPUT/ImXLSQ4OTSM/BWlNBcplFMnkP2zf9A
+	 sd6yuD4b/BftJB/b8ZzA1HwYS1DAmU11mX6raT2FAotndhLOcFec2JE3CRL5zb2WDu
+	 uHhE0bUL1IdimosgdOAV0YT1XvA/LZDNFgGtsH8aVIOvwKxnGtp4LRycast6fJ0UM2
+	 idPq7YinQrl/Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14C3F40D27;
-	Mon, 23 Mar 2026 19:48:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BA97C353
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19516822EC;
+	Mon, 23 Mar 2026 19:48:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80D7AF4
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A0DFC608BE
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D3194027F
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vg2LV8kUkvDf for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 19:47:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sRkW5Itwegnw for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 19:47:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAEFC608AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2EE84007D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAEFC608AF
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2EE84007D
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 19:47:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1981D84C9F; Mon, 23 Mar 2026 19:47:46 +0000 (UTC)
+ id 6AC2E84CF1; Mon, 23 Mar 2026 19:47:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 22 Mar 2026 12:28:37 +0100
+Date: Mon, 23 Mar 2026 20:26:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 72711087f22990261b58cf5780219ff1d61e9cda
-X-Git-Newrev: 86254ee6b5168c2b1c413c27810a541bda1dfff6
+X-Git-Oldrev: 8b3d346bd4fb533c76edfc88485dcb9d0f7efaf3
+X-Git-Newrev: 20c3eb6eb68432c37d5db69963be266b7f2d23f7
 X-Patchwork-Hint: ignore
-Message-Id: <20260323194746.1981D84C9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bitstream: bump version to 1.6
+Message-Id: <20260323194746.6AC2E84CF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libwebsockets: bump version to
+ 4.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/86254ee6b5168c2b1c413c27810a541bda1dfff6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20c3eb6eb68432c37d5db69963be266b7f2d23f7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://code.videolan.org/videolan/bitstream/-/blob/1.6/NEWS
+Changelog:
+https://github.com/warmcat/libwebsockets/blob/v4.5.7/changelog
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bitstream/bitstream.hash | 8 ++++----
- package/bitstream/bitstream.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitstream/bitstream.hash b/package/bitstream/bitstream.hash
-index bdaf90c012..fb41a40ee1 100644
---- a/package/bitstream/bitstream.hash
-+++ b/package/bitstream/bitstream.hash
-@@ -1,6 +1,6 @@
--# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.md5
--md5  34630d13332fd1575bcc8531b0a596be  bitstream-1.5.tar.bz2
--# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.sha256
--sha256  45fc5a5a6e4537a69fa8440821e87b76252135180a3070c631b0b36ce0a3b90a  bitstream-1.5.tar.bz2
-+# From https://get.videolan.org/bitstream/1.6/bitstream-1.6.tar.bz2.md5
-+md5  3106981310a54d4717cec766a0183f74  bitstream-1.6.tar.bz2
-+# From https://get.videolan.org/bitstream/1.6/bitstream-1.6.tar.bz2.sha256
-+sha256  dea67a9dca7eda0d72017359c8d649bd5a9d249f9f9a691b8daf739d16798029  bitstream-1.6.tar.bz2
- # Locally computed
- sha256  9644a812f9a8377a59acb7092a36ce8882a39743425d9171a8fb84637e2f6e04  COPYING
-diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
-index 12124a63d3..44228242ce 100644
---- a/package/bitstream/bitstream.mk
-+++ b/package/bitstream/bitstream.mk
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 1466c8d9a2..6d708135d5 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  472e6cfa77b6f80ff2cc176bc59f6cb2856df7e30e8f31afcbd1fc94ffd2f828  libwebsockets-4.4.1.tar.gz
++sha256  d08df7634da0a377a4e077400ed6b2d1d25cf0b239e89397cd39432c5eb437ac  libwebsockets-4.5.7.tar.gz
+ sha256  6ff2868dd9d9e251de27574342663f4773a8c2f954128899eb6f3c2ba9d9a245  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 2d3395c5dd..3c7e778ccc 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BITSTREAM_VERSION = 1.5
-+BITSTREAM_VERSION = 1.6
- BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
- BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
- BITSTREAM_LICENSE = MIT
+-LIBWEBSOCKETS_VERSION = 4.4.1
++LIBWEBSOCKETS_VERSION = 4.5.7
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = MIT with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
