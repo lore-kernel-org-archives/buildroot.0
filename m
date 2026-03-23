@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81E5EF483F5
-	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 20:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 768E7F483F7
+	for <buildroot@archiver.kernel.org>; Mon, 23 Mar 2026 20:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52B9F406AF;
-	Mon, 23 Mar 2026 20:17:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DB2781947;
+	Mon, 23 Mar 2026 20:17:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ucuS8ZyWxZZ; Mon, 23 Mar 2026 20:17:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AB1ZIgkV2v1F; Mon, 23 Mar 2026 20:17:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 695CA406C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 639B1819BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774297028;
-	bh=JfAEfmnxd9K5QfPHJedTm7Ybcl51tL3v+QGmMK+/9n0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Pf7IgyHuhMKq60O7grPwtag/J9ZvNsMK/j2xuYzNdLg5eiT3wYBmzQaFQk8r6Z/J4
-	 6HruDQBc6kt6g3UkfywpFX8YQv5WV6/dSilSMh2HBRRj9bVjvjqiZx/SnH3Ossg17n
-	 VUp16RMpJybYBgWzmAJxdu8wIvCz5/U8ZLIJWSaoEtOc++SZogDCaj93pH/+1mUCQv
-	 kEqaLrOZzOD99r8YXKWPASwHN8dd+Nl9/BYBVSQS6YgHoYF4+tjHmRwRrtPswt4ntP
-	 AzkKUtnZGO+wThpGxU1/DYDTPp5Fl8U+wB8xZeUPzp1La4HYsHV61dGwq2HbXh0mBx
-	 AWAdS33VnkmZg==
+	s=default; t=1774297042;
+	bh=ipkhF1iwGXQaBJkiOZFQUFjLOPrAPjw191UbDeJnnFU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=L/fIyZXUNM9gyAc7uOYmbfXMWcSAsr2+CgPgs7hatYcFOaWKwASd+2ee3u1xk9VD8
+	 pWA24ekJqaafJLdeRxN0TYwOrTFSTnSWddP0dW1iPI4y3B0hpa23ejpIWOF+p7JYZY
+	 YzaQ3QYbinbH4xE5pwkDDwe3s5EIA6v7f37W4ZWVxnp5JQfqWVI6sI7P5WUU3Gu0eG
+	 JSN69kdjMXDlmUUn1+MDN/urHq1N2SfLbO91d//n5PDbZPoNKbK8Sjhwl6jOrU/4Of
+	 xQs5fnBa5Y0BZlvBc0S3BKBW6ApNO0oLEytwNGaey3+3qP5ATPDKy3XakrGZOXoLNx
+	 h2ZgkdqqlVI5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 695CA406C3;
-	Mon, 23 Mar 2026 20:17:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 639B1819BC;
+	Mon, 23 Mar 2026 20:17:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 424E8353
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EE2CF4
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 281A8406C3
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 201FF40A86
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iuc9P4L26TLq for <buildroot@buildroot.org>;
- Mon, 23 Mar 2026 20:17:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F2C9406AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F2C9406AF
- for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A6098496E; Mon, 23 Mar 2026 20:17:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 23 Mar 2026 21:16:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8937414d68240e66d6345a946b2916bf62fcfe4b
-X-Git-Newrev: cf9a58b042feca2366107593904c14331ad5799a
-X-Patchwork-Hint: ignore
-Message-Id: <20260323201705.8A6098496E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openblas: fix build
+ id QagFRouUmzmv for <buildroot@buildroot.org>;
+ Mon, 23 Mar 2026 20:17:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54C8040A82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C8040A82
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 54C8040A82
+ for <buildroot@buildroot.org>; Mon, 23 Mar 2026 20:17:20 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 4E1BD13F86E;
+ Mon, 23 Mar 2026 21:17:17 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 23 Mar 2026 21:17:17 +0100
+MIME-Version: 1.0
+Date: Mon, 23 Mar 2026 21:17:17 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260322090709.1150583-1-bernd@kuhls.net>
+References: <20260322090709.1150583-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <cc6b8cb2640469530044ab6d689e93a4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1774297038;
+ bh=l8vRpatf71X6gYccxwADgQvTFLyLgoYg6h2BNOtnDFM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WPZP92RchOMXM38lCiqs2+EaDSotAvVcQI3I1BYW9BpvaaiMnqS71UHl5JiUvtUiG
+ kaHm1IHLk0SOCSFr2DcMkuqdjV+ae1l64Xdo+hKDolQI59dZL5JEQxhPkq/0SX5emD
+ i0NAXfvVlKfdQrViJE3LjLYOMPURjPa+EjiDNE8k0tQffNZCumZ2LMi/EpwFgSAmqa
+ 71m9yZdJ0+U2O9qRRedOj8wWIiWcDXuH3gw8SVKppftq9Z8QzN4enCg0bLPsE+ldXv
+ XJoluw08V0DHWlrRzEwwyZxitYPA+nxFONju5ZA8i/ETzEVFqHKC7f5JeSZTXXrmJV
+ G0L8Iu8KuR7dg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WPZP92Rc
+Subject: Re: [Buildroot] [PATCH 1/1] package/openblas: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,96 +94,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf9a58b042feca2366107593904c14331ad5799a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 22/03/2026 10:07, Bernd Kuhls wrote:
+> Buildroot commit b08ac7636dc7b2753592989dc5fe73959e0f6507 bumped the
+> package to version 0.3.31 and introduced a build error
+> 
+> linktest.c:(.text.startup+0x6f4):
+>  undefined reference to `openblas_set_threads_callback_function'
+> 
+> which according to https://github.com/OpenMathLib/OpenBLAS/issues/5607
+> was introduced by upstream commit
+> https://github.com/OpenMathLib/OpenBLAS/commit/879497990f42e6dcfa370bcbf478cc5674158336
+> that was first included in version 0.3.31.
+> 
+> This patch adds another upstream commit to fix the problem.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/7d8/7d80a912ddda01acd109786641df02ad826399f6/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Buildroot commit b08ac7636dc7b2753592989dc5fe73959e0f6507 bumped the
-package to version 0.3.31 and introduced a build error
-
-linktest.c:(.text.startup+0x6f4):
- undefined reference to `openblas_set_threads_callback_function'
-
-which according to https://github.com/OpenMathLib/OpenBLAS/issues/5607
-was introduced by upstream commit
-https://github.com/OpenMathLib/OpenBLAS/commit/879497990f42e6dcfa370bcbf478cc5674158336
-that was first included in version 0.3.31.
-
-This patch adds another upstream commit to fix the problem.
-
-Fixes:
-https://autobuild.buildroot.net/results/7d8/7d80a912ddda01acd109786641df02ad826399f6/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ead-callback-replacement-hook-in-singleth.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/package/openblas/0002-Include-thread-callback-replacement-hook-in-singleth.patch b/package/openblas/0002-Include-thread-callback-replacement-hook-in-singleth.patch
-new file mode 100644
-index 0000000000..7ea199fb2e
---- /dev/null
-+++ b/package/openblas/0002-Include-thread-callback-replacement-hook-in-singleth.patch
-@@ -0,0 +1,53 @@
-+From 874243421298866d116e1e8bdbd7e0ed4e31e4f6 Mon Sep 17 00:00:00 2001
-+From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
-+Date: Sun, 18 Jan 2026 19:55:40 +0100
-+Subject: [PATCH] Include thread callback replacement hook in singlethreaded
-+ builds as well
-+
-+Upstream: https://github.com/OpenMathLib/OpenBLAS/commit/874243421298866d116e1e8bdbd7e0ed4e31e4f6
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ driver/others/CMakeLists.txt | 2 +-
-+ driver/others/Makefile       | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/driver/others/CMakeLists.txt b/driver/others/CMakeLists.txt
-+index a07a0baf99..72abdc4ee4 100644
-+--- a/driver/others/CMakeLists.txt
-++++ b/driver/others/CMakeLists.txt
-+@@ -27,7 +27,6 @@ if (USE_THREAD)
-+     ${BLAS_SERVER}
-+     divtable.c # TODO: Makefile has -UDOUBLE
-+     blas_l1_thread.c
-+-    blas_server_callback.c
-+   )
-+ 
-+   if (NOT NO_AFFINITY)
-+@@ -42,6 +41,7 @@ set(COMMON_SOURCES
-+   openblas_env.c
-+   openblas_get_num_procs.c
-+   openblas_get_num_threads.c
-++  blas_server_callback.c
-+ )
-+ 
-+ # these need to have NAME/CNAME set, so use GenerateNamedObjects, but don't use standard name mangling
-+diff --git a/driver/others/Makefile b/driver/others/Makefile
-+index 719d617c45..fbd016e6b0 100644
-+--- a/driver/others/Makefile
-++++ b/driver/others/Makefile
-+@@ -1,12 +1,12 @@
-+ TOPDIR	= ../..
-+ include ../../Makefile.system
-+ 
-+-COMMONOBJS	 = memory.$(SUFFIX) xerbla.$(SUFFIX) c_abs.$(SUFFIX) z_abs.$(SUFFIX) openblas_set_num_threads.$(SUFFIX) openblas_get_num_threads.$(SUFFIX) openblas_get_num_procs.$(SUFFIX) openblas_get_config.$(SUFFIX) openblas_get_parallel.$(SUFFIX) openblas_error_handle.$(SUFFIX) openblas_env.$(SUFFIX)
-++COMMONOBJS	 = memory.$(SUFFIX) xerbla.$(SUFFIX) c_abs.$(SUFFIX) z_abs.$(SUFFIX) openblas_set_num_threads.$(SUFFIX) openblas_get_num_threads.$(SUFFIX) openblas_get_num_procs.$(SUFFIX) openblas_get_config.$(SUFFIX) openblas_get_parallel.$(SUFFIX) openblas_error_handle.$(SUFFIX) openblas_env.$(SUFFIX) blas_server_callback.$(SUFFIX)
-+ 
-+ #COMMONOBJS	+= slamch.$(SUFFIX) slamc3.$(SUFFIX) dlamch.$(SUFFIX)  dlamc3.$(SUFFIX)
-+ 
-+ ifdef SMP
-+-COMMONOBJS	+= blas_server.$(SUFFIX) divtable.$(SUFFIX) blasL1thread.$(SUFFIX) blas_server_callback.$(SUFFIX)
-++COMMONOBJS	+= blas_server.$(SUFFIX) divtable.$(SUFFIX) blasL1thread.$(SUFFIX)
-+ ifneq ($(NO_AFFINITY), 1)
-+ COMMONOBJS	+= init.$(SUFFIX)
-+ endif
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
