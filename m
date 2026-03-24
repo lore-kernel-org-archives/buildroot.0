@@ -1,85 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42442F54AB9
-	for <buildroot@archiver.kernel.org>; Tue, 24 Mar 2026 13:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF3BF54AC7
+	for <buildroot@archiver.kernel.org>; Tue, 24 Mar 2026 15:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDBAC80E84;
-	Tue, 24 Mar 2026 13:39:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QaZXjtrBJWYN; Tue, 24 Mar 2026 13:39:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1629980E85
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774359567;
-	bh=eVKiPKQdHDZO7x8L7gF16epMLp+Ha4Q2fNsKijkURWQ=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=bNBxmRBFSntQAESzcfBtky04UASeUzIpbyfI1ijYshHjSe9SA7crYsOobCPHikFbE
-	 R+GMtrkzdgqTKA53hbkuZJDCAXNuuyHv5FGsz8VIOyDHfc5SJbqoT1M24cN3OG/LGH
-	 PtiamNaKg3rrqzTiMjs532++vWe0NGxfr7iPyMKMzy9oScFsLZ2TEZa4YTUXzoIfrk
-	 z+QQlk76uRON2GJXDu4a38O86ehcvJVDPa32GjV/AD3LU9yMnm1guY3l1U6bYvMkug
-	 skxtvLMNkJjgHyqjc0NMEYgcwHZ4aUBX2znBmjhsdezl0I0peFXqF5b6tusss51fM1
-	 8aF+Qa4VIRasg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1629980E85;
-	Tue, 24 Mar 2026 13:39:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A065B353
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 13:39:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85E0D40F8B
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 13:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D07E740B92;
+	Tue, 24 Mar 2026 15:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hgSL-pJjfxb1 for <buildroot@buildroot.org>;
- Tue, 24 Mar 2026 13:39:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.100;
- helo=smtpdh16-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D5F7F4005B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5F7F4005B
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D5F7F4005B
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 13:39:23 +0000 (UTC)
-Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id 51ybwb6EO0dL051ybwPG7i; Tue, 24 Mar 2026 14:39:21 +0100
-Message-ID: <6b4acd9c-1b85-4fbf-8e2b-aca75b71ba85@benettiengineering.com>
-Date: Tue, 24 Mar 2026 14:39:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+ id xN3zHCFtjJbt; Tue, 24 Mar 2026 15:02:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7773E40CFA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774364565;
+	bh=EGZO4q96Rq9hZ64sE/bhlhMdqrUEvTVNta+cMzTDpT8=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=B737WjfAyqj3oRHV+Gy406aW/xHQjkRoPRwNYWyX5mGRcuIVJZwu2ygC1m2PYeRHB
+	 EfWk1tciekgcVE46ceabWA9r/DQm8jw3cFBTjcF6tqqMkJeNy2TPdWTMHSnfIUFysG
+	 HJBoRimXQw673wfpWS3xXw8k0KZbEFAsglRFgjNKUVs37iPSQnNmEj1BoJZ0MueY1p
+	 teyOvyXwEtM3zYCHVyzP3ITcpE/zzkrPsXXrbnFBQnNeb2I8pK8XbOrPbtCm00mL/B
+	 OwsRRjBtvGENl88Kn5k2WLtUvnYNpOg5yF+fEUsInjhrePqmDNMntbg7FE9pMzEYRa
+	 UYbHJQ2ZECBOQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7773E40CFA;
+	Tue, 24 Mar 2026 15:02:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 99DB0353
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 15:02:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FFD881E51
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 15:02:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6nXnWVOuDHS for <buildroot@buildroot.org>;
+ Tue, 24 Mar 2026 15:02:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8474281E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8474281E48
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8474281E48
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 15:02:43 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 359CA14BF;
+ Tue, 24 Mar 2026 08:02:36 -0700 (PDT)
+Received: from debian (X72Y076X74-2.nice.arm.com [10.34.125.2])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 91BAE3F915;
+ Tue, 24 Mar 2026 08:02:41 -0700 (PDT)
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 To: buildroot@buildroot.org
-References: <20260324133448.2021140-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260324133448.2021140-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfOM5bVe9SQYU5rgQLorwtnBGOF9rR0TcZTqq4W5R/lRQHsXjOlOQOXj/LpuDmjYq0k5rwzSIPAEQC1bABUoRkw9KfkGKNxtywVB+jyFclZrX9NhMdAC/
- Hz/qb9iT8QOY0R9KaXturcVDfR7Orx+BJ4WtN8f4unwUIAzd2/2LVUOEUs3u4Utqe/40LyZqyDpSyKR+YYNDrBuDBbhrwfh7MzY0VfacOZ/fb1QUJufr+eUU
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1774359561; bh=gsDVao8qHYT8pANBkulsalvHu0UiyyAee6cl+fFCM+Y=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Ojyjp9X6kYLq+OCETz8RCn+k70phnGay2SPeqwVmGzLiT0iyVyBepFls0byaGveDE
- S2p6pMfD8JAnzCVdQu9cw6NXL0z6UFdPNuRFPxnvF0yD/JT0e0E/J2Cal/MZ37v+sa
- PchwiT9QfmfpHhG10CROYIXYEz2x/CiQkTd0NGqM0i78JJtD95cgPhl/hARTJCyaHW
- 0Hfg3zLvBp3WerEdGXZ/+msOrH1ENa+faNQHhpZGwicum+ZQIHD1Gy4GQDBCkOfpax
- BJ5lLXbriXGk5PDshMIxJRX1KUb5b8MGoFFXk7XFraDdD0a/ujBGlBBLpw30X3xHUU
- hcG6YtjQrK+qA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Dick Olsson <hi@senzilla.io>
+Date: Tue, 24 Mar 2026 16:02:39 +0100
+Message-ID: <20260324150239.21226-1-vincent.stehle@arm.com>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=arm.com; s=foss; 
+ t=1774364562; bh=11PHBJSpEaUyK/CQAlCH1WItYzL+clLkZqUKJscU5og=;
+ h=From:To:Cc:Subject:Date:From;
+ b=SxNYjAcl7H2LtIo04GYFXs0cdwaODhbMfGCPZU6ewvYi2cXC25kLQgUg6pwC+rq4t
+ 41CtAxBplf07nV5hRX6cBJgk2wh8mgSxsXrpvaGFquLgHFxzAgfnp+g/DMobny6ZM1
+ iB84tZc2hZ84RuMTbevij5Y8vZKNKehIaFDSDozk=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=Ojyjp9X6
-Subject: Re: [Buildroot] [PATCH v2] packge/swupdate: bump to version 2025.12
+ header.from=arm.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=arm.com header.i=@arm.com header.a=rsa-sha256
+ header.s=foss header.b=SxNYjAcl
+Subject: [Buildroot] [PATCH] boot/edk2: fix build with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,170 +87,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/03/2026 14:34, Giulio Benetti wrote:
-> * as stated here[2] now swupdate requires at least one crypto backend so
->    as done for libssh let's enable BR2_PACKAGE_OPENSSL if no other crypto
->    backend supported by swupdate is enabled
-> * libconfig is required by default[1] so let's select it
-> * align swupdate.config to the most basic one with openssl crypto
->    backend enabled by default
-> * drop HAVE_LIBCRYPTO since it's not used anymore by swupdate even if
->    present
-> 
-> [1]: https://github.com/sbabic/swupdate/commit/4b9a71476c886be1a6affe21d6a0334b254a04e1
-> [2]: https://groups.google.com/g/swupdate/c/bLY3DyLzII0
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-
-Here I've forgotten:
-V1->V2:
-* drop Config.in choice since we can have multiple crypto backends
-* add libgpgme as a possible crypto backend
-* select openssl as default crypto backend
-* set CONFIG_SSL_IMPL_OPENSSL=y in swupdate.config
-
->   package/swupdate/Config.in       |  8 ++++++--
->   package/swupdate/swupdate.config |  4 +---
->   package/swupdate/swupdate.hash   |  2 +-
->   package/swupdate/swupdate.mk     | 20 +++++++++-----------
->   4 files changed, 17 insertions(+), 17 deletions(-)
-> 
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index 3708df0881..83cdec691d 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -5,7 +5,10 @@ config BR2_PACKAGE_SWUPDATE
->   	depends on BR2_USE_MMU # fork()
->   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
->   	select BR2_PACKAGE_JSON_C
-> +	select BR2_PACKAGE_LIBCONFIG
->   	select BR2_PACKAGE_LIBUBOOTENV
-> +	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_LIBGPGME || \
-> +	       BR2_PACKAGE_MBEDTLS || BR2_PACKAGE_WOLFSSL)
->   	help
->   	  swupdate provides a reliable way to update the software on
->   	  an embedded system.
-> @@ -25,8 +28,9 @@ config BR2_PACKAGE_SWUPDATE
->   	    want to have Lua support.
->   	  * Select BR2_PACKAGE_LIBCURL if you want to use the download
->   	    feature.
-> -	  * Select BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS if you
-> -	    want to add encryption support.
-> +	  * Select at least one of these crypto backends:
-> +	    BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS or
-> +	    BR2_PACKAGE_WOLFSSL or BR2_PACKAGE_LIBGPGME.
->   	  * Select BR2_PACKAGE_MTD if you want to use swupdate with
->   	    UBI partitions.
->   	  * Select BR2_PACKAGE_ZLIB if you want to deal with gzip
-> diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-> index a6b7a74948..d913d16b09 100644
-> --- a/package/swupdate/swupdate.config
-> +++ b/package/swupdate/swupdate.config
-> @@ -2,7 +2,6 @@
->   # Automatically generated file; DO NOT EDIT.
->   # Swupdate Configuration
->   #
-> -CONFIG_HAVE_DOT_CONFIG=y
->   
->   #
->   # Swupdate Settings
-> @@ -24,7 +23,6 @@ CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
->   #
->   CONFIG_SOCKET_CTRL_PATH="/tmp/sockinstctrl"
->   CONFIG_SOCKET_PROGRESS_PATH="/tmp/swupdateprog"
-> -CONFIG_SOCKET_REMOTE_HANDLER_DIRECTORY="/tmp/"
->   
->   #
->   # MTD support needs libmtd
-> @@ -60,7 +58,7 @@ CONFIG_BOOTLOADER_NONE=y
->   #
->   # U-Boot support needs libubootenv, libz
->   #
-> -CONFIG_SSL_IMPL_NONE=y
-> +CONFIG_SSL_IMPL_OPENSSL=y
->   
->   #
->   # Image downloading support needs libcurl
-> diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-> index bc911d1820..b3f43648f8 100644
-> --- a/package/swupdate/swupdate.hash
-> +++ b/package/swupdate/swupdate.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated
-> -sha256  678b47fd2419727c4d0abf5c9f3bc0dc4b67e95951132bd1c8f5603e88947779  swupdate-2025.05.tar.gz
-> +sha256  8517f3730eeb66e20e651b881dd4b9c10ca9ae05e3883db59b5df18ab1eaa533  swupdate-2025.12.tar.gz
->   sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
->   sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
->   sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> index 05329d13b8..b2778d2aec 100644
-> --- a/package/swupdate/swupdate.mk
-> +++ b/package/swupdate/swupdate.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -SWUPDATE_VERSION = 2025.05
-> +SWUPDATE_VERSION = 2025.12
->   SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
->   SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
->   SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-> @@ -18,7 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
->   	LICENSES/MIT.txt \
->   	LICENSES/OFL-1.1.txt
->   SWUPDATE_INSTALL_STAGING = YES
-> -SWUPDATE_DEPENDENCIES = json-c libubootenv
-> +SWUPDATE_DEPENDENCIES = json-c libconfig libubootenv
->   
->   # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
->   # available in all external toolchains, and use CC for linking. Ensure
-> @@ -51,13 +51,6 @@ else
->   SWUPDATE_MAKE_ENV += HAVE_LIBBLKID=n
->   endif
->   
-> -ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
-> -SWUPDATE_DEPENDENCIES += libconfig
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=y
-> -else
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=n
-> -endif
-> -
->   ifeq ($(BR2_PACKAGE_LIBCURL),y)
->   SWUPDATE_DEPENDENCIES += libcurl
->   SWUPDATE_MAKE_ENV += HAVE_LIBCURL=y
-> @@ -82,6 +75,13 @@ else
->   SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-> +SWUPDATE_DEPENDENCIES += libgpgme
-> +SWUPDATE_MAKE_ENV += HAVE_GPGME=y
-> +else
-> +SWUPDATE_MAKE_ENV += HAVE_GPGME=n
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
->   SWUPDATE_DEPENDENCIES += liburiparser
->   SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
-> @@ -126,10 +126,8 @@ endif
->   ifeq ($(BR2_PACKAGE_OPENSSL),y)
->   SWUPDATE_DEPENDENCIES += openssl
->   SWUPDATE_MAKE_ENV += HAVE_LIBSSL=y
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=y
->   else
->   SWUPDATE_MAKE_ENV += HAVE_LIBSSL=n
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=n
->   endif
->   
->   ifeq ($(BR2_PACKAGE_P11_KIT),y)
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGVkazIgcGFja2FnZSBmYWlscyB0byBidWlsZCB3aXRoIGdjYyAxNSwgd2l0aCB0aGUgZm9s
+bG93aW5nIGVycm9yOgoKICBFZmlSb20uYzo3ODoxNzogZXJyb3I6IGFzc2lnbm1lbnQgZGlzY2Fy
+ZHMgJ2NvbnN0JyBxdWFsaWZpZXIgZnJvbSBwb2ludGVyIHRhcmdldCB0eXBlIFstV2Vycm9yPWRp
+c2NhcmRlZC1xdWFsaWZpZXJzXQoKQ2hlcnJ5LXBpY2sgb25lIHBhdGNoIGZyb20gZWRrMi1zdGFi
+bGUyMDI2MDIgdG8gZml4IHRoaXMuCgpUaGlzIGNhbiBiZSB2ZXJpZmllZCB3aXRoIHRoZSB0ZXN0
+cy5ib290LnRlc3RfZWRrMiBweXRob24gdGVzdHMuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0
+ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+CkNjOiBEaWNrIE9sc3NvbiA8aGlAc2Vuemls
+bGEuaW8+Ci0tLQogLi4uYXNlVG9vbHMtRWZpUm9tLWZpeC1jb21waWxlci13YXJuaW5nLnBhdGNo
+IHwgNDYgKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDQ2IGluc2VydGlvbnMo
+KykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L2VkazIvMDAwMS1CYXNlVG9vbHMtRWZpUm9tLWZp
+eC1jb21waWxlci13YXJuaW5nLnBhdGNoCgpkaWZmIC0tZ2l0IGEvYm9vdC9lZGsyLzAwMDEtQmFz
+ZVRvb2xzLUVmaVJvbS1maXgtY29tcGlsZXItd2FybmluZy5wYXRjaCBiL2Jvb3QvZWRrMi8wMDAx
+LUJhc2VUb29scy1FZmlSb20tZml4LWNvbXBpbGVyLXdhcm5pbmcucGF0Y2gKbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYzFlNjg4Y2ZlMAotLS0gL2Rldi9udWxsCisrKyBi
+L2Jvb3QvZWRrMi8wMDAxLUJhc2VUb29scy1FZmlSb20tZml4LWNvbXBpbGVyLXdhcm5pbmcucGF0
+Y2gKQEAgLTAsMCArMSw0NiBAQAorRnJvbSA5YWYwNmVmM2NiYjA1MmIxNDJmOTY2MGMyYzAxZTdh
+ZWI0MDEzMDBjIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogR2VyZCBIb2ZmbWFubiA8
+a3JheGVsQHJlZGhhdC5jb20+CitEYXRlOiBNb24sIDggRGVjIDIwMjUgMTA6Mjg6NTAgKzAxMDAK
+K1N1YmplY3Q6IFtQQVRDSF0gQmFzZVRvb2xzL0VmaVJvbTogZml4IGNvbXBpbGVyIHdhcm5pbmcK
+K01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRG
+LTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworTmV3IHdhcm5pbmcgYWZ0ZXIg
+dXBkYXRpbmcgZ2NjOgorCitFZmlSb20uYzogSW4gZnVuY3Rpb24g4oCYbWFpbuKAmToKK0VmaVJv
+bS5jOjc4OjE3OiBlcnJvcjogYXNzaWdubWVudCBkaXNjYXJkcyDigJhjb25zdOKAmSBxdWFsaWZp
+ZXIgZnJvbSBwb2ludGVyIHRhcmdldCB0eXBlIFstV2Vycm9yPWRpc2NhcmRlZC1xdWFsaWZpZXJz
+XQorCitUaGUgYXNzaWduZWQgdmFsdWUgaXMgbm90IHVzZWQsIHNvIGZpeCB0aGUgd2FybmluZyBi
+eSBqdXN0IHJlbW92aW5nIGl0LgorCitTaWduZWQtb2ZmLWJ5OiBHZXJkIEhvZmZtYW5uIDxrcmF4
+ZWxAcmVkaGF0LmNvbT4KK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vdGlhbm9jb3JlL2Vk
+azIvY29tbWl0LzlhZjA2ZWYzY2JiMDUyYjE0MmY5NjYwYzJjMDFlN2FlYjQwMTMwMGMKK1NpZ25l
+ZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KKy0tLQor
+IEJhc2VUb29scy9Tb3VyY2UvQy9FZmlSb20vRWZpUm9tLmMgfCAzICstLQorIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL0Jhc2VU
+b29scy9Tb3VyY2UvQy9FZmlSb20vRWZpUm9tLmMgYi9CYXNlVG9vbHMvU291cmNlL0MvRWZpUm9t
+L0VmaVJvbS5jCitpbmRleCBmYTdiZjBlNjJlLi42ZTkwM2IzNTA0IDEwMDY0NAorLS0tIGEvQmFz
+ZVRvb2xzL1NvdXJjZS9DL0VmaVJvbS9FZmlSb20uYworKysrIGIvQmFzZVRvb2xzL1NvdXJjZS9D
+L0VmaVJvbS9FZmlSb20uYworQEAgLTQ0LDcgKzQ0LDYgQEAgUmV0dXJuczoKKyAgIEZJTEVfTElT
+VCAqRkxpc3Q7DQorICAgVUlOVDMyICAgIFRvdGFsU2l6ZTsNCisgICBVSU5UMzIgICAgU2l6ZTsN
+CistICBDSEFSOCAgICAgKlB0cjA7DQorIA0KKyAgIFNldFV0aWxpdHlOYW1lKFVUSUxJVFlfTkFN
+RSk7DQorIA0KK0BAIC03NSw3ICs3NCw3IEBAIFJldHVybnM6CisgICAvLw0KKyAgIGlmIChtT3B0
+aW9ucy5EdW1wT3B0aW9uID09IDEpIHsNCisgICAgIGlmIChtT3B0aW9ucy5GaWxlTGlzdCAhPSBO
+VUxMKSB7DQorLSAgICAgIGlmICgoUHRyMCA9IHN0cnN0ciAoKENPTlNUIENIQVI4ICopIG1PcHRp
+b25zLkZpbGVMaXN0LT5GaWxlTmFtZSwgREVGQVVMVF9PVVRQVVRfRVhURU5TSU9OKSkgIT0gTlVM
+TCkgew0KKysgICAgICBpZiAoc3Ryc3RyICgoQ09OU1QgQ0hBUjggKikgbU9wdGlvbnMuRmlsZUxp
+c3QtPkZpbGVOYW1lLCBERUZBVUxUX09VVFBVVF9FWFRFTlNJT04pICE9IE5VTEwpIHsNCisgICAg
+ICAgICBEdW1wSW1hZ2UgKG1PcHRpb25zLkZpbGVMaXN0KTsNCisgICAgICAgICBnb3RvIEJhaWxP
+dXQ7DQorICAgICAgIH0gZWxzZSB7DQorLS0gCisyLjUzLjAKKwotLSAKMi41My4wCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
