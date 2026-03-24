@@ -1,110 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1772FEC0EA
-	for <buildroot@archiver.kernel.org>; Tue, 24 Mar 2026 17:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A32B4FEC0F1
+	for <buildroot@archiver.kernel.org>; Tue, 24 Mar 2026 18:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DE31812BD;
-	Tue, 24 Mar 2026 17:27:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZKWwXL-ZstCJ; Tue, 24 Mar 2026 17:27:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 522C0811E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774373228;
-	bh=v6n9rtTCcnE5Dimcht03tF06+973B4NH4FmhznQXQg4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=AlB9wnAK+TcYLmlyP6WkKrDVad2dl8Um9uZLYTVivoBhtBfsGaxzpeLBJD4tuXvEA
-	 puCPOSjwWeusZvOYnm9N6Vy9iv+smADBrlZuZMjIMS2mpWoXzEg68hu8rL5vIVSFuh
-	 NZyTIj2Ef/xduSMdk542Dnqipyht35T4+atMPa7J6boHMNHu0eWJ/dMlBudfTJOdlN
-	 sE2yEhTdggZ80RWY8NSOQqj9z6afDmY848ghJtWA8asl4U+B3ekw87a2sqFonbUahh
-	 sfUxisqxZBs5X3lr6jUChtJ7SKiA4NlCU+8zCK2fGWJynUbSgtI3nE83ifH0BfSa0M
-	 tG2htct8CmWNQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 522C0811E1;
-	Tue, 24 Mar 2026 17:27:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 45780F4
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 17:27:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B4CB407EA
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 17:27:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 649C741281;
+	Tue, 24 Mar 2026 18:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TPpSO4y6xJB7 for <buildroot@buildroot.org>;
- Tue, 24 Mar 2026 17:27:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 201BC407B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201BC407B9
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 201BC407B9
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 17:27:05 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4852b81c73aso38004775e9.3
- for <buildroot@buildroot.org>; Tue, 24 Mar 2026 10:27:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774373224; x=1774978024;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9iwGlPokK4MkdT1fKAfOu2Rfhawjj12JXi0cX3SpzP4=;
- b=D9er9uvFDzFD1siHaQ9pwu0QNKBjyRcWK7mmilYB7pEW/xM6j7Jb6UnWHmHO1xH7HV
- 9NCqdMvy0EWbQfgxXVMIY7YbPRmDVLFssKZ3/ZHhfWq69tCZ6+BzgKpye8FcGjvxuP0r
- Av6qoZxxQhFZWiPN6VNrtzfdAIKKELKreIt4Zkc+MSXntajD+McNnKxDR6iysMfHMZtz
- nIohe2pyW4r7/pUUD3E8bhSoM3p7Meqkj4HeBjztkMA3swImtn1EOw9+eXPzMd3MIVUK
- Wdre5BcOIh3a8cCS9CiZdJa8tGTi2G+zUrZD3aNIF66srVROk8YMzi+0b8/TLAHgYUk8
- DdeA==
-X-Gm-Message-State: AOJu0YyrEh7YPNnygZLRSNU2NT+FTpAvs+phek1YImBCEDYpXWWr4ZTO
- npJA3WwiiT/bBVsCjpnWhwa38zBXK0OcxweO/57xl6BVjkT7gkmwoVjE+RZcTw1K
-X-Gm-Gg: ATEYQzyHQr93y8LqS4fY2zuvNF6mD2y5uChtVNYoLDDaRu3tANpTr2uOMvBA3vztza9
- 607LHWuzsdWgqh/0yjYsbX1DoGR/Hdi95eUCb4Ha00iRMoLhx3QK+39oQ9U5N5z1Ssw7Ti5tGBx
- zhEK4bASVxyedNPtl9Rp6spGF1hJHJoSCj1IatV/OoPq4QRO/HgUZC6MYrqV5ZPpMsrj0NQ+bXB
- SWfvlfPzsrXsWwztq+Yz5BAK0mql3Ijf+ia8/e+vzH9qJ1amXn26xvbDDa6UIUzfyb9hIQoxhZT
- e/wvDNlnw0MPNkreHky0sqZ8fi2oyIAKY/IawziFFPAcbn0JTVzkE1Ob4jblTCeMPvDb33gJKy5
- sF2p1Wyjx1iYGFwqnIREJ/SgiYQI3pBJHjqUXuqX+qtyKfhiRhZY5vtT4qKWAuJzRWnI0Mhx6UE
- Zvk0NFKLgmeOxVcfHnT7qJyjL9Jr/UEPSrKA1xIp8fwqkGaBzlgmqRj4OcKBIp2eYtAQw1eILj
-X-Received: by 2002:a05:600c:45d4:b0:486:fbf6:abd4 with SMTP id
- 5b1f17b1804b1-48715fd607cmr8667465e9.9.1774373223603; 
- Tue, 24 Mar 2026 10:27:03 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43b8567b2e2sm3945507f8f.33.2026.03.24.10.27.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 24 Mar 2026 10:27:03 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 24 Mar 2026 19:26:59 +0200
-Message-ID: <20260324172659.4834-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ id fgLSw64kArlJ; Tue, 24 Mar 2026 18:30:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67C204127A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774377034;
+	bh=HJRX7/F94h8OjwYXjULkcNu0uwsBumpm28/rkS0Hpt4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=aTJQv5G06hsT/1zn1XagpqwQ76sgvXxMXcvs0p0s4awpBr8NodfHG2LzPJI+rHNao
+	 JUpxu+wf7eT7+2ph3BKVufEVLbVg5m/IosuBjTy3spY0M6+Iri5GqOt7lzqyh58VXd
+	 i1nJH+SxBTOdP6/tsuIBAhyskfzK+aEcBCipMIkKLRM3gVrTxoU+Bji8OAIEVBkq9I
+	 cQgaYNtl5Zs7J8BcsVQsGUGnrXTpyv4cgQwW9r9h6OJC2//yyFZfctOl1aVtTmwJeL
+	 4+fsaS6iOhq/LkkT7UvebmSM/+NA2OzwTHf+32D7f/BQCpLKvIYTeU+y98lmksOA0F
+	 qMUSqkR1PoQ2A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67C204127A;
+	Tue, 24 Mar 2026 18:30:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC2B9353
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 18:30:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDA574127A
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 18:30:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lTGrDgn4kIMl for <buildroot@buildroot.org>;
+ Tue, 24 Mar 2026 18:30:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BD52B41273
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD52B41273
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD52B41273
+ for <buildroot@buildroot.org>; Tue, 24 Mar 2026 18:30:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 1EA87B0054E;
+ Tue, 24 Mar 2026 19:30:22 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 24 Mar 2026 19:30:22 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1774373224; x=1774978024; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9iwGlPokK4MkdT1fKAfOu2Rfhawjj12JXi0cX3SpzP4=;
- b=TBhD2FmFIsCmxcm+cL4fCiUxreNN+AvPFAk45UGbGoS9g4bf2G1I+jOnyOjh75jeho
- nSwgwvjk+QDr8Qq2cJbp4haicWy45Prtit916PP0nA28YFh28kFT/bOp8tP9v25w/l55
- taODbC9/HOA4Q4+vaXYlbNxbmY2vnbgclkFSTQqKogjuil2I43H6PAuWiMZy8oPs1DvD
- ylMiG5WRHIidCEi6DblNdZO9OxOL4pqOlK+4vmCgNgvdpzdMFELfsEzBpwMDNF/eOhhu
- Ou6W2f2CUL5Go28JYn4CAryPUcJBCBcR1H5eSIDBe0tbW5Q1vp66SFpo7nPU/eb7dND4
- Mb9Q==
+Date: Tue, 24 Mar 2026 19:30:22 +0100
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Romain Naour <romain.naour@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>, Marcus Hoffmann <bubu@bubu1.eu>
+In-Reply-To: <20260324073706.654995-3-titouan.christophe@mind.be>
+References: <20260324073706.654995-1-titouan.christophe@mind.be>
+ <20260324073706.654995-3-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <481d246b5592f0cc3833e11468b453c8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1774377028;
+ bh=Sa/Lr/uUeTzKmbkOPPd2ZGNauN8y1QjnFWReHCop0aY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=F8OilSNpdNJY0z7h0aSHEKKAcFhsm6z/nHHnUPeAdQj+mODtz73qUS03UPx3px/Qu
+ Eg5JnHkUnaFhaSz5qk7oBVqK83iI9bU5ZuiVXSLG3Q8nDt/jStmb57z7geGSQXSSWO
+ Sn/sekuDMLS9ZikxGWmhzfRbXDaRuFk7XgNd2ZFWwq61hq3BOejrW4qHCI9PclXiSS
+ 5DSd6icBJ20C5Pqya9ZvX8H8qIhwj7Qr560EdcnWrxNMNwOoXUjzmKbPF47iTweZqC
+ /wNgmxp56nCdqv2G70Gw8N7m8Nrnzs6pFg2YF2+XNIxaH/jlg4gcF77VAtj5zk+sUf
+ Xmdy2IQz3nB3Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=TBhD2FmF
-Subject: [Buildroot] [PATCH 1/1] package/python-aenum: bump version to 3.1.17
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=F8OilSNp
+Subject: Re: [Buildroot] [PATCH RFC 2/2] SECURITY.md: add new file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,50 +95,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
----
- package/python-aenum/python-aenum.hash | 4 ++--
- package/python-aenum/python-aenum.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Titouan,
 
-diff --git a/package/python-aenum/python-aenum.hash b/package/python-aenum/python-aenum.hash
-index dcef45a701..9404b9ca70 100644
---- a/package/python-aenum/python-aenum.hash
-+++ b/package/python-aenum/python-aenum.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aenum/json
--md5  2e00e2da1c6a2aa8b6a8fae85292e44a  aenum-3.1.16.tar.gz
--sha256  bfaf9589bdb418ee3a986d85750c7318d9d2839c1b1a1d6fe8fc53ec201cf140  aenum-3.1.16.tar.gz
-+md5  bd988607bd8bc8ee4d352b4cb33b913a  aenum-3.1.17.tar.gz
-+sha256  a969a4516b194895de72c875ece355f17c0d272146f7fda346ef74f93cf4d5ba  aenum-3.1.17.tar.gz
- # Locally computed sha256 checksums
- sha256  0db837e38002017b352666c83c8d3216ee5b9b2229375eb2cf4487f8c24e1f8c  aenum/LICENSE
-diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
-index 4b59216722..49cba84990 100644
---- a/package/python-aenum/python-aenum.mk
-+++ b/package/python-aenum/python-aenum.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AENUM_VERSION = 3.1.16
-+PYTHON_AENUM_VERSION = 3.1.17
- PYTHON_AENUM_SOURCE = aenum-$(PYTHON_AENUM_VERSION).tar.gz
--PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/09/7a/61ed58e8be9e30c3fe518899cc78c284896d246d51381bab59b5db11e1f3
-+PYTHON_AENUM_SITE = https://files.pythonhosted.org/packages/07/e9/8b283567c1fef7c24d1f390b37daede8b61593d8cdaffb8e95d571699e83
- PYTHON_AENUM_SETUP_TYPE = setuptools
- PYTHON_AENUM_LICENSE = BSD-3-Clause
- PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
--- 
-2.34.1
+Thanks for the patch. I have few suggestions, see below.
 
+On 24/03/2026 08:37, Titouan Christophe via buildroot wrote:
+> This is an in-tree description of Buildroot's security policy
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>  SECURITY.md | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>  create mode 100644 SECURITY.md
+> 
+> diff --git a/SECURITY.md b/SECURITY.md
+> new file mode 100644
+> index 0000000000..6b955638df
+> --- /dev/null
+> +++ b/SECURITY.md
+> @@ -0,0 +1,16 @@
+> +# Security Policy
+> +
+> +## Reporting a Vulnerability
+> +
+> +To report a security vulnerability found in the Buildroot build system 
+> itself,
+> +please send an email to 
+> [security@buildroot.org](mailto:security@buildroot.org).
+
+Maybe we should make explicit this email is a private one.
+For example:
+"""
+Note: this is a private mailing list contacting the Buildroot
+maintainers.
+"""
+
+About Buildroot vulnerabilities, we could also mention that Buildroot
+security advisories are announced publicly on the general mailing list.
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Buildroot itself has a CPE to track its published vulnerabilities:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=buildroot
+
+> +
+> +## Vulnerabilities in packages
+> +
+> +Buildroot is a build system that cross-compiles packages from 
+> third-party
+> +sources. The Buildroot developers are not responsible for security
+> +vulnerabilities in these packages. Such vulnerabilities should be 
+> reported
+> +directly to the upstream project that maintains the affected package.
+
+Regarding vulnerability in packages, I would also suggest to add
+here a comment suggesting Buildroot provides ways to monitor the
+vulnerability of those packages:
+
+"""
+While Buildroot does not have the responsibility to fix those
+upstream packages, Buildroot provide ways to its users to track
+the published vulnerabilities of its packages included in the
+generated images.
+
+See for example:
+https://nightly.buildroot.org/manual.html#_details_about_packages
+https://autobuild.buildroot.org/stats/
+https://security.buildroot.org/
+"""
+
+> +
+> +When vulnerabilities are fixed upstream, send a patch to update the 
+> affected
+> +packages in Buildroot.
+> --
+> 2.53.0
+
+What do you think?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
