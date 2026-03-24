@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2968C109C05B
-	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 20:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B63109C05D
+	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 20:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA9EA6069F;
-	Wed, 25 Mar 2026 20:08:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lawXjK9R1kNm; Wed, 25 Mar 2026 20:08:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE322606E5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774469323;
-	bh=pHASjDWVahC28/9NiIx3LhioamREwCUatcvpZYaeD/4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rZB1dYJ7zaj+agbkZD6AcUHEQqSeDLG3eTyPqZvs/JBQMC0xJEOHWqScld3EXqOrE
-	 mXpa4ADdaPML7xsPhO7ZLk+5TuWGMeIMaxsGnLa05ChiNxvIz9SN+bj8PorKlLJulM
-	 pVR8gcIbMtQEl26vW1eR9y3rr3ccGxaO4iF+NoeWjefeZpXdcGFQtEIQrCeJt4FEza
-	 wdeChXafnuV9fSZI7f8uaAyeJaIzxuOTcToMrxRI4cayOy5ugSTj4jkujPZBezJWMJ
-	 VbbQPzoEPHsLpBZ76/KUYmIMGp+Y4YafqYJOXaaczg3ex0JzzngOqZeyvbR9hahzsg
-	 +XaaSqYJLYrEg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE322606E5;
-	Wed, 25 Mar 2026 20:08:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B5EDB1D3
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:08:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C07C40B43
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:08:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0A2F40B43;
+	Wed, 25 Mar 2026 20:10:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ITtb5qzsE_qW for <buildroot@buildroot.org>;
- Wed, 25 Mar 2026 20:08:40 +0000 (UTC)
+ id auhgk7tX2zyd; Wed, 25 Mar 2026 20:10:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AC6340B61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774469423;
+	bh=2MG92dp9z0nDM0/DzvEsZJaoP3ThIvolmavLpcsPjRU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mk0BiRLZ0NQpffi8XwrHsvwWarQHHgtz0bDqUn7l9SjE+D3mO53bJZsc54Ck4NHDQ
+	 RfUmUYckfQuAz8LupS0RaWfjpidHOlLcTo6ITnZErcfQKdivaraxX7aHYmkcy2P6p6
+	 Rhkw8s1At7kk7Kzbmnrp9CSLDiDQi3NkPqGFPXaTGUwnOsqviwhteewLlaqAqTXeFR
+	 ZDwaKC20nxPnTnOiaO7lIhBdR6P+UZp14uTPw+Sw7MpYSn2H3WN7X20PthWrUOtqNR
+	 +s7YLjC7MbdWI2GniGDHI2hXVX77maesNBb8MuxDxaHtaCo2NdXuBvrqGHCovKHfJx
+	 thdCilN0cxLJw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AC6340B61;
+	Wed, 25 Mar 2026 20:10:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 201BC1D3
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:10:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 055AA60727
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:10:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cka9P8X9e40V for <buildroot@buildroot.org>;
+ Wed, 25 Mar 2026 20:10:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA3EF40B13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25A32606E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA3EF40B13
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:08:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25A32606E5
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 20:10:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 36AF97F88D; Wed, 25 Mar 2026 20:08:39 +0000 (UTC)
+ id F24B2846B5; Tue, 24 Mar 2026 11:21:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 25 Mar 2026 21:04:07 +0100
+Date: Tue, 24 Mar 2026 12:11:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d26ff6c144e17327351dcf8aa5dfa6181afee85
-X-Git-Newrev: 0fa55218f44e30d62843e0b99921a4b26e6aa6c7
+X-Git-Oldrev: 1332aaade40f30ef39022cc5da3b1e5b80e2844e
+X-Git-Newrev: c8dd9e9a011f1a5755df62baceb865efc09862fe
 X-Patchwork-Hint: ignore
-Message-Id: <20260325200839.36AF97F88D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: security bump to version
- 9.18.47
+Message-Id: <20260324112112.F24B2846B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ 6.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +77,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0fa55218f44e30d62843e0b99921a4b26e6aa6c7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c8dd9e9a011f1a5755df62baceb865efc09862fe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.47/doc/arm/html/notes.html
+Fixes the following security issues:
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.47/doc/arm/html/changelog.html
+CVE-2026-25673 (moderate):
+Potential denial-of-service vulnerability in URLField via Unicode
+normalization on Windows
+https://www.cve.org/CVERecord?id=CVE-2026-25673
 
-Fixes CVE-2026-1519.
+CVE-2026-25674 (low): Potential incorrect permissions on newly
+created file system objects
+https://www.cve.org/CVERecord?id=CVE-2026-25674
 
-Fixes bug:
-GL #5708
-https://gitlab.isc.org/isc-projects/bind9/-/issues/5708
+See the release notes here:
+https://docs.djangoproject.com/en/6.0/releases/6.0.3/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This commit also fixes the license hash file
+django/contrib/gis/measure.py, after whitespace cleanup:
+https://github.com/django/django/commit/090f1da56e663e9f840e307e73b5cf011cb7b061#diff-eb11d321d233226d88aeffc485fb6c318a06e807feb1574d80a92a7d6a1461a2
+
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+[Julien: fix license hash for django/contrib/gis/measure.py]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-django/python-django.hash | 6 +++---
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4671eab985..09d35a3698 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.46/bind-9.18.46.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.47/bind-9.18.47.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  6b59f0de30c6901cce783007d06f7dd717ec3aa74b5bb5cc5159f93f0be4fc1d  bind-9.18.46.tar.xz
-+sha256  9d544ba013decd1ee60e3c99d5548dd21aaaf5db96205dfc8623f39f061f14be  bind-9.18.47.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index e58dcda34d..b889f922b6 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index f1ddcc7128..dca77f02e2 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,9 +1,9 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  0836ceb8f1f4694f87f0a698c64bd00e  django-6.0.2.tar.gz
+-sha256  3046a53b0e40d4b676c3b774c73411d7184ae2745fe8ce5e45c0f33d3ddb71a7  django-6.0.2.tar.gz
++md5  0bb395b518e2f2f17e1a936deb7ba74c  django-6.0.3.tar.gz
++sha256  90be765ee756af8a6cbd6693e56452404b5ad15294f4d5e40c0a55a0f4870fe1  django-6.0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+-sha256  de642dff9b1019c2c7209032fb94ea92060084efb0bc4238d81a2219e21c7382  django/contrib/gis/measure.py
++sha256  be30dc0e3f7010af6c453d205feaece1f89494789b6e92f0c255ef597a1e6864  django/contrib/gis/measure.py
+ sha256  570a045a8372b6cd6a00e30ebafe8e3e8dfc0a7fe3d4ef2cc5f16d419eb63aeb  django/contrib/gis/gdal/LICENSE
+ sha256  08bf24b7551238ae325295245425b1caeb9ad0f42f9e2d303c7b353502632045  django/contrib/gis/geos/LICENSE
+ sha256  d48633adb736dac091477ec2206feebeee88e3e6e486aedb21c584e4b49be0ec  django/contrib/admin/static/admin/js/inlines.js
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 18871163d6..0cc68129ee 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.18.46
-+BIND_VERSION = 9.18.47
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+-PYTHON_DJANGO_VERSION = 6.0.2
++PYTHON_DJANGO_VERSION = 6.0.3
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/26/3e/a1c4207c5dea4697b7a3387e26584919ba987d8f9320f59dc0b5c557a4eb
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/80/e1/894115c6bd70e2c8b66b0c40a3c367d83a5a48c034a4d904d31b62f7c53a
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js), CC-BY-4.0 (admin svg files)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
