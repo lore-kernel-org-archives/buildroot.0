@@ -4,74 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 717FD103A9A7
-	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 11:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3ACC106B533
+	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 13:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD8376133E;
-	Wed, 25 Mar 2026 11:26:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6153360731;
+	Wed, 25 Mar 2026 13:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNIHmugjfFOU; Wed, 25 Mar 2026 11:26:19 +0000 (UTC)
+ id byxIHQzuhW0a; Wed, 25 Mar 2026 13:22:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C10F661327
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1746B60704
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774437979;
-	bh=QGiZSZIBlCFygYfcuP+XGPhFwxvBhdBJP9U1WI4HGdQ=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Lf0/argyS2I3PAbU1UnOGo2Txpa7cDLH6wdGblEeBFcE9hHngn+VBIXflk/568t2E
-	 XR3X9/daQu7i+4zoszQtafV59CR56BBrFB6FhOQQxqr+qiLsiFyDQIDg1oRxTj+yYr
-	 jTmh8/bHmF3HKLZ2NMo2AjZoVXXz0If8IBjrheiPxBHv6v8kCColDN3hA1S5c5wfEm
-	 yoUx+wSDo+T1ou60rukcnqwJgzgBPSLYr4HDjRiovRzQLt41NgER2w/i7VIUE+bdPI
-	 q1TLAuchRXv9M42BVlkMMTymiqyGURs0uaV4HI9GOjzpBv+j9hPYYavEPU/jPNxlg5
-	 xsvi+BxjeLtCA==
+	s=default; t=1774444936;
+	bh=pEzOvdw50YBpyhTWkPsWpPi29gOTC3nI7aXKnSepARc=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=kQrxFVfpzCvm7fy2evK+mbdNritfSYPDffJ0L+5Z5+0C3fk0IDMBKZjgMlDJ1Q8Df
+	 LW21lgU9035Kofpxlf4FgX+7uox6ARR8FZmbIZorodBDNOHtCSDr6KHHA+EFG6sxTH
+	 +j218zTSwCeFFeBvHSrw988L+7C75R0OgxUdHi5PGgrZBKjCMZ6ate1WVtdpwVTp26
+	 LfD+xhG7oH7802ZHSQqchsb/+Q5P8QL54OlaHZZm38RbrR4U6VdGSbLRfQ0yrEfk/c
+	 GXm0IPM0TSlOq9OjBDeekQPuWzNcENAtc8gM7sA1YLGg5IdLTpJdCmh1ach8lyOjV+
+	 rpD7bwhF4tETA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C10F661327;
-	Wed, 25 Mar 2026 11:26:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E1C3CF5
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 11:26:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1746B60704;
+	Wed, 25 Mar 2026 13:22:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0271DF5
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 13:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D35DA8376B
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 11:26:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E84C0408AA
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 13:22:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLV7XQfcEgnO for <buildroot@buildroot.org>;
- Wed, 25 Mar 2026 11:26:17 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom;
- client-ip=2a01:e0c:1:1599::15; helo=smtp6-g21.free.fr;
- envelope-from=ignacy.gawedzki@green-communications.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9A24C83760
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A24C83760
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A24C83760
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 11:26:15 +0000 (UTC)
-Received: from mail.qult.net (unknown [IPv6:2a01:e34:ec12:1270::2])
- by smtp6-g21.free.fr (Postfix) with ESMTPS id 053C178050F
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 12:26:12 +0100 (CET)
-Received: from zenon.in.qult.net ([192.168.64.1] helo=zenon.qult.net)
- by mail.qult.net with esmtps (TLS1.3) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.97)
- (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1w5MNI-0000000Gwvj-3Pi3 for buildroot@buildroot.org;
- Wed, 25 Mar 2026 12:26:12 +0100
-Received: from ig by zenon.qult.net with local (Exim 4.98.2)
- (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1w5MNI-00000006CSk-1oc7 for buildroot@buildroot.org;
- Wed, 25 Mar 2026 12:26:12 +0100
-Date: Wed, 25 Mar 2026 12:26:12 +0100
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-To: buildroot@buildroot.org
-Message-ID: <dpzpiofmvjr7qshzhveo3ebyu5igb2rv3u25ti56huo4axz3m3@mqub7vltk6uv>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YzziJqi6Oe7v for <buildroot@buildroot.org>;
+ Wed, 25 Mar 2026 13:22:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.202.192.35;
+ helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A70C94087F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A70C94087F
+Received: from mail.codelabs.ch (mail.codelabs.ch [109.202.192.35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A70C94087F
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 13:22:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.codelabs.ch (Postfix) with ESMTP id C9A345A0003;
+ Wed, 25 Mar 2026 14:22:06 +0100 (CET)
+Received: from mail.codelabs.ch ([127.0.0.1])
+ by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9_VGvLSzEBoI; Wed, 25 Mar 2026 14:22:05 +0100 (CET)
+Received: from [10.6.32.204] (unknown [185.12.128.224])
+ by mail.codelabs.ch (Postfix) with ESMTPSA id B31865A0002;
+ Wed, 25 Mar 2026 14:22:05 +0100 (CET)
+Message-ID: <0242e80ff6d2e69be00d58324aabe11fac9e4a31.camel@strongswan.org>
+From: Martin Willi <martin@strongswan.org>
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Wed, 25 Mar 2026 14:22:05 +0100
+In-Reply-To: <20260319130014.120393-1-thomas.perale@mind.be>
+References: <36f45eeb35bb33fa068060c77ba22b06fc34550a.camel@strongswan.org>
+ <20260319130014.120393-1-thomas.perale@mind.be>
+Autocrypt: addr=martin@strongswan.org; prefer-encrypt=mutual;
+ keydata=mQENBEhbeIwBCADbKW4rqhkBsvQumeWTAfy+Q+YciIbbqLvxwRZPKpxz19nxJQPbWF7pG
+ oiPb3TWLK3TitWVKKZuNILStsKTGiR4RqLUs8n3sESPoz5HmRqsijm6yJDzzPAE3/B7IWHBeAOssV
+ TWS7b9ROz4iFI+fNLnqMqE22zMEItC2r9zi6GpDmi/QP3CcxHFzPMF5iQkMPp6QJMwOdPvYR9kBb1
+ x1ubDOjsfWqI41neJTGlv3EVFc5nkv0s7PfoYxMkf8/VStd29pMe4csKJUaPDkLqenLl8Omq8Z3F+
+ sbjdo+hcim4i3EsROYh59kA4/UuMFfI0hxaIaoW6UAb6gyqOHkS6vC+VABEBAAG0Jk1hcnRpbiBXa
+ WxsaSA8bWFydGluLndpbGxpQHJldm9zZWMuY2g+iQE4BBMBAgAiBQJRsHoSAhsvBgsJCAcDAgYVCA
+ IJCgsEFgIDAQIeAQIXgAAKCRAQGu6ewTL0wxf8B/9EThZXuVqNTK2nH2QuRi2zQntFXkK2QbU11sv
+ zkfZV8xDfWKHdq67LLako/FOE1dXN6iurWFChgMexs0bSMzaftCmHGSSgGaQhBhANSObKu8M+UyHd
+ bes88zNpQKdwVd9guIo6oRrX33IYkb63ifZReChcBffu6cjXQky7/79kpnl6f3qlP5ZluyNGX9Iwe
+ z1EpmG2zHkJlc+3oPQbsQbFKjUOdR1hfyKbcVVQHs1ddv830Z0cpM6QbcknR81VsCQ7FYBrH5Hw3N
+ AKhrfbIaZMvwBgQfXIgc7mwPZFg2oONZMzauzX6EpZ29Z+kCsy3AArnZssVAwxk+ydRJhUWlZmtCR
+ NYXJ0aW4gV2lsbGkgPG1hcnRpbkBzdHJvbmdzd2FuLm9yZz6JATYEEwECACAFAkhbeIwCGy8GCwkI
+ BwMCBBUCCAMEFgIDAQIeAQIXgAAKCRAQGu6ewTL0w9ruCADDGN0JgrImHOPGgsJwdP2nKwBytO8mM
+ Z/Z/folgH20zqiMqyNR4lOZW9L3DF4rz83fKXQFbP7nCf6GZ/tmjmrImiTZBkKwr37ZsaBRaCz3i9
+ rYITY94njenYp7jy6roMcvlBMhNjSI04AvLjaA/hcPuSexqqso+qoNTa7+VplF7OpikB8vKPt+fMp
+ XuGP8TF/q8v9TrY+gcVv0c8ZOrGDnI5vJt1Fp0PvoH/vXFx3Jy90g+hRUYFbLW2S76geiGVML9AeK
+ IQKjEpp2bxsd+JYGo91MeKBqjlllonxZ17eKNtlA+X+iluwcDJZzdabB19EQG7ZEf0jAy6Sy09au6
+ MYFtCBNYXJ0aW4gV2lsbGkgPG1hcnRpbkByZXZvc2VjLmNoPokBNgQTAQIAIAUCSzjspgIbLwYLCQ
+ gHAwIEFQIIAwQWAgMBAh4BAheAAAoJEBAa7p7BMvTDaP4IALJRUmUEagBRrdAi1SrxxcsgPDr5vo8
+ 1UrPADXKnMdf6KXPqfPMN4hIeS4zbFyC/FA9cg0T9680pVk8hLmcD3iCRMMnL9d38hOQmMxw2TYnd
+ 7rth1LuoDRhIwI1bfADw3EJGEMsTy49zVtVl1KwmqBZDDk3PGHvukHYawleOrTRVitOEvavg0vfgg
+ CgqvSeSBy3tkX2EIlagC/5eXpYLguj1iI84xG01M4bZ9PU+PuzZADaHL+a9iPelBvk0uNjwKvKjPx
+ OPDfaxsmEgjNG7M9gZjBkjSjvclRUlLMpe+3qHhGEYf2yKsv72hCLYy8my5jRnu59eZq72lX9YWVs
+ jlXU=
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=green-communications.fr
-Subject: [Buildroot] [PATCH] package/libcurl: Use certificate bundle
- conditionally
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=strongswan.org; s=default; t=1774444925;
+ bh=d2VG0wcIvr8N1vPltuGo5YzMVLFixyHIAi9ckrQu56k=;
+ h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+ b=kEOIhqfatmPjep6Nyhj2JU1Ql8rzFRzuMuguC652bSWH8MMYqUyjqiupaJ30UIAWy
+ pKPZfT8hUXW8TuivVOrxPrQtUmsUGTz6gBQAitk2fC1/axauBB0ime4AtFk0asyt/z
+ wh5oGGG65N98qQDPKB6urp5brG9TppktBCX8VQBhMKWkaePGNkvR6R0OpdUSt+94Er
+ y17zagX+Bdn+RK1JOzhhSM0PyE83fC7zYjSv7gTZVrHkhQXRlXk43E7VrLQTyo9+h2
+ 3kX74bBe41GvwWn42G9sPJxLoFjRZFI4W0ActU5cPEH9pabcUTByjAB/0L0BSFpC1M
+ MuWyy+XGfBNnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=strongswan.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=strongswan.org header.i=@strongswan.org
+ header.a=rsa-sha256 header.s=default header.b=kEOIhqfa
+Subject: Re: [Buildroot] [PATCH v2 8/8] utils/generate-cyclonedx: add hashes
+ from .hash files to externalReferences
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,41 +123,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Configure with --with-ca-bundle option only if package ca-certificates
-is selected, otherwise curl will fail connecting with HTTPS, since the
-specified /etc/ssl/certs/ca-certificates.crt file does not exist.
+Hi Thomas,
 
-Signed-off-by: Ignacy Gaw=EAdzki <ignacy.gawedzki@green-communications.fr>
----
- package/libcurl/libcurl.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks for your feedback.
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3d00a4a33a..3410317b6d 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -58,8 +58,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
- LIBCURL_DEPENDENCIES +=3D openssl
- LIBCURL_CONF_OPTS +=3D --with-openssl=3D$(STAGING_DIR)/usr \
--	--with-ca-path=3D/etc/ssl/certs \
--	--with-ca-bundle=3D/etc/ssl/certs/ca-certificates.crt
-+	--with-ca-path=3D/etc/ssl/certs
-+ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
-+LIBCURL_CONF_OPTS +=3D --with-ca-bundle=3D/etc/ssl/certs/ca-certificates.c=
-rt
-+endif
- else
- LIBCURL_CONF_OPTS +=3D --without-openssl
- endif
--- =
+> For the first series personnaly, I would not include [...]
+> 'add option to control patch diff inclusion in SBOM' &
+> 'allow referencing patches by upstream URL'
 
-2.51.0
+> Regarding this series with the additional metadata [...] I'm
+> wondering if there isn't a better way to add some of the metadata
+> information without adding to many CLI options.
+
+Ok, I'll respin a series with a minimum of patches: unit-tests, fix for
+root deps + externalRefs with hashes. Not sure if manufacturer URL
+extraction from Config.in is something we want upstream, but I can add
+that later on top of it.
+
+That metadata template thing sounds very reasonable, but this requires
+some more work in a separate effort.
+
+Best regards,
+Martin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
