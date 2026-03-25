@@ -4,76 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 859FF109C02F
-	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 15:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93887109C032
+	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 15:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DAF882265;
-	Wed, 25 Mar 2026 15:03:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B748181E26;
+	Wed, 25 Mar 2026 15:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eiZcR4hmdXB4; Wed, 25 Mar 2026 15:03:56 +0000 (UTC)
+ id mlZ7vrPtZ8Vi; Wed, 25 Mar 2026 15:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AC61811F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6D081DE3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774451036;
-	bh=uNEB5t3NUWnrEEZUiNXpW+LHXtv5NnpjDYWHNgipK5I=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=bn0E39WkmBg4SUbZ2LNklMmbnN28qlPU9MZ2Qe3MJGujxHD4mvwpJ/TMEAjYslZmj
-	 enod94P9JCqJpogYa/JHeVfIv/a1RBqpcJYjt9BR1voGjnGSBWscz9saOUnWppQ0zW
-	 vpCJV7eTa5CghHpI0G7kJVtwOUQmoS5N/qSliy74CdwTCcvjE8VrC5tXdWz1aGq2i5
-	 3I3v2Tem3YWjTfaa26XE9Dtz8i+2z6Hi9QP7WODbKlpO551F13OX1dzFfcsEtqGPwv
-	 XVXRc8Iy909AF6U1vXZ/UBGmc4bgCgM4ZuDwrILCkyfXE6P/tSoSypNETSeponr7I1
-	 9pmho7TSOEJ7A==
+	s=default; t=1774452594;
+	bh=i+DZA78DqsroUIcsdfJhGqhHTsDkIwjwJNJ6L4Az9+g=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lOit3NHCibQPTndWUNq9TafOEdGeWV1sN0nssvwQad849hnz5YPw7hAHzDy1m9YIu
+	 a+dpB3lmQEvFfnFC9H26mTm4yJbbrKEW8EqXIA0T6udujVynknFczHlbJQBUfuk3UA
+	 cG3U80FvOKC3cV1mDx05TFAQCfNtCY0EQJ/5k0LU/Oox73dd2HfxjYJL23aQ1HQo8Q
+	 lDEnqheypQeCuQUm5Ctjutb7wCifuNZauZVU1PyQGxePtDQBeaWtRO5QXRHPc/9xND
+	 vxh1qyLc332CRVjX9NvM5nhGsiET+OIaMB0EvoUAgqoNEQlBZhcKltZENofMkgckSq
+	 lFGQNhwe1/dCg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AC61811F3;
-	Wed, 25 Mar 2026 15:03:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D1B571D3
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:03:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A6D081DE3;
+	Wed, 25 Mar 2026 15:29:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15B2A353
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B759140FE8
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:03:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFDB840C78
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SrptW6uAC8IJ for <buildroot@buildroot.org>;
- Wed, 25 Mar 2026 15:03:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.11.138.130;
- helo=gloria.sntech.de; envelope-from=heiko@sntech.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0D90F40D31
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D90F40D31
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0D90F40D31
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:03:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
- Quentin Schulz <quentin.schulz@cherry.de>, heiko@sntech.de,
- Heiko Stuebner <heiko.stuebner@cherry.de>
-Date: Wed, 25 Mar 2026 16:03:46 +0100
-Message-ID: <20260325150346.414826-1-heiko@sntech.de>
-X-Mailer: git-send-email 2.51.0
+ id SLawy-IUmeI2 for <buildroot@buildroot.org>;
+ Wed, 25 Mar 2026 15:29:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 27F9740C74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27F9740C74
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 27F9740C74
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:51 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-486ff201041so46695355e9.1
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 08:29:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1774452589; x=1775057389;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=4/9+3nA8ooU1t6O2iYCeLBeIEaBhqgZfyujjNdS8yMw=;
+ b=LGKlowk0Jurt9Imyg2FtPwxrdtfTLgIGDRn+RUnirm/4OxcBorkdI5Fb7nKliEeODW
+ /JLcCIL0poBe5lCrph0GoFhv4PJE5JXmtbSloeUr3WfP7x2oAQtuh4DlSA+wGi6OHfan
+ XknSuHqFLu9HJB9qctgFVQ6w9dJLORMxrWErno2V3Y5zxphaDezbAI1taSDM7bdV1XjF
+ UocKt6AQxOMVrvtP6Wpka8Kdo2PnNDyPaj125Fwgmb48DvyIVFACewWoaiv+wCXuozwF
+ EOwKaVjueZrfv9ATxa15XNVuzis3fPmMjENDwIsgZ3ngvg022WgrmePpkHYXa8p33dqq
+ HINA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUoJFx3VzxaDkkTE7N8CvYtdXpWxHH98qYrgFr8QWpYMyu5O9+HGdN2Qbw1GCsyPBNjIygzAXBXnQM=@buildroot.org
+X-Gm-Message-State: AOJu0YzJQ1PDS4v3zwGwesIgw1pdUHZNRURZc3PR6vTmZ2jq0145qK4P
+ sH8qIKAK/jG7HPYELlQI+2tZ5E+slUqXZ+sVLQYXyRzhnpH+5DaZEl6cQeoPh9ttxP9z4Gc9tsz
+ LGj3O7BY=
+X-Gm-Gg: ATEYQzwXy7hyWrUaiu2Vghe/fN0Q0AA1qCvKSD3WvcfMZUlYiNm9jrY4vwG8V6osJ0B
+ 0non52lf5HY5ywLPC2i+jfWE0MpsEzCPBx1yAeuTsJ9YZacJvjLH5fKMInXGE+8rUF41qnPF1l0
+ T/kAnz7jcea4jrV6KhrblG8ghY4Y2byeOofQlSZoD8ChpkW3MEjfKq9eGJWvoIXO4eTbhMOWPSr
+ VqFWkkb2IxM7E0dgL3vPSnPru78u+QASHk70VPqJV+heemgEqDYiM6wzt640vjPunNPREnIi3yz
+ 8YEp0UC08suObh+4eHAnYFK9gMCKGO3iHpTmQWqTzm4bcYv4ESwe2ZlilZyHrGRIXQtg5E7+v8f
+ 3m9mYH23qvh+k4IOUmqz445Hl6hUz7e8mQrgZ1fZFxnfkFJheFqKBz0f89BeAv9yuPT/piE2Tj6
+ rS0cq2SGRKn7ya4zmw
+X-Received: by 2002:a05:600c:4e12:b0:486:fe83:8621 with SMTP id
+ 5b1f17b1804b1-48716056832mr58444105e9.23.1774452589434; 
+ Wed, 25 Mar 2026 08:29:49 -0700 (PDT)
+Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48717390c4csm21702815e9.31.2026.03.25.08.29.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 25 Mar 2026 08:29:49 -0700 (PDT)
+To: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Wed, 25 Mar 2026 16:29:48 +0100
+Message-ID: <20260325152948.394613-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <dpzpiofmvjr7qshzhveo3ebyu5igb2rv3u25ti56huo4axz3m3@mqub7vltk6uv>
+References: <dpzpiofmvjr7qshzhveo3ebyu5igb2rv3u25ti56huo4axz3m3@mqub7vltk6uv>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=sntech.de; 
- s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
- Subject:Cc:To:From:Reply-To:Content-Type:In-Reply-To:References;
- bh=4CR5tkBv6CVUG6g4umwnCVifllmluXMmRwuT4soPECo=; b=LG2ubJErkaDdG9A7JN8QfWBZjs
- L7RpGcVTj/Z0MoEUYUmL7rcemcF0SQDZmLyB8SxBK6ZnGaNqNweYmrnxfHS7DA5OMbLAB+UcGeK+9
- FaWeZm7m7Mkm2aTLlonW+KYbxS5BrKnCidWOKqYKrJu/PpLe6OE75lvlcl4X4Fg1l/jTt64ccyUQQ
- r2EeldpUDBGE1n2Vav+XhQLtI670kuH89y5tbt4goEBKuRfPFHKFO2Jv0EonDSEX099rUaRAblQwR
- AkRGtP+aaFyJLcfiHv6AW79DKug16Bv5HlzlKNs7+AQw92tj9ipMO908z6t2FFlIg7BuDq1pJCoXr
- XCX4L2dQ==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1774452589; x=1775057389; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4/9+3nA8ooU1t6O2iYCeLBeIEaBhqgZfyujjNdS8yMw=;
+ b=Eu1rhmHIiz31hlY72YMJRhJSjriedCvcqsEP0E5yTOMRzE2eld4dw3ReStoositHBS
+ ob9LIJitKzD4E2ni4y/AbnyjO7XwNVnKgOR7k+ogYhGD+3s2IVzaShyBmboRxTEPRk/Q
+ /vWGkg3FEELP1sHBnsG+yoi5mHyytYCDTLY5wBmzgAt4NBXNZ9po6b8IVFvvsg3GaWjL
+ jmIX/QFwPsORASGjL1el4Fi+dfGM35hvBD0Isave9ILBf/c6mGwlka8bQb6hTTpNGO2E
+ aPSlMgRPXJuUY06gybScyc12+UcNckQUr4l8yeXHYEUnbfVy3KrsFI4LB24uRwbpdMDl
+ ApCA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=sntech.de
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256
- header.s=gloria202408 header.b=LG2ubJEr
-Subject: [Buildroot] [PATCH] package/arm-trusted-firmware: add
- ARM_TRUSTED_FIRMWARE_CPE_ID_*
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Eu1rhmHI
+Subject: Re: [Buildroot] [PATCH] package/libcurl: Use certificate bundle
+ conditionally
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,45 +124,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Heiko Stuebner via buildroot <buildroot@buildroot.org>
-Reply-To: Heiko Stuebner <heiko@sntech.de>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Heiko Stuebner <heiko.stuebner@cherry.de>
+Hi Ignacy,
 
-Trusted-Firmware has been using a number of CPE identifiers in the past
-but especially after v2.4, the correct identifier would be similar
-to cpe:2.3:o:arm:trusted_firmware-a:2.12:rc0:*:*:-:*:*:*
+In reply of:
+> Configure with --with-ca-bundle option only if package ca-certificates
+> is selected, otherwise curl will fail connecting with HTTPS, since the
+> specified /etc/ssl/certs/ca-certificates.crt file does not exist.
+> 
 
-  https://nvd.nist.gov/products/cpe/detail/65DEC230-1CD5-40DB-903A-22537D1E44FE
+You can specify in your commit message that "ca-bundle" option has been
+introduced in the following commit:
+"5a63ee3c09 package/libcurl: also specify the CA bundle location"
 
-Add the relevant CPE fields to the trusted-firmware package.
+It makes it easier to track the origin of this option.
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index b81ce0d827..6de35dca7a 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -5,6 +5,9 @@
- ################################################################################
- 
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
-+ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
-+ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
-+ARM_TRUSTED_FIRMWARE_CPE_ID_PRODUCT = trusted_firmware-a
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL),y)
- # Handle custom ATF tarballs as specified by the configuration
--- 
-2.51.0
-
+Best regards,
+PERALE Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
