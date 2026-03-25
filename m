@@ -1,118 +1,167 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93887109C032
-	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 15:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F61109C035
+	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 16:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B748181E26;
-	Wed, 25 Mar 2026 15:29:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mlZ7vrPtZ8Vi; Wed, 25 Mar 2026 15:29:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6D081DE3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774452594;
-	bh=i+DZA78DqsroUIcsdfJhGqhHTsDkIwjwJNJ6L4Az9+g=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=lOit3NHCibQPTndWUNq9TafOEdGeWV1sN0nssvwQad849hnz5YPw7hAHzDy1m9YIu
-	 a+dpB3lmQEvFfnFC9H26mTm4yJbbrKEW8EqXIA0T6udujVynknFczHlbJQBUfuk3UA
-	 cG3U80FvOKC3cV1mDx05TFAQCfNtCY0EQJ/5k0LU/Oox73dd2HfxjYJL23aQ1HQo8Q
-	 lDEnqheypQeCuQUm5Ctjutb7wCifuNZauZVU1PyQGxePtDQBeaWtRO5QXRHPc/9xND
-	 vxh1qyLc332CRVjX9NvM5nhGsiET+OIaMB0EvoUAgqoNEQlBZhcKltZENofMkgckSq
-	 lFGQNhwe1/dCg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A6D081DE3;
-	Wed, 25 Mar 2026 15:29:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15B2A353
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFDB840C78
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 570E340B61;
+	Wed, 25 Mar 2026 16:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SLawy-IUmeI2 for <buildroot@buildroot.org>;
- Wed, 25 Mar 2026 15:29:52 +0000 (UTC)
+ id RyTHb8FA59_l; Wed, 25 Mar 2026 16:11:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 572EC40B73
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774455114;
+	bh=58K1Nr770fMzfOqNpNVMXtwjiszhe48xmM3cQAtcVwg=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=faaicGhc7D94VaTdzJzZgX1mUqMOPDnxn+7WWBFnDbGxZRXNhw5q4DSU9tzFJjr3L
+	 tKp7YKq4OzLAVX7PPgIC0WVoFvjF2iZvNkfH4SimqsbOcq6yAc/jImRUBnPcyRU8Sv
+	 7Tkfd/EbkLEOJRV7m3FLlM9e/mnh+hD3pRn3oiuyimy/0oCbhs2OpFsOA/WFTRq4h0
+	 lodLpWbY2rjbEA1qyY2FWOr3pC9IuW8KIDDyxJzLMcTQe1oewp4l3l1fq3nwc1EDa3
+	 pEKF+Up2rkibm+NET5VTVqJyyYylAR1wjkQkFAwBB5HRt4i3mMCqHOZloyAIoJlj/v
+	 creCxBtlJf9UA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 572EC40B73;
+	Wed, 25 Mar 2026 16:11:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B527DF5
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 16:11:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B3F340A39
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 16:11:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OIXdLVqM3qi5 for <buildroot@buildroot.org>;
+ Wed, 25 Mar 2026 16:11:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 27F9740C74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27F9740C74
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27F9740C74
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 15:29:51 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-486ff201041so46695355e9.1
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 08:29:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774452589; x=1775057389;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=4/9+3nA8ooU1t6O2iYCeLBeIEaBhqgZfyujjNdS8yMw=;
- b=LGKlowk0Jurt9Imyg2FtPwxrdtfTLgIGDRn+RUnirm/4OxcBorkdI5Fb7nKliEeODW
- /JLcCIL0poBe5lCrph0GoFhv4PJE5JXmtbSloeUr3WfP7x2oAQtuh4DlSA+wGi6OHfan
- XknSuHqFLu9HJB9qctgFVQ6w9dJLORMxrWErno2V3Y5zxphaDezbAI1taSDM7bdV1XjF
- UocKt6AQxOMVrvtP6Wpka8Kdo2PnNDyPaj125Fwgmb48DvyIVFACewWoaiv+wCXuozwF
- EOwKaVjueZrfv9ATxa15XNVuzis3fPmMjENDwIsgZ3ngvg022WgrmePpkHYXa8p33dqq
- HINA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUoJFx3VzxaDkkTE7N8CvYtdXpWxHH98qYrgFr8QWpYMyu5O9+HGdN2Qbw1GCsyPBNjIygzAXBXnQM=@buildroot.org
-X-Gm-Message-State: AOJu0YzJQ1PDS4v3zwGwesIgw1pdUHZNRURZc3PR6vTmZ2jq0145qK4P
- sH8qIKAK/jG7HPYELlQI+2tZ5E+slUqXZ+sVLQYXyRzhnpH+5DaZEl6cQeoPh9ttxP9z4Gc9tsz
- LGj3O7BY=
-X-Gm-Gg: ATEYQzwXy7hyWrUaiu2Vghe/fN0Q0AA1qCvKSD3WvcfMZUlYiNm9jrY4vwG8V6osJ0B
- 0non52lf5HY5ywLPC2i+jfWE0MpsEzCPBx1yAeuTsJ9YZacJvjLH5fKMInXGE+8rUF41qnPF1l0
- T/kAnz7jcea4jrV6KhrblG8ghY4Y2byeOofQlSZoD8ChpkW3MEjfKq9eGJWvoIXO4eTbhMOWPSr
- VqFWkkb2IxM7E0dgL3vPSnPru78u+QASHk70VPqJV+heemgEqDYiM6wzt640vjPunNPREnIi3yz
- 8YEp0UC08suObh+4eHAnYFK9gMCKGO3iHpTmQWqTzm4bcYv4ESwe2ZlilZyHrGRIXQtg5E7+v8f
- 3m9mYH23qvh+k4IOUmqz445Hl6hUz7e8mQrgZ1fZFxnfkFJheFqKBz0f89BeAv9yuPT/piE2Tj6
- rS0cq2SGRKn7ya4zmw
-X-Received: by 2002:a05:600c:4e12:b0:486:fe83:8621 with SMTP id
- 5b1f17b1804b1-48716056832mr58444105e9.23.1774452589434; 
- Wed, 25 Mar 2026 08:29:49 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48717390c4csm21702815e9.31.2026.03.25.08.29.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 25 Mar 2026 08:29:49 -0700 (PDT)
-To: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Wed, 25 Mar 2026 16:29:48 +0100
-Message-ID: <20260325152948.394613-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <dpzpiofmvjr7qshzhveo3ebyu5igb2rv3u25ti56huo4axz3m3@mqub7vltk6uv>
-References: <dpzpiofmvjr7qshzhveo3ebyu5igb2rv3u25ti56huo4axz3m3@mqub7vltk6uv>
+ client-ip=2a01:111:f403:c201::3;
+ helo=as8pr04cu009.outbound.protection.outlook.com;
+ envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7F8B740A26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F8B740A26
+Received: from AS8PR04CU009.outbound.protection.outlook.com
+ (mail-westeuropeazlp170110003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c201::3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7F8B740A26
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 16:11:49 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ftMn+iItRr6RKnmN65kCNNpzsgdw+wWGnna62HJGqGxHR6AQcd5KuNX0vx+2VN3dO4rfA/nlPpovcFjGoiNJXQZPW7fYG2+oH8H7hvq4RxnoYPhITSk8L6QZ61gcM9YHJWRFglcNLIJd0zppJzY6+DQSC1r5hec+eaYThRiMyGbqdujPXkynsO7lxuPvFEHFAUCH2XRsndwdJRxZxUIoZhvoexQEnbr59Da45q0ATatRNFRlmL3Io607cxqHEpAm3MjAA4wByOct81amFeEZbmufSUkIvMWqX5Yck+oq0F+gg3ki9LPvSP38W+N5LbOXjvYIqwx+9QIda1tOa1ePxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4gY8yF4KzRaexM0MVxISmfhlHUaONNtZ0ZCZgpZ5xSw=;
+ b=MKDLXRveMPy5Swh9DBxcILHMJt8rQPpg4tBgikAj2+WrbpwFiDsW2lB42knuV6RUr3sM+EUo5wTC1SWgs92LnuOO9mCAjpP00TX5T/FjSYQTVGpvDTVV7wLw0YEqcyUiHfIn+mPg+4qQbzElFCMUg8K4fPmtPKQ+J1lhf9SiWZSTXSWJhs8Il2zbYuUHbPphPcqXv/qaKuQuo2fn4XmShfUf+1B3xtnUBSLexzARpvVEAeNV3mQ2d2RuSGwGJ8CHbP2WLzzd9bYTD8tG8UyKmGIF/OfB4N7GzULm8Cqo7fcTw/LfAJmo2HN4or++/kHeMgj4p4k3L6rKCdnPYSkM1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+Received: from GVXPR04MB12038.eurprd04.prod.outlook.com (2603:10a6:150:2be::5)
+ by VE1PR04MB7485.eurprd04.prod.outlook.com (2603:10a6:800:1a6::5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Wed, 25 Mar
+ 2026 16:11:43 +0000
+Received: from GVXPR04MB12038.eurprd04.prod.outlook.com
+ ([fe80::6c04:8947:f2f0:5e78]) by GVXPR04MB12038.eurprd04.prod.outlook.com
+ ([fe80::6c04:8947:f2f0:5e78%6]) with mapi id 15.20.9723.030; Wed, 25 Mar 2026
+ 16:11:43 +0000
+Message-ID: <ae06ae1d-7bf6-4668-a8fe-2c96e92b1ad6@cherry.de>
+Date: Wed, 25 Mar 2026 17:11:42 +0100
+User-Agent: Mozilla Thunderbird
+To: Heiko Stuebner <heiko@sntech.de>, buildroot@buildroot.org
+Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
+ Heiko Stuebner <heiko.stuebner@cherry.de>
+References: <20260325150346.414826-1-heiko@sntech.de>
+Content-Language: en-US
+In-Reply-To: <20260325150346.414826-1-heiko@sntech.de>
+X-ClientProxiedBy: VI1PR07CA0140.eurprd07.prod.outlook.com
+ (2603:10a6:802:16::27) To GVXPR04MB12038.eurprd04.prod.outlook.com
+ (2603:10a6:150:2be::5)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GVXPR04MB12038:EE_|VE1PR04MB7485:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46e84ff6-a41b-4f37-bb4f-08de8a8934aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|1800799024|376014|366016|18002099003|22082099003|56012099003; 
+X-Microsoft-Antispam-Message-Info: eB8pq8haZHgwl7sK6U6syvCN8Jepv0bt7YQjntWUtse2eDR512AICLdv46MeoT9rNhVDtWhIgtP8NGHGxj5pSWIdGsGMWcPnlHlSJFlpWaAjIVIhzt3zMQ7vF79kAju1+DmaHT9nnpXfW328lMS5eMfd8AkyVVvunC4ziZ/Xeh4YTYQPAgOcZOIlWnipMcw83aRwW6SX0RCj3MBd5DfrGNs22msdcuneMnlIpTjyw5EIZ5sqQeu4HRHy4c5IGiuosiO+QNpseeVRLE5Gg5PULn7f3ivnZDP+6vp/9gmOzw3kQQLdFMQVKELrhhO3EQNeyIXyXtlj53nISzr5P7ykxYWgNgBMykJXShxhJDsrMnTHrqqFz9axTkicv0Gq3lOFREEIddf2fuv96XyMJAIGFZdFIlRdeoLJX7Q4dSClLHdO1rgKOr2mpjR8HSc2JHrHnxP5qjOpPeoN2P7O1S9sxTvXADcDPDGWckMISP58G/qPTDc+hfCO9jHom5D6r3fuLyGJGMEYYsctXiFrmjprLlHaixtMmPueTbUp6gTWmPPzi+9h84zMzoybXKwRD4/ZCmkabBIEwC+1PUHL8fsSfVFR++3i4VSiVzStyYyNri2/FD74fNz2BAmQWMVGy3t/kw4kgqC19tg8TdMdZkP9sEuWe0GJkTTVXGYyQ1CdsSWH5nQ+WGNQJy1TXQxgKVYE
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:GVXPR04MB12038.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(376014)(366016)(18002099003)(22082099003)(56012099003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWlqTDJhRGI5MlRXV1owVVQyODliS3NOVkhCSkwxTStORnpYSnNLSXZIbTJV?=
+ =?utf-8?B?aWQyRGdZenB6aVpQWW85QUY5ZUE3ZjlCekNyMnBvSFQ4Um1pSWtuUWMyZ1VF?=
+ =?utf-8?B?VVBmdVlHWTV1QVJMbUZKSjgydzQrbFpiS3J1QVhEZ0psYkxrWnBuWC9aSzhJ?=
+ =?utf-8?B?Q1hzaUpacmQvWjEwdW51K01DcFZ3ZFVIT2NuNk1oTmhCSVdsdmtUQW5rOGFP?=
+ =?utf-8?B?bUc5Y0oyOWhKWUlkeVIzanJ2NFZKb05DUmZOK2R5dVhQY2VKNUYxU0FrRlFK?=
+ =?utf-8?B?Zmtid3grSkJ2YlJFNEdpQnV4OTBhNHJhL0lzVHY2RjJQbTlOcmtFbWZXSzZv?=
+ =?utf-8?B?MUpRMCs1cUVwVVpYdjJyTXRIOEFkVmZ2ZEV5K0szTUx0cDhvWnNKSGE5d2x4?=
+ =?utf-8?B?enM3UkpwMXNBSWl5RE1SWlNXbjBkUWNmRTVLQzZWZGN0MmF6SWZwOHpiRUty?=
+ =?utf-8?B?bnIyV1psc1pBMHhwT05ySVZ4TWx5R1cvak9VSFZnVEE0eXE2ZVRyUHhGdFgz?=
+ =?utf-8?B?Rzlxb1RMaVFzMENSMUdhalNody83ck9iTVM5b1JsNzFJZXVEZ2VMeWJzb1lq?=
+ =?utf-8?B?VFpKNlJwa2VCSmJIVjMyOGU0eFk4UnFwSEVidUxvSHowM3FXZjZFSnFCeG15?=
+ =?utf-8?B?ek9LUXVWMGQ1cmRHRDdrL3RMKytPM0xUczdKV0ZId3lFbTE5cjMxUHNqNmN5?=
+ =?utf-8?B?OUxMQlVCYnNvcFRRbnJ4eC9CQlU5VDRCL09YMldmYlExdzVNR1JseVJhL1ZF?=
+ =?utf-8?B?U3JpSWM4b3pFSTIxc0h3bUlFVHhYSHZQbzFZeHRxK0RMMSt1UFF4eXJnUkJC?=
+ =?utf-8?B?NE52L1ZwRXd4aFl2VWJKMGFMMXdEVTVIcGp1RGliNDRoQndWa1JQYW8zREI4?=
+ =?utf-8?B?UkNKVnBBZ2J3MkNyK25veE5PU25IdjNTbm9pQnc5MWZ3SXpOTWxTNXdkVVV2?=
+ =?utf-8?B?T2xzV3BvS2JqWE9aWXBicDUzZENUeFVyRTRZeWhJekgweDQraFpNUVBOanVO?=
+ =?utf-8?B?Q0p5d09NdTJXeFpHdzd5dnlEa1h0cnc0Nk1DQ2E5NENZNWVleDRWYUJ0Q1Jx?=
+ =?utf-8?B?QzA0RElFN3RmakVicWxKbFF1QmkxdEJVUHRleFVydWplOXFzZnp6eE1QYTA2?=
+ =?utf-8?B?QmtzbHNlamhqcG9NeHNSSGxoODN4MGtuMkt1WC9YWXJsM2llbVR1a2ZURFNh?=
+ =?utf-8?B?SDJtalV0NWFtTGxrb01uK2VsVDZYaUpiSUlhbHdJSFREWis2NkFPanl4aFlB?=
+ =?utf-8?B?L05IQzltL3NZamZGWjRPWUVpbmRPeE8xRW9QdEV6Umx0VTBpRjY5MXVBNTcy?=
+ =?utf-8?B?Q0pQM3RZODV0SHpqejE3R29GMWRCY2pBQ2RWKzBTeHFlN2FnSDcxVW9iMUJZ?=
+ =?utf-8?B?OTUxZzg3QVhtOHN4NG5QUTlGSWszMjh3bjZEQ0M2a3VNWjc2RlBhYnVkN3hx?=
+ =?utf-8?B?cFJ3UFdLWHlDVEt0MW1GK0dYTy9DeUVESy9oTHZHUHRtcUpmc2J1V2gyUVRy?=
+ =?utf-8?B?bVBacTdzWHZKaE1MWllpRy9qL3hsRU5DRGFLTDQyQ3VWU0Z6YkY4OWRlb0Jh?=
+ =?utf-8?B?dVQ0bUZkM2J2UmppMGRxRkovaGxvc0czdGF6RzAyR3lGNHhWbU9nQ3dwalZ2?=
+ =?utf-8?B?R3pDdlJSZVdlODhPb0NzZnhYL0NPKzhDTVo0aWdyVEkyYld3S0w3NnZOMDQ1?=
+ =?utf-8?B?UThwRFNzKzdqaElhd0RnR1JmYnJ5cWZpRHRWZGwreHdsU1F3dVJmOU1QSDRU?=
+ =?utf-8?B?c0x1VnF0TWNQbGxWcC9mTmRNY01jcURBaXRMbUh1azVkUjlBWDhXdzgzcUl1?=
+ =?utf-8?B?Z1RFaWQ0M2JYMzBEUC9FZmI3bmwyMDRnOGZWeUQ0VUsvK2tIWGR6RDZTeXBj?=
+ =?utf-8?B?bWVrbmU5THNRai8yUnJKUUJMNlpqWkgyVVpsMWkzK05lRHdCMDZUWW9tQ25R?=
+ =?utf-8?B?UWsvdGZYbjhod2czcS9mUmVFNmNvUHVVb0NxTHlRUStnd2lDbU50UEhWUE4r?=
+ =?utf-8?B?aVBaR2dWeEVHOW1aWkxXYXVVY1BRdUFkbEUyQ2J3UFdkaWVVM0JjN3dPZFVN?=
+ =?utf-8?B?aVdRRHNqaTFsSVBSc0dvRi8yY3BmR2VIK3VuU1BRbk1HWGNEMUJ4ZnRjelV6?=
+ =?utf-8?B?MExGTkl3dWFlcjhPUzBNVU96WEZXWWpkOW9vLzkvWXdrdVJJMkRhQnQvckpp?=
+ =?utf-8?B?NFhHa2RjeUxMV1lqUm03aHQ2aEpnWmloWXdSTFhaT3hLZUk5cmNMVGFhWmJ5?=
+ =?utf-8?B?cWh3Y0I5U0ZMbXBvbm5vcUZNUTdPbWN6UFR5MDFQWHBzWnc3T0NLcCtabXVB?=
+ =?utf-8?B?eUwrek5UTGZxenA4VjFEQjgxNVJldFNuL2VvK2kyOFBWa0l2eFV0UT09?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46e84ff6-a41b-4f37-bb4f-08de8a8934aa
+X-MS-Exchange-CrossTenant-AuthSource: GVXPR04MB12038.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2026 16:11:43.3144 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: trqXRL1Xd+FsE0NcL255aoGS1iDkxNyzdNlMSVY58p3xSbCevgi1Iwx0PBh2qyE7TFrOTd/vxGPmKU0+0pvFF27/NZZ7m00OgOkA+PyKqZo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7485
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774452589; x=1775057389; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4/9+3nA8ooU1t6O2iYCeLBeIEaBhqgZfyujjNdS8yMw=;
- b=Eu1rhmHIiz31hlY72YMJRhJSjriedCvcqsEP0E5yTOMRzE2eld4dw3ReStoositHBS
- ob9LIJitKzD4E2ni4y/AbnyjO7XwNVnKgOR7k+ogYhGD+3s2IVzaShyBmboRxTEPRk/Q
- /vWGkg3FEELP1sHBnsG+yoi5mHyytYCDTLY5wBmzgAt4NBXNZ9po6b8IVFvvsg3GaWjL
- jmIX/QFwPsORASGjL1el4Fi+dfGM35hvBD0Isave9ILBf/c6mGwlka8bQb6hTTpNGO2E
- aPSlMgRPXJuUY06gybScyc12+UcNckQUr4l8yeXHYEUnbfVy3KrsFI4LB24uRwbpdMDl
- ApCA==
+ d=cherry.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4gY8yF4KzRaexM0MVxISmfhlHUaONNtZ0ZCZgpZ5xSw=;
+ b=RtYN/DNdjrAEN44NEAriQIVPrqJo45kXt+SEFwMfHz6+tV7VezJ84sgURa4EJdhXAzFzzAFZodQjb7ebSZBqWcBkIzk5WYWTY4cGHAY/8H/VaxIXiPm05gU8yaUZnCAPRLM87PS1nHx4iA11ZurmNJ6zjtfsBIbYyoFSd2y3voE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=cherry.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Eu1rhmHI
-Subject: Re: [Buildroot] [PATCH] package/libcurl: Use certificate bundle
- conditionally
+ dkim=pass (1024-bit key,
+ unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
+ header.s=selector1 header.b=RtYN/DNd
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Subject: Re: [Buildroot] [PATCH] package/arm-trusted-firmware: add
+ ARM_TRUSTED_FIRMWARE_CPE_ID_*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,29 +173,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Ignacy,
+Hi Heiko,
 
-In reply of:
-> Configure with --with-ca-bundle option only if package ca-certificates
-> is selected, otherwise curl will fail connecting with HTTPS, since the
-> specified /etc/ssl/certs/ca-certificates.crt file does not exist.
+On 3/25/26 4:03 PM, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@cherry.de>
+> 
+> Trusted-Firmware has been using a number of CPE identifiers in the past
+> but especially after v2.4, the correct identifier would be similar
+> to cpe:2.3:o:arm:trusted_firmware-a:2.12:rc0:*:*:-:*:*:*
+> 
+>    https://nvd.nist.gov/products/cpe/detail/65DEC230-1CD5-40DB-903A-22537D1E44FE
+> 
+> Add the relevant CPE fields to the trusted-firmware package.
 > 
 
-You can specify in your commit message that "ca-bundle" option has been
-introduced in the following commit:
-"5a63ee3c09 package/libcurl: also specify the CA bundle location"
+meta-arm (the official Yocto layer from Arm themselves) reports 4 
+possible CPEs (c.f. 
+https://git.yoctoproject.org/meta-arm/commit/meta-arm/recipes-bsp/trusted-firmware-a/trusted-firmware-a.inc?id=067a259cbd5ad4d2a8c2b4ea2cff5acdc126ccd2), 
+TF-A source code adds yet another one, c.f. 
+https://review.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a/+/refs/heads/master/docs/sbom.cdx.json.
 
-It makes it easier to track the origin of this option.
+As far as I could tell, only two CPEs have been used so far. I've sent a 
+request to NVD to merge existing CPEs (and/or add all existing CPEs to 
+existing CVEs such that looking for one CPE will return all applicable 
+CVEs). I've sent a patch 
+(https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/49486) 
+to TF-A to fix the CycloneDX to avoid yet another CPE to appear (but 
+since it's been in releases since v2.13, maybe it's "too late" and 
+someone in the future will use that CPE and NVD won't correct it before 
+publishing /me shrugs).
 
-Best regards,
-PERALE Thomas
+cpe:2.3:o:arm:trusted_firmware-a: indeed seems to be the one people now 
+use to report CVEs as it contains the two newest CVEs for TF-A (the 
+other CPE with CVEs haven't seen a new one since 2017).
+
+Yocto supports the SPDX v3 format which allows to specify multiple CPEs 
+(externalIdentifier) per Software Package. CycloneDX doesn't though... 
+So I am wondering what's the plan on Buildroot-side here?
+
+OP-TEE OS also has multiple CPEs... meta-arm Yocto layer reports 
+linaro:op-tee and op-tee:op-tee_os. Ugh...
+
+Anyway, this looks fine to me so:
+
+Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+
+Thanks!
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
