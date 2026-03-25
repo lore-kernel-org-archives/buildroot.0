@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C3A109C057
-	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 19:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C231109C05C
+	for <buildroot@archiver.kernel.org>; Wed, 25 Mar 2026 19:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8587C60D7F;
-	Wed, 25 Mar 2026 19:40:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A963607A2;
+	Wed, 25 Mar 2026 19:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dY1a6Xt2p4wc; Wed, 25 Mar 2026 19:40:26 +0000 (UTC)
+ id t32jHSBgx8Kp; Wed, 25 Mar 2026 19:59:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A769260D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D93960AEE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774467626;
-	bh=SidM4K6Q2FG7l8dPpbWyiJ4xOUVwcHT8XKPbga+99xE=;
+	s=default; t=1774468746;
+	bh=wgoxLpY6S384BL6wpm8uSPv9/UQQSf3wxChNj3bj+YA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sHnl8VgdWJ30gefzizwonvh8PuodTqRwdww7gUXSlCY6US0m2Tfc6ENoYMJI0HPFj
-	 5/UceHYkIk0707oxH/nsUNp7J455EYWVCUXTt8iNfQjTggaNef9Hib+H7EFHNCvcX2
-	 eyonVE6P6/LfKomtjPYM3UoD3m8en0TbQjpSlvswM1SL22LT8hoMWIpF/dUb73MlHV
-	 0FCH3/sW79esu9hkbYEVbChckbk7FZJNh+vA8fJxdVlx9PWexd8PuJ19ahlymq/UnG
-	 21MOGVA3I324klcMvH0nsx8Q2UH4MjOq5aQR47Sk0CmOzK36I2Ik0ZFVtCINfc8AoD
-	 v3t8Px4eNU51A==
+	b=bnGPn5IGenrB7sc6zWuHuuS/u9M1aI+AOofmKAa0sX8cmglpIEGegsbd8aRX8rb/u
+	 5whr138MpkCAE6ZyuHa2u1MNV5NbfqxZYBkMTc019VqI7cG2W3QbM8fGOPqrrqQXdf
+	 3KLFLEHQcmrCjrWD6jhg9I08pVnpd/MpeaNFrQwd6Qa/kulxBO7OReA1uUovp/+l45
+	 ETwhjPhhoMcny8Ga4ZpBxNBtORPOvXuXCgOvS1iY2lpd3Lu4dQrEwMaP+NCMNl5bf8
+	 RihaLTkbzcmq4ol88eC3LyHTAHF3WhmNNnc2hxUpeANgFBfgfbQLx4gN8Go3TK4/2o
+	 tHkVlS1kthj1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A769260D56;
-	Wed, 25 Mar 2026 19:40:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DB3A353
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:40:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D93960AEE;
+	Wed, 25 Mar 2026 19:59:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6E48353
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:59:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 991BC60D57
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:40:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C85AB607A2
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eHDnkPKz1HMY for <buildroot@buildroot.org>;
- Wed, 25 Mar 2026 19:40:21 +0000 (UTC)
+ id RmyUs-MNNADb for <buildroot@buildroot.org>;
+ Wed, 25 Mar 2026 19:59:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED33760D7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5821606B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED33760D7F
- for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:40:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5821606B1
+ for <buildroot@buildroot.org>; Wed, 25 Mar 2026 19:59:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D888848AE; Tue, 24 Mar 2026 21:22:47 +0000 (UTC)
+ id 3419F7F887; Wed, 25 Mar 2026 19:59:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Mar 2026 22:14:51 +0100
+Date: Wed, 25 Mar 2026 20:56:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4889d8b1cfcf4ec79487787c61e8033fb74df2c
-X-Git-Newrev: e656b8b6394231e26d18cd9567d25893ffe2868b
+X-Git-Oldrev: 50eca46e3571dda2921d0a2a7d2ee9737f2e82eb
+X-Git-Newrev: 7d26ff6c144e17327351dcf8aa5dfa6181afee85
 X-Patchwork-Hint: ignore
-Message-Id: <20260324212247.3D888848AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] website/lts: fix section on small screens
+Message-Id: <20260325195903.3419F7F887@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nghttp2: security bump to 1.68.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,41 +71,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8426694975745873679=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e656b8b6394231e26d18cd9567d25893ffe2868b
+--===============8426694975745873679==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7d26ff6c144e17327351dcf8aa5dfa6181afee85
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Make the section header take the whole screen size for device with a
-small screen (mobile phones).
+For changelog, see:
+https://github.com/nghttp2/nghttp2/releases/tag/v1.68.1
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Fixes:
+CVE-2026-27135:
+nghttp2 Denial of service: Assertion failure due to the missing
+state validation:
+https://www.cve.org/CVERecord?id=CVE-2026-27135
+
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
+[Julien: add links to changelog and CVE]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- docs/website/css/lts.css | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/nghttp2/nghttp2.hash | 2 +-
+ package/nghttp2/nghttp2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/css/lts.css b/docs/website/css/lts.css
-index 5f05288188..c1e9b198a8 100644
---- a/docs/website/css/lts.css
-+++ b/docs/website/css/lts.css
-@@ -145,6 +145,12 @@
-     scroll-margin-top: 20px; /* Offset for jump to anchor */
- }
+diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
+index 30c2c9078e..6af7b3eecb 100644
+--- a/package/nghttp2/nghttp2.hash
++++ b/package/nghttp2/nghttp2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5511d3128850e01b5b26ec92bf39df15381c767a63441438b25ad6235def902c  nghttp2-1.68.0.tar.xz
++sha256  6abd7ab0a7f1580d5914457cb3c85eb80455657ee5119206edbd7f848c14f0b2  nghttp2-1.68.1.tar.xz
+ sha256  6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
+diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
+index 3db48e7323..50b94582e1 100644
+--- a/package/nghttp2/nghttp2.mk
++++ b/package/nghttp2/nghttp2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+@media screen and (max-width: 768px) {
-+  .br-lts-section-header {
-+    width: 100%;
-+  }
-+}
-+
- .br-lts-section-header:hover {
-     border: 2px solid var(--br-blue);
-     box-shadow: 6px 6px 0 var(--br-blue);
+-NGHTTP2_VERSION = 1.68.0
++NGHTTP2_VERSION = 1.68.1
+ NGHTTP2_SOURCE =  nghttp2-$(NGHTTP2_VERSION).tar.xz
+ NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
+ NGHTTP2_LICENSE = MIT
+
+--===============8426694975745873679==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8426694975745873679==--
