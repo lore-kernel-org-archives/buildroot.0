@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333C510AB827
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3015410AB822
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E43864094A;
-	Thu, 26 Mar 2026 21:14:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h07R6WmVjnCs; Thu, 26 Mar 2026 21:14:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 018AF40E70
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774559694;
-	bh=D7yb3pPpPnhCiOitZM92VaWGf/CVdPyHsEc+05uu3Vo=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=iqnVlWjOJ8VH8B64Ysxo3Jqi83m5UWHwXQuTPAEwG0aarMZN06AE4676BfEDaSm9G
-	 9d5pFjJd0secfQKLQFDCrmCviDPShabXxR6vfSSlV+ZVKl4tFmmJ7Sk9OJ7+QMkgtA
-	 wErdpIVXtQvsYxWgiH4s6YofU/wemktOMOiqGONAjTWvC/Mf8zKWxNpPbV9u+dFLhk
-	 xUIdewN7WUeJfOesYnv/jR/NuqacEhz8ABGTYZJLfPTKtRw7E5INQqrhAemKNbUdOA
-	 yg6hgtnUjLHcTLRjPl4DENusovXUcs3BSgN8z+q6jmItqH/Y8ch8rZX1zKEjPQxUrs
-	 MwtsDtaGVmAlA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 018AF40E70;
-	Thu, 26 Mar 2026 21:14:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02C7C249
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:14:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8EDF80A91
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:14:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD7DE80B1B;
+	Thu, 26 Mar 2026 21:15:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tAwpxN3XiMkq for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 21:14:51 +0000 (UTC)
+ id wsw44s_TTefZ; Thu, 26 Mar 2026 21:15:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09D8C80B2C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774559707;
+	bh=jPSPewZhub6RbT/LQ5K9YAfRnq3ZBUQo4J4e5BpHZQM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ZhDqpCRY48xgO3MDEYZXE2kGKAVsnIFOdJN2HY2DJaaiQvZZjpweMl+6CnGfRs7dO
+	 9pynzdyOkRhrww91FDnXb6AkSkgStWRdfFbIt8vo3+V5O0Tn0uLsw91GNnuMr75l6q
+	 HluvGNLKytUaiQKzOHQa92XJ7uhtC5Kyf1MARBuwBrcsmWd4qbMjrqk4hQ9wJ1O1Y3
+	 Nn4ZJRR0xXb6YR7btDEkz4kM5duY3FwsYJTe9/3deqZbOj57r110zv/ZF8EtxFng3v
+	 wbOpqRzlLHIpAFWpqOkb9opgj4nAxh47Krq6P8tJ6yXPz2b5u1A2+sXiE7l4Zk9FVN
+	 P2FM2XjowvZtg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09D8C80B2C;
+	Thu, 26 Mar 2026 21:15:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C51CE249
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6DA6401E7
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w07XuWARvuO4 for <buildroot@buildroot.org>;
+ Thu, 26 Mar 2026 21:15:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9CFC8098E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9CFC8098E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8DFDE4018F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DFDE4018F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D9CFC8098E
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:14:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8DFDE4018F
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:04 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c201.dip0.t-ipconnect.de [79.214.194.1])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AEDA8A4C0DCF
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 22:14:48 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57776)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B756A4C0DCF
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 22:15:02 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49090)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w5s2S-000000006tz-1dbu
- for buildroot@buildroot.org; Thu, 26 Mar 2026 21:14:48 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w5s2f-000000006wH-3tED
+ for buildroot@buildroot.org; Thu, 26 Mar 2026 21:15:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 26 Mar 2026 22:14:48 +0100
-Message-ID: <20260326211448.3598621-1-bernd@kuhls.net>
+Date: Thu, 26 Mar 2026 22:15:01 +0100
+Message-ID: <20260326211501.3598657-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1774559688;
- bh=m15o7zKgGzHPtzrEoUm6uwEJnEdbP38DHBta9vDGzwk=;
+ s=kas202511301023; t=1774559702;
+ bh=MMXzT4Qmh4fcnxFFvY14tSxDJX+4kcYG+MuivKAFS+E=;
  h=From:To:Subject:Date:From;
- b=K/s8AAHE+kBjpN4nmk70h9qKmMZY7eghT8/oNAtYsWatdEZs3OyG2kJnr9FM6WRwB
- 8dy9QOQkI6tEJUzjqcoDQnnYS/hJVVhKTEJV2EDJmVofyI+aQLZ+NwIgLOShJepm3B
- aWPKFVryD+wLzeq92GJf7+5uTksyUiVbigVZKQwJN9pHiSIHS2h+iyKmekSImg50QP
- KQWPLll0zY78De6vJxsto2M14J4Xm2XGHUBmghrjJY3KQT4moDMbq66wH2iE0fDkY/
- QHn9BuD9infpkeUrbNfEi05DBCcogN7FdqXXeVPKfOiiI8H6eey3TY45kWdNBYk6q8
- HXJJfpwKuLSjw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Jkx2mLGTFH1FrJcxqmQtibxykXHDHQXxs7wAXZFHCNbeWzMN4ZYzZSasJr02ZBHXa
+ 2a9Vp/1pWLUbpX/nuDppy2jeYJzLEkBWRjj4l83xTSmwmZcLZ0jLiagQZv3C9Jaik2
+ 4oGVleajb5QnXY6AzlXAVldf0owL7rIOE8j8tOBBshPdlWBFtXeO2mi7plQ/TZxzz+
+ uKNlvhpOxDaKEYY3NR+THGjocZ5gbpCzbgmiqyeMh5Ua5VP/N/R/RGnJ7A2HCj2lEm
+ 5wQQytyM6hvUcyQHzB+uYIe+QpSwX+KgwyrUoZUFO22XjRplO6MwRD/QgAArUbdWYd
+ 8zsrQ6eS9Mwmw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=K/s8AAHE
-Subject: [Buildroot] [PATCH 1/1] package/freetype: security bump version to
- 2.14.3
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Jkx2mLGT
+Subject: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,43 +96,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://sourceforge.net/projects/freetype/files/freetype2/2.14.3/
-"- A bunch of potential security problems have been found.  All users
- should update."
+https://ccache.dev/releasenotes.html#_ccache_4_13_2
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 520e6c2bcf..9bd01d3ad6 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
--sha1  28200b8f8df5a524f476bdacb20f05da1c33280c  freetype-2.14.2.tar.xz
--sha256  4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1  freetype-2.14.2.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.3/
-+sha1  62e26b89a057ad4f1e28af977945d5c1975a8e67  freetype-2.14.3.tar.xz
-+sha256  36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f  freetype-2.14.3.tar.xz
- 
- # Locally calculated
- sha256  bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index fbf9d13235..634d9107fe 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index d408836c4e..a0c53a8a11 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ccache/ccache/releases/tag/v4.13.1
+-sha256  85638df95c4d3907d9dd686583f2e0b2bd4c232d36e025a5c48e91524b491c4b  ccache-4.13.1.tar.xz
++# From https://github.com/ccache/ccache/releases/tag/v4.13.2
++sha256  4a0d835f1b3fd7e2ac58a511718bbc902532941f377f7990a3d33b5cf8733ba6  ccache-4.13.2.tar.xz
+ # sha256 computed locally
+ sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
+ sha256  072c40891d4ec8e1bcc93420031ebbbeb90b8f2c49fcd7c872d1bb05564c345c  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 1f12123164..8f9d0005fa 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.14.2
-+FREETYPE_VERSION = 2.14.3
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = https://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+-CCACHE_VERSION = 4.13.1
++CCACHE_VERSION = 4.13.2
+ CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
 -- 
 2.47.3
 
