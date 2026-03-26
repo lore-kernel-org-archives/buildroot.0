@@ -4,78 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDB86106F318
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 10:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6910F10A1E77
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 11:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9118A40B86;
-	Thu, 26 Mar 2026 10:15:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AFE440B36;
+	Thu, 26 Mar 2026 11:15:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AO8-4bD-ukXd; Thu, 26 Mar 2026 10:15:05 +0000 (UTC)
+ id MvvJ2T4g-DUc; Thu, 26 Mar 2026 11:15:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1CF740B3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CF5140B15
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774520105;
-	bh=dsvziWXfvjlzLo0ORU04FamjStADau39pymmluW8mIs=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LrGImhGViknEh17lWC3u39nePOOuopIChSnjYupxpgsxI8vXbDGNQmX5IFC6HG8z4
-	 x/4noIBeMqk+X7lGpgw5OLZu5KB5LByKJ1KaX9vvIW7OdMcP3hA4X48ILHucJSlTCg
-	 BTh04VBrIKSPjTFs6Za3MH3iHEhN0VTQ2mEK24GQSorEsp257Yy+L04uIBqdoftFly
-	 eaj+VvMskPphCs4DFI7VFUbo4W9OuaEjjpJb7ZkOKpUQaK9s36tr2hYc7afrWCqOYo
-	 yK6kxJUGoA0rDODKgCHDg1y7ejv5hgvdzsdMO+omODDo60MJH/8H9HtQ6yRFA3PLdj
-	 nWMMUn9uCvb7g==
+	s=default; t=1774523708;
+	bh=KDWQx9Anta/U+HKH10s9fh70ihHGgryzpLqIi3YjqTY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Lw9XhQhxnQYHQ3Lm9YMN1I3tp4Oi4QY5TAc8I/0bESW7tV1DKFu2whnmHZF6829HP
+	 P/2LdNywbkRTuzVzKnBp1cKy8X17wrdzPnXS9aCEbKwfmVEaZG7xwrTi81FBYuksBe
+	 1zV0G3CFFLQGo5RQUpl2nog7hcjZK4/xac1BRYFmN6+YF5RSLBZHkxefuirz/3zTpK
+	 A8veA+zAi9Awku/LSAaUdD3OXtH4OpmGdE+4N+sCoxyhfKZ+jIyKRPnutnQFOx+h4N
+	 NOWBDsWxaWhxV3ZovbH2qt6RMTdykpZ7iwLgQYdjxTsHUqbuLkV24xf+UoLkoJvJYl
+	 XqbjCU9G4Mk6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1CF740B3E;
-	Thu, 26 Mar 2026 10:15:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D7F4A353
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 10:15:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CF5140B15;
+	Thu, 26 Mar 2026 11:15:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 993C5353
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9B81814C6
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 10:15:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7EF12404B8
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:15:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hQgTTBs_TIIP for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 10:15:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.11.138.130;
- helo=gloria.sntech.de; envelope-from=heiko@sntech.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C4548814BC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4548814BC
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C4548814BC
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 10:15:01 +0000 (UTC)
-To: buildroot@buildroot.org, Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
- Heiko Stuebner <heiko.stuebner@cherry.de>
-Date: Thu, 26 Mar 2026 11:14:59 +0100
-Message-ID: <3936876.kQq0lBPeGt@phil>
-In-Reply-To: <d728395d-316b-4ab6-be7e-bba218dcf31a@cherry.de>
-References: <20260325150346.414826-1-heiko@sntech.de>
- <d728395d-316b-4ab6-be7e-bba218dcf31a@cherry.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TLhhPd7F80be for <buildroot@buildroot.org>;
+ Thu, 26 Mar 2026 11:15:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=54.36.140.177;
+ helo=smtpout6.mo534.mail-out.ovh.net; envelope-from=mooz@blockos.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C4B51404A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4B51404A6
+Received: from smtpout6.mo534.mail-out.ovh.net
+ (smtpout6.mo534.mail-out.ovh.net [54.36.140.177])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C4B51404A6
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:15:04 +0000 (UTC)
+Received: from director2.derp.mail-out.ovh.net
+ (director2.derp.mail-out.ovh.net [79.137.60.36])
+ by mo534.mail-out.ovh.net (Postfix) with ESMTPS id 4fhLln4BShz61Xf;
+ Thu, 26 Mar 2026 11:15:01 +0000 (UTC)
+Received: from director2.derp.mail-out.ovh.net
+ (director2.derp.mail-out.ovh.net. [127.0.0.1])
+ by director2.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Thu, 26 Mar 2026 11:15:01 +0000 (UTC)
+Received: from mta2.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.113.125])
+ by director2.derp.mail-out.ovh.net (Postfix) with ESMTPS id
+ 4fhLln3Cs0z1xrF; Thu, 26 Mar 2026 11:15:01 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.6])
+ (Authenticated sender: mooz@blockos.org)
+ by mta2.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 0E7653E149A; 
+ Thu, 26 Mar 2026 11:15:00 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
+To: buildroot@buildroot.org
+Cc: Vincent Cruz <mooz@blockos.org>
+Date: Thu, 26 Mar 2026 12:12:54 +0100
+Message-ID: <20260326111412.78314-2-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=sntech.de; 
- s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
- References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
- bh=0amiXQtoJIwvvZUQTmTpNLbBN9tMtjLlQrN/kdlM2co=; b=KqoVDX3IULu8sZfmatnH0KjZaI
- I3z8oWtWLxopmQjSxFxnyPLQSEK13zuY3k28zUAlHpn3y7adaA/DFdzw4wqC8u6GZcmFZ157B9JaY
- 4XgskXZPpjIK6oQxeRRIL66StVUk9H328AATC7y9l8C4h4OgYNGTanAlIGsk3UfCJTG66/cM6YnJN
- BPEfduE5dNGDvBX++lmADmiZ1IpgmhWSR/kRGha+WRARvo5TAv2fHX+AmoiJ8wszDxCTfqDzfyHcR
- KJZhrmI4IHI6yTvgxumt3ZpFlIDsWQhyvR7TJWNJPBBi/fAbSNDuExihiKGVMAA4BydFWTRAnY2jd
- NCiDgFyQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=sntech.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=sntech.de header.i=@sntech.de header.a=rsa-sha256
- header.s=gloria202408 header.b=KqoVDX3I
-Subject: Re: [Buildroot] [PATCH] package/arm-trusted-firmware: add
- ARM_TRUSTED_FIRMWARE_CPE_ID_*
+x-ovh-tracer-id: 1528127651294596045
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: dmFkZTE9TzWv+3FRBPN/KjfruV2iHGJHXfpedUbTxRP298GL1y1G3VqPoDkwLa9eFn4ms3Juv78iyiCdkOymPTve1uqZazQ2U0ErEYvupX9sJyFjob4dWAoZwZ7g9CaXaGlvOV6Ucc0u2AFyRPcMiYE6A91mBwz71rfD5yxVPnyFuDhV+nX2QkyPEYULA1/zB+RcWiFqIxno2BrYeylz6SjkWU8S6iRaaII2mo0T9H84CxvPUgNa8H2t7xyABwwxShFYIuR+9BM4Z+DSyjYckVZbNbZJ8Id8vfQ8tvv/mNpMkOCBd5KR+1HB4Ka9cvSQHjA97BqngUmPjbU4UolGwsk9dlv1aziPZHHs3hKVbnIAIWN1c20KPPlj7s9uFZlXrtrqfI3cZ7T5ZnUoUZSHc9MT2SG5Gd+0MMCUws4vFNYNo6o3ImnWKIQt9kPbVbiyHRWUnEE/oq4BRR0CSzTGVEVK5sHI9kcNSo6Oh1OgQL10UquFf+OfR5zQqBrmuF10yJReA85iu/ezS+cbx8I6TL2613ajLv3ks4nowBt0wLFI9jKzoI1Ik0+BVnmjbbfdmdX5MR+C4yPzF6g7hgL8+wqYk/Rp6qAMEx5Yzh1+m67eMtNiy2gYE3IpOYPUPjejyGId/PDtV+vcwHgvUIU2QD465agil9P4jycdJ4CX8gZ9MX0hGw
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-114S0080109791c-7310-474a-bd92-cfd4aad63402,
+ 46696CBB4EEABC9EFA8DF8527D371D8007EF4257) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] package/rwmem: bump to version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,32 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Heiko Stuebner via buildroot <buildroot@buildroot.org>
-Reply-To: Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gTWl0dHdvY2gsIDI1LiBNw6RyeiAyMDI2LCAxOToxMjozMyBNaXR0ZWxldXJvcMOkaXNjaGUg
-Tm9ybWFsemVpdCBzY2hyaWViIFF1ZW50aW4gU2NodWx6Ogo+IEhpIEhlaWtvLAo+IAo+IE9uIDMv
-MjUvMjYgNDowMyBQTSwgSGVpa28gU3R1ZWJuZXIgd3JvdGU6Cj4gPiBGcm9tOiBIZWlrbyBTdHVl
-Ym5lciA8aGVpa28uc3R1ZWJuZXJAY2hlcnJ5LmRlPgo+ID4gCj4gPiBUcnVzdGVkLUZpcm13YXJl
-IGhhcyBiZWVuIHVzaW5nIGEgbnVtYmVyIG9mIENQRSBpZGVudGlmaWVycyBpbiB0aGUgcGFzdAo+
-ID4gYnV0IGVzcGVjaWFsbHkgYWZ0ZXIgdjIuNCwgdGhlIGNvcnJlY3QgaWRlbnRpZmllciB3b3Vs
-ZCBiZSBzaW1pbGFyCj4gPiB0byBjcGU6Mi4zOm86YXJtOnRydXN0ZWRfZmlybXdhcmUtYToyLjEy
-OnJjMDoqOio6LToqOio6Kgo+ID4gCj4gPiAgICBodHRwczovL252ZC5uaXN0Lmdvdi9wcm9kdWN0
-cy9jcGUvZGV0YWlsLzY1REVDMjMwLTFDRDUtNDBEQi05MDNBLTIyNTM3RDFFNDRGRQo+ID4gCj4g
-PiBBZGQgdGhlIHJlbGV2YW50IENQRSBmaWVsZHMgdG8gdGhlIHRydXN0ZWQtZmlybXdhcmUgcGFj
-a2FnZS4KPiA+IAo+IAo+IFRoaW5raW5nIGFib3V0IGl0IGEgYml0IG1vcmUsIEkgKip0aGluayoq
-IHdlIG1heSB3YW50IHRvIHN0cmlwIGx0cy0gCj4gcHJlZml4IGZvciB0aGUgQ1BFX0lEX1ZFUlNJ
-T04uIEkgZG9uJ3Qgc2VlIGFueSB2ZXJzaW9uIHBhc3QgMi40IG9uIE5WRCAKPiBzbyB3ZSBjYW5u
-b3QgcmVhbGx5IGtub3cgd2hhdCB0aGV5J2xsIGRvIG9uY2UgdGhleSBuZWVkIHRvIHRhY2tsZSBM
-VFNlcywgCj4gYnV0IEkgYW0gYXNzdW1pbmcgdGhleSBhcmUgTk9UIGdvaW5nIHRvIHVzZSB0aGUg
-bHRzLSBwcmVmaXg/Cj4gCj4gV2hhdCBkbyB5b3UgdGhpbms/CgpJIHRoaW5rIHlvdSdyZSBxdWl0
-ZSByaWdodCA6LSkgLgoKSSBhbHNvIHJlYWxpemVkIEkgbWVzc2VkIHRoZSB2ZXJzaW9uaW5nIGFu
-eXdheSBhbmQgZGlkIG5vdCByZW1vdmUKdGhlICJ2IiB0byBtYXRjaCB0aGUgdmVyc2lvbiB1c2Vk
-IGluIENQRXMuCgpEb25lIGJvdGggbm93IGluIHYyLgoKVGhhbmtzIGZvciB0aGUgcmV2aWV3Ckhl
-aWtvCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+For more details, see:
+https://github.com/tomba/rwmem/compare/c89bc9ad9...2.0
+
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
+---
+ package/rwmem/rwmem.hash | 3 ++-
+ package/rwmem/rwmem.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/rwmem/rwmem.hash b/package/rwmem/rwmem.hash
+index da74002cb4..8b73f662ea 100644
+--- a/package/rwmem/rwmem.hash
++++ b/package/rwmem/rwmem.hash
+@@ -1,2 +1,3 @@
+-sha256  e6cb76b77869aef9ec4a2c31d0d80af0182a5f9c9c3ae06225c8fb2f8266379f  rwmem-c89bc9ad9a8f2359f358c510db57b7678eb156d1.tar.gz
++# Locally calculated
++sha256  d10639f563100c819202337c4d4df57db11c2fcd59a19b0c68e34b8eb9aa1d01  rwmem-2.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rwmem/rwmem.mk b/package/rwmem/rwmem.mk
+index d6ef05193b..1259b5503f 100644
+--- a/package/rwmem/rwmem.mk
++++ b/package/rwmem/rwmem.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-RWMEM_VERSION = c89bc9ad9a8f2359f358c510db57b7678eb156d1
++RWMEM_VERSION = 2.0
+ RWMEM_SITE = $(call github,tomba,rwmem,$(RWMEM_VERSION))
+ RWMEM_LICENSE = GPL-2.0
+ RWMEM_LICENSE_FILES = LICENSE
+-RWMEM_CONF_OPTS = -Dpyrwmem=disabled
+ RWMEM_DEPENDENCIES = host-pkgconf fmt inih
+ 
+ $(eval $(meson-package))
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
