@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8951F10ED640
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D96610ED64F
 	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:01:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E91B6131E;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75180416B6;
 	Fri, 27 Mar 2026 10:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b7x8ruMaOMZA; Fri, 27 Mar 2026 10:01:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d3i5KH5i9F4F; Fri, 27 Mar 2026 10:01:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08D87612E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B44B416C2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605710;
-	bh=kNtlzgltxJOd5SJ3NzkR4G9AyJnI9Ics7yUjeSkJE64=;
+	s=default; t=1774605711;
+	bh=a+BvnmhBQ/r9u/pciXZNAXAx4kPh3x9Etk7VZr1EA/4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=k2Lk9rkX/U3d8TsqgKI7GnT/Ru7FymkERQgMGMSKD/UoHDej2WlHT7cDq4BolRA1T
-	 OR0ZMYZmHwYABIavfplPstUnFk+kv+KUa4Pi6ri6RgJR7Y06WRlhue3LmeUYztY9Z4
-	 MYAAOWvpkSYtf+H+OtuL0ah60vSKhlda7ag/9LCD7I3od52UV0F+kjZYKPIVlvWMdF
-	 hEc/MeakZCcvMDTcSeQDdqfiIv3SEI44nRXfo8jYGyk1ovc02FR+ayHEG0z4y9mz/g
-	 NH6iIpLCkd3689Zdaj/WF+waKfo5IN3EV8HwKiqoRa+wPWsrSPicA/ZbEOBYpDhD56
-	 WnkBNXIYqRZgA==
+	b=lDw0z0C8ldwlJYi0MQ1lQV1+BXpPhETuF5IV7IuvSKIFqHpoD1QjKyedlzdaBisbV
+	 W4/df1f8ZkUwIBVdnKLZo+uxig/YmbHwFTJ9I10KyPIMIWt7u63sQItdCsGn55lJGA
+	 yD63lnYbFYowv2L5l0qrj4kqXux5adQNuLAfGQMkzJgQGqYnIFZx093wnwwcmkrax2
+	 NGkmgiasEbEXNqCwfywxbBriRDbcfH6gj/zUlH7WMOh7DBUuzEyXRVOt2Ifkt71uwb
+	 lvE+MMe6dAUg9RDFjP3RmAjCJqgIhausY7Cl0c+WJ78IHsIu6DnRKit0XvQtwE+WKj
+	 fCT67MFYIHApw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08D87612E0;
-	Fri, 27 Mar 2026 10:01:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 56D05249
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B44B416C2;
+	Fri, 27 Mar 2026 10:01:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 612E8353
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48FF183D61
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1A1C405EB
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NiWDRaO6yt42 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fgkNskL-8kPc for <buildroot@buildroot.org>;
  Fri, 27 Mar 2026 10:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFADA83D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0783340BD7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFADA83D5E
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0783340BD7
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D2737FBC6; Fri, 27 Mar 2026 10:01:41 +0000 (UTC)
+ id 5A9377FBBE; Fri, 27 Mar 2026 10:01:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Mar 2026 17:07:37 +0100
+Date: Thu, 26 Mar 2026 17:07:43 +0100
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: efc22bcd2c18ba00335f7e076434cb34684d28e6
-X-Git-Newrev: 75c2df66f664428abb39836fe9b8bf5b9cfcc2a1
+X-Git-Oldrev: 2294bcbc275794b2ff848bd83cfcbb285cd33e8f
+X-Git-Newrev: 6980799e92d2ab8ffbb780f90834f06d1c3c8f93
 X-Patchwork-Hint: ignore
-Message-Id: <20260327100141.3D2737FBC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/zfs: add patch to
- fix build with uclibc >= 1.0.57
+Message-Id: <20260327100141.5A9377FBBE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ support/scripts/generate-cyclonedx: add source attribute to CVEs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,89 +77,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/75c2df66f664428abb39836fe9b8bf5b9cfcc2a1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6980799e92d2ab8ffbb780f90834f06d1c3c8f93
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-uclibc 1.0.57 added a statx() syscall wrapper in upstream commit [1].
+Add 'source' attribute to each CVE in vulnerabilities node, including NVD
+URL reference to enable proper import into Dependency-Track.
 
-zfs fail to build with uclibc 1.0.57 (not yet in Buildroot), because:
-1. uclibc <fcntl.h> internally includes <sys/stat.h>, and
-2. a zfs test redefines a statx() wrapper with a slightly different
-   prototype.
+Dependency-Track's VEX importer requires the source attribute to
+properly process vulnerability entries. Without it, vulnerabilities are
+skipped during import with "does not have an ID and / or source" warnings.
 
-In that case, zfs fails to compile with error:
+Include the full NVD URL following the CycloneDX 1.6 documentation format:
+https://nvd.nist.gov/vuln/detail/{CVE-ID}
 
-    tests/zfs-tests/cmd/statx.c:58:1: error: conflicting types for 'statx'; have 'int(int,  const char *, int,  unsigned int,  void *)'
+Test Environment:
+- Buildroot: 2025.02.11 (or master)
+- Dependency-Track: v4.13.6
 
-Issue has been reported upstream at [2].
+Test Results - BEFORE (without source attribute):
+apiserver_1  | 2026-02-23 16:05:40,890 INFO [VexUploadProcessingTask] Processing CycloneDX VEX uploaded to project: e43fe185-c0a3-4e3a-a908-667344a66a9c
+apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #0 does not have an ID and / or source; Skipping it
+apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #1 does not have an ID and / or source; Skipping it
+...
+apiserver_1  | 2026-02-23 16:05:40,941 WARN [CycloneDXVexImporter] VEX vulnerability at position #19 does not have an ID and / or source; Skipping it
+apiserver_1  | 2026-02-23 16:05:40,941 INFO [CycloneDXVexImporter] The uploaded VEX does not contain any applicable vulnerabilities; Skipping VEX import
 
-This commit adds a package patch to fix that issue.
+Test Results - AFTER (with source):
+apiserver_1  | 2026-02-23 16:17:13,492 INFO [VexUploadProcessingTask] Processing CycloneDX VEX uploaded to project: e43fe185-c0a3-4e3a-a908-667344a66a9c
+apiserver_1  | 2026-02-23 16:17:14,054 INFO [VexUploadProcessingTask] Completed processing of CycloneDX VEX for project: e43fe185-c0a3-4e3a-a908-667344a66a9c
 
-[1] https://github.com/wbx-github/uclibc-ng/commit/d3a819aff25af436e22abd5ba01ff2cfc0631b32
-[2] https://github.com/openzfs/zfs/pull/18316
+CVEs are correctly imported in Dependency-Track
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b6884913ae5e342e6ab3c8926447bde158e62de9)
+Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Acked-By: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 3a5e70d1d123d8fd0f1843de47fc1cd7a66ae445)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...s-tests-cmd-statx.c-avoid-statx-conflicts.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ utils/generate-cyclonedx | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/zfs/0001-tests-zfs-tests-cmd-statx.c-avoid-statx-conflicts.patch b/package/zfs/0001-tests-zfs-tests-cmd-statx.c-avoid-statx-conflicts.patch
-new file mode 100644
-index 0000000000..98f905aa48
---- /dev/null
-+++ b/package/zfs/0001-tests-zfs-tests-cmd-statx.c-avoid-statx-conflicts.patch
-@@ -0,0 +1,49 @@
-+From d363aafe0a773cd55890a385694cf05cb6225c5a Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sun, 15 Mar 2026 13:18:07 +0100
-+Subject: [PATCH] tests/zfs-tests/cmd/statx.c: avoid statx() conflicts
-+
-+With some libc, such as uclibc >= 1.0.57, the libc defines the statx()
-+function, while also internally including <sys/stat.h> (from <fcntl.h>
-+from example), which results to a compilation error due to conflicting
-+types.
-+
-+This commit fixes the issue by only defining the statx() prototype only
-+if the libc was detected not to have a working statx() wrapper, and
-+explicitly include the <sys/stat.h> otherwise.
-+
-+Upstream: Discussed in: https://github.com/openzfs/zfs/pull/18316#issuecomment-4062904581
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ tests/zfs-tests/cmd/statx.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/tests/zfs-tests/cmd/statx.c b/tests/zfs-tests/cmd/statx.c
-+index 1acc7e58c..c292fdbdf 100644
-+--- a/tests/zfs-tests/cmd/statx.c
-++++ b/tests/zfs-tests/cmd/statx.c
-+@@ -34,6 +34,9 @@
-+  * statx() may be available in the kernel, but not in the libc, so we build
-+  * our own wrapper if we can't link one.
-+  */
-++#ifdef HAVE_STATX
-++#include <sys/stat.h>
-++#endif
-+ 
-+ #ifndef __NR_statx
-+ #if defined(__x86_64__)
-+@@ -54,9 +57,11 @@
-+ #endif /* __NR_statx */
-+ 
-+ 
-++#ifndef HAVE_STATX
-+ int
-+ statx(int, const char *, int, unsigned int, void *)
-+     __attribute__((weak));
-++#endif
-+ 
-+ static inline int
-+ _statx(int fd, const char *path, int flags, unsigned int mask, void *stx)
-+-- 
-+2.53.0
-+
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 2b6c6d63d3..35198a47cf 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -327,6 +327,10 @@ def cyclonedx_vulnerabilities(show_info_dict):
+ 
+     return [{
+         "id": cve,
++        "source": {
++            "name": "NVD",
++            "url": "https://nvd.nist.gov/vuln/detail/" + cve
++        },
+         "analysis": {
+             "state": "resolved_with_pedigree" if cve in VULN_WITH_PEDIGREE else "in_triage",
+             "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
