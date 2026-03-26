@@ -4,82 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5067910AB822
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6B9D10AB822
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1903940E70;
-	Thu, 26 Mar 2026 21:15:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95C6440E95;
+	Thu, 26 Mar 2026 21:15:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DSp71fSeQNqV; Thu, 26 Mar 2026 21:15:30 +0000 (UTC)
+ id 5dBgjMOqqcdZ; Thu, 26 Mar 2026 21:15:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B45740B5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40CD84017F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774559730;
-	bh=WhcP1qltHfAtV/ipS1DBTly/bka3awt1NAibWp6Zc9o=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=P9Ua1hM+TzZC4zuo3c/5ekw71/ryVFLUyY/MWVOaIk8CTIUjyiBTkXVPKZWpMQmds
-	 HXwnV4LckzIm73jPnJJGUY8lWKhTK1d09Z7zF8pSilExvkrrkmMpZQaoD0Lb3Z8slg
-	 oGGyi0sA+htH3SIfCz/qESUXN2tKrm9wF6HLPfXAfXJ6CLyNBvycWKytkvYxb/dBd2
-	 1Znysf+yeK+HX1uzndBKW05rB8bOdKiu2umt5Z8Z7937byc/AyCRdPvjuVi8RrkxW6
-	 XqaTf8Eg3fn9xiL5KTfp3hn0Pft4oRHIYxhZZRNWj/9KVtzXOfm1MqPrB92gNG4git
-	 VLyIMzHv+l01Q==
+	s=default; t=1774559743;
+	bh=cc/ubu6JFRx2Lwu4J8hMrNSW+rOAq8s63RwohhTmNks=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=dNCoNf8kwCnm+yWwZpCm4Q23ovJDXAuOFskRzUtEu+KgtPSYBF1ZWmsV7AcKet32z
+	 62YPhILjsD48ji4fjQ8e2C+tc+IjJl6y7Yjs0a8X0JH1+29TWvzC+/Dny34pOfkTpK
+	 5O8lloifBuAapms1ZLF4fwKN0obo4Wd8GzOXXFmc8PtMQw/dWVPDKF6+IuYfvxa/7y
+	 LHoM6l/tIuN/1Bi7bbx7QtAdRHhunbuINjbTGjdQsTQ3RnPmiA3eIFx3MSBdtPXrIt
+	 Xbsxr4NctYS9kYiDCNjiNpgUHdQZG1rUqUAd7Er8rMZzNYDRH3X/XOlkWYinP2PsGR
+	 pV/mwPzg4z2kw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B45740B5F;
-	Thu, 26 Mar 2026 21:15:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3061C2D5
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40CD84017F;
+	Thu, 26 Mar 2026 21:15:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F0FA249
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16B1A40754
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6070740754
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VqH2yM6F4EsO for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 21:15:28 +0000 (UTC)
+ id n3QLGea2B1kj for <buildroot@buildroot.org>;
+ Thu, 26 Mar 2026 21:15:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BF1F740713
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF1F740713
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 526C540713
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 526C540713
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BF1F740713
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 526C540713
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:15:40 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c201.dip0.t-ipconnect.de [79.214.194.1])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3663EA4C0DCF
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4889EA4C0EF5
  for <buildroot@buildroot.org>; Thu, 26 Mar 2026 22:15:25 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:49662)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w5s32-0000000070b-3bxa
+ (envelope-from <bernd@kuhls.net>) id 1w5s32-0000000070b-3stV
  for buildroot@buildroot.org; Thu, 26 Mar 2026 21:15:24 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 26 Mar 2026 22:15:22 +0100
-Message-ID: <20260326211524.3598703-1-bernd@kuhls.net>
+Date: Thu, 26 Mar 2026 22:15:23 +0100
+Message-ID: <20260326211524.3598703-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260326211524.3598703-1-bernd@kuhls.net>
+References: <20260326211524.3598703-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1774559725;
- bh=RVsCj9+2nKXYdSumRQMiGPZb7INE49gy8YlOYrWA8PI=;
- h=From:To:Subject:Date:From;
- b=WHprmZ072c+eGNEDP2u67KgdIDSJ/z1zQuTwUL/IIZRfwwXlioXmU53dc9/g+1A2y
- 64ocrUW9WbthzHyIL7L9fZLutDeR1Nl9kB8WkDnCqC17KPyg+jh6ukutmpuSjQlAxk
- HBW0y9N89W63pWU9qGijZvazrfmVFE1QgideLSzduNAvKd9wXfmBICZ0VU8GmpwsKX
- 0LpEC86sHt0qUf+aMT776xDbN5YqHiqg/MfeVFKabTnq8T36QMlkXAfdOlpVjr1O2E
- QY4icrSFqDXHZTZu0CS98eF9Si5jD7+H8/jDLOmu7JevSYOKQ/KMCsMJIlrmkHe61R
- TQ/e4ptUTqF7g==
+ bh=uZfw+nrffhVkrTlhuxGgtbzRPGISI+Q9y5kNEbYxxb0=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=eDKF220SbCIp/w8nGJnUSa/8J3e53ooZ6VvPe1MzLQK/Tw9rbQmkA5N5v+G5FVURM
+ Fp0pPoBciTArjTIWskrlx3gC0irN0ua88lAFdSruJedErfXimCismReck2vwlmRQJS
+ 3suhUC6azYpTt6f8ZakX1v48JI5vZYSWC49Onpp/SmsicPcdUW250NbMyVcK7Zf72i
+ IA9pDTuahW3P32xVVC/rk2Lr+J/4CK3fCA+6W4v9GxrMCoL4pAOmylJ1KEJdCJwAHu
+ t32TRT7SyNI13yZsevkOlM+S4ghv3mKMRDqP0mzQ68Ii0nOuHiF/aJfZKNKHGxwMx8
+ L2mTqBYU3sd/w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=WHprmZ07
-Subject: [Buildroot] [PATCH 1/3] package/intel-mediadriver: bump version to
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=eDKF220S
+Subject: [Buildroot] [PATCH 2/3] package/intel-vpl-gpu-rt: bump version to
  26.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -97,36 +99,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/intel/media-driver/releases/tag/intel-media-26.1.5
+https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.1.5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 350a3c8761..d0f0d36eb6 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index 38e8c14064..3043ae6df0 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  dd9132c69d68702b87520d9f4a4ee51796d67cb164e8befbcd024257369edba7  intel-media-26.1.4.tar.gz
-+sha256  c56899fecc003d047ce6afbdf471851512e0ceac66c2ef22ac36f1e6ce46170c  intel-media-26.1.5.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index a3f64d0542..52a9d1d99c 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+-sha256  1d567932451ed179a7f146677a48219cdc241787dcc72528e7ae8bff2804b8a1  intel-vpl-gpu-rt-26.1.4.tar.gz
++sha256  d2f297dc03d4e5585bee75ce3bafc5c8a35b30ac60ff7d6b49c1ed6f6b8152a3  intel-vpl-gpu-rt-26.1.5.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index bb0a83f730..2c496ad220 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 26.1.4
-+INTEL_MEDIADRIVER_VERSION = 26.1.5
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-INTEL_VPL_GPU_RT_VERSION = 26.1.4
++INTEL_VPL_GPU_RT_VERSION = 26.1.5
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
