@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33F6210AB822
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 20:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD0310AB81D
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 20:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33ECA60E93;
-	Thu, 26 Mar 2026 20:16:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE05960EDF;
+	Thu, 26 Mar 2026 20:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yz-wue-LcAS7; Thu, 26 Mar 2026 20:16:22 +0000 (UTC)
+ id H304iILKbYNs; Thu, 26 Mar 2026 20:16:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9403D60E9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DD5860E73
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774556181;
-	bh=exky4jey8dyBM9SwVC8VTL3L8HkIUr1wLfes7aei7aE=;
+	s=default; t=1774556180;
+	bh=7eeZTIVHNJssl266U37ojTMl+OWWnPkYOb6lYprCaaA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NPpzistjyW9iLPeT4BaBILQoq3B92zVAyDr6Ju/GppXnoja7IlPAL2kXY8ol91ASu
-	 oyyHi3P27lJ8Xsw3a9YPnDfVSE6KOil+nAejiLdhoEFVyhLl2g0y/PDH0xkfdyLLbh
-	 7GwTcQ19Ofq9qWviM3Qn4OxBtwK66kswT45k07vBt2IyjJx6rZlnskHhOpm3vTAbZG
-	 LjeY9x+leAHeLmblL4DIp+yGHenCcHHUvs0+53Qjd0iR+RYjKHJULESNus+dG3H+su
-	 88CHVAoCPJRKTjCgTizIjBKyIYl92+90rf0W96BYjosj/AfyVcniw6MlcZ0Ve72zny
-	 h6cTw1t+Fb3XQ==
+	b=EXA8wWlSMbpNuMi4waaV0RMcrqzFdl9dEyO1eM1Ix3HERT3s4nuf+u+Qi+BQ45mb1
+	 zgxpv13FqGFO8sV6cTbDv/UslpVDg7bKfBbx4crLIWitGiOuSfckWNzWb72SgY3e0l
+	 B3rlkG41RFTAwbeMSJ7fz4rc71B8XHtAx3+HadKXJudYWorcqBh3xWQr6paVxEWOyl
+	 /j5oSj5eiNf5xSELtSGe1uktfZeYRs6pEZtxpW9GjnLh3/uj+n4Lnnh53HaQSQ5NIW
+	 LZ/U6uXJdGePAb9hBHUfpAboeDEL3Q1XbCfi6sWSZR1z2RTcSND0LDo8o4vHZd8SCO
+	 iMx+NtTnb0Ibw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9403D60E9D;
-	Thu, 26 Mar 2026 20:16:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E32403A5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DD5860E73;
+	Thu, 26 Mar 2026 20:16:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE16B1D3
  for <buildroot@buildroot.org>; Thu, 26 Mar 2026 20:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C969881303
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF85C60E73
  for <buildroot@buildroot.org>; Thu, 26 Mar 2026 20:16:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VgZtCoPcg-V1 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B_Tmfl2xVll6 for <buildroot@buildroot.org>;
  Thu, 26 Mar 2026 20:16:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7E3181418
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B896760E65
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7E3181418
+ by smtp3.osuosl.org (Postfix) with ESMTP id B896760E65
  for <buildroot@buildroot.org>; Thu, 26 Mar 2026 20:16:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F19797FA5F; Thu, 26 Mar 2026 20:16:16 +0000 (UTC)
+ id 053DB7FA66; Thu, 26 Mar 2026 20:16:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 26 Mar 2026 21:07:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4749b83e59910eb13b72db6d093d37940f7a747b
-X-Git-Newrev: a667cbe134d3be2e9ad3866a984eefba18ed6e61
+X-Git-Oldrev: a667cbe134d3be2e9ad3866a984eefba18ed6e61
+X-Git-Newrev: 0ce674c2449fd506b4836a80ec0d78c2862d353d
 X-Patchwork-Hint: ignore
-Message-Id: <20260326201616.F19797FA5F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: add security contact
- information on the homepage
+Message-Id: <20260326201617.053DB7FA66@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] SECURITY.md: add new file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,35 +76,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a667cbe134d3be2e9ad3866a984eefba18ed6e61
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0ce674c2449fd506b4836a80ec0d78c2862d353d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+This is an in-tree description of Buildroot's security policies
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- docs/website/index.html | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ SECURITY.md | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/docs/website/index.html b/docs/website/index.html
-index d68436c721..027fd485e0 100644
---- a/docs/website/index.html
-+++ b/docs/website/index.html
-@@ -148,4 +148,15 @@
-   </div>
- </div><!-- /container -->
- 
-+<div class="container">
-+  <div class="row mt centered">
-+    <div class="col-lg-6 col-lg-offset-3">
-+      <h1>Security</h1>
-+      <h3>To report a security vulnerability, please send an email to
-+	<a href="mailto:security@buildroot.org">security@buildroot.org</a>.</h3>
-+    </div>
-+  </div><!-- /row -->
-+  <hr>
-+</div><!-- /container -->
+diff --git a/SECURITY.md b/SECURITY.md
+new file mode 100644
+index 0000000000..6b21ffd2b9
+--- /dev/null
++++ b/SECURITY.md
+@@ -0,0 +1,36 @@
++# Security Policy
 +
- <!--#include file="footer.html" -->
++## Security advisories
++
++Advisories for Buildroot security vulnerabilities are reported on the
++developer's mailing list. A public archive can be consulted on
++https://lists.buildroot.org/mailman/listinfo/buildroot
++
++Buildroot itself has a CPE to track its published vulnerabilities:
++https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=buildroot
++
++The Buildroot project provides some ways for its users to track known
++vulnerabilites in the packages included in the generated images, see:
++- https://nightly.buildroot.org/manual.html#_details_about_packages
++
++In addition, detailed informations for all packages integrated with Buildroot
++are updated daily on the following public web pages:
++- https://security.buildroot.org/
++- https://autobuild.buildroot.org/stats/
++
++## Reporting a Vulnerability
++
++To report a security vulnerability found in the Buildroot build system itself,
++please send an email to [security@buildroot.org](mailto:security@buildroot.org).
++
++This is a private mailing list contacting the Buildroot maintainers only.
++
++## Vulnerabilities in packages
++
++Buildroot is a build system that cross-compiles packages from third-party
++sources. The Buildroot developers are not responsible for security
++vulnerabilities in these packages. Such vulnerabilities should be reported
++directly to the upstream project that maintains the affected package.
++
++When vulnerabilities are fixed upstream, send a patch to update the affected
++packages in Buildroot.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
