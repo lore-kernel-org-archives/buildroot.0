@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E552110ED64F
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D66810ED652
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:02:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B29F8613A3;
-	Fri, 27 Mar 2026 10:02:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04272416E3;
+	Fri, 27 Mar 2026 10:02:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gO57wK9jXkkY; Fri, 27 Mar 2026 10:02:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n8jdZFwmIIUI; Fri, 27 Mar 2026 10:02:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B297E613A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3157341699
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605721;
-	bh=h/19q0jE9YCQyQgfajuagFwX+qC9WCgpxWJBbYjGIIE=;
+	s=default; t=1774605723;
+	bh=0B0jDPzum5nagPWlu5VR3Hcu0JZfmmNvsFA7mwDaUi4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Xu0y1FIIHoljLNAOo/xdb7zGQirpC9u40/ioKY2cfdRYUJX0ErzULVxF82bWJc9Xm
-	 b4RnWQqYug5xLfVqckPrT2+30mPY1ZcGdpZd7GNBxgn6bA9v9maQMiHF7p7yueRTrF
-	 o2q4QNRN60JZpHyMSA1WgslcAx1Lluj5qENgYKC73ARbHl3tYXZklKN5oPvIXv0DI7
-	 x4X1iSEqKomHDmDsDUVZDfMhbvsFuKVHp7f4fFUeoAIFbJvSwSY+3iOcJhF2ub8Hfj
-	 RwY6/of0RD7S71Y5PKBCsJO9TLRt2dm2M+5KiUo62+VLCyDIGnbKsogrLt+d3DQJza
-	 K35AlRYUTWsBQ==
+	b=b7N05FhIHfbjGyl+pi6LlfY3bK1S2t/QEH5z6TPSiHNjI18sa21ltoF0wNfkgbgRJ
+	 D1n7ZWhFMc78C48Yv2XJ0EcgEoSJDivdeu8tuHj/jFn3QNbh6qPvUsln1ouGqmanPz
+	 ZFF2gvMpBBOYmiPMLlDNWtFRZ+ePeYndY2oFNBaX8pVVOJoszf6VOLrDfA8WD2oUia
+	 Eiei3ZfBcLJxwp5UwNgLbqALztFEKJXgLLF0ilA+Df21WXsoGULGBzCC50xWpWgR93
+	 TDZjwLX/TR/3DnVmzM4ay+vfvNTVH/S0g8WYqiZ8ODBxwgLgt4RZMOaCbCvM7WhJzr
+	 QkanN2sNv0oWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B297E613A4;
-	Fri, 27 Mar 2026 10:02:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3157341699;
+	Fri, 27 Mar 2026 10:02:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E4DCF249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D49C1D3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5B2940BE2
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2397440BD9
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GUAEBYCA51IJ for <buildroot@buildroot.org>;
+ id Dcm_T5OyVueH for <buildroot@buildroot.org>;
  Fri, 27 Mar 2026 10:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 113D640BD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 441D140BDF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 113D640BD9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 441D140BDF
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:01:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64F5B7FBB8; Fri, 27 Mar 2026 10:01:41 +0000 (UTC)
+ id 97F497FBBB; Fri, 27 Mar 2026 10:01:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 26 Mar 2026 17:07:46 +0100
+Date: Thu, 26 Mar 2026 17:07:56 +0100
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 6980799e92d2ab8ffbb780f90834f06d1c3c8f93
-X-Git-Newrev: 8061b9f4f76f44d7dccc6f6904a7a1d35972e6ad
+X-Git-Oldrev: 0251ef146676d3fe14a9eaac50e087b1428aeba8
+X-Git-Newrev: b17368f7c11b09e24f2f72bde5309fba2d08f20a
 X-Patchwork-Hint: ignore
-Message-Id: <20260327100141.64F5B7FBB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/mesa3d: add
- EGL_WL_bind_wayland_display support
+Message-Id: <20260327100141.97F497FBBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/expat: security
+ bump version to 2.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8061b9f4f76f44d7dccc6f6904a7a1d35972e6ad
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b17368f7c11b09e24f2f72bde5309fba2d08f20a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-This feature was made optional in mesa3d 25.2.0 as it is deprecated,
-however some packages still require it so lets add a new config
-option that those packages can select until they no longer require
-this feature.
+https://github.com/libexpat/libexpat/blob/R_2_7_5/expat/Changes
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 026074163934a5d563449cacf1d3d6768f8b5caa)
+Fixes CVE-2026-32776, CVE-2026-32777 & CVE-2026-32778.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 763b9c289e36eedc0ac43791e9a367e01b16b038)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mesa3d/Config.in | 6 ++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 9 insertions(+)
+ package/expat/expat.hash | 4 ++--
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index e1faea95d5..8a7811b6a5 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -50,6 +50,12 @@ comment "llvm support needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 7536e7cb1d..37a9c2ab9f 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/libexpat/libexpat/releases/tag/R_2_7_4
+-sha256  9e9cabb457c1e09de91db2706d8365645792638eb3be1f94dbb2149301086ac0  expat-2.7.4.tar.xz
++# From https://github.com/libexpat/libexpat/releases/tag/R_2_7_5
++sha256  1032dfef4ff17f70464827daa28369b20f6584d108bc36f17ab1676e1edd2f91  expat-2.7.5.tar.xz
+ # Locally calculated
+ sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 215c34e9cf..68af751233 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY
-+	bool "Legacy Wayland EGL_WL_bind_wayland_display support"
-+	depends on BR2_PACKAGE_WAYLAND
-+	help
-+	  Legacy Wayland EGL_WL_bind_wayland_display support.
-+
- menuconfig BR2_PACKAGE_MESA3D_OPENCL
- 	bool "OpenCL support"
- 	depends on BR2_PACKAGE_MESA3D_LLVM
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 325756d92e..f082d3c429 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -209,6 +209,9 @@ endif
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland wayland-protocols
- MESA3D_PLATFORMS += wayland
-+ifeq ($(BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY),y)
-+MESA3D_CONF_OPTS += -Dlegacy-wayland=bind-wayland-display
-+endif
- endif
- 
- MESA3D_CONF_OPTS += \
+-EXPAT_VERSION = 2.7.4
++EXPAT_VERSION = 2.7.5
+ EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
