@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469D410AB822
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:16:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5118F10AB822
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18554401F7;
-	Thu, 26 Mar 2026 21:16:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21E514009B;
+	Thu, 26 Mar 2026 21:16:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fyhkCAsKSaQg; Thu, 26 Mar 2026 21:16:07 +0000 (UTC)
+ id Tu-hyPBRpGj0; Thu, 26 Mar 2026 21:16:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4519D40945
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3437F4010D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774559767;
-	bh=bcF9jE7x5k8g/JcF4KNjtvG6ruwrjs6Z2mh1C14JkXY=;
+	s=default; t=1774559779;
+	bh=u5whri2noglgTAI6kEb6vwLqHfHiFSwV1fph2cfkjdw=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=qLahNYpGI530wTOdZ5c5ch7e5xACjTwAZMbA6FacGk8UFNF6JYc+TkucDDTXDMwG3
-	 YonFwxb90YERGtQEV/VWBuQziByqmOr0Li+mJdA1xd50AIVztoUGo/1TWDRKq/LWLA
-	 GtXEKN/EPRErIkbdwgQFNI5JUtOjAQyuiz0mvbCIMZryf0S13hh7Uuze19iaWQ4qQI
-	 5qyO+feQZP8rJfYFCuMkzUlD9zb6JShQgfMjmkPKYUrYaKwAXh3R0ioFUSPzWp6xmr
-	 A7QfImK67oiFYumJJlLyEYm6Qpn2Fml4s4o48HWj0GBeogYQsLak8Oe4TUxq4nX8Zg
-	 cNXG5W861gz4Q==
+	b=Zyh089MRf0Omg4LDpp+khefq+FzasnKAlTcTdn2FGcFFOHKnHEJHFQPh0mie1TeHp
+	 iyb8O2h/0Xjeb8KkH94YCYH4epyeMg5YgDCMvjkRhp9FhWBBjt7y9yrFVSr+vVFOx9
+	 RPxwb1Wc15W6nOOhnyGLx/2YGNbjznnXGMEpeVYUFfBChTWQij9B00FqMGHn+lmHSi
+	 Avtq+79jW/xgVKdtznTi325xH8eS+/LREwgopAWGt0QlzqiF9x1NLEjKD5sJ+zTz2N
+	 RkTV09HodMZx8p7lFifMSXSeET1CDEf0XyWqHi76kzGvz+3/12gZaq4sc3eAjIXVi9
+	 6Yuq6BkWGmvyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4519D40945;
-	Thu, 26 Mar 2026 21:16:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05158249
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3437F4010D;
+	Thu, 26 Mar 2026 21:16:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D1FEB2D5
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF2DE401F7
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF30460DE0
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VE3qq0FGsGqw for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 21:16:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h1ua_-nh7yrK for <buildroot@buildroot.org>;
+ Thu, 26 Mar 2026 21:16:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D6A7440E7A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6A7440E7A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC03060C24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC03060C24
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D6A7440E7A
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC03060C24
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:16 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c201.dip0.t-ipconnect.de [79.214.194.1])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 69B8AA4C0DCF;
- Thu, 26 Mar 2026 22:15:51 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33618)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 65030A4C0DCF;
+ Thu, 26 Mar 2026 22:16:14 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47696)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w5s3T-0000000075C-0Glg;
- Thu, 26 Mar 2026 21:15:51 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w5s3q-0000000079X-0KRF;
+ Thu, 26 Mar 2026 21:16:14 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Mar 2026 22:15:51 +0100
-Message-ID: <20260326211551.3598750-1-bernd@kuhls.net>
+Cc: Daniel Lang <dalang@gmx.at>
+Date: Thu, 26 Mar 2026 22:16:14 +0100
+Message-ID: <20260326211614.3598784-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1774559751;
- bh=b8Z/Y6a/23Xm5aU0pv7+0PCH0micwTrVDLrXrHYwqBs=;
+ s=kas202511301023; t=1774559774;
+ bh=Mo7GDY8z3KcVnDFPEG7T8lt6NvT7Jzk8Xu6vAL/nZGc=;
  h=From:To:Cc:Subject:Date:From;
- b=JHnTtwSp1B7gg7TPp09rObGx+XZ8ZyyOODJaVzVFpQlL5r93N4vusBPmA5v2/UTjr
- W93wOeaiaqoyToHhursoEAQtje9ivp+ttCG1cdSPZ25ujf0TYpGU3n7JOyzi7/G4CJ
- LdD+NkWZuKtrMESo9SE80PhPhQHOaDj1oHzVDUobw11jF/pIG6iEZ27vVpYKYEWv2s
- nj7EROuZW/+/+UezC1kGczsuKMBZ+EQ9vKDDdj/nP7/r5BJuCSaBU3jHoxmO4gtPTV
- GtXFjIunvZ6daWE4ygFbLSrReyQzNrCfT7sUzlGcSl3ZkoIsMJLRw9b3JOXo0Rd6zC
- gSAEbKinzdlyw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=bpUC819QS/dDtAI3LBM51skXuljPyJkZ8yDUXnuuDvIGFu89civ82DK6kt3cxD2N5
+ ssZfoA76sPWogDjVuuAXBlpOwXK4fj9AFg3IQYaOImjxm0mbgF6j53FECWdpqBBbKQ
+ A/ceynGZMpPJlbBC8EZmpUzvWzoLdPTLCKy0z0/aHuo2ruq/9XHnGU5ZL5GxNmcfMU
+ SiV+nA4w3183hfEBm9x48svDI0jEjg8mZrUw7FUYs4yl8BvCVrFZ3JU5I5AGhkdxgy
+ DKvsumCl8ouhq+8vWQVeol30WTF54tf8RjJoesj3ufuwBFOtznYEvIblil/u2XD+Ui
+ 7BMpWYGvkh29g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=JHnTtwSp
-Subject: [Buildroot] [PATCH 1/1] package/{glibc,
- localedef}: security bump to version 2.43-16-g5c6fca0c6
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=bpUC819Q
+Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump version to 22.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,56 +97,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2026-4437:
-https://sourceware.org/git/?p=glibc.git;a=commit;h=5c6fca0c62ce5bd6e68e259f138097756cbafd4d
-
-For a full list of changes, see:
-https://sourceware.org/git/?p=glibc.git;a=shortlog;h=5c6fca0c62ce5bd6e68e259f138097756cbafd4d
+https://discourse.llvm.org/t/llvm-22-1-2-released/90308
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/glibc/glibc.hash       | 2 +-
- package/glibc/glibc.mk         | 2 +-
- package/localedef/localedef.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/llvm-project/llvm-project.hash | 4 ++--
+ package/llvm-project/llvm-project.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index ed6d69acc2..abf8d4db18 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from git)
--sha256  5e21722755f466d15770574788394a4abb4fb1e02603a707beeb199706a26a46  glibc-2.43-10-gc3ceb93dc4f67253037644dc8f194831e27f3160-git4.tar.gz
-+sha256  f19dbfef9499e97a63b1f309252d43fba36edf244561f38f8e00cbbbe04e106b  glibc-2.43-16-g5c6fca0c62ce5bd6e68e259f138097756cbafd4d-git4.tar.gz
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index 528591ba09..095dc76dfd 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.1
+-sha256  9c6f37f6f5f68d38f435d25f770fc48c62d92b2412205767a16dac2c942f0c95  llvm-project-22.1.1.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.2
++sha256  62f2f13ff25b1bb28ea507888e858212d19aafb65e8e72b4a65ee0629ec4ae0c  llvm-project-22.1.2.src.tar.xz
+ # locally calculated
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index b358b80e23..becbcc0612 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # Hashes for license files
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYINGv2
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 64a2c58377..6cdcf5ce93 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.43-10-gc3ceb93dc4f67253037644dc8f194831e27f3160
-+GLIBC_VERSION = 2.43-16-g5c6fca0c62ce5bd6e68e259f138097756cbafd4d
- GLIBC_SITE = https://sourceware.org/git/glibc.git
- GLIBC_SITE_METHOD = git
+ LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.1
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.2
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
  
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index aa746a9d70..bac90d47c1 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.43-10-gc3ceb93dc4f67253037644dc8f194831e27f3160
-+LOCALEDEF_VERSION = 2.43-16-g5c6fca0c62ce5bd6e68e259f138097756cbafd4d
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
- LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
- LOCALEDEF_SITE_METHOD = git
 -- 
 2.47.3
 
