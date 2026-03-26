@@ -4,114 +4,164 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD79110A1E7E
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 11:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24E2010A1E7E
+	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 11:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 661C5606F0;
-	Thu, 26 Mar 2026 11:36:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9E7F607BE;
+	Thu, 26 Mar 2026 11:37:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tuiQMS4wuUGS; Thu, 26 Mar 2026 11:36:45 +0000 (UTC)
+ id mALnnII-DJrW; Thu, 26 Mar 2026 11:37:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ED3060034
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C76C3607C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774525005;
-	bh=78c4o4GF8g2/X55pHMFjaVdAWU6whz9OL6BXpdrGaM4=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1774525068;
+	bh=oR8mnPiu+LbrEGU45OmHi9uHx4XQaLDqwNuQ/0tbHPY=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=GpvvkuJ6lNOG2L1/6q8ZolvfMg0QnxBnSveE/1NVnNM+OkZ3OWHYZl7Sw5llTwc9h
-	 IaaQUhEvz1evTwGro/EV50SN5d9cVESbbVaYvDR61NsLv2Ehn3iz7hejqYEYv4TF9m
-	 KJrtpb4C7gW0q7J/D4UYjNMEXLhGTcVW4XbXwHV5NT34knsl+QzGSD9MkqolkyCc7F
-	 kwcz87xL8pK4P21xCJBg/6DoVktyCstjW7QdkEuYo/lLysO8MT3cOXFWr4k/WOYfUL
-	 gP7B6cpengI0cTooJcClOVU5nb7Lnm3bL2kNnkaum61S5zIZszkbTg0mKrCS6VPZoc
-	 i7bbCBOYyLMwQ==
+	 From:Reply-To:From;
+	b=RsBLX7KhkXizW0EsYe9LtCShWJoJ2hgCNx4KkguD/qawZM3FbcbBX5wfKjIwWftX7
+	 UQV+mCB0aoJKTQsSYUealbvMvcTkOATO4ot1NVfP5nw3HoB6oLSUrQJkuWLe30EDgz
+	 MYUO39qvqbJY0JILp67tUMxSqUqrhrn7ObFAoQQCxw++ICGiJu5hea3xlLe2rqN+hv
+	 XKs3y0U6dn9701uiIY8TRS9XB/GX+hO8/Yu6J+3HeXVv8MIZTHkAkJRcEKVCY0mP+p
+	 xd48mcB17xxd1n+EX8iLHDHmH3LqWoiIe8kdqBZ4fSBjvFVeyDKWA6DKdRLdpnMzVk
+	 nBQLZvMeKs/TA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5ED3060034;
-	Thu, 26 Mar 2026 11:36:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A0D32353
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:36:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C76C3607C4;
+	Thu, 26 Mar 2026 11:37:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6EB1353
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9251680D17
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:36:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3F4F404A6
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:37:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XHpF8eFYsmg7 for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 11:36:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Yz32gTIm9we for <buildroot@buildroot.org>;
+ Thu, 26 Mar 2026 11:37:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7AFE480C6A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFE480C6A
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7AFE480C6A
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:36:42 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-824c9da9928so797311b3a.3
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 04:36:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774525001; x=1775129801;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=dbG7Jw2hXEoiloiKHys6QzcPWv7MtqVelpTMibhAIRM=;
- b=MnWe5WLkh4PGOVEalAZfJt39l+vmBreDA3c2duUwdxw6EdrijdAA5dTUkETumFsfLm
- bMPJAnfPAzt+qUnk2P6bzNB6bCH8RCR4hGO7AhuJWqg/zqcG0DjzLCpSMTanx2hHNR3L
- 1FTeETVkD6ufm89fzgi4/3OH5FOKUPXNT+qgJIbTmokMuCbcpUVX2EyXJQXMWqZn79dZ
- lILUzCxVBCT9fa4YwBWSTI/ElDqLa34C90RXqEWKgEhqt8GRrwhTZxqNEY0oBzR9xky3
- ykKJZ7VZ9pSb4ivjMxBYvdybKYBXNjL7LcUfYoEEsFxu1+RRG14VW+3yVFVQSM/WYNXG
- 99uA==
-X-Gm-Message-State: AOJu0Yw8VVM+GOZXyiT7S28Kmhl7LdN1+ob5AXu0UGM1cCchnRArpXWM
- TiWyZzXtKom6fsn56xiIyu4KI1DCIcHuWTddE1zQQZB6AkQDFTf6oH5t3kaHH0Xb
-X-Gm-Gg: ATEYQzwTbSb7g/AQhsw1a2Cr7gCmClaPmZhZFgVPQvE+LMOYjSIlFUC5hUymZAv58kg
- Sdnv9GZUk4+V1BXZrkMst0Y9iXRTys0DjCq92bIaLV64MHklCl8NbGoCmlBF0IDcicGPFU6YaBJ
- 4tr9R4apUTdNXufwAaD2cZfbzM6TwVI5FXsWtvXC5XKg6bz981Z23jys73QqBlzi6xp+FfXy/yz
- kzE1J+MBHy5IUub5jQsQT3P57G58+W9an0vvAjxuA+O4ut7ogp2N9doB9qVHsRxfGOWNs85gkpD
- fE2fjl62jc6uDZvk+aJraySG33VcZABX8IfHbEASGGpRdiMMlCtqiJWSz1klRvCtopbn1HJxUFi
- QrXjUgaAOzHZfU86h2Cl7/o8ZtuudnIVp+BgrgghyHcHFMaF9Q+u0cQUFJqg2NHYnsvgfb+NH3W
- 8bWiRVBNp5HXf7YEcm3mRoqwrIQRuouWeE9d/jqPKA2XrOZQ==
-X-Received: by 2002:a05:6a00:3989:b0:829:7d1c:29ff with SMTP id
- d2e1a72fcca58-82c6e1211c7mr7266320b3a.57.1774525001103; 
- Thu, 26 Mar 2026 04:36:41 -0700 (PDT)
-Received: from fedora ([2409:40e5:11a6:4157:6782:ab8c:40e4:4b38])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82c7d20fc0fsm3041549b3a.19.2026.03.26.04.36.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Mar 2026 04:36:40 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: thomas.petazzoni@bootlin.com, romain.naour@gmail.com, br025@umbiko.net,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Thu, 26 Mar 2026 17:06:19 +0530
-Message-ID: <20260326113620.2433228-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260303182128.1242999-1-chakrabortyshubham66@gmail.com>
-References: <20260303182128.1242999-1-chakrabortyshubham66@gmail.com>
+ client-ip=2a01:111:f403:c202::7;
+ helo=gvxpr05cu001.outbound.protection.outlook.com;
+ envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B3703402CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3703402CE
+Received: from GVXPR05CU001.outbound.protection.outlook.com
+ (mail-swedencentralazlp170130007.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c202::7])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3703402CE
+ for <buildroot@buildroot.org>; Thu, 26 Mar 2026 11:37:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UfAfNLDAlwgvNHGoiI5znHIFfFmPN61FchgMe3/1djPNFU5VYurapBwM7JOwyblrT351w5xchmcgdqPut9lUTKkgK4F3ju3NpEhL/aGn0DI/EsjLVlmi8POIf1w+kxOCGHRkwJAycLJiFZVeoSVV7D+gYiGtiogyEHnNjPZhOVNv4RIhTWYgh0JGqaap6xY2dsMMOtJsSG4jg428Pjhf95vYpqVzov2uHjI0mlZS4M3wwb6lb1GZO0Ta+AGb23X4RKiylLeUcl4Bv1K7jS4+SrZ44fZurhRLaihiSAQ/Wlt680tJ7WtZpzh/peFWUGOlF8CrG67gKxHTNZSgfX00gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SBeAQJV4ONkMp5AzPdKQ/RvxrQDjWEE5kQ0jTR+ZxF0=;
+ b=yLLx52Bwlj4bdBF9nBC7Uuk/QbY+nNMPIB/B98hyYfTlMj4lDeJ8igIAJ0R5lSLadQ0ocjsBjxy0SLE6fKDAC2l83de6vXHrkJFHjHAVdp/uYqydbgWQOpk1XhsY99PNyr9MmtwoQ3sCGeNe+4bAZHouq2cNO9lkjhxtVY40XA5i5zij5/0IY+P5SnLRIIuvdnbJANIuRLlyQL3nv8Ni1i7R8Br82/ZvjYUkzl3PPsNV1h2WcXGfakjw0n/0Pf0pHMSBEv9pXrBVKJpTa/RM69vgMY7Wyq97Z7jZkKdr82+Y7ErUy/UgzZQknRGDC1qgM2gs5+6ZtdMUOvZCanGLtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+Received: from GVXPR04MB12038.eurprd04.prod.outlook.com (2603:10a6:150:2be::5)
+ by AM0PR04MB7009.eurprd04.prod.outlook.com (2603:10a6:208:19b::24)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.20; Thu, 26 Mar
+ 2026 11:37:40 +0000
+Received: from GVXPR04MB12038.eurprd04.prod.outlook.com
+ ([fe80::6c04:8947:f2f0:5e78]) by GVXPR04MB12038.eurprd04.prod.outlook.com
+ ([fe80::6c04:8947:f2f0:5e78%6]) with mapi id 15.20.9745.022; Thu, 26 Mar 2026
+ 11:37:40 +0000
+Message-ID: <e41342fb-6354-4ced-a000-ceef2b6ac577@cherry.de>
+Date: Thu, 26 Mar 2026 12:37:39 +0100
+User-Agent: Mozilla Thunderbird
+To: Heiko Stuebner <heiko@sntech.de>, buildroot@buildroot.org
+Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
+ Heiko Stuebner <heiko.stuebner@cherry.de>
+References: <20260326101033.587997-1-heiko@sntech.de>
+Content-Language: en-US
+In-Reply-To: <20260326101033.587997-1-heiko@sntech.de>
+X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::13) To GVXPR04MB12038.eurprd04.prod.outlook.com
+ (2603:10a6:150:2be::5)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GVXPR04MB12038:EE_|AM0PR04MB7009:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c9eda1d-8c68-42b0-51c9-08de8b2c168e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|18002099003|22082099003|56012099003; 
+X-Microsoft-Antispam-Message-Info: lKCVGjF6NatsBqIFbzDzvg2xbzRFAyk3qnlw7JFs/QqD7aqdfbdGlHw7XUFlab6Rof6fxceGgrOO5p3VZc4+pYa3LZrYzRA6rIiL/8og7GKYzjCOmqEr5zmF0FHyoww0pKUA7JNf1OVgS+cTUWKmGZSY55rjMS7RkrR24PuwRcZzy4EwG+Vt9aH4dWvLXvoR72LG8Iozva5QcAHfsJIzIOYkNto9JlA2/DvSHRBa/89jEMvY8jEKxkuvhqzdNjAcdBwLTcMTLsZyaVs90SW7gZBmwznVx5O/qou94U9nfWWKhZdU4oGL50HRsKkiSLZFKgIM1Lj4efLw0dsuqzaoWneDegyZW8UTAV+rRipVBPy0p2Hj37MxnMflDBOm63XzKKqenlqkbfoh8gIQexLdnnY2+VOJbIMqyZA09ImQM+CmX/7XPtphJAeG/FDQGVJYj8VhjzLNlmnHw5rX5wm0HYaC3boUcXIj0jnudNb0Wr9IypG6Yiy/4PfyptWCV+g2PgGiJtcZKldqrKVMhnsvJwJXSbor9A+HnEf6M/Ygv4tjVp/FEcQT4+okDCazm2OwB6oNBpc8VHSV1Yk42yQI0YsR/T613p04QqklJpv+91t/DpSZ+JDzqA6+DFc4mO4dEHDfyp9ud2HKauKrWEt02iVBn+xh/YxgBzgcDA0in3jh03KtBdaFbrujnHVrWHhwIc/0bnSE5BJwIGcZpJ2/rpiFNAmRUqZkfxiMaOYJtJw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:GVXPR04MB12038.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(18002099003)(22082099003)(56012099003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekwzWmJ2eG4yZm1JQUI1TTk3TkNKcFJYTXJWK1RtNkJmRXNDMmIyVjdMRFdW?=
+ =?utf-8?B?cVY1eEpwSkNxZTg4NmprWm1jNzF2SXVrMWh2dG5xVXBNRSs4bG1DaGZ1NVNt?=
+ =?utf-8?B?RUtIKzdLYnlJbHh4cWlncStkNDJDd2w3OGM1eTU4cGpodWpDWlBzU3RrTlJ4?=
+ =?utf-8?B?U1M0b2pBQXlTOUpqUlFqS1pTWFBhdGU1VGNvWW9pNFVublN3c3lzaTRLcVhF?=
+ =?utf-8?B?TkRROTBzaUlydzFhT1R2cnRZUXhIanIvTU9RdlpKNWhPMHI0Qk9ucXJRMTRO?=
+ =?utf-8?B?WUxrRXM1WEE5SGVTUTZqNEliV1kvQmE4Z2xaS0N3VWlWdk5JMUtod2NmZDVC?=
+ =?utf-8?B?bW9aWExFdTJ4ZTJqMlVONytWT3AyZkgrVFFTNlZQeHpSZUIrTVVkQkwwVFdZ?=
+ =?utf-8?B?Zi84RVIvUFgxc0VrdnM3RmxlaklyT2xINUVlQjBTWmJhYUpKd1ZVdzhvZmJn?=
+ =?utf-8?B?VU5XRXpjcEdjOTQ1UW9IMGhScjlEcWVldEwrdmRxcGx4OW96d3E3SStleGlw?=
+ =?utf-8?B?by9UUzRCRC9mQjlCdEhCRTFGblhNMm5TcXozVjdRMGFsMXFWZzFKMTgwWStW?=
+ =?utf-8?B?WHBNN3VMamRSRTMrS29OUmVBWE1yaEh2WmczSGU2c0xZSEo5eXZQRDZncGEx?=
+ =?utf-8?B?Z3dFbjQxQ1grTERBTzRiajBlWUNtNnM0N2svOC9DQ0w0TStrUjVOSmNuando?=
+ =?utf-8?B?RGhPV0o1TG1DYnZPRmxOY3d4Rk9KL1BxN2NBVFJOT2cwK1NhZXBjS0NITmNy?=
+ =?utf-8?B?bjBRcFEzcmxtTWpPS2todU1QWjBQTjFvYWJxQ2FDM2hNYzhwRWZIS0JrSDRu?=
+ =?utf-8?B?MW5BaU1GUStKalRiZFBGZlI4NitmZW5jZEo4SUJTNlpGSXQ1a1h2U1BMK3lo?=
+ =?utf-8?B?OE5lbjRXK0VWeTBmUVZqVXFtd2tuUHJIeGEwYmhKOHE1Mk96TkdDN2g2bU1v?=
+ =?utf-8?B?MHpFcHFrQVZBMWhIOXhKT2djdjYyQ2lRSFVCbkxCYmdCaHJrelN1dVdxZUly?=
+ =?utf-8?B?NHVDbW1VdlZoS3ZRTENSTzlUUmNaaytkeDA3aFlzWXlUQnN4R3hUcXVMaDAw?=
+ =?utf-8?B?SHhhZHRZMWtaVnBwbldibFFaY3MvR2Myb2poM0FNYmYySlByQjdJOVVTT0R6?=
+ =?utf-8?B?UzI4VUYreDdmemJpbkx1Ym41bEFnN202eVA1SEFQd3hHVERkNlRhZzVGWkZZ?=
+ =?utf-8?B?MFJlclRhTmNWSFNER0drcHB6a2Rva29aaFlUNUN1MzZqQzJUNVg0aGhRRjc0?=
+ =?utf-8?B?b3o3MU9ab0dFOGVwU01NRWp1WnJ4Y0hPVmpnK1QrcklERzlLekNEOW5FR1J4?=
+ =?utf-8?B?YXV1SG9rbFZrMXNlUlZTZHR4c0V6ZnV3TC9GSFVsZk0xNmlIYXJlU0FBVzhK?=
+ =?utf-8?B?MGxNVHpOTmlNN05YQTVCWEl4UEFXU25LQjdTeWFtSWtpak1VcUZyQURFT1Yx?=
+ =?utf-8?B?V1dya2hKQnhZMjJwblF0dUZ5blBzRG9YbDZHZ0RlUFJjY3hHNzFzUVBLakIx?=
+ =?utf-8?B?MENYbG53bVArYWRyZ3ZLVVE5bkJjcUs2aERBalNnMDZmaVI1aEd2VXZHQ0Nr?=
+ =?utf-8?B?RGsrTlp3b0QySXlZbjJOeis0UmNHa2FwSk1yWjU3bExyc0NRNkhELzJTOXhT?=
+ =?utf-8?B?VSsycUlZRGFWSmNHWTZ3bTBEWEV2SktVZU5LN1lvRiszUVltNjFzNllvQ2hi?=
+ =?utf-8?B?SUtVdFArN2VSNFR2elQ5QmpRNlZBakhLLzR3TEU3NjdLeC92czFRWVAwN2dS?=
+ =?utf-8?B?V1hkem51bmMvTVRSYTNsU0pFM1lvaDF4ZXYzTEZGZ21rS0c5b3dCWC9QWnI3?=
+ =?utf-8?B?OUFRakF5YVBTOUJ1TnNyUEpwbk1BUW9FUDlwbE5BZ3FhcUpiZ25yT0lHWHlM?=
+ =?utf-8?B?cURRUWhmczlVOTRQSHRPbVE1VUV4STlreXliWCsyRldNVk9NNUVKWWNuanpo?=
+ =?utf-8?B?VFZINVMvU0NmQ090dGozeUViK2ZRdktnbktCU2haV1EzMlEwS2lCOXczc1Zz?=
+ =?utf-8?B?WFpGTTcrWS9DT0sxbkZjT3Y3eE8wY3BMa0RiV2JDcHBWbWdqVVVtTktpZVdD?=
+ =?utf-8?B?VnU4dFViRDV5Nm9hNC9pYVZxWjFod1U1QTh1SGd1bllVOG8wenhDM2VZdXFH?=
+ =?utf-8?B?WVpXNm0vYVJLTWVUVUc2bHVFWlcxNG5PMlJKOURHeHhndWNscEx2dEdXUkY3?=
+ =?utf-8?B?M1ZOVHc1d0tyT2hGMVBGR1Z0TFE4ODRqdkpWd1pSZklNRTBLdFhwcW90dk5R?=
+ =?utf-8?B?RFo4bDRsZ1MrUFBSYlFIM1RPTC8xUW0yYVRlRExrZCtOSDIxaDhBblIyTjh1?=
+ =?utf-8?B?MjZMblRheGVXYTdCa3orMlZFTlpXQmVVYVJ6YVVZRVh0ZE1ISklzUT09?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9eda1d-8c68-42b0-51c9-08de8b2c168e
+X-MS-Exchange-CrossTenant-AuthSource: GVXPR04MB12038.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2026 11:37:40.7534 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zm/4dUGj5ijmS/K9YQRuBDzCVCiqtgj0A7LhLmKjF8JNrbtVjWwc6yEQvhnt0ujPGyR/xc5wGCio+jeL6NAiaQIsW3oEkhVjOEPJCk2ANWo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7009
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1774525001; x=1775129801; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dbG7Jw2hXEoiloiKHys6QzcPWv7MtqVelpTMibhAIRM=;
- b=R3ompXQlDYzAWrddvbt2FpqNNKKXk2GIgAZYnWr0bnI5CL4LxCyyylXG/faHzjqqvk
- i77qqalP1fzrZXsAtQVEa6XX8f0MWiaMX9iWa8r9SIHAfZ3XtbI8ibFBbnztHJsXlqw5
- 6T0a6QIjH1Xv5nSrTnSa6G1N4euJQb60oU9ecCzlvwUy/4xcT2AaW0uhwBqIaIsDH1BX
- EfhApcp9hOqom6v9EMdVswgiteXEQkpF3HJPGuv2XVZ+rwrP7ASR+2fGHwDtM37FQT6/
- zZEtin9fBHWle3SUsxRLq7Wcp+yrMxZkSm+n+QJvbSihhuAKtE9AUesA5Q4UvvfiLz7C
- ARTw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=R3ompXQl
-Subject: [Buildroot] [PATCH v3] package/icu: fix static linking with icu-uc
+ d=cherry.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SBeAQJV4ONkMp5AzPdKQ/RvxrQDjWEE5kQ0jTR+ZxF0=;
+ b=b3imWcE+UWNLf4hURiPVHMDtVOpiMb3PrjffXICYtmZz0ZcoKB6afwtLvuxWbyASBher5eui3zvBsx9wQ2F6Iq0LXJ3bkrRDnhw+nkWS6uzg+13TeIhGN85OPa3Luy4nrxhct5A7Us0Ofr3Zp+EtXctU04k/uB+MSkEtCVnqGiw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=cherry.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
+ header.s=selector1 header.b=b3imWcE+
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Subject: Re: [Buildroot] [PATCH v2] package/arm-trusted-firmware: add
+ ARM_TRUSTED_FIRMWARE_CPE_ID_*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,113 +173,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Extend the existing patch to also add -lstdc++ to the Libs
-field, fixing static linking issues with libicuuc.a.
+Hi Heiko,
 
-This combines the previous 0003 and 0004 changes into a
-single patch, following review feedback from Andreas.
+On 3/26/26 11:10 AM, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@cherry.de>
+> 
+> Trusted-Firmware has been using a number of CPE identifiers in the past
+> but especially after v2.4, the correct identifier would be similar
+> to cpe:2.3:o:arm:trusted_firmware-a:2.12:rc0:*:*:-:*:*:*
+> 
+>    https://nvd.nist.gov/products/cpe/detail/65DEC230-1CD5-40DB-903A-22537D1E44FE
+> 
+> Add the relevant CPE fields to the trusted-firmware package.
+> 
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
+> ---
+> changes in v2:
+> - remove lts- from lts releases
+> - remove "v" from version, to actually match version used in CPEs
+> 
+>   boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index b81ce0d827..c3c4a581da 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -5,6 +5,10 @@
+>   ################################################################################
+>   
+>   ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_PRODUCT = trusted_firmware-a
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(subst v,,$(subst lts-,,$(ARM_TRUSTED_FIRMWARE_VERSION)))
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
-Changes v2 -> v3:
-  - Merge previous 0003 and 0004 into a single patch
-  - Extend existing fix to also add -lstdc++ to Libs (static linking case)
-  - Keep original authorship and add my Signed-off-by below Romain's
-  - Update commit message and description based on review feedback
----
- .../0003-fix-static-linking-with-icu-uc.patch | 29 ++++++++++++-------
- ...atic-linking-with-icu-uc-static-musl.patch | 26 -----------------
- 2 files changed, 19 insertions(+), 36 deletions(-)
- delete mode 100644 package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
+I'm wondering if it'd make sense we don't touch 
+ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION if it isn't any of the 
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_*. We don't care about 
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION because we cannot 
+know what the user's naming scheme is, so better not mess with it. Then 
+for BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE, we cannot 
+guarantee it actually makes sense. There are branches and tags in TF-A 
+git repo which do have v or lts- prefix but also other non-version 
+things in there, e.g. sandbox/lts-v2.14.1-20260202T0851, or 
+dev/upstream. I think it'd make sense to not do anything about for those 
+two?
 
-diff --git a/package/icu/0003-fix-static-linking-with-icu-uc.patch b/package/icu/0003-fix-static-linking-with-icu-uc.patch
-index 36a3d1f696..ec393254e8 100644
---- a/package/icu/0003-fix-static-linking-with-icu-uc.patch
-+++ b/package/icu/0003-fix-static-linking-with-icu-uc.patch
-@@ -3,9 +3,6 @@ From: Romain Naour <romain.naour@openwide.fr>
- Date: Wed, 22 Jul 2015 22:43:25 +0200
- Subject: [PATCH] fix static linking with icu-uc
- 
--During static linking with a C application and libicuuc.a,
---lstdc++ is required.
--
- Add -lstdc++ in Libs.private of icu-uc.pc.
- 
- Fixes:
-@@ -13,14 +10,26 @@ http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef52
- 
- Signed-off-by: Romain Naour <romain.naour@openwide.fr>
- ---
-- source/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+This patch currently addresses linking against stdc++ for shared-library
-+builds. Add -lstdc++ to the static build flags also, to fix 'undefined
-+reference' errors when linking programs like xmlcatalog (libxml2)
-+with musl static toolchains.
-+
-+Upstream: Inactive-Upstream [Buildroot specific]
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ source/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
--diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
----- icu.orig/source/Makefile.in	2025-03-13 19:31:23.000000000 +0100
--+++ icu/source/Makefile.in	2025-09-22 08:56:36.791792784 +0200
--@@ -279,7 +279,7 @@
-- 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' >> $@
-+diff --git icu.orig/source/Makefile.in icu/source/Makefile.in
-+--- icu.orig/source/Makefile.in
-++++ icu/source/Makefile.in
-+@@ -279,10 +279,10 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
-+ 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
-+ 	@echo "Name: $(PACKAGE)-uc" >> $@
-+ ifeq ($(ENABLE_SHARED),)
-+-	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' >> $@
-++	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' -lstdc++ >> $@
-  else
-  	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" >> $@
- -	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' >> $@
-diff --git a/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch b/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
-deleted file mode 100644
-index e17f6ac775..0000000000
---- a/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 2107f9dfb39eeb6559fb4271c7af8b39aef521ca Mon Sep 17 00:00:00 2001
--From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
--Date: Tue, 3 Mar 2026 10:00:00 +0000
--Subject: [PATCH] fix static linking with icu-uc (static case)
--
--During static linking with a C application and libicuuc.a,
---lstdc++ is required. The previous patch (0003) only addressed the
--shared library case (Libs.private). This patch adds -lstdc++ to the
--main Libs line for the static case to fix undefined reference
--errors when linking programs like xmlcatalog (libxml2) with
--musl toolchains.
--
--Upstream: Inactive-Upstream [Buildroot specific]
--Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-----
-- source/Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
----- icu.orig/source/Makefile.in
--+++ icu/source/Makefile.in
--@@ -281,3 +281,3 @@
-- ifeq ($(ENABLE_SHARED),)
---	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' >> $@
--+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' -lstdc++ >> $@
-- else
--- 
-2.53.0
+Essentially a simple (NOT TESTED!):
 
+# Better not touch user's custom version
+ifneq 
+($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION),y)
+ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(subst v,,$(subst 
+lts-,,$(ARM_TRUSTED_FIRMWARE_VERSION)))
+endif
+
+What do you think?
+
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
