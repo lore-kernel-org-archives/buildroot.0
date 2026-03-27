@@ -1,116 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B46D810ED640
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3252610ED659
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 11:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89514613D3;
-	Fri, 27 Mar 2026 10:03:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CS0n2jhFH8gm; Fri, 27 Mar 2026 10:03:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B33146140B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605801;
-	bh=uISbSTZZQn655TH9xKPfpw2ABxR0NusigQ1mLn11c1o=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PtSueCs8nM56eRUyKIxAarXlD6jFictaRWs1+12cc5civyugMNcIRekAq6Rg7A4fD
-	 5pLzu+M8JksXR3FjuDcHjvASqzUuu7sA/Lyu9NvNnb9JbVvxI7XMaZ6fDoemjk134s
-	 2CYSVU2kBnnKR2L2cE6o34KbHkrRveh0GukadbqrN5SL9/yp3swFmN/O9k16KXCWI8
-	 yAGsXqS6tK8WLyVR5CgPznqUF0rc/DDrGEcKpY729EBDjD7aa5h2+vM3emktCvyUu9
-	 oi7jjOhZcvpzdssplnH+6cctSsYJB+uEUtI59WaxD45YvYww5kAsDVGO2wgWGwSE1w
-	 W1w6dSf4zOeOw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B33146140B;
-	Fri, 27 Mar 2026 10:03:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 550F8249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4757F4172A
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4656416C5;
+	Fri, 27 Mar 2026 11:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xE-33n2yZnc4 for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 10:03:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2347141747
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2347141747
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2347141747
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:18 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-48541edecf9so23830195e9.1
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 03:03:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774605797; x=1775210597;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=WzgbnslvcR/1TwFUFz5ViFiOl/jclX8pXP2TUm8XxC8=;
- b=PCoIlJviG27X7ouGZRtdk2jxjDyM5FGYg6G7QR69HDyxFU8FFoT5XUe3ym1UlKN6Mt
- uS1t6gzVt7JDClcugwXi6HCecwk9ppAKoKGVS+rqAUk1pX37qkUGwx2Wo9N6MBmhbyIS
- rE53rh/hmnzx3Xpro2xMhbrq4xoUsCGaoTVuUc0rnHwhmrMamtTzEX6vv7bQerQ86m6p
- k6iBuCW2Qi5535f7e2Qv6x5UzPbSkvvHMYtqwZPDOCskhWYdpbrNNEdGAcVPm+9ZWepw
- 1l4LtWZQlvtt5OfMoufXEb7gdn4ku4AMLG7pMMMdON627kFQusWvcFXjd3R2PJCBEKhF
- WaQg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUMEwaNPwEx5VyHka18HT5X3AVcQGtHBUwiRcmOJU5sgrYJ0wj9VBEO4za3wGtlhfJvxgJRtbwu7I4=@buildroot.org
-X-Gm-Message-State: AOJu0YxChVEtOkt5P9tlNnraBqNME8egA0Qp0lcDMp/WEIJ41y4NqYpB
- yOk5HyTlM028FNxsBONE4yBEEq5lmgAYe4pqz1l+yLqDV1sNuFxWSaHW5LNiWVtY2+I=
-X-Gm-Gg: ATEYQzwnoEsO84Qk7SsdgQi7yaoiFyTsoYepvenITDHzavTAGEk7OjUa+1QkJjMSE5y
- 9DtHBoEhyYGqqE6zGl+492pb1id7VQYeGLyl0st9HkNAoTLUcmBLhckgyR0hXvmBK5AukmXhFl/
- nSWaMWGfoQQvprPPcg3z/HvDF8jKAhoXzkO0HvUDsTBth/8EJ8P9ARqZX7I/kl0hLXNFOKYc1SU
- iqtx7aWxtbi3Wg8r5MZu8eIfTJerURPFRRllKIG9aTbDOJt5YHGj5E/2PLVwDrgBTOMlK/CmuQo
- vDklikiI+krIc+YqPuzNyQMeaK5OQzHcrQqxg6eUSVG57/BJusBhKSOaCA/7e9K2gU1+Q/QfJs0
- hzyC2vC2DteC6XvXIu8Xn53IJ5xUFwOInsQHNZCIsLCPs1Zc3LUdno3zCVe9+qQuSO9x/p7ncC1
- VY5qgQ84GyDvzUDCOehM8MoyAGtlA=
-X-Received: by 2002:a05:600c:8b86:b0:485:3f58:d9f with SMTP id
- 5b1f17b1804b1-48727f405fbmr28808985e9.30.1774605796772; 
- Fri, 27 Mar 2026 03:03:16 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48722d38a5fsm81107315e9.12.2026.03.27.03.03.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Mar 2026 03:03:15 -0700 (PDT)
-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 11:03:14 +0100
-Message-ID: <20260327100314.47069-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260318123714.2494747-1-vincent.stehle@arm.com>
-References: <20260318123714.2494747-1-vincent.stehle@arm.com>
+ id 5osk9joV8uKb; Fri, 27 Mar 2026 11:11:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB924416C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774609895;
+	bh=0adxE1tfP3wt7yO4BfD6O/RGGFnaTiEyxA2d+egThU4=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=AR9Bz3Za8uTzbgzIFuyAaysV50Urm3+pPC0m1ZmyRzoZH08ljK7ySHrPJsVx2YVMN
+	 vUIdf+jUwojUGh0QJHDJgaZdNUcPwjGaivQguiCkyiSl2GSZR7/CJVOdt0NZvL7gUp
+	 5gGAXw+MlNTPoECFLn4TIXGXA6D3D8FZEOueKg1s3s8OPtoDcJupYwD/Ayurok53qt
+	 ystG2oZfujqsgvuzNvOH5zWGvnjvkuRSaKKUW8J+sT+uXnvYm/1VyRRUCeF/HVsd+5
+	 DTM315dDHmi7LQ6T2SQ07oZeQYD3zTKQjqBmb3e7om10B/QVorGMikoAuioOnkJbrP
+	 0tq5gh1BwMc2g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB924416C0;
+	Fri, 27 Mar 2026 11:11:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4F142D5
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 11:11:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB350416C0
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 11:11:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wBAO2E_aMY7j for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 11:11:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=51.210.94.138;
+ helo=smtpout1.mo533.mail-out.ovh.net; envelope-from=mooz@blockos.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3EEDA416BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EEDA416BF
+Received: from smtpout1.mo533.mail-out.ovh.net
+ (smtpout1.mo533.mail-out.ovh.net [51.210.94.138])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3EEDA416BF
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 11:11:30 +0000 (UTC)
+Received: from director3.derp.mail-out.ovh.net
+ (director3.derp.mail-out.ovh.net [152.228.215.222])
+ by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4fhydC2NRNz60gK;
+ Fri, 27 Mar 2026 11:11:27 +0000 (UTC)
+Received: from director3.derp.mail-out.ovh.net
+ (director3.derp.mail-out.ovh.net. [127.0.0.1])
+ by director3.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Fri, 27 Mar 2026 11:11:27 +0000 (UTC)
+Received: from mta3.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.43.92])
+ by director3.derp.mail-out.ovh.net (Postfix) with ESMTPS id 4fhycl2VpJz5vr2;
+ Fri, 27 Mar 2026 11:11:03 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.6])
+ (Authenticated sender: mooz@blockos.org)
+ by mta3.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 03CBC941509; 
+ Fri, 27 Mar 2026 11:11:02 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
+To: buildroot@buildroot.org
+Cc: Vincent Cruz <mooz@blockos.org>
+Date: Fri, 27 Mar 2026 12:09:39 +0100
+Message-ID: <20260327111042.1172143-1-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774605797; x=1775210597; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=WzgbnslvcR/1TwFUFz5ViFiOl/jclX8pXP2TUm8XxC8=;
- b=RUgxRgiBaeuhKIj1Ed5/4Vz86YuyyrsoTeztrE85nDfxbfHXC3IfCLOXv2G693j1Bz
- h7/bfQTNi1xSrgjOe3TVYiNFnh2BjPnG5dcONTbvq+8Xgi6QVcowAo29SYonkm7OgHwn
- y4ZGSQmHs2MMz9jt64gNhueRhsv7yDc5eBTXN9Z2MXy60P1QfsG1sXqaShe9zUBOvWbt
- tfd8xLUaxncV6Fpk0rzuL0w39cmvL3gI34iFSrMMQco2cthhb6Q9ox4Cy8HKg199DUCu
- 9jdVk9h4jYSAhzBrcvKEJ9CHTZ947KxJl21zN6+vfJWTtUgk1euF5bRkkB/Evm9hzvty
- bHvw==
+x-ovh-tracer-id: 7333830518234139597
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: dmFkZTElGEe8rzEefrflNawYYIu7EZGdx8M/UZwKEj4X7GtBvrVVfM9PS00t2cuBOyue5vltczKKXcihftbKtvJfg3Ki+mw6RPOMkrDxRmJHuTan923PnXH9/h8pTuJ6BXYYJl08eze0dCYqJmJnNiGCEyMHUZ4dcuTW1ePTg4+eYeJ32DsWhfQk1WObfB1/0cD6C/ShFm6PuK7NOxj7X05CkljZt+dukuZVyg/Ttnl72/kGR+52ErPL8TaeYYvH8A6s3hCRlCwZZ6oC1jpJl5XPzaJns4I4lgKdMU9NtQQ0jFI8rTmWn8RoXCqRh2SR7CUpBC9ko/tY64M0W1dkab132ehHoMhCGOWRbz6JbDCnjzFQ8jmcnmRHwAngKT/BIkyf63Z0zcna3xb1cUMUYbTpZmhL6eCw4qmYTyHwQN8y5pT0W5qMoh98q+ZzB5nGO83TIMUGfnnunnPX3/zCQvGKlFVmxMQYWcJDdUbtSGNBleZ7IKFkvYHMRdTO+4tvktGvAcOuFhHP+fKAchcG/KXsg42OApB60taOg7akJ8vx6eO79wXvT7jW52Gyk42FBpTAepKv2md7QWuUXqsvrXHe25qrmF9Cr9iOjgcfT056rsL0rPhY4M338tirr8JcQRQ8Hz/j3gbNXxJsyTfy3TbSW3KPfTDfR+DNCbQUsBuPVREV5A
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RUgxRgiB
-Subject: Re: [Buildroot] [PATCH] package/xen: fix armv7 build with gcc-15
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-108S002557f74ca-97de-4b94-baf3-c83c4f2d1335,
+ B548C52B33E4A2712BFB385F62670DC0A4297526) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] [PATCH v2] package/rwmem: bump to version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,76 +94,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gQmFja3BvcnQgYSBwYXRjaCBmcm9tIFhlbiA0LjIxIHRvIGZpeCB0aGUg
-Zm9sbG93aW5nIGJ1aWxkIGVycm9ycyBmb3IgQXJtIHY3Cj4gd2l0aCBnY2MtMTU6Cj4gCj4gICB4
-ZW4tNC4xNC42L3hlbi9pbmNsdWRlL2FzbS9wbGF0Zm9ybXMvbWlkd2F5Lmg6MTogZXJyb3I6IGhl
-YWRlciBndWFyZCAnX19BU01fQVJNX1BMQVRGT1JNU19NSURXQVlfSCcgZm9sbG93ZWQgYnkgJyNk
-ZWZpbmUnIG9mIGEgZGlmZmVyZW50IG1hY3JvIFstV2Vycm9yPWhlYWRlci1ndWFyZF0KPiAgIHhl
-bi00LjE0LjYveGVuL2luY2x1ZGUvYXNtL3BsYXRmb3Jtcy9vbWFwNS5oOjE6IGVycm9yOiBoZWFk
-ZXIgZ3VhcmQgJ19fQVNNX0FSTV9QTEFURk9STVNfT01BUDVfSCcgZm9sbG93ZWQgYnkgJyNkZWZp
-bmUnIG9mIGEgZGlmZmVyZW50IG1hY3JvIFstV2Vycm9yPWhlYWRlci1ndWFyZF0KPiAKPiBTaW5j
-ZSB0aGUgZXh0ZXJuYWwgMzJiIGFybSB0b29sY2hhaW4gaGFzIGJlZW4gdXBkYXRlZCB0byBhIHZl
-cnNpb24gYmFzZWQgb24KPiBnY2MtMTUsIHRoZSB0ZXN0cy5wYWNrYWdlLnRlc3RfeGVuLlRlc3RY
-ZW5Bcm12NyBweXRob24gdGVzdCBkb2VzIG5vdCBidWlsZAo+IGFueW1vcmUuCj4gQWRkaW5nIHRo
-ZSBwYXRjaCByZXBhaXJzIGl0Lgo+IAo+IExpbms6IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJv
-b3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTM1MTgzMTg0NzMKPiBGaXhlczogODZkNDUzYTdkYzA4
-ICgidG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtYXJtLWFy
-bTogYnVtcCB0byAxNS4yLnJlbDEiKQo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8
-dmluY2VudC5zdGVobGVAYXJtLmNvbT4KPiBDYzogQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3RhaXJA
-YWxpc3RhaXIyMy5tZT4KPiBDYzogRG93YW4gR3VsbGllbnQgPGRvd2FuLmd1bGxpZW50QHNtaWxl
-LmZyPgoKQXBwbGllZCB0byAyMDI2LjAyLnguIFRoYW5rcwoKPiAtLS0KPiAgLi4uOS1Bcm0tcGxh
-dGZvcm1zLWZpeC1idWlsZC13aXRoLWdjYzE1LnBhdGNoIHwgNDYgKysrKysrKysrKysrKysrKysr
-Kwo+ICAxIGZpbGUgY2hhbmdlZCwgNDYgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS94ZW4vMDAwOS1Bcm0tcGxhdGZvcm1zLWZpeC1idWlsZC13aXRoLWdjYzE1LnBh
-dGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UveGVuLzAwMDktQXJtLXBsYXRmb3Jtcy1maXgt
-YnVpbGQtd2l0aC1nY2MxNS5wYXRjaCBiL3BhY2thZ2UveGVuLzAwMDktQXJtLXBsYXRmb3Jtcy1m
-aXgtYnVpbGQtd2l0aC1nY2MxNS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
-MDAwMDAwMDAwMC4uZmI5NWNhOWZhNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3hl
-bi8wMDA5LUFybS1wbGF0Zm9ybXMtZml4LWJ1aWxkLXdpdGgtZ2NjMTUucGF0Y2gKPiBAQCAtMCww
-ICsxLDQ2IEBACj4gK0Zyb20gZDEyNjY2ZDc0ZGM3NDJiYjA2YzMwYjk2ZDZiODc0YTNlMTRjNmI0
-NiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogSmFuIEJldWxpY2ggPGpiZXVsaWNo
-QHN1c2UuY29tPgo+ICtEYXRlOiBUdWUsIDI2IEF1ZyAyMDI1IDA4OjQxOjE4ICswMjAwCj4gK1N1
-YmplY3Q6IFtQQVRDSF0gQXJtL3BsYXRmb3JtczogZml4IGJ1aWxkIHdpdGggZ2NjMTUKPiArTUlN
-RS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04
-Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK0ZvciB0d28gb2YgdGhl
-IGhlYWRlcnMgZ2NjMTUgY29tcGxhaW5zICJoZWFkZXIgZ3VhcmQgLi4uIGZvbGxvd2VkIGJ5Cj4g
-KycjZGVmaW5lJyBvZiBhIGRpZmZlcmVudCBtYWNybyIuIE1pc3JhIGNlcnRhaW5seSB3b3VsZG4n
-dCBoYXZlIGxpa2VkCj4gK3RoaXMgZWl0aGVyLCBpZiB0aGVzZSBoZWFkZXJzIHdlcmUgY292ZXJl
-ZCBieSBhIHNjYW4uCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBKYW4gQmV1bGljaCA8amJldWxpY2hA
-c3VzZS5jb20+Cj4gK0Fja2VkLWJ5OiBNaWNoYWwgT3J6ZWwgPG1pY2hhbC5vcnplbEBhbWQuY29t
-Pgo+ICtVcHN0cmVhbTogaHR0cHM6Ly94ZW5iaXRzLnhlbi5vcmcvZ2l0d2ViLz9wPXhlbi5naXQ7
-YT1jb21taXRkaWZmO2g9MzlmOTUwODllMmJhMTVjNTQzOGNlOTA0YzBjYmJkOGQ3OWQzZTZlNwo+
-ICtTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+
-Cj4gKy0tLQo+ICsgeGVuL2luY2x1ZGUvYXNtLWFybS9wbGF0Zm9ybXMvbWlkd2F5LmggfCAyICst
-Cj4gKyB4ZW4vaW5jbHVkZS9hc20tYXJtL3BsYXRmb3Jtcy9vbWFwNS5oICB8IDIgKy0KPiArIDIg
-ZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+ICsKPiArZGlm
-ZiAtLWdpdCBhL3hlbi9pbmNsdWRlL2FzbS1hcm0vcGxhdGZvcm1zL21pZHdheS5oIGIveGVuL2lu
-Y2x1ZGUvYXNtLWFybS9wbGF0Zm9ybXMvbWlkd2F5LmgKPiAraW5kZXggMDk5ZTQzNS4uNjkxNDM5
-MyAxMDA2NDQKPiArLS0tIGEveGVuL2luY2x1ZGUvYXNtLWFybS9wbGF0Zm9ybXMvbWlkd2F5LmgK
-PiArKysrIGIveGVuL2luY2x1ZGUvYXNtLWFybS9wbGF0Zm9ybXMvbWlkd2F5LmgKPiArQEAgLTEs
-NSArMSw1IEBACj4gKyAjaWZuZGVmIF9fQVNNX0FSTV9QTEFURk9STVNfTUlEV0FZX0gKPiArLSNk
-ZWZpbmUgX19BU01fQVNNX1BMQVRGT1JNU19NSURXQVlfSAo+ICsrI2RlZmluZSBfX0FTTV9BUk1f
-UExBVEZPUk1TX01JRFdBWV9ICj4gKyAKPiArIC8qIGFkZHJlc3NlcyBvZiBTUkVHIHJlZ2lzdGVy
-cyBmb3IgcmVzZXR0aW5nIHRoZSBTb0MgKi8KPiArICNkZWZpbmUgTVdfU1JFR19QV1JfUkVRICAg
-ICAgICAgICAgIDB4ZmZmM2NmMDAKPiArZGlmZiAtLWdpdCBhL3hlbi9pbmNsdWRlL2FzbS1hcm0v
-cGxhdGZvcm1zL29tYXA1LmggYi94ZW4vaW5jbHVkZS9hc20tYXJtL3BsYXRmb3Jtcy9vbWFwNS5o
-Cj4gK2luZGV4IGM1NTljODQuLjg4NjdiNDUgMTAwNjQ0Cj4gKy0tLSBhL3hlbi9pbmNsdWRlL2Fz
-bS1hcm0vcGxhdGZvcm1zL29tYXA1LmgKPiArKysrIGIveGVuL2luY2x1ZGUvYXNtLWFybS9wbGF0
-Zm9ybXMvb21hcDUuaAo+ICtAQCAtMSw1ICsxLDUgQEAKPiArICNpZm5kZWYgX19BU01fQVJNX1BM
-QVRGT1JNU19PTUFQNV9ICj4gKy0jZGVmaW5lIF9fQVNNX0FTTV9QTEFURk9STVNfT01BUDVfSAo+
-ICsrI2RlZmluZSBfX0FTTV9BUk1fUExBVEZPUk1TX09NQVA1X0gKPiArIAo+ICsgI2RlZmluZSBS
-RUFMVElNRV9DT1VOVEVSX0JBU0UgICAgICAgICAgICAgICAgICAgMHg0ODI0MzIwMAo+ICsgI2Rl
-ZmluZSBJTkNSRU1FTlRFUl9OVU1FUkFUT1JfT0ZGU0VUICAgICAgICAgICAgMHgxMAo+ICstLSAK
-PiArMi41My4wCj4gKwo+IC0tIAo+IDIuNTEuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+For more details, see:
+https://github.com/tomba/rwmem/compare/c89bc9ad9...2.0
+
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
+---
+Changes v1 -> v2:
+  - Add patch to fix compilation failure with musl libc.
+
+ ...001-Fix-build-failure-with-musl-libc.patch | 29 +++++++++++++++++++
+ package/rwmem/rwmem.hash                      |  3 +-
+ package/rwmem/rwmem.mk                        |  3 +-
+ 3 files changed, 32 insertions(+), 3 deletions(-)
+ create mode 100644 package/rwmem/0001-Fix-build-failure-with-musl-libc.patch
+
+diff --git a/package/rwmem/0001-Fix-build-failure-with-musl-libc.patch b/package/rwmem/0001-Fix-build-failure-with-musl-libc.patch
+new file mode 100644
+index 0000000000..9f298eb842
+--- /dev/null
++++ b/package/rwmem/0001-Fix-build-failure-with-musl-libc.patch
+@@ -0,0 +1,29 @@
++Fix build failure with musl libc.
++
++Signed-off-by: Vincent Cruz <mooz@blockos.org>
++---
++ tests/test_data_generator.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/tests/test_data_generator.cpp b/tests/test_data_generator.cpp
++index 39e1322..3676f19 100644
++--- a/tests/test_data_generator.cpp
+++++ b/tests/test_data_generator.cpp
++@@ -2,6 +2,7 @@
++ 
++ #include <algorithm>
++ #include <cstring>
+++#include <endian.h>
++ 
++ // Constants from regfiledata.h
++ static const uint32_t RWMEM_MAGIC = 0x00e11554;
++@@ -169,4 +170,4 @@ std::vector<uint8_t> TestRegisterFileBuilder::build() {
++     }
++ 
++     return data;
++-}
++\ No newline at end of file
+++}
++-- 
++2.51.0
++
+diff --git a/package/rwmem/rwmem.hash b/package/rwmem/rwmem.hash
+index da74002cb4..8b73f662ea 100644
+--- a/package/rwmem/rwmem.hash
++++ b/package/rwmem/rwmem.hash
+@@ -1,2 +1,3 @@
+-sha256  e6cb76b77869aef9ec4a2c31d0d80af0182a5f9c9c3ae06225c8fb2f8266379f  rwmem-c89bc9ad9a8f2359f358c510db57b7678eb156d1.tar.gz
++# Locally calculated
++sha256  d10639f563100c819202337c4d4df57db11c2fcd59a19b0c68e34b8eb9aa1d01  rwmem-2.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rwmem/rwmem.mk b/package/rwmem/rwmem.mk
+index d6ef05193b..1259b5503f 100644
+--- a/package/rwmem/rwmem.mk
++++ b/package/rwmem/rwmem.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-RWMEM_VERSION = c89bc9ad9a8f2359f358c510db57b7678eb156d1
++RWMEM_VERSION = 2.0
+ RWMEM_SITE = $(call github,tomba,rwmem,$(RWMEM_VERSION))
+ RWMEM_LICENSE = GPL-2.0
+ RWMEM_LICENSE_FILES = LICENSE
+-RWMEM_CONF_OPTS = -Dpyrwmem=disabled
+ RWMEM_DEPENDENCIES = host-pkgconf fmt inih
+ 
+ $(eval $(meson-package))
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
