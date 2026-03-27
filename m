@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9449910ED640
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A119510ED64F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68FBE4171A;
-	Fri, 27 Mar 2026 10:03:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76FC66129C;
+	Fri, 27 Mar 2026 10:03:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f-mlwSxpcYMl; Fri, 27 Mar 2026 10:03:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tzVcWLn15byn; Fri, 27 Mar 2026 10:03:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 869EE4173D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92839613D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605797;
-	bh=FBRKBoAJmWOqyveMWfVqiF47z464Hu3kYBf3QHLJA1s=;
+	s=default; t=1774605800;
+	bh=tzpDqQt3PkWvkHuW+bCCUGfakza2+TwHNh9QId93E7U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=EqLQJyhCVS6AOQU11lOpWPSglITuULW9gUqTZw/PTmXkR472Rh6q/lUcwqAQxBy5q
-	 h1ZCmyofzdzQOvNvpcNf4q1KHxheIZrC0vXqXpHSxyE+xN3dKUJh99oNCco+HDXc3H
-	 hLG1jyAT/gLIGGfKvgd+oqSMNNPaadCJh6DTLhwCUJrOAo2ODcEF/yjY7usBOvFJOx
-	 nLgQqpEhqxzBAX7whItm3ks9XW4DByy3VWAO8hs73Fcp7bDs17fr/Y3YsoQ5wPE6PL
-	 SXJ3HprxFnsQV+OYhFvNhPbQ8j1Hd3iCA682fkPwAYxMdz87y5xPSIw/03OGWa5QGc
-	 YPYlSLc99dRRg==
+	b=KNbBhocmfJ8diBd1DYGc/cHnt/m55jur9Ap/XG2ct1xssgjeHEzfHowOI+pg0wDyI
+	 UyzL8L8PMtVmRfAeHRLQLX+tVpRaz3hq91u1MLmDCSlqI2CJrG9mPsYRU2mhbwBVmO
+	 yagGG3Ie7QOlm88hXVgKnzeSYYJP5MdDADnjWKpdHhwE16wVchFqVmOFZDr1Kc5Qh0
+	 l6qQ+kqe1Nq6WjDDxgzl/aVZfUArWAgL8clMVih86k2mlbp6xkP20Od0PtCQhvD1YF
+	 6bdm6a8NKPiL50qqaQQtSCEBlk+f5mHPSHbMtIW0YA8k6psBx/boWT4ZlodRShBqeQ
+	 9eqGQebqOp88w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 869EE4173D;
-	Fri, 27 Mar 2026 10:03:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 53141249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92839613D3;
+	Fri, 27 Mar 2026 10:03:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EF801D3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38EA84171A
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 510C940087
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qSu11UfgAqWD for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 10:03:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LQ1ysL8EQ8FZ for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 10:03:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3415D4172A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3415D4172A
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3415D4172A
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:14 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-486fba7ce4cso19735755e9.3
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 03:03:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 274FF40BD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274FF40BD7
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 274FF40BD7
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:03:15 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-439c6fc2910so1281659f8f.0
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 03:03:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774605792; x=1775210592;
+ d=1e100.net; s=20251104; t=1774605794; x=1775210594;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ljq0f4zCapEYncQhr7tZ5aqJ2egtp4DVGapvpcjoA70=;
- b=W9DQ6RTSJeA+FM4txeQFH4ger55yXUo8aasMot9FMJuudowmMFGEcSp7mpOXQjqKq4
- uxolOLq3Wun+MY7UZNeskvDOkNgr4X5SrL7xxZgJXjEPJi++wTpTDU17gNevyeps3jLG
- mH4XuVq4GWmF41Li5FnZVI2Uy+zKiLZkInNbaanShHXaP/YpxMsaJqJFfFiy68+j1Ad/
- FFuQzYDpDFTlI3MahmtcJv35ICSxNmpdjSyOQNkLxByeYYdIOx5zJgL37VVtIMS9qBaj
- fp1Ns5R8/LF8YKu6pkEbLV9O4KhWQfB5z+sl8t51h8XzBDUtDcs7lE7sjzmok4eoIofT
- v79w==
+ bh=u7ob7sRfG1T5JZ1arQAkUZkq0mYvX/dRWyGkdoZKHks=;
+ b=XmgdJ67845rGd7j9mjKYOi//efH3Z0y7Mm5gP4907v5G0HGMh9FB6CvzlUGW5Z5njp
+ eypxK31PTovmeOBpMfMPhFzHU4LB6b89oVrSQ7aMtt8vuv7PuFZD6EgRf5MxLuED9/5h
+ Y9R3eecMaq9J4RHJy1ZwJ09nMK8t3a+I665ipmlZxMN4rT7xOgVZpBr+CN4hRClh1vqF
+ rgJcP0txREvjbcwLx8c0kNadk/s5RkVpObNjdDNm0pXyF52OtjCt9rxd8qUa/TckhLDy
+ zNZ9D+d22WNgDYneFwJSodIqMWTpP0TKaO80W+e+65TlZ+WeGdE01617VygEoQiA+O22
+ n41g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCViG4utBLbHc/LG2oz5g2DxTYw532Ae5hLZYHX2dQDugRGTFROZm/50XvcZtAoKK597btFhlLvEpZg=@buildroot.org
-X-Gm-Message-State: AOJu0Yy8K9eu2NGnqwuR4Bqb9J8eGMoeZR+QFcwa8a0Jz+ZDjZtshn0S
- Abmz/8Ot9dueDZV6mXaT8yzrYxpba7sieyMESKeHppCSYreILKspQa6kFf56tEQWLEc=
-X-Gm-Gg: ATEYQzw7NKo4/x8VVV78yxSOSDd6RpxpD7s4o0z2NKseY8fYpAV/tALvgOYtW/lShB8
- H5A3AYRkKwonUFpOJZGt5kEwN+P1AjZMCKa5YRHYmBY9nRSbOWSMa11p1GF0ovbXwF3ooKGrjCp
- skW/hHGXsSIoUgtZgaFJQ/Fs6wXRg6Tv8RN7LK66T7CbsPIIXyLZaAJwXKQ7geLSn3uPhbMOakj
- zOKrmelc8L/zfPIuHq845FcrIfAMnlvGTD2okl56sfssWN0RQ7g+uIiP0iMtGPYw+BaztxxmmyL
- a4Y1BtvO9aWqvj83E6YKmsdnoIQ5DQfn9xhVzzB/pExQ/L4Y6YAoGrjlEuPHnuU9DAoVgrXpP4y
- J3wAjhx5yA41VZl0wJilbeiYBwBwIDr4yjfkbxbJIA6EHIDkdaV7/93uiLrbSt/VW0hvGOJszPb
- l6uSOiCNmZ7c+JfDAJ
-X-Received: by 2002:a05:600c:81c5:b0:46e:4e6d:79f4 with SMTP id
- 5b1f17b1804b1-48727e90ec7mr27036165e9.15.1774605791910; 
- Fri, 27 Mar 2026 03:03:11 -0700 (PDT)
+ AJvYcCXJdcy6NgBkGhJYo6i40u+ZTMwesQsxskthQpBAxmXmIS9Y4fgd1wygYU7b2cs5ohJf7pCHhPFS4Gg=@buildroot.org
+X-Gm-Message-State: AOJu0YwcL+J6bxBV0xxOceNzutCeUwN0ZTMeC8AhO45VxM05S/Jm26im
+ 3kvIHxaFwygOQXMXCSWaeT716nX6ldRRkEc+R8fPj5aRV5CaubUlv3PEieCfQBUcDyoRt+aVi2K
+ VmLXQ22M=
+X-Gm-Gg: ATEYQzzId1kfK3DzR1NVF08WDrDAXZ6KM4iaC2m9NNj/4V6s8THZEvAUafF0hWQbVdq
+ m79tN0vCGdUrFLZAjrefwzs8nyhDGjkX46qxZ5xhfhPAabYFy5NQ40lrs86sSGSbHk3IUn3bcNi
+ sIqfRPN5NBpAO6J0E5+rHT7D9r+8X9dssJTHXLmlfOItdwYp5OXMgt8rdIoEAUaWuND6UKoVYUl
+ alQKYcM8dpjRMJ0gLHpm4QgXNDZaVb3s6XeMDE+MA9cKLttBm1TDK6kSaXSRDsDRAiBGpEv/G8d
+ LNefj9fVRT/EH2/sDeD/Wfcx28HyanjABZZ10yQy1J3VHKVeuwBml5lQHL8/pWijGWwjKIIr05x
+ p/1RSDxarT2im7JSy5cyIW0rOh4D2U2wkbqaNg6JXiF0NR6AxjVXlClFQh132lWtBWBSpzCy0r+
+ SzcsdWTjiXjrSH2PVQ
+X-Received: by 2002:a5d:5f50:0:b0:43b:9a9f:8956 with SMTP id
+ ffacd0b85a97d-43b9e99d921mr2681612f8f.22.1774605793895; 
+ Fri, 27 Mar 2026 03:03:13 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48725fc4827sm13987085e9.11.2026.03.27.03.03.11
+ ffacd0b85a97d-43b919cf2b2sm15127139f8f.18.2026.03.27.03.03.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Mar 2026 03:03:11 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 27 Mar 2026 03:03:12 -0700 (PDT)
+To: Neal Frager <neal.frager@amd.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 11:03:09 +0100
-Message-ID: <20260327100310.46952-1-thomas.perale@mind.be>
+Date: Fri, 27 Mar 2026 11:03:12 +0100
+Message-ID: <20260327100312.47004-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260315191748.762183-1-bernd@kuhls.net>
-References: <20260315191748.762183-1-bernd@kuhls.net>
+In-Reply-To: <20260318100457.1838670-1-neal.frager@amd.com>
+References: <20260318100457.1838670-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774605792; x=1775210592; darn=buildroot.org;
+ d=mind.be; s=google; t=1774605794; x=1775210594; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ljq0f4zCapEYncQhr7tZ5aqJ2egtp4DVGapvpcjoA70=;
- b=YHYF/aGeaJofXwTEMVAmb6pS9aeBdDu5xF8pV1WtJjNXi+aDv4lfO8GrJPlChz37vL
- REfgWVr/4rs415ngpEnTPPa/JVW7dPKpU1sx6uFiqQs8hF9jdOztVnqso4IpukRVGkUT
- A53WSvQXdYhWkJP0VLK+UaiOg2dZFhWXzsEOb0YNw6VXknMsaYN4jZJqAvvYGZdyyBnX
- axHtXTgixZj35KYtPU1kWtfc9xPf+hVo4udF/9ox6ISBD0vL8X9fDVybsJpqWBWQ7ixr
- 2GDzXKujF9MOaj8iIRa7VaILcfYr3C288nu31Sl9h7XIqbVApkXVaAwDVZRYjxQb4FlN
- CqAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=u7ob7sRfG1T5JZ1arQAkUZkq0mYvX/dRWyGkdoZKHks=;
+ b=ZcL5puiYhyC2SiRzZnA+7o8rQiByWijAi2o8dXnXlSJNWFDx9htnFDftqfifY3A5m3
+ 5mPEMjW8gBE5rkn+MqGhwZ63lszE85EjDnq18HEn+mv9rnpHHqGOwixB0MBoQKTOC28m
+ bBZwwzHSe3tJrqTcQ78k4tf29O1+YS3tOwnxGhRw8012F/w5TldGjgRph73e2uiWnIxv
+ CUaUrBuW8ZJxXBxeZrD1UGPO6sfx7O4eKwXNfrwVR5DU+YAZ4LiWloxAUKMV6BgBjx2p
+ 178s1dKJ1/swbz9+a0Ig2nI8B12Y3s0zwmQS1Myw+zMdS9LQcRIStkRsDFJyhsLBv7Qn
+ fjHQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YHYF/aGe
-Subject: Re: [Buildroot] [PATCH 1/1] package/igh-ethercat: fix build with
- kernel >= 6.15
+ header.a=rsa-sha256 header.s=google header.b=ZcL5puiY
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/bootgen: fix build issue if
+ host-flex already built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,78 +126,134 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gQnVpbGRyb290IGNvbW1pdCBjNmU5MTQ4MTk3NzQyMTJlNzliZTE5ZjYy
-NzA2ZjY1M2I5NjQ2ZjExIGJ1bXBlZCB0aGUKPiBwYWNrYWdlIGZyb20gMS42LjMgdG8gMS42Ljgu
-IFRoZSBwcmV2aW91cyB2ZXJzaW9uIDEuNi4zIGZhaWxlZCB0byBidWlsZAo+IHdpdGgga2VybmVs
-ID49IDYuMTUgYXMgc2VlbiBoZXJlOgo+IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQv
-cmVzdWx0cy83ZjQvN2Y0YjNlNjMyYTVkZTY3ZGVjMjYyNGEyMDk3MDQ1ZWM0ZDc2NzI0Ni8KPiAi
-ZXhhbXBsZXMvbWluaS9taW5pLmM6NTI4OjU6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBv
-ZiBmdW5jdGlvbgo+ICDDouKCrMucZGVsX3RpbWVyX3N5bmPDouKCrOKEoiBbLVdpbXBsaWNpdC1m
-dW5jdGlvbi1kZWNsYXJhdGlvbl0KPiAgIDUyOCB8ICAgICBkZWxfdGltZXJfc3luYygmdGltZXIp
-OyIKPiAKPiBUaGUgYnVtcCB0byAxLjYuOCBpbmNsdWRlcyBhIGNvbW1pdCB3aGljaCBmaXhlcyB0
-aGUgcHJvYmxlbToKPiBodHRwczovL2dpdGxhYi5jb20vZXRoZXJsYWIub3JnL2V0aGVyY2F0Ly0v
-Y29tbWl0LzI0MDA4MGYxMTA2MmNjYTQyZjkxMzJjZDMyZmFkM2I5OTM1MDI2NjUKPiAKPiBidXQg
-aXQgb25seSBtYXNrZWQgb3RoZXIgYnVpbGQgZXJyb3JzIHdoaWNoIHdlcmUgZm91bmQgYnkgdGhl
-Cj4gYXV0b2J1aWxkZXJzOgo+IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
-cy8xYTUvMWE1NDZlZTIyMTdlNzg0M2I4NTJhNWI3OWI0NzdlZjIzZGY2YTA2NC8KPiAiZXhhbXBs
-ZXMvdHR5L3R0eS5jOjIzNjo1OiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rp
-b24KPiAgJ2RlbF90aW1lcl9zeW5jJyBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0K
-PiAgIDIzNiB8ICAgICBkZWxfdGltZXJfc3luYygmdGltZXIpOyIKPiAKPiB3aGljaCBuZWVkIHNp
-bWlsYXIgZml4ZXMuCj4gCj4gRml4ZXM6Cj4gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5l
-dC9yZXN1bHRzLzBiYS8wYmE3MTYzZTUwMTIzMDlkM2EzMWFhNzE4NmNhOTVhOWQ1YzhkZTY5Lwo+
-IAo+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CgpBcHBsaWVk
-IHRvIDIwMjYuMDIueC4gVGhhbmtzCgo+IC0tLQo+ICAuLi5uZXctdGltZXItaW50ZXJmYWNlLXNp
-bmNlLWtlcm5lbC02LjEucGF0Y2ggfCA2MyArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBj
-aGFuZ2VkLCA2MyBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2ln
-aC1ldGhlcmNhdC8wMDAxLXR0eS1JbXBsZW1lbnRlZC1uZXctdGltZXItaW50ZXJmYWNlLXNpbmNl
-LWtlcm5lbC02LjEucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9pZ2gtZXRoZXJjYXQv
-MDAwMS10dHktSW1wbGVtZW50ZWQtbmV3LXRpbWVyLWludGVyZmFjZS1zaW5jZS1rZXJuZWwtNi4x
-LnBhdGNoIGIvcGFja2FnZS9pZ2gtZXRoZXJjYXQvMDAwMS10dHktSW1wbGVtZW50ZWQtbmV3LXRp
-bWVyLWludGVyZmFjZS1zaW5jZS1rZXJuZWwtNi4xLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2
-NDQKPiBpbmRleCAwMDAwMDAwMDAwLi41ZTU2OGVhYmE5Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBi
-L3BhY2thZ2UvaWdoLWV0aGVyY2F0LzAwMDEtdHR5LUltcGxlbWVudGVkLW5ldy10aW1lci1pbnRl
-cmZhY2Utc2luY2Uta2VybmVsLTYuMS5wYXRjaAo+IEBAIC0wLDAgKzEsNjMgQEAKPiArRnJvbSBl
-MzJlOTlmOGI4ZWMwMmEzNDBhZDNiOTNjYzhhYmQzNjc4MWZmNTY4IE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQo+ICtGcm9tOiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0Pgo+ICtEYXRlOiBT
-dW4sIDE1IE1hciAyMDI2IDIwOjA2OjQyICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gdHR5OiBJ
-bXBsZW1lbnRlZCBuZXcgdGltZXIgaW50ZXJmYWNlIHNpbmNlIGtlcm5lbCA2LjE1Cj4gKwo+ICtV
-cHN0cmVhbTogaHR0cHM6Ly9naXRsYWIuY29tL2V0aGVybGFiLm9yZy9ldGhlcmNhdC8tL21lcmdl
-X3JlcXVlc3RzLzE4Nwo+ICsKPiArU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1
-aGxzLm5ldD4KPiArLS0tCj4gKyBleGFtcGxlcy90dHkvdHR5LmMgfCA0ICsrKysKPiArIHR0eS9t
-b2R1bGUuYyAgICAgICB8IDggKysrKysrKysKPiArIDIgZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0
-aW9ucygrKQo+ICsKPiArZGlmZiAtLWdpdCBhL2V4YW1wbGVzL3R0eS90dHkuYyBiL2V4YW1wbGVz
-L3R0eS90dHkuYwo+ICtpbmRleCA0ZDQ3YTQ5Li5lNWI0ZDUyIDEwMDY0NAo+ICstLS0gYS9leGFt
-cGxlcy90dHkvdHR5LmMKPiArKysrIGIvZXhhbXBsZXMvdHR5L3R0eS5jCj4gK0BAIC0yMzMsNyAr
-MjMzLDExIEBAIHN0YXRpYyB2b2lkIF9fZXhpdCBjbGVhbnVwX21pbmlfbW9kdWxlKHZvaWQpCj4g
-KyB7Cj4gKyAgICAgcHJpbnRrKEtFUk5fSU5GTyBQRlggIlN0b3BwaW5nLi4uXG4iKTsKPiArIAo+
-ICsrI2lmIExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTig2LCAxNSwgMCkKPiAr
-KyAgICB0aW1lcl9kZWxldGVfc3luYygmdGltZXIpOwo+ICsrI2Vsc2UKPiArICAgICBkZWxfdGlt
-ZXJfc3luYygmdGltZXIpOwo+ICsrI2VuZGlmCj4gKyAKPiArICAgICBmcmVlX3NlcmlhbF9kZXZp
-Y2VzKCk7Cj4gKyAKPiArZGlmZiAtLWdpdCBhL3R0eS9tb2R1bGUuYyBiL3R0eS9tb2R1bGUuYwo+
-ICtpbmRleCAyYjdiMjJiLi4xMmFkMWU3IDEwMDY0NAo+ICstLS0gYS90dHkvbW9kdWxlLmMKPiAr
-KysrIGIvdHR5L21vZHVsZS5jCj4gK0BAIC0yOTIsNyArMjkyLDExIEBAIHN0YXRpYyBpbnQgZWNf
-dHR5X2luaXQoZWNfdHR5X3QgKnQsIGludCBtaW5vciwKPiArIAo+ICsgc3RhdGljIHZvaWQgZWNf
-dHR5X2NsZWFyKGVjX3R0eV90ICp0dHkpCj4gKyB7Cj4gKysjaWYgTElOVVhfVkVSU0lPTl9DT0RF
-ID49IEtFUk5FTF9WRVJTSU9OKDYsIDE1LCAwKQo+ICsrICAgIHRpbWVyX2RlbGV0ZV9zeW5jKCZ0
-dHktPnRpbWVyKTsKPiArKyNlbHNlCj4gKyAgICAgZGVsX3RpbWVyX3N5bmMoJnR0eS0+dGltZXIp
-Owo+ICsrI2VuZGlmCj4gKyAgICAgdHR5X3VucmVnaXN0ZXJfZGV2aWNlKHR0eV9kcml2ZXIsIHR0
-eS0+bWlub3IpOwo+ICsgfQo+ICsgCj4gK0BAIC0zNjcsMTAgKzM3MSwxNCBAQCBzdGF0aWMgdm9p
-ZCBlY190dHlfd2FrZXVwKHN0cnVjdCB0aW1lcl9saXN0ICp0KQo+ICsgc3RhdGljIHZvaWQgZWNf
-dHR5X3dha2V1cCh1bnNpZ25lZCBsb25nIGRhdGEpCj4gKyAjZW5kaWYKPiArIHsKPiArKyNpZiBM
-SU5VWF9WRVJTSU9OX0NPREUgPj0gS0VSTkVMX1ZFUlNJT04oNiwgMTUsIDApCj4gKysgICAgZWNf
-dHR5X3QgKnR0eSA9IHRpbWVyX2NvbnRhaW5lcl9vZih0dHksIHQsIHRpbWVyKTsKPiArKyNlbHNl
-Cj4gKyAjaWYgTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9OKDQsIDE1LCAwKQo+
-ICsgICAgIGVjX3R0eV90ICp0dHkgPSBmcm9tX3RpbWVyKHR0eSwgdCwgdGltZXIpOwo+ICsgI2Vs
-c2UKPiArICAgICBlY190dHlfdCAqdHR5ID0gKGVjX3R0eV90ICopIGRhdGE7Cj4gKysjZW5kaWYK
-PiArICNlbmRpZgo+ICsgICAgIHNpemVfdCB0b19yZWN2Owo+ICsgCj4gKy0tIAo+ICsyLjQ3LjMK
-PiArCj4gLS0gCj4gMi40Ny4zCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> Fix a silent build issue with the host-bootgen package if host-flex is already
+> built. The host-flex package will install a version of the flexlexer.h header
+> file that is not compatible with the version embedded in bootgen.
+> 
+> While the build will still 'succeed', the binary will not be correct. This
+> can be seen by just running the binary that is built. By default, running
+> bootgen without any parameters should print the help menu, but if the wrong
+> version of flexlexer.h is used, it will print the following instead:
+> 
+> $ output/host/bin/bootgen
+> 
+> ****** Bootgen v2025.1-Merged
+>   **** Build date : Mar 18 2026-07:08:01
+>     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+>     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+> 
+> ERROR: syntax error
+> -h
+> 
+> Add a patch to the bootgen package that corrects the issue.
+> 
+> Upstream: CR to AMD jira
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Applied to 2026.02.x. Thanks
+
+> ---
+>  ...use-embedded-win_include-flexlexer.h.patch | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+> 
+> diff --git a/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch b/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+> new file mode 100644
+> index 0000000000..1de9a91223
+> --- /dev/null
+> +++ b/package/bootgen/0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
+> @@ -0,0 +1,76 @@
+> +From dfe45e10791a171c3c79699257d3d3a978ec30eb Mon Sep 17 00:00:00 2001
+> +From: Neal Frager <neal.frager@amd.com>
+> +Date: Wed, 18 Mar 2026 09:51:58 +0000
+> +Subject: [PATCH] flexlexer: use embedded win_include/flexlexer.h
+> +
+> +bootgen embeds an old version of flex. If the host machine has a newer version
+> +of flex, the bootgen binary that is built will have errors such as the
+> +following, if the wrong version of flexlexer.h is used.
+> +
+> +$ output/host/bin/bootgen
+> +
+> +****** Bootgen v2025.1-Merged
+> +  **** Build date : Mar 18 2026-07:08:01
+> +    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+> +    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+> +
+> +ERROR: syntax error
+> +-h
+> +
+> +Running the bootgen binary should print the help menu by default and should
+> +not have a syntax error.
+> +
+> +Correct the path to the flexlexer.h header files, such that no host version
+> +of these files can cause a silent build failure.
+> +
+> +Upstream: CR to AMD jira
+> +
+> +Signed-off-by: Neal Frager <neal.frager@amd.com>
+> +---
+> + common/include/bifscanner.h        | 2 +-
+> + common/include/cmdoptionsscanner.h | 2 +-
+> + common/include/reginitscanner.h    | 2 +-
+> + 3 files changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/common/include/bifscanner.h b/common/include/bifscanner.h
+> +index 9683416..9aa72a5 100755
+> +--- a/common/include/bifscanner.h
+> ++++ b/common/include/bifscanner.h
+> +@@ -29,7 +29,7 @@
+> + #if ! defined(yyFlexLexerOnce)
+> + #undef yyFlexLexer
+> + #define yyFlexLexer bifFlexLexer
+> +-#include "FlexLexer.h"
+> ++#include "../../win_include/FlexLexer.h"
+> + #endif
+> + 
+> + // Override the interface for yylex since we namespaced it
+> +diff --git a/common/include/cmdoptionsscanner.h b/common/include/cmdoptionsscanner.h
+> +index aa2f474..78fa7cf 100755
+> +--- a/common/include/cmdoptionsscanner.h
+> ++++ b/common/include/cmdoptionsscanner.h
+> +@@ -30,7 +30,7 @@
+> + 
+> + #undef yyFlexLexer
+> + #define yyFlexLexer reginitFlexLexer
+> +-#include "FlexLexer.h"
+> ++#include "../../win_include/FlexLexer.h"
+> + #endif
+> + 
+> + // Override the interface for yylex since we namespaced it
+> +diff --git a/common/include/reginitscanner.h b/common/include/reginitscanner.h
+> +index 74463e6..d8152a6 100755
+> +--- a/common/include/reginitscanner.h
+> ++++ b/common/include/reginitscanner.h
+> +@@ -30,7 +30,7 @@
+> + 
+> + #undef yyFlexLexer
+> + #define yyFlexLexer reginitFlexLexer
+> +-#include "FlexLexer.h"
+> ++#include "../../win_include/FlexLexer.h"
+> + #endif
+> + 
+> + // Override the interface for yylex since we namespaced it
+> +-- 
+> +2.25.1
+> +
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
