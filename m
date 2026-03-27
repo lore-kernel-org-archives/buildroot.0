@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBD9510ED652
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2EEC10ED651
 	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 09:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C162C61311;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97B60416A4;
 	Fri, 27 Mar 2026 09:59:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 67vLDisjlCM6; Fri, 27 Mar 2026 09:59:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A229E612EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605571;
-	bh=T/oKFcwUB0YuaLA38R9sG/jPgrGP3kjlRKQeL0R9sjw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=joGEvcM2ixTY+/RlDCYP16LiR5rpxobp4xqAiEsvLJ9MCxhqaZlRV3tzuyExyxxLn
-	 NkWu5a+ri+q+qGRXSgE5sbXIEyTnZppqh1inAIkQVou27InsYmQHw3zpKTIhFHRXpM
-	 g2gXrLns5086R+eDjImW98dUaBgKC4UZtF9roN/Al7xoQCzPkNOKD2+qjEbVNou454
-	 WIwANx7GO5nBdiZmVkonzL+ZOmgUOSeav3pzwXyc4SGQ6IJ3qOng5C7JpwLyygM3fK
-	 2z5qh1DukVlUGEOi2Ssz/2Ii/Kk77+2FCoOrHvCmjkYdy6JOHofbaoCw2i2tq7fq5b
-	 BqV+3CVgn/c/w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A229E612EB;
-	Fri, 27 Mar 2026 09:59:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78604249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECA87416A2
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nrhNUB534Fzl for <buildroot@buildroot.org>;
+ id D0ce1LVRtwc2; Fri, 27 Mar 2026 09:59:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1EDE416B7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774605572;
+	bh=21UJFEgufaFfaRl7bAb1aHK5eSxT0O5ssxaEfIx3bSY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=UeQZTA6zhy7xVOIs0VWxBXfBfT+9pjngwGUM2uTRqfeuV9TiD6zb+kDzZsw+Tgeu4
+	 bMEuHUyUHa0yld8/aenXFJoDoUAUQPCUNtj4xotxZLwG+uPxy3xgjEXS0cd+wtxbE7
+	 tHk/03FOuS7LPssYi0SLKLXkKZUNjRBgTxcUYGK7iu/0zvK4F/0BnnrbW76LgxwC/Q
+	 cZT5/6lCxPh9aWDW0KyiBWC7lbNgKGYPVhHIDGDmLauKyAuiPR8AWQJH8nSJpJ9SJv
+	 BN+F5dtrkETQNrGAgWU+LFZsv1oekpnQCA23EriSTCrL/k0a9N5PH6xVhwdbUB5Ww6
+	 5cTevbUPr5pig==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1EDE416B7;
+	Fri, 27 Mar 2026 09:59:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 086E61D3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5756F612A7
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xOFzTLWYs89G for <buildroot@buildroot.org>;
  Fri, 27 Mar 2026 09:59:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3140041678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD626129C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3140041678
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0BD626129C
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 770167FB68; Fri, 27 Mar 2026 09:59:16 +0000 (UTC)
+ id 520357FB6C; Fri, 27 Mar 2026 09:59:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 10:57:19 +0100
+Date: Fri, 27 Mar 2026 10:57:11 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9a4cee3b339dbe741232e88ee12ec29bb7a710f0
-X-Git-Newrev: c04ad0721369d920ea4a00849dfd2640c9a96ca3
+X-Git-Oldrev: ae1d606f48cc2fbf2fb0bb425f08699ad5297746
+X-Git-Newrev: 0f53b596f15ca98cba142921cfad43503da3377c
 X-Patchwork-Hint: ignore
-Message-Id: <20260327095916.770167FB68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-wheel:
- patch CVE-2026-24049
+Message-Id: <20260327095916.520357FB6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mongoose: patch
+ CVE-2025-65502
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,88 +77,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c04ad0721369d920ea4a00849dfd2640c9a96ca3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f53b596f15ca98cba142921cfad43503da3377c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following vulnerability:
-
-- CVE-2026-24049:
-    wheel is a command line tool for manipulating Python wheel files, as
-    defined in PEP 427. In versions 0.40.0 through 0.46.1, the unpack
-    function is vulnerable to file permission modification through
-    mishandling of file permissions after extraction. The logic blindly
-    trusts the filename from the archive header for the chmod operation,
-    even though the extraction process itself might have sanitized the
-    path. Attackers can craft a malicious wheel file that, when unpacked,
-    changes the permissions of critical system files (e.g., /etc/passwd,
-    SSH keys, config files), allowing for Privilege Escalation or
-    arbitrary code execution by modifying now-writable scripts. This issue
-    has been fixed in version 0.46.2.
+- CVE-2025-65502:
+    Null pointer dereference in add_ca_certs() in Cesanta Mongoose before
+    7.2 allows remote attackers to cause a denial of service via TLS
+    initialization where SSL_CTX_get_cert_store() returns NULL.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-24049
-  - https://github.com/advisories/GHSA-8rrh-rw8j-w5fx
+  - https://www.cve.org/CVERecord?id=CVE-2025-65502
+  - https://github.com/cesanta/mongoose/commit/64abf061bf018fd78f31c200a57a3fb04f9f3ef2
 
-(cherry picked from commit 635c145c16c11f90109f49b842c5a1b4184760d1)
+(cherry picked from commit f536fd4a2e883309ab2fe97532fc94f608e31de1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-fixed-security-issue-around-wheel-unpack.patch | 35 ++++++++++++++++++++++
- package/python-wheel/python-wheel.mk               |  3 ++
- 2 files changed, 38 insertions(+)
+ package/mongoose/0001-improve-resiliency.patch | 37 ++++++++++++++++++++++++++
+ package/mongoose/mongoose.mk                   |  3 +++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/package/python-wheel/0001-fixed-security-issue-around-wheel-unpack.patch b/package/python-wheel/0001-fixed-security-issue-around-wheel-unpack.patch
+diff --git a/package/mongoose/0001-improve-resiliency.patch b/package/mongoose/0001-improve-resiliency.patch
 new file mode 100644
-index 0000000000..8640dfa291
+index 0000000000..edeea4efba
 --- /dev/null
-+++ b/package/python-wheel/0001-fixed-security-issue-around-wheel-unpack.patch
-@@ -0,0 +1,35 @@
-+From 7a7d2de96b22a9adf9208afcc9547e1001569fef Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alex=20Gr=C3=B6nholm?= <alex.gronholm@nextday.fi>
-+Date: Thu, 22 Jan 2026 01:41:14 +0200
-+Subject: [PATCH] Fixed security issue around wheel unpack (#675)
++++ b/package/mongoose/0001-improve-resiliency.patch
+@@ -0,0 +1,37 @@
++From 64abf061bf018fd78f31c200a57a3fb04f9f3ef2 Mon Sep 17 00:00:00 2001
++From: "Sergio R. Caprile" <scaprile@cesanta.com>
++Date: Mon, 13 Oct 2025 10:43:45 -0300
++Subject: [PATCH] improve resiliency
 +
-+A maliciously crafted wheel could cause the permissions of a file outside the unpack tree to be altered.
-+
-+CVE: CVE-2026-24049
-+Upstream: https://github.com/pypa/wheel/commit/7a7d2de96b22a9adf9208afcc9547e1001569fef.patch
-+[thomas: change filename, remove tests]
++CVE: CVE-2025-65502
++Upstream: https://github.com/cesanta/mongoose/commit/64abf061bf018fd78f31c200a57a3fb04f9f3ef2
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/wheel/cli/unpack.py |  4 ++--
-+ 3 files changed, 27 insertions(+), 2 deletions(-)
++ mongoose.c        | 1 +
++ src/tls_openssl.c | 1 +
++ 2 files changed, 2 insertions(+)
 +
-+diff --git a/src/wheel/cli/unpack.py b/src/wheel/cli/unpack.py
-+index d48840e6e..83dc7423f 100644
-+--- a/src/wheel/cli/unpack.py
-++++ b/src/wheel/cli/unpack.py
-+@@ -19,12 +19,12 @@ def unpack(path: str, dest: str = ".") -> None:
-+         destination = Path(dest) / namever
-+         print(f"Unpacking to: {destination}...", end="", flush=True)
-+         for zinfo in wf.filelist:
-+-            wf.extract(zinfo, destination)
-++            target_path = Path(wf.extract(zinfo, destination))
-+ 
-+             # Set permissions to the same values as they were set in the archive
-+             # We have to do this manually due to
-+             # https://github.com/python/cpython/issues/59999
-+             permissions = zinfo.external_attr >> 16 & 0o777
-+-            destination.joinpath(zinfo.filename).chmod(permissions)
-++            target_path.chmod(permissions)
-+ 
-+     print("OK")
-+
-diff --git a/package/python-wheel/python-wheel.mk b/package/python-wheel/python-wheel.mk
-index 417db7c167..ae02d21feb 100644
---- a/package/python-wheel/python-wheel.mk
-+++ b/package/python-wheel/python-wheel.mk
-@@ -13,4 +13,7 @@ PYTHON_WHEEL_LICENSE_FILES = LICENSE.txt
- PYTHON_WHEEL_CPE_ID_VENDOR = wheel_project
- PYTHON_WHEEL_CPE_ID_PRODUCT = wheel
++diff --git a/mongoose.c b/mongoose.c
++index 4c72be8201..f860ab3b07 100644
++--- a/mongoose.c
+++++ b/mongoose.c
++@@ -14581,6 +14581,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
++ static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
++   int i;
++   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+++  if (cert_store == NULL) return false;
++   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
++     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
++     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
++diff --git a/src/tls_openssl.c b/src/tls_openssl.c
++index 37838d95ba..f51d6dd8b7 100644
++--- a/src/tls_openssl.c
+++++ b/src/tls_openssl.c
++@@ -39,6 +39,7 @@ static STACK_OF(X509_INFO) * load_ca_certs(struct mg_str ca) {
++ static bool add_ca_certs(SSL_CTX *ctx, STACK_OF(X509_INFO) * certs) {
++   int i;
++   X509_STORE *cert_store = SSL_CTX_get_cert_store(ctx);
+++  if (cert_store == NULL) return false;
++   for (i = 0; i < sk_X509_INFO_num(certs); i++) {
++     X509_INFO *cert_info = sk_X509_INFO_value(certs, i);
++     if (cert_info->x509 && !X509_STORE_add_cert(cert_store, cert_info->x509))
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 8316a8d59a..02c2ac5626 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -13,6 +13,9 @@ MONGOOSE_INSTALL_STAGING = YES
+ # static library
+ MONGOOSE_INSTALL_TARGET = NO
  
-+# 0001-fixed-security-issue-around-wheel-unpack.patch
-+PYTHON_WHEEL_IGNORE_CVES += CVE-2026-24049
++# 0001-improve-resiliency.patch
++MONGOOSE_IGNORE_CVES += CVE-2025-65502
 +
- $(eval $(host-python-package))
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
