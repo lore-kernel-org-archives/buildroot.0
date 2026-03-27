@@ -1,85 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 368C510AB822
-	for <buildroot@archiver.kernel.org>; Thu, 26 Mar 2026 21:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F5310BA422
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 04:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FBD2401EF;
-	Thu, 26 Mar 2026 21:17:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n9P4rWMc8JfI; Thu, 26 Mar 2026 21:17:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 454A9401F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774559822;
-	bh=fAN/Xwb1y1hPDDnwHRpUtkJ/eBz9GHYNbyWlhL/3Imc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=aZ1KdKeKW/GO/ifKJT1HUF8rkwf4J4n57juhiXGDCFTVb5ZhlPE+GWaS8gDWYqg0j
-	 3pBN0qFz/95A0qhbJtzgHRcwKFOUraJrFVA1OZ5U/hBEI7iW+qGDWl8xVVaFwBKgTU
-	 4AJi2f/3Pz8gpxZAowG2t+Lmqy+edfF6zv8GKelqEV6ChB7DQpxEQwCfaB9BP9nMCe
-	 oHKmqgHILhJMaY8KzD30lJCWLKf8F+x44X4aYJhhjOnGwQLM3GnuptqYA0YQKv5T7J
-	 Zz6mit0z/qOIfUDEg+2N46Xq9CqNZg88cAuvVswfSAcnVnwpk3+X8IPBVVyaejOehn
-	 vtsAOpwZj6Tfw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 454A9401F4;
-	Thu, 26 Mar 2026 21:17:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id ECCCA249
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:17:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF10B80BFB
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:17:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 941288239A;
+	Fri, 27 Mar 2026 04:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ib3Pb80gABuM for <buildroot@buildroot.org>;
- Thu, 26 Mar 2026 21:17:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA1D380BB8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA1D380BB8
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA1D380BB8
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 21:16:59 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c201.dip0.t-ipconnect.de [79.214.194.1])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0FCD8A4C0DCF
- for <buildroot@buildroot.org>; Thu, 26 Mar 2026 22:16:58 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40194)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w5s4X-000000007Ha-34sV
- for buildroot@buildroot.org; Thu, 26 Mar 2026 21:16:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 26 Mar 2026 22:16:57 +0100
-Message-ID: <20260326211657.3598854-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id AvCk0hVJSSzA; Fri, 27 Mar 2026 04:27:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C0E28238B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774585633;
+	bh=FchfqH/V0OZgdFCteM01QEW+7zrGwv72CjgMTMvDi8Q=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Jign0BbF76WP3QJSEkpMR61NjkpZdpUHt1nuh/K2DyKNfwoE7og6rrAw2qQIKgAj2
+	 +isflnNJKLJ/1IovBhne23LGJs7SNdQCdEVdbcV52D+Kj2+GKdlI7dkrP0MDvZBntG
+	 jY+gviRhPxA19ZvUeRBS7yILs0fFRwfKUqmOjkcdr4HnKdkvZLvL9IoF/E7Jml2M3Z
+	 qy+77u+PnhqcqAMEtGUsDfT2kEPi2Tx99YpvwDkt5By358U922LNuK6FyFvQmWLRM8
+	 OdE1YJMcj6JoVtDKiIunSrBmJEvxoFAhvXFWJjnd9NaWKoljzABRUzlL+ulAlWRzxF
+	 KurBAGdd9iQKg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C0E28238B;
+	Fri, 27 Mar 2026 04:27:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77759249
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 04:27:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 695AC40A62
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 04:27:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3YzLFy2shA4U for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 04:27:09 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69D7740126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69D7740126
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69D7740126
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 04:27:07 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id BA719BDE0769;
+ Fri, 27 Mar 2026 05:27:03 +0100 (CET)
 MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1774559818;
- bh=Hacml1AfBUPHAmVUuHTWLE3byB70SJAatcRLpi05CvQ=;
- h=From:To:Subject:Date:From;
- b=hh0Hv4H7qlJb4KPWjspt7Lbyz2yX1Rxgsjdn1dlaT4kUiL00sJ7E5ScdS6u24fdDm
- O4BcdjoSfCzowveVcm7eocVvZ+jkL0lG3z5ViIiTfg/WU9FumgCecgjDH8b/4DUnPd
- qkAud6EfODnqKRv5Zt/PQnXbhcS4zMVt+LzvaBunEESUDwUbAnHhB1Trm+1GZo1Z7P
- OaKL0sg67JbHO+WtSHFK6IPu686wM1AbCgWm2Dz6FhAKQAT2eem54axi1raVlQ/12N
- bHZUiUbenz7tyoqxqn6y8Pw3rp5B+SVLIWtnBmVLeiC+PvsbOgFM5QPVVCZdgy1Cy2
- nfMzrLvwghdfg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=hh0Hv4H7
-Subject: [Buildroot] [PATCH 1/1] package/leafnode2: bump version to
- 2.0.0.alpha202601
+Date: Fri, 27 Mar 2026 04:27:03 +0000
+From: Andreas Ziegler <br025@umbiko.net>
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Cc: buildroot@buildroot.org, thomas.petazzoni@bootlin.com,
+ romain.naour@gmail.com
+In-Reply-To: <20260326113620.2433228-1-chakrabortyshubham66@gmail.com>
+References: <20260303182128.1242999-1-chakrabortyshubham66@gmail.com>
+ <20260326113620.2433228-1-chakrabortyshubham66@gmail.com>
+Message-ID: <8fff630f63cf5dbca36e7efe3a8f13ef@umbiko.net>
+X-Sender: br025@umbiko.net
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1774585624; bh=7VAiILGkF/uCwnWBFOcu7gNHEUMDXtCdPZcrsSIdu3M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=mwxImDCw0J7dp0Mn+N2AhuUDxI57Vq/IJQVW5zwUdC3qOZEsKso993O8+O4p6HDWj
+ uCnHlxiYe2LNAosj/s702esHioRhFAcSw62/pcTar98/rrue9ZDc0M4UNvY5sJiMYA
+ Jvszh12QsmyRzJpNcVUt6sVM58LfExEQtIGWiNDw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=mwxImDCw
+Subject: Re: [Buildroot] [PATCH v3] package/icu: fix static linking with
+ icu-uc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,45 +90,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.com/leafnode-2/leafnode-2/-/blob/leafnode-2.0.0.alpha202601/NEWS
+Hi Shubham,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/leafnode2/leafnode2.hash | 2 +-
- package/leafnode2/leafnode2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2026-03-26 11:36, Shubham Chakraborty wrote:
+> Extend the existing patch to also add -lstdc++ to the Libs
+> field, fixing static linking issues with libicuuc.a.
+> 
+> This combines the previous 0003 and 0004 changes into a
+> single patch, following review feedback from Andreas.
+> 
+> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> ---
+> Changes v2 -> v3:
+>   - Merge previous 0003 and 0004 into a single patch
+>   - Extend existing fix to also add -lstdc++ to Libs (static linking 
+> case)
+>   - Keep original authorship and add my Signed-off-by below Romain's
+>   - Update commit message and description based on review feedback
+> ---
+>  .../0003-fix-static-linking-with-icu-uc.patch | 29 ++++++++++++-------
+>  ...atic-linking-with-icu-uc-static-musl.patch | 26 -----------------
+>  2 files changed, 19 insertions(+), 36 deletions(-)
+>  delete mode 100644 
+> package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
+> 
+> diff --git a/package/icu/0003-fix-static-linking-with-icu-uc.patch 
+> b/package/icu/0003-fix-static-linking-with-icu-uc.patch
+> index 36a3d1f696..ec393254e8 100644
+> --- a/package/icu/0003-fix-static-linking-with-icu-uc.patch
+> +++ b/package/icu/0003-fix-static-linking-with-icu-uc.patch
+> @@ -3,9 +3,6 @@ From: Romain Naour <romain.naour@openwide.fr>
+>  Date: Wed, 22 Jul 2015 22:43:25 +0200
+>  Subject: [PATCH] fix static linking with icu-uc
+> 
+> -During static linking with a C application and libicuuc.a,
+> --lstdc++ is required.
+> -
+>  Add -lstdc++ in Libs.private of icu-uc.pc.
+> 
+>  Fixes:
+> @@ -13,14 +10,26 @@ 
+> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef52
+> 
+>  Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>  ---
+> - source/Makefile.in | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> +This patch currently addresses linking against stdc++ for 
+> shared-library
+> +builds. Add -lstdc++ to the static build flags also, to fix 'undefined
+> +reference' errors when linking programs like xmlcatalog (libxml2)
+> +with musl static toolchains.
+> +
+> +Upstream: Inactive-Upstream [Buildroot specific]
+> +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> +---
+> + source/Makefile.in | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> -diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
+> ---- icu.orig/source/Makefile.in	2025-03-13 19:31:23.000000000 +0100
+> -+++ icu/source/Makefile.in	2025-09-22 08:56:36.791792784 +0200
+> -@@ -279,7 +279,7 @@
+> - 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
+> '$${baselibs}' >> $@
+> +diff --git icu.orig/source/Makefile.in icu/source/Makefile.in
+> +--- icu.orig/source/Makefile.in
+> ++++ icu/source/Makefile.in
+> +@@ -279,10 +279,10 @@ config/icu-uc.pc: config/icu.pc Makefile 
+> icudefs.mk
+> + 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data 
+> libraries" >> $@
+> + 	@echo "Name: $(PACKAGE)-uc" >> $@
+> + ifeq ($(ENABLE_SHARED),)
+> +-	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
+> '$${baselibs}' >> $@
+> ++	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
+> '$${baselibs}' -lstdc++ >> $@
+>   else
+>   	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" >> $@
+>  -	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' >> $@
+> diff --git 
+> a/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch 
+> b/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
+> deleted file mode 100644
+> index e17f6ac775..0000000000
+> --- a/package/icu/0004-fix-static-linking-with-icu-uc-static-musl.patch
+> +++ /dev/null
 
-diff --git a/package/leafnode2/leafnode2.hash b/package/leafnode2/leafnode2.hash
-index 9a5eb4aa40..040e0d92a4 100644
---- a/package/leafnode2/leafnode2.hash
-+++ b/package/leafnode2/leafnode2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  c9f92282e97f399e02d6d2a2576f21e19dbb81961901e5278941e859f8660076  leafnode2-2.0.0.alpha202501.tar.gz
-+sha256  c98201dffc51addf4157ceb67f2ef7f2c0f3813e49342834f243244a872d90c1  leafnode2-2.0.0.alpha202601.tar.gz
- sha256  59d37f745dc5a2d63a51dff344f4ad89f72e76f8c7b7d877f20880d838b1bec9  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 6f7035ac13..4afb449b9e 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LEAFNODE2_VERSION = 2.0.0.alpha202501
-+LEAFNODE2_VERSION = 2.0.0.alpha202601
- LEAFNODE2_SITE = $(call gitlab,leafnode-2,leafnode-2,leafnode-$(LEAFNODE2_VERSION))
- LEAFNODE2_LICENSE = LGPL-2.1
- LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
--- 
-2.47.3
+Your patch seems not to be based on the current Buildroot master branch. 
+It cannot be applied, unfortunately.
 
+> @@ -1,26 +0,0 @@
+> -From 2107f9dfb39eeb6559fb4271c7af8b39aef521ca Mon Sep 17 00:00:00 2001
+> -From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> -Date: Tue, 3 Mar 2026 10:00:00 +0000
+> -Subject: [PATCH] fix static linking with icu-uc (static case)
+> -
+> -During static linking with a C application and libicuuc.a,
+> --lstdc++ is required. The previous patch (0003) only addressed the
+> -shared library case (Libs.private). This patch adds -lstdc++ to the
+> -main Libs line for the static case to fix undefined reference
+> -errors when linking programs like xmlcatalog (libxml2) with
+> -musl toolchains.
+> -
+> -Upstream: Inactive-Upstream [Buildroot specific]
+> -Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> ----
+> - source/Makefile.in | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
+> ---- icu.orig/source/Makefile.in
+> -+++ icu/source/Makefile.in
+> -@@ -281,3 +281,3 @@
+> - ifeq ($(ENABLE_SHARED),)
+> --	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
+> '$${baselibs}' >> $@
+> -+	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" 
+> '$${baselibs}' -lstdc++ >> $@
+> - else
+> --
+> 2.53.0
+
+Kind regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
