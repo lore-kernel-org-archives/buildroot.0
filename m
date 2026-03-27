@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1FCF10F2855
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 16:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8D4910F284F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 16:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 222B1613AD;
-	Fri, 27 Mar 2026 16:53:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DE7A613BC;
+	Fri, 27 Mar 2026 16:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v3W1CFG3GNWr; Fri, 27 Mar 2026 16:53:24 +0000 (UTC)
+ id dZivOHKgUTbR; Fri, 27 Mar 2026 16:53:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 458CE61313
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 105C4613B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774630404;
-	bh=eB3j1A1+ZTo2ac8bddStebD/qKLIkHLX5ryn259/DG8=;
+	s=default; t=1774630410;
+	bh=1J8AEiPRQqt1G6E0U0TGzDp4uMpj/908DUhAL/NInhA=;
 	h=Date:References:In-Reply-To:To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=sb3XXQpsOnyNjLhYmqPEr88TyII9LafgFLSux1VmefozzP5rxFqWjNekHswc+oOBx
-	 U8LJyPSvlP+QicgwRx5nRTrIGwonRT5UFgp4fJeIH030sdp24teEgL4Uk7V9wuO+G7
-	 iBbZQ3HnUWflRcnkdcPQhZVxbPJ2cvC1yKaBMprHE2IokPLhjjwSvMeforKuYvloxY
-	 w49oaMhnLIFu7Dc5ESvS/PQ2yt6XsAuFemouIYRgpz3iQ5dAh7RrMUPeWDmx8RuhAn
-	 oa+YSMRIPhbCZqz+JG+cXN1/n5aN2FpCrRhCyy5PEch+wKRaQZdnA6nMnA3kYeKF5k
-	 pu+0HUhb9/9pA==
+	b=bJEx2asmZ15g4upkIQ7xhrNaxKhgpvGmp1G0ZgOp6de6n0cF3Oww/3czZKLf/0YS3
+	 IYOkS4Kxj2grOUbdgJxVYrAMx4wocLcNj2xsTLd374JklUEis/EfbDBEjW2K4gkUQl
+	 DviO2WQhoe63AhMrfA6mlwGalsCeDim5ejanOgVACRrym5vfaCPbj3NknJVQUXV6Wy
+	 PzFF4ijx+l2/OuUbVX4OiNmJWJOJg7/Yt8X2eaaYmc9HbAIygi3dtQGGtkzTXOKy+s
+	 Y1tnOW6/usHOk2g43wCK/3CutwFzlAgNv5sYgux6GD/XCfgUUsJUir6SVrJ7a4hXRe
+	 sxV54ZB1R/04Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 458CE61313;
-	Fri, 27 Mar 2026 16:53:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 186F92D5
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 105C4613B5;
+	Fri, 27 Mar 2026 16:53:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DA152AA
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3560417A3
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C97383EA1
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BeOp_sofUEug for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 16:53:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.8;
- helo=smtp-1908.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZZpXye0FmVSd for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 16:53:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::190c;
+ helo=smtp-190c.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD0BC4179F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD0BC4179F
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch
- [185.125.25.8])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD0BC4179F
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:20 +0000 (UTC)
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch
- [10.4.36.108])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fj6Cf32BhzLG9;
- Fri, 27 Mar 2026 17:53:18 +0100 (CET)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5EDD283E96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EDD283E96
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch
+ [IPv6:2001:1600:4:17::190c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5EDD283E96
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 16:53:26 +0000 (UTC)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown
+ [IPv6:2001:1600:4:17::246c])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fj6Cm1M2jzKQv;
+ Fri, 27 Mar 2026 17:53:24 +0100 (CET)
 Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4fj6Cd5pPJzLvr; Fri, 27 Mar 2026 17:53:17 +0100 (CET)
-Date: Fri, 27 Mar 2026 17:53:03 +0100
+ id 4fj6Cf3PHXzN5H; Fri, 27 Mar 2026 17:53:18 +0100 (CET)
+Date: Fri, 27 Mar 2026 17:53:04 +0100
 MIME-Version: 1.0
-Message-Id: <20260327-qt5-5-15-18-v2-2-4c98e853266a@cherry.de>
+Message-Id: <20260327-qt5-5-15-18-v2-3-4c98e853266a@cherry.de>
 References: <20260327-qt5-5-15-18-v2-0-4c98e853266a@cherry.de>
 In-Reply-To: <20260327-qt5-5-15-18-v2-0-4c98e853266a@cherry.de>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.15-dev-47773
 X-Infomaniak-Routing: alpha
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1774630398;
- bh=ttn+7Xxwhc+N+o1s+RcKgfuYZ6sDVodL7bA+SLJhauI=;
+ d=0leil.net; s=20231125; t=1774630404;
+ bh=/9SguVJMt3/VEyBSaOxh2JbPQIZfcvMlN1LQBdgjFrY=;
  h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=OLBtGMD8VOCzl8SrrH3pUTJCewlnJtlob4nkE+4pZ4kDPNBF7sDZ+P8Zxjg/MJnVB
- Yy72BjmvnSgAYmRgY/MVxbyZVQ8bhi7YZLPZHSAxUsd5FSpEZtKOKOj2gkMxm6XuJl
- pNSj1JHnB9W93PsSFEXOYVC8m3lTH8Suqsg7PAwq+fVBYK0PP84AyNcoUB08q0VrA+
- JdQFPvdbWP8wUbBdR8CkhugGEySX+EJLJ3aIfFJUtz9yNFLoJYZ0bV+AHAqgHUnA+K
- TCrV0chsyH8c7/4wL0OwYv6e0pqz0BUYquQHAksb9MrEx0JX4SyySCSo9/wCJWPiR4
- 0iKCpg5ivkzEQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=oINhs06bU/g2lb4e20fcTYZRu1MGC3EtVFpoki65S30DH2LocIoroTCM1q1pQBHZp
+ atKbu5MwOIS/YRv/V+nmzHj8kVDxfotYNbO4wb3/3TiaN/GUyuTw8FO+LHucaabbdO
+ QuroPTXBUSPDEXDexfY8PHePXrdwuaXmpye0gbNfHVWlJpO7QaP2mPr3NVxA+AtwV1
+ ERZb9BaUKJkSg68DppiUaNFnU8bA1T92tOckuKrrvMSYOeAquO06kRN/t5Y9fXTOa7
+ CpXxFkTxtfeVAUc2KK0Zs9ikQ0HLpkFrrR2RVf3GyxdWrHO5IKb+BBTXljKgrtkjHH
+ Dt4X9zwpTvV+g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=0leil.net header.i=@0leil.net header.a=rsa-sha256
- header.s=20231125 header.b=OLBtGMD8
-Subject: [Buildroot] [PATCH v2 2/5] package/qt5/qt53d: force using
- Buildroot's assimp when selected
+ header.s=20231125 header.b=oINhs06b
+Subject: [Buildroot] [PATCH v2 3/5] package/qt5/qt53d: always disable assimp
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,31 +107,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-If we're adding a dependency to the package, it's for its build system
-to use it. Unfortunately, when -feature-system-assimp is not passed, the
-assimp module from the sources will be used. Moreover, it doesn't build
-currently.
-
-Unfortunately, qt53d still doesn't build with assimp from Buildroot.
+Neither Buildroot's nor the module from qt53d sources compile, so always
+disable assimp support.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- package/qt5/qt53d/qt53d.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qt5/qt53d/qt53d.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 459b019902..ae15b58df3 100644
+index ae15b58df3..33e93ec5db 100644
 --- a/package/qt5/qt53d/qt53d.mk
 +++ b/package/qt5/qt53d/qt53d.mk
-@@ -16,6 +16,8 @@ QT53D_CONF_OPTS = --
+@@ -14,14 +14,10 @@ QT53D_SYNC_QT_HEADERS = YES
+ # command line argument separator
+ QT53D_CONF_OPTS = --
  
- ifeq ($(BR2_PACKAGE_ASSIMP),y)
- QT53D_DEPENDENCIES += assimp
-+QT53D_CONF_OPTS += \
-+	-feature-system-assimp
- else
+-ifeq ($(BR2_PACKAGE_ASSIMP),y)
+-QT53D_DEPENDENCIES += assimp
+-QT53D_CONF_OPTS += \
+-	-feature-system-assimp
+-else
++# Assimp support is broken with both Buildroot assimp and the assimp module in
++# the qt53d sources, therefore disable it for now.
  QT53D_CONF_OPTS += \
  	-no-feature-assimp
+-endif
+ 
+ QT53D_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
+ QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.GPLv3 LICENSE.LGPLv3
 
 -- 
 2.53.0
