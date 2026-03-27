@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DCF510ED650
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 09:59:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6975710ED64F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 09:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF45612CF;
-	Fri, 27 Mar 2026 09:59:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24799612BE;
+	Fri, 27 Mar 2026 09:59:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UHqLWtWy-b-D; Fri, 27 Mar 2026 09:59:23 +0000 (UTC)
+ id N4GarzGS9FIL; Fri, 27 Mar 2026 09:59:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B654612AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F160A612DA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605563;
-	bh=dzirbEjK1BcpZA8Q2GtCWPoFjAVKfCM/JEcTp5uEGac=;
+	s=default; t=1774605566;
+	bh=aBnc5P4GJ2UO7kVBukXbhPwRLP81e82DSU7sjVYE5Us=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CI8H6Mq+2rNVDzlLa5oEQQiGTUf/uLDPSj7eS52DWJ44edyQX1zQiSotwTNNZ3OTn
-	 1OCykJl6Db47gDobRt0gZ/lCsiWohfT6PHdcZDLysrmjiLT3cz7LSYsTsUP5L78FsO
-	 VoXqClEPsmLZf8fZjTRob6//LzHc3k7qPmLfUVlJkJ8p6toOx1GN1hDzkdbS6PIAjX
-	 N0F+bT8JI9o/1mPWnx/LM4Z5sXoxE31iH9z+odGWOePVF5zuMoRiGI/ekjfUP5mxNL
-	 rsK/2ZQfXsPBd/ubqc70tQAfj1fxc7lluBQLC3Xj5SW/LaKUuEs3uEeMdMwoL5QnoX
-	 5VZWSJCH1/dDA==
+	b=LZIdT8IGf8haQenjZbpuEKERD6wcVleQS2ZrbX2GJkmr6A46RVTzIrA2THR7Jy67c
+	 fJbX42YVDzwe4+tOS0JNVrEE7xR5mFsN0XFh5sQDhplg1USchM01QLtk0xlYagy3Bd
+	 BpNy6Tylh246FCs/ZGFU/vS5PHV3NfVOrTetmsguIZfisx2iqjnvdoyJUp9gYGW6Ya
+	 pIwO6FaCQ41mVmVO6pLHpFylkQ3oNfc0YppGaL6gi8r9Kh5/E/th1sywntmW9Ap1F5
+	 JMfL01Kj8ZRjXU18sziko4DW7xg2QJuNQkYwY7OPgTS/HdTIZykc4y/Soza05WcVFl
+	 kE1sHHeqz+HJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B654612AC;
-	Fri, 27 Mar 2026 09:59:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B92D249
+	by smtp3.osuosl.org (Postfix) with ESMTP id F160A612DA;
+	Fri, 27 Mar 2026 09:59:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71DFD1D3
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5298A83D7F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67ADC612A5
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 85z2RZVw0SLm for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HEDQm7fIVr6Y for <buildroot@buildroot.org>;
  Fri, 27 Mar 2026 09:59:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1260C83D62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16142612A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1260C83D62
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16142612A0
  for <buildroot@buildroot.org>; Fri, 27 Mar 2026 09:59:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 642987FBBB; Fri, 27 Mar 2026 09:59:16 +0000 (UTC)
+ id 5BC3B7FBB8; Fri, 27 Mar 2026 09:59:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 10:57:15 +0100
+Date: Fri, 27 Mar 2026 10:57:13 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b2c698886f9046c4ea37a34f6ccc5f0c20c93ec5
-X-Git-Newrev: 470edc2923f285669e34a57cd223fd37ef25d9a2
+X-Git-Oldrev: 0f53b596f15ca98cba142921cfad43503da3377c
+X-Git-Newrev: b2c698886f9046c4ea37a34f6ccc5f0c20c93ec5
 X-Patchwork-Hint: ignore
-Message-Id: <20260327095916.642987FBBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wireshark:
- security bump to v4.2.14
+Message-Id: <20260327095916.5BC3B7FBB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: patch
+ CVE-2025-68431
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/470edc2923f285669e34a57cd223fd37ef25d9a2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b2c698886f9046c4ea37a34f6ccc5f0c20c93ec5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information on the version bump, see:
-
-- https://www.wireshark.org/docs/relnotes/wireshark-4.2.14.html
-
-Fixes the following vulnerability:
-
-- CVE-2025-11626:
-    MONGO dissector infinite loop in Wireshark 4.4.0 to 4.4.9 and 4.2.0 to
-    4.2.13 allows denial of service
+- CVE-2025-68431:
+    libheif is an HEIF and AVIF file format decoder and encoder. Prior to
+    version 1.21.0, a crafted HEIF that exercises the overlay image item
+    path triggers a heap buffer over-read in `HeifPixelImage::overlay()`.
+    The function computes a negative row length (likely from an unclipped
+    overlay rectangle or invalid offsets), which then underflows when
+    converted to `size_t` and is passed to `memcpy`, causing a very large
+    read past the end of the source plane and a crash. Version 1.21.0
+    contains a patch. As a workaround, avoid decoding images using `iovl`
+    overlay boxes.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-11626
+  - https://www.cve.org/CVERecord?id=CVE-2025-68431
+  - https://github.com/strukturag/libheif/commit/b8c12a7b70f46c9516711a988483bed377b78d46
 
-(cherry picked from commit 2aaeb10bce055d63ea0855914a8fbac4f6390611)
+(cherry picked from commit a8aed698c706ec534ddc41cdce651c18016c28ca)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...01-fix-wrong-copy-width-in-overlay-images.patch | 26 ++++++++++++++++++++++
+ package/libheif/libheif.mk                         |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index f1f2f58442..521fea662c 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.13.txt
--sha1  e5a08396a98d5dfba4078c66677aacd50d47ec90  wireshark-4.2.13.tar.xz
--sha256  2454aa650276264d23aca28e1b62eb5d4bd12b64aa261d38c06b33f97b8fa3dd  wireshark-4.2.13.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.14.txt
-+sha1  e972062abc0d15db34c3a0186c39511efb29ea34  wireshark-4.2.14.tar.xz
-+sha256  098177f021951638f5bdca5b01f284c14fcc3f6c804f7aa2ca00fdcb99c7a166  wireshark-4.2.14.tar.xz
+diff --git a/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch b/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch
+new file mode 100644
+index 0000000000..4d845b2f90
+--- /dev/null
++++ b/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch
+@@ -0,0 +1,26 @@
++From b8c12a7b70f46c9516711a988483bed377b78d46 Mon Sep 17 00:00:00 2001
++From: Dirk Farin <dirk.farin@gmail.com>
++Date: Tue, 11 Nov 2025 19:47:50 +0100
++Subject: [PATCH] fix wrong copy width in overlay images (thanks to Aldo
++ Ristori for reporting this)
++
++CVE: CVE-2025-68431
++Upstream: https://github.com/strukturag/libheif/commit/b8c12a7b70f46c9516711a988483bed377b78d46
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ libheif/pixelimage.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libheif/pixelimage.cc b/libheif/pixelimage.cc
++index f202c61049..84a8dd739e 100644
++--- a/libheif/pixelimage.cc
+++++ b/libheif/pixelimage.cc
++@@ -1508,7 +1508,7 @@ Error HeifPixelImage::overlay(std::shared_ptr<HeifPixelImage>& overlay, int32_t
++       if (!has_alpha) {
++         memcpy(out_p + out_x0 + (out_y0 + y - in_y0) * out_stride,
++                in_p + in_x0 + y * in_stride,
++-               in_w - in_x0);
+++               in_w);
++       }
++       else {
++         for (uint32_t x = in_x0; x < in_w; x++) {
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 8d91a109db..325502ad00 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -23,6 +23,9 @@ LIBHEIF_CONF_OPTS = \
+ 	-DWITH_REDUCED_VISIBILITY=ON \
+ 	-DWITH_SvtEnc=OFF
  
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index bd81224ae7..3a92c4cfa4 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.2.13
-+WIRESHARK_VERSION = 4.2.14
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
++# 0001-fix-wrong-copy-width-in-overlay-images.patch
++LIBHEIF_IGNORE_CVES += CVE-2025-68431
++
+ ifeq ($(BR2_PACKAGE_DAV1D),y)
+ LIBHEIF_CONF_OPTS += -DWITH_DAV1D=ON
+ LIBHEIF_DEPENDENCIES += dav1d
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
