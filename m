@@ -4,80 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A608510F2862
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 18:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5934110F2862
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 18:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6DF083E3C;
-	Fri, 27 Mar 2026 18:22:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB16583B86;
+	Fri, 27 Mar 2026 18:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FdqlapzA51ch; Fri, 27 Mar 2026 18:22:16 +0000 (UTC)
+ id UntgeTnqrKJf; Fri, 27 Mar 2026 18:25:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77DFB83E29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46ADA835DF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774635736;
-	bh=kkFYs64XRbROINzackA96AFgUyDKkaEj99I1lmXh/Dk=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=Ll0qg44Pl11/eD4+vNxwLUbDooALY3AFfbXML/AzV3gcEWWv4WW3KGFFGr3z0fq9T
-	 914Zt6iVeNsCXBCwpfbRuUhsELhnL2PLaCnmsQc0wSo101h/W8tamjGw3QfIf9/koB
-	 dDkmkl9rgg7fCEwS9dXvj0RK0toufOBkkUP37ZbgvFss8q1ALeuhc2nAeDYQGX1X4U
-	 o24L7rD8VxEK3tl47ABcOsYG6E8kDJFTP9bC1ZbbFlkt9TlnxcbY20vG2eLBDeB1Dx
-	 MiG3zaZ6JtIeYRFaNeFE9wU4M3SMHgAA2HxQF0jbL7sg6MOqJTXUCDT625LEosJKWf
-	 WhJRvHkZxStEg==
+	s=default; t=1774635933;
+	bh=P6S3vvb5jhr4F39RzChWfyL68ImPoQ6xIeGRICXxA5U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Fgn26PRr1FFcdhzdi26ZD+RUJUgREoQ4DO9GAJxstYkg7UUmxwWUwGaHkNHjJPNV3
+	 8Ic1inQr4s+saGpLff42ak2gECX0OKIJxgu4d3CjYyqGkPlOpkUqWkbxX9o5KAc8//
+	 su3M4hGMdAJY2Ley6bOMupYxnFMc0jcU8oZjrFts5bYTWaw3k5YVY0AtHyiZqbE384
+	 Eqek0h3D/ezzYvDOTaJIbbBzX0XPAz65MCcpCwghtOnTqB50eDhnvcg0K1dV3cvRB/
+	 Yzbhzloj89HmdQ8WxGVJlCL28/V2Yn7/QKaTPOpSCDVhh+XB5jAJXVN7XyKA9gkX/v
+	 HbkFdZ/zWohtg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77DFB83E29;
-	Fri, 27 Mar 2026 18:22:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46ADA835DF;
+	Fri, 27 Mar 2026 18:25:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E3EB1D3
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:22:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 287522AA
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63D5460FDC
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:22:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E11C60FE3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:25:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yrkye6-AxaGb for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 18:22:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ id Ddrz8peA_G9y for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 18:25:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C0E3C605A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E3C605A7
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0E3C605A7
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:22:12 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1960693743; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 27 Mar 2026 18:22:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1w6Bos-00000000oBa-3P0w;
- Fri, 27 Mar 2026 19:22:06 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 336C560FDC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 336C560FDC
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 18:25:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 783A67FBE7; Fri, 27 Mar 2026 18:25:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 19:21:53 +0100
-Message-ID: <20260327182155.192855-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=byX+3QKPRMyBZb7sh8GR6JQUbXmYFn9AnkXeGjDA/FrpzkMGnDpYFBUaWSc+OIRdK5plPTxz+us2qbUI5ZisJSpwxJEXwCu+5xskkWAdG5TdhHWaMQexg8nxLKJPDNgy9y9rpYy7Glw+xavM1jRegx8KGEXOO5XhYSN4Oun4azZ8BrRos6AhP8l2+7/tv4L3IVpnEeDcpi1EhGhBaQTFObTFbkkFuFPHzunKsgnEQAwu+QzbT3GuSUNbREoZNVj73cZxcnxByk+SPlVnTWrg1p+7c6O+hRoWKgKDPApKk91zZmRYPXahlBLzq00zOc2BK+/3lypsFK/+WrfDNAlkFw==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=hn6UV5AlWGDyix01BUJbtFwXXZm8H/onW+0tHLw0uBg=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=byX+3QKP
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/rauc: security bump to version 1.15.2
+Date: Fri, 27 Mar 2026 19:23:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f359f665bec3300bf0f1efdaed95a1384f63b588
+X-Git-Newrev: a9a4d0a7a568412193f5232904b51836759e0b3e
+X-Patchwork-Hint: ignore
+Message-Id: <20260327182529.783A67FBE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freetype: security bump version to
+ 2.14.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,60 +69,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, Andrey Yurovsky <yurovsky@gmail.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issue:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a9a4d0a7a568412193f5232904b51836759e0b3e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-CVE-2026-34155: Improper Signing of Plain Bundles Exceeding 2 GiB
+https://sourceforge.net/projects/freetype/files/freetype2/2.14.3/
+"- A bunch of potential security problems have been found.  All users
+ should update."
 
-RAUC bundles using the 'plain' format exceeding a payload size of 2 GiB
-cause an integer overflow which results in a signature which covers only the
-first few bytes of the payload.  Given such a bundle with a legitimate
-signature, an attacker can modify the part of the payload which is not
-covered by the signature.
-
-Bundles using the recommended 'verity' or 'crypt' formats are not affected.
-
-For more details, see the advisory:
-https://github.com/rauc/rauc/security/advisories/GHSA-6hj7-q844-m2hx
-
-https://github.com/rauc/rauc/releases/tag/v1.15.2
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rauc/rauc.hash | 2 +-
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index ea537c63b6..edfefb5a7b 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  603dafa5085b6b964c74d5f57a154a1489af2b415dd20c6ff1447815d02c094f  rauc-1.15.1.tar.xz
-+sha256  127a24cde208c65b837ae978c695a00730f1094ee8b6c7d48cf58ef846eae340  rauc-1.15.2.tar.xz
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index ba30c70dad..54974abc09 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 520e6c2bcf..9bd01d3ad6 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.2/
+-sha1  28200b8f8df5a524f476bdacb20f05da1c33280c  freetype-2.14.2.tar.xz
+-sha256  4b62dcab4c920a1a860369933221814362e699e26f55792516d671e6ff55b5e1  freetype-2.14.2.tar.xz
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.14.3/
++sha1  62e26b89a057ad4f1e28af977945d5c1975a8e67  freetype-2.14.3.tar.xz
++sha256  36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f  freetype-2.14.3.tar.xz
+ 
+ # Locally calculated
+ sha256  bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b  LICENSE.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index fbf9d13235..634d9107fe 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RAUC_VERSION = 1.15.1
-+RAUC_VERSION = 1.15.2
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
--- 
-2.47.3
-
+-FREETYPE_VERSION = 2.14.2
++FREETYPE_VERSION = 2.14.3
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
+ FREETYPE_SITE = https://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
