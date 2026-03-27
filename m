@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E43CB10ED674
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 14:21:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7450010AB830
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 14:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E393416DB;
-	Fri, 27 Mar 2026 14:21:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B3C160767;
+	Fri, 27 Mar 2026 14:25:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzujPB3X1M9j; Fri, 27 Mar 2026 14:21:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YOFz0wUMEosD; Fri, 27 Mar 2026 14:25:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B0DC41731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 418E760724
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774621311;
-	bh=MCM5NcvkFNZYcg8ISG2TfL9x94Cht3B3LX9q1kyFSO0=;
+	s=default; t=1774621514;
+	bh=NFlhq3ejawiy9VTbHbiczGyFy32g1sTwiDIFNgFBkDY=;
 	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=mmzmjyrfyY41DDjRiUuhTtQIgX+nfu0wzIVtwtghMbMYIDqpBE8JXDcLpCe4rJGF/
-	 WIZATgPYD7iO43meTOxRZOt+ePxeikkrlGws/iP2HNi3n6k4GnSEmAqCjCdsEZgC88
-	 72JK0eQNFVbVCdoljwyKwtZQjdqRvNbuaPRmKWigV7dKy+ib2m5YdmnUHNwYOCe3I4
-	 r2vAa7ypJ7yLzfDQmJ/YQ7xRMNyY7e7qH0bKuXcwFoKgHoTf1RWRIL9jFw3yO5aKrT
-	 sabVXSiVe1RL4tc2b82St9b5j0AfwidZKTwVOSLyPFthic9spDaIS9+i0MbCyWx6c/
-	 pmnJAbxJ4GY/A==
+	b=WCrVAoU2y56oGL38NpwE4A+1VCrpv81TRTI3fOB7PN//vLOCuMf+4ARkGsLoF8tTG
+	 inqNDDLhOekAvt6dYkAqXXq2vl+Tws+WO6V+BDv15epfMEecFpO6dg+pdSdbG0iOdt
+	 s38X5M9tMzZ3tHKlWu/CIA4x83IVrHOAjlI1so44DDsjypPO2wWM27FKW9LBNJTvrI
+	 io39qz9K19Y0LzbkDXR7A8FQ0GoJkYqyLft2ylN1oFBpwST7np0kXoof4onSTwOzdg
+	 OpSkIQ3kurWgOtzybkP3D6WwUq5opatB/LuKOKvzXBsdzT3xM8hBa1ERwIqVnG5dhH
+	 79iE9p16V3tMw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B0DC41731;
-	Fri, 27 Mar 2026 14:21:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 96C41249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 418E760724;
+	Fri, 27 Mar 2026 14:25:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C8BB1D3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88BF141731
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:21:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6216F60724
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wzGD7x21viBb for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 14:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6JS20KrN2P7B for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 14:25:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.57;
  helo=smtpcmd0757.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AD557416DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD557416DB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F11AA60708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F11AA60708
 Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD557416DB
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:21:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F11AA60708
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 14:25:11 +0000 (UTC)
 Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id 684HwlecDtpTf684HwW7Ws; Fri, 27 Mar 2026 15:21:45 +0100
-Message-ID: <b2049a43-6bb5-4f16-b6ac-1205e2d337a3@benettiengineering.com>
-Date: Fri, 27 Mar 2026 15:21:44 +0100
+ id 687Zwli63tpTf687ZwW9tQ; Fri, 27 Mar 2026 15:25:09 +0100
+Message-ID: <6f53b4a6-49bf-48cf-9db8-e86d53689a5b@benettiengineering.com>
+Date: Fri, 27 Mar 2026 15:25:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-References: <CADvTj4qihD1uocWibJpjL1SypAEGea-vCFWfnG7_znv4xhXykA@mail.gmail.com>
- <20260327141659.1109640-1-giulio.benetti@benettiengineering.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+References: <20260324133448.2021140-1-giulio.benetti@benettiengineering.com>
+ <CADvTj4qihD1uocWibJpjL1SypAEGea-vCFWfnG7_znv4xhXykA@mail.gmail.com>
 Content-Language: en-US
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260327141659.1109640-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfJ35IdzC3iShuOnHEWb+nGMpQy+Q2kG1UjGe2ftLvI901Ds1ZgMrTEvnjoYqFc6W3u+HACR6Uwl7uWJCzyIXpjeMUf1CZmw0rLO+vD1D8z6WnuR33CA9
- SOmxWLRSbsfcgyWA2Sr7/lh0sgVa8UfJzgMRhNK7gPAmB24zezVDBVGCCu08/TjlIpMpQo6J/pS9sE+HIIqkP0OI5M4s+bwJtZvOmShP45DOBgHFGGMN5yiP
- wV83B8n3nSgs16ICGUVoJQ==
+In-Reply-To: <CADvTj4qihD1uocWibJpjL1SypAEGea-vCFWfnG7_znv4xhXykA@mail.gmail.com>
+X-CMAE-Envelope: MS4xfK5wb7M9ZFSwqzdeXMrmRjtMdFpb76rrcoALP2ZsW4HGeoTMXvEOWYMQctnXOOGqCgcNxSvXrq1krPnozEG5z43dE8MPa3scfgQe/L4wig/PMgLkOiW6
+ 1YFsqZU0upOusYosBlSvehkT8799XA3LkGYHEmeMCtzMeLaZOy3MU3WC2qcpjgDlFC8yEcXfYvRsANEeOoPdg+ctoQ5LxyB8MuNPxQtmFojbdocBHbh0MiPk
+ GcTuNqnP+iLUwhKeJDx+tQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1774621305; bh=aectwj/O/TqqaI1hqHtO2uij55yuHUZwHIS/A8/Jgko=;
+ t=1774621509; bh=U9RayUIFYQfQPu5XbpnDiNHX59mLQJF/UK4LWIJZ34U=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=BWpB8kF9+0Rxoot+J826PICOkFFUwp6zcwpyY+wmdY0gJ4nBurt3+TrE6hPyoBaJz
- KUFUWUZg7ZgIPnWO+vtUppTGhQwy82teesOJ2fWDVv5lhEsRsdpXgp4XxwbrXdfff9
- BzrxlBBqyGT2ygzmh3MWKLMXFhmAxRepRJysuKZyg5+/13hIhr5DDbC/okX2TDeWCQ
- a4SywU90qwppHWUxlg4vfZjon5y+c9bRp2XA/lxgdiSnlOcME7UsHkCoOw6XAySpuJ
- Qrd2MCd7DIV6ya6egRDOjLDH8tJbnwZPQZuamFGJhWKjOpfZCisvGOTSmy8UXCWlBW
- 7dDg+gAy3bbjA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Zh+UAKXlqDEXYSHpBLiDvPCLyFtzyFSuJRySp6ZYrY0pIH5ulDyHAJuXE13Bo/+4L
+ RnDT8i1A2WReJkFZ6MPmJgt6H+VnjLnW+kyCVuEUTygjKDLepETRlVSReoMy2CealV
+ r7OAHAplahH6/gFhK4Kw2/5cd3xOAiG3ArHsO0TCQ2R6rfeXxS2QfSiXZXnNhWZwQ/
+ sjx7uD5SqWbdIp91MndVslKqPMTs12KZNOVqTcsWQs4QOKMlscE+zIucHhh4m8Y/5D
+ Hlhc87HRdBRtUMD09UxLmU+xjF3PcOuiiVgb4A5HkmAK4XqL8hq7X/P84OcN6hSMuy
+ JbBlqccLSICLw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=BWpB8kF9
-Subject: Re: [Buildroot] [PATCH v3] packge/swupdate: bump to version 2025.12
+ header.s=a1 header.b=Zh+UAKXl
+Subject: Re: [Buildroot] [PATCH v2] packge/swupdate: bump to version 2025.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,239 +94,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-On 27/03/2026 15:16, Giulio Benetti wrote:
-> * backport locally patch [1] to fix build failure due to missing crypto
->    backend
-> * libconfig is required by default[2] so let's select it
-> * align swupdate.config to the most basic one with openssl crypto
->    backend enabled by default
-> * drop HAVE_LIBCRYPTO since it's not used anymore by swupdate even if
->    present
-> * add libgpgme support
-> 
-> [1]: https://github.com/sbabic/swupdate/commit/10334fb21796b75f3a1208a3d5a98a307712218b
-> [2]: https://github.com/sbabic/swupdate/commit/4b9a71476c886be1a6affe21d6a0334b254a04e1
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
-
-V1->V2:
-* drop Config.in choice since we can have multiple crypto backends
-* add libgpgme as a possible crypto backend
-* select openssl as default crypto backend
-* set CONFIG_SSL_IMPL_OPENSSL=y in swupdate.config
-
-V2->V3:
-* don't use a crypto backend by default since James Hillard provided a
-patch committed upstream that still allow to build without it
-* document the adding of libgpgme in commit log
-
----
->   ...no-crypto-configuration-link-failure.patch | 67 +++++++++++++++++++
->   package/swupdate/Config.in                    |  6 +-
->   package/swupdate/swupdate.config              |  2 -
->   package/swupdate/swupdate.hash                |  2 +-
->   package/swupdate/swupdate.mk                  | 20 +++---
->   5 files changed, 81 insertions(+), 16 deletions(-)
->   create mode 100644 package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch
-> 
-> diff --git a/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch b/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch
-> new file mode 100644
-> index 0000000000..15f33aa3ab
-> --- /dev/null
-> +++ b/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch
-> @@ -0,0 +1,67 @@
-> +From 4e7c2f6c4b978efae69d777705de84411a01c147 Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Tue, 24 Mar 2026 14:23:58 -0600
-> +Subject: [PATCH] build: fix no-crypto configuration link failure
-> +
-> +When no crypto backend is selected, the crypto directory contributes
-> +no objects, so this kbuild variant does not generate
-> +crypto/built-in.o.
-> +
-> +The top-level build still linked that file unconditionally, causing
-> +the final link to fail.
-> +
-> +Introduce a hidden SWUPDATE_CRYPTO helper selected by the Kconfig
-> +options that actually populate crypto/, and only descend into the
-> +crypto directory when that helper is enabled.
-> +
-> +Upstream: https://github.com/sbabic/swupdate/commit/10334fb21796b75f3a1208a3d5a98a307712218b
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + Makefile       | 3 ++-
-> + crypto/Kconfig | 5 +++++
-> + 2 files changed, 7 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index aa9604aa..759fd191 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -369,7 +369,8 @@ include $(srctree)/Makefile.flags
-> + # This allow a user to issue only 'make' to build a kernel including modules
-> + # Defaults to vmlinux, but the arch makefile usually adds further targets
-> +
-> +-objs-y		:= core handlers crypto bootloader suricatta
-> ++objs-y		:= core handlers bootloader suricatta
-> ++objs-$(CONFIG_SWUPDATE_CRYPTO) += crypto
-> + libs-y		:= corelib mongoose parser fs containers
-> + bindings-y	:= bindings
-> + tools-y		:= tools
-> +diff --git a/crypto/Kconfig b/crypto/Kconfig
-> +index 4b9db821..cc953542 100644
-> +--- a/crypto/Kconfig
-> ++++ b/crypto/Kconfig
-> +@@ -23,9 +23,13 @@ menu "Crypto libraries"
-> + 		depends on HAVE_GPGME
-> + endmenu
-> +
-> ++config SWUPDATE_CRYPTO
-> ++	bool
-> ++
-> + config HASH_VERIFY
-> + 	bool "Allow to add sha256 hash to each image"
-> + 	depends on SSL_IMPL_OPENSSL || SSL_IMPL_WOLFSSL || SSL_IMPL_MBEDTLS
-> ++	select SWUPDATE_CRYPTO
-> + 	help
-> + 	  Allow to add a sha256 hash to an artifact.
-> + 	  This is automatically set in case of Signed Image
-> +@@ -83,6 +87,7 @@ menu "Encryption"
-> + config ENCRYPTED_IMAGES
-> + 	bool "Images can be encrypted with a symmetric key"
-> + 	depends on SSL_IMPL_OPENSSL || SSL_IMPL_WOLFSSL || SSL_IMPL_MBEDTLS
-> ++	select SWUPDATE_CRYPTO
-> + comment "Image encryption needs an SSL implementation"
-> + 	depends on !SSL_IMPL_OPENSSL && !SSL_IMPL_WOLFSSL && !SSL_IMPL_MBEDTLS
-> +
-> +--
-> +2.47.3
-> +
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index 3708df0881..112e53a127 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_SWUPDATE
->   	depends on BR2_USE_MMU # fork()
->   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
->   	select BR2_PACKAGE_JSON_C
-> +	select BR2_PACKAGE_LIBCONFIG
->   	select BR2_PACKAGE_LIBUBOOTENV
->   	help
->   	  swupdate provides a reliable way to update the software on
-> @@ -25,8 +26,9 @@ config BR2_PACKAGE_SWUPDATE
->   	    want to have Lua support.
->   	  * Select BR2_PACKAGE_LIBCURL if you want to use the download
->   	    feature.
-> -	  * Select BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS if you
-> -	    want to add encryption support.
-> +	  * Select at least one of these crypto backends:
-> +	    BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS or
-> +	    BR2_PACKAGE_WOLFSSL or BR2_PACKAGE_LIBGPGME.
->   	  * Select BR2_PACKAGE_MTD if you want to use swupdate with
->   	    UBI partitions.
->   	  * Select BR2_PACKAGE_ZLIB if you want to deal with gzip
-> diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-> index a6b7a74948..0f672805be 100644
-> --- a/package/swupdate/swupdate.config
-> +++ b/package/swupdate/swupdate.config
-> @@ -2,7 +2,6 @@
->   # Automatically generated file; DO NOT EDIT.
->   # Swupdate Configuration
->   #
-> -CONFIG_HAVE_DOT_CONFIG=y
->   
->   #
->   # Swupdate Settings
-> @@ -24,7 +23,6 @@ CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
->   #
->   CONFIG_SOCKET_CTRL_PATH="/tmp/sockinstctrl"
->   CONFIG_SOCKET_PROGRESS_PATH="/tmp/swupdateprog"
-> -CONFIG_SOCKET_REMOTE_HANDLER_DIRECTORY="/tmp/"
->   
->   #
->   # MTD support needs libmtd
-> diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-> index bc911d1820..b3f43648f8 100644
-> --- a/package/swupdate/swupdate.hash
-> +++ b/package/swupdate/swupdate.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated
-> -sha256  678b47fd2419727c4d0abf5c9f3bc0dc4b67e95951132bd1c8f5603e88947779  swupdate-2025.05.tar.gz
-> +sha256  8517f3730eeb66e20e651b881dd4b9c10ca9ae05e3883db59b5df18ab1eaa533  swupdate-2025.12.tar.gz
->   sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
->   sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
->   sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> index 05329d13b8..b2778d2aec 100644
-> --- a/package/swupdate/swupdate.mk
-> +++ b/package/swupdate/swupdate.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -SWUPDATE_VERSION = 2025.05
-> +SWUPDATE_VERSION = 2025.12
->   SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
->   SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
->   SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-> @@ -18,7 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
->   	LICENSES/MIT.txt \
->   	LICENSES/OFL-1.1.txt
->   SWUPDATE_INSTALL_STAGING = YES
-> -SWUPDATE_DEPENDENCIES = json-c libubootenv
-> +SWUPDATE_DEPENDENCIES = json-c libconfig libubootenv
->   
->   # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
->   # available in all external toolchains, and use CC for linking. Ensure
-> @@ -51,13 +51,6 @@ else
->   SWUPDATE_MAKE_ENV += HAVE_LIBBLKID=n
->   endif
->   
-> -ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
-> -SWUPDATE_DEPENDENCIES += libconfig
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=y
-> -else
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=n
-> -endif
-> -
->   ifeq ($(BR2_PACKAGE_LIBCURL),y)
->   SWUPDATE_DEPENDENCIES += libcurl
->   SWUPDATE_MAKE_ENV += HAVE_LIBCURL=y
-> @@ -82,6 +75,13 @@ else
->   SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-> +SWUPDATE_DEPENDENCIES += libgpgme
-> +SWUPDATE_MAKE_ENV += HAVE_GPGME=y
-> +else
-> +SWUPDATE_MAKE_ENV += HAVE_GPGME=n
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
->   SWUPDATE_DEPENDENCIES += liburiparser
->   SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
-> @@ -126,10 +126,8 @@ endif
->   ifeq ($(BR2_PACKAGE_OPENSSL),y)
->   SWUPDATE_DEPENDENCIES += openssl
->   SWUPDATE_MAKE_ENV += HAVE_LIBSSL=y
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=y
->   else
->   SWUPDATE_MAKE_ENV += HAVE_LIBSSL=n
-> -SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=n
->   endif
->   
->   ifeq ($(BR2_PACKAGE_P11_KIT),y)
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFtZXMsCgpPbiAyNi8wMy8yMDI2IDE5OjI1LCBKYW1lcyBIaWxsaWFyZCB3cm90ZToKPiBP
+biBUdWUsIE1hciAyNCwgMjAyNiBhdCA3OjM14oCvQU0gR2l1bGlvIEJlbmV0dGkKPiA8Z2l1bGlv
+LmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4gd3JvdGU6Cj4+Cj4+ICogYXMgc3RhdGVk
+IGhlcmVbMl0gbm93IHN3dXBkYXRlIHJlcXVpcmVzIGF0IGxlYXN0IG9uZSBjcnlwdG8gYmFja2Vu
+ZCBzbwo+PiAgICBhcyBkb25lIGZvciBsaWJzc2ggbGV0J3MgZW5hYmxlIEJSMl9QQUNLQUdFX09Q
+RU5TU0wgaWYgbm8gb3RoZXIgY3J5cHRvCj4+ICAgIGJhY2tlbmQgc3VwcG9ydGVkIGJ5IHN3dXBk
+YXRlIGlzIGVuYWJsZWQKPiAKPiBUaGlzIGJ1ZyBzaG91bGQgbm93IGJlIGZpeGVkOgo+IGh0dHBz
+Oi8vZ2l0aHViLmNvbS9zYmFiaWMvc3d1cGRhdGUvY29tbWl0LzEwMzM0ZmIyMTc5NmI3NWYzYTEy
+MDhhM2Q1YTk4YTMwNzcxMjIxOGIKClRoYW5rIHlvdSwgSSd2ZSBwcm92aWRlZCBhIFYzIHdpdGgg
+Y3J5cHRvIGRpc2FibGVkIGJ5IGRlZmF1bHQ6Cmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcv
+cHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNjAzMjcxNDE2NTkuMTEwOTY0MC0xLWdpdWxpby5i
+ZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20vCgpCZXN0IHJlZ2FyZHMKR2l1bGlvCgo+PiAq
+IGxpYmNvbmZpZyBpcyByZXF1aXJlZCBieSBkZWZhdWx0WzFdIHNvIGxldCdzIHNlbGVjdCBpdAo+
+PiAqIGFsaWduIHN3dXBkYXRlLmNvbmZpZyB0byB0aGUgbW9zdCBiYXNpYyBvbmUgd2l0aCBvcGVu
+c3NsIGNyeXB0bwo+PiAgICBiYWNrZW5kIGVuYWJsZWQgYnkgZGVmYXVsdAo+PiAqIGRyb3AgSEFW
+RV9MSUJDUllQVE8gc2luY2UgaXQncyBub3QgdXNlZCBhbnltb3JlIGJ5IHN3dXBkYXRlIGV2ZW4g
+aWYKPj4gICAgcHJlc2VudAo+Pgo+PiBbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS9zYmFiaWMvc3d1
+cGRhdGUvY29tbWl0LzRiOWE3MTQ3NmM4ODZiZTFhNmFmZmUyMWQ2YTAzMzRiMjU0YTA0ZTEKPj4g
+WzJdOiBodHRwczovL2dyb3Vwcy5nb29nbGUuY29tL2cvc3d1cGRhdGUvYy9iTFkzRHlMeklJMAo+
+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
+aWVuZ2luZWVyaW5nLmNvbT4KPj4gLS0tCj4+ICAgcGFja2FnZS9zd3VwZGF0ZS9Db25maWcuaW4g
+ICAgICAgfCAgOCArKysrKystLQo+PiAgIHBhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUuY29uZmln
+IHwgIDQgKy0tLQo+PiAgIHBhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUuaGFzaCAgIHwgIDIgKy0K
+Pj4gICBwYWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLm1rICAgICB8IDIwICsrKysrKysrKy0tLS0t
+LS0tLS0tCj4+ICAgNCBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlv
+bnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3d1cGRhdGUvQ29uZmlnLmluIGIvcGFj
+a2FnZS9zd3VwZGF0ZS9Db25maWcuaW4KPj4gaW5kZXggMzcwOGRmMDg4MS4uODNjZGVjNjkxZCAx
+MDA2NDQKPj4gLS0tIGEvcGFja2FnZS9zd3VwZGF0ZS9Db25maWcuaW4KPj4gKysrIGIvcGFja2Fn
+ZS9zd3VwZGF0ZS9Db25maWcuaW4KPj4gQEAgLTUsNyArNSwxMCBAQCBjb25maWcgQlIyX1BBQ0tB
+R0VfU1dVUERBVEUKPj4gICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmsoKQo+
+PiAgICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNCAjIGpzb24tYwo+
+PiAgICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfSlNPTl9DCj4+ICsgICAgICAgc2VsZWN0IEJS
+Ml9QQUNLQUdFX0xJQkNPTkZJRwo+PiAgICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCVUJP
+T1RFTlYKPj4gKyAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTCBpZiAhKEJSMl9QQUNL
+QUdFX0xJQkdQR01FIHx8IFwKPj4gKyAgICAgICAgICAgICAgQlIyX1BBQ0tBR0VfTUJFRFRMUyB8
+fCBCUjJfUEFDS0FHRV9XT0xGU1NMKQo+PiAgICAgICAgICBoZWxwCj4+ICAgICAgICAgICAgc3d1
+cGRhdGUgcHJvdmlkZXMgYSByZWxpYWJsZSB3YXkgdG8gdXBkYXRlIHRoZSBzb2Z0d2FyZSBvbgo+
+PiAgICAgICAgICAgIGFuIGVtYmVkZGVkIHN5c3RlbS4KPj4gQEAgLTI1LDggKzI4LDkgQEAgY29u
+ZmlnIEJSMl9QQUNLQUdFX1NXVVBEQVRFCj4+ICAgICAgICAgICAgICB3YW50IHRvIGhhdmUgTHVh
+IHN1cHBvcnQuCj4+ICAgICAgICAgICAgKiBTZWxlY3QgQlIyX1BBQ0tBR0VfTElCQ1VSTCBpZiB5
+b3Ugd2FudCB0byB1c2UgdGhlIGRvd25sb2FkCj4+ICAgICAgICAgICAgICBmZWF0dXJlLgo+PiAt
+ICAgICAgICAgKiBTZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTlNTTCBvciBCUjJfUEFDS0FHRV9NQkVE
+VExTIGlmIHlvdQo+PiAtICAgICAgICAgICB3YW50IHRvIGFkZCBlbmNyeXB0aW9uIHN1cHBvcnQu
+Cj4+ICsgICAgICAgICAqIFNlbGVjdCBhdCBsZWFzdCBvbmUgb2YgdGhlc2UgY3J5cHRvIGJhY2tl
+bmRzOgo+PiArICAgICAgICAgICBCUjJfUEFDS0FHRV9PUEVOU1NMIG9yIEJSMl9QQUNLQUdFX01C
+RURUTFMgb3IKPj4gKyAgICAgICAgICAgQlIyX1BBQ0tBR0VfV09MRlNTTCBvciBCUjJfUEFDS0FH
+RV9MSUJHUEdNRS4KPj4gICAgICAgICAgICAqIFNlbGVjdCBCUjJfUEFDS0FHRV9NVEQgaWYgeW91
+IHdhbnQgdG8gdXNlIHN3dXBkYXRlIHdpdGgKPj4gICAgICAgICAgICAgIFVCSSBwYXJ0aXRpb25z
+Lgo+PiAgICAgICAgICAgICogU2VsZWN0IEJSMl9QQUNLQUdFX1pMSUIgaWYgeW91IHdhbnQgdG8g
+ZGVhbCB3aXRoIGd6aXAKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUu
+Y29uZmlnIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5jb25maWcKPj4gaW5kZXggYTZiN2E3
+NDk0OC4uZDkxM2QxNmIwOSAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0
+ZS5jb25maWcKPj4gKysrIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5jb25maWcKPj4gQEAg
+LTIsNyArMiw2IEBACj4+ICAgIyBBdXRvbWF0aWNhbGx5IGdlbmVyYXRlZCBmaWxlOyBETyBOT1Qg
+RURJVC4KPj4gICAjIFN3dXBkYXRlIENvbmZpZ3VyYXRpb24KPj4gICAjCj4+IC1DT05GSUdfSEFW
+RV9ET1RfQ09ORklHPXkKPj4KPj4gICAjCj4+ICAgIyBTd3VwZGF0ZSBTZXR0aW5ncwo+PiBAQCAt
+MjQsNyArMjMsNiBAQCBDT05GSUdfU1dfVkVSU0lPTlNfRklMRT0iL2V0Yy9zdy12ZXJzaW9ucyIK
+Pj4gICAjCj4+ICAgQ09ORklHX1NPQ0tFVF9DVFJMX1BBVEg9Ii90bXAvc29ja2luc3RjdHJsIgo+
+PiAgIENPTkZJR19TT0NLRVRfUFJPR1JFU1NfUEFUSD0iL3RtcC9zd3VwZGF0ZXByb2ciCj4+IC1D
+T05GSUdfU09DS0VUX1JFTU9URV9IQU5ETEVSX0RJUkVDVE9SWT0iL3RtcC8iCj4+Cj4+ICAgIwo+
+PiAgICMgTVREIHN1cHBvcnQgbmVlZHMgbGlibXRkCj4+IEBAIC02MCw3ICs1OCw3IEBAIENPTkZJ
+R19CT09UTE9BREVSX05PTkU9eQo+PiAgICMKPj4gICAjIFUtQm9vdCBzdXBwb3J0IG5lZWRzIGxp
+YnVib290ZW52LCBsaWJ6Cj4+ICAgIwo+PiAtQ09ORklHX1NTTF9JTVBMX05PTkU9eQo+PiArQ09O
+RklHX1NTTF9JTVBMX09QRU5TU0w9eQo+Pgo+PiAgICMKPj4gICAjIEltYWdlIGRvd25sb2FkaW5n
+IHN1cHBvcnQgbmVlZHMgbGliY3VybAo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zd3VwZGF0ZS9z
+d3VwZGF0ZS5oYXNoIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5oYXNoCj4+IGluZGV4IGJj
+OTExZDE4MjAuLmIzZjQzNjQ4ZjggMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2Uvc3d1cGRhdGUvc3d1
+cGRhdGUuaGFzaAo+PiArKysgYi9wYWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLmhhc2gKPj4gQEAg
+LTEsNSArMSw1IEBACj4+ICAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPj4gLXNoYTI1NiAgNjc4YjQ3
+ZmQyNDE5NzI3YzRkMGFiZjVjOWYzYmMwZGM0YjY3ZTk1OTUxMTMyYmQxYzhmNTYwM2U4ODk0Nzc3
+OSAgc3d1cGRhdGUtMjAyNS4wNS50YXIuZ3oKPj4gK3NoYTI1NiAgODUxN2YzNzMwZWViNjZlMjBl
+NjUxYjg4MWRkNGI5YzEwY2E5YWUwNWUzODgzZGI1OWI1ZGYxOGFiMWVhYTUzMyAgc3d1cGRhdGUt
+MjAyNS4xMi50YXIuZ3oKPj4gICBzaGEyNTYgIDRjZjA0ZWQzNGZmMGViYmY1YzcxMzQ1YjU2ZTZh
+ZjUwOTNmYzE3MjA2MzY0Y2NhMGViYmFlOTJlZjM5NDA2ODMgIExJQ0VOU0VTL0JTRC0xLUNsYXVz
+ZS50eHQKPj4gICBzaGEyNTYgIGUyN2EzZTg3NzA2YjNhYTVmZjJlNTBlYWFmZTJlNmVkNTM5N2Zi
+ZjJkNzY3OWVhZjQ0NGE2ZDAwMDUxOGEzYTYgIExJQ0VOU0VTL0JTRC0zLUNsYXVzZS50eHQKPj4g
+ICBzaGEyNTYgIDA1NTgxMDE5ODQ1NTBmYTg0ZDFkMTNjMmFmMTFkMTE2YzIwMDc5ZDJiZTU4NzEx
+ZThkOTljYWRjZTcwMDkxOTIgIExJQ0VOU0VTL0NDMC0xLjAudHh0Cj4+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL3N3dXBkYXRlL3N3dXBkYXRlLm1rIGIvcGFja2FnZS9zd3VwZGF0ZS9zd3VwZGF0ZS5t
+awo+PiBpbmRleCAwNTMyOWQxM2I4Li5iMjc3OGQyYWVjIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdl
+L3N3dXBkYXRlL3N3dXBkYXRlLm1rCj4+ICsrKyBiL3BhY2thZ2Uvc3d1cGRhdGUvc3d1cGRhdGUu
+bWsKPj4gQEAgLTQsNyArNCw3IEBACj4+ICAgIwo+PiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Cj4+Cj4+IC1TV1VQREFURV9WRVJTSU9OID0gMjAyNS4wNQo+PiArU1dVUERBVEVfVkVSU0lPTiA9
+IDIwMjUuMTIKPj4gICBTV1VQREFURV9TSVRFID0gJChjYWxsIGdpdGh1YixzYmFiaWMsc3d1cGRh
+dGUsJChTV1VQREFURV9WRVJTSU9OKSkKPj4gICBTV1VQREFURV9MSUNFTlNFID0gR1BMLTIuMCwg
+R1BMLTIuMCssIExHUEwtMi4xKywgTUlULCBJU0MsIEJTRC0xLUNsYXVzZSwgQlNELTMtQ2xhdXNl
+LCBDQzAtMS4wLCBDQy1CWS1TQS00LjAsIE9GTC0xLjEKPj4gICBTV1VQREFURV9MSUNFTlNFX0ZJ
+TEVTID0gTElDRU5TRVMvQlNELTEtQ2xhdXNlLnR4dCBcCj4+IEBAIC0xOCw3ICsxOCw3IEBAIFNX
+VVBEQVRFX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFUy9CU0QtMS1DbGF1c2UudHh0IFwKPj4gICAg
+ICAgICAgTElDRU5TRVMvTUlULnR4dCBcCj4+ICAgICAgICAgIExJQ0VOU0VTL09GTC0xLjEudHh0
+Cj4+ICAgU1dVUERBVEVfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4+IC1TV1VQREFURV9ERVBFTkRF
+TkNJRVMgPSBqc29uLWMgbGlidWJvb3RlbnYKPj4gK1NXVVBEQVRFX0RFUEVOREVOQ0lFUyA9IGpz
+b24tYyBsaWJjb25maWcgbGlidWJvb3RlbnYKPj4KPj4gICAjIHN3dXBkYXRlIHVzZXMgJENST1NT
+LWNjIGluc3RlYWQgb2YgJENST1NTLWdjYywgd2hpY2ggaXMgbm90Cj4+ICAgIyBhdmFpbGFibGUg
+aW4gYWxsIGV4dGVybmFsIHRvb2xjaGFpbnMsIGFuZCB1c2UgQ0MgZm9yIGxpbmtpbmcuIEVuc3Vy
+ZQo+PiBAQCAtNTEsMTMgKzUxLDYgQEAgZWxzZQo+PiAgIFNXVVBEQVRFX01BS0VfRU5WICs9IEhB
+VkVfTElCQkxLSUQ9bgo+PiAgIGVuZGlmCj4+Cj4+IC1pZmVxICgkKEJSMl9QQUNLQUdFX0xJQkNP
+TkZJRykseSkKPj4gLVNXVVBEQVRFX0RFUEVOREVOQ0lFUyArPSBsaWJjb25maWcKPj4gLVNXVVBE
+QVRFX01BS0VfRU5WICs9IEhBVkVfTElCQ09ORklHPXkKPj4gLWVsc2UKPj4gLVNXVVBEQVRFX01B
+S0VfRU5WICs9IEhBVkVfTElCQ09ORklHPW4KPj4gLWVuZGlmCj4+IC0KPj4gICBpZmVxICgkKEJS
+Ml9QQUNLQUdFX0xJQkNVUkwpLHkpCj4+ICAgU1dVUERBVEVfREVQRU5ERU5DSUVTICs9IGxpYmN1
+cmwKPj4gICBTV1VQREFURV9NQUtFX0VOViArPSBIQVZFX0xJQkNVUkw9eQo+PiBAQCAtODIsNiAr
+NzUsMTMgQEAgZWxzZQo+PiAgIFNXVVBEQVRFX01BS0VfRU5WICs9IEhBVkVfTElCR1BJT0Q9bgo+
+PiAgIGVuZGlmCj4+Cj4+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xJQkdQR01FKSx5KQo+PiArU1dV
+UERBVEVfREVQRU5ERU5DSUVTICs9IGxpYmdwZ21lCj4+ICtTV1VQREFURV9NQUtFX0VOViArPSBI
+QVZFX0dQR01FPXkKPj4gK2Vsc2UKPj4gK1NXVVBEQVRFX01BS0VfRU5WICs9IEhBVkVfR1BHTUU9
+bgo+PiArZW5kaWYKPj4gKwo+PiAgIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCVVJJUEFSU0VSKSx5
+KQo+PiAgIFNXVVBEQVRFX0RFUEVOREVOQ0lFUyArPSBsaWJ1cmlwYXJzZXIKPj4gICBTV1VQREFU
+RV9NQUtFX0VOViArPSBIQVZFX1VSSVBBUlNFUj15Cj4+IEBAIC0xMjYsMTAgKzEyNiw4IEBAIGVu
+ZGlmCj4+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9PUEVOU1NMKSx5KQo+PiAgIFNXVVBEQVRFX0RF
+UEVOREVOQ0lFUyArPSBvcGVuc3NsCj4+ICAgU1dVUERBVEVfTUFLRV9FTlYgKz0gSEFWRV9MSUJT
+U0w9eQo+PiAtU1dVUERBVEVfTUFLRV9FTlYgKz0gSEFWRV9MSUJDUllQVE89eQo+PiAgIGVsc2UK
+Pj4gICBTV1VQREFURV9NQUtFX0VOViArPSBIQVZFX0xJQlNTTD1uCj4+IC1TV1VQREFURV9NQUtF
+X0VOViArPSBIQVZFX0xJQkNSWVBUTz1uCj4+ICAgZW5kaWYKPj4KPj4gICBpZmVxICgkKEJSMl9Q
+QUNLQUdFX1AxMV9LSVQpLHkpCj4+IC0tCj4+IDIuNDcuMwo+Pgo+PiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
