@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AEEF10ED64F
-	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74C4E10ED652
+	for <buildroot@archiver.kernel.org>; Fri, 27 Mar 2026 10:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75FE9416B6;
-	Fri, 27 Mar 2026 10:02:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6J_3F5Q9_fuo; Fri, 27 Mar 2026 10:02:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8007416DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774605764;
-	bh=4tShOLq8hp6hLH3Rv54buItw0pHeFXWl3YgUqOEXwH4=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZBbRqI06W+X6j/nzbvAG5Hy1ZxvrTd0PSj0j92v68ZanGZrRi4wgrhxS/laGZlkPz
-	 Mh4qDTtSMR3QgYYR1IJasWiTNGQJyOR3vWHGbR9EsklW06Q/VhC1Mc2zqUPbdLGfZr
-	 TFhB19Fp3jqwwKvxvaK4GZVVM67GTcJDjszzZOeKJlHWmbWfXtcVTePWGkyKLiTV8a
-	 dHK2iRjR3JKG31PNeFLDDYMUeA4k4I2NkWox/MK7uomis+aAf1T3LkCfkVQkfqMYue
-	 zWrilPnT6pCx2RPbpndc72slnkG7BRpZq8e2hlWqG54M1/B2bo0zDdizZqBSREbd9v
-	 JIcXUPlFtRDvg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8007416DB;
-	Fri, 27 Mar 2026 10:02:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 226B2249
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 064DF613F3
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E5F7613FF;
+	Fri, 27 Mar 2026 10:02:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n7JmguIv9ENZ for <buildroot@buildroot.org>;
- Fri, 27 Mar 2026 10:02:41 +0000 (UTC)
+ id zabHK3im-o19; Fri, 27 Mar 2026 10:02:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FDD4613E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774605765;
+	bh=TRjv6XP5ovnyXKsNO5lx7mNjoJ6IVab93G/WdwvJmA0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=N10ymBA5QQJQMOWaT4832d8pRyhG2UQSrILTLQ0Kz1nMWeqQxyAVTPCM8E1Jx7sLp
+	 QN7I+pcSqdBzDNYMIpwC2CU9wx717xziKbkX5OeXSynujUCVqXsnpw9M4sbaiZXQBr
+	 I/1HhOdlnNFsdEVx+R6pVO3FpJ0xzIpL7xoDki3du8a5vZDg56tAVBoZVGeIGjVQ21
+	 wAU50pmItds+noa63qUFd192hr0p4x7REj/ETy0E+S9rL+8MIKuTy8YqiZunfWTfuy
+	 PiF3VRvQpMbiiLhlrFH13+bz6IpxmEP0rfkKbhWTy5j5JikThEsiqD2Pos9YfT8dnJ
+	 V0xe+0K/rkKoQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FDD4613E9;
+	Fri, 27 Mar 2026 10:02:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D20B1D3
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A33F613D6
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bG5yVS_LCSYh for <buildroot@buildroot.org>;
+ Fri, 27 Mar 2026 10:02:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C73EC612F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C73EC612F4
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C73EC612F4
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:40 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-439c56e822eso2032009f8f.2
- for <buildroot@buildroot.org>; Fri, 27 Mar 2026 03:02:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DC6AE613ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC6AE613ED
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DC6AE613ED
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 10:02:41 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4852c9b4158so15543555e9.0
+ for <buildroot@buildroot.org>; Fri, 27 Mar 2026 03:02:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774605759; x=1775210559;
+ d=1e100.net; s=20251104; t=1774605760; x=1775210560;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=dWaQk2NcPSaH99mVG3MxYM2t85xoh8xoOmti5az48b8=;
- b=Xt909q0onAT45kTTa57oZ3JMQWVQ3Xxy4rEQjXLUf50dVY07lL06NLjQNOfO4LpJ5l
- eEQLwN5MiCdVAuL3wnXMSmXpx4QVwugDnsihA4/zpSSPanetiLcYkPRZIAoiasS6Sm64
- D8c2pdc6O6qUxgyUxc6SF4qvdOFc+IxwkWt1cfYRbD7YPS7EM6IHEu88GCw/CaI1blAA
- Hry9RLXGMBvv8pSkd7VfYVOPZx8eIgFcQthN75cPzb/oTKp13HsubA4pAKdpwlEbZAMD
- +4IyIUy85nuun9K7AvgfjdGZjbbeb0nDYT5DpcsqxSoNZ5e+LFMmkUBz9pO9CEHExb3a
- k8GQ==
+ bh=NCQsfO5L+iAqA3kJppUi7WVrzkM1ry3jC4ZPEI6GcEU=;
+ b=Upgg02+JrBl/qauk5eZy6LSsndrjsIFfz+FYtPBA/ekNrkineIs1fFcFon+CQKXCjr
+ AmjM7mRn9tPzfZkGfLltRJ6DVzaN2soCJWc34cZvR8vzH6hImoBvrHKgPcGtwNbvNfV6
+ 7mH459q9vHbWlbjrFrR5KWpWgIRKc93q/5PNkd4+MXVYc9QUR2t7bWcgb6P2HoD5bE5A
+ 3gIlFqzZ1hIJDRPalk49vgP10cFZ8kPqlGvmE871obiEdVvXV+76YZ2+hafNqvNeZaoI
+ e1Ci0cSVsXrLhNp1d/eZuD+kuBuadZMpXgOBIrTseZSAaY2szcSvkmq3s772FItvU8o2
+ 9ZVQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX9I4jaGgCaDv7BvQbuP+o21PTXT0HX4pAbnXbCvZ+ZGethjCnC2F+D+KOlkN2/aDwfThCTjhyNLms=@buildroot.org
-X-Gm-Message-State: AOJu0YzAqgVPdOARV5MDrVEDE98Hgp4Ji8YGPzrg2irFsrZxAh6yK5bq
- PfA2r+TAl2vOhok9IzbGvaJBmaboCGvir3gaSt3/lccj5RdgkdyG7nuFmSDlzO63UKc=
-X-Gm-Gg: ATEYQzyANtEyNTTPq/jG0VtudtCNfuktWaK+1UDhoXbTr2r9J/+glbOz5YJDAFSf8uV
- OQQhmiG8FYePEudSfacAxKHIUbg7URDMla/UJNYyjImJrTM+oJ/obEzc3IdKoILD5SLxvwCMQU6
- I5nK3oxtsYUMval7hWkGhyL0A/b/WCpBEa83b/IMyNA4vCmozbQy+NOEdNSqx8dp9w54XUhI5zM
- 1YR9oOkGQddAtB7JQ9eLTA4CJTKpN4xyUhZvUw5UocMnFM+QXau8NMf67V73OwMvc1f9xOuPJn+
- gFakkU9T54BB5jRkJvhCOzr4hHu+JQSyVB9gf4MDW91/GBpOoNSL3oFCAGKv6myBAvpzksz5ihY
- gw2IZYk0LCTnI5kDQPqsYUizCQl7PTAji7ODAN4BOBpPQ2Qo0CpFn7nigVWAZFBY9EmA21FeU+5
- ehUeV7JuBTT5y7aVpy
-X-Received: by 2002:a05:6000:2505:b0:439:be78:e1e9 with SMTP id
- ffacd0b85a97d-43b9ea34773mr2819204f8f.14.1774605758524; 
- Fri, 27 Mar 2026 03:02:38 -0700 (PDT)
+ AJvYcCWES707Alrs90aV/FbVZaI26k9PFZvJPqdVO0vaRBN1SztSvAYCAxiwNr6/C5rVKGu6Kh4zkt+qT74=@buildroot.org
+X-Gm-Message-State: AOJu0YxXtX2+PTeCiFtXZWs4SOGYBFvXcnxRLOaTJXItTjUbibJgO301
+ +Vjy9NgwP/eOJ4KYII6xcloWFlzWY4fm2faBojtjh98j0vJQJ2TGQBSvnXaQ890fPTY=
+X-Gm-Gg: ATEYQzz9RcYnWr1jU1HKaKoyag10i8sdsSk41B2GCo/odlvfCv5yoqoL6djMkTPyHGf
+ vG4CjbRyH0E1zeYm0yWmXjlpqF2F6tk+fGyjfY+YUcyrugNchfLRJ5vtq+DIWbYiGm4w2WXTrqg
+ +XAnlfKLYMfqesBKgT+g38cK7Wq7MWHPqr4gtBeu6lrftRpt6FGdHxJYYOqRUsZDxjh1IBsmb+K
+ r+Srbb93h2wFW1t6GAwnqf1XJk36xaMI2fmFQ9ZAwi09kzu75pUbKzhWtGSypNVbk3IRFoLDkHu
+ goIKoPgEOmtGZV5S4xABCu/o2nU/NpVJ7iWwtUhPT5jrF7cgtpD2fmR7SbS67dJx9wTnmiH2ULv
+ F4bpSsGo5B8wzYouEMrNG6L4ojVGNNw5FdCylQm0282lcp2KqGN8sSeTPV4BZYTlWqFl7rr/c4r
+ vCKwIACmttFD7xM+G5
+X-Received: by 2002:a05:600c:1d1f:b0:486:d76c:fa57 with SMTP id
+ 5b1f17b1804b1-48727eb81bbmr32925405e9.17.1774605759809; 
+ Fri, 27 Mar 2026 03:02:39 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43b9194311asm15421563f8f.10.2026.03.27.03.02.37
+ 5b1f17b1804b1-48722d2366dsm79245105e9.10.2026.03.27.03.02.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Mar 2026 03:02:37 -0700 (PDT)
-To: Waldemar Brodkorb <wbx@openadk.org>
+ Fri, 27 Mar 2026 03:02:39 -0700 (PDT)
+To: Andreas Ziegler <br025@umbiko.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 27 Mar 2026 11:02:37 +0100
-Message-ID: <20260327100237.46205-1-thomas.perale@mind.be>
+Date: Fri, 27 Mar 2026 11:02:38 +0100
+Message-ID: <20260327100238.46259-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
-References: <aaQ0OC8I4PAx0xZz@waldemar-brodkorb.de>
+In-Reply-To: <20260314061837.9425-4-br025@umbiko.net>
+References: <20260314061837.9425-4-br025@umbiko.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774605759; x=1775210559; darn=buildroot.org;
+ d=mind.be; s=google; t=1774605760; x=1775210560; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dWaQk2NcPSaH99mVG3MxYM2t85xoh8xoOmti5az48b8=;
- b=LyYSCxAK+qoT20s6bFsTZanvKP3sFh2zR8l2/XzN2SnXqwZLSICRCo81m2EDJDSkr9
- Mw1e2nMspx5pTFM4nUPx/9DdwHY15X69ibScGMkDqJFdaUS2UBp0zhIVTkkMBSfuA7W5
- Gsd5ea5OpjFCWvdyI7+4i35nqSEosCAcTyYVv2z6ijrjUZJi4pS3soMpcMMEEDEq4mFn
- kYJTRMFz8jVNuaGY3zTTRh6xp3ro9IKLEiLVTtCuRZ8ty2jNwJBU24OE93ZSyXRL6LhP
- J1HRfxbTK8bWcs21PNhl/gZkPb59w4vd5BAgBO3IvhNGSGFbedcSUU1+VH1cFRzzh8rn
- l6Cg==
+ bh=NCQsfO5L+iAqA3kJppUi7WVrzkM1ry3jC4ZPEI6GcEU=;
+ b=hd7qlGuMJ5HX7t396UZRFKcM+4QWIaA+dii6/AEjMFiUNJrdt6nY+SpphAm7Ez137H
+ fmY3Y33LdLQXc4Hb8IBn8ZdsiDnFZTgOTcgkV9OURe6I0tVkL0dgDBq8sVBY8x/FmJAI
+ gXxnscYujJ1iLoN5VMxrTN1EC1KUK1rU7NCMo4MVvLG4Ma6IQnhoFQkYv+SA9yxWnXM2
+ XEoUS9ZQz7xlckM3bUdGnWWJ+/1xnFGi8WQNJa2G3sr/xb7Juv1QNKHuaIBUDMrtt43q
+ 0CQPrGcPGEXdefymWe7YybHNkvFuddOKlnqnGE38OSrzQnYT1XkkWsl1huUJ5g6o8ZZE
+ F6Dw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LyYSCxAK
-Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.57
+ header.a=rsa-sha256 header.s=google header.b=hd7qlGuM
+Subject: Re: [Buildroot] [PATCH 3/3] package/mpd: add missing optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,56 +131,70 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Following changes made it into the release:
+> Config.in selects libiconv in certain situations (uClibc with locales
+> not enabled). This may lead to a build error with utils/test-pkg -p mpd.
 > 
-> Joris van Rantwijk (1):
->       Fix adjtimex() with TIME64
+> Add missing optional dependency and restore sorting order.
 > 
-> Waldemar Brodkorb (8):
->       sys/stat.h: remove _STAT_VER/_MKNOD_VER
->       fix gettid() declaration
->       add statx syscall wrapper
->       sparc: add optimize build support for leon3
->       sparc: sync with Linux kernel definition, fixes gdb compile
->       fix compile error on earlier Kernels predating statx
->       select: fix compilation failure with very old kernel
->       bump version for 1.0.57 release
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 
 Applied to 2026.02.x & 2025.02.x. Thanks
 
 > ---
->  package/uclibc/uclibc.hash | 4 ++--
->  package/uclibc/uclibc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/mpd/mpd.mk | 24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index 6a96e57069..e0dba1b6b4 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -1,4 +1,4 @@
-> -# From https://downloads.uclibc-ng.org/releases/1.0.56/uClibc-ng-1.0.56.tar.xz.sha256
-> -sha256  23c9cab54c113e020fb20b9dc06be4a49560df791b78fcbc2ca899a6e8f213dd  uClibc-ng-1.0.56.tar.xz
-> +# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
-> +sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
->  # Locally calculated
->  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 69eb73510e..0c91a176fa 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index c8107be128..ce7c44a9a8 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -26,14 +26,6 @@ MPD_CONF_OPTS = \
+>  	-Dpipewire=disabled \
+>  	-Dsnapcast=false
 >  
-> -UCLIBC_VERSION = 1.0.56
-> +UCLIBC_VERSION = 1.0.57
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
->  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_LICENSE = LGPL-2.1+
+> -# Zeroconf support depends on libdns_sd from avahi.
+> -ifeq ($(BR2_PACKAGE_MPD_AVAHI_SUPPORT),y)
+> -MPD_DEPENDENCIES += avahi
+> -MPD_CONF_OPTS += -Dzeroconf=avahi
+> -else
+> -MPD_CONF_OPTS += -Dzeroconf=disabled
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_EXPAT),y)
+>  MPD_DEPENDENCIES += expat
+>  MPD_CONF_OPTS += -Dexpat=enabled
+> @@ -49,6 +41,14 @@ else
+>  MPD_CONF_OPTS += -Dicu=disabled
+>  endif
+>  
+> +# uClibc w/o locales
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +MPD_DEPENDENCIES += libiconv
+> +MPD_CONF_OPTS += -Diconv=enabled
+> +else
+> +MPD_CONF_OPTS += -Diconv=disabled
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_JSON_FOR_MODERN_CPP),y)
+>  MPD_DEPENDENCIES += json-for-modern-cpp
+>  MPD_CONF_OPTS += -Dnlohmann_json=enabled
+> @@ -63,6 +63,14 @@ else
+>  MPD_CONF_OPTS += -Dalsa=disabled
+>  endif
+>  
+> +# Zeroconf support depends on libdns_sd from avahi.
+> +ifeq ($(BR2_PACKAGE_MPD_AVAHI_SUPPORT),y)
+> +MPD_DEPENDENCIES += avahi
+> +MPD_CONF_OPTS += -Dzeroconf=avahi
+> +else
+> +MPD_CONF_OPTS += -Dzeroconf=disabled
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_MPD_AO),y)
+>  MPD_DEPENDENCIES += libao
+>  MPD_CONF_OPTS += -Dao=enabled
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
