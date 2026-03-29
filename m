@@ -1,112 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F4F2F3D5F4
-	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 06:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD931F3D5FF
+	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 559464099D;
-	Sun, 29 Mar 2026 06:46:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5855960770;
+	Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_KyHEhImpsr; Sun, 29 Mar 2026 06:46:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uDdnCF1E_yHt; Sun, 29 Mar 2026 11:06:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FE5E409A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77513608F0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774766774;
-	bh=Fyptl+TEaSw2Kt/uDNlKjJ4xGqbICtI6qeB1Adj4+VQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=C4pocJEAd5YyCKOMBB8dOV0UxhXxp9ZIuUPEkEkSbAx2bDptg/PZ1avUYhjyeNAfP
-	 lMjEvFy489UEvvocsvbBKACfHA3jnXxF46movwC8zDGjQbjXP+LxHZjAJhuwt6rB92
-	 Alc4K9reKGvwCJIdKKgnZDj62v7ChaC1MSwDAsoT5fwzm7fVVFjOWqGoD3sCubqi/J
-	 aAMaAY2RMqGsNjHdUWtzZSSWqnM5bzQJXSXBcl7Q97+VRYSbNmSjMtY/VYgEkkHq58
-	 oUINhx0F0OmUsh4KZJKifGCCVYgsVrSeUP5Wi5ZD4fiJyCPO/5Pl4ZLa7QLwt8kcoc
-	 YiFGxolNUDxkQ==
+	s=default; t=1774782398;
+	bh=0VQRhXoI/TR29UeMbGOp0M861pBddL8dUn8PMt5loBY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BkLL0t5EDLRQSNl7eh6fD5PLZjo/ggWmVEYiraVzFF4NepuHtZ8opXeLGqY3AT0Dm
+	 G2opoWDmniGPzLpnpiRO/Th3PWhM+A3VLEN55P4JKOnCdgltmHZuL98OTozgSCjlCv
+	 Huh7FSOe0YNkcEtTs9ESZE2XgXA1DBqatDqmgIpFGig2F+JbbWIuMgvqAyw6VLiaqZ
+	 b3EUPbyfeDoI3hm5OR0w+hNvonOEcVsO3vJBOIPkFVY5xEoziVFZmqjWLCwAhXjOO9
+	 mEeDOqq4/4Bw6jy3ysne5p6biJR2zjWiH6D9HyR38SvsoFJMOmuODJhdu1FpQXU9DM
+	 8oMniFWXkGlSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FE5E409A1;
-	Sun, 29 Mar 2026 06:46:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CE8381D3
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 06:46:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77513608F0;
+	Sun, 29 Mar 2026 11:06:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E9DF10F
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C04BC409A1
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 06:46:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B2E4810BD
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ec06AOkrYE_p for <buildroot@buildroot.org>;
- Sun, 29 Mar 2026 06:46:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E10E04099D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E10E04099D
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E10E04099D
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 06:46:12 +0000 (UTC)
-Received: by mail-pl1-x631.google.com with SMTP id
- d9443c01a7336-2b0ba3bfe16so27652775ad.1
- for <buildroot@buildroot.org>; Sat, 28 Mar 2026 23:46:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774766771; x=1775371571;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+P/WDSUkVWxMCH65X5K5KZQHZfsepq3z6LfB6y4JEZI=;
- b=WO0PWzQOFOe6TMGjHBKpqYGQay9yaoRNzzA45NNLU/JATS6zfPin0iUa3jlmMuDrYo
- mWtcxnrDLrWDSlzg9qbYdQIB5eLRX5o1h4UDWPYAZjR0nRLnybp+38Od/aCJ8dn4kPHm
- 2Xg8X/miYAgO54n9tOaTbfVX++YGVWJv6KpYXTQKMNlkHzZW3GAfVZzxmJu02j0XXyp5
- jNUG3DvPpK9OWsRGvvqirGCkDcuow1Oe88aZlKxLfXFPw0oymzcBtYtApqdAY/sgk7An
- 1TSx8453yE3G6BLxQ4VXUlCUhVBuWnxONKPwQ2p25q7A7P2jf8kRV2ZlyB0NY/pnS0zR
- iF7w==
-X-Gm-Message-State: AOJu0YziIblPzTNnRvTjhxAZlgHQXQTII3oRpVuoMaqfRWCKaNXws6wr
- 58Vn7U+ozNCkSw/202RUCf7b9jIeUimk19xSWBSRojTYdvIWqJsSQY6Fvdap/Q==
-X-Gm-Gg: ATEYQzxL7Euex0ONJbmrM9tZCIlw3J+3rESqXGytAN14u8u8x6IepqJTamPF2USHiGx
- 2CQCMgrzV8otQo/7yWM2gEZRDPDbEfi24GYbSyyde+mn123SyxZY/LNxVi86HkCScdr1ejMCJs4
- ZQeAV3tdYC+UHT/KFK4PO2AxzwUTGedxpabtHOOBfIIWPmf3A9s8j6lThhhXbfaPGrTUZTAc42d
- 8u2jKSijj8DODrr7xeVRqppIvdBOFRfhYnhIirlxupA5dSG2eHbDOGUDn9+LOE2TRECj0vgKEOX
- YKAry/bFrMWa/H9PPJ05zI6A3BOEVq8QrRCzGEuC9Fq5JH+ltDlQqzd4WgL/VXAprBg6hUQDHC0
- es7a54aNjddJLMpMTRt9e0U+MXJx6vLdAEN9dswEzA7DyF/oPsR8VpYqPMUpqVPjQW4pcwq6jT3
- DArtwEzaO6aWPHZkHhVpG0RAS3Q8Gp/YVC1Q==
-X-Received: by 2002:a17:902:cf03:b0:2ae:4d6b:b2c7 with SMTP id
- d9443c01a7336-2b0ce4ee4c8mr74022525ad.9.1774766771476; 
- Sat, 28 Mar 2026 23:46:11 -0700 (PDT)
-Received: from fedora ([2409:40e5:104b:2bf0:f192:27a:e37e:a94d])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2b242642b43sm52542605ad.9.2026.03.28.23.46.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 28 Mar 2026 23:46:10 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WsdQNAZrkYFy for <buildroot@buildroot.org>;
+ Sun, 29 Mar 2026 11:06:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 522DD810B7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 522DD810B7
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A2ABC7FDBA; Sun, 29 Mar 2026 11:06:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sun, 29 Mar 2026 12:15:58 +0530
-Message-ID: <20260329064559.15124-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1774766771; x=1775371571; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+P/WDSUkVWxMCH65X5K5KZQHZfsepq3z6LfB6y4JEZI=;
- b=AWlYF/PalbWCJ5uSvk2ATcAOORZb+xmzwyOJdk1cQf/MWipJprqK1b2MA0QYbt+QnG
- 73YeZuox37HZwomarRevEYz8Yr/yslUCWUlzsljkplzBCdXyfYLT3L0tg/cSdjFfucZt
- ogJz7GcdITK9p4ggqpd0bRbMBGU7O0A0FXGq5e+7dQUoIEUuwL6RlmKk/tCIDeeZp2Wa
- CXlSFY9Lo3o3HLdDIttumoJqpgTkN93Xv2ue5XC/R7jW2GATCc/woutYfCKvzw0w43Hd
- yatOs0oLD1k/AeBwU8xyBGaDryIDAufjwlzK34KaPbxGtNF3FRVbPKYArvpbh3CfoQlA
- H9/A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=AWlYF/Pa
-Subject: [Buildroot] [PATCH] package/font-awesome: bump to version 7.2.0
+Date: Sun, 29 Mar 2026 12:30:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fb53371286f912fc3e4dfe9a61b6e5fcb2935c90
+X-Git-Newrev: d25f18a3c3bc984df529cf2b264be2fe30b51257
+X-Patchwork-Hint: ignore
+Message-Id: <20260329110635.A2ABC7FDBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add python-cloudpickle
+ tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,93 +69,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a major version bump from 4.7.0 to 7.2.0, skipping versions 5.x
-and 6.x. Font Awesome 4.7.0 is end-of-life.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d25f18a3c3bc984df529cf2b264be2fe30b51257
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Major changes in version 7.2.0:
+Add a basic runtime test for the python-cloudpickle package.
+This test verifies the fundamental serialization capabilities of the
+library by:
+- Importing `cloudpickle`.
+- Defining a simple Python function (fibonacci).
+- Using `cloudpickle.dumps()` to serialize this function.
 
-Directory structure changes:
-- Dropped 'less' and 'fonts' directories
-- Added 'js', 'sprites', 'svgs', and 'webfonts' directories
-- Retained 'css' and 'scss' with modernized syntax
-
-Technology stack updates:
-- Migration to Dart Sass (node-sass and libsass deprecated)
-- Removed jQuery, Less CSS, Python Django, Ruby on Rails, and
-  Require.js support
-
-Icon improvements:
-- Expanded from 605 to thousands of icons
-- Icons now fixed-width by default
-- Icons organized by Packs, Families, and Styles
-- Backward compatibility features included to translate v4/v5/v6
-  icons automatically
-
-Changes to package files:
-- Update package description to reflect larger icon count
-- Update directory list for Font Awesome 7.x structure
-- Update license information to reflect new licensing:
-  OFL-1.1 (fonts), MIT (code), CC-BY-4.0 (icons)
-- Add LICENSE.txt to license files
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
+[Julien: fix flake8 warnings to fix check-package errors]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/font-awesome/Config.in         | 4 ++--
- package/font-awesome/font-awesome.hash | 3 ++-
- package/font-awesome/font-awesome.mk   | 9 +++++----
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ DEVELOPERS                                                 |  2 ++
+ support/testing/tests/package/sample_python_cloudpickle.py |  8 ++++++++
+ support/testing/tests/package/test_python_cloudpickle.py   | 12 ++++++++++++
+ 3 files changed, 22 insertions(+)
 
-diff --git a/package/font-awesome/Config.in b/package/font-awesome/Config.in
-index 694d74e5a8..40cadaf433 100644
---- a/package/font-awesome/Config.in
-+++ b/package/font-awesome/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_FONT_AWESOME
- 	bool "font-awesome"
- 	help
--	  Font Awesome is a full suite of 605 pictographic icons for
--	  easy scalable vector graphics on websites.
-+	  Font Awesome is a full suite of thousands of pictographic
-+	  icons for easy scalable vector graphics on websites.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b2d3305db6..767de9b964 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3483,6 +3483,8 @@ N:	Xukai Wang <kingxukai@zohomail.com>
+ F:	package/python-cloudpickle/
+ F:	package/python-farama-notifications/
+ F:	package/python-gymnasium/
++F:	support/testing/tests/package/sample_python_cloudpickle.py
++F:	support/testing/tests/package/test_python_cloudpickle.py
  
- 	  https://github.com/FortAwesome/Font-Awesome
-diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
-index 89bc411f66..29c64cd40f 100644
---- a/package/font-awesome/font-awesome.hash
-+++ b/package/font-awesome/font-awesome.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256  de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43  font-awesome-4.7.0.tar.gz
-+sha256  8f433b74d3d4bbba2a6374a0a0ddf53be8e127809341e4c2578719229b43903a  font-awesome-7.2.0.tar.gz
-+sha256  20c6f40715a567c97b80f6944beb8bb325835cab47ea7dcab89ee3b8e077eced  LICENSE.txt
-diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
-index 5211ac22a5..2b1de910ce 100644
---- a/package/font-awesome/font-awesome.mk
-+++ b/package/font-awesome/font-awesome.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--FONT_AWESOME_VERSION = 4.7.0
--FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,v$(FONT_AWESOME_VERSION))
--FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
--FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
-+FONT_AWESOME_VERSION = 7.2.0
-+FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
-+FONT_AWESOME_LICENSE = OFL-1.1 (fonts), MIT (code), CC-BY-4.0 (icons)
-+FONT_AWESOME_LICENSE_FILES = LICENSE.txt
-+FONT_AWESOME_DIRECTORIES_LIST = css js scss webfonts sprites svgs
- 
- define FONT_AWESOME_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
--- 
-2.53.0
-
+ N:	Yair Ben Avraham <yairba@protonmail.com>
+ F:	package/casync/
+diff --git a/support/testing/tests/package/sample_python_cloudpickle.py b/support/testing/tests/package/sample_python_cloudpickle.py
+new file mode 100644
+index 0000000000..c17a73a415
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_cloudpickle.py
+@@ -0,0 +1,8 @@
++import cloudpickle
++
++
++def fibonacci(n):
++    return n if n < 2 else fibonacci(n-1) + fibonacci(n-2)
++
++
++serialized = cloudpickle.dumps(fibonacci)
+diff --git a/support/testing/tests/package/test_python_cloudpickle.py b/support/testing/tests/package/test_python_cloudpickle.py
+new file mode 100644
+index 0000000000..b28080f02e
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cloudpickle.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Cloudpickle(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_CLOUDPICKLE=y
++        """
++    sample_scripts = ["tests/package/sample_python_cloudpickle.py"]
++    timeout = 20
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
