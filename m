@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD931F3D5FF
-	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD5DF3D5FF
+	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 11:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5855960770;
-	Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 412B66090A;
+	Sun, 29 Mar 2026 11:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uDdnCF1E_yHt; Sun, 29 Mar 2026 11:06:38 +0000 (UTC)
+ id zZYbLvuXJ_Mr; Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77513608F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7978660A35
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774782398;
-	bh=0VQRhXoI/TR29UeMbGOp0M861pBddL8dUn8PMt5loBY=;
+	s=default; t=1774782399;
+	bh=ioq5UqCKlJNtPN2judGt+CqGRsdvO5Evx+TM2SwfBfc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BkLL0t5EDLRQSNl7eh6fD5PLZjo/ggWmVEYiraVzFF4NepuHtZ8opXeLGqY3AT0Dm
-	 G2opoWDmniGPzLpnpiRO/Th3PWhM+A3VLEN55P4JKOnCdgltmHZuL98OTozgSCjlCv
-	 Huh7FSOe0YNkcEtTs9ESZE2XgXA1DBqatDqmgIpFGig2F+JbbWIuMgvqAyw6VLiaqZ
-	 b3EUPbyfeDoI3hm5OR0w+hNvonOEcVsO3vJBOIPkFVY5xEoziVFZmqjWLCwAhXjOO9
-	 mEeDOqq4/4Bw6jy3ysne5p6biJR2zjWiH6D9HyR38SvsoFJMOmuODJhdu1FpQXU9DM
-	 8oMniFWXkGlSQ==
+	b=rSuNlUG6BLhEd6WnQsYtic0f+DMPF+Pl1ldGkp1OK3urH81WcmFwQLRZWbBHgTaRL
+	 fUmL2cSSUJpmiqIXV1kf6YArtrDCSfyStxF8rPdqcd+ZVf9uwKNdco5d+6J/W2QtY8
+	 Q3Pa8vFLlucV/duumkQX926P5YdUkQMGhL8x1p9BBhn5VlA9gY06QybkVV0Twbtg+/
+	 yffScVedUqYa+cUo7AHO2NJoMlfab3uY287HVEdnyf0431n0X+eUbgJkXHzFnL45iR
+	 K9L6AVteaXdbytnPykmKH8oC781MfI5oXFYtgXMLdjHIDPaF9yYoMd5FRhEVbudBQU
+	 NnSvR5vF/MvTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77513608F0;
-	Sun, 29 Mar 2026 11:06:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E9DF10F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7978660A35;
+	Sun, 29 Mar 2026 11:06:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50404374
  for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B2E4810BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35E8440375
  for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WsdQNAZrkYFy for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZNrg9xLKB2qu for <buildroot@buildroot.org>;
  Sun, 29 Mar 2026 11:06:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 522DD810B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AD91400C8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 522DD810B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AD91400C8
  for <buildroot@buildroot.org>; Sun, 29 Mar 2026 11:06:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2ABC7FDBA; Sun, 29 Mar 2026 11:06:35 +0000 (UTC)
+ id BA7827FDB7; Sun, 29 Mar 2026 11:06:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 29 Mar 2026 12:30:35 +0200
+Date: Sun, 29 Mar 2026 12:57:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb53371286f912fc3e4dfe9a61b6e5fcb2935c90
-X-Git-Newrev: d25f18a3c3bc984df529cf2b264be2fe30b51257
+X-Git-Oldrev: 6e6597de2173cab3e40a115cf1282c9cf9ebd913
+X-Git-Newrev: b647b0c95d823a294ac5da6c15d5daad41874e1c
 X-Patchwork-Hint: ignore
-Message-Id: <20260329110635.A2ABC7FDBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add python-cloudpickle
- tests
+Message-Id: <20260329110635.BA7827FDB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add python-gymnasium tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,69 +76,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d25f18a3c3bc984df529cf2b264be2fe30b51257
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b647b0c95d823a294ac5da6c15d5daad41874e1c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Add a basic runtime test for the python-cloudpickle package.
-This test verifies the fundamental serialization capabilities of the
-library by:
-- Importing `cloudpickle`.
-- Defining a simple Python function (fibonacci).
-- Using `cloudpickle.dumps()` to serialize this function.
+Add a basic runtime test for the python-gymnasium package.
+This test verifies the fundamental operations of the library by:
+- Importing `gymnasium`.
+- Creating a "CartPole-v1" environment.
+- Resetting the environment.
+- Taking a random action step.
+- Closing the environment.
 
 Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
-[Julien: fix flake8 warnings to fix check-package errors]
+[Julien:
+ - sort DEVELOPERS entries alphabetically
+ - fix file name typo in DEVELOPERS
+ - remove selection of dependencies in test config
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                                 |  2 ++
- support/testing/tests/package/sample_python_cloudpickle.py |  8 ++++++++
- support/testing/tests/package/test_python_cloudpickle.py   | 12 ++++++++++++
+ DEVELOPERS                                               |  2 ++
+ support/testing/tests/package/sample_python_gymnasium.py |  8 ++++++++
+ support/testing/tests/package/test_python_gymnasium.py   | 12 ++++++++++++
  3 files changed, 22 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b2d3305db6..767de9b964 100644
+index f0aadbbcd3..410073d48a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3483,6 +3483,8 @@ N:	Xukai Wang <kingxukai@zohomail.com>
- F:	package/python-cloudpickle/
- F:	package/python-farama-notifications/
+@@ -3485,8 +3485,10 @@ F:	package/python-farama-notifications/
  F:	package/python-gymnasium/
-+F:	support/testing/tests/package/sample_python_cloudpickle.py
-+F:	support/testing/tests/package/test_python_cloudpickle.py
+ F:	support/testing/tests/package/sample_python_cloudpickle.py
+ F:	support/testing/tests/package/sample_python_farama_notifications.py
++F:	support/testing/tests/package/sample_python_gymnasium.py
+ F:	support/testing/tests/package/test_python_cloudpickle.py
+ F:	support/testing/tests/package/test_python_farama_notifications.py
++F:	support/testing/tests/package/test_python_gymnasium.py
  
  N:	Yair Ben Avraham <yairba@protonmail.com>
  F:	package/casync/
-diff --git a/support/testing/tests/package/sample_python_cloudpickle.py b/support/testing/tests/package/sample_python_cloudpickle.py
+diff --git a/support/testing/tests/package/sample_python_gymnasium.py b/support/testing/tests/package/sample_python_gymnasium.py
 new file mode 100644
-index 0000000000..c17a73a415
+index 0000000000..42997b2982
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_cloudpickle.py
++++ b/support/testing/tests/package/sample_python_gymnasium.py
 @@ -0,0 +1,8 @@
-+import cloudpickle
++import gymnasium as gym
++env = gym.make("CartPole-v1")
 +
++observation, info = env.reset()
++random_action = env.action_space.sample()
++next_observation, reward, terminated, truncated, info = env.step(random_action)
 +
-+def fibonacci(n):
-+    return n if n < 2 else fibonacci(n-1) + fibonacci(n-2)
-+
-+
-+serialized = cloudpickle.dumps(fibonacci)
-diff --git a/support/testing/tests/package/test_python_cloudpickle.py b/support/testing/tests/package/test_python_cloudpickle.py
++env.close()
+diff --git a/support/testing/tests/package/test_python_gymnasium.py b/support/testing/tests/package/test_python_gymnasium.py
 new file mode 100644
-index 0000000000..b28080f02e
+index 0000000000..c36ce37dde
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_cloudpickle.py
++++ b/support/testing/tests/package/test_python_gymnasium.py
 @@ -0,0 +1,12 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy3Cloudpickle(TestPythonPackageBase):
++class TestPythonPy3Gymnasium(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CLOUDPICKLE=y
++        BR2_PACKAGE_PYTHON_GYMNASIUM=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_cloudpickle.py"]
++    sample_scripts = ["tests/package/sample_python_gymnasium.py"]
 +    timeout = 20
 _______________________________________________
 buildroot mailing list
