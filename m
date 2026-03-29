@@ -1,122 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48B03F3D5FB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72594F3D610
 	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 15:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C1C360A52;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31D1B80C6E;
 	Sun, 29 Mar 2026 15:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oNHr4y6loVCo; Sun, 29 Mar 2026 15:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aRhgg5tSlMUa; Sun, 29 Mar 2026 15:47:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 129D460A41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 634AF80C8A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774799264;
-	bh=8PmnM8gB4exdvKPIQt6VI47Pc6On3rKBjsu1WXvbyo0=;
+	s=default; t=1774799265;
+	bh=k6uInHpIsyVNOh66SglZ7mslhhy8b2/D0eavScE/mIM=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=J7o+C6iUJEsVv6BvS4Lf3Q55q7UdjyCtG4WFIXa504JrLgcqBFmHXdcruuTHXKvFK
-	 sLV04ex0t2paedKX5ss6DeSNWuIJIhI5d7zTuO7mJix/AZHIKBFYXIzBfysnANPk7i
-	 BOHZqeyhhN3j6LZV8OQ4+MHtGnmgzY2TUithrDCRnyrbETWJXWm4KuRQ6Ur9FYHrYi
-	 k6U2WsD/WxUZjAlQIF6pmGF7QQo59A1KwJ3y6Bazh3ZRxHuHqJWrkcKPKdCWb6hQzW
-	 xN5AYQb//WLn0VI/BBJTDmcXSIWu9W7Vfvox4RsEOEpoEtW6+OKOhO09zsSLcEI5/B
-	 AZN2cz50ARs9Q==
+	b=hxmxNahY4ZpP7LcQSSRg+0/ceZg9C11z8rNzYT8RqPiTlk0AkXzBGY/gpsLjJ7tGK
+	 MLyuA0mNoDwzUxx/1Peq6tde3O5vXoPAaOSJ52/COk+8yAWXZunOIxbA8YFf3R5YPd
+	 06s7P99wXUnTJE/tEday3opNxjuq7FdFEMZyvaXpMssCaqkv2mUNwWORIFjaqs78Rs
+	 5kdPUqLS3liw0KrV75INGtM4nxpnL2DydYWWL9vvcRfBj4uJdFWsCFL5VPk299O0v0
+	 Upn367nratkyVAPFgKTxdL0+6WUxHBENRuaGZADxqS0DQPSlhJvs9Xfsb2zI90FYr8
+	 9KOUIwb6U0+mQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 129D460A41;
-	Sun, 29 Mar 2026 15:47:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C76E82EB
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 634AF80C8A;
+	Sun, 29 Mar 2026 15:47:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 45EF42EB
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B833C40188
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43B5F40188
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mxLK9SYemrcX for <buildroot@buildroot.org>;
- Sun, 29 Mar 2026 15:47:38 +0000 (UTC)
+ id 79rUJV4RPBIK for <buildroot@buildroot.org>;
+ Sun, 29 Mar 2026 15:47:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f29; helo=mail-qv1-xf29.google.com;
+ client-ip=2607:f8b0:4864:20::82c; helo=mail-qt1-x82c.google.com;
  envelope-from=a.p.dicarlo@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B26D3401A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B26D3401A4
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
- [IPv6:2607:f8b0:4864:20::f29])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B26D3401A4
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:38 +0000 (UTC)
-Received: by mail-qv1-xf29.google.com with SMTP id
- 6a1803df08f44-89cdd75e424so38345576d6.2
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 08:47:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6F913401A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F913401A4
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com
+ [IPv6:2607:f8b0:4864:20::82c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6F913401A4
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:47:40 +0000 (UTC)
+Received: by mail-qt1-x82c.google.com with SMTP id
+ d75a77b69052e-505a1789a27so19523941cf.3
+ for <buildroot@buildroot.org>; Sun, 29 Mar 2026 08:47:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774799256; x=1775404056;
+ d=1e100.net; s=20251104; t=1774799259; x=1775404059;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=LPlrR9xX76FUN5ufckzTuMiTglDMB83YXRwl3yxx2V4=;
- b=qybptJGjONnldsQzOxGEEt84wwyoJ6ksLAmobneFCcMg8ku8C8opvdMEj3/EYVTEMZ
- FG+9ZSM2bN3m3QbnmJpbQ7JG9F3SY6gX4T7lvPGmbz8lvX8wCRq22TBn5yn8Xp5qeTnq
- 4Ns4CR2I1LtaUR2MKeE0bwONQBPwln6cBlSq5fPQvvcw0ZtizwOlWUVc5pT8odQho9az
- VJ0ej1QeejznRVevQSmaTA9/nRnpiMXlRvfzCT5wvWvClwjlD4vMyUg/qeBYZ2x52eT+
- LzY+QXUR3CqurZqf0qjvCkwjNJUcmospF9qlsdZpkHIwFfT4amzvLAgMf/135HmgRI6k
- fJjw==
-X-Gm-Message-State: AOJu0YzPJORHghgr8rUkR9VxCbTM/9bylqj6AlVnrDaOQXWejfc5Aatl
- KHOClEEH3aieAkA/SA28nr+s7Xf9vB1aXaZMwStITGAmXEbdk3C4ZM1MB4pVvgXG
-X-Gm-Gg: ATEYQzzNSYLTR0rTZlVybBomNUhzWltQgKcxr9yPkNPSVqSRYND12089uwz7eMrXsCo
- JFwadPmuZrHYneCrpB9XHv0a/KIswW56YrZtlfAVE41uTODRjxwcmMcZSqrYMlVXnlsmgyGbzso
- 9XaeWWLU+ObmnTFxehLJXcW3Df6+WuZVCxCf6UIbaqt/UlibVGBmSBU7S6z3sPwh/xIAxUcs6f3
- ia658LIi6bjNnRZT/3cp7g6EU9V3e0Sop0mM14UZQDgGp8GCR6QfGvmH9BJcKmaJ502bhcDq8Vw
- iApmVScdvSXI+8mKvzbi/adqhkFBfJ409wEebEKD0jXfEPPt1xR2ONSaTt+iW42En8l5YTkZWhl
- qdY4+g5yOluQVnj/fGzK7Og2RhT3eJlPdXMCS91pXWsodigMSLiwEfzwRYv0LIVccrQ8maIE4Y1
- hkXM9mR9arNSIcRc8gLkBp
-X-Received: by 2002:a05:622a:1b89:b0:509:820:58d7 with SMTP id
- d75a77b69052e-50ba39792eemr117689581cf.52.1774799256267; 
- Sun, 29 Mar 2026 08:47:36 -0700 (PDT)
-Received: from adicarlo.nyc ([67.245.157.254])
+ bh=0HuqfgcREYsAXvdAwy0OGuyzRMBC/DurNM4IF/JPKYg=;
+ b=quWlwHckPtHAgJvrNZcdmrh4+MGaEL/Uq1SVnlYGKc1lT/20WH4+rf4XzymzxNnJ4v
+ dhgYJwI+DpSXwS5C14WzmkOtDnYhX6YnJcY/ZUJSEk8QSmlnjmGaQVcx3kmMeJ9v6SEH
+ G8d5IzbiP63+zUjtAgmsUlBIvBfXxmMj51OhH/Mwe2XmaeqnW9wsOm+2cpzJl9Y42K4b
+ PC1ov9lNI4aJo8NKCZWdkrIzCgARVyvwuD8uD8iLHFPSR3LnRvOphFN18O06Q05lCEye
+ mQJ7gVYVo/fiG8lVicUHbe1Ieu0RMsBw1NKCraHOH5kUzD2YaLGLIitnDqea1U3xlwI5
+ 2LgA==
+X-Gm-Message-State: AOJu0YxQxJgy3VtSB+yr8w1g2vPUldleD/wFmkLt7pq436GLb6k8RUcK
+ 2hrK0kn4L6+x7A0s2C8KEcece11PfTmjSkSFwmmPSiPL2NcHy4Oz3Ffv4+ytmiTK
+X-Gm-Gg: ATEYQzwE8v8SAsFdAfSe/fOfKQqT4b5G1tXP21a2mg6LjMoI5jmDQ20bSRm9LlVrBJm
+ HYjtncLuu9Tbd2bCP3usBcXqgMEbADF07ooPlDWfHgAE7ms7Lp/TMQJ58edH1WE3qbWbcV8z91v
+ srcXJVcAQlvmoGlQnXOneYB/KL28jlz/1VlhtXMOL3tk51KWtbWkZv0ARAiqJT8NZ+huO35UiP4
+ JGVV+U2ndAz25Dnq57NyjI5X5Iu7BzKUKwZZBp89REoxNMasEF5rDM420Pj6fL4baY8UkG/Ubn1
+ IfxDIlusCx6yy2p12en0cRz8HaR/Mh+Z56WMHPeNp8pER8ZmEWtuvUdG/XpcGEmHNuEPVRFs/59
+ AvBp+ULBF03e0ZwXSxIionRCdGSdiGmjI8jTHPEdgFyZgg+Q4OhT+cBlZLGM7TtXjwelHuRzLvy
+ x/xlZUyRr0AlLPCS23d35mlnd4fmL9aFZE
+X-Received: by 2002:a05:622a:5917:b0:50b:893f:7d93 with SMTP id
+ d75a77b69052e-50ba380b4b3mr128448491cf.2.1774799258574; 
+ Sun, 29 Mar 2026 08:47:38 -0700 (PDT)
+Received: from adicarlo.nyc ([2603:7000:4000:24ab:21e:4fff:feac:60a])
  by smtp.gmail.com with ESMTPSA id
- d75a77b69052e-50bb2c678cfsm42980681cf.2.2026.03.29.08.47.34
+ 6a1803df08f44-89ecb5cba4dsm40884386d6.9.2026.03.29.08.47.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Mar 2026 08:47:34 -0700 (PDT)
+ Sun, 29 Mar 2026 08:47:35 -0700 (PDT)
 Received: from yogur.coo (yogur.coo [192.168.7.134])
- by adicarlo.nyc (Postfix) with ESMTP id 54624A9804F;
+ by adicarlo.nyc (Postfix) with ESMTP id 7A86BA980C3;
  Sun, 29 Mar 2026 11:47:34 -0400 (EDT)
 Received: by yogur.coo (Postfix, from userid 1000)
- id 0E0868A; Sun, 29 Mar 2026 11:47:34 -0400 (EDT)
+ id 2C8DE8A; Sun, 29 Mar 2026 11:47:34 -0400 (EDT)
 From: Adam Di Carlo <a.p.dicarlo@gmail.com>
 To: buildroot@buildroot.org
 Cc: Adam Di Carlo <a.p.dicarlo@gmail.com>
-Date: Sun, 29 Mar 2026 11:47:07 -0400
-Message-ID: <20260329154709.539516-2-a.p.dicarlo@gmail.com>
+Date: Sun, 29 Mar 2026 11:47:09 -0400
+Message-ID: <20260329154709.539516-4-a.p.dicarlo@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260329154709.539516-1-a.p.dicarlo@gmail.com>
 References: <20260319022906.47253-1-a.p.dicarlo@gmail.com>
  <20260329154709.539516-1-a.p.dicarlo@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1774799256; x=1775404056; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1774799259; x=1775404059; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LPlrR9xX76FUN5ufckzTuMiTglDMB83YXRwl3yxx2V4=;
- b=Ih/6TUBBquzk/PVimQblJVpG/APnOWTaBS7IgKQT5wOY/MGGQ49smX4GnBpr15ybUD
- 5Ob3sVfbmPXxgIKWiB07d3P5sTrNSZ9rY1lOKoeFxca7lbVRv4QigiLnAuV9c5lAbx+f
- 54CnTMl84ePDXR6OAiQBWaJ44IlAyQMyxY8kDKcEQpebYZ7HobhP0qX87D98eVQkqLB0
- KcLJoIoAzr94G94p75c5htJxC14Dxfzq+Ipl4OFG+afd4rhxV4VyKrjXwc9a0n2eprAK
- QzpQHeYVIXv2HeccHceb1htNUIdifUMRs1oYx02102+g84sW55qkMh2arB0ueA01Ivfn
- +jQw==
+ bh=0HuqfgcREYsAXvdAwy0OGuyzRMBC/DurNM4IF/JPKYg=;
+ b=ZdqDQzQ6B+h7qVy+r5mUsaBQFXIqKnwHUFK7DhGDP5f8dxUdh0O2NzfzarPav6um/4
+ Z6TD8Lx4Tkf2DcdAAkfQvwcUADqgQmsEavsx1CzUBgFAkxEqHEJe7j7vQpF9pO6PXwmu
+ QGlHkyt4MUfQeV4qoICpfClZIc3ABtBdwtQ8UzAPylLkdtojEBOwjyoOK0eib+M0C2pS
+ 50M2FOVNURoJRepUV26kGjtKOvJN9hAy80G4YMLO8fUVkx7bpLkUwFqNeXxCajm+az8J
+ eZjqBhqhBewdH1tSdXL4l/7nouPZhRhv7JXRC89GVKu/GHW3Cgakp23XexvZsh8+H1Fp
+ Bhhw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=Ih/6TUBB
-Subject: [Buildroot] [PATCH v2 1/3] package/gst1-plugins-base: if libdrm is
- enabled, make use of it
+ header.a=rsa-sha256 header.s=20251104 header.b=ZdqDQzQ6
+Subject: [Buildroot] [PATCH v2 3/3] package/gst1-plugins-bad: presence of
+ libgudev enables udev support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,35 +133,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This formalizes the relation between the configuration option, now
-automatically aka randomly set, depending on the state of
-libdrm (BR2_PACKAGE_LIBDRM).  Since that host dependency was not
-previously noted, configure would sometimes choose one way or another,
-but usually without.
+If the buildroot packages libgudev (BR2_PACKAGE_LIBGUDEV) is enabled,
+enable udev support in various plugins.  Also bring libgudev into the
+build dependencies, so they are there when required.
 
 Signed-off-by: Adam Di Carlo <a.p.dicarlo@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index adfb407386..467e15414b 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -47,6 +47,13 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += -Dintrospection=disabled
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index e488fa3c2d..bd2061a7d5 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -77,7 +77,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	-Dsvthevcenc=disabled \
+ 	-Dtranscode=disabled \
+ 	-Dunixfd=disabled \
+-	-Dudev=disabled \
+ 	-Duvcgadget=disabled \
+ 	-Dvulkan=disabled \
+ 	-Dx11=disabled \
+@@ -111,6 +110,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dorc=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += -Ddrm=enabled
-+GST1_PLUGINS_BASE_DEPENDENCIES += libdrm
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dudev=enabled
++GST1_PLUGINS_BAD_DEPENDENCIES += libgudev
 +else
-+GST1_PLUGINS_BASE_CONF_OPTS += -Ddrm=disabled
++GST1_PLUGINS_BAD_CONF_OPTS += -Dudev=disabled
 +endif
 +
- ifeq ($(BR2_PACKAGE_ORC),y)
- GST1_PLUGINS_BASE_DEPENDENCIES += orc
- GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=enabled
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ),y)
+ GST1_PLUGINS_BAD_DEPENDENCIES += bluez5_utils
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dbluez=enabled
 -- 
 2.47.3
 
