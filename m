@@ -1,117 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C971061B0B
-	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 15:06:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E24E1061B0E
+	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 15:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEA6540CD4;
-	Mon, 30 Mar 2026 15:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC48860BBE;
+	Mon, 30 Mar 2026 15:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3sBSgSDbIYAJ; Mon, 30 Mar 2026 15:06:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gn8tWfr58ZW5; Mon, 30 Mar 2026 15:20:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D50540CB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12FAD60BC4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774883176;
-	bh=UwUeehaBVvQtYZejQ4VX9h8WhEZG8XL9A2FApGFOC30=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=OPM4mqTeIXjSfVznbAzx7N1Z3cZ0KPPxb1zEwhEXr0Wlhx3SIO625aNsaR4D83ODN
-	 1SDv/3L2yZDhkoRI1DangtNj6BCGygzDUN+pg66rDndEwYfDY+sAjtof6mTT6nRAn9
-	 m7PxqwAdNjJBCdCIgMNFeWh+3Ttn29Aoh5Mrvx2OribT+S7wk/ubVZuKAST/OfmCNP
-	 TGKFWTb2vevAjoK0xpLPcO/1elaOhtQflrqxrmGHVncZmzfLGqvtFAAtUUINzic+d9
-	 gq/2ZocjGbsqRyGMw6wzO7YRyGRz7vostcNDEQSu2MSODLcaUxKa23mza3i3jbKVI8
-	 BSlCsL2/cf2UQ==
+	s=default; t=1774884046;
+	bh=9+muFFjYAz5txhas8t7sK31Cu67TqtN2kzQU/OE17WY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=GCJoWf5giLGoUteTls42/jtFXfhiQnmG2FzxfIrivFRunDl056lzGSkuwddJZ9/Ws
+	 CJ/lN3pLC2zH9BPBBY5VzX7fFBvwBohvCZ9f4cqFNJuFZ1bx6oi1BRWK1InZbOfNrg
+	 C6mfJg0o+7oFhD4DyHPhIjUuA4tzqnIHx8lXQR7vZGW64q/UCQEDjUgQNdTQd/IeS/
+	 IpoDFztPMyh6gqaoVJS59L2psjpODEK1X73KYeFlvdOSkoFEU3HIl57re+ZivH6Vrh
+	 As4o2LgsKIRZJnQfj6SBAKTph06ssb3UC6GJR8+Xnbt1yJFVK4Ra8w3R0mRcpOcFuA
+	 91fFa/z3I9aNA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D50540CB2;
-	Mon, 30 Mar 2026 15:06:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AD691D3
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:06:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12FAD60BC4;
+	Mon, 30 Mar 2026 15:20:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93A421D3
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:20:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CFB940C9C
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:06:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85C9280F14
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:20:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B8pha8NI_zvN for <buildroot@buildroot.org>;
- Mon, 30 Mar 2026 15:06:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D04F240C8D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D04F240C8D
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D04F240C8D
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:06:12 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-43cfce3a195so717052f8f.2
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 08:06:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774883170; x=1775487970;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=JuU1kvVjwVAnhQaDAc+OnPNMvyFgY3cTdGfcfYXTp3s=;
- b=ZN+xuky8IyvWgqoaAaSpwSVjDOMfJN0fF9a5KTbX8++X7yM7j0rLCfpsWYCSExfFXO
- v9lVpqsoBCOb8qei4iMGVtcBIeM5c4bqCnYiT3dltJHtK8UsQPfrqRjZafNzSintLosZ
- ka9H0AjHFmFMuU+rHFx0Bgxa02J5HrSrqG5GVGtT1OnxIbMBvvuGKOyAPVaB6Tft8XMy
- j64qdjBpa3XurkIKGFZV1e8l5JSSnleVbdEuJhwWeSprkuxDZHq3aCeyKr0B97SzaDrx
- cALYFszBEAlZ03ESKo0UyJvPtE+6l10YQzc0dlbSXjr9ELF/kiU9WiTQbaRdNiZKDU+6
- iRFw==
-X-Gm-Message-State: AOJu0Yy8w1kQvROxNfclAwjm1z26MH0K6hLtqh+bAmKXtVW2ax+LPegI
- TjCqo5fAJFb9fKqZbCmBBoZNu0eqwF+H5KtLzBi23yCIoBUSrfXwUMdWTNiXEyMpjQegimHHeLu
- J+hsHmgY=
-X-Gm-Gg: ATEYQzws91hRVfKIRKUA7uPkWHQVTsFVuUz6W31snhTkdmpTbHnIRc015p1aA1yM/XC
- GSGRy6blch75F6o+GWPfuCLtGAHHWqQNN30pPv6XrOWnrPkEOmuqTU7If9vtd5LNGCTGO5+1X1L
- aOcHxPCqf2WbWVBP71rqAPxte10O28XnqBtloQXfntlJQVbUT9C+x4OzFtP7Xo6qi9xkoovOOiP
- WBnHHeyI1Vi+iwaT3lAOwW4iaFbxeJTHny+mFOJHzpmunOyNnSQpr+1j973sRBLBidOCptU3kxp
- LtAAy1l/UewSAtiV50rogOExQhUOQd8662R6mww1ACz8VVYKeW7mAlN3xT7JwTyxdV/NqYAlANt
- ac8GNnisVWMLboANGBWEaXrYAjTnGRdz698YVkYkj47YkFUiV6onT9XgoslTU3o08LIj8Dny05u
- uAF1vsg2HE4p36XqxJto3UsYxF3e/0tG5YT4ojEDe3CZKvvs8Mkio4CCzhpcQyGQxzpSoM9n9uY
- FGN
-X-Received: by 2002:a05:600c:6612:b0:486:f8e9:add5 with SMTP id
- 5b1f17b1804b1-48727f631f4mr217531515e9.19.1774883170098; 
- Mon, 30 Mar 2026 08:06:10 -0700 (PDT)
-Received: from dragon (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48730688694sm175716085e9.11.2026.03.30.08.06.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Mar 2026 08:06:09 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0BGKeU6pCfDo for <buildroot@buildroot.org>;
+ Mon, 30 Mar 2026 15:20:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
+ helo=smtpcmd02102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3EFD580F04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EFD580F04
+Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3EFD580F04
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 15:20:39 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 7EPtwaGcUxFXL7EPtw2fuT; Mon, 30 Mar 2026 17:20:37 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-Date: Mon, 30 Mar 2026 17:06:05 +0200
-Message-ID: <20260330150605.300571-2-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260330150605.300571-1-titouan.christophe@mind.be>
-References: <20260330150605.300571-1-titouan.christophe@mind.be>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 30 Mar 2026 17:20:36 +0200
+Message-ID: <20260330152036.4180595-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774883170; x=1775487970; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=JuU1kvVjwVAnhQaDAc+OnPNMvyFgY3cTdGfcfYXTp3s=;
- b=GVUWUTFSorY9VD9wuzfh5uKsj4C5eE9a8+Q6VEkSDI1BUDcsAO9GXB3ICgae2BW5Nn
- OTXnNeHH12T9zeYCD4dSySwjENGJS3ksCkne3OUPBgWERlD+lx2Tup9GpiGRvMrfALkh
- vNz/iw2+P/2atzCugdgsFtgQGQ/AvOvIMnLTIKF4eBBeUOvynNbzvu0DQcUTH/nVpwNw
- SLux93ZOPwYd76VFpEUAkuyUgmR7fR3dD854jLfgOyt2SjCUcPlGlr8/n3vhONeZir0R
- V5vYPGAdN23WhZKUasWnp/jqqBunP2k7nlw+YzPpr+FRiKRYc+rR+2ylWh+EeYbLr9O7
- 6dvw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-CMAE-Envelope: MS4xfGw8aliqowCQeCqdEfvN1MIj6NK2s2txXmN0WVn7iZ+bghlP979wPgiHzPDpFlBr5a1kGZDh9HMU8ej5wthl9+AEut941LwMjOhUjEyHzBKU2k6us+fX
+ Md5Et/sH11zIJHzfRTQzhTzaLCjJXkgLrp83Z3j5OnnA7P696Bunq7O5dCPUfjAEAcioHgZZ94txXUcnUcZ24QpDGsaDHHdO6/FjWE4gk+DkuOqV+j+cIeeM
+ hfZMCo7VXmBn706VPfQNG1do4zAIVhPXQWZCV2bIVVcPSw5m7/vYaQTn0UZ+RhDeYIhzbH7/PhaFwpNy+ZICtg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1774884037; bh=CUA41uzpnqsILs4nysONhWhP8q++/iU7BHotW1QQUxk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=aUoEUONE1ZQmAUUMS8Jt3GF51wfNAPAh6D5mvARuVW4cXxBK5vGlLxEqER8XKhXUh
+ OdmvL7hQtPpAUY0YEjrBL4C37pT0szCgUF/ZXseIIRf4DJZlJ4sQgkZm1ootsDq03a
+ i+xue/8gJkK4YSTA7s7dUc34Gtl244r+20BKAUrmMgRt4OezuHx+i4m2x9haGQFgYA
+ SIRWW/BzGPIRjWTGHWy6gJtsMV+N5lHdLCEAnc6vs/Mj0zzJp8ie4G4W/KnVvUg2li
+ agGqsXWbm88S6U3h2iplh13akR+/NrdrAkznqyKuiu+62GRbMgqcR1BE+GMiXEbCXe
+ jBoyQNXs8JdRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=GVUWUTFS
-Subject: [Buildroot] [PATCH 2/2] package/cpp-httplib: bump to v0.40.0
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=aUoEUONE
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on big endian
+ architectures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,49 +92,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
+Add local patch pending upstream to fix build failure due to missing gcm
+stubs.
 
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.38.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.39.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.40.0
+Fixes:
+https://autobuild.buildroot.org/results/9899df5d31b32c414f9a924aedb389217bcb9793
+https://autobuild.buildroot.org/results/370b9ab04c2eb8bea81d6216a8ff18fe17a6b5ba
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/cpp-httplib/cpp-httplib.hash | 2 +-
- package/cpp-httplib/cpp-httplib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...build-failure-due-to-missing-gcm-stu.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
 
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-index 076b30cfa1..eb2b77bcd8 100644
---- a/package/cpp-httplib/cpp-httplib.hash
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  909766cd7697153c9e588b0f96defe1868b7bb11d94b8d4f0c83bb4875bc9066  cpp-httplib-0.37.2.tar.gz
-+sha256  b52ecaebf0f94086c8b3305650412359d920c5267f6d9ce87f883198783af678  cpp-httplib-0.40.0.tar.gz
- sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index 56e8c27fc4..5cc60565c6 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CPP_HTTPLIB_VERSION = 0.37.2
-+CPP_HTTPLIB_VERSION = 0.40.0
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
+diff --git a/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch b/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
+new file mode 100644
+index 0000000000..22307a96b6
+--- /dev/null
++++ b/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
+@@ -0,0 +1,30 @@
++From 1e78c2416a65a3b00ed4f0d87dacc033ee65718c Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 30 Mar 2026 17:06:14 +0200
++Subject: [PATCH] Bug 2027768 - Fix build failure due to missing gcm stubs if
++ on big endian
++
++Let's guard gcm stubs also if arch is Big Endian.
++
++Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=2027768
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/gcm.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/freebl/gcm.c b/lib/freebl/gcm.c
++index 994072aca4..c2fa685291 100644
++--- a/nss/lib/freebl/gcm.c
+++++ b/nss/lib/freebl/gcm.c
++@@ -35,7 +35,7 @@ SECStatus gcm_HashMult_sftw(gcmHashContext *ghash, const unsigned char *buf,
++                             unsigned int count);
++ 
++ /* Stub definitions if we aren't linking a platform-specific ghash */
++-#if !defined(HAVE_PLATFORM_GHASH)
+++#if !defined(HAVE_PLATFORM_GHASH) || !defined(IS_LITTLE_ENDIAN)
++ PRBool
++ platform_ghash_support()
++ {
++-- 
++2.47.3
++
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
