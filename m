@@ -1,114 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBCB9FC97EA
-	for <buildroot@archiver.kernel.org>; Sun, 29 Mar 2026 19:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3032FB3CE3
+	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 09:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 950BB80F33;
-	Sun, 29 Mar 2026 19:30:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4958F4080E;
+	Mon, 30 Mar 2026 09:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fIMrM5yp6hm4; Sun, 29 Mar 2026 19:30:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zRoYYDgTz2ro; Mon, 30 Mar 2026 09:07:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1713E80F12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FF9F40816
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774812627;
-	bh=hVQaSUxwvuzvWDVWjGMrOBJ78x9f7dUs9fnfdy1kUhg=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=MfPt0gJkClgQGl3Ds84uRKDUY1em80wpWYdRw47E9mOVbWaZOFwPHNftEBkhK779s
-	 V3wlbzxRFgSIWVaA17kitz9KCtSYtMHlfatbKiFqvIfNmKKw4rozDENdmFSuB7r36E
-	 wBuEZ99FdDvFvlfvvgVAsxrplZZ3YAVIdRdLhp7KmzDYq23QHLEw6v20UU5OtZSPUU
-	 TdEk+1ZwnQDWPGq2IEB7jElj25s2Q6JoSdUsf4xWNSmXICX7owgU3EIAwEg92XFUQx
-	 vDJLdlUs+7Tx5XHOWS2nYHxYCJjB/w3Jgrz+hEb4YZJKYq41mQpl2oGAsIhELBBFDf
-	 nRIIIQEDRc6CA==
+	s=default; t=1774861620;
+	bh=1fxLC6EbG8+NBgcQTiSYhQLLTX4Ug9FFKf5Gtx3VvLc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=qe1BZI0BP7dkji73xUlXpc5MXP9cvlFvXYX7pv1jtwnyuZJEINC7wTyrR4Ru5X8mE
+	 qrGMo+PnfceehZgi6Z/t58jnIfnAaNG5dJx7akA9aiJ56/L5GvjjG/T1af2Gekr9Ip
+	 aThjOKafuc4MYXMUwgb4p5s31fJmzsO4ltS6Vbgoi2HD0nne1HfmaiWsmnzhx2noHt
+	 FjhqBSDvjCAV0WV3xF2xrD/3pRnwEnz8/z8q3kcHG4Wa9vX7Xp9lm53a6b9pmEJDpx
+	 lrBnxPNetVPyGYuI3g91Kb4gNm6YsE76Q9ohW7nqfXkdOMPGTjz/It18D7eBcz4Xoj
+	 d+v94qsbuuGVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1713E80F12;
-	Sun, 29 Mar 2026 19:30:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FF9F40816;
+	Mon, 30 Mar 2026 09:07:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A8291D3
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 19:30:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 855362C5
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 09:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 107E34023F
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 19:30:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 713F8400FE
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 09:06:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id srG4CYBeM1Ia for <buildroot@buildroot.org>;
- Sun, 29 Mar 2026 19:30:25 +0000 (UTC)
+ id vKMBSne5qX3K for <buildroot@buildroot.org>;
+ Mon, 30 Mar 2026 09:06:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::730; helo=mail-qk1-x730.google.com;
- envelope-from=a.p.dicarlo@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5372340068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5372340068
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com
- [IPv6:2607:f8b0:4864:20::730])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5372340068
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 19:30:25 +0000 (UTC)
-Received: by mail-qk1-x730.google.com with SMTP id
- af79cd13be357-8cfc5941028so696743385a.1
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 12:30:25 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 24FBD4041B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24FBD4041B
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24FBD4041B
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 09:06:54 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-48702d51cd0so50547735e9.2
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 02:06:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774812623; x=1775417423;
- h=mime-version:user-agent:message-id:date:subject:to:from:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4eUbFmus8hx897B7SUVtl1zELn3uuAzJ6TvmzBkEYgw=;
- b=K6ke8KTACarCIquWrPcSQMrND6hE/Pru08amlH9L219Q97jOhM1VtuvJ+O/MGvL5IK
- DYELhyea6HK7jZSCvHznNn71HoNJYupIwVBIxlSwI0fPo/lNWTu+AlVWsuxOAmPJfPDo
- qeE2+ZGUL9i1GVJiNb81Q6zFg/H7KCifgm6OCPji0l6bm+YwWHTuxlthIqJtelvhz3y3
- NE5DrGwpnCZOZu6ynMSxzVe1YJ5SzKFK5wQUMPTYqKz68/6iWH0Dzs8PS073IrsDRqOx
- 5qBl+B1eRTHKK22FR0x3EWzhC7NLDXmGXGPLzPS9PoTKg4/2wuRk+BXMRbpfG9TGmrXd
- d79w==
-X-Gm-Message-State: AOJu0YxZLagoEAz5pmypHNID03qILSDCHJ/LoTFLNSESwjvHaeF/aZ99
- AfZmmSNcr8zWx6quGLJnYkyaKO4NfvT9tcyb0q920MvmYHVRqbnxrxN6WaVLwKq9
-X-Gm-Gg: ATEYQzzguFvrebeiI5crKeN9mfboFbo81BGr8SCL/1JGvRNSBNNrpS0tWV600tdWYYy
- SG3T49gK7+tgDNmGy83Y26xDFhIvnAEu8GurCM4kv2jITCXIqt/qhKCYJAOdt9nk46tMHZsRjiS
- WL7RYEhDvxocDoSHrVV375JmkSDnnERDQ3eDVXSOCN10a/9NT6K8NAIAzCWrE3SS63NaXQSCX0G
- O/6n/EzhdRTJTk1WIkhYBAqFHie007pljiyXz9Y2zhbEggl1kVQs7mcsxC4UL2PE5f4p0EQCEpO
- 3bZqIpreUpDBxzmIuVjoEQbhh6SwOnUlXkWFZfTLueTnwPhW3XO2RlweQV2dTAqwJeW4YbDM7jv
- jGfq/IMPgFRYkVi62gkuAWCAJhqU/OV8UOSImbCchbHYtQdjXQjAiblH/S+JgYvO3sfJQEA43Cb
- DAk2NnowXZcdRxphRVd5CEgo1fRqY=
-X-Received: by 2002:a05:620a:1a22:b0:8cf:d62a:c81a with SMTP id
- af79cd13be357-8d01c5fc276mr1256375585a.31.1774812623203; 
- Sun, 29 Mar 2026 12:30:23 -0700 (PDT)
-Received: from adicarlo.nyc ([2603:7000:4000:24ab:21e:4fff:feac:60a])
+ d=1e100.net; s=20251104; t=1774861612; x=1775466412;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=N2l4hc8DOXqstpi52hNIMZwhUDvEnqdzp/QIou/vezQ=;
+ b=XgKVWY5dcn256d9vkyu58ZgS+2UbfXJVlp0IjROnslfbfvVtUU5qspue37mwOP8D/H
+ e9t3ouDVJhrfEuW8STEXFGz2a68bHKxSgJQRvvh9NYqj63vC9uUDPyB4x2y0lduDLPJ0
+ 8Dd8jeNRFFUfFuBErLhYIdHDTJGgr85PybvHvswEBQTmJOAQsqCHtzSGv38LiB7ROD69
+ y+Ccuq1utIGhj3brlb+Ug35zZLl9jDbeGRMXz3YrK8L+ctc01U7jyU53b7WCU7T0lMia
+ 2fgtGymsJefMUkYlBaj3zI3Xm8xy7TPneFZuSO2KSzsST5jqhnjKHfaUSjO+zTriCfKM
+ y3OA==
+X-Gm-Message-State: AOJu0Yw4kVspbEolL8pFqeWv8JlxsqFxUwUqg84GiJNUCedNfp78usXo
+ d6J7YOQYz5CReTB/o3KrRkdlcc0n7TQim5YPEQAqPmzVeM64EssUH24Bp4QLSb5o5fFVxxNWxOM
+ Iov4OARY=
+X-Gm-Gg: ATEYQzykWznLeRbsGnndxgl9K4Vg6IPzo57WMziisvCTOU43//tp0+B2ygz18vVfdnE
+ w74K8RCWtTGiHTCllzm9j7gcpI5XGApzQU+lxrGRw5t3yBV+zdlOxzfYOoOnckly/O8V1VDMlOk
+ Sl+yoNR//g0qvzitwDjtImWI2kIV1Hhjg3tm2duXUSTF3SYCD9G0JcMvKn/x0H0i4/AXMqZB5hn
+ 7L8fSSs1kkdZs3fvP5mD7BLoicHiGytU5U7pET9LGMNMhRMOh90M3nbkLuWSpg3kVjNt6ta3Ppj
+ kCoMKp3nmX11nf0FiszEwoVoMRP0pFCDdnrHvSMuXiIPReDfTWpHvR40pLcZV4upvL16LJ71nwx
+ UHPDB8L3ME6x5miezubXaQbdN12Da0lOOHU343lQYwRJy/R7L8M1dhz7Az+cTnnJoLfrnKXLqny
+ 015Inr/xkAIcw03uuUUf8Nn+EVro4UtvjvaUS5hvt2jIYrE+xzBfN/TNsQ7eF8e7QuJuTmuE2Vq
+ VyQ
+X-Received: by 2002:a05:600c:a00b:b0:485:34b3:8587 with SMTP id
+ 5b1f17b1804b1-48727d8ffc5mr198755425e9.10.1774861612440; 
+ Mon, 30 Mar 2026 02:06:52 -0700 (PDT)
+Received: from dragon (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-8d027edb7ddsm430644385a.9.2026.03.29.12.30.20
- for <buildroot@buildroot.org>
+ 5b1f17b1804b1-487270f1943sm95773575e9.7.2026.03.30.02.06.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Mar 2026 12:30:21 -0700 (PDT)
-Received: from sopa (localhost [127.0.0.1])
- by adicarlo.nyc (Postfix) with ESMTP id 0DD5AA9804F
- for <buildroot@buildroot.org>; Sun, 29 Mar 2026 15:30:20 -0400 (EDT)
-From: Adam Di Carlo <a.p.dicarlo@gmail.com>
+ Mon, 30 Mar 2026 02:06:52 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun, 29 Mar 2026 15:30:19 -0400
-Message-ID: <875x6efn78.fsf@adicarlo.nyc>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Date: Mon, 30 Mar 2026 11:06:48 +0200
+Message-ID: <20260330090648.14672-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1774812623; x=1775417423; darn=buildroot.org;
- h=mime-version:user-agent:message-id:date:subject:to:from:from:to:cc
- :subject:date:message-id:reply-to;
- bh=4eUbFmus8hx897B7SUVtl1zELn3uuAzJ6TvmzBkEYgw=;
- b=D98vMrwcaE91JGNUJj5Cj5eRevIaABpEBV6DHktDI8M31XOiImWd6CtN7JlhLEOWvO
- oGFF5Z0lOYQ/1rB+K+vQbF0ik4Vimfq2SAcgT8+/zkbNM+aELVVF/YmfcxTJNkYjSgVX
- fiB3eGcxcArXl4soy/bPa07vACiK4lFy+ILY/PvU9MMboJHlXl+lq4ld/yZK3ENWzo2k
- wbvQmQBpspPUWyzi+29XYdTyS7hMSQfiHB92UTTtrctOYJCNonUCpQz25rnIdWhxS9y1
- HyHki2CGNoJH3QbrSgjBC1uERgrsdjH83Dj4xAskOGAKMVt/OwXFWcwVlLYEfqsDYH/i
- gh5g==
+ d=mind.be; s=google; t=1774861612; x=1775466412; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=N2l4hc8DOXqstpi52hNIMZwhUDvEnqdzp/QIou/vezQ=;
+ b=FOQbZraVWD/dCj6vKSnbFPQjG6azZVSYx6/KQtFeLpbcP23CdJuqcwArV3GfylwXN1
+ BdA9HXfOmoB5YbKFUky52Ssx8W8sF63Ko4B1TcLhR3jXnApuyjAthoqKcdJMWpBcRSsc
+ fDm+aRGbW0RWqzGPd+gptN2B1wDwzTcjHwu+eoZI1gxRUsjbUeqr/q/O5rJQpsBLHL65
+ 0t1UUz5SSdDrEaRGDWENBE4hKraAS3qxvXI4N2B7aZIikwjNPHoKeWp7KIkpcoZAsYR7
+ AyfWhR0xaclo0EH7nnc3KFpR0xBAKVreFsZd355TuCyFi+aji+Lbd9nuMfm8rWSRe4Ls
+ DOQg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=D98vMrwc
-Subject: [Buildroot] considering embarking on gstreamer1 upgrade (to 1.28.1)
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=FOQbZraV
+Subject: [Buildroot] [PATCH for 2025.02.x] package/python-django: security
+ bump to v5.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,37 +119,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Manuel Diener <manuel.diener@oss.othermo.de>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+See the release notes:
+https://docs.djangoproject.com/en/5.2/releases/5.2.12/
 
-Buildroot's set of gstreamer1 packages is getting rather long in the
-tooth, to wit, 1.24.13.  Specifically I'm finding HEVC support is quite
-spotty in this release, in particular, some pixel formats are missing
-preventing, for instance, the Raspberry Pi 5 HEVC hardware decoder from
-working.
+This fixes the following vulnerabilities:
 
-The latest stable is 1.28.1, released 26 February 2026, so that's what
-I'm targetting.
+- CVE-2026-25673:
+    An issue was discovered in 6.0 before 6.0.3, 5.2 before 5.2.12, and
+    4.2 before 4.2.29. `URLField.to_python()` in Django calls
+    `urllib.parse.urlsplit()`, which performs NFKC normalization on
+    Windows that is disproportionately slow for certain Unicode
+    characters, allowing a remote attacker to cause denial of service via
+    large URL inputs containing these characters. Earlier, unsupported
+    Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and
+    may also be affected. Django would like to thank Seokchan Yoon for
+    reporting this issue.
+    https://www.cve.org/CVERecord?id=CVE-2026-25673
 
-If someone else has already started this process or wishes to
-contribute, please let me know.  I have a forked project in gitlab where
-I can push the work I have so far if anyone is interested.
+- CVE-2026-25674:
+    An issue was discovered in 6.0 before 6.0.3, 5.2 before 5.2.12, and
+    4.2 before 4.2.29. Race condition in file-system storage and file-
+    based cache backends in Django allows an attacker to cause file system
+    objects to be created with incorrect permissions via concurrent
+    requests, where one thread's temporary `umask` change affects other
+    threads in multi-threaded environments. Earlier, unsupported Django
+    series (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may
+    also be affected. Django would like to thank Tarek Nakkouch for
+    reporting this issue.
+    https://www.cve.org/CVERecord?id=CVE-2026-25674
 
-Alternatively, if anyone thinks I'm wasting my time, please also let me
-know!
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I'm pretty well setup to test Raspberry Pi 5 and AMD64 / VAAPI for
-hardware video support and possible regressions.  I'm not sure if there
-are other gotchas I should be aware of....
-
-Anyhow, this is just a heads-up, no action needed by anyone yet. If I'm
-successful I should have a patch series ready in a week or so.
-
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1cd2959b69..b1859b0647 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  051357d45eb71a115a64e6d2a79c7c51  django-5.2.11.tar.gz
+-sha256  7f2d292ad8b9ee35e405d965fbbad293758b858c34bbf7f3df551aeeac6f02d3  django-5.2.11.tar.gz
++md5  9b60bb1145abcc97d276694f3f82a3b8  django-5.2.12.tar.gz
++sha256  6b809af7165c73eff5ce1c87fdae75d4da6520d6667f86401ecf55b681eb1eeb  django-5.2.12.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 4b840701f4..52d0a2b740 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.2.11
++PYTHON_DJANGO_VERSION = 5.2.12
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/17/f2/3e57ef696b95067e05ae206171e47a8e53b9c84eec56198671ef9eaa51a6
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bd/55/b9445fc0695b03746f355c05b2eecc54c34e05198c686f4fc4406b722b52
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
 -- 
-...Adam Di Carlo...<a.p.dicarlo@gmail.com>............................
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
