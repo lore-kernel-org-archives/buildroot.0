@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D1A71061B1F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 20:07:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB4911061B1F
+	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 20:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22D4F60E47;
-	Mon, 30 Mar 2026 20:07:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ew5ZN3hREfy4; Mon, 30 Mar 2026 20:07:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C926060E39
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774901251;
-	bh=Efm2Fd8QqzPEr2eft2yAOWGtJRF46GwUMXXvHFdrpF0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WvANIIZfcwgwKhL+vm+pN0WWz4OKZQyKCko9rkQ+xhC0u08+KPrXgvpAwiIxubQl6
-	 ez+bLoNYR5RgFgsMUTXxAYMh4JBL33fZNSbbfQws7J4QTJiZT2X+bgZ4WqdSA45Vnj
-	 eiyoTWkcT29hscoLVmcqYuUOU1SKA2w4A9umBnitCzmhL+fTvfCctw0Jt4bxc5m0Rd
-	 0cjuCb1mQNCosnz/TCrhBT4rbnqdf9pYmI1B9H974dJqlp0uxh0A+reNdOs/KjkLXd
-	 JtlCNDCETQ6fI9cyJJWPyKGY9HZMTDOTZjmSLGAuAc2bK1DHJNnVlVeZbweLBBEZ1U
-	 0NFJo7TJWJ6hw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C926060E39;
-	Mon, 30 Mar 2026 20:07:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BDDFD4D2
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B05FD407DE
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87969408EE;
+	Mon, 30 Mar 2026 20:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8AoX4FGSzbLB for <buildroot@buildroot.org>;
- Mon, 30 Mar 2026 20:07:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C912407BC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C912407BC
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0B0E7FDAB; Mon, 30 Mar 2026 20:07:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 30 Mar 2026 21:59:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fc6377f7f949ac23d38fb58c2c4a2f27bba73b1f
-X-Git-Newrev: 8dad17ea06260ef0bd23eebc47c95a8510310bf5
-X-Patchwork-Hint: ignore
-Message-Id: <20260330200727.A0B0E7FDAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpp-httplib: security bump to
+ id F92a4v5Fp3ek; Mon, 30 Mar 2026 20:07:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D45F240857
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1774901273;
+	bh=ovUEV1M3/Y6KT1zu+s1fRdj/V+WH8I4qCrIWOvl7Vew=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kRfVH9WNVg2Byq67Tm5zRj13B/T0Hl7Yt6LK2AbVnldn2Rqa9oPXltw+3hXGlFvyn
+	 //q5RFelZnR56fZA77SHpZHSoTikx6hO2waMvdLIy9k8DTKJ43zBfxHG/eAtxE1B9+
+	 R7+Y3DthLaym0lGLmFIyhyf3HdMaUQ/Wa1C4fuleb25+aagXcCsGFnmGXCrPIZwvvq
+	 CTMpKkll2JRtc9XnTHNV6qauGRGgLe8UblTRxMaA2gUeP+yH1l01lGLoLl/AfFY/r7
+	 g5GFZOXNHIrSjkrMCUTLAxZ4hbo+CQ38n/xQZkczzyiifNzO4E56OxuFb14EEkvvtE
+	 +/gfgareX6ZTg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D45F240857;
+	Mon, 30 Mar 2026 20:07:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BDC44D2
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D4BD81C20
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UpIm3GJ274ri for <buildroot@buildroot.org>;
+ Mon, 30 Mar 2026 20:07:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7F2C381B53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F2C381B53
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7F2C381B53
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 8BB062003C1;
+ Mon, 30 Mar 2026 22:07:46 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 30 Mar 2026 22:07:46 +0200
+MIME-Version: 1.0
+Date: Mon, 30 Mar 2026 22:07:46 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+In-Reply-To: <20260330150605.300571-1-titouan.christophe@mind.be>
+References: <20260330150605.300571-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <0099007f28d9e7056ec8c742fd4f7dca@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1774901268;
+ bh=pfMrbYPuONmOEOBjk70BGTkMSMWSSUPUSpxp9oCgTNg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NceY6J9EDsZre2a7MPXdkkNVAb5qj6/x5eKiHc+KvEdAgWlSXc8b0t9KifVLYJi+h
+ QWKJ7t2haQ4y4JwswyMlbrsakuw3jEmnsjG+TJs+GUy5AHxduVh4aAqDgWtRHCLxkn
+ bu4tl9DvnIzdy7MwA0aKsKJH8gk/+DFc0PbYdcZ6toS8nc3N3y3l4G+rSklCeTm9Js
+ MsY8TWl060bQJ337s+kUtlOlz916VFrzqEpswPG2PnPG593w3ylHsuSEHfRv2KHR/u
+ Le++tiqeXJqv0U5YdtYuLoDCBqouqIwcReMiTRx5vw0swhn6VssE/A3oiYy9ceYFG3
+ 8FxClJGSRVF8g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NceY6J9E
+Subject: Re: [Buildroot] [PATCH 1/2] package/cpp-httplib: security bump to
  v0.37.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,166 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5124484618288043711=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5124484618288043711==
-Content-Type: text/plain
+On 30/03/2026 17:06, Titouan Christophe via buildroot wrote:
+[...]
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8dad17ea06260ef0bd23eebc47c95a8510310bf5
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-See the release notes of intermediate versions:
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.28.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.29.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.30.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.30.1
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.30.2
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.31.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.32.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.33.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.33.1
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.34.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.35.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.36.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.37.0
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.37.1
-- https://github.com/yhirose/cpp-httplib/releases/tag/v0.37.2
-
-This fixes numerous vulnerabilities:
-
-- CVE-2026-21428:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to version 0.30.0, the ``write_headers``
-    function does not check for CR & LF characters in user supplied
-    headers, allowing untrusted header value to escape header lines. This
-    vulnerability allows attackers to add extra headers, modify request
-    body unexpectedly & trigger an SSRF attack. When combined with a
-    server that supports http1.1 pipelining (springboot, python twisted
-    etc), this can be used for server side request forgery (SSRF). Version
-    0.30.0 fixes this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-21428
-
-- CVE-2026-22776:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to version 0.30.1, a Denial of Service (DoS)
-    vulnerability exists in cpp-httplib due to the unsafe handling of
-    compressed HTTP request bodies (Content-Encoding: gzip, br, etc.). The
-    library validates the payload_max_length against the compressed data
-    size received from the network, but does not limit the size of the
-    decompressed data stored in memory.
-    https://www.cve.org/CVERecord?id=CVE-2026-22776
-
-- CVE-2026-28434:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to 0.35.0, when a request handler throws a
-    C++ exception and the application has not registered a custom
-    exception handler via set_exception_handler(), the library catches the
-    exception and writes its message directly into the HTTP response as a
-    header named EXCEPTION_WHAT. This header is sent to whoever made the
-    request, with no authentication check and no special configuration
-    required to trigger it. The behavior is on by default. A developer who
-    does not know to opt in to set_exception_handler() will ship a server
-    that leaks internal exception messages to any client. This
-    vulnerability is fixed in 0.35.0.
-    https://www.cve.org/CVERecord?id=CVE-2026-28434
-
-- CVE-2026-28435:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to 0.35.0, cpp-httplib (httplib.h) does not
-    enforce Server::set_payload_max_length() on the decompressed request
-    body when using HandlerWithContentReader (streaming ContentReader)
-    with Content-Encoding: gzip (or other supported encodings). A small
-    compressed payload can expand beyond the configured payload limit and
-    be processed by the application, enabling a payload size limit bypass
-    and potential denial of service (CPU/memory exhaustion). This
-    vulnerability is fixed in 0.35.0.
-    https://www.cve.org/CVERecord?id=CVE-2026-28435
-
-- CVE-2026-29076:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to version 0.37.0, cpp-httplib uses
-    std::regex (libstdc++) to parse RFC 5987 encoded filename* values in
-    multipart Content-Disposition headers. The regex engine in libstdc++
-    implements backtracking via deep recursion, consuming one stack frame
-    per input character. An attacker can send a single HTTP POST request
-    with a crafted filename* parameter that causes uncontrolled stack
-    growth, resulting in a stack overflow (SIGSEGV) that crashes the
-    server process. This issue has been patched in version 0.37.0.
-    https://www.cve.org/CVERecord?id=CVE-2026-29076
-
-- CVE-2026-31870:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to 0.37.1, when a cpp-httplib client uses
-    the streaming API (httplib::stream::Get, httplib::stream::Post, etc.),
-    the library calls std::stoull() directly on the Content-Length header
-    value received from the server with no input validation and no
-    exception handling. std::stoull throws std::invalid_argument for non-
-    numeric strings and std::out_of_range for values exceeding ULLONG_MAX.
-    Since nothing catches these exceptions, the C++ runtime calls
-    std::terminate(), which kills the process with SIGABRT. Any server the
-    client connects to — including servers reached via HTTP redirects,
-    third-party APIs, or man-in-the-middle positions can crash the client
-    application with a single HTTP response. No authentication is
-    required. No interaction from the end user is required. The crash is
-    deterministic and immediate. This vulnerability is fixed in 0.37.1.
-    https://www.cve.org/CVERecord?id=CVE-2026-31870
-
-- CVE-2026-32627:
-    cpp-httplib is a C++11 single-file header-only cross platform
-    HTTP/HTTPS library. Prior to 0.37.2, when a cpp-httplib client is
-    configured with a proxy and set_follow_location(true), any HTTPS
-    redirect it follows will have TLS certificate and hostname
-    verification silently disabled on the new connection. The client will
-    accept any certificate presented by the redirect target — expired,
-    self-signed, or forged — without raising an error or notifying the
-    application. A network attacker in a position to return a redirect
-    response can fully intercept the follow-up HTTPS connection, including
-    any credentials or session tokens in flight. This vulnerability is
-    fixed in 0.37.2.
-    https://www.cve.org/CVERecord?id=CVE-2026-32627
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cpp-httplib/cpp-httplib.hash | 2 +-
- package/cpp-httplib/cpp-httplib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-index 904bca6d02..076b30cfa1 100644
---- a/package/cpp-httplib/cpp-httplib.hash
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  cc57615af359efda816122dcfca37bcbb9f1591396f50a1fd1ad70bbe6050581  cpp-httplib-0.27.0.tar.gz
-+sha256  909766cd7697153c9e588b0f96defe1868b7bb11d94b8d4f0c83bb4875bc9066  cpp-httplib-0.37.2.tar.gz
- sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index ed5c33d2a5..56e8c27fc4 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CPP_HTTPLIB_VERSION = 0.27.0
-+CPP_HTTPLIB_VERSION = 0.37.2
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
-
---===============5124484618288043711==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5124484618288043711==--
