@@ -4,86 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C5B1061B1F
-	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 19:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F64F1061B1E
+	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 20:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C19F240E7A;
-	Mon, 30 Mar 2026 19:52:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3B3A40802;
+	Mon, 30 Mar 2026 20:07:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UY4OilS_31tC; Mon, 30 Mar 2026 19:52:52 +0000 (UTC)
+ id ORFKBBa_WV0D; Mon, 30 Mar 2026 20:07:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EACF40E6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE7B6407DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774900372;
-	bh=K2sz35LPk2h2o9uYRNNBQzwv6T6q95fnWv/KxSoOgDU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=sjylI7QmTrCoJwVS+ApEKRHc4tjTi04MRPalMjfE7mwTdjMyw6UMTbTBQl+eoSjLk
-	 nXfbpgAhVwUIXuxW9+D9QJNShR8ziWhtGasWwae+2e/4KMR9Msv0rppglJ+7p0vIUa
-	 OxOe0McgbYg7N6bfPyRYSFGvu7EaiFcHIv9cUIFqmLCCqPT7M3+HvIeSSU0PfufVVt
-	 eelWMH3XjKs7PiQXdyOT+6JJg5G2sn9nO2FU2DdcZZlVM6WjXK87C66GAPK+YeA/gv
-	 xii6yetTT5el3+L2L+gsTMtRweyoKA0Cc2Qp44svXDg41UZH6xkff9Ta7LRIVNO39O
-	 ydipIQS3JVbrg==
+	s=default; t=1774901250;
+	bh=DQzkpUzUCxo0ohu+GcsF6RTesmv2bwT1PQNx7sr8wc8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NYI0VTHKnR4JIQY7JmfSEw/37bpJUkP8+14fCOMQcG9Y7KcKcRBXF1Z2xaRxxD54E
+	 paJWaYN8PzvVtuo92ROF7VBK85gLlVNxRqh+9xfpbNJw3WC5rQXP+0FRelZSxVb8+a
+	 8GzjV8Ad3L1j5Z2P1Oy9hjg1cXZd+gXK8LSlEjuAdCVlCLlLdOVc3XVybc45NHegyJ
+	 qgOa036qLKteJeqmZNpct0d17fVMQyy7W/yOtOGdsQ01E6Y/h6ROuqjqvshgx/P8ZY
+	 bRNdEi95EJs07w7dBruGXTpXLQql9v1NhHao5Tf3M7KA7uAy0JfubZVwQKgBk/rFvL
+	 EAUfEQNmuTMEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EACF40E6E;
-	Mon, 30 Mar 2026 19:52:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE7B6407DE;
+	Mon, 30 Mar 2026 20:07:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 182FD4D2
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 19:52:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 88EC04D2
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F265E4055A
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 19:52:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AF7140540
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNkfHx6Qjumm for <buildroot@buildroot.org>;
- Mon, 30 Mar 2026 19:52:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 203BE4002A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 203BE4002A
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 203BE4002A
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 19:52:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 7F76113F8B5;
- Mon, 30 Mar 2026 21:52:42 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 30 Mar 2026 21:52:42 +0200
-MIME-Version: 1.0
-Date: Mon, 30 Mar 2026 21:52:42 +0200
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, "Yann E . MORIN"
- <yann.morin.1998@free.fr>
-In-Reply-To: <20260203224414.192218-1-petr.vorel@gmail.com>
-References: <20260203224414.192218-1-petr.vorel@gmail.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <a65039752d2ca87b1b3c6e673c163ff4@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1774900366;
- bh=DruDp9tIeoHFMx1YEgsYbdl0/TRiAYYUgODETo1kv+4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=HZOXCVU8Xzv8lIQV2O9tDgGvWxZbk7zzXEySIDzJNFF73tBTkkrkQgH6oFheAWCtt
- 30qrGCGB5jU/6tY+i8Q5zbAcnuftvsPlzIdtSHcewQRDu/ZZZXmOWZ1DY2Zi5XELHE
- dFmNn5105l1jVPv4baRnhImk5tro6IOwhJXWoPd+HIeFbvRefb7ZrvlL6KfKjqq7cG
- qdlTu35Cu3nhHTqZzh9cYr/vpYZHafs6KXO/wMUgMF+fQhV2bfn3/pWJHfMb3PUMj9
- A3RFxQoKkwLy+AQJgaDTrapraLDAlgEFW83t2MDH3uhVocoYYWorp83H4VPuZlvQuZ
- OwvBIitMDi6Zg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HZOXCVU8
-Subject: Re: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Always require
- host-pkgconf
+ id xGCQ1-t8ab_q for <buildroot@buildroot.org>;
+ Mon, 30 Mar 2026 20:07:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D5734002A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D5734002A
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 20:07:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B92057FDFF; Mon, 30 Mar 2026 20:07:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 30 Mar 2026 21:59:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8dad17ea06260ef0bd23eebc47c95a8510310bf5
+X-Git-Newrev: 774a09423e00360b51d3ed35ff9635c6bfc38cd8
+X-Patchwork-Hint: ignore
+Message-Id: <20260330200727.B92057FDFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cpp-httplib: bump to v0.40.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,42 +70,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/02/2026 23:44, Petr Vorel wrote:
-> Require host-pkgconf only for libtirpc is not enough because libmnl
-> requires as well.
-> 
-> Upstream added it since 20200515 commit
-> 553ca8ea3b ("net/route: Add netlink based route change tests")
-> using it in m4/ltp-libmnl.m4.
-> 
-> Later, in 20210524 in commit
-> 6e17e2ba13 ("configure: Improve error message on missing pkg-config")
-> configure.ac required it explicitly:
-> 
-> m4_ifndef([PKG_CHECK_EXISTS],
-> 	[m4_fatal([must install pkg-config or pkgconfig and pkg.m4 macro 
-> (usual dependency), see INSTALL])])
-> 
-> This fixes error:
-> checking pkg-config is at least version 0.9.0... ./configure: line 
-> 7419: br-mips64r6-el-hf-glibc/host/bin/pkg-config: No such file or 
-> directory
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/774a09423e00360b51d3ed35ff9635c6bfc38cd8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
-For info, I added a link to the changelog, and fixed the ltp
-runtime test. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/fc6377f7f949ac23d38fb58c2c4a2f27bba73b1f
+See the release notes:
 
-Best regards,
+- https://github.com/yhirose/cpp-httplib/releases/tag/v0.38.0
+- https://github.com/yhirose/cpp-httplib/releases/tag/v0.39.0
+- https://github.com/yhirose/cpp-httplib/releases/tag/v0.40.0
 
-Julien.
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/cpp-httplib/cpp-httplib.hash | 2 +-
+ package/cpp-httplib/cpp-httplib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
+index 076b30cfa1..eb2b77bcd8 100644
+--- a/package/cpp-httplib/cpp-httplib.hash
++++ b/package/cpp-httplib/cpp-httplib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  909766cd7697153c9e588b0f96defe1868b7bb11d94b8d4f0c83bb4875bc9066  cpp-httplib-0.37.2.tar.gz
++sha256  b52ecaebf0f94086c8b3305650412359d920c5267f6d9ce87f883198783af678  cpp-httplib-0.40.0.tar.gz
+ sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
+diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
+index 56e8c27fc4..5cc60565c6 100644
+--- a/package/cpp-httplib/cpp-httplib.mk
++++ b/package/cpp-httplib/cpp-httplib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPP_HTTPLIB_VERSION = 0.37.2
++CPP_HTTPLIB_VERSION = 0.40.0
+ CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
+ CPP_HTTPLIB_LICENSE = MIT
+ CPP_HTTPLIB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
