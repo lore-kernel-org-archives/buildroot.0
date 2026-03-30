@@ -4,110 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB9E10D14A2
-	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 11:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3753810D14A4
+	for <buildroot@archiver.kernel.org>; Mon, 30 Mar 2026 11:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F94940BAC;
-	Mon, 30 Mar 2026 11:57:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE26D40BAE;
+	Mon, 30 Mar 2026 11:57:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ICcaW7PMems8; Mon, 30 Mar 2026 11:57:09 +0000 (UTC)
+ id t6Y4NEv46Srp; Mon, 30 Mar 2026 11:57:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B976140BA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA9F240BA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774871829;
-	bh=Q7As5nO1baYoPk+tKk0OuJ0fIb+7wa87Hiad+NJ4U3s=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KRb/VrcCLdlm/+2m40RVLzxEwdiNbsk+9VaLmcypJjMHHvxqeRiy2xLefOcgTsM77
-	 5UdRi/3xbsMvnxNmwb1F6NCden+7Fa3wkD+NiQAPE4ijWlCaFx+4fWga3Zx/d26CAk
-	 QSpMxME+Hp921Yuop2p7L4igJzS6GI82woWBtnI6sV5byDwv3FxnooISOUpb/WXcv1
-	 ygy0zYeAia906kJNnBF+aJnnsJrF8Fm/3c+5umy9Rg9BQwcPq9/249qzM/Q6855Z73
-	 2rzb8KWVszh1l3q0UEckOETxpP71Wx3UZB278ZC3WhyV9NJ5Ozdhv43ABdiw6wQDOU
-	 vfeOHRyL8kbgw==
+	s=default; t=1774871831;
+	bh=w1EaHuMH7AtriyWaPEnuMR0BCX6cKNvaeREicGoIbpw=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=PGhBhdRRDU4tWpwYBbw09CzwV0y8Gdcx2JVQKNe3v7+gdZM1WbFPn/hgJMYAwNDdR
+	 NnucqMuI8xApAzTGRdODSxIsJU8GrT7PcZrHrnl3zA0SOdbaPp1YsOy3SOV4PKiGYp
+	 PBUyvl4muasiC+7/sLSKNRDSTfb8itLYrgFEtB+2vd2NT5FZIlQnqCJ899RYgn5iLq
+	 +vd9keC4fnnnPm9WSYipVyiwKUXdupi8XUp7V0EUI958IjBVbCJ28BY16Cs6BnzdV5
+	 qosx2c11uUTYcDFbxg2P7oIIoPDE7KbfFAaR/qpSGgSZagBNnHFQudmE15fiUfA+0o
+	 F/fPpcZwuJGbg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B976140BA2;
-	Mon, 30 Mar 2026 11:57:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D77011D3
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA9F240BA3;
+	Mon, 30 Mar 2026 11:57:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E9D11D3
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C95AF81180
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 911D740BA6
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekSqI23Vdpvq for <buildroot@buildroot.org>;
- Mon, 30 Mar 2026 11:57:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VNbBchzJ-wFV for <buildroot@buildroot.org>;
+ Mon, 30 Mar 2026 11:57:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=ferdinand.bachmann@go-e.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D53348117F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D53348117F
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D53348117F
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:07 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-486b9675d36so36809145e9.0
- for <buildroot@buildroot.org>; Mon, 30 Mar 2026 04:57:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88BA440B6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88BA440B6B
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 88BA440B6B
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 11:57:09 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4873ce69ba9so8924405e9.2
+ for <buildroot@buildroot.org>; Mon, 30 Mar 2026 04:57:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774871825; x=1775476625;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CpgFgw/S5CFL3BnNZsrqz/Wm/FABbtoQgNWn7dfA1a8=;
- b=ap09t6t1njQlcUY1WV+dGdSjiRYxjbMEYDHWloT1gbXasCQLQeWUTUdabiV7uaWAg9
- 94zrokvM0XcBqAYXi7VJRQdijtL4ykd9q99idM4AycLzXxXJ9lWVAatW15SnDkFpI/PP
- vcxYW5vWZcSIicXRFJ8QKXoyTANKAJo3CcPr3BUXXE5jdykwJ3kXG3u9mOYLWGRKo9Im
- xSyRB6NdhCCqup5cWVMS/ai2lQpThQMtDZlEpKUahGPjY8JCvTpmS02VLkWqB2Zs9RXL
- f4zwLYXLNAo8jAt5h44gTCHnsMxbx8EWLJG6KnB1/ZczNsMT5zg9KjNTXPgyjGZB1p68
- buog==
-X-Gm-Message-State: AOJu0YxbsxUQrGTtlMsU9G63vgaLK7Nmgq4REqT2I8M9f3h1GjjOpV5U
- ctrpqyiTEM7AZxHPQ1c8L8dTZvUFV2GphnaqEXPMdxFiWmnLYc61tWfssFLgsQlM1RZS1TbavLA
- hnru+QofltCzwPuln9fwp74olWmTdCbSvU55rvJFK680owz/noluiw/kkNErWUIaG8poDDGG4WC
- Uf/9n9BOOHo24qCDD1PuF51bf5UXBab58XZlIr1fss4vMoTz1xn+Xv
-X-Gm-Gg: ATEYQzy2CjYJhZsB932RJWKgV2lHeGSFsfRuaAf2SmplhpeTsAK0ruRPCO3MbdmV7yi
- gl2E9+4J0S60PmWqq27/tfsyjQ45mdqdKCDNsqz6Zt18i8cStbQtJDQ9EL/J7NQNVSylw8wFqLp
- YKHbxs+KCU1UsH+TlOlHkTYWwd/WjbaXtat47kZ2QCRbNGpOPRjS2QcRxcf5yeafOAfh5aQU3ot
- yWYK/tR4XZ9mtITe2YKXjxYf/PYk9LkCWIum+/Hgpm4MzRLtW3MKwtKb+wVaRByxCRj6BsHqAI6
- 6GeFMjnNXL55ArtlAGHQnm56CRlxq0xSt5MbOFh9fw8tr0D3f6FHqCEQ/Iioce526EqyRZcKM+X
- vbiSaZmzFjZAWJj6xefCyCfIjIj0ve8+5YhWpjS4nNzuZIhLDv/46IbkgGppRjsMVviAzlBzlag
- QQ+JO9WC65NZblw/RJCmJecDwqaPJJ
-X-Received: by 2002:a05:600c:a31b:b0:487:716:2fa2 with SMTP id
- 5b1f17b1804b1-48727ec3c1dmr168755075e9.16.1774871824747; 
- Mon, 30 Mar 2026 04:57:04 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1774871827; x=1775476627;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=GdFTF6x4zBveWRwgusf5zDgS7jOT2uBRSPhcBnm8j9I=;
+ b=DA8+0T/nZianXwbPeDM3sMN9RnKQ9Or8/XZvOJv4tlgO36TC9yk9+jQ2jtimB8hpCs
+ UwDdQQTB4mcjZ2d5USc08zN7wui6VhYjBRfI7tK4pjLuMMXHBQPVVRq9kOwXhvJ8TkD5
+ PX6uE1wHRJh61Kl5LI0pvAr7T8AI0xci8MT0nO9ZrlK1t3bIGjVtHvr56DfvAb3/dE18
+ ub/Bqgab1AutjBUOB8tkzyNrTJO5kR/SNRvmehtKh7oLYR3bBOf25kZBjSzY9DNZ1Xfc
+ luVs3AyplaD009aw1n1R35c2dypNkNkuO1cV/83tFBisP8gz9IypFomgny9yEuWk7h20
+ QQ6A==
+X-Gm-Message-State: AOJu0Yyjj2KKag2pz3LpVJFaMJEVPzH5La3Lft6GVuwSCF8J0++mfpnM
+ 7PkhImFkPsOp0fMhd7PWbeoIulieRdz4+/Faa4IzikMKU5Kp9nlvAb4HISsIpWRI76iTjlmbAnX
+ cJcrAqopjBtcpFwL+zxCeVJjGnK2/3WrzEZwTrFI4waJG6VFCSTe6SpWoINdDcFbciTLzaBCmok
+ GVpJ6a8hE2KX5dBDPoM82b7sZQtA5gqKV+pw+s2T/Xwo1I7SY/KWfp
+X-Gm-Gg: ATEYQzxekxSFQ56p4G313Nq3X7lgGUUZtLqCGRqjUmo+UTJZIRPGzkPYUHg4c7vQfGN
+ oPAeEdCJrvLzxHweoePHdMEE5I5I8TEjBcPKD4ZkjfMFES7JTBMJ/8bGCERykqH8A6XPDJCb1t7
+ aBoYJchuzMEIf4Mfnf2Ii35aFt+wNDZ/GIc4H+osijBa9rY7EqDMgGokTS7d/fWer5GXFQPyoOQ
+ 2ymdq2iozw2iPdlJMr6uoMROotVcncAEGtdbzscOZAaYCQg7W72iNpA3s6GoWKCqNuRxFd3I+90
+ AXtF8Lny0oCDU6Cp6a5vpxXqj6cjzdk0JmC0qcxuJ7Pwm/H/gfk0Sztrg1GSNYlHYoyAJh2is0b
+ loiHLJcUrdkrLxBxujp3QiU+oK0jgrJ8693vvPeuU4TI/NRQKZACJVskHuXRTXZspgtKfVWlK6H
+ l5Tf/Tp2K5CrYttGa4dDLzhoq0w/Uy
+X-Received: by 2002:a05:600c:1d1c:b0:483:7903:c3b1 with SMTP id
+ 5b1f17b1804b1-48727efacb3mr193613895e9.20.1774871826535; 
+ Mon, 30 Mar 2026 04:57:06 -0700 (PDT)
 Received: from goefb.lan ([185.236.72.5]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48730688605sm283802535e9.10.2026.03.30.04.57.04
+ 5b1f17b1804b1-48730688605sm283802535e9.10.2026.03.30.04.57.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Mar 2026 04:57:04 -0700 (PDT)
+ Mon, 30 Mar 2026 04:57:06 -0700 (PDT)
 From: Ferdinand Bachmann <ferdinand.bachmann@go-e.com>
 To: buildroot@buildroot.org
 Cc: Ferdinand Bachmann <ferdinand.bachmann@go-e.com>
-Date: Mon, 30 Mar 2026 13:57:01 +0200
-Message-ID: <20260330115702.1451432-1-ferdinand.bachmann@go-e.com>
+Date: Mon, 30 Mar 2026 13:57:02 +0200
+Message-ID: <20260330115702.1451432-2-ferdinand.bachmann@go-e.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260330115702.1451432-1-ferdinand.bachmann@go-e.com>
+References: <20260330115702.1451432-1-ferdinand.bachmann@go-e.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=go-e.com; s=google; t=1774871825; x=1775476625; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CpgFgw/S5CFL3BnNZsrqz/Wm/FABbtoQgNWn7dfA1a8=;
- b=Et8Dp4E8jy7e2f83MM+wcZ+Tve7PyiRD1ozwtsjZjzXJ3VKU24QTUzqZV0U4FNZ/jQ
- MwmGcAx5msnPWbiDrL0/Y6rjcjjz2FRAFsd+6jZ+kMv7NY4kN1rvnfZOG0di1rpQrPIs
- 9htwJFuXZvB6u8Zum1rUjACnBPXJboTJ1dUdBDQIzD0oT5p8kuI7T0g3m9MGjTwN5+jr
- elbF4rGmjoUj1O8amJlgPGAEBMYbFzFbpz/a3gIrU+HFbsZOE/+Zndykg7WyxrYRnvlh
- By7t8rxTh3Pz7zUBpPbXA1ValIeUjuTvapGxxwlt8/Bh9Q6+KD9GB3/cYgIJ1pmSnfNl
- 9CxQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=go-e.com; s=google; t=1774871827; x=1775476627; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GdFTF6x4zBveWRwgusf5zDgS7jOT2uBRSPhcBnm8j9I=;
+ b=hcLYnHrjpmaFWR3Htyi9UWhubMnbD0UPyp89p4KWIGXvZkNP6mfcoPRTKub0v0NcKa
+ jR3z/woR2yW5TDaV9I8QnWFHQAB9VMX7HbeZ5BbAhS8E7SH5yBSxGhr2zw3gbCqpMUTt
+ JhsgPdPM/+uLyvEAMBbmIIbVpNmNS0v0bCAbomUwpH6m2R9ZXtcd3zPA6aJ5SEgocRCV
+ tjt6vB76mtXWPVGtPexETCDh0DVuUqRGQLcYgziRRF717yBVWYK7O3ymSn4cx/+za/7G
+ xPGXBguhz98bJd0Fi9ipwgVion/FkV7UpmqR0Fbv4Y3NL3t4P+mIuS3NVLKPh/SmhsuE
+ qNZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=go-e.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=go-e.com header.i=@go-e.com header.a=rsa-sha256
- header.s=google header.b=Et8Dp4E8
-Subject: [Buildroot] [PATCH 0/1] package/uboot-tools: fix FIT signature
+ header.s=google header.b=hcLYnHrj
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix FIT signature
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -125,22 +129,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-FIT signature support in uboot-tools is currently broken in buildroot
-master due to changes in uboot-tools' Makefile from the big update in
-2025.11. This patch fixes the changes by adding missing defines and make
-options.
+uboot-tools changed how the config system works for tool builds, which
+leads to buildroot's configure cmds being wrong / incomplete.
 
-Note that I sent out a content-identical version of this patch a few
-minutes ago that had the wrong git author (@yrlf.at instead of the
-company email @go-e.com). Please disregard the previous version of this
-patch series.
+Specifically, the CONFIG_FIT_* macros are now called CONFIG_TOOLS_FIT_*,
+while the make options needed to compile FIT signature support are still
+CONFIG_FIT_*. Additionally, CONFIG_TOOLS_LIBCRYPTO is needed to link
+uboot-tools with FIT signature support correctly.
 
-Ferdinand Bachmann (1):
-  package/uboot-tools: fix FIT signature support
+This patch fixes the issue by adding the new CONFIG_TOOLS_FIT_* defines
+to the generated autoconf.h and adding CONFIG_TOOLS_LIBCRYPTO to the
+make options.
 
+Signed-off-by: Ferdinand Bachmann <ferdinand.bachmann@go-e.com>
+---
  package/uboot-tools/uboot-tools.mk | 14 ++++++++++----
  1 file changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index fa0b6aba78..99752a9b47 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -31,9 +31,12 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
+ 	echo "#include <linux/kconfig.h>" > $(@D)/include/config.h
+ 	touch $(@D)/include/config/auto.conf
+ 	mkdir -p $(@D)/include/generated
++	touch $(@D)/include/generated/autoconf.h
+ 	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
+ 	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
+-	echo $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
++	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
+ 	mkdir -p $(@D)/include/asm
+ 	touch $(@D)/include/asm/linkage.h
+ endef
+@@ -50,7 +53,7 @@ UBOOT_TOOLS_DEPENDENCIES += dtc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+-UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
++UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 CONFIG_TOOLS_LIBCRYPTO=y
+ UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
+ endif
+ 
+@@ -124,9 +127,12 @@ define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
+ 	echo "#include <linux/kconfig.h>" > $(@D)/include/config.h
+ 	touch $(@D)/include/config/auto.conf
+ 	mkdir -p $(@D)/include/generated
++	touch $(@D)/include/generated/autoconf.h
+ 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
+ 	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
+-	echo $(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
++	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
+ 	mkdir -p $(@D)/include/asm
+ 	touch $(@D)/include/asm/linkage.h
+ endef
+@@ -142,7 +148,7 @@ HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+-HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
++HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000 CONFIG_TOOLS_LIBCRYPTO=y
+ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
+ define HOST_UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(HOST_DIR)/bin/fit_check_sign
 -- 
 2.53.0
 
