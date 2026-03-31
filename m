@@ -4,111 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52222FF60CF
-	for <buildroot@archiver.kernel.org>; Tue, 31 Mar 2026 07:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC9FFF60EE
+	for <buildroot@archiver.kernel.org>; Tue, 31 Mar 2026 08:37:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0356C8230B;
-	Tue, 31 Mar 2026 07:09:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95A99814A0;
+	Tue, 31 Mar 2026 08:37:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QMOUo3628mOL; Tue, 31 Mar 2026 07:09:40 +0000 (UTC)
+ id QtWr1W9kRSoF; Tue, 31 Mar 2026 08:37:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E76AE8230C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71F3C81311
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1774940980;
-	bh=NbAOJWvN3XiPjjT1SF5srf8SgEeXTa8r4jp1TC9Abaw=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=KxjWwhEFU/FNmZVbaplBb7ZeZ73X/ADOISyx37wvQlxT0TDgCLLubVw155UOhv1MU
-	 yF0SrZixXHgnojudrH1Bq+m0FwWDH4W+3BhbZRbwH3qoE24LNqR1iYYv4v71vhjXGn
-	 fr/0+85vATkHrkvckPhrQsLIOqSosDV+0H4/KwkHpbb6TXj5iMEyY8hKNaQIwgLrXA
-	 L1HbPJEyMug//ZRuJ8S0kE0VQe8CeBoCogpTZmnjgg3+Qh5kiEuwZhTSovdDCthmqh
-	 wOe+Zoa36lGa2RuHxoM33GeiwQ8G/3Kk8Id3CibK1qslw17RMsdKtTB3wtEp4EMNNs
-	 yJKUoohVKoxjw==
+	s=default; t=1774946233;
+	bh=PJ65kGFYNP0rpjWTXumHZsq3fy4oqnVv8DjK0Z2RETI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=H9ITwGUDoY1u4+iZZWRdiqwbzEA6iOHz9j2TkzS6srnsmZYXtrwJ1uZNehGwgIYkj
+	 PA2WoeUyef5F3st3EfAeOVe3s1sGqejXYR419zaibz5G++PsBrUCo0SpXqdRJuem65
+	 OIE9JX34J0K8hodDjmHJ6HMOL+xrkJtrk9DOM/i9WdWbD3uRdWuEFTyDddJi8lCZP/
+	 0w2uEoro+1opcB+3EaBhF5+lterLLyI1mGfgy54ADZEhMEVVZYFoZFfHeRAAR+9fcF
+	 VNCWL+z+soD9bk810fuXjtnBqYKb9wyyvnPh436XsEbsaBFf1EUphHJQhcUijY+l3C
+	 8LWci8lEk+I4Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E76AE8230C;
-	Tue, 31 Mar 2026 07:09:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 79E2D2C5
- for <buildroot@buildroot.org>; Tue, 31 Mar 2026 07:09:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71F3C81311;
+	Tue, 31 Mar 2026 08:37:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F6ED30E
+ for <buildroot@buildroot.org>; Tue, 31 Mar 2026 08:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FC418230C
- for <buildroot@buildroot.org>; Tue, 31 Mar 2026 07:09:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C61A81309
+ for <buildroot@buildroot.org>; Tue, 31 Mar 2026 08:37:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B65ond3fqd_M for <buildroot@buildroot.org>;
- Tue, 31 Mar 2026 07:09:37 +0000 (UTC)
+ id ij7CYpMH2OQ8 for <buildroot@buildroot.org>;
+ Tue, 31 Mar 2026 08:37:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8E0E78230B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E0E78230B
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8E0E78230B
- for <buildroot@buildroot.org>; Tue, 31 Mar 2026 07:09:36 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-48700b1ba53so47922835e9.1
- for <buildroot@buildroot.org>; Tue, 31 Mar 2026 00:09:35 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BCCCF812F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCCF812F5
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BCCCF812F5
+ for <buildroot@busybox.net>; Tue, 31 Mar 2026 08:37:10 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-48700b1ba53so48958055e9.1
+ for <buildroot@busybox.net>; Tue, 31 Mar 2026 01:37:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1774940974; x=1775545774;
+ d=1e100.net; s=20251104; t=1774946228; x=1775551028;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3mKKFRczhcUV7sZwUWnOUMEkpWRBBp1iKwpPfxrMq7g=;
- b=qIZQ3bib+ohTaho5Do8EwB7b6F34LSmtyOcW0foaAR7be6sVVsBeGJVS3zUoN2Iz5M
- NxxcIxtnUz2fnQx4gdrxazALo7wpuEuMHQNQcbQuprCm+U18P1BrcfW57IoirieHlfiT
- 17gW6J+8jmwAzW29X/IiKq/SfjCihBLkVJvGOPdHTGaw04NE3+R18DbbFhdfBKipkbJw
- 72V6pD8KdLayzc5wYnCcX4qC96u3R/F+oBh6Ddgmt/VpKy1nUzSL+SqS9yefvvl2rbxR
- 0gQ3X/yB62J/UAHTti/mDG/cS0V2V3br3JiT9I86VT0gd6/AjPp4XT0WmKii+6OBIZdl
- 1nPg==
-X-Gm-Message-State: AOJu0Ywi46GRZghbgUMbvnp3X7nYyrAsWOoWW02pLioFJYuBc3IVdC/x
- Oeb8M5lGjE/3ATgrbnWGoisMWglKs8Ry42AUalY7tFlYkFuAtktKnOFX/yWYPcenVLwlSHQxbF1
- iHzaA
-X-Gm-Gg: ATEYQzwGp0KqTzrvBQOd0I/FnorVqWdJQ3J5rY3k4552RU3CIQZJe4No8aoLIxkOWez
- +lA2bSYm5OyyOm1PllTj/HudFfXKSRCwj74a9wNp64IUu2jxh9BywnYG75NuVflcG51f84Lvm/V
- Z/U8lRrMbspl1zZ2G5rThcI7mVPpZIGNiKj/+pse2rF5a/KYVQd1h0TifGiBnsqKffoDFvHMsqy
- NocIjYZ6ORJzjWO4KZgi8un7ANbXdrODOtdw4RM1XKOvbN4C/kc9LD93OigPIOp4Q1LTe08q/8D
- jFFB3aGP/xF8gF/EdJx0AUFlt3R4dmwPnOHy1i9fjmObTsEYXkXzxXEFLBbLZVT0cajj0LH4lqD
- +HLwE/k6RNgrc+jeK2hP67LCIIjbK7VjVeYVLpXbsZrA7sDsE2UJxyYBal4lfaE7cFqNgktEFTX
- vDYV1kbtYyXXSs8jy9dMQbqzHUW1G9ClSA/2JV6FJJXQsP4vv7XegcXa8=
-X-Received: by 2002:a05:600d:e:b0:485:5812:bb9e with SMTP id
- 5b1f17b1804b1-48727d31801mr224676675e9.0.1774940973814; 
- Tue, 31 Mar 2026 00:09:33 -0700 (PDT)
-Received: from dragon (ptr-94-109-16-81.dyn.orange.be. [94.109.16.81])
+ bh=OpJa1jw/B/FSEzuXKzqPlmbIjfSDbhLjbx8EM6eYAlU=;
+ b=AgmsGFIQeqDmUzZ9Y2JmQubaszOhWTsiQ3x62wxRoUKQIt6uuPDWKdqc/72CBMZP5Y
+ 70w18nMu/yD0/rofVPjhDfoCAqOob3z+ep0aM5sBhhp1SSdPCYbpJR/HsECm11HHg0Yb
+ XPtpotE1gpzgYzshmJ+CuL6aaW7SZYBMbhRrd1TyfxjxKi7g9gsmTlOIsCfGvoP7SKlh
+ 6BGa6ceD4qB2i7GkBiI8MhikZM8mOaOMxF8c/jhQqK216PHypoNTNAY0oat+enYPLC3w
+ DgF79H/9fLl+3JoPwlqCvW7JiyYsgcpDWg6nRPO419aStt/vzKYOgVQ4Bsr8tNQ8plLa
+ uV0w==
+X-Gm-Message-State: AOJu0Yz6QMtnqxMAjWTY0PV53WcFeQPReRoxjQOR2N8FFtdedWXSFuM6
+ HiNT1NomZWV7yiWdppr26X9Nm4a3QnltUHbV2FATSkQa0Go5DsYq3Ph5mINAewFa8Efl0Mok5Da
+ WTqntNQ==
+X-Gm-Gg: ATEYQzwUri7L19un2lwaSnLtDh3tAlV7kSpyHccciNCFUltyb/4/Uh8+63rAGUlt3m5
+ Tb/mT1pVW/SxXP5BQIOLsCRZetcJSfdhLB6dE8uCZKbXBazs3C9oPIhGfjAw6YfRlm4dwXWJ6ZC
+ ESTfnXw2fm/BTrjqQbGiRDOJdzR0m/59hs2BQFqqTvJ+CKfcYZiHE94Mis6t25DPhEbo5crTs7Y
+ Ear6WIl8XT6n446BcX0R4AHdTwdg4vORGXfnSXv2nTd6NcT7zJUma9f8Qx8c+rzdz2egjgDXmb7
+ NJgVM9U4qzdjUnUStW8uC7dPD43se3mifx94P8Sjosqgjrhq+ProkIPE0t2WQ/fG5Rng4bQH1Mc
+ ofmakNKTqq8SFaQE6EVXeYzfbJc/Ef24fP7RuhGOYRjo6mXpKEmTiJbfkfmW6NwfQRe9RP24QWm
+ LgW0zADfVGtZI3BOAIrdd/HfgsqGw1cLxBuebqYXQ6ApGFwerjEQ==
+X-Received: by 2002:a05:600c:4fc9:b0:485:2fe9:336f with SMTP id
+ 5b1f17b1804b1-487280ba3a8mr246125085e9.30.1774946226819; 
+ Tue, 31 Mar 2026 01:37:06 -0700 (PDT)
+Received: from vm-2404.. (181.185.66.37.rev.sfr.net. [37.66.185.181])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4887a648f3dsm17789635e9.0.2026.03.31.00.09.33
+ ffacd0b85a97d-43cf21e3602sm25893943f8f.4.2026.03.31.01.37.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 31 Mar 2026 00:09:33 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Andrey Yurovsky <yurovsky@gmail.com>,
- Heiko Thiery <heiko.thiery@gmail.com>, thomas.perale@mind.be
-Date: Tue, 31 Mar 2026 09:09:14 +0200
-Message-ID: <20260331070914.459068-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.53.0
+ Tue, 31 Mar 2026 01:37:06 -0700 (PDT)
+To: buildroot@busybox.net
+Date: Tue, 31 Mar 2026 10:37:01 +0200
+Message-ID: <20260331083702.86930-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1774940974; x=1775545774; darn=buildroot.org;
+ d=gadz.org; s=google; t=1774946228; x=1775551028; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3mKKFRczhcUV7sZwUWnOUMEkpWRBBp1iKwpPfxrMq7g=;
- b=XM7xe+yhOgluJES2zWxoDVJMX3SEsHG29K863ZZucBTRnYyNEAG65BgpD2wA4Ml/TR
- SVVVaWNUID+BcAsHF9quiHboOpLHnM5HNEH8eLlda/Iwd3Zk0iC4UYcW1rZhw82iOgus
- ClGCM4y04rwcL3md2N8bfF4c7ZGGEigCtuHwjCVRm/MRVzLWX/KYTEHAiCkc9BAaz/ag
- dHTTB/cbIy9J5qDGD1zm5GOOPbXxP4NtCwaRjsrLDoGWEvFKvFiwavhomyk2skE1FrlW
- WF3yL0voHYCXF5CNkl8zG+8C8dHGqHW3oPUPA0hkE97nJaxY2F+ylIbMqW6UExyIVp3Q
- egsg==
+ bh=OpJa1jw/B/FSEzuXKzqPlmbIjfSDbhLjbx8EM6eYAlU=;
+ b=pppS0izcQGmYLalOndEDlDcTceW4zZMiHbCQfLPoV+RSXTz0HbIJrF2sEcTFWSonip
+ VwLhGtVtkkZnOZfTtbM+8DRMQntHYhMRIZ6vfmHZGwKSB6MN1tw06wQ8tDtQmERnCzH1
+ yITqj8bLPDUSfj4+5qyaqtPxa3TCvwi22efVGMN9NAv8MUA53PUDMaW0oMEY+3on77ok
+ dikiAE4aYB+lygNUuHGh7Ma4itxQJqfxX2Yx/QgjMYi2vsKrw1F1NKdqkPnI4JvtGAxr
+ vojQ0HTFH0tuRLDlf7joru47NYXSmclAQm70qK1Cy4SaAMDrMOt7whKXJIBXjAKBmgRv
+ VdUg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=XM7xe+yh
-Subject: [Buildroot] [PATCH for 2025.02.x] package/rauc: add patch for
- CVE-2026-34155
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=pppS0izc
+Subject: [Buildroot] [PATCH] package/perl: security bump to version 5.42.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,259 +117,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Francois Perrad via buildroot <buildroot@buildroot.org>
+Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
+fix CVE 2026-4176 : contains a vulnerable version of Compress::Raw::Zlib
 
-    RAUC bundles using the 'plain' format exceeding a payload size of 2 GiB
-    cause an integer overflow which results in a signature which covers only
-    the first few bytes of the payload. Given such a bundle with a legitimate
-    signature, an attacker can modify the part of the payload which is not
-    covered by the signature. Bundles using the recommended 'verity' or
-    'crypt' formats are not affected. They are supported from v1.5
-    (released 2020-12-14) and v1.7 (released 2022-06-03) respectively.
-    If all signed and published bundles were smaller than 2GiB,
-    the vulnerability cannot be exploited.
-    https://github.com/rauc/rauc/security/advisories/GHSA-6hj7-q844-m2hx
+For release notes, see:
+https://perldoc.perl.org/5.42.2/perl5422delta
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/rauc/0001-fix-cve-2026-34155.patch | 219 +++++++++++++++++++++
- 1 file changed, 219 insertions(+)
- create mode 100644 package/rauc/0001-fix-cve-2026-34155.patch
+ package/perl/perl.hash | 14 +++++++-------
+ package/perl/perl.mk   |  5 +++--
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/package/rauc/0001-fix-cve-2026-34155.patch b/package/rauc/0001-fix-cve-2026-34155.patch
-new file mode 100644
-index 0000000000..dccb6f0d4c
---- /dev/null
-+++ b/package/rauc/0001-fix-cve-2026-34155.patch
-@@ -0,0 +1,219 @@
-+From f482e9f2ce34697844332db531b4b8be1e4b6043 Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@mind.be>
-+Date: Tue, 31 Mar 2026 08:49:13 +0200
-+Subject: [PATCH] Fix CVE-2026-34155
-+
-+This is the concatenation of the 2 upstream commits that make the actual
-+change between rauc v1.15.1 and 1.15.2; rebased on top of rauc v1.13
-+
-+===============================================================================
-+[1/2] src/signature: protect against integer overflows with BIO_new_mem_buf()
-+
-+BIO_new_mem_buf()'s len argument is of type int, so it cannot support
-+lengths exceeding 2 GiB. Reject larger lengths and additionally check
-+that we have created the BIO correctly.
-+
-+These are only internal checks, GError handling will be added in a later
-+commit.
-+
-+Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-+
-+Upstream: https://github.com/rauc/rauc/commit/bbdf9f04a96a7094e11cfa822d695bc7f33dbf61
-+===============================================================================
-+[2/2] src/signature: reject plain bundles with payload exceeding 2 GiB
-+
-+Due to BIO_new_mem_buf() only supporting buffers of up to 2 GiB, we
-+cannot sign or verify bundles with a payload larger than that.
-+
-+This fixes an integer overflow which would lead to calling
-+BIO_new_mem_buf() with a negative len, which will cause it to use
-+strlen() to  to determine the buffer size automatically. As a result,
-+the buffer is truncated at the first '\0' byte in the SquashFS header.
-+The first 4 bytes are a fixed magic number ("hsqs"), and since a '\0'
-+byte appears within the inode count field at bytes 5-8 in most SquashFS
-+images, the resulting signature will only cover this part of the
-+SquashFS header.
-+
-+As we sign or verify the payload directly via OpenSSL only for the
-+'plain' format, the 'verity' and 'crypt' formats are not affected.
-+
-+Fix this by checking the content size before calling cms_sign_file() or
-+cms_verify_bytes(), which call BIO_new_mem_buf() via bytes_as_bio().
-+
-+Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-+
-+Upstream: https://github.com/rauc/rauc/commit/662a212fc16b736bfed163ebb7349a53881803cd
-+===============================================================================
-+
-+CVE: CVE-2026-34155
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/signature.c  | 32 ++++++++++++++++++++++++++++++++
-+ test/signature.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 78 insertions(+)
-+
-+diff --git a/src/signature.c b/src/signature.c
-+index 88f6e790..ca06bfa6 100644
-+--- a/src/signature.c
-++++ b/src/signature.c
-+@@ -414,11 +414,19 @@ static BIO *bytes_as_bio(GBytes *bytes)
-+ 		g_error("bytes_as_bio: no data");
-+ 	if (size == 0)
-+ 		g_error("bytes_as_bio: size is zero");
-++	if (size > INT_MAX)
-++		g_error("bytes_as_bio: size is too large for BIO_new_mem_buf");
-+ 
-+ 	bio = BIO_new_mem_buf(data, size);
-+ 	if (!bio)
-+ 		g_error("bytes_as_bio: BIO_new_mem_buf() failed");
-+ 
-++	/* ensure that we've passed the data correctly */
-++	const BUF_MEM *bio_mem_buf = NULL;
-++	BIO_get_mem_ptr(bio, &bio_mem_buf);
-++	g_assert(bio_mem_buf->data == data);
-++	g_assert(bio_mem_buf->length == size);
-++
-+ 	return bio;
-+ }
-+ 
-+@@ -1420,6 +1428,7 @@ GBytes *cms_sign_file(const gchar *filename, const gchar *certfile, const gchar
-+ 	GError *ierror = NULL;
-+ 	g_autoptr(GMappedFile) file = NULL;
-+ 	g_autoptr(GBytes) content = NULL;
-++	gsize content_size = 0;
-+ 	GBytes *sig = NULL;
-+ 
-+ 	g_return_val_if_fail(filename != NULL, FALSE);
-+@@ -1434,6 +1443,17 @@ GBytes *cms_sign_file(const gchar *filename, const gchar *certfile, const gchar
-+ 	}
-+ 	content = g_mapped_file_get_bytes(file);
-+ 
-++	G_STATIC_ASSERT(INT_MAX >= INT32_MAX);
-++	content_size = g_bytes_get_size(content);
-++	if (content_size > INT32_MAX) {
-++		g_set_error(
-++				error,
-++				R_SIGNATURE_ERROR,
-++				R_SIGNATURE_ERROR_LOAD_FAILED,
-++				"Bundle payload size %"G_GSIZE_FORMAT " exceeds maximum for bundles using plain format (2 GiB)", content_size);
-++		goto out;
-++	}
-++
-+ 	sig = cms_sign(content, TRUE, certfile, keyfile, interfiles, &ierror);
-+ 	if (sig == NULL) {
-+ 		g_propagate_error(error, ierror);
-+@@ -1479,6 +1499,7 @@ gboolean cms_verify_fd(gint fd, GBytes *sig, goffset limit, X509_STORE *store, C
-+ 	GError *ierror = NULL;
-+ 	g_autoptr(GMappedFile) file = NULL;
-+ 	g_autoptr(GBytes) content = NULL;
-++	gsize content_size = 0;
-+ 	gboolean res = FALSE;
-+ 
-+ 	g_return_val_if_fail(fd >= 0, FALSE);
-+@@ -1515,6 +1536,17 @@ gboolean cms_verify_fd(gint fd, GBytes *sig, goffset limit, X509_STORE *store, C
-+ 		content = tmp;
-+ 	}
-+ 
-++	G_STATIC_ASSERT(INT_MAX >= INT32_MAX);
-++	content_size = g_bytes_get_size(content);
-++	if (content_size > INT32_MAX) {
-++		g_set_error(
-++				error,
-++				R_SIGNATURE_ERROR,
-++				R_SIGNATURE_ERROR_LOAD_FAILED,
-++				"Bundle payload size %"G_GSIZE_FORMAT " exceeds maximum for bundles using plain format (2 GiB)", content_size);
-++		goto out;
-++	}
-++
-+ 	res = cms_verify_bytes(content, sig, store, cms, NULL, &ierror);
-+ 	if (!res) {
-+ 		g_propagate_error(error, ierror);
-+diff --git a/test/signature.c b/test/signature.c
-+index 7fc9a4f3..7a16c1b1 100644
-+--- a/test/signature.c
-++++ b/test/signature.c
-+@@ -10,6 +10,7 @@
-+ #include "common.h"
-+ 
-+ typedef struct {
-++	gchar *tmpdir;
-+ 	GBytes *content;
-+ 	GBytes *sig;
-+ 	GError *error;
-+@@ -23,6 +24,8 @@ static void signature_set_up(SignatureFixture *fixture,
-+ {
-+ 	r_context_conf();
-+ 
-++	fixture->tmpdir = g_dir_make_tmp("rauc-XXXXXX", NULL);
-++	g_assert_nonnull(fixture->tmpdir);
-+ 	fixture->content = read_file("test/openssl-ca/manifest", NULL);
-+ 	g_assert_nonnull(fixture->content);
-+ 	fixture->sig = NULL;
-+@@ -39,6 +42,10 @@ static void signature_set_up(SignatureFixture *fixture,
-+ static void signature_tear_down(SignatureFixture *fixture,
-+ 		gconstpointer user_data)
-+ {
-++	if (fixture->tmpdir)
-++		g_assert_true(rm_tree(fixture->tmpdir, NULL));
-++
-++	g_free(fixture->tmpdir);
-+ 	g_bytes_unref(fixture->content);
-+ 	g_bytes_unref(fixture->sig);
-+ 	g_clear_error(&fixture->error);
-+@@ -275,6 +282,44 @@ static void signature_verify_file(SignatureFixture *fixture,
-+ 	g_clear_error(&fixture->error);
-+ }
-+ 
-++static void signature_too_large(SignatureFixture *fixture,
-++		gconstpointer user_data)
-++{
-++	gboolean res = FALSE;
-++
-++	g_autofree gchar *payloadname = write_random_file(fixture->tmpdir, "payload", 1024, 1234);
-++	g_assert_nonnull(payloadname);
-++	fixture->sig = read_file("test/openssl-ca/manifest-r1.sig", NULL);
-++	g_assert_nonnull(fixture->sig);
-++
-++	goffset large_size = (goffset)INT32_MAX+1;
-++
-++	g_assert_cmpint(truncate(payloadname, large_size), ==, 0);
-++	g_autoptr(GBytes) sig = cms_sign_file(payloadname,
-++			"test/openssl-ca/rel/release-1.cert.pem",
-++			"test/openssl-ca/rel/private/release-1.pem",
-++			NULL,
-++			&fixture->error);
-++	g_assert_null(sig);
-++	g_assert_error(fixture->error, R_SIGNATURE_ERROR, R_SIGNATURE_ERROR_LOAD_FAILED);
-++	g_clear_error(&fixture->error);
-++
-++	g_assert_cmpint(truncate(payloadname, large_size + 1024), ==, 0);
-++	gint fd = g_open(payloadname, O_RDONLY|O_CLOEXEC, 0);
-++	g_assert_cmpint(fd, >=, 0);
-++	res = cms_verify_fd(fd,
-++			fixture->sig,
-++			large_size,
-++			fixture->store,
-++			&fixture->cms,
-++			&fixture->error);
-++	g_assert_false(res);
-++	g_assert_error(fixture->error, R_SIGNATURE_ERROR, R_SIGNATURE_ERROR_LOAD_FAILED);
-++	g_assert_null(fixture->cms);
-++	g_clear_error(&fixture->error);
-++	g_close(fd, NULL);
-++}
-++
-+ static void signature_loopback_detached(SignatureFixture *fixture,
-+ 		gconstpointer user_data)
-+ {
-+@@ -828,6 +873,7 @@ int main(int argc, char *argv[])
-+ 	g_test_add("/signature/verify_valid", SignatureFixture, NULL, signature_set_up, signature_verify_valid, signature_tear_down);
-+ 	g_test_add("/signature/verify_invalid", SignatureFixture, NULL, signature_set_up, signature_verify_invalid, signature_tear_down);
-+ 	g_test_add("/signature/verify_file", SignatureFixture, NULL, signature_set_up, signature_verify_file, signature_tear_down);
-++	g_test_add("/signature/too_large", SignatureFixture, NULL, signature_set_up, signature_too_large, signature_tear_down);
-+ 	g_test_add("/signature/loopback_detached", SignatureFixture, NULL, signature_set_up, signature_loopback_detached, signature_tear_down);
-+ 	g_test_add("/signature/loopback_inline", SignatureFixture, NULL, signature_set_up, signature_loopback_inline, signature_tear_down);
-+ 	g_test_add("/signature/get_cert_chain", SignatureFixture, NULL, signature_set_up, signature_get_cert_chain, signature_tear_down);
-+-- 
-+2.53.0
-+
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 3aefdd05b..d88de6c42 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,12 +1,12 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz.{md5,sha1,sha256}.txt
+-md5  7a6950a9f12d01eb96a9d2ed2f4e0072  perl-5.42.0.tar.xz
+-sha1  3b557f28dcb412b115d9628c37fc94b2fda08384  perl-5.42.0.tar.xz
+-sha256  73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3  perl-5.42.0.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.42.2.tar.xz.{md5,sha1,sha256}.txt
++md5  be6e70b71ec6589fc090f7303c5b3056  perl-5.42.2.tar.xz
++sha1  dc36549204ec31680e1c7c0acb37fad0de83a339  perl-5.42.2.tar.xz
++sha256  0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb  perl-5.42.2.tar.xz
+ 
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.3/perl-cross-1.6.3.hash
+-sha256  cd57d8f8017727dc7e19cca55e1e9f22664edecf6c9f04c3515ecc13fd88e4f3  perl-cross-1.6.3.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.4/perl-cross-1.6.4.hash
++sha256  b6202173b0a8a43fb312867d85a8cd33527f3f234b1b6e591cdaa9895c9920c7  perl-cross-1.6.4.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+ sha256  8979e6dd61852041643c5c5c40ea63b2bd1b438a67d114e62cbaef808c514315  Copying
+-sha256  189e9d6ac7743ed4e832f14c9edb6f782c92d8868b447fa2684f7fe5a81465c1  README
++sha256  16381bf5fe73ad96ed26449b52eb4a85b2a32a49763c8a788d43af80f3add548  README
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index c31a368b7..c96eb4413 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 42
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.6.3
++PERL_CROSS_VERSION = 1.6.4
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+@@ -28,6 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
+ define PERL_CROSS_EXTRACT
+ 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
+ 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
++	mv $(@D)/cnf/diffs/perl5-5.42.0 $(@D)/cnf/diffs/perl5-5.42.2
+ endef
+ PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
 -- 
-2.53.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
