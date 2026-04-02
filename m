@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F186CD6AAF9
-	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 19:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D10AD6AAFD
+	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 19:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E7B940AC7;
-	Thu,  2 Apr 2026 19:07:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA81140B9E;
+	Thu,  2 Apr 2026 19:12:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmUYtIVZ5trJ; Thu,  2 Apr 2026 19:07:46 +0000 (UTC)
+ id ZytUvUhvRVqI; Thu,  2 Apr 2026 19:12:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A716640AB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8942040BA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775156866;
-	bh=Ddgqx5t/HIr9gmze9iFpA+Zm06AtuCKTDnSGTI+gh+A=;
-	h=From:In-Reply-To:Cc:Date:References:To:Subject:List-Id:
+	s=default; t=1775157158;
+	bh=BPAL4RozGIDEn2X/zto+78iJ7KZtnxI6cNz4rlb3ZDY=;
+	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=cysI+uzOB3FpX4wMxe6Q+NRU27u1ILKLXM/OXk0F9XG6tmazKLe9blZd4jr7Da/7N
-	 w7JlshrC4k92eIAdR6GB0V3fTz+LH9QhqYB5d0Dnn75u3KA49JplRcuWWBj7rxOTUc
-	 ExcDtlB3a2/6fNYCem55VumZecZDlb0iVYfE922BlPahcta/vBhMM+NKhQhjYcq1QR
-	 rcQOakCqRWlTQYxY11vWnKxX30WqWXmTgWEcPpRyWBO6/seSMiUVakgD8EYxpZeCkW
-	 JtDEW5bk3vnbO598gPPB0rPd7rjFY67IENV+OXrjnfUbYEsUTnCiBYnrc4D8sUTXsg
-	 fVJoy2Oqyls5A==
+	b=sQDreatotr6heo7eVq5Onf10M3Fs758SnWIPVybOFFppAJnseEO41fI34KyAXo5qW
+	 OXVUijmK3sPxss/BhQ+tH4ZcO0cJHQWwHpUNpXyssX1xHGaNMr5/LloDXfcQ4+8lda
+	 b7s/ICdo4R8jQ7EFpeuj4JF1l35dNYUH7/HDKuIIxlgeWwUtRDeOqRS8+p4S8WVSOi
+	 A//6SFSb36G77S01xL+SmJB5XCw+ilxbTqsHCo3UNVGu/FoWzCtNQwDw+hNzEae5SY
+	 TvbFdsy8z1pbxawoBSnY7kqALlJYswr43GINotrRqJStAkTiMu2bmjvahlZ5p4CYYm
+	 2IZSNSKJXInwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A716640AB7;
-	Thu,  2 Apr 2026 19:07:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CBF232D3
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:07:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8942040BA3;
+	Thu,  2 Apr 2026 19:12:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39C522A2
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA10E401E0
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:07:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F7D940BA3
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EaMwQMPF-IuO for <buildroot@buildroot.org>;
- Thu,  2 Apr 2026 19:07:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
- helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 09BA8400BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09BA8400BE
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 09BA8400BE
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:07:42 +0000 (UTC)
-Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id 8NOEwd5ee0dL08NOFwVKia; Thu, 02 Apr 2026 21:07:39 +0200
-Mime-Version: 1.0 (1.0)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TyDSeTtk3NPh for <buildroot@buildroot.org>;
+ Thu,  2 Apr 2026 19:12:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
+ helo=smtpcmd15176.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C361C40B9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C361C40B9E
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C361C40B9E
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:12:35 +0000 (UTC)
+Received: from [192.168.50.134] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id 8NSywGPvnwf0D8NSyww4L8; Thu, 02 Apr 2026 21:12:32 +0200
+Message-ID: <efae39d7-98ea-4bb1-9438-4ef52e2a551f@benettiengineering.com>
+Date: Thu, 2 Apr 2026 21:12:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260402180419.2780025-1-bernd@kuhls.net>
+Content-Language: en-US
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <bd057c4a-ad38-4d13-a3d0-090648529153@kuhls.net>
-Cc: Buildroot <buildroot@buildroot.org>
-Date: Thu, 2 Apr 2026 21:07:38 +0200
-Message-Id: <90567E24-F02A-4DBC-A9A3-4C12D40E2316@benettiengineering.com>
-References: <bd057c4a-ad38-4d13-a3d0-090648529153@kuhls.net>
-To: Bernd Kuhls <bernd@kuhls.net>
-X-Mailer: iPhone Mail (23E246)
-X-CMAE-Envelope: MS4xfFtXfFEHHsI0JuYGa42ruUZ/VA/uAfrkrwOqqGHpyKTtdB4xfMaPSJW+xPKFSXG1BCFfKpPli7rPCbnUe76nmlW/Irl/RcGjRyTXkwjWvRtODDqPichI
- oUkoWa7OnmMv1maY6HU9WCONtvL4UdoPu1w9Fo4wEZtb7j7aqjiPwy0LHqesfrVBvjMc/V6+OWA7xq9tvEt+lWO4gGjaxIZi7qgnrlmqm8cwVZmRE24LEB4t
- 9gpImIjcUAkLNZSM2JH7nQ==
+In-Reply-To: <20260402180419.2780025-1-bernd@kuhls.net>
+X-CMAE-Envelope: MS4xfAIG55LF++bbEZ0+b5kfzRU21Hv9J0utT6vw/EQGj4begHm8VZPrrpSKD0HFs1B6pg7DAbm3ccDCthDngxIJkL3G5Ra4D4+ClidtnxFRUqqMrdlWKVSI
+ o7YJ70wLh6XNWTrqZBlFdWs3d1TxrnGv1R1S3U+IPeEweWfGsMx8jZxV5+JxN7qJZ0Cq/5lovMIcwPttd6VHAEGNXow4yyryL8dfEMK0ns3tquc7YxiKKQky
+ UUxuZklD2WxSJKo44T0yuQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1775156859; bh=fP75W9GYQHJLnm+wwMRo97lRr5aj6HqYqNF5ffkeoyE=;
- h=Content-Type:Mime-Version:Subject:From:Date:To;
- b=QVbtAgds1W1SNxPGoI+JX6Ha4SCKxcxqXm/mKm2c5NqyQvQ6cVXerHrMLNCqM6DDi
- AmQ/TBQAerQVugL+wl7uklsjlMiNS7KHj9wybk8akehi3Thank08YbiurBI4vlllz1
- 60aAzF0u8wPegmit912ihPMXnmJQuDy8oIPwQ8WrpN3vQdH7+lrE+71xIO4g8HcCAd
- sdjKI+BU51WLlXPhcjYJe6KOgLnDpMPnDi8yHztrZUHkRf8DbYrHPRU97Pr4Wpoy9X
- 7lQm5Yyur4prbSz3mKxzCQVRbiL65Dy/qJ1Cn6nPiS+O94n0bG6vi3KnntltXJFr2x
- Qm2QbXCQt8QQw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1775157152; bh=fAArn8pSg7sJWMYXUMQUVJb2A9u3aEnYK5kk+JC/kYg=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=RdGfIOeHIWZaFll7lBQHETCq5J4kmKj0xFjR1jcZlBh4wKcznOSnIfONCB8ss55Lm
+ SdSlDlf//jKw/y2PxqQok/mAswDIHvmsb92q0fCStWWXQ3YcCs86ZGg+Zi+v0gtE3R
+ /6J37Wd9AcuGBkmyC3U75/L8i/F7ZU4KR36efe/Gf5x79VgBzH2Qs47qDXhs42l+8q
+ +Bm6fQVDGclTV8l+id7iSh00shihkz5+PIX+1D1VTbVZovBjnWnvESQVIYPANUAG5s
+ 5r7QXHabJccGV1Jvn7gIYPCP+BIEz2ekmRbyczwRwcBVwAnM4ybmEPayEHbD8ykv67
+ UVvl3aqOibAHQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=QVbtAgds
+ header.s=a1 header.b=RdGfIOeH
 Subject: Re: [Buildroot] [PATCH 1/1] package/harfbuzz: bump version to 14.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -92,28 +92,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQmVybmQsCgo+IElsIGdpb3JubyAyIGFwciAyMDI2LCBhbGxlIG9yZSAyMDo1MywgQmVybmQg
-S3VobHMgPGJlcm5kQGt1aGxzLm5ldD4gaGEgc2NyaXR0bzoKPiAKPiDvu79bVGhpcyBtYWlsIHdh
-cyBhbHNvIHBvc3RlZCB0byBnbWFuZS5jb21wLmxpYi51Y2xpYmMuYnVpbGRyb290Ll0KPiAKPiBB
-bSBUaHUsIDIgQXByIDIwMjYgMjA6NDc6MTYgKzAyMDAgc2NocmllYiBHaXVsaW8gQmVuZXR0aToK
-PiAKPj4gSGkgQmVybmQsCj4+IHNpbmNlIHRoaXMgaXMgYSBtYWpvciB2ZXJzaW9uIGNoYW5nZSBo
-YXZlIHlvdSBidWlsdCBoYXJkIGJ1enogd2l0aCBhbGwKPiBwYWNrYWdlcyB0aGF0IGRlcGVuZCBv
-biBpdCBhcyBJ4oCZdmUgYWx3YXlzIGRvbmUgaW4gdGhlIHBhc3Q/Cj4gCj4gSGkgR2l1bGlvLAo+
-IAo+IGJlY2F1c2UgdGhlIHJlbGVhc2Ugbm90ZXMgb25seSBhbm5vdW5jZXMgbmV3IEFQSSBhbmQg
-bm8gY2hhbmdlcyB0byBleGlzdGluZyBBUEkgSSBvbmx5IGJ1aWx0IG15IHVzdWFsIHBhbmdvL2Zm
-bXBlZy9saWJhc3Mva29kaSBkZWZjb25maWcgYW5kIHRoaXMgZmluaXNoZWQgd2l0aG91dCBhbnkg
-cHJvYmxlbXMuCgpPaCwgdGhpcyBtYWtlcyBzZW5zZQpNYW55IHllYXJzIGFnbyBJ4oCZdmUgYmVl
-biBhc2tlZChjYW7igJl0IGZpbmQgdGhlIGVtYWlsIGFueW1vcmUpIHRvIHRlc3QgYXBpLCBidXQg
-dGhlIG9uZSB3aG/igJlzIHdyaXR0ZW4gYXQgdGhhdCB0aW1lIG5ldmVyIHBvaW50ZWQgbWUgdG8g
-YnVpbGQgYWxsIHRoZSBwYWNrYWdlcywgdGhlbiBsYXRlciBvbiBJ4oCZdmUgc2VudCBwYXRjaGVz
-IHdpdGggYWxsIHBhY2thZ2VzIGJ1aWxkIHRlc3RlZCBhbmQgaXQgYmVjYW1lIGEgc3RhbmRhcmQg
-dG8gbWUuCgpTbyBpdCBzb3VuZHMgZ29vZCBhbmQgZWFzaWVyLgoKVGhhbmtzIGEgbG90IGZvciBj
-bGFyaWZ5aW5nIQoKQmVzdCByZWdhcmRzCkdpdWxpbwoKPiAKPiBSZWdhcmRzLCBCZXJuZAoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Bernd,
+
+On 02/04/2026 20:04, Bernd Kuhls wrote:
+> https://github.com/harfbuzz/harfbuzz/blob/14.0.0/NEWS
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+as discussed this major change has no API change compared to version 
+13.x.x so no need to build all packages that depend on harfbuzz.
+
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Best regards
+
+> ---
+>   package/harfbuzz/harfbuzz.hash | 4 ++--
+>   package/harfbuzz/harfbuzz.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+> index 8642387392..626ed7b7d4 100644
+> --- a/package/harfbuzz/harfbuzz.hash
+> +++ b/package/harfbuzz/harfbuzz.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/harfbuzz/harfbuzz/releases/tag/13.2.1
+> -sha256  6695da3eb7e1be0aa3092fe4d81433a33b47f4519259c759d729e3a9a55c1429  harfbuzz-13.2.1.tar.xz
+> +# From https://github.com/harfbuzz/harfbuzz/releases/tag/14.0.0
+> +sha256  d4aa312728136e3dc7c3cda47b871614ce0d12bbb19f9dcac2ea70de836dc307  harfbuzz-14.0.0.tar.xz
+>   # Locally computed
+>   sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> index df05596b1d..aef8681a13 100644
+> --- a/package/harfbuzz/harfbuzz.mk
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -HARFBUZZ_VERSION = 13.2.1
+> +HARFBUZZ_VERSION = 14.0.0
+>   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+>   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+>   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
