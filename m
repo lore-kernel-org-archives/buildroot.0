@@ -1,112 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 982A0CC6B3E
-	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 15:22:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CEACD6AAF5
+	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 16:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6B9E610CB;
-	Thu,  2 Apr 2026 15:22:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24CF380D6F;
+	Thu,  2 Apr 2026 16:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7g5Ry4YEgyJK; Thu,  2 Apr 2026 15:22:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wnr4XX5oyPvh; Thu,  2 Apr 2026 16:55:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85592610BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D9B080D49
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775143332;
-	bh=V4JYhsQJcY5hnEmnfqQpHX236j1qaEfQpztQcfh8B9Q=;
+	s=default; t=1775148944;
+	bh=XPYehUv/MTeQ87YZ237ASF1TdtGmVJK0eZbXokrZ6A0=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Efb79PaNoAqdqasn+RN3ygCEBxyM36VT0mq6XJCe3eA2voSf5XhmsCTPr5jgNSZ8C
-	 NWG/6CpCTRQvPh5g9oU9YSO1SI66NoCrMHUIGzbPf30fR0s5cVFtujOa8ioCm1xWsS
-	 fq0umBeK3B4nmi4Z/0rCB13OQYsN9Y8PCmghXpq7rjGFJriqGAuoGbRUreahH6naxw
-	 3IwqiLNxNoXE6gxJbm3Ddw2um7O2wCXmJ1TJ4Ldtfxg5D6IeRNmOOfNYnOS3MF0DRz
-	 WAXypcB8M7IF6QsFsXVRwCDda4pCoTYCF4GTi2yU1Me4ILnyDmKr4AVk82q38Jr/j+
-	 g0sUNtp3krFHg==
+	b=JnRCAyBT61WFOGSyT4MAgk8w8t4zDSz8C2gT2e/cANu0S1hrOxM6bsif/VgA/6pGb
+	 5anSrez+EVFYTbNGNxi7n4qKXeF0cpSA5pHoR+CvjVaZxu82qCGwRmupLMUL4YZcXY
+	 Y5kqfAWXI/kbPVLV2DXhKlMZdAuYj1VnRYNLY2F/DU2KRS++i1UPGemqoYLTyhMua9
+	 c8JQe1Vl2c6ZFhefNJqaeGOoyCHjOwGNd9Q2XvbuModxdulvaWhFR+AMjC4OwRqJKx
+	 zTWIKqXv/6fE83PMmTOkSi11dtutJJEUQzULyMs6Aeb2kTXPjwqgEyYrr5E1pf/gDt
+	 ZKWSvhj+ci/8g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85592610BA;
-	Thu,  2 Apr 2026 15:22:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D9B080D49;
+	Thu,  2 Apr 2026 16:55:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 96312196
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 01ED02E9
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 16:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70D94610BA
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBFF76080B
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 16:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qMUmvtkOSziJ for <buildroot@buildroot.org>;
- Thu,  2 Apr 2026 15:22:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC764610B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC764610B7
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
- [IPv6:2607:f8b0:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BC764610B7
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:10 +0000 (UTC)
-Received: by mail-pl1-x62e.google.com with SMTP id
- d9443c01a7336-2ab39b111b9so4350415ad.1
- for <buildroot@buildroot.org>; Thu, 02 Apr 2026 08:22:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775143330; x=1775748130;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IGnEYU7Zmii84kp/VAtD5r4smvfs+DxTv/hR/7ILA28=;
- b=SWdTVpaPhVY8+v4qevPSU7RKGiGys0OU9N5hFqTieMWgse14eJju81Zjy91kNSZBHb
- PavcnnGHHFNejvrmQLLN7Jb+ehuv4NBC7KcyY9kSp7AogOWKwAiU1xR1eNdM7+g5cFsJ
- R3ocnvZMCX3QZG5laXJnpE+4J0QRgXKb7eaDhK7Xt1wlmhpiX677M+QWJ9vcf9ksNJDd
- zf9bhAx3XItl5tH++9iXzgim6qP2FSzl4JnocEfsWDd8iRTGlAEPs5WNHBYWyhC6ORVB
- rF8jft64tOOv9owx/Ifs9tSD3jzgUhPhgUzAUtWMOjY1at+UKY1GeiRGxsnRrgiWabvD
- PvGQ==
-X-Gm-Message-State: AOJu0YxPK/ofciBMNRrWonOL/ago+jrvALsxA3qBqS5OzfMy41CPp5oi
- Dwr55GmzXZf6BdiYc8x5X0VeDEM45aAeia9o21H0LeknoHk2g8Mrhleh/WIBb64qyPk=
-X-Gm-Gg: AeBDieu4ZK7y0J1KtlWS9H2LJkNKRfWunImURC9gtwQdB2WyGnyj+K3XOmzg1Avx9SX
- DT9PoG2dsLwCm9tcHpXINhDcyZ2tiyeD5h3xHYX5rSkFmJVX8rGJCpdd82lwXu7SpNzNiODk6Lb
- LvkFmRgm2YrzdwlUvh6IDlHJtkQxVLNv5bMGXiCTIhZuzHv70HhTRQ0ceh0NLnFg1Z4F/2SkPZh
- SmOfqncENxbbwMLVLY6z1ENWw8l9Yljh0UDABaXFPeiBIsIUBRpg0R3HU8ONzkembpu+Ot1+GuI
- RTa4E+gPznuFPfX8LiUAS3S0vjo/aonyCPjPEj0vtQGLMtrgAchtOnXIXNhOEQ+p/lpBolV7bU/
- V0ZSHBWIQZQaObOwk0Yh46hBFPYfy7WSBEEettemysUY1TN7t40RY8VKnms0COhk5s0rb5uCJPd
- cBlGYz46V/2cCWOhvfgOr05jIX+ZpPnRcynHJuYnqdeAzs
-X-Received: by 2002:a17:903:38c4:b0:2ae:c5fc:b2ea with SMTP id
- d9443c01a7336-2b269c9b38cmr85460155ad.30.1775143329456; 
- Thu, 02 Apr 2026 08:22:09 -0700 (PDT)
-Received: from fedora ([2409:40e5:104b:2bf0:f192:27a:e37e:a94d])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2b27497c117sm30095475ad.40.2026.04.02.08.22.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Apr 2026 08:22:08 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ id YnHHshMyliPI for <buildroot@buildroot.org>;
+ Thu,  2 Apr 2026 16:55:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
+ helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A58FD6070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A58FD6070A
+Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A58FD6070A
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 16:55:39 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 8LKSwcowVrbJK8LKSwp0SI; Thu, 02 Apr 2026 18:55:36 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Thu,  2 Apr 2026 20:51:55 +0530
-Message-ID: <20260402152156.653017-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu,  2 Apr 2026 18:55:35 +0200
+Message-ID: <20260402165535.1464368-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1775143330; x=1775748130; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IGnEYU7Zmii84kp/VAtD5r4smvfs+DxTv/hR/7ILA28=;
- b=g87tyS7IfgthVybYxpRiKsSY7GRq0Vj4UHP+ewkYZZi7ULT+sBpEA+P4yEL69ioUGx
- HDCZgbXcqcoHkH1UhRwcunJJLMGi7Swq6+8vFQ3ntYEAaladPD/Up6rlOutXptyeGYlM
- lYW468dkqBLRZFJeeRwDNxsEngR+l9apuRrLHtSpYKZyolIfCAIJxz6ADez5GBQBMmnp
- gS3eAsIb7waDC/geihtHnvTUfvvWTaAK29TjJrvtGG1rTWdlYiyN+IzHs1l6jbWHHWO0
- WRriOXB3V8SdDOHUZUNuejDptboCulwYpwoeB9yU8YAFdbSMuyoy7Wm8LYIrXY840m24
- ZPbw==
+X-CMAE-Envelope: MS4xfPcwip41R8947ZDq6PQj9LOhXf9zdX0EGbTBiVS3ryVSZzCcYBIammKX5zZHee/4MV35ed7FD1BioMvzcL7U3IROHfSoCyIUncp7aPMCCCIEazOzLqO5
+ lz9xSca6rKOSNRqJ3gPvnwp1bE4eHnLKlB9Avxu/+tokX0VrPvogEtAOHui+cq1nH/J4cBCcC27gGRUIJt31yNuSRCX8ueiCjFUzXmeUowz81RjciihOkSDV
+ t/J4KVTm5kyhnOVKbzJXv2Kor96WtJnC/vgrc330vI8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1775148936; bh=CaCpwN9cWF7EkU0pBdEVUr+Ggb1yPGSJFM/BMKjxlBU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YH5C88IayzHBcGKIb9tFs983IsTMstTSj/r7+uuzsBIXmHHKc/Jw/A8I10VxuviEn
+ ssg0zbNPeoN38BTnPq6uE5caPUzRdlXQ7kjac+fBDo00zQLyUhQDbvb+jmckHtyHib
+ wBkM4jaGiinPXpt+c0i16tG5bg2D6hOHqCEXlGqiBA6Sw6vGFDtmdF9bLrq1CIs7uk
+ WGh6FOtaIaMy/3PG173ouZVA1Gg5GRK+AWTXWRE5QWZCj1gj3YNiqpYZGDryMaNIQW
+ 3X3ccJrjCKvNplKzjSvXpwe0QRWwt1kORK8zMHmq+NMM3LVjl9W8CShwFmn3HPEUrx
+ Dt/C607M7z+qw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=g87tyS7I
-Subject: [Buildroot] [PATCH] package/ncurses: improve EGREP detection in
- configure script
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=YH5C88Ia
+Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.18.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,81 +95,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building host-ncurses fails on systems where a non-standard 'ggrep'
-script is present in the PATH (e.g., from Android build tools).
-The ncurses configure script picks up 'ggrep' because it searches
-for it before 'grep'.
+Release notes:
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/notes.html
 
-The existing check for EGREP only verifies the exit code of:
-  echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/changelog.html
 
-The problematic 'ggrep' script returns 0 but does not process stdin
-correctly, causing it to be selected as a working EGREP. This leads
-to failures later when the script is used to extract version numbers
-from dist.mk, resulting in:
-  configure: error: Release major-version value is empty
+Fixes bugs:
+GL #5817
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5817
+GL #5800
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5800
+GL #5826
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5826
 
-Improve the check by verifying that the output of the test command
-matches the expected value 'a'. This ensures the selected tool
-is a functional grep.
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...-EGREP-detection-in-configure-script.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
-new file mode 100644
-index 0000000000..e43fd737cc
---- /dev/null
-+++ b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
-@@ -0,0 +1,43 @@
-+From 8fb8ef42710bec224ea4cd8940007d6c85268f0a Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Thu, 2 Apr 2026 20:33:10 +0530
-+Subject: [PATCH] Improve EGREP detection in configure script
-+
-+The ncurses configure script searches for ggrep before grep. To verify
-+if a found grep works as an extended grep (EGREP), it currently only
-+checks the exit code of the following command:
-+  echo a | $GREP -E '\''(a|b)'\'' >/dev/null 2>&1
-+
-+On systems where a tool or script named 'ggrep' is present in the PATH
-+but does not behave like a standard GNU grep (for example, a specialized
-+wrapper script that ignores stdin but returns an exit code of 0), the
-+configure script incorrectly identifies it as a working EGREP. This
-+leads to a failure later in the configuration process (e.g., "Release
-+major-version value is empty") because the tool fails to extract
-+information from source files like dist.mk.
-+
-+This patch improves the robustness of the check by verifying that the
-+output of the test command matches the expected value, ensuring that
-+the selected GREP actually processes input correctly.
-+
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ configure | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index 48ad381..ea8e4c4 100755
-+--- a/configure
-++++ b/configure
-+@@ -1238,7 +1238,7 @@ echo $ECHO_N "checking for egrep... $ECHO_C" >&6
-+ if test "${ac_cv_path_EGREP+set}" = set; then
-+   echo $ECHO_N "(cached) $ECHO_C" >&6
-+ else
-+-  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
-++  if test "`echo a | $GREP -E '(a|b)' 2>/dev/null`" = "a"
-+    then ac_cv_path_EGREP="$GREP -E"
-+    else
-+      for ac_prog in gegrep egrep
-+-- 
-+2.53.0
-+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 09d35a3698..7b268a49b4 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.47/bind-9.18.47.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.48/bind-9.18.48.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  9d544ba013decd1ee60e3c99d5548dd21aaaf5db96205dfc8623f39f061f14be  bind-9.18.47.tar.xz
++sha256  c742a69bff2561c23099d7c70c6984c145bcca1c1e3c67fac1f68a8132e8e7c5  bind-9.18.48.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b889f922b6..17ea50c5f4 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.18.47
++BIND_VERSION = 9.18.48
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
