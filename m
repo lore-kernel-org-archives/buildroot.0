@@ -1,85 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86C11D6AAF8
-	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 19:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99C6DD6AAF8
+	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 19:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B26C04117F;
-	Thu,  2 Apr 2026 19:19:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66EBF6075B;
+	Thu,  2 Apr 2026 19:21:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jd8ZNlxfPhd; Thu,  2 Apr 2026 19:19:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 58uEdQ03QZYm; Thu,  2 Apr 2026 19:21:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C0044114C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84B9A6076D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775157556;
-	bh=fQbhrYtwJVl+giyTXpUoOUmYbSTR/qTFWqRzyarx+mA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=aujTTGdyxM4yXyWBpyVAIW82w7ZzoXTv1Q63tFxk+Of1J4A1S44uUr0fjmDTBlAP4
-	 X+w7cybgN0yNZvgYflr49hxjJgSgoRkwpVXEsKyyf0OQsbT//sEOrGfi89Yoi099cA
-	 R/osjNHwPe+95R4hJSXQDVIQhC68FmPl1OwhSM5OZeHNfjFilhwO4Gx92x75QW3BVx
-	 TVRCoTq7bRM/F4UqZ/l2TutTueOaaABrmv1a/w1jv2rde7kSRjATc/ff2XHWw7S3D+
-	 65OE7F99zHGFg1lM81ItNQC5yEV+Swsk1Emm30EuDlNKoCcqbip6j0SL2BJ3blg6h9
-	 cw3K8ef9qJn+g==
+	s=default; t=1775157667;
+	bh=CdYhG2tyTdSG0AWXHhW6p1BWiYE86qOnJmM8K4MNDdE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=aJbbiasjryETso6sstbFXbnz67kGFpVYZZ2qsWsMpOjs1ImfKAV2yUbKesVsyayy9
+	 vD9k0bB6uxAfYlUfOyDCwyME7C4nv+TI7sSwto3kIg7XCsBBuL5n/8GK11SAOg3E8+
+	 BW2jxcCZ0C8vzx4sZVw1AfCe58r4O7y5S9AY63fvThP2jJk/vpjBK//99bLPygKRe3
+	 qigDa5MOTV+o9mY8BizJCTXso4CVZTk2Rmkd4+e9G7pYAKmO2+X3+b/GVI8udbVcMZ
+	 +8K35hP9xJ0nWiJ7xj4ftLKGYSJWZ6B/GmzKkxAxSzL6IwsDKyEMECQjwfgtSY8wU9
+	 1v4jB1WyA6B9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0044114C;
-	Thu,  2 Apr 2026 19:19:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 778EC2A2
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:19:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84B9A6076D;
+	Thu,  2 Apr 2026 19:21:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38BC32D3
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:21:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A46981B17
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:19:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A39D401E0
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:21:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K-eG10O6KBDF for <buildroot@buildroot.org>;
- Thu,  2 Apr 2026 19:19:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
- helo=smtpcmd15176.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9B5E081B3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B5E081B3E
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B5E081B3E
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:19:12 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 8NZNwGUWdwf0D8NZNww5W4; Thu, 02 Apr 2026 21:19:09 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id va98poJ1b4Wt for <buildroot@buildroot.org>;
+ Thu,  2 Apr 2026 19:21:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E09C400B3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E09C400B3
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 19:21:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3DEC7FF1A; Thu,  2 Apr 2026 19:21:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Thu,  2 Apr 2026 21:19:08 +0200
-Message-ID: <20260402191908.2125697-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfBhzHn4+BPabgl9sd4EwfAhMFyO1NCu8x1LK+PI8wAzdrAM7J2QkM8OqMqZVvN+hjkCCHikCBzPyDBUcZjQJ76Mhof2NmwNoMTu/vyQ0xwZGho5kj0PV
- eX1xVzFLXxesjqFSC/6gZ9rDlpOpVFCx/2Y5aVbw3eLqtSTGDn2lowlSA1bosJglVmbWqjRHYZMjiPcJ8RE0Jk8cd/6tgpH+pp+gdLPfEpQ7q28jb86Ftb0r
- VtMA+zc4zSTriO4TUvisoyC5nWiYe/ROBT8TfuCR4VFE9ot5zFX79gNmvR1C3lE4iBenU0iXnAi/sRFd7HCT/Q==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1775157549; bh=8iy2J47VEagAmsCExGS77CXwOcaPSLr8LlWdc5LPa34=;
- h=From:To:Subject:Date:MIME-Version;
- b=Y/RFb05Ve023YK6CXWg6xQS8n0UMCAfCPM+FE2xgTnXQbPKL/H1r9rNvKNdlHa7IK
- Bx1lZUFwITRln89GYCjst7IzlQuI+RkrfaiY0tN+xTbXJgEBFgi5JdN9BlV7jhd6nM
- +/ogBoJky2pgbb39SA3KJTNx1drwL6OwjfRGsLHzVys7Mf0x2OxHCQBc5aAmIr6AiT
- X2RPoqlU5ipBU9/UxaChdsm3HRrXGHDLHVGZPUXeEKvSKIrR0ShgwGno+1rZHmVxJv
- eNp8PEezosBMLqItpZWnujySULN9k4eiU84ijt01tXofESuNneBGQYA0ocHiWbnOlG
- 9nBDjJlNkYIYw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=Y/RFb05V
-Subject: [Buildroot] [PATCH] package/mongoose: bump to version 7.21
+Date: Thu, 2 Apr 2026 21:15:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5388405cfd6df463ec01643d371ec9eef95360a7
+X-Git-Newrev: f42f5f4dbcc21d3119799d61112fcb4de0d24a68
+X-Patchwork-Hint: ignore
+Message-Id: <20260402192104.A3DEC7FF1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: security bump to version
+ 9.18.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,46 +69,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f42f5f4dbcc21d3119799d61112fcb4de0d24a68
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
 Release notes:
-https://github.com/cesanta/mongoose/releases/tag/7.21
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/notes.html
+
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/changelog.html
+
+Fixes bugs:
+GL #5817
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5817
+GL #5800
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5800
+GL #5826
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5826
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mongoose/mongoose.hash | 4 ++--
- package/mongoose/mongoose.mk   | 2 +-
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 07c0fc68c1..556a438880 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ede2371ff4e41e95fd7b2de83a7df727388307a64d3706046ead320defe35e7e  mongoose-7.20.tar.gz
--sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
-+sha256  d4ddbd12c12f223abefcc0a74417a638ae5c118d7cf10ba546553c6b0e0b5ada  mongoose-7.21.tar.gz
-+sha256  f0d9cfd6f7d92f6ec061a5fb2882f67d2521a151bf09a637c33ca6181834b048  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 44de3fa1e0..432c20a54c 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 09d35a3698..7b268a49b4 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.47/bind-9.18.47.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.48/bind-9.18.48.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  9d544ba013decd1ee60e3c99d5548dd21aaaf5db96205dfc8623f39f061f14be  bind-9.18.47.tar.xz
++sha256  c742a69bff2561c23099d7c70c6984c145bcca1c1e3c67fac1f68a8132e8e7c5  bind-9.18.48.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b889f922b6..17ea50c5f4 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONGOOSE_VERSION = 7.20
-+MONGOOSE_VERSION = 7.21
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
--- 
-2.47.3
-
+-BIND_VERSION = 9.18.47
++BIND_VERSION = 9.18.48
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
