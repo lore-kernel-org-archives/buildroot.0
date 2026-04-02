@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD946D6AAF7
-	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 17:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA70D6AAF7
+	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 18:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AD6D80682;
-	Thu,  2 Apr 2026 17:59:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E264A40C35;
+	Thu,  2 Apr 2026 18:02:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oWm92ly8tp60; Thu,  2 Apr 2026 17:59:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nPW4KfymRN-F; Thu,  2 Apr 2026 18:02:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E5FF8069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAAA240C47
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775152793;
-	bh=zRRILSYnZ2RuMZ/+GRBnAGMiJTsT+1wRrE6vQkcG8mE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1775152935;
+	bh=29UwxvCWblasr4XXjMeChnvIR0NVNuT0TIefE7AvPZw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=P0ThlHRbX1FGk3gFDbi85BdxlPVtsmxEczYUB7pswjMnHtaMvjI7+yPeWF9Il6ZL3
-	 kLE1Wj18Hf40GWathmJtK40xrxv+c+Cb3QPVZHqaaXrTAvZbd+Vkt8MPQ71+6XRNAJ
-	 iTxJmzeKcShZxRssdAcfBYmKAiJ8HQLW5tVeAbPJqmhr4g9WNYjOqmxTfZOXf7XtRE
-	 t0il0q5+0Of+uoUwiDega4LxRiXcGzwzrnLDnqkxN01CjzoMePgPEXxjxR+rqZYys8
-	 RD3CtkdrkbiHEXu17QIwU4VoRvbf6odFUPAlkDJ2CrOfcDRx5VKqL2QCtAJVLNPOLT
-	 nCc5Bf605nlkw==
+	b=A2wjhBJYZdhFY4ano2t75Sw6Tb+yIXzwrk3bBf2vIRasbBH4tG0sczl3qlQjnnmvc
+	 ovJ2wjCKlDRZI9FYmpLxCT3pZj2zdEYF3N7IroqOstSWdjHLhWNUYIA2QnqUlyZqs9
+	 61YZIpwHGaA3kgwXGJVbA6Uj0F4m3813/27UYAHodq/YG6pht0DIPSTLDrYamihFyf
+	 TVWKw/68nYDxhnEhvsomI2RvFfvm4qUQ2QmmBw8qY/oR4wvxvzehqj9KDApEf2dlel
+	 /bYqSkymh0RJzkKZijZ7PosW8aXDQGTgZu7bpE3SRcMHEKEo2wTLaaTFFuBTPR1HvR
+	 VDN1oiE1dmMIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E5FF8069C;
-	Thu,  2 Apr 2026 17:59:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FE8B2CC
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 17:59:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAAA240C47;
+	Thu,  2 Apr 2026 18:02:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8AD082D3
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 18:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41A31607FE
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 17:59:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B2CD40C47
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 18:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SS7Sg512jhhG for <buildroot@buildroot.org>;
- Thu,  2 Apr 2026 17:59:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qkQeU9CR_vaS for <buildroot@buildroot.org>;
+ Thu,  2 Apr 2026 18:02:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2D227607B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D227607B5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E753B40C35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E753B40C35
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D227607B5
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 17:59:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E753B40C35
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 18:02:10 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a08f0.dip0.t-ipconnect.de [91.58.8.240])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DEC58A4C1889;
- Thu,  2 Apr 2026 19:59:48 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35860)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 107A8A4C32CE
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 20:02:09 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54696)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w8MKa-000000007m1-1QF9;
- Thu, 02 Apr 2026 17:59:48 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w8MMq-000000008Bn-1weP
+ for buildroot@buildroot.org; Thu, 02 Apr 2026 18:02:08 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Simon Dawson <spdawson@gmail.com>
-Date: Thu,  2 Apr 2026 19:59:48 +0200
-Message-ID: <20260402175948.2779682-1-bernd@kuhls.net>
+Date: Thu,  2 Apr 2026 20:02:08 +0200
+Message-ID: <20260402180208.2779866-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1775152788;
- bh=pyhNFVdwjkSL0gakvDEhPoFCZBcM/sBWXuV95OiX0tQ=;
- h=From:To:Cc:Subject:Date:From;
- b=Y11ZAQCcqdOHezqX9GTmduHIxqqxPtWUm+HtHZC2yPUf6xuOPczLqk+DJfdSQbLMQ
- 4BC2O67sGGKkW5Bpyd6wqa61nEHrWUGWPQQC2y1uwxbGPpjQFlfL170tgBPpSDaQ7Y
- 7ZBjDjvy1vd0dpHbm0It00VaRdg/6rUJpyODbglpUAgO1K8TkL8P7XHlkoSjbb8pxo
- jaR4ooP/oiRojvPJg/lWb45NSzciWajUNwglWgf7xGA2c+a6Uqmrq3uAtwFeSM9hCV
- YinoK/t1LIEQsLklTbi8UNcAweV8rwOZkOSOzDfr1LiLq+EsNbiWMv2RZ7WH8koMJV
- 00gu/UW71XTXg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202511301023; t=1775152929;
+ bh=nIFpkZLe5o/1IeRyT7Lf0nHJK0OXJZ+wQ/gxJh4C878=;
+ h=From:To:Subject:Date:From;
+ b=vD8s7j35GxdPXi5d9clLej+fbsJRxqM2YYW5MxkNvzIoInFBYpSKGcr9ShB2WKJCg
+ iPsu7Om02KUO27tZHsQxdf/TKdN4dUqB/kbhiTZRUhOJPFFQGzz4ZDFUG0id+EYhgK
+ 8ot4q1ZDWPFtQzrHqCwf4iMjRyzNDwrYYrM14fvCm9h56/P0qgmHPRPaQFeqPKjOGf
+ PERE3iYhd6DtdTpF2GeOswq3Ar8TlSWxGlEfvYjojt7bx+1mtKIUr4pstGQT/gjZu4
+ qodNTioHC/uyUkkRv6VL4aa1t8eMZtHLY6ekeXOqrBsMtAUjKfAtXaJbytCXm+nYne
+ OHB1fDwPflHCg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Y11ZAQCc
-Subject: [Buildroot] [PATCH 1/1] package/jansson: bump to version 2.15.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=vD8s7j35
+Subject: [Buildroot] [PATCH 1/1] package/igt-gpu-tools: bump version to 2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,43 +96,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/akheron/jansson/blob/v2.15.0/CHANGES
+https://lists.x.org/archives/xorg-announce/2026-March/003676.html
 
-Switched to sha256 tarball hash provided by upstream.
+Upstream added a dependency to pciutils:
+https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/a97925a6d7cac457a5d46020f38fbef59e74abc5
 
-Updated license hash due to upstream commit:
-https://github.com/akheron/jansson/commit/2297a2e320ebecc6dc98f7034a2f38509ad1d7f5
+Upstream replaced json-c with jansson library:
+https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/b24cdab174240399a6ac377dbeb7923d4f429680
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/jansson/jansson.hash | 6 +++---
- package/jansson/jansson.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/igt-gpu-tools/Config.in          | 1 +
+ package/igt-gpu-tools/igt-gpu-tools.hash | 6 +++---
+ package/igt-gpu-tools/igt-gpu-tools.mk   | 7 ++++---
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
-index 0d9dc7b5a5..747f9e4420 100644
---- a/package/jansson/jansson.hash
-+++ b/package/jansson/jansson.hash
-@@ -1,3 +1,3 @@
--# Locally calculated after checking pgp signature
--sha256  fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9  jansson-2.14.tar.bz2
--sha256  1fff7d37d22157bcd81ab53b6c54da755d7c2f868f15807d9bde920f10730da0  LICENSE
-+# From https://github.com/akheron/jansson/releases/tag/v2.15.0
-+sha256  a7eac7765000373165f9373eb748be039c10b2efc00be9af3467ec92357d8954  jansson-2.15.0.tar.bz2
-+sha256  150d90904cd8de73609bb177b42edd3867b07b4b7b786dbba319f30de39fcda2  LICENSE
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index 8efe28bf4a..e60bb1aab6 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
+diff --git a/package/igt-gpu-tools/Config.in b/package/igt-gpu-tools/Config.in
+index 87268969a1..00dc59a2ae 100644
+--- a/package/igt-gpu-tools/Config.in
++++ b/package/igt-gpu-tools/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_IGT_GPU_TOOLS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBPCIACCESS
++	select BR2_PACKAGE_PCIUTILS
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_PROCPS_NG
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/igt-gpu-tools/igt-gpu-tools.hash b/package/igt-gpu-tools/igt-gpu-tools.hash
+index b1899cd986..b66d856da9 100644
+--- a/package/igt-gpu-tools/igt-gpu-tools.hash
++++ b/package/igt-gpu-tools/igt-gpu-tools.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-December/003648.html
+-sha256  429f2578fb16cff7402e9beb325c5c267ad30a2b7b957343c77e8ea24af03887  igt-gpu-tools-2.3.tar.xz
+-sha512  669e5f124c1177ed58c43b8b9b945f6436fc37b1162b16bbd1db78c5e170c68be98cc3b08b5ecb438d1313722fee2ab8bba8ca86a971443401c2acc3f3ec68ff  igt-gpu-tools-2.3.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-March/003676.html
++sha256  a44b7d089a27555944d4cd5da372c9339501539e3cd2735bbdb30e0d802f1cbe  igt-gpu-tools-2.4.tar.xz
++sha512  3f8e8202e3a613faf077ecb3fcc6a13840a8df94f94cb7d3a7933e51888757ea22e4154f2e0f88b896583e23bc8fd472bd286a0b50630b8b5eeb13878a1a2d9f  igt-gpu-tools-2.4.tar.xz
+ 
+ # Hash for license file:
+ sha256  1b7e266857b05808660f42369a4a797459d7b7bec7245e378aa28a8db2f213da  COPYING
+diff --git a/package/igt-gpu-tools/igt-gpu-tools.mk b/package/igt-gpu-tools/igt-gpu-tools.mk
+index 85ed999ed4..6e6d4278f1 100644
+--- a/package/igt-gpu-tools/igt-gpu-tools.mk
++++ b/package/igt-gpu-tools/igt-gpu-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANSSON_VERSION = 2.14
-+JANSSON_VERSION = 2.15.0
- JANSSON_SOURCE = jansson-$(JANSSON_VERSION).tar.bz2
- JANSSON_SITE = \
- 	https://github.com/akheron/jansson/releases/download/v$(JANSSON_VERSION)
+-IGT_GPU_TOOLS_VERSION = 2.3
++IGT_GPU_TOOLS_VERSION = 2.4
+ IGT_GPU_TOOLS_SOURCE = igt-gpu-tools-$(IGT_GPU_TOOLS_VERSION).tar.xz
+ IGT_GPU_TOOLS_SITE = https://www.x.org/releases/individual/app
+ IGT_GPU_TOOLS_LICENSE = MIT
+@@ -18,6 +18,7 @@ IGT_GPU_TOOLS_DEPENDENCIES = \
+ 	libdrm \
+ 	libglib2 \
+ 	libpciaccess \
++	pciutils \
+ 	pixman \
+ 	procps-ng \
+ 	udev \
+@@ -44,9 +45,9 @@ ifeq ($(BR2_i386)$(BR2_x86_64)x$(BR2_RELRO_NONE),yx)
+ IGT_GPU_TOOLS_LDFLAGS = $(TARGET_LDFLAGS) -Wl,-z,lazy
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_JSON_C),y)
++ifeq ($(BR2_PACKAGE_JANSSON),y)
+ IGT_GPU_TOOLS_CONF_OPTS += -Drunner=enabled
+-IGT_GPU_TOOLS_DEPENDENCIES += json-c
++IGT_GPU_TOOLS_DEPENDENCIES += jansson
+ else
+ IGT_GPU_TOOLS_CONF_OPTS += -Drunner=disabled
+ endif
 -- 
 2.47.3
 
