@@ -4,116 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C56C8CC6B32
-	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 08:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 982A0CC6B3E
+	for <buildroot@archiver.kernel.org>; Thu,  2 Apr 2026 15:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78E7160E01;
-	Thu,  2 Apr 2026 08:31:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6B9E610CB;
+	Thu,  2 Apr 2026 15:22:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ULTfeNlt3kUT; Thu,  2 Apr 2026 08:31:56 +0000 (UTC)
+ id 7g5Ry4YEgyJK; Thu,  2 Apr 2026 15:22:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C64DD606D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85592610BA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775118716;
-	bh=RHRGtnMGbV/ZPMFGJl104deZBdDxKOD1LTNwvv9MGB8=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=bqBJOOijKo0KIZkgIVXJyvmlTDBfuz961Bq0TM2n+A/eYYVUkk7lNxtdNkJox81Oh
-	 zHfSHdhZi+qHh5pOSMl2e8IgOmKrslEPfltC++qxUJXqV6OUA3xo7eQy5Dz3IfgW2n
-	 YZ5xcN30teVxoaNQePmSw6tqhitDFvWO45tFDB0DNNfr0gFee9Xw8EQR6XRrUMF+fH
-	 01fxDa0RfU+chLjZ2id/CSRvK2BjmW4Wn0f1imVzzkMcANdbR+1C3zzDgrCGhT8epT
-	 noEKwpcXDK00Oyn2V01lNrP1cP9WhtH4+1mlUiVw9UyN6e5z1/PSE2kWkCusPfkuJP
-	 AR60G9x/WdbXw==
+	s=default; t=1775143332;
+	bh=V4JYhsQJcY5hnEmnfqQpHX236j1qaEfQpztQcfh8B9Q=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Efb79PaNoAqdqasn+RN3ygCEBxyM36VT0mq6XJCe3eA2voSf5XhmsCTPr5jgNSZ8C
+	 NWG/6CpCTRQvPh5g9oU9YSO1SI66NoCrMHUIGzbPf30fR0s5cVFtujOa8ioCm1xWsS
+	 fq0umBeK3B4nmi4Z/0rCB13OQYsN9Y8PCmghXpq7rjGFJriqGAuoGbRUreahH6naxw
+	 3IwqiLNxNoXE6gxJbm3Ddw2um7O2wCXmJ1TJ4Ldtfxg5D6IeRNmOOfNYnOS3MF0DRz
+	 WAXypcB8M7IF6QsFsXVRwCDda4pCoTYCF4GTi2yU1Me4ILnyDmKr4AVk82q38Jr/j+
+	 g0sUNtp3krFHg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C64DD606D7;
-	Thu,  2 Apr 2026 08:31:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9088F2A2
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 08:31:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85592610BA;
+	Thu,  2 Apr 2026 15:22:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96312196
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 76338813D8
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 08:31:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 70D94610BA
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2OW8H76Iosr for <buildroot@buildroot.org>;
- Thu,  2 Apr 2026 08:31:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qMUmvtkOSziJ for <buildroot@buildroot.org>;
+ Thu,  2 Apr 2026 15:22:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E45D2813CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E45D2813CF
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E45D2813CF
- for <buildroot@buildroot.org>; Thu,  2 Apr 2026 08:31:53 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-482f454be5bso17988005e9.0
- for <buildroot@buildroot.org>; Thu, 02 Apr 2026 01:31:53 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC764610B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC764610B7
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC764610B7
+ for <buildroot@buildroot.org>; Thu,  2 Apr 2026 15:22:10 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-2ab39b111b9so4350415ad.1
+ for <buildroot@buildroot.org>; Thu, 02 Apr 2026 08:22:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775118711; x=1775723511;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=/I9JeRArLjNqICEHgnV9Q1GMbLnuKc3u1G/eRXSiTMY=;
- b=aJKpNX22ff7AJ/9WVoI3DpXGxGbhZtiU0HpH+p8af9GPa7b1FNYzxeBItm7x32ZAXv
- BCR1woF17FdEKsilQ2p9g8w3pi6C6LJKsv1AoiyjU+2g58P0NBVtx5ARWmjFuDWV78Bz
- tDEzup8cgaI3lGLL5OikmhvB2U1Vcs4r0YHGm2loIsc1SH5OMoHK6wWcSnXM7mTcuoj9
- JXv9mR6SXHsvYqT9rcFeU1wVbbMwILdt5qdYDsNPBbszgKJNzB23KcG3kKr3TRJLtE3o
- UpA0nxuAo1VwqcTJ4CyV/VH3XIMq1uZ2NnEXoO7FeVmtftd4UbHTzKd0egcdyuhLGID+
- m+0A==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW3n8VGEZYaHUvDMtayec/6A8CmrjBKM8lon1ZnW9PSbFCNqOLcyBrk8o7+StN7ZEN/Db3f0r3j+UE=@buildroot.org
-X-Gm-Message-State: AOJu0Ywu24DB6z3i5kNVmGWidKKQugkvFyD1mt+fK4yw3gv/GIstymeJ
- bScPF5hU4SLiCZCv/F5+vCjOn8DVBflR7OPp4OZMUmS1qD1o3yKMgqJjMadMTymmc2x5NLAoo57
- UPyHwRGw=
-X-Gm-Gg: ATEYQzxtiRUdTlHEnSyzVexr89/eth4p6Ay8c+2knF4EU236Lj/WW6cuU5vD2b2L/v+
- BzPYDv3wx3LBZK3LcmFmvA/HL3itJ6AY6sN2BSIKuNzfUP0EI2BYTxMghzsTs138irtd8XadSfJ
- +5bZsFxZrGpPQONE1NkDLdtIbxW5E0n5hRo3/0r9bEDQ4mXPuo9wEvKLNLWIAZPaB+EJbV7bpek
- yLfzngBkYzuIF9o1U9z04SMskbhdnsoXX6otjdaH6NdcudzrUi7DE2YFJ+6spjN8Vfe1ipFgzM+
- yVelL3zyqePUwTUhkLKSYSmBmWYRpvf10VvJDO32ht8BVY+GkLot+qihVykV/rq25SoCDQSAtif
- F0o5PW2HWxgzqEds4qcUrnbyDV5jHPbqm5P8nkBuPHOu4av715cDfjTmINkmGhH7MuQi909IJKo
- P0f4jpQ1YFBCteC2Ff
-X-Received: by 2002:a05:600c:19d0:b0:477:9890:9ab8 with SMTP id
- 5b1f17b1804b1-4888e01f5c4mr21138145e9.3.1775118711273; 
- Thu, 02 Apr 2026 01:31:51 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4887e967badsm227314345e9.14.2026.04.02.01.31.50
+ d=1e100.net; s=20251104; t=1775143330; x=1775748130;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=IGnEYU7Zmii84kp/VAtD5r4smvfs+DxTv/hR/7ILA28=;
+ b=SWdTVpaPhVY8+v4qevPSU7RKGiGys0OU9N5hFqTieMWgse14eJju81Zjy91kNSZBHb
+ PavcnnGHHFNejvrmQLLN7Jb+ehuv4NBC7KcyY9kSp7AogOWKwAiU1xR1eNdM7+g5cFsJ
+ R3ocnvZMCX3QZG5laXJnpE+4J0QRgXKb7eaDhK7Xt1wlmhpiX677M+QWJ9vcf9ksNJDd
+ zf9bhAx3XItl5tH++9iXzgim6qP2FSzl4JnocEfsWDd8iRTGlAEPs5WNHBYWyhC6ORVB
+ rF8jft64tOOv9owx/Ifs9tSD3jzgUhPhgUzAUtWMOjY1at+UKY1GeiRGxsnRrgiWabvD
+ PvGQ==
+X-Gm-Message-State: AOJu0YxPK/ofciBMNRrWonOL/ago+jrvALsxA3qBqS5OzfMy41CPp5oi
+ Dwr55GmzXZf6BdiYc8x5X0VeDEM45aAeia9o21H0LeknoHk2g8Mrhleh/WIBb64qyPk=
+X-Gm-Gg: AeBDieu4ZK7y0J1KtlWS9H2LJkNKRfWunImURC9gtwQdB2WyGnyj+K3XOmzg1Avx9SX
+ DT9PoG2dsLwCm9tcHpXINhDcyZ2tiyeD5h3xHYX5rSkFmJVX8rGJCpdd82lwXu7SpNzNiODk6Lb
+ LvkFmRgm2YrzdwlUvh6IDlHJtkQxVLNv5bMGXiCTIhZuzHv70HhTRQ0ceh0NLnFg1Z4F/2SkPZh
+ SmOfqncENxbbwMLVLY6z1ENWw8l9Yljh0UDABaXFPeiBIsIUBRpg0R3HU8ONzkembpu+Ot1+GuI
+ RTa4E+gPznuFPfX8LiUAS3S0vjo/aonyCPjPEj0vtQGLMtrgAchtOnXIXNhOEQ+p/lpBolV7bU/
+ V0ZSHBWIQZQaObOwk0Yh46hBFPYfy7WSBEEettemysUY1TN7t40RY8VKnms0COhk5s0rb5uCJPd
+ cBlGYz46V/2cCWOhvfgOr05jIX+ZpPnRcynHJuYnqdeAzs
+X-Received: by 2002:a17:903:38c4:b0:2ae:c5fc:b2ea with SMTP id
+ d9443c01a7336-2b269c9b38cmr85460155ad.30.1775143329456; 
+ Thu, 02 Apr 2026 08:22:09 -0700 (PDT)
+Received: from fedora ([2409:40e5:104b:2bf0:f192:27a:e37e:a94d])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2b27497c117sm30095475ad.40.2026.04.02.08.22.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Apr 2026 01:31:50 -0700 (PDT)
-To: Martin Willi <martin@strongswan.org>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu,  2 Apr 2026 10:31:49 +0200
-Message-ID: <20260402083150.168514-1-thomas.perale@mind.be>
+ Thu, 02 Apr 2026 08:22:08 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+To: buildroot@buildroot.org
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Thu,  2 Apr 2026 20:51:55 +0530
+Message-ID: <20260402152156.653017-1-chakrabortyshubham66@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <b195db8b73619949850e3d99f2282c3b4f69165f.camel@strongswan.org>
-References: <b195db8b73619949850e3d99f2282c3b4f69165f.camel@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775118711; x=1775723511; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/I9JeRArLjNqICEHgnV9Q1GMbLnuKc3u1G/eRXSiTMY=;
- b=SDpo1odTA2Y/zjQhz22TBqBcwbY+jswt9NS6ygSpZPQIo7bIvJk3ciXqt6T6raYpUj
- JQciXfWhPcvY6sWYa0DOqitYn6PeCIZuBZtFagChk1o8hFLvtaORFBhjVghlJ8VcH/ng
- wGq0oPM/SUbnJYdvmQgAS5W4mcskar5FoyrHp5cp4L7MXVVgmDmNQw9/v4bxcs9GA9FH
- AlSCSt+uTN0s2LFei9YW2MI8WQF/2bxZNGxa34qYhGbayyCvJLzWTAKZO4g1voQx8wJP
- NSE4JS99iipovZ1um3TeQURjNF+ZPac7SL0fPRxzmdJA/DMGWjzrmE31A4fY2AJkhB+f
- 0QtA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SDpo1odT
-Subject: Re: [Buildroot] [PATCH v3 3/5] utils/generate-cyclonedx: generate
- externalReferences with source-distribution
+ d=gmail.com; s=20251104; t=1775143330; x=1775748130; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=IGnEYU7Zmii84kp/VAtD5r4smvfs+DxTv/hR/7ILA28=;
+ b=g87tyS7IfgthVybYxpRiKsSY7GRq0Vj4UHP+ewkYZZi7ULT+sBpEA+P4yEL69ioUGx
+ HDCZgbXcqcoHkH1UhRwcunJJLMGi7Swq6+8vFQ3ntYEAaladPD/Up6rlOutXptyeGYlM
+ lYW468dkqBLRZFJeeRwDNxsEngR+l9apuRrLHtSpYKZyolIfCAIJxz6ADez5GBQBMmnp
+ gS3eAsIb7waDC/geihtHnvTUfvvWTaAK29TjJrvtGG1rTWdlYiyN+IzHs1l6jbWHHWO0
+ WRriOXB3V8SdDOHUZUNuejDptboCulwYpwoeB9yU8YAFdbSMuyoy7Wm8LYIrXY840m24
+ ZPbw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=g87tyS7I
+Subject: [Buildroot] [PATCH] package/ncurses: improve EGREP detection in
+ configure script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,50 +118,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTWFydGluLAoKVGhpcyB3YXMgYW4gb3BlbiBxdWVzdGlvbiwgdGhhdCB3ZSBjYW4gZXhwbG9y
-ZSBpbiB0aGUgZnV0dXJlLiBGb3IgbWUgSSB0aGluawp0aGlzIHBhdGNoIGlzIG9rIHRvIGJlIGFw
-cGxpZWQgb3RoZXJ3aXNlLgoKSW4gcmVwbHkgb2Y6Cj4gSGkgVGhvbWFzLAo+IAo+IFRoYW5rcyBm
-b3IgeW91ciByZXZpZXcuCj4gCj4gPiA+IElmIGEgaHR0cCBvciBodHRwcyBzb3VyY2UgZG93bmxv
-YWQgVVJJIGlzIGF2YWlsYWJsZSBmcm9tIHNob3ctaW5mbywKPiA+ID4gZXh0cmFjdCBpdCBhbmQg
-aW5jbHVkZSBpdCBhcyBhbiBleHRlcm5hbFJlZmVyZW5jZSBvZiB0eXBlCj4gPiA+ICJzb3VyY2Ut
-ZGlzdHJpYnV0aW9uIiBpbiB0aGUgQ3ljbG9uZURYIG91dHB1dC4KPiAKPiA+IFdoYXQgYWJvdXQg
-J2dpdCcgcmVwb3MgPyBJZiBJIHVuZGVyc3RhbmQgY29ycmVjdGx5IFVSSSBzdWNoIGFzOgo+ID4g
-Cj4gPiBgYGAKPiA+IGdpdCtodHRwczovL2dpdGh1Yi5jb20vY29udGFpbmVycy9hYXJkdmFyay1k
-bnMKPiA+IGBgYAo+ID4gCj4gPiBXb24ndCBiZSBwYXJ0IG9mIHRoZSAnc291cmNlLWRpc3RyaWJ1
-dGlvbicuIFdoaWNoIGxvb2tzIHRvIG1ha2Ugc2Vuc2UKPiA+IGluIHJlZ2FyZCBvZiB0aGUgQ0RY
-IHNwZWMuIENvdWxkIHdlIHVzZSBtYXliZSB0aGUgImRpc3RyaWJ1dGlvbiIKPiA+IHByb3BlcnR5
-IGZvciB0aG9zZSA/IERvZXMgaXQgbWFrZSBzZW5zZSA/Cj4gPiAKPiA+IGh0dHBzOi8vY3ljbG9u
-ZWR4Lm9yZy91c2UtY2FzZXMvZXh0ZXJuYWwtcmVzb3VyY2UtbGlua3MvCj4gCj4gSXQgbWFrZXMg
-c2Vuc2UsIHllcywgYnV0IHRoZXJlIGFyZSBzb21lIHF1ZXN0aW9ucyB0aGF0IGFyaXNlOgo+IAo+
-ICAqIFRoZXJlIGlzIGFsc28gYSAidmNzIiB0eXBlLCB3b3VsZCB0aGF0IG1hdGNoIGJldHRlciB0
-aGFuCj4gICAgImRpc3RyaWJ1dGlvbiI/CgpJbmRlZWQgaXQgbG9va3MgZXZlbiBiZXR0ZXIgc3Vp
-dGVkLiBJIGZpcnN0IHRob3VnaHQgaXQgd291bGQgdGhlIGFuIGlkZW50aWZpZXIKZm9yIHRoZSBW
-Q1MgYnV0IGFjY29yZGluZyB0byB0aGUgZm9sbG93aW5nIGV4YW1wbGUgdGhleSB1c2UgdGhlIHJl
-cG8gVVJMLgoKaHR0cHM6Ly9naXRodWIuY29tL0N5Y2xvbmVEWC9ib20tZXhhbXBsZXMvYmxvYi83
-ZDkxNzJkMDBjODhjMDVhOGYxY2NiOTA1ODlkMTExODcwZmM5ZDg2L1NCT00vbGFyYXZlbC03LjEy
-LjAvYm9tLjEuMy5qc29uI0wxMDkKCkxvb2tpbmcgYXQgdGhpcyBleGFtcGxlIG1ha2UgdGhlIGZy
-b250aWVyIGJldHdlZW4KImRpc3RyaWJ1dGlvbiIvInNvdXJjZS1kaXN0cmlidXRpb24iLyJ2c2Mi
-IGV2ZW4gbGVzcyBjbGVhciBhcyB0aGV5IHVzZSB0aGUKJ2Rpc3RyaWJ1dGlvbicgaWRlbnRpZmll
-ciB0byBwb2ludCB0byB0aGUgJ3ppcCcuLi4KCj4gICogVGhlcmUgYXJlIChhIGZldykgb3RoZXIg
-VkNTIHR5cGVzIGluIHVzZSwgc28gd2UgcHJvYmFibHkgc2hvdWxkIGRvCj4gICAgdGhpcyBmb3Ig
-c3ZuL2N2cy9oZy9ienIgYXMgd2VsbD8KClllcyBtYWtlIHNlbnNlLgoKPiAgKiBNb3N0IGdpdCBT
-SVRFcyB1c2UgaHR0cHM6Ly/CoFVSTHMuIEZyb20gdGhlIFVSTCBhbG9uZSwgaXQgbWF5IG5vdCBi
-ZQo+ICAgIG9idmlvdXMgdGhhdCB0aGlzIGlzIGFuIFVSTCBmb3IgYSBnaXQgcmVwb3NpdG9yeS4g
-U2hhbGwgd2UgYWRkIGEKPiAgICAiY29tbWVudCI/CgpTdXJlIGNvdWxkIGJlIHVzZWZ1bC4KCj4g
-ICogQWRkaW5nIGhhc2hlcyBmcm9tIC5oYXNoIGZpbGVzIHByb2JhYmx5IGRvZXMgbm90IG1ha2Ug
-c2Vuc2UsIGFzIGl0Cj4gICAgaXMgZm9yIGEgbG9jYWxseSBjb21wdXRlZCB0YXJiYWxsLCBub3Qg
-YSBnaXQgcmVmZXJlbmNlIG9yIHNvbWV0aGluZy4KPiAgICBXZSBwcm9iYWJseSBzaG91bGQganVz
-dCBub3QgYWRkIGhhc2hlcyBmb3IgcmVwb3NpdG9yeSByZWZlcmVuY2VzPwoKSWYgSSBsb29rIGF0
-IHRoZSAnYWFyZHZhcmstZG5zJyBvciAnbGlieG1scnBjJyBleGFtcGxlIHRoZXJlIGlzIHN0aWxs
-IGFuIGhhc2gKYXNzb2NpYXRlZCB0byBpdCB3b3VsZCBpdCBtYWtlIHNlbnNlIHRvIGFkZCB0aGVt
-IGFueXdheSA/CgpCZXN0IHJlZ2FyZHMsClBFUkFMRSBUaG9tYXMKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Building host-ncurses fails on systems where a non-standard 'ggrep'
+script is present in the PATH (e.g., from Android build tools).
+The ncurses configure script picks up 'ggrep' because it searches
+for it before 'grep'.
+
+The existing check for EGREP only verifies the exit code of:
+  echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+
+The problematic 'ggrep' script returns 0 but does not process stdin
+correctly, causing it to be selected as a working EGREP. This leads
+to failures later when the script is used to extract version numbers
+from dist.mk, resulting in:
+  configure: error: Release major-version value is empty
+
+Improve the check by verifying that the output of the test command
+matches the expected value 'a'. This ensures the selected tool
+is a functional grep.
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+---
+ ...-EGREP-detection-in-configure-script.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+
+diff --git a/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+new file mode 100644
+index 0000000000..e43fd737cc
+--- /dev/null
++++ b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+@@ -0,0 +1,43 @@
++From 8fb8ef42710bec224ea4cd8940007d6c85268f0a Mon Sep 17 00:00:00 2001
++From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
++Date: Thu, 2 Apr 2026 20:33:10 +0530
++Subject: [PATCH] Improve EGREP detection in configure script
++
++The ncurses configure script searches for ggrep before grep. To verify
++if a found grep works as an extended grep (EGREP), it currently only
++checks the exit code of the following command:
++  echo a | $GREP -E '\''(a|b)'\'' >/dev/null 2>&1
++
++On systems where a tool or script named 'ggrep' is present in the PATH
++but does not behave like a standard GNU grep (for example, a specialized
++wrapper script that ignores stdin but returns an exit code of 0), the
++configure script incorrectly identifies it as a working EGREP. This
++leads to a failure later in the configuration process (e.g., "Release
++major-version value is empty") because the tool fails to extract
++information from source files like dist.mk.
++
++This patch improves the robustness of the check by verifying that the
++output of the test command matches the expected value, ensuring that
++the selected GREP actually processes input correctly.
++
++Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index 48ad381..ea8e4c4 100755
++--- a/configure
+++++ b/configure
++@@ -1238,7 +1238,7 @@ echo $ECHO_N "checking for egrep... $ECHO_C" >&6
++ if test "${ac_cv_path_EGREP+set}" = set; then
++   echo $ECHO_N "(cached) $ECHO_C" >&6
++ else
++-  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+++  if test "`echo a | $GREP -E '(a|b)' 2>/dev/null`" = "a"
++    then ac_cv_path_EGREP="$GREP -E"
++    else
++      for ac_prog in gegrep egrep
++-- 
++2.53.0
++
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
