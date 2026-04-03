@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8820BE7E367
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E94FE7E369
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 297F4608B4;
-	Fri,  3 Apr 2026 10:27:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC8E060BB1;
+	Fri,  3 Apr 2026 10:27:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id taAq89vLm7Ik; Fri,  3 Apr 2026 10:27:03 +0000 (UTC)
+ id 3ku3UJgJ5D_b; Fri,  3 Apr 2026 10:27:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC5D760898
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01DCE60A55
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212023;
-	bh=lixbV8wsd7WeA6HdA7AElTvaj1Op9MvhKRatQia0Fd4=;
+	s=default; t=1775212025;
+	bh=tjA9GqFIOVdZmXkJRiVwHc36QHPMwnS4sXxHmxamZ6E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YHREjcVQFn1M80xekdX11cQoeUA95+czbLptHW5ldG5aDFTIRB14ZYWSc+7wtR31R
-	 9nnmMWPwTKeh3YIr23OIstzD4W+0D8dOWvhuqbVZdLEIrspZNDJZi8sCAJcBN2zi5k
-	 V35sgDOXzFGtx2BqBRvYbo7HlzoiedPyjYH1RxPiLoAR4ZsnlEwZo0ORJ0DqPu4jox
-	 2/QFRC2hChKwhe64OTPUcDdWcl5T1C4oNgr2MD5Otrk8cB7gLN+lDOS9rlbbnsNEfP
-	 1/GnqwjOXWaT6IDrh2Y+DX7kHjt1U3qfPwJUbPZCgE2CketO+IHagGhsLDGzeE1Sxu
-	 SLOAOhs0l0u+g==
+	b=bJ9MZbC/8g8y77E8gKC72kwZ6W77e2bDcI6X1Fa7QsHi50jtIn71W/VqxiExgbT+r
+	 y8wDTNdeeEm3ov0TMwx4WiJa/lxi7itgmXRCPEnmqsZJZ8JQrCd3vSAHwfCghLXWEC
+	 Oz+ZJXeGcZwMhMbt2GKU1j4MIjY4vLDlsM+CiJxVxetE3Zk2ZVDU5I8YzDUsdm32EG
+	 ehept74zHaly3yA0LFvnZxa2tL3wTAjy+eFask2s4w6yubXU2TMqOrRkcz5iRu5TaX
+	 ITBLrnXSfq/xDCthc+F/tT6a5AVBlUhtY27rk8g6vu9J+0HrKqmyWI1SWFyllH695z
+	 KWXJtJ7hdcFUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC5D760898;
-	Fri,  3 Apr 2026 10:27:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 95D231A9
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01DCE60A55;
+	Fri,  3 Apr 2026 10:27:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 406062CC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BCBC608A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 721E940055
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id asSqMvc8JfYd for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AIbasE6PrAmU for <buildroot@buildroot.org>;
  Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2488060891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6504040238
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2488060891
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6504040238
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A14D77FFAA; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
+ id E151780079; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 12:21:27 +0200
+Date: Fri, 3 Apr 2026 12:21:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a5e8381a3e701d93e94363e89b9a368f4eaf336f
-X-Git-Newrev: bc3bd08b601c07391d50c6deadbf6902c91a2059
+X-Git-Oldrev: 93666f7a6eade12dd49a9f356505ce498cd9e689
+X-Git-Newrev: 227e220be2aff7406040bf4166b2cca1f6c671b9
 X-Patchwork-Hint: ignore
-Message-Id: <20260403102656.A14D77FFAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk: bump to
- 22.8.1
+Message-Id: <20260403102656.E151780079@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: security
+ bump to version 9.18.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bc3bd08b601c07391d50c6deadbf6902c91a2059
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/227e220be2aff7406040bf4166b2cca1f6c671b9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-See here for Changes:
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.1.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.0.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.7.0.html
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.6.0.html
+Release notes:
+https://ftp.isc.org/isc/bind9/9.18.46/doc/arm/html/notes.html
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit 94a817a58909e1cfe0c1f63b63754079f1866523)
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.46/doc/arm/html/changelog.html
+
+Fixes bug:
+GL #5751
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5751
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 9702cf6ca3d55ba385f315b46def79ac2ffaece0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index c09a5bc183..12700dc38b 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asterisk-22.5.2.tar.gz
-+sha256  4f30af0695a0131fc091d85e7b91e22504609434b3fbd263898c7354d41959c9  asterisk-22.8.1.tar.gz
- 
- # Locally computed
- sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 0d40ebf2b4..e92ed55e03 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 2e6ab4e043..4671eab985 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.45/bind-9.18.45.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.46/bind-9.18.46.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  096ec94c10bc9d2ba686325660a615962d0fd6529429149acfcfb7daefaf2421  bind-9.18.45.tar.xz
++sha256  6b59f0de30c6901cce783007d06f7dd717ec3aa74b5bb5cc5159f93f0be4fc1d  bind-9.18.46.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 1b71bcbf66..e58dcda34d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 22.5.2
-+ASTERISK_VERSION = 22.8.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-BIND_VERSION = 9.18.45
++BIND_VERSION = 9.18.46
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
