@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D677EE7E366
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52D68E7E366
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BCCE81AF5;
-	Fri,  3 Apr 2026 10:27:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DB35608CE;
+	Fri,  3 Apr 2026 10:27:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0MmvCgEuzj2; Fri,  3 Apr 2026 10:27:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kDr7dXGibxIP; Fri,  3 Apr 2026 10:27:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBC7E81A58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B525D608A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212021;
-	bh=6Ma1NT5l7A+jiSTm06uxISSfyOtLOaE0k+H1+mu88MU=;
+	s=default; t=1775212020;
+	bh=wEdwrDSKvWItJe1FP51fOVu9vMBeToJLIm01L3YUVd4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AKhsUbi2OZBMv5to6V7bxbxJ1GNEt5uEd7Fq2RNBZrRfs+lzBVHkviDd94acV/h2k
-	 tLWRSo5LpTgLYRSO/rubgNmRCBOehS0OjcHS+BMaoYgqvEKJgcTYLcqJYtYRcL1Zm7
-	 L2GdF/oEDzOzvBeAWsP6brTdl4ukR8tau9icB0SlpahPf7dDK4GVtdfExlEqUefI2M
-	 7a2noTXbCKH5rtT9cffxEfftp/90JSZqwx9lxqCz5CtvaBWUcgHFazGBmg3vsQBEMc
-	 3H3Nidr0nh6crjcJxW3BsD5mGt0ww+Zn1y7nvMlHJvMlEREjlb9MEm+ZvHyT+Tt/eD
-	 bvyHyT+yXjCWA==
+	b=YjP2zkO1oJ5WQQB6McwePrhMVbrsFp2uJx14O58vX9C1VVbCMZYUbP+iHELGryqqY
+	 60aU+kSPM1zzrp3CjDd3lPhwMVUt3lTmz9PbABKBTZHExzb9qwqdVyx4JPIiWUZ0Rz
+	 4kSKyWCehFtJIc/JAkjZR19IjXGOYIgaoiiSC5eXNlBh3nryZrrMYgDjnrFFxVXLCU
+	 IdVsFSRNaakWTvHlxKtpZQot/sZpJ5L5441DV07Ka2Ja3A6Ik+h8lQ7WnuWt4ouE84
+	 1m/zgCoEJlypHEr4CZjbpgbiYgUvsAVimpdi7o22XLjaCKnE3dMmto5q2XUVBoXK0E
+	 6DRbKtIRstpFQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBC7E81A58;
-	Fri,  3 Apr 2026 10:27:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 80EFF399
+	by smtp3.osuosl.org (Postfix) with ESMTP id B525D608A6;
+	Fri,  3 Apr 2026 10:27:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7793F2D3
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 613BE817AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 698EE40E7E
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cRahtEyZoS3L for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nMIXdmM2waiI for <buildroot@buildroot.org>;
  Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 670888175F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE7040E7C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 670888175F
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABE7040E7C
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D90437FFF8; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
+ id 36ABF7FFAA; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 12:21:37 +0200
+Date: Fri, 3 Apr 2026 12:21:56 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 36bf173d217ce827777f5e21a2d252f21ba33f5d
-X-Git-Newrev: 93666f7a6eade12dd49a9f356505ce498cd9e689
+X-Git-Oldrev: dd3884b7360f610fb2e01ce690f344188bf48cd4
+X-Git-Newrev: 22eb284823338dd9cfbaf08c0a98943c482f21a8
 X-Patchwork-Hint: ignore
-Message-Id: <20260403102656.D90437FFF8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: bump
- version to 9.18.45
+Message-Id: <20260403102657.36ABF7FFAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/faketime: rebase
+ patch on v0.9.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/93666f7a6eade12dd49a9f356505ce498cd9e689
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22eb284823338dd9cfbaf08c0a98943c482f21a8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.45/doc/arm/html/notes.html
+As of glibc 2.43, faketime build was broken in buildroot because of a
+missing const qualifier. A patch was applied to it in master to fix this
+issue.
+Sadly, due to a difference in faketime version between master (v0.9.12) and
+2025.02.x (v0.9.10), the patch didn't apply properly in 2025.02.x.
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.45/doc/arm/html/changelog.html
+Rebase the faketime patch on v0.9.10.
+Fixes:
+https://autobuild.buildroot.org/results/761/761250e8cbb2602abdc7752d182a44b6f7de5e11
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: fix signature url in license hash file comment]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f0d13085291aebd484eb8ca653a9674a3c1de00c)
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...onst-qualifiers-to-fix-build-with-ISO-C23.patch | 23 ++++++++--------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index aaf3519ced..2e6ab4e043 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
+index ce84d40699..c889dfae29 100644
+--- a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
++++ b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
 @@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.45/bind-9.18.45.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d  bind-9.18.44.tar.xz
-+sha256  096ec94c10bc9d2ba686325660a615962d0fd6529429149acfcfb7daefaf2421  bind-9.18.45.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 041541b037..1b71bcbf66 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-From dbe865dfdba0145d993d70b7fd4ec88b2f47554b Mon Sep 17 00:00:00 2001
++From 1f4f260977a7fcd09fb71b83ee64c4d87b868441 Mon Sep 17 00:00:00 2001
+ From: Tomas Korbar <tkorbar@redhat.com>
+ Date: Mon, 15 Dec 2025 11:03:21 +0100
+ Subject: [PATCH] Add const qualifiers to fix build with ISO C23
+@@ -8,15 +8,17 @@ Fix https://github.com/wolfcw/libfaketime/issues/524
+ Upstream: https://github.com/wolfcw/libfaketime/commit/dbe865dfdba0145d993d70b7fd4ec88b2f47554b
  
--BIND_VERSION = 9.18.44
-+BIND_VERSION = 9.18.45
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Thomas: Rebased for version v0.9.10]
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+ ---
+- src/libfaketime.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/libfaketime.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/src/libfaketime.c b/src/libfaketime.c
+-index ef1dca9..02839c8 100644
++index e632395..955cf3c 100644
+ --- a/src/libfaketime.c
+ +++ b/src/libfaketime.c
+-@@ -2666,7 +2666,7 @@ int timespec_get(struct timespec *ts, int base)
++@@ -2365,7 +2365,7 @@ int timespec_get(struct timespec *ts, int base)
+  static void parse_ft_string(const char *user_faked_time)
+  {
+    struct tm user_faked_time_tm;
+@@ -25,15 +27,6 @@ index ef1dca9..02839c8 100644
+    char * nstime_str;
+  
+    if (!strncmp(user_faked_time, user_faked_time_saved, BUFFERLEN))
+-@@ -3338,7 +3338,7 @@ static void prepare_config_contents(char *contents)
+- bool str_array_contains(const char *haystack, const char *needle)
+- {
+-   size_t needle_len = strlen(needle);
+--  char *pos = strstr(haystack, needle);
+-+  const char *pos = strstr(haystack, needle);
+-   while (pos) {
+-     if (pos == haystack || *(pos - 1) == ',') {
+-       char nextc = *(pos + needle_len);
+ -- 
+-2.47.3
++2.53.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
