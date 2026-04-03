@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6008BE8537A
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF65E8537A
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2315D608F7;
-	Fri,  3 Apr 2026 17:32:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB6041234;
+	Fri,  3 Apr 2026 17:32:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zytnP9fM1Y_J; Fri,  3 Apr 2026 17:32:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WwLLSAwlFqZJ; Fri,  3 Apr 2026 17:32:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46CBA60E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AC7D410E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775237534;
-	bh=4LQr4N4o/NqKwCOs2dUQ9OvB8uDthSJ4n+KJSYT/X9w=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZAxCR42yXcCclcoh8Ar7OM7+UBXkhIM/rB8lxAzKRHvGd9GACSj+SxdDmyFGchNZo
-	 ZHZi7WQoY5YgngTCp2GLdxCYfefsjyrFDLD54X7QJ4rLlKiUd//MtUkzEDYVUaCbG/
-	 VJKHtl7QCaK2JBtIaK4fwAZQH5h3LHNciXx2Fi251UIN5H1wwrL5a7kigkQ6IykHMK
-	 P2mXpoYRqsgAgziqJhC0fO032KksLRMlCRq9w/nLKFKFKm5YWrIysK/WS9vnW8MH6s
-	 THFfr+jc0ZVHEZ61ExdcpU6aDO9PtrgLqLcuxg7gGszBgHk40iIHiZyS5XnG5+HSkb
-	 guPjjuVUuY+fw==
+	s=default; t=1775237565;
+	bh=7vpmPe6aAn+8GVlT8dS7NjmmlLcX2qW96I1N8t6qUW0=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=i++CN90J+A8HF8rWWHtfbJsy0GehQRDv2KzxDerxVWMn3bcJtyZQoJyDIhkuLpV1P
+	 MetI/j/IRddjzy5dQmt1TstJA1QY2zYNkkoS1RnyklpbJK9rtLLJwhefRG5WmAE389
+	 vDdfrfndDnp2R313ZttiwkRCR4JEn7/qxo+akvplLPrEebTy0/7PZnUVs9r1FDoNMU
+	 SJ2fnOeDS8osFL10fp/HohQCa4ZUjl+a91qbyfNWaa3LgUUcFmDCngwtO5ons2vdO2
+	 cXwEuaZBJXGuXcmUawanBsm1vJpmYQJWdFaRfaEjzPYjQX/L/7cDR6rzcaxEg4yEP6
+	 +sZN7hLaxPZAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46CBA60E9C;
-	Fri,  3 Apr 2026 17:32:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC7D410E7;
+	Fri,  3 Apr 2026 17:32:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EF212CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 43DE71A9
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 304A48230C
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 352C382F31
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LmIyQSlLDhgJ for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 17:32:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED3D82305
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4ED3D82305
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBB98800EC; Fri,  3 Apr 2026 17:32:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 19:31:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 545de5af036737a5515b3f17259ee2a12f889db3
-X-Git-Newrev: d28468b921e1e86c0a46502d574e26e293844702
-X-Patchwork-Hint: ignore
-Message-Id: <20260403173211.BBB98800EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
- 21.3.3
+ id Fl-appuPO62e for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 17:32:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 553E682EE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 553E682EE1
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 553E682EE1
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 42E6E19F759;
+ Fri,  3 Apr 2026 19:32:40 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 03 Apr 2026 19:32:40 +0200
+MIME-Version: 1.0
+Date: Fri, 03 Apr 2026 19:32:40 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260402175848.2779597-1-bernd@kuhls.net>
+References: <20260402175848.2779597-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <4a54fed0a971e28ff5402ccc0263eb0d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1775237561;
+ bh=fRDY+ghGGFbWOBq+vgwrOwx8KXypw5d69PM+3CDnl+Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=tylzi5zdwpo/zrX6yOjq/mQz3e6wdaevenGtesckCQELt6TqLxTePt/ipdUsd1KAD
+ nxPkzfHlD0i/l9KsvJm6lP7w+VEC3Nk5VTnc/wQvYWGCBJP937Foak35/0RZrhPW2s
+ leSpyVLJbu5tsm+8Uq+5mw8f3nDcgVIxjKVsKRETo+kAah9HpxfQKmg60keJyA9idY
+ lpKxoJJIAqwDfTBzdH3UlV6cEavjjBkyD0liDn5Skvr1FUx8D+FQkEG4qx7H5DB9z+
+ IRU8HME2YfnBWImR0ndkxbmFsWiVya0wT99n5qnah0DkByezncESeo4NRdqbDl66+j
+ Mn7P6Tg+O18eQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tylzi5zd
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
+ to 21.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,46 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d28468b921e1e86c0a46502d574e26e293844702
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 02/04/2026 19:58, Bernd Kuhls wrote:
+> https://github.com/janbar/pvr.mythtv/blob/21.3.3-Omega/pvr.mythtv/changelog.txt
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/janbar/pvr.mythtv/blob/21.3.3-Omega/pvr.mythtv/changelog.txt
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index c187fb0054..dde8406aae 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  47d058a9bd960ccdc3352b2fac6f4aeb7587bad50cf1daee20d643c5e64deeb2  kodi-pvr-mythtv-21.2.15-Omega.tar.gz
-+sha256  8dbbc12e5b95adeda229a572e24202abda52284f59a96c30798d7d3a855f6a42  kodi-pvr-mythtv-21.3.3-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 9b1b336dfd..9ab39ac092 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_MYTHTV_VERSION = 21.2.15-Omega
-+KODI_PVR_MYTHTV_VERSION = 21.3.3-Omega
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
