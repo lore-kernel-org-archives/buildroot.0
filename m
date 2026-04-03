@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520DBE7E367
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 613A4E7E366
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 265E481B58;
-	Fri,  3 Apr 2026 10:28:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 372F0610EC;
+	Fri,  3 Apr 2026 10:28:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D6RbqPrIy3s0; Fri,  3 Apr 2026 10:27:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qz0HRBRZEN2F; Fri,  3 Apr 2026 10:28:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9F3281BBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12B4160A5A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212079;
-	bh=7UMcxeNjX3qlf3tIMN8LLiAhB41/kAlRQkXyo+nzP0A=;
+	s=default; t=1775212091;
+	bh=ROBKI90hKHDidv6g285D0pFjdLdx6ME0nWMc3s1h45E=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ECLlUOexjgOPBzsjhEGg1LOl4Yf+ZtfWuHp+tXrr4M/Rw6FApZ7uMZe4NSWS7RHWd
-	 Qx0tVRjf7UBHghZ8eezl20CWZHrtjLxhQlFF4KTbSQUeC7a4EkGmU+YdPItEUlNMMJ
-	 ih1o3a/orYXEQo1wdWTdXS0d6XmXZ6fyyeKo1oFe748rbV5+zBVF3Xlb0G/TCXyyJH
-	 1rV4UyB5bFEF1nJMrFDPaUxm4/bnAsJ2SSxRXv5N4hHSEicrSWil5Y11vlzP9oIYez
-	 2eFdzzXsmJ3tfAduIwdm7UfYdWJGmVcUWHysrQln1lS99zSvPY5GdTyrqnejUYXigg
-	 Ri6eU/2bkstGg==
+	b=sG1OBJxvbAeQM04YwpMpyoZQ6YVCbu8m8JVm8MsRycdO2TBwqKOzcw+jPV3Ko2Egi
+	 wfEn+xSF/3l0O2g+9KAxDq1ZY7i+FgH6/CAkgBq2ErANPeGDhhppQlP32qaYrTVmj3
+	 oKJe2yyEq3Pq4T8fCG4f1pf3F9OVWtX6AS7Rn/d8pcPapKIUPdn7DN04TkrrZrwZ4J
+	 0IQi9kTaq+ScFbebTXgBpqQ7l1A9BAqBzZJA+JEox7l4JzWfdQMJZuVCeBopehl90P
+	 gnwrBueAVVl+78ihIUhBE2Qaei4o7y5u5lWP8K9aUzhzFSPJslk4x3CKgEZEWId7mf
+	 rPO4ot1bvNJqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9F3281BBD;
-	Fri,  3 Apr 2026 10:27:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D4632CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12B4160A5A;
+	Fri,  3 Apr 2026 10:28:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ADCC12CC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 337934020D
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93E5440E60
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3qBaayuskqV for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 10:27:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1SbiHI0TJP9Z for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 10:28:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 14E0940055
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14E0940055
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 14E0940055
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:54 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-43cf8fe9c2aso978888f8f.2
- for <buildroot@buildroot.org>; Fri, 03 Apr 2026 03:27:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 86E4240E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86E4240E55
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 86E4240E55
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:08 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-488a041eae5so961715e9.1
+ for <buildroot@buildroot.org>; Fri, 03 Apr 2026 03:28:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775212073; x=1775816873;
+ d=1e100.net; s=20251104; t=1775212086; x=1775816886;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=eM1BdaX1pglAlAMYkU4IymabnJ89oNcHmlR2BZNaTeU=;
- b=HFX8z9iF7mnpCUqRiLuAEmDfpna3IlJWGqw/y5MJ7DJsPs1r0Tk455SM6bACW956Fj
- 39A7a7pW3y2Dycd94O0Gbk25ZDN2+2ZiAyLYaKIr9fOBOv5XNdVrLFrnKmePMJ0iZ6fW
- Wzl0lzjlMi2mitm6mOUxjavuKSemwdCL5Y+btsYKXLMsf4Z9cJpCLawPxGnp2f1i4AfO
- La7K1uh1bw1mb7pV0W8WpDKFVKSIqYNJIeENvw856ui/5g6F/+pJbIPqad/RSJs8kXwq
- rBbR6S2rmwxOXmr8CerNmR9fWG3crBy+/IOWho52WQckRozPnXHVi9IlMGLqyDrK8WB4
- wz0A==
+ bh=UgxTI0u3dUHTqVXkcQLRNf+pA6YlxzN9XIuwmQ8F7T4=;
+ b=OUIQoLscGXRr1n529wDVuW8hWlgaJwDD94xwfoepPYgJzLuMYd9YUBZfv8E1KtTw78
+ TabWiILi16pSFu/Q9JcfGH9x4AP6d1mYu5p+8a44aLef4fGtTBUhMLcpl3Qw2P6eeyoA
+ CPFldx0F9OkylMqnfQ8s5KMK3fmrpXVR7S37Zwkf8AtpLi+3w2SSwibRo1K9gVwERgIF
+ 94JxE8ri7tyjDCR6NYTeZD1Sn3gE1a290QGafBF+aQOEUvf8n1RKwR4hi8J4dcqZaJIr
+ fcBE1b/jAJfcuLRYEsweeNq7cM0MxRdKKLWGdsXZZT2oDquedA+ey5Gp49tcg4OEHQ7X
+ crHg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCW6ie5dO+Koq6M/Q85jLlpW1qtxcGETGCGcU3k+VRoZ5SZNDxzSRf4urmSXgdY9C5bxKaVgsYHqfec=@buildroot.org
-X-Gm-Message-State: AOJu0Yz0rQXgLmLnMC7BqOp2RIuYQ/btWSTClrjtiH7+WaRoqlc+5bIq
- 5hfnliOg5aW7TbjPduXyyvaRJPYInTJ/lj8SAVyBo9rgpbzPXuqtjehH+v0zpzO24OJcOewbnTk
- ycKBL+uM=
-X-Gm-Gg: AeBDieukQPVuBcAU0p3OHNPKy6Mjqz7BAUhf2W0xJmyPeQ8SUQKBKxUFZeTeiDpi4GJ
- ZceskykeGuWFBVCRTNOM0klc56vmKlalnCaGsM9m1q8GHJgnsj31pj3yTSXEcsrGjzw5kj+SBjw
- NbHs9rbIKPbBKciImkA0JYlhexdVMse+wBb5Q3kGhbqBtPagwvJppfQw3R6TAmKMRE4f8Hc89XE
- WcLDRSyRjEiwda4xKaUgjuhnHcgi/l1p53kBG7OVPDrFhGblTppouECk/ne+fZthb5IlcaE/PE5
- 3BQbpeAtsrEfI264sUyEExOE6EgH/qug7d8+SuphoibRkBjcap7XKpGViYcvh4KvrIligYcPT8T
- Lmm0sdL/m3bCWIRCoX3+Tm56DBqknX1LB8E9cBT1xSTgpW25D/B7slDPQUbpeuxQteu5Z0O6UUJ
- dDesIH39koZP5DQTJBuNTuQlddnMg=
-X-Received: by 2002:a05:6000:40cc:b0:43c:dc99:771c with SMTP id
- ffacd0b85a97d-43d292ff698mr3901940f8f.42.1775212072972; 
- Fri, 03 Apr 2026 03:27:52 -0700 (PDT)
+ AJvYcCVyVLHhimjbO5cI7R66huvio5qjGde8di1RcxWdjruWECsZ6wHS6ZWniw5r36rgDRkMpPd9mHpqW50=@buildroot.org
+X-Gm-Message-State: AOJu0YxyZEE3zNjjaMN2epJOKiaFnidMOF9nel0c6s0wsxT5Qg02S4Cl
+ inOsf+9M2JGC/KVFzPz+ApQBDCNLYdV05awAm7L6y1cqXZvchobMX29hSkMP1MjqMp3ohqdeMgS
+ 59RjKV2E=
+X-Gm-Gg: ATEYQzzVfWqrmil1brtwVvhKPuNVdGxlC803IW5TIeSzQ/Qeuy6p8iEiMVaFtJTqoUV
+ yWVcgCsl2xYytu/VlzNtjBTUyiIfGCdJKB/YcTOlsJg61Jqz6SNDyJCGi0Ht+xK1E8lxlsd0Db9
+ AT5W08SDL5V9KjiVluX+9kwqENsjxu5uahBOGu3pvRCsZac+h84gKMJeeN2na8XbIF985PpfVLd
+ ri5tM97sfKFJZw8xspPvPhJ10t8bJIOECGwUf6plFraT0nKGEuxTrhNVaHLrbRCrc+gOewd/ien
+ +2bLC7FIPAJcz+c8Ot06AVoMOuU//vRxBpDwSyXpbvFVZZ+irtF1Yk3jy5UzrIesBF0H/bRfDrw
+ 8CX2ewJxancSzSGFfCO6aTnACW1OW+DtlJ6OiL2T74Y3IpR8PgDovEEpYOinek+7GplTaSXa0VY
+ OsXhL9ZNcjUs1eOIbf8vDmNLmPy8E=
+X-Received: by 2002:a05:600c:630a:b0:485:2fe9:336f with SMTP id
+ 5b1f17b1804b1-488998e3cbemr38339745e9.30.1775212086443; 
+ Fri, 03 Apr 2026 03:28:06 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d1e4e52a0sm14557780f8f.30.2026.04.03.03.27.52
+ 5b1f17b1804b1-4887e829c43sm237621815e9.5.2026.04.03.03.28.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Apr 2026 03:27:52 -0700 (PDT)
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+ Fri, 03 Apr 2026 03:28:06 -0700 (PDT)
+To: Franciszek Stachura <fbstachura@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Apr 2026 12:27:52 +0200
-Message-ID: <20260403102752.210028-1-thomas.perale@mind.be>
+Date: Fri,  3 Apr 2026 12:28:05 +0200
+Message-ID: <20260403102805.210174-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260403-fix_faketime-v1-1-3e35e7b9c419@bootlin.com>
-References: <20260403-fix_faketime-v1-1-3e35e7b9c419@bootlin.com>
+In-Reply-To: <20260205184800.3308827-2-fbstachura@gmail.com>
+References: <20260205184800.3308827-2-fbstachura@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775212073; x=1775816873; darn=buildroot.org;
+ d=mind.be; s=google; t=1775212086; x=1775816886; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=eM1BdaX1pglAlAMYkU4IymabnJ89oNcHmlR2BZNaTeU=;
- b=DEYLEZH42J9s7//US2zNNUdjkKM7QfeIMWBQkKdr2okNqPGk8RP1xusfns7zJlUduv
- Gu1Yicdmz8eMrVhFo/NDGgWZD43MOz2SKrzlPCfCctEaga+WGScPyBcSLkfG1c86yse+
- vYXkVFP64+SDHjMUMs8RK4suyQLRFETjBC8OOrXFl3YgM2bqZe152I01QEz0ahWvXzCB
- vfs4qE2cCkDv+REYrC+RqUFJZoftGqiVYkcnyQHWMZYh1oga8nP3d7Yu+IO96Z+CnYM1
- IEgMMZHNYQKXgKOW5+GVzPqydPvxxDtPvKQEJwNJc4kMboSHp6awAPMSethBBhqGWOtG
- +zvQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=UgxTI0u3dUHTqVXkcQLRNf+pA6YlxzN9XIuwmQ8F7T4=;
+ b=D2mppVGMKPIAkCzsn4DkO/uv0qycnPH4X0XpXxPoBAttNbYD/SorqPDRT3nHefpPeZ
+ doivOTEaQbJSNFznPL4zuG1jmFBOH51Ok8M1yAMSF8bceta7p/FL9QmXbycjtQiu8By0
+ hI5ZBIahUm3LV2FNW4rxq6Xhg1QzKmWhlwtBxjYPcT3C/3dfuCxnkxlaekW4S2mPe5eM
+ +FifuNBBFLfM3CM9jc5OYZF8VXoYFzbuggks5kWhfEGUDPMZrjSCa9MjTN74tPfQHJ1L
+ Q7o9Zj1VOFJoNYrXG+/qq9vcRvfWO1AQC5A/lahyCPAznJSsVN3zYeWjM9rw5U1DCvn4
+ +OJA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DEYLEZH4
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/faketime: rebase patch on
- v0.9.10
+ header.a=rsa-sha256 header.s=google header.b=D2mppVGM
+Subject: Re: [Buildroot] [PATCH] support/testing: add memcached test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,81 +131,76 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> As of glibc 2.43, faketime build was broken in buildroot because of a
-> missing const qualifier. A patch was applied to it in master to fix this
-> issue.
-> Sadly, due to a difference in faketime version between master (v0.9.12) and
-> 2025.02.x (v0.9.10), the patch didn't apply properly in 2025.02.x.
+> Add a basic runtime test for memcached. The test starts memcached and
+> checks if it responds to a basic set/get request.
 > 
-> Rebase the faketime patch on v0.9.10.
-> Fixes:
-> https://autobuild.buildroot.org/results/761/761250e8cbb2602abdc7752d182a44b6f7de5e11
-> 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
 
-Applied to 2025.02.x. Thanks
+Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  ...onst-qualifiers-to-fix-build-with-ISO-C23.patch | 23 ++++++++--------------
->  1 file changed, 8 insertions(+), 15 deletions(-)
+>  DEVELOPERS                                    |  3 ++
+>  .../testing/tests/package/test_memcached.py   | 35 +++++++++++++++++++
+>  2 files changed, 38 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_memcached.py
 > 
-> diff --git a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-> index ce84d40699..c889dfae29 100644
-> --- a/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-> +++ b/package/faketime/0001-Add-const-qualifiers-to-fix-build-with-ISO-C23.patch
-> @@ -1,4 +1,4 @@
-> -From dbe865dfdba0145d993d70b7fd4ec88b2f47554b Mon Sep 17 00:00:00 2001
-> +From 1f4f260977a7fcd09fb71b83ee64c4d87b868441 Mon Sep 17 00:00:00 2001
->  From: Tomas Korbar <tkorbar@redhat.com>
->  Date: Mon, 15 Dec 2025 11:03:21 +0100
->  Subject: [PATCH] Add const qualifiers to fix build with ISO C23
-> @@ -8,15 +8,17 @@ Fix https://github.com/wolfcw/libfaketime/issues/524
->  Upstream: https://github.com/wolfcw/libfaketime/commit/dbe865dfdba0145d993d70b7fd4ec88b2f47554b
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 8290ccc281..f2f3bb8e44 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1160,6 +1160,9 @@ F:	package/tbb/
+>  N:	Francisco Gonzalez <gzmorell@gmail.com>
+>  F:	package/ser2net/
 >  
->  Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +[Thomas: Rebased for version v0.9.10]
-> +Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
->  ---
-> - src/libfaketime.c | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
-> + src/libfaketime.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
->  
->  diff --git a/src/libfaketime.c b/src/libfaketime.c
-> -index ef1dca9..02839c8 100644
-> +index e632395..955cf3c 100644
->  --- a/src/libfaketime.c
->  +++ b/src/libfaketime.c
-> -@@ -2666,7 +2666,7 @@ int timespec_get(struct timespec *ts, int base)
-> +@@ -2365,7 +2365,7 @@ int timespec_get(struct timespec *ts, int base)
->   static void parse_ft_string(const char *user_faked_time)
->   {
->     struct tm user_faked_time_tm;
-> @@ -25,15 +27,6 @@ index ef1dca9..02839c8 100644
->     char * nstime_str;
->   
->     if (!strncmp(user_faked_time, user_faked_time_saved, BUFFERLEN))
-> -@@ -3338,7 +3338,7 @@ static void prepare_config_contents(char *contents)
-> - bool str_array_contains(const char *haystack, const char *needle)
-> - {
-> -   size_t needle_len = strlen(needle);
-> --  char *pos = strstr(haystack, needle);
-> -+  const char *pos = strstr(haystack, needle);
-> -   while (pos) {
-> -     if (pos == haystack || *(pos - 1) == ',') {
-> -       char nextc = *(pos + needle_len);
->  -- 
-> -2.47.3
-> +2.53.0
->  
-> 
-> ---
-> base-commit: 894ab931e1edcb2171e6c09c8efc70dd546ab52e
-> change-id: 20260403-fix_faketime-2b9ddfbe192e
-> 
-> Best regards,
-> --  
-> Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> +N:	Franciszek Stachura <fbstachura@gmail.com>
+> +F:	support/testing/tests/package/test_memcached.py
+> +
+>  N:	Francois Dugast <francois.dugast.foss@gmail.com>
+>  F:	board/sipeed/licheepi_nano/
+>  F:	board/visionfive2/
+> diff --git a/support/testing/tests/package/test_memcached.py b/support/testing/tests/package/test_memcached.py
+> new file mode 100644
+> index 0000000000..2d00e47ab4
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_memcached.py
+> @@ -0,0 +1,35 @@
+> +import os
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestMemcached(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
+> +    BR2_TARGET_ROOTFS_CPIO=y
+> +    BR2_PACKAGE_MEMCACHED=y
+> +    BR2_PACKAGE_NETCAT=y
+> +    BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> +    """
+> +
+> +    def test_run(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +        output, exit_code = self.emulator.run("memcached -u root &")
+> +
+> +        set_key_cmd = "set test_key 0 100 10\\r\\ntest_value\\r\\nquit\\r\\n"
+> +        output, exit_code = self.emulator.run(
+> +            f"echo -ne '{set_key_cmd}' | nc localhost 11211"
+> +        )
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0].strip(), 'STORED')
+> +
+> +        get_key_cmd = "get test_key\\r\\nquit\\r\\n"
+> +        output, exit_code = self.emulator.run(
+> +            f"echo -ne '{get_key_cmd}' | nc localhost 11211"
+> +        )
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[2].strip(), 'test_value')
+> -- 
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
