@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6AADE7E366
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C74E7E366
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73A0C60A9D;
-	Fri,  3 Apr 2026 10:27:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE873608AF;
+	Fri,  3 Apr 2026 10:27:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3KBJUo9qwLnt; Fri,  3 Apr 2026 10:27:07 +0000 (UTC)
+ id F0lUP64EsIGP; Fri,  3 Apr 2026 10:27:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83FFE60E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21B38608B2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212027;
-	bh=VgFUZ1ayqSAm5d8RIyruLCqQPXAa7yDc226cmtB/Gls=;
+	s=default; t=1775212029;
+	bh=+TPdUf86vRPB5zyHjv5FxzzIGNzAtrTKuSMSc57CI1E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RjhieTGTC4CMA4iuRUb0OduEXkHUQa+O4+IQNcdC5E5c2AZ+YQVxK1kemVo0A3uO+
-	 Iko6Z1BdcMFEAwkzOHTRXdMXXJQ1LRd2Mb0s1Lhm476hrh0Av/uzAPbVufFscDZ67C
-	 koEK0YQ7K+gmAaDiMtZidinxfcm+ZVkrWW2xkRKi7S2voeHIfJ1pMDwzFJQg4SLDST
-	 wiR71VsJul7S8rg45Ho/UwwJ5AtZ4EBLD2HfgwomRvRYNBbvGQ7mOX3LeQTqQHsDO1
-	 wwliToTWahQX8YbE02y/J+ugBFX71wme2UspT/WoE7CCwLrvP24gohcSL++6+tXBlW
-	 ETy16XRUav2Pw==
+	b=Ho1X88Xze4njxADtsCnldg2Q7kyOe4ZdPxxPyhskOI1KwOyNQjANyeqHfL3huzrUn
+	 mXY9owrg541onFO2w6sVJ+DoTdo60tQZzI82vUX8+HtKut6G0rSXlsfWJYGOkWRYel
+	 o3RErXEVnT/zimsdCt8QTdyX3jgCUr/kUwJJWOINdrdum/6AAKx7QxqFNqKpMCoHBb
+	 /hBc2X294oX+ZKWppMT9yvON9xWqREDwWkBBlsNAJUUD2nohpbDVGetK76m91TUAO6
+	 VU4nzSUPODOJa158uOT2JA9PoPWgF7CuAUgUUmeqUeWFGXs3dfZkvjkGG8QFnTmPbB
+	 cf6qV9CLAhtbg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83FFE60E2E;
-	Fri,  3 Apr 2026 10:27:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BBB01A9
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21B38608B2;
+	Fri,  3 Apr 2026 10:27:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 573B42CC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89C8A60891
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C48F40238
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QL2fvYX-LXTI for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PcqqfBWntfZh for <buildroot@buildroot.org>;
  Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E2B260898
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54B864020D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E2B260898
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54B864020D
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF0417FFF8; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
+ id C720B7FFA9; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 12:21:29 +0200
+Date: Fri, 3 Apr 2026 12:21:33 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bc3bd08b601c07391d50c6deadbf6902c91a2059
-X-Git-Newrev: a0f011cac71f7a0cf96e1a6b2c31e6e8cdf0a602
+X-Git-Oldrev: 317fa104f15501227b22bad2dfb5925c0ef7f1b1
+X-Git-Newrev: 6b208dd1d21e9b2d3a2663c1bb1b2c9c62408073
 X-Patchwork-Hint: ignore
-Message-Id: <20260403102656.AF0417FFF8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk:
- security bump to 22.8.2
+Message-Id: <20260403102656.C720B7FFA9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ruby: security
+ bump to v3.4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,72 +77,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a0f011cac71f7a0cf96e1a6b2c31e6e8cdf0a602
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b208dd1d21e9b2d3a2663c1bb1b2c9c62408073
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-See here for detailed changelog:
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.8.2.html
+Read the announcements:
 
-Fixes the following CVEs:
+- https://www.ruby-lang.org/en/news/2025/10/07/ruby-3-4-7-released/
+- https://www.ruby-lang.org/en/news/2025/12/17/ruby-3-4-8-released/
+- https://www.ruby-lang.org/en/news/2026/03/11/ruby-3-4-9-released/
 
-CVE-2026-23739 / GHSA-85x7-54wr-vh42:
-Asterisk xml.c uses unsafe XML_PARSE_NOENT leading to potential
-XXE Injection
-https://github.com/asterisk/asterisk/security/advisories/GHSA-85x7-54wr-vh42
-https://www.cve.org/CVERecord?id=CVE-2026-23739
+This fixes a few vulnerabilities in bundled gems (ruby libraires):
 
-CVE-2026-23741 / GHSA-rvch-3jmx-3jf3:
-ast_coredumper running as root sources ast_debug_tools.conf from
-/etc/asterisk; potentially leading to privilege escalation
-https://github.com/asterisk/asterisk/security/advisories/GHSA-rvch-3jmx-3jf3
-https://www.cve.org/CVERecord?id=CVE-2026-23741
+- CVE-2025-27221:
+    In the URI gem before 1.0.3 for Ruby, the URI handling methods
+    (URI.join, URI#merge, URI#+) have an inadvertent leakage of
+    authentication credentials because userinfo is retained even after
+    changing the host.
+    https://www.cve.org/CVERecord?id=CVE-2025-27221
 
-CVE-2026-23738 / GHSA-v6hp-wh3r-cwxh:
-The Asterisk embedded web server's /httpstatus page echos user
-supplied values(cookie and query string) without sanitization
-https://github.com/asterisk/asterisk/security/advisories/GHSA-v6hp-wh3r-cwxh
-https://www.cve.org/CVERecord?id=CVE-2026-23738
+- CVE-2025-58767:
+    REXML is an XML toolkit for Ruby. The REXML gems from 3.3.3 to 3.4.1
+    has a DoS vulnerability when parsing XML containing multiple XML
+    declarations. If you need to parse untrusted XMLs, you may be impacted
+    to these vulnerabilities. The REXML gem 3.4.2 or later include the
+    patches to fix these vulnerabilities.
+    https://www.cve.org/CVERecord?id=CVE-2025-58767
 
-CVE-2026-23740 / GHSA-xpc6-x892-v83c:
-ast_coredumper runs as root, and writes gdb init file to world
-writeable folder; leading to potential privilege escalation
-https://github.com/asterisk/asterisk/security/advisories/GHSA-xpc6-x892-v83c
-https://www.cve.org/CVERecord?id=CVE-2026-23740
+- CVE-2025-61594:
+    URI is a module providing classes to handle Uniform Resource
+    Identifiers. In versions prior to 0.12.5, 0.13.3, and 1.0.4, a bypass
+    exists for the fix to CVE-2025-27221 that can expose user credentials.
+    When using the `+` operator to combine URIs, sensitive information
+    like passwords from the original URI can be leaked, violating RFC3986
+    and making applications vulnerable to credential exposure. Versions
+    0.12.5, 0.13.3, and 1.0.4 fix the issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-61594
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Julien: add CVE details in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 84ece21e8482c98fc4d21f3a791cb516118bc169)
+- CVE-2026-27820:
+	The zstream_buffer_ungets function prepends caller-provided bytes
+	ahead of previously produced output but fails to guarantee the backing
+	Ruby string has enough capacity before the memmove shifts the existing
+	data. This can lead to memory corruption when the buffer length exceeds
+	capacity.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 12700dc38b..6343b0bdf2 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 90faed4c32..e8bf51ea43 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  4f30af0695a0131fc091d85e7b91e22504609434b3fbd263898c7354d41959c9  asterisk-22.8.1.tar.gz
-+sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asterisk-22.8.2.tar.gz
+-# https://www.ruby-lang.org/en/news/2025/09/16/ruby-3-4-6-released/
+-sha512  29000b3396ab95fc2dc13d2d78441ff5c34258e5421115181c54b1b4d55d5c0d4f3d0c3cec6b32b9a1bb8de5c51b383fcad4369ec3fb244fd0ce182afbe79ba4  ruby-3.4.6.tar.xz
++# https://www.ruby-lang.org/en/news/2026/03/11/ruby-3-4-9-released/
++sha512  356fb47cc56f2d25198cb95253fc20ff7d9a6fd1fa53bc475e5c440012aebe27562537c399d271357235114ade263fd625029b66cb0f9b526f9c04f169fb9580  ruby-3.4.9.tar.xz
  
- # Locally computed
- sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index e92ed55e03..b09df98494 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
+ # License files, Locally calculated
+ sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index ffe42968b5..c56d2510be 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ASTERISK_VERSION = 22.8.1
-+ASTERISK_VERSION = 22.8.2
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ RUBY_VERSION_MAJOR = 3.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
+ RUBY_VERSION_EXT = 3.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
