@@ -4,107 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD8AD6AAFC
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 08:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BBD2E7E345
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 08:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CDBE40DAF;
-	Fri,  3 Apr 2026 08:27:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6D740CE5;
+	Fri,  3 Apr 2026 08:42:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XBgowSqOM_bd; Fri,  3 Apr 2026 08:26:59 +0000 (UTC)
+ id 7Zfe1Slauh_Q; Fri,  3 Apr 2026 08:42:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6796940DA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DF3440CE7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775204819;
-	bh=+US0ynJiDuKRPHhMJc3p6lgKZzVutQuAvfSNRsUhnw0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=PXT5P0ane6i14BcyLKqP5rWaBY/6GdVJo3fSilZZo4RqaVnKtMjlq+pnTnzSUTyO0
-	 6/6OydQg0gnWhtTOW6PYWhXBAqom2aPwgsD1x3XJ3GxF76B/AfeFvq4kld9RFeMIG2
-	 s2syLTu3AVNJ3TQwWrj0aEz5dg8xGbXas6aKOOPyaapTkE6FSrZWBFr3mh8FveJFdi
-	 mLgqhRfvongYD6MidleoEQVQ08XMAr6EM6nRGVP3yt5yLgXMoaSfUxHYMkwQP6MbHn
-	 07uQ+sh35KiRVcgn7ke8s5cELu0arUNChedoKypZgZnHTJ4YgdumcK0QKC7yEXKzcx
-	 K3Nsp2payGj4Q==
+	s=default; t=1775205749;
+	bh=w379+XbIsaBDNgQERWr3QPhg2kbS5wnNoRERaX0pnB8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ow5/eNziFKE/ASC6JvH2Zh2QjOmIzyqq8e/CREZIBy3OuaWBJnFUsA45ub9rpeX5c
+	 pIfAu3ioPBupH5Nu0tgQLg9e/2nAaF2d8EBA9FBkg4/zhMkOKR59GfVrRpJK3qBE1S
+	 81FJRGwyvSKKZIq55jL39Os3hnGwtaXiQ3UlcmbsJYOFslOKxVse6Z6YTb3thT9c2H
+	 hfasBTLmNCr/JLP0x120zE5Yj8RSdUoVT1+6P9a9+dZeFe5sPrynZEirzlVRdQkxbK
+	 aX1WJK71X1JzsJqF1KWNuTYG0TL9Ul6xEYhpn6+ARabcwZlSLkhPJ409KR4ZkwGgwi
+	 cZU6TLMraeN+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6796940DA6;
-	Fri,  3 Apr 2026 08:26:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id ADD492CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:26:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF3440CE7;
+	Fri,  3 Apr 2026 08:42:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0D852CC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9392C8148B
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:26:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE1CD8132A
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:42:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kJMOhpbQmsKG for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 08:26:57 +0000 (UTC)
+ id D4aDfyQ3i6Xe for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 08:42:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::532; helo=mail-pg1-x532.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E998981467
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E998981467
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
- [IPv6:2607:f8b0:4864:20::532])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E998981467
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:26:56 +0000 (UTC)
-Received: by mail-pg1-x532.google.com with SMTP id
- 41be03b00d2f7-c742824e1d3so590319a12.1
- for <buildroot@buildroot.org>; Fri, 03 Apr 2026 01:26:56 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B80D80F40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B80D80F40
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B80D80F40
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 08:42:24 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-43cfbd17589so1304588f8f.0
+ for <buildroot@buildroot.org>; Fri, 03 Apr 2026 01:42:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775204815; x=1775809615;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mRGoJPZiWI6zeqZnmHRKZQHio3t99b8GNZA5UEo+kh0=;
- b=NMyzVfRy+JFXyePe4i4yPPlq+VhyOTW94HEllnqyKOVqNjkU/hn4Q/xKe3G51MIRs0
- TL9IBAulyzaBU20skWcL1x8TQJSxSDv3AB/UgFlAUIPTeEOQPQb89Uy3vAuKbocbSwyu
- ynLglVOhc39RiC/P689DfhTUxuxIOGyihf0v5UJzjC5m3mVeMvuGPfSEr6Mu8A+R2HaP
- 5hpxJbM40RJoyc9DkGDUtZxOyw0ZSlEjN5BoBAXUlJjTpgXk8Opy9OJ9S4KzFTp9z1m9
- IarmNrHVSjappD4hzZx+TnGUuqaAEkD3p1uG+CwmMf9fD/CxW+VcfLqZ7R32qzxOQiw6
- bjew==
-X-Gm-Message-State: AOJu0YykhA8p7JciGYou0l+lCOBOuOUsv8gDEr+ueUa/uVLMg0b9Hv7X
- Nuwrpbjsg9N0/zL1VME5krQQdc65Rag/60W1lzX/ggydCFGrCm82n2lPt9By8Q==
-X-Gm-Gg: AeBDiev+RzZYTPJtOUVW5DOi3zzA+x9UD8neKUcu42FjBOaI1E7pKrRxqChhTVfhNW4
- HQJkxCfx46/teNsRWx/R2E47+DmUrS9qKjVCoEQvCCjillmNfU1IRRkYHab1IXM5X/XwewHneNL
- voB0eyb3wOdlQLivg395PaRmKuvhF4xC+7L3YJi0YKE+5z4oyE3wASXwqE+HG6sH8r/ZUAQWpZr
- 1TkPXSUa2NErSORJmLZvEG1ZPnw9fY97Q3XiMeTAm/OxGQdoPyakdZS8RQzHvGT3Zesno31IDzQ
- nO/y1G4bSeT80f/h/Xnud4w6/So0BkDoSQPL7Q62PZ4K4HPvC9a6DGWwUTMS1GsFKw8CfOH+7t0
- anKCFgM223Z1CEmz3YPHgjaWNdqwsGP9uUNvkKeNZt05hFpmQRoXG7Dz40OyXvYhoe32CqEvZB5
- vuGEueB2CUeAiBr6rfp4x6o5SJohvhIUyREap5MFXakJC4/Q==
-X-Received: by 2002:a17:903:4b47:b0:2ae:803e:6c0d with SMTP id
- d9443c01a7336-2b2816c291amr24662865ad.19.1775204815391; 
- Fri, 03 Apr 2026 01:26:55 -0700 (PDT)
-Received: from fedora ([2409:4064:2d9c:554:d9db:ca4d:ea7f:ffa9])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2b27472d233sm53129755ad.2.2026.04.03.01.26.52
+ d=1e100.net; s=20251104; t=1775205743; x=1775810543;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9+w1x+PkIWu8g+70ZUMmR18pyahDp04donL3DACjSHM=;
+ b=ll8yauXoNZUEibyvvb0Fh3xKDoNYnLQJ3j5IQBKv75yzaKaPM2UmWF/9It4IcOI0kR
+ btLfLcQ9FaVYJ1k6YGux8XzXC2Eoq+rANKwB41DNUmcziyetoI8A7g6pqnttp8X/XveW
+ IAqAAJOBG/9cJh5woGxUm45Eh8TsOSPQQiD4K54WrygoR6asN3mmgzyge3+BNHxpran+
+ UXhQq+3VsU8Xq2uP19Efi7duW9wr3EaCC52Hhizh1ypj7s3EL5dBnUDo3NLiAcsXV06s
+ KdcULxxDplNSH2ZZ7PExCUx3AAPeUVy8KnAIaBj92bGbrpfQXtjG3yf5JlT8DTU+DZj+
+ mg/w==
+X-Gm-Message-State: AOJu0YwZcYysBif93vjOJy/+psULcTMu1Yz2JC2GynWvRkVSHeIKJJsA
+ 9bhr5wE6VmcKL6RcZxE2tMtkJWNigOEWIpM8gabUO0NERfAi/qW33CuTQQdAsIjCVYPPkTZxan4
+ 1rR3fT7Q=
+X-Gm-Gg: AeBDievBYo83A73EiaO3VSAjPPlIGqpP0s3jETF3Ofbv0brL7fBeLKqQdBLXZkPjyr/
+ yie1gtYMYIiaf1TudpXwAYyKXXkz+H/6T6Ac8jSWNWx0qAesXCxfh6SGNDBnTH4KV2g+ImVbMdx
+ tqdnofL+S35nECozS0BOYcptfmV0Om/SegJpECn/STsJzSyq70z+zB+qL65e0eY5OROGavONKAz
+ em/YA/gsMJj8s48dyeyyz7zPe8s+Pbin4dFSyYqwc7XaTuhmlgROZQFab3Ka3i72RVwDiQ2MOGN
+ 7B4Dk3s2YiY7BGsSc5TBkUWiZPeTTS4tDjmJu9hM5GW8IBvj9/9hKZ2UqyLFfSEw1mXD3zgCWZz
+ p4Be/2Qf/YgM2WnzfPnQUEFGxn+8ROZJfydUr03B1Kt4dQmChU2CkDzwBatb/MuZvtW0QrZec+t
+ YNvq1bozxMhfRBLut5
+X-Received: by 2002:a05:6000:238a:b0:43b:3bed:f34 with SMTP id
+ ffacd0b85a97d-43d292e70a9mr3853352f8f.30.1775205742544; 
+ Fri, 03 Apr 2026 01:42:22 -0700 (PDT)
+Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43d1e4e52a0sm13936040f8f.30.2026.04.03.01.42.21
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Apr 2026 01:26:54 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Fri, 03 Apr 2026 01:42:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri,  3 Apr 2026 13:56:40 +0530
-Message-ID: <20260403082641.491778-1-chakrabortyshubham66@gmail.com>
+Date: Fri,  3 Apr 2026 10:42:21 +0200
+Message-ID: <20260403084221.35659-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1775204815; x=1775809615; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mRGoJPZiWI6zeqZnmHRKZQHio3t99b8GNZA5UEo+kh0=;
- b=BIACwxvmNZeQOwb2nksqPDkH39Z6dKT2J0CxCQWjTm5P9msc4bzzb455u8MUK/2OMb
- 707ls1ROrawsqF935/2l7iBOthn9qJDMuhPPcaIA2cx9a6hKU8D3LZrxQKlbzm00rXXE
- OhbT3LdyTocaeQkWPMNnXWG70iEJLOI7z6S/aaMDFTLlG0ovf57IufhHy9PYpnbYiO90
- S1RpideNfSqM2r/EmSxGi2bIpchfzWaWXngGZrbTUk79RRI4Uv7UKa8u19COu+1t6BTq
- cY0sjGBBT8ZTYrlFjKmH2E0hD7dcU3nrtvcUqXTyGv6TAnR9IgAFfUUREevki2Tqba44
- pTxg==
+ d=mind.be; s=google; t=1775205743; x=1775810543; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9+w1x+PkIWu8g+70ZUMmR18pyahDp04donL3DACjSHM=;
+ b=aquE97XwPgpAXYXvWpi0Z9GTXcY5cGIOacFlLZ9vLJqY8zKbx1WSDTQAaiElpqEQBn
+ qSU+GzgtB+lxnLc1pv8cEHAeBNhDrZOCPgA5InfF743d6Od/YKrZ96AxljaodJc3lMzP
+ eVkkP1WDiTjuBMO82omNY0KWyeJ5jYSbHhS0Wh9mJniW0g2ke7ApdcJa2fwmMRVlFbde
+ 2pHGuIGKRLylZwjDYBbdlACI5nNg7Z/5R/WpBNJHQTTPQy8nzhGkVLWC4UPokncA+cbd
+ oK0p165KZWLfsZY6XEFRXDWRiGeqW0arY14sAO3Xg0ZnxawWLLV2qwCYiY/oIJG9pbVC
+ aPFA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=BIACwxvm
-Subject: [Buildroot] [PATCH] package/perl: fix musl build issues
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=aquE97Xw
+Subject: [Buildroot] [PATCH 1/1] package/nghttp2: patch CVE-2026-27135
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,92 +117,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add _GNU_SOURCE to perl's target CFLAGS on musl so the build matches perl-cross feature detection for memrchr(). Without that, perl enables HAS_MEMRCHR during configure but later compiles op.c without a visible prototype and fails on an implicit declaration of memrchr.
+Fixes the following vulnerability:
 
-Also add a Buildroot patch for ext/re/re_top.h to rename additional regex helper symbols in static builds. This avoids duplicate symbol errors when both libperl.a and lib/auto/re/re.a export the same Perl_* regex helpers while linking the final static perl binary.
+- CVE-2026-27135:
+    nghttp2 is an implementation of the Hypertext Transfer Protocol
+    version 2 in C. Prior to version 1.68.1, the nghttp2 library stops
+    reading the incoming data when user facing public API
+    `nghttp2_session_terminate_session` or
+    `nghttp2_session_terminate_session2` is called by the application.
+    They might be called internally by the library when it detects the
+    situation that is subject to connection error. Due to the missing
+    internal state validation, the library keeps reading the rest of the
+    data after one of those APIs is called. Then receiving a malformed
+    frame that causes FRAME_SIZE_ERROR causes assertion failure. nghttp2
+    v1.68.1 adds missing state validation to avoid assertion failure. No
+    known workarounds are available.
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-27135
+  - https://github.com/nghttp2/nghttp2/commit/5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...name-additional-static-regex-symbols.patch | 35 +++++++++++++++++++
- package/perl/perl.mk                          | 10 +++++-
- 2 files changed, 44 insertions(+), 1 deletion(-)
- create mode 100644 package/perl/0001-ext-re-rename-additional-static-regex-symbols.patch
+ ...lidations-to-avoid-assertion-failure.patch | 105 ++++++++++++++++++
+ package/nghttp2/nghttp2.mk                    |   3 +
+ 2 files changed, 108 insertions(+)
+ create mode 100644 package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
 
-diff --git a/package/perl/0001-ext-re-rename-additional-static-regex-symbols.patch b/package/perl/0001-ext-re-rename-additional-static-regex-symbols.patch
+diff --git a/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch b/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
 new file mode 100644
-index 0000000000..1dc4c708e6
+index 0000000000..ef8b9a5a5d
 --- /dev/null
-+++ b/package/perl/0001-ext-re-rename-additional-static-regex-symbols.patch
-@@ -0,0 +1,35 @@
-+From 45895a24147d1fd8d07abfe83f5b0013138f018a Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Fri, 3 Apr 2026 13:41:15 +0530
-+Subject: [PATCH] ext/re: rename additional static regex symbols
++++ b/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
+@@ -0,0 +1,105 @@
++From 5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1 Mon Sep 17 00:00:00 2001
++From: Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
++Date: Wed, 18 Feb 2026 18:04:30 +0900
++Subject: [PATCH] Fix missing iframe->state validations to avoid assertion
++ failure
 +
++CVE: CVE-2026-27135
++Upstream: https://github.com/nghttp2/nghttp2/commit/5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ ext/re/re_top.h | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
++ lib/nghttp2_session.c | 32 ++++++++++++++++++++++++++++++++
++ 1 file changed, 32 insertions(+)
 +
-+diff --git a/ext/re/re_top.h b/ext/re/re_top.h
-+index 4766b10..8c6d755 100644
-+--- a/ext/re/re_top.h
-++++ b/ext/re/re_top.h
-+@@ -30,6 +30,18 @@
-+ #define Perl_reg_named_buff_scalar   my_reg_named_buff_scalar  
-+ #define Perl_reg_named_buff_all      my_reg_named_buff_all     
-+ #define Perl_reg_qr_package        my_reg_qr_package
-++#define Perl_reg_add_data            my_reg_add_data
-++#define Perl_release_RExC_state      my_release_RExC_state
-++#define Perl_populate_anyof_bitmap_from_invlist \
-++    my_populate_anyof_bitmap_from_invlist
-++#define Perl_populate_bitmap_from_invlist \
-++    my_populate_bitmap_from_invlist
-++#define Perl_populate_invlist_from_bitmap \
-++    my_populate_invlist_from_bitmap
-++#define Perl_add_above_Latin1_folds  my_add_above_Latin1_folds
-++#define Perl_set_ANYOF_arg           my_set_ANYOF_arg
-++#define Perl_get_ANYOFM_contents     my_get_ANYOFM_contents
-++#define Perl_get_ANYOFHbbm_contents  my_get_ANYOFHbbm_contents
++diff --git a/lib/nghttp2_session.c b/lib/nghttp2_session.c
++index bcea547343..0fbcc930b9 100644
++--- a/lib/nghttp2_session.c
+++++ b/lib/nghttp2_session.c
++@@ -5573,6 +5573,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++           return rv;
++         }
 + 
-+ /* We override these names because currently under static builds
-+  * we end up with confusion between the normal regex engine and
-+-- 
-+2.53.0
-+
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index c96eb44135..8bfc829d9a 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -45,6 +45,14 @@ ifeq ($(BR2_PACKAGE_GDBM),y)
- PERL_DEPENDENCIES += gdbm
- endif
+++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++          return (nghttp2_ssize)inlen;
+++        }
+++
++         on_begin_frame_called = 1;
++ 
++         rv = session_process_headers_frame(session);
++@@ -6041,6 +6045,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++           if (nghttp2_is_fatal(rv)) {
++             return rv;
++           }
+++
+++          if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++            return (nghttp2_ssize)inlen;
+++          }
++         }
++       }
++ 
++@@ -6293,6 +6301,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++           return rv;
++         }
++ 
+++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++          return (nghttp2_ssize)inlen;
+++        }
+++
++         session_inbound_frame_reset(session);
++ 
++         break;
++@@ -6599,6 +6611,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++         if (nghttp2_is_fatal(rv)) {
++           return rv;
++         }
+++
+++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++          return (nghttp2_ssize)inlen;
+++        }
++       } else {
++         iframe->state = NGHTTP2_IB_IGN_HEADER_BLOCK;
++       }
++@@ -6775,6 +6791,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++             rv = session->callbacks.on_data_chunk_recv_callback(
++               session, iframe->frame.hd.flags, iframe->frame.hd.stream_id,
++               in - readlen, (size_t)data_readlen, session->user_data);
+++            if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++              return (nghttp2_ssize)inlen;
+++            }
+++
++             if (rv == NGHTTP2_ERR_PAUSE) {
++               return (nghttp2_ssize)(in - first);
++             }
++@@ -6861,6 +6881,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++           return rv;
++         }
++ 
+++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++          return (nghttp2_ssize)inlen;
+++        }
+++
++         if (rv != 0) {
++           busy = 1;
++ 
++@@ -6879,6 +6903,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++         return rv;
++       }
++ 
+++      if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++        return (nghttp2_ssize)inlen;
+++      }
+++
++       session_inbound_frame_reset(session);
++ 
++       break;
++@@ -6907,6 +6935,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
++         return rv;
++       }
++ 
+++      if (iframe->state == NGHTTP2_IB_IGN_ALL) {
+++        return (nghttp2_ssize)inlen;
+++      }
+++
++       session_inbound_frame_reset(session);
++ 
++       break;
+diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
+index 98f837e28e..9e051d24ed 100644
+--- a/package/nghttp2/nghttp2.mk
++++ b/package/nghttp2/nghttp2.mk
+@@ -14,6 +14,9 @@ NGHTTP2_CPE_ID_VENDOR = nghttp2
+ NGHTTP2_DEPENDENCIES = host-pkgconf
+ NGHTTP2_CONF_OPTS = --enable-lib-only
  
-+PERL_CFLAGS = $(TARGET_CFLAGS)
++# 0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
++NGHTTP2_IGNORE_CVES += CVE-2026-27135
 +
-+# perl-cross detects memrchr() with _GNU_SOURCE enabled, but the actual perl
-+# build does not inherit that on musl unless we add it explicitly.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+PERL_CFLAGS += -D_GNU_SOURCE
-+endif
-+
- # We have to override LD, because an external multilib toolchain ld is not
- # wrapped to provide the required sysroot options.
- PERL_CONF_OPTS = \
-@@ -52,7 +60,7 @@ PERL_CONF_OPTS = \
- 	--target-tools-prefix=$(TARGET_CROSS) \
- 	--prefix=/usr \
- 	-Dld="$(TARGET_CC)" \
--	-Dccflags="$(TARGET_CFLAGS)" \
-+	-Dccflags="$(PERL_CFLAGS)" \
- 	-Dldflags="$(TARGET_LDFLAGS) -lm $(TARGET_NLS_LIBS)" \
- 	-Dmydomain="" \
- 	-Dmyhostname="noname" \
+ define NGHTTP2_INSTALL_CLEAN_HOOK
+ 	# Remove fetch-ocsp-response script unused by library
+ 	$(Q)$(RM) -rf $(TARGET_DIR)/usr/share/nghttp2
 -- 
 2.53.0
 
