@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D077E8537A
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73AFBE85388
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA1C38329D;
-	Fri,  3 Apr 2026 17:37:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EEF141204;
+	Fri,  3 Apr 2026 17:39:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UXhnu9KJsLW4; Fri,  3 Apr 2026 17:37:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kbHQcBdJUhcJ; Fri,  3 Apr 2026 17:39:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D809383163
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A33641201
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775237831;
-	bh=zePgUUs9f2+mgvoNGhrD68tZPuo/BDYHsWbUkJqC1Hk=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=L2ZDicw4BFvXJCyJzjE36uk7KC4DscIMc/Gypchv70DGR922CoLSa/5ntaVvYkviE
-	 Aqeot2iAJwU33Y16Xyty/hXLfrX2qbAq6vO3zGTAXqm8JW2n5pNZMs/LBhZVRGjKd3
-	 npZ87u4zTxbbBx24GxfObDT2Vyde2V0wd7Xzx4HsKTX8nTUMceWUm17R6ec9pGJYNG
-	 5ACGM2DCav01l8wfx24rHO8gYyAl0Ph7JFPnz47DeIkx9QqmKB9+Fr16fw+thcLT6E
-	 KTesXvJ9iKAu+lVomhj1GM2jQ4kZueMyOB89QVF9bpigKVCrR82eM9rpa/NsgTPbn9
-	 2Fzz669rnbZEA==
+	s=default; t=1775237952;
+	bh=n1vT8i71uR0NVz2q2U2CKaQxsz+EEEj+bjSh5iXidGo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Y9ilBcNcjOVwPuA0++jf7SctEAN7MUj3EWDtmvMEE5IHLqlR7R8KSCwXBj3c+tSHA
+	 KHDxA4Luw3HZn8ae1fnysjyCj7PoPPS+jyn1RYeflZ4NaRaqPhYZBrUBc2Ha8BvCpP
+	 GYn5O+cniiMAbrLhSQ58qD3JYoBry8m/l34RGwfdTs0zVHHrULX9q2YjCz3jYuDzYH
+	 k5QvP5UfnkFs5T4mPuc53K9fM0CnjcVMvD+HfrAhKkbGUESMF9DpzFHzDY7WETKNEK
+	 QzTxU8M6WODncgbZCVFQHhkRCaEw00CUt9ik6CBeXJmWPiwXeZq9p2TRDD4MlGKXM5
+	 0pZ4OthobbCoA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D809383163;
-	Fri,  3 Apr 2026 17:37:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BDFC1AF
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:37:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A33641201;
+	Fri,  3 Apr 2026 17:39:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C146D1AF
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61C4040226
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:37:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B313040226
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:39:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QnKbetLqshMb for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 17:37:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E9EEC40202
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9EEC40202
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E9EEC40202
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:37:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id EDEFA780514;
- Fri,  3 Apr 2026 19:37:05 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 03 Apr 2026 19:37:05 +0200
-MIME-Version: 1.0
-Date: Fri, 03 Apr 2026 19:37:05 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260402180208.2779866-1-bernd@kuhls.net>
-References: <20260402180208.2779866-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <b01f192a406fad22c4946d9838efed28@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775237827;
- bh=BwTUruz0Bw7i+nwlJhm5ck0IOiZbBnvCspI4ACKJ6Ig=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=VjZPgQB3Oh82bY5Z89RQeYUm+Vzt8T/92bUR8HFnvfwrhBFVnuFC+hP3q1OK/GGtB
- LncEB7zKEWksss/7I491gnwsq11kf1w5LaVGTzQZT7nbpOkdhllYgp4N3S/H+HoJWA
- jshy3ZOLpS1hSSkFeh4k3HKJLh+djMk4m65AhV6y/0ioysGRVL1n3/5kR3ij1kyzpN
- 2m3iS7bYiX3mL8I3Jg3sTUtSnPGJxgJze1xOKSPbPXG08zNC9zW97+pDBveucTaJ+p
- AGrMH7nW797LeQV5d5J4/Rc6bpYEgfFBNGL3QkSroOvtYaMQuN9mj6a+oWt3Za0q41
- kuDeaNShdQh1Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VjZPgQB3
-Subject: Re: [Buildroot] [PATCH 1/1] package/igt-gpu-tools: bump version to
- 2.4
+ id OdvwdWlJCi1T for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 17:39:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DAE40202
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2DAE40202
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:39:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4F1FF8013A; Fri,  3 Apr 2026 17:39:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 3 Apr 2026 19:37:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d2b2246517d089b15baef288c23bed026576b866
+X-Git-Newrev: 82186898102ea15b23b011ba39ddffe0ca4b4c20
+X-Patchwork-Hint: ignore
+Message-Id: <20260403173909.4F1FF8013A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
+ 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,23 +71,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/04/2026 20:02, Bernd Kuhls wrote:
-> https://lists.x.org/archives/xorg-announce/2026-March/003676.html
-> 
-> Upstream added a dependency to pciutils:
-> https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/a97925a6d7cac457a5d46020f38fbef59e74abc5
-> 
-> Upstream replaced json-c with jansson library:
-> https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/b24cdab174240399a6ac377dbeb7923d4f429680
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/82186898102ea15b23b011ba39ddffe0ca4b4c20
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://lists.gnu.org/archive/html/info-gnu/2026-04/msg00000.html
+
+Switched project URL to https.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libmicrohttpd/Config.in          | 2 +-
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 8477ef6668..4ce089bf6b 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBMICROHTTPD
+ 	  GNU libmicrohttpd is a small C library that makes it easy to
+ 	  run an HTTP server as part of another application.
+ 
+-	  http://www.gnu.org/software/libmicrohttpd/
++	  https://www.gnu.org/software/libmicrohttpd/
+ 
+ if BR2_PACKAGE_LIBMICROHTTPD
+ 
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 59c87a738d..bd5d0b3e8b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  df324fcd0834175dab07483133902d9774a605bfa298025f69883288fd20a8c7  libmicrohttpd-1.0.2.tar.gz
++sha256  7816b57aae199cf5c3645e8770e1be5f0a4dfafbcb24b3772173dc4ee634126a  libmicrohttpd-1.0.3.tar.gz
+ sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 335234c14b..b74a7a1338 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 1.0.2
++LIBMICROHTTPD_VERSION = 1.0.3
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_CPE_ID_VENDOR = gnu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
