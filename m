@@ -4,111 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A88E7E358
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 09:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3AB4E7E360
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 09:52:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7094081426;
-	Fri,  3 Apr 2026 09:16:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6533E8197D;
+	Fri,  3 Apr 2026 09:52:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b2Mlu23oDg44; Fri,  3 Apr 2026 09:16:33 +0000 (UTC)
+ id UBIYnki6r9B1; Fri,  3 Apr 2026 09:52:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A18E8142A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691C480F85
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775207793;
-	bh=NDXyh+v5eCky3ypj5wALjyeB9Ztv9FDd8IzT4sXK7Mg=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=dG2F/oLtPAJxK5nVho8AqYfxq6QRvP6z50K1YlmcNAkGo2iFWUskTSBYEXvXpjeW9
-	 AsnULTXXNAla47SLar6S7h0FK5Fy2+BIhudZVtJ0oVTx14A7KEDh8z91pN0rNDiRM6
-	 wHi7+lD/A3do2ktwV4/Lz2PH4Lrg6E/EiK1hbAg8gosh2BlxRYCI7353XepsTxQi6F
-	 3JsU/yfTOIxxpKWxm0snD4fK9WLqk5rnwXHVNvYmq67YxObobDWvlUwRT1NdUh15l+
-	 8SwvD7IY5VGwtHcTdANYyh4je7MTXzlvGA8FpeXDNYLNzuFGUVt0+RAtNgQ6hBYvqG
-	 0VRlVIoXRu6BQ==
+	s=default; t=1775209937;
+	bh=+g4MwqxzU8YwmpqjwGxo1OKDdsT7G3kfDtaPoyiRSLk=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=LBeOYvr+Og9ErMlQ5NX1mBuaINsb9rXjGpWuoDHM3KBLYRTzvITOEGmrWVchHZJw4
+	 yE1ccYyQ0iOp1iCIy74z/S3ZjInZw7PDCraN6KEoYESLVE3vsJhSr2tTjmB41P6mVe
+	 lGpIVUMkdc7J6ZKweVMag/YKQhsmNC9R7ssiUuL/DNvBBGwILEwJo9OJHFUwyawIHa
+	 /dYZ75ucqZUcw/7mddcXhxT8sMVHMwZlAqqKkMxcVxJbVkk/iipquRufz9gqvdbiv5
+	 JO5SC65/E+5rCak6z1XE/rHRLqK7JWLSP9wxLqGHsHZUh3r+IrhIPAINoU7LuDTV3H
+	 9PjtKjm36LOqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A18E8142A;
-	Fri,  3 Apr 2026 09:16:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 51B9F2CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:16:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 691C480F85;
+	Fri,  3 Apr 2026 09:52:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4174D1F3
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 374AC40055
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:16:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 261DB60882
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GHPV98lCCkhG for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 09:16:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C72A40028
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C72A40028
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C72A40028
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:16:30 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-43cfa33a983so1076591f8f.1
- for <buildroot@buildroot.org>; Fri, 03 Apr 2026 02:16:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775207788; x=1775812588;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=2RYCQ/hcrz5acXo2ZN+cJqyKdbnaqFFEdCn26LzRdK0=;
- b=aCHgS7nhT2Z2TvMxpnjlN90js2XK9klzGXo8nlGFbCmRIaH7RWPKaLyIlClW0tLktX
- 7O9p9LrmyOjEqC84vr0ILeVFkc3lFniyLrV1PhdvVBQI1NA8JagNDESbVbR9fg1mLOzh
- NxKZhLMtxXmFGUVukM4eQQcPOk2NngalY6YFqtfji/QV4kFPZswP+roTFj3BhGMtFgzj
- Vhy2Co6dffnGNzvEBBmz3hlZJfvmNnNucpkXGVoHrxmjnrpSBnICJa/Zql1kSLWeOfC3
- UMBrH9aD+RTiwjLlAO//Npu1vfKfo7y2RfzwFhMZdcBTz2IiuglI57xvrtHQqJ9783cr
- mGZw==
-X-Gm-Message-State: AOJu0Yzcsgq4TWxeWipeZFNcylENLZSxZgpRg/tjFBY3oDOZAd2r2WA9
- RGvfvX6Qm4ENON41vZxpF7xpI5czOfjcCohZgqybTfo1RHi7pVoeaA4USKbg1kTEjH+3iho4FLe
- oP6emcXA=
-X-Gm-Gg: AeBDievzuwnPXyGnSi9C84HV4ChsGC64mMDFhRf6zC9UUzAnGvMC0zQA7Oe6daKrPUZ
- S3dycf508nI9/MZGzLV3uuOlDKoaBu2U/8/r4aPjUrawYYuRkEw6lPEml3r6yjmbS5ZFDwYSlV6
- YVq8QHak5zPyCs57pgBAvHbWSEVMXqUDkS9TawGVkHbmmkKug1uAb+5zmt/IgVy4PiJgyfiDAjV
- A2O30DS4GGznGWxS501a6w6fUh3JAPBDBeb50fSWw4+fo+CCwON8hD41ZbKs1eEMHOAHcgglUdB
- ZeVXFjOJBNv1l7e7C1TXu4wp1LdwmSSRg4ybPs+CD+vpCEf8H+vF2VDufjbfDdYGrPYdUlkiFte
- FVlYp5hdW2r5vlU1iohu+8HIC1KSv7HQo1H9C70wrxgrGA9fEP2iIqC68SjNS2AlTYE+UlRKwcR
- gRWtJEQedxW59anLAk
-X-Received: by 2002:a5d:5f48:0:b0:43c:f40f:6c91 with SMTP id
- ffacd0b85a97d-43d29285606mr3733612f8f.10.1775207788343; 
- Fri, 03 Apr 2026 02:16:28 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d1e2c5468sm14800860f8f.13.2026.04.03.02.16.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Apr 2026 02:16:27 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  3 Apr 2026 11:16:27 +0200
-Message-ID: <20260403091627.57341-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260403084221.35659-1-thomas.perale@mind.be>
-References: <20260403084221.35659-1-thomas.perale@mind.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PgouCz3VmE_o for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 09:52:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1A81B6083C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A81B6083C
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A81B6083C
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:52:14 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 0BBD91A3129
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:52:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D2785603C1
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 09:52:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id AF75710451A8C; 
+ Fri,  3 Apr 2026 11:52:08 +0200 (CEST)
+Date: Fri, 03 Apr 2026 11:51:52 +0200
 MIME-Version: 1.0
+Message-Id: <20260403-openscap_bump-v1-1-20f99c3c9429@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDEwNj3fyC1Lzi5MSC+KTS3ALdVIskE0szUxMzUwNjJaCegqLUtMwKsHn
+ RsRB+cWlSVmpyCcgQpdpaADW2MSZxAAAA
+X-Change-ID: 20260403-openscap_bump-e8b496546503
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775207788; x=1775812588; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=2RYCQ/hcrz5acXo2ZN+cJqyKdbnaqFFEdCn26LzRdK0=;
- b=YOHMUea335/FkaEprDjMz916FO0dcapp/GAwmEOpqAdhaX1wVpwdJeZENItHOG/uFr
- terSN2i0d/9zSDbzHoGUUOK4wyWvsb9pFKUEdcwlR+vAneVHMOsUrC9MPHdHy8uUra5n
- cIEo9KecpzHQqc4jLIBXBEF3RHmlpohTdUlm5k/OpjevGqrbLAtWoByfEPzfQYwGih85
- 1PORGgZU5Wnfp+gqRs52b0cEa5EzAGfQHVU4xgZ0I6/jfIFfYwN2NlPqyJBm3eagavhO
- z1MoyJf81b+KTTsPm551WN7t64lLQzkvhsMJIMmfRcl3Cfz/ZRSKtOE9QRVAARza6jjS
- TFeQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YOHMUea3
-Subject: Re: [Buildroot] [PATCH 1/1] package/nghttp2: patch CVE-2026-27135
+ d=bootlin.com; s=dkim; 
+ t=1775209930; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=mHLvK0Ui7rVEHKWjV4d8uAsxhvPbLusHB5Acl2heSV0=;
+ b=WBCaTMscwysFBMAXQy3wESJEtzVwMUM4hAgDXCWtLneNVIqV6joZB8fZclwqkgJGxM/heP
+ dPtn9cWSPd3M7L+zpYMSFhgyl5azyUPHDO7km8sk115aXgo/j5+wKnYlHJF2h/vZVjAjW2
+ 6TS41tTYmfW4Wb6/uc35/fWtU/wJ9zf4kbqRdc3BfL113DqJfspaqHHslIub0fRE6Wb5sv
+ qb/5JbiVIOKbEMFKSrGjLuRUdQzN7MgISAG8ZGP3+v9Loj8Qz1LhpGwkK7iLBhWPokdTSd
+ QilOWe+Hh7BqWNkxM7rVF3/3GTqTpEcKMGBWS18okjbfsttzjHxquq2mi1Agfw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=WBCaTMsc
+Subject: [Buildroot] [PATCH] package/openscap: bump to version 1.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,177 +97,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Only for 2025.02.x & 2026.02.x. Removed on patchwork and resent.
-
-In reply of:
-> Fixes the following vulnerability:
-> 
-> - CVE-2026-27135:
->     nghttp2 is an implementation of the Hypertext Transfer Protocol
->     version 2 in C. Prior to version 1.68.1, the nghttp2 library stops
->     reading the incoming data when user facing public API
->     `nghttp2_session_terminate_session` or
->     `nghttp2_session_terminate_session2` is called by the application.
->     They might be called internally by the library when it detects the
->     situation that is subject to connection error. Due to the missing
->     internal state validation, the library keeps reading the rest of the
->     data after one of those APIs is called. Then receiving a malformed
->     frame that causes FRAME_SIZE_ERROR causes assertion failure. nghttp2
->     v1.68.1 adds missing state validation to avoid assertion failure. No
->     known workarounds are available.
-> 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2026-27135
->   - https://github.com/nghttp2/nghttp2/commit/5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-> ---
->  ...lidations-to-avoid-assertion-failure.patch | 105 ++++++++++++++++++
->  package/nghttp2/nghttp2.mk                    |   3 +
->  2 files changed, 108 insertions(+)
->  create mode 100644 package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
-> 
-> diff --git a/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch b/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
-> new file mode 100644
-> index 0000000000..ef8b9a5a5d
-> --- /dev/null
-> +++ b/package/nghttp2/0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
-> @@ -0,0 +1,105 @@
-> +From 5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1 Mon Sep 17 00:00:00 2001
-> +From: Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
-> +Date: Wed, 18 Feb 2026 18:04:30 +0900
-> +Subject: [PATCH] Fix missing iframe->state validations to avoid assertion
-> + failure
-> +
-> +CVE: CVE-2026-27135
-> +Upstream: https://github.com/nghttp2/nghttp2/commit/5c7df8fa815ac1004d9ecb9d1f7595c4d37f46e1
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + lib/nghttp2_session.c | 32 ++++++++++++++++++++++++++++++++
-> + 1 file changed, 32 insertions(+)
-> +
-> +diff --git a/lib/nghttp2_session.c b/lib/nghttp2_session.c
-> +index bcea547343..0fbcc930b9 100644
-> +--- a/lib/nghttp2_session.c
-> ++++ b/lib/nghttp2_session.c
-> +@@ -5573,6 +5573,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +           return rv;
-> +         }
-> + 
-> ++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++          return (nghttp2_ssize)inlen;
-> ++        }
-> ++
-> +         on_begin_frame_called = 1;
-> + 
-> +         rv = session_process_headers_frame(session);
-> +@@ -6041,6 +6045,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +           if (nghttp2_is_fatal(rv)) {
-> +             return rv;
-> +           }
-> ++
-> ++          if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++            return (nghttp2_ssize)inlen;
-> ++          }
-> +         }
-> +       }
-> + 
-> +@@ -6293,6 +6301,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +           return rv;
-> +         }
-> + 
-> ++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++          return (nghttp2_ssize)inlen;
-> ++        }
-> ++
-> +         session_inbound_frame_reset(session);
-> + 
-> +         break;
-> +@@ -6599,6 +6611,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +         if (nghttp2_is_fatal(rv)) {
-> +           return rv;
-> +         }
-> ++
-> ++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++          return (nghttp2_ssize)inlen;
-> ++        }
-> +       } else {
-> +         iframe->state = NGHTTP2_IB_IGN_HEADER_BLOCK;
-> +       }
-> +@@ -6775,6 +6791,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +             rv = session->callbacks.on_data_chunk_recv_callback(
-> +               session, iframe->frame.hd.flags, iframe->frame.hd.stream_id,
-> +               in - readlen, (size_t)data_readlen, session->user_data);
-> ++            if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++              return (nghttp2_ssize)inlen;
-> ++            }
-> ++
-> +             if (rv == NGHTTP2_ERR_PAUSE) {
-> +               return (nghttp2_ssize)(in - first);
-> +             }
-> +@@ -6861,6 +6881,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +           return rv;
-> +         }
-> + 
-> ++        if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++          return (nghttp2_ssize)inlen;
-> ++        }
-> ++
-> +         if (rv != 0) {
-> +           busy = 1;
-> + 
-> +@@ -6879,6 +6903,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +         return rv;
-> +       }
-> + 
-> ++      if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++        return (nghttp2_ssize)inlen;
-> ++      }
-> ++
-> +       session_inbound_frame_reset(session);
-> + 
-> +       break;
-> +@@ -6907,6 +6935,10 @@ nghttp2_ssize nghttp2_session_mem_recv2(nghttp2_session *session,
-> +         return rv;
-> +       }
-> + 
-> ++      if (iframe->state == NGHTTP2_IB_IGN_ALL) {
-> ++        return (nghttp2_ssize)inlen;
-> ++      }
-> ++
-> +       session_inbound_frame_reset(session);
-> + 
-> +       break;
-> diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
-> index 98f837e28e..9e051d24ed 100644
-> --- a/package/nghttp2/nghttp2.mk
-> +++ b/package/nghttp2/nghttp2.mk
-> @@ -14,6 +14,9 @@ NGHTTP2_CPE_ID_VENDOR = nghttp2
->  NGHTTP2_DEPENDENCIES = host-pkgconf
->  NGHTTP2_CONF_OPTS = --enable-lib-only
->  
-> +# 0001-Fix-missing-iframe-state-validations-to-avoid-assertion-failure.patch
-> +NGHTTP2_IGNORE_CVES += CVE-2026-27135
-> +
->  define NGHTTP2_INSTALL_CLEAN_HOOK
->  	# Remove fetch-ocsp-response script unused by library
->  	$(Q)$(RM) -rf $(TARGET_DIR)/usr/share/nghttp2
-> -- 
-> 2.53.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGN1c3RvbSBwYXRjaCB0byBlbmZvcmNlIHByb2plY3QgYXMgQyBwcm9qZWN0IGFzIGJlZW4g
+bWVyZ2VkIHVwc3RyZWFtCnNpbmNlIHRoZW4sIGJ1dCBpdCBpcyBub3QgcmVsZWFzZWQgeWV0LiBU
+aGlzIGNvbW1pdCB1cGRhdGVzIHRoZSBwYXRjaCB0bwphcHBseSBpdCBvbiB0b3Agb2YgMS40LjMs
+IGFuZCB1c2UgdGhlIG9wcG9ydHVuaXR5IHRvIGZpeCB0aGUgcGF0Y2ggZmlsZQpuYW1lIHRvIG1h
+dGNoIHRoZSBjb21taXQgdGl0bGUuCgpTaW5jZSB2ZXJzaW9uIDEuNC4wLCBvcGVuc2NhcCBkZXBl
+bmRzIG9uIFBDUkUyIHJhdGhlciB0aGFuIFBDUkUKCmh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NB
+UC9vcGVuc2NhcC9jb21wYXJlLzEuMy4xMi4uLjEuNC4zCgpTaWduZWQtb2ZmLWJ5OiBBbGV4aXMg
+TG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgotLS0KIC4uLj0+IDAwMDEtU2V0
+LXByb2plY3QtYXMtQy1wcm9qZWN0LWluLUNNYWtlTGlzdHMudHh0LnBhdGNofSB8IDEyICsrKysr
+Ky0tLS0tLQogcGFja2FnZS9vcGVuc2NhcC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAuaGFzaCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBwYWNrYWdlL29wZW5zY2FwL29wZW5z
+Y2FwLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNiArKystLS0KIDQgZmls
+ZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9vcGVuc2NhcC8wMDAxLXNldC1wcm9qZWN0LWFzLWMtcHJvamVjdC5wYXRjaCBi
+L3BhY2thZ2Uvb3BlbnNjYXAvMDAwMS1TZXQtcHJvamVjdC1hcy1DLXByb2plY3QtaW4tQ01ha2VM
+aXN0cy50eHQucGF0Y2gKc2ltaWxhcml0eSBpbmRleCA5MSUKcmVuYW1lIGZyb20gcGFja2FnZS9v
+cGVuc2NhcC8wMDAxLXNldC1wcm9qZWN0LWFzLWMtcHJvamVjdC5wYXRjaApyZW5hbWUgdG8gcGFj
+a2FnZS9vcGVuc2NhcC8wMDAxLVNldC1wcm9qZWN0LWFzLUMtcHJvamVjdC1pbi1DTWFrZUxpc3Rz
+LnR4dC5wYXRjaAppbmRleCBjNzk0ZmJhZjQ0ZGMuLjJjY2JmZDEzOGQyYiAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9vcGVuc2NhcC8wMDAxLXNldC1wcm9qZWN0LWFzLWMtcHJvamVjdC5wYXRjaAorKysg
+Yi9wYWNrYWdlL29wZW5zY2FwLzAwMDEtU2V0LXByb2plY3QtYXMtQy1wcm9qZWN0LWluLUNNYWtl
+TGlzdHMudHh0LnBhdGNoCkBAIC0xLDQgKzEsNCBAQAotRnJvbSBhNzQyNjQ3ZWZkMjE1YjY4MmU0
+Y2QyNmIxNWFjM2U1ODBjMTBlZjlmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbSBkMmZh
+OGRmMTI2YjUzMzMxN2I0Yjg2Mzc1OGNmNTc5ZmZmM2EyYjQ1IE1vbiBTZXAgMTcgMDA6MDA6MDAg
+MjAwMQogRnJvbTogPT9VVEYtOD9xP0FsZXhpcz0yMExvdGhvcj1DMz1BOT89IDxhbGV4aXMubG90
+aG9yZUBib290bGluLmNvbT4KIERhdGU6IE1vbiwgMTYgRmViIDIwMjYgMTM6NTA6NDggKzAxMDAK
+IFN1YmplY3Q6IFtQQVRDSF0gU2V0IHByb2plY3QgYXMgQyBwcm9qZWN0IGluIENNYWtlTGlzdHMu
+dHh0CkBAIC01MywxNSArNTMsMTUgQEAgdGVzdCBDKysgZmVhdHVyZXMgb24gdGhlIHVzZWQgdG9v
+bGNoYWluLgogWzFdIGh0dHBzOi8vYnVpbGRyb290Lm9yZy8KIFsyXSBodHRwczovL2F1dG9idWls
+ZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMWZlNTUwZmZhNzlmMGEwODNhNDUwYWUwM2ZlMDY3YThh
+YjczMzZiZS9idWlsZC1lbmQubG9nCiAKLVVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vT3Bl
+blNDQVAvb3BlbnNjYXAvcHVsbC8yMzEyCi1bcGF0Y2ggc2xpZ2h0bHkgYWRhcHRlZCB0byBiZSBh
+cHBsaWNhYmxlIG9uIHYxLjMuMTJdCitVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL09wZW5T
+Q0FQL29wZW5zY2FwL2NvbW1pdC9iYmZiMmQ3YjAwY2JiOGUwOGQ5OTk1NDY3MzRkM2JhNmFlMTUw
+NzM2CitbcGF0Y2ggc2xpZ2h0bHkgYWRhcHRlZCB0byBiZSBhcHBsaWNhYmxlIG9uIHYxLjQuM10K
+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5j
+b20+CiAtLS0KICBDTWFrZUxpc3RzLnR4dCB8IDIgKy0KICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
+cnRpb24oKyksIDEgZGVsZXRpb24oLSkKIAogZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIv
+Q01ha2VMaXN0cy50eHQKLWluZGV4IGNiMTNkZWJiNDdjZi4uMDViMDU0MzI3OTUxIDEwMDY0NAor
+aW5kZXggYzU2MTExNmQ4MjZjLi41NzA4MTI2NjcwMzYgMTAwNjQ0CiAtLS0gYS9DTWFrZUxpc3Rz
+LnR4dAogKysrIGIvQ01ha2VMaXN0cy50eHQKIEBAIC04LDcgKzgsNyBAQCBpZihOT1QgQ01BS0Vf
+QlVJTERfVFlQRSBBTkQgTk9UIENNQUtFX0NPTkZJR1VSQVRJT05fVFlQRVMpCkBAIC03MSw4ICs3
+MSw4IEBAIGluZGV4IGNiMTNkZWJiNDdjZi4uMDViMDU0MzI3OTUxIDEwMDY0NAogLXByb2plY3Qo
+Im9wZW5zY2FwIikKICtwcm9qZWN0KCJvcGVuc2NhcCIgQykKICBzZXQoT1BFTlNDQVBfVkVSU0lP
+Tl9NQUpPUiAiMSIpCi0gc2V0KE9QRU5TQ0FQX1ZFUlNJT05fTUlOT1IgIjMiKQotIHNldChPUEVO
+U0NBUF9WRVJTSU9OX1BBVENIICIxMiIpCisgc2V0KE9QRU5TQ0FQX1ZFUlNJT05fTUlOT1IgIjQi
+KQorIHNldChPUEVOU0NBUF9WRVJTSU9OX1BBVENIICIzIikKIC0tIAogMi41My4wCiAKZGlmZiAt
+LWdpdCBhL3BhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmluIGIvcGFja2FnZS9vcGVuc2NhcC9Db25m
+aWcuaW4KaW5kZXggMzE3MDU1Yzc1MzI3Li44Mjc1OTA1OThlNDEgMTAwNjQ0Ci0tLSBhL3BhY2th
+Z2Uvb3BlbnNjYXAvQ29uZmlnLmluCisrKyBiL3BhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmluCkBA
+IC0xMCw3ICsxMCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOU0NBUAogCXNlbGVjdCBCUjJf
+UEFDS0FHRV9MSUJYU0xUCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlhNTFNFQzEKIAlzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTVVTTF9GVFMgaWYgIUJSMl9UT09MQ0hBSU5fVVNFU19HTElCQwotCXNlbGVj
+dCBCUjJfUEFDS0FHRV9QQ1JFCisJc2VsZWN0IEJSMl9QQUNLQUdFX1BDUkUyCiAJc2VsZWN0IEJS
+Ml9QQUNLQUdFX1BDUkVfVVRGCiAJaGVscAogCSAgVGhlIHB1cnBvc2Ugb2YgdGhpcyBwcm9qZWN0
+IGlzIHRvIGNyZWF0ZSBzZWN1cml0eSBwb2xpY3kKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNj
+YXAvb3BlbnNjYXAuaGFzaCBiL3BhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAuaGFzaAppbmRleCBl
+OTg2MzEzNzJkNTEuLjdhMjU3ODliNWJjYyAxMDA2NDQKLS0tIGEvcGFja2FnZS9vcGVuc2NhcC9v
+cGVuc2NhcC5oYXNoCisrKyBiL3BhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAuaGFzaApAQCAtMSwz
+ICsxLDMgQEAKICMgTG9jYWxseSBjb21wdXRlZAotc2hhMjU2ICA2ZTYxOTEzZmNhM2E3NGQzMTBk
+N2NmOTM1NDk3M2VlYWVmYTQyYmU5MDlhZTY0OWFmMWRmNDhjM2MwOGJjNmZmICBvcGVuc2NhcC0x
+LjMuMTIudGFyLmd6CitzaGEyNTYgIDk2ZWJlNjk3YWFmYzgzZWIyOTdhOGYyOTU5NmQ1NzMxOTI3
+ODExMjQ2N2M0NmU2YWFmMzY0OWIzMTFjZjhmYmEgIG9wZW5zY2FwLTEuNC4zLnRhci5negogc2hh
+MjU2ICA1ZGYwNzAwNzE5ODk4OWM2MjJmNWQ0MWRlOGQ3MDNlN2JlZjNkMGU3OWQ2MmUyNDMzMmVl
+NzM5YTQ1MmFmNjJhICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zY2FwL29wZW5z
+Y2FwLm1rIGIvcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5tawppbmRleCAyMDQyNzUyNGQ3OWEu
+LjQyZjY0NGRiNTVlOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5tawor
+KysgYi9wYWNrYWdlL29wZW5zY2FwL29wZW5zY2FwLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotT1BFTlNDQVBfVkVSU0lPTiA9IDEuMy4xMgorT1BFTlND
+QVBfVkVSU0lPTiA9IDEuNC4zCiBPUEVOU0NBUF9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL09w
+ZW5TQ0FQL29wZW5zY2FwL3JlbGVhc2VzL2Rvd25sb2FkLyQoT1BFTlNDQVBfVkVSU0lPTikKIE9Q
+RU5TQ0FQX0xJQ0VOU0UgPSBMR1BMLTIuMSsKIE9QRU5TQ0FQX0xJQ0VOU0VfRklMRVMgPSBDT1BZ
+SU5HCkBAIC0xNyw3ICsxNyw3IEBAIE9QRU5TQ0FQX0RFUEVOREVOQ0lFUyA9IFwKIAlsaWJ4bWwy
+IFwKIAlsaWJ4bWxzZWMxIFwKIAlsaWJ4c2x0IFwKLQlwY3JlCisJcGNyZTIKIAogSE9TVF9PUEVO
+U0NBUF9ERVBFTkRFTkNJRVMgPSBcCiAJaG9zdC1wa2djb25mIFwKQEAgLTI2LDcgKzI2LDcgQEAg
+SE9TVF9PUEVOU0NBUF9ERVBFTkRFTkNJRVMgPSBcCiAJaG9zdC1saWJ4bWwyIFwKIAlob3N0LWxp
+YnhtbHNlYzEgXAogCWhvc3QtbGlieHNsdCBcCi0JaG9zdC1wY3JlCisJaG9zdC1wY3JlMgogCiBP
+UEVOU0NBUF9DT05GX09QVFMgPSBcCiAJLURFTkFCTEVfT1NDQVBfVVRJTD1PTiBcCgotLS0KYmFz
+ZS1jb21taXQ6IDAxMWJjNGI3NDcyYmY3NzgyYWY0ZWI4MTg3ZjVjOTk5MmE5ZjljZWYKY2hhbmdl
+LWlkOiAyMDI2MDQwMy1vcGVuc2NhcF9idW1wLWU4YjQ5NjU0NjUwMwoKQmVzdCByZWdhcmRzLAot
+LSAgCkFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
