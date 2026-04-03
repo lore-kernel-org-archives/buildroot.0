@@ -4,81 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71C6CE85376
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 15:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11318E85371
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 16:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23C24411EC;
-	Fri,  3 Apr 2026 15:54:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2484B411FD;
+	Fri,  3 Apr 2026 16:22:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bD1vzyFR1d1b; Fri,  3 Apr 2026 15:54:34 +0000 (UTC)
+ id 4or8cFhnqp7p; Fri,  3 Apr 2026 16:22:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BD67411E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8028F411F5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775231674;
-	bh=SBAB/lgdEh9TECFGOmcxRNVfyNZ55RN1tYmiMFlWpoM=;
+	s=default; t=1775233327;
+	bh=zzL3pjW9fRnA0dCN4d+9vbF56jP6d74Sl/HDiiSVge0=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=rdEm/X7iXHs8M3siBuEDmyzQk31MpcUhJMHk/mbtFDYHG/BTNeA3XJWp43yxu873Z
-	 5ORTK9Fl+HKVXm87FAEx0AERwDUc3GhIGM6l/Hi0QH78GnC+6ufiNxsEUeC1BW7GrM
-	 Ty2onSb5l7Pg79tYQ2eITED4R2mGi+fJ0e7o6Fa7pcNG4m20p47qjlWFovvYObGH0W
-	 nZj4pYfLaxXW4zb/HmpzOaLK5tGOcOJi9PTey0Z+z1Tfj6kBvYz9b+5YL+ZIptFgGi
-	 ycQwcTkDo+j90Oz1VPUeTTjDCRCG25VCiQbOvvKm5WJCm+CIlT8St0metal3oftQC4
-	 3v/gbq/XzdhOw==
+	b=IwWPvPGJ3HDHn9lITGa3phs1K4c774RFStxDUaji5Mza6F1BRn01qhDjT1IrC5s6c
+	 VG4w7tX/OBZWDmnvxN06pVRRW9WQwuK0c8HBPaWXZgh8S4be18FHzY7MnC/G1XK2qn
+	 DRRJLIHPBkFlSxAOOsokr995+l39WNdUEr+GkSStRFP4BCD1sTOSsoLPeIv+DMVQsl
+	 sTDenCGNLTOW9z9dtzfYHvHJZfwdbxW+jHkZvmDFBr855cZuSVgmUYM3IVIkWWVKCV
+	 uXUHlXR3oFlsaL8t3t70UsBqKHSXF/N1hhuujaKAMfgCX905u4CH982zFeh9l8k4+A
+	 a/BeEJplFVGUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BD67411E2;
-	Fri,  3 Apr 2026 15:54:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 73D3B2CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 15:54:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8028F411F5;
+	Fri,  3 Apr 2026 16:22:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6A7B1F3
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 16:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62B99401EA
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 15:54:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB951610DC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 16:22:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dXejjSlzRJAm for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 15:54:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.146;
- helo=smtpcmd13146.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81E5F4003D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81E5F4003D
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 81E5F4003D
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 15:54:29 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 8gqowr5zTRHsh8gqow9zjw; Fri, 03 Apr 2026 17:54:26 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F4_m8tsaM_9g for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 16:22:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18133610DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18133610DB
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 18133610DB
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 16:22:04 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-2a8fba3f769so8217925ad.2
+ for <buildroot@buildroot.org>; Fri, 03 Apr 2026 09:22:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1775233324; x=1775838124;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=PEaiqPZnP0D3zejc/ms6v7hyghEASxjF8+2/SNguydA=;
+ b=R8NSBI3QJgmJROCn8RTxz8tf9R32xmdOU+wSbikZndYK4JOlrghu71LkOuOAcQWni/
+ LaF3C0nkZ9J9YqdkhbSzyz7ACUJqcJuWje+fqg9kcd+7CIVPN9YjO+zY1g1VVTC2w6Ca
+ 52br+B77OVz0a3S0Q0wv22dNi6LutyxGjrrm+Vb9gK7iVjRLJ/fFwTHXUXgJ1LsOBtfl
+ 910iQ727NUeBFd1nAPn/5PLrHAHefUty/W6ue/f/XAsuwRt3U/znLcorogmPzCo4ARIh
+ wqDqAsqSliJ7yJslFqTjFAlPScTffgJ2/2VlTRF7wFbXlFhJt1ASi47kaCmkZV9Pr7J1
+ o0KQ==
+X-Gm-Message-State: AOJu0YwF9Y9tr7I5BxG22Jf7HdYa03oehZd3gPWlBSQszgawYcLh6Rqq
+ slaYX3bXPw9WdiMbKaN3B2EAW/tFpcnmbKbFyeSBC67M47m1scavXDE5SRkXZA==
+X-Gm-Gg: AeBDietPSV77WGOSH24BzBdxMS2xFz68kRCUqk1cSfb9JKENFi4EV5xS+lYdylEGzJj
+ lzluUqMZqYmhi1vJI5kGUbTktqEj4hNxcq/VJLDPOq6K23qRMh22R1gZfI/ocijl9pCyxi/9JQh
+ 1VpJl3MJZnV2gH/gl3wEketgck2VXJ0Hn5ioBuEvsaPqOOe5QXmc7QcvEClMOtx/9kejMj1rcrG
+ y/OExycVXA6aa+9bRqxMkQLIcoiWAerlUPqzOFUhFQpAfQtK6jXgTGKLYOcJiBOfoa8awNaYrqU
+ HnDa4M607FMDIVCHgxJN+X4HIoRmxXGooXQxZt+ft32lJ87YtUB1EvzqCbt/tp2/ITrpMd4CeTs
+ RTWQjG1App+hOaZNWhetY3br/U2eNlmCbxhR4pHwsA0D7q8wemiWHdbEB7WPPbtCGn/oz9rYpJd
+ YK7IXFmVQlBSsJVZd4P6DxXNQJesRmeiNA/hM=
+X-Received: by 2002:a17:903:b07:b0:2ae:4fc8:3f5d with SMTP id
+ d9443c01a7336-2b2818a733dmr36769915ad.48.1775233323792; 
+ Fri, 03 Apr 2026 09:22:03 -0700 (PDT)
+Received: from fedora ([2409:4064:2d9c:554:d9db:ca4d:ea7f:ffa9])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2b2749b66aasm63622765ad.68.2026.04.03.09.22.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 03 Apr 2026 09:22:03 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  3 Apr 2026 17:54:25 +0200
-Message-ID: <20260403155425.2878268-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
+ Ayoub Zaki <ayoub.zaki@embetrix.com>
+Date: Fri,  3 Apr 2026 21:51:42 +0530
+Message-ID: <20260403162143.16290-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFDGI11cAoyIybV5ULU06cF+om4a83lyOpolEA+oV8StYAy+AgWeCAkChCAttZQAIYrDH3JCz6tlFkmi+t1mRvOcMkKd0dG3b+8zjbJHvpBDN1om5CXR
- l9Bj+BPrn8Xpf+Lr4WDebIplccSgoad/vUti0gYbVu6FeTgAhSseaO0M8q1pMM1zwY4HcakvZvueIQVLxxxHSiuKyxPeNHOq4niUB1VzDoJEX39BFb7vuHv3
- fOozyFD1dYfVKNuuA/yVoz1QrgSHBoTHCRR/9zsbMNU=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1775231666; bh=3lwUwQEtK5N0wUYr74SIUjqCsQLaVvQMCatySjc4HyM=;
- h=From:To:Subject:Date:MIME-Version;
- b=Ft7kS7OVNHQJHelINlPIo8YMwrGjjwuXaQZl4wZ7kUqJeaLMqUkhn7AKk74BBVPon
- mUQxX9XuR2S9Mi3GNzMLWPHIbXzr/6ibQYd6h09/6ysQgYrERKoQ8wuOe8mSHwEbRO
- 2AjkW9vPZGwryIKFrSqIzbmOK6FgDTF+zGeA05J5IcPenkehS6iOtbk3ma09wRKftI
- 963BjzKD00DabJ840cwukta1WBnTHkHY1GQBody/76RVbXLXQzhe/+8nLN8+eyhtAg
- 5bT91P8OD3kKmmSPE0F6k51WlaT8Bb7aqF+UML4xnWTxbBxniCmBGIrRioUQfHXJwZ
- 3aQWUYg4uYlKw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1775233324; x=1775838124; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PEaiqPZnP0D3zejc/ms6v7hyghEASxjF8+2/SNguydA=;
+ b=gPfnNoKL//NoQHZbIAOulfcvzbvWXgGidlefICjDjfLdugqtqL5EaEC3zU5HAxeOO1
+ NbL9Y1bPJ8ivZ048NLKa0RSaL7G8k16cymmoyzjZn1GNTV7Q1vKq0woi3Wz2J0T87QTd
+ eIOskzep7MtjLYED/j2wiVxD9H4J+XOB3GXpCct8zuzhE9S7E0T1EwVfSz8/7dnasCCh
+ D6fJY71F/HUzYanSA20ctz2hNFw8GSiTJA5NxzYf9euX3MrPcHk0CY8on2FKh9PZmo6/
+ 1ShUPdZU97Q5SYk3v3P9D+PN7J7IejunhN0YjaN9mNWjH4HsfrSFXgC2cS9tpakEtm/H
+ EkJg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=Ft7kS7OV
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.8.6
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=gPfnNoKL
+Subject: [Buildroot] [PATCH] package/bmap-writer: bump to version 1.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,41 +124,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-https://gitlab.com/cryptsetup/cryptsetup/-/blob/v2.8.6/docs/v2.8.6-ReleaseNotes
+This version includes upstream fixes for static linking issues
+related to libarchive. In previous versions, CMake's
+FindLibArchive module did not propagate private dependencies,
+leading to link-time errors (e.g. missing zlib, bzip2, lz4,
+liblzma, zstd) in static build environments such as Buildroot.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The upstream build system has been updated to correctly handle
+these dependencies, allowing us to drop the downstream patch.
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
+ package/bmap-writer/bmap-writer.hash | 2 +-
+ package/bmap-writer/bmap-writer.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index c8e76bab9e..dada277347 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/sha256sums.asc
--sha256  46f7a5b5b228b28ce17f43bcb891b442dc0f1f56df2370646131131e4d702e92  cryptsetup-2.8.5.tar.xz
-+sha256  8004265fd993885d08f7b633dbe056851de1a210307613a4ebddc743fccefe5a  cryptsetup-2.8.6.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  docs/licenses/COPYING.Apache-2.0
- sha256  28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5  docs/licenses/COPYING.CC-BY-SA-4.0
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 80abf88a94..716a244915 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/bmap-writer/bmap-writer.hash b/package/bmap-writer/bmap-writer.hash
+index 0b0e8de46a..e2936525e8 100644
+--- a/package/bmap-writer/bmap-writer.hash
++++ b/package/bmap-writer/bmap-writer.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a86ade2c70304574f200c048bd8a728ed27b04b7ece62cf0f696366e37fed6e7  bmap-writer-1.0.2.tar.gz
++sha256  121832c4ab44d30828489a6620c21d0fcc05904bb85cde71e82ea383acc12d1d  bmap-writer-1.0.4.tar.gz
+ sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
+diff --git a/package/bmap-writer/bmap-writer.mk b/package/bmap-writer/bmap-writer.mk
+index 19ccd3afbc..e6d85f2279 100644
+--- a/package/bmap-writer/bmap-writer.mk
++++ b/package/bmap-writer/bmap-writer.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 2.8
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+-BMAP_WRITER_VERSION = 1.0.2
++BMAP_WRITER_VERSION = 1.0.4
+ BMAP_WRITER_SITE = $(call github,embetrix,bmap-writer,$(BMAP_WRITER_VERSION))
+ BMAP_WRITER_LICENSE = GPL-3.0
+ BMAP_WRITER_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
