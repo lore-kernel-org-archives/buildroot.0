@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF65E8537A
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:32:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42470E8537A
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 17:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB6041234;
-	Fri,  3 Apr 2026 17:32:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WwLLSAwlFqZJ; Fri,  3 Apr 2026 17:32:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AC7D410E7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775237565;
-	bh=7vpmPe6aAn+8GVlT8dS7NjmmlLcX2qW96I1N8t6qUW0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=i++CN90J+A8HF8rWWHtfbJsy0GehQRDv2KzxDerxVWMn3bcJtyZQoJyDIhkuLpV1P
-	 MetI/j/IRddjzy5dQmt1TstJA1QY2zYNkkoS1RnyklpbJK9rtLLJwhefRG5WmAE389
-	 vDdfrfndDnp2R313ZttiwkRCR4JEn7/qxo+akvplLPrEebTy0/7PZnUVs9r1FDoNMU
-	 SJ2fnOeDS8osFL10fp/HohQCa4ZUjl+a91qbyfNWaa3LgUUcFmDCngwtO5ons2vdO2
-	 cXwEuaZBJXGuXcmUawanBsm1vJpmYQJWdFaRfaEjzPYjQX/L/7cDR6rzcaxEg4yEP6
-	 +sZN7hLaxPZAw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC7D410E7;
-	Fri,  3 Apr 2026 17:32:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 43DE71A9
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 352C382F31
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6634880CFA;
+	Fri,  3 Apr 2026 17:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fl-appuPO62e for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 17:32:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 553E682EE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 553E682EE1
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 553E682EE1
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:32:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 42E6E19F759;
- Fri,  3 Apr 2026 19:32:40 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 03 Apr 2026 19:32:40 +0200
-MIME-Version: 1.0
-Date: Fri, 03 Apr 2026 19:32:40 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260402175848.2779597-1-bernd@kuhls.net>
-References: <20260402175848.2779597-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <4a54fed0a971e28ff5402ccc0263eb0d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775237561;
- bh=fRDY+ghGGFbWOBq+vgwrOwx8KXypw5d69PM+3CDnl+Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tylzi5zdwpo/zrX6yOjq/mQz3e6wdaevenGtesckCQELt6TqLxTePt/ipdUsd1KAD
- nxPkzfHlD0i/l9KsvJm6lP7w+VEC3Nk5VTnc/wQvYWGCBJP937Foak35/0RZrhPW2s
- leSpyVLJbu5tsm+8Uq+5mw8f3nDcgVIxjKVsKRETo+kAah9HpxfQKmg60keJyA9idY
- lpKxoJJIAqwDfTBzdH3UlV6cEavjjBkyD0liDn5Skvr1FUx8D+FQkEG4qx7H5DB9z+
- IRU8HME2YfnBWImR0ndkxbmFsWiVya0wT99n5qnah0DkByezncESeo4NRdqbDl66+j
- Mn7P6Tg+O18eQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tylzi5zd
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
- to 21.3.3
+ id Xn5Kd7qkEYGI; Fri,  3 Apr 2026 17:35:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99BC180CAB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1775237713;
+	bh=ZE18+sL8q392CVJRXqOAA1aNQFnUGrSY/k5ADQhcxTM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Y0oTz4LRVVpcPSjdiSOaNmU8smGofKGftoB7dy1oNrOV+qvi/+9ji7bswx614nTC4
+	 0I2KWZLlOY4QOjFvWL0lR8xHrMK8Qo/n9hf+43stcSEhX/lMcXd1iFCoOgOPqxlxFK
+	 aPCEj1ev3gpE/6D2DXxWwCGOVw3GdUlDNDw6JuR/lD1pnTtP63hn18udf+cCWiIgal
+	 5jagU1NwQacOrk1L2ZQd0EpjCsjayOBDopGWcfGQ0/VURri8CD4cLA8cbTQQs0TQD6
+	 eGs/radzGT4gJ2FxIXIxk1Xd8IvrP+MBV7/L3LCug31K2z9VBJPZ/zNA12LDYwEtpU
+	 a+IQixoFkOAyA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99BC180CAB;
+	Fri,  3 Apr 2026 17:35:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BBC72CC
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:35:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C25C40308
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:35:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jCnV6g0FYYrw for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 17:35:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4214006F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B4214006F
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 17:35:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 00D4D80104; Fri,  3 Apr 2026 17:35:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 3 Apr 2026 19:32:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d28468b921e1e86c0a46502d574e26e293844702
+X-Git-Newrev: 3664f8ad49bf09180e766efc0e07856fad6913ec
+X-Patchwork-Hint: ignore
+Message-Id: <20260403173511.00D4D80104@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jansson: bump to version 2.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,17 +70,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/04/2026 19:58, Bernd Kuhls wrote:
-> https://github.com/janbar/pvr.mythtv/blob/21.3.3-Omega/pvr.mythtv/changelog.txt
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3664f8ad49bf09180e766efc0e07856fad6913ec
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://github.com/akheron/jansson/blob/v2.15.0/CHANGES
+
+Switched to sha256 tarball hash provided by upstream.
+
+Updated license hash due to upstream commit:
+https://github.com/akheron/jansson/commit/2297a2e320ebecc6dc98f7034a2f38509ad1d7f5
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/jansson/jansson.hash | 6 +++---
+ package/jansson/jansson.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
+index 0d9dc7b5a5..747f9e4420 100644
+--- a/package/jansson/jansson.hash
++++ b/package/jansson/jansson.hash
+@@ -1,3 +1,3 @@
+-# Locally calculated after checking pgp signature
+-sha256  fba956f27c6ae56ce6dfd52fbf9d20254aad42821f74fa52f83957625294afb9  jansson-2.14.tar.bz2
+-sha256  1fff7d37d22157bcd81ab53b6c54da755d7c2f868f15807d9bde920f10730da0  LICENSE
++# From https://github.com/akheron/jansson/releases/tag/v2.15.0
++sha256  a7eac7765000373165f9373eb748be039c10b2efc00be9af3467ec92357d8954  jansson-2.15.0.tar.bz2
++sha256  150d90904cd8de73609bb177b42edd3867b07b4b7b786dbba319f30de39fcda2  LICENSE
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index 8efe28bf4a..e60bb1aab6 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANSSON_VERSION = 2.14
++JANSSON_VERSION = 2.15.0
+ JANSSON_SOURCE = jansson-$(JANSSON_VERSION).tar.bz2
+ JANSSON_SITE = \
+ 	https://github.com/akheron/jansson/releases/download/v$(JANSSON_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
