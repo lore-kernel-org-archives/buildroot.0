@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96275E7E363
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B201DE7E366
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A4FE81A29;
-	Fri,  3 Apr 2026 10:28:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D22A61108;
+	Fri,  3 Apr 2026 10:28:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BWFDef_jT-fa; Fri,  3 Apr 2026 10:28:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QgqzPkPccAPh; Fri,  3 Apr 2026 10:28:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81AFD81D02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0D2A6110A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212098;
-	bh=cCpp2up0FXks7Zk8BBoBRjVzL/XPSz2d9aK9wOucdNM=;
+	s=default; t=1775212099;
+	bh=IfOzlxWNl7Yt/HhjvnW8GtjadsUFO/ZmZPZoPTDf/Sg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=biEhDBIJhpa1gE4VxKjBfL/mB/WwjKyaIzXNxKlx9smKrop8cbGssFTHXouJS+4A2
-	 smY8OM0LA3vSUcnKsfumTfClmZt87Zd07633vj6NIjVVH/SS9W2nF+YIy3KiLiN1Xz
-	 F1OU+zbxwILIPmQC7CpHytsCkDcJXwEz8xqz7paMcElgvmlcNRwxo7sfFHMCQT5GI8
-	 uwrd0K3NxZbnvVkAWhCe7RGi7aguGsxH593om8K42LHXzxi1Y6ETq9xWLl8oClQzSR
-	 a6irCqdWn8OKgEdXGVmWZ6j2zbA8rk7Q7T2x7zldBdTi7g1GrHPFDHUzQ1uiOWo1RW
-	 pqN/Q+dZTjmcA==
+	b=htTVESc3DGfIeoKOAEKAE9HU2iJQ6lAyJ4TtyUc2oOMk+GF6GLCHFh6SoHHmazKoc
+	 fAgHGu7Bpuj9PUZ7EJVT4nAln96Q7cX3Qfnp/KK+3btjXGophNUzwz+c+9qj8dgr6T
+	 UQy+HFWUm8PDveVyFCzE2L5NRDI+5PxkeG2TUKRf8IHAjrBFFc3NMq7jpE8fmw/IZh
+	 aNhFWfNmJ1oYUQLBliwifZM3hByxZ8W6ItXW3JXH3pFNlHeFGckMjpk5Tan41psqEO
+	 9l0tx+vJpJmili9mMsaHG352Qjq4V4KBvwWQCrqSgrehjjvhTH7NrNrM4jDu3wOz4X
+	 m76Lo/bN23nsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81AFD81D02;
-	Fri,  3 Apr 2026 10:28:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A51512CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0D2A6110A;
+	Fri,  3 Apr 2026 10:28:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DE111A9
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 975FA81B99
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6437A40E60
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8CLRn8tigTU for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 10:28:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Er3cnMp6Ipi for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 10:28:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85CE281B58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85CE281B58
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 85CE281B58
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:14 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-43cf5fbacc9so955115f8f.1
- for <buildroot@buildroot.org>; Fri, 03 Apr 2026 03:28:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 569CF40E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 569CF40E55
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 569CF40E55
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:28:15 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-486b9675d36so15182665e9.0
+ for <buildroot@buildroot.org>; Fri, 03 Apr 2026 03:28:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775212092; x=1775816892;
+ d=1e100.net; s=20251104; t=1775212093; x=1775816893;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=czj3ocifZZo66Q57qepqHfbIcMXzKii8lCIcDEsdoXo=;
- b=Fwl+f3oLS5BSmGTjjMrvulpZh8StxaMj3R3NcXFEt6S1Ddww8HJL/Psgsq85qR44Z7
- dpqeqA6uI8c/h+lK2IkySSNGFzTS81d+OU7D4G51RFMOUGz18tGUp2VtaIXOWCtBupX1
- reThtMRyt7s9w1ViqyYxBTpFazZ65exqephFncmRpiSyQQ6+T1CGttIQoQZ4FKXhOZs2
- G9c85Q2M/aA7grabTFjQXC37gLwvzL6a/uL6LGb6uO/7MVWReI/d/p0qxZ8LrFC4XJ3k
- eti0ZeXjxVEvtG5/f1SGRhCWi+3M1CLg+lBJTmAjRY50NaZVAeywtMSsiPWSQbIW9IWP
- Z+mw==
+ bh=eyfscECdWLwlOdeUKGs5E2JzMqmpe0+wfloiqT8j+RI=;
+ b=aXUeZZ1tof8ci9aTgw1XvU8ILiWiFwRw+9kE7e7wSYf/7Sj/gOVOTNZ5NpFRxvcMUE
+ Ra+P5uXj9lTUBq5l/q7q3IbHQXduvashlGn9p0SUUD5CP3YVNLHY+ymuzWz4s7Dosy+j
+ OjfdvnQjmGA+0xU9G/3vEh3AxAfUWEgaufo29DiVpMNoVArjCTfkSVqjwxw6W4tZj3iC
+ YQpKgcLI3Ght27H/Qo6Lk59+KQ5dB1RKsvAuPtB8KR5dsZw0kwZE+XEAgihlwwmU8j7y
+ O6FNStIE7prrLTPPX+WRxrmCP4VrWypcUbxC/ZHZcG8YbrJyI0tBdpLtTVMusPNuHho1
+ twQg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWQlMGMZ8MHLY1IEcpcQjVZ4h3zlI9BBwEsgunYTOkoRG4dY3NUw0X7Pb/2uywt/ChBJ9/mIln1Dts=@buildroot.org
-X-Gm-Message-State: AOJu0YxOWYhZNL4X7QK+UpySIQdGjymqXOgfdfKrTKtpIFyktMpthPx6
- qT1cBWlVWRWKZF2uhyKDCEamPJHHw5kbKzoPL/UrTpTGuJdofdOu0hqSmPrpaEmQT14=
-X-Gm-Gg: AeBDies+NVsIYAWa6AL9WSenx/Ax99dgduJemxHDkklnojSZ5X40AfC5ajL0FswIZ5q
- hNaRng585BaKpuIHtzMoI/d2BFkImb9XW0DUw4NiiQIss4jcxsQS0QbU3p4gSQsQz76lBtuiXx2
- H8cXJLrUDOAY4CNnVLyjtYIkHI0ky4FeXlHzNUq8omKTBMnV6VHFtONKfQpYl8mPEE/HtWvGJqx
- 5NT6lrkvHGKGekcuqeTUctLWW2jVE8DdRkaysjrogOcK5JKKft77+INVyuCHot/PRvC3tA/K9Do
- bNwQRtQRJ4lSJ4Ws7+roZHlseDo7W6ae5ovwLE0NhPacB/preaFFuypZkWokNAz42gd7D5f+9uk
- FntAfpbinWj4mneUsXf5THGP2EtCNuuMSKx9s12DTd49+gx+HWySxTmMsofxc5Fj1lucWzcNxEW
- oz1ur4VGrjr10rJl39
-X-Received: by 2002:a05:6000:18a3:b0:43d:1bf6:91b with SMTP id
- ffacd0b85a97d-43d290da62fmr4039253f8f.16.1775212092359; 
- Fri, 03 Apr 2026 03:28:12 -0700 (PDT)
+ AJvYcCWzGFM7PCDQO2xZLwo788yjA+j9Ph1446sIb8iSKOSMbc0m0/tNEJ+ymxBFcXw9jNbohvsrPdk/lFQ=@buildroot.org
+X-Gm-Message-State: AOJu0YxKjnkAhykPx+Uc03QUSt1sNJTnt1oDi25WJgWTsqOG7eGnP+04
+ fy38uRlnCHBEaoXinF4TITzMKfauQ1hbppV02ghy/VchTSoE6+D4sP0FycYdJhbS4rcqttcjTUD
+ IONZqghY=
+X-Gm-Gg: ATEYQzx8mltF/nDgOyZsHo0sZ+F23rQ9oAkEHoNJf4VD9cZae4/zSoe3aM4d+CehOfe
+ PraOBQMt0C4o4q4WiO/h2cSc3fmCQdF8fBkf+Q78IJ4vKdQT8l8GIhz5x+QqB+Gl38uaCdUw1qt
+ V9yzJ7GxX1ktFCTjvCVOvem8mLfnVLO7cTxQ1NgWWlHMk0fp8z6y43EujCUa04qv8jjz8u1Tk5y
+ HZix1rASq93wdC9RJ+z/4N3G18zQvG2CJfLljfXxOzjJWx3988LHilcQwLWl9rzjTJgzgZRBBbU
+ G1njVkzXW4fjKXwOMZcXiAiaS4d7+9ZKiGbiaMi5pEfThmZDVLxdroZqkjhx47EunX/TpBty9H3
+ Bv3rA1blabc9k7gPmNwCuN9EixuZzu7vBQHOOfYQZxT/rJhxXoC2VGgRXv2wdK379jubQ+vrI6e
+ eFSoHRv3ORIfoSB6GtmImcZGHBQRI=
+X-Received: by 2002:a05:600c:6385:b0:488:90ac:8f8d with SMTP id
+ 5b1f17b1804b1-48899776385mr39452425e9.16.1775212093395; 
+ Fri, 03 Apr 2026 03:28:13 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d1e4d2971sm15312206f8f.22.2026.04.03.03.28.11
+ ffacd0b85a97d-43d1e2c5253sm13567647f8f.9.2026.04.03.03.28.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Apr 2026 03:28:11 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 03 Apr 2026 03:28:13 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  3 Apr 2026 12:28:11 +0200
-Message-ID: <20260403102811.210464-1-thomas.perale@mind.be>
+Date: Fri,  3 Apr 2026 12:28:12 +0200
+Message-ID: <20260403102812.210516-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260326211631.3598817-1-bernd@kuhls.net>
-References: <20260326211631.3598817-1-bernd@kuhls.net>
+In-Reply-To: <20260326081422.945900-3-titouan.christophe@mind.be>
+References: <20260326081422.945900-3-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775212092; x=1775816892; darn=buildroot.org;
+ d=mind.be; s=google; t=1775212093; x=1775816893; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=czj3ocifZZo66Q57qepqHfbIcMXzKii8lCIcDEsdoXo=;
- b=Ni8y5ucfoL/zX9qmHoLA0nXznloidNvMWx+mDvmEDLZXzj70EfFncO85WJCHQsdcbV
- 6OPL7+V+LN0JDFPR0TzuVb6BpxtWimNjVNeUXbQFKyop+Y0VeshCFEdDAMkhVilFO1ys
- qAC5XpNh9GTJOM32yUZPqBYLt/+NuPLJGcV/6ukiDmdYBlC6cryaZqlV7znCfaYEt2ji
- 6AV8uHLiuVgwLWliDqEEA73JgpYccl3/Ak2H/tX+BGLVsiJW0H0gs+jpv6b9hT1av+0L
- +OkP2iOWo5f41SMIqcB9Bo3a41jBSp4OCN2auU4yJNBfVtu6F9KrUnNnb8BpXXN1rQfL
- YO3g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=eyfscECdWLwlOdeUKGs5E2JzMqmpe0+wfloiqT8j+RI=;
+ b=P3LL8HRTrLEagl4ZQVqWmSh9u8kSXvwHDwfPFEZ9ED3Q1MQJWFBTC5U6di+ftnHQpz
+ dbyxR7fvzAfMrsO3f4Xj+4cCBRsIOq9/CjPy/tJO93rHwEfdcHFL2U/nqUekypJ4ECLH
+ WiV8tAtPrr4sQoibYdEVvw5/Wmg0Udi3hCB3w2fhJH85HXWKltF0hEOKmCBv4IbxroGB
+ xylRXdvHQ1HFNa99eYDWLNAOQ3rvkg0lTQrpwcZAM3DJH1P+0jMw7XqIEzkCyVAkrzPn
+ Www+8ADDV/mgcn+4S1qiQrU53yhsE6t+UGIO5ycyeSHjALlHv7UyQadNAcrVq507g7Bc
+ E8Zg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ni8y5ucf
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
- 0.4.9.6
+ header.a=rsa-sha256 header.s=google header.b=P3LL8HRT
+Subject: Re: [Buildroot] [PATCH v2 2/2] SECURITY.md: add new file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,45 +131,67 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.6/ReleaseNotes
+> This is an in-tree description of Buildroot's security policies
 > 
-> Fixes TROVE-2026-003 & TROVE-2026-004.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/tor/tor.hash | 4 ++--
->  package/tor/tor.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Changes v1->v2:
+> - Add references to the Buildroot User Manual for vulnerability tracking
+> - Add links to autobuilder pkg-stats and Buildroot security website
+> - Link to CPE info for Buildroot
+> - Explicitely say that security@buildroot.org is a private ML
+> ---
+>  SECURITY.md | 36 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 SECURITY.md
 > 
-> diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-> index a4b0af12b5..a70b9e9baf 100644
-> --- a/package/tor/tor.hash
-> +++ b/package/tor/tor.hash
-> @@ -1,4 +1,4 @@
-> -# From https://dist.torproject.org/tor-0.4.9.5.tar.gz.sha256sum
-> -sha256  c949c2f86b348e64891976f6b1e49c177655b23df97193049bf1b8cd3099e179  tor-0.4.9.5.tar.gz
-> +# From https://dist.torproject.org/tor-0.4.9.6.tar.gz.sha256sum
-> +sha256  a89aba97052e9963a654b40df2d46be07e8a6b6e24e5437917fd81acd90a7017  tor-0.4.9.6.tar.gz
->  # Locally computed
->  sha256  5dc29ea302cc75db6db4a7c88d7b5d4638b4e0f5f1d2e6d21ce71f707470b766  LICENSE
-> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-> index 36be7967bf..f11afcc449 100644
-> --- a/package/tor/tor.mk
-> +++ b/package/tor/tor.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TOR_VERSION = 0.4.9.5
-> +TOR_VERSION = 0.4.9.6
->  TOR_SITE = https://dist.torproject.org
->  TOR_LICENSE = BSD-3-Clause
->  TOR_LICENSE_FILES = LICENSE
+> diff --git a/SECURITY.md b/SECURITY.md
+> new file mode 100644
+> index 0000000000..6b21ffd2b9
+> --- /dev/null
+> +++ b/SECURITY.md
+> @@ -0,0 +1,36 @@
+> +# Security Policy
+> +
+> +## Security advisories
+> +
+> +Advisories for Buildroot security vulnerabilities are reported on the
+> +developer's mailing list. A public archive can be consulted on
+> +https://lists.buildroot.org/mailman/listinfo/buildroot
+> +
+> +Buildroot itself has a CPE to track its published vulnerabilities:
+> +https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=buildroot
+> +
+> +The Buildroot project provides some ways for its users to track known
+> +vulnerabilites in the packages included in the generated images, see:
+> +- https://nightly.buildroot.org/manual.html#_details_about_packages
+> +
+> +In addition, detailed informations for all packages integrated with Buildroot
+> +are updated daily on the following public web pages:
+> +- https://security.buildroot.org/
+> +- https://autobuild.buildroot.org/stats/
+> +
+> +## Reporting a Vulnerability
+> +
+> +To report a security vulnerability found in the Buildroot build system itself,
+> +please send an email to [security@buildroot.org](mailto:security@buildroot.org).
+> +
+> +This is a private mailing list contacting the Buildroot maintainers only.
+> +
+> +## Vulnerabilities in packages
+> +
+> +Buildroot is a build system that cross-compiles packages from third-party
+> +sources. The Buildroot developers are not responsible for security
+> +vulnerabilities in these packages. Such vulnerabilities should be reported
+> +directly to the upstream project that maintains the affected package.
+> +
+> +When vulnerabilities are fixed upstream, send a patch to update the affected
+> +packages in Buildroot.
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
