@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32F24E7E367
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 043A5E7E368
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 034C78175F;
+	by smtp3.osuosl.org (Postfix) with ESMTP id C908760A5A;
 	Fri,  3 Apr 2026 10:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QpIypQjWiz1E; Fri,  3 Apr 2026 10:27:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4bTAqD7srS9T; Fri,  3 Apr 2026 10:27:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C35B581B99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3AD660F06
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212030;
-	bh=CjpUGRhc7pSSyAbmCDEbzC9Ybo3APcDXN8RoF5zhoH8=;
+	s=default; t=1775212031;
+	bh=Z97Y87wsYJ5VSX4cvrDWVCUM3iwI1i5qdHdBJGvZPeM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WyRbzsSuGDtXzHLQjqt7oA+gRZIXxudQ3TEIRXctmubHebaBjAXsmbSUJruR6mX3q
-	 uJqPXQ4x4u9i8+OBLTWd1bkgywS9WgZeaZvKl0vFwswRhLccLa1uUCtYETFO2M7SS7
-	 qCTGUsDdo5wV5Oq4bOWExvP8dmdaIiGOviO3qT8hPA2gCem0ZJIzYOtid9eaQTv0Sb
-	 hmuHwB3eL67AKHRxHSA6U9VJCz2DWW1mAHYKg9D7NKO1yZGYQX+PWUvJE92tHJlTnt
-	 ekFrV2XuqnMKPIwTGnEsDPumeAXrp8iVKZ/eUzR8CcvhdSfMOnGIDAYtUVotJitETe
-	 Yx909qTy4nwOg==
+	b=XbVOAQXUCgUxpfVoJIqvUOx8MwvGjuysbHrNeRZGJGu71Umrhia1OpxYShezNr65A
+	 PWFd5jXkRTtx08+JhbFfwdlXUkX/qMGyyWDV95ubc1MZyqQ11Xe+iKv29psCf/L6+D
+	 PaJyJpmKzxVYrRiW+DDFvvv0nwURFZJjJcPaNmvwUorSbdnnMnJ/2PL2UfdjV7ROe9
+	 HEo86kZEPDYJrgKV+JJEM+PpvF01wW4rBzY8uDe+1S3LneEKCgT8WZFlHv/lF4erLw
+	 cgzrOZobrK1csjHdXV80TjE9yR5amFaN7LWx04uxR4UjLKoiONOul9P0Z5Oc5TBw5c
+	 Qv3fSpU8qogxg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C35B581B99;
-	Fri,  3 Apr 2026 10:27:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3AD660F06;
+	Fri,  3 Apr 2026 10:27:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BA492D3
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 290911A9
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9488A40E55
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3156D40E65
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GlA-HEjudD0C for <buildroot@buildroot.org>;
+ id sygGQ0FRPVgZ for <buildroot@buildroot.org>;
  Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9011C40E65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D7740E60
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9011C40E65
+ by smtp4.osuosl.org (Postfix) with ESMTP id 75D7740E60
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AB807FFAA; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
+ id 00B057FFAA; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 12:21:50 +0200
+Date: Fri, 3 Apr 2026 12:21:44 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6e84b56f4dc2821893af41a6cf9a1fdd33e52b10
-X-Git-Newrev: c9f7b876ee5bac0ee7344e5ecb7bd3ac0d5aab76
+X-Git-Oldrev: cf9b4eb348d69e0a561f43211efddb431d40199f
+X-Git-Newrev: 5905cd590ccab0c01315dd46603a30ba96212682
 X-Patchwork-Hint: ignore
-Message-Id: <20260403102657.1AB807FFAA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rauc: add patch
- for CVE-2026-34155
+Message-Id: <20260403102657.00B057FFAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] SECURITY.md: add new file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,254 +76,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c9f7b876ee5bac0ee7344e5ecb7bd3ac0d5aab76
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5905cd590ccab0c01315dd46603a30ba96212682
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This fixes the following vulnerability:
-
-    RAUC bundles using the 'plain' format exceeding a payload size of 2 GiB
-    cause an integer overflow which results in a signature which covers only
-    the first few bytes of the payload. Given such a bundle with a legitimate
-    signature, an attacker can modify the part of the payload which is not
-    covered by the signature. Bundles using the recommended 'verity' or
-    'crypt' formats are not affected. They are supported from v1.5
-    (released 2020-12-14) and v1.7 (released 2022-06-03) respectively.
-    If all signed and published bundles were smaller than 2GiB,
-    the vulnerability cannot be exploited.
-    https://github.com/rauc/rauc/security/advisories/GHSA-6hj7-q844-m2hx
+This is an in-tree description of Buildroot's security policies
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 6e4a136363260458a1a15c487f1903f233e80795)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 0ce674c2449fd506b4836a80ec0d78c2862d353d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rauc/0001-fix-cve-2026-34155.patch | 219 +++++++++++++++++++++++++++++
- 1 file changed, 219 insertions(+)
+ SECURITY.md | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/rauc/0001-fix-cve-2026-34155.patch b/package/rauc/0001-fix-cve-2026-34155.patch
+diff --git a/SECURITY.md b/SECURITY.md
 new file mode 100644
-index 0000000000..dccb6f0d4c
+index 0000000000..6b21ffd2b9
 --- /dev/null
-+++ b/package/rauc/0001-fix-cve-2026-34155.patch
-@@ -0,0 +1,219 @@
-+From f482e9f2ce34697844332db531b4b8be1e4b6043 Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@mind.be>
-+Date: Tue, 31 Mar 2026 08:49:13 +0200
-+Subject: [PATCH] Fix CVE-2026-34155
++++ b/SECURITY.md
+@@ -0,0 +1,36 @@
++# Security Policy
 +
-+This is the concatenation of the 2 upstream commits that make the actual
-+change between rauc v1.15.1 and 1.15.2; rebased on top of rauc v1.13
++## Security advisories
 +
-+===============================================================================
-+[1/2] src/signature: protect against integer overflows with BIO_new_mem_buf()
++Advisories for Buildroot security vulnerabilities are reported on the
++developer's mailing list. A public archive can be consulted on
++https://lists.buildroot.org/mailman/listinfo/buildroot
 +
-+BIO_new_mem_buf()'s len argument is of type int, so it cannot support
-+lengths exceeding 2 GiB. Reject larger lengths and additionally check
-+that we have created the BIO correctly.
++Buildroot itself has a CPE to track its published vulnerabilities:
++https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=buildroot
 +
-+These are only internal checks, GError handling will be added in a later
-+commit.
++The Buildroot project provides some ways for its users to track known
++vulnerabilites in the packages included in the generated images, see:
++- https://nightly.buildroot.org/manual.html#_details_about_packages
 +
-+Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
++In addition, detailed informations for all packages integrated with Buildroot
++are updated daily on the following public web pages:
++- https://security.buildroot.org/
++- https://autobuild.buildroot.org/stats/
 +
-+Upstream: https://github.com/rauc/rauc/commit/bbdf9f04a96a7094e11cfa822d695bc7f33dbf61
-+===============================================================================
-+[2/2] src/signature: reject plain bundles with payload exceeding 2 GiB
++## Reporting a Vulnerability
 +
-+Due to BIO_new_mem_buf() only supporting buffers of up to 2 GiB, we
-+cannot sign or verify bundles with a payload larger than that.
++To report a security vulnerability found in the Buildroot build system itself,
++please send an email to [security@buildroot.org](mailto:security@buildroot.org).
 +
-+This fixes an integer overflow which would lead to calling
-+BIO_new_mem_buf() with a negative len, which will cause it to use
-+strlen() to  to determine the buffer size automatically. As a result,
-+the buffer is truncated at the first '\0' byte in the SquashFS header.
-+The first 4 bytes are a fixed magic number ("hsqs"), and since a '\0'
-+byte appears within the inode count field at bytes 5-8 in most SquashFS
-+images, the resulting signature will only cover this part of the
-+SquashFS header.
++This is a private mailing list contacting the Buildroot maintainers only.
 +
-+As we sign or verify the payload directly via OpenSSL only for the
-+'plain' format, the 'verity' and 'crypt' formats are not affected.
++## Vulnerabilities in packages
 +
-+Fix this by checking the content size before calling cms_sign_file() or
-+cms_verify_bytes(), which call BIO_new_mem_buf() via bytes_as_bio().
++Buildroot is a build system that cross-compiles packages from third-party
++sources. The Buildroot developers are not responsible for security
++vulnerabilities in these packages. Such vulnerabilities should be reported
++directly to the upstream project that maintains the affected package.
 +
-+Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-+
-+Upstream: https://github.com/rauc/rauc/commit/662a212fc16b736bfed163ebb7349a53881803cd
-+===============================================================================
-+
-+CVE: CVE-2026-34155
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/signature.c  | 32 ++++++++++++++++++++++++++++++++
-+ test/signature.c | 46 ++++++++++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 78 insertions(+)
-+
-+diff --git a/src/signature.c b/src/signature.c
-+index 88f6e790..ca06bfa6 100644
-+--- a/src/signature.c
-++++ b/src/signature.c
-+@@ -414,11 +414,19 @@ static BIO *bytes_as_bio(GBytes *bytes)
-+ 		g_error("bytes_as_bio: no data");
-+ 	if (size == 0)
-+ 		g_error("bytes_as_bio: size is zero");
-++	if (size > INT_MAX)
-++		g_error("bytes_as_bio: size is too large for BIO_new_mem_buf");
-+ 
-+ 	bio = BIO_new_mem_buf(data, size);
-+ 	if (!bio)
-+ 		g_error("bytes_as_bio: BIO_new_mem_buf() failed");
-+ 
-++	/* ensure that we've passed the data correctly */
-++	const BUF_MEM *bio_mem_buf = NULL;
-++	BIO_get_mem_ptr(bio, &bio_mem_buf);
-++	g_assert(bio_mem_buf->data == data);
-++	g_assert(bio_mem_buf->length == size);
-++
-+ 	return bio;
-+ }
-+ 
-+@@ -1420,6 +1428,7 @@ GBytes *cms_sign_file(const gchar *filename, const gchar *certfile, const gchar
-+ 	GError *ierror = NULL;
-+ 	g_autoptr(GMappedFile) file = NULL;
-+ 	g_autoptr(GBytes) content = NULL;
-++	gsize content_size = 0;
-+ 	GBytes *sig = NULL;
-+ 
-+ 	g_return_val_if_fail(filename != NULL, FALSE);
-+@@ -1434,6 +1443,17 @@ GBytes *cms_sign_file(const gchar *filename, const gchar *certfile, const gchar
-+ 	}
-+ 	content = g_mapped_file_get_bytes(file);
-+ 
-++	G_STATIC_ASSERT(INT_MAX >= INT32_MAX);
-++	content_size = g_bytes_get_size(content);
-++	if (content_size > INT32_MAX) {
-++		g_set_error(
-++				error,
-++				R_SIGNATURE_ERROR,
-++				R_SIGNATURE_ERROR_LOAD_FAILED,
-++				"Bundle payload size %"G_GSIZE_FORMAT " exceeds maximum for bundles using plain format (2 GiB)", content_size);
-++		goto out;
-++	}
-++
-+ 	sig = cms_sign(content, TRUE, certfile, keyfile, interfiles, &ierror);
-+ 	if (sig == NULL) {
-+ 		g_propagate_error(error, ierror);
-+@@ -1479,6 +1499,7 @@ gboolean cms_verify_fd(gint fd, GBytes *sig, goffset limit, X509_STORE *store, C
-+ 	GError *ierror = NULL;
-+ 	g_autoptr(GMappedFile) file = NULL;
-+ 	g_autoptr(GBytes) content = NULL;
-++	gsize content_size = 0;
-+ 	gboolean res = FALSE;
-+ 
-+ 	g_return_val_if_fail(fd >= 0, FALSE);
-+@@ -1515,6 +1536,17 @@ gboolean cms_verify_fd(gint fd, GBytes *sig, goffset limit, X509_STORE *store, C
-+ 		content = tmp;
-+ 	}
-+ 
-++	G_STATIC_ASSERT(INT_MAX >= INT32_MAX);
-++	content_size = g_bytes_get_size(content);
-++	if (content_size > INT32_MAX) {
-++		g_set_error(
-++				error,
-++				R_SIGNATURE_ERROR,
-++				R_SIGNATURE_ERROR_LOAD_FAILED,
-++				"Bundle payload size %"G_GSIZE_FORMAT " exceeds maximum for bundles using plain format (2 GiB)", content_size);
-++		goto out;
-++	}
-++
-+ 	res = cms_verify_bytes(content, sig, store, cms, NULL, &ierror);
-+ 	if (!res) {
-+ 		g_propagate_error(error, ierror);
-+diff --git a/test/signature.c b/test/signature.c
-+index 7fc9a4f3..7a16c1b1 100644
-+--- a/test/signature.c
-++++ b/test/signature.c
-+@@ -10,6 +10,7 @@
-+ #include "common.h"
-+ 
-+ typedef struct {
-++	gchar *tmpdir;
-+ 	GBytes *content;
-+ 	GBytes *sig;
-+ 	GError *error;
-+@@ -23,6 +24,8 @@ static void signature_set_up(SignatureFixture *fixture,
-+ {
-+ 	r_context_conf();
-+ 
-++	fixture->tmpdir = g_dir_make_tmp("rauc-XXXXXX", NULL);
-++	g_assert_nonnull(fixture->tmpdir);
-+ 	fixture->content = read_file("test/openssl-ca/manifest", NULL);
-+ 	g_assert_nonnull(fixture->content);
-+ 	fixture->sig = NULL;
-+@@ -39,6 +42,10 @@ static void signature_set_up(SignatureFixture *fixture,
-+ static void signature_tear_down(SignatureFixture *fixture,
-+ 		gconstpointer user_data)
-+ {
-++	if (fixture->tmpdir)
-++		g_assert_true(rm_tree(fixture->tmpdir, NULL));
-++
-++	g_free(fixture->tmpdir);
-+ 	g_bytes_unref(fixture->content);
-+ 	g_bytes_unref(fixture->sig);
-+ 	g_clear_error(&fixture->error);
-+@@ -275,6 +282,44 @@ static void signature_verify_file(SignatureFixture *fixture,
-+ 	g_clear_error(&fixture->error);
-+ }
-+ 
-++static void signature_too_large(SignatureFixture *fixture,
-++		gconstpointer user_data)
-++{
-++	gboolean res = FALSE;
-++
-++	g_autofree gchar *payloadname = write_random_file(fixture->tmpdir, "payload", 1024, 1234);
-++	g_assert_nonnull(payloadname);
-++	fixture->sig = read_file("test/openssl-ca/manifest-r1.sig", NULL);
-++	g_assert_nonnull(fixture->sig);
-++
-++	goffset large_size = (goffset)INT32_MAX+1;
-++
-++	g_assert_cmpint(truncate(payloadname, large_size), ==, 0);
-++	g_autoptr(GBytes) sig = cms_sign_file(payloadname,
-++			"test/openssl-ca/rel/release-1.cert.pem",
-++			"test/openssl-ca/rel/private/release-1.pem",
-++			NULL,
-++			&fixture->error);
-++	g_assert_null(sig);
-++	g_assert_error(fixture->error, R_SIGNATURE_ERROR, R_SIGNATURE_ERROR_LOAD_FAILED);
-++	g_clear_error(&fixture->error);
-++
-++	g_assert_cmpint(truncate(payloadname, large_size + 1024), ==, 0);
-++	gint fd = g_open(payloadname, O_RDONLY|O_CLOEXEC, 0);
-++	g_assert_cmpint(fd, >=, 0);
-++	res = cms_verify_fd(fd,
-++			fixture->sig,
-++			large_size,
-++			fixture->store,
-++			&fixture->cms,
-++			&fixture->error);
-++	g_assert_false(res);
-++	g_assert_error(fixture->error, R_SIGNATURE_ERROR, R_SIGNATURE_ERROR_LOAD_FAILED);
-++	g_assert_null(fixture->cms);
-++	g_clear_error(&fixture->error);
-++	g_close(fd, NULL);
-++}
-++
-+ static void signature_loopback_detached(SignatureFixture *fixture,
-+ 		gconstpointer user_data)
-+ {
-+@@ -828,6 +873,7 @@ int main(int argc, char *argv[])
-+ 	g_test_add("/signature/verify_valid", SignatureFixture, NULL, signature_set_up, signature_verify_valid, signature_tear_down);
-+ 	g_test_add("/signature/verify_invalid", SignatureFixture, NULL, signature_set_up, signature_verify_invalid, signature_tear_down);
-+ 	g_test_add("/signature/verify_file", SignatureFixture, NULL, signature_set_up, signature_verify_file, signature_tear_down);
-++	g_test_add("/signature/too_large", SignatureFixture, NULL, signature_set_up, signature_too_large, signature_tear_down);
-+ 	g_test_add("/signature/loopback_detached", SignatureFixture, NULL, signature_set_up, signature_loopback_detached, signature_tear_down);
-+ 	g_test_add("/signature/loopback_inline", SignatureFixture, NULL, signature_set_up, signature_loopback_inline, signature_tear_down);
-+ 	g_test_add("/signature/get_cert_chain", SignatureFixture, NULL, signature_set_up, signature_get_cert_chain, signature_tear_down);
-+-- 
-+2.53.0
-+
++When vulnerabilities are fixed upstream, send a patch to update the affected
++packages in Buildroot.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
