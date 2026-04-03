@@ -1,116 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDB7E85375
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C68FBE85374
 	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 14:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E843F40DA6;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 926EF81339;
 	Fri,  3 Apr 2026 14:50:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O2mIXSWSMZfK; Fri,  3 Apr 2026 14:50:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xk0ZRtNQb6eq; Fri,  3 Apr 2026 14:50:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17FD941148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC194811BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775227842;
-	bh=IHDnyqGXLqtD2RVov4u/bC59+OWGt2G2VAsMjoSuOF4=;
+	s=default; t=1775227839;
+	bh=UZWgTDJWloUDOIOrauNBgXHzsBlJrbP2N0PswmWAVfY=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=K8LCwzQRB+8Pm9S22ydlcDVivuS36sVsIhL1W14dk/jpR4g35KP9TKdwtvCCPczCb
-	 FIemJmHE8uxhFQ6gYvMWaQ0Lr1AEl+i920+qVWjAZ3hmMHVxDYCldwC6UbzfkT6gi3
-	 Td4Z1tiMrb9l5XyTtVHKRcB8wr+0bb+YYhAaz2ae696ZnFRPZKakCuF5QgYeySrkVQ
-	 mM8Wbf2kaZHDTpCIwhthBt5YxFP0bxN2/D0pnB4Gm0BbuV26pDT8w8QPvzTq34nW4X
-	 uAnIAj4/DH6hKsbYPZpNd+z/L1zmSAiq9NMzXwQmCqPhdB4TmAbglu6i27e2poKV2e
-	 i1+Kb4v8bmAMQ==
+	b=kFOjYPqjR4Vi0R5nMazSent1rtQ3i3HN7lZmr9SsWh2SxgffZPMBHq1Kz1W1S9dpx
+	 h9F3u0uUp2B51R6jH20EOFZRSUcqQhEZEfdZ2CJMxeDAe5Db8+o5GfzpkngYRG4DRH
+	 qhaOBSchJX/5oS5aOLIR8/0RN7jQ7ef9qZyu/0D/Gq3x2rKYZnSYc5BL+uMHpheQQB
+	 1+WQphSgVcsC8cNW1eW++4LfBTbI4CrfMnKrtsh/y1eCj4hLM2F/nHVbHWwHXjqPvX
+	 CUEtKS/0aAzNex4/g4pTJG/fC2kegfCE0UM8T9dtUzSrPecOaZqtoRJgBpoikLL9WV
+	 rPu4LrbBOFVTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17FD941148;
-	Fri,  3 Apr 2026 14:50:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B92AD1A9
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 14:50:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8CBF40DA6
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 14:50:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bn3gEFADkm9n for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 14:50:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BBBE941148
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBBE941148
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BBBE941148
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC194811BC;
+	Fri,  3 Apr 2026 14:50:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7ECD71A9
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 14:50:38 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-488971db0fdso9502605e9.0
- for <buildroot@buildroot.org>; Fri, 03 Apr 2026 07:50:38 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6534A4030D
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 14:50:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qLS5wmjXcoJZ for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 14:50:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 140AE4003D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 140AE4003D
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 140AE4003D
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 14:50:36 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4888375f735so16971725e9.3
+ for <buildroot@buildroot.org>; Fri, 03 Apr 2026 07:50:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775227836; x=1775832636;
+ d=1e100.net; s=20251104; t=1775227835; x=1775832635;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=/5EfDYgaRoI6swP1ytk4marn6judwKK8/RKJrnY9Mc0=;
- b=VoZUJvXIG+bKFhX1I1OmwTKe7RvskP0zyedjl7TB8rrjDz6+S3twJA73Lr7+bMi3Ap
- puv9XDs4493S8k5CMrXaWpTph61UvXdYIO7qIP9o7nGEX9yv0jnIDHrtMAAwLVqO0tWA
- UvVtQkrK4qqA0P8FdMKMwMmOYU+QJ2OUMSfimWVv9QGmyKLYAT30ePjwGryICu9O268v
- FAsTcSnzWjTfgB+RtzpAJ6wGKpPrK6uqmi2RnWETaUVoG4pPlZ6TotlrzrZDLXsjxxuQ
- 0HprM2S9u4hnHa8MamHjWSZ72UyAxiIgxcdEV6f47aAX881ttsO4+4/QvLhwMUNkx0MA
- UtGg==
-X-Gm-Message-State: AOJu0YwaRUtfPuDXlnU7ocVGRfpk0bhZyiamstbPjN1BW9GKJTr4ONiV
- KQwrmqhAFakAqhfSQaIyZ/RqDwvyi+LZl2FJi3E3S3ZEYwK8uHMHkqFh2z52Lek/6YnPA/wpPWD
- 7KY7LCao=
-X-Gm-Gg: ATEYQzx/YOGUGGtCzfxH+JHMA37mSX7zrbbNvwpABH1jBiiOZ+RllbKWXmtB5PPH9RW
- T92hen49yuONZ2EfAmm4SGTJALV9BMwYDpkrwBUivqTIqWFfM8JbakFIgEoT1fleL2+GuevAIa2
- 6QweFJoftjR1G2hP+hPIT6kBAjWnDcXa749Xl1GmQ3alr1LW2ab/ppH9yAKgj6/mRqk9xVViuN0
- 9Njgp1XXP3VDH4fH0GfCn1lMPTKXgtr0khxSQAdG89pNwJb6bozfGbouUAQPSPKUSvlWKT2c2+J
- 5IbqrYkfcDslnpVS+6PnEbPgJ2GTB5IS3WwlExyqT2tLcRlopfoqsoaux9S1sIYu2DGX/2Goi8d
- KEiaAPR2Ik38MiFdz5jKRWr4stabOC65KKXbd3JBa7/iKlzfJiYEXQ4EIYNyFCk6PcWtzTVJN21
- UPKndsvWBMC9XfP3yr6xkLg1mks0oFPFVHPdr24ymOpy54sTuakVjl3RDKZkJdD5yX1dLTZHlCf
- cuZUIk/Ay4w1hpZ7NO5
-X-Received: by 2002:a05:600c:a4a:b0:488:7f69:4abf with SMTP id
- 5b1f17b1804b1-488997426f9mr49713995e9.12.1775227836277; 
- Fri, 03 Apr 2026 07:50:36 -0700 (PDT)
+ bh=l75kk+krpatzHAIyHDSogOmN4sKbyq3XGcrUfYcwjLU=;
+ b=TQHf7nY2CEadDErqLV8wyejyAtfiPhTVzMtzK8v0RLTA+9d3Co6rl3SiUSezp4jM9K
+ VuzsB/Q1xuhp63iVGdjD4HF4aEMLzpHdSa+/B41Qi/5eH1QZSsVxQHPFaGn62WkJrXpK
+ x/MExTkKiP2yiIJbcnPb9D0p5YAIeLYiU+CvLQiQq1fo6RJmU4x2NG6OrgZPAB16ysYE
+ GmAR5+fdW1MA+ieVtxXMIKEzALEuc6aHl0uFxnET04MPPzVbNcPc91+zwWokb0D0l4N6
+ fDbPMmwGLtSSSaDoGd7WDuVFu+BoYzW95cJr8AMJuS/zaiA2rsSNC/hMm3L4y6CZxJ7L
+ 3Uqg==
+X-Gm-Message-State: AOJu0YxiazTqrBXqXMaRS00BDkT/uFGuo08lWx/g5STKsoNXukuY609u
+ i9JkMMU3LL+PSr/mfrhj9gK4eDTHxlTwa59+ECp+9o0MlEd0E3uSnYpeJl79IEwfdHCfF5DgNej
+ 9NpXd+kU=
+X-Gm-Gg: ATEYQzyYh0rRyEQC5kDUhoPywlRXGWfkMndDjeRokPpQwK1OrJspGfwLABiw4q4U1yi
+ ot+A4Mo3dJ5F0JSL7bzxV4eUSda/69pA9F6r8zi5m2D7F6SXOtaKWH+vjShT4H5LnnGVU9LyWcM
+ M3jiegdgof/phsYae0ODRMnOXtkjiDYQFUQByWPX39882/7Fu9i2NSkgSQ6u0FatEnFjRyUB2Y7
+ aSTYhu8BO6S9ONKqAlj8SWRYg8mtyRTWZ+eerERbq2yQODxjIDzwpZqZQeH1L5kkzOD7xqEgtsN
+ 36aKM8EW27ohBBURB7KddSBIcwG0cd+Ag+7ZK5ubCvsZUGfOuGNpe9s3dlxoM2+ZWLU2JpBTETz
+ 4kBpOw/fzNo/CgBZZVRdIEa2cimixkTNyZfQYzYUijUS81MrVoTMROP0fi8HFUvFBzMpoSA2xZq
+ RKBY2YLde7gvbmP11cAPp9nmOFuUXMnYo2mDCH97cYvuQsTd8052HZyqUZ1NfKwR3Maznlz/f7W
+ A+sa/JhViUv7m4WNlKx
+X-Received: by 2002:a05:600c:c0c8:b0:486:fd3a:fd22 with SMTP id
+ 5b1f17b1804b1-488996e0cd4mr35963935e9.4.1775227834635; 
+ Fri, 03 Apr 2026 07:50:34 -0700 (PDT)
 Received: from P-NAN-NAPALM..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488983db4fbsm22419265e9.13.2026.04.03.07.50.35
+ 5b1f17b1804b1-488983db4fbsm22419265e9.13.2026.04.03.07.50.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Apr 2026 07:50:36 -0700 (PDT)
+ Fri, 03 Apr 2026 07:50:34 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Dowan Gullient <dowan.gullient@smile.fr>
-Date: Fri,  3 Apr 2026 16:50:22 +0200
-Message-ID: <20260403145022.1532257-4-dowan.gullient@smile.fr>
+Date: Fri,  3 Apr 2026 16:50:21 +0200
+Message-ID: <20260403145022.1532257-3-dowan.gullient@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260403145022.1532257-1-dowan.gullient@smile.fr>
 References: <20260403145022.1532257-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1775227836; x=1775832636; darn=buildroot.org;
+ d=smile.fr; s=google; t=1775227835; x=1775832635; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/5EfDYgaRoI6swP1ytk4marn6judwKK8/RKJrnY9Mc0=;
- b=g0oUsFZOIMQWaLBTPX/dFsVBkM680XHyFko/Fg/VQUYAda9BrlUkZa5l/lQ7ZuIhVX
- IAzmk414opRrmbtjTxlCLEEINgP7CuJDV0Kl2k3Pn9zJXqoZPUpwc2uKFjlSF3C4KqxB
- TxGz4wbOT2mzXWtsDFJlII3TID3jG62Kx/ZRo=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=l75kk+krpatzHAIyHDSogOmN4sKbyq3XGcrUfYcwjLU=;
+ b=g6EUPf7HkG5pkKj5NuqRzgYn2MhHlibKRY/eqhcE7VXedJoWf1/PeuHs+RR+H4UjOR
+ tHmwUU3CnINcYpTE3YgdY+9ikyHd2OlvePy6DMz4/kyLTwOlaU2sk+VyZ0q+UGz4+BET
+ bcxY2binJOjt0ajr+aDN1iURFl7CD2q/sBnMg=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=g0oUsFZO
-Subject: [Buildroot] [PATCH v1 3/3] support/scripts: add manual trigger for
- pre-built kernels in GitLab CI
+ header.s=google header.b=g6EUPf7H
+Subject: [Buildroot] [PATCH v1 2/3] support/testing: add builtin kernel
+ configuration for ARMv7 Vexpress
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,132 +129,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a manual trigger in GitLab CI to generate the pre-built
-kernels for ARMv5 Versatile and ARMv7 Vexpress platforms, using the builtin
-configurations added in the previous patches by creating a .runtime_prebuilt_kernels
-job that can be triggered with the variable ARCH_NAME = all , arm5 or arm7.
+This configuration is based on the one used in the CI for a long time, but with
+some fixes to be able to build it with more recent toolchains and kernel versions,
+and to be able to update it when needed.
+It also uses an external bootlin toolchain.
+It was tested in QEMU and booted successfully with a rootfs generated with the same
+configuration.
 
-support/scripts/generate-gitlab-ci-yml:
-    - add a new condition that checks if the variable ARCH_NAME is set to "all",
-        "arm5" or "arm7" to include the .runtime_prebuilt_kernels job in the
-        generated gitlab-ci.yml file. The value of the variable is set in the
-        GitLab CI interface when creating a manual pipeline.
-    - There is three options for the ARCH_NAME variable:
-        - all: generates pre-built kernels for both ARMv5 and ARMv7 platforms
-        - arm5: generates pre-built kernels only for ARMv5 Versatile platform
-        - arm7: generates pre-built kernels only for ARMv7 Vexpress platform
+A hash file is added for the kernel source (version 6.18.15), and a
+fragment file is provided to be able to update the kernel configuration when needed.
 
-support/misc/gitlab-ci.yml.in:
-    - add .runtime_prebuilt_kernels job with manual trigger that generates
-        ARMv5 and ARMv7 pre-built kernels
-    - This job uses a buildroot .config file, linux .config and .fragment files
-        to build the kernels for testing.
-    - It also creates an output directory, rename the generated binaries with
-        the format <kernel_name>-<board_name>-<kernel_version> and upload them as
-        artifacts to download them for later.
-    - for debug purposes a build-time.log file is included in the artifacts to
-        check the build output and errors.
+To manually test this config you can use :
+
+qemu-img resize images/rootfs.ext2 64M
+
+qemu-system-arm \
+    -M vexpress-a9 \
+    -kernel images/kernel-vexpress-v2p-ca9-6.18.15 \
+    -dtb images/vexpress-v2p-ca9-6.18.15.dtb \
+    -drive file=images/rootfs.ext2,format=raw,if=sd \
+    -append "console=ttyAMA0,115200 root=/dev/mmcblk0 rw rootwait" \
+    -net nic -net user \
+    -nographic
+
+Linux buildroot 5.10.202 #1 SMP Wed Dec 6 00:43:44 CET 2023 armv7l GNU/Linux
 
 Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 ---
- support/misc/gitlab-ci.yml.in          | 39 ++++++++++++++++++++++++++
- support/scripts/generate-gitlab-ci-yml | 22 +++++++++++++++
- 2 files changed, 61 insertions(+)
+ .../buildroot_arm7_vexpress.config            | 17 +++++++
+ .../linux_arm7_vexpress.fragment              | 46 +++++++++++++++++++
+ .../arm7-vexpress/patches/linux/linux.hash    |  2 +
+ 3 files changed, 65 insertions(+)
+ create mode 100644 support/testing/builtin-kernels/arm7-vexpress/buildroot_arm7_vexpress.config
+ create mode 100644 support/testing/builtin-kernels/arm7-vexpress/linux_arm7_vexpress.fragment
+ create mode 100644 support/testing/builtin-kernels/arm7-vexpress/patches/linux/linux.hash
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index ada36d0d60..8bd6d5efd5 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -152,3 +152,42 @@ before_script:
-             - br-test-pkg/*/defconfig
-             - br-test-pkg/*/build/build-time.log
-             - br-test-pkg/*/build/packages-file-list*.txt
+diff --git a/support/testing/builtin-kernels/arm7-vexpress/buildroot_arm7_vexpress.config b/support/testing/builtin-kernels/arm7-vexpress/buildroot_arm7_vexpress.config
+new file mode 100644
+index 0000000000..9a69131365
+--- /dev/null
++++ b/support/testing/builtin-kernels/arm7-vexpress/buildroot_arm7_vexpress.config
+@@ -0,0 +1,17 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/testing/builtin-kernels/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="vexpress-v2p-ca9 $(BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE)"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.15"
++BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="support/testing/builtin-kernels/arm7-vexpress/linux_arm7_vexpress.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
+diff --git a/support/testing/builtin-kernels/arm7-vexpress/linux_arm7_vexpress.fragment b/support/testing/builtin-kernels/arm7-vexpress/linux_arm7_vexpress.fragment
+new file mode 100644
+index 0000000000..2515202c01
+--- /dev/null
++++ b/support/testing/builtin-kernels/arm7-vexpress/linux_arm7_vexpress.fragment
+@@ -0,0 +1,46 @@
++# Options for debug and logs
++CONFIG_ARCH_VEXPRESS=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_TMPFS_XATTR=y
++CONFIG_INPUT_EVDEV=y
 +
-+.runtime_prebuilt_kernels:
-+    stage: test
-+    script:
-+        - |
-+            {
-+                case ${CI_JOB_NAME} in
-+                (armv5)
-+                    DEFCONFIG_NAME="support/testing/builtin-kernels/arm5-versatile/buildroot_arm5_versatile.config"
-+                    ;;
-+                (armv7)
-+                    DEFCONFIG_NAME="support/testing/builtin-kernels/arm7-vexpress/buildroot_arm7_vexpress.config"
-+                esac
-+            }
-+        - OUTPUT_DIR=output
-+        - mkdir -p ${OUTPUT_DIR}
-+        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - make defconfig BR2_DEFCONFIG=${DEFCONFIG_NAME}
-+        - echo "Build ${CI_JOB_NAME} kernel"
-+        - |
-+            make O=${OUTPUT_DIR} linux > >(tee build.log |grep '>>>') 2>&1 || {
-+                echo 'Failed build last output'
-+                tail -200 build.log
-+                exit 1
-+            }
-+    retry:
-+        max: 2
-+        when:
-+            - runner_system_failure
-+            - stuck_or_timeout_failure
-+    artifacts:
-+        when: always
-+        expire_in: 2 weeks
-+        paths:
-+            - .config
-+            - build.log
-+            - output/images/
-+            - output/build/build-time.log
-+            - output/build/packages-file-list.txt
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 2d922b9eb2..922392485c 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -56,6 +56,19 @@ gen_tests() {
-             do_runtime=true
-             ;;
-         esac
-+    elif [ -n "${ARCH_NAME}" ]; then
-+        do_prebuilt_kernels=true
-+        case "${ARCH_NAME}" in
-+            (all)
-+                prebuilt_kernels=( "armv5" "armv7" )
-+                ;;
-+            (armv5|armv7)
-+                prebuilt_kernels=( "${ARCH_NAME}" )
-+                ;;
-+            (*)
-+                do_prebuilt_kernels=false
-+                ;;
-+        esac
-     else
-         case "${CI_COMMIT_REF_NAME}" in
-           (*-basics)
-@@ -113,6 +126,7 @@ gen_tests() {
-     if [    -z "${do_defconfigs}" \
-          -a -z "${do_runtime}" \
-          -a -z "${do_testpkg}" \
-+         -a -z "${do_prebuilt_kernels}" \
-        ]
-     then
-         do_basics=true
-@@ -139,6 +153,14 @@ gen_tests() {
-     if [ -n "${do_testpkg}" ]; then
-         printf '%s: { extends: .test_pkg }\n' "${do_testpkg[@]}"
-     fi
++# Sytemd and Docker fixups (see the commit 241a8b06) 
++CONFIG_AUTOFS4_FS=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CGROUPS=y
++CONFIG_FAIR_GROUP_SCHED=y
++CONFIG_FHANDLE=y
++CONFIG_FW_LOADER_USER_HELPER=n
++CONFIG_INOTIFY_USER=y
++CONFIG_KCMP=y
++CONFIG_MEMCG=y
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_FQ_CODEL=y
++CONFIG_PSI=y
++CONFIG_RT_GROUP_SCHED=n
++CONFIG_SYSFS_DEPRECATED=n
++CONFIG_USER_NS=y
 +
-+    if [ -n "${do_prebuilt_kernels}" ]; then
-+        printf '%s: { extends: .runtime_prebuilt_kernels }\n' \
-+               "${prebuilt_kernels[@]}"
-+    fi
++# Create a config file for maintenance
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
 +
++# Fix the entropy problem during the boot
++CONFIG_HW_RANDOM=y
 +
- }
- 
- main "${@}"
-+
++# Other QEMU options
++#Storage
++CONFIG_PCI=y
++CONFIG_PCI_VERSATILE=y
++CONFIG_SCSI=y
++CONFIG_SCSI_SYM53C8XX_2=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_EXT4_FS=y
++#Network
++CONFIG_PHYLIB=y
+diff --git a/support/testing/builtin-kernels/arm7-vexpress/patches/linux/linux.hash b/support/testing/builtin-kernels/arm7-vexpress/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..473cc598b5
+--- /dev/null
++++ b/support/testing/builtin-kernels/arm7-vexpress/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  7c716216c3c4134ed0de69195701e677577bbcdd3979f331c182acd06bf2f170  linux-6.18.15.tar.xz
 -- 
 2.43.0
 
