@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 692F6E7E369
-	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9D85E7E367
+	for <buildroot@archiver.kernel.org>; Fri,  3 Apr 2026 10:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D58E60F76;
-	Fri,  3 Apr 2026 10:27:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA3A081A58;
+	Fri,  3 Apr 2026 10:27:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TtD6-2EUBCMU; Fri,  3 Apr 2026 10:27:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R5Vk0rSezhfr; Fri,  3 Apr 2026 10:27:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B38A608D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47DBC81D0B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775212039;
-	bh=0u+4BazrakkOYIp7qnxQLqWFM5m8zbY0LorP5DqGW6g=;
+	s=default; t=1775212038;
+	bh=Z8XCg2zVgjSE7AIhZnPj9Oshz+top2HmB8KHYnGNrRU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=o26jrnKApJNWbxCPIG8QOggg9AIDX2fKlZhlXT6apYDpzz941t9YUDhRWJ/cvSYAc
-	 DSmoSuBZ5dvziz3fMVakGk6Tjj30RBmAg45B+Xb9BNbLhZPJT4JNXH4afhwyzzST3q
-	 TF9Fa7lHWUROmIqGmj6cpLYHD4cYsKOzrux/KXHVdN8bnLb3KSbJH5/8SZeABPQPxq
-	 UXi+qB/5/7Po+5AcxhV7MAR8J5aB92E6JX/wRRCJlrztXZi6KSuqGaaCKoGtfz1zti
-	 szl99fWYVPGyaTGoE7fFUg7LmlV/l1VIaFAZXQXXd1pbGpnjXBuAwlwHGMOCiAZ7tr
-	 yHejyE0ueobCA==
+	b=TKo6mIdOEh/xK5Z/xtnienmAiN6eHBFQn730w72ZMXei3NqrPMpJs/evumKZkFddp
+	 PMk5026wRh4S9PW0Aadmzn/72n8ZSBL8VLH6Enio1oGAWhErH3n6KKa6JbaSteCgLi
+	 vQDajZwVnLshdJtYvCYQjlxD/q0iE+nzheGpk2oGquKjmuZw++U0YZnsnWwjakq8Az
+	 BILgJmVzvKjHfReibDabRdMR47YMZf65ixZqPMPf+F+WVcFVhp4dy/FpHUhVAtYZl5
+	 7RRTIpeIFQlnPXNwWkrRKE/pXDZRvdJLCpjItPbIg7Ymc3xoHsGDUmar00p/E7XtSI
+	 6vSOIwOZxpJ4A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B38A608D8;
-	Fri,  3 Apr 2026 10:27:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47DBC81D0B;
+	Fri,  3 Apr 2026 10:27:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7AE982CC
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CC291A9
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55A6C40263
- for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:27:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8F5640269
+ for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W7CG3KCMMvUc for <buildroot@buildroot.org>;
- Fri,  3 Apr 2026 10:26:58 +0000 (UTC)
+ id 8PtCOyCO0MWf for <buildroot@buildroot.org>;
+ Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 870A640266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D30F40263
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 870A640266
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D30F40263
  for <buildroot@buildroot.org>; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 120707FFA9; Fri,  3 Apr 2026 10:26:57 +0000 (UTC)
+ id EC6347FFA9; Fri,  3 Apr 2026 10:26:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Apr 2026 12:21:48 +0200
+Date: Fri, 3 Apr 2026 12:21:42 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f6a408fd8f94e24c724a78e55cfb3acef7851dff
-X-Git-Newrev: 6e84b56f4dc2821893af41a6cf9a1fdd33e52b10
+X-Git-Oldrev: 227e220be2aff7406040bf4166b2cca1f6c671b9
+X-Git-Newrev: cf9b4eb348d69e0a561f43211efddb431d40199f
 X-Patchwork-Hint: ignore
-Message-Id: <20260403102657.120707FFA9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libpng: security
- bump to version 1.6.56
+Message-Id: <20260403102656.EC6347FFA9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: security
+ bump to version 9.18.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,59 +77,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6e84b56f4dc2821893af41a6cf9a1fdd33e52b10
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf9b4eb348d69e0a561f43211efddb431d40199f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following security vulnerabilities:
-
-CVE-2026-33416 (high):
-Use-after-free via pointer aliasing in `png_set_tRNS` and `png_set_PLTE`.
-
-CVE-2026-33636 (high):
-Out-of-bounds read/write in the palette expansion on ARM Neon.
-
-For more details, see the advisories:
-https://github.com/pnggroup/libpng/security/advisories/GHSA-m4pc-p4q3-4c7j
-https://github.com/pnggroup/libpng/security/advisories/GHSA-wjr5-c57x-95m2
-
 Release notes:
-https://github.com/pnggroup/libpng/blob/v1.6.56/ANNOUNCE
+https://ftp.isc.org/isc/bind9/9.18.47/doc/arm/html/notes.html
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.47/doc/arm/html/changelog.html
+
+Fixes CVE-2026-1519.
+
+Fixes bug:
+GL #5708
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5708
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 22e4440eaed6330401ac4c87b2eee7e0f0d19ba9)
+(cherry picked from commit 0fa55218f44e30d62843e0b99921a4b26e6aa6c7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 7901f82c3a..ae28eee087 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.55/
--sha1  13f7bedf27009e59961f823cc779a5f9f5341a91  libpng-1.6.55.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.56/
-+sha1  71eb3636e60b6ea66f2f670cdf1f7160b7a1fa8b  libpng-1.6.56.tar.xz
- # Locally computed:
--sha256  d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d  libpng-1.6.55.tar.xz
-+sha256  f7d8bf1601b7804f583a254ab343a6549ca6cf27d255c302c47af2d9d36a6f18  libpng-1.6.56.tar.xz
- sha256  bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index e79e259536..25687ca927 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 4671eab985..09d35a3698 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.46/bind-9.18.46.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.47/bind-9.18.47.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  6b59f0de30c6901cce783007d06f7dd717ec3aa74b5bb5cc5159f93f0be4fc1d  bind-9.18.46.tar.xz
++sha256  9d544ba013decd1ee60e3c99d5548dd21aaaf5db96205dfc8623f39f061f14be  bind-9.18.47.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index e58dcda34d..b889f922b6 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.55
-+LIBPNG_VERSION = 1.6.56
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+-BIND_VERSION = 9.18.46
++BIND_VERSION = 9.18.47
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
