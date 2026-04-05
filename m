@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2E1FE64019
-	for <buildroot@archiver.kernel.org>; Sun,  5 Apr 2026 10:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CF61E64018
+	for <buildroot@archiver.kernel.org>; Sun,  5 Apr 2026 10:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 719988120F;
-	Sun,  5 Apr 2026 10:39:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2529E8120F;
+	Sun,  5 Apr 2026 10:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvANqFTVm2fd; Sun,  5 Apr 2026 10:39:11 +0000 (UTC)
+ id 88bzAkYL2nso; Sun,  5 Apr 2026 10:39:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CFDA81211
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45B6181216
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775385551;
-	bh=0op5XjVhzeTxRidpxkyLFkeLLTup6x4aeRe+eujR34s=;
+	s=default; t=1775385563;
+	bh=ilYFXjiNnlnWhIxuJibBYvlhmiK5LY6F/GRKAm1FJjw=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=FPmpTYX0i4ICWZ7mmCZDePPOoLNWLOxh0HHK4jmNndp1cT1r2RKSE1PfgHgNUo4/S
-	 VGdAMMLC7qo8xClj37duhuv8w7Gnk6aP4zyMxj5XlyPja2uiOiWCWv1pR30VXewD95
-	 Z58Zu4K238L4i2St2kz9tJI7qyX/RyzNhsNNeoId8b8O8J1DB0/2B1jSTodXXkiRkq
-	 sYAohxDAj8RMTXPo9B14z0+qtzi2h2KukeCNSzGmIzydVuT/PAbKVY7Bgw7aI6wjDE
-	 C61/VA5DM4TE6p2b5/uXmSkMHjHj1+aiYuPFwbGkwmNoGbVQ1qkhXCr18pQC10ObU3
-	 YiOY0VArThKdg==
+	b=G+Fiee3+4GtCO5P4EcPvufW0LEoTbNiOhoW1C4vbDkWg0ofetSX3LJv5TON6/5d98
+	 8urwVvwbb8hNzrS7l9q6yvQcXxvU32av/FreKHPU3hVlRv2YJBSdEOXjS7as7GwaMI
+	 v0HCe0kZlojYdTnDwIfykxjDv6oJn2zAIyojaT6FUx2qnZ3LurpgZSrP9FwPEB3J+O
+	 g4T5OnRI3LlX2EzdZCl5DRy48W+ubRD1PiEPO08w6oFUpr0lg9FPMWaH+BqwVWbuYo
+	 nj9EQgvEKI+0v3pegfOMXhsh9n+s7nn4JLW61BwvvgHPqIji9zX7e88HPLDVH5Ik7w
+	 lMO7MNbwb6qqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CFDA81211;
-	Sun,  5 Apr 2026 10:39:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45B6181216;
+	Sun,  5 Apr 2026 10:39:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CA09219
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10E2C2EF
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82B4740A85
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB74F40A85
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OosvrlmQae7N for <buildroot@buildroot.org>;
- Sun,  5 Apr 2026 10:39:08 +0000 (UTC)
+ id i59QUXmLzdFX for <buildroot@buildroot.org>;
+ Sun,  5 Apr 2026 10:39:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1232B40A4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1232B40A4F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B990540A4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B990540A4F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1232B40A4F
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B990540A4F
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 10:39:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a012a.dip0.t-ipconnect.de [91.58.1.42])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C132BA4C3767
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CE3E9A4C38EB
  for <buildroot@buildroot.org>; Sun,  5 Apr 2026 12:38:51 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:53282)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w9KsV-000000007LA-1MGx
+ (envelope-from <bernd@kuhls.net>) id 1w9KsV-000000007LA-28y5
  for buildroot@buildroot.org; Sun, 05 Apr 2026 10:38:51 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  5 Apr 2026 12:38:48 +0200
-Message-ID: <20260405103851.2855053-2-bernd@kuhls.net>
+Date: Sun,  5 Apr 2026 12:38:49 +0200
+Message-ID: <20260405103851.2855053-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260405103851.2855053-1-bernd@kuhls.net>
 References: <20260405103851.2855053-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1775385531;
- bh=5Vxo1Z4RjTUCTmvHYNOAtxsgCpQWO2BUWqrxsRUtrwM=;
+ bh=t0vj6aIRfhqn9cVx1gIJi9hkBhsG8INZnnkhHais/o8=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=fxu6HIIHbKqZmrlSlNMnlp2MEjBuyQWK9ueXEUa8VDBIYaDiNekiN1y2b9ufS8J+U
- O4QaJPt1ThIxtu+beEi4+QiVTDJ5dNouSbGyOEAirIZoIiun1gKe5rixE53vAtnsok
- DMcG3acObr5siwNpRQVzHdR1SRGW9HWanHFjbHIN5Q+UTSVZTVU6n5T3vjP9bR0gDR
- pnXq8ix5cYuhvExSblc0hHsvkmmdD+mVG0QRl/uLz4Opw/kh6D+4MQFmdzRhPKyk3w
- kM9KPAa3h41lYSvUlMCgr/xl7YbXHPtacBOi1UX1HkiwHNeL0SuGCSC6yjKteiIgA2
- Up3KoKnMWsYHQ==
+ b=YXXSremDrl8zCED2x6cPQx0JmEoSxuNkVjr4ZyXW2CObnLo1BdRoRt6a2qMTtW4l6
+ X6hnQjmNIG7nkofKNzxi379Fv7l6rq36xgXyIwKiic+zqbFhXsEitL0Av/SeCS05Or
+ eaPEgBWCVHBaFEZsx94Lvf+HhEScmuSqlPxGIse2WEV5RzC5x6tovgeuGP7t0u8iR8
+ INTeKYb220jEyLWGEnqyF3zAk+8T3l0bp4fzE5Kp5PxQZuOFZTIfXK1a3MKQ9X09sj
+ IPiDQ3ih6rBk/frNwQlAbhx2PZ2Djgvzw80vL0XXe5Yzc8tPAiPj+Yt0Af8ptUNvU0
+ 0yVAuR+ztiapw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=fxu6HIIH
-Subject: [Buildroot] [PATCH 2/4] package/c-icap: bump version to 0.5.14
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=YXXSremD
+Subject: [Buildroot] [PATCH 3/4] package/c-icap-modules: bump version to
+ 0.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,194 +99,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-0.5.11: https://sourceforge.net/p/c-icap/mailman/message/38634903/
-0.5.12: https://sourceforge.net/p/c-icap/mailman/message/58723532/
-0.5.13: https://github.com/c-icap/c-icap-server/compare/C_ICAP_0.5.12...C_ICAP_0.5.13
-        (no announcement found)
-0.5.14: https://sourceforge.net/p/c-icap/mailman/message/59202148/
-
-Rebased patch 0001 due to upstream commit
-https://github.com/c-icap/c-icap-server/commit/1559d1662a9c0cd8280073202f187f0d5c080f87
-
-Rebased patch 0003 due to upstream commit
-https://github.com/c-icap/c-icap-server/commit/b650bfdd4ac5aa32fd1b2de8cc0a47e2dc08c6d7
-
-Removed patch 0004 which is included in this release:
-https://github.com/c-icap/c-icap-server/commit/16cdaa505db2108d9a7c42baa3779f5831e62916
-
-Renamed patches 0005 & 0006.
-
-Disabled zstd support added upstream with commit
-https://github.com/c-icap/c-icap-server/commit/1559d1662a9c0cd8280073202f187f0d5c080f87
-due to build errors when enabled:
-
-encode.c: In function 'ci_compress_to_membuf':
-encode.c:75:16: error: implicit declaration of function
- 'ci_zstd_compress_to_membuf'; did you mean 'ci_decompress_to_membuf'?
- [-Wimplicit-function-declaration]
+0.5.7: https://sourceforge.net/p/c-icap/mailman/message/58723534/
+"The newer c-icap-0.5.12 or c-icap-0.6.2 c-icap release is also
+ required."
+0.5.6: https://sourceforge.net/p/c-icap/mailman/message/40461114/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...ixes-to-compile-and-run-under-cygwin.patch |  8 +++--
- ...thod-release_authentication_header-m.patch | 18 ++---------
- ...ion-prototypes-to-fix-GCC-15.x-buil.patch} |  0
- ...ith-GCC15-signal-handlers-require-an.patch | 31 -------------------
- ...ing-in-various-printf-to-avoid-warn.patch} |  0
- package/c-icap/c-icap.hash                    |  6 ++--
- package/c-icap/c-icap.mk                      |  3 +-
- 7 files changed, 13 insertions(+), 53 deletions(-)
- rename package/c-icap/{0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch => 0004-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch} (100%)
- delete mode 100644 package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
- rename package/c-icap/{0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch => 0005-Fix-integer-printing-in-various-printf-to-avoid-warn.patch} (100%)
+ package/c-icap-modules/c-icap-modules.hash | 6 +++---
+ package/c-icap-modules/c-icap-modules.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
-index 6f886c9b72..1174825c0e 100644
---- a/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
-+++ b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
-@@ -7,6 +7,8 @@ Subject: [PATCH] Required fixes to compile and run under cygwin
- https://github.com/c-icap/c-icap-server/commit/1631a6c1f50e152b8a45d8279c96086e5636795b,
- which has the side effect of fixing the build with the musl C library]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Bernd: rebased for 0.5.14]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.am                 |  2 +-
-  configure.ac                | 10 +++++++---
-@@ -26,13 +28,13 @@ index 4c34033..ab80f4f 100644
- --- a/Makefile.am
- +++ b/Makefile.am
- @@ -53,7 +53,7 @@ c_icap_SOURCES = aserver.c request.c cfg_param.c \
-- libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/ -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@ @BROTLI_ADD_FLAG@ @PCRE_ADD_FLAG@ -DCI_BUILD_LIB
-+ libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/ -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@ @BROTLI_ADD_FLAG@ @ZSTD_ADD_FLAG@ @PCRE_ADD_FLAG@ -DCI_BUILD_LIB
-  
-- libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@ @BROTLI_ADD_LDADD@ @PCRE_ADD_LDADD@ @DL_ADD_FLAG@ @THREADS_LDADD@ @OPENSSL_ADD_LDADD@
-+ libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@ @BROTLI_ADD_LDADD@ @ZSTD_ADD_LDADD@ @PCRE_ADD_LDADD@ @DL_ADD_FLAG@ @THREADS_LDADD@ @OPENSSL_ADD_LDADD@
- -libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@ @THREADS_LDFLAGS@
- +libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@ @LIBS_LDFLAGS@ @THREADS_LDFLAGS@
-  
-- export EXT_PROGRAMS_MKLIB = @ZLIB_LNDIR_LDADD@ @BZLIB_LNDIR_LDADD@ @BROTLI_LNDIR_LDADD@ @PCRE_LNDIR_LDADD@ @OPENSSL_LNDIR_LDADD@
-+ export EXT_PROGRAMS_MKLIB = @ZLIB_LNDIR_LDADD@ @BZLIB_LNDIR_LDADD@ @BROTLI_LNDIR_LDADD@ @ZSTD_LNDIR_LDADD@ @PCRE_LNDIR_LDADD@ @OPENSSL_LNDIR_LDADD@
-  
- diff --git a/configure.ac b/configure.ac
- index 405571b..8059cb7 100644
-diff --git a/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch b/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
-index 940a67b70d..abfdace618 100644
---- a/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
-+++ b/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
-@@ -11,10 +11,11 @@ Reported with PR#72 at github:
+diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
+index 110ffd4de3..278b3efdbb 100644
+--- a/package/c-icap-modules/c-icap-modules.hash
++++ b/package/c-icap-modules/c-icap-modules.hash
+@@ -1,7 +1,7 @@
+ # From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.5.x/
+-md5  ca6d5d124a4668d63affcaa5ab083e57  c_icap_modules-0.5.5.tar.gz
+-sha1  67be484a93fe662a7735ee06e1d34d82b54469a8  c_icap_modules-0.5.5.tar.gz
++md5  08c4721a26840bb0ff95fcaa64b686c3  c_icap_modules-0.5.7.tar.gz
++sha1  839b79bc53e9048680309a7cd31ad3c1e2cf44b5  c_icap_modules-0.5.7.tar.gz
  
- Upstream: 48a221b0197727b26f90c00544fa19c67d0f5d47
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+[Bernd: rebased for 0.5.14]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  http_auth.c      | 2 +-
-- include/module.h | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/http_auth.c b/http_auth.c
- index 1883b55..b831bb1 100644
-@@ -29,19 +30,6 @@ index 1883b55..b831bb1 100644
-      int len, res;
-  
-      if (ALLOW_REMOTE_PROXY_USERS && !use_method) {
--diff --git a/include/module.h b/include/module.h
--index 286ef72..0e57586 100644
----- a/include/module.h
--+++ b/include/module.h
--@@ -96,7 +96,7 @@ typedef struct http_auth_method {
--     void *(*create_auth_data)(const char *authorization_header,const char **username);
--     void (*release_auth_data)(void *data);
--     char *(*authentication_header)();
---    void (*release_authentication_header)();
--+    void (*release_authentication_header)(char *);
--     struct ci_conf_entry *conf_table;
-- } http_auth_method_t;
-- 
- -- 
- 2.51.0
- 
-diff --git a/package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch b/package/c-icap/0004-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-similarity index 100%
-rename from package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-rename to package/c-icap/0004-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-diff --git a/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch b/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
-deleted file mode 100644
-index 97359ab4d6..0000000000
---- a/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 8d21c9c18e3b03e28ef2831f3ecd287c4cc44694 Mon Sep 17 00:00:00 2001
--From: Christos Tsantilas <christos@chtsanti.net>
--Date: Fri, 21 Feb 2025 13:41:37 +0200
--Subject: [PATCH] Fix to compile with GCC15: signal handlers require an int
-- argument
--
--Reported with PR#72 at github:
--     https://github.com/c-icap/c-icap-server/pull/72
--
--Upstream: 0b3408ad0e9f5ccadcd4d77dffa651f9211e4cd2
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- mpmt_server.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/mpmt_server.c b/mpmt_server.c
--index aab9db5..01bab65 100644
----- a/mpmt_server.c
--+++ b/mpmt_server.c
--@@ -140,7 +140,7 @@ static void sigchld_handler_main(int sig)
--     /*Do nothing the signal will be ignored..... */
-- }
-- 
---static void sighup_handler_main()
--+static void sighup_handler_main(int sig)
-- {
--     c_icap_reconfigure = 1;
-- }
---- 
--2.51.0
--
-diff --git a/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch b/package/c-icap/0005-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
-similarity index 100%
-rename from package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
-rename to package/c-icap/0005-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
-diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
-index 9a596cf375..64af987017 100644
---- a/package/c-icap/c-icap.hash
-+++ b/package/c-icap/c-icap.hash
-@@ -1,6 +1,6 @@
- # Retrieved from https://sourceforge.net/projects/c-icap/files/c-icap/0.5.x/
--md5  c8329684588a906d10a687e84ba4a478  c_icap-0.5.10.tar.gz
--sha1  2901aa19c8c4b09b700164290942290c34132076  c_icap-0.5.10.tar.gz
-+md5  f678d20ae30cad41b08437b441752e31  c_icap-0.5.14.tar.gz
-+sha1  db5e72065a3219410adfdbc5378b40b01e21ec36  c_icap-0.5.14.tar.gz
  # Locally calculated
--sha256  541d503354907f06d1d72fa90fffd031002f0f4346150fb7b2203ad5825ae49d  c_icap-0.5.10.tar.gz
-+sha256  28c30c97b1892a1a8938db6cdad806a73016c57ae181e232d33f347d5d700ec5  c_icap-0.5.14.tar.gz
- sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 4ece4c4b26..7e1b73cd2e 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
+-sha256  6a42f1fdd8c35ad38d29f7d3c10f925471977f217086352e146cf95e45f2b5b5  c_icap_modules-0.5.5.tar.gz
++sha256  80bc0af10be171c0c73cd5886533a397c4d55211756fb6279f245ee7e5dd3814  c_icap_modules-0.5.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+index e9bbbdb284..5ef0fa3256 100644
+--- a/package/c-icap-modules/c-icap-modules.mk
++++ b/package/c-icap-modules/c-icap-modules.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--C_ICAP_VERSION = 0.5.10
-+C_ICAP_VERSION = 0.5.14
- C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
- C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
- C_ICAP_LICENSE = LGPL-2.1+
-@@ -14,6 +14,7 @@ C_ICAP_INSTALL_STAGING = YES
- C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
- 	--without-perl \
-+	--without-zstd \
- 	--enable-large-files \
- 	--enable-ipv6
- # Pre-seed cache variables for tests done with AC_TRY_RUN that are not
+-C_ICAP_MODULES_VERSION = 0.5.5
++C_ICAP_MODULES_VERSION = 0.5.7
+ C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
+ C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_MODULES_LICENSE = GPL-2.0+
 -- 
 2.47.3
 
