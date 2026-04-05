@@ -4,81 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68D5BE64019
-	for <buildroot@archiver.kernel.org>; Sun,  5 Apr 2026 11:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D66E64013
+	for <buildroot@archiver.kernel.org>; Sun,  5 Apr 2026 12:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23A5E8124C;
-	Sun,  5 Apr 2026 11:57:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BFB9811C1;
+	Sun,  5 Apr 2026 12:15:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6SVcs5BDkDM3; Sun,  5 Apr 2026 11:57:42 +0000 (UTC)
+ id Mv47c9v4C-Tg; Sun,  5 Apr 2026 12:15:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8E8E80F8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29B21810B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775390262;
-	bh=rO/0Zjwrc7cE9mjCvDJZGZ01oV/FpeqCMDL4DoyjpS8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=RtzdN0i5p+Fsa+0bNNZQtDuxS5eFYXqFQ2yKR7uf+UAlQFvF7suPNtcEvc9rmuCEf
-	 ep6P54ElIRI20O3ybRwgLzNYnC5cuJbh50R7b93pbg8Aibts4wJHsqZLNdRoHhXfCt
-	 xYlLgqXDgjAGEvCp3BorhYhIDi7qiJImyXBUgPz1lDEeU7rtTQzuuRfDq89HzcDWXh
-	 9obE486+LXlX82wCLC+OdffDwsIv8XVvRYeRYAjfhKpk4T1D5IeXCGR5KwPiUni0ro
-	 6G73q8dhAeHlUYQ4QJHltiSu13jxsIXBLNeYT6t0zgMPOU04RG3eerAzx2ChncrPhz
-	 vJJC3ldLk2jDg==
+	s=default; t=1775391330;
+	bh=qCJNOQ9OatHbuHIHDkCyt2o8EWf9RUcF70Nwt8jEVCc=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=hoVvGIf1YPqvMLxc6qakN0QJqVNYBoJwS9M0WrumKDcyjVTZtvwtUzyVMgSkj2msf
+	 rSYQWVwtWl0nQCwvLyX/MPNYAzIRt/JgMhxQyosVxkovQbeoZ3y5/KPynCUZ9nuBLD
+	 jxjnNNqTnA1eRTofOIBJmHTLgM/X+SyF+aa/+OpCUdOUHF6blpsO4sIjbSH8Yg0kLX
+	 rjQa15Y98VeEyXVi9YYS8OFPKiaCHpBdKSdkK9iNelCpRQ/tccq8cb9bdEYkDODAGK
+	 JeADKe2QweYtG+S7LFluaMbNoTRuyVtNESZUj5kDUyq0b+WxOy0g+x0m8vzb2gFn9N
+	 E8Fli7m2XEEMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8E8E80F8C;
-	Sun,  5 Apr 2026 11:57:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BA5A1EB
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 11:57:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29B21810B6;
+	Sun,  5 Apr 2026 12:15:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB4C91EB
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 12:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DF8540389
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 11:57:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB0DD40A84
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 12:15:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZBaMiiurHFz for <buildroot@buildroot.org>;
- Sun,  5 Apr 2026 11:57:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZgykXeA0f1sI for <buildroot@buildroot.org>;
+ Sun,  5 Apr 2026 12:15:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 472FB4005B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 472FB4005B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F8D440A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F8D440A12
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 472FB4005B
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 11:57:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8F8D440A12
+ for <buildroot@buildroot.org>; Sun,  5 Apr 2026 12:15:27 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a012a.dip0.t-ipconnect.de [91.58.1.42])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 78E87A4C0413
- for <buildroot@buildroot.org>; Sun,  5 Apr 2026 13:57:38 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35286)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 67CDCA4C37C0;
+ Sun,  5 Apr 2026 14:15:25 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57052)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1w9M6k-000000004Zm-0lhV
- for buildroot@buildroot.org; Sun, 05 Apr 2026 11:57:38 +0000
+ (envelope-from <bernd@kuhls.net>) id 1w9MNx-000000007lm-0Ehg;
+ Sun, 05 Apr 2026 12:15:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  5 Apr 2026 13:57:38 +0200
-Message-ID: <20260405115738.2469253-1-bernd@kuhls.net>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>,
+ Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun,  5 Apr 2026 14:15:24 +0200
+Message-ID: <20260405121524.2590079-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260405121524.2590079-1-bernd@kuhls.net>
+References: <20260405121524.2590079-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1775390258;
- bh=NkXx4M6+A2eirxC1h/H+cx5vbFgjeWfjW06DpdT6J2s=;
- h=From:To:Subject:Date:From;
- b=KuaNbNXNtm+liPnD8sHQxdbSGQB4+2RGQkU8gw6OZ4RPVn9FCYcZCYZGYpS64yNZW
- UA5e52jC9gO+qAdS90gi3a1IMcVkiWUuTYnMihhOgcpx0dqFYBXcbdO050QMmIHN3d
- LCa4uEEsr/2wNuVTxkjzq+euDmBCMjRKaw6yqBX9HuFLXwgmK+34stk6DXomRnFXXD
- FviUUbttcrqSl4WCnVpoLcfbNWAl4/IwJl63DMlNjFO0JyOXtUPgmi9Vds4X9BGqp1
- uQH3iagddxbciD0Ygx6UEBuWuBXUISmbUH/SNtvT+ldT8R4Tfz2pJBI2OhC5ZZXVIc
- greCaAPcVBUvA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202511301023; t=1775391325;
+ bh=oq9n2QSQyAO74W904EEzzztDNI3oiL79m7Jg+0UiBSM=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=seXnhxM6Wn2ZDgTYDKIVkKK4tfBIUWihrgLz9T6QL4les5pecJqOoR4T5bozwfMqj
+ lDgPJ5cS+uxfZw+F5aRMQzWapxU7DA6P6olqGZSTUERIoZSd24VFNqfx9UwjRwEpDx
+ UK14Q9ub+cE/B362KaoBIngsMAOQu+//PcvCN6wEQoKrOkJaAOytEb/0y5PM4t2DkJ
+ qdftZJg4w3B6UC9HcO4XZPhV+Em4a+3ffSjLUlMZYAnQAWGRgu5G8LJosyCx4jGRly
+ v46l9s01iBOuEaLWzKHoWhpcd+EFaH9UV5Dq02Lc+HnXXKPaTXHKjc+5wt1ygV7eC4
+ Fhf+q3wq+Shww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=KuaNbNXN
-Subject: [Buildroot] [PATCH 1/1] package/luvi: update help text
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=seXnhxM6
+Subject: [Buildroot] [PATCH 2/2] package/postgis: bump version to 3.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,27 +100,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 00317f0aff243986983650671fd220ab040af50f switched the
-package from pcre to pcre2 but forgot update the Kconfig help text.
+https://github.com/postgis/postgis/blob/3.6.2/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/luvi/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/postgis/postgis.hash | 2 +-
+ package/postgis/postgis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luvi/Config.in b/package/luvi/Config.in
-index 19d3307f12..04163141b0 100644
---- a/package/luvi/Config.in
-+++ b/package/luvi/Config.in
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_LUVI
- 	  The luvi core can be extended with several Lua modules by
- 	  adding its bundled Lua binding libraries.
- 	  To get the Lua module...
--	    * 'rex' select PCRE (BR2_PACKAGE_PCRE)
-+	    * 'rex' select PCRE2 (BR2_PACKAGE_PCRE2)
- 	    * 'ssl' select OpenSSL (BR2_PACKAGE_OPENSSL)
- 	    * 'zlib' select zlib (BR2_PACKAGE_ZLIB)
+diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+index e70d0e43eb..8ca0fa48c3 100644
+--- a/package/postgis/postgis.hash
++++ b/package/postgis/postgis.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ec0cfaab475630106211d180d71df46782e41e10b6dffe91d79ca818ecd2cbb4  postgis-3.6.1.tar.gz
++sha256  d488089a64ee4060bce7dbba0291fcca358e7f7ac5230e2ee5b344e7485729c4  postgis-3.6.2.tar.gz
+ sha256  81749eea887e78402c9b85896cd629b155bc29256927f818f01001f038146391  LICENSE.TXT
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index 8585694c06..0a55ee0e58 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-POSTGIS_VERSION = 3.6.1
++POSTGIS_VERSION = 3.6.2
+ POSTGIS_SITE = https://download.osgeo.org/postgis/source
+ # parallel build issues
+ POSTGIS_MAKE = $(MAKE1)
 -- 
 2.47.3
 
