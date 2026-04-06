@@ -4,84 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61E2FF46C78
-	for <buildroot@archiver.kernel.org>; Mon,  6 Apr 2026 19:45:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABA6AF46C78
+	for <buildroot@archiver.kernel.org>; Mon,  6 Apr 2026 19:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2875760BFB;
-	Mon,  6 Apr 2026 19:45:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64D1E60B2E;
+	Mon,  6 Apr 2026 19:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qDp1OLwycbQM; Mon,  6 Apr 2026 19:45:06 +0000 (UTC)
+ id 1l7KQ8WFdpeZ; Mon,  6 Apr 2026 19:56:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03E2860B1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4197C60BE9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775504706;
-	bh=8n0rsvDkl0bCRVezcTtdDavDzjiNYoyiziR0VhzaXU8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1775505404;
+	bh=6ElpO1lEbXgSa0LRisxOnsOb6ihRVLgbMuss+HkGxh8=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pLHLQC4qr/gKI5leb/CwYUniyNoyFgMBLY3D79Kf8PHzsZbEWy37/JPtMTe7WPdyO
-	 HC+BAwmfbEKDFRI+cL/bozzGY5Ee5IjPnq7YLmHPdtoHtC30VMT3042quEzkK/dfOD
-	 b8QSuVV4zzDRPidCpdAeomFfhwS5DnuNWC2+7OBrpCxg65ytBMA6Uy/ecn9ZvvwVSQ
-	 rX5EchMkUlT45zhQUvnSZhs66OWMP0ndEuinwVyeNzlrIwlblM3ZSh7VmtdtzCmM0G
-	 Dgs5OND36SNoTt0Ik61LUkupXZqJeptOBnLEEOrHlgjM4MHDKoTPYrrgarWrDugAbr
-	 P8nK0DEcOiJvA==
+	b=RAGZ6vW8CqQsYjF3KV4cDCSSOb9diq7UHfLJES65hKQLAtu2KfHz8ee4aYFsKNfHT
+	 y+b/LSbvC8pcFdh/Jf+YhkokN8DtJtVt+BqRoFfyx+TX35GKjKmNxZwjO1hLokkyzZ
+	 pfi/Yihm5gNgUpGQH0F820qyFk/J+qvfqmtisxOvK42KgQK01mgZjs78T5xarpp7t8
+	 rnkGrrP/12FlostsFsb1sJEjucD0XlLvSBcpByDzE7xcfpiLxG9GPt+5zwjx5bXYIV
+	 DvpqSe84dWdYKKsAVKqjiat7mhChOvh3gcNri5pV2tHt+J4/GEOiX8su4o3PJDw7di
+	 IloTOIgjJe5bQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03E2860B1D;
-	Mon,  6 Apr 2026 19:45:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4197C60BE9;
+	Mon,  6 Apr 2026 19:56:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B8AA1EB
- for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:45:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D3E7B219
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0150440608
- for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:45:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B109C40605
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nazfKihBJSgI for <buildroot@buildroot.org>;
- Mon,  6 Apr 2026 19:45:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4C911405F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C911405F9
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4C911405F9
- for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:45:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 071C613F8BA;
- Mon,  6 Apr 2026 21:44:59 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 06 Apr 2026 21:44:59 +0200
+ id PDkkNsavc9mb for <buildroot@buildroot.org>;
+ Mon,  6 Apr 2026 19:56:41 +0000 (UTC)
+X-Greylist: delayed 393 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 06 Apr 2026 19:56:40 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B37CD405F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B37CD405F9
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ receiver=<UNKNOWN> 
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B37CD405F9
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 19:56:40 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:d567:798e:6586:ab5d] (unknown
+ [IPv6:2a01:e0a:12:eba0:d567:798e:6586:ab5d])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 1D664BFB98;
+ Mon,  6 Apr 2026 21:50:05 +0200 (CEST)
+Message-ID: <b1d2ad5d-f081-4fea-903f-fd1ccd79a3e3@grenoble.cnrs.fr>
+Date: Mon, 6 Apr 2026 21:50:04 +0200
 MIME-Version: 1.0
-Date: Mon, 06 Apr 2026 21:44:59 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20260406181810.1853090-1-bernd@kuhls.net>
-References: <20260406181810.1853090-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <9d950574ff3a4eb2708bd017ccb32498@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775504702;
- bh=zqJsB1dSvi4ZIZssoRjluF9AieV938yh4Ssz5uEnpL0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tJB8Nz9/HagoQg6srDV3vC8Ao7nncoX4Fe6f9dgvVvDTQINHzgC4Yz1RU8uvsIdJf
- h0jAsfSK9P43WHxYqxFdRRN/gmx0lRx+wXAIaZr7OhhBOMU1jGtxf/yJ1z9jiOPpdO
- hyFytCccnEBLos1aPJcMJ5H0HvKyzdDzOS9mTNVPybEjM0Wo29vIwFtgkrIn86NE5q
- yy28CB2XaAcwIyqzLB8mQSmztfuEXiWVjEYzstNFjza2+7HmpbYsX4S+/2HYsJLUAZ
- YRotgE02JMghWMHDRg+oCDHAooKtHn0LvVmur5oZI384TG3AHGY/sKqtOAGXS3bNSz
- HfW6eG/d3ZpMA==
+User-Agent: Mozilla Thunderbird
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com
+References: <20260406134106.4145818-1-dario.binacchi@amarulasolutions.com>
+Content-Language: en-US, fr
+In-Reply-To: <20260406134106.4145818-1-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1775505005;
+ bh=4J6oDpLEWQviqLkPsFVY6yM0qDpsVeW3m6M7PkUP/HA=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=Ah/L0qo7UkBe4x1ZpS/niG4vSQi/LMbdMdfS0jvXRr3uBSD0YkZxZmVmfaBxemoqa
+ MhufdcVSDMEvWyD2+PrN0HYDfd/BGyLvNxRFCZGqeq7DS2fzi7SHsHNGD0P2eE4ZJ+
+ c1L9UdcR0Gl/XHfCgbvqalVgzELzhya8Ad4cE3tF+z2xSZkLG/uAFZBZ0Ui+WSbuBv
+ JJ7/NdYlXWQimhC47MBAfpo9A4GCUlj2zZ3qaBpZdrYteovZ1qY27PSncpyJoo6f46
+ Pur2mKJb2k0iMkCAYKWV/o9fneLDFlou6mKRH9LF219BK9hTKKOYGEisDWNZQ7S9hF
+ 98e1mwyTVuR2A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=grenoble.cnrs.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tJB8Nz9/
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/suricata: security bump
- version to 8.0.4
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=Ah/L0qo7
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgphoto2: fix build with gcc
+ >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,18 +100,222 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Edgar Bonet via buildroot <buildroot@buildroot.org>
+Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/04/2026 20:18, Bernd Kuhls wrote:
-[...]
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Hello everybody!
 
-Applied to master, thanks.
+On 2026-04-06 at 15:41, Dario Binacchi wrote:
+> The commit adds an upstream patch to fix the following build failure:
+> 
+> jl2005c/jl2005bcd_decompress.c: In function 'jl2005bcd_decompress':
+> jl2005c/jl2005bcd_decompress.c:161:46: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
+>   161 |         jpeg_mem_dest (&cinfo, &jpeg_header, &jpeg_header_size);
+>       |                                              ^~~~~~~~~~~~~~~~~
+>       |                                              |
+>       |                                              long unsigned int *
+> 
+> Fixes:
+> - https://autobuild.buildroot.org/results/cb983d9ad90170aa8d7f2b9a5dfc30055d83b5de
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+
+I did a build-test as follows:
+
+    cat >gphoto2_defconfig <<EOF
+    BR2_mips64el=y
+    BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+    BR2_PACKAGE_JPEG=y
+    BR2_PACKAGE_LIBGPHOTO2=y
+    EOF
+    make defconfig BR2_DEFCONFIG=gphoto2_defconfig
+    make libgphoto2
+
+On commit adf99a634b357 (master at the time of the test), this test
+reproduces the build failure seen on the autobuilder.[1] Applying this
+patch, the build succeeds.
+
+Regards,
+
+Edgar Bonet.
+
+[1] https://autobuild.buildroot.org/results/cb983d9ad90170aa8d7f2b9a5dfc30055d83b5de
+
+> ---
+>  ...s-for-the-size-type-of-jpeg_mem_dest.patch | 143 ++++++++++++++++++
+>  package/libgphoto2/libgphoto2.mk              |   2 +
+>  2 files changed, 145 insertions(+)
+>  create mode 100644 package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+> 
+> diff --git a/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch b/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+> new file mode 100644
+> index 000000000000..543678181b06
+> --- /dev/null
+> +++ b/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+> @@ -0,0 +1,143 @@
+> +From ca4441f48117c681cecfb3c883115e0546aed985 Mon Sep 17 00:00:00 2001
+> +From: Marcus Meissner <marcus@jet.franken.de>
+> +Date: Sun, 29 Mar 2026 21:31:49 +0200
+> +Subject: [PATCH] autoconf checks for the size type of jpeg_mem_dest
+> +
+> +fixes https://github.com/gphoto/libgphoto2/pull/1176
+> +
+> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +Upstream: https://github.com/gphoto/libgphoto2/commit/ca4441f48117c681cecfb3c883115e0546aed985
+> +---
+> + camlibs/ax203/ax203.c                   |  2 +-
+> + camlibs/ax203/ax203_compress_jpeg.c     |  2 +-
+> + camlibs/ax203/jpeg_memsrcdest.h         |  2 ++
+> + camlibs/jl2005c/jl2005bcd_decompress.c  |  2 +-
+> + camlibs/jl2005c/jpeg_memsrcdest.h       |  2 ++
+> + camlibs/ptp2/chdk.c                     |  2 +-
+> + libgphoto2_port/gphoto-m4/gp-libjpeg.m4 | 32 +++++++++++++++++++++++++
+> + 7 files changed, 40 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/camlibs/ax203/ax203.c b/camlibs/ax203/ax203.c
+> +index 62f572686c44..b9db8ebdabf1 100644
+> +--- a/camlibs/ax203/ax203.c
+> ++++ b/camlibs/ax203/ax203.c
+> +@@ -1202,7 +1202,7 @@ ax203_encode_image(Camera *camera, int **src, char *dest, unsigned int dest_size
+> + 	struct jpeg_compress_struct cinfo;
+> + 	struct jpeg_error_mgr jcerr;
+> + 	JOCTET *jpeg_dest = NULL;
+> +-	unsigned long jpeg_size = 0;
+> ++	JPEG_SIZE jpeg_size = 0;
+> + 	JSAMPLE row[camera->pl->width * 3];
+> + 	JSAMPROW row_pointer[1] = { row };
+> + #endif
+> +diff --git a/camlibs/ax203/ax203_compress_jpeg.c b/camlibs/ax203/ax203_compress_jpeg.c
+> +index 1ec7534ff484..22068afd79c0 100644
+> +--- a/camlibs/ax203/ax203_compress_jpeg.c
+> ++++ b/camlibs/ax203/ax203_compress_jpeg.c
+> +@@ -124,7 +124,7 @@ ax206_compress_jpeg(Camera *camera, int **in, uint8_t *outbuf, int out_size,
+> + 	jvirt_barray_ptr *in_coefficients;
+> + 	unsigned int i, x, y;
+> + 	int stop, size, ret, outc;
+> +-	unsigned long regular_jpeg_size = 0, buf_size = 0;
+> ++	JPEG_SIZE regular_jpeg_size = 0, buf_size = 0;
+> + 	int last_dc_val[3] = { 0, 0, 0 };
+> + 
+> + 	/* We have a rgb24bit image in the desired dimensions, first we
+> +diff --git a/camlibs/ax203/jpeg_memsrcdest.h b/camlibs/ax203/jpeg_memsrcdest.h
+> +index 674ab7128f8e..22ba2ac1e2c7 100644
+> +--- a/camlibs/ax203/jpeg_memsrcdest.h
+> ++++ b/camlibs/ax203/jpeg_memsrcdest.h
+> +@@ -5,6 +5,8 @@
+> + 
+> + #if JPEG_LIB_VERSION < 80 && !defined(MEM_SRCDST_SUPPORTED)
+> + 
+> ++#define JPEG_SIZE unsigned long
+> ++
+> + void
+> + jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
+> + 	unsigned long bufsize);
+> +diff --git a/camlibs/jl2005c/jl2005bcd_decompress.c b/camlibs/jl2005c/jl2005bcd_decompress.c
+> +index dff2d6264025..8c3307fd6098 100644
+> +--- a/camlibs/jl2005c/jl2005bcd_decompress.c
+> ++++ b/camlibs/jl2005c/jl2005bcd_decompress.c
+> +@@ -85,7 +85,7 @@ jl2005bcd_decompress (unsigned char *output, unsigned char *input,
+> + 	struct jpeg_error_mgr jcerr, jderr;
+> + 	JOCTET *jpeg_header = NULL;
+> + 	int outputsize = 0;
+> +-	unsigned long jpeg_header_size = 0;
+> ++	JPEG_SIZE jpeg_header_size = 0;
+> + 	int i, x, y, x1, y1, jpeg_data_size, jpeg_data_idx, eoi, size, ret;
+> + 	JSAMPLE green[8 * 16];
+> + 	JSAMPLE red[8 * 8];
+> +diff --git a/camlibs/jl2005c/jpeg_memsrcdest.h b/camlibs/jl2005c/jpeg_memsrcdest.h
+> +index 4334e099688a..94fca070d05b 100644
+> +--- a/camlibs/jl2005c/jpeg_memsrcdest.h
+> ++++ b/camlibs/jl2005c/jpeg_memsrcdest.h
+> +@@ -5,6 +5,8 @@
+> + 
+> + #if JPEG_LIB_VERSION < 80 && !defined(MEM_SRCDST_SUPPORTED)
+> + 
+> ++#define JPEG_SIZE unsigned long
+> ++
+> + void
+> + jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
+> + 	unsigned long bufsize);
+> +diff --git a/camlibs/ptp2/chdk.c b/camlibs/ptp2/chdk.c
+> +index 2787a7261c4a..2646c3ba0fb1 100644
+> +--- a/camlibs/ptp2/chdk.c
+> ++++ b/camlibs/ptp2/chdk.c
+> +@@ -1145,7 +1145,7 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
+> + 	struct		jpeg_error_mgr jerr;
+> + 	JSAMPROW	row_ptr[1];
+> + 	uint8_t		*outbuf = NULL, *tmprowbuf = NULL;
+> +-	unsigned long	outlen = 0;
+> ++	JPEG_SIZE	outlen = 0;
+> + 	unsigned int	row_inc;
+> + 	int		sshift, dshift, xshift, skip;
+> + 
+> +diff --git a/libgphoto2_port/gphoto-m4/gp-libjpeg.m4 b/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
+> +index ce9e816fdbce..4870882a686d 100644
+> +--- a/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
+> ++++ b/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
+> +@@ -77,6 +77,38 @@ found and made to work.
+> +     GP_CONFIG_MSG([JPEG mangling support],
+> +                   [${have_libjpeg}])
+> +   ])
+> ++  dnl find type of memdest
+> ++  AC_LANG_PUSH([C])
+> ++
+> ++  AC_MSG_CHECKING([type of jpeg_mem_dest size])
+> ++  AC_COMPILE_IFELSE([
+> ++    #include <stdio.h>
+> ++    #include <unistd.h>
+> ++    #include <jpeglib.h>
+> ++    void f(j_compress_ptr cinfo, unsigned char ** outbuffer, unsigned long * outsize) {
+> ++	    jpeg_mem_dest(cinfo, outbuffer, outsize);
+> ++    }
+> ++  ],[
+> ++     AC_MSG_RESULT([unsigned long*])
+> ++     AC_DEFINE([JPEG_SIZE],[unsigned long], "JPEG memdest size type")
+> ++  ],[
+> ++     AC_COMPILE_IFELSE([
+> ++    #include <stdio.h>
+> ++    #include <unistd.h>
+> ++    #include <jpeglib.h>
+> ++    void f(j_compress_ptr cinfo, unsigned char ** outbuffer, size_t * outsize) {
+> ++	    jpeg_mem_dest(cinfo, outbuffer, outsize);
+> ++    }
+> ++    ],[
+> ++     AC_MSG_RESULT([size_t*])
+> ++     AC_DEFINE([JPEG_SIZE],[size_t], "JPEG memdest size type")
+> ++    ],[
+> ++     AC_MSG_RESULT([unknown, using unsigned long*])
+> ++     AC_DEFINE([JPEG_SIZE],[unsigned long], "JPEG memdest size type")
+> ++    ])
+> ++  ]
+> ++  )
+> ++  AC_LANG_POP([C])
+> + ],
+> + [AC_MSG_ERROR([
+> + Unhandled value given to --with-jpeg: ${with_jpeg}
+> +-- 
+> +2.43.0
+> +
+> diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+> index 95c0190ee63d..4265d1c57e10 100644
+> --- a/package/libgphoto2/libgphoto2.mk
+> +++ b/package/libgphoto2/libgphoto2.mk
+> @@ -9,6 +9,8 @@ LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.xz
+>  LIBGPHOTO2_SITE = https://github.com/gphoto/libgphoto2/releases/download/v$(LIBGPHOTO2_VERSION)
+>  LIBGPHOTO2_LICENSE = LGPL-2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+>  	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg)
+> +# 0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+> +LIBGPHOTO2_AUTORECONF = YES
+>  # There is a single license file for the LGPL-2.1, no license files
+>  # for other licenses
+>  LIBGPHOTO2_LICENSE_FILES = COPYING
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
