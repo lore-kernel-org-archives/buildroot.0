@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65125F46C64
-	for <buildroot@archiver.kernel.org>; Mon,  6 Apr 2026 17:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D79F46C66
+	for <buildroot@archiver.kernel.org>; Mon,  6 Apr 2026 18:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24F9D407E5;
-	Mon,  6 Apr 2026 17:26:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6dCZ891XuskN; Mon,  6 Apr 2026 17:26:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1114E407D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775496397;
-	bh=FdpQpAqx6SIURazJt0OuHHoiQIs0IaqENjH7o3FhXUA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Jouw8T9uC7udvpezEI08AaOvxitwAkvpwjQ76BupB1Yf433PQFe1GLyXLXJAhBEbr
-	 kZvEamVISvTDFZzAHmAWteBhej2pdoNWxqOe9EXBmEe2z/OIWATH42jyTN///3j62V
-	 LV65RQM35YkXwVvKb6yyT3+pJR3mr9fUgnxtT7mdOKoZBPfxINkpHU5eSsfl3+xOH5
-	 RwFD1JjD4dHGyiFa7OnGpv4z9tQprb1ARmIPPydGW5NWvdFwB9+NOboED8C91Hgf3l
-	 E3jYxQbMAjlOmI+7UjWmKX2Wz32T8FKGsiWApJFgCuPAuOIQQ8Hz+IjZKnKcT9nheB
-	 NrjY7EymGRN4A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1114E407D3;
-	Mon,  6 Apr 2026 17:26:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 289451EB
- for <buildroot@buildroot.org>; Mon,  6 Apr 2026 17:26:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E80080E96
- for <buildroot@buildroot.org>; Mon,  6 Apr 2026 17:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CBCA81025;
+	Mon,  6 Apr 2026 18:18:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ADCJPTcYMoB for <buildroot@buildroot.org>;
- Mon,  6 Apr 2026 17:26:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F0D280E92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F0D280E92
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F0D280E92
- for <buildroot@busybox.net>; Mon,  6 Apr 2026 17:26:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 424E513F8A7;
- Mon,  6 Apr 2026 19:26:30 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 06 Apr 2026 19:26:30 +0200
+ id Lc7Mn0fCeGFn; Mon,  6 Apr 2026 18:18:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BED858103B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1775499499;
+	bh=X6EfXotRWL4LHak00UJzxyb15piklQ+UWUmU97Awbdk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=GepPOYq2IUwVunzFXXh8r+QwvzD35wnniI0Oaw+B8dXVAL5Ke93OAQWMVsnBJmJ32
+	 YStw78oajwu74SGhSt049f/Ljv68AkXMBYoBjBVOsY0XMTNQiH58HggNV5Zzqt6hyx
+	 U6lJjP9AYdoIJ9YekDcxqVKzaVNIlpkZc3IulMenjfG0pseEOJO5j0/Tr0n3HaQ9R0
+	 46dQOsourMxfWK/greRJINC+AqCFmnR+sXd5Vy06sQzB831apziFULO1y4a/kawn0J
+	 s4LvR9Ud02HkhDT0z6OKldl9W7mfn48Kja3gx6c6Q/zSGXu8Wdd6WnD5fgX2zQqsJB
+	 CbWTsI7HOKZSg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BED858103B;
+	Mon,  6 Apr 2026 18:18:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D8AC219
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 18:18:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F44D40126
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 18:18:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y_Sg7v3luVuI for <buildroot@buildroot.org>;
+ Mon,  6 Apr 2026 18:18:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DA1A440131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA1A440131
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA1A440131
+ for <buildroot@buildroot.org>; Mon,  6 Apr 2026 18:18:15 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a012a.dip0.t-ipconnect.de [91.58.1.42])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5FB6FA4C393D;
+ Mon,  6 Apr 2026 20:18:11 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43888)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1w9oWY-0000000010d-2Nj6;
+ Mon, 06 Apr 2026 18:18:10 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  6 Apr 2026 20:18:10 +0200
+Message-ID: <20260406181810.1853090-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Mon, 06 Apr 2026 19:26:30 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20260406100822.7845-1-francois.perrad@gadz.org>
-References: <20260406100822.7845-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <90f9582eb5fef06765158333df520c91@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775496391;
- bh=7tXXRoDrrAPTseE/4ADu8AWiRXcnsLABaQBQirny4Dc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=k9IoSVU1LXSTa5nswhAk4/RIKqDk6X57SsLa7lEnzOgPvBATh9XD24GY1jMqml3nx
- 3ls6z0Sd+kzAALx9ozmhESwt9pGYg/ex+Bg1D5ljp0WhYGvUS1yaOlQVEfNAFdCwIh
- v8T9pUCn47d6wYOyY8iC2RPuRC5wYDyMVrd91mANhgd4oKCIw0dkOFo28TJ1Cuw9UF
- 8ei4i/hXeCSZmaDFTQOSnX2DS/pS/GJUC9ln00CQP9DhbnwMOd5k1IwU5Dp9b/qitv
- JC2GYdxjljVvQPtbxoFo4mNgHuefjFNajwsWDRoam6jO0oi9ndy/ijDrXrh2qz6s0W
- vF9DGuv74mYcA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=k9IoSVU1
-Subject: Re: [Buildroot] [PATCH] package/quickjs: bump to version 2025-09-13
+X-Spamd-Bar: --
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1775499491;
+ bh=ZtBZ0vN737vKwvfszxT6+ohJchgbLh3h6jhvH0q8mT8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bFSHXWnl0GU5Wmsi8qnJNyhKmHfaBLbWwEnk5gizX2h6HVy4nT+4YYvZKjbynjgvb
+ ULwyg1G6xB8zm9ga4xNUjxenjFdchoe8xb/yik2A9LAAd/h5qwI33zn7uIjuX//fOX
+ 9XUAdUbtDpGmWIBCfhf5X0r4DaPn88js/pyMxv6AdklU2r4rFvClsnYQRW+Txv5h68
+ rON6IlXZHTke4dvfat2rOp9ciOZN+4bnl945DrFTVeirCrG44sERxHU3tIe4QVsScb
+ 0R1UwBlyr3HvXX7bYtP5/xKJx2Ycb/pN6KtjPOCCSNuUnhJYk5MJgUTV17qBNV2aBt
+ dXhhQa9rbkb5A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=bFSHXWnl
+Subject: [Buildroot] [PATCH v2 1/1] package/suricata: security bump version
+ to 8.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,54 +93,271 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Francois,
+Suricata 6.x is EOL since August 1st, 2024:
+https://forum.suricata.io/t/suricata-6-is-now-end-of-life-eol/4790
 
-Thanks for the patch.
+Version 6.0.20, used by buildroot, was the last release on the 6.x
+branch. We bump to the newest available release, a backport to the LTS
+branches should be considered.
 
-On 06/04/2026 12:08, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
-[...]
-> diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-> index e2170b297..511f14245 100644
-> --- a/package/quickjs/quickjs.mk
-> +++ b/package/quickjs/quickjs.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -QUICKJS_VERSION = 2025-04-26
-> +QUICKJS_VERSION = 2025-09-13
+The last common release of 6.0.20 with a 7.x version was with version
+7.0.6 which fixed several CVEs in both versions back then:
+https://forum.suricata.io/t/suricata-7-0-6-and-6-0-20-released/4728
 
-Looking at:
-https://autobuild.buildroot.org/stats/master.html
+New release notes following EOL of 6.x:
 
-It seems there is 7 CVEs assigned to the old version,
-fixed by this new version. CVE-2025-62490 to CVE-2025-62496
-inclusive.
+7.0.7: https://forum.suricata.io/t/suricata-7-0-7-released/4877
+Contains these security fixes:
+CVE-2024-45797: CRITICAL
+CVE-2024-47187: CRITICAL
+CVE-2024-47188: CRITICAL
+CVE-2024-47522: HIGH
+CVE-2024-45795: HIGH
+CVE-2024-45796: HIGH
 
-Could you mark this commit as a "security bump", and
-add in the commit log a link to the change log
-https://bellard.org/quickjs/Changelog
-and references to fixed CVEs, please?
+7.0.8: https://forum.suricata.io/t/suricata-7-0-8-released/5137
+Contains these security fixes:
+CVE-2024-55627: CRITICAL
+CVE-2024-55605: CRITICAL
+CVE-2024-55629: HIGH
+CVE-2024-55628: HIGH
+CVE-2024-55626: LOW
 
->  QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
->  QUICKJS_SITE = https://bellard.org/quickjs
->  QUICKJS_LICENSE = MIT
-> --
-> 2.43.0
+7.0.9: https://forum.suricata.io/t/suricata-7-0-9-released/5495
+Contains these security fixes:
+CVE-2025-29915: HIGH
+CVE-2025-29917: HIGH
+CVE-2025-29918: HIGH
+CVE-2025-29916: Moderate
 
-Best regards,
+7.0.10: https://forum.suricata.io/t/suricata-7-0-10-released/5522
+Contains no security fixes.
 
-Julien.
+7.0.11: https://forum.suricata.io/t/suricata-7-0-11-released/5851
+Contains these security fixes:
+CVE-2025-53537: HIGH
+CVE-2025-53538: HIGH
+
+8.0 (released together with 7.0.11):
+https://forum.suricata.io/t/suricata-8-0-0-released/5854
+
+8.0.1: https://forum.suricata.io/t/suricata-8-0-1-and-7-0-12-released/6018
+Contains these security fixes:
+CVE-2025-59147: HIGH (7.0.x and 8.0.x)
+CVE-2025-59148: HIGH (8.0.x only)
+CVE-2025-59149: MODERATE (8.0.x only)
+CVE-2025-59150: HIGH (8.0.x only)
+
+8.0.2: https://forum.suricata.io/t/suricata-8-0-2-and-7-0-13-released/6100
+Contains these security fixes:
+CVE-2025-64344: HIGH (7.0.x and 8.0.x)
+CVE-2025-64333: HIGH (7.0.x and 8.0.x)
+CVE-2025-64332: HIGH (7.0.x and 8.0.x)
+CVE-2025-64331: HIGH (7.0.x and 8.0.x)
+CVE-2025-64330: HIGH (7.0.x and 8.0.x)
+CVE-2025-64335: HIGH (8.0.x only)
+CVE-2025-64334: HIGH (8.0.x only)
+
+8.0.3: https://forum.suricata.io/t/suricata-8-0-3-and-7-0-14-released/6161
+Contains these security fixes:
+CVE-2026-22260
+CVE-2026-22263
+CVE-2026-22258
+CVE-2026-22259
+CVE-2026-22261
+CVE-2026-22262
+CVE-2026-22264
+
+8.0.4: https://forum.suricata.io/t/suricata-8-0-4-and-7-0-15-released/6218
+Contains these security fixes:
+CVE-2026-31935
+CVE-2026-31934
+CVE-2026-31931
+CVE-2026-31933
+CVE-2026-31932
+CVE-2026-31937
+
+Rebased patches.
+
+Upstream switched from pcre to pcre2 in version 7.0.0:
+https://github.com/OISF/suricata/commit/bce3c46874cfad9228d2f32b01c9aa5b9091fee6
+
+Updated project URL, the old URL is not reachable anymore.
+
+Added a cargo variable to _MAKE_ENV to fix build error introduced by the
+bump to 8.x:
+https://lists.buildroot.org/pipermail/buildroot/2025-September/786602.html
+"The library suricata-htp appeared in suricata 8."
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note: LC_ALL="C" PATH="/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/bin:/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/bin:/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/bin:/home/adymov/build_fw/binaries/vpnfw/host/bin:/home/adymov/build_fw/binaries/vpnfw/host/sbin:/home/adymov/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" VSLANG="1033" "cc" "-Wl,--version-script=/tmp/rustcQjKpH4/list" "-Wl,--no-undefined-version" "-m64" "/tmp/rustcQjKpH4/symbols.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.00.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.01.rcgu.o" "/home/adymov/build_fw/binaries/vpnf
+ w/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.02.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.03.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.04.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.05.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.06.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.07.rcgu.o" "/home/adymov/build_fw/binaries
+ /vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.08.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.09.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.10.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.11.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.12.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.13.rcgu.o" "/home/adymov/build_fw/bin
+ aries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.14.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.suricata_htp.26578ac6e8e15929-cgu.15.rcgu.o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/suricata_htp.9o2zvkk1iz7v62w1p151csbmg.rcgu.o" "-Wl,--as-needed" "-Wl,-Bstatic" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libflate2-c96dc52b792974fc.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libminiz_oxide-9a5e6c87bd0989fa.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libadler2-15e2a2214e20491a.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/targe
+ t/x86_64-unknown-linux-gnu/release/deps/liblibz_sys-b9befbb3035c2fca.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libcrc32fast-0a43d2846a4a9b36.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libcfg_if-360ab3241b788fcb.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/liblzma_rs-9f468070623da4fd.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libcrc-bf45046f4b8356ef.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libbyteorder-dfc24cad053c0b20.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/liblibc-ed317864a666eb97.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/targ
+ et/x86_64-unknown-linux-gnu/release/deps/libbase64-a4f094197250161c.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/liblazy_static-5ba27f73220e0e24.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libnom-4108c1713f94c8d7.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libbrotli-98d4b766d2a5f84b.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libbrotli_decompressor-59c8bf34b757d6b2.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/liballoc_stdlib-703a31eff75062d1.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/liballoc_no_stdlib-5d20fd5d2a496308.rlib" "/home/adymov/build_fw/binaries/vpnfw/bui
+ ld/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libtime-44b9873eb3882e39.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libitoa-416b9fe21b8f56dc.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libtime_core-eab4204f5d5ed516.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libnum_conv-f033d8bf2b8b56f6.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libderanged-bdda0d83f774c73b.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libpowerfmt-3c6a581bbf7aead2.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libbstr-346bfb9c2bf6a77a.rlib" "/home/adymov/build_fw/binaries/vpnfw/bui
+ ld/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libregex_automata-b93a7f9635e4dd42.rlib" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/release/deps/libmemchr-a87a7ebd56a50ef2.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libstd-22be60875a4ac8d7.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_unwind-4b832a03827ff95e.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libobject-a25e7f31e2204719.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libmemchr-1f1858edbb50ccb5.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libaddr2line-1319b75889377807.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libgimli-c9972d847170eb93.rlib" "/home/adymov/build_fw/bina
+ ries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/librustc_demangle-0868a75d0b80f801.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libstd_detect-f4254a923640cbea.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libhashbrown-f21de9b2e2c92770.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_alloc-cf868f78468d45dd.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libminiz_oxide-cce9a55233783113.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libadler-6ef1f692f91f321e.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libunwind-d2b4a3bc57672e2c.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libcfg_if-9d8e4e6f4cb45592.rlib" "/home/adymov/build_fw/binaries/vp
+ nfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/liblibc-858b7338441a56b6.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/liballoc-d182631d04e1eed2.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_core-7874c355ab5ed077.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libcore-46b25da62cc69443.rlib" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-c71612932829263c.rlib" "-Wl,-Bdynamic" "-lz" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/home/adymov/build_fw/binaries/vpnfw/host/bin/../x86_64-tss-linux-gnu/sysroot/usr/lib" "-L" "/home/adymov/build_fw/binaries/vpnfw/host/lib64/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/adymov/build_fw/binaries/vpnfw/build/suricata-8.0.0/rust/target/x86_64-unknown-linux-gnu/relea
+ se/deps/libsuricata_htp.so" "-Wl,--gc-sections" "-shared" "-Wl,-z,relro,-z,now" "-Wl,-O1" "-nodefaultlibs"
+  = note: /usr/bin/ld: cannot find /lib64/libc.so.6: No such file or directory
+          collect2: error: ld returned 1 exit status
+
+error: could not compile `suricata-htp` (lib) due to 1 previous error
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: updated subject, added release notes (Julien)
+
+ ...allow-the-user-to-override-RUST_TARGET.patch |  4 +++-
+ .../0002-configure.ac-fix-static-build.patch    | 17 +++++++++--------
+ package/suricata/Config.in                      |  4 ++--
+ package/suricata/suricata.hash                  |  2 +-
+ package/suricata/suricata.mk                    |  7 +++++--
+ 5 files changed, 20 insertions(+), 14 deletions(-)
+
+diff --git a/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch b/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+index ec876a6852..9c8123f3f1 100644
+--- a/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
++++ b/package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
+@@ -8,6 +8,8 @@ When cross-compiling, RUST_TARGET is not always equal to host_triplet
+ through RUST_TARGET environment variable
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Bernd: rebased for version 8.0.4]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  configure.ac | 7 ++++++-
+  1 file changed, 6 insertions(+), 1 deletion(-)
+@@ -16,7 +18,7 @@ diff --git a/configure.ac b/configure.ac
+ index 32c230209..7d7c9373f 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2489,7 +2489,12 @@ fi
++@@ -2146,7 +2146,12 @@ fi
+      have_rust_vendor="no"
+  
+      if test "x$cross_compiling" = "xyes"; then
+diff --git a/package/suricata/0002-configure.ac-fix-static-build.patch b/package/suricata/0002-configure.ac-fix-static-build.patch
+index fc5384a114..9e09aa3005 100644
+--- a/package/suricata/0002-configure.ac-fix-static-build.patch
++++ b/package/suricata/0002-configure.ac-fix-static-build.patch
+@@ -21,6 +21,8 @@ Fixes:
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Upstream: https://redmine.openinfosecfoundation.org/issues/7008
++[Bernd: rebased for version 8.0.4]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  configure.ac | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -29,24 +31,23 @@ diff --git a/configure.ac b/configure.ac
+ index 232ee9bed..6277cb9b6 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1219,6 +1219,8 @@
++@ -1263,6 +1263,8 @@
+          fi
+      fi
+  
+-+    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}"],[:])
+++    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}" with_pkgconfig_pcap=yes],[with_pkgconfig_pcap=no])
+ +
+      if test "$have_wpcap" != "yes"; then
+          AC_CHECK_LIB(pcap, pcap_open_dead, [], [
+              echo
+-@@ -1234,8 +1236,6 @@
++@@ -1278,7 +1280,6 @@
+          PCAP_LIB_NAME="pcap"
+      fi
+  
+--    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}"],[:])
+--
+-     AC_PATH_PROG(HAVE_PCAP_CONFIG, pcap-config, "no")
+-     if test "$HAVE_PCAP_CONFIG" = "no" -o "$cross_compiling" = "yes"; then
+-         AC_MSG_RESULT(no pcap-config is use)
++-    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}" with_pkgconfig_pcap=yes],[with_pkgconfig_pcap=no])
++     if test "$with_pkgconfig_pcap" != "yes"; then
++         AC_PATH_PROG(HAVE_PCAP_CONFIG, pcap-config, "no")
++         if test "$HAVE_PCAP_CONFIG" = "no" -o "x$cross_compiling" = "xyes"; then
+ -- 
+ 2.43.0
+ 
+diff --git a/package/suricata/Config.in b/package/suricata/Config.in
+index 5f7eb21da0..64069888d8 100644
+--- a/package/suricata/Config.in
++++ b/package/suricata/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_SURICATA
+ 	select BR2_PACKAGE_LIBHTP
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBYAML
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  Suricata is a free and open source, mature, fast and robust
+ 	  network threat detection engine.
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_SURICATA
+ 	  detection (IDS), inline intrusion prevention (IPS), network
+ 	  security monitoring (NSM) and offline pcap processing.
+ 
+-	  https://suricata-ids.org
++	  https://suricata.io
+ 
+ comment "suricata needs a toolchain w/ wchar, threads"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index ea5ba01dc0..15f7e666b3 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  c1515754924b618914fcb3cb98873af49996b920f2389a1998f89604f227a807  suricata-6.0.20.tar.gz
++sha256  81cee7bae69848a9751b2ce0867620eefa52b192e79c20b5eac897600b28b191  suricata-8.0.4.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 8840853054..0ee3752a21 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 6.0.20
++SURICATA_VERSION = 8.0.4
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
+@@ -24,7 +24,7 @@ SURICATA_DEPENDENCIES = \
+ 	libpcap \
+ 	libyaml \
+ 	$(if $(BR2_PACKAGE_LZ4),lz4) \
+-	pcre \
++	pcre2 \
+ 	$(if $(BR2_PACKAGE_XZ),xz)
+ 
+ SURICATA_CONF_ENV = \
+@@ -32,6 +32,9 @@ SURICATA_CONF_ENV = \
+ 	CARGO_HOME=$(BR_CARGO_HOME) \
+ 	RUST_TARGET=$(RUSTC_TARGET_NAME)
+ 
++SURICATA_MAKE_ENV = \
++	CARGO_TARGET_$(call UPPERCASE,$(RUSTC_TARGET_NAME))_LINKER=$(TARGET_CROSS)gcc
++
+ SURICATA_CONF_OPTS = \
+ 	--disable-gccprotect \
+ 	--disable-pie \
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
