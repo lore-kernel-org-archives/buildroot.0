@@ -1,88 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E008FEEF2A
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 11:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EAEFEEF2E
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 12:35:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39196811A7;
-	Tue,  7 Apr 2026 11:54:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A0716073D;
+	Tue,  7 Apr 2026 12:35:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mV9qHaUad9ia; Tue,  7 Apr 2026 11:54:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8fWs85Z1JMcc; Tue,  7 Apr 2026 12:35:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A41580E6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AB2260832
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775562855;
-	bh=RwzByCccqGfp9ojfvXO0MiyUjjBTPEVJdgkKlf/pdH8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RZF5VI4QsU3QkxtWjNDdKrCSipsfBBR1+fupH/mrgHAGq2V1Aw/3RSdFROO93r7+a
-	 IHh3YXg0jzHxLNcCEVZ9T0VjsCYDLE3LFU2wSRFmvffOYE7RRkELx3e3B4kotG0yHB
-	 CBzKZ4hMdm0LC07oMYBl73NRFdcX59VeCrP5/g2I0wP8xDOqS/ivkk7DYhMPhFe6Wv
-	 zECZ1tGeaHHxhZ5kxLLkXC3lDWovOczP5LsahYSr7zeQusBnnpbQ3XCF5O8EfglJc4
-	 yfD/Z1ff0JQKCQNM8e9U3mT+SNU5b4V/fvsGNLEKWLa9GPC8asxmAVn2czxIOzJFRF
-	 0zsI0eVHOUo/g==
+	s=default; t=1775565327;
+	bh=uzuHuIaEaRwrQE4TwI7ly3fIlFT+qtQ+n1KgFAbtqRY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=bAf/mx3pjiCp2JOV8VGPHqwKRSFkUnmhQHcosXuPAPnFddJG7pExhL1696FPPjvAs
+	 vpCknG2w5hVUwxrS2B8hW+GRqMHVNtgPGf/QVaoaTNskF2aQsBSLR1trn0HRJ+3XGx
+	 PzrFSAuKBMuLAXpBCr6x+Vrq5hI/Es0gxk1jg0zHHb3JFKFbq4lZO2ZnkZ2khQkRZM
+	 LXzAItmj/Qqys+/M5BPCz14Ax8i5o9tcS2YNrpdHQ9R4H3BPBENewZG64/2/QmSSfC
+	 kKgalGCN25PS0O3bFKAd/AHnh+dTI10Tbk2jue1Gsx1+DJXkBp08nhu+lbFdI6FsYN
+	 U0A4GBiPWjbIw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A41580E6B;
-	Tue,  7 Apr 2026 11:54:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F21C3219
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 11:54:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AB2260832;
+	Tue,  7 Apr 2026 12:35:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 098FB1F6
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 12:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3F3880E6B
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 11:54:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAF7D40086
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 12:35:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j2sXGlDEIkU2 for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 11:54:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 43CD280E4E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43CD280E4E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 43CD280E4E
- for <buildroot@busybox.net>; Tue,  7 Apr 2026 11:54:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 01A4113F879;
- Tue,  7 Apr 2026 13:54:08 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 07 Apr 2026 13:54:08 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XS9LikEQ6WoM for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 12:35:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F60D40025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F60D40025
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F60D40025
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 12:35:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 05D921814BF; Tue,  7 Apr 2026 14:35:20 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Tue,  7 Apr 2026 14:34:14 +0200
+Message-ID: <20260407123424.3983175-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Tue, 07 Apr 2026 13:54:08 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20260407072208.8583-1-francois.perrad@gadz.org>
-References: <20260407072208.8583-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <4eb9b9cba06768cae6bc2d256424ba07@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775562850;
- bh=GuP7J4WpbFoPqOiyW0aHPPw3gp08MoVAya3FUop/Xdc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=cdRZoFI4srbGOPuHL+gUiuPW2UIid1D3rN1/smQrhZ3kFrd7aY5ic0egZBkityYlC
- w2t6R6PkMoGHkOzSUWf3UxwSztVGgfglb9j4CR7TeT7jwpSrd6ZYv6UQkK21742wbJ
- m58rxI89FGTuZR7egh55wxdKyTTUNGPKmDjUiDgWIy3+vte97cUzhkOxqVrdSz5+wq
- FXvp+wtuV7p3sgVks+M53pFnIQC4NOB3yUm8sF+zfPSEKKfkxjqNRPJuZG2bglYRA0
- YMF35bGq4Uiz47VVkq41JEGZuDgAMpGe7J9UiHNDU/WR91hGQZS3P7+k+7D9twAmka
- b3Tvn2gEUsRlw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1775565321; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ihVEbBdM301a9QxanZu6yCVHWz/JvaMga3OwBL+qyVI=;
+ b=HepHXQ2+Ww1YQLUKrmyzL9fh5oybcAIz71yqHRoBf3bSYuA3mJVqb2OA43+CWiLbowG10G
+ T2PoSkoIMMdDcZSN6Ase/xfusARXqgZol7cdMK9fZM7/5q8CTEmuxwRbKPaD0c069yxR4n
+ +UNQIXs8xqY3fzuYuc4lFsiY3juCmNs=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=cdRZoFI4
-Subject: Re: [Buildroot] [PATCH v2] package/quickjs: security bump to
- version 2025-09-13
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=HepHXQ2+
+Subject: [Buildroot] [PATCH v2] package/supertux: fix build with gcc > 11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,29 +81,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/04/2026 09:22, Francois Perrad via buildroot wrote:
-> fixes this serie of CVE:
-> https://security-tracker.debian.org/tracker/CVE-2025-62490
-> https://security-tracker.debian.org/tracker/CVE-2025-62491
-> https://security-tracker.debian.org/tracker/CVE-2025-62492
-> https://security-tracker.debian.org/tracker/CVE-2025-62493
-> https://security-tracker.debian.org/tracker/CVE-2025-62494
-> https://security-tracker.debian.org/tracker/CVE-2025-62495
-> https://security-tracker.debian.org/tracker/CVE-2025-62496
-> 
-> For release notes, see:
-> https://bellard.org/quickjs/Changelog
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ "missing #include <memory>" when building with GCC > 11.
 
-Applied to master, thanks.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
+---
+V2: add "Upstream" to patch
+
+---
+ package/supertux/0001-fix-gcc11-build.patch | 33 +++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/supertux/0001-fix-gcc11-build.patch
+
+diff --git a/package/supertux/0001-fix-gcc11-build.patch b/package/supertux/0001-fix-gcc11-build.patch
+new file mode 100644
+index 0000000000..d5ada531c6
+--- /dev/null
++++ b/package/supertux/0001-fix-gcc11-build.patch
+@@ -0,0 +1,33 @@
++From 81809dd5e6f611b1d64d952f6d96310bcc9c5fca Mon Sep 17 00:00:00 2001
++From: Semphris <semphris@protonmail.com>
++Date: Fri, 17 Jun 2022 12:36:26 -0400
++Subject: [PATCH] Fix problem with GCC 11 and Partio's ZIP manager (missing
++ #include <memory>)
++
++Closes #2219 on GitHub. Same fix, but puts the include closer to the copyright header.
++
++Upstream: https://github.com/SuperTux/supertux/commit/81809dd5e6f611b1d64d952f6d96310bcc9c5fca
++Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
++---
++ external/partio_zip/zip_manager.hpp | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/external/partio_zip/zip_manager.hpp b/external/partio_zip/zip_manager.hpp
++index 666884dda53..245303c76be 100644
++--- a/external/partio_zip/zip_manager.hpp
+++++ b/external/partio_zip/zip_manager.hpp
++@@ -1,8 +1,12 @@
++ // SOURCE: https://github.com/wdas/partio/blob/main/src/lib/io/ZIP.h
+++// NOTE: This file was edited for purposes of compatibility with SuperTux.
++ 
++-/*
+++// This include has been added to fix a problem with GCC 11+ (and maybe 10)
+++#include <memory>
+++
+++// =============================================================================
++ 
++-NOTE: This file was edited for purposes of compatibility with SuperTux.
+++/*
++ 
++ PARTIO SOFTWARE
++ Copyright 2010 Disney Enterprises, Inc. All rights reserved
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
