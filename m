@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3843EFF512C
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E007FF512E
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0671740583;
-	Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FD1140C25;
+	Tue,  7 Apr 2026 17:37:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z3YRR4k3BsNX; Tue,  7 Apr 2026 17:37:21 +0000 (UTC)
+ id DW3LnBD8rzSX; Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AF0840C21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C67640C32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775583441;
-	bh=p1End3LgdGLgZt9rt9Lgi++ke21a72sWd/UTpfmMX/U=;
+	s=default; t=1775583442;
+	bh=Yry/kkUZi512H+ED7uALZvxRunyb7gT1xS0FcbB9E0o=;
 	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=SlMufzScab3jFt3FUgPIS3Qb6Fn1/rfgpy9fWVA2SeLhpcpjvTDjG5FAkXww2zeJm
-	 jyeZbSC+D9kYlBIzii6BqDPReYipA1cUq8LcXABKPTL4mLZ0oh0/8SQUm7sI1nF+Wy
-	 EZZR9r35h8w1+oggNbzedLUVjMAOWlJkdYfJ0qEvHrf30GgfQPAhv8T/0ZbGBJkPfg
-	 63cYSJ9mINWxZTLb9y1ZF3jCgNNhoOcYaeP8rVGRqMhu3WTbVRL9SgRPIWLA/mE0mu
-	 UwAIUfzd0G4fZ0fC7pG3zxkRverO+Kw19Do+YIJmYb+ik4r8gkBSnTz3qO1ZKJkJhe
-	 G5q4UCsExUyhQ==
+	b=EUKZJksJR+2InmMvzZBxj5mpkhT4LSJ2iUWDdGCMbvN9x2ihPxVbxWnuYgxHYRUlZ
+	 31Ux0YBJCatnwPjFAhwFHyd92KFny0fovcIHkd+OV+GWOjLD+w2Tx9JQWYlSb5zXPm
+	 mSmvbam9PMw3DHcv9VAY24Z/i6bK3HhCgwP++gaPxCWmhxhGvqyerjyViFSlNaPLrD
+	 lbWqR3YICPE8WJc8g6k90vjCFRZQrf/NBff2lpaJQ6Q+9FOzV45sgAQ09Cdg9yaFvF
+	 7/1VUy8ouQLRMDfQxKJVNuBSo4oYUVPajsqnxQmHgrvMOXG7Jt8VVFCprLuUeD9q1f
+	 32quPJ7KZI+WQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AF0840C21;
-	Tue,  7 Apr 2026 17:37:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E511237
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C67640C32;
+	Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FA882C7
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 848B7811C4
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10FE860642
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9yCUQGts1Fn for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 17:37:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::42ac;
- helo=smtp-42ac.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6X8Lwg2_8Yxw for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.14;
+ helo=smtp-190e.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8661281189
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8661281189
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch
- [IPv6:2001:1600:4:17::42ac])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8661281189
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F8C260DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F8C260DC6
+Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch
+ [185.125.25.14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F8C260DC6
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:17 +0000 (UTC)
 Received: from smtp-3-0001.mail.infomaniak.ch (unknown
  [IPv6:2001:1600:4:17::246c])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fqtgH0CtKzBDn;
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fqtgH4fgWz8mB;
  Tue,  7 Apr 2026 19:37:15 +0200 (CEST)
 Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4fqtgG3SHWzJ5; Tue,  7 Apr 2026 19:37:14 +0200 (CEST)
-Date: Tue, 07 Apr 2026 19:37:07 +0200
+ id 4fqtgH0jdmz1hs; Tue,  7 Apr 2026 19:37:15 +0200 (CEST)
+Date: Tue, 07 Apr 2026 19:37:08 +0200
 MIME-Version: 1.0
-Message-Id: <20260407-generate-cyclonedx-br-v1-1-03c45ccba2ed@cherry.de>
+Message-Id: <20260407-generate-cyclonedx-br-v1-2-03c45ccba2ed@cherry.de>
 References: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
 In-Reply-To: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
 To: buildroot@buildroot.org
@@ -68,24 +68,23 @@ Cc: Thomas Perale <thomas.perale@mind.be>, Martin Bark <martin@barkynet.com>,
 X-Mailer: b4 0.15-dev-47773
 X-Infomaniak-Routing: alpha
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1775583434;
- bh=M12nU030M+gdaTdmzvpQGK3BOl4fZWgPtke/skEJdOA=;
+ d=0leil.net; s=20231125; t=1775583435;
+ bh=lQ2TgqAul7QHXgCy9/+A6Ob+iGNdKvufhgvB1Z3dDUM=;
  h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=KX5KfJPZhLKoWfitrE2zcZ1T1qHCic2GlW1ZANOEs4yPy9N/zQHxY09366VTMdIZZ
- U7TBqfcUxYnTd7u6De7ebDh6aHmFpIji63h2o4rqRXM+6p483cvi8t2NpgQv1/bgQJ
- y3/Q/c8KeLSth3eXjTMZQvOmXZ4Wtgac3ddnw1/MLatWr4oZztOOK/hQBCNrKKxlUX
- aXY/H3HAH+N0C5k/ZwiRHs7AYJ1SM7BULRkj/trKP03bsbndOQzZm2RnMxYM2biva7
- xZj7lxn/moM78v93aozo1+Sjg67nKTezpsEU9+wtZEEkTv2PR9KzrHcFjgWcTcZ74u
- 95ErAGXvaag3Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=aXLj/0nBXdeu+3F/0GZp9C9RgwPmrR/ZUs6AwpxgYr2udJmLqfve9U7a0STs4f85N
+ 3XwV1k/U4b+Dshl7PY/2AuXLcQH+b5Z0bjajgvUNZuV6QKh4xNijxO8+m2+HBcBvTl
+ DJhvGP4i82uQHltso2xSqwih5+5u7LOMIYBv/FegT6p2f2vXcLI4momOC4L7CCuyYu
+ yDJiVp05MndAT1av7sPuRIL/KYa6iZQ5NTKNvd6biT7ivX3UFyOdy1Ip0rFVBnGLJK
+ B9+zlwK4UOD36ILtZ5JHgd9FtZptTQIW6227Gi/aJUlivQnX4rSAuBT3SVPH7TjPcQ
+ JiYTZzqNcyuSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=0leil.net header.i=@0leil.net header.a=rsa-sha256
- header.s=20231125 header.b=KX5KfJPZ
-Subject: [Buildroot] [PATCH 1/4] utils/generate-cyclonedx: remove "support"
- for bz2 and gzip compressed patches
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
+ header.a=rsa-sha256 header.s=20231125 header.b=aXLj/0nB
+Subject: [Buildroot] [PATCH 2/4] utils/generate-cyclonedx: better error
+ message when host Python is built without ssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,66 +105,74 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-Buildroot-local patches can only be suffixed by .patch, otherwise they
-either need to be downloaded via <PKG>_PATCH or manually applied via
-$(APPLY_PATCHES) in a <PKG>_{PRE,POST}_PATCH_HOOKS like in
-linux/linux.mk. In the former case, they are then listed in the
-show-info output with a full URL (prefixed by '<PKG>_SITE_METHOD+'). In
-the latter case, they are simply not listed at all at the moment.
+urllib will eventually complain that it does not know what https is:
+Traceback (most recent call last):
+  File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
+    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
+    with contextlib.closing(urlopen(url, data)) as fp:
+                            ~~~~~~~^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 509, in _open
+    return self._call_chain(self.handle_open, 'unknown',
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            'unknown_open', req)
+                            ^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1397, in unknown_open
+    raise URLError('unknown url type: %s' % type)
+urllib.error.URLError: <urlopen error unknown url type: https>
 
-By removing "support" for those compressed patches, we can avoid the bz2
-dependency and can now use Buildroot's host-python3 package without
-BR2_PACKAGE_HOST_PYTHON3_BZIP2 to run utils/generate-cyclonedx (though
-the initial downloading of the SPDX schema in JSON format doesn't work
-yet, though that is something that one can handle with a simple
-wget/curl to the appropriate place).
+It's quite confusing really but what it means is that host Python was
+built without ssl support.
+
+This adds an additional check importing _ssl and if the module is not
+found, tell the user what to do. This still doesn't make Buildroot's
+host Python3 fully usable for utils/generate-cyclonedx as it'll then
+fail when trying to validate certificates, this will be handled in the
+next few commits.
+
+Note that ssl Python library is always built in CPython, but itself
+imports the _ssl module which is the one that may be disabled with
+py_cv_module__ssl=n/a (which is what happens when
+BR2_PACKAGE_HOST_PYTHON3_SSL is not enabled), hence why _ssl is checked
+and not ssl.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- utils/generate-cyclonedx | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ utils/generate-cyclonedx | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 35198a47cf..d17aa805b7 100755
+index d17aa805b7..045bf14caa 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -9,8 +9,6 @@
+@@ -9,6 +9,7 @@
  
  
  import argparse
--import bz2
--import gzip
++import importlib.util
  import json
  import os
  from pathlib import Path
-@@ -177,7 +175,7 @@ def patch_retrieve_header(content: str) -> str:
+@@ -42,6 +43,11 @@ VULN_WITH_PEDIGREE = set()
+ SPDX_LICENSES = []
  
- 
- def read_patch_file(patch_path: Path) -> str:
--    """Read the content of a patch file, handling compression.
-+    """Read the content of a patch file.
- 
-     Args:
-         patch_path (Path): Patch path.
-@@ -185,16 +183,8 @@ def read_patch_file(patch_path: Path) -> str:
-     Returns:
-         str: Patch content.
-     """
--    if patch_path.suffix == ".gz":
--        f = gzip.open(patch_path, mode="rt")
--    elif patch_path.suffix == ".bz":
--        f = bz2.open(patch_path, mode="rt")
--    else:
--        f = open(patch_path)
--
--    content = f.read()
--    f.close()
--    return content
-+    with open(patch_path) as f:
-+        return f.read()
- 
- 
- def cyclonedx_patches(patch_list: list[str]):
+ if not SPDX_SCHEMA_PATH.exists():
++    if not importlib.util.find_spec("_ssl"):
++        print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
++              file=sys.stderr)
++        exit(1)
++
+     # Download the CycloneDX SPDX schema JSON, and cache it locally
+     cyclonedxpath.mkdir(parents=True, exist_ok=True)
+     urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
 
 -- 
 2.53.0
