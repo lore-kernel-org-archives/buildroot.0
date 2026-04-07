@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB52FF512E
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 18:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379B1FF5134
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 18:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1418A40C75;
-	Tue,  7 Apr 2026 18:43:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF41240D41;
+	Tue,  7 Apr 2026 18:56:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K2TrgDu02p5m; Tue,  7 Apr 2026 18:43:09 +0000 (UTC)
+ id IuA7dmPtUTft; Tue,  7 Apr 2026 18:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F99340C80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3FEF40D37
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775587389;
-	bh=TJXf4sPYzzF8sACyEAnMUynLXDLg4sPtD+Nhj5JgEyk=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=D2Cc03dc/msyN4jOkjux0H5jp4T50czlkj5UMux0TZRytPZlqLvdO47NbQGM2GaAM
-	 zrvAD6VcKJN11PHwSyzv4qHjeUuxmIboEPt1B/Xxq9GF7+XNHt1j3D1nye2FY4Zexz
-	 XufV38qv4WHUdywL3/igzHUxtWIK/+VIAPagSAWJCoqk5AQvoj7dW/yOcQc2M3jTNK
-	 lEjGPNFBPROTJBIEDVNvok5RToS31I802MEPcRGHvXRIR8yqGimT9qXw4jylN5+57U
-	 x9/2X+f1p9lhaY+SHVSBJCby+2LM/dEBlSFvyqKgxOL1Hfl8LZcUFoF/bZsayYz6fU
-	 x4lwl9a/3eDJg==
+	s=default; t=1775588199;
+	bh=NvFu/vIoVKApS4WljDN1MhfHejM476Hr9/WC+9Idfr4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NGzep9PX4ubaPXc6VtyPi7LkPVaa7XT1z3H41OSiGhWqxENZbX9oE9fiTo3zPgcJN
+	 MJHR/MRtJgaJAQNaKNdPSTIrlOrPsh51I7lUXYcBaCyCX1S2/j0SQXVIUdUofKbTbs
+	 Cyg8W9ZkpORKq1VhkZlUpiJhzS1VkC/irfvM7zspLewrN/hrQGSoGrOyAjiRILk64W
+	 HOmcpsDmQA1vBHZcY8K9Ket3ciAHvqbSXAU7u6mK+AWKVo9gdtRI4gQqb+hmhI34xf
+	 9nki2RMFBugpaDCAZxASpbghweIEPTgSZGukNCfVsfWN70/Adiw8hUN8zzjqcNODWH
+	 aROc8Z6Q1AoOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F99340C80;
-	Tue,  7 Apr 2026 18:43:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 79ED41F6
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:43:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C3FEF40D37;
+	Tue,  7 Apr 2026 18:56:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BA0F237
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68ABE81268
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:43:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 216B88148A
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mRzufbvPpiNI for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 18:43:06 +0000 (UTC)
+ id 1Pr4GszkMfx6 for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 18:56:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5D5C0811F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D5C0811F0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D18CA81479
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D18CA81479
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D5C0811F0
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:43:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D18CA81479
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:36 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DE520B97BBAD; Tue,  7 Apr 2026 20:43:02 +0200 (CEST)
-Message-ID: <06d6220f-2982-4c79-9b7d-6940088a95e1@rnout.be>
-Date: Tue, 7 Apr 2026 20:42:59 +0200
+ with ESMTPSA id 26AFAB97BBAD; Tue,  7 Apr 2026 20:56:33 +0200 (CEST)
+Message-ID: <27a01177-9b40-4a03-8f8d-626fd9fa81fc@rnout.be>
+Date: Tue, 7 Apr 2026 20:56:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Nathan Bloch <nblochn@gmail.com>, buildroot@buildroot.org
-References: <20260319104249.22286-1-Nathan.B@solaredge.com>
+To: Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
+Cc: Quentin Schulz <quentin.schulz@cherry.de>
+References: <20260325-linux-werror-v1-1-2b98ff2a2cdd@cherry.de>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260319104249.22286-1-Nathan.B@solaredge.com>
+In-Reply-To: <20260325-linux-werror-v1-1-2b98ff2a2cdd@cherry.de>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1775587383; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1775588194; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=2r+CQeF5A0F36LnB/wRzJL8QEBbs6uxcqrjlprRoAm4=;
- b=iSvJtMmIF1BI2goXw2lSny6GwbkskmBcM4GBv8N8z6D8Wu5H4qUT3MDQxlcNYoi8Lgtoeh
- pOjMKfxS6SxbDgIVWekDZq712ACMnE7vYBD6c2ZpYEKlBFRSR5b1p43MvCQU2PTS0kq54D
- OMBU2ajtstK+rZNMN3fY4n0R2GlDViUgOuhQbUvg7TOtM3pyGafHOOtIDqz3zfcfj6gNiK
- BsdZaXd793W24bxY1V3H9d2klxLYCnSYQEfrKpB+w9YJ/GI7FusZvbFQDx7/XQEaT5/9Tf
- kKNiUUXFpSEMhiB76B3YA4R+7UOtAu4JrpOCDak6810KZvm7aaA9FdOvvMcD3w==
+ bh=jIT2vTz2oMAH0rG100A7eWfVVCp3eobuj5XdOruOwOo=;
+ b=Ei/RXVnuK893G2DnYCGuigyag9BPXEQUdOttpvUVoNQ4pYuRUdl3RjODOFnfS8eNZRvu+o
+ HS24MMF1ysqaqAQP9X4E1xU7fnh/Trk1thnppBRSbeaZftcF9ClMf3hj+UCLbFCOT1LYOF
+ rC0OjD62i5DQRDXccNOczmtH4WxWk9Um20lJXFsrXk5L9oGaH33qNrl3PwmPYb/XMcGv1B
+ xj2M2Sqn6izGp4XUrgQriJklSoQ20znW1RwABHYy40iLE2MF9jd1xNAmCn1AvBF9QIMV9U
+ SSJic9Amj2S82sjwiRDpfDWyqqmomHW5AjRBKKJfHfjTkSYmno7PBLankP4l9Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=iSvJtMmI
-Subject: Re: [Buildroot] [PATCH] pkg-generic: suppress SOURCE_DATE_EPOCH
- warning in step_time
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=Ei/RXVnu
+Subject: Re: [Buildroot] [PATCH] linux: allow the user to respect Linux
+ kernel defconfig's CONFIG_WERROR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,43 +91,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBOYXRoYW4sCgpPbiAxOS8wMy8yMDI2IDExOjQyLCBOYXRoYW4gQmxvY2ggd3JvdGU6Cj4g
-RnJvbTogTmF0aGFuIEJsb2NoIDxuYmxvY2huQGdtYWlsLmNvbT4KPiAKPiBUaGUgc3RlcF90aW1l
-IGhvb2sgY2FsbHMgZGF0ZSArJXMuJU4gdG8gbWVhc3VyZSBidWlsZCBzdGVwIGVsYXBzZWQgdGlt
-ZS4KPiBXaGVuIFNPVVJDRV9EQVRFX0VQT0NIIGlzIHNldCAoZm9yIHJlcHJvZHVjaWJsZSBidWls
-ZHMpLCBHTlUgY29yZXV0aWxzIGRhdGUKPiBlbWl0cyAiV2FybmluZzogdXNpbmcgJFNPVVJDRV9E
-QVRFX0VQT0NIIGluc3RlYWQgb2YgdHJ1ZSB0aW1lIiBmb3IgZXZlcnkKPiBjYWxsIOKAlCB0d2lj
-ZSBwZXIgc3RlcCwgYWNyb3NzIGFsbCBwYWNrYWdlcywgcmVzdWx0aW5nIGluIGh1bmRyZWRzIG9m
-IG5vaXN5Cj4gbG9nIGxpbmVzLgoKICBJIHdhcyBnb2luZyB0byBhcHBseSBidXQganVzdCB0byBi
-ZSBzdXJlIEkgdGVzdGVkIG15c2VsZiwgYW5kIG15IChGZWRvcmEgNDMpIApHTlUgY29yZXV0aWxz
-IGRhdGUgdHVybnMgb3V0IG5vdCB0byBiZWhhdmUgbGlrZSB0aGF0LiBTbyBJIHdlbnQgdG8gdGhl
-IGNvcmV1dGlscyAKc291cmNlIGFuZCBzZWFyY2hlZCBmb3IgU09VUkNFX0RBVEVfRVBPQ0ggYW5k
-IGZvciAiaW5zdGVhZCBvZiB0cnVlIHRpbWUiLCBhbmQgCmdvdCBubyBoaXRzIChleGNlcHQgZm9y
-IHRoZSBleHBlY3RlZCBvbmVzIGZvciBTT1VSQ0VfREFURV9FUE9DSCkuIEl0IGFjdHVhbGx5IApq
-dXN0IHVzZXMgdHJ1ZSB0aW1lLiBJIGFsc28gY2hlY2tlZCB1dXRpbHMgYW5kIGdsaWJjIGp1c3Qg
-dG8gYmUgc3VyZSwgZm91bmQgCm5vdGhpbmcgdGhlcmUgZWl0aGVyLgoKICBTbyBpdCBsb29rcyBs
-aWtlIHlvdSdyZSB1c2luZyBzb21lIHBhdGNoZWQgdmVyc2lvbiBvZiBHTlUgZGF0ZS4gSSdtIG5v
-dCBzdXJlIAppZiBpdCB3b3J0aCBwYXRjaGluZyBCdWlsZHJvb3QgdG8gY2F0ZXIgd2l0aCB0aGF0
-LCB1bmxlc3MgeW91J3JlIG9uIHNvbWUgcHJldHR5IAptYWluc3RyZWFtIGRpc3Ryby4KCiAgUmVn
-YXJkcywKICBBcm5vdXQKCj4gVW5zZXQgU09VUkNFX0RBVEVfRVBPQ0ggaW5saW5lIGZvciB0aGVz
-ZSB0aW1pbmctb25seSBjYWxscywgc2luY2UgdGhleQo+IG1lYXN1cmUgcmVhbCBlbGFwc2VkIHRp
-bWUgYW5kIGRvIG5vdCBhZmZlY3QgYnVpbGQgcmVwcm9kdWNpYmlsaXR5Lgo+IAo+IFNpZ25lZC1v
-ZmYtYnk6IE5hdGhhbiBCbG9jaCA8bmJsb2NobkBnbWFpbC5jb20+Cj4gLS0tCj4gICBwYWNrYWdl
-L3BrZy1nZW5lcmljLm1rIHwgMiArLQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGtnLWdlbmVyaWMubWsg
-Yi9wYWNrYWdlL3BrZy1nZW5lcmljLm1rCj4gaW5kZXggYTI3NDkzMjAuLmU0YmY2ZGVmIDEwMDY0
-NAo+IC0tLSBhL3BhY2thZ2UvcGtnLWdlbmVyaWMubWsKPiArKysgYi9wYWNrYWdlL3BrZy1nZW5l
-cmljLm1rCj4gQEAgLTUwLDcgKzUwLDcgQEAgZW5kZWYKPiAgICMgVGltZSBzdGVwcwo+ICAgZGVm
-aW5lIHN0ZXBfdGltZQo+ICAgCXByaW50ZiAiJXM6JS01LjVzOiUtMjAuMjBzOiAlc1xuIiAgICAg
-ICAgICAgXAo+IC0JICAgICAgICIkJChkYXRlICslcy4lTikiICIkKDEpIiAiJCgyKSIgIiQoMyki
-ICBcCj4gKwkgICAgICAgIiQkKFNPVVJDRV9EQVRFX0VQT0NIPSBkYXRlICslcy4lTikiICIkKDEp
-IiAiJCgyKSIgIiQoMykiICBcCj4gICAJICAgICAgID4+IiQoQlVJTERfRElSKS9idWlsZC10aW1l
-LmxvZyIKPiAgIGVuZGVmCj4gICBHTE9CQUxfSU5TVFJVTUVOVEFUSU9OX0hPT0tTICs9IHN0ZXBf
-dGltZQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+
+On 25/03/2026 18:51, Quentin Schulz via buildroot wrote:
+> From: Quentin Schulz <quentin.schulz@cherry.de>
+> 
+> Buildroot forcibly disables WERROR (and PPC_WERROR via
+> PPC_DISABLE_WERROR for PowerPC) for all kernels since commit
+> 6b56e0b4f09b ("linux: disable -Werror") for the former and 1713c3c344be
+> ("linux: disable Werror for powerpc kernels") for the latter.
+> 
+> Some users (me :) ) may only build kernels within Buildroot and may be
+> required by audit companies to ensure that no warnings are generated
+> when building them. While we could look at the log manually and report
+> that indeed no warnings are seen, better not even build if there's a
+> warning and catch them as early as possible.
+> 
+> Thus, let's allow the user to not override the WERROR state gotten from
+> the defconfig. It is left as force-disabled by default as upstream
+> Buildroot likely does not want to fail builds when bumping the
+> toolchains with newer warnings and no bandwidth to fix or backport fixes
+> for kernels for upstream Buildroot defconfigs.
+> 
+> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> ---
+> I believe that commit 6b56e0b4f09b ("linux: disable -Werror") should
+> rather have disabled WERROR from ESP_HOSTED_LINUX_CONFIG_FIXUPS in
+> package/esp-hosted/esp-hosted.mk instead of disabling it for everybody.
+
+  Yeah, I agree with that. And even so, it should only be done if it's really 
+needed.
+
+> I understand Buildroot not wanting to respect WERROR if in the kernel
+> defconfig to avoid additional friction when bumping toolchains, hence
+> why I made this into a Kconfig knob.
+
+  Not really - for the defconfigs, we can easily create 
+board/linux-disable-werror.fragment and include that as a Kconfig fragment for 
+all problematic defconfigs. Ideally though the error should be resolved in a 
+more recent kernel.
+
+  So I'd tend to prefer to revert 6b56e0b4f09b (or perhaps move it to 
+esp-hosted) rather than adding yet another weird Config.in option.
+
+  For 1713c3c344be, it's probably not worth to bother reverting that one (and 
+trying to find out which defconfigs break due to it). Unless you also need PPC 
+builds to comply?
+
+  Regards,
+  Arnout
+
+> 
+> I'm assuming we do not want upstream Buildroot defconfigs to have this
+> set to N. I can add this info to the Kconfig help text. I can also make
+> sure defconfigs aren't setting this to N by adding a check in
+> utils/checkpackagelib/lib_defconfig.py. Let me know if this is something
+> you're interested in.
+> ---
+>   linux/Config.in | 14 ++++++++++++++
+>   linux/linux.mk  | 12 +++++++++---
+>   2 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 44f8b08e71..43397d52af 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -223,6 +223,20 @@ config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
+>   	  A space-separated list of kernel configuration fragment files,
+>   	  that will be merged to the main kernel configuration file.
+>   
+> +config BR2_LINUX_KERNEL_DISABLE_WERROR
+> +	bool "Force-disable Werror"
+> +	default y
+> +	help
+> +	  This allows to force disable CONFIG_WERROR (and force enable
+> +	  CONFIG_PPC_DISABLE_WERROR for PPC) even if set by the kernel
+> +	  defconfig. This is typically wanted for third party kernel
+> +	  trees or old kernel releases when attempting to build with
+> +	  newer toolchains. Since 2019.08 for PPC and since 2024.05 for
+> +	  the other architectures, the default has been Y.
+> +
+> +	  You may want to set this to N if you want to make sure your
+> +	  kernel builds without warning for your specific setup.
+> +
+>   config BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH
+>   	string "Custom boot logo file path"
+>   	help
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index c61089bfe0..f7f2dfe107 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -419,6 +419,14 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
+>   endef
+>   endif
+>   
+> +ifeq ($(BR2_LINUX_KERNEL_DISABLE_WERROR),y)
+> +define LINUX_FIXUP_CONFIG_DISABLE_WERROR
+> +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
+> +endef
+> +endif
+> +
+>   define LINUX_KCONFIG_FIXUP_CMDS
+>   	@$(call MESSAGE,"Updating kernel config with fixups")
+>   	$(if $(LINUX_NEEDS_MODULES),
+> @@ -431,8 +439,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>   	$(LINUX_FIXUP_CONFIG_PAHOLE_CHECK)
+>   	$(if $(BR2_arm)$(BR2_armeb),
+>   		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
+> -	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+> -		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
+>   	$(if $(BR2_ARC_PAGE_SIZE_4K),
+>   		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
+>   		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
+> @@ -474,7 +480,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>   		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+>   		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+>   	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+> -	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
+> +	$(LINUX_FIXUP_CONFIG_DISABLE_WERROR)
+>   	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+>   endef
+>   
+> 
+> ---
+> base-commit: c8dd9e9a011f1a5755df62baceb865efc09862fe
+> change-id: 20260325-linux-werror-9f6e4ad44b0f
+> 
+> Best regards,
+> --
+> Quentin Schulz <quentin.schulz@cherry.de>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
