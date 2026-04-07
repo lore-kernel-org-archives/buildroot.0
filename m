@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B9B5FF5138
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 20:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353E9FF513C
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 105D181758;
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9E8781799;
 	Tue,  7 Apr 2026 20:02:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uJZkHnuQ_Xe8; Tue,  7 Apr 2026 20:02:48 +0000 (UTC)
+ id T7LpZl7sPlsa; Tue,  7 Apr 2026 20:02:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43AC981751
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5095E81763
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775592168;
-	bh=hUwESqIkw8J/2byqGDVt5pq7PB3TaDdzf/d8+/Welug=;
+	s=default; t=1775592171;
+	bh=sn6AeOsltOZBI3YYvb7vS5ScBbkeAqJxKczn0Xkcxao=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OZCbxoaSGryrf6TIRv/3RYWhNVae/5Kl0usrw5r6UnKMZWhUDsJXTpOg6kUxIAMeQ
-	 YGQeqbaa5ojDgSo5chv07SqcuCc8+5urzJ6QUvVkrEHdQ5iWTTEPEIV499GhRSIItA
-	 XdKZb0CPGd8imepVOdAQiPwsnzZnXEBs0x+WVqvPPE/HsZOmjhKnWZkkaLi4W/UYTg
-	 RSeMpPXz1BWtCU8rERfxTlfSatOt3F8eT8Cwe7rgXHxQkqPPa6B4NjrwBP02Dmm5Mj
-	 AyAZLNSTafmRLg4oqYnmBDAnXkg/CqiRUNrW6AipiYRRwqUnur9gNUSsM4abGlIkVB
-	 YboFBVN360I8Q==
+	b=AhQ16+it2FZoVGoxB/Ac//KZn8LaNJzF23QQbmrmCk7kQ80q1a9wG2I/ZPk/VSUkC
+	 vZZP6gr5mQn0AQ7LxFLex1lyBkBestDsuql2dD+X24Mp7cRtg9i8UGqeT9kBfVhXhd
+	 SNITTItCdsqvDF9MWe5p/dQfbxKWPJoDYfXz9iXqyMehDfTOqUQhFRjUaoqCsE9AC6
+	 LqgQvNedh71DrmwJhBArUpMk/G2oaH1vu2XfNsbHuKudIgzlU71jiutIlnZPueBfGM
+	 VkQXTCjE0mLOT0Vp1v44sY5oLJ/TuBKvYkPukKIClr+Iyml27V7u+XtJzNiUFCHImy
+	 3IUesMDc3MG2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43AC981751;
-	Tue,  7 Apr 2026 20:02:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B7FF2EF
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 20:02:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5095E81763;
+	Tue,  7 Apr 2026 20:02:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 030E62C7
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 20:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30C7A816F7
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 20:02:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1589D60E1E
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 20:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWk6_XnYNYEs for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C56bSquBRHlg for <buildroot@buildroot.org>;
  Tue,  7 Apr 2026 20:02:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312C0816FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2712460E15
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 312C0816FA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2712460E15
  for <buildroot@buildroot.org>; Tue,  7 Apr 2026 20:02:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8E5C807F0; Tue,  7 Apr 2026 20:02:39 +0000 (UTC)
+ id A65A5807ED; Tue,  7 Apr 2026 20:02:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 7 Apr 2026 21:52:32 +0200
+Date: Tue, 7 Apr 2026 21:49:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0ebeaf888241f3bb6b8e3e177c1ac097c38de33
-X-Git-Newrev: 48b9974b3866590d3bd6476e830c7c4f95cc4c4d
+X-Git-Oldrev: d24b2517894195fa4625dcda245c78f90ac3c720
+X-Git-Newrev: f0ebeaf888241f3bb6b8e3e177c1ac097c38de33
 X-Patchwork-Hint: ignore
-Message-Id: <20260407200239.B8E5C807F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cegui: remove package
+Message-Id: <20260407200239.A65A5807ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sphinxbase: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,252 +76,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48b9974b3866590d3bd6476e830c7c4f95cc4c4d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f0ebeaf888241f3bb6b8e3e177c1ac097c38de33
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The package has no buildroot maintainer and causes many build errors:
-https://autobuild.buildroot.net/?reason=cegui%
+The upstream github repo https://github.com/cmusphinx/sphinxbase
+"was archived by the owner on Jun 9, 2022."
 
-We remove the package for now, no other package depends on it.
+Remove an unmaintained package which also causes build errors due to
+changes to a released tarball.
+
+Jonathan Ben-Avraham answered by email, which maybe is still sitting in
+a queue on the buildroot mailinglist, on Feb, 21st, 2026:
+"I was the package submitter. Please remove the package."
 
 Fixes:
-https://autobuild.buildroot.net/results/248/248fabed54239e3f4cfe68c3b964a2b6a52c9dd5/
-and many more.
+https://autobuild.buildroot.net/results/b45/b45eebbcc86f33741053bb6f9b89e16c7041c470/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Arnout: also update cegui06 legacy entry]
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- Config.in.legacy                           | 16 +++--
- package/Config.in                          |  1 -
- package/cegui/0001-Fix-cmake-4-build.patch | 28 ---------
- package/cegui/Config.in                    | 24 --------
- package/cegui/cegui.hash                   |  3 -
- package/cegui/cegui.mk                     | 95 ------------------------------
- 6 files changed, 12 insertions(+), 155 deletions(-)
+ Config.in.legacy                   |  7 +++++++
+ DEVELOPERS                         |  1 -
+ package/Config.in                  |  1 -
+ package/sphinxbase/Config.in       | 13 -------------
+ package/sphinxbase/sphinxbase.hash |  3 ---
+ package/sphinxbase/sphinxbase.mk   | 19 -------------------
+ 6 files changed, 7 insertions(+), 37 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index d13d4ee88f..b6724c9709 100644
+index 64112f97c5..d13d4ee88f 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+@@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.05"
  
-+config BR2_PACKAGE_CEGUI
-+	bool "cegui"
++config BR2_PACKAGE_SPHINXBASE
++	bool "sphinxbase removed"
 +	select BR2_LEGACY
 +	help
-+	  cegui was removed from Buildroot as it was insufficiently
-+	  maintained. It can be re-added if someone volunteers to
-+	  maintain it.
++	  sphinxbase was no longer maintained upstream, so it has
++	  been dropped.
 +
- config BR2_PACKAGE_SPHINXBASE
- 	bool "sphinxbase removed"
+ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan removed"
  	select BR2_LEGACY
-@@ -3516,12 +3524,12 @@ config BR2_PACKAGE_KODI_LIBTHEORA
- 	  Kodi does not need libtheora
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6fd01545c5..f2548f676b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1740,7 +1740,6 @@ F:	package/dawgdic/
+ F:	package/libphidget/
+ F:	package/phidgetwebservice/
+ F:	package/rapidxml/
+-F:	package/sphinxbase/
  
- config BR2_PACKAGE_CEGUI06
--	bool "BR2_PACKAGE_CEGUI06 was renamed"
--	select BR2_PACKAGE_CEGUI
-+	bool "BR2_PACKAGE_CEGUI06 was removed"
- 	select BR2_LEGACY
- 	help
--	  The BR2_PACKAGE_CEGUI06 config symbol was renamed to
--	  BR2_PACKAGE_CEGUI.
-+	  cegui06 was removed from Buildroot as it was insufficiently
-+	  maintained. It can be re-added if someone volunteers to
-+	  maintain it.
- 
- config BR2_GCC_VERSION_5_X
- 	bool "gcc 5.x support removed"
+ N:	Joris Offouga <offougajoris@gmail.com>
+ F:	package/python-colorlog/
 diff --git a/package/Config.in b/package/Config.in
-index 3e330b2fcf..9afcf74af9 100644
+index 774f77c106..3e330b2fcf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -334,7 +334,6 @@ comment "Graphic applications"
- 	source "package/wmenu/Config.in"
- 
- comment "Graphic libraries"
--	source "package/cegui/Config.in"
- 	source "package/efl/Config.in"
- 	source "package/fb-test-app/Config.in"
- 	source "package/fbdump/Config.in"
-diff --git a/package/cegui/0001-Fix-cmake-4-build.patch b/package/cegui/0001-Fix-cmake-4-build.patch
+@@ -2278,7 +2278,6 @@ endif
+ 	source "package/ruy/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
+-	source "package/sphinxbase/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tbb/Config.in"
+ 	source "package/tensorflow-lite/Config.in"
+diff --git a/package/sphinxbase/Config.in b/package/sphinxbase/Config.in
 deleted file mode 100644
-index 952b17e494..0000000000
---- a/package/cegui/0001-Fix-cmake-4-build.patch
+index 00a19f6178..0000000000
+--- a/package/sphinxbase/Config.in
 +++ /dev/null
-@@ -1,28 +0,0 @@
--From 6c0e6d8ffb3c13cd7fb08c8ef217daf45eabdf99 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Tue, 2 Dec 2025 20:38:29 +0100
--Subject: [PATCH] Fix cmake 4 build
--
--Upstream: https://github.com/cegui/cegui/pull/1334
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 418931822..645ff6cf7 100755
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,7 +1,7 @@
-- ################################################################################
-- # Top-level CMakeLists.txt file for Crazy Eddie's GUI System
-- ################################################################################
---cmake_minimum_required(VERSION 3.1)
--+cmake_minimum_required(VERSION 3.5)
-- 
-- if (APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
--     set( CMAKE_OSX_ARCHITECTURES ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE STRING "Build architectures for Mac OS X")
---- 
--2.47.3
--
-diff --git a/package/cegui/Config.in b/package/cegui/Config.in
-deleted file mode 100644
-index 20b865835b..0000000000
---- a/package/cegui/Config.in
-+++ /dev/null
-@@ -1,24 +0,0 @@
--comment "cegui needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 5"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--			|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--			|| !BR2_TOOLCHAIN_GCC_AT_LEAST_5
--
--config BR2_PACKAGE_CEGUI
--	bool "cegui"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11 PR59987
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_SPHINXBASE
+-	bool "sphinxbase"
 -	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GLM
--	select BR2_PACKAGE_LIBGLFW if BR2_PACKAGE_HAS_LIBGL # SampleBrowser dependency
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 -	help
--	  Crazy Eddie's GUI System is a free library providing windowing
--	  and widgets for graphics APIs / engines where such
--	  functionality is not natively available, or severely lacking.
--	  The library is object orientated, written in C++, and targeted
--	  at games developers who should be spending their time creating
--	  great games, not building GUI sub-systems!
+-	  CMUSphinx toolkit is a leading speech recognition toolkit
+-	  with various tools used to build speech applications. CMU
+-	  Sphinx toolkit has a number of packages for different tasks
+-	  and applications.
 -
--	  http://www.cegui.org.uk/
-diff --git a/package/cegui/cegui.hash b/package/cegui/cegui.hash
+-	  http://cmusphinx.sourceforge.net/
+-
+-comment "sphinxbase needs a toolchain with threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sphinxbase/sphinxbase.hash b/package/sphinxbase/sphinxbase.hash
 deleted file mode 100644
-index be0939148c..0000000000
---- a/package/cegui/cegui.hash
+index 433fba685d..0000000000
+--- a/package/sphinxbase/sphinxbase.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally computed:
--sha256  9460cbbe7fc3bb3cf6abfd7f5a9c5f135b20e9898400bd698a5fa0d0fe879865  cegui-e7a03afc70c6182a091ff31accb9d77c6bdf6f60.tar.gz
--sha256  cc869e2ece8ad039f6d7fd17259db4ea0ae0a502d02a1bb506c0168deb12e40d  COPYING
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+-# Locally computed
+-sha256  06971dbe272d2f73bde0ef7b3538c0c8f8ea885cb171fd6b17a5975bced66e64  sphinxbase-5prealpha.tar.gz
+-sha256  26f12e0152a5d58c69904e439761a1b2fbb9267b5f04674dbf93667e3e6dd043  src/libsphinxbase/util/bio.c
+diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
 deleted file mode 100644
-index 9b2a1704b6..0000000000
---- a/package/cegui/cegui.mk
+index 86f9089b48..0000000000
+--- a/package/sphinxbase/sphinxbase.mk
 +++ /dev/null
-@@ -1,95 +0,0 @@
+@@ -1,19 +0,0 @@
 -################################################################################
 -#
--# cegui
+-# sphinxbase
 -#
 -################################################################################
 -
--CEGUI_VERSION = e7a03afc70c6182a091ff31accb9d77c6bdf6f60
--CEGUI_SITE = $(call github,cegui,cegui,$(CEGUI_VERSION))
--CEGUI_LICENSE = MIT
--CEGUI_LICENSE_FILES = COPYING
--CEGUI_INSTALL_STAGING = YES
--CEGUI_CONF_OPTS = \
--	-DCEGUI_BUILD_RESOURCE_PROVIDER_MINIZIP=OFF \
--	-DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=OFF \
--	-DCEGUI_BUILD_RENDERER_IRRLICHT=OFF \
--	-DCEGUI_BUILD_RENDERER_OGRE=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
--	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
--	-DCEGUI_USE_FRIBIDI=OFF \
--	-DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
--	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
--CEGUI_DEPENDENCIES = glm \
--	$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
--	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
--	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
--	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-SPHINXBASE_VERSION = 5prealpha
+-SPHINXBASE_SITE = http://downloads.sourceforge.net/project/cmusphinx/sphinxbase/5prealpha
+-SPHINXBASE_LICENSE = BSD-2-Clause
+-# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
+-# 5prealpha tarballs". The license is contained in the copyright notice at the
+-# top of each source file. For example:
+-SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
 -
--# libepoxy support cannot be enabled together with libglew
--ifeq ($(BR2_PACKAGE_LIBGLEW)$(BR2_PACKAGE_LIBGLU),yy)
--CEGUI_DEPENDENCIES += libglew libglu
--CEGUI_CONF_OPTS += -DCEGUI_USE_GLEW=ON -DCEGUI_USE_EPOXY=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=ON \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=ON
--else ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
--CEGUI_DEPENDENCIES += libepoxy
--# old OpenGL renderer module is only supported using GLEW
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
--	-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
--endif
+-SPHINXBASE_DEPENDENCIES = host-bison
 -
--ifeq ($(BR2_PACKAGE_EXPAT),y)
--CEGUI_DEPENDENCIES += expat
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=OFF
--endif
+-SPHINXBASE_CONF_OPTS = --without-python --without-lapack
 -
--ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_IMAGE),yy)
--CEGUI_DEPENDENCIES += sdl2 sdl2_image
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_IMAGECODEC_SDL2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_IMAGECODEC_SDL2=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_PCRE),y)
--CEGUI_DEPENDENCIES += pcre
--CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=PCRE
--else
--CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=std
--endif
--
--ifeq ($(BR2_PACKAGE_FREETYPE),y)
--CEGUI_DEPENDENCIES += freetype
--CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBXML2),y)
--CEGUI_DEPENDENCIES += libxml2
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_PUGIXML),y)
--CEGUI_DEPENDENCIES += pugixml
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_TINYXML2),y)
--CEGUI_DEPENDENCIES += tinyxml2
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=OFF
--endif
--
--$(eval $(cmake-package))
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
