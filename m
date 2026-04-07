@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69602FF5136
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 19:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6128CFF5138
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 19:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3577A60D4D;
-	Tue,  7 Apr 2026 19:58:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27D8E60E13;
+	Tue,  7 Apr 2026 19:59:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWAqRUauobSr; Tue,  7 Apr 2026 19:58:04 +0000 (UTC)
+ id Fgl4hJM82BVF; Tue,  7 Apr 2026 19:59:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5699560E0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B70B60E0B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775591884;
-	bh=WYgwD1OabOSV9Gxrhs4dOI846QnpKVirWNvokVWfUMQ=;
+	s=default; t=1775591953;
+	bh=UgWCAeivpJZeQykbFISgtcxJ0sTFtRLuL0GrXxuHULM=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cba00JED4bb2cUZ4zKf06iJRZdtydvb4WIwqYyx3oneg8I1ARZHSQJSNaqCqfMIZX
-	 i/r/y/Q2lgFX0x3uO5LODlXE1kOYUSjuy9TejbHqcoYGIVdie3mCAB0J7pFM2/tmkj
-	 4mvHFxhXCS1hb13DQq/bxhVXlU2cpDaF0OUiDcJIM88F/O4HmM1SXSvow1p1ow/j9M
-	 uUt3AbRp8pKSXfCbz0CFBZKU6dgnOotJ86BppwXtwswIFYTpCoZEO2b2LU5kBxAKQQ
-	 Ij8VDbRo2Y7u7N4jfa5JPdmFzwipRclkqu7CCKi8HeusCt1dEgCBJiU0N+w9mG4ivd
-	 ojec/M5N2vbGQ==
+	b=BGokvELsw0OajNsBRai83sT67rCAc2lHM1BJZSfsjbnPJenZlgUbB9TfUdbWj5zM2
+	 wckFVHhy71H/AoxXY1JtrSvAFyIsXbgWR7GQW257qSyUtbtgP3UkORBXfNVxn6yrlF
+	 tlEkqG0cxw7UjD6wNflkWCmxEkfYGJ0+fQZiJaIVjoF3aN+/RFXUohDx/qkjXEKWnZ
+	 8KqFVrPTLwwribM7qeWXO2201RgZMMiLANK7IHOsognqvHJ12pVESFhhC9rTbWGUvt
+	 Q84wDBF8EiugQ4t/WL1ECbUGPlUdbJ37r/hh1p/eYwOhyRh1sw4UIapnvb5HTROeA4
+	 98Z3kChmHBi9Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5699560E0E;
-	Tue,  7 Apr 2026 19:58:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FBA42C7
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:58:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B70B60E0B;
+	Tue,  7 Apr 2026 19:59:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5954B2C7
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2034640DAF
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:58:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A5F360E0B
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:59:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j43NeW0L43xq for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 19:58:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c5JF-RryHnyZ for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 19:59:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1CC6940DB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CC6940DB7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4624260D4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4624260D4D
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1CC6940DB7
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:58:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4624260D4D
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 19:59:11 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 124EEB97BCFF; Tue,  7 Apr 2026 21:57:58 +0200 (CEST)
-Message-ID: <dbc669a5-595c-4e4d-97cb-9bd5d393d578@rnout.be>
-Date: Tue, 7 Apr 2026 21:57:57 +0200
+ with ESMTPSA id D01BCB97BCDA; Tue,  7 Apr 2026 21:59:08 +0200 (CEST)
+Message-ID: <f6ac7d10-2fe6-4b63-ba97-19875c6de0d6@rnout.be>
+Date: Tue, 7 Apr 2026 21:59:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Cc: Mark Corbin <mark@dibsco.co.uk>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20260307180711.1025866-1-ju.o@free.fr>
- <20260307180711.1025866-3-ju.o@free.fr>
+ <20260307180711.1025866-4-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260307180711.1025866-3-ju.o@free.fr>
+In-Reply-To: <20260307180711.1025866-4-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1775591879; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1775591949; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=yL2E4V1ogVKai0FT7VvorRPVkb6/L1cWxs9c2iVpAzw=;
- b=AYpGFqH/p6Hq0atEFvrEUpLNDrpypQbPSAn1n89h9aVF1X5jTjipWrO6ilJ9+0HEunxoQe
- xOwS8UE5z197FTEDeyI75w1HTI/tdWHP7fV1S42yTODHcjICYs4Gl93AjwRkeYi7Y7ggH7
- PIc5PZevZprWNRZ/YtEL9b+ePoZhejNBPcxUGjeY5TweV4D76JWXAQ7CHYW7Tg/3lSu68R
- ipcE4Pb4cSMhW8j0IGk+app0L8XqKqSaHFNm/sLNyAno9bUF9ov2LP3TZq3wJQ6NF7lfhi
- oF/TR1/IUD8LgSViT4TnJefXEr4//oE0cQ3Qxy8sUkqgUVlwRR3C8xvOOojEfw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=QL2JURNaBihvY+5Z5qKE0fzVvHjBh+KJk7Eoan1+pTM=;
+ b=DajuDLi7dh/j9YaL67bSMBH6O8W/poPKg1drCO0PvaslJT9KsM/oHLxRJ5wtpyAvg4mMDC
+ S8Pzic5yI2ojGQiQMwZhBcBDaAxx3wi42d7Qse7T9VsYhuvlyABLCMAKwovT84G7zqwid4
+ i8foSMgqFayK6syfRrZaGxnqte9CPwRVbt2liiATSteNKufpoC58mFUifGIIgH1fzipuHt
+ 653Z8fQWjASv6IpVUufCI6rmL0qHNfddRzcJHWmYbPHWlTjmOM7ZUjOWGIl5IVPZ4YHfSz
+ +t8DnTMqbDxeEL80JQhb7dV73e+kTS0m6SiRS0Xv0hMgNd2YRNb/y/CfywLIIw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=AYpGFqH/
-Subject: Re: [Buildroot] [PATCH RFC v2 3/5] Config.in: add
- BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ header.a=rsa-sha256 header.s=dkim header.b=DajuDLi7
+Subject: Re: [Buildroot] [PATCH RFC v2 4/5] arch/Config.in: add
+ BR2_SHOW_SECONDARY_TARGET_OPTIONS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,41 +101,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 07/03/2026 19:07, Julien Olivain wrote:
-> This patch is needed with the current kconfig version in Buildroot.
-> If kconfig get updated with the series proposed in:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=490997
-> the current patch might not be needed.
-> 
 > Suggested-by: Arnout Vandecappelle <arnout@rnout.be>
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Changes v1 -> v2:
+> - change the Kconfig symbol to be hidden
+> ---
+>   arch/Config.in | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/Config.in b/arch/Config.in
+> index bdfc2b092c..bf638e6226 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -15,6 +15,11 @@ config BR2_USE_MMU
+>   config BR2_ARCH_HAS_FDPIC_SUPPORT
+>   	bool
+>   
+> +config BR2_SHOW_SECONDARY_TARGET_OPTIONS
+> +	bool
+> +	default y
+> +	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
 
-  I've squashed this with the preceding patch, there's no reason to split them.
+  As I mentioned in v1, this symbol isn't needed, we can just use
+!BR2_HIDE_SECONDARY_TARGET_OPTIONS directly.
+
+  I dropped this patch.
 
   Regards,
   Arnout
 
-> ---
-> Changes v1 -> v2:
-> - changed Kconfig variable from string to bool (Arnout)
-> ---
->   Config.in | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/Config.in b/Config.in
-> index d730f2034b..0bfe6d1ab5 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -15,6 +15,10 @@ config BR2_HAVE_DOT_CONFIG
->   config BR2_BROKEN
->   	bool
->   
-> +config BR2_HIDE_SECONDARY_TARGET_OPTIONS
-> +	bool
-> +	option env="BR2_HIDE_SECONDARY_TARGET_OPTIONS"
 > +
->   config BR2_VERSION
->   	string
->   	option env="BR2_VERSION_FULL"
+>   choice
+>   	prompt "Target Architecture"
+>   	default BR2_i386
 
 _______________________________________________
 buildroot mailing list
