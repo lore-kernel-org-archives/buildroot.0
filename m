@@ -4,101 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039BBFB5192
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 04:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739CCFB519E
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 07:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 995A540A76;
-	Tue,  7 Apr 2026 04:49:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26DFD4083C;
+	Tue,  7 Apr 2026 07:04:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e0H0E-yr81uE; Tue,  7 Apr 2026 04:49:11 +0000 (UTC)
+ id sFfkkc4IC7vf; Tue,  7 Apr 2026 07:04:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3A2340A70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 353F440A77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775537351;
-	bh=TYNlyeKPWO8uwpToU8efDVnginMRczgi0qA2fE3fZCs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RPxHJx4CRK9pO6wGzbTN8xZv5gH5HB9NiMErcMtjmYOR9L1o+6Jd0Hr2x/9hKvnCy
-	 kR7vEvsQd3sEbiPXbcPi2hIw2ljkpOB3nFmWeEeqtsMvFKd3sQF1xT40RoqCFnG67Z
-	 qxIe6HtODCpjVK6lIbVHf+tj1OrI1XSpYRfYN5hXS1obSfdFK+Jv3iR807FLOid96o
-	 AmM5RtDzKqiGyf5uyfoUaQtbfwU216RjfTUrojSUKYXSWL+Is5/tQeCT0kTK5TBV94
-	 Eo7unNXiSh4W043l9UaSGjt0Skdj8hPc4bMmDFAflU1budq837YXZTTbOE/Oei7JGs
-	 lD6meeBq1ipAA==
+	s=default; t=1775545455;
+	bh=1SkCXU2Nt1yLILrSER78r81PBDayM+vecUzNGLlvdRg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=c9Kssdhz42O7fywU3TjsCV6/UDpm0C8Oqr7+iaNKC2YgtZKdmUnflSmE1GxvP1Ufp
+	 +V5Z0RaDXd9UeUeexP0bGLguXQx1VdPQ5p23JbzzbKisCMYOXa4e7bpus99C0mljWi
+	 gVLPRAJD4SmBbDW6zDw3B9LxU1eohTmTWls7x3HFUExEIO6zDhCrDDAacZdF5k4oVD
+	 dSEamvSKfg304K1T/f++JPuL7Pi3my8kzD/UZNevumKYQDYPCD+bzDa3isM+9lgfVN
+	 3RYN/H1v4QALodnUai75BXFgyHsZxAuV9UiUrDB2zgXQj6JGv25GPFrIvuDUhuwe8C
+	 QTvgyop0jbJ6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3A2340A70;
-	Tue,  7 Apr 2026 04:49:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 506422EF
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 04:49:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 353F440A77;
+	Tue,  7 Apr 2026 07:04:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E3641F6
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 07:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D77A608D4
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 04:49:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8030B810FE
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 07:04:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-2BJ5ZqQh78 for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 04:49:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.12;
- helo=send173.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63501608B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63501608B3
-Received: from send173.i.mail.ru (send173.i.mail.ru [95.163.59.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 63501608B3
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 04:49:07 +0000 (UTC)
-Received: by exim-smtp-69889cbf87-9dbhw with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1w9yN6-000000008nn-0M5y; Tue, 07 Apr 2026 07:49:04 +0300
-Message-ID: <88257b11-e0e4-4775-b132-b7fb57c0ff3b@inbox.ru>
-Date: Tue, 7 Apr 2026 07:49:03 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ltIpBethHj6 for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 07:04:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5D98C810F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D98C810F7
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5D98C810F7
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 07:04:12 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-488a8ca4aadso25964745e9.3
+ for <buildroot@buildroot.org>; Tue, 07 Apr 2026 00:04:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1775545450; x=1776150250;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9m2yEr4AGDcL6HF1c1Zq0Bfl6f3R4KF3xABRsEr8rFg=;
+ b=HRR47bFDMe48hSr4w1GHhl5sIM0NyURioE4zcV4PArtQEga88rf7WGH3VugdGoljUA
+ mHBcX9SZRpdzFQhP5Y+IVNEWtlUUx90DzxoZho3novXV+dRUhbXGsLUSZuHARafU95Ja
+ PkuDULzGEwCgF8ZbrgrrNLProEjdvk9Br9yUMgiZP+XCvDhPS2nP/oztlt6FLt0ctGOg
+ FVBjaJ3YLOKtSJNQe/Xgmaq/593N/06pq+X0Ly8E08nzvqoPXIj+oFIMfnbJQfIpA/ie
+ U9Zs6lIDsJveBeZCFOMYLxc8rI6hsb2WO5EzxDluS7QmqJU77VCxtzMmxayhZbr4FOWk
+ zIpQ==
+X-Gm-Message-State: AOJu0YyFfzi5y+X5pdlaBVB/zwhK08wauDA5PTSZrM9Qm878/0vOA0UC
+ Z8+CMYz4lshthcw7oDlMvJZECAl9LbrpxkgKxnl8DyKmp4DYpkhClb6JoqUHydkDBWsG9xXf7Ft
+ u0s4L
+X-Gm-Gg: AeBDiev5ekTyAWCyC+9AsCLHnv0bzgQSN1JbKX4sGIfV8FvqbfFgoRoGT+VWDzhJT7e
+ T1E0Pmbw+cJjeWYSTGWVccJ6KqEOuHnmafMOXrHlSsJEWZ7GbldO4kFoyL+RiwhzYmykz8bMzXS
+ qusq1yTwGQybiLsficPDicz6t3n4QETqDqsHp3smYasC733HFh0/x+988kQ5FQ5pllTjwUmoy1S
+ aTtOmQjWeT1sUi6Cm3+dKAUxKiVU2XIqyUitXO0utdWvptuZOYeBi4CayHoaOIh8+Xc1a9F6LRL
+ yhLUC9BPIA4WDZ4zR3ynZzkMYQgcc4MCy6RgWI3H+b60qlK0xeYsHWhSy9jpGvCZX3bSfLSmEms
+ 0bp77/FfrwDbuca5Tpf2keipW2nv6C2Plxc3rjzBnhSFpdOkKTC8TizAr9WRa9W+QXM7eQ8vjrg
+ JLMPrwW9YXo5I0dy8iFAZ66v52b0o4Kw+asn8BSge+/LZbC0hcp+PrmFaXupKW2PM6BQY2ITS3L
+ SWbqhH4VLGMVXQyct8dtNzqKaXgnPENiK9J4psFMfoEZwLZRbRWdDxCATJOM1qVAsSZjhQDWedg
+ e08exOF9YlDrc6OHL1G4HdCN
+X-Received: by 2002:a05:600c:4ec7:b0:485:30f7:6e88 with SMTP id
+ 5b1f17b1804b1-488997ed834mr214926985e9.31.1775545449627; 
+ Tue, 07 Apr 2026 00:04:09 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-87-9-100-184.retail.telecomitalia.it. [87.9.100.184])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4887e9630ddsm540058105e9.13.2026.04.07.00.04.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 Apr 2026 00:04:09 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Tue,  7 Apr 2026 09:04:01 +0200
+Message-ID: <20260407070401.322480-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: David GOUARIN <dgouarin@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Laurent Cans <laurent.cans@gmail.com>,
- Phil Eichinger <phil.eichinger@gmail.com>
-References: <20260406182217.1853895-1-bernd@kuhls.net>
- <20260406182217.1853895-8-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260406182217.1853895-8-bernd@kuhls.net>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD949E5EAB5516A89290DF06F0D2DF8E3E79F6E52EAE14C76E3182A05F5380850404C228DA9ACA6FE27530A7924BA2D0A0E3DE06ABAFEAF67056B73EE4E9D48CE4D37ABDF3A0C4F9CA4E4D8D3D339598BC1
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7E3137013C338FE3BEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637F88016AB904663428638F802B75D45FF914D58D5BE9E6BC1A93B80C6DEB9DEE97C6FB206A91F05B295D50EEEB9BB0AF52E070BE324C7D3C45461BB8BAC75CCC9BB0A4F435E46E6718B35066C979671628AA50765F790063783E00425F71A4181389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0B27420F9988F54058941B15DA834481FCF19DD082D7633A0EF3E4896CB9E6436389733CBF5DBD5E9D5E8D9A59859A8B6F532FBFD8162E58CCC7F00164DA146DA6F5DAA56C3B73B237318B6A418E8EAB86D1867E19FE14079C09775C1D3CA48CF3D321E7403792E342EB15956EA79C166A417C69337E82CC275ECD9A6C639B01B78DA827A17800CE754A400A07F115C59731C566533BA786AA5CC5B56E945C8DA
-X-C1DE0DAB: 0D63561A33F958A53599F51824D079F35002B1117B3ED696C6BB061DD1A955A4715D9AB585B0EB04823CB91A9FED034534781492E4B8EEAD37F46C620FF2CAEEBDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE1918E10F71CB4DF9F96AB70F9BE574AE9C625B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659497FA5921E3AC1DB5EEBD092C530FA8B115ADCBB1BC33BB6C471E44081812D119BCC84AEC2CA907EB8341EE9D5BE9A0A99B287CE7CD7291D1AF9E8710121A38901F9A146730299BC721D270AA2B885D14C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVajF1spCY9aaBryYAKlNAy4=
-X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE2549A156686162EA4FC20827FE094204355D22FD9320A017790DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
- :Cc:To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
- Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
- List-Archive:X-Cloud-Ids:Disposition-Notification-To;
- bh=EnwpKZu695MMOuUGitsXLnj2pwAxMrSJBcBxzx2wOxs=; t=1775537348; x=1775627348; 
- b=B0NdaKIxuhvtpT5caJ0j2tZ0xwyiZu4TFsnP5hVICqaDiu3sA643bNJUOx4r9k8TrJkc+dbib27
- y1imVd+y6re+h5vjNbGp/UajTIfQydt9DBbCJETjMoQEmE/4/81dHtsp3x322f4rhqtfhYraQpCxP
- V98nfTGf6Q38d8BLQjjgFYWfadAf25mb7Q71FHDRLUO84pn78sw1xWBkGGPmEW/ls/ZZ5YibtFiNM
- 4c90ETqmlm2b7W9LZVCSarHCsDBiCWKfhGJfyVue6cyCUW/wdaVJwxXlQa8rVP2r9PcL5ccAA4hYS
- X3xuAfOwzbaVTbGUI0UuWNMSHmjD3qFPFyMg==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=B0NdaKIx
-X-Mailman-Original-Authentication-Results: exim-smtp-69889cbf87-9dbhw;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH 08/11] package/postgis: switch to pcre2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1775545450; x=1776150250;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9m2yEr4AGDcL6HF1c1Zq0Bfl6f3R4KF3xABRsEr8rFg=;
+ b=rzRv5YlECJ3ku3/zbLiUf8zVQw3RX3TxO2AL8rpjB8XXUlM3xemh4v+dr5AnNeegv9
+ KGFAoywsnX36WIiXxOKFPcTrFI+BxXfeSDK/LPrkmWkWUJYI8yt47EsPU90BDhlIRQ3Y
+ vo9RvcefbqmNPQrJh4LngNZ/dvC1cJThSr1Xg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=rzRv5YlE
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2026.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,22 +121,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-06.04.2026 21:22, Bernd Kuhls wrote:
-> Upstream added additional and optional support for pcre2 in version
-> 3.2.0:
-> https://github.com/postgis/postgis/commit/6cf2fba94a434e79d6526a6a5cfdb6057a91bff8
-> which was added to buildroot in 2021 with commit
-> 5084994d3f6dce350de091cd813047e658b9363d.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Release announcement:
+https://lists.denx.de/pipermail/u-boot/2026-April/614160.html
+
+Changelog:
+https://github.com/u-boot/u-boot/compare/v2026.01...v2026.04
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ boot/uboot/Config.in  | 6 +++---
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 3331b81e8c6c..2d2c3f9d4154 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2026.01"
++	bool "2026.04"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -85,7 +85,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2026.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2026.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+@@ -368,7 +368,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
+ 	help
+ 	  Use binman tool for generation and signing of boot images.
+ 
+-	  https://docs.u-boot.org/en/v2026.01/develop/package/binman.html
++	  https://docs.u-boot.org/en/v2026.04/develop/package/binman.html
+ 
+ menu "U-Boot binary format"
+ 
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 39b894fe9ab6..691649825605 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
++sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
