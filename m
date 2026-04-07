@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E007FF512E
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16C6FFF512F
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FD1140C25;
-	Tue,  7 Apr 2026 17:37:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DW3LnBD8rzSX; Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C67640C32
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775583442;
-	bh=Yry/kkUZi512H+ED7uALZvxRunyb7gT1xS0FcbB9E0o=;
-	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=EUKZJksJR+2InmMvzZBxj5mpkhT4LSJ2iUWDdGCMbvN9x2ihPxVbxWnuYgxHYRUlZ
-	 31Ux0YBJCatnwPjFAhwFHyd92KFny0fovcIHkd+OV+GWOjLD+w2Tx9JQWYlSb5zXPm
-	 mSmvbam9PMw3DHcv9VAY24Z/i6bK3HhCgwP++gaPxCWmhxhGvqyerjyViFSlNaPLrD
-	 lbWqR3YICPE8WJc8g6k90vjCFRZQrf/NBff2lpaJQ6Q+9FOzV45sgAQ09Cdg9yaFvF
-	 7/1VUy8ouQLRMDfQxKJVNuBSo4oYUVPajsqnxQmHgrvMOXG7Jt8VVFCprLuUeD9q1f
-	 32quPJ7KZI+WQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C67640C32;
-	Tue,  7 Apr 2026 17:37:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FA882C7
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10FE860642
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB32360DDB;
+	Tue,  7 Apr 2026 17:37:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6X8Lwg2_8Yxw for <buildroot@buildroot.org>;
+ id OnULlKlnfFsC; Tue,  7 Apr 2026 17:37:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB05B60DCB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1775583444;
+	bh=nk3hps9IXuUfHDOJsNZR2kvQA2E2Wj+lcFqPXloTbaU=;
+	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Dxw2HPcKGLutRs1M/eH/+l9q4LNhNoptKPJUMwrqnkm6zThhgRSwRFrg3WeJ3hHcx
+	 e0W4tAVDKAda0Ffuc/L3HZM5tVNpKTTWbe3XSrSB2ATT+z98rP4Z5bSbwDt123SEXp
+	 pBC9In17CAt9AuA7YpQLWUswZNAnz9ywuVo7NSI/ME20EqUAsmWoq4Aw3eC4dVXbqs
+	 Yg/H/YAW4t8MgMIZVDWyRubwNsFysDjDtWmdtLbL0JuCKXm4XBXqUsHYEJRr3GutFi
+	 5n1m9ys+vcJCwUAb3PGX2Ez0prwOCr1vd7m7t19Tv8LBqWyzZAVfD5qQFEMeWgxqFC
+	 aSDTKMUh3JXgQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB05B60DCB;
+	Tue,  7 Apr 2026 17:37:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EC8C237
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84D8940C21
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lPccKjjfCNt8 for <buildroot@buildroot.org>;
  Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.14;
- helo=smtp-190e.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=45.157.188.10;
+ helo=smtp-bc0a.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F8C260DC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F8C260DC6
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch
- [185.125.25.14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F8C260DC6
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4804B40583
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4804B40583
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch
+ [45.157.188.10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4804B40583
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
 Received: from smtp-3-0001.mail.infomaniak.ch (unknown
  [IPv6:2001:1600:4:17::246c])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fqtgH4fgWz8mB;
- Tue,  7 Apr 2026 19:37:15 +0200 (CEST)
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fqtgJ2CJMz9VF;
+ Tue,  7 Apr 2026 19:37:16 +0200 (CEST)
 Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4fqtgH0jdmz1hs; Tue,  7 Apr 2026 19:37:15 +0200 (CEST)
-Date: Tue, 07 Apr 2026 19:37:08 +0200
+ id 4fqtgH55KGzxpd; Tue,  7 Apr 2026 19:37:15 +0200 (CEST)
+Date: Tue, 07 Apr 2026 19:37:09 +0200
 MIME-Version: 1.0
-Message-Id: <20260407-generate-cyclonedx-br-v1-2-03c45ccba2ed@cherry.de>
+Message-Id: <20260407-generate-cyclonedx-br-v1-3-03c45ccba2ed@cherry.de>
 References: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
 In-Reply-To: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
 To: buildroot@buildroot.org
@@ -68,23 +68,24 @@ Cc: Thomas Perale <thomas.perale@mind.be>, Martin Bark <martin@barkynet.com>,
 X-Mailer: b4 0.15-dev-47773
 X-Infomaniak-Routing: alpha
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1775583435;
- bh=lQ2TgqAul7QHXgCy9/+A6Ob+iGNdKvufhgvB1Z3dDUM=;
+ d=0leil.net; s=20231125; t=1775583436;
+ bh=rx+MXtVijcKc7+GL0k1pc95BUavReMmv+pTLUPfQMVk=;
  h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=aXLj/0nBXdeu+3F/0GZp9C9RgwPmrR/ZUs6AwpxgYr2udJmLqfve9U7a0STs4f85N
- 3XwV1k/U4b+Dshl7PY/2AuXLcQH+b5Z0bjajgvUNZuV6QKh4xNijxO8+m2+HBcBvTl
- DJhvGP4i82uQHltso2xSqwih5+5u7LOMIYBv/FegT6p2f2vXcLI4momOC4L7CCuyYu
- yDJiVp05MndAT1av7sPuRIL/KYa6iZQ5NTKNvd6biT7ivX3UFyOdy1Ip0rFVBnGLJK
- B9+zlwK4UOD36ILtZ5JHgd9FtZptTQIW6227Gi/aJUlivQnX4rSAuBT3SVPH7TjPcQ
- JiYTZzqNcyuSQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Zq/I6sN0Ranqv2rfgLOdD1XVL/VtFEy1tSz3xFCWSCbya6r0d2NVNFzCQegx6GK+M
+ +X3ALKDgY8dxRUyCWWZIK1h5G9oKmpEOkZjN7Nad+u/YVobALSXHYAFR46rXWc9nPU
+ zV82Rr2IniVQdZB+J4Uzof1ft7e9v+nltdJLRVj2Yq2cq9/47TLB+REG/ltcxT8QU4
+ saHzg62Hne1E5+EjeRIHJKe6sUfLAN5ZnoB+KeA707Abh6Oo6+mr/s8NzESLKif/gr
+ Dx/JAFDCKnJDoB/mUKSBrj1PxRV0GA98tGrWmwNWPMt4bk0YWASuwdTE+vz8XaZNev
+ 6ux2RmLZ4WDUQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
- header.a=rsa-sha256 header.s=20231125 header.b=aXLj/0nB
-Subject: [Buildroot] [PATCH 2/4] utils/generate-cyclonedx: better error
- message when host Python is built without ssl
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=0leil.net header.i=@0leil.net header.a=rsa-sha256
+ header.s=20231125 header.b=Zq/I6sN0
+Subject: [Buildroot] [PATCH 3/4] package/ca-certificates: enable host
+ package variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,74 +106,110 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-urllib will eventually complain that it does not know what https is:
-Traceback (most recent call last):
-  File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
-    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
-    with contextlib.closing(urlopen(url, data)) as fp:
-                            ~~~~~~~^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
-    return opener.open(url, data, timeout)
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
-    response = self._open(req, data)
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 509, in _open
-    return self._call_chain(self.handle_open, 'unknown',
-           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                            'unknown_open', req)
-                            ^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
-    result = func(*args)
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1397, in unknown_open
-    raise URLError('unknown url type: %s' % type)
-urllib.error.URLError: <urlopen error unknown url type: https>
+The host ca-certificates is needed to download the SPDX schema on
+CycloneDX's GitHub when using Buildroot's host Python, see
+urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH) in
+utils/generate-cyclonedx.
 
-It's quite confusing really but what it means is that host Python was
-built without ssl support.
-
-This adds an additional check importing _ssl and if the module is not
-found, tell the user what to do. This still doesn't make Buildroot's
-host Python3 fully usable for utils/generate-cyclonedx as it'll then
-fail when trying to validate certificates, this will be handled in the
-next few commits.
-
-Note that ssl Python library is always built in CPython, but itself
-imports the _ssl module which is the one that may be disabled with
-py_cv_module__ssl=n/a (which is what happens when
-BR2_PACKAGE_HOST_PYTHON3_SSL is not enabled), hence why _ssl is checked
-and not ssl.
+Note that unlike the target package which uses a _TARGET_FINALIZE_HOOKS
+since commit 2bc8e72bafed ("package/ca-certificates: create the bundle
+as target-finalize hook"), the host package doesn't have this option as
+there's no such hook for host packages. Therefore, the target's
+CA_CERTIFICATES_INSTALL_TARGET_CMDS and CA_CERTIFICATES_GEN_BUNDLE are
+merged and adapted into HOST_CA_CERTIFICATES_INSTALL_CMDS.
+This of course has the same shortcomings as the target package had
+before commit 2bc8e72bafed ("package/ca-certificates: create the bundle
+as target-finalize hook").
+The adaptations were:
+- replaced $(TARGET_MAKE_ENV) with $(HOST_MAKE_ENV)
+- replaced $(TARGET_DIR) to $(HOST_DIR)
+- replaced $(HOST_DIR)/usr with $(HOST_DIR)
+- replaced find usr/share/ca-certificates with find share/ca-certificates
+  (since it's done from within $(HOST_DIR)
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- utils/generate-cyclonedx | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/Config.in.host                     |  1 +
+ package/ca-certificates/Config.in.host     | 12 ++++++++++++
+ package/ca-certificates/ca-certificates.mk | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index d17aa805b7..045bf14caa 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -9,6 +9,7 @@
- 
- 
- import argparse
-+import importlib.util
- import json
- import os
- from pathlib import Path
-@@ -42,6 +43,11 @@ VULN_WITH_PEDIGREE = set()
- SPDX_LICENSES = []
- 
- if not SPDX_SCHEMA_PATH.exists():
-+    if not importlib.util.find_spec("_ssl"):
-+        print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
-+              file=sys.stderr)
-+        exit(1)
+diff --git a/package/Config.in.host b/package/Config.in.host
+index b990ce8b14..5365eddd5c 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -14,6 +14,7 @@ menu "Host utilities"
+ 	source "package/bmap-writer/Config.in.host"
+ 	source "package/bootgen/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
++	source "package/ca-certificates/Config.in.host"
+ 	source "package/casync-nano/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+diff --git a/package/ca-certificates/Config.in.host b/package/ca-certificates/Config.in.host
+new file mode 100644
+index 0000000000..950f5854dc
+--- /dev/null
++++ b/package/ca-certificates/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_CA_CERTIFICATES
++	bool "Host CA Certificates"
++	help
++	  This package includes PEM files of CA certificates to allow
++	  SSL-based applications to check for the authenticity of SSL
++	  connections on the host.
 +
-     # Download the CycloneDX SPDX schema JSON, and cache it locally
-     cyclonedxpath.mkdir(parents=True, exist_ok=True)
-     urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
++	  It includes, among others, certificate authorities used by the
++	  Debian infrastructure and those shipped with Mozilla's
++	  browsers.
++
++	  https://salsa.debian.org/debian/ca-certificates
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index b1903f6166..bcf645b767 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -8,6 +8,7 @@ CA_CERTIFICATES_VERSION = 20250419
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+ CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
++HOST_CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+ 
+@@ -43,4 +44,33 @@ define CA_CERTIFICATES_GEN_BUNDLE
+ endef
+ CA_CERTIFICATES_TARGET_FINALIZE_HOOKS += CA_CERTIFICATES_GEN_BUNDLE
+ 
++define HOST_CA_CERTIFICATES_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean all
++endef
++
++define HOST_CA_CERTIFICATES_INSTALL_CMDS
++	$(INSTALL) -d -m 0755 $(HOST_DIR)/share/ca-certificates
++	$(INSTALL) -d -m 0755 $(HOST_DIR)/etc/ssl/certs
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(HOST_DIR)
++	rm -f $(HOST_DIR)/sbin/update-ca-certificates
++	# Remove any existing certificates under /etc/ssl/certs
++	rm -f $(HOST_DIR)/etc/ssl/certs/*
++
++	# Create symlinks to certificates under /etc/ssl/certs
++	# and generate the bundle
++	cd $(HOST_DIR) ;\
++	for i in `find share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
++		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
++		cat $$i ;\
++	done >$(BUILD_DIR)/ca-certificates.crt
++
++	# Create symlinks to the certificates by their hash values
++	$(HOST_DIR)/bin/c_rehash $(HOST_DIR)/etc/ssl/certs
++
++	# Install the certificates bundle
++	$(INSTALL) -D -m 644 $(BUILD_DIR)/ca-certificates.crt \
++		$(HOST_DIR)/etc/ssl/certs/ca-certificates.crt
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 
 -- 
 2.53.0
