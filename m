@@ -4,87 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF8DFF512E
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 314E1FF512E
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 17:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E51A40C86;
-	Tue,  7 Apr 2026 17:37:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F12A140C50;
+	Tue,  7 Apr 2026 17:39:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OaG6GEk1ADup; Tue,  7 Apr 2026 17:37:25 +0000 (UTC)
+ id alMZ4_ONtD4J; Tue,  7 Apr 2026 17:39:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1974240C72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21F2A40C2F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775583445;
-	bh=qxLJ5VYU7gALh5eCFLt661Mjw6sW/rQLl8YagVTcX68=;
-	h=Date:References:In-Reply-To:To:Cc:Subject:List-Id:
+	s=default; t=1775583575;
+	bh=1Y0ec37vYfCYQgTTonriZGwT+ho60zsl1XWD1BvUjIo=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=SvqRTCi0vv1ac8c8RMr6CVB2Iy409RC/b43l9mPk34mXo0XVgBEj+GTW0HLWgmGjP
-	 KilrpBGXWfTm7qnG0HAyokpTRAV38ct5gsOs19AYeespk1Owlw3YauLyy1lUgWQiT2
-	 t5Tycm08W/qxo2Mj4xkzBfyBWYS4pR0km8+IVFfUUsFW9egx/g2InnX6oVq6LsSa3K
-	 GHAFyRg1t+hPUk957R78ihXOysZPg6QpwHX3AVCwBtwS8jAPwXq58KON7qCRj50dtJ
-	 obKCpxE0n4XHH5uD3/Qqo4LjfEkOybrG6eTfvyoIJHyuTjlBTW6hTXBaA2Wr9Rcs1c
-	 PAHlI4jkqlogQ==
+	b=snF4lf4+7KPdmneHH02P+ufFLS1+ezsRx8QqfUw1fkGOYhb2UM8Xx4r1W9jnnnvrJ
+	 mrDlsdjJplf69y6sckvF2GWNkaMVEQ80o2gMM9QNK+88jgoCixzreMZG1ONAHn3mrG
+	 Kq2AEnAEZco2/7sly7n4d3WxocqH+XGVmuttm0n5y6KOVB+CmWM3DNq0x4aOHHIof4
+	 zzkM48hoN8ZGfwHYNfoei1nbP3d7aZy6tROqKDQnKq5yGK/brna4m1wKHdD7E4pQrG
+	 6SSAV4beQaIkhDQMX93b5AfejV+RsBvM8nnVuw5RQySKvdkQPkDRb1ZYQ+aObCJiVo
+	 M+v7u59s7mg0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1974240C72;
-	Tue,  7 Apr 2026 17:37:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 92E232C7
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21F2A40C2F;
+	Tue,  7 Apr 2026 17:39:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C01AC237
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 796DA811C4
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B16DD60642
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:39:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AOtS_S_yfwds for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 17:37:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.16.66.174;
- helo=smtp-42ae.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21B8D81189
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21B8D81189
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch
- [84.16.66.174])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21B8D81189
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:37:18 +0000 (UTC)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown
- [IPv6:2001:1600:4:17::246c])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fqtgJ6T9zz8jg;
- Tue,  7 Apr 2026 19:37:16 +0200 (CEST)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4fqtgJ2LMpzRX; Tue,  7 Apr 2026 19:37:16 +0200 (CEST)
-Date: Tue, 07 Apr 2026 19:37:10 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5syPjkueP2EP for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 17:39:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EB7160DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EB7160DC6
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6EB7160DC6
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 17:39:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id B15CAB0051E;
+ Tue,  7 Apr 2026 19:39:27 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 07 Apr 2026 19:39:27 +0200
 MIME-Version: 1.0
-Message-Id: <20260407-generate-cyclonedx-br-v1-4-03c45ccba2ed@cherry.de>
-References: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
-In-Reply-To: <20260407-generate-cyclonedx-br-v1-0-03c45ccba2ed@cherry.de>
-To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>, Martin Bark <martin@barkynet.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.15-dev-47773
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=0leil.net; s=20231125; t=1775583436;
- bh=skQ9YMiEmQUYxLhXWTNqQ3sCRS5c5cLe2pIVhCrgFGk=;
- h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
- b=Da7icd7GhLkFzvjwTzzVd9NrMGB7J2axlDh/WkIQA6P8ZiENIb6xu97Ms0aslJWI+
- 5DUIoOtRMY+RwiAcdOtvrQNXoXa9mCwJIRfTr9KxaXMVQIgxcu5NZIs28MqfniT1nd
- UYrkkiaPIIw18F/TTgm9ZWlQWmTIJF7MHv5yJLf+YNdAL7VNLEYQ5OBRwHP/pktdEz
- C7FeCELMSsdsi2zdtE9pDZ3CidEPc1EXFdhAJXaT87ZLqUkqbgAiVJgGx2OiWCzLU+
- X7fTXuXf7wJ7MpzagqieDBCRM40SQTA+UOvqrWmnrwGltc/Rh+1vu8c+Su1OuCFxQU
- qZHYSsvmCF4qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=0leil.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=0leil.net header.i=@0leil.net
- header.a=rsa-sha256 header.s=20231125 header.b=Da7icd7G
-Subject: [Buildroot] [PATCH 4/4] utils/generate-cyclonedx: hint at missing
- Buildroot host package on a specific error
+Date: Tue, 07 Apr 2026 19:39:27 +0200
+To: Franciszek Stachura <fbstachura@gmail.com>
+Cc: buildroot@buildroot.org, Jonathan Ben Avraham <yba@tkos.co.il>
+In-Reply-To: <20260406184858.1335459-2-fbstachura@gmail.com>
+References: <20260406184858.1335459-2-fbstachura@gmail.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <ff9ad5a1e9daa6153e416c1e931a4db8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1775583570;
+ bh=s+ZbIIcL6Qo1LwKoFU53b57oIwsBUTdEIJ6gssVWr/U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RBaQi3pPGmt7hObR4kUMF+Z/D39rE5YFcaVG3KMBePwdZ6otTHZhoP1j3jysms7g9
+ orok0PeVAaO6ZG61uX4M9f24Le7vqJWCJd2cRTfAbf1B16z5ZyJBYqmOJcfoFK59Gc
+ 9QWziJWThqU8eplurjh192LrX0PBRZKSozFvc+QogyIbSLdNrbfL8vu+PhW9KIT7AP
+ ibPFbXxh5J94GAIH4qFoih6WJxzCBHzcYnNSNuQAkzMWrljdGx8dgYljJBA/HieU0Q
+ KUIpjLffPctXPn+ziSeFv0fk3Az6+cYtl4QFU1FohnTz7WdXigZd+tKJgsOXHa4TAN
+ HRSRuLpfqomnA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=RBaQi3pP
+Subject: Re: [Buildroot] [PATCH] package/libphidget: bump to version
+ 1.24.20260127
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,122 +94,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <foss+buildroot@0leil.net>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
+On 06/04/2026 20:48, Franciszek Stachura wrote:
+> This is also a backward-incompatible upgrade from version 21 to 22 [1].
+> 
+> Version 21 was deprecated in 2020, it doesn't support latest phidget
+> devices [2].
+> 
+> Version 22 is covered by BSD-3 instead of LGPL3 [3].
+> 
+> Release notes: https://www.phidgets.com/?view=changelog
+> 
+> [1]
+> https://www.phidgets.com/docs/Upgrading_Code_from_Phidget21_to_Phidget22
+> [2] https://www.phidgets.com/docs21/Main_Page
+> [3] https://www.phidgets.com/docs/Software_License
+> 
+> Signed-off-by: Franciszek Stachura <fbstachura@gmail.com>
 
-Since last commit, utils/generate-cyclonedx can now be used with
-Buildroot host tools, provided the user either externally install the
-SPDX schema in the DL_DIR themselves or have
-BR2_PACKAGE_HOST_PYTHON3_SSL and BR2_PACKAGE_HOST_CA_CERTIFICATES both
-enabled. If the latter is missing, Python will complain with:
-
-Traceback (most recent call last):
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1321, in do_open
-    h.request(req.get_method(), req.selector, req.data, headers,
-    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-              encode_chunked=req.has_header('Transfer-encoding'))
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1358, in request
-    self._send_request(method, url, body, headers, encode_chunked)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1404, in _send_request
-    self.endheaders(body, encode_chunked=encode_chunked)
-    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1353, in endheaders
-    self._send_output(message_body, encode_chunked=encode_chunked)
-    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1113, in _send_output
-    self.send(msg)
-    ~~~~~~~~~^^^^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1057, in send
-    self.connect()
-    ~~~~~~~~~~~~^^
-  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1499, in connect
-    self.sock = self._context.wrap_socket(self.sock,
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-                                          server_hostname=server_hostname)
-                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/ssl.py", line 455, in wrap_socket
-    return self.sslsocket_class._create(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        sock=sock,
-        ^^^^^^^^^^
-    ...<5 lines>...
-        session=session
-        ^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/buildroot/build/host/lib/python3.14/ssl.py", line 1076, in _create
-    self.do_handshake()
-    ~~~~~~~~~~~~~~~~~^^
-  File "/buildroot/build/host/lib/python3.14/ssl.py", line 1372, in do_handshake
-    self._sslobj.do_handshake()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
-ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
-    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
-    with contextlib.closing(urlopen(url, data)) as fp:
-                            ~~~~~~~^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
-    return opener.open(url, data, timeout)
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
-    response = self._open(req, data)
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 504, in _open
-    result = self._call_chain(self.handle_open, protocol, protocol +
-                              '_open', req)
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
-    result = func(*args)
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1369, in https_open
-    return self.do_open(http.client.HTTPSConnection, req,
-           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                        context=self._context)
-                        ^^^^^^^^^^^^^^^^^^^^^^
-  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1324, in do_open
-    raise URLError(err)
-urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
-
-Provide some hint as to what could be missing from Buildroot host.
-
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
- utils/generate-cyclonedx | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 045bf14caa..fad0671166 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -50,7 +50,12 @@ if not SPDX_SCHEMA_PATH.exists():
- 
-     # Download the CycloneDX SPDX schema JSON, and cache it locally
-     cyclonedxpath.mkdir(parents=True, exist_ok=True)
--    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-+    try:
-+        urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-+    except urllib.error.URLError as e:
-+        if "CERTIFICATE_VERIFY_FAILED" in str(e.reason):
-+            raise Exception("Couldn't verify certificate. Try enabling BR2_PACKAGE_HOST_CA_CERTIFICATES.")
-+        raise e
- 
- try:
-     with SPDX_SCHEMA_PATH.open() as f:
-
--- 
-2.53.0
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
