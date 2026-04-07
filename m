@@ -4,80 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379B1FF5134
-	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 18:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFA5FF5134
+	for <buildroot@archiver.kernel.org>; Tue,  7 Apr 2026 19:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF41240D41;
-	Tue,  7 Apr 2026 18:56:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 278044021D;
+	Tue,  7 Apr 2026 19:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IuA7dmPtUTft; Tue,  7 Apr 2026 18:56:39 +0000 (UTC)
+ id 4bSK_yTzLOew; Tue,  7 Apr 2026 19:00:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3FEF40D37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49B1840224
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775588199;
-	bh=NvFu/vIoVKApS4WljDN1MhfHejM476Hr9/WC+9Idfr4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NGzep9PX4ubaPXc6VtyPi7LkPVaa7XT1z3H41OSiGhWqxENZbX9oE9fiTo3zPgcJN
-	 MJHR/MRtJgaJAQNaKNdPSTIrlOrPsh51I7lUXYcBaCyCX1S2/j0SQXVIUdUofKbTbs
-	 Cyg8W9ZkpORKq1VhkZlUpiJhzS1VkC/irfvM7zspLewrN/hrQGSoGrOyAjiRILk64W
-	 HOmcpsDmQA1vBHZcY8K9Ket3ciAHvqbSXAU7u6mK+AWKVo9gdtRI4gQqb+hmhI34xf
-	 9nki2RMFBugpaDCAZxASpbghweIEPTgSZGukNCfVsfWN70/Adiw8hUN8zzjqcNODWH
-	 aROc8Z6Q1AoOg==
+	s=default; t=1775588400;
+	bh=6u782Jhnoff1tltJD32ijufXn0dg3OWJiVERvNlijK8=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=BXdSowOCvLJPpv0CQv2Wrt4GqGPnSxzXBibC+JjMJxzDinz9COGHIlNjLdamMjtkB
+	 9lQafjbLCSPXOtJPytTvtNaed7q1XPH773HEBvnucoIHWPfBVqttX/GeTQ37n/CUwk
+	 silnvKW91QfNlBZW9TMOuJOeuBbmz0aMHT9VBtDrLNleJpnN+6mtghNds5qsXJMYVM
+	 aI7rylgoK1aJqAzkwBGY8pfluMdrxmsl81dNhMv2fseFltan/07fzQpG0mus4fHSfX
+	 EKxigmGc+wZM5RtBUwr9bzFKI3CUjt87NJBKuXhwFcbxVjWzE5Mz/QKq6kt49LFbdL
+	 5cHetfOT1lgYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3FEF40D37;
-	Tue,  7 Apr 2026 18:56:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3BA0F237
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49B1840224;
+	Tue,  7 Apr 2026 19:00:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9318C237
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 216B88148A
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7913760DE9
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:59:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Pr4GszkMfx6 for <buildroot@buildroot.org>;
- Tue,  7 Apr 2026 18:56:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zB2biufjXlc6 for <buildroot@buildroot.org>;
+ Tue,  7 Apr 2026 18:59:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D18CA81479
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D18CA81479
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 619C060D9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 619C060D9B
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D18CA81479
- for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:56:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 619C060D9B
+ for <buildroot@buildroot.org>; Tue,  7 Apr 2026 18:59:58 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 26AFAB97BBAD; Tue,  7 Apr 2026 20:56:33 +0200 (CEST)
-Message-ID: <27a01177-9b40-4a03-8f8d-626fd9fa81fc@rnout.be>
-Date: Tue, 7 Apr 2026 20:56:31 +0200
+ with ESMTPSA id 410F5B97BCDA; Tue,  7 Apr 2026 20:59:56 +0200 (CEST)
+Message-ID: <0a191350-d411-4247-934c-a17ddbaa3562@rnout.be>
+Date: Tue, 7 Apr 2026 20:59:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
-Cc: Quentin Schulz <quentin.schulz@cherry.de>
-References: <20260325-linux-werror-v1-1-2b98ff2a2cdd@cherry.de>
+To: Flaviu Nistor <flaviu.nistor@gmail.com>, buildroot@buildroot.org
+References: <20260327064354.5892-1-flaviu.nistor@gmail.com>
+ <20260327064354.5892-2-flaviu.nistor@gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260325-linux-werror-v1-1-2b98ff2a2cdd@cherry.de>
+In-Reply-To: <20260327064354.5892-2-flaviu.nistor@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1775588194; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1775588396; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=jIT2vTz2oMAH0rG100A7eWfVVCp3eobuj5XdOruOwOo=;
- b=Ei/RXVnuK893G2DnYCGuigyag9BPXEQUdOttpvUVoNQ4pYuRUdl3RjODOFnfS8eNZRvu+o
- HS24MMF1ysqaqAQP9X4E1xU7fnh/Trk1thnppBRSbeaZftcF9ClMf3hj+UCLbFCOT1LYOF
- rC0OjD62i5DQRDXccNOczmtH4WxWk9Um20lJXFsrXk5L9oGaH33qNrl3PwmPYb/XMcGv1B
- xj2M2Sqn6izGp4XUrgQriJklSoQ20znW1RwABHYy40iLE2MF9jd1xNAmCn1AvBF9QIMV9U
- SSJic9Amj2S82sjwiRDpfDWyqqmomHW5AjRBKKJfHfjTkSYmno7PBLankP4l9Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=H2yy72365XnSq8XLBiUJQQwYlhl5kxSM9/gcxUFr/hw=;
+ b=O/pt/XoC7ctAy3GZ/j8fMNrDyhtfam0ZtNTCewn+BeSKJra17WkM0JOE0wHqXFRTLaF082
+ fKkHMY2iOorycvNEe/o/OhGQ57fXMy61CP6F3r0YrIyxabp8iRo76PXbRgvZKPgJ6tsU3O
+ BYEFEw863voLCaIc6tpShUL5H0u8U2XL6Uv8evPNv2Ufy3IdscIPReaORrz1CVWa73CmLM
+ qqObWw4khpMauyfsbHSrSGy0CYpnXsc1rys/RYlFgZBOG94fWXdBhAH711AsL2HoC7IO8R
+ 5vDmBBZUENgXTrMOF+Kq8yNCeohzerdwOIvk+ChPchNcmrBXAVIrr18FEuA9BQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Ei/RXVnu
-Subject: Re: [Buildroot] [PATCH] linux: allow the user to respect Linux
- kernel defconfig's CONFIG_WERROR
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=O/pt/XoC
+Subject: Re: [Buildroot] [PATCH 1/1] utils/scanpypi: workaround for pypi
+ project names
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,140 +99,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/03/2026 18:51, Quentin Schulz via buildroot wrote:
-> From: Quentin Schulz <quentin.schulz@cherry.de>
-> 
-> Buildroot forcibly disables WERROR (and PPC_WERROR via
-> PPC_DISABLE_WERROR for PowerPC) for all kernels since commit
-> 6b56e0b4f09b ("linux: disable -Werror") for the former and 1713c3c344be
-> ("linux: disable Werror for powerpc kernels") for the latter.
-> 
-> Some users (me :) ) may only build kernels within Buildroot and may be
-> required by audit companies to ensure that no warnings are generated
-> when building them. While we could look at the log manually and report
-> that indeed no warnings are seen, better not even build if there's a
-> warning and catch them as early as possible.
-> 
-> Thus, let's allow the user to not override the WERROR state gotten from
-> the defconfig. It is left as force-disabled by default as upstream
-> Buildroot likely does not want to fail builds when bumping the
-> toolchains with newer warnings and no bandwidth to fix or backport fixes
-> for kernels for upstream Buildroot defconfigs.
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
-> ---
-> I believe that commit 6b56e0b4f09b ("linux: disable -Werror") should
-> rather have disabled WERROR from ESP_HOSTED_LINUX_CONFIG_FIXUPS in
-> package/esp-hosted/esp-hosted.mk instead of disabling it for everybody.
+On 27/03/2026 07:43, Flaviu Nistor wrote:
+> Add a dictionary for buildroot packages that have a different
+> name compared to the pypi project name (e.g. smmap2 -> smmap).
+> Since it is not intended to change the buildroot package name,
+> this is a workaround in order to use the scanpypi utility for
+> this packages and still get correct generated files. Current
+> packages added in the dictionary by this commit are smmap2 and
+> gitdb2.
 
-  Yeah, I agree with that. And even so, it should only be done if it's really 
-needed.
-
-> I understand Buildroot not wanting to respect WERROR if in the kernel
-> defconfig to avoid additional friction when bumping toolchains, hence
-> why I made this into a Kconfig knob.
-
-  Not really - for the defconfigs, we can easily create 
-board/linux-disable-werror.fragment and include that as a Kconfig fragment for 
-all problematic defconfigs. Ideally though the error should be resolved in a 
-more recent kernel.
-
-  So I'd tend to prefer to revert 6b56e0b4f09b (or perhaps move it to 
-esp-hosted) rather than adding yet another weird Config.in option.
-
-  For 1713c3c344be, it's probably not worth to bother reverting that one (and 
-trying to find out which defconfigs break due to it). Unless you also need PPC 
-builds to comply?
+  Would it be an option, instead of having this mapping table, to parse the name 
+out of the .mk file if it exists? So if you do scanpypi smmap2, it will check if 
+package/python-smmap2/python-smmap2.mk exists, and if yes read the _SOURCE to 
+find the upstream name.
 
   Regards,
   Arnout
 
 > 
-> I'm assuming we do not want upstream Buildroot defconfigs to have this
-> set to N. I can add this info to the Kconfig help text. I can also make
-> sure defconfigs aren't setting this to N by adding a check in
-> utils/checkpackagelib/lib_defconfig.py. Let me know if this is something
-> you're interested in.
+> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
 > ---
->   linux/Config.in | 14 ++++++++++++++
->   linux/linux.mk  | 12 +++++++++---
->   2 files changed, 23 insertions(+), 3 deletions(-)
+>   utils/scanpypi | 18 +++++++++++++++---
+>   1 file changed, 15 insertions(+), 3 deletions(-)
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 44f8b08e71..43397d52af 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -223,6 +223,20 @@ config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
->   	  A space-separated list of kernel configuration fragment files,
->   	  that will be merged to the main kernel configuration file.
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 61879e39d4..09899bfe0e 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -189,6 +189,14 @@ class BuildrootPackage():
+>       create_config_in
 >   
-> +config BR2_LINUX_KERNEL_DISABLE_WERROR
-> +	bool "Force-disable Werror"
-> +	default y
-> +	help
-> +	  This allows to force disable CONFIG_WERROR (and force enable
-> +	  CONFIG_PPC_DISABLE_WERROR for PPC) even if set by the kernel
-> +	  defconfig. This is typically wanted for third party kernel
-> +	  trees or old kernel releases when attempting to build with
-> +	  newer toolchains. Since 2019.08 for PPC and since 2024.05 for
-> +	  the other architectures, the default has been Y.
+>       """
 > +
-> +	  You may want to set this to N if you want to make sure your
-> +	  kernel builds without warning for your specific setup.
+> +    # Dictionary of python package names to their actual PyPI project names
+> +    # Used when a package's buildroot name differs from its PyPI name
+> +    PYPI_NAME_MAPPINGS = {
+> +        'smmap2': 'smmap',
+> +        'gitdb2': 'gitdb',
+> +    }
 > +
->   config BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH
->   	string "Custom boot logo file path"
->   	help
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c61089bfe0..f7f2dfe107 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -419,6 +419,14 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
->   endef
->   endif
+>       setup_args = {}
 >   
-> +ifeq ($(BR2_LINUX_KERNEL_DISABLE_WERROR),y)
-> +define LINUX_FIXUP_CONFIG_DISABLE_WERROR
-> +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
-> +endef
-> +endif
+>       def __init__(self, real_name, pkg_folder):
+> @@ -216,8 +224,12 @@ class BuildrootPackage():
+>           """
+>           Fetch a package's metadata from the python package index
+>           """
 > +
->   define LINUX_KCONFIG_FIXUP_CMDS
->   	@$(call MESSAGE,"Updating kernel config with fixups")
->   	$(if $(LINUX_NEEDS_MODULES),
-> @@ -431,8 +439,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
->   	$(LINUX_FIXUP_CONFIG_PAHOLE_CHECK)
->   	$(if $(BR2_arm)$(BR2_armeb),
->   		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
-> -	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
-> -		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
->   	$(if $(BR2_ARC_PAGE_SIZE_4K),
->   		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
->   		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
-> @@ -474,7 +480,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
->   		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
->   		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
->   	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
-> -	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
-> +	$(LINUX_FIXUP_CONFIG_DISABLE_WERROR)
->   	$(PACKAGES_LINUX_CONFIG_FIXUPS)
->   endef
->   
-> 
-> ---
-> base-commit: c8dd9e9a011f1a5755df62baceb865efc09862fe
-> change-id: 20260325-linux-werror-9f6e4ad44b0f
-> 
-> Best regards,
-> --
-> Quentin Schulz <quentin.schulz@cherry.de>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> +        # Check if there's a PyPI name in the dictionary for this package
+> +        pypi_name = self.PYPI_NAME_MAPPINGS.get(self.real_name, self.real_name)
+> +
+>           self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
+> -            pkg=self.real_name)
+> +            pkg=pypi_name)
+>           try:
+>               pkg_json = urllib.request.urlopen(self.metadata_url).read().decode()
+>           except urllib.error.HTTPError as error:
+> @@ -225,13 +237,13 @@ class BuildrootPackage():
+>               print('ERROR: Could not find package {pkg}.\n'
+>                     'Check syntax inside the python package index:\n'
+>                     'https://pypi.python.org/pypi/ '
+> -                  .format(pkg=self.real_name))
+> +                  .format(pkg=pypi_name))
+>               raise
+>           except urllib.error.URLError:
+>               print('ERROR: Could not find package {pkg}.\n'
+>                     'Check syntax inside the python package index:\n'
+>                     'https://pypi.python.org/pypi/ '
+> -                  .format(pkg=self.real_name))
+> +                  .format(pkg=pypi_name))
+>               raise
+>           self.metadata = json.loads(pkg_json)
+>           self.version = self.metadata['info']['version']
 
 _______________________________________________
 buildroot mailing list
