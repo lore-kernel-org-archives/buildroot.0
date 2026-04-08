@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 581D2FD5F8C
-	for <buildroot@archiver.kernel.org>; Wed,  8 Apr 2026 07:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6BBFD5F87
+	for <buildroot@archiver.kernel.org>; Wed,  8 Apr 2026 08:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1336B60ECD;
-	Wed,  8 Apr 2026 07:41:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1C40821DA;
+	Wed,  8 Apr 2026 08:21:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ny8Z2S_0nzQQ; Wed,  8 Apr 2026 07:41:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wrhjkS9z1lOc; Wed,  8 Apr 2026 08:21:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38F1E60EAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8594821F1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775634060;
-	bh=OImr077G6uxKTXL5PzcpmP8OussWeL4j4Vn1Q73rtgs=;
+	s=default; t=1775636499;
+	bh=U26XeDq9qdYqqM8jIoDsWWRZhDq+IL88wjqdxBka2SI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=dXM6/g1wx8HzROp6S+6YQjRixdAfn47Z/PSphGbyHUK4x2BBy50iAyuk1MowiiLNU
-	 JiPdtzXOEgFSA/+5Kzx70Or3ThJZqHVwWz4SJpIlKhbg7EP8pIfbrBjENOKrmo6lKd
-	 ViGTPsM+nP1p1TCbZVMhDOuxO3OeAtq+5+S8U4V9WobafylyddLhfMZgc9qaO2tQ5i
-	 SvWbY1CG/N9aJSQId/mKVPMZb/jeaVbcOyc6yJ1pF6pHVilkLkmu+G7besPYtWlP2a
-	 oFXe38IxMxQzauwJjbXTH481SfSILZFNEzGCni6Dh1LrjxL0qY4QXhg4wbQrWGgO38
-	 wtzHyzi9XoBHQ==
+	b=bkTEpx7qzjrqrHJZxgnQ8nqns0IfShXVMJtR8ggxUb+BKdeaW1yB+b/Vy6MBiYIJH
+	 wlp6QoeZFl0BNDuV18wWP1Sn6MH970HdeAN1HKs0JUkRq51NT+Aph3VBdJZVm9hc6X
+	 36mhJbZ23InmWkctTOnXvSIs6pNV5UwGTfkdY2eYogMD/x0LQEUYB5Qxrj0N7TGTYL
+	 kI8ecv8juhMtBzknj9QRO2evzH8Jarl7r4teAzgvCyon3UEDz1ZY8WkR1VQKMw9xar
+	 N2ppLfBKUFnIQrc31wYNh0XUvUPuYl0nELEvhsAuzm5APUe/6/lwfkZlNq8pNIgCtt
+	 FG7sJCGpI2SIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38F1E60EAD;
-	Wed,  8 Apr 2026 07:41:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A49812C7
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 07:40:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8594821F1;
+	Wed,  8 Apr 2026 08:21:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B2A1237
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 08:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 964594047B
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 07:40:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CC7B4025A
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 08:21:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rkrlwmNsIAhT for <buildroot@buildroot.org>;
- Wed,  8 Apr 2026 07:40:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 84C5A403D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84C5A403D8
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 84C5A403D8
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 07:40:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DbxCKrv13b3u for <buildroot@buildroot.org>;
+ Wed,  8 Apr 2026 08:21:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4D5F04023D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D5F04023D
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4D5F04023D
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 08:21:36 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 38B0F1814BF; Wed,  8 Apr 2026 09:40:55 +0200 (CEST)
+ with ESMTPSA id 4F8E01814BF; Wed,  8 Apr 2026 10:21:33 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed,  8 Apr 2026 09:40:28 +0200
-Message-ID: <20260408074029.4005543-2-buildroot@heine.tech>
+Date: Wed,  8 Apr 2026 10:21:01 +0200
+Message-ID: <20260408082103.4125427-2-buildroot@heine.tech>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=heine.tech; s=dkim; 
- t=1775634055; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=Fq4IcczE715pfvKDf8z8vC9JV8LTSl7azN5IpsXw6CY=;
- b=ulRV3a7v3FsMP8aGtddwwrPzvss2ZgIZ+kFwGHxDgi7Zv5227Ii35OncaFNb/TqxNRmsHz
- CzcrqbMLobuCMHTMbvMp06v1/dMtP+YYvBRwZAYBliBLF3grqHB97lBRtbOsQIxr/ZiiH8
- DQSkgVtF4IA0Q7Fvw/RRoo0j9lvW4IQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1775636493; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=yD4gCq779v03/T1WuOiTs3zCxZd4j/hcK5NtwOD6t64=;
+ b=H9wLOSKhQMRKuV06Hbigx+KF/napL1sTtKFPwJJwMkC/a4mnawejyEKJbONXSUOJi3J0Kl
+ 6D3A93ek3VuwRES5pcVs+/j9vbB5JxUbfxTwtdhepXOZEb7NU2QgL4j2NfO+lUVrKYrn6y
+ ASbwWDjzXM55kraUK3gsrhOM1WUxNXk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=ulRV3a7v
-Subject: [Buildroot] [PATCH v2] package/libgpiod2: bump to version 2.2.3
+ header.a=rsa-sha256 header.s=dkim header.b=H9wLOSKh
+Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 34.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,47 +82,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
 Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v2.2.3
+https://github.com/protocolbuffers/protobuf/releases/tag/v34.1
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
-V2: use correct package name
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ package/python-protobuf/python-protobuf.mk   | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
----
- package/libgpiod2/libgpiod2.hash | 2 +-
- package/libgpiod2/libgpiod2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libgpiod2/libgpiod2.hash b/package/libgpiod2/libgpiod2.hash
-index 24bcfafc6c..157e605ed5 100644
---- a/package/libgpiod2/libgpiod2.hash
-+++ b/package/libgpiod2/libgpiod2.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256  7e3bff0209d75fbca2e9fcff1fd5f07cc58b543e129e08b6d4bb1e4a56cfec0d  libgpiod-2.2.2.tar.xz
-+sha256  70012b0262e4b90f140431efa841ca89643b02ea6c09f507e23cec664a51b71a  libgpiod-2.2.3.tar.xz
- # Hash for license file
- sha256  f646ad5159efb51c1130a4b43c31f0759750b1e254d2acf510f368ee2e2085c3  COPYING
-diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
-index ae3bcfa207..8803a282fe 100644
---- a/package/libgpiod2/libgpiod2.mk
-+++ b/package/libgpiod2/libgpiod2.mk
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index fe1084b640..be6484fb92 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  e540aae70d3b4f758846588768c9e39090fab880bc3233a1f42a8ab8d3781efd  protobuf-34.0.tar.gz
++sha256  e4e6ff10760cf747a2decd1867741f561b216bd60cc4038c87564713a6da1848  protobuf-34.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 1d110fdbf0..4f5911e794 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 34.0
++PROTOBUF_VERSION = 34.1
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 1d84f02292..346a2f3c54 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/protobuf/json
+-md5  f8ad7dac46884ad2ac3929eecfcafb0a  protobuf-7.34.0.tar.gz
+-sha256  3871a3df67c710aaf7bb8d214cc997342e63ceebd940c8c7fc65c9b3d697591a  protobuf-7.34.0.tar.gz
++md5  7d860558dfbd2762140370c391285c35  protobuf-7.34.1.tar.gz
++sha256  9ce42245e704cc5027be797c1db1eb93184d44d1cdd71811fb2d9b25ad541280  protobuf-7.34.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index 84a6c3a8a6..3ba1b96514 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
 @@ -6,7 +6,7 @@
  
- # Be careful when bumping versions.
- # Dependency on kernel header versions may change.
--LIBGPIOD2_VERSION = 2.2.2
-+LIBGPIOD2_VERSION = 2.2.3
- LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
- LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD2_LICENSE = LGPL-2.1+
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+ PYTHON_PROTOBUF_SOURCE = protobuf-7.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f2/00/04a2ab36b70a52d0356852979e08b44edde0435f2115dc66e25f2100f3ab
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/6b/6b/a0e95cad1ad7cc3f2c6821fcab91671bd5b78bd42afb357bb4765f29bc41
+ 
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
