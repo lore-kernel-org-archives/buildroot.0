@@ -4,87 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79D0B1073C89
-	for <buildroot@archiver.kernel.org>; Wed,  8 Apr 2026 09:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A131073C85
+	for <buildroot@archiver.kernel.org>; Wed,  8 Apr 2026 09:57:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30B1A82308;
-	Wed,  8 Apr 2026 09:57:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3619C8235B;
+	Wed,  8 Apr 2026 09:57:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uU9A9KCtUIOb; Wed,  8 Apr 2026 09:57:08 +0000 (UTC)
+ id 5vgdh_ifTmdl; Wed,  8 Apr 2026 09:57:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F4982309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F7FE8230B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775642228;
-	bh=6OrBb9eQyqJCixxKlp1i6xqLTQHJbguS7TVfGwF9t+U=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	s=default; t=1775642246;
+	bh=yExNRQjPd1eXiOPUTVF/huZgVkyCbtHLq+uZ4o6w58c=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=UzaVjRWd+co0zhQRJkAHma6NYD/GgC/z/PTIBE7fquLPUTD5jU6gFmaX9WE1ZFto1
-	 LGxmFhfEKkwkIKWgiog0ss/viAynJ3TLrL/WtWeJNPJVKBlfaPeD0y3+6g0bt5GMfo
-	 or42uxDBlj6q0DEW+X+jmXh5QPh63fu0NdeQiQ+Q42jvHNRtBKpfEQY68Ysil/kyGT
-	 l8DuN+AZ+nE+UwkzmwD7FdbdUk8HA47ZEGbJUjZkG1eKdxs+UyH+/6HkGf4t0pcNzI
-	 7eVzx0hI27NicTwRWXJtv09vBxxhxnXRUE4cx7OmpcJ7GUesQgKgHp8HJIGOcryD87
-	 q01BQxOn3cV1Q==
+	b=Jio8DSFvYAr4kUO+xQ9WzXLxKJXVM2StmEn02YYtgQZl3y+Hs0zbwiD4vvE4VmvYU
+	 ceo0b+0ImwGQv1eglaBRFUH1+k2ZrmgB/pHAz5SYxJvWXQMIvva+BxUOe5ljeYCTMQ
+	 jn/RSwpit98kkGu2bQ1rm2uK+3XYfe5DP6ZR+IlhD5KfSo1K5f6rfbyeYdXQj+wMVt
+	 qHzjulg9u31xaq4sBzisow4t0W/CO03vUUI+rswFdrNuY/rCetFuD5ksQdYJjwmlou
+	 Rqbn5gJnixqOdjagke1alwD6qhWQZrlzmOQgZMIcLOB0s+opK7OnhYl0KRtyEwDWCu
+	 YA0t+3Vnca8XA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32F4982309;
-	Wed,  8 Apr 2026 09:57:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 64F631F6
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F7FE8230B;
+	Wed,  8 Apr 2026 09:57:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A64B11F6
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56E95400B7
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C65540EC6
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zwP_65L-YJgM for <buildroot@buildroot.org>;
- Wed,  8 Apr 2026 09:57:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.86;
- helo=smtpcmd0986.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA72D400A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA72D400A0
-Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA72D400A0
- for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:01 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id APebw2GtG4bDkAPecwcSIg; Wed, 08 Apr 2026 11:56:58 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Petr Vorel <petr.vorel@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  8 Apr 2026 11:56:57 +0200
-Message-ID: <20260408095657.2560313-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260408095657.2560313-1-giulio.benetti@benettiengineering.com>
-References: <20260408095657.2560313-1-giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i5rNhqB_h4UE for <buildroot@buildroot.org>;
+ Wed,  8 Apr 2026 09:57:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6C06740EC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C06740EC4
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C06740EC4
+ for <buildroot@buildroot.org>; Wed,  8 Apr 2026 09:57:22 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 85B20B97BBE0; Wed,  8 Apr 2026 11:57:20 +0200 (CEST)
+Message-ID: <e9427dfd-f603-4ace-aa2b-77ea68f8986d@rnout.be>
+Date: Wed, 8 Apr 2026 11:57:17 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfMitWLiwaD48cnmq/TXxoV6QcAEb23pWRS6N5HZdEE3KgRidA/9kYButGfUotLdpVmEcbhDpwNtrhcSc+TaXmhIGoigZcDe7RGhhltBCoP7jRVvBd3/c
- 7xIVw/Ihf4lV+wV2UKdrQjaQSiQIggFl80TS2WXGDvhl0CEYhNBEj5VZxAxgWHTPGMcQ5Q+Hyih6dfu4lH/JuARXr33sirh0sYrsfUDhdMxUzKQ7qtckngXM
- mfWaGOAMXtdaAoom59H7GbmYN8jOL5FqMyjyxCipnWzfIGQXeQQ+k4InA+I/kQ7S3QIWrWaHlQvwnXa/J367GfmpcynVFfFV38284FPRKnCTr/+Q94jzhMwo
- rcCDJiCN
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1775642218; bh=hUCE6zhMqGVmjejyKttM5UlULwwEbZ8F00mOtAFf8LM=;
- h=From:To:Subject:Date:MIME-Version;
- b=iGLDYayzJ6cocj4RCunePU9JqvRUDNlPEiCn6vfpr8D8mU7Bk+9A/XR+Vyup142LV
- b02sVztwMh2QbUPr89ckHdGu+SuwQWefYNsL7m2Y9+f4nZc9AVwNHfS6B3NdVZWc8V
- 2J3HY30n1r4qDMioAbA84x9o+jagyRx/8RfVD3w59wkAJUhGyC91Dj+M4mY9dwUmBf
- cXevbRjS6fJeSaWJhR2J8TN3uTNAKvx/vAUgIbM1I35SrKwVX2pVQ0zfJqtx98F1tQ
- BYGyxQXkdC36Uz6ubdEmZjINNLJYTIT7g+LkJH+MhPG+HOV8QBev8nAO+JdT6jkpsg
- BUwg1KxANuJTQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+ Nathan Bloch <nblochn@gmail.com>, buildroot@buildroot.org
+References: <20260319104249.22286-1-Nathan.B@solaredge.com>
+ <06d6220f-2982-4c79-9b7d-6940088a95e1@rnout.be>
+ <9deec371-1edd-4ff0-9678-0caa53aa47f8@green-communications.fr>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <9deec371-1edd-4ff0-9678-0caa53aa47f8@green-communications.fr>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1775642241; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=miG5VdVzzqX5HHolO7o4T1iXFn1js5BYIWUjVvLQabo=;
+ b=JdhfZ6xvdCXXZ7/WD1luWF0l6qFjbU6801F/r4jH7Bb1VuzADoBxjfTl85n305zNyBAkWU
+ 3cqa5eWZEoWhlhq3fbcNdKBu1KMNiAZ3iXd7YgC09oPB3+fh6qSbQsxZrYQbTkSF/Q9B+B
+ VZyAW1q55BbBhhme6oM54fPaqdOUzAbi32spVXNUNOQwMCaRxW2Yaf55ZkxNEHjY6h8uB5
+ D8YLCLZ9EunJnhvoLnn2BLfEBYUOLsaRYTO4cYyNI644EBWWWx33vPivaJT8kPS6125Pxc
+ weVCld+RjWfrScpcmgPFJITqiz8Z/n40x0m5eBOUeCXqg/b8gd6o7jx5GM+m3g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=iGLDYayz
-Subject: [Buildroot] [PATCH 2/2] package/nfs-utils: bump version to 2.9.1
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=JdhfZ6xv
+Subject: Re: [Buildroot] [PATCH] pkg-generic: suppress SOURCE_DATE_EPOCH
+ warning in step_time
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,201 +92,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add dependency to libnl that became mandatory with commit:
-https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commitdiff;h=d2fa3421f857e04de7f79cdf3114a0fe73983d25
-
-Add 2 local patches pending upstream to fix build failures.
-
-Release announce:
-https://lore.kernel.org/linux-nfs/955a922e-c12d-435b-a698-caf73312f01d@redhat.com/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ..._file-fix-missing-string.h-inclusion.patch | 28 +++++++
- ....h-file-to-deal-with-old-Linux-api-a.patch | 76 +++++++++++++++++++
- package/nfs-utils/Config.in                   |  1 +
- package/nfs-utils/nfs-utils.hash              |  4 +-
- package/nfs-utils/nfs-utils.mk                |  6 +-
- 5 files changed, 110 insertions(+), 5 deletions(-)
- create mode 100644 package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
- create mode 100644 package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
-
-diff --git a/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch b/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
-new file mode 100644
-index 0000000000..6b6b2baba6
---- /dev/null
-+++ b/package/nfs-utils/0001-fh_key_file-fix-missing-string.h-inclusion.patch
-@@ -0,0 +1,28 @@
-+From 2d99ff0aa8a3b4d20558bce742edaaed9d24b3cb Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Tue, 7 Apr 2026 17:23:13 +0200
-+Subject: [PATCH] fh_key_file: fix missing string.h inclusion
-+
-+Add #include <string.h> to fix build failure.
-+
-+Upstream: https://lore.kernel.org/linux-nfs/20260407154113.1152555-1-giulio.benetti@benettiengineering.com/T/#u
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ support/nfs/fh_key_file.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/support/nfs/fh_key_file.c b/support/nfs/fh_key_file.c
-+index 5f5eafc1..81ea1500 100644
-+--- a/support/nfs/fh_key_file.c
-++++ b/support/nfs/fh_key_file.c
-+@@ -26,6 +26,7 @@
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+ #include <errno.h>
-++#include <string.h>
-+ #include <uuid/uuid.h>
-+ 
-+ #include "nfslib.h"
-+-- 
-+2.47.3
-+
-diff --git a/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch b/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
-new file mode 100644
-index 0000000000..1cfa407b32
---- /dev/null
-+++ b/package/nfs-utils/0002-Introduce-compat.h-file-to-deal-with-old-Linux-api-a.patch
-@@ -0,0 +1,76 @@
-+From 3dce5da6a61f8a8aa27e5bafd253be5834b18c4e Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Tue, 7 Apr 2026 17:47:40 +0200
-+Subject: [PATCH] Introduce compat.h file to deal with old Linux api and fix
-+ build failure due to missing NETLINK_EXT_ACK
-+
-+Check if NETLINK_EXT_ACK exists, otherwise define it to fix build
-+failure.
-+
-+Upstream: https://lore.kernel.org/linux-nfs/20260407155045.1176993-1-giulio.benetti@benettiengineering.com/T/#u
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ support/export/cache.c       |  2 ++
-+ support/export/cache_flush.c |  2 ++
-+ support/include/compat.h     | 10 ++++++++++
-+ utils/nfsdctl/nfsdctl.c      |  1 +
-+ 4 files changed, 15 insertions(+)
-+ create mode 100644 support/include/compat.h
-+
-+diff --git a/support/export/cache.c b/support/export/cache.c
-+index 2f128d7d..ca75a1ce 100644
-+--- a/support/export/cache.c
-++++ b/support/export/cache.c
-+@@ -58,6 +58,8 @@
-+ #include "blkid/blkid.h"
-+ #endif
-+ 
-++#include "compat.h"
-++
-+ enum nfsd_fsid {
-+ 	FSID_DEV = 0,
-+ 	FSID_NUM,
-+diff --git a/support/export/cache_flush.c b/support/export/cache_flush.c
-+index ed7b964f..2a24dec7 100644
-+--- a/support/export/cache_flush.c
-++++ b/support/export/cache_flush.c
-+@@ -38,6 +38,8 @@ extern int no_netlink;
-+ #include "sunrpc_netlink.h"
-+ #endif
-+ 
-++#include "compat.h"
-++
-+ static int nl_send_flush(struct nl_sock *sock, int family, int cmd)
-+ {
-+ 	struct nl_msg *msg;
-+diff --git a/support/include/compat.h b/support/include/compat.h
-+new file mode 100644
-+index 00000000..83229b65
-+--- /dev/null
-++++ b/support/include/compat.h
-+@@ -0,0 +1,10 @@
-++#ifndef COMPAT_H
-++#define COMPAT_H
-++
-++#include <linux/netlink.h>
-++
-++#ifndef NETLINK_EXT_ACK
-++#define NETLINK_EXT_ACK 11
-++#endif
-++
-++#endif /* COMPAT_H */
-+diff --git a/utils/nfsdctl/nfsdctl.c b/utils/nfsdctl/nfsdctl.c
-+index 016dd2eb..fb326640 100644
-+--- a/utils/nfsdctl/nfsdctl.c
-++++ b/utils/nfsdctl/nfsdctl.c
-+@@ -45,6 +45,7 @@
-+ 
-+ #include "nfslib.h"
-+ #include "nfsdctl.h"
-++#include "compat.h"
-+ #include "conffile.h"
-+ #include "xlog.h"
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 419b605667..295ce28edb 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_NFS_UTILS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # getrandom()
- 	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LIBNL
- 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
- 	select BR2_PACKAGE_LIBTIRPC_RPCDB
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index 1e3f63d419..19315e60a3 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.7/sha256sums.asc
--sha256  59d0f1e17b18efaa60ea3ccf89a9cad3217f8d3b23c18d2fe34b25c8969d60ae  nfs-utils-2.8.7.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.9.1/sha256sums.asc
-+sha256  302846343bf509f8f884c23bdbd0fe853b7f7cbb6572060a9082279d13b21a2c  nfs-utils-2.9.1.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 3d391c1804..df9fdbc052 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--NFS_UTILS_VERSION = 2.8.7
-+NFS_UTILS_VERSION = 2.9.1
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
- NFS_UTILS_LICENSE_FILES = COPYING
--NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libevent libtirpc sqlite util-linux
-+NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libevent libnl libtirpc sqlite util-linux
- NFS_UTILS_CPE_ID_VENDOR = linux-nfs
- 
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
-@@ -23,7 +23,7 @@ NFS_UTILS_CONF_OPTS = \
- 	--with-statedir=/run/nfs \
- 	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
- 
--HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqlite host-util-linux
-+HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-libnl host-sqlite host-util-linux
- 
- HOST_NFS_UTILS_CONF_OPTS = \
- 	--enable-tirpc \
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwOC8wNC8yMDI2IDExOjI5LCBOaWNvbGFzIENhdmFsbGFyaSB3cm90ZToKPiBPbiA0Lzcv
+MjYgMjA6NDIsIEFybm91dCBWYW5kZWNhcHBlbGxlIHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4+IMKg
+wqBIaSBOYXRoYW4sCj4+Cj4+IE9uIDE5LzAzLzIwMjYgMTE6NDIsIE5hdGhhbiBCbG9jaCB3cm90
+ZToKPj4+IEZyb206IE5hdGhhbiBCbG9jaCA8bmJsb2NobkBnbWFpbC5jb20+Cj4+Pgo+Pj4gVGhl
+IHN0ZXBfdGltZSBob29rIGNhbGxzIGRhdGUgKyVzLiVOIHRvIG1lYXN1cmUgYnVpbGQgc3RlcCBl
+bGFwc2VkIHRpbWUuCj4+PiBXaGVuIFNPVVJDRV9EQVRFX0VQT0NIIGlzIHNldCAoZm9yIHJlcHJv
+ZHVjaWJsZSBidWlsZHMpLCBHTlUgY29yZXV0aWxzIGRhdGUKPj4+IGVtaXRzICJXYXJuaW5nOiB1
+c2luZyAkU09VUkNFX0RBVEVfRVBPQ0ggaW5zdGVhZCBvZiB0cnVlIHRpbWUiIGZvciBldmVyeQo+
+Pj4gY2FsbCDigJQgdHdpY2UgcGVyIHN0ZXAsIGFjcm9zcyBhbGwgcGFja2FnZXMsIHJlc3VsdGlu
+ZyBpbiBodW5kcmVkcyBvZiBub2lzeQo+Pj4gbG9nIGxpbmVzLgo+Pgo+PiDCoMKgSSB3YXMgZ29p
+bmcgdG8gYXBwbHkgYnV0IGp1c3QgdG8gYmUgc3VyZSBJIHRlc3RlZCBteXNlbGYsIGFuZCBteSAo
+RmVkb3JhIDQzKSAKPj4gR05VIGNvcmV1dGlscyBkYXRlIHR1cm5zIG91dCBub3QgdG8gYmVoYXZl
+IGxpa2UgdGhhdC4gU28gSSB3ZW50IHRvIHRoZSAKPj4gY29yZXV0aWxzIHNvdXJjZSBhbmQgc2Vh
+cmNoZWQgZm9yIFNPVVJDRV9EQVRFX0VQT0NIIGFuZCBmb3IgImluc3RlYWQgb2YgdHJ1ZSAKPj4g
+dGltZSIsIGFuZCBnb3Qgbm8gaGl0cyAoZXhjZXB0IGZvciB0aGUgZXhwZWN0ZWQgb25lcyBmb3Ig
+U09VUkNFX0RBVEVfRVBPQ0gpLiAKPj4gSXQgYWN0dWFsbHkganVzdCB1c2VzIHRydWUgdGltZS4g
+SSBhbHNvIGNoZWNrZWQgdXV0aWxzIGFuZCBnbGliYyBqdXN0IHRvIGJlIAo+PiBzdXJlLCBmb3Vu
+ZCBub3RoaW5nIHRoZXJlIGVpdGhlci4KPj4KPj4gwqDCoFNvIGl0IGxvb2tzIGxpa2UgeW91J3Jl
+IHVzaW5nIHNvbWUgcGF0Y2hlZCB2ZXJzaW9uIG9mIEdOVSBkYXRlLiBJJ20gbm90IHN1cmUgCj4+
+IGlmIGl0IHdvcnRoIHBhdGNoaW5nIEJ1aWxkcm9vdCB0byBjYXRlciB3aXRoIHRoYXQsIHVubGVz
+cyB5b3UncmUgb24gc29tZSAKPj4gcHJldHR5IG1haW5zdHJlYW0gZGlzdHJvLgo+IAo+IFlvdSBu
+ZWVkIHRvIGVuYWJsZSBCUjJfUkVQUk9EVUNJQkxFIHRvIGhhdmUgcGFja2FnZS9mYWtlZGF0ZS9m
+YWtlZGF0ZSBpbnN0YWxsZWQgCj4gYXMgaG9zdC9iaW4vZGF0ZSB0byBvYmV5IFNPVVJDRV9EQVRF
+X0VQT0NILgoKICBEJ29oLCBJIG1pc3NlZCB0aGF0LgoKICBIb3dldmVyLCBob3cgY29tZSBob3N0
+L2Jpbi9kYXRlIGdldHMgdXNlZCBpbiB0aGUgdGltaW5nIHN0ZXA/ICQoSE9TVF9ESVIpL2JpbiAK
+ZG9lc24ndCBnZXQgZXhwb3J0ZWQgdG8gUEFUSCwgc28gaXQgc2hvdWxkIG9ubHkgZ2V0IHVzZWQg
+aW4gdGhlIGFjdHVhbCBidWlsZCBhbmQgCmNvbmZpZ3VyZSBzdGVwcyAod2hpY2ggdXNlIFBBVEg9
+JChCUl9QQVRIKSkuCgogIEkgdHJpZWQgaXQgbG9jYWxseSAod2l0aCBCUjJfUkVQUk9EVUNJQkxF
+PXkgb2J2aW91c2x5KSBhbmQgSSBkb24ndCBzZWUgdGhpcyBpc3N1ZS4KCiAgUmVnYXJkcywKICBB
+cm5vdXQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
