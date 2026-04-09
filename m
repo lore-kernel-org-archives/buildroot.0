@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 704C3F364B7
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 20:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFCEF364B8
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 20:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 226F380A7A;
-	Thu,  9 Apr 2026 20:25:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1143E81E7A;
+	Thu,  9 Apr 2026 20:27:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5EB6-ukrhgQV; Thu,  9 Apr 2026 20:25:00 +0000 (UTC)
+ id mLsZ3EYaygBN; Thu,  9 Apr 2026 20:27:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 476CB80A8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2EA81E4F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775766300;
-	bh=DvRWw+0kh5FNrAaGdfHS4/i2P9SIUyOJfARLUvBHmAg=;
+	s=default; t=1775766447;
+	bh=/zeEO2pDPwwmIR3LOOVtwOXtX8QJOmmX0RqMc6L4uVU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VQqUEnASEoIZlgEahCRLlrt7wW/GlE07Rk0IR8RLTFfCiA9yEgQT3WZNlWo9Lx5w/
-	 w+GQZr+hvA9E99I9pS1TryuSqZfghjzZGfNh1K6Z54pd/L21E3OZyUUzPK/+CcPyYJ
-	 aIFvuJuLgotC5uwPFh3HYdRP10CWV13oje/1Q4BiP/eL/hkJVfHTRbxiLnzRlcITe0
-	 AR8WYp98R/BjckkjjIWHaP+Isr9PvEvxKSs6gdJmLovwOEUpqOVt46KhTzR9tqOfxj
-	 1keFM3thXn/nxJkCINlLPCwfYS3KyeZoO19rUPsfYOvjA05B0p4svt8XJ45z6zAI1E
-	 caNMWOKZao/Zg==
+	b=CGbDYI+6PbflpCdY8rNlvjFtcd9mArn2hemsMzqw1JfMz0Mtnntyn6nAvcwkUpfNo
+	 d1bc4fNag9gxT9z6Uv/B05bNoerGMe/PKZiMENoTf8MVkQlBTLL0aRztWCKurDrnDP
+	 aXKLV2ZgU4pI3vQC0A8eTmJdZ1m+yWeB/ac8Bvse/ql0j1CR3BmOLGUcMpsxe7Hm+b
+	 2HXHGGnLL6yly3N0WJyPEPp9tz1A5eh/SoMtrpuICtf1dmOmAdb3zum8EQzP/FD5tV
+	 ZVsKa7fF6nqkTMRnrQDR+0Ou7b59DikK1k/ermAfdi1x4P+MGtgiZ6koRsozdAsqNi
+	 baZp+g1oeh/0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 476CB80A8B;
-	Thu,  9 Apr 2026 20:25:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E8FA4237
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:24:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2EA81E4F;
+	Thu,  9 Apr 2026 20:27:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12DD0237
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF773401B0
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:24:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01C1B401B0
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:27:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Smn5gNTQTjaq for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 20:24:56 +0000 (UTC)
+ id Y7Zk5iSbrouF for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 20:27:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 910B2400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 910B2400FE
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 910B2400FE
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:24:55 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-43cfce3a195so825986f8f.2
- for <buildroot@buildroot.org>; Thu, 09 Apr 2026 13:24:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 301BA400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 301BA400FE
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 301BA400FE
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:27:25 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-43d03db7f87so821851f8f.3
+ for <buildroot@buildroot.org>; Thu, 09 Apr 2026 13:27:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775766293; x=1776371093;
+ d=1e100.net; s=20251104; t=1775766444; x=1776371244;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ABbTh+MiTWkUn1nW6j78yln9tGvwCUN5ZkN6jJK+z58=;
- b=X83urAFGca+TnRxRt+ZAjeS3BB7J29zUYs246IEeS6qA/PB+ihM996iK+xSONj1ZI9
- dr5HSfE2Jd7jkcCQyU5FxLCrdNHlLBI8HPyTGEhcX6BNemeCsr52nLFMQ5Qv8oLT0+9D
- 90/iAvxQCH46TBNYLuwTvff101AAHwa8ShXDWiESZqAvgtkXhGjBan+k82AkZpP/zOFA
- 5Pg/Tx/ivSCfyXYPTijiDFOt2pmgo7V6ti3Weu4PNMCPkaN9fiCt+aJNY5k5k8yA4rQ/
- 50lY7n/N0zbd41E+mbgkqa+JHIo1KHI5cuX0hAOMuppe9CkWQF/ZFhpXKBSpGODoRYyb
- oNYg==
+ bh=FRB4CIbSK+xAEvMvHBbfE3Vd28uzaIo9mzjSmpO6Sow=;
+ b=m/CMyPfqm2lXfcX0z/F9R+3qn7w3jypCDKL6bGLCuuVKcr3/G1hMRM7RKsbsyC4p0i
+ NjZZIGTVS/XFOm1U9SAG0OUMQcU54ArMk6u1L600w32VAwxAeTsw9IlSQ+hkf49BJPXr
+ SdxYizQoXrh28NiokxDArWtD08viKNL9yOjzr/+FjnQQBwwvT75Y/r4iZGDw60UbRx+p
+ jMV3OKlC3L37guKMleLycnoVGtA4KklSTwhi8yEcCoL+9wkEy2HBo8msn/gt/qMjVzol
+ v6PmDFZP3nhlXoHgaLGYPsrZb4oq7L+XAeBRBjmMmjIzOYfLBFMa0ehpaXv4k2DreLId
+ tyYA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWx7sDviePIk2qOqthvHrXe2+XvHh5GgdJ+kKuEV203csbNsad58mrQEANc6AslHXWGHSrrW/jMUrk=@buildroot.org
-X-Gm-Message-State: AOJu0Ywev0Qc9NiQyFiEJNfyLKuo4PqaKfHslEKpEjeY5UTtAcSR5DUv
- LxRiZ+eAwln0IcsL8Jb5Ejtp1kxWR1s3J+vb55DwIHel5hk6eQZk4snFd/Tr9uGlfwA=
-X-Gm-Gg: AeBDietZcOGwB+skO8rAAiPsBZw/GU50jeMBzYbu9bOSfFuTfaP+H6Rdv5tCW6ldwGf
- Of2bY43pirLMOGlTeyL9hT7uBxEite9Lwyt8euSkF9JERYjagDWh4c/sZTiQIB0ObtM18QXvYW4
- tJ7Q8172vteeK7xce39mdYSoTp1hLfbdPIH7DPFqmYGLscx96ufEB/UZFQ2hnrOMooPbCychCLW
- vLlRA4+AsCzJJLoJQFSdExGrHY6cO3L3UYrT4aM4mlzijCMxyp2wVVI0lQwQZUIcv3EXMP/d7N8
- 2TlobtzRYTRLs7Asosnea4rhoC96y6bUc12UkgxyqdbgnElmB2bPDZSMwxgHlfuauX+xf5O0xgH
- N43B1mGEwd+8zFyw35XDHSz+jiCvCzoVB9ow2BogrlXdpdUZ9Y3s5KIu5dkfpI0haPK4YNq4Hk+
- 63oxOJLJ8/o4u1PDNO
-X-Received: by 2002:a05:6000:186e:b0:43b:8f38:3b88 with SMTP id
- ffacd0b85a97d-43d642a989bmr632247f8f.25.1775766293023; 
- Thu, 09 Apr 2026 13:24:53 -0700 (PDT)
+ AJvYcCWIHOj8CxJejKlAtxNOSCEoBoqILClL9qk9b09Gm3fYcE33xR6nHeDRP7oRg9ZlJfdO6Ur3E3kktsA=@buildroot.org
+X-Gm-Message-State: AOJu0YymflnmXkUMem0aGB+Bs7taKgwgJZyA21TQyvsYNbC8oebVpaT6
+ T1nQsuDjmb5IrIUTg+yK7Fm/awvoHYDk607VsphZqJsmj2ZA9qo/X9E3Cd3orEmO11rUMvtMqvy
+ hlq/+mZg=
+X-Gm-Gg: AeBDiet7KI5+Mt/VH9YBftE0Em6/ED9YxANSql+LtUpUbs8EkvI8VifxebmhEgU+u6o
+ XcCYBZMo8rJ0OaqyYBHAL7FHZRw1lVLrnRC7jdXVJUdbH2qS2hRIGCwO50PJH1M8/zK0B+PedUl
+ YbFY/vPnogUZySfj8ufnneafOhmbN+gzzKTm2sZqV7y8ox66GusDLutjNkWzsEEhUP8oVU/rR+M
+ hk/dF9C1xbEItT/wlJgiTEOKXXyfo2J6t0gquZdK/ay6e9wB3NP6lcgMOr2wvSIt3Dz42icjMdn
+ 1KsrIv3ZQBzzrrGQ4CShajGuvSRTMnMgotvp0jHf8iWz/pXtFPtwaCAfiHQC3n/cPT6EL4M9DKO
+ ITpPTA7GOiYolikrEP95BYcGwcI2fgJQm7e9lC12u3F+ZoSjEDhfTTqrMyQ0wlkeTuwJ0c0eJWi
+ hAUTqObT9/9P2fAaaa
+X-Received: by 2002:a05:6000:2309:b0:43c:f49f:9b7d with SMTP id
+ ffacd0b85a97d-43d64270f00mr641705f8f.17.1775766444114; 
+ Thu, 09 Apr 2026 13:27:24 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d63e50044sm1393632f8f.25.2026.04.09.13.24.52
+ ffacd0b85a97d-43d63e50200sm1470597f8f.29.2026.04.09.13.27.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Apr 2026 13:24:52 -0700 (PDT)
+ Thu, 09 Apr 2026 13:27:23 -0700 (PDT)
 To: Quentin Schulz <quentin.schulz@cherry.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  9 Apr 2026 22:24:52 +0200
-Message-ID: <20260409202452.299708-1-thomas.perale@mind.be>
+Date: Thu,  9 Apr 2026 22:27:23 +0200
+Message-ID: <20260409202723.300317-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <8a81626c-cac7-40c9-adb1-56d8ef8b4067@cherry.de>
-References: <8a81626c-cac7-40c9-adb1-56d8ef8b4067@cherry.de>
+In-Reply-To: <af55c098-2733-49fa-8d98-ffeb8072de94@cherry.de>
+References: <af55c098-2733-49fa-8d98-ffeb8072de94@cherry.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775766293; x=1776371093; darn=buildroot.org;
+ d=mind.be; s=google; t=1775766444; x=1776371244; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ABbTh+MiTWkUn1nW6j78yln9tGvwCUN5ZkN6jJK+z58=;
- b=ASSag459/R6oYADEkiWkLTAjnVycx9sO8iFdXzYT/n9d50z3ODHyQRhdEcAtXCG7e8
- Eidzf6qbF3tO5uMbBOEyS6jlbzixmeXlvthfpiflbf6dVwkucJTyZ5jV01mg9yAVlSAX
- 19xrcS4JGsLqoXVq7Yq0cDf1ecJQhuf9xCODI2qNT1OXLtD4LgMoOsGD9lMmXSjIMkVB
- LxhW/YcGQNzvFl769AaJzNOV+Je/5SWWSLD1z95NEfK5RblxyuY3zEoWJ8gWYg//oWzB
- mk2B3bu4zLgXtn3/6WFyp4ueSSuLSPMLRPVWWVNDUq6hya/hSgaObRsAi6fZl4G+2UKs
- CW7g==
+ bh=FRB4CIbSK+xAEvMvHBbfE3Vd28uzaIo9mzjSmpO6Sow=;
+ b=exR7OQUknBpp6EKKgoRMZ9/3Y8qc+Rprm9IGKYL13qZvdxPhZFR94FdqOvRxD5IwNr
+ LPHstj+hhebABpaJSZj8x6yIlUellGSJgYbSxgsjwHVIU/2PcBncMcgjdHO28Qsya7GH
+ qqDi6azpdQYjzA5YIbQqk37sL/CTK8VEFaP/t0Coyj3vxqi3jtZUwkUs68MHrVbrEEoj
+ 1T7L57rWIhEHAfKacWzOIehQxzZjv0+SUjHIm4wh+0f92GvNDqqgOQoT+e7dD6SLQIZS
+ FXVBEM7G3KR2wio3xTnfnGbHp87DnmW848hRUJWTSIXJIXIGQTA2gVmeeYPITv8wBmHa
+ q/ZA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ASSag459
-Subject: Re: [Buildroot] [PATCH v5 7/8] utils/generate-cyclonedx: add 'id'
- property to resolves
+ header.a=rsa-sha256 header.s=google header.b=exR7OQUk
+Subject: Re: [Buildroot] [PATCH v5 1/8] utils/generate-cyclonedx: use tuple
+ for version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,41 +133,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Quentin,
 
-Thanks for taking the time looking at this series. Really helpful to discuss
-the new features.
-
-> Are you aware of tools that were broken before this? Would be nice for the commit log :)
-
-None that I'm aware, I just found it odd that the `id` property wasn't used
-when adding support for it over security.buildroot.org and gave it a second
-look.
-
-> My opinion is this isn't v1.7-specific but rather a "fix" or "improvement" that we don't necessarily need to have in this series. What do you think of having this as a separate patch (or at the beginning of the series so the series can be applied partially easily?).?
-
-Sure, good idea.
-
-> Honestly strange we have id and name for seemingly the same thing. The introducing commit was 2512eb835a46 ("#21 - Added support for patches and unit tests for JSON schema") for both and https://github.com/CycloneDX/specification/issues/21 doesn't shine a light of why for either. The only hint is https://github.com/CycloneDX/specification/issues/21#issuecomment-625104801 where
+> How about generating the version with
 > 
-> ```
->             <issue type="[ defect | enhancement | security ]" ref="7bc2d01f-a0e8-4ae2-a274-7bd188f89926">
->                 <id>18</id>
->                 <name>LDAP Injection</name>
->                 <description>blah blah</description>
->                 <source>NPM Advisories</source>
->                 <url>https://www.npmjs.com/advisories/18</url>
->             </issue>
-> ```
+> '.'.join(str(x) for x in CYCLONEDX_VERSION)
+> ? This way, we support when there are patch versions as well (1.6.1 exists after all).
 > 
-> With ID being the number assigned by npm (though you'll note that the link is a redirect to a CVE in the GitHub Advisory Database) and name the title of the CVE.
+> Maybe a class for the version would be best, then we can convert to (__init__) and from (__str__) the class to a string and compare two versions against each other (using tuples or list for example; __eq__/__lt__).
 > 
-> The example in the same comment for CVE on NVD sets id and name to the CVE full number, so I guess this checks out with what's implemented in this patch, so
+> Now I'm wondering whether the SPDX schema version needs to be in sync with the BOM schema? Because while there exists a 1.6.1 SPDX schema which differs from 1.6 SPDX schema, see commit 5f3ee8066491 ("Updating SPDX license list to 3.24.0."), the BOM schema too is different but it's kept under the same name of bom-1.6.schema.json (and the $id is the same).
+> 
+> Also, are we validating that our SBOM generated by this script is actually CycloneDX version X.Y compatible? Should we download the bom-1.6.schema.json and validate it with e.g. jsonschema?
 
-I think you could also interpret it outside of the scope security
-vulnerabilities. If a pedigree resolve something like a JIRA ticket for
-instance. The `id` is the ID of the ticket on JIRA while the name is the title
-probably ? That is how I interpret it at least.
-
-PERALE Thomas
+It's true that 1.6.1 exists ... Good catch, i will rework this part and take into account your comments.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
