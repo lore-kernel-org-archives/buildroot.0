@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D916F364B6
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 20:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B938F364B6
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 20:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3226821F9;
-	Thu,  9 Apr 2026 20:43:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAFDA60B22;
+	Thu,  9 Apr 2026 20:44:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rcEgn29E_8pp; Thu,  9 Apr 2026 20:44:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7E9B60623
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1775767494;
+	bh=B4kkdpNCTRVo+9L42KdPISJtVjNbf5TjvTOYey9mwsM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=JJ8m94WxZez5Jk1DCCwnq1s9ixLI9Qpf74Y+lhjRkscSkN3efqV7ltocdmiKjVHQs
+	 qtK9byQ8AzN5n8r0WzMP6yPrPtWshESmxe5Bzo+1uVCnKHRp0ARGPy+jvlLLy6Huoz
+	 tVVmAgXoCJGvJ/kejBB53fR5JwYeOG64TC8k4z3x4D1dFkTqMw5X2/QsKCmLWLwAgs
+	 9oQj9iC4LAVST/83UkdKOnbjhDrfvS7jJ8e2vdFfNkNWeaiinihxe8jBjzkCH/CpKq
+	 wiVkTDk5Uiil3C7G+aOLIVbr/Kt2uqJvKlkMNrKXO238wt0GYIYFBIzJlzsseUsLbt
+	 xHacaOhfuTbwQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7E9B60623;
+	Thu,  9 Apr 2026 20:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EC8B194
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:44:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84EA180B08
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YjBigNCuB_OJ; Thu,  9 Apr 2026 20:43:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7FD181E5C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775767420;
-	bh=ASW+WgW29HINVC9B/nQJ00j1gmE3D4i9eJr1YTYeWpc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O+S+fRp50dShLUKL2r+MGLaTgale8Aa9pYIRErwzJX78wPL/g5rPrRmZsx8IaZSd/
-	 LA+Ennp2e20Wph/UwH3gLYTfkiAIU6M3fMbsQJ4AHHyaw+gUsEPlCQXgftk5Qxra0h
-	 1JDCoFlyy4uaBi+FQGTv7/Vml2HFsuv0mCYEtO/D3/Ghytpjwh9PlKxxOB2c7zbJvv
-	 bcvcA0/GjP/ok1xGE+0DE61EOvb9+AMlXkDoK0OocVM2Rf74g/1bVTo4jy0VDFojkx
-	 j4CKuN3g4SuOs20vvsaMHv907//P9Cxhmqsyu+0Rk6po5jYo/iph4TkvdKE9z0plZB
-	 NvH0iNlutbFmA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7FD181E5C;
-	Thu,  9 Apr 2026 20:43:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0964C237
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:43:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF30840CC2
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:43:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IEYWvxNrPOaU for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 20:43:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32C6040CAC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32C6040CAC
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:43:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD6B78101A; Thu,  9 Apr 2026 20:43:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 Apr 2026 22:35:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21c7c8ec135e8570189fe13c354e3b6292d4a9bf
-X-Git-Newrev: 3adec23fe0230abaaf28d764e816300d15df17a5
-X-Patchwork-Hint: ignore
-Message-Id: <20260409204337.BD6B78101A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/nitrogen*: bump u-boot revision
+ id noSryyQ2EVCY for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 20:44:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1CEEA80A8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CEEA80A8A
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1CEEA80A8A
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:44:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id DA42978035B;
+ Thu,  9 Apr 2026 22:44:47 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 09 Apr 2026 22:44:47 +0200
+MIME-Version: 1.0
+Date: Thu, 09 Apr 2026 22:44:47 +0200
+To: Gary Bisson <bisson.gary@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260408-nitrogenfix-v1-1-fc4471caaff2@gmail.com>
+References: <20260408-nitrogenfix-v1-1-fc4471caaff2@gmail.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <25d0f6f195a6d3e37d7f4f71894b7a86@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1775767489;
+ bh=JB15fuwcPtOeFld3e0PE40G2OFZ/Ul1BNL+VXjejpnQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=uYYbdlT/8UeEOObrlYuLNInFBs4xdJux+6evFxZeGV5JYa7o/1F7gETKA5q+fLFWb
+ lJd7ELAM94pSoSy1KJjZWjtgbJRvsH4Z1dZWga0icdZ+SDspXLdaSkGgLoAs7fOzIU
+ Mm2J6tClrLuaQQ3Rn0oTjPQexAWbWuCKYfgEnnz167BFSt5FK6RAp/EYH6fXvmS7z9
+ uFaYyUD+VtG6UO3yDnFQW2t113y20cRpSuqpR29jEeDC44TC9H+7t3CizNwNdDrje9
+ EXW5xX8SVohB6AsPCwPZD7oiZYdT5ofYav7HB26mcvdXtTzBVx4MS/CWU/m7Pa9s0g
+ SHT773ib4JiRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=uYYbdlT/
+Subject: Re: [Buildroot] [PATCH] configs/nitrogen*: bump u-boot revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,128 +95,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3adec23fe0230abaaf28d764e816300d15df17a5
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Gary,
 
-- update nitrogen8mp SMARC rev2 support
-- update LPDDR4 init to match latest NXP spreadsheet
-- update binman support for newer python versions
+On 08/04/2026 10:33, Gary Bisson wrote:
+> - update nitrogen8mp SMARC rev2 support
+> - update LPDDR4 init to match latest NXP spreadsheet
+> - update binman support for newer python versions
+> 
+> Fixes:
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764611
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764638
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764687
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764734
+> 
+> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764611
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764638
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764687
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764734
+Applied to master, thanks.
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/nitrogen6sx_defconfig | 2 +-
- configs/nitrogen6x_defconfig  | 2 +-
- configs/nitrogen7_defconfig   | 2 +-
- configs/nitrogen8m_defconfig  | 2 +-
- configs/nitrogen8mm_defconfig | 2 +-
- configs/nitrogen8mn_defconfig | 2 +-
- configs/nitrogen8mp_defconfig | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+Could you consider switcing those defconfigs to use Bootlin external 
+glibc stable toolchains, please?
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 03103567e9..5aa7465720 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 4d5408a474..bd108f24d6 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 65aff36860..b3de6b758a 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 9a90cdae54..4c2cd5a258 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -26,7 +26,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index db4af070a8..4f80c781a6 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -26,7 +26,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index dc54d24008..38c244019e 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -26,7 +26,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-index 72884d97fd..482603c2b3 100644
---- a/configs/nitrogen8mp_defconfig
-+++ b/configs/nitrogen8mp_defconfig
-@@ -26,7 +26,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/ea37a18c.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
