@@ -1,111 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49BB4E98FA4
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 03:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF0EE9DE5B
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 07:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD3D980E41;
-	Thu,  9 Apr 2026 03:25:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5358B40F4E;
+	Thu,  9 Apr 2026 07:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ykWkQSWK8Xv; Thu,  9 Apr 2026 03:25:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NjKKG17uugxT; Thu,  9 Apr 2026 07:32:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04B7C80E45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77A5840B9B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775705117;
-	bh=Loz2pQ9SCWy9Qtbyfx5rQz/Y6Ck0hHct65X2RN832F0=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1775719955;
+	bh=p0C56hIf04YxuZMUVOA8y7dDm44quvLN+2ezvIh2VHk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=MjhiwnYfrNfIPT5OiUOWZ1va6SdE7vqhqYD66ifThRoouwfte27oaquJCIN780cab
-	 FunsiCbu/2Vs9SIU3HqbqdsBTz5reAK1pNFv0/apIZRFC0dECiycwi0TNSu2JJ31v3
-	 RRcMTQZnCHjpx2/qS+v5WLPIusmnxBVLJDM6f2HxEOBshC96guhQxQZzabCYzaXN8P
-	 PTu4zlgwzafxujUCPOs/h4mAjNVp1aids7BLa7G0i5L/ZJfFs/zPVJPhdixGPHPfNM
-	 MJSSgKgMYxGLfgS+6CMr/GmzahkNu3Osl8eLs/VX0TjiOkr6ftzbEBzmF7a2J4hEcn
-	 xWsRYKZ7XreLQ==
+	b=Dvf0kIynEjaTt4ERUyZfpFmUyJXXAzQWUBXC5WBTNFHlQUCSESMJZSJRpILKOXQlp
+	 LPhtWrmq8l+t1tjrDLhPLwJucnHc9hERsvP3sdJu0YvqnzoCY33YDVVjWC5lEhFeIj
+	 oYIFQIRVAr/R18NBGWyIX2ahMsPS8OxvC2kDkucEsvuy4HCBL+8I+GLFzSioiJPkEM
+	 sF2EMhW56raO2tY2cBAVzEG7OGFwq7VUeUmrfdmKNxwBaUknxzp+GoeVGMqOFaualB
+	 GnrsHxFDt5Eg+Kkxg+iEFCvmXO3tP/AGt8UJCJuVD0afUqNhiBCnAx45N2cXiyUvkE
+	 IVlzNjmtdui3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04B7C80E45;
-	Thu,  9 Apr 2026 03:25:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C8D461F6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 03:25:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77A5840B9B;
+	Thu,  9 Apr 2026 07:32:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B2881D6
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 07:32:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAAAF60771
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 03:25:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6110A40B9B
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 07:32:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cY-mlebmWSiS for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 03:25:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DBC5260767
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBC5260767
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DBC5260767
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 03:25:13 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-48374014a77so4757405e9.3
- for <buildroot@buildroot.org>; Wed, 08 Apr 2026 20:25:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775705112; x=1776309912;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=M2viE7x/FIvliGTQxpq5OKiRrNF+qyFLCNFhZVGZ9CA=;
- b=GoZGfqYm0MQMzo4QfV4kuUsN8OR0o4dmnN4RklGmQmm2hIQzMzgw+Ug7BvZxbKKy7t
- L8ZmgnOwsI2T7VlvtyZ8uM7bDRY08udWGSRJLoyyAseNyJ5KbL55+SMmjkvi/oKXWfLo
- MGfbOtEwf9Nzyo1uUCTnXdpRQaLjRKSVHV1NI34WJsno9HZXX8vSrVV4MY4OWeya9ktb
- sHNPAeTaZGJ+PuxJSrvyOs4Sj6qBZrZCV7P2UmZFWw2xOyrOsg5i2kvR0eSccLYviajr
- rBZ06ANszg0a1CGuJq+zeHvjLaPbrkQmZILy/JVEk/adLZ+g61qAnAQ04psrQ07a88tj
- yWKA==
-X-Gm-Message-State: AOJu0Yz7QN7Lls69yaQLOyZrkrqx/Dcm5nI8YJQHzDVIfF0J2IievmEO
- xQNjLMkJt+yeeiqrwdheQnhX6EKKu1Boz0FhkHK08Jb1ei3fI5IZ++DUbQUWohBv
-X-Gm-Gg: AeBDievry2+ofJQtilKds9NxCwCiEhWOTrFoWnZJH2EN/bB/Ewo9LaTZManu8d4fH+W
- JEyFsmET+wiph0oKxJ4uX0vXP6I60GW2qUqs4xAsaP43vBvurVOa7hoiOcRifNPaMYR6CKTJzZj
- PnEO1NbTOI5DGqtjDEPjwpInV/+kyt8HraZlzquFLQYLvxiQo3UuxSpYm7cjDa6rfgSO7VuL+bq
- QG/QcCTIBJ0aWstjT78TkHMYMbpKUueQsJSDS+rF4sHSyQhNoGODiJeMkcWWMmnIhB5u3lEtzJV
- dDtT0n+7o9UuuEXV6de1jEMSNUWCondSOcM6V4RixNuosuXklnyZf7EG5o8VtR0gBVP1nu6b8FE
- tUicnsB0DiAX3tPW0FB78zIc4rlmqLhNmuzlZxiJ1xo0MrmOMzCwLt5u/vv3RDrTjxLC2lLpCzC
- 9ePZuyBm9L5aQ9XsmadzQUM7QpZJgy1g==
-X-Received: by 2002:a05:600c:8595:b0:488:bfc3:ef3 with SMTP id
- 5b1f17b1804b1-488bfc314e5mr90237515e9.0.1775705111373; 
- Wed, 08 Apr 2026 20:25:11 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488cd22c77csm34679305e9.12.2026.04.08.20.25.10
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 Apr 2026 20:25:11 -0700 (PDT)
-Message-ID: <69d71c17.050a0220.d8430.d597@mx.google.com>
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6FBf0Ug-OriU for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 07:32:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D1D7240B2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1D7240B2F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1D7240B2F
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 07:32:29 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6ca66.dip0.t-ipconnect.de [79.214.202.102])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 218AFA4C02D2
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 09:32:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53660)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1wAjsG-000000000QG-1ZX0
+ for buildroot@buildroot.org; Thu, 09 Apr 2026 07:32:25 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Thu, 09 Apr 2026 03:25:10 -0000
+Date: Thu,  9 Apr 2026 09:32:23 +0200
+Message-ID: <20260409073223.3644434-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1775705112; x=1776309912; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=M2viE7x/FIvliGTQxpq5OKiRrNF+qyFLCNFhZVGZ9CA=;
- b=sh8ytmrEsfai9HUiEpwUMos9M2zCvzM508vL0z8XkJQXBTWW0yCIgPo1y09EtYsQY/
- ZrTrJ+uLaVGaucuJ+ha0FwzL6o5MdSsDnbrZCW/mco5HYG12AUvQ75Jzp9VXsDHNbf0w
- 3WJ2P0NuMnohrjkrQjdH90ISF+z1bYCofxw21uUMbrxgg33EYZcrL+NxuhaWvrHvD1L+
- REZ7ntDQ4Ar+uz6fZHENlXlVGQ2XGcMEJgXOh8JCSx6i8ZjLDbzNR0M9HW5i8QIzCvD1
- n13ohnewP9Zpo4BGCvACjqqIR8JcTuHMouPdpJKM2i2gjnzsiZNTYRHh4kWU5vmeof52
- N84w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1775719946;
+ bh=1zi79R+qkk6Eet+QBecjd57x8Fp561lqZN8XMgasytY=;
+ h=From:To:Subject:Date:From;
+ b=rt8pA2wn6YgiSO0i3c/zNu3J0uAV8P+3ZRWlljSvGnTG52FCbGpGvlu9/PB+I1bgO
+ vgmYdLrLiTSnYPp6Pyo+ktYglLcVZIUWaIYTMKG6u+mDx6uEYfn0rzDuDJxcItMvph
+ fJt7NKiWeL4PhTzFq8veHQOnmZt/QTdZz5R6P1lpF+0GsiobJQ2NA8Z4j4EPwKdwgz
+ J+y6Z3wBBQnEtjqyiICdhQmgLY1Ax9DxtgHDhXICHckh2DfbeuA5GN//Z1qEYoaqM7
+ UPm6FK7NVSrGpElzoW6qPs/U8NZ/fG97rIrsJkYumi7tLGyFcneJwMFMZ1p1nRvyZP
+ Utg18ChWfOklA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=sh8ytmrE
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-04-08
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=rt8pA2wn
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: switch to pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,249 +96,1987 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Added patch 0006 which replaces the usage of pcre in favour of pcre2,
+this is a rebased version of upstream commits used by OpenWRT:
+https://github.com/openwrt/telephony/commit/75acd1cdc29740a47454212cd48755b9abbd7a12
 
-Autobuild statistics for 2026-04-08
-===================================
+Added patch 0005 which is a prerequisite for patch 0006, also used by
+OpenWRT.
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  | 10  | 20  |  0  | 30  |
-  2025.11.x  |  4  |  5  |  0  |  9  |
-    master   | 45  | 86  |  2  | 133 |
+Added patch 0007 which fixes a runtime crash caused by patch 0006.
 
-Classification of failures by reason for master
------------------------------------------------
+Added Upstream: tag to patch 0001.
 
-odhcp6c-f19dd37fb467c9cf10c... | 6 
-                flashrom-1.7.0 | 4 
-                  libnfs-6.0.2 | 3 
-          linux-5.10.246-cip66 | 3 
-                       unknown | 3 
-             dahdi-linux-3.3.0 | 2 
-                   dante-1.4.4 | 2 
-glibc-2.43-17-gdd9945c0ba40... | 2 
-  gobject-introspection-1.84.0 | 2 
-    host-mender-artifact-4.2.0 | 2 
-     kvm-unit-tests-2025-06-05 | 2 
-                libcurl-8.19.0 | 2 
-libftdi1-v1.5-62-g5e67403c4... | 2 
-                 linux-headers | 2 
-      passt-2025_06_11.0293c6f | 2 
-                   perl-5.42.2 | 2 
-                    sbctl-0.18 | 2 
-       shadowsocks-libev-3.3.5 | 2 
-           xtables-addons-3.24 | 2 
-          aardvark-dns-v1.17.0 | 1 
-                   atop-2.12.1 | 1 
-cpuinfo-8a1772a0c5c447df2d1... | 1 
-                      gdb-15.2 | 1 
-                   guile-3.0.9 | 1 
-                 host-gdb-14.2 | 1 
-            host-protobuf-34.0 | 1 
-              host-rust-1.88.0 | 1 
-          host-tipidee-0.0.5.1 | 1 
-      host-uboot-tools-2026.01 | 1 
-                       kmod-33 | 1 
-            libargon2-20190702 | 1 
-libdill-32d0e8b733416208e04... | 1 
-              libgeotiff-1.7.4 | 1 
-                  libnss-3.122 | 1 
-      libphidget-1.24.20260127 | 1 
-              libsecret-0.20.5 | 1 
-                libsoup3-3.6.6 | 1 
-                 libssh-0.11.4 | 1 
-                 linux-6.19.11 | 1 
-                 mbedtls-3.6.5 | 1 
-                 mdevd-0.1.6.5 | 1 
-                    ne10-1.2.1 | 1 
-               nushell-0.108.0 | 1 
-                opencv4-4.13.0 | 1 
-                openntpd-6.8p1 | 1 
-                openocd-0.12.0 | 1 
-                 pixman-0.46.4 | 1 
-               pulseaudio-17.0 | 1 
-            python-numpy-2.4.0 | 1 
-                 rtl_433-25.02 | 1 
-                   s6-2.13.1.0 | 1 
-                s6-dns-2.4.0.0 | 1 
-         s6-linux-init-1.1.2.1 | 1 
-        s6-linux-utils-2.6.2.1 | 1 
-                setserial-2.17 | 1 
-                 sqlite-3.51.3 | 1 
-uhttpd-15346de8d3ba42200249... | 1 
-             util-linux-2.41.3 | 1 
-            vorbis-tools-1.4.3 | 1 
-             xapp_xhost-1.0.10 | 1 
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .checkpackageignore                           |    1 -
+ ...-hash-hmac_ossl.c-fix-build-with-lib.patch |    2 +
+ ...mory-leak-by-correctly-freeing-regex.patch |   34 +
+ .../0006-Move-project-to-PCRE2.patch          | 1813 +++++++++++++++++
+ ...x-double-free-after-upgrade-to-pcre2.patch |   27 +
+ package/freeswitch/Config.in                  |    2 +-
+ package/freeswitch/freeswitch.mk              |    5 +-
+ 7 files changed, 1881 insertions(+), 3 deletions(-)
+ create mode 100644 package/freeswitch/0005-Fix-memory-leak-by-correctly-freeing-regex.patch
+ create mode 100644 package/freeswitch/0006-Move-project-to-PCRE2.patch
+ create mode 100644 package/freeswitch/0007-Fix-double-free-after-upgrade-to-pcre2.patch
 
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   armeb     |      aardvark-dns-v1.17.0      | NOK | https://autobuild.buildroot.org/results/d7cf03aefc757ee62c2184a5990b00550a0cef1a | ORPH
-    or1k     |          atop-2.12.1           | NOK | https://autobuild.buildroot.org/results/e5a61f9cc291fca46ba676715f58bef2c1b5dd37 |     
-    arm      | cpuinfo-8a1772a0c5c447df2d1... | NOK | https://autobuild.buildroot.org/results/b420bf4180939907dc433a38c57666b292f0078b |     
- aarch64_be  |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/a9a3564aa20f07d9297216dfb1d705993c686f44 | ORPH
-  sparc64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/7452df7ffadadc4bb68155edfa4fe955ba26828e | ORPH
-powerpc64le  |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/bcb8c89ab6a94e762db3478680f50c7c7bac3e08 | ORPH
-loongarch64  |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/8ef7b5136e3bcfab6daa99988265aa888390a6ca | ORPH
-  sparc64    |         flashrom-1.7.0         | NOK | https://autobuild.buildroot.org/results/cef3bcecf1779a6789fa72cc8060aaf2e6483d1a |     
- powerpc64   |         flashrom-1.7.0         | NOK | https://autobuild.buildroot.org/results/1959e7fb5c7a8287112639b4858b4f52e67ffe7c |     
-    mips     |         flashrom-1.7.0         | NOK | https://autobuild.buildroot.org/results/34110d57162913f3919dc958bb1449fe0c062a87 |     
- powerpc64   |         flashrom-1.7.0         | NOK | https://autobuild.buildroot.org/results/4502a91de005085dd7c48e151e3d26aee3feff00 |     
-  mips64el   |            gdb-15.2            | NOK | https://autobuild.buildroot.org/results/31a5aa5b68817f7b8ebc4f106aa508db7eeb4233 | ORPH
-  mips64el   | glibc-2.43-17-gdd9945c0ba40... | NOK | https://autobuild.buildroot.org/results/254d08a4021988db3b426b9689e8ca4995af3564 |     
-  mips64el   | glibc-2.43-17-gdd9945c0ba40... | NOK | https://autobuild.buildroot.org/results/43673d4d231ff4f553cc88edcb46dad89746af4b |     
-  sparc64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/467293309bb902abb6b8e109bbde8da3cefb78ed | ORPH
-  sparc64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/db9d73c45c537252f3ac7116fde75d8ba9e040d5 | ORPH
-  aarch64    |          guile-3.0.9           | NOK | https://autobuild.buildroot.org/results/314525cbfc592b1774462e27caeb4bfca9964028 |     
-    arm      |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/a9f4a362dc3b9a31bea907f81b97eaaee7a9f24f | ORPH
-  mips64el   |   host-mender-artifact-4.2.0   | NOK | https://autobuild.buildroot.org/results/e8a88ba4f70aac435d6fc36857dfb3c212f19929 |     
-  mips64el   |   host-mender-artifact-4.2.0   | NOK | https://autobuild.buildroot.org/results/de125b4c5b0a8ea64fb564431847f4986c11bf0c |     
-   xtensa    |       host-protobuf-34.0       | NOK | https://autobuild.buildroot.org/results/26dd88a4336c222b9f3bc71447b7b656995cb107 |     
-   armeb     |        host-rust-1.88.0        | NOK | https://autobuild.buildroot.org/results/edcd191c292ba3032aa96b72fb25c3740aeda8bf |     
- microblaze  |      host-tipidee-0.0.5.1      | NOK | https://autobuild.buildroot.org/results/0a0d5a4b793b47bd0599a60878dba6edf5110890 |     
-loongarch64  |    host-uboot-tools-2026.01    | NOK | https://autobuild.buildroot.org/results/4653f61965b82a0a0433423fa922ab0c6287a906 | ORPH
-    arc      |            kmod-33             | NOK | https://autobuild.buildroot.org/results/cf74281a8c6cb4c18e6027b17b768b02ac7ad48f |     
-  riscv32    |   kvm-unit-tests-2025-06-05    | NOK | https://autobuild.buildroot.org/results/2e9ae01af0f6fde2b18b82706d8e8bd44f7b95ec |     
-  riscv32    |   kvm-unit-tests-2025-06-05    | NOK | https://autobuild.buildroot.org/results/a09a8b358624d819428907a5abab41e2110d24b7 |     
-loongarch64  |       libargon2-20190702       | NOK | https://autobuild.buildroot.org/results/1adb3188d087d387e49630f4e029c61bbe851c64 |     
-   sh4eb     |         libcurl-8.19.0         | NOK | https://autobuild.buildroot.org/results/88c437e1610d4f1f0bbb2c3fe8a5a0a64442be1d |     
-    sh4a     |         libcurl-8.19.0         | NOK | https://autobuild.buildroot.org/results/9f64e87dd3d070ef8e43254b826c27fb12af036c |     
-  powerpc    | libdill-32d0e8b733416208e04... | NOK | https://autobuild.buildroot.org/results/374980c694374e18620a8206ea93bcbb89fb1846 |     
-    arm      | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/54bbe028db23ce2b76e511c385ef38a8e70ecb92 |     
-    arm      | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/fe02b37aa94cacae0d311fb466413b6b704d5711 |     
- aarch64_be  |        libgeotiff-1.7.4        | NOK | https://autobuild.buildroot.org/results/3c6645d67c593eeb66bd7d06a00fcda1cee7ea2f |     
-  mips64el   |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/8b1c452e83fa8778da6305c746826e8cd514613e | ORPH
-   mips64    |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/9d5b4130f57ca551d62bc57f084f933a9cc40469 | ORPH
-    or1k     |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/1add8c323bb3b3484ef583eebe7d8a4407a0247c | ORPH
-   armeb     |          libnss-3.122          | NOK | https://autobuild.buildroot.org/results/c62e59f57f8c6c811764391b2c153c6750636709 |     
-  sparc64    |    libphidget-1.24.20260127    | NOK | https://autobuild.buildroot.org/results/37607d3f99cadeb9cd1f89bb4c212a36bcc93984 |     
-    or1k     |        libsecret-0.20.5        | NOK | https://autobuild.buildroot.org/results/cf73cc4b6161ca486f3089678a78cf324be211da | ORPH
-loongarch64  |         libsoup3-3.6.6         | NOK | https://autobuild.buildroot.org/results/d10b78940c6793dea384e2ce3e3ff6f172c23e8d |     
-  powerpc    |         libssh-0.11.4          | NOK | https://autobuild.buildroot.org/results/dbddda2de03c0974fd168c21b1dd2fef6a3cba27 | ORPH
-  mips64el   |      linux-5.10.246-cip66      | NOK | https://autobuild.buildroot.org/results/d5d83cfe2cade0c0c24a280bd82889236f14b081 | ORPH
-    mips     |      linux-5.10.246-cip66      | NOK | https://autobuild.buildroot.org/results/5998d5c670a911e6aee86ec3262f07b292472ba3 | ORPH
-  powerpc    |      linux-5.10.246-cip66      | NOK | https://autobuild.buildroot.org/results/138aedf6488b83db5fb27723c0cd36d66f5e536f | ORPH
-   sh4aeb    |         linux-6.19.11          | NOK | https://autobuild.buildroot.org/results/ca3bbfcbc1cad77c655a756c4edb956539088983 | ORPH
-    arm      |         linux-headers          | TIM | https://autobuild.buildroot.org/results/f1dba5203031c4147d28748a610fcf673021ba67 |     
-   xtensa    |         linux-headers          | TIM | https://autobuild.buildroot.org/results/ee52af9dca33ecb2a341e8ec8e565286e51b5e17 |     
-  aarch64    |         mbedtls-3.6.5          | NOK | https://autobuild.buildroot.org/results/a19af7d84b1d4febd4a906a3a01c3da2160fb961 |     
-loongarch64  |         mdevd-0.1.6.5          | NOK | https://autobuild.buildroot.org/results/5695d721ff9b378a1d910ce148f65883507ac521 |     
-  aarch64    |           ne10-1.2.1           | NOK | https://autobuild.buildroot.org/results/be156c35e3f3db1e62ef0bd5158c036a16a7a596 |     
-  sparc64    |        nushell-0.108.0         | NOK | https://autobuild.buildroot.org/results/0dcd49f6284bd6e440db57618e5fda09876fa3bb | ORPH
- microblaze  | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/2fafbe2aa3798dfda24a685a7639e725622ee776 |     
-    or1k     | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/d8b1417e0279827b1befeacb473665fad2594e0e |     
- microblaze  | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/ff8427d1fe3ebd64b02bc4fcdd90fecc275041e3 |     
-powerpc64le  | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/00f72d8883de4fb9202b3f4eacd0e7e8394a61a4 |     
-   s390x     | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/0980ea829b82a1308882ed0037c4528a75af9685 |     
- microblaze  | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/85addc9c5b30d09e91166ef2e4e659095b992961 |     
-powerpc64le  |         opencv4-4.13.0         | NOK | https://autobuild.buildroot.org/results/bbbf1bb22667700ef275da85be08d8941cb661d2 |     
- microblaze  |         openntpd-6.8p1         | NOK | https://autobuild.buildroot.org/results/572a2808604ed2049fe160526f956f927b5d69f6 | ORPH
-   xtensa    |         openocd-0.12.0         | NOK | https://autobuild.buildroot.org/results/96592722335727e3f791c59d46b407c2ead103e5 | ORPH
-microblazeel |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/df4ab0ecfc58c6008fb05dc52c4c54ef01b747da | ORPH
-microblazeel |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/0fc56b4481aa255dc85295bd6982c7fc39b60abd | ORPH
-   x86_64    |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/7e29a64d1de006ffbcdb940368c78bf83c8e7390 |     
-microblazeel |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/a6881692f4213eff7a01f1db4047fab257a344d7 |     
-  riscv64    |         pixman-0.46.4          | NOK | https://autobuild.buildroot.org/results/c6fb556871a617b30468e53c57548486e9f44642 | ORPH
-   sparc     |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/b4b151d546ba6f2a12f2f4ac0773a15641e24662 | ORPH
- microblaze  |       python-numpy-2.4.0       | NOK | https://autobuild.buildroot.org/results/bd83f0dd143cedad08beb04fbb2452a8b1d24356 |     
-powerpc64le  |         rtl_433-25.02          | NOK | https://autobuild.buildroot.org/results/195b0943798381a0fccf2b0ee9517453ca4f3792 |     
-    or1k     |          s6-2.13.1.0           | NOK | https://autobuild.buildroot.org/results/206e18363b9e181e34d52128a6a31603984e2ba9 |     
-loongarch64  |         s6-dns-2.4.0.0         | NOK | https://autobuild.buildroot.org/results/15bccac4b99569bfb6ce1cf3ba41561d7a457be7 |     
-    i686     |     s6-linux-init-1.1.2.1      | NOK | https://autobuild.buildroot.org/results/4a84592a3250b7d45e6eafdb235313b8ac5996bd |     
-loongarch64  |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/9e9f5542102ea82cc6d4e7339bbfc79ca28d97c1 |     
-   mips64    |           sbctl-0.18           | NOK | https://autobuild.buildroot.org/results/546e19570098e545c120b8db868f7661b10fcab6 | ORPH
-  mips64el   |           sbctl-0.18           | NOK | https://autobuild.buildroot.org/results/22cbb7f05f35b776c7ae0797ab86eb206b8a406a | ORPH
-    m68k     |         setserial-2.17         | NOK | https://autobuild.buildroot.org/results/53e7e489aba9d5f33281bb67a7c682e1bea229eb | ORPH
-loongarch64  |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/ebce347a5bd70f3bbc3385a35b641ce60547d3ed | ORPH
- microblaze  |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/0221d5dc3a2ec7b5223731cc95754bb945fdbeb0 | ORPH
-    m68k     |         sqlite-3.51.3          | NOK | https://autobuild.buildroot.org/results/dac1812b3ad61f8c07a1ddc1d7d76d1bc8c11a4c |     
-   mipsel    | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/9f5cfdbd29cd4c82f482346e436175ae7487f91c | ORPH
-   sparc     |            unknown             | NOK | https://autobuild.buildroot.org/results/5a849c73e5d222e9fe999f64e7fec7954b61b19a |     
-   sh4eb     |            unknown             | NOK | https://autobuild.buildroot.org/results/545ed2ece780383db846ea512a3aa0f92f0c7eaf |     
- microblaze  |            unknown             | NOK | https://autobuild.buildroot.org/results/d77bd0b0e1ce5fa7feab81a424d374911f59958e |     
-microblazeel |       util-linux-2.41.3        | NOK | https://autobuild.buildroot.org/results/def596246b43cf9bb662f541812c68d1222c12a3 |     
-  riscv32    |       vorbis-tools-1.4.3       | NOK | https://autobuild.buildroot.org/results/f1b5c44837820058be2a7c73915b9d0569989977 | ORPH
-    hppa     |       xapp_xhost-1.0.10        | NOK | https://autobuild.buildroot.org/results/3f7cdc8e4a289744274afac67fbf155cf5a6af01 | ORPH
- microblaze  |      xtables-addons-3.24       | NOK | https://autobuild.buildroot.org/results/5ecf22ad6bb772d3c53cefe626679566c9db7fae | ORPH
-  mips64el   |      xtables-addons-3.24       | NOK | https://autobuild.buildroot.org/results/5933373073422a6c70034aaf4596f9360ca1651b | ORPH
-
-
-Classification of failures by reason for 2025.11.x
---------------------------------------------------
-
-              containerd-2.0.7 | 1 
-              host-rust-1.88.0 | 1 
-                libxml2-2.15.1 | 1 
-                pipewire-1.2.8 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2025.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        containerd-2.0.7        | NOK | https://autobuild.buildroot.org/results/46e70cf1aa093b9a3ba2d50c30e5e699e2b12fe6 |     
-   armeb     |        host-rust-1.88.0        | NOK | https://autobuild.buildroot.org/results/0070bd22d453456e90bebc0d1e026829811d025b |     
-    m68k     |         libxml2-2.15.1         | NOK | https://autobuild.buildroot.org/results/3477f20ae7d3c34753afe1078881bdb111b5a5f1 |     
-   arceb     |         pipewire-1.2.8         | NOK | https://autobuild.buildroot.org/results/3ea217fdf78069e1677f31796d7b5ecb45550099 |     
-  sparc64    |            unknown             | NOK | https://autobuild.buildroot.org/results/cfa02183e956885e7ad844931da43f9111b55379 |     
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-        host-python-lxml-5.3.0 | 3 
-        ltp-testsuite-20250130 | 2 
-                       unknown | 2 
-                    bat-0.25.0 | 1 
-                   dante-1.4.4 | 1 
-    host-mender-artifact-4.0.0 | 1 
-                  iozone-3.508 | 1 
-              libopenssl-3.4.4 | 1 
-                 libssh-0.11.4 | 1 
-                   linux-tools | 1 
-                  nginx-1.26.3 | 1 
-                   openrc-0.56 | 1 
-package/linux-headers/linux... | 1 
-python-remi-2022.7.27-37-g1... | 1 
-rtl8189fs-94cc959d56c1425fb... | 1 
-                 zabbix-7.2.13 | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |           bat-0.25.0           | NOK | https://autobuild.buildroot.org/results/44b17b06c11ab09ff9e40de677c02b9d0ca66d62 |     
-   x86_64    |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/ef191995007938dac0e35203584a1ffa85feecbb | ORPH
-    arm      |   host-mender-artifact-4.0.0   | NOK | https://autobuild.buildroot.org/results/861589a55a9b7b4e1bdc555f9758c2aae8dc2e80 |     
-   xtensa    |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/93bade058dee42b7c5d91cb44d9e154d8e4031a6 |     
-  aarch64    |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/9d5d6508425f52fbabf24ab9de3b94bf96895c76 |     
-   arceb     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/c4a24f685157298c233ffb1de199e5c62081be1f |     
-   sparc     |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/48d82d2fc3c79933cb9ec230e7a14282977ae97c |     
- powerpc64   |        libopenssl-3.4.4        | NOK | https://autobuild.buildroot.org/results/907eadd06ee7f9a3a723bdd8bb1805926a13f0a1 | ORPH
-    i686     |         libssh-0.11.4          | NOK | https://autobuild.buildroot.org/results/21e894a5ddff25ef138cbfdc3c171d5428bbda55 | ORPH
-   mipsel    |          linux-tools           | NOK | https://autobuild.buildroot.org/results/c8b7be02b88f5f595ac74eecb22131cfa660099a | ORPH
-powerpc64le  |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/cd50fa3de5cd4979583e48a8e4ee028ec87baf6c |     
-   mips64    |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/47f1f3d3919d7af448803e2e64bb8f124a247bbf |     
-   sparc     |          nginx-1.26.3          | NOK | https://autobuild.buildroot.org/results/fc704d7a2d9f20ec39a7153829cedb2b187e98fa | ORPH
-   x86_64    |          openrc-0.56           | NOK | https://autobuild.buildroot.org/results/c33cf1a68bb6909ec8391556cea29109b92f1306 |     
-    sh4      | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/84f236db048ddc5aeefc527b1d802b4c839ee344 |     
-    m68k     | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/118166d3dadaa003eabe388fb86d6334b62352ba |     
-  powerpc    | rtl8189fs-94cc959d56c1425fb... | NOK | https://autobuild.buildroot.org/results/da83bdbbfb036528c8fc81c9fa45c2e28ce6bc1c |     
-powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/f5264663a8aeee11e327b9527921e0c607f1d6d6 |     
-   s390x     |            unknown             | NOK | https://autobuild.buildroot.org/results/fd5c8d1e3ee513820c1d94777e2ea9b07c843d1b |     
-microblazeel |         zabbix-7.2.13          | NOK | https://autobuild.buildroot.org/results/508b1a7bcfcfa31b938010938ec3ea38ae54c6ce |     
-
-
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 6599435b62..1eca2febe9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -354,7 +354,6 @@ package/freescale-imx/imx-uuc/S80imx-uuc Shellcheck lib_sysv.Indent lib_sysv.Var
+ package/freescale-imx/imx-vpu-hantro/0001-Fix-ion.h-header-inclusion-to-be-standard.patch lib_patch.Upstream
+ package/freescale-imx/imx-vpu-hantro/0002-Fix-build-with-uclibc-toolchain.patch lib_patch.Upstream
+ package/freescale-imx/imx-vpu-hantro/0003-Fix-Linux-kernel-version-header.patch lib_patch.Upstream
+-package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch lib_patch.Upstream
+ package/frr/S50frr Shellcheck
+ package/fstrcmp/0001-disable-rpath.patch lib_patch.Upstream
+ package/ftop/0001-overflow.patch lib_patch.Upstream
+diff --git a/package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch b/package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+index eb717fc26d..1a66e7c8d5 100644
+--- a/package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
++++ b/package/freeswitch/0001-libs-srtp-crypto-hash-hmac_ossl.c-fix-build-with-lib.patch
+@@ -25,6 +25,8 @@ crypto/hash/hmac_ossl.c:133:40: error: invalid application of 'sizeof' to incomp
+ Fixes:
+  - http://autobuild.buildroot.org/results/e696ead9ffffa5bb80928d75607bfbb9b263d3c6
+ 
++Upstream: https://github.com/signalwire/freeswitch/pull/1654
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  libs/srtp/crypto/hash/hmac_ossl.c | 6 ++++--
+diff --git a/package/freeswitch/0005-Fix-memory-leak-by-correctly-freeing-regex.patch b/package/freeswitch/0005-Fix-memory-leak-by-correctly-freeing-regex.patch
+new file mode 100644
+index 0000000000..5ce3a060a8
+--- /dev/null
++++ b/package/freeswitch/0005-Fix-memory-leak-by-correctly-freeing-regex.patch
+@@ -0,0 +1,34 @@
++From 12b47fe7f91b93ba9cec90676e62c6239a097c98 Mon Sep 17 00:00:00 2001
++From: Christian Marangi <ansuelsmth@gmail.com>
++Date: Fri, 3 Nov 2023 17:27:06 +0100
++Subject: [PATCH] [mod_verto] Fix memory leak by correctly freeing regex
++
++For mod_verto regex was never freed and was actually leaking memory.
++Correctly free the compiled regex to fix the memory leak.
++
++Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
++
++Upstream: https://github.com/signalwire/freeswitch/commit/12b47fe7f91b93ba9cec90676e62c6239a097c98
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/mod/endpoints/mod_verto/mod_verto.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/mod/endpoints/mod_verto/mod_verto.c b/src/mod/endpoints/mod_verto/mod_verto.c
++index 48c40527b56..36aba6db5e2 100644
++--- a/src/mod/endpoints/mod_verto/mod_verto.c
+++++ b/src/mod/endpoints/mod_verto/mod_verto.c
++@@ -1893,10 +1893,12 @@ static void http_run(jsock_t *jsock)
++ 				switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG,
++ 								  "%d request [%s] matched expr [%s]\n", proceed, request->uri, expression);
++ 				request->uri = rule->value;
+++				switch_regex_safe_free(re);
++ 				break;
++ 			}
++ 
++ 			rule = rule->next;
+++			switch_regex_safe_free(re);
++ 		}
++ 	}
++ 
+diff --git a/package/freeswitch/0006-Move-project-to-PCRE2.patch b/package/freeswitch/0006-Move-project-to-PCRE2.patch
+new file mode 100644
+index 0000000000..f9d3d53574
+--- /dev/null
++++ b/package/freeswitch/0006-Move-project-to-PCRE2.patch
+@@ -0,0 +1,1813 @@
++From b0692d4810466ca048fcfb217dfc7ce012620e5a Mon Sep 17 00:00:00 2001
++From: Christian Marangi <ansuelsmth@gmail.com>
++Date: Fri, 3 Nov 2023 17:23:31 +0100
++Subject: [PATCH] [Core] Move project to PCRE2
++
++Move project to PCRE2 as PCRE is EOL and won't receive any security
++updates anymore.
++
++PCRE2 have different API compared to PCRE. Mainly PCRE2 have the concept
++of match_data, no ovector needs to be passed, different handling for
++error string and different handling for substring manipulation.
++
++Update any user of PCRE library with the new API
++
++Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
++
++Upstream: https://github.com/signalwire/freeswitch/pull/2858
++
++Downloaded rebased version from
++https://github.com/openwrt/telephony/blob/master/net/freeswitch/patches/900-Core-Move-project-to-PCRE2.patch
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Makefile.am                                   |   4 +-
++ build/Makefile.centos5                        |  10 +-
++ build/Makefile.centos6                        |   4 +-
++ build/Makefile.openbsd                        |   2 +-
++ build/Makefile.solaris11                      |  10 +-
++ configure.ac                                  |   2 +-
++ freeswitch.spec                               |   4 +-
++ libs/.gitignore                               |  10 +-
++ libs/apr/build/prebuildNW.bat                 |   6 +-
++ src/include/switch.h                          |   2 +-
++ src/include/switch_regex.h                    |  33 +++--
++ .../mod_abstraction/mod_abstraction.c         |   8 +-
++ .../applications/mod_commands/mod_commands.c  |   8 +-
++ .../applications/mod_dptools/mod_dptools.c    |   8 +-
++ src/mod/applications/mod_enum/mod_enum.c      |  21 +--
++ src/mod/applications/mod_lcr/mod_lcr.c        |  11 +-
++ src/mod/applications/mod_sms/mod_sms.c        |  12 +-
++ .../mod_translate/mod_translate.c             |  11 +-
++ .../mod_dialplan_asterisk.c                   |  11 +-
++ .../mod_dialplan_xml/mod_dialplan_xml.c       |  23 ++--
++ src/mod/endpoints/mod_sofia/sofia_glue.c      |   6 +-
++ src/mod/endpoints/mod_verto/mod_verto.c       |   8 +-
++ .../mod_erlang_event/mod_erlang_event.c       |   6 +-
++ .../mod_event_socket/mod_event_socket.c       |   6 +-
++ src/mod/event_handlers/mod_rayo/Makefile.am   |  18 +--
++ src/mod/event_handlers/mod_rayo/srgs.c        |  62 +++++----
++ .../mod_managed/freeswitch_managed.h          |   8 +-
++ .../languages/mod_managed/freeswitch_wrap.cxx | Bin 1672594 -> 1672494 bytes
++ src/mod/languages/mod_managed/managed/swig.cs | Bin 2625569 -> 2629167 bytes
++ src/mod/languages/mod_v8/include/fspcre.hpp   |   2 +-
++ .../languages/mod_v8/src/fseventhandler.cpp   |   5 +-
++ src/mod/languages/mod_v8/src/fspcre.cpp       |  11 +-
++ src/mod/languages/mod_yaml/mod_yaml.c         |  10 +-
++ .../xml_int/mod_xml_radius/mod_xml_radius.c   |   8 +-
++ src/switch_channel.c                          |  14 +-
++ src/switch_ivr.c                              |   7 +-
++ src/switch_ivr_async.c                        |   8 +-
++ src/switch_ivr_menu.c                         |   8 +-
++ src/switch_ivr_play_say.c                     |  11 +-
++ src/switch_regex.c                            | 123 ++++++++++--------
++ src/switch_utils.c                            |  43 +++---
++ 41 files changed, 317 insertions(+), 247 deletions(-)
++
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -231,9 +231,9 @@ CORE_LIBS+=libfreeswitch_libyuv.la
++ endif
++ 
++ lib_LTLIBRARIES	         = libfreeswitch.la
++-libfreeswitch_la_CFLAGS  = $(CORE_CFLAGS) $(SQLITE_CFLAGS) $(GUMBO_CFLAGS) $(FVAD_CFLAGS) $(FREETYPE_CFLAGS) $(CURL_CFLAGS) $(PCRE_CFLAGS) $(SPEEX_CFLAGS) $(LIBEDIT_CFLAGS) $(openssl_CFLAGS) $(SOFIA_SIP_CFLAGS) $(AM_CFLAGS) $(TPL_CFLAGS)
+++libfreeswitch_la_CFLAGS  = $(CORE_CFLAGS) $(SQLITE_CFLAGS) $(GUMBO_CFLAGS) $(FVAD_CFLAGS) $(FREETYPE_CFLAGS) $(CURL_CFLAGS) $(PCRE2_CFLAGS) $(SPEEX_CFLAGS) $(LIBEDIT_CFLAGS) $(openssl_CFLAGS) $(SOFIA_SIP_CFLAGS) $(AM_CFLAGS) $(TPL_CFLAGS)
++ libfreeswitch_la_LDFLAGS = -version-info 1:0:0 $(AM_LDFLAGS) $(PLATFORM_CORE_LDFLAGS) -no-undefined
++-libfreeswitch_la_LIBADD  = $(CORE_LIBS) $(APR_LIBS) $(SQLITE_LIBS) $(GUMBO_LIBS) $(FVAD_LIBS) $(FREETYPE_LIBS) $(CURL_LIBS) $(PCRE_LIBS) $(SPEEX_LIBS) $(LIBEDIT_LIBS) $(SYSTEMD_LIBS) $(openssl_LIBS) $(PLATFORM_CORE_LIBS) $(TPL_LIBS) $(SPANDSP_LIBS) $(SOFIA_SIP_LIBS)
+++libfreeswitch_la_LIBADD  = $(CORE_LIBS) $(APR_LIBS) $(SQLITE_LIBS) $(GUMBO_LIBS) $(FVAD_LIBS) $(FREETYPE_LIBS) $(CURL_LIBS) $(PCRE2_LIBS) $(SPEEX_LIBS) $(LIBEDIT_LIBS) $(SYSTEMD_LIBS) $(openssl_LIBS) $(PLATFORM_CORE_LIBS) $(TPL_LIBS) $(SPANDSP_LIBS) $(SOFIA_SIP_LIBS)
++ libfreeswitch_la_DEPENDENCIES = $(BUILT_SOURCES)
++ 
++ if HAVE_PNG
++--- a/build/Makefile.centos5
+++++ b/build/Makefile.centos5
++@@ -13,7 +13,7 @@ DOWNLOAD=http://files.freeswitch.org/dow
++ JPEG=v8d
++ OPENSSL=1.0.1l
++ SQLITE=autoconf-3080403
++-PCRE=8.35
+++PCRE2=10.42
++ CURL=7.40.0
++ SPEEX=1.2rc1
++ LIBEDIT=20140618-3.1
++@@ -45,7 +45,7 @@ has-git:
++ 	@git --version || (echo "please install git by running 'make install-git'" && false)
++ 
++ clean:
++-	@rm -rf openssl* ldns* jpeg* pcre* perl* pkg-config* speex* sqlite* libedit* curl* *~
+++	@rm -rf openssl* ldns* jpeg* pcre2* perl* pkg-config* speex* sqlite* libedit* curl* *~
++ 	(cd freeswitch.git && git clean -fdx && git reset --hard HEAD && git pull)
++ 
++ libjpeg: jpeg-8d/.done
++@@ -66,9 +66,9 @@ sqlite-$(SQLITE):
++ 	(test -d $@) || (wget -4 -O $@.tar.gz $(DOWNLOAD)/$@.tar.gz && tar zxfv $@.tar.gz)
++ 	(cd $@ && ./configure --prefix=$(PREFIX) && make && sudo make install && touch .done_sqlite && touch .done)
++ 
++-pcre: pcre-$(PCRE)/.done
++-pcre-$(PCRE)/.done: pcre-$(PCRE)
++-pcre-$(PCRE):
+++pcre2: pcre2-$(PCRE2)/.done
+++pcre2-$(PCRE2)/.done: pcre2-$(PCRE2)
+++pcre2-$(PCRE2):
++ 	(test -d $@) || (wget -4 -O $@.tar.gz $(DOWNLOAD)/$@.tar.gz && tar zxfv $@.tar.gz)
++ 	(cd $@ && ./configure --prefix=$(PREFIX) && make && sudo make install && touch .done)
++ 
++--- a/build/Makefile.centos6
+++++ b/build/Makefile.centos6
++@@ -6,8 +6,8 @@
++ # in that same directory.
++ #
++ #
++-RPMS=git gcc-c++ autoconf automake libtool wget python ncurses-devel zlib-devel libjpeg-devel openssl-devel e2fsprogs-devel sqlite-devel libcurl-devel pcre-devel speex-devel ldns-devel libedit-devel
++-DEBS=git build-essential automake autoconf 'libtool-bin|libtool' wget python uuid-dev zlib1g-dev 'libjpeg8-dev|libjpeg62-turbo-dev' libncurses5-dev libssl-dev libpcre3-dev libcurl4-openssl-dev libldns-dev libedit-dev libspeexdsp-dev  libspeexdsp-dev libsqlite3-dev perl libgdbm-dev libdb-dev bison libvlc-dev pkg-config
+++RPMS=git gcc-c++ autoconf automake libtool wget python ncurses-devel zlib-devel libjpeg-devel openssl-devel e2fsprogs-devel sqlite-devel libcurl-devel pcre2-devel speex-devel ldns-devel libedit-devel
+++DEBS=git build-essential automake autoconf 'libtool-bin|libtool' wget python uuid-dev zlib1g-dev 'libjpeg8-dev|libjpeg62-turbo-dev' libncurses5-dev libssl-dev libpcre2-dev libcurl4-openssl-dev libldns-dev libedit-dev libspeexdsp-dev  libspeexdsp-dev libsqlite3-dev perl libgdbm-dev libdb-dev bison libvlc-dev pkg-config
++ 
++ freeswitch: deps has-git freeswitch.git/Makefile
++ 	cd freeswitch.git && make
++--- a/build/Makefile.openbsd
+++++ b/build/Makefile.openbsd
++@@ -7,7 +7,7 @@
++ #
++ #
++ 
++-PKG=rsync-3.1.0 git automake-1.14.1 autoconf-2.69p1 libtool gmake bzip2 jpeg wget pcre speex libldns
+++PKG=rsync-3.1.0 git automake-1.14.1 autoconf-2.69p1 libtool gmake bzip2 jpeg wget pcre2 speex libldns
++ PREFIX=/usr/local/freeswitch
++ DOWNLOAD=http://files.freeswitch.org/downloads/libs
++ OPENSSL=1.0.1j
++--- a/build/Makefile.solaris11
+++++ b/build/Makefile.solaris11
++@@ -12,7 +12,7 @@ DOWNLOAD=http://files.freeswitch.org/dow
++ JP=v8d
++ SSL=1.0.1j
++ SQLITE=autoconf-3080403
++-PCRE=8.35
+++PCRE2=10.42
++ CURL=7.35.0
++ SPEEX=1.2rc1
++ LIBEDIT=20140618-3.1
++@@ -43,7 +43,7 @@ has-git:
++ 	@git --version || (echo "please install git by running 'gmake install-git'" && false)
++ 
++ clean:
++-	@rm -rf openssl* ldns* jpeg* pcre* perl* pkg-config* speex* sqlite* libedit* curl* *~
+++	@rm -rf openssl* ldns* jpeg* pcre2* perl* pkg-config* speex* sqlite* libedit* curl* *~
++ 	(cd freeswitch.git && git clean -fdx && git reset --hard HEAD && git pull)
++ 
++ libjpeg: jpeg-8d/.done
++@@ -64,9 +64,9 @@ sqlite-$(SQLITE):
++ 	(test -d $@) || (wget -4 -O $@.tar.gz $(DOWNLOAD)/$@.tar.gz && tar zxfv $@.tar.gz)
++ 	(cd $@ && CFLAGS=-m64 LDFLAGS=-m64 ./configure --prefix=$(PREFIX) && gmake && sudo gmake install && touch .done)
++ 
++-pcre: pcre-$(PCRE)/.done
++-pcre-$(PCRE)/.done: pcre-$(PCRE)
++-pcre-$(PCRE):
+++pcre2: pcre2-$(PCRE2)/.done
+++pcre2-$(PCRE2)/.done: pcre2-$(PCRE2)
+++pcre2-$(PCRE2):
++ 	(test -d $@) || (wget -4 -O $@.tar.gz $(DOWNLOAD)/$@.tar.gz && tar zxfv $@.tar.gz)
++ 	(cd $@ && CXXFLAGS=-m64 CFLAGS=-m64 LDFLAGS=-m64 ./configure --prefix=$(PREFIX) && gmake && sudo gmake install && touch .done)
++ 
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1312,7 +1312,7 @@ PKG_CHECK_MODULES([TPL], [libtpl >= 1.5]
++ 
++ PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6.20])
++ PKG_CHECK_MODULES([CURL], [libcurl >= 7.19])
++-PKG_CHECK_MODULES([PCRE], [libpcre >= 7.8])
+++PKG_CHECK_MODULES([PCRE2], [libpcre2-8 >=  10.00])
++ PKG_CHECK_MODULES([SPEEX], [speex >= 1.2rc1 speexdsp >= 1.2rc1])
++ PKG_CHECK_MODULES([YAML], [yaml-0.1 >= 0.1.4],[
++   AM_CONDITIONAL([HAVE_YAML],[true])],[
++--- a/freeswitch.spec
+++++ b/freeswitch.spec
++@@ -142,7 +142,7 @@ BuildRequires: libtool >= 1.5.17
++ BuildRequires: openssl-devel >= 1.0.1e
++ BuildRequires: sofia-sip-devel >= 1.13.17
++ BuildRequires: spandsp3-devel >= 3.0
++-BuildRequires: pcre-devel 
+++BuildRequires: pcre2-devel 
++ BuildRequires: speex-devel 
++ BuildRequires: sqlite-devel >= 3.6.20
++ BuildRequires: libtiff-devel
++@@ -156,7 +156,7 @@ BuildRequires: zlib-devel
++ BuildRequires: libxml2-devel
++ BuildRequires: libsndfile-devel
++ Requires: curl >= 7.19
++-Requires: pcre
+++Requires: pcre2
++ Requires: speex
++ Requires: sqlite >= 3.6.20
++ Requires: libtiff
++--- a/libs/.gitignore
+++++ b/libs/.gitignore
++@@ -554,7 +554,7 @@ opal
++ /win32/celt/*/*/libcelt.log
++ /win32/libg722_1/*/*/libg722_1.log
++ /win32/libshout/*/*/libshout.log
++-/win32/pcre/pcre_chartables.c
+++/win32/pcre2/pcre2_chartables.c
++ /win32/tmp*.bat
++ !/xmlrpc-c/include/xmlrpc-c/config.h.in
++ /xmlrpc-c/stamp-h2
++@@ -610,9 +610,9 @@ opal
++ broadvoice/config/compile
++ ilbc/config/compile
++ libg722_1/config/compile
++-pcre/compile
+++pcre2/compile
++ srtp/build/compile
++-/pcre-*/
+++/pcre2-*/
++ /speex-*/
++ /curl-*/
++ /sqlite-*.zip
++@@ -637,8 +637,8 @@ curl-*/
++ curl-*
++ flite-*/
++ flite-*
++-pcre-*/
++-pcre-*
+++pcre2-*/
+++pcre2-*
++ libsndfile-*/
++ libsndfile-*
++ opencv-*/
++--- a/libs/apr/build/prebuildNW.bat
+++++ b/libs/apr/build/prebuildNW.bat
++@@ -35,9 +35,9 @@ copy ..\..\apr-util\xml\expat\lib\expat.
++ copy ..\..\apr-util\xml\expat\lib\config.hnw ..\..\apr-util\xml\expat\lib\config.h
++ copy ..\..\apr-util\include\private\apu_select_dbm.hw ..\..\apr-util\include\private\apu_select_dbm.h
++ 
++-@echo Fixing up the pcre headers
++-copy ..\..\pcre\config.hw ..\..\pcre\config.h
++-copy ..\..\pcre\pcre.hw ..\..\pcre\pcre.h
+++@echo Fixing up the pcre2 headers
+++copy ..\..\pcre2\config.hw ..\..\pcre2\config.h
+++copy ..\..\pcre2\pcre2.hw ..\..\pcre2\pcre2.h
++ 
++ @echo Generating the import list...
++ set MWCIncludes=..\include;..\include\arch\netware;..\include\arch\unix;..\..\apr-util\include;+%NovellLibC%
++--- a/src/include/switch.h
+++++ b/src/include/switch.h
++@@ -172,7 +172,7 @@
++  *		- APR (http://apr.apache.org)
++  *		- APR-Util (http://apr.apache.org)
++  *		- SQLite (http://www.sqlite.org)
++- *		- Pcre (http://www.pcre.org/)
+++ *		- Pcre2 (http://www.pcre.org/)
++  *		- SRTP (http://srtp.sourceforge.net/srtp.html)
++  *
++  *	Additionally, the various external modules make use of several external modules:
++--- a/src/include/switch_regex.h
+++++ b/src/include/switch_regex.h
++@@ -25,7 +25,7 @@
++  *
++  * Michael Jerris <mike@jerris.com>
++  *
++- * switch_regex.h -- pcre wrapper and extensions Header
+++ * switch_regex.h -- pcre2 wrapper and extensions Header
++  *
++  */
++ /*! \file switch_regex.h
++@@ -40,18 +40,21 @@ SWITCH_BEGIN_EXTERN_C
++  * @ingroup FREESWITCH
++  * @{
++  */
++-	typedef struct real_pcre switch_regex_t;
+++	typedef struct pcre2_real_code switch_regex_t;
+++	typedef struct pcre2_real_match_data_8 switch_regex_match_data_t;
+++	typedef struct pcre2_real_compile_context_8 switch_regex_compile_context_t;
++ 
++-SWITCH_DECLARE(switch_regex_t *) switch_regex_compile(const char *pattern, int options, const char **errorptr, int *erroroffset,
++-													  const unsigned char *tables);
+++SWITCH_DECLARE(switch_regex_t *) switch_regex_compile(const char *pattern, int options, int *errorcode, unsigned int *erroroffset,
+++													  switch_regex_compile_context_t *ccontext);
++ 
++-SWITCH_DECLARE(int) switch_regex_copy_substring(const char *subject, int *ovector, int stringcount, int stringnumber, char *buffer, int size);
+++SWITCH_DECLARE(int) switch_regex_copy_substring(switch_regex_match_data_t *match_data, int stringnumber, char *buffer, unsigned int *size);
++ 
+++SWITCH_DECLARE(void) switch_regex_match_free(void *data);
++ SWITCH_DECLARE(void) switch_regex_free(void *data);
++ 
++-SWITCH_DECLARE(int) switch_regex_perform(const char *field, const char *expression, switch_regex_t **new_re, int *ovector, uint32_t olen);
++-SWITCH_DECLARE(void) switch_perform_substitution(switch_regex_t *re, int match_count, const char *data, const char *field_data,
++-												 char *substituted, switch_size_t len, int *ovector);
+++SWITCH_DECLARE(int) switch_regex_perform(const char *field, const char *expression, switch_regex_t **new_re, switch_regex_match_data_t **new_match_data);
+++SWITCH_DECLARE(void) switch_perform_substitution(switch_regex_match_data_t *match_data, const char *data,
+++												 char *substituted, switch_size_t len);
++ 
++ /*!
++  \brief Function to evaluate an expression against a string
++@@ -70,17 +73,27 @@ SWITCH_DECLARE(switch_status_t) switch_r
++ */
++ SWITCH_DECLARE(switch_status_t) switch_regex_match_partial(const char *target, const char *expression, int *partial_match);
++ 
++-SWITCH_DECLARE(void) switch_capture_regex(switch_regex_t *re, int match_count, const char *field_data,
++-										  int *ovector, const char *var, switch_cap_callback_t callback, void *user_data);
+++SWITCH_DECLARE(void) switch_capture_regex(switch_regex_match_data_t *match_data, int match_count,
+++										  const char *var, switch_cap_callback_t callback, void *user_data);
++ 
++ SWITCH_DECLARE_NONSTD(void) switch_regex_set_var_callback(const char *var, const char *val, void *user_data);
++ SWITCH_DECLARE_NONSTD(void) switch_regex_set_event_header_callback(const char *var, const char *val, void *user_data);
++ 
+++#define switch_match_data_safe_free(match_data)	if (match_data) {\
+++				switch_regex_match_free(match_data);\
+++				match_data = NULL;\
+++			}
+++
++ #define switch_regex_safe_free(re)	if (re) {\
++ 				switch_regex_free(re);\
++ 				re = NULL;\
++ 			}
++ 
+++#define switch_regex_and_match_data_safe_free(re, match_data) {\
+++				switch_match_data_safe_free(match_data);\
+++				switch_regex_safe_free(re);\
+++			}
+++
++ 
++ /** @} */
++ 
++--- a/src/mod/applications/mod_abstraction/mod_abstraction.c
+++++ b/src/mod/applications/mod_abstraction/mod_abstraction.c
++@@ -65,9 +65,9 @@ SWITCH_STANDARD_API(api_abstraction_func
++ 
++ 		int proceed;
++ 		switch_regex_t *re = NULL;
++-		int ovector[30];
+++		switch_regex_match_data_t *match_data = NULL;
++ 
++-		if ((proceed = switch_regex_perform(cmd, parse, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++		if ((proceed = switch_regex_perform(cmd, parse, &re, &match_data))) {
++ 			const char *api_args = NULL;
++ 			char *substituted = NULL;
++ 
++@@ -78,7 +78,7 @@ SWITCH_STANDARD_API(api_abstraction_func
++ 					goto end;
++ 				}
++ 				memset(substituted, 0, len);
++-				switch_perform_substitution(re, proceed, arguments, cmd , substituted, len, ovector);
+++				switch_perform_substitution(match_data, arguments, substituted, len);
++ 				api_args = substituted;
++ 			} else {
++ 				api_args = arguments;
++@@ -89,7 +89,7 @@ SWITCH_STANDARD_API(api_abstraction_func
++ 		} else {
++ 			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "No match for API %s  (%s != %s)\n", api_name, parse, cmd);
++ 		}
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 	} else {
++ 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "API %s doesn't exist inside the xml structure.  You might have forgot to reload the module after editing it\n", api_name);
++--- a/src/mod/applications/mod_commands/mod_commands.c
+++++ b/src/mod/applications/mod_commands/mod_commands.c
++@@ -2014,7 +2014,7 @@ SWITCH_STANDARD_API(replace_function)
++ SWITCH_STANDARD_API(regex_function)
++ {
++ 	switch_regex_t *re = NULL;
++-	int ovector[30];
+++	switch_regex_match_data_t *match_data = NULL;
++ 	int argc;
++ 	char *mydata = NULL, *argv[4];
++ 	size_t len = 0;
++@@ -2054,7 +2054,7 @@ SWITCH_STANDARD_API(regex_function)
++ 		goto error;
++ 	}
++ 
++-	proceed = switch_regex_perform(argv[0], argv[1], &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
+++	proceed = switch_regex_perform(argv[0], argv[1], &re, &match_data);
++ 
++ 	if (argc > 2) {
++ 		char *flags = "";
++@@ -2069,7 +2069,7 @@ SWITCH_STANDARD_API(regex_function)
++ 			switch_assert(substituted);
++ 			memset(substituted, 0, len);
++ 			switch_replace_char(argv[2], '%', '$', SWITCH_FALSE);
++-			switch_perform_substitution(re, proceed, argv[2], argv[0], substituted, len, ovector);
+++			switch_perform_substitution(match_data, argv[2], substituted, len);
++ 
++ 			stream->write_function(stream, "%s", substituted);
++ 			free(substituted);
++@@ -2091,7 +2091,7 @@ SWITCH_STANDARD_API(regex_function)
++   error:
++ 	stream->write_function(stream, "-ERR");
++   ok:
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 	switch_safe_free(mydata);
++ 	return SWITCH_STATUS_SUCCESS;
++ }
++--- a/src/mod/applications/mod_dptools/mod_dptools.c
+++++ b/src/mod/applications/mod_dptools/mod_dptools.c
++@@ -3211,16 +3211,16 @@ SWITCH_STANDARD_APP(capture_function)
++ {
++ 	char *argv[3] = { 0 };
++ 	switch_regex_t *re = NULL;
++-	int ovector[30] = {0};
+++	switch_regex_match_data_t *match_data = NULL;
++ 	char *lbuf;
++ 	int proceed;
++ 
++ 	if (!zstr(data) && (lbuf = switch_core_session_strdup(session, data))
++ 		&& switch_separate_string(lbuf, '|', argv, (sizeof(argv) / sizeof(argv[0]))) == 3) {
++-		if ((proceed = switch_regex_perform(argv[1], argv[2], &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
++-			switch_capture_regex(re, proceed, argv[1], ovector, argv[0], switch_regex_set_var_callback, session);
+++		if ((proceed = switch_regex_perform(argv[1], argv[2], &re, &match_data))) {
+++			switch_capture_regex(match_data, proceed, argv[0], switch_regex_set_var_callback, session);
++ 		}
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 	} else {
++ 		switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_ERROR, "No data specified.\n");
++ 	}
++--- a/src/mod/applications/mod_enum/mod_enum.c
+++++ b/src/mod/applications/mod_enum/mod_enum.c
++@@ -365,7 +365,8 @@ static void parse_naptr(const ldns_rr *n
++ 
++ 	if (service && regex && replace) {
++ 		switch_regex_t *re = NULL, *re2 = NULL;
++-		int proceed = 0, ovector[30];
+++		switch_regex_match_data_t *match_data = NULL, *match_data2 = NULL;
+++		int proceed = 0;
++ 		char *substituted = NULL;
++ 		char *substituted_2 = NULL;
++ 		char *orig_uri;
++@@ -374,17 +375,17 @@ static void parse_naptr(const ldns_rr *n
++ 		int supported = 0;
++ 		uint32_t len = 0;
++ 
++-		if ((proceed = switch_regex_perform(number, regex, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++		if ((proceed = switch_regex_perform(number, regex, &re, &match_data))) {
++ 			if (strchr(regex, '(')) {
++ 				len = (uint32_t) (strlen(number) + strlen(replace) + 10) * proceed;
++ 				if (!(substituted = malloc(len))) {
++ 					switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_CRIT, "Memory Error!\n");
++-					switch_regex_safe_free(re);
+++					switch_regex_and_match_data_safe_free(re, match_data);
++ 					goto end;
++ 				}
++ 				memset(substituted, 0, len);
++ 
++-				switch_perform_substitution(re, proceed, replace, number, substituted, len, ovector);
+++				switch_perform_substitution(match_data, replace, substituted, len);
++ 				orig_uri = substituted;
++ 			} else {
++ 				orig_uri = replace;
++@@ -398,7 +399,7 @@ static void parse_naptr(const ldns_rr *n
++ 					continue;
++ 				}
++ 
++-				if ((proceed = switch_regex_perform(uri, route->regex, &re2, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++				if ((proceed = switch_regex_perform(uri, route->regex, &re2, &match_data2))) {
++ 					switch_event_t *event = NULL;
++ 
++ 					if (strchr(route->regex, '(')) {
++@@ -406,14 +407,14 @@ static void parse_naptr(const ldns_rr *n
++ 						if (!(substituted_2 = malloc(len))) {
++ 							switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_CRIT, "Memory Error!\n");
++ 							switch_safe_free(substituted);
++-							switch_regex_safe_free(re);
++-							switch_regex_safe_free(re2);
+++							switch_regex_and_match_data_safe_free(re, match_data);
+++							switch_regex_and_match_data_safe_free(re2, match_data2);
++ 							switch_mutex_unlock(MUTEX);
++ 							goto end;
++ 						}
++ 						memset(substituted_2, 0, len);
++ 
++-						switch_perform_substitution(re2, proceed, route->replace, uri, substituted_2, len, ovector);
+++						switch_perform_substitution(match_data2, route->replace, substituted_2, len);
++ 						uri = substituted_2;
++ 					} else {
++ 						uri = route->replace;
++@@ -434,7 +435,7 @@ static void parse_naptr(const ldns_rr *n
++ 				}
++ 				switch_safe_free(uri_expanded);
++ 				switch_safe_free(substituted_2);
++-				switch_regex_safe_free(re2);
+++				switch_regex_and_match_data_safe_free(re2, match_data2);
++ 			}
++ 			switch_mutex_unlock(MUTEX);
++ 
++@@ -443,7 +444,7 @@ static void parse_naptr(const ldns_rr *n
++ 			}
++ 
++ 			switch_safe_free(substituted);
++-			switch_regex_safe_free(re);
+++			switch_regex_and_match_data_safe_free(re, match_data);
++ 		}
++ 	}
++ 
++--- a/src/mod/applications/mod_lcr/mod_lcr.c
+++++ b/src/mod/applications/mod_lcr/mod_lcr.c
++@@ -166,7 +166,8 @@ static void lcr_destroy(lcr_route route)
++ static const char *do_cid(switch_memory_pool_t *pool, const char *cid, const char *number, switch_core_session_t *session)
++ {
++ 	switch_regex_t *re = NULL;
++-	int proceed = 0, ovector[30];
+++	switch_regex_match_data_t *match_data = NULL;
+++	int proceed = 0;
++ 	char *substituted = NULL;
++ 	uint32_t len = 0;
++ 	char *src = NULL;
++@@ -230,24 +231,24 @@ static const char *do_cid(switch_memory_
++ 		switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_DEBUG, "expanded src: %s, dst: %s\n", src, dst);
++ 	}
++ 
++-	if ((proceed = switch_regex_perform(number, src, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++	if ((proceed = switch_regex_perform(number, src, &re, &match_data))) {
++ 		len = (uint32_t) (strlen(src) + strlen(dst) + 10) * proceed; /* guestimate size */
++ 		if (!(substituted = switch_core_alloc(pool, len))) {
++ 			switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_ERROR, "Memory Error!\n");
++ 			goto done;
++ 		}
++ 		memset(substituted, 0, len);
++-		switch_perform_substitution(re, proceed, dst, number, substituted, len, ovector);
+++		switch_perform_substitution(match_data, dst, substituted, len);
++ 	} else {
++ 		goto done;
++ 	}
++ 
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 	return substituted;
++ 
++ done:
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 	switch_safe_free(tmp_regex);
++ 	return number;
++ }
++--- a/src/mod/applications/mod_sms/mod_sms.c
+++++ b/src/mod/applications/mod_sms/mod_sms.c
++@@ -124,6 +124,7 @@ static int parse_exten(switch_event_t *e
++ 	int proceed = 0;
++ 	char *expression_expanded = NULL, *field_expanded = NULL;
++ 	switch_regex_t *re = NULL;
+++	switch_regex_match_data_t *match_data = NULL;
++ 	const char *to = switch_event_get_header(event, "to");
++ 	const char *tzoff = NULL, *tzname_ = NULL;
++ 	int offset = 0;
++@@ -143,7 +144,6 @@ static int parse_exten(switch_event_t *e
++ 		char *do_break_a = NULL;
++ 		char *expression = NULL;
++ 		const char *field_data = NULL;
++-		int ovector[30];
++ 		switch_bool_t anti_action = SWITCH_TRUE;
++ 		break_t do_break_i = BREAK_ON_FALSE;
++ 		int time_match;
++@@ -214,7 +214,7 @@ static int parse_exten(switch_event_t *e
++ 				field_data = "";
++ 			}
++ 
++-			if ((proceed = switch_regex_perform(field_data, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++			if ((proceed = switch_regex_perform(field_data, expression, &re, &match_data))) {
++ 				switch_log_printf(SWITCH_CHANNEL_LOG_CLEAN, SWITCH_LOG_DEBUG,
++ 								  "Chatplan: %s Regex (PASS) [%s] %s(%s) =~ /%s/ break=%s\n",
++ 								  to, exten_name, field, field_data, expression, do_break_a ? do_break_a : "on-false");
++@@ -271,7 +271,7 @@ static int parse_exten(switch_event_t *e
++ 		} else {
++ 			if (field && strchr(expression, '(')) {
++ 				switch_event_add_header_string(event, SWITCH_STACK_BOTTOM, "DP_MATCH", NULL);
++-				switch_capture_regex(re, proceed, field_data, ovector, "DP_MATCH", switch_regex_set_event_header_callback, event);
+++				switch_capture_regex(match_data, proceed, "DP_MATCH", switch_regex_set_event_header_callback, event);
++ 			}
++ 
++ 			for (xaction = switch_xml_child(xcond, "action"); xaction; xaction = xaction->next) {
++@@ -297,7 +297,7 @@ static int parse_exten(switch_event_t *e
++ 						abort();
++ 					}
++ 					memset(substituted, 0, len);
++-					switch_perform_substitution(re, proceed, data, field_data, substituted, len, ovector);
+++					switch_perform_substitution(match_data, data, substituted, len);
++ 					app_data = substituted;
++ 				} else {
++ 					app_data = data;
++@@ -326,7 +326,7 @@ static int parse_exten(switch_event_t *e
++ 				switch_safe_free(substituted);
++ 			}
++ 		}
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 		if (((anti_action == SWITCH_FALSE && do_break_i == BREAK_ON_TRUE) ||
++ 			 (anti_action == SWITCH_TRUE && do_break_i == BREAK_ON_FALSE)) || do_break_i == BREAK_ALWAYS) {
++@@ -335,7 +335,7 @@ static int parse_exten(switch_event_t *e
++ 	}
++ 
++   done:
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 	switch_safe_free(field_expanded);
++ 	switch_safe_free(expression_expanded);
++ 	return proceed;
++--- a/src/mod/applications/mod_translate/mod_translate.c
+++++ b/src/mod/applications/mod_translate/mod_translate.c
++@@ -117,7 +117,8 @@ static void translate_number(char *numbe
++ 	translate_rule_t *hi = NULL;
++ 	translate_rule_t *rule = NULL;
++ 	switch_regex_t *re = NULL;
++-	int proceed = 0, ovector[30];
+++	switch_regex_match_data_t *match_data = NULL;
+++	int proceed = 0;
++ 	char *substituted = NULL, *subbed = NULL;
++ 	uint32_t len = 0;
++ 
++@@ -136,17 +137,17 @@ static void translate_number(char *numbe
++ 
++ 	for (rule = hi; rule; rule = rule->next) {
++ 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "%s =~ /%s/\n", number, rule->regex);
++-		if ((proceed = switch_regex_perform(number, rule->regex, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++		if ((proceed = switch_regex_perform(number, rule->regex, &re, &match_data))) {
++ 			len = (uint32_t) (strlen(number) + strlen(rule->replace) + 10) * proceed;
++ 			if (!(substituted = malloc(len))) {
++ 				switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_CRIT, "Memory Error!\n");
++-				switch_regex_safe_free(re);
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 				goto end;
++ 			}
++ 
++ 			memset(substituted, 0, len);
++ 
++-			switch_perform_substitution(re, proceed, rule->replace, number, substituted, len, ovector);
+++			switch_perform_substitution(match_data, rule->replace, substituted, len);
++ 
++ 			if ((switch_string_var_check_const(substituted) || switch_string_has_escaped_data(substituted))) {
++ 				switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "perform variable expansion\n");
++@@ -169,7 +170,7 @@ static void translate_number(char *numbe
++ 				switch_safe_free(subbed);
++ 			}
++ 
++-			switch_regex_safe_free(re);
+++			switch_regex_and_match_data_safe_free(re, match_data);
++ 			break;
++ 		}
++ 	}
++--- a/src/mod/dialplans/mod_dialplan_asterisk/mod_dialplan_asterisk.c
+++++ b/src/mod/dialplans/mod_dialplan_asterisk/mod_dialplan_asterisk.c
++@@ -170,9 +170,8 @@ SWITCH_STANDARD_DIALPLAN(asterisk_dialpl
++ 				char *expression = NULL, expression_buf[1024] = { 0 };
++ 				char substituted[2048] = "";
++ 				const char *field_data = caller_profile->destination_number;
++-				int proceed = 0;
++ 				switch_regex_t *re = NULL;
++-				int ovector[30] = { 0 };
+++				switch_regex_match_data_t *match_data = NULL;
++ 				char *cid = NULL;
++ 
++ 				expression = expression_buf;
++@@ -221,8 +220,8 @@ SWITCH_STANDARD_DIALPLAN(asterisk_dialpl
++ 						field_data = "";
++ 					}
++ 
++-					if (!(proceed = switch_regex_perform(field_data, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
++-						switch_regex_safe_free(re);
+++					if (!(switch_regex_perform(field_data, expression, &re, &match_data))) {
+++						switch_regex_and_match_data_safe_free(re, match_data);
++ 						switch_safe_free(field_expanded);
++ 						continue;
++ 					}
++@@ -267,11 +266,11 @@ SWITCH_STANDARD_DIALPLAN(asterisk_dialpl
++ 				}
++ 
++ 				if (strchr(expression, '(')) {
++-					switch_perform_substitution(re, proceed, argument, field_data, substituted, sizeof(substituted), ovector);
+++					switch_perform_substitution(match_data, argument, substituted, sizeof(substituted));
++ 					argument = substituted;
++ 				}
++ 
++-				switch_regex_safe_free(re);
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 				if (!extension) {
++ 					if (zstr(field_data)) {
++--- a/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c
+++++ b/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c
++@@ -103,6 +103,7 @@ static int parse_exten(switch_core_sessi
++ 	int proceed = 0, save_proceed = 0;
++ 	char *expression_expanded = NULL, *field_expanded = NULL;
++ 	switch_regex_t *re = NULL, *save_re = NULL;
+++	switch_regex_match_data_t *match_data = NULL, *save_match_data = NULL;
++ 	int offset = 0;
++ 	const char *tmp, *tzoff = NULL, *tzname_ = NULL, *req_nesta = NULL;
++ 	char nbuf[128] = "";
++@@ -170,7 +171,6 @@ static int parse_exten(switch_core_sessi
++ 		char *expression = NULL, *save_expression = NULL, *save_field_data = NULL;
++ 		char *regex_rule = NULL;
++ 		const char *field_data = NULL;
++-		int ovector[30];
++ 		switch_bool_t anti_action = SWITCH_TRUE;
++ 		break_t do_break_i = BREAK_ON_FALSE;
++ 		int time_match;
++@@ -292,7 +292,7 @@ static int parse_exten(switch_core_sessi
++ 						field_data = "";
++ 					}
++ 
++-					if ((proceed = switch_regex_perform(field_data, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++					if ((proceed = switch_regex_perform(field_data, expression, &re, &match_data))) {
++ 						if ( switch_core_test_flag(SCF_DIALPLAN_TIMESTAMPS) ) {
++ 							switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_DEBUG,
++ 										  "%sDialplan: %s Regex (PASS) [%s] %s(%s) =~ /%s/ match=%s\n", space,
++@@ -344,21 +344,22 @@ static int parse_exten(switch_core_sessi
++ 					switch_snprintf(var, sizeof(var), "DP_REGEX_MATCH_%d", total);
++ 
++ 					switch_channel_set_variable(channel, var, NULL);
++-					switch_capture_regex(re, proceed, field_data, ovector, var, switch_regex_set_var_callback, session);
+++					switch_capture_regex(match_data, proceed, var, switch_regex_set_var_callback, session);
++ 
++ 					switch_safe_free(save_expression);
++ 					switch_safe_free(save_field_data);
++-					switch_regex_safe_free(save_re);
+++					switch_regex_and_match_data_safe_free(save_re, save_match_data);
++ 
++ 					save_expression = strdup(expression);
++ 					save_field_data = strdup(field_data);
++ 					save_re = re;
+++					save_match_data = match_data;
++ 					save_proceed = proceed;
++ 
++ 					re = NULL;
++ 				}
++ 
++-				switch_regex_safe_free(re);
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 				switch_safe_free(field_expanded);
++ 				if (expression == expression_expanded) expression = NULL;
++@@ -406,7 +407,7 @@ static int parse_exten(switch_core_sessi
++ 					field_data = "";
++ 				}
++ 
++-				if ((proceed = switch_regex_perform(field_data, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++				if ((proceed = switch_regex_perform(field_data, expression, &re, &match_data))) {
++ 					if ( switch_core_test_flag(SCF_DIALPLAN_TIMESTAMPS) ) {
++ 						switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_DEBUG,
++ 									  "%sDialplan: %s Regex (PASS) [%s] %s(%s) =~ /%s/ break=%s\n", space,
++@@ -446,7 +447,9 @@ static int parse_exten(switch_core_sessi
++ 
++ 		if (save_re) {
++ 			re = save_re;
+++			match_data = save_match_data;
++ 			save_re = NULL;
+++			save_match_data = NULL;
++ 
++ 			expression = expression_expanded = save_expression;
++ 			save_expression = NULL;
++@@ -506,7 +509,7 @@ static int parse_exten(switch_core_sessi
++ 		} else {
++ 			if (field && expression && strchr(expression, '(')) {
++ 				switch_channel_set_variable(channel, "DP_MATCH", NULL);
++-				switch_capture_regex(re, proceed, field_data, ovector, "DP_MATCH", switch_regex_set_var_callback, session);
+++				switch_capture_regex(match_data, proceed, "DP_MATCH", switch_regex_set_var_callback, session);
++ 			}
++ 
++ 			for (xaction = switch_xml_child(xcond, "action"); xaction; xaction = xaction->next) {
++@@ -534,7 +537,7 @@ static int parse_exten(switch_core_sessi
++ 						goto done;
++ 					}
++ 					memset(substituted, 0, len);
++-					switch_perform_substitution(re, proceed, data, field_data, substituted, len, ovector);
+++					switch_perform_substitution(match_data, data, substituted, len);
++ 					app_data = substituted;
++ 				} else {
++ 					app_data = data;
++@@ -571,7 +574,7 @@ static int parse_exten(switch_core_sessi
++ 				switch_safe_free(substituted);
++ 			}
++ 		}
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 		if (((anti_action == SWITCH_FALSE && do_break_i == BREAK_ON_TRUE) ||
++ 			 (anti_action == SWITCH_TRUE && do_break_i == BREAK_ON_FALSE)) || do_break_i == BREAK_ALWAYS) {
++@@ -591,7 +594,7 @@ static int parse_exten(switch_core_sessi
++ 	}
++ 
++   done:
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 	switch_safe_free(field_expanded);
++ 	switch_safe_free(expression_expanded);
++ 
++--- a/src/mod/endpoints/mod_sofia/sofia_glue.c
+++++ b/src/mod/endpoints/mod_sofia/sofia_glue.c
++@@ -912,7 +912,7 @@ char *sofia_glue_get_extra_headers(switc
++ 	switch_event_header_t *hi = NULL;
++ 	const char *exclude_regex = NULL;
++ 	switch_regex_t *re = NULL;
++-	int ovector[30] = {0};
+++	switch_regex_match_data_t *match_data = NULL;
++ 
++ 	exclude_regex = switch_channel_get_variable(channel, "exclude_outgoing_extra_header");
++ 	SWITCH_STANDARD_STREAM(stream);
++@@ -926,13 +926,13 @@ char *sofia_glue_get_extra_headers(switc
++ 			}
++ 
++ 			if (!strncasecmp(name, prefix, strlen(prefix))) {
++-				if ( !exclude_regex || !(/*proceed*/ switch_regex_perform(name, exclude_regex, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++				if ( !exclude_regex || !(/*proceed*/ switch_regex_perform(name, exclude_regex, &re, &match_data))) {
++ 					const char *hname = name + strlen(prefix);
++ 					stream.write_function(&stream, "%s: %s\r\n", hname, value);
++ 				} else {
++ 					switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "Ignoring Extra Header [%s] , matches exclude_outgoing_extra_header [%s]\n", name, exclude_regex);
++-					switch_regex_safe_free(re);
++ 				}
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 			}
++ 		}
++ 		switch_channel_variable_last(channel);
++--- a/src/mod/endpoints/mod_verto/mod_verto.c
+++++ b/src/mod/endpoints/mod_verto/mod_verto.c
++@@ -1883,22 +1883,22 @@ authed:
++ 	if (vhost->rewrites) {
++ 		switch_event_header_t *rule = vhost->rewrites->headers;
++ 		switch_regex_t *re = NULL;
++-		int ovector[30];
+++		switch_regex_match_data_t *match_data = NULL;
++ 		int proceed;
++ 
++ 		while(rule) {
++ 			char *expression = rule->name;
++ 
++-			if ((proceed = switch_regex_perform(request->uri, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++			if ((proceed = switch_regex_perform(request->uri, expression, &re, &match_data))) {
++ 				switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG,
++ 								  "%d request [%s] matched expr [%s]\n", proceed, request->uri, expression);
++ 				request->uri = rule->value;
++-				switch_regex_safe_free(re);
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 				break;
++ 			}
++ 
++ 			rule = rule->next;
++-			switch_regex_safe_free(re);
+++			switch_regex_and_match_data_safe_free(re, match_data);
++ 		}
++ 	}
++ 
++--- a/src/mod/event_handlers/mod_erlang_event/mod_erlang_event.c
+++++ b/src/mod/event_handlers/mod_erlang_event/mod_erlang_event.c
++@@ -250,9 +250,9 @@ static void event_handler(switch_event_t
++ 
++ 						if (*hp->value == '/') {
++ 							switch_regex_t *re = NULL;
++-							int ovector[30];
++-							cmp = !!switch_regex_perform(hval, comp_to, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
++-							switch_regex_safe_free(re);
+++							switch_regex_match_data_t *match_data = NULL;
+++							cmp = !!switch_regex_perform(hval, comp_to, &re, &match_data);
+++							switch_regex_and_match_data_safe_free(re, match_data);
++ 						} else {
++ 							cmp = !strcasecmp(hval, comp_to);
++ 						}
++--- a/src/mod/event_handlers/mod_event_socket/mod_event_socket.c
+++++ b/src/mod/event_handlers/mod_event_socket/mod_event_socket.c
++@@ -350,9 +350,9 @@ static void event_handler(switch_event_t
++ 
++ 						if (*hp->value == '/') {
++ 							switch_regex_t *re = NULL;
++-							int ovector[30];
++-							cmp = !!switch_regex_perform(hval, comp_to, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
++-							switch_regex_safe_free(re);
+++							switch_regex_match_data_t *match_data = NULL;
+++							cmp = !!switch_regex_perform(hval, comp_to, &re, &match_data);
+++							switch_regex_and_match_data_safe_free(re, match_data);
++ 						} else {
++ 							cmp = !strcasecmp(hval, comp_to);
++ 						}
++--- a/src/mod/event_handlers/mod_rayo/Makefile.am
+++++ b/src/mod/event_handlers/mod_rayo/Makefile.am
++@@ -8,12 +8,12 @@ IKS_LA=$(IKS_BUILDDIR)/src/libiksemel.la
++ noinst_LTLIBRARIES = librayomod.la
++ librayomod_la_SOURCES = mod_rayo.c iks_helpers.c nlsml.c rayo_components.c rayo_cpa_component.c rayo_cpa_detector.c rayo_elements.c rayo_fax_components.c
++ librayomod_la_SOURCES += rayo_input_component.c rayo_output_component.c rayo_prompt_component.c rayo_record_component.c sasl.c srgs.c xmpp_streams.c rayo_exec_component.c
++-librayomod_la_CFLAGS = $(AM_CFLAGS) -I$(switch_builddir)/libs/iksemel/include $(PCRE_CFLAGS)
+++librayomod_la_CFLAGS = $(AM_CFLAGS) -I$(switch_builddir)/libs/iksemel/include $(PCRE2_CFLAGS)
++ 
++ mod_LTLIBRARIES = mod_rayo.la
++ mod_rayo_la_SOURCES  = 
++-mod_rayo_la_CFLAGS   = $(AM_CFLAGS) -I$(IKS_DIR)/include $(PCRE_CFLAGS)
++-mod_rayo_la_LIBADD   = $(switch_builddir)/libfreeswitch.la $(IKS_LA) $(PCRE_LIBS) librayomod.la
+++mod_rayo_la_CFLAGS   = $(AM_CFLAGS) -I$(IKS_DIR)/include $(PCRE2_CFLAGS)
+++mod_rayo_la_LIBADD   = $(switch_builddir)/libfreeswitch.la $(IKS_LA) $(PCRE2_LIBS) librayomod.la
++ mod_rayo_la_LDFLAGS  = -avoid-version -module -no-undefined -shared
++ 
++ BUILT_SOURCES=$(IKS_LA)
++@@ -25,19 +25,19 @@ $(IKS_LA): $(IKS_BUILDDIR) $(IKS_DIR) $(
++ noinst_PROGRAMS = test/test_iks test/test_nlsml test/test_srgs
++ 
++ test_test_iks_SOURCES = test/test_iks.c
++-test_test_iks_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
+++test_test_iks_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE2_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
++ test_test_iks_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined $(freeswitch_LDFLAGS) $(switch_builddir)/libfreeswitch.la $(CORE_LIBS) $(APR_LIBS)
++-test_test_iks_LDADD = librayomod.la $(IKS_LA) $(PCRE_LIBS) $(switch_builddir)/libfreeswitch.la
+++test_test_iks_LDADD = librayomod.la $(IKS_LA) $(PCRE2_LIBS) $(switch_builddir)/libfreeswitch.la
++ 
++ test_test_nlsml_SOURCES = test/test_nlsml.c
++-test_test_nlsml_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
+++test_test_nlsml_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE2_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
++ test_test_nlsml_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined $(freeswitch_LDFLAGS) $(switch_builddir)/libfreeswitch.la $(CORE_LIBS) $(APR_LIBS)
++-test_test_nlsml_LDADD = librayomod.la $(IKS_LA) $(PCRE_LIBS) $(switch_builddir)/libfreeswitch.la
+++test_test_nlsml_LDADD = librayomod.la $(IKS_LA) $(PCRE2_LIBS) $(switch_builddir)/libfreeswitch.la
++ 
++ test_test_srgs_SOURCES = test/test_srgs.c
++-test_test_srgs_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
+++test_test_srgs_CFLAGS = $(AM_CFLAGS) -I. -I$(switch_builddir)/libs/iksemel/include $(PCRE2_CFLAGS) -DSWITCH_TEST_BASE_DIR_FOR_CONF=\"${abs_builddir}/test\" -DSWITCH_TEST_BASE_DIR_OVERRIDE=\"${abs_builddir}/test\"
++ test_test_srgs_LDFLAGS = $(AM_LDFLAGS) -avoid-version -no-undefined $(freeswitch_LDFLAGS) $(switch_builddir)/libfreeswitch.la $(CORE_LIBS) $(APR_LIBS)
++-test_test_srgs_LDADD = librayomod.la $(IKS_LA) $(PCRE_LIBS) $(switch_builddir)/libfreeswitch.la
+++test_test_srgs_LDADD = librayomod.la $(IKS_LA) $(PCRE2_LIBS) $(switch_builddir)/libfreeswitch.la
++ 
++ 
++ TESTS = $(noinst_PROGRAMS)
++--- a/src/mod/event_handlers/mod_rayo/srgs.c
+++++ b/src/mod/event_handlers/mod_rayo/srgs.c
++@@ -28,7 +28,8 @@
++  */
++ #include <switch.h>
++ #include <iksemel.h>
++-#include <pcre.h>
+++#define PCRE2_CODE_UNIT_WIDTH 8
+++#include <pcre2.h>
++ 
++ #include "srgs.h"
++ 
++@@ -179,7 +180,7 @@ struct srgs_grammar {
++ 	/** root rule */
++ 	struct srgs_node *root_rule;
++ 	/** compiled grammar regex */
++-	pcre *compiled_regex;
+++	pcre2_code *compiled_regex;
++ 	/** grammar in regex format */
++ 	char *regex;
++ 	/** grammar in JSGF format */
++@@ -846,7 +847,7 @@ static void srgs_grammar_destroy(struct
++ {
++ 	switch_memory_pool_t *pool = grammar->pool;
++ 	if (grammar->compiled_regex) {
++-		pcre_free(grammar->compiled_regex);
+++		pcre2_code_free(grammar->compiled_regex);
++ 	}
++ 	if (grammar->jsgf_file_name) {
++ 		switch_file_remove(grammar->jsgf_file_name, pool);
++@@ -986,7 +987,7 @@ static int create_regexes(struct srgs_gr
++ 					case '+':
++ 					case '(':
++ 					case ')':
++-						/* escape special PCRE regex characters */
+++						/* escape special PCRE2 regex characters */
++ 						stream->write_function(stream, "\\%c", node->value.string[i]);
++ 						break;
++ 					default:
++@@ -1082,10 +1083,10 @@ static int create_regexes(struct srgs_gr
++ /**
++  * Compile regex
++  */
++-static pcre *get_compiled_regex(struct srgs_grammar *grammar)
+++static pcre2_code *get_compiled_regex(struct srgs_grammar *grammar)
++ {
++-	int erroffset = 0;
++-	const char *errptr = "";
+++	PCRE2_SIZE erroffset = 0;
+++	int errcode = 0;
++ 	int options = 0;
++ 	const char *regex;
++ 
++@@ -1096,7 +1097,7 @@ static pcre *get_compiled_regex(struct s
++ 
++ 	switch_mutex_lock(grammar->mutex);
++ 	if (!grammar->compiled_regex && (regex = srgs_grammar_to_regex(grammar))) {
++-		if (!(grammar->compiled_regex = pcre_compile(regex, options, &errptr, &erroffset, NULL))) {
+++		if (!(grammar->compiled_regex = pcre2_compile((PCRE2_SPTR)regex, PCRE2_ZERO_TERMINATED, options, &errcode, &erroffset, NULL))) {
++ 			switch_log_printf(SWITCH_CHANNEL_UUID_LOG(grammar->uuid), SWITCH_LOG_WARNING, "Failed to compile grammar regex: %s\n", regex);
++ 		}
++ 	}
++@@ -1225,7 +1226,6 @@ struct srgs_grammar *srgs_parse(struct s
++ }
++ 
++ #define MAX_INPUT_SIZE 128
++-#define OVECTOR_SIZE MAX_TAGS
++ #define WORKSPACE_SIZE 1024
++ 
++ /**
++@@ -1234,9 +1234,9 @@ struct srgs_grammar *srgs_parse(struct s
++  * @param input the input to check
++  * @return true if end of match (no more input can be added)
++  */
++-static int is_match_end(pcre *compiled_regex, const char *input)
+++static int is_match_end(pcre2_code *compiled_regex, const char *input)
++ {
++-	int ovector[OVECTOR_SIZE];
+++	pcre2_match_data *match_data;
++ 	int input_size = strlen(input);
++ 	char search_input[MAX_INPUT_SIZE + 2];
++ 	const char *search_set = "0123456789#*ABCD";
++@@ -1257,13 +1257,15 @@ static int is_match_end(pcre *compiled_r
++ 			search = search_set;
++ 		}
++ 		search_input[input_size] = *search++;
++-		result = pcre_exec(compiled_regex, NULL, search_input, input_size + 1, 0, PCRE_PARTIAL,
++-			ovector, sizeof(ovector) / sizeof(ovector[0]));
+++		match_data = pcre2_match_data_create_from_pattern(compiled_regex, NULL);
+++		result = pcre2_match(compiled_regex, (PCRE2_SPTR)search_input, input_size + 1, 0,
+++				     PCRE2_PARTIAL_SOFT, match_data, 0);
+++		pcre2_match_data_free(match_data);
++ 		if (result > 0) {
++ 			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "not match end\n");
++ 			return 0;
++ 		}
++-		if (result == PCRE_ERROR_PARTIAL) {
+++		if (result == PCRE2_ERROR_PARTIAL) {
++ 			switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "partial match possible - not match end\n");
++ 			return 0;
++ 		}
++@@ -1282,8 +1284,8 @@ static int is_match_end(pcre *compiled_r
++ enum srgs_match_type srgs_grammar_match(struct srgs_grammar *grammar, const char *input, const char **interpretation)
++ {
++ 	int result = 0;
++-	int ovector[OVECTOR_SIZE];
++-	pcre *compiled_regex;
+++	pcre2_code *compiled_regex;
+++	pcre2_match_data *match_data;
++ 
++ 	*interpretation = NULL;
++ 
++@@ -1298,8 +1300,11 @@ enum srgs_match_type srgs_grammar_match(
++ 	if (!(compiled_regex = get_compiled_regex(grammar))) {
++ 		return SMT_NO_MATCH;
++ 	}
++-	result = pcre_exec(compiled_regex, NULL, input, strlen(input), 0, PCRE_PARTIAL,
++-		ovector, OVECTOR_SIZE);
+++
+++	match_data = pcre2_match_data_create_from_pattern(compiled_regex, NULL);
+++
+++	result = pcre2_match(compiled_regex, (PCRE2_SPTR)input, strlen(input), 0, PCRE2_PARTIAL_SOFT,
+++			     match_data, NULL);
++ 
++ 	switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "match = %i\n", result);
++ 	if (result > 0) {
++@@ -1310,24 +1315,33 @@ enum srgs_match_type srgs_grammar_match(
++ 		/* find matching instance... */
++ 		for (i = 1; i <= grammar->tag_count; i++) {
++ 			char substring_name[16] = { 0 };
+++			PCRE2_SIZE buffer_size = MAX_INPUT_SIZE + 1;
++ 			buffer[0] = '\0';
++ 			snprintf(substring_name, 16, "tag%d", i);
++-			if (pcre_copy_named_substring(compiled_regex, input, ovector, result, substring_name, buffer, MAX_INPUT_SIZE) != PCRE_ERROR_NOSUBSTRING && !zstr_buf(buffer)) {
+++			if (pcre2_substring_copy_byname(match_data, (PCRE2_SPTR)substring_name, (PCRE2_UCHAR *)buffer, &buffer_size) != PCRE2_ERROR_NOSUBSTRING && !zstr_buf(buffer)) {
++ 				*interpretation = grammar->tags[i];
++ 				break;
++ 			}
++ 		}
++ 
++ 		if (is_match_end(compiled_regex, input)) {
++-			return SMT_MATCH_END;
+++			result = SMT_MATCH_END;
+++			goto exit;
++ 		}
++-		return SMT_MATCH;
+++		result = SMT_MATCH;
+++		goto exit;
++ 	}
++-	if (result == PCRE_ERROR_PARTIAL) {
++-		return SMT_MATCH_PARTIAL;
+++
+++	if (result == PCRE2_ERROR_PARTIAL) {
+++		result = SMT_MATCH_PARTIAL;
+++		goto exit;
++ 	}
++ 
++-	return SMT_NO_MATCH;
+++	result = SMT_NO_MATCH;
+++exit:
+++	pcre2_match_data_free(match_data);
+++
+++	return result;
++ }
++ 
++ /**
++--- a/src/mod/languages/mod_managed/freeswitch_managed.h
+++++ b/src/mod/languages/mod_managed/freeswitch_managed.h
++@@ -135,7 +135,13 @@ struct sqlite3 {
++ struct switch_ivr_digit_stream {
++ 	char foo[];
++ };
++-struct real_pcre {
+++struct real_pcre2 {
+++	char foo[];
+++};
+++struct pcre2_real_match_data_8 {
+++	char foo[];
+++};
+++struct pcre2_real_compile_context_8 {
++ 	char foo[];
++ };
++ struct HashElem {
++--- a/src/mod/languages/mod_v8/include/fspcre.hpp
+++++ b/src/mod/languages/mod_v8/include/fspcre.hpp
++@@ -46,9 +46,9 @@ class FSPCRE : public JSBase
++ {
++ private:
++ 	switch_regex_t *_re;
+++	switch_regex_match_data_t *_match_data;
++ 	char *_str;
++ 	int _proceed;
++-	int _ovector[30];
++ 	int _freed;
++ 
++ 	void Init();
++--- a/src/mod/languages/mod_v8/src/fseventhandler.cpp
+++++ b/src/mod/languages/mod_v8/src/fseventhandler.cpp
++@@ -139,9 +139,10 @@ void FSEventHandler::QueueEvent(switch_e
++ 
++ 					if (*hp->value == '/') {
++ 						switch_regex_t *re = NULL;
+++						switch_regex_match_data_t *match_data = NULL;
++ 						int ovector[30];
++-						cmp = !!switch_regex_perform(hval, comp_to, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
++-						switch_regex_safe_free(re);
+++						cmp = !!switch_regex_perform(hval, comp_to, &re, &match_data);
+++						switch_regex_and_match_data_safe_free(re, match_data);
++ 					} else {
++ 						cmp = !strcasecmp(hval, comp_to);
++ 					}
++--- a/src/mod/languages/mod_v8/src/fspcre.cpp
+++++ b/src/mod/languages/mod_v8/src/fspcre.cpp
++@@ -40,7 +40,7 @@ static const char js_class_name[] = "PCR
++ FSPCRE::~FSPCRE(void)
++ {
++ 	if (!_freed && _re) {
++-		switch_regex_safe_free(_re);
+++		switch_regex_and_match_data_safe_free(_re, _match_data);
++ 		switch_safe_free(_str);
++ 	}
++ }
++@@ -53,9 +53,9 @@ string FSPCRE::GetJSClassName()
++ void FSPCRE::Init()
++ {
++ 	_re = NULL;
+++	_match_data = NULL;
++ 	_str = NULL;
++ 	_proceed = 0;
++-	memset(&_ovector, 0, sizeof(_ovector));
++ 	_freed = 0;
++ }
++ 
++@@ -74,11 +74,10 @@ JS_PCRE_FUNCTION_IMPL(Compile)
++ 		String::Utf8Value str2(info[1]);
++ 		string = js_safe_str(*str1);
++ 		regex_string = js_safe_str(*str2);
++-		switch_regex_safe_free(this->_re);
+++		switch_regex_and_match_data_safe_free(this->_re, this->_match_data);
++ 		switch_safe_free(this->_str);
++ 		js_strdup(this->_str, string);
++-		this->_proceed = switch_regex_perform(this->_str, regex_string, &this->_re, this->_ovector,
++-												 sizeof(this->_ovector) / sizeof(this->_ovector[0]));
+++		this->_proceed = switch_regex_perform(this->_str, regex_string, &this->_re, &this->_match_data);
++ 		info.GetReturnValue().Set(this->_proceed ? true : false);
++ 	} else {
++ 		info.GetIsolate()->ThrowException(String::NewFromUtf8(info.GetIsolate(), "Invalid args"));
++@@ -103,7 +102,7 @@ JS_PCRE_FUNCTION_IMPL(Substitute)
++ 		len = (uint32_t) (strlen(this->_str) + strlen(subst_string) + 10) * this->_proceed;
++ 		substituted = (char *)malloc(len);
++ 		switch_assert(substituted != NULL);
++-		switch_perform_substitution(this->_re, this->_proceed, subst_string, this->_str, substituted, len, this->_ovector);
+++		switch_perform_substitution(this->_match_data, subst_string, substituted, len);
++ 		info.GetReturnValue().Set(String::NewFromUtf8(info.GetIsolate(), substituted));
++ 		free(substituted);
++ 	} else {
++--- a/src/mod/languages/mod_yaml/mod_yaml.c
+++++ b/src/mod/languages/mod_yaml/mod_yaml.c
++@@ -215,7 +215,7 @@ static switch_caller_extension_t *parse_
++ 	int context_hit = 0;
++ 	int proceed = 0;
++ 	switch_regex_t *re = NULL;
++-	int ovector[30];
+++	switch_regex_match_data_t *match_data = NULL;
++ 	int parens = 0;
++ 
++ 	if (!caller_profile) {
++@@ -266,7 +266,7 @@ static switch_caller_extension_t *parse_
++ 
++ 						parens = 0;
++ 						proceed = 0;
++-						switch_regex_safe_free(re);
+++						switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 						if ((p = strstr(field, "=~"))) {
++ 							*p = '\0';
++@@ -305,7 +305,7 @@ static switch_caller_extension_t *parse_
++ 							last_field = strdup(field_data);
++ 
++ 							switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "test conditions %s(%s) =~ /%s/\n", field, field_data, expression);
++-							if (!(proceed = switch_regex_perform(field_data, expression, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++							if (!(proceed = switch_regex_perform(field_data, expression, &re, &match_data))) {
++ 								switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "Regex mismatch\n");
++ 							}
++ 
++@@ -343,7 +343,7 @@ static switch_caller_extension_t *parse_
++ 							if (parens) {
++ 								len = (uint32_t) (strlen(value) + strlen(last_field) + 10) * proceed;
++ 								switch_zmalloc(substituted, len);
++-								switch_perform_substitution(re, proceed, value, last_field, substituted, len, ovector);
+++								switch_perform_substitution(match_data, value, substituted, len);
++ 								app_data = substituted;
++ 							} else {
++ 								app_data = value;
++@@ -368,7 +368,7 @@ static switch_caller_extension_t *parse_
++   end:
++ 
++ 	switch_safe_free(last_field);
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 	yaml_parser_delete(&parser);
++ 
++ 	if (input) {
++--- a/src/mod/xml_int/mod_xml_radius/mod_xml_radius.c
+++++ b/src/mod/xml_int/mod_xml_radius/mod_xml_radius.c
++@@ -531,20 +531,20 @@ switch_status_t mod_xml_radius_add_param
++ 
++ 						if ( regex && val ) {
++                                                         switch_regex_t *re = NULL;
++-                                                        int ovector[30];
+++                                                        switch_regex_match_data_t *match_data = NULL;
++                                                         int proceed;
++                                                         char replace[1024] = "";
++                                                         proceed = 0;
++-                                                        proceed = switch_regex_perform(val, regex, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
+++                                                        proceed = switch_regex_perform(val, regex, &re, &match_data);
++                                                         if ( proceed > 0 ) {
++-                                                            switch_regex_copy_substring(val, ovector, proceed, proceed - 1, replace, sizeof(replace));
+++                                                            switch_regex_copy_substring(match_data, proceed - 1, replace, sizeof(replace));
++ 							    switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "original value: %s, regex: %s, result: %s\n", val, regex, replace);
++                                                             val = replace;
++                                                         }
++                                                         else {
++ 							    switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "original value: %s, regex: %s, result: nomatch, value left intact\n", val, regex);
++                                                         }
++-                                                        switch_regex_safe_free(re);
+++                                                        switch_regex_and_match_data_safe_free(re, match_data);
++ 						}
++ 
++ 						if ( val == NULL && val_default != NULL) {
++--- a/src/switch_channel.c
+++++ b/src/switch_channel.c
++@@ -33,7 +33,8 @@
++ 
++ #include <switch.h>
++ #include <switch_channel.h>
++-#include <pcre.h>
+++#define PCRE2_CODE_UNIT_WIDTH 8
+++#include <pcre2.h>
++ 
++ struct switch_cause_table {
++ 	const char *name;
++@@ -4548,21 +4549,22 @@ SWITCH_DECLARE(switch_status_t) switch_c
++ 		char *digit_string = dtstr;
++ 		char *X = NULL;
++ 		switch_regex_t *re = NULL;
+++		switch_regex_match_data_t *match_data = NULL;
++ 		char *substituted = NULL;
++ 
++ 		if (!zstr(var)) {
++ 			int proceed = 0;
++-			int ovector[30];
++ 
++-			if ((proceed = switch_regex_perform(dtstr, var, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++			if ((proceed = switch_regex_perform(dtstr, var, &re, &match_data))) {
++ 				int len = (strlen(dtstr) + strlen(var) + 10) * proceed;
++ 				int i = 0;
++ 				const char *replace = NULL;
+++				PCRE2_SIZE replace_size;
++ 
++ 				X = malloc(len);
++ 
++ 				for (i = 0; i < proceed; i++) {
++-					if (pcre_get_substring(dtstr, ovector, proceed, i, &replace) >= 0) {
+++					if (pcre2_substring_get_bynumber(match_data, i, (PCRE2_UCHAR **)&replace, &replace_size) >= 0) {
++ 						if (replace) {
++ 							switch_size_t plen = strlen(replace);
++ 							memset(X, 'X', plen);
++@@ -4571,7 +4573,7 @@ SWITCH_DECLARE(switch_status_t) switch_c
++ 							switch_safe_free(substituted);
++ 							substituted = switch_string_replace(substituted ? substituted : dtstr, replace, X);
++ 							
++-							pcre_free_substring(replace);
+++							pcre2_substring_free((PCRE2_UCHAR *)replace);
++ 						}
++ 					}
++ 				}
++@@ -4583,7 +4585,7 @@ SWITCH_DECLARE(switch_status_t) switch_c
++ 		}
++ 
++ 		switch_channel_set_variable(channel, "digits_dialed", digit_string);
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 		switch_safe_free(substituted);
++ 		switch_safe_free(X);
++ 	} else {
++--- a/src/switch_ivr.c
+++++ b/src/switch_ivr.c
++@@ -4344,7 +4344,8 @@ SWITCH_DECLARE(char *) switch_ivr_check_
++ 	char *r = NULL;
++ 	switch_event_t *params = NULL;
++ 	switch_regex_t *re = NULL;
++-	int proceed = 0, ovector[100];
+++	switch_regex_match_data_t *match_data = NULL;
+++	int proceed = 0;
++ 
++ 	switch_event_create(&params, SWITCH_EVENT_REQUEST_PARAMS);
++ 	switch_assert(params);
++@@ -4376,8 +4377,8 @@ SWITCH_DECLARE(char *) switch_ivr_check_
++ 			const char *proto = switch_xml_attr(x_exten, "proto");
++ 
++ 			if (!zstr(regex) && !zstr(proto)) {
++-				proceed = switch_regex_perform(exten_name, regex, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
++-				switch_regex_safe_free(re);
+++				proceed = switch_regex_perform(exten_name, regex, &re, &match_data);
+++				switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 				if (proceed) {
++ 					switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG1, "Mapping %s@%s to proto %s matching expression [%s]\n",
++--- a/src/switch_ivr_async.c
+++++ b/src/switch_ivr_async.c
++@@ -370,12 +370,12 @@ static dm_match_t switch_ivr_dmachine_ch
++ 	for(bp = dmachine->realm->binding_list; bp; bp = bp->next) {
++ 		if (bp->is_regex) {
++ 			if (bp->repl) {
++-				int ovector[30] = { 0 };
++ 				int proceed = 0;
++ 				switch_regex_t *re = NULL;
+++				switch_regex_match_data_t *match_data = NULL;
++ 
++ 				
++-				proceed = switch_regex_perform(dmachine->digits, bp->digits, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
+++				proceed = switch_regex_perform(dmachine->digits, bp->digits, &re, &match_data);
++ 				
++ 				if (proceed) {
++ 					char *substituted = NULL;
++@@ -385,13 +385,13 @@ static dm_match_t switch_ivr_dmachine_ch
++ 					substituted = malloc(len);
++ 					switch_assert(substituted);
++ 					memset(substituted, 0, len);
++-					switch_perform_substitution(re, proceed, bp->repl, dmachine->digits, substituted, len, ovector);
+++					switch_perform_substitution(match_data, bp->repl, substituted, len);
++ 
++ 					if (!bp->substituted || strcmp(substituted, bp->substituted)) {
++ 						bp->substituted = switch_core_strdup(dmachine->pool, substituted);
++ 					}
++ 					free(substituted);
++-					switch_regex_safe_free(re);
+++					switch_regex_and_match_data_safe_free(re, match_data);
++ 					bp->rmatch = 1;
++ 				} else {
++ 					bp->substituted = NULL;
++--- a/src/switch_ivr_menu.c
+++++ b/src/switch_ivr_menu.c
++@@ -553,15 +553,15 @@ SWITCH_DECLARE(switch_status_t) switch_i
++ 
++ 				if (ap->re) {
++ 					switch_regex_t *re = NULL;
++-					int ovector[30];
+++					switch_regex_match_data_t *match_data = NULL;
++ 
++-					if ((ok = switch_regex_perform(menu->buf, ap->bind, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
++-						switch_perform_substitution(re, ok, ap->arg, menu->buf, substituted, sizeof(substituted), ovector);
+++					if ((ok = switch_regex_perform(menu->buf, ap->bind, &re, &match_data))) {
+++						switch_perform_substitution(match_data, ap->arg, substituted, sizeof(substituted));
++ 						use_arg = substituted;
++ 					}
++ 					switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_DEBUG, "action regex [%s] [%s] [%d]\n", menu->buf, ap->bind, ok);
++ 
++-					switch_regex_safe_free(re);
+++					switch_regex_and_match_data_safe_free(re, match_data);
++ 				} else {
++ 					ok = !strcmp(menu->buf, ap->bind);
++ 				}
++--- a/src/switch_ivr_play_say.c
+++++ b/src/switch_ivr_play_say.c
++@@ -178,7 +178,8 @@ SWITCH_DECLARE(switch_status_t) switch_i
++ 		char *field_expanded = NULL;
++ 		char *field_expanded_alloc = NULL;
++ 		switch_regex_t *re = NULL;
++-		int proceed = 0, ovector[100];
+++		switch_regex_match_data_t *match_data = NULL;
+++		int proceed = 0;
++ 		switch_xml_t match = NULL;
++ 
++ 		searched = 1;
++@@ -204,7 +205,7 @@ SWITCH_DECLARE(switch_status_t) switch_i
++ 
++ 		status = SWITCH_STATUS_SUCCESS;
++ 
++-		if ((proceed = switch_regex_perform(field_expanded, pattern, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++		if ((proceed = switch_regex_perform(field_expanded, pattern, &re, &match_data))) {
++ 			match = switch_xml_child(input, "match");
++ 		} else {
++ 			match = switch_xml_child(input, "nomatch");
++@@ -224,12 +225,12 @@ SWITCH_DECLARE(switch_status_t) switch_i
++ 					len = (uint32_t) (strlen(data) + strlen(adata) + 10) * proceed;
++ 					if (!(substituted = malloc(len))) {
++ 						switch_log_printf(SWITCH_CHANNEL_SESSION_LOG(session), SWITCH_LOG_ERROR, "Memory Error!\n");
++-						switch_regex_safe_free(re);
+++						switch_regex_and_match_data_safe_free(re, match_data);
++ 						switch_safe_free(field_expanded_alloc);
++ 						goto done;
++ 					}
++ 					memset(substituted, 0, len);
++-					switch_perform_substitution(re, proceed, adata, field_expanded, substituted, len, ovector);
+++					switch_perform_substitution(match_data, adata, substituted, len);
++ 					odata = substituted;
++ 				} else {
++ 					odata = adata;
++@@ -326,7 +327,7 @@ SWITCH_DECLARE(switch_status_t) switch_i
++ 			}
++ 		}
++ 
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 		switch_safe_free(field_expanded_alloc);
++ 
++ 		if (done || status != SWITCH_STATUS_SUCCESS
++--- a/src/switch_regex.c
+++++ b/src/switch_regex.c
++@@ -24,39 +24,49 @@
++  * Contributor(s):
++  *
++  * Michael Jerris <mike@jerris.com>
+++ * Christian Marangi <ansuelsmth@gmail.com> # PCRE2 conversion
++  *
++  *
++- * switch_regex.c -- PCRE wrapper
+++ * switch_regex.c -- PCRE2 wrapper
++  *
++  */
++ 
++ #include <switch.h>
++-#include <pcre.h>
+++#define PCRE2_CODE_UNIT_WIDTH 8
+++#include <pcre2.h>
++ 
++ SWITCH_DECLARE(switch_regex_t *) switch_regex_compile(const char *pattern,
++-													  int options, const char **errorptr, int *erroroffset, const unsigned char *tables)
+++													  int options, int *errorcode, unsigned int *erroroffset, switch_regex_compile_context_t *ccontext)
++ {
++ 
++-	return (switch_regex_t *)pcre_compile(pattern, options, errorptr, erroroffset, tables);
+++	return (switch_regex_t *)pcre2_compile((PCRE2_SPTR)pattern, PCRE2_ZERO_TERMINATED, options, errorcode, (PCRE2_SIZE *)erroroffset, ccontext);
++ 
++ }
++ 
++-SWITCH_DECLARE(int) switch_regex_copy_substring(const char *subject, int *ovector, int stringcount, int stringnumber, char *buffer, int size)
+++SWITCH_DECLARE(int) switch_regex_copy_substring(switch_regex_match_data_t *match_data, int stringnumber, char *buffer, unsigned int *size)
++ {
++-	return pcre_copy_substring(subject, ovector, stringcount, stringnumber, buffer, size);
+++	return pcre2_substring_copy_bynumber(match_data, stringnumber, (PCRE2_UCHAR *)buffer, (PCRE2_SIZE *)size);
+++}
+++
+++SWITCH_DECLARE(void) switch_regex_match_free(void *data)
+++{
+++	pcre2_match_context_free(data);
+++
++ }
++ 
++ SWITCH_DECLARE(void) switch_regex_free(void *data)
++ {
++-	pcre_free(data);
+++	pcre2_code_free(data);
++ 
++ }
++ 
++-SWITCH_DECLARE(int) switch_regex_perform(const char *field, const char *expression, switch_regex_t **new_re, int *ovector, uint32_t olen)
+++SWITCH_DECLARE(int) switch_regex_perform(const char *field, const char *expression, switch_regex_t **new_re, switch_regex_match_data_t **new_match_data)
++ {
++-	const char *error = NULL;
++-	int erroffset = 0;
++-	pcre *re = NULL;
+++	int error_code = 0;
+++	PCRE2_UCHAR error_str[128];
+++	PCRE2_SIZE error_offset = 0;
+++	pcre2_code *re = NULL;
+++	pcre2_match_data *match_data;
++ 	int match_count = 0;
++ 	char *tmp = NULL;
++ 	uint32_t flags = 0;
++@@ -87,52 +97,56 @@ SWITCH_DECLARE(int) switch_regex_perform
++ 		expression = tmp;
++ 		if (*opts) {
++ 			if (strchr(opts, 'i')) {
++-				flags |= PCRE_CASELESS;
+++				flags |= PCRE2_CASELESS;
++ 			}
++ 			if (strchr(opts, 's')) {
++-				flags |= PCRE_DOTALL;
+++				flags |= PCRE2_DOTALL;
++ 			}
++ 		}
++ 	}
++ 
++-	re = pcre_compile(expression,	/* the pattern */
+++	re = pcre2_compile((PCRE2_SPTR)expression,	/* the pattern */
+++					  PCRE2_ZERO_TERMINATED,
++ 					  flags,	/* default options */
++-					  &error,	/* for error message */
++-					  &erroffset,	/* for error offset */
+++					  &error_code,	/* for error code */
+++					  &error_offset,	/* for error offset */
++ 					  NULL);	/* use default character tables */
++-	if (error) {
++-		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "COMPILE ERROR: %d [%s][%s]\n", erroffset, error, expression);
++-		switch_regex_safe_free(re);
+++	if (!re) {
+++		pcre2_get_error_message(error_code, error_str, 128);
+++		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "COMPILE ERROR: %zu [%s][%s]\n", error_offset, error_str, expression);
++ 		goto end;
++ 	}
++ 
++-	match_count = pcre_exec(re,	/* result of pcre_compile() */
++-							NULL,	/* we didn't study the pattern */
++-							field,	/* the subject string */
+++	match_data = pcre2_match_data_create_from_pattern(re, NULL);
+++
+++	match_count = pcre2_match(re,	/* result of pcre_compile() */
+++							(PCRE2_SPTR)field,	/* the subject string */
++ 							(int) strlen(field),	/* the length of the subject string */
++ 							0,	/* start at offset 0 in the subject */
++ 							0,	/* default options */
++-							ovector,	/* vector of integers for substring information */
++-							olen);	/* number of elements (NOT size in bytes) */
+++							match_data,	/* vector of integers for substring information */
+++							NULL);	/* number of elements (NOT size in bytes) */
++ 
++ 
++ 	if (match_count <= 0) {
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 		match_count = 0;
++ 	}
++ 
++ 	*new_re = (switch_regex_t *) re;
+++	*new_match_data = (switch_regex_match_data_t *) match_data;
++ 
++   end:
++ 	switch_safe_free(tmp);
++ 	return match_count;
++ }
++ 
++-SWITCH_DECLARE(void) switch_perform_substitution(switch_regex_t *re, int match_count, const char *data, const char *field_data,
++-												 char *substituted, switch_size_t len, int *ovector)
+++SWITCH_DECLARE(void) switch_perform_substitution(switch_regex_match_data_t *match_data, const char *data,
+++												 char *substituted, switch_size_t len)
++ {
++ 	char index[10] = "";
++ 	const char *replace = NULL;
+++	PCRE2_SIZE replace_size;
++ 	switch_size_t x, y = 0, z = 0;
++ 	int num = 0;
++ 	int brace;
++@@ -174,14 +188,14 @@ SWITCH_DECLARE(void) switch_perform_subs
++ 				num = -1;
++ 			}
++ 
++-			if (pcre_get_substring(field_data, ovector, match_count, num, &replace) >= 0) {
+++			if (pcre2_substring_get_bynumber(match_data, num, (PCRE2_UCHAR **)&replace, &replace_size) >= 0) {
++ 				if (replace) {
++ 					switch_size_t r;
++ 
++ 					for (r = 0; r < strlen(replace) && y < (len - 1); r++) {
++ 						substituted[y++] = replace[r];
++ 					}
++-					pcre_free_substring(replace);
+++					pcre2_substring_free((PCRE2_UCHAR *)replace);
++ 				}
++ 			}
++ 		} else {
++@@ -193,20 +207,21 @@ SWITCH_DECLARE(void) switch_perform_subs
++ }
++ 
++ 
++-SWITCH_DECLARE(void) switch_capture_regex(switch_regex_t *re, int match_count, const char *field_data,
++-										  int *ovector, const char *var, switch_cap_callback_t callback, void *user_data)
+++SWITCH_DECLARE(void) switch_capture_regex(switch_regex_match_data_t *match_data, int match_count,
+++										  const char *var, switch_cap_callback_t callback, void *user_data)
++ 
++ {
++ 
++ 
++ 	const char *replace;
+++	PCRE2_SIZE replace_size;
++ 	int i;
++ 
++ 	for (i = 0; i < match_count; i++) {
++-		if (pcre_get_substring(field_data, ovector, match_count, i, &replace) >= 0) {
+++		if (pcre2_substring_get_bynumber(match_data, i, (PCRE2_UCHAR **)&replace, &replace_size) >= 0) {
++ 			if (replace) {
++-				callback(var, replace, user_data);
++-				pcre_free_substring(replace);
+++				callback(var, (const char *)replace, user_data);
+++				pcre2_substring_free((PCRE2_UCHAR *)replace);
++ 			}
++ 		}
++ 	}
++@@ -214,12 +229,13 @@ SWITCH_DECLARE(void) switch_capture_rege
++ 
++ SWITCH_DECLARE(switch_status_t) switch_regex_match_partial(const char *target, const char *expression, int *partial)
++ {
++-	const char *error = NULL;	/* Used to hold any errors                                           */
++-	int error_offset = 0;		/* Holds the offset of an error                                      */
++-	pcre *pcre_prepared = NULL;	/* Holds the compiled regex                                          */
+++	PCRE2_UCHAR error[128]; /* Used to hold any errors                                           */
+++	int error_code = 0;	/* Holds the code of an error                                           */
+++	PCRE2_SIZE error_offset = 0;		/* Holds the offset of an error                                      */
+++	pcre2_code *pcre_prepared = NULL;	/* Holds the compiled regex                                          */
++ 	int match_count = 0;		/* Number of times the regex was matched                             */
++-	int offset_vectors[255];	/* not used, but has to exist or pcre won't even try to find a match */
++-	int pcre_flags = 0;
+++	pcre2_match_data *match_data;
+++	int pcre2_flags = 0;
++ 	uint32_t flags = 0;
++ 	char *tmp = NULL;
++ 	switch_status_t status = SWITCH_STATUS_FALSE;
++@@ -239,43 +255,44 @@ SWITCH_DECLARE(switch_status_t) switch_r
++ 		expression = tmp;
++ 		if (*opts) {
++ 			if (strchr(opts, 'i')) {
++-				flags |= PCRE_CASELESS;
+++				flags |= PCRE2_CASELESS;
++ 			}
++ 			if (strchr(opts, 's')) {
++-				flags |= PCRE_DOTALL;
+++				flags |= PCRE2_DOTALL;
++ 			}
++ 		}
++ 	}
++ 
++ 	/* Compile the expression */
++-	pcre_prepared = pcre_compile(expression, flags, &error, &error_offset, NULL);
+++	pcre_prepared = pcre2_compile((PCRE2_SPTR)expression, PCRE2_ZERO_TERMINATED, flags, &error_code, &error_offset, NULL);
++ 
++ 	/* See if there was an error in the expression */
++-	if (error != NULL) {
++-		/* Clean up after ourselves */
++-		if (pcre_prepared) {
++-			pcre_free(pcre_prepared);
++-			pcre_prepared = NULL;
++-		}
+++	if (!pcre_prepared) {
+++		pcre2_get_error_message(error_code, error, 128);
+++
++ 		/* Note our error */
++ 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR,
++-						  "Regular Expression Error expression[%s] error[%s] location[%d]\n", expression, error, error_offset);
+++						  "Regular Expression Error expression[%s] error[%s] location[%zu]\n", expression, error, error_offset);
++ 
++ 		/* We definitely didn't match anything */
++ 		goto end;
++ 	}
++ 
++ 	if (*partial) {
++-		pcre_flags = PCRE_PARTIAL;
+++		pcre2_flags = PCRE2_PARTIAL_SOFT;
++ 	}
++ 
++ 	/* So far so good, run the regex */
+++	match_data = pcre2_match_data_create_from_pattern(pcre_prepared, NULL);
+++
++ 	match_count =
++-		pcre_exec(pcre_prepared, NULL, target, (int) strlen(target), 0, pcre_flags, offset_vectors, sizeof(offset_vectors) / sizeof(offset_vectors[0]));
+++		pcre2_match(pcre_prepared, (PCRE2_SPTR)target, (int) strlen(target), 0, pcre2_flags, match_data, NULL);
+++
+++	pcre2_match_data_free(match_data);
++ 
++ 	/* Clean up */
++ 	if (pcre_prepared) {
++-		pcre_free(pcre_prepared);
+++		pcre2_code_free(pcre_prepared);
++ 		pcre_prepared = NULL;
++ 	}
++ 
++@@ -285,7 +302,7 @@ SWITCH_DECLARE(switch_status_t) switch_r
++ 	if (match_count > 0) {
++ 		*partial = 0;
++ 		switch_goto_status(SWITCH_STATUS_SUCCESS, end);
++-	} else if (match_count == PCRE_ERROR_PARTIAL || match_count == PCRE_ERROR_BADPARTIAL) {
+++	} else if (match_count == PCRE2_ERROR_PARTIAL) {
++ 		/* yes it is already set, but the code is clearer this way */
++ 		*partial = 1;
++ 		switch_goto_status(SWITCH_STATUS_SUCCESS, end);
++--- a/src/switch_utils.c
+++++ b/src/switch_utils.c
++@@ -2081,8 +2081,9 @@ SWITCH_DECLARE(switch_status_t) switch_f
++ SWITCH_DECLARE(switch_time_t) switch_str_time(const char *in)
++ {
++ 	switch_time_exp_t tm = { 0 }, local_tm = { 0 };
++-	int proceed = 0, ovector[30], time_only = 0;
+++	int proceed = 0, time_only = 0;
++ 	switch_regex_t *re = NULL;
+++	switch_regex_match_data_t *match_data = NULL;
++ 	char replace[1024] = "";
++ 	switch_time_t ret = 0, local_time = 0;
++ 	char *pattern = "^(\\d+)-(\\d+)-(\\d+)\\s*(\\d*):{0,1}(\\d*):{0,1}(\\d*)";
++@@ -2092,67 +2093,77 @@ SWITCH_DECLARE(switch_time_t) switch_str
++ 	switch_time_exp_lt(&tm, switch_micro_time_now());
++ 
++ 
++-	if ((time_only = switch_regex_perform(in, pattern3, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
+++	if ((time_only = switch_regex_perform(in, pattern3, &re, &match_data))) {
++ 		tm.tm_hour = 0;
++ 		tm.tm_min = 0;
++ 		tm.tm_sec = 0;
++ 	} else {
++ 		tm.tm_year = tm.tm_mon = tm.tm_mday = tm.tm_hour = tm.tm_min = tm.tm_sec = tm.tm_usec = 0;
++ 
++-		if (!(proceed = switch_regex_perform(in, pattern, &re, ovector, sizeof(ovector) / sizeof(ovector[0])))) {
++-			switch_regex_safe_free(re);
++-			proceed = switch_regex_perform(in, pattern2, &re, ovector, sizeof(ovector) / sizeof(ovector[0]));
+++		if (!(proceed = switch_regex_perform(in, pattern, &re, &match_data))) {
+++			switch_regex_and_match_data_safe_free(re, match_data);
+++			proceed = switch_regex_perform(in, pattern2, &re, &match_data);
++ 		}
++ 	}
++ 
++ 	if (proceed || time_only) {
+++		unsigned int replace_size;
++ 
++ 		if (time_only > 1) {
++-			switch_regex_copy_substring(in, ovector, time_only, 1, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 1, replace, &replace_size);
++ 			tm.tm_hour = atoi(replace);
++ 		}
++ 
++ 		if (time_only > 2) {
++-			switch_regex_copy_substring(in, ovector, time_only, 2, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 2, replace, &replace_size);
++ 			tm.tm_min = atoi(replace);
++ 		}
++ 
++ 		if (time_only > 3) {
++-			switch_regex_copy_substring(in, ovector, time_only, 3, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 3, replace, &replace_size);
++ 			tm.tm_sec = atoi(replace);
++ 		}
++ 
++ 		if (proceed > 1) {
++-			switch_regex_copy_substring(in, ovector, proceed, 1, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 1, replace, &replace_size);
++ 			tm.tm_year = atoi(replace) - 1900;
++ 		}
++ 
++ 		if (proceed > 2) {
++-			switch_regex_copy_substring(in, ovector, proceed, 2, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 2, replace, &replace_size);
++ 			tm.tm_mon = atoi(replace) - 1;
++ 		}
++ 
++ 		if (proceed > 3) {
++-			switch_regex_copy_substring(in, ovector, proceed, 3, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 3, replace, &replace_size);
++ 			tm.tm_mday = atoi(replace);
++ 		}
++ 
++ 		if (proceed > 4) {
++-			switch_regex_copy_substring(in, ovector, proceed, 4, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 4, replace, &replace_size);
++ 			tm.tm_hour = atoi(replace);
++ 		}
++ 
++ 		if (proceed > 5) {
++-			switch_regex_copy_substring(in, ovector, proceed, 5, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 5, replace, &replace_size);
++ 			tm.tm_min = atoi(replace);
++ 		}
++ 
++ 		if (proceed > 6) {
++-			switch_regex_copy_substring(in, ovector, proceed, 6, replace, sizeof(replace));
+++			replace_size = sizeof(replace);
+++			switch_regex_copy_substring(match_data, 6, replace, &replace_size);
++ 			tm.tm_sec = atoi(replace);
++ 		}
++ 		
++-		switch_regex_safe_free(re);
+++		switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 		switch_time_exp_get(&local_time, &tm);
++ 		switch_time_exp_lt(&local_tm, local_time);
++@@ -2163,7 +2174,7 @@ SWITCH_DECLARE(switch_time_t) switch_str
++ 		return ret;
++ 	}
++ 
++-	switch_regex_safe_free(re);
+++	switch_regex_and_match_data_safe_free(re, match_data);
++ 
++ 	return ret;
++ }
+diff --git a/package/freeswitch/0007-Fix-double-free-after-upgrade-to-pcre2.patch b/package/freeswitch/0007-Fix-double-free-after-upgrade-to-pcre2.patch
+new file mode 100644
+index 0000000000..37455d7794
+--- /dev/null
++++ b/package/freeswitch/0007-Fix-double-free-after-upgrade-to-pcre2.patch
+@@ -0,0 +1,27 @@
++From 02549c10d9155d0f71f36289aeeddc9c73a4d46e Mon Sep 17 00:00:00 2001
++From: Andrey Volk <andywolk@gmail.com>
++Date: Thu, 13 Nov 2025 17:42:04 +0300
++Subject: [PATCH] [mod_dialplan_xml] Fix double free after upgrade to pcre2.
++ (#2946)
++
++Upstream: https://github.com/signalwire/freeswitch/commit/02549c10d9155d0f71f36289aeeddc9c73a4d46e
++
++[backported only second part of upstream commit, the first part is
++ already included in patch 0006]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c b/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c
++index 3d3fdfd8a93..cab522887c4 100644
++--- a/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c
+++++ b/src/mod/dialplans/mod_dialplan_xml/mod_dialplan_xml.c
++@@ -357,6 +357,7 @@ static int parse_exten(switch_core_session_t *session, switch_caller_profile_t *
++ 					save_proceed = proceed;
++ 
++ 					re = NULL;
+++					match_data = NULL;
++ 				}
++ 
++ 				switch_regex_and_match_data_safe_free(re, match_data);
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index 3633a29903..ad54efc0cb 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_FREESWITCH
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_SOFIA_SIP
+ 	select BR2_PACKAGE_SPANDSP
+ 	select BR2_PACKAGE_SPEEX
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 1121bfa9cc..5cd80cfc4f 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -19,6 +19,9 @@ FREESWITCH_LICENSE_FILES = \
+ 	libs/apr/LICENSE \
+ 	libs/srtp/LICENSE
+ 
++# 0006-Move-project-to-PCRE2.patch
++FREESWITCH_AUTORECONF = YES
++
+ FREESWITCH_CPE_ID_VENDOR = freeswitch
+ 
+ # required dependencies
+@@ -27,7 +30,7 @@ FREESWITCH_DEPENDENCIES = \
+ 	jpeg \
+ 	libcurl \
+ 	openssl \
+-	pcre \
++	pcre2 \
+ 	spandsp \
+ 	sofia-sip \
+ 	speex \
 -- 
-https://autobuild.buildroot.org
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
