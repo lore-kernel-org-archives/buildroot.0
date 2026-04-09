@@ -4,85 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C6BBF364B5
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 19:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7751FF364AF
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 20:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B21C7410B7;
-	Thu,  9 Apr 2026 19:44:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B40440AFA;
+	Thu,  9 Apr 2026 20:00:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jdau2DKkdLzr; Thu,  9 Apr 2026 19:44:40 +0000 (UTC)
+ id wW3sZqEmKJvh; Thu,  9 Apr 2026 20:00:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69FBB410AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C3E340B08
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775763880;
-	bh=36L9rpPbVjmxX7C/r8uefOQfr91d6F6Yer2OGX+tJ8M=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=IVel3vv0VA3Ikt2r6t+sO8Ln/CUPZYTOsz+IoFXQgUVoCZyvSCco1Ky+qvs2zSDmX
-	 J6+NnD2lvvcNs6/3kfRzb0rRKIcumVdzlyjuq2AeilWBPgvSR8igbqblp2BrhxcaqK
-	 D8zarqi5ZSVuM/XAH9f32JpV+KXFa4z3FMJ45CuptOxmPbpX1qGLpC+tfbJ74K/fko
-	 YV+kSarYJh4iKp44jGYYUgBYCHlBBWv6Y8TzMquQnTIcINd84Zrw2UzY4quC040MCh
-	 E5gED8GcXYiVRhN5MXDARJjhPxUEyCzak9K3uEfkyep3GvRCYhQPxNOVtkyjtKygf0
-	 LbdqaBAWkhKAw==
+	s=default; t=1775764828;
+	bh=dF4+MdvS736uaPQ3uFxzl2unJkg9VyTFrft4oyJ+SjQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=V2+5Nciternf2pFsYQ5mBwdJMlsShYcijDPF4xZ4PcLHrfVw6nA08fW/XkwEsGgoY
+	 Uu1SWvFAnSSHIRGl2PfC+3Yh469IsZBWc1T75IODFXs+ArypzlULVIqlR2DumURfhF
+	 u8h6l0uMj+7YlxFXq9YeyJiVAiaR8JJg9onhimh6mmW+hum880wg/PgjRJnrGicGOr
+	 dDdN7spDN1GtQQy3u0LwCEmvx8iKSrrvXrMoV0G4tHZaoM/028NikvzEJCZWt1dQS8
+	 Y31SMaRdnoe58LW9cy6SiHZ4OMPubYQMINogy2rOw26dFhVrSdr78on60gWoqzIiDH
+	 skpQvc4EdDOXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69FBB410AD;
-	Thu,  9 Apr 2026 19:44:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DB8CE194
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:44:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C3E340B08;
+	Thu,  9 Apr 2026 20:00:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CBCB237
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD3B260B2B
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:44:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82B50404A1
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:00:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a9UNojoaNnjH for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 19:44:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E432D60B29
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E432D60B29
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E432D60B29
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:44:37 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 9836CB00571;
- Thu,  9 Apr 2026 21:44:32 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 09 Apr 2026 21:44:32 +0200
-MIME-Version: 1.0
-Date: Thu, 09 Apr 2026 21:44:32 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260409131728.278764-1-bernd@kuhls.net>
-References: <20260409131728.278764-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <9dcfc6689673f88ff53fa6ad09ecff91@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775763875;
- bh=0XG6vSZcYQzDd8DVeQnsGniPjO8nbJ2bBzCK1Nc0ELY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ow6wF6SFwaeo6SVOUBpy5hgtJ7O5D2kvQ3LBwO/EVIq2lKNHNY2osX7bNwu5AbzDf
- imInKe+fdPf0l9mTmHhiVKtWb27s+tFwMwVNjZbF0PoYX7xIMnTTu/u7avPcmfN10T
- ELEmBDUFIeVuZuay1yfH/68g3k03AV3oW+6c+25xtOzr4i64PIGkUEWOVb73bGQDUw
- gTjbBKY612qMDBLauOP80ALMKmmrDgDms+OitBAyqTDxaUZYoTLzRNi1K+odkjwvK4
- GmSvXHgp17y9KDvb1XXD1xTnhf9ATNV+pgWBK/okEG0m87ogNqhlmoXJ3BFK9gZGsL
- 55rScCmlMYegw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ow6wF6SF
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
- to 3.14.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LPQA-VNloAzr for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 20:00:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B43D2401B0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B43D2401B0
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:00:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2E2D880F82; Thu,  9 Apr 2026 20:00:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 Apr 2026 21:45:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f862711b1033ee3b0bd92f2aab9f16ee4035b603
+X-Git-Newrev: 63d64fb09f03b4ca2bfbe582e5e21a5293110929
+X-Patchwork-Hint: ignore
+Message-Id: <20260409200025.2E2D880F82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: bump to version 10.3p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,26 +70,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/04/2026 15:17, Bernd Kuhls wrote:
-> https://www.python.org/downloads/release/python-3144/
-> https://docs.python.org/release/3.14.4/whatsnew/changelog.html
-> 
-> Fixes
-> CVE 2026-4224: https://www.cve.org/CVERecord?id=CVE-2026-4224
-> CVE 2026-3644: https://www.cve.org/CVERecord?id=CVE-2026-3644
-> CVE 2026-2297: https://www.cve.org/CVERecord?id=CVE-2026-2297
-> 
-> Rebased patch 0010 due to upstream commit
-> https://github.com/python/cpython/commit/616e6118442832544fab0b93e9dd7d15411a2a58
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/63d64fb09f03b4ca2bfbe582e5e21a5293110929
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://www.openssh.org/txt/release-10.3
+https://www.openssh.com/releasenotes.html#10.3p1
+
+Switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 154464d68a..2d242b4a99 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-10.2
+-sha256  ccc42c0419937959263fa1dbd16dafc18c56b984c03562d2937ce56a60f798b2  openssh-10.2p1.tar.gz
++# From https://www.openssh.com/txt/release-10.3
++sha256  56682a36bb92dcf4b4f016fd8ec8e74059b79a8de25c15d670d731e7d18e45f4  openssh-10.3p1.tar.gz
+ # Locally calculated
+ sha256  5bb5b160726ef5756e4f32fe95b35249c294962419650f48d05134b486d27ccb  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index bcbfc39755..607af7456d 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION_MAJOR = 10.2
++OPENSSH_VERSION_MAJOR = 10.3
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+ OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
+-OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
++OPENSSH_SITE = https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
