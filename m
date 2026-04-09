@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E477F364A6
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 18:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97107F364B2
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 19:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0D0F40DE3;
-	Thu,  9 Apr 2026 18:41:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v4QMRozJcPFG; Thu,  9 Apr 2026 18:41:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24BDB40D86
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775760081;
-	bh=DlkhftS2e/E5DsojoJHquT2mRuTcs6UEteXo7GEBqiE=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=jHfDSGuNZio7uNedA5w//nvwjOWaAobuSXaSYsvc763uBxCiXyghyzdT7koYlLPfk
-	 MgEqPCGy29+YQ+Nrdt8VQhXojnlV9/U1zU/lSOcZm8jcAOWCZJqwtiXIX7YfPN4ZMt
-	 +B3xT01o7m8gE4+hQSnopC/UuZhlAYxqoYJ4cHXuscKzF5tqMdeoMrUiHgZh7wk0cG
-	 ubS4t2PORfg7BtCxDQYXnjjYkb4hE7k1Ws97nRzSjWLEb3PQ90vODefgbJwAGM9be3
-	 iE4+zg/lbaTE7Dml9u+rqlHrkobei1zl2PHkSiY/cL8E2hsvNodHAdKeCKaQJUmeSe
-	 pNJ1Z/Gfkk+3A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24BDB40D86;
-	Thu,  9 Apr 2026 18:41:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A77BF194
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 18:41:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9917E819F3
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 18:41:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 504FB81EA3;
+	Thu,  9 Apr 2026 19:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2UJi1r6C5LWL for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 18:41:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3C7C481916
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C7C481916
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C7C481916
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 18:41:18 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c238.dip0.t-ipconnect.de [79.214.194.56])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5C5F5A4C0E55
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 20:40:49 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57198)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wAuJ6-000000004H0-3Irw
- for buildroot@buildroot.org; Thu, 09 Apr 2026 18:40:49 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id V_pXZd3dlcVQ; Thu,  9 Apr 2026 19:11:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A93681EAD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1775761899;
+	bh=gSmRA0LPr16C81DX4tVytZVUOmp1lUoS69dKPxh1hGc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZL3T4yprJhQ5+eCxrvOGvqZDbsSfNsxNj07k6i/n28VetzmOLVsqDK78l7G5an+h+
+	 nKQ2jI9ccRczxJR70VZB0En0l3ItrLdfJSYJiDW/oZMhvlaighh80R6uLzow2iJRmQ
+	 xZR7tchyM5atGiRv2TfS2A7GjpWJM0UAkTo/Fn7w03M66ruD5U89mZL+iu90AST/H3
+	 Mb9cmoFp0g6j+9LDZYCfQzUpJv8fuDITJk/BgXUqhXdVxLWdlF9H63Gn2KvNYDEBju
+	 YXIzZPbxl5P7MwgIdMRNenzjjLlXEpKJAVIVy03SXDCLFgGiY4XWnmy6L4oN+OycKZ
+	 4QxXtMsceZ41Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A93681EAD;
+	Thu,  9 Apr 2026 19:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 766D71F6
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:11:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 680D540A8C
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:11:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IdiEwMGMRV8O for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 19:11:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F27B4097F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F27B4097F
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 19:11:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EEC0C80AD5; Thu,  9 Apr 2026 19:11:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu,  9 Apr 2026 20:40:48 +0200
-Message-ID: <20260409184048.3180731-3-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260409184048.3180731-1-bernd@kuhls.net>
-References: <20260409184048.3180731-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1775760049;
- bh=w9fOdDl0fRGj8jOtKvj0INFwZkBtHgEfeaBx7OkhHSw=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=CGrXUX38MeYE2tk67asHmquTrQXS9rrsGGSf4+hyl6mZK63ip95izhIJOWQWK0Hvh
- uttIUl2o4ZRNQ7bcQPimOG+BteOzFQbz0aku+5w3rgyUrv/nJIKllWzw0ZBd+H5qy2
- cTM2x2mvbQerNA6XWhXxkt/Zh5TxyZQbebgBKkKJgfwU3RIymNwdAQf9Akte/WQSon
- DeP+x05Sfk5eI4GGPkugGpU/aHTUOEg9aH+oPogKI8xbNNwKBHWdxF/XAVU2o2uAe3
- iwf3Wnq70qZH3KNMx2XdU9TVa1OkphikhVkpJQ9whM8/A3lghPKRfqeR39nM7xLWza
- fDzCt7koki/Ag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=CGrXUX38
-Subject: [Buildroot] [PATCH 3/3] Config.in: remove BR2_NEEDS_HOST_JAVA
+Date: Thu, 9 Apr 2026 21:05:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9e93af0cec3cfab5ece5450bb65edb36d4fc70e6
+X-Git-Newrev: ad5faa474cfd8d79a67e884c8b5fa67223385c11
+X-Patchwork-Hint: ignore
+Message-Id: <20260409191136.EEC0C80AD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpng: security bump to version
+ 1.6.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,82 +69,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit aac3d2b402fd2b8b91f125cf9314f4805b88f72a added a hidden
-boolean option that packages which depend on java on the host can select.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ad5faa474cfd8d79a67e884c8b5fa67223385c11
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Since buildroot commit 5366b8f734fe7aff7e95c1f92627265c5a75becc we can
-provide our own host-openjdk-bin package.
+https://github.com/pnggroup/libpng/blob/v1.6.57/ANNOUNCE
 
-Kodi previously used BR2_NEEDS_HOST_JAVA but was switched to host-open-
-jdk-bin in this series.
-The option BR2_NEEDS_HOST_JAVA is now unused and can be removed.
+Fixes CVE-2026-34757:
+https://github.com/pnggroup/libpng/security/advisories/GHSA-6fr7-g8h7-v645
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in                            |  5 -----
- support/dependencies/dependencies.sh | 11 -----------
- utils/genrandconfig                  |  2 --
- 3 files changed, 18 deletions(-)
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 0bfe6d1ab5..ac58c685d1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -101,11 +101,6 @@ config BR2_HOST_GCC_AT_LEAST_15
- # When adding new entries above, be sure to update
- # the HOSTCC_MAX_VERSION variable in the Makefile.
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index ae28eee087..977f8fcca4 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.56/
+-sha1  71eb3636e60b6ea66f2f670cdf1f7160b7a1fa8b  libpng-1.6.56.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.57/
++sha1  866fb81e3355088bb885bb4ded39093ef80eb686  libpng-1.6.57.tar.xz
+ # Locally computed:
+-sha256  f7d8bf1601b7804f583a254ab343a6549ca6cf27d255c302c47af2d9d36a6f18  libpng-1.6.56.tar.xz
++sha256  d10c20d7171569804cae8dfc13ba6dcd0662c41ed39d43d4d429314aafb10a80  libpng-1.6.57.tar.xz
+ sha256  bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 7c5bc35a77..0081406300 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Hidden boolean selected by packages in need of Java in order to build
--# (example: kodi)
--config BR2_NEEDS_HOST_JAVA
--	bool
--
- # Hidden boolean selected by pre-built packages for x86, when they
- # need to run on x86-64 machines (example: pre-built external
- # toolchains, binary tools, etc.).
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 9c2aeaf23f..f44723678e 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -217,17 +217,6 @@ if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
- 	fi
- fi
- 
--if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
--	check_prog_host "java"
--	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
--	if [ ! -z "$JAVA_GCJ" ] ; then
--		echo
--		echo "$JAVA_GCJ is not sufficient to compile your package selection."
--		echo "Please install an OpenJDK/IcedTea/Oracle Java."
--		exit 1 ;
--	fi
--fi
--
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 	if test ! -f /lib/ld-linux.so.2 ; then
- 		echo
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 5ebd552a1d..727c8193c4 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -113,8 +113,6 @@ async def fixup_config(sysinfo, configfile):
- 
-     ROOTFS_SIZE = '5G'
- 
--    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not await sysinfo.has("java"):
--        return False
-     # libffi not available on ARMv7-M, but propagating libffi arch
-     # dependencies in Buildroot is really too much work, so we handle
-     # this here.
--- 
-2.47.3
-
+-LIBPNG_VERSION = 1.6.56
++LIBPNG_VERSION = 1.6.57
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = https://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
