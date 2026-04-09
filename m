@@ -1,118 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7194DF31E22
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 15:22:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A26F31E27
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 15:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F09776060E;
-	Thu,  9 Apr 2026 15:22:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 490818186A;
+	Thu,  9 Apr 2026 15:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fGSHsLraq5UU; Thu,  9 Apr 2026 15:22:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eqwwL8Ftl1qZ; Thu,  9 Apr 2026 15:25:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54D25606AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BFDD814C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775748125;
-	bh=aL+b8shb6RaWHnFF7J+PGPcDRC8WRq1JPelaLCjndgA=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Csk2HT7CVOj5lWnwEvJtB1NemNIXTBr3PMVAZUDzx3ZQLNumXpwrxkVy7RyBX+Qqf
-	 CuM8oGkaaeTA2yR0dCbqK4gytA2LIoTdOMIfEgk/Z9E+2RmxsytysnDHjX/gO39eSj
-	 MFxrU3CjRDiP8dMkp4OV+zYrsejirUYebOyP1dMr0GrVRi37YJkfiamdAilMMZnIKa
-	 ti8H+HmhEVF4pLD6Q5hka6M1gBZ1Fx6/SbqLJ+cLcKbe0Ocswi+JwMLlVE6uDI5vQZ
-	 Eg6WfqsxgPoc9SzFuis01yHhjfTgaq10nuSWSC/LmbAcgReHT/GCQJ/6S4ulRX38F6
-	 RG5zy13mJcUlw==
+	s=default; t=1775748332;
+	bh=n3abJkfnoEGoapVII4hGYrMVoH4FQc5MHum2mlG0/xQ=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=ayUTNUAofRywf7ma2uQGTOZiR+mavlnFXc8vNXw5VtqP03sZ1txFemJMnp1pCjCWn
+	 3dS+GWfX7x+YgvKFWSuh9EUOFEQxYj9OCCAgXsQyHAJCSz+ZJbIZil9YCMA0vlZBWo
+	 jKmAWjh/5aCKItqvtF8LgvuRrLfVzBus3MFixGykhJ6HkSWgNeYteZKNdDAs05JFGf
+	 ji4J3swFL3xIb0A3nkFp8BcNb/YkLDYEWYQ/v3GC82/PCuaRz2zFmiKY78svVb6ur0
+	 kjXlk1+pTwxvqAddNoqCDU0qV2aZzMOLxAC+Eu1PGFJjySN0vkzxO0/Y7yU7uGcmhK
+	 EnNR/D3FGY5eA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54D25606AA;
-	Thu,  9 Apr 2026 15:22:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 277761D6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:22:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1BFDD814C1;
+	Thu,  9 Apr 2026 15:25:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EB891D6
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D2A9403F0
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:22:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E92D840D26
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:25:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tUfYJzrST7hH for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 15:22:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id szoK8CBxyvPD for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 15:25:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4955B403EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4955B403EC
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4955B403EC
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:22:02 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-488b00ed86fso11328915e9.3
- for <buildroot@buildroot.org>; Thu, 09 Apr 2026 08:22:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F022840CEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F022840CEC
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F022840CEC
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 15:25:29 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-43d17bb1c65so671379f8f.0
+ for <buildroot@buildroot.org>; Thu, 09 Apr 2026 08:25:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775748120; x=1776352920;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=gJh3ElZiQcQzOKCJ3qBtq/N1xCS5WmJM3H0Zpq4VHIc=;
- b=Wqz+UVcTTBdh6L8L3i/PRGJAjTEQnVcQQ6h4bo+hYymDHjFK5pU7f1SWdLYZsJvZvn
- sc4pdoedgYdNqSqOBtVwuyGo490a8hDevkAxcTWBQB74a1aN8LUKo4iYXVmYx/Uh6KGZ
- FcECBP3Md/M2Pp8gTQ8m1m6ebefRpv6jNdymNNdb5sl3SGIwTfOznqH7yBWRWE+3gLuJ
- vOby5eaiACDH6NobnHeZgnTlJPRcRJgeqIuJoUliWNLzjVmTNbJLe1mmTIep9aXVZMUf
- wZEBjZMPdogWetptrQcAsE/Xf8GQOfMMRECm1g5fCNu98xzb9UkvViElU/AN8QKWDKoj
- lyNA==
-X-Gm-Message-State: AOJu0YwSu5Xn5ZoZ8FGxg7CqmK0q6VKdokJ4kd5vFEz3r+GHjXpszbZu
- dv+FESZkBo8w2iaeKevucKU4NWf0lYBNsp8LGTlsNx1HBxa4nP4GrSLL
-X-Gm-Gg: AeBDievE82qsstpIKan9bMYptwvLwwNJLTgY6BT8KMX7wI+XFgGW8RxcpDiHma3uMqK
- OWlqtRtkymqJb7mGaJyNMeCZx+g3Y666ME9gZRIR5dVmEcSHEUop0LWGfkRIcGJ8i/oVovSgw7p
- S3sSuXgPe/FH4kbMGGyaso5JcwO2Q/cpMBjRKfazExdh9b3A08tpQLCiZhpSV+YtUWj4KGz9kg1
- dVmlJ2EVOiDBG8b7uyr5KG8+WYi0n3xHBrGnjQt+NlkPrfM3kp/VWX2wjAIXlEmxTrnvWvKwjf9
- OmBE0WuEbGn9fV3cAh9jNlApa5ZUuoE3+qszkwLeOa+/rKAN9bC31uayeAdZPMrcTY31UcHlf/Z
- sJvkSD37XextG+ii+PGMqB7cA+sCtV6YUMR9RYfX2Nc9PXR+C1ksEs3FR40inlUqGZpnTe0e+WZ
- AE+570VG/sZddmb60jSJfmetclDfKHpjySsZYKNBwLbMGxVNf/LomPTbdmeh0QqcjdY9/CC1fAa
- V6F+OBHJjubVQc=
-X-Received: by 2002:a05:600d:1c:b0:487:1fb4:7e1 with SMTP id
- 5b1f17b1804b1-488cd041593mr42333365e9.22.1775748119731; 
- Thu, 09 Apr 2026 08:21:59 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1775748328; x=1776353128;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=eRuWQ27x5AGOuGroQploelo+VgNipRI/TcWSoES93Cw=;
+ b=loEahdNTofx/Wlobkqeip1Y24AENnGkMTq2GebhbLokYyXDEGJk+S1RgnmKHJmqtYu
+ WalSMCLK6clurh99Z/yDnNqsyZP1F+8LgCsCNzwhdP1nPWNkbNRf84KJoqD/E0Quij5k
+ t0KgKz2EbKXy6oZdL2qxUhzDREtRj/wyCiZ6kQYcadaYzW5zTwKycKY8XHhvCa+kpQW9
+ HcxyRgl5uT1FRbZquGp60vfgo3IXEN5E64cpu7xnkGdiLVTCtBP8ymJ3hNrPB6N9THa6
+ en/GsAWDIP3c6Rnhw24P0gZiUZJ+BBVon3Zb8HZW6HKH74bZCdQF6PBdMAnXOZlXuMga
+ UbtQ==
+X-Gm-Message-State: AOJu0Ywk94nxd5Eur9NDLni70YW344nAwhGpo6P0tWo2iP1Vn08puAaT
+ eCuxvpqHp3TA27LrjZl8QEOOwdGagwn+KlZ2NthYThS84nPACFOGHKppf2UzBzoI
+X-Gm-Gg: AeBDievKkCb0zvyw4pIFu9uqPtOQuewVBF3ChnLdNabCxw+DroPZ4RMNmb00aWHpWru
+ rtdUS4MgUzwre/CPJTbUTbt0aXFiYE3wv+txs3ZwIvF/Ww7fsCEfdxNMVEN1wxxrg7HG1odQmZe
+ V7LkMYvz0DbVgZDteSCZGYn78aB7Gvtx3+fiCTanImHbT8wKxR3wVKhsi9QID8NBcQwu0P/wYzA
+ f8/i4/YmQJLvy5+vGbf5VLuV8PvIIRW4ypFPp6O+9KQsg5xZcprmM+X+yqFRbUp16TmCb4n7f0t
+ A9UdWflWGFNMFE/6bpihplG9gF6Rh+PzMLTUKXpMoX6dOvQrA/AAG2i+HEb8lp3fDCPVFvbvQIk
+ oLJX/oad7XTbqEHgKiQbSFh4zQ2aM5J3NcY6KfoV1fctctSfvY9wR2Jc3u9CYcKZ16BvuXuQiKx
+ StsrMG61XtQwx+bBqTBmBiP2gQWlrkJ/DYQE6D1xUan3mA8RdkIf7Ib05LPLOPBZ1ZysSMRof6W
+ oYx
+X-Received: by 2002:a05:6000:240b:b0:43b:8fa4:1937 with SMTP id
+ ffacd0b85a97d-43d2927648cmr36911610f8f.5.1775748327577; 
+ Thu, 09 Apr 2026 08:25:27 -0700 (PDT)
 Received: from flaviu-Aspire-E5-572G.. ([93.122.248.173])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488cd096ecbsm43555775e9.2.2026.04.09.08.21.58
+ ffacd0b85a97d-43d1e4d29bbsm70309655f8f.21.2026.04.09.08.25.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Apr 2026 08:21:59 -0700 (PDT)
+ Thu, 09 Apr 2026 08:25:27 -0700 (PDT)
 From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: buildroot@buildroot.org,
-	Flaviu Nistor <flaviu.nistor@gmail.com>
-Date: Thu,  9 Apr 2026 18:21:55 +0300
-Message-ID: <20260409152155.5801-1-flaviu.nistor@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu,  9 Apr 2026 18:25:20 +0300
+Message-ID: <20260409152520.5894-1-flaviu.nistor@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <0a191350-d411-4247-934c-a17ddbaa3562@rnout.be>
-References: <0a191350-d411-4247-934c-a17ddbaa3562@rnout.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1775748120; x=1776352920; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=gJh3ElZiQcQzOKCJ3qBtq/N1xCS5WmJM3H0Zpq4VHIc=;
- b=bR+myTmdwT2H1avs57bCOXSS7HKmYQHZi2K6sI0EPciw2V/gnyMJ638E/5WGQlW6qZ
- qufBUgvbFuDGNTqKBD9rPdTzrk5MX9Ob4r6pFnyMhPyF9b7dw+3/R2HwZzr4TLE5xhVf
- c+eqjF9JCzhPV6u3qsvvxCN51veJpKkj8XOHpOPX8benJ13O9uk+qBinRpEUhNo651qa
- nSpeZhktRFuCk+48dAgpH5HYOxW9wkbU2o8wk8OVL8MLqzN0rFcPoasRoO/XBiPikNR3
- t7byoWYIW866EoXbglWWWy0a1RamJyJaiEQhuM78dIPWDOtTfVDWyJhZQCwultjYEbqY
- 5YiA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20251104; t=1775748328; x=1776353128; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eRuWQ27x5AGOuGroQploelo+VgNipRI/TcWSoES93Cw=;
+ b=n91504HnBciOvxpranZ/CrGSbPZoT2OSR9FzeC9Y6z7vtOG+mXEvtykqAPmAUbHWCs
+ NWgcI0yJ4zt+mQVz8gD7kapoxmj0cqIy5Ff2ZZFk3cDk9tUiDz7Huazno4OqNAPTMUzq
+ Np/30RL2fOxc/kW1Ms5fKf9/Slhk7G6VfcTBeYfCSFXQBQgkmzg1iEy6StXyXDxII273
+ f17MzdVbQ3wp9TJxItG78cfIed61F6AMk6WOZC7HGLUGC1M8fNkqhNc1U4MqvdYPfmTf
+ 9RF1ga0bmP6zpDodrhsXPlHUK2b5MomJuB4UaQ1etF5lmAm9ucT+VnprPs/E0hf6KXrB
+ 6eoQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=bR+myTmd
-Subject: Re: [Buildroot] [PATCH 1/1] utils/scanpypi: workaround for pypi
- project names
+ header.a=rsa-sha256 header.s=20251104 header.b=n91504Hn
+Subject: [Buildroot] [PATCH 1/1] package/python-snappy: bump version to 0.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,90 +117,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/04/2026 11:59, Arnout Vandecappelle wrote:
->On 27/03/2026 07:43, Flaviu Nistor wrote:
->> Add a dictionary for buildroot packages that have a different
->> name compared to the pypi project name (e.g. smmap2 -> smmap).
->> Since it is not intended to change the buildroot package name,
->> this is a workaround in order to use the scanpypi utility for
->> this packages and still get correct generated files. Current
->> packages added in the dictionary by this commit are smmap2 and
->> gitdb2.
->
->  Would it be an option, instead of having this mapping table, to parse the name 
->out of the .mk file if it exists? So if you do scanpypi smmap2, it will check if 
->package/python-smmap2/python-smmap2.mk exists, and if yes read the _SOURCE to 
->find the upstream name.
->
-  Indeed that would be a better solution and less subjected to human error. I will
-prepare a new version based on your suggestion and come back with a v2.
+Even if there is a 0.7.3 on Pypi, there is no 0.7.3 release
+on the project homepage, hence the bump to 0.7.2.
+Add also PYTHON_SNAPPY_SOURCE for correct package on Pypi.
 
-  Thank you,
-  Flaviu
+Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+---
+ package/python-snappy/python-snappy.hash | 4 ++--
+ package/python-snappy/python-snappy.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
->  Regards,
->  Arnout
->
->> 
->> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->> ---
->>   utils/scanpypi | 18 +++++++++++++++---
->>   1 file changed, 15 insertions(+), 3 deletions(-)
->> 
->> diff --git a/utils/scanpypi b/utils/scanpypi
->> index 61879e39d4..09899bfe0e 100755
->> --- a/utils/scanpypi
->> +++ b/utils/scanpypi
->> @@ -189,6 +189,14 @@ class BuildrootPackage():
->>       create_config_in
->>   
->>       """
->> +
->> +    # Dictionary of python package names to their actual PyPI project names
->> +    # Used when a package's buildroot name differs from its PyPI name
->> +    PYPI_NAME_MAPPINGS = {
->> +        'smmap2': 'smmap',
->> +        'gitdb2': 'gitdb',
->> +    }
->> +
->>       setup_args = {}
->>   
->>       def __init__(self, real_name, pkg_folder):
->> @@ -216,8 +224,12 @@ class BuildrootPackage():
->>           """
->>           Fetch a package's metadata from the python package index
->>           """
->> +
->> +        # Check if there's a PyPI name in the dictionary for this package
->> +        pypi_name = self.PYPI_NAME_MAPPINGS.get(self.real_name, self.real_name)
->> +
->>           self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
->> -            pkg=self.real_name)
->> +            pkg=pypi_name)
->>           try:
->>               pkg_json = urllib.request.urlopen(self.metadata_url).read().decode()
->>           except urllib.error.HTTPError as error:
->> @@ -225,13 +237,13 @@ class BuildrootPackage():
->>               print('ERROR: Could not find package {pkg}.\n'
->>                     'Check syntax inside the python package index:\n'
->>                     'https://pypi.python.org/pypi/ '
->> -                  .format(pkg=self.real_name))
->> +                  .format(pkg=pypi_name))
->>               raise
->>           except urllib.error.URLError:
->>               print('ERROR: Could not find package {pkg}.\n'
->>                     'Check syntax inside the python package index:\n'
->>                     'https://pypi.python.org/pypi/ '
->> -                  .format(pkg=self.real_name))
->> +                  .format(pkg=pypi_name))
->>               raise
->>           self.metadata = json.loads(pkg_json)
->>           self.version = self.metadata['info']['version']
+diff --git a/package/python-snappy/python-snappy.hash b/package/python-snappy/python-snappy.hash
+index c4dbc72077..13cce0e484 100644
+--- a/package/python-snappy/python-snappy.hash
++++ b/package/python-snappy/python-snappy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-snappy/json
+-md5  fc84cfa3526fba06d66f0d0b2e764300  python-snappy-0.6.1.tar.gz
+-sha256  b6a107ab06206acc5359d4c5632bd9b22d448702a79b3169b0c62e0fb808bb2a  python-snappy-0.6.1.tar.gz
++md5  04a4e58b0a932403bb285900e67c778d  python-snappy-0.7.2.tar.gz
++sha256  04bf182f9d9f67b7a846dae2f1df36180ceeee8d3380e4b6799deff5272c4978  python-snappy-0.7.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  d007cb05f143d99d16d5cd0d1bf291daf037adb36800344e440ec26edb938f9a  LICENSE
+diff --git a/package/python-snappy/python-snappy.mk b/package/python-snappy/python-snappy.mk
+index e80aa861df..b1bd8ca6ca 100644
+--- a/package/python-snappy/python-snappy.mk
++++ b/package/python-snappy/python-snappy.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SNAPPY_VERSION = 0.6.1
+-PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
++PYTHON_SNAPPY_VERSION = 0.7.2
++PYTHON_SNAPPY_SOURCE = python_snappy-$(PYTHON_SNAPPY_VERSION).tar.gz
++PYTHON_SNAPPY_SITE = https://files.pythonhosted.org/packages/cb/52/acd87583175fa930e4385f8a6164eb5909acd683c0e62ee01d41de8195a2
+ PYTHON_SNAPPY_SETUP_TYPE = setuptools
+ PYTHON_SNAPPY_LICENSE = BSD-3-Clause
+ PYTHON_SNAPPY_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
