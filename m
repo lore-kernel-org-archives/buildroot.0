@@ -4,115 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10AADE9DE6C
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 08:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF5B6E9DE6B
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 08:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0393840FBC;
-	Thu,  9 Apr 2026 08:43:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB0574106A;
+	Thu,  9 Apr 2026 08:43:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFjcnBGkA-8X; Thu,  9 Apr 2026 08:43:16 +0000 (UTC)
+ id ujVW1IrZSFUl; Thu,  9 Apr 2026 08:43:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AA1F40FD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEF0941030
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775724196;
-	bh=YMlxl6NAzS7JHNOZraKlxYqbI1ju5uPyYB3PtkiDjNQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1775724202;
+	bh=7ALWEzkJtt5JsB9NAa0AIUzKckTUKp/j6+KlzK8EwyI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nRHbjN18CWij5ZDAOhIo/F+dhh6G8cniBDl2Xy7pxY86Zn/a+PHNLVfq4VLOfVDJr
-	 gsQaNNkXOS9doVCav9uoT/dqJ2UYQIBsJ3wzWCs+jAtJL+io1zc8y9MoSlx1Ze6pH9
-	 xaZWc8yES3I0kVJuESjVqhPoFJabW3H8kAk7/XPtaxn3JUhyHjkXJCoI33XnXwSG5U
-	 IcbVQnNFNAvAk/jezvRIJBAKGk90pywBZRNmuQNEpc6AX3LWXnZlZq4PxvA87A9o21
-	 sLeYDsXpXl3Hc2J5incPCG8dL86lQ7KxvvQNyOg/TT0aZqfwlKZ3UK1Fzf/5Zt2UeA
-	 tCTrfSHs6cIgw==
+	 From;
+	b=WZ2cu0wZY1KHv5YDev+UPysAUdZegUlCpl1Rn3f5qFhX2iUnrElmhDlarsQkatXeh
+	 MOlSD0MDIVXzvoZieSxSoFsziEwx03kTH3zXIq5sZdqP5tDHkTX/QkpRVn6YazPTWo
+	 KSmdJIpeH+7lHAkNmBgZ0AewJ/uTYCT2frZEn8/gRO9RVoDuH5B67vbc1Eqd4CP4hH
+	 mZTQzxxBB9ovRgD6pIXSza9+5RK1LkNf98o+yKUGKPVAx1v+w0D/zeXiE0EcONNlo0
+	 AUcu4AJzpAZufDp4kSTx7/cY4kXeHZKVinsnki5iLGGK5CHXiXLkHp4+N9F39PpX3v
+	 3YnnNYsoGSzzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AA1F40FD1;
-	Thu,  9 Apr 2026 08:43:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4170C237
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEF0941030;
+	Thu,  9 Apr 2026 08:43:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 404FF1F6
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EEE74039B
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 268F84039D
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ay79JahlqJL3 for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 08:43:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7DA094039D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DA094039D
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7DA094039D
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:12 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-48374014a77so7879485e9.3
- for <buildroot@buildroot.org>; Thu, 09 Apr 2026 01:43:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775724191; x=1776328991;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=gVY7xot0SlWePQMbNUFrSkcfVE2UR/yCndnWje17vyw=;
- b=d7Ki5Aw3Ykm65m+nm4Tr+gfJynLayx6LlUx0tdlq9H4JVm8tOii8k4yO4Iq7oKGL8j
- DyngF9DHI9lRdAiTDCsik+6GSl7QQHZP8XNCcpg37mL0uxGqsvpsj/mOw8fsheuWIjRY
- d8TYoJVn0iDIWfdEBzfIVIGpNZsl3r1Ilu6VVMwVR6JQBZr717lipp1fObx4SNX42aSN
- PqDhE8M2m4hgaUJYdnKqu96x01qn064KgAnCoOmHql13sysdHOeqDh5f2SWEKH7qDSAa
- y1okXGUTXcI/e5zsb1dclbgXKTUHv6B/aEdi8+GLGoHm6kLedpb9yyny/zEhg5lIi6uE
- gbjQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU/n46AqJOYT3OabhzjsAIaTUD1pWm7rccj5/wZccna9uESnTXZOvHP5v8vgaWmgwFa6iJyosmJIxM=@buildroot.org
-X-Gm-Message-State: AOJu0YyhwRrRfeIka9G7z4Upuf/InZ0xP8kTfVSSeJUKSoehT+Qs9X9d
- quUFgLYyQwWft+B7EMO4Oi6xG90FfODq347yCDki0VKw4FZORA0RDBm7a+TRass0UrI=
-X-Gm-Gg: AeBDiesIWf9Ey8g3xPRGVaZe2JWgdkfZi+/SI6ARzGAC94LFKQzLwnYlv1cBhNaFqdr
- /e8xLs9i/sYj3oSY5P58dunq2WG0koN7fAfOfN+q0JezERu5x0AfcvFx88NcmbwCO31LMzSFI6f
- tne/k9f/QJHYshGeZ3it7dNXg6/0Y97Jaq4A0wMKSS8z2AJhKTMNlnaN/Gl4rKMKTb7C853N+wU
- ZZkgxdyClmxdSzDbaX/Hqj0VDc2QBJfPMYphvlexMCpX4WdX8lOinvA8QEZPSgAu384Hnm/Ycbq
- r+eUcNCoi6o8ModDh/BNa3T/USu6Kc4DMGZb+exW7x2SRJOe94JlWuZl6F+F0KEmFkM4Zyzk/4M
- m62PeBbbVLBnKPT3sL5BNbSkUVrlgCCLgz+joXDmkove8KdjsFOlKlz+z93ChbQGJBSQHe6gbV6
- lgGS2/S5HiraizlnGP
-X-Received: by 2002:a05:600c:6305:b0:486:d76c:fa57 with SMTP id
- 5b1f17b1804b1-4889978da75mr330990145e9.17.1775724190900; 
- Thu, 09 Apr 2026 01:43:10 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488cd19a69esm20272185e9.32.2026.04.09.01.43.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Apr 2026 01:43:10 -0700 (PDT)
-To: Martin Willi <martin@strongswan.org>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu,  9 Apr 2026 10:43:10 +0200
-Message-ID: <20260409084310.27382-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260409081401.2060709-4-martin@strongswan.org>
-References: <20260409081401.2060709-4-martin@strongswan.org>
+ id 8UKKz4j1Lupp for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 08:43:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0EA2F4039B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EA2F4039B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EA2F4039B
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:43:20 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6ca66.dip0.t-ipconnect.de [79.214.202.102])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 55B4EA4C0693;
+ Thu,  9 Apr 2026 10:43:06 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35588)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1wAkyg-000000004SH-0qOl;
+ Thu, 09 Apr 2026 08:43:06 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: David GOUARIN <dgouarin@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Laurent Cans <laurent.cans@gmail.com>, Mario Lang <mlang@blind.guru>,
+ Maxim Kochetkov <fido_max@inbox.ru>,
+ Phil Eichinger <phil.eichinger@gmail.com>
+Date: Thu,  9 Apr 2026 10:42:46 +0200
+Message-ID: <20260409084305.3960494-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260409084305.3960494-1-bernd@kuhls.net>
+References: <20260409084305.3960494-1-bernd@kuhls.net>
 MIME-Version: 1.0
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775724191; x=1776328991; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=gVY7xot0SlWePQMbNUFrSkcfVE2UR/yCndnWje17vyw=;
- b=Sn8/ekr+hrvBcTBX1MBXrreIblhkmWerfbe0+YYbZbfkOg2WNHgbpy9gLC7EGqMd8L
- iklb0qkqeCBBBT/uPi4ZJlID2bp670uIMYlXhpm4zQEcifYPNJ8QjIXGsLrYuHxF5rrs
- p5eo2nESUPkwKii8m6HSOemhyZMKz+Zi9D0dNzK5E3LdK4L975xYDHS+wFuUtkJnz7Hy
- b2nxtLJB7oL6Y9yVl7TSN7THaTdugbwJR3U4lbRo8M5NQa6BlWYxTy9iE9YqaN4I2gy9
- 2XQbA49fWGjwlU0rb2Z2+h38cWn170+Tw2DmkGhiCQX5UxAw9p9lhuE9+QJnAFB84QdP
- 277g==
+ d=kuhls.net; 
+ s=kas202511301023; t=1775724186;
+ bh=JAgcMVtTmqIJNMGKA5YoixTjoIRrAIIdQNnIdJIC4nU=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=Hm3275q92RJKx+A+R+2Q6TDAZivFurH3Kj6feUe8H5Delr+Tj6TlF1Ns9+yWykrAT
+ Ts+DsluBZ0kvlJDEheo7aUqceXTOdS/pjIqWfcGVO17/BtFQLyd5xVKbqPXAaPUfO0
+ ekoPli4W7nAgCWmn9Uj0pB2eFUEUB+e1jVlTsdxwnQswiPneQa4MjGvco3U1e5T5e+
+ fWQhKlcAF08nO//3P3G599I4OlYnQNMJgVvQkaRhgOq/efkzEXqVlhh29US4k649ay
+ wTvmUt8mBipQxT5Pq1XPwzdBmY1gvIJg0CqoPSGDYIiz5eNU8fglEGz9wId8NVaqz+
+ sK69zwU6Oaq/Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Sn8/ekr+
-Subject: Re: [Buildroot] [PATCH v4 3/6] utils/generate-cyclonedx: generate
- externalReferences with source-distribution
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Hm3275q9
+Subject: [Buildroot] [PATCH 02/20] package/c-icap: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,147 +98,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thanks !
+Fixes:
+https://autobuild.buildroot.net/results/33b/33bb3ea8ac36da7f40a82c580d3614f0b34a7ab2/
 
-Acked-by: Thomas Perale <thomas.perale@mind.be>
+The oldest build error dates back to June 2024 so this patch should be
+backported to LTS branches.
 
-In reply of:
-> BSI TR-03183-2 5.4.2 [1] lists source code URIs under "Additional data fields
-> for each component", and as such "MUST additionally be provided, if it exists".
-> 
-> If a http or https source download URI is available from show-info, extract
-> it and include it as an externalReference of type "source-distribution" in the
-> CycloneDX output.
-> 
-> [1] https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03183/BSI-TR-03183-2_v2_1_0.pdf?__blob=publicationFile&v=5
-> 
-> Signed-off-by: Martin Willi <martin@strongswan.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...ting-in-various-printf-to-avoid-warn.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
 
-> ---
->  .../tests/utils/test_generate_cyclonedx.py    | 26 ++++++++++
->  utils/generate-cyclonedx                      | 47 +++++++++++++++++++
->  2 files changed, 73 insertions(+)
-> 
-> diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-> index bf1b8e099bf9..a071ff867923 100644
-> --- a/support/testing/tests/utils/test_generate_cyclonedx.py
-> +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-> @@ -140,3 +140,29 @@ class TestGenerateCycloneDX(unittest.TestCase):
->  
->          foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
->          self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
-> +
-> +    def test_external_references(self):
-> +        info = self._make_show_info()
-> +        info["package-foo"]["downloads"] = [
-> +            {
-> +                "source": "foo-1.2.tar.gz",
-> +                "uris": [
-> +                    "https+https://sources.buildroot.net/foo",
-> +                    "http|https+https://mirror.example.org/foo",
-> +                ],
-> +            },
-> +        ]
-> +
-> +        result = self._run_script(show_info=info)
-> +        foo = self._find_component(result, "package-foo")
-> +
-> +        self.assertIn("externalReferences", foo)
-> +        self.assertEqual(
-> +            foo["externalReferences"],
-> +            [
-> +                {
-> +                    "type": "source-distribution",
-> +                    "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
-> +                },
-> +            ],
-> +        )
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index f4d5afd847e5..a3b7293f9a5e 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -14,6 +14,8 @@ import gzip
->  import json
->  import os
->  from pathlib import Path
-> +from typing import Iterator
-> +import urllib.parse
->  import urllib.request
->  import subprocess
->  import sys
-> @@ -261,6 +263,50 @@ def cyclonedx_patches(patch_list: list[str]):
->      }
->  
->  
-> +def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
-> +    """Parse download URIs into (schemes, url) tuples.
-> +
-> +    Splits the Buildroot URI format "scheme[|scheme]+url" and yields all
-> +    Buildroot schemes with the stripped URL, excluding
-> +    sources.buildroot.net mirrors.
-> +
-> +    Args:
-> +        uris (list): Array of URI strings from the show-info output.
-> +    Yields:
-> +        tuple[list[str], str]: (schemes, url) for each usable URI.
-> +    """
-> +    for uri in uris:
-> +        scheme, _, stripped_uri = uri.partition("+")
-> +        if stripped_uri:
-> +            parsed = urllib.parse.urlparse(stripped_uri)
-> +            if parsed.hostname != "sources.buildroot.net":
-> +                yield scheme.split("|"), stripped_uri
-> +
-> +
-> +def cyclonedx_external_refs(comp):
-> +    """Create CycloneDX external references for a component.
-> +
-> +    Args:
-> +        comp (dict): The component information from the show-info output.
-> +    Returns:
-> +        dict: External reference information in CycloneDX format, or empty dict
-> +    """
-> +    SOURCE_DIST_SCHEMES = {"http", "https"}
-> +
-> +    refs = []
-> +    for download in comp.get("downloads", []):
-> +        source = download.get("source")
-> +        for schemes, uri in parse_uris(download.get("uris", [])):
-> +            if set(schemes) & SOURCE_DIST_SCHEMES and source:
-> +                refs.append({
-> +                    "type": "source-distribution",
-> +                    "url": f"{uri}/{source}",
-> +                })
-> +    if refs:
-> +        return {"externalReferences": refs}
-> +    return {}
-> +
-> +
->  def cyclonedx_component(name, comp):
->      """Translate a component from the show-info output, to a component entry in CycloneDX format.
->  
-> @@ -284,6 +330,7 @@ def cyclonedx_component(name, comp):
->          **({
->              "cpe": comp["cpe-id"],
->          } if "cpe-id" in comp else {}),
-> +        **cyclonedx_external_refs(comp),
->          **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
->          "properties": [{
->              "name": "BR_TYPE",
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch b/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
+new file mode 100644
+index 0000000000..7183efa46f
+--- /dev/null
++++ b/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
+@@ -0,0 +1,47 @@
++From 8ef8966237865ec699ab16d208ff56edaac4ff7b Mon Sep 17 00:00:00 2001
++From: Christos Tsantilas <christos@chtsanti.net>
++Date: Fri, 1 Nov 2019 08:00:52 -0700
++Subject: [PATCH] Fix integer printing in various printf to avoid warnings
++ about integer sizes
++
++Upstream: https://github.com/c-icap/c-icap-server/commit/8ef8966237865ec699ab16d208ff56edaac4ff7b
++
++[Bernd: partially backported to 0.5.10]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ mpmt_server.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/mpmt_server.c b/mpmt_server.c
++index a30d55d4..9b178a66 100644
++--- a/mpmt_server.c
+++++ b/mpmt_server.c
++@@ -74,7 +74,7 @@ typedef struct server_decl {
++ 
++ ci_thread_mutex_t threads_list_mtx;
++ server_decl_t **threads_list = NULL;
++-ci_thread_t listener_thread_id = -1;
+++ci_thread_t listener_thread_id;
++ int listener_running = 0;
++ 
++ ci_thread_cond_t free_server_cond;
++@@ -242,8 +242,8 @@ static void cancel_all_threads()
++         for (i=0; i<CI_CONF.THREADS_PER_CHILD; i++) {
++             if (threads_list[i] != NULL) { /* if the i thread is still alive*/
++                 if (!threads_list[i]->running) { /*if the i thread is not running any more*/
++-                    ci_debug_printf(5, "Cancel server %d, thread_id %lu (%d)\n",
++-                                    threads_list[i]->srv_id, threads_list[i]->srv_pthread,
+++                    ci_debug_printf(5, "Cancel server %" PRIu64 ", thread_id %" PRIu64 " (%d)\n",
+++                                    (uint64_t)threads_list[i]->srv_id, (uint64_t)threads_list[i]->srv_pthread,
++                                     i);
++                     ci_thread_join(threads_list[i]->srv_pthread);
++                     release_thread_i(i);
++@@ -252,7 +252,7 @@ static void cancel_all_threads()
++                     /*The thread is still running, and we have a timeout for waiting
++                       the thread to exit. */
++                     if (wait_for_workers <= 2) {
++-                        ci_debug_printf(5, "Thread %ld still running near the timeout. Try to kill it\n", threads_list[i]->srv_pthread);
+++		        ci_debug_printf(5, "Thread %" PRIu64 " still running near the timeout. Try to kill it\n", (uint64_t)threads_list[i]->srv_pthread);
++                         pthread_kill( threads_list[i]->srv_pthread, SIGTERM);
++                     }
++                 }
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
