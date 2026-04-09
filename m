@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52538E9DE66
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 08:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2627AE9DE62
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 08:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80FCE41095;
-	Thu,  9 Apr 2026 08:14:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDAF140F45;
+	Thu,  9 Apr 2026 08:23:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bPb9Ie_soJMQ; Thu,  9 Apr 2026 08:14:36 +0000 (UTC)
+ id h7BvrJOTqzSv; Thu,  9 Apr 2026 08:23:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 717234108B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F19E540EF8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775722476;
-	bh=LOAG9Vutpu+JAn+l8nhtcXKaIY3Ij1XLoARUByXqP+Y=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=RxkefK+Utpsf808AxfqgKjVEbyqLQbbhthEaNBaA2W4uaDp4lgjcO5zUnef864VfC
-	 kvpoQIvWYki4onc5nEj353qFt7UY4/iUM4mkhnUdbW2dasKI1wu8K1a2WR9Pc6NExD
-	 a/6d2qilCSf8NhnUJHPNe9hRDlMYhq0G7OZcL11wxzt5mbF26+hqLqnG6uv4qbqoPk
-	 i1FQk80vXxdFwMejzdBNTjs4CLnkeRDjgblZqZaDAtx5r+hsKtQPPtmhfJoGyXOpAM
-	 sUWBY1ZgSmkApbrRjJMfND951YpithXess+CfXBPErm3afMkm3bhs7nq9Zai/pc+ZV
-	 TdTDggEgBMPnQ==
+	s=default; t=1775723027;
+	bh=+GbVmfX0KpSbAadwVSNa88OrYstEsXVv5PRrzKcPSCI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=FcpBa/3PJDLbG8SXTciCMPdociVRYUtzyKSKk0afCrfDroH4t3RyhonLo/EAqS7tG
+	 3zo2uux8Lovgi1u+gSOGrP3jDIYiHTJeVLnKqfRsXWsKBwFka+4505Q5/s7fRuchz/
+	 x+mj3Lf3MERAwB6dyfbje14WZNZ4I6ADAkV9qvOFG/P7zWbxrvDgswSY3eWxP6HQdU
+	 rSYUuo0CZmNIEHpQqjGXAXcD4oWrnXyh5RubONIeiC9pNVYEKwuj13xmhkFKZk0mXW
+	 F7HyP7jWlt7r8gO6BSPuC3v1RfrFaiNQshPsSdG8P6GkWQ129R+v8MR1Ceup6UuCns
+	 f2QHB9pcl1zag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 717234108B;
-	Thu,  9 Apr 2026 08:14:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F19E540EF8;
+	Thu,  9 Apr 2026 08:23:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FABB1D6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:14:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C242237
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0158182726
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:14:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D45982784
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:23:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vGFDg7NSJs_z for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 08:14:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a02:168:860f:1::35;
- helo=mail.codelabs.ch; envelope-from=martin@strongswan.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3A4758254A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A4758254A
-Received: from mail.codelabs.ch (mail.codelabs.ch [IPv6:2a02:168:860f:1::35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A4758254A
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:14:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.codelabs.ch (Postfix) with ESMTP id CC3A25A0009;
- Thu, 09 Apr 2026 10:14:22 +0200 (CEST)
-Received: from mail.codelabs.ch ([127.0.0.1])
- by localhost (fenrir.codelabs.ch [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rfjj8BEnfQGl; Thu,  9 Apr 2026 10:14:21 +0200 (CEST)
-Received: from zbook.wlp.is (unknown [185.12.128.225])
- by mail.codelabs.ch (Postfix) with ESMTPSA id 2116A5A000A;
- Thu, 09 Apr 2026 10:14:18 +0200 (CEST)
-From: Martin Willi <martin@strongswan.org>
+ id Uhh1_6rxwLtf for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 08:23:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB6918272C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB6918272C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB6918272C
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 08:23:44 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6ca66.dip0.t-ipconnect.de [79.214.202.102])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D405DA4C07B9;
+ Thu,  9 Apr 2026 10:23:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40362)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1wAkfu-0000000012r-31bP;
+ Thu, 09 Apr 2026 08:23:42 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Thu,  9 Apr 2026 10:14:01 +0200
-Message-ID: <20260409081401.2060709-7-martin@strongswan.org>
-In-Reply-To: <20260409081401.2060709-1-martin@strongswan.org>
-References: <20260409081401.2060709-1-martin@strongswan.org>
+Cc: Alexander Clouter <alex+buildroot@digriz.org.uk>
+Date: Thu,  9 Apr 2026 10:23:42 +0200
+Message-ID: <20260409082342.3957780-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=strongswan.org; s=default; t=1775722458;
- bh=V9sn0a/le4/vrYMMq8wy9/V5VX0paIycQzrEI/EJ6f8=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=CvaR2Ea3P7vqhDsJVxHQQCo/ZR6wsoXrIVYxkkYubth+NuPLmJSaIRkegvzcRk9Ub
- uenyHXYajdovX0N1EhhAORfLhAw9ZNFcPlvxxhWxqsfqdWhaJqReTIeC+pDQmRhpkC
- Iv3eKl2yyF86U9vrDZYyIMesf8czfavvVu35J0R+HvagTlzjsPoqnxv+4WAm+3SIL0
- sgJ7dOXYeRAC/lDnumt/g/qCYDPchDJju/p0ddEXDkJ+k9I6C5lJnEYt5XmVLgdgEW
- gaDOaW7z4U2Y1eibWYs//ymwID+aULI4SiVwGeuAZG2YSesRV0sac8LU5bqOPV8uGl
- 9VLaHwQ/n3Gcg==
+X-Spamd-Bar: --
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1775723022;
+ bh=egM2VHTEgh0aCLLNtVjsq96MmbLx9zU7zpsS9JfcPyc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=qYEWBuMTFSi9kcYUPppDATPUl8PU08ivKRrxubKlTF5Mm53Olchr6uIr6aohSIPSQ
+ ucmaZyfrnHIepELbeHNIOILKGaUbUCyK+XVK+MHoZBb33s0qygRwT2Tw9R5mfsX+Au
+ AgjfqgnzH0Ve3kp0iflFi/SKQOrC8FvjpNOYZK81B+B2dirk8VYnJmBv2YwJTQ2uHe
+ MSpr4YY5aLnqQefADeBjnpmyomcQyqc08kuOvZ52TDQdgFtfVg7ZIwuyyvUz724RyH
+ iCZ5NcDae4ENkQlviahbrzUHMR5tes3kX6bngexv+obpENy1XpDLsO6Qb/gi5GXG8W
+ HUOH80gJ88nUw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=strongswan.org
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=strongswan.org header.i=@strongswan.org
- header.a=rsa-sha256 header.s=default header.b=CvaR2Ea3
-Subject: [Buildroot] [PATCH v4 6/6] utils/generate-cyclonedx: generate vcs
- externalReferences for source repos
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=qYEWBuMT
+Subject: [Buildroot] [PATCH 1/1] package/odhcp6c: fix build with glibc >=
+ 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,116 +98,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some packages do not have a http/https download URL for a source tarball,
-but are acquired over a version control system like git. If so, add
-externalReferences of type "vcs" for such URLs.
+Buildroot commit 227378b5930b681c79a13476ae60a98753a98a03 bumped glibc
+to 2.43 causing build errors in odhcp6c like:
 
-As most git repositories use a https:// transport that may not indicated the
-repository type, add a "comment" due to the lack of a better mechanism in
-CycloneDX.
+/home/autobuild/autobuild/instance-10/output-1/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/config.c:
+ In function 'config_parse_opt_string':
+/home/autobuild/autobuild/instance-10/output-1/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/config.c:338:21:
+ error: initialization discards 'const' qualifier from pointer target
+ type [-Werror=discarded-qualifiers]
+  338 |         char *sep = strpbrk(src, ARRAY_SEP);
 
-While the hashes are calculated over a tarball created locally, it still may
-be useful, so add them for "vcs" externalReferences as well.
+Add upstream commit to fix the problem.
 
-Signed-off-by: Martin Willi <martin@strongswan.org>
+Fixes:
+https://autobuild.buildroot.net/results/efb/efb43d2dc069f5ba9c56816d670a8a2a3682d9ae/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../tests/utils/test_generate_cyclonedx.py    | 30 ++++++++++++++++++-
- utils/generate-cyclonedx                      |  8 +++++
- 2 files changed, 37 insertions(+), 1 deletion(-)
+ ...p6c-const-cast-for-c23-compatibility.patch | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+ create mode 100644 package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch
 
-diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-index 84f94f050760..77690b1b98bc 100644
---- a/support/testing/tests/utils/test_generate_cyclonedx.py
-+++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-@@ -147,6 +147,8 @@ class TestGenerateCycloneDX(unittest.TestCase):
-             {
-                 "source": "foo-1.2.tar.gz",
-                 "uris": [
-+                    "git+git://git.example.org/foo",
-+                    "svn+https://svn.example.org/foo",
-                     "https+https://sources.buildroot.net/foo",
-                     "http|https+https://mirror.example.org/foo",
-                 ],
-@@ -160,10 +162,20 @@ class TestGenerateCycloneDX(unittest.TestCase):
-         self.assertEqual(
-             foo["externalReferences"],
-             [
-+                {
-+                    "type": "vcs",
-+                    "url": "git://git.example.org/foo",
-+                    "comment": "git repository",
-+                },
-+                {
-+                    "type": "vcs",
-+                    "url": "https://svn.example.org/foo",
-+                    "comment": "svn repository",
-+                },
-                 {
-                     "type": "source-distribution",
-                     "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
--                },
-+                }
-             ],
-         )
- 
-@@ -183,6 +195,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
-                 {
-                     "source": "foo-1.2.tar.gz",
-                     "uris": [
-+                        "git+git://git.example.org/foo",
-                         "http|https+https://mirror.example.org/foo",
-                     ],
-                 },
-@@ -194,6 +207,21 @@ class TestGenerateCycloneDX(unittest.TestCase):
-         self.assertEqual(
-             foo["externalReferences"],
-             [
-+                {
-+                    "type": "vcs",
-+                    "url": "git://git.example.org/foo",
-+                    "comment": "git repository",
-+                    "hashes": [
-+                        {
-+                            "alg": "SHA-256",
-+                            "content": "1111111111111111111111111111111111111111111111111111111111111111",
-+                        },
-+                        {
-+                            "alg": "SHA-1",
-+                            "content": "2222222222222222222222222222222222222222",
-+                        },
-+                    ]
-+                },
-                 {
-                     "type": "source-distribution",
-                     "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 382d91ce55af..4166abd9ff04 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -325,6 +325,7 @@ def cyclonedx_external_refs(comp):
-         dict: External reference information in CycloneDX format, or empty dict
-     """
-     SOURCE_DIST_SCHEMES = {"http", "https"}
-+    VCS_SCHEMES = {"git", "svn", "cvs", "hg", "bzr"}
- 
-     refs = []
-     for download in comp.get("downloads", []):
-@@ -336,6 +337,13 @@ def cyclonedx_external_refs(comp):
-                     "url": f"{uri}/{source}",
-                     **cyclonedx_source_hashes(comp, source),
-                 })
-+            elif set(schemes) & VCS_SCHEMES:
-+                refs.append({
-+                    "type": "vcs",
-+                    "url": uri,
-+                    "comment": f"{schemes[0]} repository",
-+                    **cyclonedx_source_hashes(comp, source),
-+                })
-     if refs:
-         return {"externalReferences": refs}
-     return {}
+diff --git a/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch b/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch
+new file mode 100644
+index 0000000000..cdb26a7434
+--- /dev/null
++++ b/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch
+@@ -0,0 +1,102 @@
++From 3b69378125aba61b3391bf5fe607983ce75b839c Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Wed, 8 Apr 2026 14:14:56 -0700
++Subject: [PATCH] odhcp6c: const cast for c23 compatibility
++
++strpbrk is now a macro that returns const based on the parameter. Cast
++it away when we don't want const.
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++
++Upstream: https://github.com/openwrt/odhcp6c/pull/156
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/config.c | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/src/config.c b/src/config.c
++index 54e2d35..c1a3a99 100644
++--- a/src/config.c
+++++ b/src/config.c
++@@ -338,7 +338,7 @@ static int config_parse_opt_u8(const char *src, uint8_t **dst)
++ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
++ 
++ 	if (sep && !array)
++ 		return -1;
++@@ -362,7 +362,7 @@ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool ar
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -371,7 +371,7 @@ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool ar
++ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
++ 
++ 	if (sep && !array)
++ 		return -1;
++@@ -399,7 +399,7 @@ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const boo
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -408,7 +408,7 @@ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const boo
++ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
++ 
++ 	if (sep && !array)
++ 		return -1;
++@@ -433,7 +433,7 @@ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -442,7 +442,7 @@ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array
++ static int config_parse_opt_user_class(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
++ 
++ 	if (sep && !array)
++ 		return -1;
++@@ -471,7 +471,7 @@ static int config_parse_opt_user_class(const char *src, uint8_t **dst, const boo
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -555,7 +555,7 @@ int config_parse_opt(const char *opt)
++ 	struct odhcp6c_opt *dopt = NULL;
++ 	int ret = -1;
++ 
++-	data = strpbrk(opt, ":");
+++	data = strpbrk((char*)opt, ":");
++ 	if (!data)
++ 		return -1;
++ 
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
