@@ -4,164 +4,164 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F237EA3C59
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 12:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFDEEEA3C4E
+	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 12:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1400440587;
-	Thu,  9 Apr 2026 12:40:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 969F940D49;
+	Thu,  9 Apr 2026 12:59:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sMIx32rxYeI6; Thu,  9 Apr 2026 12:40:10 +0000 (UTC)
+ id Y_YO9E4Ro69E; Thu,  9 Apr 2026 12:59:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2940140718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D6940D71
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775738410;
-	bh=urd1W2GNJf1jxd/rGI9KgkgTjNhyuw/3BIoflgmBGkE=;
+	s=default; t=1775739541;
+	bh=QifrzDrEmC4JwbIe8/m39sGefaSITnY1aR9rA8rLNgA=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=bk1XtnSutFrqOqJ/C/0sWwUz/UXZLdavkT2jTDJgmV8mrJNJI5GWyfASwhZcQRsVc
-	 AbVi6xX6nHgQZCaRLrZatb4FreT6qNuKgviQaUsE1xGH2m3QEkRHBK9YREYDs5cBtk
-	 OHKFVW15Hm+voQ9502kUuXEYlcYhGcIEy6UjJ6pIMFlHmdujZGV8x7uW4AUoL5vMcO
-	 SYT+YNPeUOHn8zBxntB+k281WhvgEji1nonebgJTUWqm5ka8Qdg0aVK7aPDSFgwtXZ
-	 8iB+kP0+8jhNiOCeBThtFkUr90sfQArXlkXTrviA39GOEdLSx0kGKcVpcNkgCZ/ZEC
-	 qa0FJ3BEWPGxw==
+	b=PL7hTAipD6Z1uUnA/1kt2h39QdJj3MPK4eSsHiS7d7hYEAHuII81JPPdPUuDbV0IV
+	 6AIMUwj9jiRNYwJ82KKQW+0U2Ud9FNu/phsvYAylq5sUhoOS36z9cBK5GnFk0QuRhB
+	 4uT3aqsMgYdeflXd78Gts8ELK+ujqTzpD0oJWpXVVHUMHO8TkVoBQEPYtxwAYVARN8
+	 ZAHIj4RcDNZBIvOve/F5DqRTow9oMAf6C1OTVTtrHLGQOAQUcFp3TZDlSNfd2jFu/j
+	 eM7Cgm3OHuWwLWHPQn053kvBg+9dGnPS/vGZi6U/s8MA0dQfYZ87+Y9VrIPM5jU7OC
+	 IfIGJsWV3L6PQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2940140718;
-	Thu,  9 Apr 2026 12:40:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 67DF91F6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:40:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0D6940D71;
+	Thu,  9 Apr 2026 12:59:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 69A7E1F6
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A76540431
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57F4440D71
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:59:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NjtzeH-IHq69 for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 12:40:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5tJc5kP-O_zB for <buildroot@buildroot.org>;
+ Thu,  9 Apr 2026 12:58:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a01:111:f403:c201::6;
  helo=am0pr02cu008.outbound.protection.outlook.com;
  envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B286400F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B286400F6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 69DE140D49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69DE140D49
 Received: from AM0PR02CU008.outbound.protection.outlook.com
  (mail-westeuropeazlp170130006.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:c201::6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B286400F6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:40:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 69DE140D49
+ for <buildroot@buildroot.org>; Thu,  9 Apr 2026 12:58:59 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AbmqR3qQ0+HGmfyBWTh1a5qtsNxmV2/m6ITA7NJN7uPNrYtuk+NXIfX0KRbsMwE8OMfMRBHDkME1QL058aVYTxsuFUjaVfqhtTX+UtHFf9Wl0nuxBjarTxKKEuUJ1CCV+J8LCtGD8OhjhnaVRc2oHtPzSJBqRHkgNPNimUdpKA/hauIhVuSfTNT+RzTT/yPfiQrs5H4+4z/NDNLqqBxE71w6vREyBxDc4R2qT8fceD303FlxEm+UtbuzXtioMGrvvcRdFbtMU/ymL/KO1Dw8YNhOnaxGYFgCcZ/AHIzL4ZfjF2c0t65XJ1Pv2mpuJNF0qjRSKRapy9J7TJxHcVsVuw==
+ b=aOWoINkBvSdt8+xJ3sonQpiM1ldu2wZ8qCfcw2P5MxPLgLvLPnJoQUR0m+QOZ00C+a60D2VAEwOEuJDio9qU1PKPxDuq/gJ8vvu4HYrQvH24029UyjOp9LtkUR+kEXK4rWaCjRrYvWopzBTwaRDBD8HDJoZ7bQtUF8Kv6JqtAQG8RrY96PBVI+UhKc/dJXpSBuQOymytaE9KkxgMFlNphxcBHC/67QVYuskJD0tK4YQByL4UydFEzxXR3smmwcrD9Q0K0nPt7wvwvbHwAZr8ENKY+b7+M3KCiJD3cW/SkWl1PuMW9qKgxw6P9s9GHM7X47BQU5s4XcyMDOem9VwaJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OkzjS2nLSOaBVETWhBt51PkSsbO5wK+EgAWAW/3VW7I=;
- b=oUJAyHqsI/niVLV1wUdawuoh2BM3q4+sQCaw1IXKGrk1sA3K1VAFyWu6MNcAfXBp7BZSUsKz20WJmhvJoNwU24sm/jzIrc0icTL2I4+hcBbd+uRC1lnJ8WiiNhQhwDCkrghdX2c8ZQK0EIywIclt8zRDwJrcbNOoMMkVbyyQY5/5Nq2pHowqpK8cxCUvoMc6kXPG7JFIEgNz69AbRkkQ/DIXxvrfPqaLVQbu/3mZ3Fq9b1k5x8xRhtKSb4hBlPTRhwVI1pKK+vPVIGrybQSI6qymcYpx+T79doPBE28eG2AOCGKd+lWfRkQ9pUlcAwiBwDXIFpoUYXbHUxYFlw5cBQ==
+ bh=ZzCdv5NfSh7RVpErZRkOXrlQNjcBK4+mSTXF1ffHXIg=;
+ b=e4HtaT9yu1y2LKTqves26jGwlrztDz4Qk3KGhThWMqgWaarDHstfPoM9yQgYFrq9NTVjN92YXAz6onG3mQ0wbFkbGyz+BwlHOMITG2tkQSeDL1wGRWYmjyBl66VbLaevxheNr4NSvHVpoF2begHXKQmSirXWCSu3eDGCpDY4vBDyy6UBd8QzZQFsO4qhyQ4FiV60EMNDbmRjtCi1+biK+NTS7b5tQaOwVbbmEo9INohxRidH9rS+wE7rm4Y+quvOctzFQifdYCacwWTPA7LiAylBfIQgkvc+IhlbagvtWU8XbL200lxrqu1n+NrgBMXGZSUqHGlT9eRi/RjsxPo0WQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
  dkim=pass header.d=cherry.de; arc=none
 Received: from DBBPR04MB7737.eurprd04.prod.outlook.com (2603:10a6:10:1e5::22)
- by AS8PR04MB8104.eurprd04.prod.outlook.com (2603:10a6:20b:3b1::8)
+ by PA4PR04MB7805.eurprd04.prod.outlook.com (2603:10a6:102:c2::12)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Thu, 9 Apr
- 2026 12:40:03 +0000
+ 2026 12:58:54 +0000
 Received: from DBBPR04MB7737.eurprd04.prod.outlook.com
  ([fe80::5960:fb4b:9313:2b00]) by DBBPR04MB7737.eurprd04.prod.outlook.com
  ([fe80::5960:fb4b:9313:2b00%4]) with mapi id 15.20.9769.016; Thu, 9 Apr 2026
- 12:40:03 +0000
-Message-ID: <67394df1-d461-4672-ba43-30696e505500@cherry.de>
-Date: Thu, 9 Apr 2026 14:40:01 +0200
+ 12:58:54 +0000
+Message-ID: <de0bb761-ca88-4bc6-8d7b-6bd14e9d1cbe@cherry.de>
+Date: Thu, 9 Apr 2026 14:58:53 +0200
 User-Agent: Mozilla Thunderbird
 To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
 References: <20260311140457.140041-1-thomas.perale@mind.be>
- <20260311140457.140041-6-thomas.perale@mind.be>
+ <20260311140457.140041-7-thomas.perale@mind.be>
 Content-Language: en-US
-In-Reply-To: <20260311140457.140041-6-thomas.perale@mind.be>
-X-ClientProxiedBy: VI1PR06CA0228.eurprd06.prod.outlook.com
- (2603:10a6:802:2c::49) To DBBPR04MB7737.eurprd04.prod.outlook.com
+In-Reply-To: <20260311140457.140041-7-thomas.perale@mind.be>
+X-ClientProxiedBy: FR4P281CA0406.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:d0::11) To DBBPR04MB7737.eurprd04.prod.outlook.com
  (2603:10a6:10:1e5::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7737:EE_|AS8PR04MB8104:EE_
-X-MS-Office365-Filtering-Correlation-Id: a509509f-71c9-42af-a3d1-08de96351ee0
+X-MS-TrafficTypeDiagnostic: DBBPR04MB7737:EE_|PA4PR04MB7805:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2006939c-55e2-4b7a-9198-08de9637c129
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|366016|1800799024|376014|10070799003|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: VvYjJkEki8JCqRd7B+hlxfxD1PVB0yuvkGTv3L8BwSe6Tmp1BT/03+If9MsqDtzhEAWLamPeqGDhFCQymAb81umqU9TJ4AoGec8AN1BZcaPzVNqXpbRgYJfFfQrgviQBiWsrvsZwAkA4N3CY+0Tf+Bz7eHgbIShvD5SgHDukb9IvXqY6FYF/27teLBgy/w9lHUq5HK8tVnpb7MiMYwWxuIcShlcroq/NOVOa3FfEGFFGZXgoCzB07sUHrNcmQ39VHVvO4lEwEIxrSdoLzRuJe03i6WQ5KpVeoWg89mkv9YZsd6mQJ0aO55iYogaYAtFwdHaeI3JkTXYSZOV3Rns3WUv3OvRtc5cZBii4/JtxXKOgKL6lMQ+jKALS97l/JRGNyXcV1TT2RIID8ZTfkSKIq4jpxMWwTWJWGweuuroI2dHgIhT81j0bXXtVe6/6IQCkW5OXgcT8PJ/7vbNX44NUAqW+y27hU8u2SlJXYZWM2NNtmiYesrX+4+TFmKzFcyNZfrNPLii9fakvh0diprAq2ueh4/jlWRGE1LSufk0jDL8pWLs/44EVFV3m4Q/eOrxUn4GBjyYBGjdlgcuDUlF2Zxx5NKukf7BzeH+NOnifRVbtleNvuhjdgz6/wNExHtHJOWUKkdyUrBtyZv4VnbICQqfuFJVPp7cO4mIHhfAWgLUZ/jz/wGoJlJ4Xc5xEhO1L
+ ARA:13230040|10070799003|1800799024|376014|366016|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: 7NT/zwSn7GMPDFYoVRQq7cI3XZbimT5pPHRCA5AAh4K8k4ZyhnCjHsj3SiK2ojOcGUOzYg2A5JfyAZ2IkiEXG5U/0Ap66aTO6ML8K2XOOo2f/pD+DTHQPL0Y1FLrSwJqSz63rI6+Ik5sNIiXNaO/1XhJdOy6wEqpwUt3pQSVNwuPqLYpA0PVFl0770qmkEN7SCl32tp6xlwDJkhxwRqVe3wYyJHAVLWs13FWEh/QXzcr0sQWhTsPEdUjeLu69JsfFwwmqgqX83On1+jR9JaNhMkLIfbadcVcnMkdQe1vOvmYLXZpVyfwo6AnwoRt2pNgqC0i2MJaMiZYlrxH3FOwkjARel6r8P4xAkIPbvkLXdXRElo3Ri+veKZhThjEMmPIQHk8Cl2AaTjQSQFzsv94gqaap9yDp5nWjpFJdErFHIof/XkO8F+YfkF16bp94d7OfXC1NiMnuc3CKyH4hplBozyWf92pt0CMe2pKqcgPQZ5/yICcNS+r7NgXsmKfZVe1NGjhgeDP54ouxz9fhR1E6lb9QMYx7gR8pjrmki+2G8nhYndNRdimPGZctz13hfFUKL80LTgks9rBaG4r5lm5JV2nTOBIi7N1okKQu+FrmvaE4ZFEC2IL6hClXS1bz0Wii1PyAYGkNFjYowD1IFvnXboMuLmY+DmHfKDTrpsGjUeFGIBRKGESbcfwQnkidjqf
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DBBPR04MB7737.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014)(10070799003)(22082099003)(18002099003)(56012099003);
+ SFS:(13230040)(10070799003)(1800799024)(376014)(366016)(56012099003)(22082099003)(18002099003);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWpHdVpueGllSVdXQWVGM0NQRExWUzYwZ0txemgxT2ppZHliSTZvTUFZWXc0?=
- =?utf-8?B?VUJqWlgzYU9ZT0tQaXNMenhmenZsN0dQOHhrUlVBWVNrQ3lFcjJ4MTVXMkFk?=
- =?utf-8?B?N2dTS0V5bXI4c2E3eU9xVEpnbzZXblhGRTVlSXhaZ1lwaEdzd1JvTFhNSTdp?=
- =?utf-8?B?SHZvQXVIaXU5ZW1hVFYra0MrRkROYW5yTFdSc0F5QmxMQ2w3TlVwQjh6OXB2?=
- =?utf-8?B?ZjhVVWQ5aU53dFBROTJNS1AraU5mOG5uUUMxb0RQcWNrbmp0V1dhTkN3L3hT?=
- =?utf-8?B?bHdIVisrQWM2T2U4bzJ0bUxJUU1UQWNESkwveGJSMGNvRVNOU01mTDV2Uit3?=
- =?utf-8?B?RFVpUjQxWFZjZG1lbTQ4UlNSNzR0c1JFdy9ybHI2cmRTL3RUdnE3MUY0S0U3?=
- =?utf-8?B?dklvaW1xdFZ0OTlZYUQxNVZHQjl5eDBPbkVqZW0ydXZwQVdFNGxvQS9tTWhx?=
- =?utf-8?B?cXBUMWhoOGFQRjA3V2ZRR3RrdWdXcnJMYjFtTG5KQVFEbm1Ya3FDOEg4Rzd1?=
- =?utf-8?B?dUozOWxUT0ZETHVURlJlL0RiSjR5SnZDamFXTGZMaENaYVZZMmVmbEdxSVk4?=
- =?utf-8?B?OWR2cDhCZWE0RWtTcUoxbEFmVWhHWFlVWlpjMkpjUlF2b1EwU3RVaG4xQXZr?=
- =?utf-8?B?dkVvYTYvVEQ4NzdnczVaa0xJQ3lRYzBGZlpQbm00a29YZEErcTRHSWVuaW5E?=
- =?utf-8?B?eFRSemdlbys5YmVEOGxUZXZBei94cFJROHRBUFFPcnB4MGpPcDJkZkFvUG9K?=
- =?utf-8?B?RC9VamVQcG9PSG53UWZ3TG5UYVBmTGRHZHBJVG5hVFRXcEFGR0s1UlpFVy9t?=
- =?utf-8?B?L1JuUWZXSzNlQ0E5SllWUnF2ZU9UQnl3RE0zREdtRUhBRE9PWVFoT2JBT0Qr?=
- =?utf-8?B?NGZVeWtQeFhQdnYrcEVCQnFKNWllODhwaVdMNGJKdzRZREptaW8rMVJoV2RM?=
- =?utf-8?B?ekROTzRxTngxMEIxOEJ0RmR5NUFuc1g4N3dPWUZka3pETU9yNnJsT0w1OSt3?=
- =?utf-8?B?R1dDUzRhM1U2UXZ2WW8ydWxmNjRTaTRNa1IvbnJJcXo1emNLSk1lbkFKMmpQ?=
- =?utf-8?B?OXVLZGhVM3huOUpocm12dFBkcFA2cjR5blM0LzMrSUpnc3VsOVFFQlpvMndN?=
- =?utf-8?B?UEFtM2FabE16NFk0YkRRMEdOUnVyM2oraVNDZ3pvT01qVnYwTmhUV2o0bHJa?=
- =?utf-8?B?V3Z2ZUpPU0NzZkNSNkZBU2ZFVEtFZmdBcFZHREZrdVYwVEtHSDRzWUdqK2s3?=
- =?utf-8?B?R2hxNzYrcGczYkE2OFhyN1RFUURSQTl5ZXNEeHpncjNaNHQ4eXh2djFoZ0tI?=
- =?utf-8?B?aDY2Uk81MExoWnhyWUpobUpXMEtoTHVFSk5NQ2R3dkZGalpIdU11OXdiWEVG?=
- =?utf-8?B?MjBUNkhxQXgwYUxqQk9Fa0t0MWRPb21jYWlRVHNTTGhkcWhjYmpsL05xSUdy?=
- =?utf-8?B?WGlYV1NKKzUxRUo1cHN3ZGxHeXl1dUsxMGo1VTdxQzNuODdRb3V4RGtTY1JE?=
- =?utf-8?B?US91dTJhb0Fjb1pKMm5LRGNWQ25sZ29BVE9ZbzI5dkdkeG5va1kvd1ptQWF2?=
- =?utf-8?B?QytOR3dJZmFEQzZLWWxTclRuMGU2eC9xbkNVd0NZR0I0SFR6R0xTZjU2Nm95?=
- =?utf-8?B?WVJUQnY1blNXSG11VE41dWpuVDhmZ3Jod29OaHAvcCtKSUdYOUFYZ0JocGQx?=
- =?utf-8?B?V0hHOE93YnJLbmhJaW9hTTNlZXM2c3JGSE5zR1djeFBpdXArQnZxOWNKRDdZ?=
- =?utf-8?B?Q1ZFc2xYWW54NHUvK3JkdVVYYmdkazhmS3BlMUEwaThXNjNsQzhMOFUyUFBP?=
- =?utf-8?B?YjUyeTJzdlJtUTlIRWtJVUI5M1JlTnBxcVIrdlQ3bWYzRXI1d3JEd1lTTmpx?=
- =?utf-8?B?blVDUndOSkdmcTJVSkVpT0xxbm1NQWhTVTZFUlpndXJ4OGNJTVNvMnJZSDZJ?=
- =?utf-8?B?OThkTmhLUlRPdjllRnpxcmRUVG9xNjhJNzRhUzdsbHBuUmovWngrREF4NTZ0?=
- =?utf-8?B?SDM3SFByKyt0RXBUU1Bkd294TjB4WERSaHRZNnc0U2xvTTRtSmFWYlNNeXNu?=
- =?utf-8?B?MkhEcnlBVUNKN3hhVWVGUXFTWDRLaExLQTh1TEdNa1RLUkNuUnlCdDFVa3Vy?=
- =?utf-8?B?bmZ0bXQ5eERQZHpBMFRIdEVWRDJJMEpqRFF5UDduZVF6SG1wWnhmSlJyaW1K?=
- =?utf-8?B?S1ZZZkk2Z25FaXJkWXY0NHRFb3VhWGtOSWo5eWhUOC95ZTRXVDdhRjV5RUFL?=
- =?utf-8?B?L1J6T0VEMW5Rb2lWZzdobnNQdEE3cmVrSFlXMG1qMnBseXcxQnZnZzR3cU9m?=
- =?utf-8?B?cE5SbGlmQUJTQTJMNmhZOEk2Yi9lc3ROa2IxNi9wZkFPVTduL0czejFyNjYy?=
- =?utf-8?Q?V1WeqTKaMGfgtaostbAKeq76YCAZAZlInZyWV?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnNtM0dkR2RwbnAwSkM3cGllaEhPaWxkZFRyZEpTMUdQbWlrU0wxQWJtREZQ?=
+ =?utf-8?B?YTk2U2o2NjNlbi9qUTlQWjlDaFJ2YytQT0JlVmN1N2g1UTdlZkdKMjN3dlpk?=
+ =?utf-8?B?V0tOMC9lMDBNd3NvOG1tWnZNWlE2dFpkaFQ0WktzQVJzUkJaSFpBL1orRks5?=
+ =?utf-8?B?YXJRaEg2dWl5VzdKL0hvdDBPeTN6Mm96Yitlc2ZmVkhJTndpZis2VG1RazhK?=
+ =?utf-8?B?bUVIdWVseEtmM1hxZnh6T0dsZ2JKWkhlb01FMkJteThDWEhIWU1GT0ttbVhr?=
+ =?utf-8?B?RGJvK283eGtDbmQxdFlMR0hFcVVvU1VtREE5dnl0b01jOHgrNzc1N2EyZFlh?=
+ =?utf-8?B?S2Z2SDQzSGsvclpEWm4rVG01MGl3S3dtN1YwUThrUmp0M0hIYmtuU0xvWHVp?=
+ =?utf-8?B?ZWF6RHVxbzl6SmhjVEkxTW52QVpFd1JuTXRibVYxRTlPbGkyeUhHbWJEaytD?=
+ =?utf-8?B?aDBrN1dvV3hKUnllY2hhTG82VGZJaXVXTEdtOUp4a1BudkJRcEtCSml0cFFJ?=
+ =?utf-8?B?ZlVPckxXWlR3Nnh5VnJ6bThpdnVtQi93QTcybTNOL2ppWDZRZFZvL3d2Ujkz?=
+ =?utf-8?B?Yy9vcUVNZTBUNU44TlYxUWpsaEozeW5LV1k0dFFidjJnaitEUWR4Slc3M2tB?=
+ =?utf-8?B?R1BhcG43c0xlRDVSZDN5LzNUQVlRNU9VMVJENkxRRlhRS09OYVNBTjU0bEdt?=
+ =?utf-8?B?V1U4eWs4SmNHYWdaa0FvT3cxcFJoRTU1bUZkR0ZZMzZvd2VwdnExalN0YmNa?=
+ =?utf-8?B?b2ZKeVRHYkNoQzNTKzIyVnhldkhIdExBOHpkVW5DWS9qZ0JQVlVBSERZcS8w?=
+ =?utf-8?B?N1F4K3gxUDZjUEthNjQzQkc3MjE4ZWxtOG1WTml1TUZFUUxqWWlGWU5Id01r?=
+ =?utf-8?B?WFpMWGVMN1hLZzZlbnU5R0hOeTlabFNsMGhoNkdyZlpWOXlhR0tJVDN2c3Z2?=
+ =?utf-8?B?QmE1RWNXcDcyQVNGc0M3M1huS2s1Um1odFdtVlpoVTJTempHY3p6dGxGYS9x?=
+ =?utf-8?B?OUwvS1BuL2IzQ2ZTclJwMzRKM3A0VmFVY2J3M1FwKzdLQzBXNkJWVTVRazhT?=
+ =?utf-8?B?bFBSeG5GNHd2K1o5T2JQZFVzMndhdHk0MExnUG5nTnM1cjhOaEd2VHNyeU9Z?=
+ =?utf-8?B?Y2lYbE5SR2Y1WG1IcWg2Q21XYUNobkxyOG1xay9hbW5Wb2l6ZitLdVg4Q0xy?=
+ =?utf-8?B?NlZLMWlSa0N5YmNPWDBOeTdIVldMbVRjRDMyL05zZUtJc0hWblVkMVB2RUxV?=
+ =?utf-8?B?dVZSUndvZVZYdEJFTnJmQytnVlZDT0pyMkFyaVplMHZPMlNvcnNncUtNT0NF?=
+ =?utf-8?B?MWhLbDdZL1l1Y05RMDN3SEtEcjFCM0lwRjhHWENlSDRsMjE0alF1Q01FVVZQ?=
+ =?utf-8?B?RDBBY3J3NFVla0Y2RXNaVytSOE1GODBUcXRUZ1hkZWRlWUNWODRrTGFreDBq?=
+ =?utf-8?B?NnRENVpCdFRvc1dPTkZMaVk3bkNrTEtSSVo1MmFtTDgwWExISHRrcE4wT2Yw?=
+ =?utf-8?B?ckMxUVNlVXFhRzdDRUNuWFhzdnFUaCticnZ0dU5nd2RPZWJiSzJGaHEzb0x5?=
+ =?utf-8?B?LzJEdXhnRXFBYW5mcDlaTU0vdmtob3VxdE1YeGcyUTZRUHZBV2wxenlRbkdR?=
+ =?utf-8?B?Sk1KcUd2bi91RTZDelpESTJzUU9tNU0zUUlGSGtnOUk5M1UrN3k2VnNNQTdC?=
+ =?utf-8?B?d2dFN1EzTVE1UHhvZVhXZktsSS9PaWMvSExBM0V1ZkRGOHhtOGN1UEw4UWd0?=
+ =?utf-8?B?bW56T3pNc2FPSXlTZVAvWUZlSkJSbE9tTWcxVGFlV2g4YWxUUjU0WjF4b1V3?=
+ =?utf-8?B?SENvVzNxQldqYjRicXVXcUM4ZGdSdzdCdm9lMFZkN1hCbVVrWHRlNkdoR0xz?=
+ =?utf-8?B?UzV2U1dOeWR5RTNDRFVYbVBDS0FDeEdZejFRbjVaMkZ3eEk5ZVZmVnp4N2cz?=
+ =?utf-8?B?S0hWU0dSdTJWcXRRZHFqOGJuM3IxcUVLNVM3eFJ4VU9MZU1pcjJ1Z0pxVTFD?=
+ =?utf-8?B?Ky9qNUNKUVFNM0NLdHc4SWFVZUNxemYvaGN0REh4aTF3QXZ1TU8vdWlGeHZp?=
+ =?utf-8?B?SVhTODhvdVlJVkdIY0Q3T3JJdkVaNVhLbmFlTnQrS2NpeDQ3VllkWUVFL0x6?=
+ =?utf-8?B?UUNrTEVSZ2RROWFXOU80QW1jdzBuUCtCRDByN2NHeHlsaU12dlJJdGJqU3BW?=
+ =?utf-8?B?M0JIZjJHa09XVnZEcHc3YkpTQStTczkxdWttOTB2ZDhpbmdGU3NWTC9BZ3NM?=
+ =?utf-8?B?QkZhaWk2Sy9pTXp5YzgyeVNQaHRnVVRGSW9kckFHUFZwR1JzaVliUGtaNmtR?=
+ =?utf-8?B?WGpHNllWQ1NHZlVWLy85VnMwWWltNmJwOFYzdU9TYUU3MlJ0L3Uvb3ZQaklM?=
+ =?utf-8?Q?WvbKrHwx9PZcPprti3vhlVBTCulUsVKysOyEc?=
 X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: a509509f-71c9-42af-a3d1-08de96351ee0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2006939c-55e2-4b7a-9198-08de9637c129
 X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7737.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 12:40:03.0107 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 12:58:54.2495 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Kk8KI46GPvrKR5AOkmfI5snvG9O7hl9i69/P/YMUmn9/Yil8OvA6w+/jN7FNGPIfcOq7EdPo04i3M1suQqyWkmNe1+8Jd7QAkuAdTvZpnkc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8104
+X-MS-Exchange-CrossTenant-UserPrincipalName: dVreIttu0vUjjLzJFRkfT7csiHowwf8AXWg5Qy9BZe3QiQ15gK1allG+q5qqFyR7xvXrzg3bcqgz5ovdO9T7QLdCDwgPDXTM2vugJzNgWEk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7805
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=cherry.de; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OkzjS2nLSOaBVETWhBt51PkSsbO5wK+EgAWAW/3VW7I=;
- b=ceTgj51Xi5HcWD9ux0Ezj0/ppP3cupkt5EIs+Jw8HpqnHoES2XBffA0ukmVX56IRmDSfuN+1/K60hpGhvuSjAp7vHEekkxpGS4GPgYLbccGphDOoS3vfLvfGrGxtpGENZGf4DcPHUB33sp2sw/9X07M4Iz5NWdFdM+N6Bo9KnZY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ZzCdv5NfSh7RVpErZRkOXrlQNjcBK4+mSTXF1ffHXIg=;
+ b=E+6ifZRD37pNlsyERTg11HxGCblMMZj56oiAm30+3CdslcSVzNgGKxBwIKRZPn7E0m5u4JRD9V2hJrNV7TokmzLOUR0few+ddLy4X8YQxX8jKJE/pLVCvYXvcXQsRFOUz60pEL7I1gz93StCDguWD+oLAVzaJLMwktXWdaxHQLU=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=cherry.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
- header.s=selector1 header.b=ceTgj51X
+ header.s=selector1 header.b=E+6ifZRD
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=cherry.de;
-Subject: Re: [Buildroot] [PATCH v5 5/8] utils/generate-cyclonedx: optional
- bump to v1.7
+Subject: Re: [Buildroot] [PATCH v5 6/8] utils/generate-cyclonedx: mark host
+ packages as external
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -183,63 +183,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Thomas,
 
 On 3/11/26 3:04 PM, Thomas Perale via buildroot wrote:
-> See changes:
+> Mark Buildroot's host packages as 'external' with the 'isExternal'
+> property. Starting CycloneDX v1.7 [1][2] the CycloneDX spec defines this
+> property like the following [3].
 > 
-> - https://cyclonedx.org/news/cyclonedx-v1.7-released/
-> - https://github.com/CycloneDX/specification/releases/tag/1.7
+>> An external component is one that is not part of an assembly, but is
+>> expected to be provided by the environment, regardless of the
+>> component's .scope. This setting can be useful for distinguishing which
+>> components are bundled with the product and which can be relied upon to
+>> be present in the deployment environment.
 > 
-> Since some tools like DependencyTrack don't support CycloneDX SBOM v1.7
-> this bump is optional and default remains v1.6.
+> This fits the usage of 'host' packages : a package provided by the
+> environment and not bundled with the target.
 > 
-> To allow generation of CycloneDX based on the current version of the
-> spec we are using a 'Context' datastructure is created that reference
-> the CycloneDX version spec currently in use.
-> 
-> This Context datastructure is then passed down to functions that
-> generate part of the CycloneDX SBOM.
-> 
-> All the top level datastructure are moved into the Context
-> datastructure that will be generated after the arguments from the
-> command line are interpreted.
+
+That's not my understanding. None of the examples provided in the GitHub 
+issue match a requirement on host executables (in the context of 
+cross-compilation). They all are related to runtime dependencies 
+(dynamic linking, interpreters, hardware-limitation (which SoC/CPU can 
+this run on)) you need to use with the binary(ies) associated with that 
+SBOM. What Buildroot generates is likely self-sufficient? A Buildroot 
+SDK is kinda different, but then the host packages wouldn't be external 
+anyway since they would be part of the SDK and thus "internal". Do you 
+have a different reading of the spec on this? (We just started to look 
+at CycloneDX generated by Buildroot so I wouldn't trust my own 
+gut-feeling on that :) ).
+
+> [1] https://github.com/CycloneDX/specification/releases/tag/1.7
+> [2] https://cyclonedx.org/docs/1.7/json/#components_items_isExternal
+> [3] https://github.com/CycloneDX/specification/issues/321
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 > ---
->   utils/generate-cyclonedx | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
+>   utils/generate-cyclonedx | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
 > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 24c15df94e..cbce3364de 100755
+> index cbce3364de..35d8c72057 100755
 > --- a/utils/generate-cyclonedx
 > +++ b/utils/generate-cyclonedx
-> @@ -21,8 +21,7 @@ import re
->   from typing import Mapping, Tuple
->   from dataclasses import dataclass, field
->   
-> -
-> -CYCLONEDX_VERSION = (1, 6)
-> +DEFAULT_CYCLONEDX_VERSION = (1, 6)
->   
->   brpath = Path(__file__).parent.parent
->   
-> @@ -493,6 +492,9 @@ def main():
->                           help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
->       parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
->                           help="Specify the project version to use in the SBOM metadata (default: builroot version)")
-> +    parser.add_argument("--v17", dest='cdx_version', action='store_const',
-> +                        const=(1, 7), default=DEFAULT_CYCLONEDX_VERSION,
-> +                        help=f"Use CycloneDX version 1.7 (default: {DEFAULT_CYCLONEDX_VERSION})")
->   
+> @@ -373,6 +373,9 @@ class CycloneDX:
+>           return {
+>               "bom-ref": name,
+>               "type": "library",
+> +            **({
+> +                "isExternal": True
+> +            } if self.options.cyclonedx_version >= (1, 7) and comp["type"] == "host" else {}),
+>               **({
+>                   "name": comp["name"],
+>               } if "name" in comp else {}),
 
-How about making this a choice instead so we can easily extend this 
-later on? c.f. https://docs.python.org/3/library/argparse.html#choices
-
-Then use it with generate-cyclonedx --cyclone-sbom-vers 1.7 for example.
-
-Otherwise I'm afraid we're going to have to add more --v arguments and 
-handle them separately (or I guess with a mutual exclusion group).
-
-Cheers,
-Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
