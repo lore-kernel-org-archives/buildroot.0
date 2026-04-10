@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D2FF9D0DB
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31557F9D0DA
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97ED542AF1;
-	Tue, 14 Apr 2026 15:42:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pt-C95RPavUc; Tue, 14 Apr 2026 15:42:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2024342B0F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776181365;
-	bh=3KdPWrmWs2xOXzFfse8Da791D3VPNR8YHsU0IWrCKJg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Qx1tYeFCjv8jdNtrVazR1UAEnkHIbgP+HUfIdpG1K2njtMCJkgc0xHkJFOrh2OR5T
-	 hrdTRtUIfNigS+lOwwdmPGCq2gbKM2oDmM7+a981TRXVeOGyBTy4qS5HuI5ujtBj83
-	 HHsNHTQoqmy9UJ8yXg9TDsAAY963MaLynMJ7R+iWfBmBmxte20atPqO+qBs5ewTHXI
-	 +cULnyjeDpQ5+1KkqIrpIdwV00mljewpqw7FnX6X9zVuq0vrtX5QeK2thgqHW9oLbC
-	 LSN2yhskS4OD5tvWQGKJaRHgBDbPhav0R0X6CwvMJ7WYy+JJQa537grCdudTxXODPJ
-	 fuZMnpgkPKY5g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2024342B0F;
-	Tue, 14 Apr 2026 15:42:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3AF97283
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:42:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 217816EE12
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:42:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 071F961BC3;
+	Tue, 14 Apr 2026 15:42:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iQ0drnJ4Wr2w for <buildroot@buildroot.org>;
+ id 8_PpTKwNoQu1; Tue, 14 Apr 2026 15:42:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C726F481
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776181367;
+	bh=MpZITJti3NiL89A8WGGBxzXMAc1nt+x/hAAmxxOFEmQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=YwkCZY66u9uZijhDQPoA9RW9c4Qj4avoMXv3aA1FD5VECaLiKJBjIr0hHozrvMcYU
+	 yOdRKp0DdbpKWA88ybIs/dhldghOZLfxuE+h9kGDND+mQf3E5Tihn2K7aA4AQNPDD2
+	 gq4eJ/NOSmEgLDPPt7wqCHo7zIwUCoOxP86qCURjGsRrAa+HmX1l1+TNwgT7kNJhtB
+	 B4dcwZ07X9tazKDWSYlyxaWEVoEBuu73WtwS+uSOImKCMjbU4i7jeV8cP0+exWNreQ
+	 wtXh9U3ytIOeC7t1WjglEkZvc6UMLQuTe1zT29e9UXvJyNWrs9eSjno8M9tnwSa5XS
+	 p5bxQW8ZvB6WQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21C726F481;
+	Tue, 14 Apr 2026 15:42:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EF39237
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:42:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DCEA400F6
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:42:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nxajHG_l1qMh for <buildroot@buildroot.org>;
  Tue, 14 Apr 2026 15:42:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B60A06F47F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2282403F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B60A06F47F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2282403F4
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:42:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C4DA814A9; Tue, 14 Apr 2026 15:42:37 +0000 (UTC)
+ id 43F14814A5; Tue, 14 Apr 2026 15:42:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Apr 2026 13:59:14 +0200
+Date: Fri, 10 Apr 2026 12:30:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e3d10db814da1eafe3ec1c2e340bd23ce6f62ee8
-X-Git-Newrev: 886ed61c7d3ea5036f5c09a222f59ace587e4091
+X-Git-Oldrev: a063cf3843dca506d611e1a818a086fb0af36357
+X-Git-Newrev: e3d10db814da1eafe3ec1c2e340bd23ce6f62ee8
 X-Patchwork-Hint: ignore
-Message-Id: <20260414154237.4C4DA814A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/giflib: update
- tarball URL
+Message-Id: <20260414154237.43F14814A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/perl: security
+ bump to version 5.40.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/886ed61c7d3ea5036f5c09a222f59ace587e4091
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e3d10db814da1eafe3ec1c2e340bd23ce6f62ee8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Upstream moved all tarballs to new locations:
-https://sourceforge.net/p/giflib/bugs/190/
+fix CVE 2026-4176 : contains a vulnerable version of Compress::Raw::Zlib
 
-Fixes:
-https://autobuild.buildroot.net/results/c7f/c7f918fe7c879706c5a5875ea11c5f8b57007a85/
+For release notes, see:
+https://perldoc.perl.org/5.40.4/perl5404delta
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ea698142bdd04811fd85f5c6e492d4f896b32990)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/giflib/giflib.hash | 2 +-
- package/giflib/giflib.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/perl/perl.hash | 14 +++++++-------
+ package/perl/perl.mk   |  6 +++---
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-index f11d4f1505..dcc384a523 100644
---- a/package/giflib/giflib.hash
-+++ b/package/giflib/giflib.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/giflib/files
-+# From https://sourceforge.net/projects/giflib/files/giflib-5.x/
- md5  913dd251492134e235ee3c9a91987a4d  giflib-5.2.2.tar.gz
- sha1  608ba98d2dd8d03dfa7476f434d57de50a33e10b  giflib-5.2.2.tar.gz
- # Locally computed
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-index f37ec8af21..00922ce2db 100644
---- a/package/giflib/giflib.mk
-+++ b/package/giflib/giflib.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 0035c448c5..2fe7b5c210 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,12 +1,12 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.3.tar.xz.{md5,sha1,sha256}.txt
+-md5  f526a5975a7cc6f53f28326437b1eb39  perl-5.40.3.tar.xz
+-sha1  7c95250ceff00d649c1f5afa511987a2c4da61d3  perl-5.40.3.tar.xz
+-sha256  65f63b4763ab6cb9bb3d5731dd10369e1705be3c59be9847d453eb60b349ab43  perl-5.40.3.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.4.tar.xz.{md5,sha1,sha256}.txt
++md5  2e83cf578d5044444eb9e445f58cf36f  perl-5.40.4.tar.xz
++sha1  85790a2f35446a9dca6749a563117a36bf381a2e  perl-5.40.4.tar.xz
++sha256  eb0b1116b84ded552f686c9ee40c83000d8388c454f54197ca1d3a3b17246bd3  perl-5.40.4.tar.xz
  
--GIFLIB_VERSION = 5.2.2
--GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
-+GIFLIB_VERSION_MAJOR = 5
-+GIFLIB_VERSION = $(GIFLIB_VERSION_MAJOR).2.2
-+GIFLIB_SITE = https://sourceforge.net/projects/giflib/files/giflib-$(GIFLIB_VERSION_MAJOR).x
- GIFLIB_INSTALL_STAGING = YES
- GIFLIB_LICENSE = MIT
- GIFLIB_LICENSE_FILES = COPYING
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.3/perl-cross-1.6.3.hash
+-sha256  cd57d8f8017727dc7e19cca55e1e9f22664edecf6c9f04c3515ecc13fd88e4f3  perl-cross-1.6.3.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.4/perl-cross-1.6.4.hash
++sha256  b6202173b0a8a43fb312867d85a8cd33527f3f234b1b6e591cdaa9895c9920c7  perl-cross-1.6.4.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+ sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
+-sha256  af805523b88a8ebb60afc009caaf247a498208502f7b8b3d9d3e329fcfb1dc3b  README
++sha256  52bbfb0dbdd5301ab21cc43d0b1d649189eaa3c0caad60a0798657b8c011ab0e  README
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index a301b93e46..41bb8d5dc1 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 40
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).4
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.6.3
++PERL_CROSS_VERSION = 1.6.4
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+@@ -28,7 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
+ define PERL_CROSS_EXTRACT
+ 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
+ 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
+-	mv $(@D)/cnf/diffs/perl5-5.40.2 $(@D)/cnf/diffs/perl5-5.40.3
++	mv $(@D)/cnf/diffs/perl5-5.40.3 $(@D)/cnf/diffs/perl5-5.40.4
+ endef
+ PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
