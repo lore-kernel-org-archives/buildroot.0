@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E43FF9D0D6
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC80F9D0DA
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B47442C09;
-	Tue, 14 Apr 2026 15:49:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D647A42C35;
+	Tue, 14 Apr 2026 15:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9nV8Gb1YCiYb; Tue, 14 Apr 2026 15:49:42 +0000 (UTC)
+ id s3KrVRblBkFC; Tue, 14 Apr 2026 15:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FC1342B0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5273E42C25
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776181781;
-	bh=TmTdS2FWjYsRBF0K+lhlX7IZWXF/jttz5Stoty4wAB0=;
+	s=default; t=1776181783;
+	bh=nYkgo+WfMQmvrWXlDx1J/vQFv+R5P2czwAjzgBJJ1Gw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eeQqN6ZJ5HZYUXCNAcibtr2wqlEiRTF6gt6L7Fr3na/znoy4AW1mmWS9en+7VslAf
-	 X1wp7HfxRGzn2orZh7C5ANOddhI/90p0XSTfuU/zLbKD4Duo5lPgtLx9AQP5nhUFck
-	 w/CEhn8Dkzj+KLvenLoB/ufqao5+U81+diK1+oXHM0yJV/fVa/xoNYegAkVgrhOMh/
-	 i0xghgk2lydulSkRDlm324fIK+fjaz1aAFwqpvnbCOJrbaPo6+A6GPp005rYUe+sz2
-	 bRPVwUQQu+WeU/iZkYRv5PHY/nqcwQAlJl5p76Pb+VVxzzNRfpoyZHVjVGnv0hjd/J
-	 EsSFdCK+ATPxA==
+	b=SKf/Gb6wlBVArSZmyI6OlfWLBU2OImFwCZQ7Az9eLk68EugZC8jonIFQnwCj11s7O
+	 GEXf7flOXpZb5DXwIfDCnzxEK4UUKiV1iC+zUFKyrkk9BDAcPlB103JeRc/msUeH/h
+	 oR/OoW6t0twU2503Vqvi/M8BEH1M9fcrnPNRzLp74xppR8/fSsuzA9ByKJB5QHRUNl
+	 1JCL4Y35v0qoX1UQoim433L5bfaPHmTo7AYxrNqtMHqqEiIfvafgFU1UhqGYLn8zfz
+	 51PGXX6Y29e1fauRztb0iMIstd0V6R5gkTCcWPHpPDxIqXiDaJh3oP2FDpc4dGsOQH
+	 VOLjza35rCEpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FC1342B0E;
-	Tue, 14 Apr 2026 15:49:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5273E42C25;
+	Tue, 14 Apr 2026 15:49:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 53FE0237
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 62228283
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CF0584D42
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4655984D41
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GlT3ykN2KYQY for <buildroot@buildroot.org>;
+ id ui-0JOFdL2LK for <buildroot@buildroot.org>;
  Tue, 14 Apr 2026 15:49:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2AA284D44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 143C784D45
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2AA284D44
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 143C784D45
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:49:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8823181510; Tue, 14 Apr 2026 15:49:26 +0000 (UTC)
+ id AAA5E81518; Tue, 14 Apr 2026 15:49:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Apr 2026 12:27:05 +0200
+Date: Fri, 10 Apr 2026 14:02:57 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 829b1819fcbd4b91c43c3971ca6ee859942639bc
-X-Git-Newrev: 6b319ddb5f38597279759dfe27530956fe1e37d8
+X-Git-Oldrev: 986b66534e64fff342f91e67234f6200f0825900
+X-Git-Newrev: 53cd2b0d0d56e2ee51932aa908f5e0f81de64370
 X-Patchwork-Hint: ignore
-Message-Id: <20260414154926.8823181510@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/perl: security
- bump to version 5.42.2
+Message-Id: <20260414154926.AAA5E81518@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/bind: security
+ bump to version 9.18.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,77 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b319ddb5f38597279759dfe27530956fe1e37d8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/53cd2b0d0d56e2ee51932aa908f5e0f81de64370
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-fix CVE 2026-4176 : contains a vulnerable version of Compress::Raw::Zlib
+Release notes:
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/notes.html
 
-For release notes, see:
-https://perldoc.perl.org/5.42.2/perl5422delta
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.48/doc/arm/html/changelog.html
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d6900606188dec4c100a648715d8c702e74dd7cd)
+Fixes bugs:
+GL #5817
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5817
+GL #5800
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5800
+GL #5826
+https://gitlab.isc.org/isc-projects/bind9/-/issues/5826
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f42f5f4dbcc21d3119799d61112fcb4de0d24a68)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/perl/perl.hash | 14 +++++++-------
- package/perl/perl.mk   |  5 +++--
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 3aefdd05b6..d88de6c425 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,12 +1,12 @@
--# Hashes from: https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz.{md5,sha1,sha256}.txt
--md5  7a6950a9f12d01eb96a9d2ed2f4e0072  perl-5.42.0.tar.xz
--sha1  3b557f28dcb412b115d9628c37fc94b2fda08384  perl-5.42.0.tar.xz
--sha256  73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3  perl-5.42.0.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.42.2.tar.xz.{md5,sha1,sha256}.txt
-+md5  be6e70b71ec6589fc090f7303c5b3056  perl-5.42.2.tar.xz
-+sha1  dc36549204ec31680e1c7c0acb37fad0de83a339  perl-5.42.2.tar.xz
-+sha256  0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb  perl-5.42.2.tar.xz
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 09d35a3698..7b268a49b4 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.47/bind-9.18.47.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.48/bind-9.18.48.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  9d544ba013decd1ee60e3c99d5548dd21aaaf5db96205dfc8623f39f061f14be  bind-9.18.47.tar.xz
++sha256  c742a69bff2561c23099d7c70c6984c145bcca1c1e3c67fac1f68a8132e8e7c5  bind-9.18.48.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b889f922b6..17ea50c5f4 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.3/perl-cross-1.6.3.hash
--sha256  cd57d8f8017727dc7e19cca55e1e9f22664edecf6c9f04c3515ecc13fd88e4f3  perl-cross-1.6.3.tar.gz
-+# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.4/perl-cross-1.6.4.hash
-+sha256  b6202173b0a8a43fb312867d85a8cd33527f3f234b1b6e591cdaa9895c9920c7  perl-cross-1.6.4.tar.gz
- 
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
- sha256  8979e6dd61852041643c5c5c40ea63b2bd1b438a67d114e62cbaef808c514315  Copying
--sha256  189e9d6ac7743ed4e832f14c9edb6f782c92d8868b447fa2684f7fe5a81465c1  README
-+sha256  16381bf5fe73ad96ed26449b52eb4a85b2a32a49763c8a788d43af80f3add548  README
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index c31a368b70..c96eb44135 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 42
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
-@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
- PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.6.3
-+PERL_CROSS_VERSION = 1.6.4
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
-@@ -28,6 +28,7 @@ PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(PERL_DL_DIR)/$(PERL_CROSS_SOURCE) | \
- 	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
-+	mv $(@D)/cnf/diffs/perl5-5.42.0 $(@D)/cnf/diffs/perl5-5.42.2
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
+-BIND_VERSION = 9.18.47
++BIND_VERSION = 9.18.48
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
