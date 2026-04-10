@@ -1,85 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD82F36BA9
-	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 05:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A99F36BAE
+	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 06:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E97360731;
-	Fri, 10 Apr 2026 05:31:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89754401AF;
+	Fri, 10 Apr 2026 06:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iUDBWVMMfFIi; Fri, 10 Apr 2026 05:30:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lm-ND0RDQy0d; Fri, 10 Apr 2026 06:20:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8934B60857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B6D0402B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775799059;
-	bh=qfaH5+JydI9qp3PHUbyncT/ChiUOWyAu7iEmQwZyXIk=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=H58v2EDkLDxPdKtUbDYqq6kOqcDGvyjLU5w0GCADa0qJTiGNEOIeyyZgTKSewFmQw
-	 o1BFtYIpdn5+605REgdAo5NZK+sMYHN7JLauMQ+iPDplpYnT2iNey2iuxSzqyAq9BG
-	 rPnyV7WpfCXK2iPBqEwsZ4GWMmFCVMI6B9DxsORcDsJuh1KxF8jDxbm9sx1aaUgNzC
-	 8Kz7QAvohODd0oButwhiz6S12YziwUHH9HWOiieULU2uCKSq0csyP4TzsP9+F2MIJ9
-	 sr093A+wWuPi4AcV1iEuuv+iF6JSWzUCn88B4pLbUSJsDnHuPwQyRCOIeHF9QjsrXm
-	 hfiZ9QoYLKwiA==
+	s=default; t=1775802001;
+	bh=iCp/b2LeUv78M+PO60AOJx5XkgG5W8YZ0bMje5iH9rU=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=piTZRo7htTiFkWgPjDYYkTZ/o/7WVlL+sMHHPi+4TR2v2K1CUwnH4aBQvUb7XbOhW
+	 mA7QYDoGdMjOsNrQ68c8pVrowCKRhNcWxiDeHxyhmOcFXcbcI3/5LiIpIti+MkxcP/
+	 GY1XTjnjglsYszadnVOt/Bo6hThbsPMlCvsQLOgf18mxO8sgl8DFx9qMmWcXi27bGH
+	 CdVE9ScNa4f7kEChsihoP1fuJ83wUHbLFkQxn9h91KyS+evY/4JXhJ69JqXa/Ia8y9
+	 rhqvEa8ci8hjs3QAkAjcJBoq2P1uWiha9HaD19/C36uwyWZWdxBKM15GsAtM0/uJxR
+	 9ZTUtYwPkYTew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8934B60857;
-	Fri, 10 Apr 2026 05:30:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 648AD1F6
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 05:30:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B6D0402B5;
+	Fri, 10 Apr 2026 06:20:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EE7F237
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 06:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58761816D5
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 05:30:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE9B54030F
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 06:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C-wdLaptSsV2 for <buildroot@buildroot.org>;
- Fri, 10 Apr 2026 05:30:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 859BD814C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 859BD814C6
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 859BD814C6
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 05:30:57 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a090a.dip0.t-ipconnect.de [91.58.9.10])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AE489A4C1087
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:30:55 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51424)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wB4SF-000000000dF-2VZ7
- for buildroot@buildroot.org; Fri, 10 Apr 2026 05:30:55 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uGJJLC9Qm3lE for <buildroot@buildroot.org>;
+ Fri, 10 Apr 2026 06:19:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B321340313
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B321340313
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B321340313
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 06:19:56 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-43d0deb7ad5so1216318f8f.2
+ for <buildroot@buildroot.org>; Thu, 09 Apr 2026 23:19:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1775801994; x=1776406794;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=uQpH/FCwlr6wNnkswoVmcjA4MUwAlQ+4DrKwwm9pXhg=;
+ b=pVs1MCZh3s1tKHnBlCauLnqhj6PMOZvYp9JFRvGRslsn8w+cYJsu1aCaR/bH0Dl/Fc
+ sC1hgRkjmpRalC6sElkw+qpqlfd4dQmvRWIveR8QZ2kzyKevR2fTxrmpNmiT07Y19tq7
+ d9qIx04vwex+Bg/MZrq1yABws/e5biBSDyeiTuZPc5Rxu7V5JTONGN4GD+v6wn/BdCIX
+ +2XZ6qSXnEBVzL4dpkk15d3EI2Kg80q9sWHh0tAxcC9gXRw6ckCxgCTGiAoAaNynvKL6
+ HK33mp72CaszefI+2c/gHCTnXvw3bb+XTYK810/SgwK+1j+0+slL/7V/jaimjBelLwRj
+ ScIA==
+X-Gm-Message-State: AOJu0YxzuyoXSC3d4bTMYrF+yNvA1cTsbdNlcsJAOEzVW+oUYGnjvfko
+ ftDIjeEqZel1Zj9gHI32hFaL0pOAfRJIVijUPUNEYK0H3Q+d4Xg+j6ccBrI88x9eLwHdU9Y79/g
+ jp0KW
+X-Gm-Gg: AeBDievIBGyp/8dG0wikGrmDNS7dz3svP7qJOR3E8wPtL40qXCI1+NYLqhsXUEywY/l
+ kSvcderSlcsZhu+K8SN1qVoMR5m3XUz/uh6pclwe3LBFqhL7UVAWlT7oFlrsmiC5yadSU8iLVdR
+ QQQ+Ttdaw/wEvRYuBKvEtObMMhxVGzQhD85FnTXZGfM8tWjCdDJDqP7P9xLuDlbYurwp2al23q1
+ 2Y9Dfs2IU1Mo0YTN9zcKXHEWeYQfqhtiLNWEPnTXwf26s3c0EasUF0PBP9yzOhmKMk6yCWnYrHM
+ Ljn2lxWkua3vTZEllxMUjz5DEDtafNB4WLGLQuXNcQ6AZVcYdHLr+Tf7EAq/ibVdBE1+O/m4jzI
+ XC7GeU9jmgpQ3dr1YoqWQLzrPSvRrlWTdloC9hOYdUSAp8HBQFK4bwJztxkwrMQmDIbesQ7h0EX
+ 7dEKTljwE9ho+MWtH6piQJK6B1zZ01lhNMYEOGIIeR6TmBEmXdVEcXeZz6T1JK
+X-Received: by 2002:a5d:588c:0:b0:43d:1b3c:83bc with SMTP id
+ ffacd0b85a97d-43d642bb20dmr2586273f8f.48.1775801994018; 
+ Thu, 09 Apr 2026 23:19:54 -0700 (PDT)
+Received: from dragon (ptr-94-109-198-162.dyn.orange.be. [94.109.198.162])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43d63e5c98fsm5182837f8f.35.2026.04.09.23.19.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 09 Apr 2026 23:19:53 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 10 Apr 2026 07:30:55 +0200
-Message-ID: <20260410053055.304955-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Daniel Price <daniel.price@gmail.com>
+Date: Fri, 10 Apr 2026 08:19:23 +0200
+Message-ID: <20260410061924.1759312-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1775799055;
- bh=agNJ6PCkpNW8r6lZnxBAwuHSjHJcnGaGEuuXCDEDN0Q=;
- h=From:To:Subject:Date:From;
- b=WQUR7+QyQtZ46xUMvUCybdAB+mC7YZsSaRWQN3OR1ulEIx1aM4Y/nD6wmEnF2wgs8
- 9sZRXrDMjwJCxAOCkWn7vp9iclX/467IzT1SDiTrjaQ2gCPZBkAZ8MqwRu4uWQwMxx
- 8mdo0jK2jqYrmC8AeUcNgbUzu0ou8D+duxJwEs+V86bszHdQjeHe23VoKAuphB3gQ7
- jK1dQ5Gg7zVrA+Nto33cNi92gbYBjly8Q4+G7ANqlM9E2eBQP6qZXqqUaw280hkA9u
- 2w7v9BUCH4LlvX3CnNG1I9Tt34AIesfX5dVx9h0ZUGNREsp++C9D0bKQwPPG7ckO/E
- XKsUECfI+Vqpw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=WQUR7+Qy
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+ d=mind.be; s=google; t=1775801994; x=1776406794; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=uQpH/FCwlr6wNnkswoVmcjA4MUwAlQ+4DrKwwm9pXhg=;
+ b=dKugax4qgnA0tckjhYjTDaUCDCy8v+adGDbeycuNIBlIeF6bxFhMhL8c7ct8O8Qm5C
+ uBXqPclgzG6+LgZd9qPwIV3qN9NOo/1pZJAYMBHgHfakNyup20ze1a0Hs/AwqiXSmXIX
+ MqhvvTaC97/2LYbilbm5Pw8cz7Is0Zl5Z9rja+Jo8NfLfSTC6RRF3tHU+YmPrWorAikn
+ 3brr9fBGgtnOMrDNIAq94DhCncn/x1Efr2KVJXtDXCWqSc94AreoOvxWj7aCZNJdDMjR
+ tHq+VCwcuN0ccCvEiSkotwVfcydpnnan3y0MMEKC4+rV/qdcNYbJznNmqBgn8zufbJd3
+ Vb3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=dKugax4q
+Subject: [Buildroot] [PATCH 1/2] package/redis: security bump to v8.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,63 +117,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/tvheadend/tvheadend/compare/5abbcda4d8c82d2d4889452a7056a7bfcd728fc6...37453bc3fe5f9e10f3428ebb1abdc613f8b07186
+See the release notes:
+https://github.com/redis/redis/blob/8.4.2/00-RELEASENOTES
 
-Updated license hash due to upstream commit
-https://github.com/tvheadend/tvheadend/commit/4adb0cb06be5b936bcf09fccba7fde79aab8cd49
+================================================================================
+Redis 8.4.2    Released Mon 23 Feb 2026 10:00:00 IST
+================================================================================
 
-Moved mandatory dtv-scan-tables dependency to main block.
+SECURITY: There is a security fix in the release
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+- A user can manipulate data read by a connection by injecting \r\n sequences
+  into a Redis error reply
+
+================================================================================
+Redis 8.4.1    Released Sun 8 Feb 2026 9:00:00 IST
+================================================================================
+
+Update urgency: `SECURITY`: There are security fixes in the release.
+
+- #T1837, #J1474 Hide Personally Identifiable Information from server log
+- #P936 Cuckoo filter: crash on RDB load on 0 buckets (MOD-11593)
+- #P945 Bloom filter: crash on RDB load on large number of filters (MOD-11590)
+
+(And a whole lot of other bugfixes)
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/tvheadend/tvheadend.hash | 4 ++--
- package/tvheadend/tvheadend.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 0ec391b8b9..1062dd2c81 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f3c311c2bed4de5b0312286f5b1a0307edf502fa0ed360855eedb044d4247674  tvheadend-5abbcda4d8c82d2d4889452a7056a7bfcd728fc6.tar.gz
--sha256  0420f5d2e0df002e31320d9f58fc5454cbb8f53fa0ab1fc85afb8821c6b103e3  LICENSE.md
-+sha256  0ced1ea6ce8b78ac9bfc7e6e8cdc908a57840d25276b5248039661483faad705  tvheadend-37453bc3fe5f9e10f3428ebb1abdc613f8b07186.tar.gz
-+sha256  bd98338d78a253979b9b3040de83c8a6546de499c9a648b8d2d6dedb891c3605  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 87d99bbb72..2f99bebbb2 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 1ac1b1764d..e690dd1eaa 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  ca909aa15252f2ecb3a048cd086469827d636bf8334f50bb94d03fba4bfc56e8  redis-8.4.0.tar.gz
++sha256  0e7c150919e10c630d6e806fa7e65ce12aa90ddd0805e459b7da64ee65892805  redis-8.4.2.tar.gz
+ 
+ # Locally calculated
+ sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 36a13a34ef..fb166b6f49 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 5abbcda4d8c82d2d4889452a7056a7bfcd728fc6
-+TVHEADEND_VERSION = 37453bc3fe5f9e10f3428ebb1abdc613f8b07186
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
- TVHEADEND_DEPENDENCIES = \
-+	dtv-scan-tables \
- 	host-gettext \
- 	host-pkgconf \
- 	host-pngquant \
-@@ -135,8 +136,6 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- TVHEADEND_CONF_OPTS += --disable-pie
- endif
- 
--TVHEADEND_DEPENDENCIES += dtv-scan-tables
--
- # The tvheadend build system expects the transponder data to be present inside
- # its source tree. To prevent a download initiated by the build system just
- # copy the data files in the right place and add the corresponding stamp file.
+-REDIS_VERSION = 8.4.0
++REDIS_VERSION = 8.4.2
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = \
+ 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
