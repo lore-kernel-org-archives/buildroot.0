@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33CB1F44842
-	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 11:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C90FF44844
+	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 12:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D49BE40D31;
-	Fri, 10 Apr 2026 11:48:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D50D182F57;
+	Fri, 10 Apr 2026 12:04:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SzP0OI93D1O4; Fri, 10 Apr 2026 11:48:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vdkVOLT68zHG; Fri, 10 Apr 2026 12:04:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15D6040CBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1463580F86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775821738;
-	bh=+EUIujb0BgQzEGMCl3l0UVY7w6FoULwyamzj/lo07EM=;
+	s=default; t=1775822680;
+	bh=oAblIAFUg1Afso3dkRLI9XvcNZSuEoLnkapz5xM89Sk=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=nr+Gys+jJfJDMDTQVXay7WYk1wYK11x2hyRzWeYsW97sfuv5jERIEVggRoq19FfYY
-	 b10qYjsadeLTEmmv6Xey+AqVBaNb5sgyZGnemhrz8HKzxK6k5X5C1XIhtzkfjHUG7b
-	 15QjskYUbvrmpfAL8l7XiS48nXa+0jJGcC5lyMQ+BJlnzAhr2SgB/D/H6l+dPeeUVS
-	 nmsCOzxLmNlfvF8z2JyhegysBjPJHZoNQV/+4jFpk9s6JUfWxLm8cZ7tlwnE76XaAs
-	 bRr3kpZZZSv9AOinlhTonmuxfgzaQ1mGxMRyBzaN6HhSzvIQROtn6mi8rxD4tKYZL/
-	 5dNmABN0nlNYA==
+	b=Fmlh4LD24rT+hEJFVIvXzJJpMUiW7C45nrLGSoWM9C6Ac+koKS2BDtcRDl4qP0AL0
+	 WqxVIzOut+bYTtpwvs4JvfViZqh/90qaiKSaZ0qephfsNX53BIZwMCNSj/+35gYB8D
+	 SVV1qas8nhMSnXOu9SUnJK9vUIUdqY+OgJcB1zE8zeKmGpU++vAAdjyX0BigC21OfK
+	 K9Mvjx+XsmwRPvSMCva9y00H/jaKeoj1jZKJL/pefQu3lst5lN7V7A/qkc748tRXc/
+	 HrpMSzFeaha4g+NhCO1jhmPAxouvN219HTjZfkR1jtFYeSySwuvEBcluuEY+vz1ykg
+	 is/5MBIywwcTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15D6040CBD;
-	Fri, 10 Apr 2026 11:48:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B8F2A1F6
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 11:48:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1463580F86;
+	Fri, 10 Apr 2026 12:04:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8869E237
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 12:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E5D460BE5
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 11:48:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6EF40409C7
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 12:04:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HcMXjQdqCBRV for <buildroot@buildroot.org>;
- Fri, 10 Apr 2026 11:48:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E3B3860BE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3B3860BE1
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3B3860BE1
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 11:48:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uVh_TQeHAPiz for <buildroot@buildroot.org>;
+ Fri, 10 Apr 2026 12:04:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 13F2D4074C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13F2D4074C
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 13F2D4074C
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 12:04:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 22011B0053E;
- Fri, 10 Apr 2026 13:48:52 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id E2AEB20039E;
+ Fri, 10 Apr 2026 14:04:30 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 10 Apr 2026 13:48:52 +0200
+ with HTTP (HTTP/1.0 POST); Fri, 10 Apr 2026 14:04:30 +0200
 MIME-Version: 1.0
-Date: Fri, 10 Apr 2026 13:48:52 +0200
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>
-In-Reply-To: <20260410061924.1759312-1-titouan.christophe@mind.be>
-References: <20260410061924.1759312-1-titouan.christophe@mind.be>
+Date: Fri, 10 Apr 2026 14:04:30 +0200
+To: Christian Stewart <christian@aperture.us>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>
+In-Reply-To: <20260410043308.42434-1-christian@aperture.us>
+References: <20260410043308.42434-1-christian@aperture.us>
 User-Agent: Webmail Free/1.6.14
-Message-ID: <6c9d68deaefa399f81339a804bf7e718@free.fr>
+Message-ID: <bb84af0a2992f6515979f5dd0a8fe31a@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775821734;
- bh=Atak3R78gqdE4TB/bBpDn6wmw8teRA0g5WkV3GrBw0U=;
+ d=free.fr; s=smtp-20201208; t=1775822675;
+ bh=h7avOUkL4NOw4TwgW9ilMbZT62dcKlc1MicXmC91Hzk=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=LbI3lL750bsW3aqrCZ1lxe6tMxmjvwAvZ0ydfVo2LmtNfH++SV8lsrcc00fHZ5h0W
- dLyA2HlfFKy/iuZz6+6q1elqnrt6385CzGMiaYPfDHkGbHFv1L7m66Y2qhiakXfaHc
- WmgSbdnvZigkPeDMhq/hrnFUuuqp3EAruaeFUZz8X126O8CFv10pbOnyIqagwhaXhB
- vG7xSQVXTlhgC152cxILp+w1XZmrRxNLexdZ7P1Tdumxj3x0mi7EwGe8A0Yh/oESNE
- sJH53XE4UkNWL8rAyVHZZV3arL2T4uITZDwUugFh3uYOheogZSodiJk5xyxiPUyN1f
- Lt6d/s+ILuXMQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=aqc7tOkD8xtC/tNiFn51eeMAXfCIPp5AxYYP/NeoQsecuoPu/H6ko1IHYGbU5Mui8
+ yWeb+TUCN6BZlA/yXugc9H6v2PBXOz+u7Jz+YA/0V6pJGtYpEyL07Zxll+3OJr+rmK
+ bnBNsARZ9KoCuwho9dsfdm5xVe0/Ka/MatRvlrXgPmEcc8reQRHEhJm+HDyDBSxQAf
+ W9DkfFDULsmCfQYArae2iRsEMouu4ZwwgBeWyVhFhQ1C9dLaX+jrqgUPpHaIVWZlSZ
+ Rssh4+ZOgSELke1he3zZ0NXO/qeUW0CSt6tfDI/alO4v/nW39EBQu0h4CTJoQXl6EP
+ FRVzNbUx17HoA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LbI3lL75
-Subject: Re: [Buildroot] [PATCH 1/2] package/redis: security bump to v8.4.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=aqc7tOkD
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,11 +101,38 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/04/2026 08:19, Titouan Christophe via buildroot wrote:
-[...]
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+On 10/04/2026 06:33, Christian Stewart via buildroot wrote:
+> go1.26.2 (released 2026-04-07) includes security fixes to the go 
+> command, the
+> compiler, and the archive/tar, crypto/tls, crypto/x509, html/template, 
+> and os
+> packages, as well as bug fixes to the go command, the go fix command, 
+> the
+> compiler, the linker, the runtime, and the net, net/http, and net/url 
+> packages.
+> 
+> CVE-2026-32289: html/template: JS template literal context incorrectly 
+> tracked
+> CVE-2026-33810: crypto/x509: excluded DNS constraints not properly 
+> applied to wildcard domains
+> CVE-2026-27144: cmd/compile: no-op interface conversion bypasses 
+> overlap checking
+> CVE-2026-27143: cmd/compile: possible memory corruption after bound 
+> check elimination
+> CVE-2026-32288: archive/tar: unbounded allocation when parsing old 
+> format GNU sparse map
+> CVE-2026-32283: crypto/tls: multiple key update handshake messages can 
+> cause connection to deadlock
+> CVE-2026-27140: cmd/go: trust layer bypass when using cgo and SWIG
+> CVE-2026-32280: crypto/x509: unexpected work during chain building
+> CVE-2026-32281: crypto/x509: inefficient policy validation
+> 
+> https://go.dev/doc/devel/release#go1.26.2
+> https://github.com/golang/go/issues?q=milestone%3AGo1.26.2+label%3ACherryPickApproved
+> 
+> Signed-off-by: Christian Stewart <christian@aperture.us>
 
-Series applied to master, thanks.
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
