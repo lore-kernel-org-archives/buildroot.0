@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD85F364BA
-	for <buildroot@archiver.kernel.org>; Thu,  9 Apr 2026 21:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD6E9F36B9A
+	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 01:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46B7160907;
-	Thu,  9 Apr 2026 21:29:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0E040D93;
+	Fri, 10 Apr 2026 01:44:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tVGWnGwcgAdT; Thu,  9 Apr 2026 21:29:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hadL6yRlnYrI; Fri, 10 Apr 2026 01:44:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63D2160A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D9B14107C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775770171;
-	bh=m5wot2zQFIJdZDWjWJSuhqn6rsmQXQIc0PoJb5cUciA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=l9zs5VmoWn5TSVDs9nwwsg/x68KOCwnxFmLFIAAu9MpEP3j6IhtanOZFkGVtqcmoX
-	 AskEhFWyMjXJEuN1G89nLmlYU2PUi7bki1y3c2xnSrzStAKn35WtSnx0DoMTXRSKzz
-	 KNLiCNTmYEByhLE+karwvcMfMyo6gmzagciry4Q3YbUU7l/8rv8wYtNOYjHKVc2jsK
-	 DaZovHQZBAeXkYfqxE8Nmnq5MQ1TzZykzSQjOpdWP+A9KfO/fmiCkdftrWrnw5joe+
-	 wpHYlol63BYG1hMDnnwaNGTEBIkrKxiIHmn2VpBJuVDlji7P2htBwxhNg5/AlPUbs+
-	 JMtFBPCdS+D3w==
+	s=default; t=1775785457;
+	bh=lp7Gh9OSOa9fFOcsUcmECXGUdtLrKH+JSxwrq8XSyxE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=LBcm1zw7v8YH4xH+ZHvUeP5ilhxBasvGxmrYtzg4q/pqA0SUaaawY+G1aac73734j
+	 CElUWw7HjrZzZiM3qbXzb9+aDNjGaBGQXdL2WrpZnRjRQyaR/7N7nXs1oWLfylFRfH
+	 jYKxB+3xUMEhKJjQd0mMhBvbXm15uFqsvzeFj6lMAkVaGZgsKhgeS27Gsqm8IuqdAC
+	 qU3xNnHRhfdbTpYPzd1ubYIumprOBo6GUvc2plfdWTglS3EN/9qIPDn4z3347V1aW9
+	 5J3GWkc6Z5b5O5j/bTPQZPVJOrtmUlel9gLSCIx0r79nsoKNys56uJd6HaE7f1urIy
+	 xyoaJ4WpaJ7VA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63D2160A4D;
-	Thu,  9 Apr 2026 21:29:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 80E231F6
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 21:29:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3D9B14107C;
+	Fri, 10 Apr 2026 01:44:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75AA7237
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 01:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 724F460907
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 21:29:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6157D4107C
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 01:44:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sVguwnTC7siM for <buildroot@buildroot.org>;
- Thu,  9 Apr 2026 21:29:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A06DE6089D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A06DE6089D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A06DE6089D
- for <buildroot@buildroot.org>; Thu,  9 Apr 2026 21:29:28 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 230A4B00535;
- Thu,  9 Apr 2026 23:29:24 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 09 Apr 2026 23:29:24 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CeLWelhaslRu for <buildroot@buildroot.org>;
+ Fri, 10 Apr 2026 01:44:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=64.142.111.50;
+ helo=d.mail.sonic.net; envelope-from=sen@hastings.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 624A440D93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624A440D93
+Received: from d.mail.sonic.net (d.mail.sonic.net [64.142.111.50])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 624A440D93
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 01:44:13 +0000 (UTC)
+Received: from obsidian.. (syn-068-189-041-004.res.spectrum.com [68.189.41.4]
+ (may be forged)) (authenticated bits=0)
+ by d.mail.sonic.net (8.16.1/8.16.1) with ESMTPSA id 63A1iBVX003155
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+ Thu, 9 Apr 2026 18:44:12 -0700
+From: Sen Hastings <sen@hastings.org>
+To: buildroot@buildroot.org
+Date: Thu,  9 Apr 2026 18:43:08 -0700
+Message-ID: <20260410014309.18115-2-sen@hastings.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Thu, 09 Apr 2026 23:29:24 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Daniel Lang <dalang@gmx.at>
-In-Reply-To: <20260408171717.3533474-1-bernd@kuhls.net>
-References: <20260408171717.3533474-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <5ca4535252a18b975f884068b0f447bf@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1775770166;
- bh=5LPgRlbTDdG2RG9pdZLbz+Lr/Ei6TSugqlWWRolzgz8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=S2MmDXGmbZH4CAbWWV1vMeMNEPoiQMfxBjae0HmOY6p1fibNVpaROrIf2cVfPnfAq
- 4tf+EEdz1TKSwBKNwItuzjNsTbOc7q+I6DNx2rIxyh4JhbLGfpoF9X7E9TBvWUjyGZ
- vCU+y+RM9YfpXIbtLjGcGI4q6F0cLH89a2t+9irKuTu6CPuR8k/XV6x/wTcPFqtgpn
- //kYuM5ZTfVwJpVBjiQ6J1fZM9kSWXJu4+MPPvpKFsm/qM394D3+e3i3Pj1bzin0To
- 2RM7qROuryYEiZroMh7omluf5A+TUOOQMsXBfX7SPzreLLikZ+n1VY57BhKeBLNfxi
- u4NfS9tBmAoPg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=S2MmDXGm
-Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project: bump version to
- 22.1.3
+X-Sonic-CAuth: UmFuZG9tSVaVxXiKu/AYYdJLEiPx5GIGD+TVsblo4mQYnM4CckJy3edQucrAJLDp10bYuKn/tR53tbsE2W7ZahX1cKE2TU2g
+X-Sonic-ID: C;roTPxX408RGucKIf40Rrfg== M;uB07xn408RGucKIf40Rrfg==
+X-Sonic-Spam-Details: not scanned (too big) by cerberusd
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=hastings.org
+Subject: [Buildroot] [PATCH 0/1] [RFC] re-add lua 5.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,19 +76,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Sen Hastings <sen@hastings.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/04/2026 19:17, Bernd Kuhls wrote:
-> https://discourse.llvm.org/t/llvm-22-1-3-released/90467
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+I'm caught a bit between a rock and a hard place,
+I want to use the simplefb (https://codeberg.org/gnarz/simplefb) library
+with mpv, however simplefb needs lua 5.2 (or later with slight modification)
+and cannot be easily backported to 5.1.
+mpv of course only supports 5.2, 5.1 or luajit.
+Porting mpv to lua 5.3 or newer would be pretty unwise, the mpv maintainers
+have made it very clear it would break stuff (internally & externally)
+and they are very uninterested in changing it, see:
+https://github.com/mpv-player/mpv/wiki/FAQ#why-does-mpv-not-support-lua-53-or-newer
+https://github.com/mpv-player/mpv/issues/9225
 
-Applied to master, thanks.
+The least painful solution to my problem I can think of is re-adding lua 5.2
+support to buildroot, basically entirely for the benefit of mpv.
+It's very unlikely mpv will *ever* support a newer version of lua.
+
+Any objections? It seems like we are still supporting lua 5.1 for legacy reasons,
+and I am happy to maintain this.
+
+Sen Hastings (1):
+  package/lua: re-add lua 5.2.4
+
+ Config.in.legacy                              | 10 +--
+ package/lua/5.2.4/0001-root-path.patch        | 17 ++++
+ .../lua/5.2.4/0002-shared-libs-for-lua.patch  | 78 +++++++++++++++++++
+ package/lua/5.2.4/0011-linenoise.patch        | 26 +++++++
+ package/lua/5.2.4/lua.hash                    |  2 +
+ package/lua/Config.in                         |  7 +-
+ package/lua/lua.mk                            |  6 +-
+ package/luainterpreter/Config.in              |  4 +
+ package/mpv/mpv.mk                            |  2 +-
+ 9 files changed, 144 insertions(+), 8 deletions(-)
+ create mode 100644 package/lua/5.2.4/0001-root-path.patch
+ create mode 100644 package/lua/5.2.4/0002-shared-libs-for-lua.patch
+ create mode 100644 package/lua/5.2.4/0011-linenoise.patch
+ create mode 100644 package/lua/5.2.4/lua.hash
+
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
