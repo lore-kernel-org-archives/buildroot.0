@@ -4,108 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A585E99049
-	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 07:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B54E99050
+	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 07:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB7E960839;
-	Fri, 10 Apr 2026 07:28:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAB5A608A5;
+	Fri, 10 Apr 2026 07:48:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DNTs_OUIJX9X; Fri, 10 Apr 2026 07:28:27 +0000 (UTC)
+ id Yep13AtgNB0X; Fri, 10 Apr 2026 07:48:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E77C960880
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF58460880
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775806107;
-	bh=dwfel2tNCTHt3/6P5zgzOeiPaA5ux5hGOmtYrgGKlfo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=L7tmlLpgmELOAf5jPiyrndLOni5m6W//03ONCO2pFZdcj1mBT7X1wMSpbBjfqJ+hX
-	 0Cpk4IT9v9cPTn8Bk5dWJKT0xATWPnRjO8DJBp8Bl/Esjlu8gdS6lNxAnw/FyETn03
-	 bwaWnkrOHxQatOpnJ4GO5/t1V4mXLHqEUGZ+uofjWjfuTtznxiF9d/iuMxyFrCL7nf
-	 0G7wU1Z3RWsXoczwSh4Z/XYGjzmMJjQ/S2Z71OYWFW7mqKsD2pe/x9y4QRHIRVtrtk
-	 sELiypT9zAGHy9b7Kk5u7sQsZCDmuAQpKSrZhCBSnSh9zP2aN95e0qV8kaLAQMXFgP
-	 gM03uHWuZfRgA==
+	s=default; t=1775807327;
+	bh=XoS+K8RrpPxaOgJCqF01SHWdy0WYfLu/rtSSEbLlhzM=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=MtUTyZyyKYgVM9dlfVyyH4vU8Tcf4E7pjnNVjiNw004bcvgK8q6ABlorWDBuSXp2t
+	 mug6sUNpaKWHkTl1wXaKhS5lSLq0CH4zhpVFn5dkIImCC6LCtFATrtmiyBa9xNC3f1
+	 0eDUtzQbQ9s83eoOc1TUdzV6KHsCXdkq2hpQU41Qpjv5y50nK9oI7AmOewYIkdAHOr
+	 Oibp8jXY1pd4i1c3P4/Ws/3nwl4/Q76WiAZsMyaswbXULGp4aausbzps7N3mOZ+QD0
+	 gC/FNDQ2znuWsqHJmntEfSE/GrEU+HxB1X1bq40fpg53tGjSCr5lZfyvvp2R6GfwwC
+	 yLubkfWdtSUgw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E77C960880;
-	Fri, 10 Apr 2026 07:28:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2F6D237
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:28:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF58460880;
+	Fri, 10 Apr 2026 07:48:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10CF51F6
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A90E781D02
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:28:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 02A4540246
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:48:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AxmuI5Cbq8Ds for <buildroot@buildroot.org>;
- Fri, 10 Apr 2026 07:28:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cMk4V5TnvXIM for <buildroot@buildroot.org>;
+ Fri, 10 Apr 2026 07:48:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A71EC81754
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A71EC81754
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A71EC81754
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:28:23 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-43d02a71526so1000470f8f.3
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 00:28:23 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=bisson.gary@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E5C8240070
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5C8240070
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E5C8240070
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 07:48:44 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-488aa77a06eso27154215e9.0
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 00:48:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775806102; x=1776410902;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=c1Wjm/ddfcp0Hqb7aptCWwmjFh3tpH2O1jkqcjyugTU=;
- b=EcntKCbZul/Pm6WG0Fo/vwFvCGfN+vzZ0OhCLPkOOUPFoyR3OtQG2QJZeOc6m5GQYe
- JQDbyut/hxqCzM7gsiZW+cY8wcyAnWJrGK/LeZ5EhbesuE+E0sMU5iN23pQFwd8BF7t2
- en9eklkcEUMb064pp2j/BiF9oZ7+bzdRueYldYF7zuwhSmk8m8VAai+wnvaH2D3rq4s+
- nEB/lrR02/Dp++5KtV8g/jo9MIQHGhtLiVWW8YdtSKVPfbjnmlux/Nruu7bA9mbolJRS
- wOh7sg2wZNN//7s9Dbsq1IPWO4BLDWrXHqIVBmYg9ca9uCa2TN63ihfkQu19aeRSK3jy
- Sycw==
-X-Gm-Message-State: AOJu0YyZfR/faP+EwrRhU0xZIfD09nJKdKO9i2Xeo9dc9WOIH6q5pgjM
- oEVDjvdwyN/KY3RXD1hJOqz+dIZBTCZq1qpZwi+iEI9HdWPc1eeo34CEdugtgHrx0DMuxl7q8mq
- UAq9n
-X-Gm-Gg: AeBDievISD+ay2nLghNsR6NrZIgCQ9xdvQW6BVVNuKY9jnghZqadD+ZkFMl4vukSIeD
- Fd+kkfFFLeL8Ghnl1TmhL8EbQVPYcnzgJnKPalmj1lS/Z/CHNWQ+rdTH0HZso0vHvjlD244Xseq
- Ym5IV/BbPEO044e5DsnExGSVRSUWMNrydSFvw6WPUfwcXQVx0Vh0QWK8081FsKScDHKKx+a451+
- SJA/GTY/d7H3F/JZYsfKnUWNSntq333/mffrbYyU63MOxQZ8COdfdSKffJwsFHvHSLoIGDOCRyK
- PI2vEESDMx2V05Hjajoqy6/Tc62EPGG2ReYiPxlREmalFBxktDkscCTzWJDBHIbgmhO8/47d/dJ
- E81gfJ42JqFiYpqStWp7U/IMkD6ADRYJK3jN5oQr+2s5yk/kSe+rQcCNEv0HyZp7Jt3Kr2sYjlp
- l2yhA14S4ty1q3ok1cXXXF3nkhBT8Fr8gxoh+Kz3WsSpfmGZWSNcV3gcRYKEbN
-X-Received: by 2002:a05:6000:3105:b0:43d:309b:f2db with SMTP id
- ffacd0b85a97d-43d6423d032mr2784320f8f.7.1775806101766; 
- Fri, 10 Apr 2026 00:28:21 -0700 (PDT)
-Received: from dragon (ptr-94-109-198-162.dyn.orange.be. [94.109.198.162])
+ d=1e100.net; s=20251104; t=1775807323; x=1776412123;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=isFZPnL4cj4YkDFWa1ebwFBEzis2QYq/1nkZvfJ3t3E=;
+ b=eAbiTWLI/l+765MCJV1Ng0vTLlu9QdZHunBaYEv5cXi+MEmhAsR5ElM6eOZlg6i6OK
+ X4R0fQ2pJJPi2AQrXH/65bunn8N8sD2Sfwr7yl+Sh/7ZY+wlYW/tUYsR8qs6svRWVlca
+ r+XyLuTH7wlYPKPbEIkCuVygBwJlGqkMMQsZVj5Lo/whCcjk+OnU2tCaS8cmJ4kVVNCJ
+ Wvsmx+Ix4BIxsCOMKiO5cP3NEfCgg7+qVNcO23mfKl7T4Rj9E0ep5TIZpSMVGXU9tjP7
+ gorpqoNrKcig2u270/13rovcUdyPC+06cSNY2pDlMLepX3syrrEvGTbUovnWg/LeUtZg
+ uQIg==
+X-Gm-Message-State: AOJu0Yz23VaemQlDatwMhsCHVrK2bwqgIEHvKkh4yfVekVxXBivWn24F
+ EXVO58lQOwsDkWXj6rS6SoNMzBQBFvbIT4asWob0XXyq49aYQ5VC53F70bukzg==
+X-Gm-Gg: AeBDiete3ELyobWyzDWvAkJPP5LqO0f1uUEbEAGogy1OaJChDrDNVHMT/CMx36sSKxl
+ /uUhKdEEgznvaUFgEXIk7SX2wiVxm6AE/FEUmMA8KTx99a/YMLKwGTAmWBOHIkpWLtNm73t9j/w
+ 5cYY0O2Uz1iEXU3kFfdyC1XVz65cQ090296sFAEDkws6QeouEwaND2ynh8zkiq9B+0nrGyRMzhB
+ TFGNrGY0TrA9Iwq919HEhFUQHWTDq0gGlnHYoKR4uXWLBrxP2Q8ZvYUdfgr4zWTNN/lLSRo+HnC
+ lG3RzrsjGz6tsSdcRLmLcp8GXheexRFjh21954FRKTRLqPgSDf1PTPTWQvekJe1Sfr7YTv70Q0W
+ 6ebQ5QVgLaD7h/WbgN9UV0uCGpMmYMheeJTHW9B/rE/MnuoSF/Ep7P2SwP1N5WNytCHl4lktzR3
+ WPC1WmTxfw0qmFwtAnhCQhYKz0v56oCg==
+X-Received: by 2002:a05:6000:26c4:b0:43c:f1da:488a with SMTP id
+ ffacd0b85a97d-43d642a4d54mr2831718f8f.13.1775807322352; 
+ Fri, 10 Apr 2026 00:48:42 -0700 (PDT)
+Received: from owl5 ([2001:861:3201:3d10:c6a2:4659:6438:8651])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d63de3499sm5067183f8f.1.2026.04.10.00.28.21
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-43d63dec07esm5705565f8f.13.2026.04.10.00.48.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Apr 2026 00:28:21 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Fri, 10 Apr 2026 09:28:12 +0200
-Message-ID: <20260410072812.1874864-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.53.0
+ Fri, 10 Apr 2026 00:48:41 -0700 (PDT)
+Date: Fri, 10 Apr 2026 09:48:40 +0200
+From: Gary Bisson <bisson.gary@gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <adirWO7Ss77pxf5o@owl5>
+References: <20260408-nitrogenfix-v1-1-fc4471caaff2@gmail.com>
+ <25d0f6f195a6d3e37d7f4f71894b7a86@free.fr>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <25d0f6f195a6d3e37d7f4f71894b7a86@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1775806102; x=1776410902; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=c1Wjm/ddfcp0Hqb7aptCWwmjFh3tpH2O1jkqcjyugTU=;
- b=YOratGZk2QsDubmSJUuBkFKWmKIqm6HhbxUpWxqAbUyM3yOXQgbNdrikkxHoeAAtDg
- XZAIlcnMwG/0GdlqWI5BF1rEF4lNi6cBjU9RDSQU3oVUzwTFIYbSNGBLm4cU5U5jIraB
- QTpomXYf1qLzDB9WRyMXsEZbZe/IfnSiBsYTsVNWTEdru9a09tyeir3vBcTW9YSxIwTg
- QA/xXWgObdSgtgT4hJJYzXGX5Ca4eKVyMUpL8jg8bFNaCM/V2o+ZZz9lrUZbcFupJLFL
- LR/sMFvs357hKVjLYWAcy8yrkOSt+rMoHyYNgDlXHF0fhTf5c69HQFRm/iDr/FPpVMho
- VZIA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YOratGZk
-Subject: [Buildroot] [PATCH] package/waf: bump to v2.1.9
+ d=gmail.com; s=20251104; t=1775807323; x=1776412123; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=isFZPnL4cj4YkDFWa1ebwFBEzis2QYq/1nkZvfJ3t3E=;
+ b=Eyay1PF+lMJ02vDkDPiTtcMRQ1DDjLw/LipKsGCNvAXGUCvqUsLn93vdZXBoqaaIRt
+ jD4H6mSVVYCxNMQ+Lt/XeMfr0r82xH+h3YWPWbdK21HcWyHgBaxfGeT9vv1BhJXGoRcw
+ 4Wf0yzgVW5oPj2BYCMcDydiGu6C5CNc0WN+THpd9e4BkPEjbq5DaNVSqNOZOWeu9A2nN
+ 2MOqCXps+Furrw3kpoMmf1xZ6bKOUffZeSFF/+zS8U3JX6TTd02G9x2Vl9CyEv2T33Tb
+ gFW/P4HdG9SngvP1J2QHRbz3JVQYiDkWGxmiDRITla6pw9v6nrqmQjoCLyEWWqK5c6LZ
+ /S7A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Eyay1PF+
+Subject: Re: [Buildroot] [PATCH] configs/nitrogen*: bump u-boot revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,53 +122,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This contains some minor bugfixes and enhancements, see the release notes
-https://gitlab.com/ita1024/waf/blob/waf-2.1.9/ChangeLog
+Hi Julien,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Thu, Apr 09, 2026 at 10:44:47PM +0200, Julien Olivain wrote:
+> Hi Gary,
+> 
+> On 08/04/2026 10:33, Gary Bisson wrote:
+> > - update nitrogen8mp SMARC rev2 support
+> > - update LPDDR4 init to match latest NXP spreadsheet
+> > - update binman support for newer python versions
+> > 
+> > Fixes:
+> > - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764611
+> > - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764638
+> > - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764687
+> > - https://gitlab.com/buildroot.org/buildroot/-/jobs/13768764734
+> > 
+> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> 
+> Applied to master, thanks.
+> 
+> Could you consider switcing those defconfigs to use Bootlin external glibc
+> stable toolchains, please?
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 061a093c55..12dd57a4e2 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  d11579fb088200adc5e6bf6c96e31fcb7afd94cb  waf-2.1.6
--sha256  4bc4587a11925e19739da021e021a5764d39759fada85563bc6d4ded17515b14  waf-2.1.6
-+sha1  40033ed0306c210f4e8d6e6cd5cb0592acec55c3  waf-2.1.9
-+sha256  e235eeac6d34f039834e355a738298416a92a17defd1b6e1eae48488ba4a6864  waf-2.1.9
- 
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  4bc4587a11925e19739da021e021a5764d39759fada85563bc6d4ded17515b14  waf
-+sha256  e235eeac6d34f039834e355a738298416a92a17defd1b6e1eae48488ba4a6864  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index 911dcc5fc6..13d088d54e 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAF_VERSION = 2.1.6
-+WAF_VERSION = 2.1.9
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
--- 
-2.53.0
+Sure thing, will provide a patch for that shortly.
 
+Thanks,
+Gary
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
