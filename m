@@ -4,113 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E99EF45A0F
-	for <buildroot@archiver.kernel.org>; Fri, 10 Apr 2026 22:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36017F45A1D
+	for <buildroot@archiver.kernel.org>; Sat, 11 Apr 2026 03:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13BA140BDD;
-	Fri, 10 Apr 2026 22:42:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D849C41119;
+	Sat, 11 Apr 2026 03:27:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eUh0vn9_ERCL; Fri, 10 Apr 2026 22:42:37 +0000 (UTC)
+ id FfnY2IrAaP05; Sat, 11 Apr 2026 03:27:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8452341260
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40BDF4111A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1775860956;
-	bh=OxLeJnA+oGYIoRa59lYmG/Bg2iJYnH4sDzH7/ZrXh6w=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=NVon/tK0dhYjWROXTk56uvnKrziDMgcBzsy1RqQykJogvMX/aOz+mxoxiknrPYGMc
-	 z54Dwg81jZj/GW3NIBhnwX5KwvQzDgWUwXmHQYqb80cQSCHILq6t/I2M7m8V5o2pYN
-	 mA2rm6VeMPzKVbuXNWvXEruRZbcb6GrRuls43Bhg1Onx9P+oEWVW5LTeXOrx9YrQ55
-	 SkfPze24KmzsSKVH6CqNF4c4kRZw+lwNrEnp4tNK41bpsXHJ+YZYmtGOmvZjggZsw8
-	 9Uol2mZ8d42mouk5+RVOjynZXB+r8YgylvR5gXLhDl83pw4y9tfBYL1GON0cFHQ9px
-	 TAAZPMe5GWr8Q==
+	s=default; t=1775878032;
+	bh=dTeOgd7EEBzgLzmFkMPZ/nIycmrVZ3kjHdj+xOkLci0=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=sF1+BuwdWdP926tCVumXK7ArNrbnHHu6CPTKUXpSHu8RhKTzRZCOmBWjVA7g7IGPy
+	 31aEKI0OsMdsOAM7bBnQGIO9/Ymt/nnlvcocwee0XMgltLrPki2RzfneehSuDoEMF9
+	 yfOYF2qoqpekVdNIgheW8rbMas4S8h4A3K4TgvClq0ADSHSrYL+y9UaoM3y6BYJ/Um
+	 Q5wLaCWwVY2xiFJ+fuqlYrMBaSZ9YLWS9eicdzua0dYPTLfXN1SL03Pboi2NOT+uQ6
+	 0X8mR3PsHBvz1O05WOggHKYy8sK/jNpDJFNdlXCrr/Q+iD8w8jvb0aaitPgOr2DvGy
+	 2jm/oDEfD+Uqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8452341260;
-	Fri, 10 Apr 2026 22:42:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id ED316EC
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 22:42:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40BDF4111A;
+	Sat, 11 Apr 2026 03:27:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A5A85194
+ for <buildroot@buildroot.org>; Sat, 11 Apr 2026 03:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF1096114A
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 22:42:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B52261298
+ for <buildroot@buildroot.org>; Sat, 11 Apr 2026 03:27:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6a5hDMmSEQd7 for <buildroot@buildroot.org>;
- Fri, 10 Apr 2026 22:42:31 +0000 (UTC)
+ id XGfmJNLyH1A2 for <buildroot@buildroot.org>;
+ Sat, 11 Apr 2026 03:27:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=nicolas.serafini@flyability.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C31A3607AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C31A3607AC
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C31A3607AC
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 22:42:30 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-43d17bb1c1dso1975083f8f.2
- for <buildroot@buildroot.org>; Fri, 10 Apr 2026 15:42:30 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C7BDC61297
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7BDC61297
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7BDC61297
+ for <buildroot@buildroot.org>; Sat, 11 Apr 2026 03:27:08 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-488a9033b2cso31398125e9.2
+ for <buildroot@buildroot.org>; Fri, 10 Apr 2026 20:27:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1775860948; x=1776465748;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=YNlfgdJc0GAEu5ZprAHEzN++ZAKu7Mnayv3KIzAusRQ=;
- b=YffVi9JFiGQ/FNkp+n1e5d9POZr+cfCLwmnbMRnDrvd3GkZRaXWDExA28OcPDRu9qu
- fvlrD9BZzasybTYgYKqut/g+5iR5vSy/6G8+JIlP4eePzqiz+bB5IUwx10naH0QYbB6f
- Tse7holzx+I2HCKe7c6r71VQCWobYUfzfUvEdqVd4MIN1VM05lvvipZcShjcbJy6eXuv
- S+ADc8rpbGOKrx4pZgNMJTBCmN2kITsWgwRLNlceY0oDUIkWy4AwSbv6BhN0qfQukAbw
- FXx9hfRlRkbXiuH9o7YsQBbtI0OK8SzybdVRjc21zYfcdLeD6/jccyY+Jif8JSLEalbl
- js6w==
-X-Gm-Message-State: AOJu0YyWJeDB46G0NhGwKg4HfhpuJZ6pHYcqL7IN77xyYihWY84v4MiS
- qa4dUT/A0rnX/NqIny+6yK0qEl1yzlvboLWygJ7X3ZvYQOJDm4MLfo017PZSOsTje1956zTtJ8a
- RCPiZlrJZEA==
-X-Gm-Gg: AeBDietGbaTMyrWsfVX3f3SSsSr1ssTpPH3QvCd0d4B+eJKxgw/T36UmvZCkTAAqiq0
- qpZejgnbZqySTzZgZktjxqXHPCRCpwYNbV1sX3IvbEalAjjdxBmPEm60ddD0LKnXZnQk1C8xnIR
- J6xIbjul2I9oAmgYWEDIpLqYqC+PUwqEbUPB38vef9oIB3ci5w+jYE3jz+gKFbWfIxlS1zvRgho
- UJxJiCAmKbQAQIbcejd/3V8w0xh77Fcj3gVqVV3C1hqlgu5vPkrykjHBg1+ehy4PzXGohVS27XD
- JsZSeK3o0oWydc/51J7vP7Ul7TmxhHBIlVyUEHYJa/Hb6MG1bScjZEkXHLrNMXTI/miPgvvS4pY
- 1hNSSkdlKY2eSllbZ6Wu6IVf2d6A8Tq5GwL7A05DZWdPjeJ8/1rys8WvEXEznCojr5DBwDi3hXj
- hBZgg6lKW5nOl/089cZE7rQdcWetKIqeaKd7tRPfDuuAFLWVIhQEJCwCvP9GNCyw==
-X-Received: by 2002:a05:6000:2906:b0:43d:6e0:9447 with SMTP id
- ffacd0b85a97d-43d642c4f4dmr7032284f8f.28.1775860948468; 
- Fri, 10 Apr 2026 15:42:28 -0700 (PDT)
-Received: from nse-t16 (adsl-84-227-54-58.adslplus.ch. [84.227.54.58])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d63e50015sm11668479f8f.27.2026.04.10.15.42.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Apr 2026 15:42:28 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Sat, 11 Apr 2026 00:42:20 +0200
-Message-ID: <20260410224221.1185631-4-nicolas.serafini@flyability.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260410224221.1185631-1-nicolas.serafini@flyability.com>
-References: <20260410224221.1185631-1-nicolas.serafini@flyability.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=flyability.com; s=google; t=1775860948; x=1776465748; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1775878027; x=1776482827;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=YNlfgdJc0GAEu5ZprAHEzN++ZAKu7Mnayv3KIzAusRQ=;
- b=ijTmk68ocrKTIVOEYHEXnNcBTxxmVhCdSb4w0npPgQ4UPtOVnxiGvJacmQ1Ucsz9Dy
- GGByZtm/nHWlNBedul8VhKXNYhw7U2NcgNwO0fid2RGE7qpUy7a9UvCu/RY/77HzqboN
- LVbaEab6+x79nCx+FvyNgsF/vVmqAoJe0V4ostNbn2BIRg8qKyMzfoGfS4vifyv7jduP
- e8oXVszcIXPbJUOUfoT/By6orQf1+e5oqyBdHzF0T2g7HNILiMXMnL9+d1fWCA9xyqmo
- 9r2MYlYpApDOgMm2Y+p8jDkjoZqeBowV6HYsCHRuR2+Oe+lTTawvEbeSsgSjvqCvaOEa
- m+aw==
+ bh=KkjyotxQJUfXj2u1CsykouSUsCm1WRPYupi2p/pKd4s=;
+ b=c/ktaerHRyVLlxMQhXjrF+HvT9VadjzGdtLXirqvjq90K6Zaw0TRtPokJg1bPR1/mP
+ HuL2IDZDavaePbhekJWVRWdfnU8+wOhF+9uJrzXPxj8IEc/1AigomCY99IQvQr8osBxj
+ 35qNmRd5DRpqhBh038uVVIpm0ipASXfapNKGtRenuzSm7zU8o2wV8AIuuPow4+fUgygv
+ DfqWRc443trsiLXqVuq+llyw/41wA53gIzGl8yrRIoQzRUQJNvEA5BtDPyWb7YxvkIcT
+ f9EEFB0yhcZA1Tn1jl6/R8ZPemH2VGQBA7yAaa54cxerXXFgt3WBiNpmUdCjhhoeRUIB
+ 5/Nw==
+X-Gm-Message-State: AOJu0YwwT8DP1ELvQRnTpW/5yFbGLxP9IdBcJ+Hm4W1waXjKl9uLxebJ
+ 4/xLnpBZ2JbrU42MpyX3DM54MZRvOnDAwRzSSbNYoIRo/5a4G+VCuJFtioRtdcG+
+X-Gm-Gg: AeBDietoY5FL79qPyFfdqnHMJ2R2e0OUeWRGoIOoDaEKLWaZvfYJCElfRmPw67bYD6x
+ vZs7Ck1EvzUNXmSWEF4J4GVjmZWK27nbexkYX3usSuMqufWdmjF7ad+SPvEKFO2zrnNCEDVUZpt
+ 5nnGhicLe5RE1vUyhn0DOa4Q4f4ZyZqFUogOLyARFJxDtXiHHDBJvUXoJhvXg1uKSaGddjp/VNE
+ 2QZGvjrVe/jHCw8D3b8/DQFchRWKlBEsA0FtottZp4FrZb4k+IEcZ5EejUIigf/FIqNLslH2Gpf
+ GZNMRLofHo0VQQXkygT6gYQ0ehmDhgTHc+btTOudhacM4pR3MeH4Fqqcu+AhjXQKMRhygkUiqTN
+ vymnYyOANag93oGPBji8rhVvj/zqNS+Ky1ZjL34V8StQYpyjvVLFOzidNNirrD5UbTiZDTES3Iv
+ d+cG3gpB+9PSYbw++o4fHf9rwP20ZrTQpOw1/Hn2Jw
+X-Received: by 2002:a05:600c:a415:b0:485:419c:4eba with SMTP id
+ 5b1f17b1804b1-488d67bf7abmr54907995e9.1.1775878026368; 
+ Fri, 10 Apr 2026 20:27:06 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-488d683c902sm36278875e9.22.2026.04.10.20.27.06
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 10 Apr 2026 20:27:06 -0700 (PDT)
+Message-ID: <69d9bf8a.050a0220.1e9186.e0d2@mx.google.com>
+MIME-Version: 1.0
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sat, 11 Apr 2026 03:27:06 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1775878027; x=1776482827; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=KkjyotxQJUfXj2u1CsykouSUsCm1WRPYupi2p/pKd4s=;
+ b=YMWPh2iX17BZhWa6vVnU46Niab96/3K84zPL2nBV0xZFBWqn8t+fJxmWCB6NClHbXy
+ vuOjPNRojv9Abu7sk/ISgy/W00wMLI1PsYDheDFAZBSl3OqzkEJHia8SYJU9SAd8QO8o
+ aMWtCsNDP8PTw/ns3O+jnAuSC4tlAuWxR8r6Jg4isE4ILRbvWvUC1WZm8JgMWMAKHcqL
+ 12Kl1RU/zWiBOtDZ7j0bxzJpt6Uv/ZD7Cil75yb53oD+7ff80qICkKM6tomtOVAbRlm7
+ Sbtcir3qqRJnPDsI7X/aMOLiZ1Pn++69FHD1M2QfwY/dbU1DskNgSqaD/KHEF/fFQuXd
+ 5Llw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=flyability.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=flyability.com header.i=@flyability.com
- header.a=rsa-sha256 header.s=google header.b=ijTmk68o
-Subject: [Buildroot] [PATCH 3/4] package: update cargo suffix to -cargo5 and
- fix hashes
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=YMWPh2iX
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-04-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,428 +117,283 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Nicolas Serafini via buildroot <buildroot@buildroot.org>
-Reply-To: Nicolas Serafini <nicolas.serafini@flyability.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Joseph Kogut <joseph.kogut@gmail.com>, Simon Richter <simon@sinic.eu>,
- David Pierret <david.pierret@smile.fr>, Danilo Bargen <mail@dbrgn.ch>,
- Bernd Kuhls <bernd@kuhls.net>, Graeme Smecher <gsmecher@threespeedlogic.com>,
- Julien Olivain <ju.o@free.fr>, Torben Voltmer <mail@t-voltmer.net>,
- Nicolas Serafini <nicolas.serafini@flyability.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Manuel Diener <manuel.diener@oss.othermo.de>,
- Alexander Shirokov <shirokovalexs@gmail.com>, Sam Voss <sam.voss@gmail.com>,
- Saeed Kazemi <kazemi.ms@gmail.com>,
- Alex Michel <alex.michel@wiedemann-group.com>,
- Leo Yu-Chi Liang <ycliang@andestech.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following the bump of Rust to 1.94.1, three changes in Cargo's
-vendoring logic produce different vendor directory contents:
+Hello,
 
-- cargo vendor now does direct extraction from .crate tarballs
-  instead of heuristic file listing, adding previously excluded
-  files like .cargo_vcs_info.json and hidden directories:
-  https://github.com/rust-lang/cargo/pull/15514
+Autobuild statistics for 2026-04-10
+===================================
 
-- Files with .rej/.orig suffixes (e.g. Cargo.toml.orig) are no
-  longer excluded from vendoring:
-  https://github.com/rust-lang/cargo/pull/15569
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  | 19  | 20  |  0  | 39  |
+  2025.11.x  |  3  |  6  |  0  |  9  |
+    master   | 47  | 104 |  2  | 153 |
 
-- Git-specific files (.gitattributes, .gitignore) are now
-  recursively filtered in subdirectories, not just at the top
-  level:
-  https://github.com/rust-lang/cargo/pull/16439
+Classification of failures by reason for master
+-----------------------------------------------
 
-Therefore the hashes of all Cargo-fetched packages need to be
-updated. This commit changes the suffix of Cargo packages from
--cargo4 to -cargo5, and updates all hashes.
+  gobject-introspection-1.84.0 | 7 
+odhcp6c-f19dd37fb467c9cf10c... | 5 
+                  libnfs-6.0.2 | 4 
+       shadowsocks-libev-3.3.5 | 4 
+glibc-2.43-17-gdd9945c0ba40... | 3 
+                  libnss-3.122 | 3 
+                       unknown | 3 
+                 c-icap-0.5.10 | 2 
+             dahdi-linux-3.3.0 | 2 
+                    gawk-5.4.0 | 2 
+           ghostscript-10.06.0 | 2 
+    host-mender-artifact-4.2.0 | 2 
+               host-runc-1.3.0 | 2 
+libdill-32d0e8b733416208e04... | 2 
+                 linux-headers | 2 
+               nushell-0.108.0 | 2 
+           oath-toolkit-2.6.14 | 2 
+phidgetwebservice-2.1.9.201... | 2 
+        s6-linux-utils-2.6.2.1 | 2 
+                 s6-rc-0.5.5.0 | 2 
+uhttpd-15346de8d3ba42200249... | 2 
+ustream-ssl-5a81c108d20e247... | 2 
+             util-linux-2.41.3 | 2 
+                  bitcoin-30.2 | 1 
+          cloudflared-2025.8.1 | 1 
+              containerd-2.0.7 | 1 
+ docker-credential-gcr-v2.1.30 | 1 
+              e2fsprogs-1.47.4 | 1 
+                  ffmpeg-6.1.4 | 1 
+                flashrom-1.7.0 | 1 
+                 fwts-25.11.00 | 1 
+            gdk-pixbuf-2.42.12 | 1 
+            gettext-gnu-0.22.4 | 1 
+      gst1-plugins-bad-1.24.13 | 1 
+                   guile-3.0.9 | 1 
+                 host-gdb-14.2 | 1 
+              host-rust-1.88.0 | 1 
+          host-xfsprogs-6.18.0 | 1 
+                   i2pd-2.59.0 | 1 
+                   iotools-1.8 | 1 
+               iproute2-6.17.0 | 1 
+kvmtool-7ad32e5514aca2b6d19... | 1 
+                 lapack-3.12.1 | 1 
+libftdi1-v1.5-62-g5e67403c4... | 1 
+         libhdhomerun-20210624 | 1 
+           libmicrohttpd-1.0.3 | 1 
+                libmpeg2-0.5.1 | 1 
+                  libsepol-3.9 | 1 
+                 linux-6.19.11 | 1 
+                    lua-ev-1.5 | 1 
+                 mdevd-0.1.6.5 | 1 
+                       mrp-1.2 | 1 
+             ntfs-3g-2022.10.3 | 1 
+                opencv4-4.13.0 | 1 
+              openjdk-21.0.4+7 | 1 
+      passt-2025_06_11.0293c6f | 1 
+          pkcs11-helper-1.30.0 | 1 
+           python-html5lib-1.1 | 1 
+python-remi-2022.7.27-37-g1... | 1 
+              python-xlib-0.33 | 1 
+           python-zlmdb-23.1.1 | 1 
+                   s6-2.13.1.0 | 1 
+              skalibs-2.14.3.0 | 1 
+toolchain-external-bootlin-... | 1 
+                tpm2-tss-4.1.3 | 1 
+        util-linux-libs-2.41.3 | 1 
+            vorbis-tools-1.4.3 | 1 
+                    webp-1.6.0 | 1 
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@flyability.com>
----
- package/aardvark-dns/aardvark-dns.hash                 | 2 +-
- package/aichat/aichat.hash                             | 2 +-
- package/bat/bat.hash                                   | 2 +-
- package/broot/broot.hash                               | 2 +-
- package/dust/dust.hash                                 | 2 +-
- package/espflash/espflash.hash                         | 2 +-
- package/eza/eza.hash                                   | 2 +-
- package/fd/fd.hash                                     | 2 +-
- package/hyperfine/hyperfine.hash                       | 2 +-
- package/kibi/kibi.hash                                 | 2 +-
- package/kmon/kmon.hash                                 | 2 +-
- package/libzenoh-c/libzenoh-c.hash                     | 2 +-
- package/netavark/netavark.hash                         | 2 +-
- package/nushell/nushell.hash                           | 2 +-
- package/parsec-tool/parsec-tool.hash                   | 2 +-
- package/parsec/parsec.hash                             | 2 +-
- package/pkg-download.mk                                | 2 +-
- package/procs/procs.hash                               | 2 +-
- package/python-bcrypt/python-bcrypt.hash               | 2 +-
- package/python-cryptography/python-cryptography.hash   | 2 +-
- package/python-logbook/python-logbook.hash             | 2 +-
- package/python-maturin/python-maturin.hash             | 2 +-
- package/python-orjson/python-orjson.hash               | 2 +-
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-rpds-py/python-rpds-py.hash             | 2 +-
- package/python-rtoml/python-rtoml.hash                 | 2 +-
- package/python-selenium/python-selenium.hash           | 2 +-
- package/ripgrep/ripgrep.hash                           | 2 +-
- package/rust-bindgen/rust-bindgen.hash                 | 2 +-
- package/sentry-cli/sentry-cli.hash                     | 2 +-
- package/tbtools/tbtools.hash                           | 2 +-
- package/tealdeer/tealdeer.hash                         | 2 +-
- package/uefisettings/uefisettings.hash                 | 2 +-
- package/zellij/zellij.hash                             | 2 +-
- package/zoxide/zoxide.hash                             | 2 +-
- 35 files changed, 35 insertions(+), 35 deletions(-)
 
-diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
-index 134dd34a1b..b3b742089a 100644
---- a/package/aardvark-dns/aardvark-dns.hash
-+++ b/package/aardvark-dns/aardvark-dns.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  aeb5fc77455b01916b28f7c306834446f3f6e184c02d38b177c578bb4f01939e  aardvark-dns-v1.17.0-git4-cargo4.tar.gz
-+sha256  bf046c3bc7bc9f1f04220a89393b9189bcab1c61c204f247b3a5415d0ac27117  aardvark-dns-v1.17.0-git4-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/aichat/aichat.hash b/package/aichat/aichat.hash
-index 43e96381ed..09291a070f 100644
---- a/package/aichat/aichat.hash
-+++ b/package/aichat/aichat.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  214af28357dd2b7543120fd23b81614c986ea62d69fade6d80259cb7a42eafdd  aichat-0.30.0-cargo4.tar.gz
-+sha256  1e8643532ec5ad25aa227c36dd5fd3dee31afd1d2dc51acf25a68d12c3fd3980  aichat-0.30.0-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
- sha256  5af431a6a9869052e2be4e71ccd731c7efe45dca47eaca84d4d1fb38f134cb79  LICENSE-MIT
-diff --git a/package/bat/bat.hash b/package/bat/bat.hash
-index 532ccd98a4..78bd1de394 100644
---- a/package/bat/bat.hash
-+++ b/package/bat/bat.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  e62f9f1b14090044db860727a3c6bcb0d5b840f866ccaea4298518eeeb807a72  bat-0.26.0-cargo4.tar.gz
-+sha256  e23db7a34f860d425cf0bb6f13505606024ab81035327262963d8395b4a6f3b5  bat-0.26.0-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
- sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
-diff --git a/package/broot/broot.hash b/package/broot/broot.hash
-index ec72063928..56168b5a38 100644
---- a/package/broot/broot.hash
-+++ b/package/broot/broot.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  46fc9c18ac0bb7a23eb752aab853b2484dba5b168052d380b1d8b902bf4a6fbf  broot-1.56.2-cargo4.tar.gz
-+sha256  dde0da41fe9ee0f03c7f2895134360a4d2e003ed1ebc726c7394009dd9ad0f07  broot-1.56.2-cargo5.tar.gz
- sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
-diff --git a/package/dust/dust.hash b/package/dust/dust.hash
-index 83b01447b6..edb865fc0a 100644
---- a/package/dust/dust.hash
-+++ b/package/dust/dust.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  275c2d7bd06205588b7e20e4b478e0df7213f426a1441923e3f2dfaa80cf4828  dust-1.2.3-cargo4.tar.gz
-+sha256  2ce1847c74a9ee1512c8ceca68c648b8dee1f7996cd5750ffbbd79a932edd129  dust-1.2.3-cargo5.tar.gz
- sha256  aee6e2d13d3a55c7881630c09b41ca7b3b44bb1437b5d36695d22decc3655160  LICENSE
-diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
-index 0be30f0442..317c84e56e 100644
---- a/package/espflash/espflash.hash
-+++ b/package/espflash/espflash.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  5edf94cd55daceffd08278f7789ea58b24de2051f0e15d8b7ba441bc94337d87  espflash-4.0.1-cargo4.tar.gz
-+sha256  3d750c05de3a44acaca67219a70360fc1d0e79776027fcc3a2298a7d2edb108f  espflash-4.0.1-cargo5.tar.gz
- sha256  811f4d4d7ae8f88090dcd14cddf1982ca75cc30b5604e6ebb636693d9b885788  LICENSE-APACHE
- sha256  8daec6f7e829af4dfc7c99a251986648f718b90589aa819bc48be8ef82b0c12f  LICENSE-MIT
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 0bc5061ab1..a8e670527a 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d31a17b4733589da761ad79bc9faf4271b358a0ef9fea19dabb5f38827ba7cf4  eza-0.23.3-cargo4.tar.gz
-+sha256  921ea63ca5281c496a1a370f703de3f68e6147d22da21789c4bf44d222195148  eza-0.23.3-cargo5.tar.gz
- sha256  57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4  LICENSE.txt
-diff --git a/package/fd/fd.hash b/package/fd/fd.hash
-index 991be349b8..0dde7218ed 100644
---- a/package/fd/fd.hash
-+++ b/package/fd/fd.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  4a32dbd98dab4faf307954bf854d0c0c5719816e1cd28fe49385b6925cc8c515  fd-10.3.0-cargo4.tar.gz
-+sha256  adc1e51c35259f6ee393ae28df84faa02c5c320b4c391eabda6391d555f40bbf  fd-10.3.0-cargo5.tar.gz
- sha256  73c83c60d817e7df1943cb3f0af81e4939a8352c9a96c2fd00451b1116fa635c  LICENSE-APACHE
- sha256  322cfc7aa0c774d0eca3b2610f1d414de3ddbd7d8dd4b9dea941a13a6eb07455  LICENSE-MIT
-diff --git a/package/hyperfine/hyperfine.hash b/package/hyperfine/hyperfine.hash
-index e0408ee79d..13420dc0d0 100644
---- a/package/hyperfine/hyperfine.hash
-+++ b/package/hyperfine/hyperfine.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  64644b26342ebd44ad455ee7750809e424aff084bad403d04d713d729b020934  hyperfine-1.20.0-cargo4.tar.gz
-+sha256  c119d7d85ea9d3141cc894ae9d0530e83f3456e220fb23c7642e7c8f73bc978b  hyperfine-1.20.0-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
- sha256  1dfee18c2ff07ce551de4d6a1d2db158c0380746b488a7f0d08c8e0d3568b7c3  LICENSE-MIT
-diff --git a/package/kibi/kibi.hash b/package/kibi/kibi.hash
-index a805f75f91..3ab58428cd 100644
---- a/package/kibi/kibi.hash
-+++ b/package/kibi/kibi.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  0a2cdd264fadf455ed919e5d4c12ab25614735dfe0b30895004ce4f3919d7eff  kibi-0.3.1-cargo4.tar.gz
-+sha256  c65ab03df3c2f1b83b41c2074032edc6c0bc7ff616ff9116cee49ee36c462521  kibi-0.3.1-cargo5.tar.gz
- sha256  53cdcb17642e801f813712b4844293b037c23d4b482004b77c15ae2f36f551c3  LICENSE-MIT
- sha256  8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE-APACHE
-diff --git a/package/kmon/kmon.hash b/package/kmon/kmon.hash
-index c9c129648b..1877e9ab31 100644
---- a/package/kmon/kmon.hash
-+++ b/package/kmon/kmon.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7b66ef3d20951dfdbe6a62c82ee6de4bb6db23135e65cf535df5d934a7d462d4  kmon-1.7.1-cargo4.tar.gz
-+sha256  cd2ce6dec4d47b5ab1c4656be32d8eca71944731471b82a4e365d1312d70e578  kmon-1.7.1-cargo5.tar.gz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/libzenoh-c/libzenoh-c.hash b/package/libzenoh-c/libzenoh-c.hash
-index 9a1cbca0ff..ed9013c3b8 100644
---- a/package/libzenoh-c/libzenoh-c.hash
-+++ b/package/libzenoh-c/libzenoh-c.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5b1cc424771338f28ed16bce23a442856ed5b7f7f3ba1ff2aeb7373d68b484dd  libzenoh-c-1.2.1-cargo4.tar.gz
-+sha256  c0c1c0b97a36ec189f70562927326fb68ae4e49c368003cb3194dbff5d94fda3  libzenoh-c-1.2.1-cargo5.tar.gz
- sha256  01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  LICENSE
-diff --git a/package/netavark/netavark.hash b/package/netavark/netavark.hash
-index 79fcb2eab1..f7ab17de3e 100644
---- a/package/netavark/netavark.hash
-+++ b/package/netavark/netavark.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4c696e3e61b425270762f8d9d97705358de15de80e06fac7142cf65011d1dc0c  netavark-v1.17.0-git4-cargo4.tar.gz
-+sha256  9ff98fe9bcb6478ef558ae277b32aad67dbd7e7b72cac66df24084cb4f9038d9  netavark-v1.17.0-git4-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
-index 45047a82ed..d70882e2ec 100644
---- a/package/nushell/nushell.hash
-+++ b/package/nushell/nushell.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  59b3af5d873d0ce21ddd10358bc4d54753c01c7245caae7a3d8a72782d3f626e  nushell-0.108.0-cargo4.tar.gz
-+sha256  a26769088250b7af721db9c27c3c8982923b6f0a0ef1cb1eb507669de472c0b7  nushell-0.108.0-cargo5.tar.gz
- sha256  ff5dcaaba6140ec57cafdd4f707cd0d329e727477cf7d5b9ba7a244ec2678b79  LICENSE
-diff --git a/package/parsec-tool/parsec-tool.hash b/package/parsec-tool/parsec-tool.hash
-index f84c64802d..8ce1e1e123 100644
---- a/package/parsec-tool/parsec-tool.hash
-+++ b/package/parsec-tool/parsec-tool.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6ddb379cf9ab309a64c869cd64870d4e58414398f00fdb0ed1524f1e684db226  parsec-tool-0.7.0-cargo4.tar.gz
-+sha256  0ad62590274ba72bd1e02e5df234c33f7a24ee77f8d3316887e12d04b01469ea  parsec-tool-0.7.0-cargo5.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/parsec/parsec.hash b/package/parsec/parsec.hash
-index c6d9ad8d01..66ef007c8c 100644
---- a/package/parsec/parsec.hash
-+++ b/package/parsec/parsec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1d12fc9718a8690790974348e8ac170bcee433c074c06ba5db7c0a15c372b30e  parsec-1.4.1-cargo4.tar.gz
-+sha256  4c5f760f1f9c1c28ed93341c0e1416e8a229180eca4df32dd9f743d0f035531b  parsec-1.4.1-cargo5.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index ef268f5c83..ce63ce9658 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -12,7 +12,7 @@
- BR_FMT_VERSION_git = -git4
- BR_FMT_VERSION_svn = -svn5
- BR_FMT_VERSION_go = -go2
--BR_FMT_VERSION_cargo = -cargo4
-+BR_FMT_VERSION_cargo = -cargo5
- 
- DL_WRAPPER = support/download/dl-wrapper
- 
-diff --git a/package/procs/procs.hash b/package/procs/procs.hash
-index 35f1f6d2f4..516bc7e950 100644
---- a/package/procs/procs.hash
-+++ b/package/procs/procs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  09f2faee76bad885af50bf2977ea34b64810645a0b781699f8c822311211575e  procs-0.14.10-cargo4.tar.gz
-+sha256  31337ff0a89d13b26d94971ae12b2ee92cf1a188491711e700d0bf03ecf7ba6a  procs-0.14.10-cargo5.tar.gz
- sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
-diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
-index a30e716df0..272bdbcf66 100644
---- a/package/python-bcrypt/python-bcrypt.hash
-+++ b/package/python-bcrypt/python-bcrypt.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  c209e01bb77628213eecb2152cf143c95e4147e3ef54aada6cf69803fafdc67d  python-bcrypt-5.0.0-cargo4.tar.gz
-+sha256  c423e043342548dbe409b15e6cded27dba3a70376f36f6d91e1ed01d01ae116a  python-bcrypt-5.0.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 25d987a321..8e3b797272 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  18ecafb2c1f2de6d02d1b848f0f80736f0f93e8708afaf3df3064e8722077291  python-cryptography-46.0.5-cargo4.tar.gz
-+sha256  ecb4559a7bb579198761a996404b96fe3e9a0f79b1ef0a1a8c9d8d1b7d7dcfd7  python-cryptography-46.0.5-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
-index de75a97e72..c630a82a42 100644
---- a/package/python-logbook/python-logbook.hash
-+++ b/package/python-logbook/python-logbook.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  1533f03ef76a4d646b14dd00e9982d6ef5d5dc86f134c9bbc1cd98b55fbf566f  python-logbook-1.9.2-cargo4.tar.gz
-+sha256  c4abf52044e756f64ed2beba8e7a10e0bf941de9946eb7a82b71abf90f109bc0  python-logbook-1.9.2-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  2ca266337cc6947578654ab0dd6438de4d01fa78b2e6eb554b09757df1178f98  LICENSE
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index a92307d53b..f255ba8261 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  f4d2f9955b1b1d1ca71558ce969b65345056ef8db643cea33bc4aa124fb248df  python-maturin-1.11.2-cargo4.tar.gz
-+sha256  b7e5d7303140b6b67a11a40c11b61127d61b6d02d6e727f0a133e73bd78963c5  python-maturin-1.11.2-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index f55aab62ef..3f2cd0ad4c 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  ab71a5f3d6efb4a3dd0cacad24e62d774907be42ba2e01be8a3ddeecf46d078b  python-orjson-3.11.5-cargo4.tar.gz
-+sha256  da89615d51a086912e7f6444027c14f1edd943aa0910ed498c6f3febdcfae271  python-orjson-3.11.5-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index 6ab537ad67..61775e5522 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  8919dc76250449ed22d47e94f53929cb44eb982cd4ad80dc0607f8018868e549  python-pydantic-core-2.41.5-cargo4.tar.gz
-+sha256  cc643029337df7a2e90799cedbd75fef0636c6a467e74d22f4dfec4c1959359e  python-pydantic-core-2.41.5-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-index 9c72c1e7ab..4ce45941b8 100644
---- a/package/python-rpds-py/python-rpds-py.hash
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  9f8d17fa01176f0f0f5b20675d4c1759f9f8b02d667ae085bd70236b3681ae4f  python-rpds-py-0.30.0-cargo4.tar.gz
-+sha256  5a1adf51bde76b4865ead196427d5d3ad74eb677186f0eed6b22a89578084822  python-rpds-py-0.30.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
-diff --git a/package/python-rtoml/python-rtoml.hash b/package/python-rtoml/python-rtoml.hash
-index 54aba0c849..506d3b93ac 100644
---- a/package/python-rtoml/python-rtoml.hash
-+++ b/package/python-rtoml/python-rtoml.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  9174c3af184cbd94e67ac99f63a54c5f8ecea95421b36f15204f6eab762af047  python-rtoml-0.10.0-cargo4.tar.gz
-+sha256  8a489442beeb69a9a8bf24d7ccb6cee81afd287e0e45237c9d43aa16517500d1  python-rtoml-0.10.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  cd5ffde80e6d3286a2e2e5f02fb2cb07b823931ca368e7c735a6c5f5aebe7103  LICENSE
-diff --git a/package/python-selenium/python-selenium.hash b/package/python-selenium/python-selenium.hash
-index 97978c0995..3b22e5c5a1 100644
---- a/package/python-selenium/python-selenium.hash
-+++ b/package/python-selenium/python-selenium.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  c2518c75784290095739e386b4deb9f192b11dab3dce152452e6763918dd6c18  python-selenium-4.39.0-cargo4.tar.gz
-+sha256  6a614eb2cc8fff809f9cb10dae089eebad3af996dda49f9787bfed071fb5ac0c  python-selenium-4.39.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  1ee8454a0696ac46b0d5b67f85b2a0e3af2b7726e1b82cd182af60fd285bcba3  LICENSE
-diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
-index c6cfa63ea3..6ab8264605 100644
---- a/package/ripgrep/ripgrep.hash
-+++ b/package/ripgrep/ripgrep.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  cb56abf62d2e9924a873af5dba4ecc87964a5144459d240a83e42c26ea6f9d7f  ripgrep-14.1.1-cargo4.tar.gz
-+sha256  755b1ea52374d7a067a70ded10be04ddfc083d9333c6bb4f2c1e9a2493cd98c1  ripgrep-14.1.1-cargo5.tar.gz
- sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
-diff --git a/package/rust-bindgen/rust-bindgen.hash b/package/rust-bindgen/rust-bindgen.hash
-index 72ff0401ce..09f4b91f96 100644
---- a/package/rust-bindgen/rust-bindgen.hash
-+++ b/package/rust-bindgen/rust-bindgen.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9dd2f0f7bae7c84b1d79fb848d17335b8ebc37c27cd5ecb6e0da3ec0dba87d71  rust-bindgen-0.72.1-cargo4.tar.gz
-+sha256  c4dc8c1a1414f139cf0625e538d861fe59802c86e615afef144165f236cdb9dc  rust-bindgen-0.72.1-cargo5.tar.gz
- sha256  c23953d9deb0a3312dbeaf6c128a657f3591acee45067612fa68405eaa4525db  LICENSE
-diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
-index 88f3fdf46d..de5982dfcb 100644
---- a/package/sentry-cli/sentry-cli.hash
-+++ b/package/sentry-cli/sentry-cli.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  5072542aad76e1cad27ef643c50b2d959bd5d49e742d887fbad83391d9ce61e2  sentry-cli-2.20.3-cargo4.tar.gz
-+sha256  1f03892772a944ff9fbe208ff92e15ec2a966337f1739a5162f3af7dc252b574  sentry-cli-2.20.3-cargo5.tar.gz
- sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
-diff --git a/package/tbtools/tbtools.hash b/package/tbtools/tbtools.hash
-index a66ae15e63..60056f1fd2 100644
---- a/package/tbtools/tbtools.hash
-+++ b/package/tbtools/tbtools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  114c0dfb3f30cc491c9fcb583adf0f8b356268d8207bfc8c73a5bffe990e0c6a  tbtools-0.8.0-cargo4.tar.gz
-+sha256  a45d11a0beca595c9e10cfa30f78945876ef4bd3ac0651d903f9f2bc14d05197  tbtools-0.8.0-cargo5.tar.gz
- sha256  9b16a3add311d607af8d9b348a842a37840d0f47dfcc6cf2a7756ee02c24ed69  LICENSE
-diff --git a/package/tealdeer/tealdeer.hash b/package/tealdeer/tealdeer.hash
-index acfaad0271..f9fba9b610 100644
---- a/package/tealdeer/tealdeer.hash
-+++ b/package/tealdeer/tealdeer.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  40952b9921d750bd6a84a7624b7b19558a9bbf1be6433b70db5ec2ccd840e33d  tealdeer-1.6.1-cargo4.tar.gz
-+sha256  233d220f1f917efccae0f7591ae619cb637862d959596a16afd1390a3203d44c  tealdeer-1.6.1-cargo5.tar.gz
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  a313b5e62b80a08f3aae0fa62ff3de8482ef55247299eb352ab44f87ef456b1b  LICENSE-MIT
-diff --git a/package/uefisettings/uefisettings.hash b/package/uefisettings/uefisettings.hash
-index b9b5222d4b..0523d7b9b9 100644
---- a/package/uefisettings/uefisettings.hash
-+++ b/package/uefisettings/uefisettings.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3c199e92e9dde29d5a1be33994cef27eb9450f1dbc006eb5e09856e2be7f172b  uefisettings-149bc92970949d44be641ae1e3e942220d7390e7-cargo4.tar.gz
-+sha256  d614106b2f9093dfdd24367a5fc131b1537580a0a1e563a82da294539e10ca4a  uefisettings-149bc92970949d44be641ae1e3e942220d7390e7-cargo5.tar.gz
- sha256  acc0b83e151985bb943d35ac37e7522fef28d707af9a4829678e92baa409aaf1  LICENSE
-diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
-index 6a8c5a5857..e0aaceeee2 100644
---- a/package/zellij/zellij.hash
-+++ b/package/zellij/zellij.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  248cb15f4853079dbc02962f2d41db8e1108c5b7b369bbf6feb484d8b1a5be5d  zellij-0.43.1-cargo4.tar.gz
-+sha256  ee8fb9d36f07f00a3f21e65aadcb85911132a1de1666c18c0c5afe23f63c49d7  zellij-0.43.1-cargo5.tar.gz
- sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
-diff --git a/package/zoxide/zoxide.hash b/package/zoxide/zoxide.hash
-index 64c1efd277..da04d48e9f 100644
---- a/package/zoxide/zoxide.hash
-+++ b/package/zoxide/zoxide.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  728fbe4e44cb9b4b8bb0753e962e2889619cccdc354ac141d6e26eb2ca8ee9b9  zoxide-0.9.8-cargo4.tar.gz
-+sha256  c86fb903f941d0470712f2e5b37121957a75bdd7e593980ddd8c14a05ec86b5c  zoxide-0.9.8-cargo5.tar.gz
- sha256  23aa3b08366e4ed6050f3d9950070201802aadbe5675fa1c19f24f4de91cf294  LICENSE
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mips64    |          bitcoin-30.2          | NOK | https://autobuild.buildroot.org/results/28d8e1520860fd2e621c444985a2bfcf19d60ec9 |     
+    sh4a     |         c-icap-0.5.10          | NOK | https://autobuild.buildroot.org/results/81d803eee4b554ce7b464d28db1f9171a75eb0f4 | ORPH
+microblazeel |         c-icap-0.5.10          | NOK | https://autobuild.buildroot.org/results/cb0026442669d0ea8468865a00493e7907f0514c | ORPH
+    arm      |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/78481b1585ac2c5b623c3215b3ce084cf06291de |     
+powerpc64le  |        containerd-2.0.7        | NOK | https://autobuild.buildroot.org/results/9eda1abe80b6a53ff15ab42123bc88c9e1d3745e |     
+  aarch64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/d4ba13ed49dc7fd55db0a16846170370f293fd39 | ORPH
+  sparc64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/0f30d057eefa7a410d634fed7ba9f9e1d0112742 | ORPH
+   x86_64    | docker-credential-gcr-v2.1.30  | NOK | https://autobuild.buildroot.org/results/e55f78d957950f1c43f9d0dab6d7a6412f5f19f2 | ORPH
+   mipsel    |        e2fsprogs-1.47.4        | NOK | https://autobuild.buildroot.org/results/6157d3def31f6a55f9fb602207d928fceacef391 | ORPH
+   s390x     |          ffmpeg-6.1.4          | NOK | https://autobuild.buildroot.org/results/ef95498014d8854c8d56c0b25079ec7060709577 |     
+    mips     |         flashrom-1.7.0         | NOK | https://autobuild.buildroot.org/results/391952f15eaa2b572d0556607896b7cc365c33e1 |     
+    arm      |         fwts-25.11.00          | NOK | https://autobuild.buildroot.org/results/859390dbd2a1d7b3bf43588a461a2ff7dc66f92b | ORPH
+   armeb     |           gawk-5.4.0           | NOK | https://autobuild.buildroot.org/results/64095e94154bf3ef695afe85979db4a012cc2e8c | ORPH
+  mips64el   |           gawk-5.4.0           | NOK | https://autobuild.buildroot.org/results/518c4c37d046b7fd0750e8166b9f50c5f36cf6f1 | ORPH
+   mips64    |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/b617db05e754ed54b3b1e3a533faf808bb303a22 | ORPH
+ microblaze  |       gettext-gnu-0.22.4       | NOK | https://autobuild.buildroot.org/results/73b3f27b66a9c1bfb611d3dbecd197bbf3fd2027 | ORPH
+    m68k     |      ghostscript-10.06.0       | NOK | https://autobuild.buildroot.org/results/97d5b569e77c8f56bd565f3f2a42ec704ab218cf |     
+    arm      |      ghostscript-10.06.0       | NOK | https://autobuild.buildroot.org/results/ef06373de56a170ac7495579e3c8a2de02434f37 |     
+    hppa     | glibc-2.43-17-gdd9945c0ba40... | NOK | https://autobuild.buildroot.org/results/e4e1b6327cacb6c681b84a02195e1be85c2eb2f0 |     
+    hppa     | glibc-2.43-17-gdd9945c0ba40... | NOK | https://autobuild.buildroot.org/results/bdd8f09cc380828423edd6e4283220e5833ce9a9 |     
+   mips64    | glibc-2.43-17-gdd9945c0ba40... | NOK | https://autobuild.buildroot.org/results/d744babac4d3b6cd6098b5a0bf9d073498dfafde |     
+loongarch64  |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/8fc5ef79fbcde4fff8b0594711a061619807e4a4 | ORPH
+   mipsel    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/32bf0dcdc2e7a9e8d89a99fee92eea3de8018ac3 | ORPH
+  powerpc    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/0cf6cbd4037f9f926566483a4e38f3d87ed57029 | ORPH
+  aarch64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/8d0c789c458a11e3c93f8f82e579c39fc8b86e2b | ORPH
+   mipsel    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/046a8d1f849901b8008f0ee505cd6b4bb0b4dfa9 | ORPH
+  sparc64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/133be6cefed0624647d603b799dd13ef1c035ca2 | ORPH
+loongarch64  |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/57543e008602af215de0f3211c9be344f6475413 | ORPH
+microblazeel |    gst1-plugins-bad-1.24.13    | NOK | https://autobuild.buildroot.org/results/07c5c13ef04acb2531d781a8d1fa1b377a7a1c91 | ORPH
+   sparc     |          guile-3.0.9           | NOK | https://autobuild.buildroot.org/results/f67f2aa5a9516becc8ed79c9e34fdad58302d2b0 |     
+   s390x     |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/24b8c786be3366c4aee7b78ccdc0a0206f1621ff | ORPH
+  mips64el   |   host-mender-artifact-4.2.0   | NOK | https://autobuild.buildroot.org/results/980606d046272261b94a9a6f831ed291537b0c98 |     
+powerpc64le  |   host-mender-artifact-4.2.0   | NOK | https://autobuild.buildroot.org/results/490af14d525fdfe9a9f688f1b71a5d23a93a1bd6 |     
+  powerpc    |        host-runc-1.3.0         | NOK | https://autobuild.buildroot.org/results/b34070a54f5301dba7821b24f01c25118707859d |     
+microblazeel |        host-runc-1.3.0         | NOK | https://autobuild.buildroot.org/results/732335a399dab40193a45bb24f0c692cdf9a40cf |     
+   x86_64    |        host-rust-1.88.0        | NOK | https://autobuild.buildroot.org/results/80e5bec7212f7e5a56b4604c4823c41d4e1304ef |     
+  mips64el   |      host-xfsprogs-6.18.0      | NOK | https://autobuild.buildroot.org/results/97789305b7b7b0bcf93699bee79277e12cefeedf | ORPH
+microblazeel |          i2pd-2.59.0           | NOK | https://autobuild.buildroot.org/results/21946369168b069a485bc78127cf11a8e69361be |     
+powerpc64le  |          iotools-1.8           | NOK | https://autobuild.buildroot.org/results/c2b241c12a616706dd4f270ce9d80ac873a7a21f |     
+   mips64    |        iproute2-6.17.0         | NOK | https://autobuild.buildroot.org/results/21e012f938b951fe347f4762bfb0eee811aca207 |     
+    arm      | kvmtool-7ad32e5514aca2b6d19... | NOK | https://autobuild.buildroot.org/results/72184d67821c9e806f9e2738dd3bd7dfe85f4107 | ORPH
+   xtensa    |         lapack-3.12.1          | NOK | https://autobuild.buildroot.org/results/2ee97a98d8f9227369c0164827d71c1ac33f7c07 |     
+   x86_64    | libdill-32d0e8b733416208e04... | NOK | https://autobuild.buildroot.org/results/8d466d82862e088ec28cf1d38b0c051c17960556 |     
+ powerpc64   | libdill-32d0e8b733416208e04... | NOK | https://autobuild.buildroot.org/results/792882339644b3b3b3c11d20539aeea24bea7902 |     
+   x86_64    | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/d6935c89bec274718fdf843ccbdc940d421b1628 |     
+   armeb     |     libhdhomerun-20210624      | NOK | https://autobuild.buildroot.org/results/cde5508c3e2ea355ec4f0126f9d87990acf3d26d |     
+  riscv32    |      libmicrohttpd-1.0.3       | NOK | https://autobuild.buildroot.org/results/12808e4a13dc234646af3a704734706b08511c44 |     
+  powerpc    |         libmpeg2-0.5.1         | NOK | https://autobuild.buildroot.org/results/29f95e00973a5a7624fe4bf116d8cf797ffffd4c | ORPH
+  mips64el   |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/33e4987076ebfc711245c4a5565439bdbab0d78e | ORPH
+  mips64el   |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/cd25e7871255fa2837920c5ab5f16d83f0f531c4 | ORPH
+   mipsel    |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/f954a09e236a10c90022f0ba8475ca4e41ba7fec | ORPH
+    hppa     |          libnfs-6.0.2          | NOK | https://autobuild.buildroot.org/results/bb77a0ba59319f4281f7c7dbf44f48204d2e45c5 | ORPH
+ microblaze  |          libnss-3.122          | NOK | https://autobuild.buildroot.org/results/5be4b3917a9e85a52efdaae6de607c01582aa72e |     
+ powerpc64   |          libnss-3.122          | NOK | https://autobuild.buildroot.org/results/1027f176ef9a625bf38a0aaf7685ed32d80068e3 |     
+ powerpc64   |          libnss-3.122          | NOK | https://autobuild.buildroot.org/results/6fbe1012e02d7046ef9b8d7901e9081e65862797 |     
+   mipsel    |          libsepol-3.9          | NOK | https://autobuild.buildroot.org/results/ac79c3ab4f940a19693b84d496e19d1e858bad73 |     
+loongarch64  |         linux-6.19.11          | NOK | https://autobuild.buildroot.org/results/8609b315cb5ec48c5499f3c991d9de41d8f915bc | ORPH
+powerpc64le  |         linux-headers          | TIM | https://autobuild.buildroot.org/results/a1d24186b07d5a2fcefc73d399af4c9fb82a90d5 |     
+   mips64    |         linux-headers          | TIM | https://autobuild.buildroot.org/results/f923481dc9085e99e555101363770a318e1c562a |     
+  powerpc    |           lua-ev-1.5           | NOK | https://autobuild.buildroot.org/results/85066797df4a2ca59da5f885048168f27a91f7e8 |     
+    or1k     |         mdevd-0.1.6.5          | NOK | https://autobuild.buildroot.org/results/f1bbb3779257893c641c3da0f5418261c99961a3 |     
+ powerpc64   |            mrp-1.2             | NOK | https://autobuild.buildroot.org/results/87d6555feb4ef3d3cc15655062f0a35fde0d7b6b |     
+loongarch64  |       ntfs-3g-2022.10.3        | NOK | https://autobuild.buildroot.org/results/385eb6ee095af6034b2de87bae7ba693757353ee | ORPH
+  sparc64    |        nushell-0.108.0         | NOK | https://autobuild.buildroot.org/results/a09a94fc9b8e079c5df62bad37db84c7603c278a | ORPH
+  sparc64    |        nushell-0.108.0         | NOK | https://autobuild.buildroot.org/results/f8cb7d151af69acdf76311b17adbf151e7a53c5a | ORPH
+    i686     |      oath-toolkit-2.6.14       | NOK | https://autobuild.buildroot.org/results/b140bd11ec0f696926ac05d2f3fe2190214178fe |     
+  aarch64    |      oath-toolkit-2.6.14       | NOK | https://autobuild.buildroot.org/results/122cd851f7ff0a10487376f25f370078ed4224b8 |     
+ powerpc64   | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/aed5fcd3c22315c521c3abef0a696436da1e15cf |     
+powerpc64le  | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/4a434f1b1cfe6dd7b4bd6a2b87295bb11e91e25c |     
+  aarch64    | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/97a50de85b161f595b6a8f17a7ba64cd328aec2e |     
+   s390x     | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/5ebe2128a3ccd674021da56411d2ed3ef97618d1 |     
+   s390x     | odhcp6c-f19dd37fb467c9cf10c... | NOK | https://autobuild.buildroot.org/results/c829ec68cf716a4380e4e69821f1b2062d418379 |     
+ aarch64_be  |         opencv4-4.13.0         | NOK | https://autobuild.buildroot.org/results/3f24dff8a4c3aea48517618a203460551f1f4d69 |     
+    sh4      |        openjdk-21.0.4+7        | NOK | https://autobuild.buildroot.org/results/99438e20a672aa3219edb01cd7152e63fa1b114a |     
+    or1k     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/868ca09baf74c095cb497b7a43b3e2a6ed587f5e | ORPH
+  mips64el   | phidgetwebservice-2.1.9.201... | NOK | https://autobuild.buildroot.org/results/20216534d317dc92c8905a18c0d6aff13bafdcfc |     
+    sh4      | phidgetwebservice-2.1.9.201... | NOK | https://autobuild.buildroot.org/results/13967fc94850e27299d758ee3ed3537e840bd288 |     
+   mips64    |      pkcs11-helper-1.30.0      | NOK | https://autobuild.buildroot.org/results/a59bcf4d6a72e18663f9017a3c34c8d135de6ebb | ORPH
+  aarch64    |      python-html5lib-1.1       | NOK | https://autobuild.buildroot.org/results/394a6629d5a7610d3aa59550f20e53d024344f90 |     
+ aarch64_be  | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/f8076d64a268ce9ff1867d8372508f1c176042dd |     
+    arc      |        python-xlib-0.33        | NOK | https://autobuild.buildroot.org/results/dc77089f4820b7c4b31547dcca71532a59cbef32 |     
+  aarch64    |      python-zlmdb-23.1.1       | NOK | https://autobuild.buildroot.org/results/2d16b4458b6555f6d2e57261191c060e4c0185e9 |     
+   x86_64    |          s6-2.13.1.0           | NOK | https://autobuild.buildroot.org/results/f64b25a74bfb33d009799115d7be944c4b80e59b |     
+    or1k     |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/7e965bae849eb662bb71695947bd169e5d0fb27f |     
+    arc      |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/7e701d07ce00c1fc01948a99c5d9fff3c880a384 |     
+ microblaze  |         s6-rc-0.5.5.0          | NOK | https://autobuild.buildroot.org/results/ffeca70ff7fe1857d566a886d371c94c84edcde8 |     
+microblazeel |         s6-rc-0.5.5.0          | NOK | https://autobuild.buildroot.org/results/c7e51ea071c3e3470400a729c005913268b40ed2 |     
+    i686     |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/bb0246ef696950d46d8f34281a0fa6e9e559210a | ORPH
+  aarch64    |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/071923adfb776a3b3a3095bfb889a9e548003a7a | ORPH
+    i686     |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/4312ffd3a0e982beb717b906e1a008a0562a49f6 | ORPH
+  aarch64    |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/4d0d2f25bc568ca4839b7449156ef82f3ebfc954 | ORPH
+powerpc64le  |        skalibs-2.14.3.0        | NOK | https://autobuild.buildroot.org/results/0f51cfb6cf4a6cfb6935ab9ab3be48f5edc5b601 |     
+    arm      | toolchain-external-bootlin-... | NOK | https://autobuild.buildroot.org/results/c66c53e94f1d546f37e3355cb6b817db240543ea | ORPH
+  aarch64    |         tpm2-tss-4.1.3         | NOK | https://autobuild.buildroot.org/results/4517f2e64055b72256a9af73b7b20459adec22ea | ORPH
+   mips64    | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/05b8419b6eb05347c19bfe8224712ad096042cc1 | ORPH
+   s390x     | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/b54aee4ef77abbc90a09fca2dfe36b9eca0b7f8f | ORPH
+microblazeel |            unknown             | NOK | https://autobuild.buildroot.org/results/f37ab6a9f24785b8e88653c4cfc11f85147ffe9e |     
+    arm      |            unknown             | NOK | https://autobuild.buildroot.org/results/3b1b1d748f2201657883653203537d95d1311395 |     
+ microblaze  |            unknown             | NOK | https://autobuild.buildroot.org/results/15cb1e62fe5e2cfbeb7a861e4cb88d37ba20fe66 |     
+powerpc64le  | ustream-ssl-5a81c108d20e247... | NOK | https://autobuild.buildroot.org/results/7688b282f6f7ff14f52b6d32ee1bc30052280b3f | ORPH
+   x86_64    | ustream-ssl-5a81c108d20e247... | NOK | https://autobuild.buildroot.org/results/379cb1382987bb51a80f9b53202a79c32f1fa5b1 | ORPH
+    or1k     |       util-linux-2.41.3        | NOK | https://autobuild.buildroot.org/results/a61b8c9a4ad306df71d5e9bf873c828f67977efe |     
+  aarch64    |       util-linux-2.41.3        | NOK | https://autobuild.buildroot.org/results/34ab56db9a2a17ff43a464d82121e73823bdd954 |     
+  powerpc    |     util-linux-libs-2.41.3     | NOK | https://autobuild.buildroot.org/results/3f6ab515f86f3677d20b763cc89d4a6d7508bff6 |     
+   sparc     |       vorbis-tools-1.4.3       | NOK | https://autobuild.buildroot.org/results/55fd38904a2a3e0a9d29b505cf7a321a6d21ffe6 | ORPH
+  powerpc    |           webp-1.6.0           | NOK | https://autobuild.buildroot.org/results/150c7643d2e8d772655aa3df44c66323062be0f9 |     
+
+
+Classification of failures by reason for 2025.11.x
+--------------------------------------------------
+
+                   dante-1.4.4 | 1 
+             libgphoto2-2.5.33 | 1 
+package/linux-headers/linux... | 1 
+             parsec-tool-0.7.0 | 1 
+        perl-xml-libxml-2.0134 | 1 
+                 protobuf-29.3 | 1 
+
+
+Detail of failures for 2025.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/e8fe5b6183e50757e82fc0ad9b8135cfc3c7ff41 | ORPH
+ microblaze  |       libgphoto2-2.5.33        | NOK | https://autobuild.buildroot.org/results/2115fc8005ed56f81ac05f2487ec0e144024a055 |     
+    arc      | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/5a8d8f64a58f040284c4fde1c1a8379a1182fe68 |     
+ powerpc64   |       parsec-tool-0.7.0        | NOK | https://autobuild.buildroot.org/results/2c8a368857d09c296755e5a6515e9b9fbc2bc03b |     
+    m68k     |     perl-xml-libxml-2.0134     | NOK | https://autobuild.buildroot.org/results/cd54d1232dab24e7be770f4ccf48408effdd458d |     
+   mipsel    |         protobuf-29.3          | NOK | https://autobuild.buildroot.org/results/11cd2c2184a1fe4812dda189d21e3e4f98e1974a |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+        host-python-lxml-5.3.0 | 3 
+                       unknown | 2 
+                    azmq-1.0.3 | 1 
+                  giflib-5.2.2 | 1 
+  gobject-introspection-1.82.0 | 1 
+           host-go-src-1.23.12 | 1 
+host-netsurf-buildsystem-75... | 1 
+              host-rust-1.82.0 | 1 
+                libcurl-8.19.0 | 1 
+                libdnet-1.18.0 | 1 
+                 libgee-0.20.6 | 1 
+                   libks-2.0.5 | 1 
+     libphidget-2.1.9.20190409 | 1 
+              libsodium-1.0.18 | 1 
+     linux-5.10.246-cip66-rt29 | 1 
+                   perl-5.40.3 | 1 
+ulog-0389d243352255f6182326... | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |           azmq-1.0.3           | NOK | https://autobuild.buildroot.org/results/ef049fb5526f0c8ed2a2f99f9d235e311a606a0f |     
+   armeb     |          giflib-5.2.2          | NOK | https://autobuild.buildroot.org/results/38bc1ca5b4104aa55b1aa7a3c1c38f3106f0505c |     
+    i686     |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/fd685eaca30de856dbd801a149407fbf1f2be99c | ORPH
+    mips     |      host-go-src-1.23.12       | NOK | https://autobuild.buildroot.org/results/7ccc16b12956c8d4bb64001e7fe6665c33cb121d |     
+powerpc64le  | host-netsurf-buildsystem-75... | NOK | https://autobuild.buildroot.org/results/1c55618ffb7f5b283693052316656684cc611557 | ORPH
+    i586     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/c209b5d6d83e8e4e9e410a9d31e82cdb0ac346fe |     
+    m68k     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/1ab22c1f522118c9e61a1141f975d778f02f0dec |     
+microblazeel |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/c2f684f0e125291ab929ce8067cae29d11af90fd |     
+   x86_64    |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/0234f196e967d2b04a24722c408e201ba9624286 |     
+   mipsel    |         libcurl-8.19.0         | NOK | https://autobuild.buildroot.org/results/a452cab34da48054f1baf115f631d7260a75282f |     
+   s390x     |         libdnet-1.18.0         | NOK | https://autobuild.buildroot.org/results/b47158c6d15ca44d68ac9e37bbbdd1fe4b68882a | ORPH
+    m68k     |         libgee-0.20.6          | NOK | https://autobuild.buildroot.org/results/0c3c101d2d97fd208d8954c609c3974138674f77 |     
+ aarch64_be  |          libks-2.0.5           | NOK | https://autobuild.buildroot.org/results/f53ecbf2af5f4ced4b1d9adc9efec066a9b9932a | ORPH
+  mips64el   |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/dfa3cc5fd4f800c234cac9504628313bcbb6dae6 |     
+microblazeel |        libsodium-1.0.18        | NOK | https://autobuild.buildroot.org/results/9aa54caa522800b8ed5250fdd8c8bb6a96c0a44f |     
+microblazeel |   linux-5.10.246-cip66-rt29    | NOK | https://autobuild.buildroot.org/results/0e7403475d3c018ab9cea860142d68cd749fbe7d | ORPH
+  powerpc    |          perl-5.40.3           | NOK | https://autobuild.buildroot.org/results/890985e8d9621e083c762b5b186ebb213d8d3c27 |     
+    m68k     | ulog-0389d243352255f6182326... | NOK | https://autobuild.buildroot.org/results/6fe368c1ea330b0b6679b3f57a97eed75ebaf5dd |     
+   armeb     |            unknown             | NOK | https://autobuild.buildroot.org/results/6b91fa7274d2d3fb4f115f1fb65274d667a02176 |     
+ powerpc64   |            unknown             | NOK | https://autobuild.buildroot.org/results/d8ccfaa73cfe2f1d3150a7278697081bca8c9d92 |     
+
+
+
 -- 
-2.53.0
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
