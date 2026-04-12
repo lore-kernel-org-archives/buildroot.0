@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA32E937EB
-	for <buildroot@archiver.kernel.org>; Sun, 12 Apr 2026 16:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF76EE937EA
+	for <buildroot@archiver.kernel.org>; Sun, 12 Apr 2026 16:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43B1E42389;
-	Sun, 12 Apr 2026 16:02:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6ED3D61689;
+	Sun, 12 Apr 2026 16:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W-6dXQQPiSYW; Sun, 12 Apr 2026 16:02:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j1r9k_IrR6as; Sun, 12 Apr 2026 16:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF79D422D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93C866163D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776009743;
-	bh=2igE76oGQ9S+buzh2p7RuinzTLlSjuUBq3CkQU19FfY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WTXwn9z5LRYvO5E6sf3e2/0e4R36EEnsjhS6oC7pvU5AsBU5pPgxe5H33Eyrwab8Q
-	 sZazqWtPp3OyWjqNgARYmYN092lGMPuOoJfKjXp/4lVqnLB/DOrnGKIuoz6LSdUbfS
-	 Ingz2VvbJwrAPGPPahP5kCwHNC1BOL97lRx4zOlfks3t48ggbJuasp4sVJEDDckGMa
-	 b+kJuXmLoVCmr6nvzADZpERoZmg/g7TL/6wfvZXmThP6ulA6mIIabaBPjhtpjG9hgm
-	 QwC5KyzQD8KWUtmXZwCttXpb253+pMgJ6/GCazRH0EPndnn+WSVAq/KOCYwD0KEC9l
-	 oisYaDWCy9Feg==
+	s=default; t=1776010685;
+	bh=vynqKYHnW64oOKasnZNUDZeXtq9DY2YKEGEwLYTmLUo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gYadIyrzbqGiuaDdHmb+sdTvvtOWlcPOfDQ79eOMh1B5ZYajE1vGg0LIJPJMTfdPq
+	 9h3uz1WbU+PaVkmtMcsvcc68oFgn1dCiOfZYeC1Jyrsxk4Bffv63bfDCXlM40qEVZX
+	 4VofmrpRUQow75SQpaFw6v+phGAkfXR5RQAnZ+BaWZwM44K4Ti+pqmG1Cc9ndGPAPh
+	 f2wmjDF1GRDfXAMXJB3VjPrbjYFGcs/qFZfQ0JYcPxlCIdBFgPbvVH4+GikhJIJUYW
+	 d6In46PX59rLG0WTlgC4kFvKqO19+YiGu5oqAkp90Dd06mqCnkxMwxhk31kBgcqIXW
+	 h0hm/3BYN+KoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF79D422D9;
-	Sun, 12 Apr 2026 16:02:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EB12237
- for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:02:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93C866163D;
+	Sun, 12 Apr 2026 16:18:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9CA4237
+ for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24EC9400C7
- for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:02:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B537183DAF
+ for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:18:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Kw2XrPDqvC1 for <buildroot@buildroot.org>;
- Sun, 12 Apr 2026 16:02:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 67165400B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67165400B0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 67165400B0
- for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:02:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 243AA78035B;
- Sun, 12 Apr 2026 18:02:18 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 12 Apr 2026 18:02:18 +0200
-MIME-Version: 1.0
-Date: Sun, 12 Apr 2026 18:02:18 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
-In-Reply-To: <20260410162857.1449619-1-dario.binacchi@amarulasolutions.com>
-References: <20260410162857.1449619-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <2608528f878bd2a7f5e94ba2edada1cc@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776009740;
- bh=j7mf1gohjZ+hASclmJHRV94fag0t4aVHF/6hJUTpk90=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Y9aPf3O+K7jCIVC+fOQRe/XTAOMt9EtmNehK2st/WjUvV89DTECNOYZaLM22OnqOc
- +HRb9sCdM549C4cpFBzgS1tcJNAmnUmQSTUQloCFCdeC0fbTX/Vyk8O1D5YAVy/35z
- GXwOIYQ2IuUvYxJruEflmvmt5Ol1LqX7/ybIy7w5lyL2C2boedZ+fCc7Hhbwz/ne7S
- NrX3z8Fz5kF0T6ShPVMs0nGTp9059H8ODe+0KnMgWIybKm/nZVXpyjx39FT64gKm6v
- JswfrWrIFYuJvSvpVrDItLY/t00ILxevJJGCk/nGkmY8gZiwBLqtX/9eUl0Z7PxHYW
- W4HxdWtxTdUNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Y9aPf3O+
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32h747_disco_sd: bump Linux
- to 6.18.21 and U-Boot to 2026.04
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RNVjdiiHQlf5 for <buildroot@buildroot.org>;
+ Sun, 12 Apr 2026 16:18:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3F1383DB5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3F1383DB5
+ for <buildroot@buildroot.org>; Sun, 12 Apr 2026 16:18:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5D8E6810E5; Sun, 12 Apr 2026 16:18:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 Apr 2026 18:02:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8e7886acfc5be2bb67fc87a1b4bfc8a8d2a16421
+X-Git-Newrev: 19370808a2aa8243c18d2ed1712057686e3c9640
+X-Patchwork-Hint: ignore
+Message-Id: <20260412161801.5D8E6810E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/waf: bump to v2.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,18 +70,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/04/2026 18:28, Dario Binacchi wrote:
-> The patch bumps the Linux kernel to version 6.18.21 and U-Boot to
-> version 2026.04.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/19370808a2aa8243c18d2ed1712057686e3c9640
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+This contains some minor bugfixes and enhancements, see the release notes
+https://gitlab.com/ita1024/waf/blob/waf-2.1.9/ChangeLog
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/waf/waf.hash | 6 +++---
+ package/waf/waf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 061a093c55..12dd57a4e2 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,7 +1,7 @@
+ # Locally computed
+-sha1  d11579fb088200adc5e6bf6c96e31fcb7afd94cb  waf-2.1.6
+-sha256  4bc4587a11925e19739da021e021a5764d39759fada85563bc6d4ded17515b14  waf-2.1.6
++sha1  40033ed0306c210f4e8d6e6cd5cb0592acec55c3  waf-2.1.9
++sha256  e235eeac6d34f039834e355a738298416a92a17defd1b6e1eae48488ba4a6864  waf-2.1.9
+ 
+ # The waf script also contains its license, but is renamed `waf` in the extract
+ # step, so this is a synonym for the above, to check WAF_LICENSE
+-sha256  4bc4587a11925e19739da021e021a5764d39759fada85563bc6d4ded17515b14  waf
++sha256  e235eeac6d34f039834e355a738298416a92a17defd1b6e1eae48488ba4a6864  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index 911dcc5fc6..13d088d54e 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAF_VERSION = 2.1.6
++WAF_VERSION = 2.1.9
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ WAF_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
