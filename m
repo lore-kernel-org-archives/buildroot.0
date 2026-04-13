@@ -1,63 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88D63F531CE
-	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 21:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20580F531CF
+	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 21:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3873641FAD;
-	Mon, 13 Apr 2026 21:07:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D42E83F8C;
+	Mon, 13 Apr 2026 21:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xa2uPFDnpiwD; Mon, 13 Apr 2026 21:07:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EEIRAh2D_hkn; Mon, 13 Apr 2026 21:08:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E72041FB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F59C83F4C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776114460;
-	bh=kYlc9mVqNL5HmtSExgh0HawXsiBiy99d6tlhCcKj1hY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DCJYoTT5Iqj8XcEiKjl8MfXT2t4F8eUSbSUSG2sw+f61Nm61M2GlYbk0mx/t42Qk4
-	 mq/EtQp9t1+vsDEaH+6g0iCSoNJCpSb7HsBUs9rMGv54ITY/flX1g8HFIWJNO4KaAd
-	 B6Jd0AbyvhYNuaoAPNKhd1Gi4apngBAGaI76hU2jhpRe2hPsSYATrTyFVuxwi/9W+c
-	 vHdEIdq/B5mwlsGKwOfRiLCrLQCyofClB8n6/Y+7TxwkUZSNIXanN3XtQEevbmgUDS
-	 WMiklD1Luuy+y8kuH899cDaQhxrJYOzAR2LUTyZ+h7YByBp4/KkOSbnIi1/DEXC0Gs
-	 ygd/+sHfPvW/A==
+	s=default; t=1776114483;
+	bh=zyeOTn1sbzCPBHKt9EYY73AKJZDE7KQdhRKIOjAkTM8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Md0P7eLMmyCbtkXZI3CKOs82+V0US3/rBVewM7OSPQfeNgcd7L0MRcsVdgxzBB3Sa
+	 CB9GT01B0qnIFfZUA7gRP/Z6DxKBp/MA/wvrD9nTwGG+OZD7zEYNObZDsqTl0PJwif
+	 Hr8Hkg8rJCvLBwB5yw64a2r1PTteTM/0HnFYPFIHVueRGQHR/aJ5jtZsqjmxM5SfV5
+	 IKrIjuzfijSGtWS6+Tx+j+AI/xAtJoYRoeywZ0IA6PlLDoEBdHdrYWio077ZwFcbGJ
+	 5R4T6ZgLfJfC+gkDnmgwUbcTx/0+tDvJemEpy5wWuqi2YqUKk7k1JyqS5tAUP1AX8J
+	 Fe/UUdkHWBMDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E72041FB0;
-	Mon, 13 Apr 2026 21:07:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 32383375
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:07:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F59C83F4C;
+	Mon, 13 Apr 2026 21:08:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 524BB237
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2455B4064F
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:07:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4429F83F4C
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:08:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qDIgBQRMS-9K for <buildroot@buildroot.org>;
- Mon, 13 Apr 2026 21:07:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EA634023F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4EA634023F
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:07:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D167C813F8; Mon, 13 Apr 2026 21:07:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 Apr 2026 23:04:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 329643baa5225f6262ed4411d4c1ca2829d46fdf
-X-Git-Newrev: 9f79afbfb042176dba99c51e26653523fbf58169
-X-Patchwork-Hint: ignore
-Message-Id: <20260413210737.D167C813F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: add SMC-Gateway as a bronze
- sponsor
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F9R2ql9zICFZ for <buildroot@buildroot.org>;
+ Mon, 13 Apr 2026 21:08:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 18F9083F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18F9083F42
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 18F9083F42
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 21:08:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 323752003B4;
+ Mon, 13 Apr 2026 23:07:58 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 13 Apr 2026 23:07:58 +0200
+MIME-Version: 1.0
+Date: Mon, 13 Apr 2026 23:07:58 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260413114051.20941-1-thomas.perale@mind.be>
+References: <20260413114051.20941-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <3724a6ea3933cffa2b9587f87290020c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1776114479;
+ bh=M6YTYhTvW8ciRLswIcQ8npphQIp7ZN73CMImS5lhyh4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=eTi8ZWaaqOWpR37LVgQPuPBo9XE6ryd/xbDg+WUPq1mpgl9cJlbv1BxYNQC/t+LlJ
+ uRhd4C3DXVTgHO9f9pEnEDOl9/QBStrdoHKm4tqaxu1ieeBAPFaIPvFYg05oCQbah+
+ 3lFWFnDCipJUh10YyliBDTcqLDomONYQmu2C9MJvjU4CtWBAlOWHih5M1Q6RsjKI//
+ u/m6zHQf5h1RBSFFsElG5x4Wokmpd1WmuOWZaicih75W7sR+6Rsukgmo7IvXiM7Hnl
+ pgNMp7b5IIQzHdDZ3MlNC/JUmKIXqMI6rArwf1jE5GhXnGvkXvgWMT8yOnA+b6nvzS
+ VwXZN7FNhbtVA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=eTi8ZWaa
+Subject: Re: [Buildroot] [PATCH 1/1] docs/website: add SMC-Gateway as a
+ bronze sponsor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,68 +95,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9f79afbfb042176dba99c51e26653523fbf58169
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 13/04/2026 13:40, Thomas Perale via buildroot wrote:
+> SMC Gateway creates applications to enable communications simpler.
+> 
+> They produce an intelligent hub that connects radio networks with
+> various external systems.
+> 
+> We thanks them for contributing to the LTS maintenance as a bronze
+> sponsor.
+> 
+> [1] https://smc-gateway.com/
+> [2] https://www.linkedin.com/company/smc-gateway-ltd
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-SMC Gateway creates applications to enable communications simpler.
-
-They produce an intelligent hub that connects radio networks with
-various external systems.
-
-We thanks them for contributing to the LTS maintenance as a bronze
-sponsor.
-
-[1] https://smc-gateway.com/
-[2] https://www.linkedin.com/company/smc-gateway-ltd
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- docs/website/images/smc-gateway-logo.png | Bin 0 -> 69324 bytes
- docs/website/sponsors.html               |  20 ++++++++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/docs/website/images/smc-gateway-logo.png b/docs/website/images/smc-gateway-logo.png
-new file mode 100644
-index 0000000000..b530f5ec0b
-Binary files /dev/null and b/docs/website/images/smc-gateway-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 76182c602a..cf7cba9806 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -71,6 +71,26 @@
-       </div>
-     </div>
- 
-+    <div class="panel-body">
-+      <h3>Bronze Sponsors</h3>
-+      <div class="sponsors-container">
-+        <div class="sponsor-entry">
-+          <div class="panel panel-default panel-lts-sponsor">
-+            <div class="panel-body">
-+              <div class="sponsor-title">
-+                <a href="https://smc-gateway.com/">
-+                  <img class="img-responsive center-block" style="height: 100%;" src="images/smc-gateway-logo.png"/>
-+                </a>
-+              </div>
-+              <div class="sponsor-body">
-+                <a href="https://smc-gateway.com/">SMC Gateway</a>
-+              </div>
-+            </div>
-+          </div>
-+        </div>
-+      </div>
-+    </div>
-+
-     <div class="panel panel-primary">
-     <div class="panel-heading">Current sponsors</div>
-     <div class="panel-body">
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
