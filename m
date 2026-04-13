@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B18CFF436B7
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD081F436B8
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CE6760E21;
-	Fri, 17 Apr 2026 15:20:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C4F880E44;
+	Fri, 17 Apr 2026 15:20:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZNcFfx6rjHt5; Fri, 17 Apr 2026 15:20:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bdto5WsPWLsx; Fri, 17 Apr 2026 15:20:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F45560E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4E2280D8F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439214;
-	bh=WHxa9Ev684LwPa0RX7Y6bu8BroECm7EyIGkVIH+7sbI=;
+	s=default; t=1776439213;
+	bh=6oaTc3MbN2bP8ta4I+F0rGOcxVVdz8lQdic0zWJKfpM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lhxs7avoeDzYTD3ckJaSEj6RRxStK/Fas+APnO9O/Jf8r01dp4buektLlUZfo6TTW
-	 YiIrN0f25XK3YBJQ3MJ2PDgjtM3x5zyNWAkh2acjRV0uqLBNqwvynSM84aPgsNgGPR
-	 bf76s8GhuDTU1he+Me/jQCxRN8P8jdaFyGjkaTRwLGqGPqrijt046ZoptipvJxx6CY
-	 hBYCn/zRwXCuVyU1cSmi8R5TxBJ7P85Ykc5yZdg8IFRbSOUPqz8S6KYLxQFIj/VXgB
-	 c6uCMISfk8ToE6Hefy1u6zyJRqgmWdAySLtUeqqUssK4UDuG0KZWA/25AJ/R+hV4OW
-	 KiIPkZanYjyKg==
+	b=i4c7SV8o6uvHWFAbXOiYXJrlQM8Twi0CaQloEDThQKO5Be4UoLbt2FvloDEE0DxFU
+	 sjyxQpo544Q1sNlsYBqYf+3aTvM98N29AsXY9hna6g4t+dee8oZgFZj12srYFQvr7I
+	 DzIeLEJtI+6ath+JXnNNg5Ax/ryOGHnVNPOHj5630rBqtUUw3tGQN+DWQQWjhTEegr
+	 ilf37LaELRlzyqjLveTGt5DG3nIt2kLK+BFR4jXmvsIlIC5xE1sKcLFiYwlAUklOMP
+	 i6xH04owxuaGo1vJxIou5l8tgxF/GG0RD/9wEPFGE0cbyfITT6bm0vKZ0oWFecLqYM
+	 zJHZIvBHRoz9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F45560E22;
-	Fri, 17 Apr 2026 15:20:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D6B0259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4E2280D8F;
+	Fri, 17 Apr 2026 15:20:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B2D7259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 396C04054F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F3E84060A
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FzF4q-dTKYfD for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DFYmCusI-Chs for <buildroot@buildroot.org>;
  Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C71E40541
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2986C405F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C71E40541
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2986C405F7
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2444819B9; Fri, 17 Apr 2026 15:20:07 +0000 (UTC)
+ id C1E41819B4; Fri, 17 Apr 2026 15:20:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 13 Apr 2026 14:01:34 +0200
+Date: Mon, 13 Apr 2026 13:48:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2827b497468b416d01a0077765f46e94e519c743
-X-Git-Newrev: 20f7059c1aa30c24f87c0c63d78a3ed05fca9f79
+X-Git-Oldrev: c74ab224e3287768d0e1c59155f6ae11f1270e40
+X-Git-Newrev: 8206e9ea7955ae45523c6c8d1979a1ee18f10aae
 X-Patchwork-Hint: ignore
-Message-Id: <20260417152007.E2444819B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ibm-sw-tpm2: add
- upstream patch to fix builds against libopenssl 3.5.x
+Message-Id: <20260417152007.C1E41819B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libopenssl: bump
+ version to 3.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +77,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20f7059c1aa30c24f87c0c63d78a3ed05fca9f79
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8206e9ea7955ae45523c6c8d1979a1ee18f10aae
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
+Bugfix release:
+
+- Miscellaneous minor bug fixes.
+
+- The FIPS provider now performs a PCT on key import for RSA, EC and ECX.
+  This is mandated by FIPS 140-3 IG 10.3.A additional comment 1.
+
+https://github.com/openssl/openssl/releases/tag/openssl-3.5.2
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 359908d33ccf4b44a8b035f6c3ae6ffc52d40453)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 7e5a3c98452c6db8422b0fa6455390d138ad07df)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0004-tpm-Update-to-OpenSSL-3.5.patch           | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch b/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch
-new file mode 100644
-index 0000000000..36a9cb97dc
---- /dev/null
-+++ b/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch
-@@ -0,0 +1,39 @@
-+From 720ed4b8c74c3b517a46b442be9482319ed027dd Mon Sep 17 00:00:00 2001
-+From: Ken Goldman <kgold@linux.ibm.com>
-+Date: Fri, 18 Apr 2025 13:41:59 -0400
-+Subject: [PATCH] tpm: Update to OpenSSL 3.5
-+
-+Accept 3.5 as a supported version
-+
-+Signed-off-by: Ken Goldman <kgold@linux.ibm.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/kgoldman/ibmswtpm2/commit/720ed4b8c74c3b517a46b442be9482319ed027dd
-+---
-+ src/BnToOsslMath.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/BnToOsslMath.h b/src/BnToOsslMath.h
-+index 165304d..5fd5323 100644
-+--- a/src/BnToOsslMath.h
-++++ b/src/BnToOsslMath.h
-+@@ -54,7 +54,7 @@
-+ /*    arising in any way out of use or reliance upon this specification or any 	*/
-+ /*    information herein.							*/
-+ /*										*/
-+-/*  (c) Copyright IBM Corp. and others, 2023				  	*/
-++/*  (c) Copyright IBM Corp. and others, 2023 - 2025			  	*/
-+ /*										*/
-+ /********************************************************************************/
-+ 
-+@@ -77,7 +77,7 @@
-+ #include <openssl/ec.h>
-+ #include <openssl/bn.h>
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x30400ff0L
-++#if OPENSSL_VERSION_NUMBER >= 0x30500ff0L
-+ // Check the bignum_st definition against the one below and either update the
-+ // version check or provide the new definition for this version.
-+ #  error Untested OpenSSL version
-+-- 
-+2.39.5
-+
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 1675d72fb2..7f3795e1ac 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.5.1/openssl-3.5.1.tar.gz.sha256
+-sha256  529043b15cffa5f36077a4d0af83f3de399807181d607441d734196d889b641f  openssl-3.5.1.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz.sha256
++sha256  c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec  openssl-3.5.2.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index f3521b3cf3..38d04ea924 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.5.1
++LIBOPENSSL_VERSION = 3.5.2
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
