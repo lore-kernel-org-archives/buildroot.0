@@ -4,113 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD0CDF34C5C
-	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 15:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB221F34C78
+	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 17:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A392384799;
-	Mon, 13 Apr 2026 15:12:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92ABD80784;
+	Mon, 13 Apr 2026 17:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GSB4-tPrVM12; Mon, 13 Apr 2026 15:12:53 +0000 (UTC)
+ id IOqJ997TrLZU; Mon, 13 Apr 2026 17:35:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5788084637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29FCC80779
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776093173;
-	bh=J/15QamYar1ovxefL/zl35n6TszKL+g85Vp4bx5ezoQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1776101707;
+	bh=2Dn9ZulLQEsgSZnVc4ClELG9FdEO1o/F/Azy53mWNpM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=B9ye2kR75CQMsKsdBQMJVjrti/W6WIw/iGleWmxlLIfbAAhYHX/d1UE9r1JBZ2oUW
-	 /9NrdDmJCAid1i6wSqTINtaf98t9T3vOCJrYe6DP2U8y6E30zKYQzSGwDLX3LZvbZn
-	 4coaxduiqyk6lKGaL0W+L30BSUCX0xvx6+7FNUi2RYeiyCNz70fgwlgGg6xy6DoFsP
-	 ggu6I4Ih38XBxgnr06YmH8infALbyoZVfAE3u7oHOZHfgbvMJhOCTImykF223iHsNW
-	 m1SwrJZU7XnuQsNpsjQKclMbzAP6cBhpuz7nG1ZyE6OcS6+JMPuHCunpswqgpyZ+Gw
-	 cYnJulKO3AqRA==
+	 From:Reply-To:From;
+	b=jZaEfRUzaqcNJ0WISq6p9Sltzsy7kGR7HvYW5Jgmq2YT+0hbiR63EPS1b8sATboYb
+	 CyQpkag3+EnhSfL/n2OjVrPVuRRm4sNFKbEyUMZV4I+8nD4G31jdFwbfFXVUZy4z/B
+	 OUzlIBPVuUHDDvvtksY+Qe+Z2kjGmHnDZine7FcMujm0BXJYxHx0dVWxUxXzfruE/u
+	 zCYQ+SJesekXd/MluUkJRlwidY9qgIvsIOMuiQu4gG8URdkSujgKbjspqRE11Pj/sr
+	 fcMmqjHGBMZt0wjmujNYNkgz+P2kHhTeYXXk46fbwKOhJxlKnMw+KGXmZ1gZ3vKJUt
+	 4H11jjJO6oqTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5788084637;
-	Mon, 13 Apr 2026 15:12:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29FCC80779;
+	Mon, 13 Apr 2026 17:35:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 25115283
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F608283
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 17:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15DA9422EA
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 758DE40226
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 17:35:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id diVSdBa7VTEM for <buildroot@buildroot.org>;
- Mon, 13 Apr 2026 15:12:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02E86422E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02E86422E7
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02E86422E7
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:50 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-43cf8fe9c2aso2862897f8f.2
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 08:12:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776093169; x=1776697969;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tHPH1lXtAMGXAA/Wwhlr4VqAvK3YuWzDG5wZG9rKPDw=;
- b=Eu9tjJEg4MOALeJ9MnRO/ae2t+W+C27dC77MXkZ52Y/0EQ/y92GqKDUqjEmlZ+2cxO
- QGQuqzo7VPu5RsMI5chTFwewmzRAN9S1pVdKO82GGTWCdBkcTVUeOaSqsbmpCausuTI6
- oQvhcfqlclt+sL3U79dtbOrEo1gKKC4/1LdFBjIZujUBMXAgYbk9bXbK6XXUdiPkn9wO
- BGbVU1fSeKRvV7bqtvLpf40A5QObe6Xm/mM0tZZC3Hb27W1bBKBVcNaZJ3vqRjJrJNy7
- 4HucqDkeQSaTGTSsksrBCP+YJ+EG6lkqfLBFJQ8Cem79Rb0dyhWz6DyA+3EFkX/9ufwb
- IySQ==
-X-Gm-Message-State: AOJu0YyhidxOaBjvolwW0ZUCrBvoge0tUkS7qaul1NTyykqEzqGmVLvL
- MLo+LQ7Y50BxHMfPsaz4m5iLabtfjnOk8OlbLtoCY5MznJ1TL5Zvo+siUb/eNA==
-X-Gm-Gg: AeBDieuctNl6NFeyTvoYcwPxcuN/trYInlrtmmUM9hj94CNwNrYkXSd1eKx1nwZ7Pdh
- NXoK9pbXo7SgPP27R7lJS5rZzkz9HGHI5W0zH1aime/temqZcq+/L4jGl3cwzg1fWJuUcKSSjp9
- HY1a7WDAheC/E7ZvX+woOZGWe0opQuWk20h3YcIEQFJrbn05HeeVlW27YanHyMUgJJzsh9TWjy0
- lDG/0QMbmrxgMJ4Ruzo3P7vrFgtRyj9OMo0dsIMJNKBG/HnCjwx2f5MsB8AerYVWxBFpFwvkB1V
- DI+nIpgNnx6qwh8cO+zfedzLIbtjeARUKhnkpDIfT6VsmhAnkvPQ9wMuUvNkRZBwKdIuOGIQ5Jc
- 7JLIhX78igxIaPie5/AhzlYIjbHhMbQFT4ysrfysyzoKv88cUIU9rxwo3tckL/+o2l3g6olRMzX
- FjxsosXbJhx4mhlzOy
-X-Received: by 2002:a5d:5f53:0:b0:43d:5833:fdc5 with SMTP id
- ffacd0b85a97d-43d642b6b90mr22455563f8f.25.1776093167815; 
- Mon, 13 Apr 2026 08:12:47 -0700 (PDT)
-Received: from freepad.. ([2a01:e0a:6f:bdf0:e29d:2bc5:1d06:3359])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43d7c135fd6sm8908945f8f.28.2026.04.13.08.12.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Apr 2026 08:12:47 -0700 (PDT)
-From: Maxime Leroy <maxime@leroys.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Vincent Jardin <vjardin@free.fr>,
- Maxime Leroy <maxime@leroys.fr>
-Date: Mon, 13 Apr 2026 17:11:48 +0200
-Message-ID: <20260413151148.42226-4-maxime@leroys.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260413151148.42226-1-maxime@leroys.fr>
-References: <20260413151148.42226-1-maxime@leroys.fr>
+ id xIomVWsj4vAJ for <buildroot@buildroot.org>;
+ Mon, 13 Apr 2026 17:35:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 501AA40216
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 501AA40216
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 501AA40216
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 17:35:04 +0000 (UTC)
+Received: from [192.168.178.20] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 1F30B2C80CDB;
+ Mon, 13 Apr 2026 19:35:01 +0200 (CEST)
+Message-ID: <67e6f7f4-4e43-4230-b2c8-e5bb98d1ccc9@bubu1.eu>
+Date: Mon, 13 Apr 2026 19:35:00 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776093169; x=1776697969; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=tHPH1lXtAMGXAA/Wwhlr4VqAvK3YuWzDG5wZG9rKPDw=;
- b=UsB5S2yaBMN4ZvjKgn0tNEoMEENdyc5H9SM3SKBLjNqv5+Xd/j+uVDUqMOnuAEaWhw
- QetU3Bw+9R0omNKmOvd+zGWw/n5f2dgrJS5WNGVKVMzC1sgSmvNtzjW3suxurjqO/j9u
- ivTYI7OhrMz4yPmcOYSQy4waZjdlVLv9ahohPrUrVvXhVVZ89bPZG9sn5dZhqp1ivV0X
- /MWHTtdnLt2E4v125z91Rcj2ufERvxQyYiSTBA0bv4hkvHo9d1bMk+VqN90nVlOsIsdY
- u9iXUp15c1OLTkUCKcawqESVsq2L+3ZPQP3POYOjv8nX31nfy5G620f3SrzYHW1rvzEn
- HFbA==
+User-Agent: Mozilla Thunderbird
+To: Nicolas Serafini <nicolas.serafini@flyability.com>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Joseph Kogut <joseph.kogut@gmail.com>, Simon Richter <simon@sinic.eu>,
+ David Pierret <david.pierret@smile.fr>, Danilo Bargen <mail@dbrgn.ch>,
+ Bernd Kuhls <bernd@kuhls.net>, Graeme Smecher
+ <gsmecher@threespeedlogic.com>, Julien Olivain <ju.o@free.fr>,
+ Torben Voltmer <mail@t-voltmer.net>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Manuel Diener <manuel.diener@oss.othermo.de>,
+ Alexander Shirokov <shirokovalexs@gmail.com>, Sam Voss <sam.voss@gmail.com>,
+ Saeed Kazemi <kazemi.ms@gmail.com>,
+ Alex Michel <alex.michel@wiedemann-group.com>,
+ Leo Yu-Chi Liang <ycliang@andestech.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+References: <20260410224221.1185631-1-nicolas.serafini@flyability.com>
+Content-Language: en-US
+In-Reply-To: <20260410224221.1185631-1-nicolas.serafini@flyability.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1776101702; bh=S6x3n/rBnO8zUb6RAaGgb3V+iznCX5ksbfe23mQk5+Q=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=YMHQS9YPoIz1OGDMQiGjZFZa5qXx3fiYMxvmNRMHtGXkI1IBPJ4B9iK1IozNePLHf
+ AxAMFAWbTvQsVgtH1+0u4kETBjdIwgnDr7+lno/nD3bqFVukJd1SZPKOK+1aozkprT
+ atkZ+xZugtwbvHKdqQQSie73KWkypvhcCsJygpd2crFNoCaE+MUXe/59R3ikGuI4Ze
+ fexfjryzopN6l0LHH+9NZLKWQGiCWRahkJ/aJAk5MmYQd98Vpx2ZUmqqN3UhnGKstW
+ wCHTZKxnQrXuVWpg6cmRBw76nb5llbbUNZ5cG89wDae//SmoAxLYYyWkP0fpXL2K8S
+ s3Z88Res671kQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=leroys.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=UsB5S2ya
-Subject: [Buildroot] [PATCH 3/3] package/grout: bump version to 0.15.0
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=YMHQS9YP
+Subject: Re: [Buildroot] [PATCH 0/4] package/rust: bump to 1.94.1 and fix
+ bootstrap
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,93 +105,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop util-linux dependency, libsmartcols is no longer used.
-Bump GCC requirement from 4.9 to 13 for gnu2x and C23 enum underlying
-types support.
+Hi Nicolas,
 
-See the release note of the new version:
-https://github.com/DPDK/grout/releases/tag/v0.15.0
+thanks for taking care of this! I've done a test build of the rust 
+bootstrap and a few packages with that and everything worked, so series
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
----
- package/grout/Config.in  | 10 ++++------
- package/grout/grout.hash |  2 +-
- package/grout/grout.mk   |  5 ++---
- 3 files changed, 7 insertions(+), 10 deletions(-)
+Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-diff --git a/package/grout/Config.in b/package/grout/Config.in
-index 1cfec41d7a..c57937dc18 100644
---- a/package/grout/Config.in
-+++ b/package/grout/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_GROUT
- 	bool "grout"
- 	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS # dpdk
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dpdk
--	depends on BR2_USE_MMU # dpdk, numactl, libecoli, util-linux-smartcols
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # dpdk
-+	depends on BR2_USE_MMU # dpdk, numactl, libecoli
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_13 # C23 enum underlying types
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19 # dpdk
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # dpdk
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # numactl
-@@ -14,16 +14,14 @@ config BR2_PACKAGE_GROUT
- 	select BR2_PACKAGE_NUMACTL
- 	select BR2_PACKAGE_LIBECOLI
- 	select BR2_PACKAGE_LIBMNL
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	help
- 	  Graph router based on DPDK
- 
--comment "grout needs a glibc toolchain w/ dynamic library, threads, wchar, gcc >= 4.9, headers >= 4.19"
-+comment "grout needs a glibc toolchain w/ dynamic library, threads, wchar, gcc >= 13, headers >= 4.19"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_13 || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-diff --git a/package/grout/grout.hash b/package/grout/grout.hash
-index bf3d6b87ec..ead390f8fc 100644
---- a/package/grout/grout.hash
-+++ b/package/grout/grout.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  4ccceea87ead25dfbee7d44d25283abc61173caf6bae08c9644fa9a6cb6b9ade  grout-0.14.3.tar.gz
-+sha256  c4a289d13453a42961db2131a179e95965450feb27505f4c463adbd8970e0440  grout-0.15.0.tar.gz
- sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  licenses/BSD-3-clause.txt
-diff --git a/package/grout/grout.mk b/package/grout/grout.mk
-index 39bdc7f824..0b66995dfe 100644
---- a/package/grout/grout.mk
-+++ b/package/grout/grout.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GROUT_VERSION = 0.14.3
-+GROUT_VERSION = 0.15.0
- GROUT_SITE = $(call github,DPDK,grout,v$(GROUT_VERSION))
- GROUT_LICENSE = BSD-3-Clause
- GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
-@@ -18,8 +18,7 @@ GROUT_DEPENDENCIES = \
- 	libevent \
- 	libmnl \
- 	numactl \
--	libecoli \
--	util-linux
-+	libecoli
- 
- define GROUT_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
--- 
-2.43.0
+I did noticed that quite a few things during the bootstrap get built 
+twice. Once in the host-rustc-build step and then again in 
+host-rustc-install. Do you know why this is the case? This (sometimes?) 
+happens for normal rust packages as well, but during the many-hour long 
+bootstrap it was especially noticeable here.
+
+On 4/11/26 00:42, Nicolas Serafini via buildroot wrote:
+> Apologies for the resend, my previous submission bounced as I was
+> not subscribed to the mailing list with this email address.
+> 
+> Rust remained at version 1.88.0 because, starting from version
+> 1.89.0, the bootstrap process was redesigned, and attempting to
+> bootstrap host-rust from source resulted in the following errors:
+> 
+> error[E0463]: can't find crate for `std`
+> error[E0463]: can't find crate for `core`
+> 
+> Several attempts to bump Rust were submitted but none were merged:
+>    - Bernd Kuhls, bump to 1.92.0 (Dec 2025)
+>      https://patchwork.ozlabs.org/project/buildroot/patch/20251218222527.3861751-1-bernd@kuhls.net/
+>    - Simon Richter, bump to 1.93.1 (Feb 2026)
+>      https://patchwork.ozlabs.org/project/buildroot/patch/20260226073135.64960-1-simon@sinic.eu/
+> 
+> This series bump Rust to 1.94.1 and fixes the bootstrap issue:
+>    [1/4] Bump Rust from 1.88.0 to 1.94.1
+>    [2/4] Fix the bootstrap build for Rust >= 1.89.0: set
+>          local-rebuild = true in config.toml and replace the broken
+>          relative symlinks in host-rust-bin with hardlink copies.
+>    [3/4] Bump the cargo vendor suffix from -cargo4 to -cargo5 and
+>          update SHA256 hashes for all 34 affected packages, as the
+>          vendored content changed following the Rust bump.
+>    [4/4] Add riscv64gc-unknown-linux-musl target support, rebased
+>          from Mariusz Bialonczyk's earlier patch (Oct 2025) and
+>          also part of the patch series for the bump to 1.92.0:
+>          https://patchwork.ozlabs.org/project/buildroot/patch/20251028045833.2792350-1-manio@skyboo.net/
+>          https://patchwork.ozlabs.org/project/buildroot/patch/20251218222527.3861751-3-bernd@kuhls.net/
+> 
+> Tested with:
+> utils/docker-run support/testing/run-tests \
+>       -k -d dl -o output_folder tests.package.test_rust
+> 
+> Nicolas Serafini (4):
+>    package/rust: bump version to 1.94.1
+>    package/rust{,-bin}: fix bootstrap build for Rust >= 1.89.0
+>    package: update cargo suffix to -cargo5 and fix hashes
+>    rust: add support for riscv64gc-unknown-linux-musl target
+> 
+
+Best,
+Marcus
+
+
 
 _______________________________________________
 buildroot mailing list
