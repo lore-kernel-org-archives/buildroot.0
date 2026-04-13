@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C698F34C5E
-	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 15:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD0CDF34C5C
+	for <buildroot@archiver.kernel.org>; Mon, 13 Apr 2026 15:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 577A042550;
-	Mon, 13 Apr 2026 15:12:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A392384799;
+	Mon, 13 Apr 2026 15:12:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UmGO4FN6YySI; Mon, 13 Apr 2026 15:12:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GSB4-tPrVM12; Mon, 13 Apr 2026 15:12:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44C1942295
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5788084637
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776093168;
-	bh=ndOI3LPbU5OaxJXArXuJ3mQbKXq+BF4HdDs4ayiGrnc=;
+	s=default; t=1776093173;
+	bh=J/15QamYar1ovxefL/zl35n6TszKL+g85Vp4bx5ezoQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=sE2fzt/U6lwxj6PuRkqnNQHGDY1QbPGIgwOYr+S8FyIQJ/8EM0zl/yfvvfgW8sRtT
-	 k7FSHMg73/ZSUUL0GGN5YQxsCqwV4zaAJ3N7+XUFFIcpxCa2E4qbccG5wXUBYpnqFL
-	 fGFeWosaOOmT1icXerIAMpq5ffML7RNy5QSycNeD7oE/Jsnn+dIR+QqvyA070EEVyj
-	 +1f6QvtwZBCoc2UBZyJ4o6x2jQy/zrsTYURhgUxEBPs+UE3BxyxfyyvFUeq6mnuAhI
-	 W1LemKwHTWQYEsdYX4irLR/7YnZ/VIVKPuA5acDng+ZSNmbi5DPyIQqvz2DG3lyO1B
-	 vwysw4vidrQtA==
+	b=B9ye2kR75CQMsKsdBQMJVjrti/W6WIw/iGleWmxlLIfbAAhYHX/d1UE9r1JBZ2oUW
+	 /9NrdDmJCAid1i6wSqTINtaf98t9T3vOCJrYe6DP2U8y6E30zKYQzSGwDLX3LZvbZn
+	 4coaxduiqyk6lKGaL0W+L30BSUCX0xvx6+7FNUi2RYeiyCNz70fgwlgGg6xy6DoFsP
+	 ggu6I4Ih38XBxgnr06YmH8infALbyoZVfAE3u7oHOZHfgbvMJhOCTImykF223iHsNW
+	 m1SwrJZU7XnuQsNpsjQKclMbzAP6cBhpuz7nG1ZyE6OcS6+JMPuHCunpswqgpyZ+Gw
+	 cYnJulKO3AqRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44C1942295;
-	Mon, 13 Apr 2026 15:12:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD7BD237
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5788084637;
+	Mon, 13 Apr 2026 15:12:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25115283
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF2AE402EF
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15DA9422EA
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CkuS1wUKmDyp for <buildroot@buildroot.org>;
- Mon, 13 Apr 2026 15:12:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id diVSdBa7VTEM for <buildroot@buildroot.org>;
+ Mon, 13 Apr 2026 15:12:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C4B32400C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4B32400C8
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C4B32400C8
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:45 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-48896199cbaso49086155e9.1
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 08:12:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02E86422E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02E86422E7
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02E86422E7
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 15:12:50 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-43cf8fe9c2aso2862897f8f.2
+ for <buildroot@buildroot.org>; Mon, 13 Apr 2026 08:12:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776093163; x=1776697963;
+ d=1e100.net; s=20251104; t=1776093169; x=1776697969;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tKuVKmr/7S2CIlHy1fiapU/1GPiF/8wp7HNgANXO96E=;
- b=BYxHRZzC4ZqRBG/k6Q12G1QU2mtAaZS54gZ72u7xGJ6i+7+Leb9as/gyPpO6pRPbWZ
- b7a/2texz43VcTdb8uzpXb3TuV8CI2VWK8GaQEaTnrYaGFgUb0hqaRNq388EansVO1oJ
- BJvbCv0H2HCyqW6BrRuGzGWmVyu71ZVcvWAusqMXknCbQ3VNRxHAO9uwLcC/OOgSM3kH
- 9H9KGpCPoLTPZ2oGOEKvWsmd9DP5VmE43aK5WkC2fmmIxcaGJpPwPgwPyUnSU1vGUUpj
- vsJ+B7ev/yly4PYJXRlA+0NOyXfF4UfR5cYHJ1auDwg3k/rQifL/PE9uyfdTHE1XgWEm
- n+gg==
-X-Gm-Message-State: AOJu0Yx87YFG9lC8XRPkw0FbJfYimQnPI9VO/YdOpq5Q+ttg2f25frKP
- fpynQhVeXzowyZJNwKuW7i5htxpLv5Sueo6TEQ6IfWH43i1Z7YsfcCx5I0h3Ng==
-X-Gm-Gg: AeBDiesYTqhEU/8PVziqo54kPoxnJgKf2gt5bOdd5L4kWT9EsrYyNt0HwruoIj/w/0V
- rfhlb/8bm12xL7HXn8ODkYGnXbQM1fMQ8/Tx/rQRHXwSbN145OIo5wCC0FgUz5OWOtnz2w5GOHH
- 2KZVWVaC/PovkyoBo7OonUaNhug3yoyJfMspMQk/V9i7kUzTJ9zVOY7jTtzdlZl4PYgzVCjdbIT
- p8DstrxXArhylrzBbbPEYX54x6ntBkyD3mRiHW3/NUnRnDufBgoQA8h+2BSb67ghtHI0jPDrySL
- S6QZp7VVr971AvrMLOdn1/5k/UNbUKtXhh5X4NpNmWVCRdc6VLSUXCHwTWx9gJ6XOeBpmTyrZw4
- uT04VoG9KgRzwRiWDAAWfMAXlQE0Y9I967Dkb+m+4zZpvHL3e0Q0PyLkbdjY/zgEjSrE21AvAIL
- CNRSESZOB0CLDicn5a
-X-Received: by 2002:a05:600c:796:b0:488:e7e4:8425 with SMTP id
- 5b1f17b1804b1-488e7e48437mr23588145e9.23.1776093163511; 
- Mon, 13 Apr 2026 08:12:43 -0700 (PDT)
+ bh=tHPH1lXtAMGXAA/Wwhlr4VqAvK3YuWzDG5wZG9rKPDw=;
+ b=Eu9tjJEg4MOALeJ9MnRO/ae2t+W+C27dC77MXkZ52Y/0EQ/y92GqKDUqjEmlZ+2cxO
+ QGQuqzo7VPu5RsMI5chTFwewmzRAN9S1pVdKO82GGTWCdBkcTVUeOaSqsbmpCausuTI6
+ oQvhcfqlclt+sL3U79dtbOrEo1gKKC4/1LdFBjIZujUBMXAgYbk9bXbK6XXUdiPkn9wO
+ BGbVU1fSeKRvV7bqtvLpf40A5QObe6Xm/mM0tZZC3Hb27W1bBKBVcNaZJ3vqRjJrJNy7
+ 4HucqDkeQSaTGTSsksrBCP+YJ+EG6lkqfLBFJQ8Cem79Rb0dyhWz6DyA+3EFkX/9ufwb
+ IySQ==
+X-Gm-Message-State: AOJu0YyhidxOaBjvolwW0ZUCrBvoge0tUkS7qaul1NTyykqEzqGmVLvL
+ MLo+LQ7Y50BxHMfPsaz4m5iLabtfjnOk8OlbLtoCY5MznJ1TL5Zvo+siUb/eNA==
+X-Gm-Gg: AeBDieuctNl6NFeyTvoYcwPxcuN/trYInlrtmmUM9hj94CNwNrYkXSd1eKx1nwZ7Pdh
+ NXoK9pbXo7SgPP27R7lJS5rZzkz9HGHI5W0zH1aime/temqZcq+/L4jGl3cwzg1fWJuUcKSSjp9
+ HY1a7WDAheC/E7ZvX+woOZGWe0opQuWk20h3YcIEQFJrbn05HeeVlW27YanHyMUgJJzsh9TWjy0
+ lDG/0QMbmrxgMJ4Ruzo3P7vrFgtRyj9OMo0dsIMJNKBG/HnCjwx2f5MsB8AerYVWxBFpFwvkB1V
+ DI+nIpgNnx6qwh8cO+zfedzLIbtjeARUKhnkpDIfT6VsmhAnkvPQ9wMuUvNkRZBwKdIuOGIQ5Jc
+ 7JLIhX78igxIaPie5/AhzlYIjbHhMbQFT4ysrfysyzoKv88cUIU9rxwo3tckL/+o2l3g6olRMzX
+ FjxsosXbJhx4mhlzOy
+X-Received: by 2002:a5d:5f53:0:b0:43d:5833:fdc5 with SMTP id
+ ffacd0b85a97d-43d642b6b90mr22455563f8f.25.1776093167815; 
+ Mon, 13 Apr 2026 08:12:47 -0700 (PDT)
 Received: from freepad.. ([2a01:e0a:6f:bdf0:e29d:2bc5:1d06:3359])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488d67b128dsm161210665e9.2.2026.04.13.08.12.42
+ ffacd0b85a97d-43d7c135fd6sm8908945f8f.28.2026.04.13.08.12.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Apr 2026 08:12:42 -0700 (PDT)
+ Mon, 13 Apr 2026 08:12:47 -0700 (PDT)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>, Vincent Jardin <vjardin@free.fr>,
  Maxime Leroy <maxime@leroys.fr>
-Date: Mon, 13 Apr 2026 17:11:46 +0200
-Message-ID: <20260413151148.42226-2-maxime@leroys.fr>
+Date: Mon, 13 Apr 2026 17:11:48 +0200
+Message-ID: <20260413151148.42226-4-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260413151148.42226-1-maxime@leroys.fr>
 References: <20260413151148.42226-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776093163; x=1776697963; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1776093169; x=1776697969; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=tKuVKmr/7S2CIlHy1fiapU/1GPiF/8wp7HNgANXO96E=;
- b=FgJMdDxJQtI/5XsTqKqubEGff00F2gQnSi9Y4rCQQH+q/TOP6Hp5p6o9bEps4Z2/Us
- n8u2ptWmuHPlzD4q4PSCZ54Xlg/dT70Y1VjrxviLN0h0GU/E+FxnmUVuHacobAzTSn77
- RD0yernMdOLeTfjeY3obBtS07boTfLR28dtn/1bSlbGnuX0JOECs8KN1DuP5TEclWx2G
- NXzGw4MXoVNkWttPs/htDV1zWol19eouw8+Q0mUKeyPIxkh0bvF5f1spBmnwt5P4qSpw
- As+0yLtCGCmGkfNPy1jebIeh3t1T++cTLdM1k2XtV8ZNAfv5YvymiWSwzWa7l0g2+wES
- vktA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=tHPH1lXtAMGXAA/Wwhlr4VqAvK3YuWzDG5wZG9rKPDw=;
+ b=UsB5S2yaBMN4ZvjKgn0tNEoMEENdyc5H9SM3SKBLjNqv5+Xd/j+uVDUqMOnuAEaWhw
+ QetU3Bw+9R0omNKmOvd+zGWw/n5f2dgrJS5WNGVKVMzC1sgSmvNtzjW3suxurjqO/j9u
+ ivTYI7OhrMz4yPmcOYSQy4waZjdlVLv9ahohPrUrVvXhVVZ89bPZG9sn5dZhqp1ivV0X
+ /MWHTtdnLt2E4v125z91Rcj2ufERvxQyYiSTBA0bv4hkvHo9d1bMk+VqN90nVlOsIsdY
+ u9iXUp15c1OLTkUCKcawqESVsq2L+3ZPQP3POYOjv8nX31nfy5G620f3SrzYHW1rvzEn
+ HFbA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=FgJMdDxJ
-Subject: [Buildroot] [PATCH 1/3] package/libecoli: bump version to 0.11.3
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=UsB5S2ya
+Subject: [Buildroot] [PATCH 3/3] package/grout: bump version to 0.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,40 +127,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release note of the new versions:
-https://github.com/rjarry/libecoli/releases/tag/v0.11.3
-https://github.com/rjarry/libecoli/releases/tag/v0.11.2
-https://github.com/rjarry/libecoli/releases/tag/v0.11.1
-https://github.com/rjarry/libecoli/releases/tag/v0.11.0
+Drop util-linux dependency, libsmartcols is no longer used.
+Bump GCC requirement from 4.9 to 13 for gnu2x and C23 enum underlying
+types support.
+
+See the release note of the new version:
+https://github.com/DPDK/grout/releases/tag/v0.15.0
 
 Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 ---
- package/libecoli/libecoli.hash | 2 +-
- package/libecoli/libecoli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/grout/Config.in  | 10 ++++------
+ package/grout/grout.hash |  2 +-
+ package/grout/grout.mk   |  5 ++---
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/package/libecoli/libecoli.hash b/package/libecoli/libecoli.hash
-index 4045c7e19d..882f01fa99 100644
---- a/package/libecoli/libecoli.hash
-+++ b/package/libecoli/libecoli.hash
+diff --git a/package/grout/Config.in b/package/grout/Config.in
+index 1cfec41d7a..c57937dc18 100644
+--- a/package/grout/Config.in
++++ b/package/grout/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_GROUT
+ 	bool "grout"
+ 	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS # dpdk
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dpdk
+-	depends on BR2_USE_MMU # dpdk, numactl, libecoli, util-linux-smartcols
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # dpdk
++	depends on BR2_USE_MMU # dpdk, numactl, libecoli
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_13 # C23 enum underlying types
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19 # dpdk
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # dpdk
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # numactl
+@@ -14,16 +14,14 @@ config BR2_PACKAGE_GROUT
+ 	select BR2_PACKAGE_NUMACTL
+ 	select BR2_PACKAGE_LIBECOLI
+ 	select BR2_PACKAGE_LIBMNL
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	help
+ 	  Graph router based on DPDK
+ 
+-comment "grout needs a glibc toolchain w/ dynamic library, threads, wchar, gcc >= 4.9, headers >= 4.19"
++comment "grout needs a glibc toolchain w/ dynamic library, threads, wchar, gcc >= 13, headers >= 4.19"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_13 || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+diff --git a/package/grout/grout.hash b/package/grout/grout.hash
+index bf3d6b87ec..ead390f8fc 100644
+--- a/package/grout/grout.hash
++++ b/package/grout/grout.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  ec359850f4f338b607d05200d508736b14eaa30fca8aefdfde980a283afd789d  libecoli-0.10.1.tar.gz
-+sha256  25ed9638452fa050749746c863574dfd47df95bde98347d210c9deedea188151  libecoli-0.11.3.tar.gz
- sha256  e58bf9ec962bee9b3e37abcaa0bc0ec940b05efdc1d1a5a4d9e2fdbcc08b7bdd  LICENSE
-diff --git a/package/libecoli/libecoli.mk b/package/libecoli/libecoli.mk
-index 96617a1689..5d4b3993f8 100644
---- a/package/libecoli/libecoli.mk
-+++ b/package/libecoli/libecoli.mk
+-sha256  4ccceea87ead25dfbee7d44d25283abc61173caf6bae08c9644fa9a6cb6b9ade  grout-0.14.3.tar.gz
++sha256  c4a289d13453a42961db2131a179e95965450feb27505f4c463adbd8970e0440  grout-0.15.0.tar.gz
+ sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  licenses/BSD-3-clause.txt
+diff --git a/package/grout/grout.mk b/package/grout/grout.mk
+index 39bdc7f824..0b66995dfe 100644
+--- a/package/grout/grout.mk
++++ b/package/grout/grout.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBECOLI_VERSION = 0.10.1
-+LIBECOLI_VERSION = 0.11.3
- LIBECOLI_SITE = $(call github,rjarry,libecoli,v$(LIBECOLI_VERSION))
- LIBECOLI_INSTALL_STAGING = YES
- LIBECOLI_LICENSE = BSD-3-Clause
+-GROUT_VERSION = 0.14.3
++GROUT_VERSION = 0.15.0
+ GROUT_SITE = $(call github,DPDK,grout,v$(GROUT_VERSION))
+ GROUT_LICENSE = BSD-3-Clause
+ GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
+@@ -18,8 +18,7 @@ GROUT_DEPENDENCIES = \
+ 	libevent \
+ 	libmnl \
+ 	numactl \
+-	libecoli \
+-	util-linux
++	libecoli
+ 
+ define GROUT_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
 -- 
 2.43.0
 
