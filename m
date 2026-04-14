@@ -4,116 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7162F9D0D3
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4A89F9D0DA
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 15:44:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DED642B01;
-	Tue, 14 Apr 2026 15:44:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7162A42B2A;
+	Tue, 14 Apr 2026 15:44:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pVWcmaxIu-Pf; Tue, 14 Apr 2026 15:44:10 +0000 (UTC)
+ id 8xDDDJRee-Ss; Tue, 14 Apr 2026 15:44:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D20842B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90E5542B31
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776181450;
-	bh=j0OLQvheY1wKTaq3u7nrbmy+tdt1wqlPxIuFW/kr5OE=;
+	s=default; t=1776181452;
+	bh=jrLeiGjeBsbID6cU/QAjGNxFdwPtJztrxbEXO1fJuHw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MPs1jXveEtj5cdo5SmOtPFxMiNyj4GwqhMY3+wPoLGo3554rjBAa/JtT5eh4F5Ec9
-	 jMjMAGCOoa+OmJd3em0qxernKNq9UshP9NQ16sHmEIAq25yT5h57apUKncy9hvy+bZ
-	 7TKVrM8bT4mV/lW0/X0b05QGWE8j/J8zQlntYXGqPeQJJ3q7WbAhZ9VioM6EgE7meZ
-	 eB8d21e3LatZrX9sLq90z7seiHT7x8yoyS0CpZJcegaPG5Dkqno/U4Y0R9NCBA+dfr
-	 ZDRKxuhJj1jwlibXYjY+B0tQev7HzVDIYaBei9TB3kRl+u6TYvg0hutLetajzxxbMI
-	 Z5mojQf9dZDXA==
+	b=kUrDHVA6RyO5DEAjE+liooRQBLyO4vuBWaFcOHWc1BrC+4SKGJBUnIyfUWCzRRdsw
+	 8NPI9iPiTXLXDDdfP7yRHSl7gBl4jkuT01EnLyiQfoXJMnRm+oDbvQNRoJ65jQ5/HG
+	 wLQzjrMfyK1KCLbhcMklKJbNwN3V+u/tp6W+GxlTwXlfh25maVodIwePjNzSLxuO/v
+	 hmellk0wH8CbV0zwBjw5HDu4PQKBZ0piXpMUeXWFfvq3532OMDdugCeEWCIho+twkE
+	 ItNWCMZ+tfwzoh7ScgeXFEcXBGKzyVGYF5dFmQgXj89VdGgRcpphsuMMEXet8Yi3JX
+	 O10lvHYYx9O4A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D20842B04;
-	Tue, 14 Apr 2026 15:44:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B16C283
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90E5542B31;
+	Tue, 14 Apr 2026 15:44:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB9E4237
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8159442B04
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1BCF6F480
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D94KD0cU22ho for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 15:44:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mMX4wm7n5AWo for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 15:44:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A1E142B00
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1E142B00
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A1E142B00
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:08 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-488b3f8fa2bso59594625e9.1
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 08:44:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6E7186F483
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E7186F483
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E7186F483
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 15:44:09 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4887ca8e529so38183195e9.0
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 08:44:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776181446; x=1776786246;
+ d=1e100.net; s=20251104; t=1776181447; x=1776786247;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=LRHo0vRpzFqfirPCePJ6oKwmW3Yj62lr0fc5YCwK9B4=;
- b=UiR43FBwx/zvMjksVNDm2TXAMDxZw8+FXsBj7oLZJSeDfWWg6vqCfRH7P21dpe3nuu
- KmmT01liCLiZgyaXFy1bwXW7bBSo7fAvL9MlNzTa5dS6lP1iILqKKfVYTjZwfCVOo7RM
- UxhFAZNpn3Fnwi9tReGxKAjry23jcWmLknIm65q31oQz8gD4zgW+emyHv2OoGrgDiTbL
- X1fV7SJ2i8TTujeWrz+FFURcfCsVD6griakcMgKrDCUulrA/16mLC1yR+sM/Jn4jDo8W
- Iwk/FVf+R0ukx4VE1M9W0ezihp/kcIgAI8Ukn8az0vc8S/XqwMhBTCCcZReqAst4DcGT
- H0WQ==
+ bh=p0iCshYxhWf3V+FlKC8D6wVV56WmTRTitapY3mkrOzQ=;
+ b=pic8i/mx26kevY75f/5+TRk2Y+KCcnCldOj0tCAPn2OeVaFh3hOrKxQdCU55q47OBP
+ p0Hki/ZHAC7N2/bJ4FAy9W9YvJDUHF7UNocIGmi2bML0ib1D/kamdjLfSRSqbM4GBESs
+ cPuUA/MqdSiGEGO35KZlTLenZjR4L7YtB8h0VuJ2FazSk4HPcGc/rzPPk+mHe49GZofs
+ mOiusblX5NQDTfydTjsosFu4m+KbJAmE/jKRAwLNEUjm4QPq+LMsbh4TJtcaGg3EFQ52
+ ULwWQf1/mBVvMg3WVBBaAt1inrR5njdCkYCn9ylK52k+PiENOXf0vUhA6y19RBZePqOl
+ HXtw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9uxm2njzMc4Xl1H7cUm3e2OVyAOIiOLpV0Ilbc9Mywwt8548dRTgh0MdJFFFf9oTkJHxaQACn0s0Q=@buildroot.org
-X-Gm-Message-State: AOJu0YyVKvkn9wnF5UPaXAzeSWcM+XDd3mEJ/YtwEr1qtNFWgjBuNyL4
- oFTAQzJsf+t1gOCHyqeZtzM/3XPNssZ/fvequOXQPRRmz5I4iXqtfil8EpLwc572RILY5GSOaFZ
- +Fcnm
-X-Gm-Gg: AeBDievo0JaSlDeCBCDiVovF49pPYOG28EKn1HK8QuyyhcVvCb+CAJxM3iQd/2acSTT
- u94hpWXfgZQQAQPWVWozKcqe3TczsbcOrVA66o7hNvC5gsmQjFYD1ZZEdPfJj5JVukHUQaQ5Mr3
- auPZ3r/VSaDPeOiZcZyQbP94DnThUOl1U+yoTVQsyBFx9XzuXwzSvHWL+MN428PZ4GuwxD6hPfx
- t8ISmdybcJnjRgxvIWQu/2rPVoDEjU3letM6NXSpEwETFVaOXRPU5PPv3gGD+5qykixuusqaG2Y
- Bm8lrPA53YJwOBVMHcXUxWJV2ZmqIAMmhZC8I4BE5iKQZ35dYhQ8oX/eKhdIfgURb31LZctN4Cb
- dkZnPY5DYww2FhTpVyjSFNA9KdPDiQCAFp0odb3zMzbgzUh6IY20U5dCR4Paoz1Q2RdyYNl0CHX
- 1B6WKHI4sMulYYSS4X
-X-Received: by 2002:a05:600c:c10c:b0:486:faa8:9e4 with SMTP id
- 5b1f17b1804b1-488d68cb8demr152528875e9.12.1776181446255; 
- Tue, 14 Apr 2026 08:44:06 -0700 (PDT)
+ AFNElJ96pRFlPVYnyRKcFXrGcWAj4ASMpL9wZH4sgVzlXdg9JMAbguX86BLi5Yaai/u9Q7C/8R94as8aLQE=@buildroot.org
+X-Gm-Message-State: AOJu0YwA5nLVffj61H0SD7YQw6LPdUX+ZazrV2pU31t0aYTDJLvdwlTI
+ OnOqVTIQqnY13Cf+7ytn8Pgehgq6lJdC0moufBf7wCFppoavUtVj/c3jOjSREUsAfF8=
+X-Gm-Gg: AeBDieuX9qr9xW9VM6wwU0oh8I9+GPyMfF8hIgieR4TUYH0tWHLhvP29ImllG05cAqL
+ 23V62pMyeRUVw0atJGb7a0+dtsu6x79mQwg8WYZ+G5Ap4lW/xnFiU/6X6gcgKO44sbMMkY3u73Y
+ oZolqa7oEbp2wH1xdpjURrRiJ/BrAXVdvdgmSGdTZIrWtuVfMz7SQ9qBAPhCqra0a+uq/jldwKo
+ /6rrHVLyTx1cqtsLfm6x3eXZXzJavQaOyQntfqHlcbGMczeB+n4K1Sp5fja13JwXbpD8BuvvggV
+ iMyFP0cgAn1f6wXzIfK1NR4A1nbRaOi2cKL37XIHW5aZYZjMxKk5fOD/E0pnHqNkIDiX0B9aNf0
+ pCoYmZMQ+LKMJefhq3oERyCq5W0u1eRbUV+msU7D5UwWR8FXNgZjO839It2Kpgls55wiO1/5Q9Q
+ 41/4RLWwHrWQvx0ymF
+X-Received: by 2002:a05:600c:444b:b0:488:9c3b:ff40 with SMTP id
+ 5b1f17b1804b1-488d6acd9fbmr203249315e9.15.1776181447201; 
+ Tue, 14 Apr 2026 08:44:07 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488ede2519dsm61054095e9.8.2026.04.14.08.44.05
+ 5b1f17b1804b1-488ede15cfbsm66018525e9.1.2026.04.14.08.44.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Apr 2026 08:44:05 -0700 (PDT)
+ Tue, 14 Apr 2026 08:44:06 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Tue, 14 Apr 2026 17:44:05 +0200
-Message-ID: <20260414154405.334134-1-thomas.perale@mind.be>
+Date: Tue, 14 Apr 2026 17:44:06 +0200
+Message-ID: <20260414154406.334207-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260315131107.3959487-2-bernd@kuhls.net>
-References: <20260315131107.3959487-2-bernd@kuhls.net>
+In-Reply-To: <20260402180355.2779992-1-bernd@kuhls.net>
+References: <20260402180355.2779992-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776181446; x=1776786246; darn=buildroot.org;
+ d=mind.be; s=google; t=1776181447; x=1776786247; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LRHo0vRpzFqfirPCePJ6oKwmW3Yj62lr0fc5YCwK9B4=;
- b=XdeVOXcwU3crEKVrla9lj31DWuCnkyV2vlNA2sxjqnsxaRGHPPSvguMCYemHdVb5EN
- 1Oh51G7axvBs5XCdVG8F58BgPw5X4/AreAi8rf7WohW57uOfqwK3Y9sgRtqzJ36jvGl2
- eZ09+7OnUWpBE7SMJg9eyw+7SwZqdEipXK7CStpOpsf8xfE7PacTlGKtLNBdjnWl8Z7i
- r+qgLy55rRk8oUQhLTRkmzEjGx02Sz9yacjI2FfEmTaAF24S9IusXYqaG9iW67/7bQY4
- dC4aYWk+bmt7hqhQMtVrLMJRjoLkamagD/dMymqGsP2ZjILl3K/5jDy8+TlLg9chyH8h
- IgNQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=p0iCshYxhWf3V+FlKC8D6wVV56WmTRTitapY3mkrOzQ=;
+ b=Y3oAkoUOzNr4SnDg8ygxvGhsgtYzm1q6dtqBjsjvL3zLrOwpPGyBY7Bvs0syrntLtV
+ AOHFGcTkvI/19JAOVSKdRJfN53eToKjXxvfMXz6ceQmvQuXwWOJAyGsHIrPv1VSmn0oa
+ XdqvRhlx6riZ/088osNFcIJ9r49uPkD0VbzucJ98G51cEPm12yu53HHU5KdwGnleJ5yg
+ /IvZz/z3yqR1UXcRl7EqVeS1WziX+OIeZTka3mCMyk+XPakFjme8jK2pYPPhRnCzto6e
+ /2V6Vzu9dlUNpcfLdX3RjTD1jXpvA+JbxqpJgCri4+9WD9jc6ez0QYQCvzoNXU79XuUE
+ izog==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=XdeVOXcw
-Subject: Re: [Buildroot] [PATCH 2/3] package/kodi: allow build with giflib
- 6.x
+ header.s=google header.b=Y3oAkoUO
+Subject: Re: [Buildroot] [PATCH 1/1] package/libinput: security bump version
+ to 1.31.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,174 +132,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> These patches fix build errors which would be introduced by the upcoming
-> bump of giflib to 6.1.2.
+> https://lore.freedesktop.org/wayland-devel/ac3BI2BjKx53LqmH@quokka/T/#u
+> 
+> Fixes CVE-2026-35093 & CVE-2026-35094.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  ...rePacker-allow-build-with-giflib-6.x.patch | 71 +++++++++++++++++++
->  ...rePacker-allow-build-with-giflib-6.x.patch | 71 +++++++++++++++++++
->  2 files changed, 142 insertions(+)
->  create mode 100644 package/kodi-texturepacker/0001-TexturePacker-allow-build-with-giflib-6.x.patch
->  create mode 100644 package/kodi/0002-TexturePacker-allow-build-with-giflib-6.x.patch
+>  package/libinput/libinput.hash | 2 +-
+>  package/libinput/libinput.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/kodi-texturepacker/0001-TexturePacker-allow-build-with-giflib-6.x.patch b/package/kodi-texturepacker/0001-TexturePacker-allow-build-with-giflib-6.x.patch
-> new file mode 100644
-> index 0000000000..5a23237375
-> --- /dev/null
-> +++ b/package/kodi-texturepacker/0001-TexturePacker-allow-build-with-giflib-6.x.patch
-> @@ -0,0 +1,71 @@
-> +From 29492cbd20d4c90a9c00a30ab525d4d0e81a968b Mon Sep 17 00:00:00 2001
-> +From: Rudi Heitbaum <rudi@heitbaum.com>
-> +Date: Sun, 15 Mar 2026 11:38:16 +0000
-> +Subject: [PATCH] TexturePacker: allow build with giflib 6.x
-> +
-> +Current #if clauses are written with a maximum of giflib 5 written in,
-> +update the to >= to allow for newer versiosn of the giflib api.
-> +
-> +Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-> +
-> +Upstream: https://github.com/xbmc/xbmc/pull/28016
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + .../native/TexturePacker/src/decoder/GifHelper.cpp        | 8 ++++----
-> + .../depends/native/TexturePacker/src/decoder/GifHelper.h  | 2 +-
-> + 2 files changed, 5 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> +index eb513134b3eb8..b216ecbcef7fa 100644
-> +--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> ++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> +@@ -52,7 +52,7 @@ GifHelper::~GifHelper()
-> + bool GifHelper::Open(GifFileType*& gif, void *dataPtr, InputFunc readFunc)
-> + {
-> +   int err = 0;
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +   gif = DGifOpen(dataPtr, readFunc, &err);
-> + #else
-> +   gif = DGifOpen(dataPtr, readFunc);
-> +@@ -73,7 +73,7 @@ void GifHelper::Close(GifFileType* gif)
-> + {
-> +   int err = 0;
-> +   int reason = 0;
-> +-#if GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1
-> ++#if (GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1) || GIFLIB_MAJOR >= 6
-> +   err = DGifCloseFile(gif, &reason);
-> + #else
-> +   err = DGifCloseFile(gif);
-> +@@ -181,7 +181,7 @@ bool GifHelper::Slurp(GifFileType* gif)
-> +   if (DGifSlurp(gif) == GIF_ERROR)
-> +   {
-> +     int reason = 0;
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +     reason = gif->Error;
-> + #else
-> +     reason = GifLastError();
-> +@@ -246,7 +246,7 @@ bool GifHelper::GcbToFrame(GifFrame &frame, unsigned int imgIdx)
-> + 
-> +   if (m_gif->ImageCount > 0)
-> +   {
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +     GraphicsControlBlock gcb;
-> +     if (DGifSavedExtensionToGCB(m_gif, imgIdx, &gcb))
-> +     {
-> +diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.h b/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> +index 6124b69e46296..ce5dca3394b41 100644
-> +--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> ++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> +@@ -128,7 +128,7 @@ class GifHelper
-> +   bool PrepareTemplate(GifFrame &frame);
-> +   void Release();
-> + 
-> +-#if GIFLIB_MAJOR != 5
-> ++#if GIFLIB_MAJOR < 5
-> +   /*
-> +   taken from giflib 5.1.0
-> +   */
-> diff --git a/package/kodi/0002-TexturePacker-allow-build-with-giflib-6.x.patch b/package/kodi/0002-TexturePacker-allow-build-with-giflib-6.x.patch
-> new file mode 100644
-> index 0000000000..5a23237375
-> --- /dev/null
-> +++ b/package/kodi/0002-TexturePacker-allow-build-with-giflib-6.x.patch
-> @@ -0,0 +1,71 @@
-> +From 29492cbd20d4c90a9c00a30ab525d4d0e81a968b Mon Sep 17 00:00:00 2001
-> +From: Rudi Heitbaum <rudi@heitbaum.com>
-> +Date: Sun, 15 Mar 2026 11:38:16 +0000
-> +Subject: [PATCH] TexturePacker: allow build with giflib 6.x
-> +
-> +Current #if clauses are written with a maximum of giflib 5 written in,
-> +update the to >= to allow for newer versiosn of the giflib api.
-> +
-> +Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-> +
-> +Upstream: https://github.com/xbmc/xbmc/pull/28016
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + .../native/TexturePacker/src/decoder/GifHelper.cpp        | 8 ++++----
-> + .../depends/native/TexturePacker/src/decoder/GifHelper.h  | 2 +-
-> + 2 files changed, 5 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> +index eb513134b3eb8..b216ecbcef7fa 100644
-> +--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> ++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.cpp
-> +@@ -52,7 +52,7 @@ GifHelper::~GifHelper()
-> + bool GifHelper::Open(GifFileType*& gif, void *dataPtr, InputFunc readFunc)
-> + {
-> +   int err = 0;
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +   gif = DGifOpen(dataPtr, readFunc, &err);
-> + #else
-> +   gif = DGifOpen(dataPtr, readFunc);
-> +@@ -73,7 +73,7 @@ void GifHelper::Close(GifFileType* gif)
-> + {
-> +   int err = 0;
-> +   int reason = 0;
-> +-#if GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1
-> ++#if (GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1) || GIFLIB_MAJOR >= 6
-> +   err = DGifCloseFile(gif, &reason);
-> + #else
-> +   err = DGifCloseFile(gif);
-> +@@ -181,7 +181,7 @@ bool GifHelper::Slurp(GifFileType* gif)
-> +   if (DGifSlurp(gif) == GIF_ERROR)
-> +   {
-> +     int reason = 0;
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +     reason = gif->Error;
-> + #else
-> +     reason = GifLastError();
-> +@@ -246,7 +246,7 @@ bool GifHelper::GcbToFrame(GifFrame &frame, unsigned int imgIdx)
-> + 
-> +   if (m_gif->ImageCount > 0)
-> +   {
-> +-#if GIFLIB_MAJOR == 5
-> ++#if GIFLIB_MAJOR >= 5
-> +     GraphicsControlBlock gcb;
-> +     if (DGifSavedExtensionToGCB(m_gif, imgIdx, &gcb))
-> +     {
-> +diff --git a/tools/depends/native/TexturePacker/src/decoder/GifHelper.h b/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> +index 6124b69e46296..ce5dca3394b41 100644
-> +--- a/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> ++++ b/tools/depends/native/TexturePacker/src/decoder/GifHelper.h
-> +@@ -128,7 +128,7 @@ class GifHelper
-> +   bool PrepareTemplate(GifFrame &frame);
-> +   void Release();
-> + 
-> +-#if GIFLIB_MAJOR != 5
-> ++#if GIFLIB_MAJOR < 5
-> +   /*
-> +   taken from giflib 5.1.0
-> +   */
+> diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+> index a942bb069c..ec6e52e1e2 100644
+> --- a/package/libinput/libinput.hash
+> +++ b/package/libinput/libinput.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed
+> -sha256  af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5  libinput-1.31.0.tar.bz2
+> +sha256  e0bb6537de892ce7c63fc5be9ad373eae894b7655c92220ef00316cc33097356  libinput-1.31.1.tar.bz2
+>  
+>  # License files
+>  sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+> diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+> index e018f87f00..8b930805b2 100644
+> --- a/package/libinput/libinput.mk
+> +++ b/package/libinput/libinput.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBINPUT_VERSION = 1.31.0
+> +LIBINPUT_VERSION = 1.31.1
+>  LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
+>  LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
+>  LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
 > -- 
 > 2.47.3
 > 
