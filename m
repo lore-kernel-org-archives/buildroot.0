@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4426CF9D0F6
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 20:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C6C3F9D0F1
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 21:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14D6184CF2;
-	Tue, 14 Apr 2026 20:36:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BD48807A6;
+	Tue, 14 Apr 2026 21:00:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vXN39PKDsaGZ; Tue, 14 Apr 2026 20:36:09 +0000 (UTC)
+ id 4J4_i8eLiUyM; Tue, 14 Apr 2026 21:00:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB161849C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1924A807AD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776198969;
-	bh=/U+bKF4u8JhHr5Xyy53DBX/6qiyw3PD2S3nAeTzhsr8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Jo8Oam/9V/e3syKFX95Abqop2ei8eVukZkaa1Pk0UkiPl1UCKeDWYlq/n27fWfd2V
-	 blTkZ/nBBu/hOlpIPtagU8cVGE6t8cKMBPze+eE12N0DawozOmvqf/1IyGE9Tth56J
-	 NSzoUFXQvzhuG+staiT8V/vqQQv+D1iSAKh3muBch+cPgzPsObgdrR9egt5P1WlPc+
-	 9AliOqceN6CGZPfJr5wLUsycxcM/SpgRj1Su2mA0M/FPe/wielQpacNLYu6tBK5WaE
-	 MBTDfVoYVaYk8bPaM/b2dLB/dqrFiHvKXPFZDnXZq8V0bmK+nwE8zLXXA+m+Bw9Jf3
-	 CMASnznzZp2WQ==
+	s=default; t=1776200411;
+	bh=eWscBG75VQdjVgOaulCOxtaDQL5fDgKREXa53IJNKsY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oaqijV4+GUD6pg791HAFYXH+oDsZtS7BF9jDTTxNtEwsGWLApQNpUEpm6DGUa16Cy
+	 63vaGoDEm8jpLXPjRP5pfZxwKGLPBoaq7BZqddwe8OgJDpWenc3Fw8kzZdTF2YhcOV
+	 CO6Lhc2yq/gsixd22ru0gulpJXh+9okClnEUGikKU/2awKUajKKg5CFmlzqyPY3QmZ
+	 KrbiivJQci2mIKmHYCzODU7jVU4olvnFctR2ZqlPcRdMwYGSgLBNJawx8rRB7JoFJa
+	 QOXLkEaa05FtTjmSJemu7BN68NIQpKt95IHkCPpkzlnOQTa3p2NZ7C7xUfJmQh93h9
+	 2BT2PwJgifsOg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB161849C3;
-	Tue, 14 Apr 2026 20:36:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CC170375
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:36:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1924A807AD;
+	Tue, 14 Apr 2026 21:00:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48ACE375
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 21:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD6E7849C3
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:36:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EAED42527
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 21:00:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mRekO-iVCpBc for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 20:36:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B62A4848F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B62A4848F3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B62A4848F3
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:36:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 6D95013F89C;
- Tue, 14 Apr 2026 22:36:04 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Apr 2026 22:36:04 +0200
-MIME-Version: 1.0
-Date: Tue, 14 Apr 2026 22:36:04 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260414195536.19279-1-thomas.perale@mind.be>
-References: <20260414195536.19279-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <6a6a9b4008ecd7a174bff578e9f61873@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776198965;
- bh=0OZTvLbb3qtTJ7e0VQfVOUBCdGpNCcL2ilns0CvAVJ0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tQ+Ovnv23ICNdwmW9ZMRFD7/IoMzVNexr2m/++CbyxwWQDhZTuRqZMKAb2kOq7MS+
- pPWN8ML2OIDIhIpvkLqCKa3w2NCsrSzlI3aiK2MDB1hHPLOB7ikuWNGlucc7DhT0zr
- FdHKHtJ2zLO4ogDHfeaEvC1V/jJEFdcv+kmkjg/HAh5+ojd/OwuA2NdupGo8t+yXBM
- riQx0kC9X0tzAIM3MslgHc07e6yPjMovEaNPG0JthHJvL3rw4yNVN6jZm+TDcE4MJu
- 0y6/nAWuO0qz7hretrsYMPcReFMhV7muGg4tvNmq7c5Fue4dEUz2NBDHpk4zoczTdz
- BiACEoVwN6j2A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tQ+Ovnv2
-Subject: Re: [Buildroot] [PATCH 1/1] docs/website: add Calian as a bronze
- sponsor
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DNvuwHiL-EJi for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 21:00:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 007DE404AF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 007DE404AF
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 21:00:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 82FEC815E8; Tue, 14 Apr 2026 21:00:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 14 Apr 2026 22:40:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 374e31947a2961f7563d83cfab10c5af2e660c11
+X-Git-Newrev: f3d0050e3d044ee5e83f3a8df38806f4df9ebbb1
+X-Patchwork-Hint: ignore
+Message-Id: <20260414210007.82FEC815E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-transitions: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,25 +70,180 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/04/2026 21:55, Thomas Perale via buildroot wrote:
-> Calian provides a diverse set of mission-critical solutions to solve
-> complex challenges for customers in defence, space, health and other
-> critical infrastructure industries.
-> 
-> We thanks them for contributing to the LTS maintenance as a bronze
-> sponsor.
-> 
-> [1] https://www.calian.com/
-> [2] https://www.linkedin.com/company/calian/
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f3d0050e3d044ee5e83f3a8df38806f4df9ebbb1
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Lightweight finite state machine implementation in Python.
+
+https://github.com/pytransitions/transitions
+
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
+[Julien:
+ - remove directory for LICENSE in hash file
+ - remove PKG-INFO entry in hash file
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ package/python-transitions/Config.in               |  7 +++++
+ package/python-transitions/python-transitions.hash |  4 +++
+ package/python-transitions/python-transitions.mk   | 15 ++++++++++
+ .../tests/package/sample_python_transitions.py     | 34 ++++++++++++++++++++++
+ .../tests/package/test_python_transitions.py       | 29 ++++++++++++++++++
+ 7 files changed, 93 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ad64e876e..b20cf7d93c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3361,6 +3361,9 @@ F:	package/rtl8822cs/
+ N:	Victor Huesca <victor.huesca@bootlin.com>
+ F:	support/testing/tests/core/test_root_password.py
+ 
++N:	Vincent Cruz <mooz@blockos.org>
++F:	package/python-transitions/
++
+ N:	Vincent Jardin <vjardin@free.fr>
+ F:	board/nvidia/bf3/
+ F:	configs/nvidia_bf3_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index bd2e06dc0b..d0f148699b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1463,6 +1463,7 @@ menu "External python modules"
+ 	source "package/python-tqdm/Config.in"
+ 	source "package/python-trafaret/Config.in"
+ 	source "package/python-traitlets/Config.in"
++	source "package/python-transitions/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-trio/Config.in"
+ 	source "package/python-trio-websocket/Config.in"
+diff --git a/package/python-transitions/Config.in b/package/python-transitions/Config.in
+new file mode 100644
+index 0000000000..4289b446f5
+--- /dev/null
++++ b/package/python-transitions/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRANSITIONS
++	bool "python-transitions"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Lightweight finite state machine implementation in Python.
++
++	  https://github.com/pytransitions/transitions
+diff --git a/package/python-transitions/python-transitions.hash b/package/python-transitions/python-transitions.hash
+new file mode 100644
+index 0000000000..9d0057c793
+--- /dev/null
++++ b/package/python-transitions/python-transitions.hash
+@@ -0,0 +1,4 @@
++# From https://pypi.org/pypi/transitions/0.9.3/json
++sha256  881fb75bb1654ed55d86060bb067f2c716f8e155f57bb73fd444e53713aafec8  transitions-0.9.3.tar.gz
++# Locally computed
++sha256  fd7115fc5517d1d2d042a80a33d92033532236830a9c25866112299fe33c036b  LICENSE
+diff --git a/package/python-transitions/python-transitions.mk b/package/python-transitions/python-transitions.mk
+new file mode 100644
+index 0000000000..8189cebcbd
+--- /dev/null
++++ b/package/python-transitions/python-transitions.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-transitions
++#
++################################################################################
++
++PYTHON_TRANSITIONS_VERSION = 0.9.3
++PYTHON_TRANSITIONS_SOURCE = transitions-$(PYTHON_TRANSITIONS_VERSION).tar.gz
++PYTHON_TRANSITIONS_SITE = https://files.pythonhosted.org/packages/source/t/transitions
++PYTHON_TRANSITIONS_SETUP_TYPE = setuptools
++
++PYTHON_TRANSITIONS_LICENSE = MIT
++PYTHON_TRANSITIONS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_transitions.py b/support/testing/tests/package/sample_python_transitions.py
+new file mode 100644
+index 0000000000..ca33309998
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_transitions.py
+@@ -0,0 +1,34 @@
++# test from https://github.com/pytransitions/transitions/blob/master/tests/test_nesting.py
++
++from transitions.extensions import HierarchicalMachine as Machine
++
++states = ['standing', 'walking', {'name': 'caffeinated', 'children': ['dithering', 'running']}]
++transitions = [
++  ['walk', 'standing', 'walking'],
++  ['stop', 'walking', 'standing'],
++  ['drink', 'caffeinated_dithering', '='],
++  ['drink', 'caffeinated', 'caffeinated_dithering'],
++  ['drink', '*', 'caffeinated'],
++  ['walk', 'caffeinated', 'caffeinated_running'],
++  ['relax', 'caffeinated', 'standing']
++]
++
++machine = Machine(states=states, transitions=transitions, initial='standing', ignore_invalid_triggers=True)
++
++machine.walk()   # Walking now
++machine.stop()   # let's stop for a moment
++machine.drink()  # coffee time
++machine.state
++print(machine.state)
++machine.drink()  # again!
++print(machine.state)
++machine.drink()  # and again!
++print(machine.state)
++machine.walk()   # we have to go faster
++print(machine.state)
++machine.stop()   # can't stop moving!
++machine.state
++print(machine.state)
++machine.relax()  # leave nested state
++machine.state    # phew, what a ride
++print(machine.state)
+diff --git a/support/testing/tests/package/test_python_transitions.py b/support/testing/tests/package/test_python_transitions.py
+new file mode 100644
+index 0000000000..ae64284720
+--- /dev/null
++++ b/support/testing/tests/package/test_python_transitions.py
+@@ -0,0 +1,29 @@
++import os
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonTransitions(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_TRANSITIONS=y
++        """
++    sample_scripts = ["tests/package/sample_python_transitions.py"]
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++
++        cmd = self.interpreter + " " + os.path.basename(self.sample_scripts[0])
++        output, exit_code = self.emulator.run(cmd, timeout=15)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, [
++            'caffeinated',
++            'caffeinated_dithering',
++            'caffeinated_dithering',
++            'caffeinated_running',
++            'caffeinated_running',
++            'standing'
++        ])
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
