@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1573DF9D0F6
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 20:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C401EF9D0F6
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 20:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0518835FB;
-	Tue, 14 Apr 2026 20:31:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E9A4427CB;
+	Tue, 14 Apr 2026 20:35:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a4G2Q1OSSrYY; Tue, 14 Apr 2026 20:31:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4OI0_3mUlJht; Tue, 14 Apr 2026 20:35:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8B483C61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A12FC427CD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776198694;
-	bh=Yuzkc4ChGJt9lELxC6j+j59wreeFCJMcwB1BCmxPgbs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nurhhYODlogBDxKT33PN4TGUn6N22lOinTtn5yjem8MiWAB12t6EVd5XIetymBofn
-	 V0+wzZhei/aP19a18L9Q/h/tpi/0aLpnWqSmt+PTIZYH7tEL4xkXGz/85H50plUQlb
-	 6uXuYeOeCI9XxLL+8tKCJzwDg3VT34TSwLUB72uOfuqU7VLIR6jwAg4NtmkMxF/xJi
-	 zV9FU5GCozOc+80tnsN7H6tGAj0iT8p282sGvX5MKlRF4nmfRJ64jNxTtkyLzMCD0S
-	 RB+5mkN0snDwZYmN01OgCKhJOxlIjasbeJ96Xid7Ga2rzH37e7bnJZLKL8lH6Oz/3E
-	 L3jlPjVOD9FLg==
+	s=default; t=1776198953;
+	bh=G00aQjhDLHkC15xBKFoMPvsLDyjy8IswEOJaiTLh8Mk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=sRE3b6fLqw5ki6YbRZs67y4fT01zqQjKEvWsIP1MaWAKqDI8NGkXjFo7bzTHDNEY1
+	 0Y2pviwJrHsWjNu/1WzfpjnuyP4KbhD0QnaH5B4qp4Qf24QlVZMiTwMwXbatyt8vAg
+	 CxSvlZiZY8fomLAvwpCyn0XFOToraPb/wJEii9bElE0jKqvDQuWoBTiIIshdJeJCqL
+	 yO24Df68GeujyY/CftMuOUyHORNyYuW8/8pamws6LQk3GF119XV7ZAaw1uF7xsMUxG
+	 rmm6z6lqZ6aoOdWfpYJWXDFo0shn8ooBdzPeFO7ZVSzgK5539BWhIW93sOR8+z59s5
+	 wlw2/KE6wrRnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8B483C61;
-	Tue, 14 Apr 2026 20:31:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E296375
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:31:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A12FC427CD;
+	Tue, 14 Apr 2026 20:35:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31C6E375
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55BFB84525
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:31:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1750860AD1
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:35:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zd1kpMoL0GM0 for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 20:31:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 92086835FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92086835FB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 92086835FB
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:31:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 490AE78035E;
- Tue, 14 Apr 2026 22:31:25 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 14 Apr 2026 22:31:25 +0200
-MIME-Version: 1.0
-Date: Tue, 14 Apr 2026 22:31:25 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Dimitar Tomov <dimi@tpm.dev>, =?UTF-8?Q?J?=
- =?UTF-8?Q?=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>, Sergio Prado
- <sergio.prado@e-labworks.com>
-In-Reply-To: <20260414160708.2041081-1-bernd@kuhls.net>
-References: <20260414160708.2041081-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <353b88977ba0eb5b8fb7434fc4b3c76e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776198689;
- bh=0na0aSRGyNVgMtGlPpu3BbNp39uB5vfbrOY7KN8C/WE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=vNgFwgmNKZ4o84u0wHn1wfK+2sG3I0xIyHixl8r+Hr18LaptTTnFHS6B58WDxUo/f
- iVurtl4UlqQGN7NnDZjpwIaPnYZ32WKpQYuBg/ylpaJGfJdq0DeLNxYBxrLUPncA/U
- sVYE44Uip9t8OzkR6Olyquj5kIvsB5DQc+oA+9Rfj/9Bx6ERRsqpNfnSXU0XNgQo37
- Xx161ad1YMGoqBOvrlmCRqMcFK+wJbrbD+M1tmSufrQO75eLVxpL+IQk09NWJI5o0+
- Qjjr9FMSCVcBmJB0I0wi3k1Aapv5JLWGI69e1XURWrLBD6M+yxubp0L9ge9Pl+SfTs
- d7TpIYsLpuKzA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=vNgFwgmN
-Subject: Re: [Buildroot] [PATCH 1/5] package/strongswan: remove unneeded
- wolfSSL fix
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0u3oylVcsZ-7 for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 20:35:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E3460A99
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59E3460A99
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:35:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E201881599; Tue, 14 Apr 2026 20:35:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 14 Apr 2026 22:32:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 99f8ed1212c8670404b2d6a2d0721914229be628
+X-Git-Newrev: 374e31947a2961f7563d83cfab10c5af2e660c11
+X-Patchwork-Hint: ignore
+Message-Id: <20260414203551.E201881599@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: add Calian as a bronze
+ sponsor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,16 +71,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/04/2026 18:07, Bernd Kuhls wrote:
-[...]
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/374e31947a2961f7563d83cfab10c5af2e660c11
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+Calian provides a diverse set of mission-critical solutions to solve
+complex challenges for customers in defence, space, health and other
+critical infrastructure industries.
+
+We thanks them for contributing to the LTS maintenance as a bronze
+sponsor.
+
+[1] https://www.calian.com/
+[2] https://www.linkedin.com/company/calian/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ docs/website/images/calian-logo.png | Bin 0 -> 2135 bytes
+ docs/website/sponsors.html          |  15 +++++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/docs/website/images/calian-logo.png b/docs/website/images/calian-logo.png
+new file mode 100644
+index 0000000000..762e0b13dc
+Binary files /dev/null and b/docs/website/images/calian-logo.png differ
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index cf7cba9806..8353b149e6 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -74,6 +74,21 @@
+     <div class="panel-body">
+       <h3>Bronze Sponsors</h3>
+       <div class="sponsors-container">
++        <div class="sponsor-entry">
++          <div class="panel panel-default panel-lts-sponsor">
++            <div class="panel-body">
++              <div class="sponsor-title">
++                <a href="https://calian.com/">
++                  <img class="img-responsive center-block" style="height: 100%;" src="images/calian-logo.png"/>
++                </a>
++              </div>
++              <div class="sponsor-body">
++                <a href="https://calian.com/">Calian</a>
++              </div>
++            </div>
++          </div>
++        </div>
++
+         <div class="sponsor-entry">
+           <div class="panel panel-default panel-lts-sponsor">
+             <div class="panel-body">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
