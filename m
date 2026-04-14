@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A1FF9D0E7
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 16:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99823F9D0EB
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 17:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3DDA6F4A1;
-	Tue, 14 Apr 2026 16:34:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51FE183CD1;
+	Tue, 14 Apr 2026 17:48:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CzwvWuefJm8X; Tue, 14 Apr 2026 16:34:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lm05X0_zaJvr; Tue, 14 Apr 2026 17:48:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF2BF6F49E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74A8583C91
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776184481;
-	bh=B57lOVmNZGhJKp6WHkymFoM2OJd6iidiFOUN6GZqXo8=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=jOyMbjx0LUwrHTRQXscu5JWixtvDDZcOlpuS25ykeM/CR/0Fc3swqqGvIIaYd22dC
-	 qI4YmP+QK30hhcPPB2Nw/bcQb6MIOq2P+/ywI/9uNNIw9PxG15BmYdRWBM7hdYKyMy
-	 AbDxe1rv5nlfF5qdMa9BjCSb1Eym2AyKetRcTWitKn37EoU7kcvDNlCJ5+V98RNDX2
-	 c7YGh+U2lPhQdvbEE08G1f/hXkwBBNFiGvnRdety3en6uGNKaz0vaTu2Hia7nhqJZi
-	 QvbV4Dgo7kw2/htnOBkE9+NUavQLsShpOkNfceeJ7vNj9IrVu0Pcqh6UuXizujtI+t
-	 MlpLjJ28okFEw==
+	s=default; t=1776188932;
+	bh=VJfnjZnS8LR30WGUDrYwKfcrmew7aHQrr//gV8oB/nY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ApkFT9qN9FuZOQ/R18CWwhJvivGAzuvoXqjB9Ip/48DpAs5Rtzdkt2AkolO4HvmHM
+	 gbWynjMqNXpOCatO7iCn9azdusnh3BxiU73KmLd4nz8aI6flAo+7SFRkPlC8xhN1E0
+	 8WSKltfA7AF5B9ey9Pjqqz5mj8NGuoZlRBKrXJUiJgMGA/XMkZvwwTAiWCmM6pwjz4
+	 EavTByb8jB0QlZZZvB7lnabLSPeRdPR96KJ7iDQpW/UmBSoTK394Sxpq39lUM7eBVk
+	 6ko2kWVmO7bD4Z6jzmvlsXIxBlOKsdX/kMCLgEgzAc8HN00r9Qp0pj8Sja6CZLtZnb
+	 mVWljaRdjnISQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF2BF6F49E;
-	Tue, 14 Apr 2026 16:34:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C835375
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 16:34:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74A8583C91;
+	Tue, 14 Apr 2026 17:48:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1110375
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E48B403F0
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 16:34:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B30E242741
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J3QohYeeevIz for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 16:34:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1232E4012B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1232E4012B
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1232E4012B
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 16:34:37 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1be9a.dip0.t-ipconnect.de [84.161.190.154])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 86835A4C234F;
- Tue, 14 Apr 2026 18:34:24 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53522)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wCgiV-000000008Pi-3lK2;
- Tue, 14 Apr 2026 16:34:24 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id onLK2tW1se47 for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF31C4273A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF31C4273A
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 727967FB2E; Tue, 14 Apr 2026 17:48:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Tue, 14 Apr 2026 18:34:24 +0200
-Message-ID: <20260414163424.2355464-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260414163424.2355464-1-bernd@kuhls.net>
-References: <20260414163424.2355464-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: --
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1776184464;
- bh=UpurXloHz7XaWRiG8yhcnUmfvEV2ijCwLnHIs/11EfM=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=qU0oKzoEDrN0eI6YE//ecLP9SPyZweQuEVJF5IPyAm+A0xWbvDEwaFbUv0SCFLAsI
- pAX+/B5Q6dnuPU/I5AGvIk6y4mWjKnw2+gU3MfFf4e0mGemHw7iHYNsX6ab2uyJYJO
- /mG++APlR8ph7pV4toPNWqrOgz8VFWVr7/YpCRGC35L0qsReL0pPZSXHKwlvW37W1/
- 9MWK8jRkjY3n3v1UGHFIpHLLDaKeV+oKy/Ko4jUEgGc64tYuHk/U5tTMQ7P/dYZMYm
- pxYrH1/3+LNfVdcSRTfxrxRWNhvYj2CdDsUaliQp5FPd6fB7d9ZyYzLq24nMwwe3fK
- w531yIHQoCrMA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=qU0oKzoE
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xwayland: security bump
- version to 24.1.10
+Date: Tue, 14 Apr 2026 19:12:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 97c434f731c765a446d24fc94682dfd1fb2024ca
+X-Git-Newrev: 81177e9bd0997e87559d2e241c95a5b294da917d
+X-Patchwork-Hint: ignore
+Message-Id: <20260414174849.727967FB2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/c-icap-modules: bump version to
+ 0.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,62 +69,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.x.org/archives/xorg-announce/2026-April/003679.html
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/81177e9bd0997e87559d2e241c95a5b294da917d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Updated license hash due to upstream commits:
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/e5c6a5ab905e0158ec22877b4117f10bef6e4140
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/89f82cce4a4ca480501c130231968a72cafa952d
-
-Fixes the following CVEs:
-
-* CVE-2026-33999: XKB Integer Underflow in XkbSetCompatMap()
-* CVE-2026-34000: XKB Out-of-bounds Read in CheckSetGeom()
-* CVE-2026-34001: XSYNC Use-after-free in miSyncTriggerFence()
-* CVE-2026-34002: XKB Out-of-bounds read in CheckModifierMap()
-* CVE-2026-34003: XKB Buffer overflow in CheckKeyTypes()
+0.5.7: https://sourceforge.net/p/c-icap/mailman/message/58723534/
+"The newer c-icap-0.5.12 or c-icap-0.6.2 c-icap release is also
+ required."
+0.5.6: https://sourceforge.net/p/c-icap/mailman/message/40461114/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xwayland/xwayland.hash | 8 ++++----
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/c-icap-modules/c-icap-modules.hash | 6 +++---
+ package/c-icap-modules/c-icap-modules.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 0d1df29b43..ba84d20b9f 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg/2025-October/062148.html
--sha256  f297af27a84508db9b80d1cbbcc69c3801da38eb64c72f3b5b50f582459afdd0  xwayland-24.1.9.tar.xz
--sha512  7438a572651dc77c1fd749879abccdc9a245c7b75143668d5561a8e99d41063f042a8eb3f9b931a2a12be1fc3cb9d197eee6794d0702a19e56c20f55acb35a26  xwayland-24.1.9.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-April/003679.html
-+sha256  459762be8ea046c94386687d77a87add6073868bee14f02913eafebb945b7aa0  xwayland-24.1.10.tar.xz
-+sha512  bceba1db7f4d7ac92d2b2a3c8f6f7ab0cc093f396fe89406f8dba25e32ffc3edfa552df246cbfb3b0708c1d28b3e179694d11870b063d5b8f9ab2db9fb861a8f  xwayland-24.1.10.tar.xz
+diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
+index 110ffd4de3..278b3efdbb 100644
+--- a/package/c-icap-modules/c-icap-modules.hash
++++ b/package/c-icap-modules/c-icap-modules.hash
+@@ -1,7 +1,7 @@
+ # From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.5.x/
+-md5  ca6d5d124a4668d63affcaa5ab083e57  c_icap_modules-0.5.5.tar.gz
+-sha1  67be484a93fe662a7735ee06e1d34d82b54469a8  c_icap_modules-0.5.5.tar.gz
++md5  08c4721a26840bb0ff95fcaa64b686c3  c_icap_modules-0.5.7.tar.gz
++sha1  839b79bc53e9048680309a7cd31ad3c1e2cf44b5  c_icap_modules-0.5.7.tar.gz
  
  # Locally calculated
--sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
-+sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index d4fd47413f..1c90447aef 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
+-sha256  6a42f1fdd8c35ad38d29f7d3c10f925471977f217086352e146cf95e45f2b5b5  c_icap_modules-0.5.5.tar.gz
++sha256  80bc0af10be171c0c73cd5886533a397c4d55211756fb6279f245ee7e5dd3814  c_icap_modules-0.5.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+index e9bbbdb284..5ef0fa3256 100644
+--- a/package/c-icap-modules/c-icap-modules.mk
++++ b/package/c-icap-modules/c-icap-modules.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 24.1.9
-+XWAYLAND_VERSION = 24.1.10
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
--- 
-2.47.3
-
+-C_ICAP_MODULES_VERSION = 0.5.5
++C_ICAP_MODULES_VERSION = 0.5.7
+ C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
+ C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_MODULES_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
