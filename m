@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C60F9D0EC
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 17:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D037F9D0EC
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 17:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FB0442741;
-	Tue, 14 Apr 2026 17:49:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EEC342C95;
+	Tue, 14 Apr 2026 17:49:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MwCOkTkUMqLB; Tue, 14 Apr 2026 17:49:11 +0000 (UTC)
+ id 8nC9XIJMIboM; Tue, 14 Apr 2026 17:49:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D74642C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0DD042CAE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776188951;
-	bh=wtKFDhZO4zl56318T+9tMJ+n7c1ijANZ67naOLKl0EE=;
+	s=default; t=1776188956;
+	bh=3MaK7jLLmwxR06AoZijCeE+kTgzuOuoh2VI2le9dplY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RmA9AyccLuvw327FvhCooqr3oAkgvZPCumlylfoRu4+pNbqMcq/71UdxNuH1jLhU6
-	 aQTAo+aSNVxqXdnDciFpxOLrrE4gJChimpDayIVff8fggLaKU+Cn+kLSVgX1RLJa7t
-	 Uxo5CR8+ZdTL+9iZoi96uVJ6M38PV9TKB4tUaATsSVsMRS8wwQq5kJ5eTkHAMnDDOy
-	 3ZqSs2vK4vpc4NX9qYbiQ+pxTFRCDvHf9/1hX/EIydPEx6Ygk5bCw/wNM1DV7nR0Up
-	 UNG6YNVpLoUVDiKfDk4e7dR0iDSvGYMstntEFP7qlQw4Y0jzw/eDd9GLr1fO3BRHlc
-	 +Vg9+Z6B68rJA==
+	b=QxFqxZesSXnPPoD2RIGk3B3vqAOpiqJKWxP/TgdqIh6mZuSSQX+P1lef/3T7kus38
+	 gpJ61uBwVhB2uX/0G6nkMwOVA9fAIGpLw87BitkKR41t3ovtfv/k+YAvSMcB3w5ZIe
+	 p8ecNejFM/QI9IxN04VyS2KgoRhfPslfX2y+Pq9nKRY+GrrbgiZ5uU/LlLR7I3ogPh
+	 2mVASzmtwpdbl9oL6JvlDob3dK1h1kaTViOLa5adNVljEm8ssGnBBqd88JzSYTsJdG
+	 TyLhYjuJ5mrEGyv33fAVqWe69a8hNyGl2KJHUOIHRuCDZxzs52CeTPL5w5N8zYYEnL
+	 gXplgcatPp7HQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D74642C9F;
-	Tue, 14 Apr 2026 17:49:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F637283
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0DD042CAE;
+	Tue, 14 Apr 2026 17:49:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E41F1283
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D546342741
+ by smtp2.osuosl.org (Postfix) with ESMTP id B577B403D6
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NOw3hoohf8th for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LNOIltsuj9ix for <buildroot@buildroot.org>;
  Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA65F4273A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33F19403E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA65F4273A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33F19403E4
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F8777FB24; Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
+ id BDFF87FB2E; Tue, 14 Apr 2026 17:48:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Apr 2026 19:12:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12c5a199231d7dbece4043a2011897bd049e842f
-X-Git-Newrev: 1eae9a4b1a83945540bc1d0c215cd5c2a1c65911
+X-Git-Oldrev: 6c81798b6828707080c76167789b857b8cf2c357
+X-Git-Newrev: 081c27aea5516e4657b690d80a7f6105456e4b20
 X-Patchwork-Hint: ignore
-Message-Id: <20260414174850.5F8777FB24@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/aircrack-ng: switch to pcre2
+Message-Id: <20260414174849.BDFF87FB2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haproxy: remove optional support
+ for pcre, keep pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,289 +77,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1eae9a4b1a83945540bc1d0c215cd5c2a1c65911
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/081c27aea5516e4657b690d80a7f6105456e4b20
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Added two upstream commits to support pcre2 and switch the package from
-pcre to pcre2.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-autotools-add-PCRE2-detection.patch       | 102 +++++++++++++++
- ...s-indicate-if-PCRE-or-PCRE2-is-being-used.patch | 142 +++++++++++++++++++++
- package/aircrack-ng/aircrack-ng.mk                 |   2 +-
- 3 files changed, 245 insertions(+), 1 deletion(-)
+ package/haproxy/haproxy.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/aircrack-ng/0001-autotools-add-PCRE2-detection.patch b/package/aircrack-ng/0001-autotools-add-PCRE2-detection.patch
-new file mode 100644
-index 0000000000..e99663c39e
---- /dev/null
-+++ b/package/aircrack-ng/0001-autotools-add-PCRE2-detection.patch
-@@ -0,0 +1,102 @@
-+From 6b05dc10cdcf45d50bc8f9dd74667a3ff399a059 Mon Sep 17 00:00:00 2001
-+From: Andras Gemes <andrasgemes@outlook.com>
-+Date: Fri, 20 Jan 2023 14:52:12 +0100
-+Subject: [PATCH] autotools: add PCRE2 detection
-+
-+Upstream: https://github.com/aircrack-ng/aircrack-ng/commit/6b05dc10cdcf45d50bc8f9dd74667a3ff399a059
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ build/m4/aircrack_ng_pcre2.m4 | 61 +++++++++++++++++++++++++++++++++++
-+ configure.ac                  |  2 ++
-+ 2 files changed, 63 insertions(+)
-+ create mode 100644 build/m4/aircrack_ng_pcre2.m4
-+
-+diff --git a/build/m4/aircrack_ng_pcre2.m4 b/build/m4/aircrack_ng_pcre2.m4
-+new file mode 100644
-+index 0000000000..f61c0f656d
-+--- /dev/null
-++++ b/build/m4/aircrack_ng_pcre2.m4
-+@@ -0,0 +1,61 @@
-++dnl Aircrack-ng
-++dnl
-++dnl Copyright (C) 2023 Andras Gemes <andrasgemes@outlook.com>
-++dnl
-++dnl Autotool support was written by: Joseph Benden <joe@benden.us>
-++dnl
-++dnl This program is free software; you can redistribute it and/or modify
-++dnl it under the terms of the GNU General Public License as published by
-++dnl the Free Software Foundation; either version 2 of the License, or
-++dnl (at your option) any later version.
-++dnl
-++dnl This program is distributed in the hope that it will be useful,
-++dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
-++dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++dnl GNU General Public License for more details.
-++dnl
-++dnl You should have received a copy of the GNU General Public License
-++dnl along with this program; if not, write to the Free Software
-++dnl Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-++dnl
-++dnl In addition, as a special exception, the copyright holders give
-++dnl permission to link the code of portions of this program with the
-++dnl OpenSSL library under certain conditions as described in each
-++dnl individual source file, and distribute linked combinations
-++dnl including the two.
-++dnl
-++dnl You must obey the GNU General Public License in all respects
-++dnl for all of the code used other than OpenSSL.
-++dnl
-++dnl If you modify file(s) with this exception, you may extend this
-++dnl exception to your dnl version of the file(s), but you are not obligated
-++dnl to do so.
-++dnl
-++dnl If you dnl do not wish to do so, delete this exception statement from your
-++dnl version.
-++dnl
-++dnl If you delete this exception statement from all source files in the
-++dnl program, then also delete it here.
-++
-++AC_DEFUN([AIRCRACK_NG_PCRE2], [
-++AC_ARG_ENABLE(static-pcre2,
-++    AS_HELP_STRING([--enable-static-pcre2],
-++		[Enable statically linked PCRE2 libpcre2-8.]),
-++    [static_pcre2=$enableval], [static_pcre2=no])
-++
-++if test "x$static_pcre2" != "xno"; then
-++	AC_REQUIRE([AX_EXT_HAVE_STATIC_LIB_DETECT])
-++	AX_EXT_HAVE_STATIC_LIB(PCRE2, ${DEFAULT_STATIC_LIB_SEARCH_PATHS}, pcre2 libpcre2-8, pcre2_version)
-++	if test "x$PCRE2_FOUND" = xyes; then
-++		HAVE_PCRE2=yes
-++	else
-++		HAVE_PCRE2=no
-++	fi
-++else
-++	PKG_CHECK_MODULES(PCRE2, libpcre2-8, HAVE_PCRE2=yes, HAVE_PCRE2=no)
-++fi
-++
-++AS_IF([test "x$HAVE_PCRE2" = "xyes"], [
-++    AC_DEFINE([HAVE_PCRE2], [1], [Define this if you have libpcre2-8 on your system])
-++])
-++])
-+\ No newline at end of file
-+diff --git a/configure.ac b/configure.ac
-+index 06aca4e466..6d8e0e5677 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -143,6 +143,7 @@ AIRCRACK_NG_EXT_SCRIPTS
-+ AIRCRACK_NG_HWLOC
-+ AIRCRACK_NG_PCAP
-+ AIRCRACK_NG_PCRE
-++AIRCRACK_NG_PCRE2
-+ AIRCRACK_NG_RFKILL
-+ AIRCRACK_NG_SQLITE
-+ AIRCRACK_NG_ZLIB
-+@@ -319,6 +320,7 @@ ${PACKAGE} ${VERSION}
-+     Jemalloc:                    ${JEMALLOC}
-+     Pcap:                        ${PCAP_FOUND}
-+     Pcre:                        ${HAVE_PCRE}
-++    Pcre2:                       ${HAVE_PCRE2}
-+     Sqlite:                      ${HAVE_SQLITE3}
-+     Tcmalloc:                    ${TCMALLOC}
-+     Zlib:                        ${HAVE_ZLIB}
-diff --git a/package/aircrack-ng/0002-autotools-indicate-if-PCRE-or-PCRE2-is-being-used.patch b/package/aircrack-ng/0002-autotools-indicate-if-PCRE-or-PCRE2-is-being-used.patch
-new file mode 100644
-index 0000000000..455e211115
---- /dev/null
-+++ b/package/aircrack-ng/0002-autotools-indicate-if-PCRE-or-PCRE2-is-being-used.patch
-@@ -0,0 +1,142 @@
-+From b381ef3f6b6cc83a4aa016f4c0aebb58fcffcf3f Mon Sep 17 00:00:00 2001
-+From: Andras Gemes <andrasgemes@outlook.com>
-+Date: Mon, 23 Jan 2023 16:58:38 +0100
-+Subject: [PATCH] autotools: indicate if PCRE or PCRE2 is being used
-+
-+Upstream: https://github.com/aircrack-ng/aircrack-ng/commit/b381ef3f6b6cc83a4aa016f4c0aebb58fcffcf3f
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ build/m4/aircrack_ng_pcre.m4  | 28 ++++++++++++++--
-+ build/m4/aircrack_ng_pcre2.m4 | 61 -----------------------------------
-+ configure.ac                  |  3 +-
-+ 3 files changed, 26 insertions(+), 66 deletions(-)
-+ delete mode 100644 build/m4/aircrack_ng_pcre2.m4
-+
-+diff --git a/build/m4/aircrack_ng_pcre.m4 b/build/m4/aircrack_ng_pcre.m4
-+index 72f09b98ff..af3e24b4bc 100644
-+--- a/build/m4/aircrack_ng_pcre.m4
-++++ b/build/m4/aircrack_ng_pcre.m4
-+@@ -55,7 +55,29 @@ else
-+ 	PKG_CHECK_MODULES(PCRE, libpcre, HAVE_PCRE=yes, HAVE_PCRE=no)
-+ fi
-+ 
-+-AS_IF([test "x$HAVE_PCRE" = "xyes"], [
-++AC_ARG_ENABLE(static-pcre2,
-++    AS_HELP_STRING([--enable-static-pcre2],
-++		[Enable statically linked PCRE2 libpcre2-8.]),
-++    [static_pcre2=$enableval], [static_pcre2=no])
-++
-++if test "x$static_pcre2" != "xno"; then
-++	AC_REQUIRE([AX_EXT_HAVE_STATIC_LIB_DETECT])
-++	AX_EXT_HAVE_STATIC_LIB(PCRE2, ${DEFAULT_STATIC_LIB_SEARCH_PATHS}, pcre2 libpcre2-8, pcre2_version)
-++	if test "x$PCRE2_FOUND" = xyes; then
-++		HAVE_PCRE2=yes
-++	else
-++		HAVE_PCRE2=no
-++	fi
-++else
-++	PKG_CHECK_MODULES(PCRE2, libpcre2-8, HAVE_PCRE2=yes, HAVE_PCRE2=no)
-++fi
-++
-++if test "x$HAVE_PCRE" = "xyes" && test "x$HAVE_PCRE2" = "xyes"; then
-++    AC_DEFINE([HAVE_PCRE2], [1], [Define this if you have libpcre2-8 on your system])
-++    PCRE2_NOTE="(Pcre and Pcre2 found, using Pcre2)"
-++elif test "x$HAVE_PCRE" = "xyes"; then
-+     AC_DEFINE([HAVE_PCRE], [1], [Define this if you have libpcre on your system])
-+-])
-+-])
-++elif test "x$HAVE_PCRE2" = "xyes"; then
-++    AC_DEFINE([HAVE_PCRE2], [1], [Define this if you have libpcre2-8 on your system])
-++fi
-++])
-+\ No newline at end of file
-+diff --git a/build/m4/aircrack_ng_pcre2.m4 b/build/m4/aircrack_ng_pcre2.m4
-+deleted file mode 100644
-+index f61c0f656d..0000000000
-+--- a/build/m4/aircrack_ng_pcre2.m4
-++++ /dev/null
-+@@ -1,61 +0,0 @@
-+-dnl Aircrack-ng
-+-dnl
-+-dnl Copyright (C) 2023 Andras Gemes <andrasgemes@outlook.com>
-+-dnl
-+-dnl Autotool support was written by: Joseph Benden <joe@benden.us>
-+-dnl
-+-dnl This program is free software; you can redistribute it and/or modify
-+-dnl it under the terms of the GNU General Public License as published by
-+-dnl the Free Software Foundation; either version 2 of the License, or
-+-dnl (at your option) any later version.
-+-dnl
-+-dnl This program is distributed in the hope that it will be useful,
-+-dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+-dnl GNU General Public License for more details.
-+-dnl
-+-dnl You should have received a copy of the GNU General Public License
-+-dnl along with this program; if not, write to the Free Software
-+-dnl Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-+-dnl
-+-dnl In addition, as a special exception, the copyright holders give
-+-dnl permission to link the code of portions of this program with the
-+-dnl OpenSSL library under certain conditions as described in each
-+-dnl individual source file, and distribute linked combinations
-+-dnl including the two.
-+-dnl
-+-dnl You must obey the GNU General Public License in all respects
-+-dnl for all of the code used other than OpenSSL.
-+-dnl
-+-dnl If you modify file(s) with this exception, you may extend this
-+-dnl exception to your dnl version of the file(s), but you are not obligated
-+-dnl to do so.
-+-dnl
-+-dnl If you dnl do not wish to do so, delete this exception statement from your
-+-dnl version.
-+-dnl
-+-dnl If you delete this exception statement from all source files in the
-+-dnl program, then also delete it here.
-+-
-+-AC_DEFUN([AIRCRACK_NG_PCRE2], [
-+-AC_ARG_ENABLE(static-pcre2,
-+-    AS_HELP_STRING([--enable-static-pcre2],
-+-		[Enable statically linked PCRE2 libpcre2-8.]),
-+-    [static_pcre2=$enableval], [static_pcre2=no])
-+-
-+-if test "x$static_pcre2" != "xno"; then
-+-	AC_REQUIRE([AX_EXT_HAVE_STATIC_LIB_DETECT])
-+-	AX_EXT_HAVE_STATIC_LIB(PCRE2, ${DEFAULT_STATIC_LIB_SEARCH_PATHS}, pcre2 libpcre2-8, pcre2_version)
-+-	if test "x$PCRE2_FOUND" = xyes; then
-+-		HAVE_PCRE2=yes
-+-	else
-+-		HAVE_PCRE2=no
-+-	fi
-+-else
-+-	PKG_CHECK_MODULES(PCRE2, libpcre2-8, HAVE_PCRE2=yes, HAVE_PCRE2=no)
-+-fi
-+-
-+-AS_IF([test "x$HAVE_PCRE2" = "xyes"], [
-+-    AC_DEFINE([HAVE_PCRE2], [1], [Define this if you have libpcre2-8 on your system])
-+-])
-+-])
-+\ No newline at end of file
-+diff --git a/configure.ac b/configure.ac
-+index 6d8e0e5677..9d1d148cfd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -143,7 +143,6 @@ AIRCRACK_NG_EXT_SCRIPTS
-+ AIRCRACK_NG_HWLOC
-+ AIRCRACK_NG_PCAP
-+ AIRCRACK_NG_PCRE
-+-AIRCRACK_NG_PCRE2
-+ AIRCRACK_NG_RFKILL
-+ AIRCRACK_NG_SQLITE
-+ AIRCRACK_NG_ZLIB
-+@@ -320,7 +319,7 @@ ${PACKAGE} ${VERSION}
-+     Jemalloc:                    ${JEMALLOC}
-+     Pcap:                        ${PCAP_FOUND}
-+     Pcre:                        ${HAVE_PCRE}
-+-    Pcre2:                       ${HAVE_PCRE2}
-++    Pcre2:                       ${HAVE_PCRE2} ${PCRE2_NOTE}
-+     Sqlite:                      ${HAVE_SQLITE3}
-+     Tcmalloc:                    ${TCMALLOC}
-+     Zlib:                        ${HAVE_ZLIB}
-diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
-index 6ce738bbab..cd3abe5f08 100644
---- a/package/aircrack-ng/aircrack-ng.mk
-+++ b/package/aircrack-ng/aircrack-ng.mk
-@@ -13,7 +13,7 @@ AIRCRACK_NG_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CMOCKA),cmocka) \
- 	$(if $(BR2_PACKAGE_LIBNL),libnl) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
--	$(if $(BR2_PACKAGE_PCRE),pcre) \
-+	$(if $(BR2_PACKAGE_PCRE2),pcre2) \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
- 	host-pkgconf
- AIRCRACK_NG_AUTORECONF = YES
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 51878e754f..9504ec6b7a 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -59,11 +59,6 @@ HAPROXY_DEPENDENCIES += pcre2
+ HAPROXY_MAKE_OPTS += \
+ 	PCRE2_CONFIG=$(STAGING_DIR)/usr/bin/pcre2-config \
+ 	USE_PCRE2=1
+-else ifeq ($(BR2_PACKAGE_PCRE),y)
+-HAPROXY_DEPENDENCIES += pcre
+-HAPROXY_MAKE_OPTS += \
+-	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config \
+-	USE_PCRE=1
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
