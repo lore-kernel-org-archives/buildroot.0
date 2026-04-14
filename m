@@ -1,85 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C4B7F9D0CA
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3FFCF9D0CF
 	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2E6242A3D;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87D8A61CD4;
+	Tue, 14 Apr 2026 13:23:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZQ_ayxePpDEt; Tue, 14 Apr 2026 13:23:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF4661CE1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776173028;
+	bh=Rmg9gjzuwBUrToiR40HVeP4oLcok6n62VSElXUXI2JE=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=Pc6tvdQSN62onsAw40hqrDy/xmpYuJFR87CrNqNrPvp+bovH+Q8uwy88LDqlpvDTx
+	 McJmOW8iQDYvYI5TQyxYOmagWNkAeEh9HMRQsTaFUlpFnEbqc59+zQBJsyRdVLy+gA
+	 0oQgOMY1NjoNPp9yFymZSLrfCQkVX8Pe7VQ3snlOmESHFOx/WhCvwOg696ZfBOF26w
+	 btKKJFncuUmW4ib5eDYtHLe9Ew2e/vkPvEnXZHzjLLgdcZ6SinyFJZxiq/6wmUPUBM
+	 lt1jAZwbh50rRcPrQFW0mi8qDdMnKDtxsVVnNyrJIxcs/XTFjsAFUyrjO6z7r960it
+	 4nJBui1R14CEg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADF4661CE1;
 	Tue, 14 Apr 2026 13:23:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A5E4237
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5121842A34
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h95Q0uAh7K81; Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9BC42A33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776173027;
-	bh=I3VJ9py5xj7gTatzYxJUCt4ilcTLlB12+Pl3WR0IJ50=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=poUNL3HAw1PKBHDmCg4huaLhVDIiYIfPIRc+2W/9kF/dLVk1f1S9IcJqHE0ETHhkA
-	 PBjWQxchZI/AUe2Vb/IdoCj/UJGdHLqPh/DHn7GXTpQjasBjcEaPAHDzytbdShGK+p
-	 4tqHoDQgDj8SYtT3zxiwie7rcOjO9izVLQipxTPl+tsnMO2TKzFQW3OoLL0HvVbBwI
-	 BxboZJHu7WLVuFuVX+OUaL3s1E+OUdv6hdvqepYllw5oRCoLJ/DBP8L60o/hX4rNYk
-	 YsZiLfjt5uPu0jlq6Pw6Y1lK+TM8SJ9s24aTfNeMGOOp1WgUdrNRHnD+5gZf/opRzB
-	 +70QrfXzKjElQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9BC42A33;
-	Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C7BF283
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E666403CC
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D_mAkT9EgTTC for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 13:23:45 +0000 (UTC)
+ id T7-vGQY-41jy for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 13:23:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1F9F40266
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1F9F40266
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A888042A33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A888042A33
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F1F9F40266
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A888042A33
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:43 +0000 (UTC)
 Received: from bubutux.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
  SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 5D2F72C88C8A;
- Tue, 14 Apr 2026 15:23:42 +0200 (CEST)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 5969F2C88C79;
+ Tue, 14 Apr 2026 15:23:40 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: David Pierret <david.pierret@smile.fr>
-Date: Tue, 14 Apr 2026 15:20:52 +0200
-Message-ID: <20260414132055.3263118-2-buildroot@bubu1.eu>
+Date: Tue, 14 Apr 2026 15:20:51 +0200
+Message-ID: <20260414132055.3263118-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260414132055.3263118-1-buildroot@bubu1.eu>
-References: <20260414132055.3263118-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1776173022; bh=NZW3OjHsBghLCbckt/4FnVC/wOMvCwEE7p3oWd6Y/hs=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=Wzmnt4qcoemXhTEnoGyQ1MXdJhbjz5eKEEHFRT2j2sj8su84A3dSJXEPiqjb6xzya
- oIlerCn+JqE/l0+jaYBQ1rUJoECKf+cKr4e6M0eFXXVvr0FEpQHlPVliPA1LcQi5dM
- Dv/ewkxYeFoHZrMZiRZvGfUJdKAKdOdhyOUArpCFh0Leib6p6fMzqdpV8nPBXbewMN
- 2AEvbNcDwYrciaXFVI8E9p27xuWuOMJ7XV1V/9N/i8Cqxs7GLM/1zmMcoEYSIJMoi/
- csq+oghpU4MoFZXZTShNWc73bdT6I7pvClgV7VvOM1lc/Yq6aQUshNi7ejlxYrEr7g
- zcxIx5H/fk1QA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1776173020; bh=U7gqm4Tsb6POmTs0xgd1yO+lJfdBNAMjYH20oKMDRf4=;
+ h=From:To:Cc:Subject:Date;
+ b=H2QSAoqc5k3obCWZCDYiULMvj5jttUlPA4dMY62tpdUXWSzhcpYI7tmRemzaP1iYr
+ 20gMUpaR2CqCbTjldDUWGv9hZkTfjbUoosylI0brtIqt/zfEJBx0v3o8CEXYo7J4Zb
+ Eo2Zu66/zKZ0yeN03du21VDmerwttqzXhV7Z8n06b+R91/nclqL7jXxV9U6DWb8erY
+ DDyhbapKrz+42RC1Dm/K0qxLz5oZyj//j713R8Xbf0O70JsU8qyZcjbsbLHxk0he89
+ a9edZQQj/nmMtF1POtQdGFUk0+dl6+q+sF1OThLM+OKP96b1odpbN2kXcr++lcgf98
+ VhE1PfwEUndtQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=Wzmnt4qc
-Subject: [Buildroot] [PATCH 2/2] package/bat: bump to 0.26.1
+ header.s=bubu header.b=H2QSAoqc
+Subject: [Buildroot] [PATCH 1/2] package/bat: remove no longer needed patch
+ for gcc15 compat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,37 +96,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/sharkdp/bat/releases/tag/v0.26.1
+The bat 0.26.0 already depends on a newer version of the onig_sys crate,
+so the problem that patch is fixing was no already no longer present.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/bat/bat.hash | 2 +-
- package/bat/bat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ig-by-regex-fancy-in-minimal-applica.patch | 47 -------------------
+ 1 file changed, 47 deletions(-)
+ delete mode 100644 package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
 
-diff --git a/package/bat/bat.hash b/package/bat/bat.hash
-index 78bd1de394..16dfd2c5ab 100644
---- a/package/bat/bat.hash
-+++ b/package/bat/bat.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  e23db7a34f860d425cf0bb6f13505606024ab81035327262963d8395b4a6f3b5  bat-0.26.0-cargo5.tar.gz
-+sha256  688fe9a308dc6024f8d9516b33f6f8e293087023c0a75628ad36c8e04e36a824  bat-0.26.1-cargo5.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
- sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
-diff --git a/package/bat/bat.mk b/package/bat/bat.mk
-index 8084e6c2c3..d72c9395d7 100644
---- a/package/bat/bat.mk
-+++ b/package/bat/bat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BAT_VERSION = 0.26.0
-+BAT_VERSION = 0.26.1
- BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
- BAT_LICENSE = Apache-2.0 or MIT
- BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
+deleted file mode 100644
+index de6a3fc70c..0000000000
+--- a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
+-From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+-Date: Tue, 2 Sep 2025 14:02:11 +0200
+-Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
+-
+-The default "application" feature enables "minimal-application", which
+-in turn pulls in the "regex-onig" feature of syntect. This brings in the
+-onig crate (version 6.4.0) and its dependency onig_sys, which fail to
+-build with GCC 15 due to C23 keyword conflicts.
+-
+-It is not possible to simply update the onig crate from bat itself,
+-since its version is pinned indirectly by syntect. To avoid this
+-dependency and fix the build, replace "regex-onig" with "regex-fancy" in
+-"minimal-application". This makes bat use the pure-Rust fancy-regex
+-engine instead of Oniguruma, removing the need for onig_sys and allowing
+-the package to build with GCC 15.
+-
+-There is an an ongoing discussion about removing Oniguruma from bat
+-since Oniguruma has been declared archived:
+-
+-see https://github.com/sharkdp/bat/issues/3285
+-
+-The Upstream project for now is refusing to use fancy-regex as default.
+-
+-Upstream: not submitted
+-
+-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+----
+- Cargo.toml | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Cargo.toml b/Cargo.toml
+-index 80d19321..93a07a1d 100644
+---- a/Cargo.toml
+-+++ b/Cargo.toml
+-@@ -29,7 +29,7 @@ minimal-application = [
+-     "clap",
+-     "etcetera",
+-     "paging",
+--    "regex-onig",
+-+    "regex-fancy",
+-     "wild",
+- ]
+- git = ["git2"] # Support indicating git modifications
+--- 
+-2.43.0
+-
 -- 
 2.53.0
 
