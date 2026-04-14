@@ -1,84 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB94CF9D0CA
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBFD8F9D0D2
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 14:15:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E31B42A32;
-	Tue, 14 Apr 2026 13:27:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75AB384A6E;
+	Tue, 14 Apr 2026 14:15:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kGGE8BOFre00; Tue, 14 Apr 2026 14:15:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AB8F84A8E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776176158;
+	bh=X6xxT6dFF3xeoaf+pQokkw2J0DNGm0vq9vpKdzHp2cY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=AnE6XkTD+iepIhFCpFZm47K5Ks3pKnn+VnmjG1G0tw5fY7UEx+nXnd9u/TwhsVF/u
+	 FspIlkpzQe4hfkqeXmFJEwJk0/ZrF669PLcNafSz3ZCED8vygnwIHJMz4+kf/R+dBe
+	 XtC4A6qnN9GVGhQxDI29J6RmVZn1inZjIDj4U87YRcOHGap/NfJG/NwfN77T26Vm16
+	 C5rrdr0YsODZZySLX62eXOKKmUE4cu5407U8m0Ep+PaAvaMn3ld/vD4yG8lYokUFVq
+	 gtf1QK2i18+j0CEen+oIF4hbKddNEDvN8XEpP+TdEARw6eS38iMXeRXqL7F/oheTbK
+	 EOuhQcLlNcJig==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AB8F84A8E;
+	Tue, 14 Apr 2026 14:15:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A2B8283
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 14:15:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 402A842771
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 14:15:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FKLPnl809WP6; Tue, 14 Apr 2026 13:27:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22702405A9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776173260;
-	bh=sEEAstMbGQUZHj1s5ADFQ4w/Vh+WXUeieqNpTwgeUEI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=cssntbrf1AYcdYWMeSyoqZJ7Iv671LpxTzs20ARV1iA9WKjHjvi1YZdNYJGsVLbXf
-	 1Q/IeX/xTUwBcONkhpECt8CzZYDFK94VOBYe2Xdns8mPsIARAvzXvXKMLO32ojXDG8
-	 4/0iXPzc9/oRZSHz2ie+Qvq68OV60ZiuIqeg4/oTl4viD7RsYy/Ai2NViTrnlmfI4i
-	 cNn19Pcv2M7x5rJv3cjReoTW7vGuLXi1LSZRwBFW0l6m6wJEW9m0f2zP84//lDrc9A
-	 Q9HdrJLH9IBNuUn7D+v+WZLgimJJUJNUWORTUDUyVnbD74ek7HpuuG6MHi4pnNwC4t
-	 G3T+fWnZPzirQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22702405A9;
-	Tue, 14 Apr 2026 13:27:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3463237
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC60060D9B
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qS0G94OgxFep for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 13:27:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
- helo=sea.source.kernel.org; envelope-from=mwalle@kernel.org;
+ id xbtDT6pDdwqp for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 14:15:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=54.36.140.177;
+ helo=smtpout6.mo534.mail-out.ovh.net; envelope-from=mooz@blockos.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6199A60BAE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6199A60BAE
-Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6199A60BAE
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:37 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by sea.source.kernel.org (Postfix) with ESMTP id EEE98407B9;
- Tue, 14 Apr 2026 13:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1D7C19425;
- Tue, 14 Apr 2026 13:27:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 776684021A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 776684021A
+Received: from smtpout6.mo534.mail-out.ovh.net
+ (smtpout6.mo534.mail-out.ovh.net [54.36.140.177])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 776684021A
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 14:15:53 +0000 (UTC)
+Received: from director5.derp.mail-out.ovh.net
+ (director5.derp.mail-out.ovh.net [51.68.94.138])
+ by mo534.mail-out.ovh.net (Postfix) with ESMTPS id 4fw5sf4rGyz6MpX;
+ Tue, 14 Apr 2026 14:15:50 +0000 (UTC)
+Received: from director5.derp.mail-out.ovh.net
+ (director5.derp.mail-out.ovh.net. [127.0.0.1])
+ by director5.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Tue, 14 Apr 2026 14:15:50 +0000 (UTC)
+Received: from mta3.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.54.159])
+ by director5.derp.mail-out.ovh.net (Postfix) with ESMTPS id
+ 4fw5sf2wnTz7tnn; Tue, 14 Apr 2026 14:15:50 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.5])
+ (Authenticated sender: mooz@blockos.org)
+ by mta3.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 9C00C9415D3; 
+ Tue, 14 Apr 2026 14:15:49 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
 To: buildroot@buildroot.org
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
-	Michael Walle <mwalle@kernel.org>
-Date: Tue, 14 Apr 2026 15:27:29 +0200
-Message-ID: <20260414132732.2866884-1-mwalle@kernel.org>
-X-Mailer: git-send-email 2.47.3
+Date: Tue, 14 Apr 2026 16:14:54 +0200
+Message-ID: <20260414141542.975966-1-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1776173256;
- bh=8EQoBlWnJIeaHUKpLwIuTojz6/j3GQFWe2scRnrVPS0=;
- h=From:To:Cc:Subject:Date:From;
- b=rlP8W8s9ylZVuRCIQjh2+XQ4Ka6oHNyy7J2nsdZmjWQ13MJY7iOSzo2sEYbOrkW5x
- qji+Mr4z9/GQcHuaDCnbR2RgrBAOlDzwasOheAkwxdb940lhASJfOaCEm5FPqvVsw1
- 3uO+SnCCwSIelQ+1o0mHA3ym8NXYJiqelr+5TLBHAYmSX0UkhCLAW/pKK0uefFoX9T
- p2adGZeSLrojnNZtK4n+VKsa46OupbtI2fKGytru2NJUIINFraQDlujmYhVXfnxA1N
- SbxvKBsBjKcJtbdQlsEH9PUwF26iTUimjZ5EieGm1X/74pmGeWLCAYIc0vnHKAo9+t
- xsg4dICMublLA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=rlP8W8s9
-Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: bump u-boot and
- linux
+x-ovh-tracer-id: 5482569597051063202
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTEpAR4jkgW9wailg971qANVaew2qfIw0Im1sCvGxh8IXdaeWNvPZzAOePYvVr/S9UcewmWnCpnEAbVN5IdOFttw8D3JF09PWVchlvSuaTZYbfMk+jSPOUFulTsws2TAcw/82ox1hDRdjUBZq/bzAczK+FSE5BZwYr/HA8C6AFUYDTvNCqrkSK8UJwr66OE+7sJ9+BlIcGGWVs4oQ9mWsgM6dYf39Iz00vzu4pofGc/TdWQjUP5ciBcxm9A8kG8G5PClrbnyMDe7+FjNjXmNGn6R8KEQftZJQc2AAdrn56AriqRBMOL+vNgn8VssJcRwBxDHJ8hAsMMdghj4EoulYAOsC+nJ5QWyM7nYI05XwYK+v2XeY/QcVnSnYuOYurkt9FYVwHQ3nHf9hviqKfmMaC9fRoOc8NU3nD1b3ltRfkzVlTNSF030GJ44nCm9G/rk16xXSrIPKD3F07flWn/Q+Hzsr1XZlsEDF75Wi7ry8XB+9RShc6alQ6Gk6eF7T1IEliqKxQCa65Q6am0nF9ro5PsCi2601ovNlXoXZLnmoaQiSDjiQ86e5XxfS4BdM1oMPEDL8mSyv3+QbGwGc805vqttH7dyb7aQlQYWm8KA3PfaBdkwwjDUn2j/Lx8xyGAzqPxofVl9Kufo3oSh2NTcMNGG3uYGkXd2K6FSJRExwFwsxA
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-107S001307d88dc-9973-4e35-8b65-c1bda3b569db,
+ 57EC06D2F55947E19987155D42FF0DD2D92A6C82) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] [PATCH] package/python-transitions: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,65 +93,184 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Walle via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Walle <mwalle@kernel.org>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Vincent Cruz <mooz@blockos.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The old u-boot version doesn't build anymore because of the following
-error:
+Lightweight finite state machine implementation in Python.
 
-  ModuleNotFoundError: No module named 'pkg_resources'
+https://github.com/pytransitions/transitions
 
-Bump it to the latest version 2026.04. While at it, also bump linux to
-the latest LTS kernel (6.18). The new kernel grew in size, thus we also
-have to enlarge the rootfs image.
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/13858936681
-Signed-off-by: Michael Walle <mwalle@kernel.org>
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
 ---
- configs/kontron_smarc_sal28_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Tested with Buildroot gitlab CI:
+  https://gitlab.com/v_cz/buildroot/-/pipelines/2452239577
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index efd4bd41e6..181a92daab 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
-@@ -18,11 +18,11 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_RCW_SMARC_SAL28=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="160M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ package/python-transitions/Config.in          |  7 ++++
+ .../python-transitions.hash                   |  5 +++
+ .../python-transitions/python-transitions.mk  | 15 ++++++++
+ .../package/sample_python_transitions.py      | 34 +++++++++++++++++++
+ .../tests/package/test_python_transitions.py  | 28 +++++++++++++++
+ 7 files changed, 93 insertions(+)
+ create mode 100644 package/python-transitions/Config.in
+ create mode 100644 package/python-transitions/python-transitions.hash
+ create mode 100644 package/python-transitions/python-transitions.mk
+ create mode 100644 support/testing/tests/package/sample_python_transitions.py
+ create mode 100644 support/testing/tests/package/test_python_transitions.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ad64e876e..b20cf7d93c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3361,6 +3361,9 @@ F:	package/rtl8822cs/
+ N:	Victor Huesca <victor.huesca@bootlin.com>
+ F:	support/testing/tests/core/test_root_password.py
+ 
++N:	Vincent Cruz <mooz@blockos.org>
++F:	package/python-transitions/
++
+ N:	Vincent Jardin <vjardin@free.fr>
+ F:	board/nvidia/bf3/
+ F:	configs/nvidia_bf3_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 71501cea53..3aa13ec75d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1463,6 +1463,7 @@ menu "External python modules"
+ 	source "package/python-tqdm/Config.in"
+ 	source "package/python-trafaret/Config.in"
+ 	source "package/python-traitlets/Config.in"
++	source "package/python-transitions/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-trio/Config.in"
+ 	source "package/python-trio-websocket/Config.in"
+diff --git a/package/python-transitions/Config.in b/package/python-transitions/Config.in
+new file mode 100644
+index 0000000000..4289b446f5
+--- /dev/null
++++ b/package/python-transitions/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRANSITIONS
++	bool "python-transitions"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Lightweight finite state machine implementation in Python.
++
++	  https://github.com/pytransitions/transitions
+diff --git a/package/python-transitions/python-transitions.hash b/package/python-transitions/python-transitions.hash
+new file mode 100644
+index 0000000000..a37cc44928
+--- /dev/null
++++ b/package/python-transitions/python-transitions.hash
+@@ -0,0 +1,5 @@
++# From https://pypi.org/pypi/transitions/0.9.3/json
++sha256  881fb75bb1654ed55d86060bb067f2c716f8e155f57bb73fd444e53713aafec8  transitions-0.9.3.tar.gz
++# Locally computed
++sha256  fd7115fc5517d1d2d042a80a33d92033532236830a9c25866112299fe33c036b  transitions-0.9.3/LICENSE
++sha256  4802901f4f7cf09d7df279c021ace21ffe4513d782eaa3fce96a7375380c9cf8  transitions-0.9.3/PKG-INFO
+diff --git a/package/python-transitions/python-transitions.mk b/package/python-transitions/python-transitions.mk
+new file mode 100644
+index 0000000000..8189cebcbd
+--- /dev/null
++++ b/package/python-transitions/python-transitions.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-transitions
++#
++################################################################################
++
++PYTHON_TRANSITIONS_VERSION = 0.9.3
++PYTHON_TRANSITIONS_SOURCE = transitions-$(PYTHON_TRANSITIONS_VERSION).tar.gz
++PYTHON_TRANSITIONS_SITE = https://files.pythonhosted.org/packages/source/t/transitions
++PYTHON_TRANSITIONS_SETUP_TYPE = setuptools
++
++PYTHON_TRANSITIONS_LICENSE = MIT
++PYTHON_TRANSITIONS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_transitions.py b/support/testing/tests/package/sample_python_transitions.py
+new file mode 100644
+index 0000000000..ca33309998
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_transitions.py
+@@ -0,0 +1,34 @@
++# test from https://github.com/pytransitions/transitions/blob/master/tests/test_nesting.py
++
++from transitions.extensions import HierarchicalMachine as Machine
++
++states = ['standing', 'walking', {'name': 'caffeinated', 'children': ['dithering', 'running']}]
++transitions = [
++  ['walk', 'standing', 'walking'],
++  ['stop', 'walking', 'standing'],
++  ['drink', 'caffeinated_dithering', '='],
++  ['drink', 'caffeinated', 'caffeinated_dithering'],
++  ['drink', '*', 'caffeinated'],
++  ['walk', 'caffeinated', 'caffeinated_running'],
++  ['relax', 'caffeinated', 'standing']
++]
++
++machine = Machine(states=states, transitions=transitions, initial='standing', ignore_invalid_triggers=True)
++
++machine.walk()   # Walking now
++machine.stop()   # let's stop for a moment
++machine.drink()  # coffee time
++machine.state
++print(machine.state)
++machine.drink()  # again!
++print(machine.state)
++machine.drink()  # and again!
++print(machine.state)
++machine.walk()   # we have to go faster
++print(machine.state)
++machine.stop()   # can't stop moving!
++machine.state
++print(machine.state)
++machine.relax()  # leave nested state
++machine.state    # phew, what a ride
++print(machine.state)
+diff --git a/support/testing/tests/package/test_python_transitions.py b/support/testing/tests/package/test_python_transitions.py
+new file mode 100644
+index 0000000000..a22ceb4afd
+--- /dev/null
++++ b/support/testing/tests/package/test_python_transitions.py
+@@ -0,0 +1,28 @@
++import os
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonTransitions(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_TRANSITIONS=y
++        """
++    sample_scripts = ["tests/package/sample_python_transitions.py"]
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++
++        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
++        output, exit_code = self.emulator.run(cmd, timeout=15)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, [
++            'caffeinated',
++            'caffeinated_dithering',
++            'caffeinated_dithering',
++            'caffeinated_running',
++            'caffeinated_running',
++            'standing'
++        ])
 -- 
-2.47.3
+2.51.0
 
 _______________________________________________
 buildroot mailing list
