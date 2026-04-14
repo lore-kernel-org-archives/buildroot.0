@@ -1,83 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3FFCF9D0CF
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB94CF9D0CA
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87D8A61CD4;
-	Tue, 14 Apr 2026 13:23:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZQ_ayxePpDEt; Tue, 14 Apr 2026 13:23:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF4661CE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776173028;
-	bh=Rmg9gjzuwBUrToiR40HVeP4oLcok6n62VSElXUXI2JE=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=Pc6tvdQSN62onsAw40hqrDy/xmpYuJFR87CrNqNrPvp+bovH+Q8uwy88LDqlpvDTx
-	 McJmOW8iQDYvYI5TQyxYOmagWNkAeEh9HMRQsTaFUlpFnEbqc59+zQBJsyRdVLy+gA
-	 0oQgOMY1NjoNPp9yFymZSLrfCQkVX8Pe7VQ3snlOmESHFOx/WhCvwOg696ZfBOF26w
-	 btKKJFncuUmW4ib5eDYtHLe9Ew2e/vkPvEnXZHzjLLgdcZ6SinyFJZxiq/6wmUPUBM
-	 lt1jAZwbh50rRcPrQFW0mi8qDdMnKDtxsVVnNyrJIxcs/XTFjsAFUyrjO6z7r960it
-	 4nJBui1R14CEg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADF4661CE1;
-	Tue, 14 Apr 2026 13:23:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A5E4237
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5121842A34
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E31B42A32;
+	Tue, 14 Apr 2026 13:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T7-vGQY-41jy for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 13:23:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A888042A33
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A888042A33
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A888042A33
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:43 +0000 (UTC)
-Received: from bubutux.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 5969F2C88C79;
- Tue, 14 Apr 2026 15:23:40 +0200 (CEST)
+ id FKLPnl809WP6; Tue, 14 Apr 2026 13:27:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22702405A9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776173260;
+	bh=sEEAstMbGQUZHj1s5ADFQ4w/Vh+WXUeieqNpTwgeUEI=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=cssntbrf1AYcdYWMeSyoqZJ7Iv671LpxTzs20ARV1iA9WKjHjvi1YZdNYJGsVLbXf
+	 1Q/IeX/xTUwBcONkhpECt8CzZYDFK94VOBYe2Xdns8mPsIARAvzXvXKMLO32ojXDG8
+	 4/0iXPzc9/oRZSHz2ie+Qvq68OV60ZiuIqeg4/oTl4viD7RsYy/Ai2NViTrnlmfI4i
+	 cNn19Pcv2M7x5rJv3cjReoTW7vGuLXi1LSZRwBFW0l6m6wJEW9m0f2zP84//lDrc9A
+	 Q9HdrJLH9IBNuUn7D+v+WZLgimJJUJNUWORTUDUyVnbD74ek7HpuuG6MHi4pnNwC4t
+	 G3T+fWnZPzirQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22702405A9;
+	Tue, 14 Apr 2026 13:27:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3463237
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC60060D9B
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qS0G94OgxFep for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 13:27:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
+ helo=sea.source.kernel.org; envelope-from=mwalle@kernel.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6199A60BAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6199A60BAE
+Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6199A60BAE
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:27:37 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by sea.source.kernel.org (Postfix) with ESMTP id EEE98407B9;
+ Tue, 14 Apr 2026 13:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1D7C19425;
+ Tue, 14 Apr 2026 13:27:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: David Pierret <david.pierret@smile.fr>
-Date: Tue, 14 Apr 2026 15:20:51 +0200
-Message-ID: <20260414132055.3263118-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.53.0
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+	Michael Walle <mwalle@kernel.org>
+Date: Tue, 14 Apr 2026 15:27:29 +0200
+Message-ID: <20260414132732.2866884-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1776173020; bh=U7gqm4Tsb6POmTs0xgd1yO+lJfdBNAMjYH20oKMDRf4=;
- h=From:To:Cc:Subject:Date;
- b=H2QSAoqc5k3obCWZCDYiULMvj5jttUlPA4dMY62tpdUXWSzhcpYI7tmRemzaP1iYr
- 20gMUpaR2CqCbTjldDUWGv9hZkTfjbUoosylI0brtIqt/zfEJBx0v3o8CEXYo7J4Zb
- Eo2Zu66/zKZ0yeN03du21VDmerwttqzXhV7Z8n06b+R91/nclqL7jXxV9U6DWb8erY
- DDyhbapKrz+42RC1Dm/K0qxLz5oZyj//j713R8Xbf0O70JsU8qyZcjbsbLHxk0he89
- a9edZQQj/nmMtF1POtQdGFUk0+dl6+q+sF1OThLM+OKP96b1odpbN2kXcr++lcgf98
- VhE1PfwEUndtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=kernel.org; s=k20201202; t=1776173256;
+ bh=8EQoBlWnJIeaHUKpLwIuTojz6/j3GQFWe2scRnrVPS0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=rlP8W8s9ylZVuRCIQjh2+XQ4Ka6oHNyy7J2nsdZmjWQ13MJY7iOSzo2sEYbOrkW5x
+ qji+Mr4z9/GQcHuaDCnbR2RgrBAOlDzwasOheAkwxdb940lhASJfOaCEm5FPqvVsw1
+ 3uO+SnCCwSIelQ+1o0mHA3ym8NXYJiqelr+5TLBHAYmSX0UkhCLAW/pKK0uefFoX9T
+ p2adGZeSLrojnNZtK4n+VKsa46OupbtI2fKGytru2NJUIINFraQDlujmYhVXfnxA1N
+ SbxvKBsBjKcJtbdQlsEH9PUwF26iTUimjZ5EieGm1X/74pmGeWLCAYIc0vnHKAo9+t
+ xsg4dICMublLA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=kernel.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=H2QSAoqc
-Subject: [Buildroot] [PATCH 1/2] package/bat: remove no longer needed patch
- for gcc15 compat
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=rlP8W8s9
+Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: bump u-boot and
+ linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,77 +90,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Michael Walle via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Walle <mwalle@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The bat 0.26.0 already depends on a newer version of the onig_sys crate,
-so the problem that patch is fixing was no already no longer present.
+The old u-boot version doesn't build anymore because of the following
+error:
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+  ModuleNotFoundError: No module named 'pkg_resources'
+
+Bump it to the latest version 2026.04. While at it, also bump linux to
+the latest LTS kernel (6.18). The new kernel grew in size, thus we also
+have to enlarge the rootfs image.
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/13858936681
+Signed-off-by: Michael Walle <mwalle@kernel.org>
 ---
- ...ig-by-regex-fancy-in-minimal-applica.patch | 47 -------------------
- 1 file changed, 47 deletions(-)
- delete mode 100644 package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
+ configs/kontron_smarc_sal28_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-deleted file mode 100644
-index de6a3fc70c..0000000000
---- a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
--From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
--Date: Tue, 2 Sep 2025 14:02:11 +0200
--Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
--
--The default "application" feature enables "minimal-application", which
--in turn pulls in the "regex-onig" feature of syntect. This brings in the
--onig crate (version 6.4.0) and its dependency onig_sys, which fail to
--build with GCC 15 due to C23 keyword conflicts.
--
--It is not possible to simply update the onig crate from bat itself,
--since its version is pinned indirectly by syntect. To avoid this
--dependency and fix the build, replace "regex-onig" with "regex-fancy" in
--"minimal-application". This makes bat use the pure-Rust fancy-regex
--engine instead of Oniguruma, removing the need for onig_sys and allowing
--the package to build with GCC 15.
--
--There is an an ongoing discussion about removing Oniguruma from bat
--since Oniguruma has been declared archived:
--
--see https://github.com/sharkdp/bat/issues/3285
--
--The Upstream project for now is refusing to use fancy-regex as default.
--
--Upstream: not submitted
--
--Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-----
-- Cargo.toml | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Cargo.toml b/Cargo.toml
--index 80d19321..93a07a1d 100644
----- a/Cargo.toml
--+++ b/Cargo.toml
--@@ -29,7 +29,7 @@ minimal-application = [
--     "clap",
--     "etcetera",
--     "paging",
---    "regex-onig",
--+    "regex-fancy",
--     "wild",
-- ]
-- git = ["git2"] # Support indicating git modifications
---- 
--2.43.0
--
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index efd4bd41e6..181a92daab 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
+@@ -18,11 +18,11 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_RCW_SMARC_SAL28=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_ROOTFS_EXT2_SIZE="160M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
