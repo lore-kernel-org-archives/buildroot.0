@@ -4,90 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7425FF9D0CE
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C4B7F9D0CA
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 13:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BEC442A18;
-	Tue, 14 Apr 2026 13:11:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2E6242A3D;
+	Tue, 14 Apr 2026 13:23:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5kJAZ1Ii-rN; Tue, 14 Apr 2026 13:11:15 +0000 (UTC)
+ id h95Q0uAh7K81; Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE7F42A1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9BC42A33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776172275;
-	bh=OVEid9F45CbQExO3pvWgBLuHcugERxv0LhDiGKOUkfU=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1776173027;
+	bh=I3VJ9py5xj7gTatzYxJUCt4ilcTLlB12+Pl3WR0IJ50=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=RQ0i5mc+J1wZ0xKfyTjfZv8eKD4gD+cqmRWfiYZ2nHqjLCYLpfIkTLNH+w/SF5sur
-	 zV3K00vK3wcDVjzRHBGrtP0FjhyzlnOnHfKW5Al20QW6NuVqz0odKa3Wub8lQvUrIK
-	 /wiFQQr3EeHtXET7iJ1F8C2cm1uNt0EFGhXeUDpYUYFlopwMieHtiVYuD9YiGvH3f3
-	 bPXT2Ce8AwgUMXf7tsSOTSorUXc3FZNVNYsJW8m1R4pPAe0ydkWtjsGr2CxMWa1fpD
-	 t4PIxA6CO5LQRczaLuwq/QphK4VK7Uiz1/L8mRxrCXdSNf9X9iW8pbMqE0qwk4Zu44
-	 01mq6FBf3gqkA==
+	 From:Reply-To:From;
+	b=poUNL3HAw1PKBHDmCg4huaLhVDIiYIfPIRc+2W/9kF/dLVk1f1S9IcJqHE0ETHhkA
+	 PBjWQxchZI/AUe2Vb/IdoCj/UJGdHLqPh/DHn7GXTpQjasBjcEaPAHDzytbdShGK+p
+	 4tqHoDQgDj8SYtT3zxiwie7rcOjO9izVLQipxTPl+tsnMO2TKzFQW3OoLL0HvVbBwI
+	 BxboZJHu7WLVuFuVX+OUaL3s1E+OUdv6hdvqepYllw5oRCoLJ/DBP8L60o/hX4rNYk
+	 YsZiLfjt5uPu0jlq6Pw6Y1lK+TM8SJ9s24aTfNeMGOOp1WgUdrNRHnD+5gZf/opRzB
+	 +70QrfXzKjElQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BE7F42A1A;
-	Tue, 14 Apr 2026 13:11:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DA8A237
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:11:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9BC42A33;
+	Tue, 14 Apr 2026 13:23:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C7BF283
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B38C42A18
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:11:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E666403CC
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9IYEn54-o3Cn for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 13:11:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=51.210.94.139;
- helo=smtpout2.mo533.mail-out.ovh.net; envelope-from=mooz@blockos.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 86B6241072
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86B6241072
-Received: from smtpout2.mo533.mail-out.ovh.net
- (smtpout2.mo533.mail-out.ovh.net [51.210.94.139])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 86B6241072
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:11:10 +0000 (UTC)
-Received: from director1.derp.mail-out.ovh.net
- (director1.derp.mail-out.ovh.net [51.68.80.175])
- by mo533.mail-out.ovh.net (Postfix) with ESMTPS id 4fw4Jy4N7Xz64bs;
- Tue, 14 Apr 2026 13:05:54 +0000 (UTC)
-Received: from director1.derp.mail-out.ovh.net
- (director1.derp.mail-out.ovh.net. [127.0.0.1])
- by director1.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
- for <thomas.petazzoni@bootlin.com>; Tue, 14 Apr 2026 13:05:54 +0000 (UTC)
-Received: from mta10.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.110.96.93])
- by director1.derp.mail-out.ovh.net (Postfix) with ESMTPS id
- 4fw4Jy26wfz5vgj; Tue, 14 Apr 2026 13:05:54 +0000 (UTC)
-Received: from mailstore13.priv.ovhmail-u1.ea.mail.ovh.net (unknown
- [10.1.8.13])
- by mta10.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTP id 8DECD7815D2; 
- Tue, 14 Apr 2026 13:05:53 +0000 (UTC)
-Date: Tue, 14 Apr 2026 13:05:53 +0000 (UTC)
-From: Vincent Cruz <mooz@blockos.org>
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot <buildroot@buildroot.org>, 
- James Hilliard <james.hilliard1@gmail.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <1628957097.30634098.1776171953434.JavaMail.zimbra@blockos.org>
-In-Reply-To: <ad439G29nhY3vWGf@L13942.iliad.fr>
-References: <20260414095841.445592-1-mooz@blockos.org>
- <ad439G29nhY3vWGf@L13942.iliad.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D_mAkT9EgTTC for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 13:23:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1F9F40266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1F9F40266
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1F9F40266
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 13:23:44 +0000 (UTC)
+Received: from bubutux.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 5D2F72C88C8A;
+ Tue, 14 Apr 2026 15:23:42 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: David Pierret <david.pierret@smile.fr>
+Date: Tue, 14 Apr 2026 15:20:52 +0200
+Message-ID: <20260414132055.3263118-2-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260414132055.3263118-1-buildroot@bubu1.eu>
+References: <20260414132055.3263118-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
-X-Originating-IP: [213.36.7.12]
-X-Authenticated-User: mooz@blockos.org
-Thread-Topic: package/python-ncclient: new package
-Thread-Index: J7BUgbLYmV6hPzOcAF45SulyBEcSeA==
-x-ovh-tracer-id: 4301500595798264706
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: dmFkZTFECCxhbDCF2lDuijY3YMju0dmoFFPyluuE/2Z1qHB5c8WwXVK9mGa8kTfMXpeQUrEYGzSxx4wYx4xI68/Y3joCCzTVsf0EINdEzBVppTCrMfsg7SPQWpV4qKd6EAw+j8CuvdSTOVpjgkffatvdK+FF9bd8QpM0FSDosr3creA7zIuvFx3GRbe044QFMfEf44VMpGfhVSNVKsUUNc+pN1WDGmilATdfx05HwHVR68ZyTysVx7FZ91mT9JhePzyt3G4CqbxvHPJCa6EgY6r4Hd/wlXOBpETsSVuaIC477MvNq3TJ2SA0bnReS/WsP8sxtW2B9hNEJmDhH8FDEcU4yrV1dDhSQ8vEzsLo6h+r7PKqlBOS0cgFud2h6MWdpX/LKuPNnwjzYZLJSB14NoLYRgImP/CooySjhEak0IhYN2tC+mT+zK/52YUa7XfYt8RI6dZLj6ZJ1XSowght+fXCvAksI1Y26GTlP29yHCpbTBuC3SGH/mzEPS4u0tRXky3f5DYss+cZHehlaed0Ft22rN0h3V4rlo6/s8EiCjl9G7/aDdicD8V8HFDiGkI/U/MYOXi8/w18t6iHF2rFsD83CYGyIPLIhPT8u1ZjasYq0F+NWz3+S5uJ7yB5nmnMC061jkYydHThgP1SPDa+QJ2vdTISuyNZeBeJS1olXcVJLkPgzQ
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=blockos.org
-Subject: Re: [Buildroot] [PATCH v2] package/python-ncclient: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1776173022; bh=NZW3OjHsBghLCbckt/4FnVC/wOMvCwEE7p3oWd6Y/hs=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=Wzmnt4qcoemXhTEnoGyQ1MXdJhbjz5eKEEHFRT2j2sj8su84A3dSJXEPiqjb6xzya
+ oIlerCn+JqE/l0+jaYBQ1rUJoECKf+cKr4e6M0eFXXVvr0FEpQHlPVliPA1LcQi5dM
+ Dv/ewkxYeFoHZrMZiRZvGfUJdKAKdOdhyOUArpCFh0Leib6p6fMzqdpV8nPBXbewMN
+ 2AEvbNcDwYrciaXFVI8E9p27xuWuOMJ7XV1V/9N/i8Cqxs7GLM/1zmMcoEYSIJMoi/
+ csq+oghpU4MoFZXZTShNWc73bdT6I7pvClgV7VvOM1lc/Yq6aQUshNi7ejlxYrEr7g
+ zcxIx5H/fk1QA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=Wzmnt4qc
+Subject: [Buildroot] [PATCH 2/2] package/bat: bump to 0.26.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,25 +91,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
+Release notes: https://github.com/sharkdp/bat/releases/tag/v0.26.1
 
-> 
-> Can you share the buildroot build ci with those running properly ?
-> 
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/bat/bat.hash | 2 +-
+ package/bat/bat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sure. Here they are:
-- package build:
-  https://gitlab.com/v_cz/buildroot/-/pipelines/2451547769
-- runtime test:
-  https://gitlab.com/v_cz/buildroot/-/pipelines/2451972712
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+index 78bd1de394..16dfd2c5ab 100644
+--- a/package/bat/bat.hash
++++ b/package/bat/bat.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  e23db7a34f860d425cf0bb6f13505606024ab81035327262963d8395b4a6f3b5  bat-0.26.0-cargo5.tar.gz
++sha256  688fe9a308dc6024f8d9516b33f6f8e293087023c0a75628ad36c8e04e36a824  bat-0.26.1-cargo5.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+ sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+index 8084e6c2c3..d72c9395d7 100644
+--- a/package/bat/bat.mk
++++ b/package/bat/bat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BAT_VERSION = 0.26.0
++BAT_VERSION = 0.26.1
+ BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+ BAT_LICENSE = Apache-2.0 or MIT
+ BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-- 
+2.53.0
 
-Regards,
-Vincent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
