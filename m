@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1048DF9D0EB
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 17:49:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 897F5F9D0EE
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 17:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D084842CAF;
-	Tue, 14 Apr 2026 17:49:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F2BE84A59;
+	Tue, 14 Apr 2026 17:49:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F8BT-NRdfLIP; Tue, 14 Apr 2026 17:49:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5JSJq8RGHxck; Tue, 14 Apr 2026 17:49:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A1C242CA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B68984DCB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776188954;
-	bh=zqU1DDJ/ENQA9QlJSOLC6Ccx43k0OmGipS+lstmF/Sw=;
+	s=default; t=1776188955;
+	bh=nhUEXsBvJ1lNl5MqeVVOf/dHCFp85OG7fnKHrHm5G4g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hp5mX7rjugN5Sylggm8Kh7WVor6tXPYD4rJ8b3mUsDwYMOKLfAEPg5s1tO3QLzhIq
-	 EBOARK8lU1XX9Q/CfkkxlFGvgPI6zD/YnOnw3P5ADr2yVdbyGnmRSdt8fvR8nNEQiI
-	 33SSNH7jnSAuWLK+zuXSzUQRh/gJePlyfTOGCiZLqT64Bb3K2g9mgwWaOQDw6Cs/D8
-	 PKyyoWlVtivLrwg9WFM5fDlb2a4Dr0NV4p6Rldb/v3LHdVcflWlABxxdViQUisOqti
-	 9ytkjlMY9TTz+4IutFGzavhEpe36CYisBbcvq+Xz2DAglBswzdKgJoPAxAneygwLtF
-	 Qdtx5w6F9wghg==
+	b=EW9VJhs3IDb1OgFD6AnB//KvzzMFFe2nYbZhxg5JcoKHKLGTMzAYjvtFDz+aFg/jg
+	 TuAV7MbhdDI6EGhoA8QmtXXMTEjiEOjRU9p0a6MbEBl7mQZbRdCotSSrLKJoEr5vHd
+	 V2IJGxctz+UCQTB7bzuy+vzl4taI71jligOD9ClFu5CvT3KGmb52CiC9DJbZSJ6KFz
+	 iiHU/NWhuovO6WtCCZzxUr7DYCdZEfSXr2dr9+jpv/8u6l+nHDAeTIY/hITFX4OrAs
+	 9/oEe3jy2Vc3IqJP3nHA1mXz+OVhVUBqAk4D0K+omEP5EcQsJuexMNwLdnSe/W+46L
+	 4SstB3lc5RN2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A1C242CA8;
-	Tue, 14 Apr 2026 17:49:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D5AA0283
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B68984DCB;
+	Tue, 14 Apr 2026 17:49:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41E00283
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9AC0F40392
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 238296ECE9
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SEoDsQ10qZdU for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bXaFwuiHbDnK for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 17:48:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DE2A403D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 930D861C9E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DE2A403D6
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 930D861C9E
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 17:48:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7BA77FB24; Tue, 14 Apr 2026 17:48:49 +0000 (UTC)
+ id 346087FB2E; Tue, 14 Apr 2026 17:48:52 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Apr 2026 19:12:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 81177e9bd0997e87559d2e241c95a5b294da917d
-X-Git-Newrev: 492155af6ac957982683c6e95a1701b1aa6b859d
+X-Git-Oldrev: a4aaad59da2dd744803636ea2447aba348f540c1
+X-Git-Newrev: 3a71efc10e052eff225907cc65c00fe9f46ccbc4
 X-Patchwork-Hint: ignore
-Message-Id: <20260414174849.A7BA77FB24@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/c-icap: switch to pcre2
+Message-Id: <20260414174852.346087FB2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zsh: switch to pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,737 +71,796 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8612985883082553174=="
+Content-Type: multipart/mixed; boundary="===============3528888305017609080=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8612985883082553174==
+--===============3528888305017609080==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/492155af6ac957982683c6e95a1701b1aa6b859d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a71efc10e052eff225907cc65c00fe9f46ccbc4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Added two patches backported from the upstream branch c_icap_0_6_x which
-were backported by Debian to the 0.5.x branch.
+https://bbs.archlinux.org/viewtopic.php?pid=2129384#p2129384
 
-Build-tested using this defconfig:
+Patches 0003 and 0004 add upstream commits to support pcre2.
 
-BR2_PACKAGE_PCRE2=y
-BR2_PACKAGE_C_ICAP=y
-BR2_PACKAGE_C_ICAP_MODULES=y
+Patch 0002 is a prerequisite for patch 0003 to apply cleanly to
+Src/Modules/pcre.c.
 
-                             arm-aarch64 [ 1/32]: OK
-                   bootlin-aarch64-glibc [ 2/32]: OK
-               bootlin-aarch64-glibc-old [ 3/32]: FAILED
-               bootlin-arcle-hs38-uclibc [ 4/32]: OK
-                    bootlin-armv5-uclibc [ 5/32]: OK
-                     bootlin-armv7-glibc [ 6/32]: OK
-                   bootlin-armv7m-uclibc [ 7/32]: SKIPPED
-                      bootlin-armv7-musl [ 8/32]: OK
-                bootlin-m68k-5208-uclibc [ 9/32]: SKIPPED
-               bootlin-m68k-68040-uclibc [10/32]: OK
-             bootlin-microblazeel-uclibc [11/32]: OK
-                  bootlin-mips64el-glibc [12/32]: OK
-                bootlin-mipsel32r6-glibc [13/32]: OK
-                   bootlin-mipsel-uclibc [14/32]: OK
-                 bootlin-openrisc-uclibc [15/32]: OK
-        bootlin-powerpc64le-power8-glibc [16/32]: OK
-           bootlin-powerpc-e500mc-uclibc [17/32]: OK
-                   bootlin-riscv32-glibc [18/32]: OK
-                   bootlin-riscv64-glibc [19/32]: OK
-                    bootlin-riscv64-musl [20/32]: OK
-                 bootlin-s390x-z13-glibc [21/32]: OK
-                      bootlin-sh4-uclibc [22/32]: OK
-                   bootlin-sparc64-glibc [23/32]: OK
-                    bootlin-sparc-uclibc [24/32]: OK
-                    bootlin-x86-64-glibc [25/32]: OK
-                     bootlin-x86-64-musl [26/32]: OK
-                   bootlin-x86-64-uclibc [27/32]: OK
-                   bootlin-x86-i686-musl [28/32]: OK
-                   bootlin-xtensa-uclibc [29/32]: OK
-                            br-arm-basic [30/32]: FAILED
-                    br-arm-full-nothread [31/32]: SKIPPED
-                      br-arm-full-static [32/32]: SKIPPED
-
-32 builds, 4 skipped, 2 build failed, 0 legal-info failed, 0 show-info failed
-
-The two build errors are unrelated to this patch, they are caused by
-patch 0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-which breaks the build with gcc <= 9.x:
-
-http_auth.c: In function ‘basic_close’:
-http_auth.c:412:25: error: parameter name omitted
- void basic_close(struct ci_server_conf *)
+Renamed ac_cv_prog_ variable due to changes in patch 0004.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/c-icap/0006-Backport-pcre2-support.patch   | 569 +++++++++++++++++++++
- ...-missing-_CI_ASSERT-macro-for-pcre2-patch.patch |  50 ++
- package/c-icap/c-icap.mk                           |   9 +-
- 3 files changed, 624 insertions(+), 4 deletions(-)
+ ...Enable-to-switch-between-C-UTF-8-locales-.patch |  68 +++
+ .../0003-51723-migrate-pcre-module-to-pcre2.patch  | 539 +++++++++++++++++++++
+ ...t-build-pcre-module-if-pcre2-config-is-no.patch | 108 +++++
+ package/zsh/zsh.mk                                 |   8 +-
+ 4 files changed, 720 insertions(+), 3 deletions(-)
 
-diff --git a/package/c-icap/0006-Backport-pcre2-support.patch b/package/c-icap/0006-Backport-pcre2-support.patch
+diff --git a/package/zsh/0002-50658-test-Enable-to-switch-between-C-UTF-8-locales-.patch b/package/zsh/0002-50658-test-Enable-to-switch-between-C-UTF-8-locales-.patch
 new file mode 100644
-index 0000000000..76d42f7527
+index 0000000000..937fd2ee9a
 --- /dev/null
-+++ b/package/c-icap/0006-Backport-pcre2-support.patch
-@@ -0,0 +1,569 @@
-+From: Boyuan Yang <byang@debian.org>
-+Date: Sat, 29 Jul 2023 19:13:16 -0400
-+Subject: Backport pcre2 support
++++ b/package/zsh/0002-50658-test-Enable-to-switch-between-C-UTF-8-locales-.patch
+@@ -0,0 +1,68 @@
++From 6e0862221f2fadef0ec4153c7f0ca41a016144b8 Mon Sep 17 00:00:00 2001
++From: Jun-ichi Takimoto <takimoto-j@kba.biglobe.ne.jp>
++Date: Mon, 26 Sep 2022 10:52:50 +0900
++Subject: [PATCH] 50658 + test: Enable to switch between C/UTF-8 locales in
++ PCRE
 +
-+Bug-Debian: https://bugs.debian.org/1000077
-+Upstream: https://github.com/c-icap/c-icap-server/commit/888a98ff382d782729f000876b4e81f08d9046d3
++Upstream: https://github.com/zsh-users/zsh/commit/1b421e4978440234fb73117c8505dad1ccc68d46
 +
-+Downloaded from
-+https://sources.debian.org/src/c-icap/1%3A0.5.10-7/debian/patches/0005-Backport-pcre2-support.patch
-+
-+[Bernd: rebased for 0.5.14]
++[Bernd: backported to 5.9]
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ Makefile.am        |  16 +++-
-+ aserver.c          |   2 +
-+ configure.ac       |  51 ++++++++++++-
-+ include/ci_regex.h |  43 ++++++++++-
-+ regex.c            | 210 ++++++++++++++++++++++++++++++++++++++++++++++++-----
-+ types_ops.c        |   4 +-
-+ 6 files changed, 296 insertions(+), 30 deletions(-)
++ Src/Modules/pcre.c | 10 ++--------
++ Test/V07pcre.ztst  | 11 +++++++++++
++ 2 files changed, 13 insertions(+), 8 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index acfa0d0..ebdf51c 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -22,11 +22,23 @@ bin_PROGRAMS = c-icap
++diff --git a/Src/Modules/pcre.c b/Src/Modules/pcre.c
++index 6289e003e..46875a59b 100644
++--- a/Src/Modules/pcre.c
+++++ b/Src/Modules/pcre.c
++@@ -47,8 +47,6 @@ zpcre_utf8_enabled(void)
++ #if defined(MULTIBYTE_SUPPORT) && defined(HAVE_NL_LANGINFO) && defined(CODESET)
++     static int have_utf8_pcre = -1;
 + 
-+ bin_SCRIPTS = c-icap-config c-icap-libicapapi-config
++-    /* value can toggle based on MULTIBYTE, so don't
++-     * be too eager with caching */
++     if (have_utf8_pcre < -1)
++ 	return 0;
 + 
-++UTIL_FLAGS=
-++UTIL_LDADD=
-+ UTIL_LIB_SOURCES=net_io.c util.c os/unix/net_io.c os/unix/proc_mutex.c os/unix/shared_mem.c os/unix/threads.c os/unix/utilfunc.c os/unix/dlib.c
-+ if USE_OPENSSL
-+ UTIL_LIB_SOURCES += openssl/net_io_ssl.c
-+ endif
-++
-+ if USE_REGEX
-++if USE_PCRE2
-++UTIL_FLAGS += @PCRE2_ADD_FLAG@
-++UTIL_LDADD += @PCRE2_ADD_LDADD@
-++endif
-++if USE_PCRE
-++UTIL_FLAGS += @PCRE_ADD_FLAG@
-++UTIL_LDADD += @PCRE_ADD_LDADD@
-++endif
-++
-+ UTIL_LIB_SOURCES += regex.c
-+ endif
-+ UTIL_SOURCES=os/unix/proc_utils.c
-+@@ -50,9 +62,9 @@ c_icap_SOURCES = aserver.c request.c cfg_param.c \
++@@ -56,15 +54,11 @@ zpcre_utf8_enabled(void)
++ 	return 0;
 + 
-+ 
-+ # libicapapi ......
-+-libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/ -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@ @BROTLI_ADD_FLAG@ @ZSTD_ADD_FLAG@ @PCRE_ADD_FLAG@ -DCI_BUILD_LIB
-++libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/ -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@ @BROTLI_ADD_FLAG@ @ZSTD_ADD_FLAG@ $(UTIL_FLAG) -DCI_BUILD_LIB
-+ 
-+-libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@ @BROTLI_ADD_LDADD@ @ZSTD_ADD_LDADD@ @PCRE_ADD_LDADD@ @DL_ADD_FLAG@ @THREADS_LDADD@ @OPENSSL_ADD_LDADD@
-++libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@ @BROTLI_ADD_LDADD@ @ZSTD_ADD_LDADD@ $(UTIL_LDADD) @DL_ADD_FLAG@ @THREADS_LDADD@ @OPENSSL_ADD_LDADD@
-+ libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@ @LIBS_LDFLAGS@ @THREADS_LDFLAGS@
-+ 
-+ export EXT_PROGRAMS_MKLIB = @ZLIB_LNDIR_LDADD@ @BZLIB_LNDIR_LDADD@ @BROTLI_LNDIR_LDADD@ @ZSTD_LNDIR_LDADD@ @PCRE_LNDIR_LDADD@ @OPENSSL_LNDIR_LDADD@
-+diff --git a/aserver.c b/aserver.c
-+index 9eaa609..990be9d 100644
-+--- a/aserver.c
-++++ b/aserver.c
-+@@ -29,6 +29,7 @@
-+ #endif
-+ #include "txtTemplate.h"
-+ #include "commands.h"
-++#include "ci_regex.h"
-+ 
-+ /*
-+ extern char *PIDFILE;
-+@@ -142,6 +143,7 @@ int main(int argc, char **argv)
++     if ((have_utf8_pcre == -1) &&
++-        (!strcmp(nl_langinfo(CODESET), "UTF-8"))) {
++-
++-	if (pcre_config(PCRE_CONFIG_UTF8, &have_utf8_pcre))
+++	(pcre_config(PCRE_CONFIG_UTF8, &have_utf8_pcre))) {
++ 	    have_utf8_pcre = -2; /* erk, failed to ask */
 +     }
-+     ci_txt_template_init();
-+     ci_txt_template_set_dir(DATADIR"templates");
-++    ci_regex_memory_init();
-+     commands_init();
 + 
-+     if (!(CI_CONF.MAGIC_DB = ci_magic_db_load(CI_CONF.magics_file))) {
++-    if (have_utf8_pcre < 0)
++-	return 0;
++-    return have_utf8_pcre;
+++    return (have_utf8_pcre == 1) && (!strcmp(nl_langinfo(CODESET), "UTF-8"));
++ 
++ #else
++     return 0;
++diff --git a/Test/V07pcre.ztst b/Test/V07pcre.ztst
++index c9c844d2a..ca35d43f0 100644
++--- a/Test/V07pcre.ztst
+++++ b/Test/V07pcre.ztst
++@@ -174,3 +174,14 @@
++     echo $match[2] )
++ 0:regression for segmentation fault, workers/38307
++ >test
+++
+++  LANG_SAVE=$LANG
+++  [[ é =~ '^.\z' ]]; echo $?
+++  LANG=C
+++  [[ é =~ '^..\z' ]]; echo $?
+++  LANG=$LANG_SAVE
+++  [[ é =~ '^.\z' ]]; echo $?
+++0:swich between C/UTF-8 locales
+++>0
+++>0
+++>0
++-- 
++2.47.3
++
+diff --git a/package/zsh/0003-51723-migrate-pcre-module-to-pcre2.patch b/package/zsh/0003-51723-migrate-pcre-module-to-pcre2.patch
+new file mode 100644
+index 0000000000..a6444292fa
+--- /dev/null
++++ b/package/zsh/0003-51723-migrate-pcre-module-to-pcre2.patch
+@@ -0,0 +1,539 @@
++From 87cfc6e480742ac9721699530085cc07f07045b1 Mon Sep 17 00:00:00 2001
++From: Oliver Kiddle <opk@zsh.org>
++Date: Sat, 13 May 2023 00:53:32 +0200
++Subject: [PATCH] 51723: migrate pcre module to pcre2
++
++Upstream: https://github.com/zsh-users/zsh/commit/b62e911341c8ec7446378b477c47da4256053dc0
++
++[Bernd: backported to 5.9]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Src/Modules/pcre.c | 223 ++++++++++++++++++---------------------------
++ Test/V07pcre.ztst  |  13 ++-
++ configure.ac       |  20 ++--
++ 3 files changed, 107 insertions(+), 149 deletions(-)
++
++diff --git a/Src/Modules/pcre.c b/Src/Modules/pcre.c
++index 46875a59b..079ecc2c5 100644
++--- a/Src/Modules/pcre.c
+++++ b/Src/Modules/pcre.c
++@@ -34,11 +34,11 @@
++ #define CPCRE_PLAIN 0
++ 
++ /**/
++-#if defined(HAVE_PCRE_COMPILE) && defined(HAVE_PCRE_EXEC)
++-#include <pcre.h>
+++#if defined(HAVE_PCRE2_COMPILE_8) && defined(HAVE_PCRE2_H)
+++#define PCRE2_CODE_UNIT_WIDTH 8
+++#include <pcre2.h>
++ 
++-static pcre *pcre_pattern;
++-static pcre_extra *pcre_hints;
+++static pcre2_code *pcre_pattern;
++ 
++ /**/
++ static int
++@@ -54,8 +54,8 @@ zpcre_utf8_enabled(void)
++ 	return 0;
++ 
++     if ((have_utf8_pcre == -1) &&
++-	(pcre_config(PCRE_CONFIG_UTF8, &have_utf8_pcre))) {
++-	    have_utf8_pcre = -2; /* erk, failed to ask */
+++       (pcre2_config(PCRE2_CONFIG_UNICODE, &have_utf8_pcre))) {
+++           have_utf8_pcre = -2; /* erk, failed to ask */
++     }
++ 
++     return (have_utf8_pcre == 1) && (!strcmp(nl_langinfo(CODESET), "UTF-8"));
++@@ -69,115 +69,87 @@ zpcre_utf8_enabled(void)
++ static int
++ bin_pcre_compile(char *nam, char **args, Options ops, UNUSED(int func))
++ {
++-    int pcre_opts = 0, pcre_errptr, target_len;
++-    const char *pcre_error;
+++    uint32_t pcre_opts = 0;
+++    int target_len;
+++    int pcre_error;
+++    PCRE2_SIZE pcre_offset;
++     char *target;
++     
++-    if(OPT_ISSET(ops,'a')) pcre_opts |= PCRE_ANCHORED;
++-    if(OPT_ISSET(ops,'i')) pcre_opts |= PCRE_CASELESS;
++-    if(OPT_ISSET(ops,'m')) pcre_opts |= PCRE_MULTILINE;
++-    if(OPT_ISSET(ops,'x')) pcre_opts |= PCRE_EXTENDED;
++-    if(OPT_ISSET(ops,'s')) pcre_opts |= PCRE_DOTALL;
+++    if (OPT_ISSET(ops, 'a')) pcre_opts |= PCRE2_ANCHORED;
+++    if (OPT_ISSET(ops, 'i')) pcre_opts |= PCRE2_CASELESS;
+++    if (OPT_ISSET(ops, 'm')) pcre_opts |= PCRE2_MULTILINE;
+++    if (OPT_ISSET(ops, 'x')) pcre_opts |= PCRE2_EXTENDED;
+++    if (OPT_ISSET(ops, 's')) pcre_opts |= PCRE2_DOTALL;
++     
++     if (zpcre_utf8_enabled())
++-	pcre_opts |= PCRE_UTF8;
++-
++-#ifdef HAVE_PCRE_STUDY
++-    if (pcre_hints)
++-#ifdef PCRE_CONFIG_JIT
++-	pcre_free_study(pcre_hints);
++-#else
++-	pcre_free(pcre_hints);
++-#endif
++-    pcre_hints = NULL;
++-#endif
+++	pcre_opts |= PCRE2_UTF;
++ 
++     if (pcre_pattern)
++-	pcre_free(pcre_pattern);
+++	pcre2_code_free(pcre_pattern);
++     pcre_pattern = NULL;
++ 
++     target = ztrdup(*args);
++     unmetafy(target, &target_len);
++ 
++-    if ((int)strlen(target) != target_len) {
++-	zwarnnam(nam, "embedded NULs in PCRE pattern terminate pattern");
++-    }
++-
++-    pcre_pattern = pcre_compile(target, pcre_opts, &pcre_error, &pcre_errptr, NULL);
+++    pcre_pattern = pcre2_compile((PCRE2_SPTR) target, (PCRE2_SIZE) target_len,
+++	    pcre_opts, &pcre_error, &pcre_offset, NULL);
++ 
++     free(target);
++ 
++     if (pcre_pattern == NULL)
++     {
++-	zwarnnam(nam, "error in regex: %s", pcre_error);
+++	PCRE2_UCHAR buffer[256];
+++	pcre2_get_error_message(pcre_error, buffer, sizeof(buffer));
+++	zwarnnam(nam, "error in regex: %s", buffer);
++ 	return 1;
++     }
++     
++     return 0;
++ }
++ 
++-/**/
++-#ifdef HAVE_PCRE_STUDY
++-
++ /**/
++ static int
++ bin_pcre_study(char *nam, UNUSED(char **args), UNUSED(Options ops), UNUSED(int func))
++ {
++-    const char *pcre_error;
++-
++     if (pcre_pattern == NULL)
++     {
++ 	zwarnnam(nam, "no pattern has been compiled for study");
++ 	return 1;
++     }
++-    
++-    if (pcre_hints)
++-#ifdef PCRE_CONFIG_JIT
++-	pcre_free_study(pcre_hints);
++-#else
++-	pcre_free(pcre_hints);
++-#endif
++-    pcre_hints = NULL;
++ 
++-    pcre_hints = pcre_study(pcre_pattern, 0, &pcre_error);
++-    if (pcre_error != NULL)
++-    {
++-	zwarnnam(nam, "error while studying regex: %s", pcre_error);
++-	return 1;
+++    int jit = 0;
+++    if (!pcre2_config(PCRE2_CONFIG_JIT, &jit) && jit) {
+++	if (pcre2_jit_compile(pcre_pattern, PCRE2_JIT_COMPLETE) < 0) {
+++	    zwarnnam(nam, "error while studying regex");
+++	    return 1;
+++	}
++     }
++     
++     return 0;
++ }
++ 
++-/**/
++-#else /* !HAVE_PCRE_STUDY */
++-
++-# define bin_pcre_study bin_notavail
++-
++-/**/
++-#endif /* !HAVE_PCRE_STUDY */
++-
++-/**/
++ static int
++-zpcre_get_substrings(char *arg, int *ovec, int captured_count, char *matchvar,
++-		     char *substravar, int want_offset_pair, int matchedinarr,
++-		     int want_begin_end)
+++zpcre_get_substrings(char *arg, pcre2_match_data *mdata, int captured_count,
+++	char *matchvar, char *substravar, int want_offset_pair,
+++	int matchedinarr, int want_begin_end)
++ {
++-    char **captures, *match_all, **matches;
+++    PCRE2_SIZE *ovec;
+++    char *match_all, **matches;
++     char offset_all[50];
++     int capture_start = 1;
++ 
++     if (matchedinarr) {
++-	/* bash-style captures[0] entire-matched string in the array */
+++	/* bash-style ovec[0] entire-matched string in the array */
++ 	capture_start = 0;
++     }
++ 
++-    /* captures[0] will be entire matched string, [1] first substring */
++-    if (!pcre_get_substring_list(arg, ovec, captured_count, (const char ***)&captures)) {
++-	int nelem = arrlen(captures)-1;
+++    /* ovec[0] will be entire matched string, [1] first substring */
+++    ovec = pcre2_get_ovector_pointer(mdata);
+++    if (ovec) {
+++	int nelem = captured_count - 1;
++ 	/* Set to the offsets of the complete match */
++ 	if (want_offset_pair) {
++-	    sprintf(offset_all, "%d %d", ovec[0], ovec[1]);
+++	    sprintf(offset_all, "%ld %ld", ovec[0], ovec[1]);
++ 	    setsparam("ZPCRE_OP", ztrdup(offset_all));
++ 	}
++ 	/*
++@@ -186,7 +158,7 @@ zpcre_get_substrings(char *arg, int *ovec, int captured_count, char *matchvar,
++ 	 * ovec is length 2*(1+capture_list_length)
++ 	 */
++ 	if (matchvar) {
++-	    match_all = metafy(captures[0], ovec[1] - ovec[0], META_DUP);
+++	    match_all = metafy(arg + ovec[0], ovec[1] - ovec[0], META_DUP);
++ 	    setsparam(matchvar, match_all);
++ 	}
++ 	/*
++@@ -201,16 +173,12 @@ zpcre_get_substrings(char *arg, int *ovec, int captured_count, char *matchvar,
++ 	 */
++ 	if (substravar &&
++ 	    (!want_begin_end || nelem)) {
++-	    char **x, **y;
+++	    char **x;
++ 	    int vec_off, i;
++-	    y = &captures[capture_start];
++ 	    matches = x = (char **) zalloc(sizeof(char *) * (captured_count+1-capture_start));
++-	    for (i = capture_start; i < captured_count; i++, y++) {
+++	    for (i = capture_start; i < captured_count; i++) {
++ 		vec_off = 2*i;
++-		if (*y)
++-		    *x++ = metafy(*y, ovec[vec_off+1]-ovec[vec_off], META_DUP);
++-		else
++-		    *x++ = NULL;
+++		*x++ = metafy(arg + ovec[vec_off], ovec[vec_off+1]-ovec[vec_off], META_DUP);
++ 	    }
++ 	    *x = NULL;
++ 	    setaparam(substravar, matches);
++@@ -247,7 +215,8 @@ zpcre_get_substrings(char *arg, int *ovec, int captured_count, char *matchvar,
++ 	    setiparam("MEND", offs + !isset(KSHARRAYS) - 1);
++ 	    if (nelem) {
++ 		char **mbegin, **mend, **bptr, **eptr;
++-		int i, *ipair;
+++		int i;
+++		size_t *ipair;
++ 
++ 		bptr = mbegin = zalloc(sizeof(char*)*(nelem+1));
++ 		eptr = mend = zalloc(sizeof(char*)*(nelem+1));
++@@ -287,8 +256,6 @@ zpcre_get_substrings(char *arg, int *ovec, int captured_count, char *matchvar,
++ 		setaparam("mend", mend);
++ 	    }
++ 	}
++-
++-	pcre_free_substring_list((const char **)captures);
++     }
++ 
++     return 0;
++@@ -314,7 +281,8 @@ getposint(char *instr, char *nam)
++ static int
++ bin_pcre_match(char *nam, char **args, Options ops, UNUSED(int func))
++ {
++-    int ret, capcount, *ovec, ovecsize, c;
+++    int ret, c;
+++    pcre2_match_data *pcre_mdata = NULL;
++     char *matched_portion = NULL;
++     char *plaintext = NULL;
++     char *receptacle = NULL;
++@@ -344,36 +312,30 @@ bin_pcre_match(char *nam, char **args, Options ops, UNUSED(int func))
++     /* For the entire match, 'Return' the offset byte positions instead of the matched string */
++     if(OPT_ISSET(ops,'b')) want_offset_pair = 1;
++ 
++-    if ((ret = pcre_fullinfo(pcre_pattern, pcre_hints, PCRE_INFO_CAPTURECOUNT, &capcount)))
++-    {
++-	zwarnnam(nam, "error %d in fullinfo", ret);
++-	return 1;
++-    }
++-
++-    ovecsize = (capcount+1)*3;
++-    ovec = zalloc(ovecsize*sizeof(int));
++-
++     plaintext = ztrdup(*args);
++     unmetafy(plaintext, &subject_len);
++ 
++     if (offset_start > 0 && offset_start >= subject_len)
++-	ret = PCRE_ERROR_NOMATCH;
++-    else
++-	ret = pcre_exec(pcre_pattern, pcre_hints, plaintext, subject_len, offset_start, 0, ovec, ovecsize);
+++	ret = PCRE2_ERROR_NOMATCH;
+++    else {
+++	pcre_mdata = pcre2_match_data_create_from_pattern(pcre_pattern, NULL);
+++	ret = pcre2_match(pcre_pattern, (PCRE2_SPTR) plaintext, subject_len,
+++		offset_start, 0, pcre_mdata, NULL);
+++    }
++ 
++     if (ret==0) return_value = 0;
++-    else if (ret==PCRE_ERROR_NOMATCH) /* no match */;
+++    else if (ret == PCRE2_ERROR_NOMATCH) /* no match */;
++     else if (ret>0) {
++-	zpcre_get_substrings(plaintext, ovec, ret, matched_portion, receptacle,
+++	zpcre_get_substrings(plaintext, pcre_mdata, ret, matched_portion, receptacle,
++ 			     want_offset_pair, 0, 0);
++ 	return_value = 0;
++     }
++     else {
++-	zwarnnam(nam, "error in pcre_exec [%d]", ret);
+++	zwarnnam(nam, "error in pcre2_match [%d]", ret);
++     }
++     
++-    if (ovec)
++-	zfree(ovec, ovecsize*sizeof(int));
+++    if (pcre_mdata)
+++	pcre2_match_data_free(pcre_mdata);
++     zsfree(plaintext);
++ 
++     return return_value;
++@@ -383,17 +345,19 @@ bin_pcre_match(char *nam, char **args, Options ops, UNUSED(int func))
++ static int
++ cond_pcre_match(char **a, int id)
++ {
++-    pcre *pcre_pat;
++-    const char *pcre_err;
+++    pcre2_code *pcre_pat = NULL;
+++    int pcre_err;
+++    PCRE2_SIZE pcre_erroff;
++     char *lhstr, *rhre, *lhstr_plain, *rhre_plain, *avar, *svar;
++-    int r = 0, pcre_opts = 0, pcre_errptr, capcnt, *ov, ovsize;
+++    int r = 0, pcre_opts = 0;
+++    pcre2_match_data *pcre_mdata = NULL;
++     int lhstr_plain_len, rhre_plain_len;
++     int return_value = 0;
++ 
++     if (zpcre_utf8_enabled())
++-	pcre_opts |= PCRE_UTF8;
+++	pcre_opts |= PCRE2_UTF;
++     if (isset(REMATCHPCRE) && !isset(CASEMATCH))
++-	pcre_opts |= PCRE_CASELESS;
+++	pcre_opts |= PCRE2_CASELESS;
++ 
++     lhstr = cond_str(a,0,0);
++     rhre = cond_str(a,1,0);
++@@ -401,9 +365,6 @@ cond_pcre_match(char **a, int id)
++     rhre_plain = ztrdup(rhre);
++     unmetafy(lhstr_plain, &lhstr_plain_len);
++     unmetafy(rhre_plain, &rhre_plain_len);
++-    pcre_pat = NULL;
++-    ov = NULL;
++-    ovsize = 0;
++ 
++     if (isset(BASHREMATCH)) {
++ 	svar = NULL;
++@@ -415,27 +376,27 @@ cond_pcre_match(char **a, int id)
++ 
++     switch(id) {
++ 	 case CPCRE_PLAIN:
++-		if ((int)strlen(rhre_plain) != rhre_plain_len) {
++-		    zwarn("embedded NULs in PCRE pattern terminate pattern");
++-		}
++-		pcre_pat = pcre_compile(rhre_plain, pcre_opts, &pcre_err, &pcre_errptr, NULL);
++-		if (pcre_pat == NULL) {
++-		    zwarn("failed to compile regexp /%s/: %s", rhre, pcre_err);
+++		if (!(pcre_pat = pcre2_compile((PCRE2_SPTR) rhre_plain,
+++			(PCRE2_SIZE) rhre_plain_len, pcre_opts,
+++			&pcre_err, &pcre_erroff, NULL)))
+++		{
+++		    PCRE2_UCHAR buffer[256];
+++		    pcre2_get_error_message(pcre_err, buffer, sizeof(buffer));
+++		    zwarn("failed to compile regexp /%s/: %s", rhre, buffer);
++ 		    break;
++ 		}
++-                pcre_fullinfo(pcre_pat, NULL, PCRE_INFO_CAPTURECOUNT, &capcnt);
++-    		ovsize = (capcnt+1)*3;
++-		ov = zalloc(ovsize*sizeof(int));
++-    		r = pcre_exec(pcre_pat, NULL, lhstr_plain, lhstr_plain_len, 0, 0, ov, ovsize);
++-		/* r < 0 => error; r==0 match but not enough size in ov
+++		pcre_mdata = pcre2_match_data_create_from_pattern(pcre_pat, NULL);
+++		r = pcre2_match(pcre_pat, (PCRE2_SPTR8) lhstr_plain, lhstr_plain_len,
+++			0, 0, pcre_mdata, NULL);
+++		/* r < 0 => error; r==0 match but not enough size in match data
++ 		 * r > 0 => (r-1) substrings found; r==1 => no substrings
++ 		 */
++     		if (r==0) {
++-		    zwarn("reportable zsh problem: pcre_exec() returned 0");
+++		    zwarn("reportable zsh problem: pcre2_match() returned 0");
++ 		    return_value = 1;
++ 		    break;
++ 		}
++-	        else if (r==PCRE_ERROR_NOMATCH) {
+++		else if (r == PCRE2_ERROR_NOMATCH) {
++ 		    return_value = 0; /* no match */
++ 		    break;
++ 		}
++@@ -444,7 +405,7 @@ cond_pcre_match(char **a, int id)
++ 		    break;
++ 		}
++                 else if (r>0) {
++-		    zpcre_get_substrings(lhstr_plain, ov, r, svar, avar, 0,
+++		    zpcre_get_substrings(lhstr_plain, pcre_mdata, r, svar, avar, 0,
++ 					 isset(BASHREMATCH),
++ 					 !isset(BASHREMATCH));
++ 		    return_value = 1;
++@@ -457,10 +418,10 @@ cond_pcre_match(char **a, int id)
++ 	free(lhstr_plain);
++     if(rhre_plain)
++ 	free(rhre_plain);
+++    if (pcre_mdata)
+++	pcre2_match_data_free(pcre_mdata);
++     if (pcre_pat)
++-	pcre_free(pcre_pat);
++-    if (ov)
++-	zfree(ov, ovsize*sizeof(int));
+++	pcre2_code_free(pcre_pat);
++ 
++     return return_value;
++ }
++@@ -489,11 +450,11 @@ static struct builtin bintab[] = {
++ 
++ static struct features module_features = {
++     bintab, sizeof(bintab)/sizeof(*bintab),
++-#if defined(HAVE_PCRE_COMPILE) && defined(HAVE_PCRE_EXEC)
+++#if defined(HAVE_PCRE2_COMPILE_8) && defined(HAVE_PCRE2_H)
++     cotab, sizeof(cotab)/sizeof(*cotab),
++-#else /* !(HAVE_PCRE_COMPILE && HAVE_PCRE_EXEC) */
+++#else /* !(HAVE_PCRE2_COMPILE_8 && HAVE_PCRE2_H) */
++     NULL, 0,
++-#endif /* !(HAVE_PCRE_COMPILE && HAVE_PCRE_EXEC) */
+++#endif /* !(HAVE_PCRE2_COMPILE_8 && HAVE_PCRE2_H) */
++     NULL, 0,
++     NULL, 0,
++     0
++@@ -540,19 +501,9 @@ cleanup_(Module m)
++ int
++ finish_(UNUSED(Module m))
++ {
++-#if defined(HAVE_PCRE_COMPILE) && defined(HAVE_PCRE_EXEC)
++-#ifdef HAVE_PCRE_STUDY
++-    if (pcre_hints)
++-#ifdef PCRE_CONFIG_JIT
++-	pcre_free_study(pcre_hints);
++-#else
++-	pcre_free(pcre_hints);
++-#endif
++-    pcre_hints = NULL;
++-#endif
++-
+++#if defined(HAVE_PCRE2_COMPILE_8) && defined(HAVE_PCRE2_H)
++     if (pcre_pattern)
++-	pcre_free(pcre_pattern);
+++	pcre2_code_free(pcre_pattern);
++     pcre_pattern = NULL;
++ #endif
++ 
++diff --git a/Test/V07pcre.ztst b/Test/V07pcre.ztst
++index ca35d43f0..0129ddc94 100644
++--- a/Test/V07pcre.ztst
+++++ b/Test/V07pcre.ztst
++@@ -129,12 +129,17 @@
++ >78884; ZPCRE_OP: 25 30
++ >90210; ZPCRE_OP: 31 36
++ 
++-# Embedded NULs allowed in plaintext, but not in RE (although \0 as two-chars allowed)
+++# Embedded NULs allowed in plaintext, in RE, pcre supports \0 as two-chars
++   [[ $'a\0bc\0d' =~ '^(a\0.)(.+)$' ]]
++   print "${#MATCH}; ${#match[1]}; ${#match[2]}"
++ 0:ensure ASCII NUL passes in and out of matched plaintext
++ >6; 3; 3
++ 
+++# PCRE2 supports NULs also in the RE
+++  [[ $'a\0b\0c' =~ $'^(.\0)+' ]] && print "${#MATCH}; ${#match[1]}"
+++0:ensure ASCII NUL works also in the regex
+++>4; 2
+++
++ # Ensure the long-form infix operator works
++   [[ foo -pcre-match ^f..$ ]]
++   print $?
++@@ -181,7 +186,11 @@
++   [[ é =~ '^..\z' ]]; echo $?
++   LANG=$LANG_SAVE
++   [[ é =~ '^.\z' ]]; echo $?
++-0:swich between C/UTF-8 locales
+++0:switch between C/UTF-8 locales
++ >0
++ >0
++ >0
+++
+++  [[ abc =~ 'a(d*)bc' ]] && print "$#MATCH; $#match; ${#match[1]}"
+++0:empty capture
+++>3; 1; 0
 +diff --git a/configure.ac b/configure.ac
-+index 2144011..08a937f 100644
++index b4d3e1f96..a31b32b4e 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -246,6 +246,7 @@ AC_ARG_ENABLE(rpath,
-+ #Routines used for checking libraries
-+ AC_DEFUN([ICFG_STATE_SAVE],[
-+ #save state
-++ICFG_OLD_CPPFLAGS=$CPPFLAGS
-+ ICFG_OLD_CFLAGS=$CFLAGS
-+ ICFG_OLD_LDFLAGS=$LDFLAGS
-+ ICFG_OLD_LIBS=$LIBS
-+@@ -253,7 +254,8 @@ ICFG_OLD_LIBS=$LIBS
++@@ -438,7 +438,7 @@ fi],
 + 
-+ #Routines used for checking libraries
-+ AC_DEFUN([ICFG_STATE_ROLLBACK],[
-+-#save state
-++#rollback saved state
-++CPPFLAGS=$ICFG_OLD_CPPFLAGS
-+ CFLAGS=$ICFG_OLD_CFLAGS
-+ LDFLAGS=$ICFG_OLD_LDFLAGS
-+ LIBS=$ICFG_OLD_LIBS
-+@@ -650,6 +652,45 @@ if test a"$libmemcached" != "ano"; then
-+     ICFG_STATE_ROLLBACK
++ dnl Do you want to look for pcre support?
++ AC_ARG_ENABLE(pcre,
++-AS_HELP_STRING([--enable-pcre],[enable the search for the pcre library (may create run-time library dependencies)]))
+++AS_HELP_STRING([--enable-pcre],[enable the search for the pcre2 library (may create run-time library dependencies)]))
++ 
++ dnl Do you want to look for capability support?
++ AC_ARG_ENABLE(cap,
++@@ -662,13 +662,12 @@ AC_HEADER_SYS_WAIT
++ 
++ oldcflags="$CFLAGS"
++ if test x$enable_pcre = xyes; then
++-AC_CHECK_PROG([PCRECONF], pcre-config, pcre-config)
++-dnl Typically (meaning on this single RedHat 9 box in front of me)
++-dnl pcre-config --cflags produces a -I output which needs to go into
+++AC_CHECK_PROG([PCRECONF], pcre2-config, pcre2-config)
+++dnl pcre2-config --cflags may produce a -I output which needs to go into
++ dnl CPPFLAGS else configure's preprocessor tests don't pick it up,
++ dnl producing a warning.
++-if test "x$ac_cv_prog_PCRECONF" = xpcre-config; then
++-  CPPFLAGS="$CPPFLAGS `pcre-config --cflags`"
+++if test "x$ac_cv_prog_PCRECONF" = xpcre2-config; then
+++  CPPFLAGS="$CPPFLAGS `pcre2-config --cflags`"
++ fi
 + fi
 + 
-++# Check for PCRE2 regex library
-++AC_ARG_WITH(pcre2,
-++[       --with-pcre2     Path to PCRE2 library],
-++[
-++case "$withval" in
-++     yes)
-++        pcre2=yes;
-++     ;;
-++     no)
-++        pcre2=no;
-++     ;;
-++     *)
-++        pcre2=yes;
-++        pcre2path=$withval;
-++     ;;
-++     esac
-++],
-++[ pcre2=yes]
-++)
-++
-++if test a"$pcre2" != "ano"; then
-++   ICFG_STATE_SAVE(PCRE2)
-++   CPPFLAGS="$CPPFLAGS -DPCRE2_CODE_UNIT_WIDTH=8"
-++   if test "a$pcre2path" != "a"; then
-++       CFLAGS="$CFLAGS -I$pcre2path/include"
-++       LDFLAGS="$LDFLAGS -L$pcre2path/lib"
-++   fi
-++   AC_CHECK_HEADERS(pcre2.h,
-++                    AC_CHECK_LIB(pcre2-8, pcre2_match_8,[pcre2=yes],[pcre2=no]),
-++                    [pcre2=no]
-++   )
-++
-++   if test "a$pcre2" = "ayes"; then
-++       AC_DEFINE(HAVE_PCRE2,1,[Define HAVE_PCRE2 if pcre2 installed])
-++       ICFG_BUILD_FLAGS(PCRE2, "$pcre2path", "-lpcre2-8")
-++   fi
-++   ICFG_STATE_ROLLBACK
-++fi
-++
-+ # Check for PCRE regex library
-+ AC_ARG_WITH(pcre,
-+ [       --with-pcre     Path to PCRE library],
-+@@ -670,7 +711,7 @@ case "$withval" in
-+ [ pcre=yes]
-+ )
-+ 
-+-if test a"$pcre" != "ano"; then
-++if test a"$pcre" != "ano" -a a"$pcre2" != "ayes"; then
-+    ICFG_STATE_SAVE(PCRE)
-+    if test "a$pcrepath" != "a"; then
-+        CFLAGS="$CFLAGS -I$pcrepath/include"
-+@@ -714,7 +755,7 @@ AC_CHECK_HEADERS(regex.h,
-+   )
-+ 
-+ USE_REGEX=0
-+-if test "a$pcre" = "ayes" -o "a$posix_regex" = "ayes"; then
-++if test "a$pcre2" = "ayes" -o "a$pcre" = "ayes" -o "a$posix_regex" = "ayes"; then
-+    USE_REGEX=1
++@@ -678,9 +677,10 @@ AC_CHECK_HEADERS(sys/time.h sys/times.h sys/select.h termcap.h termio.h \
++ 		 locale.h errno.h stdio.h stdarg.h varargs.h stdlib.h \
++ 		 unistd.h sys/capability.h \
++ 		 utmp.h utmpx.h sys/types.h pwd.h grp.h poll.h sys/mman.h \
++-		 netinet/in_systm.h pcre.h langinfo.h wchar.h stddef.h \
+++		 netinet/in_systm.h langinfo.h wchar.h stddef.h \
++ 		 sys/stropts.h iconv.h ncurses.h ncursesw/ncurses.h \
++ 		 ncurses/ncurses.h)
+++AC_CHECK_HEADERS([pcre2.h],,,[#define PCRE2_CODE_UNIT_WIDTH 8])
++ if test x$dynamic = xyes; then
++   AC_CHECK_HEADERS(dlfcn.h)
++   AC_CHECK_HEADERS(dl.h)
++@@ -958,9 +958,7 @@ if test "x$ac_found_iconv" = "xyes"; then
 + fi
-+ AC_SUBST(USE_REGEX)
-+@@ -1001,7 +1042,9 @@ AM_CONDITIONAL(ISCYGWIN,[test a"$iscygwin" != a])
-+ # Now determine which modules will going to build .....
 + 
-+ AM_CONDITIONAL(USE_OPENSSL, [test a"$openssl" != "ano"])
-+-AM_CONDITIONAL(USE_REGEX, [test a"$pcre" = "ayes" -o a"$posix_regex" = "ayes"])
-++AM_CONDITIONAL(USE_PCRE2, [test a"$pcre2" = "ayes"])
-++AM_CONDITIONAL(USE_PCRE, [test a"$pcre" = "ayes"])
-++AM_CONDITIONAL(USE_REGEX, [test a"$pcre2" = "ayes" -o a"$pcre" = "ayes" -o a"$posix_regex" = "ayes"])
-+ AM_CONDITIONAL(USEPERL,[test a"$perlcore" != a])
-+ AM_CONDITIONAL(USEBDB,   [test a"$libdb" != ano])
-+ AM_CONDITIONAL(USELDAP, [test a"$libldap" != ano])
-+diff --git a/include/ci_regex.h b/include/ci_regex.h
-+index 27afc9c..df7b77a 100644
-+--- a/include/ci_regex.h
-++++ b/include/ci_regex.h
-+@@ -33,18 +33,57 @@ struct ci_regex_match {
-+     size_t s;
-+     size_t e;
-+ };
-+-typedef struct ci_regex_match ci_regex_matches_t[10];
-++#define CI_REGEX_SUBMATCHES 10
-++typedef struct ci_regex_match ci_regex_matches_t[CI_REGEX_SUBMATCHES];
-+ typedef struct ci_regex_replace_part {
-+     const void *user_data;
-+     ci_regex_matches_t matches;
-+ } ci_regex_replace_part_t;
++ if test x$enable_pcre = xyes; then
++-dnl pcre-config should probably be employed here
++-dnl AC_SEARCH_LIBS(pcre_compile, pcre)
++-  LIBS="`$ac_cv_prog_PCRECONF --libs` $LIBS"
+++  LIBS="`$ac_cv_prog_PCRECONF --libs8` $LIBS"
++ fi
 + 
-+-#define ci_regex_create_match_list() ci_list_create(32768, sizeof(ci_regex_replace_part_t))
-++/**
-++ \brief Builds a regex match list to store regex matches.
-++ * The regex match list is a ci_list_t object which stores ci_regex_replace_part
-++ * objects as items.
-++ \ingroup UTILITY
-++ */
-++#define ci_regex_create_match_list() ci_list_create(1024, sizeof(ci_regex_replace_part_t))
-++
-++/**
-++  \brief Parses a regex expresion having the form /regex/flags
-++  \ingroup UTILITY
-++  *
-++ */
-+ CI_DECLARE_FUNC(char *) ci_regex_parse(const char *str, int *flags, int *recursive);
-++
-++/**
-++  \brief Compiles a regex expresion into an internal form.
-++  \param regex_str The regex string normally returned by ci_regex_parse function
-++  \param regex_flags The regex flags built using the ci_regex_parse
-++  \ingroup UTILITY
-++ */
-+ CI_DECLARE_FUNC(ci_regex_t) ci_regex_build(const char *regex_str, int regex_flags);
-++
-++/**
-++ * Releases objects built using the ci_regex_build
-++ \ingroup UTILITY
-++ */
-+ CI_DECLARE_FUNC(void) ci_regex_free(ci_regex_t regex);
-++
-++/**
-++ * Matchs a compiled regex expresion of type ci_regex_t  against the given string.
-++ \param regex The compiled regex expresion
-++ \param str The string to match against
-++ \param len The str string length. For '\0' terminated strings set it to -1
-++ \param recurs If it is not NULL matches recursivelly
-++ \param matches The regex match list to store matches. It can be NULL
-++ \param user_data pointer to user data to store with matches in rege match list.
-++ \ingroup UTILITY
-++ */
-+ CI_DECLARE_FUNC(int) ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs, ci_list_t *matches, const void *user_data);
-+ 
-++
-++CI_DECLARE_FUNC(void) ci_regex_memory_init();
-++
-+ #ifdef __cplusplus
-+ }
-+ #endif
-+diff --git a/regex.c b/regex.c
-+index 82277df..de9b387 100644
-+--- a/regex.c
-++++ b/regex.c
-+@@ -1,14 +1,107 @@
-+ #include "common.h"
-+ #include "debug.h"
-+ #include "array.h"
-++#include "mem.h"
-+ #include "ci_regex.h"
-+ 
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++#define PCRE2_CODE_UNIT_WIDTH 8 // TODO: make it configurable via configure
-++#include <pcre2.h>
-++#elif defined(HAVE_PCRE)
-+ #include <pcre.h>
-+ #else
-+ #include <regex.h>
-+ #endif
-+ 
-++#if defined(HAVE_PCRE2)
-++pcre2_general_context *pcre2GenContext = NULL;
-++pcre2_match_context *pcre2MatchContext = NULL;
-++
-++void *pcre2_malloc(PCRE2_SIZE size, void *udata)
-++{
-++    void *p = ci_buffer_alloc(size);
-++    return p;
-++}
-++
-++void pcre2_free(void *p, void *udata)
-++{
-++    ci_buffer_free(p);
-++}
-++
-++struct {
-++    char *name;
-++    uint32_t flag;
-++} pcre2_flags[] = {
-++    {"ANCHORED", 0x80000000u},
-++    {"NO_UTF_CHECK", 0x40000000u},
-++    {"ENDANCHORED", 0x20000000u},
-++    {"ALLOW_EMPTY_CLASS", 0x00000001u},
-++    {"ALT_BSUX", 0x00000002u},
-++    {"AUTO_CALLOUT", 0x00000004u},
-++    {"CASELESS", 0x00000008u},
-++    {"DOLLAR_ENDONLY", 0x00000010u},
-++    {"DOTALL", 0x00000020u},
-++    {"DUPNAMES", 0x00000040u},
-++    {"EXTENDED", 0x00000080u},
-++    {"FIRSTLINE", 0x00000100u},
-++    {"MATCH_UNSET_BACKREF", 0x00000200u},
-++    {"MULTILINE", 0x00000400u},
-++    {"NEVER_UCP", 0x00000800u},
-++    {"NEVER_UTF", 0x00001000u},
-++    {"NO_AUTO_CAPTURE", 0x00002000u},
-++    {"NO_AUTO_POSSESS", 0x00004000u},
-++    {"NO_DOTSTAR_ANCHOR", 0x00008000u},
-++    {"NO_START_OPTIMIZE", 0x00010000u},
-++    {"UCP", 0x00020000u},
-++    {"UNGREEDY", 0x00040000u},
-++    {"UTF", 0x00080000u},
-++    {"NEVER_BACKSLASH_C", 0x00100000u},
-++    {"ALT_CIRCUMFLEX", 0x00200000u},
-++    {"ALT_VERBNAMES", 0x00400000u},
-++    {"USE_OFFSET_LIMIT", 0x00800000u},
-++    {"EXTENDED_MORE", 0x01000000u},
-++    {"LITERAL", 0x02000000u},
-++    {"MATCH_INVALID_UTF", 0x04000000u},
-++    {NULL, 0}
-++};
-++
-++int pcre2_flag_parse(const char **f)
-++{
-++    const char *s = (*f);
-++    if (*s != '<')
-++        return 0;
-++    s++;
-++    const char *e = strchr(s, '>');
-++    if (e)
-++        *f = e;
-++    else {
-++        e = s + strlen(s);
-++        *f = e - 1;
-++    }
-++    size_t len = e - s;
-++    e--;
-++    if (!len)
-++        return 0;
-++
-++    int i;
-++    for (i = 0; pcre2_flags[i].name != NULL; i++) {
-++        if (strncmp(pcre2_flags[i].name, s, len) == 0)
-++            return pcre2_flags[i].flag;
-++    }
-++    return 0;
-++}
-++
-++#endif
-++
-++void ci_regex_memory_init()
-++{
-++#if defined(HAVE_PCRE2)
-++    pcre2GenContext = pcre2_general_context_create(pcre2_malloc, pcre2_free,  NULL);
-++    pcre2MatchContext = pcre2_match_context_create(pcre2GenContext);
-++#endif
-++}
-++
-++
-+ 
-+ char *ci_regex_parse(const char *str, int *flags, int *recursive)
-+ {
-+@@ -29,7 +122,10 @@ char *ci_regex_parse(const char *str, int *flags, int *recursive)
-+     s[slen] = '\0';
-+ 
-+     *flags = 0;
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++    *flags |= PCRE2_NEWLINE_ANY;
-++    *flags |= PCRE2_NEWLINE_ANYCRLF;
-++#elif defined(HAVE_PCRE)
-+     *flags |= PCRE_NEWLINE_ANY;
-+     *flags |= PCRE_NEWLINE_ANYCRLF;
-+ #else
-+@@ -38,7 +134,27 @@ char *ci_regex_parse(const char *str, int *flags, int *recursive)
-+ #endif
-+ 
-+     while (*e != '\0') {
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++        if (*e == 'i')
-++            *flags = *flags | PCRE2_CASELESS;
-++        else if (*e == 'm')
-++            *flags |= PCRE2_MULTILINE;
-++        else if (*e == 's')
-++            *flags |= PCRE2_DOTALL;
-++        else if (*e == 'x')
-++            *flags |= PCRE2_EXTENDED;
-++        else if (*e == 'A')
-++            *flags |= PCRE2_ANCHORED;
-++        else if (*e == 'D')
-++            *flags |= PCRE2_DOLLAR_ENDONLY;
-++        else if (*e == 'U')
-++            *flags |= PCRE2_UNGREEDY;
-++        else if (*e == 'u')
-++            *flags |= PCRE2_UTF | PCRE2_UCP;
-++        else if (*e == '<') {
-++            *flags |= pcre2_flag_parse(&e);
-++        }
-++#elif defined(HAVE_PCRE)
-+         if (*e == 'i')
-+             *flags = *flags | PCRE_CASELESS;
-+         else if (*e == 'm')
-+@@ -74,7 +190,19 @@ char *ci_regex_parse(const char *str, int *flags, int *recursive)
-+ 
-+ ci_regex_t ci_regex_build(const char *regex_str, int regex_flags)
-+ {
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++    pcre2_code *re;
-++    int errcode;
-++    PCRE2_SIZE erroffset;
-++    re =  pcre2_compile((PCRE2_SPTR)regex_str, PCRE2_ZERO_TERMINATED, (uint32_t)regex_flags, &errcode, &erroffset, NULL);
-++    if (re == NULL) {
-++        PCRE2_UCHAR errbuf[256];
-++        pcre2_get_error_message(errcode, errbuf, sizeof(errbuf));
-++        ci_debug_printf(2, "PCRE2 compilation of '%s' failed at offset %d: %s\n", regex_str, (int)erroffset, errbuf);
-++        return NULL;
-++    }
-++    return (ci_regex_t)re;
-++#elif defined(HAVE_PCRE)
-+     pcre *re;
-+     const char *error;
-+     int erroffset;
-+@@ -103,7 +231,9 @@ ci_regex_t ci_regex_build(const char *regex_str, int regex_flags)
-+ 
-+ void ci_regex_free(ci_regex_t regex)
-+ {
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++    pcre2_code_free((pcre2_code *)regex);
-++#elif defined(HAVE_PCRE)
-+     pcre_free((pcre *)regex);
-+ #else
-+     regfree((regex_t *)regex);
-+@@ -112,7 +242,7 @@ void ci_regex_free(ci_regex_t regex)
-+ }
-+ 
-+ #ifdef HAVE_PCRE
-+-#define OVECCOUNT 30    /* should be a multiple of 3 */
-++#define OVECCOUNT (3*CI_REGEX_SUBMATCHES)    /* should be a multiple of 3 */
-+ #endif
-+ 
-+ int ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs, ci_list_t *matches, const void *user_data)
-+@@ -120,14 +250,42 @@ int ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs,
-+     int count = 0, i;
-+     ci_regex_replace_part_t parts;
-+ 
-+-    if (!str)
-++    if (!str || len == 0)
-+         return 0;
-+ 
-+-#ifdef HAVE_PCRE
-++#if defined(HAVE_PCRE2)
-++    PCRE2_SIZE offset = 0;
-++    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex, pcre2GenContext);
-++    do {
-++        int str_length = len > 0 ? len : PCRE2_ZERO_TERMINATED;
-++        int rcaptures = pcre2_match(regex, (PCRE2_SPTR)str, str_length, offset, 0, match_data, pcre2MatchContext);
-++        if (rcaptures >= 0)
-++            count++;
-++        if (rcaptures > 0 && matches) {
-++            PCRE2_SIZE *ovector = pcre2_get_ovector_pointer(match_data);
-++            for (i = 0; i < rcaptures && i < CI_REGEX_SUBMATCHES; i++) {
-++                _CI_ASSERT(ovector[2*i+1] >= ovector[2*i]);
-++                if (matches) {
-++                    parts.user_data = user_data;
-++                    memset(parts.matches, 0, sizeof(ci_regex_matches_t));
-++                    ci_debug_printf(9, "\t sub-match pattern (pos:%d-%d): '%.*s'\n", (int)ovector[2*i], (int)ovector[2*i+1], (int)(ovector[2*i + 1] - ovector[2*i]), str+ovector[2*i]);
-++                    parts.matches[i].s = ovector[2*i];
-++                    parts.matches[i].e = ovector[2*i+1];
-++                }
-++                ci_list_push_back(matches, (void *)&parts);
-++            }
-++            offset = ovector[1]; /*Assert that it is less than strlen(str)?*/
-++        } else if (rcaptures < 0) {
-++            /* maybe check and report the exact error?*/
-++            offset = 0;
-++        } /* the rcaptures==0 not possible for our case, but maybe check and warn?*/
-++    } while (recurs && offset > 0);
-++    pcre2_match_data_free(match_data);
-++#elif defined(HAVE_PCRE)
-+     int ovector[OVECCOUNT];
-+     int rc;
-+     int offset = 0;
-+-    int str_length = len >=0 ? len : strlen(str);
-++    int str_length = len > 0 ? len : strlen(str);
-+     do {
-+         memset(ovector, 0, sizeof(ovector));
-+         rc = pcre_exec(regex, NULL, str, str_length, offset, 0, ovector, OVECCOUNT);
-+@@ -139,7 +297,7 @@ int ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs,
-+             if (matches) {
-+                 parts.user_data = user_data;
-+                 memset(parts.matches, 0, sizeof(ci_regex_matches_t));
-+-                for (i = 0; i < 10 && ovector[2*i+1] > ovector[2*i]; ++i) {
-++                for (i = 0; i < CI_REGEX_SUBMATCHES && ovector[2*i+1] > ovector[2*i]; ++i) {
-+                     ci_debug_printf(9, "\t sub-match pattern (pos:%d-%d): '%.*s'\n", ovector[2*i], ovector[2*i+1], ovector[2*i + 1] - ovector[2*i], str+ovector[2*i]);
-+                     parts.matches[i].s = ovector[2*i];
-+                     parts.matches[i].e = ovector[2*i+1];
-+@@ -151,17 +309,27 @@ int ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs,
-+ 
-+ #else
-+     int retcode;
-+-    regmatch_t pmatch[10];
-++    regmatch_t pmatch[CI_REGEX_SUBMATCHES];
-++    char *tmpS = NULL;
-++    const char *s;
-++    if (len > 0 && len < strlen(str)) {
-++        tmpS = ci_buffer_alloc(len + 1);
-++        _CI_ASSERT(tmpS);
-++        memcpy(tmpS, str, len);
-++        tmpS[len] = '\0';
-++        s = tmpS;
-++    } else
-++        s = str;
-+     do {
-+-        if ((retcode = regexec(regex, str, 10, pmatch, 0)) == 0) {
-++        if ((retcode = regexec(regex, s, CI_REGEX_SUBMATCHES, pmatch, 0)) == 0) {
-+             ++count;
-+-            ci_debug_printf(9, "Match pattern (pos:%d-%d): '%.*s'\n", pmatch[0].rm_so, pmatch[0].rm_eo, pmatch[0].rm_eo - pmatch[0].rm_so, str+pmatch[0].rm_so);
-++            ci_debug_printf(9, "Match pattern (pos:%d-%d): '%.*s'\n", pmatch[0].rm_so, pmatch[0].rm_eo, pmatch[0].rm_eo - pmatch[0].rm_so, s+pmatch[0].rm_so);
-+ 
-+             if (matches) {
-+                 parts.user_data = user_data;
-+                 memset(parts.matches, 0, sizeof(ci_regex_matches_t));
-+-                for (i = 0; i < 10 && pmatch[i].rm_eo > pmatch[i].rm_so; ++i) {
-+-                    ci_debug_printf(9, "\t sub-match pattern (pos:%d-%d): '%.*s'\n", pmatch[i].rm_so, pmatch[i].rm_eo, pmatch[i].rm_eo - pmatch[i].rm_so, str+pmatch[i].rm_so);
-++                for (i = 0; i < CI_REGEX_SUBMATCHES && pmatch[i].rm_eo > pmatch[i].rm_so; ++i) {
-++                    ci_debug_printf(9, "\t sub-match pattern (pos:%d-%d): '%.*s'\n", pmatch[i].rm_so, pmatch[i].rm_eo, pmatch[i].rm_eo - pmatch[i].rm_so, s+pmatch[i].rm_so);
-+                     parts.matches[i].s = pmatch[i].rm_so;
-+                     parts.matches[i].e = pmatch[i].rm_eo;
-+                 }
-+@@ -169,14 +337,16 @@ int ci_regex_apply(const ci_regex_t regex, const char *str, int len, int recurs,
-+             }
-+ 
-+             if (pmatch[0].rm_so >= 0 && pmatch[0].rm_eo >= 0 && pmatch[0].rm_so != pmatch[0].rm_eo) {
-+-                str += pmatch[0].rm_eo;
-+-                ci_debug_printf(8, "I will check again starting from: %s\n", str);
-++                s += pmatch[0].rm_eo;
-++                ci_debug_printf(8, "I will check again starting from: %s\n", s);
-+             } else /*stop here*/
-+-                str = NULL;
-++                s = NULL;
-+         }
-+-    } while (recurs && str && *str != '\0' && retcode == 0);
-++    } while (recurs && s && *s != '\0' && retcode == 0);
-++    if (tmpS)
-++        ci_buffer_free(tmpS);
-+ #endif
-+ 
-+-    ci_debug_printf(5, "ci_regex_apply matches count: %d\n", count);
-++    ci_debug_printf(5, "ci_regex_apply string '%s' matches count: %d\n", str, count);
-+     return count;
-+ }
-+diff --git a/types_ops.c b/types_ops.c
-+index 78798c6..1310d4b 100644
-+--- a/types_ops.c
-++++ b/types_ops.c
-+@@ -273,7 +273,7 @@ int regex_cmp(const void *key1, const void *key2)
-+     struct ci_acl_regex *reg = (struct ci_acl_regex *)key1;
-+     if (!key2)
-+         return -1;
-+-    return (ci_regex_apply(reg->preg, (const char *)key2, strlen(key2), 0, NULL, NULL) == 0 ? 1 : 0);
-++    return (ci_regex_apply(reg->preg, (const char *)key2, -1, 0, NULL, NULL) == 0 ? 1 : 0);
-+ }
-+ 
-+ int regex_equal(const void *key1, const void *key2)
-+@@ -281,7 +281,7 @@ int regex_equal(const void *key1, const void *key2)
-+     struct ci_acl_regex *reg = (struct ci_acl_regex *)key1;
-+     if (!key2)
-+         return 0;
-+-    return ci_regex_apply(reg->preg, (const char *)key2, strlen(key2), 0, NULL, NULL) != 0;
-++    return ci_regex_apply(reg->preg, (const char *)key2, -1, 0, NULL, NULL) != 0;
-+ }
-+ 
-+ size_t regex_len(const void *key)
-diff --git a/package/c-icap/0007-Add-missing-_CI_ASSERT-macro-for-pcre2-patch.patch b/package/c-icap/0007-Add-missing-_CI_ASSERT-macro-for-pcre2-patch.patch
++ dnl ---------------------
++@@ -1323,7 +1321,7 @@ AC_CHECK_FUNCS(strftime strptime mktime timelocal \
++ 	       pathconf sysconf \
++ 	       tgetent tigetflag tigetnum tigetstr setupterm initscr resize_term \
++ 	       getcchar setcchar waddwstr wget_wch win_wch use_default_colors \
++-	       pcre_compile pcre_study pcre_exec \
+++	       pcre2_compile_8 \
++ 	       nl_langinfo \
++ 	       erand48 open_memstream \
++ 	       posix_openpt \
++-- 
++2.47.3
++
+diff --git a/package/zsh/0004-51877-do-not-build-pcre-module-if-pcre2-config-is-no.patch b/package/zsh/0004-51877-do-not-build-pcre-module-if-pcre2-config-is-no.patch
 new file mode 100644
-index 0000000000..0209722a16
+index 0000000000..78ab9e7b1e
 --- /dev/null
-+++ b/package/c-icap/0007-Add-missing-_CI_ASSERT-macro-for-pcre2-patch.patch
-@@ -0,0 +1,50 @@
-+From: Boyuan Yang <byang@debian.org>
-+Date: Sat, 29 Jul 2023 19:34:51 -0400
-+Subject: Add missing _CI_ASSERT macro for pcre2 patch
++++ b/package/zsh/0004-51877-do-not-build-pcre-module-if-pcre2-config-is-no.patch
+@@ -0,0 +1,108 @@
++From 041c553ed62e2c3f5a9444b82463a330555ad347 Mon Sep 17 00:00:00 2001
++From: Jun-ichi Takimoto <takimoto-j@kba.biglobe.ne.jp>
++Date: Tue, 20 Jun 2023 18:14:27 +0900
++Subject: [PATCH] 51877: do not build pcre module if pcre2-config is not found
 +
-+Upstream: https://github.com/c-icap/c-icap-server/commit/9d4b75b2a044669cbe4570f95f0f8f00f09b0d21
++Upstream: https://github.com/zsh-users/zsh/commit/10bdbd8b5b0b43445aff23dcd412f25cf6aa328a
 +
-+Downloaded from
-+https://sources.debian.org/src/c-icap/1%3A0.5.10-7/debian/patches/0007-Add-missing-_CI_ASSERT-macro-for-pcre2-patch.patch
-+
++[Bernd: backported to 5.9]
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ debug.c         | 10 ++++++++++
-+ include/debug.h |  3 +++
-+ 2 files changed, 13 insertions(+)
++ Src/Modules/pcre.mdd |  2 +-
++ configure.ac         | 31 +++++++++++++++++++------------
++ 2 files changed, 20 insertions(+), 13 deletions(-)
 +
-+diff --git a/debug.c b/debug.c
-+index 8a3bf6d..4f34a87 100644
-+--- a/debug.c
-++++ b/debug.c
-+@@ -47,6 +47,16 @@ void __ldebug_printf(int i, const char *format, ...)
-+ }
-+ #endif
++diff --git a/Src/Modules/pcre.mdd b/Src/Modules/pcre.mdd
++index 6eb3c691b..3e1579117 100644
++--- a/Src/Modules/pcre.mdd
+++++ b/Src/Modules/pcre.mdd
++@@ -1,5 +1,5 @@
++ name=zsh/pcre
++-link=`if test x$enable_pcre = xyes && (pcre-config --version >/dev/null 2>/dev/null); then echo dynamic; else echo no; fi`
+++link=`if test x$enable_pcre = xyes; then echo dynamic; else echo no; fi`
++ load=no
 + 
-++void ci_debug_abort(const char *file, int line, const char *function, const char *mesg)
-++{
-++    ci_debug_printf(1, "Abort at %s, %d, %s: \'%s\'\n", file, line, function, mesg);
-++    fflush(stderr);
-++    fflush(stdout);
-++    abort();
-++}
-++
-++void (*__ci_debug_abort)(const char *file, int line, const char *function, const char *mesg) = ci_debug_abort;
-++
-+ /*
-+ void debug_print_request(ci_request_t *req){
-+      int i,j;
-+diff --git a/include/debug.h b/include/debug.h
-+index 9373ec9..990cce7 100644
-+--- a/include/debug.h
-++++ b/include/debug.h
-+@@ -44,6 +44,9 @@ CI_DECLARE_DATA extern void (*__log_error)(void *req, const char *format,... );
-+ #define ci_debug_printf(i, args...) if(i<=CI_DEBUG_LEVEL){ if(__log_error) (*__log_error)(NULL,args); if(CI_DEBUG_STDOUT) printf(args);}
-+ #endif
++ autofeatures="b:pcre_compile b:pcre_study b:pcre_match"
++diff --git a/configure.ac b/configure.ac
++index a31b32b4e..770a788e8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -440,6 +440,17 @@ dnl Do you want to look for pcre support?
++ AC_ARG_ENABLE(pcre,
++ AS_HELP_STRING([--enable-pcre],[enable the search for the pcre2 library (may create run-time library dependencies)]))
 + 
-++CI_DECLARE_DATA extern void (*__ci_debug_abort)(const char *file, int line, const char *function, const char *mesg);
-++#define _CI_ASSERT(expression) {if (!(expression)) (*__ci_debug_abort)(__FILE__, __LINE__, __func__, #expression);}
+++AC_ARG_VAR(PCRE_CONFIG, [pathname of pcre2-config if it is not in PATH])
+++if test "x$enable_pcre" = xyes; then
+++  AC_CHECK_PROG([PCRE_CONFIG], pcre2-config, pcre2-config)
+++  if test "x$PCRE_CONFIG" = x; then
+++    enable_pcre=no
+++    AC_MSG_WARN([pcre2-config not found: pcre module is disabled.])
+++    AC_MSG_NOTICE(
+++      [Set PCRE_CONFIG to pathname of pcre2-config if it is not in PATH.])
+++  fi
+++fi
 ++
-+ #ifdef __cplusplus
-+ }
-+ #endif
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 7e1b73cd2e..ee351d9781 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -13,6 +13,7 @@ C_ICAP_CPE_ID_VALID = YES
- C_ICAP_INSTALL_STAGING = YES
- C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
-+	--without-pcre \
- 	--without-perl \
- 	--without-zstd \
- 	--enable-large-files \
-@@ -63,11 +64,11 @@ else
- C_ICAP_CONF_OPTS += --without-openssl
++ dnl Do you want to look for capability support?
++ AC_ARG_ENABLE(cap,
++ AS_HELP_STRING([--enable-cap],[enable the search for POSIX capabilities (may require additional headers to be added by hand)]))
++@@ -660,15 +671,12 @@ AC_HEADER_DIRENT
++ AC_HEADER_STAT
++ AC_HEADER_SYS_WAIT
++ 
++-oldcflags="$CFLAGS"
++-if test x$enable_pcre = xyes; then
++-AC_CHECK_PROG([PCRECONF], pcre2-config, pcre2-config)
++ dnl pcre2-config --cflags may produce a -I output which needs to go into
++ dnl CPPFLAGS else configure's preprocessor tests don't pick it up,
++ dnl producing a warning.
++-if test "x$ac_cv_prog_PCRECONF" = xpcre2-config; then
++-  CPPFLAGS="$CPPFLAGS `pcre2-config --cflags`"
++-fi
+++if test "x$enable_pcre" = xyes; then
+++  CPPFLAGS="`$PCRE_CONFIG --cflags` $CPPFLAGS"
+++  AC_CHECK_HEADERS([pcre2.h],,,[#define PCRE2_CODE_UNIT_WIDTH 8])
++ fi
++ 
++ AC_CHECK_HEADERS(sys/time.h sys/times.h sys/select.h termcap.h termio.h \
++@@ -680,7 +688,6 @@ AC_CHECK_HEADERS(sys/time.h sys/times.h sys/select.h termcap.h termio.h \
++ 		 netinet/in_systm.h langinfo.h wchar.h stddef.h \
++ 		 sys/stropts.h iconv.h ncurses.h ncursesw/ncurses.h \
++ 		 ncurses/ncurses.h)
++-AC_CHECK_HEADERS([pcre2.h],,,[#define PCRE2_CODE_UNIT_WIDTH 8])
++ if test x$dynamic = xyes; then
++   AC_CHECK_HEADERS(dlfcn.h)
++   AC_CHECK_HEADERS(dl.h)
++@@ -957,10 +964,6 @@ if test "x$ac_found_iconv" = "xyes"; then
++     [Define as const if the declaration of iconv() needs const.])
++ fi
++ 
++-if test x$enable_pcre = xyes; then
++-  LIBS="`$ac_cv_prog_PCRECONF --libs8` $LIBS"
++-fi
++-
++ dnl ---------------------
++ dnl CHECK TERMCAP LIBRARY
++ dnl ---------------------
++@@ -1321,7 +1324,6 @@ AC_CHECK_FUNCS(strftime strptime mktime timelocal \
++ 	       pathconf sysconf \
++ 	       tgetent tigetflag tigetnum tigetstr setupterm initscr resize_term \
++ 	       getcchar setcchar waddwstr wget_wch win_wch use_default_colors \
++-	       pcre2_compile_8 \
++ 	       nl_langinfo \
++ 	       erand48 open_memstream \
++ 	       posix_openpt \
++@@ -1376,6 +1378,11 @@ if test x$zsh_cv_func_realpath_accepts_null = xyes; then
++   AC_DEFINE(REALPATH_ACCEPTS_NULL)
++ fi
++ 
+++if test x$enable_pcre = xyes; then
+++  LIBS="`$PCRE_CONFIG --libs8` $LIBS"
+++  AC_CHECK_FUNCS(pcre2_compile_8)
+++fi
+++
++ if test x$enable_cap = xyes; then
++   AC_CHECK_FUNCS(cap_get_proc)
++ fi
++-- 
++2.47.3
++
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 7e577fa9e1..2c464c33a8 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -14,6 +14,8 @@ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+ ZSH_CPE_ID_VENDOR = zsh
+ # 0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch
++# 0003-51723-migrate-pcre-module-to-pcre2.patch
++# 0004-51877-do-not-build-pcre-module-if-pcre2-config-is-no.patch
+ ZSH_AUTORECONF = YES
+ 
+ # zsh uses TRY_RUN to determine these
+@@ -38,10 +40,10 @@ else
+ ZSH_CONF_OPTS += --disable-cap
  endif
  
 -ifeq ($(BR2_PACKAGE_PCRE),y)
--C_ICAP_CONF_OPTS += --with-pcre
--C_ICAP_DEPENDENCIES += pcre
 +ifeq ($(BR2_PACKAGE_PCRE2),y)
-+C_ICAP_CONF_OPTS += --with-pcre2
-+C_ICAP_DEPENDENCIES += pcre2
+ ZSH_CONF_OPTS += --enable-pcre
+-ZSH_CONF_ENV += ac_cv_prog_PCRECONF=$(STAGING_DIR)/usr/bin/pcre-config
+-ZSH_DEPENDENCIES += pcre
++ZSH_CONF_ENV += ac_cv_prog_PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre2-config
++ZSH_DEPENDENCIES += pcre2
  else
--C_ICAP_CONF_OPTS += --without-pcre
-+C_ICAP_CONF_OPTS += --without-pcre2
+ ZSH_CONF_OPTS += --disable-pcre
  endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
 
---===============8612985883082553174==
+--===============3528888305017609080==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -812,4 +871,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8612985883082553174==--
+--===============3528888305017609080==--
