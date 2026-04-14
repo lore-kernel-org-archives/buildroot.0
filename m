@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80406F9D0F8
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 20:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B11C4F9D0F6
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 20:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E4C984211;
-	Tue, 14 Apr 2026 20:30:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26D8C84E02;
+	Tue, 14 Apr 2026 20:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LcBgZiaVAfbI; Tue, 14 Apr 2026 20:30:43 +0000 (UTC)
+ id 9Zt4sS47vQ7N; Tue, 14 Apr 2026 20:30:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6252D84C65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B76AD83BBB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776198643;
-	bh=PYGRGJthwvKnFDs3Nlbi2KKSPCyKI+CrdpXBxGZeCJA=;
+	s=default; t=1776198645;
+	bh=qCRn/JhATLRB3WQVFVJOuuO1xAwmJ0EwBlqAQWVWLxs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Tqur6U3Dj59kD1OfZ4aIq474eMoJyfqMrO23EwykZGV5lchgdGkU7OWkBhs1QqGDy
-	 6nD0F7UeaNRFmz5mQBD73+vt+xCeNYQsLih4FjuSCJ1xDdTNKij0Q6DHkLSWoA8JbD
-	 w+lM3AURNRZ5VkUod1/gVN/fj8JX1xStUZZQBzXSG61/3sZlh87URLRePHFXCWEEL5
-	 SrORmAetlhUB0ZI19Q34vgz4S4hkSxwW9HOh3dGSgq0R0my7jTk4VxpApCybhxdbRP
-	 0H53KTONcwGtDYVvFIfPD32MHhbvu/bTSE+8YCs/RfLQ1w7g32pRZOi2efqrKV417d
-	 NQ0mM48MtN3MA==
+	b=W4dWRZPs+qtyuGnotf7lUBIQD+JntgVomuTuegdMtqnRBvpzVT1+nvdY68vIA9O1l
+	 L0iKCO5+naZO2ch+LcKNhaYi3nE1ns3M7HiFeTMknO2g5hf6hPoanByiYv5lDgTCfL
+	 EbATamWxd97uDO7QsrdfNTSwYuiL1bshdUlLTi5eYrcLry4KVoW+fNtrN1rmttzJWZ
+	 AOIC52bNkaDuYbxAgEX5CoDAHyq4sLYKznsYozr8XywBgI4/PpbbJoXHyb+Hw0iVNj
+	 9l7oyV7a1CZgJR7SwXyZN73aVFIlSxnrnQEhwgdNL1y4xKATw/EDT3wEEba/u2BbDR
+	 QWTbn4d4dT+bw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6252D84C65;
-	Tue, 14 Apr 2026 20:30:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 53028375
+	by smtp1.osuosl.org (Postfix) with ESMTP id B76AD83BBB;
+	Tue, 14 Apr 2026 20:30:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A369394
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4342742228
+ by smtp3.osuosl.org (Postfix) with ESMTP id 349B260690
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:30:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pRNRfD-ChNAa for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0iSG-Xdd62My for <buildroot@buildroot.org>;
  Tue, 14 Apr 2026 20:30:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66F394228D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AEA960B24
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66F394228D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AEA960B24
  for <buildroot@buildroot.org>; Tue, 14 Apr 2026 20:30:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06AEC81586; Tue, 14 Apr 2026 20:30:39 +0000 (UTC)
+ id D084D81520; Tue, 14 Apr 2026 20:30:38 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Apr 2026 21:46:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50feb8738464448c74a7e51e037716fa6a2f38f3
-X-Git-Newrev: 99f8ed1212c8670404b2d6a2d0721914229be628
+X-Git-Oldrev: 5d6378db9dd83d46808cba4538a7412f71f88089
+X-Git-Newrev: cc7c20d817c6cd949c0b48999092af161ca51e49
 X-Patchwork-Hint: ignore
-Message-Id: <20260414203039.06AEC81586@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wolfssl: security bump version to
- 5.9.1
+Message-Id: <20260414203038.D084D81520@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: security bump version
+ to 6.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,142 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/99f8ed1212c8670404b2d6a2d0721914229be628
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cc7c20d817c6cd949c0b48999092af161ca51e49
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/wolfSSL/wolfssl/blob/v5.9.1-stable/ChangeLog.md
+https://github.com/strongswan/strongswan/releases/tag/6.0.5
 
-Restored patch 0001 to its original state.
+Switched _SITE to https.
 
-Updated license hashes due to upstream commits:
-
-"updating license from GPLv2 to GPLv3"
-https://github.com/wolfSSL/wolfssl/commit/629c5b4cf61ac717d40678b5cd65974b42077af6
-
-"Add GPLv2 exception list to LICENSING"
-https://github.com/wolfSSL/wolfssl/commit/e02de78507778128d989febb54086f343307a47d
-
-with various follow-up commits:
-https://github.com/wolfSSL/wolfssl/commit/0d49df7735316cdcf9ddb5a145ea6269b11364b6
-https://github.com/wolfSSL/wolfssl/commit/32d33f2a53d9a15b49694f12205dee8c0199db9d
-https://github.com/wolfSSL/wolfssl/commit/1e9d71af429218f1cd03ec9e21ca89470119462a
-https://github.com/wolfSSL/wolfssl/commit/18332faa054b58e4fe4673c041b2fbfd379247a7
-
-Fixes the following CVEs:
-
-* [High] CVE-2026-5264
-* [High] CVE-2026-5263
-* [High] CVE-2026-5295
-* [High] CVE-2026-5466
-* [High] CVE-2026-5477
-* [High] CVE-2026-5447
-* [High] CVE-2026-5500
-* [High] CVE-2026-5501
-* [High] CVE-2026-5503
-* [Low] CVE-2026-5187
-* [Low] CVE-2026-5188
-* [Low] CVE-2026-5448
-* [Low] CVE-2026-5772
-* [Low] CVE-2026-5778
-* [High] CVE-2026-3548
-* [High] CVE-2026-3549
-* [High] CVE-2026-3547
-* [Low] CVE-2026-0819
-* [Low] CVE-2026-1005
-* [Low] CVE-2026-2645
-* [Low] CVE-2026-3230
-* [Low] CVE-2025-12888
-* [Med.] CVE-2025-11936
-* [Low] CVE-2025-11935
-* [Low] CVE-2025-11934
-* [Low] CVE-2025-11933
-* [Low] CVE-2025-11931
-* [Low] CVE-2025-11932
-* [Low] CVE-2025-12889
-* [Low] CVE-2025-13912
-* [High] CVE-2025-7395
-* [Med.] CVE-2025-7394
-* [Low] CVE-2025-7396
+Fixes CVE-2026-25075.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...fine-HAVE_LIMITS_H-in-options.h-rather-than-config.patch | 13 ++++++-------
- package/wolfssl/wolfssl.hash                                |  6 +++---
- package/wolfssl/wolfssl.mk                                  |  4 ++--
- 3 files changed, 11 insertions(+), 12 deletions(-)
+ package/strongswan/strongswan.hash | 6 +++---
+ package/strongswan/strongswan.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch b/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-index 67f9672c2a..0599f9d615 100644
---- a/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-+++ b/package/wolfssl/0001-Define-HAVE_LIMITS_H-in-options.h-rather-than-config.patch
-@@ -7,7 +7,6 @@ Subject: [PATCH] Define HAVE_LIMITS_H in options.h rather than config.h since
- 
- Upstream: https://github.com/wolfSSL/wolfssl/pull/10097
- 
--[Bernd: rebased for 5.7.2]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  cmake/config.in    | 3 ---
-@@ -33,7 +32,7 @@ diff --git a/cmake/options.h.in b/cmake/options.h.in
- index 985b54241d6..c46ada8045d 100644
- --- a/cmake/options.h.in
- +++ b/cmake/options.h.in
--@@ -31,6 +31,9 @@ extern "C" {
-+@@ -33,6 +33,9 @@ extern "C" {
-  #endif
-  
-  #ifndef WOLFSSL_OPTIONS_IGNORE_SYS
-@@ -47,12 +46,12 @@ diff --git a/configure.ac b/configure.ac
- index bce600f2ecc..c5cf9f320c7 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -116,7 +116,9 @@
--     AM_CCASFLAGS="$AM_CCASFLAGS -DWOLFSSL_EXPERIMENTAL_SETTINGS"
-- fi
-+@@ -185,7 +185,9 @@ AC_ARG_ENABLE([freebsdkm-crypto-register],
-+     [ENABLED_BSDKM_REGISTER=no]
-+     )
-  
---AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h])
--+AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h])
-+-AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
-++AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stddef.h time.h sys/ioctl.h sys/socket.h sys/time.h errno.h sys/un.h ctype.h sys/random.h])
- +# Special case: Since types.h depends on HAVE_LIMITS_H, we must define it in options.h.
- +AC_CHECK_HEADER([limits.h], [AM_CPPFLAGS="$AM_CPPFLAGS -DHAVE_LIMITS_H=1"], [])
-  AC_CHECK_LIB([network],[socket])
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 9a1e8bfd4a..e1ecd5f98a 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  0f2ed82e345b833242705bbc4b08a2a2037a33f7bf9c610efae6464f6b10e305  wolfssl-5.7.2.tar.gz
-+sha256  d5ca7af48cd2d9a91d539e9baedeba55a0605a28d7ac8b01dc3d5254a13ca341  wolfssl-5.9.1.tar.gz
- 
- # Hash for license files:
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  b23c1da1f85d699d3288d73c952b4cd02760d23dc1ddc1b221cbb8be82387189  LICENSING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  84f8096dc7f70cdb6075ccf3722a44654361063eaf3e1ce7885c9875b8465a63  LICENSING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 91ab7ca08a..44f51e06e6 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 7a6939b979..44eadbaecf 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-6.0.4.tar.bz2.md5
+-md5  f6b78a99e95179b6a65df218d75da7ca  strongswan-6.0.4.tar.bz2
++# From https://download.strongswan.org/strongswan-6.0.5.tar.bz2.md5
++md5  7049111627010dc02293970c82e43d28  strongswan-6.0.5.tar.bz2
+ # Calculated based on the hash above
+-sha256  79576bb61b9a406cea9eb73d0c565cc6254a6b6d2e7198f44758d2d7c61a7aec  strongswan-6.0.4.tar.bz2
++sha256  437460893655d6cfbc2def79d2da548cb5175b865520c507201ab2ec2e7895d9  strongswan-6.0.5.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index bb5fd2d217..2e20b244ad 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WOLFSSL_VERSION = 5.7.2
-+WOLFSSL_VERSION = 5.9.1
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
--WOLFSSL_LICENSE = GPL-2.0+
-+WOLFSSL_LICENSE = GPL-3.0+
- WOLFSSL_LICENSE_FILES = COPYING LICENSING
- WOLFSSL_CPE_ID_VENDOR = wolfssl
- WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
+-STRONGSWAN_VERSION = 6.0.4
++STRONGSWAN_VERSION = 6.0.5
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+-STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_SITE = https://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_CPE_ID_VENDOR = strongswan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
