@@ -1,113 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99300F531EC
-	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 05:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 903D9F531F8
+	for <buildroot@archiver.kernel.org>; Tue, 14 Apr 2026 07:46:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4859A61CA5;
-	Tue, 14 Apr 2026 05:52:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 456FA4299A;
+	Tue, 14 Apr 2026 07:46:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7cfHiXR5Ewcq; Tue, 14 Apr 2026 07:46:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 690754299C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776152773;
+	bh=gw1NjlrVlbgmcpSnyz5wzp8SiaPxnrHJJmHKqDl7Tm8=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ZavOraxdrd+fL0Ei6rjBQQOzHmB7qhbSkDTusGvL8Bp+9RwgNlxwPVzRNZiPAy1h9
+	 Big+vZGyY1kRDNfzhgfXKPT2uCfA4QdmBgHzaIE7f4xxQCxgGOe1xQTt6HRJbO0Qwh
+	 R+DSRbJsiNPoQS8HHuyxrxGunsgHZg3b1ZqVlxlpEuNGRQmLpNZ2i3957urVVd1ZSg
+	 XOqNJ9fVknlydUmiewZVDYeN82XKWdiPaDgb1k9ZdI9cXQG0kSpUk2DRkewYxIL23Y
+	 Ms6Ks6evm/+zHU4LRKp+RfgcSIzazofNnPQrsxwD1yfb3XH/ppfoZzEx08F0/pZpzG
+	 EcgZlSk1qJOCA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 690754299C;
+	Tue, 14 Apr 2026 07:46:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9CF9237
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 07:46:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89F6261CDC
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 07:46:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YsBh5z5JDGmT; Tue, 14 Apr 2026 05:51:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EED561CA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776145919;
-	bh=f5cZDtvWFabiQBIJlGlzLM6yZezD2uo39UPeC92d4fs=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=FrZFEiBY6iCaY9GxQvRM+Rw2HiLDuD0QaOkY8JJut5dk158OOxnxE6LPocReF9hAS
-	 hyb1TLJ7xmDYbATWpAhDGR/MkHLpjhoWqhl6d4WfMm4fbfVbSsV7Ib2NoBgjxiIK0T
-	 hVGW4z0AERD6TI63AggmrxtoEmOFGHlufjt84haUtptOq2X4w6ErFGN0Y4hv0XVXr2
-	 pioER5d25Kx/OdxkRmkTBtV6XgMf5QSa6lY3Fpd5RDxOdceG8eea1qsxNrTsoe4QH0
-	 Ed9VBhaKAx5M84Ej2QfBHQB4mx5wsX0pTiFb4Xx8k9fJAdFZuiRrYVKBHTESUA6Zic
-	 Cp6V7KPwJ4TdQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EED561CA2;
-	Tue, 14 Apr 2026 05:51:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9AFE375
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 05:51:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6A764007D
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 05:51:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a_cuR-SGhV6D for <buildroot@buildroot.org>;
- Tue, 14 Apr 2026 05:51:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42d; helo=mail-pf1-x42d.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DEF4940074
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEF4940074
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
- [IPv6:2607:f8b0:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DEF4940074
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 05:51:56 +0000 (UTC)
-Received: by mail-pf1-x42d.google.com with SMTP id
- d2e1a72fcca58-82f41fce3e6so776956b3a.1
- for <buildroot@buildroot.org>; Mon, 13 Apr 2026 22:51:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776145916; x=1776750716;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=GLO9rsxXTUJCgIRx3jcQZtHKRtqpFbTKDGhJEu6s2BE=;
- b=VTJiAR6wglbxLn/wXynndj49SgLQRkrdX8HiH9Xct/ZaH0XOYeyuYUsGwwEDYM8OnF
- wMWPeP/kCpMtyNKxhxOpLx5QYQFO/36VYsT7QyosfmvRzbgVLFtk0wGzoRXPiDR9L8yr
- VGjRN8ZgRGIkyVYH+FudphTBj42LUjNDToelIiIkibtYiZsR8SeDLtX5UFU7TolFCsJl
- oO5YF8NSKcOJ+E051Nk9+yXY0iKul5xbio3TGb7hVwc5h3oH5H8mCLZfsIYdtcyriU/W
- EUAR5s/QEAbpaRnSxsoMPw6VRsLXj0SLAusUyqJFmUR+HMLxWNGpYbdGskYK1QV4HqYr
- kOEQ==
-X-Gm-Message-State: AOJu0YzOu78S2mdXzIctQ1hH5lOCs1CnhH7hh3IdcFWSfKn86SsRBFPp
- x1/JrhQTuGUHUishZUyWZlr0dLFcxOvzqy+sgEtGSqFhq33W2Q+NbZoTIsRWGw==
-X-Gm-Gg: AeBDieubLLv5zYoRr1B39QGMXZspxsSTFWt0b3y7M8MgCwyLWDHoNHLLdj3hNyjhQ9M
- xXlYTrTcfTdrHa2kk1m7DYlC2WBElhJ6f4HVPBkPd604is2uc0GVFVqd3zGeaRAdrZdVGshh6Qv
- EB5/b5QN5yud2kCvwTPEJnQWsiwDzqylXSqf94MaGttWWNNrv8/p/TMFYBxHe/Fu0vYt0IHm/B9
- ygGmO0dSITn7dmWX7MCvSGafjy043UdhyKrvtrAz2p0QsAminuX0fBAQr/gHxF7DCOlxjc5LXFn
- MVvcgeMIReTS6GHx7bQKSkLO7cOE8BFO2S9xpbE+SwVp2+lZUHFaT8ldoQcseqSlocDsVqTrSjI
- fsKSEJJYMeoFd7S27efjDRUkP0cLBp58iOljab9q0XxMB1CFun2GgbvriAnqTczA18usVDFrSzp
- WY1wZRZoZALJmWOwn7EiujaDbkFbICWuzhOh8=
-X-Received: by 2002:a05:6a00:114f:b0:82c:e0d7:2681 with SMTP id
- d2e1a72fcca58-82f0c276ff3mr16684543b3a.16.1776145915510; 
- Mon, 13 Apr 2026 22:51:55 -0700 (PDT)
-Received: from fedora ([152.58.163.113]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82f0c30e3f8sm13500555b3a.8.2026.04.13.22.51.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 Apr 2026 22:51:54 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ id 1W1F6oi782Zn for <buildroot@buildroot.org>;
+ Tue, 14 Apr 2026 07:46:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
+ helo=smtpcmd02102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B83B961CDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B83B961CDB
+Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B83B961CDB
+ for <buildroot@buildroot.org>; Tue, 14 Apr 2026 07:46:09 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id CYTFwpG4XxFXLCYTGwWceN; Tue, 14 Apr 2026 09:46:06 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 14 Apr 2026 11:21:29 +0530
-Message-ID: <20260414055130.72888-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 14 Apr 2026 09:46:05 +0200
+Message-ID: <20260414074605.3769357-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776145916; x=1776750716; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GLO9rsxXTUJCgIRx3jcQZtHKRtqpFbTKDGhJEu6s2BE=;
- b=Kj9Z6lPXKZR33azWYBrQloSSAooN2zTuByTVu1qttSAuRgqtGeioAqbA8/uJgcMNUG
- HWt/wrk/wW7XybW9Po9oUXVIztZFG9Mqf/+CvNLJnTgWnQ1Hh1oA6o66AvgCQOkkRXAj
- Ls6zu8gdQVcyuq5Fo237NBpMZFbFUO3RI9Y8r4RssRQtvfxAjhMOfEhV+FwQj94zwFzq
- j6I6n5hR++ePSzyAYE2WZVvbW7+0XRq+wIXlKChOT4uf5EnXFv0ls7XB577S6b9zpso9
- z3Xk55s3+DucvrAlNSyLcTTYs7Jme+vOyqS5As3nMVD+DDV8ZkmMMNHJcZYq5b48bzg8
- 3Q4Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfO/+7twa6Y0n0ggq+5C/Ig1Vh7x8beW6bQJ9h61w2E7Loo9zirfgdXW4kfg6fSZviw8tGchmV7FpFWU3+E56Vr2mk1zsHTg74MRd+ZjNAPT2bBeZlfC7
+ e7TXYIww6ozDJfXjhT57uH6/1dL41o0GWexExHy07lnFaNOSObR+L9RmdhutwvvGMZ92DQYFIe83qzYtstek+YRuhEN3S/7Tk5Fh124HRubJqcLu9OdaNvov
+ nxOSbQLMxMHuaTuIOkAfvr8ukBgd8O3Hu21vZ/yay/tE9ha50C0LuHy6vfAI3eC/8O0A8rsbk24FSGUZHbPVEA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1776152766; bh=tNgntZzigZTBQXpSlAS9OzwDDtnroSU1mMQgwdX2XLY=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=H44MefcwWi93DckTUogHAjK0uJWsOSmoSN26THIZyMbzQ2/d3XuwhV7Rnjt0+0JNj
+ CZuQiw8hdk9ExRJhJ9p4V71f18T+I2TyW4t+7fW4RnvaGhwoAcImXbUpb+H4stU98j
+ zcMHjWrO84moJ1dcXkLNtlYa7xFDYG/ZzToLGobCguNonMmj4upO5W/pZPzCy5V4mn
+ RkuECHS7uPamKLjZ7fi7q1LMIMN8xYYjM3tdDfG/oNr55vh8LpwMSpmE2qSGdxUgy4
+ o/oJcpz7+g+L3gstVdE0/LekazcGipn1LSpVHn0goJjR007ysVRj+vCOTV1UFDe5Kh
+ 2tC0Mr7J++CoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Kj9Z6lPX
-Subject: [Buildroot] [PATCH] package/util-linux: fix LSMT_ROOT fallback
- definition
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=H44Mefcw
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.122.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,90 +96,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The fallback definition for LSMT_ROOT was incorrectly guarded
-with #ifdef instead of #ifndef, making it ineffective on systems
-with older kernel headers that don't define this constant.
+For release note, see:
+https://firefox-source-docs.mozilla.org/security/nss/releases/nss_3_112_1.html
 
-This caused build failures with "LSMT_ROOT undeclared" errors on
-autobuilders using older kernel headers.
-
-Fixes:
- - http://autobuild.buildroot.net/results/ac2/ac2bc633db0c605564c79bfdfa0e257a9b4f1b28/
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...api-utils.h-fix-LSMT_ROOT-definition.patch | 26 +++++++++++++++++++
- ...api-utils.h-fix-LSMT_ROOT-definition.patch | 26 +++++++++++++++++++
- 2 files changed, 52 insertions(+)
- create mode 100644 package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
- create mode 100644 package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-new file mode 100644
-index 0000000000..672a2b2e79
---- /dev/null
-+++ b/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-@@ -0,0 +1,26 @@
-+From 72ff3b8998a675900fcb7c18c0e03f1552b13a8b Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Tue, 14 Apr 2026 11:04:08 +0530
-+Subject: [PATCH] include/mount-api-utils.h: fix LSMT_ROOT definition
-+
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ include/mount-api-utils.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
-+index a916f99..87e173e 100644
-+--- a/include/mount-api-utils.h
-++++ b/include/mount-api-utils.h
-+@@ -339,7 +339,7 @@ struct ul_statmount {
-+ /*
-+  * Special @mnt_id values that can be passed to listmount
-+  */
-+-#ifdef LSMT_ROOT
-++#ifndef LSMT_ROOT
-+ # define LSMT_ROOT              0xffffffffffffffff    /* root mount */
-+ #endif
-+ 
-+-- 
-+2.53.0
-+
-diff --git a/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-new file mode 100644
-index 0000000000..672a2b2e79
---- /dev/null
-+++ b/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-@@ -0,0 +1,26 @@
-+From 72ff3b8998a675900fcb7c18c0e03f1552b13a8b Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Tue, 14 Apr 2026 11:04:08 +0530
-+Subject: [PATCH] include/mount-api-utils.h: fix LSMT_ROOT definition
-+
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ include/mount-api-utils.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
-+index a916f99..87e173e 100644
-+--- a/include/mount-api-utils.h
-++++ b/include/mount-api-utils.h
-+@@ -339,7 +339,7 @@ struct ul_statmount {
-+ /*
-+  * Special @mnt_id values that can be passed to listmount
-+  */
-+-#ifdef LSMT_ROOT
-++#ifndef LSMT_ROOT
-+ # define LSMT_ROOT              0xffffffffffffffff    /* root mount */
-+ #endif
-+ 
-+-- 
-+2.53.0
-+
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index d2e85cb32d..d0d278c7f6 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_122_RTM/src/SHA256SUMS
+-sha256  2699478b843b9f09c61f85341578df514463a0069447c816bef0d59bd800d777  nss-3.122.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_122_1_RTM/src/SHA256SUMS
++sha256  de5a655da82a67e502b802ae0b53f3eb02ea53f509c3fc0ab54a892e04493bbf  nss-3.122.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index bf59827bdc..b40cab03c9 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.122
++LIBNSS_VERSION = 3.122.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
