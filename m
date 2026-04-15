@@ -1,118 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBDBCFA0C30
-	for <buildroot@archiver.kernel.org>; Wed, 15 Apr 2026 06:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F27CF43832
+	for <buildroot@archiver.kernel.org>; Wed, 15 Apr 2026 15:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B294042E8D;
-	Wed, 15 Apr 2026 06:27:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FC3D80675;
+	Wed, 15 Apr 2026 15:25:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8jOKpiqRVSgN; Wed, 15 Apr 2026 06:27:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bIARafP2jM5A; Wed, 15 Apr 2026 15:25:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC00F42EB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96F9B806BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776234444;
-	bh=wHLBJ5BR7RQxeu7oAufOPnr2F6ERwj6g7WxIbCooGQE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qtecG09LPqh1XlZ7UJLffKiUMOFgqLpl89Ei2ip7BTku5WJ3SFNOy5W67Z/y81jpk
-	 JevMh8rdqcS/9RTCARtnZr19TwZsrbKyLXpca3ht9sxLfn0uz695uiH221VnPHCv8e
-	 4aiyt2du4uhnYWj+OKi7936RbSFka+YFCppBf93wdOPexNyToMbCUDXSZEDewSt9m0
-	 J3dGolQt6KjYuFPi7mBH9uHM14PZ2Oe6WZAtlLMU2lW5L5fYQ4PVmlszmnhg7kYQ1y
-	 EwE/vQj8pO3QOeTiF61ggoxH+tQZbTisenvsBmb8rpS6RcH65VOJEdnW6WZFywFCpM
-	 Xg4QWxENtHgrQ==
+	s=default; t=1776266714;
+	bh=kxNxfJGHueAxg44zTX8wrh+ERkULcF1w1BUqlySMxEQ=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ilwZdUC1bjgGKZ4DdvSCWpgR3yEDWYMNOrcCVZH1c3f2VSjxcNXYLRBTukCPIj5jU
+	 z9bNc6IpYSMY2fhhu842OcODaXKLBK0m1BJoZfa6mGAwauWjVQXYow76QlqTVwKz5h
+	 XEJofFJEA7lH+NJYdu8ii+oNIAnYRRprmvebY+cLsrUzF3Ew7hsALzIlG4cOVDuWcj
+	 K6UooNiLDKJBGrD3NUYpCPC5KUN00diHKLTivSBSnPQUy+e0CO/gUYH+NPPCMYafzV
+	 KYWZVqk6EcJe3MJFRrO+GBbfZqApNOea06RhLQ768YEiLVJFVWmJuRJgMS7yTj6tU+
+	 g6/jHFw4Frctg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC00F42EB0;
-	Wed, 15 Apr 2026 06:27:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 742DA237
- for <buildroot@buildroot.org>; Wed, 15 Apr 2026 06:27:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96F9B806BD;
+	Wed, 15 Apr 2026 15:25:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80351391
+ for <buildroot@buildroot.org>; Wed, 15 Apr 2026 15:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65BAC4269F
- for <buildroot@buildroot.org>; Wed, 15 Apr 2026 06:27:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71E2C60731
+ for <buildroot@buildroot.org>; Wed, 15 Apr 2026 15:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TY4fY1hDnR2C for <buildroot@buildroot.org>;
- Wed, 15 Apr 2026 06:27:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NcDSO2BAZFvm for <buildroot@buildroot.org>;
+ Wed, 15 Apr 2026 15:25:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6AE94422CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE94422CA
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6AE94422CA
- for <buildroot@buildroot.org>; Wed, 15 Apr 2026 06:27:21 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4838c15e3cbso59604535e9.3
- for <buildroot@buildroot.org>; Tue, 14 Apr 2026 23:27:21 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6AA94606BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AA94606BF
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6AA94606BF
+ for <buildroot@buildroot.org>; Wed, 15 Apr 2026 15:25:12 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-59dea72099eso6996464e87.0
+ for <buildroot@buildroot.org>; Wed, 15 Apr 2026 08:25:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776234440; x=1776839240;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=D3trGtVZBOX4+r7ZcJUNZDDlqEm42gFdhI73c8UUE78=;
- b=lZYZ0DWtsWNIlqL/HjIx6mmxYK+MwBvksJUrwTfnlDD5gqhvXiBC3S/5wV2V5Wf5s3
- 2KK0wagk0dgsxvxXfEobmRfvH80UGu912uq+S1hlnx26f2JkNG7uRTcpfqMUT30E9nLt
- xKbjn23ieFFn1xAql1c/vrQYzQcKd08QRdUyp8Fq80eGqTS375aNQ4UIceSjl8Kk67jO
- +5CqSKyS1IrBbyOW/tmpFZaRgkGIU79xq2PsKwtv27Zndcfm2WqFS51g5Cr1njxSHZTf
- qgswMly3FX/b+afBtg15L0T9gVbiHneiC7/poCV6GFHYW0AhahMEH0k5cXuO7FiQeLCn
- 76YQ==
-X-Forwarded-Encrypted: i=1;
- AFNElJ9Pxx8yznYD8JtrZOwNEchKldFZlupGKZ1jvoByAdde9cZbJ+p2S9mqBw0NQRPztqUF7Ssvu01NqNU=@buildroot.org
-X-Gm-Message-State: AOJu0YxNQsy6slwcyzWLRU8ggzC0+WlBwmpg/cvQTXo94eVqTEe130tL
- XiPT0u5R+CACmKPJi5MtGgUz26Obmmz0vIvY7mtPzxL6BK9wnCH8pddjEaoEnVs0Bdo=
-X-Gm-Gg: AeBDies4mSTXqcMF9WuLCdqLUa4hIql+ETd3x5ybWW23KQZVxzyydnjssLU8atfzWM5
- Cwz+Axng7saStF5w8ErzTqG7+s3aMsZwXpzYuCDrM3dpoYDjv18ovNfGy9jXXt8ACWcL4ef4JCQ
- Pinu4EcfPQWqEIv7SYAHZ1GNOmXOxy1NSJs2UzEA1khLrGvQWtPs+n5bP4Fuefe5LX2Y1yE9PvP
- wZjylKgWGxpJL4n5M091VUmBk1LE/rsHbVduwWIC7e+fD+utbUoAoV77Jm7c5V2fKhDbKmPUkIc
- sOk8PU7rLiB3Ty4kf7Kp01CEehiW4arMCUyMsLOdOVyqBTEd/tffxIuCVqqanWy18UhiPgqFdFn
- PKu0rjGNhcivAbB3dd8rkIopMbw23PkG6Cheua19pxPC/7/31ZhG2Jxdxgs8oWMj73tSyM/Bdh5
- jX4TEDLk5lfabuX8JOz7Gfc/bVTQU=
-X-Received: by 2002:a5d:5d12:0:b0:43c:faee:87e with SMTP id
- ffacd0b85a97d-43d642cb48bmr30293418f8f.48.1776234439847; 
- Tue, 14 Apr 2026 23:27:19 -0700 (PDT)
-Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43ead3d5ea9sm2427550f8f.21.2026.04.14.23.27.19
+ d=1e100.net; s=20251104; t=1776266710; x=1776871510;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=o+7lmFfvcz2l854Y6ekfJBYfOCp60aFKocelQSDwlG8=;
+ b=g/jHzWm9pNfveYw691T2swqxUf9lxJqpHy4ip8vpT/MwtwPklaPf1yjaAf+FczBQnt
+ ud/Z04HwMB5ify88iPkEOngM5+TfwTv43GGAQc06r/z5AOA2QzyKfz6XHOAHqRFeX3cg
+ 4nmC2GJe626QNEUImAlaOis3GtEnAyPNn8GJNHYzU+LIGUGlKzzItwTbV/LJwsQl2Idh
+ 8/QZJqwIr5sx0VAt3wvkKTz4oaKCvdEkLRiqjzAbJUBGG4UidVnjxOqhqxX/lJfwrzN5
+ D5IuC/ti0da73WWA58Bd+pUd/MQTsN8BkmQ95vEzz5ixxMk8ITeF7ggPOWljl4YYhaPv
+ /cTA==
+X-Gm-Message-State: AOJu0Yxngy9U8tSiSkoP1mKWbrFPpyHUoM+E9k4q5AD5nqxmtFg9bL6G
+ b7rwUX7oQXMMIH3cBra5IOOmKYyvqkf+3CD4pzq7gcD80uH4ML7l/9MfZwpE
+X-Gm-Gg: AeBDieuCag5kulYnIk5lNmUaEnlF1ZUjdW9PQ4GB6L5f/jtLOv7gjsnjvYhQ7s6+Dtv
+ TV3GdoreHRZDosfRd6+N4yesy9SVZFc5msh5xPyBqAZ0uPl13iHEehv0ev4Q2BRevMe/XgcaVHF
+ 1SuAW+8I+mVcluYbaNWKr64NONenL5OWfOZ/GEUUcZqLkBRhvCmKmQqRhVYzYW6+dO9JM1AHvMo
+ xkypm2dLZWhe/hlY26muCeFE6YFDfkL+cmfHe3DB7762YJfw5OlQjMnEg4nRFswmMiYwb6PE6ZM
+ W/6D2jNZ8RPIvtn6yMRJZBTGfet1JVABAL3QA7SouGo/V4tCD1pO8ZVRKBMlQRvt8ZGMG4VvySQ
+ CGWrSALmZ1jsk+Qg5z4Vu639dbpol581JB+bftp+ascfbQyXsv/353aWHVEjRdv5/gNEfcyxcG4
+ U6+6f43+KF1CCLZB0TLBJpIcde6FtSCEa/NmhDZQ==
+X-Received: by 2002:a05:6512:6c7:b0:5a3:cc75:26e9 with SMTP id
+ 2adb3069b0e04-5a3efb38d38mr7307419e87.29.1776266709324; 
+ Wed, 15 Apr 2026 08:25:09 -0700 (PDT)
+Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-5a40a2e7394sm551695e87.51.2026.04.15.08.25.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Apr 2026 23:27:19 -0700 (PDT)
-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Thomas Perale via buildroot <buildroot@buildroot.org>,
- Bernd Kuhls <bernd@kuhls.net>
-Date: Wed, 15 Apr 2026 08:27:18 +0200
-Message-ID: <20260415062718.21784-1-thomas.perale@mind.be>
+ Wed, 15 Apr 2026 08:25:08 -0700 (PDT)
+From: Alexander Shirokov <shirokovalexs@gmail.com>
+To: buildroot@buildroot.org
+Cc: Alexander Shirokov <shirokovalexs@gmail.com>
+Date: Wed, 15 Apr 2026 17:24:36 +0200
+Message-ID: <20260415152504.484373-1-shirokovalexs@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <877bq8deuh.fsf@tarshish>
-References: <877bq8deuh.fsf@tarshish>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776234440; x=1776839240; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=D3trGtVZBOX4+r7ZcJUNZDDlqEm42gFdhI73c8UUE78=;
- b=ZX3Yt/HjXuua8j8G8XLJtXGoSREoFqf+PTmRt8HWel5zllQbKQ3/z5cTcCGv0HzNSp
- R+7SA0gz6X7oTo+mFizUm0XNIX39vTWRPOIq+DPiTJ1h/lk8NbsRVBKNSbvYLK7rqaOZ
- dcdSzIHYFBRnMpxZEoQirL22qhEKEdesYvXod3FB2AofyW/lj8kwH1JBEcZ6v/+tsMWb
- +5XPeIcHk4edYqvsz5777V6OZ9gdIldWQotuZK/RTArC/BmY5T3PHQJYMTSXUf1W8TiD
- vsZDAhk1NdZWbe02afRlmx6Xe9yuaXvsJpQNz8lo8KB6d9qHAUrBEZyVZ9o4cwzxW6ye
- tJ2Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZX3Yt/Hj
-Subject: Re: [Buildroot] [PATCH 1/1] package/xz: security bump version to
- 5.8.3
+ d=gmail.com; s=20251104; t=1776266710; x=1776871510; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=o+7lmFfvcz2l854Y6ekfJBYfOCp60aFKocelQSDwlG8=;
+ b=Og7Xd6GzebsvgyXjJWnYxczLgT+ite9RE/UCavZ8VrSHov7PPTq2TU51Y9e5oaQXDC
+ V7ruC+OAkrbovwEaO3CMW5W+ne2irNSngQgwB+DgQzn0zjP6vmE8m9rgv8WFpqdVG86J
+ qu2qXM4PhpUop+r0zkgyYbW1Kjm8N+FrlvZzJUiNwZoQgVQYfrip9tgzs+EbWVrEpWCA
+ lruauwvBKt2Mq/EHq8hpSb1f0uMT6qnyFVDQodRF7yskVgBNtbgMGsNoWaPCv8CRQM92
+ YvG8EICmrxU417j6XuGGX3WZN9EqNXyIsnsv8xsOXGtWsydRLxeJzUcFTMf/shKxAZ2X
+ nc5A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=Og7Xd6Gz
+Subject: [Buildroot] [PATCH 1/1] package/kibi: bump to version 0.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,84 +117,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Baruch,
+Changelog: https://github.com/ilai-deutel/kibi/blob/v0.3.3/CHANGELOG.md
 
-In reply of:
-> Hi Thomas,
-> 
-> On Tue, Apr 14 2026, Thomas Perale via buildroot wrote:
-> > In reply of:
-> >> https://github.com/tukaani-project/xz/releases/tag/v5.8.3
-> >> 
-> >> Fixes CVE-2026-34743.
-> >> 
-> >> Switched to sha256 tarball provided by upstream.
-> >> 
-> >> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> >
-> > Applied to 2026.02.x. Thanks
-> 
-> Not in 2026.02.x branch as of commit 8f19b5b8096f ("package/leafnode2:
-> fix build without pod2man").
-> 
-> baruch
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+---
+ package/kibi/kibi.hash | 2 +-
+ package/kibi/kibi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixed thanks
-
-PERALE Thomas
-
-> >
-> >> ---
-> >>  package/xz/xz.hash | 6 ++----
-> >>  package/xz/xz.mk   | 2 +-
-> >>  2 files changed, 3 insertions(+), 5 deletions(-)
-> >> 
-> >> diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-> >> index 99daa5e9df..488a3d55dc 100644
-> >> --- a/package/xz/xz.hash
-> >> +++ b/package/xz/xz.hash
-> >> @@ -1,7 +1,5 @@
-> >> -# Locally calculated after checking pgp signature
-> >> -# https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.bz2.sig
-> >> -# using key 3690C240CE51B4670D30AD1C38EE757D69184620 Lasse Collin <lasse.collin@tukaani.org>
-> >> -sha256  60345d7c0b9c8d7ffa469e96898c300def3669f5047fc76219b819340839f3d8  xz-5.8.2.tar.bz2
-> >> +# From https://github.com/tukaani-project/xz/releases/tag/v5.8.3
-> >> +sha256  33bf69c0d6c698e83a68f77e6c1f465778e418ca0b3d59860d3ab446f4ac99a6  xz-5.8.3.tar.bz2
-> >>  
-> >>  # Hash for license files
-> >>  sha256  616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8  COPYING
-> >> diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-> >> index 8aa0716b18..91eedd7a83 100644
-> >> --- a/package/xz/xz.mk
-> >> +++ b/package/xz/xz.mk
-> >> @@ -4,7 +4,7 @@
-> >>  #
-> >>  ################################################################################
-> >>  
-> >> -XZ_VERSION = 5.8.2
-> >> +XZ_VERSION = 5.8.3
-> >>  XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
-> >>  XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
-> >>  XZ_INSTALL_STAGING = YES
-> >> -- 
-> >> 2.47.3
-> 
-> -- 
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/kibi/kibi.hash b/package/kibi/kibi.hash
+index 3ab58428cd..b206b7742e 100644
+--- a/package/kibi/kibi.hash
++++ b/package/kibi/kibi.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  c65ab03df3c2f1b83b41c2074032edc6c0bc7ff616ff9116cee49ee36c462521  kibi-0.3.1-cargo5.tar.gz
++sha256  1fb9203d4d45efd7e0645f5a1dbeb14604dc7817d9db35c6f2bd650053877e59  kibi-0.3.3-cargo5.tar.gz
+ sha256  53cdcb17642e801f813712b4844293b037c23d4b482004b77c15ae2f36f551c3  LICENSE-MIT
+ sha256  8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE-APACHE
+diff --git a/package/kibi/kibi.mk b/package/kibi/kibi.mk
+index 24f466ec30..99ac38f320 100644
+--- a/package/kibi/kibi.mk
++++ b/package/kibi/kibi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KIBI_VERSION = 0.3.1
++KIBI_VERSION = 0.3.3
+ KIBI_SITE = $(call github,ilai-deutel,kibi,v$(KIBI_VERSION))
+ KIBI_LICENSE = MIT or Apache-2.0
+ KIBI_LICENSE_FILES = LICENSE-MIT LICENSE-APACHE
+-- 
+2.53.0
 
 _______________________________________________
 buildroot mailing list
