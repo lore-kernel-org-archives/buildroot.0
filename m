@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19FB8F8D774
-	for <buildroot@archiver.kernel.org>; Thu, 16 Apr 2026 19:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE3EDF8D775
+	for <buildroot@archiver.kernel.org>; Thu, 16 Apr 2026 19:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7517340ABB;
-	Thu, 16 Apr 2026 19:34:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sriB00AflL4A; Thu, 16 Apr 2026 19:34:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C29840AB1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776368050;
-	bh=Hb76q8w8YB5wY/31pOx5GVjT7+1rQyrrm3JnjsJF5Sc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nfW8O7YtRk2AtYKdBX/cWxd5FgplUMgP/YkAUc832txPL3hcNUXJGjgH3cOPSWyG4
-	 JUbZ3/esZFF3d1nqvg3PydhJHHzEJHzZ7W9+Bf1a7PgliNSN+3fqvjSAF88tHNMXFS
-	 wXppTx88AedsKW2ZNvna06p4mWgcan79BUN5gav3EhVi9bOMDw5XoSb6oLBIM89xuh
-	 7vJY/dfHKa2JgCr5L459QZ4f1K3CPc5MsJticBNY14qzatJkWYjb1IDfE/DnSLPff/
-	 izFWnnITDckqgghCZ1NWL9ZEGzv8M/4CYTuvhPBa+kx+qdO2Ww9klAoGqohNQsujRW
-	 SuOWLqG3DWsMg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C29840AB1;
-	Thu, 16 Apr 2026 19:34:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 427C7259
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:34:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2801B80FF4
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:34:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C71181046;
+	Thu, 16 Apr 2026 19:43:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hdK6iWh13H55 for <buildroot@buildroot.org>;
- Thu, 16 Apr 2026 19:34:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20AE180FF3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20AE180FF3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20AE180FF3
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:34:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CF97313F89A;
- Thu, 16 Apr 2026 21:34:03 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 16 Apr 2026 21:34:03 +0200
-MIME-Version: 1.0
-Date: Thu, 16 Apr 2026 21:34:03 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
-In-Reply-To: <20260416073657.3605628-1-bernd@kuhls.net>
-References: <20260416073657.3605628-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <9254d97d1fb01a3e21d2a0f5e009d290@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776368046;
- bh=YTY0tSVuPAnyZvPEuylD6uREdShJkwCdMxWjXbQcPQM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=i0xnB53gOSal/CERPlogAyqqb9jO8mfO8dgT9Ao01JhC004U1kZ/z9PaYSfeOQLGT
- PKSbw2+frU5zTEkP9jj7NFUX6jNM277LZ728yM1YZu0Y9hfbfpIp5vQzK/wOok2yju
- A5/HVxKMaoe5KxLZcw4fmQhRWgir2P5NidYnR9PJB16QziLCM/nqFoXZjx4Rirny0C
- 8k9H3dXKOGAt+kny7SgclFbjGpSSDqbLLyNxe1d+3fsUZcvCrjz1tTb48s9PauyIcR
- vCsuIa44ex41H3subi+7I20FtlfnDRhEzylj4Oyv/JVh60KRK0M8aKJWCbSebct6A2
- BZEtaWgccaipw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=i0xnB53g
-Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: security bump
- version to 3.8.7
+ id 9hX1hPS4HCtA; Thu, 16 Apr 2026 19:43:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FD6281027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776368599;
+	bh=nnD3VYqzaAKUZOy1ihMLTqSwZghFuJET5immfiAEeYM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mB9tm+cdKqdp2PUund80WWyqOPvGGQvhA0ZOfA0pyKQ+7frZBtJcF1FwJL+9nYznx
+	 o24+yqYNAT9QbIfxoQGNM/Hg2ld8ShW+L6Z+f6nHA5LQfcixakIQmk8014GbcMeoUa
+	 oU8dxu0Vy/8iXSJKpnDQreSc1BiV1s0wBPQtEdCNYXcbMazSAnV+G00R2KAX06K8Eh
+	 /zVe4YtAcxhfHgdOBpCN0lfGINacBnlBtQVkszAIeAhjnBi7CrLowEqnRe66Yo7EXh
+	 jLVdpAa2Vs8XGpOvBz2m2h5ndO4EAwdhy6Kpo1jIVvcT92GCM2oLzyoSm/mN2wBDl6
+	 uTu8JnJ2k/60w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FD6281027;
+	Thu, 16 Apr 2026 19:43:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16E58259
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:43:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F12D280FF4
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:43:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eRCIVmdvAfEy for <buildroot@buildroot.org>;
+ Thu, 16 Apr 2026 19:43:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FC8A8103B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FC8A8103B
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 19:43:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3CEBB817A9; Thu, 16 Apr 2026 19:43:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 16 Apr 2026 21:35:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5fc186771e18bd2a39d8a643e85ddb662eaeae36
+X-Git-Newrev: 188fad7af1fafae2981d3916bcc8e0b13b3d2c5b
+X-Patchwork-Hint: ignore
+Message-Id: <20260416194315.3CEBB817A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xdg-dbus-proxy: security bump to
+ version 0.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,18 +71,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/04/2026 09:36, Bernd Kuhls wrote:
-> https://github.com/libarchive/libarchive/releases/tag/v3.8.7
-> "Libarchive 3.8.7 is a security and bugfix release."
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/188fad7af1fafae2981d3916bcc8e0b13b3d2c5b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+While there is not a security advisory to go with the release,
+it includes a patch to prevent message interception that may be
+considered a security fix.
+
+Release notes:
+
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.7
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index 93d4bc05ce..e5be1f0cd3 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
+-sha256  131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1  xdg-dbus-proxy-0.1.6.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.7
++sha256  3ad3d27ba574e178acb5e4d438ba36ace25e3564f899c36f31c56f82c7adbbe7  xdg-dbus-proxy-0.1.7.tar.xz
+ 
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 0e92946915..6c3ef5c9d4 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDG_DBUS_PROXY_VERSION = 0.1.6
++XDG_DBUS_PROXY_VERSION = 0.1.7
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
