@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 566F0F8809B
-	for <buildroot@archiver.kernel.org>; Thu, 16 Apr 2026 07:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82584F43841
+	for <buildroot@archiver.kernel.org>; Thu, 16 Apr 2026 07:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A1BE80609;
-	Thu, 16 Apr 2026 07:35:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58EFF807D5;
+	Thu, 16 Apr 2026 07:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vy9qFWqYlBWL; Thu, 16 Apr 2026 07:35:07 +0000 (UTC)
+ id MlZGuZjW7gtc; Thu, 16 Apr 2026 07:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F18F8059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70A06809CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776324907;
-	bh=kekwo7BG1P1TEaobquERWNrOr1yGBxz7MCnAece3CY4=;
+	s=default; t=1776324930;
+	bh=iO0vKOgKmh1JlvJk0QrE9cJNL7sSOY+INxeNWhIgBOQ=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Hvh/u2xsZFPO74E6JzxiQqex7kc2HsPJE8DuZpkhxKct4PMuUT3PhEjl6jqqVbeUs
-	 Yvh57x4xGsFm+kSwBjiE149J1F0p2s9vQmcTGcfOBNJT86uVVmd6BNYBHbCHXKJlo2
-	 ClmbBUDImPQoRzh05IHkVh7pBBIUAszkajbU+m6DODV/UMmf32+xI3ZGFZ78bToGOW
-	 Utz90/riqT7DZwgxDEJvsLm7LMG1o/mQ/Drp+RsLSpoeP12KjF2mAYHKcPYPwZJITG
-	 0ixWv+uAEcKoBxhRXjthwI1m2xdCxfh9z+x+kXCWTwZ0/6HQ0F/c8p75z/B2M04oK3
-	 XNhCS3D8olEDw==
+	b=B6ZhJITzeWJ1BnNQs6BLBog2LQ/Xqf0WVj22B/r8E0KZfy8u9Rq0DaV0b/mfXTxXL
+	 /JJ107G3VRKnPk4sJj3fwmTi8rX+Wtbwk1aa0k+5jOFNcGy10+6Q+4Ru/j4RS2Hind
+	 /WgF4wPJxBYd5D/5yTniDY6nP5QTUrdI8vTej2Fzys504rn5Uh+5wynOZ6V4SqeRQk
+	 aIpDb4Pm9ur+vIatS/2nRORBC2vMbrfodF1A6VehsX7DxACBGWDOQgUp1Z+hECghQZ
+	 OpacuDOQAfdQHpYJ41uqQRw62G+U0H8cprrfIPbQTVVxxzjv/axPyuPu5pKMknx+Vg
+	 uW1QA3cUoeSuw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F18F8059A;
-	Thu, 16 Apr 2026 07:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70A06809CF;
+	Thu, 16 Apr 2026 07:35:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BC3A2CF
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id ACC34127
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71BA540106
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92B7D40128
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lu0y4_fAtLDF for <buildroot@buildroot.org>;
- Thu, 16 Apr 2026 07:35:05 +0000 (UTC)
+ id SsHZVVJzihor for <buildroot@buildroot.org>;
+ Thu, 16 Apr 2026 07:35:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 592EB400EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 592EB400EA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 811A540106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 811A540106
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 592EB400EA
- for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 811A540106
+ for <buildroot@buildroot.org>; Thu, 16 Apr 2026 07:35:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf3d.dip0.t-ipconnect.de [79.214.207.61])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7CF09A4C0BEA;
- Thu, 16 Apr 2026 09:35:03 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56150)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 641E2A4C0BEA;
+ Thu, 16 Apr 2026 09:35:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60814)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wDHFf-000000007KC-0AzP;
- Thu, 16 Apr 2026 07:35:03 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wDHG1-000000007OO-3sVD;
+ Thu, 16 Apr 2026 07:35:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 16 Apr 2026 09:35:02 +0200
-Message-ID: <20260416073503.3605369-1-bernd@kuhls.net>
+Cc: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 16 Apr 2026 09:35:25 +0200
+Message-ID: <20260416073525.3605421-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1776324903;
- bh=dcdYHoRBXYHPOdpM0kjCiMzydLKQh0oPIzh56vNZ+2A=;
+ s=kas202511301023; t=1776324926;
+ bh=psYnt22+2NPJ05K+pWk40nYHD/RchH1BxiZZA0EqSGA=;
  h=From:To:Cc:Subject:Date:From;
- b=TWbNOdz1E998x4griVSTjGZRgt+vvV6+3AbWTIt42wdb372630RHle+ber/jJrMC7
- vxpkELCzx1joMJfkFFg/UP8e1G8O11J5XxD9Jd0KHCaMuWHWHFcljdygZxMJtKEDr3
- 0xql7ZrXUHfAkkhJDGsZ23AlKvBMFd6DtotkEvMxcKztVHitCRuMi/L/YnifrhO5G9
- FBYz53p60Zqpb9j9ZzntMYq9KscuBsEeM5LhRlaNwW5jyAKxuQUH1aVTGN3hjsTylk
- Ix9hkW7jkUD/dajtPLwPEEVNRNx34xPFwQ99cYvM/FF+c6bcc1iofjRwqEVjssx+Az
- 3Ve7q/1Ok6dVw==
+ b=q5167o/NfXwJwsYuy2Q1c4+CKrttNE4VYis036KCGxDMql7d+Ky6MkZ3BojlbVg+5
+ mkyiTzYBgMAW+VMQGuaxXheRKn+NSUNsVtQ0PXPSy1y1ko1RK75mY1G6RGyyJB72TV
+ 3km+QLXQ9+tKA9bmHFIZjPewWSNGxiHasQfIVlzMUPKaGM0TfR1QQQyu3DLYNFOCoM
+ +PY9V73RmCzS0usl5I6S1mnofbmg8yM2UDk+hHY6EXbebVV/0C85+zoIBaS+UnLgXr
+ Elo1EtrWrOPwgphVfbRsFTaixDcJL+QKQhXpTk/6r2MtD1dFoWz1sUDZFVOYhn2bRq
+ GnqkKjLkoWP/g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=TWbNOdz1
-Subject: [Buildroot] [PATCH 1/1] package/libcap-ng: bump version to 0.9.3
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=q5167o/N
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,55 +97,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/stevegrubb/libcap-ng/blob/v0.9.3/ChangeLog
-
-The source tarball is not distributed on the project site anymore so we
-switch to the github helper and need to enable autoreconf.
-
-Added _POST_EXTRACT_HOOKS to fix autoreconf error.
+https://lists.freedesktop.org/archives/mesa-announce/2026-April/000845.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libcap-ng/libcap-ng.hash |  2 +-
- package/libcap-ng/libcap-ng.mk   | 11 +++++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index 022dd1f895..d79ef54d07 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  3ba5294d1cbdfa98afaacfbc00b6af9ed2b83e8a21817185dfd844cc8c7ac6ff  libcap-ng-0.8.5.tar.gz
-+sha256  fe11ebbb55904763b3532f19069f13ec319042634620180a03bd4653d301563e  libcap-ng-0.9.3.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index e544e27696..6bb6b80fc5 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,12 +4,19 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3fe82e9ba5..01883a8ce1 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.0.4
++MESA3D_HEADERS_VERSION = 26.0.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 9a56e54406..f486734cd5 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-April/000843.html
+-sha256  6d91541e086f29bb003602d2c81070f2be4c0693a90b181ca91e46fa3953fe78  mesa-26.0.4.tar.xz
+-sha512  ddb59df633116a7ccd9d2d3a2e2009945909e3f774956efcbc032a2f963641cce50d0f319bebdc041df17700aa827aa2ccbc61c9e40b4020de9ff027eab27e23  mesa-26.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-April/000845.html
++sha256  d229c9937d9a25ca0a8958c59f425174563d300ec42acbea2dbe84a055023368  mesa-26.0.5.tar.xz
++sha512  8aa03a46269b2443be15cbd516d523af78fdd35e5273f5346b9142d2d21e245f6d5fd47e7e90176b0444ea967540eaa7c62d217f599ca5a216ef83244ee97d5c  mesa-26.0.5.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 79f063d7e3..fb5499de81 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCAP_NG_VERSION = 0.8.5
--LIBCAP_NG_SITE = https://people.redhat.com/sgrubb/libcap-ng
-+LIBCAP_NG_VERSION = 0.9.3
-+LIBCAP_NG_SITE = $(call github,stevegrubb,libcap-ng,v$(LIBCAP_NG_VERSION))
- LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
- LIBCAP_NG_CPE_ID_VALID = YES
- LIBCAP_NG_INSTALL_STAGING = YES
-+# github tarball does not include configure
-+LIBCAP_NG_AUTORECONF = YES
-+
-+define LIBCAP_NG_CREATE_MISSING_FILES
-+	touch $(@D)/NEWS
-+endef
-+LIBCAP_NG_POST_EXTRACT_HOOKS += LIBCAP_NG_CREATE_MISSING_FILES
- 
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
- LIBCAP_NG_CONF_OPTS = --without-python3
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.0.4
++MESA3D_VERSION = 26.0.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.47.3
 
