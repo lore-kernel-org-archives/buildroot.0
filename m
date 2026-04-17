@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D4EF436B9
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C24F436BA
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A17160E55;
-	Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91301813C6;
+	Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0E6n5jsiwfYk; Fri, 17 Apr 2026 15:25:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KNGE5EvyW7a; Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6838560E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88E7A81399
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439502;
-	bh=9u2kqqKK0qNNYCi8cz6Tq9zenizJGhKni6aH50VaC0o=;
+	s=default; t=1776439503;
+	bh=oG2pZ+UJ/kpeCXA2gcQWNIO33uOCkrJw4kseAmZLtsw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=W2rQ26hoQdQwjyPTuznIn/asvHfQN/7inMeedSO5zQvInjwHO/fTCx8w+7o19kXKB
-	 sJtwGfoj4188IXrU+T/8J0ZPlnOMKuMmwmGU3MOE7JfMAuafGYlecGQQ/OZ3bweSa1
-	 /w8dk6lqQMvRyu//AGhNIts+ZtRsQ5m5vGot584UTl9ps9Neq4yygmyc/9Ycm52y1p
-	 qYcL5Sly4ZDSSfwDOdBvqPeLy179EwoxZEvRQgPHSMiEp2deWWy9V/+5Qw4yE3ffhs
-	 teu+YSGs9F11XCmI4zR8WQEfPIdVjPsg/1R9xEI+YmZXGsEGY4/xem3ZMBz60v3N53
-	 Tviss6kMbjlZw==
+	b=iBA/DWaRxxjHdgpbTggwK18YLH4dF7SCXbCdXzehaw2gCxH9nKdXrjFhj6XcF6fVC
+	 IwVEl3Fi9sG4X3fUYGhtO5WA73N90Oi3D5vNH76nzHXIssuO3X6R7nqf+tC05Lsc1d
+	 2VPl6uz7ZqMjkcuy2E2V6/FkCYkgE1BcEX4peeTymkVppVPLR1RdRfULgSDGzj1CDt
+	 B0GNkTPYwEbmTWuK4/ttUZLjGuSnqnEQZ7lS8fLz3/5m0T+56Lm+8IoHFz151Dhywb
+	 LmUckxLeRw73LUDmQuFRXcgrvyyVVIHfYeNQopN51Psd7Dtr+JjpLWnCZCAsX0nXqm
+	 ajm3ry2BPb6Ow==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6838560E56;
-	Fri, 17 Apr 2026 15:25:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DC8D396
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88E7A81399;
+	Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2524C259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E64A406D8
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D5E6813A3
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZeUd2l-ESQQZ for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:24:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D7wTtxptMvVB for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:25:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B85F406D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B85F406D2
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B85F406D2
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:57 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-488b0e1b870so12404765e9.2
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:57 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07F4E81348
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07F4E81348
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07F4E81348
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:58 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-43fe608cb92so474816f8f.2
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776439496; x=1777044296;
+ d=1e100.net; s=20251104; t=1776439497; x=1777044297;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=FLsgQoeO+lj+MF/EWW7fm+ytzhSndWEvq/HcFGGXRFc=;
- b=tKeYJmUWK7jvdx1Zi9Y9xn4xfHobDwmuznn3n9bTnoInlMQL+nqxeqnerS8wv++kyl
- iMl2WTPYeW0yP6LQWQpZGh9FRQxKxVdCTI6YbW2+3J88MFDlRmMk2lY+YEZaLWQd2nPw
- j130fgNejEq4WfTYHeAbhRXHTotAF7le9bEErs6e4/xFquu6gJyV6ylYZWCPQHEgSsjC
- SxrDxFNc3IaYj/wRhoz1cYM0WjAsrQvZWc+c/istZ+EA/k11E1lSU8qFFMLYLEw08TNA
- jmHjkJoEyAKTW3MHMFKo0iHUckaylpesckNMDJTEvo1UwaUX8fCa7w0IPutKf27yaHsV
- INpA==
+ bh=dCm0POcztnLDPch6Pg1zqrk2wbmaNzV85PiZPk2QmzI=;
+ b=LxqNtBnqdo3agFOV6waRid6V9zJPq5lzWdonzyg97oFcsr8bqgrKJEGO/FIUbM7LNA
+ z9NpPMpOx1jMoade9jc3XKIOrZ8QpuPT4sNOW9P6i2TRgw5eIJDDG+kfFWpm1WWRz4iz
+ 8Ei7qJdwrZnaFN8ij3IMmVsnIwTjx+G2HKHffszEWJrU4ZgqHpN4rL8YPBD7RpE/NqX9
+ 4r5ZIi/QI2j93SOY9cK2lN8yPu4OVFIFCFU5AsdHdiaR6lQcOxLfXmXSsjMhyNNKhWuF
+ JDJ5Q5E4RTfZDoY/tsik/U6iJC5752+8FtHhq9sRgBhokBtXBoFOoj/7pm0Pw+151F6l
+ YWtw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ85mym0yVR3hEVbGv4+vBYKEqp8UTryPLYiSJyqwIAP2xWh8eqbHQrJER/Iq5fKXxY9w0OY+elyz58=@buildroot.org
-X-Gm-Message-State: AOJu0YzpfDl2so7HIef9Z7uSld5ATZ7yKDZpl5tQhlS1835mjwewwAYi
- anP15u5rhnfd6Kj+MjmO5GnbGW1jGdrG9YOYvOhPT6Cw8GswS876KYbHPjwqoD3KZeI=
-X-Gm-Gg: AeBDiesCjBIvwOA+vBg9Cf1H/OtJwHSrjefysdJTFafw7MO2NbCfzK5EOjc8LcNHaCR
- X/tmH4B7IMwjZBFv0myjRRYIopZK6OlZY8lD9LcKnTYHHfI8Hzy9Okfg8KzvEQjkJ/48LYwmQqL
- AYZkVIyJsRmAAvPJxYyAq952DeVXzzO00FXrFh0TKwL+CU8gCTI1gCCHJitYIBPBQV15LtAmCtO
- jQrxr/s2NhnNhCD6WNlKyH+oj2Npk66L74EklmRKsaSw19Y61avRwBYEdlh7xpQiEsmLZTWX5Zu
- pEpyveBdq8oGlmewPUOgbztLLWfPvXhdep5jxLmYljV0JUN2NmDZ3a1WogxhZIs/vKVZXjBrDik
- cgfxMiver9IbE/FajsEuhWMcRs2FSRBn/OXdVRYn03gpisG+PiklJA+JqCDMiv5pHnd5k0yMiIH
- RNi2hcrJ6b1r+Tl/9phWaDUE5kcf0=
-X-Received: by 2002:a05:600c:4711:b0:488:d9ea:3da7 with SMTP id
- 5b1f17b1804b1-488fb742ddbmr49836685e9.10.1776439495848; 
- Fri, 17 Apr 2026 08:24:55 -0700 (PDT)
+ AFNElJ+h0EAFpPvg/rzLFKSaucmi6PL9QrE5HH9w38dWIhhIXkxufOGpSzcjlpixhgT74d10S+ECWZXv2M8=@buildroot.org
+X-Gm-Message-State: AOJu0YyVUpiNwllrlz+i+ugAL43x/XZDM5v3DwPwcB0p2a+hBGOaE+G1
+ 7iiZwfxZqKUoIyrUqpLjravK5qvqigcZNj12OA4xukPx4nRdBNqDzUhawLTnjOkM1M8=
+X-Gm-Gg: AeBDieuznvPwVWeIwGPsud211+9vLaQoA/jcZs9InCILO8vB5UuS8IYGcI5pFd7SaI1
+ WZo5Yz98Sf1P3RLOswX5oYXFRcXxRM8asgS+EsmiFpzyAcjuJEgI64jw84xyBZPeQZh7WEyTVnI
+ PBz2JA4fxaLR4/q9rCfKV0jqUlzDOaDY6iCBeRKm/+dkLI79gFtEXbPiO7Q/r/p0r3ofpCb5Jo9
+ D1IhB2AOkSAY42jfhlUMD8xiUy3Yw/1QAzl5ekClQvYFPhA2Vzr3/IcdetiCz6uC2B5v49h+M4O
+ FK0+URb90i3u4gLljJ4i+zfzDpL+eg0RXg9WwMN/OZZ4Qhfh8FoU83/EEDt6lvAaS1KcxpD1pON
+ MjgRXNknshxjK+HhWAmypSP3gRxiKwFeqNN5gysLc4PbGi/6lcR9vVc3eLhcgwbyebAWfxUTTXR
+ B/sDcWU32D72jyQ0F4wHusCMLVCRMpo9JQT54y/g==
+X-Received: by 2002:a05:6000:2890:b0:43d:7aa8:f64e with SMTP id
+ ffacd0b85a97d-43fe3e0a2c4mr5382183f8f.32.1776439496880; 
+ Fri, 17 Apr 2026 08:24:56 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488fc0f8188sm59370125e9.2.2026.04.17.08.24.55
+ ffacd0b85a97d-43fe4e3a341sm5740845f8f.24.2026.04.17.08.24.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:24:55 -0700 (PDT)
+ Fri, 17 Apr 2026 08:24:56 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:24:55 +0200
-Message-ID: <20260417152455.313403-1-thomas.perale@mind.be>
+Date: Fri, 17 Apr 2026 17:24:56 +0200
+Message-ID: <20260417152456.313457-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260409131700.278723-1-bernd@kuhls.net>
-References: <20260409131700.278723-1-bernd@kuhls.net>
+In-Reply-To: <20260409131728.278764-1-bernd@kuhls.net>
+References: <20260409131728.278764-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439496; x=1777044296; darn=buildroot.org;
+ d=mind.be; s=google; t=1776439497; x=1777044297; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FLsgQoeO+lj+MF/EWW7fm+ytzhSndWEvq/HcFGGXRFc=;
- b=S0UtevEGlEN4de5lQuQCplffnxtNjNcvY4fdFUd/aBf/eKGdl/2Gtsb2ayQziNn9YU
- 4vlUZEsRhAXYEaqhAs1hWmJkAyQS5ynyzbkZpcH5p8j/az75txc476xa2rFH0NTnzS+b
- l7RvTcBXFo/kEGCPZhnffGViOzsQmQN1OqrxAWBGvBSfoN6+RPB7tFlYCMYh4x7lvlqy
- dCutZ6UD6ADsRi6xEk7wOdnjYhiKbXMDMQYrBSrXxSvvWsHIIBPyP0MANyS8/uml/aow
- CfRMkkFkT0GqdHS+u8OiEITHII2BslIi6BZ1zZPxk0PsuL8fdJVzLgtoXmzB8I5Nb7OR
- 0/RQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=dCm0POcztnLDPch6Pg1zqrk2wbmaNzV85PiZPk2QmzI=;
+ b=Don8/dLYax9EjG/8cKvX/qDZvmRGDFpRm/mWupw4rfonmu+7yY8eGqyoCmuc94KVo/
+ t65RVSZzxzydH5QKu1LUj2Jt68KJe4e1Xc6fPPoP+TWx/dqUIpyLDizi5hYVk6P886Xh
+ 58KrNeyw0R7bI8F9QZkre5wIY3BeBhdKj6KYu9jBz8anFgnlBm6MB2YbAH3Qv/c+Lv6M
+ QV0Iuw/kyRRB0ZcmNRNjoFczcFMGnPJM2jFAzSoKsowoX/q/P6r+15OTTIfqHMDFGQrL
+ jFriAO8NsIDXqbIN8IBlqKCuBQzuYa6icNFL30Evb0ddeTx17M6x5RoqwUG+Kz9/ZEF+
+ 3h8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S0UtevEG
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
- version 3.6.2
+ header.a=rsa-sha256 header.s=google header.b=Don8/dLY
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
+ to 3.14.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,131 +131,98 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://openssl-library.org/post/2026-04-07-release-announcement/
+> https://www.python.org/downloads/release/python-3144/
+> https://docs.python.org/release/3.14.4/whatsnew/changelog.html
 > 
-> Fixes the following vulnerabilities:
+> Fixes
+> CVE 2026-4224: https://www.cve.org/CVERecord?id=CVE-2026-4224
+> CVE 2026-3644: https://www.cve.org/CVERecord?id=CVE-2026-3644
+> CVE 2026-2297: https://www.cve.org/CVERecord?id=CVE-2026-2297
 > 
-> CVE-2026-31790 - Incorrect Failure Handling in RSA KEM RSASVE Encapsulation.
-> CVE-2026-28386 - Out-of-bounds Read in AES-CFB-128 on X86-64 with AVX-512 Support.
-> CVE-2026-28387 - Potential Use-after-free in DANE Client Code.
-> CVE-2026-28388 - NULL Pointer Dereference When Processing a Delta CRL.
-> CVE-2026-28389 - Possible NULL Dereference When Processing CMS KeyAgreeRecipientInfo.
-> CVE-2026-28390 - Possible NULL Dereference When Processing CMS KeyTransportRecipientInfo.
-> CVE-2026-31789 - Heap Buffer Overflow in Hexadecimal Conversion.
-> 
-> Removed patch 0004 which is included in this release.
+> Rebased patch 0010 due to upstream commit
+> https://github.com/python/cpython/commit/616e6118442832544fab0b93e9dd7d15411a2a58
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  ...ppc.pl-Removed-.localentry-directive.patch | 69 -------------------
->  package/libopenssl/libopenssl.hash            |  4 +-
->  package/libopenssl/libopenssl.mk              |  2 +-
->  3 files changed, 3 insertions(+), 72 deletions(-)
->  delete mode 100644 package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
+>  ...-Fix-compilation-of-Modules-_remote_debuggi.patch | 12 ++++++------
+>  package/python3/python3.hash                         |  4 ++--
+>  package/python3/python3.mk                           |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 > 
-> diff --git a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch b/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-> deleted file mode 100644
-> index 7c507a2687..0000000000
-> --- a/package/libopenssl/0004-aes-gcm-ppc.pl-Removed-.localentry-directive.patch
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -From 5aaa7e5fdc59e88a13d2911cb86d814d4e2669da Mon Sep 17 00:00:00 2001
-> -From: Danny Tsen <dtsen@us.ibm.com>
-> -Date: Wed, 28 Jan 2026 07:23:13 -0500
-> -Subject: [PATCH] aes-gcm-ppc.pl: Removed .localentry directive
-> -
-> -Otherwise there is mixing of  ELFv1 ABI and ELFv2 ABI directives
-> -and PPC64 big endian builds fail.
-> -
-> -Fixes #29815
-> -
-> -Signed-off-by: Danny Tsen <dtsen@us.ibm.com>
-> -
-> -Reviewed-by: Paul Dale <paul.dale@oracle.com>
-> -Reviewed-by: Shane Lontis <shane.lontis@oracle.com>
-> -Reviewed-by: Tomas Mraz <tomas@openssl.org>
-> -MergeDate: Tue Feb  3 08:39:50 2026
-> -(Merged from https://github.com/openssl/openssl/pull/29827)
-> -
-> -Upstream: https://github.com/openssl/openssl/commit/5aaa7e5fdc59e88a13d2911cb86d814d4e2669da
-> -
-> -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ----
-> - crypto/modes/asm/aes-gcm-ppc.pl | 5 -----
-> - 1 file changed, 5 deletions(-)
-> -
-> -diff --git a/crypto/modes/asm/aes-gcm-ppc.pl b/crypto/modes/asm/aes-gcm-ppc.pl
-> -index 68918a9305a2b..fd5dcc22a6117 100644
-> ---- a/crypto/modes/asm/aes-gcm-ppc.pl
-> -+++ b/crypto/modes/asm/aes-gcm-ppc.pl
-> -@@ -409,7 +409,6 @@
-> - ################################################################################
-> - .align 4
-> - aes_gcm_crypt_1x:
-> --.localentry	aes_gcm_crypt_1x,0
-> - 
-> - 	cmpdi	5, 16
-> - 	bge	__More_1x
-> -@@ -492,7 +491,6 @@
-> - ################################################################################
-> - .align 4
-> - __Process_partial:
-> --.localentry	__Process_partial,0
-> - 
-> - 	# create partial mask
-> - 	vspltisb 16, -1
-> -@@ -564,7 +562,6 @@
-> - .global ppc_aes_gcm_encrypt
-> - .align 5
-> - ppc_aes_gcm_encrypt:
-> --.localentry     ppc_aes_gcm_encrypt,0
-> - 
-> - 	SAVE_REGS
-> - 	LOAD_HASH_TABLE
-> -@@ -752,7 +749,6 @@
-> - .global ppc_aes_gcm_decrypt
-> - .align 5
-> - ppc_aes_gcm_decrypt:
-> --.localentry	ppc_aes_gcm_decrypt, 0
-> - 
-> - 	SAVE_REGS
-> - 	LOAD_HASH_TABLE
-> -@@ -1032,7 +1028,6 @@
-> - .size   ppc_aes_gcm_decrypt,.-ppc_aes_gcm_decrypt
-> - 
-> - aes_gcm_out:
-> --.localentry	aes_gcm_out,0
-> - 
-> - 	mr	3, 11			# return count
-> - 
-> diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-> index 0e0dbd3926..05777cdac2 100644
-> --- a/package/libopenssl/libopenssl.hash
-> +++ b/package/libopenssl/libopenssl.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/openssl/openssl/releases/download/openssl-3.6.1/openssl-3.6.1.tar.gz.sha256
-> -sha256  b1bfedcd5b289ff22aee87c9d600f515767ebf45f77168cb6d64f231f518a82e  openssl-3.6.1.tar.gz
-> +# From https://github.com/openssl/openssl/releases/download/openssl-3.6.2/openssl-3.6.2.tar.gz.sha256
-> +sha256  aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f  openssl-3.6.2.tar.gz
+> diff --git a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+> index 716d9d3e8a..b000a68e9b 100644
+> --- a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+> +++ b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+> @@ -7,7 +7,7 @@ Subject: [PATCH] gh-139275: Fix compilation of
 >  
->  # License files
->  sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-> index d580947899..bd4b889c88 100644
-> --- a/package/libopenssl/libopenssl.mk
-> +++ b/package/libopenssl/libopenssl.mk
-> @@ -4,7 +4,7 @@
->  #
+>  Upstream: https://github.com/python/cpython/commit/1963e701001839389cfb1b11d803b0743f4705d7
+>  
+> -[ Bernd Kuhls: ported to Python 3.14.2]
+> +[ Bernd Kuhls: ported to Python 3.14.4]
+>  [ Vincent Fazio: update to apply cleanly to 3.14.3 ]
+>  Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+> @@ -29,28 +29,28 @@ diff --git a/Modules/_remote_debugging_module.c b/Modules/_remote_debugging_modu
+>  index b46538b76df..e86a27d5812 100644
+>  --- a/Modules/_remote_debugging_module.c
+>  +++ b/Modules/_remote_debugging_module.c
+> -@@ -812,7 +812,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
+> +@@ -834,7 +834,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
+>           PyErr_SetString(PyExc_RuntimeError, "Failed to find the AsyncioDebug section in the process.");
+>           _PyErr_ChainExceptions1(exc);
+>       }
+>  -#elif defined(__linux__)
+>  +#elif defined(__linux__) && HAVE_PROCESS_VM_READV
+>       // On Linux, search for asyncio debug in executable or DLL
+> -     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython");
+> +     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython", NULL);
+>       if (address == 0) {
+>  diff --git a/Python/remote_debug.h b/Python/remote_debug.h
+>  index 8f9b6cd4c49..b7d17a0f345 100644
+>  --- a/Python/remote_debug.h
+>  +++ b/Python/remote_debug.h
+> -@@ -886,7 +886,7 @@ _Py_RemoteDebug_GetPyRuntimeAddress(proc_handle_t* handle)
+> +@@ -923,7 +923,7 @@
+>               handle->pid);
+>           _PyErr_ChainExceptions1(exc);
+>       }
+>  -#elif defined(__linux__)
+>  +#elif defined(__linux__) && HAVE_PROCESS_VM_READV
+>       // On Linux, search for 'python' in executable or DLL
+> -     address = search_linux_map_for_section(handle, "PyRuntime", "python");
+> -     if (address == 0) {
+> +     address = search_linux_map_for_section(handle, "PyRuntime", "python",
+> +                                            _Py_RemoteDebug_ValidatePyRuntimeCookie);
+>  -- 
+>  2.47.3
+>  
+> diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+> index b674b589bd..13e2b94336 100644
+> --- a/package/python3/python3.hash
+> +++ b/package/python3/python3.hash
+> @@ -1,4 +1,4 @@
+> -# From https://www.python.org/downloads/release/python-3143/
+> -sha256  a97d5549e9ad81fe17159ed02c68774ad5d266c72f8d9a0b5a9c371fe85d902b  Python-3.14.3.tar.xz
+> +# From https://www.python.org/downloads/release/python-3144/
+> +sha256  d923c51303e38e249136fc1bdf3568d56ecb03214efdef48516176d3d7faaef8  Python-3.14.4.tar.xz
+>  # Locally computed
+>  sha256  b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231  LICENSE
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 07cba7c02d..c71cb0b05b 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -LIBOPENSSL_VERSION = 3.6.1
-> +LIBOPENSSL_VERSION = 3.6.2
->  LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
->  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
->  LIBOPENSSL_LICENSE = Apache-2.0
+>  PYTHON3_VERSION_MAJOR = 3.14
+> -PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
+> +PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
+>  PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+>  PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+>  PYTHON3_LICENSE = Python-2.0, others
 > -- 
 > 2.47.3
 > 
