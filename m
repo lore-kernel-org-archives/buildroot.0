@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF50DF436B9
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3178EF436B7
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8FD3060E27;
-	Fri, 17 Apr 2026 15:23:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A536816FB;
+	Fri, 17 Apr 2026 15:23:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yeOSV4ho6-vG; Fri, 17 Apr 2026 15:23:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 636C4818DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776439383;
+	bh=ukBFIH61g6nEvUWSh8uiCkwexdZwnV1lI1PKPTtum2o=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=KnzgbJic0ZNmHznDOMwbC7nipKSHCGbMsUKJoHEvnO32N4Ls/VJfICL0/4WW6/r5f
+	 B0LFdZXs0P7E3TKdl5c02UMCepAO4zMeLqlTDWqTNWAOofrNYDcroqRw4CJApl59b3
+	 5YQt+VKVsLvrqQmdJKKF4SRsNBqT7WjRXj+UzBYxA+ElgXuUMJHTzTXW+yBAtzDdqU
+	 HShyu+QIafZp4z77vQGDonZo5coWUO18VkMiSo3ioIuJ3zHQI68sRW6RrwN2GaWS7X
+	 A7ojEiy8Rpb7uZl+pqxwHuFBJxexNTBAUp0W9q+pVG5mw1EMUwQ8U1Ngj1Ory9k0xU
+	 8jW3biuP+FgJw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 636C4818DC;
+	Fri, 17 Apr 2026 15:23:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2710C259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6312C60E1F
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SDiPCCTQbl_7; Fri, 17 Apr 2026 15:23:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B40D460E42
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439386;
-	bh=9XH4WbLkxDr3TN4QO2/NcreP5j6oBzWWoIED5ZIzTLw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jnrC7+H5WUU+MHGM6lQL9bfnL6iDiGml874tvqGKQBFSkeHn7MVrLfObUsWlCP/sH
-	 WKHFFQ/tY8a4WQqHR7AzwbFcuD7l+78+1MCmTi3Rx3a867RO6AKnzTYw8z3rx/aynE
-	 VGbap+D6PYg7+lgViAmS0PgTardpp8wpSwTohWU0A8Lv1zbUSoi1Q8qsD2NCVge+ol
-	 nZgZmwbKT/1bWDSgzuRsPYgsIdBt7CnfNgFoXDaIUMhzm0YL1q58D9nYIYm+RElfd/
-	 rstWJmx79qlJ5E0vvRqiQo505q6kJhfF9kxstuQd/meKBY91VGmmcgB+xkyRgoTGKJ
-	 SPXProZ6IwKGQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B40D460E42;
-	Fri, 17 Apr 2026 15:23:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D0C66396
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2701440DF3
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TlTC-JKYO6Ne for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
+ id qxWkkBybnBgq for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:22:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60AB040DF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDDFC60E25
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60AB040DF5
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDDFC60E25
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10D1381DDA; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
+ id 6ECEC81DD5; Fri, 17 Apr 2026 15:22:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:21:27 +0200
+Date: Fri, 17 Apr 2026 17:21:06 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 60748b81afe881b3eed0a7183e4c28b60bb68ff8
-X-Git-Newrev: 6b8cb03a4ab86d2a3efef9421716f8c4328862b6
+X-Git-Oldrev: bbfbabcc50b7b051a9fde67c0c37ce2739846c19
+X-Git-Newrev: d29bfbd6a3e8b6101207971bbc127a796470647e
 X-Patchwork-Hint: ignore
-Message-Id: <20260417152247.10D1381DDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libgpiod2:
- security bump to 2.2.4
+Message-Id: <20260417152246.6ECEC81DD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libde265:
+ security bump version to 1.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,62 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b8cb03a4ab86d2a3efef9421716f8c4328862b6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d29bfbd6a3e8b6101207971bbc127a796470647e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Bug fixes:
-- fix buffer over-read bugs when translating uAPI structs to library types
-- fix variable and argument types where necessary
-- sanitize values returned by the kernel to avoid potential buffer overflows
-- fix memory leaks in gpio-tools
-- add missing return value checks in gpio-tools
-- fix period parsing in gpio-tools
-- use correct loop counter in error path in gpio-manager
+https://github.com/strukturag/libde265/releases/tag/v1.0.18
 
-Improvements:
-- make tests work with newer coreutils by removing cases checking tools'
-  behavior on SIGINT which stopped working due to changes in behavior of the
-  timeout tool
+https://github.com/strukturag/libde265/releases/tag/v1.0.17
+Fixes CVE-2026-33164 & CVE-2026-33165.
 
-See: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v2.2.4
+Used sha256 tarball hash provided by upstream.
 
-Note: this commit is marked as "security" update because it contains
-security related bugfixes, but no CVE or advisory are published at
-the time of this commit.
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: add note in the commit log]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6ac53518a0ceb0611ee08adef500fc8d2994d21a)
+(cherry picked from commit d4b8a42fb253116befe539e5529ac4efd97ab421)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libgpiod2/libgpiod2.hash | 2 +-
- package/libgpiod2/libgpiod2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libde265/libde265.hash | 3 ++-
+ package/libde265/libde265.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgpiod2/libgpiod2.hash b/package/libgpiod2/libgpiod2.hash
-index 157e605ed5..a12752261a 100644
---- a/package/libgpiod2/libgpiod2.hash
-+++ b/package/libgpiod2/libgpiod2.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256  70012b0262e4b90f140431efa841ca89643b02ea6c09f507e23cec664a51b71a  libgpiod-2.2.3.tar.xz
-+sha256  13207176b0eb9b3e0f02552d5f49f5a6a449343ce47416158bb484d9d3019592  libgpiod-2.2.4.tar.xz
- # Hash for license file
- sha256  f646ad5159efb51c1130a4b43c31f0759750b1e254d2acf510f368ee2e2085c3  COPYING
-diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
-index 8803a282fe..d83fdbd94a 100644
---- a/package/libgpiod2/libgpiod2.mk
-+++ b/package/libgpiod2/libgpiod2.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
+index efd48d13aa..d977af5521 100644
+--- a/package/libde265/libde265.hash
++++ b/package/libde265/libde265.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/strukturag/libde265/releases/tag/v1.0.18
++sha256  800478f3bf35f0621b14928ceb317579f3e8b23de4bd2aac29b6cb8be962bbd8  libde265-1.0.18.tar.gz
+ # Locally computed
+-sha256  b92beb6b53c346db9a8fae968d686ab706240099cdd5aff87777362d668b0de7  libde265-1.0.16.tar.gz
+ sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index 3d9b96134f..aab86ab3d7 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Be careful when bumping versions.
- # Dependency on kernel header versions may change.
--LIBGPIOD2_VERSION = 2.2.3
-+LIBGPIOD2_VERSION = 2.2.4
- LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
- LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD2_LICENSE = LGPL-2.1+
+-LIBDE265_VERSION = 1.0.16
++LIBDE265_VERSION = 1.0.18
+ LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+ LIBDE265_LICENSE = LGPL-3.0+
+ LIBDE265_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
