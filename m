@@ -4,112 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3516CF43685
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 09:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0DDBF43684
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 09:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFC8560DFB;
-	Fri, 17 Apr 2026 09:00:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9E9660D5E;
+	Fri, 17 Apr 2026 09:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kfo0ZphbEbM4; Fri, 17 Apr 2026 09:00:08 +0000 (UTC)
+ id V9naHkobK2Bj; Fri, 17 Apr 2026 09:00:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D829960E00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ED3C60E00
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776416407;
-	bh=OJ9QRyT0uCwkaW7Qq815ehZq7DhOc5Arr5tRGUHxQqE=;
+	s=default; t=1776416409;
+	bh=zb0Sez702sorpIJ92ffoP9Kq3Ay8nkloEqh4SGVR0C8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pVaGvPEa2gcUU5JkUC3NAtk70QLzMgNk8AtQdAs9mlNW1xvXP1X+/Gc8xlDMW4qiX
-	 oRrSENxwebrcOSwHtkQ5kn9Bp9zDLbG+PXD720pANeY3rPx90JhJqsMzYENGHCuVEy
-	 2TgjbEccpYLRBlAVIUFgtSkD6YVkrl000H7zBLYgDyxPLoumD15XAKeUpJ/40szhoD
-	 weJSriE7XGS/XIBLeeu9SXbO5gdjUFrCxTvbtjkBD+GumUT2AEPGJRmxmLwRrW4PrV
-	 IxZWkuAVSubE1klDhsTWka50Ip0JSCicp/U2my+OwKI5e/0DjWyENjk7lhErZbmIlg
-	 WaLVssHnHsH+A==
+	b=TI0XrWkm0Wr8vslnbXcrEWYRSp6fXN7ZODoi8L1Ac5qtJbsFfV4VCUGuZOY53gQLj
+	 Ibfre+uz9pWlcVc5AMNBk/qoHl/1NXZA6xNelpGV39FnwosKc5lLoU/kpaCZ/5NeI/
+	 8uE/lMpra+WyGXAYgeodq2+cbg2ONcZAmLrZfKQ3XL6jiARwS458QdDALDoUUhWJxl
+	 73bitd6cFe6oYx8ToGR3mMXQ6zqvDiDJm98mbDvwYu4ApXamTlgaELd1eiGEi+XRBT
+	 SbhTZp7DYCBYRnjLjzWL6zrbT9xXujv/NrWtFpsfvyRiqrAjp/RlXWsL02/i/v/Kn1
+	 i2k24XuzzE2qg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D829960E00;
-	Fri, 17 Apr 2026 09:00:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0561A259
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4ED3C60E00;
+	Fri, 17 Apr 2026 09:00:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72DCC396
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD81B404F7
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57DEA605D7
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tUVXf2KGsdJS for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4_92n0KUz0uc for <buildroot@buildroot.org>;
  Fri, 17 Apr 2026 08:59:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A28BC40291
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A28BC40291
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A28BC40291
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:55 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-488afb0427eso5571855e9.1
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:59:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3107860A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3107860A6B
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3107860A6B
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:56 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-488aa77a06eso7608015e9.0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:59:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776416393; x=1777021193;
+ d=1e100.net; s=20251104; t=1776416394; x=1777021194;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ze1ZKR2n2zVbx+yBeqR0SeW759Uec0fqAlbPd3KU8Ro=;
- b=ij7kXKfen9s2zQ6JZ57xCKjEDU1XHLZWzDNfnL58M9/iYN8K1DO64U7nG2ZSzZDRHP
- 8RYIS7odhxcNJGq0d/7IOoHh97EAyUClz2GKgVbXlfxvlWD16RDUL4i7waxo9vTg2iwT
- DN4uXqSk6k7mbyuXsqjv4Q+UsHtE2CJVmBxn9i7GSnz12UXkA1uivaMcBXsFlobCppzR
- 227EplJPr4tzn62e6TxkNQaniKoDG8sO6TtYrvAzXxGnbwEpRD6qC5MneLIumiumn53T
- 5kaQNWhdKafFxh1ThaynoWY1NNLYSMB4tEvcQ50bl3Y4Zz67KIU9dSmW8YtvJFsDHARc
- jZqw==
-X-Gm-Message-State: AOJu0Ywqt7t1ddbwJ3XndNJbPe6BEBzsYoWR75qwmJ+1c4W90NwKNPSN
- 6fEquJEYil2xfvOZLN+ugpvyUADhyY+KDOkSZBKaAeNLrXR4YV2TUFQlwvUi4owUj7Zu5Wpxnaa
- D92Yf/PM=
-X-Gm-Gg: AeBDiesTjok/Cl1UdlVvkgJEA8r8zw/kv7j5AV2pYBha2mpjU3+5JLNOMkf8Y67klKa
- oeq0gyIgbcnXXV2ghdeAqrunXR3Okl6ambk4V6Fnf0F+g8aT7Sb5RPkTHSh9kI6Pn5TtmWfLH36
- XQxsKgATpH8ksS7Qr+s1rGUG1qMFD2RXkKeGC22osdAc46cijzOI/tH73moKTGXkfeam5G35KiK
- htFIpmYCmxbNVhTxHjEqwjOBsZ9utpw5U5L4/3WhO4L0jYga2YZOl5OLWAWURmmI7MD/eJt9FbH
- pSrUMhmHT7ZdbUsnIcOG7JiyuQUk7BN1b7R2aAxujRrQc8FGJG3UArkDkkDYDh70HQQuj83MT3u
- haQz56s3KmjqiM4ym9i3CN2EHjL/TeVbeq6hAQwCg9fVOf8wr9GPoMa0yMclS5JRGMwx94Hof8R
- JC9lQJjW9BqKf89qkXtu6OFJ26ZeUItxe8ardyZ4NI+wTOnsKXMfkQvYBz6ClQEdKyPN7MvCRwA
- KQxD2kqc0mwxfOzoHFyHkeYSNE45cgNDe3TLXJ0eg==
-X-Received: by 2002:a05:600c:45d1:b0:488:c14b:201b with SMTP id
- 5b1f17b1804b1-488fb74fcd5mr26560505e9.10.1776416393302; 
+ bh=7NBYpfFSUcKfvkAPKtLLdGLcAK6yIs9BBG/h7HSsg7M=;
+ b=FIhCEIQKMaSSKZO4ox755H0275Wcy0AmH1z7A3LmLibsxkIpTvy5epZvJk72aBtpDR
+ iwHiwDqpDxSA3JqZ7CNTIwmVzlAHfF/Fn2PSBPMD5BWpsuIF0Lt10u5LKpcw2Va8rKvC
+ MotQq0T/QIF0mNc5cN35o7a/zs0uR96X34MU7UH7G8M7zCHee1/29sq8E7Msr5mGdwTq
+ CoxLAO0lF94Bi30IVBbF/2aqqwWdE/ReAB3iLV7+F7X5ega+BVVA/VFvo19QUX+fLYUq
+ nmkzmOeD9IUYeqFIZ5e4XgMWto0GqhDdliinSbHgV86km8X3FHH0Q85VwNPYOFhy2cpy
+ ypIA==
+X-Gm-Message-State: AOJu0YyjSGXRcmZS0G5oABuTGnXExDIydhBrUzmjPFiSrXFYLngIPPPR
+ VESD5jOxl8NFeMievOvhByABzsgW4DFcQZg0SYUcPZxJhJCXkmxmpbStu42oMExhG7nhWVhCkNg
+ OcXXvrU8=
+X-Gm-Gg: AeBDieuYqk+YkYMx4lKnMKkCPOyNHD5hWEpE+F+8aOYrJb3Utr2vCHpzFoj96XHTinz
+ PaLMtXosEViGZvdIIfENXjS/tktZl5oFNwdquYRF1/8CPkrn7mgUHg0MQk3dtVourrwRJ8CTv6S
+ hTdQrBBybZsw8hUKoKEMfyLx/MQ+y/fGhQEnajYHU4wmhA6gMOwE4+x+q3odSTm+bdKdDNkZDAV
+ UTgEOWY8rbqgziXHdiseC+JVNGgFg+HmpMTjSNdmXr+6rjygIKYnzBHXCzFOjQaV/d10U8bKW4H
+ wHMMdrg8oY29qxSCeCjtwOoWa/6/18dmqit+cv9DPmKO+rvHiCZ4Mdn+h1v0ZKLbQhPem7UBitz
+ YdaEXrenqAZ5GMKQCnW1Yr+FbovvWs0mb74XeXzKcN20pGFHS1AhWoZ+H+xP6P0xZz/yVe97BsD
+ uPXUtJNZMGYYnUP4jyRunrhG8sU+YV0GONn2YpqX1Ku8mepWn27JY3ASntAMOe5Gnx4EHXHDx9n
+ Z9jmMdPXN9CJmKI67ywai7W9jVR9tI=
+X-Received: by 2002:a05:600c:1e28:b0:483:7903:c3b1 with SMTP id
+ 5b1f17b1804b1-488fb77fbf3mr25738025e9.20.1776416393921; 
  Fri, 17 Apr 2026 01:59:53 -0700 (PDT)
 Received: from P-NAN-NAPALM..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488fb7a0745sm15077795e9.9.2026.04.17.01.59.52
+ 5b1f17b1804b1-488fb7a0745sm15077795e9.9.2026.04.17.01.59.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Fri, 17 Apr 2026 01:59:53 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Dowan Gullient <dowan.gullient@smile.fr>
-Date: Fri, 17 Apr 2026 10:59:32 +0200
-Message-ID: <20260417085936.200528-18-dowan.gullient@smile.fr>
+Date: Fri, 17 Apr 2026 10:59:33 +0200
+Message-ID: <20260417085936.200528-19-dowan.gullient@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260417085936.200528-1-dowan.gullient@smile.fr>
 References: <20260417085936.200528-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1776416393; x=1777021193; darn=buildroot.org;
+ d=smile.fr; s=google; t=1776416394; x=1777021194; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ze1ZKR2n2zVbx+yBeqR0SeW759Uec0fqAlbPd3KU8Ro=;
- b=Xx/UOdO2Q90AIhGvFwABW7oNv8Flfs/VhcnwubaMNBU+iYEPEtKaOc21RXE9RK4roG
- AIjN4u07KSsQGDSgrWDE5tHP8Owe/Bzgn7jiFbUaFO87Lxlxa+uTgxjBybSkQNaS2BIL
- wvgjAkUA1C/yH9HfShjKGSiP+Sp9wMA4xZSR0=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=7NBYpfFSUcKfvkAPKtLLdGLcAK6yIs9BBG/h7HSsg7M=;
+ b=eiClZhClA7nICmIm8kI8y2Zy8TN2J5B5gpnOosoczgJ6i+93yPSMhjzPWAIXxVzSY9
+ UCZ22MgBQnIWhYn+q84g5QSRxvc+mtu0T5YGIhKvTIgFgrnhF0vMso2UUh7i05G+CYr5
+ wk85OLbAtSpoVcncUN+N8CHeC9jBHsMBc3lvc=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Xx/UOdO2
-Subject: [Buildroot] [PATCH v1 17/21] support/testing : test_openjdk : Bump
- kernel version to last LTS (6.18)
+ header.a=rsa-sha256 header.s=google header.b=eiClZhCl
+Subject: [Buildroot] [PATCH v1 18/21] support/testing : test_fluidsynth :
+ Bump kernel version to last LTS (6.18)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,79 +128,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit bumps Linux kernel version to 6.18.21 in the test infrastructure
-to ensure compatibility with the latest toolchain features.
-
-This also Update the OpenJDK package from 21.0.4+7 to 21.0.9+8 to fix the
-'unsigned int uabs(int)' was declared 'extern' and later 'static' error during
-compilation, see: https://github.com/openjdk/jdk21u/commit/3445b99bedfba659da49d72a39979703969cfc91
-backported from https://bugs.openjdk.org/browse/JDK-8354941
-This error was due to the use of a new glibc version used in the updated toolchain.
-
-Update the hash file to match the new tarball.
-
-Fix OpenJDK test configuration:
-    - Add BR2_PACKAGE_XORG7 and BR2_PACKAGE_XLIB_LIBX11 to satisfy
-        build-time dependencies for the non-headless variant.
-    - Enable BR2_PACKAGE_OPENJDK_X11 to ensure the package
-        correctly detects X11 support during the configure stage.
-    - Enable BR2_SHARED_LIBS as BR2_PACKAGE_XORG7 requires to disable static libraries.
-
 Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 ---
- package/openjdk/openjdk.hash                  | 2 +-
- package/openjdk/openjdk.mk                    | 4 ++--
- support/testing/tests/package/test_openjdk.py | 6 +++++-
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_fluidsynth.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 209004a292..c0d7f9a905 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  b8b37fa6fcc284d91e7458c703ca4c893a1dd5a6e0f6b9e198e7d13cd8efd24d  openjdk-21.0.4+7.tar.gz
-+sha256  1cd30b645104bbbfff2bafc6e6c27694a999b4fbe8a9e9a2d2adc4a9a04414b1  openjdk-21.0.9+8.tar.gz
- sha256  ccb7d37c24f9f5808f9d25419d93680570dc600f292e68944032338cb4b2c51e  openjdk-17.0.12+7.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 58b266c4e9..5a08ed4f47 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,8 +6,8 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
--OPENJDK_VERSION_MINOR = 0.4
--OPENJDK_VERSION_BUILD = 7
-+OPENJDK_VERSION_MINOR = 0.9
-+OPENJDK_VERSION_BUILD = 8
- 
- else
- OPENJDK_VERSION_MAJOR = 17
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-index 3bf89f9efe..800ed363e7 100644
---- a/support/testing/tests/package/test_openjdk.py
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -12,13 +12,17 @@ class TestOpenJdk(infra.basetest.BRTest):
+diff --git a/support/testing/tests/package/test_fluidsynth.py b/support/testing/tests/package/test_fluidsynth.py
+index 20d4da0c50..909c878b75 100644
+--- a/support/testing/tests/package/test_fluidsynth.py
++++ b/support/testing/tests/package/test_fluidsynth.py
+@@ -15,7 +15,7 @@ class TestFluidsynth(infra.basetest.BRTest):
          BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
          BR2_LINUX_KERNEL=y
          BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
 +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
          BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
          BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
          BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         BR2_TARGET_ROOTFS_CPIO_GZIP=y
-         BR2_PACKAGE_OPENJDK=y
-+        BR2_SHARED_LIBS=y
-+        BR2_PACKAGE_XORG7=y
-+        BR2_PACKAGE_XLIB_LIBX11=y
-+        BR2_PACKAGE_OPENJDK_X11=y
-         BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
-         BR2_PACKAGE_OPENJDK_JNI_TEST=y
-         """
 -- 
 2.43.0
 
