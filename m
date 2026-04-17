@@ -4,113 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3779FF436B8
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECF07F436B9
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECC0D816FC;
-	Fri, 17 Apr 2026 15:25:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2B0981A23;
+	Fri, 17 Apr 2026 15:25:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jlYevUsFglZJ; Fri, 17 Apr 2026 15:25:09 +0000 (UTC)
+ id SVyBW1MapoCY; Fri, 17 Apr 2026 15:25:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 820BE817AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F14781A33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439509;
-	bh=t+OraGRdzpINCNL3bzo0kmgTYLdMf8/lVsa+eJ4YMLk=;
+	s=default; t=1776439511;
+	bh=ldf6bTyRWKqELQtUPr4wleMKikKaXmMcPlb/XkSD/lw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=g52+O7pJFGmTp0t/WUYm8pSMtV8xt8f59PnDEu8L/XvshnSLwIRoyRSP22+COUFOq
-	 0UYapTyG4DFJfFyj1awQUgu/i3Jk1HqyASzEi2wjbW+6ZHTyv1FdsXO4QNNF83LoXB
-	 ZAl3YtfERs4qZwkPe7WKI1PlG689svDKIS5b5MHLa71npV79+p9CORm5n9c4q4AW8S
-	 mQlAIVuSGdXUudMqkHpsPa2pP1xvJILJbHGs4BMwbv85CclO43CNtae/cUWoqv0dHm
-	 5BCPvbNTj4LPev/qFMK/QhJDCcP1DQEMyI0n/WjJobylXl0l5Fj3GmdzcVupHrCntg
-	 0k8RVOtdHgA/Q==
+	b=JxA8WZhKdfCZC7BJxcUXuDJyUdRT5k6vpFMiYvkzQaKXt6HbPtuN1a3rbCmXfB9md
+	 DpE9guaCiPB3hswia/nGI0zOYH+KnbnIdKMgX4znGnijEdLXkQ1EBL2JgcCHy4IVLR
+	 DiBmejoWl8gIo6jMjA9kw59tkuvuoKz43vafb5RZdlRH5M3ZGwSFgkmEuSAq+gfGla
+	 vz4OM18dn5MquNCYCPW2olaz3UpmNdvMVwxGXHkdtJyi4KGNmi2HJFszMpRXcCK9fR
+	 av0tiKM531iW2e7Ik2NrfaAZwtndy2Hb2W99jbX0LYo2HSn9bCWCTKgPBY05zZ1Lq1
+	 BWzl+4Za1xPeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 820BE817AA;
-	Fri, 17 Apr 2026 15:25:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D1E8D259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F14781A33;
+	Fri, 17 Apr 2026 15:25:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F1D1396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C38EE60E62
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21355405F5
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G1XmSr6IpLS2 for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j_tOLWyo1SeQ for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3415A60E71
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3415A60E71
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3415A60E71
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C87F405DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C87F405DC
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C87F405DC
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-488a8ca4aadso9982375e9.3
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:25:02 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-483487335c2so8077105e9.2
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:25:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776439501; x=1777044301;
+ d=1e100.net; s=20251104; t=1776439502; x=1777044302;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=K+McY2yvltDI7BBH7XK7dDZjBvNYRwST82FT//Qwhrc=;
- b=n7DfI5Hl402fsV89tkfBvbfnIHNI2IG1PCHhVBbqnTNZ94XyHbn4HRZ3L8dyOc4OU+
- rtsPbGREOkx3pTLxsbaFqvr8yYPy3fsJi4frxjnYgrMn39RxvKmfcg8Jw6F/9XDBLwV8
- 0rUhhWkYfHYFHgmJzRvJPGfiMqVwOqHkrac2UyFhtIvaeKcyWMVm8pKRlXK4wf0iul92
- 18g5CTDcriCOiGU7B6LvHE/x0mHgOgJYzr1KqygwA/vEbXASHIIz9aRcfrlVtNdbftGl
- UihaCNrfRupNAhhbB6QEgiJSUwhZSWT75C7WweyB0vNbz/+Eyy3oAQqWI1u+HXlCqIUg
- V+0A==
+ bh=UoykUPfTYSOBsIvcMDXCMk3Cwfeg3iLc6EEhPnX2b08=;
+ b=s4rMJCLxMdE5zIK0WuxhTbszudhHnjmn+vhZKucy77yWx3ElFCfg0F3+S8xMfxGK/3
+ M0RI6GfKs/PsgjtNta1ioXZ2NuCxqSAgBZmfpN2a7TSTxOOGRZeX3XU5c5OjwBK0Irwy
+ 9kvYJu4hbqKkHFIG6mwFJ+4nI4eKslVwtJAANhMEWdHyilHDqihfh1TuQfKXLjUcWCId
+ E8HDURXvZK0ARNu3JSknAF4G419SX8pKYhEb4SPsGnQkTMEaE+L+F9Oi8D6xAQMpHA5P
+ 8XxkJds5D+aJLEJZiBeRNVxDHRZ7fkOg3YoXmFG8ymY0BXRE0F96xoiwEbdMBIKUtXdk
+ zSMw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9iIFUuedHX8bxoY4sSRwRjEAI39UI5ldf558L+88Te3QLgFXceBlmR3EcNOuLuwQho4AB3E/XvXJk=@buildroot.org
-X-Gm-Message-State: AOJu0YzJzofc3nooOr1yAIK4jdvNA9bO1OmJy9RsykxmheWb121ckajh
- //7oaB4bzRL+7mvJ93zD569Vvx82C7tjw5wTreoM6EgHoWwcGNNAwnMWDChz+ACcDL4=
-X-Gm-Gg: AeBDies/jRo14fyEDUMDZisQLQH1GfuNUxj2rCVrm0i0umTCqaMpNgtksp8JO8+fyfD
- cMO9zny/7lCpIN0wW2VfmZRp/hoc7JY+S+o0TGPbPxWA+NvFRx1DC/N5omOoq38jYOF6JnhVs7f
- L8o9+SbtJY1wmZHf390h5AVYxhWqAiiGj8kDnaw0sLGYJqNsU7TsKRx6vCHc6S+grMoqsa784pa
- DgklUGv8ItMpnqYowBQojiKgF+NK4n+LQyGvUpPDTsO2APmAaGD6Spq6Xphjm2yqQFtLvDUlOxR
- WAYfGKXM6xg+pl/PI1SeMxV40BLIrTwLBVOp4pMEUc18HLkX2/NRYNQtqEixVpNtPPezJN1vHnU
- naEtHKw2ob3OCUAAGHtotezHFVZ4rGfajETwQh+xbX5Kx4rzu526bvv/pgfsVACU8Kk12Mjgq4S
- RtgzOEDigCjrP7bObRL16fv2Z5Zyk=
-X-Received: by 2002:a05:600c:c085:b0:488:acbc:b2e with SMTP id
- 5b1f17b1804b1-488fb765b04mr36763125e9.17.1776439501075; 
- Fri, 17 Apr 2026 08:25:01 -0700 (PDT)
+ AFNElJ80G4HlfrYIq6XA1mOfv2XQnse0khM10CDDLt1KtSZfenPTDJMixKJb7vXcTZHqbFFaIls9X2i6PnU=@buildroot.org
+X-Gm-Message-State: AOJu0YyMSJKT4rK02Zn6oUp+Hg8IVA/zMg6DjuOYuYnCGqbst8N7YXql
+ nn47HI7an7EHCYyrqGrDYHvAvRCMJkFgQBZtAlNrEM2j2htBH0ftjOpSbqCoqD8t/SCliVLQTyY
+ 24rNN
+X-Gm-Gg: AeBDies9gQ2EUBaIldpvf1qdDzkEObSrPWCzCQQ3UWYUd1blj8gCbgRw8JlkLp5CygN
+ 7dXwkSaLqH5kAWx0Mo5t2aI1SREhXZWw/NzIfTkivciLApmg2ik8R3ihTW5ATTgRgY0ZdjPVuy+
+ zcdBxJ1y+4NUJAEtYqfZ8Ju7awGMQHNDIX0tQrjlSTzFKCDPWYaxbSxdLXok2AfBfFkn05fse3T
+ ZZHXV/80TBVEsm6iW6SDNwX4dzAA2ttNIIffps/BEd5U72286BIxK9O52Ph2kk5JigI/18Sc7rc
+ 6cPe6L7fki37b8So5cYdnR79tfNLVU+lg8xujZsKWnIJlIRi7iypp2gqkn4CPr2OHCpBmS66CM/
+ PTRSRlVzM64rj/iI6t41qhT7adNL0crGXl463KYxlO/GZrxwcs9Tae+atnfT8Xn0ziUDWL1hs1S
+ Y5DDSHwHvPRCTuhurXHoQKUV9kfkc=
+X-Received: by 2002:a05:600c:a416:b0:483:8062:b2f with SMTP id
+ 5b1f17b1804b1-488fb73b31dmr39006105e9.6.1776439502038; 
+ Fri, 17 Apr 2026 08:25:02 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-488fc1393d3sm80420095e9.11.2026.04.17.08.25.00
+ 5b1f17b1804b1-488fc1c96b4sm87205845e9.13.2026.04.17.08.25.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:25:00 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 17 Apr 2026 08:25:01 -0700 (PDT)
+To: Marcus Hoffmann <buildroot@bubu1.eu>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:25:00 +0200
-Message-ID: <20260417152500.313680-1-thomas.perale@mind.be>
+Date: Fri, 17 Apr 2026 17:25:01 +0200
+Message-ID: <20260417152501.313753-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260410052000.26329-1-bernd@kuhls.net>
-References: <20260410052000.26329-1-bernd@kuhls.net>
+In-Reply-To: <20260410145709.271512-2-buildroot@bubu1.eu>
+References: <20260410145709.271512-2-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439501; x=1777044301; darn=buildroot.org;
+ d=mind.be; s=google; t=1776439502; x=1777044302; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=K+McY2yvltDI7BBH7XK7dDZjBvNYRwST82FT//Qwhrc=;
- b=CnLmajkmBcS6BczFyp/8xvkc36EysFMOQbHirdPn47lMb/PnaOunNEIZeGQf/zOuY6
- ZjzOhXjkWqeEQ4/IPqH9ebfvIq9/qLzRkeHexCmfJ9SBr6WJcvRqkrffsc8dp8lANCy5
- BmZ4DppAGn1aK9c5RhU653mbJfTnDD5o79zwk0qddQAwehKVlS9+uPjmVnxU0KzWXfpG
- a6gVe7ZEiOM4JM6Tbij4nrSVw7d78rmgK+pabx7ocXHnRO7CaGt0MEUpiT2VmPzAerSj
- dVfFzwbKNIeH9aMJSg2rAQvzkrGIx2F4qK5C/AqkwjIwKvBE0iczMIrSjCUzhKVE6p40
- a9mg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UoykUPfTYSOBsIvcMDXCMk3Cwfeg3iLc6EEhPnX2b08=;
+ b=JWeNENeiXsbgYcT7VyBM534nXredNgN+SsBBWlzAMBi9amlYgTRK/bymerHa4X5ALG
+ VzA6m8t00E4PVuv/c9iJ/w2DnbHHyi4CMnDo9ujW861JDUvpSihSx5aaf4YBQcVu0hiW
+ Qgt+gM4vchXBjTfuqVk85uj/jjGEQZr23bZgR9uBY/Su++HOs2iqwwWbf91VHHcC+Abq
+ +63K6YOS4sFv0UhhK1qcF0en4tWmPYi+csQY+Hzm/F491dp63Y7ACCYFa52J9/wGXn7c
+ yUvv8S6IR6lYb6n8t8spLNF6FkExGjCQVO1EmPxthmpu1K08Oy1oN80xHE9QpZT/Ibdz
+ gj9w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CnLmajkm
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.5.5
+ header.a=rsa-sha256 header.s=google header.b=JWeNENei
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-gpiod: security bump to
+ 2.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,44 +132,58 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://www.php.net/ChangeLog-8.php#8.5.5
-> https://news-web.php.net/php.announce/488
+> Update for libgpiod v2.2.4.
+> Contains the following security fix:
+> https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/commit/?h=python-v2.4.x&id=c3655b5f641b87656c11da3ac708608d2c0e05ee
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> The package now contains a proper LICENSE file in the sdist since:
+> https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/commit/?h=python-v2.4.x&id=51ee19fe1ec8a94b5ecfdc7627b0c574c7874a1b
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python-gpiod/python-gpiod.hash | 6 +++---
+>  package/python-gpiod/python-gpiod.mk   | 7 +++----
+>  2 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/php/php.hash b/package/php/php.hash
-> index 7fdb76b01a..d400f8e0bb 100644
-> --- a/package/php/php.hash
-> +++ b/package/php/php.hash
+> diff --git a/package/python-gpiod/python-gpiod.hash b/package/python-gpiod/python-gpiod.hash
+> index dfaafd4d4c..d3277c5a20 100644
+> --- a/package/python-gpiod/python-gpiod.hash
+> +++ b/package/python-gpiod/python-gpiod.hash
 > @@ -1,5 +1,5 @@
->  # From https://www.php.net/downloads.php?source=Y
-> -sha256  c1569f1f543f6b025c583cdc0e730e5c5833c603618613f1aa8e75d1524b8c91  php-8.5.4.tar.xz
-> +sha256  95bec382f4bd00570a8ef52a58ec04d8d9b9a90494781f1c106d1b274a3902f2  php-8.5.5.tar.xz
->  
->  # License file
->  sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 220fb8c5c0..9976884001 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -4,7 +4,7 @@
+>  # md5, sha256 from https://pypi.org/pypi/gpiod/json
+> -md5  62cf044aa3214d0ebee6aef78db2aa52  gpiod-2.4.0.tar.gz
+> -sha256  9243a1a59d084ec749d1df4a1e2f238ffb9d94515b0d9f5335460175143c3aa1  gpiod-2.4.0.tar.gz
+> +md5  c9c2fb67d78204896d85a7945314356f  gpiod-2.4.2.tar.gz
+> +sha256  602aae17ff365bb8e2a30ce65c6bbf2d8e7a7e64bf016e82e4fd4c730ef69ab7  gpiod-2.4.2.tar.gz
+>  # Locally computed sha256 checksums
+> -sha256  a2b24e2158144b22a77a6a404fc5a05911612c5b99d7ab6d0e2addcaeb7514a3  pyproject.toml
+> +sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  LICENSE
+> diff --git a/package/python-gpiod/python-gpiod.mk b/package/python-gpiod/python-gpiod.mk
+> index 8ab901972e..6881f0df43 100644
+> --- a/package/python-gpiod/python-gpiod.mk
+> +++ b/package/python-gpiod/python-gpiod.mk
+> @@ -4,13 +4,12 @@
 >  #
 >  ################################################################################
 >  
-> -PHP_VERSION = 8.5.4
-> +PHP_VERSION = 8.5.5
->  PHP_SITE = https://www.php.net/distributions
->  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
->  PHP_INSTALL_STAGING = YES
+> -PYTHON_GPIOD_VERSION = 2.4.0
+> +PYTHON_GPIOD_VERSION = 2.4.2
+>  PYTHON_GPIOD_SOURCE = gpiod-$(PYTHON_GPIOD_VERSION).tar.gz
+> -PYTHON_GPIOD_SITE = https://files.pythonhosted.org/packages/0c/dc/5a6bd309345bd9cfa7e098174ab7e65367e408539b6c1998e4f267c673cd
+> +PYTHON_GPIOD_SITE = https://files.pythonhosted.org/packages/13/ca/b3bd043091b4462d6c5561f86581f553df102d8990c37938ddbff2823016
+>  PYTHON_GPIOD_SETUP_TYPE = setuptools
+>  PYTHON_GPIOD_LICENSE = LGPL-2.1+
+> -# The package license follows libgpiod's license but doesn't include the LICENSE text in the pypi distrobuted package again
+> -PYTHON_GPIOD_LICENSE_FILES = pyproject.toml
+> +PYTHON_GPIOD_LICENSE_FILES = LICENSE
+>  PYTHON_GPIOD_DEPENDENCIES = libgpiod2
+>  PYTHON_GPIOD_ENV = LINK_SYSTEM_LIBGPIOD=1
+>  
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
