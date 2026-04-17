@@ -4,109 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04C74F43680
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 08:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28768F43682
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 08:59:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B33D960D5C;
-	Fri, 17 Apr 2026 08:57:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEE1960D5C;
+	Fri, 17 Apr 2026 08:59:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XPmeZHtjSI4f; Fri, 17 Apr 2026 08:57:15 +0000 (UTC)
+ id iHn58veGkTje; Fri, 17 Apr 2026 08:59:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B573D60D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0AB160D5E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776416235;
-	bh=/Yz0P+RmUhNEfxtT1/2MiP3ZfABmIuJZ6t4KODkqZW4=;
+	s=default; t=1776416385;
+	bh=FQue3PlingfiWO4KKVMpiC2mex1a34n1tB+wXPo1B4M=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=AdAgk9qjfAj8gMOnm98/PLzgHNsadQ9HbepwAI8gqeZpoQhpRfcfzJ3N36o4yE6W+
-	 gxmTE1W7T4M4J3iehORhlS6nG4iZyPy6oNQj7G3mCk/5rJiRn2uQud+enRo53ACVFo
-	 IYLZPb7KkThAhdmi/thLR4BBZ/vfeDADremuuvUvPicHoA1VSEo5DyIm0JpzIWRX5g
-	 3KDFKNY6+a4xqz4FvdNNtCNM5q0vh/cBYYP5ibTv3KUOdR0fFQwtTYbNaP9Vyggl48
-	 rhh2xs3tR1VY+Iqqg0C9pQVkHTVVfTlQYzW1stb+RGu79R0JopZj51O4zjhb5u2a3Y
-	 C2oAusm/7qm9Q==
+	b=pAS92zWDEeSQ9+aPBjN4MxirO3X56JwFRpi+DMoieZnn8uaP5FUAdq2qsETHPT4Ug
+	 7MajtbkCACVGCC32V5bkb13pVcZZOJX0lDuqMH0KnCosAx4aG5mHkenrHQPtrtPl3E
+	 rTSHSFw3ZsY4sHFmyuNf4SEtj8yX6BB6hJW/6Copz24vmyze1jPKddPf6uP6HJRf8x
+	 bdrNthEMAtyB6h4qMF377VY9zpFRDwR1HZ5EBIgBRelyllNHpXLC6G90IoAfWGVnXM
+	 O7WWDIOgcOHtqJv4k76Q2TfYPVRU61esXE7z/a3WCNEmqDkWdltrOfLpMGEx/6sdL7
+	 Ssr3foGt6wauQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B573D60D5E;
-	Fri, 17 Apr 2026 08:57:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0AB160D5E;
+	Fri, 17 Apr 2026 08:59:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 30D5E259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:57:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A1938259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22FD360D5E
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:57:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D6BD60D5E
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vg8pWxAu0sWR for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 08:57:12 +0000 (UTC)
+ id PrZb84V79y7r for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 08:59:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EDEB260D5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDEB260D5C
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EDEB260D5C
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:57:11 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-43d7650202fso401305f8f.2
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:57:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42F3360D5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42F3360D5C
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 42F3360D5C
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:42 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-488af9fdaa7so2833005e9.1
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:59:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776416229; x=1777021029;
+ d=1e100.net; s=20251104; t=1776416380; x=1777021180;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KOnHUfkUY7gBsr9VfwDCDI81D1xKCzM1xtW/996E8oE=;
- b=dpQ50CHhif0tVwB6WT/t2GSBUiNdxeNlqIppkucAL1uwvQopEmjEilSTww8Zg6PZLB
- 2hUHvxUpWbSXSBkoyu9lqBMAJ1RDPCXde6rI1Hx8iMEhX1uWr6MCXCgjYLqqaEWWnt0L
- fs/e1TDz2cuYaPUgKyip3jOXh3jondMaYjSI4ZbwhC10wGsh2NFnHcUcD0FHptjvpaLH
- cxD3BnPzOgQHCXHS4SpnnuBHzbmove1lFH0NLKGIOvU7wGX9qnqXRULQ5XCrU7masCb2
- L/o4d7xPv570uei9HBKy7noxjekXoBqkfBGF9Ho9o0HaLT2cJD6E0xafsc5Coai9mO1I
- HQqw==
-X-Gm-Message-State: AOJu0YzhcSAugdGWOzHGx5+kRbDpGqbrYGkcxHMGM7p/kgHthhSO8wrc
- hsKj7rYIC3iYQQznmPFrIdXHDw/d75v342V9nLhbkRAEoKF0ObZH++tEXLDmxnsps2RfNN3i6i/
- SFsz818c=
-X-Gm-Gg: AeBDieubhfhdx8qKTBeFqJEQYH1e0NuioTqzifqxIpob4kIAiOBMk2rf35k2aeCotYe
- COmcTw8vbQQ4Xo2ymRldNG4rOe1G8GJ6a5fuzu5aLjqnakAAPpt3RUXqohFFllNmd2mw1YHe4CI
- yX6mBno02xI12dHM9e2++qwb8lliGmcyIr73ntr7T6jXpU+rQOfVnXThdJHiSTzg8Dpv2gPfI1P
- UL2rNyFCJoqOPdlAuYGigNi2R/Of3aU4ZxCxuaufIQFTceSSjqAxbToUkC5Jz1cTRgfKj9E/4J7
- m1aLDUvv4J7pOTEhDLHTuVAwuxIKBqpCm+Vvirs1kWFoc9LUBndvNo5edQcgmXB2K9XfecJ7SE+
- Tnwtj2SQkmwc0z8F8S7DPYIyOUDRb+KM+VId4CKzngxJjnFCZpMVlygDQB0TTXdZ+6buAd/XpBG
- wy5tHq/bkMydREsqVZUssPqcXwAcHE7UT0dTvCO1cIU++A5DnLE7kb4dagZE3O7dDQKn3aDoq9J
- 7AHsvNqYsl13tCoMgmkFPbnvN0EpQKf9HDRoRtcTQ==
-X-Received: by 2002:a05:6000:178f:b0:43d:2be:e4e with SMTP id
- ffacd0b85a97d-43fe3e23d1fmr2878378f8f.46.1776416229368; 
- Fri, 17 Apr 2026 01:57:09 -0700 (PDT)
+ bh=Wqf5v0YHUKsMWLqLTiVerKQjbsW74yVlIeLsqRp9gHI=;
+ b=T2husoGIuVWUjhcu9mxTIP+LqpM6gZz5S0hgFaBskSibo675R6nWz/0NzNJahiLcgR
+ O+8ZGemBvsagj/qorHNjL5FY5D9vC27bqb4IsmEtUC9puXcHa1NI0MfJca52TWTN+CFI
+ c3C6lMwWIjrhzJG8V/uD7O0OYGFfRN82K+3Z/O5WTPcQNVip78zCY/JOHVB2oiWNEy3D
+ saoyArB9xTvd4OKLYzscKfqq7MxF2PaPjvqegvmInC4CPGoz79SAfhHJq4JTZNKT92JT
+ 8aDL3ewYnMfL0YrB5ILNWs3a5L/+82nFP59t6KVleU4dCQRIULp8H6u0wR7m4QxyBRYc
+ su7g==
+X-Gm-Message-State: AOJu0YwvzkKuEFpK48Wox5eNxbeOQ3vB6fTIJsE8F0L/BfiWen2AIaCv
+ paEF0C4m3todTBhKJQRDnrnBA93koeZ/gmAgXY1Irq9lWQPQReUXUQNBNrKkyZcCm/+lcqY10dy
+ S4OpLnqk=
+X-Gm-Gg: AeBDievK+/PA9i85Z9cd3/6kqqupZjc2lkKqn8lNrKZfYWsNNXXVt6YS6arTm/Chj+j
+ ExOR6IDsoatUfQhTlf8sUToVg/5TKS3xgIIB+sHB3JBpPfWaTh2waosxo/8BF4XKmeB7nfJQc8m
+ /cgs17/WrgJd5Rw7hJEMKtf6lnwqCJ9wL+xp7669O5JykXntVNFdD7M+Nhc9nu2UJggybZX9mHG
+ B+eyDs/mQ2w1UgwGkrTzJxaarHl/ecpb00U+r1qEz2cxzUqUyqA49agLmlqGUQ8bvyp3s+TTkPX
+ lmUn79ELkhJZhBUH48GG4UBhhJYrT4xeSia3NS8w5w8baMpfu9d3kKE47pqiheEy4FfXNemZT9M
+ X4ETMiO/ZtRF+9PGcHHJnwYPycAiigXZHrlCWTOHnChDIigZDGrbqwWLdC6vGuUKHIe3zjpkcbG
+ G94wv9VAtG1rPldm2FvXKLX+YJ/WgLxeP+IVS26tFCpTb3eWR4AhzKKjf8zEulPoCZeOQZAPqQM
+ pwvKhZhg+RT0jsK0+a7QqNFnxD/NAw=
+X-Received: by 2002:a05:600c:8b84:b0:480:1c69:9d36 with SMTP id
+ 5b1f17b1804b1-488fb76e4aamr28124735e9.17.1776416379752; 
+ Fri, 17 Apr 2026 01:59:39 -0700 (PDT)
 Received: from P-NAN-NAPALM..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e59f97sm2989465f8f.37.2026.04.17.01.57.08
+ 5b1f17b1804b1-488fb7a0745sm15077795e9.9.2026.04.17.01.59.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 01:57:09 -0700 (PDT)
+ Fri, 17 Apr 2026 01:59:39 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Dowan Gullient <dowan.gullient@smile.fr>
-Date: Fri, 17 Apr 2026 10:57:03 +0200
-Message-ID: <20260417085703.200145-1-dowan.gullient@smile.fr>
+Date: Fri, 17 Apr 2026 10:59:15 +0200
+Message-ID: <20260417085936.200528-1-dowan.gullient@smile.fr>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1776416229; x=1777021029; darn=buildroot.org;
+ d=smile.fr; s=google; t=1776416380; x=1777021180; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KOnHUfkUY7gBsr9VfwDCDI81D1xKCzM1xtW/996E8oE=;
- b=huto7pcglohQBLVvfLQ3KCRyEjRsMACRbQ3Toj8LUIfcRAq/BQxGipGrRXM5h4AFlL
- MhG1/ReAW9WnHA4G0gGAeH5E6lMIZnRIAiFSbNnSMPcUNammSNgeaHMhmoTWGugDrk2X
- fT54wdtu3huAY+CCtUpjVmNU60Ja3jKEa6V6Y=
+ bh=Wqf5v0YHUKsMWLqLTiVerKQjbsW74yVlIeLsqRp9gHI=;
+ b=nLUr37XaV+A/H6bkocNlxorJVT9+RG0INjEUKGEDOiF4VnVaLbVHosozD2Y77O1vp/
+ NGG/Mv0gjjnLKcFc8vM0ejG2IZ0NFq7LASpIUxpUNlpAwJh5c/usDSgaZafE4oI0AYyN
+ dkObCnl+lSCxuzwbwIm49pRgfmeAeKuGpUsaU=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=huto7pcg
-Subject: [Buildroot] [RFC] support/testing: test_podman.py : Build failure
- due to bump of toolchain
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=nLUr37Xa
+Subject: [Buildroot] [PATCH v1 00/21] support/testing: bump kernels to 6.18
+ and fix associated failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,67 +124,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The recent update to the AArch64 15.2.rel1 toolchain (including newer
-glibc and GCC 15) has introduced a regression in the build process of
-host-protobuf v34.0, which is a dependency for Podman tests.
+This series updates the kernel version used in several runtime tests (LXC, ISO9660, Docker, etc.)
+from 4.x and 5.x to 6.18. This bump is necessary to ensure our test suite remains relevant with
+modern toolchains and kernel features.
 
-The issue manifests as "incomplete type" errors and "missing definitions"
-during the compilation of several generated files (such as type.pb.cc,
-timestamp.pb.cc, and any.cc) [1].
+The transition to kernel 6.18 introduced several build and runtime regressions in the test
+infrastructure, which are addressed in this series.
 
-This is caused in particular by the stricter header inclusion and inlining rules
-enforced by GCC 15, which expose missing explicit includes in the
-Protobuf 34.0 source code, so it appears to rely
-on legacy implicit inclusions that are no longer provided by the
-latest toolchains.
+All modifications were tested locally with the updated kernel version, and the affected tests 
+now pass successfully except for the tests.package.test_podman test wich is failing due to
+the bump of the toolchain. More details here : [1]
 
-This failure prevents all test classes from the podman test from
-completing, as the host requirements cannot be built.
+[1]: https://lore.kernel.org/buildroot/20260417085703.200145-1-dowan.gullient@smile.fr/
 
-The DCMAKE_CXX_STANDARD=17 option was added to the protobuf Makefile but the
-issue still persists. What would be needed to fix this issue ?
+Dowan Gullient (21):
+  Revert "package/python-setuptools: bump to version 82.0.0"
+  support/testing: test_grub :  Kernel update bump to last LTS (6.18)
+  support/testing: test_file_capabilities : Kernel version bump LTS
+    (6.18)
+  support/testing: test_f2fs : Kernel version bump LTS (6.18)
+  support/testing : test_iso9660 : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_docker_compose : Bump kernel version to last
+    LTS (6.18)
+  support/testing : test_glxinfo : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_clang : ump kernel version to last LTS (6.18)
+  support/testing : test_edk2 : Bump kernel version to last LTS (6.18)
+  support/testing : test_oci : Bump kernel version to last LTS (6.18)
+  support/testing : test_systemd_selinux : Bump kernel version to last
+    LTS (6.18)
+  support/testing : test_dtbocfg : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_libjxl : Bump kernel version to last LTS (6.18)
+  support/testing : test_lxc : Bump kernel version to last LTS (6.18)
+  support/testing : test_octave : Bump kernel version to last LTS (6.18)
+  support/testing : test_systemd : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_openjdk : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_fluidsynth : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_distribution_registry : Bump kernel version to
+    last LTS (6.18)
+  support/testing : test_rdma_core : Bump kernel version to last LTS
+    (6.18)
+  support/testing : test_aarch64_64k : Bump kernel version to last LTS
+    (6.18)
 
-Thanks for your help. Sincerely.
+ package/openjdk/openjdk.hash                  |  2 +-
+ package/openjdk/openjdk.mk                    |  4 +--
+ .../python-setuptools/python-setuptools.hash  |  4 +--
+ .../python-setuptools/python-setuptools.mk    |  4 +--
+ .../testing/conf/docker-compose-kernel.config | 26 +++++++++----------
+ .../conf/minimal-x86-qemu-kernel.config       |  4 +++
+ support/testing/tests/boot/test_edk2.py       |  2 +-
+ support/testing/tests/boot/test_grub.py       |  9 ++++---
+ .../tests/core/test_file_capabilities.py      |  2 +-
+ support/testing/tests/fs/test_f2fs.py         |  2 +-
+ support/testing/tests/fs/test_iso9660.py      |  2 +-
+ support/testing/tests/fs/test_oci.py          |  2 +-
+ support/testing/tests/init/test_systemd.py    |  4 +--
+ .../tests/init/test_systemd_selinux.py        |  2 +-
+ support/testing/tests/package/test_clang.py   |  2 +-
+ .../package/test_distribution_registry.py     |  4 +--
+ .../tests/package/test_docker_compose.py      | 12 ++++++---
+ support/testing/tests/package/test_dtbocfg.py |  2 +-
+ .../testing/tests/package/test_fluidsynth.py  |  2 +-
+ support/testing/tests/package/test_glxinfo.py |  2 +-
+ support/testing/tests/package/test_libjxl.py  |  2 +-
+ support/testing/tests/package/test_lxc.py     |  4 +--
+ support/testing/tests/package/test_octave.py  |  2 +-
+ support/testing/tests/package/test_openjdk.py |  6 ++++-
+ .../testing/tests/package/test_rdma_core.py   |  2 +-
+ .../tests/toolchain/test_aarch64_64k.py       |  4 +--
+ 26 files changed, 62 insertions(+), 51 deletions(-)
 
-[1]: https://gitlab.com/buildroot.org/buildroot/-/jobs/13698215942
-
-Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
----
- package/protobuf/protobuf.mk                 | 3 ++-
- support/testing/tests/package/test_podman.py | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 1d110fdbf0..2d4ecd0d65 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -42,7 +42,8 @@ HOST_PROTOBUF_CONF_OPTS = \
- 	-Dprotobuf_DISABLE_RTTI=OFF \
- 	-Dprotobuf_INSTALL=ON \
- 	-Dprotobuf_LOCAL_DEPENDENCIES_ONLY=ON \
--	-Dprotobuf_WITH_ZLIB=OFF
-+	-Dprotobuf_WITH_ZLIB=OFF \
-+	-DCMAKE_CXX_STANDARD=17
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- PROTOBUF_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-index 9d86a06129..72552b945b 100644
---- a/support/testing/tests/package/test_podman.py
-+++ b/support/testing/tests/package/test_podman.py
-@@ -15,10 +15,10 @@ class PodmanBase(infra.basetest.BRTest):
-         BR2_SYSTEM_DHCP="eth0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
-         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-         BR2_LINUX_KERNEL_DTS_SUPPORT=y
--        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
-         BR2_PACKAGE_PODMAN=y
-         BR2_PACKAGE_UTIL_LINUX=y
-         BR2_PACKAGE_UTIL_LINUX_MOUNT=y
 -- 
 2.43.0
 
