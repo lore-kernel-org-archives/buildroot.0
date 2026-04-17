@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 774E0F436B9
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72FE6F436B7
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A4B48174C;
-	Fri, 17 Apr 2026 15:20:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AC2C60E5D;
+	Fri, 17 Apr 2026 15:20:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0mbS9le5cogt; Fri, 17 Apr 2026 15:20:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uSXgLysZCZRs; Fri, 17 Apr 2026 15:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4752280F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F53A60E4C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439227;
-	bh=hKOHMtmj8/kOCvkEWAmY6byvdtYyVF3Lq2ezryZ+D+s=;
+	s=default; t=1776439226;
+	bh=gUfuubI+DTPBiuwgfhlT3dskOgVXDSgEtv74u74JYBk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pGFSa2rAyU6uCOhc/iEHanQzNwcxIOAVh5ZtoUFcBgUb6ekAwQB7GjFSfBS5BhTae
-	 ajBFHO6+4HVQUGii3/fWetOPgje3Lw8SUdcKuwBndI/O7DkDrvkShcZBm+gYNxq24a
-	 Cwe+yTbc+1x0ebcBbz/m0+8M3ONj5H0I1vXb4l/sQntstRxSjqbMROqI6anMPXClNw
-	 2eW4KZPSq9ElD2Nsb8EWK/QKq8E7sVaslOy6IiAQ+0do1n3Q2yP6ZV6Agz/ycUNECp
-	 2v1wrmys/cGcBNoshCCu4/19fqI41Uz1R5kszsShEcXCh3qoQEZV28ytlu3izPkrf7
-	 BAj2oaAgr+ZnQ==
+	b=c4pVmnCdYTel9nBHuiDPZDtB5whqP63y3IIZiIEYO0XSAynpdB7ZTDUZ42+ExwrgW
+	 FkbcSHzYAmW9g9vUT1Zp24jE/kd+JwVjmYn7rvY7YffY/4s3KrjhnIOHCwKOqpKT3d
+	 62QdDVXFDKxXJnH2/667hAhbyxkQkgu2MS+i0CUaa+dWgQ1yTH/+xj7+Auq/Eu1Klt
+	 oVUTz5BUrVu/aZu+6FWebkkJtxUfNfsyHQTMmJ5ahPQcXtxCdKwv1W7kXPpSl66TZX
+	 eoMDPBM4Sg51fUn5TKiTtqjhLVIAgq3bPxoaAZb9m7JySq0RN0O9y4pGZk8y/H70+C
+	 gr+WjbWLYHmAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4752280F5C;
-	Fri, 17 Apr 2026 15:20:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1139E4E0
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F53A60E4C;
+	Fri, 17 Apr 2026 15:20:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40559396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35D264054F
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E76CD40608
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QAKXV-uQ8cXX for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QpbjDxqfS-3H for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:20:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 693C040561
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B293740609
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 693C040561
+ by smtp2.osuosl.org (Postfix) with ESMTP id B293740609
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AD12819B7; Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
+ id 64916819B9; Fri, 17 Apr 2026 15:20:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Apr 2026 12:51:47 +0200
+Date: Fri, 17 Apr 2026 16:14:03 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 474c124db19c84b0609d52acdd10c1ad4f6f9fcf
-X-Git-Newrev: d2e7e6cb654dbd489ece1351d06308c0dc3347ee
+X-Git-Oldrev: e5583b9da6e2449759151008b18098acbea89489
+X-Git-Newrev: 59b2b238c1a1d606339a5fc7ad44e4dc1ddfbd38
 X-Patchwork-Hint: ignore
-Message-Id: <20260417152008.1AD12819B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] .b4-config: automatically
- add 2025.02.x prefix
+Message-Id: <20260417152008.64916819B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/redis: security
+ bump to v7.2.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,32 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2e7e6cb654dbd489ece1351d06308c0dc3347ee
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/59b2b238c1a1d606339a5fc7ad44e4dc1ddfbd38
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This avoids having to run b4 prep --set-prefixes 2025.02.x to add the
-2025.02.x prefix to the patch subject.
+From the release notes:
+https://github.com/redis/redis/blob/7.2.13/00-RELEASENOTES
 
-You do need b4 0.11+ to make use of that.
+================================================================================
+Redis 7.2.13    Released Mon 23 Feb 2026 10:00:00 IST
+================================================================================
 
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+SECURITY: There is a security fix in the release
+
+* A user can manipulate data read by a connection by injecting \r\n sequences
+  into a Redis error reply
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 29a49271574095fb813ce7896c630a6e5fd78764)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .b4-config | 1 +
- 1 file changed, 1 insertion(+)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.b4-config b/.b4-config
-index d568669864..0c6966c0c8 100644
---- a/.b4-config
-+++ b/.b4-config
-@@ -1,6 +1,7 @@
- # Configuration for the `b4` tool
- # See https://b4.docs.kernel.org/en/latest/config.html
- [b4]
-+    send-prefixes = 2025.02.x
-     send-series-to = buildroot@buildroot.org
-     send-auto-cc-cmd = "./utils/get-developers -e -"
-     prep-perpatch-check-cmd = "./utils/check-package -q -p -"
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 7677642ed1..9e5be53969 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  97c60478a7c777ac914ca9d87a7e88ba265926456107e758c62d8f971d0196bc  redis-7.2.12.tar.gz
++sha256  b3eeef15ea90a41c568f1f97a78d3370400baad55566869bbbf1af9f9106d85c  redis-7.2.13.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index e6175b69b5..ce39305176 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 7.2.12
++REDIS_VERSION = 7.2.13
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
