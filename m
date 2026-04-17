@@ -4,115 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BC3CF436B7
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D78AFF436B8
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5E0981C21;
-	Fri, 17 Apr 2026 15:25:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF2E781CA0;
+	Fri, 17 Apr 2026 15:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ev84tuiO-fvM; Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
+ id gfnQq85mESzD; Fri, 17 Apr 2026 15:25:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA4B581C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD3EB81C26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439536;
-	bh=aCcbfx+YrjuktV6XNVRED6Q1KTi1eNmQgP7ptVnaduM=;
+	s=default; t=1776439538;
+	bh=QnMkqVXzeILAlFfrnCmWnSwiB/ezVFcUoJocEGKSar0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pQxNhzfLtWCfX5G6N6yGBVRQxg+vYF0m6iDI4NzGGJ5l4eEEey+IJbdXczO8ezdUZ
-	 imN+jfyKAKFGiGqbSyJEbOX/PedViz3eu39pPeuEZiZw2MIFkwoHVLuiIC9RHqRpty
-	 c5EeOjeajWI13iqL7LLChMVa/VP2vB63XGaZBAiNzIqLXq5WLDS2bLU2yKig2er3u1
-	 CUCIrE04s+97Whnc6mWUlU7oL3VKxURizsYY2o2og9zt6v9AZubQnVhF1/FBQX+IyE
-	 7EBv2ATMmhbUlUxdM85IBPuxYITqUl8ZiRpOq7bbN6/R78zU2cTpH8d9kDaAiiS8Ul
-	 jNwXoDYWd/yEQ==
+	b=CvOmdz8e+rD68nLpAndYNj2v11HJL82gXhQLcvND9gJEKjzQkfYI3JXsxI4t4CFSF
+	 8ur9mczY08MJ2aSuKbG3bDCW+cE6EhPB1xJ++xaTund1CdfO9ISLm4v1dENbwpSArz
+	 3wwYC3tVujjhXBDGIGBRSCj6xfNe61qb1jQSHJcoxQ7cgmSvzuJrGRYO2amwBbP8Rw
+	 ig8+6VwSsiqWwkBJN2EfyP+Vs0FkWmkZ46ulbYbamRDUr7kwolrwftU8wKjUsDXxs+
+	 MIAE8HTXXSmVit8leEXvebJsodLPgCljlmovjYVoM7T/BX5IA6tmeMRbATsgj+gp/J
+	 Vo7K1LHV8X0AQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA4B581C20;
-	Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A9F66396
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD3EB81C26;
+	Fri, 17 Apr 2026 15:25:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD0FB396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9068C81B70
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F82A40DD8
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DLbbPnqEHJJL for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bTIg6-9FY1OK for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 87F4080B32
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F4080B32
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87F4080B32
- for <buildroot@busybox.net>; Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-43eb012ac4fso514237f8f.0
- for <buildroot@busybox.net>; Fri, 17 Apr 2026 08:25:31 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 92CB640DCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92CB640DCD
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 92CB640DCD
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-488c2690057so8338745e9.0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:25:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776439529; x=1777044329;
+ d=1e100.net; s=20251104; t=1776439531; x=1777044331;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=4381/RKjS2XXHfZNu6VQbQyaaUDLiXQ0lkQo8xIWZNI=;
- b=JGMR8EHOhOK1xZS+cjo0pVIGHvBje1jGT+e2YsbdTsRSHcFEAgdvbIJPLD5W0BtSZY
- VLObDFRCQHKl1Mr1ZGq2rvwvl86YOIcgX6aldakzPbAaTyxcs5FbCWjqgQmDOhhWNmtk
- JxHTuQje2yF9op8aTHq4fm/7SSLr6Z+jPbqmtAO+xh2ItSF732jhS1hxKtux+uxA5lj+
- A2iRd+9ElNzoywtHg0nctFRQdqIhe0MCK/e0CSlmLkqGDPFOf+Rpvywzyxc3f6fKtM08
- cf39QgQHCZNQLtF2LH6wpPTI3E+nwrTNN7gM4XbI6gkQ4DkoASMrUBLp2tCY5/gGgJQX
- 6UCw==
+ bh=zdWkayu2bBzHy45pHy11rYWZnPdcceQfC1ZNTL3L1Dc=;
+ b=TSVyuQSNuWSXT1hw4fcR7hK1V23VvQq8CMTpwWNZULUBSE4f0fFUPsZqEU7TIbpGaD
+ 8HwgKWmh8wKqjr/GjibljSMZtT0UCehuSTfSqTicX4lEMqzt+yjOvkXYeLQiVHPJwiKK
+ UdkWxTO7h9sGDbVTVd8SpF8dBR0MnAfsllSLaq5nJuBRgqw85GfE03mqk0uXJg6+DKfn
+ djfZhh+NLCyTfAjgSXs7o9De1rlKWNUy2rGcopC+hHyHg3a77YtyyfoJxYc/VsvMMu3t
+ 8uGDWtIsS7YxI4sP/9BHjyfqnpnWJrx84eRnUCtWYys1T0/NLPvQPLpYMVUqvfmiZfZX
+ LrMw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/u1uocmLkg7qt37iALpYzjjo1WhNLotg+XFGuPdx9qYS/jFcWj5ZKEUG4ljmLny1fK24kIAGLXWI4=@busybox.net
-X-Gm-Message-State: AOJu0YyVS0VCbAU+JWc+d0PbyqwT5I0J6SNQoRIj0Xc85N3oN4IAGg7/
- qMMEe83ULLqlo0KCz5F0EBuL7T59Nez3eM335Vl4/bUq0Q5JEe/3JXKmEcIf20i0xfoBfkEqjma
- UpfHq
-X-Gm-Gg: AeBDies8GjMb+nBE1Jj+ddDJp37gHhVWaPJZdCYSM094UvqG1G5+OKpRl+gU1TRQjkc
- i41niVnGXGjzPGJvynE21Hdp72uBgmuSCi+J5Mk0Gb247GeCgyilThDszeqtp/MlI+2BNpr4j8V
- Ifmx3qep/eU4mumgjRw23bWnGAqE/4Jg88Vscd4HnWaIIRlSc1G1hAXIb3WjDva5oPr/4IB0xTg
- idGnLHcJlC6itzNjMVwYzNQk0N/lNDTL8dNioI6yQmwZpcBtkdyhKz9gn4Qtr9mq5AGMyPBzZLZ
- 8UppaM2CjjbNkSKGwKvLjlOEh+PT2Vc4remP9q7YtpAguvY7aOtTq7+E7BbTiFMUAwccwA1DUvW
- skY/9k1ipMSXqW8QJxuTKRtQBNTPSeSpnpAVPLfe/Ieli9JDeK7t+J5bM0RF3ZOjQnQogQE+cyn
- tlQehoDtHy1n4qyIqNMIDSd9rmkys=
-X-Received: by 2002:a5d:5d11:0:b0:43b:8858:1146 with SMTP id
- ffacd0b85a97d-43fe3e0fe61mr5153405f8f.41.1776439529503; 
- Fri, 17 Apr 2026 08:25:29 -0700 (PDT)
+ AFNElJ+NYNYHnrMdFLeHA5UuRjk4DrQ68+LBRDRgoKr/naWBt8+HvhZxlpQQgEw/MgbcZJ5LCGnyXzw+XpA=@buildroot.org
+X-Gm-Message-State: AOJu0YzxC9zssS0HOSA60CysyJZ9zfAYxCQGe4El3mYZiN5Gehdvo1j7
+ TDWRCqNOFDX4Tj3lb2kgVNcUWvN8zEcAe50jfkQi8DgnFvoRZZ8Lfulbz8ROfYMQfDH+d0TdwS3
+ yl+/b
+X-Gm-Gg: AeBDiev1bk5LR5a7w95hgwYhfO6tfgzAGBK4PygH1e+AdhEnWZuL3wcwxtpm7ldS2Sn
+ f4Du9uNgDn5anmFfil9K6XG5i/THJBLQxbwl+NG8MCd0GdVAmFE/+Jra7RsMPv0+36NUwZl6lSp
+ 6jyxGLW3FydgRhUXd5syxXxPSMp/eE9CDzkBBHuYB9V8ApfBNKiy/OifogixO75xkI4ccYqrvo6
+ J/26ITWJi+Nn5tLY5MPyb5zX8nXORRx3tLdVjfrILgeYojXQgJ2GjwPf6tDR4C9zHQvQ5TohoW0
+ 30UdHx0XwnMgxLGLUO4EcVOtknccOaY+KV3etkSLILy6f3nTXsrDokYyQKEM5SRfWsxPPtu1MOL
+ NAjPFF7OTWOM2a+Ypp20W+m3lJo70dEQf71wFObbRMI6NJd3AZ8fVkk1gRzLblhUQ4xIfB/sT3j
+ /2o7tkI6v1lxSpPUtSuli4t8zAi5g=
+X-Received: by 2002:a05:600c:154e:b0:488:aa3d:faca with SMTP id
+ 5b1f17b1804b1-488fb771a4emr37644975e9.18.1776439530565; 
+ Fri, 17 Apr 2026 08:25:30 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e4d112sm5687559f8f.29.2026.04.17.08.25.29
+ 5b1f17b1804b1-488fb78446csm29940255e9.4.2026.04.17.08.25.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:25:29 -0700 (PDT)
-To: Francois Perrad <francois.perrad@gadz.org>
+ Fri, 17 Apr 2026 08:25:30 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@busybox.net
-Date: Fri, 17 Apr 2026 17:25:28 +0200
-Message-ID: <20260417152528.314181-1-thomas.perale@mind.be>
+	buildroot@buildroot.org
+Date: Fri, 17 Apr 2026 17:25:29 +0200
+Message-ID: <20260417152529.314235-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260407072208.8583-1-francois.perrad@gadz.org>
-References: <20260407072208.8583-1-francois.perrad@gadz.org>
+In-Reply-To: <20260408085506.1641767-1-bernd@kuhls.net>
+References: <20260408085506.1641767-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439529; x=1777044329; darn=busybox.net;
+ d=mind.be; s=google; t=1776439531; x=1777044331; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4381/RKjS2XXHfZNu6VQbQyaaUDLiXQ0lkQo8xIWZNI=;
- b=Nt+IfIx3YyMZQW1b3LLendVD1PWoe7VIeUg+P8cxifcESNKGslzEecr52oL2m8FVNO
- Iv46Sn9Uo/XfE/5AYqj7xEl2G63QiPdAjB6t5MYxeoV3k9QG6koBJZyMI48oqa2MJ1GJ
- VYwn3Xq4EoGt7BGDkj1vHvtTOVeqKSLkIUwAGRgCS/ps/w5mrixWNDmI6Z1tRxZNAZsA
- KFLQl+/KI+iKHe3N4Dqm03DiWJNtfRIXdQM/MPDn8I3vjNZ/6hdbn7T0CkLI9Ltw0pf8
- BlE6As1tUeCh2LS6jE5toPWOrSbID+GC9Hce71DbnU3bB6zBekC9AQ/ihai4q0ITSzNW
- SBdw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=zdWkayu2bBzHy45pHy11rYWZnPdcceQfC1ZNTL3L1Dc=;
+ b=PPVijgBtx8jkj1vBf7MDkx74maIEaFgJa/sdA/SH+FnD/fIQIn04VV7iu15XxI87l4
+ CMEMD8AJ9ZDV9nzmwcZNI3mVe8vsYNwXlWwmZcYMDasvAq+r7Vbb8Lowc4Hvz2TlaidO
+ KzG6iXhzdSC791NSx9c0X6i6JrGi6Whzy7rfwCF/DciC3XeI6tqRLbNAh88J4q+QxJ+b
+ mEzprvVS50eWVCDAmAEvxWz3ZezgbHJSEchO7cnI+DSlndcMrT7C8JrAwpyTRrMms0lW
+ lJmzqRCzbM0gntgp6NKUhTLAFaZczTxMkZQV+E/N0TIaUGKLFca3+XT96Z4oKm8eMmDD
+ y9kQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Nt+IfIx3
-Subject: Re: [Buildroot] [PATCH v2] package/quickjs: security bump to
- version 2025-09-13
+ header.a=rsa-sha256 header.s=google header.b=PPVijgBt
+Subject: Re: [Buildroot] [PATCH 1/1] package/libde265: security bump version
+ to 1.0.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,65 +132,47 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> fixes this serie of CVE:
-> https://security-tracker.debian.org/tracker/CVE-2025-62490
-> https://security-tracker.debian.org/tracker/CVE-2025-62491
-> https://security-tracker.debian.org/tracker/CVE-2025-62492
-> https://security-tracker.debian.org/tracker/CVE-2025-62493
-> https://security-tracker.debian.org/tracker/CVE-2025-62494
-> https://security-tracker.debian.org/tracker/CVE-2025-62495
-> https://security-tracker.debian.org/tracker/CVE-2025-62496
+> https://github.com/strukturag/libde265/releases/tag/v1.0.18
 > 
-> For release notes, see:
-> https://bellard.org/quickjs/Changelog
+> https://github.com/strukturag/libde265/releases/tag/v1.0.17
+> Fixes CVE-2026-33164 & CVE-2026-33165.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Used sha256 tarball hash provided by upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/quickjs/Config.in    | 2 +-
->  package/quickjs/quickjs.hash | 2 +-
->  package/quickjs/quickjs.mk   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libde265/libde265.hash | 3 ++-
+>  package/libde265/libde265.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-> index a59d46070..0ae0389b2 100644
-> --- a/package/quickjs/Config.in
-> +++ b/package/quickjs/Config.in
-> @@ -10,7 +10,7 @@ config BR2_PACKAGE_QUICKJS
->  	depends on BR2_USE_MMU # fork()
->  	help
->  	  QuickJS is a small and embeddable Javascript engine.
-> -	  It supports the ES2020 specification including modules,
-> +	  It supports the ES2023 specification including modules,
->  	  asynchronous generators, proxies and BigInt.
->  
->  	  https://bellard.org/quickjs/
-> diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-> index 798c857a1..70dfb2d19 100644
-> --- a/package/quickjs/quickjs.hash
-> +++ b/package/quickjs/quickjs.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  2f20074c25166ef6f781f381c50d57b502cb85d470d639abccebbef7954c83bf  quickjs-2025-04-26.tar.xz
-> +sha256  6f1f322aea3bb3a90858db85c9fe717013fde4df7dfcafe2f57e78f5bb4b4a0c  quickjs-2025-09-13.tar.xz
->  sha256  598fd7fc928e4350abce36e337ba5a1346923c5c692f5be92c3d8e29ddd7c18d  LICENSE
-> diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-> index e2170b297..511f14245 100644
-> --- a/package/quickjs/quickjs.mk
-> +++ b/package/quickjs/quickjs.mk
+> diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
+> index efd48d13aa..d977af5521 100644
+> --- a/package/libde265/libde265.hash
+> +++ b/package/libde265/libde265.hash
+> @@ -1,3 +1,4 @@
+> +# From https://github.com/strukturag/libde265/releases/tag/v1.0.18
+> +sha256  800478f3bf35f0621b14928ceb317579f3e8b23de4bd2aac29b6cb8be962bbd8  libde265-1.0.18.tar.gz
+>  # Locally computed
+> -sha256  b92beb6b53c346db9a8fae968d686ab706240099cdd5aff87777362d668b0de7  libde265-1.0.16.tar.gz
+>  sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
+> diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+> index 3d9b96134f..aab86ab3d7 100644
+> --- a/package/libde265/libde265.mk
+> +++ b/package/libde265/libde265.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -QUICKJS_VERSION = 2025-04-26
-> +QUICKJS_VERSION = 2025-09-13
->  QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
->  QUICKJS_SITE = https://bellard.org/quickjs
->  QUICKJS_LICENSE = MIT
+> -LIBDE265_VERSION = 1.0.16
+> +LIBDE265_VERSION = 1.0.18
+>  LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+>  LIBDE265_LICENSE = LGPL-3.0+
+>  LIBDE265_LICENSE_FILES = COPYING
 > -- 
-> 2.43.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
