@@ -1,89 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F9F1F4368A
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 10:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76BAEF43698
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 12:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5E57409D5;
-	Fri, 17 Apr 2026 10:55:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3295281460;
+	Fri, 17 Apr 2026 12:06:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IWchjmqBYj5K; Fri, 17 Apr 2026 10:55:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z96t6saUIuZG; Fri, 17 Apr 2026 12:06:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D799040C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E5AE8145C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776423348;
-	bh=lPKmZvRvJueTgw8FEAQDobpj3DK96tG9RiwPTMoxjMA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=G9vXMv3qYHT5q8epoVwVueOFykQZTSWwyoW4NCDf2/E1GZ0pJh9N+S1CDYedEQ0qz
-	 LlohBJJDO13bFH/pu8Htc4z2q/EZx6qXtb+lP/azIKPz990e55K/dM/AHrpW63v5zt
-	 zIQkUTXB3GPizaXocZotPRywiEzHimYnbGvYWwdhj6aCp90aD+IHTD7yxhquqFotSs
-	 3oiRe3MIZ0tMXlFVJEs5yCHJlHmWWMRPsJs4VPOFZ0Qv05XFGny7MsEjQpWWbu9ATR
-	 BBLAAb/WLP+QTbrhVPKbgBXSJRX+VM5SXZSXs2SAFrA+ajblLThYWh+Pdn03kW7CoQ
-	 6uYMrqS15WFoA==
+	s=default; t=1776427609;
+	bh=NKq2GIK1xNzov68THfe0IWMxFh+NcCc1BMWHj8LAL/c=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oiUfEi90yYabeKuXZUF4uDNEcHqilzFA+SJu7L++i29XL+tNOb0C3CJVyL3oftHEc
+	 KfmFYTgZoycXgoEF4D6wFOSShgAMxOY2ik/EXkuXr/cP2tUnStgSvT6G+GX1QEDdmI
+	 E6L+9l/ywWjZKmWVbeuUKrYRO+aLKEUU8pxZZbfAJ0E5k37pxcEM6qUBmPaKMq8byw
+	 i+7rimZstSYUJVumendN31xagpgumtIkg9P6cpHJ4gs3eUfe8tUFjsBwkGeO+ZUyx8
+	 n1KmKWBiAcLtI4QnKxmto5WIDPmHfv8IrPoMmJz/bq7ZI7QUlzpwOiDmd1cvieSHhh
+	 UnERwIeYKDhdw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D799040C3E;
-	Fri, 17 Apr 2026 10:55:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A6627270
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 10:55:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E5AE8145C;
+	Fri, 17 Apr 2026 12:06:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62C93396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 12:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CD1340C3E
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 10:55:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6050E8145C
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 12:06:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xDb3kqMWLOxj for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 10:55:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 21028409D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21028409D5
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 21028409D5
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 10:55:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bf30.dip0.t-ipconnect.de [84.161.191.48])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A48B3A4C370A
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 12:55:29 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35444)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wDgrB-000000002Fa-0P45
- for buildroot@buildroot.org; Fri, 17 Apr 2026 10:55:29 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eyu6l_vsLZdg for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 12:06:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 54D958145B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54D958145B
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 54D958145B
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 12:06:46 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-43d70c30767so994210f8f.0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 05:06:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1776427604; x=1777032404;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1oJZQztYI/4Fy36/ni5sv+6HWszuTEfPoUNTgI9F07s=;
+ b=OftOaYyUD7tkkLrcFy997Ftu4y40w6x5MC/Iqg5bzZh47AiW1hq58wITQ3gkBNWv15
+ OTU/lUQF9KUYF8nHUy7VjWsdPVWU7J+4C3eM7YslEwPTCaOZWw9pmG6QR3GHKfA5FxuW
+ KroARQVn26E7n+ZAQxI5vlDMLapGNQ8d4/IeXTs2JTIHIF7E6FdIUSzXEbru3mQERQR4
+ R8s4vZrZXjPbgVxxlZF+5XZZNHU+YNq1a64LN9gyaCFWPWHi2yPDWG2eKSHNoLupc6oN
+ /NnWbrvzJdl2Ix68YF4Wcu2as6hCgezdngKKyAy2abXU8a4YKfFpbxd/EUaBQ+4dotDd
+ qmWg==
+X-Gm-Message-State: AOJu0YzKOlXrYHIUplbzFVAx2UMbN7msHSpsNbGK5JSlCt3qStKBP8KV
+ 2QYNXOnyf/l5k+5WWktcl5Xl9Ekt5eD86YO4qp+g04EblN+qE7FsFys67Np7A92L9OOw+R1aKw0
+ tTM18
+X-Gm-Gg: AeBDietuaotIqVlLQY3aWPqVOmYf/+trWSbczbZc4uZ1FtcEOgetW3u4K23ML4LA7Ci
+ 7bb3nkNyT1F7voJuHyFVeQMFj0PvF44m6wwuweirFBo56J6iYNvD/EjLe63PbFXlEUMr/FhUPGB
+ 8B++CktlnonG5qtrjI+xMHYVBvreJE8tPrPRubDKXbboHtWmZKsvvXKhZaM3kbkTBP89ClKCFzP
+ xvV77p64XsMfVi5P+7jv1Ua939NxdYMwMqQ1pxmYW9OBNeuNQ1LG5qpLDcm0TYVhgXFJm7CsdIM
+ DLlfxO3Eao5Tv9eEsTfVFp6m8KUBGsChpjeCFJAmQoUhfwz1818LJVpnUpu96cV+CTIU5ZcK7NP
+ eqvVCoDSqDIrCVXx3k2aa2B8/NbPx0g4tfEr6oMlXUOcByxPrM815tluhMOvaSiZA7tzQJXeNK3
+ dVABJcDjL71Uxw3NOFT7jin5HBYqM=
+X-Received: by 2002:a5d:6f14:0:b0:43d:7086:b03 with SMTP id
+ ffacd0b85a97d-43fe4032b76mr3317587f8f.1.1776427603876; 
+ Fri, 17 Apr 2026 05:06:43 -0700 (PDT)
+Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43fe4e3a341sm4421878f8f.24.2026.04.17.05.06.43
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Apr 2026 05:06:43 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 12:55:29 +0200
-Message-ID: <20260417105529.4147375-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260417105529.4147375-1-bernd@kuhls.net>
-References: <20260417105529.4147375-1-bernd@kuhls.net>
+Date: Fri, 17 Apr 2026 14:06:40 +0200
+Message-ID: <20260417120641.174060-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1776423329;
- bh=VJqFebxRmQGAM/gtfMe0uyT6qBphsiOPLFYUMCMUMzU=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=gymkwRnel7hyodz62rfdJx/ajINomcmia8jYpNbNbrzdk8yTFOEoW5UPCXHRjIVxj
- svxbqyRm97CG2jn6WN5aHdpvpxU6NjEDr/nyoGbrvKhN1hqVHxW7fOVRKRw1sn1/6X
- CiAUQ3cE77z5e3jMYfTws4+/j46H3brCzTHLG6eQCndq8GJM20iR3HB7+KD4AI+MFR
- 5dLqNs0Npj0IpjhqUVIotvYxVAer40p3Te7jg0NnYocwBvlrYTa4ajirEh+LWCaZB0
- lltbkBRI3HGVo61llem5DwU8BACqE9z7ryDIbMlwgkI1hlW3xZdzzDAfLVp4YbMc3V
- FYhaGZrq3M+bg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=gymkwRne
-Subject: [Buildroot] [PATCH 2/2] package/ghostscript: security bump to
- version 10.07.0
+ d=mind.be; s=google; t=1776427604; x=1777032404; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1oJZQztYI/4Fy36/ni5sv+6HWszuTEfPoUNTgI9F07s=;
+ b=Bexwa7rirfwnpmeF3GuZvCvYQ9nylhF+7MIDr2uEWIflbcvLaWeT2+BcBw18ImIJPv
+ Xaml9ZmZJnvZRr7I3pqg6tfbYLT5bHp2H6W+2b16p4rwVCrt5BM+NjqtPyEOgRqpZsIP
+ dXH9XDQDfnYdR0CHPhqV4I9b1BIiedobL43SC1lQjqnk0bXL+lLd5gomhoFjogKRgSJf
+ pxF67rMTwDQZ43VGEe+zSXa+g/zkUJvPbVE0IBfqJBkIAHy6o0lnBmoUmDwrnsbkSl4c
+ oM1Ec8dWLuyhYmMStxqsM1nPyl9YJeIepsr0oRPWop43av21BxUL3A0FmMulcBNa8M8V
+ adPA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Bexwa7ri
+Subject: [Buildroot] [PATCH 1/2 2025.02.x] package/xz: add patch trailer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,120 +116,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://ghostscript.readthedocs.io/en/gs10.07.0/News.html
-"This release addresses CVEs: TBC (Two applied for)"
+Commit [1] introduced a set of patches to fix CVE-2025-31115.
+Since [2] the security patches neeed to reference the vulnerability with
+the `CVE: ` trailer in the patch header.
 
-Removed patch which is included in this release.
+This set of patch is no longer present on master branch with xz bump [3]
+but hasn't been cherry picked to 2025.02.x branch.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] 06c6c49fe8 package/xz: add security patches fixing CVE-2025-31115
+[2] 1167d0ff3d docs/manual: mention CVE trailer
+[3] aaa50b0e61 package/xz: bump to version 5.8.1
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../ghostscript/0001-Fix-32-bit-build.patch   | 63 -------------------
- package/ghostscript/ghostscript.hash          |  4 +-
- package/ghostscript/ghostscript.mk            |  2 +-
- 3 files changed, 3 insertions(+), 66 deletions(-)
- delete mode 100644 package/ghostscript/0001-Fix-32-bit-build.patch
+ package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch               | 1 +
+ ...02-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch | 1 +
+ ...03-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch | 1 +
+ ...04-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/package/ghostscript/0001-Fix-32-bit-build.patch b/package/ghostscript/0001-Fix-32-bit-build.patch
-deleted file mode 100644
-index 648e235d3b..0000000000
---- a/package/ghostscript/0001-Fix-32-bit-build.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From 3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f Mon Sep 17 00:00:00 2001
--From: Ken Sharp <Ken.Sharp@artifex.com>
--Date: Wed, 10 Sep 2025 08:55:30 +0100
--Subject: [PATCH] Fix 32-bit build
--
--Bug #708824 "ghostscript 10.06.0 compilation failure on 32-bit archs"
--
--nbytes shiouldn't be an intptr_t, it doesn't get used for pointer
--arithmetic. Previously it was a uint, should be a int64_t, to fit with
--all the other devices.
--
--Checked other warnings, and found a (very minor) one in gdevdbit.c, fix
--that while we're here (signed/unsigned mismatch, we don't really care).
--
--Upstream: https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f
--
--Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-----
-- base/gdevdbit.c | 2 +-
-- base/gdevmpla.c | 6 +++---
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/base/gdevdbit.c b/base/gdevdbit.c
--index e07cc3f3b8..1b5c69325b 100644
----- a/base/gdevdbit.c
--+++ b/base/gdevdbit.c
--@@ -191,7 +191,7 @@ gx_default_copy_alpha_hl_color(gx_device * dev, const byte * data, int data_x,
--     fit_copy(dev, data, data_x, raster, id, x, y, width, height);
--     row_alpha = data;
--     out_raster = bitmap_raster(width * (size_t)byte_depth);
---    if (check_64bit_multiply(out_raster, ncomps, &product) != 0)
--+    if (check_64bit_multiply(out_raster, ncomps, (int64_t *) &product) != 0)
--         return gs_note_error(gs_error_undefinedresult);
--     gb_buff = gs_alloc_bytes(mem, product, "copy_alpha_hl_color(gb_buff)");
--     if (gb_buff == 0) {
--diff --git a/base/gdevmpla.c b/base/gdevmpla.c
--index 2f0d522561..ffc5ff42e6 100644
----- a/base/gdevmpla.c
--+++ b/base/gdevmpla.c
--@@ -1954,12 +1954,12 @@ mem_planar_strip_copy_rop2(gx_device * dev,
--         int i;
--         int j;
--         intptr_t chunky_sraster;
---        intptr_t nbytes;
--+        int64_t nbytes;
--         byte **line_ptrs;
--         byte *sbuf, *buf;
-- 
--         chunky_sraster = sraster * (intptr_t)mdev->num_planar_planes;
---        if (check_64bit_multiply(height, chunky_sraster, (size_t *)&nbytes) != 0)
--+        if (check_64bit_multiply(height, chunky_sraster, &nbytes) != 0)
--             return gs_note_error(gs_error_undefinedresult);
--         buf = gs_alloc_bytes(mdev->memory, nbytes, "mem_planar_strip_copy_rop(buf)");
--         if (buf == NULL) {
--@@ -2003,7 +2003,7 @@ mem_planar_strip_copy_rop2(gx_device * dev,
--         intptr_t i;
--         intptr_t chunky_t_raster;
--         int chunky_t_height;
---        intptr_t nbytes;
--+        int64_t nbytes;
--         byte **line_ptrs;
--         byte *tbuf, *buf;
--         gx_strip_bitmap newtex;
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index e50113ecfe..c2e48b01e6 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/SHA512SUMS
--sha512  e9efa6a334cf34703f565f5043dd794452270415b34c2bea260e9dac6c72ebbcbedfa2e4cb9029841f8f582bbce91be8160e135a190081f3262bcf04417f80f1  ghostscript-10.06.0.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10070/SHA512SUMS
-+sha512  1c2a14951223c975a53bd9767c28bd3a6e420c385a5e0d7a60a5ff5b091bc027929c815bf57cddf97611e8d265ece1c219321737f2cabb5646685c6e8cdb85c9  ghostscript-10.07.0.tar.xz
+diff --git a/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch b/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch
+index 2424fb0d13..41870a8282 100644
+--- a/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch
++++ b/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch
+@@ -5,6 +5,7 @@ Subject: [PATCH] liblzma: mt dec: Fix a comment
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 1fc850ad20..159e06db91 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+ Thanks-to: Sam James <sam@gentoo.org>
++CVE: CVE-2025-31115
+ Upstream: https://github.com/tukaani-project/xz/commit/831b55b971cf579ee16a854f177c36b20d3c6999
+ Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+diff --git a/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch b/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+index 7845380a8c..14985ebc8f 100644
+--- a/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
++++ b/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+@@ -12,6 +12,7 @@ called (reinitializing the decoder always calls threads_end()).
  
--GHOSTSCRIPT_VERSION = 10.06.0
-+GHOSTSCRIPT_VERSION = 10.07.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+ Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+ Thanks-to: Sam James <sam@gentoo.org>
++CVE: CVE-2025-31115
+ Upstream: https://github.com/tukaani-project/xz/commit/c0c835964dfaeb2513a3c0bdb642105152fe9f34
+ Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+diff --git a/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch b/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+index 9915e6b275..d370d8b613 100644
+--- a/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
++++ b/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+@@ -26,6 +26,7 @@ Fixes: 4cce3e27f529 ("liblzma: Add threaded .xz decompressor.")
+ Reported-by: Harri K. Koskinen <x64nop@nannu.org>
+ Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+ Thanks-to: Sam James <sam@gentoo.org>
++CVE: CVE-2025-31115
+ Upstream: https://github.com/tukaani-project/xz/commit/d5a2ffe41bb77b918a8c96084885d4dbe4bf6480
+ Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+diff --git a/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch b/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+index 1a914e08db..b3fd11b29d 100644
+--- a/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
++++ b/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+@@ -21,6 +21,7 @@ Block before the worker thread is activated.
+ Fixes: 4cce3e27f529 ("liblzma: Add threaded .xz decompressor.")
+ Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+ Thanks-to: Sam James <sam@gentoo.org>
++CVE: CVE-2025-31115
+ Upstream: https://github.com/tukaani-project/xz/commit/8188048854e8d11071b8a50d093c74f4c030acc9
+ Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
