@@ -1,119 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 451B1F436B8
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8D12F436B8
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14C2B80240;
-	Fri, 17 Apr 2026 15:24:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE81C60E51;
+	Fri, 17 Apr 2026 15:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tuODIhBM0Bb; Fri, 17 Apr 2026 15:24:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DmcqfbOUkBHb; Fri, 17 Apr 2026 15:24:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16E1881985
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2EC760E5A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439486;
-	bh=PL62yISpBRwJ9jCGfHjaTaePSAsbddxWg45L5HBCpOI=;
+	s=default; t=1776439488;
+	bh=q0Uwc/rD9oCzh1GsMbINolpJ3JXH6o0pCCFw3ShaLeo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=IGCFLVcXlzO5TRloO7eihMDrsDf++WHAJcIJ7xe/DqiN6uSHhcwuGmbLe/654xgJh
-	 /BdOdu+sGS7/pgFVj0qHCuIbBnHzvSDx9CnGNw0K2wscrFSontWMByxyTUsEXmEICT
-	 Wnm+RJZQcfYqacJQZ7TDJ4P4oYpH66sWmHuT3o4lgCDFpQcVW/lhqecNmX8EA2ZBH6
-	 lV0PYLzbP+mol5dp55d+l+rVlCZp0zD8wkUsTb3BRRowh6wru3kSJBRaF8xc8Aip/l
-	 hsv6pL0t5u2ZTjCXiF1g32E7p1o/BEq1xkul0YKbqCooGgnXFZRm0mv6/GDLWCXeEL
-	 R40sL6YNeggiQ==
+	b=P4kRixtIz2f6irR6L942Hceb68Rvffn7/MXrA+U5re7vQyoIUBaQ4thmSoKMRK8x1
+	 wRLhzGVBdN+hG5Akgr0jtO/bn9amQdyYgWQvS7+C8dDm8GUYf3ASR/4rY2maimep1Z
+	 D7SbdPSDnNf7YUHBCe2MVDTpUK1Fn07CBwFgZ+uoyh+1y8iWa/0sU2vCbaNBB9180R
+	 HLGpgBzfEDeOSeEKOammoI4GWwSnCqsXDdaSdeyQ3Okkf95xiE43iNOS8xYuDKJVzJ
+	 QiDlQoxiYtvj/t4fFlbcx399hNYT3iQ4mUnI8FlfZnasMe5ke2VRDYrPBYOoIhEcNk
+	 YW8dcxrQ0RLhg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16E1881985;
-	Fri, 17 Apr 2026 15:24:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 81827396
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2EC760E5A;
+	Fri, 17 Apr 2026 15:24:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63CA9396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67D41405F5
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 561CB40DED
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TY9Ga0WAUcLr for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:24:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CS2ptxklFQIq for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:24:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1EB01405DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EB01405DC
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1EB01405DC
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:41 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-488af9fdaa7so5926155e9.1
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:41 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5352940DEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5352940DEB
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5352940DEB
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:44 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-488a4bc360bso5130215e9.0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776439480; x=1777044280;
+ d=1e100.net; s=20251104; t=1776439482; x=1777044282;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=y7jAp0RnWQBwVHZ8nCFcHCD6pEnsIr+xbsINGKr+dYI=;
- b=fGXIvIqMqPVegXxevcBFEWwaGDZKSYfU1vhvQjC037cziDqkCHB3cMak3P6AhIT3Tw
- cfUECLZSWUZHaJMRuNEUXVrV95pwqf+NiNsb61x6iGBYv9rZt4RxLLoVDmkcTK/0aLMy
- ILL5oBsvl98kWEM5jNEChTsP2B6vbaNp8Za3KUnFov/bp+WEIFS3CXsVpwrUa81peYCE
- rB1SPFT4uSGNFKGbalZutVrQ76S4+AD6pC6byTNorhjfLpivImtoktogTaKWn1GZPUNM
- FfgmPcM2I7A9CvjWA+t0XZoUahsapK5msg5MLzk/Yzrzwu23A0pBE6SpI3nNQ5ri2MaG
- GAyw==
+ bh=DKztr6bw9Yf5/+IKiHghoY+z5Pmj6fDD1sTWWX9MTuo=;
+ b=k4JG7AmOBHmLn6Z1fwi2ayPWHkcHpwMdtwnLOonD+PXOEn5guKx2PngAszQFNV2sLt
+ jv1H3O/aGFgLI82vGbWzK98PwticnfeMgU6BM0LUMatganEPolZgcj7O2AOzy16k4NBy
+ 9N1SB3/fAZcWPpbxuAqgG3Ks5F8s/v/7a4Vey2jiTPb2JLvgKW1raRcAQlLif85k/b6k
+ lZyn4Kt46tqSVgZLbn4bu/CpCUCfvWV7+/k8XWfdTg3SEHU8LzHU/h2rZ83BdkNu4x1N
+ McECSKX9CfRYYiVqA0lwVdOg3yzkuMfkClc9QYB0kM3rCOU5lh45rGP6FRg6hXWmut8l
+ vdxw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9dNGfaRDxCt8/48ZzuWfIIG9nk9g5d2VORWOZ7kpSpe7zxpV1Ri4kSBavD+UNclDJNi6oLkZVNyVE=@buildroot.org
-X-Gm-Message-State: AOJu0Yzm3lsaCcMpO9ziRvhPDLCd/EkqukEu1UsVROwT8Wkv15VPFtWK
- m/3QODMLJlf/s+AYZpPJ+lXgQEepK4inwpDR+VtqyGBvtdRlP+4dQ5atbMSI65Y/s4VWWREAL4R
- axoVL
-X-Gm-Gg: AeBDieuZv0Mz+Trj+rhQ5URh0O7oKmfVrBp3Zm9Gr8DrGybEMq4FJGJEhjYxLSkfxSd
- jsN4dFYjiSwZ7fifszCKIN4PU2FMif02QmboXfCSMqvu50HjecqEs9iy3Gcs0EXT317gQzooPcA
- AhI+NUZFU9eFbizl4eE4BRtR1yDZRmx9z7ykLhqWjPVdwRf8z7lY3xfvqT5s8qh54WvOc9epwQ0
- mDKOD0IMK19VVdiSrlu+s4+WgsQ71QIzBwCTPj9Gm3tGmfTYwqxjFCuzFC2kOLuKJEEuMx0Mso9
- 1/Dy2vZ0frjZNWyFUADatPUIr1i3Y0ogujWKDFunjUuWN6A0+kr53QQjAfoY/U/3BHNayLKhZs0
- yaP+31xzF97LYKIu0RciXpdML6n6ghT4x3x3JxUoeNAonvZ5gAHpTo7N2NQJ0zZOUmy2R8dWc77
- Coy31dWu4a1In5hE4jLsFdXOev9Acvo1cvr7GuHA==
-X-Received: by 2002:a05:600d:8448:b0:488:f3f4:b8c8 with SMTP id
- 5b1f17b1804b1-488fb78dd98mr40346285e9.30.1776439480000; 
- Fri, 17 Apr 2026 08:24:40 -0700 (PDT)
+ AFNElJ/a/03QubB35n7m4YOyd0L+96PDG352WvbDRY4kVYUa6PSblEdVF1ReSLAN95dMfSMG28DOSRSBQ5E=@buildroot.org
+X-Gm-Message-State: AOJu0YzrcGhFIwea8ULSAOoMByfcHVYEXDm/HrzTRTfk+CeeDOD7YSEl
+ unCA8PcbynpnIc9mo/tOA/FwO2D0B/5vaUxaYoGoDRH4g7YW30m16YDqaCPTsvMMaxQ=
+X-Gm-Gg: AeBDiet91LqO+aYOS6NplZevDNrBxsS5Fg6oKZJAAMCgGAQ6XoUqiBXWyjSOSQb3fDL
+ VFtxrzIx1PVtoUZMhtG3J/7jsLInfyHcwDEFTY1jv8AwTHjQ73a5np+rlEyNbKm7HzOqb6LnRFY
+ c7e6Ktkhk+deXwueTVHyJQL1y7bq2sQT7yQTcVucal4Tw42Sluqq5JCPGO7AV292u6NgD7zp7zh
+ fofAjVDs+vJWxrwOaIyUG8xhAq3CiAVWllHHwhriSSvZmOz2DuWHVybvitv6TszmzFd8RsJ45b0
+ iuvISKv2HCTbpnWR2vnyobem3QHhumbI/Q2JO49+c9xa23fc/xzTrXXXIkAGd3BHlEuC0Sw4EFY
+ FZ4afn4tu90LxWjUfV//s5ZAP5Yiuu1LpW3+mHpq78XA6JDb2VSelvnDRZGKrANSwVfs5K8dMYJ
+ uZFggoih79ydaiz+xHG4K1Ke5hKHI=
+X-Received: by 2002:a05:600c:5246:b0:487:219e:42d with SMTP id
+ 5b1f17b1804b1-488fb750a1dmr50408785e9.11.1776439482157; 
+ Fri, 17 Apr 2026 08:24:42 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e3a381sm5814576f8f.21.2026.04.17.08.24.39
+ ffacd0b85a97d-43fe4e46471sm4826762f8f.28.2026.04.17.08.24.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:24:39 -0700 (PDT)
-To: Scott Fan <fancp2007@gmail.com>
+ Fri, 17 Apr 2026 08:24:41 -0700 (PDT)
+To: Quentin Schulz <foss+buildroot@0leil.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:24:38 +0200
-Message-ID: <20260417152439.312909-1-thomas.perale@mind.be>
+Date: Fri, 17 Apr 2026 17:24:41 +0200
+Message-ID: <20260417152441.313007-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20250925014217.1562831-1-fancp2007@gmail.com>
-References: <20250925014217.1562831-1-fancp2007@gmail.com>
+In-Reply-To: <20260409-b4-2025-02-v1-1-187337706139@cherry.de>
+References: <20260409-b4-2025-02-v1-1-187337706139@cherry.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439480; x=1777044280; darn=buildroot.org;
+ d=mind.be; s=google; t=1776439482; x=1777044282; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=y7jAp0RnWQBwVHZ8nCFcHCD6pEnsIr+xbsINGKr+dYI=;
- b=S0zG+e3w07kQkwvNlZRk6t7CH9j9oVZHo/BR3mqXWF7JXl6A8G5dz4OIZhES0f7PIZ
- Htxlv3MDiIrfKqr82ai8EkJPcQYt2pmHdSxqsdihyJTRL28zvKEUxqJSEvmT+a4BBLWz
- +ubIepu/od8sfNc51HPHTVqdCK/ML1mw9xhiy4kYjDJPCUVwZl1J8QT96q+nDR1fowCC
- +5So65EgLzhnvlWbafkmnCywEM4am57A5j2Ix/JD+052lX9NerXUexMX0v4Y4qM0hJVQ
- 7i3fe+CD3OZb9A/bZau+17jfyihe2XiQsUL10hGE6H8lMX4cfHGo4ROx6mX8Ib5liXRU
- 8eVw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=DKztr6bw9Yf5/+IKiHghoY+z5Pmj6fDD1sTWWX9MTuo=;
+ b=MTon/ahyABiJMj7pvS1zIaHp9nLlluSjp36mNJykITNG3ZSYaDfPGq3UqSxWktncT9
+ MDZrWRaH66z+wf9UfYOR8NMG9FD67Be6dace3ggoV4kVrllVJnuyRLmLuYVSa3yfKDaa
+ Q5x9PXI4urVFA31FBOc9hujxHZFeFXU1Ps9GzeE7t0yPI5lEfNaMlSQc8DZgYh+mXUCO
+ i48xf7+mzCPIVUIwJi7v8kFo6Vkkam4/OdT4wNtmF9jjSlA1rz2JRH+pjvkz49wZQia3
+ Y1pNZwguuAPQh14K5jsEKzwwTZoA/VtcCvaWsSbuQaMYO/VvXIYtAWjALXR0f2BHPL2H
+ FIEw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=S0zG+e3w
-Subject: Re: [Buildroot] [PATCH 1/2] package/libopenssl: bump version to
- 3.5.3
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MTon/ahy
+Subject: Re: [Buildroot] [PATCH 2025.02.x] .b4-config: automatically add
+ 2025.02.x prefix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,48 +131,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This release incorporates the following bug fixes and mitigations:
-> - Added FIPS 140-3 PCT on DH key generation.
-> - Fixed the synthesised OPENSSL_VERSION_NUMBER.
+> This avoids having to run b4 prep --set-prefixes 2025.02.x to add the
+> 2025.02.x prefix to the patch subject.
 > 
-> https://github.com/openssl/openssl/releases/tag/openssl-3.5.3
+> You do need b4 0.11+ to make use of that.
 > 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/libopenssl/libopenssl.hash | 4 ++--
->  package/libopenssl/libopenssl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .b4-config | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-> index 7f3795e1ac..d0ca45d303 100644
-> --- a/package/libopenssl/libopenssl.hash
-> +++ b/package/libopenssl/libopenssl.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz.sha256
-> -sha256  c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec  openssl-3.5.2.tar.gz
-> +# From https://github.com/openssl/openssl/releases/download/openssl-3.5.3/openssl-3.5.3.tar.gz.sha256
-> +sha256  c9489d2abcf943cdc8329a57092331c598a402938054dc3a22218aea8a8ec3bf  openssl-3.5.3.tar.gz
->  
->  # License files
->  sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-> index 38d04ea924..b892d4e236 100644
-> --- a/package/libopenssl/libopenssl.mk
-> +++ b/package/libopenssl/libopenssl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBOPENSSL_VERSION = 3.5.2
-> +LIBOPENSSL_VERSION = 3.5.3
->  LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
->  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
->  LIBOPENSSL_LICENSE = Apache-2.0
-> -- 
-> 2.43.0
+> diff --git a/.b4-config b/.b4-config
+> index d568669864..0c6966c0c8 100644
+> --- a/.b4-config
+> +++ b/.b4-config
+> @@ -1,6 +1,7 @@
+>  # Configuration for the `b4` tool
+>  # See https://b4.docs.kernel.org/en/latest/config.html
+>  [b4]
+> +    send-prefixes = 2025.02.x
+>      send-series-to = buildroot@buildroot.org
+>      send-auto-cc-cmd = "./utils/get-developers -e -"
+>      prep-perpatch-check-cmd = "./utils/check-package -q -p -"
+> 
+> ---
+> base-commit: 22eb284823338dd9cfbaf08c0a98943c482f21a8
+> change-id: 20260409-b4-2025-02-31ef3a6d4391
+> 
+> Best regards,
+> --  
+> Quentin Schulz <quentin.schulz@cherry.de>
 > 
 > _______________________________________________
 > buildroot mailing list
