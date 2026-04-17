@@ -4,114 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C24F436BA
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C45CF436B7
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91301813C6;
-	Fri, 17 Apr 2026 15:25:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60854815D7;
+	Fri, 17 Apr 2026 15:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8KNGE5EvyW7a; Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
+ id kNkaG8iKkKRZ; Fri, 17 Apr 2026 15:25:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88E7A81399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C55AE81678
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439503;
-	bh=oG2pZ+UJ/kpeCXA2gcQWNIO33uOCkrJw4kseAmZLtsw=;
+	s=default; t=1776439505;
+	bh=jJVZPbVTfOC1wwMd0zRxtiJhS/3TY8qZozW/aTPHpHg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=iBA/DWaRxxjHdgpbTggwK18YLH4dF7SCXbCdXzehaw2gCxH9nKdXrjFhj6XcF6fVC
-	 IwVEl3Fi9sG4X3fUYGhtO5WA73N90Oi3D5vNH76nzHXIssuO3X6R7nqf+tC05Lsc1d
-	 2VPl6uz7ZqMjkcuy2E2V6/FkCYkgE1BcEX4peeTymkVppVPLR1RdRfULgSDGzj1CDt
-	 B0GNkTPYwEbmTWuK4/ttUZLjGuSnqnEQZ7lS8fLz3/5m0T+56Lm+8IoHFz151Dhywb
-	 LmUckxLeRw73LUDmQuFRXcgrvyyVVIHfYeNQopN51Psd7Dtr+JjpLWnCZCAsX0nXqm
-	 ajm3ry2BPb6Ow==
+	b=bTjmb9rEVZIffjbH7ygp4/Zpdm8FWqQja64wzp8Vs4wimK76UlEOnLHkfu1HJbxk4
+	 //hlMbScjYOj+8dSDj2xH1H/RWVEvMHNXAuG3ZyLbrmAuFA96L4oToU3O8TlmBLo8j
+	 JyIVrxTvwan9qMmiasrxLjQaUTpew4mhQL1W7a35USwkkW7Bv18CzY2i3ftxg77IUw
+	 ap0K/Oa6aQR6rzTmKs7MFsLcGbrgJ0MGUl55flhWoJJpBS1JbUF4097OQ8LgRPx6pj
+	 3HmCK0Xvp6zLCpHoxQBP+0DrwBGA2QIyK+zZB6yOcmYwW5EoJmvmWr+xpzzRqm9NyK
+	 W+9kEap4RVy9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88E7A81399;
-	Fri, 17 Apr 2026 15:25:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2524C259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C55AE81678;
+	Fri, 17 Apr 2026 15:25:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1354C259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D5E6813A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE34381399
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D7wTtxptMvVB for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:25:00 +0000 (UTC)
+ id b20aFW9CwmS8 for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:25:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07F4E81348
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07F4E81348
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07F4E81348
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:58 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-43fe608cb92so474816f8f.2
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:58 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B3F628134D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3F628134D
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B3F628134D
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:24:59 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-488971db0fdso8864925e9.0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:24:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776439497; x=1777044297;
+ d=1e100.net; s=20251104; t=1776439498; x=1777044298;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=dCm0POcztnLDPch6Pg1zqrk2wbmaNzV85PiZPk2QmzI=;
- b=LxqNtBnqdo3agFOV6waRid6V9zJPq5lzWdonzyg97oFcsr8bqgrKJEGO/FIUbM7LNA
- z9NpPMpOx1jMoade9jc3XKIOrZ8QpuPT4sNOW9P6i2TRgw5eIJDDG+kfFWpm1WWRz4iz
- 8Ei7qJdwrZnaFN8ij3IMmVsnIwTjx+G2HKHffszEWJrU4ZgqHpN4rL8YPBD7RpE/NqX9
- 4r5ZIi/QI2j93SOY9cK2lN8yPu4OVFIFCFU5AsdHdiaR6lQcOxLfXmXSsjMhyNNKhWuF
- JDJ5Q5E4RTfZDoY/tsik/U6iJC5752+8FtHhq9sRgBhokBtXBoFOoj/7pm0Pw+151F6l
- YWtw==
+ bh=T6Aprni+6jjaDfXKnCfN/b6TgFCoJmA2JQ0Sb88hBKg=;
+ b=rbsseppMQ+OjtiPmfEKrCi9JtZzj13aeEWXQgXuLM6eG4D0pnT3CIfI8GgsbtYKw/L
+ tkZi/72/9SmLrs+mVSksOLT42OyfrRqDzCcin8ayE04xcG5YFfOwziiaB1u4r8ymbhO8
+ ZgAeMiE2l5uFnFsuA6j780iV3WU5w8Fx4pHWmsxSj7p1DQ1JLYZAUzXk4SnH2f2weniF
+ f8nIDkUmxTAqU7AuBIQUNSdSKMv+ygeJRgN1Lzw4bQF+ApuAoHhIBFO67avswDv1nCT4
+ Ua8CZJsVQZxBA6deyDgsjrYisWTT6r8y6dGYRb3npFLcbciIxyCYiUqSg/f3PSNtKYMx
+ x/QA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+h0EAFpPvg/rzLFKSaucmi6PL9QrE5HH9w38dWIhhIXkxufOGpSzcjlpixhgT74d10S+ECWZXv2M8=@buildroot.org
-X-Gm-Message-State: AOJu0YyVUpiNwllrlz+i+ugAL43x/XZDM5v3DwPwcB0p2a+hBGOaE+G1
- 7iiZwfxZqKUoIyrUqpLjravK5qvqigcZNj12OA4xukPx4nRdBNqDzUhawLTnjOkM1M8=
-X-Gm-Gg: AeBDieuznvPwVWeIwGPsud211+9vLaQoA/jcZs9InCILO8vB5UuS8IYGcI5pFd7SaI1
- WZo5Yz98Sf1P3RLOswX5oYXFRcXxRM8asgS+EsmiFpzyAcjuJEgI64jw84xyBZPeQZh7WEyTVnI
- PBz2JA4fxaLR4/q9rCfKV0jqUlzDOaDY6iCBeRKm/+dkLI79gFtEXbPiO7Q/r/p0r3ofpCb5Jo9
- D1IhB2AOkSAY42jfhlUMD8xiUy3Yw/1QAzl5ekClQvYFPhA2Vzr3/IcdetiCz6uC2B5v49h+M4O
- FK0+URb90i3u4gLljJ4i+zfzDpL+eg0RXg9WwMN/OZZ4Qhfh8FoU83/EEDt6lvAaS1KcxpD1pON
- MjgRXNknshxjK+HhWAmypSP3gRxiKwFeqNN5gysLc4PbGi/6lcR9vVc3eLhcgwbyebAWfxUTTXR
- B/sDcWU32D72jyQ0F4wHusCMLVCRMpo9JQT54y/g==
-X-Received: by 2002:a05:6000:2890:b0:43d:7aa8:f64e with SMTP id
- ffacd0b85a97d-43fe3e0a2c4mr5382183f8f.32.1776439496880; 
- Fri, 17 Apr 2026 08:24:56 -0700 (PDT)
+ AFNElJ/xdsPFxkGh6F++t38neAfOB7K+TSjK0e4r5VMDECAPWb78/+UXY/gfrJadbS7rlkS526fPi+zvSYg=@buildroot.org
+X-Gm-Message-State: AOJu0YwS9HzTo0EnyJ9Cjw1JElS1L+cfjiu65jCxPe6oFLTFOkUQjZFs
+ K84ZqqXauAfqlqku0/rdcrhCeT0nss5n+SI6PGYQVqkMGktKZHeHYiBWILyr7jBPYCs=
+X-Gm-Gg: AeBDietJ4ibCcaR6z0jfxmDFrzkZbIVpEtaE3jeaOBcndmShQ9Bqp8qec1E9bxqdD/v
+ 5lrmqeH1l1thDa6IJjJ/RJ68tpHzTcXQMOBG3IXn8RqnP07JaH3JCdn8dCwJ/9ZqMtcF7o5QvWu
+ Ex/O/G6x/xadx5NcPu08lZPqVK9cSPj/DR1OvI5TzmoTdTwBXWxoU0nsgFO26jJkK7r9KJx2425
+ FhRokrTdMzHCMr37H2tkonTfBBz0W8YSWBVeIrR11fwjub7xKL7d62S10APN5n7fxufCqBuqr5S
+ 7t+rTIde2SlHyay5vN1vajgllWdu4UXL8HH5LALG9vfAJccJs5V8LRA+4Rj8VNdVRGmbFdBB/F6
+ Q/ojLluOw+zAWpGWb3LaP82mMr5cUd/f7DpNNi81H3fFBOdczCZlO01FrOegJZh+KvMtTeURsFY
+ wYO2fQsL8G3N9z/zRRfeTFC8ZltKI=
+X-Received: by 2002:a05:600c:8b68:b0:488:7f69:4abf with SMTP id
+ 5b1f17b1804b1-488fb75405fmr50986905e9.12.1776439497779; 
+ Fri, 17 Apr 2026 08:24:57 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e3a341sm5740845f8f.24.2026.04.17.08.24.56
+ 5b1f17b1804b1-488fc16f93dsm73285195e9.3.2026.04.17.08.24.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:24:56 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 17 Apr 2026 08:24:57 -0700 (PDT)
+To: Christian Stewart <christian@aperture.us>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:24:56 +0200
-Message-ID: <20260417152456.313457-1-thomas.perale@mind.be>
+Date: Fri, 17 Apr 2026 17:24:57 +0200
+Message-ID: <20260417152457.313506-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260409131728.278764-1-bernd@kuhls.net>
-References: <20260409131728.278764-1-bernd@kuhls.net>
+In-Reply-To: <20260410043308.42434-1-christian@aperture.us>
+References: <20260410043308.42434-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439497; x=1777044297; darn=buildroot.org;
+ d=mind.be; s=google; t=1776439498; x=1777044298; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dCm0POcztnLDPch6Pg1zqrk2wbmaNzV85PiZPk2QmzI=;
- b=Don8/dLYax9EjG/8cKvX/qDZvmRGDFpRm/mWupw4rfonmu+7yY8eGqyoCmuc94KVo/
- t65RVSZzxzydH5QKu1LUj2Jt68KJe4e1Xc6fPPoP+TWx/dqUIpyLDizi5hYVk6P886Xh
- 58KrNeyw0R7bI8F9QZkre5wIY3BeBhdKj6KYu9jBz8anFgnlBm6MB2YbAH3Qv/c+Lv6M
- QV0Iuw/kyRRB0ZcmNRNjoFczcFMGnPJM2jFAzSoKsowoX/q/P6r+15OTTIfqHMDFGQrL
- jFriAO8NsIDXqbIN8IBlqKCuBQzuYa6icNFL30Evb0ddeTx17M6x5RoqwUG+Kz9/ZEF+
- 3h8Q==
+ bh=T6Aprni+6jjaDfXKnCfN/b6TgFCoJmA2JQ0Sb88hBKg=;
+ b=GCU9kakL3H8VYRu/p2+MzaTFN45ZXs1tRsZZ+Fs0KARsd+4pWgwyZP7e/J1ab4civr
+ 3rMmcXcSigoxGZfJ5+bor4774zYbLpncU+KWtfJY4kntAIXg/b7Etl5jxR8NTp0aM79j
+ k+HqQ8I5myno0V2rFJTz5X7deXOMaZCEj2AeWL9KNjZyxNZc0Gy3FXCINXYvolKi2Yo5
+ gt2vCFq8bzJBIwRY2blRK4VKDV0XvYOC43lwpFKPJe2UpGTTnh6e2gNqBB3QOs1+pSSg
+ QnjhSIAesKD17QOjxDQ7E10xmDYs3nJh9BOV+FN8IXNyYErpGAfXLeQj225PnyVOgcY8
+ ub3A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Don8/dLY
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
- to 3.14.4
+ header.a=rsa-sha256 header.s=google header.b=GCU9kakL
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,100 +130,69 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://www.python.org/downloads/release/python-3144/
-> https://docs.python.org/release/3.14.4/whatsnew/changelog.html
+> go1.26.2 (released 2026-04-07) includes security fixes to the go command, the
+> compiler, and the archive/tar, crypto/tls, crypto/x509, html/template, and os
+> packages, as well as bug fixes to the go command, the go fix command, the
+> compiler, the linker, the runtime, and the net, net/http, and net/url packages.
 > 
-> Fixes
-> CVE 2026-4224: https://www.cve.org/CVERecord?id=CVE-2026-4224
-> CVE 2026-3644: https://www.cve.org/CVERecord?id=CVE-2026-3644
-> CVE 2026-2297: https://www.cve.org/CVERecord?id=CVE-2026-2297
+> CVE-2026-32289: html/template: JS template literal context incorrectly tracked
+> CVE-2026-33810: crypto/x509: excluded DNS constraints not properly applied to wildcard domains
+> CVE-2026-27144: cmd/compile: no-op interface conversion bypasses overlap checking
+> CVE-2026-27143: cmd/compile: possible memory corruption after bound check elimination
+> CVE-2026-32288: archive/tar: unbounded allocation when parsing old format GNU sparse map
+> CVE-2026-32283: crypto/tls: multiple key update handshake messages can cause connection to deadlock
+> CVE-2026-27140: cmd/go: trust layer bypass when using cgo and SWIG
+> CVE-2026-32280: crypto/x509: unexpected work during chain building
+> CVE-2026-32281: crypto/x509: inefficient policy validation
 > 
-> Rebased patch 0010 due to upstream commit
-> https://github.com/python/cpython/commit/616e6118442832544fab0b93e9dd7d15411a2a58
+> https://go.dev/doc/devel/release#go1.26.2
+> https://github.com/golang/go/issues?q=milestone%3AGo1.26.2+label%3ACherryPickApproved
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Christian Stewart <christian@aperture.us>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  ...-Fix-compilation-of-Modules-_remote_debuggi.patch | 12 ++++++------
->  package/python3/python3.hash                         |  4 ++--
->  package/python3/python3.mk                           |  2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
+>  package/go/go.hash | 14 +++++++-------
+>  package/go/go.mk   |  2 +-
+>  2 files changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
-> index 716d9d3e8a..b000a68e9b 100644
-> --- a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
-> +++ b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
-> @@ -7,7 +7,7 @@ Subject: [PATCH] gh-139275: Fix compilation of
->  
->  Upstream: https://github.com/python/cpython/commit/1963e701001839389cfb1b11d803b0743f4705d7
->  
-> -[ Bernd Kuhls: ported to Python 3.14.2]
-> +[ Bernd Kuhls: ported to Python 3.14.4]
->  [ Vincent Fazio: update to apply cleanly to 3.14.3 ]
->  Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->  ---
-> @@ -29,28 +29,28 @@ diff --git a/Modules/_remote_debugging_module.c b/Modules/_remote_debugging_modu
->  index b46538b76df..e86a27d5812 100644
->  --- a/Modules/_remote_debugging_module.c
->  +++ b/Modules/_remote_debugging_module.c
-> -@@ -812,7 +812,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
-> +@@ -834,7 +834,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
->           PyErr_SetString(PyExc_RuntimeError, "Failed to find the AsyncioDebug section in the process.");
->           _PyErr_ChainExceptions1(exc);
->       }
->  -#elif defined(__linux__)
->  +#elif defined(__linux__) && HAVE_PROCESS_VM_READV
->       // On Linux, search for asyncio debug in executable or DLL
-> -     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython");
-> +     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython", NULL);
->       if (address == 0) {
->  diff --git a/Python/remote_debug.h b/Python/remote_debug.h
->  index 8f9b6cd4c49..b7d17a0f345 100644
->  --- a/Python/remote_debug.h
->  +++ b/Python/remote_debug.h
-> -@@ -886,7 +886,7 @@ _Py_RemoteDebug_GetPyRuntimeAddress(proc_handle_t* handle)
-> +@@ -923,7 +923,7 @@
->               handle->pid);
->           _PyErr_ChainExceptions1(exc);
->       }
->  -#elif defined(__linux__)
->  +#elif defined(__linux__) && HAVE_PROCESS_VM_READV
->       // On Linux, search for 'python' in executable or DLL
-> -     address = search_linux_map_for_section(handle, "PyRuntime", "python");
-> -     if (address == 0) {
-> +     address = search_linux_map_for_section(handle, "PyRuntime", "python",
-> +                                            _Py_RemoteDebug_ValidatePyRuntimeCookie);
->  -- 
->  2.47.3
->  
-> diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-> index b674b589bd..13e2b94336 100644
-> --- a/package/python3/python3.hash
-> +++ b/package/python3/python3.hash
-> @@ -1,4 +1,4 @@
-> -# From https://www.python.org/downloads/release/python-3143/
-> -sha256  a97d5549e9ad81fe17159ed02c68774ad5d266c72f8d9a0b5a9c371fe85d902b  Python-3.14.3.tar.xz
-> +# From https://www.python.org/downloads/release/python-3144/
-> +sha256  d923c51303e38e249136fc1bdf3568d56ecb03214efdef48516176d3d7faaef8  Python-3.14.4.tar.xz
->  # Locally computed
->  sha256  b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231  LICENSE
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 07cba7c02d..c71cb0b05b 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/go/go.hash b/package/go/go.hash
+> index bae223882a..77be843c83 100644
+> --- a/package/go/go.hash
+> +++ b/package/go/go.hash
+> @@ -1,9 +1,9 @@
+>  # sha256 checksum from https://go.dev/dl/
+> -sha256  3172293d04b209dc1144698e7ba13f0477f6ba8c5ffd0be66c20fdbc9785dfbb  go1.26.1.src.tar.gz
+> -sha256  da75d696c6b9440fe9fb6418429f29eaeee947707ee8c6ddb567c558051a1cc2  go1.26.1.linux-386.tar.gz
+> -sha256  031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a  go1.26.1.linux-amd64.tar.gz
+> -sha256  a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7  go1.26.1.linux-arm64.tar.gz
+> -sha256  c9937198994dc173b87630a94a0d323442bef81bf7589b1170d55a8ebf759bda  go1.26.1.linux-armv6l.tar.gz
+> -sha256  f56eed002998f5f51fa07fd4ed0c5de5e02d51cec7a4007f771c7576620d9d45  go1.26.1.linux-ppc64le.tar.gz
+> -sha256  60fe623ef63e6338c055ec0e0e3f4fa85c97a056de2d2f6ee38591e2bfa9cdde  go1.26.1.linux-s390x.tar.gz
+> +sha256  2e91ebb6947a96e9436fb2b3926a8802efe63a6d375dffec4f82aa9dbd6fd43b  go1.26.2.src.tar.gz
+> +sha256  89835cdc4dfebde7fe28c9c6dc080bb3753f6b0354301966ff9f62d14991bd7d  go1.26.2.linux-386.tar.gz
+> +sha256  990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  go1.26.2.linux-amd64.tar.gz
+> +sha256  c958a1fe1b361391db163a485e21f5f228142d6f8b584f6bef89b26f66dc5b23  go1.26.2.linux-arm64.tar.gz
+> +sha256  0000e45577827b0a8868588c543cbe4232853def1d3d7a344ad6e60ce2b015c8  go1.26.2.linux-armv6l.tar.gz
+> +sha256  62b7645dd2404052535617c59e91cf03c7aa28e332dbaddbe4c0d7de7bcc6736  go1.26.2.linux-ppc64le.tar.gz
+> +sha256  410726ed10a0ea6745c2ea8da4f0e769fd3ce819cd4a41a67ad08b094d5dfc31  go1.26.2.linux-s390x.tar.gz
+>  sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index 6c57be0ad7..67948dc405 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -4,7 +4,7 @@
+>  #
 >  ################################################################################
 >  
->  PYTHON3_VERSION_MAJOR = 3.14
-> -PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
-> +PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
->  PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
->  PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
->  PYTHON3_LICENSE = Python-2.0, others
+> -GO_VERSION = 1.26.1
+> +GO_VERSION = 1.26.2
+>  
+>  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+>  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
