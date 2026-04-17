@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 903C6F436B7
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86611F436B8
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 560BA81991;
-	Fri, 17 Apr 2026 15:23:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C95B60D6F;
+	Fri, 17 Apr 2026 15:23:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kfp1MEEH1N7a; Fri, 17 Apr 2026 15:23:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtS10qU7wQJM; Fri, 17 Apr 2026 15:23:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15B848196A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FA5060E1F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439389;
-	bh=YK+yDAn4ojcfJ67ce0GRxJ2+NKYmcKNx7epxDcJf9T8=;
+	s=default; t=1776439390;
+	bh=V/03J74B3iI4H0iC0wetgLH/Z9YBA4lurEk7090/bZY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bOjeThHVQaDquLv6mei4mXXTFAcpsb40JElhiAeVogheHk2a99v4F0FGAWrh+QuAr
-	 h21S9glR2WLRCp6pqbpZPnu3YaFdebYj0lZ7nWrnZM+98dx9pP9EkF6Lx8g8ySc/V/
-	 UtA4vuxG3omOzAEcesEeglSo/eFYhwgRebfI+HgvxAtUPYss2p+pk0MoKVLAh15dgH
-	 kAvRd5QQ3tu44T+S07Wy8bafx+H1qGhFCCY7n5KPUuKx2x2AlKtd4FE/+JhjrxUYfl
-	 zfIKCiatQoSvRs2c2aWBq5QLQsmfytxna+HGEOAOF2TeiEXiRvJIICFApOScbJXe0/
-	 1wQ7KgrtkQzHA==
+	b=EfSXlUURSSuxYvizyXI3XUzA8txFi6w7C3F4ZV4og4dFeXKIc8WOpqvgMytCjggfW
+	 KYwQfwukzLuTX1bFLQkEKQ5EKGvjWtdCZ1NhGqwhuQ+wV8IqQn5dAxXJkaNbHpCVPw
+	 GL/a8YGirZJ5Ag+Q5cj74soELeyEstr/jwLG/QvoOFYyszRBKayuqO9xzy/LdYzgpe
+	 eHLZx4W3TkJkINIDbTyZ7bJtYrUW+HkUE2WMD1Ik4X2B/3jYCRxdtemO1NJvcwnLA7
+	 frkL6I+IR2yqEyanPADVl5JUkjV8ape2lI+X2c6dEoZ7FNAlVAAGwO1FA6bSPdrhov
+	 mcxAGvlbvZovw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15B848196A;
-	Fri, 17 Apr 2026 15:23:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E1055396
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FA5060E1F;
+	Fri, 17 Apr 2026 15:23:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1016E396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DE4F40DF5
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C15760D6F
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EtzbAkFgDsI3 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lRe8pKrR3vPK for <buildroot@buildroot.org>;
  Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A1DB40DEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19D2160E2C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A1DB40DEB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19D2160E2C
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2AEC681DD9; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
+ id BF1DC81DD9; Fri, 17 Apr 2026 15:22:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:21:31 +0200
+Date: Fri, 17 Apr 2026 17:21:17 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 67f7393f1bb015ccde709df9b924dd8258b5f89e
-X-Git-Newrev: e40a802ba30ae669549a12b8cf8898628e2bdcc5
+X-Git-Oldrev: fc8111fcd1f71d609624acb95f899ac72b265cc4
+X-Git-Newrev: 1b5a7bb021e92a1faf528c5f59dbd7b114bcf108
 X-Patchwork-Hint: ignore
-Message-Id: <20260417152247.2AEC681DD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/php: bump version
- to 8.5.5
+Message-Id: <20260417152246.BF1DC81DD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/go: security bump
+ to version 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,45 +77,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e40a802ba30ae669549a12b8cf8898628e2bdcc5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1b5a7bb021e92a1faf528c5f59dbd7b114bcf108
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://www.php.net/ChangeLog-8.php#8.5.5
-https://news-web.php.net/php.announce/488
+go1.26.2 (released 2026-04-07) includes security fixes to the go command, the
+compiler, and the archive/tar, crypto/tls, crypto/x509, html/template, and os
+packages, as well as bug fixes to the go command, the go fix command, the
+compiler, the linker, the runtime, and the net, net/http, and net/url packages.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+CVE-2026-32289: html/template: JS template literal context incorrectly tracked
+CVE-2026-33810: crypto/x509: excluded DNS constraints not properly applied to wildcard domains
+CVE-2026-27144: cmd/compile: no-op interface conversion bypasses overlap checking
+CVE-2026-27143: cmd/compile: possible memory corruption after bound check elimination
+CVE-2026-32288: archive/tar: unbounded allocation when parsing old format GNU sparse map
+CVE-2026-32283: crypto/tls: multiple key update handshake messages can cause connection to deadlock
+CVE-2026-27140: cmd/go: trust layer bypass when using cgo and SWIG
+CVE-2026-32280: crypto/x509: unexpected work during chain building
+CVE-2026-32281: crypto/x509: inefficient policy validation
+
+https://go.dev/doc/devel/release#go1.26.2
+https://github.com/golang/go/issues?q=milestone%3AGo1.26.2+label%3ACherryPickApproved
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+[Julien: add "security" in commit log title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1014d8ffb6b6d4f20888c4cb62f4a05d1c63d04a)
+(cherry picked from commit 82518f8cb41f1377b7a65abc659adc96ffcbe05b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 7fdb76b01a..d400f8e0bb 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  c1569f1f543f6b025c583cdc0e730e5c5833c603618613f1aa8e75d1524b8c91  php-8.5.4.tar.xz
-+sha256  95bec382f4bd00570a8ef52a58ec04d8d9b9a90494781f1c106d1b274a3902f2  php-8.5.5.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 220fb8c5c0..9976884001 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index bae223882a..77be843c83 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  3172293d04b209dc1144698e7ba13f0477f6ba8c5ffd0be66c20fdbc9785dfbb  go1.26.1.src.tar.gz
+-sha256  da75d696c6b9440fe9fb6418429f29eaeee947707ee8c6ddb567c558051a1cc2  go1.26.1.linux-386.tar.gz
+-sha256  031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a  go1.26.1.linux-amd64.tar.gz
+-sha256  a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7  go1.26.1.linux-arm64.tar.gz
+-sha256  c9937198994dc173b87630a94a0d323442bef81bf7589b1170d55a8ebf759bda  go1.26.1.linux-armv6l.tar.gz
+-sha256  f56eed002998f5f51fa07fd4ed0c5de5e02d51cec7a4007f771c7576620d9d45  go1.26.1.linux-ppc64le.tar.gz
+-sha256  60fe623ef63e6338c055ec0e0e3f4fa85c97a056de2d2f6ee38591e2bfa9cdde  go1.26.1.linux-s390x.tar.gz
++sha256  2e91ebb6947a96e9436fb2b3926a8802efe63a6d375dffec4f82aa9dbd6fd43b  go1.26.2.src.tar.gz
++sha256  89835cdc4dfebde7fe28c9c6dc080bb3753f6b0354301966ff9f62d14991bd7d  go1.26.2.linux-386.tar.gz
++sha256  990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  go1.26.2.linux-amd64.tar.gz
++sha256  c958a1fe1b361391db163a485e21f5f228142d6f8b584f6bef89b26f66dc5b23  go1.26.2.linux-arm64.tar.gz
++sha256  0000e45577827b0a8868588c543cbe4232853def1d3d7a344ad6e60ce2b015c8  go1.26.2.linux-armv6l.tar.gz
++sha256  62b7645dd2404052535617c59e91cf03c7aa28e332dbaddbe4c0d7de7bcc6736  go1.26.2.linux-ppc64le.tar.gz
++sha256  410726ed10a0ea6745c2ea8da4f0e769fd3ce819cd4a41a67ad08b094d5dfc31  go1.26.2.linux-s390x.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 6c57be0ad7..67948dc405 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.5.4
-+PHP_VERSION = 8.5.5
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-GO_VERSION = 1.26.1
++GO_VERSION = 1.26.2
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
