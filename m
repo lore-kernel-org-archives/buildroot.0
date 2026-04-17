@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB9E9F436B9
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BC3CF436B7
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6B9360A3B;
-	Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5E0981C21;
+	Fri, 17 Apr 2026 15:25:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dRS_Ad0O2Sel; Fri, 17 Apr 2026 15:25:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ev84tuiO-fvM; Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA9D960E3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA4B581C20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439535;
-	bh=XhcMNXW9QtCCveCJjhw6iW5BFz6NFdR4OaXyvsomLRA=;
+	s=default; t=1776439536;
+	bh=aCcbfx+YrjuktV6XNVRED6Q1KTi1eNmQgP7ptVnaduM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dRbWSpEH6AWzsTnrXgmvGI+iO8tTn4RGRVAF3s0389HnZvi7OW8+ij9EaGyqiXl2q
-	 EtNKGzd6AvlXdG95gm+2P2HUXujJqE9uW5qqcgEpNiYviXAPPBS5NI0Cff2pZM9yK3
-	 /aYbAin+Xy9Tz9ndTzmMf1efkldktXW40Tgoxtjah31sem5O174MNKJ6YqYSO/r/I4
-	 tkXscsWkpmhLYHaCek7SlcCFZw0ISsKUblZ+xrqblAgXphQ3/KpeSElZjvNJ2QL2DH
-	 zd5Wr7vynev1v4cre4BwnAHgfailUifkjPZq3MmARam3/YUxzfZVt7q6nHVkvo5jQT
-	 kp1Bd0/c/21vQ==
+	b=pQxNhzfLtWCfX5G6N6yGBVRQxg+vYF0m6iDI4NzGGJ5l4eEEey+IJbdXczO8ezdUZ
+	 imN+jfyKAKFGiGqbSyJEbOX/PedViz3eu39pPeuEZiZw2MIFkwoHVLuiIC9RHqRpty
+	 c5EeOjeajWI13iqL7LLChMVa/VP2vB63XGaZBAiNzIqLXq5WLDS2bLU2yKig2er3u1
+	 CUCIrE04s+97Whnc6mWUlU7oL3VKxURizsYY2o2og9zt6v9AZubQnVhF1/FBQX+IyE
+	 7EBv2ATMmhbUlUxdM85IBPuxYITqUl8ZiRpOq7bbN6/R78zU2cTpH8d9kDaAiiS8Ul
+	 jNwXoDYWd/yEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA9D960E3D;
-	Fri, 17 Apr 2026 15:25:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CE880259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA4B581C20;
+	Fri, 17 Apr 2026 15:25:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9F66396
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B452B60E3D
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9068C81B70
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uREYyi356isp for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 15:25:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DLbbPnqEHJJL for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9971A60E9F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9971A60E9F
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9971A60E9F
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:25:30 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-488a9033b2cso9566435e9.2
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:25:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 87F4080B32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F4080B32
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 87F4080B32
+ for <buildroot@busybox.net>; Fri, 17 Apr 2026 15:25:31 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-43eb012ac4fso514237f8f.0
+ for <buildroot@busybox.net>; Fri, 17 Apr 2026 08:25:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1776439529; x=1777044329;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=miO13KQg953GkPdLURPQdkMf1AKKRjhx25C73lifvow=;
- b=abk14zeH8Xyql2Q8c9QWCC28xXaqEvT/JNl/8CVMrIE0fFWgI83ouwpo43equyXxuQ
- 5OchyLxftC6r28/d2dlpL/HkWT5xOO1pYkn2+Kw8sxf6KrRj2T0vZ7++hT2PRUhiTAyU
- nnyil0nYa90YFzhGYfSgZdlAlfwnotCVwagVOzTIFwnTvaq8FTieNCwm+crgODukbSZB
- 1rIPFq1bsioNIA0eDix4mhnlMhjedMmDHHhfc3M4mawOlyoNPYKK2rfPZtfgwx0pnmlO
- 6tfjWCfkXrSlCw1No5fpa7Zu1Buy08GtgSAE5DwbZ3CpQmuh3RafIo1LGoAqWlQq1R//
- 7oZw==
+ bh=4381/RKjS2XXHfZNu6VQbQyaaUDLiXQ0lkQo8xIWZNI=;
+ b=JGMR8EHOhOK1xZS+cjo0pVIGHvBje1jGT+e2YsbdTsRSHcFEAgdvbIJPLD5W0BtSZY
+ VLObDFRCQHKl1Mr1ZGq2rvwvl86YOIcgX6aldakzPbAaTyxcs5FbCWjqgQmDOhhWNmtk
+ JxHTuQje2yF9op8aTHq4fm/7SSLr6Z+jPbqmtAO+xh2ItSF732jhS1hxKtux+uxA5lj+
+ A2iRd+9ElNzoywtHg0nctFRQdqIhe0MCK/e0CSlmLkqGDPFOf+Rpvywzyxc3f6fKtM08
+ cf39QgQHCZNQLtF2LH6wpPTI3E+nwrTNN7gM4XbI6gkQ4DkoASMrUBLp2tCY5/gGgJQX
+ 6UCw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9yT81ZHU5aCyRjHwkiIpf3dxe9+bUjUtMQmZREKoT233zTw0vjgpC6CZncjs9eiERQyvxpycNH8Eo=@buildroot.org
-X-Gm-Message-State: AOJu0YwBdVeaaveD4+DTpXLsIwrE7iUYfBC7iNGPcVjC7qMJJCD+7N2y
- TdTO2qhGH3NeuupueBOCB0A3N4/1wM82+SoGuyPvhqBQeF4BD6iGprJgJhoTsDDbS2E=
-X-Gm-Gg: AeBDieuJIWRnB71Wini6T3NhBNzV0wMiBFUhitEb3NeXWQBzKrFWD85OOuw1Epm6jbl
- C6onIUP4EpbFSiwMWJnrZsJxFSci9gmbM/uBAYB04DTVwL+al8D1ek1KGOe09kKz7BgmDZ2dT3s
- dCzuQ/thnHzCwj0HqSZ1xWwsT8hgnbh8ciPyx42Fz7hpFfYk8D5eKxrKaWp7k1K6Zt4eidNFXzh
- BfPe8ohmAgEtPdIsD+NZndWTMt1attDqTG15WACZi3dcmO+/rlLzfMsOp6I+ocjHKVmqoLXE0cN
- U7wnRac8uwLq074hYmnxRYPOFAj7GH3TqCWHlqu+3JRFADxOcU74hg+z6UN8aZk8gugON8ccZfQ
- 01nuFRvEbV9YoCwzqt+DZE9NXOXF2Jnz5ufQvqhpZ58whA7x34MYwEXmHUBuZaaRi4rD3vBb0W2
- 9kZoIm71rKrGftAYbSxm2zgE8DaZKnG8bzrB/a0g==
-X-Received: by 2002:a05:600c:a318:b0:488:a2ac:a340 with SMTP id
- 5b1f17b1804b1-488fb7579demr37181835e9.12.1776439528606; 
- Fri, 17 Apr 2026 08:25:28 -0700 (PDT)
+ AFNElJ/u1uocmLkg7qt37iALpYzjjo1WhNLotg+XFGuPdx9qYS/jFcWj5ZKEUG4ljmLny1fK24kIAGLXWI4=@busybox.net
+X-Gm-Message-State: AOJu0YyVS0VCbAU+JWc+d0PbyqwT5I0J6SNQoRIj0Xc85N3oN4IAGg7/
+ qMMEe83ULLqlo0KCz5F0EBuL7T59Nez3eM335Vl4/bUq0Q5JEe/3JXKmEcIf20i0xfoBfkEqjma
+ UpfHq
+X-Gm-Gg: AeBDies8GjMb+nBE1Jj+ddDJp37gHhVWaPJZdCYSM094UvqG1G5+OKpRl+gU1TRQjkc
+ i41niVnGXGjzPGJvynE21Hdp72uBgmuSCi+J5Mk0Gb247GeCgyilThDszeqtp/MlI+2BNpr4j8V
+ Ifmx3qep/eU4mumgjRw23bWnGAqE/4Jg88Vscd4HnWaIIRlSc1G1hAXIb3WjDva5oPr/4IB0xTg
+ idGnLHcJlC6itzNjMVwYzNQk0N/lNDTL8dNioI6yQmwZpcBtkdyhKz9gn4Qtr9mq5AGMyPBzZLZ
+ 8UppaM2CjjbNkSKGwKvLjlOEh+PT2Vc4remP9q7YtpAguvY7aOtTq7+E7BbTiFMUAwccwA1DUvW
+ skY/9k1ipMSXqW8QJxuTKRtQBNTPSeSpnpAVPLfe/Ieli9JDeK7t+J5bM0RF3ZOjQnQogQE+cyn
+ tlQehoDtHy1n4qyIqNMIDSd9rmkys=
+X-Received: by 2002:a5d:5d11:0:b0:43b:8858:1146 with SMTP id
+ ffacd0b85a97d-43fe3e0fe61mr5153405f8f.41.1776439529503; 
+ Fri, 17 Apr 2026 08:25:29 -0700 (PDT)
 Received: from arch ([79.132.232.220]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e4eec9sm4941012f8f.34.2026.04.17.08.25.28
+ ffacd0b85a97d-43fe4e4d112sm5687559f8f.29.2026.04.17.08.25.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 08:25:28 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 17 Apr 2026 08:25:29 -0700 (PDT)
+To: Francois Perrad <francois.perrad@gadz.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:25:27 +0200
-Message-ID: <20260417152527.314132-1-thomas.perale@mind.be>
+	buildroot@busybox.net
+Date: Fri, 17 Apr 2026 17:25:28 +0200
+Message-ID: <20260417152528.314181-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260402180332.2779951-1-bernd@kuhls.net>
-References: <20260402180332.2779951-1-bernd@kuhls.net>
+In-Reply-To: <20260407072208.8583-1-francois.perrad@gadz.org>
+References: <20260407072208.8583-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776439529; x=1777044329; darn=buildroot.org;
+ d=mind.be; s=google; t=1776439529; x=1777044329; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=miO13KQg953GkPdLURPQdkMf1AKKRjhx25C73lifvow=;
- b=Dj2cqB3l5SJSnfR/QATO5OJRzgv/fU0kR9wygy8mYYg7/7i3AnVNkCoW6/fOxWOegv
- 40lWU8MkmKakNWY3QDGJCrpniBHfPuWl8k8GBD6XrDDuATcD259qgWUTjh0GF10Ngnbo
- WapmcN4DR7LI0ldzK/FDM7KHxQQ5GQDHgiIwcOhyZWHcwRBvXCD7GL/FcG0illOe5V4Q
- Ql25WahkrjWPdcq89mGWyJgp/myLklCvqwwy68INgPyeD07IO9e/WnWBrNGNdlfy7sOU
- UKMsXSfv0//cELjtdYCMATU9dedfLZ8tDvXLfwRTHZ6RnYVyECCjtNIA/Ybw6xpBiQB4
- eFUw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=4381/RKjS2XXHfZNu6VQbQyaaUDLiXQ0lkQo8xIWZNI=;
+ b=Nt+IfIx3YyMZQW1b3LLendVD1PWoe7VIeUg+P8cxifcESNKGslzEecr52oL2m8FVNO
+ Iv46Sn9Uo/XfE/5AYqj7xEl2G63QiPdAjB6t5MYxeoV3k9QG6koBJZyMI48oqa2MJ1GJ
+ VYwn3Xq4EoGt7BGDkj1vHvtTOVeqKSLkIUwAGRgCS/ps/w5mrixWNDmI6Z1tRxZNAZsA
+ KFLQl+/KI+iKHe3N4Dqm03DiWJNtfRIXdQM/MPDn8I3vjNZ/6hdbn7T0CkLI9Ltw0pf8
+ BlE6As1tUeCh2LS6jE5toPWOrSbID+GC9Hce71DbnU3bB6zBekC9AQ/ihai4q0ITSzNW
+ SBdw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Dj2cqB3l
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
- 1.0.3
+ header.a=rsa-sha256 header.s=google header.b=Nt+IfIx3
+Subject: Re: [Buildroot] [PATCH v2] package/quickjs: security bump to
+ version 2025-09-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,57 +132,65 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://lists.gnu.org/archive/html/info-gnu/2026-04/msg00000.html
+> fixes this serie of CVE:
+> https://security-tracker.debian.org/tracker/CVE-2025-62490
+> https://security-tracker.debian.org/tracker/CVE-2025-62491
+> https://security-tracker.debian.org/tracker/CVE-2025-62492
+> https://security-tracker.debian.org/tracker/CVE-2025-62493
+> https://security-tracker.debian.org/tracker/CVE-2025-62494
+> https://security-tracker.debian.org/tracker/CVE-2025-62495
+> https://security-tracker.debian.org/tracker/CVE-2025-62496
 > 
-> Switched project URL to https.
+> For release notes, see:
+> https://bellard.org/quickjs/Changelog
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/libmicrohttpd/Config.in          | 2 +-
->  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
->  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+>  package/quickjs/Config.in    | 2 +-
+>  package/quickjs/quickjs.hash | 2 +-
+>  package/quickjs/quickjs.mk   | 2 +-
 >  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-> index 8477ef6668..4ce089bf6b 100644
-> --- a/package/libmicrohttpd/Config.in
-> +++ b/package/libmicrohttpd/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBMICROHTTPD
->  	  GNU libmicrohttpd is a small C library that makes it easy to
->  	  run an HTTP server as part of another application.
+> diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+> index a59d46070..0ae0389b2 100644
+> --- a/package/quickjs/Config.in
+> +++ b/package/quickjs/Config.in
+> @@ -10,7 +10,7 @@ config BR2_PACKAGE_QUICKJS
+>  	depends on BR2_USE_MMU # fork()
+>  	help
+>  	  QuickJS is a small and embeddable Javascript engine.
+> -	  It supports the ES2020 specification including modules,
+> +	  It supports the ES2023 specification including modules,
+>  	  asynchronous generators, proxies and BigInt.
 >  
-> -	  http://www.gnu.org/software/libmicrohttpd/
-> +	  https://www.gnu.org/software/libmicrohttpd/
->  
->  if BR2_PACKAGE_LIBMICROHTTPD
->  
-> diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-> index 59c87a738d..bd5d0b3e8b 100644
-> --- a/package/libmicrohttpd/libmicrohttpd.hash
-> +++ b/package/libmicrohttpd/libmicrohttpd.hash
+>  	  https://bellard.org/quickjs/
+> diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
+> index 798c857a1..70dfb2d19 100644
+> --- a/package/quickjs/quickjs.hash
+> +++ b/package/quickjs/quickjs.hash
 > @@ -1,3 +1,3 @@
 >  # Locally calculated
-> -sha256  df324fcd0834175dab07483133902d9774a605bfa298025f69883288fd20a8c7  libmicrohttpd-1.0.2.tar.gz
-> +sha256  7816b57aae199cf5c3645e8770e1be5f0a4dfafbcb24b3772173dc4ee634126a  libmicrohttpd-1.0.3.tar.gz
->  sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-> diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-> index 335234c14b..b74a7a1338 100644
-> --- a/package/libmicrohttpd/libmicrohttpd.mk
-> +++ b/package/libmicrohttpd/libmicrohttpd.mk
+> -sha256  2f20074c25166ef6f781f381c50d57b502cb85d470d639abccebbef7954c83bf  quickjs-2025-04-26.tar.xz
+> +sha256  6f1f322aea3bb3a90858db85c9fe717013fde4df7dfcafe2f57e78f5bb4b4a0c  quickjs-2025-09-13.tar.xz
+>  sha256  598fd7fc928e4350abce36e337ba5a1346923c5c692f5be92c3d8e29ddd7c18d  LICENSE
+> diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
+> index e2170b297..511f14245 100644
+> --- a/package/quickjs/quickjs.mk
+> +++ b/package/quickjs/quickjs.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBMICROHTTPD_VERSION = 1.0.2
-> +LIBMICROHTTPD_VERSION = 1.0.3
->  LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
->  LIBMICROHTTPD_LICENSE_FILES = COPYING
->  LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+> -QUICKJS_VERSION = 2025-04-26
+> +QUICKJS_VERSION = 2025-09-13
+>  QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
+>  QUICKJS_SITE = https://bellard.org/quickjs
+>  QUICKJS_LICENSE = MIT
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
