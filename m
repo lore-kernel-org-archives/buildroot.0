@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9A7CF436B8
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616FFF436B7
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 15:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FE4460E87;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3805A81971;
+	Fri, 17 Apr 2026 15:23:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ep6Oy9CHrziG; Fri, 17 Apr 2026 15:23:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 340B1819D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776439394;
+	bh=KJeIFxcwtc0ivc6LWYfRZg4WnlvyIThy3RYXNd9cC1s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=cPMJH8axmnpzKzMjGV1QCyS7aXrJLRudFcPuAVWIa0TChTgMRqB8PX0faCp6i+Cq2
+	 uRt8I2mIw2wfXmwR6TB7vdUw02uU1oyPEPCtMa8Riri3cjPcbBrSu2WxYsPAA4TEqy
+	 T+J45Di39aCyD+KYyayqlKnd8MwkbRk9aHs4j0OQDLcNw0kCcGziGsPfU4vgCdLHIv
+	 NcbrhfGluJea7UW7JFwCiYjqZWrvWeqXjEMex0Ucog8S/mqBX8hKBsWK5Y1UtURYGo
+	 OWl+GF7AL1/9CiG7FczdyZp5QZ3B63Qt/uBUGDgYwFdvY83JtFfveZJfdtyBTmVZ1v
+	 DQhA0AEsTpGMQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 340B1819D5;
 	Fri, 17 Apr 2026 15:23:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F2604E0
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF24760E2C
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbFIz06j5XWN; Fri, 17 Apr 2026 15:23:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E044D60E8B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776439393;
-	bh=alti70shAXhec7CpWPzJzmdqHfN7c/kwBjNhye5/McI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jWJBGpNqJsYg+nxInZG7PICbpqG3t+aWBUxNTNM8+4ByQfM1ItIKYGTHnHGK2CJnM
-	 46FoeS5288/fFVe1qo/k0OCoNk6IlRCsbIsRK1enCMPLiMcCxnO/DKtaWnXdprMuer
-	 DPg5bP8A+/3UCIilVWN0daKHfI0csOXw6Y9+rKMQI0hH3sFPyNIF7YfFrtB+B2wrOj
-	 jV5zRLqqQz/DCJUALC2whIjfhw3xlcUcamDh1OV6csJmRCot7qCISAEMfKEbg1CHPK
-	 LkCiNd3/B28YRPcaETarTLAdVsrji/R6+kQrw+3Okm3dSw4gsd80jmHHTHLjB3rHUm
-	 7tACrkOM1T+Ig==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E044D60E8B;
-	Fri, 17 Apr 2026 15:23:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EF7B3259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0271240DEB
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DQble01rie3e for <buildroot@buildroot.org>;
+ id eEzzkj9XHc1Q for <buildroot@buildroot.org>;
  Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4996340DF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54A9060E30
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4996340DF4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54A9060E30
  for <buildroot@buildroot.org>; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDD5681DD5; Fri, 17 Apr 2026 15:22:46 +0000 (UTC)
+ id 05D5681DD9; Fri, 17 Apr 2026 15:22:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 17 Apr 2026 17:21:23 +0200
+Date: Fri, 17 Apr 2026 17:21:25 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: d7da44f6da765263051e69c4b3924d2da43e7442
-X-Git-Newrev: fc52ce0ef6160382dfcfd3d018b89a88d40a731f
+X-Git-Oldrev: fc52ce0ef6160382dfcfd3d018b89a88d40a731f
+X-Git-Newrev: 60748b81afe881b3eed0a7183e4c28b60bb68ff8
 X-Patchwork-Hint: ignore
-Message-Id: <20260417152246.EDD5681DD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] configs/nitrogen*: switch
- to bootlin toolchain
+Message-Id: <20260417152247.05D5681DD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libgpiod2: bump
+ to version 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,124 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fc52ce0ef6160382dfcfd3d018b89a88d40a731f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60748b81afe881b3eed0a7183e4c28b60bb68ff8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-As recommended by Julien[1].
+Changelog:
+https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS?h=v2.2.3
 
-[1] https://lists.buildroot.org/pipermail/buildroot/2026-April/800059.html
-
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8c655ac80ce3beca4669436a3a23dab83cd14865)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit 1afd1a6d4dbef3c78d92fb3f228c9bc5e592d90b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- configs/nitrogen6sx_defconfig | 4 +++-
- configs/nitrogen6x_defconfig  | 4 +++-
- configs/nitrogen7_defconfig   | 4 +++-
- configs/nitrogen8m_defconfig  | 4 +++-
- configs/nitrogen8mm_defconfig | 4 +++-
- configs/nitrogen8mn_defconfig | 4 +++-
- configs/nitrogen8mp_defconfig | 4 +++-
- 7 files changed, 21 insertions(+), 7 deletions(-)
+ package/libgpiod2/libgpiod2.hash | 2 +-
+ package/libgpiod2/libgpiod2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 03103567e9..1c68810aa9 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -3,7 +3,9 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 4d5408a474..50f769ac23 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -3,7 +3,9 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 65aff36860..7e5f8dd4f6 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 9a90cdae54..48ecf4b201 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index db4af070a8..b984acd604 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index dc54d24008..4c63fdf9d3 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-index 72884d97fd..b6c1264e77 100644
---- a/configs/nitrogen8mp_defconfig
-+++ b/configs/nitrogen8mp_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
+diff --git a/package/libgpiod2/libgpiod2.hash b/package/libgpiod2/libgpiod2.hash
+index 24bcfafc6c..157e605ed5 100644
+--- a/package/libgpiod2/libgpiod2.hash
++++ b/package/libgpiod2/libgpiod2.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  7e3bff0209d75fbca2e9fcff1fd5f07cc58b543e129e08b6d4bb1e4a56cfec0d  libgpiod-2.2.2.tar.xz
++sha256  70012b0262e4b90f140431efa841ca89643b02ea6c09f507e23cec664a51b71a  libgpiod-2.2.3.tar.xz
+ # Hash for license file
+ sha256  f646ad5159efb51c1130a4b43c31f0759750b1e254d2acf510f368ee2e2085c3  COPYING
+diff --git a/package/libgpiod2/libgpiod2.mk b/package/libgpiod2/libgpiod2.mk
+index ae3bcfa207..8803a282fe 100644
+--- a/package/libgpiod2/libgpiod2.mk
++++ b/package/libgpiod2/libgpiod2.mk
+@@ -6,7 +6,7 @@
+ 
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD2_VERSION = 2.2.2
++LIBGPIOD2_VERSION = 2.2.3
+ LIBGPIOD2_SOURCE = libgpiod-$(LIBGPIOD2_VERSION).tar.xz
+ LIBGPIOD2_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD2_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
