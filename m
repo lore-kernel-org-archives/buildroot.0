@@ -4,108 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28768F43682
-	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 08:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0821EF43680
+	for <buildroot@archiver.kernel.org>; Fri, 17 Apr 2026 08:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEE1960D5C;
-	Fri, 17 Apr 2026 08:59:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F214E60D76;
+	Fri, 17 Apr 2026 08:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHn58veGkTje; Fri, 17 Apr 2026 08:59:45 +0000 (UTC)
+ id UY1zn_-OtxLL; Fri, 17 Apr 2026 08:59:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0AB160D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0120A60D74
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776416385;
-	bh=FQue3PlingfiWO4KKVMpiC2mex1a34n1tB+wXPo1B4M=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=pAS92zWDEeSQ9+aPBjN4MxirO3X56JwFRpi+DMoieZnn8uaP5FUAdq2qsETHPT4Ug
-	 7MajtbkCACVGCC32V5bkb13pVcZZOJX0lDuqMH0KnCosAx4aG5mHkenrHQPtrtPl3E
-	 rTSHSFw3ZsY4sHFmyuNf4SEtj8yX6BB6hJW/6Copz24vmyze1jPKddPf6uP6HJRf8x
-	 bdrNthEMAtyB6h4qMF377VY9zpFRDwR1HZ5EBIgBRelyllNHpXLC6G90IoAfWGVnXM
-	 O7WWDIOgcOHtqJv4k76Q2TfYPVRU61esXE7z/a3WCNEmqDkWdltrOfLpMGEx/6sdL7
-	 Ssr3foGt6wauQ==
+	s=default; t=1776416387;
+	bh=cdrplLdDAo7uDd8VlP3C6nyyBW3RG10rjX6qs+w7PS8=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=EKVakndMo0L1Q4vLY+tmx/qACY66PX1sRRoTe1D9MRhrzzdUoM8euiTtfNAx84h1h
+	 pkJiS3NIoiHSEo7Vh0mPHAUO+Sti8WftN9el5Z8IQmYoy8I8N4TSQplqOiuotmcQj8
+	 HUDLfu/j3iLYJkSuHGmhvMEkLVWXeP6vAeKp4eUjzwhyUctkJF53V+K+Hc1l4+ixwv
+	 X8d8JZbW939wR3KPVJ7fhMqUVqQoGPtXa8kANkPQ+wjBhr1/rmsttwiUYEkITREzLE
+	 2JYhqDwiYS0ST+nsseu1UN4lJJHttjKUmd8LFv7E9Tcf1/HKPqtEJANIHlsrrVEQVQ
+	 RvLJBYDX8jNAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0AB160D5E;
-	Fri, 17 Apr 2026 08:59:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A1938259
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0120A60D74;
+	Fri, 17 Apr 2026 08:59:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B777259
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D6BD60D5E
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CF8740578
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PrZb84V79y7r for <buildroot@buildroot.org>;
- Fri, 17 Apr 2026 08:59:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qluYcLo00k0y for <buildroot@buildroot.org>;
+ Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42F3360D5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42F3360D5C
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 42F3360D5C
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:42 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-488af9fdaa7so2833005e9.1
- for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:59:41 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3CEB140015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CEB140015
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CEB140015
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 08:59:43 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-488b0046078so4044315e9.1
+ for <buildroot@buildroot.org>; Fri, 17 Apr 2026 01:59:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776416380; x=1777021180;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Wqf5v0YHUKsMWLqLTiVerKQjbsW74yVlIeLsqRp9gHI=;
- b=T2husoGIuVWUjhcu9mxTIP+LqpM6gZz5S0hgFaBskSibo675R6nWz/0NzNJahiLcgR
- O+8ZGemBvsagj/qorHNjL5FY5D9vC27bqb4IsmEtUC9puXcHa1NI0MfJca52TWTN+CFI
- c3C6lMwWIjrhzJG8V/uD7O0OYGFfRN82K+3Z/O5WTPcQNVip78zCY/JOHVB2oiWNEy3D
- saoyArB9xTvd4OKLYzscKfqq7MxF2PaPjvqegvmInC4CPGoz79SAfhHJq4JTZNKT92JT
- 8aDL3ewYnMfL0YrB5ILNWs3a5L/+82nFP59t6KVleU4dCQRIULp8H6u0wR7m4QxyBRYc
- su7g==
-X-Gm-Message-State: AOJu0YwvzkKuEFpK48Wox5eNxbeOQ3vB6fTIJsE8F0L/BfiWen2AIaCv
- paEF0C4m3todTBhKJQRDnrnBA93koeZ/gmAgXY1Irq9lWQPQReUXUQNBNrKkyZcCm/+lcqY10dy
- S4OpLnqk=
-X-Gm-Gg: AeBDievK+/PA9i85Z9cd3/6kqqupZjc2lkKqn8lNrKZfYWsNNXXVt6YS6arTm/Chj+j
- ExOR6IDsoatUfQhTlf8sUToVg/5TKS3xgIIB+sHB3JBpPfWaTh2waosxo/8BF4XKmeB7nfJQc8m
- /cgs17/WrgJd5Rw7hJEMKtf6lnwqCJ9wL+xp7669O5JykXntVNFdD7M+Nhc9nu2UJggybZX9mHG
- B+eyDs/mQ2w1UgwGkrTzJxaarHl/ecpb00U+r1qEz2cxzUqUyqA49agLmlqGUQ8bvyp3s+TTkPX
- lmUn79ELkhJZhBUH48GG4UBhhJYrT4xeSia3NS8w5w8baMpfu9d3kKE47pqiheEy4FfXNemZT9M
- X4ETMiO/ZtRF+9PGcHHJnwYPycAiigXZHrlCWTOHnChDIigZDGrbqwWLdC6vGuUKHIe3zjpkcbG
- G94wv9VAtG1rPldm2FvXKLX+YJ/WgLxeP+IVS26tFCpTb3eWR4AhzKKjf8zEulPoCZeOQZAPqQM
- pwvKhZhg+RT0jsK0+a7QqNFnxD/NAw=
-X-Received: by 2002:a05:600c:8b84:b0:480:1c69:9d36 with SMTP id
- 5b1f17b1804b1-488fb76e4aamr28124735e9.17.1776416379752; 
- Fri, 17 Apr 2026 01:59:39 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1776416381; x=1777021181;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=0EEiKVA6/aZAZcdoDPaQYF4/U5Djhp0WEn2mAfoBZxM=;
+ b=RAdN/4kOEPCPCsEi4FpZeMU0EIydujRaYl2FG0gzgdWkX6Wgdh6r8T6CPjvyuP2Dpc
+ CRff7LSEle0CpkbFR1lxkNKdcBwNWQ6D71qnv3F1D/MPCxSTB7zA/mOt/4yNGtVWvP/1
+ wZIEqNVNwBPHCg/FS/4CZlR8BRRzKushF+dp+sEXYt2G+5HYVdpqKKWk2uTW9wg9L7Qa
+ T3ytsOGBRCaCjJWYDAmJYrezpahK2Lit2WsGSYdbAa/QPfizn75IDaJ6HNnPA33MBh42
+ b0TARkvJTLhqDCo+3HZ2EE0UUAB4JJ8q4/YaIhr7Lb/jzsfRMy1SHTVuFUbhUEaKjQDI
+ ncyg==
+X-Gm-Message-State: AOJu0YwFwPDg4QQEVi51EM5SwNQCwFmFQAkffki0N0Y4NrqCNS+zzosW
+ rJl3pxi0pP2ZPCeIa+B7ehOV/1UMK/+aCnlv5aXhl8M2db/Rh+8QvJQS8vhgVleSsQ93QhBIpC6
+ ubUW/SxY=
+X-Gm-Gg: AeBDiet9zfZuQrXXvv/jvbhEjUss1AvSbSbIsuVRUfEMJLAOQY6NMZztDtQS1SpczHQ
+ /fBUPw3WIoxmCawV6S0eSJAwiv77/v/cSF16aihOV1eEh1WqHYZP/RzI4ryXOFNGdcF9pb9ttql
+ n5HwgGkwN3dnhSrNyOEaMexhKcZlDdDi/k8BGm4Ip7RSp/SEao/wBqzHd7ES2ThW6/xDYJCkw1w
+ Cr/oi91hyhdlFWa1WAUVdS+croBhU6WTVzAsLD2F1ezNxPdHwC9GGGXYNR065ADenk/WOy7H+hD
+ 3GHIXST/HoJR8m4iRn+2KK46ENeHEslyq8iu40Tl+0Ibi7aSkaqCl/Tup92kXudfjmfkEZMI/2R
+ lbuT//3VCa12hWTXErgMaTsbonSndpKqNz3NUqd3D1IkTR0jF+0DQeaRuAQjm+3+DVkTpbib4cC
+ lvOJYRv2KXLSBD9E8LXPD/kxIEnXqQtMXu1BypPk7aLv5+kt6So695/6aoMucd5yWdDiJ+/rwT8
+ eh1WJGwrL3tPVLTs+OXDqFympqIok0=
+X-Received: by 2002:a05:600c:a00f:b0:486:fe83:8621 with SMTP id
+ 5b1f17b1804b1-488fb788924mr28574875e9.23.1776416380703; 
+ Fri, 17 Apr 2026 01:59:40 -0700 (PDT)
 Received: from P-NAN-NAPALM..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-488fb7a0745sm15077795e9.9.2026.04.17.01.59.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Apr 2026 01:59:39 -0700 (PDT)
+ Fri, 17 Apr 2026 01:59:40 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Dowan Gullient <dowan.gullient@smile.fr>
-Date: Fri, 17 Apr 2026 10:59:15 +0200
-Message-ID: <20260417085936.200528-1-dowan.gullient@smile.fr>
+Date: Fri, 17 Apr 2026 10:59:16 +0200
+Message-ID: <20260417085936.200528-2-dowan.gullient@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260417085936.200528-1-dowan.gullient@smile.fr>
+References: <20260417085936.200528-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1776416380; x=1777021180; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Wqf5v0YHUKsMWLqLTiVerKQjbsW74yVlIeLsqRp9gHI=;
- b=nLUr37XaV+A/H6bkocNlxorJVT9+RG0INjEUKGEDOiF4VnVaLbVHosozD2Y77O1vp/
- NGG/Mv0gjjnLKcFc8vM0ejG2IZ0NFq7LASpIUxpUNlpAwJh5c/usDSgaZafE4oI0AYyN
- dkObCnl+lSCxuzwbwIm49pRgfmeAeKuGpUsaU=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=smile.fr; s=google; t=1776416381; x=1777021181; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0EEiKVA6/aZAZcdoDPaQYF4/U5Djhp0WEn2mAfoBZxM=;
+ b=wvswIaaag+04WerJGzwSItna2Ylw26rrDxm2MUxHq/d1TgVWWxAZZQU4V4iGVyuYBb
+ TJc8k//cHpeIlOKjPjMatx22Xfg8B0qDbHT9TdjLFNQTdlQGeNoWBAsD1UW1jabrTGoD
+ vJm0NEyk8BpVwqyT+BT6sPKud/BHcmYW4mn2M=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=nLUr37Xa
-Subject: [Buildroot] [PATCH v1 00/21] support/testing: bump kernels to 6.18
- and fix associated failures
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=wvswIaaa
+Subject: [Buildroot] [PATCH v1 01/21] Revert "package/python-setuptools:
+ bump to version 82.0.0"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,82 +129,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series updates the kernel version used in several runtime tests (LXC, ISO9660, Docker, etc.)
-from 4.x and 5.x to 6.18. This bump is necessary to ensure our test suite remains relevant with
-modern toolchains and kernel features.
+This reverts commit 51365ff06379aaf6fcc9a751e8ff32ac694f3e92 as suggested inthe patch review :
+https://patchwork.ozlabs.org/project/buildroot/patch/20260314140633.2967249-66-bernd@kuhls.net/
 
-The transition to kernel 6.18 introduced several build and runtime regressions in the test
-infrastructure, which are addressed in this series.
+Indeed, the new version of setuptools (82.0.0) removed pack_ressources and causes build failures
+for packages and tests that depend on setuptools.
 
-All modifications were tested locally with the updated kernel version, and the affected tests 
-now pass successfully except for the tests.package.test_podman test wich is failing due to
-the bump of the toolchain. More details here : [1]
+This serie will update kernel versions of the testsuite, so to test them, a revert is needed.
 
-[1]: https://lore.kernel.org/buildroot/20260417085703.200145-1-dowan.gullient@smile.fr/
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+---
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Dowan Gullient (21):
-  Revert "package/python-setuptools: bump to version 82.0.0"
-  support/testing: test_grub :  Kernel update bump to last LTS (6.18)
-  support/testing: test_file_capabilities : Kernel version bump LTS
-    (6.18)
-  support/testing: test_f2fs : Kernel version bump LTS (6.18)
-  support/testing : test_iso9660 : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_docker_compose : Bump kernel version to last
-    LTS (6.18)
-  support/testing : test_glxinfo : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_clang : ump kernel version to last LTS (6.18)
-  support/testing : test_edk2 : Bump kernel version to last LTS (6.18)
-  support/testing : test_oci : Bump kernel version to last LTS (6.18)
-  support/testing : test_systemd_selinux : Bump kernel version to last
-    LTS (6.18)
-  support/testing : test_dtbocfg : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_libjxl : Bump kernel version to last LTS (6.18)
-  support/testing : test_lxc : Bump kernel version to last LTS (6.18)
-  support/testing : test_octave : Bump kernel version to last LTS (6.18)
-  support/testing : test_systemd : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_openjdk : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_fluidsynth : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_distribution_registry : Bump kernel version to
-    last LTS (6.18)
-  support/testing : test_rdma_core : Bump kernel version to last LTS
-    (6.18)
-  support/testing : test_aarch64_64k : Bump kernel version to last LTS
-    (6.18)
-
- package/openjdk/openjdk.hash                  |  2 +-
- package/openjdk/openjdk.mk                    |  4 +--
- .../python-setuptools/python-setuptools.hash  |  4 +--
- .../python-setuptools/python-setuptools.mk    |  4 +--
- .../testing/conf/docker-compose-kernel.config | 26 +++++++++----------
- .../conf/minimal-x86-qemu-kernel.config       |  4 +++
- support/testing/tests/boot/test_edk2.py       |  2 +-
- support/testing/tests/boot/test_grub.py       |  9 ++++---
- .../tests/core/test_file_capabilities.py      |  2 +-
- support/testing/tests/fs/test_f2fs.py         |  2 +-
- support/testing/tests/fs/test_iso9660.py      |  2 +-
- support/testing/tests/fs/test_oci.py          |  2 +-
- support/testing/tests/init/test_systemd.py    |  4 +--
- .../tests/init/test_systemd_selinux.py        |  2 +-
- support/testing/tests/package/test_clang.py   |  2 +-
- .../package/test_distribution_registry.py     |  4 +--
- .../tests/package/test_docker_compose.py      | 12 ++++++---
- support/testing/tests/package/test_dtbocfg.py |  2 +-
- .../testing/tests/package/test_fluidsynth.py  |  2 +-
- support/testing/tests/package/test_glxinfo.py |  2 +-
- support/testing/tests/package/test_libjxl.py  |  2 +-
- support/testing/tests/package/test_lxc.py     |  4 +--
- support/testing/tests/package/test_octave.py  |  2 +-
- support/testing/tests/package/test_openjdk.py |  6 ++++-
- .../testing/tests/package/test_rdma_core.py   |  2 +-
- .../tests/toolchain/test_aarch64_64k.py       |  4 +--
- 26 files changed, 62 insertions(+), 51 deletions(-)
-
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 0236a13999..d0ed270e9c 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools/json
+-md5  6e65b88d2466b35e86e5187b99502b1c  setuptools-82.0.0.tar.gz
+-sha256  22e0a2d69474c6ae4feb01951cb69d515ed23728cf96d05513d36e42b62b37cb  setuptools-82.0.0.tar.gz
++md5  82e1d67883b713f9493659b50d13b436  setuptools-80.9.0.tar.gz
++sha256  f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c  setuptools-80.9.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 3c94931fbe..e013000c57 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_VERSION = 82.0.0
++PYTHON_SETUPTOOLS_VERSION = 80.9.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/82/f3/748f4d6f65d1756b9ae577f329c951cda23fb900e4de9f70900ced962085
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 -- 
 2.43.0
 
