@@ -4,113 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB06F99C72
-	for <buildroot@archiver.kernel.org>; Sat, 18 Apr 2026 15:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF76CF99C89
+	for <buildroot@archiver.kernel.org>; Sat, 18 Apr 2026 16:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CEBE60F69;
-	Sat, 18 Apr 2026 15:55:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 684AD60D61;
+	Sat, 18 Apr 2026 16:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TJPA6Eme4CLy; Sat, 18 Apr 2026 15:55:47 +0000 (UTC)
+ id JNonh4H1pie2; Sat, 18 Apr 2026 16:10:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D72D160E90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B22C60D77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776527746;
-	bh=9MQp96kAfOdFvVL5jLDx6EiqPM40I8dANpXT+X9TCHo=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=DnL4kA+BhIDWVPToTDZ8PAd/YRty/LcXJxEs4LDlws2+o+cUEUBiiNVgTJ8zvArCO
-	 pYUnw66kYHKqNCpp7rcp0Ztse2opJtBbJvu2Sc/nCsbHTAd9lidcVDvSwATLw2+dE0
-	 he8OZBXxa6uvF9PFhmOBbflfAPAVaM9Ermwn1+8kaakr5inVNAZ0gFEY5LFvQ+cnH9
-	 mz9uhQ5DtUq3nron9evz5Sm9sNaZtnOjcMbEHwaTI+WcZ859on+O18gbPWBROhAte8
-	 gO1OVTfzhLpHSq0XsaCzHZ5E2Ia7t18j//TAnDuMM4SqEO3p6OMd/yhKIhSXYQ9pty
-	 NqGQK4AaIdMLQ==
+	s=default; t=1776528604;
+	bh=1JXRIVJZUDVkfe5VzX4A6Fu6tX1/L2G9lTaPdw4BCQw=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=kwpACIs388jCTha/VDQpo7Mdpof7bt0yMNnbU2WPOylHXKyw12ZlshCi4grfvEt93
+	 nMJ64auSE4D3OnAjpLWbVF1k+7nDWukEhl+rocCZX/wD3zHj87k0KKPLm57j30k26e
+	 55Rc7OQLiSbhoQKs33uvpRsar5FzFH/WExJD0ps/zdPYIYcvwzPSoLItdrE7cDScgR
+	 Gb2GGZ0STsntsXVXkADuBoAxwXF4qyIRnDlOTB7+/SObHnxXONKwzYKR5OjWMr0td1
+	 U9eLKWaLlucPiYwjrkG3+rep2SodiHZELwNpmcei42yGtWyX9renlRLv3mS7r4gGbF
+	 gOFVumxwHBJzA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D72D160E90;
-	Sat, 18 Apr 2026 15:55:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5D3C369
- for <buildroot@buildroot.org>; Sat, 18 Apr 2026 15:55:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B22C60D77;
+	Sat, 18 Apr 2026 16:10:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93EC0259
+ for <buildroot@buildroot.org>; Sat, 18 Apr 2026 16:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3965C4002D
- for <buildroot@buildroot.org>; Sat, 18 Apr 2026 15:55:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85A3840108
+ for <buildroot@buildroot.org>; Sat, 18 Apr 2026 16:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LZSM-CYhmIiN for <buildroot@buildroot.org>;
- Sat, 18 Apr 2026 15:55:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::435; helo=mail-pf1-x435.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3E9A340108
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E9A340108
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
- [IPv6:2607:f8b0:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3E9A340108
- for <buildroot@buildroot.org>; Sat, 18 Apr 2026 15:55:42 +0000 (UTC)
-Received: by mail-pf1-x435.google.com with SMTP id
- d2e1a72fcca58-82f83bd32efso1284360b3a.2
- for <buildroot@buildroot.org>; Sat, 18 Apr 2026 08:55:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776527741; x=1777132541;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=7rCvZrLtggBIIuefhgwprHfASFcTJic2MlgtD/jvohY=;
- b=P74dsTz20uIZlY7fe+DfJj6i77eXNnVe2E9Yd25ah9fg+z2ossh9gS7aIlDOh3FMOZ
- ZfsAxbwplzmgrnd1vpr9sclB1Kh3K/rrtxekbhQMwhE7qAFstdb+8eqfFwNaT2k7moqV
- +Ss4jL8IvFE6fH+vubBxQtQ8BPczpZY9aDFf/qgKQQjkwvZqYn20uhdqlrEEY1KdOUYm
- eF5GgbRggbqoD/P27+5OFZL2/B+LW3jho3RZ6u987Pqore3tfcNco6ESvHk46PpJ0LPc
- fG9RGMHN+KF6UOD4Zqm+88E/sY6IbgL39hku/VFRlYZ2CDTENOZxddiLw4VUUGMt1e34
- pWIQ==
-X-Gm-Message-State: AOJu0YxdC+NY3kd9FGEOxYvL3CnjDReK0z2xBvQ+CCncO3y9OQTUYHCa
- U20BkzulR9yZhPNLBIO8Y7h5F1PdTFD8bWEwZOKl0XhOCb/P/WTRdY1XtjLqS1vg
-X-Gm-Gg: AeBDievyyyrpSW9/mfgobswsPKTXIyC5uaP9uT56BHJr/PGBZG7u58NNVwgxJ9BHwny
- Z8GQQ3yRgauGSHZ1isY2eZS7/13ahwVra7ToCNSKb2SYq6IkCauvx9LLoP6XbbGRTNgRtBSpn/e
- mLyaZXGiz2cjLGNTl/rcd//JRemeSV4OwRYOaKU7q82+86yh5a8qV1aenZojfHSCngYnTGwvn9Q
- gz/OD9vXnwbI6KS2FePbRbdpzEx7XA7mp2l78Qt6N2v/92BtXsPqS/M6Bn9KITlp8W9cJBD+ZDZ
- mMPZrnsfi4Lub4MLpoxK9ZANi5rSiQPl9M0I0Rl+LO9g8TUbfTPfRRNRGjf29mkBF+/+7+9vs1o
- HPu4eFv5KcWIJ45mkgswdxaKIMuM03PT8+0rNG3laGGKRM+xVNPxMK+SsWy634LyLcBUUbVOXyD
- szcw4ZkIHVsNrq5Ssf3ot60VmJb1Yah84kXWB/NN/LA9QE8O8DXeGyOwKs
-X-Received: by 2002:a05:6a00:1c96:b0:82f:1d38:f692 with SMTP id
- d2e1a72fcca58-82f8c7db39dmr7142609b3a.6.1776527740932; 
- Sat, 18 Apr 2026 08:55:40 -0700 (PDT)
-Received: from fedora ([2409:40e5:112e:daba:4994:b597:7615:a059])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-82f8e9cbb1dsm5959033b3a.14.2026.04.18.08.55.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Apr 2026 08:55:40 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ id SOwrolLH4Lr4 for <buildroot@buildroot.org>;
+ Sat, 18 Apr 2026 16:10:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9138A4002D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9138A4002D
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9138A4002D
+ for <buildroot@buildroot.org>; Sat, 18 Apr 2026 16:10:01 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 5C19B6013C;
+ Sat, 18 Apr 2026 18:09:57 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sat, 18 Apr 2026 21:25:12 +0530
-Message-ID: <20260418155515.9980-3-chakrabortyshubham66@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sat, 18 Apr 2026 18:09:53 +0200
+Message-ID: <20260418160953.958739-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260418155515.9980-1-chakrabortyshubham66@gmail.com>
-References: <20260418155515.9980-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776527741; x=1777132541; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7rCvZrLtggBIIuefhgwprHfASFcTJic2MlgtD/jvohY=;
- b=FfUmMEcuAKXVmz11dllfmAn3jwtwG/TDt+jS3iLwSRnsCoBUf44IFRLwhKqsKH02M+
- SB9PVut9yuG3WCbSmeh+aT+PVXh9H+psfUD38JNZ0IUsVL3i40sfJn4yrUN7cJ3qrEv5
- fHmGgTY2FF/JpVr9/dMdE6s0tibIk2FVkSayND1SZLbdc67xTQ9VOpyNTEX/lSPF+nAH
- X8PQe8CIxOFAuzN28PI7vSKbrFCL8PKXsZ8BNauWbOzYJs6BEdXXQxCvJaY5LK8U1MqE
- nCbI2zbMKwCfbOqM9+7qIM/+KnPoLwS6cvDVX0oVrBSMjZPiaayQtPZF30L1Li/i/BOY
- 9gXg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1776528598;
+ bh=tkznQ2MjpOprL3+6nKduhLFR5sH68b5M/HYU3UXHpEc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Yvya2rW4O07etv87TxDmWC3B4vv3ZiJbatBtXEvk2wJeO9n4tJRXqrjxhIffi3jCc
+ KzRBH7wKa7fXDcbiHeI9BbWlz44YVZrgbWXsV8JxtRSwkEAf4mG4J+WvU0sZKI8H0F
+ 1hPwsqUYN0oUVXta4Hl48gJa+c0jMpcspvPWhcO5RKAFx0xk2IjcEahOr1cbxtSQ8S
+ Op0iq7Pa0WXB0jk5sqPP2cb5qKGoFAcjwTkn9gLFV8BjMB++6F5z/De/r5XMt2WvIA
+ q4IyIQD8TVPr4lwYmNG6mT1oI1lBzWajeLM9mgF7q+I4iF9N0lkyunhwlappM1TS5X
+ borXNTICXWQPg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=FfUmMEcu
-Subject: [Buildroot] [PATCH 3/3] package/libenca: fix C23 compatibility for
- getenv/getopt prototypes
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Yvya2rW4
+Subject: [Buildroot] [PATCH 1/1] package/opencsd: bump to version 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,104 +86,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-GCC 15 defaults to C23, which removes support for K&R-style
-unprototyped function declarations. This causes build failures
-with strict modern C libraries.
+For change log since 1.6.1, see:
+https://github.com/Linaro/OpenCSD/blob/v1.8.1/README.md?plain=1#L365
 
-Add proper function prototypes for getopt, getopt_long,
-getopt_long_only, getenv, and _getopt_internal to comply
-with C23 requirements.
-
-Fixes build with musl libc and GCC 15.
-
-Upstream: https://github.com/Project-OSS-Revival/enca/pull/97
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...atibility-for-getenv-getopt-prototyp.patch | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch
+ package/opencsd/opencsd.hash | 2 +-
+ package/opencsd/opencsd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch b/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch
-new file mode 100644
-index 0000000000..74e92ce677
---- /dev/null
-+++ b/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch
-@@ -0,0 +1,69 @@
-+From 1782ea5dd749cd66b38b03aa02bd0c2f9d558f83 Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Sat, 18 Apr 2026 14:25:27 +0530
-+Subject: [PATCH] src: fix C23 compatibility for getenv/getopt prototypes
-+
-+GCC 15 defaults to C23, which no longer supports unprototyped function
-+declarations (K&R style). This fixes conflicts with strict prototypes
-+in modern C libraries like musl.
-+
-+Build-tested in Buildroot using musl libc and C23.
-+
-+Upstream: https://github.com/Project-OSS-Revival/enca/pull/97
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ src/getopt.h      | 16 +++++++++++-----
-+ src/getopt_long.c |  2 +-
-+ 2 files changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/getopt.h b/src/getopt.h
-+index 2eae587..91647ae 100644
-+--- a/src/getopt.h
-++++ b/src/getopt.h
-+@@ -144,7 +144,7 @@ struct option
-+    errors, only prototype getopt for the GNU C library.  */
-+ extern int getopt (int __argc, char *const *__argv, const char *__shortopts);
-+ # else /* not __GNU_LIBRARY__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char * const argv[], const char *shortopts);
-+ # endif /* __GNU_LIBRARY__ */
-+ 
-+ # ifndef __need_getopt
-+@@ -161,12 +161,18 @@ extern int _getopt_internal (int __argc, char *const *__argv,
-+ 			     int __long_only);
-+ # endif
-+ #else /* not __STDC__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char * const argv[], const char *shortopts);
-+ # ifndef __need_getopt
-+-extern int getopt_long ();
-+-extern int getopt_long_only ();
-++extern int getopt_long (int argc, char *const *argv, const char *shortopts,
-++		        const struct option *longopts, int *longind);
-++extern int getopt_long_only (int argc, char *const *argv,
-++			     const char *shortopts,
-++		             const struct option *longopts, int *longind);
-+ 
-+-extern int _getopt_internal ();
-++extern int _getopt_internal (int __argc, char *const *__argv,
-++			     const char *__shortopts,
-++		             const struct option *__longopts, int *__longind,
-++			     int __long_only);
-+ # endif
-+ #endif /* __STDC__ */
-+ 
-+diff --git a/src/getopt_long.c b/src/getopt_long.c
-+index caba753..a55fe2a 100644
-+--- a/src/getopt_long.c
-++++ b/src/getopt_long.c
-+@@ -199,7 +199,7 @@ static char *posixly_correct;
-+    whose names are inconsistent.  */
-+ 
-+ #ifndef getenv
-+-extern char *getenv ();
-++extern char *getenv (const char *name);
-+ #endif
-+ 
-+ static char *
-+-- 
-+2.53.0
+diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
+index 52d07fefc4..8cccb03cc9 100644
+--- a/package/opencsd/opencsd.hash
++++ b/package/opencsd/opencsd.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed:
+-sha256  e940e7ddd4e3c723c8dbe614e0728e20cb19729d44bb55cdb016abd6ad221bfd  opencsd-1.6.1.tar.gz
++sha256  2133692c37f05c01354959d9da6f57797d58b2d1346693fd9477f1332eaa4223  opencsd-1.8.1.tar.gz
+ sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
+diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
+index a7a24587ee..350dec73ce 100644
+--- a/package/opencsd/opencsd.mk
++++ b/package/opencsd/opencsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCSD_VERSION = 1.6.1
++OPENCSD_VERSION = 1.8.1
+ OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
+ OPENCSD_LICENSE = BSD-3-Clause
+ OPENCSD_LICENSE_FILES = LICENSE
 -- 
 2.53.0
 
