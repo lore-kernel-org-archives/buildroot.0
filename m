@@ -4,83 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1F1EA71AA
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 21:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17A4EEA71AA
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 21:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3895E6100D;
-	Sun, 19 Apr 2026 21:48:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F05E6100A;
+	Sun, 19 Apr 2026 21:59:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KcWC6km5muuw; Sun, 19 Apr 2026 21:48:06 +0000 (UTC)
+ id j04niHWEZDDj; Sun, 19 Apr 2026 21:59:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83AA061002
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D23961003
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776635286;
-	bh=IodClfVXpy9Ce0NhJ26kfAGKo9meLM654yfZnw9a8Ws=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1776635961;
+	bh=sWDK0f4TPDnhfL/zIhSj97ojfC7fyQsH3xfdAb1HAFo=;
+	h=Date:To:References:Cc:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VG2dvhlFRMMlHmCuGJfpypz9DDH55VsWgtKDnQ+9wT/bH84qBPQwey9EUpKvjeiqw
-	 EWpY+MhkNdSbAxbPeOiYnQR4t90P3sQ9wHUqNF+h4Jvwvm9MBKllgk0/rNX6XJQeKL
-	 KGzbeb18dlbe30gsTix+/g2UVQWpkhAFHOkiysybgaazrLlV4UzNAuEXuNi0DmEuYl
-	 PabN8FNiiSNCfRNa3jRZKv+hkG8TBnv3Q3ftJAPopKVYmvicyyzIbo29faW+2zkoK6
-	 qQOY8p5Z+ILJBOd1GMO3gtHw4C89ypJrcXBfqXcTJFtA4o1In83385/1WJHv6DyXsH
-	 F/NmGBruE6ZSg==
+	b=LrmA6/8CIpPXA9z4kHV7cZl11JIkEPgiKAeCIa4bSB7r7FiwVW7BUhc5wyOeMI+jL
+	 kE4QQalRkB3pb5d/4yBMVrk5/KmHBkbSz7GRzme/0Vzupb2d10JHOAijag9PtXFRHJ
+	 F/7MLXOh0Y0l+SbAPkuGvEfUHvDAhmfQvHeckYYhf36sasXz1s/MDRF9re8tFYGIeo
+	 Qg7pYLAKgd1wCXzbmoOdSU2oU55Ldl1i2lefP6IrOZc6pljMXSG2rOe7MUEcIf7oPe
+	 ENi93sBYk53RoHdSTtH/KJbXeDOdwq/33tXhXi1t1eBJpFKwjLHoiTgQIdcalt3ii6
+	 d1O2fuZ40XKvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83AA061002;
-	Sun, 19 Apr 2026 21:48:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 45C802B8
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:48:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D23961003;
+	Sun, 19 Apr 2026 21:59:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F34ED2B8
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36E25404A6
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:48:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D03BB82380
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R8HTPnp5MCzX for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 21:48:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fNPF6tOQN1yM for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 21:59:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65DF74041C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65DF74041C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1037C8237A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1037C8237A
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65DF74041C
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:48:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1037C8237A
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:59:18 +0000 (UTC)
 Received: from [192.168.178.20] (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
  SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 651432C80C2A;
- Sun, 19 Apr 2026 23:48:02 +0200 (CEST)
-Message-ID: <b21a1d77-873d-499a-b476-5db5916d29d3@bubu1.eu>
-Date: Sun, 19 Apr 2026 23:48:01 +0200
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 5CD402C80C2A;
+ Sun, 19 Apr 2026 23:59:16 +0200 (CEST)
+Message-ID: <a6dbb42a-b990-4248-9caa-aaa9385e83ce@bubu1.eu>
+Date: Sun, 19 Apr 2026 23:59:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-References: <20260418135007.558260-1-ju.o@free.fr>
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+References: <20260403085152.511498-1-chakrabortyshubham66@gmail.com>
+ <e4ee930e-02d7-4008-9c97-3c50319c561b@bubu1.eu>
+ <CABvxksxUY9ZC=PPSXdrjs8Vq5p12YJxWLHKWWJJZF-X=UvaheQ@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <20260418135007.558260-1-ju.o@free.fr>
+Cc: Buildroot List <buildroot@buildroot.org>
+In-Reply-To: <CABvxksxUY9ZC=PPSXdrjs8Vq5p12YJxWLHKWWJJZF-X=UvaheQ@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1776635282; bh=94EFWVf5bmdMLmqpiDtbcjBlMjcXgdue+Ji2MomDf6g=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=ZY+uVjymEio6xZTgT72S9dE0ZvWEtsVkHi/Q3c6T79H08r4Lg6Z4rkqHm7Eh1OSDh
- uJWu552XjX0OF8nwaFMZxlPIZ9ANf50TmXIN0+ZYiNHT6s20ez/ItrB+XdvE0JPciU
- cotC8g0J4g1nm+9DGAGVsVSYKFuf83YjtgGD/1hgms4IyicXb4/xNDHqOFY8SysSaa
- oQZABFF/ctBsuHYSjjULW+77T8BAuZNj6Jgb4kXM86vjqxXNiszgeFKr5GSRAxoWgV
- Ah2E5UimmVIzqrmwjXRnMfB4eYChvp8eBi8nGLJJWa4abGoq1OvEoUhIUWyiIiGxif
- aJTx2OO8vp8+Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1776635956; bh=gfhbkhmIctYGOgv8VsLOgpiamHp72BZ46buT/1sO7xw=;
+ h=Date:Subject:To:References:Cc:From:In-Reply-To;
+ b=IPtR9Eh2kEFRVGcu/0ymyPivzQCLQt7EDBD/bI6klCi5bZjURwpyEP43/jctewIi4
+ 1f13Fmu7f4+I0cZ/WGJjSrvSCypOVWayATr3ukTIqonV41V87jB8RXKFTL7CkTQp8X
+ EqhYkdIxE5RpXtINeaXjDdrQJV3MbFyQfAjxyXzn5NiOFJnsQGG53ojvZ20D1ewNXg
+ 9SjFiAfeXbV/zseE0gnC9Ltp8QpPV4E9lyLmJN5mxkU8EkKGMnRK6Qi04JocAmwROn
+ v0DZqgbOFAdJCEFi1PIYBIE2MYOnjGVtSKy7jLMYUg14b8n84pUhNeuemfI4nAjur3
+ AUmrTHZGiSLBw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=ZY+uVjym
-Subject: Re: [Buildroot] [PATCH 1/1] package/stress-ng: bump to 0.21.00
+ header.s=bubu header.b=IPtR9Eh2
+Subject: Re: [Buildroot] [PATCH] package/python3: fix build in static-only
+ configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,43 +102,62 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Julien
+Hi Shubham,
 
-On 4/18/26 15:50, Julien Olivain via buildroot wrote:
-> Changelog:
-> https://github.com/ColinIanKing/stress-ng/releases/tag/V0.21.00
+please keep the list in CC in your replies.
 
-I noticed there's a new BUILD_SMALL option in this release[1] and 
-wondered if we should set this when we have the optimize for size build 
-option enabled... but enabling it (on aarch64) I only managed to 
-increase the final binary size a bit:
+On 4/17/26 22:00, Shubham Chakraborty wrote:
+> Hi Marcus,
+> 
+> I investigated the original reason for disabling static Python 3 support 
+> (commit 54915af7). At the time, the issue was that the interpreter 
+> attempted to load standard library modules dynamically, which fails in 
+> static-only configurations.
+> 
+>  From my testing, this limitation can be partially addressed.
+> 
+> I was able to build and run a statically linked Python interpreter using 
+> |--disable-shared| and |--with-static-libpython|. By configuring | 
+> Modules/Setup.local|, several standard library extension modules (e.g. | 
+> math|, |_json|, |_struct|, hashing modules) can be built-in, avoiding 
+> the need for dynamic loading with musl libc.
+> 
+> I validated this on AArch64 using QEMU. The interpreter starts 
+> correctly, and built-in modules work as expected. Basic operations and 
+> selected imports succeed in this configuration.
+> 
+> However, this setup is not yet fully equivalent to a standard Python 
+> environment. Some parts of the standard library and general script 
+> execution still require further validation, and third-party C extensions 
+> are not automatically supported (they would require manual inclusion in 
+> |Setup.local|).
+> 
+> Based on this, it appears that partial support for static-only Python 3 
+> may be feasible, but additional work is needed to determine whether it 
+> is robust enough to re-enable in Buildroot.
 
-BUILD_SMALL=0, -O2:
-2867800 19. Apr 22:57 output/target/usr/bin/stress-ng
-
-BUILD_SMALL=1, -O2:
-2912856 19. Apr 23:07 output/target/usr/bin/stress-ng
-
-BUILD_SMALL=0, -Os:
-2642432 19. Apr 23:05 output/target/usr/bin/stress-ng
-
-BUILD_SMALL=1, -Os:
-2671192 19. Apr 23:31 output/target/usr/bin/stress-ng
-
-I stopped investigating at this point as this doesn't
-seem to help.
-
-[1] 
-https://github.com/ColinIanKing/stress-ng/commit/8e6aad2731d746e1903f0d34104bb2d369cc2fc9
+I think the question here is: would anyone want this? Do you have a 
+usecase for this?
 
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> If this direction is of interest, I can continue investigating and 
+> prepare a patch series that:
 
+I'm confused now. You tried to fix a static-only python3 build failure, 
+which is not something that buildroot currently supports/allows. How did 
+you even encounter that? What is your reason to work on that?
 
-Applied to master, thanks!
-
+> 
+>   * Re-enables python3 with |BR2_STATIC_LIBS=y| (if deemed acceptable)
+>   * Adjusts module configuration to minimize reliance on dynamic loading
+>   * Adds a runtime test to better assess static Python behavior
+> 
+> Please let me know how you would prefer to proceed.
+> 
+> Best regards,
+> Shubham
+>
 Marcus
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
