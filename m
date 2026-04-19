@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B702EA7197
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 19:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B6C4EA7197
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 19:16:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE7B540D78;
-	Sun, 19 Apr 2026 19:16:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18CFF40DAC;
+	Sun, 19 Apr 2026 19:16:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pWXVKAPTyG7k; Sun, 19 Apr 2026 19:16:26 +0000 (UTC)
+ id 8QZ47ornOuSI; Sun, 19 Apr 2026 19:16:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0021140D45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11C3A40D55
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776626186;
-	bh=fA89staEp6Xe7laYidkHaYgt5V+QDtKyb3sntsTL1WQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NoeGQNkRl7wOMsLhOUngWf97pfkC5Hfb3VlELHVp1VHlXJh3UxNr1Zc/+Yw9a3Ytl
-	 vCGZIxqD9sdq4Je8OHhOlMxzaXlvJ13OOMMayu9KdB/7EYwRo5Jl0R/Q3bRo9hobKU
-	 1KGc6sxVcEsOewxvUjRtcKLi9g84puB6FtCLIsb+Q5MTc//6v/iwUXXb8u/ElLv7C2
-	 pA1qkrfsz/K/jwizsPeJhutDya2vvbXnIrKBMR9xhMU6i9fEeEu8NVQZDhErxsnoyb
-	 w8TfyC55IuAIVEZOeHV+tgfW4hZRl6p+I1EA6JO5cINsGrkfn9Yd9D0zc5Qdg1Atr9
-	 VBO3nOo7BEEfA==
+	s=default; t=1776626202;
+	bh=bo2RXJV/wVAwJzrs4JlArKrjA4mSVd6M4/OiH69RQZQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=HbpfccPNs8ttN6Lp0ORpvmOdsT98MHWSxebXXuRCu8vUQXkcgJu3lTqRKZ1fTi7ln
+	 p5L4yeEFqZhnEDoUpSGzBlZzQLA8+WzUeJz0X8lVk/khdCHx02VWyG7bdskeAqNOuM
+	 48z87PNV53JkYXZ6Vqaa6nSCi/O/UXUnx4u3kjHZhQBuqdUWljw/A8PO24T6bFlvmQ
+	 bN2iQ35z6MG9vmvTLvxpowHiIgXNj1DqgEx+syDU3xn2o99rWkWIKBWOi5wK+IRHdF
+	 PybCSPciKK1EkiCvwNQaTmlaSZ1Wymx+aick4ZRk13QW8EWc13yMkeZPqAgaMLIWSL
+	 UEPMdi/XB1opA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0021140D45;
-	Sun, 19 Apr 2026 19:16:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DDC024D
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11C3A40D55;
+	Sun, 19 Apr 2026 19:16:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 310B424D
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 439EE40448
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22E7C80EEF
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id af8jWToqfxmA for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 19:16:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 859B840426
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 859B840426
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E98881F7B; Sun, 19 Apr 2026 19:16:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Apr 2026 21:11:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b30035e832bf7afbc4506806255d75d8f92cd4df
-X-Git-Newrev: f1fcca3a79790c5a1bcb412d25b857385a5ecdce
-X-Patchwork-Hint: ignore
-Message-Id: <20260419191624.2E98881F7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/proftpd: bump version to 1.3.9
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IIDXBugUg4fl for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 19:16:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5631380ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5631380ECE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5631380ECE
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:16:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 46A75780383;
+ Sun, 19 Apr 2026 21:16:37 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Apr 2026 21:16:37 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Apr 2026 21:16:37 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260419131554.2952082-1-bernd@kuhls.net>
+References: <20260419131554.2952082-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <efb0ed44fc34913de183b1ff5a380620@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1776626198;
+ bh=KRGfk3MHTjrkhBWAwKEqTrjXbKxoCaUpyoiv3Htl4ns=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DvAunSDYPKUs9h/MbMl5E/Sjhpv5xo8UT5KJpc9fNDq+mnMaYnDJZnn1DCypljQE6
+ VGr0AjpfLVzR/ZJ5gFCwINZS4diRoneAO8ysCMXycjxc+IzVJVC+Aazsi0Nu485G7F
+ DfFpJ+SRG7TrkFQkIM86F7mn7Ex0SB4LCxLUAP+EGHbj6nPtLiNT5gN/OJw0Gpgh9v
+ jiVL6wLObB5areqoOTjV55bXWEgPVSuIMHWdIryOdRwWLDQV4lJHHzO4YZ9YhMgxfQ
+ 0rLYzcw8s9Knw868LZIBMuYLqdB3WbTcnEhpmDeZVFvmRpv4IqoxpJmNRbA3+Ehd3A
+ ZfvXauCyGsx3g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DvAunSDY
+Subject: Re: [Buildroot] [PATCH 1/1] package/proftpd: bump version to 1.3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,64 +94,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f1fcca3a79790c5a1bcb412d25b857385a5ecdce
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 19/04/2026 15:15, Bernd Kuhls wrote:
+> https://github.com/proftpd/proftpd/tree/1.3.9/RELEASE_NOTES
+> 
+> Removed fix for gcc 15.x added by buildroot commit
+> c53f5e78fcd0c6af9174c76d381a44aa48fb4f24.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/proftpd/proftpd/tree/1.3.9/RELEASE_NOTES
-
-Removed fix for gcc 15.x added by buildroot commit
-c53f5e78fcd0c6af9174c76d381a44aa48fb4f24.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/proftpd/proftpd.hash |  2 +-
- package/proftpd/proftpd.mk   | 10 +---------
- 2 files changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index 88b5906945..482534fb1c 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  42ba40d8d5a5a9f28c9dcd7f15aa6b5368fe5efceaacb999041311b170f076d5  proftpd-1.3.8d.tar.gz
-+sha256  4a5f13b666226813b4da0ade34535d325e204ab16cf8008c7353b1b5a972f74b  proftpd-1.3.9.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index d450489cb0..a30c46ee27 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROFTPD_VERSION = 1.3.8d
-+PROFTPD_VERSION = 1.3.9
- PROFTPD_SITE = https://github.com/proftpd/proftpd/archive/v$(PROFTPD_VERSION)
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
-@@ -27,14 +27,6 @@ PROFTPD_CONF_OPTS = \
- 	--with-gnu-ld \
- 	--without-openssl-cmdline
- 
--# source code contains a number of variables named 'bool', which
--# conflicts with the C23 keyword. Fixed upstream in 1.3.9 with
--# https://github.com/proftpd/proftpd/commit/61be7eb14f200b97804a3cfa85fed51661067c62
--# so can be dropped when bumping to that
--ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
--PROFTPD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu18"
--endif
--
- ifeq ($(BR2_PACKAGE_LIBIDN2),y)
- PROFTPD_DEPENDENCIES += libidn2
- endif
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
