@@ -4,82 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA5E9EA7192
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 08:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C1EEA7193
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 09:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13BB660FC6;
-	Sun, 19 Apr 2026 08:56:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBFBA60FC0;
+	Sun, 19 Apr 2026 09:01:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uyg60dFhFpgB; Sun, 19 Apr 2026 08:56:33 +0000 (UTC)
+ id 5bEVVVELYWt5; Sun, 19 Apr 2026 09:01:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23D9760FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF22760FAF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776588993;
-	bh=yu8ZZDNbzonJ2R/AMMgkmHSKT+n8qpC95INzOd6zneM=;
+	s=default; t=1776589283;
+	bh=RPIdyAqWFE2yLgzgbiCFjGLDmIQe0seBxB4N4Y2DxiE=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=YMxVGobe+uh2UDnSh0tb/bIEHf1/3MeNfCvenBGni+dyx0ygY54a+0Orrz+DyJFKv
-	 23Mk1hCTqYDgLhPzg5ts8kbU3JfvlL6sCVEoDa8cpDSlAjivsfRKGXeT70eEk/lhhY
-	 2kTM7Rd42cCbxH+BtyrsyTwK+ugw5bVnJjxZ2I9LyFrGW+4Ox/4hTGuBv7YJO7cK4b
-	 aycfSzp3OueGHB4SHOCFX/I6EBErxOzx8G8vWggvtsNgiM7SETMoPuJlzkcn0Vr40h
-	 C6lLqu/JFKXIWN+QjhuQUqya7i1c4qFCMtw/c5ZGJrj/7jMSYA7FPuhC5kREAYR7M0
-	 WDgm2txAWmCag==
+	b=NEdjD6bGV5tXtg5AY/SsIobyq9CRukjGUtXxV2aWSbX7geg/JEho7vvUE/BXlgvQ6
+	 Cr38fh9D2nxmZ2+XD7noI/vsDpPkqILAbVH5q+ruKg9O3erZaSYwuPKppvrt6NXoxc
+	 O8psu4iulHQ9Ta+cO2ObJbmIaUnKdT0Mbjx/8gapI3FTY/imUQG1pJD7jGGeawqwrk
+	 LrQyQ5kOdYXbS/ZBtCUkLFZy0Uj97BbCerRo9b+Sg8hFhyireE9LtBAQDcBeXljPy3
+	 001K6X/fnUVot7Srk+oJjFCV/Ffm8VCdHPqpTuZWVjUyESlI8bDDSUcBbAy1LqgC0T
+	 ROtKxLPXK/mXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23D9760FA7;
-	Sun, 19 Apr 2026 08:56:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BA5F24D
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF22760FAF;
+	Sun, 19 Apr 2026 09:01:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21CE624D
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 09:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D3754044C
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0808240BAD
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 09:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XmVrksZwP-Lz for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 08:56:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.101;
- helo=smtpcmd02101.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B35994029B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35994029B
-Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B35994029B
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:28 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id ENx2wvbK6xFXLENx2w68NH; Sun, 19 Apr 2026 10:56:24 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l91LdGB0gLyW for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 09:01:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 30EC840B8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30EC840B8E
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 30EC840B8E
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 09:01:18 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cc94.dip0.t-ipconnect.de [79.214.204.148])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EF639A4C0C96;
+ Sun, 19 Apr 2026 11:01:15 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50252)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1wEO1j-000000005ix-0QiY;
+ Sun, 19 Apr 2026 09:01:15 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 19 Apr 2026 10:56:23 +0200
-Message-ID: <20260419085623.1200423-1-giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Apr 2026 11:01:15 +0200
+Message-ID: <20260419090115.1129567-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfNHAyLg1sHbWTHH9Tmr+Lv7W7uoBmJoSYk/UCICiPVbshbK8J+j/pwtDT0kna63DkpjaEW1YuVGtihEawyQsAWw+Pj6QaE/gWJDujW4v6AsHB9uERsvU
- ZQjBS32ZcaOUMmRDwZol/Sfd24wdzkE8icxrJhzvaD7yjRXG8nouJCr0xp48a+mdwwf7a3yzNYFwc85rF5WIS4Gm+MMV07fQSl63RgXs9fi46SJ/a22WfopN
- 9stscTDR9R7vTNz7DhDCpITU9taMSU6rErTX7bifonmwmG94NEhsu9/MexrmYUZyJuNqieQmfJ0mZnHTcD3M8g==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1776588984; bh=VSTFz33fQii+47MAFtW4hg/Acnze00FcAjVWJs+Ow5U=;
- h=From:To:Subject:Date:MIME-Version;
- b=YpaArTGnM8FS0qdKsP1Ks0+hlkmPPdudsoIr5vtt8zqlTsOiOCGE+euuK0H8lH+65
- lsH3X9tp3PtjMSBXnSztl3Sc6RX/h+1w3hm8LF+ypdDf9soK7uW3WnnG8mt7hbdiwx
- oHhzlDBUr8u2lUKEMp9rokISakTQjgSQPcsJR3sqOBK4rgw0I+TfRSRYt2K9+9Pd2q
- P/CaKBmeWox7lQbz5fzTJvWJjPMLR6L07+z+70ySCPMdMs0qROPUL5St5xelklst9H
- 7uf8hDqfdy4FLmN4fvZ/N5m1M5Nj1EfvROn0cq/TYEh19GK82f3s8PYv4mYRSTaRzf
- 3QgegV5NkMQGg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: -
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1776589276;
+ bh=pcctYbipgYh7NcIwAhWZxs/bSwgS8keO1x8dEu0jq1g=;
+ h=From:To:Cc:Subject:Date:From;
+ b=eYJOFkKiYtyzOgBjWh6f37Gm2HarC0LA5DzyaeTO245xRMeYJBwJuG/WJJJNZWbAC
+ CoUGCvZzkF01gWvXuFKUGkZ6fZIztgCC4JN5Yi61Kdax68JajgYPkmZHSU3xGCmfWk
+ edm/Sg5aLc/0xmd/cxzonlClmZ3lKZRphK3rdN9pWNDwNPe2ye4HjOzWpsPNkxroy+
+ 5Uwy/UK2+Rzj68I8/qm5PSym5T+T6fZtc51/OZ65b8XXTImzQSYae/CluZ2EO3Kwd+
+ UOEVoXrJ/FGBhApqVJSNP+8uYezAlQgiFVr/xd5qO1PNPNaKpbPyUnTQzqIJUCHB3A
+ nif6ZJJPjlHUQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=YpaArTGn
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.123
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=eYJOFkKi
+Subject: [Buildroot] [PATCH 1/1] package/zeek: add various fixes for gcc >=
+ 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,39 +98,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-https://firefox-source-docs.mozilla.org/security/nss/releases/nss_3_123.html
+Fixes:
+https://autobuild.buildroot.net/results/022/0227cdc337fe7cbb19d9b88b2c3d890c6a3ee347/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Please note that patch 0006 fixes a follow-up error masked by the
+configure error found by the autobuilders.
+
+Building zeek with gcc 14.x works unpatched with this defconfig:
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
+BR2_PACKAGE_ZEEK=y
+
+The cause of the build errors was the bump of gcc to 15.x, this
+defconfig fails without these new patches:
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_PACKAGE_ZEEK=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+@Fabrice: Building with BR2_PACKAGE_ZEEK_ZEEKCTL=y is still broken.
+Our zeek release 4.1.1 dates back to 2021 with > 8000 patches applied
+to upstream since then, current version is 8.1.1. Backporting python-
+related patches to fix the build of zeekctl looks really difficult due
+to many changes in the 3rd-party libraries/submodules used by zeek.
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index d0d278c7f6..31c1315783 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_122_1_RTM/src/SHA256SUMS
--sha256  de5a655da82a67e502b802ae0b53f3eb02ea53f509c3fc0ab54a892e04493bbf  nss-3.122.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_123_RTM/src/SHA256SUMS
-+sha256  2145113398a269779a7390515a1638800836b130248e33f93243268c026d4e49  nss-3.123.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index b40cab03c9..a47856b03e 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.122.1
-+LIBNSS_VERSION = 3.123
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Do you have any interest in further maintaining zeek or should we
+consider to remove the package because it regularly causes build
+errors due to its huge codebase?
+
+ ...fedora-rawhide-due-to-FindBIND.cmake.patch | 28 ++++++++++
+ ...dint-to-header-files-and-source-file.patch | 55 +++++++++++++++++++
+ 2 files changed, 83 insertions(+)
+ create mode 100644 package/zeek/0005-Fix-build-with-fedora-rawhide-due-to-FindBIND.cmake.patch
+ create mode 100644 package/zeek/0006-Add-include-cstdint-to-header-files-and-source-file.patch
+
+diff --git a/package/zeek/0005-Fix-build-with-fedora-rawhide-due-to-FindBIND.cmake.patch b/package/zeek/0005-Fix-build-with-fedora-rawhide-due-to-FindBIND.cmake.patch
+new file mode 100644
+index 0000000000..53f4d7bc1e
+--- /dev/null
++++ b/package/zeek/0005-Fix-build-with-fedora-rawhide-due-to-FindBIND.cmake.patch
+@@ -0,0 +1,28 @@
++From dd6b23769d624b88abb452d657e2aede4af6a211 Mon Sep 17 00:00:00 2001
++From: Johanna Amann <johanna@corelight.com>
++Date: Sun, 19 Apr 2026 09:02:20 +0200
++Subject: [PATCH] Fix build with fedora rawhide due to FindBIND.cmake
++
++Upstream: https://github.com/zeek/zeek/issues/4329
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ cmake/FindBIND.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/cmake/FindBIND.cmake b/cmake/FindBIND.cmake
++index a5e3204..da18242 100644
++--- a/cmake/FindBIND.cmake
+++++ b/cmake/FindBIND.cmake
++@@ -66,7 +66,7 @@ foreach (bindlib ${bind_libs})
++         #include <arpa/nameser.h>
++         #include <resolv.h>
++         int main() {
++-            int (*p)() = res_mkquery;
+++            int (*p)() = (int (*)())res_mkquery;
++             return 0;
++         }
++ " res_mkquery_works_${bindlib})
++-- 
++2.47.3
++
+diff --git a/package/zeek/0006-Add-include-cstdint-to-header-files-and-source-file.patch b/package/zeek/0006-Add-include-cstdint-to-header-files-and-source-file.patch
+new file mode 100644
+index 0000000000..aacd86e7b5
+--- /dev/null
++++ b/package/zeek/0006-Add-include-cstdint-to-header-files-and-source-file.patch
+@@ -0,0 +1,55 @@
++From 4c7f302f0526713adae4aad7b3153be53039aca3 Mon Sep 17 00:00:00 2001
++From: i2z1 <i2z1@yandex.ru>
++Date: Tue, 6 May 2025 22:09:27 +0300
++Subject: [PATCH] Add `#include <cstdint>` to header files and source file
++
++Upstream: https://github.com/zeek/paraglob/commit/4c7f302f0526713adae4aad7b3153be53039aca3
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ auxil/paraglob/include/paraglob/paraglob.h   | 2 ++
++ auxil/paraglob/include/paraglob/serializer.h | 1 +
++ src/paraglob.cpp              | 2 ++
++ 3 files changed, 5 insertions(+)
++
++diff --git a/auxil/paraglob/include/paraglob/paraglob.h b/auxil/paraglob/include/paraglob/paraglob.h
++index d29488c..f02b4f6 100644
++--- a/auxil/paraglob/include/paraglob/paraglob.h
+++++ b/auxil/paraglob/include/paraglob/paraglob.h
++@@ -13,6 +13,8 @@
++ #include <vector>
++ #include <memory> // std::unique_ptr
++ 
+++#include <cstdint>
+++
++ class AhoCorasickPlus;
++ 
++ namespace paraglob {
++diff --git a/auxil/paraglob/include/paraglob/serializer.h b/auxil/paraglob/include/paraglob/serializer.h
++index 38a3646..fe9be1a 100644
++--- a/auxil/paraglob/include/paraglob/serializer.h
+++++ b/auxil/paraglob/include/paraglob/serializer.h
++@@ -6,6 +6,7 @@
++ 
++ #include <vector>
++ #include <memory> // std::unique_ptr
+++#include <cstdint>
++ 
++ #include "paraglob/paraglob.h"
++ #include "paraglob/exceptions.h"
++diff --git a/auxil/paraglob/src/paraglob.cpp b/auxil/paraglob/src/paraglob.cpp
++index 3dd490f..feb87c6 100644
++--- a/auxil/paraglob/src/paraglob.cpp
+++++ b/auxil/paraglob/src/paraglob.cpp
++@@ -4,6 +4,8 @@
++ 
++ #include "ahocorasick/AhoCorasickPlus.h"
++ 
+++#include <cstdint>
+++
++ paraglob::Paraglob::Paraglob()
++   : my_ac(new AhoCorasickPlus) {}
++ 
++-- 
++2.47.3
++
 -- 
 2.47.3
 
