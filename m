@@ -4,109 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D2DEA7188
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 05:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA5E9EA7192
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 08:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AB5960FB8;
-	Sun, 19 Apr 2026 05:47:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13BB660FC6;
+	Sun, 19 Apr 2026 08:56:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TTeVMwCPzzCW; Sun, 19 Apr 2026 05:47:02 +0000 (UTC)
+ id Uyg60dFhFpgB; Sun, 19 Apr 2026 08:56:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1256960FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23D9760FA7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776577622;
-	bh=+T5C29nyhWpkTS91jyOUUvbh4sUPVUGtNDfP+YIBbQ0=;
+	s=default; t=1776588993;
+	bh=yu8ZZDNbzonJ2R/AMMgkmHSKT+n8qpC95INzOd6zneM=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=YcCmkfCbyFMjXRIJFlHOeyyu/REV8WFqncxgqjhYMV2ewU7bOCo8cf++zmxh+UV+S
-	 OJt/wPCXUsuXxk6gvXF6FerFpvMnEthuUFKdSXFZYh1NQ9e8Pd4eW5dJLsbdCpVcfZ
-	 GzzMTSK5JaT5Kc32sMcxSCzOG+vioxIbZ1pIBI2LzSdVMLBElR3ZR7E57HgPiUEB1I
-	 OwkoZ9Di7MZypsQGU6Bz+/yWRZrbz2p7PA8q6rMsmBJhMOFojG5uf/HjNiSGNi0pPo
-	 KeN1/9gfWuVRJUcbGGeLKhkjFjs/7bJhVbZ9SPKV/dzZxSFaGs+/JByOuhtfWUrVlT
-	 qcTZ6Cjk/KMyA==
+	b=YMxVGobe+uh2UDnSh0tb/bIEHf1/3MeNfCvenBGni+dyx0ygY54a+0Orrz+DyJFKv
+	 23Mk1hCTqYDgLhPzg5ts8kbU3JfvlL6sCVEoDa8cpDSlAjivsfRKGXeT70eEk/lhhY
+	 2kTM7Rd42cCbxH+BtyrsyTwK+ugw5bVnJjxZ2I9LyFrGW+4Ox/4hTGuBv7YJO7cK4b
+	 aycfSzp3OueGHB4SHOCFX/I6EBErxOzx8G8vWggvtsNgiM7SETMoPuJlzkcn0Vr40h
+	 C6lLqu/JFKXIWN+QjhuQUqya7i1c4qFCMtw/c5ZGJrj/7jMSYA7FPuhC5kREAYR7M0
+	 WDgm2txAWmCag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1256960FA7;
-	Sun, 19 Apr 2026 05:47:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 72639259
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 05:47:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23D9760FA7;
+	Sun, 19 Apr 2026 08:56:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BA5F24D
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 508E9400BB
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 05:47:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D3754044C
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kIL33Uq0VJgc for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 05:46:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102d; helo=mail-pj1-x102d.google.com;
- envelope-from=daniel@0x0f.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 870D5400AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 870D5400AB
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 870D5400AB
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 05:46:58 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- 98e67ed59e1d1-35d965648a2so1738496a91.0
- for <buildroot@buildroot.org>; Sat, 18 Apr 2026 22:46:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776577617; x=1777182417;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yueeA1RmOsL1HHLpfd/m04ar3dSnT5NaECK4tga8V6M=;
- b=YU0Vi+X0SzTi+MAuYMiHderDZIGreQtRSP97ESKDQrVgZmKx+3ajaJov5jMWDLUzWC
- ChkbPHZlCTtmjAcC9ZPcgRRmRqF+RE2rovYs2qPMOxINaM5eG8xRaTipwxROMDALEyZh
- V0cKjhg9leIKLP9WKdnA43X0TXChT2jUpihNc0evHWcy9T0fNAFLZ9/wppV20103jRQH
- nj7s4RcOAEsxLce0fcovEbnwx+j+frEFc4pm+ubEm2VckwYbVWMXC2CUepY07BfD4tYu
- hzL3QD3BbrFISlOT3SXtlbtChBke3auCkghiNmHktvjq0mmOS2Lt1yL7tore/T3yGKat
- o65Q==
-X-Gm-Message-State: AOJu0YxUHr8kmYrdHpZvuLFpClRXErDr6rL2N1KTzs4d7PDsS4HlI02x
- ag1JNjbPZPCwIGLUnEm+BoMpXAHd/jAasBIyXvXwGhj/Xp74KglL8phu6HCfJBw/NmRJUMN/OUb
- 1x7jV
-X-Gm-Gg: AeBDieuVHfP5F//0Qb/URuhqqgSu5TzxjAmLwIYFPkaMjix7BGQlBXtiPYBF7fO6hPG
- XtzxtKbnBRmuQVxqbaIVgPltag2ja0T89fohsgiKMdeSJrvHWMlcSmutUDilB/yCj9nU5dZV+yb
- TytIwY3rls/Huma/0bklD4AF2tyaXtYK4jU7Jmj/C2IqF3SAoiUQbaJjRY2AD94Tneky1UkppRo
- /d6wzpLR1HiGcH6Ruk21vtNyasHeu+sJqnRvEWPlMruNaKAuzRGokUkPbJTXRRWvEV8AU8u9Ip1
- HGsRNj2y4lOlwgPzCQV/xxMpItelfxEGytxUnA2s/Gc73HeBJbTJ1fr+IkMQGvEs3xNtHQuSbCY
- DrNlxVyQs33VmEpJdUwK3JzBjbHPjex7UzoRPgHxsu97KgL74P21m9zUdbWCR6kYxAJFyG2IKk7
- EWckMvMWKjZQEt5KVxwen5KJ0f7Ah0i4cHUvU6tZihgqdOWZm+sH+G0k9bRzh9A49pVCQaGGsMb
- JsosWQdlRXtdV8dSLtjAZ8+
-X-Received: by 2002:a17:90b:3d86:b0:35d:a90d:580e with SMTP id
- 98e67ed59e1d1-36140490bedmr9251584a91.23.1776577617228; 
- Sat, 18 Apr 2026 22:46:57 -0700 (PDT)
-Received: from kinako.work.home.arpa
- (p1329195-ipxg00a01sizuokaden.shizuoka.ocn.ne.jp. [114.145.5.195])
- by smtp.googlemail.com with ESMTPSA id
- 98e67ed59e1d1-3613fa8e5d3sm3223150a91.2.2026.04.18.22.46.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 Apr 2026 22:46:55 -0700 (PDT)
-From: Daniel Palmer <daniel@thingy.jp>
+ id XmVrksZwP-Lz for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 08:56:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.101;
+ helo=smtpcmd02101.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B35994029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35994029B
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B35994029B
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 08:56:28 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id ENx2wvbK6xFXLENx2w68NH; Sun, 19 Apr 2026 10:56:24 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Daniel Palmer <daniel@thingy.jp>
-Date: Sun, 19 Apr 2026 14:46:45 +0900
-Message-ID: <20260419054645.2019170-1-daniel@thingy.jp>
-X-Mailer: git-send-email 2.53.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun, 19 Apr 2026 10:56:23 +0200
+Message-ID: <20260419085623.1200423-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=thingy.jp; s=google; t=1776577617; x=1777182417; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=yueeA1RmOsL1HHLpfd/m04ar3dSnT5NaECK4tga8V6M=;
- b=hw3w7SX1IPIUnOgjbC+sjtOUP3JtDQ+w6hAozZLKViYAVDFR/0zrmXriIZsZMOs00y
- edxDOLDuYLaAcTrtSKKVboIETttAoRv2LpR7IOYDCIqflo6noYPacs2Vpwpiv/gbXDFY
- R/5DQRBDXehVeCUA8h8tXuD7gkTg17haFncz8=
+X-CMAE-Envelope: MS4xfNHAyLg1sHbWTHH9Tmr+Lv7W7uoBmJoSYk/UCICiPVbshbK8J+j/pwtDT0kna63DkpjaEW1YuVGtihEawyQsAWw+Pj6QaE/gWJDujW4v6AsHB9uERsvU
+ ZQjBS32ZcaOUMmRDwZol/Sfd24wdzkE8icxrJhzvaD7yjRXG8nouJCr0xp48a+mdwwf7a3yzNYFwc85rF5WIS4Gm+MMV07fQSl63RgXs9fi46SJ/a22WfopN
+ 9stscTDR9R7vTNz7DhDCpITU9taMSU6rErTX7bifonmwmG94NEhsu9/MexrmYUZyJuNqieQmfJ0mZnHTcD3M8g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1776588984; bh=VSTFz33fQii+47MAFtW4hg/Acnze00FcAjVWJs+Ow5U=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YpaArTGnM8FS0qdKsP1Ks0+hlkmPPdudsoIr5vtt8zqlTsOiOCGE+euuK0H8lH+65
+ lsH3X9tp3PtjMSBXnSztl3Sc6RX/h+1w3hm8LF+ypdDf9soK7uW3WnnG8mt7hbdiwx
+ oHhzlDBUr8u2lUKEMp9rokISakTQjgSQPcsJR3sqOBK4rgw0I+TfRSRYt2K9+9Pd2q
+ P/CaKBmeWox7lQbz5fzTJvWJjPMLR6L07+z+70ySCPMdMs0qROPUL5St5xelklst9H
+ 7uf8hDqfdy4FLmN4fvZ/N5m1M5Nj1EfvROn0cq/TYEh19GK82f3s8PYv4mYRSTaRzf
+ 3QgegV5NkMQGg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=thingy.jp
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=thingy.jp header.i=@thingy.jp header.a=rsa-sha256
- header.s=google header.b=hw3w7SX1
-Subject: [Buildroot] [RFC PATCH] m68k: Add 68000 nommu support
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=YpaArTGn
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.123
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,54 +96,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Everyone thinks they like ARM but secretly they want to run
-Linux on their Megadrive[0].
+For release note, see:
+https://firefox-source-docs.mozilla.org/security/nss/releases/nss_3_123.html
 
-Building a working toolchain/userland for nommu m68k is a bit
-difficult because of the bitrotten tools all over the place and
-one big issue is GCC generates code that uses unaligned
-accesses that will cause an exception on 68000 machines if you
-aren't careful.
-
-Buildroot can easily create a working toolchain and userland
-for nommu m68k so why not?
-
-0 - This isn't a joke, I'm working on this. I have u-boot working
-    on the Megadrive, Linux is already working on a bunch of 68000
-    machines and I just need to get everything a little bit smaller
-    to get into 4MB of RAM.
-
-Signed-off-by: Daniel Palmer <daniel@thingy.jp>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- arch/Config.in.m68k | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-index 235cafacf5b7..74a197934ff1 100644
---- a/arch/Config.in.m68k
-+++ b/arch/Config.in.m68k
-@@ -23,6 +23,11 @@ choice
- 	help
- 	  Specific CPU variant to use
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index d0d278c7f6..31c1315783 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_122_1_RTM/src/SHA256SUMS
+-sha256  de5a655da82a67e502b802ae0b53f3eb02ea53f509c3fc0ab54a892e04493bbf  nss-3.122.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_123_RTM/src/SHA256SUMS
++sha256  2145113398a269779a7390515a1638800836b130248e33f93243268c026d4e49  nss-3.123.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index b40cab03c9..a47856b03e 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_m68k_68000
-+	bool "68000"
-+	select BR2_m68k_m68k
-+	select BR2_SOFT_FLOAT
-+
- config BR2_m68k_68030
- 	bool "68030"
- 	select BR2_m68k_m68k
-@@ -41,6 +46,7 @@ config BR2_m68k_cf5208
- endchoice
- 
- config BR2_GCC_TARGET_CPU
-+	default "68000"		if BR2_m68k_68000
- 	default "68030"		if BR2_m68k_68030
- 	default "68040"		if BR2_m68k_68040
- 	default "5208"		if BR2_m68k_cf5208
+-LIBNSS_VERSION = 3.122.1
++LIBNSS_VERSION = 3.123
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
