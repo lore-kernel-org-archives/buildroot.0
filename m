@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3829EA71AD
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 21:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C08EA71AA
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 21:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4912361019;
-	Sun, 19 Apr 2026 21:39:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C652E4103F;
+	Sun, 19 Apr 2026 21:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tO3ECoDkkReP; Sun, 19 Apr 2026 21:39:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E8nEu5QhQ6g4; Sun, 19 Apr 2026 21:46:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3848961001
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79B594102F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776634780;
-	bh=BeD4oKXGSAKs4OnNv5HhiAI9qlr/L7VlFXGp6br7UJ0=;
+	s=default; t=1776635200;
+	bh=q922sih7/9nf+uxUiXLDITJg33r1ycTcL8TUtmDxDQ8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kD96sBNibFYVmw2G/0V5o6aRd/ckYpFSyLtOdKB27ZBfk/O8UGAAUHLrY5ZCKC6Ds
-	 OTZ9yTcJqVfolH2Enoqos8rm5mOVN/uNXzJoobGHT1bmpIzv3JahiDeoh7fnQSebMR
-	 +YptGeeIUKB81SIFNuy0sEBROXJgbCL8J8nx6CY1aslS0HJZ3y643zK6+U+a0yR9BJ
-	 ymmmKAkZ1F3Nb2RoJIxC+YG+4WbBchwl/sFVbUgCXuaB6YWl2M/n7YO7ORMqc8qq2M
-	 34RUOkTwDBM4o6KVK12upEbUqJW92JdtLphHMkXkrH0tvVYRflulte3+1DY+zv3SjB
-	 neC26B4TplkeQ==
+	b=FnJkehZWacqsXGlgqGazmGXlsxnxO/6nsOzsXP2bdb+ShP8luC4Qo6teGUNGySp1r
+	 ihB/NUkfacT0+wddz93ZRBaWMrVQGwZtnp7rBMRBlZYiPuzGh6Y1uvtGOWYZQMuXzP
+	 E8blzrJC2NrYrWBEbJBJG4cMXNTfl+t7i0rTCNH2qO/Rs/lRLw/EzDYYFCBMSHef5m
+	 zKICE5M5W15oStaB/dWQ71F+FT2WFI4iG1pGf+2lEzGcY6o2bwpn9dn9V067cZOlxw
+	 Kb0RIWyq3SnYOZbl/LPeR+XIy57rtQvwTDQWEEymgw1EyezNuXw4CJvAMOPQMO+BLK
+	 tzC5Eca42zPTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3848961001;
-	Sun, 19 Apr 2026 21:39:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79B594102F;
+	Sun, 19 Apr 2026 21:46:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60A522B8
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:39:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D66B62B8
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46CB0407B5
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:39:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC24E404A6
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:46:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JMyKza82E1wb for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 21:39:36 +0000 (UTC)
+ id YhWbA5goxlps for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 21:46:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C2E140484
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 938334041C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C2E140484
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:39:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 938334041C
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 21:46:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E85F281F98; Sun, 19 Apr 2026 21:39:35 +0000 (UTC)
+ id 486CE81F98; Sun, 19 Apr 2026 21:46:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 19 Apr 2026 23:30:58 +0200
+Date: Sun, 19 Apr 2026 23:43:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0104d731834ae1a50185f7bf456d62b06fda0f70
-X-Git-Newrev: 0f5e9556a13cf662732aeaa829a4b0e661e3a7ab
+X-Git-Oldrev: bf7c35d4f799cacc382633b01f9b934ea59af21a
+X-Git-Newrev: a37d904419b1ab56c722c629184072709f54b499
 X-Patchwork-Hint: ignore
-Message-Id: <20260419213935.E85F281F98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pv: bump to version 1.10.5
+Message-Id: <20260419214637.486CE81F98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stress-ng: bump to 0.21.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,65 +68,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f5e9556a13cf662732aeaa829a4b0e661e3a7ab
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a37d904419b1ab56c722c629184072709f54b499
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-See NEWS:
-https://codeberg.org/ivarch/pv/src/tag/v1.10.5/docs/NEWS.md
+Changelog:
+https://github.com/ColinIanKing/stress-ng/releases/tag/V0.21.00
 
-Changes in 1.10.5:
-- Fix --bits option rate calculation and --gauge compatibility
-- Security: ignore TMP/TMPDIR, improve memory safety
-- Fix terminal state garbling on exit with --cursor
-- Improve ETA calculation across suspend/resume
-- Better --watchfd and --line-mode handling
-- Address issues found by security audit tools
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-[Julien:
- - move DEVELOPER entry in a separate commit
- - add link to NEWS in commit log
-]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/pv/pv.hash | 2 +-
- package/pv/pv.mk   | 2 +-
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pv/pv.hash b/package/pv/pv.hash
-index 76595904d4..4ddce35f89 100644
---- a/package/pv/pv.hash
-+++ b/package/pv/pv.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
- # using key: D8FF44A79CC8A61EF694FA7EB883E01314DA8E84
- # from: https://codeberg.org/a-j-wood.gpg
--sha256  aa1630c79af6960a8922ffa64d2c3e7f87486da21fcb57e277824294fd266742  pv-1.10.3.tar.gz
-+sha256  ab21b4f8662280646b6a02e1b9f096790918f89c952bbe0d06fef75d3b52fb15  pv-1.10.5.tar.gz
- 
- # Hash for license file
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  docs/COPYING
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 41a7280f6f..efe305cf6e 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index f91aa76054..81123b3587 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fe9e5161ac186c6ada22963251ff701fe3275fac2c5b87bdb59c4cab08aaeaae  stress-ng-0.20.00.tar.gz
++sha256  1339cbc6ccbff7e2ee2177bf0fd67e7b94e8ff7b07fe89bcfaec0280d800cf34  stress-ng-0.21.00.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 32ac21b540..4181c5ed1a 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PV_VERSION = 1.10.3
-+PV_VERSION = 1.10.5
- PV_SITE = https://www.ivarch.com/programs/sources
- PV_LICENSE = GPL-3.0+
- PV_LICENSE_FILES = docs/COPYING
+-STRESS_NG_VERSION = 0.20.00
++STRESS_NG_VERSION = 0.21.00
+ STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
