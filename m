@@ -4,82 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69A4AEA7190
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 13:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE71EA7190
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 13:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0521240F87;
-	Sun, 19 Apr 2026 13:43:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA3664094A;
+	Sun, 19 Apr 2026 13:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mNypG9uxCjBx; Sun, 19 Apr 2026 13:43:32 +0000 (UTC)
+ id vDNh1MFFbX9f; Sun, 19 Apr 2026 13:55:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F4C840F8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C01964094C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776606212;
-	bh=hGJX90jpTGBLGMa7T0WdZEHx45/cbAfk/hh95zxdPco=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=SPhWAwlkinkdxdr4y/4xmD+d/VmtyJ7Blf+2AnnX1oTPirU3JQVA7WUMsvQp7wP9k
-	 G4FuYejMvuv3ku54dhxagc87ncyDuheCvJN6Y9g9BjebjP3QQ66LDuxeY8FMb1f6pN
-	 qaSbEb3CDDbJjFK0gC8G6gmnbwAE1f3ErJTWz+/lKhJbijghKnKM5UAQrV0VQOfp0D
-	 4cO/FVB8LviFStPHFBL6b+lAI7fZuIVj7P3YybLMkklPE0wqDjwaCOCqkREPhCFliT
-	 R3Myf91/cq5oBzdYQZg192OEsgmZLYZhpwFC/PKvH6Ar+9BLFrdAHj4WnDQ18Etbc0
-	 alA3SUbDjGS1g==
+	s=default; t=1776606938;
+	bh=rDxbPWrve1WURFd3YhiNzG/JGmhfEa1qfHLxmHWeKgs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=cQ0naCQrY2qPriyT1S5+HiSuk19H1nsofBL+7kZLDVG35CqrR+c+pR1/PdSHqClVx
+	 lMg8LHf3yBtXwICCDBRT421bBp5MX09+1P113yJqxgi6zdi+gdoG9DVG28Dv2eHKk4
+	 nqvEm6OBB1g6LdujH43JGpXrQC743+DLCcOCMwe/ZjFDOSLCvjgYE1wgxUFIZAR9lI
+	 Fp6m3ZNrKoY0qmFtSwUSxPBPNvRtPRBEU0taLHucRzpPJZvwyTJy9JR92O9zqheKR/
+	 MsnTlKAaA+nFpgS5q2aSYjiu4x66wkI7ZnDCVlPKc44EMJnq2e6uiPeCusw//wTZJi
+	 FWxL128E5c5sg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F4C840F8C;
-	Sun, 19 Apr 2026 13:43:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C01964094C;
+	Sun, 19 Apr 2026 13:55:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B4C2C2B8
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:43:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EC6E624D
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96EF281E6B
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:43:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE21882254
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:55:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tyg-9MUko9L for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 13:43:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2EF8B81E59
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EF8B81E59
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2EF8B81E59
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:43:29 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cc94.dip0.t-ipconnect.de [79.214.204.148])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 40BB8A4C37AD;
- Sun, 19 Apr 2026 15:43:27 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37054)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wESQo-0000000065a-3Esa;
- Sun, 19 Apr 2026 13:43:26 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 5kXFS6xVMcOX for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 13:55:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF59E82251
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF59E82251
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 13:55:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 62AF081841; Sun, 19 Apr 2026 13:55:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 19 Apr 2026 15:43:26 +0200
-Message-ID: <20260419134326.3225671-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: --
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1776606207;
- bh=2n6GLyN7ivi60qWmYu54gzkadQIc1G2JSkY7lwiQlAU=;
- h=From:To:Cc:Subject:Date:From;
- b=mimKDIxf3SHIgXJ5t7J4HPto9J/5uSls2LOkUqXiI2lYSc41nJIMDTd2A18B8Zzz8
- UmwIQVLjFpaiNiq9lYd0enKCQBihwjAf739eHMjmry6ZRPoJ09+yWSyrwoArsYlB6B
- I7vpaA5+BmK8vSg3QMe5UGPTyEoCtxU3r/VfDFb4ZK5XQgMH4nw/TgrjcV3c6dxvrH
- hHgayiKPJSfWta2KZKGVSLURDwG5tSTjqnQe6sqMdjUcDuPBop/O/MGtujaF8djC2K
- mwg+SHZau37oB0CeSHy5oUVV+GPqYiZHTP8HsAtLa9Dda1mAER5mjDuHj2tzxSOVjX
- yAZCkFNpigkhg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=mimKDIxf
-Subject: [Buildroot] [PATCH v2 1/1] package/lftp: bump version to 4.9.3
+Date: Sun, 19 Apr 2026 14:11:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ccf69ab8c4cedfe5a1fdb7e5d90b962045064444
+X-Git-Newrev: a7bb4571f4562b6bf35354d2b33ad4f9450bb2e6
+X-Patchwork-Hint: ignore
+Message-Id: <20260419135536.62AF081841@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.{1, 6, 12, 18, 19}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,236 +69,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/lavv17/lftp/releases/tag/v4.9.3
-
-Removed patches which are included in this release.
-
-Added patch for gnulib to fix linking error which would be introduced
-by this bump.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a7bb4571f4562b6bf35354d2b33ad4f9450bb2e6
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v2: Added patch for gnulib to fix linking error
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  4 ++--
+ package/linux-headers/{5.10.252 => 5.10.253} |  0
+ package/linux-headers/{5.15.202 => 5.15.203} |  0
+ package/linux-headers/{6.1.168 => 6.1.169}   |  0
+ package/linux-headers/{6.12.81 => 6.12.82}   |  0
+ package/linux-headers/{6.18.22 => 6.18.23}   |  0
+ package/linux-headers/{6.19.12 => 6.19.13}   |  0
+ package/linux-headers/{6.6.134 => 6.6.135}   |  0
+ package/linux-headers/Config.in.host         | 14 +++++++-------
+ 10 files changed, 14 insertions(+), 14 deletions(-)
 
- .checkpackageignore                           |  2 -
- ...-LibreSSL-following-commit-537f37898.patch | 46 ---------------
- package/lftp/0001-gnulib.patch                | 59 +++++++++++++++++++
- ..._ssl.c-fix-build-with-libressl-2.7.0.patch | 36 -----------
- package/lftp/lftp.hash                        |  6 +-
- package/lftp/lftp.mk                          |  2 +-
- 6 files changed, 63 insertions(+), 88 deletions(-)
- delete mode 100644 package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch
- create mode 100644 package/lftp/0001-gnulib.patch
- delete mode 100644 package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 26c13d5387..3e06e60fa2 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -474,8 +474,6 @@ package/leafnode2/0001-cross_makefile.patch lib_patch.Upstream
- package/leveldb/0001-Fix-compilation-with-g-4.8.2.patch lib_patch.Upstream
- package/leveldb/0002-CMake-install-libmemenv.a.patch lib_patch.Upstream
- package/leveldb/0003-CMakeLists.txt-check-for-atomic-library.patch lib_patch.Upstream
--package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch lib_patch.Upstream
--package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch lib_patch.Upstream
- package/libabseil-cpp/0001-force-position-independent-code.patch lib_patch.Upstream
- package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch lib_patch.Upstream
- package/libart/0001-art-config-cross.patch lib_patch.Sob lib_patch.Upstream
-diff --git a/package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch b/package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch
-deleted file mode 100644
-index 8a40351b63..0000000000
---- a/package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 0276d5c239c41b3a63f738a5dc47fd56ac389cf0 Mon Sep 17 00:00:00 2001
--From: Ganael Laplanche <ganael.laplanche@martymac.org>
--Date: Thu, 20 Aug 2020 12:29:05 +0200
--Subject: [PATCH] Fix build with LibreSSL (following commit 537f37898)
--
--Upstream status: https://github.com/lavv17/lftp/commit/0276d5c239c41b3a63f738a5dc47fd56ac389cf0
--Signed-off-by: Artem Panfilov <artemp@synopsys.com>
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/lftp_ssl.cc | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
--index 14a3b9d4..968d3fb2 100644
----- a/src/lftp_ssl.cc
--+++ b/src/lftp_ssl.cc
--@@ -34,7 +34,7 @@
-- #include "misc.h"
-- #include "network.h"
-- #include "buffer.h"
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
-- #define X509_STORE_CTX_get_by_subject X509_STORE_get_by_subject
-- #endif
-- extern "C" {
--@@ -840,7 +840,7 @@ lftp_ssl_openssl_instance::lftp_ssl_openssl_instance()
--    ssl_ctx=SSL_CTX_new();
--    X509_set_default_verify_paths(ssl_ctx->cert);
-- #else
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
--    SSLeay_add_ssl_algorithms();
-- #endif
--    ssl_ctx=SSL_CTX_new(SSLv23_client_method());
--@@ -1080,7 +1080,7 @@ void lftp_ssl_openssl::copy_sid(const lftp_ssl_openssl *o)
-- 
-- const char *lftp_ssl_openssl::strerror()
-- {
---#if OPENSSL_VERSION_NUMBER < 0x10100000L
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
--    SSL_load_error_strings();
-- #endif
--    int error=ERR_get_error();
---- 
--2.25.1
--
-diff --git a/package/lftp/0001-gnulib.patch b/package/lftp/0001-gnulib.patch
-new file mode 100644
-index 0000000000..4fecabc0b4
---- /dev/null
-+++ b/package/lftp/0001-gnulib.patch
-@@ -0,0 +1,59 @@
-+From 353a3236d9328349c18ce2e4e984755cb4a76ea7 Mon Sep 17 00:00:00 2001
-+From: Jan Palus <jpalus@fastmail.com>
-+Date: Sun, 17 Nov 2024 18:58:42 +0100
-+Subject: [PATCH] md5-stream, sha*-stream, sm3-stream: Avoid duplicate symbols.
-+
-+* lib/md5-stream.c (GL_OPENSSL_INLINE): Remove definition, that caused
-+the symbols defined in md5.o to be defined in md5-stream.o as well.
-+* lib/sha1-stream.c (GL_OPENSSL_INLINE): Likewise.
-+* lib/sha256-stream.c (GL_OPENSSL_INLINE): Likewise.
-+* lib/sha512-stream.c (GL_OPENSSL_INLINE): Likewise.
-+* lib/sm3-stream.c (GL_OPENSSL_INLINE): Likewise.
-+
-+Copyright-paperwork-exempt: Yes
-+
-+Upstream: https://gitweb.git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=353a3236d9328349c18ce2e4e984755cb4a76ea7
-+Upstream issue: https://github.com/lavv17/lftp/issues/743
-+
-+[Bernd: partially backported to 4.9.3]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ ChangeLog           | 10 ++++++++++
-+ lib/md5-stream.c    |  3 ---
-+ lib/sha1-stream.c   |  3 ---
-+ lib/sha256-stream.c |  3 ---
-+ lib/sha512-stream.c |  3 ---
-+ lib/sm3-stream.c    |  3 ---
-+ 6 files changed, 10 insertions(+), 15 deletions(-)
-+
-+diff --git a/lib/md5-stream.c b/lib/md5-stream.c
-+index fdd2bd8b4b..2cbdda6b0f 100644
-+--- a/lib/md5-stream.c
-++++ b/lib/md5-stream.c
-+@@ -22,9 +22,6 @@
-+ #include <config.h>
-+ 
-+ /* Specification.  */
-+-#if HAVE_OPENSSL_MD5
-+-# define GL_OPENSSL_INLINE _GL_EXTERN_INLINE
-+-#endif
-+ #include "md5.h"
-+ 
-+ #include <stdlib.h>
-+diff --git a/lib/sha1-stream.c b/lib/sha1-stream.c
-+index cbdf95ab76..b713e678a6 100644
-+--- a/lib/sha1-stream.c
-++++ b/lib/sha1-stream.c
-+@@ -24,9 +24,6 @@
-+ #include <config.h>
-+ 
-+ /* Specification.  */
-+-#if HAVE_OPENSSL_SHA1
-+-# define GL_OPENSSL_INLINE _GL_EXTERN_INLINE
-+-#endif
-+ #include "sha1.h"
-+ 
-+ #include <stdlib.h>
-+-- 
-+2.52.0
-+
-diff --git a/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch b/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
-deleted file mode 100644
-index 4251a5e176..0000000000
---- a/package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 3ffa0132987bdde986c82c924bc51b13b37f8b54 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 6 Apr 2022 22:56:21 +0200
--Subject: [PATCH] src/lftp_ssl.c: fix build with libressl >= 2.7.0
--
--X509_OBJECT_get0_X509_CRL is provided by libressl since version 2.7.0
--and
--https://github.com/libressl-portable/openbsd/commit/9866ae34c0af718973475296bd9ef036d3aaa94e
--resulting in the following build failure:
--
--/nvmedata/autobuild/instance-21/output-1/host/opt/ext-toolchain/bin/../lib/gcc/microblaze-buildroot-linux-musl/11.2.0/../../../../microblaze-buildroot-linux-musl/bin/ld: /nvmedata/autobuild/instance-21/output-1/host/microblaze-buildroot-linux-musl/sysroot/usr/lib/libcrypto.a(x509_lu.c.o): in function `X509_OBJECT_get0_X509_CRL':
--(.text+0xc3c): multiple definition of `X509_OBJECT_get0_X509_CRL'; /nvmedata/autobuild/instance-21/output-1/build/lftp-4.9.2/src/.libs/liblftp-network.a(liblftp_network_la-lftp_ssl.o):(.text+0x894): first defined here
--
--Fixes:
-- - http://autobuild.buildroot.org/results/7fd1dfd5bc750ae5a3278ca950c838ae90704b23
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/lavv17/lftp/commit/3ffa0132987bdde986c82c924bc51b13b37f8b54]
-----
-- src/lftp_ssl.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/lftp_ssl.cc b/src/lftp_ssl.cc
--index 26e91e4b..a814543d 100644
----- a/src/lftp_ssl.cc
--+++ b/src/lftp_ssl.cc
--@@ -664,7 +664,7 @@ int gnutls_x509_crt_list_import(gnutls_x509_crt_t *certs, unsigned int* cert_max
-- #elif USE_OPENSSL
-- //static int lftp_ssl_passwd_callback(char *buf,int size,int rwflag,void *userdata);
-- 
---#if OPENSSL_VERSION_NUMBER < 0x10100000L || LIBRESSL_VERSION_NUMBER
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined (LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
-- // for compatibility with older versions
-- X509_OBJECT *X509_OBJECT_new()
-- {
-diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
-index e4c3305c03..8a548fba0a 100644
---- a/package/lftp/lftp.hash
-+++ b/package/lftp/lftp.hash
-@@ -1,7 +1,7 @@
--# From http://lftp.yar.ru/ftp/lftp-4.9.2.md5sum
--md5  b3a272ecb7a2b60e3827776f90ffb2f3  lftp-4.9.2.tar.xz
-+# From http://lftp.yar.ru/ftp/lftp-4.9.3.md5sum
-+md5  f2e4ffa81b68106a14d354d50635bbf4  lftp-4.9.3.tar.xz
- # Locally calculated after checking gpg signature
--sha256  c517c4f4f9c39bd415d7313088a2b1e313b2d386867fe40b7692b83a20f0670d  lftp-4.9.2.tar.xz
-+sha256  96e7199d7935be33cf6b1161e955b2aab40ab77ecdf2a19cea4fc1193f457edc  lftp-4.9.3.tar.xz
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index f6a6e0dfa7..cd69a9dd05 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  c2b09c3643946a7097c5371e1dcb123c66505ea30fafd0b0a22dc1d5f0228847  linux-6.12.81.tar.xz
+-sha256  6378697b36376bf4e727a47402fee340ca4e3b146d5b407d3753cbff300f37bf  linux-6.6.134.tar.xz
+-sha256  e0856fe51e444986425886533ebb91d8540189e80c3f0365c76e4beb7439776e  linux-6.1.168.tar.xz
++sha256  0e570b05cd73981bb4a5bcf0e03751d4f0e2ac776c6d4fdcc2366bed3e0f19a9  linux-6.12.82.tar.xz
++sha256  d3d238ede7169dedb642898af0cb1777e9913171eb1c750eb4d9f82350a7132a  linux-6.6.135.tar.xz
++sha256  e0cbe674801749075b93008d8854dbf1c8d300805ada0b60f6f907bbb83aef2c  linux-6.1.169.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  0bc1bdf74957e276793691865ffb71505809706d9243a42e9704aad0f128cdd4  linux-5.15.202.tar.xz
+-sha256  34b3fbe2c9eeb767fc7eea4b9516e0dd44b79401ceb13e41713096b8eb270afb  linux-5.10.252.tar.xz
++sha256  0bebe7d82a57e98792a407109566f1813fde97aaf7f735c1c7e6feebe833dc64  linux-5.15.203.tar.xz
++sha256  ec0724928050e8e2f6226fe8bbb206f42a951c0ed2dbb533c5462789f6d75ac8  linux-5.10.253.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+ sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 75994f545c..66c28f474e 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -2,8 +2,8 @@
+ sha256  bb7f6d80b387c757b7d14bb93028fcb90f793c5c0d367736ee815a100b3891f0  linux-7.0.tar.xz
  
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 483ca298cd..50b3f9809f 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  ce5c4f1205f9729286b569b037649591555f31ca1e03cc504bd3b70b8e58a8d5  linux-6.19.12.tar.xz
+-sha256  a23c92faf3657385c2c6b5f4edd8f81b808907ebe603fa30699eae224da55f59  linux-6.18.22.tar.xz
++sha256  0559b1fea740e71714b4368023902b7d098c45ac1faa3176eab392c867645648  linux-6.19.13.tar.xz
++sha256  2a2d8e76bfcd135ab861bb9795211574eeff6d4ede9cc920f7c137587e835134  linux-6.18.23.tar.xz
  
--LFTP_VERSION = 4.9.2
-+LFTP_VERSION = 4.9.3
- LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
- LFTP_SITE = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPL-3.0+
--- 
-2.47.3
-
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.252 b/package/linux-headers/5.10.253
+similarity index 100%
+rename from package/linux-headers/5.10.252
+rename to package/linux-headers/5.10.253
+diff --git a/package/linux-headers/5.15.202 b/package/linux-headers/5.15.203
+similarity index 100%
+rename from package/linux-headers/5.15.202
+rename to package/linux-headers/5.15.203
+diff --git a/package/linux-headers/6.1.168 b/package/linux-headers/6.1.169
+similarity index 100%
+rename from package/linux-headers/6.1.168
+rename to package/linux-headers/6.1.169
+diff --git a/package/linux-headers/6.12.81 b/package/linux-headers/6.12.82
+similarity index 100%
+rename from package/linux-headers/6.12.81
+rename to package/linux-headers/6.12.82
+diff --git a/package/linux-headers/6.18.22 b/package/linux-headers/6.18.23
+similarity index 100%
+rename from package/linux-headers/6.18.22
+rename to package/linux-headers/6.18.23
+diff --git a/package/linux-headers/6.19.12 b/package/linux-headers/6.19.13
+similarity index 100%
+rename from package/linux-headers/6.19.12
+rename to package/linux-headers/6.19.13
+diff --git a/package/linux-headers/6.6.134 b/package/linux-headers/6.6.135
+similarity index 100%
+rename from package/linux-headers/6.6.134
+rename to package/linux-headers/6.6.135
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 366d17ad09..c774796377 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -472,13 +472,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.252"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.202"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.168"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.134"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.81"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.22"	if BR2_KERNEL_HEADERS_6_18
+-	default "6.19.12"	if BR2_KERNEL_HEADERS_6_19
++	default "5.10.253"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.203"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.169"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.135"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.82"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.23"	if BR2_KERNEL_HEADERS_6_18
++	default "6.19.13"	if BR2_KERNEL_HEADERS_6_19
+ 	default "7.0"		if BR2_KERNEL_HEADERS_7_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
