@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB9FAEA71A2
-	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 19:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F255EA71A1
+	for <buildroot@archiver.kernel.org>; Sun, 19 Apr 2026 19:30:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A75EE80BB2;
-	Sun, 19 Apr 2026 19:24:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vxTRMJWfxMJq; Sun, 19 Apr 2026 19:24:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05C1F80AD9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776626694;
-	bh=OwIb8xWAq+A673CG4/79p27CH7miB0gq5tBO+avAs/s=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=spwozYfn6/sNiLwrzlbTxaGY/cpG5EDC//lOJtX3LZz4Iv4VJZL9AWtV4toMmOeba
-	 PMgRrBlZpRrBE74cF7uLqfDKuGBRVYKblarUJ6RncFJrkv/V3NPfLYTX+e3LABVPnD
-	 +aUU+YqCNB0V97VIxwMVX6nuuXlXXRge2Jw8tnPHNali88AaGTddwuVN5Mm4u+m3j6
-	 rOor6fj63yqw3HeFPt6AOdrPjP/QxRM2VDf2Cov17AJToNIXJ9uhF5z3bU5kx7HWWV
-	 uFw09nx1mm728RV+/r7fKSEh0NzsYg6VA1w8foJj4NthQGdnWj+TK78kIbuYs+3s4Y
-	 ztpfj8Lo0LmGw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05C1F80AD9;
-	Sun, 19 Apr 2026 19:24:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C48B2B8
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:24:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31A6B60FF0
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:24:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4BB760FFE;
+	Sun, 19 Apr 2026 19:30:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3HdVLCd1kUHz for <buildroot@buildroot.org>;
- Sun, 19 Apr 2026 19:24:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0CC8660FEF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CC8660FEF
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0CC8660FEF
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:24:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id D7E5B2003C1;
- Sun, 19 Apr 2026 21:24:47 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Apr 2026 21:24:47 +0200
-MIME-Version: 1.0
-Date: Sun, 19 Apr 2026 21:24:47 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260419140540.261219-1-bernd@kuhls.net>
-References: <20260419140540.261219-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <1bbf05bde7c47408d89b3a8702acddfd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776626689;
- bh=8tPwqenLbrORQZ+pUf3KghY1YRu/4yobdrgusd37iKk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=LazfCD39I0wrtaA8vRusBjL0tTZrbdBm0DlCgRFurtlc5gTBlHvfauzb3DeeLkJh2
- A74ZRuFOxn+YmTofP89CI1c6E4qH6F9bdbmmoRGmpjzGhHsKvQonDEyIJG/bZr5jBx
- LLYa7IJAkuXdYFDubhWJju5loWYbeKfI/3ysz/ZEkKaxMg1bAps1sg/xu4lqe8s4as
- TFKS0K6YsoCcdRN111mcIpKgooV1kXCql1rXcTlqPiwuJRga0HInQ4qs+H1HhP73A4
- C0063WaeJFBDklFGZAeoyWi/YQrr9j6b+/zE8093F8kyldACv3PeQM+EJBQ71mBohT
- X2YEfKBAnuYIg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LazfCD39
-Subject: Re: [Buildroot] [PATCH 1/1] package/nmap: bump version to 7.99
+ id 8Uj6XorNE18x; Sun, 19 Apr 2026 19:30:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F09960FF2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776627054;
+	bh=RSOrto1zVdSHnBYr8GY/USejt0Ee26Tjjhx/0xMCVr8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NafwiVzQb9nipeUsw8+iGuKuG653ALZ+7A6Zz35M1XbxV4+WilW5qqPgFXlXfnC8o
+	 mZ06RKD0nieFoGcSOiCRGdhSppu6jznKGy/jy3IYNUKxeHnlg59NBL4FW/1FSIMfms
+	 wXQSwmuLJ24M5ot9Hp6zKtDSMsKfpMg8XtWb2llxb7/H3ETvT1Gczkx/+3S9C1gh8Q
+	 t3tYzmwmhr5YF3QTPrlGyfIHRfsohi2KwreLWok2IKYlQKgszo985PlGzs6/Gyrzgh
+	 14v2L/0yFdiLkLy46ZPuE7o8bcg+rWgxXMisCHbNhd/i9k5OjPTPDwEEGiP3/gUYWV
+	 85z43SLnCqAUg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F09960FF2;
+	Sun, 19 Apr 2026 19:30:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DFA9259
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:30:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F40660FF1
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:30:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XmxKgTa_UPhF for <buildroot@buildroot.org>;
+ Sun, 19 Apr 2026 19:30:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1769C60C23
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1769C60C23
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 19:30:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C08EC81F7F; Sun, 19 Apr 2026 19:30:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Apr 2026 21:27:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dcf78651abe57bf745703d6bd95aed6ae2c12af3
+X-Git-Newrev: 5f78b5661f6d44daead89f28346c2c573b33954d
+X-Patchwork-Hint: ignore
+Message-Id: <20260419193050.C08EC81F7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libwebsockets: bump version to
+ 4.5.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,20 +71,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/04/2026 16:05, Bernd Kuhls wrote:
-> https://github.com/nmap/nmap/blob/master/CHANGELOG
-> 
-> Removed patch which is not needed anymore due to upstream commit
-> https://github.com/nmap/nmap/commit/1b3ca45054cd1e569f5fc0da59fceaa7a518b631
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5f78b5661f6d44daead89f28346c2c573b33954d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://github.com/warmcat/libwebsockets/compare/v4.5.7...v4.5.8
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 6d708135d5..654d3007e6 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d08df7634da0a377a4e077400ed6b2d1d25cf0b239e89397cd39432c5eb437ac  libwebsockets-4.5.7.tar.gz
++sha256  b6ade658f4af3a823d0dc806ae5ef0623f0f4f5e2aeb895a0f77c4783840c30e  libwebsockets-4.5.8.tar.gz
+ sha256  6ff2868dd9d9e251de27574342663f4773a8c2f954128899eb6f3c2ba9d9a245  LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 3c7e778ccc..51f3df80f1 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = 4.5.7
++LIBWEBSOCKETS_VERSION = 4.5.8
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = MIT with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
