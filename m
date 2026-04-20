@@ -1,166 +1,172 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1221F5A8C5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 22:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D39F5A8BC
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 22:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D86F83231;
-	Mon, 20 Apr 2026 22:09:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE6E961017;
+	Mon, 20 Apr 2026 22:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NskM-JzvYEwi; Mon, 20 Apr 2026 22:09:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LpIJsnTQEQ1g; Mon, 20 Apr 2026 22:09:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAD2B83155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1818610F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776722940;
-	bh=r5jR0+uRaizicRk1HycK0dQ3g48xSNJCK19n943/k8w=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=U3NyYs/uPJzulQodig8gdllnuRz6tv1f1Ctu4h5E0IvPchRTCVi+UL9VW7/oxa6gu
-	 HUbXTtJjCaPxVH9IOMeYmZZ2G75wr3mKvyk9ZKDZ/J+nnHmTEklGxQ7Ql1LlDX5pob
-	 sYNL8Axp4VCLNflOAgp5XZCc61TonBTBQvOeqyPAQmnX63x+s0Q8fGMBZR3JKJapS/
-	 veHSRMvA112ZercBjncX1nQJjAiM8QMs6beN4swTqOJMPixvLHT3nIAHm1+KZjmTRu
-	 +wNbprj9iF7BhrJu6n3TFlbsuruqc+c7z/d1UNzQ255R2bh2YhVbcMTjdqL1YosVUZ
-	 HfbVzRRauJqmA==
+	s=default; t=1776722942;
+	bh=K8Y5QzmDMJNEo3HRv9D5TgUdjmHAxBxxDO0S9vPKaKM=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=pehjt3hyyIYV2FThGCXKsSw2jOst1qs7JxwEhjIbaQ4R+aFYoeoE8PKSFgfBN2LTg
+	 RKVtWS2dhzUw58JelD8IxPl3pIfFfbf5G9aCVIJzlj45JB/HcJOx0ZQ9lIDacDIdIr
+	 ChApz4lrk4Uojo/osuK2OQlLjRnAS/62qduqqE3YDNcEfJ38QhQuV5wn2/P+daBryp
+	 vS/YyUvOas8Q8l6wPsSV26ffQiJjrQXaSXjA0bf9vBkqoDOf8p1FM9+iy3wGW8Mh1D
+	 SV5JmR9CHi/gQyzKUfWMta816KXocuU50LBdDWCHNEYLRw9KXKG2tURQO36pqYhUK3
+	 Mhlj/IzzBqznw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAD2B83155;
-	Mon, 20 Apr 2026 22:09:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60A91259
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1818610F4;
+	Mon, 20 Apr 2026 22:09:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD2D1259
  for <buildroot@buildroot.org>; Mon, 20 Apr 2026 22:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DAF440084
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF06341110
  for <buildroot@buildroot.org>; Mon, 20 Apr 2026 22:08:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 44Qrm3YeXrmJ for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 22:08:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3tQpcNLD6Z2H for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 22:08:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5761D40051
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5761D40051
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5761D40051
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 22:08:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3F90841104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F90841104
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F90841104
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 22:08:57 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1fn0-1vHSJc0qs4-00unPf; Tue, 21
- Apr 2026 00:08:48 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4JmN-1wFDmN1Xph-00Apgg; Tue, 21
+ Apr 2026 00:08:50 +0200
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Marcus Hoffmann <buildroot@bubu1.eu>, Fiona Klute <fiona.klute@gmx.de>
-Date: Tue, 21 Apr 2026 00:08:37 +0200
-Message-ID: <20260420220839.1232620-1-fiona.klute@gmx.de>
+Date: Tue, 21 Apr 2026 00:08:38 +0200
+Message-ID: <20260420220839.1232620-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260420220839.1232620-1-fiona.klute@gmx.de>
+References: <20260420220839.1232620-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:cYlha4C3/OZE9ZUNKgLaG22IQmmibyWjGcoCypByMWQUzj5SRTA
- 2cs7WtuoysN5hJdC1gmyle6xp0EI4H9T2D8eA6+rfPMFGGDzwjZxv7nTX/q2KdMru5CFtlx
- COzzf7mdEhVpJwH67gmF//fq+jOtScIp/TnYER8XYPHcBz/aJTuaEN/piIEvQBzPHSMr4xG
- HMQ+Oko52RyAmy0C/KUzw==
-UI-OutboundReport: notjunk:1;M01:P0:BFJ+UoLIdek=;N3h3+BPyy+Ere31Ldww8YIBcBgd
- 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
- Ea5RM91aq1T/5JTJiKXpasEw==
+X-Provags-ID: V03:K1:N6VksApCPXvpzEL3N4vpwf1XoNRCZZO55VP9NHYtjELNG2VgHuO
+ MDXv0p/P8ioy5kvUTrNb31FL9IWZIkiGq0MmNPTw0XGOUDHbXnRe2oP3tZ8RmgOPEvdrUnq
+ vD5lli6rykGYTiCWtCOg0osY2KgYHlR9XUhm07VUtxMiQxkduebcGilk8UwBoxvHStVzx7T
+ o6HU2Ihlqba1unF6X3J7A==
+UI-OutboundReport: notjunk:1;M01:P0:9EivL49IBh4=;b/p5U4UP/I2keOT9O7ncGBjjRG4
+ 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
+ By38DA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1776722928; x=1777327728; i=fiona.klute@gmx.de;
- bh=gIkqdOs974GEGpXPXjjin5OfZWqGt1kRo/0CJMjA57o=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1776722930; x=1777327730; i=fiona.klute@gmx.de;
+ bh=/f1DSmyV7y3CCB/ih05dUSIqofm7ItwMxG7BbBG0s2U=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=r3Ug0TKOJkb877IzePYO0r03hytMV+Vv4o7UmMt5kvhRWiCV8CRSm1w8giqJPqVG
- z0YgmqBQc7c/W22FLlWKotX94c+HV7QmIq6j7Jv6y/Tzh29hKHDtL06tvQ2XPA3YH
- tJBBy6D2+uDgMZQLaSAarlfs5hEFKVAhRlNk/lk6gf5qK4XUFCW2rzZK3c69vzx01
- B0D4qV4haU8917p4uusl9/kqkY9jlv9PiBLH26YHZitMqdX+NbVl2kLbD2UcckmTz
- fohlVYd3nl8Dwbe29mfH3NoQdQInaWzyOIMH2XvNu4lOpB3qIUSTT+K22KzlDb4kl
- liqIUDzxlWfv7kWcQg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=MY8BLM+FWEx57FAs9eMkkrU6VHTUqQ+vAR1pZ17nSUDk5gNcY1ebOaxSi2E42pJ7
+ H3o6DR4IGBsn9qiGxDTfSINxQICKrGMfFp8CudCiFTL/jcmvE/OvT66WmMcl1wSyK
+ ux7f15AJ6y0fRo4UZ2cPgjpOS51QIBlZaBmgUOPxtAtRjLZR5BLnKig4MpwPG5Kvy
+ pPK6bLWphfZLLwnzJJrxfEcO561t1NJP4UF7YyPtVlsptqfcjWxWoCHCAyGDeNNV0
+ I93X+finQdDyKmob4ErhIKmy+WYQM0EYewQNR9731sI6M82Uj1OgzWEL7KHVZruYE
+ 27hoBFCiZ1+n/LQ8zg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=r3Ug0TKO
-Subject: [Buildroot] [PATCH 0/2] Add upstream security patches for musl 1.2.6
+ header.s=s31663417 header.b=MY8BLM+F
+Subject: [Buildroot] [PATCH 1/2] package/musl: add upstream security patch
+ for CVE-2026-6042
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -179,48 +185,363 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi everyone,
+Fixes CVE-2026-6042: musl libc: Algorithmic complexity DoS in iconv
+GB18030 decoder
+https://www.openwall.com/lists/oss-security/2026/04/09/19
 
-the patches themselves are pretty standard, importing the upstream
-patches. This is the first time I'm adding CVE tags & ignore rules to
-Buildroot, so please check everything is right.
+Fixes: https://nvd.nist.gov/vuln/detail/CVE-2026-6042
 
-However, I found an annoying thing while looking into the CVE details:
-"make pkg-stats" didn't find any open CVEs for package/musl, I believe
-because CVE-2026-6042 and CVE-2026-40200 have not been tagged with the
-CPE yet in the NVD (status "Awaiting Analysis").
-
-I looked https://db.gcve.eu/ in search of an alternative, and the
-results were mixed:
-
-* https://db.gcve.eu/vuln/cve-2026-40200 has the correct CPE
-
-* https://db.gcve.eu/vuln/CVE-2026-6042 does not: no CPE, and tagged
-  with vendor "musl" and product "libc" which does not match
-
-Unfortunately they don't seem to have a channel for reporting errors.
-So I'm wondering: Is there another reliable source for vulnerability
-information that might be a bit faster to update?
-
-Best regards,
-Fiona
-
-
-Fiona Klute (2):
-  package/musl: add upstream security patch for CVE-2026-6042
-  package/musl: add upstream security patches for CVE-2026-40200
-
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
  ...-slowness-incorrect-mappings-in-icon.patch | 324 ++++++++++++++++++
- ...do-heap-corruption-from-bug-in-doubl.patch |  48 +++
- ...ude-oob-array-writes-independent-of-.patch |  97 ++++++
- ...06-qsort-fix-shift-UB-in-shl-and-shr.patch |  43 +++
- package/musl/musl.mk                          |   8 +
- 5 files changed, 520 insertions(+)
+ package/musl/musl.mk                          |   3 +
+ 2 files changed, 327 insertions(+)
  create mode 100644 package/musl/0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch
- create mode 100644 package/musl/0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch
- create mode 100644 package/musl/0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch
- create mode 100644 package/musl/0006-qsort-fix-shift-UB-in-shl-and-shr.patch
 
+diff --git a/package/musl/0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch b/package/musl/0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch
+new file mode 100644
+index 0000000000..5cbc8144d9
+--- /dev/null
++++ b/package/musl/0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch
+@@ -0,0 +1,324 @@
++From 67219f0130ec7c876ac0b299046460fad31caabf Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Mon, 30 Mar 2026 16:00:50 -0400
++Subject: [PATCH] fix pathological slowness & incorrect mappings in iconv
++ gb18030 decoder
++
++in order to implement the "UTF" aspect of gb18030 (ability to
++represent arbitrary unicode characters not present in the 2-byte
++mapping), we have to apply the index obtained from the encoded 4-byte
++sequence into the set of unmapped characters. this was done by
++scanning repeatedly over the table of mapped characters and counting
++off mapped characters below a running index by which to adjust the
++running index by on each iteration. this iterative process eventually
++leaves us with the value of the Nth unmapped character replacing the
++index, but depending on which particular character that is, the number
++of iterations needed to find it can be in the tens of thousands, and
++each iteration traverses the whole 126x190 table in the inner loop.
++this can lead to run times exceeding an entire second per character on
++moderate-speed machines.
++
++on top of that, the transformation logic produced wrong results for
++BMP characters above the the surrogate range, as a result of not
++correctly accounting for it being excluded, and for characters outside
++the BMP, as a result of a misunderstanding of how gb18030 encodes
++them.
++
++this patch replaces the unmapped character lookup with a single linear
++search of a list of unmapped ranges. there are only 206 such ranges,
++and these are permanently assigned and unchangeable as a consequence
++of the character encoding having to be stable, so a simple array of
++16-bit start/length values for each range consumes only 824 bytes, a
++very reasonable size cost here.
++
++this new table accounts for the previously-incorrect surrogate
++handling, and non-BMP characters are handled correctly by a single
++offset, without the need for any unmapped-range search.
++
++there are still a small number of mappings that are incorrect due to
++late changes made in the definition of gb18030, swapping PUA
++codepoints with proper Unicode characters. correcting these requires a
++postprocessing step that will be added later.
++
++CVE: CVE-2026-6042
++Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=67219f0130ec7c876ac0b299046460fad31caabf
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++---
++ src/locale/gb18030utf.h | 206 ++++++++++++++++++++++++++++++++++++++++
++ src/locale/iconv.c      |  33 +++++--
++ 2 files changed, 230 insertions(+), 9 deletions(-)
++ create mode 100644 src/locale/gb18030utf.h
++
++diff --git a/src/locale/gb18030utf.h b/src/locale/gb18030utf.h
++new file mode 100644
++index 00000000..322a2440
++--- /dev/null
+++++ b/src/locale/gb18030utf.h
++@@ -0,0 +1,206 @@
+++{ 0x80, 36 },
+++{ 0xa5, 2 },
+++{ 0xa9, 7 },
+++{ 0xb2, 5 },
+++{ 0xb8, 31 },
+++{ 0xd8, 8 },
+++{ 0xe2, 6 },
+++{ 0xeb, 1 },
+++{ 0xee, 4 },
+++{ 0xf4, 3 },
+++{ 0xf8, 1 },
+++{ 0xfb, 1 },
+++{ 0xfd, 4 },
+++{ 0x102, 17 },
+++{ 0x114, 7 },
+++{ 0x11c, 15 },
+++{ 0x12c, 24 },
+++{ 0x145, 3 },
+++{ 0x149, 4 },
+++{ 0x14e, 29 },
+++{ 0x16c, 98 },
+++{ 0x1cf, 1 },
+++{ 0x1d1, 1 },
+++{ 0x1d3, 1 },
+++{ 0x1d5, 1 },
+++{ 0x1d7, 1 },
+++{ 0x1d9, 1 },
+++{ 0x1db, 1 },
+++{ 0x1dd, 28 },
+++{ 0x1fa, 87 },
+++{ 0x252, 15 },
+++{ 0x262, 101 },
+++{ 0x2c8, 1 },
+++{ 0x2cc, 13 },
+++{ 0x2da, 183 },
+++{ 0x3a2, 1 },
+++{ 0x3aa, 7 },
+++{ 0x3c2, 1 },
+++{ 0x3ca, 55 },
+++{ 0x402, 14 },
+++{ 0x450, 1 },
+++{ 0x452, 7102 },
+++{ 0x2011, 2 },
+++{ 0x2017, 1 },
+++{ 0x201a, 2 },
+++{ 0x201e, 7 },
+++{ 0x2027, 9 },
+++{ 0x2031, 1 },
+++{ 0x2034, 1 },
+++{ 0x2036, 5 },
+++{ 0x203c, 112 },
+++{ 0x20ad, 86 },
+++{ 0x2104, 1 },
+++{ 0x2106, 3 },
+++{ 0x210a, 12 },
+++{ 0x2117, 10 },
+++{ 0x2122, 62 },
+++{ 0x216c, 4 },
+++{ 0x217a, 22 },
+++{ 0x2194, 2 },
+++{ 0x219a, 110 },
+++{ 0x2209, 6 },
+++{ 0x2210, 1 },
+++{ 0x2212, 3 },
+++{ 0x2216, 4 },
+++{ 0x221b, 2 },
+++{ 0x2221, 2 },
+++{ 0x2224, 1 },
+++{ 0x2226, 1 },
+++{ 0x222c, 2 },
+++{ 0x222f, 5 },
+++{ 0x2238, 5 },
+++{ 0x223e, 10 },
+++{ 0x2249, 3 },
+++{ 0x224d, 5 },
+++{ 0x2253, 13 },
+++{ 0x2262, 2 },
+++{ 0x2268, 6 },
+++{ 0x2270, 37 },
+++{ 0x2296, 3 },
+++{ 0x229a, 11 },
+++{ 0x22a6, 25 },
+++{ 0x22c0, 82 },
+++{ 0x2313, 333 },
+++{ 0x246a, 10 },
+++{ 0x249c, 100 },
+++{ 0x254c, 4 },
+++{ 0x2574, 13 },
+++{ 0x2590, 3 },
+++{ 0x2596, 10 },
+++{ 0x25a2, 16 },
+++{ 0x25b4, 8 },
+++{ 0x25be, 8 },
+++{ 0x25c8, 3 },
+++{ 0x25cc, 2 },
+++{ 0x25d0, 18 },
+++{ 0x25e6, 31 },
+++{ 0x2607, 2 },
+++{ 0x260a, 54 },
+++{ 0x2641, 1 },
+++{ 0x2643, 2110 },
+++{ 0x2e82, 2 },
+++{ 0x2e85, 3 },
+++{ 0x2e89, 2 },
+++{ 0x2e8d, 10 },
+++{ 0x2e98, 15 },
+++{ 0x2ea8, 2 },
+++{ 0x2eab, 3 },
+++{ 0x2eaf, 4 },
+++{ 0x2eb4, 2 },
+++{ 0x2eb8, 3 },
+++{ 0x2ebc, 14 },
+++{ 0x2ecb, 293 },
+++{ 0x2ffc, 4 },
+++{ 0x3004, 1 },
+++{ 0x3018, 5 },
+++{ 0x301f, 2 },
+++{ 0x302a, 20 },
+++{ 0x303f, 2 },
+++{ 0x3094, 7 },
+++{ 0x309f, 2 },
+++{ 0x30f7, 5 },
+++{ 0x30ff, 6 },
+++{ 0x312a, 246 },
+++{ 0x322a, 7 },
+++{ 0x3232, 113 },
+++{ 0x32a4, 234 },
+++{ 0x3390, 12 },
+++{ 0x339f, 2 },
+++{ 0x33a2, 34 },
+++{ 0x33c5, 9 },
+++{ 0x33cf, 2 },
+++{ 0x33d3, 2 },
+++{ 0x33d6, 113 },
+++{ 0x3448, 43 },
+++{ 0x3474, 298 },
+++{ 0x359f, 111 },
+++{ 0x360f, 11 },
+++{ 0x361b, 765 },
+++{ 0x3919, 85 },
+++{ 0x396f, 96 },
+++{ 0x39d1, 14 },
+++{ 0x39e0, 147 },
+++{ 0x3a74, 218 },
+++{ 0x3b4f, 287 },
+++{ 0x3c6f, 113 },
+++{ 0x3ce1, 885 },
+++{ 0x4057, 264 },
+++{ 0x4160, 471 },
+++{ 0x4338, 116 },
+++{ 0x43ad, 4 },
+++{ 0x43b2, 43 },
+++{ 0x43de, 248 },
+++{ 0x44d7, 373 },
+++{ 0x464d, 20 },
+++{ 0x4662, 193 },
+++{ 0x4724, 5 },
+++{ 0x472a, 82 },
+++{ 0x477d, 16 },
+++{ 0x478e, 441 },
+++{ 0x4948, 50 },
+++{ 0x497b, 2 },
+++{ 0x497e, 4 },
+++{ 0x4984, 1 },
+++{ 0x4987, 20 },
+++{ 0x499c, 3 },
+++{ 0x49a0, 22 },
+++{ 0x49b8, 703 },
+++{ 0x4c78, 39 },
+++{ 0x4ca4, 111 },
+++{ 0x4d1a, 148 },
+++{ 0x4daf, 81 },
+++{ 0x9fa6, 14426 },
+++{ 0xe76c, 1 },
+++{ 0xe7c8, 1 },
+++{ 0xe7e7, 13 },
+++{ 0xe815, 1 },
+++{ 0xe819, 5 },
+++{ 0xe81f, 7 },
+++{ 0xe827, 4 },
+++{ 0xe82d, 4 },
+++{ 0xe833, 8 },
+++{ 0xe83c, 7 },
+++{ 0xe844, 16 },
+++{ 0xe856, 14 },
+++{ 0xe865, 4295 },
+++{ 0xf92d, 76 },
+++{ 0xf97a, 27 },
+++{ 0xf996, 81 },
+++{ 0xf9e8, 9 },
+++{ 0xf9f2, 26 },
+++{ 0xfa10, 1 },
+++{ 0xfa12, 1 },
+++{ 0xfa15, 3 },
+++{ 0xfa19, 6 },
+++{ 0xfa22, 1 },
+++{ 0xfa25, 2 },
+++{ 0xfa2a, 1030 },
+++{ 0xfe32, 1 },
+++{ 0xfe45, 4 },
+++{ 0xfe53, 1 },
+++{ 0xfe58, 1 },
+++{ 0xfe67, 1 },
+++{ 0xfe6c, 149 },
+++{ 0xff5f, 129 },
+++{ 0xffe6, 26 },
++diff --git a/src/locale/iconv.c b/src/locale/iconv.c
++index 52178950..4151411d 100644
++--- a/src/locale/iconv.c
+++++ b/src/locale/iconv.c
++@@ -74,6 +74,10 @@ static const unsigned short gb18030[126][190] = {
++ #include "gb18030.h"
++ };
++ 
+++static const unsigned short gb18030utf[][2] = {
+++#include "gb18030utf.h"
+++};
+++
++ static const unsigned short big5[89][157] = {
++ #include "big5.h"
++ };
++@@ -224,6 +228,8 @@ static unsigned uni_to_jis(unsigned c)
++ 	}
++ }
++ 
+++#define countof(a) (sizeof (a) / sizeof *(a))
+++
++ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restrict out, size_t *restrict outb)
++ {
++ 	size_t x=0;
++@@ -430,15 +436,24 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
++ 				d = *((unsigned char *)*in + 3);
++ 				if (d-'0'>9) goto ilseq;
++ 				c += d-'0';
++-				c += 128;
++-				for (d=0; d<=c; ) {
++-					k = 0;
++-					for (int i=0; i<126; i++)
++-						for (int j=0; j<190; j++)
++-							if (gb18030[i][j]-d <= c-d)
++-								k++;
++-					d = c+1;
++-					c += k;
+++				/* Starting at 90 30 81 30 (189000), mapping is
+++				 * linear without gaps, to U+10000 and up. */
+++				if (c >= 189000) {
+++					c -= 189000;
+++					c += 0x10000;
+++					if (c >= 0x110000) goto ilseq;
+++					break;
+++				}
+++				/* Otherwise we must process an index into set
+++				 * of characters unmapped by 2-byte table. */
+++				for (int i=0; ; i++) {
+++					if (i==countof(gb18030utf))
+++						goto ilseq;
+++					if (c<gb18030utf[i][1]) {
+++						c += gb18030utf[i][0];
+++						break;
+++					}
+++					c -= gb18030utf[i][1];
++ 				}
++ 				break;
++ 			}
++-- 
++2.53.0
++
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index bea9029455..29a9c90ce1 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -26,6 +26,9 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ MUSL_INSTALL_STAGING = YES
+ 
++# 0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch
++MUSL_IGNORE_CVES += CVE-2026-6042
++
+ # musl does not build with LTO, so explicitly disable it
+ # when using a compiler that may have support for LTO
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
 -- 
 2.53.0
 
