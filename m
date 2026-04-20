@@ -4,108 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D44F4F557F2
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 09:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7336F55803
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 09:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB94A806E9;
-	Mon, 20 Apr 2026 09:49:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A87A48284B;
+	Mon, 20 Apr 2026 09:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RcqqD-eBIr-z; Mon, 20 Apr 2026 09:49:49 +0000 (UTC)
+ id qmiRP7nn1OEK; Mon, 20 Apr 2026 09:58:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A2EA8069B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE7E68277E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776678589;
-	bh=CHICyc3OChBDnMixUR1UXJ0v0m6MIHF/ZDG3Ya33vlo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=A03nMBB4hgZNJ8I+OrlxBsJ33gkfDz7KMDl0jwQeo714u/b5CAEKGaIpsB7ORJaz2
-	 z+hH6DREEg3WZxk8G42hLobxIf2hy9oLh1j7mEsGMf3NyKkUYCrQoS7qpZPq1jZzDJ
-	 ytAyluKYkQcUFxqsy5FTokaYRMtj7o3PumSGeElRfbU8kCCnCLHN3RhzV49Wb5Pr03
-	 1hGI85cn34RbDMbkQRxLjEHlJSrOe+c2QMac7194zpOpqxAdPHAY+fwU3R2fRd4yxc
-	 1JQv0b64Y9TupoOApTzakoGGj05XRGL2cKAKUzF9AiuovM1V3TRa9c1sJtchtKg/On
-	 r7TAYLx9Ao03g==
+	s=default; t=1776679129;
+	bh=+bJ8SD3UMg92JGa4f+hY26NuB+z6bSwMm/+PblpOLQA=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=UhfP5uAmiTp3gxEaIMZWlLipqoAnruWiPf3xITn65YiqL4vuapsxYUR7S4+LBDDap
+	 iuANAWjFZibwnBqGvIxYacymmP4yLeX4LYVK8kfHeB+rTSKweYarmI0+M6c1vzqmpn
+	 ojSVzswVbGWal63I0vrgfkcFzeyMW/zwrk1+EgG+fIefefeFDGLoLNL8r1SuRv5aX2
+	 J/Jnx3u674nZ27rNgAygvHVTgJE6hGYxClPXVTYeWQfmXxcNguZU5eJuhP5/1ubDuv
+	 psa18mNHg5d3d66FpaUO1aWmpVoSQAhafh+VwnM/f8iPGlp+TF0xZssJcbuoEpNAU5
+	 zxMM90J0lE5fw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A2EA8069B;
-	Mon, 20 Apr 2026 09:49:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C494A24D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:49:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE7E68277E;
+	Mon, 20 Apr 2026 09:58:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 903D824D
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B67C940F42
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:49:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CB97610BE
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:58:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZiQJjeWx2n3u for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 09:49:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gfpUEjiPwiof for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 09:58:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BDAE40D31
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BDAE40D31
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BDAE40D31
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:49:46 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-b79f8f7ea43so392559966b.2
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 02:49:46 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B726B610B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B726B610B3
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B726B610B3
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:58:46 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-488a9033b2cso31890275e9.2
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 02:58:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776678584; x=1777283384;
+ d=1e100.net; s=20251104; t=1776679124; x=1777283924;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AUBbAVCcME0cD9TAwgzm0BnQQH4r6j+J2yP4rNMiWw8=;
- b=EZeqQ7HVR0qQzBcM0Ev9Aq8swQbgniOrily0/w2eAwCLIv2dakiojv3nwizgBzp+aZ
- etgWi6PfPDfPH1VPjWyW06mAQG87NsHgpcMwIJo53X+Em42t4sVv5koQ4FW155GR6gA8
- sXdSNFRU2lX7+5VRzErG9lux4lDtOJasygvPMGNK33at00cJRMZj3Tr45LiLoOOw9xWU
- KAPR0sYr2QmBeJ1YpRoOA3OYhm36EILQhmD+DiugBSJDmlB2tDHrtbc0RgaAqBTY16NB
- ZH3gT0E9XdFapEbbJzuEgcLRDlEJrkDoivX8BYoGv5Ot/FgzBoh8nOqnYCz0/yjmqAhK
- 5l2g==
-X-Gm-Message-State: AOJu0YwW1HuR/6Px1m3Q9xy4YkfJmkfON/F6MI9TnAkF6+Fh0cTo6leG
- QquI2r0UrsaA0uWp0fxm/c5fsFGo43vZDzqwJGnbl/C8Adg7DVsVVIg/X1T3lg==
-X-Gm-Gg: AeBDievRPn+5fKCg5E2xy0w+jpN88+LMuOou3LFOxBX+UYQMFJeaAi45PnQfd9rtXVg
- JJWoakgq6+OjkifUejHkfuXBgcKJeoCVAdLOqzJSy9mDeo5LkaW6FzCXopMQU4fu2eROVuhaGme
- zH4qQ9xuZrIRrlk2gl+akED79W74kYX7M8mrhBtZSOgAOrPSnD6zGdNezEM80YAzAQOsi9+83Pz
- Ygq8OncvUo55DfijXmfb8YauL/fC9fdBFjg/DyoYblVhRGTfFWUVR75k4pS7v+sA7S++ivGwqtU
- E5nPnwjU9RKaqRnd31FleQ3dmv8MtTPQ1z7nzS1H8AnH4gbVF3ZUvmAzQEaod8ok41bP01HY7k2
- ou+OsEFininLwiinI46ia8Yk5Rx55a6+02GhhUbQokPbx2eV8SAnPquTv0KWXvn8WR1Hn6z3Jsm
- 21ukkIrgbpUHAEmSKe/kt7qDlRetiZZ3t9d/Hdq3tJ5tCCHhTP3Nmwfv8ozB9YOGrDoGu/HPkel
- DiR5xyriLx5yjhtvA==
-X-Received: by 2002:a17:907:86a3:b0:ba8:8c8c:1c5d with SMTP id
- a640c23a62f3a-ba88c8c2648mr67230266b.47.1776678583409; 
- Mon, 20 Apr 2026 02:49:43 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ba455046223sm330904966b.49.2026.04.20.02.49.42
+ bh=2lsEG0SoP2y1yVEoKdjn14rM7sZEeKmrm6fScypOBsw=;
+ b=MDY+kp6h/0FyPATvuvq6GmcM2U+KlM2qATfAMT6GwgpvbdBW2DPUg3X3Ptwv7+JStA
+ bj3HjVLt/lEZQ2gWx+z/jJCf0YOyWQq/qPMXBWGNSmuRFRlF19uUkywn1niSTrT0B2qc
+ BjqrnLAlhe9udzKALqoOzx5lcxuZhAth21Hma9X3gTygDy8i6L4+QFGeAuZ2YPgcYN4m
+ VUhoQMspnsa4ttMtYKMDlTEPWQvCLGSl7TbU9Ylx2SrxQYEJqkHp+ZtidigZqT8Q5yYl
+ X24O3mqF8y/QakLGKXJ6Kln375Ies445JK4vkfRKiH1qXPTPrdK57pqKmVrEEfmpUyrH
+ zZrA==
+X-Gm-Message-State: AOJu0Yzyisjn/XI2sLg9TsL0/Y4xZx5ezu6F27RqUBOhRSQ2qRas88N6
+ Pav/tnrl1vGIcrHIqsCz6G8lw5WL7QwO+2/1/GA0yHwwxrxkNU8UhLbv+IRNWDV1NFWcohnO6NG
+ QajfJ
+X-Gm-Gg: AeBDieugjW627+cLosZlkmrSWWuEzcoY65nZ1o0IenSU8OTVj+mBf6Jm8908iD4Ofpl
+ MDDseW7stkmE59iylZpKIGVHKa3Jf+2hMZbMFCy6YXpKIvkx0QSosjmxvPAjvUx2XdBgCimqKsM
+ FEg94Mv67MwycGCFpgu9aUWcbyvayGjpgEMBlCR+kspw9PGfpLc2EMEHMorJL23HsmoZmsvWayz
+ 386ub6jx/2FMhggIIElCu/+HY2CxTyL4Ig18GZ++PEuJ+FdEhkap/sjtpG+XKnsBZSgWJewMc2I
+ wXKaHylo2rA+4S7EiE8402VbyyvDi6iJn87uPFS5Mvhkon2Ubt2suPW9js3pM67LGCYkTqyO4Th
+ eG2hP0Q20GuNyC5we7TWX3skyZF65R2GClFKvZ+GI5RD7V785PGJnCfM1qBxmuOXfQef6cDjIQ1
+ WiF4HF2bcblDpPUav7+HO42kbTe9pZLUIeXgfKO9/bDTIqS5yPwmTPtQfyDwqvUr3SvcGeICJK3
+ RYk
+X-Received: by 2002:a05:600c:19d4:b0:48a:5339:ef0e with SMTP id
+ 5b1f17b1804b1-48a5339ef15mr218285e9.3.1776679124089; 
+ Mon, 20 Apr 2026 02:58:44 -0700 (PDT)
+Received: from dragon (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-488fc0f82bbsm448033415e9.3.2026.04.20.02.58.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Apr 2026 02:49:42 -0700 (PDT)
+ Mon, 20 Apr 2026 02:58:43 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 20 Apr 2026 11:49:31 +0200
-Message-Id: <20260420094931.2669516-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Norbert Lange <nolange79@gmail.com>,
+	Sen Hastings <sen@hastings.org>
+Date: Mon, 20 Apr 2026 11:58:23 +0200
+Message-ID: <20260420095823.2561132-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20251104; t=1776678584; x=1777283384; darn=buildroot.org; 
+ d=mind.be; s=google; t=1776679124; x=1777283924; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AUBbAVCcME0cD9TAwgzm0BnQQH4r6j+J2yP4rNMiWw8=;
- b=DhLh/FdhKni1SSqhRM4XLTNFteI61rvTKSfNPiEZVxclU9jcgzV2vFHJe6Ia4xvCdh
- SInc7QFWtrPVq/mqRBar8a6HhDyB7q/EWk2Cq7h01v6CpCWh1zPI1IVtqkR7EUf8bFXP
- 9+xKFvJo2YaXepI6i9ZnPw2wyWUiRlfifo37AICEE+g6mjR1W/c5U4vn74oZlJKPs/LH
- J5l/sNyBbQvriZ4hoyybuHsxYZQ/xW1yrXqArIGuttPt8aqYZisGHioOQOdBW5HlZNTE
- SXn7uPfxScNKGtJ8qB33iBT1TRr2f/euOoSjnN6y84JY84uVw8o4Ctwn51b3XgR/zv3G
- +8Gg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=2lsEG0SoP2y1yVEoKdjn14rM7sZEeKmrm6fScypOBsw=;
+ b=N5SB55sLAhvpnYlFZQf8a6TY8NokQqktN5b6fMPeWzBeAwE/sGkaWpVyiboYLiHfMA
+ lq2ka8fi1GwfCzrxd3ddU4UQl+nOHPagRooV0IvD61JTJQ62pRjElFJ4q9yoPUTEMp5F
+ 5fjxQE48TH91X4gjWnb4gzfHZ8c1G8Js0xvhymFB7ka3WYh88LzNa99v3YNgUm6zEbc6
+ PvJFU73t3hBVvB0nHbZbA/+koJ6IGoDis55rp7sgNZ24yGYgWVpcHOg+VF8zredfz0X8
+ of2R+mVt6juCMBh/TS+o3QrFDcGboh/UqzY3Qt+/QSprtwHH2nSGgX9dHt/BEz3vwo6y
+ El2g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20251104 header.b=DhLh/Fdh
-Subject: [Buildroot] [PATCH] package/libftdi1: bump to version
- v1.6rc1-2-g92d657b
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=N5SB55sL
+Subject: [Buildroot] [PATCH] package/systemd: security bump to v258.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,85 +120,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Daniel Sangue <daniel.sangue@sangue.ch>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This fixes the following vulnerabilities:
 
-libftdi1's commit 2a992306c0acf938b29fa0cd5fbc160e24424209 introduced
-support for independent static/shared library building. But the proper
-building of the ftid_eeprom tool was introduced later in commit
-eaf42c00bfab5d6bbd8106b11a697ff4f2d7659f. So let's update to the latest
-commit that also includes other fixes:
+- CVE-2026-29111:
+    systemd, a system and service manager, (as PID 1) hits an assert and
+    freezes execution when an unprivileged IPC API call is made with
+    spurious data. On version v249 and older the effect is not an assert,
+    but stack overwriting, with the attacker controlled content. From
+    version v250 and newer this is not possible as the safety check causes
+    an assert instead. This IPC call was added in v239, so versions older
+    than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11
+    contain patches. No known workarounds are available.
+    https://www.cve.org/CVERecord?id=CVE-2026-29111
 
-92d657bcb543a9622947d984d4a8e725fb680e8c ChangeLog: Add license clarifications
-06fa7fa342a6976a3745894b46babfa5fde841f7 ftdipp: Add wrapper for ftdi_set_module_detach_mode()
-120c3495ba82ae9c35a7518248b2e45dfbc36ea7 Merge branch 'prepare-release'
-c4b7675a43dcd8fa7c1c42708d5665a2a02e86e4 Set version number to 1.6rc1
-c0c8c923829e1c391d7ca951e12b50092d6435f1 Prepare changelog for 1.6rc1
-9341a7e8efc07c213c872ced62fc03c03a270b44 Increase copyright year to 2026
-f9301536f4004d42cec4dd36f2505679459aae4e Update AUTHORS with contributors since v1.5
-ed9d31e41a6ec695fd610e4d718ccc8bb6aefa4b Merge branch 'clarify-license'
-84497180578f481758042c73eee9ec0eb60bace3 COPYING.LIB: Update to LGPL v2.1
-4ec5bc584c27c333f74eca524de5a0839c983935 LICENSE: Clarify the main ftdi lib is LGPL v2.1 only
-61ad454af3e0a886a665659b73729872cfb564a0 LICENSE: Clarify ftdi_eeprom is GPL v2 only
-630a27f240fd784c7c3f5d75e7c880eca3a66cf8 Replace tabs in fall-through comments
-4f600d690ee0dcbecef4b02edb5700fe84c4a9b3 Modernize Boost detection for CMake 3.30+
-f7ed9dd371f9387ed5b715a4f316eea9f85de48d python/CMakeLists.txt: rework Python development files detection
-eaf42c00bfab5d6bbd8106b11a697ff4f2d7659f ftdi_eeprom: fix static build
-f554d7cd432d3056b1ca62bf09cc4003bf307912 Ignore JetBrains IDE files
-019f48462836c9f3a0a1f113a351395ddcf99640 CMake: auto-format all CMake files
+- CVE-2026-40226:
+    In nspawn in systemd 233 through 259 before 260, an escape-to-host
+    action can occur via a crafted optional config file.
+    https://www.cve.org/CVERecord?id=CVE-2026-40226
+    https://github.com/systemd/systemd/security/advisories/GHSA-9mj4-rrc3-gjcx
 
-Licence files changed due to copyright year change as also some licence
-clarifications described in patches:
-
-84497180578f481758042c73eee9ec0eb60bace3
-4ec5bc584c27c333f74eca524de5a0839c983935
-61ad454af3e0a886a665659b73729872cfb564a0
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/8e1299b9ce28df2a848310c5bfb968f59cd8794c/
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/libftdi1/libftdi1.hash | 6 +++---
- package/libftdi1/libftdi1.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index e110da6b5b..d855076324 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha256  e85f1161d19f60b570751f3c8be334d309c710e5f77ef9afdc0eaa2c4fa73c95  libftdi1-v1.5-62-g5e67403c4fb5536a2effe2e91181dd73a2cff91b-git4.tar.gz
-+sha256  ac78a308fe3c031dd820c97b37d920345814cafbc056cbcbc108a861f32b6694  libftdi1-92d657bcb543a9622947d984d4a8e725fb680e8c-git4.tar.gz
- 
- # Hash for license files:
--sha256  524f46428bf72bb8c6acfeca4909551fd2e0bdbb5305406d38382f4056095c56  LICENSE
-+sha256  483d3d73b7cc56f3db406ec6e60d5e9fa737dd8794c36cfb7795a37030682d63  LICENSE
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
--sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING.LIB
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LIB
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index 4fac8d2e39..e72eae878c 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFTDI1_VERSION = v1.5-62-g5e67403c4fb5536a2effe2e91181dd73a2cff91b
-+LIBFTDI1_VERSION = 92d657bcb543a9622947d984d4a8e725fb680e8c
- LIBFTDI1_SITE = git://developer.intra2net.com/libftdi
- LIBFTDI1_INSTALL_STAGING = YES
- LIBFTDI1_DEPENDENCIES = host-pkgconf libusb
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index d5a97ffcbd..e96d3ba7ad 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  5c95e54e555b21594ab11e76f91a092c6383553ed725292eb0a929bf2fe028ae  systemd-258.4.tar.gz
++sha256  6bd311c25f00d634ae3b4544d582e27df0d4166e6ba3d403b18b3129d7f44cae  systemd-258.7.tar.gz
+ sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
+ sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
+ sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 4b488857fd..9ce4f8fef2 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 258.4
++SYSTEMD_VERSION = 258.7
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
 -- 
-2.34.1
+2.53.0
 
 _______________________________________________
 buildroot mailing list
