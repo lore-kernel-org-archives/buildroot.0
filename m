@@ -4,86 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0440EF5A8C6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 20:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3412EF5A8C6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 20:57:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB02C80A4C;
-	Mon, 20 Apr 2026 20:50:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0451F80E0C;
+	Mon, 20 Apr 2026 20:57:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kWG4MSuppKJG; Mon, 20 Apr 2026 20:50:15 +0000 (UTC)
+ id Tu9UTezy5G9w; Mon, 20 Apr 2026 20:57:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19E5C807E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 188E880F11
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776718215;
-	bh=mzUwKbKuJBVwlOHJoCAuj16/Q+7AlZF/P1XR3zv7rA4=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Kne1Zp1EXjht/OylO1hP7i1TOher9XGG4aAWuwrfwEWfe/ia3+S0xAiR2sGEcDRGt
-	 HZ301fP4glLt09T74usVfMcpx3lqF3EUuawx0zzT2dMjEDkfVZmew5axGEh4iWIcPV
-	 gcfHrd4u43xT0ctfY3R7NE/iRvVMZr0oUc6751r6kc9LAqhmGnHp/rNf87MxfbbJoh
-	 PoZ3f+g/6myLJzEMsMA1PncCNeUynI48zjPuXRY6V3ncBQhVemj1bIh+kVU58CuSBe
-	 RKgyNcy51e8ppIf0i5xLlD5l0Ddd4JVVDqCB2DUp9Y5jA266W7bVrMfEbWUgICbLPq
-	 izYA7tKATLwQg==
+	s=default; t=1776718630;
+	bh=rQEvCrsBRudy4bLqVzzS4H5HtpCVy6VjgCGfsxvaUjY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Bh3HVpmYnzew8ibyYPZnct1FtKp9VUtlltFNkY5dTALojScozFhVbjc71v80t1cRN
+	 H357JtpiO2XKflai/ki+czPtowToyGBKxETVmWZGrz3BLhevwOKnGbOj88qzXhR0PZ
+	 HSpppoKV5q5BOnBLeZFAk7pvSdv93b1g103E335VxAAvtjfz/mbdYupBx6GPENPN1j
+	 Hzb5cyZ5bTLGhPHhzt+lighrCsxMk07MPPkiR6zxdyXpxMvhf2ISGrk+bzbIitOXht
+	 30+F/n6zHOujn2nSjjNSe2Lf/JUIiWTUDk3U+xtUo1JVbwVeV2HQpSDzeQfxYpMtJN
+	 wH6kvLuihcx5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19E5C807E1;
-	Mon, 20 Apr 2026 20:50:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E3F124D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:50:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 188E880F11;
+	Mon, 20 Apr 2026 20:57:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37698257
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 841134084D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:50:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2841F80F11
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOWb4Zbf6T0O for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 20:50:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D3CB24071B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3CB24071B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3CB24071B
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:50:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id C713913F8B9;
- Mon, 20 Apr 2026 22:50:00 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 20 Apr 2026 22:50:00 +0200
-MIME-Version: 1.0
-Date: Mon, 20 Apr 2026 22:50:00 +0200
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-In-Reply-To: <20260420173858.1655069-1-neal.frager@amd.com>
-References: <20260420173858.1655069-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <1680095fb1bc4aadf9082cbb51c22151@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776718210;
- bh=NHppSUF6omeTj6gyum22sXQr6ZpD+H7nAbRxfsr/X9Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=KnXUN1/qj+P5Owla02DO3WyzCRpYxtI1i7rnPD/fTAcFJDRELLuyiAMzJQgtQFxfN
- H8lCTSBwt60SOfYh3K1otbWjunNEyyNlMLfLEpHaalTWXEBmHtCBRCEX/AuKRFvxVM
- RPLrqmY+XFcITzFYlvpJE1J9JiCWxlYejv+ZawAxA+N/P2L0AodFlQxMs6P80YEfqn
- 5XwHQin8KxmyJkGQhfpEewBuLM+d6t5ydIvZrKjbLqvtWVR/FfY3IQK5DSweTaa4FO
- vHWzdaqBRjK/Zsr0nw7fAFxWANwz50CIL2NpO/TmzMPf58nrNsjXDYVfIXEWux1w5O
- IEMEVrB/xue6w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KnXUN1/q
-Subject: Re: [Buildroot] [PATCH v1 1/6] board/xilinx: add Linux 6.12.70 hash
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nST7eng-CyDB for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 20:57:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5079E80E0C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5079E80E0C
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 20:57:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03ED082167; Mon, 20 Apr 2026 20:57:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 20 Apr 2026 22:51:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b228deaeccd222c620b8bd6dedcca08fd95149ff
+X-Git-Newrev: 1f801dc616113c11d335c45b2f5e1ebe648a75c1
+X-Patchwork-Hint: ignore
+Message-Id: <20260420205707.03ED082167@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups: security bump to v2.4.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,17 +70,111 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/04/2026 19:38, Neal Frager via buildroot wrote:
-> Add the hash for the Xilinx Linux 6.12.70 release tag.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f801dc616113c11d335c45b2f5e1ebe648a75c1
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+For more information about the release, see:
+
+- https://github.com/OpenPrinting/cups/releases/tag/v2.4.17
+- https://github.com/OpenPrinting/cups/blob/2.4.x/CHANGES.md
+
+The new release 2.4.17 contains the following security fixes:
+
+- CVE-2026-27447: The scheduler treated local user and group names as
+  case-insensitive.
+  https://www.cve.org/CVERecord?id=CVE-2026-27447
+
+- CVE-2026-34978: The RSS notifier could write outside the scheduler's
+  RSS directory.
+  https://www.cve.org/CVERecord?id=CVE-2026-34978
+
+- CVE-2026-34979: The scheduler did not always allocate enough memory
+  for a job's options string.
+  https://www.cve.org/CVERecord?id=CVE-2026-34979
+
+- CVE-2026-34980: The scheduler did not filter control characters from
+  option values.
+  https://www.cve.org/CVERecord?id=CVE-2026-34980
+
+- CVE-2026-34990: The scheduler incorrectly allowed local certificates
+  over the loopback interface.
+  https://www.cve.org/CVERecord?id=CVE-2026-34990
+
+- CVE-2026-39314: Fixed the range check for job password strings.
+  https://www.cve.org/CVERecord?id=CVE-2026-39314
+
+- CVE-2026-39316: Fixed a printer subscription bug in the scheduler.
+  https://www.cve.org/CVERecord?id=CVE-2026-39316
+
+- CVE-2026-41079: Fixed a SNMP string conversion bug in the backends.
+  https://www.cve.org/CVERecord?id=CVE-2026-41079
+
+Also updated patch offsets.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch | 2 +-
+ package/cups/0004-Remove-PIE-flags-from-the-build.patch        | 2 +-
+ package/cups/cups.hash                                         | 2 +-
+ package/cups/cups.mk                                           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+index 30c3ddb48f..3c00bb1b49 100644
+--- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -18,7 +18,7 @@ diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
+ index 613f01ddf..6f1bcb07e 100644
+ --- a/config-scripts/cups-common.m4
+ +++ b/config-scripts/cups-common.m4
+-@@ -462,7 +462,7 @@ LIBHEADERS="\$(COREHEADERS) \$(DRIVERHEADERS)"
++@@ -467,7 +467,7 @@ LIBHEADERS="\$(COREHEADERS) \$(DRIVERHEADERS)"
+  LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
+  
+  AS_CASE(["$COMPONENTS"], [all], [
+diff --git a/package/cups/0004-Remove-PIE-flags-from-the-build.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+index e4081d0e07..82251d0fec 100644
+--- a/package/cups/0004-Remove-PIE-flags-from-the-build.patch
++++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+@@ -23,7 +23,7 @@ diff --git a/Makedefs.in b/Makedefs.in
+ index 0d8df733b..2560c0c36 100644
+ --- a/Makedefs.in
+ +++ b/Makedefs.in
+-@@ -156,7 +156,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
++@@ -154,7 +154,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
+  			$(ONDEMANDFLAGS) $(OPTIONS)
+  ALL_DSOFLAGS	=	-L../cups @ARCHFLAGS@ @RELROFLAGS@ $(DSOFLAGS) $(OPTIM)
+  ALL_LDFLAGS	=	-L../cups @LDARCHFLAGS@ @RELROFLAGS@ $(LDFLAGS)  \
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 7c08a68c10..e421c6457b 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d  cups-2.4.16-source.tar.gz
++sha256  89c703238de210d4f4f4e5d4269e3d60c4b2f487aad75a8a1eaecd659e4d0b77  cups-2.4.17-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index d3e6094c67..f79e3846df 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.4.16
++CUPS_VERSION = 2.4.17
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
