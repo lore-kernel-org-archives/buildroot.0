@@ -1,130 +1,136 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 410E2EA71B4
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 01:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEFB8EA71B3
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 01:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 022BA61013;
-	Mon, 20 Apr 2026 01:19:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54AB040C88;
+	Mon, 20 Apr 2026 01:51:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IAMbpIWcYEmO; Mon, 20 Apr 2026 01:51:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFA140CFB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776649906;
+	bh=1UrAq3rhnRlyf488ppUaF2Y2rjCgyHqJA0kRb3y+KdU=;
+	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=hEiESw9h5RTcnDt5ewCFxVle8f8e1sQZoPhUkfsTw0PuZ1n5FnZFbMSGmqn0K4ejj
+	 lb2fe4Ua2ei/iuqoVKnXu/T5PbGOSDZ/LH6Xvg1V5mBrBl30l28oW1BpgEyWyrdDSL
+	 ku6szwEOe3R3buANDPEncwjKQFuOMCehLXArD1vWjF6PkF3vgvcoZZ0rDcvdhR6Xkg
+	 MKBhJwUfYRNudP8D6wSD+W8VYVmenB/qiklnE+1aSzpY7munxoSz7YBZ2PncQ/dV2/
+	 7wWy5CnzyO6fZnrKKTeMI4aUW/mmvNNkarPJejWRbJCw0QzpIRNmsYjESwvZ/C6VL5
+	 T832gt6VtsW6w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DFA140CFB;
+	Mon, 20 Apr 2026 01:51:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05BBC355
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:51:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF47961028
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:51:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zqQqe3hekM5A; Mon, 20 Apr 2026 01:19:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EECC461014
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776647961;
-	bh=IRTiv+xnSpPj8dc25Y2OqdG33nPuiteasQ0fKU2Dr9M=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Q2tDhyBFLgIZeoJIsJELR3C3jb6sXXuYJwJtDHGKGzPzD4OOL6ruvWZDL84eIkbwM
-	 txJBFQWOUKaaecG4Y0yzR4dJehSBSY8/l+VD9uUWPBFUQ0O6ypdIv+5m601xMlIC3V
-	 4H9/sCiQVBZ1V9zR8E3dblVZQ070BPDdZWUdOZX7U3n1PwCjg2soxy1Lo2j5nH9JT+
-	 45anQSuVC9u/IpK1jaRQpjQq8L6nCP4XBhuVBSQ374kASOtkW6vOThiyRP8RSvLb2V
-	 AmI6Y299ZAhDMd96TZBmiuUGNy83OguBJDZwxAD6ylQyxc3MkkA4Z7jgFMfx6EA4rN
-	 QMqXnzHWeRghg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EECC461014;
-	Mon, 20 Apr 2026 01:19:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4910E24D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:19:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A55F8232F
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:19:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WIF7i6FJrYik for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 01:19:18 +0000 (UTC)
+ id m5efchNtKJVo for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 01:51:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1131; helo=mail-yw1-x1131.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2D79A822EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D79A822EC
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com
- [IPv6:2607:f8b0:4864:20::1131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D79A822EC
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:19:17 +0000 (UTC)
-Received: by mail-yw1-x1131.google.com with SMTP id
- 00721157ae682-79a535e7c00so24548797b3.3
- for <buildroot@buildroot.org>; Sun, 19 Apr 2026 18:19:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776647957; cv=none;
- d=google.com; s=arc-20240605;
- b=MFW27mSn7S4140YEBlcSYDEGOSYRlfBQXAt/y3OX5K/ltiqCuitH8u2XbIcGdgUEqg
- H0KIk8WuPHPb9D9jTlVmpBqu71Y5xPZBwJlx6nDR/+ez3Dm9LqWxq5xuQqLxazbvJ7/z
- EQt9/q7M51JyHl/F+ES/hAPsVJ6gbD6wDbpPO53sbVa2kt5CDTNxoYa68Wb7UNgirYgv
- 4aIFEsgMUhfncGBxLvZCgr0QAmtJarkLpcopC2zZGpI1SKedkbey9v8rnkIefYRxbfw2
- 3QxmUEdImBEmie1BDoTZY5j+rwLkHf1i+YVGAzceDpBuEjbm+u3uvtBSFJGMf9dHi6JO
- gcOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20240605; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=KZI2O5xCOnEB5CyETqI6+LpD+IyyQ2PNXxmfbl2juBI=;
- fh=+f3U4CSVE/IxKOJklstpZrq+i19ILBslJ/jGhl6HbT4=;
- b=S0jWTPEVb/m+N8MLl3wR01IfwI2BXMuvjosMQZQTBWT8tHIO1dA1pAM6FCnCjrR+ij
- 7UGgu2D3cUSb/SXD1fE36D0iwJomwoMhNdui3BvWOtj6+x7LVMqBT35EO9/kWpKsQVBz
- fwNNMgtz1ZxS5I+13/15XmgIpSEn8NmpHfLdogaVogwVSxAUn3Ocm/0WjQpgKul0g1lG
- HEY4QgtCTKQpODedzaIVMlNcLTR9eILhy+mewgjAH14uH/WDRQElzv+IaZiRfahvSUDe
- RYs6toERETi43Jga8VbyO2hijdukJ4nW0BLWa4oeP41vMVTqC7xD2zLljcmfVNoVBFBu
- XHTQ==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=obbardc@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AB63361027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB63361027
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB63361027
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 01:51:43 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-488c2690057so23883185e9.0
+ for <buildroot@buildroot.org>; Sun, 19 Apr 2026 18:51:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776647957; x=1777252757;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1776649901; x=1777254701;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KZI2O5xCOnEB5CyETqI6+LpD+IyyQ2PNXxmfbl2juBI=;
- b=Z/ZWuLlXRW/wNxz/e5IwG7h20bF8gdCrckXMDI1pZLINXWWuDOabfZLLYycb0KkuCA
- tLuqMh2bdCSHVyAPza1Hsae44rY656vakkVxOzAgmuSJ5BCxAERV331vXjV88NXqzEW4
- X5OLc90T1p+6e3us963ILz/tCI/0cpVogMuOpYRwV68CE/fk9YRAQurKUUJkkaPDG7Qz
- +tpjJFkK8pJKcePdjlsUDDG6/AGwtELOjmi8beio96YsgzRmdwzlyuMFUD5cR5FbTu80
- T1flaZdXK1c5FGrQRkq15FbYSNsEg28mpntsYDhRKODa41UqS6MudNv+vwePElXvxtYZ
- wFlg==
-X-Gm-Message-State: AOJu0YxbDDuNuoWUXOmECiIqIfqZZhhDSiMCihrX3YZYZ0jHzUH8oXkk
- b6zqF3g41tCzAC8wZp4jI0qN61AYnnx6daiVXmXTOMjRF/xTBacOoHC/mNXZgYWKn5VNkYZzT+S
- m3MlfJ1EYdtK4el+E7XM2LgxGSWzS7fDI/1DfgXQ=
-X-Gm-Gg: AeBDietdVhvN8g0MwgPqN7nxMMrPLEa6Exur/ROQmyc1D74j4WlENaAudjutYTIYAT3
- b3SpmL4VNaqaAvDPHvN4rb+ZcMhUKol47M12h5YKMcaIkp/jfdecHHL/6G6UQxW1XmcG0ycE4wf
- puhxsZQX3MM9WvIoA+778/FufusokoGGZ2FpLoQSEDLN4xjtohBbsDXC9ruthjYB96as2H6/VoU
- BGRTO3I1KHpBsVU+/GNY4q24E5uBvVODzFWcWIpW/QLOCpek3QXFTPcSnWzuFU8ihr9ijRNGphV
- l59E+hmJLm6F8HBq
-X-Received: by 2002:a05:690c:c50e:b0:7b8:926e:3ef1 with SMTP id
- 00721157ae682-7b9ece7715cmr115879127b3.9.1776647956707; Sun, 19 Apr 2026
- 18:19:16 -0700 (PDT)
+ bh=MhoAoh6695YffWAwiN6NIXB9UMw3/o7CgHDZv8Q4gh4=;
+ b=mqZAdM/3ovolqNxIxOD/ZSOQELOuv1LDWLKkVOC8Z8EXzXGOtUB1S+bF1nS41SKLU0
+ OGlgAlBc6b/ZwX+7b3iggwGnFX3wufS8U60HEQCLUvnbZknulET5TdBawbA4gzharPl9
+ zPkpxFSxfx/0+Lp/ouZe/qN6dmm/6w9wbGNL/ojHoHypYjDwsl43g1Tj9ZLuRngLORgR
+ XJgEcrvyOoIPObqIfuWCvMQDPdtacvhTWyysvUmYaDgXw6VslK4dSJVczFHCXuevhuri
+ aF2stFMssIpmuOX5B6FGHuFLXog8fWSWFcxqSC7pb/qyx/6tDav/fyZKAKqWhkYHBKu5
+ f/8g==
+X-Gm-Message-State: AOJu0YyKKx/R5L8WPFcuf41voa5kfMBJIpsxnoSVolugCneCp9A6lWzi
+ liRvJUAYvTLndqnjAqXY6DWS+2PZhBU02WzwmFiewY5Z/7zrmCIOHYSO
+X-Gm-Gg: AeBDieu5+zef2eqLx//y2njP6Jrag9ipMEVwXpmE+wxjGjsf/mLQyf3wJper/o6Z9uO
+ rbA5vuiE1OV3Md1ZBJDO2/TXRc/+keg/NpIiW9Mi85IQvrwpBTXuFMHy+gaVggiIgA6qRzp8H6P
+ CpZmcxNjELipmH/65ZByKPE/6theA7ywPtKE5jnhAsnw0tN3UhtqAkysDRMnZkQNyQElKon6Zat
+ GkHXapeATOk466e2VPEl4J11US9bOtGX1ZHbcWfnxjQG6fLAxXHMwXUtyb00UOu4GywmhY3hYb4
+ olHNUkvsQnsAzKXIuSVb2u9v6witDkATW8u/+cCWgngKROjcISMoM8yYH9YoN4Kk8C22rhGk8z+
+ qai+SaV4qiipF8WiBI0M9pDIE8nq6TLGs+JNpvQ4QklJ/kHiB/aJPtTQDPNrF9/M0lWW48K0VIY
+ R3AlMkFNXIPtmPL5V/x2+Ub2xcF3MQqfkc255xOW1ZYzKt8HDWnoNK2inMNvOz2f+fHVNURG6df
+ 9ooc3nqc5FKiH6JyD3DmK0GCsxaKxRzhhzA8EnchW1v0T95LRqhsJDxir4TQWDw7PTZMBZxrXZl
+ lhlwVb7jcLmFloyvwWbX6hEej85lCcS9TwnZwYmoVGBkVpxsPi+FhgcTPPA1VFbg1OCKYvaneFl
+ 7cr2tndQxVOX8Z0Q=
+X-Received: by 2002:a05:600c:c04a:b0:487:12c:e7e1 with SMTP id
+ 5b1f17b1804b1-488fb750840mr117072695e9.11.1776649901240; 
+ Sun, 19 Apr 2026 18:51:41 -0700 (PDT)
+Received: from localhost (host86-170-11-80.range86-170.btcentralplus.com.
+ [86.170.11.80]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4891df9e50asm22230925e9.0.2026.04.19.18.51.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 Apr 2026 18:51:40 -0700 (PDT)
+From: Christopher Obbard <obbardc@gmail.com>
+Date: Mon, 20 Apr 2026 02:51:33 +0100
 MIME-Version: 1.0
-References: <20260419173016.53785-1-chakrabortyshubham66@gmail.com>
- <0a5de70e-cac1-4932-b4e2-40deb3c18e1a@bubu1.eu>
-In-Reply-To: <0a5de70e-cac1-4932-b4e2-40deb3c18e1a@bubu1.eu>
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Mon, 20 Apr 2026 06:49:04 +0530
-X-Gm-Features: AQROBzDexId1BCoImYUqMV5rI7l9ShF6PQ00zE56py1qNl2Jo0OOGJqBNNaXilU
-Message-ID: <CABvxkszi3CQCmnphwAgvvxUSoLkBME0dHU324az8PznuysTPrA@mail.gmail.com>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org
+Message-Id: <20260420-wip-obbardc-add-package-dtui-v4-1-5be457a32cce@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKSG5WkC/43NTQ6CMBCG4auQrq2hQ6HFlfcwLkpn0Ik/kKKoI
+ dzdwoq4weX7ZfLMIDoKTJ3YJYMI1HPHzT2G3iTCn939RJIxtoAUcgVKyxe3sqkqF9BLhyhb5y8
+ unuHjybIGl3sLpiQEEYk2UM3vmT8cY5+5ezThM3/r1bT+CfdKKmktEtTGWsBif7o5vm59cxMT3
+ MMSK1cwiJjRujZFkWqf0y+WLTDIV7AsYlXmU/SWMlJmiY3j+AW3RFw/YgEAAA==
+X-Change-ID: 20251214-wip-obbardc-add-package-dtui-f2a5c8279ed2
+To: buildroot@buildroot.org
+Cc: Christopher Obbard <obbardc@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3976; i=obbardc@gmail.com;
+ h=from:subject:message-id; bh=HFgp8fJGEQHahCXqg0w4H/TIab7LiRh+HZ9Q/pmmT1U=;
+ b=owEBbQKS/ZANAwAKAWNNxPBocEb4AcsmYgBp5YamcF8I7HAlFnOJrckB71xUS4od2tEAU1Caf
+ AFLmQVN4ICJAjMEAAEKAB0WIQTxi9yLbCX5CqI9UXRjTcTwaHBG+AUCaeWGpgAKCRBjTcTwaHBG
+ +A98D/9wIDWdYbeG/eMDR2gopF9N9caGp/VmK+OMJm8aRXuH596xALedPRv76BWFZGRrUD65tih
+ MgRqV8qZwlcmUBW1NB6PjOatVrR2qRM9ue/ahuXlL/ViRsLHovg4ZLMcpV3Ej63F+oRRETr+o0H
+ Ibw353uNGcotp0pc3DwYgEe4KLgcuY/+hkntfJMe/N7sWfxogHIaIqRSQL7QliPcJcU5A+TYhtN
+ 0AHSdqOg5kXuRzTk/g94sEtmEkSlC89Mi+Q4pkOuft6flHiwEv2dAF3tUJ7yaIcx6iMX57aaw9v
+ b4Ymrx+gdBSZiil7ZS4ZdPygHL2bB3lj4dsdJK3ohQZf+iV1HZ898nAwjC9sHU3VJc09xh3LBVe
+ tjSzaorGMPrxvjhJEo18JT23FWNqLH27PGr0ihs1uCvbMewKXgBok2/rtza3eu44AW3KQL/LgWu
+ TDZNCn62Ev18xMTZrZyLnF2N39I27164K+baKDVTaM0uCIFo6m5X3JVMtKQaRCeavEJspSoAD7h
+ +z2JiR5CFMQw/Ex3XLHTlj6uobOgKk55PJmIv5P0OcQYU0j7ieQePZN6rK2FjPs2RjsOkAyJYeV
+ vjs0bo66HoP1w1vm5OGp6NfNHcfSc6m7arChpTPz1myUntndxfrkOadgoWzZMvio08Bj/HcYsmR
+ TH6nxAWMVtui+tA==
+X-Developer-Key: i=obbardc@gmail.com; a=openpgp;
+ fpr=F18BDC8B6C25F90AA23D5174634DC4F0687046F8
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776647957; x=1777252757; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=KZI2O5xCOnEB5CyETqI6+LpD+IyyQ2PNXxmfbl2juBI=;
- b=MYdqJb3eyO9bjfnOjq80KJpCfNlYPvAODSoYeQ//TLuSa+YwZgIQNHsanRqCX7cKf4
- N3xdfZ4y9IrGYnLzaIi5ADC2Y/sqIpctrdFZUKXddukU+6y3OwQbZsnDJkScK755itAd
- iOdYWi8Ht5+nXc0nMaMKK40DPP600J9UKhzdwbIdNMcofJkNfJVXfqIc8+xIFY5Vghl+
- 0SIyvvdPR4Tq+77p4uocDqEuGVfnEYcBWiNQLjEvjM5UZMhQUNlrVXQd3k3uqZHo0gG9
- 7Gggrp/EeO29/1byeHK8BJ657sZU6Hfb2xSHI7b9/5W2ruseoiPCZ1x8U1kQZM3sFseX
- gM8A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20251104; t=1776649901; x=1777254701; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MhoAoh6695YffWAwiN6NIXB9UMw3/o7CgHDZv8Q4gh4=;
+ b=m8lnL//52g+kfthHLGWGgkwEUlBI2h7+BW+CUbMYgKVSCPywQoaWwrGmRQLwLL5Qm0
+ vV8Ruab1iF2N2MWWmJyvaSrtpeuv4um/2AJKudp1DLAw1//WB+eAxtJLePiDFg+7i8LC
+ +UlXCNJgVXBTw26pd/czZhiss5PIyXrhl8skA3ZhjvOaej+J3zzdCtJb9z19etR/TG4R
+ V5pbmPQQ94UavsBG746RDgUtrrHSA2LHkRZ136hmMkO4vVLqnQFbLDado06nQNYZWCaa
+ DFydqpfA+PHzGYOfq4yKNHt503hnmAXVK1qbehiZ1z58is6YVayXLSLaYRmeDZaMo+kD
+ ZmKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=MYdqJb3e
-Subject: Re: [Buildroot] [PATCH] package/fakeroot: bump to version 1.37.2
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=m8lnL//5
+Subject: [Buildroot] [PATCH v4] package/dtui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,221 +142,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8655708240400911529=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8655708240400911529==
-Content-Type: multipart/alternative; boundary="00000000000059bdb2064fda16b8"
+DTUI is a small TUI for introspecting the state of the system/session
+D-Bus. It shows current services and lets you introspect objects and
+their interfaces.
 
---00000000000059bdb2064fda16b8
-Content-Type: text/plain; charset="UTF-8"
+This package is built with Rust/Cargo.
 
-Hi Marcus,
+Upstream: https://github.com/Troels51/dtui
+License: MIT
+Signed-off-by: Christopher Obbard <obbardc@gmail.com>
+---
+Changes in v4:
+- Rebase on top of buildroot 2026.02.
+- Add extra depends for dbus to Config.in.
+- Update description to start with "dbus is ...".
+- Link to v3: https://lore.kernel.org/r/20251225-wip-obbardc-add-package-dtui-v3-1-b3c0dc8e3e17@gmail.com
 
-Got it. Thanks for applying the patch and for the pointer on the Debian
-comparison link.
+Changes in v3:
+- Add prefix "package/" to patch title.
+- Chnage upstream version to v3.0.0 (v3.0.1 is unreleased on crates.io).
+- Link to v2: https://lore.kernel.org/r/20251219-wip-obbardc-add-package-dtui-v2-1-744f76604c5e@gmail.com
+
+Changes in v2:
+- Rebase on latest buildroot master.
+- Add entry to DEVELOPERS.
+- Remove useless variable DTUI_CARGO_BIN.
+- Change upstream tarball filename from dtui-3.0.1.tar.gz to dtui-3.0.1-cargo4.tar.gz.
+- Link to v1: https://lore.kernel.org/r/20251214-wip-obbardc-add-package-dtui-v1-1-88de2f7882d6@gmail.com
+---
+ DEVELOPERS             |  3 +++
+ package/Config.in      |  1 +
+ package/dtui/Config.in | 13 +++++++++++++
+ package/dtui/dtui.hash |  3 +++
+ package/dtui/dtui.mk   | 13 +++++++++++++
+ 5 files changed, 33 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9e983ae113..439fa31afb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -697,6 +697,9 @@ F:	package/perl-sys-mmap/
+ F:	package/perl-time-parsedate/
+ F:	package/perl-x10/
+ 
++N:	Christopher Obbard <obbardc@gmail.com>
++F:	package/dtui/
++
+ N:	Clayton Shotwell <clayton.shotwell@collins.com>
+ F:	package/audit/
+ F:	package/checkpolicy/
+diff --git a/package/Config.in b/package/Config.in
+index 371a1c33e1..c0f52cfcf4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2799,6 +2799,7 @@ menu "System tools"
+ 	source "package/docker-credential-acr-env/Config.in"
+ 	source "package/docker-credential-gcr/Config.in"
+ 	source "package/docker-engine/Config.in"
++	source "package/dtui/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/dtui/Config.in b/package/dtui/Config.in
+new file mode 100644
+index 0000000000..524407d272
+--- /dev/null
++++ b/package/dtui/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_DTUI
++	bool "dtui"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  dtui is a minimal TUI for introspecting the state of the
++	  system/session D-Bus. It shows current services and lets
++	  you introspect objects and their interfaces.
++
++	  https://github.com/Troels51/dtui
+diff --git a/package/dtui/dtui.hash b/package/dtui/dtui.hash
+new file mode 100644
+index 0000000000..18ed484f44
+--- /dev/null
++++ b/package/dtui/dtui.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  8ccdf97b0b9e949cff11abf0ed505a409bd04f52161a782707ab15b94f622efb  dtui-3.0.0-cargo4.tar.gz
++sha256  b7b3cd0d92fc6638f0a7bd2306d715c747d040c6d851ed821a45c5538663e57a  LICENSE
+diff --git a/package/dtui/dtui.mk b/package/dtui/dtui.mk
+new file mode 100644
+index 0000000000..fad5f818b4
+--- /dev/null
++++ b/package/dtui/dtui.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# dtui
++#
++################################################################################
++
++DTUI_VERSION = 3.0.0
++DTUI_SITE = $(call github,Troels51,dtui,v$(DTUI_VERSION))
++
++DTUI_LICENSE = MIT
++DTUI_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
+
+---
+base-commit: 52ee2f5644da5389634b2465f1dc31deb5a4807c
+change-id: 20251214-wip-obbardc-add-package-dtui-f2a5c8279ed2
 
 Best regards,
-Shubham
-
-On Mon, 20 Apr, 2026, 4:51 am Marcus Hoffmann, <buildroot@bubu1.eu> wrote:
-
-> Hi Shubham,
->
-> On 4/19/26 19:30, Shubham Chakraborty wrote:
-> > For details see the Debian changelog:
-> > https://tracker.debian.org/fakeroot
->
-> This page doesn't really directly provide a changelog as far as I can
-> tell? It does link to the debian package changelog, but while debian is
-> also the upstream here, the debian package changelog only, unhelpfully,
-> states "new upstream version".
->
-> The actual changes are these;
->
-> https://salsa.debian.org/clint/fakeroot/-/compare/upstream%2F1.37.1.2...upstream%2F1.37.2?from_project_id=28340
->
-> I don't think there's a proper upstream changelog though, unfortunately.
->
-> >
-> > Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> > ---
-> >   package/fakeroot/fakeroot.hash | 5 ++---
-> >   package/fakeroot/fakeroot.mk   | 4 ++--
-> >   2 files changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/fakeroot/fakeroot.hash
-> b/package/fakeroot/fakeroot.hash
-> > index 1f52d37f1a..9fc8e0a54e 100644
-> > --- a/package/fakeroot/fakeroot.hash
-> > +++ b/package/fakeroot/fakeroot.hash
-> > @@ -1,5 +1,4 @@
-> > -# From
-> https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.37.1.2-1.dsc
-> > -sha1  925958f4730b172f4e1ae5dbeb9734f3da95da13
-> fakeroot_1.37.1.2.orig.tar.gz
->
-> As the upstream signed message explicitly lists the sha1sum, we should
-> keep this updated here as well.
->
-> > -sha256
-> 959496928c8a676ec8377f665ff6a19a707bfad693325f9cc4a4126642f53224
-> fakeroot_1.37.1.2.orig.tar.gz
-> > +# From
-> https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.37.2-1.dsc
-> > +sha256
-> 0eea60fbe89771b88fcf415c8f2f0a6ccfe9edebbcf3ba5dc0212718d98884db
-> fakeroot_1.37.2.orig.tar.gz
-> >   # License files, locally calculated
-> >   sha256
-> fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-> > diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-> > index ea0edb7665..12d7f1c4a1 100644
-> > --- a/package/fakeroot/fakeroot.mk
-> > +++ b/package/fakeroot/fakeroot.mk
-> > @@ -4,9 +4,9 @@
-> >   #
-> >
->  ################################################################################
-> >
-> > -FAKEROOT_VERSION = 1.37.1.2
-> > +FAKEROOT_VERSION = 1.37.2
-> >   FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
-> > -FAKEROOT_SITE =
-> https://snapshot.debian.org/archive/debian/20250513T025019Z/pool/main/f/fakeroot
-> > +FAKEROOT_SITE =
-> https://snapshot.debian.org/archive/debian/20260401T000000Z/pool/main/f/fakeroot
-> >
-> >   HOST_FAKEROOT_DEPENDENCIES = host-acl
-> >   # Force capabilities detection off
->
->
-> Applied with these changed, thanks!
->
-> Marcus
->
-
---00000000000059bdb2064fda16b8
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><span class=3D"smart_draft_text">Hi Marcus,<br><br>Got it=
-. Thanks for applying the patch and for the pointer on the Debian compariso=
-n link.<br><br>Best regards,<br>Shubham</span></div><br><div class=3D"gmail=
-_quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Mon,=
- 20 Apr, 2026, 4:51 am Marcus Hoffmann, &lt;<a href=3D"mailto:buildroot@bub=
-u1.eu">buildroot@bubu1.eu</a>&gt; wrote:<br></div><blockquote class=3D"gmai=
-l_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left=
-:1ex">Hi Shubham,<br>
-<br>
-On 4/19/26 19:30, Shubham Chakraborty wrote:<br>
-&gt; For details see the Debian changelog:<br>
-&gt; <a href=3D"https://tracker.debian.org/fakeroot" rel=3D"noreferrer nore=
-ferrer" target=3D"_blank">https://tracker.debian.org/fakeroot</a><br>
-<br>
-This page doesn&#39;t really directly provide a changelog as far as I can <=
-br>
-tell? It does link to the debian package changelog, but while debian is <br=
->
-also the upstream here, the debian package changelog only, unhelpfully, <br=
->
-states &quot;new upstream version&quot;.<br>
-<br>
-The actual changes are these; <br>
-<a href=3D"https://salsa.debian.org/clint/fakeroot/-/compare/upstream%2F1.3=
-7.1.2...upstream%2F1.37.2?from_project_id=3D28340" rel=3D"noreferrer norefe=
-rrer" target=3D"_blank">https://salsa.debian.org/clint/fakeroot/-/compare/u=
-pstream%2F1.37.1.2...upstream%2F1.37.2?from_project_id=3D28340</a><br>
-<br>
-I don&#39;t think there&#39;s a proper upstream changelog though, unfortuna=
-tely.<br>
-<br>
-&gt; <br>
-&gt; Signed-off-by: Shubham Chakraborty &lt;<a href=3D"mailto:chakrabortysh=
-ubham66@gmail.com" target=3D"_blank" rel=3D"noreferrer">chakrabortyshubham6=
-6@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 =C2=A0package/fakeroot/fakeroot.hash | 5 ++---<br>
-&gt;=C2=A0 =C2=A0package/fakeroot/<a href=3D"http://fakeroot.mk" rel=3D"nor=
-eferrer noreferrer" target=3D"_blank">fakeroot.mk</a>=C2=A0 =C2=A0| 4 ++--<=
-br>
-&gt;=C2=A0 =C2=A02 files changed, 4 insertions(+), 5 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroo=
-t.hash<br>
-&gt; index 1f52d37f1a..9fc8e0a54e 100644<br>
-&gt; --- a/package/fakeroot/fakeroot.hash<br>
-&gt; +++ b/package/fakeroot/fakeroot.hash<br>
-&gt; @@ -1,5 +1,4 @@<br>
-&gt; -# From <a href=3D"https://deb.debian.org/debian/pool/main/f/fakeroot/=
-fakeroot_1.37.1.2-1.dsc" rel=3D"noreferrer noreferrer" target=3D"_blank">ht=
-tps://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.37.1.2-1.dsc</a=
-><br>
-&gt; -sha1=C2=A0 925958f4730b172f4e1ae5dbeb9734f3da95da13=C2=A0 fakeroot_1.=
-37.1.2.orig.tar.gz<br>
-<br>
-As the upstream signed message explicitly lists the sha1sum, we should <br>
-keep this updated here as well.<br>
-<br>
-&gt; -sha256=C2=A0 959496928c8a676ec8377f665ff6a19a707bfad693325f9cc4a41266=
-42f53224=C2=A0 fakeroot_1.37.1.2.orig.tar.gz<br>
-&gt; +# From <a href=3D"https://deb.debian.org/debian/pool/main/f/fakeroot/=
-fakeroot_1.37.2-1.dsc" rel=3D"noreferrer noreferrer" target=3D"_blank">http=
-s://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.37.2-1.dsc</a><br=
->
-&gt; +sha256=C2=A0 0eea60fbe89771b88fcf415c8f2f0a6ccfe9edebbcf3ba5dc0212718=
-d98884db=C2=A0 fakeroot_1.37.2.orig.tar.gz<br>
-&gt;=C2=A0 =C2=A0# License files, locally calculated<br>
-&gt;=C2=A0 =C2=A0sha256=C2=A0 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe78=
-2895abd91d64763f8e7=C2=A0 COPYING<br>
-&gt; diff --git a/package/fakeroot/<a href=3D"http://fakeroot.mk" rel=3D"no=
-referrer noreferrer" target=3D"_blank">fakeroot.mk</a> b/package/fakeroot/<=
-a href=3D"http://fakeroot.mk" rel=3D"noreferrer noreferrer" target=3D"_blan=
-k">fakeroot.mk</a><br>
-&gt; index ea0edb7665..12d7f1c4a1 100644<br>
-&gt; --- a/package/fakeroot/<a href=3D"http://fakeroot.mk" rel=3D"noreferre=
-r noreferrer" target=3D"_blank">fakeroot.mk</a><br>
-&gt; +++ b/package/fakeroot/<a href=3D"http://fakeroot.mk" rel=3D"noreferre=
-r noreferrer" target=3D"_blank">fakeroot.mk</a><br>
-&gt; @@ -4,9 +4,9 @@<br>
-&gt;=C2=A0 =C2=A0#<br>
-&gt;=C2=A0 =C2=A0##########################################################=
-######################<br>
-&gt;=C2=A0 =C2=A0<br>
-&gt; -FAKEROOT_VERSION =3D 1.37.1.2<br>
-&gt; +FAKEROOT_VERSION =3D 1.37.2<br>
-&gt;=C2=A0 =C2=A0FAKEROOT_SOURCE =3D fakeroot_$(FAKEROOT_VERSION).orig.tar.=
-gz<br>
-&gt; -FAKEROOT_SITE =3D <a href=3D"https://snapshot.debian.org/archive/debi=
-an/20250513T025019Z/pool/main/f/fakeroot" rel=3D"noreferrer noreferrer" tar=
-get=3D"_blank">https://snapshot.debian.org/archive/debian/20250513T025019Z/=
-pool/main/f/fakeroot</a><br>
-&gt; +FAKEROOT_SITE =3D <a href=3D"https://snapshot.debian.org/archive/debi=
-an/20260401T000000Z/pool/main/f/fakeroot" rel=3D"noreferrer noreferrer" tar=
-get=3D"_blank">https://snapshot.debian.org/archive/debian/20260401T000000Z/=
-pool/main/f/fakeroot</a><br>
-&gt;=C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0HOST_FAKEROOT_DEPENDENCIES =3D host-acl<br>
-&gt;=C2=A0 =C2=A0# Force capabilities detection off<br>
-<br>
-<br>
-Applied with these changed, thanks!<br>
-<br>
-Marcus<br>
-</blockquote></div>
-
---00000000000059bdb2064fda16b8--
-
---===============8655708240400911529==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
+Christopher Obbard <obbardc@gmail.com>
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8655708240400911529==--
