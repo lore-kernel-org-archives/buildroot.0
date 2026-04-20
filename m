@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD3BF5A8A3
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739CEF5A8A5
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1D6441115;
-	Mon, 20 Apr 2026 17:23:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 465B561107;
+	Mon, 20 Apr 2026 17:24:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k8ueuZODrdG5; Mon, 20 Apr 2026 17:23:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wFwtpJPL-O7J; Mon, 20 Apr 2026 17:24:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3471141110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F2EB610EB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776705805;
-	bh=Jllkst/YWS46yG8uSNLTCBY8m/EfVL7ZtJH6k8kpoD8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=a6GD29T7aoAumqxxgCVmi4awTrb0X7SgyBn3vk+SX4CX997xaBg0giT/hoJ9VXaVi
-	 hEMewP1bFDWZKAEP2+XUX6qScQfcLqSrWDsoF/iz+XyXtC6dNXOm1lnEkp0rRedaOS
-	 g132KwJkTLaeaZrM2h74bNwwJjvte29yQTAJmjSPDfaHeHZXK+BXfCBADwsDTf6Y2e
-	 WqiKDMmfyJzPjB9vR8KZb1Qc5OnzERVerTkPXNPVHh9B/KfEHzLZsfZunu9CiVL2tE
-	 rJB0ScLd+Ho860LNP7YCu5RQ0xVQk9RDHM544UZf8OBcniOPIOdwxBlTCEX7JFbHmX
-	 f/mrq4H6zcYfQ==
+	s=default; t=1776705867;
+	bh=eNojC8ZE+6Twk+5/CwuDc/x1OptsKz165z6d3EDVl3s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=S8CsxryKPeGgE7LordRuCYhz19uMdrtW7FdbKetKhgknGpAsvbulHE8eExyeaunvJ
+	 K7zY88EL/lcEF1eG7mR4+sM74QAFfB1or3xeHOTxFpOXe3TLPZ6h6Vs1LC7qWSIFjK
+	 d8DfID6yRFRpabjHNcbjRfVTGCRdWjaT0YW1vSbGlqCaopxA3ddt1hVC00c0D508I9
+	 /rPUuVfeVf1R/PHVcATVIxK0M1WOG139O/icGnvDWMNGTH5YQKWzY++y0eclnyDSo1
+	 BXLHh53DvOzU9adhPEMZq+G6y/1fMdZ2VCQMRAe8p7mWHRcweV0eDo3xKAhOapaB60
+	 2WbCQUZT/EarQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3471141110;
-	Mon, 20 Apr 2026 17:23:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F2EB610EB;
+	Mon, 20 Apr 2026 17:24:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DFBC5257
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:23:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C2DC257
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:24:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0E7E82CAC
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:23:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69EE182CAC
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:24:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dpw-4qCx2Kd9 for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 17:23:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A8A5182BA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8A5182BA1
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A8A5182BA1
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:23:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id B843A780395;
- Mon, 20 Apr 2026 19:23:18 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 20 Apr 2026 19:23:18 +0200
-MIME-Version: 1.0
-Date: Mon, 20 Apr 2026 19:23:18 +0200
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20260420142814.753135-1-buildroot@bubu1.eu>
-References: <20260420142814.753135-1-buildroot@bubu1.eu>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <9cd836be0bc0e28b30cc77a1ee4243a7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776705801;
- bh=e3m1a6FzPsK1Y1BYEeUDKrnbRmrNBJd8euuMJ2nk5N8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=px4UywxBw5fDwwO4eBXXfWPF4WUoN4xWnua4V7c5xhipT9XlSafjwogOrd/K6n/Y8
- 3lGauMgz2+hT40QpGJdnbAVf9ReHS4cr+i/MwttPbqTlUIxXWRPA3AV11BCTnDOiud
- fafsyqGPCOyhi6ygQbkWxf0Rhfm+hQau1gs0Vd+RYhnvEHT2rZDytibHIv1caGs7T0
- pclL6Zu5aGx0q6XUimN5oH9BM2ZU4cUC+TDV/3uFI9dnfE2fW1w8mSgVZEL//xKquA
- PbLTFANvywC3nDd8DomMM9vkM+DoumJEluKUGwL+uBQThlVjyw15XIyDm/QyN86hWm
- 6oE8npWY+8FPQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=px4UywxB
-Subject: Re: [Buildroot] [PATCH] package/util-linux: security bump to 2.41.4
+ id ZbFqFp4neIk9 for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 17:24:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 887AD82BA1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 887AD82BA1
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:24:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3F13A81F78; Mon, 20 Apr 2026 17:24:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 20 Apr 2026 19:23:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cd52acda141d621b6c5774defe1427be29fe6ac1
+X-Git-Newrev: 892aed53e0916cf19d752ec496a02978cc12eac2
+X-Patchwork-Hint: ignore
+Message-Id: <20260420172425.3F13A81F78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wlroots: bump version to 0.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,32 +70,161 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/04/2026 16:28, Marcus Hoffmann via buildroot wrote:
-> Security fixes:
-> 
->  CVE-2026-27456 - mount(8) TOCTOU symlink attack via loop device.
->    The SUID mount follows symlinks when resolving loop backing file
->    paths. On systems where non-root users are permitted to mount loop
->    devices (via 'user' option in fstab), this allows access to
->    arbitrary files.
-> 
->  CWE-190 - Integer overflow in libblkid parse_dos_extended().
->    A crafted MBR disk image can cause uint32_t wraparound in EBR
->    chain processing, causing reported partitions to not match the
->    on-disk layout. Tools like udisks may then register a partition
->    at logical sector 0.
-> 
-> Full release notes: 
-> https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.4-ReleaseNotes
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/892aed53e0916cf19d752ec496a02978cc12eac2
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+While at it, drop the two patches, as they are part of this version.
+Release notes:
+
+  https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.0
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...end-libinput-fix-build-with-libinput-1.31.patch | 51 ----------------------
+ package/wlroots/0002-xcursor.patch                 | 33 --------------
+ package/wlroots/wlroots.hash                       |  4 +-
+ package/wlroots/wlroots.mk                         |  4 +-
+ 4 files changed, 4 insertions(+), 88 deletions(-)
+
+diff --git a/package/wlroots/0001-backend-libinput-fix-build-with-libinput-1.31.patch b/package/wlroots/0001-backend-libinput-fix-build-with-libinput-1.31.patch
+deleted file mode 100644
+index c5ef11ecf0..0000000000
+--- a/package/wlroots/0001-backend-libinput-fix-build-with-libinput-1.31.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From c1452d88114710f5772662b1d8efb9c71edaa34c Mon Sep 17 00:00:00 2001
+-From: Aleksei Bavshin <alebastr89@gmail.com>
+-Date: Sat, 7 Feb 2026 17:48:16 -0800
+-Subject: [PATCH] backend/libinput: fix build with libinput 1.31
+-
+-Upstream: https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/c1452d88114710f5772662b1d8efb9c71edaa34c
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- backend/libinput/meson.build | 4 ++++
+- backend/libinput/switch.c    | 5 +++++
+- 2 files changed, 9 insertions(+)
+-
+-diff --git a/backend/libinput/meson.build b/backend/libinput/meson.build
+-index c244eb77a..091b0e0eb 100644
+---- a/backend/libinput/meson.build
+-+++ b/backend/libinput/meson.build
+-@@ -29,3 +29,7 @@ features += { 'libinput-backend': true }
+- wlr_deps += libinput
+- 
+- internal_config.set10('HAVE_LIBINPUT_BUSTYPE', libinput.version().version_compare('>=1.26.0'))
+-+internal_config.set10(
+-+	'HAVE_LIBINPUT_SWITCH_KEYPAD_SLIDE',
+-+	libinput.version().version_compare('>=1.30.901')
+-+)
+-diff --git a/backend/libinput/switch.c b/backend/libinput/switch.c
+-index abeec86d7..9dde3c9cb 100644
+---- a/backend/libinput/switch.c
+-+++ b/backend/libinput/switch.c
+-@@ -2,6 +2,7 @@
+- #include <libinput.h>
+- #include <wlr/interfaces/wlr_switch.h>
+- #include "backend/libinput.h"
+-+#include "config.h"
+- 
+- const struct wlr_switch_impl libinput_switch_impl = {
+- 	.name = "libinput-switch",
+-@@ -36,6 +37,10 @@ void handle_switch_toggle(struct libinput_event *event,
+- 	case LIBINPUT_SWITCH_TABLET_MODE:
+- 		wlr_event.switch_type = WLR_SWITCH_TYPE_TABLET_MODE;
+- 		break;
+-+#if HAVE_LIBINPUT_SWITCH_KEYPAD_SLIDE
+-+	case LIBINPUT_SWITCH_KEYPAD_SLIDE:
+-+		return;
+-+#endif
+- 	}
+- 	switch (libinput_event_switch_get_switch_state(sevent)) {
+- 	case LIBINPUT_SWITCH_STATE_OFF:
+--- 
+-GitLab
+-
+diff --git a/package/wlroots/0002-xcursor.patch b/package/wlroots/0002-xcursor.patch
+deleted file mode 100644
+index d57980fa39..0000000000
+--- a/package/wlroots/0002-xcursor.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 47486545b196987f6f07fffe2929bba8f515b8e9 Mon Sep 17 00:00:00 2001
+-From: Dale Turner <rxguyrx@gmail.com>
+-Date: Wed, 3 Dec 2025 20:02:29 -0400
+-Subject: [PATCH] =?UTF-8?q?Add=20"const"=20to=20eliminate=20"error:=20init?=
+- =?UTF-8?q?ialization=20discards=20=E2=80=98const=E2=80=99=20qualifier=20f?=
+- =?UTF-8?q?rom=20pointer=20target=20type"?=
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Upstream: https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/47486545b196987f6f07fffe2929bba8f515b8e9
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- xcursor/xcursor.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/xcursor/xcursor.c b/xcursor/xcursor.c
+-index b5edb9de8..6627fb6cd 100644
+---- a/xcursor/xcursor.c
+-+++ b/xcursor/xcursor.c
+-@@ -602,7 +602,7 @@ xcursor_build_fullname(const char *dir, const char *subdir, const char *file)
+- static const char *
+- xcursor_next_path(const char *path)
+- {
+--	char *colon = strchr(path, ':');
+-+	const char *colon = strchr(path, ':');
+- 
+- 	if (!colon)
+- 		return NULL;
+--- 
+-GitLab
+-
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 37ac909693..cd1b83e6e4 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.19.2/downloads/wlroots-0.19.2.tar.gz.sig
++# https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.0/downloads/wlroots-0.20.0.tar.gz.sig
+ # with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
+-sha256  09a0a8d60104c8b0772fee4f60ba76a89aed7e59dff7659d00960fba06bdf267  wlroots-0.19.2.tar.gz
++sha256  33f52414e1b280839aeb70786f0ae2c9f54e27ad4873108d86270a2f89c4934b  wlroots-0.20.0.tar.gz
+ 
+ # Hashes for license files:
+ sha256  35d427c043dcafe8893b9e7247348f599847c81d9a067703587c80707f3d58df  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index bd2e0eb561..5ce634d402 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WLROOTS_VERSION = 0.19.2
++WLROOTS_VERSION = 0.20.0
+ WLROOTS_SITE = https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/$(WLROOTS_VERSION)/downloads
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
+@@ -26,7 +26,7 @@ WLROOTS_DEPENDENCIES = \
+ 	wayland \
+ 	wayland-protocols
+ 
+-WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled
++WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled -Dlibliftoff=disabled
+ 
+ WLROOTS_RENDERERS = gles2
+ WLROOTS_BACKENDS = libinput drm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
