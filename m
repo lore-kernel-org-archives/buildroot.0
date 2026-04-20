@@ -4,59 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D290F588C4
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 12:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2242F588DF
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 14:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2EDB40DC9;
-	Mon, 20 Apr 2026 12:37:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32E39410FD;
+	Mon, 20 Apr 2026 14:29:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Koma87DNnuUf; Mon, 20 Apr 2026 12:37:50 +0000 (UTC)
+ id Pi1U2fh1TcV4; Mon, 20 Apr 2026 14:29:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F151440DCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F6E041100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776688670;
-	bh=1ROyOsGS1a2LRmNLXXRvqFHQofhMJkayZB8rsuenv+4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=q0NFB3V+zp422YXkVv14O2wscje8tCdG6d/abZmZoeq88JzTdNvoclCt2Ounbq2CU
-	 IMamvaIB7shq2wBREagP41iSLjU7IdH9p1WZj4JJAYpXA0q+hKNcZWZFsgNt4wFXgs
-	 s/7ahJAmBZ1SKSO5QIjmjZlvn5og0kXylKSy2VFOYNCkyqJn4i6LLD2wVzJ/pw+aa/
-	 37NAcrcRTmZhmZDkVFHWVW7bstwmBRyziWYgrV0Q7Q2QV2O3mQGONM897qdz+iK4VU
-	 yN3lf9PNhftZB/j5zl/KOf9ofIWdH4RVnBFSrRX1qC3bWyxlRYAT0B9wHGN8SwFHR4
-	 Fkfq5mZf5SXew==
+	s=default; t=1776695367;
+	bh=1jI4qTefLoJpj082io1Gx9wfI/uumXWqm04blihLRmY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=jPwMyw/SyxRNDFjPjoF6x4DtxBmesUF1bSUk9uVaAd/wTm8inu8QPfrrHnfeTtaZN
+	 +EpJhboeuNsIaS3hBwbWvRLL6yteYnU+We2L72s01tut+F4KUYApTKUKvGbSyASGRx
+	 m64gKwhbm2h1/AZCKXLMC3wpNVguM9pVW3oJ1ixLY/VQ72Kbars5ECfoNyN/Y3In1M
+	 ET63r28k/aJ7ZXjSNqu9YOdWDHaQA8H/sOcFomqOfaMBr5cC7mxSn7gkYkMqNsmMZZ
+	 4YhZnyJTznmqtZis6yT78QHT0dssMhRWO0fPR5dXPviVUkICRF6NIUVM+g+XGA77NI
+	 ZjSzwxy8oyPYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F151440DCC;
-	Mon, 20 Apr 2026 12:37:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5160A24D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 12:37:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F6E041100;
+	Mon, 20 Apr 2026 14:29:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 348D124D
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 14:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3736040519
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 12:37:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11AE940514
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 14:29:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdZonCKQ4N2T for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 12:37:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DCD440142
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DCD440142
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 12:37:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA9D881F58; Mon, 20 Apr 2026 12:37:47 +0000 (UTC)
+ id KuXuLT5b9tiV for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 14:29:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C99040082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C99040082
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C99040082
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 14:29:23 +0000 (UTC)
+Received: from bubutux.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 2E5982C838ED;
+ Mon, 20 Apr 2026 16:29:21 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 20 Apr 2026 13:22:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4f2419164c4f3514e573427f6537f94c2878837
-X-Git-Newrev: f6e0ad3858687d5a0194a3abb4171770fd49be35
-X-Patchwork-Hint: ignore
-Message-Id: <20260420123747.AA9D881F58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: security bump to v258.7
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 20 Apr 2026 16:28:10 +0200
+Message-ID: <20260420142814.753135-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.53.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1776695361; bh=ItZs15DzjLWxqTNN2KwGWV5W+mmcOc70yNlcuOC6dIw=;
+ h=From:To:Cc:Subject:Date;
+ b=PZyRP3zJyi86sQFmIuZUsC9UfK1dpcCNb16iBO65QenpN7uEEUeIgASQjwzb4cN6f
+ nL91pjvoEIUmF7ifWB9NeQi1EQdYKUzb74IahVWZ/B2yVPv/WixBYWAZ548TiapaCN
+ mLH8A/lvtlEkwWqV4t0RuoYF9vbd+r6PEpVkYpYbpVYtFCEomCA0O1BXOnx11Qxtb2
+ FZ9OTspnjKt4d23PpmHC5tq5S6YSQsq8DTRk95Om0x4EYYBD0dMitPF1NHz+UCE7Yq
+ Gd6tG5y/EqjYV6AeGvQABHjJ5GBNxSu5ut0QEdyX4vLj96/8MkXpD8jg09CpjJWRe6
+ xh6X8IxbXH2fA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=PZyRP3zJ
+Subject: [Buildroot] [PATCH] package/util-linux: security bump to 2.41.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,66 +89,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f6e0ad3858687d5a0194a3abb4171770fd49be35
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Security fixes:
 
-This fixes the following vulnerabilities:
+ CVE-2026-27456 - mount(8) TOCTOU symlink attack via loop device.
+   The SUID mount follows symlinks when resolving loop backing file
+   paths. On systems where non-root users are permitted to mount loop
+   devices (via 'user' option in fstab), this allows access to
+   arbitrary files.
 
-- CVE-2026-29111 (fixed in 258.5):
-    systemd, a system and service manager, (as PID 1) hits an assert and
-    freezes execution when an unprivileged IPC API call is made with
-    spurious data. On version v249 and older the effect is not an assert,
-    but stack overwriting, with the attacker controlled content. From
-    version v250 and newer this is not possible as the safety check causes
-    an assert instead. This IPC call was added in v239, so versions older
-    than that are not affected. Versions 260-rc1, 259.2, 258.5, and 257.11
-    contain patches. No known workarounds are available.
-    https://www.cve.org/CVERecord?id=CVE-2026-29111
+ CWE-190 - Integer overflow in libblkid parse_dos_extended().
+   A crafted MBR disk image can cause uint32_t wraparound in EBR
+   chain processing, causing reported partitions to not match the
+   on-disk layout. Tools like udisks may then register a partition
+   at logical sector 0.
 
-- CVE-2026-40226 (fixed in 258.6):
-    In nspawn in systemd 233 through 259 before 260, an escape-to-host
-    action can occur via a crafted optional config file.
-    https://www.cve.org/CVERecord?id=CVE-2026-40226
-    https://github.com/systemd/systemd/security/advisories/GHSA-9mj4-rrc3-gjcx
+Full release notes: https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.4-ReleaseNotes
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Marcus: note which minor versions included the respective security fixes]
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index d5a97ffcbd..e96d3ba7ad 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index eab8a0c3b5..5a5656212c 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
 @@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  5c95e54e555b21594ab11e76f91a092c6383553ed725292eb0a929bf2fe028ae  systemd-258.4.tar.gz
-+sha256  6bd311c25f00d634ae3b4544d582e27df0d4166e6ba3d403b18b3129d7f44cae  systemd-258.7.tar.gz
- sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
- sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
- sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 4b488857fd..9ce4f8fef2 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 258.4
-+SYSTEMD_VERSION = 258.7
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+ # From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/sha256sums.asc
+-sha256  3330d873f0fceb5560b89a7dc14e4f3288bbd880e96903ed9b50ec2b5799e58b  util-linux-2.41.3.tar.xz
++sha256  a8c213cc06048862602a42b2d299b340001f6d05c4407b549f3e03521df83688  util-linux-2.41.4.tar.xz
+ # License files, locally calculated
+ sha256  4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3  README.licensing
+ sha256  527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1  Documentation/licenses/COPYING.BSD-2-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 7617041a46..1271bc7dc0 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+ 
+ UTIL_LINUX_VERSION_MAJOR = 2.41
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).4
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
+-- 
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
