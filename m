@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D69BCF5A8AA
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 18:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24394F5A8AB
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 18:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2B380794;
-	Mon, 20 Apr 2026 18:10:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3610607C4;
+	Mon, 20 Apr 2026 18:44:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AgzOl8vb-Ua2; Mon, 20 Apr 2026 18:44:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAE1E60B8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776710694;
+	bh=DgP49s4mFnZ9FizPAq37BNK1iBsFkGsmTHEDzbqCinU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=b2PH+THaN2E6HrmHDbQ8V67+HsUanWqnl8nTtpHCPmetTs8mqWXSqLkayEVSoAWGz
+	 p/qVI7aZyH97ZXGx2zEjGc6O6Hnt6Fy9Rqrd4H/6AgJJHuKlMsgnh9B3aJA9KcPswY
+	 v47z8/NKi06SZaljF1Z6dvA54ZGR+sc8Kota085bnTCSkl9R18xKTFbh09UBHKMzAs
+	 hJcmTIUynTP0EfCi20Akvwbaiwgzco0rJXc+jy+J2mnDkA7T7om6zJZp3bm5vzjUK4
+	 c4aSpFH5j3ZmzwBk313581Ay+RuKQBh4eelRpL6YNayHfdmGlFlpAU680CeHhzL+q0
+	 jiRxaJ0a95dKA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAE1E60B8D;
+	Mon, 20 Apr 2026 18:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B11D824D
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:44:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8ED118078A
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EWBtMxiixowJ; Mon, 20 Apr 2026 18:09:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B18FF807A3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776708599;
-	bh=kqA5sHShRqDj2t8B2qIotNgjys4WJDjGs/2e4nAEnig=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KnnhhnMfZJ6E7B/Z3+0RHePTi+j4tSLjfc3zEbYWASZcao6qlzxX9nJrymMtVCYNV
-	 CGwGaZ1C5V2YoJNjbaMs0JSoqmhwarZqHGKErgg5uAEaS86gwN2EBMjP4+QfNYQAqM
-	 61mXuGdTgkX0oJgJYlMl85xfYFX+TiA3t94V9rz2IRfDdKEdwGEh97P+oV46xvDdhr
-	 qXBlCfe5iR271EQm4WAza0SxqSyWT1SYGfDknApPJ8j54626odCxeV+lh62phsJdUl
-	 69G2clz2xwaHIOLo22Hnz5NO7YY3tZ4/Xp94Ei9rwtMuFBL/cixSLssdmHVDSftgpa
-	 qsF9akw4lZWPw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B18FF807A3;
-	Mon, 20 Apr 2026 18:09:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D51B24D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:09:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55A6C402F3
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:09:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0mWxwnq4oe3D for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 18:09:57 +0000 (UTC)
+ id Ay_cDl37AGqY for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 18:44:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 67826402E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67826402E1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA3CF80777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA3CF80777
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 67826402E1
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:09:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA3CF80777
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 18:44:52 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cdab.dip0.t-ipconnect.de [79.214.205.171])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 57406A4C38CF;
- Mon, 20 Apr 2026 20:09:55 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43016)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CF2ECA4C38CF;
+ Mon, 20 Apr 2026 20:44:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43970)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wEt4E-0000000028p-479u;
- Mon, 20 Apr 2026 18:09:55 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wEtc2-000000008K8-1zPw;
+ Mon, 20 Apr 2026 18:44:50 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2026 20:09:54 +0200
-Message-ID: <20260420180954.3749024-1-bernd@kuhls.net>
+Cc: Qais Yousef <qais.yousef@arm.com>,
+	Romain Naour <romain.naour@gmail.com>
+Date: Mon, 20 Apr 2026 20:44:50 +0200
+Message-ID: <20260420184450.3781485-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1776708595;
- bh=U9D0SflJjkhcrbxukONBYMIWHI3Xid/Dj87nQ68dObI=;
+ s=kas202511301023; t=1776710690;
+ bh=+nIDYgI4DX3PIQNWwI16gE7WIdVEM9uulwywKTFDmHA=;
  h=From:To:Cc:Subject:Date:From;
- b=XAWyuuNvCho4MJo0PbI1As5sxyr0xutOXV49TaTrPQVu/+gj8VGCVHgJuf8VZXBkk
- P8N8+OwXBiE1Z7lX1Z3mYvKBJtxvG5rINOJ3ZYlaWKiPbxhkJwYFhhpU7ek2Fd/7P3
- G7wkVsvupTM1RpVZjQJmjYQH0Xf2jQA652nNNg5v85X504x4aB4iq/njkPiFPOkHXX
- Wi0EmPcFAARUwT/iFBJIdsALVd6/wUEoSb05aLqIFvjErZfVafa64nZJy3aAGcJD/K
- Y8PbVCciLvaRzJcwVyRt4fY7bbnEVMPpfJrQZmvs/z4AixT5fyjuji4EfSzSa2WXAO
- oo8zP2CPqEIHQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=PrqaTXhGGTmWygpgqzba6EJYTRDYhnEKNX4Fviy+B26RMtaBO1E3Q5T29o/76DMge
+ uMxafXiRib0tVu3WYE0vzmh8vI3QaQyP+m+85UYwcXkxA1jSe+Y5GBz1sI37tNOnbO
+ zUju1YYgS/Dsh+ixL7TCsIt+/z+booWInXMqfWtcqIFDrBc1pQJ75vHGH4wRPanOZZ
+ OrktpLlBBPFCzcLklpN6VnurrtBzLrxOxxg4cgASQoBOviEJehsMISCk13wUE5bGwB
+ HPrMf0BOHtU4IlAydPT1BEPUlb8fHJ/P5yJkyJvDV6C90Rf4lsb77EEhWYn8Tb5FPP
+ ngiPQFMbhDV3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=XAWyuuNv
-Subject: [Buildroot] [PATCH 1/1] package/boinc: bump version to 8.2.11
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=PrqaTXhG
+Subject: [Buildroot] [PATCH 1/1] package/bpftrace: bump version to 0.25.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,43 +97,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/BOINC/boinc/wiki/Client-release-notes
+https://github.com/bpftrace/bpftrace/blob/v0.25.1/CHANGELOG.md
 
-Updated license hash due to upstream commit
-https://github.com/BOINC/boinc/commit/44742026e2e30e1c97fa846796236cbb73e43521
+Added configure option USE_SYSTEM_LIBBPF to use our libbpf package,
+needed due to upstream commit
+https://github.com/bpftrace/bpftrace/commit/6d53738627d4f80c83f799f9e042f6bdd373a433
+which was added to version 0.25.0.
+
+This bump includes upstream commit
+https://github.com/bpftrace/bpftrace/commit/c6442cde6e45945e3cfd72cb2fdbcca590454d0c
+which adds support for LLVM 22 and fixes build errors introduced by
+buildroot commit 25cb3813e7fc6ed3e455f983cf0e09c7bc02fccb.
+
+Fixes:
+https://autobuild.buildroot.net/results/599/59920f909d808911ea2710938271ecfab48c367f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/boinc/boinc.hash | 4 ++--
- package/boinc/boinc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bpftrace/bpftrace.hash | 2 +-
+ package/bpftrace/bpftrace.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 3955cffb31..ee3168b148 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  e577072b06f590d3230c25c94b221dba528b0938681e645bbd870778f8958077  boinc-7.20.2.tar.gz
-+sha256  0697781686bd99f0294d639d19d7184f884e5d8b11ae8fae720b855f58bb3f5a  boinc-8.2.11.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
--sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-+sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 421c8a1455..6227d464d2 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
+index 4add96aee3..9990ab3cdc 100644
+--- a/package/bpftrace/bpftrace.hash
++++ b/package/bpftrace/bpftrace.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  e0514aa3e1a032b0b2de2cf3c281bfee9b9e80509498e70ed78786bbd64db373  bpftrace-0.24.2.tar.gz
++sha256  89d1cb7448a650eecebe52e8deb6dfa85517ae91c465bccd5246abd4588707dc  bpftrace-0.25.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
+index 7b1b41781a..e32798cb83 100644
+--- a/package/bpftrace/bpftrace.mk
++++ b/package/bpftrace/bpftrace.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOINC_VERSION_MAJOR = 7.20
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).2
-+BOINC_VERSION_MAJOR = 8.2
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).11
- BOINC_SITE = \
- 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
- BOINC_LICENSE = LGPL-3.0+
+-BPFTRACE_VERSION = 0.24.2
++BPFTRACE_VERSION = 0.25.1
+ BPFTRACE_SITE = $(call github,bpftrace,bpftrace,v$(BPFTRACE_VERSION))
+ BPFTRACE_LICENSE = Apache-2.0
+ BPFTRACE_LICENSE_FILES = LICENSE
+@@ -30,6 +30,7 @@ BPFTRACE_CONF_OPTS += \
+ 	-DBUILD_TESTING:BOOL=OFF \
+ 	-DENABLE_MAN:BOOL=OFF \
+ 	-DINSTALL_TOOL_DOCS:BOOL=OFF \
+-	-DUSE_SYSTEM_BPF_BCC:BOOL=ON
++	-DUSE_SYSTEM_BPF_BCC:BOOL=ON \
++	-DUSE_SYSTEM_LIBBPF:BOOL=ON
+ 
+ $(eval $(cmake-package))
 -- 
 2.47.3
 
