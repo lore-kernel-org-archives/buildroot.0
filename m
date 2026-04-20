@@ -4,82 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFDD2F5A8A1
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A9AF5A8A1
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF9BF61116;
-	Mon, 20 Apr 2026 17:34:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DC85610EB;
+	Mon, 20 Apr 2026 17:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ddNdln1LTwbU; Mon, 20 Apr 2026 17:34:33 +0000 (UTC)
+ id hkPizySO3WN6; Mon, 20 Apr 2026 17:38:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B58B6107E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 218A761018
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776706473;
-	bh=wv4pWxaM2DmcXz94Xt8K2VmSyh68582vb+xQy+ajbyU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1776706736;
+	bh=14gKgHOcpswxud0GjNzuOiI1hjev8LFBklvD8PpVWhg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LhqWmE4g+1bkynV2ONOo+W1Nzkdu+oo6cZSCy0TvJysglrrmzk92YD2wr/TkzEnMA
-	 DuwRSZESO0AWArDVxpl5XpBOsjC91kKhd/WQfzFQE4GOkpvjwPs/QN8voHN8HuYy5z
-	 9bwoc0pTNh7AyU7sCs1+5eq2BSCqPHxI8rqpIJ5aImBm3jWabxvmlRW5zoHUdzZRIU
-	 TJ0MqDHi5TrNTrZv5C1xaYeyF8nAlzQhK5tF4llGgf5w8rqn7myGBQTR9nPMlZ3lLw
-	 uJ9tEg0Kr0zOmzdmRUKivyleuGFEmps1aedKKTxRKpW8jYQ8w6ihqdxLejqaGyhAoh
-	 BfRIxJQeW/kcw==
+	b=Ai7y6ABDlg+lDfaxoLnuav2xig8UkaMMJwC00r+3iP3S/2XVJNSCkTGy7zon54cF8
+	 NIHhYXYQwr1/5+SyIpSvqk7/3KpMFZoKBB3hONhX3AcEind3TPTTXilk62vhUVccXe
+	 dhLG1aONt4PnEp/SUFNYCpSqnJBz17d3PFE6YO4yRY/IvNv0guZMgnmwy9hzkCRq66
+	 KJzqpJXaTjfcXWAj7Xa9yGAPT+cw4EKRS6eDXm7N31dR9+DBnFd/RZYfLXecHyhukE
+	 zdGJV56kZwmQBN+MrFQFq+q7QHzMyVCd1kZcQcNX/gkYTf3ggSruxDTlpMXvlyNhCv
+	 XYfBrnmG2HDGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B58B6107E;
-	Mon, 20 Apr 2026 17:34:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 218A761018;
+	Mon, 20 Apr 2026 17:38:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D594624D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:34:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F54724D
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB4116107E
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:34:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C42261018
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id njXb5A-Qp-7j for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 17:34:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9D76761010
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D76761010
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9D76761010
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:34:30 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cdab.dip0.t-ipconnect.de [79.214.205.171])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D6827A4C0D6A
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:34:14 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55302)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wEsVh-000000004Fn-08XP
- for buildroot@buildroot.org; Mon, 20 Apr 2026 17:34:14 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 811Qi487zmZw for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 17:38:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58EC461010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58EC461010
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 58EC461010
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:38:53 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-43fe62837baso2025448f8f.3
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 10:38:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1776706731; x=1777311531;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=MpfNy6Rt+yRhY+EqMhNptj+Rqi92JzZzJ7q/GLVV6nk=;
+ b=aZNlacfK1VAWDQh5vSqk76NJ3z8BRF7lRWIRr8RYKRhKb2M2VgE8GCrb7NU66Ukrzp
+ DYPO+FHIh/FsuNzIcbrE3szygvBmUadsS83G39NVmb1FR/SP19FUqTHLIcGkQIkpi8WO
+ okb+c/5od4Bd2u42bob0tA1oypuAHSWaMalbeowmcg/lHe6tysHpBer/Yy2cRaFkV7pO
+ eHvZ13azrNd+Nl2kMN57LrY0OlgF1dfWkYr6dtYM1jeoJnz6CLIga/nx+5xRCGOo3dKp
+ IQBng2kEpMhz5rv8FA1DCCvMf7cf56mJGGlB4mAG/iJnudJrS22hCEasZVcgwqtXw/vL
+ ha4w==
+X-Gm-Message-State: AOJu0Yx42scr229EYDrYgHU5z7WPPYtvWcQFz3qBEEKIUpCXgQZq3+wf
+ 7qi4AYOXt019ryf0p/t4EmcXIE20yUsaIng0lPPDbHBaXk5mYJE4LnMabpa41dpWqljycgAz4Oo
+ D1KjC
+X-Gm-Gg: AeBDiet/4ruNXs0wk7SAXTRIlXeYqgtZYtUVWGH97RX7wlfntO9RNYkYJVzVVLaFDbv
+ 1HSEFZ5Fx5VsAgBMar3soDWElrwe1Bkch+gBuwMtSrGZ1nyYm7uUgwduKq2v2NHMOzvlDDkW9Rk
+ kCiOdiXeu6XcuMUcRqEz9RewefpuSrjrWCAwf+9/H+jSSrrYOr+0trM4//37clDaSImiJhlElnT
+ LXkUCjo8o6L5V+kTkMXVYZ5gdjxBvQxjNMq67tS+hr12JxBLXy5+WYDlLeOw2p55qRhtW2BRHFN
+ LqCFItClgA9pYELxznDXQcccCZ3om41rvVG4Js2h27BRRGM8u6vaf8jYVM3P0wrWBehVNcHcuPv
+ suSRCtT8v0b+z/9BAhPwN0nKtbDMWAurAPl1dVj+XthAvm4/tSfcK4tMGrU7wzwJujtxeyKgNLv
+ 7uj4u5qhuaiGmavImqYgSAHlcopVu5DEijA5/OkqSO9de54/ty5nNXyCJX8O1w0jdMp1nS6HOkl
+ cEiLwpnXHdE58M7tywMi0O1lcK7JqtfkYfwIq8bRqU10iF85LyauLpYANr8B9nhTnXi13fLdYae
+ A9jVsiWyKQ4eqR5kaPVeNjYsKSRlDOfwxyM=
+X-Received: by 2002:a05:6000:2906:b0:43b:8f38:3b88 with SMTP id
+ ffacd0b85a97d-43fe3df22bdmr22874520f8f.25.1776706730378; 
+ Mon, 20 Apr 2026 10:38:50 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-87-4-101-145.retail.telecomitalia.it. [87.4.101.145])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43fe4e4d5b1sm34251607f8f.30.2026.04.20.10.38.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Apr 2026 10:38:49 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Apr 2026 19:34:11 +0200
-Message-ID: <20260420173412.3572945-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Mon, 20 Apr 2026 19:38:47 +0200
+Message-ID: <20260420173847.2353616-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1776706454;
- bh=O1N1XWfrfqYTM6c3vTwYnQrPnqWcGwW8+2HUh03l6Sk=;
- h=From:To:Subject:Date:From;
- b=LJvPgyM4H55JEUwDMlSQTodjR7h39Xc2stEKVnybyTTj1LmcHJRyzbsa3dXbH4gC5
- 3r4p9RrcA2h4VplagnAYq7Wu/PmxMCIiYRff6CuXU7rUgs5UJDhRQpfNBtUcfle4yW
- eXmxdacjkckYcwQ9QfeS3nFFH5WV3IAq4PVLf3MSstsSIha3pFfYSrCFZBHvjeBHl7
- wlDTBWeVs2RXXiYw17WbXtGM01wSdNdC+fP3B/AbV8TzM4E5qxFUQj9NZdFuy+W2UZ
- OYfnXgToQ9JuXOjgzs4hMPYkt+zQcSyF3bgFvMXt6C6xFN7PxG0KfIEC8dGe+nwYMN
- DLYrA48zoByLA==
+ d=amarulasolutions.com; s=google; t=1776706731; x=1777311531;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MpfNy6Rt+yRhY+EqMhNptj+Rqi92JzZzJ7q/GLVV6nk=;
+ b=ZTOagaZpi0ewjWKMdMuV5Z53n26mzxkntMAikQTnD3jiWjIdGYrkc14m9J/iU/HJLm
+ Fg9iBRDHp/3a5salSyEfmonTfDS/c5Gd2GKr+sibppk06Ki6QidY4PdSNhJ77hyQiyXM
+ djr61FHwu0CpAcwD25YH4EFgQBdRWnVArdGGs=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=LJvPgyM4
-Subject: [Buildroot] [PATCH 1/2] package/p11-kit: security bump version to
- 0.26.2
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=ZTOagaZp
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 15.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,44 +126,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/p11-glue/p11-kit/blob/0.26.2/NEWS
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
 
-Fixes CVE-2026-2100: https://github.com/advisories/GHSA-hq85-3f6c-jx84
-
-Switched to sha256 tarball hash provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/p11-kit/p11-kit.hash | 4 ++--
- package/p11-kit/p11-kit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 43a566a82c..943ad9c22f 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index bc6a19a13146..b0bc621113d3 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
 @@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
-+# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
-+sha256  09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828  p11-kit-0.26.2.tar.xz
- # Locally computed
- sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 42de3e1065..68b1894183 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
+ # Locally computed:
+-sha256  bb03a16da6b2cca43962b65a2890faf4e6b16607220cf60270436a11e09e6f46  armadillo-15.2.4.tar.xz
++sha256  97cb8ef708541f632e861d005a462dd0367240f81ff96f8e63ebbdd75c8ce55f  armadillo-15.2.6.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 8c9c44f89ab5..194af02e0038 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--P11_KIT_VERSION = 0.25.5
-+P11_KIT_VERSION = 0.26.2
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
+-ARMADILLO_VERSION = 15.2.4
++ARMADILLO_VERSION = 15.2.6
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
