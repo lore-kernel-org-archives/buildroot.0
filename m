@@ -1,144 +1,144 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B9AF5A8A5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B52B6F5A8A6
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 17:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0606181FB3;
-	Mon, 20 Apr 2026 17:39:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F3C561010;
+	Mon, 20 Apr 2026 17:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 07ERNV4_S-3y; Mon, 20 Apr 2026 17:39:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7oZK0d-aEY1C; Mon, 20 Apr 2026 17:39:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FB1082003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9F0161063
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776706756;
-	bh=ZEbexsP8ehVOQRa8/YajpjWfaRJflEMKsu4KtqRIj0I=;
+	s=default; t=1776706759;
+	bh=HLwdXDvo8jCKeD9Y6+3f8pTYi8Wt6dyI4klJMwQAHH8=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=ZTS6h9kPitOFf+EWzY7nJlpPk4KiXJ03Yh0cEOcLJT2D5lJGvdldsCc8UB+9iYEsJ
-	 PXCKote47KnOE79uO51H7dEtNU7ym8t+oe70Cy1/0NeeEtkaBVUgOV/UHNboopz2SF
-	 IVcR7mwKX2TOmiinv2Nx5SqSEeLtolaEOkGmCJ1NeBw77UD+l7lXXuBucqMiQbk0BL
-	 l7jm7h+stivCXbKe/YyHzDpMc3ybYp+yGzcOM+7f1B9AHpYyoH4whltKuZF05J6w/Z
-	 A1Iw/8b5cf7zQu5jNwkV7hlsolLwX7JW1pZVWTFYEv/3megUmHTSJnN6uk99Ud9qcZ
-	 VaVbnnQDM26vQ==
+	b=ri61US2bTqnAtzxM+bubPsPf7Xu0g9x1nIn5xUVrew8+Srd9If7svFkgUq6ARXRYs
+	 TVov5HEP0poHTLrUc4QQ1Etbb5FfbPisZLTFhwlDF0h3k4BxafqIs/eqDdOYeC3F7f
+	 xYWsqnvpvxPv3spcKrx2JPnGIVo3pLuE/MruxTVcM72ANTES8x7cAqsfnIcSBCwqps
+	 8s0EGfCcqQvcNVALek0QeBayeM2OGH41ebMb6P0+p64jYex0w35swDWdeKHfuiaLRb
+	 qBm1JltqPNS+EWgFEbGzrP1ZSFZkuFhgqnI1wGKFCDW9aAXoGT1/5bJJ+5E8kmt/bm
+	 IJQzrG3vwvN6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FB1082003;
-	Mon, 20 Apr 2026 17:39:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EFCE724D
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9F0161063;
+	Mon, 20 Apr 2026 17:39:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F08F924D
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E205340864
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E249F8297F
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrJBj8BUEtIz for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 17:39:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4j9bnk_Rvgmr for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 17:39:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c005::5;
- helo=co1pr03cu002.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:c107::1;
+ helo=ph8pr06cu001.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3AEB240839
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AEB240839
-Received: from CO1PR03CU002.outbound.protection.outlook.com
- (mail-westus2azlp170100005.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c005::5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3AEB240839
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F67381FB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F67381FB3
+Received: from PH8PR06CU001.outbound.protection.outlook.com
+ (mail-westus3azlp170120001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c107::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5F67381FB3
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 17:39:16 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TWGrMviKzwi9i08ObQO7b63oZ8LNg053HvhC8AYoJGF04U0vKM91HBtDjO2WM96E/uJnybR84SoSObU2mkj3ompNcfONMNv/1tWhPteFF5dleDJhx/9WTDILIYuo3oF0wrkWQSJ8GMZff5LeAu26GV12J0sR1F1u4TRNzth8uDJOzqoaV8us9uHcQeHctbPnEaxBVeIgwRdkTivRDeIpZCsjbJCLPrFk0zyPqqGYSllBBO7qfoKZoMyLpd0CzrqJ+RxhXbtSkm/ZDDbAUhASZE8v+5HjAHSDme3xokR9c3wmy4ZeXNaJHSZB0auAeerm19E4or/mAuORqUVbU9gdMw==
+ b=YToXZa4db2STqdriAevNDmABwZH6T1CR26uArRjvXdYjzevrpQF97jwealPE0mE5cpDW9oU29EEBaF+a3omV9c4Uu5c3gxtkbrYPOcVDgOVOQpvtK4BIQaaE8pJdEMEQmsW6sUv58EXWeFK2ep//MJYss5pH11lFXUtFeg90O0/bDpDUj9YvKPjuKcNOULUOKOlE0It3JcJr/KUsjcuSAPnV7/nTqq+nfEi9LtkaI8dHc+wSoJjn/c6fVQ9PzCsJ9qrRxYPwkDFU3ltLGCkq4THqtM/glVpiA89/bh2N+vvd/X5YbT7HF681UKaQYOyqlPHdTIPIgtkO2TjW3aNcOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j77cJ0ZgNijB+iuTfzNVYkIEu1RxE3mQ+R68vVmgEaw=;
- b=G09f5NJ38szNWnC0ZMe3aWqZlmZ6zaNW7x/Ai+ZfFvdF71/9BhhifNrOq8nor896GdUXAQbRvfjamua8My3VAPvr7bFfUahiXSHyu8eCqbBfByksrSUxHEJ8gsOoQ8SdgqcgRxs77kscBxbzT10/nLc0BhEB5eiFOY1oPX4u0ldCLPSiGWmITg0WdrCpgbKf8tf6r7KBu51/NmkGv+3Q0Lr/L16Yx7OvpqcEOFBeniq45CTwfAbtJsqOSBXRd7JXjNc1SBrBRdosKWUx/csB64Yn/YOz6p/m5y58hhQHwBvU7OghrS838AuggltWeQ1eYZOPSokK7W+Sv5J19w6u9Q==
+ bh=0/lbRSqAwt0Omzs842DJPj8uwJ3+MzftUkOnav78Ctg=;
+ b=qDKe8RmbLIA0+mPUPzOkdM0t/kEpQSpNEew/duhOp8K7pkXUjjXOht7dfU1W/fxw9ogZoUqshyur2f11TQnheUMjIdQ4y2g+td8XlVP87RpobcPG9InCZmcj4evjmff6f9FlcrIx9uQ8zD8zkdfmgauDwJg9QYqoCrC/YyTCGmwsek7OB+4LWWlryer49+PIUDTIhM0U7b2u0uCgGVMLA1k0hnAGZbfWvLDCm0nQAhbCCqYJXGKJwp42dDVMKALUdrEjAGLGkYCwGLfHjlHXXZmRZuKBVfFZv81p/WwuMgwhjmQKpvF2vWQJv7wHx+1f73agCegAcFOaXttTkEnUCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MN2PR06CA0014.namprd06.prod.outlook.com (2603:10b6:208:23d::19)
- by SJ2PR12MB9240.namprd12.prod.outlook.com (2603:10b6:a03:563::13)
+Received: from SJ0PR03CA0145.namprd03.prod.outlook.com (2603:10b6:a03:33c::30)
+ by DSVPR12MB999123.namprd12.prod.outlook.com (2603:10b6:8:388::13)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.15; Mon, 20 Apr
- 2026 17:39:11 +0000
-Received: from BN2PEPF000055DE.namprd21.prod.outlook.com
- (2603:10b6:208:23d:cafe::4a) by MN2PR06CA0014.outlook.office365.com
- (2603:10b6:208:23d::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.12; Mon, 20 Apr
+ 2026 17:39:09 +0000
+Received: from SJ5PEPF000001EE.namprd05.prod.outlook.com
+ (2603:10b6:a03:33c:cafe::65) by SJ0PR03CA0145.outlook.office365.com
+ (2603:10b6:a03:33c::30) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9791.48 via Frontend Transport; Mon,
- 20 Apr 2026 17:39:11 +0000
+ 20 Apr 2026 17:39:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- BN2PEPF000055DE.mail.protection.outlook.com (10.167.245.8) with Microsoft
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SJ5PEPF000001EE.mail.protection.outlook.com (10.167.242.202) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9870.4 via Frontend Transport; Mon, 20 Apr 2026 17:39:10 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9791.48 via Frontend Transport; Mon, 20 Apr 2026 17:39:08 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 20 Apr
- 2026 12:39:05 -0500
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ 2026 12:39:07 -0500
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 20 Apr
- 2026 10:39:05 -0700
+ 2026 12:39:07 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Mon, 20 Apr 2026 12:39:04 -0500
+ Transport; Mon, 20 Apr 2026 12:39:06 -0500
 To: <buildroot@buildroot.org>
-Date: Mon, 20 Apr 2026 18:38:54 +0100
-Message-ID: <20260420173858.1655069-2-neal.frager@amd.com>
+Date: Mon, 20 Apr 2026 18:38:55 +0100
+Message-ID: <20260420173858.1655069-3-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260420173858.1655069-1-neal.frager@amd.com>
 References: <20260420173858.1655069-1-neal.frager@amd.com>
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000055DE:EE_|SJ2PR12MB9240:EE_
-X-MS-Office365-Filtering-Correlation-Id: abfd8673-ac12-4bff-0301-08de9f03bb5d
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001EE:EE_|DSVPR12MB999123:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5cbbcc92-8d8f-4b4d-9c74-08de9f03b9fd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|376014|7416014|36860700016|1800799024|22082099003|56012099003|18002099003|41080700001;
-X-Microsoft-Antispam-Message-Info: mkpjE2ilj/GHd0PIBLHUOIvCHMaqGyYA35XmqLaZ6AP/mMWMcYv6adeTonIK9VfJ3RdKAwiw1uNe14eXofMikiA+E3g9mCkOZGklRhQdL2suGbmf2vLUT/YzyQBhYXes544tLmxVZAToyTyv3F0q1FJDIXCDVmD9QLFHg8gO1zE0QB29QFHYZieVlBGqbeITlPEauoc7VV6B2jGRgFfXfrrJfqUnjBSanJm59nWeAMj4ECaajoe0yxllyOtlIhLP4xrU0gZD5PX6FUSj3UVXf3OxQeVeZ5W5lzTcP1m39VXgiMft6Kcu6HrWzHb4qlYQ44nzyaCsOlQaOnw44hLq/evkLwnb1ZMhAU3WS7z0xJZaNrAvXFFWiasNnvqwuJR1pxFVZjd5dnyTfTrvJusBMvTKHj6hhULFqcGWi6g9uv0Rd+G6Be+sa7ZhsrrCeZwW/mSZmy/6tr3KafAVmdvGdt0nnutjeX3fFXXsfjO4JG8wfN7y24g0RAPbagWX0wVdr5wVb9Vt5KVIcLQHp5WK7HEzfII1BuIGVV88dHoX3md3Yiexvj4GNUddDT9mR1S3atatVd+LJirh5aquNQ/Tv2GbNdcm0xq0QYcrnG8os+Wtj1lhMbL/It9KgPx0nHtAfFPxrzygW5/dchhAGOhbM891BEvpkizmz9spr6TleVJ8PO6eemZM3+wUVY+gibdz2ZfmW6jvlSRV5yvugaUP1CpXECNANRXLuJ2SpTMZ6iBUPbyP8XbSKzxC3o/GufXM6IaCR6oR2FpQNAuRmi+V19Q/l0vq6X0rlM/X5hUHZkK8xzPpVxxysAmX4wiTOHAC0NytsOZ/yBvdjH0BuITDEw==
+ ARA:13230040|36860700016|1800799024|7416014|376014|82310400026|56012099003|22082099003|18002099003|41080700001;
+X-Microsoft-Antispam-Message-Info: RQYSEQvEjWcFKQ93fRfC0cm3CJP4xhNve/qOJU5tQUuzEvWA/ZkrxFjYMKgXx3ArL/2VBo6tx5vwZEs9CEWFcVs3HgKephj6RhmborjeAjRhwB4AtiLxNoX7oCvPksQYDRi39DGCWENwprTre5fd58i3XW43PX460cYzaQjIrNmWRNTGIaQBX2VhDGth4t58bPn2wxy1AQMy0+i1FueAfdTjuBcdH1EsUK94NdwftrjJn7UkjPNlN3aO8SawcS+2pW8RynRLq7+dQdGv19DlwYJ8WqDO38LVbNUmsn1kXxZqtRSPqpzDzPBfpq3wBnCUtQwJWkzjwMdaholsZPP7KBAWVoBTAgXfKA6lfyhBhwl4RztVxKbgIeypD5XrYtofVxrlAWR6T+/v/1cPMSvbrzdSa2QYNQPRVuEKV8i46XkJed1sce2MqmFYVfkJoTngrn/sO924kveWyEqhi+kBp7Uk0zvf3Jko4TDwCU7OLUW+S8jWtEVI9yfbwpDnsOLMh4uifvXZu3yCex2eKS93TRPhbSE/HRQ0/9+Tpuh4Ag8vlzbCQcVnsoskQxeKmdHhL+jZBZX+E4vP591gADIzR8pvvUCzTOXNhntiH2/4j4STzUzjkjkKDL5A280EmqhOqoWNDfNbJ73k/1q5asbspRRqWTI2OsSJctZ/H1tjcy2s4Cw2XfJS8NA9yNoLJe2IHedSb/z/5hmYAn+Q3+04eB1s6eSJSj7hm4B9thgHNHVNmMi+ZNPa5dO4B6ss39uNQWbs1AhaI0vEQ4aRgDMS/rt6cfPRnUGpi7k/dAjHngW8gtrWu9XDdsOJz2U90mLjG3H/cqQlCzlVgukMNecnYg==
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb08.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(1800799024)(22082099003)(56012099003)(18002099003)(41080700001);
+ IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(36860700016)(1800799024)(7416014)(376014)(82310400026)(56012099003)(22082099003)(18002099003)(41080700001);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: foIteVSrKT4c3Mn3m9WPANGZ98TF2EwM207TWPzXKAKH+O7fVRdqEZ8SKn9cYXhMaB8z8RSbGHpQRYH5yRUD92h5Pnt65b4d7molx9wzL2wu/36n8KkWcutXg3IXvmFzbO6X1kML78MuDn+1co5LfiHelatySD7zu4LWy+5yCDc3P/vmWgxCGutpRw5oH1srgLK0gli9cBug1QG2N/UZRvjgEsdynpfS1XMZvqBO2TcjAE+ewLiCDxedlBKnuTTRFVRP620D4uqkw75quGGb5hHbhCnzqnRlki+UXBmGu/ktqDhn767ITwi5tZzbTDq2P5QETisWyYx4HsybAWZCVVCiarCVQzpfI1GW9hLuI29Kqq54DNvhqsZVhBoREarVwGYVlVo3yk6RxiRCl4o0aPR+exiCRGjQ5TvG1T9quFkMtH+XyOjzEMHKf1j4iyhY
+X-MS-Exchange-AntiSpam-MessageData-0: hmeVtgxGPN5tm0Gbol6+5qN3UdBHnZa9pKKzmRwWKv2JDThVmI3oqiL5p4gg2TrCwaLONbxzhm/SeyEOUnk8QAcjDSfll6wj8a2zg+z2OMMHBjIgoe6VNv9rR/4OpGNbN6EL9JWOFNkj2tul9553XbAb4RrA2XdPyYAwfrBt2KMCmF+45RpkyO5b5NT2lcXERdrVLFRfTUu7qT+CpHr98mSBkCUW7JcZLNVJt5Skg8LACx31vvVThc7/Fb9mSdC5uK5Be3nOuX+86upMyq2YxiMEwkNHU+1Ge+3Y1pJDWT62FO7kjoVYp74BqRHeuy0h5iz+aNX2Cx26ILXMK7opwRZIbv8EyCzQtEiLocVKhvvxuuxUVw8zG5XJqmuRb5zQqP2EPwi9OVPewQztKrVI2DaWXTOcaW40RdGI57pjYFB4JfGITafaYuIJ2I0xdP4s
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 17:39:10.9929 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: abfd8673-ac12-4bff-0301-08de9f03bb5d
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 17:39:08.5965 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cbbcc92-8d8f-4b4d-9c74-08de9f03b9fd
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb08.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF000055DE.namprd21.prod.outlook.com
+ Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF000001EE.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9240
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR12MB999123
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j77cJ0ZgNijB+iuTfzNVYkIEu1RxE3mQ+R68vVmgEaw=;
- b=MF88MttnYi6CE8QI8TU1/rf0ZW7IN+ZnVCPHFepmOtXIEe/CB6sQ6qXPOA+v0zlwZrTqLn/j53ieD9rON3mCNR+5K4oMaRToNzNHrmlmD8bPl6eNrVFeL9rjA1p8p7icXeWPsFUM3rn3ueABxRL0Osw6d+ZUkt2n6dURXq5Pwuk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=0/lbRSqAwt0Omzs842DJPj8uwJ3+MzftUkOnav78Ctg=;
+ b=S0G64cBIPPc7yfTwYmNAwhDYFGzL9ifMywlxSzPCuaN9B89sseZvhIEOz7YF81P4OFxTLs5B8Ly1/Q1jXElB9I3A7FJe16+x5PEZ18KiRm1/66q6/ElmrcxTmxD8N7Nik2GPb5K2U2JDOJgCrz1pVbIX76dBnktYp8XjHkAKV2U=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=MF88Mttn
-Subject: [Buildroot] [PATCH v1 2/6] configs/zynq_*: bump to Linux 6.12.70
+ header.s=selector1 header.b=S0G64cBI
+Subject: [Buildroot] [PATCH v1 3/6] configs/zynqmp_*: bump to Linux 6.12.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,70 +161,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the zynq defconfigs to Linux 6.12.70.
+Bump the zynqmp defconfigs to Linux 6.12.70.
 
-Run-tested on a ZC702 Evaluation Board.
+Run tested on a zynqmp zcu102 evaluation board.
+Run tested on a kria kv260 evaluation board.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- configs/zynq_microzed_defconfig | 2 +-
- configs/zynq_zc702_defconfig    | 2 +-
- configs/zynq_zc706_defconfig    | 2 +-
- configs/zynq_zed_defconfig      | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ configs/zynqmp_kria_kd240_defconfig | 2 +-
+ configs/zynqmp_kria_kr260_defconfig | 2 +-
+ configs/zynqmp_kria_kv260_defconfig | 2 +-
+ configs/zynqmp_zcu102_defconfig     | 2 +-
+ configs/zynqmp_zcu104_defconfig     | 2 +-
+ configs/zynqmp_zcu106_defconfig     | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index f307614337..cc1f001d37 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 08a5714387..7f2449cf95 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index 5056d96441..c6022ca670 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 85caab689e..2372d3b0f9 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 8ec71a2716..94b7880c76 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index d5bdca42d3..aa5724e942 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index bf9fd40e33..0cf1b259aa 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index a0c99ac01d..f501846c23 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index acb8721225..9ae2093829 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 9caac719d7..c72a33a182 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.60)/xlnx_rebase_v6.12_LTS_merge_6.12.60.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.70)/xlnx_rebase_v6.12_LTS_merge_6.12.70.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
 -- 
 2.25.1
 
