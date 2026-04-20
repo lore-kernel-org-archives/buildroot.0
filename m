@@ -1,110 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04247F557F5
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 09:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74EB4F557FA
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 09:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF26A40F4C;
-	Mon, 20 Apr 2026 09:32:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40615826D5;
+	Mon, 20 Apr 2026 09:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nel2mFqhAlcX; Mon, 20 Apr 2026 09:32:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2Mf9bizk8SBU; Mon, 20 Apr 2026 09:46:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D20B440F22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E7FD8269C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776677541;
-	bh=mW9hC70g+4r/rHzb3oqMOkMZvfJFTJv6/OHq6i29cQ4=;
-	h=From:Date:To:CC:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=WehBI5g3lZoD67fCDKI1zcS/fi+3plkAr5Nskr2mL1/7p01pc0zBwZkKDvbmSxhUQ
-	 2f00GNGh3tqke+JXzL8WLrDIe2tu2blVZy+vkxGxxHVa3jkCnnIGXatRRW5XNH7Vlt
-	 Qzfv2v5XA7OB5xYhgpDD6PBl3i6ETAdo+/hRtCAvCOreUzMCryWm50P32LsD1NeYV/
-	 qxAj+8eWipGLuu/2cmyAZoyr9Us8CRb0jQcGVgHNSFYfwDkBjsGfK5cRYMFVOYKSKJ
-	 2zvVIzaT9cK+ZT02ZC/qYloyqBcAwK4TrWvAwIXjBEmhRTENZW5efbQrOne47eURc5
-	 fJH1n5tdTt8OQ==
+	s=default; t=1776678395;
+	bh=vypjoQNXbLNeRGcxhpUszvKWINgKvC3aCiI4p7X0Sew=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=aGgknD+wE5yfsWSS9bGJIk95AXOgBCkgW55EPtHpebhCUXhckcAQh8RP7MIfvXKHP
+	 ITtxqiQWgzYqKJxt1oYg1haaA4/kW7DfFNArbe+YrWWWJb4QWwp7FW9zdGe+2hpR8X
+	 PSEeIcjpt78rAGFrBDakcHMZY6RfSlpG6DIRvDaI45XKMfxxCMxIX590uN3CnAnwCI
+	 fFHzzmyc5gJO0GPDrFzAkx1KFH7DvE+VGllV29JeBQCQSpR9fjEN79WFaYaN/sXG1n
+	 oHfX2XC9C2zkT7Yu3jjI0fKw6tPtrEpa+T2LL9/tQ5ZwtWIlq5yTqJP5CgOcUSUC74
+	 5LI7+J9JGPNNg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D20B440F22;
-	Mon, 20 Apr 2026 09:32:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F8AC355
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:32:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E7FD8269C;
+	Mon, 20 Apr 2026 09:46:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF4E0355
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DAD0407F7
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:32:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0C0A826A8
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a1DTIloxx7zM for <buildroot@buildroot.org>;
- Mon, 20 Apr 2026 09:32:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.238;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B9CD0404D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9CD0404D9
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.238])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9CD0404D9
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:32:18 +0000 (UTC)
-X-CSE-ConnectionGUID: GsLaOyyIQrGFW+Bn4SlDgw==
-X-CSE-MsgGUID: tR8d8/BQSuCFz+r4yBFBWg==
-Received: from unknown (HELO opfedv3rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 20 Apr 2026 11:32:14 +0200
-Received: from unknown (HELO OPE16NORMBX604.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2026 11:32:14 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX604.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Mon, 20 Apr 2026 11:32:12 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 20 Apr 2026 11:32:10 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: kez1XxICTxuJuiJh6/VMcA==
-X-CSE-MsgGUID: qROiR64KRiG1Q3v5JYiSRA==
-X-IronPort-AV: E=Sophos;i="6.23,189,1770591600"; d="scan'208";a="414893391"
-X-Amp-Result: SKIPPED(no attachment in message)
-Date: Mon, 20 Apr 2026 11:32:10 +0200
-To: Peter Korsgaard <peter@korsgaard.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Romain Naour <romain.naour@smile.fr>, Julien
- Olivain <ju.o@free.fr>, Arnout Vandecappelle <arnout@rnout.be>
-CC: buildroot <buildroot@buildroot.org>
-Message-ID: <aeXymikPfNmmnA67@yd-6wlzhs3>
-References: <69e59cd7.050a0220.1ab584.974e@mx.google.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aswVhzyX_tQd for <buildroot@buildroot.org>;
+ Mon, 20 Apr 2026 09:46:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6E04C82690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E04C82690
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E04C82690
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 09:46:32 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-488e1a8ac40so38158465e9.2
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 02:46:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1776678390; x=1777283190;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=wKSLQ0OSloqweBXYYZ4aUUJNi6QeN2tw1JkNSzqjbA8=;
+ b=QaB4Xg7MRXQgQ0OO4sQMEo/Dgv8cWDQ6mw/S5/6zLz3LxjcNVprYKps6s5ZvIzQAf1
+ S5nq3IZegePbCW1JrUVu/YaWnVhbOGVvDFIebx8SGLBRq/Ne2f7wrKnEKLhETXQoetdt
+ 32WYYNj5Q637hC7UpBc5xJ3LhSEgTxiu6fkTE3bjTZLKE1IehA5XQcSiB4htk+/ci1Kp
+ Futylo70lETFag4CtWUNvdrX5cn8m+jMCNVpDMTk9KtEIcUwmOocG6vzpunpSgf0iSCc
+ UQUJ+R42yxcOvwAYaR/87k2WrMxjR9gVYHz1Qz2hASU3RD/JOqL523d8QhRQKY4YA5Ci
+ GolQ==
+X-Gm-Message-State: AOJu0YwkOSr07FkvPtmLx5J8kNPZfXIhZ1/Vbw/B29nWJ0zGWLU36/kx
+ XprQ6q5tfUOUYMZ9euWUencDGDmmraMcvkFXagH55NY9zRfFOsOSqPDxE3zY1rp/W+wyRrElwEY
+ Y0ouABqE=
+X-Gm-Gg: AeBDietqwlgiqRtcUDWk6MfmmFX5WnCZHsQ9XKkedIVuCP4wEa2uzeQJXIqb+y49AI+
+ exNJs2tNYHc4mbvSSWOgH2hDWIfpLJcyNgZz6iPEFYWx5i9h1bp+TGwypmTvP49ryNRt5Yea/AG
+ AQ0eL0j6qMUlG18cyndYeu25eGhpAMbZkzAIqWzbOXQQ0G5JO3WKF2DL7WNOLCZa9NUY4d+tbxk
+ Kx9Yh4wg1g+XsFaNPs5rcQIIwsOzoZhrPPWzciCW6lgbjE6X9Mpe4L6o+610T34FJaMzmOfsgv9
+ iL1yGlr67od3K47B3q8Uf1FdgOh8lQuqobjuQRVoKxPPM0eS+khn2KVXFX1cxSd7KmR4PZRrVg+
+ aMJYdi7aBSrxk4NcWKYZ6fKxJnWt6887f+33jqw5Y7vQdzS7Om6aMNu6McZwvbQdCoQ+MzQ6UVo
+ /KJjdl6QTkI0muG0ElnQok2BkIza4mWq/UvsWYdeGaZfyGAdCo5vWqLPOI/cIxKGY5KMJkBaYYz
+ S1Jwbc0cGxRxgf789vS0rZOEVNbxe8=
+X-Received: by 2002:a05:600c:a318:b0:488:966f:70a7 with SMTP id
+ 5b1f17b1804b1-488fb746c49mr128997785e9.2.1776678389582; 
+ Mon, 20 Apr 2026 02:46:29 -0700 (PDT)
+Received: from P-NAN-NAPALM..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4891c318636sm69942495e9.7.2026.04.20.02.46.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Apr 2026 02:46:29 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Dowan Gullient <dowan.gullient@smile.fr>
+Date: Mon, 20 Apr 2026 11:46:22 +0200
+Message-ID: <20260420094622.349566-1-dowan.gullient@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <69e59cd7.050a0220.1ab584.974e@mx.google.com>
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX602.corporate.adroot.infra.ftgroup
- (10.115.26.30) To OPE16NORMBX604.corporate.adroot.infra.ftgroup
- (10.115.26.32)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1776677539; x=1808213539;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=G6lYT+yk6A+NgAgmDvK4tmmhHbUNsUlzgyc30Q+H7vk=;
- b=elcy5+IxbGcXhY4G39joqH95oXlhITpyJhBuCYK84CCnh2wPAU9aFSiT
- AR3LLBx17KBuOdRrPi0ydr1acfSnwfT3QbgAdFSmhmcdPJKyDTLm/vsjX
- iXzQrPeyOiqtaHQEqjJmqPuta1FDRiFrg6wIncPwoVSdUG0owQQJWqkzP
- DkeC1v/DIXVlWkX8CkRLyx36cr+tbqMdBuEABzGCrReeaNJHNK1KpAjRf
- ZhDeGhIx6bhf0Kh9dSr9KisaP0Q5E0vCDotrftQFIVAYNpwE/kaw11cxM
- RLl9SLebUfAasyVgYM+vx0wNnq+Y7Sr8Kr2nkdJWJZ3CSJKOD1GY49wMv
- w==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=elcy5+Ix
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Your daily results for
- 2026-04-19
+ d=smile.fr; s=google; t=1776678390; x=1777283190; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wKSLQ0OSloqweBXYYZ4aUUJNi6QeN2tw1JkNSzqjbA8=;
+ b=e8bVBzaacEB9Q7oduLDITWvb2ifincldN/42cPYTgvY787ISPMkh9xLR6BXUXemVYr
+ KGPJ2V+iKrS8u7jiga6zTzz6863pp3TFeiXaY2tq4ZPrmnuri+rhmskHyVxhIsKrnTgV
+ x/J+Pvl1QFc9XBxrSVBzgk1b0WmjPvau53QV4=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=e8bVBzaa
+Subject: [Buildroot] [PATCH v2 1/1] support/testing : test_openjdk : Bump
+ kernel version to last LTS (6.18)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,49 +118,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Dowan Gullient via buildroot <buildroot@buildroot.org>
+Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, Thomas, All,
+This change depends on the following pending patch series:
+https://lore.kernel.org/buildroot/20260313195744.991927-1-bernd@kuhls.net/T/#u
 
-On 2026-04-20 03:26 -0000, Buildroot Notifications spake thusly:
->       gpsd |  DISTRO  | https://release-monitoring.org/project/006846 | 3.27.2       | 3.27.5
->  mosquitto |  DISTRO  | https://release-monitoring.org/project/006078 | 2.0.22       | 2.1.2
+And updates the kernel version used for the test_openjdk test to the last LTS version (6.18.21)
+instead of 5.10.3, which is quite old and may not be compatible with the latest OpenJDK versions.
 
-Not sure what is happening with this weekly outdated packages notice:
+This change was tested by running the openjdk test.
 
-* gpsd has been updated end of February, with  commit 13daf36ee2dc
-  (package/gpsd: Bump version to 3.27.5),
-* mosquitto since mid-march, more than a month ago now, with commit
-  583a02e39888 (package/mosquitto: bump to version 2.1.2).
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+---
+ support/testing/tests/package/test_openjdk.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is the git-pull before the check is made still working?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
+index 3bf89f9efe..0dc69b7c49 100644
+--- a/support/testing/tests/package/test_openjdk.py
++++ b/support/testing/tests/package/test_openjdk.py
+@@ -12,7 +12,7 @@ class TestOpenJdk(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.34"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.43.0
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
