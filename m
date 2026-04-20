@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82AD6F5A8B6
-	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 19:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0949FF5A8B1
+	for <buildroot@archiver.kernel.org>; Mon, 20 Apr 2026 19:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BCDA4112E;
+	by smtp3.osuosl.org (Postfix) with ESMTP id A84D5610D4;
 	Mon, 20 Apr 2026 19:19:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R2tsI1mTfXdU; Mon, 20 Apr 2026 19:19:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2860610F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776712776;
+	bh=qOSSWhiuyxpqS6kBULATJ676iu+6LfWrfMMmxPZuaFI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ntyQUs8tb6IH4wRJoA0wrdDqnFMttRQyXKqgy4qFx5M5MZp7CZMBkQzwckjka2UhB
+	 s0mq/FFFSoWF4n312FfR82MePDCyWzMNjkeoaF4uG5wpNLokguvlqWFNXT/rzcKzpY
+	 XJREOCs2vzONUZrB/GO/wX8ERcazEhsoMYhzS5sSccs9edhpaOYoqrtUGYDuKQ4oaU
+	 0dae06LGC+1EeuSYTB87z6kynR2t0GJc2+/hBHUmHtDjcxMTXvusboqcANH25iygr2
+	 TsK/tl1Xtz291iOBZOtM7OIgemW/8P+p9Pw/mKExYHhS3R04YGCDbG9uRp2h+YQoFz
+	 ueAy8MOf6cAWw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2860610F4;
+	Mon, 20 Apr 2026 19:19:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC334259
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:19:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E49A41127
+ for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uK0IKiSQYWGx; Mon, 20 Apr 2026 19:19:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6BF541127
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776712775;
-	bh=lxLVLZVrgcnluzi2zQFjvkbwMvt6pqveXEzg9nfk1HI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lgj/4gAcxhlnbSZt3t3ivHAIvd/YcG/R1Ig5eQY9SLgL4mzvzUQE1vtlNf3bkZL1h
-	 Qa14JvXVjmEzfrUzb1F4szxKvihcJM9l4Ix+CBkYlysQPVZ3YfB8zgE5N7pBej8SqS
-	 Akgp/L3T7Sm2gdxPQh+c0k6iMu1KfdmVYk6gczm1QNBASMyXzMEX4B7gLiXxlKbSJM
-	 OnaCxzDcOXyViRq1lb68WwXnrsnpj8G9bzrC/76QS2rYcwsV/477cbxEl8jyaNG6lr
-	 jvPn0ZJWESDh+jK6yazS8A+Pezjj1hN0ELvCNgaW3LeG6CCBzVTkappuN7Y6l5rp4m
-	 t6a2+aZ+Gmd8Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6BF541127;
-	Mon, 20 Apr 2026 19:19:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 99445257
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:19:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ADF740888
- for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:19:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zv7POWa8DEZG for <buildroot@buildroot.org>;
+ id 1umYcy_twPzm for <buildroot@buildroot.org>;
  Mon, 20 Apr 2026 19:19:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6E5F4015F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C954941122
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6E5F4015F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C954941122
  for <buildroot@buildroot.org>; Mon, 20 Apr 2026 19:19:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 688BA82160; Mon, 20 Apr 2026 19:19:33 +0000 (UTC)
+ id 71E3282161; Mon, 20 Apr 2026 19:19:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 20 Apr 2026 21:08:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f2228d6c9e2cc1e8447c3555d89495d0f9ba53e
-X-Git-Newrev: a5366d13ba67d297440ad28a1651cf9bb037c303
+X-Git-Oldrev: a5366d13ba67d297440ad28a1651cf9bb037c303
+X-Git-Newrev: fe7ad9e3a2b9f5cf58c044cfa1338d6bc7bcf686
 X-Patchwork-Hint: ignore
-Message-Id: <20260420191933.688BA82160@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p11-kit: security bump version to
- 0.26.2
+Message-Id: <20260420191933.71E3282161@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libp11: bump version to 0.4.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +76,195 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a5366d13ba67d297440ad28a1651cf9bb037c303
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fe7ad9e3a2b9f5cf58c044cfa1338d6bc7bcf686
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/p11-glue/p11-kit/blob/0.26.2/NEWS
+https://github.com/OpenSC/libp11/blob/libp11-0.4.18/NEWS
 
-Fixes CVE-2026-2100: https://github.com/advisories/GHSA-hq85-3f6c-jx84
+Removed all patches which are included in this release.
 
 Switched to sha256 tarball hash provided by upstream.
+
+Apply the fix for enginesdir to the newly introduced configure option
+--with-modulesdir, added in version 0.4.14, as well:
+https://github.com/OpenSC/libp11/commit/8ff7952a811086110486162fe9c3f167ded4afe3
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/p11-kit/p11-kit.hash | 4 ++--
- package/p11-kit/p11-kit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...001-src-p11_attr.c-fix-build-with-gcc-4.8.patch | 42 --------------
+ ...02-change-bool-attribute-true-false-names.patch | 67 ----------------------
+ package/libp11/libp11.hash                         |  3 +-
+ package/libp11/libp11.mk                           |  5 +-
+ 5 files changed, 5 insertions(+), 113 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 43a566a82c..943ad9c22f 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
-+# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
-+sha256  09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828  p11-kit-0.26.2.tar.xz
- # Locally computed
- sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 42de3e1065..68b1894183 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 3b867a994b..c4b4f1c4e8 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -535,7 +535,6 @@ package/liboping/0002-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+ package/liboping/0003-Fix-compile-break-with-GCC-7-buffer-overflow-with-snprintf.patch lib_patch.Upstream
+ package/liboping/0004-Fix-compile-error-on-GCC-7.patch lib_patch.Upstream
+ package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch lib_patch.Upstream
+-package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch lib_patch.Upstream
+ package/libpthsem/0001-fix-build-on-linux-3.x-host.patch lib_patch.Upstream
+ package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch lib_patch.Upstream
+ package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch lib_patch.Upstream
+diff --git a/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch b/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 60fc16d9d0..0000000000
+--- a/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From ba44b87318ed89e489fa3ce0a5d66002afa2bd6c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Aug 2022 11:54:54 +0200
+-Subject: [PATCH] src/p11_attr.c: fix build with gcc 4.8
+-
+-Fix the following build failure with gcc 4.8 raised since version 0.4.12
+-and
+-https://github.com/OpenSC/libp11/commit/639a4b6463278c0119a2ec60b261da3e5330fb33:
+-
+-p11_attr.c: In function 'pkcs11_zap_attrs':
+-p11_attr.c:167:2: error: 'for' loop initial declarations are only allowed in C99 mode
+-  for (unsigned i = 0; i < 32; i++) {
+-  ^
+-p11_attr.c:167:2: note: use option -std=c99 or -std=gnu99 to compile your code
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4391020fb5738cc8c26dc53783a6228bbf76473a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/OpenSC/libp11/commit/ba44b87318ed89e489fa3ce0a5d66002afa2bd6c]
+----
+- src/p11_attr.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/p11_attr.c b/src/p11_attr.c
+-index d49456ff..d425241a 100644
+---- a/src/p11_attr.c
+-+++ b/src/p11_attr.c
+-@@ -162,9 +162,11 @@ void pkcs11_addattr_obj(PKCS11_TEMPLATE *tmpl, int type, pkcs11_i2d_fn enc, void
+- 
+- void pkcs11_zap_attrs(PKCS11_TEMPLATE *tmpl)
+- {
+-+	unsigned int i;
+-+
+- 	if (!tmpl->allocated)
+- 		return;
+--	for (unsigned i = 0; i < 32; i++) {
+-+	for (i = 0; i < 32; i++) {
+- 		if (tmpl->allocated & (1<<i))
+- 			OPENSSL_free(tmpl->attrs[i].pValue);
+- 	}
+diff --git a/package/libp11/0002-change-bool-attribute-true-false-names.patch b/package/libp11/0002-change-bool-attribute-true-false-names.patch
+deleted file mode 100644
+index d63ec74590..0000000000
+--- a/package/libp11/0002-change-bool-attribute-true-false-names.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 89ccb1f097f56a0933f881af051422b8d67e457f Mon Sep 17 00:00:00 2001
+-From: dlegault <dlegault@blackberry.com>
+-Date: Fri, 2 Sep 2022 12:01:23 -0400
+-Subject: [PATCH] Change bool attribute true/false names to _true/_false
+-
+-This prevents conflicts with true/false defined in stdbool.h
+-
+-fixes #472
+-
+-Upstream: https://github.com/OpenSC/libp11/commit/89ccb1f097f56a0933f881af051422b8d67e457f
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- src/p11_attr.c |  6 +++---
+- src/p11_ec.c   | 14 +++++++-------
+- 2 files changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/src/p11_attr.c b/src/p11_attr.c
+-index d425241a..a420efad 100644
+---- a/src/p11_attr.c
+-+++ b/src/p11_attr.c
+-@@ -123,9 +123,9 @@ unsigned int pkcs11_addattr(PKCS11_TEMPLATE *tmpl, int type, void *data, size_t
+- 
+- void pkcs11_addattr_bool(PKCS11_TEMPLATE *tmpl, int type, int value)
+- {
+--	static CK_BBOOL true = CK_TRUE;
+--	static CK_BBOOL false = CK_FALSE;
+--	pkcs11_addattr(tmpl, type, value ? &true : &false, sizeof(CK_BBOOL));
+-+	static CK_BBOOL _true = CK_TRUE;
+-+	static CK_BBOOL _false = CK_FALSE;
+-+	pkcs11_addattr(tmpl, type, value ? &_true : &_false, sizeof(CK_BBOOL));
+- }
+- 
+- void pkcs11_addattr_s(PKCS11_TEMPLATE *tmpl, int type, const char *s)
+-diff --git a/src/p11_ec.c b/src/p11_ec.c
+-index 4fb4efc3..16e3b3af 100644
+---- a/src/p11_ec.c
+-+++ b/src/p11_ec.c
+-@@ -590,22 +590,22 @@ static int pkcs11_ecdh_derive(unsigned char **out, size_t *outlen,
+- 	CK_MECHANISM mechanism;
+- 	int rv;
+- 
+--	CK_BBOOL true = TRUE;
+--	CK_BBOOL false = FALSE;
+-+	CK_BBOOL _true = TRUE;
+-+	CK_BBOOL _false = FALSE;
+- 	CK_OBJECT_HANDLE newkey = CK_INVALID_HANDLE;
+- 	CK_OBJECT_CLASS newkey_class= CKO_SECRET_KEY;
+- 	CK_KEY_TYPE newkey_type = CKK_GENERIC_SECRET;
+- 	CK_ULONG newkey_len = key_len;
+- 	CK_OBJECT_HANDLE *tmpnewkey = (CK_OBJECT_HANDLE *)outnewkey;
+- 	CK_ATTRIBUTE newkey_template[] = {
+--		{CKA_TOKEN, &false, sizeof(false)}, /* session only object */
+-+		{CKA_TOKEN, &_false, sizeof(_false)}, /* session only object */
+- 		{CKA_CLASS, &newkey_class, sizeof(newkey_class)},
+- 		{CKA_KEY_TYPE, &newkey_type, sizeof(newkey_type)},
+- 		{CKA_VALUE_LEN, &newkey_len, sizeof(newkey_len)},
+--		{CKA_SENSITIVE, &false, sizeof(false) },
+--		{CKA_EXTRACTABLE, &true, sizeof(true) },
+--		{CKA_ENCRYPT, &true, sizeof(true)},
+--		{CKA_DECRYPT, &true, sizeof(true)}
+-+		{CKA_SENSITIVE, &_false, sizeof(_false) },
+-+		{CKA_EXTRACTABLE, &_true, sizeof(_true) },
+-+		{CKA_ENCRYPT, &_true, sizeof(_true)},
+-+		{CKA_DECRYPT, &_true, sizeof(_true)}
+- 	};
+- 
+- 	memset(&mechanism, 0, sizeof(mechanism));
+diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
+index 0e42bdd4cf..8a31a6f39e 100644
+--- a/package/libp11/libp11.hash
++++ b/package/libp11/libp11.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.18
++sha256  9292de67ca73aba1deacf577c9086b595765f36ef47712cfeb49fa31f6e772fb  libp11-0.4.18.tar.gz
+ # Locally computed:
+-sha256  1e1a2533b3fcc45fde4da64c9c00261b1047f14c3f911377ebd1b147b3321cfd  libp11-0.4.12.tar.gz
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index cd4ed34297..51a44f5b3d 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--P11_KIT_VERSION = 0.25.5
-+P11_KIT_VERSION = 0.26.2
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
+-LIBP11_VERSION = 0.4.12
++LIBP11_VERSION = 0.4.18
+ LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
+ LIBP11_DEPENDENCIES = openssl host-pkgconf
+ LIBP11_INSTALL_STAGING = YES
+@@ -14,7 +14,8 @@ LIBP11_LICENSE_FILES = COPYING
+ # pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
+ # so let's rip it out.
+ LIBP11_CONF_OPTS = \
+-	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
++	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'` \
++	--with-modulesdir=`$(PKG_CONFIG_HOST_BINARY) --variable modulesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
+ 
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+ LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
