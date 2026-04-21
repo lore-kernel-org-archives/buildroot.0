@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AC5F94CA7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 20:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B0FAF94CAA
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 20:31:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5FBE6088C;
-	Tue, 21 Apr 2026 20:31:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5vaKGGW6gVvF; Tue, 21 Apr 2026 20:31:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC3E960B5D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776803467;
-	bh=1A5JTtfDv9Y9HwilvrhbmjuKKAROr5dq4zQA5lH9iPc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=d6LPvaUy92hY13xRW6ymXP5Z1qFTYobIAewfJUOOkeCjVLW2USGcWJLkMdU7yCKCq
-	 By2o8UmX20+S1x587oWqsQsv5HD21+faSsJlyGSCZ8Cxm5FvV3j5f4r/tBYcroDLSS
-	 a/VP+37Tc9gF/xrzRJZqStUxwOZRDYSoRGW0Y4/yn7pbnhPhzeS6Gu+G9O0qp/Ev81
-	 mzc0/Doknw2CiUV2e9y3+7eXTY8CR1i456qYmba9ecJfM8yd17XjEqRKwjuDTqRjFH
-	 vs01G7Up52AyM0vhL9seIb0Avu6TKplLuexnF49NKX06jr903Sf1Qo51JYO0tYlL+K
-	 nrJ5PPTwJtPcA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC3E960B5D;
-	Tue, 21 Apr 2026 20:31:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C18FF183
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:31:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B41D341FC1
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:31:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1631B4128E;
+	Tue, 21 Apr 2026 20:31:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OhveH4cZX2BZ for <buildroot@buildroot.org>;
+ id OISVF6RVt2t4; Tue, 21 Apr 2026 20:31:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 278CF41FB7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776803468;
+	bh=nXIR42fcK68YRWBtK1gkKv+Vs0vAbZ5v8lUclFoUqp4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Q6IGp+Yf33TjyBjUyJuEHzkKcyBiDJv1Snq4Acg4NbxbBwHfj9Fv2C3yVOhywM8JL
+	 GTdt2LD9HCdQDnsa6kFBg4g+pGcWrAIVixxaabqc24pJbY56Y6+MMIRydTmGK0A60C
+	 iVi9/Ttldfrb8Sqdy3iECwBf5pOW5pVyiEqTSYjdXuyeMY81EstPt0ifDsigQenPxL
+	 1nepIP0250ISD7ml7Hf6m1mIDj5Lr42NS+wm0x3yfDl8JA7MYbsFab7YiHT8Ofb1Cv
+	 +nJujCXunIhS+lyAEj8cmhe+H6nwhdWUSBra2GNYRnVeX0C9UtB6gMCKxfivX6KkjI
+	 R+7Yb52tiBy/g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 278CF41FB7;
+	Tue, 21 Apr 2026 20:31:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 44EEA183
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:31:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B3C2838D3
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:31:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sDgC3bz51kVr for <buildroot@buildroot.org>;
  Tue, 21 Apr 2026 20:31:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE47541FB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5DEA8387D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE47541FB7
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5DEA8387D
  for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:31:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 505F08216D; Tue, 21 Apr 2026 20:31:03 +0000 (UTC)
+ id 5B6C4821D7; Tue, 21 Apr 2026 20:31:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Apr 2026 22:24:15 +0200
+Date: Tue, 21 Apr 2026 22:26:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 591e28a557e5693d955013a5d9b9f3078fe47ccf
-X-Git-Newrev: 92746d0dea25125bbda6359dcbeb2f90b192eeef
+X-Git-Oldrev: 92746d0dea25125bbda6359dcbeb2f90b192eeef
+X-Git-Newrev: 80898249b7e06d409a8a9cd433d687ce24c5224f
 X-Patchwork-Hint: ignore
-Message-Id: <20260421203103.505F08216D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: security bump version to
- 4.0.3
+Message-Id: <20260421203103.5B6C4821D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libspdm: security bump version to
+ 3.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,49 +77,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/92746d0dea25125bbda6359dcbeb2f90b192eeef
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/80898249b7e06d409a8a9cd433d687ce24c5224f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
+https://github.com/DMTF/libspdm/releases/tag/3.8.2
 
-Added sha512 tarball hash provided by upstream.
-
-Fixes CVE-2026-41316:
-https://www.ruby-lang.org/en/news/2026/04/21/erb-cve-2026-41316/
+This release brings a fix for the security issues described in
+https://github.com/DMTF/libspdm/security/advisories/GHSA-j54w-759w-xj3m
+https://github.com/DMTF/libspdm/security/advisories/GHSA-m4wc-xmvg-369f
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ruby/ruby.hash | 5 +++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libspdm/libspdm.hash | 2 +-
+ package/libspdm/libspdm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 9908fe8d4f..7512d1153b 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,6 @@
--# https://www.ruby-lang.org/en/news/2026/03/16/ruby-4-0-2-released/
--sha256  4618db85bb9ec04d8152d0099db488694a3d3c4f52106625e4ad547f1318db87  ruby-4.0.2.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
-+sha256  22cf6005d25bbe496b5ebe9224d63a1aaabfbfe02591bb5d612517c5a7836f29  ruby-4.0.3.tar.xz
-+sha512  5816fb264ce76df59f4bfe0cadceb45025fada2e61f2c14024d6b03f63d304820cddf94afcf82a4951fd12f3b0d9148683f856f3f2245d56042fc8407b6cbff5  ruby-4.0.3.tar.xz
- 
- # License files, Locally calculated
- sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 6bd8ad43c5..7e6f6d8146 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index 1c7b6b3158..0e281a5471 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2184a586bfe030218c6f336750d0fb0c3747fcfb0ed8af9a921bccb567029671  libspdm-3.8.1.tar.gz
++sha256  8d53d5072540ff86ffe496d83b83f49c82792883738bd23ae6ad41fe7c773edf  libspdm-3.8.2.tar.gz
+ sha256  8c891ecf439cca84ceab33fc819c029a72c198f31818aa53a3788a0553841d6e  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index f76262c77b..fc3eea424e 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 4.0
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 4.0.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-LIBSPDM_VERSION = 3.8.1
++LIBSPDM_VERSION = 3.8.2
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
