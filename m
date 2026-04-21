@@ -4,106 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB02EF94CB1
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 20:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59960F94CB0
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 20:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E74842110;
-	Tue, 21 Apr 2026 20:48:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D52A41262;
+	Tue, 21 Apr 2026 20:50:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bxx5QXMCY2km; Tue, 21 Apr 2026 20:48:54 +0000 (UTC)
+ id w_t4R6mnXnrh; Tue, 21 Apr 2026 20:50:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 771B542111
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F26A40C32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776804534;
-	bh=YY9RAvnCYvBAjx8hTfKU6s6j0mQOA0CKRxbvOECWi7U=;
+	s=default; t=1776804636;
+	bh=hUMLPpQ1BXOhHPi6pr1o6T5AoUsQBSM49CVPOB/an9Q=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=ihsCNXwmewOtWFVJz/nGZXdBrjQDphj2k7tN4AVd7N6bR88CFLEAAd3X2EMBGfvhX
-	 rspBU6yPdOXGJyg4tIb7WRRapM+X0MpJ8bF1lTTjRob1nRi9W2rXIEo0PhsLHV7vlQ
-	 FAApj79bZ3OrRfqcNc1S1E3fweRtPIb1iY826nszdq14uqIleYLigr7TRkdLNKAtQj
-	 dgUHPpc6CZLvnlC+tPxtSd7jRQ4LInCfKwxLeliyru/lnRAx6DVR4pVQG/Ss8lAiSZ
-	 OyHmJnM//NaWkVaDr6MySzvE4nSu/m+0u8jS6WbhEjxfOfjCvrhXEijcVMggvENEn6
-	 5xdjqTyvUtQHg==
+	b=ZmOjZHt+hNjclMFpKZjvZbL/i34lZu6QqhiGNBJVcAJ6jLsRagOi5LfsYkzcqo4jL
+	 hkjkTNhPPETxMbYf+X31wHVEVGNhWfUSS7ix8tFQgXCA7trwh00Z1AamU5xVFVEMe8
+	 l6vh8fG09OuQm4Ng4je0hTi2BI5vqyAqaQnGChQE2XK9h3yOWi2i32w+LMH5lsJfoO
+	 nAMHYbgAUdms1S4AxlFsB9vSlVa36TqHP0C2wlnaOmuW6j44yJjm7C7Y6BQ6Yq4yb7
+	 x6nu7+V4VN7BMuPRiYfSDPSp/DQoNTwGz63I925PMQUqVxKBIHePV8hXoyscwD80Bz
+	 vtS4CHU40Shig==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 771B542111;
-	Tue, 21 Apr 2026 20:48:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 580CD257
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:48:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F26A40C32;
+	Tue, 21 Apr 2026 20:50:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF82F183
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4973F420CF
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:48:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C62ED840F5
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:50:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X8TbYYkVTE2E for <buildroot@buildroot.org>;
- Tue, 21 Apr 2026 20:48:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YTMIhQyoNaDc for <buildroot@buildroot.org>;
+ Tue, 21 Apr 2026 20:50:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f31; helo=mail-qv1-xf31.google.com;
+ client-ip=2607:f8b0:4864:20::731; helo=mail-qk1-x731.google.com;
  envelope-from=hellohacker.dev@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7B180420CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B180420CD
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com
- [IPv6:2607:f8b0:4864:20::f31])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7B180420CD
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:48:52 +0000 (UTC)
-Received: by mail-qv1-xf31.google.com with SMTP id
- 6a1803df08f44-8aca450026bso3399316d6.0
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 13:48:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E8797840F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8797840F2
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com
+ [IPv6:2607:f8b0:4864:20::731])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E8797840F2
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:50:34 +0000 (UTC)
+Received: by mail-qk1-x731.google.com with SMTP id
+ af79cd13be357-8eb22d4de2fso31692485a.2
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 13:50:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776804531; x=1777409331;
+ d=1e100.net; s=20251104; t=1776804633; x=1777409433;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fy1BKehkORVj5LUFUyJhPSPCWPu+ByiM2liWnK5gFsI=;
- b=mr7QeHWrUf7u7n377q/cndv6h6Q8FKu8XRcheW3cNaq45sVZkxRCWwYubVF0sfn/Xl
- ZTww6SouMhqYEQuhfrYlugFmbubxpbTeKiYjYDnndTvAwOJSCM/6YbZCffOqwx5UKh2P
- fStNzmh4vk0aiz07OEzEfmfg4ZOCNX3wspjXvB9tvndfrbtKWBnjGaRk5Xk0lPZtE1gY
- 6PuM9vkzNdzGV1swYXyBq1k6shEQ/yZE5lfE4WQLuNF1RIbBvex7Mq6HMi5cTbf+aO71
- /fm/g6nAM/jwcWdeBbtLo+aukp7SUwV6vCPmy5Jnn5Yr9kfZkKbjQIsjMbAoysF2JaWl
- +ETg==
-X-Gm-Message-State: AOJu0Yx436OGDs2hONKkTahYv0EkSvFISgfUuNc6RLm7b26vrjL29KSs
- t+3LG86TDZsFLkokwQ7NvV8BReXkg/OlmyQO3jp6YQliaNMDiXqaKPw4m00UFtY8gvbtRA==
-X-Gm-Gg: AeBDievIBTByEpB4l/SYPfFycMzPqLnvWhp5cwt6ThxfRcksPDazFPNQrjjt+hpzdRg
- dzwt9IWcxRNq96vrz2287fovk2muxVe17lJbeLgvAAHFjsi60Ggp+ahTH7xZWOB/D8wIRT/mtnX
- iwx0J/XqXUqBQesiA6rO01hj/mqq8FPBPcqBeuU+B2WleTBrIsIMICfpj39ITasyqmJQjKehcKu
- ZRRrbhckq8bECcKFAw2dZuV7tPRf1ruQHdR196NTcaFzMPRIMe3Ro6SpCgCxJmGiUivWUAyerfk
- Y23uaYoRPxvW4W3iXoQ/A3H2vjJTExLf0VNErqK3LsZT3hGDgraA9lOSAN9znkDFBuL/iYNCiB3
- MdTVEjZxmtMEm3mRE4BjJbsSmwSg4Kh5Taq6i1b+n29duX3aRirfjIdsZL+vJfXYGWdEN31C1gE
- Sfa2JLiazn1/dQh6p+hdAuahXOr34nhXdpvcn8p8g=
-X-Received: by 2002:ad4:4eef:0:b0:89c:c7ee:fe96 with SMTP id
- 6a1803df08f44-8b028191923mr229828416d6.8.1776804530792; 
- Tue, 21 Apr 2026 13:48:50 -0700 (PDT)
-Received: from precialexwin ([76.65.67.233]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-8b02aa4f1f9sm111942096d6.0.2026.04.21.13.48.49
+ bh=tq1a5hL/b0waLuX00bHdkrhCCPDqmxwbx0HSk5y7lhQ=;
+ b=rkfsoDOzM29hiKcmN4w7uph4qgaxupfpTfQOpjoc/caLd9ojBCCqjqXFrmVqCBxLW9
+ cIdW1gMjVUdK8yuixHJk3u4IXmbRYGgxBoc+WtSkG5Jz/AGobg8KUhDoOFTCJDuUdrqt
+ sXW19HkXtv7gBtfZKW6fBJe2hcfenolLteHxS7SqVuBuFRhYHG5EDnDj8l5W5hRHkCum
+ sIpc6VkQqOF/yOs+aQYco9tAdCHYrO6gkukuo/iPqBZoilnbxvATTJKcIfuBsW9EIkLS
+ NuE8O0BRVlQwI+4ovQsSzYSVEq1ODGpCS1LrHfvWvRvWtIXDyHjOGwpnMxYSf+LBgrLp
+ 4QVQ==
+X-Gm-Message-State: AOJu0YzAV8lDRMDkNsLKfFyUP+IzfEiCmxoptTMUwC57OZpo4oWcsWcV
+ 8klC3s+q58KCqYvP0d9yvIQOXwi+rKe/wFPf3qYjX3vN9jQj5slnY6cswsKt6ATP0a1Y8g==
+X-Gm-Gg: AeBDievS+kOxPSbVxvv7lx18ir+hfc9PxgoIaI0/QPo0yQGP3bxelZeYGC8qenTQ7mh
+ yQn2OIcEykAZOldB/R6dNjGon5DbqXrWZQAek7TQv/u/Y/gKkVuYiEp3SRPlITdoqdyRu4IP6l8
+ lVZs3X4VqaBk/Qz1j3UcEZcuWq5yGUGPCMpuqDY0fs3VUwj5mVfihUazKHfhMYIRAfPAug1ssBp
+ MT3oZRQkPA5lFvb59CLU+CH/vRfjBTaEM4k8i84mmNxsqH6iA5iU96Blvt4Haa5k1+txM+Y5k24
+ 2UAqLMH9SvIK6NRs/8sauNOUw4F+MmPRkWJV18sL63q5BMPErcFoE66qEbV9IJWe+hDjz5kX3p9
+ 2Lvsodixo9C3v7yZ8c+uVY0TdqbMTqt92ecByN/IsloWkVIAyE8+0PLluZBgBtdLbSSlTHD2yZG
+ t7n+ZIeB3x8wTz4I0tYhtXG65VzIXm7LFUSgy7yRXVf/zzzVQ5P1v0q5GdGeA23qvsnsSi5ZQbo
+ /V5SoCLDn5qaVduFZgvBb3+Pj8VgA==
+X-Received: by 2002:a05:620a:40cb:b0:8ef:6d2d:c3 with SMTP id
+ af79cd13be357-8ef6d2d013bmr140132785a.8.1776804633156; 
+ Tue, 21 Apr 2026 13:50:33 -0700 (PDT)
+Received: from precialexwin
+ (bras-base-mtrlpq0313w-grc-01-76-65-67-233.dsl.bell.ca. [76.65.67.233])
+ by smtp.gmail.com with ESMTPSA id
+ af79cd13be357-8e7d69ad48asm1116004785a.19.2026.04.21.13.50.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Apr 2026 13:48:50 -0700 (PDT)
+ Tue, 21 Apr 2026 13:50:32 -0700 (PDT)
 From: Alexandre Ondet <hellohacker.dev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 Apr 2026 16:48:27 -0400
-Message-ID: <20260421204827.2225-1-hellohacker.dev@gmail.com>
+Date: Tue, 21 Apr 2026 16:50:31 -0400
+Message-ID: <20260421205031.2237-1-hellohacker.dev@gmail.com>
 X-Mailer: git-send-email 2.53.0.windows.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776804531; x=1777409331; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1776804633; x=1777409433; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=fy1BKehkORVj5LUFUyJhPSPCWPu+ByiM2liWnK5gFsI=;
- b=h25l0nOBd71w17QmhDJAgU/LTsQ8F4yQCJN1o4EF/3PGOHrXFQGtZZdtv/bE2wf6RL
- 79fsdCQOYI9wHwPIdJipDK57PQAiZsSf0GOMARhGs2K5kf4zl2TkZfeuUwzy6vVMj1Rg
- ipv6VvOcyXQaOT8iPUv3sQ6tbzawAC+SG4rYOBlq4UOS4bst238OBHHXkY3bKoHZW/Xs
- dGMRULplLQNpWxTcAvdYZzAum1r8y3c6b54+Wbm65Swg30bgWmTmrXz6SoC05gzh0f0e
- iZSfpffPux8CoEaeMkqid2v/qu78WxilkfnrmyhERkSdmOScB3UfABDnPUAFEf6ciG6G
- 3olA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=tq1a5hL/b0waLuX00bHdkrhCCPDqmxwbx0HSk5y7lhQ=;
+ b=IkPND7Oi7mkLeFm9LnF2jynNOTCliJysVmu/Ou6k0cy3T/q6I+XiJb934xbNQ+MRv6
+ 3EJGN7R2hTjmXBSeLwF1D0cjU0iUbi+9X+0CldQz5OyicaefOGu2GU0dWVSnQHpGBskT
+ dZRFfqj3qaf9imn/IxdtawcODxxib1LKVpsOhg3pnz4ouUq6k1ba99bLzqelW22pJxl+
+ PBER2grQFX+WoOQjApnjl40VQVMc/G9vuTnDHjfjmXkwBU1vdkCHV+NVaEdi8j442tng
+ Xr8vVaJ3DUQVc304rJdsZSVgJShf63EpTfg1Qrc7p9foo8HSHriSnUuowJhG02DPZnw4
+ Wi2Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=h25l0nOB
-Subject: [Buildroot] [PATCH 1/2] package/python-deprecation: new package
+ header.a=rsa-sha256 header.s=20251104 header.b=IkPND7Oi
+Subject: [Buildroot] [PATCH 2/2] package/python-isodate: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,64 +128,66 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Alexandre Ondet <hellohacker.dev@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/python-deprecation/Config.in               |  5 +++++
- package/python-deprecation/python-deprecation.hash |  2 ++
- package/python-deprecation/python-deprecation.mk   | 14 ++++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/python-deprecation/Config.in
- create mode 100644 package/python-deprecation/python-deprecation.hash
- create mode 100644 package/python-deprecation/python-deprecation.mk
+ package/Config.in                          |  1 +
+ package/python-isodate/Config.in           |  7 +++++++
+ package/python-isodate/python-isodate.hash |  2 ++
+ package/python-isodate/python-isodate.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-isodate/Config.in
+ create mode 100644 package/python-isodate/python-isodate.hash
+ create mode 100644 package/python-isodate/python-isodate.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d0f148699b..a2bd4a2e4a 100644
+index a2bd4a2e4a..5f07294b3f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1077,6 +1077,7 @@ menu "External python modules"
- 	source "package/python-dbus-fast/Config.in"
- 	source "package/python-dbus-next/Config.in"
- 	source "package/python-decorator/Config.in"
-+	source "package/python-deprecation/Config.in"
- 	source "package/python-decouple/Config.in"
- 	source "package/python-defusedxml/Config.in"
- 	source "package/python-dialog3/Config.in"
-diff --git a/package/python-deprecation/Config.in b/package/python-deprecation/Config.in
+@@ -1180,6 +1180,7 @@ menu "External python modules"
+ 	source "package/python-ipython-genutils/Config.in"
+ 	source "package/python-ipython-pygments-lexers/Config.in"
+ 	source "package/python-iso8601/Config.in"
++	source "package/python-isodate/Config.in"
+ 	source "package/python-iterable-io/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
+ 	source "package/python-iwlib/Config.in"
+diff --git a/package/python-isodate/Config.in b/package/python-isodate/Config.in
 new file mode 100644
-index 0000000000..83bf414bd5
+index 0000000000..77ce259891
 --- /dev/null
-+++ b/package/python-deprecation/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_PYTHON_DEPRECATION
-+	bool "python-deprecation"
++++ b/package/python-isodate/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ISODATE
++	bool "python-isodate"
 +	help
-+	  A library to handle automated deprecations in Python.
-+	  https://pypi.org/project/deprecation/
-diff --git a/package/python-deprecation/python-deprecation.hash b/package/python-deprecation/python-deprecation.hash
++	  An ISO 8601 date/time/duration parser and formatter for Python.
++	  Useful for parsing and formatting ISO 8601 dates, times, and durations.
++
++	  https://github.com/gweis/isodate/
+diff --git a/package/python-isodate/python-isodate.hash b/package/python-isodate/python-isodate.hash
 new file mode 100644
-index 0000000000..027dfafa4e
+index 0000000000..16af316781
 --- /dev/null
-+++ b/package/python-deprecation/python-deprecation.hash
++++ b/package/python-isodate/python-isodate.hash
 @@ -0,0 +1,2 @@
-+# From https://pypi.org/pypi/deprecation/2.1.0/json
-+sha256  72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff  deprecation-2.1.0.tar.gz
-diff --git a/package/python-deprecation/python-deprecation.mk b/package/python-deprecation/python-deprecation.mk
++# From https://pypi.org/pypi/isodate/0.7.2/json
++sha256  4cd1aa0f43ca76f4a6c6c0292a85f40b35ec2e43e315b59f06e6d32171a953e6  isodate-0.7.2.tar.gz
+diff --git a/package/python-isodate/python-isodate.mk b/package/python-isodate/python-isodate.mk
 new file mode 100644
-index 0000000000..5ec8977c80
+index 0000000000..e658ddceee
 --- /dev/null
-+++ b/package/python-deprecation/python-deprecation.mk
++++ b/package/python-isodate/python-isodate.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-deprecation
++# python-isodate
 +#
 +################################################################################
 +
-+PYTHON_DEPRECATION_VERSION = 2.1.0
-+PYTHON_DEPRECATION_SOURCE = deprecation-$(PYTHON_DEPRECATION_VERSION).tar.gz
-+PYTHON_DEPRECATION_SITE = https://files.pythonhosted.org/packages/source/d/deprecation
-+PYTHON_DEPRECATION_SETUP_TYPE = setuptools
-+PYTHON_DEPRECATION_LICENSE = Apache-2.0
-+PYTHON_DEPRECATION_LICENSE_FILES = LICENSE
++PYTHON_ISODATE_VERSION = 0.7.2
++PYTHON_ISODATE_SOURCE = isodate-$(PYTHON_ISODATE_VERSION).tar.gz
++PYTHON_ISODATE_SITE = https://files.pythonhosted.org/packages/source/i/isodate
++PYTHON_ISODATE_SETUP_TYPE = setuptools
++PYTHON_ISODATE_LICENSE = BSD-3-Clause
++PYTHON_ISODATE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
