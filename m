@@ -4,84 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D77F8FA9E
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 17:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A69BF8FA9E
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 17:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF9C4119A;
-	Tue, 21 Apr 2026 17:23:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A8CE41249;
+	Tue, 21 Apr 2026 17:26:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L56gBDXGu_AC; Tue, 21 Apr 2026 17:23:36 +0000 (UTC)
+ id 584_GVBZOjw8; Tue, 21 Apr 2026 17:26:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75B2D410DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DD564122B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776792216;
-	bh=cMl+0Y+LKmK8uwytdf9ZDEo3dFBUNUTcz++eCPrNVqw=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=QCXcfw94y25WfUd0kFxuBYZM5l9/DrTgq3j1FzMoYEaqc3wmtgLEgKp+DtfGBcmOb
-	 HoKZiXd/K/xGcJ9NOFtSlehcElpeM/eYL9xUyJj/QXZypQ4I5Cd5m8B1Kq8yzYOuED
-	 pIC+qPDeC8V/6twaFHlqXwNYOyrNElkbwP2ZRnPBeHH1pcTwEYeOZnLIqC0qxP8zIX
-	 ++AO859PY2wiCS/ynje97O17cWA8uZ5fHZE4a/nZeyDjq/8+ooy4CaX6dAp6w+DDEX
-	 IM+wO3y5e8F2DNrODBciZIU0r0HTQOruUsUEZW8qhvqw1FhRi4q71EV8viGVXqlxHH
-	 qFwGfUZXJ1qNA==
+	s=default; t=1776792408;
+	bh=9q96WlnYw64D5HvtXNMQxZ5Cp35i8nuwFlUzWV8XV0k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=hLKow84zTuvYaJ46VfEw0mbDF0U9dWQZVF6WQ+vSZj6oh4xHOTF6yTN9VEEkfUQ3q
+	 luVgvtpv79oq/zwUSUt6+d5mRsD3vifK4n9EkR/q6/DOpL1CH7A+6oZRRvUYsBqfsJ
+	 N1b0gYhqCZKOh6VndqXuzlTDcD+eTwIBnzi7e1pTFMolR4uCqe6jHzR7LL0f5BYeBn
+	 IgvlzeyU9T6QCuMDbyIQw4mQhvTh+ECeoDaQFZVy9clxHkG1MwuVn6GlnpkeOxctlS
+	 qWdBd4m8funWVGI0kjiKorneknDLPAQltbqfFcj/OYwpVFdYuezAy6KDC9pXvmBZef
+	 c6SBP9mey3xYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75B2D410DB;
-	Tue, 21 Apr 2026 17:23:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 83B0C24D
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:23:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DD564122B;
+	Tue, 21 Apr 2026 17:26:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E52F724D
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 694D083F14
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:23:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6CDE402DB
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ygre0Wpd19JK for <buildroot@buildroot.org>;
- Tue, 21 Apr 2026 17:23:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9C7E83EFC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9C7E83EFC
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9C7E83EFC
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:23:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sQ4wofwKWRvI for <buildroot@buildroot.org>;
+ Tue, 21 Apr 2026 17:26:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E28EB40262
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E28EB40262
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E28EB40262
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:26:45 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id B5B5819F5BA;
- Tue, 21 Apr 2026 19:23:29 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 21 Apr 2026 19:23:29 +0200
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1627760143;
+ Tue, 21 Apr 2026 19:26:40 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Tue, 21 Apr 2026 19:26:22 +0200
+Message-ID: <20260421172625.735873-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-Date: Tue, 21 Apr 2026 19:23:29 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20260420180954.3749024-1-bernd@kuhls.net>
-References: <20260420180954.3749024-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <3cbd9399d45398f080080393242a2d53@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1776792212;
- bh=X91KAaYE3G70kEAVrEG11vZfjCCWPofGRjdh7VTjiRg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=memT8XBMSRu9Lh5LM8haLEgD/+0f3DaJ6Y1Y5WmlJAjmGBucT7+6mPiJPtkeQGrAq
- yAgOcvmcfs7+6QDOh1RhtgpjGUjPquPmJ7lUrdQL/MkC6sYHIjJNcH/8oLN6M0TaCy
- LmAXALBX7FwaXOSK0DxTIfGuowVwu10eCh+ID/ZLgvFFcvaLbADQ3l1MY9ZF1Rhg/a
- TRIXEm2+E6Umx0j5DaC3Lvx+sbSOJk3JS/ut7pN8Gqg8gkxY/d8bfJg7kfEr/XYGJe
- caikH68rLw+HryzqZp/E36ZmVxHlOadxq6uUMEKAzzvDk/zvsppTxb2CYXpJHX5Xsv
- UHeSOWaAdKqnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1776792403;
+ bh=QtVNhn15iD9TrhRqYOWEjM0RyyJ8Y3B1ziqVybn3V98=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ebQ3cFLOK/FN12Fe1mXn9lob/8RkyoC5iQPYL+adRbKo6/KyxfDEDAzRPkEJ1hoXe
+ lp5z1nCfbed79h29SiJsu6DEAJigdxQmXqOUJw4NDlQvWonNZE6+XWEX8VqjFP0W14
+ KBocHXhoawM74YL3picqBctoqV9g/7uqIMd0mcUUQKa1TyGDocZ1cyHqY4oP/N8MZ0
+ 0uaQgsznCdv6mXjxlfKacFc2Fh5BzBCxil+eCfxUEbtogEBDTghg5oyP0oNPI2qpxH
+ 6c5pW2aj9MZh2wxu4pcLXyxf7JVRN2rcr9BLs1BMJR2luUFklfiyYmWwFSig8BBxaG
+ D65Y+quRTQmhw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=memT8XBM
-Subject: Re: [Buildroot] [PATCH 1/1] package/boinc: bump version to 8.2.11
+ header.s=smtp-20201208 header.b=ebQ3cFLO
+Subject: [Buildroot] [PATCH 1/4] package/python-magic-wormhole: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,20 +88,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/04/2026 20:09, Bernd Kuhls wrote:
-> https://github.com/BOINC/boinc/wiki/Client-release-notes
-> 
-> Updated license hash due to upstream commit
-> https://github.com/BOINC/boinc/commit/44742026e2e30e1c97fa846796236cbb73e43521
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The CPE ID `magic_wormhole_project:magic_wormhole` is valid for
+magic-wormhole. See:
+https://nvd.nist.gov/products/cpe/detail/591D7832-786D-4BBD-A16A-04CBDE20333B
 
-Applied to master, thanks.
+This commit adds the information.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-magic-wormhole/python-magic-wormhole.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
+index 11d4a8867e..7b74113df1 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.mk
++++ b/package/python-magic-wormhole/python-magic-wormhole.mk
+@@ -10,6 +10,8 @@ PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/65/34/08813
+ PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
+ PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
+ PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
++PYTHON_MAGIC_WORMHOLE_CPE_ID_VENDOR = magic_wormhole_project
++PYTHON_MAGIC_WORMHOLE_CPE_ID_PRODUCT = magic_wormhole
+ PYTHON_MAGIC_WORMHOLE_DEPENDENCIES = host-python-versioneer
+ 
+ $(eval $(python-package))
+-- 
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
