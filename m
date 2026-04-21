@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAB6BF94CA7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 19:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47F5F94CA7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 19:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B767E41EE8;
-	Tue, 21 Apr 2026 19:00:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26F1860890;
+	Tue, 21 Apr 2026 19:02:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KnQ7T4v01RpK; Tue, 21 Apr 2026 19:00:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mxJFDxh5ejjw; Tue, 21 Apr 2026 19:02:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70A3C41EDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4CA86087D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776798038;
-	bh=PmHrF4BVQHGtVr+/VjJFMn8V/5IoXoveUQMLGwIipkg=;
+	s=default; t=1776798126;
+	bh=tuQbSjypTJnnMz7aZihSq3LldAdW1CdfVsQIF5cepJo=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=YdX7ryS/9B6XM9qJYFL+SFPQ7DVMV2+LI+hPUns4KvPb52XCiDoDyepZD/LPdK1lx
-	 1wQFryMnlfR541cu8Wae0nWw8SQPvgj7rg21fthhnHbCfwIX1bnR0ETsA7nFNNf292
-	 sn+X8SKRH2io28YwLR51jieIX3aTYm70w5wTNcRYif6qw4a7h6pBiV9Tmg8B4kTrzd
-	 uME8/SxocJrCFimI9dJXU+AFupKrH4d2GiQHWZUtRpcSaZqCfJUWtWGkyH8lHzfAh5
-	 CUKiZ+wQSzOZUQ3PVa2svRNhFOGGUpfCuBUYkrdSDW1NxhMT/f3/SJTOPCUiwslAK/
-	 H6AZpK8qFyyTg==
+	b=Ajp2u264IgHhiwGxuEsW7LToPsglOg7kGjttFd1Z5ABckUtCgQHzd0QOFqkITkLf3
+	 xSLxZrQeBPyYYirXGMb6sOu8y/bfjoWQX+SJcOOQrJsAfk9j22kcQGVVqZr6OJmfq0
+	 Yl1JL5bSpCakK/u+u4hgfY1VWFsvZr60RNrLy4VdHc6TBMEo39MoSxRoEUxJ0dxA0U
+	 ieq/YNavDLzjCO6jTb7VqfKXWgrCVlZNB29MtMqPDCk+onvcGbMrF3ZTQO2JPSI77w
+	 mXD58cntuET2Xs/uYBGCF894U1WNkGTUNXhkWToMZ4/Pf9kYdzGbbdnJYiTBf48ujQ
+	 bnqB0DcSDYpZA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70A3C41EDD;
-	Tue, 21 Apr 2026 19:00:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8735F183
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4CA86087D;
+	Tue, 21 Apr 2026 19:02:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86324183
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7942640364
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C71B83FF0
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:02:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qDIpJ8GG9FDc for <buildroot@buildroot.org>;
- Tue, 21 Apr 2026 19:00:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G5m3R0Sq1XBQ for <buildroot@buildroot.org>;
+ Tue, 21 Apr 2026 19:02:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6E46E4030D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E46E4030D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4CB0683FED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CB0683FED
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6E46E4030D
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4CB0683FED
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:02:04 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0177.dip0.t-ipconnect.de [91.58.1.119])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 87BB6A4C0602;
- Tue, 21 Apr 2026 21:00:34 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50262)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2F001A4C0185;
+ Tue, 21 Apr 2026 21:02:02 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45816)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wFGKo-000000003Kj-0xrK;
- Tue, 21 Apr 2026 19:00:34 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wFGMD-000000003ag-3Xtu;
+ Tue, 21 Apr 2026 19:02:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Alistair Francis <alistair@alistair23.me>
-Date: Tue, 21 Apr 2026 21:00:34 +0200
-Message-ID: <20260421190034.2722046-1-bernd@kuhls.net>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 21 Apr 2026 21:02:01 +0200
+Message-ID: <20260421190201.2722268-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1776798034;
- bh=wqbShoz5CKyFMDIiAAjreGwVGsv7hrjQ/crtMW+fZoI=;
+ s=kas202511301023; t=1776798122;
+ bh=OhN9x6bVk6PPu+8HDqXiBhH/kD1n+yUL1OOpA9tCvSs=;
  h=From:To:Cc:Subject:Date:From;
- b=VJQC117fOjUKFUaMm/XPrl3wGFBQHHhJWAA4g9xkgMVK+P1uyYe2PTPQQ2edYSC06
- d5BykYLFsa4iNZSHiUTvvUdQ474uO91caC8QMMnJCP2E14/HgGGxV0SAI7S3zqBkjS
- WVraClTyMEXb8gR97E3C8ZWTYdnMwLW6DvkaUoDk1Ak92bt7VDmU9EasT6U6YJMUdY
- 0R8aYKCPf7WiKwmJX+fAbILx3Cj5LUwk8DoMAgv3PdKP+dmSVUuNkffvw2kBZqrN3I
- Mx1FjOn1u4/nJFKeY3EsCUT3m3r7PU+xzj5InkqH/heLfdTZUWERLTRuZOq7K9ZpPR
- Zqzg3A/2XLYjg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=LkCDP3t572s4LKj0WGj6nY2GXov9LiV47x8WT3pSjWmSoX1CisHXYMAkUyBiiLiHs
+ D3Sp+bdQkvNQEgkCSK6r7LHbaIobpzFHbTnqXq/mXwNBGKVR8YpU5w5WG6RrXijqr2
+ GPF6WQOW8E/cUC0fgTatWMCaaxuBmTrDD0lpFfmiONQwoqQWOGpEK13mfGmO1vP9tL
+ 6pb1tofqKFNrRM2OuLuhZUkVaopgZ8FA0CplZmohNLFbuaikzefSJ+kfl3dJpy/qeB
+ zYloGT1gRDLfnZIQnuy+LE+VyCLv/sBH/C5BaCZQVnnGJ3d8chaNv5VIE3pNd2pa6+
+ i1Pdk9RDLE9zA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=VJQC117f
-Subject: [Buildroot] [PATCH 1/1] package/libspdm: security bump version to
- 3.8.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=LkCDP3t5
+Subject: [Buildroot] [PATCH 1/1] package/cog: fix build with weston 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,40 +96,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/DMTF/libspdm/releases/tag/3.8.2
+Buildroot commit 2e6b2b82d5301977cf2f59adfd633d8774830f69 bumped weston
+to 15.0.0 causing a configure error with cog:
 
-This release brings a fix for the security issues described in
-https://github.com/DMTF/libspdm/security/advisories/GHSA-j54w-759w-xj3m
-https://github.com/DMTF/libspdm/security/advisories/GHSA-m4wc-xmvg-369f
+Run-time dependency libweston-14-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-13-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-12-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-11-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-10-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-9-protocols found: NO (tried pkgconfig)
+Run-time dependency libweston-8-protocols found: NO (tried pkgconfig)
+
+output/build/cog-0.18.5/platform/wayland/meson.build:66:8: ERROR:
+ Problem encountered: No usable weston-protocols dependency found
+
+This error was not yet found by the autobuilders and is solved by adding
+an upstream patch.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libspdm/libspdm.hash | 2 +-
- package/libspdm/libspdm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-Add-support-for-weston-15-protocols.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/cog/0001-Add-support-for-weston-15-protocols.patch
 
-diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
-index 1c7b6b3158..0e281a5471 100644
---- a/package/libspdm/libspdm.hash
-+++ b/package/libspdm/libspdm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2184a586bfe030218c6f336750d0fb0c3747fcfb0ed8af9a921bccb567029671  libspdm-3.8.1.tar.gz
-+sha256  8d53d5072540ff86ffe496d83b83f49c82792883738bd23ae6ad41fe7c773edf  libspdm-3.8.2.tar.gz
- sha256  8c891ecf439cca84ceab33fc819c029a72c198f31818aa53a3788a0553841d6e  LICENSE.md
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index f76262c77b..fc3eea424e 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSPDM_VERSION = 3.8.1
-+LIBSPDM_VERSION = 3.8.2
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
+diff --git a/package/cog/0001-Add-support-for-weston-15-protocols.patch b/package/cog/0001-Add-support-for-weston-15-protocols.patch
+new file mode 100644
+index 0000000000..97ec65a409
+--- /dev/null
++++ b/package/cog/0001-Add-support-for-weston-15-protocols.patch
+@@ -0,0 +1,29 @@
++From b59d3a3c0feceecb10f0376ac2695d9466c9ecf6 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Tue, 1 Oct 2024 10:24:56 -0600
++Subject: [PATCH] Add support for weston 15 protocols
++
++Weston 14 was released recently and the weston development branch is
++now using libweston-15-protocols.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++
++Upstream: https://github.com/Igalia/cog/commit/b59d3a3c0feceecb10f0376ac2695d9466c9ecf6
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ platform/wayland/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/platform/wayland/meson.build b/platform/wayland/meson.build
++index 74215f0a..dad47a6b 100644
++--- a/platform/wayland/meson.build
+++++ b/platform/wayland/meson.build
++@@ -49,6 +49,7 @@ wayland_protocols_path = wayland_protocols_dep.get_variable(pkgconfig: 'pkgdatad
++ 
++ if wayland_platform_weston_protocols.length() > 0
++     foreach weston_dep_name : [
+++            'libweston-15-protocols',
++             'libweston-14-protocols',
++             'libweston-13-protocols',
++             'libweston-12-protocols',
 -- 
 2.47.3
 
