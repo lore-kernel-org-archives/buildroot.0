@@ -4,81 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B803EF94CA8
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 18:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAB6BF94CA7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 19:00:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A42441FEC;
-	Tue, 21 Apr 2026 18:59:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B767E41EE8;
+	Tue, 21 Apr 2026 19:00:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Y03vy3YlWd8; Tue, 21 Apr 2026 18:59:50 +0000 (UTC)
+ id KnQ7T4v01RpK; Tue, 21 Apr 2026 19:00:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4E4841FDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70A3C41EDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776797990;
-	bh=pQixD7SIr+bExjIaSLzOb98prRxGMh7+DHExTjOLnyw=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1776798038;
+	bh=PmHrF4BVQHGtVr+/VjJFMn8V/5IoXoveUQMLGwIipkg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=sJHq4n5GUGeD0oAEs1eryn0xbVfH9qd1oYw0FvnfC/5C7niKA9aqiXTNumpFylfBR
-	 Yj4+k1SDn2uN9RckrnnArRfbs1vHFOJqrSDSIdfSOWlheSO166LZE13WW4uACAqXth
-	 PwMrRIG8SyA5mONCMT2isxvS3B5jtt/T8SFapjR/oG1ZVJFpbrGF64jK4m2ML9vCli
-	 4AlNkA0iB9tBex0228fofvKM0Kb9DA4WWqiFiUzbtMgZqMJJKWZPZmaHcOvoS2jp1u
-	 buPV5jS7d9J7I11rbb2E/BB2gRKaYcL51PjACK3IrI2+jqC0VJplAmInrkwTwC5r4o
-	 f46iXlqoSZOVA==
+	b=YdX7ryS/9B6XM9qJYFL+SFPQ7DVMV2+LI+hPUns4KvPb52XCiDoDyepZD/LPdK1lx
+	 1wQFryMnlfR541cu8Wae0nWw8SQPvgj7rg21fthhnHbCfwIX1bnR0ETsA7nFNNf292
+	 sn+X8SKRH2io28YwLR51jieIX3aTYm70w5wTNcRYif6qw4a7h6pBiV9Tmg8B4kTrzd
+	 uME8/SxocJrCFimI9dJXU+AFupKrH4d2GiQHWZUtRpcSaZqCfJUWtWGkyH8lHzfAh5
+	 CUKiZ+wQSzOZUQ3PVa2svRNhFOGGUpfCuBUYkrdSDW1NxhMT/f3/SJTOPCUiwslAK/
+	 H6AZpK8qFyyTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4E4841FDD;
-	Tue, 21 Apr 2026 18:59:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4127C183
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:59:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70A3C41EDD;
+	Tue, 21 Apr 2026 19:00:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8735F183
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 222DC60878
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:59:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7942640364
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vkzs6Rp8-CIM for <buildroot@buildroot.org>;
- Tue, 21 Apr 2026 18:59:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qDIpJ8GG9FDc for <buildroot@buildroot.org>;
+ Tue, 21 Apr 2026 19:00:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18A2760879
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18A2760879
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6E46E4030D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E46E4030D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18A2760879
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:59:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E46E4030D
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 19:00:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0177.dip0.t-ipconnect.de [91.58.1.119])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3C319A4C0602;
- Tue, 21 Apr 2026 20:59:42 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46154)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 87BB6A4C0602;
+ Tue, 21 Apr 2026 21:00:34 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50262)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wFGJx-000000003B1-3gKc;
- Tue, 21 Apr 2026 18:59:41 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wFGKo-000000003Kj-0xrK;
+ Tue, 21 Apr 2026 19:00:34 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 21 Apr 2026 20:59:41 +0200
-Message-ID: <20260421185941.2721885-1-bernd@kuhls.net>
+Cc: Alistair Francis <alistair@alistair23.me>
+Date: Tue, 21 Apr 2026 21:00:34 +0200
+Message-ID: <20260421190034.2722046-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1776797982;
- bh=2kExGDZ1SoT5PgvIGafK1zfYRXaYJTvN4KrD1Zm90yM=;
+ s=kas202511301023; t=1776798034;
+ bh=wqbShoz5CKyFMDIiAAjreGwVGsv7hrjQ/crtMW+fZoI=;
  h=From:To:Cc:Subject:Date:From;
- b=p5htoxwBwKdMDCzIbCq22JNPmB8P06q5LQUCalaIuBgnscWBrAq1C/MSo0VmT9sG/
- PihPaFO3tK+0Bg5Kff/DG9q+MPcdQy3rf2njW7g8snCRkvqz1ONvUXn6faz2E6UyGH
- UeKVAgYUy/3FmULIl/RrZGtoMGFgM+0GvS80xes24ReNEgONowEYT3uVcpr9CE3lcE
- HouDiFtDVwgkV7WG9Dj44Rw7NEdZ5rLq3UJ2ztSh9d3Sr/PtvpViFSkvxOqpNqqTUS
- NLNYYC3oAUz5zlXF2lerGt5O0ZsFdgeLBxA5s8rdo8ahFfe3CYIQEsHAFoDOu4kVcI
- TmQvGVm9wKKWA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=VJQC117fOjUKFUaMm/XPrl3wGFBQHHhJWAA4g9xkgMVK+P1uyYe2PTPQQ2edYSC06
+ d5BykYLFsa4iNZSHiUTvvUdQ474uO91caC8QMMnJCP2E14/HgGGxV0SAI7S3zqBkjS
+ WVraClTyMEXb8gR97E3C8ZWTYdnMwLW6DvkaUoDk1Ak92bt7VDmU9EasT6U6YJMUdY
+ 0R8aYKCPf7WiKwmJX+fAbILx3Cj5LUwk8DoMAgv3PdKP+dmSVUuNkffvw2kBZqrN3I
+ Mx1FjOn1u4/nJFKeY3EsCUT3m3r7PU+xzj5InkqH/heLfdTZUWERLTRuZOq7K9ZpPR
+ Zqzg3A/2XLYjg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=p5htoxwB
-Subject: [Buildroot] [PATCH 1/1] package/ruby: security bump version to 4.0.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=VJQC117f
+Subject: [Buildroot] [PATCH 1/1] package/libspdm: security bump version to
+ 3.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,45 +97,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
+https://github.com/DMTF/libspdm/releases/tag/3.8.2
 
-Added sha512 tarball hash provided by upstream.
-
-Fixes CVE-2026-41316:
-https://www.ruby-lang.org/en/news/2026/04/21/erb-cve-2026-41316/
+This release brings a fix for the security issues described in
+https://github.com/DMTF/libspdm/security/advisories/GHSA-j54w-759w-xj3m
+https://github.com/DMTF/libspdm/security/advisories/GHSA-m4wc-xmvg-369f
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ruby/ruby.hash | 5 +++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libspdm/libspdm.hash | 2 +-
+ package/libspdm/libspdm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 9908fe8d4f..7512d1153b 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,6 @@
--# https://www.ruby-lang.org/en/news/2026/03/16/ruby-4-0-2-released/
--sha256  4618db85bb9ec04d8152d0099db488694a3d3c4f52106625e4ad547f1318db87  ruby-4.0.2.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
-+sha256  22cf6005d25bbe496b5ebe9224d63a1aaabfbfe02591bb5d612517c5a7836f29  ruby-4.0.3.tar.xz
-+sha512  5816fb264ce76df59f4bfe0cadceb45025fada2e61f2c14024d6b03f63d304820cddf94afcf82a4951fd12f3b0d9148683f856f3f2245d56042fc8407b6cbff5  ruby-4.0.3.tar.xz
- 
- # License files, Locally calculated
- sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 6bd8ad43c5..7e6f6d8146 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index 1c7b6b3158..0e281a5471 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2184a586bfe030218c6f336750d0fb0c3747fcfb0ed8af9a921bccb567029671  libspdm-3.8.1.tar.gz
++sha256  8d53d5072540ff86ffe496d83b83f49c82792883738bd23ae6ad41fe7c773edf  libspdm-3.8.2.tar.gz
+ sha256  8c891ecf439cca84ceab33fc819c029a72c198f31818aa53a3788a0553841d6e  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index f76262c77b..fc3eea424e 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 4.0
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 4.0.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-LIBSPDM_VERSION = 3.8.1
++LIBSPDM_VERSION = 3.8.2
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
