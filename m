@@ -4,88 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D2E7F94CA1
-	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 17:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD3C4F94CA5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Apr 2026 18:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39FA16080E;
-	Tue, 21 Apr 2026 17:44:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61816607AC;
+	Tue, 21 Apr 2026 18:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kVUcWfrP80C4; Tue, 21 Apr 2026 17:44:37 +0000 (UTC)
+ id LaPLpP5QBLRW; Tue, 21 Apr 2026 18:38:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6BE960807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6090E607E0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776793477;
-	bh=F5RCPxSDu1WSRYq6WpwRJiYBlKgLQO7RshfjwF+8aYg=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1776796733;
+	bh=dYBn2YJTiOgpVln/rhBzQxEyLI24x9bPmnvjM5nz/Ys=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=i5k4YUog76o+ExHgTGDchrHC2zLa3vHZtyitZ9b7SrKaCHjy2+HTJla6yvJq2UNYc
-	 32u7t/isBZe0Tf1v97LgQk6kfCkbEqhy3womXcPuc3kM+iHNfPaGAAiJer49rAIjrl
-	 JjMmQn2r4zW4MI9re3pRzLdD2JiNxxnKOJzlodXPxcSeuGpEcyqk/NqGO/SnWjoGPg
-	 dKosdkcga7P1rDe3IVubgileNOlkqP2eJCcBJtpfyhFzSKYteZy0i+4/35eT2W9tLB
-	 NowIq6HYibclQneuCIfnqWhmjT9fhTNMWNAnemDZVtwpVOXWwmPG/sf1XJDI0frAU6
-	 vW0Bu3A4Cj8tA==
+	b=UKyay+jmO/FsT7GR9ViNUuN5bqj0THVoBCXyV7Vy5GPsuTMfKo9owBfehJiqJCJzi
+	 wo7GnV+o4q0gb/bJcfSgqfO2RacErOuo3/WZ7BL/VxbX+qKtJbBsnuGFKSMlSxagGS
+	 hCjkwMckTny6INPXTFtGcqXO8CrwcIWdA/AnHnDrMvT+neG3ei4Dtlm3vGskgcRWfk
+	 Pf+mWXANH/57rdp50ysspp8aUzNxOs5oDDfzF+RJiV5UG0/qqe3ICPFD8BEmzFzGeN
+	 8bMrY73ZzRVeUOZPAsw/VvNzPw/ajI/UDO5n8c982XFQrV2nTirtC2tmVjXsNNWwHZ
+	 r8rKUtGV7d8sw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6BE960807;
-	Tue, 21 Apr 2026 17:44:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 876B7257
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:44:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6090E607E0;
+	Tue, 21 Apr 2026 18:38:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35E4C257
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7942D83E49
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:44:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AB1C607E0
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yROJdRjRhjuX for <buildroot@buildroot.org>;
- Tue, 21 Apr 2026 17:44:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A57683E2A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A57683E2A
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6A57683E2A
- for <buildroot@buildroot.org>; Tue, 21 Apr 2026 17:44:31 +0000 (UTC)
-Received: from 81-197-150-176.elisa-laajakaista.fi ([81.197.150.176]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1wFF98-0022Ly-Ia; Tue, 21 Apr 2026 19:44:26 +0200
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 03af63a4;
- Tue, 21 Apr 2026 17:44:25 +0000 (UTC)
-Date: Tue, 21 Apr 2026 20:44:25 +0300
-Message-ID: <20260421204425.GD3419825@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Thomas Devoogdt <thomas@devoogdt.com>
-In-Reply-To: <CACXRmJjbyhWrvtRVpn2L0oEpn+UZzfK-=ca=L6z0yT8BJusjaA@mail.gmail.com>
-References: <CACXRmJjbyhWrvtRVpn2L0oEpn+UZzfK-=ca=L6z0yT8BJusjaA@mail.gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VUimzYQMUDje for <buildroot@buildroot.org>;
+ Tue, 21 Apr 2026 18:38:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E1B8607AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E1B8607AC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E1B8607AC
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 18:38:48 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0177.dip0.t-ipconnect.de [91.58.1.119])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3C2AAA4C063B
+ for <buildroot@buildroot.org>; Tue, 21 Apr 2026 20:38:46 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42168)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
+ (envelope-from <bernd@kuhls.net>) id 1wFFzh-000000007x8-3r09
+ for buildroot@buildroot.org; Tue, 21 Apr 2026 18:38:45 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Tue, 21 Apr 2026 20:38:44 +0200
+Message-ID: <20260421183845.2456995-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260421183845.2456995-1-bernd@kuhls.net>
+References: <20260421183845.2456995-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=OQnC8MXYIPNv1KAkMFq3UmvGSWPGHQAIM49OubTGcfk=; b=rY+2EasTifLuPdD1FGKVG7jOYz
- tP85ltS4GPNgp4pf2PHau4mJyvNvyhzVueFGVC6QGoYHazVEhzL9AaN0QWM/2PuJ7ymnn+vd+bdgX
- oBO15c91IR7fXB+XpwEOA35H93B9gFRUvaXW4kcYWkSvW3GyKHRDPQmrfkqVLVy3LtJCTfgioCiJX
- uhOUGH4HydT92/HKbvzUK46jLXS57v4ykhgEfP4S+IocNblSR/bHl4s4ofZWjAFgqdzitWiADBoxj
- KKyWraCG2Hkrbu21uTHyY7igjpZpKfDdgH7fDdYMEZTfDACE7s7CT4wyLK9VUUuTca7ZmF14LX9uR
- L719pccQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1776796726;
+ bh=FsdJR8Nw8jIuqEaGtl16a+ST+6cpLeL2YRaJmYhOo4Y=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=iAFpHNIlRBd7SqTrYQQ9xVIDH5rj2K3m/uacUEmcmNiBc4qwstGR70shErDM+4Hwp
+ 3b82b+t7CiNcfz6ZDU8m7LDL23F7T7kyHEGRqQK1ma+px/1nyYfRlZgURbQGHNKAbm
+ TWnbmG9PTt4vXxcturmBzM1/lQHjmzwypFje1qUP805Ja7a+xIQaB9WnVLBKSGmGqy
+ 7kD8/HMlfltxeFcmg795A1ihpiIkF/L19vSt2O9VyiCN57cVTUMx7brMpPL3iQwKw1
+ glyxS4j+53YvsjuBlMQO9dFsN1aznnR+SZ3Ok/Ax4f9dTkboRdnThAPfRBd6gybGiT
+ JMtKb0JI/N+nQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=rY+2EasT
-Subject: Re: [Buildroot] [PATCH v1] package/webkitgtk: bump to 2.52.3
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=iAFpHNIl
+Subject: [Buildroot] [PATCH 2/3] package/neon: fix build with zlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,52 +94,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0323539948698614158=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Building this defconfig
 
---===============0323539948698614158==
-Content-Type: multipart/signed; boundary="B/q2rB5t7ZXxsnTy"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_NEON=y
+BR2_PACKAGE_NEON_ZLIB=y
 
+does not build libneon with zlib support, quoting configure log:
 
---B/q2rB5t7ZXxsnTy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+  configure: zlib not enabled
 
-SGkgVGhvbWFzLAoKT24gVHVlLCAyMSBBcHIgMjAyNiAxNDozNzoyOSArMDIwMCBUaG9tYXMgRGV2
-b29nZHQgPHRob21hc0BkZXZvb2dkdC5jb20+IHdyb3RlOgoKPiBZZXMsIEkgbWlzc2VkIHlvdXIg
-cGF0Y2guIEkgd2lsbCBtYXJrIG15IG93biBwYXRjaCBhcyBzdXBlcnNlZWRlZC4gRmluZSB0bwo+
-IGtlZXAgVVNFX0dTVFJFQU1FUl9HTCBmcm9tIHdoZXJlIGl0IGlzLgoKTm8gcHJvYmxlbSBhdCBh
-bGwsIGl0IGNvdWxkIGhhcHBlbiB0byBhbnlvbmUgPSkKCj4gQ2FuIHlvdSBhbHJlYWR5IHRha2Ug
-dGhlIDAwMDEtSlNDLUZpeC1FTkFCTEUtSklULWJ1aWxkLnBhdGNoIHRvIHlvdXIgd2Via2l0Cj4g
-YnVtcCwgb3Igd2lsbCB5b3UgdXBkYXRlIHRoZSBwYXRjaCB3aXRoIDIuNTIuNCBvbmNlIHJlbGVh
-c2VkPwoKSSB3aWxsIGRvIGJvdGg6IGZpcnN0IHNlbmQgYSB2MiB3aXRoIHRoZSBwYXRjaCBhZGRl
-ZCwgYW5kIHRoZW4gYmFja3BvcnQKaXQgdG8gdGhlIHN0YWJsZSBicmFuY2ggdG8gaGF2ZSBpdCBp
-bmNsdWRlZCBpbiAuNCBhcyB3ZWxsLgoKQ2hlZXJzLArigJRBZHJpw6FuCg==
+although the configure parameter
 
---B/q2rB5t7ZXxsnTy
-Content-Type: application/pgp-signature; name="signature.asc"
+  --with-zlib=/home/bernd/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot
 
------BEGIN PGP SIGNATURE-----
+was used.
 
-iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaee3eQAKCRCRxVnb5MkS
-OytmAJ0aD+k8126cb7nWd9w9kC5zMHyKEgCffaJaPsGkGDl+oiR5neMjmqpHdsg=
-=rcCv
------END PGP SIGNATURE-----
+The reason is the addition of "=$(STAGING_DIR)" to --with-zlib which was
+added to buildroot in 2008 with commit
+cc6562ff839502a65a3b202ffe7fa3c67bae0856.
 
---B/q2rB5t7ZXxsnTy--
+The upstream code, which expects only "yes", all other values lead to
+the else-condition, is unchanged since 2004:
+https://github.com/notroj/neon/blame/0.37.1/macros/neon.m4#L478
+so a backport of this patch to LTS branches should be considered.
 
---===============0323539948698614158==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+With this patch the configure log shows:
+
+  checking for zlib.h... yes
+  checking for inflate in -lz... yes
+  configure: zlib support enabled, using -lz
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/neon/neon.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index e7872df3c9..39abbaef48 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -16,7 +16,7 @@ NEON_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NEON_CONF_ENV = ne_cv_libsfor_bindtextdomain=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
+-NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
++NEON_CONF_OPTS += --with-zlib
+ NEON_DEPENDENCIES += zlib
+ else
+ NEON_CONF_OPTS += --without-zlib
+-- 
+2.47.3
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0323539948698614158==--
