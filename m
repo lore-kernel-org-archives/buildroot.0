@@ -1,110 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10915F9EDD8
-	for <buildroot@archiver.kernel.org>; Wed, 22 Apr 2026 13:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66052F9EDEB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Apr 2026 14:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94C9E42726;
-	Wed, 22 Apr 2026 13:56:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13291605DC;
+	Wed, 22 Apr 2026 14:33:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NktunY6T_WDb; Wed, 22 Apr 2026 14:32:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352BE60C2B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776868377;
+	bh=VsunE+ipsLZEowGZNBOmV9TbZ6nzcdY0h6LOQKcI5sk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=r07nETnOu08UmROnclroghoQcHmfklJImLd8z/+YQZC7h8B6hfFiY/O2Bpx6HI9Zw
+	 egKP05cH5d2FHYb4vMyMtId77+CdbkGz3ebgZTSUEL1TJDgf5JAze9KGo9C2LPfMaV
+	 Cno7NuI59QDjV86VXHsBEBb4/DDuSR4GyQeTvijZyk1mxFmrVO1+fzQJETDGYxmahm
+	 MKB+PHNe+YQKHcNLZLuBC+SKCjxIBqtCv7VGcl90DSiKwH+dJk7BUOvFVHpBFmzx/G
+	 lwEjN5tN9QvSv2lfwdCTzSlQk0fES6Q5zCv2xDBS+IstgiKocJ6mAVz5PuNJ+iTF88
+	 ZwBrtE+FYWHSQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 352BE60C2B;
+	Wed, 22 Apr 2026 14:32:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05E4024D
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 14:32:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB596426E5
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 14:32:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZWeaVwv3LAhl; Wed, 22 Apr 2026 13:56:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA8C742734
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776866173;
-	bh=Gvxu0C/HI01ck0hgFbTsoKq2Y/almc9rEja4HSVLgjw=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=LVm7HGo67PBhgHB7YnpwusUqvwTFmGL72LDQfjaed3w9ujS18ObV5C/m4hXjbmx+q
-	 s4ZvK+nt1vKklM+PeMgoRAcK6ESaBZ9SGLLiX3sNBu9+2QiSbM0VRmHjeeOT05geqU
-	 1jI2mg0sQxfwkl98ACLIcLh1ogaesAVFEHvBVChHJJkO+GQ6g4xS9k50Lv3xd9ZJDe
-	 hMSrbTUKzOQoyGRJQtGVrxxbjWlQCIZ0H3CYKQ8ZcXklSZJExU2Q9Dbwk82uJ1ecJX
-	 pixBEu3jWrlCXMDFOhwh2TRl1oWEDto8zu1zkP9cKWd20AqOHTCi5kT/jaeOQqz44D
-	 pySwgkxTqrcZA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA8C742734;
-	Wed, 22 Apr 2026 13:56:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 276E0183
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C55584905
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWwXDlPdGIN9 for <buildroot@buildroot.org>;
- Wed, 22 Apr 2026 13:56:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9D0384904
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D0384904
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9D0384904
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:10 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-43fe62837baso3349652f8f.3
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 06:56:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776866168; x=1777470968;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Y26FStnTttcZ2saErPzmLVaL1m99FFydv83feNwjWCE=;
- b=l8SadXGZXPbs/2Qoc1alb9Bf1VEe/msCj4mPqQ2mk4dZgX+hj0t2YzHWaBJyjdYgQI
- cwj1hLp1So8HZKzVhgt/638Z4gW6h408Lekoh+yRj6zDpWlihbYQMvpboj3VbqF7NtWw
- wShZUtPNl679fKfsvcBixa/Nh/IyBV5NBMpNn32TC7M8ztCO9Pvh9RsbhNKFcjYAQtWz
- 2YIMlUn4Tp+Ll2ctJzpOe9U/1ivl/Uuz2WUpCR+AYoe4dOZwS0PdWmxGzR7iOQw88Xtl
- h565qm8XiPIgtHiq+w6fxNlRjt1uFxINVAujMJxYglqjgzwDzfzUPbhlVY7nhshUPFPW
- EwPA==
-X-Gm-Message-State: AOJu0YyuSv4v1hireZhYXzEuYZjXo8XRvfo4zj+FPtyJMx2N23BWue6W
- hygkGntHZEKPkG1pE12GBtU8kJd5QsRA5CzCrRxsEPaU7KmYwT/YWV6VqbWRG8WE0/nvX3c8UqW
- zi9e3sP4=
-X-Gm-Gg: AeBDietpcugfmASXHTDxXYNoRGNms0yRGztV+250BkVOp5CkOzhbp1pqFPv36tTkeYO
- fe3ykKIzZ/3r79q0HM0OWopLDsqkKRbLM1VNGQkPwm14yILncZ5kGiGNV1Av/Jiu7rnyCFLs5Zg
- EidK4QHxQhZtiH5EicE6XwD8iQ5FlJmpglCCwtAocSfL1GlMuTKjq2OdUsTssmYLYgU90pxVyKd
- JIrBOnHzW7O9cCadcdyXS4KmWp6i8W2ZXPfATzla4nN1WdzTfPPbE8TxzreCO8Q2OXPzhlu2sCK
- rijBT4lpOLxlqWFMTNhmvgCiUeDK+Id25hmPLnluuYGMzXfy+Zqa+buDID728xOblFwHvTWhmVG
- L6OW2MtzIBmESZ3IE+aS3aNDA7go2aoKoEKFCGNwG0+cb7P+fCYMyZg9zcPus+R/SFqDV2rBHrZ
- 9nxO+b4bmPPSADNg7qcL8IOibOmFzE0M25Tc6b2W3emcA=
-X-Received: by 2002:a05:6000:1a8c:b0:43e:b0f8:66f1 with SMTP id
- ffacd0b85a97d-43fe3e0b86emr34611364f8f.43.1776866168319; 
- Wed, 22 Apr 2026 06:56:08 -0700 (PDT)
-Received: from dragon.home ([109.136.97.112]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e3a79esm48079552f8f.17.2026.04.22.06.56.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Apr 2026 06:56:08 -0700 (PDT)
+ id Wf1AF11UHElY for <buildroot@buildroot.org>;
+ Wed, 22 Apr 2026 14:32:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=51.210.94.141;
+ helo=smtpout2.mo534.mail-out.ovh.net; envelope-from=mooz@blockos.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AD6BB42676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD6BB42676
+Received: from smtpout2.mo534.mail-out.ovh.net
+ (smtpout2.mo534.mail-out.ovh.net [51.210.94.141])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD6BB42676
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 14:32:49 +0000 (UTC)
+Received: from director6.derp.mail-out.ovh.net
+ (director6.derp.mail-out.ovh.net [51.255.22.22])
+ by mo534.mail-out.ovh.net (Postfix) with ESMTPS id 4g11sV715Tz5xMj;
+ Wed, 22 Apr 2026 14:32:46 +0000 (UTC)
+Received: from director6.derp.mail-out.ovh.net
+ (director6.derp.mail-out.ovh.net. [127.0.0.1])
+ by director6.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+ for <mooz@blockos.org>; Wed, 22 Apr 2026 14:32:46 +0000 (UTC)
+Received: from mta3.priv.ovhmail-u1.ea.mail.ovh.net (unknown [10.109.231.30])
+ by director6.derp.mail-out.ovh.net (Postfix) with ESMTPS id
+ 4g11sV5PkMz7tpL; Wed, 22 Apr 2026 14:32:46 +0000 (UTC)
+Received: from blockos.org (unknown [10.1.6.7])
+ (Authenticated sender: mooz@blockos.org)
+ by mta3.priv.ovhmail-u1.ea.mail.ovh.net (Postfix) with ESMTPSA id 33B0E941627; 
+ Wed, 22 Apr 2026 14:32:46 +0000 (UTC)
+X-OVh-ClientIp: 213.36.7.12
+From: Vincent Cruz <mooz@blockos.org>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Apr 2026 15:54:56 +0200
-Message-ID: <20260422135456.3109434-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.53.0
+Date: Wed, 22 Apr 2026 16:32:17 +0200
+Message-ID: <20260422143243.214664-1-mooz@blockos.org>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1776866168; x=1777470968; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Y26FStnTttcZ2saErPzmLVaL1m99FFydv83feNwjWCE=;
- b=GjRBAmH1atpkhJxFz3Dc2lNllCe0vHBGWFz1p7VMTR98Jdr2cfGJap+HfAfp/zxOFJ
- jLUE19clsYejtcPGXg5+KJALJK9Q0h87S7fV6YNkIZHn5AsC2jt9XeRZqCqtX9VFMSgE
- aNYFSR85kIwquvlb3PbK3ZSamnoJOiOibu9FIeZFxZxFCnzray7C11nfOyx4LaLF78qa
- EUaTHckMyWKPvFUnvJHETSQCSR38zJ+hogirKZPM3j+6NTbJnC6/DzjTuIp4fqSrgJFn
- Q41w49e7jHbLq0WLj1M1Rj1ym7NwmEWKn1svA0cIiYJyYhZ3/WIV0ftevkwCJ8i+G4dT
- 20zA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GjRBAmH1
-Subject: [Buildroot] [PATCH] package/log4cxx: security bump to v1.7.0
+x-ovh-tracer-id: 15856611340027808674
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTFrjFaw/IBtjd1rL8hkx5YJpPWlQhBsL7tuqhExoyWNTIYsxQcMyfVnOe8bY1VppSCHnJrz3V2e6wQEKnUTA8Xkwh/+WOL/RoFDnarQjlm7TZQ27eimESUKfS3UlYLvqJvbo8+qYvrkodlS6mO11W57+cknnXlIvYdzJqAqjAgh/AfdsOF1SvaV0MhMHcZ0L7q6dYoXN5Lk5yyuWqYuhSD1p0Ql91RATrSGQMRIdIyNoC/aBzYK9d4MjxEvKsOXG92eiNGl5ohRjmnnUApTb6Y/InmOEsk++QrEeXLI63WnXa1arZDB5eMEMAAbbcJb5iszwWS2wymFNytGKoTHxNVxDzomzZZOlAc08nBs0OVa7shjL3BGb1tSViihm962yWNOLAQ3DHuPFg8CCP8Kwr0GyPGvECQRiXlH81oYECq9uEMiYir3GQ/d50K0R/O1KKO14dzJWePqBfzofupcgW2ZTQCCgbWst3P1nTnkiTxHX9zrWRKWkQM8ULTUiid5ACgKkDx9YLJeFg+kFK4x2M5rrCh2RwOQWVXFuDQH1+gPLBpOEDX3gs6LTenanzjIGOmK/Xu+WGtPPkf3UxIzmZPKwxf027C3nMjwEQBAvfnIDSfGJRbUzvDoOkXMYjeri5n+7Ki/AwZP8fXhcR3yDytgzi1pr1nU7b2sv8WMC8Fjtg
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=blockos.org
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-103G00520313f65-a730-40a6-aac9-ace412c85d99,
+ 9CEE4CE7D23EE3C4032A23CBFEEA5276D7BBA8CC) smtp.auth=mooz@blockos.org
+Subject: [Buildroot] [PATCH 1/1] package/python-portalocker: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,60 +93,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Vincent Cruz <mooz@blockos.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
-- CVE-2026-40023:
-    Apache Log4cxx's  XMLLayout https://logging.apache.org/log4cxx/1.7.0/c
-    lasslog4cxx_1_1xml_1_1XMLLayout.html , in versions before 1.7.0, fails
-    to sanitize characters forbidden by the  XML 1.0 specification
-    https://www.w3.org/TR/xml/#charsets  in log messages, NDC, and MDC
-    property keys and values, producing invalid XML output. Conforming XML
-    parsers must reject such documents with a fatal error, which may cause
-    downstream log processing systems to drop or fail to index affected
-    records.  An attacker who can influence logged data can exploit this
-    to suppress individual log records, impairing audit trails and
-    detection of malicious activity.  Users are advised to upgrade to
-    Apache Log4cxx 1.7.0, which fixes this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-40023
+Cross-platform file locking library.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+https://github.com/wolph/portalocker
+
+Signed-off-by: Vincent Cruz <mooz@blockos.org>
 ---
- package/log4cxx/log4cxx.hash | 4 ++--
- package/log4cxx/log4cxx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Tested with Buildroot gitlab CI:
+  https://gitlab.com/v_cz/buildroot/-/pipelines/2471767381
 
-diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
-index f6770e287c..af97ebca18 100644
---- a/package/log4cxx/log4cxx.hash
-+++ b/package/log4cxx/log4cxx.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.apache.org/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz.sha512
--sha512  6ee406314bd7ab02a46c98cc8a0d5ad5aec8928a23716a81a152775ca315cd3b950d600b2e221d5b4a88416ae9bbda1215fae43626107feea4df2f3e074303ad  apache-log4cxx-1.6.1.tar.gz
-+# From https://downloads.apache.org/logging/log4cxx/1.7.0/apache-log4cxx-1.7.0.tar.gz.sha512
-+sha512  0e94946457423689af6d85074ab97b717e0cec85a4f548e6650b060e8f98b780f980b7d4a7780410fa64681376fb4bc62fab6ed9068fc944e07f9f32ac0413af  apache-log4cxx-1.7.0.tar.gz
- # Locally computed
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index 57f9b1e844..ea47073d3c 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/python-portalocker/Config.in          |  6 +++
+ .../python-portalocker.hash                   |  5 ++
+ .../python-portalocker/python-portalocker.mk  | 15 ++++++
+ .../package/sample_python_portalocker.py      | 51 +++++++++++++++++++
+ .../tests/package/test_python_portalocker.py  | 24 +++++++++
+ 7 files changed, 103 insertions(+)
+ create mode 100644 package/python-portalocker/Config.in
+ create mode 100644 package/python-portalocker/python-portalocker.hash
+ create mode 100644 package/python-portalocker/python-portalocker.mk
+ create mode 100644 support/testing/tests/package/sample_python_portalocker.py
+ create mode 100644 support/testing/tests/package/test_python_portalocker.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eba91f10a6..2534140617 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3363,6 +3363,7 @@ N:	Victor Huesca <victor.huesca@bootlin.com>
+ F:	support/testing/tests/core/test_root_password.py
  
--LOG4CXX_VERSION = 1.6.1
-+LOG4CXX_VERSION = 1.7.0
- LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
- LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
- LOG4CXX_INSTALL_STAGING = YES
+ N:	Vincent Cruz <mooz@blockos.org>
++F:	package/python-portalocker/
+ F:	package/python-transitions/
+ 
+ N:	Vincent Jardin <vjardin@free.fr>
+diff --git a/package/Config.in b/package/Config.in
+index d0f148699b..504c84eb43 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1281,6 +1281,7 @@ menu "External python modules"
+ 	source "package/python-platformdirs/Config.in"
+ 	source "package/python-pluggy/Config.in"
+ 	source "package/python-ply/Config.in"
++	source "package/python-portalocker/Config.in"
+ 	source "package/python-portend/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-priority/Config.in"
+diff --git a/package/python-portalocker/Config.in b/package/python-portalocker/Config.in
+new file mode 100644
+index 0000000000..6225a659d2
+--- /dev/null
++++ b/package/python-portalocker/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PORTALOCKER
++	bool "python-portalocker"
++	help
++	  Cross-platform file locking library.
++
++	  https://github.com/wolph/portalocker
+diff --git a/package/python-portalocker/python-portalocker.hash b/package/python-portalocker/python-portalocker.hash
+new file mode 100644
+index 0000000000..c6be94b8e3
+--- /dev/null
++++ b/package/python-portalocker/python-portalocker.hash
+@@ -0,0 +1,5 @@
++# From https://pypi.org/pypi/portalocker/3.2.0/json
++sha256  1f3002956a54a8c3730586c5c77bf18fae4149e07eaf1c29fc3faf4d5a3f89ac  portalocker-3.2.0.tar.gz
++# Locally computed
++sha256  a50570fa3b3102a42d7babb0569238b0b3c0aedce0063c8e4d65060dfd3f7293  portalocker-3.2.0/LICENSE
++sha256  1a6cc9434cfd4a373630949c8807ab6c30f4783ad2024151eea755f0766ecc03  portalocker-3.2.0/PKG-INFO
+diff --git a/package/python-portalocker/python-portalocker.mk b/package/python-portalocker/python-portalocker.mk
+new file mode 100644
+index 0000000000..6e1076334b
+--- /dev/null
++++ b/package/python-portalocker/python-portalocker.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-portalocker
++#
++################################################################################
++
++PYTHON_PORTALOCKER_VERSION = 3.2.0
++PYTHON_PORTALOCKER_SOURCE = portalocker-$(PYTHON_PORTALOCKER_VERSION).tar.gz
++PYTHON_PORTALOCKER_SITE = https://files.pythonhosted.org/packages/source/p/portalocker
++PYTHON_PORTALOCKER_SETUP_TYPE = setuptools
++PYTHON_PORTALOCKER_LICENSE = BSD-3-Clause
++PYTHON_PORTALOCKER_LICENSE_FILES = LICENSE
++PYTHON_PORTALOCKER_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_portalocker.py b/support/testing/tests/package/sample_python_portalocker.py
+new file mode 100644
+index 0000000000..f5268a8fe0
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_portalocker.py
+@@ -0,0 +1,51 @@
++import os
++import multiprocessing
++import time
++from pathlib import Path
++from portalocker import utils, LockFlags
++
++flags = LockFlags.EXCLUSIVE | LockFlags.NON_BLOCKING
++
++def worker(filename, result):
++    try:
++        lock = utils.Lock(filename, fail_when_locked=True, flags=flags)
++        lock.acquire()
++        result.put((True, 'ok'))
++        lock.release()
++    except Exception as e:
++        result.put((False, str(e)))
++
++
++def run(filename):
++    queue: multiprocessing.Queue[tuple[bool, str]] = (
++        multiprocessing.Queue()
++    )
++
++    proc = multiprocessing.Process(
++        target=worker, args=(str(lock.filename), queue)
++    )
++
++    proc.start()
++    try:
++        result, msg = queue.get(timeout=1)
++        print(f"{result} {msg}")
++    finally:
++        proc.join(timeout=1)
++    
++    if  proc.is_alive():
++        proc.terminate()
++
++
++if __name__ == '__main__':
++    filename = Path('/tmp/foo')
++
++    lock = utils.Lock(filename, fail_when_locked=True, flags=flags)
++    assert(lock.filename == str(filename))
++
++    lock.acquire()
++    time.sleep(0.1)
++    run(filename)       # should fail
++    lock.release()
++
++    time.sleep(0.1)
++    run(filename)       # success
+diff --git a/support/testing/tests/package/test_python_portalocker.py b/support/testing/tests/package/test_python_portalocker.py
+new file mode 100644
+index 0000000000..58f27c0f79
+--- /dev/null
++++ b/support/testing/tests/package/test_python_portalocker.py
+@@ -0,0 +1,24 @@
++import os
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPortalocker(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PORTALOCKER=y
++        """
++    sample_scripts = ["tests/package/sample_python_portalocker.py"]
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++
++        cmd = self.interpreter + " " + os.path.basename(self.sample_scripts[0])
++        output, exit_code = self.emulator.run(cmd, timeout=15)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output, [
++            'False [Errno 11] Resource temporarily unavailable',
++            'True ok',
++        ])
 -- 
-2.53.0
+2.51.0
 
 _______________________________________________
 buildroot mailing list
