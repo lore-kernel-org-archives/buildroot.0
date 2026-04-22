@@ -1,84 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F8EF9EDC5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Apr 2026 12:57:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10915F9EDD8
+	for <buildroot@archiver.kernel.org>; Wed, 22 Apr 2026 13:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06DCB848A8;
-	Wed, 22 Apr 2026 12:57:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uAo4D4kgnjt4; Wed, 22 Apr 2026 12:57:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCEE4848BE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776862674;
-	bh=eI6SKD6ZMMzOtGaozT4T50sBGIZ0z8L6P06uj/aLq/4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=Ou7/3AIsGytNJrI3xuhRbxq+NFyf11kupgvh+n5vUdSA5pube6wjNow6bW454S0FS
-	 XyWIyJeY6WNoJeQSHk0SOozl9TTleDvC0sYwAIoyjrrD6l9R9Be3sIXpIwFgTcXseV
-	 are2e/SnPfJVKQMV7XuCLuF/p5Jjzo6mLcDzEyipuLlQzlnGsxwwyqRCw6gaVoCjKh
-	 nPuzLTs7TnUtjJJUIDsqbomEWau3Le6CSM/FM4NfRlcaM2rZMg0eN7+qmDDUTwfG2u
-	 S6YKuV5f32ielF4z9n+ZHwQTzJdtHdSqejR5XEIrXlkegvgF6uH1ouDu9GKB1qWkBp
-	 w0wcYmC+Z9eXg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCEE4848BE;
-	Wed, 22 Apr 2026 12:57:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B56E4183
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 12:57:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2CE342746
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 12:57:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94C9E42726;
+	Wed, 22 Apr 2026 13:56:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qu92rYfsHRyJ for <buildroot@buildroot.org>;
- Wed, 22 Apr 2026 12:57:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D4FCD42745
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4FCD42745
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D4FCD42745
- for <buildroot@buildroot.org>; Wed, 22 Apr 2026 12:57:47 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -530940237; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 22 Apr 2026 12:57:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wFX9E-0000000DOj5-01pR;
- Wed, 22 Apr 2026 14:57:44 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id ZWeaVwv3LAhl; Wed, 22 Apr 2026 13:56:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA8C742734
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1776866173;
+	bh=Gvxu0C/HI01ck0hgFbTsoKq2Y/almc9rEja4HSVLgjw=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=LVm7HGo67PBhgHB7YnpwusUqvwTFmGL72LDQfjaed3w9ujS18ObV5C/m4hXjbmx+q
+	 s4ZvK+nt1vKklM+PeMgoRAcK6ESaBZ9SGLLiX3sNBu9+2QiSbM0VRmHjeeOT05geqU
+	 1jI2mg0sQxfwkl98ACLIcLh1ogaesAVFEHvBVChHJJkO+GQ6g4xS9k50Lv3xd9ZJDe
+	 hMSrbTUKzOQoyGRJQtGVrxxbjWlQCIZ0H3CYKQ8ZcXklSZJExU2Q9Dbwk82uJ1ecJX
+	 pixBEu3jWrlCXMDFOhwh2TRl1oWEDto8zu1zkP9cKWd20AqOHTCi5kT/jaeOQqz44D
+	 pySwgkxTqrcZA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA8C742734;
+	Wed, 22 Apr 2026 13:56:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 276E0183
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C55584905
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QWwXDlPdGIN9 for <buildroot@buildroot.org>;
+ Wed, 22 Apr 2026 13:56:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9D0384904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D0384904
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E9D0384904
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 13:56:10 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-43fe62837baso3349652f8f.3
+ for <buildroot@buildroot.org>; Wed, 22 Apr 2026 06:56:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1776866168; x=1777470968;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Y26FStnTttcZ2saErPzmLVaL1m99FFydv83feNwjWCE=;
+ b=l8SadXGZXPbs/2Qoc1alb9Bf1VEe/msCj4mPqQ2mk4dZgX+hj0t2YzHWaBJyjdYgQI
+ cwj1hLp1So8HZKzVhgt/638Z4gW6h408Lekoh+yRj6zDpWlihbYQMvpboj3VbqF7NtWw
+ wShZUtPNl679fKfsvcBixa/Nh/IyBV5NBMpNn32TC7M8ztCO9Pvh9RsbhNKFcjYAQtWz
+ 2YIMlUn4Tp+Ll2ctJzpOe9U/1ivl/Uuz2WUpCR+AYoe4dOZwS0PdWmxGzR7iOQw88Xtl
+ h565qm8XiPIgtHiq+w6fxNlRjt1uFxINVAujMJxYglqjgzwDzfzUPbhlVY7nhshUPFPW
+ EwPA==
+X-Gm-Message-State: AOJu0YyuSv4v1hireZhYXzEuYZjXo8XRvfo4zj+FPtyJMx2N23BWue6W
+ hygkGntHZEKPkG1pE12GBtU8kJd5QsRA5CzCrRxsEPaU7KmYwT/YWV6VqbWRG8WE0/nvX3c8UqW
+ zi9e3sP4=
+X-Gm-Gg: AeBDietpcugfmASXHTDxXYNoRGNms0yRGztV+250BkVOp5CkOzhbp1pqFPv36tTkeYO
+ fe3ykKIzZ/3r79q0HM0OWopLDsqkKRbLM1VNGQkPwm14yILncZ5kGiGNV1Av/Jiu7rnyCFLs5Zg
+ EidK4QHxQhZtiH5EicE6XwD8iQ5FlJmpglCCwtAocSfL1GlMuTKjq2OdUsTssmYLYgU90pxVyKd
+ JIrBOnHzW7O9cCadcdyXS4KmWp6i8W2ZXPfATzla4nN1WdzTfPPbE8TxzreCO8Q2OXPzhlu2sCK
+ rijBT4lpOLxlqWFMTNhmvgCiUeDK+Id25hmPLnluuYGMzXfy+Zqa+buDID728xOblFwHvTWhmVG
+ L6OW2MtzIBmESZ3IE+aS3aNDA7go2aoKoEKFCGNwG0+cb7P+fCYMyZg9zcPus+R/SFqDV2rBHrZ
+ 9nxO+b4bmPPSADNg7qcL8IOibOmFzE0M25Tc6b2W3emcA=
+X-Received: by 2002:a05:6000:1a8c:b0:43e:b0f8:66f1 with SMTP id
+ ffacd0b85a97d-43fe3e0b86emr34611364f8f.43.1776866168319; 
+ Wed, 22 Apr 2026 06:56:08 -0700 (PDT)
+Received: from dragon.home ([109.136.97.112]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-43fe4e3a79esm48079552f8f.17.2026.04.22.06.56.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 22 Apr 2026 06:56:08 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 22 Apr 2026 14:57:20 +0200
-Message-ID: <20260422125721.3193186-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Apr 2026 15:54:56 +0200
+Message-ID: <20260422135456.3109434-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=GRt22PDp+YD5Q8LYzLky5+YQBXoSAYknsrd4HVu4kK0cTK43DCbxfoCop+rQQwfEjIrUfG/0+vo4dhXXTiBbUyHsIxWgUUT6ZUBwy7iH68pIZDu6tpCmD9WsPlauGxr73VVzZNuavPIOCZKLcQqsef1pm88eML2okdq9XeoHpwFF0wJSvgE598iuxWJTtsvhWJTxc2T4eNMIQWCaiaK3dtJDUTgzEIHDMOlL6l5d6o71IsyQNH0i9QkAC4VmtuWkwylc9vnhNICEN1XPYLZpfgCVpVW81TVVtRRzmk8lUkSy0QdIUtFXC4NGYfdOormbXQmSBhIbH9pY3LdW7eiEkQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=EN/SG3zmfL8qHIFNoMFldCnEhS1wWm9SNa1/CFBEeB0=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=GRt22PDp
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH-2025.02.x] package/python3: security bump to
- version 3.12.13
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1776866168; x=1777470968; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Y26FStnTttcZ2saErPzmLVaL1m99FFydv83feNwjWCE=;
+ b=GjRBAmH1atpkhJxFz3Dc2lNllCe0vHBGWFz1p7VMTR98Jdr2cfGJap+HfAfp/zxOFJ
+ jLUE19clsYejtcPGXg5+KJALJK9Q0h87S7fV6YNkIZHn5AsC2jt9XeRZqCqtX9VFMSgE
+ aNYFSR85kIwquvlb3PbK3ZSamnoJOiOibu9FIeZFxZxFCnzray7C11nfOyx4LaLF78qa
+ EUaTHckMyWKPvFUnvJHETSQCSR38zJ+hogirKZPM3j+6NTbJnC6/DzjTuIp4fqSrgJFn
+ Q41w49e7jHbLq0WLj1M1Rj1ym7NwmEWKn1svA0cIiYJyYhZ3/WIV0ftevkwCJ8i+G4dT
+ 20zA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=GjRBAmH1
+Subject: [Buildroot] [PATCH] package/log4cxx: security bump to v1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,108 +116,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes a number of security issues:
+This fixes the following vulnerability:
+- CVE-2026-40023:
+    Apache Log4cxx's  XMLLayout https://logging.apache.org/log4cxx/1.7.0/c
+    lasslog4cxx_1_1xml_1_1XMLLayout.html , in versions before 1.7.0, fails
+    to sanitize characters forbidden by the  XML 1.0 specification
+    https://www.w3.org/TR/xml/#charsets  in log messages, NDC, and MDC
+    property keys and values, producing invalid XML output. Conforming XML
+    parsers must reject such documents with a fatal error, which may cause
+    downstream log processing systems to drop or fail to index affected
+    records.  An attacker who can influence logged data can exploit this
+    to suppress individual log records, impairing audit trails and
+    detection of malicious activity.  Users are advised to upgrade to
+    Apache Log4cxx 1.7.0, which fixes this issue.
+    https://www.cve.org/CVERecord?id=CVE-2026-40023
 
-Email and header-related:
-
-gh-144125: email.generator.BytesGenerator now refuses to serialize headers
-that are unsafely folded or delimited (see
-email.policy.Policy.verify_generated_headers); addressing CVE-2024-6923.
-
-gh-143935: Fixed comment folding in modern email policies to prevent header
-injection when very long non-foldable comment text is wrapped.
-
-gh-136063: email.message now ensures linear complexity for legacy HTTP
-parameter parsing.
-
-HTTP, cookies, and URL parsing-related:
-
-gh-143916: wsgiref.headers.Headers now rejects C0 control characters in
-fields, values, and parameters.
-
-gh-143919: http.cookies.Morsel now rejects control characters in fields and
-values.
-
-gh-143925: data: URL media types now reject control characters.
-
-XML-related:
-
-gh-144363: Upgraded bundled libexpat to 2.7.4 to fix CVE-2026-24515 and
-CVE-2026-25210.
-
-gh-90949: Added Expat allocation-tracker APIs to xml.parsers.expat parser
-objects to limit memory amplification from malicious XML input; includes
-mitigation for CVE-2025-59375.
-
-gh-142145: Removed quadratic behavior in xml.dom.minidom node ID cache
-clearing.
-
-Denial-of-service hardening:
-
-gh-119342: Fixed a potential memory denial of service in plistlib.
-
-gh-119451: Fixed a potential memory denial of service in http.client.
-
-gh-119452: Fixed a potential memory denial of service in http.server (CGI
-server on Windows).
-
-gh-136065: Fixed quadratic complexity in os.path.expandvars().
-
-HTML parsing-related:
-
-gh-137836: Hardened html.parser.HTMLParser with support for additional
-RAWTEXT/PLAINTEXT elements (plaintext, xmp, iframe, noembed, noframes,
-optional noscript), improving robust handling of hostile markup.
-
-SSL memory-safety fixes:
-
-gh-144833: Fixed a use-after-free in ssl when SSL_new() fails.
-
-For details, see the announcement:
-https://www.python.org/downloads/release/python-31213/
-
-Upstream now provides a sha256 hash, so use that instead of md5.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/python3/python3.hash | 5 ++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/log4cxx/log4cxx.hash | 4 ++--
+ package/log4cxx/log4cxx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index ed0d879f11..6964789262 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,4 @@
--# From https://www.python.org/downloads/release/python-31211/
--md5  04feb01316c7bb1b448001adbc63dd23  Python-3.12.12.tar.xz
-+# From https://www.python.org/downloads/release/python-31213/
-+sha256  c08bc65a81971c1dd5783182826503369466c7e67374d1646519adf05207b684  Python-3.12.13.tar.xz
+diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
+index f6770e287c..af97ebca18 100644
+--- a/package/log4cxx/log4cxx.hash
++++ b/package/log4cxx/log4cxx.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.apache.org/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz.sha512
+-sha512  6ee406314bd7ab02a46c98cc8a0d5ad5aec8928a23716a81a152775ca315cd3b950d600b2e221d5b4a88416ae9bbda1215fae43626107feea4df2f3e074303ad  apache-log4cxx-1.6.1.tar.gz
++# From https://downloads.apache.org/logging/log4cxx/1.7.0/apache-log4cxx-1.7.0.tar.gz.sha512
++sha512  0e94946457423689af6d85074ab97b717e0cec85a4f548e6650b060e8f98b780f980b7d4a7780410fa64681376fb4bc62fab6ed9068fc944e07f9f32ac0413af  apache-log4cxx-1.7.0.tar.gz
  # Locally computed
--sha256  fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4  Python-3.12.12.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4ace4d8573..60ab5b0cbc 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index 57f9b1e844..ea47073d3c 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.12
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).12
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).13
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-LOG4CXX_VERSION = 1.6.1
++LOG4CXX_VERSION = 1.7.0
+ LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
+ LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
+ LOG4CXX_INSTALL_STAGING = YES
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
