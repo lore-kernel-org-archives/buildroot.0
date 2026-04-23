@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6B56FED3F1
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53D9CFED3F1
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D7DD42995;
-	Fri, 24 Apr 2026 16:38:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BCBA4299B;
+	Fri, 24 Apr 2026 16:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H7hAHnntphW1; Fri, 24 Apr 2026 16:38:46 +0000 (UTC)
+ id OsOKPsZOLYrn; Fri, 24 Apr 2026 16:38:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C528F42980
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DD6B42991
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048726;
-	bh=JK2VnZTrVKKdnm54GVvLEsIAor8tQ7/8G6oaV8x4Ob0=;
+	s=default; t=1777048730;
+	bh=HQCAX3Jap6ynxOvvn7/1RUtZdxAL57oTZZUJNy3OGO8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E+aqoMMXYHqiTCHfGNI4BcvgjGM+2sAX6JxVni0ZGD7rDJ8Fpytzd5YXw7ukwYnzc
-	 Ci8LMdXS+kQOOuZDMKz0uYwLJ5eiV0XduM+E7LkCOE1euH5YLgue3OjfgZHLTgkg8a
-	 92Is0xx2gW/EPRUbKdhAVZ9F9a4lUUqtLqa6G2bHtrDN+fLmFf+NhB72UncCTGuk3O
-	 glKFnXoq3s+heLAqAxuF9U58lTcc65hqpHzD/MBxD8cPqpbHPPtcCFf+8dxjU6owiy
-	 lk63VkF84MxIqbnPl2dblyhqzlTKorNMmoPpxo3g32qz4gWIrq2aAEkAXlffAIzLEd
-	 nahx4LzVqaAZg==
+	b=FGHCP5D4ZEZIcqWFyJaaj/tAhWJe6CJoIzSXVJh09PlVueTtMw29QwU26t/jIMOim
+	 mmItK9v4cA1eXPI7SwfR1B5TTNyAqFhx9ghppFVjY9tig9MrkwVSiqx78pr3cMTkXu
+	 Oz9/qYTYeGuy5x2VHE1b9zub1jWg5n+wb7KToLgeFAzc2vTZ4ZnyBFPoPflrZmR9Tc
+	 WdnyI382ppUU3mrKG7QGu3omA27URw+bHoQPO/c2pyn/JC8jBj4rKtHGHpLHJml6bc
+	 nS3nTjl/O8kz9uDoOTV/As5J6mjv/UK/NDRUNT1zsfB6EPklLwbAsHOn5drlZMAfDx
+	 gyqsJzIyWRPdA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C528F42980;
-	Fri, 24 Apr 2026 16:38:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DD6B42991;
+	Fri, 24 Apr 2026 16:38:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E0C231
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BCF6F231
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 175AE423EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CBFC423F0
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHbJOahHCR7C for <buildroot@buildroot.org>;
+ id DvZKBdK0jSsC for <buildroot@buildroot.org>;
  Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9468423F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C006A423EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9468423F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id C006A423EE
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A18B782B2E; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+ id 7765082AFA; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 14:29:25 +0200
+Date: Thu, 23 Apr 2026 14:24:12 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 7a1f92b0dfcf8d944fc198421bdd64b429d54570
-X-Git-Newrev: e4b3bdb663c3a1d58deea21cb1d21c0a963bc6f2
+X-Git-Oldrev: 2513ab9603a8a4ee98ee13df3cb6ec6160c4d4ca
+X-Git-Newrev: 3082413b9be086e3cd9d5bfe204f88dfcb0d83e4
 X-Patchwork-Hint: ignore
-Message-Id: <20260424163825.A18B782B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/dash: add patch
- for CVE-2026-31323
+Message-Id: <20260424163825.7765082AFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libarchive:
+ security bump version to 3.8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,81 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e4b3bdb663c3a1d58deea21cb1d21c0a963bc6f2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3082413b9be086e3cd9d5bfe204f88dfcb0d83e4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The vulnerability description is not disclosed yet.
+https://github.com/libarchive/libarchive/releases/tag/v3.8.7
+"Libarchive 3.8.7 is a security and bugfix release."
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 7e24f892f6120d008e6a73617398ddc3111ee3a2)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 5fc186771e18bd2a39d8a643e85ddb662eaeae36)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dash/0002-fix-CVE-2026-31323.patch | 42 ++++++++++++++++++++++++++++++
- package/dash/dash.mk                       |  3 +++
- 2 files changed, 45 insertions(+)
+ package/libarchive/libarchive.hash | 6 +++---
+ package/libarchive/libarchive.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dash/0002-fix-CVE-2026-31323.patch b/package/dash/0002-fix-CVE-2026-31323.patch
-new file mode 100644
-index 0000000000..5c92119db5
---- /dev/null
-+++ b/package/dash/0002-fix-CVE-2026-31323.patch
-@@ -0,0 +1,42 @@
-+From 0034bfe185d3d875cebace8cb3ca5c9dabf9e0f3 Mon Sep 17 00:00:00 2001
-+From: Muchen Hou <996029583@qq.com>
-+Date: Mon, 13 Apr 2026 10:28:29 +0800
-+Subject: arith: Fix CVE-2026-31323 INTMAX_MIN / -1 overflow
-+
-+Division and remainder currently guard against division by zero, but not
-+against the signed overflow case INTMAX_MIN / -1. On affected systems
-+this can trigger SIGFPE during arithmetic expansion.
-+
-+Add an explicit guard before evaluating division or remainder.
-+
-+Signed-off-by: Muchen Hou <996029583@qq.com>
-+
-+Merge the overflow check with the zero division check.
-+
-+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-+
-+CVE: CVE-2026-31323
-+Upstream: https://git.kernel.org/pub/scm/utils/dash/dash.git/commit/?h=601bc50bfc2858ab7a9ec327fe4e33a9c4877759&id=0034bfe185d3d875cebace8cb3ca5c9dabf9e0f3
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ src/arith_yacc.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/arith_yacc.c b/src/arith_yacc.c
-+index 1a087c3..b978ef0 100644
-+--- a/src/arith_yacc.c
-++++ b/src/arith_yacc.c
-+@@ -98,8 +98,8 @@ static intmax_t do_binop(int op, intmax_t a, intmax_t b)
-+ 	default:
-+ 	case ARITH_REM:
-+ 	case ARITH_DIV:
-+-		if (!b)
-+-			yyerror("division by zero");
-++		if (!b || (a == INTMAX_MIN && b == -1))
-++			yyerror("division error");
-+ 		return op == ARITH_REM ? a % b : a / b;
-+ 	case ARITH_MUL:
-+ 		return a * b;
-+-- 
-+cgit 1.3-korg
-+
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 143972f01a..af0f776109 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -13,6 +13,9 @@ DASH_AUTORECONF = YES
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index be357183e2..665259f2b6 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/libarchive/libarchive/releases/tag/v3.8.6
++# From https://github.com/libarchive/libarchive/releases/tag/v3.8.7
+ # After verifying the pgp signature from:
+-# https://www.libarchive.de/downloads/libarchive-3.8.6.tar.xz.asc
+-sha256  8ac57c1f5e99550948d1fe755c806d26026e71827da228f36bef24527e372e6f  libarchive-3.8.6.tar.xz
++# https://www.libarchive.de/downloads/libarchive-3.8.7.tar.xz.asc
++sha256  d3a8ba457ae25c27c84fd2830a2efdcc5b1d40bf585d4eb0d35f47e99e5d4774  libarchive-3.8.7.tar.xz
+ # Locally computed:
+ sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 3b8fdbae1e..f11f5d8f6f 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- DASH_CPE_ID_VENDOR = dash
- 
-+# 0002-fix-CVE-2026-31323.patch
-+DASH_IGNORE_CVES += CVE-2026-31323
-+
- # dash does not build in parallel
- DASH_MAKE = $(MAKE1)
- 
+-LIBARCHIVE_VERSION = 3.8.6
++LIBARCHIVE_VERSION = 3.8.7
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
