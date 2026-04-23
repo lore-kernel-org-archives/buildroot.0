@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01478FED3F1
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF8D2FED3EF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C93ED84C99;
-	Fri, 24 Apr 2026 16:38:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96CAB84DE8;
+	Fri, 24 Apr 2026 16:38:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9XKNPPr-Uf0n; Fri, 24 Apr 2026 16:38:43 +0000 (UTC)
+ id lrLBa9O3F9R5; Fri, 24 Apr 2026 16:38:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3CBC84DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F41884DFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048723;
-	bh=afggYvZ19/n/3C8o/ZxfOjkr5hD8S504h7ptAVt6mwk=;
+	s=default; t=1777048725;
+	bh=pJdJ13gARJ+benTHCM4K2skkpClchB4GTV4lqNxLdPk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bQNs9wuV+/TvqJas4KYY0V1z0/wjCFY2cYjtwdN6ESqvDZP0UyIMKvTXooZUFkVys
-	 YgqvHeX9DvKuD2q50mqNRoCqvbwBbYHxBXnRoTxPW4SaC8uEnAIPn7hign/z8+Y+Jz
-	 RlLN/z5EP3XEYlPZmsfY7EVpC9rDnZv0vuXygfkgoazwpUXbygFUgPr6KYk1mhoW3/
-	 ocJSZgkD94I8GDPS04N6TgLmxPtwRzV+E1TySNs/DTe6oQkOGDjwjsVM6xvloq6mu6
-	 gci2Em90WwXFRdZ/1oxrcAuGaFqXSXsrC7a9SmJtDu4oXEL3ifKOX+aj7uwgNRMK+j
-	 X+LOaPVdOu16g==
+	b=MgOjen+KYqWbi5ubmfFepcJhxWq/nvvPDnk08kaGhPRpTa2w4K763TK9XGe2luhZw
+	 wovrxa9RbY7v3+VBbBEiT/iON7PONyK2oX58L+0MmqbXcnwOFT1sZ45VguxiIRUG7w
+	 4AuDJbU/0Ku2MIH17ThjP+GGoatwAkfnG+TZXe4dWrh7qEtCT4+ohELKi6LKbgu2gz
+	 evUH8gU3HFFseVGDWm4Z25v9UUrVtoiy9E7izRJhiDA+NGJGn5gbKXc/Vlg/lyYCej
+	 R7ZeomHvlnGXACS+xyS6o8yqKLbUy8TIhXTeGkAQwbOjN3njR0JGiB3IeD4EwuVwa9
+	 JrBaMGIHpj/kA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3CBC84DE8;
-	Fri, 24 Apr 2026 16:38:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A2B0231
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F41884DFB;
+	Fri, 24 Apr 2026 16:38:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76DEB231
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0355F61C35
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E49DB423EB
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eYgiXlPjQ63l for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l9XoqOOTC5A2 for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C895261C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6BD3423ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C895261C38
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6BD3423ED
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6567182B2F; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+ id 6ED8282B2E; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 14:23:09 +0200
+Date: Thu, 23 Apr 2026 14:23:43 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: d1c44f8cdf61bdce0567cd86f47d04ab0ac9df3f
-X-Git-Newrev: 2e3c080b9874a6858a7d2054de7d97fa5489aaae
+X-Git-Oldrev: 2e3c080b9874a6858a7d2054de7d97fa5489aaae
+X-Git-Newrev: 2513ab9603a8a4ee98ee13df3cb6ec6160c4d4ca
 X-Patchwork-Hint: ignore
-Message-Id: <20260424163825.6567182B2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/bat: remove no
- longer needed patch for gcc15 compat
+Message-Id: <20260424163825.6ED8282B2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libexif: security
+ bump to version 0.6.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2e3c080b9874a6858a7d2054de7d97fa5489aaae
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2513ab9603a8a4ee98ee13df3cb6ec6160c4d4ca
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The bat 0.26.0 already depends on a newer version of the onig_sys crate,
-so the problem that patch is fixing was no already no longer present.
+https://github.com/libexif/libexif/blob/v0.6.26/NEWS
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+* Security issues fixed:
+  * CVE-2026-40386: An unsigned integer underflow in Fuji and Olympus
+    makernote handling
+  * CVE-2026-40385: An unsigned integer overflow on 32bit systems in
+    Nikon makernote handling
+  * CVE-2026-32775: A buffer overwrite via integer underflow in makernote
+    handling
+
+Switched to xz tarball and tarball hash provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0e2b7e2bee7ea2b40b82a43beaf161cb7fbf3d23)
+(cherry picked from commit 3f9bcf42c31bb0d089ae0e70642242cf572ba5b6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...ex-onig-by-regex-fancy-in-minimal-applica.patch | 47 ----------------------
- 1 file changed, 47 deletions(-)
+ package/libexif/libexif.hash | 3 ++-
+ package/libexif/libexif.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-deleted file mode 100644
-index de6a3fc70c..0000000000
---- a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
--From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
--Date: Tue, 2 Sep 2025 14:02:11 +0200
--Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
--
--The default "application" feature enables "minimal-application", which
--in turn pulls in the "regex-onig" feature of syntect. This brings in the
--onig crate (version 6.4.0) and its dependency onig_sys, which fail to
--build with GCC 15 due to C23 keyword conflicts.
--
--It is not possible to simply update the onig crate from bat itself,
--since its version is pinned indirectly by syntect. To avoid this
--dependency and fix the build, replace "regex-onig" with "regex-fancy" in
--"minimal-application". This makes bat use the pure-Rust fancy-regex
--engine instead of Oniguruma, removing the need for onig_sys and allowing
--the package to build with GCC 15.
--
--There is an an ongoing discussion about removing Oniguruma from bat
--since Oniguruma has been declared archived:
--
--see https://github.com/sharkdp/bat/issues/3285
--
--The Upstream project for now is refusing to use fancy-regex as default.
--
--Upstream: not submitted
--
--Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-----
-- Cargo.toml | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Cargo.toml b/Cargo.toml
--index 80d19321..93a07a1d 100644
----- a/Cargo.toml
--+++ b/Cargo.toml
--@@ -29,7 +29,7 @@ minimal-application = [
--     "clap",
--     "etcetera",
--     "paging",
---    "regex-onig",
--+    "regex-fancy",
--     "wild",
-- ]
-- git = ["git2"] # Support indicating git modifications
---- 
--2.43.0
--
+diff --git a/package/libexif/libexif.hash b/package/libexif/libexif.hash
+index 9e95e27f3e..5949bfb36c 100644
+--- a/package/libexif/libexif.hash
++++ b/package/libexif/libexif.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/libexif/libexif/releases/tag/v0.6.26
++sha256  4a055ed6575e61ca46c3172be3c753cc16c9becd0f99ec71d58dd0e471476c0c  libexif-0.6.26.tar.xz
+ # Locally computed:
+-sha256  7c9eba99aed3e6594d8c3e85861f1c6aaf450c218621528bc989d3b3e7a26307  libexif-0.6.25.tar.bz2
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index 0e50d78fbe..f434f9a922 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBEXIF_VERSION = 0.6.25
+-LIBEXIF_SOURCE = libexif-$(LIBEXIF_VERSION).tar.bz2
++LIBEXIF_VERSION = 0.6.26
++LIBEXIF_SOURCE = libexif-$(LIBEXIF_VERSION).tar.xz
+ LIBEXIF_SITE = \
+ 	https://github.com/libexif/libexif/releases/download/v$(LIBEXIF_VERSION)
+ LIBEXIF_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
