@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 440F0FDEE50
-	for <buildroot@archiver.kernel.org>; Thu, 23 Apr 2026 21:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21427FDEE4E
+	for <buildroot@archiver.kernel.org>; Thu, 23 Apr 2026 21:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 872BC60F92;
-	Thu, 23 Apr 2026 21:04:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF5FE60F89;
+	Thu, 23 Apr 2026 21:04:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FOfZJj7bJP3v; Thu, 23 Apr 2026 21:04:05 +0000 (UTC)
+ id TYwmwfw2IW3c; Thu, 23 Apr 2026 21:04:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0061F60F83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F9B060F8C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776978245;
-	bh=VuRVijA+ImTOBo1PRpsp6Hmd3cpEVJhkVgMwVKtVNY4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pf0epiy0haOGmfAPfVpm0QVZh8lfWkuZyJwAnu72mnnfddoDbH/q1N/SuxiKf1Q9E
-	 kM6UPq4LNfkF+Mi2FfqHMtnBjZNuZGZUsMwlbEeqgxI8i50PMPxF5YCoeW/Y+oOhZq
-	 hyhkSsAPWfNNSSua7QPjtH9Ya5uNukAR9RAE9Bc4XxrRGcoIbsSWdeAcbRc2rrKU9i
-	 rZM8lmEBsGg4m9Ym2E+PnslieLULrnFFsDnCidBlw7j/Z8ITSVtYwWQ8GvhYUMWYsv
-	 4LhSfs990StxCa9YngmpJ9Zy9gz2XnWpbhT9fVi0BsLvL5SgPAGnYszXWVUWFxvkNu
-	 TfxQNFASsxhpA==
+	s=default; t=1776978260;
+	bh=YRBZF9gu3EAAFknpjzcaWuVA3K1d35kDqcYQbh0880Q=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Ixd4wx0Z/ZomV5NpLomOrWpWu01QsMcrvH4HTzUetAAsrTKQwJ6KYBhRFOjpPbb3U
+	 zXXIz2omazaCyyphA0Ju8F3edGjVbfAAPv0khqceZ6VRuZTmpyzWQ73Rn6AYmGydzs
+	 F8A/7TTmTvVmOGFod583GJThPZT6VSAf6HyFm6g8NvlguRRnnlePEHQd3s/uORtvbu
+	 LbuKGakvEKkIba3GyUyfRc99TBaCZqRRu8YX4XrG450V96AOYr1WwHcRiokteWXMik
+	 KGkAuf+G+4pDOlwqxlbQcuW6UgYtEOasd6THIdCLhAp1v7MoRZxJ/DOYLvurzUThbg
+	 T3LFN7Y9NtDlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0061F60F83;
-	Thu, 23 Apr 2026 21:04:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F9B060F8C;
+	Thu, 23 Apr 2026 21:04:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A1048231
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E005231
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92FED411F8
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F40D9411F8
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6zUWKa7xP53M for <buildroot@buildroot.org>;
- Thu, 23 Apr 2026 21:04:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C98F040CEB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C98F040CEB
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55EFA828E5; Thu, 23 Apr 2026 21:04:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 22:34:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6774a1e4c8442d187ce6839d9a1b6dc3d04d684c
-X-Git-Newrev: 9dd9e5a4def8b7bb00479aadfab5103e57bb23cf
-X-Patchwork-Hint: ignore
-Message-Id: <20260423210402.55EFA828E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-net-ssleay: bump version to
- 1.96
+ id sptIae5DSEtH for <buildroot@buildroot.org>;
+ Thu, 23 Apr 2026 21:04:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BDBE140CEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDBE140CEB
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BDBE140CEB
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:04:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 7B53F19F57B;
+ Thu, 23 Apr 2026 23:04:14 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 23 Apr 2026 23:04:14 +0200
+MIME-Version: 1.0
+Date: Thu, 23 Apr 2026 23:04:14 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260421190704.2723240-1-bernd@kuhls.net>
+References: <20260421190704.2723240-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <ae030dd68325a9dcf3783b1a57a1d681@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1776978255;
+ bh=xHgoC0/X9hPmSPgT+T0fbQU/Zo1znCptHh9Xi3IFlDc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=P1bAY6PzDhOVxd8j02Opu5wlNodLkb2d3w47X9IlOV1YK34vkGYD6m/QswsPn7V/H
+ EFtsKCLqq1HjG5bPbUsUqOfXOmihc3y414f7dOEAoHlo8EwJQ4kgSCV/+OyPRINAo1
+ BnzptcEbPOQH9BApc8j/jLNCf6u//xDV0r2w6N7XeieZF0r/E6L4ud5rQwIg/MQUZH
+ hNYb19XgrJSbYN2y7VoeaPx2BKBQY4QOwywZSzabH8/5bsyu8bC761bOZl2WEEh0pH
+ seqVX7mu+OfDQxaFyMwOJaeHPzxBYNPOrjVV4YIATWZbAEN+gOJXmhUBeqghu+gHfJ
+ mRItw6gqYxUSQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P1bAY6Pz
+Subject: Re: [Buildroot] [PATCH 1/1] package/perl-net-ssleay: bump version
+ to 1.96
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,50 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9dd9e5a4def8b7bb00479aadfab5103e57bb23cf
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 21/04/2026 21:07, Bernd Kuhls wrote:
+> https://github.com/radiator-software/p5-net-ssleay/blob/1.96/Changes
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/radiator-software/p5-net-ssleay/blob/1.96/Changes
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/perl-net-ssleay/perl-net-ssleay.hash | 4 ++--
- package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
-index 219edd4e0f..739df2c181 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.hash
-+++ b/package/perl-net-ssleay/perl-net-ssleay.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  1b22c764e5a094c6261e37a4b1f148ce  Net-SSLeay-1.94.tar.gz
--sha256  9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d  Net-SSLeay-1.94.tar.gz
-+md5  63772ad94b874b5f0f025c2a4285f82f  Net-SSLeay-1.96.tar.gz
-+sha256  ab213691685fb2a576c669cbc8d9266f8165a31563ad15b7c4030b94adfc0753  Net-SSLeay-1.96.tar.gz
- 
- # computed by scancpan
- sha256  685e534b60d4e2b4fbb1a259a83b5a86e877a919bbb9efc95994276f706a3a71  LICENSE
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 7f58093082..1ba2227bc4 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_NET_SSLEAY_VERSION = 1.94
-+PERL_NET_SSLEAY_VERSION = 1.96
- PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
- PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CH/CHRISN
- PERL_NET_SSLEAY_DEPENDENCIES = openssl
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
