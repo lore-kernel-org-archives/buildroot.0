@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3458FED3EF
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AEF3FED3EA
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7E3A4295B;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 852AF84DAF;
 	Fri, 24 Apr 2026 16:38:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9ciphkWKEZ4v; Fri, 24 Apr 2026 16:38:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F1F484D9C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777048709;
+	bh=xvDup/9NhwWtIBgyAtnWYm0QYInm9NMICLG6VHLHsFs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FhJAzR144kEIXok/xETBPIrKCLRc7IlzEOqv69z8n12pSKpbIY/evZDBwhItVYQOu
+	 CSFVDKR/fnd51QbUGHBNuERpRIrMOvBZAxhvVGUhocHHY+k6xzzZCJ51QbFHDw87t2
+	 dBUj9hQd8mXY51ed/ahR9LmYiUNmi9NKlhZhEmQlY1vUZlmClCJ4VdywR3KVUH3U5D
+	 svjEJ0z6aIO0R4cwz4bL7fLEgO67DBCCTCJLmyGHQWOSCRkNAnf0JcXSqnx9uokXiN
+	 0QwQ5PpXhPk0iG5ewmlsrq+kghNLF1mq7Kxpd+tuJ3eTdS7C+EImDCdAwq21ky+nCq
+	 H4makRQro3yzA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F1F484D9C;
+	Fri, 24 Apr 2026 16:38:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E8B024D
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FA3A4295B
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PPtzBEno4tns; Fri, 24 Apr 2026 16:38:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C16CD42960
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048710;
-	bh=PV/Y1w3xIqd7j9C27wTJqjjvNoSQEke1ht+044jfluE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XzsEn6vQtHcn21g6kp+w0Lhsla2s8HPpcCtnoAjBYCRzr5Xto5CrSQ1ZUWf9qIHvk
-	 +3cAAsosR3VnyQMeHkdxcmTGQTDr+zMAd1g8u/WFcLgBWBG3hzMsTjuAbzdyjkb1qx
-	 JRNU3KdQ4/vSyd1Oy8rFSRp1jUJ0h0hlDjqYZ33Tt9xvtA1wpQ7mQWF8cpsAhg3Mbl
-	 tpRpiPRSJ5fmStj2HugiG4bP7Asmy7cxGwOjV7R560exiGmMC5kU8JUuPVm4nZKkt3
-	 eV4W0k27v/qEaY3T6tyxN+/vFnBZ4h55AXGQollAGbiFZmRT3jLj0tr2ocWHb8le++
-	 8MrkMi4kNQOVA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C16CD42960;
-	Fri, 24 Apr 2026 16:38:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A110124D
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86E1461C3B
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fu1eobjHjkQC for <buildroot@buildroot.org>;
+ id uuyARJO-G0d5 for <buildroot@buildroot.org>;
  Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C65661C34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C7AB4295A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C65661C34
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C7AB4295A
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 381D682AFA; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+ id 1ECCD82B2F; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 14:19:21 +0200
+Date: Thu, 23 Apr 2026 14:13:08 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 460d0ebf95e0197d36a5b5812aa01d3dbffbeca9
-X-Git-Newrev: 64e67580da3873e7c452b5684994f266ecb959fe
+X-Git-Oldrev: 66a249753e3b65acdd7eef42eba6b26570d70cb9
+X-Git-Newrev: ed0266aa51462adecc70c3d5a12ad52919dc4033
 X-Patchwork-Hint: ignore
-Message-Id: <20260424163825.381D682AFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/strongswan:
- remove unneeded wolfSSL fix
+Message-Id: <20260424163825.1ECCD82B2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ package/x11r7/xserver_xorg-server: security bump version to 21.1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,70 +77,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/64e67580da3873e7c452b5684994f266ecb959fe
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ed0266aa51462adecc70c3d5a12ad52919dc4033
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Using this defconfig
+https://lists.x.org/archives/xorg-announce/2026-April/003678.html
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_STRONGSWAN=y
-BR2_PACKAGE_STRONGSWAN_WOLFSSL=y
+Updated license hash due to upstream commits:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/3069f64d691db5396706c1ec1182bd8db52ffb22
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd924b160c9b434ff7687d1e1d2a9058cdefb6b8
 
-applied after 'git reset 10a70b1af67cf79986c2e401f7a54aa850ea82d6 --hard'
+Fixes the following CVEs:
 
-replicates the build error
-http://autobuild.buildroot.net/results/278b3f74c48c858ae368d59069752adb69c05246
-
-which was fixed in 2024 by
-https://gitlab.com/buildroot.org/buildroot/-/commit/89d512729cfa5b2ef5c5165492789ba4441add19
-
-Note: The git tree was reset to the commit right before the fix.
-
-Instead of using the fix mentioned above the build error is also fixed
-when the buildroot commit 6c183754342e6bb73aeab3c8731789c73fcae4ad is
-cherry-picked onto 10a70b1af67cf79986c2e401f7a54aa850ea82d6.
-
-This means the build error mentioned above is really fixed by enabling
-BR2_PACKAGE_WOLFSSL_ALL. Therefore we can remove the content of commit
-89d512729cfa5b2ef5c5165492789ba4441add19.
-
-This commit also prevents a build error in strongswan
-
-wolfssl_rsa_private_key.c: In function 'create_empty':
-wolfssl_rsa_private_key.c:450:18: error: 'RsaKey' has no member named 'rng'
-  450 |         this->rsa.rng = &this->rng;
-
-caused by the upcoming bump of wolfSSL from 5.7.2 to 5.9.1 due to
-upstream commit
-https://github.com/wolfSSL/wolfssl/commit/cd88a8ae88bac13019689c087755d826145811bb
-which was first included in wolfSSL 5.9.0.
+* CVE-2026-33999: XKB Integer Underflow in XkbSetCompatMap()
+* CVE-2026-34000: XKB Out-of-bounds Read in CheckSetGeom()
+* CVE-2026-34001: XSYNC Use-after-free in miSyncTriggerFence()
+* CVE-2026-34002: XKB Out-of-bounds read in CheckModifierMap()
+* CVE-2026-34003: XKB Buffer overflow in CheckKeyTypes()
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5d6378db9dd83d46808cba4538a7412f71f88089)
+(cherry picked from commit 0136eba1108ff87cee9c8e6173bec422ee23ba82)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/strongswan/strongswan.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 8 ++++----
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index fd46445df3..bb5fd2d217 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -101,11 +101,6 @@ STRONGSWAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_MARIADB),mariadb)
- endif
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index ceca9c215b..b7adf1559d 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-November/003643.html
+-sha256  c0cbe5545b3f645bae6024b830d1d1154a956350683a4e52b2fff5b0fa1ab519  xorg-server-21.1.21.tar.xz
+-sha512  bb2eb4e6756eb9e38b61bd47c017da44bcf5f45f2b7a906b4bb3a56b3d791cec64abb9bf37b224efe1e4fab9cc296f3672c9b2f8e00e1cdfc54337bef63cd16c  xorg-server-21.1.21.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-April/003678.html
++sha256  1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3  xorg-server-21.1.22.tar.xz
++sha512  6cb37ff971e10eb4a7dfcb3e8071afd769c7632d50e4ad8bc948b810dc4847e152b8a05ec135f55e0695b35908abd07e7728ef85dd3135456fd532e919f440f4  xorg-server-21.1.22.tar.xz
+ # Locally calculated
+-sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
++sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 0dc3a4a5c6..d1e7267c27 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# https://github.com/strongswan/strongswan/issues/2410
--ifeq ($(BR2_PACKAGE_STRONGSWAN_WOLFSSL),y)
--STRONGSWAN_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DWC_NO_RNG"
--endif
--
- # disable connmark/forecast until net/if.h vs. linux/if.h conflict resolved
- # problem exist since linux 4.5 header changes
- STRONGSWAN_CONF_OPTS += \
+-XSERVER_XORG_SERVER_VERSION = 21.1.21
++XSERVER_XORG_SERVER_VERSION = 21.1.22
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
