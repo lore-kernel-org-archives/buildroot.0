@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C48FED3F1
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6619BFED3EA
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED9DD42976;
-	Fri, 24 Apr 2026 16:38:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 129B984DD5;
+	Fri, 24 Apr 2026 16:38:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c62q9jwsvEwn; Fri, 24 Apr 2026 16:38:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CqqqqyDtv0gS; Fri, 24 Apr 2026 16:38:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D98D542964
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB26C84DC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048714;
-	bh=lNAi8Lh3WefLjKDKvoWLqF464dGI67zllLntj+G2eKU=;
+	s=default; t=1777048716;
+	bh=ko5Vg6tcadQzFWoPkRXX6LZ50az7X0Spk/pnl4DPgLs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CVQ+NjuGVf2tlWwIbMThqzgobpwqyu060kgYEiUbmXgbshLBqL3y4gCq79g4Bkc6r
-	 GupWJc0/xiYeApq05ShfdO617asHgvNLx0AfhokqSgpCdmNQE34D+w8Ox8JJ4mLBtS
-	 U49DgF8PqF2OiDevUNP//BXisglzJ76jQjKBPD2g5bH37CN2MZI8r73lUKybkWhRXN
-	 M4ePZb99HdU6+lB3FTIwRuG5wqI/OeVzCfmKi3yaEtDG8922bQ+Q7/PNi2Pg51UeRu
-	 /jdXNCyLgIDv6a3WrFnm2/UJWyFWPuSBeX+y8/fPtuY1RP4nC+hGqt3RodcuTBrwk0
-	 89o9Q7/jaUQrg==
+	b=qMHaPsMTspbdVoC4oUq6XH1uGqnsWtg/FXuhX8LWNr7s1C0pNUWcxKUCyRKG3fgVQ
+	 lc4XkyhWR5/vRJX4W1JLTuIEYSSNe7nTGGmqR5XnBnwj7u3suowEdLGx2kQLOemqao
+	 8GOS9DI/weDqO4+sbaMW5qx07SD7qUn4IVvSZ/mcTGPW1tqGUBss5I00kg7ooxRc+b
+	 byxV2HQ4wreX+a+ZLL3QufYm6VUPdLmObiZAz/cD072n0CKIFRRnJMbvBRkykXyFpc
+	 3QvslwRf3bTwzIgsucgcLmKs1gcq2MUh0m3+fxQCeJX5U1NX+RIU9UqCvhxx4C5Uxh
+	 xGpxKF5Vigcpw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D98D542964;
-	Fri, 24 Apr 2026 16:38:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D2F624D
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB26C84DC3;
+	Fri, 24 Apr 2026 16:38:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86CEE24D
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59455423E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD67561C35
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBQiN3ynLFnK for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g5wsp1-80Gww for <buildroot@buildroot.org>;
  Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84CFC423E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C75DA61C37
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84CFC423E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id C75DA61C37
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E7DE82B2E; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+ id 7FEDB82B36; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 14:16:36 +0200
+Date: Thu, 23 Apr 2026 14:25:15 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: ed0266aa51462adecc70c3d5a12ad52919dc4033
-X-Git-Newrev: 460d0ebf95e0197d36a5b5812aa01d3dbffbeca9
+X-Git-Oldrev: 3082413b9be086e3cd9d5bfe204f88dfcb0d83e4
+X-Git-Newrev: 67692112f76e1e2f9296ebf3f5b62b608f8555a3
 X-Patchwork-Hint: ignore
-Message-Id: <20260424163825.2E7DE82B2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/x11r7/xwayland:
- security bump version to 24.1.10
+Message-Id: <20260424163825.7FEDB82B36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/xdg-dbus-proxy:
+ security bump to version 0.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,60 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/460d0ebf95e0197d36a5b5812aa01d3dbffbeca9
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/67692112f76e1e2f9296ebf3f5b62b608f8555a3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://lists.x.org/archives/xorg-announce/2026-April/003679.html
+While there is not a security advisory to go with the release,
+it includes a patch to prevent message interception that may be
+considered a security fix.
 
-Updated license hash due to upstream commits:
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/e5c6a5ab905e0158ec22877b4117f10bef6e4140
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/89f82cce4a4ca480501c130231968a72cafa952d
+Release notes:
 
-Fixes the following CVEs:
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.7
 
-* CVE-2026-33999: XKB Integer Underflow in XkbSetCompatMap()
-* CVE-2026-34000: XKB Out-of-bounds Read in CheckSetGeom()
-* CVE-2026-34001: XSYNC Use-after-free in miSyncTriggerFence()
-* CVE-2026-34002: XKB Out-of-bounds read in CheckModifierMap()
-* CVE-2026-34003: XKB Buffer overflow in CheckKeyTypes()
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 40f8603e6a3c1c027ee80073a25a5853e03eb822)
+(cherry picked from commit 188fad7af1fafae2981d3916bcc8e0b13b3d2c5b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xwayland/xwayland.hash | 8 ++++----
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 0d1df29b43..ba84d20b9f 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg/2025-October/062148.html
--sha256  f297af27a84508db9b80d1cbbcc69c3801da38eb64c72f3b5b50f582459afdd0  xwayland-24.1.9.tar.xz
--sha512  7438a572651dc77c1fd749879abccdc9a245c7b75143668d5561a8e99d41063f042a8eb3f9b931a2a12be1fc3cb9d197eee6794d0702a19e56c20f55acb35a26  xwayland-24.1.9.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-April/003679.html
-+sha256  459762be8ea046c94386687d77a87add6073868bee14f02913eafebb945b7aa0  xwayland-24.1.10.tar.xz
-+sha512  bceba1db7f4d7ac92d2b2a3c8f6f7ab0cc093f396fe89406f8dba25e32ffc3edfa552df246cbfb3b0708c1d28b3e179694d11870b063d5b8f9ab2db9fb861a8f  xwayland-24.1.10.tar.xz
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index 93d4bc05ce..e5be1f0cd3 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
+-sha256  131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1  xdg-dbus-proxy-0.1.6.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.7
++sha256  3ad3d27ba574e178acb5e4d438ba36ace25e3564f899c36f31c56f82c7adbbe7  xdg-dbus-proxy-0.1.7.tar.xz
  
- # Locally calculated
--sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
-+sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 98bc74200a..8fa5260f47 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 0e92946915..6c3ef5c9d4 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 24.1.9
-+XWAYLAND_VERSION = 24.1.10
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-XDG_DBUS_PROXY_VERSION = 0.1.6
++XDG_DBUS_PROXY_VERSION = 0.1.7
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
