@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40D0BFED3EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90BD1FED3F2
 	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 815CD84C78;
-	Fri, 24 Apr 2026 16:38:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AFC942969;
+	Fri, 24 Apr 2026 16:38:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 03nNJubhZvBW; Fri, 24 Apr 2026 16:38:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7-cw5zeVVJXm; Fri, 24 Apr 2026 16:38:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6011B84DC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9760442971
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048717;
-	bh=QGIeFaZGQHNrUFx6ZHtseP2LCqOj0qapDeh/w+PpyiU=;
+	s=default; t=1777048718;
+	bh=X8G0AL6bUQY0GtvE70CESZunfOaanHyQy1ySJHBBJ2U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c1mrxWA1dkodk6s3BRmWi5MdxprqeZRWJFU8KgftIfouo/KdkmlCmivFKJ4D+m/g8
-	 IfkHYDGtaY/fkuLl2FQHA6YYTBBJyrGs5SaYLK62nxyDTd5nZfJcLnu6GQiD4lkUKu
-	 uKTMsijV3y9KdaQzO2S6I5t0xYvL+nSHMg4bKh8k1B1ilbqYW+E7E/GHMrzP6I6lYw
-	 mq3hqgtOjz9Ok3OGZPknobFvVbFvXoQwqOLk9ly038oMvonrFjqOZJiwgcHvt9HG1A
-	 7v8Ok2PqUpUUrOWeJF4x2RU1Mh0BDuRKkORrs2+81khuixSEaFXXcCZhRFhNZD3nJU
-	 g64x7nRrzbCFw==
+	b=MJTEO1c8DZVRF/8sEpKndND0jfZ6O/PtB3sVQk3pCP/n5jqnzbhoUpGSLOR0Zfs6l
+	 JeHlx8tCv0wNxy/VrZM6t5fWVIdCJWNlhKF/Jv0EYoVFwO9QVfI6C0jpARb/kXtzOB
+	 nntEoStiPxEo5jjhoyz1QZl9VZGbPgU/KlvmOpwMb9c/sK98D4rrgFF1dwiw7re0/m
+	 3g0zfzAxwt4cRPDEcAAEaA/wxAuUn9crbpjqDqulracBhwmIlIw/yRZTmUlUrS2oiE
+	 w3ptkRBdiZlp4a/6QHLFc1f1rQn6amJ6LVCnb0tbFNTeU09jD5JSTLk9FijNmiNYby
+	 g4XZnza/miUjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6011B84DC2;
-	Fri, 24 Apr 2026 16:38:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9760442971;
+	Fri, 24 Apr 2026 16:38:38 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 05734231
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 13C65231
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AF9061C37
+ by smtp3.osuosl.org (Postfix) with ESMTP id 837CC61C34
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dp9LSY08rjfC for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
+ id oQdjgpMubt3Y for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 060D461C3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B12EA61C36
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 060D461C3A
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B12EA61C36
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2EF882B2F; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
+ id 418BC82B33; Fri, 24 Apr 2026 16:38:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 14:31:48 +0200
+Date: Thu, 23 Apr 2026 14:19:32 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: cc627f2c6725d76c6a811cda2661dc937ca61de0
-X-Git-Newrev: 2b6eab392ddb685ff2869d9dfb2103e0fa5863e0
+X-Git-Oldrev: 64e67580da3873e7c452b5684994f266ecb959fe
+X-Git-Newrev: ceb27f0f04dbb6933ddac42eb7eb44ceaef438d4
 X-Patchwork-Hint: ignore
-Message-Id: <20260424163825.B2EF882B2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/mkpasswd: add
- dependency to host-libxcrypt
+Message-Id: <20260424163825.418BC82B33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/strongswan:
+ security bump version to 6.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,60 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2b6eab392ddb685ff2869d9dfb2103e0fa5863e0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ceb27f0f04dbb6933ddac42eb7eb44ceaef438d4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The host-mkpasswd package needs the <crypt.h> header file installed
-on the host. This file was initially provided by the libc headers,
-as part of its libcrypt implementation. libcrypt was removed in
-glibc 2.39. Most Linux distributions continued to ship a libcrypt
-replacement such as libxcrypt in their default installation.
+https://github.com/strongswan/strongswan/releases/tag/6.0.5
 
-Some mainstream Linux distribution (such as Debian testing) are
-now starting to remove this libcrypt and <crypt.h> header from their
-default image (of development files).
+Switched _SITE to https.
 
-In that case, host-mkpasswd is failing to build with the error:
+Fixes CVE-2026-25075.
 
-    /buildroot/output/build/host-mkpasswd/mkpasswd.c:54:10: fatal error: crypt.h: No such file or directory
-
-The issue can be reproduced by adapting the Buildroot Docker file,
-by setting "FROM debian:testing-20260316" in [1] and removing
-the build of tar.
-
-Note: debian 13 (for example Docker tag trixie-20260316) still
-includes the libcrypt-dev package by default, which provides crypt.h.
-
-In Buildroot, there is already the host-heimdal and host-systemd
-packages requiring host-libxcrypt. Also, the host-libxcrypt is a
-small standalone package. For those reasons, instead of adding
-the Buildroot prerequisite on the user host to provide a libcrypt
-implementation, this commit simply add the package dependency to
-host-libxcrypt, to make sure it will work in all situations.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2026.02/support/docker/Dockerfile#L11
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit cf26c772804cbce53bca73be28a64279cc7a8017)
+(cherry picked from commit cc7c20d817c6cd949c0b48999092af161ca51e49)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mkpasswd/mkpasswd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/strongswan/strongswan.hash | 6 +++---
+ package/strongswan/strongswan.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mkpasswd/mkpasswd.mk b/package/mkpasswd/mkpasswd.mk
-index c1117ef65c..6ab6419824 100644
---- a/package/mkpasswd/mkpasswd.mk
-+++ b/package/mkpasswd/mkpasswd.mk
-@@ -9,6 +9,8 @@
- # at revision 5a0f08500fa51608b6d3b73ee338be38c692eadb
- HOST_MKPASSWD_LICENSE = GPL-2.0+
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 7a6939b979..44eadbaecf 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-6.0.4.tar.bz2.md5
+-md5  f6b78a99e95179b6a65df218d75da7ca  strongswan-6.0.4.tar.bz2
++# From https://download.strongswan.org/strongswan-6.0.5.tar.bz2.md5
++md5  7049111627010dc02293970c82e43d28  strongswan-6.0.5.tar.bz2
+ # Calculated based on the hash above
+-sha256  79576bb61b9a406cea9eb73d0c565cc6254a6b6d2e7198f44758d2d7c61a7aec  strongswan-6.0.4.tar.bz2
++sha256  437460893655d6cfbc2def79d2da548cb5175b865520c507201ab2ec2e7895d9  strongswan-6.0.5.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index bb5fd2d217..2e20b244ad 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+HOST_MKPASSWD_DEPENDENCIES = host-libxcrypt
-+
- define HOST_MKPASSWD_EXTRACT_CMDS
- 	cp $(HOST_MKPASSWD_PKGDIR)/*.c $(HOST_MKPASSWD_PKGDIR)/*.h $(@D)
- endef
+-STRONGSWAN_VERSION = 6.0.4
++STRONGSWAN_VERSION = 6.0.5
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+-STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_SITE = https://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_CPE_ID_VENDOR = strongswan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
