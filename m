@@ -4,110 +4,165 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95547FDEE45
-	for <buildroot@archiver.kernel.org>; Thu, 23 Apr 2026 20:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73206FDEE49
+	for <buildroot@archiver.kernel.org>; Thu, 23 Apr 2026 21:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35EE360F1D;
-	Thu, 23 Apr 2026 20:54:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B3E660F96;
+	Thu, 23 Apr 2026 21:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id njjAoDbyyhl9; Thu, 23 Apr 2026 20:54:40 +0000 (UTC)
+ id bL4CU_wn-IFe; Thu, 23 Apr 2026 21:01:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3263460F76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 335D960F88
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1776977680;
-	bh=mxw1eJ1CaggiVcQL/cqLylYEK6gH6841KGyFT1jXeS0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Bn/er6D8AsWLVkDdQDlfcc1KrggN4lRPrqN6pSMdHSgX5xmzwAfS4P44bfanLrjuO
-	 v5y76mshcAa3FGdfuDPukLQxQRmrkMI8Y5jU2TIQvbogdWEMH7oD0QbwI+yc21evbP
-	 071qHwRuUrxnQCibAEBy9c/UJ4qTSzWq0tKmIU/DuKSASf7PpRlYETEAHK7S7mGK7h
-	 M+bZJhkBRKpkbz+jrBWpImAwcZUvVd9nmxFcVpv5LIUfvihA9vDHaocBaZe9qPpFQd
-	 FGBZh7rhSWhAqYKbjyXuHEjhFR4VVIZ2Z8veXQgj/iiz0LYyJ3uXvRNWzFmqD5ozWi
-	 7PlL+7N2vPd5w==
+	s=default; t=1776978119;
+	bh=H16k0Ae+xusIENtVJxPcTJrgLLkhz/lZUCkdBynLiPU=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=kD6bystE8TTM2ciOro6LHG2G5hH6AazDdIx5CP+mXPcW3yRs0NGdiNd8KfHINHXlq
+	 CbCFq3Zd8Q7GXacWptWa2/KbCakQe/M15/ottayZopfJou1gBGk0USr70SIKf0B30O
+	 g8FxeOpf3/UTmWPCISZdDlqX+CLuxLzAzhuxtqtO1Za3GmfUZtX5m6QCb2XkkMP1jB
+	 gaucLywfJMbd58MYxFccBXFGzMN6A27UddVrj3KSKACaScQPhNjRvp6/GKUAUBzdL+
+	 5bS+ND0+auO+8lmaiIuGEExDRyQRjlM0Yxwy/lBQFGOLGPWzXauPIZxUrgaPt+f9pt
+	 xbQUa2LabqLFQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3263460F76;
-	Thu, 23 Apr 2026 20:54:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CF772206
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 20:54:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 335D960F88;
+	Thu, 23 Apr 2026 21:01:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D74C92DF
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6E8B80847
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 20:54:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C949C40D3D
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:01:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id egYy_HzQXCFS for <buildroot@buildroot.org>;
- Thu, 23 Apr 2026 20:54:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
- envelope-from=maxin.john@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8346980729
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8346980729
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
- [IPv6:2a00:1450:4864:20::234])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8346980729
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 20:54:38 +0000 (UTC)
-Received: by mail-lj1-x234.google.com with SMTP id
- 38308e7fff4ca-38e7d983f79so55142601fa.0
- for <buildroot@buildroot.org>; Thu, 23 Apr 2026 13:54:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1776977676; x=1777582476;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=4lC/0odhufck4EZKxN+Zc4gwW4WFEglgjhu5lzyGE4A=;
- b=mY/GsEei2oAOrTRLy0f7DRKd7+Cvc2vEU6HVQdfgZTNsaS/3ecvYrRvmEvMtYgdpeP
- XegnGC+eYyN9OLtFXa6lZy88tvtVXarahncd3ZRvAz6EDyYYGRHoSwUc+xjgS/NkLpi/
- 80s7xwmcEromB51JmNudgmX0g4mSs1COs8Uq6d/VDCj3aEmu7+fC23sK/FmPzcZ3dLwb
- d/VpM6THoAIKSwIUk4iThUSK4zu7ESyr6OOQjXnkfH8ytiwn3Hzn7OnvkDZeje+fg78K
- 0tWl15Rc9+dtWxKSuTni/FHGNsuO6M93FbCHgDF9Ohtm0xpL/ttfGjC/Pzu0KdsYATfk
- u85g==
-X-Gm-Message-State: AOJu0YzvQ7YMCs1fext72tr055jX1T6KSbKxHbElHteaY/Rwf0f3grLU
- ckXlumv6a04589QBt1qDb3CwdtqeCH/RlvASP2viEwgRNLPgXloN/J5LSh2jhw==
-X-Gm-Gg: AeBDietCQohIU6zwAIy4LyNduCAJ0aA1JxdezApv2eT3K7EpRPu3m9Y2yKXsvk9teSC
- C5ZxDQglhvuuld5P+0tZHzRuUPGjU4f3W3ik+EY44dNhg1VxYzyFfKE3pAkt3EODRi9gWeNs2ox
- lKRJwjRsq3RpQHdLiWJJINUc6HvD+PS0L86UuF9IRPkQkR6eVvuR2OjDdC6/ZQ4TqEDaBUxBVg5
- H+Q0Rujv8YofxmK6wV8vsl+p5omexvjlARMJmbhxTC4H7ZLBe6vffxUEqIK3JfL7FaIm0DVChoU
- J3uKy0Vqe9RKNGBFHfa0AK+aGOgJ8GBgzHiboI5SU/PtDoAyDpvUnI62xAhztVyGEMf+CtSkGIz
- D2Nh9sXYapJ4ia+Q8EfZnFAVGeOlTqAT0Q9X9auycyU8Lt7EIi67QIS/mQJkg4Z9MXka97xQkGJ
- Q3kajxtCX1LcbJ+y/yBlKhHi5+wL4SZGOsOZp41Q3Y4ZCvfgy7POHoWtJxH4JJVHYaL/z5pFrlf
- 5Jm7cYNZDk=
-X-Received: by 2002:a05:6512:3510:b0:5a4:194f:5fff with SMTP id
- 2adb3069b0e04-5a4194f60edmr7169829e87.16.1776977675958; 
- Thu, 23 Apr 2026 13:54:35 -0700 (PDT)
-Received: from Thor.lan (nb6bp2luucgh1ubvhqb-1.v6.elisa-laajakaista.fi.
- [2001:99a:a58:9b00:9119:221d:45f0:de83])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5a4187ec153sm5494202e87.79.2026.04.23.13.54.33
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 23 Apr 2026 13:54:34 -0700 (PDT)
-From: Maxin John <maxin.john@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aSOyz6wcMN_C for <buildroot@buildroot.org>;
+ Thu, 23 Apr 2026 21:01:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4094B40D3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4094B40D3A
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4094B40D3A
+ for <buildroot@buildroot.org>; Thu, 23 Apr 2026 21:01:55 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MzyuS-1vU7qr2t8Q-014cVZ; Thu, 23
+ Apr 2026 23:01:51 +0200
 To: buildroot@buildroot.org
-Date: Thu, 23 Apr 2026 23:54:32 +0300
-Message-ID: <20260423205432.1832982-1-maxin.john@gmail.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Martin Bark <martin@barkynet.com>,
+	Fiona Klute <fiona.klute@gmx.de>
+Date: Thu, 23 Apr 2026 23:01:35 +0200
+Message-ID: <20260423210135.2859706-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:roHEJZmBZBV3du9Qf1CSfN/MYsxkeKPXRR5jlP4Y3s8I0U+pmE+
+ pSovjAC/LNxee5bByNqmnE648yahex/rgJ/PoPKsN71Y4ByaQyDOIdt2H2wcDzDC+hiQk+k
+ cgAJ0slQx5TpHyfA1Ea613IRDZmM0m4tdlgW/r28IVej7Y5HmILkewpDByHK9AsPDXrJZtF
+ D9u8aeGyJ5nSQhV1UespA==
+UI-OutboundReport: notjunk:1;M01:P0:sdz/TEN/QLY=;ymXc6F1nV9xEc5S1zBVAJufOSsS
+ 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
+ TqEA0w==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1776977676; x=1777582476; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=4lC/0odhufck4EZKxN+Zc4gwW4WFEglgjhu5lzyGE4A=;
- b=BBvtsCwRkJm9zQXCwW6gvc4mry8AjMIsZIW+MDZ7sVgRNJVUI6MBqwxSWVAzbxbH8w
- TjNjbMYrJu6n4hYmjgeACHTidUn+qrp/2O3ytsXQo9AGCIJZJf8Pubn+f5cFbNKeynS9
- hsSTyFphvNmQvRl3NtvnIVoj+/YNT0n4OtPZjanZXqvh/9mlzMbo+GlCvGwifeqn9eDs
- 6AfR/6mj7FHip90V6lMMcQUOt0RA6JUO3u4ZBUPSIckJTDsD4SjjzMCY/oIRTzNBZfgY
- lpfxvWJqhU3ucRacyw3+HRh2KjYSTGKD3AH/pDfML6gHRR7pA6eOKpMPdgCuxQffUYuz
- 0SsQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=BBvtsCwR
-Subject: [Buildroot] [PATCH] package/mdadm: bump to version 4.6
+ d=gmx.de; 
+ s=s31663417; t=1776978111; x=1777582911; i=fiona.klute@gmx.de;
+ bh=3s89hWQnKk/evrfgWC91uoFSLCrYlpftidqwegfAFAU=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=E4ug9+4jwfWdFbipAD7USBXycsWI2F6ocgRXTN9tWxysT+0CVqmyt4nNMcSTDQJb
+ sGckPKb+O5iOKAT3GEgC5Yc25Aqf0Vp31QoRX3jlM8vOSPZZTq42tiSlqryVfaRfn
+ /9DSAkZlYdcHuUS4FAUO5dR4Fis6+jfBjnN5OKkiezl29aoUMfEmDMnZGHDjMiRsh
+ dNrMbm28Dx2RRhCZpzh6nQhWnojRSqAsEerifEZxAYf9B2C4kneiHOP9kDy1cNthO
+ /Y5BqNeEr9yGqRcaucswDZmlkYFdu80rp5hoq9Az1n6E/kbHrzGHmOM0N1scopity
+ pPF4tJErhaldW1i3Ng==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=E4ug9+4j
+Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump to 20260223
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,233 +174,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop upstreamed/backported patches.
+Changelog including list of added/removed CAs:
+https://salsa.debian.org/debian/ca-certificates/-/blob/b266ecf6afc2d6fda61391bbeda455572e7f5207/debian/changelog
 
-Release mail:
-https://lore.kernel.org/linux-raid/CALTww2_2pjjOSsVj-WT++m35555CjnPWokU7fut+HwUJVV-=ZQ@mail.gmail.com/
-
-Signed-off-by: Maxin John <maxin.john@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- ...not-require-libudev-h-if-DNO_LIBUDEV.patch | 34 ---------------
- ...ts-h-include-for-NAME_MAX-definition.patch | 32 --------------
- .../0003-Create.c-fix-uclibc-build.patch      | 42 -------------------
- .../0004-Makefile-Move-pie-to-LDFLAGS.patch   | 40 ------------------
- package/mdadm/mdadm.hash                      |  5 ++-
- package/mdadm/mdadm.mk                        |  6 +--
- 6 files changed, 6 insertions(+), 153 deletions(-)
- delete mode 100644 package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
- delete mode 100644 package/mdadm/0002-util-c-add-limits-h-include-for-NAME_MAX-definition.patch
- delete mode 100644 package/mdadm/0003-Create.c-fix-uclibc-build.patch
- delete mode 100644 package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch
+ package/ca-certificates/ca-certificates.hash | 2 +-
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch b/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
-deleted file mode 100644
-index 5c3d6e03b436..000000000000
---- a/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 1750758c7ff526e3560433f6235e5cfa35cf646a Mon Sep 17 00:00:00 2001
--From: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--Date: Wed, 6 Mar 2024 15:50:55 +0100
--Subject: udev.c: Do not require libudev.h if DNO_LIBUDEV
--
--libudev may not be presented at all, do not require it.
--
--Reported-by: Boian Bonev <bbonev@ipacct.com>
--Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--
--Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=1750758c7ff526e3560433f6235e5cfa35cf646a
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- udev.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/udev.c b/udev.c
--index bc4722b0..066e6ab1 100644
----- a/udev.c
--+++ b/udev.c
--@@ -26,7 +26,10 @@
-- #include	<signal.h>
-- #include	<limits.h>
-- #include	<syslog.h>
--+
--+#ifndef NO_LIBUDEV
-- #include	<libudev.h>
--+#endif
-- 
-- static char *unblock_path;
-- 
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/mdadm/0002-util-c-add-limits-h-include-for-NAME_MAX-definition.patch b/package/mdadm/0002-util-c-add-limits-h-include-for-NAME_MAX-definition.patch
-deleted file mode 100644
-index ceaf7f923caf..000000000000
---- a/package/mdadm/0002-util-c-add-limits-h-include-for-NAME_MAX-definition.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 8bda86099089b44129ef6206764f9de47a45f0db Mon Sep 17 00:00:00 2001
--From: Alexander Kanavin <alex@linutronix.de>
--Date: Tue, 12 Mar 2024 11:01:50 +0100
--Subject: util.c: add limits.h include for NAME_MAX definition
--
--Add limits.h include for NAME_MAX definition.
--
--Signed-off-by: Alexander Kanavin <alex@linutronix.de>
--Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--
--Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=8bda86099089b44129ef6206764f9de47a45f0db
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- util.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/util.c b/util.c
--index 05ad3343..49a9c6e2 100644
----- a/util.c
--+++ b/util.c
--@@ -36,7 +36,7 @@
-- #include	<ctype.h>
-- #include	<dirent.h>
-- #include	<dlfcn.h>
---
--+#include	<limits.h>
-- 
-- /*
--  * following taken from linux/blkpg.h because they aren't
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/mdadm/0003-Create.c-fix-uclibc-build.patch b/package/mdadm/0003-Create.c-fix-uclibc-build.patch
-deleted file mode 100644
-index c8399be07682..000000000000
---- a/package/mdadm/0003-Create.c-fix-uclibc-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 52bead95d2957437c691891fcdc49bd6afccdd49 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 12 Apr 2024 18:45:13 +0200
--Subject: Create.c: fix uclibc build
--
--Define FALLOC_FL_ZERO_RANGE if needed as FALLOC_FL_ZERO_RANGE is only
--defined for aarch64 on uclibc-ng resulting in the following or1k build
--failure since commit 577fd10486d8d1472a6b559066f344ac30a3a391:
--
--Create.c: In function 'write_zeroes_fork':
--Create.c:155:35: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
--  155 |                 if (fallocate(fd, FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE,
--      |                                   ^~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0e04bcdb591ca5642053e1f7e31384f06581e989
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=52bead95d2957437c691891fcdc49bd6afccdd49
-----
-- Create.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/Create.c b/Create.c
--index 4397ff49..d94253b1 100644
----- a/Create.c
--+++ b/Create.c
--@@ -32,6 +32,10 @@
-- #include	<sys/signalfd.h>
-- #include	<sys/wait.h>
-- 
--+#ifndef FALLOC_FL_ZERO_RANGE
--+#define FALLOC_FL_ZERO_RANGE 16
--+#endif
--+
-- static int round_size_and_verify(unsigned long long *size, int chunk)
-- {
-- 	if (*size == 0)
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch b/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch
-deleted file mode 100644
-index 4d46d5823008..000000000000
---- a/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 893a55831e5abbcd15b171db66fa1f389fb61506 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 7 May 2024 19:32:16 +0200
--Subject: Makefile: Move -pie to LDFLAGS
--
--Move -pie from LDLIBS to LDFLAGS and make LDFLAGS configurable to allow
--the user to drop it by setting their own LDFLAGS (e.g. PIE could be
--enabled or disabled by the buildsystem such as buildroot).
--
--Suggested-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
--
--Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=893a55831e5abbcd15b171db66fa1f389fb61506
-----
-- Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 7c221a89..adac7905 100644
----- a/Makefile
--+++ b/Makefile
--@@ -132,12 +132,12 @@ CFLAGS += -DUSE_PTHREADS
-- MON_LDFLAGS += -pthread
-- endif
-- 
---LDFLAGS = -Wl,-z,now,-z,noexecstack
--+LDFLAGS ?= -pie -Wl,-z,now,-z,noexecstack
-- 
-- # If you want a static binary, you might uncomment these
-- # LDFLAGS += -static
-- # STRIP = -s
---LDLIBS = -ldl -pie
--+LDLIBS = -ldl
-- 
-- # To explicitly disable libudev, set -DNO_LIBUDEV in CXFLAGS
-- ifeq (, $(findstring -DNO_LIBUDEV,  $(CXFLAGS)))
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
-index 84bae1aebfd5..038222c17e51 100644
---- a/package/mdadm/mdadm.hash
-+++ b/package/mdadm/mdadm.hash
-@@ -1,4 +1,5 @@
--# From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
--sha256  416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f  mdadm-4.3.tar.xz
-+# Locally calculated
-+sha256  e89f24994f403cea90068d03f3c1ee49957303c7a092cc5b2ed2c603df9649a7  mdadm-4.6.tar.gz
-+
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 421f06d6953f..a6d7f98f0eb2 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 2112badfcc..d234705082 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,4 +1,4 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha256  33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2  ca-certificates_20250419.tar.xz
++sha256  2fa2b00d4360f0d14ec51640ae8aea9e563956b95ea786e3c3c01c4eead42b56  ca-certificates_20260223.tar.xz
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index b1903f6166..1f3f192d4a 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MDADM_VERSION = 4.3
--MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
--MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
-+MDADM_VERSION = 4.6
-+MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.gz
-+MDADM_SITE = https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/snapshot
- MDADM_LICENSE = GPL-2.0+
- MDADM_LICENSE_FILES = COPYING
- MDADM_CPE_ID_VALID = YES
+-CA_CERTIFICATES_VERSION = 20250419
++CA_CERTIFICATES_VERSION = 20260223
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20260223T202245Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
