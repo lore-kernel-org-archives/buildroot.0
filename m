@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 928CFFED3EA
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95387FED3EA
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6787784DEB;
-	Fri, 24 Apr 2026 16:27:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 91JDZLXdKMXb; Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C64C84E18
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048025;
-	bh=U+5PGb+fpzWWXLFj9CYvfsaN/GlNTLsEGHdlbID0Q04=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=EPtYTBGvDdfWXY25p43hZxk3CH9S9Rv5TRLXJP/u3Bu1TSXcdEf10Y55iragGSl7J
-	 WEmXMtHltizFDV3H/WpeCJ7WZIe/sArV0mwAbqGSXBUk5MH8/wJn633yvYMTz5o8Y5
-	 uIrKcIKszjuBhWAO2UeW2i3SB6oPbVyCm5ETDZpZRo33pYP73mRTHjqZMfyelrsmjP
-	 V9drifv3ntOhmZd6xAKmzXMaK3E3KbVG2PpBO6DEsLenMqseYuf8D1ZHNHd1t2JIBV
-	 1ckkKc7W5wbdH17wn4NDmSja4XCuOYmj5Bz+5T3PQujHUq0mwyNtPGRWIWnYCM78qQ
-	 pCIuKMEgAqNVw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C64C84E18;
-	Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CE3C194
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2E094295A
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A8C44296C;
+	Fri, 24 Apr 2026 16:27:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lKs_1UH2lu6R for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:27:03 +0000 (UTC)
+ id 0KXkBX3TDHKb; Fri, 24 Apr 2026 16:27:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C4BC42967
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777048028;
+	bh=ep/06er+/hYmTb9esORQAxu4EFq+5jnN0lf/hBxlXag=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Q6XRQ14KYHWcy7cdXpONc0T6R7ETdT6rPDY5pYA+Ps+zTa//PXzYKBg+XopmELPG2
+	 iIJgs4mLNw3tLOQylo/BpPdqRSgC/i9WRzbRXtwVwf3SQZrk4GCEkvRxUMjrCxfhtM
+	 53s4q5gtoWlhMcRHCTBh9Jn1iu9YfyIjEebnbJIQBTU5wrqSKCNJp76553U2PWvN89
+	 Iqs26G1roMy0zLj7pOn9w1uSuxtODixzp/YIHapbH262QKeRlqpwsOrg+xGghd+djl
+	 hO0mLWU9r1tKxKuJBmTbmetcYAHM5GGPASZErW4aNgzoN7KAgs5CJuA1KFsVOXjuFH
+	 8AsQkB6U/v+mQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C4BC42967;
+	Fri, 24 Apr 2026 16:27:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79E78206
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B3A5423CF
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9E0ex36aWnUg for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:27:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD0AB4295E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD0AB4295E
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CD0AB4295E
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:02 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-43d734223e4so5545666f8f.0
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:27:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AC02423E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AC02423E3
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5AC02423E3
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:04 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-48374014a77so104798315e9.3
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:27:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777048021; x=1777652821;
+ d=1e100.net; s=20251104; t=1777048022; x=1777652822;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=bBUnITh4kYb78dviRSk+4eVLTv0Z5BQ4GTIzEMHNvRs=;
- b=qCP46NHIf/gM8BkjXN8JZxouRwQK11pIv5/k3sKTGVQ5mh+L3kY/ZlzS0sZrjXOHjO
- Q028/hjFzUhdm2OLcqAva4JXGAI8ns/DoBn2k+HJ10FE9qecSmsovG58DM6APituAfSz
- lodn5EqDOVI+0ehQhze55w8jBfqjUGpmwI1KaEjE2tkPWhMm8XZWS7vL+5rKci8EQuDh
- pNTev91tPQlcQgxZmf+E1JwaeObsxiL4k/odahrTsJn+wKkwOrwcprJu+VEdYyOPWJ5y
- 2HOwTH4uaTTHjvIJY870rW9aGQZYwIVKc8zbIIGyDfqCVg8psi6oHEDgHwsmBBKTM6Dh
- pCfw==
+ bh=0UVb+mdTkwnBS6Oi+sVOy1WYVA0iyLUIPbpryoEvMOY=;
+ b=HFFL2pA7Bqmq27QGpX7D/jqd9jZyj2uatMq7z7/8a7b6PQqo0WJfxl3DBql9iAIJbz
+ EwrBRfuoFvi0ul5d9++oXdcP/Nhfj7qzHvG8yA0ytoQy6KmoR48uBCJTYcFfavbo8TIV
+ 85SH8gHeDCBalmeAAT3Ckcn5PD2yGpgrfbS8R1i7rR3UmJv+qfsPKKxwCUcA7m9+b9cI
+ my9UpW0qm9CN950qLdn6TguMMaalA0g6uckFlo1tAK7p1ovtpy95I7IQJZS972aniYGS
+ w9zSIxuv4uOUcKQLfKCiOeMRigJNkZ4u/lIpipaOnTXKGbD+s1/u5si3hURFz0FUpshx
+ ORIw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8cMv9BoJUR4Z4Z9ySTbNwGfMCeW0NQPJ4lPQeBR5DWNyLf93JDHLEEKfmXF+CHu8eb+hOYOtThYcQ=@buildroot.org
-X-Gm-Message-State: AOJu0YyynuI9d37curGNE07F0GkBX2VHRDYUBD+w5mz76sP8Gr9jODId
- t3HAKGwZGh2bY/5YvJgW1h2DYmTyLUQ8QDbPfbLxhO0UBYqLBTvfeTXhVNnrEimIrIWuL8Gz2mY
- 7zvQI
-X-Gm-Gg: AeBDiesFP07pt1QWhj+0AqJjnHAtQ22svUxSj8x3QHtoHVZJ261b0cyaU6jZNMjogHd
- jGRgPFzpFsE9NQd+tz+wNWRhqKtXiXioclr/Pd0Kuayvy/W9gW8kLcawSlp1zbDOndm4kdqP7wz
- 0/7Bw4mNU0AZ+n2Iey9kYDG17W6xBhkY9l7JcwK1ee9Zy1/QLs1f4KASD6rtb/+VAi/8FZ758TD
- YMGR2NRdd3SAYjouXPmqebHmZVmWoASdRYWPlXXzWtGCeHivgn/mqQ8lKCdpr2qawgOC1nLrD0W
- 2A9SB6N9hCAOaubY0Ve3ki/f41WOGXppjfxIaJBwBcbaWoNyrT0NxAi5aPm5RpY5aoaY0kLwMhj
- XIsr3PYzsdS6eCoe/FQbDiCilsaaVU65+3+jl7FlmXVrbORr58DdCisRi3uN8oy6PpvXz3/BPsp
- qZ0i1ntCv8hYebqmEFyHdrlnt1lmYN0nNwZ24S
-X-Received: by 2002:a05:6000:410f:b0:43f:e978:148f with SMTP id
- ffacd0b85a97d-43fe97814abmr28015358f8f.25.1777048020879; 
- Fri, 24 Apr 2026 09:27:00 -0700 (PDT)
+ AFNElJ+wLkAXxlq/VMdVxCziaOQRmCeUFIlc/LfcCMveCXnXUmumkmDrbcucvZDAFOgfl2tGBvzyAgU3e7A=@buildroot.org
+X-Gm-Message-State: AOJu0Yzsr2cByJJDneav49cHfjU0lqmyayYprLMiKyLSPxgentedTU+b
+ W6J6UkNzRmCUyC/wPRuyhJKKZSG6U4j1+L8PFNnUzg2OVxsZEvZAYj/T3jg8RlRCWaE=
+X-Gm-Gg: AeBDietsBME+CKuKCBHCtzSsI7cMbeX1eGuCEUMNqzaK0kDFVnZ+ycsGzNxTnYB/sk4
+ Y5TDy+cpUnHOTkkTTEkcYCd9SkMpROVvy8m5PwsyDMt3zQOIxqEWdajzEhG6FbGhNGrOSUGGuZm
+ x9WiDAxrahHL0gxBRmQxDramTw7IUbCTT+/V3uDSLQY36IDOdswTeqbJg4FlmbA6AgYJp9/KcDi
+ DLnnSeDaGGbgt+sT/wPqunogZldwGk7lXUEFDxq+JUMsfIssTP5Y0KUl3GL7WT3oF3yTVNzI9rf
+ Cxr9hzG0luvWie3O1B31CkV1NXbL96Y/aRMJjdJXUJcaVuwfPEw6s4mD0so9VGTRRwVhIH/Uuf1
+ ZK8xDqagQD9YSXrn1b9+ZdjAomjncEl2WKf4HJkvRke36Y6IfL1T6y6Kp7WdEMT9Ale1TWo+1YJ
+ qzdwsHJFoVvy6TXnWh+Fo9wjczrw==
+X-Received: by 2002:a05:600c:4714:b0:48a:5574:3a5b with SMTP id
+ 5b1f17b1804b1-48a55743d05mr242333875e9.27.1777048022253; 
+ Fri, 24 Apr 2026 09:27:02 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-43fe4e4ffa8sm62910841f8f.35.2026.04.24.09.27.00
+ ffacd0b85a97d-43fe4cc07bbsm64573297f8f.11.2026.04.24.09.27.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Apr 2026 09:27:00 -0700 (PDT)
-To: Marcus Hoffmann <buildroot@bubu1.eu>
+ Fri, 24 Apr 2026 09:27:01 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 18:27:00 +0200
-Message-ID: <20260424162700.161325-1-thomas.perale@mind.be>
+Date: Fri, 24 Apr 2026 18:27:01 +0200
+Message-ID: <20260424162701.161381-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260414132055.3263118-1-buildroot@bubu1.eu>
-References: <20260414132055.3263118-1-buildroot@bubu1.eu>
+In-Reply-To: <20260414160708.2041081-2-bernd@kuhls.net>
+References: <20260414160708.2041081-2-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777048021; x=1777652821; darn=buildroot.org;
+ d=mind.be; s=google; t=1777048022; x=1777652822; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=bBUnITh4kYb78dviRSk+4eVLTv0Z5BQ4GTIzEMHNvRs=;
- b=ShJxhnmOnbt/kOjUyWva4BF2sTNVVypHVusjhYpi7xNF/uTe+MfJLJdRpNqd/nUJi7
- F+hAOwB2ARnwFyJwTzRwEFECh3I2M5e5trFOvoFbdTd9409RR5+oOFlM/tDmK+AwLobW
- ZNmM0XmPUljywHkIUe1PA5aAfeoenY7jyJUNrPQk43Zuc/Ck9gjRF+Lsg1FPk5DgE4Wy
- wnKT/CuFGTalX9vNzbTA7049izfoan+VhBpridGwAxNYI2DbHQjckbGAC92sm+eIehtd
- BrTIOzQK3HZ2d8fHUqqqxSoqMSTPdQh+b34zratCZeY7MGufT/av4NNqhcABzOvJ5mVr
- hBeQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0UVb+mdTkwnBS6Oi+sVOy1WYVA0iyLUIPbpryoEvMOY=;
+ b=L7mtxethz9AULcVAMRr+b9gRfkw3tD/8lUJJFw293DdvrttUnizmo73cohyevhCBXW
+ qm65FQyStoTcLFt+KSlPSnJL7HL40pLolwnVxHn1M1Wms71MkktBp7ZiQUGt3sPF63aS
+ +AgLmJPHNAZ5cZlwNw48Zuu3sraO/QBpw5v2YP9odfF79HBHjPBMkxjbF07r981DvHLj
+ GYVQgCPJlhSPqJ2T1D5HB10hgCBOSFKIStI+wjkXVBEZ8SJvIXWBD//Q/MthMnfU/2sx
+ IDiJqTMw19UulaQJF2tOBgb+zXqpR8D8p0+PVd2+Err+2SJkZEJ9SHQLvwZMe1kq7WLq
+ Y+0g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ShJxhnmO
-Subject: Re: [Buildroot] [PATCH 1/2] package/bat: remove no longer needed
- patch for gcc15 compat
+ header.a=rsa-sha256 header.s=google header.b=L7mtxeth
+Subject: Re: [Buildroot] [PATCH 2/5] package/strongswan: security bump
+ version to 6.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,73 +131,54 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The bat 0.26.0 already depends on a newer version of the onig_sys crate,
-> so the problem that patch is fixing was no already no longer present.
+> https://github.com/strongswan/strongswan/releases/tag/6.0.5
 > 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> Switched _SITE to https.
+> 
+> Fixes CVE-2026-25075.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  ...ig-by-regex-fancy-in-minimal-applica.patch | 47 -------------------
->  1 file changed, 47 deletions(-)
->  delete mode 100644 package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
+>  package/strongswan/strongswan.hash | 6 +++---
+>  package/strongswan/strongswan.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-> deleted file mode 100644
-> index de6a3fc70c..0000000000
-> --- a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
-> -From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-> -Date: Tue, 2 Sep 2025 14:02:11 +0200
-> -Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
-> -
-> -The default "application" feature enables "minimal-application", which
-> -in turn pulls in the "regex-onig" feature of syntect. This brings in the
-> -onig crate (version 6.4.0) and its dependency onig_sys, which fail to
-> -build with GCC 15 due to C23 keyword conflicts.
-> -
-> -It is not possible to simply update the onig crate from bat itself,
-> -since its version is pinned indirectly by syntect. To avoid this
-> -dependency and fix the build, replace "regex-onig" with "regex-fancy" in
-> -"minimal-application". This makes bat use the pure-Rust fancy-regex
-> -engine instead of Oniguruma, removing the need for onig_sys and allowing
-> -the package to build with GCC 15.
-> -
-> -There is an an ongoing discussion about removing Oniguruma from bat
-> -since Oniguruma has been declared archived:
-> -
-> -see https://github.com/sharkdp/bat/issues/3285
-> -
-> -The Upstream project for now is refusing to use fancy-regex as default.
-> -
-> -Upstream: not submitted
-> -
-> -Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-> ----
-> - Cargo.toml | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/Cargo.toml b/Cargo.toml
-> -index 80d19321..93a07a1d 100644
-> ---- a/Cargo.toml
-> -+++ b/Cargo.toml
-> -@@ -29,7 +29,7 @@ minimal-application = [
-> -     "clap",
-> -     "etcetera",
-> -     "paging",
-> --    "regex-onig",
-> -+    "regex-fancy",
-> -     "wild",
-> - ]
-> - git = ["git2"] # Support indicating git modifications
-> --- 
-> -2.43.0
-> -
+> diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+> index 7a6939b979..44eadbaecf 100644
+> --- a/package/strongswan/strongswan.hash
+> +++ b/package/strongswan/strongswan.hash
+> @@ -1,7 +1,7 @@
+> -# From http://download.strongswan.org/strongswan-6.0.4.tar.bz2.md5
+> -md5  f6b78a99e95179b6a65df218d75da7ca  strongswan-6.0.4.tar.bz2
+> +# From https://download.strongswan.org/strongswan-6.0.5.tar.bz2.md5
+> +md5  7049111627010dc02293970c82e43d28  strongswan-6.0.5.tar.bz2
+>  # Calculated based on the hash above
+> -sha256  79576bb61b9a406cea9eb73d0c565cc6254a6b6d2e7198f44758d2d7c61a7aec  strongswan-6.0.4.tar.bz2
+> +sha256  437460893655d6cfbc2def79d2da548cb5175b865520c507201ab2ec2e7895d9  strongswan-6.0.5.tar.bz2
+>  # Locally calculated
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+> index bb5fd2d217..2e20b244ad 100644
+> --- a/package/strongswan/strongswan.mk
+> +++ b/package/strongswan/strongswan.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -STRONGSWAN_VERSION = 6.0.4
+> +STRONGSWAN_VERSION = 6.0.5
+>  STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+> -STRONGSWAN_SITE = http://download.strongswan.org
+> +STRONGSWAN_SITE = https://download.strongswan.org
+>  STRONGSWAN_LICENSE = GPL-2.0+
+>  STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+>  STRONGSWAN_CPE_ID_VENDOR = strongswan
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
