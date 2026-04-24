@@ -4,114 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 555BAFED3F1
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5A11FED3F2
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2555A84E44;
-	Fri, 24 Apr 2026 16:26:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D6BB84DD5;
+	Fri, 24 Apr 2026 16:26:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X3qQF-o6gSgU; Fri, 24 Apr 2026 16:26:47 +0000 (UTC)
+ id Pt-LC6kPhJh3; Fri, 24 Apr 2026 16:26:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2C8384E37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B5084E35
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048006;
-	bh=hpkIWra2DNL11Hm7uyCse7ZBa0MLu5WHKrxAsR51h+g=;
+	s=default; t=1777048010;
+	bh=s1cOlcpmlgKi/oSzZgZ26Zkt+0knirv0kop5+fh5C2I=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ErF6PthpY6B6OhLBJRGxy2DKqIXQVMKVc+RiMMLHPYR2EUb+Dnoi40D5aQn3Cqdt5
-	 6qn6zUgMWFQnP9wbU0hNH6vO6I0dzmaTyGprM8WokmCUQATAWLuboqHJgsdiz7nMlw
-	 vpSNzLYsCRZ93BbNtO0K0DFjd4spVcrZngpo9RzY124Yddkb74I9Cxt4VTsqsovaDP
-	 a6I44APVqQxGQdZzlGZ33uIZpbFtt8OBBv8/j95t2nPPqvKoNWXYc8xWY9CnIym7k4
-	 ztLhk8ZjoI+QhrHmdpcdwVXzRFGgFYgY3aRO65WpRE/vygTP/gGQPbZCkghBS6BO4o
-	 R84TRhd+JpCHw==
+	b=Iw4Wrs35OwmUMnTwsIeoJvZJ3Gq6Xx+R3goGGUTuoS7WM1JiwqtcbMmrMnwba6K7O
+	 Zggq6S3ZqGW/ELtUwr7hWcAMI6sM22lSXsvD+ERWc+QTlGxXh5yWFdceSkGEz+CgTY
+	 Kd5wdIDbCJb2BF81FY8DrY9BmI/hhAPw7xLSMo1sM48HnlvGfGFJnJK5Wsw0gFLNEK
+	 hcfB1gXPti3Vq/A0UVh/+rYAFy/VP2OxREcm7GcIJ0chjZG3JP/rVGRhHh2LQilGcK
+	 5/1IMds1mKJRbeLHAc7VUegfY7NupNDb76btOzf5Hbmu168mCnadOJS94kJMqZIdXv
+	 Mlo7NN/cRkzlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2C8384E37;
-	Fri, 24 Apr 2026 16:26:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E16EF206
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24B5084E35;
+	Fri, 24 Apr 2026 16:26:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EACDB206
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C402D4295F
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC08E61C33
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AEyTvFmdOHdg for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:26:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aULxvR1yq1Ty for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:26:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE04D4295E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE04D4295E
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE04D4295E
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:42 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-488b150559bso64238925e9.1
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:26:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D224461C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D224461C31
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D224461C31
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:44 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-488b0046078so73101845e9.1
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:26:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777048001; x=1777652801;
+ d=1e100.net; s=20251104; t=1777048003; x=1777652803;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=W2sCWZKZOInPuPG2xOdUaI4q+uGgrFkWB6H/AH2sPk4=;
- b=aA9QZKumlMmvPw7bcCIfSw3jOdtN9Grr8IhQ2H1z85EQei1Dt/jbAkqZQ9Fvbbyvgt
- QV+xDg3WsC2mrT42RudB4xj+hrWuwEpEmQfFbRejh8crthnvPHPCiFdpf70fp0wJ+w4T
- sHxRkzdEOPdbeKEjPoV/OpY3R6cCHG8IKpQv2/KsvSAKQD3qNIHBTx8tJvwadCbo9eCT
- /ykwSq0wqfnHfwxJc3ad7hdPAdLTr+6GCSgqVF5ssO1Z/S69pa6f41uqEi8TYVAxUJez
- hzfV+PF3+5+qych3LTbaHlBGa1T0OVHkt30QhiyfPq6k4XNr4FzeJ1qT5BKyzPWGmC6V
- cQ3Q==
-X-Forwarded-Encrypted: i=1;
- AFNElJ9cBiSDG33V3sy+MdWA6eizKS9QGSPmNANm2Uec4NsQw2+z8E/KJvnKf26Qmk2zMuU9pq+mVpGD2c4=@buildroot.org
-X-Gm-Message-State: AOJu0YyyCOA33YW5h6/fQN1fwq82cR4lm/fV9NK2Me5zxrtjotsJg43X
- 6abJb1d6kTNuaiaQkQsL3ZeFMT15Dijy/gzbld++0Ntxh6ZeWrYJHBxxe9n8P9wNg/M=
-X-Gm-Gg: AeBDiesw8H82RjFMsKqZEGeWq7scMTZcNrsqxXZLu5MN4l9mCcUdUt9wDzeA0wfw+zl
- B5eREDnAQapq5ayHDxhKWEwAD2LawW345erRTYebwBJ5/GCrCmlPcyazYilxNaH72rCqidDkkRJ
- Yb9qyhlnIeAwxwZut5PxaiAmFW0cKAuMEXPqaN/3sonXTxeP8cjxeKmDNiV4jSq4HNUIb8+YMeK
- w3uYP27Y11D+CAYfgj2HWepsBBdU/BnnVWJPERTOeUybXFhhW24UBY/+bgh9CECqyH/sfuqjS44
- mc8dZ3zeP8xQyYMcmd3lsJJth4tqVobqSQfaMsRo3R20JsuCMkLoI4L00tSeb4K6mHg5ZvVv9PI
- L2YT88jBn4EogfdopYhjznuS61ZFQ9/coNqxuK458FVBve8nh1aWbVqKPBvZICds5gTcbylM3P6
- 7aF5KSrb6z3ia+xwN8wjRDPXd9sg==
-X-Received: by 2002:a05:600c:348b:b0:489:5022:39a4 with SMTP id
- 5b1f17b1804b1-4895040c025mr319384585e9.9.1777048000715; 
- Fri, 24 Apr 2026 09:26:40 -0700 (PDT)
+ bh=mAA0HNtGTcUjbhWPFBilmH3xErEQC6dB4hNsku4ET2A=;
+ b=ULzUnZnFpBeo0ZSoGN4dTEBZw6OJnLV9w0K+kBAAeF1M3JOu2Aa+YT5T9kEIyhOn4+
+ W8s7MFBrUWFu4+/WIWSv1nw7nFVz6d9vU7hPECBrG3iUI1HMT38rQJb3sNhlg8k/5PYZ
+ okpkm+OBMdIb8tEegK6mAyuWh/J21pF4tF8Hkbh7F4TVSUOqCgc0Ac8DlOXg5XA6rmzf
+ gROgUOiy5eTWlX892QxNJOV+eE7iQvolqMYFoiATwULu3L/TLFPUSTwkecnDlU4fEXYE
+ 6ib7hVdogXtOh35fDTp7OvPFCKxRn4XnMsfdK/vH889dmYSO72hvwAYG5xyxHJcfCBuS
+ UJjg==
+X-Gm-Message-State: AOJu0YxPKynXMlOhK/44xGwkG1B5b+p4TmiFJGWJfKu7CrIhAEER80rw
+ enEgq3L2PyjlZjoEU0Bm2hWSpJgVdJmUp02i53BTKNL5dhkYlcd7RF6eHKmsYW1/hTc=
+X-Gm-Gg: AeBDiestQEzywhFjd3f5v63JyzX0vEYR13bDeWz3f1qm167tlffa6bNX7H1CK6ZDcNl
+ TvxiXfCylvdMBzYl0OMWZCsKS3iorcP8XxBz8rmQpXVK4nsUS1+TItmM1/HQjIBXByEoa3RJ+61
+ MIREsvYo9WvA7K6gs+S4XJ+KdtCVnVSeGF7eofJdYcM3EaaWf3YWLW7fpaesTgkZ55iGONob7VH
+ wHs60koG37gY9pbSVxRu264dsBHbTOPp4wLOfFMgW7iL29WH6HNVbfNYzK5Z4v5vWrlNYqmRfj4
+ 4IncqBXae4NbREpJITsSTeZLbC4ChwKy5RU3txA1dbsZ81mCV5EikX81kEAiRTbRbAeZgo6qdH0
+ DfuTzKvqgrGi72XI3GcgOClng6UVt0HTyL3TK0OZvP0VWhNErUpakFFRjyj3u5p9C1Usx2YJY2i
+ jV34K8yquQWjBgaMdlajf6ovSJBQ==
+X-Received: by 2002:a05:600c:5294:b0:486:fa35:aef2 with SMTP id
+ 5b1f17b1804b1-488fb73d53bmr429359655e9.4.1777048002862; 
+ Fri, 24 Apr 2026 09:26:42 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-489fec8f7cbsm318728795e9.11.2026.04.24.09.26.40
+ 5b1f17b1804b1-488fc1c01cfsm626610475e9.10.2026.04.24.09.26.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Apr 2026 09:26:40 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 18:26:38 +0200
-Message-ID: <20260424162639.160966-1-thomas.perale@mind.be>
+ Fri, 24 Apr 2026 09:26:42 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 24 Apr 2026 18:26:41 +0200
+Message-ID: <20260424162641.161067-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260417091800.2374733-1-titouan.christophe@mind.be>
-References: <20260417091800.2374733-1-titouan.christophe@mind.be>
+In-Reply-To: <20260417120641.174060-2-thomas.perale@mind.be>
+References: <20260417120641.174060-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777048001; x=1777652801; darn=buildroot.org;
+ d=mind.be; s=google; t=1777048003; x=1777652803; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=W2sCWZKZOInPuPG2xOdUaI4q+uGgrFkWB6H/AH2sPk4=;
- b=cApwgaGv+206aGyef/YNsDD7Qp4VTNAHTddiBgJ4ytQ9c+dqRcXP/dlzXY9cK81pjl
- DIHj//iJGxUZKVaqFaxjoq1+eyuXV518qjYXfqd76uV/BZL3AjjO7Nmm0st9Nx06rQcy
- FqVcVenEf+7Oxs13vtoga/lwTeHpDAgeBXrclJin0u+hiz9wMm6M9Uq327XycYnMWCkN
- dcsnCqoIO/fMwY64uMf9apwdYJrxowWVOgj/w8ces+P5H3IJGrOfsby81qfGJmi58BCQ
- rs3SVMK+7joIPGDvEm2P82lFDfSfMixdPlWUi0RWrodn+KOH2DTP0Rhvg+biorUOdnXU
- nMcg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=mAA0HNtGTcUjbhWPFBilmH3xErEQC6dB4hNsku4ET2A=;
+ b=H0p8nLhIZOeu3wvPwXPOOnVCWR6zrpOUpQ2kwSHRFmAjuMtDmEuElo0VPGxwtYZFWT
+ vzVPzJvZIIiJo1CFMupa8/YlUcabe38qYAI2LK0FHhNILTFqVPmp+CRSjnQsSM3u46DI
+ lzTSmWx+LmtFWN6QEgvx4e6ZWdU2ml2i/I5NnpVpwWp/8+FPCrCO0MlcXiecewnT0bJ0
+ KTh7gUtMOyXnNGiREqjPYpaqagu9QXKaD0UdK93bcfLJ4HZVCuIuuOenAqD9eLtRxJYO
+ nZNWmlQYBCxKCjPTkMJj8xhcSNQiMp8Pc9IdsCtWGncANevvuJwKfs3sQ1v4JsJFFotd
+ 4kuQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cApwgaGv
-Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/python3: security
- bump to v3.12.13
+ header.a=rsa-sha256 header.s=google header.b=H0p8nLhI
+Subject: Re: [Buildroot] [PATCH 2/2 2025.02.x] package/xz: patch
+ CVE-2026-34743
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,56 +122,128 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gU2VlIHRoZSByZWxlYXNlIG5vdGVzOiBodHRwczovL3d3dy5weXRob24u
-b3JnL2Rvd25sb2Fkcy9yZWxlYXNlL3B5dGhvbi0zMTIxMy8KPiAKPiBUaGlzIGZpeGVzIGEgaGFu
-ZGZ1bCBvZiBidWdzIGFuZCB0aGUgZm9sbG93aW5nIHZ1bG5lcmFiaWxpdHk6Cj4gLSBDVkUtMjAy
-NC02OTIzOgo+ICAgICBUaGVyZSBpcyBhIE1FRElVTSBzZXZlcml0eSB2dWxuZXJhYmlsaXR5IGFm
-ZmVjdGluZyBDUHl0aG9uLiAgVGhlCj4gICAgIGVtYWlsIG1vZHVsZSBkaWRu4oCZdCBwcm9wZXJs
-eSBxdW90ZSBuZXdsaW5lcyBmb3IgZW1haWwgaGVhZGVycyB3aGVuCj4gICAgIHNlcmlhbGl6aW5n
-IGFuIGVtYWlsIG1lc3NhZ2UgYWxsb3dpbmcgZm9yIGhlYWRlciBpbmplY3Rpb24gd2hlbiBhbgo+
-ICAgICBlbWFpbCAgaXMgc2VyaWFsaXplZC4KPiAgICAgaHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVS
-ZWNvcmQ/aWQ9Q1ZFLTIwMjQtNjkyMwo+IAo+IFRoaXMgYWxzbyBpbmNsdWRlcyBhIG1pdGlnYXRp
-b24gZm9yIGEgbGliZXhwYXQgdnVsbmVyYWJpbGl0eToKPiAtIENWRS0yMDI1LTU5Mzc1Ogo+ICAg
-ICBsaWJleHBhdCBpbiBFeHBhdCBiZWZvcmUgMi43LjIgYWxsb3dzIGF0dGFja2VycyB0byB0cmln
-Z2VyIGxhcmdlCj4gICAgIGR5bmFtaWMgbWVtb3J5IGFsbG9jYXRpb25zIHZpYSBhIHNtYWxsIGRv
-Y3VtZW50IHRoYXQgaXMgc3VibWl0dGVkIGZvcgo+ICAgICBwYXJzaW5nLgo+ICAgICBodHRwczov
-L3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNS01OTM3NQo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IFRpdG91YW4gQ2hyaXN0b3BoZSA8dGl0b3Vhbi5jaHJpc3RvcGhlQG1pbmQuYmU+CgpBcHBs
-aWVkIHRvIDIwMjUuMDIueC4gVGhhbmtzCgo+IC0tLQo+ICBwYWNrYWdlL3B5dGhvbjMvcHl0aG9u
-My5oYXNoIHwgNiArKystLS0KPiAgcGFja2FnZS9weXRob24zL3B5dGhvbjMubWsgICB8IDIgKy0K
-PiAgMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gCj4g
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLmhhc2ggYi9wYWNrYWdlL3B5dGhv
-bjMvcHl0aG9uMy5oYXNoCj4gaW5kZXggZWQwZDg3OWYxMS4uNWIxMGYyNGY3MCAxMDA2NDQKPiAt
-LS0gYS9wYWNrYWdlL3B5dGhvbjMvcHl0aG9uMy5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24z
-L3B5dGhvbjMuaGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+IC0jIEZyb20gaHR0cHM6Ly93d3cucHl0
-aG9uLm9yZy9kb3dubG9hZHMvcmVsZWFzZS9weXRob24tMzEyMTEvCj4gLW1kNSAgMDRmZWIwMTMx
-NmM3YmIxYjQ0ODAwMWFkYmM2M2RkMjMgIFB5dGhvbi0zLjEyLjEyLnRhci54ego+ICsjIEZyb20g
-aHR0cHM6Ly93d3cucHl0aG9uLm9yZy9kb3dubG9hZHMvcmVsZWFzZS9weXRob24tMzEyMTMvCj4g
-K21kNSAgYjY3ZGM1ZDU1YjI3Yzk4YTM2NjE1ZjdkMGRmYTZlNGMgIFB5dGhvbi0zLjEyLjEzLnRh
-ci54ego+ICAjIExvY2FsbHkgY29tcHV0ZWQKPiAtc2hhMjU2ICBmYjg1YTEzNDE0YjAyOGM0OWJh
-MThiYmQ1MjNjMmQwNTVhMzBiNTZiMThiOTJjZTQ1NGVhMmM1MWVkYzY1NmM0ICBQeXRob24tMy4x
-Mi4xMi50YXIueHoKPiArc2hhMjU2ICBjMDhiYzY1YTgxOTcxYzFkZDU3ODMxODI4MjY1MDMzNjk0
-NjZjN2U2NzM3NGQxNjQ2NTE5YWRmMDUyMDdiNjg0ICBQeXRob24tMy4xMi4xMy50YXIueHoKPiAg
-c2hhMjU2ICAzYjJmODFmZTIxZDE4MWM0OTljNTlhMjU2YzhlMTk2ODQ1NWQ2Njg5ZDI2OWFhODUz
-NzNiZmI2YWY0MWRhM2JmICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uMy9w
-eXRob24zLm1rIGIvcGFja2FnZS9weXRob24zL3B5dGhvbjMubWsKPiBpbmRleCA0YWNlNGQ4NTcz
-Li42MGFiNWIwY2JjIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLm1rCj4g
-KysrIGIvcGFja2FnZS9weXRob24zL3B5dGhvbjMubWsKPiBAQCAtNSw3ICs1LDcgQEAKPiAgIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gIFBZVEhPTjNfVkVSU0lPTl9NQUpPUiA9IDMuMTIK
-PiAtUFlUSE9OM19WRVJTSU9OID0gJChQWVRIT04zX1ZFUlNJT05fTUFKT1IpLjEyCj4gK1BZVEhP
-TjNfVkVSU0lPTiA9ICQoUFlUSE9OM19WRVJTSU9OX01BSk9SKS4xMwo+ICBQWVRIT04zX1NPVVJD
-RSA9IFB5dGhvbi0kKFBZVEhPTjNfVkVSU0lPTikudGFyLnh6Cj4gIFBZVEhPTjNfU0lURSA9IGh0
-dHBzOi8vcHl0aG9uLm9yZy9mdHAvcHl0aG9uLyQoUFlUSE9OM19WRVJTSU9OKQo+ICBQWVRIT04z
-X0xJQ0VOU0UgPSBQeXRob24tMi4wLCBvdGhlcnMKPiAtLSAKPiAyLjUzLjAKPiAKPiBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+In reply of:
+> - CVE-2026-34743:
+>     XZ Utils provide a general-purpose data-compression library plus
+>     command-line tools. Prior to version 5.8.3, if lzma_index_decoder()
+>     was used to decode an Index that contained no Records, the resulting
+>     lzma_index was left in a state where where a subsequent
+>     lzma_index_append() would allocate too little memory, and a buffer
+>     overflow would occur. This issue has been patched in version 5.8.3.
+> 
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2026-34743
+>   - https://security-tracker.debian.org/tracker/CVE-2026-34743
+>   - https://github.com/tukaani-project/xz/commit/c8c22869e780ff57c96b46939c3d79ff99395f87
+> 
+> (cherry picked from commit 724635227314010518372c5bad4d37d7c58950c1)
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+
+Applied to 2025.02.x. Thanks
+
+> ---
+>  ...buffer-overflow-in-lzma-index-append.patch | 62 +++++++++++++++++++
+>  package/xz/xz.mk                              |  5 +-
+>  2 files changed, 66 insertions(+), 1 deletion(-)
+>  create mode 100644 package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+> 
+> diff --git a/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+> new file mode 100644
+> index 0000000000..034122d4f7
+> --- /dev/null
+> +++ b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+> @@ -0,0 +1,62 @@
+> +From c8c22869e780ff57c96b46939c3d79ff99395f87 Mon Sep 17 00:00:00 2001
+> +From: Lasse Collin <lasse.collin@tukaani.org>
+> +Date: Sun, 29 Mar 2026 19:11:21 +0300
+> +Subject: [PATCH] liblzma: Fix a buffer overflow in lzma_index_append()
+> +
+> +If lzma_index_decoder() was used to decode an Index that contained no
+> +Records, the resulting lzma_index had an invalid internal "prealloc"
+> +value. If lzma_index_append() was called on this lzma_index, too
+> +little memory would be allocated and a buffer overflow would occur.
+> +
+> +While this combination of the API functions is meant to work, in the
+> +real-world apps this call sequence is rare or might not exist at all.
+> +
+> +This bug is older than xz 5.0.0, so all stable releases are affected.
+> +
+> +Reported-by: GitHub user christos-spearbit
+> +CVE: CVE-2026-34743
+> +Upstream: https://github.com/tukaani-project/xz/commit/c8c22869e780ff57c96b46939c3d79ff99395f87
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/liblzma/common/index.c | 21 +++++++++++++++++++++
+> + 1 file changed, 21 insertions(+)
+> +
+> +diff --git a/src/liblzma/common/index.c b/src/liblzma/common/index.c
+> +index 6add6a683..c4aadb9b0 100644
+> +--- a/src/liblzma/common/index.c
+> ++++ b/src/liblzma/common/index.c
+> +@@ -433,6 +433,26 @@ lzma_index_prealloc(lzma_index *i, lzma_vli records)
+> + 	if (records > PREALLOC_MAX)
+> + 		records = PREALLOC_MAX;
+> + 
+> ++	// If index_decoder.c calls us with records == 0, it's decoding
+> ++	// an Index that has no Records. In that case the decoder won't call
+> ++	// lzma_index_append() at all, and i->prealloc isn't used during
+> ++	// the Index decoding either.
+> ++	//
+> ++	// Normally the first lzma_index_append() call from the Index decoder
+> ++	// would reset i->prealloc to INDEX_GROUP_SIZE. With no Records,
+> ++	// lzma_index_append() isn't called and the resetting of prealloc
+> ++	// won't occur either. Thus, if records == 0, use the default value
+> ++	// INDEX_GROUP_SIZE instead.
+> ++	//
+> ++	// NOTE: lzma_index_append() assumes i->prealloc > 0. liblzma <= 5.8.2
+> ++	// didn't have this check and could set i->prealloc = 0, which would
+> ++	// result in a buffer overflow if the application called
+> ++	// lzma_index_append() after decoding an empty Index. Appending
+> ++	// Records after decoding an Index is a rare thing to do, but
+> ++	// it is supposed to work.
+> ++	if (records == 0)
+> ++		records = INDEX_GROUP_SIZE;
+> ++
+> + 	i->prealloc = (size_t)(records);
+> + 	return;
+> + }
+> +@@ -685,6 +705,7 @@ lzma_index_append(lzma_index *i, const lzma_allocator *allocator,
+> + 		++g->last;
+> + 	} else {
+> + 		// We need to allocate a new group.
+> ++		assert(i->prealloc > 0);
+> + 		g = lzma_alloc(sizeof(index_group)
+> + 				+ i->prealloc * sizeof(index_record),
+> + 				allocator);
+> diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+> index 60c2df70ee..205ab928a7 100644
+> --- a/package/xz/xz.mk
+> +++ b/package/xz/xz.mk
+> @@ -22,7 +22,10 @@ HOST_XZ_ADD_CCACHE_DEPENDENCY = NO
+>  # 0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+>  # 0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+>  # 0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+> -XZ_IGNORE_CVES = CVE-2025-31115
+> +XZ_IGNORE_CVES += CVE-2025-31115
+> +
+> +# 0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+> +XZ_IGNORE_CVES += CVE-2026-34743
+>  
+>  XZ_CONF_OPTS = \
+>  	--enable-encoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
+> -- 
+> 2.53.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
