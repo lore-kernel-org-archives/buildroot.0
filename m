@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0105FF8855
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 21:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B20AFF8850
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 21:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0BF640B8D;
-	Fri, 24 Apr 2026 21:56:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 414E540B97;
+	Fri, 24 Apr 2026 21:59:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uK9BKjVuwRfu; Fri, 24 Apr 2026 21:56:39 +0000 (UTC)
+ id cT9d4NowMDDz; Fri, 24 Apr 2026 21:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7424A40B7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56FCD40B84
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777067799;
-	bh=G6gxDibPsks0N8EYw037CvLDt1XX9f8SoOP5J8jOOTA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fU91iiyA/y4E1Hh/PP/35bJyQwtW+10dHmYvLds2C1uOf9DxQBjmqbSCHe8cmgbln
-	 gysgpjaNLQ4TcLqhEZ/lMWd15Z2FoAdaxjBGBUWSeyhJNkzS5lLRKyq9kRLj8JzSav
-	 yaaaZlxXtXQ8pk96g2x5h+j0+NfdbRKUyCkfgnaPTL17ImQikwWFKCTtFQm6eJtHRV
-	 fedocpmHLLv7Saq+ieHZE6qdt6igEHqJhtLbm/b47DUR68Bvq5TB02oi2TJ8gRXKls
-	 VKaeX1cFtF2kLkXSRFaQSz/Mantz4b2/61dIFMOhjpSJmoZ0UzexkwYVWbpfJc089J
-	 UjmbXAcYfIqww==
+	s=default; t=1777067949;
+	bh=t5gJFSnt9cXJVOEZCWMFpcbfQOAjlA3/QRkqKzysRkA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=W5Tl4p26cMgbu5IHrzy/uFBS/iLbh6gZ/Y+vdFlxvb+GlR7lufJaVUgD2wRBYlx17
+	 9TDVehtiZ+njx4jS+EaB2InwC47yUei2ZZldTjKx9FFI4xX+mXkj5ZccszK9dWAmjL
+	 e/qIZ/ojibtB5Yn06t0LfhHD/eb17PRBkMdBxgtKNFZvQlZmlv4HrvbqZsgErUyVUL
+	 UND9sVv0XqIBoE3Xkl8DfmhU7CEpBqMFQefL6T6dhRivmLx8tswYTeQAqjGFTZK0Sm
+	 X+EX2WTDMe5f9KiFRhefeR1ctx5pu6boQznkPKyLHM2S33hRRpg4TdfHz80tuWtbqA
+	 5nkA1+5s/uyhg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7424A40B7B;
-	Fri, 24 Apr 2026 21:56:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E19002DF
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:56:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56FCD40B84;
+	Fri, 24 Apr 2026 21:59:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80AAD194
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C73C860792
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:56:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65C1E812C5
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:59:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eEAFIy9xNAns for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 21:56:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7369B60790
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7369B60790
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:56:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27CBA83460; Fri, 24 Apr 2026 21:56:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 23:55:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7d76a7ab3915ffb62eaf95ffa9f4de491652861
-X-Git-Newrev: 24479bf29ab607c2477641ec60369db40761e7ca
-X-Patchwork-Hint: ignore
-Message-Id: <20260424215636.27CBA83460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flashrom: fix build on big-endian
- targets
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LgXWgK1tvFPs for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 21:59:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5DAE4812C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DAE4812C2
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DAE4812C2
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:59:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 067D420039C;
+ Fri, 24 Apr 2026 23:59:02 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 24 Apr 2026 23:59:02 +0200
+MIME-Version: 1.0
+Date: Fri, 24 Apr 2026 23:59:02 +0200
+To: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260413000423.9275-1-fl@n621.de>
+References: <20260413000423.9275-1-fl@n621.de>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <72837c9638f325bf86bc3eda417db609@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777067945;
+ bh=XKcqqJbCXh3Li1r6/upFyNZE+NFuVXD4Om8pnuTeKYo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pK7nG9uQY76qRC3H5K40XU4C592R+SnPWACeVwj7+D2ezDXd8BiUCwDXeMBB/flh8
+ /FuRaL4HwOSDEeUR1NkDhPRRKL23jpZ8W0vFD3MbeToBgjmdpKexaSNL4WQumgQN7R
+ fo1TXZu1ZzRx8qNKuHY89hUw1BtiEGCMT43V9KVBqISIjzBQ5jQcyBWOpup49yk26+
+ k/PaBD49GZGXWsApuTO8iX9OsMpoHijy2j3kQq2oSQbdyZPcdzEuZtOffNWEhnatVx
+ bPdU2UvA6WcIAtPkeXM5N99MGwvSWL5ByIi4f1iZfNtPQ6ShPzED4vgFS2Gxeds+Ly
+ NXeAbiNHeRqvw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pK7nG9uQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/flashrom: fix build on
+ big-endian targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,86 +95,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24479bf29ab607c2477641ec60369db40761e7ca
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 13/04/2026 02:04, Florian Larysch wrote:
+> flashrom 1.7.0 fails to build on big-endian targets because of an 
+> errant
+> compile guard. Import the pending upstream patch that fixes it.
+> 
+> Fixes: 
+> https://autobuild.buildroot.org/results/d75/d75f5a555b7ad1a99ffe46298bf6f527f3bafbc9
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
-flashrom 1.7.0 fails to build on big-endian targets because of an errant
-compile guard. Import the pending upstream patch that fixes it.
-
-Fixes: https://autobuild.buildroot.org/results/d75/d75f5a555b7ad1a99ffe46298bf6f527f3bafbc9
-
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...bflashrom-fix-build-on-big-endian-targets.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/package/flashrom/0001-libflashrom-fix-build-on-big-endian-targets.patch b/package/flashrom/0001-libflashrom-fix-build-on-big-endian-targets.patch
-new file mode 100644
-index 0000000000..f09a39d137
---- /dev/null
-+++ b/package/flashrom/0001-libflashrom-fix-build-on-big-endian-targets.patch
-@@ -0,0 +1,54 @@
-+From 13c19fccd7946c692e587e308c916a1090d3592d Mon Sep 17 00:00:00 2001
-+From: Florian Larysch <fl@n621.de>
-+Date: Mon, 13 Apr 2026 01:40:52 +0200
-+Subject: [PATCH] libflashrom: fix build on big-endian targets
-+
-+Commit f74f02e2 ("Add guard for compare_region_with_dump()") added
-+little-endian-only compile guards to that function because it was only
-+used on little-endian systems and caused -Wunused-function to trip on
-+other targets.
-+
-+When b0b975d0 ("libflashrom: Add new layout_compare() function with
-+test") introduced flashrom_layout_compare(), it included the new
-+function within those guards too, but this isn't necessary:
-+compare_region_with_dump() is not sensitive to endianess and adding that
-+new dependent actually made the original reason for adding the guard
-+obsolete.
-+
-+However, now building on big-endian architectures fails because
-+cli_classic.c unconditionally refers to flashrom_layout_compare().
-+
-+Resolve this by simply removing the guard.
-+
-+Fixes: https://ticket.coreboot.org/issues/635
-+
-+Change-Id: If3e6828e6445e0708e1174728f91053e48a097ba
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+Upstream: https://review.coreboot.org/c/flashrom/+/92156
-+---
-+ libflashrom.c | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/libflashrom.c b/libflashrom.c
-+index 159e3924..503386fa 100644
-+--- a/libflashrom.c
-++++ b/libflashrom.c
-+@@ -462,7 +462,6 @@ bool flashrom_flag_get(const struct flashrom_flashctx *const flashctx, const enu
-+ 	}
-+ }
-+ 
-+-#ifdef __FLASHROM_LITTLE_ENDIAN__
-+ static int compare_region_with_dump(const struct romentry *const a, const struct romentry *const b)
-+ {
-+ 	if (a->region.start != b->region.start
-+@@ -508,7 +507,6 @@ int flashrom_layout_compare(const struct flashrom_layout *layout1,
-+ 
-+ 	return 0;
-+ }
-+-#endif /* __FLASHROM_LITTLE_ENDIAN__ */
-+ 
-+ int flashrom_layout_read_from_ifd(struct flashrom_layout **const layout, struct flashctx *const flashctx,
-+ 				  const void *const dump, const size_t len)
-+-- 
-+2.53.0
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
