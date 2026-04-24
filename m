@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A3BFED3F0
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 928CFFED3EA
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:27:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1E4284E65;
-	Fri, 24 Apr 2026 16:26:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6787784DEB;
+	Fri, 24 Apr 2026 16:27:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cqJHcApQ1o-X; Fri, 24 Apr 2026 16:26:53 +0000 (UTC)
+ id 91JDZLXdKMXb; Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAAE684E59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C64C84E18
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777048013;
-	bh=OgOI9GrY2FTS/qoWWYbUgeQJZu5cRiKqrt6qQv67yjQ=;
+	s=default; t=1777048025;
+	bh=U+5PGb+fpzWWXLFj9CYvfsaN/GlNTLsEGHdlbID0Q04=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=RvEhsw66kihzg0x94Wks/1q6MW8qvqvRu1nuiWzdukMQuBpGv9EeyqLm4X7CsWWjn
-	 KhkPz68bmkKhOBdYjcNAu8eK8OH/48RJ7/za5zEhSo0NX6JfXmndavJmVpS4diuAb0
-	 2l/1YgwJfaTqRipK+QmIHDb17AvJKdHG4XEhYhhJe2jEIbvf49fFlK52yCNOYu/pZB
-	 argg/eG2EEj0Aav+x1E4eTWKEIvYXt8Sx5EfH3drZTR7UAkit8S6WarXxaE7gR9+Mp
-	 /SAqnhlCbWhLbhJXxHsXg59WTr0xNBV5MA2yAAas7rLSUYcYRKRtLSzRtit2lZGil5
-	 7/LcDY5wFPHUQ==
+	b=EPtYTBGvDdfWXY25p43hZxk3CH9S9Rv5TRLXJP/u3Bu1TSXcdEf10Y55iragGSl7J
+	 WEmXMtHltizFDV3H/WpeCJ7WZIe/sArV0mwAbqGSXBUk5MH8/wJn633yvYMTz5o8Y5
+	 uIrKcIKszjuBhWAO2UeW2i3SB6oPbVyCm5ETDZpZRo33pYP73mRTHjqZMfyelrsmjP
+	 V9drifv3ntOhmZd6xAKmzXMaK3E3KbVG2PpBO6DEsLenMqseYuf8D1ZHNHd1t2JIBV
+	 1ckkKc7W5wbdH17wn4NDmSja4XCuOYmj5Bz+5T3PQujHUq0mwyNtPGRWIWnYCM78qQ
+	 pCIuKMEgAqNVw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAAE684E59;
-	Fri, 24 Apr 2026 16:26:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0927C194
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C64C84E18;
+	Fri, 24 Apr 2026 16:27:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CE3C194
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B26194295E
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2E094295A
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lPwDB2njxRuJ for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:26:47 +0000 (UTC)
+ id lKs_1UH2lu6R for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:27:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7DF6A42977
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DF6A42977
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7DF6A42977
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:26:47 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4852a9c6309so75012045e9.0
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:26:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD0AB4295E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD0AB4295E
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD0AB4295E
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:27:02 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-43d734223e4so5545666f8f.0
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 09:27:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777048005; x=1777652805;
+ d=1e100.net; s=20251104; t=1777048021; x=1777652821;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=UrPG26TrrpbFxKoOi5CZeVhoofGBxm9Rae0fh7r3si4=;
- b=eKBzZY9Yy2ufHgP+9ALnbbgVV3yCllJUNTTKuzmXFscjqDxgxZ/MaHSrYILDaC/e0H
- 5WXz4CK0UsfJnoIQzA/FbpgQOomWkn15oxstnErxAeXBumpyZlg10WAjVotJOJEwrtNg
- pb5+x+39i+edsgvjCxzOBWo1o0dPIeSWHn9EKuyBsodor5BEGzr1RnLDe4TkgowsqwCw
- Wc1Kb1yz6f7DSLvplB/aV8uplmIfWp10ZA41lS4BjqwimsgR5wp8rMDwzD7SeNNKxZX4
- eg42rQz2/RflAI2skvhcvaP5psfwtP20KmNHw7uRjJh3HDVkTYhUSx5qf172JNKtTuQd
- 4ugg==
+ bh=bBUnITh4kYb78dviRSk+4eVLTv0Z5BQ4GTIzEMHNvRs=;
+ b=qCP46NHIf/gM8BkjXN8JZxouRwQK11pIv5/k3sKTGVQ5mh+L3kY/ZlzS0sZrjXOHjO
+ Q028/hjFzUhdm2OLcqAva4JXGAI8ns/DoBn2k+HJ10FE9qecSmsovG58DM6APituAfSz
+ lodn5EqDOVI+0ehQhze55w8jBfqjUGpmwI1KaEjE2tkPWhMm8XZWS7vL+5rKci8EQuDh
+ pNTev91tPQlcQgxZmf+E1JwaeObsxiL4k/odahrTsJn+wKkwOrwcprJu+VEdYyOPWJ5y
+ 2HOwTH4uaTTHjvIJY870rW9aGQZYwIVKc8zbIIGyDfqCVg8psi6oHEDgHwsmBBKTM6Dh
+ pCfw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9FbUWf0ghNgMk+y2hGEcMTq97earVkNE+OU16Vd+ayKuveYPxWOZiqpOf2MKrAUtk3YPjib76qfuA=@buildroot.org
-X-Gm-Message-State: AOJu0Yyk+7wgfWyFngNd/FDxjWbLUHn9XMhSUboWWE0QoSP+rzE/qgPM
- Iae2MpxSpSeh1n91/XEuiAIJlPf0AYjpjrHec+MqaLb/Uofx7MFDBkmxhaP51xZ/Nuk=
-X-Gm-Gg: AeBDiet7XNEcMm3JQV+yXXprUqdGxigZt1i2Im382kGFFApITscKtH6uHZT6zpXs2St
- m/NKFMYf8B3OOiUsTeJ6dzRnUSFN+xdCa+/w0Imu0kuq8ZisGSN7yx8lQvTGIB1Vb8LCtVjgs21
- n/BiJ/ifNAqAxQoFAQQV16xi6Urcav87f+Izz9Ims63XBtX5naAKULVWiLlFFmtq1FObWxwfmu3
- 2Rs3sGQGNJkcmtVxUTdJq1Tm1EAJMNa8GFX1oaLLMICH8A5HUNPDVMLEaZ8RB9C2rOMvJBYd56f
- PR8O+dwMKLRQdq0GMjxUa/U2Psyh/W7gXm6vH9FBd0k0qJgjAayqQZsr4/xLcJUDgGlUqjAOuBt
- G/VU8icK8zSLA6ZpYWl0M4ByhIvEnIaNYQ7DhVFzuk3Qs84sQHQccHn/c+qiaJU/buAegkSsn25
- KHgc30rRXjmPqroaoU78ZXBb8cpA==
-X-Received: by 2002:a05:600c:348d:b0:48a:674d:e756 with SMTP id
- 5b1f17b1804b1-48a677401c7mr26657625e9.20.1777048005349; 
- Fri, 24 Apr 2026 09:26:45 -0700 (PDT)
+ AFNElJ8cMv9BoJUR4Z4Z9ySTbNwGfMCeW0NQPJ4lPQeBR5DWNyLf93JDHLEEKfmXF+CHu8eb+hOYOtThYcQ=@buildroot.org
+X-Gm-Message-State: AOJu0YyynuI9d37curGNE07F0GkBX2VHRDYUBD+w5mz76sP8Gr9jODId
+ t3HAKGwZGh2bY/5YvJgW1h2DYmTyLUQ8QDbPfbLxhO0UBYqLBTvfeTXhVNnrEimIrIWuL8Gz2mY
+ 7zvQI
+X-Gm-Gg: AeBDiesFP07pt1QWhj+0AqJjnHAtQ22svUxSj8x3QHtoHVZJ261b0cyaU6jZNMjogHd
+ jGRgPFzpFsE9NQd+tz+wNWRhqKtXiXioclr/Pd0Kuayvy/W9gW8kLcawSlp1zbDOndm4kdqP7wz
+ 0/7Bw4mNU0AZ+n2Iey9kYDG17W6xBhkY9l7JcwK1ee9Zy1/QLs1f4KASD6rtb/+VAi/8FZ758TD
+ YMGR2NRdd3SAYjouXPmqebHmZVmWoASdRYWPlXXzWtGCeHivgn/mqQ8lKCdpr2qawgOC1nLrD0W
+ 2A9SB6N9hCAOaubY0Ve3ki/f41WOGXppjfxIaJBwBcbaWoNyrT0NxAi5aPm5RpY5aoaY0kLwMhj
+ XIsr3PYzsdS6eCoe/FQbDiCilsaaVU65+3+jl7FlmXVrbORr58DdCisRi3uN8oy6PpvXz3/BPsp
+ qZ0i1ntCv8hYebqmEFyHdrlnt1lmYN0nNwZ24S
+X-Received: by 2002:a05:6000:410f:b0:43f:e978:148f with SMTP id
+ ffacd0b85a97d-43fe97814abmr28015358f8f.25.1777048020879; 
+ Fri, 24 Apr 2026 09:27:00 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48919f54572sm159603575e9.26.2026.04.24.09.26.44
+ ffacd0b85a97d-43fe4e4ffa8sm62910841f8f.35.2026.04.24.09.27.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 24 Apr 2026 09:26:44 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Fri, 24 Apr 2026 09:27:00 -0700 (PDT)
+To: Marcus Hoffmann <buildroot@bubu1.eu>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 18:26:44 +0200
-Message-ID: <20260424162644.161179-1-thomas.perale@mind.be>
+Date: Fri, 24 Apr 2026 18:27:00 +0200
+Message-ID: <20260424162700.161325-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260421143310.2795827-1-titouan.christophe@mind.be>
-References: <20260421143310.2795827-1-titouan.christophe@mind.be>
+In-Reply-To: <20260414132055.3263118-1-buildroot@bubu1.eu>
+References: <20260414132055.3263118-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777048005; x=1777652805; darn=buildroot.org;
+ d=mind.be; s=google; t=1777048021; x=1777652821; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=UrPG26TrrpbFxKoOi5CZeVhoofGBxm9Rae0fh7r3si4=;
- b=Et9+y4vX5qizF8SOXsa/kBlDMYlcWPmojSL4VvRObIHZ3bQEtG/sjGZ8eYBI7QkzNo
- N5LTEATNRxUQe0XMXWXYfACbk+lYEmm7BwOb3vc5026b9Ogpo2r1QuiUSNKKU7qGojhz
- uYgyAImX7WoW9sOWxGM+1ARfTi+QacDR5JjjnSrkDEvdcNYG06z60QnWI4BSBTMhb676
- v3JrnuPpEAfoBk8ESEP9t8Sl5Zp41xZXJOUreytbOm50+o+AI9WoME5tw9RnQDO1+w1G
- eOD+P3I7WIBGCLDVPy/oCn4F9hqF2W0eLlTY9FiOd9NxwRoUAD3ngimf70a4qcRjr87O
- nwlg==
+ bh=bBUnITh4kYb78dviRSk+4eVLTv0Z5BQ4GTIzEMHNvRs=;
+ b=ShJxhnmOnbt/kOjUyWva4BF2sTNVVypHVusjhYpi7xNF/uTe+MfJLJdRpNqd/nUJi7
+ F+hAOwB2ARnwFyJwTzRwEFECh3I2M5e5trFOvoFbdTd9409RR5+oOFlM/tDmK+AwLobW
+ ZNmM0XmPUljywHkIUe1PA5aAfeoenY7jyJUNrPQk43Zuc/Ck9gjRF+Lsg1FPk5DgE4Wy
+ wnKT/CuFGTalX9vNzbTA7049izfoan+VhBpridGwAxNYI2DbHQjckbGAC92sm+eIehtd
+ BrTIOzQK3HZ2d8fHUqqqxSoqMSTPdQh+b34zratCZeY7MGufT/av4NNqhcABzOvJ5mVr
+ hBeQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Et9+y4vX
-Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/strongswan: add patch
- for CVE-2026-25075
+ header.a=rsa-sha256 header.s=google header.b=ShJxhnmO
+Subject: Re: [Buildroot] [PATCH 1/2] package/bat: remove no longer needed
+ patch for gcc15 compat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,80 +132,71 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
-> - CVE-2026-25075:
->     strongSwan versions 4.5.0 prior to 6.0.5 contain an integer underflow
->     vulnerability in the EAP-TTLS AVP parser that allows unauthenticated
->     remote attackers to cause a denial of service by sending crafted AVP
->     data with invalid length fields during IKEv2 authentication. Attackers
->     can exploit the failure to validate AVP length fields before
->     subtraction to trigger excessive memory allocation or NULL pointer
->     dereference, crashing the charon IKE daemon.
->     https://www.cve.org/CVERecord?id=CVE-2026-25075
+> The bat 0.26.0 already depends on a newer version of the onig_sys crate,
+> so the problem that patch is fixing was no already no longer present.
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Applied to 2025.02.x. Thanks
+Applied to 2026.02.x. Thanks
 
 > ---
->  .../strongswan/0002-fix-cve-2026-25075.patch  | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/strongswan/0002-fix-cve-2026-25075.patch
+>  ...ig-by-regex-fancy-in-minimal-applica.patch | 47 -------------------
+>  1 file changed, 47 deletions(-)
+>  delete mode 100644 package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
 > 
-> diff --git a/package/strongswan/0002-fix-cve-2026-25075.patch b/package/strongswan/0002-fix-cve-2026-25075.patch
-> new file mode 100644
-> index 0000000000..82e07fba3f
-> --- /dev/null
-> +++ b/package/strongswan/0002-fix-cve-2026-25075.patch
-> @@ -0,0 +1,48 @@
-> +From d4b3c39776f06948d875614a0eddea9561159f2a Mon Sep 17 00:00:00 2001
-> +From: Tobias Brunner <tobias@strongswan.org>
-> +Date: Thu, 5 Mar 2026 12:43:12 +0100
-> +Subject: [PATCH] eap-ttls: Prevent crash if AVP length header field is invalid
-> +
-> +The length field in the AVP header includes the 8 bytes of the header
-> +itself.  Not checking for that and later subtracting it causes an
-> +integer underflow that usually triggers a crash when accessing a
-> +NULL pointer that resulted from the failing chunk_alloc() call because
-> +of the high value.
-> +
-> +The attempted allocations for invalid lengths (0-7) are 0xfffffff8,
-> +0xfffffffc, or 0x100000000 (0 on 32-bit hosts), so this doesn't result
-> +in a buffer overflow even if the allocation succeeds.
-> +
-> +Fixes: 79f2102cb442 ("implemented server side support for EAP-TTLS")
-> +CVE: CVE-2026-25075
-> +Upstream: https://download.strongswan.org/security/CVE-2026-25075/
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + src/libcharon/plugins/eap_ttls/eap_ttls_avp.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/libcharon/plugins/eap_ttls/eap_ttls_avp.c b/src/libcharon/plugins/eap_ttls/eap_ttls_avp.c
-> +index 06389f7ca73e..2983bd021ded 100644
-> +--- a/src/libcharon/plugins/eap_ttls/eap_ttls_avp.c
-> ++++ b/src/libcharon/plugins/eap_ttls/eap_ttls_avp.c
-> +@@ -119,7 +119,7 @@ METHOD(eap_ttls_avp_t, process, status_t,
-> + 		chunk_free(&this->input);
-> + 		this->inpos = 0;
-> + 
-> +-		if (!success)
-> ++		if (!success || avp_len < AVP_HEADER_LEN)
-> + 		{
-> + 			DBG1(DBG_IKE, "received invalid AVP header");
-> + 			return FAILED;
-> +@@ -130,7 +130,7 @@ METHOD(eap_ttls_avp_t, process, status_t,
-> + 			return FAILED;
-> + 		}
-> + 		this->process_header = FALSE;
-> +-		this->data_len = avp_len - 8;
-> ++		this->data_len = avp_len - AVP_HEADER_LEN;
-> + 		this->input = chunk_alloc(this->data_len + (4 - avp_len) % 4);
-> + 	}
-> + 
-> +-- 
-> +2.43.0
-> +
+> diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
+> deleted file mode 100644
+> index de6a3fc70c..0000000000
+> --- a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
+> -From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+> -Date: Tue, 2 Sep 2025 14:02:11 +0200
+> -Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
+> -
+> -The default "application" feature enables "minimal-application", which
+> -in turn pulls in the "regex-onig" feature of syntect. This brings in the
+> -onig crate (version 6.4.0) and its dependency onig_sys, which fail to
+> -build with GCC 15 due to C23 keyword conflicts.
+> -
+> -It is not possible to simply update the onig crate from bat itself,
+> -since its version is pinned indirectly by syntect. To avoid this
+> -dependency and fix the build, replace "regex-onig" with "regex-fancy" in
+> -"minimal-application". This makes bat use the pure-Rust fancy-regex
+> -engine instead of Oniguruma, removing the need for onig_sys and allowing
+> -the package to build with GCC 15.
+> -
+> -There is an an ongoing discussion about removing Oniguruma from bat
+> -since Oniguruma has been declared archived:
+> -
+> -see https://github.com/sharkdp/bat/issues/3285
+> -
+> -The Upstream project for now is refusing to use fancy-regex as default.
+> -
+> -Upstream: not submitted
+> -
+> -Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+> ----
+> - Cargo.toml | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/Cargo.toml b/Cargo.toml
+> -index 80d19321..93a07a1d 100644
+> ---- a/Cargo.toml
+> -+++ b/Cargo.toml
+> -@@ -29,7 +29,7 @@ minimal-application = [
+> -     "clap",
+> -     "etcetera",
+> -     "paging",
+> --    "regex-onig",
+> -+    "regex-fancy",
+> -     "wild",
+> - ]
+> - git = ["git2"] # Support indicating git modifications
+> --- 
+> -2.43.0
+> -
 > -- 
 > 2.53.0
 > 
