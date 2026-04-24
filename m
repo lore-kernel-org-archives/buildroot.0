@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E02FED3EA
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 583A1FED3F2
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2ECA42837;
-	Fri, 24 Apr 2026 16:26:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27CE584D74;
+	Fri, 24 Apr 2026 16:26:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4L-VVSzICUXh; Fri, 24 Apr 2026 16:26:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3k8YvSz4ynjI; Fri, 24 Apr 2026 16:26:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03F2B4295A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1078684E16
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777047974;
-	bh=e3x5irMlTeLN23rToNgdc+zdMY1JBOXyHG4C1lvmaiM=;
+	s=default; t=1777047975;
+	bh=S5IOaInA1vkxoHADiLM0mC9CstnMqc4ZzLDyzCNcTAk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QARUhyAzDyliD9Axx1yqJHbsmKa3Tp6REf9Ep7KR0DU8fzmUWIOaVurHN8Awgfaj9
-	 bsvRng/MOYdsqc1LUnU372cXNP61hLhEoJaGCTlXxQ17+j8cZETFf2No2pmRQ4I7I8
-	 4AiDNGUAxR+vLR64PmOEg6Y7s+ig99F/BaiRSqxhPwECWyAaHU/vP7VvDFeJZ88aJT
-	 TyalJH8tTzwiBOLmk/ViyQBsc4e74J0ZqC3w1Ydws4m4X1jkAS74oRQ7e0H0+YseWx
-	 UKII/8Nlty4dHVgvL0sg3NPAnbHUHp4NU5SJ6e7FbMbQnle2U5N5YFpTFKtjqcmkXK
-	 3aEfacVpjKzKw==
+	b=s6+q37KlNGKxLVKVu8eG0TrkWP4a9ftZt+pmmtIXJshkDUP682iC83OIN+Z+dpYP+
+	 gMeFkgsO6fl8WV3jpREjby4Z/s+pBV+/lGkUFxWoUt4/99G7qAgn52vdnold3XxKyE
+	 yG3xZSL7dzOcYjV04rO+YomcnhQVd7jrsF62BNAlgXssYsU1ECN+C1Wmnc2FAlULbP
+	 l/z+xo/utoBndHi6t9u04Y2/bbwIfkkjR/5mWyqkwQaSkWyip73FvcGfARtcFVlFbc
+	 YFuT1FiUIhfte5h6Jix3wMwbdcll7IHXePdnMhdgVARK3tNWzxoEgd80HOhdb94WD9
+	 EJhnxSa4kKGZQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03F2B4295A;
-	Fri, 24 Apr 2026 16:26:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1078684E16;
+	Fri, 24 Apr 2026 16:26:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14065206
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DB67206
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E09242960
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F3CF4295D
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kGPGrp5XFoKk for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 16:25:41 +0000 (UTC)
+ id Kkyj0v10CgJM for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72984295D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53EAD428E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D72984295D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53EAD428E4
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F61082AFA; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
+ id 0B31982AE9; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 18:21:04 +0200
+Date: Fri, 24 Apr 2026 18:20:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: cbe45c6848a042af7f84ca2a42008326daf43ad8
-X-Git-Newrev: e20469f0014b263945102cd880c6c5a356b32eb5
+X-Git-Oldrev: 136f41d0e908d2094fe7ad87fdf738a882e8b1a3
+X-Git-Newrev: e0914c0ef7ad85b3f969788af8f0c49cf021c2b8
 X-Patchwork-Hint: ignore
-Message-Id: <20260424162539.8F61082AFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ghostscript:
- security bump to version 10.07.0
+Message-Id: <20260424162539.0B31982AE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/xz: patch
+ CVE-2026-34743
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,118 +77,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e20469f0014b263945102cd880c6c5a356b32eb5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e0914c0ef7ad85b3f969788af8f0c49cf021c2b8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://ghostscript.readthedocs.io/en/gs10.07.0/News.html
-"This release addresses CVEs: TBC (Two applied for)"
+- CVE-2026-34743:
+    XZ Utils provide a general-purpose data-compression library plus
+    command-line tools. Prior to version 5.8.3, if lzma_index_decoder()
+    was used to decode an Index that contained no Records, the resulting
+    lzma_index was left in a state where where a subsequent
+    lzma_index_append() would allocate too little memory, and a buffer
+    overflow would occur. This issue has been patched in version 5.8.3.
 
-Removed patch which is included in this release.
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-34743
+  - https://security-tracker.debian.org/tracker/CVE-2026-34743
+  - https://github.com/tukaani-project/xz/commit/c8c22869e780ff57c96b46939c3d79ff99395f87
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6216be221fa2b9a5849ebbc894a5574a04b8017e)
+(cherry picked from commit 724635227314010518372c5bad4d37d7c58950c1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/0001-Fix-32-bit-build.patch | 63 -------------------------
- package/ghostscript/ghostscript.hash            |  4 +-
- package/ghostscript/ghostscript.mk              |  2 +-
- 3 files changed, 3 insertions(+), 66 deletions(-)
+ ...ix-a-buffer-overflow-in-lzma-index-append.patch | 62 ++++++++++++++++++++++
+ package/xz/xz.mk                                   |  5 +-
+ 2 files changed, 66 insertions(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/0001-Fix-32-bit-build.patch b/package/ghostscript/0001-Fix-32-bit-build.patch
-deleted file mode 100644
-index 648e235d3b..0000000000
---- a/package/ghostscript/0001-Fix-32-bit-build.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From 3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f Mon Sep 17 00:00:00 2001
--From: Ken Sharp <Ken.Sharp@artifex.com>
--Date: Wed, 10 Sep 2025 08:55:30 +0100
--Subject: [PATCH] Fix 32-bit build
--
--Bug #708824 "ghostscript 10.06.0 compilation failure on 32-bit archs"
--
--nbytes shiouldn't be an intptr_t, it doesn't get used for pointer
--arithmetic. Previously it was a uint, should be a int64_t, to fit with
--all the other devices.
--
--Checked other warnings, and found a (very minor) one in gdevdbit.c, fix
--that while we're here (signed/unsigned mismatch, we don't really care).
--
--Upstream: https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f
--
--Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-----
-- base/gdevdbit.c | 2 +-
-- base/gdevmpla.c | 6 +++---
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/base/gdevdbit.c b/base/gdevdbit.c
--index e07cc3f3b8..1b5c69325b 100644
----- a/base/gdevdbit.c
--+++ b/base/gdevdbit.c
--@@ -191,7 +191,7 @@ gx_default_copy_alpha_hl_color(gx_device * dev, const byte * data, int data_x,
--     fit_copy(dev, data, data_x, raster, id, x, y, width, height);
--     row_alpha = data;
--     out_raster = bitmap_raster(width * (size_t)byte_depth);
---    if (check_64bit_multiply(out_raster, ncomps, &product) != 0)
--+    if (check_64bit_multiply(out_raster, ncomps, (int64_t *) &product) != 0)
--         return gs_note_error(gs_error_undefinedresult);
--     gb_buff = gs_alloc_bytes(mem, product, "copy_alpha_hl_color(gb_buff)");
--     if (gb_buff == 0) {
--diff --git a/base/gdevmpla.c b/base/gdevmpla.c
--index 2f0d522561..ffc5ff42e6 100644
----- a/base/gdevmpla.c
--+++ b/base/gdevmpla.c
--@@ -1954,12 +1954,12 @@ mem_planar_strip_copy_rop2(gx_device * dev,
--         int i;
--         int j;
--         intptr_t chunky_sraster;
---        intptr_t nbytes;
--+        int64_t nbytes;
--         byte **line_ptrs;
--         byte *sbuf, *buf;
-- 
--         chunky_sraster = sraster * (intptr_t)mdev->num_planar_planes;
---        if (check_64bit_multiply(height, chunky_sraster, (size_t *)&nbytes) != 0)
--+        if (check_64bit_multiply(height, chunky_sraster, &nbytes) != 0)
--             return gs_note_error(gs_error_undefinedresult);
--         buf = gs_alloc_bytes(mdev->memory, nbytes, "mem_planar_strip_copy_rop(buf)");
--         if (buf == NULL) {
--@@ -2003,7 +2003,7 @@ mem_planar_strip_copy_rop2(gx_device * dev,
--         intptr_t i;
--         intptr_t chunky_t_raster;
--         int chunky_t_height;
---        intptr_t nbytes;
--+        int64_t nbytes;
--         byte **line_ptrs;
--         byte *tbuf, *buf;
--         gx_strip_bitmap newtex;
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index e50113ecfe..c2e48b01e6 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/SHA512SUMS
--sha512  e9efa6a334cf34703f565f5043dd794452270415b34c2bea260e9dac6c72ebbcbedfa2e4cb9029841f8f582bbce91be8160e135a190081f3262bcf04417f80f1  ghostscript-10.06.0.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10070/SHA512SUMS
-+sha512  1c2a14951223c975a53bd9767c28bd3a6e420c385a5e0d7a60a5ff5b091bc027929c815bf57cddf97611e8d265ece1c219321737f2cabb5646685c6e8cdb85c9  ghostscript-10.07.0.tar.xz
+diff --git a/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+new file mode 100644
+index 0000000000..034122d4f7
+--- /dev/null
++++ b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
+@@ -0,0 +1,62 @@
++From c8c22869e780ff57c96b46939c3d79ff99395f87 Mon Sep 17 00:00:00 2001
++From: Lasse Collin <lasse.collin@tukaani.org>
++Date: Sun, 29 Mar 2026 19:11:21 +0300
++Subject: [PATCH] liblzma: Fix a buffer overflow in lzma_index_append()
++
++If lzma_index_decoder() was used to decode an Index that contained no
++Records, the resulting lzma_index had an invalid internal "prealloc"
++value. If lzma_index_append() was called on this lzma_index, too
++little memory would be allocated and a buffer overflow would occur.
++
++While this combination of the API functions is meant to work, in the
++real-world apps this call sequence is rare or might not exist at all.
++
++This bug is older than xz 5.0.0, so all stable releases are affected.
++
++Reported-by: GitHub user christos-spearbit
++CVE: CVE-2026-34743
++Upstream: https://github.com/tukaani-project/xz/commit/c8c22869e780ff57c96b46939c3d79ff99395f87
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/liblzma/common/index.c | 21 +++++++++++++++++++++
++ 1 file changed, 21 insertions(+)
++
++diff --git a/src/liblzma/common/index.c b/src/liblzma/common/index.c
++index 6add6a683..c4aadb9b0 100644
++--- a/src/liblzma/common/index.c
+++++ b/src/liblzma/common/index.c
++@@ -433,6 +433,26 @@ lzma_index_prealloc(lzma_index *i, lzma_vli records)
++ 	if (records > PREALLOC_MAX)
++ 		records = PREALLOC_MAX;
++ 
+++	// If index_decoder.c calls us with records == 0, it's decoding
+++	// an Index that has no Records. In that case the decoder won't call
+++	// lzma_index_append() at all, and i->prealloc isn't used during
+++	// the Index decoding either.
+++	//
+++	// Normally the first lzma_index_append() call from the Index decoder
+++	// would reset i->prealloc to INDEX_GROUP_SIZE. With no Records,
+++	// lzma_index_append() isn't called and the resetting of prealloc
+++	// won't occur either. Thus, if records == 0, use the default value
+++	// INDEX_GROUP_SIZE instead.
+++	//
+++	// NOTE: lzma_index_append() assumes i->prealloc > 0. liblzma <= 5.8.2
+++	// didn't have this check and could set i->prealloc = 0, which would
+++	// result in a buffer overflow if the application called
+++	// lzma_index_append() after decoding an empty Index. Appending
+++	// Records after decoding an Index is a rare thing to do, but
+++	// it is supposed to work.
+++	if (records == 0)
+++		records = INDEX_GROUP_SIZE;
+++
++ 	i->prealloc = (size_t)(records);
++ 	return;
++ }
++@@ -685,6 +705,7 @@ lzma_index_append(lzma_index *i, const lzma_allocator *allocator,
++ 		++g->last;
++ 	} else {
++ 		// We need to allocate a new group.
+++		assert(i->prealloc > 0);
++ 		g = lzma_alloc(sizeof(index_group)
++ 				+ i->prealloc * sizeof(index_record),
++ 				allocator);
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 60c2df70ee..205ab928a7 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -22,7 +22,10 @@ HOST_XZ_ADD_CCACHE_DEPENDENCY = NO
+ # 0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+ # 0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+ # 0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+-XZ_IGNORE_CVES = CVE-2025-31115
++XZ_IGNORE_CVES += CVE-2025-31115
++
++# 0005-liblzma-Fix-a-buffer-overflow-in-lzma-index-append.patch
++XZ_IGNORE_CVES += CVE-2026-34743
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 1fc850ad20..159e06db91 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 10.06.0
-+GHOSTSCRIPT_VERSION = 10.07.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+ XZ_CONF_OPTS = \
+ 	--enable-encoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
