@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE667FED3F1
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891B1FED3EA
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 16:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81FD284DD1;
-	Fri, 24 Apr 2026 16:26:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-fneXajLs2M; Fri, 24 Apr 2026 16:26:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10BCA84DC9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777047960;
-	bh=YmiK00okIGC7TYNPhAJyist5CE7C+APtTP6HbJKeY0o=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rQ+xAIgSdIlGt091As396fz2zRCQq3uxH3b1ErILdXo+4dEXnRWYJ5xvrTNQVwr8l
-	 u9roie80EzScswrRRutTQCa76PsbqSxdx2k26bnJQcnY0dXdLtfIWHJPLgBDHI/MW0
-	 xF1UQsqvqrpcfObaUnLjJH7Ax4X/VSvML7O6aClJkg4eHJ615nHnHTpvfNWftmVEVb
-	 ya7QzzuL6ju+xol+xulg/vBr2n7/johXwvl80NkElhjCf3yWSo9SRMV46xEmLi+8OS
-	 kuxvjtzBhZbCWYozzMM5X9bt6ePiZU3SBfvV06shajkEW5X15aSU2qDWm7vYkKKxpo
-	 xdw0eXl/LzK3w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10BCA84DC9;
-	Fri, 24 Apr 2026 16:26:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DDB2206
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2A554295F
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5ED7F4298D;
+	Fri, 24 Apr 2026 16:26:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lumZB4VBabGw for <buildroot@buildroot.org>;
+ id q9esaiD6BsXU; Fri, 24 Apr 2026 16:26:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C13D42981
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777047961;
+	bh=3150KI+wbeDLSx+DWMFzklrLu8U8+H0CbJCb9lu7tc8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JjJrMPS8+haVYiSx9NL5CTaYYiuk4AN0KriD3YGUORvOqRgOHHeM0jHUjPFUrflpj
+	 nFysCYF7rv2rgmwMvCcE603xxgbC33UV+r/Lg+mOk6R+iWyX4nFG64wWUmzVPLyF3f
+	 dfxdM4SnirUOLLEK2HyNr0JTv2wcCdzjqdcAihOyNGLnXKfe/bCwygZXh+smuyRSaY
+	 6Y7+INjPNW4igU23cNz54Eh0ZTEvyFNinFYWDj7UpoPVcdAqNcPZPYp/usyVQT3xF9
+	 NUWbjUl0rYR0YzhFJV6arjA8esvDTE9f07rEp6MRud2EEkmGy+a5LQPW4+ti3DyKug
+	 Hs+vcH+4dtafA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C13D42981;
+	Fri, 24 Apr 2026 16:26:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15CAD24D
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5605584C7C
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RdcQl4B9_ZpP for <buildroot@buildroot.org>;
  Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70456428ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746F884C4F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70456428ED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 746F884C4F
  for <buildroot@buildroot.org>; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A74D82B33; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
+ id 2B46782AFA; Fri, 24 Apr 2026 16:25:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 18:20:36 +0200
+Date: Fri, 24 Apr 2026 18:20:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 953c7fb20d79be66a8fc99844c2b83d61361c7b1
-X-Git-Newrev: c4bf25dcdf8947c6c89df2cdbd479f0d6969943e
+X-Git-Oldrev: cd85f4c1af3b71efdcd00d0d5dfa19898a212a75
+X-Git-Newrev: 1b019bf8de0a29b8cf8083b8a090f3ad2bc26150
 X-Patchwork-Hint: ignore
-Message-Id: <20260424162539.1A74D82B33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/c-icap: fix musl
- build
+Message-Id: <20260424162539.2B46782AFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/x11r7/xserver_xorg-server: security bump version to 21.1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,76 +77,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c4bf25dcdf8947c6c89df2cdbd479f0d6969943e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1b019bf8de0a29b8cf8083b8a090f3ad2bc26150
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/33b/33bb3ea8ac36da7f40a82c580d3614f0b34a7ab2/
+https://lists.x.org/archives/xorg-announce/2026-April/003678.html
 
-The oldest build error dates back to June 2024 so this patch should be
-backported to LTS branches.
+Updated license hash due to upstream commits:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/3069f64d691db5396706c1ec1182bd8db52ffb22
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd924b160c9b434ff7687d1e1d2a9058cdefb6b8
+
+Fixes the following CVEs:
+
+* CVE-2026-33999: XKB Integer Underflow in XkbSetCompatMap()
+* CVE-2026-34000: XKB Out-of-bounds Read in CheckSetGeom()
+* CVE-2026-34001: XSYNC Use-after-free in miSyncTriggerFence()
+* CVE-2026-34002: XKB Out-of-bounds read in CheckModifierMap()
+* CVE-2026-34003: XKB Buffer overflow in CheckKeyTypes()
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 428e0e292be4d6b41af9db893a97e90cc1730e4e)
+(cherry picked from commit 0136eba1108ff87cee9c8e6173bec422ee23ba82)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-printing-in-various-printf-to-avoid-warn.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 8 ++++----
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch b/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
-new file mode 100644
-index 0000000000..7183efa46f
---- /dev/null
-+++ b/package/c-icap/0006-Fix-integer-printing-in-various-printf-to-avoid-warn.patch
-@@ -0,0 +1,47 @@
-+From 8ef8966237865ec699ab16d208ff56edaac4ff7b Mon Sep 17 00:00:00 2001
-+From: Christos Tsantilas <christos@chtsanti.net>
-+Date: Fri, 1 Nov 2019 08:00:52 -0700
-+Subject: [PATCH] Fix integer printing in various printf to avoid warnings
-+ about integer sizes
-+
-+Upstream: https://github.com/c-icap/c-icap-server/commit/8ef8966237865ec699ab16d208ff56edaac4ff7b
-+
-+[Bernd: partially backported to 0.5.10]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ mpmt_server.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/mpmt_server.c b/mpmt_server.c
-+index a30d55d4..9b178a66 100644
-+--- a/mpmt_server.c
-++++ b/mpmt_server.c
-+@@ -74,7 +74,7 @@ typedef struct server_decl {
-+ 
-+ ci_thread_mutex_t threads_list_mtx;
-+ server_decl_t **threads_list = NULL;
-+-ci_thread_t listener_thread_id = -1;
-++ci_thread_t listener_thread_id;
-+ int listener_running = 0;
-+ 
-+ ci_thread_cond_t free_server_cond;
-+@@ -242,8 +242,8 @@ static void cancel_all_threads()
-+         for (i=0; i<CI_CONF.THREADS_PER_CHILD; i++) {
-+             if (threads_list[i] != NULL) { /* if the i thread is still alive*/
-+                 if (!threads_list[i]->running) { /*if the i thread is not running any more*/
-+-                    ci_debug_printf(5, "Cancel server %d, thread_id %lu (%d)\n",
-+-                                    threads_list[i]->srv_id, threads_list[i]->srv_pthread,
-++                    ci_debug_printf(5, "Cancel server %" PRIu64 ", thread_id %" PRIu64 " (%d)\n",
-++                                    (uint64_t)threads_list[i]->srv_id, (uint64_t)threads_list[i]->srv_pthread,
-+                                     i);
-+                     ci_thread_join(threads_list[i]->srv_pthread);
-+                     release_thread_i(i);
-+@@ -252,7 +252,7 @@ static void cancel_all_threads()
-+                     /*The thread is still running, and we have a timeout for waiting
-+                       the thread to exit. */
-+                     if (wait_for_workers <= 2) {
-+-                        ci_debug_printf(5, "Thread %ld still running near the timeout. Try to kill it\n", threads_list[i]->srv_pthread);
-++		        ci_debug_printf(5, "Thread %" PRIu64 " still running near the timeout. Try to kill it\n", (uint64_t)threads_list[i]->srv_pthread);
-+                         pthread_kill( threads_list[i]->srv_pthread, SIGTERM);
-+                     }
-+                 }
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index ceca9c215b..b7adf1559d 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-November/003643.html
+-sha256  c0cbe5545b3f645bae6024b830d1d1154a956350683a4e52b2fff5b0fa1ab519  xorg-server-21.1.21.tar.xz
+-sha512  bb2eb4e6756eb9e38b61bd47c017da44bcf5f45f2b7a906b4bb3a56b3d791cec64abb9bf37b224efe1e4fab9cc296f3672c9b2f8e00e1cdfc54337bef63cd16c  xorg-server-21.1.21.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-April/003678.html
++sha256  1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3  xorg-server-21.1.22.tar.xz
++sha512  6cb37ff971e10eb4a7dfcb3e8071afd769c7632d50e4ad8bc948b810dc4847e152b8a05ec135f55e0695b35908abd07e7728ef85dd3135456fd532e919f440f4  xorg-server-21.1.22.tar.xz
+ # Locally calculated
+-sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
++sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 0dc3a4a5c6..d1e7267c27 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 21.1.21
++XSERVER_XORG_SERVER_VERSION = 21.1.22
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
