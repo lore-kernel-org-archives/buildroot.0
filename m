@@ -1,145 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF19FE5215
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 12:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6491AFED3C3
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 13:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4B5F617AE;
-	Fri, 24 Apr 2026 12:29:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8wOaJbqSAZp3; Fri, 24 Apr 2026 12:29:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44946617A1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777033790;
-	bh=jppZaa61eL8SNZ81FC2WcEg9dxdlW+NoOf787CzbRyE=;
-	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=o78V6eecS9MZGFINtWwItXpWZ3CYYDKu6QiwdO+wMnQLtt/U4ZyJR6EWABZe2oD4H
-	 85QWL2htVfa8gCS1IUlk+g9Ud/M5it/YAaA8Tt+/HKhHbV35nkNTlQnEExSu0qHfgV
-	 z5ju045sx5OzRwxP7TBmJTcOitWK8hlE7NownGgxNtOAEcTXpletEgVHz4xCtlbiw5
-	 1T5rkJ9+lFGoMmyUA9Dnx5J0wh4l/sp47o2zcd/hyXaoAUck9BiYP0gNvSi+hBZ3un
-	 tyP+gtF0UmOuov5cn95g+sJyjTGP2syDLWPRKkruQFhNtiKGPzLSK3Ahkgu83u+5/p
-	 cqDmlYdQN+jWA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44946617A1;
-	Fri, 24 Apr 2026 12:29:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E70D3231
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 12:29:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D917E80C58
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 12:29:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09D7484A99;
+	Fri, 24 Apr 2026 13:16:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3SX8HOChqsYM for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 12:29:48 +0000 (UTC)
+ id BDqG8XeAWy8w; Fri, 24 Apr 2026 13:16:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F19484A9B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777036612;
+	bh=B+/jP8AKJxiZr5kZWUtu3eMkWhfr5ereMxoWrCprkHk=;
+	h=In-Reply-To:References:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=US63XcpPcLXZ9ddYSQUlZJV/rqL+MJ+UNDTKO3tXulxDsiychETozkSkFwcUvfPDS
+	 3TXRIz6IRzjocMxCKuYB4U4RoRJIQgpdBb30VVgQcOasrCaO1csPa3FSwZgQZ3itqN
+	 OZPfOse24pPAthldRNx67x/A0OAO/7bdoE8MQbvkkdI3+/Qu2dzQM9gLSmhWxoH3kB
+	 fuOFwj5oL2cUDdSFllLtjAQEz9CUZ1oCAJ2c/bORU8QLjEEsqZdzDkg3GVPMOdBAnD
+	 939cXqKdNbqflhZTnIor7XDx4puW9uBDvcmT56q8uVlUqi6Wo9YC6mWZw1//IsbY1C
+	 coCzpGVOHCXeQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F19484A9B;
+	Fri, 24 Apr 2026 13:16:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2BCE24D
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:16:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFF33422D4
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:16:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ymtOShmT_dwt for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 13:16:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c201::3;
- helo=as8pr04cu009.outbound.protection.outlook.com;
- envelope-from=kanak.shilledar@axis.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21C2480647
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21C2480647
-Received: from AS8PR04CU009.outbound.protection.outlook.com
- (mail-westeuropeazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c201::3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21C2480647
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 12:29:47 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vqSbOPwgg7dZ96IwYVlKFFT2pxlj6hS5jV2xvXImNMwcFyp1FWfLpFZ79Gew2kPi++QEU8ukw6ceamcBb+kv5V5NzxWweVA2DfdNl8HMcT1OEj1RQUsXKETcOr0Bi2U4em/SiShm7kimnPH/yC4ms8YACNb8Jh7+ocxQBUPG4gWE1vDa0GBILi3X16Q0g/N4c7iqesiJzSA3d3zppQKdA2yphVH+zYKqZdwd4Yvgf0qZKIldChN1MvrjpIAAhqpUSLF7TUvf192eFzLLVPCrDgxGsnqbyXl5XTg6ekSUk9fjMfko28stGKqziD4vQ1tbpgw6ccjg/4rg11RGUGORUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gMN+0hMyQuiQGPQidbmKyT0kwRbe/dtcDHLYOpfOnig=;
- b=bTtW7klM6lEMQLGMIBoV5TOzwXObJ9BbIiPtJZPOpiNnP8y4b9YmPf1gswjNJua4CCN9oHCycMW75hsXY06AygmpUy0tsFDotasd1nOs2+nn5d7li9dJzGTj8oQvkuSH11/gHrzuh00NTpd5gtYQ6OqLv+h/JddLecMR81UfD9NNG9UTJuyasXOixWOOFc3x2HmrqsX2qQo97XQcGHHHl/97HdmusSnE2aZu9gcMelMOhWnRKYoskZ23DJJ+1XEnUWGEOaqwQO5IRIG4lJlARGNRSrb2QZx68p8qoXTANov8gD39Kwqc8bps+Ay07lRQJXSOvG/SKp91Hx5IGOySLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=buildroot.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-Received: from CWLP123CA0261.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:1d5::6)
- by VI1PR02MB6255.eurprd02.prod.outlook.com (2603:10a6:800:17d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.22; Fri, 24 Apr
- 2026 12:29:39 +0000
-Received: from AM2PEPF0001C710.eurprd05.prod.outlook.com
- (2603:10a6:400:1d5:cafe::53) by CWLP123CA0261.outlook.office365.com
- (2603:10a6:400:1d5::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.22 via Frontend Transport; Fri,
- 24 Apr 2026 12:29:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- AM2PEPF0001C710.mail.protection.outlook.com (10.167.16.180) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9846.18 via Frontend Transport; Fri, 24 Apr 2026 12:29:38 +0000
-Received: from se-mail10w.axis.com (10.20.40.10) by se-mail10w.axis.com
- (10.20.40.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.39; Fri, 24 Apr
- 2026 14:29:37 +0200
-Received: from se-intmail01x.se.axis.com (10.4.0.28) by se-mail10w.axis.com
- (10.20.40.10) with Microsoft SMTP Server id 15.2.1748.39 via Frontend
- Transport; Fri, 24 Apr 2026 14:29:37 +0200
-Received: from pc66231-2602.sto.se.axis.com (pc66231-2602.sto.se.axis.com
- [10.133.4.42])
- by se-intmail01x.se.axis.com (Postfix) with ESMTP id 7B7A92B7;
- Fri, 24 Apr 2026 14:29:37 +0200 (CEST)
-Received: by pc66231-2602.sto.se.axis.com (Postfix, from userid 21940)
- id 66C8E304A26C; Fri, 24 Apr 2026 14:29:37 +0200 (CEST)
-From: Kanak Shilledar <kanak.shilledar@axis.com>
-To: <buildroot@buildroot.org>
-CC: Kanak Shilledar <kanak.shilledar@axis.com>
-Date: Fri, 24 Apr 2026 14:29:15 +0200
-Message-ID: <20260424122917.3911794-1-kanak.shilledar@axis.com>
-X-Mailer: git-send-email 2.43.0
+ client-ip=2607:f8b0:4864:20::e35; helo=mail-vs1-xe35.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EDB33400BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDB33400BA
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com
+ [IPv6:2607:f8b0:4864:20::e35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EDB33400BA
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:16:50 +0000 (UTC)
+Received: by mail-vs1-xe35.google.com with SMTP id
+ ada2fe7eead31-6221c72515fso769218137.0
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 06:16:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777036609; cv=none;
+ d=google.com; s=arc-20240605;
+ b=eAhDu8AoYSIj5NfnZrANeZZRvgTqFOJVzed6HEPUoY1gfdzA2ncqZ1Xbi7CzZhb+g8
+ is8zXdRi3eZ16jdrNkv9BREcEtxrJmQCoT1SG/s+SrKfapwoyiMdh8UZrWjNzgUXyA3Y
+ TArWmeXroQCHVhWThFW0MqeKsAAgC2auxolkssvXHlRXB2FF+pynv1q6WBmdnZAYpsn7
+ wVRC7rkm16DRlxVAnLjZakIXLLAS+TZw/kqYZwR8J/82LnMrrIO+Pdrcaw2j3a1yhnIj
+ sUavPjosYaXlN8XC5LjF/mSFUIGWqWGF/mhJN8e+jVfuWyeEO346fXB3G0mJxGPqKQm+
+ RxKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20240605; 
+ h=cc:to:subject:message-id:date:from:references:in-reply-to
+ :mime-version:dkim-signature;
+ bh=cj07Mqz/oXQV2wwoWeqmfRPr6AAN/9/6ep+u8gVugZc=;
+ fh=BFeTSV1N2FCAhNQ7FyBnyiS4KMraWGdyyVxwP7SQJUQ=;
+ b=Nz9i7aQzz1AQdYe1yr7PgOy0ehtEJJ4XeXp47GxUHisrULttcqq8WcLet7EvLK7wwD
+ fR0MdIR6Ds/CVV4x8kUwl1/DOwfdF96TVCwIoRLb5UgPKLdLLXDNL/wQHnFwSWTPFBiQ
+ YnnFpL92eJ/tukrF28xbB4MwUHfPEhE0+chNgvvfbraDnaWoqMljupcsJAyrwMxyu/Gj
+ D6gNTxSnZ5In2WW+jEOVH9qLQTtaVH6WlcFjBWw+gUfXOp/mkrNsrrVtgidj4aVr7nnn
+ cWcKTc7SpipYHhE+2afMS0BDWcceEmutmd7vEngdF/IZGPwILAJpq6HYt9oOplai3T8t
+ cs4g==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1777036609; x=1777641409;
+ h=cc:to:subject:message-id:date:from:references:in-reply-to
+ :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cj07Mqz/oXQV2wwoWeqmfRPr6AAN/9/6ep+u8gVugZc=;
+ b=b2LL2ZmT3fp6LjW2QPu4Rp7T7ZZl6aZcHIyMk8le54v8fy4qV2nTKj7iw4GfApeOPq
+ dPbk7jO92q+NMlfSolNO83+kWXmGarhwV4Em6GCp/jM3ZiRmvTRGYul8zoy85cgIUan0
+ +NgyO2QR4d0s9mowJ050rzfJfJ4n97ILB0Ydm1yseAmpOxy2ZZPRhZ6Xg6cssx0aV4Ph
+ /TDkUd8IJnPUIQB8eXODgUB1ZcF+P+WrLZIpNtzanKTWkkecR8gba8dLgt8k0sjuLhka
+ MhbBmyllauXVPWadWFmjiHA8p5VimMS4LTAj2zO1pY39tcmu4COfS8QdRLCPuNJqP2Gv
+ tmRw==
+X-Gm-Message-State: AOJu0YyYQpE3takmdH53aVQdWmxNzS8TR4Q8efPCeVF2GTlzqzAYnWTC
+ VY6m+OEjkZ05VfF0wv6+PE8cg2PQ8/v4quuug4JMq+TqW2uADVXEOOt+fphWJYaZOrcywtsilYB
+ rAECs+RII8p7Dn936bfRqFJPUaaEQzl0=
+X-Gm-Gg: AeBDieu8VDDXIWd4QFRtYC/DNN2U+wjuLDlqJMUZlsIfQlesOiXb3hd0e2w4lo5BUM0
+ SwiKL2pIj26qr5WleDSdZCheL3tC6eCL+4o1fwqpoE7YpavHOMJR5d7G9MKubMEf+mYDPEbOm5W
+ d+88kVbUfL92SI3PnKAG3mQGgPJz87B+YLqzL/H3z1j7BrGzMjJYZ4qdXLsiiJkmMR6eQvDHVrv
+ pzgWFnxbyYLeopJut4wd/r+6UpZEiNLiQhU0rhpv9vdn+ksJjntKbyzXFg0Psc0vw6StfW9hS7m
+ +6yFkAd9WXDIE75SixSPRBKZ3FLsoJz4DLT7npu1uHWAd4vIWu8=
+X-Received: by 2002:a05:6102:ccc:b0:613:6b44:3fad with SMTP id
+ ada2fe7eead31-616f783ddf9mr16527613137.25.1777036609333; Fri, 24 Apr 2026
+ 06:16:49 -0700 (PDT)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM2PEPF0001C710:EE_|VI1PR02MB6255:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bc534c4-3101-4a1e-97b3-08dea1fd26db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700016|376014|1800799024|82310400026|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info: wVUU69is/5E359X3eGRch8QuaWcCQPMbJJ3Yjag79eW2ZelGUVQxTDUTONWQe8aBeD+G7OzYNnC23dCKolA5DSggizNcIOec/AcW2zugoT1AmbTz20Urh4MFtt2BCD2OPNWsrvOWKCCo6Xhu8kbSMHfazE4yMUGGjV5EpQ6QKO07btm4ibIXFfHOHTKt19hhA28UBKMypf6nlkwnLW5hzxtVs4q8XXLrQGaTvsHGH0QGDWk8hCwZkdhzzfIkJQy7sBobltVT9VybHtQL87D8KbhlvxWGeS1B5lSv1xQEGiu33AijoYgLNkaXHKELOGXfMmkL33gPA0AwbL10Mwg+xKSCoig8kDwRBqwZoroN+p47Cmn/yVvJ7C1BuaO2ss5ArNR9Oy1hqZYKGFYS4+jCvmthu+7yoZfU+2yDCuUf2EC2S7TBocL4W+F7QMuC3ZPu6teBLmO4kTKBsHGC7CP77gLgt8idjSNQ1sE58yq9+kDU2cX9vqS6arxKtPi93rFjbtuma/bZGW9G7aK+4LzaJw28+ZTrU9grK8DvtcCd4nsVT1+TWQROwfXCZM3PmCCvp+3kGXu4EPyuBR9LyS4wGx4oIg1aC9pfvIvGZADwVGp1Lh+Na1wynqjlhL1kVbtpCWzyb2lNtgvDStb8lk5Po73+X+oano+cBIjnh9xOw+Q2vfHdBFRg865u7J0GJk6lOiqK6VV8c3XfYA4aNVCrDl6yUlvE2/Wf2h74jMiPB+E4AQ99jz/o7wywLNyCoZAAyQYMUy8fcY5C7ljExHy1FA==
-X-Forefront-Antispam-Report: CIP:195.60.68.100; CTRY:SE; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:mail.axis.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700016)(376014)(1800799024)(82310400026)(56012099003)(18002099003);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 2Wpdm6NOZhGyhHLBQdkUPAZgK19MvoMYa4U/6u860SUa+JCRYkMfutK1bzyHeVCS4kwZF+8Slb/AMFdFny6pGFFTsZwId+sCeszPxnqJZ6vIoiObumjuGLHq1v3Wa4ArZdfOejOdEzHpKEDLrlFaavTSRsr2RDtcZ0WQwrYMOK43ZH1AXJT2yEEKRqILy3dtG3tWQJuG/+T52b3AbTu24dQkti/93JO6oIOqWTKr0ZkdQARSkqihOQyCE3NoIze8llydb7bYENM+uwNg0JhQ7/IY/umjJyVFh+vkqW+96jt0xHq6X6ctON1z0ExU67Uf7vP8iI4naKZSr0jEzjskUR0bl7/yb9MZrB0e+NAu2xcqaRVeeRoZacQUyKdXw6IpkapozbezY9usn5iZQJ72iE6+bcBEVGvVrXjcfj3wt9AJtkKWB2enA1ybRNlUjy/1
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2026 12:29:38.3480 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bc534c4-3101-4a1e-97b3-08dea1fd26db
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af; Ip=[195.60.68.100];
- Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM2PEPF0001C710.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB6255
+Received: by 2002:a05:612c:c04:b0:583:13b4:e6e0 with HTTP; Fri, 24 Apr 2026
+ 06:16:47 -0700 (PDT)
+In-Reply-To: <20260424122518.3908953-2-kanak.shilledar@axis.com>
+References: <20260424122518.3908953-1-kanak.shilledar@axis.com>
+ <20260424122518.3908953-2-kanak.shilledar@axis.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 24 Apr 2026 15:16:47 +0200
+X-Gm-Features: AQROBzAUPLYbxOP-l88hjM9Tcl4OfR98IbNi32Ys459yF3TBgWpl_NAaXL0Tn2E
+Message-ID: <CAB1t1CwB29mtEm9xOcej+Ky93jJDZhTfXVtv=DeCYrr5xZTB+w@mail.gmail.com>
+To: Kanak Shilledar <kanak.shilledar@axis.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=axis.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gMN+0hMyQuiQGPQidbmKyT0kwRbe/dtcDHLYOpfOnig=;
- b=o7X3TRMWXlHRrZswgAFbP7gzBlo3+AzOepFK4RUo35lhYQ1x/7ZwYsDbzYdQjoLxJzbIRZpF+liQx9bdYaPRdFjuuaR+X6rOMwXDTj5qtM4n5TVRvjvUbJZCf80LV1koa78ZVrb6iK08DEhZKqi9HWICZiRFS6gOvFfwlGIn/Pc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20251104; t=1777036609; x=1777641409; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:references:in-reply-to
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=cj07Mqz/oXQV2wwoWeqmfRPr6AAN/9/6ep+u8gVugZc=;
+ b=ktzzgZtX/JrFacIillPK5rUWLszgDmFBm60r5jGQ9q7DWcSLIhT8wBLA7Sf20/5lqo
+ XX81+eCKdXywwYhKL4Z6xDyxTHBdKOJF2cj1GGKGFOsmyIDn+CqcZYKGFv1o0oRf+d7/
+ NXzvUlpmAF2M+Z144K7ZVAFf5e1vmeDwmnMEUxv4EgHN73KoRlNMOnOwHiQXSdeZGhKN
+ Y0f2zKAxqCkWp580kqtDox6ezmO/D3YLulH2k9jWRx59pVQtA5wOvR/a4hpJmNo45OtJ
+ oOuQGN+NBdiTccXji85tYSnby0fW6h+3rsRvKFRla6HI/mNEdwCfILiz4SNfiwqi3IwO
+ bd7g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=axis.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=axis.com header.i=@axis.com header.a=rsa-sha256
- header.s=selector1 header.b=o7X3TRMW
-Subject: [Buildroot] [PATCH 0/1] support: kconfig: Fix compiler warnings
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=ktzzgZtX
+Subject: Re: [Buildroot] [PATCH 1/1] support: kconfig: Fix compiler warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,27 +139,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8896841554143275136=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCldoaWxlIGJ1aWxkaW5nIHRoZSBgbWFzdGVyYCBicmFuY2ggb24gVWJ1bnR1IDI0LjA0LjQg
-SSBhbSBnZXR0aW5nIHRoZQp3YXJuaW5nIG9mIGAtV2Zvcm1hdC1vdmVyZmxvdz1gLgoKYGBgCi4v
-dXRpbC5jOiBJbiBmdW5jdGlvbiDigJhmaWxlX3dyaXRlX2RlcOKAmToKLi91dGlsLmM6ODY6MjY6
-IHdhcm5pbmc6IOKAmCVz4oCZIGRpcmVjdGl2ZSB3cml0aW5nIDEwIG9yIG1vcmUgYnl0ZXMgaW50
-byBhIHJlZ2lvbiBvZiBzaXplIGJldHdlZW4gMSBhbmQgNDA5NyBbLVdmb3JtYXQtb3ZlcmZsb3c9
-XQogICA4NiB8ICAgICAgICAgc3ByaW50ZihidWYyLCAiJXMlcyIsIGRpciwgbmFtZSk7CiAgICAg
-IHwgICAgICAgICAgICAgICAgICAgICAgICAgIF5+Ci4vdXRpbC5jOjg2Ojk6IG5vdGU6IOKAmHNw
-cmludGbigJkgb3V0cHV0IDExIG9yIG1vcmUgYnl0ZXMgKGFzc3VtaW5nIDQxMDcpIGludG8gYSBk
-ZXN0aW5hdGlvbiBvZiBzaXplIDQwOTcKICAgODYgfCAgICAgICAgIHNwcmludGYoYnVmMiwgIiVz
-JXMiLCBkaXIsIG5hbWUpOwogICAgICB8ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn4KYGBgCgpJIHRyaWVkIHRoaXMgb24gdGhlIHJlbGVhc2UgYDIwMjYuMDIueGAgYW5k
-IHRoaXMgd2FybmluZyBleGlzdHMgdGhlcmUgYXMKd2VsbC4gSSBhbSBydW5uaW5nIEdDQyB2ZXJz
-aW9uIGAoVWJ1bnR1IDEzLjMuMC02dWJ1bnR1Mn4yNC4wNC4xKSAxMy4zLjBgCgpLYW5hayBTaGls
-bGVkYXIgKDEpOgogIHN1cHBvcnQ6IGtjb25maWc6IEZpeCBjb21waWxlciB3YXJuaW5ncwoKIHN1
-cHBvcnQva2NvbmZpZy91dGlsLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24o
-KyksIDEgZGVsZXRpb24oLSkKClRoYW5rcyBhbmQgUmVnYXJkcywKS2FuYWsgU2hpbGxlZGFyCi0t
-IAoyLjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============8896841554143275136==
+Content-Type: multipart/alternative; boundary="000000000000da2c1b06503493f5"
+
+--000000000000da2c1b06503493f5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Friday, 24 April 2026, Kanak Shilledar <kanak.shilledar@axis.com> wrote:
+
+> On Ubuntu 24.04.4, the compiler gives the warning of
+> `-Wformat-overflow=3D`.
+>
+> ```
+> ./util.c: In function =E2=80=98file_write_dep=E2=80=99:
+> ./util.c:86:26: warning: =E2=80=98%s=E2=80=99 directive writing 10 or mor=
+e bytes into a
+> region of size between 1 and 4097 [-Wformat-overflow=3D]
+>    86 |         sprintf(buf2, "%s%s", dir, name);
+>       |                          ^~
+> ./util.c:86:9: note: =E2=80=98sprintf=E2=80=99 output 11 or more bytes (a=
+ssuming 4107)
+> into a destination of size 4097
+>    86 |         sprintf(buf2, "%s%s", dir, name);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ```
+>
+> Update `buf2` to `PATH_MAX+20` similar to `buf`, thus giving enough
+> headroom for the filename suffix.
+>
+> Signed-off-by: Kanak Shilledar <kanak.shilledar@axis.com>
+> ---
+>  support/kconfig/util.c | 2 +-
+>
+
+LGTM, but coild you please create a patch in support/kconfig/patches/
+instead of direct file modification?
+
+Petr
+
+
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/support/kconfig/util.c b/support/kconfig/util.c
+> index 8665f5bb89..c2e7979ac1 100644
+> --- a/support/kconfig/util.c
+> +++ b/support/kconfig/util.c
+> @@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
+>  int file_write_dep(const char *name)
+>  {
+>         char *str;
+> -       char buf[PATH_MAX+20], buf2[PATH_MAX+1], dir[PATH_MAX+1];
+> +       char buf[PATH_MAX+20], buf2[PATH_MAX+20], dir[PATH_MAX+1];
+>         struct symbol *sym, *env_sym;
+>         struct expr *e;
+>         struct file *file;
+> --
+> 2.43.0
+>
+>
+
+--000000000000da2c1b06503493f5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<br><br>On Friday, 24 April 2026, Kanak Shilledar &lt;<a href=3D"mailto:kan=
+ak.shilledar@axis.com">kanak.shilledar@axis.com</a>&gt; wrote:<br><blockquo=
+te class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc so=
+lid;padding-left:1ex">On Ubuntu 24.04.4, the compiler gives the warning of<=
+br>
+`-Wformat-overflow=3D`.<br>
+<br>
+```<br>
+./util.c: In function =E2=80=98file_write_dep=E2=80=99:<br>
+./util.c:86:26: warning: =E2=80=98%s=E2=80=99 directive writing 10 or more =
+bytes into a region of size between 1 and 4097 [-Wformat-overflow=3D]<br>
+=C2=A0 =C2=A086 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sprintf(buf2, &quot;%s%s=
+&quot;, dir, name);<br>
+=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ^~<br>
+./util.c:86:9: note: =E2=80=98sprintf=E2=80=99 output 11 or more bytes (ass=
+uming 4107) into a destination of size 4097<br>
+=C2=A0 =C2=A086 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sprintf(buf2, &quot;%s%s=
+&quot;, dir, name);<br>
+=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0^~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~<wbr>~~<br>
+```<br>
+<br>
+Update `buf2` to `PATH_MAX+20` similar to `buf`, thus giving enough<br>
+headroom for the filename suffix.<br>
+<br>
+Signed-off-by: Kanak Shilledar &lt;<a href=3D"mailto:kanak.shilledar@axis.c=
+om">kanak.shilledar@axis.com</a>&gt;<br>
+---<br>
+=C2=A0support/kconfig/util.c | 2 +-<br></blockquote><div><br></div><div>LGT=
+M, but coild you please create a patch in support/kconfig/patches/ instead =
+of direct file modification?</div><div><br></div><div>Petr</div><div><br></=
+div><div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
+.8ex;border-left:1px #ccc solid;padding-left:1ex">=C2=A01 file changed, 1 i=
+nsertion(+), 1 deletion(-)<br>
+<br>
+diff --git a/support/kconfig/util.c b/support/kconfig/util.c<br>
+index 8665f5bb89..c2e7979ac1 100644<br>
+--- a/support/kconfig/util.c<br>
++++ b/support/kconfig/util.c<br>
+@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)<br>
+=C2=A0int file_write_dep(const char *name)<br>
+=C2=A0{<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 char *str;<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0char buf[PATH_MAX+20], buf2[PATH_MAX+1], dir[PA=
+TH_MAX+1];<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0char buf[PATH_MAX+20], buf2[PATH_MAX+20], dir[P=
+ATH_MAX+1];<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct symbol *sym, *env_sym;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct expr *e;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct file *file;<br>
+-- <br>
+2.43.0<br>
+<br>
+</blockquote>
+
+--000000000000da2c1b06503493f5--
+
+--===============8896841554143275136==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8896841554143275136==--
