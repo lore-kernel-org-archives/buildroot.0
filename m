@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56847FF8850
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 21:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D78E0FF885A
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 21:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B6E34097F;
-	Fri, 24 Apr 2026 21:41:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D07940B4A;
+	Fri, 24 Apr 2026 21:43:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wjd2BdICq_uH; Fri, 24 Apr 2026 21:41:40 +0000 (UTC)
+ id qQGW49zQhCPK; Fri, 24 Apr 2026 21:43:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 317F940980
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4209240982
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777066900;
-	bh=NJjQODzcKS3NWAlm7e0u1Ed43RVAd1a+RO9KD1TOXqA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XITbte2VlgAZOeKHlbYZjeUdWAKPxWUXJ8Y9t3vJzi1z4DM3zuRj2odk0XGr4akMa
-	 yQp9Xyl4RbyXvm0w5/DiIe4yoXFoZOEHl5oSQhleIBwi76UxRiHmXo5BGkqNNIxb1m
-	 EmqYG2WG1Kc3FSWOZNB5BufQ4yV/8qYf5D9aHwDsP1gsP7yB6Xho4NA0OBg2c7uLpC
-	 wKyV0wBJN2tpG4DLh2i04Lzy2c9vYgQrhpeiEfeFJ4WPCEwz7XREOiaEAFkC82Nxea
-	 byFLnPtsNKS383VAeEemLDNcoRmDU738babQSowdzLlTVOSpju9vShp2UWPFKaLN6G
-	 gfapL5uG3n3WA==
+	s=default; t=1777066984;
+	bh=QKmUJ+IOx28YAgpUGMG4aQEdbumb3gpOZewQQTlIfNM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YzHVbCvG7VeymRWezjs4kjzGl030KZx+O3zfSDnb4EtAQEwFTLz4QM5J5nJFcejT6
+	 2vl9trCryEtdMXk8ux1PYL8tf0FV4kEvCgUX3X1B9FA7TFBfUHvVsgPVOjYH883UmR
+	 0uBB1lvJrE/dhRSZJYFrYEIPwzDizSXZo7WVHirfuVr24/d9+AlygRedSRoAnEFfpV
+	 /sagTiQHwLrC65Ewi/8gxw76Nsl0ESSTVeakoJXIWh0aO5BKictg4ls4czt30f3xDC
+	 SInPRi/SZWx1HIVZS8DRWUcJ58bsXKS8EJdhJkL2c4PbqA9+Euu1OTSWAH+wNkYtuP
+	 nkGPZwgcmBlMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 317F940980;
-	Fri, 24 Apr 2026 21:41:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 208FA2DF
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:41:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4209240982;
+	Fri, 24 Apr 2026 21:43:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91BA8194
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B35F760688
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:41:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 776A94022E
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:43:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ty516gCzOcH for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 21:41:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C16C605BA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C16C605BA
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:41:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2167E832DB; Fri, 24 Apr 2026 21:41:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 23:31:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5e917c3a81f131a0d8555a81a43fe106b11bda02
-X-Git-Newrev: a7d76a7ab3915ffb62eaf95ffa9f4de491652861
-X-Patchwork-Hint: ignore
-Message-Id: <20260424214135.2167E832DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/neon: bump version to 0.37.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PZ5eLKYgskSf for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 21:43:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A822D40073
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A822D40073
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A822D40073
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 21:43:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id F016C5FFB7;
+ Fri, 24 Apr 2026 23:42:57 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 24 Apr 2026 23:42:57 +0200
+MIME-Version: 1.0
+Date: Fri, 24 Apr 2026 23:42:57 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260421183845.2456995-1-bernd@kuhls.net>
+References: <20260421183845.2456995-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <6c1c20778b6378bf4c8c92481f9101a0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777066979;
+ bh=FN/OweDu6zAhzdBmUmUPZFow5rh1uKoeda0Hd9EnyRg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=hSUrmYnQkGJiHgAK9UJSQjmpiqgK+8ZVUc4NiVZKpTkiSqlrCN7s6albXwjWZuYL2
+ zCfD9crmLEnSVXjVTZxF7o6CRZOoZZOZUY/luHCjy2UgiwtqzaglHMDojNT5cIMZIo
+ PY3bk44+j7PCcvYfz/hJLjO6rIPmFqmAz35Zw+zvg490VcS44JJ2PiX8juPZtpnBdi
+ ctIBbKDUWpXwOsKatR6w6hwM+pd9dwMoqVkb2C67OvkmXcdOc46zzvNYPILQT6+KUb
+ PJSPfVAlwR0OSJW4GIk0JaMQuiJFC1EAIMpe3Kc79MHkWrNZvI8/0WXEPPANKGCgZr
+ iljh0qu7w3TSQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hSUrmYnQ
+Subject: Re: [Buildroot] [PATCH 1/3] package/davfs2: bump version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,55 +94,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a7d76a7ab3915ffb62eaf95ffa9f4de491652861
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 21/04/2026 20:38, Bernd Kuhls wrote:
+> https://github.com/alisarctl/davfs2/blob/rel-1-7-3/ChangeLog
+> 
+> Removed patch 0002 which is not needed anymore due to upstream removal
+> of the neon version check:
+> https://github.com/alisarctl/davfs2/commit/6b614bed3e814eb820a43a433c1f2c715c301f61
+> 
+> Upstream added musl support with this version:
+> https://github.com/alisarctl/davfs2/commit/270607253e4cbfa40ff59fc67a850b252bf0b0fa
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/notroj/neon/blob/0.37.1/NEWS
-
-Updated license hash due to a copyright year bump:
-https://github.com/notroj/neon/commit/dc575f32f479895762548bdeb0b4ff81e929047f
-
-This bump depends on the bump of davfs2 to 1.7.3.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/neon/neon.hash | 4 ++--
- package/neon/neon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/neon/neon.hash b/package/neon/neon.hash
-index d773b0f316..c5964ba669 100644
---- a/package/neon/neon.hash
-+++ b/package/neon/neon.hash
-@@ -1,6 +1,6 @@
- # Locally computed
--sha256  659a5cc9cea05e6e7864094f1e13a77abbbdbab452f04d751a8c16a9447cf4b8  neon-0.33.0.tar.gz
-+sha256  a99b7262525a454d1065cf76dd17240fd808dfc4ef15636990ff83a5d0d9e740  neon-0.37.1.tar.gz
- # Hash for license files
--sha256  6c4f5d59a60a66cc970642c0f3799cf03b40a81c9dccbc4a254f20487d143f74  README.md
-+sha256  a982d694ca4b8c3ae8b05bf07c701e7e8c7013a416356caa0746354d2d86c7e1  README.md
- sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  src/COPYING.LIB
- sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  test/COPYING
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 39abbaef48..71bad567a1 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NEON_VERSION = 0.33.0
-+NEON_VERSION = 0.37.1
- NEON_SITE = https://notroj.github.io/neon
- NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
- NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README.md
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
