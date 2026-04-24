@@ -1,84 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F31D4FED3C9
-	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 13:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D92FED3CF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Apr 2026 14:11:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 160F2401E1;
-	Fri, 24 Apr 2026 13:44:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE52084B63;
+	Fri, 24 Apr 2026 14:11:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VKCqw25ZBIOF; Fri, 24 Apr 2026 13:44:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t5eOlPculo9z; Fri, 24 Apr 2026 14:11:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 216C640015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5BC084B7B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777038295;
-	bh=sxnrMTG4nwBXD3+tALw8j04mVirGFRsswyWoZi6tjJ4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=nPxnHZ3J7gzS9yZBFVonvWgkwVEoV9WUXevWw3O/PoHD7D4OyI9PDEB5v+pE+Wt6E
-	 z1YfdDaUAd3cZxuVFgkkvpD70Wd0Is+iUwGe9JRR6h0j0EgIoh/Z58LOXIuuRVupR5
-	 8K1cVJHrGFR1jRCzxB3Tlt0qqoqiQETQI2olys2REjYm26rPXul6USfIJXi5nEDKVF
-	 9aC8BGYOplELMBt2ZGVPpJIDvJ5NpOF1kZ/m0uASQQ7Z5KPi+xDmjpxrkHZzG5A+pr
-	 kmIkpD5nc3/ep1oME1wpGtBB05h24h4tIHqJ+1hiR9cCTwD6340mUtDc8K2wD6jQjx
-	 ZTODYjAHMTstw==
+	s=default; t=1777039875;
+	bh=k+u/72k5URk2FkbnEILNT9NRPMOZ2vgnFoSK+E8CAww=;
+	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=N6UQAtCXTVRScVw+5AwumqVZW09G60zKPD01Em0DikGmBjEqSAb+HqPkh8+wB0Y9E
+	 +MX+/qTC75+hwS3sXapqLNrSyCHa+5nzHc+f50n944kqHCPn/kYFTpRywpvoZ14FRh
+	 gzFUwp7adhXHnhoreyV5KWu1AnrDkJeKaBXx9hwIqDFqeBh8WoIC1QDa9kcis+4ufE
+	 hBAkqzqbK//yQB9V3MJ4iVfOGdF/iK5g3ZpdKQvTXsUl8Ze5zbjRT4p14mocbCzZiB
+	 CgaXO1LVqJwnk/+pE52TI//Powlfi43jnGleo6DebLoCGvl2BTbvLY9i8yjmHmLVQO
+	 9fMicxFVF2tbg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 216C640015;
-	Fri, 24 Apr 2026 13:44:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A4B124D
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:44:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5BC084B7B;
+	Fri, 24 Apr 2026 14:11:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86C8E206
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 14:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E34F561B21
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:44:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6361A84B7B
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 14:11:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IyIoiAShVh8n for <buildroot@buildroot.org>;
- Fri, 24 Apr 2026 13:44:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4741661B1F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4741661B1F
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4741661B1F
- for <buildroot@buildroot.org>; Fri, 24 Apr 2026 13:44:50 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 457758527; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 24 Apr 2026 13:44:45 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wGGpo-0000000ELwG-1J3S;
- Fri, 24 Apr 2026 15:44:44 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 24 Apr 2026 15:44:42 +0200
-Message-ID: <20260424134443.3420911-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FmpZSzMAXOzr for <buildroot@buildroot.org>;
+ Fri, 24 Apr 2026 14:11:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A48D084B63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A48D084B63
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A48D084B63
+ for <buildroot@buildroot.org>; Fri, 24 Apr 2026 14:11:12 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id A46F3440E97;
+ Fri, 24 Apr 2026 17:11:06 +0300 (IDT)
+To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Cc: buildroot@buildroot.org,  Bernd Kuhls <bernd@kuhls.net>,  Fabrice
+ Fontaine <fontaine.fabrice@gmail.com>,  Giulio Benetti
+ <giulio.benetti@benettiengineering.com>,  Ismael Luceno
+ <ismael@iodev.co.uk>,  Romain Naour <romain.naour@gmail.com>,  Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260424132326.825570-8-jeanmichel.hautbois@yoseli.org>
+ (Jean-Michel Hautbois's message of "Fri, 24 Apr 2026 15:23:22 +0200")
+References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
+ <20260424132326.825570-8-jeanmichel.hautbois@yoseli.org>
+User-Agent: mu4e 1.12.15; emacs 30.2
+Date: Fri, 24 Apr 2026 17:11:07 +0300
+Message-ID: <87mrys30uc.fsf@tarshish>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=V4LnEv8rIbPBVjO3QwSEKVA/tHZMFNuh3M3AZ+wzEvsacOTzwsJpfwDfz2rLCfAU5bUDw81GW49zobZbqKl2eOboSoPpHDkSgWOK5t0kj+Lj/8T+/9w6FvfmdHK4fxYRk4sGb1oqbgzF9CzdxPuB7OMw0OOgha3CYc9sli1ZAp+FTShwU8vBmh7VBY3AK5sw5OCd0av6nS3mhVnE1NBYMhJ88mZOtbi81lhYg9irzWw2/zve1tIXJl9puDKl/kMGlu3pNaR+Rjbpxolk/9L7sMbw35KU0UeEsCQ4NqaVXEuLzVdhLrMghzDq6MbjWKr/b+JS8rfujoKiwcOu93c5vA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=4xY+fPlPZgexF5dJplzImvQzRHdbDAcWhVEjtPrKx/s=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1777039866;
+ bh=hImOFwh/A3oowwAxTafrf5cfu1IC8p7Hwp2Q2KWAhRw=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=HDUElYehTyO7/jSEDWelOv9VnZIzsFWQ7DtPntDD8cVM3uOSE36pTIFe5FKYfnuIP
+ 2PbczjdzIw+G6tTGP2f+zUKiVDbCyJ4bww1431C5bsFXbcRtp+5BJZJPGDhmKg9dIf
+ mSL8u3NshKQyhky3I492+na9GQqYGsc8BaYO/duh35epZmYwzI6crsJTiYayET0jca
+ 6UHRsCSjdfiddgHcoOdBP84h+ZgKo/W239JXshfeddHNJzzhFu2nkAJ/2poumgKmcN
+ 48hG8QTBZkRJhGSw1XZFGLBay1vamKq1BsgL5h+GTZ9rL0XII7r3Qs5wKvpskq6y2H
+ 5RsQxNnpRoZ9g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=V4LnEv8r
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH-2025.02.x] package/xz: add upstream security fix
- for CVE-2026-34743
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=HDUElYeh
+Subject: Re: [Buildroot] [PATCH 07/11] package/dropbear: disable ML-KEM768
+ on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,129 +95,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerability:
+Hi Jean-Michel,
 
-CVE-2026-34743: XZ Utils: Buffer overflow in lzma_index_append()
+On Fri, Apr 24 2026, Jean-Michel Hautbois wrote:
+> ML-KEM768 post-quantum key exchange code (in the vendored header
+> src/libcrux_mlkem768_sha3.h) triggers a GCC internal compiler error
+> (ICE) in cselib_record_set during the postreload CSE pass on m68k.
+> Reproduced on m68k-buildroot-linux-uclibc (cf5441x, -O2) with both
+> GCC 14.3.0 (the current Buildroot default for m68k) and GCC 15.2.0.
+>
+> The failing pass backtrace is:
+>   reload_cse_regs_1
+>   -> pass_postreload_cse::execute
+>      -> cselib_process_insn
+>         -> cselib_record_sets
+>            -> cselib_record_set  (cselib.cc:2869 on gcc 15)
+>
+> Disable ML-KEM768 via localoptions.h on m68k until the GCC bug is
+> resolved. Standard key exchange algorithms remain available.
 
-If lzma_index_decoder() was used to decode an Index that contained no
-Records, the resulting lzma_index was left in a state where where a
-subsequent lzma_index_append() would allocate too little memory, and a
-buffer overflow would occur.
+Common practice for GCC bugs is to add a BR2_TOOLCHAIN_HAS_GCC_BUG_[id]
+config symbol to toolchain/Config.in, and use that symbol to activate
+bug specific workaround. [id] refers to GCC Bugzilla bug ID. This makes
+it easier to track the GCC versions this bug affects.
 
-The lzma_index functions are rarely used by applications directly.  In the
-few applications that do use these functions, the combination of function
-calls required to trigger this bug are unlikely to exist, because there
-typically is no reason to append Records to a decoded lzma_index.  Thus,
-it's likely that this bug cannot be triggered in any real-world application.
+baruch
 
-This bug is older than xz 5.0.0, so all stable releases are affected.  The
-issue has been fixed in XZ Utils 5.8.3 and in the Git repository branch
-v5.8.  The fix is also available in the Git repository branches v5.6, v5.4,
-and v5.2, but no new releases will be made from these old branches.
+>
+> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+> ---
+>  package/dropbear/dropbear.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+> index e4e42cf994..52bc15e346 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -62,6 +62,13 @@ endef
+>  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
+>  endif
+>  
+> +ifeq ($(BR2_m68k),y)
+> +define DROPBEAR_DISABLE_MLKEM
+> +	echo '#define DROPBEAR_MLKEM768 0'               >> $(@D)/localoptions.h
+> +endef
+> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_MLKEM
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
+>  define DROPBEAR_ENABLE_LEGACY_CRYPTO
+>  	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
 
-https://github.com/tukaani-project/xz/security/advisories/GHSA-x872-m794-cxhv
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...buffer-overflow-in-lzma_index_append.patch | 66 +++++++++++++++++++
- package/xz/xz.mk                              |  3 +
- 2 files changed, 69 insertions(+)
- create mode 100644 package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma_index_append.patch
-
-diff --git a/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma_index_append.patch b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma_index_append.patch
-new file mode 100644
-index 0000000000..0555abb3f4
---- /dev/null
-+++ b/package/xz/0005-liblzma-Fix-a-buffer-overflow-in-lzma_index_append.patch
-@@ -0,0 +1,66 @@
-+From 8287299ba858bd7ee767fe6eabcc050574616bf4 Mon Sep 17 00:00:00 2001
-+From: Lasse Collin <lasse.collin@tukaani.org>
-+Date: Sun, 29 Mar 2026 19:11:21 +0300
-+Subject: [PATCH] liblzma: Fix a buffer overflow in lzma_index_append()
-+
-+If lzma_index_decoder() was used to decode an Index that contained no
-+Records, the resulting lzma_index had an invalid internal "prealloc"
-+value. If lzma_index_append() was called on this lzma_index, too
-+little memory would be allocated and a buffer overflow would occur.
-+
-+While this combination of the API functions is meant to work, in the
-+real-world apps this call sequence is rare or might not exist at all.
-+
-+This bug is older than xz 5.0.0, so all stable releases are affected.
-+
-+Reported-by: GitHub user christos-spearbit
-+(cherry picked from commit c8c22869e780ff57c96b46939c3d79ff99395f87)
-+CVE: CVE-2026-34743
-+Upstream: https://github.com/tukaani-project/xz/commit/8287299ba858bd7ee767fe6eabcc050574616bf4
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/liblzma/common/index.c | 21 +++++++++++++++++++++
-+ 1 file changed, 21 insertions(+)
-+
-+diff --git a/src/liblzma/common/index.c b/src/liblzma/common/index.c
-+index 6add6a68..c4aadb9b 100644
-+--- a/src/liblzma/common/index.c
-++++ b/src/liblzma/common/index.c
-+@@ -433,6 +433,26 @@ lzma_index_prealloc(lzma_index *i, lzma_vli records)
-+ 	if (records > PREALLOC_MAX)
-+ 		records = PREALLOC_MAX;
-+ 
-++	// If index_decoder.c calls us with records == 0, it's decoding
-++	// an Index that has no Records. In that case the decoder won't call
-++	// lzma_index_append() at all, and i->prealloc isn't used during
-++	// the Index decoding either.
-++	//
-++	// Normally the first lzma_index_append() call from the Index decoder
-++	// would reset i->prealloc to INDEX_GROUP_SIZE. With no Records,
-++	// lzma_index_append() isn't called and the resetting of prealloc
-++	// won't occur either. Thus, if records == 0, use the default value
-++	// INDEX_GROUP_SIZE instead.
-++	//
-++	// NOTE: lzma_index_append() assumes i->prealloc > 0. liblzma <= 5.8.2
-++	// didn't have this check and could set i->prealloc = 0, which would
-++	// result in a buffer overflow if the application called
-++	// lzma_index_append() after decoding an empty Index. Appending
-++	// Records after decoding an Index is a rare thing to do, but
-++	// it is supposed to work.
-++	if (records == 0)
-++		records = INDEX_GROUP_SIZE;
-++
-+ 	i->prealloc = (size_t)(records);
-+ 	return;
-+ }
-+@@ -685,6 +705,7 @@ lzma_index_append(lzma_index *i, const lzma_allocator *allocator,
-+ 		++g->last;
-+ 	} else {
-+ 		// We need to allocate a new group.
-++		assert(i->prealloc > 0);
-+ 		g = lzma_alloc(sizeof(index_group)
-+ 				+ i->prealloc * sizeof(index_record),
-+ 				allocator);
-+-- 
-+2.47.3
-+
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 60c2df70ee..d32c6f08f9 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -24,6 +24,9 @@ HOST_XZ_ADD_CCACHE_DEPENDENCY = NO
- # 0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
- XZ_IGNORE_CVES = CVE-2025-31115
- 
-+# 0005-liblzma-Fix-a-buffer-overflow-in-lzma_index_append.patch
-+XZ_IGNORE_CVES += CVE-2026-34743
-+
- XZ_CONF_OPTS = \
- 	--enable-encoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
- 	--enable-decoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
 -- 
-2.47.3
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
