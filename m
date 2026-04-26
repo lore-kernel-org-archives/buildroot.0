@@ -4,84 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBBD7FF885E
-	for <buildroot@archiver.kernel.org>; Sun, 26 Apr 2026 18:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E38D7FF885D
+	for <buildroot@archiver.kernel.org>; Sun, 26 Apr 2026 18:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88BBF807E5;
-	Sun, 26 Apr 2026 18:54:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A389984B60;
+	Sun, 26 Apr 2026 18:56:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z5UUHVe_tpyD; Sun, 26 Apr 2026 18:54:55 +0000 (UTC)
+ id K7q44G86PEz2; Sun, 26 Apr 2026 18:56:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87DE6807C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3F684359
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777229695;
-	bh=4NbnDrEvTokE0hmFRkO4a3nDHuJctEMOpIqkXzLNQKM=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ES0ODx4X3iFFIjfafXB4ziLhBZEIbUhQj8obdhuXFy0xON9JW+1TrOqUmb7O55jz8
-	 ICNh5sauK654tAh67gq5LMHhon8G7Yi+NV9T8JpW5F7sJhOxnK80KntwEkYbeRc9Uo
-	 WjsHbstn8BhY7CDW1yK9Ce2pmPPTEfxky8D4cqg1tzpfWjceLDoc2ERpQu2p8rfStl
-	 EUehhxzsUhKxC6bkPe49YEpRphj0+052ftbj93yxDn7X2kYPbM5ilQmvnzCA/sgJmk
-	 Dl7eOlYX8E9NqJu/ZPZjDLLbdVSJIOzGHgRHheDHOeXRUWdj5xuM8FbSulzwRz6eU8
-	 8t6L6s70VhO1g==
+	s=default; t=1777229801;
+	bh=pGCz+GaO0+RJwvCI5OR3F+n/RECHfb6gxNpy4GedkwE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ww4L9/+0TEwyNvyqkNwSC+rhVhV9/mvUuewzrajiMkajYYbOGnHPDWGal093+WgI9
+	 lllKwDO9Ful2bDUvXw1TK5e62YQ43NEayVuCBNz4zTmiFn4QxsupheRh+gNiFbNAgV
+	 /RaGQzImgZStn8Dt1udQ4ByvtHiBI7++TXS1st8s7G3+G3YR5GxjGT6qoACwRV1rTL
+	 TzBS/2zAsTTzC0jBdNrGMsBhq1+mKoYVygcVcYciGlzi+J9rCf0ZsbOwLs1Jra6aNj
+	 h7dw9niGMc1jpp+Q/8pA3WeEb1AliTmP9BD7IMAYrPrExhHLPD+Kqrd7RvLDr34Wyp
+	 2yjt3+rvOTjqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87DE6807C9;
-	Sun, 26 Apr 2026 18:54:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EEE441B8
- for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:54:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB3F684359;
+	Sun, 26 Apr 2026 18:56:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3857231
+ for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0EAE42A6E
- for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:54:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5662422C7
+ for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oMHdDSlLtSdV for <buildroot@buildroot.org>;
- Sun, 26 Apr 2026 18:54:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A02542A6D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A02542A6D
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A02542A6D
- for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:54:51 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c5b2.dip0.t-ipconnect.de [79.214.197.178])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1362AA4C0D10;
- Sun, 26 Apr 2026 20:54:49 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44994)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.1)
- (envelope-from <bernd@kuhls.net>) id 1wH4cy-000000002QV-1I1v;
- Sun, 26 Apr 2026 18:54:48 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id o5-wghelUDlY for <buildroot@buildroot.org>;
+ Sun, 26 Apr 2026 18:56:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3664E422C4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3664E422C4
+ for <buildroot@buildroot.org>; Sun, 26 Apr 2026 18:56:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CAE4A836EA; Sun, 26 Apr 2026 18:56:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Sun, 26 Apr 2026 20:54:48 +0200
-Message-ID: <20260426185448.1650280-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1777229689;
- bh=gI5J/kZragGx/hdH4rKq0r8rhO4P3bver58tPm84By4=;
- h=From:To:Cc:Subject:Date:From;
- b=UfmegpuApuPpAzwk4kqN8y1AVuMG0tgblp8A92WDpbb3dZJKbKHgcn3zgvpep0xpX
- cSue2+oW0K2GWtFZImrWaPyZ1rkJ+3AicU9yKfU3OOQKL9Rz3f/ToYjEeRzyN1B8i9
- tqNTCOPimypRibK+ImbDrMvYMCnL0HivnQPe/nHNUPzwYKc921K5azN5Iodx15zcol
- iyDS+XjUNxaxG1ffX2tNT6rr3BD/bNPlr47M0iCt6I3NtLCcsGv0kmhsJZn0smKygv
- o7SKyKW0FD8XB6PGu2brnNx1NQjEflZbLb9uZpd9BI8T34DfcBGPY49SFC98sCcwoD
- vHqUErARmelgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=UfmegpuA
-Subject: [Buildroot] [PATCH 1/1] package/stunnel: Switch URLs to main
- project site
+Date: Sun, 26 Apr 2026 20:45:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 45d056e7bf69aca4a036aba83e2573301996e9e0
+X-Git-Newrev: d96eb2f7daf51d96602b1076ed8399e3781569e8
+X-Patchwork-Hint: ignore
+Message-Id: <20260426185638.CAE4A836EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sudo: bump version to 1.9.17p2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,57 +68,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/stunnel/Config.in    | 2 +-
- package/stunnel/stunnel.hash | 2 +-
- package/stunnel/stunnel.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d96eb2f7daf51d96602b1076ed8399e3781569e8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-diff --git a/package/stunnel/Config.in b/package/stunnel/Config.in
-index a46e2f0316..1bdce7ab28 100644
---- a/package/stunnel/Config.in
-+++ b/package/stunnel/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_STUNNEL
- 	  Stunnel is a program that wraps any TCP connection with an SSL
- 	  connection.
- 
--	  http://www.stunnel.org/
-+	  https://www.stunnel.org/
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index c06f1c0774..dc61f6d5b9 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
+https://github.com/sudo-project/sudo/blob/v1.9.17p2/NEWS
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/sudo/sudo.hash | 2 +-
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 3bbce74cbc..340d155346 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
 @@ -1,4 +1,4 @@
--# From http://www.usenix.org.uk/mirrors/stunnel/stunnel-5.78.tar.gz.sha256
-+# From https://www.stunnel.org/downloads/stunnel-5.78.tar.gz.sha256
- sha256  8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d  stunnel-5.78.tar.gz
+ # From: https://www.sudo.ws/getting/download/
+-sha256  ff607ea717072197738a78f778692cd6df9a7e3e404565f51de063ca27455d32  sudo-1.9.17p1.tar.gz
++sha256  4a38a1ab3adb1199257edc2a7c4a2bd714665eb605b04368843b06dada2cfcfb  sudo-1.9.17p2.tar.gz
  # Locally calculated
- sha256  716f18b10eac3f1875ea2205418dd1b0084bd210bd17d615df6b180cfc4d65b6  COPYING.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 9c8b4b870e..8bd680af32 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,9 +4,8 @@
- #
+ sha256  41eb34d6b184c2638d6d32c6e7f70b8dd6423e68b91da959e0cf773aa01f62d7  LICENSE.md
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 0aacd8207d..8602e62b0b 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).78
--STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
-+STUNNEL_VERSION = 5.78
-+STUNNEL_SITE = https://www.stunnel.org/downloads
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
--- 
-2.47.3
-
+ SUDO_VERSION_MAJOR = 1.9.17
+-SUDO_VERSION_MINOR = p1
++SUDO_VERSION_MINOR = p2
+ SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
