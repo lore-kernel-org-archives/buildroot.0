@@ -1,111 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B819FF885E
-	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 11:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD18BFF885E
+	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 11:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52EEF84F8F;
-	Mon, 27 Apr 2026 11:00:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A95645790;
+	Mon, 27 Apr 2026 11:39:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jvYwULb-OYa; Mon, 27 Apr 2026 11:00:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A4Pq1aKncGXT; Mon, 27 Apr 2026 11:38:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61D0684FA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D51D455DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777287656;
-	bh=/Pvh2xvSETAcbnE9p8K6cwxtJQRizbCpPHkXY2tuWwE=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=g/GLMvJy3G2mMo9OB34sjrp3R0e9zfoXqIhCArcPnzeshHIse2CjP0fo5OIy3nlgQ
-	 nAeW/37iUHAIXRxjKfAQUzdBbS6LtXNdkKxOiL+DBgurXvH7DNi/mnSD0FbBJeu7yR
-	 yOBE2oYXp2iyEyx5lQPFQMJL0Y/p+JY1+DCDgPlsdPRcKN2azq/V/BZx/l2q9CtrA/
-	 Uiyetef17VtObgX2S8Ab4ihfkmC/igIzZbHQm8BTGLQcOscftWTLnMVtFy4iroulE+
-	 znBZFaUiP4UUDLkbz1FvOYCq95bBxFSQy1ulonoeAELejhaWmg+52Sk9UjhPRvadeZ
-	 DPV3q5dJ4o0Tg==
+	s=default; t=1777289939;
+	bh=C9B8IzFQ3rhiVS1NTicprxLqCyXalNLoE/PoRrtTQLM=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=EnuRnp79pzk9Y7lMCXa5Y/AGGdDRSelh75PiCfwZJkRGkoPZqU5+Xk+rifFyl15CU
+	 SHBoE2hSKq1ssEFtYVBvMohwmGyIckdo5LVGCXi6lpTDc77hJ0q7GHiGQmUkfi2u3K
+	 N603BIxnnisnUarJYzsndulIJ4i1kFLJfxqhmZhZtw8p8GUKN5I5kVJpCDLlOKSGsn
+	 BmA+bniMpW24E2LMJ6JQwXpNWo4hcKIhnFfsqyc+buzBXd8Rea2yfA0PU2XHe12VwE
+	 KFqHLAiS8FaTr9s0bNLR7cMqr9vfSqzxmBYfDdcS5xbdkmzTI8vl5JKiYfTxdKkMZl
+	 +VZOirzvQzc0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61D0684FA4;
-	Mon, 27 Apr 2026 11:00:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D51D455DD;
+	Mon, 27 Apr 2026 11:38:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C3DC5231
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E51081B8
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B610984FFC
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2B3A85633
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9yUyUevvGJCO for <buildroot@buildroot.org>;
- Mon, 27 Apr 2026 11:00:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E334984FE0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E334984FE0
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E334984FE0
- for <buildroot@busybox.net>; Mon, 27 Apr 2026 11:00:52 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-ba6b39871a3so1224993066b.0
- for <buildroot@busybox.net>; Mon, 27 Apr 2026 04:00:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777287651; x=1777892451;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=pz+P3rXdMEO/8PQ+34WuGvFJ4NhS6AcmN94Mju+oDd4=;
- b=anFxeDoraibxUar8Qi6V5qRbPgOI9u9yccAC9P9so1xZXmGNIzGnxzy5lHKHsMf5iu
- zX2286OYMCcHZxdOVKjUk0btyFGRlXjxIlcAaFH4WMQtPRhNbuyB6Q5WjKaVKJvdVmgz
- ZjhJBmojdCW24fFfIWlKX3taOHwKt4+aR6IOtTZPQiPnfw79BTnQCBmaFdfM4PsbUcrz
- fFQM8RjbtqaLPZmh2F6hlslaQDaOOr/O6I8p6PikMLb0F9mu5iuwH2vSlEP88VR4MzW1
- id7pcWydbzw3fpIAY7Pf0/R+3k8wmVHJwXvhCT1o289e/jbOmrDceGsdMXoYQs9VjfWQ
- nkkg==
-X-Gm-Message-State: AOJu0YyjXCakCdxtuxFGQZEjeUXLQWNTNftMQJahti1lTAFbUtUqlR6I
- JBvHiIp2I5EciG2AT5oGhtc+YwUoaNS6CUkQCubAFgSczR1XBE0bhpC1D6/4DrHYxarbUPni1Cq
- B1yHtXdF+scc=
-X-Gm-Gg: AeBDiesBD/TOxQsl2V98faXTSDUas/WQekt9m9wHRRbmGYXiCsXhLsqrk/Gu+G5Ybrk
- j9+vmBqwLgpPrkcWG77pC+a1vosVm9mGkNdzfcmoSVwlL18HsBFrqgRFbkArqgpgWQtMQ+7S5jy
- pYMUY5vMJVR10pVDrt4hckoXt4UFTf7cfXX9X6UvG+ZSr7BTvCDdrWsxY+Jo+OXKTT8ATsifFcI
- BKDp8mq2bCJhLEPrlctZWghu4RqPBMt9mSn/P9tQ8uNKDh7YRzdqXTHWLJl1A11JW4sKk+D380H
- ohALNvcxjEUBH5VlMa+j3p3t7Hmj9jNKXBFmiYb1d8NS/J2o2hcqPZCtxtY7aUq7z91aeAdGHa7
- KFFawMsLU6GM/mJ0CxjLgomoQ+LmkEjvAxPmV2KmJI9F3UBKa6hIBSxs+EWJePnH30T+wxNtriD
- Ln1J2JGpazfJF2l87hN13ZyCNbMR5Z4BepdtajaoAb8gSnq3Vd64eW/rFJaCJC
-X-Received: by 2002:a17:907:6ea0:b0:ba5:3dec:8b63 with SMTP id
- a640c23a62f3a-ba53dec8c4cmr1600174166b.25.1777287648503; 
- Mon, 27 Apr 2026 04:00:48 -0700 (PDT)
-Received: from vm-2404.. (222.186.66.37.rev.sfr.net. [37.66.186.222])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6794b925d0fsm901154a12.15.2026.04.27.04.00.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Apr 2026 04:00:48 -0700 (PDT)
-To: buildroot@busybox.net
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Date: Mon, 27 Apr 2026 13:00:45 +0200
-Message-ID: <20260427110045.71300-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
+ id 5TLNgiYbzgWE for <buildroot@buildroot.org>;
+ Mon, 27 Apr 2026 11:38:57 +0000 (UTC)
+X-Greylist: delayed 601 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 27 Apr 2026 11:38:55 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4423C84A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4423C84A12
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.160;
+ helo=cvsmtppost19.nm.naver.com; envelope-from=dungeonlords789@naver.com;
+ receiver=<UNKNOWN> 
+Received: from cvsmtppost19.nm.naver.com (cvsmtppost19.nm.naver.com
+ [114.111.35.160])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4423C84A12
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:38:55 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo022.nm ([10.112.20.47])
+ by cvsmtppost19.nm.naver.com with ESMTP id TP547FLeT2mL0i99ev5pbw
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:28:52 -0000
+X-Session-ID: NKzOJKddTP2rGRwbHHq6Xg
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: p/Y/jAJYjHmlKxu/FoJYKxgXKBwkx0eFjAJYKg==
+X-Works-Smtp-Source: eqY9KobXFqJZ+HmwKqvr+6E=
+Received: from Linux ([125.132.232.68])
+ by cvnsmtp008.nm.naver.com with ESMTP id NKzOJKddTP2rGRwbHHq6Xg
+ for <multiple recipients>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 27 Apr 2026 11:28:51 -0000
+From: Andrei Cherniaev <dungeonlords789@naver.com>
+To: buildroot@buildroot.org
+Cc: hi@senzilla.io, romain.naour@gmail.com, kory.maincent@bootlin.com,
+ vincent.stehle@arm.com, ju.o@free.fr, jiaxun.yang@flygoat.com,
+ fancp2007@gmail.com, Andrei Cherniaev <dungeonlords789@naver.com>
+Date: Mon, 27 Apr 2026 20:28:20 +0900
+Message-ID: <20260427112820.3753844-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1777287651; x=1777892451; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pz+P3rXdMEO/8PQ+34WuGvFJ4NhS6AcmN94Mju+oDd4=;
- b=WbsuXtpJ/br+vBuWaWVWz8ovpJlaWBP6wuO9qg0nJG1H9C3mvWi8ZfodZFSHJ5qD4r
- BTMjru3VGEGWnvw7fEB/X6SWlmjoWWWBn7fqg0MbVGp5HZpvWkbcXb/gAJyDH78HxLpA
- 5EauCqTLDRdlhXp3yH5rcxWaFfE+0vBLqOoLdHqNK9zEqL3ypd4UfrW9q43aKFccnk+W
- Gb8lbkcg6Xwar+cPSH7SIaMMHSPfpKMVKV+rE0EPqTDmirxQpCSbzGZbNRvnOW7fpA9f
- Hc9T6vjJa62OJJWks58voq3cPD9ntiJUDaGeiFX7nQtVHMGj6SmxLaPCU4WJvyPo6/JC
- Du3Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=naver.com; s=s20171208; 
+ t=1777289332; bh=IJKDqZ7qEiGath2a0USZMRs2xSuCX4yzwv2aWiVZLJ8=;
+ h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=URjV+BPQFh/mbffxBx2+WLdMQ93ezH0DbWxlL5jYKV/Ir6Qfs+yp/HaFLGe/jwKS3
+ jQ+0MD8sr2165u6RTTF30xnGP7CddFauWJ63sHoNYFDXvJHOCG21lNkk3IBbC6F4Yv
+ md+xfh7GeXE93Cd4vfiR3Br2g2mO4+j/HrimUEv6Q1Tbo5EGoCprLu1VZ8rGruPPSU
+ +7dvj6qi/BwvRxLYIMlTz92F00m1w6bJe1daur7coS/E69eo2DpBqev0NL5fG6ZZ9k
+ H0xAA+fCMI5fhqqIGnmKpNGTFeu5C2Phq4ldlLqE5ubx0zL8ybx9yv0l+tEXolOhen
+ FMPXHSNs6IMXg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=gadz.org
+ dmarc=pass (p=none dis=none)
+ header.from=naver.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=WbsuXtpJ
-Subject: [Buildroot] [PATCH] package/tcpdump: bump to version 4.99.6
+ dkim=pass (2048-bit key,
+ unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
+ header.s=s20171208 header.b=URjV+BPQ
+Subject: [Buildroot] [PATCH 1/1] boot/edk2: fix description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,46 +103,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Francois Perrad via buildroot <buildroot@buildroot.org>
-Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/tcpdump/tcpdump.hash | 4 ++--
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+1) usually user should not try to find OVMF.fd somewhere manually
+2) board/qemu/x86_64-efi/readme.txt is trying to be duplicate of board/pc/readme.txt. We should not duplicate info
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index b29ac0606..f69b672be 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature at
--# https://www.tcpdump.org/release/tcpdump-4.99.5.tar.gz.sig
-+# https://www.tcpdump.org/release/tcpdump-4.99.6.tar.gz.sig
- # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
--sha256  8c75856e00addeeadf70dad67c9ff3dd368536b2b8563abf6854d7c764cd3adb  tcpdump-4.99.5.tar.gz
-+sha256  5839921a0f67d7d8fa3dacd9cd41e44c89ccb867e8a6db216d62628c7fd14b09  tcpdump-4.99.6.tar.gz
- sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index f4086ef12..c3d777ca7 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Andrei Cherniaev <dungeonlords789@naver.com>
+---
+ board/pc/readme.txt              | 10 +++++-----
+ board/qemu/x86_64-efi/readme.txt | 17 +++--------------
+ boot/edk2/Config.in              |  6 ++----
+ 3 files changed, 10 insertions(+), 23 deletions(-)
+
+diff --git a/board/pc/readme.txt b/board/pc/readme.txt
+index 18b1e3dcf0..31ca5357e9 100644
+--- a/board/pc/readme.txt
++++ b/board/pc/readme.txt
+@@ -63,12 +63,12 @@ Run the emulation with:
  
--TCPDUMP_VERSION = 4.99.5
-+TCPDUMP_VERSION = 4.99.6
- TCPDUMP_SITE = https://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3-Clause
- TCPDUMP_LICENSE_FILES = LICENSE
+ qemu-system-x86_64 \
+ 	-M pc \
+-	-bios </path/to/OVMF_CODE.fd> \
++	-bios output/images/OVMF.fd \
+ 	-drive file=output/images/disk.img,if=virtio,format=raw \
+ 	-net nic,model=virtio \
+ 	-net user
+ 
+-Note that </path/to/OVMF.fd> needs to point to a valid x86_64 UEFI
+-firmware image for qemu. It may be provided by your distribution as a
+-edk2 or OVMF package, in path such as
+-/usr/share/edk2/ovmf/OVMF_CODE.fd .
++Note that OVMF.fd needs to be a valid x86_64 UEFI firmware image for qemu. The 
++easiest way is to generate it during the Buildroot build by set 
++BR2_TARGET_EDK2. Alternatively it may be provided by your distribution as a 
++edk2 or OVMF package, in path such as /usr/share/edk2/ovmf/OVMF_CODE.fd .
+diff --git a/board/qemu/x86_64-efi/readme.txt b/board/qemu/x86_64-efi/readme.txt
+index 7f69be065f..036239819a 100644
+--- a/board/qemu/x86_64-efi/readme.txt
++++ b/board/qemu/x86_64-efi/readme.txt
+@@ -12,17 +12,6 @@ Build
+ Emulation
+ =========
+ 
+-Run the emulation with:
+-
+-    qemu-system-x86_64 \
+-        -M pc \
+-        -m 1024 \
+-        -serial stdio \
+-        -bios output/images/OVMF.fd \
+-        -drive file=output/images/disk.img,format=raw \
+-        -netdev user,id=net0 \
+-        -device virtio-net-pci,netdev=net0 # qemu_x86_64_efi_defconfig
+-
+-Optionally add -smp N to emulate a SMP system with N CPUs.
+-
+-The login prompt will appear in the graphical window.
++    output/images/start-qemu.sh
++or
++    output/images/start-qemu.sh --serial-only --use-system-qemu
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index 2620c79076..a2ea1180f0 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -12,10 +12,8 @@ config BR2_TARGET_EDK2
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	select BR2_PACKAGE_EDK2_PLATFORMS
+ 	help
+-	  EDK II is a modern, feature-rich, cross-platform firmware
+-	  development environment for the UEFI and PI specifications.
+-
+-	  https://github.com/tianocore/tianocore.github.io/wiki/EDK-II
++	  build EDK II (and OVMF) to have capability to boot Buildroot
++	  in QEMU (UEFI mode)
+ 
+ if BR2_TARGET_EDK2
+ 
 -- 
-2.43.0
+2.51.0
 
 _______________________________________________
 buildroot mailing list
