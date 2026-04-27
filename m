@@ -1,84 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EBAFF8867
-	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 20:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C8DBFF8868
+	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 20:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BE7A8120D;
-	Mon, 27 Apr 2026 20:33:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCCC260760;
+	Mon, 27 Apr 2026 20:39:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jamgrmlxODfw; Mon, 27 Apr 2026 20:33:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ogb4TIUOATSt; Mon, 27 Apr 2026 20:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BECF181349
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D405A60763
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777321989;
-	bh=6Ld6NZMRgW57cRvHS84dgHoYciguQrtMGSlskjAIvxg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VeWLc5f5YfDtfaMLkpjjPq7J5xSANGIv9kn0ogeWI1olFdYRfIHDu7cDh+6rB9kSD
-	 To17jO37fDu6BFudB5OywLbKYNXtI0x4WERZG2E7D0zcS5SumKQldYaGI/Pp8AymuQ
-	 613xgJI1HonIEIJwp6GlEEWbA8HimnH8zxAjgsY1KFCNT42gXFzY8SEx1VPZz3DTlC
-	 7jFhn4bq4cmvzd3VVrbpUDG4vBHzi0wqOyGbsO+ps50r4pC3bAqzrD9NQ0OOTQIuFi
-	 hQTAyLL2KxsWWW2J4BbUi5Y4lD+T2aXk9etcB7qRSM43oMeihgJYjVsX4NRffvdU9c
-	 AT+v7h73bdGUg==
+	s=default; t=1777322380;
+	bh=RmZctaq2URgzMkc14IuOmWh9igC7aeUV3p3wLZXpusw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LOjQSKwqm1zSGFnTo07mPN/8Z2YjXrFhQioUVbNBP5Z7cZNbnI7WX7Te5ItdeI7gR
+	 xpJcQMXzKAyeQJ54fo8ZIXLL+MBfwxzVlNl2LJ72Da/b+CMMKCbggRiZHwtCEiGAFV
+	 hiU0Z0B/7azeZ7Dy15uuZsXRWrRPe2WCpOVr0L5rbQ8zgf6eweJb1eEiC3EseR9fB1
+	 AYOHaJWzfvmWIiuk5I8NPpsTx/iEfqS/Hss9VceNBkX9BOKaXtv3RA93eDHzTOs0z1
+	 sFAr8QNUx3by3IeKAmyjI3ckBacTY0tzjpn3NDZnUQmVh2gDuJlm/9GjdkV4CcAO2K
+	 nnDMG75fAbv5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BECF181349;
-	Mon, 27 Apr 2026 20:33:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F7992DF
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:33:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D405A60763;
+	Mon, 27 Apr 2026 20:39:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F3F11B8
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CBFA81349
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:33:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 80E094009D
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:39:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YEv3GsMRsGhx for <buildroot@buildroot.org>;
- Mon, 27 Apr 2026 20:33:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.87;
- helo=smtpcmd0987.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6EsR1Qsk5Y6u for <buildroot@buildroot.org>;
+ Mon, 27 Apr 2026 20:39:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B277481345
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B277481345
-Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B277481345
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:33:04 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id HSdawBD7s4bDkHSdawpQnS; Mon, 27 Apr 2026 22:33:02 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1B1F400C7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1B1F400C7
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 20:39:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 67D4D83785; Mon, 27 Apr 2026 20:39:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 27 Apr 2026 22:01:00 +0200
-Message-ID: <20260427200100.1413484-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDKgtci5d/5wp37mfLePgLuPCBK00RpZhOkXnjgVRd9a3bOCEY32kAEjDx77fV2l/O5bLXZ98MeoCUOmQMY7sg9cqML3nlAHHblJ+51bKgz/Og7rvPV1
- NX+mxdL7+xJOcG3eg57bpPNyZO/9MoLFT3lLGrkKP2egriQ0bQW0YbsvjdbLyDE2QfyCPVNgYfhxtUtlwXL3Uyc7Wzoa65n94H10MrRolmknOVPlCjhiD+EO
- kQPxHMJ1AMpToKg4ip1c7hj/0lfUN/1sHlqyQxk0gNM=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1777321982; bh=OaXcssNwe0xtCYCE++fxP1o1kZGyyL0QqMCzbWwl6Ok=;
- h=From:To:Subject:Date:MIME-Version;
- b=PfKRak4XsOHHhlvXN7KkOS2NJFbe1XfqVaQJhbv7mkD8K4/dKiV8Oqx83m1qsZlmo
- RWcT4CfEM3n8qoQJBxniHfTAW+0hStkrXCvDc26haG2mJvFZEST+2EMdOe1smj5YPA
- 9qDS/2juQSQFbRV+2sMKCsMWtXCqLXNCVpXgtliDRA06oZ/eNHLba8v5uch3Rd2oQh
- z3ibzkHfo37staAMUFuJwR++g4AxQbSISnmmHCKl2FM+0jYqtAgFvU83UZ8Sfv51F3
- BTKUMRcc9USoa5mKgvlpU9ldwtXtMhYH0HwXZ0s1K4KtptewE0rO0DVC8r1PEn4DIJ
- tyvPGOg+obW/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=PfKRak4X
-Subject: [Buildroot] [PATCH] package/libblockdev: bump to version 3.5.0
+Date: Mon, 27 Apr 2026 22:33:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a8e7f79241999245710963f42a4bcb4524ebeff7
+X-Git-Newrev: 37d84032bef02a913c825dc67ab7ecff39b0e9d3
+X-Patchwork-Hint: ignore
+Message-Id: <20260427203938.67D4D83785@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{6, 12,
+ 18}.x / 7.0.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,116 +69,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/storaged-project/libblockdev/blob/3.5.0/NEWS.rst
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/37d84032bef02a913c825dc67ab7ecff39b0e9d3
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Reworked local patch.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-replacement-function-for-strerror_l.patch | 35 +++++++++++++------
- package/libblockdev/libblockdev.hash          |  2 +-
- package/libblockdev/libblockdev.mk            |  2 +-
- 3 files changed, 26 insertions(+), 13 deletions(-)
+ linux/{7.0.1 => 7.0.2}                     | 0
+ linux/Config.in                            | 2 +-
+ linux/before-6.17/linux.hash               | 4 ++--
+ linux/from-6.17/linux.hash                 | 4 ++--
+ package/linux-headers/{6.12.83 => 6.12.84} | 0
+ package/linux-headers/{6.18.24 => 6.18.25} | 0
+ package/linux-headers/{6.6.135 => 6.6.136} | 0
+ package/linux-headers/{7.0.1 => 7.0.2}     | 0
+ package/linux-headers/Config.in.host       | 8 ++++----
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-index d073e16ac5..dbbe3e5c4a 100644
---- a/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-+++ b/package/libblockdev/0001-Provide-replacement-function-for-strerror_l.patch
-@@ -1,5 +1,5 @@
--From 01883cc14904e55d90955ad7cd9fc55bc18364ac Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+From 3d198be196bdc59ba332b87d8c2959de0b9160d2 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
- Date: Sat, 20 Jan 2024 13:29:28 +0100
- Subject: [PATCH] Provide replacement function for strerror_l()
+diff --git a/linux/7.0.1 b/linux/7.0.2
+similarity index 100%
+rename from linux/7.0.1
+rename to linux/7.0.2
+diff --git a/linux/Config.in b/linux/Config.in
+index 8633ddbc82..8fa2ab8ef2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
-@@ -11,18 +11,19 @@ Upstream: N/A since it's due uclibc only
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.0.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.0.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 7e14032158..d9f1290f9c 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  39e3172cd1dfa526d353b603e6388db2ab122bbf6a08e05930559a832adcdf31  linux-6.12.83.tar.xz
+-sha256  d3d238ede7169dedb642898af0cb1777e9913171eb1c750eb4d9f82350a7132a  linux-6.6.135.tar.xz
++sha256  d56e463a7b1f5355794ae83a102453ad930a51f9cb46b295fcf24a717bff52dd  linux-6.12.84.tar.xz
++sha256  6fb2d21a98281d786ee5fc63760e6f2c33e567e178e83c605bf0359eabbcf471  linux-6.6.136.tar.xz
+ sha256  e0cbe674801749075b93008d8854dbf1c8d300805ada0b60f6f907bbb83aef2c  linux-6.1.169.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  0bebe7d82a57e98792a407109566f1813fde97aaf7f735c1c7e6feebe833dc64  linux-5.15.203.tar.xz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index a2e1be9d31..c7f378d06c 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  b2c935a36d24980e11e59bed3ca558ea6d67619ec0065faa335cdc0b64d887bf  linux-7.0.1.tar.xz
++sha256  53591a03294527a48ccb0b9e559e922df8a38554745a1206827ca751d2ca7662  linux-7.0.2.tar.xz
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Giulio: ported to version 3.0 and 3.1]
-+[Giulio: ported to version 3.0, 3.1 and 3.5]
- ---
-- configure.ac       | 2 ++
-- src/utils/module.c | 1 +
-- src/utils/utils.h  | 4 ++++
-- 3 files changed, 7 insertions(+)
-+ configure.ac          | 2 ++
-+ src/utils/dev_utils.c | 1 +
-+ src/utils/module.c    | 1 +
-+ src/utils/utils.h     | 4 ++++
-+ 4 files changed, 8 insertions(+)
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  c207c557ce58103b4dda30e26da5203f3d8467c6dadc53d709f6d83ae1d1255f  linux-6.18.24.tar.xz
++sha256  29680a07d4430b269af6ce68079b0e81dbd60f03e6f351e0661991fe39bd1898  linux-6.18.25.tar.xz
  
- diff --git a/configure.ac b/configure.ac
--index 02b26e3e..67341134 100644
-+index e5d65d8b..507fa854 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -120,6 +120,8 @@ AC_CHECK_HEADERS([dlfcn.h string.h unistd.h sys/fcntl.h sys/ioctl.h linux/random
-+@@ -123,6 +123,8 @@ AC_CHECK_HEADERS([dlfcn.h string.h unistd.h sys/fcntl.h sys/ioctl.h linux/random
-                   [LIBBLOCKDEV_SOFT_FAILURE([Header file $ac_header not found.])],
-                   [])
-  
-@@ -31,8 +32,20 @@ index 02b26e3e..67341134 100644
-  AC_ARG_WITH([escrow],
-      AS_HELP_STRING([--with-escrow], [support escrow @<:@default=yes@:>@]),
-      [],
-+diff --git a/src/utils/dev_utils.c b/src/utils/dev_utils.c
-+index 89a54b4c..b4be5b44 100644
-+--- a/src/utils/dev_utils.c
-++++ b/src/utils/dev_utils.c
-+@@ -23,6 +23,7 @@
-+ #include <errno.h>
-+ 
-+ #include "dev_utils.h"
-++#include "utils.h"
-+ 
-+ /**
-+  * bd_utils_dev_utils_error_quark: (skip)
- diff --git a/src/utils/module.c b/src/utils/module.c
--index 6557c3ab..5893f0ac 100644
-+index 11e139f8..c8b124e0 100644
- --- a/src/utils/module.c
- +++ b/src/utils/module.c
- @@ -28,6 +28,7 @@
-@@ -59,5 +72,5 @@ index 801a8b6e..b2bdf0d0 100644
-   * SECTION: utils
-   * @short_description: library providing utility functions used by the blockdev library and its plugins
- -- 
--2.34.1
-+2.47.3
- 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index ad0dce77ff..e76e02a756 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  65ef9a37babd44b85b8ff9b273f90f9f7d5f8ff7b0c76a8edb69240325fd83f4  libblockdev-3.4.0.tar.gz
-+sha256  bccd30e6b5d11504de60d9889ff6a2a25b07a4ec8f04070f2387e168301b3e3a  libblockdev-3.5.0.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index b8f5a6cffc..e5cbe45b93 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBLOCKDEV_VERSION = 3.4.0
-+LIBBLOCKDEV_VERSION = 3.5.0
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
--- 
-2.47.3
-
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/6.12.83 b/package/linux-headers/6.12.84
+similarity index 100%
+rename from package/linux-headers/6.12.83
+rename to package/linux-headers/6.12.84
+diff --git a/package/linux-headers/6.18.24 b/package/linux-headers/6.18.25
+similarity index 100%
+rename from package/linux-headers/6.18.24
+rename to package/linux-headers/6.18.25
+diff --git a/package/linux-headers/6.6.135 b/package/linux-headers/6.6.136
+similarity index 100%
+rename from package/linux-headers/6.6.135
+rename to package/linux-headers/6.6.136
+diff --git a/package/linux-headers/7.0.1 b/package/linux-headers/7.0.2
+similarity index 100%
+rename from package/linux-headers/7.0.1
+rename to package/linux-headers/7.0.2
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0c1a90f920..c34dd4a7df 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -471,10 +471,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.253"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.203"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.169"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.135"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.83"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.24"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.1"		if BR2_KERNEL_HEADERS_7_0
++	default "6.6.136"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.84"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.25"	if BR2_KERNEL_HEADERS_6_18
++	default "7.0.2"		if BR2_KERNEL_HEADERS_7_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
