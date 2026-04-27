@@ -4,108 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6196BFF885E
-	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 11:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B819FF885E
+	for <buildroot@archiver.kernel.org>; Mon, 27 Apr 2026 11:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24B1284FA4;
-	Mon, 27 Apr 2026 11:00:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52EEF84F8F;
+	Mon, 27 Apr 2026 11:00:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYialc89L7-X; Mon, 27 Apr 2026 11:00:43 +0000 (UTC)
+ id 5jvYwULb-OYa; Mon, 27 Apr 2026 11:00:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC8284F72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61D0684FA4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777287643;
-	bh=KbHHBDu5TE0oXEea9h5qhelhE/Df06azM/8IisEpaj8=;
+	s=default; t=1777287656;
+	bh=/Pvh2xvSETAcbnE9p8K6cwxtJQRizbCpPHkXY2tuWwE=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=lrfFc89HUDVN9D4TIV5BxmRDTshDILFqOVdyTp3I27ukSfVS3sbRGFsNY0LlzgPmR
-	 OGida9yPfI0+qPNtjKvpP3bO9lV3kaKaz/akSq8OCcwbp2nwSv3LkXxHdQ6rYhQ0Jn
-	 bUGVu9yvwO82TWFeApjNsGZU74LqEr+d7fLCtlUQNHLENcdowb473uKzHq3h5fYMm6
-	 aR4IeciZ4mm0zpDtn6QnKDRWfs1DyKNSJ4gvpRAz0lWD9JSM7Md4tMERFlhw/Z3PRJ
-	 Tt3nNtqA2Plzv5rBkHybEfQw7a/8SI8hQWuYahD8Bdg/9+XdZs/1IkCzJ8KJwVfNLx
-	 F0G6T82XSfG+w==
+	b=g/GLMvJy3G2mMo9OB34sjrp3R0e9zfoXqIhCArcPnzeshHIse2CjP0fo5OIy3nlgQ
+	 nAeW/37iUHAIXRxjKfAQUzdBbS6LtXNdkKxOiL+DBgurXvH7DNi/mnSD0FbBJeu7yR
+	 yOBE2oYXp2iyEyx5lQPFQMJL0Y/p+JY1+DCDgPlsdPRcKN2azq/V/BZx/l2q9CtrA/
+	 Uiyetef17VtObgX2S8Ab4ihfkmC/igIzZbHQm8BTGLQcOscftWTLnMVtFy4iroulE+
+	 znBZFaUiP4UUDLkbz1FvOYCq95bBxFSQy1ulonoeAELejhaWmg+52Sk9UjhPRvadeZ
+	 DPV3q5dJ4o0Tg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DC8284F72;
-	Mon, 27 Apr 2026 11:00:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61D0684FA4;
+	Mon, 27 Apr 2026 11:00:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 558AD1B8
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C3DC5231
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5376F84F53
- for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B610984FFC
+ for <buildroot@buildroot.org>; Mon, 27 Apr 2026 11:00:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFzeKzK4rUKg for <buildroot@buildroot.org>;
- Mon, 27 Apr 2026 11:00:40 +0000 (UTC)
+ id 9yUyUevvGJCO for <buildroot@buildroot.org>;
+ Mon, 27 Apr 2026 11:00:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A47084F72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A47084F72
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A47084F72
- for <buildroot@busybox.net>; Mon, 27 Apr 2026 11:00:40 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-6720c7968e4so8031296a12.0
- for <buildroot@busybox.net>; Mon, 27 Apr 2026 04:00:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E334984FE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E334984FE0
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E334984FE0
+ for <buildroot@busybox.net>; Mon, 27 Apr 2026 11:00:52 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-ba6b39871a3so1224993066b.0
+ for <buildroot@busybox.net>; Mon, 27 Apr 2026 04:00:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777287638; x=1777892438;
+ d=1e100.net; s=20251104; t=1777287651; x=1777892451;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=M7vp3Cef/wnpK0blT1SPQ6m1LUjHo+AkEa50k3LEqQU=;
- b=O+pMBWcxoBjMyIdc9FacfFk+mRz3iTqHiO6m6bkjuZYwQ/Q9ZuuQWPtGmOkbr45vGU
- W9FBM8oTF9T8xGPBA63HIQr+pMObEDX93luemL9bXqam/EhTVW88NVJJaMb9nftlldjg
- 3Sb+ePzMs25WkUFBSvDok/ttICOrs5x2FEBrCXrChiV10iTHvxxkrGy+pu7sRgn5jj0q
- hsF1UypzJy5mu69A5ju6poVtyiSS6JFUjbMt4PNcHHUL9+2dAmfqCZ8ktDrdxtHIA4Xi
- QOI94f3TYeIJExwq7PffGI9w3P2fqv9bBo4PiMcY49ifBV8XCU8nm4gveoCv8M2QPaox
- wzaA==
-X-Gm-Message-State: AOJu0YzxURtVqUt7DBOnFecnyiAVNXPkHWMZwerFpn/oRLqmmAzVUR1j
- 0zBey6J9fIYscD0Vmvu7jWPHZO6i7mRLJ6N02imGCqULFPjtrXAMwL9Diptgj+HdG2BpF8u1W3E
- sHimRzDGBWlg=
-X-Gm-Gg: AeBDievqRxwM99Pnx4FvGF+08Gmo5Sr5W/Ao/ORxPswMbTvDrg+UPKdNt9NF9fTKpqE
- fb+ni4+8zBofwabGfCUgg0+eBdpNvD6WZcfvGeayvmW22rLaa0I3lflRqPlwteiw5eDXRT0qVMD
- cfOvVHQTvRvJpjR0p3/wZ+I1NRmzaQpiWTN8V7BtS/LIaLRtCJC+KoojrxO08driCpzomZdE9dO
- Ic6foZOyb+MpUWlSA6Dw/eCcdUNUCwlEdprOFXzfmxr5XQZ2ZebMe7g16O1AxudhykEHc+DSrjq
- r9rT1P1FORiqEfYDpZmjgQ/1b/eX10THnkJSMFvTblNhDKksg3gmULNcSByV8UjKqqPVER302Se
- DJyHlK98zlInxNvnzIwNdSc/nNeXptvkvSdGK6v4Tr8QA8o5i03z5kkVNjpc4dQY2Hbxl1ctBL4
- 7HRUR5flL8WeCAg3gvX4N1kh/6uPjIRuyFjzNjay7II11MCTq+mhAB/49h+MpChgWST1LWUgY=
-X-Received: by 2002:a05:6402:5384:b0:678:8f3e:2bb3 with SMTP id
- 4fb4d7f45d1cf-6788f3e2f29mr6086128a12.12.1777287633898; 
- Mon, 27 Apr 2026 04:00:33 -0700 (PDT)
+ bh=pz+P3rXdMEO/8PQ+34WuGvFJ4NhS6AcmN94Mju+oDd4=;
+ b=anFxeDoraibxUar8Qi6V5qRbPgOI9u9yccAC9P9so1xZXmGNIzGnxzy5lHKHsMf5iu
+ zX2286OYMCcHZxdOVKjUk0btyFGRlXjxIlcAaFH4WMQtPRhNbuyB6Q5WjKaVKJvdVmgz
+ ZjhJBmojdCW24fFfIWlKX3taOHwKt4+aR6IOtTZPQiPnfw79BTnQCBmaFdfM4PsbUcrz
+ fFQM8RjbtqaLPZmh2F6hlslaQDaOOr/O6I8p6PikMLb0F9mu5iuwH2vSlEP88VR4MzW1
+ id7pcWydbzw3fpIAY7Pf0/R+3k8wmVHJwXvhCT1o289e/jbOmrDceGsdMXoYQs9VjfWQ
+ nkkg==
+X-Gm-Message-State: AOJu0YyjXCakCdxtuxFGQZEjeUXLQWNTNftMQJahti1lTAFbUtUqlR6I
+ JBvHiIp2I5EciG2AT5oGhtc+YwUoaNS6CUkQCubAFgSczR1XBE0bhpC1D6/4DrHYxarbUPni1Cq
+ B1yHtXdF+scc=
+X-Gm-Gg: AeBDiesBD/TOxQsl2V98faXTSDUas/WQekt9m9wHRRbmGYXiCsXhLsqrk/Gu+G5Ybrk
+ j9+vmBqwLgpPrkcWG77pC+a1vosVm9mGkNdzfcmoSVwlL18HsBFrqgRFbkArqgpgWQtMQ+7S5jy
+ pYMUY5vMJVR10pVDrt4hckoXt4UFTf7cfXX9X6UvG+ZSr7BTvCDdrWsxY+Jo+OXKTT8ATsifFcI
+ BKDp8mq2bCJhLEPrlctZWghu4RqPBMt9mSn/P9tQ8uNKDh7YRzdqXTHWLJl1A11JW4sKk+D380H
+ ohALNvcxjEUBH5VlMa+j3p3t7Hmj9jNKXBFmiYb1d8NS/J2o2hcqPZCtxtY7aUq7z91aeAdGHa7
+ KFFawMsLU6GM/mJ0CxjLgomoQ+LmkEjvAxPmV2KmJI9F3UBKa6hIBSxs+EWJePnH30T+wxNtriD
+ Ln1J2JGpazfJF2l87hN13ZyCNbMR5Z4BepdtajaoAb8gSnq3Vd64eW/rFJaCJC
+X-Received: by 2002:a17:907:6ea0:b0:ba5:3dec:8b63 with SMTP id
+ a640c23a62f3a-ba53dec8c4cmr1600174166b.25.1777287648503; 
+ Mon, 27 Apr 2026 04:00:48 -0700 (PDT)
 Received: from vm-2404.. (222.186.66.37.rev.sfr.net. [37.66.186.222])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-678974e23adsm3016276a12.13.2026.04.27.04.00.32
+ 4fb4d7f45d1cf-6794b925d0fsm901154a12.15.2026.04.27.04.00.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Apr 2026 04:00:33 -0700 (PDT)
+ Mon, 27 Apr 2026 04:00:48 -0700 (PDT)
 To: buildroot@busybox.net
 Cc: Francois Perrad <francois.perrad@gadz.org>
-Date: Mon, 27 Apr 2026 13:00:29 +0200
-Message-ID: <20260427110029.71280-1-francois.perrad@gadz.org>
+Date: Mon, 27 Apr 2026 13:00:45 +0200
+Message-ID: <20260427110045.71300-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1777287638; x=1777892438; darn=busybox.net;
+ d=gadz.org; s=google; t=1777287651; x=1777892451; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M7vp3Cef/wnpK0blT1SPQ6m1LUjHo+AkEa50k3LEqQU=;
- b=BTONySEFxkHQbuw3rhK1KHiAbj3WNx4sDoJ48BB/3lDJebYBJHG4q7IaZw0m/t1v3p
- ZY3iqqT0Ao6181cpCU9rmllBjrRJUKBNKYAFnwvgN6nhnVgRD4iO8AeY2omlvlpbxqz/
- 5l3xjVnFm63xJPXSSkiBs91Yn+tC9Rz4psk/4iZocRReXYsl7GbDW6FJsUDERQ/K9pAM
- ykXXo6DngbG+eMe8RtNgZap8g2p/k2eeBw32G3ERtg7DSkPknAAKHQHStOZUxIqzBlwc
- O2uXr5JSFQ3/9L090d6FM1rtvEJOFeHlXZINmjep9aqosVqkTXQYm0D0wTMB3aF/hNZl
- mqAg==
+ bh=pz+P3rXdMEO/8PQ+34WuGvFJ4NhS6AcmN94Mju+oDd4=;
+ b=WbsuXtpJ/br+vBuWaWVWz8ovpJlaWBP6wuO9qg0nJG1H9C3mvWi8ZfodZFSHJ5qD4r
+ BTMjru3VGEGWnvw7fEB/X6SWlmjoWWWBn7fqg0MbVGp5HZpvWkbcXb/gAJyDH78HxLpA
+ 5EauCqTLDRdlhXp3yH5rcxWaFfE+0vBLqOoLdHqNK9zEqL3ypd4UfrW9q43aKFccnk+W
+ Gb8lbkcg6Xwar+cPSH7SIaMMHSPfpKMVKV+rE0EPqTDmirxQpCSbzGZbNRvnOW7fpA9f
+ Hc9T6vjJa62OJJWks58voq3cPD9ntiJUDaGeiFX7nQtVHMGj6SmxLaPCU4WJvyPo6/JC
+ Du3Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=BTONySEF
-Subject: [Buildroot] [PATCH] package/nano: bump to version 9.0
+ header.a=rsa-sha256 header.s=google header.b=WbsuXtpJ
+Subject: [Buildroot] [PATCH] package/tcpdump: bump to version 4.99.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,41 +124,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://www.nano-editor.org/dist/v9/ChangeLog
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tcpdump/tcpdump.hash | 4 ++--
+ package/tcpdump/tcpdump.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 5d369a514..62692d81c 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index b29ac0606..f69b672be 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v8/nano-8.7.1.tar.xz.asc
-+# https://www.nano-editor.org/dist/v9/nano-9.0.tar.xz.asc
- # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
--sha256  76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf  nano-8.7.1.tar.xz
-+sha256  9f384374b496110a25b73ad5a5febb384783c6e3188b37063f677ac908013fde  nano-9.0.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 0e2b0af57..a3e019d5e 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature at
+-# https://www.tcpdump.org/release/tcpdump-4.99.5.tar.gz.sig
++# https://www.tcpdump.org/release/tcpdump-4.99.6.tar.gz.sig
+ # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
+-sha256  8c75856e00addeeadf70dad67c9ff3dd368536b2b8563abf6854d7c764cd3adb  tcpdump-4.99.5.tar.gz
++sha256  5839921a0f67d7d8fa3dacd9cd41e44c89ccb867e8a6db216d62628c7fd14b09  tcpdump-4.99.6.tar.gz
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index f4086ef12..c3d777ca7 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION_MAJOR = 8
--NANO_VERSION = $(NANO_VERSION_MAJOR).7.1
-+NANO_VERSION_MAJOR = 9
-+NANO_VERSION = $(NANO_VERSION_MAJOR).0
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-TCPDUMP_VERSION = 4.99.5
++TCPDUMP_VERSION = 4.99.6
+ TCPDUMP_SITE = https://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3-Clause
+ TCPDUMP_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
