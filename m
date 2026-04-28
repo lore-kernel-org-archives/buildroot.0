@@ -1,112 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71278FF8868
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 15:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48440FF886D
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CCAA410A7;
-	Tue, 28 Apr 2026 15:11:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C230D60EDF;
+	Tue, 28 Apr 2026 17:17:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C20lRnaDfXUP; Tue, 28 Apr 2026 15:11:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SF9aLalI48z5; Tue, 28 Apr 2026 17:17:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2350B410AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4C0B60EED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777389113;
-	bh=sTwQDAN5vbnPegOE+2RwdyovSC3Prj7UK4E5+coTBIc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=U4LMHGcbCyCheyx/ACrnjQXA2VrdRmvBYyc+AO6kynl5DdLNYMU1Caxz3oAGmwr7y
-	 L3OBGrrAcPhnLTgAcKeEM18fmFYX1IFzs8L/PxV3KfkLjFuKGEmYkLHPPjHUm8acer
-	 vMZ85crt+7PwAqHVMkUKOsYwbW4M9qJDlo8VkFzV+opRSzt8SHedKyQw7q+sj3aKys
-	 nVH8ibVYBo+avl6+tRo9ReXIw4hf0XM8kdYAAXOOR/DYm047xTXQrpbzhgURnV7QEn
-	 FaDJfaEdG9bo04rLOMh/sIoFL3BNebDDFfz9zk0dwKaidB3kq7KTNUUEPHoEpFOmIO
-	 fLxxoUV12nIlw==
+	s=default; t=1777396652;
+	bh=DZ+/reAQiMB5hZRJoXCPletL4ima1IGT6ufoGqm82lA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=D/zqE3HsrmgDU3zj2pnlCrEZxNVv3/xGT7Dv/nubIs2FL1EGRbYMr+/VTj8awRFa2
+	 CTT3NxWIfU6iVWx1M2Dn/cP027QwcvmNh2k+z165CMu6z5x0VpggokYggRcJj+eww0
+	 FU/K4ii6xKlUzN/ylnz4e3fZ5X7OCEknwLaMeSHQZGtkTUDm+rMts4Ojl2b1CpgFSr
+	 WaSkIb+h9+Aey9H2Yro6Ijt5i0sMXIdtpvfKDkQwKEgyIEEyZC0y0Nvnzdi0cvkWfO
+	 x/Tqb3Fm0NdffrjC16gSutvexaxkVTmIVD8l9mXcky9hQu4cTx3tAi7XZJQR0JNp9F
+	 gyOpx/1QfGccg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2350B410AB;
-	Tue, 28 Apr 2026 15:11:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 59B501B8
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 15:11:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4C0B60EED;
+	Tue, 28 Apr 2026 17:17:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A86AE231
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:17:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B479817FD
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 15:11:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BBFB60EDF
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:17:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OXU9ZR5O5bmp for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 15:11:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zsdMv1kXxIoN for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 17:17:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D217E817EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D217E817EB
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D217E817EB
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 15:11:49 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-488e1a8ac40so142455875e9.2
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:11:49 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::742; helo=mail-qk1-x742.google.com;
+ envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 79D4460EED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79D4460EED
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com
+ [IPv6:2607:f8b0:4864:20::742])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79D4460EED
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:17:28 +0000 (UTC)
+Received: by mail-qk1-x742.google.com with SMTP id
+ af79cd13be357-8e8c0c2d2bcso823117285a.1
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:17:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777389107; x=1777993907;
+ d=1e100.net; s=20251104; t=1777396647; x=1778001447;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=X1fB4hDkT+k4yBrwHwQ+3eEBxA6pYrM516a87OTLa8E=;
- b=hpD+NWh8kvXpI0cFQifb49Vrdt256J2ONiEkiQCiuf3VyMCe8M2dy4PlnYEfug/dKa
- lz439CePc7Jb7m+w1a/AN9/DcsWm7KPWcrwEDv02p2Sf7NfoGoyBXSCgAxYAd2QutQ4l
- vcRQKc5K33W62Lv8b1jbn6E0ohKiVAB/OjlfQ2QekOo7o06QnhI9BKwHtuNMHHi/o4tG
- X8GqVeOZVVyPcoIvMNne16479WQcIWkZuLhYM3w83TBTrbcfRbyQYFIrNgxJ38QC1D9m
- 9fJidfBhsqdx7l6r9ynYctgHXFuuzHpvW+ae0j4eyHx2pVsCc1On4L5xP53F30HbZbhC
- V9Uw==
-X-Gm-Message-State: AOJu0Yx/KZhiiwdAJwIJ6kPyelF7RQCw+2nlTi8lrETw2uZCwdFguFYG
- tvB87+cBVjtcz4Qa+3H78zH/sGbK4eVuVsA62GB9HCLSqgVc2J1/JRMMFgGZwz2h7p8dkWDDCpF
- ja3kCNeM=
-X-Gm-Gg: AeBDieubM9JcN2IRfw+E/Czh8lUw45oFHmBx9aDWYg0tpEHRVHXsNAGLFrly7Y+b5La
- +7bcVs6k/uPVQBlGn/ltA+JaMdbyOcwP5SHjGZKRJDK3hrNnaQwnoJcajJ0bYAZyc6G3mduoq1P
- YknSzRQwRvo5KY6ppazQ0oc6q6Fml1NU9FFPXvwf0D4iiTJXhEdcqzdGZvpS/kxG0qasu7UROEf
- mr66d8GDJqPZ0YtKKVHl7O/1kSmFZAh53oHXvBi3bPy8YLqz3Ab2AlENmqhVO3I1qSqaLWwB8SF
- KnwKnA5f1zFdhTWYVnnPyJfMuc9ES7Vf396OdQmdND+PCMa2FsdDfXqsvW9T+nfK7UBKrk8Brbt
- DkmYE4wMfC2Aq4giau2dsvo43q7Y+kSR2I/FYHmcxT3dELgfdteXuWzsIbIQDjMKConu1baSax8
- 7HCjJKVaTgmfZQYcdR6Bg+emE4d8E9FkFrgjlUj55RM7VcK9Y=
-X-Received: by 2002:a05:600c:4745:b0:488:9bf8:7f17 with SMTP id
- 5b1f17b1804b1-48a77b054d8mr50329745e9.14.1777389107225; 
- Tue, 28 Apr 2026 08:11:47 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ bh=NlSiMeeuJEaBJiU7VvLS3u9d8oH6wRoUZPQMoKE01B0=;
+ b=GrehgX7qY53JAuzFXMSnqiOBjjMHMc+2qAJwALhAfs8/nqMXyUFG7z0oJdyIVVPrz4
+ +emZFHww7s7Tan+owYoVa6GgR1FcFm28qqTUeW0qDp/rDKvjTmDhAdnrPF1pUiT5K/pa
+ /Ycy3siP5TWXZdXmhWOpL+GaZRT7P4wE/fZvpazmshdtF/V4VlnYKX7Ahot+UzZuCuox
+ GVs23zafEhSRTQ1xCSyrpQAHSwSBG5SRt1tgt00nI8vZ7HVnwfHNltvC33Ope9h8gYE9
+ C/adNT3GJ7NUsLmNonmGeYLnpnrcHaqmXQ2+KQOvhx5Yx5aMBz6LU6QsQH0Rf7AHq7W6
+ PeSA==
+X-Gm-Message-State: AOJu0YyeCQGOb59rmmfIVm/B4xjmwkiEDy4aBCp5cmuY+vFxWYe/0iGC
+ gp7bno92mFVsr/dtYBryHsp8ZptaCPsh7l27j/WuarMF1M9oZVevgwc0WSznYrxB7LEgT/6c
+X-Gm-Gg: AeBDieth+z1TKzr3AnRU8zD52/7Ck2ny6gxsjIc4fPTcOpq+s3zTDML2+Gh3/wyqeNl
+ qt38YrQlNTV8wUNNCJknrTOHRkWz8FXCO+v4XEq5zqu3GyjeKFThCTsSXfPE8wpXkqZilBLWC2T
+ s7gbu2K9VFWsGr5+Gc003B+SfyCEqeZZXt/yLRzlpSCKyVL1sycqTaNVXfZiKFM8FcHaRsPgM41
+ NVZ181Rl53eDVWh74w19zK7IsE3far81hmeKccl4WmgM+bvgnOmWyorKrb8yCidRZwAA4b557q6
+ xRDVnTc1jBltrMMvIFuYG9bU1KdCxZe3DX2XOO/20C6MoVa8BuCn/IknrefhQB3a9J2GlBIEdpp
+ Amp+8RuWvE0Y8f++cM50s+NnEg8sjogKMia++n7Sn0shOsSf79hAjGrDuY3/vUtIWJxs3kodDsH
+ hUUMzIQnkCPepln4XmMC+4F6RC0Ao3VGbP5GYsLFlpAFotjxG88kFxbg7QNL2v7l50QBPEW98RG
+ iaj0QFtfFrBxkknMTBT
+X-Received: by 2002:a05:620a:4623:b0:8cd:b315:7399 with SMTP id
+ af79cd13be357-8f7d990279cmr560578385a.46.1777396646572; 
+ Tue, 28 Apr 2026 10:17:26 -0700 (PDT)
+Received: from precialexwin
+ (bras-base-mtrlpq0313w-grc-01-76-65-67-233.dsl.bell.ca. [76.65.67.233])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48a774d7be0sm34046475e9.5.2026.04.28.08.11.46
+ af79cd13be357-8f86831cf01sm159624785a.34.2026.04.28.10.17.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Apr 2026 08:11:46 -0700 (PDT)
+ Tue, 28 Apr 2026 10:17:26 -0700 (PDT)
+From: Alexandre Ondet <frcomdev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 17:11:36 +0200
-Message-ID: <20260428151136.78922-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.53.0
+Date: Tue, 28 Apr 2026 13:16:52 -0400
+Message-ID: <20260428171652.2544-1-frcomdev@gmail.com>
+X-Mailer: git-send-email 2.53.0.windows.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777389107; x=1777993907; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1777396647; x=1778001447; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=X1fB4hDkT+k4yBrwHwQ+3eEBxA6pYrM516a87OTLa8E=;
- b=CsRBFvnlLUOKIpwKhxzOcFN96db1KjKQIfL1a/ga5doMuovDWG05eZ1AUQKoXJUlsg
- PJV3ClUbYi03LonaU7ZSGHKqZNqcSxFlBFTBfrlKZnZgD77BGcNjYGMmK86BvZ4mUSIN
- k6OEUAz1vP57AHEY03cz22PSn2l72wtIrFWHLhBR1F+dQQoOPniGeEin8+hnx92ZkjLe
- aE96jN5Ch4+YvBNY1aHwb2xnd5QaB69AkO+nE6dl4nZ4QTmpR8hEgPBrOvJ4rWXDknOF
- 7I0s0Z0hYSJqXSb0cBXs6ha0VdwPpwX/eAQ8YOq0D430OJWbdldMSlYJIvJQHxLMzoiW
- PMJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=CsRBFvnl
-Subject: [Buildroot] [PATCH for 2025.02.x] package/python-django: security
- bump to v5.2.13
+ bh=NlSiMeeuJEaBJiU7VvLS3u9d8oH6wRoUZPQMoKE01B0=;
+ b=fMeFQVTunrUiyUWh3nv6G0LXXaSWipwPas6F1tGXtvK9wRu4F1vlX1+IZYu+Xvp4h5
+ pHb1bxlWZxsHEyJXuGAzipOIF+tp0cmzsn8HAH8RnbI4EvhPVaR7FcRSPrZwRHfycI59
+ 32hk7p7DDAcWcLRQpmnCl30scLSQjBj26tXy2/eo6c9I0zpl2YO79zODOZuvBY6vX8vW
+ oP4yp6wsunJlV3y6SJvBgDeE6Fj0IKDR+zkoIsDfYJWf+AavVpuOWa2hi3XM5uJfrwIN
+ NaQY3BaacuMqsah3oUrF0PyGiCfFhMii5ELhFSvBpgDZl0nceeb9mQ2vkvQFtTa/AFDM
+ E6KQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=fMeFQVTu
+Subject: [Buildroot] [PATCH 01/13] package/python-cpu-load-generator: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,120 +119,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Manuel Diener <manuel.diener@oss.othermo.de>,
- Oli Vogt <oli.vogt.pub01@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be,
- Marcus Hoffmann <bubu@bubu1.eu>
+Cc: Alexandre Ondet <frcomdev@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
-https://docs.djangoproject.com/en/5.2/releases/5.2.13/
-
-In addition, update the pypi url to a stable one, which shouldn't change
-in each and every release (similar to the url change in commit
-https://gitlab.com/buildroot.org/buildroot/-/commit/60ce218196281d76606849037986b275c4619ae9)
-
-Finally, one hash file has changed because of upstream commit
-https://github.com/django/django/commit/0ee44c674cf61efbca2056c40f3e4f2335aaeee6
-
-Django 5.2.13 fixes one security issue with severity "moderate",
-and four security issues with severity "low":
-- CVE-2026-3902:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. `ASGIRequest` allows a remote attacker to spoof
-    headers by exploiting an ambiguous mapping of two header variants
-    (with hyphens or with underscores) to a single version with
-    underscores. Earlier, unsupported Django series (such as 5.0.x, 4.1.x,
-    and 3.2.x) were not evaluated and may also be affected. Django would
-    like to thank Tarek Nakkouch for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-3902
-
-- CVE-2026-4277:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. Add permissions on inline model instances were not
-    validated on submission of  forged `POST` data in
-    `GenericInlineModelAdmin`. Earlier, unsupported Django series (such as
-    5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected.
-    Django would like to thank N05ec@LZU-DSLab for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-4277
-
-- CVE-2026-4292:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. Admin changelist forms using
-    `ModelAdmin.list_editable` incorrectly allowed new  instances to be
-    created via forged `POST` data. Earlier, unsupported Django series
-    (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be
-    affected. Django would like to thank Cantina for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-4292
-
-- CVE-2026-33033:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. `MultiPartParser` allows remote attackers to
-    degrade performance by submitting multipart uploads with `Content-
-    Transfer-Encoding: base64` including excessive whitespace. Earlier,
-    unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not
-    evaluated and may also be affected. Django would like to thank
-    Seokchan Yoon for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-33033
-
-- CVE-2026-33034:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. ASGI requests with a missing or understated
-    `Content-Length` header could  bypass the
-    `DATA_UPLOAD_MAX_MEMORY_SIZE` limit when reading  `HttpRequest.body`,
-    allowing remote attackers to load an unbounded request body into
-    memory. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and
-    3.2.x) were not evaluated and may also be affected. Django would like
-    to thank Superior for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-33034
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
 ---
- package/python-django/python-django.hash | 6 +++---
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-cpu-load-generator/Config.in        |  6 ++++++
+ .../python-cpu-load-generator.hash                 |  4 ++++
+ .../python-cpu-load-generator.mk                   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-cpu-load-generator/Config.in
+ create mode 100644 package/python-cpu-load-generator/python-cpu-load-generator.hash
+ create mode 100644 package/python-cpu-load-generator/python-cpu-load-generator.mk
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b1859b0647..a7bf2aed8b 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,9 +1,9 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  9b60bb1145abcc97d276694f3f82a3b8  django-5.2.12.tar.gz
--sha256  6b809af7165c73eff5ce1c87fdae75d4da6520d6667f86401ecf55b681eb1eeb  django-5.2.12.tar.gz
-+md5  4af55cc09a3d1a828259ad0c05330e6b  django-5.2.13.tar.gz
-+sha256  a31589db5188d074c63f0945c3888fad104627dfcc236fb2b97f71f89da33bc4  django-5.2.13.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
--sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-+sha256  a6fa72074c31928128aaa18162204507938b7a9a8b819bd833fa82467441800d  django/contrib/gis/measure.py
- sha256  570a045a8372b6cd6a00e30ebafe8e3e8dfc0a7fe3d4ef2cc5f16d419eb63aeb  django/contrib/gis/gdal/LICENSE
- sha256  08bf24b7551238ae325295245425b1caeb9ad0f42f9e2d303c7b353502632045  django/contrib/gis/geos/LICENSE
- sha256  d48633adb736dac091477ec2206feebeee88e3e6e486aedb21c584e4b49be0ec  django/contrib/admin/static/admin/js/inlines.js
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 52d0a2b740..a478c95f95 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.2.12
-+PYTHON_DJANGO_VERSION = 5.2.13
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bd/55/b9445fc0695b03746f355c05b2eecc54c34e05198c686f4fc4406b722b52
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+diff --git a/package/Config.in b/package/Config.in
+index 9cae377fb5..407966b37c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1059,6 +1059,7 @@ menu "External python modules"
+ 	source "package/python-construct/Config.in"
+ 	source "package/python-contourpy/Config.in"
+ 	source "package/python-couchdb/Config.in"
++	source "package/python-cpu-load-generator/Config.in"
+ 	source "package/python-crayons/Config.in"
+ 	source "package/python-crc/Config.in"
+ 	source "package/python-crc16/Config.in"
+diff --git a/package/python-cpu-load-generator/Config.in b/package/python-cpu-load-generator/Config.in
+new file mode 100644
+index 0000000000..fceb6fdb32
+--- /dev/null
++++ b/package/python-cpu-load-generator/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CPU_LOAD_GENERATOR
++	bool "python-cpu-load-generator"
++	help
++	  Generate a configurable CPU load for testing and benchmarking.
++
++	  https://pypi.org/project/cpu-load-generator/
+diff --git a/package/python-cpu-load-generator/python-cpu-load-generator.hash b/package/python-cpu-load-generator/python-cpu-load-generator.hash
+new file mode 100644
+index 0000000000..6cf8c4dac4
+--- /dev/null
++++ b/package/python-cpu-load-generator/python-cpu-load-generator.hash
+@@ -0,0 +1,4 @@
++# From https://pypi.org/pypi/cpu-load-generator/1.2.0/json
++sha256  41586edd59e5d9e75a39a0c8c86e8baa8eac0550dc4dab8c0bef9eeac328b8af  cpu-load-generator-1.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  0de0992ffa96771645e251c62628bcb546ffaf1c13d5a42240a9a17941101e9e  LICENCE
+diff --git a/package/python-cpu-load-generator/python-cpu-load-generator.mk b/package/python-cpu-load-generator/python-cpu-load-generator.mk
+new file mode 100644
+index 0000000000..f81170d8b8
+--- /dev/null
++++ b/package/python-cpu-load-generator/python-cpu-load-generator.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cpu-load-generator
++#
++################################################################################
++
++PYTHON_CPU_LOAD_GENERATOR_VERSION = 1.2.0
++PYTHON_CPU_LOAD_GENERATOR_SOURCE = cpu-load-generator-$(PYTHON_CPU_LOAD_GENERATOR_VERSION).tar.gz
++PYTHON_CPU_LOAD_GENERATOR_SITE = https://files.pythonhosted.org/packages/source/c/cpu-load-generator
++PYTHON_CPU_LOAD_GENERATOR_SETUP_TYPE = setuptools
++PYTHON_CPU_LOAD_GENERATOR_LICENSE = MIT
++PYTHON_CPU_LOAD_GENERATOR_LICENSE_FILES = LICENCE
++
++$(eval $(python-package))
 -- 
-2.53.0
+2.53.0.windows.2
 
 _______________________________________________
 buildroot mailing list
