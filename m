@@ -4,113 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5F49FF886D
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 20:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4B6EFF8875
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 20:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6404B41EB8;
-	Tue, 28 Apr 2026 20:23:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BE16407C7;
+	Tue, 28 Apr 2026 20:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7vfYUXeW0vWB; Tue, 28 Apr 2026 20:23:45 +0000 (UTC)
+ id nDegHjMpVJxL; Tue, 28 Apr 2026 20:46:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DFDB41EAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BA77407CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777407825;
-	bh=ZSmlcsUjz+pDrYsX1glwvgdfKYQcp2shfJ4tsfE5O4U=;
+	s=default; t=1777409160;
+	bh=IF9SmP04a/2duYcB/KDFWMaUjwZgMODCJIcl+9PK4k0=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=PVoh+bShFH5dC1YlSvPB9K5tvYEez04UKFhV1JAvm4z+t+oZffRmtmp7u9U3JurkI
-	 UmjhuUchLDXe72w8wKMY0RS08ZDYEC61hpP4qZzhe1Fbfo1ApyBvg0mD41MVWmkl3K
-	 i6GF5o3plLxE7gTY077nvA51dHz70WkS2vJRn8hgs3j+fUlErDn/MnSa9nDmLfB43A
-	 H91d4ZMo1RGoH0ztTQ076bv2wbOeWV9pE5b7cDU753kP2Y4IwQa3RAoLffBe5oEwYg
-	 nW/L7HqBD/CBIuanLMDXnxhZk9StQ1o67/xPv7/eJVFC80/PDEkB+ebZRI14FiE/Cx
-	 +GOMImAUOr3jQ==
+	b=Dt3QZ0Aqtj9EHAIkJxa9X0DpvGUsRHKKmDXPdfIVSnYJL533rIvZ1VNJjO8Ubo3Sv
+	 xbPysbEU32hsYyjn+kxjpSSV8G+rO2mbC+veqDd+aGxE09sdgYGBAISe79CrnzfOYf
+	 P68TMKKl8GOCDczVnAGtoPSzYVy6EIP77G9pO44hjHRC6BLZFhFselh2dMBUOy4etx
+	 Ff74Ok0CeJ78nLVe3oF+/sxoSZ5kAGkW1g+1iY+DrDe/9yVllzPNS+IW+L3BI1rumF
+	 pRkQuSMXdmTf54ngRIYqDtRGhTWf1R4aHeyPoyXfbkySKMifTlumsnbmKm6F8rkWWk
+	 xYjftqFcIxj3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7DFDB41EAF;
-	Tue, 28 Apr 2026 20:23:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 98D531B8
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:23:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BA77407CC;
+	Tue, 28 Apr 2026 20:46:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D39941B8
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AF5C40337
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:23:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6117407D0
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:45:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MCZIROjOMgTT for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 20:23:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4e4QhTlswYKS for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 20:45:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42b; helo=mail-pf1-x42b.google.com;
+ client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
  envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B1E6940470
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1E6940470
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B1E6940470
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:23:43 +0000 (UTC)
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-82f69a286dbso8900608b3a.2
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 13:23:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F3A26407C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3A26407C7
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F3A26407C7
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:45:57 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-35da1af3e10so11006590a91.3
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 13:45:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777407822; x=1778012622;
+ d=1e100.net; s=20251104; t=1777409157; x=1778013957;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=8IxzMVx/CKP1clv3SSe3VOAHkTcKSDYB8DlyKCaXFGc=;
- b=QB5e/w4tYn5uHwraKXMB572P1ttsiGsmRx53PWCHA5VstXWMN9M/cEeVpsWKpSpAa4
- BIyxq35umZdtfMsceX0oMTLLnv24I1Tt2MCfez8aLdHKIl/238wNfwUBFi5U6jr41V9S
- FD6pRq2kT5/aHf9ehIkOA4YnLDHkDpdJvtIwMGJw0A2W7hGg1h9Pak4U3BjYJmlX4YB0
- DiLN5XgcVjfNdqQp9ZBC1cpMJ2wCyguuKKuKB0x9qluvdbSspo9WnyBo4OZyiCxXviOo
- 9H7ZNF/sctIJfCnHblNUz9Qz4e6X413M8qU8yUQ1jXSPURcYxdrIb+T6+yx59JSleoqb
- z5lg==
-X-Gm-Message-State: AOJu0YyrP0yjaZXOgFKkjad/gs0cMRNtEEJ6qdLoEW1bahOCp9v+ocsK
- ytgGI9YN0b+KRG9fA5DQIw3B0FZB6AovJtTsd/LlRLG7Ognvc9vmyXET5DEW64Ay
-X-Gm-Gg: AeBDievoGk4v1HVhLg6d5VWtgNZ+QsAMuuqTjofOpyn+Rqh1XtyWVu7rwKf6cQTUkN3
- neF0z9z99ZVH7DRf3NzlLp6G6OWVCUB8OY2SCJuDw8mMylnEA7P4jJNqkGBK3FMc10U87KNYjHp
- fAdDn8KI5wiSXVIRAFyn9WNoh7lLofxU84qNfaCnx8wSsEdsYrSMBgKU871wMn0M5bDeR75UrAM
- Stw5NTTzZRu5/wvgDkBqvRK3G3P/FaJyoYfsdhO8cEa1nUQMJmGoWyGAJP/oYt4/WWnG0EQkcIj
- zqePZ4HAssjj3IHsW+DmalmoECi1kL20nlJyn32XNwA2DBNAF7pD2dJru7TJ436Rdn97Jb7OBNL
- JVW8QuagnsP1nnlbzVnM6q4bCf5CqjOMQl0+E1OAFNH9VcntYj9Vd/tdltLnTtCNFJV4CR3ynFp
- a+4iXc7RxBbVAYvzc7sSQx2c6v/x2Iodt4QLavkfEmCwcESOWfaP3dq7Ok9w==
-X-Received: by 2002:a05:6a00:2990:b0:82c:7335:4f71 with SMTP id
- d2e1a72fcca58-834ddc77179mr4219645b3a.36.1777407822280; 
- Tue, 28 Apr 2026 13:23:42 -0700 (PDT)
+ bh=29q/23TNCakapOev/P74W/TuonGTHowQb0ZBmYub22M=;
+ b=Xkgn0+k9jqnfgtldOukzyy1ZD/OoP3/nwLqLmo6WgonZcy3ASpw2jGFtrroDQmw9yZ
+ n3QFqXeUqJkzErwsOblZ4XQe/vci6+1DCTgKr6oe3+q2S441zOSii5U5W5yxMDjHXBaE
+ 8Uw4EZeke/FqJvPdYNErBYdzZEUZm1T5Jmfr0bTyfVX9seE903q/UNn22avSxzYjL8OT
+ szSWSYUwE3opAQWrDMKs0JNZ6JItrf7aZZ9nvoo1nCYLa4qjOJAKBSr8CoyKcCw5ZuXb
+ H33mIbcqxfmBru7PtdikJXOpXxWK8yYixZ+P+T8r1P9nc9LnYTjTQVlL+Oo5CRmbhviZ
+ QkGg==
+X-Gm-Message-State: AOJu0YzZeFxL4wcuFAS/sR9lLAP6hu/AXV++T5zyca4re/TmTFvYQy1J
+ feHquiQGVN+DjO/c563En5WeMKMSjE/YnvTfWQpH5aOXO0Z54boC23BvKJN1boHu
+X-Gm-Gg: AeBDiesUBmall4kE7NiVhidYZSPoKp6kKv/vlNtAuHtFjW2xOnnTOkW2csPPVoIVmmD
+ DO81E7Bmvz7/bigK3WLraJizPL+lhoqLPW+CDxzdjDxsim/08JLmu6LZzxw0VdBcg4y1bnw8Mx9
+ jJ8NjBARArrd0xjkzSCro5BmThVZ7YTnc3ARruV+uMMUXzpMsSxvxVIP0hVTWwzIhcbR+3iSmFG
+ mmeDVAU9rvnvDyxaeGg5OlaGogEGtjlp6INxJOGEr4mKPTzxdTMCmrcRBDiqjdUUv46/Y1XN6vO
+ KNx4beS2OitIiQlNb7jQZj+EUeCL/7LXRHy5ues2CCPm6bGadoZoPDUKGt+mOG0DMX+yD8fbL4y
+ 1aUsCZmFrzWlSEWdriVVzd+jMIkJXhRtF4oQzgl3gQP9kXxdExvZ4t+4u7q2G44dBvs1xY4AhVf
+ 9M/lbV4vKXTB2ccG/xo2MoLgfVb/0EAJkuaGwkT8rBRjyTQZA=
+X-Received: by 2002:a17:90b:17ca:b0:35f:ccf6:69a5 with SMTP id
+ 98e67ed59e1d1-3649205a55emr5030281a91.20.1777409156823; 
+ Tue, 28 Apr 2026 13:45:56 -0700 (PDT)
 Received: from fedora ([2409:40e5:1178:d0d6:4db3:78fb:ce74:a637])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-834daf7f515sm4567011b3a.59.2026.04.28.13.23.38
+ d9443c01a7336-2b988963ed0sm1056125ad.65.2026.04.28.13.45.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Apr 2026 13:23:41 -0700 (PDT)
+ Tue, 28 Apr 2026 13:45:56 -0700 (PDT)
 From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 To: buildroot@buildroot.org
 Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Wed, 29 Apr 2026 01:53:07 +0530
-Message-ID: <20260428202308.2045378-1-chakrabortyshubham66@gmail.com>
+Date: Wed, 29 Apr 2026 02:15:35 +0530
+Message-ID: <20260428204536.2085875-1-chakrabortyshubham66@gmail.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260412180902.86006-1-chakrabortyshubham66@gmail.com>
-References: <20260412180902.86006-1-chakrabortyshubham66@gmail.com>
+In-Reply-To: <20260418073313.37718-1-chakrabortyshubham66@gmail.com>
+References: <20260418073313.37718-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777407822; x=1778012622; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1777409157; x=1778013957; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8IxzMVx/CKP1clv3SSe3VOAHkTcKSDYB8DlyKCaXFGc=;
- b=DLbXY+g8qSqyH2ksp16P9BdVytLwxWJc6qwmPIaLvDEY4enI3TggKicIAl9vA2iBRa
- 42GEjNf2mEJ+nEOdbIh2e9DRsmHw6OeW6GRA+VklBseU1F7rnjlJuMfRrMjoyUae7nRl
- QgYRi9gPvfMat6aOzj0DNCpN2B6/wBy+FWLoq7/bx0OsYgPofo8VHpRiABgpYogQRWqB
- LftuWnMBk2Q1qeUQ8848507u3raAlPbcTYMlTxWrLye81HSzkTDD51lC31McuRhu6+9a
- tDWBXlLdxrw4PUuQOOusK3yS7O7IvOtuhkiEXjyyYSwJ40NcJxMfuynqQ4UQOcv+Bqlt
- GnaA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=29q/23TNCakapOev/P74W/TuonGTHowQb0ZBmYub22M=;
+ b=B2H3pmFNVPzfH/8+PBmel1GE8OtXuDpMtneGGPz1jWZy2E6iwdabs8cRFleqzhZ/Q3
+ +4ZAmMT4iRo1Qi6qCaa4wOLGtqvOuJ8rcfBZAnqGjj++k2O6yby+VuGMEgsmtS/6xxXA
+ RlrMiXxFpIv05sZ1sNH8/CmgNltB0hmj7NyRw1nl9w/GIJMbC8PVyXTLMLydXZkUsLH1
+ FiCD+t5AlPhrpU+PZJ2lsUuOopm53u3obtutF4KwlGbzLeZWzBcx4MvAOAEZW0S6mH9I
+ HNx1ZKQjSJR50wyV7FPNtAhXKE9h+xAaVdwgVi3978jprygEFSJqE/cUizJscOGKW5Bq
+ NH+w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=DLbXY+g8
-Subject: [Buildroot] [PATCH v2] package/inotify-tools: bump to version
- 4.25.9.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=B2H3pmFN
+Subject: [Buildroot] [PATCH v2] package/psmisc: bump to version 23.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,129 +127,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix crash on >=1024 watched files
-- Add recursive watch with --include
-- Add static compilation flag
-- Fix fanotify-only options when disabled
-- Fix man page reference formatting
-- Add C++ toolchain dependency (new requirement)
-- Add patch to fix fanotify header conflicts with uClibc
+- Fix --disable-statx build option
+- fuser: Add stat() fallback, ignore EACCES errors
+- pstree: Fix assumption about root PID
+- killall: Output formatting fixes
+- Update gettext to 0.21
+
+https://gitlab.com/psmisc/psmisc/-/tags/v23.7
 
 Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 ---
- .../0001-fix-fanotify-header-conflict.patch   | 83 +++++++++++++++++++
- package/inotify-tools/Config.in               |  5 ++
- 2 files changed, 88 insertions(+)
- create mode 100644 package/inotify-tools/0001-fix-fanotify-header-conflict.patch
+ package/psmisc/psmisc.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/inotify-tools/0001-fix-fanotify-header-conflict.patch b/package/inotify-tools/0001-fix-fanotify-header-conflict.patch
-new file mode 100644
-index 0000000000..9696b42e39
---- /dev/null
-+++ b/package/inotify-tools/0001-fix-fanotify-header-conflict.patch
-@@ -0,0 +1,83 @@
-+From f59f9fefb26342c35c2874e83299d5b69bbc6ffb Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Wed, 29 Apr 2026 01:40:39 +0530
-+Subject: [PATCH] libinotifytools: fix fanotify fallback with uClibc
-+
-+uClibc provides sys/fanotify.h, but it lacks the newer FAN_REPORT_*
-+declarations and related event info types needed by inotify-tools 4.25.9.0.
-+
-+The configure test therefore selects the fallback header path.
-+
-+That fallback previously included the bundled linux/fanotify.h copy before
-+sys/fanotify.h, which led to duplicate struct definitions on uClibc.
-+
-+Fix it by building the fallback on top of sys/fanotify.h and only defining
-+the missing declarations actually used by inotify-tools.
-+---
-+ .../src/inotifytools/fanotify.h.in            | 45 +++++++++++++++++--
-+ 1 file changed, 41 insertions(+), 4 deletions(-)
-+
-+diff --git a/libinotifytools/src/inotifytools/fanotify.h.in b/libinotifytools/src/inotifytools/fanotify.h.in
-+index 9fcbe26..c30bb73 100644
-+--- a/libinotifytools/src/inotifytools/fanotify.h.in
-++++ b/libinotifytools/src/inotifytools/fanotify.h.in
-+@@ -10,15 +10,52 @@
-+ #elif !defined __ANDROID__
-+ /*
-+  * Assuming sys/fanotify.h does exist, but linux/fanotify.h doesn't have
-+- * FAN_REPORT_DFID_NAME, so include our own copy of linux/fanotify.h
-+- * before including sys/fanotify.h.
-++ * FAN_REPORT_DFID_NAME, so extend the libc header with the newer
-++ * fanotify declarations required by inotify-tools.
-+  */
-+-#include "fanotify-dfid-name.h"
-+ #include <sys/fanotify.h>
-++#include <linux/types.h>
-++
-++#ifndef FAN_MARK_FILESYSTEM
-++#define FAN_MARK_FILESYSTEM 0x00000100
-++#endif
-++#ifndef FAN_MARK_INODE
-++#define FAN_MARK_INODE 0x00000000
-++#endif
-++#ifndef FAN_REPORT_FID
-++#define FAN_REPORT_FID 0x00000200
-++#endif
-++#ifndef FAN_REPORT_DIR_FID
-++#define FAN_REPORT_DIR_FID 0x00000400
-++#endif
-++#ifndef FAN_REPORT_NAME
-++#define FAN_REPORT_NAME 0x00000800
-++#endif
-++#ifndef FAN_REPORT_DFID_NAME
-++#define FAN_REPORT_DFID_NAME (FAN_REPORT_DIR_FID | FAN_REPORT_NAME)
-++#endif
-++#ifndef FAN_EVENT_INFO_TYPE_FID
-++#define FAN_EVENT_INFO_TYPE_FID 1
-++struct fanotify_event_info_header {
-++	__u8 info_type;
-++	__u8 pad;
-++	__u16 len;
-++};
-++struct fanotify_event_info_fid {
-++	struct fanotify_event_info_header hdr;
-++	__kernel_fsid_t fsid;
-++	unsigned char handle[];
-++};
-++#endif
-++#ifndef FAN_EVENT_INFO_TYPE_DFID_NAME
-++#define FAN_EVENT_INFO_TYPE_DFID_NAME 2
-++#endif
-++#ifndef FAN_EVENT_INFO_TYPE_DFID
-++#define FAN_EVENT_INFO_TYPE_DFID 3
-++#endif
-+ #else
-+ #include <linux/fanotify.h>
-+ #endif // SYS_FANOTIFY_H_EXISTS_AND_WORKS
-+ 
-+ 
-+ #endif
-+-
-+-- 
-+2.54.0
-+
-diff --git a/package/inotify-tools/Config.in b/package/inotify-tools/Config.in
-index 6b113d9e42..45296bd170 100644
---- a/package/inotify-tools/Config.in
-+++ b/package/inotify-tools/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_INOTIFY_TOOLS
- 	bool "inotify-tools"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  inotify-tools is a C library and a set of command-line
-@@ -9,3 +10,7 @@ config BR2_PACKAGE_INOTIFY_TOOLS
- 	  'inotifywatch' binaries.
- 
- 	  https://github.com/inotify-tools/inotify-tools
-+
-+comment "inotify-tools needs a toolchain w/ C++"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
+index 646c01b3c6..f16b95eee3 100644
+--- a/package/psmisc/psmisc.hash
++++ b/package/psmisc/psmisc.hash
+@@ -1,3 +1,6 @@
+ # From https://sourceforge.net/projects/psmisc/files/psmisc/
++md5  53eae841735189a896d614cba440eb10  psmisc-23.7.tar.xz
++sha1  89046d35a8919def79200115c9cc78e91b98ad53  psmisc-23.7.tar.xz
++# Locally computed:
+ sha256  58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327  psmisc-23.7.tar.xz
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
 -- 
 2.54.0
 
