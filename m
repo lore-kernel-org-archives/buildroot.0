@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CACC0FF885A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 19:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73B62FF886D
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 19:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F85040737;
-	Tue, 28 Apr 2026 19:45:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45D8840E34;
+	Tue, 28 Apr 2026 19:45:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J2xLOG47usrW; Tue, 28 Apr 2026 19:45:15 +0000 (UTC)
+ id RMLCMIyDkJF1; Tue, 28 Apr 2026 19:45:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9773D4073B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E59B407E6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777405515;
-	bh=Wg0/+WxN5qCf90T+EFzRjK9g81Bwoq0u+9ZoMW/J9MA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Z90zx2Y/BqJk7sJ4vpkPbHvbML79s0HyXGKKCx7diELyybX3Z90w5N0bMuv0lsD4C
-	 X93pwUFLWTsM4bWZ+zRGhrtOW+HmZXRKIuip2ucWdLRji1sqv58FQbH4baMnS35wYo
-	 LxRNmmJxpoalqmgDTc1Kkpap8v0WIkp+JtDHDXuqAGzN+GiUy4kc0tPDn3mS1DdLTV
-	 025oT5/XAw02MTnVkcgWT0osmNhOgjfAU/ktTw2acJtK3drj4KIjrNf6Csheqx1dmo
-	 Ram8/lCUzw6+bhzAD/wY9bds0e6g7LWg3gbmyD2xF6CkWapjHdiXONluuTfiIyyPZb
-	 fO0vp2XBKCgFA==
+	s=default; t=1777405530;
+	bh=q/z89/WvhcBwMJI3gwcRxwwbLA1ChNbnyARddh8AAGY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LEiT7ZPwAUrq5BCKE6j+4zWP5Tk3HkcM6JDOlTMv+iNC1Selnt6CfT/WS8297qqzQ
+	 yi6p5sOUkJaxRAD1kdPrWTOI3ievL4smtvwnwspXnNxwW3WqoONjRvY10zjF7x+iUU
+	 PfUjDbsmX5V6Q1mCGQQ6XJdiKWyrvkr+w2nYBhEFxCQ3WkX7SmZAgaZVdgBFYIBJ84
+	 1G89yIB+aoUcyybHYcB+6Q/9NzzU9on53i89fvQaFIFhnQ002wMOK5NWuLUvuf0nlU
+	 FeQ52HUdnG7r4I7UR1r7z7YV09qDxf22h6I9/dshsC6vm8va49xHyqx7eH/oOqWvZS
+	 4TjQoRxAeG6VQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9773D4073B;
-	Tue, 28 Apr 2026 19:45:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B4FA231
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E59B407E6;
+	Tue, 28 Apr 2026 19:45:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C03291B8
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CF3140737
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1ECF60F18
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nFsIpBa0VAQc for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 19:45:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32C434072F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32C434072F
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E959D839A0; Tue, 28 Apr 2026 19:45:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 21:43:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c03745d7de627e70b1142a6f212fe7e5f060cdd7
-X-Git-Newrev: 3a488674b52f2515b3cc54526253682749553d11
-X-Patchwork-Hint: ignore
-Message-Id: <20260428194513.E959D839A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/initscripts: fix check-package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xUmwbYprlgrr for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 19:45:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 05A1760F21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05A1760F21
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 05A1760F21
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 19:45:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id E5CB378034D;
+ Tue, 28 Apr 2026 21:45:25 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 28 Apr 2026 21:45:25 +0200
+MIME-Version: 1.0
+Date: Tue, 28 Apr 2026 21:45:25 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260428095056.3024331-1-fiona.klute@gmx.de>
+References: <20260428095056.3024331-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <79c9c133c36c65fbb24c8b1170fcabcf@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777405527;
+ bh=vT0+sg7MiOwnmi018zVdjjRxNW7DYjor45zkrvhT7hw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=FFTK56yPjHmoE0mumP/QxarAzb+Sqdoy1kMWhP9rU+C0uAKwYlMSqW3ZLrnQCGAgX
+ ETRVeKjKqBLk2hQQe9TgKMLtR72FCRkwj8fZYErHoFteXI4KTGcUYWh0oZ3FjkEQwg
+ kYia/aRiPG/jU1ejMa/nBAehT6LJB0bP/Zx/fwVNBK6wmcin2HwZT7kusk/jQwDtvn
+ wZdYD0GEMeUwO8NfARkRz53o2DZ6BkDy21u/WCbFd4tMd2Awx7ZIRZKDveSd73K1Mx
+ i2UsBDfOUCUW9184VcvUtn8KaopdgMGs/mDpDcd2g21FgfsxRj4wm9QMYVlG53JVNZ
+ cGgyH8iY3KHDQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FFTK56yP
+Subject: Re: [Buildroot] [PATCH 1/1] package/initscripts: fix check-package
  warnings & indent
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,153 +95,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a488674b52f2515b3cc54526253682749553d11
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 28/04/2026 11:50, Fiona Klute via buildroot wrote:
+> No functional change. Add package-level .editorconfig so indentation
+> matches what other init scripts use.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-No functional change. Add package-level .editorconfig so indentation
-matches what other init scripts use.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore               |  2 --
- package/initscripts/.editorconfig |  3 +++
- package/initscripts/init.d/rcK    | 41 ++++++++++++++++++++-------------------
- package/initscripts/init.d/rcS    | 39 ++++++++++++++++++-------------------
- 4 files changed, 43 insertions(+), 42 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 494de2a880..fb459bf269 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -441,8 +441,6 @@ package/ifupdown/0001-dont-use-dpkg-architecture.patch lib_patch.Upstream
- package/igd2-for-linux/S99upnpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/imx-mkimage/0001-Add-unused-fake-version.patch lib_patch.Upstream
- package/inadyn/S70inadyn NotExecutable lib_sysv.Indent
--package/initscripts/init.d/rcK Shellcheck lib_shellscript.ConsecutiveEmptyLines lib_shellscript.EmptyLastLine
--package/initscripts/init.d/rcS Shellcheck lib_shellscript.ConsecutiveEmptyLines lib_shellscript.EmptyLastLine
- package/input-event-daemon/S99input-event-daemon lib_sysv.ConsecutiveEmptyLines lib_sysv.Indent lib_sysv.Variables
- package/intel-gmmlib/0001-Drop-hardening-related-flags.patch lib_patch.Upstream
- package/intel-mediasdk/0001-Don-t-force-fstack-protector.patch lib_patch.Upstream
-diff --git a/package/initscripts/.editorconfig b/package/initscripts/.editorconfig
-new file mode 100644
-index 0000000000..e616e5ae3f
---- /dev/null
-+++ b/package/initscripts/.editorconfig
-@@ -0,0 +1,3 @@
-+[rc?]
-+indent_style = tab
-+indent_size = tab
-diff --git a/package/initscripts/init.d/rcK b/package/initscripts/init.d/rcK
-index 59e9c54ff9..521e9eb645 100755
---- a/package/initscripts/init.d/rcK
-+++ b/package/initscripts/init.d/rcK
-@@ -1,27 +1,28 @@
- #!/bin/sh
--
--
-+#
- # Stop all init scripts in /etc/init.d
- # executing them in reversed numerical order.
- #
--for i in $(ls -r /etc/init.d/S??*) ;do
-+# we need to reverse the order here, sort -r would be no less fragile
-+# shellcheck disable=SC2045
-+for i in $(ls -r /etc/init.d/S??*); do
- 
--     # Ignore dangling symlinks (if any).
--     [ ! -f "$i" ] && continue
-+	# Ignore dangling symlinks (if any).
-+	[ ! -f "$i" ] && continue
- 
--     case "$i" in
--	*.sh)
--	    # Source shell script for speed.
--	    (
--		trap - INT QUIT TSTP
--		set stop
--		. $i
--	    )
--	    ;;
--	*)
--	    # No sh extension, so fork subprocess.
--	    $i stop
--	    ;;
--    esac
-+	case "$i" in
-+		*.sh)
-+			# Source shell script for speed.
-+			(
-+				trap - INT QUIT TSTP
-+				set stop
-+				# shellcheck source=/dev/null
-+				. "$i"
-+			)
-+			;;
-+		*)
-+			# No sh extension, so fork subprocess.
-+			"$i" stop
-+			;;
-+	esac
- done
--
-diff --git a/package/initscripts/init.d/rcS b/package/initscripts/init.d/rcS
-index de411534da..67efe3cf7f 100755
---- a/package/initscripts/init.d/rcS
-+++ b/package/initscripts/init.d/rcS
-@@ -1,27 +1,26 @@
- #!/bin/sh
--
--
-+#
- # Start all init scripts in /etc/init.d
- # executing them in numerical order.
- #
--for i in /etc/init.d/S??* ;do
-+for i in /etc/init.d/S??*; do
- 
--     # Ignore dangling symlinks (if any).
--     [ ! -f "$i" ] && continue
-+	# Ignore dangling symlinks (if any).
-+	[ ! -f "$i" ] && continue
- 
--     case "$i" in
--	*.sh)
--	    # Source shell script for speed.
--	    (
--		trap - INT QUIT TSTP
--		set start
--		. $i
--	    )
--	    ;;
--	*)
--	    # No sh extension, so fork subprocess.
--	    $i start
--	    ;;
--    esac
-+	case "$i" in
-+		*.sh)
-+			# Source shell script for speed.
-+			(
-+				trap - INT QUIT TSTP
-+				set start
-+				# shellcheck source=/dev/null
-+				. "$i"
-+			)
-+			;;
-+		*)
-+			# No sh extension, so fork subprocess.
-+			"$i" start
-+			;;
-+	esac
- done
--
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
