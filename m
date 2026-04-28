@@ -4,59 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E53E9FF886C
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 08:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26885FF885D
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 08:45:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E978D411AE;
-	Tue, 28 Apr 2026 08:44:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD49940A9D;
+	Tue, 28 Apr 2026 08:45:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ov0MvTvTlgad; Tue, 28 Apr 2026 08:44:51 +0000 (UTC)
+ id Vh8shPfgOy2M; Tue, 28 Apr 2026 08:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA83409FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5085D40A61
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777365891;
-	bh=6oeuuLNw5IFXoYIHT8tzceaS7dn338nQxL057QVhB3U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JjQ8UR46cVwm/jz7UPoHFQ8y0mZGejEMw/h1tIRpNZ1nsrzvsqG68b7O4868pjG6Q
-	 eqMxXdCfOZeFHaoJ43FUGtPuJnNB86U8apL23RMEvRAJ0arZbHvGP3SN7GXpja028h
-	 VBYGFIy7JqrvkCGqitx5CWu8rm9jfJrx+s/wR1AvP3zIGLIR6mmKHvU9VL54rYQhnC
-	 Q9DBss12bZJxA0Fn+wpeJNuod5m82uJoA62d6hldyz/3QH4wSwDhNxzgJCdePMBE/8
-	 TOnjbqWHCbeXiUPGQht7qPL+9WkgY1zDvHyPRysyMI1zuQ6s/bxIhci4XOR0Mnr1Gc
-	 RvCCmbXuO6O1w==
+	s=default; t=1777365939;
+	bh=/vFpuDhRr2CaMBqFBOreGb0OpRoaF/YtuxDv2v63ImM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=RhT+euO20w3IqSdDH97hKPyKSYdXNV8ws3WWjccjfikiFezwcW4lMGFGLzFjGXs04
+	 LD3cMUe/Y9SqLbTFrwWqFxtKg4HqpkVSO9ooBC3+whCgbChxrM81SXxXyklK8rJ5M0
+	 f/EHWzrwAVQPnNBAwhdU+TshVj1BUEUlourbOE1NXV3FQfiMeJKNR3Y1DtLnxzoWAV
+	 G5HzSHODzRy+9XfQuFeEr8aZMVBziW5M3DQSvoFbZl2i9GKLQojShlMF2KgPsLeDCm
+	 X0UuVaRSdg6eP+tBKB7Iuk5VZezuYuwHnNbw1/DShGxSQRyQZ+loIVkMcMsnJIWSwV
+	 4r4ddCTnSbuCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA83409FE;
-	Tue, 28 Apr 2026 08:44:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B9EC1B8
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:44:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5085D40A61;
+	Tue, 28 Apr 2026 08:45:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9FF3C23D
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14C81404ED
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:44:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9133560671
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1lcm06cO4MIt for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 08:44:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D7814048C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D7814048C
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:44:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C5F583845; Tue, 28 Apr 2026 08:44:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 10:37:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a48ede9c2f7378b1e091057ed5bf025965a4cb76
-X-Git-Newrev: 3590862c9cc33a5920c05d9db948ff1d1334bce1
-X-Patchwork-Hint: ignore
-Message-Id: <20260428084449.1C5F583845@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ccache: bump version to 4.13.5
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bGus3ozPswKU for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 08:45:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7833B6065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7833B6065D
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7833B6065D
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 08:45:37 +0000 (UTC)
+Received: from [192.168.178.20] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 1A8D82C84162;
+ Tue, 28 Apr 2026 10:45:35 +0200 (CEST)
+Message-ID: <ec706dce-7c73-4322-8423-7cbf34998405@bubu1.eu>
+Date: Tue, 28 Apr 2026 10:45:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+References: <20260427191951.571150-1-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260427191951.571150-1-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1777365935; bh=YtVb4p1kCf+1yB49xvDOnsMqPSqjqz+OEnRl+hNzfZY=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=pXsszDY/jIkfcvCW5PVsEdqElnSWQ5o8PEFap6S7vFEP4Q2gVNt+3EkzCYTGk/wKX
+ 7aV4l+TIJLbyDrAP8pkI6r2yP/qnvG2McXvpUdG/T2p5VZ/qRDPnqTk5WuJT4f45uR
+ 5VuAjBjxt2NJ7ns3PjkgPEjlKhPjeLcQtsGR0OOQypYCZquwPymuQasyqbqeg+dJG1
+ 0FnfxQ0n3UlqEjHW+wcifhuHqLXeEmDhHrR9fSgWaqrNLTKqb8PqZTJJVCMKfnNhIC
+ eINkfto82UeMR6zVRoL4Fb5wjReJD+FzJl4FqoSFDQGsIvO8ptId0NF4u0HMgr4G28
+ uczu1I4BOxt4w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=pXsszDY/
+Subject: Re: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.13.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,49 +94,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3590862c9cc33a5920c05d9db948ff1d1334bce1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Bernd,
 
-https://ccache.dev/releasenotes.html#_ccache_4_13_5
+On 4/27/26 21:19, Bernd Kuhls wrote:
+> https://ccache.dev/releasenotes.html#_ccache_4_13_5
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+Applied to master, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index f4c81bbe4c..c01bcd8f1b 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ccache/ccache/releases/tag/v4.13.4
--sha256  4a7ef278b39d031b9ec524c0778d24bdb3e761940ed368060b54594f15559537  ccache-4.13.4.tar.xz
-+# From https://github.com/ccache/ccache/releases/tag/v4.13.5
-+sha256  7a8945f4ac7d4bb79c0055cd3db7857a6934c2b7ab3d80bb11a0f5271e36fd94  ccache-4.13.5.tar.xz
- # sha256 computed locally
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
- sha256  072c40891d4ec8e1bcc93420031ebbbeb90b8f2c49fcd7c872d1bb05564c345c  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 744d962abc..74fa2fbf90 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 4.13.4
-+CCACHE_VERSION = 4.13.5
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
