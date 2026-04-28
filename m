@@ -4,109 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 362D6FF886F
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E25A4FF886F
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09C836074A;
-	Tue, 28 Apr 2026 17:19:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AECD161094;
+	Tue, 28 Apr 2026 17:20:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ubqryr0m5je5; Tue, 28 Apr 2026 17:19:57 +0000 (UTC)
+ id 7_3sM2GERDvU; Tue, 28 Apr 2026 17:20:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3756660B7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47BA760F26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777396797;
-	bh=BDZieG8nn05Ij0WreG3/Y+3hn7K6UPnv0WH1CFMze0Q=;
+	s=default; t=1777396835;
+	bh=fZ9mhW+LXvDq7XdRH7eApbd9LHhBBafJPFx996KOSEA=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=f7q/XW+971ZVF1TTgol6ibJSLw34BoxTioqlEC7/Qb+cl8VwWmd8yON2xw+c0C58v
-	 eduzHW2b9jAa14ReVbYy5SSHuLGVdPfj9hM726vhs5W5iKMstAimROzSZG+/51HGzv
-	 +ZYdhH7cUK0fWMJQPsNQvUgy7qU6PjRmlxKtEGxlB482165E/1nwEuL83rH+QalY06
-	 mO4PSryOQB6XWNqC2zqMCC2giTOCJ3BaoaQMKtQLjWFNjgtgOIjJiufo5jhM1dVgoY
-	 bpmC8t+TNAkH3Mx1u7cEUO8VFFKzp9hWi9Nrqvc78/MDvTp94/Pplzg3QrQDPULhIZ
-	 B2VeJbfmoZQnA==
+	b=iYvTBgdtmGnEZGIrsmEtxZc8t5R/0h6gqqPVqG4pveRslXMueaWC7G9YB0uxHsp/b
+	 CXb2/nRz8WLITHPS2pe5txN1u/OxDbLLOcBxIMB9ocEKh7LAWM+Ke8vlEJMHzcFBPf
+	 nTcgk0y1yo95R2YcDhChRLsVzRR/I/Sg+gYtujLXvJ3n0MmOfxGpKuDN0h49dxwQNu
+	 dk/CeGjs1T3Chxh6Zm/1sASDQipOLdV7GOUdiXl1rk4nWPlUri2d/shv15+9hIzprf
+	 Y0Egiq7s0pWith5HNf1hwqwEQYpcJIeZ9WHoDbKoLiEnarHNh6tZGWtu2uJjauPDWv
+	 c/bFSjsP4qSwA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3756660B7B;
-	Tue, 28 Apr 2026 17:19:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 64805231
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47BA760F26;
+	Tue, 28 Apr 2026 17:20:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD2F31B8
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 563786074A
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9EF4D83B7E
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GiF3yexbIVZP for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 17:19:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UkY9fPl7I_8J for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 17:20:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::741; helo=mail-qk1-x741.google.com;
+ client-ip=2607:f8b0:4864:20::f44; helo=mail-qv1-xf44.google.com;
  envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3BE6060B7B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BE6060B7B
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com
- [IPv6:2607:f8b0:4864:20::741])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3BE6060B7B
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:55 +0000 (UTC)
-Received: by mail-qk1-x741.google.com with SMTP id
- af79cd13be357-8c70b5594f4so5865485a.1
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:19:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C0A5383B6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0A5383B6B
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com
+ [IPv6:2607:f8b0:4864:20::f44])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C0A5383B6B
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:32 +0000 (UTC)
+Received: by mail-qv1-xf44.google.com with SMTP id
+ 6a1803df08f44-89fc349b5ceso166707416d6.3
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:20:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777396794; x=1778001594;
+ d=1e100.net; s=20251104; t=1777396831; x=1778001631;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QNXmAnYWlYTFgH59WZKeFVjKFb0LSaDY+Lqx7w243xM=;
- b=qOyIukyE+e1XUrqwXstIBY5+v4joZ5WAONzJHX7KvOKnhvsg7DiB3onJ8p+/+a1Tm8
- UXUdyeC4/I0WuV4ARx8yFCca5xpUQvjGBocLOGnCcCIzdEWxod4AqVS4tF3Xj2BipcsN
- JF7yVLvcDtpLKpII/5u3vcoR/LiTGtCsKWa3rWdgka+mp93hxwSxiRPl4NXE+noFKVSy
- gc2BYRtDsa5O0NpkhaHoESbsk+h5YK1/W+jMpR17qUGU+RhNqwfUYvpRMqdXvIzjQiFQ
- NT3hLQfD6hgtmRogMhXpMxSepBhe5b1zwZqfJteJle0vMCECOEKbuJ/fZt1TFji6RQ68
- keTQ==
-X-Gm-Message-State: AOJu0YwuJeQ3OT1J2KKFh1QNFkQfufYVw3vXAWScbL2MoJ8qZ2xk99b6
- Lbv/j7VppulAiRaOL54O/IxSGe3uMN6/vtDKNadkNesEd3Wvt80P1fV2FfAfVu6emIM6FOOH
-X-Gm-Gg: AeBDieuRaUfX/WqiEPKlyQ8D/t73CaHGtbA0Gv64sYxArVqelhlKJrewO98DCGxDdKJ
- 5I7bqN3ZWbjp7O3nCNkWmkmE2E6btYynTHXHIYNCsRlta6ebHqs1vfyJr1yFIeuwh+ShpH6mbxg
- HTox3IqbpMw5ZqfLWnig4tXnlSzvHFPiKdq8xLYkurLZpqBxqdRKwMKk3/qjVL3wKvMZ4Q3km0t
- 3DHN2kpuErhOvq4/vjDozWj4OfabVy5UXeEAOlhro+27MNpXLErNwAhdUV3+PCuDzjWYnc9Kd25
- 9EauxBfUrevGxTzICWY/M9kkHRAnNnXx3fkWEAUYo87ItC5Ai4BHpWSNzVjiNLl3vOKkshrNd2f
- 5G4Ty9LC1PdNB9vo2jq9QLtZuOPaXVFEDeczw3vZ1KHP7wC+EK8sMx7mR6k9nNoWU8k33whUF8F
- m10Y/WOqef00hPtPprQm4Vgt3XH386uEGjj11HCtr2tbQ6qlcCW+gPEDpzGNkvNNMdO3mJcEd/G
- iWXtV/Dpt3B+Yi/XSPZ
-X-Received: by 2002:a05:620a:f04:b0:8cd:94f9:1bc5 with SMTP id
- af79cd13be357-8f7d568ced0mr451709985a.12.1777396793859; 
- Tue, 28 Apr 2026 10:19:53 -0700 (PDT)
+ bh=DDHwbMiXSaFPGVCB2xU2SzwBCngcGS7SRxvDaHwKHYU=;
+ b=KZH3/rNysy97Ngg1reYeyAamXFFqgCqQ3318PdFFuc4HC4hHe9nyXRvnfrhxxZ0TAr
+ j60AlQjDpuj5aU07CbC9rGLt6QZbh1OD90TlT5hxYg1OvspxjOGJpE9o2saUQMl8qV34
+ cqOj35Ybve+Ie1csTbclKgJCZhfQR8Y5k7kYlnytLeVxj0oh8bZBA3lai/w2FHOyQE6Q
+ ymbTl2m/0wb3yzFDaZtTVEjBaFs7fkYfdsciSMyGh47CPJjIid6Q2nyiSZEJdHnQ4k0P
+ s/yyWR1SJM4aVCHKCnetzFlgpDdKRm1M08DoltmWJUmMYAsxXGSC0jEXF4G0LCfuposZ
+ oE/w==
+X-Gm-Message-State: AOJu0YwAYY8pWZgWjcTr3pzYyzSS+D2LbrudETavEIY18IC1Dwus8A3X
+ xzsRXtv6pPyQOwvlmb8tfWGFip8GdzsNRqfTt6ICzniF+YgeE1c+RPR8PbKGh89tyf6B3w==
+X-Gm-Gg: AeBDiesVhmd0/y9PC1LmWGoAQkflI/iRtP+/4tLnGmCEzldc/rfeljNzedAq+r/4yZC
+ 04EFyuBY3QUb9HNMiSFgeDYHF+TmoZa2MG5xqq2x/pbybhnBc9Kfcl+uw8eclD2IKVy6uWTVMbI
+ RRsNHfBqtUWMGFu/zax24JNwKt1wRp2wFOKwKq4IZtfYYV8D/UC/btK5SKChgYeHHv2CcgrNdHq
+ 0u3S7rt+8aDxM87paOfn/9O/vYsgenAJI6pI/Xl6nlgqAsgK4yigFMnTGjx2iCIKvXsyiUn7Kxf
+ 80FlnXJ0g+LuEy5TgGRfgFt77P7VN+n/vQgr9CZb9PcmlNslwgbwp+dhYU9mP0bjEQ2v/ObIQBd
+ 9sof245HkSgzM990vmC5T7iwBFHHuHVMiiJbUur2xTx8htx46T6NZwn/BanYfEb8gd3hNMFf6eW
+ 6XWowGBIHx2uazF4NrTHooke4e5zB/bOoFGT/2r32sWgIA5fFL5uflLnJt5c3jCj9RSsHzoYQN3
+ EGubA/feia3dX7Kg7bO
+X-Received: by 2002:a05:6214:320d:b0:8ac:a4f9:da76 with SMTP id
+ 6a1803df08f44-8b3e31bd0c4mr77643026d6.26.1777396831212; 
+ Tue, 28 Apr 2026 10:20:31 -0700 (PDT)
 Received: from precialexwin
  (bras-base-mtrlpq0313w-grc-01-76-65-67-233.dsl.bell.ca. [76.65.67.233])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-8f7c50b7537sm242811385a.18.2026.04.28.10.19.53
+ 6a1803df08f44-8b3e2848264sm24517906d6.17.2026.04.28.10.20.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Apr 2026 10:19:53 -0700 (PDT)
+ Tue, 28 Apr 2026 10:20:30 -0700 (PDT)
 From: Alexandre Ondet <frcomdev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 13:19:29 -0400
-Message-ID: <20260428171929.2646-1-frcomdev@gmail.com>
+Date: Tue, 28 Apr 2026 13:20:00 -0400
+Message-ID: <20260428172000.2671-1-frcomdev@gmail.com>
 X-Mailer: git-send-email 2.53.0.windows.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777396794; x=1778001594; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1777396831; x=1778001631; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=QNXmAnYWlYTFgH59WZKeFVjKFb0LSaDY+Lqx7w243xM=;
- b=tE0AJjQYoiAnlWwyOFXN93Qi21DG8+kaLXpMZF9w8D1KpZ1p0Hn9mNRkui3GxxrFlx
- GsT0aNjUwLdmjoIjd9Gq5FDaBYk9i+NmgfNviJko3sqrVJfU5vi7I2+XMkB2WpuE2D5M
- DV/mwgMOxEaGbogVwyAvcHFVybZ6MVX9lFxWEabe7NynrIrpXZk/EuwCDb73OgKNP9Gu
- xRXcgZZX2fg+e7xnS0LRwJCNElWvBI4/O/mFdKzW67R5Y2uxBqEs/ZqpbAtYzJBetvOB
- c4qwV1aBqZNEChU/x9e3fsdzCFF7mQd1S8XDbTfBaJenFPVda5D+N78O9bqIbFekrFMH
- BVAQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=DDHwbMiXSaFPGVCB2xU2SzwBCngcGS7SRxvDaHwKHYU=;
+ b=nCqyeT8yBfsZ4KK8JOaJIsExbgEixJkMaqMK3ydCx9XVsZ3JrS/b53tnMaifiAh9ys
+ GdQ6al69ijcpMimfeNMiyjr4jWEeXiuf2yA65mev7YfZhZM6d6GwSovWzwN8k8LmEFz6
+ WHlYAPtyQ1dD+kLRMPfPJM+s9466Y+quK1ks6xmCnkAASN+QIXZmzC7gxwHZ1HsCuzuL
+ DbFiq7PROoB8Wy3Au7TaDFYLhL8LeG3zXrbGkRV2NdiSNf9nUitSD20e4RvNsyN4yBwQ
+ tWPuXZ/Jhvt8GSitMcEncth9P6zKBVwYb1FAMl1osEbixcefCVl4ERUVUSZpgnIhywyZ
+ iHNg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=tE0AJjQY
-Subject: [Buildroot] [PATCH 05/13] package/python-jose: new package
+ header.a=rsa-sha256 header.s=20251104 header.b=nCqyeT8y
+Subject: [Buildroot] [PATCH 06/13] package/python-nmcli: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,69 +128,68 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
 ---
- package/Config.in                    |  1 +
- package/python-jose/Config.in        |  7 +++++++
- package/python-jose/python-jose.hash |  3 +++
- package/python-jose/python-jose.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-jose/Config.in
- create mode 100644 package/python-jose/python-jose.hash
- create mode 100644 package/python-jose/python-jose.mk
+ package/Config.in                      |  1 +
+ package/python-nmcli/Config.in         |  6 ++++++
+ package/python-nmcli/python-nmcli.hash |  3 +++
+ package/python-nmcli/python-nmcli.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-nmcli/Config.in
+ create mode 100644 package/python-nmcli/python-nmcli.hash
+ create mode 100644 package/python-nmcli/python-nmcli.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1409370bfa..754bdee9f4 100644
+index 754bdee9f4..83c9e0809c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1198,6 +1198,7 @@ menu "External python modules"
- 	source "package/python-jeepney/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jmespath/Config.in"
-+	source "package/python-jose/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-jsonmodels/Config.in"
- 	source "package/python-jsonschema/Config.in"
-diff --git a/package/python-jose/Config.in b/package/python-jose/Config.in
+@@ -1261,6 +1261,7 @@ menu "External python modules"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+ 	source "package/python-networkx/Config.in"
++	source "package/python-nmcli/Config.in"
+ 	source "package/python-numpy/Config.in"
+ 	source "package/python-oauthlib/Config.in"
+ 	source "package/python-opcua-asyncio/Config.in"
+diff --git a/package/python-nmcli/Config.in b/package/python-nmcli/Config.in
 new file mode 100644
-index 0000000000..d17e80bce3
+index 0000000000..acdb6a1423
 --- /dev/null
-+++ b/package/python-jose/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_JOSE
-+	bool "python-jose"
++++ b/package/python-nmcli/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_NMCLI
++	bool "python-nmcli"
 +	help
-+	  Python library python-jose (version >= 3.3.0)
-+	  Required for JOSE (JSON Object Signing and Encryption) support.
++	  Python wrapper for nmcli (NetworkManager).
 +
-+	  https://pypi.org/project/python-jose/
++	  https://github.com/ushiboy/nmcli
 \ No newline at end of file
-diff --git a/package/python-jose/python-jose.hash b/package/python-jose/python-jose.hash
+diff --git a/package/python-nmcli/python-nmcli.hash b/package/python-nmcli/python-nmcli.hash
 new file mode 100644
-index 0000000000..b3d9a38062
+index 0000000000..d11842e3e8
 --- /dev/null
-+++ b/package/python-jose/python-jose.hash
++++ b/package/python-nmcli/python-nmcli.hash
 @@ -0,0 +1,3 @@
-+# From https://pypi.org/pypi/python-jose/3.5.0/json
-+sha256  fb4eaa44dbeb1c26dcc69e4bd7ec54a1cb8dd64d3b4d81ef08d90ff453f2b01b  python_jose-3.5.0.tar.gz
-+sha256  a5e618eee6d496f77ad8ae70fea6edf148159558e2d228787d9076c900a2f926  LICENSE
++# From https://pypi.org/pypi/nmcli/1.7.0/json
++sha256  4fb17b6c33d276a264a27b7109fa1d70987570536fa8852b51830f9f7732f982  nmcli-1.7.0.tar.gz
++sha256  9dbbc4debacc85f5f5f074614cd9cadd61da09eaa19f98f6bbb5463c34133820  LICENSE.txt
 \ No newline at end of file
-diff --git a/package/python-jose/python-jose.mk b/package/python-jose/python-jose.mk
+diff --git a/package/python-nmcli/python-nmcli.mk b/package/python-nmcli/python-nmcli.mk
 new file mode 100644
-index 0000000000..2ec7715b68
+index 0000000000..449131974d
 --- /dev/null
-+++ b/package/python-jose/python-jose.mk
++++ b/package/python-nmcli/python-nmcli.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-jose
++# python-nmcli
 +#
 +################################################################################
 +
-+PYTHON_JOSE_VERSION = 3.5.0
-+PYTHON_JOSE_SOURCE = python_jose-$(PYTHON_JOSE_VERSION).tar.gz
-+PYTHON_JOSE_SITE = https://files.pythonhosted.org/packages/source/p/python-jose
-+PYTHON_JOSE_SETUP_TYPE = setuptools
-+PYTHON_JOSE_LICENSE = MIT
-+PYTHON_JOSE_LICENSE_FILES = LICENSE
++PYTHON_NMCLI_VERSION = 1.7.0
++PYTHON_NMCLI_SOURCE = nmcli-$(PYTHON_NMCLI_VERSION).tar.gz
++PYTHON_NMCLI_SITE = https://files.pythonhosted.org/packages/source/n/nmcli
++PYTHON_NMCLI_SETUP_TYPE = setuptools
++PYTHON_NMCLI_LICENSE = MIT
++PYTHON_NMCLI_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
 \ No newline at end of file
