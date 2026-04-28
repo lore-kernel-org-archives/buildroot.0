@@ -4,109 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B82C6FF886F
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF351FF886D
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:21:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89AA6610A9;
-	Tue, 28 Apr 2026 17:20:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A3BA60EFA;
+	Tue, 28 Apr 2026 17:21:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqqnyqT0bCR5; Tue, 28 Apr 2026 17:20:47 +0000 (UTC)
+ id H41wf6C8JAFK; Tue, 28 Apr 2026 17:21:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BB866108B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 916CD6107C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777396847;
-	bh=+OQCUwPVUqeadVJ4+drHi/MeS4aKa0ZzT7IOHZ2H7vw=;
+	s=default; t=1777396861;
+	bh=bF6giy8vzmPboaNC2lvpE0zByneFLyVZFrTQmkZSRMU=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=Nm2YdY9Z4OmCBUdWIpqBJJr5HykCbbs7lc+3wd8PeWtMyzhDUSvebxd6ZZ0BxxM5e
-	 58TPnIxsot9JFEQbRfQO2AE8/V1yWZIyi0u4DdATd2sXNoj/w6hPTmDFL808ErL306
-	 wy3xXA7tmloZ2P9JnSq4SX+hQ3q0PgDEAersfagRklRuk8AKQNsJdPzHkSe52u4IWe
-	 P6dM1rZI5Gj7o5s5Cbl3t1LZ9kOnQidlcA8QWDonK7KQJYaa6zXQRuJO7g7MKxLbZn
-	 UxXgLr/LK1ttRrndHCuL2qRDpNDFoJFAV00th6k5TkbrVu1XDGmtgwPqbxEGu0sXJ0
-	 PJzrHBKLXqK3Q==
+	b=MFwi+bW6TVRXX9/Bli1VkT6I2t6dqQVn1KHR0WPQF+QDE26NfSV9VL7ES69VzJs3J
+	 fnlMrlVqt/TGTxTnPvjN/RDLA/DQn+/8aKTjbYSQyHAt/mW8wpXayrCZyMrGvk5EqR
+	 ZycH0LZ9nafUPGi85kGwd4i/8JA9Ki1idrKML+aJLCkflzTiGSqGqJqgQYXCl21wlW
+	 Q+nC0IjApZd4IW2/Ety66m4bo0s4boZDWKdOv9NGgTnfw7hmBMPvsIKRe4QXDddfU5
+	 xPAAjvZNc35hwCQJzhuSFRMXq8vxoiYDEhiBoaBYAIMWeaxoQOHPU1m/EVvOTF2leW
+	 mkvMbGKPiy+Jw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BB866108B;
-	Tue, 28 Apr 2026 17:20:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 738791B8
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 916CD6107C;
+	Tue, 28 Apr 2026 17:21:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6ECA01B8
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:21:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65A8440B44
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 613B783C50
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:21:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJsadJQ48VJK for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 17:20:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2NeJzxtnL7Il for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 17:20:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::741; helo=mail-qk1-x741.google.com;
+ client-ip=2607:f8b0:4864:20::744; helo=mail-qk1-x744.google.com;
  envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 585E740B3D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 585E740B3D
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com
- [IPv6:2607:f8b0:4864:20::741])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 585E740B3D
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:45 +0000 (UTC)
-Received: by mail-qk1-x741.google.com with SMTP id
- af79cd13be357-8ee63e91acfso681390485a.2
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:20:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 65FDD83C4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65FDD83C4F
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com
+ [IPv6:2607:f8b0:4864:20::744])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 65FDD83C4F
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:20:59 +0000 (UTC)
+Received: by mail-qk1-x744.google.com with SMTP id
+ af79cd13be357-8c70b5594f4so5970085a.1
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:20:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777396844; x=1778001644;
+ d=1e100.net; s=20251104; t=1777396858; x=1778001658;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=90Y4fd4SfZkdQmjY8TvLEPiY3o0hvoQgXtmqaQdbYD0=;
- b=hDVhmtzrtJJq+5ZlWm3yAYrQOg6DNkHzJCnn8BKQM/r3w6INmGLlMKPqQf9BwpTlbN
- rr0gBE3G/q9EPOjh9cdyc8uE28eJ/jBk9vyK0ow6BbhqawmQ61ifDZwwcTUav9hrScxG
- NZkBJqhSZ8nI/V3HkJSlYlEOeswPTHfQeq7L7zmPzoaHNhnkkPb3h0H8C/RH4PTZuHyg
- TZBKL7qG/2T+Krfj57zN3/IBVSc9zxVqlRgOAvB212/e8uOEjO/7KK+Xe2uBmgNTDg6w
- DFJJefGfBPWp1uoSAE0RuOOuvpL/3njt3ebvALb366DhnNCQQB+6/7PU/wSag0z9mGQb
- LlBQ==
-X-Gm-Message-State: AOJu0YxZQgggVSTsE7zEIUixkTROs0qYPvzk0rF5mxH9Tr6erw4c4AKy
- trkKzUJoWUxW9vDprSWQugjisimQKFi1xBqiz4GAW9nkZIraxN6v4SQ0nEqywhP29AsS15VR
-X-Gm-Gg: AeBDietSe6yojcg6BrfV5pbZWMsI1kUCh39pFbXMnFFSMRG04/+uIash37YCuxQtsjs
- U/RZ+SJjVspqdj3q4zFq5zwJ+CDZ3rnpCN9q8D+nNUYZEDemKv/A3cRcwVz+fKq9FHSf+RUFPBX
- zx1Qizh99DsIdD1zdTzopn/krDkKAYFVs2/EmXdxdBESbbqhgiSj2GFusnAnAujyfR2YZAjhyDs
- IedKL2uoHXFDm0Py3hmuk6r4qmFjQ02UaVU4xzIxcAOJo0bt/KgzDqapdN8ejFv5XR+AQ5qhwLN
- ULPNUVkOzhHP460y/IVJn3IcJaxZYZgCRxgieGDt3sIVhfmumd2kJKOLM32Lx+MQlnmj07UGzEa
- a3xu/uOWMYPIuayXDKRFVi4sid1uW6QEmOVTd7Ksge9DFEV1iC4SxFEu+UEl0+e0rvMq+Vvm+4T
- 6CPJTFWhsrl4bX3MWu0ajLJEccqaNY0hgv4spH46dSvv8vZD8/A4YH6DwvYIaEin2T5s6gXClFI
- LYnmAv2SKLUJxiSJ2g1
-X-Received: by 2002:a05:620a:19a4:b0:8f0:f1a5:680c with SMTP id
- af79cd13be357-8f8f5997d55mr69174885a.29.1777396843899; 
- Tue, 28 Apr 2026 10:20:43 -0700 (PDT)
+ bh=KFVp5+p+8JdwMBCwLBgy4Lcp8mCdJtHPoUF8sJebsqU=;
+ b=iqUrHHQN6lhys42qytOVAmGzNQvyTQNYEjzQcphTh2TFZ1eMEd60eooA4r7cNVtukX
+ 9opCtGDcOp6iNpF9XVRf4VfaPVDuZwwIkTpH6j2eUCo/dwOYPmsOZ4eSTrxRy4CiU0+/
+ JakFDjUU7YeTAAI1ZlrVQDlJOMZHSUhQjpgZCZlyTASjGWA4lWkAesfCXvGegWNIn4hH
+ hEC68i64uGpreFRbx8HBvDixxc2O45kZtoBEYsYIP+EEOwzfERD3IHOXNEVxYqEkHEkk
+ Jd2PR/OpOmGBae7lI89zdgLxargXIRwFl/tQDVTE/Ke9pCmRW5yhGQzxfP2gP2raaf/s
+ tL2g==
+X-Gm-Message-State: AOJu0YyuWScwX3h3ZSVpNklqHXO2ZHw4CS6rvpS9l1AW2Xj8Iiphi2br
+ wRLJCvO3Z0DWIxPJArMT+jjczj5t3p8B5LHaK3mUtKorlXzZcpGQTkhiw2ElKQs7AtdXBppH
+X-Gm-Gg: AeBDievQT2CuwbusS+D+YFhRWIGGvjZbV+XpY8EjrY7izwWKCAB6m8KuKltufu78wDL
+ x5VSrC8FmwFGcCkL4lL62eF6dDvjBZTZBrFvvbd/t+wG1T+eOQSKgNmRa5FJtlnN1Tix51t3Efz
+ 3Aa+sILYMwpQpTJ89P+G2deFl98WLkHNn9yAoSuW0/MipQukOLgy3wKRVbleTARnlNilGuCPN7m
+ 3T6c9hcaPiVi+CA25vQhCfqjTO3ITHPVkrJUjvPNehL4zxcxucYA8iTnTlSlD/dPKR7+z9jUXg5
+ 73ehpm0ept5hF6DMU3a0Z5FzRaLgd3BG8wTpzw+Gpsg1SsI5WzV8BcPVOXveybeQFeyX6+zwEhM
+ agnSVlxwUltxCfQpviFrJzy3im3xF6nInVhIYeZAhnJ4Ib7dyJ3QsxbZX/m3XKkj8jPWSV3nU8Y
+ OO2TKiIWTg6ULi1OcldCpRKJ6ijQbTPUr9NGuWS4GkeYl52IjjAOdVbgNLfGKtPnYfqhUcf61Fd
+ luS/8KqgaxK9RSG2BcO
+X-Received: by 2002:a05:620a:4509:b0:8f8:eb90:b235 with SMTP id
+ af79cd13be357-8f8eb90b3b0mr86950085a.26.1777396857953; 
+ Tue, 28 Apr 2026 10:20:57 -0700 (PDT)
 Received: from precialexwin
  (bras-base-mtrlpq0313w-grc-01-76-65-67-233.dsl.bell.ca. [76.65.67.233])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-8f7c48c7f2dsm252965285a.9.2026.04.28.10.20.43
+ af79cd13be357-8f7c48c79b5sm248835185a.8.2026.04.28.10.20.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Apr 2026 10:20:43 -0700 (PDT)
+ Tue, 28 Apr 2026 10:20:57 -0700 (PDT)
 From: Alexandre Ondet <frcomdev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 13:20:37 -0400
-Message-ID: <20260428172037.2696-1-frcomdev@gmail.com>
+Date: Tue, 28 Apr 2026 13:20:52 -0400
+Message-ID: <20260428172052.2721-1-frcomdev@gmail.com>
 X-Mailer: git-send-email 2.53.0.windows.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777396844; x=1778001644; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1777396858; x=1778001658; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=90Y4fd4SfZkdQmjY8TvLEPiY3o0hvoQgXtmqaQdbYD0=;
- b=ezGTc4hCCYMhj74oO2I2BVQtRg7NR+QgMbO8EmZ3dQGJ4T8mkSWiTUoheoGT4c7jOe
- d0r0bTGXZnpZIWzX1y/MDa9DvUFUKfQlO49qcqri8XNaOEvnbChvkbzAec6g4udhLM9v
- qjPXuUmr2LkfskTMPL7OUt3QCiA142PPyHSnGT9HOs0YkH01s6W5YZ6dG6OyU5p/aAFl
- Eh9zTa9/5D2vrrCupjzrAjSVow046OZzKQcaVuUxGHgpFO0GRv/ARjNzvTwtxqBTMQ1F
- zCMowKITvDOkqeZYSxEqFA3uqBwNpAnFcQrdk++mF97ptXoemSB2xJVp6tkgjYyCjQ1W
- whmg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=KFVp5+p+8JdwMBCwLBgy4Lcp8mCdJtHPoUF8sJebsqU=;
+ b=dTkkZnhVk7hKXDV7vJEJbJ1/yyEq8XPCP+JVEX06MsmysZRM3Oj7OGOBTw+LnyzRk2
+ SfQVOyp1ngAYjqKXB230+0k8qFvxsVoOBmcNnGnD/OTjLXffIKTOT4Mo0FdQUCybv8ik
+ wBKeIcg//H4Dk12K7qaxkdNMMFXxBj1cY6UxCJnWUvpDE3kMArnTp7cKf5YKv29aJKI6
+ eCrV0CpeAgsF06cQo90ThMTCvTE3cnagMFxNhVCyuv0D0LrpOjl3Gq5O/h2hGL3SNohG
+ DgLON2cnWXRgDqPwmw7JxNwa2mZE5HCeA0LME/PnK2ZPcsTdxPqpCmYzHMqSMw+Y+Y3m
+ 3SWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=ezGTc4hC
-Subject: [Buildroot] [PATCH 07/13] package/python-ntlmlib: new package
+ header.a=rsa-sha256 header.s=20251104 header.b=dTkkZnhV
+Subject: [Buildroot] [PATCH 08/13] package/python-opencanary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,68 +128,102 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
 ---
- package/Config.in                          |  1 +
- package/python-ntlmlib/Config.in           |  6 ++++++
- package/python-ntlmlib/python-ntlmlib.hash |  3 +++
- package/python-ntlmlib/python-ntlmlib.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-ntlmlib/Config.in
- create mode 100644 package/python-ntlmlib/python-ntlmlib.hash
- create mode 100644 package/python-ntlmlib/python-ntlmlib.mk
+ package/Config.in                             |  1 +
+ package/python-opencanary/Config.in           | 22 +++++++++++++
+ .../python-opencanary/python-opencanary.hash  |  3 ++
+ .../python-opencanary/python-opencanary.mk    | 32 +++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/python-opencanary/Config.in
+ create mode 100644 package/python-opencanary/python-opencanary.hash
+ create mode 100644 package/python-opencanary/python-opencanary.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 83c9e0809c..882459cefc 100644
+index 882459cefc..763ca02a06 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1263,6 +1263,7 @@ menu "External python modules"
- 	source "package/python-networkx/Config.in"
- 	source "package/python-nmcli/Config.in"
- 	source "package/python-numpy/Config.in"
-+	source "package/python-ntlmlib/Config.in"
+@@ -1266,6 +1266,7 @@ menu "External python modules"
+ 	source "package/python-ntlmlib/Config.in"
  	source "package/python-oauthlib/Config.in"
  	source "package/python-opcua-asyncio/Config.in"
++	source "package/python-opencanary/Config.in"
  	source "package/python-orjson/Config.in"
-diff --git a/package/python-ntlmlib/Config.in b/package/python-ntlmlib/Config.in
+ 	source "package/python-outcome/Config.in"
+ 	source "package/python-packaging/Config.in"
+diff --git a/package/python-opencanary/Config.in b/package/python-opencanary/Config.in
 new file mode 100644
-index 0000000000..9c3c21eff9
+index 0000000000..9d7d99ab6f
 --- /dev/null
-+++ b/package/python-ntlmlib/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_NTLMLIB
-+	bool "python-ntlmlib"
++++ b/package/python-opencanary/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PYTHON_OPENCANARY
++	bool "python-opencanary"
++	select BR2_PACKAGE_PYTHON_BCRYPT
++	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++	select BR2_PACKAGE_PYTHON_FPDF2   # voir note ci-dessous
++	select BR2_PACKAGE_PYTHON_HPFEEDS
++	select BR2_PACKAGE_PYTHON_JINJA2
++	select BR2_PACKAGE_PYTHON_NTLMLIB
++	select BR2_PACKAGE_PYTHON_PASSLIB
++	select BR2_PACKAGE_PYTHON_PYASN1
++	select BR2_PACKAGE_PYTHON_PYOPENSSL
++	select BR2_PACKAGE_PYTHON_PYPDF2
++	select BR2_PACKAGE_PYTHON_REQUESTS
++	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
++	select BR2_PACKAGE_PYTHON_SIMPLEJSON
++	select BR2_PACKAGE_PYTHON_TWISTED
++	select BR2_PACKAGE_PYTHON_URLLIB3
++	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
 +	help
-+	  Pure Python implementation of the NTLM protocol.
++	  OpenCanary is a lightweight honeypot daemon written in Python.
 +
-+	  https://pypi.org/project/ntlmlib/
++	  https://github.com/thinkst/opencanary
 \ No newline at end of file
-diff --git a/package/python-ntlmlib/python-ntlmlib.hash b/package/python-ntlmlib/python-ntlmlib.hash
+diff --git a/package/python-opencanary/python-opencanary.hash b/package/python-opencanary/python-opencanary.hash
 new file mode 100644
-index 0000000000..084f2028bb
+index 0000000000..1e7020098c
 --- /dev/null
-+++ b/package/python-ntlmlib/python-ntlmlib.hash
++++ b/package/python-opencanary/python-opencanary.hash
 @@ -0,0 +1,3 @@
-+# From https://pypi.org/pypi/ntlmlib/0.72/json
-+sha256  6b365027ec3cdaf09421a679a5b2b397a8b41f8adde8dcd88b80e695a8d2e9c2  ntlmlib-0.72.tar.gz
-+sha256  68f3b1c862730d19e8024de80621bd3df816400da6573f09be267fb1f50085be  PKG-INFO
++# From https://pypi.org/pypi/opencanary/0.9.7/json
++sha256  b10df22fa3f3b9300667811d2557dc89a8ba97c42524f8c8da076a7b7ffbe22e  opencanary-0.9.7.tar.gz
++sha256  4009cd65e5d4a0b1926c70c14a66d656ed1a05964879c668c8e868f8360c195a  LICENSE
 \ No newline at end of file
-diff --git a/package/python-ntlmlib/python-ntlmlib.mk b/package/python-ntlmlib/python-ntlmlib.mk
+diff --git a/package/python-opencanary/python-opencanary.mk b/package/python-opencanary/python-opencanary.mk
 new file mode 100644
-index 0000000000..b5d3d67e69
+index 0000000000..b1696fee35
 --- /dev/null
-+++ b/package/python-ntlmlib/python-ntlmlib.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-opencanary/python-opencanary.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# python-ntlmlib
++# python-opencanary
 +#
 +################################################################################
 +
-+PYTHON_NTLMLIB_VERSION = 0.72
-+PYTHON_NTLMLIB_SOURCE = ntlmlib-$(PYTHON_NTLMLIB_VERSION).tar.gz
-+PYTHON_NTLMLIB_SITE = https://files.pythonhosted.org/packages/source/n/ntlmlib
-+PYTHON_NTLMLIB_SETUP_TYPE = setuptools
-+PYTHON_NTLMLIB_LICENSE = Apache-2.0
-+PYTHON_NTLMLIB_LICENSE_FILES = PKG-INFO
++PYTHON_OPENCANARY_VERSION = 0.9.7
++PYTHON_OPENCANARY_SOURCE = opencanary-$(PYTHON_OPENCANARY_VERSION).tar.gz
++PYTHON_OPENCANARY_SITE = https://files.pythonhosted.org/packages/source/o/opencanary
++PYTHON_OPENCANARY_SETUP_TYPE = setuptools
++PYTHON_OPENCANARY_LICENSE = BSD-2-Clause
++PYTHON_OPENCANARY_LICENSE_FILES = LICENSE
++
++PYTHON_OPENCANARY_DEPENDENCIES = \
++	python-bcrypt \
++	python-cryptography \
++	python-fpdf2 \
++	python-hpfeeds \
++	python-jinja2 \
++	python-ntlmlib \
++	python-passlib \
++	python-pyasn1 \
++	python-pyopenssl \
++	python-pypdf2 \
++	python-requests \
++	python-service-identity \
++	python-simplejson \
++	python-twisted \
++	python-urllib3 \
++	python-zope-interface
 +
 +$(eval $(python-package))
 \ No newline at end of file
