@@ -4,89 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F933FF885A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 20:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B57FF885A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 20:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D72A2409BE;
-	Tue, 28 Apr 2026 20:50:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DE4F40A02;
+	Tue, 28 Apr 2026 20:50:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-4nSxMkN3OE; Tue, 28 Apr 2026 20:50:13 +0000 (UTC)
+ id 9ncRT70Q-rPZ; Tue, 28 Apr 2026 20:50:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A550409AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E65BB409F1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777409413;
-	bh=CBtqa2N6UGC48jqSKHmZ3OUzQ+/McWFpIX59rYGveT4=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=HmZ6XdVQ/wa9KM9gx5C+TQ56dwZ9e4i3B3FCAKdziKDxmOS0/pu4XDWgxaqwV7GiW
-	 pz8fycETVycuk+08pcnIEzTNTaXL4HOuZLAs5yV1DKVHaaCT9/B9UeQSgfXWYRcrot
-	 ySUsptV6UOuGroHiPEgkykYBltrwMfTYdu6rdHcvBj7IhwmTuNPnNLkdJ4qmMiXn13
-	 BtdPPWCj1uL785IS09LGSpLfPZAhDtsakWt3IkN0zWHTMXgEpexMuLemnu3bWHtbCZ
-	 E9C2qFPAZGwmt0GixL4WkBDlQuawkkvAIlaF2bnxoA+0bLk3UajLyTFlY/ZhFdM9HU
-	 Ykyk+WjHLtPRQ==
+	s=default; t=1777409421;
+	bh=7Z1Dqy55l5XwA244AlRoMz6336Z+PzR6eCGadE+Z0zg=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=e1hVBx21I2415W/ZRTr08dUKG6Of5+dL+TYX0RIh8x9m9Sq74vZUWk+J2hZTQiv5g
+	 1E+gwJQ7hfkHylK6oOBFcZ/UVJVQL5EtPOdKHh81OSzSzg9OXVZ/QIzWlEgIL1Xc61
+	 9T5euylZ5r4qLHujQxRvcJ9K2A3yUSh2TUis577JAdV4+AR1KmBgou/foFZNtl8tSM
+	 9fOzRua4TqXWTlBIl0J2MEF9l03EI03c26exa3MmV8TKJYYdMQJpCykVKnZFoEcnH8
+	 wJtmMyeTwllPFAbdcpAsLGNEZfj1E6+t8xtVKuCpbtm9j8arfqgCg7RmFiEyUVx0mt
+	 AzxA8bMpzorFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A550409AB;
-	Tue, 28 Apr 2026 20:50:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 53B9923D
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E65BB409F1;
+	Tue, 28 Apr 2026 20:50:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0C2523D
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45A5880EBA
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9269C60BEC
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fc7Ovo4zUJrT for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 20:50:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2600:3c04:e001:324:0:1991:8:25; helo=tor.source.kernel.org;
- envelope-from=ehristev@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8BCFA80EA9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BCFA80EA9
-Received: from tor.source.kernel.org (tor.source.kernel.org
- [IPv6:2600:3c04:e001:324:0:1991:8:25])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BCFA80EA9
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:11 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by tor.source.kernel.org (Postfix) with ESMTP id 3C5AC61119
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CDB4C2BCAF;
- Tue, 28 Apr 2026 20:50:09 +0000 (UTC)
-Date: Tue, 28 Apr 2026 23:50:05 +0300
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qYWiZ3JP1Wn7 for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 20:50:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 286A56090B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 286A56090B
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 286A56090B
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 20:50:17 +0000 (UTC)
+Received: from [10.42.0.16] (ip-109-41-114-206.web.vodafone.de
+ [109.41.114.206])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id BFCDF2C84162;
+ Tue, 28 Apr 2026 22:50:14 +0200 (CEST)
+Message-ID: <e3da29ae-507b-4148-8796-887e8408f941@bubu1.eu>
+Date: Tue, 28 Apr 2026 22:50:12 +0200
 MIME-Version: 1.0
-Message-Id: <20260428-maintainers-v1-1-9aa4552ce96a@kernel.org>
-To: buildroot@buildroot.org
-Cc: Eugen Hristev <ehristev@kernel.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=776; i=ehristev@kernel.org;
- h=from:subject:message-id; bh=iZEQ1nUWKxT4kOZpEqq6sgx0Btd1vC785Nsvga9L+5E=;
- b=owGbwMvMwCXWkjcnuXne3fmMp9WSGDI/yjbkr6lpb8prLf18bU/g1E1yrj/jTHsF2gQ/ftv8q
- 3in+lyljlIWBjEuBlkxRZZqk3+1wv073E+6WqrAzGFlAhnCwMUpABP5fIbhrzhjlKDXVl2Gw4fn
- 3pvkaVvwcfrcfwEPzcVMRMVc3Up89Rn+h83p3a64zbnvIH/VokjX/1sXK5bYeh111/WLeuI96Wk
- SIwA=
-X-Developer-Key: i=ehristev@kernel.org; a=openpgp;
- fpr=AB184498D27A77B65D7852C81EB31E020EAC2FC8
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260421185527.2664360-1-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260421185527.2664360-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1777409409;
- bh=iZEQ1nUWKxT4kOZpEqq6sgx0Btd1vC785Nsvga9L+5E=;
- h=From:Date:Subject:To:Cc:From;
- b=atNtdRZkpypKpc9ec4JipcBUNj+ScGuZD5k855bQV0zj/QC5OREqe4MeCKL6u1h0+
- 98Cqe68LGHm+gQSve9lKP7ybItFX7NPhxP3+V6vR2pIjp9dBczgJxN4XkhoXISxdb6
- DvEWDbBvttiEad+1dNdk+DhjeUq09Tzy6xw2e0T0olRQg72zPj50iQe3wsTiBKCgEO
- j5X0lWXg/bOG555NxsfpRHjC6mPPqTI0HQ0HtMV7XWJADXHUvmKAwA8MrxoGskrsg5
- +vsNJpKzAsVxTE57q30cOWw5I8TpTWJJ7gW89oGL0IUmSHcBmEOczCY6FJONZRo0ka
- pygTq6CWGLZJg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=atNtdRZk
-Subject: [Buildroot] [PATCH RESEND] DEVELOPERS: Update email for Eugen
- Hristev
+ d=bubu1.eu; s=bubu; 
+ t=1777409415; bh=vcQzbatjoqde30nHY0k5LZLPPul13aLQna7MwV8cjyY=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=DczERY+Zef6q2M+IOlWrdGotuZISeGZhIF9Ud3rzYsZEsH4DlDNDv2b7wx1OHeeb9
+ gPw1zBU58YYLyeVJt8Dha6SGz5hPhiFHYXNEsWgqje4/tBpndaEK0MxS/PmqGJ8lSz
+ BBU6SNLLyny2W0s+ebT+KQepBmWcSlLwc7fITgve7RZFFdBncJSYj9w2XfNyiUHNkv
+ L8F3WfIVAwPF7K4qu6NCoqjF1VSqBcqh0AF2tUt/T3TI0SP/sWpd3CYBgxhTODtVH1
+ QEoRYTF18MTIG/zBDa/uhmFVeyFYgHctgznqiGLFXCi2wfkp0G5ssoCf4mPe1Fs2nV
+ CipCyZTlv5ZVA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=DczERY+Z
+Subject: Re: [Buildroot] [PATCH 1/1] package/nginx: security bump version to
+ 1.30.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,44 +92,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Eugen Hristev via buildroot <buildroot@buildroot.org>
-Reply-To: Eugen Hristev <ehristev@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replace old bouncing email address.
+Hi Bernd,
 
-Signed-off-by: Eugen Hristev <ehristev@kernel.org>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 4/21/26 20:55, Bernd Kuhls wrote:
+> https://nginx.org/en/CHANGES-1.30
+> 
+> Fixes the following CVEs:
+> 
+> 1.29.7: CVE-2026-27654, CVE-2026-27784, CVE-2026-32647, CVE-2026-27651,
+> CVE-2026-28753 & CVE-2026-28755
+> 
+> 1.29.5: CVE-2026-1642
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c6c228ae91c9..1270365ef0e1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -968,7 +968,7 @@ F:	package/optee-client/
- F:	package/optee-examples/
- F:	package/optee-test/
- 
--N:	Eugen Hristev <eugen.hristev@microchip.com>
-+N:	Eugen Hristev <ehristev@kernel.org>
- F:	board/atmel/readme.txt
- F:	board/microchip/sama7g5ek/
- F:	configs/microchip_sama7g5ek*
+I think all of these are fixed by 1.28.2 and 1.28.3 as well. For 
+backporting to stable versions, we'll need to split this into the 
+security bump to 1.28.3 and then going to 1.30 from there.
 
----
-base-commit: 3a488674b52f2515b3cc54526253682749553d11
-change-id: 20260428-maintainers-d796e332862a
-
-Best regards,
---
-Eugen Hristev <ehristev@kernel.org>
--- 
-Eugen Hristev <ehristev@kernel.org>
-
+Can you send a new series doing that?
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/nginx/nginx/commit/7fa941a55e211ebd57f512fbfb24d59dbb97940d
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
