@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C84F9FF885A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 18:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D28EFF885A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 18:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 196F983DAC;
-	Tue, 28 Apr 2026 18:34:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PVvPcDLINIAx; Tue, 28 Apr 2026 18:34:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D47483DA6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777401281;
-	bh=soONSWU/r4A4HVRW5hjvjXZtus4sGt17Y0X7cLKyoIc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qgBzyVQfyNiyOt0gqdPbvC6yEh87PW/L8QRzuHdU0uUcH/aMlPpftWCChF9PdxjFh
-	 cu9NtNo5JJZuyA3xN2UHIwiuREL9GxROOV+oTEa3WQWR8ysQcqvcGTOrkCcFpmJKmi
-	 4FOpVOIPEVusXdt5w/fCSBeZw4YBBTTE2lxXC6shQpv4Y6uoMDqFAy2Q5kU3NYtBfk
-	 Vu0DsEAL3OG99pA2nyPrcjgznn8G88m53SxCnDYXmddf+Nc1NAuMQbeKhmNzlzR3ny
-	 K1agWO28sPdLjizQaQCyv2rNg9sgikOlAiokAm72+FlJBZK47H/Tl8zoRfKOALaeUX
-	 WX3YceGuA5Y4A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D47483DA6;
-	Tue, 28 Apr 2026 18:34:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C8151231
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:34:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE4D741E17
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:34:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48B2E40A28;
+	Tue, 28 Apr 2026 18:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jl23Sa9EqwWW for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 18:34:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCB3A4142B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCB3A4142B
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:34:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85EBF8390D; Tue, 28 Apr 2026 18:34:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 20:33:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d6bc9b2af6ac992810359801bcd0494f5722b03
-X-Git-Newrev: 1be89eb5939d041f912eaa7861aee9a1ce268c6e
-X-Patchwork-Hint: ignore
-Message-Id: <20260428183438.85EBF8390D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spirv-llvm-translator: bump
+ id rl5jrMBCyoMR; Tue, 28 Apr 2026 18:35:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ECF6407FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777401315;
+	bh=zhlWnofVeaP9UM6zaIwQYvaWz1KQ63gI0Y1mBu2/uTA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=qDRiUqgPM6Hbjgng4r8oR9YICmUH0rxZF87A53WU8e/ArMArKQWUT8OzZooaQ38ut
+	 tjn/HdI+NcQjWsA5CcWFCeyXbdqX+r8KDOqu3amEb1PkJA8AEeJ0qrw6yqKmWoJgTw
+	 YzSZ7RWOUW3JBl6VwkuhBHoeod2XLUmnatqqmxALsdh53RzMUDOys6ZO8it7QMmv3w
+	 2Bduw1byu0y0DUJ30h30xFHXnzezIHj91z/7rKz9uWrfYzCo8GjG+IGR7F2CSagTOl
+	 VJigzF9P0Wm6VbZ9F220LXNDUA6cMxM3ksQ/o/ybx7/YWzE7nEOBfR9z6gAMdIte5f
+	 8bcgfzdTGH+eA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2ECF6407FD;
+	Tue, 28 Apr 2026 18:35:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C249231
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:35:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E02360F2C
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:35:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cv7TILPIkJJn for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 18:35:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 44E5B60F21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44E5B60F21
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 44E5B60F21
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 18:35:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 2E54460134;
+ Tue, 28 Apr 2026 20:35:09 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 28 Apr 2026 20:35:09 +0200
+MIME-Version: 1.0
+Date: Tue, 28 Apr 2026 20:35:09 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260426072010.401358-1-bernd@kuhls.net>
+References: <20260426072010.401358-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <09034bcf205857df6488ed68c111f7a5@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777401310;
+ bh=JcrdmK/b71uEqsod7hID872i9qTv8Fd4ycT4bO+YHVk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=jCJMgpjYer8dHNm8PgEfdmuaJX69FGF3OA5o4uzaRGf4evrFNjW1BZcysYIVkf7iX
+ uNaCyByJcwQVDJDObnt3acPbZDehc+5GzzQ51BW7/EN6//reNEZUjzc4pkLXhK2UX3
+ R1c1NhKQYLkeWQBbQIHZv05+TAG9CWjFiahYLckxKqYrmqF7CPmVen61q0bQWoim2N
+ IK6s7Fy+uib+xbvtJB3RO+eqqr2tF8lCTuuVu2eFeuWsE+eQjP3lOa7R3llyrOPmLi
+ faxB+7A3j3jcYS8pm/Ln8dtUoxRXUihggAHRCAeG6QzbViMbl9MINe/u4sAb2DSdrW
+ BzbWA7NbCtt0Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jCJMgpjY
+Subject: Re: [Buildroot] [PATCH 1/1] package/spirv-llvm-translator: bump
  version to 22.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,46 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1be89eb5939d041f912eaa7861aee9a1ce268c6e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 26/04/2026 09:20, Bernd Kuhls wrote:
+> https://github.com/KhronosGroup/SPIRV-LLVM-Translator/releases/tag/v22.1.1
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/KhronosGroup/SPIRV-LLVM-Translator/releases/tag/v22.1.1
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
- package/spirv-llvm-translator/spirv-llvm-translator.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-index 5b7f13a570..1f2886ec6c 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  a5d476404ab88ac0d148211da50428178c89caef8af8042a3ca8e71e58ed9427  spirv-llvm-translator-22.1.0.tar.gz
-+sha256  83e7007b8b9b5536b30991661738a98e9cd607d4a203e9342b628aaea5ea32d7  spirv-llvm-translator-22.1.1.tar.gz
- sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 1ff8dc3401..0f5fbb814e 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.0
-+SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.1
- SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,v$(SPIRV_LLVM_TRANSLATOR_VERSION))
- SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
- SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
