@@ -4,109 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 775DAFF886D
-	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F398FF886F
+	for <buildroot@archiver.kernel.org>; Tue, 28 Apr 2026 17:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CBEA60EDF;
-	Tue, 28 Apr 2026 17:18:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D96D06107F;
+	Tue, 28 Apr 2026 17:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zCdkh8B2v6vJ; Tue, 28 Apr 2026 17:18:56 +0000 (UTC)
+ id NbJsRbwD31v6; Tue, 28 Apr 2026 17:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6359960F1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDD8E61080
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777396736;
-	bh=+bXF+icfDxTLLhUCs5qOPek5GBQPsOZm9tMJqYavNfk=;
+	s=default; t=1777396768;
+	bh=z8f1tMMhYDTXKq/g0yASjFktHr4kzdhOwVxkV93GqaA=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=UImvVmHqFwDFwKhNyaY+SOdRqN0TRx+2WOeGdhljREVrT1mdFgn6PAajISkFypMQG
-	 IH4+SB41XCrhjOEl2S99ODiS/NJIaILE9rF6NLZQLwpp0Onh4BZo6owxkuvtAz4g8j
-	 DUgJowOFsluvpsOZhXK3O7WMOsiqBloHQva2mAZg90+gdLsRZ6Ils3SM9Hbpdo4zwz
-	 sjOdx/YpQmdLedsv/YLvksc9ClIKRKuAyaXA4KhitbwqGa0xn23HFlQfprujQZx3TM
-	 X6hs5uugYZIscMqavIujgVDZljm2276fguBvA+ML4nmQbWvoGg75QUZKruJ3YeiwQX
-	 DnfPFz3eXImqA==
+	b=aaaYGvAh8IvOYKsVxGIh+PIBND7iuwG+RjW4FJbtOEd/WgksVIjXu/VGw6ikfebqS
+	 iUOHtWyh1OzJ/iCGQuVv/uaZXkm6UY+r+dFEopTGp5L2oPttOy+oE6i1efcjik0yJg
+	 zUlxdKqOLo/XHtmfd877qailaNMCJS35aMNpwTmNVQAbuLu33G6WxNWcfKvRWS3N4Q
+	 Baj1cK+wif+pcWr/a9dAUV3VDv7Gs5oxQmbYO9FLpuiKzDRxqzVCyzdJy/SvnZSmvK
+	 VVx0NBjK3Hrjn2/sOHOGvbSHP9ZpA1a1O9cqSX4kUM2QxDKrey6K5Q+5kRsLJ2P4vW
+	 FX2D1TzosKfjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6359960F1E;
-	Tue, 28 Apr 2026 17:18:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EF58231
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:18:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDD8E61080;
+	Tue, 28 Apr 2026 17:19:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B38DE1B8
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59AF040745
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:18:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A590283B6B
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s-Jxvnm3F99m for <buildroot@buildroot.org>;
- Tue, 28 Apr 2026 17:18:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V4J06Lz097eJ for <buildroot@buildroot.org>;
+ Tue, 28 Apr 2026 17:19:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::741; helo=mail-qk1-x741.google.com;
+ client-ip=2607:f8b0:4864:20::e41; helo=mail-vs1-xe41.google.com;
  envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85AB240625
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85AB240625
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com
- [IPv6:2607:f8b0:4864:20::741])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85AB240625
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:18:54 +0000 (UTC)
-Received: by mail-qk1-x741.google.com with SMTP id
- af79cd13be357-8d4f78fc9f6so1272645185a.3
- for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:18:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BBC5883C05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBC5883C05
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com
+ [IPv6:2607:f8b0:4864:20::e41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBC5883C05
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 17:19:25 +0000 (UTC)
+Received: by mail-vs1-xe41.google.com with SMTP id
+ ada2fe7eead31-605a27fa8d5so6351305137.1
+ for <buildroot@buildroot.org>; Tue, 28 Apr 2026 10:19:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777396733; x=1778001533;
+ d=1e100.net; s=20251104; t=1777396764; x=1778001564;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=al9yIZotDbRvTQy65odtm7F5fKActFXhV03jYY5pUEk=;
- b=pCArysEpV/Ug0hA2ZDaA0pHKolQD+JNLFKGGZzFGu9JWIQuJNrS/rAX+E9kgQ15EEQ
- OooFuq3UxyUCv6w6xcPPYBp8Q25i/OqTffts/aCNaCsvRgCa0JPuxxlx5RmY6NhbwzV9
- Sl845+C0RSDWqBhz8QOxi1pT1/0zMybW+KtJVhqqF5EYNzaZt0v6DIQhwoHIQAzMPH8b
- Em/vz3iUjipAewaN9W3lc/Zrk413DN+tsYdH2+YiVPLfIc6mBy7krD/9e7lG9lqUVz+G
- XOgGYlqJA91ICMc7/S5SFy87Ip+i+JNzBmNcYMBZHW/DCBj+V39GOjR2oIFkZPG4wbRY
- 5NAQ==
-X-Gm-Message-State: AOJu0Yy+joKmjd4bjXjbod8+I4wdsDo4BMEIly8Fu/HJaSHpxYa5W0HW
- sZyZeLj47Kpt/Y0UsiF8zvfB7vzJRi9BQli/xFYxeXE8WZG3fjR8YQcQBPU2lfTUrv9Aw91I
-X-Gm-Gg: AeBDieus03Kys3K2B9INuArDZzal3Gey0SXsSClb9pyYLuUYBoBO415iGsz6eU0LZeS
- KlGd3TjcA/XelryZAhNrw91P1fb7LvTXoNt1ZaVNTa6n/lyp4sBzPRKodd4g6qlMmhIFYLD6gnK
- iUWMkj6CrZilu6wRwzI8EeyW0/QnaxH2WajZtlrXKZlqNjUNzOPB9Z/dGuVlcgp3xvrWrl15akd
- kqM54MtWO7b0E+EiZ1bgIuor9gKZ2pwuVg4IBsm8q/csmGjvutKCwVm0ffQciLhalqMMfLFPNI2
- 20vRFkhWuAFVQ5jurANbEhjp2i4cRGn1RvLXcDGgtDOd3YoyblQHFEcukSnrCS50FUgdPN4RIk+
- kXAmeqSj4BEiTeVjaJB+nNvIwaXjKLuFWRaL8l7N+POmb0qzOdpZxVJvfqBJtFwqVSdPXYsbfDh
- vbTca6zj9y777YqpVzRp8zUnguMJXLFR9d0xwnGLBs2Wp/+BX8vEjqMyJNozro5BByy5npcT2XI
- ui1v8BZTgBpfYRGLObh
-X-Received: by 2002:a05:620a:f04:b0:8cf:d804:456a with SMTP id
- af79cd13be357-8f7d7833d75mr517015385a.20.1777396733065; 
- Tue, 28 Apr 2026 10:18:53 -0700 (PDT)
-Received: from precialexwin
- (bras-base-mtrlpq0313w-grc-01-76-65-67-233.dsl.bell.ca. [76.65.67.233])
- by smtp.gmail.com with ESMTPSA id
- af79cd13be357-8f7c48c7625sm247576085a.2.2026.04.28.10.18.52
+ bh=hnkaXVg/icksstLMMdoAG8m+e4+z0sUTqpTDiYroDnM=;
+ b=mtHfld1sW/lTxM4u24rJaWcYrjymMjY7uh8s5j0oaQvGOdKnqCMRgsnmYK2Xq70ATO
+ kqLEDRg2lR5G70gu9ZOaRM7V3p4hXf/iCWPpCKb1Lx0dTRzFIe+AFZ/sF1TUWh48EcoK
+ DdmVosGQirBTg9IZYgSNaK5HQXHaxMHSk+SYrGlkfUC6sVCMtk3QV6H185KNuOMzQ0Ev
+ /6YAZdUKXejdI6Yi5XqA5CAMzeh/eaQ3hcQh989hrSlR8w4RZt6OZ9Cppn3rAGr1WwSH
+ 8RsG9VOLpymWKPpy9g6bOceKtx5kr2G78AoKuxsDvNh3ps0oFf5UPm+t06FnqUlQkG3+
+ 6frg==
+X-Gm-Message-State: AOJu0YxcztC1563TTQgeAE4wn2xcFvSfHp0HYJfn91dN86LR/9uoWn4a
+ 9eozLykcNoMOB7icecdDH7p2eJLHKx6YAGutiUIBCw9YK7bnEQoiCAJP+KTVgSCQ6/Nx5UHX
+X-Gm-Gg: AeBDietLJJfL4IY9OQ3RW3jqxuvJVNPU+7KRUeAPTDw8I+8txnQM4vXUA5N5GRPp4NC
+ qmD+XK6qawpQ8Ucv98aG9FV84zGhUa86z68BX58g3e2X1GWwyxHxqE8wDcoIz335DtYWAUSUiHF
+ nHItW5POSpVJKkOEvQXPPlxvo1M7KCQgPhnfNNL3bpp+QQRKUSsH79IL1LhfsMvLpff40LNtcNK
+ IsV4MIO7jRkko6w1OsS4X2wH+TGjw6OWCgVf2zbi+jotck8rVajha1LteZ8qyIv2bV1DteXYeCZ
+ necB2nws2kSQhppTHCKpP68PYNE0nhYsfI9FresU6sxv55XHPWk/SfIzlz/3SiVd3rcHlT81ZRw
+ uQCI4nhkdRlMDTj9ckYjnSMZMllrmRoD73irnu4h+jd4u5V4/q/TYiTLRRIkkb/sHrdJtqquQI7
+ 38gguyR+4aJfvfT7X7ec0DKyQznjYddQ==
+X-Received: by 2002:a05:6102:950:b0:607:7991:8edd with SMTP id
+ ada2fe7eead31-6280a8c5705mr2274185137.19.1777396764331; 
+ Tue, 28 Apr 2026 10:19:24 -0700 (PDT)
+Received: from precialexwin ([76.65.67.233]) by smtp.gmail.com with ESMTPSA id
+ ada2fe7eead31-627f8032e9esm1607774137.12.2026.04.28.10.19.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 28 Apr 2026 10:18:52 -0700 (PDT)
+ Tue, 28 Apr 2026 10:19:24 -0700 (PDT)
 From: Alexandre Ondet <frcomdev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 28 Apr 2026 13:18:44 -0400
-Message-ID: <20260428171844.2596-1-frcomdev@gmail.com>
+Date: Tue, 28 Apr 2026 13:19:03 -0400
+Message-ID: <20260428171903.2621-1-frcomdev@gmail.com>
 X-Mailer: git-send-email 2.53.0.windows.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777396733; x=1778001533; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1777396764; x=1778001564; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=al9yIZotDbRvTQy65odtm7F5fKActFXhV03jYY5pUEk=;
- b=IWsdonBkzT9PHlCsxwewPmFPgUdAWUaKZpzmcJYiHQs0IOSuP1g0XIVJRib/hw425I
- AC4/qLtzAwYVlydb9b1IktcFAtiwmJzoQiJZJ8Lmwdl6j86vu5gIOqOm8gPAu/8IpuO4
- XGmeDxVsnMuGEBhuBlBt3Xf411Wb03V6uavuiubxAatrfvt7TDx3rQaI5pBVC0h5u/rp
- L2bStjjtuYO40yL7eg6UHKCoYFROJbvImt5UC89R3EnO9lxeRTW6wHU5QgVaHsbfG4MU
- HYR0Q4IznMJGopOhhlAoLjI+x1gP/M3n4GkLLwHvrT8w8JKrLB3vH/ILOlTmD6d/kNYe
- PaUQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=hnkaXVg/icksstLMMdoAG8m+e4+z0sUTqpTDiYroDnM=;
+ b=InnwQQG6cFwx2+z57PcGoO0lmuvlEBf4FygOk0rpV0XOyXmEHFsqyPPlxK5l+0t2RW
+ zS4J9zn/gdj+N9E92SBFejtMxkcwN+AZIkNv/XJ4sXoQjuCNe5xhlLQ0GCbULXhCxMjj
+ QjvWCwuD1LKHQ+yES10t/j0ARaMWzmwaa5Ot6ZnbmnzzjKHG5p4ROlYuFHlyRD+DcybL
+ kGYxJpj6s41qdXRxVRDgCGK9Ip4W/M8Br54V+lKGvNalAvmS7gAQliIJ/GKDU+CtBny7
+ hkueD5Xwm1jcJ2Qsv/TACzTdLMInYxCRLH+H7p9MXl4qU1hXRx0Uxf0TKhcGh0i1Lwgp
+ D1hQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=IWsdonBk
-Subject: [Buildroot] [PATCH 03/13] package/python-fpdf2: new package
+ header.a=rsa-sha256 header.s=20251104 header.b=InnwQQG6
+Subject: [Buildroot] [PATCH 04/13] package/python-hpfeeds: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,68 +125,68 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/python-fpdf2/Config.in         |  6 ++++++
- package/python-fpdf2/python-fpdf2.hash |  3 +++
- package/python-fpdf2/python-fpdf2.mk   | 14 ++++++++++++++
+ package/Config.in                          |  1 +
+ package/python-hpfeeds/Config.in           |  6 ++++++
+ package/python-hpfeeds/python-hpfeeds.hash |  3 +++
+ package/python-hpfeeds/python-hpfeeds.mk   | 14 ++++++++++++++
  4 files changed, 24 insertions(+)
- create mode 100644 package/python-fpdf2/Config.in
- create mode 100644 package/python-fpdf2/python-fpdf2.hash
- create mode 100644 package/python-fpdf2/python-fpdf2.mk
+ create mode 100644 package/python-hpfeeds/Config.in
+ create mode 100644 package/python-hpfeeds/python-hpfeeds.hash
+ create mode 100644 package/python-hpfeeds/python-hpfeeds.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1a53589155..c6f809b31d 100644
+index c6f809b31d..1409370bfa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1126,6 +1126,7 @@ menu "External python modules"
- 	source "package/python-flask-sqlalchemy/Config.in"
- 	source "package/python-flask-wtf/Config.in"
- 	source "package/python-flatbuffers/Config.in"
-+	source "package/python-fpdf2/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-fonttools/Config.in"
- 	source "package/python-frozenlist/Config.in"
-diff --git a/package/python-fpdf2/Config.in b/package/python-fpdf2/Config.in
+@@ -1153,6 +1153,7 @@ menu "External python modules"
+ 	source "package/python-hiredis/Config.in"
+ 	source "package/python-hkdf/Config.in"
+ 	source "package/python-hpack/Config.in"
++	source "package/python-hpfeeds/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httpcore/Config.in"
+ 	source "package/python-httplib2/Config.in"
+diff --git a/package/python-hpfeeds/Config.in b/package/python-hpfeeds/Config.in
 new file mode 100644
-index 0000000000..e10e141110
+index 0000000000..e08ac6e98e
 --- /dev/null
-+++ b/package/python-fpdf2/Config.in
++++ b/package/python-hpfeeds/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_FPDF2
-+	bool "python-fpdf2"
++config BR2_PACKAGE_PYTHON_HPFEEDS
++	bool "python-hpfeeds"
 +	help
-+	  Simple and fast PDF generation for Python.
++	  Python client library for the hpfeeds lightweight publish-subscribe protocol.
 +
-+	  https://pypi.org/project/fpdf2/
++	  https://pypi.org/project/hpfeeds/
 \ No newline at end of file
-diff --git a/package/python-fpdf2/python-fpdf2.hash b/package/python-fpdf2/python-fpdf2.hash
+diff --git a/package/python-hpfeeds/python-hpfeeds.hash b/package/python-hpfeeds/python-hpfeeds.hash
 new file mode 100644
-index 0000000000..2f1cfa6d21
+index 0000000000..493aae730e
 --- /dev/null
-+++ b/package/python-fpdf2/python-fpdf2.hash
++++ b/package/python-hpfeeds/python-hpfeeds.hash
 @@ -0,0 +1,3 @@
-+# From https://pypi.org/pypi/fpdf2/2.8.7/json
-+sha256  7060ccee5a9c7ab0a271fb765a36a23639f83ef8996c34e3d46af0a17ede57f9  fpdf2-2.8.7.tar.gz
-+sha256  f97bc4bb9b7ae8a653941073678b5c7775e8de44a01c3bcc21e7cdc148b90e61  LICENSE
++# From https://pypi.org/pypi/hpfeeds/3.1.0/json
++sha256  e23337d6c911e494493f7026ad2d08e7815d7d0bdad1f45f19905097c5fd55ee  hpfeeds-3.1.0.tar.gz
++sha256  c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271  LICENSE
 \ No newline at end of file
-diff --git a/package/python-fpdf2/python-fpdf2.mk b/package/python-fpdf2/python-fpdf2.mk
+diff --git a/package/python-hpfeeds/python-hpfeeds.mk b/package/python-hpfeeds/python-hpfeeds.mk
 new file mode 100644
-index 0000000000..97eed64097
+index 0000000000..6f745b0917
 --- /dev/null
-+++ b/package/python-fpdf2/python-fpdf2.mk
++++ b/package/python-hpfeeds/python-hpfeeds.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-fpdf2
++# python-hpfeeds
 +#
 +################################################################################
 +
-+PYTHON_FPDF2_VERSION = 2.8.7
-+PYTHON_FPDF2_SOURCE = fpdf2-$(PYTHON_FPDF2_VERSION).tar.gz
-+PYTHON_FPDF2_SITE = https://files.pythonhosted.org/packages/source/f/fpdf2
-+PYTHON_FPDF2_SETUP_TYPE = setuptools
-+PYTHON_FPDF2_LICENSE = LGPL-3.0+
-+PYTHON_FPDF2_LICENSE_FILES = LICENSE
++PYTHON_HPFEEDS_VERSION = 3.1.0
++PYTHON_HPFEEDS_SOURCE = hpfeeds-$(PYTHON_HPFEEDS_VERSION).tar.gz
++PYTHON_HPFEEDS_SITE = https://files.pythonhosted.org/packages/source/h/hpfeeds
++PYTHON_HPFEEDS_SETUP_TYPE = setuptools
++PYTHON_HPFEEDS_LICENSE = MIT
++PYTHON_HPFEEDS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 \ No newline at end of file
