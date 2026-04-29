@@ -4,83 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 576F3FF8864
-	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 08:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5F7FF8867
+	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 08:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01CCA41FD6;
-	Wed, 29 Apr 2026 08:23:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDC82422A0;
+	Wed, 29 Apr 2026 08:46:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5kz_-pURSM0O; Wed, 29 Apr 2026 08:23:35 +0000 (UTC)
+ id YIeD2ZsjQ6XI; Wed, 29 Apr 2026 08:46:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F41741FEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5F274229E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777451015;
-	bh=8NpC3Dv1WLrwRhlqkhxvy5ehLMAEnpt4Ri+P6Te0kYI=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=gJW4nRJMlobOEDcU55/BmzyuxpoicrLiAFBwzj/uxzUgfHrupJ/IjRnvSdj8eyu/t
-	 UNnUEOn8iwLivCPzvUiWwZ8YVh/6lazJFp1I4KePn4wsAKAHKBkmZ0+gmudiW6yfCd
-	 uzYHYNnrtQxQN2Ua2jl7eVEDlPwMRUC0c9kkKud/1CYSvKCtQW1tdy3Vcvaei63WJp
-	 8h8Ktj1SG5Cw7NB+Nn2F56PJeuXWHWQtxu745WL2WKESUaIsco8qV4jUlH3IVx+iQQ
-	 5rGqMW3S+fkp/oovrX7ifnqdxifYLgCuNihofvQq63Q3jM5NW+jlXl5xMU5+cuqXF9
-	 ZOz2UxpEHID0w==
+	s=default; t=1777452391;
+	bh=0Ac+neTUVn/dEFvu0vzkLalbOQDbBIG4P4AOvYJuje8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Qf/nwIJl4evdEp3+9uCRxER8kpyrFLND3hgWQxi639itWpQbJ18q+ELRkvTz92RKR
+	 Mno8Q9j6sIL2SlsAHA0+zqgLjqGe/zxocblh/m/kRA8vQh71vFY80vLqBeHPTdRKq9
+	 FHhOpXSBugLmRCAofra/fhuW1xDhtrWAM6LOZGSTV4DSKSiZ53Zv/oFoKLKUfoceE0
+	 0naf8waROkfMP2dr3qf/MgTK3+wsRL+LIWEEhHZys9N2hiN4RVaEloUnV52FIyvc28
+	 00Js6Ij1U+/cxXP5B5w9k2/exEfomwWtI1HyMGGQUIp5Ga9oIGfMj/i1BsJ8phfug9
+	 GEjg2hXsjNQ5A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F41741FEC;
-	Wed, 29 Apr 2026 08:23:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63A30231
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:23:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5F274229E;
+	Wed, 29 Apr 2026 08:46:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7118D231
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4062D6135B
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:23:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 575AF42296
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LgTl2xUSy0uM for <buildroot@buildroot.org>;
- Wed, 29 Apr 2026 08:23:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1C24361354
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C24361354
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1C24361354
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:23:32 +0000 (UTC)
-Received: from [192.168.178.20] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 8DF3E2C86F14;
- Wed, 29 Apr 2026 10:23:30 +0200 (CEST)
-Message-ID: <f6471f1a-c9ff-4359-8c07-e43bf3bec12a@bubu1.eu>
-Date: Wed, 29 Apr 2026 10:23:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- buildroot@buildroot.org
-References: <20260418073313.37718-1-chakrabortyshubham66@gmail.com>
- <20260428204536.2085875-1-chakrabortyshubham66@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260428204536.2085875-1-chakrabortyshubham66@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1777451010; bh=tirTHJMKiftcrnuKEDxPDsYN3bmoZ7S1lu+GeYVmZs4=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=jOS4O0bXusIaJ7BW4XJUOaohylYYFljZH7BaLh1Mm2M2JNShG2n8nN9BLQRJoG0WJ
- tjIO7IDL/OJpITdglEcHoV6g1pLCHE7tc9QlCL9tMEqsShUV32aejd4V5ALlWVtkpl
- TZTV5kErWAKOVsPyn7e/WpKiHtENX943QFSLOna8c3Um+B1QEIacTP62iqJgBnT2o/
- wxE8UumbusoWHNoY0kH1PY2SyLQqpY1+eKjz0mjhkhsvo10+WSy6FS2EPjzmEjaMIv
- gUTCsMRET8bnGtOnh4Tm9VO0gRdlbzuWvN0eFPLfOGvv0BEiHKrhtTIw4byDKYjqRF
- G9uJ44sM28ReA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=jOS4O0bX
-Subject: Re: [Buildroot] [PATCH v2] package/psmisc: bump to version 23.7
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eo3vTDsFTOJr for <buildroot@buildroot.org>;
+ Wed, 29 Apr 2026 08:46:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A82B42294
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A82B42294
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 52767800A3; Wed, 29 Apr 2026 08:46:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 29 Apr 2026 10:36:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bd9e30470f66fc491b7a4cef2b0c803e87095b71
+X-Git-Newrev: baa0a1365335560bdfec6339cfb4b5785dafe3c9
+X-Patchwork-Hint: ignore
+Message-Id: <20260429084629.52767800A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opensc: security bump version to
+ 0.27.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,61 +71,111 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Shubham,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/baa0a1365335560bdfec6339cfb4b5785dafe3c9
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 4/28/26 22:45, Shubham Chakraborty wrote:
-> - Fix --disable-statx build option
-> - fuser: Add stat() fallback, ignore EACCES errors
-> - pstree: Fix assumption about root PID
-> - killall: Output formatting fixes
-> - Update gettext to 0.21
-> 
-> https://gitlab.com/psmisc/psmisc/-/tags/v23.7
+https://github.com/OpenSC/OpenSC/blob/0.27.1/NEWS
 
-As you are bumping the package from 23.5 -> 23.7, you should also 
-include the changelog of the 23.6 release [1] in the commit description.
+Switched to sha256 tarball hash provided by upstream.
 
-> 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> ---
->   package/psmisc/psmisc.hash | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
-> index 646c01b3c6..f16b95eee3 100644
-> --- a/package/psmisc/psmisc.hash
-> +++ b/package/psmisc/psmisc.hash
-> @@ -1,3 +1,6 @@
->   # From https://sourceforge.net/projects/psmisc/files/psmisc/
-> +md5  53eae841735189a896d614cba440eb10  psmisc-23.7.tar.xz
-> +sha1  89046d35a8919def79200115c9cc78e91b98ad53  psmisc-23.7.tar.xz
-> +# Locally computed:
+Removed patch which is included in this release.
 
-This patch does not apply. I assume it is currently based on top of your 
-v1, but that is not how you should send a v2 patch. Any new version 
-should contain all the previous changes.
+Fixes the following CVEs:
+* CVE-2025-13763: Several uses of potentially uninitialized memory
+                  detected by fuzzers
+* CVE-2025-49010: Possible write beyond buffer bounds during processing
+                  of GET RESPONSE APDU
+* CVE-2025-66215: Possible write beyond buffer bounds in oberthur driver
+* CVE-2025-66038: Possible read beyond buffer bounds when parsing
+                  historical bytes in PIV driver
+* CVE-2025-66037: Possible buffer overrun while parsing SPKI
 
-Also it's nice to include a changelog in the new revision for what 
-changed in the new revision (below a --- mark, so it's visible in the 
-email but doesn't get included in the commit that gets applied).
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ ...-disable-wrap-unwrap-test-until-OpenSC-17.patch | 41 ----------------------
+ package/opensc/opensc.hash                         |  4 +--
+ package/opensc/opensc.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 44 deletions(-)
 
-See section "22.5.5. Patch revision changelog" in the manual[2]
-
- > [...]
-
-Could you send a v3 with these changes incorporated?
-
-Best,
-Marcus
-
-[1] https://gitlab.com/psmisc/psmisc/-/tags/v23.6
-[2] https://nightly.buildroot.org/manual.html#submitting-patches
-
+diff --git a/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch b/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch
+deleted file mode 100644
+index 9bf601370a..0000000000
+--- a/package/opensc/0001-pkcs11-tool-disable-wrap-unwrap-test-until-OpenSC-17.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 768c9bfcd91206f0d85cd4757fde48e00850a014 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Mon, 6 Jan 2025 22:36:10 +0100
+-Subject: [PATCH] pkcs11-tool: disable wrap/unwrap test until OpenSC#1796 is
+- resolved
+-
+-Similar to ab74fae4d71d1705b77b9459141987a95dcfc91e ("pkcs11-tool:
+-disable wrap/unwrap test until OpenSC#1796 is resolved"), but for
+-0.26, since OpenSC#1796 is still open.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/OpenSC/OpenSC/pull/3303
+----
+- src/tools/pkcs11-tool.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/tools/pkcs11-tool.c b/src/tools/pkcs11-tool.c
+-index d701d76d6..871a39977 100644
+---- a/src/tools/pkcs11-tool.c
+-+++ b/src/tools/pkcs11-tool.c
+-@@ -7681,7 +7681,7 @@ static int test_verify(CK_SESSION_HANDLE sess)
+- 	return errors;
+- }
+- 
+--#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 25
+-+#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 26
+- #else
+- #ifdef ENABLE_OPENSSL
+- static int wrap_unwrap(CK_SESSION_HANDLE session,
+-@@ -7805,7 +7805,7 @@ static int wrap_unwrap(CK_SESSION_HANDLE session,
+-  */
+- static int test_unwrap(CK_SESSION_HANDLE sess)
+- {
+--#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 25
+-+#if OPENSC_VERSION_MAJOR == 0 && OPENSC_VERSION_MINOR <= 26
+- 	/* temporarily disable test, see https://github.com/OpenSC/OpenSC/issues/1796 */
+- 	return 0;
+- #else
+--- 
+-2.47.1
+-
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+index e12d2d4bfa..b24a6bca98 100644
+--- a/package/opensc/opensc.hash
++++ b/package/opensc/opensc.hash
+@@ -1,5 +1,5 @@
+-# Computed locally from https://https://github.com/OpenSC/OpenSC/releases/
+-sha256  837baead45e1505260d868871056150ede6e73d35460a470f2595a9e5e75f82b  opensc-0.26.0.tar.gz
++# From https://github.com/OpenSC/OpenSC/releases/tag/0.27.1
++sha256  976f4a23eaf3397a1a2c3a7aac80bf971a8c3d829c9a79f06145bfaeeae5eca7  opensc-0.27.1.tar.gz
+ 
+ # Computed locally
+ sha256  376b54d4c5f4aa99421823fa4da93e3ab73096fce2400e89858632aa7da24a14  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 11d1507d45..dbc83c2b0e 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSC_VERSION = 0.26.0
++OPENSC_VERSION = 0.27.1
+ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
+ OPENSC_LICENSE = LGPL-2.1+
+ OPENSC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
