@@ -4,84 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71907FF8875
-	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 18:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B11E6CCFA13
+	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 18:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 250FA616AC;
-	Wed, 29 Apr 2026 18:49:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AEAD6077F;
+	Wed, 29 Apr 2026 18:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fbizica8nMHt; Wed, 29 Apr 2026 18:49:50 +0000 (UTC)
+ id TDPrVUo9kyjH; Wed, 29 Apr 2026 18:49:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28DAE616A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B89660ECC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777488590;
-	bh=42n9lMg5xlPlZ17zb/vsZlbQUxos4LzVRhkW1cRZKXc=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=PnCjPqB/fTLz0qFHYiCAZy5skhRi0NC6V+xoBbl0iNG43sv4hQr/pjdm9MqeCSL3P
-	 ZtBNA0TlbMzttA9CYpSiFkjXEBI5WozagOAa/J6sJcl/tsDHknicwCpf8dHEuOK//Y
-	 cSsgQma/XEkW7zz/pv5c1c+pQUwOiQcHZLNVWrCt3oZyRfUfUBYDGiMPtV5dGkE6xF
-	 7h+Ox26Zv5uqKmT0b/jvbhSbFyBn8KlVHxgJdHLN5zE5TiO8a9/lSQXBy5zN6Haf9L
-	 QMXFXZ3cUZZIanoqszz2mX2LVr3XX2xYJjwfEG+ZehusRA5Q2n/yG52OFjkVqiTydD
-	 5eT/sOg+hgEtQ==
+	s=default; t=1777488599;
+	bh=UU5/6rS8vjJsu84edNVe2h+QYE4HynnTeGzMmiLFopE=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=aXD43YOLSwau3ZVqvRKXTnqJZLbzemCTtHks814TQ7+vu89Y/Lg1JD1v7MfOdrbkC
+	 4Ed/ce8JIDxRmcSKRvxOl4ZspCn3bGbY36xCov1sGFtinuz9GClqCk22+1zcmLrUhf
+	 KAtxwyPq5YrKO0b5wqt2oQ0ONuvK2DF0AJ6mwFKgoeAej6uzIswqNjVwjkK8F3+lb5
+	 BQgOCX6qM+DaiVLwgwhlZ9qWGwYwZTxUfTXbJT9YRu+JKwqKRd6zjEJ+fCfLODKglK
+	 Cjf0S7WNRdfNSDClQI8VxAX6rDouNzuzzPAPKzTnOOdo+kc0tyGyWMCdKrWPATy3Yd
+	 wBKRGzkaqYUaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28DAE616A9;
-	Wed, 29 Apr 2026 18:49:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B89660ECC;
+	Wed, 29 Apr 2026 18:49:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B96EB18E
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5153F18E
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB2F98457D
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 437B681341
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rVKotDNcZUXp for <buildroot@buildroot.org>;
- Wed, 29 Apr 2026 18:49:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AAFE784575
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAFE784575
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AAFE784575
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:47 +0000 (UTC)
-Received: from [192.168.1.108] (tmo-087-238.customers.d1-online.com
- [80.187.87.238])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id E4E402C88E83;
- Wed, 29 Apr 2026 20:49:44 +0200 (CEST)
-Message-ID: <cb7dd067-e4be-4a93-8e0d-7735aacef28a@bubu1.eu>
-Date: Wed, 29 Apr 2026 20:49:43 +0200
+ id Ann6v8bu5eht for <buildroot@buildroot.org>;
+ Wed, 29 Apr 2026 18:49:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::529; helo=mail-pg1-x529.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71F6F810BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71F6F810BF
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com
+ [IPv6:2607:f8b0:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 71F6F810BF
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 18:49:57 +0000 (UTC)
+Received: by mail-pg1-x529.google.com with SMTP id
+ 41be03b00d2f7-c76c60c7502so534133a12.0
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 11:49:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1777488596; x=1778093396;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4IpM4dHCSoC+F8zH0QqKDsiqOxuLawYiU5ZcsnMNyxk=;
+ b=TAbVcKBRGJoy+N4IWQOdBnSMlM6G1fTNkzWOm0F6oKMHC2wECK5g6EE30hbRGLU82/
+ fvFHo8dceUPq1Wen1AJfmyBurlTq1rsBDAC1O1dD/RNuiIBVsKgXLjy8qx+jvDk6w+bz
+ yGfEHjNzxD00RIjtlNr9mwEoW8aFzbmcw6baspWhUXziRRU8Tn+3UWiI/ksVULMJFCkq
+ Ou1Zl2DzFZNx2ET4motE80XlUyTwLUnbH2sfs+gX47VjMil+Jf+ED3GsmGrh0oCk/u8w
+ hG5/g7B9C4ZeagaJpMtm+QnZrWm1kmHaL9VjczbyCFaLQxv9p1Lbo2rFeHopkUwaYTfu
+ efjQ==
+X-Gm-Message-State: AOJu0YzEHAVdw6JkAHtoEyxpBO2epxnbbo58+rma8WjMyIoDfuMCw1kT
+ JuE0tyxzTRd79tZSOwtqy4AykXRAVoocVa+YLdU0PrAq8EE7ogu2k0bjG+zb0+5S
+X-Gm-Gg: AeBDieu8U1IVHoI4T/IPMqliJMmfCacsR0N0VzS0r04Xf2r1bMg0Nldg+G4pPhVG+HN
+ FkhrDS1BfyOxDXuL8KjTH86FfLho37pBaSLo/2qfeueiC2r1yMmvSmg7pxmxrDHQ/2zx3XPruSO
+ Mn/hbqeYhmBhapj6hLkpI9ZcDInfSpjU+tfCT+y3erXVE86/hrLA7RBSVUm3HxTm+DDA3Rrk9Mx
+ 83am8pzB76zPbuYS2dHzXUZfoit+/Phyrk3gHfltxJEcfLwlRq2EcS1zky/s2sJtfvxq4xnb3A+
+ nKQLsNpWVIZgWJ3PRq5DecqShU8dmyryGhtCxXqNNDmY4IIuZc/fl6Xmrhd4JRQUZaH3qcoLN+6
+ VOT2kaR/1U0Pr9nYAc+g6zTIRrjNXq5sXEhfT0MO3IO6DC7QHKPxN1/3UfqSlwQxXb0VvmY70rZ
+ d4tlGC8zNmnf4kTzMpxpHRXzxUV9SGQ4mWn26fIh3FRVw=
+X-Received: by 2002:a17:902:9002:b0:2b2:4dc4:18cc with SMTP id
+ d9443c01a7336-2b98841cd46mr23588695ad.12.1777488596022; 
+ Wed, 29 Apr 2026 11:49:56 -0700 (PDT)
+Received: from fedora ([2409:40e5:101a:749:12b4:d7e3:4df:eaa1])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2b988772dc0sm30155905ad.15.2026.04.29.11.49.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Apr 2026 11:49:55 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+To: buildroot@buildroot.org
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Thu, 30 Apr 2026 00:19:36 +0530
+Message-ID: <20260429184937.2405733-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- buildroot@buildroot.org
-References: <20260418073313.37718-1-chakrabortyshubham66@gmail.com>
- <20260429170808.1144652-1-chakrabortyshubham66@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260429170808.1144652-1-chakrabortyshubham66@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1777488585; bh=FszMwMC76yArF/4zPvO57STzZmrGe1qZ/ceWEmVloec=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=laJ/OCL9WjVS6HGqVFe6uvNaA1qdWB4UGS70LSllMEMjc1iwFONdG8jRSSJx+1p3Y
- qB1uic/sx0gDEwGJLh8fJOkVnktBwQC3+SfRxaIeT5zGTD3+tWSsfyVh6/6mWVgcx1
- +Qrk57gnxLQ41wNiMXcSHb4gZmwMLCxaguteuvPdxyAJFP4ozA549UATedrJQ64XKg
- uK3zuR/7iSR1E2qpCCEJzlaq0y1K2rgqW/2/mjJy3ASqUnf2Wb8yzEYQi0M9gq9Ssc
- TziVLAUlHRqMmRq41GrJqxTLsg3nBEsGdbfbbd7exOVZLGZJUbPU8RxqM9pgcf25wR
- 0PTrSPPgkrEsg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1777488596; x=1778093396; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=4IpM4dHCSoC+F8zH0QqKDsiqOxuLawYiU5ZcsnMNyxk=;
+ b=XgUiHwcPSCL3QOn1vWWGxDedLQVpvCFl3/UwRXcas5wy2dePVejlCCT/Yj66LfqviB
+ eXlbqIn8BuLm9TvLqK4RZofbdH2dcIEM14m7Y67G1euloH/sYDNUwPC813JHmCFVnWVy
+ gPcXu+SpyEBr5TdUAPPVDs3MPSgBv3BlUt8lt7Cy5VfITXulCXGDU3T46mwvCyTMHK/u
+ gfn4So3VJ/blAk0+PP0jJLmC6En0kxWOIgGxnJDJd4tfIQ+o3lKYjYDQz2iOFWcKdYTw
+ i/YizFwxi8mMTQdKMw5iasKo7va1pM/SYzsU4GoTJX5GyqgfzHrM0+affJxlYbFpQvNC
+ wgLw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=laJ/OCL9
-Subject: Re: [Buildroot] [PATCH] package/nginx: bump to version 1.29.7
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=XgUiHwcP
+Subject: [Buildroot] [PATCH] package/ed: bump to version 1.22.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,54 +117,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Shubham,
+Changes in 1.22.5 (released 2026-02-06):
+- Fix sizeof usage in set_active_node: Use 'sizeof active_list[0]'
+  instead of 'sizeof (line_node **)'
+- Improve error message: Change "Is a directory" to "Invalid filename"
+  in may_access_filename function
 
-On 4/29/26 19:08, Shubham Chakraborty wrote:
-> - Security fixes: CVE-2026-27654, CVE-2026-27784, CVE-2026-32647,
->    CVE-2026-27651, CVE-2026-28753, CVE-2026-28755
+Changes in 1.22.4 (released 2026-01-03):
+- Skip check of ISO-8859-1 names on UTF-8-only systems in test suite
 
-If this version bump fixes security issues, it should be marked as such 
-in the commit title.
+https://lists.gnu.org/archive/html/bug-ed/2026-02/msg00000.html
 
-> - Feature: Multipath TCP support via "multipath" parameter
-> - Feature: "local" parameter of the "keepalive" directive in upstream block
-> - Change: keepalive in upstream block now enabled by default
-> - Change: ngx_http_proxy_module supports keepalive by default;
->    default proxy_http_version is now "1.1"; Connection header not sent by default
-> - Bugfix: invalid HTTP/2 request after switching to next upstream
->    with buffered body in ngx_http_grpc_module
-> - Fix bootlin-sparc-uclibc build by adding -latomic when needed this caused
->    build errors in "bootlin-sparc-uclibc [24/32]: FAILED"
-> 
-> https://nginx.org/en/CHANGES
+Tested Using:
+- utils/test-pkg -a -p ed
 
-I don't understand why you are updating this to 1.29.7 though. The 
-latest *mainline* version is 1.29.8, which was released over 3 weeks 
-ago. But also we are currently deliberately using the *stable* releases 
-of nginx[1], which also recently got a new release with 1.30.0.
-Bernd already sent a patch for updating to that[2], but I think we 
-should update to 1.28.3 before.
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+---
+ package/ed/ed.hash | 4 ++--
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 605c4854f7..39a6ff5f22 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnu.org/archive/html/bug-ed/2025-12/msg00000.html
+-sha256  47a55ddfc52d4a1ff6f7559fbd00cf948a16b6cf151ec520392761aeae4e97be  ed-1.22.3.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2026-02/msg00000.html
++sha256  56e107ddc2f29dad6690376c15bf9751509e1ee3b8241710e44edbe5c3a158cc  ed-1.22.5.tar.lz
+ # Locally calculated
+ sha256  022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6  COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 3042b3c370..6e1d5a3d05 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ED_VERSION = 1.22.3
++ED_VERSION = 1.22.5
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-2.0+
+-- 
+2.54.0
 
-[1] 
-https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#stable-and-mainline-versions
-[2] https://patchwork.ozlabs.org/comment/3683711/
-
-> 
-> Tested Using:
-> - utils/test-pkg -a -p nginx
-> 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> ---
-Best,
-Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
