@@ -1,87 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8D45FF8867
-	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 08:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95E27FF8875
+	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 09:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A930A613AC;
-	Wed, 29 Apr 2026 08:46:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F2AF8432E;
+	Wed, 29 Apr 2026 09:23:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vQHSDQAt261e; Wed, 29 Apr 2026 08:46:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SOJULCRHDB7Y; Wed, 29 Apr 2026 09:23:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0FC6613A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64E938432A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777452401;
-	bh=VZaCEw5fE9H9uXTya30zbP7jUIOcUDjySS/Ku+Awbh0=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SN0nizgT3pXBrgL56Gdl8BkKkLVuRdHkTzyIcT/ZePzPm5AMNzOAg/bgqfkNp4rEZ
-	 S5cM8BVmYtbZYng9dm4bsCzUGr244KaqDLzaFkUNcxKkPmT2JMnm702j1cDnepn2yp
-	 58Ywc2rbEfpK5ns5QEBU8+sgxAdciazifdDZyV6552BkRphb21FzvO0pxWCCFnTLtS
-	 8e+5ciPcb1e0DzBRyyW1ATbfP2dWiWcIZC64WPcHduLf4NkS6UsSnqWM6X2igW1vR6
-	 3QHLqpFXFxOAN4HqUQ/8fS3EylsVl4KQRnOvLOjGN5iFRdMbI2lSSfs0JY+0pl87Rf
-	 4pPhe7F2BLRJg==
+	s=default; t=1777454633;
+	bh=1UqVOmAVmytzA/CMvSPTrR/uHtkfCTux3TOCr2EPkRA=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=IgVP5a20KSgFUOg0uYxKXmOmnWQlwRDzEleSvXMJxyaM1ts4V4Pd+W1KL98oakgev
+	 1yxp7fyJBY9FLjfhJTv7pnYcl/+4b37jf5gLmvGdbbCc9FoskJJp1LJDtFg0KPwo+w
+	 E8P+t4yJHzv5xtVJNJhRKDP+8d6A/d8JISGw2NhGtdDDYFMBAVJ4eNHvPzuuriJQ/2
+	 jNcCnh6JLG7ukKixuQa8flnPMhlehELvkJb2LCemMFx+t7KnYN1wboDtWJY1wG4Uuk
+	 AD3AsEEhmw/3TbBcGbObXIEMed+6/NUCWxyvreOVb6ZEvOwHnpd/HjzqetEQRFK1eP
+	 /OMJ1a2kQAV+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0FC6613A1;
-	Wed, 29 Apr 2026 08:46:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A43E23D
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64E938432A;
+	Wed, 29 Apr 2026 09:23:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8061B273
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 09:23:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67F4C41FDC
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61F588432A
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 09:23:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H_wRaZnFN91C for <buildroot@buildroot.org>;
- Wed, 29 Apr 2026 08:46:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B1ED4135A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B1ED4135A
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B1ED4135A
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 08:46:39 +0000 (UTC)
-Received: from [192.168.178.20] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id D8CC82C86F14;
- Wed, 29 Apr 2026 10:46:36 +0200 (CEST)
-Message-ID: <c3643492-36fb-47d4-b517-fb28cf59f4e7@bubu1.eu>
-Date: Wed, 29 Apr 2026 10:46:36 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ucNUTskncQ7H for <buildroot@buildroot.org>;
+ Wed, 29 Apr 2026 09:23:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2600:3c04:e001:324:0:1991:8:25; helo=tor.source.kernel.org;
+ envelope-from=mwalle@kernel.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 513BE84327
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 513BE84327
+Received: from tor.source.kernel.org (tor.source.kernel.org
+ [IPv6:2600:3c04:e001:324:0:1991:8:25])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 513BE84327
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 09:23:51 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by tor.source.kernel.org (Postfix) with ESMTP id 8592F60018;
+ Wed, 29 Apr 2026 09:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2198AC2BCB3;
+ Wed, 29 Apr 2026 09:23:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Michael Walle <mwalle@kernel.org>
+Date: Wed, 29 Apr 2026 11:23:38 +0200
+Message-ID: <20260429092343.979523-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-References: <20260421184831.2576691-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260421184831.2576691-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1777452397; bh=k8VwWGJ68wQYGENK+7BVSxJj8yUmd2srXqFsQDSs13o=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=g+KlabEHFqxCznb37unIB91o2SVLCZNxhTvbLIpGuNrHNMwsxlWn5p9b4ir3u9RCn
- bAupl73x1UzRtBn2vSwAFEhPc2D6RL2loAjaqxMGmpZqzxME7hJDNBaeqbK0YbFRzP
- NgDUn3SHzfTbXZ+Up8FCwrNDLC9fOt7XzmTge3TXiQ/gxHqZ8nrlbqTtw2Db8Wc2zR
- keBqKM0VSgyXDtKZQGGnj8urU6nC8/t9h/Ad6pwSoV0mqu6f58bMOPI260nVA4RH9W
- pltsvtOqVZ8T/dK2aMZB1oNZyBMn1q6FtcvjF/BETFO5wikJm/dfkL8HMKgwUmDMac
- 2FzGEuhH6RSrg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kernel.org; s=k20201202; t=1777454629;
+ bh=AYcG972LzvQJ8wHe1RUD20P/Hr3HpndvK7Fj1/cAOF8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ii79+PShUjXkP/09KMlJPBVZhYAenzbl/SkOAuT7zmecSQE8FoCk5KjCzVlVr7e1I
+ EVuUibpqKALi4FuCsNvvN887sXE7d5NlCoHP+uD2rEcs/gQdS4uRYl19dRSN+lxwPm
+ JJFPTOJICYfcAPYK/6d0jyCoUnrXQJ2YgJaqpQ9XSNQC5AdsiIY/adlbw06/MzQv5m
+ akVLSsaLcdY4fVvfLPf+ej7PRC3SvDvA3UlQReDvl2D0mg5icqy44TiU0PPQ9E1LUd
+ wNFfDF+biYnqW2OORsLv7DDp//jb5BhtvDD8SEyYroA5jUbReY+162rhkmhI5xEe7i
+ bAeiIWXLV6MTw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=kernel.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=g+KlabEH
-Subject: Re: [Buildroot] [PATCH 1/2] package/opensc: security bump version
- to 0.27.1
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=ii79+PSh
+Subject: [Buildroot] [PATCH 1/2] configs/kontron_smarc_sal28: switch to
+ external Bootlin toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,35 +91,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Michael Walle via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Walle <mwalle@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 4/21/26 20:48, Bernd Kuhls wrote:
-> https://github.com/OpenSC/OpenSC/blob/0.27.1/NEWS
-> 
-> Switched to sha256 tarball hash provided by upstream.
-> 
-> Removed patch which is included in this release.
-> 
-> Fixes the following CVEs:
-> * CVE-2025-13763: Several uses of potentially uninitialized memory
->                    detected by fuzzers
-> * CVE-2025-49010: Possible write beyond buffer bounds during processing
->                    of GET RESPONSE APDU
-> * CVE-2025-66215: Possible write beyond buffer bounds in oberthur driver
-> * CVE-2025-66038: Possible read beyond buffer bounds when parsing
->                    historical bytes in PIV driver
-> * CVE-2025-66037: Possible buffer overrun while parsing SPKI
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-Applied to master, thanks!
+Use the precompiled stable toolchain from Bootlin.
 
-Marcus
+Suggested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+ configs/kontron_smarc_sal28_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index 181a92daab..09d3142589 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -1,6 +1,9 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
