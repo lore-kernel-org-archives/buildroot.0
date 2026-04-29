@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11AFCFF8873
-	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 20:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C9BFF8875
+	for <buildroot@archiver.kernel.org>; Wed, 29 Apr 2026 22:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8BF16075B;
-	Wed, 29 Apr 2026 20:55:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7983561736;
+	Wed, 29 Apr 2026 22:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HyQTg0uSGulA; Wed, 29 Apr 2026 20:55:57 +0000 (UTC)
+ id QmBzA6Fab0Ef; Wed, 29 Apr 2026 22:22:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED8C860EFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6672461708
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777496157;
-	bh=nJ6Lu9g2cVjkb/hFn4JLwZ1CMANncNemAvmJnnP6O9M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=D+DooW2MA3KFCncdxldJ3T4WF8fzmXFCi76+BAfA7QEh2W5meckHAmCyRmtmHI3cy
-	 aMG51U4OdEbLdIVHjlD1Ep4OOHpJgbrGbeKD8IPMk3RKjcATXaM4CJ+02FDCUJr1db
-	 Ao4QNKcxYPU+ZcA22rb1vGX+AdYDqqYWQ/IA8sAvy4/sn6fUckmnjE85PfpLB5kdF/
-	 j3wlnUfdI2yMcXi/YRXN38hLvy7KApfmcqMvU80fzJAeE9ynoQa2uKqSkyZpUASZAP
-	 lZXgIPh7dZdYqp6UD2Wo3NYbRNCIWQYlO5lWHFJFC5EfwA+vPWDQ32hgYFygZ8YGCe
-	 +41SqFlLpdQnQ==
+	s=default; t=1777501335;
+	bh=QKVgis37E7l9q4VeDSaO6pB8ZCsVbz7XzhFcE7NDmE8=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=CBuhyBY+/zaXN7ETT+pblvHuaFTlInh8pZt4wH2O6v9afDgueytm0hsX+ZMxMtOkb
+	 ZqbVgHj2t9LQvP0dzFzRVWrOMpvJeSXLz9ilc67FnAhVxGMDzHAfojtZ0mdN7UkgOr
+	 FfH08XzR62e03LMtbnww/laNh8aOZMB3JDnv4Jp2pi+O98pzoyB+/3NPSGb7nYNUto
+	 xE+OZJ6ta0YPZ1QBTvN5gaIOTx1RGtl0bsV3uAe6fNaNDYkwF4vj8PM5TaLvb391pX
+	 sp8wGEd3IvHdu2dyH8cqM8XMT/rNEp9WxxuI7sarT4qa1lKqK2fXEEUSCofBe3y1q2
+	 +yss+yjaBDqig==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED8C860EFA;
-	Wed, 29 Apr 2026 20:55:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D34A18E
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 20:55:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6672461708;
+	Wed, 29 Apr 2026 22:22:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D1274192
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 22:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F54C8446A
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 20:55:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2F3F425F0
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 22:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id id4GMvpn-qIR for <buildroot@buildroot.org>;
- Wed, 29 Apr 2026 20:55:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FCEF844DB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FCEF844DB
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 20:55:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA0CA83BB1; Wed, 29 Apr 2026 20:55:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 29 Apr 2026 22:36:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84c0cb6e9dbc8b3ce11c4482c50f07497f4cd45d
-X-Git-Newrev: c87b654e418b191a23220e9d9a4bdf71ec9d1347
-X-Patchwork-Hint: ignore
-Message-Id: <20260429205551.CA0CA83BB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic: bump to version
- 2.13.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uF6nLXZSFKhi for <buildroot@buildroot.org>;
+ Wed, 29 Apr 2026 22:22:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8CA90425FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA90425FB
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8CA90425FB
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 22:22:11 +0000 (UTC)
+Received: from [192.168.1.108] (tmo-087-238.customers.d1-online.com
+ [80.187.87.238])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 5E7772C80CC9;
+ Thu, 30 Apr 2026 00:22:09 +0200 (CEST)
+Message-ID: <aee80fe7-06e4-4cc3-af27-84ad2fd0bdab@bubu1.eu>
+Date: Thu, 30 Apr 2026 00:22:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20260121144322.1587729-1-nolange79@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20260121144322.1587729-1-nolange79@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1777501329; bh=i3lMYcC2zxZB7cN4pDIDNyhna13BL7VAktEnreVTKK8=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=YT7GtcoboyxMpQ2Ebd0NVeH1TpLYEywG+Di1OaztlRL5fIDUQA9jjz6g9r2YalhXP
+ M8IhU0jFC0zf5v6zDFKo7j+AiNsJ8B/jQ7gyRA1+MmN3oYOTv8SiVpeneGNX/Z19se
+ /xg28gP1ygwR1hSn+wPEh1xUHmSSq7w9G6ZUz7XaPtnthUxW8oAhVEPJB0DjnPTsv5
+ PtS9WfrEo64nScMq2f39DyseqIcq5/VVKow3e1Erzmbs7YVFIL+pMWjlQEP75JDWIf
+ pWVPOZUTlP7TDc7OLAgJ6At2pM7+q/RVLOWD7XvY/h0kvt7CngKuisCfbJ+QAoAEDE
+ b+vFc2BxvMoMQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=YT7Gtcob
+Subject: Re: [Buildroot] [PATCH] package/linux-pam: include pam_systemd for
+ login
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,61 +93,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c87b654e418b191a23220e9d9a4bdf71ec9d1347
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Norbert
 
-This patch also included the versions with the corresponding changelogs:
-v2.13.0b1: https://github.com/pydantic/pydantic/releases/tag/v2.13.0b1
-v2.13.0b2: https://github.com/pydantic/pydantic/releases/tag/v2.13.0b2
-v2.13.0b3: https://github.com/pydantic/pydantic/releases/tag/v2.13.0b3
-v2.13.0: https://github.com/pydantic/pydantic/releases/tag/v2.13.0
-v2.13.1: https://github.com/pydantic/pydantic/releases/tag/v2.13.1
-v2.13.2: https://github.com/pydantic/pydantic/releases/tag/v2.13.2
-v2.13.3: https://github.com/pydantic/pydantic/releases/tag/v2.13.3
+On 1/21/26 15:43, Norbert Lange wrote:
+> pam_systemd ensures the user's processes end up in the
+> correct cgroup and scope.
+> It should be used, even if the full functionality via logind is not enabled.
 
-Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I haven't found explicit information that this should be used with 
+systemd, but without logind, the only related thing I found that 
+registering login sessions with logind through pam_systemd can be 
+disabled since systemd v258, and then skimming the code of the module 
+says that most functionality is skipped for non-logind systems.
 
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index 85fe1c998b..ded810cefd 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  beb5176b58bf266a874ab4d085cdb766  pydantic-2.12.5.tar.gz
--sha256  4d351024c75c0f085a9febbb665ce8c0c6ec5d30e903bdb6394b7ede26aebb49  pydantic-2.12.5.tar.gz
-+md5  a6b8098934bfca79f0d99334f975c22a  pydantic-2.13.3.tar.gz
-+sha256  af09e9d1d09f4e7fe37145c1f577e1d61ceb9a41924bf0094a36506285d0a84d  pydantic-2.13.3.tar.gz
- # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index dfa30f7a56..71652bed0b 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYDANTIC_VERSION = 2.12.5
-+PYTHON_PYDANTIC_VERSION = 2.13.3
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/69/44/36f1a6e523abc58ae5f928898e4aca2e0ea509b5aa6f6f392a5d882be928
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/d9/e4/40d09941a2cebcb20609b86a559817d5b9291c49dd6f8c87e5feffbe703a
- PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+But this all makes it at least sound that it's safe to enable this 
+regardless of having logind available or not, so I'd like to merge this.
+
+But can I ask you to rebase this after the recent pam update and changes 
+in 30e38505e4 and 9408bc0161?
+
+It would also be really helpful to have a runtime test for this (and pam 
+in general), would you be interested in contributing this?
+
+And lastly, pam has support for building against libsystemd for logind 
+support as well[1], which we currently don't enable in buildroot. Would 
+this be worthwhile to add as well?
+
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+
+ > [...]
+
+Best,
+Marcus
+
+[1] 
+https://github.com/linux-pam/linux-pam/blob/master/meson_options.txt#L11-L14
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
