@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84078FF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCD9ECD3430
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A00B615C5;
-	Mon,  4 May 2026 14:48:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JAj2lYeAzmEv; Mon,  4 May 2026 14:48:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D32BD615C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906124;
-	bh=B8K0fnA3k8k4QmiW5bA/bGb/WZnD+H2VdhCudmXK/jo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=j12uYc2rjpWhyELyzETXntEux8bR2yiPWEI/vasrWmJ9FoJPQXtCT2dP+wliB8tsA
-	 MyR4op4EVSpp03A5c8DCtr7RqgsVeyMHCBZJKm4nBpxD+uK5Uy7qCVIx+lUwFDpe5y
-	 GkbF39Cb5LiU42ywDXx/vv0CEAabFaEh2OlumuKFGrTnGz2rTTuTuYG2bbG3DSWzOG
-	 JNa2gIMbm8yxIg1+WxPr/+6bfTRFh0bjLmILG0rc1xmhGf3mgkCUnG1b0cMikmBFpy
-	 aHHR6+PFBl25Gcx054DAcbbpj0O6woeGrZbLCCvv38QtnZHkgp5kQiuX+7Z3h0vXru
-	 O7pc0hypDxn9g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D32BD615C6;
-	Mon,  4 May 2026 14:48:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 19EFC190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9452845EA
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5571846D3;
+	Mon,  4 May 2026 14:48:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DIrLXnLpSfLE for <buildroot@buildroot.org>;
+ id S8mVhD1yMRsE; Mon,  4 May 2026 14:48:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EB52846CA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777906126;
+	bh=SKiTq4zxIIJl2bIKOBt4rUWUAY5c6D0oX8HHjm8j1/E=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=o6nOhyffizDIlYP4WX8tlM9bi52Oa8PMu9IsptA6OeFNx6ePqsJyp8v7maWeZ0P9+
+	 d7HzqcJ2COcmiNUfs41FG9rR/JJL+ID5yE6AAKSFRpvShu+hEFnMtjrSEpMn0nzG4d
+	 fnq/fVyVW3X+Wgd24pjyr8tDAXnoBv6lpoja91jjV+0WczKhTHIq9C5ZBPQkvl/7Vi
+	 K2KeDLZjQGlVJJeqN057UjWGDt2ih58pdyptTREHzByvS0agqFRsXTuWYqdjzn7si3
+	 63MywALMJnF3iTJ4z1jgqiux2MfTuGl1AwiAaKFU5x53uLsb1GDgtut/RI7T7+wtfM
+	 t4WSjdMhIpLYg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EB52846CA;
+	Mon,  4 May 2026 14:48:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C482190
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E2F940E0B
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tn8kCG_AS_Ry for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:48:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31B9C846A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48F6B40B70
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31B9C846A5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48F6B40B70
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1413C8423F; Mon,  4 May 2026 14:48:39 +0000 (UTC)
+ id 2D8FF8423F; Mon,  4 May 2026 14:48:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 13:57:32 +0200
+Date: Thu, 30 Apr 2026 13:58:27 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 94e54141f918784a1c8d9bbb5ca6383310fedff5
-X-Git-Newrev: 6873a1beabbe6f9b342823baa1d5abac626a003f
+X-Git-Oldrev: 6873a1beabbe6f9b342823baa1d5abac626a003f
+X-Git-Newrev: 2887dd91cceed9d446508dacde74cf7c5597a9d2
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144839.1413C8423F@busybox.osuosl.org>
+Message-Id: <20260504144839.2D8FF8423F@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2026.02.x]
- package/python-magic-wormhole: add CPE ID
+ package/python-magic-wormhole: security bump to version 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,36 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6873a1beabbe6f9b342823baa1d5abac626a003f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2887dd91cceed9d446508dacde74cf7c5597a9d2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The CPE ID `magic_wormhole_project:magic_wormhole` is valid for
-magic-wormhole. See:
-https://nvd.nist.gov/products/cpe/detail/591D7832-786D-4BBD-A16A-04CBDE20333B
+See NEWS:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.23.0/NEWS.md
 
-This commit adds the information.
+This commit also updates _SITE to use a stable URL which will redirect
+to the package archive, to reduce future maintenance.
+
+Fixes:
+https://nvd.nist.gov/vuln/detail/CVE-2026-32116
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit 298390ade47965a39e6fddaada1f7128aaa6ac6b)
+(cherry picked from commit 8de4776c609ec8afe1e603aa1b115d63bd377dbd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-magic-wormhole/python-magic-wormhole.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-magic-wormhole/python-magic-wormhole.hash | 4 ++--
+ package/python-magic-wormhole/python-magic-wormhole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/python-magic-wormhole/python-magic-wormhole.hash b/package/python-magic-wormhole/python-magic-wormhole.hash
+index b0f32e2d13..2f03594cc1 100644
+--- a/package/python-magic-wormhole/python-magic-wormhole.hash
++++ b/package/python-magic-wormhole/python-magic-wormhole.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/magic-wormhole/json
+-md5  e57bac643bbc691e94919be496813a4c  magic_wormhole-0.22.0.tar.gz
+-sha256  52a3ae2f0c56d0d4cd52188e50f10d2fe14bfd46e287dd50b72e7f7e851434ac  magic_wormhole-0.22.0.tar.gz
++md5  23f71fc6d6f78b93d419cee6d4af4d94  magic_wormhole-0.23.0.tar.gz
++sha256  4cd8f48a5c47f70578be7063f892988177681ab66845f4d6ad2d5eb03ce82acf  magic_wormhole-0.23.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4a9cc2415c52cef591b6822eee68fed36d7e6d80284b09638cff61d762d99060  LICENSE
 diff --git a/package/python-magic-wormhole/python-magic-wormhole.mk b/package/python-magic-wormhole/python-magic-wormhole.mk
-index 11d4a8867e..7b74113df1 100644
+index 7b74113df1..9f3b4dfe1c 100644
 --- a/package/python-magic-wormhole/python-magic-wormhole.mk
 +++ b/package/python-magic-wormhole/python-magic-wormhole.mk
-@@ -10,6 +10,8 @@ PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/65/34/08813
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MAGIC_WORMHOLE_VERSION = 0.22.0
++PYTHON_MAGIC_WORMHOLE_VERSION = 0.23.0
+ PYTHON_MAGIC_WORMHOLE_SOURCE = magic_wormhole-$(PYTHON_MAGIC_WORMHOLE_VERSION).tar.gz
+-PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/65/34/08813891da57999cf953e9c553193c900ff363c4cdfdd48a74f65536a883
++PYTHON_MAGIC_WORMHOLE_SITE = https://files.pythonhosted.org/packages/source/m/magic_wormhole
  PYTHON_MAGIC_WORMHOLE_SETUP_TYPE = setuptools
  PYTHON_MAGIC_WORMHOLE_LICENSE = MIT
  PYTHON_MAGIC_WORMHOLE_LICENSE_FILES = LICENSE
-+PYTHON_MAGIC_WORMHOLE_CPE_ID_VENDOR = magic_wormhole_project
-+PYTHON_MAGIC_WORMHOLE_CPE_ID_PRODUCT = magic_wormhole
- PYTHON_MAGIC_WORMHOLE_DEPENDENCIES = host-python-versioneer
- 
- $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
