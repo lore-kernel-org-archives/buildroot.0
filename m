@@ -4,109 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF22FF886F
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 05:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40216FF886F
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 09:00:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C469084A9C;
-	Thu, 30 Apr 2026 05:46:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E77018432D;
+	Thu, 30 Apr 2026 09:00:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dzKtCY3-rHPs; Thu, 30 Apr 2026 05:46:11 +0000 (UTC)
+ id HkFa453C9t0M; Thu, 30 Apr 2026 09:00:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B9DF84A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4827B8128E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777527971;
-	bh=kCvayE9E8RPajST5PCsW1bCK2oGBZ+rZfInlnKZOQ2I=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ci/DiKHScnIOtVJTw++71lgNyZkmDn0c+p3NiP2jm7804pzHxoDCUG8I8qFRf6jdI
-	 2tva5090Fgh5B2Z9Vb82PvH8W/6Vuag2IMuJDnRUuBXfgu/aWMRpT/ZCA/C63pJsQZ
-	 Kt7UXQ2nF8Le2ZfnllgPR1vN5MJpmelicKEV88u08SDAJtqwQdwrqXjbKDw9jIOkkZ
-	 vwf6p+auz0GTE1SwaJJeRS57huWiLz3r7nf/3fbtiVEDZTiKzw/MQwmpFVBZYMuQtM
-	 cu9oQ0pAyv2VEj4biFLDAlomin/XP801rm0KEQ12+SptSeYkew0R/w1PdCJXoLqo6B
-	 n7pEh5q8/TdYw==
+	s=default; t=1777539618;
+	bh=AyHVHcF6nQyU5ChFiCOTku3WX9FAC9OIHWXJpLy+Uqk=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=lk1okmGYJgPmpEYZ5inK4Y2AAJ8xNmGZ4wjbzwKfzy+n2ikFbayWsDl6vZ6GG4MIU
+	 VXCVX+eEjUs3Xsfo4aBdlcn35Ug3wwiJOGKxY3QBTxOF3RAtyOxLkPVMB1Fv/TcXrA
+	 Wip2KR959huervc3cCsDHQ7O6vFGdbyiaOyHBJe+88Lj92i4f5Y0yhlAfFAo6mIWao
+	 abiHhFrYNIEVBv26toh/Ih8/deyOe5YA1dGjSY7CX1eGnoPo0OzJAtKOyyYLvr1iD/
+	 g6579UpCAft/rLziVZRUhKMMnl3mZGXwCvk4IkGDo9AICvEKLRMTk4R47SxYAa3IzN
+	 GLBzcODZCLfgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B9DF84A9D;
-	Thu, 30 Apr 2026 05:46:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D894218F
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4827B8128E;
+	Thu, 30 Apr 2026 09:00:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1D8E18F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 09:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA8E74208F
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:46:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A39AD40AD8
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 09:00:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jc8tY2b-nGFS for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 05:46:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lzbu6e99RUAi for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 09:00:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0443E40573
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0443E40573
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0443E40573
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:46:08 +0000 (UTC)
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-2ad21f437eeso3581825ad.0
- for <buildroot@buildroot.org>; Wed, 29 Apr 2026 22:46:08 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 264FD40AC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 264FD40AC5
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 264FD40AC5
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 09:00:14 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-48896199cbaso5512585e9.1
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 02:00:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777527967; x=1778132767;
+ d=1e100.net; s=20251104; t=1777539613; x=1778144413;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=j7nCwquOeRwz4NuNPnEnCExj01p88lRF8Cq4fTxZg6M=;
- b=CEba12BXRSZF1M/0cX5oA56SJCc4YgR6Nxz9GodhiPIx0bQ9fhnHu+WyR+cpUmyq4K
- 7dR4HIDANsoZaGICCQTPnhI7MP3XqNE3fxyQpY1xXec7TiBVV20ar4e0e/NiZF3kGPg+
- had7FVDG22mLvB3JdI1No9AFiww1blfVUOhmU77dUdU30Dv4CDarDAaF3rEwl3jUcuI2
- pUctcp3CGc1TgYDIbrrDALWP7vPKJ/P/QRiGARRqmcACAn/36KocXgMn7eBVqazE5rTr
- aESI1dLx8xDEN5Jac2yYu29F2Mvp/333AX3ntJdz7y5gpVHkVziQwUwWWMzJdWcNKpMW
- aMPg==
-X-Gm-Message-State: AOJu0YzTDq8N2/UXTrmvAixBD6CwjfsWLpQzT+OfVB65oATf4FDWOjCZ
- 7/ITD8pWAs3kDtiw0/IWmGyyueLpLPOD6XzuJv5eOflR54IymKjDn19Ffwa9PfwG
-X-Gm-Gg: AeBDieuk/Kt7BD2RdejM9541TVxiLR0Ei6lvbfq6V+b/QjC+MyPhITems42pdXkNVaD
- xNdn9+MBIxfOjEuuK5gfFHufkY/c6LDWyThw7ZrmZhHHFbkjEWpZcR+REdoTwratnnu6WdCl/k0
- 3F5gqMZnvuQ4tAkDTfvQ7uG6otcKgXs/PmdYlC0lgars6uBachyUxgH14JejRH8WtTWF4vjVNZd
- VS5pkAT9sH7syDW+cwKN2wIvvtm+Wuxgm9G1iDOo2HSIEaJgOLnqCLYantW7QYWN8V99pIv1A1r
- Dyc4sbbfiVG1slvnCsCipEvl/Saw8nnq0KAKbTIG4e9cGEGou4X6hZ7wGxaCAKAQEwKNW2MikhX
- 0H6sqY7T9WYYlB5EiXujKnoJwA+ozbPyamMBjOXUJQffcj3dzgsDnEoiO5LBm8Y4DemJbswE0PX
- J3YHSqJPJm9P5AWs0vZaHb2xBDfl4tyVSwaAalnt5CqqBCWwsS+C52LFU=
-X-Received: by 2002:a17:903:2f0f:b0:2b4:64cf:e8f8 with SMTP id
- d9443c01a7336-2b9a42aae6dmr10753455ad.2.1777527967349; 
- Wed, 29 Apr 2026 22:46:07 -0700 (PDT)
-Received: from fedora ([2409:40e5:1178:1c37:1cfb:6a83:ee5f:eeda])
+ bh=Typ/RJQnxmKBQJ4O9NjPIFi+xHlN/OT9C3Un/Z4TM3U=;
+ b=jZ+lAP9Q582Hcw6GRcaq2tQx5WF2zcrbJ9K1DxVpXoYi8XdRakqcjyjLnGMFggrGF+
+ s2zpmhkXnWNcs3im/U4u0prk/8z8BcBvJ5taVkUPZoAh9So1JTgO4rG6k3yTTY9wrwhO
+ TC2Gef3H+aIDbab+eXu3yDLc4yo+RPnoVeSbjkhEk9CBbt01651g42cykZf7WQdSXAO6
+ C6oa9BmDPfwKSJZkE707/o8zRN4LWbDMO1b5Ume5dmovTPOdqTE+hTnDAakDb2I/53Dx
+ UkzH8y/7OlHhY0LzjwYNuGwXQXeBxRlBIp8WANRPfFQGuUwDgaKyQo93Zqrz9lfcn4FH
+ 0h6w==
+X-Gm-Message-State: AOJu0YyGy7s1+iA7IAduM9aiNmofv1tgbfZsEb8r3CKpaNLQdXVoyP2P
+ yA40z8J+XmmqWsuKsmxE3uNobAKJiSrLEGGReorokXuEgTVbIARXYgUa2WurnL4tHWzVGodMrVi
+ gb1BwdKs=
+X-Gm-Gg: AeBDiesVEn6gmADsRMU97J4VVXEmS+IIy9MO1DnjVwYe6ohjFgURdqcK/r9xtI1roRY
+ zRkoM/DL96/pe1tGlqDl9fpLC5akN2HQ9ou+mA0OwQaSesbv9qiwB2SBrt4QAVtsC2QVynBmfz5
+ 8v0Ws7z9Mfh6nJBNWwmlJIq6h9WItKoVohMygRhTGlhhGPOPHGx094eo3KjsiLtcK/HjetRXEY2
+ XgCMmTMNYXZQ40g4P/NetkbEseltpf3LP+Dn1MlONASXWvkXVYPuIreb2CNfLCPfFUl6P4sLM5r
+ tqJZ4vTyr+GSdn7T6Lp5YbIipKUAqQLPn509gnBlOjWGw42iXhjIc4JTRQ0nPKKFUANeM0QymlS
+ j5ZhHZGOBFvxTkXVggXQ7ZImIPAulO4hP6FdMOsV7r/jcZJ0HqYIFK070RgxKpNriE2n91kl/02
+ bvRMN6AVYm+Q/O9H3n58lU4SdG+CFIPZXFEEECHmFyN5UO
+X-Received: by 2002:a05:600c:a409:b0:48a:53ea:13eb with SMTP id
+ 5b1f17b1804b1-48a83d66d44mr26619665e9.5.1777539612431; 
+ Thu, 30 Apr 2026 02:00:12 -0700 (PDT)
+Received: from dragon.home ([109.137.238.219])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2b988798368sm40866925ad.26.2026.04.29.22.46.01
+ 5b1f17b1804b1-48a820c71c8sm85618555e9.4.2026.04.30.02.00.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Apr 2026 22:46:06 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Thu, 30 Apr 2026 02:00:12 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 30 Apr 2026 11:15:43 +0530
-Message-ID: <20260430054544.9473-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.54.0
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+	thomas.perale@mind.be
+Date: Thu, 30 Apr 2026 11:00:01 +0200
+Message-ID: <20260430090001.339335-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777527967; x=1778132767; darn=buildroot.org;
+ d=mind.be; s=google; t=1777539613; x=1778144413; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=j7nCwquOeRwz4NuNPnEnCExj01p88lRF8Cq4fTxZg6M=;
- b=fN6OYVRKEivCNm6Vt+B8fEhiEac6Cq3WNtJf8lulwPMAdugJeLbWv005OH9bXoCaJB
- irQeEDF2t6zkZAJ74DHxAkXuAd0SujmfMxRI7k8uPJaDTRop1hvgw7vWBi8n+YJslFKz
- RP1PaJNPx4W++yJf5PPDL67tZpDXX1wdkGjaBEaWf4THe/clf0+BoaIKd1864WImZhpj
- OYuJdXVlmknWKAFAdGZjb1CzJBnUi8t2Kdc2mKCUCvKQqW1tK5u56FOOOJXVkKd7BDK+
- Z6ih92PCG5kU14rapxYLMl0w1bRwXroSlPVC4oiRTw1yl52xn8XO0oozEhG3lhSPaUC0
- KgIw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=fN6OYVRK
-Subject: [Buildroot] [PATCH] package/iproute2: bump to version 7.0.0
+ bh=Typ/RJQnxmKBQJ4O9NjPIFi+xHlN/OT9C3Un/Z4TM3U=;
+ b=U0+cxKYjsfgJU0dr5WoQ5BvT2OlKqYAnKNAUtB1rOIO7KHiY48wuMcYTmIe0XSAlfO
+ teVTmOWmcQYLctTnB4LVQoYW26NzGhWgawwxCODFz8N3oqwKF5cS9TyPaRoKVNxjheZL
+ u9M/DfcqylG9i9gKweCLhfRkGN4qPvZZ/hrIS50G2qM8/k1RvMshMGcjw3wHEw8DJsP9
+ M7/sJT5P/gP/NO4ZNIWU2be2WakEEqs27h8SNEubk+al3NDSSMb1/iMQ4lzlagieAeWd
+ K24IyrRqYVzAOyhnmd4h8I79waDHB+Njfdek97lKA7l+QsnNEaIjD6WtxN0A7GHSAIAp
+ WCkw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=U0+cxKYj
+Subject: [Buildroot] [PATCH for 2025.02.x] package/openvpn: security bump to
+ v2.6.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,98 +120,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- dpll: Fix notifications and add fractional frequency offset support
-- tc: Add cake_mq support
-- mptcp: Show interface names with color support
-- devlink: Support param display and reset to defaults
-- lib/bpf_legacy: Use userspace SHA-1
-- Update kernel headers to 7.0-rc0
-- Remove upstreamed musl patch
+See the release notes:
+https://github.com/OpenVPN/openvpn/blob/v2.6.20/Changes.rst
 
-https://lwn.net/Articles/1067497/
+This fixes 2 security issues:
+- CVE-2026-40215:
+    race condition in TLS handshake that could lead to leaking of packet
+    data from a previous handshake under specific circumstances
+- CVE-2026-35058:
+    server ASSERT() on receiving a suitably malformed packet with a valid
+    tls-crypt-v2 key
 
-Tested Using:
-- utils/test-pkg -a -p iproute2
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...ridge-avoid-redefinition-of-in6_addr.patch | 36 -------------------
- package/iproute2/iproute2.hash                |  2 +-
- package/iproute2/iproute2.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch b/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
-deleted file mode 100644
-index c684b030a8..0000000000
---- a/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 7119f3736f689ab396ca4193ac593938affd55fa Mon Sep 17 00:00:00 2001
--From: Yureka <yureka@cyberchaos.dev>
--Date: Sun, 12 Oct 2025 14:39:47 +0200
--Subject: lib: bridge: avoid redefinition of in6_addr
--
--On musl libc, which does not use the kernel definitions of in6_addr, including
--the libc headers after the kernel (UAPI) headers would cause a redefinition
--error. The opposite order avoids the redefinition.
--
--Fixes: 9e89d5b94d749f37525cd8778311e1c9f28f172a
--Signed-off-by: Yureka <yureka@cyberchaos.dev>
--
--Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=7119f3736f689ab396ca4193ac593938affd55fa
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- lib/bridge.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/bridge.c b/lib/bridge.c
--index 5386aa017..104f5858b 100644
----- a/lib/bridge.c
--+++ b/lib/bridge.c
--@@ -2,8 +2,8 @@
-- 
-- #include <net/if.h>
-- 
---#include "bridge.h"
-- #include "utils.h"
--+#include "bridge.h"
-- 
-- void bridge_print_vlan_flags(__u16 flags)
-- {
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index e743b4fa0d..c918fcd2b3 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 0123babe4b..957537dde6 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
 @@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec  iproute2-6.17.0.tar.xz
-+sha256  e62890f7b5de63c05a3bf331dc8deb4c015c336013f341a4edf46969797f2f4e  iproute2-7.0.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 6d69a20126..4ca49d294e 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+ # Locally calculated after checking signature
+-sha256  05cb5fdf1ea33fcba719580b31a97feaa019c4a3050563e88bc3b34675e6fed4  openvpn-2.6.16.tar.gz
++sha256  952ecee5b911a5353c0a6d40af62a7076c6dea1481ef204ce6d3f10481531315  openvpn-2.6.20.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 0175c51d63..a117f6ee8c 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 6.17.0
-+IPROUTE2_VERSION = 7.0.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-OPENVPN_VERSION = 2.6.16
++OPENVPN_VERSION = 2.6.20
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 -- 
-2.54.0
+2.53.0
 
 _______________________________________________
 buildroot mailing list
