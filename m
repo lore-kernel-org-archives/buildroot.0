@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68276CD3430
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4370DFF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36AA1614F8;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 177B5844AE;
+	Mon,  4 May 2026 14:46:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xxCNUAmF9PUQ; Mon,  4 May 2026 14:46:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30530844D6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777906011;
+	bh=S57dxGScGJQuGihS/3RXE2m/17Q5PUrqLfPrdfHnRD4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=iz7qMyVJ8E4S+/PnSRO1He0lvWBMyz6ZyFZNPpJvVpHCiYgFDxWzWYrQ7kPWqounD
+	 F11oTLpWWRuW5efNIQKIRwkYfQWZ41a2c3e1ZudJcKXrdpPPRslZ3naoKZuUQYaflL
+	 KG11dkQup0fqRodufmgnE4M+rpudQlP5YbXPYYkE8N+PPJz0yqc8Cqoe0bYehBH1Qc
+	 FZMOlkkZE8bSZlvLVUAsF0bpTP1g7k+nEFBIf/yI/yceuTU/2s067ZeA9jes4bOKht
+	 ifBbUtL/0eewuhDPT2JrPEtQ0UovRDvF5SFOJuuvZmrUX9gzNzlVmEZKrtMVfJIuB5
+	 4d3BZjUnJTyvw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30530844D6;
 	Mon,  4 May 2026 14:46:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92B9225D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63F78614F3
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t1D50XvM1Iwz; Mon,  4 May 2026 14:46:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A9D61509
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906010;
-	bh=9zEHPBCH1cdu8ZDFP9WcQnMrAQSSSe2eydwUQALcg5c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SH+r+nJO+1jmG9RHCbPEiqmNKoAxjzpYj4UiHcjZYCsxk5hIwjgHNLkCJafQqNkE1
-	 tLDdIPpSRUTsmos1EaJLRwyYvd9KpJ2Mh8K6YH0StxHUyuS2mShMMiEsePLaapUbEU
-	 lEXVFJ4vMusPXZvGzHHuJ7g/LjuiA+dcOY0hU8nbcEnFWjqNnMsWsvVr34vCDDwAGQ
-	 nA6qkGPuxKx6kM0lwpqyK+Ah434aZIWksZcZyKqKaqHCtzo3sRKR91Zp3mI+lLzlXf
-	 /L0BrFoCR+d8w3Eeq3INIBAwJ3j59vxu6xnZ1MTGwOAYeWBJ/41E6cFf7gWnslbfNx
-	 IOLFiOtwUbawA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16A9D61509;
-	Mon,  4 May 2026 14:46:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17D6730A
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47BFA410AE
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74pNwpE_EBBo for <buildroot@buildroot.org>;
+ id Q3ASujTjHkbm for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19450410B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E27366136F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19450410B2
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E27366136F
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E99E384257; Mon,  4 May 2026 14:46:42 +0000 (UTC)
+ id B187484257; Mon,  4 May 2026 14:46:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 13:48:09 +0200
+Date: Thu, 30 Apr 2026 13:44:25 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f23d2f654af11ce413259d468c88d0856ba789ea
-X-Git-Newrev: 52886f4f833e646761f01853d621d176c666a09c
+X-Git-Oldrev: eeb65cf0f6753da6bc53197b971aec12ba647026
+X-Git-Newrev: 8593b6d091104cd60b0b8140ec716ed20feb4cd7
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144642.E99E384257@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mbedtls: security
- bump to v3.6.6
+Message-Id: <20260504144642.B187484257@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/p11-kit: bump to
+ version 0.25.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,164 +72,176 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6737754732370043267=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/52886f4f833e646761f01853d621d176c666a09c
+--===============6737754732370043267==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8593b6d091104cd60b0b8140ec716ed20feb4cd7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information about the release, see:
+Drop patch which is now upstream.
 
-- https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6
-- https://github.com/Mbed-TLS/mbedtls/compare/mbedtls-3.6.5..mbedtls-3.6.6
-
-Fixes the following vulnerabilities:
-
-- CVE-2025-66442
-    In Mbed TLS through 4.0.0, there is a compiler-induced timing side
-    channel (in RSA and CBC/ECB decryption) that only occurs with LLVM's
-    select-optimize feature. TF-PSA-Crypto through 1.0.0 is also affected.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2025-66442
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-compiler-induced-constant-time-violations/
-
-- CVE-2026-25833:
-    Mbed TLS 3.5.0 to 3.6.5 fixed in 3.6.6 and 4.1.0 has a buffer overflow
-    in the x509_inet_pton_ipv6() function
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-25833
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-inet-pton/
-
-- CVE-2026-25834:
-    Mbed TLS v3.3.0 up to 3.6.5 and 4.0.0 allows Algorithm Downgrade.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-25834
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-sigalg-injection/
-
-- CVE-2026-25835:
-    Mbed TLS before 3.6.6 and TF-PSA-Crypto before 1.1.0 misuse seeds in a
-    Pseudo-Random Number Generator (PRNG).
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-25835
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-rng-cloning/
-
-- CVE-2026-34871:
-    An issue was discovered in Mbed TLS before 3.6.6 and 4.x before 4.1.0
-    and TF-PSA-Crypto before 1.1.0. There is a Predictable Seed in a
-    Pseudo-Random Number Generator (PRNG).
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34871
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-dev-random/
-
-- CVE-2026-34872:
-    An issue was discovered in Mbed TLS 3.5.x and 3.6.x through 3.6.5 and
-    TF-PSA-Crypto 1.0. There is a lack of contributory behavior in FFDH
-    due to improper input validation. Using finite-field Diffie-Hellman,
-    the other party can force the shared secret into a small set of values
-    (lack of contributory behavior). This is a problem for protocols that
-    depend on contributory behavior (which is not the case for TLS). The
-    attack can be carried by the peer, or depending on the protocol by an
-    active network attacker (person in the middle).
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34872
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ffdh-peerkey-checks/
-
-- CVE-2026-34873:
-    An issue was discovered in Mbed TLS 3.5.0 through 4.0.0. Client
-    impersonation can occur while resuming a TLS 1.3 session.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34873
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-client-impersonation-while-resuming-tls13-session/
-
-- CVE-2026-34874:
-    An issue was discovered in Mbed TLS through 3.6.5 and 4.x through
-    4.0.0. There is a NULL pointer dereference in distinguished name
-    parsing that allows an attacker to write to address 0.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34874
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-null-pointer-dereference-x509/
-
-- CVE-2026-34875:
-    An issue was discovered in Mbed TLS through 3.6.5 and TF-PSA-Crypto
-    1.0.0. A buffer overflow can occur in public key export for FFDH keys.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34875
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ffdh-buffer-overflow/
-
-- CVE-2026-34876:
-    An issue was discovered in Mbed TLS 3.x before 3.6.6. An out-of-bounds
-    read vulnerability in mbedtls_ccm_finish() in library/ccm.c allows
-    attackers to obtain adjacent CCM context data via invocation of the
-    multipart CCM API with an oversized tag_len parameter. This is caused
-    by missing validation of the tag_len parameter against the size of the
-    internal 16-byte authentication buffer. The issue affects the public
-    multipart CCM API in Mbed TLS 3.x, where mbedtls_ccm_finish() can be
-    invoked directly by applications. In Mbed TLS 4.x versions prior to
-    the fix, the same missing validation exists in the internal
-    implementation; however, the function is not exposed as part of the
-    public API. Exploitation requires application-level invocation of the
-    multipart CCM API.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34876
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ccm-finish-boundary-check/
-
-- CVE-2026-34877:
-    An issue was discovered in Mbed TLS versions from 2.19.0 up to 3.6.5,
-    Mbed TLS 4.0.0. Insufficient protection of serialized SSL context or
-    session structures allows an attacker who can modify the serialized
-    structures to induce memory corruption, leading to arbitrary code
-    execution. This is caused by Incorrect Use of Privileged APIs.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-34877
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-serialized-data/
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e1c7f198dc537ebc1e2abc992c8e3a475e19b2cf)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit c05bf8c6c7801f2e5e50ee5b94512cec2fe31901)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...id-integer-truncation-on-32-bit-platforms.patch | 109 ---------------------
+ package/p11-kit/p11-kit.hash                       |   2 +-
+ package/p11-kit/p11-kit.mk                         |   2 +-
+ 3 files changed, 2 insertions(+), 111 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index b86c66af3e..f1be074e08 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
+diff --git a/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch b/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
+deleted file mode 100644
+index 03f54b4408..0000000000
+--- a/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
++++ /dev/null
+@@ -1,109 +0,0 @@
+-From d49c92c8420db6ee4c88515bdb014f68f4d471d9 Mon Sep 17 00:00:00 2001
+-From: Daiki Ueno <ueno@gnu.org>
+-Date: Sat, 2 Dec 2023 09:24:01 +0900
+-Subject: [PATCH] import-object: Avoid integer truncation on 32-bit platforms
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The build fails when compiling for 32-bit platforms with
+--Werror=incompatible-pointer-types:
+-
+-  CFLAGS="-m32 -march=i686 -Werror=incompatible-pointer-types -Werror=implicit -Werror=int-conversion" setarch i686 -- meson setup _build
+-  setarch i686 -- meson compile -C _build -v
+-  ...
+-
+-  ../p11-kit/import-object.c: In function ‘add_attrs_pubkey_rsa’:
+-  ../p11-kit/import-object.c:223:62: error: passing argument 3 of ‘p11_asn1_read’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+-    223 |         attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
+-        |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~
+-        |                                                              |
+-        |                                                              long unsigned int *
+-
+-Reported by Sam James in:
+-https://github.com/p11-glue/p11-kit/issues/608
+-
+-Signed-off-by: Daiki Ueno <ueno@gnu.org>
+-
+-Upstream: https://github.com/p11-glue/p11-kit/commit/d49c92c8420db6ee4c88515bdb014f68f4d471d9
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- p11-kit/import-object.c | 30 +++++++++++++++++++++++++++---
+- 1 file changed, 27 insertions(+), 3 deletions(-)
+-
+-diff --git a/p11-kit/import-object.c b/p11-kit/import-object.c
+-index feee0765..fb47b964 100644
+---- a/p11-kit/import-object.c
+-+++ b/p11-kit/import-object.c
+-@@ -55,6 +55,7 @@
+- #endif
+- 
+- #include <assert.h>
+-+#include <limits.h>
+- #include <stdbool.h>
+- #include <stdlib.h>
+- #include <string.h>
+-@@ -201,6 +202,7 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
+- 	CK_ATTRIBUTE attr_encrypt = { CKA_ENCRYPT, &tval, sizeof (tval) };
+- 	CK_ATTRIBUTE attr_modulus = { CKA_MODULUS, };
+- 	CK_ATTRIBUTE attr_exponent = { CKA_PUBLIC_EXPONENT, };
+-+	size_t len = 0;
+- 
+- 	pubkey = p11_asn1_read (info, "subjectPublicKey", &pubkey_len);
+- 	if (pubkey == NULL) {
+-@@ -220,17 +222,31 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
+- 		goto cleanup;
+- 	}
+- 
+--	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
+-+	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &len);
+- 	if (attr_modulus.pValue == NULL) {
+- 		p11_message (_("failed to obtain modulus"));
+- 		goto cleanup;
+- 	}
+-+#if ULONG_MAX < SIZE_MAX
+-+	if (len > ULONG_MAX) {
+-+		p11_message (_("failed to obtain modulus"));
+-+		goto cleanup;
+-+	}
+-+#endif
+-+	attr_modulus.ulValueLen = len;
+- 
+--	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &attr_exponent.ulValueLen);
+-+	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &len);
+- 	if (attr_exponent.pValue == NULL) {
+- 		p11_message (_("failed to obtain exponent"));
+- 		goto cleanup;
+- 	}
+-+#if ULONG_MAX < SIZE_MAX
+-+	if (len > ULONG_MAX) {
+-+		p11_message (_("failed to obtain exponent"));
+-+		goto cleanup;
+-+	}
+-+#endif
+-+	attr_exponent.ulValueLen = len;
+- 
+- 	result = p11_attrs_build (attrs, &attr_key_type, &attr_encrypt, &attr_modulus, &attr_exponent, NULL);
+- 	if (result == NULL) {
+-@@ -260,12 +276,20 @@ add_attrs_pubkey_ec (CK_ATTRIBUTE *attrs,
+- 	CK_ATTRIBUTE attr_key_type = { CKA_KEY_TYPE, &key_type, sizeof (key_type) };
+- 	CK_ATTRIBUTE attr_ec_params = { CKA_EC_PARAMS, };
+- 	CK_ATTRIBUTE attr_ec_point = { CKA_EC_POINT, };
+-+	size_t len = 0;
+- 
+--	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &attr_ec_params.ulValueLen);
+-+	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &len);
+- 	if (attr_ec_params.pValue == NULL) {
+- 		p11_message (_("failed to obtain EC parameters"));
+- 		goto cleanup;
+- 	}
+-+#if ULONG_MAX < SIZE_MAX
+-+	if (len > ULONG_MAX) {
+-+		p11_message (_("failed to obtain EC parameters"));
+-+		goto cleanup;
+-+	}
+-+#endif
+-+	attr_ec_params.ulValueLen = len;
+- 
+- 	/* subjectPublicKey is read as BIT STRING value which contains
+- 	 * EC point data. We need to DER encode this data as OCTET STRING.
+diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
+index 81d209b2c2..43a566a82c 100644
+--- a/package/p11-kit/p11-kit.hash
++++ b/package/p11-kit/p11-kit.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5:
--sha256  4a11f1777bb95bf4ad96721cac945a26e04bf19f57d905f241fe77ebeddf46d8  mbedtls-3.6.5.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6:
-+sha256  8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a  mbedtls-3.6.6.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index c1aa9f0850..e8bb0a71b9 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
+ # Locally calculated after checking pgp signature
+-sha256  d8ddce1bb7e898986f9d250ccae7c09ce14d82f1009046d202a0eb1b428b2adc  p11-kit-0.25.3.tar.xz
++sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
+ # Locally computed
+ sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 53e953e070..154a34e634 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 3.6.5
-+MBEDTLS_VERSION = 3.6.6
- MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
+-P11_KIT_VERSION = 0.25.3
++P11_KIT_VERSION = 0.25.5
+ P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
+ P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+ P11_KIT_INSTALL_STAGING = YES
+
+--===============6737754732370043267==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6737754732370043267==--
