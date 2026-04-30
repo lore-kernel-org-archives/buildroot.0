@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A6D9CD3430
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36307CD3439
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1AFD41B71;
-	Mon,  4 May 2026 14:47:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D70661501;
+	Mon,  4 May 2026 14:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IbOgLn7W6dkj; Mon,  4 May 2026 14:47:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aN8rJ1YC7VIj; Mon,  4 May 2026 14:47:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C598A41B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0810B61523
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906028;
-	bh=PZ56K2jxVKIE6KA5hAObYPRpeqfes5b+FQ1u7FAqH2o=;
+	s=default; t=1777906030;
+	bh=G0GmFDN6skFButLcEVtj3z+JOoc3HCyXJlwN+zAkmJE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bq0WkIdn4hCKNNWskUXPxGcXI1wUruhXhO2SeJ8t/18rqv3s4Wsp2eorc1gXhuXBy
-	 wj18fZuMZYt2oAwNydl6tQ2JiWXK8e7Y93Q92vUZcvlMGOK6M4FH6yDJjEXSZ4lrtg
-	 XL9mNWVtoGHTtbpNqbUM8cO7ZdcdA1+kb/ox4OQ9yqx9tW2wH7TMXuQKbYVlRllylI
-	 YCiTeNjI4rhePALL/AhTj+xIuKf0wsbfpt4eL22MTw50GWmyr/A+CgML8VAf0g1XTP
-	 6kcOpmcsIQNd/CE7Mk5osjSVUx9LRWkBHgCriH0QUrPjeWJJ2jMzM7oJECsv4nOlT1
-	 p1/xwKeO3qWCw==
+	b=faOdjXlbidcIHpKMnC8XsOyXkyoh3s+d3Kn4VfUUPWenXvOjxlbxhDFgn5eJoK0TK
+	 igm/NpR8JknsBhyXzCBuOLqgQPtvw2WufKoFnYRwm+lMQWSDGhUkM+8ZZ94qTv+LH1
+	 ZKZE1f0KoTZ3faZ1wbgb6v+VPLXQSTV2YFFiZbKUwR3d7FrXYZTjGeJ4WO4H69+4EL
+	 XG3RLvlwqfhdmQq8ZXXA9LC/9QvD7yZ5PfbBp335FLzQVVT7MfmRvkGxdllHC/bYGn
+	 21rqBIheHOUnCW/y7dj/c+piDPubteMom4XWT3Gl2YaguRmpJlr2RuU+wI52sXTIYj
+	 krhLAR0p9nKaw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C598A41B73;
-	Mon,  4 May 2026 14:47:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DC7B25D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0810B61523;
+	Mon,  4 May 2026 14:47:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12BC130A
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C90C410D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 343A7844AE
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CKTgtjBw2Hol for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:46:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MbwqyNBgUOFK for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4965410D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E05E4844A2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4965410D2
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E05E4844A2
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C78CB84216; Mon,  4 May 2026 14:46:43 +0000 (UTC)
+ id A6CF984272; Mon,  4 May 2026 14:46:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 14:08:26 +0200
+Date: Thu, 30 Apr 2026 13:42:08 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5570c93b8a33ba784a5ff82b7214c88bf88974a0
-X-Git-Newrev: 22e5dda9e847b60eb65004c4be9057ea4ac8c2cd
+X-Git-Oldrev: dabbb7caa4c057505cf0f6f15a61b0aaa46bb7dc
+X-Git-Newrev: eeb65cf0f6753da6bc53197b971aec12ba647026
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144643.C78CB84216@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ficl: downgrade
- to version 3.03
+Message-Id: <20260504144642.A6CF984272@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/util-linux: add
+ patch for CVE-2026-27456
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,209 +77,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22e5dda9e847b60eb65004c4be9057ea4ac8c2cd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/eeb65cf0f6753da6bc53197b971aec12ba647026
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-see https://sourceforge.net/p/ficl/news/2025/07/ficl4-is-retiring/
+- CVE-2026-27456: mount(8) TOCTOU symlink attack via loop device. The SUID
+    mount follows symlinks when resolving loop backing file paths. On
+    systems where non-root users are permitted to mount loop devices (via
+    'user' option in fstab), this allows access to arbitrary files.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 20bd9021423959fdd4dd4413dc12e78ea6d35353)
+For more information, see:
+
+- https://nvd.nist.gov/vuln/detail/CVE-2026-27456
+- https://github.com/util-linux/util-linux/commit/5e390467b26a3cf3fecc04e1a0d482dff3162fc4
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit cd52acda141d621b6c5774defe1427be29fe6ac1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- package/ficl/0001-fix-Makefile.patch               | 47 ----------------------
- package/ficl/0001-missing-include.patch            | 26 ++++++++++++
- .../ficl/0002-Makefile.linux-pass-LDFLAGS.patch    | 11 +++--
- package/ficl/ficl.hash                             |  4 +-
- package/ficl/ficl.mk                               | 20 ++++-----
- 6 files changed, 45 insertions(+), 64 deletions(-)
+ .../util-linux/0006-add-loopdev-fl-nofollow.patch  | 111 +++++++++++++++++++++
+ package/util-linux/util-linux.mk                   |   3 +
+ 2 files changed, 114 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b69e7c5019..d94db4febf 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -397,7 +397,6 @@ package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch lib_patch.
- package/ffmpeg/0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch lib_patch.Upstream
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch lib_patch.Upstream
- package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch lib_patch.Upstream
--package/ficl/0001-fix-Makefile.patch lib_patch.Upstream
- package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch lib_patch.Upstream
- package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch lib_patch.Upstream
- package/flex/0002-build-make-it-possible-to-disable-the-build-of-the-f.patch lib_patch.Upstream
-diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
-deleted file mode 100644
-index d5a25c43f0..0000000000
---- a/package/ficl/0001-fix-Makefile.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--fix dependency in Makefiles
--
--there is no longer a sysdep.h file.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--diff --git a/Makefile b/Makefile
--index 976d00a..7f73c44 100644
----- a/Makefile
--+++ b/Makefile
--@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-- 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-- 
---main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
--+main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-- 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-- 
--diff --git a/Makefile.ansi b/Makefile.ansi
--index e510fcd..170e6eb 100644
----- a/Makefile.ansi
--+++ b/Makefile.ansi
--@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-- 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-- 
---main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
--+main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-- 	$(CC) main.o -o main -L. -lficl -lm
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-- 
--diff --git a/Makefile.linux b/Makefile.linux
--index d447e7e..7f2cdfe 100644
----- a/Makefile.linux
--+++ b/Makefile.linux
--@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-- 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-- 
---main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
--+main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-- 	$(CC) main.o -o main -L. -lficl -lm
-- 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-- 
---- 
--
-diff --git a/package/ficl/0001-missing-include.patch b/package/ficl/0001-missing-include.patch
+diff --git a/package/util-linux/0006-add-loopdev-fl-nofollow.patch b/package/util-linux/0006-add-loopdev-fl-nofollow.patch
 new file mode 100644
-index 0000000000..8c6547c46e
+index 0000000000..21b1e2596c
 --- /dev/null
-+++ b/package/ficl/0001-missing-include.patch
-@@ -0,0 +1,26 @@
-+From 87c78eea2c4ac69c09947c8e49f8e8668640071c Mon Sep 17 00:00:00 2001
-+From: Francois Perrad <francois.perrad@gadz.org>
-+Date: Sun, 7 Dec 2025 10:15:27 +0100
-+Subject: [PATCH] missing include
++++ b/package/util-linux/0006-add-loopdev-fl-nofollow.patch
+@@ -0,0 +1,111 @@
++From 5e390467b26a3cf3fecc04e1a0d482dff3162fc4 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Thu, 19 Feb 2026 13:59:46 +0100
++Subject: [PATCH] loopdev: add LOOPDEV_FL_NOFOLLOW to prevent symlink attacks
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+Upstream: upstream is dead
++Add a new LOOPDEV_FL_NOFOLLOW flag for loop device context that
++prevents symlink following in both path canonicalization and file open.
++
++When set:
++- loopcxt_set_backing_file() uses strdup() instead of
++  ul_canonicalize_path() (which calls realpath() and follows symlinks)
++- loopcxt_setup_device() adds O_NOFOLLOW to open() flags
++
++The flag is set for non-root (restricted) mount operations in
++libmount's loop device hook. This prevents a TOCTOU race condition
++where an attacker could replace the backing file (specified in
++/etc/fstab) with a symlink to an arbitrary root-owned file between
++path resolution and open().
++
++Vulnerable Code Flow:
++
++  mount /mnt/point (non-root, SUID)
++    mount.c: sanitize_paths() on user args (mountpoint only)
++    mnt_context_mount()
++      mnt_context_prepare_mount()
++        mnt_context_apply_fstab()           <-- source path from fstab
++        hooks run at MNT_STAGE_PREP_SOURCE
++          hook_loopdev.c: setup_loopdev()
++            backing_file = fstab source path ("/home/user/disk.img")
++            loopcxt_set_backing_file()       <-- calls realpath() as ROOT
++              ul_canonicalize_path()         <-- follows symlinks!
++            loopcxt_setup_device()
++              open(lc->filename, O_RDWR|O_CLOEXEC)  <-- no O_NOFOLLOW
++
++Two vulnerabilities in the path:
++
++1) loopcxt_set_backing_file() calls ul_canonicalize_path() which uses
++   realpath() -- this follows symlinks as euid=0. If the attacker swaps
++   the file to a symlink before this call, lc->filename becomes the
++   resolved target path (e.g., /root/secret.img).
++
++2) loopcxt_setup_device() opens lc->filename without O_NOFOLLOW. Even
++   if canonicalization happened correctly, the file can be swapped to a
++   symlink between canonicalize and open.
++
++Addresses: https://github.com/util-linux/util-linux/security/advisories/GHSA-qq4x-vfq4-9h9g
++Signed-off-by: Karel Zak <kzak@redhat.com>
++
++CVE: CVE-2026-27456
++Upstream: https://github.com/util-linux/util-linux/commit/5e390467b26a3cf3fecc04e1a0d482dff3162fc4
++[Titouan: Adapt patch to apply cleanly onto util-linux 2.40]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ fileaccess.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ include/loopdev.h           | 3 ++-
++ lib/loopdev.c               | 7 ++++++-
++ libmount/src/hook_loopdev.c | 3 ++-
++ 3 files changed, 10 insertions(+), 3 deletions(-)
 +
-+diff --git a/fileaccess.c b/fileaccess.c
-+index 738889d..c03d5d6 100644
-+--- a/fileaccess.c
-++++ b/fileaccess.c
-+@@ -4,6 +4,7 @@
-+ #include <string.h>
-+ #include <ctype.h>
-+ #include <sys/stat.h>
-++#include <unistd.h>
-+ #include "ficl.h"
++diff --git a/include/loopdev.h b/include/loopdev.h
++index d10bf7f37..0f85dd254 100644
++--- a/include/loopdev.h
+++++ b/include/loopdev.h
++@@ -139,7 +139,8 @@ enum {
++ 	LOOPDEV_FL_NOIOCTL	= (1 << 6),
++ 	LOOPDEV_FL_DEVSUBDIR	= (1 << 7),
++ 	LOOPDEV_FL_CONTROL	= (1 << 8),	/* system with /dev/loop-control */
++-	LOOPDEV_FL_SIZELIMIT	= (1 << 9)
+++	LOOPDEV_FL_SIZELIMIT	= (1 << 9),
+++	LOOPDEV_FL_NOFOLLOW	= (1 << 10)	/* O_NOFOLLOW, don't follow symlinks */
++ };
 + 
-+ #if FICL_WANT_FILE
-+-- 
-+2.43.0
++ /*
++diff --git a/lib/loopdev.c b/lib/loopdev.c
++index c72fb2c40..3d2274693 100644
++--- a/lib/loopdev.c
+++++ b/lib/loopdev.c
++@@ -1267,7 +1267,10 @@ int loopcxt_set_backing_file(struct loopdev_cxt *lc, const char *filename)
++ 	if (!lc)
++ 		return -EINVAL;
++ 
++-	lc->filename = canonicalize_path(filename);
+++	if (lc->flags & LOOPDEV_FL_NOFOLLOW)
+++		lc->filename = strdup(filename);
+++	else
+++		lc->filename = ul_canonicalize_path(filename);
++ 	if (!lc->filename)
++ 		return -errno;
++ 
++@@ -1408,6 +1411,8 @@ int loopcxt_setup_device(struct loopdev_cxt *lc)
++ 
++ 	if (lc->config.info.lo_flags & LO_FLAGS_DIRECT_IO)
++ 		flags |= O_DIRECT;
+++	if (lc->flags & LOOPDEV_FL_NOFOLLOW)
+++		flags |= O_NOFOLLOW;
++ 
++ 	if ((file_fd = open(lc->filename, mode | flags)) < 0) {
++ 		if (mode != O_RDONLY && (errno == EROFS || errno == EACCES))
++diff --git a/libmount/src/hook_loopdev.c b/libmount/src/hook_loopdev.c
++index 597b9339a..4df1915a6 100644
++--- a/libmount/src/hook_loopdev.c
+++++ b/libmount/src/hook_loopdev.c
++@@ -272,7 +272,8 @@ static int setup_loopdev(struct libmnt_context *cxt,
++ 	}
++ 
++ 	DBG(LOOP, ul_debugobj(cxt, "not found; create a new loop device"));
++-	rc = loopcxt_init(&lc, 0);
+++	rc = loopcxt_init(&lc,
+++			mnt_context_is_restricted(cxt) ? LOOPDEV_FL_NOFOLLOW : 0);
++ 	if (rc)
++ 		goto done_no_deinit;
++ 	if (mnt_opt_has_value(loopopt)) {
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 5d761e01c9..d30c26deb5 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -36,6 +36,9 @@ UTIL_LINUX_CPE_ID_VENDOR = kernel
+ # 0001-libmount-ifdef-statx-call.patch
+ UTIL_LINUX_AUTORECONF = YES
+ 
++# 0006-add-loopdev-fl-nofollow.patch
++UTIL_LINUX_IGNORE_CVES += CVE-2026-27456
 +
-diff --git a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch b/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-index dd9e16412c..d05b49b7ff 100644
---- a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-+++ b/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-@@ -15,6 +15,8 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Upstream: upstream is dead
- [Dario: make the patch to be applied with fuzz factor 0]
- Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+[francois: downgrade to 3.03]
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- ---
-  Makefile.linux | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -23,11 +25,12 @@ diff --git a/Makefile.linux b/Makefile.linux
- index 5f1a41f..df887e6 100644
- --- a/Makefile.linux
- +++ b/Makefile.linux
--@@ -14,6 +14,6 @@ MINOR = 1.0
-+@@ -13,7 +13,7 @@ MAJOR = 3
-+ MINOR = 0.1
-  
-- ficl: main.o $(HEADERS) libficl.a
---	$(CC) main.o -o ficl -L. -lficl -lm
--+	$(CC) $(LDFLAGS) main.o -o ficl -L. -lficl -lm
-+ ficl: testmain.o ficl.h sysdep.h libficl.a
-+-	$(CC) testmain.o -o ficl -L. -lficl -lm
-++	$(CC) $(LDFLAGS) testmain.o -o ficl -L. -lficl -lm
-  
-  lib: libficl.so.$(MAJOR).$(MINOR)
-  
-diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
-index df53c843c1..1a4a54e704 100644
---- a/package/ficl/ficl.hash
-+++ b/package/ficl/ficl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
--sha256  1d1dd1f1cde52e8b607c5ccb6a2e5de878fd1719b8c5a4d31b9cdb343c203d0d  ReadMe.txt
-+sha256  064abbea44b2cbbeb53b8df8e5588ed41c4d32dd19bdb897e5d21507691407b2  ficl303.tar.gz
-+sha256  18527f5cdc213d29fb65791e153690974e5426b7e989f3b8eee61c2e5f9e5fcd  ReadMe.txt
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-index c0698a3433..ef2e1408ce 100644
---- a/package/ficl/ficl.mk
-+++ b/package/ficl/ficl.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
- 
--FICL_VERSION_MAJOR = 4.1
--FICL_VERSION = $(FICL_VERSION_MAJOR).0
--FICL_SITE = https://sourceforge.net/projects/ficl/files/OldFiles/Ficl4%20%28retired%29
-+FICL_VERSION = 3.03
-+FICL_TAG = ficl$(subst .,,$(FICL_VERSION))
-+FICL_VERSION_SO = 3.0.1
-+FICL_SOURCE = $(FICL_TAG).tar.gz
-+FICL_SITE = https://sourceforge.net/projects/ficl/files/ficl-all/$(FICL_TAG)
- FICL_LICENSE = BSD-2-Clause
- FICL_LICENSE_FILES = ReadMe.txt
- FICL_INSTALL_STAGING = YES
-@@ -26,14 +28,14 @@ endef
- endif
- 
- ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
--FICL_BUILD_TARGETS += main libficl.so.$(FICL_VERSION)
-+FICL_BUILD_TARGETS += testmain libficl.so.$(FICL_VERSION_SO)
- define FICL_INSTALL_SHARED_BIN
--	$(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/ficl
-+	$(INSTALL) -D -m 0755 $(@D)/testmain $(TARGET_DIR)/usr/bin/ficl
- endef
- define FICL_INSTALL_SHARED_LIB
--	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
--	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
--	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
-+	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.$(FICL_VERSION_SO)
-+	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.3
-+	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so
- endef
- endif
- 
-@@ -46,8 +48,6 @@ define FICL_INSTALL_STAGING_CMDS
- 	$(FICL_INSTALL_STATIC_LIB)
- 	$(call FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
- 	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
--	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
--	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
- endef
- 
- define FICL_INSTALL_TARGET_CMDS
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = \
+ 	host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
