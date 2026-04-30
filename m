@@ -4,82 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8772CFF886F
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 04:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741ADFF8875
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 05:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42911849FA;
-	Thu, 30 Apr 2026 04:51:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A0788456C;
+	Thu, 30 Apr 2026 05:15:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OhhM_ldBRoTU; Thu, 30 Apr 2026 04:51:15 +0000 (UTC)
+ id 3lcbfxxtomhU; Thu, 30 Apr 2026 05:15:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62957849F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 514088456D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777524675;
-	bh=wXiAJyxr5Yk/likRwkNmdLxXJOx8W5cMFV9+yRDAr30=;
+	s=default; t=1777526143;
+	bh=5FoFAvzJgDCd4ABSSAyFmmLKq1fq9jolcHc5LKbTWl4=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=OBJB14JiJV6ibbJ/8DtLNz+55kN7efRPug817GcCX0CpDtkkEP+CA/rKD+vRg2/qG
-	 6BuA4sXTaCIpW8CTI4b9cgFch/EgcgE2O1kSfQQ075K9SXe8anIB63SEnEHIQMzeYC
-	 ib1St6T/JzPjbdJtKLCQOmBFFrFC7BNh03oibwzuVM/Pf6uq6XmVmgAjjCM7fSEbo6
-	 oNN0kk9fzWBo6gHnNN8ULbUrYYXMpYrdgANAslsGVdaOqtwfO9Qf+2xAqd5zysdfaX
-	 pisnXDfrx8VRL/WeXDDOZYHeH2gNDQfF/JuuMWlnxDLzpEbx1EVse42hCZ4RPPhIej
-	 7gXYjkdE07zzQ==
+	b=hR+N8pv8GYOfzyAPmbJn4dM6i/0Y71YE2vwnAuQOy+Qa2vBggF/Wp+fCjfmLqArox
+	 FCMgggQjYvSuIKHmZZNyS1CLxlAXmAWQD+WH1OOguwxRTnzVl+0btIwWHoDhm/idbE
+	 eXFzwTa8KrWGtlWBS56s72sfQ9CnTWSR+NQwNgkPJw3Wmzte8kHzhaDzywhNhYyHdF
+	 jICaB9TiO3YFSUcAeN+8AMT+P+EN0H0HOa2t9mlVm+pnqCgyw4Vlfq2KZXJGPMLS+I
+	 QG7AyZZQm6uoztVVWrv7OREhLwjahb5gEbiMZiekbubYDEZcshTlOGTc9uHQyZEa4A
+	 j71IiHYkhKDKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62957849F4;
-	Thu, 30 Apr 2026 04:51:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 061B6192
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 04:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 514088456D;
+	Thu, 30 Apr 2026 05:15:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5BD718E
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E02564217D
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 04:51:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B50940484
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:15:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ON9-017Kqefw for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 04:51:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sm5EKW8Qm2oH for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 05:15:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E869D4217C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E869D4217C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A666E40072
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A666E40072
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E869D4217C
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 04:51:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A666E40072
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:15:41 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bb47.dip0.t-ipconnect.de [84.161.187.71])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 17470A4C0EA0
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 06:51:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34988)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CE485A4C00D7
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 07:15:39 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52414)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIJMj-000000000HI-1Pbh
- for buildroot@buildroot.org; Thu, 30 Apr 2026 04:51:09 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIJkR-000000004X1-0RwY
+ for buildroot@buildroot.org; Thu, 30 Apr 2026 05:15:39 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 06:51:09 +0200
-Message-ID: <20260430045109.59810-1-bernd@kuhls.net>
+Date: Thu, 30 Apr 2026 07:15:39 +0200
+Message-ID: <20260430051539.2272625-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777524670;
- bh=OVHobJnGs/ADuJgkWmSRaeX5U+0pru5mlxXYGR0XQXA=;
+ s=kas202511301023; t=1777526139;
+ bh=BXCQEvIsJ1f/0OksBgKA6C8Bs9OhGZ9uprPCJnkvlwk=;
  h=From:To:Subject:Date:From;
- b=QtN41MBvgurDBYa3l03XTlQ8egXj2iOGXDi0sWSH5a7j1EVeRs7HaTm8dGwEUEhm7
- /5uebs3bAZBEMFYfps6v/mfluP6x5W4voSMxqAQJ0haF24IW6vHwf8QgMZ9MEurqfz
- EpqmOO2RUNlBFBjGQydRfmG4bzR2HRUadilbXMw1iwYihv/qd7FiGAkPYboD9YAT23
- YKxuRluYk+Z+LTRkwJ6yty83mJ7uu7aG+Dh2ghfVRDosaqsq3rnMpgpao7TmxN3i0X
- YOiMbrRmyj9dx/jzM+exy8tYRd5jRXZD05+KvxRUjZ4uF3JuBTHECb0C8Bs/R6GReR
- gAAA1Rss9Mb3A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=agkfQl97+1xcNmSR5tN4PNXVNUIe6E8oSpBG3mRJ3kPmvTRiyMFDGrrQEqEIs8j+Q
+ TCXtR+hc07HnJJWOoGb1EX+1vKbeZ/CU30+z7VS898JiTNnZ/YhleatZ7k13XmiaZW
+ Es0Nu36p4YIZgIVn6A4Yd5uXoIXk8azG1Y8jW55RdZQxXD/TEe/vfnK8kQHMrmGER2
+ qB/TODrp8Hvkqimz2LWufz++UvaFkPfdEf0tcCjRdH4qkO7CbSumEdY0KlIvSnVkpI
+ DLZYn3UqmFCOZLOwpdiBKS+zwhOy39NfIr4h+ZQ4pycmuZlQm4zJwgAQyyhqjonkko
+ eAJnFIDzOYmUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=QtN41MBv
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: security bump to version
- 3.8.13
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=agkfQl97
+Subject: [Buildroot] [PATCH 1/1] package/ethtool: bump version to 7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,56 +95,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.gnupg.org/pipermail/gnutls-help/2026-April/004922.html
-
-Fixes the following CVEs:
-
-CVE-2026-33845
-CVE-2026-33846
-CVE-2026-3832
-CVE-2026-3833
-CVE-2026-42009
-CVE-2026-42010
-CVE-2026-42011
-CVE-2026-42012
-CVE-2026-42013
-CVE-2026-42014
-CVE-2026-42015
-CVE-2026-5260
-CVE-2026-5419
+https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?h=v7.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 209b6aa220..99a721d208 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.12.tar.xz.sig
--sha256  a7b341421bfd459acf7a374ca4af3b9e06608dcd7bd792b2bf470bea012b8e51  gnutls-3.8.12.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.13.tar.xz.sig
-+sha256  ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e  gnutls-3.8.13.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 0844bfe50d..6411a7d621 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index ca28e43ba4..2e02f7b256 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  1c2114ab6e0c0d2aa67d699960eb11df4f341e2403139cdf28ae9da858a6025f  ethtool-6.19.tar.xz
++sha256  660bf9725a7871343a0d232068a7634fbcfb69b6c2f8eff455827faefb0cd162  ethtool-7.0.tar.xz
  
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.8
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 9fe63f31e7..b518c971c4 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 6.19
++ETHTOOL_VERSION = 7.0
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
 2.47.3
 
