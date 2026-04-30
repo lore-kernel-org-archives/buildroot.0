@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C2FAFF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F333CD3439
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63DB5846DA;
-	Mon,  4 May 2026 14:48:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 793DB41CB1;
+	Mon,  4 May 2026 14:48:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pLfxdsX75yrB; Mon,  4 May 2026 14:48:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oQzsLKeY7opG; Mon,  4 May 2026 14:48:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C37F846DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8695341CB2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906132;
-	bh=r2dhF5aQK/t0uBMgl3FmXykJ9m1Fv14tolzFeHLtLpg=;
+	s=default; t=1777906133;
+	bh=oCH7IFQS2Zt7DW/gImsnxDlhXxRl4wi+I2oOBmfcjSs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nTzQWPtpU6A+QuYdSsqh4SRiZgZii7O7EFM0QlDBmQYNSDUwcS2x5fmryOh4SYPCv
-	 T09IUwJnxPcadIc6MkRLFKKN56u1wvh6RzIoJlCNDgToodDbihkowPVaT4z8lfwt0Z
-	 0ASVCp+MmPxQBebyQa2G160eJPEiL1WPCu4Ysn8pPKKFyl/JIoPmeFG0EIpJAlrx21
-	 QMlRbyS4lfLVz2Xb+4+sPw8T2LQqpQOb9RKp2QKG8B5Bx1xXnORto0CqlyeZgLtod7
-	 LRr2bcRrqiJriwRZ0f61heZripPiuamWwZSF6c8zATPKiB7zN7U9+iic2TOA765oM4
-	 3HE6Gl+eoFt3A==
+	b=VgbyuFmO8HIU5PBaG9UfdAau/UDLC0YLds1EvccBuEA9WEtIX+apUf/iKiFu/rzy6
+	 YI4NfC3Ew+pQUa6QEd2V4ZOVk0xJzU9InWzpX19F0F8OVf5F3IeMXV4Mr96Fy9DMvU
+	 3jWpeXlt+zP63PPVK7z//UAWox0vRyCCJKwfKkgqQIMSFxJKrgiS56U4GSscNtcR7b
+	 k0YnmBDnPzjQy1Xiabl+LF697fzrWbJKHGEUEgWvVaUy4lI8aTo64rzY5vqm4wpo/x
+	 cFUxQSCx/GigKfJP+nHFqXrLRJx5NwUMnP1jsgkvpKGU5XMxz0qOGNzP1s2Wxbz6FI
+	 Kp81DKbW8dI0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C37F846DB;
-	Mon,  4 May 2026 14:48:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 01CB625D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8695341CB2;
+	Mon,  4 May 2026 14:48:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9815190
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3488A84628
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B74A740E08
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tdMmb_nalSse for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:48:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XsvXlTtn_MZH for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:48:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FD01846B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC0C84079C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FD01846B1
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC0C84079C
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 647F584364; Mon,  4 May 2026 14:48:39 +0000 (UTC)
+ id AF0238435A; Mon,  4 May 2026 14:48:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 14:01:05 +0200
+Date: Thu, 30 Apr 2026 14:06:29 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: eff9a8c4e293c4483b29a769fd68423d469c05ab
-X-Git-Newrev: f3c3cfd7b138e46375f7f82d73a27daa1d6d8160
+X-Git-Oldrev: a07b4bb16ae32559fb336be5c6454a101cebda76
+X-Git-Newrev: d97a7101672921b8cf594c9d983fa47ecd84830f
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144839.647F584364@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/imagemagick:
- security bump to v7.1.2-19
+Message-Id: <20260504144842.AF0238435A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/python-django:
+ security bump to 6.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,85 +72,134 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0703278438782799194=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f3c3cfd7b138e46375f7f82d73a27daa1d6d8160
+--===============0703278438782799194==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d97a7101672921b8cf594c9d983fa47ecd84830f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-For change log, see:
-https://github.com/ImageMagick/Website/blob/main/ChangeLog.md#712-19---2026-04-12
+Django 6.0.4 fixes one security issue with severity “moderate”, four
+security issues with severity “low”, and several bugs in 6.0.3.
 
-This fixes a large number of CVEs:
-- CVE-2026-28493 (since 7.1.2-16)
-- CVE-2026-28494 (since 7.1.2-16)
-- CVE-2026-28686 (since 7.1.2-16)
-- CVE-2026-28687 (since 7.1.2-16)
-- CVE-2026-28688 (since 7.1.2-16)
-- CVE-2026-28689 (since 7.1.2-16)
-- CVE-2026-28690 (since 7.1.2-16)
-- CVE-2026-28691 (since 7.1.2-16)
-- CVE-2026-28692 (since 7.1.2-16)
-- CVE-2026-28693 (since 7.1.2-16)
-- CVE-2026-30883 (since 7.1.2-16)
-- CVE-2026-30929 (since 7.1.2-16)
-- CVE-2026-30931 (since 7.1.2-16)
-- CVE-2026-30935 (since 7.1.2-16)
-- CVE-2026-30936 (since 7.1.2-16)
-- CVE-2026-30937 (since 7.1.2-16)
-- CVE-2026-31853 (since 7.1.2-16)
-- CVE-2026-32259 (since 7.1.2-16)
-- CVE-2026-32636 (since 7.1.2-17)
-- CVE-2026-33535 (since 7.1.2-18)
-- CVE-2026-33536 (since 7.1.2-18)
-- CVE-2026-33899 (since 7.1.2-19)
-- CVE-2026-33900 (since 7.1.2-19)
-- CVE-2026-33901 (since 7.1.2-19)
-- CVE-2026-33902 (since 7.1.2-19)
-- CVE-2026-33905 (since 7.1.2-19)
-- CVE-2026-33908 (since 7.1.2-19)
-- CVE-2026-34238 (since 7.1.2-19)
-- CVE-2026-40169 (since 7.1.2-19)
-- CVE-2026-40183 (since 7.1.2-19)
-- CVE-2026-40310 (since 7.1.2-19)
-- CVE-2026-40311 (since 7.1.2-19)
-- CVE-2026-40312 (since 7.1.2-19)
+Security issues:
+* CVE-2026-3902: ASGI header spoofing via underscore/hyphen conflation
+    ASGIRequest normalizes header names following WSGI conventions, mapping
+    hyphens to underscores. As a result, even in configurations where
+    reverse proxies carefully strip security-sensitive headers named with
+    hyphens, such a header could be spoofed by supplying a header named with
+    underscores.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add link to change log in commit log]
+    Under WSGI, it is the responsibility of the server or proxy to avoid
+    ambiguous mappings. (Django’s runserver was patched in CVE 2015-0219.)
+    But under ASGI, there is not the same uniform expectation, even if many
+    proxies protect against this under default configuration (including
+    nginx via underscores_in_headers off;).
+
+    Headers containing underscores are now ignored by ASGIRequest, matching
+    the behavior of Daphne, the reference server for ASGI.
+
+    This issue has severity “low” according to the Django security policy.
+
+* CVE-2026-4277: Privilege abuse in GenericInlineModelAdmin¶
+
+    Add permissions on inline model instances were not validated on
+    submission of forged POST data in GenericInlineModelAdmin.
+
+    This issue has severity “low” according to the Django security policy.
+
+* CVE-2026-4292: Privilege abuse in ModelAdmin.list_editable¶
+
+    Admin changelist forms using list_editable incorrectly allowed new
+    instances to be created via forged POST data.
+
+    This issue has severity “low” according to the Django security policy.
+
+* CVE-2026-33033: Potential denial-of-service vulnerability in
+    MultiPartParser via base64-encoded file upload¶
+
+    When using django.http.multipartparser.MultiPartParser, multipart
+    uploads with Content-Transfer-Encoding: base64 that include excessive
+    whitespace may trigger repeated memory copying, potentially degrading
+    performance.
+
+    This issue has severity “moderate” according to the Django security policy.
+
+* CVE-2026-33034: Potential denial-of-service vulnerability in
+    ASGI requests via memory upload limit bypass¶
+
+    ASGI requests with a missing or understated Content-Length header could
+    bypass the DATA_UPLOAD_MAX_MEMORY_SIZE limit when reading
+    HttpRequest.body, potentially loading an unbounded request body into
+    memory and causing service degradation.
+
+    This issue has severity “low” according to the Django security policy.
+
+Bugfixes:
+* Fixed a regression in Django 6.0 where alogin() and alogout() did not
+  respectively set or clear request.user if it had already been
+  materialized (e.g., by sync middleware) (#37017).
+* Fixed a regression in Django 6.0 in admin forms where
+  RelatedFieldWidgetWrapper incorrectly wrapped all widgets in a
+  <fieldset> (#36949).
+* Fixed a bug in Django 6.0 where the fields.E348 system check did not
+  detect name clashes between model managers and related_names for
+  non-self-referential relationships (#36973).
+
+Release Notes:
+https://docs.djangoproject.com/en/6.0/releases/6.0.4/
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 08d0c7617159020b0658a98a79b4de5fe69ce3e7)
+(cherry picked from commit 60ce218196281d76606849037986b275c4619ae9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 90383c4d17..a308cd1f06 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bf646e7fffdf50b7d886eec6bbe51c3ced1c4d68fbabfcc534e014575359fe7f  imagemagick-7.1.2-15.tar.gz
-+sha256  91ffe35706ef01d0fc9630e3a81b168b9bdb10b5e1e0b0983c287063cce21210  imagemagick-7.1.2-19.tar.gz
- sha256  131447ad0099069beaa32acf1700716eea294a5bdf936d8211d7026b1849e5d4  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 5a03fbfd8f..d88323ca2d 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index dca77f02e2..6c317cf6e0 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  0bb395b518e2f2f17e1a936deb7ba74c  django-6.0.3.tar.gz
+-sha256  90be765ee756af8a6cbd6693e56452404b5ad15294f4d5e40c0a55a0f4870fe1  django-6.0.3.tar.gz
++md5  9d429cbef8c8357a480d0b920dd9a956  django-6.0.4.tar.gz
++sha256  8cfa2572b3f2768b2e84983cf3c4811877a01edb64e817986ec5d60751c113ac  django-6.0.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  be30dc0e3f7010af6c453d205feaece1f89494789b6e92f0c255ef597a1e6864  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 0cc68129ee..201eece164 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.1.2-15
-+IMAGEMAGICK_VERSION = 7.1.2-19
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+-PYTHON_DJANGO_VERSION = 6.0.3
++PYTHON_DJANGO_VERSION = 6.0.4
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/80/e1/894115c6bd70e2c8b66b0c40a3c367d83a5a48c034a4d904d31b62f7c53a
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js), CC-BY-4.0 (admin svg files)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
+
+--===============0703278438782799194==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0703278438782799194==--
