@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9DAFCD13D3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 18:17:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C7DCD13D3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 18:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E63666F4AF;
-	Thu, 30 Apr 2026 18:17:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E86441C50;
+	Thu, 30 Apr 2026 18:35:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cQdoTvW7nhLH; Thu, 30 Apr 2026 18:17:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RoCYqkeD1jK6; Thu, 30 Apr 2026 18:35:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E68426F4A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24F4241C51
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777573076;
-	bh=vQ2kp9hfhjdSzK/DLJR8PLDZ/6jnwRe4rNO1mpxlHTs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1777574156;
+	bh=qQUXv9DtiOJTsCrr4/44GSPmzD+w+1jIYUOaRtUrQqQ=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=AIXr9Zl8CKmQzEYJKlwOzw0gQQ+IVd4GOjOMwNZHiZ+z+aFYdJJnLLO0ctY3N687m
-	 30LAshDAplfntPCLWXTUAUpimbTBpJ3YFpYl4ezzRGCHlyuFnJrHdPPHqfoMnjuBV/
-	 iXZqIdBjYumTiFk7Y28ci0pVyumxrg7a6iitQNrBhUFSErHVhCZnYyga1lBNFbZgaq
-	 s0tc0Yq+DkAhsIoWX1KUdfrUNqNY2gyukqxe/u1Khhl/98hYIPtK5rl8JYPmTgLNXW
-	 Fst0wKMZVeoku78GYYSPy9WfDFxFW8S6uGkgknoz+vCzpzxWk19SlXvUEuUPg7VHe5
-	 htERJpC5JWYiw==
+	b=I7xe10IVyAhESUgxUGUEep9u1M/pTY83ZVOmOFezvSmmf/YZ7ildBrfrOt6rIxmPe
+	 12461ublAPAQthiGOAjAEzj0+AB3tarXdY5H1taxaWgckV+i4PmrSqlwMEHkCfnu0U
+	 hQGu/G3p5a9ib9TUev476iW7yJaG3EYknngAbL0fp0RzkOI8QLrDKpiiu+M3Wq9bJR
+	 TuOw3c2NiiGwkPUAAEWP0H3KMMLjznZSIJ1y/7jn/QoUmXiPDQd1RfWapU/TjgvlHw
+	 T6lu9ThQ60FI2JWxqbwhCr/DOKMfdL22f6MJq1hGP6GecvftP++dYmqTyJRq+DkdVL
+	 tsNzqt62BjIyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E68426F4A6;
-	Thu, 30 Apr 2026 18:17:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24F4241C51;
+	Thu, 30 Apr 2026 18:35:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 08801127
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:17:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5405A18E
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D96D06F4A6
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:17:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 749816F4A9
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:35:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0pKX8D-Tzazo for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 18:17:54 +0000 (UTC)
+ id HzvmNmP2dOL9 for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 18:35:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EDEE76F4A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDEE76F4A5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F1FD61237
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F1FD61237
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EDEE76F4A5
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:17:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F1FD61237
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 18:35:47 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 11484A4C11CD
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 20:17:52 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37442)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id ABF94A4C19CA;
+ Thu, 30 Apr 2026 20:35:44 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38918)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIVxP-000000008Qc-3klQ
- for buildroot@buildroot.org; Thu, 30 Apr 2026 18:17:51 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIWEi-0000000036J-3R4n;
+ Thu, 30 Apr 2026 18:35:44 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 20:17:51 +0200
-Message-ID: <20260430181751.2088520-1-bernd@kuhls.net>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Thu, 30 Apr 2026 20:35:43 +0200
+Message-ID: <20260430183544.2362642-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777573072;
- bh=qSuS/4zB47mY9cedkK1Hbh3wDERaSr+ANFhuLjQSCrs=;
- h=From:To:Subject:Date:From;
- b=lhTDRJOsCTFJuaTLTp+FDZLdYoBG01CMKyW6kwCogPFxEhISyXk7XxIpwbRzg1Y+t
- 1LDCOJ0mTCnZtoA4bspoYmDXMAVHPDF9JOUH13xcCxxcV/nPHfIIfoe6Is4/2Et1gb
- Ca48obBqGOMRfbnfRHlSubx7N7BiHYJwQCuAbuNp75fLftelbFv4RM2VFCEA4tEeDg
- evAbGgBX+97lFNX5bEDfNnl5kiGhK1FAayTJtbIq85+ZzEUMYijdvaiCpx6X7HrWhq
- K03MSl78OWQ1KHGS6jkywSBQLmBLRTuyFLCZ5LVqoKIrxs5sBDar8aJXnC0MIFQnkr
- ikjaab+FXxVng==
+ s=kas202511301023; t=1777574144;
+ bh=yOvm5CV6YqGNhREGR7anGEohS/hQbQpoo64vp/+Tiro=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZMSZkRDD+EvJNwTZDMoLGm2Mwae83RKgV8a8zVOX6c+dAdWQjK6rgaoUXiAiZPBlH
+ 3nHklQekiHO5Wtf3/l51dgf6npF8EKQEZ3YpffFqYglbhXu8YJzHqEQ224icl55SRQ
+ x53TJlWTcdent+stNlU5KqG7YownSVTRgTH+nDCVs1h20oF5WptwlqOhNeEIICJT+B
+ lv/4u195vCOrvmMi/yl7HcCxMOc3fl07j6Dq+G+blTG5gF+xSq6xwUwsN1l2rcGBrH
+ ePKU4+Q7HCQPHByYnGvZkDUvyBGymto9XXujdFjb9fPaIse9rdMmwgjF0hxqDWSBtT
+ aReROQ43A6H8Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=lhTDRJOs
-Subject: [Buildroot] [PATCH 1/1] package/proftpd: security bump version to
- 1.3.9a
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=ZMSZkRDD
+Subject: [Buildroot] [PATCH 1/2] package/libpjsip: enable parallel builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,38 +97,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/proftpd/proftpd/blob/1.3.9/NEWS
+Parallel builds were disabled in 2016 by buildroot commit
+781ce19d746efb6a5408b4d50b30626784eff324.
 
-Fixes CVE-2026-42167.
+In 2020 upstream added two commits which fix parallel builds
+https://github.com/pjsip/pjproject/commit/ddf48e2045fa155ef5242d9d7dcec27f8c5ed873
+https://github.com/pjsip/pjproject/commit/78683646c8bc670ec730a42494e075f671a08e28
+to version 2.11 which was added to buildroot with commit
+2c7ad667ec4a25226848baba809e492ca0ff06da.
+
+Tested with -j100.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/proftpd/proftpd.hash | 2 +-
- package/proftpd/proftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpjsip/libpjsip.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index 482534fb1c..9ec632884c 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4a5f13b666226813b4da0ade34535d325e204ab16cf8008c7353b1b5a972f74b  proftpd-1.3.9.tar.gz
-+sha256  bc3c7c47033ecff29f010efc18315d5906eb942d2e673ebce0138a96f11af0b4  proftpd-1.3.9a.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index a30c46ee27..ba026f5dd1 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 8cea8e3abc..38adeff626 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -13,7 +13,6 @@ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_CPE_ID_VENDOR = teluu
+ LIBPJSIP_CPE_ID_PRODUCT = pjsip
+ LIBPJSIP_INSTALL_STAGING = YES
+-LIBPJSIP_MAKE = $(MAKE1)
  
--PROFTPD_VERSION = 1.3.9
-+PROFTPD_VERSION = 1.3.9a
- PROFTPD_SITE = https://github.com/proftpd/proftpd/archive/v$(PROFTPD_VERSION)
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
+ LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
+ 
 -- 
 2.47.3
 
