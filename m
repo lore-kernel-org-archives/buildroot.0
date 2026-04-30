@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B72CD13D3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 16:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E1CFF8873
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 16:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EF0742B20;
-	Thu, 30 Apr 2026 16:24:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9531B84E3A;
+	Thu, 30 Apr 2026 16:24:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O-Vcym44GstC; Thu, 30 Apr 2026 16:24:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ncy_Lth71d6U; Thu, 30 Apr 2026 16:24:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FFDF42B40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8FDE84E36
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777566240;
-	bh=089XERaL5nxuK6eO9QE2QXNC1dFf3JCRsd1VghO/ks8=;
+	s=default; t=1777566252;
+	bh=bCpYypOOo/E7+gFjGLOwLhjjnWGyTPnMD17tUNxjyI8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=lC4o+jBA01eJzNCHZiPDbuGV0rf6TqtR7jG3JTltM58rgtFAWd2jh2inmtFywKUFZ
-	 JuaM3AdQYW8TtxlQx9hIBflDDCbdplnzKg5wnmLj8M8/9kXKp27P+xjXkbxWmSVMzm
-	 H/EHS6uDIGP1oxZeoC9in0YPs45uLWSCOkUmKZx1lhCFn0g6zQhtBFzOn+bKuq+V76
-	 K6iw1KQLmJxuyIwW2Dz2DBJVhqw7QlFd/pT8OHrbiNoQg/E63a1qvhKrUTRcaMW0ZR
-	 o2M7cKSYnl/IlkF62pobnzFV+R7Sw7zpPYQzVqHSH0i3krh8qgqlFzcqiXdz5HBv0F
-	 /UGFcTBX3YxHw==
+	b=JWF1B8SRq2BxaUoJR8Z2Wf6B9v/PM5CPS+ztS721EKuOeUiHRzyt0DaYBqW4/IAf1
+	 5vbNnL3Wvyz4/AoraLuAY/ahRUuE5TutdTLN+P/wir4gTpKp4LwPcdzVR/5nTQSpmz
+	 YmUM3Lmei9L0nncFJ1rK7QXEuKDe6JZ8cv1s8+RMZ1N5VSgXROFwouN6y71ZBM5jTZ
+	 1FShFU0YlxC6leMQ4um6wNj7UFtv6bXVzz2WZN5AFCJI0m/kb38tvEXP0nk7n3JSqG
+	 LtZxdcu/dlfIXtCMbmLMWigNU3aAyFA96OhcZvhhJnL1cI9jMPuXmuUUfAvlAg6ToV
+	 UO3FLZjHbZcLQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FFDF42B40;
-	Thu, 30 Apr 2026 16:24:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 36AD618E
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:23:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8FDE84E36;
+	Thu, 30 Apr 2026 16:24:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4DF9718E
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CCB542B41
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:23:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3304161CB8
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ibopjg0f2WMu for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 16:23:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p6QKcEiBpFs1 for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 16:24:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C5B642B20
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C5B642B20
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A9ED961CB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9ED961CB0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C5B642B20
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:23:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A9ED961CB0
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:09 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C1F56A4C2D47;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F1F33A4C2D18;
  Thu, 30 Apr 2026 18:22:04 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45580)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIU9F-000000004jw-1y9y;
+ (envelope-from <bernd@kuhls.net>) id 1wIU9F-000000004jw-2O66;
  Thu, 30 Apr 2026 16:21:57 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 18:21:48 +0200
-Message-ID: <20260430162156.3456640-6-bernd@kuhls.net>
+Date: Thu, 30 Apr 2026 18:21:49 +0200
+Message-ID: <20260430162156.3456640-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260430162156.3456640-1-bernd@kuhls.net>
 References: <20260430162156.3456640-1-bernd@kuhls.net>
@@ -66,23 +66,22 @@ MIME-Version: 1.0
 X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777566124;
- bh=kNX2R5ihbiHYoUGOUghjV5O5D2PfhYAyTEotTHbQCyw=;
+ s=kas202511301023; t=1777566125;
+ bh=oNABBqhHfyb1pzPHrOPGnRjzDWuNaEPrU1lSEf85h7M=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=PqlNw92imbsPbo7Tq9K2magQrP710o8LToT+S2FG6MNmsETucA/ZvgnRHQYM8tBI8
- xcbOqot4yTseIzBSiAMrq5C+Iu3WIvlPJ5c1dyw3bIHYD000CA/DUtblS4EWuqvJs5
- Oq07YuaD++mda+KGqJMT10SaManNxdWMhkLGRArJp1TikWOatzf8zWEJZCrro/+SoI
- Qehq+iPVoVOiP1A4n05hwhN1YftNemyLcHezHSM+FxaLY+lBwqaOEDkPEWPaw/zrkB
- DCAKM/yfhajkJ3At6twahLgxQn84JCsbMefuS87utAidzcaUvRHVMQTRwi80TwzvH/
- zVS4pUmJEmg+A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=JFJi4W+WWEq6YN/kJqKDi77ctM/YjAr82QejJ0ASLe17IoN/K+HOMWwEX/Dmhtffl
+ NgCku/AqAJcAXthfRRx43AvodWtRnNKwh4b7EmBRuO6jHQ5Lo5bRIlbx9zxPN8t8RP
+ lBig1hpw23fgRzNbVxObQ5XCGZruvjj06MMmTNBs0CgctNKGPx6xc3JQhxPUHMl0MZ
+ Z6PLY/9p02TsqE/foRYkjdJfZNyQ9P6cuwWZnaSpLIvnAzI3LuzW8+hi2lGrqVQtHd
+ OEJ+mlzHnhTbirWGnlcJCkh8NJO0qY/D55cbIweHwT+z10zZFQLL+ESZi/muXorVxG
+ vEIojz9MMjPbA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=PqlNw92i
-Subject: [Buildroot] [PATCH 06/14] package/qt5/qt5webkit: Fix build with gcc
- 16.x
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=JFJi4W+W
+Subject: [Buildroot] [PATCH 07/14] package/grantlee: Fix build with gcc 16.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,58 +106,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/qt5/qt5webkit/0014-gcc16.patch | 42 ++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/qt5/qt5webkit/0014-gcc16.patch
+ ...-id-in-constructor-of-template-class.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
 
-diff --git a/package/qt5/qt5webkit/0014-gcc16.patch b/package/qt5/qt5webkit/0014-gcc16.patch
+diff --git a/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch b/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
 new file mode 100644
-index 0000000000..795baf6386
+index 0000000000..6fd4636df1
 --- /dev/null
-+++ b/package/qt5/qt5webkit/0014-gcc16.patch
-@@ -0,0 +1,42 @@
-+From a2702a610d5ce7353e751c9604307c57e89eba8e Mon Sep 17 00:00:00 2001
-+From: Than Ngo <than@redhat.com>
-+Date: Feb 07 2026 15:46:16 +0000
-+Subject: Fix rhbz#2435048, FTBFS
++++ b/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
+@@ -0,0 +1,30 @@
++From 261bfe75d718abfc537ddcebfe805df01c33ab3a Mon Sep 17 00:00:00 2001
++From: Pino Toscano <toscano.pino@tiscali.it>
++Date: Sat, 25 Apr 2026 10:21:47 +0200
++Subject: [PATCH] Remove template-id in constructor of template class
 +
-+Fixes build error with gcc >= 16.x:
-+https://bugzilla.redhat.com/show_bug.cgi?id=2435048
++It was not required, and it is invalid now in C++ 20.
 +
-+(.data.rel.ro._ZTIN7WebCore26CachedScriptSourceProviderE[_ZTIN7WebCore26CachedScriptSourceProviderE]+0x10):
-+ undefined reference to `typeinfo for JSC::SourceProvider'
-+
-+Patch used in Fedora:
-+  https://src.fedoraproject.org/rpms/qt5-qtwebkit/raw/rawhide/f/qtwebkit-ftbfs-gcc16.patch
-+
-+Upstream: dead
++Upstream: https://github.com/steveire/grantlee/pull/93
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ templates/defaulttags/cycle.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff -up qtwebkit-5.212.0-alpha4/Source/cmake/OptionsCommon.cmake.me qtwebkit-5.212.0-alpha4/Source/cmake/OptionsCommon.cmake
-+--- qtwebkit-5.212.0-alpha4/Source/cmake/OptionsCommon.cmake.me	2026-02-07 14:18:35.540570280 +0100
-++++ qtwebkit-5.212.0-alpha4/Source/cmake/OptionsCommon.cmake	2026-02-07 14:19:38.422089625 +0100
-+@@ -30,7 +30,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS
++diff --git a/templates/defaulttags/cycle.h b/templates/defaulttags/cycle.h
++index 936c2a2e..a917555f 100644
++--- a/templates/defaulttags/cycle.h
+++++ b/templates/defaulttags/cycle.h
++@@ -40,9 +40,9 @@ Cycles endlessly over elements.
++ template <typename T> class RingIterator
++ {
++ public:
++-  RingIterator<T>() {}
+++  RingIterator() {}
 + 
-+ if (COMPILER_IS_GCC_OR_CLANG)
-+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-exceptions -fno-strict-aliasing")
-+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-strict-aliasing -fno-rtti")
-++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-strict-aliasing -frtti")
-+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-+ endif ()
-+ 
-+diff -up qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/parser/SourceProvider.h.me qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/parser/SourceProvider.h
-+--- qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/parser/SourceProvider.h.me	2026-02-07 15:12:07.758432773 +0100
-++++ qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/parser/SourceProvider.h	2026-02-07 15:12:26.229485643 +0100
-+@@ -35,7 +35,7 @@
-+ 
-+ namespace JSC {
-+ 
-+-    class SourceProvider : public RefCounted<SourceProvider> {
-++    class JS_EXPORT_PRIVATE SourceProvider : public RefCounted<SourceProvider> {
-+     public:
-+         static const intptr_t nullID = 1;
-+         
++-  RingIterator<T>(const QList<T> &list)
+++  RingIterator(const QList<T> &list)
++       : m_begin(list.constBegin()), m_it(list.constBegin()),
++         m_end(list.constEnd())
++   {
 -- 
 2.47.3
 
