@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 150CFFF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0453FCD343A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCBE6844A9;
-	Mon,  4 May 2026 14:47:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hoClJQ596ETq; Mon,  4 May 2026 14:47:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBA1284611
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906031;
-	bh=V3WQWKEtLTJ8oQDa1CYEArS3hgkFxClE7q598Rj4lNQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=G4ENH6cCDPfVcn8BTEeL+sEiO/5QHeVJCO+q11j/BBYkEE8hurxuytJBjrgq2uw29
-	 AZXrkC6lRY3eMkz/jlUjYXx3gccjqVLeGTX09mzgbZNiNcFHEREf43398kk1Q/6cOq
-	 HisEsY+NhajohpuJIz+UNBTAD79ECb/zmKMKGsULhGxJGzSva3gZ7qXPs64m44JGcf
-	 pHEbrWEVo5RQ5w5cN2sccIlFyDYgx/kFRDzo/2HmpwiZ2pjerBdUnZGhywXE0O1DhT
-	 JwxoGzvs120FOBW6vao8jDlGeiHFGEuMganA+QcC2p42iqA12vQ7P5r4+jg8VIN3vm
-	 0zkcZBi6yh7DA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBA1284611;
-	Mon,  4 May 2026 14:47:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04BBC190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCDA4410B3
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D095141B62;
+	Mon,  4 May 2026 14:47:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zC7vknByyFQS for <buildroot@buildroot.org>;
+ id rXdYN0tszK3L; Mon,  4 May 2026 14:47:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC3DD410F8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777906032;
+	bh=1YMqAV6TcixDRyT+BL/whGNCKxpWa05mq67eTwRmVkg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=rCgG4Ls5U65/oUiLL2FoHRPqwsAyUmSAC4lwlKDHRN7fD60wxLWkJQKtcmV+vJKrr
+	 Sq/V0WZoWlT1GECim9/qBFoP0pdRCltkuGxSmEvwdoX/MJ+MaWHMBJggZ6hwvjG1dt
+	 KRZhewatSsoXx8q20YwdZQnDHSkDH73VCDvSvdZAUJOqRqa5STLihl6LiryuhqITnz
+	 C1MAwJZSt372IOAoD1RQ97SfiLv9lL+fE4lEhJCyB0v5Ev+eS+JI/d0Gk07tNdrWgb
+	 C/k1BRjA4qzBsyQ149EJB+la/46HGsxl9Kt9iy9TdNeTn3RXzj+rPc6iBAdOeRk/1Z
+	 LRzR9SVL55hHw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC3DD410F8;
+	Mon,  4 May 2026 14:47:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10AE630A
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61B2F844A2
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cT_mpZk2EbUa for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:46:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9B41410D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BA95845A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9B41410D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BA95845A0
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD3628423F; Mon,  4 May 2026 14:46:43 +0000 (UTC)
+ id 639288427E; Mon,  4 May 2026 14:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 14:06:43 +0200
+Date: Thu, 30 Apr 2026 13:59:04 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ae34d39c8d4057581a84b91426de059badb54263
-X-Git-Newrev: 63ae2c9f7585b4fb20c2ac8702051c4657a763e7
+X-Git-Oldrev: 51237f6cf263b2df94be5a2a6a9f4cb9bd68b2a8
+X-Git-Newrev: fc8841477ddf5cb474a6e0e4f9fe1712401ae0e0
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144643.AD3628423F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
- security bump to v5.2.13
+Message-Id: <20260504144643.639288427E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/log4cxx: bump to
+ version 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,111 +77,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/63ae2c9f7585b4fb20c2ac8702051c4657a763e7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fc8841477ddf5cb474a6e0e4f9fe1712401ae0e0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-See the release notes:
-https://docs.djangoproject.com/en/5.2/releases/5.2.13/
+Changelog:
+https://logging.apache.org/log4cxx/1.6.1/changelog.html
 
-In addition, update the pypi url to a stable one, which shouldn't change
-in each and every release (similar to the url change in commit
-https://gitlab.com/buildroot.org/buildroot/-/commit/60ce218196281d76606849037986b275c4619ae9)
+Remove dependency on Boost.DateTime because since Boost 1.77 it's
+not a dependency of Boost.Thread anymore and that's the only thing
+log4cxx actually requires as fallback.
 
-Finally, one hash file has changed because of upstream commit
-https://github.com/django/django/commit/0ee44c674cf61efbca2056c40f3e4f2335aaeee6
-
-Django 5.2.13 fixes one security issue with severity "moderate",
-and four security issues with severity "low":
-- CVE-2026-3902:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. `ASGIRequest` allows a remote attacker to spoof
-    headers by exploiting an ambiguous mapping of two header variants
-    (with hyphens or with underscores) to a single version with
-    underscores. Earlier, unsupported Django series (such as 5.0.x, 4.1.x,
-    and 3.2.x) were not evaluated and may also be affected. Django would
-    like to thank Tarek Nakkouch for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-3902
-
-- CVE-2026-4277:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. Add permissions on inline model instances were not
-    validated on submission of  forged `POST` data in
-    `GenericInlineModelAdmin`. Earlier, unsupported Django series (such as
-    5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be affected.
-    Django would like to thank N05ec@LZU-DSLab for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-4277
-
-- CVE-2026-4292:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. Admin changelist forms using
-    `ModelAdmin.list_editable` incorrectly allowed new  instances to be
-    created via forged `POST` data. Earlier, unsupported Django series
-    (such as 5.0.x, 4.1.x, and 3.2.x) were not evaluated and may also be
-    affected. Django would like to thank Cantina for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-4292
-
-- CVE-2026-33033:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. `MultiPartParser` allows remote attackers to
-    degrade performance by submitting multipart uploads with `Content-
-    Transfer-Encoding: base64` including excessive whitespace. Earlier,
-    unsupported Django series (such as 5.0.x, 4.1.x, and 3.2.x) were not
-    evaluated and may also be affected. Django would like to thank
-    Seokchan Yoon for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-33033
-
-- CVE-2026-33034:
-    An issue was discovered in 6.0 before 6.0.4, 5.2 before 5.2.13, and
-    4.2 before 4.2.30. ASGI requests with a missing or understated
-    `Content-Length` header could  bypass the
-    `DATA_UPLOAD_MAX_MEMORY_SIZE` limit when reading  `HttpRequest.body`,
-    allowing remote attackers to load an unbounded request body into
-    memory. Earlier, unsupported Django series (such as 5.0.x, 4.1.x, and
-    3.2.x) were not evaluated and may also be affected. Django would like
-    to thank Superior for reporting this issue.
-    https://www.cve.org/CVERecord?id=CVE-2026-33034
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit cff850cfdbe1cd24fd427c3fe2239b61fca35736)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 6 +++---
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/log4cxx/Config.in    | 1 -
+ package/log4cxx/log4cxx.hash | 4 ++--
+ package/log4cxx/log4cxx.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index b1859b0647..a7bf2aed8b 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,9 +1,9 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  9b60bb1145abcc97d276694f3f82a3b8  django-5.2.12.tar.gz
--sha256  6b809af7165c73eff5ce1c87fdae75d4da6520d6667f86401ecf55b681eb1eeb  django-5.2.12.tar.gz
-+md5  4af55cc09a3d1a828259ad0c05330e6b  django-5.2.13.tar.gz
-+sha256  a31589db5188d074c63f0945c3888fad104627dfcc236fb2b97f71f89da33bc4  django-5.2.13.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
--sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-+sha256  a6fa72074c31928128aaa18162204507938b7a9a8b819bd833fa82467441800d  django/contrib/gis/measure.py
- sha256  570a045a8372b6cd6a00e30ebafe8e3e8dfc0a7fe3d4ef2cc5f16d419eb63aeb  django/contrib/gis/gdal/LICENSE
- sha256  08bf24b7551238ae325295245425b1caeb9ad0f42f9e2d303c7b353502632045  django/contrib/gis/geos/LICENSE
- sha256  d48633adb736dac091477ec2206feebeee88e3e6e486aedb21c584e4b49be0ec  django/contrib/admin/static/admin/js/inlines.js
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 52d0a2b740..a478c95f95 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
+index d9daf27eb6..8305217a48 100644
+--- a/package/log4cxx/Config.in
++++ b/package/log4cxx/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_LOG4CXX
+ 	select BR2_PACKAGE_BOOST if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_CHRONO if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+-	select BR2_PACKAGE_BOOST_DATE_TIME if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	help
+ 	  Apache log4cxx is a logging framework for C++ patterned
+diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
+index d9e9af18cf..f6770e287c 100644
+--- a/package/log4cxx/log4cxx.hash
++++ b/package/log4cxx/log4cxx.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.apache.org/logging/log4cxx/1.3.1/apache-log4cxx-1.3.1.tar.gz.sha512
+-sha512  0956fd034fd1a98d2e48ed461578c1e85da02d176850a580195b6a60b959feaf402a2743cc84ccb5d467dd924ee46422b8a7b39d2be9ee131e4e275e65ba839c  apache-log4cxx-1.3.1.tar.gz
++# From https://downloads.apache.org/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz.sha512
++sha512  6ee406314bd7ab02a46c98cc8a0d5ad5aec8928a23716a81a152775ca315cd3b950d600b2e221d5b4a88416ae9bbda1215fae43626107feea4df2f3e074303ad  apache-log4cxx-1.6.1.tar.gz
+ # Locally computed
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index 4b85adbf92..57f9b1e844 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.2.12
-+PYTHON_DJANGO_VERSION = 5.2.13
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bd/55/b9445fc0695b03746f355c05b2eecc54c34e05198c686f4fc4406b722b52
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+-LOG4CXX_VERSION = 1.3.1
++LOG4CXX_VERSION = 1.6.1
+ LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
+ LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
+ LOG4CXX_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
