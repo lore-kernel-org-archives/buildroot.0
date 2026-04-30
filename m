@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52891CD3439
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA3ECD3430
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B33E41CA2;
-	Mon,  4 May 2026 14:48:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5338E615D1;
+	Mon,  4 May 2026 14:48:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9PSn6_NLUAWl; Mon,  4 May 2026 14:48:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l-LnJLCzAbuF; Mon,  4 May 2026 14:48:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B0F141CAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CBDB615D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906130;
-	bh=9kkEdmiiGVzmMzE8YF6TUZmtD9xfOr+mBoRGLwNrg2E=;
+	s=default; t=1777906131;
+	bh=UO22kMaqUGEjXNCeEIJNC6tFhvz5H2Wl+Heo7IIc6GA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JnTvdcT8DMItLykMkiRJES4i7U39x718FspmN+0DcxOheiXRzO1+FufW6MRZw9xmQ
-	 7UESq7L92aKmpUs0YWPPaNPVhl7Gt0HhAcuYQ732I8XiBnMngA7l2h0fk5HE856vnx
-	 F/OP3z30mN+axDGs7ktvOFIpPV+rcWtgBaSy1j7keExfOKJivK7wH/DC+pQg88eZVx
-	 PraN7EyHk6gARjFjOhhrSSwdtP6FAixtgN/067k0+bTbs08ilcBvoja4Y5/khGmyM6
-	 n1RAFtYUli/wUF8wb/6W6IwzlryOR9FngwGz4fMAzpxmtdW26skQi4B5BZxcM6uOce
-	 AllbM9+SruArA==
+	b=Qk4QbiGKXdhfjOAd/Tn7+W07fvaxqdbopYQYl5lDzqnN/za2E5HijUT1fwwrx0TYK
+	 MzfTGe33tatlapAh5vyF30v8nu8fgyqQ6PAx6ZiweS22vKV1Dr2RY6pzc8ud9KEO0j
+	 C3vn19tjVNnsIvUFF9y+vrmDRxRSMWq+mifjf0LDdJ5MxhZwb7gOP6+vB/maIQ9TQt
+	 2Bgv0OEsPjvdtL/ju6iuZBDqzs8/urB9v8xCBGzt0U+tpY9oh6vreP/k9Zx6avs6g8
+	 UgqjBEFcJEyZ2yI/tp0vb/oibovvyWJmr7MNlkRoF3TkcdOkg+l63GrTlBPiGh7EaN
+	 2AKlwXK6YVqkQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B0F141CAE;
-	Mon,  4 May 2026 14:48:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F4CA190
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CBDB615D7;
+	Mon,  4 May 2026 14:48:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9959E25D
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28BF1846AE
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7FAFD40B70
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FkgAr3zs9P3M for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:48:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id THMkiuQQU0YB for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:48:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B0DA84628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0AB74079C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B0DA84628
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0AB74079C
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E6C4784364; Mon,  4 May 2026 14:48:38 +0000 (UTC)
+ id 780FB8435A; Mon,  4 May 2026 14:48:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 13:49:49 +0200
+Date: Thu, 30 Apr 2026 14:06:00 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 66221b107d6dd064ca6064d40fb0d158363028f4
-X-Git-Newrev: c83584617406dbd4904034d70d16426b8fd2dc6d
+X-Git-Oldrev: 5578590f1eb131b6e2f20346d70f43c6ea5ed4ff
+X-Git-Newrev: a07b4bb16ae32559fb336be5c6454a101cebda76
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144838.E6C4784364@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/ruby: security
- bump version to 4.0.3
+Message-Id: <20260504144841.780FB8435A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/openvpn: security
+ bump to v2.6.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c83584617406dbd4904034d70d16426b8fd2dc6d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a07b4bb16ae32559fb336be5c6454a101cebda76
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
+See the release notes:
+https://github.com/OpenVPN/openvpn/blob/v2.6.20/Changes.rst
 
-Added sha512 tarball hash provided by upstream.
+This fixes 2 security issues:
+- CVE-2026-40215:
+    race condition in TLS handshake that could lead to leaking of packet
+    data from a previous handshake under specific circumstances
+- CVE-2026-35058:
+    server ASSERT() on receiving a suitably malformed packet with a valid
+    tls-crypt-v2 key
 
-Fixes CVE-2026-41316:
-https://www.ruby-lang.org/en/news/2026/04/21/erb-cve-2026-41316/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 92746d0dea25125bbda6359dcbeb2f90b192eeef)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 1a4a04fe29ccad76159765143e221bb6fd2d598c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ruby/ruby.hash | 5 +++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 9908fe8d4f..7512d1153b 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,6 @@
--# https://www.ruby-lang.org/en/news/2026/03/16/ruby-4-0-2-released/
--sha256  4618db85bb9ec04d8152d0099db488694a3d3c4f52106625e4ad547f1318db87  ruby-4.0.2.tar.xz
-+# https://www.ruby-lang.org/en/news/2026/04/21/ruby-4-0-3-released/
-+sha256  22cf6005d25bbe496b5ebe9224d63a1aaabfbfe02591bb5d612517c5a7836f29  ruby-4.0.3.tar.xz
-+sha512  5816fb264ce76df59f4bfe0cadceb45025fada2e61f2c14024d6b03f63d304820cddf94afcf82a4951fd12f3b0d9148683f856f3f2245d56042fc8407b6cbff5  ruby-4.0.3.tar.xz
- 
- # License files, Locally calculated
- sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 6bd8ad43c5..7e6f6d8146 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 1fad2163c8..957537dde6 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  4cc8e63f710d3001493b13d8a32cf22a214d5e4f71dd37d93831e2fd3208b370  openvpn-2.6.17.tar.gz
++sha256  952ecee5b911a5353c0a6d40af62a7076c6dea1481ef204ce6d3f10481531315  openvpn-2.6.20.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 9740374bee..a117f6ee8c 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 4.0
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 4.0.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-OPENVPN_VERSION = 2.6.17
++OPENVPN_VERSION = 2.6.20
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
