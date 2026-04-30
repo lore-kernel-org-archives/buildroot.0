@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90A68CD13D3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 19:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A97CD13D3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 19:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5178D6F4ED;
-	Thu, 30 Apr 2026 19:07:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4666141C7D;
+	Thu, 30 Apr 2026 19:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S9jRbbTBct9W; Thu, 30 Apr 2026 19:07:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6IpXbT_goLNq; Thu, 30 Apr 2026 19:07:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B4646F4F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66ABE41C7A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777576061;
-	bh=bCpYypOOo/E7+gFjGLOwLhjjnWGyTPnMD17tUNxjyI8=;
+	s=default; t=1777576074;
+	bh=AdLv01MtExyvmxSBjsJ3UVmpw0EzZiJ1L1Jn/khSvjQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=lU1Nd8YkcLYUQWG6/tahgakXoZUBIp/L1Iq1xTcH8i2lbLCAIuestZRKA2PG+f3Wl
-	 92ntaZSIw92wsSTHa+NrwobqiWiDURsaAFhqnesU8dnOv+ukVP1E+/ma+9BVESnk1t
-	 0XzDnUY8Yxu1Mwbt+M88bDKIycxmHZcWhm2zmSIfC2envokgdnG9rT6lOSaU83nsKm
-	 yu3IwVCG4xaGf4M/mnF2Q8OKsouwTzpRkYkPP4TIS0jsTAA/sfltfDBjkC40MZyJ7I
-	 UFgPIaIlrsh+ah6AxZVF/lRYGANeckmI86vu1kDz3wXQxJbxfUVn3pb7pRspACz2Qo
-	 sdkPwTwvors0w==
+	b=N0r8hP1SPPUWb89AhzO1pvcoR2+f1fv5ylpeYJviWZGp59VZ+2Kw0WY37hCfhqMir
+	 NsOlAEC6cE1kXMHT+hsoE+QoJ46Ne1SpvcGS5bZMVTPobmUO8IS1P+8iVXxySbURRt
+	 4UaFBz5/MH47LJwNZ2c/5Y/RsOlQ/ckEwD/6N/Luld6qBxlh5B7yqwCjWDNhSdhK92
+	 uNO0xy30Fh2HQtbJnfc1Ttnpp8twsHPPH4wAQfTgmTBNAq2LVd5i7fUw/ymQUCB9tP
+	 8kyFYA9JbEOL1gNkwoXpvaCopiZ0kZIWQEvsg8sJGJ7wdzw3lXeswWIho9HWpz+V+O
+	 TQ0zBX+8zDZSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B4646F4F3;
-	Thu, 30 Apr 2026 19:07:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 60AAD192
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66ABE41C7A;
+	Thu, 30 Apr 2026 19:07:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25F9518E
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51ABB6F4F3
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BAB784FB3
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CS99zb9c63Et for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 19:07:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xp0jzKum9C4B for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 19:07:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B1986F4ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B1986F4ED
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A293582479
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A293582479
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3B1986F4ED
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A293582479
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:07:51 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 58EBAA4C2D18;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 89572A4C2D52;
  Thu, 30 Apr 2026 21:07:00 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60442)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIWim-000000000Pg-0m4I;
+ (envelope-from <bernd@kuhls.net>) id 1wIWim-000000000Pg-16tR;
  Thu, 30 Apr 2026 19:06:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 21:06:40 +0200
-Message-ID: <20260430190647.3212159-7-bernd@kuhls.net>
+Date: Thu, 30 Apr 2026 21:06:41 +0200
+Message-ID: <20260430190647.3212159-8-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260430190647.3212159-1-bernd@kuhls.net>
 References: <20260430190647.3212159-1-bernd@kuhls.net>
@@ -67,22 +67,23 @@ X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777576020;
- bh=oNABBqhHfyb1pzPHrOPGnRjzDWuNaEPrU1lSEf85h7M=;
+ bh=bWNhI1r3yyLPULUxeRm76DoW0v6JWSGkuWwUGWbp3u8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=APayIRgUamq0NKyqh6q56Waili8we3lZD7i/89YbNR5udsQjdYWuccF5iUbd+3wXw
- 49KcqLRb81cdduXTEGsft8ciWeuXk0aRzZVqHpIJOsq7v3w7QQ7Lps44aJEs1DfKD8
- jwFDgWBPIrL+mw/1BIBJa+0eW3xXa7SBUUxDJ+pgESP8XEBQxNqWKJV6b13HEsVo6n
- X7Koo74jhgH0LnLSVLRmqmwbSeePzhbc9YJkliWrDIHgM+An8N1rqEWKyiI7xCTeWe
- 7KN5MZoHg2nsljO4VmwbssDZptwY2gyplRuwXKM9xLonXUpi6stelxry/cfWTi8Z1S
- z4NxzzL5SdJUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=sXpHmHQTOPoWbG5L25w6FcYZtJS+L3a6YfLAXRbaTArMpiPOckix8G/XMY7NYF0gz
+ m2yAKuy115PMBhmiu23GT+CIPxRsz0aHVJtmANifsyE/K3mSekcoKVFE5XDansECZv
+ F1ZMWFy6TGNTmyYGGJpMxYFdSYeE4fThF1HPmsQrX4FShqFyOc5/yyM3QgSfVaiPgx
+ MP9YPDfxNClKoKvTeW2E6FK+krR+1Pce07TIJGI3GP24ED77jPaWMQTRf6NX+wC4fx
+ 2/eNSXfHTTCaRrCIxVyxwtN3zUBgJWhhsi35Yvg38y1MtGC8MvZEJqsUYqhkyX1sBE
+ YFnUfSvsS8wPg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=APayIRgU
-Subject: [Buildroot] [PATCH v2 07/14] package/grantlee: Fix build with gcc
- 16.x
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=sXpHmHQT
+Subject: [Buildroot] [PATCH v2 08/14] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_16 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,48 +106,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+In order to add gcc 16 support in follow-up commits, introduce
+BR2_TOOLCHAIN_GCC_AT_LEAST_16 symbol.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...-id-in-constructor-of-template-class.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch b/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
-new file mode 100644
-index 0000000000..6fd4636df1
---- /dev/null
-+++ b/package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
-@@ -0,0 +1,30 @@
-+From 261bfe75d718abfc537ddcebfe805df01c33ab3a Mon Sep 17 00:00:00 2001
-+From: Pino Toscano <toscano.pino@tiscali.it>
-+Date: Sat, 25 Apr 2026 10:21:47 +0200
-+Subject: [PATCH] Remove template-id in constructor of template class
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 910cd103dc..5aa6cf8f6d 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -848,10 +848,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_16
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
 +
-+It was not required, and it is invalid now in C++ 20.
-+
-+Upstream: https://github.com/steveire/grantlee/pull/93
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ templates/defaulttags/cycle.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/templates/defaulttags/cycle.h b/templates/defaulttags/cycle.h
-+index 936c2a2e..a917555f 100644
-+--- a/templates/defaulttags/cycle.h
-++++ b/templates/defaulttags/cycle.h
-+@@ -40,9 +40,9 @@ Cycles endlessly over elements.
-+ template <typename T> class RingIterator
-+ {
-+ public:
-+-  RingIterator<T>() {}
-++  RingIterator() {}
-+ 
-+-  RingIterator<T>(const QList<T> &list)
-++  RingIterator(const QList<T> &list)
-+       : m_begin(list.constBegin()), m_it(list.constBegin()),
-+         m_end(list.constEnd())
-+   {
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "16"	if BR2_TOOLCHAIN_GCC_AT_LEAST_16
+ 	default "15"	if BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	default "14"	if BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
 -- 
 2.47.3
 
