@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E59ECD13D3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 16:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19B69CD13D3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 17:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 434FE42B4B;
-	Thu, 30 Apr 2026 16:24:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4F9E412B8;
+	Thu, 30 Apr 2026 17:22:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1EGlv2veQjG9; Thu, 30 Apr 2026 16:24:49 +0000 (UTC)
+ id FsW0sNVMuw68; Thu, 30 Apr 2026 17:22:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2A8F42B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B22E412B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777566289;
-	bh=osJunn883iT8eQxN4vgE/esN6lJ0XP5vOnETrG0hSiU=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=nBz+ORut/pny92tkUYzUb83niOHC2SCa6PPJe1omQ4Nr4HSKsepEWxt0HtE9NH5Cf
-	 BEPdV4Zb0OO7tzjt6ccEYT2WtLBMySSmakwLXeZSrkpN226q9fwAqwi3+q8f314J1m
-	 Fc0d5F1yeXwKrMoFe64xF/gePKHossyQzI31B5/TgQ2xITZoie3uMkIAxglre0bWrN
-	 KANq2iEHWkV3nepIjcMQMCs5/wOJd/H/ThxPdi4MvEB+b+4yM5LY2gZUIomuPQkkf6
-	 WVsLGVWqFdC1xZVCAK8gfVUtBS7rtrU6qcFpqF58axyiGgKfjL7+vdfbPAb9e1LKUC
-	 uEWL61WvgdU0Q==
+	s=default; t=1777569737;
+	bh=IJwYecHdcj0KNRfs5o8BW4Yhe7b4vFIaELKAJx6gy00=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=j/Ep6cecVpHzIB2ZMSk6x4y7OJ21Jutyr2/Us5YbXUhmXHzRVGA/u+1IZXMjJcgwx
+	 ByRhaNQQJqWINxuZyLNgIYxskyLmloYg+EH3ai+nXWj4N/Ds3bdvuFP7FjI7haeY7l
+	 JhinVKdGSAtQ11VxuOoGzFySrRKCUZ1nLQRcZ4P/eD42PRUlu5FnECR/LVYpYP70Xc
+	 N/eo3yYkZPuzQH8+ef31ywmEhfshfTAm+P0hqlXv5JwfN/WvRCVbiOv045+jzmBLtA
+	 Xk61MxyrBwyJJs7xytwj/KSH/89Ev4ta+bLmBF6RWeuRHN25a9PKJzSahrJN0sLdxQ
+	 U6Br/+UHeZ6Ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2A8F42B6C;
-	Thu, 30 Apr 2026 16:24:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E03A18F
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B22E412B6;
+	Thu, 30 Apr 2026 17:22:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FAF918F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 17:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F83761CB8
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F2C484ECB
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 17:22:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NuM4yoGgUzyT for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 16:24:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9l83ONH2d3Z for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 17:22:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ADBE961CB0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADBE961CB0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3903384EBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3903384EBE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ADBE961CB0
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:24:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3903384EBE
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 17:22:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7021BA4C2D5B;
- Thu, 30 Apr 2026 18:22:05 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45580)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 801F9A4C0672
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:22:12 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39694)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIU9F-000000004jw-3a4h;
- Thu, 30 Apr 2026 16:21:57 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIV5Y-0000000073R-2I8X
+ for buildroot@buildroot.org; Thu, 30 Apr 2026 17:22:12 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 18:21:53 +0200
-Message-ID: <20260430162156.3456640-11-bernd@kuhls.net>
+Date: Thu, 30 Apr 2026 19:22:12 +0200
+Message-ID: <20260430172212.581885-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260430162156.3456640-1-bernd@kuhls.net>
-References: <20260430162156.3456640-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777566125;
- bh=g9K1vBhDxNxU6iHFcVSX0sQbIOW6Xl41tippW4Ihf7I=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=g0yd2mbZ9sxo4IS3gxQBx1X4L/agZqXHSK4PrzdIPiuON9wJeKQ82/ptPA0jODtUz
- ZWGybj1nETWRiorVVybuSTxqHQDomHBQmP29if6f6h40RWu7NAJgzIkUTXXLfdfEZe
- rvR+pbMXu5mvehRuaHNzVf2+GIBTj9LaY2xS4Kk+fS7R/D9lkm9pPDA3cSAn/z8J4Y
- 4ryyLXnNXIxlCXza/QERfkm2mwV/PFcFfNUuRUKepKiHU5sMHxh4GaKVTp6ZF3EhK9
- hxi4uKg4btnFYRmXFYTdqkqiA3zDUEw1v/IjWlKlyzlRN7NEMCmJq3urrnpHemrKV6
- YEvMYCvedRmPg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202511301023; t=1777569732;
+ bh=LWDpGjtaSbfueBsraQAucQGkTc5BjXyhbLMidGtwqLA=;
+ h=From:To:Subject:Date:From;
+ b=NiuDCu+cKEuTxX6SmNG4JEBc/LUldz0BnHxCh2v29KfWeLN0W/CU9ANLmNEcJkNW5
+ 3NJH1hmVnWvssn6m3ONx+0XBLO3U5LMqmhBGhpCpo6pmlx0BRq02NYEjA0T2wdo8wN
+ bxLKe2C39i2pnkiAXb7/k61Br87IB91sCCqVz3u4yKyU7m6bgiJDgp+QkVDJyiSuNS
+ 7F1EecrKkX/Q8HoUrz7MvNIvkpC2EwYqTOxrgPQvF+A+K5+Q9FFnh9E7XPiTLhlR/J
+ dhd4/cC7wideOjLp74slDQ8M3Blws34ZW05fgx445VyZ3MfhFr+rwLTuAvHebSdiad
+ p417xp9ACwQ0A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=g0yd2mbZ
-Subject: [Buildroot] [PATCH 11/14] package/gcc: add version 16.x
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=NiuDCu+c
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.{1, 6, 12, 18}.x / 7.0.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,204 +91,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added libatomic to HOST_GCC_INITIAL_EXCLUDES to fix linking error with
-libc:
-
-output/host/lib/gcc/x86_64-buildroot-linux-gnu/16.0.1/../../../../x86_64-buildroot-linux-gnu/bin/ld:
- cannot find -latomic_asneeded: No such file or directory
-
-caused by upstream commit
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e63cf4b130b86dd7dde1bf499d3d40faca10ea2e
-which added libatomic/ to $bootstrap_target_libs.
-
-For details see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81358
-
-Copied patches 0001 & 0003 from package/gcc/15.2.0/
-Patch 0002 was applied upstream:
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7894c00982c570d684fe5b82d8fb3aafc34d6986
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  1 +
- ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++
- ...-config-microblaze-fix-ira-for-GCC15.patch | 56 +++++++++++++++++++
- package/gcc/Config.in.host                    |  9 +++
- package/gcc/gcc-initial/gcc-initial.mk        |  2 +-
- package/gcc/gcc.hash                          |  2 +
- 6 files changed, 95 insertions(+), 1 deletion(-)
- create mode 100644 package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
- create mode 100644 package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
+ linux/{7.0.2 => 7.0.3}                       |  0
+ linux/Config.in                              |  2 +-
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  4 ++--
+ package/linux-headers/{5.10.253 => 5.10.254} |  0
+ package/linux-headers/{5.15.203 => 5.15.204} |  0
+ package/linux-headers/{6.1.169 => 6.1.170}   |  0
+ package/linux-headers/{6.12.84 => 6.12.85}   |  0
+ package/linux-headers/{6.18.25 => 6.18.26}   |  0
+ package/linux-headers/{6.6.136 => 6.6.137}   |  0
+ package/linux-headers/{7.0.2 => 7.0.3}       |  0
+ package/linux-headers/Config.in.host         | 14 +++++++-------
+ 12 files changed, 15 insertions(+), 15 deletions(-)
+ rename linux/{7.0.2 => 7.0.3} (100%)
+ rename package/linux-headers/{5.10.253 => 5.10.254} (100%)
+ rename package/linux-headers/{5.15.203 => 5.15.204} (100%)
+ rename package/linux-headers/{6.1.169 => 6.1.170} (100%)
+ rename package/linux-headers/{6.12.84 => 6.12.85} (100%)
+ rename package/linux-headers/{6.18.25 => 6.18.26} (100%)
+ rename package/linux-headers/{6.6.136 => 6.6.137} (100%)
+ rename package/linux-headers/{7.0.2 => 7.0.3} (100%)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5a33df73cd..6b96ff044a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -360,6 +360,7 @@ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
- package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
-diff --git a/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-new file mode 100644
-index 0000000000..c3b600cfb8
---- /dev/null
-+++ b/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-@@ -0,0 +1,26 @@
-+From 7d5f59e035341430e20f47420535d0e987516e55 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 25 Jul 2022 00:29:55 +0200
-+Subject: [PATCH] disable split-stack for non-thread builds
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git format]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libgcc/config/t-stack | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
-+index cc0366b4cd8..f3f97e86d60 100644
-+--- a/libgcc/config/t-stack
-++++ b/libgcc/config/t-stack
-+@@ -1,4 +1,6 @@
-+ # Makefile fragment to provide generic support for -fsplit-stack.
-+ # This should be used in config.host for any host which supports
-+ # -fsplit-stack.
-++ifeq ($(enable_threads),yes)
-+ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
-++endif
-+-- 
-+2.50.1
-+
-diff --git a/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
-new file mode 100644
-index 0000000000..663aab7218
---- /dev/null
-+++ b/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
-@@ -0,0 +1,56 @@
-+From d2fdbd8c4abe67eea86877dfb3b3b9d8508c165f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 6 Aug 2025 22:32:30 +0200
-+Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
-+
-+Add new hooks for callee-save on microblaze defined by [1] and
-+return 1 to restore the old behavior prior to the commit [3].
-+
-+Tested with qemu_microblazeel_mmu_defconfig and used to generate
-+Microblaze toolchains for the Bootlin toolchains 2025.08-1 [4][5].
-+
-+Upstream: suggested in the bug report: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432#c10
-+
-+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b191e8bdecf881d11c1544c441e38f4c18392a15
-+[2] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/i386.cc;h=3128973ba79cccfc6761f451dcb716b9558cc4da;hb=d3ff498c478acefce35de04402f99171b4f64a1a#l20606
-+[3] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3b9b8d6cfdf59337f4b7ce10ce92a98044b2657b
-+[4] https://lore.kernel.org/buildroot/87sehzndtp.fsf@dell.be.48ers.dk/T/#mce7decd0b3f6a41008d5de577538a8525c91b374
-+[5] https://toolchains.bootlin.com/
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/microblaze/microblaze.cc | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
-+index 78b9428ef3b..84ea7e8d55a 100644
-+--- a/gcc/config/microblaze/microblaze.cc
-++++ b/gcc/config/microblaze/microblaze.cc
-+@@ -3228,6 +3228,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
-+   return NO_REGS;
-+ }
-+ 
-++/* Implement TARGET_CALLEE_SAVE_COST.  */
-++static int
-++microblaze_callee_save_cost (spill_cost_type, unsigned int hard_regno, machine_mode,
-++		       unsigned int, int mem_cost, const HARD_REG_SET &, bool)
-++{
-++  return 1;
-++}
-++
-+ static void
-+ microblaze_globalize_label (FILE * stream, const char *name)
-+ {
-+@@ -4066,6 +4074,9 @@ microblaze_starting_frame_offset (void)
-+ #undef TARGET_SECONDARY_RELOAD
-+ #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
-+ 
-++#undef TARGET_CALLEE_SAVE_COST
-++#define TARGET_CALLEE_SAVE_COST microblaze_callee_save_cost
-++
-+ #undef  TARGET_ASM_OUTPUT_MI_THUNK
-+ #define TARGET_ASM_OUTPUT_MI_THUNK      microblaze_asm_output_mi_thunk
-+ 
-+-- 
-+2.50.1
-+
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 21581487df..b9dd37471f 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -46,6 +46,14 @@ config BR2_GCC_VERSION_15_X
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
+diff --git a/linux/7.0.2 b/linux/7.0.3
+similarity index 100%
+rename from linux/7.0.2
+rename to linux/7.0.3
+diff --git a/linux/Config.in b/linux/Config.in
+index 381c045d2b..f11b955653 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
-+config BR2_GCC_VERSION_16_X
-+	bool "gcc 16.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
-+	# powerpc spe support has been deprecated since gcc 8.x.
-+	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-+	depends on !BR2_POWERPC_CPU_HAS_SPE
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-+
- endchoice
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.0.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.0.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index d9f1290f9c..ffdbcd8c27 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  d56e463a7b1f5355794ae83a102453ad930a51f9cb46b295fcf24a717bff52dd  linux-6.12.84.tar.xz
+-sha256  6fb2d21a98281d786ee5fc63760e6f2c33e567e178e83c605bf0359eabbcf471  linux-6.6.136.tar.xz
+-sha256  e0cbe674801749075b93008d8854dbf1c8d300805ada0b60f6f907bbb83aef2c  linux-6.1.169.tar.xz
++sha256  e35ac999f40a6874493d8d60f33f1150d7a89ae5841c428da82257fbcd070aed  linux-6.12.85.tar.xz
++sha256  92f1e90d8be49f9d7f989e563c97a4f39cd7731025d7b81152814c68b5bd56c4  linux-6.6.137.tar.xz
++sha256  b578912f79a5e8ea1a94ce4364d20a3902d2005be0e16deee9fbd0ad697c4944  linux-6.1.170.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  0bebe7d82a57e98792a407109566f1813fde97aaf7f735c1c7e6feebe833dc64  linux-5.15.203.tar.xz
+-sha256  ec0724928050e8e2f6226fe8bbb206f42a951c0ed2dbb533c5462789f6d75ac8  linux-5.10.253.tar.xz
++sha256  9bfd4c3303ca8e2cf9aa2bc570afa31100a8e2d0132ba16e904cbe06ff76dbcd  linux-5.15.204.tar.xz
++sha256  75473ca597a1cd83a2c29a2857f9b046463672eb225912271676180bad1a869d  linux-5.10.254.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+ sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index c7f378d06c..cd0214519d 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  53591a03294527a48ccb0b9e559e922df8a38554745a1206827ca751d2ca7662  linux-7.0.2.tar.xz
++sha256  0bedadbf5788693ddebbcc913c893f1a97349af79ddde7144c2a80b401959f1c  linux-7.0.3.tar.xz
  
- config BR2_GCC_SUPPORTS_DLANG
-@@ -71,6 +79,7 @@ config BR2_GCC_VERSION
- 	default "13.4.0"    if BR2_GCC_VERSION_13_X
- 	default "14.3.0"    if BR2_GCC_VERSION_14_X
- 	default "15.2.0"    if BR2_GCC_VERSION_15_X
-+	default "16.1.0"    if BR2_GCC_VERSION_16_X
- 	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  29680a07d4430b269af6ce68079b0e81dbd60f03e6f351e0661991fe39bd1898  linux-6.18.25.tar.xz
++sha256  53772f5d3776e043767c8d81a32240d1f3eb64e822a5d7a510b55ca40707b0ec  linux-6.18.26.tar.xz
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 1f8b76a942..18d5cef0f8 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -17,7 +17,7 @@ HOST_GCC_INITIAL_DL_SUBDIR = gcc
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.253 b/package/linux-headers/5.10.254
+similarity index 100%
+rename from package/linux-headers/5.10.253
+rename to package/linux-headers/5.10.254
+diff --git a/package/linux-headers/5.15.203 b/package/linux-headers/5.15.204
+similarity index 100%
+rename from package/linux-headers/5.15.203
+rename to package/linux-headers/5.15.204
+diff --git a/package/linux-headers/6.1.169 b/package/linux-headers/6.1.170
+similarity index 100%
+rename from package/linux-headers/6.1.169
+rename to package/linux-headers/6.1.170
+diff --git a/package/linux-headers/6.12.84 b/package/linux-headers/6.12.85
+similarity index 100%
+rename from package/linux-headers/6.12.84
+rename to package/linux-headers/6.12.85
+diff --git a/package/linux-headers/6.18.25 b/package/linux-headers/6.18.26
+similarity index 100%
+rename from package/linux-headers/6.18.25
+rename to package/linux-headers/6.18.26
+diff --git a/package/linux-headers/6.6.136 b/package/linux-headers/6.6.137
+similarity index 100%
+rename from package/linux-headers/6.6.136
+rename to package/linux-headers/6.6.137
+diff --git a/package/linux-headers/7.0.2 b/package/linux-headers/7.0.3
+similarity index 100%
+rename from package/linux-headers/7.0.2
+rename to package/linux-headers/7.0.3
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c34dd4a7df..709028ca8e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -468,13 +468,13 @@ endchoice
  
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- 
--HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
-+HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES) libatomic
- 
- ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index deb7c40fa3..da6aa6e879 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -6,6 +6,8 @@ sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9b
- sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
- sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.1.0/sha512.sum
-+sha512  b3454958891ab47e1e5b6cb9396c0ad3b04f32fe2a7bf1153a143f21013fdb6b295ca94c98964698a688e4c1d7555ffd8ffbc20187507cce6b1c32cbcc09897a  gcc-16.1.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  7f08ae335d9112be65e92c3744c095d8fa265994b8282274948f99fe37409531e627e6dadfb77b138a82fa09d012c56d8c075b482a5a5186814a57f9db63c29e  gcc-arc-2024.12-release.tar.gz
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.253"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.203"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.169"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.136"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.84"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.25"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.2"		if BR2_KERNEL_HEADERS_7_0
++	default "5.10.254"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.204"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.170"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.137"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.85"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.26"	if BR2_KERNEL_HEADERS_6_18
++	default "7.0.3"		if BR2_KERNEL_HEADERS_7_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.47.3
 
