@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 508D5FF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5C43FF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F20E844AF;
-	Mon,  4 May 2026 14:47:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADF1741B98;
+	Mon,  4 May 2026 14:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-5DEBITNLkg; Mon,  4 May 2026 14:47:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oMES7I2p3Nnu; Mon,  4 May 2026 14:47:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D448461C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ABA941B7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906034;
-	bh=Uphq4M8aQNlCbV65bIIVXKVcsN1wWF0nEEIDUv/Nvu8=;
+	s=default; t=1777906035;
+	bh=5yxiEAPTaOY+14sd4Ku8vDt7jvO3ubHXcn7psfXlNYE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FXkUBTnOysKF07svC7axnBlwB4wVdPDqAkR3E8l5qEuNrKQj8ckA4vtqyVyhni5R4
-	 G792imIfGEKLNxHVSMVxpWQpyYgx5Mrz2ud5j79zyBm2ce5JIxWoXG/sIyhiTpAPMt
-	 /meOkIMXCBnPQ0J23bxNIJAwDeFmsaxlvb6eM8R58zgRRhnktPYKQdglkcEE4IHhnm
-	 M66P+Pus9WKxrVH24rOoAyEhMvMOhQxbSoGj7XVxu1oXhNGEmXPlpYtQTC39UG+QuA
-	 pwpfSvH7lO/SLH618VPNtIdLEtWxGy5x9Q9B/9DrLQLcPLyhzD8+EvYo4aMOH4OBZl
-	 SVJEP1YsKVOcA==
+	b=IedaePFbuogO/KO7Bzv1CjQSqYrsqbQOY87EEnHbnuFnE3lcpr4nUW6XJmqXg3Gz/
+	 Cyp3bEh++saPl4HJEvArY8bE5PoEtrlKTJGFzRkfw3VEQJDFmpt8e/3IRR/WG774JM
+	 y8DwSkW8vzlUerNbnrgD17MIUgcwTJ7sY2KTtrA3XS/pA5lMcumidrghkNakN+IRdy
+	 t7Ok3Yd5/QyQTPO9dfzAfHGo/6m5APf8CplQKD3YvlFFnoYUpZq4PcrcvP5BGp8FgV
+	 kuUltxLyn89djdWgSIT+IPW16C8ih7FAl6y5WQfdiVvbkZui+rzefR3xtUpZzHzMgf
+	 WknOhube3WD+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44D448461C;
-	Mon,  4 May 2026 14:47:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5ABA941B7F;
+	Mon,  4 May 2026 14:47:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11484190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11C9C25D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 260B2845A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5758F844AC
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1BHsHtAxTT4n for <buildroot@buildroot.org>;
+ id FMtdqFZ4QsYV for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DD9C844AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 009A8845AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DD9C844AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 009A8845AE
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 026AF84258; Mon,  4 May 2026 14:46:44 +0000 (UTC)
+ id D8F8684258; Mon,  4 May 2026 14:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 14:09:13 +0200
+Date: Thu, 30 Apr 2026 14:08:46 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0a4d08e5ff3fb2277543e293f39160042b8e1a32
-X-Git-Newrev: 646055c701118c4ceb0e79cf00bf1d1e3b2c3fda
+X-Git-Oldrev: 22e5dda9e847b60eb65004c4be9057ea4ac8c2cd
+X-Git-Newrev: de9cfb6fa9ee515e47c9b48255be6cc31bcd66ca
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144644.026AF84258@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ca-certificates:
- bump to 20260223
+Message-Id: <20260504144643.D8F8684258@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ficl: bump to
+ version 3.065
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/646055c701118c4ceb0e79cf00bf1d1e3b2c3fda
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de9cfb6fa9ee515e47c9b48255be6cc31bcd66ca
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Changelog including list of added/removed CAs:
-https://salsa.debian.org/debian/ca-certificates/-/blob/b266ecf6afc2d6fda61391bbeda455572e7f5207/debian/changelog
+- sources are now hosted on Github
+- ficl have its own LICENSE file
+- remove one upstreamed patch
+- support only static lib
+- requires C11
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d7ebed6df01e2d3395843ba39297359ae5498fd1)
+(cherry picked from commit e7dcf9e5af0cc0c7afd3e887f7731d855aa39094)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ca-certificates/ca-certificates.hash | 2 +-
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...atch => 0001-makefile.linux-pass-LDFLAGS.patch} | 26 ++++++------
+ package/ficl/0001-missing-include.patch            | 26 ------------
+ package/ficl/Config.in                             |  6 ++-
+ package/ficl/ficl.hash                             |  4 +-
+ package/ficl/ficl.mk                               | 47 +++++-----------------
+ 5 files changed, 31 insertions(+), 78 deletions(-)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 2112badfcc..d234705082 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,4 +1,4 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha256  33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2  ca-certificates_20250419.tar.xz
-+sha256  2fa2b00d4360f0d14ec51640ae8aea9e563956b95ea786e3c3c01c4eead42b56  ca-certificates_20260223.tar.xz
- # Locally computed
- sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index b1903f6166..1f3f192d4a 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch b/package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
+similarity index 70%
+rename from package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
+rename to package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
+index d05b49b7ff..1ac86466d4 100644
+--- a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
++++ b/package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
+@@ -17,23 +17,25 @@ Upstream: upstream is dead
+ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ [francois: downgrade to 3.03]
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++[francois: upgrade to 3.065]
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ ---
+- Makefile.linux | 2 +-
++ makefile.linux | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/Makefile.linux b/Makefile.linux
+-index 5f1a41f..df887e6 100644
+---- a/Makefile.linux
+-+++ b/Makefile.linux
+-@@ -13,7 +13,7 @@ MAJOR = 3
+- MINOR = 0.1
+- 
+- ficl: testmain.o ficl.h sysdep.h libficl.a
+--	$(CC) testmain.o -o ficl -L. -lficl -lm
+-+	$(CC) $(LDFLAGS) testmain.o -o ficl -L. -lficl -lm
++diff --git a/makefile.linux b/makefile.linux
++index 1e467ea..fad7059 100755
++--- a/makefile.linux
+++++ b/makefile.linux
++@@ -26,7 +26,7 @@ libficl.a: $(OBJECTS)
+  
+- lib: libficl.so.$(MAJOR).$(MINOR)
++ # === Console Test executable ===
++ ficl: $(FICL_TEST_OBJ) ficl.h sysdep.h libficl.a
++-	$(CC) $(FICL_TEST_OBJ) -o ficl -L. -lficl -lm
+++	$(CC) $(LDFLAGS) $(FICL_TEST_OBJ) -o ficl -L. -lficl -lm
+  
++ # === Compile rules ===
++ .SUFFIXES: .cxx .cc .c .o
+ -- 
+ 2.35.1
+ 
+diff --git a/package/ficl/0001-missing-include.patch b/package/ficl/0001-missing-include.patch
+deleted file mode 100644
+index 8c6547c46e..0000000000
+--- a/package/ficl/0001-missing-include.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 87c78eea2c4ac69c09947c8e49f8e8668640071c Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Sun, 7 Dec 2025 10:15:27 +0100
+-Subject: [PATCH] missing include
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-Upstream: upstream is dead
+----
+- fileaccess.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/fileaccess.c b/fileaccess.c
+-index 738889d..c03d5d6 100644
+---- a/fileaccess.c
+-+++ b/fileaccess.c
+-@@ -4,6 +4,7 @@
+- #include <string.h>
+- #include <ctype.h>
+- #include <sys/stat.h>
+-+#include <unistd.h>
+- #include "ficl.h"
+- 
+- #if FICL_WANT_FILE
+--- 
+-2.43.0
+-
+diff --git a/package/ficl/Config.in b/package/ficl/Config.in
+index 4d9ab4a5bf..21861652ef 100644
+--- a/package/ficl/Config.in
++++ b/package/ficl/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_FICL
+ 	bool "ficl"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6 # C11/static_assert
+ 	help
+ 	  Ficl is a programming language interpreter designed to be
+ 	  embedded into other systems as a command, macro, and
+ 	  development prototyping language.
+ 	  Ficl is an acronym for "Forth Inspired Command Language".
+ 
+-	  http://ficl.sourceforge.net
++	  https://ficl.sourceforge.net/
++
++comment "ficl needs a gcc >= 4.6"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
+index 1a4a54e704..6023708ff0 100644
+--- a/package/ficl/ficl.hash
++++ b/package/ficl/ficl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  064abbea44b2cbbeb53b8df8e5588ed41c4d32dd19bdb897e5d21507691407b2  ficl303.tar.gz
+-sha256  18527f5cdc213d29fb65791e153690974e5426b7e989f3b8eee61c2e5f9e5fcd  ReadMe.txt
++sha256  09a4649a68a075999c2bc26129cf233c4d672335a9c68b98ffcbf1bc8962e5e1  ficl3065.tar.gz
++sha256  b7a894f23d7d7302852405b3d1b6fd88e76b4c116a68f046d4547c073c75d3ea  LICENSE
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+index ef2e1408ce..1ab1bb6a39 100644
+--- a/package/ficl/ficl.mk
++++ b/package/ficl/ficl.mk
+@@ -4,56 +4,29 @@
  #
  ################################################################################
  
--CA_CERTIFICATES_VERSION = 20250419
-+CA_CERTIFICATES_VERSION = 20260223
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20260223T202245Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
- CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+-FICL_VERSION = 3.03
++FICL_VERSION = 3.065
+ FICL_TAG = ficl$(subst .,,$(FICL_VERSION))
+-FICL_VERSION_SO = 3.0.1
+ FICL_SOURCE = $(FICL_TAG).tar.gz
+-FICL_SITE = https://sourceforge.net/projects/ficl/files/ficl-all/$(FICL_TAG)
+-FICL_LICENSE = BSD-2-Clause
+-FICL_LICENSE_FILES = ReadMe.txt
++FICL_SITE = $(call github,jwsadler58,ficl,$(FICL_TAG))
++FICL_LICENSE = BSD-3-Clause
++FICL_LICENSE_FILES = LICENSE
+ FICL_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-FICL_BUILD_TARGETS += ficl
+-define FICL_INSTALL_STATIC_BIN
+-	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
+-endef
+-endif
+-
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+-FICL_BUILD_TARGETS += libficl.a
+-define FICL_INSTALL_STATIC_LIB
+-	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
+-endef
+-endif
+-
+-ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+-FICL_BUILD_TARGETS += testmain libficl.so.$(FICL_VERSION_SO)
+-define FICL_INSTALL_SHARED_BIN
+-	$(INSTALL) -D -m 0755 $(@D)/testmain $(TARGET_DIR)/usr/bin/ficl
+-endef
+-define FICL_INSTALL_SHARED_LIB
+-	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.$(FICL_VERSION_SO)
+-	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.3
+-	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so
+-endef
+-endif
++FICL_DEPENDENCIES = host-python3
+ 
+ define FICL_BUILD_CMDS
+-	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
++	# workaround for static_assert on uclibc-ng < 1.0.42
++	$(MAKE) -C $(@D) -f makefile.linux $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -std=c11 -Dlinux -D_POSIX_C_SOURCE=200809L -Dstatic_assert=_Static_assert -I. " CPPFLAGS="" ficl
+ endef
+ 
+ define FICL_INSTALL_STAGING_CMDS
+-	$(FICL_INSTALL_STATIC_LIB)
+-	$(call FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
+ 	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
+ endef
+ 
+ define FICL_INSTALL_TARGET_CMDS
+-	$(FICL_INSTALL_STATIC_BIN)
+-	$(FICL_INSTALL_SHARED_BIN)
+-	$(call FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
++	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
