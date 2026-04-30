@@ -1,83 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B0FFF8875
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 14:59:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B440FCD13D3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 16:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE9C942A6D;
-	Thu, 30 Apr 2026 14:59:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3571684CC8;
+	Thu, 30 Apr 2026 16:22:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5U7Vk0VmKbUN; Thu, 30 Apr 2026 16:22:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75FAC84C37
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777566129;
+	bh=RvDSBAVOD5n6J6/3lP7n3gLxu812+GpJScyiXyAOsL0=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=WeJQJYpT2HAWgapoT9BN4SLtv6nqAK37RTD/MmfwjVrrjfqINMRFfYJ1/Oq+B46X6
+	 Vj4csFGutAZKTeg5GJqd1oJyPpjGb0j//hlTfF8E78c0kZBO+aVfmfIPoR91wnk+Aq
+	 OPjKk6aH8GqjLRybZYPEbM+e3aiwp/pXvyf7vFUBIQcC08jQXQAdyOpVVrRxcyZ0PJ
+	 zjuOA5Lb67I22mSpxGWbXGVHXep+GZmF+UBU7NH0791DMCaE6eB7m7bNf1q+VJeSFK
+	 6D4Rh5jncIx4jtXlQOZ9aOwFls3eZAzagcOsTcfirkGO8yW3BdLCctcItB/bOUzGKW
+	 ZaUo138+IuVXw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75FAC84C37;
+	Thu, 30 Apr 2026 16:22:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BCF5918F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:22:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAB8A42B20
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sNGV5ggrveiy; Thu, 30 Apr 2026 14:59:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FD4E42A61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777561172;
-	bh=63ET3eYmHKbt7y8xa+iAZSWKyDqHMjwsyCmriMESapE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=p87BNeabMDHUOFUIlPpiGM+ZASduZWQplC43mjCxLq5SDwHaP20g772XkOIPjEua6
-	 waVAo5vvR9K5iAyGzUNXJwGKRu/Q3HYbSyxASx+7stUppqcGbDEvklN8GcBUyaPLmP
-	 8LzIDnDMurz88emm7ezpXTPA8RPChVtXWaCS5P/sivRp5t7+2bm66OonLTBeSMTCcL
-	 EvwZT3uQpJyS/CRSnJi7/bmmn1Cub+WJrhxbGN2wivMOoSmWJj0lteefZA/MCqt3rm
-	 MEK8qQLGwnfhnWCfPEPn70nn9HYF5ge+KRoQeJ4G3E7phpaZTeYlZQ9z33t6QP++lz
-	 1CCPC5gh+C0AQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FD4E42A61;
-	Thu, 30 Apr 2026 14:59:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CFA99192
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 14:59:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD8EB4248A
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 14:59:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j8LtvF58-zoY for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 14:59:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 68194407B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68194407B8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 68194407B8
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 14:59:29 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -977054828; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 30 Apr 2026 14:59:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wISrL-00000000wfr-0IDf;
- Thu, 30 Apr 2026 16:59:23 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id W4BnZ-g4XyVf for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 16:22:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0701642AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0701642AF4
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0701642AF4
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 16:22:04 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 181B6A4C0107;
+ Thu, 30 Apr 2026 18:22:02 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45580)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
+ (envelope-from <bernd@kuhls.net>) id 1wIU9F-000000004jw-07vI;
+ Thu, 30 Apr 2026 16:21:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 16:59:20 +0200
-Message-ID: <20260430145921.225530-1-peter@korsgaard.com>
+Date: Thu, 30 Apr 2026 18:21:43 +0200
+Message-ID: <20260430162156.3456640-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=h054eHoilckh197w9M+1p6WZJ49Ur2N7KL2+OrTW9tW2Cb6aGSIxf0WszLUsyjSHBzqk8MK/Jvn8Obtw9byybierZKCaea+AfFani8mIuUy8oGG9YHCx7VWIPbKZnqs5B5mZAb0AGKn/azYktW29PoK+4LEV+vSF203J2dbKXRyonG58kgutaszUJKbRqtNkS3zaw5kx7VycJIgBOIt0du4Tr6vj4gfIkxk4cIBqDebu7sYVCnxXE0feXfkhwghVdeS3ahd1+DJ6dWoPqkZptIvmS0ViwFOmphhHRO8nPk3VSdFuPA5p980gQccInqJ420lGEqZADGUe+uMZ9zQtzA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=SDigOB2TyVGze4y8HriRUEe2bPkNt/MCnhMRLJYOE5U=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1777566122;
+ bh=05rP90qDBoRpuWH3N5T01nlxJ8Tx9EQiDRR/CgDIhd0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Yxp6bv8hXPO+0i2CDudB+oOSMphKV68u68GQufGrgCnPyznVk1Bgtm7v7StEIM1mH
+ L+ZKOmphQqkfBcu77DN/6VeC8SchQACXXC22YMJ4TTxPUiCvTNVZO1JFi5U8MgxiaD
+ QxU6N9/LK5Pml0AnzvdkXM0gAaSdXs7i+dyQ6if3PrvqrQhYppZPFzIK7AItxucgfa
+ Jg3DLZNCsMA0021TFteUuM/J2HB8R1R2oyHkiVnwlK5yfRTt9Mb3h73vpp6OPd2ypm
+ qqfRcPq8eKachMExTUBdv2gRK3ttJMRSPKmuwxXWgyQIwrTkeDG71t9WMW4OrnKPlk
+ Qxqblyd1JfoYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=h054eHoi
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/ugetty: make install step more robust
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=Yxp6bv8h
+Subject: [Buildroot] [PATCH 01/14] package/autoconf: bump version to 2.73
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,31 +91,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use install -D so it also works if $(TARGET_DIR)/sbin does not exist yet.
+https://lists.gnu.org/archive/html/autoconf/2026-03/msg00060.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Rebased patch due to upstream commit
+https://cgit.git.savannah.gnu.org/cgit/autoconf.git/commit/build-aux/git-version-gen?id=2f1f41b8d3cf38101c6dce30e6319402f8c44b83
+
+Added Upstream: tag to patch.
+
+Added sha256 hash provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ugetty/ugetty.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                                  |  1 -
+ .../autoconf/0001-dont-add-dirty-to-version.patch    | 12 ++++++++----
+ package/autoconf/autoconf.hash                       |  5 +++--
+ package/autoconf/autoconf.mk                         |  2 +-
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/package/ugetty/ugetty.mk b/package/ugetty/ugetty.mk
-index 1dc628540d..d3424bee42 100644
---- a/package/ugetty/ugetty.mk
-+++ b/package/ugetty/ugetty.mk
-@@ -15,7 +15,7 @@ endef
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f4a428d4cf..5a33df73cd 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -193,7 +193,6 @@ package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch lib_p
+ package/at/S99at lib_sysv.Indent lib_sysv.Variables
+ package/attr/0001-build-with-older-GCCs.patch lib_patch.Upstream
+ package/aumix/0001-fix-incorrect-makefile-am.patch lib_patch.Upstream
+-package/autoconf/0001-dont-add-dirty-to-version.patch lib_patch.Upstream
+ package/automake/0001-noman.patch lib_patch.Upstream
+ package/avahi/S05avahi-setup.sh lib_sysv.Indent lib_sysv.Variables
+ package/avahi/S50avahi-daemon lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/autoconf/0001-dont-add-dirty-to-version.patch b/package/autoconf/0001-dont-add-dirty-to-version.patch
+index a1a50d2838..4ce3616d9d 100644
+--- a/package/autoconf/0001-dont-add-dirty-to-version.patch
++++ b/package/autoconf/0001-dont-add-dirty-to-version.patch
+@@ -10,19 +10,23 @@ commonly done in buildroot).
+ The affect is that autoconf gets built as being version 2.65-dirty, which
+ breaks programs (like Python) which explicitly checks for autoconf-2.65.
  
- # Install ugetty->getty symlink to ensure ugetty is used
- define UGETTY_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 $(@D)/bin/ugetty \
-+	$(INSTALL) -m 0755 -D $(@D)/bin/ugetty \
- 		$(TARGET_DIR)/sbin/ugetty
- 	ln -snf ugetty $(TARGET_DIR)/sbin/getty
- endef
++Upstream: Not applicable (Buildroot specific)
++
+ [Gustavo: update for autoconf 2.69]
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Bernd: rebased for version 2.73]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ 
+ diff -Nura autoconf-2.69.orig/build-aux/git-version-gen autoconf-2.69/build-aux/git-version-gen
+ --- autoconf-2.69.orig/build-aux/git-version-gen	2013-06-27 11:31:02.340200154 -0300
+ +++ autoconf-2.69/build-aux/git-version-gen	2013-06-27 11:31:13.734577033 -0300
+-@@ -210,7 +210,7 @@
++@@ -234,7 +234,7 @@
+        *) # Append the suffix only if there isn't one already.
+            case $v in
+-             *-dirty) ;;
+--            *) v="$v-dirty" ;;
+-+            #*) v="$v-dirty" ;;
++             *-dirty | *-modified) ;;
++-            *) v="$v-modified" ;;
+++            #*) v="$v-modified" ;;
+            esac ;;
+    esac
+  fi
+diff --git a/package/autoconf/autoconf.hash b/package/autoconf/autoconf.hash
+index f94b2d9de5..96f36ec3bd 100644
+--- a/package/autoconf/autoconf.hash
++++ b/package/autoconf/autoconf.hash
+@@ -1,4 +1,5 @@
+-# Locally calculated after checking pgp signature
+-sha256  ba885c1319578d6c94d46e9b0dceb4014caafe2490e437a0dbca3f270a223f5a  autoconf-2.72.tar.xz
++# From https://lists.gnu.org/archive/html/autoconf/2026-03/msg00060.html
++sha256  9fd672b1c8425fac2fa67fa0477b990987268b90ff36d5f016dae57be0d6b52e  autoconf-2.73.tar.xz
++# Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
+ sha256  1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350  COPYING.EXCEPTION
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 48bfc80e7f..6f29bba146 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_VERSION = 2.72
++AUTOCONF_VERSION = 2.73
+ AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.xz
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ 
 -- 
 2.47.3
 
