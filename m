@@ -1,86 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F4BFF8875
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 05:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF2C2FF8875
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 05:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 892DB84898;
-	Thu, 30 Apr 2026 05:26:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 953F761B73;
+	Thu, 30 Apr 2026 05:40:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qxsd9hvECvID; Thu, 30 Apr 2026 05:26:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rdCULRQB8PP5; Thu, 30 Apr 2026 05:40:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8592384899
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDE0861B70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777526761;
-	bh=l0vC476Guk3J+bBpY1aggb8pIGngvurYnu91kxsMAuQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oRo2UdNZPZ7CMG0BtbdnGw4FxOIM976KL70h5GCl8gKIU4S2W8RaUyWSo3gf1yXws
-	 dhLXy6MRLrnfRdo0RJsWLpwc4gRdY3QtULIGd35O/Ejh6Y434qmE5gR1071Va/gXza
-	 hUA1HzrhjoeEPvbJg1TxmziGN7cWrneqw0UojBteOtdLaY9DsT7G766S5bZf1nOOOy
-	 /DrkPF3g+Z5093HTVmcRqtaCpAgBHGBU8ox3xmSg1SsG46VRFm8bwQvozPQS8LjKKp
-	 GEuMaPxrBAue0iyp26oTYCF+4HB9VKaZvag0Y2i2LRJUMtCzKnWPo4V5GSCnzK1xks
-	 bQ3RTmhhZtBTQ==
+	s=default; t=1777527657;
+	bh=boaPRJLLBsKzYrNb9GgMnl32yjDMP+UbiIo1yFXe1zc=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=O4tstWeRJYtP/IFPIvg6DAtTZ4oATuJYUsFmPWfuhkP9oG2hlGo7U5TtmEQG42/AF
+	 x3mF29REMLMmQFVAk72WdU13jndOpg5WbudCOKu54w+zM1RkRNQtR9HH5r0fQ+u9XP
+	 71XVRsGnM+7fqUUM4b59ZAbMqMG/58SePTsnZQoMLackqNh24yrvAeJCFi/d6BhSAr
+	 6R+F2tJ0V/C/dsSar9lf3g5PJaVZ0c8VXbcxlDbzJ65yWt7IvtP+fqeTGtOv+vVyZq
+	 ZpBTStfCYpeVJoOknoLY3iKjz5okDovvFy0Nu9S6ElDO3qtQzQCJ271n5pY1HPkP4P
+	 6ILFHNS5usl7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8592384899;
-	Thu, 30 Apr 2026 05:26:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E911B18F
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:26:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDE0861B70;
+	Thu, 30 Apr 2026 05:40:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BFDB18F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6F0184899
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:26:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5ADD4235F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBxjEvz_cKkz for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 05:26:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01FC384898
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01FC384898
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01FC384898
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:25:59 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bb47.dip0.t-ipconnect.de [84.161.187.71])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 134AAA4C1709;
- Thu, 30 Apr 2026 07:25:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44878)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIJuP-000000006Os-1Cm2;
- Thu, 30 Apr 2026 05:25:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K3mXwjf0KdBU for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 05:40:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C2FD4208F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C2FD4208F
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
+ [IPv6:2607:f8b0:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8C2FD4208F
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 05:40:55 +0000 (UTC)
+Received: by mail-pl1-x635.google.com with SMTP id
+ d9443c01a7336-2b788a98557so4231965ad.2
+ for <buildroot@buildroot.org>; Wed, 29 Apr 2026 22:40:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1777527654; x=1778132454;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ARcpwadYno0RUv1/55OtTPOZ7/OiXp22bEgE97rZVQc=;
+ b=pb6f/N8SeZtPV8M6uVngEDpW+4kpCNzhE83fK7YNevR6j6qdP7kjmS33OBv487OzLd
+ C7PlAZPKUm4ZNq2YUV0yLD/dVEwvXg3SRLHel8kxP9DfJzSx+21Uj9xlvwG5m/oUk0NO
+ QwbsuWZb5LOFiFkZQXCCYxk9oNcuGk80AKlFdsu0GYzTihd+dmnyQKZOi70jiGGBNYIl
+ ir0ffV+i+auXA+zZmRJTD1w8JLYz4sh6CctQyvSjtio7MJAcPElOxfapz9HO3PspX3yy
+ ItPZ050dEnFSAUnJOjnZb97pQBg26vIDp9fGENM480B0DPdPt07y91oiUG9DaNp2/Aub
+ PQzQ==
+X-Gm-Message-State: AOJu0Ywfczzpsnh4LbAObXDQgccLIjXCwylGi5y9UrTIM+4idIAMseub
+ CsyANeNiNR/1TDFkrhQqm+ldsGoCDg8n44CoNq96WvUTBXdqzhma1SULoM7ODKCu
+X-Gm-Gg: AeBDieuV6gatPJY3NivOjkX6IknhSKf0VJloj8ate4nUBSf6BnYYBGpoTyCEuj6mcE1
+ AoUXNUxyhVG49+gnfuv/nzVfYfSAiD0GqtUyB2Czbbdjj8IgoUcUbXVI//AskMBb3in1qhrLI53
+ AA0mG23ZLTmDVQMov3+smyIfcJLO99FpqfJ/p/ZfCWzFuQljw47N5Mcw3/NQXhTKC7FVAFc5HCS
+ 0fPXjlRPBdnvJYz14SXiY+r4I823MJxt07RgsdECTby9VuhQc0dTENVa3ayks6uT7hm4lhO4ACR
+ p0Z8roSZdugGgE0CJZ6RQa/eqLn1t/VL68SGdDgGYRESTfAluQHk8Y0DEb5jD7scb+MPmBz5aj0
+ RejMx29/zPHwZb7BvOI0IHbGaOsX8Kg4sxqBUULoNEClI3t3fIaP2J4MEkjcA7zsaX1V+YVJxIc
+ TPnTE6DG8/pH19VRjDwJrsZpf7qxMzLiH3rTlGVXdP5RNt
+X-Received: by 2002:a17:903:1111:b0:2b4:5c20:ec7 with SMTP id
+ d9443c01a7336-2b9a2877c96mr14599225ad.41.1777527653943; 
+ Wed, 29 Apr 2026 22:40:53 -0700 (PDT)
+Received: from fedora ([2409:40e5:1178:1c37:1cfb:6a83:ee5f:eeda])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2b98893f5bcsm39532125ad.54.2026.04.29.22.40.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Apr 2026 22:40:53 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 30 Apr 2026 07:25:57 +0200
-Message-ID: <20260430052557.2947532-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Thu, 30 Apr 2026 11:10:32 +0530
+Message-ID: <20260430054033.8599-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260429170808.1144652-1-chakrabortyshubham66@gmail.com>
+References: <20260429170808.1144652-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1777526758;
- bh=asqcr+niQB1M1BNCXFhCRiQe0cNGC0O3p0Z4NcOk7sc=;
- h=From:To:Cc:Subject:Date:From;
- b=ov3eOUvBlBSdn8i73PwiqdBnJ2dLhkQrSPMPSmanEynucBOLr95dVRRTUarn5+/AH
- 0N77P0GCCinT1ydNArTyXI2Pz++K46Fy0KTBqzGJldGVrGqZqrBMxbvivt4tQ4sjtg
- SCXM5rKdrKj4x8ZeMe1uj0P9NdwYs9m3j1e51yZ6uzBpGMLGYOnlRC3+65vp1i+iB4
- Ud+auivpQahFu6bK7R4LmLNF2iEe+u0kBDHCpKbkcqKw6TW/O6nEU8ieCl4lX4cd39
- /hZRkMJK40mhDH1hFgI514aXL8olN7ACU2Q6tNCAe9+jMeNbRXvhbWGv71/yl+K3ka
- 8S1/p3zrbFt/w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20251104; t=1777527654; x=1778132454; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ARcpwadYno0RUv1/55OtTPOZ7/OiXp22bEgE97rZVQc=;
+ b=F9xj3F5t4MO2hz4NMyTyxgMxse792G2U2uAg2/bgI4dW8yMzMrO3D347AL0A0wPcqR
+ AurRjNhZK84OVHIh/nfqp7KAMfU8q1lSpYsrBreks6zVbAK/QJVjK9ym2RgbHLeVFoOn
+ rtG4KzojoNqs6UyoG+AkzgML2g4x7+J4bMrL3HOPKuzKorV0zrRljqWDBXpHQ7JNVmOb
+ NH7wZjG22qzt4VLaTCICMO3RbQhUs/7LQK4nSxSrwyfxbngN/ahCgmdUIL0o1yXpyQQk
+ 8/lqVOjH+UMW3868dwKZaZEo15V9ig802OYBvRlrZcEg1ehj/sIRoICJ3F7cbuoXbQ5Q
+ 4YEQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ov3eOUvB
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 26.0.6
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=F9xj3F5t
+Subject: [Buildroot] [PATCH v2] package/nginx: security bump to version
+ 1.28.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,57 +128,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.freedesktop.org/archives/mesa-announce/2026-April/000848.html
+Fixes the following security issues:
+- CVE-2026-27654: Buffer overflow in ngx_http_dav_module when using the
+  alias directive with WebDAV COPY or MOVE requests.
+- CVE-2026-27784 & CVE-2026-32647: Buffer overflows in ngx_http_mp4_module
+  when processing specially crafted MP4 files.
+- CVE-2026-27651: NULL pointer dereference in the mail proxy module
+  during CRAM-MD5 or APOP authentication retries.
+- CVE-2026-28753: DNS PTR record manipulation in auth_http or SMTP proxy.
+- CVE-2026-28755: OCSP certificate check bypass in the stream module.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+For a full list of changes, see:
+https://nginx.org/en/CHANGES-1.28
+
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+v1 -> v2:
+  - Bump to 1.28.3 (stable) instead of 1.29.7 (mainline) as requested
+    by Marcus Hoffmann.
+  - Highlight security fixes in the commit message.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 01883a8ce1..1098aee9c1 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 26.0.5
-+MESA3D_HEADERS_VERSION = 26.0.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f486734cd5..eed4265147 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2026-April/000845.html
--sha256  d229c9937d9a25ca0a8958c59f425174563d300ec42acbea2dbe84a055023368  mesa-26.0.5.tar.xz
--sha512  8aa03a46269b2443be15cbd516d523af78fdd35e5273f5346b9142d2d21e245f6d5fd47e7e90176b0444ea967540eaa7c62d217f599ca5a216ef83244ee97d5c  mesa-26.0.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2026-April/000848.html
-+sha256  1d3c3b8a8363b8cc354175bb4a684ad8b035211cc1d6fa17aeb9b9623c513f89  mesa-26.0.6.tar.xz
-+sha512  7f298234cb7b353ac40dc4d116866115160d1a52de6da8d4f1343af7ed47ca11e1a07b70aad8d24221906e0b520a4c140c12ffa7e7e706e3f25f301842a37e68  mesa-26.0.6.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 047cfaba2a..adac0e5c0e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+---
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 7b79036b20..1d11937987 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  40e7a0916d121e8905ef50f2a738b675599e42b2224a582dd938603fed15788e  nginx-1.28.1.tar.gz
++sha256  2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918  nginx-1.28.3.tar.gz
+ # License files, locally calculated
+ sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 41490caee2..a8b7ee7319 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 26.0.5
-+MESA3D_VERSION = 26.0.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-NGINX_VERSION = 1.28.1
++NGINX_VERSION = 1.28.3
+ NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.54.0
 
 _______________________________________________
 buildroot mailing list
