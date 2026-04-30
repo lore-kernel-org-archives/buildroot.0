@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8084CD3430
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB398CD343A
 	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:46:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EFBE41107;
-	Mon,  4 May 2026 14:46:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72BD2845A9;
+	Mon,  4 May 2026 14:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvS_d6u9LXhm; Mon,  4 May 2026 14:46:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EAgvh1LgOIK9; Mon,  4 May 2026 14:46:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E909410D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BD6E845AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906005;
-	bh=qWOsD9dQKTmxKKIwMVSpB8nq3UG334OdF+kRZmTgCrU=;
+	s=default; t=1777906007;
+	bh=57cjQpBMzWZTp80eLcOzjAbeuEkOl3M0ouBYBXh325o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qVHHMOs1jkpOIG+h6iAzbqzdoU9yJTYq8KwV5z1Bw8soRijb2bFP0FvozjyPZy00u
-	 GO4jOJcU2WuzYebHXPx/O7SBejsR3h92cXaghJVXTOjUyXIkT90N7WUE9Wp4W76njq
-	 BhuPnxpF7TVAjJIu4hnOyTCUUMYyuP0T++YkT2Uw4kVpP9e4O5sfq5sZSHSYEPg5CR
-	 odnsvj1UGS+bLWVDLmGkobU3quLcLq03qGWBuxEE5R3QeY6vlz1Qj1llnt2iI1wIRI
-	 Qocvn2X25O5UROLinLQJiKLRtlLFhMOtSkcArBU/QrOn/lixLwDHNGQ7mqAFrA6tMQ
-	 SRzlvA6V3m9FA==
+	b=PGuDp8dEiSmrzXOzWi3ll2ZAascAQ0CH8e4Dyw/MyLfnJblTJJaYsjYfOBGlbkVBB
+	 9GmWaY3BExGTGTlH839Gx8jzU9riTUUfPhMqdaTQ2JL46AIqYubrcBz8ejFGaQGUeK
+	 K9PTLrW3u2MKsnrPIX6XD3YpOWFey7IbDqPjvW9KU7MAML2h7GVsekSUewerkGMn3H
+	 3BdJ16ojn7WaTHb1z94ug1/XzKdNezKJzEYqttK0ZK8s0qMPJXxJkgF7jQAlUZ8JUC
+	 dNq4LbTlqLDYXuXl4GySwUjm4nyhTAEoHuBmrpbuaNYvfVJN9dWN4iWPNtotCd2rOZ
+	 2QCE4GiWZrVbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E909410D5;
-	Mon,  4 May 2026 14:46:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 35B98190
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BD6E845AB;
+	Mon,  4 May 2026 14:46:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5381E190
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 184DC614F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45C35845B1
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYY1_8xxxvIx for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tZ43RxOOlZS0 for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E270061355
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B11844CF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E270061355
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 54B11844CF
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF8378423F; Mon,  4 May 2026 14:46:42 +0000 (UTC)
+ id 330078423F; Mon,  4 May 2026 14:46:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 13:44:32 +0200
+Date: Thu, 30 Apr 2026 13:52:49 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8593b6d091104cd60b0b8140ec716ed20feb4cd7
-X-Git-Newrev: cec032245a9edd15538c31eae261db8168896eb8
+X-Git-Oldrev: d64056cc50f23df75e3b15cd5ad4adfd519cb40d
+X-Git-Newrev: 89be84d22e6edc8874aca8d3a85f993bcfc9ee52
 X-Patchwork-Hint: ignore
-Message-Id: <20260504144642.BF8378423F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/p11-kit: security
- bump version to 0.26.2
+Message-Id: <20260504144643.330078423F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libspdm: add
+ patches for security issues fixed in libspdm 3.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cec032245a9edd15538c31eae261db8168896eb8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/89be84d22e6edc8874aca8d3a85f993bcfc9ee52
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/p11-glue/p11-kit/blob/0.26.2/NEWS
-
-Fixes CVE-2026-2100: https://github.com/advisories/GHSA-hq85-3f6c-jx84
-
-Switched to sha256 tarball hash provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a5366d13ba67d297440ad28a1651cf9bb037c303)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 80898249b7e06d409a8a9cd433d687ce24c5224f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/p11-kit/p11-kit.hash | 4 ++--
- package/p11-kit/p11-kit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ity-vulnerability-in-GET_CSR-parsing-code.patch | 65 ++++++++++++++++++++++
+ ...ate-libspdm_rsp_measurement_extension_log.patch | 29 ++++++++++
+ 2 files changed, 94 insertions(+)
 
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 43a566a82c..943ad9c22f 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
-+# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
-+sha256  09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828  p11-kit-0.26.2.tar.xz
- # Locally computed
- sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 154a34e634..e8a8560ff9 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--P11_KIT_VERSION = 0.25.5
-+P11_KIT_VERSION = 0.26.2
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
+diff --git a/package/libspdm/0002-Fix-security-vulnerability-in-GET_CSR-parsing-code.patch b/package/libspdm/0002-Fix-security-vulnerability-in-GET_CSR-parsing-code.patch
+new file mode 100644
+index 0000000000..6d10f33564
+--- /dev/null
++++ b/package/libspdm/0002-Fix-security-vulnerability-in-GET_CSR-parsing-code.patch
+@@ -0,0 +1,65 @@
++From 704bc9916ccd8c034f912f13b75fd890a19eb3f3 Mon Sep 17 00:00:00 2001
++From: Steven Bellock <sbellock@nvidia.com>
++Date: Tue, 27 Jan 2026 12:02:37 -0800
++Subject: [PATCH] Fix security vulnerability in GET_CSR parsing code
++
++Signed-off-by: Steven Bellock <sbellock@nvidia.com>
++Co-Authored-By: Nicholas Carlini <nicholas@carlini.com>
++
++Fixes: https://github.com/DMTF/libspdm/security/advisories/GHSA-j54w-759w-xj3m
++Upstream: https://github.com/DMTF/libspdm/commit/704bc9916ccd8c034f912f13b75fd890a19eb3f3
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ os_stub/cryptlib_mbedtls/pk/x509.c | 25 +++++++++++++------------
++ 1 file changed, 13 insertions(+), 12 deletions(-)
++
++diff --git a/os_stub/cryptlib_mbedtls/pk/x509.c b/os_stub/cryptlib_mbedtls/pk/x509.c
++index 65eff62bfd5..1b5d60d4f92 100644
++--- a/os_stub/cryptlib_mbedtls/pk/x509.c
+++++ b/os_stub/cryptlib_mbedtls/pk/x509.c
++@@ -1768,6 +1768,19 @@ static bool libspdm_convert_subject_to_string(uint8_t *ptr, size_t obj_len,
++                 (libspdm_consttime_is_mem_equal(cur->oid, internal_p, obj_len))) {
++                 /*Concat subject string*/
++ 
+++                /*move to string*/
+++                internal_p += obj_len;
+++                ret = libspdm_asn1_get_tag(&internal_p, end, &obj_len, cur->default_tag);
+++                if (!ret) {
+++                    return false;
+++                }
+++
+++                /*check total space needed: name + '=' + value + ',' + '\0'*/
+++                if (buff_len < (int32_t)(cur->name_len + 1 + obj_len + 1 + 1)) {
+++                    LIBSPDM_DEBUG((LIBSPDM_DEBUG_INFO,"the buffer is too small"));
+++                    return false;
+++                }
+++
++                 /*for example: CN=*/
++                 libspdm_copy_mem(buffer, buff_len, cur->name, cur->name_len);
++                 buff_len = (int32_t)(buff_len - cur->name_len);
++@@ -1776,13 +1789,6 @@ static bool libspdm_convert_subject_to_string(uint8_t *ptr, size_t obj_len,
++                 buff_len--;
++                 buffer++;
++ 
++-                /*move to string*/
++-                internal_p += obj_len;
++-                ret = libspdm_asn1_get_tag(&internal_p, end, &obj_len, cur->default_tag);
++-                if (!ret) {
++-                    return false;
++-                }
++-
++                 /*for example: AU,*/
++                 libspdm_copy_mem(buffer, buff_len, internal_p, obj_len);
++                 buff_len = (int32_t)(buff_len - obj_len);
++@@ -1790,11 +1796,6 @@ static bool libspdm_convert_subject_to_string(uint8_t *ptr, size_t obj_len,
++                 *buffer = ',';
++                 buff_len--;
++                 buffer++;
++-
++-                if (buff_len < 0) {
++-                    LIBSPDM_DEBUG((LIBSPDM_DEBUG_INFO,"the buffer is too small"));
++-                    return false;
++-                }
++                 break;
++             }
++         }
+diff --git a/package/libspdm/0003-Update-libspdm_rsp_measurement_extension_log.patch b/package/libspdm/0003-Update-libspdm_rsp_measurement_extension_log.patch
+new file mode 100644
+index 0000000000..c1a0f7eefc
+--- /dev/null
++++ b/package/libspdm/0003-Update-libspdm_rsp_measurement_extension_log.patch
+@@ -0,0 +1,29 @@
++From f55cf6d48ec69b4ac60a63903e9c6a2cb0fd155d Mon Sep 17 00:00:00 2001
++From: Steven Bellock <sbellock@nvidia.com>
++Date: Fri, 3 Apr 2026 11:00:07 -0700
++Subject: [PATCH] Update libspdm_rsp_measurement_extension_log.c
++
++Fix #3584 in 3.8.
++
++Signed-off-by: Steven Bellock <sbellock@nvidia.com>
++
++Fixes: https://github.com/DMTF/libspdm/security/advisories/GHSA-m4wc-xmvg-369f
++Upstream: https://github.com/DMTF/libspdm/commit/f55cf6d48ec69b4ac60a63903e9c6a2cb0fd155d
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ .../spdm_responder_lib/libspdm_rsp_measurement_extension_log.c  | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/library/spdm_responder_lib/libspdm_rsp_measurement_extension_log.c b/library/spdm_responder_lib/libspdm_rsp_measurement_extension_log.c
++index 6dcb3a54bac..c5f2efa8c88 100644
++--- a/library/spdm_responder_lib/libspdm_rsp_measurement_extension_log.c
+++++ b/library/spdm_responder_lib/libspdm_rsp_measurement_extension_log.c
++@@ -125,7 +125,7 @@ libspdm_return_t libspdm_get_response_measurement_extension_log(libspdm_context_
++                                                response_size, response);
++     }
++ 
++-    if ((uint64_t)(offset + length) > spdm_mel_len) {
+++    if (((uint64_t)offset + length) > spdm_mel_len) {
++         length = (uint32_t)(spdm_mel_len - offset);
++     }
++     remainder_length = spdm_mel_len - (length + offset);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
