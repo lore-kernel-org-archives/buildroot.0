@@ -1,88 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F69FCD13DA
-	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 19:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BBDACD13D3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Apr 2026 19:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 413DE6F503;
-	Thu, 30 Apr 2026 19:09:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6193B41C8C;
+	Thu, 30 Apr 2026 19:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uN2DevTl44ln; Thu, 30 Apr 2026 19:09:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qSBdGpiB4Tig; Thu, 30 Apr 2026 19:09:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37F216F4F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 415CB41C77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777576148;
-	bh=HTh7AyqOzXcNRTnAZU9F6hAoRrkX/cCcqA5EFkfcMpU=;
+	s=default; t=1777576160;
+	bh=NuJXSAVBZeVrH+9xQgBQbEZ6dfL+tRptOrP7iBvIDfI=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=C1Yt4w/VIFC0Ia4rWMjG8MMFKyaqFEUDz479YARx0s0q9JBwEDshozbHJnfCMpURC
-	 YgN9R52/vzn4zLgdMeoyztkD65lwt0+wgAu8NLX1Jzf0eYUZNBeTLwVnviOUbhismq
-	 CrmaEbKCMzakTPKwxcd0ECsXyXDbeP/7isLRafByzYAXMLWH7CTwyscWEwQzLyJE9v
-	 RgC46U6OeAHNDcQpnrYCYK06nANbetNbkg7Fi+i/DEkbs3D/83p7//tH2LReCrXl9P
-	 bdEwbPcP0THaQxQ/AV4MVxsGWjSlNdOmCMkz0AenggV1vAGZOvkqnXCQJxrTifxyg9
-	 BKe3rg879yR5Q==
+	b=LuTRF/XZVJlJopDrkU3vER12UVa6p5cTkzzwFi0WFq/UHd6gIrNDCUiAHl2GnBLbG
+	 FRWnpSRpsS31c52OJ1qNCmy8vG0jSewa5evMsQfCWfcR30uDsHhkamD+GmEjq8rE5l
+	 kB1tzsYMvxRuPnawaDBdpXwlA0Ldml2aybYF90/dFEWgWjJtY2bzWfl7NDF4OUPinj
+	 gDZM+NV5MXi1DbNGATC29FH7RFbWXn3otVXB9QmPK6S7wq8dJaiyWI33LBU+gFIaB6
+	 vextENudNUIZCZbz0W3hnUfPzEsWRcR1ajT8yPg5t9dh94OecYN0O+7nT43XRexNL/
+	 KNyXoq4sbW6Bg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37F216F4F3;
-	Thu, 30 Apr 2026 19:09:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E9282192
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 415CB41C77;
+	Thu, 30 Apr 2026 19:09:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2D2118E
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA2E26F4F3
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0ABA84FCB
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bG4e_WIM9Ipv for <buildroot@buildroot.org>;
- Thu, 30 Apr 2026 19:09:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DKfQZWAvyEYw for <buildroot@buildroot.org>;
+ Thu, 30 Apr 2026 19:09:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1D916F4F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1D916F4F2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDE8B82479
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDE8B82479
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1D916F4F2
- for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDE8B82479
+ for <buildroot@buildroot.org>; Thu, 30 Apr 2026 19:09:17 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8B293A4C2D6C;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B1446A4C2D6D;
  Thu, 30 Apr 2026 21:07:01 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60442)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIWim-000000000Pg-2irS;
+ (envelope-from <bernd@kuhls.net>) id 1wIWim-000000000Pg-2xca;
  Thu, 30 Apr 2026 19:06:48 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 21:06:45 +0200
-Message-ID: <20260430190647.3212159-12-bernd@kuhls.net>
+Date: Thu, 30 Apr 2026 21:06:46 +0200
+Message-ID: <20260430190647.3212159-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260430190647.3212159-1-bernd@kuhls.net>
 References: <20260430190647.3212159-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777576021;
- bh=4twEeZDmt786fSG77MfE3Zp+TLRdEimw/c8/YQYP5Fc=;
+ bh=TS2mbBHhWJrOEZ+mhqPXVc2jz3gLcRk8/bNhVCWqmEc=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=DaeLtCLU/+x4N8abzBXvB0s5mWL/7l8SrkeFBNsGeM5hsYHTgS0XV//wtmaTFASjr
- USlYJqgkdhGeEM0//C9O2gKPUg4+QKLxULrj7N0yn1klKs+2IJOTgDz16cL9NQZeHU
- eblnYMwyEk6pTgMiNOpQz1Ov3NwYuadJ41Zm6giSCSKHXDsoG9G2Ocxl5QUJw85/Qk
- QNW71kJiGbagQr+0v0oDjE3+atJzo7Z72UbJXLbohfQlzEuAE60pHUBr6Ead+siq68
- o9ToUXdICK0NpmcnPqJ10eFi0Nx5jbMuLg7toPTDS31U9TjhnGM/228Cso30WdEysy
- 40w+VtOroIZzQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=QvaydN4ojLRF3eaRnCq6xXrBil4nGm9WviI39UgJXxUclxPzazH6lFLjfGYIcKPT5
+ rEgAS1SdEcP2ZG5cwUWC2sis11zPGlWj8ZFqqOflhz0cZUltfzE2xrAvHNC1Bdh0OL
+ NPfGe6BhX60d9Xwj2Qcj7UDORB40GgEXOQr9z30x3HukmuvLm2/osYfS2as6j3cSo6
+ Jue+5rfik5AKoV0BfcjHIg4V4q0sFeVgUAta2KnEdbOiSRYVcxMy+g9sODl2OSXRKX
+ tA2BRDpS+b4q4D8GjJo/ZV3mhEhjjpQIYG9I7ClKH7SBajssHOCNg9rOfZ93mmAmA4
+ zBXS0uk6z5jyw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=DaeLtCLU
-Subject: [Buildroot] [PATCH v2 12/14] package/gcc: switch to GCC 15.x as the
- default
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=QvaydN4o
+Subject: [Buildroot] [PATCH v2 13/14]
+ support/config-fragments/autobuild/br-arm-internal-glibc: update to
+ bleeding edge components
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,27 +106,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that GCC 16.x support has been added, follow our usual strategy of
-making GCC 15.x the default GCC version.
+As Thomas stated in 3bb260cf3860:
+
+The br-arm-internal-glibc.config is generally used as a configuration
+to test the bleeding edge versions of components. However, it has been
+lagging behind somewhat, so let's bring it up-to-date:
+
+  - Binutils 2.46.x
+  - GCC 16.x
+
+Let the fun begin in the autobuilders!
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../config-fragments/autobuild/br-arm-internal-glibc.config   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index b9dd37471f..e218b13bd2 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -5,7 +5,7 @@ choice
- 	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_POWERPC_CPU_HAS_SPE
--	default BR2_GCC_VERSION_14_X
-+	default BR2_GCC_VERSION_15_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
+diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+index 4986d40912..ceb311f3f0 100644
+--- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
++++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+-BR2_BINUTILS_VERSION_2_42_X=y
+-BR2_GCC_VERSION_13_X=y
++BR2_BINUTILS_VERSION_2_46_X=y
++BR2_GCC_VERSION_16_X=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
 -- 
 2.47.3
 
