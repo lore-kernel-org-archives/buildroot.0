@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD446CD3424
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F39CD3424
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8039284F78;
-	Fri,  1 May 2026 12:31:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8666761AC7;
+	Fri,  1 May 2026 12:31:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5iF2bAkpNJE2; Fri,  1 May 2026 12:31:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kuv_hJGUyoni; Fri,  1 May 2026 12:31:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E17884F7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B00ED61B25
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777638692;
-	bh=SeOBisz0gN4x1QnGe2w6f4/9/DPUt3Ul/xXSwYOPmNE=;
+	s=default; t=1777638706;
+	bh=b8P10g8YYbc2+xdx9O1aQV+mGWG+3iVLU8i2uDjVhzk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=E1BeuP0lZXldbEBRXUANC4J7l2HbpbeBSFF09CGYmokCjEIRG4/Oh7BfxeO36PNLe
-	 jxTlvXCmEjsXCTyoZBKSDw9N+NM9Nh/1RjRNH0YiRfGVTIeHGpw6lj/GAk2jDOoeiV
-	 EZdF/V7CqmO5ZHFyN/UPNB0wVjxdi43PCVSzG8Y3j8i7in0BxBTLYoq/c08sTgYjEw
-	 WujecG+8WSTKHU6o1UzWzk0HdOp0FZ1hVNSB4qt7eTBgxMdBXpi6a4xQjnseMmPKnI
-	 OD/WPdDRwXAw+6+UvZTFoezGD1SEBgVaPTXDjsqevvZm8lPS1sx6mfLzLIz57QoypM
-	 eeb1fEQiWTnEA==
+	b=XMEH9qKgK2rRnhP5p/MYZqsXb3cHXgYRDs/YfwDd1BMiMIPv14S/fKvezLzyYyHsF
+	 qwvr9MT3DHgn/g2E6Hl797obi9b958OWpFoq529R4UZwGu13mvrPh1skcDQGAL1Bs+
+	 NtA/IaYkfA3V1BwnmeoDUrwZUAHzoj3TAY3TEt6hOh9rBX1eytGmKvn5432yFGBiu9
+	 p2EIZRxP8TFDMAw1584OH274zZ94U9Pvju/4dInRbWWqR+fpQCuur7WEaBdfA/WM+4
+	 aIkweXJ5WwBEWp6K/NmQzC/D7ae4GUSnj0xBj/kEWzy3rcEnIaHJF6pLrG0N2VKQGR
+	 Jn62Y/PqG/X2g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E17884F7F;
-	Fri,  1 May 2026 12:31:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DF76B127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B00ED61B25;
+	Fri,  1 May 2026 12:31:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B699293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C564541DDD
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DC8441DD8
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gEjJ6kjImMb6 for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:31:31 +0000 (UTC)
+ id ATsi0q4J8i6j for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:31:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 61A9D41DB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61A9D41DB2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 42B8141DB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42B8141DB2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 61A9D41DB2
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 42B8141DB2
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:31:43 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E34EFA4C256D;
- Fri,  1 May 2026 14:31:00 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3E994A4C26F4;
+ Fri,  1 May 2026 14:31:02 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1I-000000008NC-3hAR;
+ (envelope-from <bernd@kuhls.net>) id 1wIn1J-000000008NC-1Erm;
  Fri, 01 May 2026 12:31:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:29:47 +0200
-Message-ID: <20260501123100.1918951-2-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:29:52 +0200
+Message-ID: <20260501123100.1918951-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777638660;
- bh=BykWMpfRVZkSO+Rgy45z6TVvhX2uVHjDwLqftt8fH8A=;
+ s=kas202511301023; t=1777638662;
+ bh=yK9lY/LSyQ+BJKGjMKY1spU1Wu//DCH+LQQolNJGtKI=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Jgp7AxAkQ8CsB2nqYYkHbfmtkzG+TjNiG1KFug9B8aFW03fHLUuEDSNJJwScQyDh6
- 26X5EnzZI+lInmVBBYo+FeNfA7caugEUTm8e1OHjwOzsSX1/2yAMbPCtg3vZ8507mm
- Z/rUtz4UKzQyjl+66uhREqBrlQyXyjzRH4ehzWgRt96sHQfx8l/QrWwVhGu0MqIWsK
- OiHeSF7vszKCXQar4i8ApaQPmMY/jJdso87AqF0ZeyaX2pFuhrvNaloBH/CS0Qg4Bj
- 3WloBUlFt2icfw3M9efFI4hnd7rHZm+n7zgRieFxW/Jsiw9cbroa4QhNCDlbtQyQEu
- WOAqS993Ut/jA==
+ b=QL43ZdwzIfwd551RSQLzkQSc6Qsm70cjAMMtdFyUqbGTnQgu9NkHV2U3CJbMCMDTZ
+ /y/BMPP0Qw0q2/CSslG2ONx5aurtdgI1VeaO2pl860Kd21kaVxvxnJORL5LVXlGjCU
+ fFJZoXdWCHAyjJgictzAJxVRPyuIVXvJgUhgOYucS3FXWweRBkXNLoXhPjgBEl9lwg
+ 50NBkOvfLR/0I+cXWTqpBerOWw7X9f1ik7YtdpvfOypunrwhWPRwUJoWV/paKOGhW8
+ A6RHTEzn/IjfwNN4WrjUB01QIlUVnfRtdaozYWpeHB8wqstb8NENAialFEUWWw80vV
+ KoBM9noozfDUQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Jgp7AxAk
-Subject: [Buildroot] [PATCH 02/75] package/python-anyio: bump to 4.13.0
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=QL43Zdwz
+Subject: [Buildroot] [PATCH 07/75] package/python-boto3: bump version to
+ 1.43.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://anyio.readthedocs.io/en/stable/versionhistory.html
+https://github.com/boto/boto3/blob/1.43.1/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
+ package/python-boto3/python-boto3.hash | 4 ++--
+ package/python-boto3/python-boto3.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index d25c1a2bad..8bd80e86fb 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index a7e3ba6476..0a620aff21 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  10e3ba7d02402b6605d834a1e4881a1d  anyio-4.12.1.tar.gz
--sha256  41cfcc3a4c85d3f05c932da7c26d0201ac36f72abd4435ba90d0464a3ffed703  anyio-4.12.1.tar.gz
-+md5  790c9bef76fdeac4c2e4e4ea757e14ab  anyio-4.13.0.tar.gz
-+sha256  334b70e641fd2221c1505b3890c69882fe4a2df910cba14d97019b90b24439dc  anyio-4.13.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/boto3/json
+-md5  8e39cbbb73c8eb861e2d2d7a5107c3d2  boto3-1.42.68.tar.gz
+-sha256  3f349f967ab38c23425626d130962bcb363e75f042734fe856ea8c5a00eef03c  boto3-1.42.68.tar.gz
++md5  8f6916a7e50632593cdf56b5fcdbd365  boto3-1.43.1.tar.gz
++sha256  9e4f85a7884797ff0f52c257094730ed228aaa07fa8134775ff8f86909cf4f2a  boto3-1.43.1.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 32b4a84ef1..4cd435e265 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index 7901c671a3..4a88e115cf 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.12.1
-+PYTHON_ANYIO_VERSION = 4.13.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/96/f0/5eb65b2bb0d09ac6776f2eb54adee6abe8228ea05b20a5ad0e4945de8aac
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/19/14/2c5dd9f512b66549ae92767a9c7b330ae88e1932ca57876909410251fe13
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_BOTO3_VERSION = 1.42.68
++PYTHON_BOTO3_VERSION = 1.43.1
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/06/ae/60c642aa5413e560b671da825329f510b29a77274ed0f580bde77562294d
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/98/36/028c12ed6ed85009a21b5472eb76c27f9b0341c6986f06f83475b40aaf51
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
