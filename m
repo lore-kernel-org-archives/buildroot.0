@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE399FF8864
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 06:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26802FF8864
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 06:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87F1285518;
-	Fri,  1 May 2026 06:26:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFB80854D5;
+	Fri,  1 May 2026 06:26:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h_WCyvE8Zz_Z; Fri,  1 May 2026 06:26:46 +0000 (UTC)
+ id jZnI_KLN5NSY; Fri,  1 May 2026 06:26:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8B2A854E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED87F854E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777616806;
-	bh=WxKJ9zQunOfiJr+VstLsc8BP2XUhPoF81hhnjvV1nfE=;
+	s=default; t=1777616819;
+	bh=cVmxGqbEKvrrnFoXIoiZ/bjTzr7pQ8urazqmgBT/d4c=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=QWg14GxZiIuGBC4xdwZzPs/QAx6f8NwqDSH0Uxzc0r3HzxqDUyuSGoa9d060NLxlW
-	 PHl1vV1sltrf/yaVv+aPtjX+Mq1D3Kjfi71946dbJhg8DbTiItXy9CmVkawhsaB3xj
-	 GnPIP8ZuJGtMH8RC2X+HoVfsN2CzTcm1AtX1zvQW0HU+I1oejEQsaU+w892QYlgEts
-	 gDQ3l8gA25274uMKjAXJP4e99ueMBnkKg0mHM8hxDxiw5e8iH2sQStJWPnW7L6TC23
-	 BvMvZDsvg34oiHQnFSV6eD3Bbf0xfvl+hz2CzdiLwwRtCUnXeQ9JSmr+IQr8uT2L9w
-	 FhHh1PvZ6PQhg==
+	b=gHYxFY4WtPP4UOtHCO0tLA9omgsPQ4QilZN+cExZW3AMZ8nzo/dxUpaJk5knVKeLc
+	 HWLphDP1BCKpN0vCEmByqAfIxVc899776/wV40ArFcWYlZo5PqyKI5d/KcETikRLdl
+	 nzvKwFDdEo9mi9jrBU+srL8LecVHlltWe/oe7Fru6vIL2hfKgTFBdHvvlyva8x1bZp
+	 mAJid8KulDGL0YLb7B1F+l1Xvh9nU0ALbXsESI562S76LTmhU9jSrnD4Gl6dztNLnn
+	 ntB9WkdCnGQ91/uJi2t3pMFQsiTUlQyGhTCk4mhoFIgUzlsewn74OWR4VGB3k0gEuN
+	 410OZUJUIBedw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8B2A854E6;
-	Fri,  1 May 2026 06:26:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 47A66204
- for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED87F854E9;
+	Fri,  1 May 2026 06:26:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F2DF293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2DB8F40151
- for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D077854E9
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L-YmZLjJ7NjU for <buildroot@buildroot.org>;
- Fri,  1 May 2026 06:26:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xnck2lr5ubfI for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 06:26:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 257814006A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257814006A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 494F7854D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 494F7854D5
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 257814006A
- for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 494F7854D5
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 06:26:56 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 35261A4C2CA3;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5D7C8A4C2CDE;
  Fri,  1 May 2026 08:23:29 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:38120)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIhHU-000000007tD-03yI;
+ (envelope-from <bernd@kuhls.net>) id 1wIhHU-000000007tD-0KQm;
  Fri, 01 May 2026 06:23:19 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 08:23:10 +0200
-Message-ID: <20260501062316.1942112-18-bernd@kuhls.net>
+Date: Fri,  1 May 2026 08:23:11 +0200
+Message-ID: <20260501062316.1942112-19-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501062316.1942112-1-bernd@kuhls.net>
 References: <20260501062316.1942112-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777616609;
- bh=uRVyEuXsoiJroTTC5Od+bzyC6BzvZdJHU3oYM0554qQ=;
+ bh=y7UnfO7DSRU9jFosmG7mD0VA3oIyYzdWaetu+bfNDug=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Lsi0+SP0SfROMo/MxRRM8enSVF3otMNnqyr6kGxg69xQgRuwhFrpuNQnIYixBV5QB
- 8DHKbTkXJWYkRKDP433ssroapWackavLtqme7Cq3d/XbrcaME8Hl0LFKtcF7JoELNC
- WROjfE1vFsPaaF9xWbXkydeaUPNGl9DddO0UROfdwJUrU9Emcya1m//sEUtZ56/DDh
- qS64gcrd//52OALV+G/pJ8ksQt0rs9ybI2NO8fYbC38qqZdpgah6+na7ofl8L6/Atm
- +C4ie3dVR0SMhxbJjqlPkCpeUZKid1co11t52vW/+JqtDE/St44kaSyTnyvUr626nm
- HluiF8e7osZ8w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=lZSKmQzEsKf+Nr75FzfFURz8idjlIkI5EeC0jQ8i2MAFSC4W1dgUrFL2aZe5grH4I
+ MfUgYU6OxgvZOHd8vAue27XCG6PhnboldEu9G/CVeR5oYLT1+KEdgTBqRnpj6IPnEj
+ cC1wjsD3HqohiBozRevDAgseWnH0zmvsTfQNcU9wPd9p4Nq8opj8DUk1UK3LnB/Gis
+ mE4sg8oCsvFXulHyjmvjmEEBY4p8r3k1uvyiDNqZfi+OnSrwEN7BzGaRNXh67WEeo4
+ LkbNGU538GFBmJerB0S17HOffA5vCvx1gyAxtQFUX8DrNXGqIpQjKiVjUr9+qIgMNE
+ /vl/CS6EQPlhw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Lsi0+SP0
-Subject: [Buildroot] [PATCH v3 17/21]
- toolchain/toolchain-external/toolchain-external-custom: add gcc 16 version
- selection
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=lZSKmQzE
+Subject: [Buildroot] [PATCH v3 18/21] package/gcc: add version 16.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,29 +106,193 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch allows to use an external toolchain based on gcc 16.
+Added libatomic to HOST_GCC_INITIAL_EXCLUDES to fix linking error with
+libc:
+
+output/host/lib/gcc/x86_64-buildroot-linux-gnu/16.0.1/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+ cannot find -latomic_asneeded: No such file or directory
+
+caused by upstream commit
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e63cf4b130b86dd7dde1bf499d3d40faca10ea2e
+which added libatomic/ to $bootstrap_target_libs.
+
+For details see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81358
+
+Copied patches 0001 & 0003 from package/gcc/15.2.0/
+Patch 0002 was applied upstream:
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=7894c00982c570d684fe5b82d8fb3aafc34d6986
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../toolchain-external-custom/Config.in.options              | 5 +++++
- 1 file changed, 5 insertions(+)
+ .checkpackageignore                           |  1 +
+ ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++
+ ...-config-microblaze-fix-ira-for-GCC15.patch | 56 +++++++++++++++++++
+ package/gcc/Config.in.host                    |  9 +++
+ package/gcc/gcc-initial/gcc-initial.mk        |  2 +-
+ package/gcc/gcc.hash                          |  2 +
+ 6 files changed, 95 insertions(+), 1 deletion(-)
+ create mode 100644 package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+ create mode 100644 package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 9ca024f5b8..f69e09ecf0 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -46,6 +46,11 @@ choice
- 	  Set to the gcc version that is used by your external
- 	  toolchain.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index cc52f6057f..d7d0a9b6b6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -358,6 +358,7 @@ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+ package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+ package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+ package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
+diff --git a/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..c3b600cfb8
+--- /dev/null
++++ b/package/gcc/16.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 7d5f59e035341430e20f47420535d0e987516e55 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.50.1
++
+diff --git a/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
+new file mode 100644
+index 0000000000..663aab7218
+--- /dev/null
++++ b/package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
+@@ -0,0 +1,56 @@
++From d2fdbd8c4abe67eea86877dfb3b3b9d8508c165f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 6 Aug 2025 22:32:30 +0200
++Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
++
++Add new hooks for callee-save on microblaze defined by [1] and
++return 1 to restore the old behavior prior to the commit [3].
++
++Tested with qemu_microblazeel_mmu_defconfig and used to generate
++Microblaze toolchains for the Bootlin toolchains 2025.08-1 [4][5].
++
++Upstream: suggested in the bug report: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432#c10
++
++[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b191e8bdecf881d11c1544c441e38f4c18392a15
++[2] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/i386.cc;h=3128973ba79cccfc6761f451dcb716b9558cc4da;hb=d3ff498c478acefce35de04402f99171b4f64a1a#l20606
++[3] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3b9b8d6cfdf59337f4b7ce10ce92a98044b2657b
++[4] https://lore.kernel.org/buildroot/87sehzndtp.fsf@dell.be.48ers.dk/T/#mce7decd0b3f6a41008d5de577538a8525c91b374
++[5] https://toolchains.bootlin.com/
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gcc/config/microblaze/microblaze.cc | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
++index 78b9428ef3b..84ea7e8d55a 100644
++--- a/gcc/config/microblaze/microblaze.cc
+++++ b/gcc/config/microblaze/microblaze.cc
++@@ -3228,6 +3228,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
++   return NO_REGS;
++ }
++ 
+++/* Implement TARGET_CALLEE_SAVE_COST.  */
+++static int
+++microblaze_callee_save_cost (spill_cost_type, unsigned int hard_regno, machine_mode,
+++		       unsigned int, int mem_cost, const HARD_REG_SET &, bool)
+++{
+++  return 1;
+++}
+++
++ static void
++ microblaze_globalize_label (FILE * stream, const char *name)
++ {
++@@ -4066,6 +4074,9 @@ microblaze_starting_frame_offset (void)
++ #undef TARGET_SECONDARY_RELOAD
++ #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
++ 
+++#undef TARGET_CALLEE_SAVE_COST
+++#define TARGET_CALLEE_SAVE_COST microblaze_callee_save_cost
+++
++ #undef  TARGET_ASM_OUTPUT_MI_THUNK
++ #define TARGET_ASM_OUTPUT_MI_THUNK      microblaze_asm_output_mi_thunk
++ 
++-- 
++2.50.1
++
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 21581487df..b9dd37471f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -46,6 +46,14 @@ config BR2_GCC_VERSION_15_X
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
  
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_16
-+	bool "16.x"
++config BR2_GCC_VERSION_16_X
++	bool "gcc 16.x"
 +	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
++	# powerpc spe support has been deprecated since gcc 8.x.
++	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
++	depends on !BR2_POWERPC_CPU_HAS_SPE
 +	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
 +
- config BR2_TOOLCHAIN_EXTERNAL_GCC_15
- 	bool "15.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
+ endchoice
+ 
+ config BR2_GCC_SUPPORTS_DLANG
+@@ -71,6 +79,7 @@ config BR2_GCC_VERSION
+ 	default "13.4.0"    if BR2_GCC_VERSION_13_X
+ 	default "14.3.0"    if BR2_GCC_VERSION_14_X
+ 	default "15.2.0"    if BR2_GCC_VERSION_15_X
++	default "16.1.0"    if BR2_GCC_VERSION_16_X
+ 	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 1f8b76a942..18d5cef0f8 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -17,7 +17,7 @@ HOST_GCC_INITIAL_DL_SUBDIR = gcc
+ 
+ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
+ 
+-HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
++HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES) libatomic
+ 
+ ifneq ($(ARCH_XTENSA_OVERLAY_FILE),)
+ HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index deb7c40fa3..da6aa6e879 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -6,6 +6,8 @@ sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9b
+ sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
+ sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-16.1.0/sha512.sum
++sha512  b3454958891ab47e1e5b6cb9396c0ad3b04f32fe2a7bf1153a143f21013fdb6b295ca94c98964698a688e4c1d7555ffd8ffbc20187507cce6b1c32cbcc09897a  gcc-16.1.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  7f08ae335d9112be65e92c3744c095d8fa265994b8282274948f99fe37409531e627e6dadfb77b138a82fa09d012c56d8c075b482a5a5186814a57f9db63c29e  gcc-arc-2024.12-release.tar.gz
 -- 
 2.47.3
 
