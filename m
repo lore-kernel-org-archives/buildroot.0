@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A88F8CD3424
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026B7CD3424
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74D9942936;
-	Fri,  1 May 2026 12:43:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC2C642957;
+	Fri,  1 May 2026 12:43:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bp6rb3PUFmIW; Fri,  1 May 2026 12:43:02 +0000 (UTC)
+ id sdQke1KYMOsE; Fri,  1 May 2026 12:43:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64DA6428FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61B3841F68
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777639382;
-	bh=MBChWTNnXb+CEv9BpvNzHTwJlqKghsqIAeDa+brW0ro=;
+	s=default; t=1777639394;
+	bh=wja4vj93eNva8evQzdlf0h7cB2r/Hyi6yVWTFqC+Dvg=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=jdqS7wfotXb1HJmFtm2Vs9aM2gXbQEF1IA9JB+Z5gdPCcShrzxUPTiiyp94/ni8N4
-	 tMLylhiHDlnBZuF+wuEBxgd6K2jQKkM3sE7xk628mRqkNgDuhT0MHYtMyOxncQNPGi
-	 AdwYfgU87ld6kENy1WdVuE9RdQOHwTthhtMqofwW1H5h97rTcOqnChxcEGK5UHPDfx
-	 cPXpmYUL6wdF+b+pcwAg4FGEGDpIFji3oyTzFN0Es9GOmvpq3a8m6lijYzBbYdcVJL
-	 u7DKz1Xs6Y+D3cM1bQ2zAmB6OmVd5Yt0F0tFL9dMGHKpu1mIppEBk/ITWBo59Q23hP
-	 zNrb6r2cUUtvA==
+	b=DC2d/25sxpHS4swGMawgpWa8Cozim28Ybt2ykcDeCAOytAAAw/F8rPnsDYYOQ2EkO
+	 cb9n5d2MS4v5OXBrJa9mdRdEJrnVjFjRQ0Vokhd0k6uRuYpTYCgvUsPkC82S5krE9F
+	 DiQw/7NN0gHaMt4L7bLGRYtB6vp8twhRSFkOqdJLQjsBB1J1hMjsnCSDYaWkGJPYqe
+	 KeuokFBOCYDBwkkkfDDagYet5zduxHBUDOOwI9RKcdSyV0iGgC9G62T5xSWa7JUmj5
+	 AtJw8W+3a0EXgsv/Hgdlx0h3LZXm1fWO77AL08Q0yhTerL6kychxRtEv0zCBEBG6uL
+	 Uw8I327793aEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64DA6428FD;
-	Fri,  1 May 2026 12:43:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4EA6E293
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61B3841F68;
+	Fri,  1 May 2026 12:43:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F332B293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34D57852E5
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4FBB6F790
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Imze7xXE98xe for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:43:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-m62cbdZbAX for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:43:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1CAA6852E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CAA6852E4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8E796128E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8E796128E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1CAA6852E4
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8E796128E
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:43:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7FDE9A4C2F20;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 992F4A4C304E;
  Fri,  1 May 2026 14:31:09 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1O-000000008NC-01PQ;
+ (envelope-from <bernd@kuhls.net>) id 1wIn1O-000000008NC-0NZk;
  Fri, 01 May 2026 12:31:05 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:46 +0200
-Message-ID: <20260501123100.1918951-61-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:30:47 +0200
+Message-ID: <20260501123100.1918951-62-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638669;
- bh=a1NEgThm7VTVzS3iYG17Gp2yxsSYYrzhE2VwS4Wvj7o=;
+ bh=Ipnm2I1m2tMlqXafB04x2eTKVRVTXTh/blWjWbPiI/w=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=L7pOnoH88RdEtC23IBtWc2LpblMECgYRP2AvRKEmZfK/MZFC4Wso4wx+P5trUnjob
- VNTZUlFVjI1SvHbKZsIjPl84V0Swrdkk1N1BaqC6GSSeWWHcC6snkCFZ/ceB0Hx0JE
- udF3t0DO2t7hxV+izUbhipbPR1W01JdHpeRSC7HT4cZlIEgJhj/RbMNcFCIRH9Y5dw
- un8Js+78GgAfHthxeI53l+Vz8PwNMza4/kivcOQjjt8ac0ZRdbM+sK0QZX4cgdN73W
- XqGpkjOY0QeuSLbcKsvboieO0GK64jWfQkay7cI9r4UGwaadNGHl/xFYh/gv6LQCJS
- Uf3HU7I31fZKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=SaI817Tb8MOVp9LnHsjFdwIlp9YRZ1a6IbEsO0yvw8NKEBXDw4IbEcm21pHktr/MY
+ 603b6qOwgSjEr9CbNOBCF2Vkz8W0F6nhHgiu6S70purNn+bEJB5wM5UTZNy0MZ+6O6
+ mZWi1wWSH7p8wPvdYvdPVH7pKwEF8bKAR68HGXVAM9fIJzx1VlJFvOzq7SqVzaHsgM
+ F9NCI2dq8QXQzO0zAuCFR+ROntL4IKVYI1bn/y+9/Cc+tFfyCsVI3uDTW5Rd66mZuI
+ Jt7661nPFEJBkoM4LIvw6JpkY7jp+fCRWMxtvCugS0jxCoLP9Itvnftpa8KxXNM728
+ tizRKBKfA2pwg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=L7pOnoH8
-Subject: [Buildroot] [PATCH 61/75] package/python-telnetlib3: bump version
- to 4.0.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=SaI817Tb
+Subject: [Buildroot] [PATCH 62/75] package/python-textual: bump version to
+ 8.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/jquast/telnetlib3/blob/4.0.2/docs/history.rst
+https://github.com/Textualize/textual/blob/v8.2.5/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-telnetlib3/python-telnetlib3.hash | 4 ++--
- package/python-telnetlib3/python-telnetlib3.mk   | 4 ++--
+ package/python-textual/python-textual.hash | 4 ++--
+ package/python-textual/python-textual.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-telnetlib3/python-telnetlib3.hash b/package/python-telnetlib3/python-telnetlib3.hash
-index 889a7aa428..14c52634f5 100644
---- a/package/python-telnetlib3/python-telnetlib3.hash
-+++ b/package/python-telnetlib3/python-telnetlib3.hash
+diff --git a/package/python-textual/python-textual.hash b/package/python-textual/python-textual.hash
+index 00a6759383..a7a60f631f 100644
+--- a/package/python-textual/python-textual.hash
++++ b/package/python-textual/python-textual.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/telnetlib3/json
--md5  468f4d8cd3571065d093d9abcf8b8f39  telnetlib3-4.0.1.tar.gz
--sha256  819aa9dae793d66e9fef5524ce838eabc4723589b0f81c72fccd3f2448cbc2fb  telnetlib3-4.0.1.tar.gz
-+md5  c72d70acb65fba264c7f1a8ed68d4e07  telnetlib3-4.0.2.tar.gz
-+sha256  76726d7a7a34163b5dbef461e9cbf8fb4bda8f4fe7fcb225f56cbb4dcf5fd16e  telnetlib3-4.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/textual/json
+-md5  d94bf25d9e81458d56b86aa108bb3fea  textual-8.1.1.tar.gz
+-sha256  eef0256a6131f06a20ad7576412138c1f30f92ddeedd055953c08d97044bc317  textual-8.1.1.tar.gz
++md5  c1831151f5fd52aa6f09c834e32df3b7  textual-8.2.5.tar.gz
++sha256  6c894e65a879dadb4f6cf46ddcfedb0173ff7e0cb1fe605ff7b357a597bdbc90  textual-8.2.5.tar.gz
  # Locally computed sha256 checksums
- sha256  23bf24a5fe7cbfc70b962da94334649cf60a3b309834c72eb053d91d8caf60cb  LICENSE.txt
-diff --git a/package/python-telnetlib3/python-telnetlib3.mk b/package/python-telnetlib3/python-telnetlib3.mk
-index 8d47ca44d4..7b29e7b13e 100644
---- a/package/python-telnetlib3/python-telnetlib3.mk
-+++ b/package/python-telnetlib3/python-telnetlib3.mk
+ sha256  94f290a762376dfdb7768e42070618b0abfd2a2799eab1b1c097816c3a39eb57  LICENSE
+diff --git a/package/python-textual/python-textual.mk b/package/python-textual/python-textual.mk
+index 9401964732..d7ada90102 100644
+--- a/package/python-textual/python-textual.mk
++++ b/package/python-textual/python-textual.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TELNETLIB3_VERSION = 4.0.1
-+PYTHON_TELNETLIB3_VERSION = 4.0.2
- PYTHON_TELNETLIB3_SOURCE = telnetlib3-$(PYTHON_TELNETLIB3_VERSION).tar.gz
--PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/5d/57/42acb7ce2c1b3d88ab28d6b1de41a08fdd5180d262d728fd10071950566b
-+PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/2c/1f/a5de9f0f86976d299a439619417019a9674fa8662377659734dd6e067235
- PYTHON_TELNETLIB3_SETUP_TYPE = hatch
- PYTHON_TELNETLIB3_LICENSE = ISC
- PYTHON_TELNETLIB3_LICENSE_FILES = LICENSE.txt
+-PYTHON_TEXTUAL_VERSION = 8.1.1
++PYTHON_TEXTUAL_VERSION = 8.2.5
+ PYTHON_TEXTUAL_SOURCE = textual-$(PYTHON_TEXTUAL_VERSION).tar.gz
+-PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/72/23/8c709655c5f2208ee82ab81b8104802421865535c278a7649b842b129db1
++PYTHON_TEXTUAL_SITE = https://files.pythonhosted.org/packages/62/1e/1eedc5bac184d00aaa5f9a99095f7e266af3ec46fa926c1051be5d358da1
+ PYTHON_TEXTUAL_SETUP_TYPE = poetry
+ PYTHON_TEXTUAL_LICENSE = MIT
+ PYTHON_TEXTUAL_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
