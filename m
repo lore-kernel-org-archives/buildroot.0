@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 385A3CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D6BCCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:40:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DCF94212B;
-	Fri,  1 May 2026 12:40:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D9FA42229;
+	Fri,  1 May 2026 12:40:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NuOyIIAplbHn; Fri,  1 May 2026 12:40:25 +0000 (UTC)
+ id xcK97jEZGsir; Fri,  1 May 2026 12:40:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 220BC4155A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24E1642233
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777639225;
-	bh=FSvvrQv/Ef20fMogITJCSLp0bAd94l043kAODjIENNM=;
+	s=default; t=1777639237;
+	bh=JP2hxuQWiBiqr/Bay5fgxEi5agRxRwJOhlm0Dgtk088=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=l0VOc2KD0YRArx2E3qTpwtc/QcJ14BNVKIxQbdloqsdlpvq35fl3Mn6fPCEDIeNbi
-	 5rDk4UTyH/4GpoiWzgJH3+xEIrq0iwbXMlVNlx/kOofkN8/kF3Ea2XiFHJglkC4Kg1
-	 TXb7nBSIKTeTdsKk/th5gH/hI0RpvN/dhutmQ47JHSz7Qhk4Qr0cthGCrcBMvO7lgi
-	 N6SJ828l2FSIQub2AJBtHb+zgY/FKLR867pfODwzrmHMCOKWfXP9Y/zB/0INza/Hyl
-	 WU69hnK4pp+1Ejy/Vgxdt30lelSnlzOrjpefz29SO9zZXPIEgC2Z59//MGWPQzkUcl
-	 C0VlHdf42S17Q==
+	b=bJ9LF+t+mp1EShtXwJGRNsl6DRJiupzgU8SfLQG0jv/avEU8+HZnTA2MUPahgB0E4
+	 3/0sN3DasgIzO+aUHw/49hSdLRlP8pPmVTzEc7v/zhFTCQITM9f7kbvgHYYFCK6EJa
+	 JvChgIv7DfvUKT+jGn/ceJKUqyoQ8ege2/jC8uswDM2Por99Wp+jGp4hnEklyiWUf8
+	 1eHXcSKgLNxrqQ3itKCP/kpf0ozbn36oiZyMInzjr8WdFWiHHt0wZD+6MsgENPW/GM
+	 /By6A9Kxhd9HImYztGtQXT1GyOGAtkMqw24MlqwyQofiwrRcWo1xxJTsxxnErnOZOK
+	 zCuHA7KV+7W9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 220BC4155A;
-	Fri,  1 May 2026 12:40:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E8018293
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24E1642233;
+	Fri,  1 May 2026 12:40:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ABB2127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE22584D73
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0DB6403DA
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id luai-jWPJh0M for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:40:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k4bAet1bN5SR for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:40:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B29A784BDE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B29A784BDE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DF2D6401CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF2D6401CA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B29A784BDE
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DF2D6401CA
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:40:34 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 638E6A4C2EED;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 74EB3A4C2EEE;
  Fri,  1 May 2026 14:31:08 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1M-000000008NC-3z87;
+ (envelope-from <bernd@kuhls.net>) id 1wIn1M-000000008NC-3dSM;
  Fri, 01 May 2026 12:31:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:34 +0200
-Message-ID: <20260501123100.1918951-49-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:30:33 +0200
+Message-ID: <20260501123100.1918951-48-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638668;
- bh=vzuebkDs42q+UhNxwPzqkSj13kkHwiLn6tyIVz3rmos=;
+ bh=MvTFDzG76G1FeSL2N+rbDdbMaWlczcF96LkCKynrbjY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=qpZ4Y1T9QUMGOPqmmCGr0ftsVU58fwtLShECz+VY3BjezesvQEFDKPWSEUvz3WKou
- uRaYgl3fKW932oQkOB0+st2OgBlODknZI2IIFiDucXzcwOR8P8amgSRAozs47cPWy6
- NNGoOrP3DVza95SZJTNPpGvAKNADB4wlwG6z5ykTmcsMIs7IdF9VLda1zukSbLWI+o
- HR71caiOjlXhhkX32yudpNvhcgiNT79mCabo01bN7fquoR+BvZmY8m0Ez1uWsGVIyW
- Pu3lvDy6LpaS6bJHPmp+Od8tOoYgXejRwbf79EijigreaPOXmWOoYQS4hpfSNDPj0M
- Cz+GyS71hlk5A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Jk/4wgXm2nHLjGfaUWRfbKE2jIHe+RMixUGkxho1rR0IZXfX6ulfoN6UyoxDM0cLb
+ OJFXRSJxXnbbR8CL3li38U2/Ewi3Rv/Fnf/w0iPMaoYepcPCrlTvBpv0ZXlXvuaZ+h
+ 4VDLO7oMCtPjUlbx4HhPrYPaKl6m0nsWjINjlZVjtur6NAvYbb10fsFXGMM9bRX0dT
+ Qm/rEQFfJoqJj9pw6rt6wrv3ieoXaTqq5s6WF8o3knVz+G25oQ0RSzghDMQ6O2mPrM
+ Awzp9/fUOeyIYkLabr/0571JeQXpFyLORNLZpkcqtqjX1FXXbDohU0P4ZImKp3r8Wm
+ 8VgV14RAjWQaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=qpZ4Y1T9
-Subject: [Buildroot] [PATCH 49/75] package/python-regex: bump version to
- 2026.4.4
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Jk/4wgXm
+Subject: [Buildroot] [PATCH 48/75] package/python-redis: bump version to
+ 7.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/mrabarnett/mrab-regex/blob/2026.4.4/changelog.txt
+https://github.com/redis/redis-py/releases/tag/v7.4.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-regex/python-regex.hash | 4 ++--
- package/python-regex/python-regex.mk   | 4 ++--
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
-index 3251993d45..c99fc9dd62 100644
---- a/package/python-regex/python-regex.hash
-+++ b/package/python-regex/python-regex.hash
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index ac284e56f0..583cb74bfd 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/regex/json
--md5  d0ce2a36afe1d6fe7b6e188963db1b22  regex-2026.2.28.tar.gz
--sha256  a729e47d418ea11d03469f321aaf67cdee8954cde3ff2cf8403ab87951ad10f2  regex-2026.2.28.tar.gz
-+md5  b9f15f11cde393d1959851ee9775fcda  regex-2026.4.4.tar.gz
-+sha256  e08270659717f6973523ce3afbafa53515c4dc5dcad637dc215b6fd50f689423  regex-2026.4.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5  fbec5721d85318b31ba62d11e4b08022  redis-7.3.0.tar.gz
+-sha256  4d1b768aafcf41b01022410b3cc4f15a07d9b3d6fe0c66fc967da2c88e551034  redis-7.3.0.tar.gz
++md5  f7c1c7b3f4d163d2d424150d0498a35b  redis-7.4.0.tar.gz
++sha256  64a6ea7bf567ad43c964d2c30d82853f8df927c5c9017766c55a1d1ed95d18ad  redis-7.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
-diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
-index 281a0e83a1..44c12789bf 100644
---- a/package/python-regex/python-regex.mk
-+++ b/package/python-regex/python-regex.mk
+ sha256  a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index ca2e165948..21dd6f1994 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REGEX_VERSION = 2026.2.28
-+PYTHON_REGEX_VERSION = 2026.4.4
- PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
--PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/8b/71/41455aa99a5a5ac1eaf311f5d8efd9ce6433c03ac1e0962de163350d0d97
-+PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/cb/0e/3a246dbf05666918bd3664d9d787f84a9108f6f43cc953a077e4a7dfdb7e
- PYTHON_REGEX_SETUP_TYPE = setuptools
- PYTHON_REGEX_LICENSE = Apache-2.0
- PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
+-PYTHON_REDIS_VERSION = 7.3.0
++PYTHON_REDIS_VERSION = 7.4.0
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/da/82/4d1a5279f6c1251d3d2a603a798a1137c657de9b12cfc1fba4858232c4d2
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/7b/7f/3759b1d0d72b7c92f0d70ffd9dc962b7b7b5ee74e135f9d7d8ab06b8a318
+ PYTHON_REDIS_SETUP_TYPE = hatch
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
