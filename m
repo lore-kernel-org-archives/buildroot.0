@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59708CD3424
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4FFDCCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25CD86F5F3;
-	Fri,  1 May 2026 12:32:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TwfXk2fHcgsA; Fri,  1 May 2026 12:32:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED5FD61AC7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777638743;
-	bh=wF777N7yy/Q0LtG9UanTkXQ2AAprRZ+4C6z08jItxz4=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=ZXD7W93dALUBaLf8o74NxFYfW/caGdUY8zp2lLyHr6OsE4cYKKC41rhw51CqcNYwF
-	 SrdoQNrC1s4Onft/zyCso/XZi0pmsmO+PvNiTrZSqTe26P4fJ6wh7iIYws4IAAjo77
-	 EdFqhHkhKb5qSaI45pdSq142fJAW8HSy/zXogZpkUmLBZ304GllFTXk1JH/A2qK8ng
-	 oRdXeEKE41WqM03GBw2Cebg+SXbaHpiuwMriBToh/f5Nzh+vz3xUpJJqk9sVqOpKiF
-	 tLyu+enkhKBDeJ0WMoKZafBDCkbHC9DY+SbBuxX4LYtHFIWosu84uwnvQcGcKAZIcU
-	 EwB1JB1WYVhDA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED5FD61AC7;
-	Fri,  1 May 2026 12:32:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A679293
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27FDB41DDD
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAC1142262;
+	Fri,  1 May 2026 12:32:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J17zCh_8-ter for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:32:20 +0000 (UTC)
+ id S_l6MBg1yB3Q; Fri,  1 May 2026 12:32:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0662D41DE9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777638755;
+	bh=ydkgWsMwQCOsJ17YbyxVhV+RGwrRWxQMIwom1LT4oAs=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=R3/V/d5NBzoyEPJgDzKJpRZzpvF+gxLK4aGHCYb+6k1zk2O+Hnclhqz4L1eoxyFph
+	 DeFOPDkBx+YCmgWQ6k2kpReIpcOhmfOqxXw4t7smwO8dchKLwtWKnLX9jsC7oAaI0a
+	 XTbGNyyfF30un2pgOUzuH1vFqzncjVdtUIjvBEvGyLoVQN8b7P7BXLsSviHxwjilQ4
+	 l3R4b36hBW3FkSLeMmhLfZgRVFTPzbfqSg64dWEttB9Funv4oXw7UUBt6Fs7zKPa4q
+	 lERpgB/pEVc93+yIB/Se+yyCzj1Ct+Aw3MZtbDvIxUiro/9D19rKw9y5pj3pUjreQ/
+	 OUdT5vigwVkiQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0662D41DE9;
+	Fri,  1 May 2026 12:32:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CFB8293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2B42855F5
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KU4nuygKe1cS for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:32:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1878541DD8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1878541DD8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E955D855F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E955D855F0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1878541DD8
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E955D855F0
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:32:31 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C041EA4C2E87;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D5C4BA4C2E88;
  Fri,  1 May 2026 14:31:02 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1K-000000008NC-3FYE;
- Fri, 01 May 2026 12:31:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIn1J-000000008NC-1xiz;
+ Fri, 01 May 2026 12:31:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:09 +0200
-Message-ID: <20260501123100.1918951-24-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:29:54 +0200
+Message-ID: <20260501123100.1918951-9-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638662;
- bh=F76TYEvO/1z95u3IXe7NZSLeGEB9xq0sogz4Ut0BGzc=;
+ bh=7OPj0cKT/Z/K2/rLhr5rj0QXK2ut06XP90cFd3eBKdo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Sz3zfrh+WRG5AGsFHFb1FO0tRnud5VJOx5DM7yfqVLgrJ3hdOoC1OHQKpIINOejKt
- XrPvDTcmDH026CmdGzd3R4vDOqoSp8RWTMqmGnGPUhpDWr8mC9tatUtn9ErUx8F5O7
- /wcqTZVYI/U7Cv+Vs3NBkp5d+HSFxoWN4fOVCb/edTaGDJG/dwvNLc7aVrZ2zhizsp
- hCnmFy3mIa0BewOcyVl47LDGbJNy/V1vh5DCYthZsKDaux9HtAMnTbhwyeqG62aB4K
- ElCChJsFnDG3KZAdTjgxEpOeRJAHM203oeszQtKTWFPIYmjeAIcGytMEXRDb/v1cGd
- epB4LvbJumyBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=R2KdL4SfW3ZID17DpBb/KFezHH4AkFMDfA38lC0a24byp3djuj2nNM1ZejNNXoNun
+ Bh6BjiQmA/g3hxCIUXi66PO4QVoiyDxBaI58yzS8D8Y3wAHtNf/OHtA+I93r1DZ9Cf
+ 3hKNasv1YFApzI5J7BsitJldTJk3Y4WJQcEl1aWTmGe8wI9cltXatMWWwylQD4VHIy
+ 2fNTnn5WrwwNVxcqV7fNyPK0sYD8TX0yV7wc/qsCHkuoJIOFiN7UQss8KvAyY0totk
+ fn0rRdSill+FzBYvQpHth1Vq4jRlDkios0M8s+xTNxkyEVpSfkQEkEDN0GqS4mgIh9
+ 67QAaQM/fL8lA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Sz3zfrh+
-Subject: [Buildroot] [PATCH 24/75] package/python-installer: bump version to
- 1.0.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=R2KdL4Sf
+Subject: [Buildroot] [PATCH 09/75] package/python-cbor2: security bump
+ version to 5.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/pypa/installer/releases/tag/1.0.0
+https://github.com/agronholm/cbor2/blob/5.9.0/docs/versionhistory.rst
+
+Fixes CVE-2026-26209.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-installer/python-installer.hash | 4 ++--
- package/python-installer/python-installer.mk   | 4 ++--
+ package/python-cbor2/python-cbor2.hash | 4 ++--
+ package/python-cbor2/python-cbor2.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-installer/python-installer.hash b/package/python-installer/python-installer.hash
-index 577b23a7ab..dbea06738d 100644
---- a/package/python-installer/python-installer.hash
-+++ b/package/python-installer/python-installer.hash
+diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
+index 2c72626637..b4d3025889 100644
+--- a/package/python-cbor2/python-cbor2.hash
++++ b/package/python-cbor2/python-cbor2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/installer/json
--md5  d961d1105c9270049528b1167ed021bc  installer-0.7.0.tar.gz
--sha256  a26d3e3116289bb08216e0d0f7d925fcef0b0194eedfa0c944bcaaa106c4b631  installer-0.7.0.tar.gz
-+md5  fdf6be7db2ab6fdfbfacfdb208abc33a  installer-1.0.0.tar.gz
-+sha256  c6d691331621cf3fec4822f5c6f83cab3705f79b316225dc454127411677c71f  installer-1.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cbor2/json
+-md5  43d53d2eedc711252f5f66b1e05389a5  cbor2-5.8.0.tar.gz
+-sha256  b19c35fcae9688ac01ef75bad5db27300c2537eb4ee00ed07e05d8456a0d4931  cbor2-5.8.0.tar.gz
++md5  21a7e1096c25ef19a81730e2c0ce05a6  cbor2-5.9.0.tar.gz
++sha256  85c7a46279ac8f226e1059275221e6b3d0e370d2bb6bd0500f9780781615bcea  cbor2-5.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  37b8b9f2569892fa54406383d431169dbb2115980d78b7efba6eeae5664c484f  LICENSE
-diff --git a/package/python-installer/python-installer.mk b/package/python-installer/python-installer.mk
-index 094a918090..22b79ec464 100644
---- a/package/python-installer/python-installer.mk
-+++ b/package/python-installer/python-installer.mk
+ sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+index 6f8bc31996..859ee4a1b5 100644
+--- a/package/python-cbor2/python-cbor2.mk
++++ b/package/python-cbor2/python-cbor2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_INSTALLER_VERSION = 0.7.0
-+PYTHON_INSTALLER_VERSION = 1.0.0
- PYTHON_INSTALLER_SOURCE = installer-$(PYTHON_INSTALLER_VERSION).tar.gz
--PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/05/18/ceeb4e3ab3aa54495775775b38ae42b10a92f42ce42dfa44da684289b8c8
-+PYTHON_INSTALLER_SITE = https://files.pythonhosted.org/packages/5f/ef/230b70e66db6ab01d5cbb93329688ed1f06b2b0618a74925e36384ff0fba
- PYTHON_INSTALLER_LICENSE = MIT
- PYTHON_INSTALLER_LICENSE_FILES = LICENSE
- PYTHON_INSTALLER_SETUP_TYPE = flit-bootstrap
+-PYTHON_CBOR2_VERSION = 5.8.0
++PYTHON_CBOR2_VERSION = 5.9.0
+ PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
+-PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/d9/8e/8b4fdde28e42ffcd741a37f4ffa9fb59cd4fe01625b544dfcfd9ccb54f01
++PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/bd/cb/09939728be094d155b5d4ac262e39877875f5f7e36eea66beb359f647bd0
+ PYTHON_CBOR2_SETUP_TYPE = setuptools
+ PYTHON_CBOR2_LICENSE = MIT
+ PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.3
 
