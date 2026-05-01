@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49EB1CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 268C5CCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:41:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 220EE42674;
-	Fri,  1 May 2026 12:41:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F413C42820;
+	Fri,  1 May 2026 12:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DQMyT8BNZ2P6; Fri,  1 May 2026 12:41:38 +0000 (UTC)
+ id xiF2HcdHpkpG; Fri,  1 May 2026 12:41:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 472A9427FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DB3B42826
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777639298;
-	bh=FNbTbcVq01xewBPnfzt7OS/mmIVl/2bTlTsf8IDzW9I=;
+	s=default; t=1777639310;
+	bh=I3S8kfGIt0aJpN573QqF6jDhvqvRRBAUhPm9sKHVFAU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=V2FiXcUs8zCvkrjm2y6k3MZcRdLUBsQIxyCD7Epx5NPSuL5MWKmVSpY8xLc95ybHf
-	 cohAzmgbx86uwyyb8WCooiFLaZ39QyIclJZ2YPYWiphkcCzMNn8wvDi+HY72bm4IG3
-	 zoUTEslM9M8/s1XyqDbi7D/BrROu6HMtwOtyZyz6V0F+UPGZcR6LHKYkAloDsEtyPW
-	 B7dr9E0C30G5/n/wnJaAMFMTyfx26XuM6RmdkLfUgAERy4TZHUl54Sjjvy2Raa7wc0
-	 wQhIoODnNfI0cHAIl4uecYpOtNCYlL+femcQV/8FOGO3xIk5JODQkBHOLMKLLq4//O
-	 C8ArUi8gt6OzQ==
+	b=Yz42LIRYPIPCIPLYYlecdhoMosMst9EeZmSDxwUlcG34VJ7sApHZFI/AANMOLlqf8
+	 dgC2TUpCB4nfecBlcd3rqOCFI5DYEWK4byj/pKYK+y9M5VmzZsPPN/aj8HvArGDemh
+	 rPnHHG7VYkj+rLjXk9Ik3MWXZVRGK6NRnfHojm7vJ3OjQ3B0vBb6rzLGmVChgh4S5v
+	 4oAQ+tNJZbYyf4fgMmBq8Oo2k1epNIvP7h3tfxH5Ig5Lt6yVYJpwxiefZNEyGh3w5n
+	 xvKKIvW0jqQPIIa/CcSG5W+mIHj3bmpTzBEUdhjm6c84Xye+hNsAmRrjnJjSYZ4ZEm
+	 Hj+C6BQM1JEyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 472A9427FE;
-	Fri,  1 May 2026 12:41:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D8E85127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DB3B42826;
+	Fri,  1 May 2026 12:41:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73546293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D61F66F791
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 650CF403DA
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xwu5t8t_Zq1c for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:41:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aKvyw_GX-HcJ for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:41:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BCEAF6F77C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCEAF6F77C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4FE15401CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FE15401CA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BCEAF6F77C
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4FE15401CA
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:41:48 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EBC4EA4C2F0A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F34A2A4C2F0C;
  Fri,  1 May 2026 14:31:08 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1N-000000008NC-1aG0;
+ (envelope-from <bernd@kuhls.net>) id 1wIn1N-000000008NC-1x4r;
  Fri, 01 May 2026 12:31:05 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:39 +0200
-Message-ID: <20260501123100.1918951-54-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:30:40 +0200
+Message-ID: <20260501123100.1918951-55-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1777638668;
- bh=euSe8A56wJypvTYVxzlFzUth6zdKFkhqjvFtg7CBAMY=;
+ s=kas202511301023; t=1777638669;
+ bh=J6aH+AjSfmIvIY+eYprwjNjZ4beiABxP5zImkjXtJ14=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=vk7aaIAajMP1fKp1YMJ6yDugrh0DU8vHsWyw7j7sYhEFVLQ7oqzhU9QDpEK5xJk+k
- 1XjhUEkq7C6pSg287Pbn6eRQGxZPSNHRWec2ACb8t5/I9VgGx0Qra0NV4xK+isggaE
- rXqwgvWgC6yOR1c+DZhgl9CwsxQDKJLNvkKMWoPbziWhFH0vstROIb4N4Xa6jLKDdF
- aJBw0OPUiZt/AjVU2fLuNNjAjzoJdauH0mNhbIhJIzSgFNIT1/YVyAG8gQYxuqYspd
- nu2fpizVK3FEhJNibP9VQrz/lrmLn4QIhIEaGweH7JU+/n4Z7zFEtbhB9OfADuNtUY
- KLp0AVFKBekhw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=n2BTpi4XX3P9Fej9z3ZXzGrJvnyQVg2I7R1z+l649sAhJDR55x6aCKt1oQ5iOeGbg
+ /OKuW779m0vupy53B8ajSxRUw5GH5w+qIERWeVh375r4hGAeFnlkFLrSI4S2NukLnG
+ W00uJWT96ZvEWdhsvj7u6AyM+xb7zGCaC3izqqzB3ORVH6dSWyTAKhTYliQhJDAnw0
+ UlagHoyUSKtcwl4HZB8nJQiZJIJ+f0TnSZnLtywlmGGu8xn0tF65ZjFH7DUuPohtIe
+ A2boS7W9MIwmnvDsGJuWlkIMlHFxIVx8nJsIavBNsRmbwASf/Tr1QYduPzCKGYWAQu
+ ZcAOhU4l53khA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=vk7aaIAa
-Subject: [Buildroot] [PATCH 54/75] package/python-sentry-sdk: bump version
- to 2.58.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=n2BTpi4X
+Subject: [Buildroot] [PATCH 55/75] package/python-setuptools-rust: bump
+ version to 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/getsentry/sentry-python/blob/2.58.0/CHANGELOG.md
+https://github.com/PyO3/setuptools-rust/blob/v1.12.1/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+ package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 8ec550c4e9..f1d47352c2 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
+index ac254fdf76..4cd068103d 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.hash
++++ b/package/python-setuptools-rust/python-setuptools-rust.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  e8e3d9ea3aa3c7fdc465b33b10505aa3  sentry_sdk-2.54.0.tar.gz
--sha256  2620c2575128d009b11b20f7feb81e4e4e8ae08ec1d36cbc845705060b45cc1b  sentry_sdk-2.54.0.tar.gz
-+md5  05b3bf19415d54f831e52d83e4371ce9  sentry_sdk-2.58.0.tar.gz
-+sha256  c1144d947352d54e5b7daa63596d9f848adf684989c06c4f5a659f0c85a18f6f  sentry_sdk-2.58.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
+-md5  6ecee3d9f3ac646a52d60155022fd0d0  setuptools_rust-1.12.0.tar.gz
+-sha256  d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c  setuptools_rust-1.12.0.tar.gz
++md5  90ce501aabce2a859e19a213985288ea  setuptools_rust-1.12.1.tar.gz
++sha256  85ae70989d96c9cfeb5ef79cf3bac2d5200bc5564f720a06edceedbdf6664640  setuptools_rust-1.12.1.tar.gz
  # Locally computed sha256 checksums
- sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 21795bf449..585a1c2cda 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+ sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
+index 862b1c853a..05951260b2 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.mk
++++ b/package/python-setuptools-rust/python-setuptools-rust.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 2.54.0
-+PYTHON_SENTRY_SDK_VERSION = 2.58.0
- PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/c8/e9/2e3a46c304e7fa21eaa70612f60354e32699c7102eb961f67448e222ad7c
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/26/b3/fb8291170d0e844173164709fc0fa0c221ed75a5da740c8746f2a83b4eb1
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = MIT
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-PYTHON_SETUPTOOLS_RUST_VERSION = 1.12.0
++PYTHON_SETUPTOOLS_RUST_VERSION = 1.12.1
+ PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools_rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/bc/c4/8d3d282cee60d3ea0369fa15ce27387810040360adb4133e31990a7a2aba
++PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/0c/11/736cfe4ec795dbce001ebdcef5cab03de1727041c805c3a45c1bda9f54a1
+ PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
+ PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
+ PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
