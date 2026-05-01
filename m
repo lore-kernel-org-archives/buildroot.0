@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44105CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4282BCCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 121CC42322;
-	Fri,  1 May 2026 12:33:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1436585065;
+	Fri,  1 May 2026 12:33:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cYxFCMWpV4OZ; Fri,  1 May 2026 12:33:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id amcJ1RsQ-cwZ; Fri,  1 May 2026 12:33:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C04241FAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 369768561D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777638790;
-	bh=Y5O7Ax6obHgF9/GErkW/8ejuRNqK+m4cFS4FI8ebTGE=;
+	s=default; t=1777638803;
+	bh=gt0YLmgWzBsR6DRVPgTjR1z1f99k+JadCzv9+su+iWE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=lJj2Qwz9Bh3Tw1r7vgGyD4Wj82bBLd7QGXq5Mqywg4FKQBxfPxGeNMBRKBhRt1yP3
-	 l782+WcA7zgaWKQ9abEmuQUK0DGVRO8q3mrW0FHtxVRcgp+I3OKoYmP0BFWJJB+y/H
-	 pQfe5BfBZKWYBMxHcUE4Smp+sYIWimOJmK2dwHI4W+lyYrqXr8CvJoq7PBEhjx/Rl+
-	 i5ra+FxnwsleQEjmSzyU/dmNL3XdveiaRbYdscshy/VlnS/WQw6EIGr3TN3sJBrpYo
-	 dGZORxcfN55urWy6yD7PN9Ed5eKRk1KFM3LjlEIb0eY8On2LQqMCijx4ebV/oaulJ9
-	 2CrSKYVrWoVow==
+	b=UHf7dHJvvkdOhB9LGJE/SVL/5J9sXo05kUQS6wqsNbnfmATQX/7olqL54UusosVw7
+	 AP7wliKzxiz/zXtKiabRFwIuRUGdrV0OBMtTXI70TrwoZFqhLnaLTwl16P+QxqJg11
+	 7l9uDj5K6s9dN8ZzhiyvEybZjETe/pOMolH9nkse7RwnQ1I0qak9jooSfqJvApUL4B
+	 9qgo5iBkVvuEdNvM0M2NB7g6Xyl2IG90xoU08CptFFCKxwxJsZetYoFPBHNtZtk7Se
+	 fkZCpG0tl3fRi+oqPJf1PBAHiPPM5y8gVO+vjanJapaNgX7BOcXfTKf5HrSuxxtz98
+	 4g/US7QoletLQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C04241FAF;
-	Fri,  1 May 2026 12:33:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E915E127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 369768561D;
+	Fri,  1 May 2026 12:33:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5F21127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DABD86F4D4
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB4826F4D4
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e4cGha95Q0Na for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:33:08 +0000 (UTC)
+ id ItOmxj8Cbmph for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:33:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B5A666F4C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5A666F4C4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F9356F4C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9356F4C4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B5A666F4C4
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8F9356F4C4
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 50160A4C2E8E;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F622A4C2E8F;
  Fri,  1 May 2026 14:31:03 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1L-000000008NC-1HCc;
- Fri, 01 May 2026 12:31:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIn1J-000000008NC-0A30;
+ Fri, 01 May 2026 12:31:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:15 +0200
-Message-ID: <20260501123100.1918951-30-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:29:49 +0200
+Message-ID: <20260501123100.1918951-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638663;
- bh=n7VY7lVB3lBBAzDy2yc6eoiJx4hf09svTTps5ZQKo0E=;
+ bh=KlXzL3ynF7wm7dZMrEG0S2sadHG1y1e4oqphujgyPK4=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=Djfj8IXQH/y0n460b9onoNkjs+mMLlwR09TpW1Zifc6TQBu3WCXbdc8vO72URwzxd
- BVYIm6wYw/ytXKrz+G7mYMono0dbTB0XtKTbM0JITXB3AQicGnnosTne/8Z9BCele3
- 3rgvINQ1FGmKs8P4iJHvbOP8QDA7dCAv0gW9sX8CmEF8IvFLdQv8k9sVYwNSrWd8wT
- mZZWYoQ3aGsxe1QveG09Ce93+zn+ISWchZ/ObItzzOUhdS7e7PFc0JY+SNyV+Y7WLd
- NwrM7yVw7CcCXLDDVWQIqR14Pkf/sqdKa+6B/IU/oQJpYYuLqld8/D9MLqV7Io9Z5F
- AcTA1qL8JqsVA==
+ b=rdx17NXI3OY0AzZgW+qsDys8I4zoQTW+R0SEJoe2qaaO6MX8pt7kU39p+jVIFEAa1
+ LWexZ1QOeQrnrKKE7pVdOwCwEqJ0ix7TVX7IWqxM6hNBEXqNZpkHcKg1+dAr21iH1G
+ 3V56PQfiPI/HaNJ98Iq7IwSR84jU4RhJCaoaxL/UGnwuX5cDxX9WhX29ZAhO79PViI
+ Vf7/R6IwFkAgobVEC1KYVX9MCnPNg1YueMIfKTsuUtH/7zr1IsvDOZ2+0Cq9dujaVB
+ yq2GgeRpzs8gEHopZ83gu+ITUTcF3ehAnn/y6vAXMJ+L65sLFPlh5uPdsrDDkX5pJO
+ NDZFpnVWq9tlw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=Djfj8IXQ
-Subject: [Buildroot] [PATCH 30/75] package/python-matplotlib: security bump
- version to 3.10.9
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=rdx17NXI
+Subject: [Buildroot] [PATCH 04/75] package/python-attrs: bump version to
+ 26.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/matplotlib/matplotlib/releases/tag/v3.10.9
+https://www.attrs.org/en/stable/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-matplotlib/python-matplotlib.hash | 4 ++--
- package/python-matplotlib/python-matplotlib.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-matplotlib/python-matplotlib.hash b/package/python-matplotlib/python-matplotlib.hash
-index f6b8c444bf..aadddc7d99 100644
---- a/package/python-matplotlib/python-matplotlib.hash
-+++ b/package/python-matplotlib/python-matplotlib.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index bf2aae1ed8..06cb8d6dfa 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/matplotlib/json
--md5  bb3330a3bdcce6cf2e57b13795f3a005  matplotlib-3.10.8.tar.gz
--sha256  2299372c19d56bcd35cf05a2738308758d32b9eaed2371898d8f5bd33f084aa3  matplotlib-3.10.8.tar.gz
-+md5  6bec2e78642cbd44c012718835ab024e  matplotlib-3.10.9.tar.gz
-+sha256  fd66508e8c6877d98e586654b608a0456db8d7e8a546eb1e2600efd957302358  matplotlib-3.10.9.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  6197561dfec99660529830edcfeee0ba  attrs-25.4.0.tar.gz
+-sha256  16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11  attrs-25.4.0.tar.gz
++md5  633953d1aa39cfa76c733a20fdd9c196  attrs-26.1.0.tar.gz
++sha256  d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32  attrs-26.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  5a1a81ea301728c8bba2933da832c0cd62229daf20893a024ab3d53244468dbc  LICENSE/LICENSE
-diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
-index 6dcf8d0fa1..067bd68685 100644
---- a/package/python-matplotlib/python-matplotlib.mk
-+++ b/package/python-matplotlib/python-matplotlib.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index fd900c5046..7456002536 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATPLOTLIB_VERSION = 3.10.8
-+PYTHON_MATPLOTLIB_VERSION = 3.10.9
- PYTHON_MATPLOTLIB_SOURCE = matplotlib-$(PYTHON_MATPLOTLIB_VERSION).tar.gz
--PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/8a/76/d3c6e3a13fe484ebe7718d14e269c9569c4eb0020a968a327acb3b9a8fe6
-+PYTHON_MATPLOTLIB_SITE = https://files.pythonhosted.org/packages/63/1b/4be5be87d43d327a0cf4de1a56e86f7f84c89312452406cf122efe2839e6
- PYTHON_MATPLOTLIB_LICENSE = Python-2.0
- PYTHON_MATPLOTLIB_LICENSE_FILES = LICENSE/LICENSE
- PYTHON_MATPLOTLIB_DEPENDENCIES = \
+-PYTHON_ATTRS_VERSION = 25.4.0
++PYTHON_ATTRS_VERSION = 26.1.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/6b/5c/685e6633917e101e5dcb62b9dd76946cbb57c26e133bae9e0cd36033c0a9
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
