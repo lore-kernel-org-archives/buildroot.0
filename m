@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05A2CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 15:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF3A2CCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 15:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 617BC42667;
-	Fri,  1 May 2026 15:29:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 993F142609;
+	Fri,  1 May 2026 15:29:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6pzLdXM1zf1K; Fri,  1 May 2026 15:29:06 +0000 (UTC)
+ id jYch0FG_DDpa; Fri,  1 May 2026 15:29:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1F4242609
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF5FE4261B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777649346;
-	bh=NuJXSAVBZeVrH+9xQgBQbEZ6dfL+tRptOrP7iBvIDfI=;
+	s=default; t=1777649358;
+	bh=zmUEvzaOangNuhNfvqipEMpxYtit92DBrkMnJ3JEEg8=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ISsieUvzaFWInjUjzSk6A16gGPs3Pk2caErZU2r0vB47KA5it3asBWYzw4L2cl693
-	 oiGNYhayXgXN5jYpSO2X7XUm5SbZAQwRqEQQOo+I1M7M/BYXMsqP5Lim8uA0TZttki
-	 gwuirlBW7p/jnMqbTPKcbVQS+baBoehT0gFZFaY3xbgXd4OXGVUB4jmQfFDld+IvZs
-	 CoUE9aBzEuBSSTr/GSIErEoyowMeWL4Yt6md3CwuQ1Y874BdpLays/0Ct01AbMpZz8
-	 87yoHo48nvCJVeegYUMj4Q0GHAz6VChirupfwx37FmWIwvLMt36hqC8sL0JU6uEtpq
-	 sOgt9GSU6KzgA==
+	b=cMJeDKFoptyankibVxQ0buHrZmzxZRGoy7ShcisvXdv4M4o5+jLh86ec1D1rJkOl8
+	 4HfXd5b+BmrrfjnAna4PxpLbAF2kT0PVTZc9xHvGV6JrGXLemGWXAyNTAVugz/1r3j
+	 zveQ1fgIWDRpo96ApKoVQxU+kvWV/GVY1FWNwtb4SlplVWtZ4S92N1tvCKpTCkq/tf
+	 PI9PpGOQHfxTbYYFhWiFAUj02Jrnf1M95z+nmYltbRGyuPw0rzaqOZ7Y1tjBBeWiJY
+	 F5h+/WjUD9QDyYVGakcTALquOKsfVwvraTImtqG/XGMYYf8W8y9vZJva7AnoQI4KnK
+	 cnQ7dkeHUuAiA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1F4242609;
-	Fri,  1 May 2026 15:29:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F473293
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF5FE4261B;
+	Fri,  1 May 2026 15:29:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71255127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D8666F733
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 635708567A
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I0OTFY1RMtD1 for <buildroot@buildroot.org>;
- Fri,  1 May 2026 15:29:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kj2VGDUNXOCy for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 15:29:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 362B26F734
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 362B26F734
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4AEC985677
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AEC985677
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 362B26F734
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AEC985677
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:29:16 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 52CEFA4C023D;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 53188A4C023E;
  Fri,  1 May 2026 17:28:02 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:42324)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIpmc-00000000172-1jD4;
- Fri, 01 May 2026 15:28:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIpmY-00000000172-3IHX;
+ Fri, 01 May 2026 15:27:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 17:27:56 +0200
-Message-ID: <20260501152758.2610763-21-bernd@kuhls.net>
+Date: Fri,  1 May 2026 17:27:37 +0200
+Message-ID: <20260501152758.2610763-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501152758.2610763-1-bernd@kuhls.net>
 References: <20260501152758.2610763-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777649282;
- bh=TS2mbBHhWJrOEZ+mhqPXVc2jz3gLcRk8/bNhVCWqmEc=;
+ bh=Z3EOEN1AUuHk2UgqJfvfZaH+LoS7aAQcHMQjGgbaMXY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=lggt5Q15kJyXZVS2fz3UWaEvEhG0OpafCyPE3exRPsyju/CrhsIOY1WRJK2oQWONj
- B+Cwq6PDJHdQ9mCzPXp5o7B+X7l2oOgm7fS7spxik9AP1lZTK4zjznqN9iTLGglmcx
- 27y6TaAI8lbV/604wGKLsueEPTlaVaiEiXMvxTJrQvxKqZtYaAUzjxnQw5YbZ/ScQk
- WbJXFwoxn161SwOIpdBO6nGH4pkrIGnSBYY7GNsOu0kMkn3sihCoxsy8VXuMIRCoFo
- JqUDwkRm/iSITWoebBv05jhMWxor/TZ0iMRnnBJgldcog0D36OaYkbhbmY38tXWJLd
- ukZehaIvbR/fg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Hu2Aqn0vKBIiS8wjLMRd18JkgTR38o6hDeM6vmtSRqHUCgB4AFENZlhy2SeCkgWy2
+ LOG82rBh10ZKrcz/xGxXJLuwvg9OvTAj4Nf9GC6HaY/oKTTunzSGUYzL+BIhiXvU+j
+ h3O0g20WVBTW1OJya0nY47XlLp3a9YiQL+m5mysv4tYAeuGTZRGsk86jkEq6qg4gY0
+ s67a0nunYGi9/vpmGUVILNI3jzsUd7gXBu6VVfm45BEZvXySpl7gdrqu5FFxQE3QWW
+ 9PDNBrQXx61YnHaUO1duHxxiF1tB+YcuaWbWtvQZQ2gW9M9NbFIvZcyQQpqI1mttUt
+ zyImTfX6OBjSw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=lggt5Q15
-Subject: [Buildroot] [PATCH v4 20/21]
- support/config-fragments/autobuild/br-arm-internal-glibc: update to
- bleeding edge components
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Hu2Aqn0v
+Subject: [Buildroot] [PATCH v4 01/21] package/autoconf: bump version to 2.73
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,35 +106,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As Thomas stated in 3bb260cf3860:
+https://lists.gnu.org/archive/html/autoconf/2026-03/msg00060.html
 
-The br-arm-internal-glibc.config is generally used as a configuration
-to test the bleeding edge versions of components. However, it has been
-lagging behind somewhat, so let's bring it up-to-date:
+Rebased patch due to upstream commit
+https://cgit.git.savannah.gnu.org/cgit/autoconf.git/commit/build-aux/git-version-gen?id=2f1f41b8d3cf38101c6dce30e6319402f8c44b83
 
-  - Binutils 2.46.x
-  - GCC 16.x
+Added Upstream: tag to patch.
 
-Let the fun begin in the autobuilders!
+Added sha256 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../config-fragments/autobuild/br-arm-internal-glibc.config   | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                  |  1 -
+ .../autoconf/0001-dont-add-dirty-to-version.patch    | 12 ++++++++----
+ package/autoconf/autoconf.hash                       |  5 +++--
+ package/autoconf/autoconf.mk                         |  2 +-
+ 4 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-index 4986d40912..ceb311f3f0 100644
---- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
-+++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
--BR2_BINUTILS_VERSION_2_42_X=y
--BR2_GCC_VERSION_13_X=y
-+BR2_BINUTILS_VERSION_2_46_X=y
-+BR2_GCC_VERSION_16_X=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b2d5320045..6147aae299 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -192,7 +192,6 @@ package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch lib_p
+ package/at/S99at lib_sysv.Indent lib_sysv.Variables
+ package/attr/0001-build-with-older-GCCs.patch lib_patch.Upstream
+ package/aumix/0001-fix-incorrect-makefile-am.patch lib_patch.Upstream
+-package/autoconf/0001-dont-add-dirty-to-version.patch lib_patch.Upstream
+ package/automake/0001-noman.patch lib_patch.Upstream
+ package/avahi/S05avahi-setup.sh lib_sysv.Indent lib_sysv.Variables
+ package/avahi/S50avahi-daemon lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/autoconf/0001-dont-add-dirty-to-version.patch b/package/autoconf/0001-dont-add-dirty-to-version.patch
+index a1a50d2838..4ce3616d9d 100644
+--- a/package/autoconf/0001-dont-add-dirty-to-version.patch
++++ b/package/autoconf/0001-dont-add-dirty-to-version.patch
+@@ -10,19 +10,23 @@ commonly done in buildroot).
+ The affect is that autoconf gets built as being version 2.65-dirty, which
+ breaks programs (like Python) which explicitly checks for autoconf-2.65.
+ 
++Upstream: Not applicable (Buildroot specific)
++
+ [Gustavo: update for autoconf 2.69]
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Bernd: rebased for version 2.73]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ 
+ diff -Nura autoconf-2.69.orig/build-aux/git-version-gen autoconf-2.69/build-aux/git-version-gen
+ --- autoconf-2.69.orig/build-aux/git-version-gen	2013-06-27 11:31:02.340200154 -0300
+ +++ autoconf-2.69/build-aux/git-version-gen	2013-06-27 11:31:13.734577033 -0300
+-@@ -210,7 +210,7 @@
++@@ -234,7 +234,7 @@
+        *) # Append the suffix only if there isn't one already.
+            case $v in
+-             *-dirty) ;;
+--            *) v="$v-dirty" ;;
+-+            #*) v="$v-dirty" ;;
++             *-dirty | *-modified) ;;
++-            *) v="$v-modified" ;;
+++            #*) v="$v-modified" ;;
+            esac ;;
+    esac
+  fi
+diff --git a/package/autoconf/autoconf.hash b/package/autoconf/autoconf.hash
+index f94b2d9de5..96f36ec3bd 100644
+--- a/package/autoconf/autoconf.hash
++++ b/package/autoconf/autoconf.hash
+@@ -1,4 +1,5 @@
+-# Locally calculated after checking pgp signature
+-sha256  ba885c1319578d6c94d46e9b0dceb4014caafe2490e437a0dbca3f270a223f5a  autoconf-2.72.tar.xz
++# From https://lists.gnu.org/archive/html/autoconf/2026-03/msg00060.html
++sha256  9fd672b1c8425fac2fa67fa0477b990987268b90ff36d5f016dae57be0d6b52e  autoconf-2.73.tar.xz
++# Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYINGv3
+ sha256  1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350  COPYING.EXCEPTION
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 48bfc80e7f..6f29bba146 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_VERSION = 2.72
++AUTOCONF_VERSION = 2.73
+ AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.xz
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ 
 -- 
 2.47.3
 
