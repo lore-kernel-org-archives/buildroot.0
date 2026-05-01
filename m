@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4282BCCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31773CD3424
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1436585065;
-	Fri,  1 May 2026 12:33:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amcJ1RsQ-cwZ; Fri,  1 May 2026 12:33:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 369768561D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777638803;
-	bh=gt0YLmgWzBsR6DRVPgTjR1z1f99k+JadCzv9+su+iWE=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=UHf7dHJvvkdOhB9LGJE/SVL/5J9sXo05kUQS6wqsNbnfmATQX/7olqL54UusosVw7
-	 AP7wliKzxiz/zXtKiabRFwIuRUGdrV0OBMtTXI70TrwoZFqhLnaLTwl16P+QxqJg11
-	 7l9uDj5K6s9dN8ZzhiyvEybZjETe/pOMolH9nkse7RwnQ1I0qak9jooSfqJvApUL4B
-	 9qgo5iBkVvuEdNvM0M2NB7g6Xyl2IG90xoU08CptFFCKxwxJsZetYoFPBHNtZtk7Se
-	 fkZCpG0tl3fRi+oqPJf1PBAHiPPM5y8gVO+vjanJapaNgX7BOcXfTKf5HrSuxxtz98
-	 4g/US7QoletLQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 369768561D;
-	Fri,  1 May 2026 12:33:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C5F21127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB4826F4D4
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E191D6F6CD;
+	Fri,  1 May 2026 12:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ItOmxj8Cbmph for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:33:20 +0000 (UTC)
+ id j5Q3veaokMUW; Fri,  1 May 2026 12:33:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5585E6F4C4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777638815;
+	bh=S5X09ZO3VBW82CDm0VR4usQhnrwOSBoQMYFCtzK8Z+A=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=fEDYHx+dUFq8zXvs3k9xkw/KrbfKtmHLdO7/gu7ixr7RFbQNHlT04m9+uHyTmidyC
+	 /wuMEI1AuA0iSPHtVKKBUpmfokr3QAHo/rJzm7jc5KT4E5ku3ndd9mUbTapfAXqC4Q
+	 0hZTvm1VP9wb7czKUpwHHBP3vosmuxWWMDe7KvhBBfVzfmXkGS7YWmozvWu895MA2N
+	 /17yDcrK+ohpsD4ku7hoaPNzgQYr82+IhdMGuaTwtMNBKJpBVXMCb7EKhlVYRVAUXN
+	 5cgUzuQ+1MnjKdQ2x0HTy/aJWRlCSwUU3yg69tahNB8mnm+7CPnLDto77lUgOuWU0T
+	 hlBSNJZGX03Hg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5585E6F4C4;
+	Fri,  1 May 2026 12:33:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C829293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8A8EB85632
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L8tUsjo7VPD9 for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:33:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F9356F4C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9356F4C4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7F98C85626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F98C85626
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F9356F4C4
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7F98C85626
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:33:32 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F622A4C2E8F;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C850A4C2E91;
  Fri,  1 May 2026 14:31:03 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1J-000000008NC-0A30;
- Fri, 01 May 2026 12:31:00 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIn1J-000000008NC-3PEL;
+ Fri, 01 May 2026 12:31:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:29:49 +0200
-Message-ID: <20260501123100.1918951-4-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:29:58 +0200
+Message-ID: <20260501123100.1918951-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638663;
- bh=KlXzL3ynF7wm7dZMrEG0S2sadHG1y1e4oqphujgyPK4=;
+ bh=Xg+uuUraaPNwBQ/S5gzHGFHNsPchel4kdnME4viF+BE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rdx17NXI3OY0AzZgW+qsDys8I4zoQTW+R0SEJoe2qaaO6MX8pt7kU39p+jVIFEAa1
- LWexZ1QOeQrnrKKE7pVdOwCwEqJ0ix7TVX7IWqxM6hNBEXqNZpkHcKg1+dAr21iH1G
- 3V56PQfiPI/HaNJ98Iq7IwSR84jU4RhJCaoaxL/UGnwuX5cDxX9WhX29ZAhO79PViI
- Vf7/R6IwFkAgobVEC1KYVX9MCnPNg1YueMIfKTsuUtH/7zr1IsvDOZ2+0Cq9dujaVB
- yq2GgeRpzs8gEHopZ83gu+ITUTcF3ehAnn/y6vAXMJ+L65sLFPlh5uPdsrDDkX5pJO
- NDZFpnVWq9tlw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=tKuFcBQCTm/CXX4nIbXggHMAJagmHYHXZ2TyLtRiZy3bA8qbpDPcIweyWNv7NdANq
+ 8Kp8wvQ/x9q4b7RdC7KnpKGG+KKpTUWtpQQaRpE9YqXtePdv+Pp3sZNdBRZvUZ4IBj
+ 3bMcubmPRbLURgcSRloAgu8p5rX9tVZGfH2lJvZ4OSRfH51ssazByyovBkIwSyvXT7
+ HpmzuXv1ixlUeB2L4oiIBA73SpJyQNwZ7B/yzzEfSIhkvL4R0aqv3kuNbkDFM+hvjE
+ Gen5itkRcUvP+fSJNAFJGbDAF7lsDAJoke5wbrN95NvwgesgTId4r1BttwksfTdp8R
+ UpRU8SgHFiI/A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=rdx17NXI
-Subject: [Buildroot] [PATCH 04/75] package/python-attrs: bump version to
- 26.1.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=tKuFcBQC
+Subject: [Buildroot] [PATCH 13/75] package/python-dbus-fast: bump version to
+ 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +113,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.attrs.org/en/stable/changelog.html
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.1
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.2
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.3
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.4
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-attrs/python-attrs.hash | 4 ++--
- package/python-attrs/python-attrs.mk   | 4 ++--
+ package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
+ package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index bf2aae1ed8..06cb8d6dfa 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
+diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
+index deaaf4bd79..4709b7ed18 100644
+--- a/package/python-dbus-fast/python-dbus-fast.hash
++++ b/package/python-dbus-fast/python-dbus-fast.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5  6197561dfec99660529830edcfeee0ba  attrs-25.4.0.tar.gz
--sha256  16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11  attrs-25.4.0.tar.gz
-+md5  633953d1aa39cfa76c733a20fdd9c196  attrs-26.1.0.tar.gz
-+sha256  d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32  attrs-26.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
+-md5  02f1448d52a71999626135269f3763f2  dbus_fast-4.0.0.tar.gz
+-sha256  e1d3ee49a4a81524d7caaa2d5a31fc71075a1c977b661df958cee24bef86b8fe  dbus_fast-4.0.0.tar.gz
++md5  af7d1d9f9b169f07fb4f185c6a78d664  dbus_fast-4.0.4.tar.gz
++sha256  43137f0b73a7adbf7d5c0e9eb9d8d34df9e6e0aeafade2166e641c52dfe0a853  dbus_fast-4.0.4.tar.gz
  # Locally computed sha256 checksums
- sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-index fd900c5046..7456002536 100644
---- a/package/python-attrs/python-attrs.mk
-+++ b/package/python-attrs/python-attrs.mk
+ sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
+diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
+index 5addc1031f..895d5fefd5 100644
+--- a/package/python-dbus-fast/python-dbus-fast.mk
++++ b/package/python-dbus-fast/python-dbus-fast.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ATTRS_VERSION = 25.4.0
-+PYTHON_ATTRS_VERSION = 26.1.0
- PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
--PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/6b/5c/685e6633917e101e5dcb62b9dd76946cbb57c26e133bae9e0cd36033c0a9
-+PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985
- PYTHON_ATTRS_SETUP_TYPE = hatch
- PYTHON_ATTRS_LICENSE = MIT
- PYTHON_ATTRS_LICENSE_FILES = LICENSE
+-PYTHON_DBUS_FAST_VERSION = 4.0.0
++PYTHON_DBUS_FAST_VERSION = 4.0.4
+ PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
+-PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/3d/f7/36515d10e85ab6d6193edbabbcae974c25d6fbabb8ead84cfd2b4ee8eaf6
++PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/5f/cd/402b0e524bdf37d8b1d22b1d926c538bf1d2eedf115ea1d401c6c08a7d81
+ PYTHON_DBUS_FAST_SETUP_TYPE = poetry
+ PYTHON_DBUS_FAST_LICENSE = MIT
+ PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
