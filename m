@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5E4ECCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 15:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEB49CD3423
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 15:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9374785648;
-	Fri,  1 May 2026 15:28:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4AE44263A;
+	Fri,  1 May 2026 15:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iiOzQDc7nLYZ; Fri,  1 May 2026 15:28:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ejofa6BXICv6; Fri,  1 May 2026 15:28:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 800C08564A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9622842611
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777649298;
-	bh=uQGbv/dVegw+ZXu7/1tnX9KGnC8lGvNYxTPMmCixXCc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=Wj7zgLxu/SepA1v2dRGm0jROQ4GmzI8R/JiCqL65ESb3OjQ/DRCWvj0cu+K4cNrtT
-	 8tUmLSzLao9UeJEnB+MnS3n5FExKkmeQuxjRiIsdBjHoG/srFB++uALUi+AEEEemFc
-	 ggGgDlLFjKLOTFq7pexF6jH+6L320tpkcdp+/xfuz5/gSjxZ9i94WuvFVKqwxxtwZ5
-	 fk9HNGUKnTRm7277wXon8Ws1olvnW00g4sLrw7wXWVx4YbUXqi9kMR/FiHq5Dh9XFm
-	 djrheuTW4Vvh0m73U7TCWYjUCLDCXwRkHnTOW8VVM4eDVA2mHWgkIuFEtjs/vadTQA
-	 /nxznABVRQWeg==
+	s=default; t=1777649310;
+	bh=i+S+bw+8JipGH06x9BqRP7q/UcRUngQjiLFGQ4jyDAQ=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=ECPw7836x17TbsQGXJ7sRI3n0a4PbJSf2d5Q8/Av27+SgMk2l7XzmVfj5Zlo09OPr
+	 SNaxHGUlNWLu5nJMZJg0MnPYywE40JBbenz4mBJ7i/HoU8Oa2Z3MArkDEvitcAPZ67
+	 IweWdymIpez7steBgxbAVSVsqN3wTscA3mS7GR3hX6xQbCrJ3v/Hkwyj2RGa4+bqZZ
+	 rF3hqFHK/Rmem57uYymoAehuBKKrYbSOOUjNFiYyGy9lRKT6ikCYloStyq75d+/W7m
+	 KTw2wg5AC2pn+Wz+bC2Nc37/nR+zsRjhIl43Su8QqGoL/HjdW7iEBX2L97Bj+OCXUk
+	 fE48tDn2CyGiQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 800C08564A;
-	Fri,  1 May 2026 15:28:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D927293
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9622842611;
+	Fri,  1 May 2026 15:28:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2AB7127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E74DC85648
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94DAE85648
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hMz8hlHVXHmh for <buildroot@buildroot.org>;
- Fri,  1 May 2026 15:28:16 +0000 (UTC)
+ id JML1HRRCO62D for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 15:28:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C650085646
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C650085646
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6350185671
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6350185671
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C650085646
- for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6350185671
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 15:28:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F04F5A4C01B7;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F2840A4C022B;
  Fri,  1 May 2026 17:27:58 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:42324)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIpmY-00000000172-2dLz;
+ (envelope-from <bernd@kuhls.net>) id 1wIpmY-00000000172-3lDF;
  Fri, 01 May 2026 15:27:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 17:27:36 +0200
-Message-ID: <20260501152758.2610763-1-bernd@kuhls.net>
+Date: Fri,  1 May 2026 17:27:38 +0200
+Message-ID: <20260501152758.2610763-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260501152758.2610763-1-bernd@kuhls.net>
+References: <20260501152758.2610763-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777649279;
- bh=cpIhfgA5OTXf9op9LOvJrVBr/rTv821DQDgRVluPAqM=;
- h=From:To:Cc:Subject:Date:From;
- b=ZMhx9k+UighaIOOR/GNhkJlYMYU/WhDSHkoNkCB0awq+6quDr9/bmm68j/4Z292aK
- UtgsZX4aoO7/f9Go13T6F+PTI9KB3cn1dotRvBX50hWeh+Ib1BH+TCPUORL5ON9vux
- 1UScL9T8Z/axAkECqs/UXyibHNxDkbSnx61GGEZFkYslzDu6rUPfKvupqOodfUs9GC
- Dwwo5E7GWNh76liYJpqcg0nGI1EBBcFDVmaHPC33mnrQFUw6iuuZ/euBuXgSlsZjSK
- zZ28/jQJ/LPXh8LRpHMC6q91N7PQ+rVDrRsldLxxxt7/B86TobwTvzEhrAiRvtejxg
- 9fu2ekHJf46TQ==
+ bh=ATLedpUga1RrU6aadpDcGhLzOm6cF33gyvu9nH1oIZI=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=SJ/RYsACJNi/TtE/WBEpLb5wNkglz4ODw8onkpGYtlfIUKmE8vwXVfmkHiQbuRCPH
+ GduLZu0du500XYOeR5gFyARLn+dfnesZbfQrNhZaK/CDy7agSVYfITQYOH6z4eVwi1
+ KXxXXfAbJ7TcFHtLoRN2+UBYuYdoVwCIhzw87Nh+VabNHDSX1TD7wF8FVg8aMNy+wG
+ bLxYAx2NMi4GLeAs+KwsV0V2CyJS0pglEOeuxtwIULG/0HEr4ZOo2pAOwxKtQfcFSj
+ QSiwpQSRPjiPtT3t0N2sA+4WDo03XTgOof2FHpgWXTcKSn6M3GunwfEi1VHaTEatZv
+ JxVDzHhRp4GuA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=ZMhx9k+U
-Subject: [Buildroot] [PATCH v4 00/21] package/gcc: add version 16.1.0
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=SJ/RYsAC
+Subject: [Buildroot] [PATCH v4 02/21] package/autoconf-archive: bump version
+ to 2024.10.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,133 +107,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series adds gcc 16.1.0
+https://cgit.git.savannah.gnu.org/cgit/autoconf-archive.git/log/
 
-Patches 0001 - 0014 add build fixes for gcc 16.
+Computed sha1 tarball hash locally due to upstream not providing
+release notes this time:
+https://lists.gnu.org/archive/html/autoconf-archive-announce/
 
-Regards, Bernd
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/autoconf-archive/autoconf-archive.hash | 5 ++---
+ package/autoconf-archive/autoconf-archive.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-
-v4:
-- fixed typo again (Edgar)
-- rephrased patch 0010 (cups-filters: needs autoreconf...) (Edgar)
-v3:
-- added updated cups-filters series to gcc series
-- added openjdk and rocksdb bumps to series
-v2: fixed typos
-
-
-Angelo Compagnucci (1):
-  package/qpdf: bump to version 12.3.2
-
-Bernd Kuhls (19):
-  package/autoconf: bump version to 2.73
-  package/autoconf-archive: bump version to 2024.10.16
-  package/redis-plus-plus: disable -Werror
-  package/dump1090: disable -Werror
-  package/qt5/qt5webkit: Fix build with gcc 16.x
-  package/grantlee: Fix build with gcc 16.x
-  package/cups-filters: add upstream patch to fix CVE-2025-64524
-  package/cups-filters: fix build against qpdf 12
-  package/cups-filters: needs autoreconf to fix build with gcc 16.x
-  package/openjdk{-bin}: bump versions to latest 17.x and 21.x series
-  package/snappy: enable rtti
-  package/rocksdb: bump version to 11.0.4
-  toolchain/Config.in: add BR2_TOOLCHAIN_GCC_AT_LEAST_16 blind option
-  arch/Config.in: introduce BR2_ARCH_NEEDS_GCC_AT_LEAST_17
-  toolchain/toolchain-external/toolchain-external-custom: add gcc 16
-    version selection
-  package/gcc: add version 16.1.0
-  package/gcc: switch to GCC 15.x as the default
-  support/config-fragments/autobuild/br-arm-internal-glibc: update to
-    bleeding edge components
-  package/gcc: drop support for GCC 13.x
-
-Thomas Devoogdt (1):
-  package/openjdk{-bin}: add OpenJDK25 and configure it as latest
-
- .checkpackageignore                           |   3 +-
- Config.in.legacy                              |   7 +
- DEVELOPERS                                    |   1 +
- arch/Config.in                                |   4 +
- .../autoconf-archive/autoconf-archive.hash    |   5 +-
- package/autoconf-archive/autoconf-archive.mk  |   2 +-
- .../0001-dont-add-dirty-to-version.patch      |  12 +-
- package/autoconf/autoconf.hash                |   5 +-
- package/autoconf/autoconf.mk                  |   2 +-
- ...ix-infinite-loop-caused-by-crafted-f.patch |  83 +++++
- ...ilters-Fixed-building-with-QPDF-11.x.patch |  57 +++
- ...ated-code-to-be-built-with-QPDF-12.x.patch | 165 +++++++++
- package/cups-filters/Config.in                |   6 +-
- package/cups-filters/cups-filters.mk          |   8 +
- package/dump1090/dump1090.mk                  |   5 +
- ...ISC-V-fix-build-issue-with-gcc-4.9.x.patch |  48 ---
- ...emove-crypt-and-crypt_r-interceptors.patch | 146 --------
- ...bsanitizer-Fix-build-with-glibc-2.42.patch |  81 -----
- ...le-split-stack-for-non-thread-builds.patch |   4 +-
- ...-config-microblaze-fix-ira-for-GCC15.patch |  56 +++
- package/gcc/Config.in.host                    |  23 +-
- package/gcc/gcc-initial/gcc-initial.mk        |   2 +-
- package/gcc/gcc.hash                          |   4 +-
- ...-id-in-constructor-of-template-class.patch |  30 ++
- .../{17.0.12_7 => 17.0.18_8}/openjdk-bin.hash |   4 +-
- .../{21.0.4_7 => 21.0.10_7}/openjdk-bin.hash  |   4 +-
- .../openjdk-bin/25.0.2_10/openjdk-bin.hash    |   7 +
- package/openjdk-bin/openjdk-bin.mk            |  12 +-
- ...ARCv2-ISA-processors-support-to-Zero.patch |   0
- ...fix-HEADLESS-compilation-without-X11.patch |   0
- ...ARCv2-ISA-processors-support-to-Zero.patch |   0
- ...fix-HEADLESS-compilation-without-X11.patch |   0
- ...es-drop-the-need-for-X11-in-headless.patch |   0
- ...ARCv2-ISA-processors-support-to-Zero.patch | 109 ++++++
- ...OpenJDK-in-headless-mode-without-req.patch | 144 ++++++++
- ...spot-aarch64-macro-assembler-fix-cmp.patch |  43 +++
- ...ot-share-gc-shenandoah-fix-constexpr.patch |  42 +++
- package/openjdk/Config.in                     |   7 +-
- package/openjdk/openjdk.hash                  |   5 +-
- package/openjdk/openjdk.mk                    |  16 +-
- package/qpdf/Config.in                        |   6 +-
- package/qpdf/qpdf.hash                        |   4 +-
- package/qpdf/qpdf.mk                          |  27 +-
- package/qt5/qt5webkit/0014-gcc16.patch        |  42 +++
- package/redis-plus-plus/redis-plus-plus.mk    |   5 +
- ...ed-parameter-when-Snappy-is-disabled.patch |  24 ++
- ...ls-build_detect_platform-fix-C-tests.patch | 325 ------------------
- package/rocksdb/rocksdb.hash                  |   4 +-
- package/rocksdb/rocksdb.mk                    |  81 ++---
- .../0002-add-option-to-enable-rtti.patch      |  52 +++
- package/snappy/snappy.mk                      |   5 +-
- .../autobuild/br-arm-internal-glibc.config    |   4 +-
- .../package/openjdk-jni-test/JniTest.java     |   2 +-
- toolchain/Config.in                           |   5 +
- .../Config.in.options                         |   5 +
- 55 files changed, 1002 insertions(+), 741 deletions(-)
- create mode 100644 package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
- create mode 100644 package/cups-filters/0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
- create mode 100644 package/cups-filters/0004-Updated-code-to-be-built-with-QPDF-12.x.patch
- delete mode 100644 package/gcc/13.4.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
- delete mode 100644 package/gcc/13.4.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
- delete mode 100644 package/gcc/13.4.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
- rename package/gcc/{13.4.0 => 16.1.0}/0001-disable-split-stack-for-non-thread-builds.patch (91%)
- create mode 100644 package/gcc/16.1.0/0002-gcc-config-microblaze-fix-ira-for-GCC15.patch
- create mode 100644 package/grantlee/0001-Remove-template-id-in-constructor-of-template-class.patch
- rename package/openjdk-bin/{17.0.12_7 => 17.0.18_8}/openjdk-bin.hash (53%)
- rename package/openjdk-bin/{21.0.4_7 => 21.0.10_7}/openjdk-bin.hash (53%)
- create mode 100644 package/openjdk-bin/25.0.2_10/openjdk-bin.hash
- rename package/openjdk/{17.0.12+7 => 17.0.18+8}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
- rename package/openjdk/{17.0.12+7 => 17.0.18+8}/0002-awt-fix-HEADLESS-compilation-without-X11.patch (100%)
- rename package/openjdk/{21.0.4+7 => 21.0.10+7}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
- rename package/openjdk/{21.0.4+7 => 21.0.10+7}/0002-awt-fix-HEADLESS-compilation-without-X11.patch (100%)
- rename package/openjdk/{21.0.4+7 => 21.0.10+7}/0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch (100%)
- create mode 100644 package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
- create mode 100644 package/openjdk/25.0.2+10/0002-8376684-Compile-OpenJDK-in-headless-mode-without-req.patch
- create mode 100644 package/openjdk/25.0.2+10/0003-src-hotspot-aarch64-macro-assembler-fix-cmp.patch
- create mode 100644 package/openjdk/25.0.2+10/0004-src-hotspot-share-gc-shenandoah-fix-constexpr.patch
- create mode 100644 package/qt5/qt5webkit/0014-gcc16.patch
- create mode 100644 package/rocksdb/0001-Fix-unused-parameter-when-Snappy-is-disabled.patch
- delete mode 100644 package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch
- create mode 100644 package/snappy/0002-add-option-to-enable-rtti.patch
-
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index c4658e6f91..0ca19aee1c 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,6 +1,5 @@
+-# From https://lists.gnu.org/archive/html/autoconf-archive-announce/2023-02/msg00000.html
+-sha1  e26d15db0f1ec60e9ea8ff024cf3ee895fa2eabd  autoconf-archive-2023.02.20.tar.xz
+ # Computed locally
+-sha256  71d4048479ae28f1f5794619c3d72df9c01df49b1c628ef85fde37596dc31a33  autoconf-archive-2023.02.20.tar.xz
++sha1  74be8b0ae9b11535dc0dba3f559ac302061e3c7f  autoconf-archive-2024.10.16.tar.xz
++sha256  7bcd5d001916f3a50ed7436f4f700e3d2b1bade3ed803219c592d62502a57363  autoconf-archive-2024.10.16.tar.xz
+ sha256  e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195  COPYING
+ sha256  23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 07ac7e9743..2b01ba2bb9 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_ARCHIVE_VERSION = 2023.02.20
++AUTOCONF_ARCHIVE_VERSION = 2024.10.16
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
 -- 
 2.47.3
 
