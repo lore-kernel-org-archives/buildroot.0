@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D89CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 18:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D3FCCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 18:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D90940799;
-	Fri,  1 May 2026 18:35:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE33283E98;
+	Fri,  1 May 2026 18:35:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vYSVCltr7O8p; Fri,  1 May 2026 18:35:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nTChO5eG4SG0; Fri,  1 May 2026 18:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C73240D32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A4B85826
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777660506;
-	bh=unfYxFkUFLc0ZI10bY3H7lA+RNm2iJabUhF3YWHCxDA=;
+	s=default; t=1777660518;
+	bh=/9o8ZA7Ca1RqhPMfcKAmS+8RsLQLVCpMLK83pjHyhF0=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=M9eW8oyy8GCl+DFhkVPTo2fEsI5WDTNphveiddiHqSehSm/M9Xu6yOSRbk3oEeFPg
-	 pPPU6NSU5HrFT/MdQkuhtbnG6BKeyHzGvm5835iPJtz1kVCXgXRcj8HaoTTTUkV40f
-	 C6hHnSDRZXQskFUw3IUi3tjHhuDSMsOSU8JVJvtZ5eaermK8i/DGDmkgqnbaFRC5bs
-	 wPRNf+g8WuMt27Du2ehCTlb9v7WddWqhgJB0lo1eB85334lqtwy5RCX2/DWD5N/qbl
-	 ru7x7uGo8+VKLzOI59acybk8q9YJnOs9iVFf//6PexdwL/NB4gQZD1GJL0pxyIX+1s
-	 ZDZBYinqE+A5g==
+	b=RiJIkKIgyCQQ3LzUFAaCjLCcKB0nAkY6gA7tAY6/n5Dg1AhFrK2UbJ+gEk32R1/UE
+	 1iOkttrPp/Yrk3kUZvK8oZvcVGlBBHgWcuHpeDEvZOw6G2YQLFri3u/qaz/KNoHyBj
+	 yg3MGIwQEzCI/JjZPUR0ipjHsxpIRGdevmdTFYJslF7Cig9BcJgNsCNwCtQN/pv3TV
+	 l5J3dRTEI5aiqau/RXSuH+02Z+/4zp5jsy4RPRnP9VRy4ywTkkiqHK72i4jr7UyxYR
+	 fT0Dy4fra/toiZu5UB4heaEd+e7MOGT1Jp3JG/J7F1OGUE5ADzvBypCKleAgPyKXC7
+	 Bp1aEkNuRCTyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C73240D32;
-	Fri,  1 May 2026 18:35:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15F51204
- for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6A4B85826;
+	Fri,  1 May 2026 18:35:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8F84293
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0842940D32
- for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2132983E7F
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cK42v7jC5p_p for <buildroot@buildroot.org>;
- Fri,  1 May 2026 18:35:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KBPGKWvWE7SF for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 18:35:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 81C8040D15
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C8040D15
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 031F683E7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031F683E7C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81C8040D15
- for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 031F683E7C
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 18:35:14 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 55C7CA4C0258;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CA6D2A4C022A;
  Fri,  1 May 2026 20:35:01 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55110)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIsgv-000000000Qz-3axX;
+ (envelope-from <bernd@kuhls.net>) id 1wIsgv-000000000Qz-44IC;
  Fri, 01 May 2026 18:34:21 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  1 May 2026 20:34:20 +0200
-Message-ID: <20260501183421.2459291-4-bernd@kuhls.net>
+Date: Fri,  1 May 2026 20:34:21 +0200
+Message-ID: <20260501183421.2459291-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501183421.2459291-1-bernd@kuhls.net>
 References: <20260501183421.2459291-1-bernd@kuhls.net>
@@ -70,21 +70,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777660501;
- bh=Ik2Q5J946ZhNBvzSwol3SqJLAJH8DJc6/3wJhFDTaPQ=;
+ bh=w0k6X3lDs1y8taMfwjzCbhcRSaV9aPChki33hIDgA24=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=SFu0denM57/Oh7kALDOb0Dn7wk0dYDxKi/7ossCvS5pUop2a5wf82yCEzH6dsvKyD
- rNtAfXfmwj/vCeG/uBjnwxI8OmUsiwZlTG/zO4Ixq1bqmn81y2g2MZ3w1rSPdo70fq
- qO2MDugsfBvF1GF+RZn0IWAKPgWSUbcY1XbByKG1mBrLQa6qO2VQiVOKBXmF6SZ9wT
- K2iH2/AlfCVC49YXGSGFlS0XqhCjcS8dXnRVVlNWXg9nBuAiVvty86xoQaqbx9LyTX
- FX8fAeWPbhwp+jZnOwgUG9D8BxlFfDYaCsNFKd0YVyAZehSFxH3R4+tS1icbCW8auO
- FXN1AcXjbZh6A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=FwGKQzR7D0sahR5WvA9fMqo98Fer0gAYnivVcwXKhHZmBTaHI1iwwKPVFr7s5y7me
+ p5z340oTpJzvthPZ5At3kxDMf/lr96S/vjO9QEgXZ3mgZPvJT1yXM1I0/CcXkFTAM5
+ c77+tYZjje9YXHpfOJ5QuzQZ1KHqHa7azqyYPp55ebR38vxsm5oZQNK7ooWtv2qeci
+ RkplgpR3/T2tGf0uUVusV1DNydDESwhdTDu2kXNE+oXQ5d+x+wmH+xFwLU3FyzqGAv
+ QAnqgxKfHCnDm8CqOgAE4ZJReeR6ZZktK8SzvZAYyam/2CioDXTSYNsqLv09BEyJFf
+ T30YR6zG2awRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=SFu0denM
-Subject: [Buildroot] [PATCH 4/5] package/qt6/qt6positioning: new package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=FwGKQzR7
+Subject: [Buildroot] [PATCH 5/5] package/stellarium: allow build with qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,108 +102,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed for GPS support in Stellarium.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- DEVELOPERS                                    |  1 +
- package/qt6/Config.in                         |  1 +
- package/qt6/qt6positioning/Config.in          |  8 +++++
- .../qt6/qt6positioning/qt6positioning.hash    |  7 +++++
- package/qt6/qt6positioning/qt6positioning.mk  | 31 +++++++++++++++++++
- 5 files changed, 48 insertions(+)
- create mode 100644 package/qt6/qt6positioning/Config.in
- create mode 100644 package/qt6/qt6positioning/qt6positioning.hash
- create mode 100644 package/qt6/qt6positioning/qt6positioning.mk
+ package/stellarium/Config.in     | 38 ++++++++++++++++++++------------
+ package/stellarium/stellarium.mk | 28 ++++++++++++++++++-----
+ 2 files changed, 47 insertions(+), 19 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1270365ef0..739fc7c56f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -514,6 +514,7 @@ F:	package/python-pyicu/
- F:	package/python-pylru/
- F:	package/python-requests-oauthlib/
- F:	package/python-slob/
-+F:	package/qt6/qt6positioning/
- F:	package/rrdtool/
- F:	package/rsync/
- F:	package/rtmpdump/
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 10594691cf..d0105db28d 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -52,6 +52,7 @@ source "package/qt6/qt6languageserver/Config.in"
- source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6multimedia/Config.in"
- source "package/qt6/qt6opcua/Config.in"
-+source "package/qt6/qt6positioning/Config.in"
- source "package/qt6/qt6quick3d/Config.in"
- source "package/qt6/qt6quicktimeline/Config.in"
- source "package/qt6/qt6scxml/Config.in"
-diff --git a/package/qt6/qt6positioning/Config.in b/package/qt6/qt6positioning/Config.in
-new file mode 100644
-index 0000000000..a083dcffb3
---- /dev/null
-+++ b/package/qt6/qt6positioning/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_QT6POSITIONING
-+	bool "qt6positioning"
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	help
-+	  This package provides Qt6 Positioning:
+diff --git a/package/stellarium/Config.in b/package/stellarium/Config.in
+index 20f32e747a..e39454c079 100644
+--- a/package/stellarium/Config.in
++++ b/package/stellarium/Config.in
+@@ -1,18 +1,28 @@
+ config BR2_PACKAGE_STELLARIUM
+ 	bool "stellarium"
+-	depends on BR2_PACKAGE_QT5
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT6_GL_SUPPORTS
+ 	depends on BR2_PACKAGE_HAS_LIBGL # does not support OpenGL ES
+-	select BR2_PACKAGE_QT5BASE_CONCURRENT
+-	select BR2_PACKAGE_QT5BASE_GUI
+-	select BR2_PACKAGE_QT5BASE_NETWORK
+-	select BR2_PACKAGE_QT5BASE_OPENGL
+-	select BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+-	select BR2_PACKAGE_QT5BASE_WIDGETS
+-	select BR2_PACKAGE_QT5CHARTS
+-	select BR2_PACKAGE_QT5LOCATION
+-	select BR2_PACKAGE_QT5MULTIMEDIA
+-	select BR2_PACKAGE_QT5SVG
++	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_NETWORK if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_PRINTSUPPORT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5CHARTS if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5LOCATION if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5MULTIMEDIA if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6BASE_CONCURRENT if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_GUI if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_NETWORK if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_PRINTSUPPORT if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_WIDGETS if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6CHARTS if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6MULTIMEDIA if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6POSITIONING if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6SVG if BR2_PACKAGE_QT6
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Stellarium is a free open source planetarium for your
+@@ -21,5 +31,5 @@ config BR2_PACKAGE_STELLARIUM
+ 
+ 	  https://stellarium.org
+ 
+-comment "stellarium needs Qt5 and an OpenGL provider"
+-	depends on !BR2_PACKAGE_QT5 || !BR2_PACKAGE_HAS_LIBGL
++comment "stellarium needs Qt5/6 and an OpenGL provider"
++	depends on (!BR2_PACKAGE_QT5 && !BR2_PACKAGE_QT6) || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 07d4a775db..37f1499ad0 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -23,18 +23,31 @@ endef
+ STELLARIUM_POST_EXTRACT_HOOKS = STELLARIUM_COPY_EXTRA_DOWNLOADS
+ 
+ STELLARIUM_DEPENDENCIES = \
++	zlib
 +
-+	  https://doc.qt.io/qt-6/qtpositioning-index.html
-+	  https://code.qt.io/cgit/qt/qtpositioning.git
-diff --git a/package/qt6/qt6positioning/qt6positioning.hash b/package/qt6/qt6positioning/qt6positioning.hash
-new file mode 100644
-index 0000000000..4e610c7e94
---- /dev/null
-+++ b/package/qt6/qt6positioning/qt6positioning.hash
-@@ -0,0 +1,7 @@
-+# From https://download.qt.io/official_releases/qt/6.9/6.9.1/submodules/qtpositioning-everywhere-src-6.9.1.tar.xz.sha256
-+sha256  7062734b4989248ca3f0e3e4aebb9aa2e7ed2d6bf19e779e520c6ef69706ff26  qtpositioning-everywhere-src-6.9.1.tar.xz
-+
-+# Hashes for license files
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-diff --git a/package/qt6/qt6positioning/qt6positioning.mk b/package/qt6/qt6positioning/qt6positioning.mk
-new file mode 100644
-index 0000000000..8ddd047f98
---- /dev/null
-+++ b/package/qt6/qt6positioning/qt6positioning.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# qt6positioning
-+#
-+################################################################################
-+
-+QT6POSITIONING_VERSION = $(QT6_VERSION)
-+QT6POSITIONING_SITE = $(QT6_SITE)
-+QT6POSITIONING_SOURCE = qtpositioning-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6POSITIONING_VERSION).tar.xz
-+QT6POSITIONING_INSTALL_STAGING = YES
-+QT6POSITIONING_SUPPORTS_IN_SOURCE_BUILD = NO
-+QT6POSITIONING_CMAKE_BACKEND = ninja
-+
-+QT6POSITIONING_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
-+
-+QT6POSITIONING_LICENSE_FILES = \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt
-+
-+QT6POSITIONING_DEPENDENCIES = qt6base
-+
-+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE)$(BR2_PACKAGE_QT6DECLARATIVE_QUICK),yy)
-+QT6POSITIONING_DEPENDENCIES += qt6declarative
++ifeq ($(BR2_PACKAGE_QT5),y)
++STELLARIUM_DEPENDENCIES += \
+ 	qt5base \
+ 	qt5charts \
+ 	qt5location \
+ 	qt5multimedia \
+-	qt5svg \
+-	zlib
++	qt5svg
++STELLARIUM_CONF_OPTS = -DENABLE_QT6=OFF
++else
++STELLARIUM_DEPENDENCIES += \
++	qt6base \
++	qt6charts \
++	qt6multimedia \
++	qt6positioning \
++	qt6svg
++STELLARIUM_CONF_OPTS = -DENABLE_QT6=ON
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QT6SERIALPORT),y)
-+QT6POSITIONING_DEPENDENCIES += qt6serialport
+ STELLARIUM_CONF_OPTS = \
+ 	-DENABLE_MEDIA=ON \
+ 	-DENABLE_NLS=OFF \
+ 	-DENABLE_SHOWMYSKY=OFF \
+ 	-DENABLE_QTWEBENGINE=OFF \
+-	-DENABLE_QT6=OFF \
+ 	-DENABLE_XLSX=OFF \
+ 	-DUSE_PLUGIN_TELESCOPECONTROL=OFF \
+ 	-DUSE_SYSTEM_ZLIB=ON
+@@ -46,8 +59,13 @@ else
+ STELLARIUM_CONF_OPTS += -DENABLE_SCRIPTING=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GPSD)$(BR2_PACKAGE_QT5SERIALPORT),yy)
+-STELLARIUM_DEPENDENCIES += gpsd qt5serialport
++ifeq ($(BR2_PACKAGE_GPSD)$(BR2_PACKAGE_QT5SERIALPORT)$(BR2_PACKAGE_QT6SERIALPORT),yy)
++STELLARIUM_DEPENDENCIES += gpsd
++ifeq ($(BR2_PACKAGE_QT5SERIALPORT),y)
++STELLARIUM_DEPENDENCIES += qt5serialport
++else
++STELLARIUM_DEPENDENCIES += qt6serialport
 +endif
-+
-+$(eval $(cmake-package))
+ STELLARIUM_CONF_OPTS += -DENABLE_GPS=ON
+ else
+ STELLARIUM_CONF_OPTS += -DENABLE_GPS=OFF
 -- 
 2.47.3
 
