@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9521ACD3424
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4142DCCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E69C42764;
-	Fri,  1 May 2026 12:44:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A6F76F7B3;
+	Fri,  1 May 2026 12:44:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0DmS_cb3xTnj; Fri,  1 May 2026 12:44:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 76qwPZOhAUbj; Fri,  1 May 2026 12:44:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 678684294D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FB4C6F790
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777639444;
-	bh=6zBXEnTbYaq68UR3jc4y1aSRavQPvozhjJW8p7n+mWg=;
+	s=default; t=1777639455;
+	bh=ePmEUnhenhU7M2jkxE0gkrclnuLlSWbGIjMSUgoP+OA=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=C33IvIG9y1o7ZVP0Gn+yaWjeVR1dG6KPkcXnP8XFYQ5erJ5pfI7QGBlEq8Y67ce2r
-	 b3DXD9Kxh5A/Ocaax2B2Kxt6HfRLN57iiK4oe9P/9x77H1732SBHW0IfRXydB/DZn2
-	 leGGCSZgdHD4iS6I3g1jTRHuphuHybwb5qJrpzn+Z4E4++76QkIr8CxZuMqhM6Zk3r
-	 xKwqJdZYb2329oXraIal7r8D52FBwjupbAgtdRvOQrK9WyWaaOZHq4bG5sZKtkkUr+
-	 Bb4r9u3ybGC9KJApGDa/p2zFAaavsmrnnAg4Xka7FntyTuXWcPuYnPNi7JQ8YhzKxi
-	 01/sX5EHfN7Fg==
+	b=XZk+JTTaTY7zPQvEyWmk1bP+KZ5osg7zIg9ocAPQn/4dYhNJWhVbOR5uP36b1pabD
+	 eLdiWqmtO1rMUmnWSL7aSISTnTZPALP3CNn1E+tPZ4F+EMCMPPdBiRYhFjmOMl8KG+
+	 CgtqYv+IHgVNArFF9LCtrxqAnisMtKwJsaEnFseKx22m7PnbLeA2mgVOMNzKnThDCG
+	 yMEHQjeEHtn/BDz18XJLuFZunzgyDN+dldG9wgy5XMubWge7FVATlzbuAK4XXlReVC
+	 FBD6cci3c3elB53Z1tyOA2BU2bd5bid6NiGiCgtJFGP7hdNQUoo9RjRg5yv2KohwxC
+	 nOQhFJDIOtrHA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 678684294D;
-	Fri,  1 May 2026 12:44:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 548F6127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FB4C6F790;
+	Fri,  1 May 2026 12:44:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21A78127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AB04403E7
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13CD285546
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ecL-H83ZNl2 for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:44:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uqKY4gk4AXvo for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:44:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A966401CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A966401CA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 045C1855D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 045C1855D8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A966401CA
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 045C1855D8
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:44:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 07637A4C305E;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0B7C0A4C3066;
  Fri,  1 May 2026 14:31:10 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1O-000000008NC-1qAF;
+ (envelope-from <bernd@kuhls.net>) id 1wIn1O-000000008NC-2PoH;
  Fri, 01 May 2026 12:31:06 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:30:51 +0200
-Message-ID: <20260501123100.1918951-66-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:30:52 +0200
+Message-ID: <20260501123100.1918951-67-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638670;
- bh=3w4kfLxTLCBv0cLuyF6jcgqLQ+EQsIC4YoONx09D3lg=;
+ bh=ST42OTPjnK5FJ6sFreqTQgDbVbHhkLG+z4YlPpYmN2g=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=n+5e7yO6Vk2Pm9PyP4KOczAWzASmrAW6fdFEL2NbRtZrSvQuVipKKUiYgWjiN8PHm
- KCGUp3mWjVn/oWvreIkEpgPgZT0TACmSW6goFAhLFm5EE5ztQeGN6sc77/YIXgjoZq
- dk8b6ElFESsSFkaU5uBpPUrFA/HthQLrGKAGPdqz4IBBqt1BIbd+iYXI1Sjn/H2vsV
- 5uP7n+Geo6ISxaveRjYGOuBDdyX5sgRn6Q/SpDfJtth3UrWzselAm3g99x4xhNccvv
- RZ1w2Dq5iZcTalTaqpkb7w74QzF/TOYdmGhZYDkhxbLF57kp1sw2JlJ0Mnwri6nGA+
- KlFiuyxEGaipA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=WHdWnQMeryCkO6NolYQMYimgeURKe816MfkaQKzleWxv6wPI5yIxPwslsaHh+TF6e
+ 01BtOR2LaeptUhr6RfYUl46pYBkuJ7Pr9KXcBDiXOkaYOW2IP6Ccia26mQoSeL6qOy
+ du+mI6PTH5O9o/L0tK0APg2xp/EB51i9t1XC+ZwTec1VjpSgd/i3Jod+HmyZ2WX029
+ zUboin7/52FeNrFqzqKp8RMIRn2NBjBKMbwMorzsw9xW7eHBT9M7EdcbmQ7UjpxI/a
+ By4ZsDdWtulue+MkIMCtfWMP6kDV2l08KedS5DKaUVYUyccHOR+v3f/adjawSj19+M
+ 66zoXc9wYzDJA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=n+5e7yO6
-Subject: [Buildroot] [PATCH 66/75] package/python-unittest-xml-reporting:
- bump version to 4.0.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=WHdWnQMe
+Subject: [Buildroot] [PATCH 67/75] package/python-urwid: bump version to
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,96 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/4.0.0
-
-Added dependency to host-python-setuptools-scm and removed patch which
-is not needed anymore due to the removal of setup.py in upstream commit
-https://github.com/xmlrunner/unittest-xml-reporting/commit/63519096e5fec64b888831bce60dbdb02a66a910
+https://github.com/urwid/urwid/releases/tag/4.0.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...ta_files-installs-LICENSE-to-incorre.patch | 40 -------------------
- .../python-unittest-xml-reporting.hash        |  4 +-
- .../python-unittest-xml-reporting.mk          |  7 ++--
- 3 files changed, 6 insertions(+), 45 deletions(-)
- delete mode 100644 package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
+ package/python-urwid/python-urwid.hash | 4 ++--
+ package/python-urwid/python-urwid.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch b/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-deleted file mode 100644
-index 4bc005f448..0000000000
---- a/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 662cd67695c31126d72035a818b0f5f1da5a31ca Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sat, 17 Aug 2024 12:24:28 +0200
--Subject: [PATCH] setup.py: drop data_files, installs LICENSE to incorrect
-- place
--
--As reported in issue
--https://github.com/xmlrunner/unittest-xml-reporting/issues/284, the
--data_files statement in the setup() calls installs the LICENSE file in
--the wrong place: in /usr/LICENSE, or even /LICENSE depending on the
--configuration.
--
--So let's drop this, and let setuptools install the LICENSE file
--automatically: since setuptools v56, the license_files attribute is
--automatically assigned to a default value, which includes "LICENSE",
--so there is in fact nothing to do to the get the LICENSE file
--installed at the correct location. See
--https://setuptools.pypa.io/en/latest/history.html#v56-0-0.
--
--Upstream: https://github.com/xmlrunner/unittest-xml-reporting/pull/287
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- setup.py | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/setup.py b/setup.py
--index c524ed4..afa5925 100755
----- a/setup.py
--+++ b/setup.py
--@@ -27,7 +27,6 @@ setup(
--     description = 'unittest-based test runner with Ant/JUnit like XML reporting.',
--     long_description = long_description,
--     long_description_content_type = 'text/markdown',
---    data_files = [('', ['LICENSE'])],
--     install_requires = ['lxml'],
--     license = 'BSD',
--     platforms = ['Any'],
---- 
--2.46.0
--
-diff --git a/package/python-unittest-xml-reporting/python-unittest-xml-reporting.hash b/package/python-unittest-xml-reporting/python-unittest-xml-reporting.hash
-index 674a533e6a..753c5ef0cb 100644
---- a/package/python-unittest-xml-reporting/python-unittest-xml-reporting.hash
-+++ b/package/python-unittest-xml-reporting/python-unittest-xml-reporting.hash
+diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
+index 56ea763deb..ec81bb59e3 100644
+--- a/package/python-urwid/python-urwid.hash
++++ b/package/python-urwid/python-urwid.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/unittest-xml-reporting/json
--md5  f12aeab63ff44e295526e103313d66c8  unittest-xml-reporting-3.2.0.tar.gz
--sha256  edd8d3170b40c3a81b8cf910f46c6a304ae2847ec01036d02e9c0f9b85762d28  unittest-xml-reporting-3.2.0.tar.gz
-+md5  fe1f9cceab8940e22d8d2bc968098597  unittest_xml_reporting-4.0.0.tar.gz
-+sha256  bfa1ed65e9e6f33c161d04470d89050458cfb65a5a5d0358834ef7ce037d9136  unittest_xml_reporting-4.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/urwid/json
+-md5  ee84dfeeac19cb4b09a9d90b64029c20  urwid-3.0.5.tar.gz
+-sha256  24be27ffafdb68c09cd95dc21b60ccfd02843320b25ce5feee1708b34fad5a23  urwid-3.0.5.tar.gz
++md5  d9dca1925cd4f8324cbb4817c22ef85f  urwid-4.0.0.tar.gz
++sha256  58ddc5c65eb3109b69e2e95469553f9f86070645cc1b553d6ee3fe8dbac2e0ba  urwid-4.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  0596648105bee470f9cafd62753b931efe52392096439d88e2564cf7d7cf0e68  LICENSE
-diff --git a/package/python-unittest-xml-reporting/python-unittest-xml-reporting.mk b/package/python-unittest-xml-reporting/python-unittest-xml-reporting.mk
-index 05bbed79a8..364099f707 100644
---- a/package/python-unittest-xml-reporting/python-unittest-xml-reporting.mk
-+++ b/package/python-unittest-xml-reporting/python-unittest-xml-reporting.mk
-@@ -4,9 +4,10 @@
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
+index 0c29c9ab75..b6622864a6 100644
+--- a/package/python-urwid/python-urwid.mk
++++ b/package/python-urwid/python-urwid.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_UNITTEST_XML_REPORTING_VERSION = 3.2.0
--PYTHON_UNITTEST_XML_REPORTING_SOURCE = unittest-xml-reporting-$(PYTHON_UNITTEST_XML_REPORTING_VERSION).tar.gz
--PYTHON_UNITTEST_XML_REPORTING_SITE = https://files.pythonhosted.org/packages/ed/40/3bf1afc96e93c7322520981ac4593cbb29daa21b48d32746f05ab5563dca
-+PYTHON_UNITTEST_XML_REPORTING_VERSION = 4.0.0
-+PYTHON_UNITTEST_XML_REPORTING_SOURCE = unittest_xml_reporting-$(PYTHON_UNITTEST_XML_REPORTING_VERSION).tar.gz
-+PYTHON_UNITTEST_XML_REPORTING_SITE = https://files.pythonhosted.org/packages/42/6b/5847d0e6e95d08e056f23b3f8cd95bede2d3ade10a1c1a9d5b50916454e1
-+PYTHON_UNITTEST_XML_REPORTING_DEPENDENCIES = host-python-setuptools-scm
- PYTHON_UNITTEST_XML_REPORTING_SETUP_TYPE = setuptools
- PYTHON_UNITTEST_XML_REPORTING_LICENSE = BSD-2-Clause
- PYTHON_UNITTEST_XML_REPORTING_LICENSE_FILES = LICENSE
+-PYTHON_URWID_VERSION = 3.0.5
++PYTHON_URWID_VERSION = 4.0.0
+ PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
+-PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/b1/59/67cd42db7c549c0c106d2b56d2d2ec1915c459e0a92722029efc5359e871
++PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/1c/09/afbd44c7c57b1124d94ffe6321154798b816bd09c00e0aaabb701583a1c8
+ PYTHON_URWID_LICENSE = LGPL-2.1+
+ PYTHON_URWID_LICENSE_FILES = COPYING
+ PYTHON_URWID_SETUP_TYPE = setuptools
 -- 
 2.47.3
 
