@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39422CCFA13
-	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457EACCFA13
+	for <buildroot@archiver.kernel.org>; Fri,  1 May 2026 12:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A6E442747;
-	Fri,  1 May 2026 12:45:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B91E42A7B;
+	Fri,  1 May 2026 12:46:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8aXbkTtSTPw; Fri,  1 May 2026 12:45:53 +0000 (UTC)
+ id BUQQq7f0lTM6; Fri,  1 May 2026 12:46:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32ED642A32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27C2242A75
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777639553;
-	bh=sZXynTS3+3wvRF+PskyzQUGroctu2w2TluJa+oRhRMQ=;
+	s=default; t=1777639565;
+	bh=68/ewVKLjdAyXwb4h/5n5PlOboptNoAS7a02+N5Aa0c=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=dYhTCDsQL2ItzNNWBF7HDtmaFbu+1xxesZZEMnC8BnHOnUQH3fWgNQxN+sFSiAnHb
-	 4lUPWFSCtNoqmrgBMxr1xaFOgiPkY1VH3YuvHTby3kvkosusQjIepzR1i11wZ2ZlMG
-	 h7Q3Q3f6vIgGz9Wow9iad/VhEZRZVOAI0ByXvdZyItz8o51cy5LjYxTgMdiaYURX9P
-	 L259Rx3cyQ3VyLxvd9xZOMxyo32Ks5WrFKpXfMxfKVIXnm9V0dftjlpPAGm+p2qZLg
-	 Kxz7SULWPAZRvq5C7Ry3xxvMuHbtqkzMkx2i8Vbxo+D9rTIr+RNql/mpg4Ois7BFea
-	 Wthog30tQ1ixw==
+	b=W1Dwj80AnPDzY8HFLIet7qwltG4NMVs9AE7WyTzI6eMaDq4nOaTjRaCQjkGGj9iI+
+	 LoIx0muOazkNBf8RhLARfU2zo54bET4EgBQapmA4EbK/6Ay3+l0vRNF1NQqmLR2KCZ
+	 kpC57Q9FcQ00lLUEh7LCwPi3fdG1RpnsImDhwIwG2WOuapgQWMBNT0/wwhn/xAYUrX
+	 qkc7mNNYwXH/LMstbmyt8kkRKm0zsM+dfImupQJxn1pRDXc2VOpWTo3F5aSM2Pwmes
+	 SU5J5rSmfgoML7W8jtQ6rhrm4ZbGutsMm5lddrTqGK5s/I1w6iNQZbLKgm81hxFtQy
+	 ABXpPn943BJTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32ED642A32;
-	Fri,  1 May 2026 12:45:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 55D4E127
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:45:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27C2242A75;
+	Fri,  1 May 2026 12:46:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C835127
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23D1342747
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:45:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A1FB6F7B2
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hAlFKViHZwRk for <buildroot@buildroot.org>;
- Fri,  1 May 2026 12:45:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aeQReIlkBW8e for <buildroot@buildroot.org>;
+ Fri,  1 May 2026 12:46:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C67442A38
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C67442A38
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 74C9D6F7AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74C9D6F7AD
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C67442A38
- for <buildroot@buildroot.org>; Fri,  1 May 2026 12:45:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 74C9D6F7AD
+ for <buildroot@buildroot.org>; Fri,  1 May 2026 12:46:02 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CDB93A4C054B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CE158A4C30AD;
  Fri,  1 May 2026 14:31:10 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45080)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wIn1P-000000008NC-14ci;
- Fri, 01 May 2026 12:31:06 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wIn1L-000000008NC-4AIO;
+ Fri, 01 May 2026 12:31:03 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  1 May 2026 14:31:00 +0200
-Message-ID: <20260501123100.1918951-75-bernd@kuhls.net>
+Date: Fri,  1 May 2026 14:30:23 +0200
+Message-ID: <20260501123100.1918951-38-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1777638670;
- bh=32GiGFq7IKfrr2x2nAhL062QKQg1n3FCvp4WGmnqkrw=;
+ bh=+o3q3mjZhjMaPeBwjY8v+RLw30r7CKkXVMzEVv2cHik=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=tuvR6K95JxgnvFqiMqU1UY7VRswbsYmyAIup3J9trg8CPXqZSgWSsR5It1c/67ImH
- XsOFIPFztBJyJ4DPogmCxjDJPNpv4FVN9A6uY3MjWYJkS+Kq3SJu0xidGpL61Ws4Ep
- Tan1KxQdI8KMH6tuNyNiTJQt3ep0oWMAnk1gXXFvhxmWC2f/OSQYVQpPkKfuaVrrYO
- g3tedTXeekmhgIFd+gsXfRciv8ve+hh+/n804Jtt94CUBLe4U6PoJc3IN9VGlZjuEj
- NcJzpRvwhA9YF1z1yayRUgh9hxtIAuuAF+iGLCIqi1TJrcWQbw3n2d8bIVqugpEPI/
- U1ILJcmbSIgmQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=DCdarqzS5wdVAXR40gBqWVLsYDaqRbZkEdVdaDDurTTyU3sGw/pOOZz+6UGVwE45i
+ 2YNBeOpTjqw+Hbn4CEfqrhSFfOmfWRObqc063p0y+gVAQaI5tz5TwWrA7fvjSfgC+C
+ OKXfYKnCWB6rWKRRCbRpDxXlyvGrkTluw1LdLWoT7uPETVoeadYMqX6xDVKGiXe5rS
+ zXUzeaV2NWJxMZm0re+2sQ/rv1LI/OYwv28dFoTal4HKGIQNgcIQsLIs4v7vjnKOGS
+ djltVsICxpzTZc0OTtrxDr6gPbnmlZFHgyJ4WYdnDxCOWJj28xC26gNg+70cs2rdRK
+ WNf7Y3n249ijQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=tuvR6K95
-Subject: [Buildroot] [PATCH 75/75] package/python-cssutils: bump version to
- 2.15.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=DCdarqzS
+Subject: [Buildroot] [PATCH 38/75] package/python-platformdirs: bump version
+ to 4.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,56 +113,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/jaraco/cssutils/blob/v2.15.0/NEWS.rst
-
-Updated license hash due to upstream commit
-https://github.com/jaraco/cssutils/commit/0ac56dd192a2d6d8c4dafb41c4701fbea2f844f0
-
-Added dependency to host-python-coherent-licensed due to upstream commit
-https://github.com/jaraco/cssutils/commit/d2b8d7750f78e870def98c4e04053af4acc86e29
-which was first included in version 2.12.0.
+https://github.com/tox-dev/platformdirs/blob/4.9.6/docs/changelog.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-cssutils/python-cssutils.hash | 6 +++---
- package/python-cssutils/python-cssutils.mk   | 8 +++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/python-platformdirs/python-platformdirs.hash | 4 ++--
+ package/python-platformdirs/python-platformdirs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cssutils/python-cssutils.hash b/package/python-cssutils/python-cssutils.hash
-index 66c87904b4..96576f9717 100644
---- a/package/python-cssutils/python-cssutils.hash
-+++ b/package/python-cssutils/python-cssutils.hash
+diff --git a/package/python-platformdirs/python-platformdirs.hash b/package/python-platformdirs/python-platformdirs.hash
+index cc92e4a824..3e2f4ea59a 100644
+--- a/package/python-platformdirs/python-platformdirs.hash
++++ b/package/python-platformdirs/python-platformdirs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cssutils/json
--md5  c8c21e635454d9ca73b21892def35f55  cssutils-2.11.1.tar.gz
--sha256  0563a76513b6af6eebbe788c3bf3d01c920e46b3f90c8416738c5cfc773ff8e2  cssutils-2.11.1.tar.gz
-+md5  8a90c28a2f037c525a25e5a2541fd9a5  cssutils-2.15.0.tar.gz
-+sha256  e9739237f3915037dacba787c4b58f280e3ec5d9864953e185bf23d40ff7d021  cssutils-2.15.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/platformdirs/json
+-md5  8168f7450c9606bfa4a28268f0f59a37  platformdirs-4.9.4.tar.gz
+-sha256  1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934  platformdirs-4.9.4.tar.gz
++md5  6b9f7a12243ab0609a433bcf2f641c6b  platformdirs-4.9.6.tar.gz
++sha256  3bfa75b0ad0db84096ae777218481852c0ebc6c727b3168c1b9e0118e458cf0a  platformdirs-4.9.6.tar.gz
  # Locally computed sha256 checksums
--sha256  03c570a068086ee577dcd795519ea93462b2ed2fcb6dcc4dfce56a71a2fd6e5a  LICENSE
-+sha256  b8f0d64361b0d6480ebd172c2c53c51e80745e41d69d612e4ffa35e85f8d822c  LICENSE
-diff --git a/package/python-cssutils/python-cssutils.mk b/package/python-cssutils/python-cssutils.mk
-index 0fc706780c..9b7a93ddd0 100644
---- a/package/python-cssutils/python-cssutils.mk
-+++ b/package/python-cssutils/python-cssutils.mk
-@@ -4,12 +4,14 @@
+ sha256  29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6  LICENSE
+diff --git a/package/python-platformdirs/python-platformdirs.mk b/package/python-platformdirs/python-platformdirs.mk
+index 11e8acd078..c3a7df9037 100644
+--- a/package/python-platformdirs/python-platformdirs.mk
++++ b/package/python-platformdirs/python-platformdirs.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CSSUTILS_VERSION = 2.11.1
-+PYTHON_CSSUTILS_VERSION = 2.15.0
- PYTHON_CSSUTILS_SOURCE = cssutils-$(PYTHON_CSSUTILS_VERSION).tar.gz
--PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/33/9f/329d26121fe165be44b1dfff21aa0dc348f04633931f1d20ed6cf448a236
-+PYTHON_CSSUTILS_SITE = https://files.pythonhosted.org/packages/01/00/7e89107ea389e952eea73b1b90ac6633e15a519c4a518ee90bb93a2f83dc
- PYTHON_CSSUTILS_LICENSE = LGPL-3.0+
- PYTHON_CSSUTILS_LICENSE_FILES = LICENSE
- PYTHON_CSSUTILS_SETUP_TYPE = setuptools
--PYTHON_CSSUTILS_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_CSSUTILS_DEPENDENCIES = \
-+	host-python-coherent-licensed \
-+	host-python-setuptools-scm
- 
- $(eval $(python-package))
+-PYTHON_PLATFORMDIRS_VERSION = 4.9.4
++PYTHON_PLATFORMDIRS_VERSION = 4.9.6
+ PYTHON_PLATFORMDIRS_SOURCE = platformdirs-$(PYTHON_PLATFORMDIRS_VERSION).tar.gz
+-PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/19/56/8d4c30c8a1d07013911a8fdbd8f89440ef9f08d07a1b50ab8ca8be5a20f9
++PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/9f/4a/0883b8e3802965322523f0b200ecf33d31f10991d0401162f4b23c698b42
+ PYTHON_PLATFORMDIRS_SETUP_TYPE = hatch
+ PYTHON_PLATFORMDIRS_LICENSE = MIT
+ PYTHON_PLATFORMDIRS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
