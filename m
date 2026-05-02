@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD7FCD3423
-	for <buildroot@archiver.kernel.org>; Sat,  2 May 2026 11:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 843A3CD3423
+	for <buildroot@archiver.kernel.org>; Sat,  2 May 2026 11:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EA5760FEC;
-	Sat,  2 May 2026 11:32:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6850812AF;
+	Sat,  2 May 2026 11:45:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOoBDxlqj9G1; Sat,  2 May 2026 11:32:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WLaAc-b8wGFk; Sat,  2 May 2026 11:45:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41B4F60FEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B02BD812A5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777721572;
-	bh=AjM/dg6X0cVF8K1uk4ZLQCdhJdHhlPkLZ1xmtoUnQuM=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=C7kyvHcL+UGVgb63qlCvZxwyEY3TT1/mbgPU84NBA3X3BtML/W/3wrHo9/h5IomDd
-	 mNXrwLm4OUyw8/SMbDpm/bjQSafND/PTtobnfDaPvxPg2frlwh0RLLoi/NYzZnF0mI
-	 55lxrqBmTcEvj6nYQasBuQ//fBjuO0JNjtljfY1TzXWwIX4FTpS42ifLNJACRqGdqO
-	 pMbr6lriem9efPVL+QKKy3UpPy9XaXr/PUCiYrhh/nKMEVTtwD+D/0+pd/ZFmrUZDp
-	 wxaP2mu0DozW97Bw3qae/U29I4LzqxHsOUcXEQ4Zz0HDQxPRXKToiYBilo3dRBttQq
-	 ZoV6QA8wU1yPw==
+	s=default; t=1777722353;
+	bh=XYHLSYFPbHJMP0g2zVkFIO0L+cw8ozQXSlrRZEsRMA0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ni40f2GgFXLEnBPus1MLZVmoasLVnk9dn9n+/LFuK0s6Et10hcNelwJDIvaxs22TZ
+	 SyIbM3xqIiCNOKwCwlv9TJdSgmVyHiUkAT+2MwzdtXHqbkqk2R1z5YXiyk3AQUQWK5
+	 8ElWSTptrUskeN3JKDS3aNo2tzBrQsnEeHN91cIGasuzzdELBzSkHZVdBZGnDo+a1Y
+	 DJCv4KvVumUiMSrcRTJI0PIR9VD674Uw+nLlGDGXJNAQbe8cKmrBS0GgEVutbUqTKb
+	 ea9+SH9flbI7w/JVXrXFfsFJsGvqrpMFR1Bams2gcBBTg5ZribZsHAdDAJ7u/Xj3hd
+	 tX/CuawaYZB3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41B4F60FEE;
-	Sat,  2 May 2026 11:32:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B02BD812A5;
+	Sat,  2 May 2026 11:45:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BCD8127
- for <buildroot@buildroot.org>; Sat,  2 May 2026 11:32:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BF0424E
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 11:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DB4660FEE
- for <buildroot@buildroot.org>; Sat,  2 May 2026 11:32:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81B6F60F36
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 11:45:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N7wm-g9eGYEU for <buildroot@buildroot.org>;
- Sat,  2 May 2026 11:32:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4173C60FEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4173C60FEC
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4173C60FEC
- for <buildroot@buildroot.org>; Sat,  2 May 2026 11:32:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 024E360132;
- Sat,  2 May 2026 13:32:46 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 02 May 2026 13:32:46 +0200
-MIME-Version: 1.0
-Date: Sat, 02 May 2026 13:32:46 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260430185635.2999959-1-bernd@kuhls.net>
-References: <20260430185635.2999959-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <642e67dfaf8e38516145980f48f4d39c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1777721568;
- bh=6h0RyqB4Xm//bwnAaDN4XFMUj+mxR7dTPet4n5NKyOY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=pkrbXzxD9SuKrI4IjsyUViyiQwXbsDQKSKkclqWax2uOvBqNDL2RJoP/1Zjp+ziU5
- T3L8yjlj3zIe3csmJCAP7uHHtvgbOTjRZPJXvaob+CY/mT1gWEeTjiFjVejlHecxaD
- uRMJ/SAtPIpoXpSEaNY/adrSCro3uc7Cplg2ybxYdEXnhVkb6HR8OyvSbUKXLChurh
- KuyY0Za9ep3F2K5hMIUOkkCijWJlhRx8YRaDwo18J6nc3sPDSj62S4AggLNPdt+lv8
- 4WFi/9r5FQoc4Ro/yiv45FcVmxwZ8sL6xaqQDFJL7JdDAFJmfkOENeTe9GsrK+iSdu
- Qjl1yxpg1zWmg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pkrbXzxD
-Subject: Re: [Buildroot] [PATCH 1/1] package/thrift: security bump version
- to 0.23.0
+ id uj7qka_p2p-R for <buildroot@buildroot.org>;
+ Sat,  2 May 2026 11:45:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC1C260A54
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC1C260A54
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 11:45:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 708857FDE7; Sat,  2 May 2026 11:45:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 2 May 2026 13:33:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6935bc74121967ab6a01950d55c3bb9a14f0f833
+X-Git-Newrev: 1880965a3b8dccaaa93dbdc36806c06b90d77eb9
+X-Patchwork-Hint: ignore
+Message-Id: <20260502114551.708857FDE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to v4.4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,33 +70,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/04/2026 20:56, Bernd Kuhls wrote:
-> https://github.com/apache/thrift/blob/v0.23.0/CHANGES.md
-> 
-> Fixes the following CVEs:
-> 
-> CVE-2026-41636: https://seclists.org/oss-sec/2026/q2/236
-> CVE-2026-41607: https://seclists.org/oss-sec/2026/q2/237
-> CVE-2026-41606: https://seclists.org/oss-sec/2026/q2/238
-> CVE-2026-41605: https://seclists.org/oss-sec/2026/q2/239
-> CVE-2026-41604: https://seclists.org/oss-sec/2026/q2/240
-> CVE-2026-41602: https://seclists.org/oss-sec/2026/q2/241
-> CVE-2026-41603: https://seclists.org/oss-sec/2026/q2/242
-> CVE-2025-48431: https://seclists.org/oss-sec/2026/q2/243
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1880965a3b8dccaaa93dbdc36806c06b90d77eb9
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master. For info, I fixed the license info. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/6935bc74121967ab6a01950d55c3bb9a14f0f833
+For more information on the version bump, see:
+  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.15.html
 
-Best regards,
+Fixes the following vulnerabilities:
+CVE-2026-5409, CVE-2026-5408, CVE-2026-5406, CVE-2026-5407, CVE-2026-5299,
+CVE-2026-5401, CVE-2026-5404, CVE-2026-5403, CVE-2026-5405, CVE-2026-5654,
+CVE-2026-5657, CVE-2026-5656, CVE-2026-5653, CVE-2026-6538, CVE-2026-6537,
+CVE-2026-6535, CVE-2026-6534, CVE-2026-6533, CVE-2026-6532, CVE-2026-6531,
+CVE-2026-6530, CVE-2026-6529, CVE-2026-6527, CVE-2026-6524, CVE-2026-6523,
+CVE-2026-6521, CVE-2026-6520, CVE-2026-6519, CVE-2026-6522, CVE-2026-6870,
+CVE-2026-6869, CVE-2026-6868.
 
-Julien.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 7572ea8b52..037f2f509a 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.14.txt
+-sha1  41536d8ba1fc977d0832b509af6ea65056c6fe1d  wireshark-4.4.14.tar.xz
+-sha256  c9113130bd2b37919fdcf575f710469ce391960baaff31911e3288469e6a8e8d  wireshark-4.4.14.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.15.txt
++sha1  dd591df261c7866e7eaac3f015c904ab21d9d51d  wireshark-4.4.15.tar.xz
++sha256  05e884da8d91929bd1fb6a91c26836d69145ecd439b97c2d82698388de221570  wireshark-4.4.15.tar.xz
+ 
+ # Locally calculated
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index d58fa7a6c5..1ded080906 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 4.4.14
++WIRESHARK_VERSION = 4.4.15
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
