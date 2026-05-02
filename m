@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAA88CD13DA
-	for <buildroot@archiver.kernel.org>; Sat,  2 May 2026 09:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC845CD13DA
+	for <buildroot@archiver.kernel.org>; Sat,  2 May 2026 09:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 863948107D;
-	Sat,  2 May 2026 09:41:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6560C83C30;
+	Sat,  2 May 2026 09:48:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UCX8mZVyDwIh; Sat,  2 May 2026 09:41:36 +0000 (UTC)
+ id 6ANUaO73bwI2; Sat,  2 May 2026 09:48:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8124822D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CB8A83C34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777714896;
-	bh=B8aWIW34D9Qb5qtX4kMFsqLm1WhzoWQU1shwUjEDFPo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=VfJDd5jefF8Qxav9dxjQA9WWik5JuckyXjKHEM/kGQB2MVhlck0LJnK4/wZ/gddRP
-	 fr6KY/Bvhu49KIAtxWS8faYoPrcKKe9pPTAQQ5z/it7eTacpGnzQdv6mlRDHLySEp6
-	 TjK2wkCNue5nDkiAfVjEzHzzZ+0r3YUPIBxoHBydn1+z3AMOCYfx6gox1DKs/Cmvxn
-	 kwuQZZj5gWaWlyJySL6xVZ4Wql7WfVrDwXQqUA6Y7LJrOKTuSNNm5yTTjAMdxMl4M+
-	 mPxy409PX1JaaUZDqVv6ZMh/2acI/G1v+aKzA0D17PrFkQh0oKbWv4aWC5A+G4ag3r
-	 RTLgcJ1ZXKQOg==
+	s=default; t=1777715287;
+	bh=VdHlFAnFEiRhz3ZnVxHmKB5X1n+PrRf48YPk377K4Pw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=XwIR1x5L2pLjBESCCuwNz/9zTZlwPZ8Ngy8lhJcBIzlwRRyFhurly7trJOT38/YFu
+	 vnOqCaK3b7b5GCIQuu92guRV5sNpoRlLgX1anmP3yl0Yk5PguhVvRAyl1nDmMpESuc
+	 TpFe7xgK8x8LQWKyvlqz8Izf10o69/GPTuiL/Jz9mW01RMQPZbmTQZEBigB1+S/TrA
+	 WX2Kv8JenxHjnRne+yOOeHQV1PnNrE6xlZPOlZb2lFqCJ5wTOxPOFII8hQjzDMpd7t
+	 RCNfATbV+czqPDDHl8L1vRtb9t2qbAEh6LEH9WQc+FfL+j2ktDjXR0dV+lpUDGPYa6
+	 x7JFf7xc/ZAsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8124822D0;
-	Sat,  2 May 2026 09:41:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D810624E
- for <buildroot@buildroot.org>; Sat,  2 May 2026 09:41:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CB8A83C34;
+	Sat,  2 May 2026 09:48:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 348C524E
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 09:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C92E5822D0
- for <buildroot@buildroot.org>; Sat,  2 May 2026 09:41:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AA0983C34
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 09:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Os7XWlwWgDKR for <buildroot@buildroot.org>;
- Sat,  2 May 2026 09:41:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4CD8A822C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD8A822C8
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4CD8A822C8
- for <buildroot@buildroot.org>; Sat,  2 May 2026 09:41:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 709B760141;
- Sat,  2 May 2026 11:41:29 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 02 May 2026 11:41:29 +0200
-MIME-Version: 1.0
-Date: Sat, 02 May 2026 11:41:29 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260430044114.7686-1-bernd@kuhls.net>
-References: <20260430044114.7686-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <93cd03c77fbb4c5abdf98f3b636bd3ec@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1777714890;
- bh=OtL20nkoYe4tAohYNJY9Zat6TQLmVhrLQsrAWov3NFU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lYgB98Oaz5gK5rK9hcqt/kXyxQUz/N4XIcPLwlzl4qpYF4zZiGAawG3RP3ybi5CR4
- m6P2wU35VxqfNxh76JkJ/UAaw02Y/nWWKPezis0i+a3rF0hsDqoAOZ15KgEu1dIaK3
- 7/cUhrDwVD4t8nNX9PLYUIbVRBtwYDDHug8sioj1ncMUzYELo45X/rvMZfKOkkw1po
- VcKmn+L1NA39uCCHaqvbFJcUdtb8w/N8f/e5R5wrNs1P9ftwKUN6gSBZ9dJ9nV/6Ts
- Vc5FXlrRpNHpUtE0/AWiAEWByw0j+kceyOSw4ZXhqaHdIBnjEF6vRTMj67zD85pSni
- 9pSr1n2pIhgiA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=lYgB98Oa
-Subject: Re: [Buildroot] [PATCH 1/1] package/rsync: security bump version to
- 3.4.2
+ id X7YX1JqJznC7 for <buildroot@buildroot.org>;
+ Sat,  2 May 2026 09:48:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4300983C30
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4300983C30
+ for <buildroot@buildroot.org>; Sat,  2 May 2026 09:48:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D816C7FB68; Sat,  2 May 2026 09:48:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 2 May 2026 11:44:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f9fff2234506cbe975d69ac315fdd15737ca2e2
+X-Git-Newrev: 3f6d37ab9a322562dfdc49a391c6e218f44fb54c
+X-Patchwork-Hint: ignore
+Message-Id: <20260502094804.D816C7FB68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exim: security bump version to
+ 4.99.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,17 +71,76 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/04/2026 06:41, Bernd Kuhls wrote:
-> https://download.samba.org/pub/rsync/NEWS#3.4.2
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3f6d37ab9a322562dfdc49a391c6e218f44fb54c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://lists.exim.org/lurker/message/20260429.121733.f58d9686.en.html
+
+Fixes CVEs:
+
+CVE-2026-40684     Possible crash with malicious DNS data when using musl libc
+
+   On systems using musl libc (not glibc) due to an oddity in octal printing
+   it is possible to crash the connection instance when malformed DNS data
+   is present in PTR records.
+
+CVE-2026-40685     Possible OOB read/write on corrupt JSON in header
+
+   configurations using json operators on invalid externally-provided input
+   could trigger heap corruption.
+
+CVE-2026-40686     Possible OOB read with large UTF8 trailing characters
+
+   configurations using utf8 operators on malformed utf8 in headers could
+   trigger OOB reads and might trigger some data leak if error
+   messages are required for subsequent emails in the current connection
+   and similar malformed headers are present.
+
+CVE-2026-40687     Possible OOB read/write with SPA authenticator
+
+   in configurations using the SPA authentication driver to a hostile/compromised
+   external SPA/NTLM connnection it is possible to trigger an OOB read/write
+   and crash the connection instance or possibly leak heap data to the instance.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index f9a62e0188..745b9f0977 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  eae967bd49a5f879933b8c6ec88c30475a1c6646232135f37f05b55dbc4e3447  exim-4.99.1.tar.xz
++sha256  25364f19988270d846965689dd29c662cf5de152639875d0d5352a69fd753a47  exim-4.99.2.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  41a280673b23a79684124dba9ba1db4da57047eefd7bac8560fab3e399659698160386c5369deb4aabdbcba1ba9278fb0a61fc1667dc2745c280b3004d02f45d  exim-4.99.1.tar.xz
++sha512  e5c80a77dca642c132dda82166c919ba9f553436038b734ef66ae41666b8c9f5818e2cd6080e4c7c8b52e866f7f89d271233fb183c7e405feb15536d507098a3  exim-4.99.2.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 47fe17b372..7129e2ebf6 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.99.1
++EXIM_VERSION = 4.99.2
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
