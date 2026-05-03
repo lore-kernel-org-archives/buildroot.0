@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0476DCD3426
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E603CD342F
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCADA84234;
-	Sun,  3 May 2026 14:51:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5FC96126F;
+	Sun,  3 May 2026 14:51:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EAvq3syQFcTp; Sun,  3 May 2026 14:51:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l9sLYXlNPTmD; Sun,  3 May 2026 14:51:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDCC084295
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00C6861505
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777819870;
-	bh=GMGuCxm59vAfefEnv1aFU5oDWYr9Shrv0nxhGtxT8Lc=;
+	s=default; t=1777819871;
+	bh=IwaLw8IDbozMUxRDhoZZNaQFwU1Ho9X1MODFQcM2QAI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XdqS3faqzSa1g7CpAHSYSy4fRUQvpvq4h/Xsq+WWLSCczIVHJvrtjtwRob2FJVln7
-	 EPzicDg5XTbXp4Lq6tKYcm/VlvqFpY8wVDql6EwMO+dvlt7dvBUs8V88Vc31NAFNf0
-	 NuMtwWuJHaFdB/4Z2GTdN3pn3ozJrs+W5+HUoYXfFl/fS71AEs/+Se5g9o93+Hpvjy
-	 HwmsPMehfQkvJvjuINzYAZoh8m/Ep9G2TgH8MN16bD9CCq1507PT2wTcIzH7H0B1sV
-	 jHSpa+Lb1SJlgoU6heYMaBn9J4bP7hmSUh0E1zzxSoFfPw/nSToEag2Xellw33pqkR
-	 ono5QdyNpQKeA==
+	b=nPVdokkSTvjX8qFWBT4cMQx9l/fJ0fDpyzXVrWMeGCpRzjABZkDJ783hekl9OEorY
+	 SfMG4Ll7cnasLxjkH6e4bSZs8ImMD54YOIPhj5rrlBXLGo29welkavZg4rBG8nY4+P
+	 FbwIkTj2lljFZ4XvNoIUnC4+04JHgKNtWNO5PFt9mpLWVsgFxh44qRgJ6riZdGzXoA
+	 xT4/A14NXmbBN66tMunql6L6cPu005QkdRxANcx5zji6EIa0okAwaD+qoOLnBNTxcv
+	 Xy6DIKlTePD9xQkwpMFZt3XIrtxZ0wSlMFt5h45CSjay9S7cBKMQDA4uF9n6SBBjr1
+	 0eimAFMUd9rWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDCC084295;
-	Sun,  3 May 2026 14:51:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 71A6D190
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00C6861505;
+	Sun,  3 May 2026 14:51:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E52BB127
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5876484255
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAD07612C1
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DOW-iM6GqmL1 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4JPsC17geJyp for <buildroot@buildroot.org>;
  Sun,  3 May 2026 14:50:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87B4384260
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C23E9612E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87B4384260
+ by smtp3.osuosl.org (Postfix) with ESMTP id C23E9612E1
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50AE283FAE; Sun,  3 May 2026 14:50:41 +0000 (UTC)
+ id 88AF583FAE; Sun,  3 May 2026 14:50:41 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 3 May 2026 16:48:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b9f5d6ed00e18f020a678998f82b8290d382b0b
-X-Git-Newrev: 123136b246f93c78cf9d51df37727d1b2cfcb638
+X-Git-Oldrev: 9df1d5653007ad0e24306860f3856930e293bf2c
+X-Git-Newrev: 5acf70b92e95c33d9987bc49cbe8095a2c66cd62
 X-Patchwork-Hint: ignore
-Message-Id: <20260503145041.50AE283FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyasn1: security bump
- version to 0.6.3
+Message-Id: <20260503145041.88AF583FAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymodbus: bump version to
+ 3.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/123136b246f93c78cf9d51df37727d1b2cfcb638
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5acf70b92e95c33d9987bc49cbe8095a2c66cd62
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/pyasn1/pyasn1/blob/v0.6.3/CHANGES.rst
-
-Fixes CVE-2026-30922.
+https://github.com/pymodbus-dev/pymodbus/blob/v3.13.0/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pyasn1/python-pyasn1.hash | 4 ++--
- package/python-pyasn1/python-pyasn1.mk   | 4 ++--
+ package/python-pymodbus/python-pymodbus.hash | 4 ++--
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
-index 4977abf4bd..eea1118bee 100644
---- a/package/python-pyasn1/python-pyasn1.hash
-+++ b/package/python-pyasn1/python-pyasn1.hash
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index ddeeb6afb6..7da0adf9da 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1/json
--md5  93dbc09023fbd1b724fd8233ffe2a343  pyasn1-0.6.2.tar.gz
--sha256  9b59a2b25ba7e4f8197db7686c09fb33e658b98339fadb826e9512629017833b  pyasn1-0.6.2.tar.gz
-+md5  b7a8127ed5fc251943e47dbef51ea6c8  pyasn1-0.6.3.tar.gz
-+sha256  697a8ecd6d98891189184ca1fa05d1bb00e2f84b5977c481452050549c8a72cf  pyasn1-0.6.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  d706a1227df2b0efa613ebbf3996ed40  pymodbus-3.12.1.tar.gz
+-sha256  bcb483381747b3e3aec2c8e01d5df885e5ea43f85b7145dc1907af06aca93a2c  pymodbus-3.12.1.tar.gz
++md5  d2db6a8e9ae1688a6ddf227a4c9e5ccd  pymodbus-3.13.0.tar.gz
++sha256  da4c87afe772787620594c564cd8aa8a4c58ff9786382aba9550fe0ce8879f32  pymodbus-3.13.0.tar.gz
  # Locally computed sha256 checksums
- sha256  2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd  LICENSE.rst
-diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
-index 2dc9470ef0..7278b3f857 100644
---- a/package/python-pyasn1/python-pyasn1.mk
-+++ b/package/python-pyasn1/python-pyasn1.mk
+ sha256  572a4d6fa7541553f70cc6d494fbcbee7eb7d3f2fbd16080d39b20cccda26f0b  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index db12e2943d..2d969b0f65 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYASN1_VERSION = 0.6.2
-+PYTHON_PYASN1_VERSION = 0.6.3
- PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
--PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/fe/b6/6e630dff89739fcd427e3f72b3d905ce0acb85a45d4ec3e2678718a3487f
-+PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/5c/5f/6583902b6f79b399c9c40674ac384fd9cd77805f9e6205075f828ef11fb2
- PYTHON_PYASN1_SETUP_TYPE = setuptools
- PYTHON_PYASN1_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
+-PYTHON_PYMODBUS_VERSION = 3.12.1
++PYTHON_PYMODBUS_VERSION = 3.13.0
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/c8/cf/9ace571421e4ed8bc870e79caca7fe04b7e2529764494f1fb406053640ef
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/3d/55/eee0782c2ca9fa8e7c3218caca22fe30e850cd6c0c0d475c10b8c19e5a36
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
