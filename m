@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 821D8CD342F
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2328ACD342C
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27AF461317;
-	Sun,  3 May 2026 14:50:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8E458427E;
+	Sun,  3 May 2026 14:50:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrdCRa-lKjgH; Sun,  3 May 2026 14:50:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xs5FOz6_0z_k; Sun,  3 May 2026 14:50:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C7B2612F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30EBB8426C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777819852;
-	bh=0XIlBCeFsvGzzh5zEJuFT/5In5VnG0763fSt1n1jG+I=;
+	s=default; t=1777819855;
+	bh=qJYC+EGYpEMCP4XOAy2JAFRyK41Rf9dkHTRCZvtLPN8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Y27gVkcPy9dUTtycPMeOkPx5ra4ljDkR4MNmvGKDvjvO05U98OvZcaIH991J7tFIy
-	 0s+34qAqu3E0dgQdAH9JFVta93aq1t4enNfmznyQLXKwqpoxb7Q8q2TGV8c1omhGr3
-	 VdanEzzL1NnCp8GLP2ngpW2+4iJFS71hA32gW4ke/qTJnMHN3tXvz0yflIZbRBanIs
-	 N+XjtMNs1VXK7BayA4OrCwhufZofRFiW/j5l+0Tskw/PaC/gAyR/Pt/lfHNjDdwKI2
-	 94sortknqqG25opW20DDnbXtzs1eCVMJZUXq+THMpv2HGrIsDcc34LZVWB9uByOj3i
-	 wNwMwl7orbE+Q==
+	b=B/oiuZ+fp2CEByaKNGrOdJt1PC4wSSdoBy98bgfe7zCvHDIsj/J8UL76B9sl0EaK4
+	 66fHo83e/XEaiXDE12Husv/dMPyXBX5IZrY1Fsc8P4JVzhaKqDVVYIZ1J4e+2O2+GQ
+	 ddfSPNMuOn0ef4sx4NlEzLvV1BsuBat4VR2dwED0rg5K79Sot/VWitnhn0v2BAgIsN
+	 pPyD3yJPUGHepzwJcrcvoJk83HymJrbq4I7Rg/E9OAuRWFX3RwyX8LDRA78+lVLamn
+	 ktDYpWQudKqqFCoWFPeOPu3/YvnLyQGRlLhJKpuEgROREN1MNaAccHaF5+z8SZ8Kx+
+	 8AmVxhQRTobPg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C7B2612F5;
-	Sun,  3 May 2026 14:50:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B4B08190
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30EBB8426C;
+	Sun,  3 May 2026 14:50:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DA8C127
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 541684046D
+ by smtp1.osuosl.org (Postfix) with ESMTP id E498A84225
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KMnQccTySJTw for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uRurRpPmRz8W for <buildroot@buildroot.org>;
  Sun,  3 May 2026 14:50:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98046406FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 762A18423D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98046406FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 762A18423D
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5259E83FD0; Sun,  3 May 2026 14:50:29 +0000 (UTC)
+ id 32E6283FC1; Sun,  3 May 2026 14:50:29 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 3 May 2026 16:48:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9252f73ffc94dd08d5b1b51fec05adecf1ac337d
-X-Git-Newrev: 11a430cfafa7e23c330f596e0b10a9e9364c130e
+X-Git-Oldrev: 703a7bde26ffe0d1adcbac8fe48cbbc4c1d98769
+X-Git-Newrev: af7cb9be2a0be4e7dede68672e3053fdc465de3f
 X-Patchwork-Hint: ignore
-Message-Id: <20260503145029.5259E83FD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-more-itertools: bump
- version to 11.0.2
+Message-Id: <20260503145029.32E6283FC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-marshmallow: bump version
+ to 4.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/11a430cfafa7e23c330f596e0b10a9e9364c130e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af7cb9be2a0be4e7dede68672e3053fdc465de3f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/more-itertools/more-itertools/blob/v11.0.2/docs/versions.rst
+https://github.com/marshmallow-code/marshmallow/blob/4.3.0/CHANGELOG.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-more-itertools/python-more-itertools.hash | 4 ++--
- package/python-more-itertools/python-more-itertools.mk   | 4 ++--
+ package/python-marshmallow/python-marshmallow.hash | 4 ++--
+ package/python-marshmallow/python-marshmallow.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
-index 113c243e8b..f19c07f278 100644
---- a/package/python-more-itertools/python-more-itertools.hash
-+++ b/package/python-more-itertools/python-more-itertools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/more-itertools/json
--md5  05fc46d7baf167d89c82a383c9f0c2fa  more_itertools-10.8.0.tar.gz
--sha256  f638ddf8a1a0d134181275fb5d58b086ead7c6a72429ad725c67503f13ba30bd  more_itertools-10.8.0.tar.gz
-+md5  cce8548e1d2882b00d83b4b436c7e47c  more_itertools-11.0.2.tar.gz
-+sha256  392a9e1e362cbc106a2457d37cabf9b36e5e12efd4ebff1654630e76597df804  more_itertools-11.0.2.tar.gz
+diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
+index 56bc15bfa2..6be06f20f4 100644
+--- a/package/python-marshmallow/python-marshmallow.hash
++++ b/package/python-marshmallow/python-marshmallow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/marshmallow/json
+-md5  d3f861e4957521a6a15eb906194deb70  marshmallow-4.2.2.tar.gz
+-sha256  ba40340683a2d1c15103647994ff2f6bc2c8c80da01904cbe5d96ee4baa78d9f  marshmallow-4.2.2.tar.gz
++md5  95589d6f1082aae57ef81cc5ce15fc2c  marshmallow-4.3.0.tar.gz
++sha256  fb43c53b3fe240b8f6af37223d6ef1636f927ad9bea8ab323afad95dff090880  marshmallow-4.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
-diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
-index befbb80402..9fd9da10e4 100644
---- a/package/python-more-itertools/python-more-itertools.mk
-+++ b/package/python-more-itertools/python-more-itertools.mk
+ sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
+ sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
+diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
+index 5e86821d0a..964ff66732 100644
+--- a/package/python-marshmallow/python-marshmallow.mk
++++ b/package/python-marshmallow/python-marshmallow.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MORE_ITERTOOLS_VERSION = 10.8.0
-+PYTHON_MORE_ITERTOOLS_VERSION = 11.0.2
- PYTHON_MORE_ITERTOOLS_SOURCE = more_itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
--PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/ea/5d/38b681d3fce7a266dd9ab73c66959406d565b3e85f21d5e66e1181d93721
-+PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/a2/f7/139d22fef48ac78127d18e01d80cf1be40236ae489769d17f35c3d425293
- PYTHON_MORE_ITERTOOLS_SETUP_TYPE = flit
- PYTHON_MORE_ITERTOOLS_LICENSE = MIT
- PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_MARSHMALLOW_VERSION = 4.2.2
++PYTHON_MARSHMALLOW_VERSION = 4.3.0
+ PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
+-PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/f9/03/261af5efb3d3ce0e2db3fd1e11dc5a96b74a4fb76e488da1c845a8f12345
++PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/25/7e/1dbd4096eb7c148cd2841841916f78820bb85a4d80a0c25c02d30815a7fb
+ PYTHON_MARSHMALLOW_SETUP_TYPE = flit
+ PYTHON_MARSHMALLOW_LICENSE = MIT
+ PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
