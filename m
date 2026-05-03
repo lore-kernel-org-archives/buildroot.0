@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C8A3CD3424
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6660CD3426
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3823E61613;
-	Sun,  3 May 2026 14:51:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3EDD61261;
+	Sun,  3 May 2026 14:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TlovD6O03hHq; Sun,  3 May 2026 14:51:56 +0000 (UTC)
+ id 8KjK3IERlHnH; Sun,  3 May 2026 14:54:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 683956158B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA4161262
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777819916;
-	bh=fyjrOARA0ibrXBvsR8M0liK4jwQxDdoKo+PNtvWtO24=;
+	s=default; t=1777820041;
+	bh=FIAHMOwH+r7JO4bqrRaR1eAZerHJu3Ulu+0HzSKdI+M=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Hp57V4mO8o9AqvYeRWgEriKgLu/hiJ/R607J2oOCs+XaQ31OM81NigxwV6zLIwpLr
-	 WP40Q9e7EpvAH177Js8fFpLJRagoWgKPYFp5K+ZK2a0jf4v8fAWdttSX6dxABBzwM7
-	 SGl1sheCuDLPu6LLbobdBDDf3v4A5Thxau+dJTw0TRv4tnqTs0CCtbntutltedqTs9
-	 ZfoL93MP94JaJUQmJ7btLW4ls7Rd7DgeIVtiYh+PTegn6xkRsPFefGm2BKaz4JQf30
-	 ghCipTm8X/3icgArUCSbpZSvFWybE1za/rUBkmjt8FDhMM9MdFRA/y+EFsnJ2Cevm0
-	 kNO8rpQWEkoCQ==
+	b=ZnermyifaaTIGyMxCVrH6Vt4nelQCZZKRuouJZwHUqPUa4IcvSMY78A1FYmnlSvui
+	 Di285o53KtFGX+ObcBYy8HfqYrBWW4NEf8lPWFxeSFpF8rJucSFQeaDC6w6L7f2zY+
+	 9QiMb/w/fn6lohFAGvqPXc1mvkFfspW7RCVL7q8I9hE2ejcQ6hAMFpWEGqH7YTF08v
+	 mEWkqTfFQSjN4ZE+YWpnr9LloLIgngveTagZnDViXUOXVVCGqUPqIMApNVxOJMlIL2
+	 yq1Lf/31zp07dU2t1KSvFoc8oVjS1Swmqxt/Un+TNfqFF1MXYBBIh4sh1s8lonZIzY
+	 5lex2bZHJ+uEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 683956158B;
-	Sun,  3 May 2026 14:51:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AA4D6127
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:51:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBA4161262;
+	Sun,  3 May 2026 14:54:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0B76127
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FF0761392
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:51:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6AD0406FA
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rRKM0V5svQhD for <buildroot@buildroot.org>;
- Sun,  3 May 2026 14:51:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F1CD761613
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1CD761613
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1CD761613
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:51:52 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t7wl5vEqLce2 for <buildroot@buildroot.org>;
+ Sun,  3 May 2026 14:53:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9112F4046D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9112F4046D
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9112F4046D
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:53:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 960E019F5B2;
- Sun,  3 May 2026 16:51:32 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 1A38C20039E;
+ Sun,  3 May 2026 16:53:39 +0200 (CEST)
 Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
  via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 03 May 2026 16:51:32 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 03 May 2026 16:53:39 +0200
 MIME-Version: 1.0
-Date: Sun, 03 May 2026 16:51:32 +0200
+Date: Sun, 03 May 2026 16:53:39 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>,
  Christophe Vu-Brugier <cvubrugier@fastmail.fm>, =?UTF-8?Q?Rapha=C3=ABl?=
@@ -70,30 +70,31 @@ Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Falco Hyfing
  <hyfinglists@gmail.com>, Mauro Condarelli <mc5686@mclink.it>, Fiona Klute
  <fiona.klute@gmx.de>
-In-Reply-To: <20260501123100.1918951-1-bernd@kuhls.net>
+In-Reply-To: <20260501123100.1918951-32-bernd@kuhls.net>
 References: <20260501123100.1918951-1-bernd@kuhls.net>
+ <20260501123100.1918951-32-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.14
-Message-ID: <0448b680ffedc83afeb144f2ec7e0179@free.fr>
+Message-ID: <0f8e1babf8f66fd8666085ec315633a9@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1777819910;
- bh=VGrvpzuAgCKvcukC7QxESzckzeOAaZ5ge+chiVBptY8=;
+ d=free.fr; s=smtp-20201208; t=1777820036;
+ bh=zqr3kTC3XTEAfUMslyd38F1EWzh4hpPs4t3qB4wFO38=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mhfFg37M+Dwd1Z6MjBmpsr6VvkC6hILFJtyDeq6stgPJbFY/HGTrF86yqq8dhBfM1
- kYBiNdYwJfvxO5OGPpi+RIGlvuVqh1rAKzTaBxuWsiXH15DNk3/wDfjzpxGf78Fixg
- 4sXcIOzKSzjR77giJjggW4Nrd9Kf/26+GndINls+kzzUYFIbtMJx/+H3lnuWBlOVfl
- VAGByrcFUXef8U4mGpPwZfVpPwlIgevQrISxsjoD7h8anNrQ5eecKVA5vN2H0S6odb
- 7C1WXAp2s5BSZBUEX/pQRoMb20YcC55Eis4mCo5icozYs1HGGGy6cwhX1mdDyCOe6r
- ZBzKxE0skT9eQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=MTMEAT6U2w8j4a76q31UcAlP6kZnhDy8TkE6lIgPuCI/TWVpvihbUbU32j6DjP8sC
+ KQWNKflJ5iHwwKDmSZV9mrBIiRiZBfRtDLnlFY4HEDvZPhjs/3vHA0e/cWUxrASvFr
+ 41zODcnDH2OY+xp/o2UgRhCdQBKuLaQF4sq662/qX2zs8M9Y5Dpylw+RyPWl+ARdve
+ vP5Ur3gHF3u/JjoUz0DRi3X7n3Odat0U5h8NAj2vj2YirCO9LLW5gWfWbCV5nObiZw
+ KOPtcrzkdaW0fax4QCBYA9GUKlNnS2ryHSo095nFXP/N3rGxlPAD66ECxFlHb29XRz
+ wVGVDfk9q3eWg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mhfFg37M
-Subject: Re: [Buildroot] [PATCH 01/75] package/python-aiohttp: bump version
- to 3.13.5
+ header.s=smtp-20201208 header.b=MTMEAT6U
+Subject: Re: [Buildroot] [PATCH 32/75] package/python-mypy: bump to version
+ 1.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,14 +113,55 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/05/2026 14:29, Bernd Kuhls wrote:
-> https://github.com/aio-libs/aiohttp/blob/v3.13.5/CHANGES.rst
+Hi Bernd, All,
+
+On 01/05/2026 14:30, Bernd Kuhls wrote:
+> https://github.com/python/mypy/blob/v1.20.2/CHANGELOG.md
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/python-mypy/python-mypy.hash | 4 ++--
+>  package/python-mypy/python-mypy.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+[...]
+> diff --git a/package/python-mypy/python-mypy.mk 
+> b/package/python-mypy/python-mypy.mk
+> index 4b02753978..c21cdc6676 100644
+> --- a/package/python-mypy/python-mypy.mk
+> +++ b/package/python-mypy/python-mypy.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  
+> ################################################################################
+> 
+> -PYTHON_MYPY_VERSION = 1.19.1
+> +PYTHON_MYPY_VERSION = 1.20.2
 
-Series applied to master, with the exception of python-mypy bump (see my
-specific answer for this patch).
-I also removed "security" in the python-wheel bump.
+With this new mypy version, python-charset-normalizer is failing to
+build with error:
+
+ModuleNotFoundError: No module named '_sqlite3'
+
+This might be related to:
+https://github.com/python/mypy/blob/v1.20.2/CHANGELOG.md
+"Enable --sqlite-cache by default"
+
+So I did not applied this mypy bump while applying the rest
+of the series.
+
+Could you have a look at this issue, please?
+
+>  PYTHON_MYPY_SOURCE = mypy-$(PYTHON_MYPY_VERSION).tar.gz
+> -PYTHON_MYPY_SITE = 
+> https://files.pythonhosted.org/packages/f5/db/4efed9504bc01309ab9c2da7e352cc223569f05478012b5d9ece38fd44d2
+> +PYTHON_MYPY_SITE = 
+> https://files.pythonhosted.org/packages/04/af/e3d4b3e9ec91a0ff9aabfdb38692952acf49bbb899c2e4c29acb3a6da3ae
+>  PYTHON_MYPY_SETUP_TYPE = setuptools
+>  PYTHON_MYPY_LICENSE = Apache-2.0, BSD-2-Clause, Python-2.0.1
+>  PYTHON_MYPY_LICENSE_FILES = LICENSE
+> --
+> 2.47.3
 
 Best regards,
 
