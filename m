@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7495CD3424
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 650ACCD342C
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E54884233;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 258AA61263;
+	Sun,  3 May 2026 14:50:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id puvkDnotMSfX; Sun,  3 May 2026 14:50:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B662D61274
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777819825;
+	bh=j2qd311XYi7b/l8va3OAuGOCJBz38LzeO1ISvD1mvxY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=d8JxCeS+9LpmxfyzEywxM+EUMzZJeCbBbCelesEek1xH9NbnKQHIJzMIhWMMP1eRV
+	 UtAx2RVti9qLrSG1WrLh2MlpMLekSt165TwsltywheIpUPwcvKdKo71ag4h2vP1iJB
+	 FZppl05gJi67d2RsuFUogdGIAbjyTqwG2ms4ke3duSo1i3T3WHywCUgWP/+1ehjC/1
+	 48ZyDojsOOneqiGqmXA2JXcjNtVtVV2lEbH47XQ9uoXJbgzGugSAJSdh0CR9w5pWgS
+	 Uor2RBpsU9WEs/SqB6LvooLOskCn9KgTntmTGL1UlJvciyFXVvZzc7xL5RhA9LU3Nx
+	 J8HLboDGMjTfw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B662D61274;
 	Sun,  3 May 2026 14:50:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A230A127
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 893668409F
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UCKGuAzvAtFE; Sun,  3 May 2026 14:50:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6136840A4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777819824;
-	bh=xb2PuK4RaWBNj91MMbRYGz75EBjfiHNQFko6Dl/r6qw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AAGAI+03mhwQA0e87NsTgklVLg84/NplO0yaQmAbQDBSWZMMtceUvZ1dektQ91412
-	 4WGEihAVQ8bf1oyezgO2bgXzcTEhQUL5ea499kLovGuXXXU/iga4LSKApGdRbZ8Dzy
-	 NLwMllaxVVh84g6ezIiIJfO+IMwEX5rZ5C6KZ3NIfDgLDN4+QV0h+0emwz/RFzXGlg
-	 Ne7yF/n/K6S1IoQZCcCToAUPmx9m5TLcVg7cHe//smE3u0y4AL8iBwkuBdn3Q1qmRk
-	 Q+kVU6F5STqHfWVxr7WnlsWEHR44mAqVPtU1EG7upC9mtSruZ3U69ArRvHUb1Zr9Rp
-	 byMlFBpIA9BVw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6136840A4;
-	Sun,  3 May 2026 14:50:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 69C56127
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67F6D40BF1
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b61scAQzughl for <buildroot@buildroot.org>;
+ id qWvBCWhE3biZ for <buildroot@buildroot.org>;
  Sun,  3 May 2026 14:50:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E9D40A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 693388409E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81E9D40A95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 693388409E
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AB6283FC0; Sun,  3 May 2026 14:50:22 +0000 (UTC)
+ id 31EAF83FC0; Sun,  3 May 2026 14:50:22 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 3 May 2026 16:48:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2db3fda4c6ad481cf4d0f31aef24e0b969d2358
-X-Git-Newrev: 6b2e8baf2e14217292f485c6db40046a53bd1eca
+X-Git-Oldrev: 11e5013d97525365f19e794583bc2071d48f6fd9
+X-Git-Newrev: e2db3fda4c6ad481cf4d0f31aef24e0b969d2358
 X-Patchwork-Hint: ignore
-Message-Id: <20260503145022.4AB6283FC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bitarray: bump version to
- 3.8.1
+Message-Id: <20260503145022.31EAF83FC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-attrs: bump version to
+ 26.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6b2e8baf2e14217292f485c6db40046a53bd1eca
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e2db3fda4c6ad481cf4d0f31aef24e0b969d2358
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/ilanschnell/bitarray/blob/3.8.1/CHANGE_LOG
-
-Updated license hash due to copyright year bump:
-https://github.com/ilanschnell/bitarray/commit/730c524980371b6f6ff2a455d9a39f8272eb9c3f
+https://www.attrs.org/en/stable/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-bitarray/python-bitarray.hash | 6 +++---
- package/python-bitarray/python-bitarray.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bitarray/python-bitarray.hash b/package/python-bitarray/python-bitarray.hash
-index dee6613e69..990dda1348 100644
---- a/package/python-bitarray/python-bitarray.hash
-+++ b/package/python-bitarray/python-bitarray.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index bf2aae1ed8..06cb8d6dfa 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bitarray/json
--md5  eedc882e4497c9b281f95af354f728d9  bitarray-3.8.0.tar.gz
--sha256  3eae38daffd77c9621ae80c16932eea3fb3a4af141fb7cc724d4ad93eff9210d  bitarray-3.8.0.tar.gz
-+md5  7199aad3582d77d568cd673a3477a6f6  bitarray-3.8.1.tar.gz
-+sha256  f90bb3c680804ec9630bcf8c0965e54b4de84d33b17d7da57c87c30f0c64c6f5  bitarray-3.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  6197561dfec99660529830edcfeee0ba  attrs-25.4.0.tar.gz
+-sha256  16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11  attrs-25.4.0.tar.gz
++md5  633953d1aa39cfa76c733a20fdd9c196  attrs-26.1.0.tar.gz
++sha256  d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32  attrs-26.1.0.tar.gz
  # Locally computed sha256 checksums
--sha256  a554c25090ad5a5ea8ad35629dacffbb4d887234b011550218a5a1f9090e5274  LICENSE
-+sha256  e19b1180b6ee73307a8545716be9b36318cf4f926aaf3eb43f7fde3396a102dd  LICENSE
-diff --git a/package/python-bitarray/python-bitarray.mk b/package/python-bitarray/python-bitarray.mk
-index 00b9a98d4b..bdfe0494ee 100644
---- a/package/python-bitarray/python-bitarray.mk
-+++ b/package/python-bitarray/python-bitarray.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index fd900c5046..7456002536 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BITARRAY_VERSION = 3.8.0
-+PYTHON_BITARRAY_VERSION = 3.8.1
- PYTHON_BITARRAY_SOURCE = bitarray-$(PYTHON_BITARRAY_VERSION).tar.gz
--PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/95/06/92fdc84448d324ab8434b78e65caf4fb4c6c90b4f8ad9bdd4c8021bfaf1e
-+PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/fc/47/b5da717e7bbe97a6dc4c986f053ca55fd3276078d78f68f9e8b417d1425a
- PYTHON_BITARRAY_SETUP_TYPE = setuptools
- PYTHON_BITARRAY_LICENSE = Python-2.0
- PYTHON_BITARRAY_LICENSE_FILES = LICENSE
+-PYTHON_ATTRS_VERSION = 25.4.0
++PYTHON_ATTRS_VERSION = 26.1.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/6b/5c/685e6633917e101e5dcb62b9dd76946cbb57c26e133bae9e0cd36033c0a9
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
