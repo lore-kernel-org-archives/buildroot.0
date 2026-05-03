@@ -4,108 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD951FF886F
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 08:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB518FF885A
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 09:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 903C461217;
-	Sun,  3 May 2026 08:12:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 850EF61244;
+	Sun,  3 May 2026 09:16:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HBcUKI_2GN9V; Sun,  3 May 2026 08:12:22 +0000 (UTC)
+ id HKOf9rxKL6o7; Sun,  3 May 2026 09:16:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1549611C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 767BF61245
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777795942;
-	bh=l0QJh+y0s7xeNC8+I87x8BnWDKzVst7ICsVHmUE0pOU=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VnXRPP3OoUKGnZpbE6pAA2eI9VZcU+A/4qsgWNk9OZlYpL03oprVBuHARKB+lqoc9
-	 inW3N3W4kcpFIup3BM0bwMMBKYEzbuyegZYGljs0yPajQAy314CeEqhPQf+/Yy+DJ+
-	 gNhLtjKn5GF7KfpzU8/TXw3WYZiZxj5mHSeacKqZc5BLfROthnMWfwB5DB3g7Ysm+h
-	 JVP0SaUjLDM06M3IIfuByzxB2WktG/EOux8pYXa2wyp8JEejGiMqRQY5YNHBXeUhB+
-	 AICHUQhvyZFJAXo0dBRibRcrL7dB+8+MT0CZ5wm6Co41XkZ/pMPDCf0jjUT7uCjJEX
-	 5n1g+8i5x1AIA==
+	s=default; t=1777799813;
+	bh=jqigPAiFPm0GDqTClGzSBSrXMf3wNkEQi3GJcT+MMyg=;
+	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=ES5Vuv/mzhD29WFuXfKxxTU33XeeYTuKAlYWcuv1RV0aSWY3Fsl5Lgx2NrAM/9GFg
+	 khESNl7J1A9i1PBR+Be8X31BL/mcHGLby3xEq8+GDbVAA4My2IzOuPFHiLFa2YXCbt
+	 DcV6D7AffvtZDZOphX8J9OeFqeOV4jZpW7MQ0Nr3Xpu6X0TtC4AGQkHjzbMFKrtUpZ
+	 nrHuRhEqkWCjf9AteRXJaDNLqv59qwYhH1sWKg1Imf/PFRSq83qL6EirsuJ9WAljZW
+	 qHOlwItLFhaDpBVi24SByxJbiBdVgAPCIMOjK0Wrjob5QZqq8pqlQv/yH4feM3wCfQ
+	 ltK8K/tZV7wRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1549611C1;
-	Sun,  3 May 2026 08:12:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B02C190
- for <buildroot@buildroot.org>; Sun,  3 May 2026 08:12:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 767BF61245;
+	Sun,  3 May 2026 09:16:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E362F204
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 09:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F19EE41548
- for <buildroot@buildroot.org>; Sun,  3 May 2026 08:12:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9A3E40620
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 09:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tZ5TVVoB-6oH for <buildroot@buildroot.org>;
- Sun,  3 May 2026 08:12:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42f; helo=mail-pf1-x42f.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2683B41547
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2683B41547
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2683B41547
- for <buildroot@buildroot.org>; Sun,  3 May 2026 08:12:20 +0000 (UTC)
-Received: by mail-pf1-x42f.google.com with SMTP id
- d2e1a72fcca58-82f68b3aaf7so1264428b3a.0
- for <buildroot@buildroot.org>; Sun, 03 May 2026 01:12:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777795939; x=1778400739;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=jUp55vT0bb2Y2fq2of8ibkxFMygZ8VdoBNO1oLZdm/I=;
- b=RhPP3IoNHXOyaC0IDmmB0ObgNS0O8/miQCg2psGD3I1TjWPs7R3oeimEBs0Kjk4xNC
- KzEuc5KwRyAKVyO60+6keXsOlfqVL4yvnXHLOJZ3VLf29qcBbzVryq5uGT4GKf3zDTY8
- UIRk6QWeZ8AjuDyg/Z4L8RKsxY2Fwj+t1S/3ib8zY4q2NmNDLf4DqKCbWQaWahRglVHz
- Zevihweo8yTqfMtlh5RZpJ55oBa0I5OMA8h7A1ITFBVO5iNdOgOJPtQ/qeN0mcL7Sicf
- W1w3I7Y9rXJhP2pntgjV0T1OpbCipKFdJ/IFACcTY+MZPjaNr+idE5e0FiJiVnoI8FQ7
- /oTg==
-X-Gm-Message-State: AOJu0YyQLQwlnJvwtNAwU76evDR3SKj2eFEJ54PDYVt+PuFV6Ipv3NA3
- Htd0G2pTgYcE2Jv2quz5AZ32jauw84T5aThavwg6bEIJG/fuUcz+hHLibIyUkxDa
-X-Gm-Gg: AeBDievpnrslqicIL+thwuNFhb27HU1y5r3/XfEWXIqbx3YQCkWS9u/K4WRRjpVW5Ce
- OBsJlamesfMoQr3LbHnpus0qefo4Ss4l/UQeD9l4PVD24IJByNVBqvpANLV+UPblmLMn3pDvzvl
- g0pKw05iW0FyzIzsw2sVwyWIy77f+YoSktdrp6uCYWU05fqlaiAWcENetu77wYY8tmOl06MdUuj
- 60ASDHNA6ltAJ66UJc9MMlf4ZcdjAHD4PzfYas4BBsj9lxqahTWwLKzh6HJK/a0StleDXDTnjcX
- Ijb7WAtRTEAX0Kq8W3XNoLBqGRZgJR+CxydzV86rR7Foknl+f8rTLRn4Wh+cHGa/LkxHjv8TJqP
- xz3S+zo5xAEt9TWjOxUUheva0y4HCtPyefnG9fx14deW50vYeEuGiMTBZcGVyIce30cf2uYbQ2Q
- 9wnDRfjAyVT0bo2iX7j5nsWpcFHQ2WeScTiLd0bVaywwd/
-X-Received: by 2002:aa7:9a87:0:b0:82f:abc8:ae0 with SMTP id
- d2e1a72fcca58-8352d1f76fdmr5230846b3a.17.1777795938841; 
- Sun, 03 May 2026 01:12:18 -0700 (PDT)
-Received: from fedora ([47.31.117.202]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-83707fab756sm266222b3a.44.2026.05.03.01.12.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 May 2026 01:12:18 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sun,  3 May 2026 13:42:03 +0530
-Message-ID: <20260503081204.963653-1-chakrabortyshubham66@gmail.com>
-X-Mailer: git-send-email 2.54.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8c_miNDH4jZP for <buildroot@buildroot.org>;
+ Sun,  3 May 2026 09:16:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 500A34043E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 500A34043E
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 500A34043E
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 09:16:50 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 7A1DD31E0C2D; Sun, 03 May 2026 11:16:47 +0200 (CEST)
+Date: Sun, 3 May 2026 11:16:47 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <afcSf1Ijjwe35gdX@waldemar-brodkorb.de>
+References: <20260502143839.1511519-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777795939; x=1778400739; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jUp55vT0bb2Y2fq2of8ibkxFMygZ8VdoBNO1oLZdm/I=;
- b=Rov5G8Kf3lhvOVY6LuS9zqt9R6OyjEJpQb7m6Fh1awUD0kFZBmQVe5sLUR7iELU5AN
- jT5qaMTCvb4y+RBN6juOYiC5r6OZb/2KHcLFE3wfd5+o/dGNJ8kx1OYh/tjD5rY6KqOc
- akedPtAJJ3mNLsXs8ofhbmTZivnb1gIWYeLpcOUsFN6Kl+WnTovnDHt5S8bHM6ilY0ie
- tJW4e7WX3UJKgvGz8jbvG7BBVoaT6Dwx1xgwuvgPRLR2ew+OEkPI3gGjpWPYZR/KRtrn
- yJ6T4S4eUak9U1jCQMN2/AqOXhieX3Gx1ObJ4IlwedmLoTtVpJpntIHZ6UacqvdjAHV/
- 6rqw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Rov5G8Kf
-Subject: [Buildroot] [PATCH] package/tcl: bump to version 9.0.3
+Content-Disposition: inline
+In-Reply-To: <20260502143839.1511519-1-bernd@kuhls.net>
+X-Operating-System: Linux 6.12.85+deb13-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1777799807; bh=a2+AiR8wjq7GkjdCVMZADiDKAtye2ej/khRjWUpjIOo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=MtgJO5j+Tv7UWOwL7giOnRfP82VRhwYYsDFrzg8TTPE7dc3v+DsSv9opYFHJuA9hy
+ hNMI58tigsmI8cyXVm+dpBVPhZuZhixl+yOTZh3s2l9mBApDL83dl5WzSS/uvWEOOS
+ AI3L+iFd491M2YIlbesRmactEXIpRYG2TLVXN3tAEz8J3CCYGU9Xz6A97LCR/C7qqG
+ JelKU7Hc/jxzTaqujmhENoLQSJYJYzL7C5TnGusnCcKM/kb1j28N48G1avl/UnBUjK
+ Jinxwv4bzidVbw+nEmDb66nKroOdxroYog4TwsMXz4nWe+MxjbSYI+L+gx37BRP13L
+ MMqc0X8RuXp7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+Subject: Re: [Buildroot] [PATCH 1/1] package/asterisk: security bump version
+ to 23.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,83 +85,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Major version upgrade from 8.6 to 9.0 series.
+Hi Bernd,
 
-Key changes in Tcl 9.0:
-- Full Unicode support (UTF-16/UTF-32/UCS-2 encodings)
-- 64-bit integer support
-- Enhanced encoding with -profile/-failindex options
-- Script library packaged with binary
-- Improved virtual filesystem support
+it seems the cleanup bug of menuselect is back:
+>>> asterisk 23.3.0 Building
+GIT_DIR=. PATH="/home/wbx/buildroot/output/host/bin:/home/wbx/buildroot/output/host/sbin:/home/wbx/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  /usr/bin/make -j13 ASTVARLIBDIR="/usr/lib/asterisk" ASTDATADIR="/usr/lib/asterisk" ASTKEYDIR="/usr/lib/asterisk" ASTDBDIR="/usr/lib/asterisk" ASTLDFLAGS="-latomic" OPTIMIZE="" -C /home/wbx/buildroot/output/build/asterisk-23.3.0/
+CC="cc" CXX="/home/wbx/buildroot/output/host/bin/x86_64-buildroot-linux-gnu-g++" LD="" AR="" RANLIB="" CFLAGS="" LDFLAGS="" make -C menuselect CONFIGURE_SILENT="--silent" makeopts
+make[3]: 'makeopts' is up to date.
+menuselect/menuselect --check-deps menuselect.makeopts
+menuselect/menuselect: error while loading shared libraries: libxml2.so.16: cannot open shared object file: No such file or directory
+make[2]: *** [Makefile:378: menuselect.makeopts] Error 127
+make[1]: *** [package/pkg-generic.mk:273: /home/wbx/buildroot/output/build/asterisk-23.3.0/.stamp_built] Error 2
+make: *** [Makefile:83: _all] Error 2
+wbx@fluor:~/buildroot$
 
-Also remove bundled itcl and thread packages to reduce bloat.
+Testing with qemu_x86_64_defconfig and asterisk enabled after
+applying your patch.
 
-https://www.tcl-lang.org/software/tcltk/9.0.html
+best regards
+ Waldemar
 
-Tested Using:
-- tils/test-pkg -n 13 -p tcl
+Bernd Kuhls wrote,
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
----
- package/tcl/tcl.hash |  2 +-
- package/tcl/tcl.mk   | 12 +++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index d67a7c4e74..b5f401e83d 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  861e159753f2e2fbd6ec1484103715b0be56be3357522b858d3cbb5f893ffef1  tcl8.6.15-src.tar.gz
-+sha256  2537ba0c86112c8c953f7c09d33f134dd45c0fb3a71f2d7f7691fd301d2c33a6  tcl9.0.3-src.tar.gz
- sha256  c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 0cd242a2e9..4a34f71693 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).15
-+TCL_VERSION_MAJOR = 9.0
-+TCL_VERSION = $(TCL_VERSION_MAJOR).3
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = TCL
-@@ -28,17 +28,19 @@ HOST_TCL_CONF_OPTS = \
- # I haven't found a good way to force pkgs to not build
- # or configure without just removing the entire pkg directory.
- define HOST_TCL_REMOVE_PACKAGES
--	rm -fr $(@D)/pkgs/sqlite3* $(@D)/pkgs/tdbc*
-+	rm -fr $(@D)/pkgs/itcl* $(@D)/pkgs/sqlite3* $(@D)/pkgs/tdbc* $(@D)/pkgs/thread*
- endef
- HOST_TCL_PRE_CONFIGURE_HOOKS += HOST_TCL_REMOVE_PACKAGES
- 
- # We remove the bundled sqlite as we prefer to not use bundled stuff at all.
- define TCL_REMOVE_PACKAGES
--	rm -fr $(@D)/pkgs/sqlite3* \
-+	rm -fr $(@D)/pkgs/itcl* \
-+		$(@D)/pkgs/sqlite3* \
- 		$(if $(BR2_PACKAGE_MARIADB),,$(@D)/pkgs/tdbcmysql*) \
- 		$(@D)/pkgs/tdbcodbc* \
- 		$(if $(BR2_PACKAGE_POSTGRESQL),,$(@D)/pkgs/tdbcpostgres*) \
--		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbcsqlite3*)
-+		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbcsqlite3*) \
-+		$(@D)/pkgs/thread*
- endef
- TCL_PRE_CONFIGURE_HOOKS += TCL_REMOVE_PACKAGES
- 
--- 
-2.54.0
-
+> https://community.asterisk.org/t/asterisk-release-23-3-0/112566
+> 
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-22.9.0.html
+> Security Advisories Resolved: 0
+> 
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.0.0.html
+> Security Advisories Resolved: 1 (also included in 22.5.2)
+> 
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.1.0.html
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.2.0.html
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.2.1.html
+> Security Advisories Resolved: 0
+> 
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.2.2.html
+> Security Advisories Resolved: 4 (also included in 22.8.2)
+> 
+> https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-23.3.0.html
+> Security Advisories Resolved: 0
+> 
+> Follow upstream bump of the bundled pjproject version to 2.16 in
+> asterisk 23.3.0:
+> https://github.com/asterisk/asterisk/commit/104b908fe95f542692f49ee8d600ad1347369688
+> https://github.com/pjsip/pjproject/releases/tag/2.16
+> Fixes CVE-2025-65102: https://github.com/pjsip/pjproject/security/advisories/GHSA-w5vr-39x7-h8g5
+> 
+> Also several upstream security fixes were added to pjproject in asterisk
+> 23.3.0:
+> https://github.com/asterisk/asterisk/commit/d0a0dc8b6d5efc65ee9a8038363196d7c84da5a2
+> Fixes CVE-2026-25994, CVE-2026-28799, CVE-2026-32942 & CVE-2026-33069.
+> 
+> Remove db.h license file due to upstream removal in version 23.0.0:
+> https://github.com/asterisk/asterisk/commit/03f1c246746655a21e4f6d66fb4be5aef8b301f8
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/asterisk/asterisk.hash |  5 ++---
+>  package/asterisk/asterisk.mk   | 11 +++++------
+>  2 files changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+> index 3a8274b458..4c52be9d74 100644
+> --- a/package/asterisk/asterisk.hash
+> +++ b/package/asterisk/asterisk.hash
+> @@ -1,8 +1,8 @@
+>  # Locally computed
+> -sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asterisk-22.8.2.tar.gz
+> +sha256  8662d367da1451acb08e8b7f217ea7bb961a44ef751190bc63e006d65053a2d3  asterisk-23.3.0.tar.gz
+>  
+>  # Locally computed
+> -sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+> +sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
+>  sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+>  
+>  # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+> @@ -16,4 +16,3 @@ sha256  449fb810d16502c3052fedf02f7e77b36206ac5a145f3dacf4177843a2fcb538  asteri
+>  sha256  82af40ed7f49c08685360811993d9396320842f021df828801d733e8fdc0312f  COPYING
+>  sha256  3ce4755b8da872a0de93ecdbbe2f940763cc95c9027bbf3c4a2e914fcd8bf4c6  main/sha1.c
+>  sha256  6215e3ed73c3982a5c6701127d681ec0b9f1121ac78a28805bd93f93c3eb84c0  codecs/speex/speex_resampler.h
+> -sha256  ea69cc96ab8a779c180a362377caeada71926897d1b55b980f04d74ba5aaa388  utils/db1-ast/include/db.h
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index e2fdb189fa..a5ad9ff44b 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ASTERISK_VERSION = 22.8.2
+> +ASTERISK_VERSION = 23.3.0
+>  # Use the github mirror: it's an official mirror maintained by Digium, and
+>  # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+>  ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+> @@ -12,21 +12,20 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+>  # compilation with the external pjsip produces a non-working asterisk, which
+>  # segfaults. The reason behind this is unclear.
+>  # https://github.com/asterisk/asterisk/issues/671
+> -ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
+> +ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
+>  ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+>  ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+>  ASTERISK_EXTRA_DOWNLOADS = \
+>  	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+>  	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+> -	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
+> +	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
+>  	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+>  
+> -ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+> +ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample)
+>  ASTERISK_LICENSE_FILES = \
+>  	COPYING \
+>  	main/sha1.c \
+> -	codecs/speex/speex_resampler.h \
+> -	utils/db1-ast/include/db.h
+> +	codecs/speex/speex_resampler.h
+>  
+>  ASTERISK_CPE_ID_VENDOR = sangoma
+>  ASTERISK_SELINUX_MODULES = asterisk
+> -- 
+> 2.47.3
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
