@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BDA6FF886F
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 16:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B6DFF886F
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 16:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4774740D6D;
-	Sun,  3 May 2026 16:12:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 146A16127B;
+	Sun,  3 May 2026 16:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rl8QwCAHH_Xv; Sun,  3 May 2026 16:12:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NiocViGjxfV0; Sun,  3 May 2026 16:13:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D753414BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D2376125B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777824764;
-	bh=PLxF6AH95Sx+oAVDU18mv0sG75/3s0i5CHNOnmT9Oc4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SNW8fGFyZRtjjIXvi4Uoy4PWpnni44ik/c9x/fi0b5cj0+E1MsY9cp0ljnQoszC4R
-	 7RF3dlEFbEl5h9uAwY3LqvuKA8mWUvs54oIQikn3ANGim8sH38mgqCE3w8YNA0bsy5
-	 H90AXlY9JpcFtq6QrPxT+dnTR0O0lIS4Gh/iVTvHvfuypjcg+gVx1i6jjOPR950BJt
-	 9htctiu+ueSaCpHkH6HcROHuATfJb1p0ls47YIIWdloqwLpoO6ItGLJBh+zqGvtSNp
-	 dd6N+5rCz4gASbuZ0/WjN39BPd/hETJt/h2B6ixfWu+SSm7UPcFgx8I1X1RTdtuiBv
-	 e901WNATfo3UA==
+	s=default; t=1777824818;
+	bh=Bx30zrHQx+NaTaZmGU04vRisLuAc6Q9ACJ8qiEVMv8s=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=q/kxWBY4KGIuyglrvbfE3gGrWN1J1RNUovafDHU2c5u+Jku9+6B6VGGA/9s5S72wz
+	 HuJrvFQj0jjtj1yoNNfndi+4wJnpIAOuX6fnbyz5DQ7+68zEhCQ5VFoYZTI0yFsAmT
+	 sVel7Pkhunymyq+II+u61HafXPZMKABwyuWrtcr4hQiUilAS1Dg/fDH7DkdaBAlm4y
+	 LYOY3TTzEZGSdGfKQ3KjETsFdjxmbeOTEfC0Yq/BD6h0ZvoqaTii6f7VnB5F7NMdHU
+	 gKyDVHJ6dyW1wHAXiOJmvFSL0WJ8EEdkwfLgxiVrAVUY1d7H4aP4all0IoAJLPZF9o
+	 lqwXS35z2ZUbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D753414BF;
-	Sun,  3 May 2026 16:12:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D2376125B;
+	Sun,  3 May 2026 16:13:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DA583204
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:12:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D22D25D
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC2EB40747
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:12:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EC95405C2
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:13:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHkSgrKTb07M for <buildroot@buildroot.org>;
- Sun,  3 May 2026 16:12:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E077406FA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E077406FA
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:12:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8D2084048; Sun,  3 May 2026 16:12:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 3 May 2026 18:10:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4d46b275ce6ac61558e8c3fcb1e2191b16c2454
-X-Git-Newrev: 5657229086de7977533aec298922f0ce1b7a1745
-X-Patchwork-Hint: ignore
-Message-Id: <20260503161241.B8D2084048@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dillo: bump to 3.3.0
+ id 1DDj_KVazr3R for <buildroot@buildroot.org>;
+ Sun,  3 May 2026 16:13:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 89473403D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89473403D7
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 89473403D7
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:13:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id BC55660137;
+ Sun,  3 May 2026 18:13:32 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 03 May 2026 18:13:32 +0200
+MIME-Version: 1.0
+Date: Sun, 03 May 2026 18:13:32 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <afb15Mavy9Eo776E@waldemar-brodkorb.de>
+References: <afb15Mavy9Eo776E@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <1189ac937407bda9e84dd80b744f9762@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777824813;
+ bh=gubNfCLdcRGVJ7UsnkeMfpLMyuE6tRd0+btC5TlDqBo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pwJpyqUX+yLlc0ZvYo7oaumRWcsQXiwTIAFj638u3hK9cpkl9NL9VVsvvPgebvfCi
+ tyUzETaS9O/qgaJQC0jzOBosaT1UX2GCkkPi1Bol81wvgwawrL67ncshXxwGEZ7W5g
+ xDHLbYTTLqpVqn2zkMcpnTE8Zg5Dhzjt85YxkI07MrkD5pQBI1a4HynnUmT77FufR7
+ JMmwnHJr+vcWARnT8txPIwf4si2j39yPtoQEqFKsOIZ30KW6JPct4VgvMq6PUkB2lV
+ 6vzxBXfK0bcEMfVOJSVxv+QYZxGeOSNTuwlOjsUX0dYpFeB9mbLcsdghpZPnP/c4Uk
+ nk5zsLnWnS+tw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pwJpyqUX
+Subject: Re: [Buildroot] [PATCH] package/dillo: bump to 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,68 +94,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5657229086de7977533aec298922f0ce1b7a1745
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/05/2026 09:14, Waldemar Brodkorb wrote:
+> Update to 3.3.0, see here for a changelog:
+> https://dillo-browser.org/release/3.3.0/
+> 
+> Update to use new homepage. Project is moving to their own
+> infrastructure.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Update to 3.3.0, see here for a changelog:
-https://dillo-browser.org/release/3.3.0/
+Applied to master, thanks.
+For info, I removed DILLO_SOURCE to fix a check-package error.  See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/5657229086de7977533aec298922f0ce1b7a1745
 
-Update to use new homepage. Project is moving to their own
-infrastructure.
+Best regards,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Julien: remove DILLO_SOURCE to fix check-package error]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/dillo/Config.in  | 2 +-
- package/dillo/dillo.hash | 2 +-
- package/dillo/dillo.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/dillo/Config.in b/package/dillo/Config.in
-index 1ebab8ab3f..1eea18e144 100644
---- a/package/dillo/Config.in
-+++ b/package/dillo/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_DILLO
- 
- 	  Enable openssl package to gain https support.
- 
--	  https://dillo-browser.github.io/
-+	  https://dillo-browser.org/
- 
- comment "dillo needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
-index 50559bf857..c6b863c9ef 100644
---- a/package/dillo/dillo.hash
-+++ b/package/dillo/dillo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1066ed42ea7fe0ce19e79becd029c651c15689922de8408e13e70bb5701931bf  dillo-3.2.0.tar.bz2
-+sha256  db1863261d5efbd27b090e430c88064082b891cea1edf7a14e234cca51754f60  dillo-3.3.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index ce8660c6cb..6c8e638e8a 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--DILLO_VERSION = 3.2.0
--DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
--DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)
-+DILLO_VERSION = 3.3.0
-+DILLO_SITE = https://dillo-browser.org/release/$(DILLO_VERSION)
- DILLO_LICENSE = GPL-3.0+
- DILLO_LICENSE_FILES = COPYING
- DILLO_DEPENDENCIES = fltk zlib \
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
