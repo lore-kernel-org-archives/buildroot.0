@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E148CD3426
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 327ABCD342C
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 14:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C33D612DB;
-	Sun,  3 May 2026 14:50:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 083D18425C;
+	Sun,  3 May 2026 14:50:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B89RRUIxHKGV; Sun,  3 May 2026 14:50:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RYSqA2xZvSIp; Sun,  3 May 2026 14:50:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 886D2612E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12BDD8425D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777819842;
-	bh=aEYXbapfI6VJXrdJQCeAQm8GbB8ScmEMtAb2LcZDkeY=;
+	s=default; t=1777819844;
+	bh=ujewxzkkYzFAWDyugoL9D/3oCna9rfNJyZ9iWCRvpPk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VXBqji5Z1Lx4hcxkDC7jfjD0i0LyLfQbhPw+h+xRZ8DjvFQTqCyxTBd4EpL1GSDGE
-	 6LabxFT9g8rNQPDRn9MGiy9W3LQ+UoCfsXbUPT6KFhfU1uyPwE9GdPabArLCrXWOwj
-	 QhLeKhgYBurivUTX+Jm9Tp2rTDWXnVneGVgKd8smDkDlAibTM8yq6NpQ/P9mp5d4gj
-	 NIZNG4gUG1luKEWzQjo4SWuYBVLkoC1zb2jqaMgSzU/ZJymw7EkSQCSk/dPfr74Bd9
-	 hYzx/5cTcr2t/nEDPl7naFLLjzq44ogR0QYZrNd/WTWMox3zq7v+67FlbOliwI/EYz
-	 r27GYzixO/ahw==
+	b=a7oPeFQNgECSVh6Zih22ocG0Nw6GFqGrDMmyWcBvyRzTJMy6mdfkd9OWGr4opTd8X
+	 3ft3Uu4EWx1gmQcuPcQ5Tsvm/F+nnI72k7pexe4l/FxeabN5xt57+R/huwO7UoT0Mk
+	 ec+bk1L+soY6szh1E19KxK+1ectJSeIT/COEyQmVddNDWfF8nOdh1A8Enp/xxldMo3
+	 4qupnPSmzT6MYCNBCOUIE2cpUKX4qu4EeC2NEI1OPCptr3sgfvuJr8ayYwmvlgdVkA
+	 xgOZNmUKhQo4adECanAf7WoZAQ9PUZ4CI8Z/BbF63dV+iSK36Zkg9Q1ajq+LkSI3+q
+	 jkJCBxigblZMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 886D2612E3;
-	Sun,  3 May 2026 14:50:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D819190
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12BDD8425D;
+	Sun,  3 May 2026 14:50:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CCB7127
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 984856125D
- for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1EEF40BFA
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 190B0JXwswzt for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jHqflZ0Fovdk for <buildroot@buildroot.org>;
  Sun,  3 May 2026 14:50:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F3B76126E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E4DE40C2B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F3B76126E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E4DE40C2B
  for <buildroot@buildroot.org>; Sun,  3 May 2026 14:50:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 255A183FC0; Sun,  3 May 2026 14:50:25 +0000 (UTC)
+ id DC80A83FC0; Sun,  3 May 2026 14:50:24 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 3 May 2026 16:48:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 536875e989dcff0856b336035354210285210462
-X-Git-Newrev: 790b9185df82cc8373c00a6fc0ca1c29ed2406f5
+X-Git-Oldrev: 5a430a6f92c330a9602e85e9f2ab9fdaebc7f046
+X-Git-Newrev: 6628b4f51b4d9b6edc7902471c87dc7e808d4213
 X-Patchwork-Hint: ignore
-Message-Id: <20260503145025.255A183FC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-filelock: bump version to
- 3.29.0
+Message-Id: <20260503145024.DC80A83FC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dbus-fast: bump version to
+ 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/790b9185df82cc8373c00a6fc0ca1c29ed2406f5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6628b4f51b4d9b6edc7902471c87dc7e808d4213
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/tox-dev/filelock/blob/3.29.0/docs/changelog.rst
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.1
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.2
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.3
+https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v4.0.4
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-filelock/python-filelock.hash | 4 ++--
- package/python-filelock/python-filelock.mk   | 4 ++--
+ package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
+ package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
-index d38518efc6..8b32611fc2 100644
---- a/package/python-filelock/python-filelock.hash
-+++ b/package/python-filelock/python-filelock.hash
+diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
+index deaaf4bd79..4709b7ed18 100644
+--- a/package/python-dbus-fast/python-dbus-fast.hash
++++ b/package/python-dbus-fast/python-dbus-fast.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/filelock/json
--md5  c0e50eab0beb1642dca5bae6246a2b54  filelock-3.25.2.tar.gz
--sha256  b64ece2b38f4ca29dd3e810287aa8c48182bbecd1ae6e9ae126c9b35f1382694  filelock-3.25.2.tar.gz
-+md5  85c7195c8c6455fd212d74717cc6a62b  filelock-3.29.0.tar.gz
-+sha256  69974355e960702e789734cb4871f884ea6fe50bd8404051a3530bc07809cf90  filelock-3.29.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
+-md5  02f1448d52a71999626135269f3763f2  dbus_fast-4.0.0.tar.gz
+-sha256  e1d3ee49a4a81524d7caaa2d5a31fc71075a1c977b661df958cee24bef86b8fe  dbus_fast-4.0.0.tar.gz
++md5  af7d1d9f9b169f07fb4f185c6a78d664  dbus_fast-4.0.4.tar.gz
++sha256  43137f0b73a7adbf7d5c0e9eb9d8d34df9e6e0aeafade2166e641c52dfe0a853  dbus_fast-4.0.4.tar.gz
  # Locally computed sha256 checksums
- sha256  608c89d5060ae9921adccf3236695bc654a9946e12323ef6c021dfa04e294d48  LICENSE
-diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
-index 21848d542c..b7a4638775 100644
---- a/package/python-filelock/python-filelock.mk
-+++ b/package/python-filelock/python-filelock.mk
+ sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
+diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
+index 5addc1031f..895d5fefd5 100644
+--- a/package/python-dbus-fast/python-dbus-fast.mk
++++ b/package/python-dbus-fast/python-dbus-fast.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FILELOCK_VERSION = 3.25.2
-+PYTHON_FILELOCK_VERSION = 3.29.0
- PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
--PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/94/b8/00651a0f559862f3bb7d6f7477b192afe3f583cc5e26403b44e59a55ab34
-+PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/b5/fe/997687a931ab51049acce6fa1f23e8f01216374ea81374ddee763c493db5
- PYTHON_FILELOCK_SETUP_TYPE = hatch
- PYTHON_FILELOCK_LICENSE = MIT
- PYTHON_FILELOCK_LICENSE_FILES = LICENSE
+-PYTHON_DBUS_FAST_VERSION = 4.0.0
++PYTHON_DBUS_FAST_VERSION = 4.0.4
+ PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
+-PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/3d/f7/36515d10e85ab6d6193edbabbcae974c25d6fbabb8ead84cfd2b4ee8eaf6
++PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/5f/cd/402b0e524bdf37d8b1d22b1d926c538bf1d2eedf115ea1d401c6c08a7d81
+ PYTHON_DBUS_FAST_SETUP_TYPE = poetry
+ PYTHON_DBUS_FAST_LICENSE = MIT
+ PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
