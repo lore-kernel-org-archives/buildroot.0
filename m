@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4D38FF886F
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 16:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B9BBFF886F
+	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 16:02:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8897861032;
-	Sun,  3 May 2026 16:01:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 235916104D;
+	Sun,  3 May 2026 16:02:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S14EYXXFPBI2; Sun,  3 May 2026 16:01:51 +0000 (UTC)
+ id 9OD9_1jO66tO; Sun,  3 May 2026 16:02:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36BA561009
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ABFD61062
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777824111;
-	bh=GZwlkVqOkuIGfHiyWDWIL+c2l6GUQZDhJgZpb9lYk6E=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pIibkzQmf+syipOhM6mwhIKt17wQhmhWZG3rIvEk2EcHsTgeg115iSd/BdjAYx1gK
-	 fn+RERb+UnKbLXAIZXGLvEmSSK4aE8xN8UC6JcX7bUwEKyPiB2+rRV2FSl1L9DGxcC
-	 l5E3Nv6Ea6mCgLl/dq5sz26r228t+JwcOt9URGrgGI7Dqkyrbr/ZGXAO5+35qASLS4
-	 JV1403aTgOhU6fXTmboqJJDf9x5ulXetZR+AsTSBWTxJxb2s1QuLHpzsCTJPzRKoWf
-	 pdwMoqW2PPRqm90Aq+D/9NoB7PvIkA52nNyra7Lp8PJXI6EKPuzNLInGYfdoB23fnA
-	 5DY1nfB3YLPJA==
+	s=default; t=1777824122;
+	bh=iZ/xkbpdnmHmjjZsNyZXDw/J5qVtGQCnOZf/eO/vxRM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NYPKNcviKcIOGaQ/IHOowS0FSJjIvRx0xWOGtCSJdfYefMadzBCcNQrNBF5JRHx4F
+	 J2bogK5ZR9vCBL6AuThgk6DjlaegdSuuVqls/za92oBccVa/sZ956hUMrCC9d8coi+
+	 M8vlMIP5vjbqnlUvjVNlo0hi6vzf6Z+CZJYY9IJ7+4G7kae1sxwNdvfVuZfAwr0fH8
+	 5YHXrSJlpLpG6ognNjJIg0RjnFEAPAaG10mMQmJV5dIbJGH0nO3PADKw1FiM1c7eqp
+	 ifpZF9V9PTF/Yt6lQNzZEEyb1IJ2wc226KMKJ29CzYLYi2ppgoHTlKN2wXe2LPBim/
+	 t4u1ScUk2J8Fw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36BA561009;
-	Sun,  3 May 2026 16:01:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B7CA425D
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:01:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4ABFD61062;
+	Sun,  3 May 2026 16:02:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DDD7204
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:02:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB274046D
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:01:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7411241579
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:02:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOE5V-3q897l for <buildroot@buildroot.org>;
- Sun,  3 May 2026 16:01:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0FAF403D7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0FAF403D7
- for <buildroot@buildroot.org>; Sun,  3 May 2026 16:01:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 849AA8403A; Sun,  3 May 2026 16:01:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 3 May 2026 17:37:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b136c89ffed35c30dff1802924a4dcf9bdab798
-X-Git-Newrev: d4d46b275ce6ac61558e8c3fcb1e2191b16c2454
-X-Patchwork-Hint: ignore
-Message-Id: <20260503160148.849AA8403A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsodium: security bump version
- to 1.0.22
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dUNbLNnOZb_O for <buildroot@buildroot.org>;
+ Sun,  3 May 2026 16:01:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4BB3C41577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BB3C41577
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BB3C41577
+ for <buildroot@buildroot.org>; Sun,  3 May 2026 16:01:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 3A961B00583;
+ Sun,  3 May 2026 18:01:54 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 03 May 2026 18:01:54 +0200
+MIME-Version: 1.0
+Date: Sun, 03 May 2026 18:01:54 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260503060906.600090-1-bernd@kuhls.net>
+References: <20260503060906.600090-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <2d9137ee4cf00e3a60cab2b96db144c7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777824115;
+ bh=Y7qE/iOhibGC3En/Nu69ha/FPAj4l80CY6c/OQbe4jA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Hkmo8zfS74muNhVhyHFNiS3XdchAjXiZKlH0xqAqhvxC2dVUXJIXppZ3Zq0IbB6cN
+ XZkJd8v2o2gZUbXUxip9zYjzxC0/QLHhExphppZnJDB3ED7ALTKPZbFhKq2DSoyIAO
+ CO65ayuF+iK1/HX7FDJ9ycG4clfAswY4y16Uyy0VAaLm4+fJi32P2YvmzeobpTELwX
+ zPw5GajTFQrVEzPOCYXhBaFayNj+y41LmH8IKd9GnyowxWCCmWP5YjMArE5J2KCLdi
+ faJvgBke+/+rCyDTuDalt6MeGAPzgnO29jcCGrlHaKSnKKevAgoOuWG/XJzqABiSGv
+ 23Cm/JojgV6Mw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Hkmo8zfS
+Subject: Re: [Buildroot] [PATCH 1/1] package/libsodium: security bump
+ version to 1.0.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,57 +96,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d4d46b275ce6ac61558e8c3fcb1e2191b16c2454
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 03/05/2026 08:09, Bernd Kuhls wrote:
+> https://github.com/jedisct1/libsodium/releases/tag/1.0.22-RELEASE
+> https://github.com/jedisct1/libsodium/releases/tag/1.0.21-RELEASE
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/jedisct1/libsodium/commit/80c6bab4518aecd197d830c145b5d23e9b932ea3
+> 
+> Switched to bz2 tarball provided by upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://github.com/jedisct1/libsodium/releases/tag/1.0.22-RELEASE
-https://github.com/jedisct1/libsodium/releases/tag/1.0.21-RELEASE
-
-Updated license hash due to copyright year bump:
-https://github.com/jedisct1/libsodium/commit/80c6bab4518aecd197d830c145b5d23e9b932ea3
-
-Switched to bz2 tarball provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libsodium/libsodium.hash | 6 +++---
- package/libsodium/libsodium.mk   | 3 ++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index ae4765a2ab..ef982ea759 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking Minisign signature
--# https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz.minisig
--sha256  ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19  libsodium-1.0.20.tar.gz
--sha256  43964d976a6db3fb986af689d05f8ca0e9971878bccae709750dac8fdc4a99cf  LICENSE
-+# https://download.libsodium.org/libsodium/releases/libsodium-1.0.22.tar.bz2.minisig
-+sha256  51b93737bf62e8549b0e94dce0fba92169e31c8ecc160883460a9bdaa6d2c298  libsodium-1.0.22.tar.bz2
-+sha256  508a76d186356c0dd807a670ef510964f8724557024796a2c426c6c0e19ab683  LICENSE
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index 7dd763e145..5f62a66246 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LIBSODIUM_VERSION = 1.0.20
-+LIBSODIUM_VERSION = 1.0.22
- LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
-+LIBSODIUM_SOURCE = libsodium-$(LIBSODIUM_VERSION).tar.bz2
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
- LIBSODIUM_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
