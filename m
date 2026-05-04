@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3348CD3427
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 17:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 577F0FF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 17:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A5EC41B68;
-	Mon,  4 May 2026 17:17:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 233DE84683;
+	Mon,  4 May 2026 17:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cSIzN93MXdm6; Mon,  4 May 2026 17:17:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CmM78cG2fbuD; Mon,  4 May 2026 17:18:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C129F41B6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5677B84680
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777915061;
-	bh=ZOmJzpTH2WzOaRkB9i6CeeloQiJp9/Il0NcpoJgurv8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=tAoNgXxtBfl5QQqMVOWLj2GnaCXHSwK/9HIIphY2oGcg/s0LmGy7X/kEhbldVGqk1
-	 dWPYkW0Hx2gKKIveibbhcCA0R57fmHP6VS+P2BEV7h6Dfx86mahAhTEmtPmEVw0ADd
-	 IekYIobC7XtiY1gD+rynOn1afOp6R965v4QcknhKKoWpouZt/X0Vv2da2CiKb3XWI2
-	 ebfnnBK/xvDfHqN0h4khOOPrJzH/QE8Z2b9Qykwtk7aXDUii0q38jXq6mQslV4Uqi0
-	 ykXeMTm0U15uuPDBktF/8Ng7wMnt9WxB0L8Pzm8e7NBmxrVp3L5EzsCJc6DeRvHVzO
-	 /m0I4iMSKl8xA==
+	s=default; t=1777915089;
+	bh=Ij/e6jqpWgg348c5W6Rpx3HCihhR6ugL9pHIA7wNAV8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=oss96EL+KQxbpJmCc+VLKpF+I+PRrCNMHit8YL1jGyifhgDP05xbiQKVDP05WCkUQ
+	 9I8M+Iifis1TD29Kiqe4YePay/U6grJzTt7dxlwoRJnmKterAs6R0es/WsQmtIitZl
+	 vPeabfW8EDRKvRhrmiWfGIhUu+Fj02H2O8purjPYGluTgqJNf1qW8flPGfy+92johD
+	 53qHmtc1+v8s5rAqL5PE2g6w6VH/X85DyehouUS4ddQT3isA9SARm+J3i6V47Ij7HB
+	 3mPN3ZYKK0Q6ZGP3jlYCHfjSv9Lr0vVTPCja6oScm0f/9czH6K7SQPXpqlR7uzxzhs
+	 tl2o2U9ht8XMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C129F41B6F;
-	Mon,  4 May 2026 17:17:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E081204
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:17:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5677B84680;
+	Mon,  4 May 2026 17:18:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 160B4204
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5FD5D41B6F
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:17:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFBC46156E
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:18:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPNsGO8EbOmg for <buildroot@buildroot.org>;
- Mon,  4 May 2026 17:17:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1BB41B68
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B1BB41B68
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:17:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CCCC8439A; Mon,  4 May 2026 17:17:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 4 May 2026 19:11:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22f1e90d6ba61e9e6306d98461adad29debd6c7b
-X-Git-Newrev: 206cd3cd31e1bff61f42b2bde9f71e0e003f6c14
-X-Patchwork-Hint: ignore
-Message-Id: <20260504171739.6CCCC8439A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mutt: bump version to 2.2.16
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cmdgz_xJ1zD1 for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 17:18:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C43FB61568
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C43FB61568
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C43FB61568
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:18:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 606A75FFAF;
+ Mon,  4 May 2026 19:18:02 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 04 May 2026 19:18:02 +0200
+MIME-Version: 1.0
+Date: Mon, 04 May 2026 19:18:02 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20260504162929.41045-1-peter@korsgaard.com>
+References: <20260504162929.41045-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <5cbdb737410deab1f652f96b8d7c864b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777915084;
+ bh=Xnn4Hzuunrh0j7ZzFLmf3dwfSSIsb9M58/P1cIqUEIE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=MJ2tW0dH12NwK5R6Q4MhqDUeOx8UpNeDPxSaUWqByX653xEu+1J8mcdAd0yvPjLC3
+ LjDqE2tMappfNo6oyOYFUXD2ujIRH4bId/aUlQvmutCcsS0XRz2IGyTQMWAes6JWWa
+ T8kr2b/AGBZw40zVIsnk4eL+uOlP91b6pvLhbx83KHye9dsB99k4B+Sjw0sZ6n+nBl
+ Eg91mYuh7+UsMlf2t/9+e546vliptQLIbYsgAsOaPB2sx6+7du2g++ZlfKR2iczN9A
+ nComeaDAu30zCe+lY4+WSSKvJf+ccRN7D+aeOhGkt+v8Kl+sDrM5CTkkuTtYZmrhkf
+ Gkgly7DvhpIuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=MJ2tW0dH
+Subject: Re: [Buildroot] [PATCH] package/mutt: bump version to 2.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,68 +95,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/206cd3cd31e1bff61f42b2bde9f71e0e003f6c14
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/05/2026 18:29, Peter Korsgaard wrote:
+[...]
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Bugfix release fixing crash / NULL pointer access issues and gsasl
-authentication compatibility with Microsoft servers.
-
-Mutt 2.2.14 was released on February 20, 2025.  This is a bug-fix release,
-fixing a couple possible crashes, in GPGME and with IMAP when logging out,
-and correcting a small issue with unnecessary encoding of "." in attachment
-names (2231 encoding).
-
-Mutt 2.2.15 was released on October 2, 2025.  This is a bug-fix release,
-fixing an IMAP search/limit bug, a compilation issue, and containing a
-workaround for gsasl SMTP authentication issues with some MS servers.  A few
-parts of the documentation were also improved.
-
-Mutt 2.2.16 was released on November 22, 2025.  This is a bug-fix release,
-fixing a resource leak when compiled with OpenSSL/LibreSSL, which could
-eventually result in new connections failing.
-
-http://www.mutt.org/news.html
-
-The 2.2.16 release is not available on bitbucket, so change to the official
-ftp.mutt.org location instead.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 72c7924e9b..4fd71fd6ab 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eb23faddc1cc97d867693f3a4a9f30949ad93765ad5b6fdae2797a4001c58efb  mutt-2.2.13.tar.gz
-+sha256  1d3109a743ad8b25eef97109b2bdb465db7837d0a8d211cd388be1b6faac3f32  mutt-2.2.16.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 9a6be6d4a0..503f2d283e 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 2.2.13
--MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
-+MUTT_VERSION = 2.2.16
-+MUTT_SITE = http://ftp.mutt.org/pub/mutt
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
- MUTT_CPE_ID_VENDOR = mutt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
