@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31B53FF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 17:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45CE0FF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 17:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF2FC41A54;
-	Mon,  4 May 2026 17:11:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kX3JwFLyna_c; Mon,  4 May 2026 17:11:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EACA2419AB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777914676;
-	bh=JL1rNQbL9KbPpC4zgcuGKeWDxQhmy8kKC5bQgumxqyQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=o1fp7bUuCSB2Q86TswWUIU15Bn6/gnkl3SEJxoLGwsgrUMUu2ATS5fslTGSsJY0hB
-	 7p14VlqEFalUqZVdZtIRMxvGmBWc0Y77l894Zwd/1rrq6ef9RANj3KWvETcJwA0wMn
-	 pWiEamwEVKP5CW+lDhtCgrI21H/U3boRNFEmTQV53Hp3FFaUaNX4yKEhBcohqMHhPe
-	 iPcv5st4TYELOHPIWeaU34L8OE7gdSuupNaffCEL1H+ARRIRBbG8YFEI98On5Y1KfO
-	 l32i/YPUI0fFxk0I3cPT4ImpMz6d0LJssWv98uJGuXSf/FlVrtOTZNoBT+kL6MCN9d
-	 Wqr8a8LVmACcQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EACA2419AB;
-	Mon,  4 May 2026 17:11:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B905F204
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F0D7845B6
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05D458467F;
+	Mon,  4 May 2026 17:11:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wF7GT9-ByEW2 for <buildroot@buildroot.org>;
- Mon,  4 May 2026 17:11:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C85C845BF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C85C845BF
- for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E85284392; Mon,  4 May 2026 17:11:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 4 May 2026 19:07:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1f77168d11cb5992166610283a631c8bc777b96
-X-Git-Newrev: 22f1e90d6ba61e9e6306d98461adad29debd6c7b
-X-Patchwork-Hint: ignore
-Message-Id: <20260504171113.2E85284392@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/haproxy: bump version to 6.2.27
+ id jnjC41ayUFLl; Mon,  4 May 2026 17:11:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0357B845BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777914697;
+	bh=6vHjc70vkxlVFtnFiBMyPrb6eJ3FhF3rNkKlfvb/ICE=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=VCgyTRyfzbQricY37xuoQFRFkJDgyw2/Dp0ACl3WcjrBpaGWgQ8QYUigBjl8bV3ik
+	 l77DNUEYHtZb/bNPvzeI6aTgNA/LfK8886k/7h+2jCJw0GROZ0osFG1R587Dh8X8U6
+	 I6eacw/ak+dvu1FOD1YPzb7REHJZZNCYjl974zcgzC/bwJVGKpgMDTwhIkkG1hqcvW
+	 3dBCJLuEZydK05IMveQXFZ2BcaBBMA67uquBDlqlhOn9jjV4x25vtbgTr3DVm+XbyQ
+	 u3lB+/SPXFsdOEMh87IYsSuHGcrKGliOmTYHpf9sJD8SJySsuNVYqLV9oZ3BEoSQds
+	 UwgDOpzE2BCLQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0357B845BF;
+	Mon,  4 May 2026 17:11:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FE20204
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4147C845BF
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iFv0XUAxhWMm for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 17:11:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B2025845B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2025845B6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B2025845B6
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 17:11:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id C72FF13F854;
+ Mon,  4 May 2026 19:11:28 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 04 May 2026 19:11:28 +0200
+MIME-Version: 1.0
+Date: Mon, 04 May 2026 19:11:28 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20260504160924.14432-1-peter@korsgaard.com>
+References: <20260504160924.14432-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <d0abdc273a842bf4243335d4801b9e0f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777914691;
+ bh=C0a+GCu0oP1Hc37TMzWYZloqKvMwKM99gCS1jNJnUUQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=LxiUPivlnqqzzQYBCcc7ypuNaSOlHQ9VvdZbK0PNk7KeqFPEgjWu3RckSVPq3CZ1W
+ 6Owfv1yQoz3mbPttG11+KZKByXDVLvuSppsk4kwm59MujA4lGAbgzRNFB+/gLLAwKY
+ ayUVia5djd7KgEDbYYe74NCt9uOjvcpB3knLg1I4gboY90CMKCx1X4T+bYTm6YRSsk
+ zplf9GNPPq1FCG4xfK/LZ2qeIcjNpuOLed5IB755rk26yNSWQZ0ABR9vSBHNTYTfNg
+ hIzrurI23N2n2n1UnCVFZ46DdqIVFHOxL1phdMlEoYpsq0F/nwnBLxnza9M+jAOb7L
+ RBJVOSMQG7xTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=LxiUPivl
+Subject: Re: [Buildroot] [PATCH] package/haproxy: bump version to 6.2.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,163 +95,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/22f1e90d6ba61e9e6306d98461adad29debd6c7b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/05/2026 18:09, Peter Korsgaard wrote:
+> Bugfix release with large number of (security) fixes.
+[...]
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Bugfix release with large number of (security) fixes.
-
-For 6.2.26:
-
-- a severe issue was found in the compression library (slz) where
-    specially crafted patterns with tune.bufsize above 17408 or
-    tune.maxrewrite below 964 (both non-default) could cause output
-    buffer overflows due to the overhead exceeding the promised
-    worst-case growth bound of 5 bytes and reach up to 1/16 of the
-    input contents. Given that the compression output is hardly
-    controllable, and the canaries at the end of the pools will catch
-    this at release time, the risk of exploitation by a hostile server
-    is close to zero, however it will cause repeated crashes if such a
-    crafted file is present on a server and regularly downloaded. A
-    workaround consists in keeping tune.maxrewrite at least 1/16 of
-    tune.bufsize or just not changing them since the defaults are safe.
-    A CVE was requested two weeks ago for this one, I'll mention it when
-    it arrives.
-
-  - HTTP/2 incomplete transfer detection was missing for HEADERS frames
-    carrying END_STREAM. When relayed to an HTTP/1.1 server that
-    responds before the end of the transfer, this can result in bytes
-    of the next request over the same connection to be ignored. Most of
-    the time it will cause the connection to be dropped due to an
-    unparsable request, but when combined with "http-reuse never", or
-    on totally idle servers, the client could expect the second request
-    to reuse the same connection and perform a content smuggling attack
-    that would allow to pass an unverified request to a server. For
-    those who can't upgrade, a temporary workaround is to disable
-    HTTP/2 by specifying "alpn http/1.1" on bind lines and adding
-    "disable-h2-upgrade" in HTTP frontends. A CVE will be requested for
-    this one.
-
-  - HTTP/1.1 bodyless messages announcing a non-null Content-Length did
-    not force close mode on the backend, potentially causing
-    desynchronisation between HAProxy and the server in conjunction
-    with other bugs.
-
-  - FCGI record length truncation with large bufsize (>=65544) could
-    enable request smuggling into PHP-FPM since the 16-bit
-    content_length field silently truncated to 65535 bytes.
-
-  - an unvalidated SNI name_len field in ClientHello could cause OOB
-    heap reads of up to 65KB via XXH3, smp_dup(), and log-format leaks
-    on any TCP frontend using req.ssl_sni, possibly causing crashes when
-    used.
-
-  - ECDSA JWT signatures with ES256/384/512 could cause a heap overflow
-    of ~14 bytes in the DER conversion before verification.
-
-  - Lua's httpclient headers conversion accepted more than 101 headers
-    without bound checking, causing a stack buffer overflow reachable
-    from any Lua action/task/service.
-
-  - peers dictionary cache updates accepted an unvalidated entry id as
-    array index, allowing OOB heap writes at attacker-controlled
-    offsets.
-
-  - Lua had a use-after-free of HTTP reason strings managed by Lua's GC
-    between set_status() and start_response(), potentially leaking
-    adjacent information from memory.
-
-  - the regsub sample function could leak ~9-50KB of stale heap data
-    when back-reference expansion overflowed the output buffer.
-
-  - SPOE decode_varint() had no iteration cap, allowing pointer
-    arithmetic to wrap and dereference memory ~64KB before the
-    allocation, causing SIGSEGV or parser confusion.
-
-  - in sample expressions, less common HTTP methods (PATCH etc.) are
-    represented by both an enum and a string. The string part was not
-    handled correctly in sample duplication functions, resulting in
-    their contents appearing empty when trying to fetch the method.
-
-  - QPACK varint decoding is now also limited to 62-bit, and had a risk
-    of 1-byte OOB reads on truncated streams, which could cause
-    incorrect header decoding.
-
-  - config: a few argument parsing errors in conditional expressions
-    used in ".if" could be misreported and even cause a crash during
-    the parsing. Also, a few keywords relying on warnif_misplaced_*
-    didn't check the return value and didn't count emitted warnings as
-    warnings.
-
-For more details, see the announcement:
-https://www.mail-archive.com/haproxy@formilux.org/msg47016.html
-
-For 6.2.27:
-
-A major issue were fixed by this release. It was related to the scheme-based
-normalization. The presence of commas in Host header and authority was permitted
-and would be used to compare the values, which then would differ when read via
-hdr(host) which splits them on commas, and under certain circumstances, trigger
-crashes (at least it did in the OSS-Fuzz environment when injecting the values
-directly at the HTX layer). The issue was fixed.  Remains the case of the comma
-characters in authorities. Even though the spec permits commas in authorities
-(not in domain names), there is currently no use case for this and it causes an
-ambiguity with the historical use of hdr(host), so we preferred to just deny
-them. The change was performed on the 3.4-dev10 and postponed for the next 3.3
-release. It will probably be backported to lower versions too.
-
-An issue in the FCGI multiplexer was fixed. The function responsible to emit
-FCGI_PARAM records was not handling cases of full buffer in a consistent
-way. The issue was quite limited, but the "http-send-name-header" option could
-be silently ignored. The issue was fixed by reworking this function.
-
-The scheme-based normalization was fixed to properly handle case of OPTIONS
-requests. As stated in RFC9110#4.2.3, when the scheme-based normalization is
-performed, an empty path must be normalized to "/", except for OPTIONS request.
-
-Finally, a memory leak on error path (tools) and other minor issues were also
-fixed.
-
-For more details, see the announcement:
-https://www.mail-archive.com/haproxy@formilux.org/msg47059.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 5c644356a6..6bb5dda804 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.25.tar.gz.sha256
--sha256  d861cacbe2ed51ae8ad5fa9ee5165b4e5e2bccaa5b9e04324711761d7d946be9  haproxy-2.6.25.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.27.tar.gz.sha256
-+sha256  ccdaf08e8653f9651992212b51af0b5513c2e2cf0cd822ca67c94cffe10386a6  haproxy-2.6.27.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index a22c8b38ce..cf1484243c 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).25
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
