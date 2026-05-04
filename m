@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCC0ECD343A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D993CCD3439
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 938D984667;
-	Mon,  4 May 2026 14:47:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACC1C6157A;
+	Mon,  4 May 2026 14:47:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7SWRptNQwA4G; Mon,  4 May 2026 14:47:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dcd5Y-APkDWr; Mon,  4 May 2026 14:47:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54D0884666
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B3E6157C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906073;
-	bh=/FdFeQlGdfCcrowg4X63DDbELFUqwYmaBtIUreyfIlQ=;
+	s=default; t=1777906075;
+	bh=k2zDQlqfSCPxjqIdUcSLFWApZM/Qh8ZSxnjEm00Xhq0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=qMDPzwV2Rj0B+/qw2NU1ICDqJGeMsj7C2F0hFC1S3zV2Aj/4uWVtiihiSrMZBPQw1
-	 WE5V5lJp94yW2FP58MYEyifebdeL7TK7eN/mnUMeNAtOlCnQPCGe8V6g5nY/IGFI+E
-	 UVNr3j4F3mM0AC37GAiPvOqijfQY7B0iY9kaP83KQ0uTiMyEH02i2+yaVI5tvDzlV6
-	 /Lu47Ex7Opp/2wBRSa/sNCxWQgov3ToRLQ1Q6LAkCWLnujV/STSRUKnCc56VPyoP5H
-	 3N95cBb0ts0x+7Uqex7DT88xJCXX0MCVd3zrXyK7hXfj3Fy9TriA7QPpIkldXWkJOa
-	 JTF/IMGii10gQ==
+	b=FqY6j9WuXHHayPSJB+GpAga1BAppxQzb0kDZnszo+PDUjcze5gBwUH6vLupfjP4gz
+	 stWy1IyLPNhJiIjMSzZnqRGtQlMuT4eVbgH5983WO+C2wG6FY+V4p6UrtdjRKYUCbv
+	 Smtbs8MmhPwce0yYxlQNayyzzQI8lfWHMMlZ4tgufFWb8S/M5LYMAWp5LBWi78qYtl
+	 n6W7L6M/H3nZHfAqTH/hPs2gczFIQzrSO4Gul5AVsbQ9UU5+JkjPQjkzyPygaKZfSz
+	 MA+CBBzMSd9SO/LsVWbhjuaiRYN2QbnWV4RByEtobS2KB91y+p6QoAUauQYqdBYuHb
+	 hxf2c3HN62igg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54D0884666;
-	Mon,  4 May 2026 14:47:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CFA225D
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5B3E6157C;
+	Mon,  4 May 2026 14:47:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A27A525D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B6648465E
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88EB441BFE
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0OW-hmTszoqa for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:47:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RYGeSecnwwHy for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:47:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A5D884651
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A5D884651
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A5D884651
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:49 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-44c4cc7c1cfso1319695f8f.0
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D481941BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D481941BF4
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D481941BF4
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:51 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-488ad135063so38303825e9.0
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906067; x=1778510867;
+ d=1e100.net; s=20251104; t=1777906069; x=1778510869;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=bj45g0Rxjl795nFaABNq3RXroqhRo+ZYMIDtdBcxIJg=;
- b=YG/DAGJZ21eGnlTouTluDz6q+oGANo3BWNSsuzbWAlt1pcYQLFKRP6x7hdL5GrvixX
- ZR10EncBIxrWII18YVh6dG2lOc6SNQYDtYIWnLG5J4+I6OZF2gFk6OhQIS9CTIYv94nq
- 9BB9+oSoRYB5qVEWZqeu/KDpv0R8b05IeSYVuiP9sWdLIF1cPq75ck4oDy/wKbQWgv3T
- ZishnJ3rKj05oZZrSILm0HQxm7sDqLxgfXrN6vFyDTVvRTU5CeHp0Y/ldrWQX0QqtqHG
- 4Q3cG5VZF6BDsCOpciQlvfDfTsHpmE/+aQRSHCNBlapZMKz2yDH8h7dFGcRfPcykU+/O
- knGw==
+ bh=wMknXs1D568s38YOtUN6idbCDN3m8kNdNBtOgRUG18E=;
+ b=bfjdOBQ04TN1g2avHxgVDOqsxBU2nWfA+HuAUBxB7SPvDiGIpSrrnsOJNa8m5EnPYV
+ Ame9DzLTLE/S8dWFInNyEdWXdG9sRQnM7aa84r9mJlAGrpNqCQSh7WIXPXMf03mblT6I
+ S/6YSEqEVc3G4FLp805UNAbSQKLVdgmOHI974rClyQqgQUVEljXr1ErLPbHPxWrzsOHV
+ C05wkclCShHuNWdIeb4sVyPQKzObX3eQ+esvBrRA6EzwobVpvDZJdTQTA7cfGqIYxXLx
+ hY6AhFLbaTOJelOPXFaZjR1/hTPKRbggrcosRGOnhNPrJJFlEZIMyfmwvDD/rOiObfc/
+ JczQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9YP4lCogAwSRgfSBi8y9aJzBepW24c+5xPhbd6SelLZGNibA6/M3WLrNL4HNH4p0eAjOvL0tkWGic=@buildroot.org
-X-Gm-Message-State: AOJu0Yy/p8V61RyC7uL96MwxlbIEOXJtZTmycv4rg/uxxVcLWNfxwm0G
- 3UTeA6ABWVXzNIHr5ao8sxjVV23il1z7UvEexBJ1MtjeNKtyvVpE0cYYni3sm8ekV7O1j+VwkaN
- 4Txh6
-X-Gm-Gg: AeBDiet4M5NjwpTbmW+/h30T08K+Y4mbt9n2Up3iAOlr/RhkiJ/ZGefF6XzIMaYAxUL
- NCay5JmYz5cNuoR4wrogJYofcUr3isvMIEhxWRGFzss/DZDFpoD+lx/3uctcOVv8aYX3Z2KTLhI
- s9y3dhM9TChUYp/GhN2pgL/ggmqxiUlSbyOTsVAAYYwrlJCBIU1YB4pVxmGYigghV9WILiS88cj
- iNWubkwxWsUluZ6aIl+jj4JGfucIP0F2l0nDz4kY24UAvhjdHgcl6bL8L/jgIgNNrHqdYPPxmBq
- hBHqvlMxs5AsSPyOhmNdHVMdMsXEi/iDKhJ5+k+zcgAlG1bDsl57NU9cgUrr43/1jtEBlUrCZdM
- 1O0y4GtrIUzUR9qw/UJBZtjN1WSvOOA1c3nOqeGF+PFnrCMuQyQ1DISbYsTztAcwXic4041BHs+
- RiorKsIz0CuSh23B8Bq7Df0J/sYg==
-X-Received: by 2002:a05:6000:144f:b0:44d:67f7:e1a6 with SMTP id
- ffacd0b85a97d-44d67f7e2f6mr10396771f8f.20.1777906067412; 
- Mon, 04 May 2026 07:47:47 -0700 (PDT)
+ AFNElJ8y2IwCeHxjGWoH25RGQ6+zpxslCCFjOyt8+CAj4jQeoD1F1XQgyDYjeV0PUtfYaNDpzJuOjXu49rM=@buildroot.org
+X-Gm-Message-State: AOJu0YwVjs7T3D6TRQGA826y81bGXdvvNgKcj/gKHmHr8rbiB09L1z5Y
+ bIOKiD1IZ1/F6y/fQxQAUzzl9SldBkF6AOn036qfKWNMurUPAG79UY3hPRH18Rtrecw=
+X-Gm-Gg: AeBDiet4JsX7AK+pQQu2/tLZriaF1EpwVH4dYJKpyuhPoqoz9cafFXRO0qpv9vlCFoG
+ tMxpmPPt3sKB2fYz7C7rH+37TtJFuqoGLUGOHFm2dLrqySKkDSvhQjfgLLitpKHrsUw78z0JPeC
+ iNB79qUcyKwAdFfQcclSCYIyzYMo2CkYJ2F3uECk3eRaAbNeb8Rhnwaj52Ddj+FwRdNY4TlC7NW
+ pi9UAuUwIH7jgwRdNBrgwKlBYIl6amcDlFMYzKa714nRlDC1DzY4MnKrpm++Br1CqiEMecNaitK
+ HsRnBQyHbhByo9WzEm6WQxcIZnJdOFSdLhU1EEsdADxLsMqSbRVGjVzK5rD+M7Yhw3mjSaKvH7q
+ gw5aL214x8azoukASGjy8vEKZPzBwiektTKfepE4g8zLVB8yYsdSiCNjloUb4nRLiFGc2fdfLJ7
+ XfQbZ5KgnRqGUJ5e3byN6UYZupiw==
+X-Received: by 2002:a05:600c:4f47:b0:488:b8bc:6a32 with SMTP id
+ 5b1f17b1804b1-48a988be27dmr185746255e9.23.1777906069571; 
+ Mon, 04 May 2026 07:47:49 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-44a98b76eddsm25564833f8f.34.2026.05.04.07.47.46
+ 5b1f17b1804b1-48a8eb75fc1sm288356225e9.7.2026.05.04.07.47.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:47:47 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Mon, 04 May 2026 07:47:49 -0700 (PDT)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:47:46 +0200
-Message-ID: <20260504144746.10396-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:47:48 +0200
+Message-ID: <20260504144748.10495-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260422135456.3109434-1-titouan.christophe@mind.be>
-References: <20260422135456.3109434-1-titouan.christophe@mind.be>
+In-Reply-To: <20260423210135.2859706-1-fiona.klute@gmx.de>
+References: <20260423210135.2859706-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906067; x=1778510867; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906069; x=1778510869; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=bj45g0Rxjl795nFaABNq3RXroqhRo+ZYMIDtdBcxIJg=;
- b=SJTlYITL+2ikI6RgVob08e7uaBi+mSBWemo08wiN8Fmw7mfkvqXDRreSvcZd/dYCPZ
- DlOsiPFebEHKti+TZgGlIXxTlB2U8GTE8+zZ+mElEF3plAMPvKkLnCH9QN3fhE6mOiIT
- cBFyKsFP6P8+xnMoGBsFQp4TJCMRsmAURCf13KUH0nvr774DVNd2Pe93OFwRGIkRqWCW
- I+Z8BpqRxz5/i2Klv3EuRIKqex9j3rNc5ZkSSIVKckamEKkWvyNUwA4VjzUmt8+YeuBS
- gH9EKWTdl2+oQgctzc/UBrg/DeHznL5bfdFMb1U59QLm+mXfEEPIlEGrTCH/E2NJcpyK
- ezWg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=wMknXs1D568s38YOtUN6idbCDN3m8kNdNBtOgRUG18E=;
+ b=UfhuH9fqvDSgXnNH9Lf0ckKnkO3RgSnG9KsSduKK7ggC99VAAa0sJOWUfZ2L1cH1CN
+ FrJQYr4LLMqGtz3uPxjeU3N5geXlTILWzsohgyAKOTcyS9+UQqtNCNNJPWx5dxggD7CK
+ 8xoqi8IvwvLjNMS2RQIf6DhHBMDdrH5xdm2O9z/CnzZOp8S53tz1aSmrbiOjXwXtzDAp
+ cQpfPXRx95bOqiCMoypk53DhGDG/WfROfYUlDEY10RLla42xdqpgCbCAu6470ZckDg0g
+ I7fZRvb1hsIFNgQzmkEFNefaBEwq+2glIffCTt852aiL+KIaoNlMV3I6of5ANwhQNxpu
+ JEww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SJTlYITL
-Subject: Re: [Buildroot] [PATCH] package/log4cxx: security bump to v1.7.0
+ header.a=rsa-sha256 header.s=google header.b=UfhuH9fq
+Subject: Re: [Buildroot] [PATCH 1/1] package/ca-certificates: bump to
+ 20260223
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,54 +131,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
-> - CVE-2026-40023:
->     Apache Log4cxx's  XMLLayout https://logging.apache.org/log4cxx/1.7.0/c
->     lasslog4cxx_1_1xml_1_1XMLLayout.html , in versions before 1.7.0, fails
->     to sanitize characters forbidden by the  XML 1.0 specification
->     https://www.w3.org/TR/xml/#charsets  in log messages, NDC, and MDC
->     property keys and values, producing invalid XML output. Conforming XML
->     parsers must reject such documents with a fatal error, which may cause
->     downstream log processing systems to drop or fail to index affected
->     records.  An attacker who can influence logged data can exploit this
->     to suppress individual log records, impairing audit trails and
->     detection of malicious activity.  Users are advised to upgrade to
->     Apache Log4cxx 1.7.0, which fixes this issue.
->     https://www.cve.org/CVERecord?id=CVE-2026-40023
+> Changelog including list of added/removed CAs:
+> https://salsa.debian.org/debian/ca-certificates/-/blob/b266ecf6afc2d6fda61391bbeda455572e7f5207/debian/changelog
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/log4cxx/log4cxx.hash | 4 ++--
->  package/log4cxx/log4cxx.mk   | 2 +-
+>  package/ca-certificates/ca-certificates.hash | 2 +-
+>  package/ca-certificates/ca-certificates.mk   | 4 ++--
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
-> index f6770e287c..af97ebca18 100644
-> --- a/package/log4cxx/log4cxx.hash
-> +++ b/package/log4cxx/log4cxx.hash
+> diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+> index 2112badfcc..d234705082 100644
+> --- a/package/ca-certificates/ca-certificates.hash
+> +++ b/package/ca-certificates/ca-certificates.hash
 > @@ -1,4 +1,4 @@
-> -# From https://downloads.apache.org/logging/log4cxx/1.6.1/apache-log4cxx-1.6.1.tar.gz.sha512
-> -sha512  6ee406314bd7ab02a46c98cc8a0d5ad5aec8928a23716a81a152775ca315cd3b950d600b2e221d5b4a88416ae9bbda1215fae43626107feea4df2f3e074303ad  apache-log4cxx-1.6.1.tar.gz
-> +# From https://downloads.apache.org/logging/log4cxx/1.7.0/apache-log4cxx-1.7.0.tar.gz.sha512
-> +sha512  0e94946457423689af6d85074ab97b717e0cec85a4f548e6650b060e8f98b780f980b7d4a7780410fa64681376fb4bc62fab6ed9068fc944e07f9f32ac0413af  apache-log4cxx-1.7.0.tar.gz
+>  # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+> -sha256  33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2  ca-certificates_20250419.tar.xz
+> +sha256  2fa2b00d4360f0d14ec51640ae8aea9e563956b95ea786e3c3c01c4eead42b56  ca-certificates_20260223.tar.xz
 >  # Locally computed
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-> index 57f9b1e844..ea47073d3c 100644
-> --- a/package/log4cxx/log4cxx.mk
-> +++ b/package/log4cxx/log4cxx.mk
-> @@ -4,7 +4,7 @@
+>  sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+> diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+> index b1903f6166..1f3f192d4a 100644
+> --- a/package/ca-certificates/ca-certificates.mk
+> +++ b/package/ca-certificates/ca-certificates.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -LOG4CXX_VERSION = 1.6.1
-> +LOG4CXX_VERSION = 1.7.0
->  LOG4CXX_SITE = https://archive.apache.org/dist/logging/log4cxx/$(LOG4CXX_VERSION)
->  LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
->  LOG4CXX_INSTALL_STAGING = YES
+> -CA_CERTIFICATES_VERSION = 20250419
+> +CA_CERTIFICATES_VERSION = 20260223
+>  CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+> -CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
+> +CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20260223T202245Z/pool/main/c/ca-certificates
+>  CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+>  CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+>  CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 > -- 
 > 2.53.0
 > 
