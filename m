@@ -4,80 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5EBFF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 18:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F3A7CD3427
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 19:23:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0160883412;
-	Mon,  4 May 2026 18:45:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 453AF846DD;
+	Mon,  4 May 2026 19:23:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JoCzjVHEQmZ8; Mon,  4 May 2026 18:45:28 +0000 (UTC)
+ id pPcvK0--xzbi; Mon,  4 May 2026 19:23:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D153843A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FD5E846DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777920328;
-	bh=QaWbVvWdOyuzPiLTxtTD+WrtQdlfiFwDAFTxc1jlGHM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=V/K10ii8Rca4dmu/c+nY4D8A+4PLC6y2YDmuyFTQFc2gCMXqBmNTooQLf9XH0kFnD
-	 vl7VpugO4p75jaVHTu2SePnxTgtqz2gUIQmTE3yC4Fqvzg/fLijSnOMGixV+rFrBtW
-	 MKA+AXGs6uWozbvhdOLMAY8OL/AQuHYUJZSkd3rABS5xVxrsdeHlzunshtlz6ayD5T
-	 vuHK5/IuhBu/DaUxETovrM1RWa+/sV0hJukale36DuQwCz8d4cbi+ApeNJ0ncBblOX
-	 xQBCZ6fSTv9NxGza3TsdgwimfYlTIfUMtNZ+idU6yCllG9bQO7jqynpn5SnSZAj9D/
-	 gyRFXA2PNxkIA==
+	s=default; t=1777922622;
+	bh=jf4Y/HWeWmLQbFsxL+05mQOqHPTpvKtHjEZxjlJXdYc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=BTCNFnLMoT6Q48/bdE6cWel0TUmD182qN9e6WZQg4YlHvtV3xnO0Lho1MfKC6g64k
+	 eO7BZx7xkvp3FnvR2HqU3xDWr2bX7VoyaPA3z4YyVusIIE2cQZBZxcpoXtD+l9iqso
+	 BZkEriUhMzJrScXx16QiRTPs2bo81/MfBMfXia5R1RsKQmszM2LbhnAirQ5eCFWfcE
+	 47GfJ+Y83+Wnx8HfgY7mnPbHrOr7uyVHfmCVTiHEKZuA1kHe7KDpwTGyPdXGS3HQUx
+	 jkx+DHe6b5h75YnJ3VzoDbzoXFto8rpd8sbwteTtQF8VC2eg8nwAWOTkpIBHQf7hyY
+	 qrWAmk2Pc7+jA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D153843A2;
-	Mon,  4 May 2026 18:45:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B767190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:45:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FD5E846DE;
+	Mon,  4 May 2026 19:23:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3FD57204
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 19:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D5FA4051C
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:45:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 254A3612ED
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 19:23:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJLBTAmG8Rzs for <buildroot@buildroot.org>;
- Mon,  4 May 2026 18:45:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c8njZJxt15ml for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 19:23:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4AD474047A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AD474047A
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4AD474047A
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:45:25 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1114533911; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 04 May 2026 18:45:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wJyIA-00000001Uco-0koy;
- Mon, 04 May 2026 20:45:18 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 557A5612C4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 557A5612C4
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 19:23:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 356BD843C0; Mon,  4 May 2026 19:23:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon,  4 May 2026 20:45:14 +0200
-Message-ID: <20260504184516.356034-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Hr30qkE3qMaQJ6n2y2KOWoSJy1cbjgC3zqwXl/z99is/hc+DnGY4bXgPXgxNtl+cVHIQEVa2P42oBHBZ+vgkqlH9uU3GohmHl5Nlse1YNIw3PC+mnHyM752TjpW0HccrDxa6v3yaA2tNdHo5txvr9keyrHUcvdBru7tGqUEwPfm9L/IkHblAFYfChLpTYkYvxir1/b2OnR7c9iCuxeMmu//WQ39W3rkvv80zWyATQc4UlL+62PC40cy+lXZ9BdBWpZVfPUnHmkE5ntJUb02rWxP7IYCgnhZCOr3mU1XdspZHe+P0O9Aj58GLOzLXu8aGrR78PTShjlM+iN79iAWj5g==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=p7ZLGuDcfH4E72iq+AE4XHWZ97sUaEKPdikeq5KaTEY=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=Hr30qkE3
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/{glibc,
+Date: Mon, 4 May 2026 21:04:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f513a952076e99fe008eb80d8180c0172c6e4764
+X-Git-Newrev: 35e475bf06f15becdbb57308145b742e636a9108
+X-Patchwork-Hint: ignore
+Message-Id: <20260504192340.356BD843C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{glibc,
  localedef}: security bump to version 2.43-22-g8362e8ce1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -90,12 +69,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/35e475bf06f15becdbb57308145b742e636a9108
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Fixes the following security issue:
 
@@ -120,6 +103,7 @@ Xi Ruoyao (1):
       elf: parse /proc/self/maps as the last resort to find the gap for tst-link-map-contiguous-ldso
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  package/glibc/glibc.hash       | 2 +-
  package/glibc/glibc.mk         | 5 ++++-
@@ -173,9 +157,6 @@ index 28494364f4..ec906fad22 100644
  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
  LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
  LOCALEDEF_SITE_METHOD = git
--- 
-2.47.3
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
