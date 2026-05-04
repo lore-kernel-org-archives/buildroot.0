@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D415CD3427
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 18:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A3E9CD3427
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 18:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C46061570;
-	Mon,  4 May 2026 18:44:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C96A861598;
+	Mon,  4 May 2026 18:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QDPKff-MzvvJ; Mon,  4 May 2026 18:43:58 +0000 (UTC)
+ id EZDhsvBc2jrE; Mon,  4 May 2026 18:44:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8FE361355
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FEB26150B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777920238;
-	bh=0LnOmEG8plWfX4Kx1JpM8YFkisKr6WRJjIIujj9ws/g=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rDo93aNyRQbQeFru4YCOo+K2wJJ+iUok8qReX6g1i3C04Gl4hIZm1Tv8awicRlYxw
-	 Sn6io/tAjNmSfpH8Ni24ZAPGpBv3/i/y4R1yp3bK5Z+TnSFFNM3zRJdfXW2PRS7yob
-	 Lqfsarz+NCztai3lCOT3SJOQ5uofDRP7Brch/lvvLS5sq92h5Okf956wksd0VDUgzm
-	 yI1KKuDeLE7fdirYeFO+AWtPawYGZ30cpIR5dK8lno2gSQq/9TRL5VET7mCYqgCawb
-	 7COYx0bLf/2/FSzBPxVfmBb1Ne2ZSTksHw/mey8SLzL4Ap+v1MyjEEzh/yWgpnAOJi
-	 de4KpX/RLkwcQ==
+	s=default; t=1777920260;
+	bh=r47T/RtEd1tn306+cyy7COCe6tg4RU3fO1J9D9wyXNQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=gfAADhuSklMfCVAvCApqwS+jkcRgCbxS3Ls+h3f4y8WvWFZ55j0MENpqclPiU6yQP
+	 i85OeJPZkFXvxgdrEaZXN4Ei/4t3cpRrPhn0uDVrcG8om1wXmxLtBEc79j2LJFARRI
+	 a3difQIbHu6T/n0lG8Ke2KB/matBscFdB05i8yqhrQ42mrFK2UJNBxIk+yl4YRhbYc
+	 tecSn4HrVDjAbFyUxnlCDyvtafL0N4ydPiof+cqacaiv8EHEqSJDjW443M+zM+uAxt
+	 y3O9a5G1vQspY+bzWiCBLzaT8GZR39yausF1D8ClsjFmz8QeUm61tGLV6X9ru1f3w7
+	 XgwvJQ+zFSbqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8FE361355;
-	Mon,  4 May 2026 18:43:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BC9D25D
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:43:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FEB26150B;
+	Mon,  4 May 2026 18:44:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3ED6190
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 18:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D09661355
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:43:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 893C6415E2
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 18:44:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xEeNiQsfjPpe for <buildroot@buildroot.org>;
- Mon,  4 May 2026 18:43:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B1DA6134B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B1DA6134B
- for <buildroot@buildroot.org>; Mon,  4 May 2026 18:43:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F85F843B1; Mon,  4 May 2026 18:43:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 4 May 2026 20:39:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 206cd3cd31e1bff61f42b2bde9f71e0e003f6c14
-X-Git-Newrev: f513a952076e99fe008eb80d8180c0172c6e4764
-X-Patchwork-Hint: ignore
-Message-Id: <20260504184357.4F85F843B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add RTL8125D rev.b
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wp2SzAZOT5Br for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 18:44:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8450140CA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8450140CA9
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8450140CA9
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 18:44:16 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 596F419F5A5;
+ Mon,  4 May 2026 20:44:12 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 04 May 2026 20:44:12 +0200
+MIME-Version: 1.0
+Date: Mon, 04 May 2026 20:44:12 +0200
+To: =?UTF-8?Q?Jan_=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20260430121512.1020041-1-sairon@sairon.cz>
+References: <20260430121512.1020041-1-sairon@sairon.cz>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <cacb0075caa0108f525f4e36d6c7bc11@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1777920254;
+ bh=rcfEX+y3H4pQrnpGBdbuhWmCgrW3k9RayTxFSqMNuFo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DkyN6nXsmlTE3eYarSTKLtzEYGLdfeP6kjxCsnVCPcuJcfVkme0FcT64GRLjvwwzz
+ w4g/f8oHcixSk0Q7bmXHKiLLUb49rB1FLuvzIXneOYKVxUErVNOg8v3c+X259WEOvF
+ g/gfmIRKQgmm+xLGzBL8EAvEQa9NqDUrFRNOheqYK7WuPKSSsxiJAg0zN1OoPjE4vx
+ GbDb8egL62vCBsYtbuvR5Vo4YRU6M7puwR7qkVgAZSdqp5dWxBy+2fx6dohDBIAHkf
+ XLNeF3DpQ8BqFxtoTvwDbsVFR2uKgQp8wlTweI8vvrdTyZn84JuhIdgTfa8UPYEUuh
+ 7pIJ/WWdSJsXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DkyN6nXs
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add RTL8125D rev.b
  firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,52 +96,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3905530801216111824=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3905530801216111824==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f513a952076e99fe008eb80d8180c0172c6e4764
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Add firmware for RTL8125D rev.b added in [1]. The r8169 driver currently
-supports this card since Linux 6.14. The firmware was added in [2] included in
-linux-firmware since version 20250109.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b3593df26ab19f114d613693fa8a92ab202803d0
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=163296523cd4ccebbbd9026a769c76901c3a8e83
-
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/linux-firmware/linux-firmware.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 4d7c608947..8187d1feaf 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -761,6 +761,7 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8125a-3.fw \
- 	rtl_nic/rtl8125b-2.fw \
- 	rtl_nic/rtl8125d-1.fw \
-+	rtl_nic/rtl8125d-2.fw \
- 	rtl_nic/rtl8168d-1.fw \
- 	rtl_nic/rtl8168d-2.fw \
- 	rtl_nic/rtl8168e-1.fw \
-
---===============3905530801216111824==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3905530801216111824==--
+T24gMzAvMDQvMjAyNiAxNDoxNSwgSmFuIMSMZXJtw6FrIHdyb3RlOgo+IEFkZCBmaXJtd2FyZSBm
+b3IgUlRMODEyNUQgcmV2LmIgYWRkZWQgaW4gWzFdLiBUaGUgcjgxNjkgZHJpdmVyIAo+IGN1cnJl
+bnRseQo+IHN1cHBvcnRzIHRoaXMgY2FyZCBzaW5jZSBMaW51eCA2LjE0LiBUaGUgZmlybXdhcmUg
+d2FzIGFkZGVkIGluIFsyXSAKPiBpbmNsdWRlZCBpbgo+IGxpbnV4LWZpcm13YXJlIHNpbmNlIHZl
+cnNpb24gMjAyNTAxMDkuCj4gCj4gWzFdIAo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3Nj
+bS9saW51eC9rZXJuZWwvZ2l0L3N0YWJsZS9saW51eC5naXQvY29tbWl0Lz9pZD1iMzU5M2RmMjZh
+YjE5ZjExNGQ2MTM2OTNmYThhOTJhYjIwMjgwM2QwCj4gWzJdIAo+IGh0dHBzOi8vZ2l0Lmtlcm5l
+bC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2Zpcm13YXJlL2xpbnV4LWZpcm13YXJlLmdp
+dC9jb21taXQvP2lkPTE2MzI5NjUyM2NkNGNjZWJiYmQ5MDI2YTc2OWM3NjkwMWMzYThlODMKPiAK
+PiBTaWduZWQtb2ZmLWJ5OiBKYW4gxIxlcm3DoWsgPHNhaXJvbkBzYWlyb24uY3o+CgpBcHBsaWVk
+IHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
