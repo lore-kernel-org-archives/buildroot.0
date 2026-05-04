@@ -1,91 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D84FFF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 07:49:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7651FFF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 08:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61A3E8441F;
-	Mon,  4 May 2026 07:49:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32285606D6;
+	Mon,  4 May 2026 08:30:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lrWITcmzT8rj; Mon,  4 May 2026 08:30:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43780606E8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777883451;
+	bh=x5jLnMhg2LzGS57dzNeiZt9cRiRu6Xhszsov59EUBCc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=VP1lKxHkfpBt4aF111wYo18AFm0vNMhcJ6BqypfSPXGrG3wd9SKpq/qqqiyTJebKz
+	 ZcR/pXl/CxvtfQaBlvkyeqX7M/2fWm1Fet2e+ZaVwv10Z7S2dC1wprndt8tdpS+GsY
+	 Kj5B9+hDJf6PT3OgBtvbG27k+jLwtJkk8I9vzAxtNqiztEhQ58IDJNQ4O91tNOs5pN
+	 gKnq8QmPc7MGgqlpx6vBW6FYeuuYSLcOkXpatAMmNZRSJSqQGHYefsuqLJkEjhdXoy
+	 P3SYGWOcutEzebxtcdUDIbRuoLV6XMkh7tCEYfB/ZOIFwIYlvOUWrWobrowKdjSdAL
+	 uwmG+NlzK0KPg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43780606E8;
+	Mon,  4 May 2026 08:30:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C9E6190
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 08:30:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12D2984476
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 08:30:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jrAiaj7FV8_s; Mon,  4 May 2026 07:49:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E35484418
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777880964;
-	bh=GMRkfO5I+5tgKoX24VrTf2a3t5TC1QNzMQUur2moCkA=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=ji6R4SlbyY7WoLl4VHVLbg3aKrY8RrFmjPEVf4+EP+lGzNFLiHm04ZhadElAv72dz
-	 34jse3Qs7Lt/b7NBS4XFgcIziov7Wfv7v3Jtd7UFrj2uAYRFKZLWYEp+QGdwoqSkBE
-	 0tYC5fIBxLmWcIQQ9/fKpayL8rp8hwVeXA1Bo43uwIpAli3us8uf2KwlFLvd56KgPk
-	 YZ71U4FRpan73gDwjSV5yqzoRwxH5tG7D4A8X0nAzHdn7jlXrFm/ZIZ+9QEoxTDedM
-	 zFPmlxYGelK2/7aY/DO7SZS++lfvKJcI3bvbuphqZpqHDUGMZ3hQNs8CIKXS+f7Px0
-	 HZyxwMBurt+hg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E35484418;
-	Mon,  4 May 2026 07:49:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02A64190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 07:49:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC098415C1
- for <buildroot@buildroot.org>; Mon,  4 May 2026 07:49:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id owjB93_aA_7u for <buildroot@buildroot.org>;
- Mon,  4 May 2026 07:49:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=luca.ceresoli@bootlin.com;
+ id HpjcNAnx_Ama for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 08:30:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0008A4112E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0008A4112E
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0008A4112E
- for <buildroot@buildroot.org>; Mon,  4 May 2026 07:49:21 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 5C7364E42BB8
- for <buildroot@buildroot.org>; Mon,  4 May 2026 07:49:19 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 32FED602AC;
- Mon,  4 May 2026 07:49:19 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9E16B11AD229C; 
- Mon,  4 May 2026 09:49:17 +0200 (CEST)
-Mime-Version: 1.0
-Date: Mon, 04 May 2026 09:49:16 +0200
-Message-Id: <DI9Q78A5H9AO.20WLIR7FZITER@bootlin.com>
-To: "Bernd Kuhls" <bernd@kuhls.net>, <buildroot@buildroot.org>
-X-Mailer: aerc 0.20.1
-References: <20260430183544.2362642-1-bernd@kuhls.net>
- <20260430183544.2362642-2-bernd@kuhls.net>
-In-Reply-To: <20260430183544.2362642-2-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1777880958; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=tSmAr16/pvACt3Wo5Tdf8KY97Lr66o7ctk4bJZgdy6I=;
- b=EA21Fao9scRFGRDvNOP35mQ/mkFl/sr/4UG+ERwbwRYNSKhZVI5+IHwQagi0YcqqDpORHW
- xZaGxiG6DxpB9gaQnMBIS7ao7Qz8C1QVjcDIhXPtQQ9yTCbeuDYIVxAV9dyiIK3Rc/Yctk
- EOhs2JCn/4w8eQTEOwGDqPm3dXPR41m9ISeZqx1A2fXYoo2DdfDUYU8AmhFmNYtTpVm2TH
- jjRSs6/g1njL4ugTdAFcU6pffi0Dk4MGAWJRmSHx6fBXEg8f6TqDu6zEhY9wIfYhHDHFW2
- 1vrFVKMtolugK7Z/dMiMWqa6Rf1Gxvqw6oGYnO79xyYI4JDCqdnYtA3mZSzEDQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=EA21Fao9
-Subject: Re: [Buildroot] [PATCH 2/2] package/libpjsip: security bump version
- to 2.17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCF5F83EBF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCF5F83EBF
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 08:30:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 673E68423D; Mon,  4 May 2026 08:30:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 4 May 2026 10:27:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7bea44e9f1abd25e41e0987e04377a8520d24282
+X-Git-Newrev: 8008da299f2d7321b3831b1cdca315aa3973ad04
+X-Patchwork-Hint: ignore
+Message-Id: <20260504083048.673E68423D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx: security bump to version
+ 1.28.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,31 +69,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu Apr 30, 2026 at 8:35 PM CEST, Bernd Kuhls wrote:
-> https://github.com/pjsip/pjproject/releases/tag/2.17
->
-> Fixes the following CVEs:
->
-> CVE-2026-25994, CVE-2026-26203, CVE-2026-26967, CVE-2026-29068,
-> CVE-2026-28799, CVE-2026-32942, CVE-2026-32945, CVE-2026-33069,
-> CVE-2026-34235, CVE-2026-40614, CVE-2026-40892, CVE-2026-41416,
-> CVE-2026-41415, CVE-2026-42225.
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8008da299f2d7321b3831b1cdca315aa3973ad04
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Fixes the following security issues:
+- CVE-2026-27654: Buffer overflow in ngx_http_dav_module when using the
+  alias directive with WebDAV COPY or MOVE requests.
+- CVE-2026-27784 & CVE-2026-32647: Buffer overflows in ngx_http_mp4_module
+  when processing specially crafted MP4 files.
+- CVE-2026-27651: NULL pointer dereference in the mail proxy module
+  during CRAM-MD5 or APOP authentication retries.
+- CVE-2026-28753: DNS PTR record manipulation in auth_http or SMTP proxy.
+- CVE-2026-28755: OCSP certificate check bypass in the stream module.
 
---
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+For a full list of changes, see:
+https://nginx.org/en/CHANGES-1.28
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 7b79036b20..1d11937987 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  40e7a0916d121e8905ef50f2a738b675599e42b2224a582dd938603fed15788e  nginx-1.28.1.tar.gz
++sha256  2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918  nginx-1.28.3.tar.gz
+ # License files, locally calculated
+ sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 41490caee2..a8b7ee7319 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.28.1
++NGINX_VERSION = 1.28.3
+ NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
