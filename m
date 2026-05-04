@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D972FCD3430
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3CF0CD3430
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF681845F2;
-	Mon,  4 May 2026 14:47:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB01B410D5;
+	Mon,  4 May 2026 14:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LjfMNEjbzREI; Mon,  4 May 2026 14:47:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7cK-GkS5QygV; Mon,  4 May 2026 14:47:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00AF84646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C341641BDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906062;
-	bh=GsoktSmF1oNvHNvejhQhONNspdY46YqmqOVqZorYcZg=;
+	s=default; t=1777906063;
+	bh=gbf8FzChAoUw71ghJvfYLmldFYumMTU0n9nlwcRK39I=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=NbIDhKcjsDMIyi0hxlk9rZqtil1WnMegphorKcWoe8SoKZBkxOMUs7GGPsU1y4pQg
-	 Jxh9GqyV8C4xcCB1uh8+8vUrBVynBLEUcFPVZE4BZTH+4Q7pbgY8GWc4fBPeAutMIq
-	 0L4tqhxvOA0B4YQoQySq2kh52VYTiIfGLOeJYJprBEMldlous0EN6w8Q6hNTTRheKc
-	 pHWZrWb+WW5l/+6fpgBipnqwHO9+3JFBtEzeXcpyA2ZfXe5qrlc2DiHyK2pTPxHn8c
-	 AlldW363s+FcYQvyIYNDcR9vENC3OwYsF9HPbFhp7UvJH+Nq7weRXyjcs8z03qpAaW
-	 EC7lNxI3qe+5g==
+	b=YA9ki+vgaYFJkWzUgVEPs64zteZDuDLXBxOG22rFccRafza5lLP1Cvp8ZFthF/pgF
+	 JrWNxC3UGXfLKLo3wMP0NPffaSaa+apOJtTbelu8UP0mlupBS+2jrIoWJVZYnpAX3A
+	 orw2cbatFTvU0RSz8JLeLS4s8+6BXGeZGIyZvKg2rTtzbf78Izrlfid8cuVCvQumEk
+	 ig29xgLaQe95sXg4rwbLGBN8qatlqilM35To2JbBiKXLdq+0yzWLMXxyOzJVoK9fyY
+	 8BglS9ZqYdEZMYPyPk/uZ1qVoCKYTsrgatnLfQIk1XGOoWsIN1eiXXjK8pWLf6FupP
+	 kHCSPyi3MkUFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C00AF84646;
-	Mon,  4 May 2026 14:47:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EEB03190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C341641BDD;
+	Mon,  4 May 2026 14:47:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E70B0190
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8DF7845BB
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D94EE84648
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TnkIgASk9-xE for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:47:40 +0000 (UTC)
+ id eAf7_oSvm8IV for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:47:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C2E97845D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2E97845D5
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2E97845D5
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:39 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4891c0620bcso29741245e9.1
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 36108845BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36108845BB
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 36108845BB
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:41 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-43fe3e22e33so2298910f8f.0
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906058; x=1778510858;
+ d=1e100.net; s=20251104; t=1777906059; x=1778510859;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=SjREVxcKyt2r27FFf6PYmJdPrlyoiodI9+8EmAE1FyQ=;
- b=nasc9ZcLRZJQO28uwbWNbHBD760H2si/2xh+kuaV5bipulmf1qMHWpusm7+/rPuKDO
- XNmWRDd/hbr+zTdYOtSi2uXEY1WwAYGjcbii9IWT91NFQuDWOWYueHxjWYtIunTLm/hM
- T9MtzS0aDZQqFSZ2Mri6GN7tZ0DLv63qt5bigXEFzxCw1DYDQG9lWFjJzhbuIesYaLv8
- Sv80QSqARRfrMRfx/EGRDUYtS9SVlZohuVszKlGSvYqnyyPXOpshEaP8ahRHE4MKIgBV
- 9eb6M5ijDf/Y19b/zpHcKFDr73jjeSHOTJSEi7Re42tYm0kLAXIXBD3ebowrcdtyS8Qg
- oqPA==
+ bh=qw5M8PeQNHVrmvZMmm1Fmmnq1Rm7KrulIAQXzHG/m74=;
+ b=bu8mfQyWUf3Z9GjgjVGOoPTeeXxZHYIXpFctWR/mc01GBNiDDe+hrsnsLf/OQ9cI99
+ Y9JtYDXKBwTuZPyqSoxdK1kakVL1LsbRrMHc6gPl2PkY9zZTXPHSZj/Ov7DOHbc3QmyZ
+ 6MFzHB0SSW2G6cv0wxghSqo6lt6e3Ni4N5j+gvKgDz+Em47tCbrNH02naCZuyTuqOrh6
+ Q08K5+IuotXOy8tlfh1bhCujaFztJ1dQ3vLjdjmkbkqNTg+D2WeNE2x2m4ti4qe8w2OX
+ VXk9MbRlU3RsrI0sEZl0kChRoM8SFWL756wiGk/9FKb750gLwxTl2Xds8+fMpuIUbOkk
+ VbCQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+snxLgO0iKXhrjIpyNkwXelcN10/mAT9yFtZDwGTLsbuT//0IaTYRbmpAnUdQDg9hJXATdBNQE93k=@buildroot.org
-X-Gm-Message-State: AOJu0Yz0IZMg2j3zyQs6FQnYCtUHG1w1VrtOoqnxf7xaSOAXegLYWRt/
- yknmZ47qzJ2Uw+55vfppBKmbVFFDn+vkC6J7+Kv7m6YkBq9UmAW7cpno3IvpFsrHIIk=
-X-Gm-Gg: AeBDieu4QZB/X+CDnmJnWCptNe1tJdkSeE4pEUqFBFeaYvulrPWJo4iMU/D/tes3v8+
- 41U7/BHAVrJwdrnmqYSr3GiJU0vygKjdfVsa8/UGE8qGnXaznaB77+hqG/ADc0A0S0DtussVGtO
- n3tfP0xGVkjxj5a4Dymyjot5ZNiiG8fXsRCNV0vS/5dD/spoe3SXkQIyH2J9AHjTb/d872NWJeE
- cwtGHCXKPpVGxRsSQm+nSCzSwmswDpgAld2ARizTl/FdiQRxLWPc6F7uG+lu3jISwDKnpK5ApFj
- tFbT8KwJplygEwqvvYQTeF4CYfmPVits5CgQslpY8uV23BEfGK4mu8vf9P55tWDZr5qgRkU3aXN
- v/j5hC0Y5GFOVQJLwBY6qJ00fXEUHQxtgw2azkeW0VwNGR/HYJkwwAg4PXyroBDHsgEnlcphbFj
- TcB/mP7KgfS89HD8uGu5Kce/cZNQ==
-X-Received: by 2002:a05:600c:c058:b0:483:8062:b2f with SMTP id
- 5b1f17b1804b1-48a9886c2aemr97858785e9.6.1777906057876; 
- Mon, 04 May 2026 07:47:37 -0700 (PDT)
+ AFNElJ8lk21pYDq0xCazZG9MIYP8TT0wwSuUzOxvwVdjIUF9SyPT4dmLfSPrGgmYeR+Ty4RUe8QDSkoYfXQ=@buildroot.org
+X-Gm-Message-State: AOJu0YyA0osSiL68qyv3xmWo38L/Qputffe04p5XSq7elS8mEJaCIprt
+ 2f2BMU9xxcKgpO6uXQPNevuo560TdRrkpM+t2WVfCBIu7xXoUL2mJ2RMIfi4JMEn8wU=
+X-Gm-Gg: AeBDietn6BCd8DJJOuFtWB0+7zXKpOLPsxEYe+8JVEgxYQLaQUCmySvQua7x09dmTMS
+ A3acmff7rSUWkUJD0upBp640y49VixfXI3z+T6BTwCQNDBT9xUzLIiWwePHcv/Aqi6YLWx+/or/
+ 50FEq1HO6Zyqq7XblYEahSwTQbXQ/c7URMkuB0bYf4XkiwMPaza65WefdYZ0B2PIcRMkaLDzuqm
+ gVnX6lGpPTfiPE3wqx9/YoDgIP4o2Rqjjx+zIEsq0GcjIEmSdLXF2PE053wE1T/jRMcDvtnwofY
+ vNxwN6HHnMYUNZ4vxvFRTm+UMxiZ8JnsZSrNW5uwQAc7zn8bqNszNTjiUJintMegFEKACovQC2E
+ 6WcD2N9sd1XnLj8rZ3a0MqBtkaQlJ3ZGuNn/VOnT5R1ZNQ2AKLu1i8RD2yfNo0+nUbI+ofwpDr+
+ nC/XvVYh43h0CRjfBMRWug7G1riQ==
+X-Received: by 2002:a05:6000:25c2:b0:43d:7d6f:f535 with SMTP id
+ ffacd0b85a97d-44bb5f24ab8mr16035356f8f.35.1777906059000; 
+ Mon, 04 May 2026 07:47:39 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48a8ebb2fa5sm239253025e9.12.2026.05.04.07.47.36
+ ffacd0b85a97d-44a981defb3sm35572327f8f.20.2026.05.04.07.47.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:47:37 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Mon, 04 May 2026 07:47:38 -0700 (PDT)
+To: Adrian Perez de Castro <aperez@igalia.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:47:36 +0200
-Message-ID: <20260504144736.9812-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:47:38 +0200
+Message-ID: <20260504144738.9918-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260420173412.3572945-1-bernd@kuhls.net>
-References: <20260420173412.3572945-1-bernd@kuhls.net>
+In-Reply-To: <20260420214451.2704785-1-aperez@igalia.com>
+References: <20260420214451.2704785-1-aperez@igalia.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906058; x=1778510858; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906059; x=1778510859; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=SjREVxcKyt2r27FFf6PYmJdPrlyoiodI9+8EmAE1FyQ=;
- b=I+cGmcnYu4pnGEoeGjb5HAASqOzqg+FED7zsZovAcEONKbOrKi0HijZfLEWveDsxLF
- Cr7L+fHxx/2owvy7KsD25q4viWYGjxqi3rF6sM0dW4Q8DSlnbgSNL3XusZEPj9+uqmj/
- GNyR1z7poOu/DT77c3xJlndqxFjG7/ydXqpbs/9IPDv4S5jyIhwKk9E4aKrhlOg+6Ztn
- JnQ4BUuYR14qqUsASGqUYndVoWTDPqjj0fcRtBOZOngY7xvrU4i0Y/wexNTUGHqwQduR
- 2Y56cIMYKP3Tp6d5FwwhqSbyRlDV/IwYhgkDOvC9OGQowEuJnw8wboF0UNfpitwhQp9q
- GrDA==
+ bh=qw5M8PeQNHVrmvZMmm1Fmmnq1Rm7KrulIAQXzHG/m74=;
+ b=QOC508m9R+XyIowpOzz4mLOKNkJSLe3mK4RfUG1EhgwV/Bo/0x8su8lKDx21Tr0J/4
+ AKjjvdFs6hHhLL9nNgUUn9n5PEeHxCo29JnAfd6LQnJqicA/Pi7Kiw4MZ6c/1lFCCgGP
+ 3xkxjkkPnKvVkcTqS92OyIzfiJjvl/SX6bm9+lcFepAT1l9/HCB459r2VZf0GXpU5tk8
+ Uq8WNnqPYywUGGe1IANcaVxfvLqtzTWn7Ngb1NzfLj9XJMZasaiBLVve4CxTicNLCRdp
+ xS1AsFkKrO+fScQOi3G1Z/LTeb8EYe0BuT1GrjUH53EnFMcwyprUh/hNXsKkc+xp8K0k
+ XDMw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=I+cGmcnY
-Subject: Re: [Buildroot] [PATCH 1/2] package/p11-kit: security bump version
- to 0.26.2
+ header.a=rsa-sha256 header.s=google header.b=QOC508m9
+Subject: Re: [Buildroot] [PATCH] package/webkitgtk: security bump to 2.52.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,47 +130,88 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/p11-glue/p11-kit/blob/0.26.2/NEWS
+> This bumps WebKitGTK to the 2.52 stable series. A welcome change
+> is the addition of the USE_GSTREAMER CMake option that can be used
+> as a blanket option to toggle all multimedia support, which matches
+> exactly the intention behind BR2_PACKAGE_WEBKITGTK_MULTIMEDIA.
 > 
-> Fixes CVE-2026-2100: https://github.com/advisories/GHSA-hq85-3f6c-jx84
+> Includes fixes (among others) for CVE-2026-20643, CVE-2026-20664,
+> CVE-2026-20665, CVE-2026-20691, CVE-2026-28857, CVE-2026-28859,
+> CVE-2026-28861, CVE-2026-28871, CVE-2025-43457, CVE-2025-46299,
+> CVE-2026-20608, CVE-2026-20635, CVE-2026-20636, CVE-2026-20644,
+> CVE-2026-20652, and CVE-2026-20676.
 > 
-> Switched to sha256 tarball hash provided by upstream.
+> Highlights of the 2.52 series:
+> - https://webkitgtk.org/2026/03/18/webkitgtk-2.52-highlights.html
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Release notes:
+> - https://webkitgtk.org/2026/04/16/webkitgtk2.52.3-released.html
+> - https://webkitgtk.org/2026/04/13/webkitgtk2.52.2-released.html
+> - https://webkitgtk.org/2026/03/27/webkitgtk2.52.1-released.html
+> - https://webkitgtk.org/2026/03/18/webkitgtk2.52.0-released.html
+> - https://webkitgtk.org/2026/03/12/webkitgtk2.50.6-released.html
+> 
+> Security advisories:
+> - https://webkitgtk.org/security/WSA-2026-0002.html
+> - https://webkitgtk.org/security/WSA-2026-0001.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/p11-kit/p11-kit.hash | 4 ++--
->  package/p11-kit/p11-kit.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/webkitgtk/webkitgtk.hash |  6 +++---
+>  package/webkitgtk/webkitgtk.mk   | 12 +++---------
+>  2 files changed, 6 insertions(+), 12 deletions(-)
 > 
-> diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-> index 43a566a82c..943ad9c22f 100644
-> --- a/package/p11-kit/p11-kit.hash
-> +++ b/package/p11-kit/p11-kit.hash
-> @@ -1,4 +1,4 @@
-> -# Locally calculated after checking pgp signature
-> -sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
-> +# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
-> +sha256  09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828  p11-kit-0.26.2.tar.xz
->  # Locally computed
->  sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-> diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-> index 42de3e1065..68b1894183 100644
-> --- a/package/p11-kit/p11-kit.mk
-> +++ b/package/p11-kit/p11-kit.mk
+> diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+> index 77bdc5485b..03b8d0a9be 100644
+> --- a/package/webkitgtk/webkitgtk.hash
+> +++ b/package/webkitgtk/webkitgtk.hash
+> @@ -1,6 +1,6 @@
+> -# From https://webkitgtk.org/releases/webkitgtk-2.50.5.tar.xz.sums
+> -sha1  e93f7efa9fbc7304cc159c35d8e76d7febab2515  webkitgtk-2.50.5.tar.xz
+> -sha256  8737631bac3e9c7ad3e5208f9370e076c09d9c45b39980021ce54edadcc6f94f  webkitgtk-2.50.5.tar.xz
+> +# From https://webkitgtk.org/releases/webkitgtk-2.52.3.tar.xz.sums
+> +sha1  17f9b127618040a5f3fcbb70e37ea16ab6d69b0b  webkitgtk-2.52.3.tar.xz
+> +sha256  5b3e0d174e63dcc28848b1194e0e7448d5948c3c2427ecd931c2c5be5261aebb  webkitgtk-2.52.3.tar.xz
+>  
+>  # Hashes for license files:
+>  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index 26c70ae6c8..54e769d589 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -P11_KIT_VERSION = 0.25.5
-> +P11_KIT_VERSION = 0.26.2
->  P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
->  P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
->  P11_KIT_INSTALL_STAGING = YES
+> -WEBKITGTK_VERSION = 2.50.5
+> +WEBKITGTK_VERSION = 2.52.3
+>  WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+>  WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+>  WEBKITGTK_INSTALL_STAGING = YES
+> @@ -56,16 +56,10 @@ WEBKITGTK_CONF_OPTS += -DENABLE_BUBBLEWRAP_SANDBOX=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
+> -WEBKITGTK_CONF_OPTS += \
+> -	-DENABLE_VIDEO=ON \
+> -	-DENABLE_WEB_AUDIO=ON \
+> -	-DENABLE_WEB_CODECS=ON
+> +WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER=ON
+>  WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-bad gst1-plugins-base
+>  else
+> -WEBKITGTK_CONF_OPTS += \
+> -	-DENABLE_VIDEO=OFF \
+> -	-DENABLE_WEB_AUDIO=OFF \
+> -	-DENABLE_WEB_CODECS=OFF
+> +WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_WEBKITGTK_WEBDRIVER),y)
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
