@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D6BCD3426
-	for <buildroot@archiver.kernel.org>; Sun,  3 May 2026 10:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AF45CD3427
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 19:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 448E7821CD;
-	Sun,  3 May 2026 10:50:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F5FC8384B;
+	Mon,  4 May 2026 19:20:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nKqxmkPozn75; Sun,  3 May 2026 10:50:12 +0000 (UTC)
+ id bAgL0aHb7SfU; Mon,  4 May 2026 19:20:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8676582275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C43C683658
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777805412;
-	bh=HbL8Fa9C96nfKnB7WFF9iqoFl2igZwUm9Sz5qbLkOfo=;
+	s=default; t=1777922414;
+	bh=IbdK4OdNc4Zfo/S7Q9l+rMu6b6lM3aXwk2cbKKsVfXQ=;
 	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=sDHTBarGW6WpBxfO0E9sY5bZN674mdqgkIh1X0T7BRIjRztyOAgjcz3CtzLWUcQXs
-	 NBz1JNNaESoIulhP+w8IVwYthyxtr/+YFrEAUWDQgLmdoYWAOOmwxUdY/Fkf6BXPLp
-	 Q9CVGA6tQwI//+JlA9Pa3EWkb/NX/cCJbt1kJ4Nb4qJ3dKQoDqxGlEtnjncJSoMDhD
-	 5+Z46w9y2fTtVG10+SCSNJY0xkh2dBFeVKjC/NCchDLO5Ua5wMsvwa7AYtUHDNXKuy
-	 CBY+qN8t6GZiZyegRlesm5lVW5fX5sA4umdwi63Nf+T3b3DfnTYfGz41b6mHU9tiGm
-	 vPvIn5aL9qDIw==
+	b=DIzBUA9i0I5Ke9YQTh+9M9/TqHGr04SDAGKObLjnmXlPTB7vPUR9sItU5zCe9p+qf
+	 cEyi5znQOYxigc5Qc2UriXw4Kl+CjDNtBUyHEscbBYKFjrKCCWSa+OMRfbqCAaR8rR
+	 r19SGa6zcruT+VVY4REUdJ7IQKJ0pztXNGnMFV53zTWLlzPapuvEvWYV7cJPgQa/gd
+	 kTpbZ96Hxsdfz8QqsDSnG/qSAFpTEBhYrX+HuL53QCIXBsm4KB+TRH0X+YsZ32yZUw
+	 vYh1dtY+AGveT5P8ZJLmLFMhI+qDctejTbgEtLpFoUTJz1KPT5GqkGeQK2Y7S/4yxk
+	 E0vP0+/rY6fAQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8676582275;
-	Sun,  3 May 2026 10:50:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D76F127
- for <buildroot@buildroot.org>; Sun,  3 May 2026 10:50:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C43C683658;
+	Mon,  4 May 2026 19:20:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DAF77204
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 19:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23ECB82275
- for <buildroot@buildroot.org>; Sun,  3 May 2026 10:50:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0DDE61065
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 19:20:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VS2QNHj1hP2O for <buildroot@buildroot.org>;
- Sun,  3 May 2026 10:50:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2ZZ-BHOhDW8P for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 19:20:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BCA65821CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCA65821CD
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4AE9460E4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AE9460E4F
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCA65821CD
- for <buildroot@uclibc.org>; Sun,  3 May 2026 10:50:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4AE9460E4F
+ for <buildroot@uclibc.org>; Mon,  4 May 2026 19:20:12 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wJUOl-000227-5V
- for buildroot@uclibc.org; Sun, 03 May 2026 12:50:07 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wJypt-00060S-66
+ for buildroot@uclibc.org; Mon, 04 May 2026 21:20:09 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 03 May 2026 12:49:39 +0200
-Message-ID: <pan$a3e45$309a5928$ce7abbe0$c6885c1c@ID-313208.user.individual.net>
-References: <20260502143839.1511519-1-bernd@kuhls.net>
- <afcSf1Ijjwe35gdX__15610.9446122841$1777799830$gmane$org@waldemar-brodkorb.de>
+Date: Mon, 04 May 2026 21:19:43 +0200
+Message-ID: <pan$4efa1$3193edca$35d0dc70$ed67a04c@ID-313208.user.individual.net>
+References: <20260501152758.2610763-8-bernd@kuhls.net>
+ <20260504145544.24754-1-thomas.perale__7627.68512811221$1777906569$gmane$org@mind.be>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/1] package/asterisk: security bump version
- to 23.3.0
+Subject: Re: [Buildroot] [PATCH v4 07/21] package/cups-filters: add upstream
+ patch to fix CVE-2025-64524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,43 +81,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 3 May 2026 11:16:47 +0200 schrieb Waldemar Brodkorb:
+Am Mon,  4 May 2026 16:55:44 +0200 schrieb Thomas Perale via buildroot:
 
-> Hi Bernd,
+> This line needs to be changed to the following as documented in [1]
 > 
-> it seems the cleanup bug of menuselect is back:
->>>> asterisk 23.3.0 Building
-> GIT_DIR=. PATH="/home/wbx/buildroot/output/host/bin:/home/wbx/buildroot/
-output/host/sbin:/home/wbx/.nix-profile/bin:/nix/var/nix/profiles/default/
-bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  /usr/bin/
-make -j13 ASTVARLIBDIR="/usr/lib/asterisk" ASTDATADIR="/usr/lib/asterisk" 
-ASTKEYDIR="/usr/lib/asterisk" ASTDBDIR="/usr/lib/asterisk" ASTLDFLAGS="-
-latomic" OPTIMIZE="" -C /home/wbx/buildroot/output/build/asterisk-23.3.0/
-> CC="cc" CXX="/home/wbx/buildroot/output/host/bin/x86_64-buildroot-linux-
-gnu-g++" LD="" AR="" RANLIB="" CFLAGS="" LDFLAGS="" make -C menuselect 
-CONFIGURE_SILENT="--silent" makeopts
-> make[3]: 'makeopts' is up to date.
-> menuselect/menuselect --check-deps menuselect.makeopts
-> menuselect/menuselect: error while loading shared libraries: 
-libxml2.so.16: cannot open shared object file: No such file or directory
+> ```
+> CVE: CVE-2025-64524 ```
+> 
+> To be correctly picked up as a patch. This is not checked yet by
+> `check-package` unfortunately
+> 
+> [1]
+> https://buildroot.org/downloads/manual/manual.html#additional-patch-
+documentation
 
-Hi Waldemar,
+Hi Thomas,
 
-afaics the bug never went away, tested on buildroot master as of today's 
-commit fdcbe271afd6a3150cc0449b99df360e82064d06 with this defconfig
+thanks for the hint, seems I am following an outdated version of the 
+manual:
+http://buildroot.uclibc.org/downloads/manual/
+manual.html#_additional_patch_documentation
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_ASTERISK=y
-
-still errors out:
-
->>> asterisk 22.8.2 Building
-[...]
-Generating input for menuselect ...
-menuselect/menuselect --check-deps menuselect.makeopts
-menuselect/menuselect: error while loading shared libraries: 
-libxml2.so.16: cannot open shared object file: No such file or directory
+which does not mention "CVE:"
 
 Regards, Bernd
 
