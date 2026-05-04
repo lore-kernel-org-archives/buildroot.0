@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3CF0CD3430
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 493B7FF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB01B410D5;
-	Mon,  4 May 2026 14:47:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 230BF614FF;
+	Mon,  4 May 2026 14:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7cK-GkS5QygV; Mon,  4 May 2026 14:47:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7IgJn07C5rnB; Mon,  4 May 2026 14:47:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C341641BDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D314D61501
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906063;
-	bh=gbf8FzChAoUw71ghJvfYLmldFYumMTU0n9nlwcRK39I=;
+	s=default; t=1777906064;
+	bh=uEBJ8i7TO0WgptdkyDI9GZXjsV6FJmYHPSduc76g2p8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YA9ki+vgaYFJkWzUgVEPs64zteZDuDLXBxOG22rFccRafza5lLP1Cvp8ZFthF/pgF
-	 JrWNxC3UGXfLKLo3wMP0NPffaSaa+apOJtTbelu8UP0mlupBS+2jrIoWJVZYnpAX3A
-	 orw2cbatFTvU0RSz8JLeLS4s8+6BXGeZGIyZvKg2rTtzbf78Izrlfid8cuVCvQumEk
-	 ig29xgLaQe95sXg4rwbLGBN8qatlqilM35To2JbBiKXLdq+0yzWLMXxyOzJVoK9fyY
-	 8BglS9ZqYdEZMYPyPk/uZ1qVoCKYTsrgatnLfQIk1XGOoWsIN1eiXXjK8pWLf6FupP
-	 kHCSPyi3MkUFw==
+	b=gLCqoVtiXTT4q9paot8l2OUWOpSITIdGmyHuLiDqQTUIq6ilTz6EFawc7/5yoeKhC
+	 qPJsyqxR8N8KMaaDWswwH7N3ZPYsiDVR8UNeBcYbRVLuvCxwd7XwgKr88abpmTdDt8
+	 zA46wPzqBiB6gGA6lNZbZ1T84//G/kudDA2ri+Oq1LI6Jns0Njgu2bRbVO+3vDBRLC
+	 MAEQvSkJXWmMjtioD6NslM+xn12Fe0JHUn96o4T1w+okOofqm8pqdQ7WNwGOVl3xxM
+	 XJ3F1+WArPDXzydD7NQmOUOI9mxx9y/FifaTrlpF2OAgS8emMqEnPUjo16bDv+pfkn
+	 Uc5Q91KjY6hKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C341641BDD;
-	Mon,  4 May 2026 14:47:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D314D61501;
+	Mon,  4 May 2026 14:47:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E70B0190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 887BB25D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D94EE84648
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79D88845F2
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eAf7_oSvm8IV for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:47:41 +0000 (UTC)
+ id uYck3BPyNql0 for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:47:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 36108845BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36108845BB
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 36108845BB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C617845BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C617845BF
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1C617845BF
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:41 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-43fe3e22e33so2298910f8f.0
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:40 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-44a786a9a35so1975759f8f.3
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906059; x=1778510859;
+ d=1e100.net; s=20251104; t=1777906060; x=1778510860;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qw5M8PeQNHVrmvZMmm1Fmmnq1Rm7KrulIAQXzHG/m74=;
- b=bu8mfQyWUf3Z9GjgjVGOoPTeeXxZHYIXpFctWR/mc01GBNiDDe+hrsnsLf/OQ9cI99
- Y9JtYDXKBwTuZPyqSoxdK1kakVL1LsbRrMHc6gPl2PkY9zZTXPHSZj/Ov7DOHbc3QmyZ
- 6MFzHB0SSW2G6cv0wxghSqo6lt6e3Ni4N5j+gvKgDz+Em47tCbrNH02naCZuyTuqOrh6
- Q08K5+IuotXOy8tlfh1bhCujaFztJ1dQ3vLjdjmkbkqNTg+D2WeNE2x2m4ti4qe8w2OX
- VXk9MbRlU3RsrI0sEZl0kChRoM8SFWL756wiGk/9FKb750gLwxTl2Xds8+fMpuIUbOkk
- VbCQ==
+ bh=N72i6ldoQgFBhFD77ddXju5LITFATTv4Tq3XcXaJriQ=;
+ b=ZbEpG1Lw/Of/lY25U3qPP+qV1mIQ6dpv8Pe36kaNt1Y3wmtNjS+GFiDXCVoC313tFF
+ nBlQCSNaNSqaN78OEBanrpjou6i4ZVemE4/tVLJqw644V6M0r+xXYoqnWyYvoACIhNBE
+ 019XOkXGjkLXkYjRTvhwkYKAXtZBrbTSS4xTJyyZOHSpzL1DK/nJeXdfdlvbNKR+J+wi
+ zubBIS0lanU0a1kvzHy98GCf94xaysr6x2n3qvrT6wY4M0EbGKdd37PDBoarcPcPhB6T
+ /aappplA3C/FeoofsYKMI+XQBM6lJxWkjJ7vUSJ2W1WHaLafV/4cLbf1Q8ya0AT15zvG
+ ZdbA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8lk21pYDq0xCazZG9MIYP8TT0wwSuUzOxvwVdjIUF9SyPT4dmLfSPrGgmYeR+Ty4RUe8QDSkoYfXQ=@buildroot.org
-X-Gm-Message-State: AOJu0YyA0osSiL68qyv3xmWo38L/Qputffe04p5XSq7elS8mEJaCIprt
- 2f2BMU9xxcKgpO6uXQPNevuo560TdRrkpM+t2WVfCBIu7xXoUL2mJ2RMIfi4JMEn8wU=
-X-Gm-Gg: AeBDietn6BCd8DJJOuFtWB0+7zXKpOLPsxEYe+8JVEgxYQLaQUCmySvQua7x09dmTMS
- A3acmff7rSUWkUJD0upBp640y49VixfXI3z+T6BTwCQNDBT9xUzLIiWwePHcv/Aqi6YLWx+/or/
- 50FEq1HO6Zyqq7XblYEahSwTQbXQ/c7URMkuB0bYf4XkiwMPaza65WefdYZ0B2PIcRMkaLDzuqm
- gVnX6lGpPTfiPE3wqx9/YoDgIP4o2Rqjjx+zIEsq0GcjIEmSdLXF2PE053wE1T/jRMcDvtnwofY
- vNxwN6HHnMYUNZ4vxvFRTm+UMxiZ8JnsZSrNW5uwQAc7zn8bqNszNTjiUJintMegFEKACovQC2E
- 6WcD2N9sd1XnLj8rZ3a0MqBtkaQlJ3ZGuNn/VOnT5R1ZNQ2AKLu1i8RD2yfNo0+nUbI+ofwpDr+
- nC/XvVYh43h0CRjfBMRWug7G1riQ==
-X-Received: by 2002:a05:6000:25c2:b0:43d:7d6f:f535 with SMTP id
- ffacd0b85a97d-44bb5f24ab8mr16035356f8f.35.1777906059000; 
+ AFNElJ9+PVHh7Q8UCtImli82IQAn7NDqfJV5fbt2ULYdE9GvB0F/HGVEVkHnfMIIrHqSV9PNIHNjLUdIS28=@buildroot.org
+X-Gm-Message-State: AOJu0YyekXM/SuIZRtIRoi9ct7D/Mz0lyIQP6UYbtxxH52q8OOlwkhl/
+ Sg1241Q3HiZ1zuRtFLXwtybXg6uavQeuhzby1tJABpKQBFflbA94iYhOOsc1/L6+cFM=
+X-Gm-Gg: AeBDieu9BmLpkBTSoNMv20YDliif+zdax+pAcJQIwrAmyT08ZyCcHp/mQysjuNXZLeJ
+ HuEUMMoTsq+JpF60BF/9ZBCLmphhUhdavy7wZFgu3gOQxLw1dppMyiztd/BFYxetqTZw6sAcqNx
+ MJalHNDl7sNOhDHrJjBIsmatcLl33X5thujJD3eKt0HrJ6KZqnevBj2RDLVk23YXoJeXXV/Jqjg
+ qu+lK2Zb1ASevInZ1J5A3sLCwahrmxfKJ2qwq9I9EuXguPaVueUsxQA0wfV+/pbxr5NGA1hIFDy
+ dHfiGYrPFgBqiuOli3DN6rPAQ8tm5xutNS1hqwFVIoRG7TCMH+baM+NwGch8DW/6CdCbxCi91wc
+ bwBcEBgILQKzfv5clDrOX4bu5T9vEgJbE/PfAind5Jz2bfawBhBC2HCIpbrsouOfGNLDHGeXOU3
+ Ak5kxCvjoxML/yiBUr7y3L5ZW6Fg==
+X-Received: by 2002:a05:6000:61e:b0:43f:ea25:20ff with SMTP id
+ ffacd0b85a97d-44bb65df078mr18121625f8f.29.1777906059991; 
  Mon, 04 May 2026 07:47:39 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-44a981defb3sm35572327f8f.20.2026.05.04.07.47.38
+ ffacd0b85a97d-44a986aab44sm27621053f8f.29.2026.05.04.07.47.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:47:38 -0700 (PDT)
-To: Adrian Perez de Castro <aperez@igalia.com>
+ Mon, 04 May 2026 07:47:39 -0700 (PDT)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:47:38 +0200
-Message-ID: <20260504144738.9918-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:47:39 +0200
+Message-ID: <20260504144739.10004-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260420214451.2704785-1-aperez@igalia.com>
-References: <20260420214451.2704785-1-aperez@igalia.com>
+In-Reply-To: <20260420220839.1232620-3-fiona.klute@gmx.de>
+References: <20260420220839.1232620-3-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906059; x=1778510859; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906060; x=1778510860; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qw5M8PeQNHVrmvZMmm1Fmmnq1Rm7KrulIAQXzHG/m74=;
- b=QOC508m9R+XyIowpOzz4mLOKNkJSLe3mK4RfUG1EhgwV/Bo/0x8su8lKDx21Tr0J/4
- AKjjvdFs6hHhLL9nNgUUn9n5PEeHxCo29JnAfd6LQnJqicA/Pi7Kiw4MZ6c/1lFCCgGP
- 3xkxjkkPnKvVkcTqS92OyIzfiJjvl/SX6bm9+lcFepAT1l9/HCB459r2VZf0GXpU5tk8
- Uq8WNnqPYywUGGe1IANcaVxfvLqtzTWn7Ngb1NzfLj9XJMZasaiBLVve4CxTicNLCRdp
- xS1AsFkKrO+fScQOi3G1Z/LTeb8EYe0BuT1GrjUH53EnFMcwyprUh/hNXsKkc+xp8K0k
- XDMw==
+ bh=N72i6ldoQgFBhFD77ddXju5LITFATTv4Tq3XcXaJriQ=;
+ b=Fx9E1Rl6HbmJWkvfRqPERhSxkkEAUE95mVpJ3HoDRlT3T5m6t1JaB9dVaYBrmfd/jE
+ yZsfd623D+oo5Gp5WdZuEFDfJdSJ+bEKQJ1v9BpudXAIivRX8ioohZhVg/eC2OU65E3L
+ APSN3QT88wHqsfjZRWM4W7ue/mnFswCo204oJgqfFNyKpDeuTb1t1Xnmk2I9PWG4CLB/
+ md54DBUVqZwHNO3x3pgUx7xdmcsuXzQi+yBeicR4rralCLpHQx18ThtiH5tIlurIqydf
+ u+8Jo68IKu0ntTN9K0+zPDZf1BaSoS+HRGajn8+uSgxPJTTK8Lj6RzaVqvaqqzbaIHD1
+ NR6Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QOC508m9
-Subject: Re: [Buildroot] [PATCH] package/webkitgtk: security bump to 2.52.3
+ header.a=rsa-sha256 header.s=google header.b=Fx9E1Rl6
+Subject: Re: [Buildroot] [PATCH 2/2] package/musl: add upstream security
+ patches for CVE-2026-40200
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,86 +131,248 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This bumps WebKitGTK to the 2.52 stable series. A welcome change
-> is the addition of the USE_GSTREAMER CMake option that can be used
-> as a blanket option to toggle all multimedia support, which matches
-> exactly the intention behind BR2_PACKAGE_WEBKITGTK_MULTIMEDIA.
+> Fixes CVE-2026-40200: musl libc: stack corruption in qsort with
+> sufficiently large inputs
+> https://www.openwall.com/lists/musl/2026/04/10/3
 > 
-> Includes fixes (among others) for CVE-2026-20643, CVE-2026-20664,
-> CVE-2026-20665, CVE-2026-20691, CVE-2026-28857, CVE-2026-28859,
-> CVE-2026-28861, CVE-2026-28871, CVE-2025-43457, CVE-2025-46299,
-> CVE-2026-20608, CVE-2026-20635, CVE-2026-20636, CVE-2026-20644,
-> CVE-2026-20652, and CVE-2026-20676.
+> Fixes: https://nvd.nist.gov/vuln/detail/CVE-2026-40200
 > 
-> Highlights of the 2.52 series:
-> - https://webkitgtk.org/2026/03/18/webkitgtk-2.52-highlights.html
-> 
-> Release notes:
-> - https://webkitgtk.org/2026/04/16/webkitgtk2.52.3-released.html
-> - https://webkitgtk.org/2026/04/13/webkitgtk2.52.2-released.html
-> - https://webkitgtk.org/2026/03/27/webkitgtk2.52.1-released.html
-> - https://webkitgtk.org/2026/03/18/webkitgtk2.52.0-released.html
-> - https://webkitgtk.org/2026/03/12/webkitgtk2.50.6-released.html
-> 
-> Security advisories:
-> - https://webkitgtk.org/security/WSA-2026-0002.html
-> - https://webkitgtk.org/security/WSA-2026-0001.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/webkitgtk/webkitgtk.hash |  6 +++---
->  package/webkitgtk/webkitgtk.mk   | 12 +++---------
->  2 files changed, 6 insertions(+), 12 deletions(-)
+>  ...do-heap-corruption-from-bug-in-doubl.patch | 48 +++++++++
+>  ...ude-oob-array-writes-independent-of-.patch | 97 +++++++++++++++++++
+>  ...06-qsort-fix-shift-UB-in-shl-and-shr.patch | 43 ++++++++
+>  package/musl/musl.mk                          |  5 +
+>  4 files changed, 193 insertions(+)
+>  create mode 100644 package/musl/0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch
+>  create mode 100644 package/musl/0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch
+>  create mode 100644 package/musl/0006-qsort-fix-shift-UB-in-shl-and-shr.patch
 > 
-> diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-> index 77bdc5485b..03b8d0a9be 100644
-> --- a/package/webkitgtk/webkitgtk.hash
-> +++ b/package/webkitgtk/webkitgtk.hash
-> @@ -1,6 +1,6 @@
-> -# From https://webkitgtk.org/releases/webkitgtk-2.50.5.tar.xz.sums
-> -sha1  e93f7efa9fbc7304cc159c35d8e76d7febab2515  webkitgtk-2.50.5.tar.xz
-> -sha256  8737631bac3e9c7ad3e5208f9370e076c09d9c45b39980021ce54edadcc6f94f  webkitgtk-2.50.5.tar.xz
-> +# From https://webkitgtk.org/releases/webkitgtk-2.52.3.tar.xz.sums
-> +sha1  17f9b127618040a5f3fcbb70e37ea16ab6d69b0b  webkitgtk-2.52.3.tar.xz
-> +sha256  5b3e0d174e63dcc28848b1194e0e7448d5948c3c2427ecd931c2c5be5261aebb  webkitgtk-2.52.3.tar.xz
+> diff --git a/package/musl/0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch b/package/musl/0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch
+> new file mode 100644
+> index 0000000000..1f179552df
+> --- /dev/null
+> +++ b/package/musl/0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch
+> @@ -0,0 +1,48 @@
+> +From 228da39e38c1cae13cbe637e771412c1984dba5d Mon Sep 17 00:00:00 2001
+> +From: Rich Felker <dalias@aerifal.cx>
+> +Date: Thu, 9 Apr 2026 22:51:30 -0400
+> +Subject: [PATCH] qsort: fix leonardo heap corruption from bug in doubleword
+> + ctz primitive
+> +
+> +the pntz function, implementing a "count trailing zeros" variant for a
+> +bit vector consisting of two size_t words, erroneously returned zero
+> +rather than the number of bits in the low word when the first bit set
+> +was the low bit of the high word.
+> +
+> +as a result, a loop in the trinkle function which should have a
+> +guaranteed small bound on the number of iterations, could run
+> +unboundedly, thereby overflowing a stack-based working-space array
+> +which was sized for the bound.
+> +
+> +CVE-2026-40200 has been assigned for this issue.
+> +
+> +CVE: CVE-2026-40200
+> +Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=228da39e38c1cae13cbe637e771412c1984dba5d
+> +Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> +---
+> + src/stdlib/qsort.c | 8 ++++----
+> + 1 file changed, 4 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/stdlib/qsort.c b/src/stdlib/qsort.c
+> +index ab79dc6f..13219ab3 100644
+> +--- a/src/stdlib/qsort.c
+> ++++ b/src/stdlib/qsort.c
+> +@@ -34,11 +34,11 @@
+> + 
+> + typedef int (*cmpfun)(const void *, const void *, void *);
+> + 
+> ++/* returns index of first bit set, excluding the low bit assumed to always
+> ++ * be set, starting from low bit of p[0] up through high bit of p[1] */
+> + static inline int pntz(size_t p[2]) {
+> +-	int r = ntz(p[0] - 1);
+> +-	if(r != 0 || (r = 8*sizeof(size_t) + ntz(p[1])) != 8*sizeof(size_t)) {
+> +-		return r;
+> +-	}
+> ++	if (p[0] != 1) return ntz(p[0] - 1);
+> ++	if (p[1]) return 8*sizeof(size_t) + ntz(p[1]);
+> + 	return 0;
+> + }
+> + 
+> +-- 
+> +2.53.0
+> +
+> diff --git a/package/musl/0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch b/package/musl/0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch
+> new file mode 100644
+> index 0000000000..1604ae9dc4
+> --- /dev/null
+> +++ b/package/musl/0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch
+> @@ -0,0 +1,97 @@
+> +From b3291b9a9f77f1f993d2b4f8c68a26cf09221ae7 Mon Sep 17 00:00:00 2001
+> +From: Rich Felker <dalias@aerifal.cx>
+> +Date: Thu, 9 Apr 2026 23:40:53 -0400
+> +Subject: [PATCH] qsort: hard-preclude oob array writes independent of any
+> + invariants
+> +
+> +while the root cause of CVE-2026-40200 was a faulty ctz primitive, the
+> +fallout of the bug would have been limited to erroneous sorting or
+> +infinite loop if not for the stores to a stack-based array that
+> +depended on trusting invariants in order not to go out of bounds.
+> +
+> +increase the size of the array to a power of two so that we can mask
+> +indices into it to force them into range. in the absence of any
+> +further bug, the masking is a no-op, but it does not have any
+> +measurable performance cost, and it makes spatial memory safety
+> +trivial to prove (and for readers not familiar with the algorithms to
+> +trust).
+> +
+> +CVE: CVE-2026-40200
+> +Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=b3291b9a9f77f1f993d2b4f8c68a26cf09221ae7
+> +Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> +---
+> + src/stdlib/qsort.c | 20 +++++++++++++-------
+> + 1 file changed, 13 insertions(+), 7 deletions(-)
+> +
+> +diff --git a/src/stdlib/qsort.c b/src/stdlib/qsort.c
+> +index 13219ab3..e4bce9f7 100644
+> +--- a/src/stdlib/qsort.c
+> ++++ b/src/stdlib/qsort.c
+> +@@ -89,10 +89,16 @@ static inline void shr(size_t p[2], int n)
+> + 	p[1] >>= n;
+> + }
+> + 
+> ++/* power-of-two length for working array so that we can mask indices and
+> ++ * not depend on any invariant of the algorithm for spatial memory safety.
+> ++ * the original size was just 14*sizeof(size_t)+1 */
+> ++#define AR_LEN  (16 * sizeof(size_t))
+> ++#define AR_MASK (AR_LEN - 1)
+> ++
+> + static void sift(unsigned char *head, size_t width, cmpfun cmp, void *arg, int pshift, size_t lp[])
+> + {
+> + 	unsigned char *rt, *lf;
+> +-	unsigned char *ar[14 * sizeof(size_t) + 1];
+> ++	unsigned char *ar[AR_LEN];
+> + 	int i = 1;
+> + 
+> + 	ar[0] = head;
+> +@@ -104,16 +110,16 @@ static void sift(unsigned char *head, size_t width, cmpfun cmp, void *arg, int p
+> + 			break;
+> + 		}
+> + 		if(cmp(lf, rt, arg) >= 0) {
+> +-			ar[i++] = lf;
+> ++			ar[i++ & AR_MASK] = lf;
+> + 			head = lf;
+> + 			pshift -= 1;
+> + 		} else {
+> +-			ar[i++] = rt;
+> ++			ar[i++ & AR_MASK] = rt;
+> + 			head = rt;
+> + 			pshift -= 2;
+> + 		}
+> + 	}
+> +-	cycle(width, ar, i);
+> ++	cycle(width, ar, i & AR_MASK);
+> + }
+> + 
+> + static void trinkle(unsigned char *head, size_t width, cmpfun cmp, void *arg, size_t pp[2], int pshift, int trusty, size_t lp[])
+> +@@ -121,7 +127,7 @@ static void trinkle(unsigned char *head, size_t width, cmpfun cmp, void *arg, si
+> + 	unsigned char *stepson,
+> + 	              *rt, *lf;
+> + 	size_t p[2];
+> +-	unsigned char *ar[14 * sizeof(size_t) + 1];
+> ++	unsigned char *ar[AR_LEN];
+> + 	int i = 1;
+> + 	int trail;
+> + 
+> +@@ -142,7 +148,7 @@ static void trinkle(unsigned char *head, size_t width, cmpfun cmp, void *arg, si
+> + 			}
+> + 		}
+> + 
+> +-		ar[i++] = stepson;
+> ++		ar[i++ & AR_MASK] = stepson;
+> + 		head = stepson;
+> + 		trail = pntz(p);
+> + 		shr(p, trail);
+> +@@ -150,7 +156,7 @@ static void trinkle(unsigned char *head, size_t width, cmpfun cmp, void *arg, si
+> + 		trusty = 0;
+> + 	}
+> + 	if(!trusty) {
+> +-		cycle(width, ar, i);
+> ++		cycle(width, ar, i & AR_MASK);
+> + 		sift(head, width, cmp, arg, pshift, lp);
+> + 	}
+> + }
+> +-- 
+> +2.53.0
+> +
+> diff --git a/package/musl/0006-qsort-fix-shift-UB-in-shl-and-shr.patch b/package/musl/0006-qsort-fix-shift-UB-in-shl-and-shr.patch
+> new file mode 100644
+> index 0000000000..455a0677e2
+> --- /dev/null
+> +++ b/package/musl/0006-qsort-fix-shift-UB-in-shl-and-shr.patch
+> @@ -0,0 +1,43 @@
+> +From 5122f9f3c99fee366167c5de98b31546312921ab Mon Sep 17 00:00:00 2001
+> +From: Luca Kellermann <mailto.luca.kellermann@gmail.com>
+> +Date: Fri, 10 Apr 2026 03:03:22 +0200
+> +Subject: [PATCH] qsort: fix shift UB in shl and shr
+> +
+> +if shl() or shr() are called with n==8*sizeof(size_t), n is adjusted
+> +to 0. the shift by (sizeof(size_t) * 8 - n) that then follows will
+> +consequently shift by the width of size_t, which is UB and in practice
+> +produces an incorrect result.
+> +
+> +return early in this case. the bitvector p was already shifted by the
+> +required amount.
+> +
+> +CVE: CVE-2026-40200
+> +Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=5122f9f3c99fee366167c5de98b31546312921ab
+> +Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> +---
+> + src/stdlib/qsort.c | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/src/stdlib/qsort.c b/src/stdlib/qsort.c
+> +index e4bce9f7..28607450 100644
+> +--- a/src/stdlib/qsort.c
+> ++++ b/src/stdlib/qsort.c
+> +@@ -71,6 +71,7 @@ static inline void shl(size_t p[2], int n)
+> + 		n -= 8 * sizeof(size_t);
+> + 		p[1] = p[0];
+> + 		p[0] = 0;
+> ++		if (!n) return;
+> + 	}
+> + 	p[1] <<= n;
+> + 	p[1] |= p[0] >> (sizeof(size_t) * 8 - n);
+> +@@ -83,6 +84,7 @@ static inline void shr(size_t p[2], int n)
+> + 		n -= 8 * sizeof(size_t);
+> + 		p[0] = p[1];
+> + 		p[1] = 0;
+> ++		if (!n) return;
+> + 	}
+> + 	p[0] >>= n;
+> + 	p[0] |= p[1] << (sizeof(size_t) * 8 - n);
+> +-- 
+> +2.53.0
+> +
+> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+> index 29a9c90ce1..5384a08abf 100644
+> --- a/package/musl/musl.mk
+> +++ b/package/musl/musl.mk
+> @@ -29,6 +29,11 @@ MUSL_INSTALL_STAGING = YES
+>  # 0003-fix-pathological-slowness-incorrect-mappings-in-icon.patch
+>  MUSL_IGNORE_CVES += CVE-2026-6042
 >  
->  # Hashes for license files:
->  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 26c70ae6c8..54e769d589 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WEBKITGTK_VERSION = 2.50.5
-> +WEBKITGTK_VERSION = 2.52.3
->  WEBKITGTK_SITE = https://www.webkitgtk.org/releases
->  WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
->  WEBKITGTK_INSTALL_STAGING = YES
-> @@ -56,16 +56,10 @@ WEBKITGTK_CONF_OPTS += -DENABLE_BUBBLEWRAP_SANDBOX=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
-> -WEBKITGTK_CONF_OPTS += \
-> -	-DENABLE_VIDEO=ON \
-> -	-DENABLE_WEB_AUDIO=ON \
-> -	-DENABLE_WEB_CODECS=ON
-> +WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER=ON
->  WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-bad gst1-plugins-base
->  else
-> -WEBKITGTK_CONF_OPTS += \
-> -	-DENABLE_VIDEO=OFF \
-> -	-DENABLE_WEB_AUDIO=OFF \
-> -	-DENABLE_WEB_CODECS=OFF
-> +WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WEBKITGTK_WEBDRIVER),y)
+> +# 0004-qsort-fix-leonardo-heap-corruption-from-bug-in-doubl.patch
+> +# 0005-qsort-hard-preclude-oob-array-writes-independent-of-.patch
+> +# 0006-qsort-fix-shift-UB-in-shl-and-shr.patch
+> +MUSL_IGNORE_CVES += CVE-2026-40200
+> +
+>  # musl does not build with LTO, so explicitly disable it
+>  # when using a compiler that may have support for LTO
+>  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
 > -- 
 > 2.53.0
 > 
