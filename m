@@ -1,110 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB058CD3430
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 15:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F278CD3427
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 16:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E34F4169B;
-	Mon,  4 May 2026 15:17:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R-0zZTQSI4Pe; Mon,  4 May 2026 15:17:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACDD641688
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777907836;
-	bh=wJ5GEYqlrVLSs+2XiXv3WEs8zt9ju26uIvC/UnkdZRo=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=SFpqjBbgLu+sT0wJOkP5VpSbJFzVycdOrcJwPcoXIfEhgwGqTbIWa6eS+yFN7tL8+
-	 8NHxhKRAo6ka35wv2+Io8f6rQfOBxSXIjNddBcfygyv8dteEQMD4t367pNUPigBtxY
-	 +PkpSLWRXsDi7WzW2ZdWKTthoqXSSbmzVifO9r9WD8e6zINgguQCFXWiTSdg169BCQ
-	 GHQH666xVPdZDV5mnYEq8IEIdUOM7Xz+wbt34hDG0HUCND/7Su9g+tgAVm1RKLtSLj
-	 IP1ZtVQulGnO4n+XITu9Z1eNs7KbYQ+1UVuQ0ZJK/c9HljkpIMQGvmLnE4Sl5ixSgm
-	 2kxlJo3YBDWyw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACDD641688;
-	Mon,  4 May 2026 15:17:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2EF2A190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 15:17:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14697614FA
- for <buildroot@buildroot.org>; Mon,  4 May 2026 15:17:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D02C661520;
+	Mon,  4 May 2026 16:09:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 61vSW_vFur-W for <buildroot@buildroot.org>;
- Mon,  4 May 2026 15:17:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::244; helo=mail-oi1-x244.google.com;
- envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 200C16136F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 200C16136F
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com
- [IPv6:2607:f8b0:4864:20::244])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 200C16136F
- for <buildroot@buildroot.org>; Mon,  4 May 2026 15:17:13 +0000 (UTC)
-Received: by mail-oi1-x244.google.com with SMTP id
- 5614622812f47-47c7b282d73so1523998b6e.3
- for <buildroot@buildroot.org>; Mon, 04 May 2026 08:17:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777907832; x=1778512632;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=HDoRIvgvo9M9jAT76pxpZ+7BJCLML8wfPS8pzVhadGE=;
- b=WLfkf2bzqmr51Ki2Q4l+v1dZKiMkx+71clN/S95GlngACPf9k2NrkDqKk5roDr9Epj
- DJAMj+payh8VLg6g4qOl3tR3C6N09BEdIxT/PPb2T0fN5UoVAmY/mM4JLnTNX/FdafFS
- Y7g/bWmRnnh8sE0JCHSHwl+HVAqL/3NZMMuHL0pn0pLNZfNPnwaRTfVkMfa9bJ1eHEm/
- ivBVc7hytOX/VPkTgpiE7U/ZKMIL5d03NT8juFKaSWfwAF7OTiO3od4gCgpHBBQEwFA+
- WtEYCXGf0MGpuavHzI2mccJ2785YZcg4B4iRqOkyIv3CJhG86m47znXLBMEEuqVJsU7a
- w57w==
-X-Gm-Message-State: AOJu0YylqzaOSrpBHl1gMTUbrciUug9VwGgO0useztur9Jk5U2B863AE
- 0TxKVFThYh3AnW7zC5zN328P8dqvXJMhLEvM/joqmLR5fpqDEutgAJ9z5n0qXix9+Es=
-X-Gm-Gg: AeBDievYg7WGMRomGD7kiebkXNYaeIRZOQiQ9tFbl/uyE7PgD2LDJh65fiTxDqtVHSh
- oJAuRfGP7OnVxsvBdYllkGJNz7UMAnxm9qFNcamN1WYnjn7gKrihfTKIersFowX986GXH7wQ1aY
- d/L93zUM7OEAaS4bLQWvAIQlo2Iqmx3NzTDuI/2/8K2TL+JT1EiaJB6O3/Wjhk+hvVyD35cXUqG
- DEdoXW8Pip3fFizbMOoRhoZMRb7BwEoecUGBSmINgjGGAbYcJUvlcPzzpSstu40LYVcVPOyCJXz
- WIETAwnEXQ/8DVmPqK/qbDwLtj9qZrGTgycrQQ68p951ztMpFb09ukR3lU8iOli4hl2bl1YZxv6
- bnK4+BR2Tst2AFV/rLEzdvfNWVBDyOzxUUYJOOB6LWQDei7wRF3BOTA55L5iOIE8q968TbDfAe8
- vEGARWFkSXHAAJxAZhAi133DFQmK0uO5GvB+gztDz6vR/2
-X-Received: by 2002:a05:6808:181a:b0:479:d605:64a0 with SMTP id
- 5614622812f47-47c88c2b0a4mr4739992b6e.0.1777907832131; 
- Mon, 04 May 2026 08:17:12 -0700 (PDT)
-Received: from precialexwin ([76.65.67.233]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-47c76935637sm6780489b6e.12.2026.05.04.08.17.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 08:17:10 -0700 (PDT)
-From: Alexandre Ondet <frcomdev@gmail.com>
+ id 6XXoeeOuCrmP; Mon,  4 May 2026 16:09:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E4DE61500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777910984;
+	bh=qKaKtDdOhSIBsur7z0/d8wX0fFha+yvdajNqSNEP2tw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=n7BTaPVtqquudJJIz/7F2HSXX4JyQXybj2R0VEwKswxvAjFcz+OWYV4emiPTnyGME
+	 tVt1gmPZt++sbWYoOTiFbHzshCa2TXUIaeWd36zRXgK7C4/q1yYG6vitAsGKP1Zwul
+	 a1vfzHjTBFxz2qK+3DT1yEaIJwU25MuUbh7eD5eiPWRFEw3bRA7H65AUh+vM6hgorJ
+	 pE6gl/2ovv0WoaoS1PpOdvRsIpMSyRo+1C7DiNU6Q5EcptN+gA++rs5dE/3JhDvHKo
+	 odGPhhgXhHHPN0XCIwuEDbA+cbBZeGZ0xppg092hq1x/Eyz16/6lGVxvdySNRIJJfm
+	 RV9GC88H9Xmzg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E4DE61500;
+	Mon,  4 May 2026 16:09:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 795BD204
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 16:09:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5ECCE845D2
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 16:09:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FC58XFW2Y6OI for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 16:09:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6CD7B845C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CD7B845C9
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6CD7B845C9
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 16:09:39 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -138368886; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 04 May 2026 16:09:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1wJvrU-000000003mi-1YF4;
+ Mon, 04 May 2026 18:09:36 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  4 May 2026 11:16:57 -0400
-Message-ID: <20260504151657.1904-1-frcomdev@gmail.com>
-X-Mailer: git-send-email 2.53.0.windows.2
+Date: Mon,  4 May 2026 18:09:22 +0200
+Message-ID: <20260504160924.14432-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1777907832; x=1778512632; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HDoRIvgvo9M9jAT76pxpZ+7BJCLML8wfPS8pzVhadGE=;
- b=TNYlZ52zgoLTxx4IVYaBMnLkTkGaTMFKAtujhXyZLO2q/v7RiAWHd1EYnleClKL3I4
- DvBIv8JcSLXIeLypq3cpzVyZTigOirLFgAKmvmVtBdvUBjDiaVBVETZgFv4TqU76cQSX
- pFzA429aY49SddlTFbDU/fs/dNRXB5uKt7tABCXjhddr4XMDqxOuEMSwKdNm5SXnESZc
- uF6hDJZ+2OQQSSnsZA9lb2iX1iX9VYjbperd4LEC9Usi5+bjejhHcCC58OCFVz9tUpMH
- oQpkiD2nbqN1Z4+Cgfz5xZQhiF8lfIT5QJ+KAd4XUSY/Z5A7vHcKJyz5+E7KhYQQ12ES
- atVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=TNYlZ52z
-Subject: [Buildroot] [PATCH 2/2] package/python-fpdf2: add build and runtime
- dependencies
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=a784coRT1ikubu/bBqiwOFs/1I1IZOVte635okQwUXQjRiJ+m88Q8/YXsQYlNk2ckCLBkiMqkJ81UIcECJQ3qgyB1vhJO23L5JqjMK/2QLfwt5cb35jI4DZe4eGGfjUGA4IRgrxou4nubX+2NkBqLadMfUNTzSjNrjDFLS1K81JGnK8UPq4cvk9WXLRJYraD/0DPiESGHf46l6HfQUYuf07alS02Xo/ZnjbWLOnHrarLlSOxvBAMqISrF0pmSTaJPuSTaE3+1E1XlM9YV5/f0CUF9RpPPZjduJsAOkwrqV4QWf0aFIXwSHy+kUbNm9MSd82OWOD9kFTlpATfG3KAOg==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=QA1JSQwdfH/rTRr50JIEQEPmR0jYuLdAF7EtizoSfII=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=a784coRT
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/haproxy: bump version to 6.2.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,77 +89,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexandre Ondet <frcomdev@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add PYTHON_FPDF2_DEPENDENCIES (host-python-fonttools for PEP 517 wheel
-build per upstream pyproject.toml, target fonttools/defusedxml/Pillow)
-and Kconfig selects for runtime packages.
+Bugfix release with large number of (security) fixes.
 
-Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
+For 6.2.26:
+
+- a severe issue was found in the compression library (slz) where
+    specially crafted patterns with tune.bufsize above 17408 or
+    tune.maxrewrite below 964 (both non-default) could cause output
+    buffer overflows due to the overhead exceeding the promised
+    worst-case growth bound of 5 bytes and reach up to 1/16 of the
+    input contents. Given that the compression output is hardly
+    controllable, and the canaries at the end of the pools will catch
+    this at release time, the risk of exploitation by a hostile server
+    is close to zero, however it will cause repeated crashes if such a
+    crafted file is present on a server and regularly downloaded. A
+    workaround consists in keeping tune.maxrewrite at least 1/16 of
+    tune.bufsize or just not changing them since the defaults are safe.
+    A CVE was requested two weeks ago for this one, I'll mention it when
+    it arrives.
+
+  - HTTP/2 incomplete transfer detection was missing for HEADERS frames
+    carrying END_STREAM. When relayed to an HTTP/1.1 server that
+    responds before the end of the transfer, this can result in bytes
+    of the next request over the same connection to be ignored. Most of
+    the time it will cause the connection to be dropped due to an
+    unparsable request, but when combined with "http-reuse never", or
+    on totally idle servers, the client could expect the second request
+    to reuse the same connection and perform a content smuggling attack
+    that would allow to pass an unverified request to a server. For
+    those who can't upgrade, a temporary workaround is to disable
+    HTTP/2 by specifying "alpn http/1.1" on bind lines and adding
+    "disable-h2-upgrade" in HTTP frontends. A CVE will be requested for
+    this one.
+
+  - HTTP/1.1 bodyless messages announcing a non-null Content-Length did
+    not force close mode on the backend, potentially causing
+    desynchronisation between HAProxy and the server in conjunction
+    with other bugs.
+
+  - FCGI record length truncation with large bufsize (>=65544) could
+    enable request smuggling into PHP-FPM since the 16-bit
+    content_length field silently truncated to 65535 bytes.
+
+  - an unvalidated SNI name_len field in ClientHello could cause OOB
+    heap reads of up to 65KB via XXH3, smp_dup(), and log-format leaks
+    on any TCP frontend using req.ssl_sni, possibly causing crashes when
+    used.
+
+  - ECDSA JWT signatures with ES256/384/512 could cause a heap overflow
+    of ~14 bytes in the DER conversion before verification.
+
+  - Lua's httpclient headers conversion accepted more than 101 headers
+    without bound checking, causing a stack buffer overflow reachable
+    from any Lua action/task/service.
+
+  - peers dictionary cache updates accepted an unvalidated entry id as
+    array index, allowing OOB heap writes at attacker-controlled
+    offsets.
+
+  - Lua had a use-after-free of HTTP reason strings managed by Lua's GC
+    between set_status() and start_response(), potentially leaking
+    adjacent information from memory.
+
+  - the regsub sample function could leak ~9-50KB of stale heap data
+    when back-reference expansion overflowed the output buffer.
+
+  - SPOE decode_varint() had no iteration cap, allowing pointer
+    arithmetic to wrap and dereference memory ~64KB before the
+    allocation, causing SIGSEGV or parser confusion.
+
+  - in sample expressions, less common HTTP methods (PATCH etc.) are
+    represented by both an enum and a string. The string part was not
+    handled correctly in sample duplication functions, resulting in
+    their contents appearing empty when trying to fetch the method.
+
+  - QPACK varint decoding is now also limited to 62-bit, and had a risk
+    of 1-byte OOB reads on truncated streams, which could cause
+    incorrect header decoding.
+
+  - config: a few argument parsing errors in conditional expressions
+    used in ".if" could be misreported and even cause a crash during
+    the parsing. Also, a few keywords relying on warnif_misplaced_*
+    didn't check the return value and didn't count emitted warnings as
+    warnings.
+
+For more details, see the announcement:
+https://www.mail-archive.com/haproxy@formilux.org/msg47016.html
+
+For 6.2.27:
+
+A major issue were fixed by this release. It was related to the scheme-based
+normalization. The presence of commas in Host header and authority was permitted
+and would be used to compare the values, which then would differ when read via
+hdr(host) which splits them on commas, and under certain circumstances, trigger
+crashes (at least it did in the OSS-Fuzz environment when injecting the values
+directly at the HTX layer). The issue was fixed.  Remains the case of the comma
+characters in authorities. Even though the spec permits commas in authorities
+(not in domain names), there is currently no use case for this and it causes an
+ambiguity with the historical use of hdr(host), so we preferred to just deny
+them. The change was performed on the 3.4-dev10 and postponed for the next 3.3
+release. It will probably be backported to lower versions too.
+
+An issue in the FCGI multiplexer was fixed. The function responsible to emit
+FCGI_PARAM records was not handling cases of full buffer in a consistent
+way. The issue was quite limited, but the "http-send-name-header" option could
+be silently ignored. The issue was fixed by reworking this function.
+
+The scheme-based normalization was fixed to properly handle case of OPTIONS
+requests. As stated in RFC9110#4.2.3, when the scheme-based normalization is
+performed, an empty path must be normalized to "/", except for OPTIONS request.
+
+Finally, a memory leak on error path (tools) and other minor issues were also
+fixed.
+
+For more details, see the announcement:
+https://www.mail-archive.com/haproxy@formilux.org/msg47059.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-fpdf2/Config.in         | 5 ++++-
- package/python-fpdf2/python-fpdf2.hash | 6 +++---
- package/python-fpdf2/python-fpdf2.mk   | 7 +++++--
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-fpdf2/Config.in b/package/python-fpdf2/Config.in
-index e10e141110..b521d0f056 100644
---- a/package/python-fpdf2/Config.in
-+++ b/package/python-fpdf2/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_PYTHON_FPDF2
- 	bool "python-fpdf2"
-+	select BR2_PACKAGE_PYTHON_DEFUSEDXML # runtime
-+	select BR2_PACKAGE_PYTHON_FONTTOOLS # PEP 517 build + runtime
-+	select BR2_PACKAGE_PYTHON_PILLOW # runtime
- 	help
- 	  Simple and fast PDF generation for Python.
- 
--	  https://pypi.org/project/fpdf2/
-\ No newline at end of file
-+	  https://pypi.org/project/fpdf2/
-diff --git a/package/python-fpdf2/python-fpdf2.hash b/package/python-fpdf2/python-fpdf2.hash
-index 2f1cfa6d21..73be730177 100644
---- a/package/python-fpdf2/python-fpdf2.hash
-+++ b/package/python-fpdf2/python-fpdf2.hash
-@@ -1,3 +1,3 @@
--# From https://pypi.org/pypi/fpdf2/2.8.1/json
--sha256  8866161396f942c8f7e3f022c4afb5e671b4d044745d4ed13c5d2ccc16ae5091  fpdf2-2.8.1.tar.gz
--sha256  f97bc4bb9b7ae8a653941073678b5c7775e8de44a01c3bcc21e7cdc148b90e61  LICENSE
-\ No newline at end of file
-+# From https://pypi.org/pypi/fpdf2/2.8.7/json
-+sha256  7060ccee5a9c7ab0a271fb765a36a23639f83ef8996c34e3d46af0a17ede57f9  fpdf2-2.8.7.tar.gz
-+sha256  f97bc4bb9b7ae8a653941073678b5c7775e8de44a01c3bcc21e7cdc148b90e61  LICENSE
-diff --git a/package/python-fpdf2/python-fpdf2.mk b/package/python-fpdf2/python-fpdf2.mk
-index 97eed64097..ea818b582c 100644
---- a/package/python-fpdf2/python-fpdf2.mk
-+++ b/package/python-fpdf2/python-fpdf2.mk
-@@ -4,11 +4,14 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 5c644356a6..6bb5dda804 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.25.tar.gz.sha256
+-sha256  d861cacbe2ed51ae8ad5fa9ee5165b4e5e2bccaa5b9e04324711761d7d946be9  haproxy-2.6.25.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.27.tar.gz.sha256
++sha256  ccdaf08e8653f9651992212b51af0b5513c2e2cf0cd822ca67c94cffe10386a6  haproxy-2.6.27.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index a22c8b38ce..cf1484243c 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_FPDF2_VERSION = 2.8.1
-+PYTHON_FPDF2_VERSION = 2.8.7
- PYTHON_FPDF2_SOURCE = fpdf2-$(PYTHON_FPDF2_VERSION).tar.gz
- PYTHON_FPDF2_SITE = https://files.pythonhosted.org/packages/source/f/fpdf2
- PYTHON_FPDF2_SETUP_TYPE = setuptools
- PYTHON_FPDF2_LICENSE = LGPL-3.0+
- PYTHON_FPDF2_LICENSE_FILES = LICENSE
- 
--$(eval $(python-package))
-\ No newline at end of file
-+PYTHON_FPDF2_DEPENDENCIES = \
-+	host-python-fonttools python-fonttools python-defusedxml python-pillow
-+
-+$(eval $(python-package))
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).25
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
-2.53.0.windows.2
+2.47.3
 
 _______________________________________________
 buildroot mailing list
