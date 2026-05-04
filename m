@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F01FF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 20:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D82ECCD3427
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 23:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AEB4605A4;
-	Mon,  4 May 2026 20:56:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86B3A606BB;
+	Mon,  4 May 2026 23:06:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 31K9ydJf09go; Mon,  4 May 2026 20:56:17 +0000 (UTC)
+ id 0NheiariqI_m; Mon,  4 May 2026 23:06:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C608600D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEAB2606BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777928177;
-	bh=8hynS75clKerYbycO7YB/kyDL9PhKzq0yCIJQ/0l+Ao=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1777936009;
+	bh=7hqzOmwhuKU3oYrXXt6eBwPSS0vxj638JKt2rgD8WK0=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZHvyM7b24nklj4iwjQ9Yk4TkjFEMh6FvSb3mB3vOklPBXC9pHEGglcs0QZYNu+MRm
-	 aXEmk2lwTsZlbuVHci/PBSnalc9QDa75Vz0Pk6HvjmYDWCXt3Tw40hEfbfyqY0iDmW
-	 STRkYyopRVAXljZWkr01bruhZrtyuz/1TET0jRfuahZDU0M7hHgx2XK0mnOXyhtqEq
-	 s9szML05H3245QTbS3IAfDW1lPVyr1FqZMSn5QLA3qm6ALhtVsQ9xHDZyMc+GuyDgX
-	 LBxr8QLxXTOw0QIX455S5y2YR7cU2zsMeeRDOSTUzZdJz5P2Iwt93IgAZT+hat8z8e
-	 yJYicMp0NrFJw==
+	 From;
+	b=KIZnaNqXIC7kJT16TiCVo769KpRVCGcy2vYjFKVhRk9ODj8+NMwUS2NugBACg8PP7
+	 oUoZ9SDVX89tQPSRUihjeJYkH2bLzWucBo/UiApIGybuH7k4giZWW9K0IM47Jl2DG/
+	 yXRwQYcWc1ReDNxgKonf4MgwfL0QWKM2PI+E7L780ZVDiXBMDl0xKjQTzlATXhXC0C
+	 bKAnXLX49G8hLWMZowBJJ/t7iqpRSj2P0fJCYyRAgUMIHPMSog6K5YG9UaZrRHnD1G
+	 4OIUJ6EF6Jr9KHPSPzBTGLWBwHEb4nYFYVWwOsQtrG9NmFlFeVndRz9VKopgl+YfL2
+	 D7wlBCqCOA2Ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C608600D1;
-	Mon,  4 May 2026 20:56:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A7547190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 20:56:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEAB2606BD;
+	Mon,  4 May 2026 23:06:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with UTF8SMTP id BA7D6280
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 23:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D00480460
- for <buildroot@buildroot.org>; Mon,  4 May 2026 20:56:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with UTF8SMTP id A0AA2606BD
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 23:06:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RPBdBHGGS1FD for <buildroot@buildroot.org>;
- Mon,  4 May 2026 20:56:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C127280453
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C127280453
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C127280453
- for <buildroot@buildroot.org>; Mon,  4 May 2026 20:56:14 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 8E4C6B00563;
- Mon,  4 May 2026 22:56:11 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 04 May 2026 22:56:11 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id 0FRveDEEVQuw for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 23:06:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=143.55.232.47;
+ helo=v547.v5f06b487.use4.send.mailgun.net;
+ envelope-from=bounce+4afdde.7f991a-buildroot=buildroot.org@drhouck.me;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A0A3606BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A0A3606BB
+Received: from v547.v5f06b487.use4.send.mailgun.net
+ (v547.v5f06b487.use4.send.mailgun.net [143.55.232.47])
+ by smtp3.osuosl.org (Postfix) with UTF8SMTPS id 2A0A3606BB
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 23:06:45 +0000 (UTC)
+X-Mailgun-Sid: WyI3M2VlNiIsImJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnIiwiN2Y5OTFhIl0=
+Received: from dhouck-linux (unknown [73.82.189.57]) by
+ b7d95edd5822e40fc3b73adddfb8e9baf24e7090ed82aa46e2ec8c730b965dd7 with SMTP id
+ 69f926848073340fc22d695d; Mon, 04 May 2026 23:06:44 GMT
+X-Mailgun-Sending-Ip: 143.55.232.47
+From: Daniel Houck <Software@DRHouck.me>
+To: buildroot@buildroot.org
+Cc: Daniel Houck <Software@DRHouck.me>
+Date: Mon,  4 May 2026 19:06:27 -0400
+Message-ID: <20260504230627.2963070-1-Software@DRHouck.me>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260503235637.637991-1-Software@DRHouck.me>
+References: <20260503235637.637991-1-Software@DRHouck.me>
 MIME-Version: 1.0
-Date: Mon, 04 May 2026 22:56:11 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260504192351.3971764-1-bernd@kuhls.net>
-References: <20260504192351.3971764-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <a02c59bf24cd4fad3c23e6251654fc27@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1777928172;
- bh=SCHWyukfuBnagSf61XE27iggi89NWlXgxxLWJPuIs8g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fD2HnSuUF2k4Lt5otCYYUpgVSp4Tn1UQoETaAyiCxLOXtcmDQJzxt+SWwIwf6lufI
- Tn7gqhXcTLcWAeV+Awi8DFadnCrT8bOTK+24vHFpEmVwUE9aLOQbOBwVCQdnC6NUfW
- cOd4UzO5QPmrfU3xFOij1lonBEz8qmzU9YWPr7sUc3BYRj6HlkPdwFk0zqyLnqTw5R
- CStu45OzSiFNS8qhHNAxfSJRYGZjCfoD1RTHvW7BXw+hLaaBw3UBJPgdW1FdvV/tnN
- HbQ0J6i+tSV+KtG7eT0Lp+Rg/2Mx2PNT8RHGPGp4lCdj4qPqNB17pNEWQVREexGIhL
- ZKiFAL2xmzBLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fD2HnSuU
-Subject: Re: [Buildroot] [PATCH 1/1] package/apache: security bump version
- to 2.4.67
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed;
+ d=drhouck.me; q=dns/txt; s=krs; t=1777936004; x=1777943204; 
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
+ Message-ID: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender; 
+ bh=YhX0bvDpeeo48MRJfF+0kHCHlrAA/yv7DHOgCvYxsMU=;
+ b=eJjTwAaOVFQkrv45hwIFE2CdNW9eF1AKfb6nheiMq8E0rS0WO+ymMD5J5qedEp8rqtTeOnUZwIyaYehmg1FzkmePZhryJiX4NK5SQcNzXcRrqYBmvkK6y1Nsx5yxsvMF9RjwK9efXET8zr037KWw2IBRxiw7or9wUTI6gISY8No=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=DRHouck.me
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=drhouck.me header.i=@drhouck.me header.a=rsa-sha256
+ header.s=krs header.b=eJjTwAaO
+Subject: [Buildroot] [PATCH v2] package/make: fix build with musl and
+ gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,24 +91,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/05/2026 21:23, Bernd Kuhls wrote:
-> Changelog:
-> https://downloads.apache.org/httpd/CHANGES_2.4.67
-> 
-> Fixes CVE-2026-23918, CVE-2026-24072, CVE-2026-28780, CVE-2026-29168,
-> CVE-2026-29169, CVE-2026-33006, CVE-2026-33007, CVE-2026-33523,
-> CVE-2026-33857, CVE-2026-34032 & CVE-2026-34059.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Patch the parts of Make that use code invalid in C23.  It wasn't
+included when compiling with glibc but failed to build with musl.
 
-Applied to master, thanks.
+Fixes #176.  See also https://savannah.gnu.org/bugs/index.php?68302
+
+Signed-off-by: Daniel Houck <Software@DRHouck.me>
+---
+Changes v1 -> v2:
+  - patch make instead of using CFLAGS (suggested by Marcus)
+
+ ...1-fix-compilation-on-musl-with-gcc15.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/make/0001-fix-compilation-on-musl-with-gcc15.patch
+
+diff --git a/package/make/0001-fix-compilation-on-musl-with-gcc15.patch b/package/make/0001-fix-compilation-on-musl-with-gcc15.patch
+new file mode 100644
+index 0000000000..aa2598df9a
+--- /dev/null
++++ b/package/make/0001-fix-compilation-on-musl-with-gcc15.patch
+@@ -0,0 +1,61 @@
++From 31bc8976fb7bfdde8b9293e6a4eb2becb29a73bc Mon Sep 17 00:00:00 2001
++From: Bobby Bingham <koorogi@koorogi.info>
++Date: Wed, 2 Jul 2025 18:09:28 -0500
++Subject: [PATCH] fix compilation on musl with gcc15
++
++---
++
++Patch originally from https://codeberg.org/gentoo/gentoo/raw/branch/master/dev-build/make/files/make-4.4.1-c23.patch
++
++ lib/fnmatch.c | 2 +-
++ src/getopt.c  | 2 +-
++ src/getopt.h  | 7 -------
++ 3 files changed, 2 insertions(+), 9 deletions(-)
++
++diff --git a/lib/fnmatch.c b/lib/fnmatch.c
++index 01da376..9b54022 100644
++--- a/lib/fnmatch.c
+++++ b/lib/fnmatch.c
++@@ -121,7 +121,7 @@ USA.  */
++    whose names are inconsistent.  */
++ 
++ # if !defined _LIBC && !defined getenv
++-extern char *getenv ();
+++extern char *getenv (const char*);
++ # endif
++ 
++ # ifndef errno
++diff --git a/src/getopt.c b/src/getopt.c
++index 7a792de..9b56abe 100644
++--- a/src/getopt.c
+++++ b/src/getopt.c
++@@ -202,7 +202,7 @@ static char *posixly_correct;
++    whose names are inconsistent.  */
++ 
++ #ifndef getenv
++-extern char *getenv ();
+++extern char *getenv (const char*);
++ #endif
++ 
++ static char *
++diff --git a/src/getopt.h b/src/getopt.h
++index df18cee..a6cc621 100644
++--- a/src/getopt.h
+++++ b/src/getopt.h
++@@ -96,14 +96,7 @@ struct option
++ #define optional_argument	2
++ 
++ #if defined (__STDC__) && __STDC__
++-#ifdef __GNU_LIBRARY__
++-/* Many other libraries have conflicting prototypes for getopt, with
++-   differences in the consts, in stdlib.h.  To avoid compilation
++-   errors, only prototype getopt for the GNU C library.  */
++ extern int getopt (int argc, char *const *argv, const char *shortopts);
++-#else /* not __GNU_LIBRARY__ */
++-extern int getopt ();
++-#endif /* __GNU_LIBRARY__ */
++ extern int getopt_long (int argc, char *const *argv, const char *shortopts,
++ 		        const struct option *longopts, int *longind);
++ extern int getopt_long_only (int argc, char *const *argv,
++-- 
++2.50.0
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
