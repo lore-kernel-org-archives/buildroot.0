@@ -1,63 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5C43FF885A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EED4CD3439
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADF1741B98;
-	Mon,  4 May 2026 14:47:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49E5161515;
+	Mon,  4 May 2026 14:47:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oMES7I2p3Nnu; Mon,  4 May 2026 14:47:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y5gJwBUuvm6J; Mon,  4 May 2026 14:47:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ABA941B7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0111F61538
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906035;
-	bh=5yxiEAPTaOY+14sd4Ku8vDt7jvO3ubHXcn7psfXlNYE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IedaePFbuogO/KO7Bzv1CjQSqYrsqbQOY87EEnHbnuFnE3lcpr4nUW6XJmqXg3Gz/
-	 Cyp3bEh++saPl4HJEvArY8bE5PoEtrlKTJGFzRkfw3VEQJDFmpt8e/3IRR/WG774JM
-	 y8DwSkW8vzlUerNbnrgD17MIUgcwTJ7sY2KTtrA3XS/pA5lMcumidrghkNakN+IRdy
-	 t7Ok3Yd5/QyQTPO9dfzAfHGo/6m5APf8CplQKD3YvlFFnoYUpZq4PcrcvP5BGp8FgV
-	 kuUltxLyn89djdWgSIT+IPW16C8ih7FAl6y5WQfdiVvbkZui+rzefR3xtUpZzHzMgf
-	 WknOhube3WD+A==
+	s=default; t=1777906037;
+	bh=nfP7qtWRa3uS697tiv8Zh19M6LBOGjXOXxmLXz24h8s=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lvOPk7QM/dYGVl+X7HWZ/9M8O8+Pgf3pgBeSZnI5S3YxWWalDvgxMSlbP87U/lMAS
+	 3TZe+keKo+q6i6L7LSdUHGD83g53kODmFoBs6NZzfo6H8PGsymP47TRgXSCVLoK3wZ
+	 8zOcW+CnQ6WxpBqrmIYSEZdX7WMr3XPJhEFXZZMIN5Fo05Hv4U+MCVJMYrV4Sr6lTg
+	 yjTmA/WMfmGccpfrLo09W9Ru4rhauTfaAw2r5LCwjK7tQsPrQ819sV7x57Kv8l4LCD
+	 4nxbhjZXl5kG/zRJvkE1Wy0PbUAIbM4yYFkKB3yXV8sr6JDt58T7TxbmeaworAdjNM
+	 3+uNRmjFn7Viw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ABA941B7F;
-	Mon,  4 May 2026 14:47:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11C9C25D
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0111F61538;
+	Mon,  4 May 2026 14:47:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B76A190
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5758F844AC
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6921961551
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMtdqFZ4QsYV for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:46:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 009A8845AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 009A8845AE
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:46:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8F8684258; Mon,  4 May 2026 14:46:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 30 Apr 2026 14:08:46 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 22e5dda9e847b60eb65004c4be9057ea4ac8c2cd
-X-Git-Newrev: de9cfb6fa9ee515e47c9b48255be6cc31bcd66ca
-X-Patchwork-Hint: ignore
-Message-Id: <20260504144643.D8F8684258@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ficl: bump to
- version 3.065
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ht4UNuyUb04V for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:47:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7AD261503
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7AD261503
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D7AD261503
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:11 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-44a14580111so2516882f8f.0
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1777906029; x=1778510829;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=nx7sJXZZm0CjP74XrrZTAL2Rc/adArQb7ZMszFqfixg=;
+ b=oJUBWJxdRbkPaTqn8Ykzv0gdMcya1ZARdAb1fOsgSYNth6WugW1OE9KQIW6N4PtF2B
+ cAfuEbYU1y+caGeGsNeW6v+KosxxdcDtpnAmUA6kwdsJ0eXEyOQQV4i4wexFD59ixLCi
+ rPDPlDGQOwEe20XaO25OuEKnNAYXfka1cgXkAeeQDRK5LzON6ICTtMw19pYsGBxEUUfT
+ sVZVkDq4R3ipSczQKwyxuvbrZP5Q7XzOI1S/JSMPNxPGH5uK/B5n1aY9jUIzKJXVd3W/
+ 2Of59q+6F6Q6+3N8irmLozMUlaF+DhVonSrV9nYSWEQvRx8wPOgQZcfs8EbiAZuuiV2X
+ fXJA==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ/gA8gEtkie0HeJeq1aH+JVQmfnmalEi6ZcEaFmk4eb0Hp0EwhV4UftdKsY1mfGjQ3OtOtx/JvHsL4=@buildroot.org
+X-Gm-Message-State: AOJu0YwR3VGTJ4Wcb7DNFrEEXY4kY6lRNFmhP3/MvQ3CCj29zK+eUjvG
+ ngxwXnfCCh/z340ilKYQWEcV0ncvf8pwKvnHgc+oHkoX6Ve0I1F7s6kCauOawFJVEjo=
+X-Gm-Gg: AeBDietujyxouUldBsT1Ndn4fd/j/64iWiTjZL4RIsX8sS5C2C/ZOauioVzVO//OCnz
+ pHq1S9gsFUbUxh6cjb5tRmVILWzvPx1VpfQcNNIqDg3rcbRGeKp6KaN2z8jfm4EzsjsBX/L35zc
+ MKJ0NcetGz+LQxY3U0YNBQfjGUWSguE9LVrY+R38Ttxxb3lVdk56024IrcVDFZ8BYDzvmVgTTXQ
+ 51S/mtlSXzr8kVIvVqQAmsWGAIF5hV/cGv9KTgCtT8t2iVdG8Z76C7FfIKzvQqqdaFUlQSf1HjS
+ 60APuetIRs4rp6pm01b+kK8MJTZ3LZXh3D3Ma8cndg9I5M0voL+ryag/tKs6gEL0D61OoQKzJIu
+ WKJnKJGJCgcRvdzuvdEQjAEVlxJ+3PGV1Cp+ZjfZLeaFfnu/OjVyNuHxa/dwpwIYu0LFla1SFL6
+ 6F01nJLuB5rrMb7v/TStIes4RgFg==
+X-Received: by 2002:a05:6000:2382:b0:439:b8b2:fad0 with SMTP id
+ ffacd0b85a97d-44bb36d1837mr17010836f8f.5.1777906029438; 
+ Mon, 04 May 2026 07:47:09 -0700 (PDT)
+Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-44a986aab44sm27617877f8f.29.2026.05.04.07.47.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 04 May 2026 07:47:09 -0700 (PDT)
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Mon,  4 May 2026 16:47:07 +0200
+Message-ID: <20260504144708.8779-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20250715183717.2464360-1-james.hilliard1@gmail.com>
+References: <20250715183717.2464360-1-james.hilliard1@gmail.com>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1777906029; x=1778510829; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=nx7sJXZZm0CjP74XrrZTAL2Rc/adArQb7ZMszFqfixg=;
+ b=BgBBZ0xQ4MtuWPrV3/RFw71lXU3JO9nZB1LI8xdnBB/fds7EJKKoUqAdIrdPd1iKem
+ rDfBilxCUHviFO6pU4WctmP2LafJLoveiagn8gvRw0B/SQrnOuRcdeBrEQUFjmH/gdkN
+ fmrB8iC2628SyB9hfpL5B2SVqqhyILwIUBypFr6S423bKskNxUUY20RG72DymRgYarNa
+ KUYljuVODtyQWWQv01E7hOKGsiZP2uv1dmaYyQ+f0RcB/tE1C33d02h5kkelxFM632yy
+ a2lGcU/wtQJ909SZeg3XQVpQTA0H9o2iiLF2PBBD01FAo0FnudT7tEAfi7nOWoVhVm01
+ fB7A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=BgBBZ0xQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/p11-kit: bump to version 0.25.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,211 +125,127 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de9cfb6fa9ee515e47c9b48255be6cc31bcd66ca
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
-
-- sources are now hosted on Github
-- ficl have its own LICENSE file
-- remove one upstreamed patch
-- support only static lib
-- requires C11
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e7dcf9e5af0cc0c7afd3e887f7731d855aa39094)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...atch => 0001-makefile.linux-pass-LDFLAGS.patch} | 26 ++++++------
- package/ficl/0001-missing-include.patch            | 26 ------------
- package/ficl/Config.in                             |  6 ++-
- package/ficl/ficl.hash                             |  4 +-
- package/ficl/ficl.mk                               | 47 +++++-----------------
- 5 files changed, 31 insertions(+), 78 deletions(-)
-
-diff --git a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch b/package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
-similarity index 70%
-rename from package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-rename to package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
-index d05b49b7ff..1ac86466d4 100644
---- a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-+++ b/package/ficl/0001-makefile.linux-pass-LDFLAGS.patch
-@@ -17,23 +17,25 @@ Upstream: upstream is dead
- Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- [francois: downgrade to 3.03]
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+[francois: upgrade to 3.065]
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- ---
-- Makefile.linux | 2 +-
-+ makefile.linux | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
--diff --git a/Makefile.linux b/Makefile.linux
--index 5f1a41f..df887e6 100644
----- a/Makefile.linux
--+++ b/Makefile.linux
--@@ -13,7 +13,7 @@ MAJOR = 3
-- MINOR = 0.1
-- 
-- ficl: testmain.o ficl.h sysdep.h libficl.a
---	$(CC) testmain.o -o ficl -L. -lficl -lm
--+	$(CC) $(LDFLAGS) testmain.o -o ficl -L. -lficl -lm
-+diff --git a/makefile.linux b/makefile.linux
-+index 1e467ea..fad7059 100755
-+--- a/makefile.linux
-++++ b/makefile.linux
-+@@ -26,7 +26,7 @@ libficl.a: $(OBJECTS)
-  
-- lib: libficl.so.$(MAJOR).$(MINOR)
-+ # === Console Test executable ===
-+ ficl: $(FICL_TEST_OBJ) ficl.h sysdep.h libficl.a
-+-	$(CC) $(FICL_TEST_OBJ) -o ficl -L. -lficl -lm
-++	$(CC) $(LDFLAGS) $(FICL_TEST_OBJ) -o ficl -L. -lficl -lm
-  
-+ # === Compile rules ===
-+ .SUFFIXES: .cxx .cc .c .o
- -- 
- 2.35.1
- 
-diff --git a/package/ficl/0001-missing-include.patch b/package/ficl/0001-missing-include.patch
-deleted file mode 100644
-index 8c6547c46e..0000000000
---- a/package/ficl/0001-missing-include.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 87c78eea2c4ac69c09947c8e49f8e8668640071c Mon Sep 17 00:00:00 2001
--From: Francois Perrad <francois.perrad@gadz.org>
--Date: Sun, 7 Dec 2025 10:15:27 +0100
--Subject: [PATCH] missing include
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--Upstream: upstream is dead
-----
-- fileaccess.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/fileaccess.c b/fileaccess.c
--index 738889d..c03d5d6 100644
----- a/fileaccess.c
--+++ b/fileaccess.c
--@@ -4,6 +4,7 @@
-- #include <string.h>
-- #include <ctype.h>
-- #include <sys/stat.h>
--+#include <unistd.h>
-- #include "ficl.h"
-- 
-- #if FICL_WANT_FILE
---- 
--2.43.0
--
-diff --git a/package/ficl/Config.in b/package/ficl/Config.in
-index 4d9ab4a5bf..21861652ef 100644
---- a/package/ficl/Config.in
-+++ b/package/ficl/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_FICL
- 	bool "ficl"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6 # C11/static_assert
- 	help
- 	  Ficl is a programming language interpreter designed to be
- 	  embedded into other systems as a command, macro, and
- 	  development prototyping language.
- 	  Ficl is an acronym for "Forth Inspired Command Language".
- 
--	  http://ficl.sourceforge.net
-+	  https://ficl.sourceforge.net/
-+
-+comment "ficl needs a gcc >= 4.6"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
-index 1a4a54e704..6023708ff0 100644
---- a/package/ficl/ficl.hash
-+++ b/package/ficl/ficl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  064abbea44b2cbbeb53b8df8e5588ed41c4d32dd19bdb897e5d21507691407b2  ficl303.tar.gz
--sha256  18527f5cdc213d29fb65791e153690974e5426b7e989f3b8eee61c2e5f9e5fcd  ReadMe.txt
-+sha256  09a4649a68a075999c2bc26129cf233c4d672335a9c68b98ffcbf1bc8962e5e1  ficl3065.tar.gz
-+sha256  b7a894f23d7d7302852405b3d1b6fd88e76b4c116a68f046d4547c073c75d3ea  LICENSE
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-index ef2e1408ce..1ab1bb6a39 100644
---- a/package/ficl/ficl.mk
-+++ b/package/ficl/ficl.mk
-@@ -4,56 +4,29 @@
- #
- ################################################################################
- 
--FICL_VERSION = 3.03
-+FICL_VERSION = 3.065
- FICL_TAG = ficl$(subst .,,$(FICL_VERSION))
--FICL_VERSION_SO = 3.0.1
- FICL_SOURCE = $(FICL_TAG).tar.gz
--FICL_SITE = https://sourceforge.net/projects/ficl/files/ficl-all/$(FICL_TAG)
--FICL_LICENSE = BSD-2-Clause
--FICL_LICENSE_FILES = ReadMe.txt
-+FICL_SITE = $(call github,jwsadler58,ficl,$(FICL_TAG))
-+FICL_LICENSE = BSD-3-Clause
-+FICL_LICENSE_FILES = LICENSE
- FICL_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--FICL_BUILD_TARGETS += ficl
--define FICL_INSTALL_STATIC_BIN
--	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
--endef
--endif
--
--ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
--FICL_BUILD_TARGETS += libficl.a
--define FICL_INSTALL_STATIC_LIB
--	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
--endef
--endif
--
--ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
--FICL_BUILD_TARGETS += testmain libficl.so.$(FICL_VERSION_SO)
--define FICL_INSTALL_SHARED_BIN
--	$(INSTALL) -D -m 0755 $(@D)/testmain $(TARGET_DIR)/usr/bin/ficl
--endef
--define FICL_INSTALL_SHARED_LIB
--	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.$(FICL_VERSION_SO)
--	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so.3
--	ln -sf libficl.so.$(FICL_VERSION_SO) $(1)/usr/lib/libficl.so
--endef
--endif
-+FICL_DEPENDENCIES = host-python3
- 
- define FICL_BUILD_CMDS
--	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
-+	# workaround for static_assert on uclibc-ng < 1.0.42
-+	$(MAKE) -C $(@D) -f makefile.linux $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -std=c11 -Dlinux -D_POSIX_C_SOURCE=200809L -Dstatic_assert=_Static_assert -I. " CPPFLAGS="" ficl
- endef
- 
- define FICL_INSTALL_STAGING_CMDS
--	$(FICL_INSTALL_STATIC_LIB)
--	$(call FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
-+	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
- 	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
- endef
- 
- define FICL_INSTALL_TARGET_CMDS
--	$(FICL_INSTALL_STATIC_BIN)
--	$(FICL_INSTALL_SHARED_BIN)
--	$(call FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
-+	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
- endef
- 
- $(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gRHJvcCBwYXRjaCB3aGljaCBpcyBub3cgdXBzdHJlYW0uCj4gCj4gU2ln
+bmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+CgpB
+cHBsaWVkIHRvIDIwMjUuMDIueC4gVGhhbmtzCgo+IC0tLQo+ICAuLi50ZWdlci10cnVuY2F0aW9u
+LW9uLTMyLWJpdC1wbGF0Zm9ybXMucGF0Y2ggfCAxMDkgLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBh
+Y2thZ2UvcDExLWtpdC9wMTEta2l0Lmhhc2ggICAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICBw
+YWNrYWdlL3AxMS1raXQvcDExLWtpdC5tayAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAg
+MyBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDExMSBkZWxldGlvbnMoLSkKPiAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcDExLWtpdC8wMDAxLWltcG9ydC1vYmplY3QtQXZvaWQt
+aW50ZWdlci10cnVuY2F0aW9uLW9uLTMyLWJpdC1wbGF0Zm9ybXMucGF0Y2gKPiAKPiBkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9wMTEta2l0LzAwMDEtaW1wb3J0LW9iamVjdC1Bdm9pZC1pbnRlZ2VyLXRy
+dW5jYXRpb24tb24tMzItYml0LXBsYXRmb3Jtcy5wYXRjaCBiL3BhY2thZ2UvcDExLWtpdC8wMDAx
+LWltcG9ydC1vYmplY3QtQXZvaWQtaW50ZWdlci10cnVuY2F0aW9uLW9uLTMyLWJpdC1wbGF0Zm9y
+bXMucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwM2Y1NGI0NDA4Li4w
+MDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9wMTEta2l0LzAwMDEtaW1wb3J0LW9iamVjdC1Bdm9p
+ZC1pbnRlZ2VyLXRydW5jYXRpb24tb24tMzItYml0LXBsYXRmb3Jtcy5wYXRjaAo+ICsrKyAvZGV2
+L251bGwKPiBAQCAtMSwxMDkgKzAsMCBAQAo+IC1Gcm9tIGQ0OWM5MmM4NDIwZGI2ZWU0Yzg4NTE1
+YmRiMDE0ZjY4ZjRkNDcxZDkgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gLUZyb206IERhaWtp
+IFVlbm8gPHVlbm9AZ251Lm9yZz4KPiAtRGF0ZTogU2F0LCAyIERlYyAyMDIzIDA5OjI0OjAxICsw
+OTAwCj4gLVN1YmplY3Q6IFtQQVRDSF0gaW1wb3J0LW9iamVjdDogQXZvaWQgaW50ZWdlciB0cnVu
+Y2F0aW9uIG9uIDMyLWJpdCBwbGF0Zm9ybXMKPiAtTUlNRS1WZXJzaW9uOiAxLjAKPiAtQ29udGVu
+dC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gLUNvbnRlbnQtVHJhbnNmZXItRW5j
+b2Rpbmc6IDhiaXQKPiAtCj4gLVRoZSBidWlsZCBmYWlscyB3aGVuIGNvbXBpbGluZyBmb3IgMzIt
+Yml0IHBsYXRmb3JtcyB3aXRoCj4gLS1XZXJyb3I9aW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXM6
+Cj4gLQo+IC0gIENGTEFHUz0iLW0zMiAtbWFyY2g9aTY4NiAtV2Vycm9yPWluY29tcGF0aWJsZS1w
+b2ludGVyLXR5cGVzIC1XZXJyb3I9aW1wbGljaXQgLVdlcnJvcj1pbnQtY29udmVyc2lvbiIgc2V0
+YXJjaCBpNjg2IC0tIG1lc29uIHNldHVwIF9idWlsZAo+IC0gIHNldGFyY2ggaTY4NiAtLSBtZXNv
+biBjb21waWxlIC1DIF9idWlsZCAtdgo+IC0gIC4uLgo+IC0KPiAtICAuLi9wMTEta2l0L2ltcG9y
+dC1vYmplY3QuYzogSW4gZnVuY3Rpb24g4oCYYWRkX2F0dHJzX3B1YmtleV9yc2HigJk6Cj4gLSAg
+Li4vcDExLWtpdC9pbXBvcnQtb2JqZWN0LmM6MjIzOjYyOiBlcnJvcjogcGFzc2luZyBhcmd1bWVu
+dCAzIG9mIOKAmHAxMV9hc24xX3JlYWTigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBl
+IFstV2Vycm9yPWluY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQo+IC0gICAgMjIzIHwgICAgICAg
+ICBhdHRyX21vZHVsdXMucFZhbHVlID0gcDExX2FzbjFfcmVhZCAoYXNuLCAibW9kdWx1cyIsICZh
+dHRyX21vZHVsdXMudWxWYWx1ZUxlbik7Cj4gLSAgICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+
+fn5+fn5+fn5+Cj4gLSAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfAo+IC0gICAgICAgIHwgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxvbmcgdW5zaWdu
+ZWQgaW50ICoKPiAtCj4gLVJlcG9ydGVkIGJ5IFNhbSBKYW1lcyBpbjoKPiAtaHR0cHM6Ly9naXRo
+dWIuY29tL3AxMS1nbHVlL3AxMS1raXQvaXNzdWVzLzYwOAo+IC0KPiAtU2lnbmVkLW9mZi1ieTog
+RGFpa2kgVWVubyA8dWVub0BnbnUub3JnPgo+IC0KPiAtVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHVi
+LmNvbS9wMTEtZ2x1ZS9wMTEta2l0L2NvbW1pdC9kNDljOTJjODQyMGRiNmVlNGM4ODUxNWJkYjAx
+NGY2OGY0ZDQ3MWQ5Cj4gLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5l
+LmZhYnJpY2VAZ21haWwuY29tPgo+IC0tLS0KPiAtIHAxMS1raXQvaW1wb3J0LW9iamVjdC5jIHwg
+MzAgKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tCj4gLSAxIGZpbGUgY2hhbmdlZCwgMjcg
+aW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiAtCj4gLWRpZmYgLS1naXQgYS9wMTEta2l0
+L2ltcG9ydC1vYmplY3QuYyBiL3AxMS1raXQvaW1wb3J0LW9iamVjdC5jCj4gLWluZGV4IGZlZWUw
+NzY1Li5mYjQ3Yjk2NCAxMDA2NDQKPiAtLS0tIGEvcDExLWtpdC9pbXBvcnQtb2JqZWN0LmMKPiAt
+KysrIGIvcDExLWtpdC9pbXBvcnQtb2JqZWN0LmMKPiAtQEAgLTU1LDYgKzU1LDcgQEAKPiAtICNl
+bmRpZgo+IC0gCj4gLSAjaW5jbHVkZSA8YXNzZXJ0Lmg+Cj4gLSsjaW5jbHVkZSA8bGltaXRzLmg+
+Cj4gLSAjaW5jbHVkZSA8c3RkYm9vbC5oPgo+IC0gI2luY2x1ZGUgPHN0ZGxpYi5oPgo+IC0gI2lu
+Y2x1ZGUgPHN0cmluZy5oPgo+IC1AQCAtMjAxLDYgKzIwMiw3IEBAIGFkZF9hdHRyc19wdWJrZXlf
+cnNhIChDS19BVFRSSUJVVEUgKmF0dHJzLAo+IC0gCUNLX0FUVFJJQlVURSBhdHRyX2VuY3J5cHQg
+PSB7IENLQV9FTkNSWVBULCAmdHZhbCwgc2l6ZW9mICh0dmFsKSB9Owo+IC0gCUNLX0FUVFJJQlVU
+RSBhdHRyX21vZHVsdXMgPSB7IENLQV9NT0RVTFVTLCB9Owo+IC0gCUNLX0FUVFJJQlVURSBhdHRy
+X2V4cG9uZW50ID0geyBDS0FfUFVCTElDX0VYUE9ORU5ULCB9Owo+IC0rCXNpemVfdCBsZW4gPSAw
+Owo+IC0gCj4gLSAJcHVia2V5ID0gcDExX2FzbjFfcmVhZCAoaW5mbywgInN1YmplY3RQdWJsaWNL
+ZXkiLCAmcHVia2V5X2xlbik7Cj4gLSAJaWYgKHB1YmtleSA9PSBOVUxMKSB7Cj4gLUBAIC0yMjAs
+MTcgKzIyMiwzMSBAQCBhZGRfYXR0cnNfcHVia2V5X3JzYSAoQ0tfQVRUUklCVVRFICphdHRycywK
+PiAtIAkJZ290byBjbGVhbnVwOwo+IC0gCX0KPiAtIAo+IC0tCWF0dHJfbW9kdWx1cy5wVmFsdWUg
+PSBwMTFfYXNuMV9yZWFkIChhc24sICJtb2R1bHVzIiwgJmF0dHJfbW9kdWx1cy51bFZhbHVlTGVu
+KTsKPiAtKwlhdHRyX21vZHVsdXMucFZhbHVlID0gcDExX2FzbjFfcmVhZCAoYXNuLCAibW9kdWx1
+cyIsICZsZW4pOwo+IC0gCWlmIChhdHRyX21vZHVsdXMucFZhbHVlID09IE5VTEwpIHsKPiAtIAkJ
+cDExX21lc3NhZ2UgKF8oImZhaWxlZCB0byBvYnRhaW4gbW9kdWx1cyIpKTsKPiAtIAkJZ290byBj
+bGVhbnVwOwo+IC0gCX0KPiAtKyNpZiBVTE9OR19NQVggPCBTSVpFX01BWAo+IC0rCWlmIChsZW4g
+PiBVTE9OR19NQVgpIHsKPiAtKwkJcDExX21lc3NhZ2UgKF8oImZhaWxlZCB0byBvYnRhaW4gbW9k
+dWx1cyIpKTsKPiAtKwkJZ290byBjbGVhbnVwOwo+IC0rCX0KPiAtKyNlbmRpZgo+IC0rCWF0dHJf
+bW9kdWx1cy51bFZhbHVlTGVuID0gbGVuOwo+IC0gCj4gLS0JYXR0cl9leHBvbmVudC5wVmFsdWUg
+PSBwMTFfYXNuMV9yZWFkIChhc24sICJwdWJsaWNFeHBvbmVudCIsICZhdHRyX2V4cG9uZW50LnVs
+VmFsdWVMZW4pOwo+IC0rCWF0dHJfZXhwb25lbnQucFZhbHVlID0gcDExX2FzbjFfcmVhZCAoYXNu
+LCAicHVibGljRXhwb25lbnQiLCAmbGVuKTsKPiAtIAlpZiAoYXR0cl9leHBvbmVudC5wVmFsdWUg
+PT0gTlVMTCkgewo+IC0gCQlwMTFfbWVzc2FnZSAoXygiZmFpbGVkIHRvIG9idGFpbiBleHBvbmVu
+dCIpKTsKPiAtIAkJZ290byBjbGVhbnVwOwo+IC0gCX0KPiAtKyNpZiBVTE9OR19NQVggPCBTSVpF
+X01BWAo+IC0rCWlmIChsZW4gPiBVTE9OR19NQVgpIHsKPiAtKwkJcDExX21lc3NhZ2UgKF8oImZh
+aWxlZCB0byBvYnRhaW4gZXhwb25lbnQiKSk7Cj4gLSsJCWdvdG8gY2xlYW51cDsKPiAtKwl9Cj4g
+LSsjZW5kaWYKPiAtKwlhdHRyX2V4cG9uZW50LnVsVmFsdWVMZW4gPSBsZW47Cj4gLSAKPiAtIAly
+ZXN1bHQgPSBwMTFfYXR0cnNfYnVpbGQgKGF0dHJzLCAmYXR0cl9rZXlfdHlwZSwgJmF0dHJfZW5j
+cnlwdCwgJmF0dHJfbW9kdWx1cywgJmF0dHJfZXhwb25lbnQsIE5VTEwpOwo+IC0gCWlmIChyZXN1
+bHQgPT0gTlVMTCkgewo+IC1AQCAtMjYwLDEyICsyNzYsMjAgQEAgYWRkX2F0dHJzX3B1YmtleV9l
+YyAoQ0tfQVRUUklCVVRFICphdHRycywKPiAtIAlDS19BVFRSSUJVVEUgYXR0cl9rZXlfdHlwZSA9
+IHsgQ0tBX0tFWV9UWVBFLCAma2V5X3R5cGUsIHNpemVvZiAoa2V5X3R5cGUpIH07Cj4gLSAJQ0tf
+QVRUUklCVVRFIGF0dHJfZWNfcGFyYW1zID0geyBDS0FfRUNfUEFSQU1TLCB9Owo+IC0gCUNLX0FU
+VFJJQlVURSBhdHRyX2VjX3BvaW50ID0geyBDS0FfRUNfUE9JTlQsIH07Cj4gLSsJc2l6ZV90IGxl
+biA9IDA7Cj4gLSAKPiAtLQlhdHRyX2VjX3BhcmFtcy5wVmFsdWUgPSBwMTFfYXNuMV9yZWFkIChp
+bmZvLCAiYWxnb3JpdGhtLnBhcmFtZXRlcnMiLCAmYXR0cl9lY19wYXJhbXMudWxWYWx1ZUxlbik7
+Cj4gLSsJYXR0cl9lY19wYXJhbXMucFZhbHVlID0gcDExX2FzbjFfcmVhZCAoaW5mbywgImFsZ29y
+aXRobS5wYXJhbWV0ZXJzIiwgJmxlbik7Cj4gLSAJaWYgKGF0dHJfZWNfcGFyYW1zLnBWYWx1ZSA9
+PSBOVUxMKSB7Cj4gLSAJCXAxMV9tZXNzYWdlIChfKCJmYWlsZWQgdG8gb2J0YWluIEVDIHBhcmFt
+ZXRlcnMiKSk7Cj4gLSAJCWdvdG8gY2xlYW51cDsKPiAtIAl9Cj4gLSsjaWYgVUxPTkdfTUFYIDwg
+U0laRV9NQVgKPiAtKwlpZiAobGVuID4gVUxPTkdfTUFYKSB7Cj4gLSsJCXAxMV9tZXNzYWdlIChf
+KCJmYWlsZWQgdG8gb2J0YWluIEVDIHBhcmFtZXRlcnMiKSk7Cj4gLSsJCWdvdG8gY2xlYW51cDsK
+PiAtKwl9Cj4gLSsjZW5kaWYKPiAtKwlhdHRyX2VjX3BhcmFtcy51bFZhbHVlTGVuID0gbGVuOwo+
+IC0gCj4gLSAJLyogc3ViamVjdFB1YmxpY0tleSBpcyByZWFkIGFzIEJJVCBTVFJJTkcgdmFsdWUg
+d2hpY2ggY29udGFpbnMKPiAtIAkgKiBFQyBwb2ludCBkYXRhLiBXZSBuZWVkIHRvIERFUiBlbmNv
+ZGUgdGhpcyBkYXRhIGFzIE9DVEVUIFNUUklORy4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wMTEt
+a2l0L3AxMS1raXQuaGFzaCBiL3BhY2thZ2UvcDExLWtpdC9wMTEta2l0Lmhhc2gKPiBpbmRleCA4
+MWQyMDliMmMyLi40M2E1NjZhODJjIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcDExLWtpdC9wMTEt
+a2l0Lmhhc2gKPiArKysgYi9wYWNrYWdlL3AxMS1raXQvcDExLWtpdC5oYXNoCj4gQEAgLTEsNCAr
+MSw0IEBACj4gICMgTG9jYWxseSBjYWxjdWxhdGVkIGFmdGVyIGNoZWNraW5nIHBncCBzaWduYXR1
+cmUKPiAtc2hhMjU2ICBkOGRkY2UxYmI3ZTg5ODk4NmY5ZDI1MGNjYWU3YzA5Y2UxNGQ4MmYxMDA5
+MDQ2ZDIwMmEwZWIxYjQyOGIyYWRjICBwMTEta2l0LTAuMjUuMy50YXIueHoKPiArc2hhMjU2ICAw
+NGQwYTg2NDUwY2RiMWJlMDE4ZjI2YWY2Njk5ODU3MTcxYTE4OGFjNmQ1YjhjOTA3ODZhNjA4NTRl
+MTE5OGU1ICBwMTEta2l0LTAuMjUuNS50YXIueHoKPiAgIyBMb2NhbGx5IGNvbXB1dGVkCj4gIHNo
+YTI1NiAgMmUxYmE5OTM5MDRkZjgwN2ExMGMzZWRhMWU1YzI3MjMzOGVkYzM1Njc0YjY3OTc3M2E4
+YjNhZDQ2MDczMTA1NCAgQ09QWUlORwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3AxMS1raXQvcDEx
+LWtpdC5tayBiL3BhY2thZ2UvcDExLWtpdC9wMTEta2l0Lm1rCj4gaW5kZXggNTNlOTUzZTA3MC4u
+MTU0YTM0ZTYzNCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3AxMS1raXQvcDExLWtpdC5tawo+ICsr
+KyBiL3BhY2thZ2UvcDExLWtpdC9wMTEta2l0Lm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICMKPiAg
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLVAxMV9LSVRfVkVSU0lPTiA9IDAuMjUuMwo+
+ICtQMTFfS0lUX1ZFUlNJT04gPSAwLjI1LjUKPiAgUDExX0tJVF9TT1VSQ0UgPSBwMTEta2l0LSQo
+UDExX0tJVF9WRVJTSU9OKS50YXIueHoKPiAgUDExX0tJVF9TSVRFID0gaHR0cHM6Ly9naXRodWIu
+Y29tL3AxMS1nbHVlL3AxMS1raXQvcmVsZWFzZXMvZG93bmxvYWQvJChQMTFfS0lUX1ZFUlNJT04p
+Cj4gIFAxMV9LSVRfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gLS0gCj4gMi4zNC4xCj4gCj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
