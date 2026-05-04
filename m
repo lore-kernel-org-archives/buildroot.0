@@ -1,114 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A44CD343A
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA180FF885A
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BF0E410D0;
-	Mon,  4 May 2026 14:47:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BUEt7Z4uDrIu; Mon,  4 May 2026 14:47:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B26E41B37
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906059;
-	bh=Bn70e8DpK1KDJaGwlFwH3RTWwcAhn3z7v08yftcYJcs=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LKOzluXK+V9vIfMWv9zLK3/OO0tOxOKMhiGh64gF1B8pfOm04u1rOoZ8TACRFyfoy
-	 0+h6lJccpeOT9nKlyyoXufGBMQHawiwaQOA1tN+jgNU3EUuhsrSYIUzJC9HJupbdxA
-	 5NabiJG0PZLJw3hjXiUe2deeu0si43FHO6xWyRGE2cxhjI4iDmJPiMQD3jZzUslhCK
-	 A6c/j6YCkZ+eSbDa1yg9EeByX9j0avAr5r85BjwwFfKPXvD8MbM1L4vlrBOY+UFB0S
-	 BY1G3bN2CNBg59HXN5323O1YmJqz/E5RC1xT7Nkr/eGxV4YMS/W4xxzMxaNOV5DHTL
-	 CwaxelKPJ5u5A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B26E41B37;
-	Mon,  4 May 2026 14:47:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B0B8A190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD898614FA
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D1E5614F3;
+	Mon,  4 May 2026 14:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1RWjRjuAlFml for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:47:37 +0000 (UTC)
+ id 30zP88L6LYk6; Mon,  4 May 2026 14:47:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 800C4614FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1777906061;
+	bh=UFB2ghETrAqoqw61FRF7j9A8dlWcmYXn+zpa/GB+eOQ=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=iu9XpWi6/t8rQjjlvNCtGTcUoLgJvkDqBLXtG/q8xiW2DXaDnporQPLO1t9DxeRHu
+	 HQcR0RuYge2+okwPAZRW9EGZaw9bTyzH5bx6N3G5REEXHcCeboHSuytVgL60jPBdon
+	 2zTRULJThUjW0oFjpajZqrTwNpKTQ/6Csflm03UHmoba2tzvAPn16MqN3Avfg69PMk
+	 arm1KnG/0Ny4m8Qko0jxObElydufUjxDAUCi3fm202af5dHnLx14ijt2bZDwSsmvdA
+	 dAd0TWGFPUG1+LT+lRI96eTsfoOoYKREtd250hGU00G7GiKD6F0lLmPpcNKllTi7fe
+	 N+zNyTtyUmuUQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 800C4614FA;
+	Mon,  4 May 2026 14:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6099325D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46F3241B37
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IoUVAy7MYHgI for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:47:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AEDE1614F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEDE1614F3
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AEDE1614F3
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:36 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4891f625344so44358835e9.0
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1360E410D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1360E410D0
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1360E410D0
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:37 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-488af9fdaa7so21093665e9.1
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906055; x=1778510855;
+ d=1e100.net; s=20251104; t=1777906056; x=1778510856;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=VYXVGbuKE0M6a/rdFDijFDf3pqaj84L3SqE0tCauiCw=;
- b=JeYSA2TQWusqqmV9sI6aiNTpw5TsrzpisJMuT/DllsVHKBpTkYKslHsS4+86JfvSDa
- KpWN3HBD6GjXaPl0wmHwCdAhCe8JVks5j1okLeLeTN+XWUm+yX/UbFNXeaeIaAiqrrc+
- eaUyrRtQBGThVcnEqGCs9L4d/VelfiBcMCvkbo5rYDgl++KUHXQX/L7EhnVu4RjfRCA5
- Rja/INkcQ4zt34kdPcPs0/5o2TDBC1vwZQ5XGsclJ7HaOrDwO3PG7mpf17rptkZFHP+v
- B/e0i57ae7NBmoa0K7HQmBULZv1HAqQnNPfVx+yIu4CL/B6kOrqxafUfACKy7XcDIL5P
- YUbg==
-X-Gm-Message-State: AOJu0Yw+bfNko3xizvaqyzk8AC7NhUc2BEwQYmiSogO2VBeAHNpzDwK9
- ON56TrKRasps/TVk/B6DAj6fwzLvWVgZKYvpRmvB7CaGEREhWvfKg/wkt2tW9vADX45ovdxUOqO
- yU4zV
-X-Gm-Gg: AeBDiesbWX2Fb4qlOzEi7A/dDjD9e6lcEgRTB4bBNZTOn6xhzJ67EHVgWk70fIgtT2s
- /jL4Fp2D35jnwBJ+uUjrY3KkO0mlSe0zxOCFNVDBXxDZ+Ow8TqvqE45aOWZ6EdD6ryl5DLb2iSe
- D4wyt09yFVpnBeylxS6UdAFZn29XXqHlJG5UfwziJA/B1AxAEOpeKo1N7zWhcIQN9CBvzzkZdZC
- W2Vp93py6+aQKnyIFO0WxRvb++DCsFJg+yz53SycwQzlOUdbm3pbuDiwpkSs5tIqo5UeOw0u1Sl
- NLE98NF3yqYAlwQI4uxX6/9fTtRValtrNBYz+vXcVC+oqjIR9K2RuV5cdU33bp9lQz5a/zrWFo4
- vT045/DuDlinDHzZLYRaqfnsP17j5bsae2iUdXZb8CkfSwdj7L13ODsW15GwIgzlYqrDoS+8v1O
- cGZTRnY2xs4mId61neNFp6A1lkjw==
-X-Received: by 2002:a05:600c:37ca:b0:48a:534a:eed8 with SMTP id
- 5b1f17b1804b1-48a970989fdmr166784305e9.1.1777906054591; 
- Mon, 04 May 2026 07:47:34 -0700 (PDT)
+ bh=rIjt7oDcvFDrG1VZGR+9M8QCKbnrYqswU4fuyxAVCpo=;
+ b=cDk4bXviqkK76DlRxBznQquhUMzKSi7yYRPsTZ/1MbkjT3ueKwGPjnbLcNASooY+5/
+ r4ddXFzzKTMwLSy0J9RKH+KRkgFSn2odqACAguPucKwjQ/O07E7iu8JzTYxjBHbxupnF
+ 4sVKq/tT6PkEnYoLVNU4CdpPJKYgVfcZqNM6tcR005W5W6hnEmVq1cckaM0Yn2SP7tcK
+ 1seBDcM244eTd874WCIj+HBPggZrnqPfbMSyGfijRrdrRx80OIL2s4IkHqiGD8LopcFT
+ Bf3vntd0rYYkD9eNpyV5HB4E/8y6d/RWrWB93r8fWbFYD6Rzuyp1ynRU0hyjxgwfYU+9
+ vN9w==
+X-Gm-Message-State: AOJu0Yw8EwiZB8vdFzaxcDsWkrRZUHfScY6tIJWS3+Cp9ACRFh4N36TL
+ l9sVmavfdb/DBS6GED0vWyuVH2AhGJafSyl7cX0gSD/j7qhu0U3FP0h/d4we4gH3SPpwj3rGfSV
+ Lxv10
+X-Gm-Gg: AeBDies0sc+3pWHrOIKffBQ+JYCtX5C1J/SYHBlUGOHmDdnBi6KOU5WA1C/Xy9BmkKT
+ QZvyU/a32yu1P0IURHqgUyL6XCMzoMp9meqfMjwLCfmVE+wlIL2DZR53X1Ggv09W4TmCoyjITT/
+ bXQd1suxlzyTlFZWbmcR9MEm03L3rFA1KbSak1PnN4Blq9XWXMFkPraUztb9eQYsSRoWA6HjdDS
+ GVncFjuJG2dYZ5+SEdTWbBupafSOQtZLipwsIP8TMPnDUxs8diy+Y9gS1n3S5jaN28MCDnUKINZ
+ b64QaZ9//KPOl1zSeSYlBz9dEMHAWyl17FZbcHerC3QhLFqKPvQXiNoa5C9qh3LdSYtPbokyYpe
+ TT/8jsJ59SsZ8eMCOqIHVHuQAvietGqZLHcthIoyIlJ9vF2K6bUarwY9xqVbMiERbeErHwokhvW
+ GCsadKj6wU3tOjfuGwBs0LTyMdiw==
+X-Received: by 2002:a05:600c:859a:b0:48a:7f90:2231 with SMTP id
+ 5b1f17b1804b1-48a9865f859mr116713165e9.19.1777906055866; 
+ Mon, 04 May 2026 07:47:35 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48a8eb3427fsm460269385e9.0.2026.05.04.07.47.34
+ 5b1f17b1804b1-48a8fee6ee5sm105742955e9.8.2026.05.04.07.47.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:47:34 -0700 (PDT)
+ Mon, 04 May 2026 07:47:35 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:47:33 +0200
-Message-ID: <20260504144733.9340-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:47:34 +0200
+Message-ID: <20260504144734.9733-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260420195520.191853-1-thomas.perale@mind.be>
-References: <20260420195520.191853-1-thomas.perale@mind.be>
+In-Reply-To: <20260420202031.210609-1-thomas.perale@mind.be>
+References: <20260420202031.210609-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906055; x=1778510855; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906056; x=1778510856; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=VYXVGbuKE0M6a/rdFDijFDf3pqaj84L3SqE0tCauiCw=;
- b=K3xeY5h1L1JNmBprmp3bjGj2Maufkrh9XT1a/FvzgFwIip1HlsNi3pTOHqTEAJ0J8A
- 3F7VlVZ8ux3yT2PUls5gK15qeM8VQLxfAwmXvOosUzGCBJK/u7OrSEf2CqPOL/NBkMa5
- JCDybrg1MfwuCYaIyGjp76FOvGgjpNGWTbheqZGWLdVTeF3XyXCRLPD8MY5bWF+fv8lG
- pfd9h8lrX2ta2mgW4OR3S/U47BebK/N2c2vvPoSf1DORiK5OSVzzdjC8OsunIfE1d/Rz
- rQUJwWQ5oyuYJiuS+L7cRTqClJWkoxsxzJrPD6qgt7zQnoSHGU2R2q+LYDyzS3s+OSh2
- voSg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=rIjt7oDcvFDrG1VZGR+9M8QCKbnrYqswU4fuyxAVCpo=;
+ b=iILcZTN+VZVibqX0LC+czJNX9XUOqYGEFghhqVbZLQ/caj2UK91r6+2VQuOHDwWULs
+ yCbG3pnuvE7vGLDTWoG7P2b7rZ+8tDo1QhKKTv/nEkytifUVkEVN1PpE8GVwK5YHhkjB
+ nZBz7xneGx8q5eXAk12mEaCgYGSF184tHjXpzJqOW3WHl6PEYj7z8GVUsBcuZtZ+KN/a
+ 7tvMg/w1lvKOYvGY80W4XJD45asYhleIIHysoHzAGb746rf6Zw9k7dmtdQu/K7wQ8ntO
+ Vr7y79xNx06LaSlfI+ybfl58sjJnJwUXU4U4vACIVbR5sPAS1zBwgB41szuzo7Yx2Fsu
+ jUqg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=K3xeY5h1
-Subject: Re: [Buildroot] [PATCH] package/cups: security bump to v2.4.17
+ header.a=rsa-sha256 header.s=google header.b=iILcZTN+
+Subject: Re: [Buildroot] [PATCH] package/mbedtls: security bump to v3.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,102 +130,153 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 In reply of:
 > For more information about the release, see:
 > 
-> - https://github.com/OpenPrinting/cups/releases/tag/v2.4.17
-> - https://github.com/OpenPrinting/cups/blob/2.4.x/CHANGES.md
+> - https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6
+> - https://github.com/Mbed-TLS/mbedtls/compare/mbedtls-3.6.5..mbedtls-3.6.6
 > 
-> The new release 2.4.17 contains the following security fixes:
+> Fixes the following vulnerabilities:
 > 
-> - CVE-2026-27447: The scheduler treated local user and group names as
->   case-insensitive.
->   https://www.cve.org/CVERecord?id=CVE-2026-27447
+> - CVE-2025-66442
+>     In Mbed TLS through 4.0.0, there is a compiler-induced timing side
+>     channel (in RSA and CBC/ECB decryption) that only occurs with LLVM's
+>     select-optimize feature. TF-PSA-Crypto through 1.0.0 is also affected.
 > 
-> - CVE-2026-34978: The RSS notifier could write outside the scheduler's
->   RSS directory.
->   https://www.cve.org/CVERecord?id=CVE-2026-34978
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2025-66442
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-compiler-induced-constant-time-violations/
 > 
-> - CVE-2026-34979: The scheduler did not always allocate enough memory
->   for a job's options string.
->   https://www.cve.org/CVERecord?id=CVE-2026-34979
+> - CVE-2026-25833:
+>     Mbed TLS 3.5.0 to 3.6.5 fixed in 3.6.6 and 4.1.0 has a buffer overflow
+>     in the x509_inet_pton_ipv6() function
 > 
-> - CVE-2026-34980: The scheduler did not filter control characters from
->   option values.
->   https://www.cve.org/CVERecord?id=CVE-2026-34980
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-25833
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-inet-pton/
 > 
-> - CVE-2026-34990: The scheduler incorrectly allowed local certificates
->   over the loopback interface.
->   https://www.cve.org/CVERecord?id=CVE-2026-34990
+> - CVE-2026-25834:
+>     Mbed TLS v3.3.0 up to 3.6.5 and 4.0.0 allows Algorithm Downgrade.
 > 
-> - CVE-2026-39314: Fixed the range check for job password strings.
->   https://www.cve.org/CVERecord?id=CVE-2026-39314
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-25834
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-sigalg-injection/
 > 
-> - CVE-2026-39316: Fixed a printer subscription bug in the scheduler.
->   https://www.cve.org/CVERecord?id=CVE-2026-39316
+> - CVE-2026-25835:
+>     Mbed TLS before 3.6.6 and TF-PSA-Crypto before 1.1.0 misuse seeds in a
+>     Pseudo-Random Number Generator (PRNG).
 > 
-> - CVE-2026-41079: Fixed a SNMP string conversion bug in the backends.
->   https://www.cve.org/CVERecord?id=CVE-2026-41079
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-25835
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-rng-cloning/
 > 
-> Also updated patch offsets.
+> - CVE-2026-34871:
+>     An issue was discovered in Mbed TLS before 3.6.6 and 4.x before 4.1.0
+>     and TF-PSA-Crypto before 1.1.0. There is a Predictable Seed in a
+>     Pseudo-Random Number Generator (PRNG).
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34871
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-dev-random/
+> 
+> - CVE-2026-34872:
+>     An issue was discovered in Mbed TLS 3.5.x and 3.6.x through 3.6.5 and
+>     TF-PSA-Crypto 1.0. There is a lack of contributory behavior in FFDH
+>     due to improper input validation. Using finite-field Diffie-Hellman,
+>     the other party can force the shared secret into a small set of values
+>     (lack of contributory behavior). This is a problem for protocols that
+>     depend on contributory behavior (which is not the case for TLS). The
+>     attack can be carried by the peer, or depending on the protocol by an
+>     active network attacker (person in the middle).
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34872
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ffdh-peerkey-checks/
+> 
+> - CVE-2026-34873:
+>     An issue was discovered in Mbed TLS 3.5.0 through 4.0.0. Client
+>     impersonation can occur while resuming a TLS 1.3 session.
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34873
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-client-impersonation-while-resuming-tls13-session/
+> 
+> - CVE-2026-34874:
+>     An issue was discovered in Mbed TLS through 3.6.5 and 4.x through
+>     4.0.0. There is a NULL pointer dereference in distinguished name
+>     parsing that allows an attacker to write to address 0.
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34874
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-null-pointer-dereference-x509/
+> 
+> - CVE-2026-34875:
+>     An issue was discovered in Mbed TLS through 3.6.5 and TF-PSA-Crypto
+>     1.0.0. A buffer overflow can occur in public key export for FFDH keys.
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34875
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ffdh-buffer-overflow/
+> 
+> - CVE-2026-34876:
+>     An issue was discovered in Mbed TLS 3.x before 3.6.6. An out-of-bounds
+>     read vulnerability in mbedtls_ccm_finish() in library/ccm.c allows
+>     attackers to obtain adjacent CCM context data via invocation of the
+>     multipart CCM API with an oversized tag_len parameter. This is caused
+>     by missing validation of the tag_len parameter against the size of the
+>     internal 16-byte authentication buffer. The issue affects the public
+>     multipart CCM API in Mbed TLS 3.x, where mbedtls_ccm_finish() can be
+>     invoked directly by applications. In Mbed TLS 4.x versions prior to
+>     the fix, the same missing validation exists in the internal
+>     implementation; however, the function is not exposed as part of the
+>     public API. Exploitation requires application-level invocation of the
+>     multipart CCM API.
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34876
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-ccm-finish-boundary-check/
+> 
+> - CVE-2026-34877:
+>     An issue was discovered in Mbed TLS versions from 2.19.0 up to 3.6.5,
+>     Mbed TLS 4.0.0. Insufficient protection of serialized SSL context or
+>     session structures allows an attacker who can modify the serialized
+>     structures to induce memory corruption, leading to arbitrary code
+>     execution. This is caused by Incorrect Use of Privileged APIs.
+> 
+> For more information, see:
+>  - https://www.cve.org/CVERecord?id=CVE-2026-34877
+>  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-03-serialized-data/
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch | 2 +-
->  package/cups/0004-Remove-PIE-flags-from-the-build.patch        | 2 +-
->  package/cups/cups.hash                                         | 2 +-
->  package/cups/cups.mk                                           | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+>  package/mbedtls/mbedtls.hash | 4 ++--
+>  package/mbedtls/mbedtls.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> index 30c3ddb48f..3c00bb1b49 100644
-> --- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> +++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> @@ -18,7 +18,7 @@ diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
->  index 613f01ddf..6f1bcb07e 100644
->  --- a/config-scripts/cups-common.m4
->  +++ b/config-scripts/cups-common.m4
-> -@@ -462,7 +462,7 @@ LIBHEADERS="\$(COREHEADERS) \$(DRIVERHEADERS)"
-> +@@ -467,7 +467,7 @@ LIBHEADERS="\$(COREHEADERS) \$(DRIVERHEADERS)"
->   LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
->   
->   AS_CASE(["$COMPONENTS"], [all], [
-> diff --git a/package/cups/0004-Remove-PIE-flags-from-the-build.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-> index e4081d0e07..82251d0fec 100644
-> --- a/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-> +++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-> @@ -23,7 +23,7 @@ diff --git a/Makedefs.in b/Makedefs.in
->  index 0d8df733b..2560c0c36 100644
->  --- a/Makedefs.in
->  +++ b/Makedefs.in
-> -@@ -156,7 +156,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
-> +@@ -154,7 +154,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
->   			$(ONDEMANDFLAGS) $(OPTIONS)
->   ALL_DSOFLAGS	=	-L../cups @ARCHFLAGS@ @RELROFLAGS@ $(DSOFLAGS) $(OPTIM)
->   ALL_LDFLAGS	=	-L../cups @LDARCHFLAGS@ @RELROFLAGS@ $(LDFLAGS)  \
-> diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-> index 7c08a68c10..e421c6457b 100644
-> --- a/package/cups/cups.hash
-> +++ b/package/cups/cups.hash
+> diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+> index b86c66af3e..f1be074e08 100644
+> --- a/package/mbedtls/mbedtls.hash
+> +++ b/package/mbedtls/mbedtls.hash
 > @@ -1,4 +1,4 @@
->  # Locally calculated:
-> -sha256  0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d  cups-2.4.16-source.tar.gz
-> +sha256  89c703238de210d4f4f4e5d4269e3d60c4b2f487aad75a8a1eaecd659e4d0b77  cups-2.4.17-source.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
->  sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-> index d3e6094c67..f79e3846df 100644
-> --- a/package/cups/cups.mk
-> +++ b/package/cups/cups.mk
+> -# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5:
+> -sha256  4a11f1777bb95bf4ad96721cac945a26e04bf19f57d905f241fe77ebeddf46d8  mbedtls-3.6.5.tar.bz2
+> +# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6:
+> +sha256  8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a  mbedtls-3.6.6.tar.bz2
+>  # Locally calculated
+>  sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+> index c1aa9f0850..e8bb0a71b9 100644
+> --- a/package/mbedtls/mbedtls.mk
+> +++ b/package/mbedtls/mbedtls.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -CUPS_VERSION = 2.4.16
-> +CUPS_VERSION = 2.4.17
->  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
->  CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
->  CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+> -MBEDTLS_VERSION = 3.6.5
+> +MBEDTLS_VERSION = 3.6.6
+>  MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+>  MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+>  MBEDTLS_CONF_OPTS = \
 > -- 
 > 2.53.0
 > 
