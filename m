@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D993CCD3439
-	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA129CD3430
+	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACC1C6157A;
-	Mon,  4 May 2026 14:47:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4B19845F2;
+	Mon,  4 May 2026 14:47:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dcd5Y-APkDWr; Mon,  4 May 2026 14:47:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gDHhpCyZiibf; Mon,  4 May 2026 14:47:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B3E6157C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D145684651
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906075;
-	bh=k2zDQlqfSCPxjqIdUcSLFWApZM/Qh8ZSxnjEm00Xhq0=;
+	s=default; t=1777906076;
+	bh=JBIOPDhU39KrVbOIZy2TtbFcg7KngWQPWL9R3imym8U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=FqY6j9WuXHHayPSJB+GpAga1BAppxQzb0kDZnszo+PDUjcze5gBwUH6vLupfjP4gz
-	 stWy1IyLPNhJiIjMSzZnqRGtQlMuT4eVbgH5983WO+C2wG6FY+V4p6UrtdjRKYUCbv
-	 Smtbs8MmhPwce0yYxlQNayyzzQI8lfWHMMlZ4tgufFWb8S/M5LYMAWp5LBWi78qYtl
-	 n6W7L6M/H3nZHfAqTH/hPs2gczFIQzrSO4Gul5AVsbQ9UU5+JkjPQjkzyPygaKZfSz
-	 MA+CBBzMSd9SO/LsVWbhjuaiRYN2QbnWV4RByEtobS2KB91y+p6QoAUauQYqdBYuHb
-	 hxf2c3HN62igg==
+	b=AU+OZ2xXgZp8ZO7prblD2srU5fpyX5Za1WXgV8l0GgwuzvRJRc3P4US5OOzRiVgyw
+	 2VBCBBcyvyaD61lfNJB+LHK9Y3LNh8t4UQXTV9Umey/PoSfvG19UWRpQ40KeAX1F+n
+	 yzTV6Du8vKwQY2W1FR1ERF4IS2jB5HO1nGwrS4RGoVUctiGPAylwNksIwM7XxYHMEt
+	 mPVggbUOoYn1OgsracwCtMwJk7lt/U7oQ0U+5LABwIjAV42jHrES/KwfCm4/OkdGsi
+	 uZV2SnLZ8JH+pLSsY+WE8n1AAbutC5Bq7h9IuVqSKJrcXfxKNmIaSEBMJtznQ/lusu
+	 kQ42jQxQ6r6Jw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5B3E6157C;
-	Mon,  4 May 2026 14:47:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A27A525D
+	by smtp1.osuosl.org (Postfix) with ESMTP id D145684651;
+	Mon,  4 May 2026 14:47:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBB4725D
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88EB441BFE
+ by smtp2.osuosl.org (Postfix) with ESMTP id A822C40E08
  for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYGeSecnwwHy for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FeNnduCEQAkw for <buildroot@buildroot.org>;
  Mon,  4 May 2026 14:47:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D481941BF4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D481941BF4
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D481941BF4
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:51 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-488ad135063so38303825e9.0
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 95F144079C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95F144079C
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 95F144079C
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:47:52 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4891e86fabeso52337655e9.1
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:47:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906069; x=1778510869;
+ d=1e100.net; s=20251104; t=1777906071; x=1778510871;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=wMknXs1D568s38YOtUN6idbCDN3m8kNdNBtOgRUG18E=;
- b=bfjdOBQ04TN1g2avHxgVDOqsxBU2nWfA+HuAUBxB7SPvDiGIpSrrnsOJNa8m5EnPYV
- Ame9DzLTLE/S8dWFInNyEdWXdG9sRQnM7aa84r9mJlAGrpNqCQSh7WIXPXMf03mblT6I
- S/6YSEqEVc3G4FLp805UNAbSQKLVdgmOHI974rClyQqgQUVEljXr1ErLPbHPxWrzsOHV
- C05wkclCShHuNWdIeb4sVyPQKzObX3eQ+esvBrRA6EzwobVpvDZJdTQTA7cfGqIYxXLx
- hY6AhFLbaTOJelOPXFaZjR1/hTPKRbggrcosRGOnhNPrJJFlEZIMyfmwvDD/rOiObfc/
- JczQ==
+ bh=jPBi4dm7PhYMcOM7JGay3QWUHuMn7I/KiESQ/d0zw3U=;
+ b=p2gl2dRXd2OD7XDqtd/xofL0v4Qtr30hOqrGNLdLZjwxiDl5hQCJxht+mgF/YsNeVt
+ Q6UeiqGWtB2QcPT2mf01zgVcvefy3Y5O+QtQIatH+mQMnQWD3dev5tONdOGOScwz06QN
+ KVs/1vhSASlStefVHZTehi49JW8wishSMkJPNF/+MleORzJocvcCk/YzPxsSsJ94BBQ/
+ V5Y28VqwjjX68aKuRQzBYp7RptstQqr51z1GFTVm+JhkJ8iLKYgDoj+YUzv3SLFhifXz
+ 395n/A6OPacJVzznTIhRe6QGrv092UvwN4tu8hD9NB8ells0ju7G36KS143xmEMVSwxc
+ LkcQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8y2IwCeHxjGWoH25RGQ6+zpxslCCFjOyt8+CAj4jQeoD1F1XQgyDYjeV0PUtfYaNDpzJuOjXu49rM=@buildroot.org
-X-Gm-Message-State: AOJu0YwVjs7T3D6TRQGA826y81bGXdvvNgKcj/gKHmHr8rbiB09L1z5Y
- bIOKiD1IZ1/F6y/fQxQAUzzl9SldBkF6AOn036qfKWNMurUPAG79UY3hPRH18Rtrecw=
-X-Gm-Gg: AeBDiet4JsX7AK+pQQu2/tLZriaF1EpwVH4dYJKpyuhPoqoz9cafFXRO0qpv9vlCFoG
- tMxpmPPt3sKB2fYz7C7rH+37TtJFuqoGLUGOHFm2dLrqySKkDSvhQjfgLLitpKHrsUw78z0JPeC
- iNB79qUcyKwAdFfQcclSCYIyzYMo2CkYJ2F3uECk3eRaAbNeb8Rhnwaj52Ddj+FwRdNY4TlC7NW
- pi9UAuUwIH7jgwRdNBrgwKlBYIl6amcDlFMYzKa714nRlDC1DzY4MnKrpm++Br1CqiEMecNaitK
- HsRnBQyHbhByo9WzEm6WQxcIZnJdOFSdLhU1EEsdADxLsMqSbRVGjVzK5rD+M7Yhw3mjSaKvH7q
- gw5aL214x8azoukASGjy8vEKZPzBwiektTKfepE4g8zLVB8yYsdSiCNjloUb4nRLiFGc2fdfLJ7
- XfQbZ5KgnRqGUJ5e3byN6UYZupiw==
-X-Received: by 2002:a05:600c:4f47:b0:488:b8bc:6a32 with SMTP id
- 5b1f17b1804b1-48a988be27dmr185746255e9.23.1777906069571; 
- Mon, 04 May 2026 07:47:49 -0700 (PDT)
+ AFNElJ+pKVcWLrMq+yo0PTiANBataqCDpWFFuMK3bHXTjYC93EX4O0WtdIPdAiAWxruVVJRd7t342O/yzJk=@buildroot.org
+X-Gm-Message-State: AOJu0YwAzqhpVPe/tGDod+tk2kAdPFhjMBdxtsljN8ZzLjadxooClFW+
+ WuL6yB3pHfFTNpZ2JbMC7mv8ri+SNNiNoBoO2t50CTwcu3QnURRjbHYUWZF+Jgxqaac=
+X-Gm-Gg: AeBDiets9Lvo/9rxpWRBoUtXJaa3vLyC/Dm41TOxW9YIbWXVKxEqHutjwnxD7NDdAgU
+ Byb1n6/j44/L4qMx49UpRI7YTRBxCAc853SuPtWiWRhUfoXckm2uH2gOTrnxWijz4PvfQBv3dv2
+ +za7rhEBvbL4KRpVl0/4lIG9UVYVWBSc39DcPYRwELSdnLR2nG/XqwiK3ujuL4yCtuJKzbEebet
+ LMGjUfjJ8TrawTdG4fV1SvHCzA/Bi9sR+ivYEtLUsy7tTUWD+OnTGq35AyPsFZR00CfYUUS0cVY
+ EOw8i0eueLAr2jbi01P+xKOQHZ/D/4hQNFiasxaexJg+brktJjZeQpt0hpnDw6057F2xRF4U1ap
+ q/kJYeXa0UtEpueJrp90g4vlrVXPOM7dSjK7mCOu8vFNxlEa7+FbcoPj+uJ9UCdbRZJnvvZixMR
+ p/CWtqzXnKpJHgOdRrfpIcRlmiXQ==
+X-Received: by 2002:a05:600c:c0c5:b0:48a:72ab:f88c with SMTP id
+ 5b1f17b1804b1-48a9865f865mr135056565e9.17.1777906070629; 
+ Mon, 04 May 2026 07:47:50 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48a8eb75fc1sm288356225e9.7.2026.05.04.07.47.49
+ 5b1f17b1804b1-48a822c3422sm306233215e9.8.2026.05.04.07.47.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:47:49 -0700 (PDT)
-To: Fiona Klute <fiona.klute@gmx.de>
+ Mon, 04 May 2026 07:47:50 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:47:48 +0200
-Message-ID: <20260504144748.10495-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:47:49 +0200
+Message-ID: <20260504144749.10550-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260423210135.2859706-1-fiona.klute@gmx.de>
-References: <20260423210135.2859706-1-fiona.klute@gmx.de>
+In-Reply-To: <20260426084054.3305901-1-bernd@kuhls.net>
+References: <20260426084054.3305901-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906069; x=1778510869; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906071; x=1778510871; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wMknXs1D568s38YOtUN6idbCDN3m8kNdNBtOgRUG18E=;
- b=UfhuH9fqvDSgXnNH9Lf0ckKnkO3RgSnG9KsSduKK7ggC99VAAa0sJOWUfZ2L1cH1CN
- FrJQYr4LLMqGtz3uPxjeU3N5geXlTILWzsohgyAKOTcyS9+UQqtNCNNJPWx5dxggD7CK
- 8xoqi8IvwvLjNMS2RQIf6DhHBMDdrH5xdm2O9z/CnzZOp8S53tz1aSmrbiOjXwXtzDAp
- cQpfPXRx95bOqiCMoypk53DhGDG/WfROfYUlDEY10RLla42xdqpgCbCAu6470ZckDg0g
- I7fZRvb1hsIFNgQzmkEFNefaBEwq+2glIffCTt852aiL+KIaoNlMV3I6of5ANwhQNxpu
- JEww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=jPBi4dm7PhYMcOM7JGay3QWUHuMn7I/KiESQ/d0zw3U=;
+ b=cSrhbKY8AjVt43PEXB1+4J7FigF8xidZkJYAWhlLp7upeEXsnDbIeDQwvP8JSXRWlg
+ GmtGtS+YUOMbq0DZHuzBQayDxf0zeMV6iIpveZE3TRTFMAA4xnHlVzxzvz5dU0mqJx51
+ RX6085u7jRYr2vA6ts2eWlEixgWrFT24XqIl0y7nfrlsVMulU/rDSnYTAWIqOmv8I2HG
+ F+0j8a8jkml6P3dmcuj9IcBJtXCg5k6gFpXp/z0mv3pP3OhSvCqfGCsFRfZWP8MkJ1Lw
+ /L3bxoNO21pexF2XYuQSZ6Rbvv50mbPaP8wIU5nqOdgac8rlz88FCQz/s6broXruXORf
+ T2Ow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UfhuH9fq
-Subject: Re: [Buildroot] [PATCH 1/1] package/ca-certificates: bump to
- 20260223
+ header.a=rsa-sha256 header.s=google header.b=cSrhbKY8
+Subject: Re: [Buildroot] [PATCH 1/1] package/expat: security bump version to
+ 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,46 +131,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Changelog including list of added/removed CAs:
-> https://salsa.debian.org/debian/ca-certificates/-/blob/b266ecf6afc2d6fda61391bbeda455572e7f5207/debian/changelog
+> https://github.com/libexpat/libexpat/blob/R_2_8_0/expat/Changes
 > 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> Fixes CVE-2026-41080.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/ca-certificates/ca-certificates.hash | 2 +-
->  package/ca-certificates/ca-certificates.mk   | 4 ++--
+>  package/expat/expat.hash | 4 ++--
+>  package/expat/expat.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-> index 2112badfcc..d234705082 100644
-> --- a/package/ca-certificates/ca-certificates.hash
-> +++ b/package/ca-certificates/ca-certificates.hash
+> diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+> index 37a9c2ab9f..a0f8b514a8 100644
+> --- a/package/expat/expat.hash
+> +++ b/package/expat/expat.hash
 > @@ -1,4 +1,4 @@
->  # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
-> -sha256  33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2  ca-certificates_20250419.tar.xz
-> +sha256  2fa2b00d4360f0d14ec51640ae8aea9e563956b95ea786e3c3c01c4eead42b56  ca-certificates_20260223.tar.xz
->  # Locally computed
->  sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-> diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-> index b1903f6166..1f3f192d4a 100644
-> --- a/package/ca-certificates/ca-certificates.mk
-> +++ b/package/ca-certificates/ca-certificates.mk
-> @@ -4,9 +4,9 @@
+> -# From https://github.com/libexpat/libexpat/releases/tag/R_2_7_5
+> -sha256  1032dfef4ff17f70464827daa28369b20f6584d108bc36f17ab1676e1edd2f91  expat-2.7.5.tar.xz
+> +# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_0
+> +sha256  a37bfae0aa9775bd8521ebd85dc456d486f0ff31138f6c91fd902ea732624542  expat-2.8.0.tar.xz
+>  # Locally calculated
+>  sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
+> diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+> index 68af751233..07c209543e 100644
+> --- a/package/expat/expat.mk
+> +++ b/package/expat/expat.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -CA_CERTIFICATES_VERSION = 20250419
-> +CA_CERTIFICATES_VERSION = 20260223
->  CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
-> -CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
-> +CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20260223T202245Z/pool/main/c/ca-certificates
->  CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
->  CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
->  CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+> -EXPAT_VERSION = 2.7.5
+> +EXPAT_VERSION = 2.8.0
+>  EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
+>  EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+>  EXPAT_INSTALL_STAGING = YES
 > -- 
-> 2.53.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
