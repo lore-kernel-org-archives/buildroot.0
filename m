@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD74ACD3430
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAE5FFF885A
 	for <buildroot@archiver.kernel.org>; Mon,  4 May 2026 14:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B30C46157A;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8679041C3D;
 	Mon,  4 May 2026 14:48:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rRexIhDTBlCI; Mon,  4 May 2026 14:48:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAXzJ5NMUk5M; Mon,  4 May 2026 14:48:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C73C36152A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56A141C18
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777906092;
-	bh=StOzOUI80hdAhCK2Qjc6AIW5BIgx5lDqZa0S3UvcpAs=;
+	s=default; t=1777906091;
+	bh=O78SjY0RzkcQZzs38+y7GdCffofgnyM1rMXQLTb0rrk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=qWz63fhTOkfD23zAHEy7xXKtRVSOWX0kpUhIRIPH7KjqCiQIcTByZiEvn+/JLRn+D
-	 vjaDlWYryk+EZTlbjfAXbRsuAwh/v7JR4nMMYyEXxBphasRH4Z8/1xBLNSQ3qMO7e6
-	 3mxb5SLB3T6cqIScM55A2q758pL9LCVR/sIoS2Jf2mnUfJztGaqb8D9pe6rudBdczM
-	 nZamdgk0l6wyeLH48WFhGg5XrszGMqSzJr9zwGu9uYmy9TsfWTeol3Zj92A71qtUnV
-	 6PWn0zYim5gGtP5fxGJpun5ixP5KO+lgpecJGF0a8ukbmVmZ6fZY0GIDiekySH/Voa
-	 MDJu9kjmKi/+Q==
+	b=XYZz9OJ7VVC8Dsqh9Q4hL+wSOc1SD5/EnHFLZjQyCuG6+m/wDCjFTDtH9zjn1UpKg
+	 XxXHGTU2ly9UKiyuRlLtja4gP87MdOpEVM6yE0bwzOSn7gGVZmdSE2YGTTBFTKD1VC
+	 yLYprF2aYTM2W8VspRrGO8i3nGKVJM0DdCv8W8pxmR6iswuAb/lkGEl9mJ7wdJLkJE
+	 TkWF/xsTDImXFVsgoZdFhIpAp5IvQzbCTi6mWh2+TOsNB1U4boJXEG4nSoBoGcaQXZ
+	 Fb4HgSaqv75rPD/ylowrNyF1xTUFA88B6xFsFlC04F50Hcw+8teZlE7EOEnyjCHTt+
+	 Mr0vfP+cyYG0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C73C36152A;
-	Mon,  4 May 2026 14:48:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C3CF3190
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B56A141C18;
+	Mon,  4 May 2026 14:48:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A170A25D
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9E99845D6
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93AA7845D6
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbyATQwJYzOg for <buildroot@buildroot.org>;
- Mon,  4 May 2026 14:48:10 +0000 (UTC)
+ id JEXHiyJFCxaC for <buildroot@buildroot.org>;
+ Mon,  4 May 2026 14:48:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F96B845DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F96B845DD
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F96B845DD
- for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:10 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4891e86fabeso52342055e9.1
- for <buildroot@buildroot.org>; Mon, 04 May 2026 07:48:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8945C845DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8945C845DD
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8945C845DD
+ for <buildroot@buildroot.org>; Mon,  4 May 2026 14:48:09 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-48334ee0aeaso30318565e9.1
+ for <buildroot@buildroot.org>; Mon, 04 May 2026 07:48:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777906089; x=1778510889;
+ d=1e100.net; s=20251104; t=1777906088; x=1778510888;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=4SS7XEcCjxueeyIqA62hO2D9AgmT1F8A4lUi2KPmA1w=;
- b=WjLbvHS98UQGevEtEj9liniM4Egq/hVEMhfaBMs5/10Gndc40Xm06r8AsG4CIm6RAM
- AB/NhqEqYcncI2/N0g/R50XeGUDz1VxyCflkPXcLXjvdExWlO0sIWxkodIJCeisXetyy
- fCVw1Qyg8ZgVG2p71qXT2ZYFNyXD1MzeFCf8WD2X9paLZXMmutiU46h7ywv1JMtbkp3/
- O2aH0sg8j6TZon1gF9E1mXyJ35ldA/t9nUUYGCzDBszXO8NtCN6U+ESpOrxESl4KzkRl
- b3blrablsqIhYJ6V5hdpxfRtdRhuiQYk+zRKgxuHV65afWDMcG/0tbNAQNbnnGLtk+79
- ANKw==
+ bh=Hnduu5p2LqDaptLbGtKbo93KIaInbVoNSBUcM9N6RxA=;
+ b=Fs+P0JFCYNKtGb8131/JAwHqckXAin4FEMEmxsKn/Bs2kCJBiqqi5iFPOyHMnuRR5t
+ bmU5d6dJ9/c36g6VgcD9ErctdZzJcMI2mqhq8jVsiwunfkzUCpqSuVq6bdKVTo7aHnSe
+ w9TR1ILDOlvWTLKVnGaoloNanXTjRZopIiR5HCxUKmsCkAUoM7plAfLZMVomhnFiDbgP
+ iD7hYw7iL8yhMZefhk4huLlJIBE8ZePORe652/KVA0s2ep5WuRlKIEMq9oDHL43P3Sel
+ TB5X6nkfhaZJXWM+JSBznc1rDNZfrMHdLTYoYtELmF/ebrzd6JdxEddMnrVB6LBbR0UW
+ NTUw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8hN31+l0pJFL2PUni5XOYOAfdbDE1zpo3V3JpYZ4DS3eA1Gj6Aso5Dqamm8nT5xIH23eVifWW7Q6E=@buildroot.org
-X-Gm-Message-State: AOJu0Yz02HWTl0WbP97TkP6anpfw0/1oeQpiOMYzRK3pIPS2jJXI+6Ec
- Tyu291f3GSlnM8+z1GXzyb4b4hlWVxKcGOUvX1bVV7n6ty43kMuzM3YGsnjT5thguoA=
-X-Gm-Gg: AeBDietAsob1VlboW/4m6xgLzapKMEcJIuLAOFkviD/LnQNZ8qI9UIFE1/qamfDX3zb
- 6j0vTWSdc3pqzBcoNr8LTSa56gGnu7f6UTrYMkUquq5pAmwRmmCzsGJ0vvI3w/MBUlzL+nZJ3mC
- QdYQlb3lxUAeDsVqZhUSrb0iNERWlDtGc029GQa8UUypMRxFSRObRRwGwfgjljob2Wl5ndA0q5I
- 89t0hbnfoS53DIEQTHVd+WGit2nP7NS2X2CgylIh24YY4jcyq2gDcoVU+AKVVCanzMjEbpHlted
- jlk1GK815t7ABMgG+ExxsSufGtO/PDxtuATvvQa9imuMH+AX6CsTaRAv8cZp3rnbCQs0Axwuxu8
- Gl1ekwzIsPyNVwfBNUuXoDFabc9RPHMtTK+hxZs7ykpU33dPdSOtqSSpBEVGO99DkTRXYCtuHD5
- CNywWvcKQc92qvEiszACBiFcfuPQ==
-X-Received: by 2002:a05:600c:a402:b0:486:fba7:b150 with SMTP id
- 5b1f17b1804b1-48a9865f7c3mr122850745e9.15.1777906088686; 
- Mon, 04 May 2026 07:48:08 -0700 (PDT)
+ AFNElJ937Izw4SLPUnom8rNupi/7Rs/8Wk8tdW4dxBh+KgZlpqneqKYsiGg2SICommYP3/mzu2ZaEQDzDF4=@buildroot.org
+X-Gm-Message-State: AOJu0Ywov2ayTeW0CMjepkYLWWbhlvk5OZ3tLnOjMSVYhNZiR5dI5lrY
+ gNib2rm6dEzuW1Qy+v2HZiIzgXHoNzupmpy7QxcmjqbzC23Xy9UpMVxOhNzVY7096WE=
+X-Gm-Gg: AeBDietB6iP5ZqOnNBx+FN2aHM1VBwc+GUJ0qQwM6tgjx2Bp07Nq+ZqawBsGseFEuFy
+ SYapWd0tk5xKaIhK+Sg0oJXekXrwGB+kpCzwnEdtF9jLkntXoYv9fuXnX9dtSp2p6Lht0Kdk+Lp
+ Go9Pg2az0z/N2M6t+vPf0YwB6IEXn5qpw/dXSJ0d3ngh3KPhUNzgb6NgBL5xcm7Zq4hdcryizcB
+ 2btRYvtG7ItnCtQhFgDazis3xlmY+UZvM7KC72EP4M+R+1qV5J7Faxnbx6rpvnh/aVXoOu83Amg
+ ZFzWE0BYMHDb/cZ48GNbZXildIxIFa0r6FLCGlwjbMX+0MEbByz0eRwTY3ictr/5VKAWrDWfwO3
+ rO/aeUg/jrbEoehqx3BmNwEqkWzZFfu5lR1++vM9p1LZB14wp/SLzXEm6Bu7uwKZ4XVt/XMj/Fv
+ twBBZzggAsXh3qRCoDTrqid/Q9/vFS30L/6a0g
+X-Received: by 2002:a05:600c:c058:b0:487:2671:fb8f with SMTP id
+ 5b1f17b1804b1-48a98874de2mr128628725e9.8.1777906087652; 
+ Mon, 04 May 2026 07:48:07 -0700 (PDT)
 Received: from arch ([79.132.248.48]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48a8ebc4201sm443791655e9.15.2026.05.04.07.48.08
+ ffacd0b85a97d-44acad8f974sm24031303f8f.23.2026.05.04.07.48.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 May 2026 07:48:08 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Mon, 04 May 2026 07:48:07 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  4 May 2026 16:48:07 +0200
-Message-ID: <20260504144807.10989-1-thomas.perale@mind.be>
+Date: Mon,  4 May 2026 16:48:06 +0200
+Message-ID: <20260504144806.10935-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260420175839.3705382-1-bernd@kuhls.net>
-References: <20260420175839.3705382-1-bernd@kuhls.net>
+In-Reply-To: <acDe3WDkqsQZlkOK@waldemar-brodkorb.de>
+References: <acDe3WDkqsQZlkOK@waldemar-brodkorb.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1777906089; x=1778510889; darn=buildroot.org;
+ d=mind.be; s=google; t=1777906088; x=1778510888; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4SS7XEcCjxueeyIqA62hO2D9AgmT1F8A4lUi2KPmA1w=;
- b=XTcGJ1kONf/zwk8XB6Qso2izDeBvm+TLYkUJCgb82pIUREShPd0K84/ChskfFVOOva
- 0bBZ0wKJ2Nvc5WCS/BtB9oEkr2Q4cDIae+Xn2lnX0DhGdREcqs5WNPpCvk48dHdwJS1D
- lPQmixNb4ue//qDFxE0WnSCCMQX5PI+Oa711FGdUr+soo59HZ/QDzsPK18qbKaOXM84u
- 5zLtp3LYFtLBN0s4LX3RKkcgNvrjBb1KS5jIrqK9MawFSq4OiCAuTMgwfZo4X3F8Mvq6
- RhaOLQPNw/Y7C6BjIGlJnm3NY0CUwOWMaWSJU4luS/FT6156hhSS3+Rh6tHcEKeF9d1z
- 2BzQ==
+ bh=Hnduu5p2LqDaptLbGtKbo93KIaInbVoNSBUcM9N6RxA=;
+ b=GavEOsgzQeX1x0RKVq7YxAKABsZvpLf+WL3U6mTMqbmy4di36NLdLngxCfFBjfR7Kh
+ IHJjNwn8D+mPiFmBLbNydSS8S1StGIXjByxqODoFx2NzYb+BDxkx6cRszdDs3i7RclSG
+ MdjfGv+apb3tn3/kpOsV35hi25jfZHEXX1rlXOo2jT4URxJ0zRKZW+g/P7VvomRm0P93
+ 4eQJ/OHQn3f6Cu1f/k9NXZp3DRpWS5r/VuvttSezynde8HsV367YuyvAVdqS+ErdZ15c
+ M7U42ZhMz7dyL59++HxDHPfT174GUbPkgpH9WqP47ySS/6g4jMjpzDp5IagMHzytxsqQ
+ pL5Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XTcGJ1kO
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpjsip: security bump version
- to 2.16
+ header.a=rsa-sha256 header.s=google header.b=GavEOsgz
+Subject: Re: [Buildroot] [PATCH] package/ruby: bump to 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,42 +130,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/pjsip/pjproject/releases/tag/2.16
+> See here for news in the release:
+> https://www.ruby-lang.org/en/news/2026/03/16/ruby-4-0-2-released/
 > 
-> Fixes CVE-2025-65102:
-> https://github.com/pjsip/pjproject/security/advisories/GHSA-w5vr-39x7-h8g5
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/libpjsip/libpjsip.hash | 2 +-
->  package/libpjsip/libpjsip.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/ruby/ruby.hash | 4 ++--
+>  package/ruby/ruby.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-> index e85d1f47b4..65f52bf3b1 100644
-> --- a/package/libpjsip/libpjsip.hash
-> +++ b/package/libpjsip/libpjsip.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  8f3bd99caf003f96ed8038b8a36031eb9d8cd9eaea1eaff7e01c2eef6bd55706  pjproject-2.15.1.tar.gz
-> +sha256  3af2e481d51aaa095897820fa2ee26c30e530590c6ca56d23e4133bbdad369eb  pjproject-2.16.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index 69b3c1cffc..8cea8e3abc 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+> index bd64f97339..9908fe8d4f 100644
+> --- a/package/ruby/ruby.hash
+> +++ b/package/ruby/ruby.hash
+> @@ -1,5 +1,5 @@
+> -# https://www.ruby-lang.org/en/news/2026/01/13/ruby-4-0-1-released/
+> -sha256  0531fe57dfdb56bf591620d2450642ea0e0964f3512a6ebee7dc9305de69395f  ruby-4.0.1.tar.xz
+> +# https://www.ruby-lang.org/en/news/2026/03/16/ruby-4-0-2-released/
+> +sha256  4618db85bb9ec04d8152d0099db488694a3d3c4f52106625e4ad547f1318db87  ruby-4.0.2.tar.xz
+>  
+>  # License files, Locally calculated
+>  sha256  a74812486cffbdc55141a5d9f165d782cbb202660d827622ec966237d4717b99  LEGAL
+> diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+> index 5e8b40a556..6bd8ad43c5 100644
+> --- a/package/ruby/ruby.mk
+> +++ b/package/ruby/ruby.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -LIBPJSIP_VERSION = 2.15.1
-> +LIBPJSIP_VERSION = 2.16
->  LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
->  LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
->  
+>  RUBY_VERSION_MAJOR = 4.0
+> -RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
+> +RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+>  RUBY_VERSION_EXT = 4.0.0
+>  RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+>  RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 > -- 
 > 2.47.3
 > 
