@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67370CD3427
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3679AFF8855
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:44:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35F9160B0A;
-	Tue,  5 May 2026 19:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 015174047B;
+	Tue,  5 May 2026 19:44:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y6DITvjmXl-c; Tue,  5 May 2026 19:37:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ki5nA7P_7Z46; Tue,  5 May 2026 19:44:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5DC560B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E51B404FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778009837;
-	bh=uXQGkntcl18+l1zQCdHKqkmiN3h22JXZUbFQ7Nd7ZT8=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Oj3+TtElL8CcOmmjGDoXTtbOrte/nkMkFYZclBk6UrfkVY4XOk+8Vc7xSl2LwU3Xr
-	 gC5/ukNV6bH7Tm/xOD/Hy28MlpeQJkWzEP2JeoM7kj5Kl3QQAavhdyNfDfJDsOWbIG
-	 hkah84SQJZWPLQJwq+avc4srei4/An/hGxjmftytXp2JbgKOT2bU6n2bo4IVSCOADR
-	 z7TGkx63pnpHaZvu92J9T/gMDoCLX1p3HBFWQTFtQiS3McZfnuX8R1pe4w9SX3//PM
-	 Wmgcb2SqfGj7KxF9YxNH38n8y1ELBUgGnE2oxQWALAT2/t7ddN8plaE96jrE1RN0h8
-	 R/Bg5J95+5Plw==
+	s=default; t=1778010247;
+	bh=Nb1RQqUfM1LRz0y7/rZZr4BCDxG1TmzdmnyQcEm2ito=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LbCgltI79VaLoJYbPJfbwLjoK2kqzBK0Ws1qwTFo5V4YbBf+t1P32OQQpDoxnE/YR
+	 iqAACPXa1DCwbscG+a3apl/9iUEd4HPneUu9s98XLUWK0apodphcxah+nrRimXb3O4
+	 mqN4mSLJ3l/KuyorzpkJyr5VbgDrwrpQ/I87QJ+ZFBRyiQQh4EETysQgAnt1O4SROf
+	 c4QiKwlJ4I0yUHj7WBggDuVhyoN+vKa1jLMoH+ZZ53Nf3hkaUNoqEW0gMx1AqQAMz3
+	 pn64sAuZBXj7sZw5VO0+oM/JHGouPI/9qeGSmThZL8+huMjVS2e8hyqpDSDjFLBsjd
+	 zx+6PnxcN1HCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5DC560B04;
-	Tue,  5 May 2026 19:37:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DE4C280
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:37:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E51B404FF;
+	Tue,  5 May 2026 19:44:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 248DD2A8
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73C2A60B04
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:37:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 168AC81395
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:44:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TqAmo2CsvdLJ for <buildroot@buildroot.org>;
- Tue,  5 May 2026 19:37:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 671B560B01
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 671B560B01
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 671B560B01
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:37:15 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c2eb.dip0.t-ipconnect.de [79.214.194.235])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E75D1A4C1345;
- Tue,  5 May 2026 21:37:12 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53298)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wKLZx-0000000068K-0GFk;
- Tue, 05 May 2026 19:37:12 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Tue,  5 May 2026 21:37:12 +0200
-Message-ID: <20260505193712.2389858-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LnPtP2MayF_h for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 19:44:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 53CE481370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53CE481370
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53CE481370
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:44:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id D2DEDB97C2C8; Tue,  5 May 2026 21:44:02 +0200 (CEST)
+Message-ID: <33f70702-9c51-4713-8ad5-dba6d1d15f3e@rnout.be>
+Date: Tue, 5 May 2026 21:44:01 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: +
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+Cc: Sen Hastings <sen@hastings.org>
+References: <20260426153334.1026982-1-fiona.klute@gmx.de>
+ <20260426153334.1026982-3-fiona.klute@gmx.de>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260426153334.1026982-3-fiona.klute@gmx.de>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1778009832;
- bh=ADCHlVMfQTS9zv4tk03rXCl7YMk93my2m7qsip4uVV0=;
- h=From:To:Cc:Subject:Date:From;
- b=ducQYVNWRCCy7vWiCNWnsCHGM4qIE/BSsijYyVmpC6Ky4WPPdaUJwNc+N38Vabi2a
- oZk6W0Lo2R3f21whQM0zNwXojRgwGjoXTa7NHIJYsfixchMN5qiAMyl274JWC3B9Hx
- yhUhHmyQBdDcqa0moqe11538nU5u8zJbmCgKBxthAyEY2FOiXTyEVQNYlU0MlnWWBW
- +7cPPnHkRcszNE3I+w1K6eKKjpBIFkztaXfCSJPxyTgwvOC3TaExAamw9rXa/xP+wA
- 2b9gwuE6p0c2Fo3zcrTW1q6M7ByDROf4LuD7vzZCF0zZg0m/fBx+f2rR9a5b23pZ5W
- 1v7D+24G6NqVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ducQYVNW
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.13.6
+ d=rnout.be; s=dkim; 
+ t=1778010243; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=zigWQ7oTL2BL520wM2SNGW2xXlZgeQwFInHpQ74Dl8o=;
+ b=CRGzSO18PLWsfkT4HcQ4WNnuSd/Mj65DAJha3XawPJAUbE7ZfAwFFD+wCpeqGng7IASsgZ
+ v2IOMCtdM9oS+VI5TAo36RbHR+orOjcKGqNWNtQ6YWoM8pKRj+PLnFOo/D/NzygYQyPm6Z
+ coqI3jn4Ktv/HaO4qXzZU/vdnTj/GKxAuopPa9IItGuommSkwtGzjz/OCIDub6Wx6d5IC+
+ d1YXRoKe3AZSZr1v8uurVN9dnZwd6kMvA+/nD7W4GMOO7W9aAWaRlUcftO5e24oLdwVXOA
+ asQC2eFGp1lyBK1xT5wsnflR01m/a0cL0mJwMmHw/wE45AFTllfsTqxrv5CUbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=CRGzSO18
+Subject: Re: [Buildroot] [PATCH v2 2/6] support/scripts/pkg-stats: format
+ upstream URL info consistently in HTML
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,46 +91,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://ccache.dev/releasenotes.html#_ccache_4_13_6
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index c01bcd8f1b..46ec78bf06 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ccache/ccache/releases/tag/v4.13.5
--sha256  7a8945f4ac7d4bb79c0055cd3db7857a6934c2b7ab3d80bb11a0f5271e36fd94  ccache-4.13.5.tar.xz
-+# From https://github.com/ccache/ccache/releases/tag/v4.13.6
-+sha256  a7de667ca08cf67c3c8af9f213f6aa701a1188a2b3163fb74483858ce5e79fbb  ccache-4.13.6.tar.xz
- # sha256 computed locally
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
- sha256  072c40891d4ec8e1bcc93420031ebbbeb90b8f2c49fcd7c872d1bb05564c345c  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 74fa2fbf90..a7302d6361 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 4.13.5
-+CCACHE_VERSION = 4.13.6
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
--- 
-2.47.3
+On 26/04/2026 17:33, Fiona Klute via buildroot wrote:
+> Use only one of the classes for "error" or "warning" status so they
+> look different, and format the error/warning text for both. Do not
+> make the text a link if the URL is None.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+
+  Applied to master, thanks.
+
+> ---
+>   support/scripts/pkg-stats | 17 +++++++++++------
+>   1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index efb85a7405..a87bb23a8e 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -1057,14 +1057,19 @@ def dump_html_pkg(f, pkg):
+>       div_class = ["centered upstream_url data"]
+>       div_class.append(f'_{pkg_css_class}')
+>       url_str = pkg.status['url'][1]
+
+  It looks like this could have been used below instead of repeating 
+pkg.status['url'][1]. But I'm too lazy to test so I left it unchanged.
+
+  Regards,
+  Arnout
+
+> -    if pkg.status['url'][0] in ("error", "warning"):
+> -        div_class.append("missing_url")
+> -    if pkg.status['url'][0] == "error":
+> -        div_class.append("invalid_url")
+> -        url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
+> -    else:
+> +    if pkg.status['url'][0] == "ok":
+>           div_class.append("good_url")
+>           url_str = f'<a href="{pkg.url}">Link</a>'
+> +    else:
+> +        if pkg.status['url'][0] == "warning":
+> +            div_class.append("missing_url")
+> +        else:
+> +            # "error" status
+> +            div_class.append("invalid_url")
+> +        if pkg.url is not None:
+> +            url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
+> +        else:
+> +            url_str = pkg.status['url'][1]
+>       f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{url_str}</div>\n')
+>   
+>       # CVEs
 
 _______________________________________________
 buildroot mailing list
