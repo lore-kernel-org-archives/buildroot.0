@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652EDFF8855
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A86ACCD3439
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D17F40B9D;
-	Tue,  5 May 2026 19:54:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EA5240BBD;
+	Tue,  5 May 2026 19:54:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZjZJumABUrxb; Tue,  5 May 2026 19:54:01 +0000 (UTC)
+ id cjnjOzKAHT_L; Tue,  5 May 2026 19:54:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFEC740611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A98240BAC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778010841;
-	bh=BpQrsdt/cEyrq1iVemdie1VwKpm1D2+df4H8251rOwI=;
+	s=default; t=1778010844;
+	bh=yd27OXo6Rjvwskb0v0dn20c4mrczhTAbj6s5b8mjmQE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YGAKIwy76B+3L3zPJHqDTZyZWwUU4C62J4dAS2O6z2NIqVOk+T4a9Q8Xl8DzQqV2K
-	 eN/QtLyyXO2lYuA9FABK9QK6XxDq44k0ISqAfenqJkKzw5/pEV4io/1lLPEnYCL7+H
-	 8sj2ujTMJP9QwCAlf5E1qFyHXkVX/Ndc+sB1HAbtIojZHbvZ6AaPY/kMdEZw6uG6xf
-	 fDuijoA8OB48GjuDS0Jckii36Jsi0QPC0IDgHsK3bNp7o4Urh//SEjNLjw2vk4+9ws
-	 Bmbs2aAeHQlc6agOs4RxMwGEWcuEy+bxtLtgF8Z8OvMeeM7oemU6Y4E7I/8s267Rjc
-	 mRuYU70sYPsRg==
+	b=UGmEvilQgyYjwEy9Ro5EaW/KM/x44G2p0yu/7ppgatfIuwMA8CXTxRBuCTTL2HhZK
+	 mZv6bnFCKFKFKxf3XvBoq3Ujr6RvC4SEVfUee/1PwBqBcS0Ib9Z5NOOZEKiGavSrp3
+	 ZXA+SfhJvwR2pylKOMuRJmj0khiXxGm67eksIqM1JD39QWMC5F0BB0OAdHiXNyrGOC
+	 U9n1bR4czJ66tVi+XfZvfKm6epMIY3ItfcOME9HFKa9f5bEqs5k1/icZasPi1HN/Vu
+	 AvEF9YCOtLQbP+I4/57eIxohSVH1EV+0DCQEQ3NHcX62uEJvTAdF172xRzkCzchdNr
+	 ssXUhbsZj4TFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DFEC740611;
-	Tue,  5 May 2026 19:54:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 912A6280
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A98240BAC;
+	Tue,  5 May 2026 19:54:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95C2C280
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 839FC8136B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CB21403F1
  for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PHFEzttiCdfO for <buildroot@buildroot.org>;
- Tue,  5 May 2026 19:53:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xnCUbqTAhFq6 for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 19:53:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB16D81324
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFD2B403F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB16D81324
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFD2B403F7
  for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF13D84650; Tue,  5 May 2026 19:53:55 +0000 (UTC)
+ id 058468463D; Tue,  5 May 2026 19:53:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 5 May 2026 21:53:30 +0200
+Date: Tue, 5 May 2026 21:53:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e8dcebf4597d74dc12c86535118ae0bd16d272a0
-X-Git-Newrev: 07f7ad9898d2412b66fec4492cc89d59063bdfd8
+X-Git-Oldrev: 07f7ad9898d2412b66fec4492cc89d59063bdfd8
+X-Git-Newrev: 8cde69e1011e82e44447803d6dbbaac96375d0a7
 X-Patchwork-Hint: ignore
-Message-Id: <20260505195355.EF13D84650@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: don't buffer
- whole file searching for infra
+Message-Id: <20260505195356.058468463D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: run main
+ function only if called as script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,33 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/07f7ad9898d2412b66fec4492cc89d59063bdfd8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8cde69e1011e82e44447803d6dbbaac96375d0a7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The file handle can be iterated over directly and each line is used
-exactly once, so the only effect of reading all lines into a list
-first was higher memory use and complexity.
+The __name__ == '__main__' guard allows importing pkg-stats as a
+module using importlib, circumventing the normal module filename
+requirements. This in turn makes it possible to test/debug individual
+functions.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- support/scripts/pkg-stats | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ support/scripts/pkg-stats | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index bbd1e3e6f0..5dcc812e2b 100755
+index 5dcc812e2b..2b2194b9a5 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -197,8 +197,7 @@ class Package:
+@@ -1334,7 +1334,7 @@ def is_newer_version_available(pkg):
+     )
  
-         self.infras = list()
-         with open(self.pkgfile, 'r') as f:
--            lines = f.readlines()
--            for line in lines:
-+            for line in f:
-                 match = INFRA_RE.match(line)
-                 if not match:
-                     continue
+ 
+-def __main__():
++def main():
+     global cvecheck
+ 
+     args = parse_args()
+@@ -1403,4 +1403,5 @@ def __main__():
+         dump_json(packages, defconfigs, stats, date, commit, args.json)
+ 
+ 
+-__main__()
++if __name__ == '__main__':
++    main()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
