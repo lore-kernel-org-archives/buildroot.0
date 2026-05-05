@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67EE7FF8855
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5F4BCD3427
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FE6F60ADB;
-	Tue,  5 May 2026 19:16:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6751160AD3;
+	Tue,  5 May 2026 19:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kOSXXME4K4cJ; Tue,  5 May 2026 19:16:35 +0000 (UTC)
+ id CzByat1Ba8Bj; Tue,  5 May 2026 19:19:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C79E60AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F154D60AD9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778008595;
-	bh=0Pz/jEULOjqxjfGsTusxctUOG2WqVDGZG3DuxvSuWaA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YFPdYF7tepulF5CA26OXzfGN0oYefxhGA2BLcmJ1kRqouOle5ouw8wMy3mfUbB597
-	 AkM/ZD500Pj2USYYvBTmc+Wx2Wu+HZN0s3Qqop0fcoyPo4A/XfCp4onHrmwFc+g4Nh
-	 /tZ9oGsiIMo8oWJMiQQQbud+jEBiFJA0/kJF1Fsy6mjb/8obgz3sa8wrncLxHqEHbD
-	 +O7ycHS9ZRxS6u7acVmsoqmIburSPh42ee0p1wNPpE07WiuoD1e9eLi1U9yTqNgKK4
-	 +IFkUOKDi/LOoF6vlA7tjcsoHMuroa3XNC0CZ7+lFStKg1izkuVAfLpRYI99HdrYsk
-	 6JGu/t+m9IG5Q==
+	s=default; t=1778008799;
+	bh=5AySZdS/9buJqw80bXfvWszjbMjj/rGR5vPVw9SWmvU=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Hdsae9jp2nsiH4KbS5daxnwbCDtolapqPp4b1V1QXxWsZuIXJUk8ow9Edw/sPfTYx
+	 yl7HoT5e+WFiFnMMh3YwTehanBP8P+QvDQUOZ8u7f214mj1iB1J/lhA07ODauv9NPZ
+	 oAe2KFKs4Ay8W4Z0RJR8/0/zXiG0TanPQsXzD3wOVTbcqmG2+gZ0pL4mF+dSZqE/tX
+	 EDWvzjFte4/RMEQIu8Q3PzV9I4+QHYeYnGcGH/iSYxg6H6d4NPBjSLsiivYaboOYo3
+	 NzeTxEPyHSMEVFLcSz1RTAOS04gBoFJHknWKkohEhaHcmnPum+BLn6b16sPMWxs0aJ
+	 BjLAth6/TnyKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C79E60AD9;
-	Tue,  5 May 2026 19:16:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B100315
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:16:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F154D60AD9;
+	Tue,  5 May 2026 19:19:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02FD5315
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30B03819D2
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:16:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8E3181A12
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n0tyUJ8h1YtP for <buildroot@buildroot.org>;
- Tue,  5 May 2026 19:16:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.100;
- helo=smtpdh16-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F1E7819CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F1E7819CC
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F1E7819CC
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:16:27 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id KLFpwWdqQ0dL0KLFpwAgSj; Tue, 05 May 2026 21:16:26 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue,  5 May 2026 21:16:25 +0200
-Message-ID: <20260505191625.1031165-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+ id iDVciG-lXUUn for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 19:19:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 25B9E819FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25B9E819FC
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25B9E819FC
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:19:56 +0000 (UTC)
+Received: from [192.168.178.20] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id A8C4E2C88D23;
+ Tue, 05 May 2026 21:19:54 +0200 (CEST)
+Message-ID: <092c37fc-ee12-44d2-a297-e521261e0843@bubu1.eu>
+Date: Tue, 5 May 2026 21:19:53 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFabFWFOJ9wjHnDm+GhPmBYGX1cnrOnVwdmHjwy/eRIeZoSx7044RZqGqkwK2Yb8WiZ5B+qw6X5yDMTikCI0BnysHAMN9ojxF4Q4GQtwPcrVYrQbxVSj
- Cz+jqN3Zml/rrN2QwoS+yGrRTZ6CVgfDrscOYjJXcBko2qKGT63AJbt21sdw82dl71MZeusBhu/gu0gqzQKNJ1Ozw+HUG5Lz/PXDRIx6XtJukGKtTiupHlH5
- 9kfD+bQ6UzrOAMUEbzWdGZYfWjfsR0p7w9DQ+ComROvYAD/8vRPARsGHwWwP7ubu1RaQeJgu6ztBHbphxBFYXQ==
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+References: <20260421184831.2576691-1-bernd@kuhls.net>
+ <20260421184831.2576691-2-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260421184831.2576691-2-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1778008586; bh=1RC5QOaL8Dh/PaKjIbKPSccztFdsg7DX69YRJI+SZ5M=;
- h=From:To:Subject:Date:MIME-Version;
- b=L9xhS8SUHXr07jzRi/9TFOdjKg+TQS8RrH4BsXSh+7p491t74tnEC8eA2cEApO+Oa
- 0IOZYLy+grau8glI421KnmukbsRzDWe5B4rMXxNMAK1dKrfluEM0qeWcOprgFprp5X
- co8CnzNTwORc6pO0LG0ZolJ0DxS9kNcbnIq7JgerK+0XKKeTm3kjLneVvHdr5AaRX+
- FJo81guA1xnQ2YS9cpiFVG83BZe6S2gDw22ZivcCNM/zPU5LIobneAWpoaIo24bd9k
- JBjXCcTDv5NO/+SeZXv8itl5GpCH7pvDLjhu21YYGzusAqJJAZxYBFl0CCERWuyBCn
- 3uU3SNxhaBmKw==
+ d=bubu1.eu; s=bubu; 
+ t=1778008794; bh=i0WmEUrmACU8/ifi/IAUtsvN887kxHyqIWjnTQxE2lE=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=jJ6ahLzg4u7EPSE1p4v5SphkbHkATJp0NfSxjOCw9H0F5sSaVNE0c/x2hnUp8Stbl
+ ax+P1/ZXLwaidCw10IAVxncN9EzCGp21qUIy0w6FASxXx3NXYJhUhNjEpLyBLPbbnj
+ 3Zt0pcS4zF+9H/ss+PJi1o9i5E6MOb0kQ5NmMPX19du7zA7abaipdksVeBGz+AEBiK
+ VZ0drljJqFrXCDeGUBRts1CDlj6+ifMmDybBZRr9pN6hyAmFz/oURxY+HRoOYjMVwG
+ nVHuLfeNHUvWnksVIrpXCWj5F+IHj7EOglUYKjMn30+VKVYPc8UQHSWNY4V/MXl/ZW
+ lbmEgC2JNVQLQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=L9xhS8SU
-Subject: [Buildroot] [PATCH] package/p7zip: bump to version v17.06
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=jJ6ahLzg
+Subject: Re: [Buildroot] [PATCH 2/2] package/openscap: bump version to 1.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,45 +92,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-What's Changed:
-  - Fix CVE-2021-3520 affected components Lz4 1.9.3 in p7zip17 (#239)
+On 4/21/26 20:48, Bernd Kuhls wrote:
+> https://github.com/OpenSCAP/openscap/blob/1.4.4/NEWS
+> 
+> Removed patch which is included in this release.
+> 
+> Added tarball hashes provided by upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+Applied to master, thanks!
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/p7zip/p7zip.hash | 2 +-
- package/p7zip/p7zip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/p7zip/p7zip.hash b/package/p7zip/p7zip.hash
-index f0b9c27113..d352965950 100644
---- a/package/p7zip/p7zip.hash
-+++ b/package/p7zip/p7zip.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d2788f892571058c08d27095c22154579dfefb807ebe357d145ab2ddddefb1a6  p7zip-17.05.tar.gz
-+sha256  c35640020e8f044b425d9c18e1808ff9206dc7caf77c9720f57eb0849d714cd1  p7zip-17.06.tar.gz
- sha256  555806657dcf0f1e720b581c52643c195ec86ae3f00bd18cc66d2e0f88ffa210  DOC/License.txt
-diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
-index 803fd38b7f..ee5a7d2e10 100644
---- a/package/p7zip/p7zip.mk
-+++ b/package/p7zip/p7zip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--P7ZIP_VERSION = 17.05
-+P7ZIP_VERSION = 17.06
- P7ZIP_SITE = $(call github,p7zip-project,p7zip,v$(P7ZIP_VERSION))
- P7ZIP_LICENSE = LGPL-2.1+ with unRAR restriction
- P7ZIP_LICENSE_FILES = DOC/License.txt
--- 
-2.47.3
-
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
