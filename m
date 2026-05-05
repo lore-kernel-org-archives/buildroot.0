@@ -1,89 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6562FFF8855
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E34CFF8855
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C4F460ACA;
-	Tue,  5 May 2026 19:15:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21AB7406DB;
+	Tue,  5 May 2026 19:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nBmPIw2UuV3l; Tue,  5 May 2026 19:15:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-SmzBfty9Vo; Tue,  5 May 2026 19:15:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E3B560AD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CF99406DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778008515;
-	bh=52lCqkWcspwVyHbjOO3Cc5XtTPzP/uzaic2hZigKE40=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=S41hn1q0QAnhq40wy7sbA0NGZwSo9K7XNC6jdLuZpVgFTmmjYhfEKyj9UWtst08rh
-	 sVTDxtqrLQFwdjByGBKwhOkQWpNcqkWyH9s6+0oSlAPQs6NWKgAd8yUIBAiW2Ugjun
-	 up92pzx98zGcYMFMS04fDiNU5nn764L3FMFxlA8iBLRNHOoQP+R+38/14nxWhbqmSz
-	 8Tt5x1RiYZ6Zde653Ogh0tF9kPNI+0QtlROl3Wg4UZfo+KLI/I4vL0/nayAHJ2W0lB
-	 GLpNZcMw8dQY1Nj8RII3VDOsDpLXn0sTlwRIkv5mWoi72IWphJ5CIIS+u71uftgC43
-	 ltO/tjpK/zYXg==
+	s=default; t=1778008518;
+	bh=/Ol8xCpJ0rNsxmwXEeJW48CK3EEzqAlDWy+n7l7/6xw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fDaMltnXBstP7HQ6o6FWW+W/zJccY38oQTfylNLfVpHoi/8sTSXAGyKtfF0jvSxfi
+	 MsuHPpqN1FcqBNdoM/1RsQ4jHl4DL74ksbxq9iLBWAhsMCibAcFHOC8Spiq1OnmAf1
+	 YggalOuwZuuH0jNK2cCqNYaZTQttEMm/GvxFnEC+DgWwpSkxOO3hJ9P3Ogy4Yn4C8S
+	 n2KsI6kL+MtO3gGYWnRMaCbEeZ8n6Gw1cP+LicwfRkuePiclWHZ92MiD5GGojqZtxU
+	 mDbkc3GwnQeOnSNiiM778j1NB50TJ7E+HbzxwxwERGLmX+1+661coZmySP53XxDqXO
+	 E9QUzeIczUCmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E3B560AD3;
-	Tue,  5 May 2026 19:15:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D7D42A8
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CF99406DE;
+	Tue,  5 May 2026 19:15:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE3B8315
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F0A2403CA
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFFF0403C9
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YuNMAd34A__x for <buildroot@buildroot.org>;
- Tue,  5 May 2026 19:15:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 301B0403C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 301B0403C7
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 301B0403C7
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9E917B97C2B2; Tue,  5 May 2026 21:15:05 +0200 (CEST)
-Message-ID: <08083a45-b1fc-4f85-aaea-a194c1a5b572@rnout.be>
-Date: Tue, 5 May 2026 21:15:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>,
- CHERNIAEV ANDREI <dungeonlords789@naver.com>, buildroot@buildroot.org
-Cc: hi@senzilla.io, romain.naour@gmail.com, kory.maincent@bootlin.com,
- vincent.stehle@arm.com, ju.o@free.fr, jiaxun.yang@flygoat.com,
- fancp2007@gmail.com
-References: <20260427112820.3753844-1-dungeonlords789@naver.com>
- <1e38b2e2-7d54-4c80-9339-c0650e7b0ec3@gmx.de>
- <40f8359b3e468bd18117bc655d762b@cweb011.nm>
- <58fafbdd-a1c3-4787-b5b0-18e6eac20d91@gmx.de>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <58fafbdd-a1c3-4787-b5b0-18e6eac20d91@gmx.de>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1778008508; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=F02Dl9RBRfiMP6uGt/TThQCMYVflDoVkBqEiyXJ0HxM=;
- b=NlqehOClfzZUqGW9Kor6UKa+vfReAg2Bf99m5E6Tw3i8oeHDVwDgzEAE7kqz3MzU2TN6zb
- IOvPGXsxJlj8qrMjzmEPcLQidtIk+s8dD5Q88Mh9xUnJzGSsIcsSBIiGRIyaK01x811md+
- 1riZIFDc3FOqSHJ5IwwiR3y4fYv7slq8YkWXCOIA+r9QFUjA7o0aKTw1OrZUZluamWIT43
- CF7CtKPXSepa6SWtKNFVjBnSPPfPcIetPHqVglhQ1ZhbaItRc8PSRlD8ZSYmURJoOrsVOa
- DVh8ajGFUhUfyhIBBfOqku03QPlBNtPWBebq+XXqgOXhas42pWhNYQ3XPjdvLQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=NlqehOCl
-Subject: Re: [Buildroot] [PATCH 1/1] boot/edk2: fix description
+ id gfJg5QtTKpBs for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 19:15:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4A14403C7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4A14403C7
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:15:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C57D0845A5; Tue,  5 May 2026 19:15:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 5 May 2026 21:14:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 81e72115a05fb9b32ccb9e613c1d5c4151980426
+X-Git-Newrev: d58449b225a25b56f0f92634818e74c79b02754e
+X-Patchwork-Hint: ignore
+Message-Id: <20260505191514.C57D0845A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openscap: bump version to 1.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,132 +68,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1804663590424293117=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBBbmRyZWksCgpPbiAyOS8wNC8yMDI2IDE4OjE5LCBGaW9uYSBLbHV0ZSB2aWEgYnVpbGRy
-b290IHdyb3RlOgo+IEFtIDI5LjA0LjI2IHVtIDA5OjQxIHNjaHJpZWIgQ0hFUk5JQUVWIEFORFJF
-SToKPj4gdGhhbmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiwKPj4gMSkgIlBsZWFzZSBkb24ndCBy
-ZW1vdmUgdGhlIHVwc3RyZWFtIFVSTC4gSWYgaXQncyBpbmNvcnJlY3Qvb3V0ZGF0ZWQgdXBkYXRl
-IGl0IAo+PiBhbmQgbm90ZSB0aGUgY2hhbmdlIChpZGVhbGx5IHdpdGggcmVmZXJlbmNlKSBpbiB0
-aGUgY29tbWl0IG1lc3NhZ2UsIG90aGVyd2lzZSAKPj4ga2VlcCBpdCBhcy1pcy4iCj4+IHVwc3Ry
-ZWFtIFVSTCBpcyBsb2NhdGVkIGluIGNvcnJlc3BvbmRpbmcgbWsgZmlsZSwgbm90IGluIGhlbHAu
-IEFuZCBnaXRodWIuY29tLyAKPj4gdGlhbm9jb3JlL3RpYW5vY29yZS5naXRodWIuaW8vd2lraS9F
-REstSUkgaXMgbm90IHVwc3RyZWFtLCBpdCBpcyB3aWtpCj4gCj4gVGhlIF9TSVRFIHZhcmlhYmxl
-IGluIHRoZSAubWsgZmlsZSBpcyB0aGUgYmFzZSBvZiB0aGUgZG93bmxvYWQgVVJMLiBUaGUgdXBz
-dHJlYW0gCj4gVVJMIGluIHRoZSBjb25maWcgaGVscCB0ZXh0IHNob3VsZCBiZSBzb21ld2hlcmUg
-d2hlcmUgYSB1c2VyIGNhbiBsZWFybiBtb3JlIAo+IGFib3V0IHRoZSB1cHN0cmVhbSBwcm9qZWN0
-LCBnZW5lcmFsbHkgdGhlIHByb2plY3QgaG9tZXBhZ2UsIHJlcG9zaXRvcnksIG9yIAo+IGRvY3Vt
-ZW50YXRpb24uCj4gCj4gQ29tcGFyZSBVLUJvb3QgKGJvb3QvdWJvb3QvKSBpZiB5b3UgbmVlZCBh
-biBleGFtcGxlLCB0aGVyZSB0aGUgaGVscCB0ZXh0IGxpbmtzIAo+IHRvIHRoZSBkb2N1bWVudGF0
-aW9uLiBJIGRvbid0IGtub3cgaWYgdGhlIHdpa2kgaXMgdGhlIGJlc3QgcG9zc2libGUgVVJMIGZv
-ciAKPiBFREsyLCBidXQgaXQncyBkZWZpbml0ZWx5IGJldHRlciB0aGFuICpub3RoaW5nKiAod2hp
-Y2ggd291bGQgcmlnaHRseSBjYXVzZSBhIAo+IHdhcm5pbmcgaW4gcGtnLXN0YXRzKS4KPiAKPj4g
-MikgIkFsc28sIEkgZG9uJ3QgdGhpbmsgaXQncyBnb29kIHRvIHJlbW92ZSB0aGUgZ2VuZXJhbCBw
-YWNrYWdlIGRlc2NyaXB0aW9uLCAKPj4gYmV0dGVyIGFkZCBhIHNlbnRlbmNlIGFib3V0IGl0IHBy
-b3ZpZGluZyBPVk1GIGZvciBib290aW5nIGluIFFlbXUuIgo+PiBvcmlnaW5hbCBkZXNjcmlwdGlv
-biBpcyB1bmNsZWFyLiBJdCBjYW4gb25seSBiZSByZWNvZ25pemVkIGJ5IGEgcGVyc29uIGFscmVh
-ZHkgCj4+IGluIEVESyBJSSBjb250ZXh0LiBEZXNjcmlwdGlvbiBmcm9tIHdpa2kgIlRpYW5vQ29y
-ZSBFREsgSUkgKGZvcm1lcmx5IFRpYW5vKSBpcyAKPj4gdGhlIHJlZmVyZW5jZSBpbXBsZW1lbnRh
-dGlvbiBvZiBVRUZJIGJ5IEludGVsLiIgaXMgYmV0dGVyLiBCdXQgc3RpbGwgdGhlIHNhbWU6IAo+
-PiBpdCBjYW4gYmUgcmVjb2duaXplZCBieSBhIHBlcnNvbiB3aG8gYWxyZWFkeSBrbm93cyB3aGF0
-IGlzIEVESyBJSS4gU28gSSAKPj4gc3VnZ2VzdCB0byBkZXNjcmliZSBub3Qgd2hhdCBpcyBFREsg
-SUkgKGltcG9zc2libGUpIGJ1dCB3aGF0IGlzIEJSMl9UQVJHRVRfRURLMgo+IAo+IERlc2NyaWJp
-bmcgKndoYXQgdGhlIHRoaW5nIGlzKiBpcyB0aGUgcHJpbWFyeSB0YXNrIG9mIHRoZSBoZWxwIHRl
-eHQuIEEgc3VtbWFyeSAKPiBpcyBlbm91Z2gsIGl0IGRvZXNuJ3QgbmVlZCB0byBiZSBjb25jbHVz
-aXZlIGZvciBzb21lb25lIHdobyBoYXMgbm8gaWRlYSB3aGF0IGl0IAo+IGlzLCB0aGF0J3Mgd2hh
-dCB0aGUgVVJMIGlzIGZvciAoc2VlIGFib3ZlKS4gOy0pCj4gCj4gQSBub3RlIGFib3V0IHRoZSAo
-cG9zc2libGUpIHJvbGUgaW4gYSBCdWlsZHJvb3Qgc2V0dXAgaXMgaGVscGZ1bCAoYW5kIHNvbWV0
-aW1lcyAKPiBuZWVkZWQpLCBidXQgbm8gcmVwbGFjZW1lbnQgZm9yIHRoZSBzdW1tYXJ5LgoKICBG
-b3IgY29tcGxldGVuZXNzLCBsZXQgbWUgcmVmZXIgeW91IHRvIHRoZSBtYW51YWwgWzFdLgoKICBX
-aGF0IHRoZSBtYW51YWwgZmFpbHMgdG8gbWVudGlvbiBpcyB0aGF0IHRoZSBoZWxwIHRleHQgaXMg
-dHlwaWNhbGx5IHRoZSAKb25lLXBhcmFncmFwaCBzdW1tYXJ5IHRoYXQgdGhlIHVwc3RyZWFtIHBy
-b2plY3QgcHJvdmlkZXMgaXRzZWxmLiBBbmQsIGFzIEZpb25hIAptZW50aW9ucywgaXQgc29tZXRp
-bWVzIChyYXJlbHkpIG1lbnRpb25zIGhpbnRzIGFib3V0IGhvdyB0byB1c2UgaXQgaW4gQnVpbGRy
-b290IApjb250ZXh0LgoKICBSZWdhcmRzLAogIEFybm91dAoKWzFdIApodHRwczovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL21hbnVhbC9tYW51YWwuaHRtbCNfbGl0ZXJhbF9jb25maWdfaW5fbGl0
-ZXJhbF9maWxlCgoKCj4gCj4gQmVzdCByZWdhcmRzLAo+IEZpb25hCj4gCj4+IC0tLS0tT3JpZ2lu
-YWwgTWVzc2FnZS0tLS0tCj4+IEZyb206ICJGaW9uYSBLbHV0ZSB2aWEgYnVpbGRyb290IjxidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZz4KPj4gVG86ICJBbmRyZWkgQ2hlcm5pYWV2IjxkdW5nZW9ubG9y
-ZHM3ODlAbmF2ZXIuY29tPjsgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPjsKPj4gQ2M6IDxoaUBz
-ZW56aWxsYS5pbz47IDxyb21haW4ubmFvdXJAZ21haWwuY29tPjsgPGtvcnkubWFpbmNlbnRAYm9v
-dGxpbi5jb20+OyAKPj4gPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+OyA8anUub0BmcmVlLmZyPjsg
-PGppYXh1bi55YW5nQGZseWdvYXQuY29tPjsgCj4+IDxmYW5jcDIwMDdAZ21haWwuY29tPjsKPj4g
-U2VudDogMjAyNi0wNC0yOCAo7ZmUKSAwMTo1NDo0MiAoR01UKzA5OjAwKQo+PiBTdWJqZWN0OiBS
-ZTogW0J1aWxkcm9vdF0gW1BBVENIIDEvMV0gYm9vdC9lZGsyOiBmaXggZGVzY3JpcHRpb24KPj4K
-Pj4gQW0gMjcuMDQuMjYgdW0gMTM6Mjggc2NocmllYiBBbmRyZWkgQ2hlcm5pYWV2Ogo+Pj4gMSkg
-dXN1YWxseSB1c2VyIHNob3VsZCBub3QgdHJ5IHRvIGZpbmQgT1ZNRi5mZCBzb21ld2hlcmUgbWFu
-dWFsbHkKPj4+IDIpIGJvYXJkL3FlbXUveDg2XzY0LWVmaS9yZWFkbWUudHh0IGlzIHRyeWluZyB0
-byBiZSBkdXBsaWNhdGUgb2YgYm9hcmQvcGMvIAo+Pj4gcmVhZG1lLnR4dC4gV2Ugc2hvdWxkIG5v
-dCBkdXBsaWNhdGUgaW5mbwo+Pj4KPj4+IFNpZ25lZC1vZmYtYnk6IEFuZHJlaSBDaGVybmlhZXYg
-PGR1bmdlb25sb3Jkczc4OUBuYXZlci5jb20+Cj4+PiAtLS0KPj4+IMKgwqAgYm9hcmQvcGMvcmVh
-ZG1lLnR4dCDCoCDCoCDCoCDCoCDCoCDCoCDCoHwgMTAgKysrKystLS0tLQo+Pj4gwqDCoCBib2Fy
-ZC9xZW11L3g4Nl82NC1lZmkvcmVhZG1lLnR4dCB8IDE3ICsrKy0tLS0tLS0tLS0tLS0tCj4+PiDC
-oMKgIGJvb3QvZWRrMi9Db25maWcuaW4gwqAgwqAgwqAgwqAgwqAgwqAgwqB8IMKgNiArKy0tLS0K
-Pj4+IMKgwqAgMyBmaWxlcyBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAyMyBkZWxldGlvbnMo
-LSkKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvcGMvcmVhZG1lLnR4dCBiL2JvYXJkL3BjL3Jl
-YWRtZS50eHQKPj4+IGluZGV4IDE4YjFlM2RjZjAuLjMxY2E1MzU3ZTkgMTAwNjQ0Cj4+PiAtLS0g
-YS9ib2FyZC9wYy9yZWFkbWUudHh0Cj4+PiArKysgYi9ib2FyZC9wYy9yZWFkbWUudHh0Cj4+PiBA
-QCAtNjMsMTIgKzYzLDEyIEBAIFJ1biB0aGUgZW11bGF0aW9uIHdpdGg6Cj4+PiDCoMKgIHFlbXUt
-c3lzdGVtLXg4Nl82NCBcCj4+PiDCoMKgwqDCoMKgwqAgLU0gcGMgXAo+Pj4gLcKgwqDCoCAtYmlv
-cyA8L3BhdGgvdG8vT1ZNRl9DT0RFLmZkPiBcCj4+PiArwqDCoMKgIC1iaW9zIG91dHB1dC9pbWFn
-ZXMvT1ZNRi5mZCBcCj4+PiDCoMKgwqDCoMKgwqAgLWRyaXZlIGZpbGU9b3V0cHV0L2ltYWdlcy9k
-aXNrLmltZyxpZj12aXJ0aW8sZm9ybWF0PXJhdyBcCj4+PiDCoMKgwqDCoMKgwqAgLW5ldCBuaWMs
-bW9kZWw9dmlydGlvIFwKPj4+IMKgwqDCoMKgwqDCoCAtbmV0IHVzZXIKPj4+IC1Ob3RlIHRoYXQg
-PC9wYXRoL3RvL09WTUYuZmQ+IG5lZWRzIHRvIHBvaW50IHRvIGEgdmFsaWQgeDg2XzY0IFVFRkkK
-Pj4+IC1maXJtd2FyZSBpbWFnZSBmb3IgcWVtdS4gSXQgbWF5IGJlIHByb3ZpZGVkIGJ5IHlvdXIg
-ZGlzdHJpYnV0aW9uIGFzIGEKPj4+IC1lZGsyIG9yIE9WTUYgcGFja2FnZSwgaW4gcGF0aCBzdWNo
-IGFzCj4+PiAtL3Vzci9zaGFyZS9lZGsyL292bWYvT1ZNRl9DT0RFLmZkIC4KPj4+ICtOb3RlIHRo
-YXQgT1ZNRi5mZCBuZWVkcyB0byBiZSBhIHZhbGlkIHg4Nl82NCBVRUZJIGZpcm13YXJlIGltYWdl
-IGZvciBxZW11LiBUaGUKPj4+ICtlYXNpZXN0IHdheSBpcyB0byBnZW5lcmF0ZSBpdCBkdXJpbmcg
-dGhlIEJ1aWxkcm9vdCBidWlsZCBieSBzZXQKPj4+ICtCUjJfVEFSR0VUX0VESzIuIEFsdGVybmF0
-aXZlbHkgaXQgbWF5IGJlIHByb3ZpZGVkIGJ5IHlvdXIgZGlzdHJpYnV0aW9uIGFzIGEKPj4+ICtl
-ZGsyIG9yIE9WTUYgcGFja2FnZSwgaW4gcGF0aCBzdWNoIGFzIC91c3Ivc2hhcmUvZWRrMi9vdm1m
-L09WTUZfQ09ERS5mZCAuCj4+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvcWVtdS94ODZfNjQtZWZpL3Jl
-YWRtZS50eHQgYi9ib2FyZC9xZW11L3g4Nl82NC1lZmkvcmVhZG1lLnR4dAo+Pj4gaW5kZXggN2Y2
-OWJlMDY1Zi4uMDM2MjM5ODE5YSAxMDA2NDQKPj4+IC0tLSBhL2JvYXJkL3FlbXUveDg2XzY0LWVm
-aS9yZWFkbWUudHh0Cj4+PiArKysgYi9ib2FyZC9xZW11L3g4Nl82NC1lZmkvcmVhZG1lLnR4dAo+
-Pj4gQEAgLTEyLDE3ICsxMiw2IEBAIEJ1aWxkCj4+PiDCoMKgIEVtdWxhdGlvbgo+Pj4gwqDCoCA9
-PT09PT09PT0KPj4+IC1SdW4gdGhlIGVtdWxhdGlvbiB3aXRoOgo+Pj4gLQo+Pj4gLSDCoCDCoHFl
-bXUtc3lzdGVtLXg4Nl82NCBcCj4+PiAtIMKgIMKgIMKgIMKgLU0gcGMgXAo+Pj4gLSDCoCDCoCDC
-oCDCoC1tIDEwMjQgXAo+Pj4gLSDCoCDCoCDCoCDCoC1zZXJpYWwgc3RkaW8gXAo+Pj4gLSDCoCDC
-oCDCoCDCoC1iaW9zIG91dHB1dC9pbWFnZXMvT1ZNRi5mZCBcCj4+PiAtIMKgIMKgIMKgIMKgLWRy
-aXZlIGZpbGU9b3V0cHV0L2ltYWdlcy9kaXNrLmltZyxmb3JtYXQ9cmF3IFwKPj4+IC0gwqAgwqAg
-wqAgwqAtbmV0ZGV2IHVzZXIsaWQ9bmV0MCBcCj4+PiAtIMKgIMKgIMKgIMKgLWRldmljZSB2aXJ0
-aW8tbmV0LXBjaSxuZXRkZXY9bmV0MCAjIHFlbXVfeDg2XzY0X2VmaV9kZWZjb25maWcKPj4+IC0K
-Pj4+IC1PcHRpb25hbGx5IGFkZCAtc21wIE4gdG8gZW11bGF0ZSBhIFNNUCBzeXN0ZW0gd2l0aCBO
-IENQVXMuCj4+PiAtCj4+PiAtVGhlIGxvZ2luIHByb21wdCB3aWxsIGFwcGVhciBpbiB0aGUgZ3Jh
-cGhpY2FsIHdpbmRvdy4KPj4+ICsgwqAgwqBvdXRwdXQvaW1hZ2VzL3N0YXJ0LXFlbXUuc2gKPj4+
-ICtvcgo+Pj4gKyDCoCDCoG91dHB1dC9pbWFnZXMvc3RhcnQtcWVtdS5zaCAtLXNlcmlhbC1vbmx5
-IC0tdXNlLXN5c3RlbS1xZW11Cj4+PiBkaWZmIC0tZ2l0IGEvYm9vdC9lZGsyL0NvbmZpZy5pbiBi
-L2Jvb3QvZWRrMi9Db25maWcuaW4KPj4+IGluZGV4IDI2MjBjNzkwNzYuLmEyZWExMTgwZjAgMTAw
-NjQ0Cj4+PiAtLS0gYS9ib290L2VkazIvQ29uZmlnLmluCj4+PiArKysgYi9ib290L2VkazIvQ29u
-ZmlnLmluCj4+PiBAQCAtMTIsMTAgKzEyLDggQEAgY29uZmlnIEJSMl9UQVJHRVRfRURLMgo+Pj4g
-wqDCoMKgwqDCoMKgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNQo+Pj4g
-wqDCoMKgwqDCoMKgIHNlbGVjdCBCUjJfUEFDS0FHRV9FREsyX1BMQVRGT1JNUwo+Pj4gwqDCoMKg
-wqDCoMKgIGhlbHAKPj4+IC3CoMKgwqDCoCDCoEVESyBJSSBpcyBhIG1vZGVybiwgZmVhdHVyZS1y
-aWNoLCBjcm9zcy1wbGF0Zm9ybSBmaXJtd2FyZQo+Pj4gLcKgwqDCoMKgIMKgZGV2ZWxvcG1lbnQg
-ZW52aXJvbm1lbnQgZm9yIHRoZSBVRUZJIGFuZCBQSSBzcGVjaWZpY2F0aW9ucy4KPj4+IC0KPj4+
-IC3CoMKgwqDCoCDCoGh0dHBzOi8vZ2l0aHViLmNvbS90aWFub2NvcmUvdGlhbm9jb3JlLmdpdGh1
-Yi5pby93aWtpL0VESy1JSQo+Pj4gK8KgwqDCoMKgIMKgYnVpbGQgRURLIElJIChhbmQgT1ZNRikg
-dG8gaGF2ZSBjYXBhYmlsaXR5IHRvIGJvb3QgQnVpbGRyb290Cj4+PiArwqDCoMKgwqAgwqBpbiBR
-RU1VIChVRUZJIG1vZGUpCj4+PiDCoMKgIGlmIEJSMl9UQVJHRVRfRURLMgo+PiBQbGVhc2UgZG9u
-J3QgcmVtb3ZlIHRoZSB1cHN0cmVhbSBVUkwuIElmIGl0J3MgaW5jb3JyZWN0L291dGRhdGVkIHVw
-ZGF0ZQo+PiBpdCBhbmQgbm90ZSB0aGUgY2hhbmdlIChpZGVhbGx5IHdpdGggcmVmZXJlbmNlKSBp
-biB0aGUgY29tbWl0IG1lc3NhZ2UsCj4+IG90aGVyd2lzZSBrZWVwIGl0IGFzLWlzLgo+Pgo+PiBB
-bHNvLCBJIGRvbid0IHRoaW5rIGl0J3MgZ29vZCB0byByZW1vdmUgdGhlIGdlbmVyYWwgcGFja2Fn
-ZSBkZXNjcmlwdGlvbiwKPj4gYmV0dGVyIGFkZCBhIHNlbnRlbmNlIGFib3V0IGl0IHByb3ZpZGlu
-ZyBPVk1GIGZvciBib290aW5nIGluIFFlbXUuCj4+Cj4+IEJlc3QgcmVnYXJkcywKPj4gRmlvbmEK
-Pj4KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4g
-YnVpbGRyb290IG1haWxpbmcgbGlzdAo+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKPiAKPiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+--===============1804663590424293117==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d58449b225a25b56f0f92634818e74c79b02754e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+https://github.com/OpenSCAP/openscap/blob/1.4.4/NEWS
+
+Removed patch which is included in this release.
+
+Added tarball hashes provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ ...et-project-as-C-project-in-CMakeLists.txt.patch | 78 ----------------------
+ package/openscap/openscap.hash                     |  5 +-
+ package/openscap/openscap.mk                       |  2 +-
+ 3 files changed, 5 insertions(+), 80 deletions(-)
+
+diff --git a/package/openscap/0001-Set-project-as-C-project-in-CMakeLists.txt.patch b/package/openscap/0001-Set-project-as-C-project-in-CMakeLists.txt.patch
+deleted file mode 100644
+index 2ccbfd138d..0000000000
+--- a/package/openscap/0001-Set-project-as-C-project-in-CMakeLists.txt.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From d2fa8df126b533317b4b863758cf579fff3a2b45 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+-Date: Mon, 16 Feb 2026 13:50:48 +0100
+-Subject: [PATCH] Set project as C project in CMakeLists.txt
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The openscap tool has been recently integrated in the buildroot build
+-system ([1]), which makes the openscap tool buildable for a wide variety
+-or architectures/OSes, with a wide variety of _compilers_. And so when
+-such compilers are not supporting C++ projects (as it is the case with a
+-default buildroot toolchain), the build breaks on the following error
+-(see [2] for an example):
+-
+-  -- Detecting CXX compiler ABI info
+-  -- Detecting CXX compiler ABI info - failed
+-  -- Check for working CXX compiler: /bin/false
+-  -- Check for working CXX compiler: /bin/false - broken
+-  CMake Error at /usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:73 (message):
+-    The C++ compiler
+-
+-      "/bin/false"
+-
+-    is not able to compile a simple test program.
+-
+-    It fails with the following output:
+-
+-      Change Dir: '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+-
+-      Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_1834b/fast
+-      make[1]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+-      /usr/bin/make  -f CMakeFiles/cmTC_1834b.dir/build.make CMakeFiles/cmTC_1834b.dir/build
+-      make[2]: Entering directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+-      Building CXX object CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o
+-      /bin/false    -o CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o -c /home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI/testCXXCompiler.cxx
+-      make[2]: *** [CMakeFiles/cmTC_1834b.dir/build.make:81: CMakeFiles/cmTC_1834b.dir/testCXXCompiler.cxx.o] Error 1
+-      make[2]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+-      make[1]: *** [Makefile:134: cmTC_1834b/fast] Error 2
+-      make[1]: Leaving directory '/home/autobuild/autobuild/instance-6/output-1/build/openscap-1.3.12/buildroot-build/CMakeFiles/CMakeScratch/TryCompile-tUydqI'
+-
+-    CMake will not be able to correctly generate this project.
+-  Call Stack (most recent call first):
+-    CMakeLists.txt:11 (project)
+-
+-openscap does not have any C++ code to build, so restricting builds to
+-toolchains supporting C++ is overconstraining, the configuration step
+-should rather not try to check C++ support.
+-
+-Enforce the project as a C project in CMakeLists.txt to make sure not to
+-test C++ features on the used toolchain.
+-
+-[1] https://buildroot.org/
+-[2] https://autobuild.buildroot.org/results/1fe550ffa79f0a083a450ae03fe067a8ab7336be/build-end.log
+-
+-Upstream: https://github.com/OpenSCAP/openscap/commit/bbfb2d7b00cbb8e08d999546734d3ba6ae150736
+-[patch slightly adapted to be applicable on v1.4.3]
+-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c561116d826c..570812667036 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -8,7 +8,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+- 		"MinSizeRel" "RelWithDebInfo")
+- endif()
+- 
+--project("openscap")
+-+project("openscap" C)
+- set(OPENSCAP_VERSION_MAJOR "1")
+- set(OPENSCAP_VERSION_MINOR "4")
+- set(OPENSCAP_VERSION_PATCH "3")
+--- 
+-2.53.0
+-
+diff --git a/package/openscap/openscap.hash b/package/openscap/openscap.hash
+index 7a25789b5b..16cebc54c9 100644
+--- a/package/openscap/openscap.hash
++++ b/package/openscap/openscap.hash
+@@ -1,3 +1,6 @@
++# From https://github.com/OpenSCAP/openscap/releases/tag/1.4.4
++sha256  25b1b046822121204e6d53d877a532c88bf7fde14b94c9c72297cd5709b03478  openscap-1.4.4.tar.gz
++# From https://github.com/OpenSCAP/openscap/releases/download/1.4.4/openscap-1.4.4.tar.gz.sha512
++sha512  c69736bee997e50a04aff8e4f22da880f342190e1289c5df0fb73b7af34833d3bd9f4e5055b227a18d571167671f821701a09f8c9a3e4568c7da68cc4be51133  openscap-1.4.4.tar.gz
+ # Locally computed
+-sha256  96ebe697aafc83eb297a8f29596d57319278112467c46e6aaf3649b311cf8fba  openscap-1.4.3.tar.gz
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/openscap/openscap.mk b/package/openscap/openscap.mk
+index 42f644db55..7da38df345 100644
+--- a/package/openscap/openscap.mk
++++ b/package/openscap/openscap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSCAP_VERSION = 1.4.3
++OPENSCAP_VERSION = 1.4.4
+ OPENSCAP_SITE = https://github.com/OpenSCAP/openscap/releases/download/$(OPENSCAP_VERSION)
+ OPENSCAP_LICENSE = LGPL-2.1+
+ OPENSCAP_LICENSE_FILES = COPYING
+
+--===============1804663590424293117==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1804663590424293117==--
