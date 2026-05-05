@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 910A9FF8855
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 21:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F816CD3427
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 21:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6899340C2B;
-	Tue,  5 May 2026 21:20:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h-gWWM__h0Li; Tue,  5 May 2026 21:20:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF2440C35
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778016037;
-	bh=QHfer/q9x4Icqq6AtFARMZH+KFT43E5HJ2Kk6V4raOA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TUdt+S0muFkE/WKRS4PyUcM2uNj/W1bnqdp1f674sN31zTdiqOLtuVV+LYdEa4YxS
-	 HHVrXi8fAiPSoFImaVrCCpnKCMCzlyVhKUxnhqy4fIf/1YG65YLqsjC4W447VDU2TV
-	 WtAd/8ZhZ+2HNDhEAh78DHOupNdrqsJ+vtRq/mMg2tRV+2kEOhcBOoGJAW2W4pE3IJ
-	 ep8Zcvfu3t/Kd9GYAj9p4jPx9zQyaz3IgGXvvRm3IaJaFvwz4N941io0P5NwajNMvY
-	 NQ1qY/+rGoPXt7LwA28asP65k7U8fTSY5jVlFXltW33+5znCkcHw4f8zXeoE2VSp0d
-	 uB2NcyBhETASw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FF2440C35;
-	Tue,  5 May 2026 21:20:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 011E6280
- for <buildroot@buildroot.org>; Tue,  5 May 2026 21:20:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFCF560B5B
- for <buildroot@buildroot.org>; Tue,  5 May 2026 21:20:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E66A60B69;
+	Tue,  5 May 2026 21:20:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WUY-Nl9wGY7a for <buildroot@buildroot.org>;
- Tue,  5 May 2026 21:20:28 +0000 (UTC)
+ id oU7aCvGr38TJ; Tue,  5 May 2026 21:20:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A9E60BA4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778016038;
+	bh=8N8DyZhAV5lmmgwNEGjHJPJTXTyHCwm1bZCkrIiplg8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Jor5lQAZAzbgQzrZeFuD6+xpHDm5J2ylgCuISO2bavOCdYImd7fFOOZQQkSOEgtBx
+	 YswrsgIHydeHtbjlXVSqAPmDtMg0PTgnY+RHp9abxCe31g/O34dMYN7KHtOQfgowrr
+	 C8XOCGz24ePP16TVXSiPlUZMjy04aUbq2glEUdjWcHwWnk5R6e5WPMJGjO7R48gAWG
+	 PzgTZHNZP+Rld2cAQzhfGVNY/ugVt3yVqNwiOt3DAB0KsUFyrhuscBKQfhOsw9orMR
+	 v+G3cjKc199AC9VfNQ2Ww8FYjjlUDbzEkyXdtNlyP0roZq0bnM9qb+GbR+jOr1/I+G
+	 17h97S/LNj32w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97A9E60BA4;
+	Tue,  5 May 2026 21:20:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BF07280
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 21:20:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3743440B5A
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 21:20:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BmrzMuz0m5Ra for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 21:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89C9760B62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4580040C05
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89C9760B62
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4580040C05
  for <buildroot@buildroot.org>; Tue,  5 May 2026 21:20:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A77EC84569; Tue,  5 May 2026 21:20:26 +0000 (UTC)
+ id 5689984673; Tue,  5 May 2026 21:20:26 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 5 May 2026 23:18:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6195e97d6e660c13eb3eaad612e1c182abfc8b18
-X-Git-Newrev: a03eaaecb3615910cb3550772bfcf8605d98e8c8
+X-Git-Oldrev: 3430d8200e58c58bc6c94064795d4f3f6f116537
+X-Git-Newrev: 069e280ec7dbd699fb52c6e8cb997d9e3eef929c
 X-Patchwork-Hint: ignore
-Message-Id: <20260505212026.A77EC84569@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: test_octave: Bump kernel
+Message-Id: <20260505212026.5689984673@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_glxinfo: Bump kernel
  version to last LTS (6.18)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,28 +77,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a03eaaecb3615910cb3550772bfcf8605d98e8c8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/069e280ec7dbd699fb52c6e8cb997d9e3eef929c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_octave.py | 2 +-
+ support/testing/tests/package/test_glxinfo.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_octave.py b/support/testing/tests/package/test_octave.py
-index cdbe2688df..4b269e3af0 100644
---- a/support/testing/tests/package/test_octave.py
-+++ b/support/testing/tests/package/test_octave.py
-@@ -13,7 +13,7 @@ class TestOctave(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
+index f96ee0aaeb..8680477b15 100644
+--- a/support/testing/tests/package/test_glxinfo.py
++++ b/support/testing/tests/package/test_glxinfo.py
+@@ -14,7 +14,7 @@ class TestGlxinfo(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_STABLE=y
          BR2_LINUX_KERNEL=y
          BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.26"
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
 +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
          BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+         BR2_PACKAGE_MESA3D_DEMOS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
