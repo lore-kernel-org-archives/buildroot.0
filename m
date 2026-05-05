@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 476C7CD3436
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 10:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F16CDCD342F
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 10:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FF3260822;
-	Tue,  5 May 2026 10:06:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19032812FD;
+	Tue,  5 May 2026 10:10:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IcYzQuCqLi_L; Tue,  5 May 2026 10:06:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kASkxikh-HoP; Tue,  5 May 2026 10:10:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 835BD60817
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7988811F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777975572;
-	bh=RjGkeALzi20PfGOEtGWTSA3Sq5opGXJoiNgf+pATQQ4=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1777975822;
+	bh=M96GqmBfqcbaMOpOJQLHVBqkb7rdN/6qdGRoPey0wVM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=FiDjLzWIO3ZquG7ZEFNa5vqUJV0L5wuX23frFMIG8hrJxBOcX99tEoSb5uv9JfWwD
-	 r8p+RHY7sqfX4XtkS9q8e/2fvkcdt6BzsjgRQPyYn7BIGc4MKqv1F29Omv3PYf/jKQ
-	 BSgOtmv2sM0d8dx69l7dAevvSdKmn2rYrMMM9vtSFAQD0ibyi22ngXI7YJxm+BiV8L
-	 pmZ6nme/3yCg2o5rIUNh2J3XQrhDinC2NeDM1ynqO+028DXdA4c0DgLoozvv/OFTWD
-	 mUJRHPwKb1TrNHotghg4zgwu975jhBq49cUyaTHL1kRY2FMODjHsE+Eq5b5XKPwuPG
-	 O2HAeVoLIr2pA==
+	b=sNmJDJX0ts724wtLAfidFPqih5z2p2wSO+aeM1d7W10kKWQdfRPv80TqyK/j3InCm
+	 QbRW3KaXDjUzTC5rjxZN57LoQVuYgIp6yTQzcqc1IE70ontnqqyyfpnzuhJjvCYYLU
+	 unip1Rj6d0gCWEJ8U6EH2hpbHdj7M1rUhu7SySWwUZWZhL7u+yTBo3DuDi6WwB/P5V
+	 77lKykovmyRC0JqXBjFwo3Xw0rMbITDEExLV5Fuq7b2g8W0BBYLu0EOC86xdDUYEzh
+	 l+3XkG0i0ummNwgPOl68DW7UftUJLha7leeIgEuMetzBsZM20lzBz69MjcKqmVRfFt
+	 dwsB1J94c9pBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 835BD60817;
-	Tue,  5 May 2026 10:06:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DB202A8
- for <buildroot@buildroot.org>; Tue,  5 May 2026 10:06:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7988811F6;
+	Tue,  5 May 2026 10:10:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E7B72DF
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 10:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F19DF60817
- for <buildroot@buildroot.org>; Tue,  5 May 2026 10:06:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0412340232
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 10:10:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gNlgG1oLd7nn for <buildroot@buildroot.org>;
- Tue,  5 May 2026 10:06:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uyzxLX0j2uyb for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 10:10:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE5AF60816
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE5AF60816
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EE5AF60816
- for <buildroot@buildroot.org>; Tue,  5 May 2026 10:06:09 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-488b150559bso34592315e9.1
- for <buildroot@buildroot.org>; Tue, 05 May 2026 03:06:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DB8FE40231
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB8FE40231
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB8FE40231
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 10:10:19 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-48374014a77so59721765e9.3
+ for <buildroot@buildroot.org>; Tue, 05 May 2026 03:10:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1777975568; x=1778580368;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=rpvNrOEmXQRWjQVLyk/I3VR5t4AbNiYJQuBIO/8lMoA=;
- b=CvYvIETPR5MSmhf/33wR+B+2hG6I0ImBsl1TMgiR5doRj1iyBkDwN4mb5gAKW2VBU2
- 2C5K4joIpH28im4tMjKU+t1HFvb2SwB040+Rm7tHutVmECsDeK1hF2Hk5R1tJ37RPtHD
- eN776aV2kheYHmyad4q/3tEouY+WJBxlR3kMoUyH+2Ou+zA13ekxzeT2jvaJ0NIejNEz
- DZ3IWkrCcQLknhVF5Bme5qfPO/iQhfBlwKp1bGkRZrLsmSHOgtGBk3VxWP46ASw/pCiu
- x1Y3JK61RBIC6whxyP3adcYlmbQ38gs1NA2/4nBCWsi7wyIiB7grkItk2/bQqou0cfJE
- hYZA==
-X-Gm-Message-State: AOJu0YwMBGNAuZY79Pg/t7Pj+7ohbL4DgX40qILNzg3Fd16iNZ9eftgv
- m7Cqz/XxCCKjvoIL/MYvh3NQxhgw923zkjceL52oFLJ1CEXyveUuKhaOWChDbuqerE7g0zKAhqC
- IonaP3/c=
-X-Gm-Gg: AeBDiesmvrLPLIOtmEp4ckrWmB3bIXFRHRWOYFb1WVnXQo7VEKK1rAolDexz2c/iNUM
- EPh1eQyRdWRpRCgyoT5PVXsp53OnErVqC8qfj+J5Q6xu/IR/+yM1fqnPURzOXfDGb5kxf1iF/iD
- 9+heKZ3VM/MxZ8+KCKIzLDdMpScbrSM7s3Bjsw4S4lOZRwDn+ML8iqtl75dRnkPS7Rui6nxuE4r
- dBVdN/UbhiNo99yUtUt99WI8oJrcEawqkW6hjr1KOhsrf8RrUea/x4qTvanW+6Bnb13lA34cV49
- aoc8/TB5+lW5CxJt3w7eFvF5LsgvEOGCqTkF8Nh0px5bJuVoi5c3nkP/YW8jfwMz4eVcmRSZwdy
- ty0b4oTuTz9TuJ64FnL5DF2E81uBhUIOOyOQsjiL8wyYMQpqQIwv6oijpc2Kj+7+59qSfEjePS/
- kLuJEB7dkTAUtTbOhxWaDoxiMd6SFtjpGm7vhYKsVJXZwTyZ1SXYCeOhcPYsnGvkLBG5N8jRua4
- QKMxjaMyoOBOcmb0HJ6F+/MPvAoM04=
-X-Received: by 2002:a05:600c:45d4:b0:489:1c5f:3a9e with SMTP id
- 5b1f17b1804b1-48a9865e17dmr209058215e9.13.1777975567884; 
- Tue, 05 May 2026 03:06:07 -0700 (PDT)
-Received: from P-NAN-NAPALM..
+ d=1e100.net; s=20251104; t=1777975818; x=1778580618;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=F8IYsc8M63XEzcllpTRIQht9sFdA3K6YzwZFermIJcs=;
+ b=GzJDonxmRC5NFkvIxHLPlXzHHbpDXnmfabTDGCSjgaE/EFnBGPNONwc6rYt73Z1996
+ sGU7OhnluhKyawTjJ7IVSbgRe+aMCLdztkiaCguTSEr3JR9zuujVB5bjKRMkUEom6m2b
+ N0npudzVf3SoThnD55NXuI+O35OvbuRAA/O3vO0fuoi3Edagaecx70iU6gBBYa9R8psS
+ GnjdDAAfWTARZw30ERKi1uzFHN2eG5xR2yfAEUWSyygEZGDMHPWe3tDF3I2/FKZCaeuz
+ 6IiO8oWkpKLMmm6TBKagRwTcvw6XDjcYcNs9a8On+etvHGAxJs+ZpR652abAjrqVq4z1
+ I78w==
+X-Gm-Message-State: AOJu0Ywe0iuyGW76v2WuKY5wZoTp4MXVIIZUGUAjvlFUNCKZYcuczIFW
+ 6EkdDuubPDA3Ny3/3YsDg8eyEuVFdZ9LCoXDV2RNo3WbK4UViyX+AxKaMmPQgtzySRk=
+X-Gm-Gg: AeBDiescjTk31d9V60k86pG7gMJX7GDMcFC2OzYtd9Pb3Efw2GCQhtrH1RLKd8Y7QUX
+ rhAZKKEbq/Z9GLXpuytA64l0DPS8Z48jZNeP96pASdWDaXl5axH1Js6qeZuJJsrNKUV39a4gCuG
+ 0rmKh6+mGoSXlnbBoyw1IkHu3z3zcq8UXQlpbhjsaOl1hJayS0zBOjgyVd3GbDyZnJpKKcAfNdF
+ pjp9ZCep+Tz0cv9sjF1chcbN5WMHK0OjqLYOt15UMCu9e2kM/X5xudgxd9dRn2Z6Vjd8T9ohpHD
+ NHnsILpAUXjFmPZwuTLPhMqu4wKacwoHRgLec5z95yhBB52TbTRMsDjYkG9I9Yl0JmTiX2DhtXL
+ W+7H6kRBtST54bY0ZHkyg16grKdd5VaSG8eza3X8/bWAHrivdWaVa6/lKmMMjikDgdvP7e0DNk8
+ sbgKWmWF1BGDvMxfoe/p28J+Kyimz0qxvI0QSA5+pRZclsj1kNtYI9wZN3aUvmaJN3gS2rLQ/tt
+ wmeiGbsdmjdj2+fSJMiTUOYBeY=
+X-Received: by 2002:a05:600c:4204:b0:485:3cf3:1010 with SMTP id
+ 5b1f17b1804b1-48d0640f5dfmr77116665e9.2.1777975817839; 
+ Tue, 05 May 2026 03:10:17 -0700 (PDT)
+Received: from [10.5.90.6]
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4505285e765sm3259221f8f.10.2026.05.05.03.06.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 May 2026 03:06:07 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: ju.o@free.fr,
-	Dowan Gullient <dowan.gullient@smile.fr>
-Date: Tue,  5 May 2026 12:05:53 +0200
-Message-ID: <20260505100553.4100688-3-dowan.gullient@smile.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260505100553.4100688-1-dowan.gullient@smile.fr>
-References: <20260505100553.4100688-1-dowan.gullient@smile.fr>
+ 5b1f17b1804b1-48a81ed6b89sm387627905e9.1.2026.05.05.03.10.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 05 May 2026 03:10:17 -0700 (PDT)
+Message-ID: <29057165-7222-444f-87b5-731fd99e94d2@smile.fr>
+Date: Tue, 5 May 2026 12:10:16 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20260417085703.200145-1-dowan.gullient@smile.fr>
+ <274c342f312f0005dc418c2bb5e64a9c@free.fr>
+Content-Language: en-US
+In-Reply-To: <274c342f312f0005dc418c2bb5e64a9c@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1777975568; x=1778580368; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=rpvNrOEmXQRWjQVLyk/I3VR5t4AbNiYJQuBIO/8lMoA=;
- b=kVEXrIu/doZt6sm9DHwTo5ezNraofng+9sbi3qH7JhukVL47B+lVH4Mw0O4tHgBBy1
- mmqe6DxBBq5sDoddXkC3ltR8TSZO0wzh0N2o2POICOESbN0iwy0aBiNEsmLQuaACzc3y
- 3VP5ZIq2QQbtt81UDBgp2yOfxY6asPYisxPKY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=smile.fr; s=google; t=1777975818; x=1778580618; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=F8IYsc8M63XEzcllpTRIQht9sFdA3K6YzwZFermIJcs=;
+ b=z+5WSmyn2SxEvopWif1yoP2ESgUAnAW/6vobYJ/01OizZOsui0eLcdiCa3zd8sQIp/
+ M0lOmiP6Mw3uFChVe5NJcqMlEdV7ylhZJIICF+RJAweYDL2lUBh0yMkmgu/zmx2VSzrZ
+ F4jZfigXjwRoUSP95HmxM09m4oAoYr52W4RX4=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=kVEXrIu/
-Subject: [Buildroot] [PATCH v2 2/2] support/testing: test_podman.py : add
- kernel fragment to fix iptables errors
+ header.s=google header.b=z+5WSmyn
+Subject: Re: [Buildroot] [RFC] support/testing: test_podman.py : Build
+ failure due to bump of toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,114 +124,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dowan Gullient via buildroot <buildroot@buildroot.org>
-Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: dowan gullient via buildroot <buildroot@buildroot.org>
+Reply-To: dowan gullient <dowan.gullient@smile.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps the kernel version and adds a Linux kernel fragment for Podman tests to resolve
-"Protocol not supported" and "Table does not exist" errors when using iptables-based
-networking which appeared due to the bump of the kernel version (5.10->6.18)
-Indeed, the new kernel version requires additional configuration options due to the switch to
-nftables, and to support Podman's networking features, especially when using iptables-based networking.
+Hi Julien, thanks for your answer, I tested your patch and yes, it's 
+fixing the toolchain errors.
 
-Justifications:
+I sent a v2 including your patch and added a fragment to the podman test 
+to fix new errors that appeared due to the bump of the kernel version 
+this time.
 
-    NFT_COMPAT & XTABLES_LEGACY: On modern kernels (6.x+), iptables often defaults
-    to the nft binary. CONFIG_NFT_COMPAT is strictly required for the iptables userspace
-    tool to communicate with the nf_tables kernel subsystem. [1]
-    Without CONFIG_IP_NF_IPTABLES_LEGACY, legacy calls from Netavark/CNI plugins fail.
+Best regards,
 
-    NET_NS & NAMESPACES: Podman relies on Network Namespaces for container isolation.
-    Without CONFIG_NET_NS, the kernel cannot create the private network stacks required for containers.
+Dowan.
 
-    NAT & MASQUERADE: Containers require Source NAT (Masquerade) to access external networks.
-    CONFIG_IP_NF_NAT and CONFIG_IP_NF_TARGET_MASQUERADE provide the necessary target modules
-    for these iptables rules. [1]
-
-    XT_MATCH Modules: Netavark (Podman's default network stack) uses specific matches like
-    addrtype, conntrack, and comment to manage bridge traffic and port forwarding.
-
-Some dependencies in the configuration file were verified by the check-config script from the Moby project [2].
-
-This configuration was tested and podman tests now pass successfully without the previous errors.
-
-[1] Gentoo Wiki (Podman Kernel Requirements): https://wiki.gentoo.org/wiki/Podman#Configure_the_kernel
-[2] Moby/Docker Check-config Script: https://github.com/moby/moby/blob/master/contrib/check-config.sh
-
-Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
----
----
- support/testing/tests/package/test_podman.py  |  5 +--
- .../package/test_podman/linux-podman.fragment | 36 +++++++++++++++++++
- 2 files changed, 39 insertions(+), 2 deletions(-)
- create mode 100644 support/testing/tests/package/test_podman/linux-podman.fragment
-
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-index 9d86a06129..9b4a7dedaf 100644
---- a/support/testing/tests/package/test_podman.py
-+++ b/support/testing/tests/package/test_podman.py
-@@ -15,10 +15,11 @@ class PodmanBase(infra.basetest.BRTest):
-         BR2_SYSTEM_DHCP="eth0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
-         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="support/testing/tests/package/test_podman/linux-podman.fragment"
-         BR2_LINUX_KERNEL_DTS_SUPPORT=y
--        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
-         BR2_PACKAGE_PODMAN=y
-         BR2_PACKAGE_UTIL_LINUX=y
-         BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-diff --git a/support/testing/tests/package/test_podman/linux-podman.fragment b/support/testing/tests/package/test_podman/linux-podman.fragment
-new file mode 100644
-index 0000000000..ae201a31a8
---- /dev/null
-+++ b/support/testing/tests/package/test_podman/linux-podman.fragment
-@@ -0,0 +1,36 @@
-+# --- Core Container System Support ---
-+CONFIG_MEMCG=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_NAMESPACES=y
-+CONFIG_NET_NS=y
-+CONFIG_VETH=y
-+CONFIG_BRIDGE=y
-+
-+# --- Netfilter Infrastructure (Core) ---
-+CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_NETLINK=y
-+CONFIG_NETFILTER_ADVANCED=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NF_TABLES=y
-+CONFIG_NF_TABLES_IPV4=y
-+CONFIG_NFT_COMPAT=y
-+CONFIG_NF_NAT=y
-+CONFIG_NFT_NAT=y
-+CONFIG_NETFILTER_XTABLES=y
-+
-+# --- IPv4 Support & IPTABLES Compatibility ---
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_IPTABLES_LEGACY=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+
-+# --- Xtables Match Modules required by Podman/Netavark ---
-+CONFIG_NETFILTER_XTABLES_LEGACY=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_COMMENT=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_NAT=y
-+CONFIG_BRIDGE_NETFILTER=y
--- 
-2.43.0
-
+On 4/27/26 22:22, Julien Olivain wrote:
+> Hi Dowan,
+>
+> On 17/04/2026 10:57, Dowan Gullient via buildroot wrote:
+>> The recent update to the AArch64 15.2.rel1 toolchain (including newer
+>> glibc and GCC 15) has introduced a regression in the build process of
+>> host-protobuf v34.0, which is a dependency for Podman tests.
+>>
+>> The issue manifests as "incomplete type" errors and "missing 
+>> definitions"
+>> during the compilation of several generated files (such as type.pb.cc,
+>> timestamp.pb.cc, and any.cc) [1].
+>>
+>> This is caused in particular by the stricter header inclusion and 
+>> inlining rules
+>> enforced by GCC 15, which expose missing explicit includes in the
+>> Protobuf 34.0 source code, so it appears to rely
+>> on legacy implicit inclusions that are no longer provided by the
+>> latest toolchains.
+>>
+>> This failure prevents all test classes from the podman test from
+>> completing, as the host requirements cannot be built.
+>>
+>> The DCMAKE_CXX_STANDARD=17 option was added to the protobuf Makefile 
+>> but the
+>> issue still persists. What would be needed to fix this issue ?
+>
+> With the patch I proposed in:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20260427201606.896700-1-ju.o@free.fr/ 
+>
+> I am able to run the podman tests.
+>
+> Could you confirm it is fixing the test on your side (and reply with a 
+> Tested-by)?
+> If so, I believe this CMAKE_CXX_STANDARD=17 is not needed.
+> In that case, could you send a v2 removing it?
+>
+>> Thanks for your help. Sincerely.
+>>
+>> [1]: https://gitlab.com/buildroot.org/buildroot/-/jobs/13698215942
+>>
+>> Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+>
+> Best regards,
+>
+> Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
