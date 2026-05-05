@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A70CD3427
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 20:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEA30FF8855
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 20:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BF9581D0B;
-	Tue,  5 May 2026 20:07:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D563940BD9;
+	Tue,  5 May 2026 20:12:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cLavhrebfaFz; Tue,  5 May 2026 20:07:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OyjeAkQ2jOxe; Tue,  5 May 2026 20:12:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3903681D11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C820540BC8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778011621;
-	bh=42Gc6xuUTaadYKd/dcNILO5B/DR0dBfe8Wk6PHS+dGI=;
+	s=default; t=1778011969;
+	bh=36aJ8zHH5YRVDnLqgN+GMJF3siZxOgClxPyr9Wu0yiA=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=auxacauNwquJQNSfVbeEXpjryqTjPhzE2Yc67wuMoq3NKIcQYj6t/a7C2y1+Dac+1
-	 ney13B7ThaTprIVdL5jU7h7C78uK8xgp7iGrVn4ydoWHuBk5EN7Ki66mEUqQsyB+As
-	 RV+3EacH2WgIRjO5WjEAsItvllI+1Gxy7f1ddKjP9/l3bLdhqXMBTx7nFGpEb2d3tJ
-	 IlrVJhbafKZYibyVovndQi4eCwEalScTxQT4RLn2X+O5toI8JaaplZaVnM+XK7bgKI
-	 ew+GirLhXtD8WQ/mIRgH/KbIPO7xz5m2Tow+Q3ER2HF4zEyYHug8AIr/p5XWGwSPf8
-	 S4xKXqrv/h17g==
+	b=mE4kmNI2VJq769GDs/tcr3zj2gheEXrhf+EPqW+mByMpxl6OXP2kP0DXk2kDpxmJL
+	 6E4dELiQNkmb0M3MZ890a04xOVCJdi5ep/ldqO+lK4QJOnbBmKUsMRaHMO1xOqkXUQ
+	 900clJgBe0ooZm+5By0xVj9Dn8cfzqyNG/PtgR24Uw5d5u3GoRS+c7D9K2hp5NxDGP
+	 IRM/hCNMozoeLMaiLr6/1sWVSTCEItviPLqWvHE0NGF39EsShbD49qe4lJ11THUKGQ
+	 eUJ/ueJwfy18aW5RT/BFny+8pxJMWXyTKaIgJqnLuWyziWGHVlPgzAUDRaWvyrFuIg
+	 qm7spUShg8JuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3903681D11;
-	Tue,  5 May 2026 20:07:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id ED88B2A8
- for <buildroot@buildroot.org>; Tue,  5 May 2026 20:06:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C820540BC8;
+	Tue,  5 May 2026 20:12:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D09D1280
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 20:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA32A60B1E
- for <buildroot@buildroot.org>; Tue,  5 May 2026 20:06:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C229D4040A
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 20:12:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CekFBp8DZls0 for <buildroot@buildroot.org>;
- Tue,  5 May 2026 20:06:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fZotalmWO8Nz for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 20:12:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F73D60B1D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F73D60B1D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A81B403F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A81B403F7
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F73D60B1D
- for <buildroot@buildroot.org>; Tue,  5 May 2026 20:06:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A81B403F7
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 20:12:47 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D6B7EB97C2AA; Tue,  5 May 2026 22:06:56 +0200 (CEST)
-Message-ID: <3d726f1b-2a2c-4f01-90fd-f32b7cc1f065@rnout.be>
-Date: Tue, 5 May 2026 22:06:54 +0200
+ with ESMTPSA id D8D15B97C2BC; Tue,  5 May 2026 22:12:45 +0200 (CEST)
+Message-ID: <9e09615e-68c5-4128-a17a-f2436f3e154b@rnout.be>
+Date: Tue, 5 May 2026 22:12:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: "Preiss, Stefan" <stefan_preiss@gmx.de>, buildroot@buildroot.org
-References: <20260426174407.8470-1-stefan_preiss@gmx.de>
+To: Edgar Bonet <bonet@grenoble.cnrs.fr>,
+ Buildroot development <buildroot@buildroot.org>
+References: <eabb6434-6827-48cb-bd2c-964b94ea07ba@grenoble.cnrs.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260426174407.8470-1-stefan_preiss@gmx.de>
+In-Reply-To: <eabb6434-6827-48cb-bd2c-964b94ea07ba@grenoble.cnrs.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1778011617; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1778011965; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=bONLw11IP8kPglBwNhxHlVIQBp7MmCeQDG2TCUgMKDw=;
- b=UEDZUEfyKfqCS1U9gThtZaBCNNsTgg+TYjh2SnxF1eThQ8xY9fhhmoKQglRa7cPuF+Aers
- d9czdjCsfevS9nnp2K1/s90kY9lgb8/UjIWq0PdnUtM/t9kq+y7W+vj5FWsUq7MgZ8ybyJ
- V6XmKA1vYsAgplYeVsZy7V1440xKEA3bblWbdeH5u5m1BPdbqe6g/ewDb4Vf0AUx32aaWN
- aFDeknvthMqw+y8y6RuBmxsaZrfWY2Xr0cHkQxhcF1Ztbkr+gtCTDDzQUz/q68VdmwQnCi
- onAL5EbVExZC/cauXOZuFUUQIA8L/unKCRWmLOnkZ18P+agwMgOGGRzAIcmP1w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Mbrpy0qTN03T7tCGYgN/+rrkUp2OIgOisDOPTNK2Qes=;
+ b=plHDap94LcmX3Hit0E8gYOGfc+RkzL95MBjqs5VpmPOYIwuVecfISfro7qSIWGVi/31Jn0
+ jIDyM/YP42WbwasPkTCYtH6xeDQWro3pAmvAUNfy9waeFfNjU2puAhZTgvGOhbZnaagCgw
+ HY9LUBPonrmR2YVR5Mbz+L679qgPCi+LGrS0hVj9ZNFdN2il02x2OuppyzxBRU9CYEVvbg
+ AByRHKiRCfTUSnyx7/5c6u3JhV4OUeWE1RoPV/oEY8uClRVvBBVegbDOAMhR02DCk9kZKp
+ h6xXISNpoSpVdA90XlvHVCAhMhuu1R6u4UWAZYy6BDpxf2uuvyxJfqPfRbNbEw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=UEDZUEfy
-Subject: Re: [Buildroot] [PATCH] feat(package/poco): build package with
- cmake instead of make
+ header.a=rsa-sha256 header.s=dkim header.b=plHDap94
+Subject: Re: [Buildroot] [PATCH 1/1] package/libgpiod: enable the kernel
+ GPIO ABI v1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,50 +96,70 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Stefan,
-
-  I was about to apply, but there's a problem.
-
-On 26/04/2026 19:44, Preiss, Stefan via buildroot wrote:
-> Currently when building with make, the cmake config files are not
-> generated. This leads to problems when integrating the package in an
-> application built with cmake.
-
-  We need your Signed-off-by here, with the same name and e-mail address as the 
-Author of the commit. This shows that you claim that you either hold the 
-copyright to this changeset or have the right to license it, and that you 
-license it under Buildroot's GPLv2. [1]
 
 
-  Also, the title line of the commit should start with package/poco: without feat().
-
-> ---
->   package/poco/poco.mk | 88 ++++++++++++++------------------------------
->   1 file changed, 27 insertions(+), 61 deletions(-)
+On 30/04/2026 16:09, Edgar Bonet via buildroot wrote:
+> Unlike libgpiod2, this version of libgpiod relies on the deprecated GPIO
+> ABI version 1. This ABI used to be enabled by default. However, since
+> Linux 7.1-rc1 (commit 7673e4c7f7f9 "Do not enable the v1 uAPI by
+> default"), this is not the case anymore. Failing to enable the ABI
+> results in a non-functional libgpiod. For instance:
 > 
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index fe1dd29855..c5f418a664 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-> @@ -9,7 +9,6 @@ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
->   POCO_LICENSE = BSL-1.0
->   POCO_LICENSE_FILES = LICENSE
->   POCO_CPE_ID_VENDOR = pocoproject
-> -POCO_INSTALL_STAGING = YES
+>      # gpioinfo
+>      gpioinfo: error creating line iterator: Invalid argument
+> 
+> Fix this by enabling the ABI v1 in LIBGPIOD_LINUX_CONFIG_FIXUPS.
 
-  I don't think this is supposed to have been removed?
+  This option only exists since 5.10. But that doesn't matter, 
+KCONFIG_ENABLE_OPT doesn't complain if the option you set doesn't end up in the 
+.config after all.
 
-  Otherwise the changeset looks OK.
+> 
+> Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+> ---
+> I noticed the problem on an Acmesystems Acqua-A5 board. Tested the patch
+> in qemu as follows:
+> 
+>      sed -i -e '/# CONFIG_GPIOLIB is not set/d' \
+>          board/qemu/arm-versatile/linux.fragment
+>      make qemu_arm_versatile_defconfig
+>      utils/config -d PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18
+>      utils/config -e PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_0  # "7.0 or later"
+>      utils/config -d DOWNLOAD_FORCE_CHECK_HASHES
+>      utils/config --set-str LINUX_KERNEL_CUSTOM_VERSION_VALUE 7.1-rc1
+>      utils/config -e PACKAGE_LIBGPIOD
+>      utils/config -e PACKAGE_LIBGPIOD_TOOLS
+>      make
+>      output/images/start-qemu.sh
+> ---
+>   package/libgpiod/libgpiod.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+> index f669643b39..f5584a9f1e 100644
+> --- a/package/libgpiod/libgpiod.mk
+> +++ b/package/libgpiod/libgpiod.mk
+> @@ -24,6 +24,10 @@ else
+>   LIBGPIOD_CONF_OPTS += --disable-tools
+>   endif
+>   
+> +define LIBGPIOD_LINUX_CONFIG_FIXUPS
+> +    $(call KCONFIG_ENABLE_OPT,CONFIG_GPIO_CDEV_V1)
 
-  Unfortunately I cannot apply without your Signed-off-by, so I've marked the 
-patch as Changes Requested in patchwork.
+  This should be indented with tab instead of spaces (check-package warning).
 
+  Please run check-package before submitting!
+
+  Applied to master with that fixed, thanks.
   Regards,
   Arnout
 
-  [1] https://developercertificate.org/
+> +endef
+> +
+>   ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+>   LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
+>   else
 
-[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
