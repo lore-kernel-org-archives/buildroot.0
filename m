@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BAAFF8855
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:54:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5426CD3427
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 19:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C165C81270;
-	Tue,  5 May 2026 19:54:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70CC740790;
+	Tue,  5 May 2026 19:54:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qlv2X-gOZuaQ; Tue,  5 May 2026 19:54:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j4k8ivURoWkr; Tue,  5 May 2026 19:54:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB38781324
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28D264084A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778010839;
-	bh=O5BUfbvClrT/d6GfV2ADlKXup4HmuVd7RHCULexMvP0=;
+	s=default; t=1778010842;
+	bh=6PpBgpO6AXR/WaqV3qXIlX2ycaS5wIFn3RAdo9xfym4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SmHrTfCJkWYXsl7eoA57J0q/QuB/CBpUHSqRwjy4rRkT4KyItxYOQ4TwEv8asf+6r
-	 /qZBYBv/wx6bRnqOHCC2jniyY9A+vUAgA+cfj043Abev5hhVZIeMmDr4lEBEFzI8iN
-	 8GwfCXpRWxmtTVKBaCZ5xht9FdylmZL8BUO/i4z82XIm63+U5T0gOzO8SNIIgjLB1h
-	 0vfeGOsBbBfJoV9+KfRZxM/TI1BRMFEXiz8Zf/+BqpSRbG18LLdYEzYGscMawo0+JH
-	 5gRRYCm0o/aWjk7tyx3T5t1PtkMNGWOi27mTL1GGgSKZXAP2Lhw3J2kXA1I2pGeI40
-	 XwNyQBGcuGmpg==
+	b=dWoecM2/HztVB9gFLl30eQthC5s3O9qYyf0YVzMoitsZ1NfJVdLA9mll3FoAGnIQd
+	 02uwWm6RuXzUYG70BPTrC37uDDMREknTzH+R99UFML2mWvcobanE6JXQUTkyoALBJs
+	 YACWabuQXTYutQg+bbHLJ0qwEtAd+SUD1lFr/yv0qLd9lUsehtJ0ih1TFrZckm9P1i
+	 9PVgLlid9l9n/9d25eJFEBHs1VKuaurNeJbCN/metSb6B6tR7N/qNgVPUb3S7prgi0
+	 gde+KCImHTzKI9uJdDUYlUMuS56umbrNgY88Jwud9mCvdmsDdfP5rpNRI63geEgTs5
+	 MmxrPWSTFsvIA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB38781324;
-	Tue,  5 May 2026 19:53:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8756B2A8
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28D264084A;
+	Tue,  5 May 2026 19:54:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 234872A8
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D656403FA
- for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 099A7405B2
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IeH0MNXYJQA9 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LVj-wIrG1w1i for <buildroot@buildroot.org>;
  Tue,  5 May 2026 19:53:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2DD4403F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B81D140BA9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2DD4403F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B81D140BA9
  for <buildroot@buildroot.org>; Tue,  5 May 2026 19:53:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C82538463D; Tue,  5 May 2026 19:53:55 +0000 (UTC)
+ id CF69084648; Tue,  5 May 2026 19:53:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 5 May 2026 21:53:25 +0200
+Date: Tue, 5 May 2026 21:53:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d58449b225a25b56f0f92634818e74c79b02754e
-X-Git-Newrev: 77a464969c77f7c2a4feb9ec2d2ec3814c2dcb4e
+X-Git-Oldrev: 77a464969c77f7c2a4feb9ec2d2ec3814c2dcb4e
+X-Git-Newrev: 7961bd10b968cce52b118aedfeda09af1bd296ba
 X-Patchwork-Hint: ignore
-Message-Id: <20260505195355.C82538463D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: search only
- Config.in{, .host} for URL
+Message-Id: <20260505195355.CF69084648@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: format upstream
+ URL info consistently in HTML
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/77a464969c77f7c2a4feb9ec2d2ec3814c2dcb4e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7961bd10b968cce52b118aedfeda09af1bd296ba
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The previous Config.* glob also caught linux/Config.ext.in and
-package/php/Config.ext, as well as some backup files created by
-editors (e.g. Config.in~ after editing a Config.in file in Emacs),
-leading to wrong results depending on directory listing order.
-
-Also use "with" to automatically close the file when the block is
-left, even on error.
+Use only one of the classes for "error" or "warning" status so they
+look different, and format the error/warning text for both. Do not
+make the text a link if the URL is None.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- support/scripts/pkg-stats | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ support/scripts/pkg-stats | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 55aa63c861..efb85a7405 100755
+index efb85a7405..a87bb23a8e 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -148,17 +148,17 @@ class Package:
-         Fills in the .url field
-         """
-         self.status['url'] = ("warning", "no Config.in")
--        for filename in os.listdir(self.pkgdir):
--            if fnmatch.fnmatch(filename, 'Config.*'):
--                fp = open(os.path.join(self.pkgdir, filename), "r")
--                for config_line in fp:
--                    if URL_RE.match(config_line):
--                        self.url = config_line.strip()
--                        self.status['url'] = ("ok", "found")
--                        fp.close()
--                        return
--                self.status['url'] = ("error", "missing")
--                fp.close()
-+        for filename in ('Config.in', 'Config.in.host'):
-+            try:
-+                with open(os.path.join(self.pkgdir, filename), "r") as fp:
-+                    for config_line in fp:
-+                        if URL_RE.match(config_line):
-+                            self.url = config_line.strip()
-+                            self.status['url'] = ("ok", "found")
-+                            return
-+                    self.status['url'] = ("error", "missing")
-+            except FileNotFoundError:
-+                continue
+@@ -1057,14 +1057,19 @@ def dump_html_pkg(f, pkg):
+     div_class = ["centered upstream_url data"]
+     div_class.append(f'_{pkg_css_class}')
+     url_str = pkg.status['url'][1]
+-    if pkg.status['url'][0] in ("error", "warning"):
+-        div_class.append("missing_url")
+-    if pkg.status['url'][0] == "error":
+-        div_class.append("invalid_url")
+-        url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
+-    else:
++    if pkg.status['url'][0] == "ok":
+         div_class.append("good_url")
+         url_str = f'<a href="{pkg.url}">Link</a>'
++    else:
++        if pkg.status['url'][0] == "warning":
++            div_class.append("missing_url")
++        else:
++            # "error" status
++            div_class.append("invalid_url")
++        if pkg.url is not None:
++            url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
++        else:
++            url_str = pkg.status['url'][1]
+     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{url_str}</div>\n')
  
-     @property
-     def patch_count(self):
+     # CVEs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
