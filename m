@@ -4,83 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A8E2CD3430
-	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 08:16:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B8C4CD3430
+	for <buildroot@archiver.kernel.org>; Tue,  5 May 2026 08:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14A444070D;
-	Tue,  5 May 2026 08:16:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23E8940977;
+	Tue,  5 May 2026 08:59:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QghyRVw1JgRR; Tue,  5 May 2026 08:16:47 +0000 (UTC)
+ id zJetSUJb0QMS; Tue,  5 May 2026 08:59:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC18406E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24F6E408F1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1777969007;
-	bh=4u2FCrTYumEWYKrGB4IA2KIoJ78EXIjX75dJno/GFEU=;
+	s=default; t=1777971571;
+	bh=BEyQM3izMaErRLu8z3YAOievEtMJgYjQS+pB/LyN6uo=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=XjagKNx0vg4DO5DOTTNZc4jBGFiEDRLPBl3MoH3VajhlToslvlAI3sS8DBafj3IJU
-	 ET6FGOsXJ5RzeQ2A+kc1DqKCpCerGAiEtAo+WXNoFTmIE+4S+QTU0Nl2vPjPIfsPmM
-	 f4UeZCxcGz3bahLr50P5Hvcpd8O4lrBDq/LAbT5uzyhV0KLvBDyfTij8mB0eTrYxnz
-	 I2Zr38N41yKeHsC0VOv1PPsn5XySNp7J6c5943/vznAbTSoCRX1c+rI239E8SxTJBU
-	 TchXPwSah6U0CCF6unzKapgrqT2sq7hzz4n5JfujuiUv1PW95sAN0wF/Mx8ylwoifI
-	 urbVjKDXT5tdA==
+	b=FbojNqlC66GTIBJ4K463mgkylTzoxDcDSLOyvyvtSpoAk4fUnbkr6DvvPBzggJbMM
+	 Q8mc0KKPkRQaJ6DZ6W8kct+JYRNxh4GZ0dmUeW0axI0ro2JcIOCwGBkv9l4quhRvxq
+	 V2YX8OGM+m0pwiGJ2Aa0NryvJVksBfM542VmW4+HnG+dbX9+AJaxhfmN+eYO7l+kwA
+	 d0xavPucOyvWibnQPioMLy0/ciPXy5qrGbo0H6bJofBAv3xB/sVpaTrbp0TkyPhs8O
+	 EuE0dcz9D5wvXkWuDYy1bc2fOIZzUQQrc9MMtsY3fIM0EUq4JKeqRG86gM7aXWR38u
+	 yp7TDHqe83RdQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EC18406E5;
-	Tue,  5 May 2026 08:16:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A3DFF2A8
- for <buildroot@buildroot.org>; Tue,  5 May 2026 08:16:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24F6E408F1;
+	Tue,  5 May 2026 08:59:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3167C2A8
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 08:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94E7640227
- for <buildroot@buildroot.org>; Tue,  5 May 2026 08:16:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BE7940743
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 08:59:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ugj-wwN2fB-z for <buildroot@buildroot.org>;
- Tue,  5 May 2026 08:16:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CDqjsAnEdyLN for <buildroot@buildroot.org>;
+ Tue,  5 May 2026 08:59:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B400340218
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B400340218
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4CC37403E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CC37403E4
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B400340218
- for <buildroot@buildroot.org>; Tue,  5 May 2026 08:16:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4CC37403E4
+ for <buildroot@buildroot.org>; Tue,  5 May 2026 08:59:26 +0000 (UTC)
 Received: from [192.168.178.20] (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
  SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 144C02C88D23;
- Tue, 05 May 2026 10:16:42 +0200 (CEST)
-Message-ID: <f21b6832-c54f-49da-9348-d48699728897@bubu1.eu>
-Date: Tue, 5 May 2026 10:16:41 +0200
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 0C1AA2C88D23;
+ Tue, 05 May 2026 10:59:23 +0200 (CEST)
+Message-ID: <2f92168f-0d36-4f68-bcdf-7c3bb168c770@bubu1.eu>
+Date: Tue, 5 May 2026 10:59:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <20260503232504.3712616-1-fiona.klute@gmx.de>
+To: Daniel Houck <Software@DRHouck.me>, buildroot@buildroot.org
+References: <20260504230627.2963070-1-Software@DRHouck.me>
+ <20260505011139.2973700-1-Software@DRHouck.me>
 Content-Language: en-US
-In-Reply-To: <20260503232504.3712616-1-fiona.klute@gmx.de>
+In-Reply-To: <20260505011139.2973700-1-Software@DRHouck.me>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1777969002; bh=pp3E75spaXL5qDCufQ5pT561iiGpHmIXk4cd9st+C60=;
+ t=1777971564; bh=yIiaa0fV3Mk+ryzJM8pw4sqPiETsq4Zhm3SkxYpeprw=;
  h=Date:Subject:To:References:From:In-Reply-To;
- b=TO7AH5jGN47MUtuehibt2x1Ib29azbJWp8FgPaUZi703K25gWqDTmEiGt2PvHoexG
- agRb2EKqrhhYmR8HOnqbWVCDECa5Xk5ZdOVOoECtYVAckmRl4aCi1ToeouJnD+ZPqr
- r3pF/MGyOjS1L4RWkwKCIfS0oz/ZTjb+5OHhdNEFx4h1+VZYRn4U2/vBZ4vrcMzgHG
- gNmUha8LCWwCqrThJi3V4yOtyGblh2rk0OEkdboBg52H534HnmYM7SmKyT5ugLpiZK
- ckf93lBP4cbY9uyTPZxrD4eIHxk0j3gTCTMSItGuGGyfNUzL+VENPL2DWiULIRED2y
- DHn8svqrTwyHw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=KQQFhI+QHh+h67jUTy6itCmXZCUgC0oA3Niy6mSuuzP1Brd7YsrqEAPHs7JcRljST
+ jJulIuH4PzzjxeB07orQrKpe3ze3cPtemXoyUaTtxT1VHz/Ekj5BgtcLxRlnnLKFol
+ ZG1aAx4SbDprqwqWkjlXyt1n5arH5fafBHaqQnAnCbP8E2sHKa1uWE38freBuMBl3J
+ MS1+VbDLocvRLlDMXLGnSa5zSBkSVPoc+2sA/mE8WaBNCSihHCLKad4vhWEAQ5c4HT
+ QfI9zN2Q+ZXsAGLPEmKoDxnAAhlouikUiRLMJ+UdcwWSk2cCQnaZBQ6RZdmk8s9Tar
+ wbwRXvHTaKtiw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=TO7AH5jG
-Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: explicitly configure
- PID file directory
+ header.s=bubu header.b=KQQFhI+Q
+Subject: Re: [Buildroot] [PATCH v3] package/make: fix build with musl and
+ gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,23 +100,15 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 5/4/26 01:25, Fiona Klute via buildroot wrote:
-> OpenSSH checks during ./configure if the default location /var/run
-> exists on the build host, and defaults to ${sysconfdir} if not
-> (/etc/ssh in Buildroot), leading to confusing errors. This can break
-> e.g. in a sandbox with its own mount namespace where there is no
-> reason to create a /var.
+On 5/5/26 03:11, Daniel Houck wrote:
+> Patch the parts of Make that use code invalid in C23.  It wasn't
+> included when compiling with glibc but failed to build with musl.
 > 
-> Explicitly setting --with-pid-dir=/var/run overrides either default,
-> and only logs a warning if /var/run does not exist.
+> Fixes #176.  See also https://savannah.gnu.org/bugs/index.php?68302
 > 
-> [1] https://github.com/openssh/openssh-portable/blob/5fa60ae0d2ed3fc441f54c9349afbd63b6301929/configure.ac#L5568-L5576
-> 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> Signed-off-by: Daniel Houck <Software@DRHouck.me>
 > ---
-Applied to master as 
-https://gitlab.com/buildroot.org/buildroot/-/commit/c09bec68f14f39e99b40eda89e538a6f4075fe98, 
-thanks!
+Applied to master, thanks!
 
 Marcus
 _______________________________________________
