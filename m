@@ -1,84 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA9CCD342C
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 19:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCC63CD342C
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 20:30:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E872F811C8;
-	Wed,  6 May 2026 19:02:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 765B460F29;
+	Wed,  6 May 2026 20:30:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWIRBPAQQz98; Wed,  6 May 2026 19:02:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tfjyYyNKn8el; Wed,  6 May 2026 20:30:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE3B0812A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F05860F28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778094167;
-	bh=ni3dWZn8VIxSxjW3ZySc/i7Jw2IzdXoNRE81iGcfgbg=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=nmUCPa+tdBCZTapN+CiKQau1atCm9IQ865Vk3fw4XHHZdiHn8KxUNDio2O4cP/emJ
-	 E7yfwf2LoGcAyyE9vh3Xdpm7YHZm0AKJ6ESmo/dS+DT5wN8t1vo0Cd1y5uGwQBlwmy
-	 Bhg0L153QuS3q3QAhtTKrTSjSW0FcctXJF7NDGm0ChQZV4gacwEzudIYrRmUXjyxKb
-	 zmtDDK5idHHCyBP28KvpyRr4E6Qtgxm+lMARBJSJnUuOqk9CWmdFn/lbwhj05hF++F
-	 DJfl0vzIbPOf834RYIzMYLtQKSarr/Cqrz/7+3JSUmqmVoku18XTgLgoj4FXH2XLkJ
-	 +4aTwjUIqJAGA==
+	s=default; t=1778099449;
+	bh=/F1VF1s3g5Apzc28nAZR77S2spPe11X1BGNjWJzsz8s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=WOr4PGq1wl5QEDVbHWLkrrXrSU+SzHxtbm4TpBl1R24h6wi66EE6F9JHDP0nnxiwr
+	 JFQnnx0H36x8ATXK9Sv25+Bdh94r1v6twJoaujq8gRkrpYRXE3LwAIPQ5xsd6XCCuA
+	 OuqUU0JMug0BPGEyF3WlI5XGCJtL8ZKZQJLWlPiL7n2TOxoWXe3472jVUFjAt5oAZz
+	 JjoJnFHUOTb2+1EijJVNjSeFzWp/MTP8EQJM725KvqFRzvsO1IancI7AetYvW5MgIO
+	 9eWjKPrGn3826+GnnrdhE+4TwY6CusVJEU7QDsX//k/cxW249RZ2VgfaFKuOln3rWw
+	 WrJXhZqiJwvPg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE3B0812A3;
-	Wed,  6 May 2026 19:02:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C2C9280
- for <buildroot@buildroot.org>; Wed,  6 May 2026 19:02:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F05860F28;
+	Wed,  6 May 2026 20:30:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C9E1280
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E58F5812A3
- for <buildroot@buildroot.org>; Wed,  6 May 2026 19:02:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4271E60F28
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vqN5WMGqVELH for <buildroot@buildroot.org>;
- Wed,  6 May 2026 19:02:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xpNPJKcwUEua for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 20:30:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F390E811C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F390E811C8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F390E811C8
- for <buildroot@buildroot.org>; Wed,  6 May 2026 19:02:43 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1777031775; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 06 May 2026 19:02:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wKhW4-00000002kax-1odE;
- Wed, 06 May 2026 21:02:40 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102DD60825
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 102DD60825
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8E76084A1B; Wed,  6 May 2026 20:30:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  6 May 2026 21:02:37 +0200
-Message-ID: <20260506190239.655752-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=l0IxGO5ht14lkZJ+l+iSNgFlvs0aR0TDMeEh3agOEAEm+ChgbZLzZcO0pCibAVlmEgK24Nkx9oeo9Rbc/G/6YwIJ/4yVVrJGWAXFbAr9faTjUBmHL7rJa2CYf3a0i9mWS78swMZbKD7MbCGBpWkDTfofgdyw+CmHSbRfWcsuv0jHrE6mbLqmsGgTBxlx1y+rcTzDqcaacLKzXd0WHgm+mxjKtdGTrILdSbObVrJ2/PlKqWrfcBrXY7pjD8MwQpKcqZlmyzJ3nFhb22bu40op5DQQVOjyBNfd94+quoKYZ4sg2MhtjrQP55aT9OsUQIMuyZmEpsm9p/loTUYOmWkuhQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=c1SryQ9S6Wg4rOIJCKfEu5itHZghRrHBzMmzvnbPLcw=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=l0IxGO5h
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/xlib_libXpm: security bump to version
- 3.5.19
+Date: Wed, 6 May 2026 22:21:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4fe009b6aa6f6dd74630656f55c8cc656611bd1b
+X-Git-Newrev: 0dd4196fa0bd11a63ff29ad4e90dcca009a4a069
+X-Patchwork-Hint: ignore
+Message-Id: <20260506203044.8E76084A1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: fix gcc-15 build with host
+ gcc 16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,64 +69,293 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerability:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0dd4196fa0bd11a63ff29ad4e90dcca009a4a069
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-CVE-2026-4367: libXpm Out-of-bounds read in xpmNextWord()
+Backport patch that was applied upstream to the gcc-15 maintenance
+branch.
 
-libXpm uses a number of internal helper functions to parse the XPM file
-format.
-One of these internal functions, xpmNextString(), checks for the NULL
-terminator when looking for the end of the current string but not when
-looking for the beginning of the next string.
-A small XPM file with a malformed color table definition may cause the
-function xpmNextWord(), called from xpmParseColors() following a call to
-xpmNextString(), to start past the actual end of the file, causing an
-out-of-bound read.
-
-Advisory:
-https://lists.x.org/archives/xorg-announce/2026-April/003690.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 6 +++---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...libcody-Make-it-buildable-by-C-11-to-C-26.patch | 261 +++++++++++++++++++++
+ 1 file changed, 261 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index 3582169891..72a330f1ad 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-October/003425.html
--sha256  64b31f81019e7d388c822b0b28af8d51c4622b83f1f0cb6fa3fc95e271226e43  libXpm-3.5.17.tar.xz
--sha512  52f9d2664a47a26c1a6ad65d18867de870b66947b0b0d99cca3512756a0aaa6ce2a245c0b49f20b70c3ce48bf04c47c333e8119a147465c277bca727f6ab017e  libXpm-3.5.17.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-April/003691.html
-+sha256  ad3576d689221a39dc728f0e0dc02ca7bb6a0d724c9a77fd1bfa1e9af83be900  libXpm-3.5.19.tar.xz
-+sha512  dd95a70af0ac2fb0f5876e69ad19b38128c5add94b00238ee41a22634aa4dc56b22c1b47c4baa6a1ab549308d11b302c250b405322da8a64ea24441a065fbada  libXpm-3.5.19.tar.xz
- # Locally calculated
- sha256  a80d706759624a04aa90fd62bc644a360fc3d72e08dcbfb129f167c11ca285de  COPYING
- sha256  cbe4ced0abc8a32bea471204ae01038c202758ce4e772d3d329a341ffa761e71  COPYRIGHT
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 1239ba0d4d..a2a652df17 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXPM_VERSION = 3.5.17
-+XLIB_LIBXPM_VERSION = 3.5.19
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.xz
- XLIB_LIBXPM_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
--- 
-2.47.3
-
+diff --git a/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+new file mode 100644
+index 0000000000..8788a0c0bd
+--- /dev/null
++++ b/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+@@ -0,0 +1,261 @@
++From 1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37 Mon Sep 17 00:00:00 2001
++From: Jakub Jelinek <jakub@redhat.com>
++Date: Fri, 21 Nov 2025 16:25:58 +0100
++Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
++
++The following builds with -std=c++11 and c++14 and c++17 and c++20 and c++23
++and c++26.
++
++I see the u8 string literals are mixed e.g. with strerror, so in
++-fexec-charset=IBM1047 there will still be garbage, so am not 100% sure if
++the u8 literals everywhere are worth it either.
++
++2025-11-21  Jakub Jelinek  <jakub@redhat.com>
++
++	* cody.hh (S2C): For __cpp_char8_t >= 201811 use char8_t instead of
++	char in argument type.
++	(MessageBuffer::Space): Revert 2025-11-15 change.
++	(MessageBuffer::Append): For __cpp_char8_t >= 201811 add overload
++	with char8_t const * type of first argument.
++	(Packet::Packet): Similarly for first argument.
++	* client.cc (CommunicationError, Client::ProcessResponse,
++	Client::Connect, ConnectResponse, PathnameResponse, OKResponse,
++	IncludeTranslateResponse): Cast u8 string literals to (const char *)
++	where needed.
++	* server.cc (Server::ProcessRequests, ConnectRequest): Likewise.
++
++(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
++Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37
++---
++ libcody/client.cc | 36 +++++++++++++++++++-----------------
++ libcody/cody.hh   | 22 ++++++++++++++++++++++
++ libcody/server.cc | 28 ++++++++++++++--------------
++ 3 files changed, 55 insertions(+), 31 deletions(-)
++
++diff --git a/libcody/client.cc b/libcody/client.cc
++index ae69d190cb7..147fecdbe50 100644
++--- a/libcody/client.cc
+++++ b/libcody/client.cc
++@@ -97,7 +97,7 @@ int Client::CommunicateWithServer ()
++ 
++ static Packet CommunicationError (int err)
++ {
++-  std::string e {u8"communication error:"};
+++  std::string e {(const char *) u8"communication error:"};
++   e.append (strerror (err));
++ 
++   return Packet (Client::PC_ERROR, std::move (e));
++@@ -110,33 +110,34 @@ Packet Client::ProcessResponse (std::vector<std::string> &words,
++     {
++       if (e == EINVAL)
++ 	{
++-	  std::string msg (u8"malformed string '");
+++	  std::string msg ((const char *) u8"malformed string '");
++ 	  msg.append (words[0]);
++-	  msg.append (u8"'");
+++	  msg.append ((const char *) u8"'");
++ 	  return Packet (Client::PC_ERROR, std::move (msg));
++ 	}
++       else
++-	return Packet (Client::PC_ERROR, u8"missing response");
+++	return Packet (Client::PC_ERROR, (const char *) u8"missing response");
++     }
++ 
++   Assert (!words.empty ());
++-  if (words[0] == u8"ERROR")
+++  if (words[0] == (const char *) u8"ERROR")
++     return Packet (Client::PC_ERROR,
++-		   words.size () == 2 ? words[1]: u8"malformed error response");
+++		   words.size () == 2 ? words[1]
+++		   : (const char *) u8"malformed error response");
++ 
++   if (isLast && !read.IsAtEnd ())
++     return Packet (Client::PC_ERROR,
++-		   std::string (u8"unexpected extra response"));
+++		   std::string ((const char *) u8"unexpected extra response"));
++ 
++   Assert (code < Detail::RC_HWM);
++   Packet result (responseTable[code] (words));
++   result.SetRequest (code);
++   if (result.GetCode () == Client::PC_ERROR && result.GetString ().empty ())
++     {
++-      std::string msg {u8"malformed response '"};
+++      std::string msg {(const char *) u8"malformed response '"};
++ 
++       read.LexedLine (msg);
++-      msg.append (u8"'");
+++      msg.append ((const char *) u8"'");
++       result.GetString () = std::move (msg);
++     }
++   else if (result.GetCode () == Client::PC_CONNECT)
++@@ -199,7 +200,7 @@ Packet Client::Connect (char const *agent, char const *ident,
++ 			  size_t alen, size_t ilen)
++ {
++   write.BeginLine ();
++-  write.AppendWord (u8"HELLO");
+++  write.AppendWord ((const char *) u8"HELLO");
++   write.AppendInteger (Version);
++   write.AppendWord (agent, true, alen);
++   write.AppendWord (ident, true, ilen);
++@@ -211,7 +212,8 @@ Packet Client::Connect (char const *agent, char const *ident,
++ // HELLO $version $agent [$flags]
++ Packet ConnectResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"HELLO" && (words.size () == 3 || words.size () == 4))
+++  if (words[0] == (const char *) u8"HELLO"
+++      && (words.size () == 3 || words.size () == 4))
++     {
++       char *eptr;
++       unsigned long val = strtoul (words[1].c_str (), &eptr, 10);
++@@ -247,7 +249,7 @@ Packet Client::ModuleRepo ()
++ // PATHNAME $dir | ERROR
++ Packet PathnameResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"PATHNAME" && words.size () == 2)
+++  if (words[0] == (const char *) u8"PATHNAME" && words.size () == 2)
++     return Packet (Client::PC_PATHNAME, std::move (words[1]));
++ 
++   return Packet (Client::PC_ERROR, u8"");
++@@ -256,7 +258,7 @@ Packet PathnameResponse (std::vector<std::string> &words)
++ // OK or ERROR
++ Packet OKResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"OK")
+++  if (words[0] == (const char *) u8"OK")
++     return Packet (Client::PC_OK);
++   else
++     return Packet (Client::PC_ERROR,
++@@ -319,11 +321,11 @@ Packet Client::IncludeTranslate (char const *include, Flags flags, size_t ilen)
++ // PATHNAME $cmifile
++ Packet IncludeTranslateResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"BOOL" && words.size () == 2)
+++  if (words[0] == (const char *) u8"BOOL" && words.size () == 2)
++     {
++-      if (words[1] == u8"FALSE")
++-	return Packet (Client::PC_BOOL, 0);
++-      else if (words[1] == u8"TRUE")
+++      if (words[1] == (const char *) u8"FALSE")
+++	return Packet (Client::PC_BOOL);
+++      else if (words[1] == (const char *) u8"TRUE")
++ 	return Packet (Client::PC_BOOL, 1);
++       else
++ 	return Packet (Client::PC_ERROR, u8"");
++diff --git a/libcody/cody.hh b/libcody/cody.hh
++index 789ce9e70b7..93bce93aa94 100644
++--- a/libcody/cody.hh
+++++ b/libcody/cody.hh
++@@ -47,12 +47,21 @@ namespace Detail  {
++ 
++ // C++11 doesn't have utf8 character literals :(
++ 
+++#if __cpp_char8_t >= 201811
+++template<unsigned I>
+++constexpr char S2C (char8_t const (&s)[I])
+++{
+++  static_assert (I == 2, "only single octet strings may be converted");
+++  return s[0];
+++}
+++#else
++ template<unsigned I>
++ constexpr char S2C (char const (&s)[I])
++ {
++   static_assert (I == 2, "only single octet strings may be converted");
++   return s[0];
++ }
+++#endif
++ 
++ /// Internal buffering class.  Used to concatenate outgoing messages
++ /// and Lex incoming ones.
++@@ -123,6 +132,13 @@ public:
++       Space ();
++     Append (str, maybe_quote, len);
++   }
+++#if __cpp_char8_t >= 201811
+++  void AppendWord (char8_t const *str, bool maybe_quote = false,
+++		   size_t len = ~size_t (0))
+++  {
+++    AppendWord ((const char *) str, maybe_quote, len);
+++  }
+++#endif
++   /// Add a word as with AppendWord
++   /// @param str the string to append
++   /// @param maybe_quote string might need quoting, as for Append
++@@ -264,6 +280,12 @@ public:
++     : string (s), cat (STRING), code (c)
++   {
++   }
+++#if __cpp_char8_t >= 201811
+++  Packet (unsigned c, const char8_t *s)
+++    : string ((const char *) s), cat (STRING), code (c)
+++  {
+++  }
+++#endif
++   Packet (unsigned c, std::vector<std::string> &&v)
++     : vector (std::move (v)), cat (VECTOR), code (c)
++   {
++diff --git a/libcody/server.cc b/libcody/server.cc
++index e2fa069bb93..c18469fae84 100644
++--- a/libcody/server.cc
+++++ b/libcody/server.cc
++@@ -36,12 +36,12 @@ static RequestPair
++   const requestTable[Detail::RC_HWM] =
++   {
++     // Same order as enum RequestCode
++-    RequestPair {u8"HELLO", nullptr},
++-    RequestPair {u8"MODULE-REPO", ModuleRepoRequest},
++-    RequestPair {u8"MODULE-EXPORT", ModuleExportRequest},
++-    RequestPair {u8"MODULE-IMPORT", ModuleImportRequest},
++-    RequestPair {u8"MODULE-COMPILED", ModuleCompiledRequest},
++-    RequestPair {u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
+++    RequestPair {(const char *) u8"HELLO", nullptr},
+++    RequestPair {(const char *) u8"MODULE-REPO", ModuleRepoRequest},
+++    RequestPair {(const char *) u8"MODULE-EXPORT", ModuleExportRequest},
+++    RequestPair {(const char *) u8"MODULE-IMPORT", ModuleImportRequest},
+++    RequestPair {(const char *) u8"MODULE-COMPILED", ModuleCompiledRequest},
+++    RequestPair {(const char *) u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
++   };
++ }
++ 
++@@ -135,21 +135,21 @@ void Server::ProcessRequests (void)
++ 	  std::string msg;
++ 
++ 	  if (err > 0)
++-	    msg = u8"error processing '";
+++	    msg = (const char *) u8"error processing '";
++ 	  else if (ix >= Detail::RC_HWM)
++-	    msg = u8"unrecognized '";
+++	    msg = (const char *) u8"unrecognized '";
++ 	  else if (IsConnected () && ix == Detail::RC_CONNECT)
++-	    msg = u8"already connected '";
+++	    msg = (const char *) u8"already connected '";
++ 	  else if (!IsConnected () && ix != Detail::RC_CONNECT)
++-	    msg = u8"not connected '";
+++	    msg = (const char *) u8"not connected '";
++ 	  else
++-	    msg = u8"malformed '";
+++	    msg = (const char *) u8"malformed '";
++ 
++ 	  read.LexedLine (msg);
++-	  msg.append (u8"'");
+++	  msg.append ((const char *) u8"'");
++ 	  if (err > 0)
++ 	    {
++-	      msg.append (u8" ");
+++	      msg.append ((const char *) u8" ");
++ 	      msg.append (strerror (err));
++ 	    }
++ 	  resolver->ErrorResponse (this, std::move (msg));
++@@ -176,7 +176,7 @@ Resolver *ConnectRequest (Server *s, Resolver *r,
++     return nullptr;
++ 
++   if (words.size () == 3)
++-    words.emplace_back (u8"");
+++    words.emplace_back ((const char *) u8"");
++   unsigned version = ParseUnsigned (words[1]);
++   if (version == ~0u)
++     return nullptr;
++-- 
++2.54.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
