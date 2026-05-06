@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD7C6CD343F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A01A6CD3439
 	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 22:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA81A4077C;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77D7360FB2;
 	Wed,  6 May 2026 22:34:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5fvwz-d_zstV; Wed,  6 May 2026 22:34:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ccg52RXbxlvw; Wed,  6 May 2026 22:34:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59B741004
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93B9160F9B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778106851;
-	bh=oxsy3ZjjuooXyaAYD6u8ONk5RRw+6GLuefiyP446blg=;
+	s=default; t=1778106850;
+	bh=j/kJbUGOYprKemU6h0JMXnkG7cRunySQ/VeEUTbYjao=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=iz7mrHpU/t23uL5f/SK07QZUHjvtiC5JLsY7cv688GzUFh8Mh/IPrMkvnDoE9/EJX
-	 OtBZ85nf5A7vn3N5BFkUMUunYLSZ/WZBj5eyBFXWxpur5QD7vejn5XIShmjs7ugW7u
-	 4IWU74EubrlvbpHsjLLpVo0jBaeAVL6DQd31wjSeqTUciZJ3wm6FNrT/hVhrfXHupU
-	 GbXKKaUy2962tUEuXRMPkcFPYeTsSJKQ5M/jRL7v8BS3hwt1zKzs0sj66QqRW7QJZH
-	 D5T0E4o+cjIAveaeQtVWwwc7QBdKprYT0b1EFvseezmstodCGcUyO7XIuImHyHQfFf
-	 NxtOELD6d0kKQ==
+	b=hhAcSTQ/Bcl0qVeZyGxZuUj4/V8VhcyiG+kV6//XF+XpxDk/9Jpsq/2qVhwNIGtXg
+	 Z2u4L3XfqEooF7k7upd6iceOhqXrMspqHugvyTxtgGT97NP0AuieWASteTj2btF97s
+	 k9ydUuO1MUxwwih/SlUpnI2HKjLjLq34P02f7/wFKvLtzfe1a8qwvMCiJfoiHEXiI/
+	 Y1XSi0QSoLg6E1BP8s8re9twuo10bUOSEBxgrZxkyX/R3YsyyZtz9WbpaVErTL/34a
+	 /XetIaWziMWxpxl3cJvA7kbnsaCRXDrMnkgXHdl3608Sk2hkLWHUZiTcNhD5Yi6NKY
+	 xf6fwdd8XHXHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B59B741004;
-	Wed,  6 May 2026 22:34:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9FF8280
- for <buildroot@buildroot.org>; Wed,  6 May 2026 22:34:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7913406F9
- for <buildroot@buildroot.org>; Wed,  6 May 2026 22:34:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lDT1hcFICoyz for <buildroot@buildroot.org>;
- Wed,  6 May 2026 22:34:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32d; helo=mail-ot1-x32d.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC428400EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC428400EC
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com
- [IPv6:2607:f8b0:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC428400EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93B9160F9B;
+	Wed,  6 May 2026 22:34:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EB24280
  for <buildroot@buildroot.org>; Wed,  6 May 2026 22:34:06 +0000 (UTC)
-Received: by mail-ot1-x32d.google.com with SMTP id
- 46e09a7af769-7de7dc85b74so201629a34.2
- for <buildroot@buildroot.org>; Wed, 06 May 2026 15:34:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 210C160F8B
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 22:34:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gf8O76R22Snk for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 22:34:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::329; helo=mail-ot1-x329.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 696AA60F7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 696AA60F7C
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
+ [IPv6:2607:f8b0:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 696AA60F7C
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 22:34:05 +0000 (UTC)
+Received: by mail-ot1-x329.google.com with SMTP id
+ 46e09a7af769-7dbe437b072so127316a34.2
+ for <buildroot@buildroot.org>; Wed, 06 May 2026 15:34:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778106845; x=1778711645;
+ d=1e100.net; s=20251104; t=1778106844; x=1778711644;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=u23z/r7yrEoQkDPtiNy7Xn4YAMZ+777UNQHcYzvGNRg=;
- b=SuQeBNhomwvidRPyxeLQfxLwjhIkYMdrlXSgtvUftJkLzYje24tJE3hrQ5RTYJfzzj
- ieSGmD5VVndJLP9sr/FTpvt/7Lsraknl4l/B5d++6BPUYPqNUmaJhYktFafl+lWpt7L5
- AF2xy52wRoJtcbbDbecQOFhOItJcAaLKUQdwPRTZa2xwtWMN6dOSk6ZtzraBE6vipOeB
- RGd8VVoBE3So7HnzN7IK2/IpCTdeDtQdF9YOqA66e9N/+l9Ko8i/OKw4N170DmmtBAQf
- 9gakiF8CIs/kkprVmcF8nLYEFE0hHzJfBcbdINzFvzbk7tY8czOyVpPdcjy/0NKM1OzC
- dMWg==
-X-Gm-Message-State: AOJu0YybnXWIOtBSw0cE5WHfjt4oamKKJuqiAckMvMfPP6XPzyXKhpJd
- qyEXMh5zbk2PE5FAbswgjHR5s3rP81vhBAUk2gA9pzq8iHlq2JZ+tlzuB39CeBjm
-X-Gm-Gg: AeBDies08+P04wDgWkZZaEsSQfUi3Qgx8xm+oBD0GTPCxszcXofAeS+V2MG+eCPWntk
- X+6isgWEVFlDSYjHU1kjWCYh6Lx5snZte7vt0dAtXTGWirasKv/Di73afDWX1V5KL4esbWReIfv
- ChynjJKu8oXA6CbLKHPrMI8lSVQgu/fo+y0O4iUc4furW6FI1oLUuImGwr5F9Lp7CgVjpe3uK21
- qV8hcANAbMLkmHJAoaJL8VY8zWLRKgxzNy0wBZM2dH7rx811XRQ/e19CL2IJg94ucvB9oz/m2tR
- ORwMNv77V0qQRXB0rXRBTFdh0WY4eKOLsDf08cn7KApzqz8oj6154DkOC4aQr4RlcN06mviqpXO
- lGDNH1oo90YDA5XhcalXX+R7etvQNfyDc0T3y3+LsIz9XDHLbWKRfuiv1bwcF6nAre08VEE+ASs
- Lz5fRqZMFYWenvhU9OCeN0D/6642HORY1GWoxBjtHj10gd08Qc2ctfOOngSoo4uwS6kvVyO3B7X
- B3SNfkeALBxh2/l96aaf2lntTULWIt0eT5PuzCxi3QEIlwlJo/mq0AIdae2Pit1/ci3msztyLpM
- VXA24us=
-X-Received: by 2002:a05:6830:2b29:b0:7dd:72f:7fb6 with SMTP id
- 46e09a7af769-7e1df074314mr3018521a34.17.1778106845565; 
- Wed, 06 May 2026 15:34:05 -0700 (PDT)
+ bh=pbd4n/M22meHUIQalX8p8ooi6Pc9q3kPGPcgUXTOpNk=;
+ b=SsdrTuEIuB5B3fjQpp++6riCg3cwz4rdxSKUPI9NwfsTjVkPh9l38/0bz8QJqfZeEr
+ cVFnvWDMu9N663vQ+nq73xRs6HCtwWQq2r3w636jOjE6IGFYNkMEGH/TAYSwC6dj7yEm
+ 7gYhmAz4U7wxrDO4DBh4J7xsThIp1zRufcb0uiozcpon5+zvT2QpRBYohZf+gYEBvYfS
+ W4SQ8Yeq7syd265bzb6ibHJyjLskjhDHd5HxIN1c/SOROYav/jzVQJxHQofghak5A8D5
+ wh6h5Ex96gqHbN3ur8mMZjJXeaGduE5OAQmJUcr7xmsmXfMim4lh8jdg1cekIjCJTSyW
+ GR5A==
+X-Gm-Message-State: AOJu0YxwrM3Qph1h3PIObjGFInm9j9iYwYeU/5rAycabNXDpyxFDe3t6
+ wsw7SFod/h2Hn9m8HGSMh6xsgr541oEOzS/T8+W2ok55j9RkwvqIcXufZeUuL3cb
+X-Gm-Gg: AeBDiesw7FwOaT+W9eGAkdBjdaygm2MRSK8lytNcZkDVE97FB4cXRBxSFhO75O2jk7s
+ mLiUfsaaF97RkFad2OGvDTHW213HUZZ4yw2nVL8ACe7AoK1//J2VY1RRnlC/4yDwbthVxjQ9LFE
+ wrTPmQ8dN+iKqorymSqFIcznwMwa+Ej5/YKSyVGj1+KrXqCJLwIFVP6mRL6TmxIgo1N7Csdoma1
+ w5bb/0tprfTWh3vvpDS7uAf2mEPJpFwd2MLzM55zi/9OHqJBHWykNB1KSMczA8kI5JTV6yw5p5z
+ qxRAL09Wh5kHYl4nuz/iyrhHQRTmhkNe+KHfSc2P9vSOeA8gTsNop5wT1lMG7NcuCPpggdR1gFm
+ sMVIzz0drQg5YeaAs/8zVOX8H7lYAKtNJYKASJ0zr0LPwpk0CFlssuRJhZFTzMWsWrYXcYDBWaL
+ Un5yVVPLKZv7RCAOWy4vw6Rj9WPPpJ/C5HW9GsW0DNF7fuDKlcV/YZ+/Ms8xO6rNe8+iIdH7Y0J
+ purmMDxMrZiNxdPq52e9S+QrB0XmCkl/Ad0C25wk3qDpH4k8eYVw8eEux2Iz0rtKhlPdAijdQDe
+ V5GJWFo=
+X-Received: by 2002:a05:6830:f81:b0:7d7:fcac:6374 with SMTP id
+ 46e09a7af769-7e1dee817a4mr2628485a34.8.1778106844142; 
+ Wed, 06 May 2026 15:34:04 -0700 (PDT)
 Received: from james-x399.tailafd1a.ts.net (71-218-113-237.hlrn.qwest.net.
  [71.218.113.237]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7deca7a9042sm12722145a34.6.2026.05.06.15.34.04
+ 46e09a7af769-7deca7a9042sm12722145a34.6.2026.05.06.15.34.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 May 2026 15:34:04 -0700 (PDT)
+ Wed, 06 May 2026 15:34:03 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 May 2026 16:33:18 -0600
-Message-ID: <20260506223341.1759760-17-james.hilliard1@gmail.com>
+Date: Wed,  6 May 2026 16:33:17 -0600
+Message-ID: <20260506223341.1759760-16-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260506223341.1759760-1-james.hilliard1@gmail.com>
 References: <20260506223341.1759760-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778106845; x=1778711645; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1778106844; x=1778711644; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=u23z/r7yrEoQkDPtiNy7Xn4YAMZ+777UNQHcYzvGNRg=;
- b=sg2jHSuER6qqevULWrcgZ53Kyaw+CgN1bwvoemzxatO+FerW9BLSS7YaWX/8uAvKcb
- A2p4nSZ3LTRhSm0eX1bh6VABulG0ll7WWhrzVKLGNpUq1+oKA2HXWFS2S9sT2HU0tnIP
- CxOJ38gg7pgZC1jjRtChnRsISiqSn/HggPgCk9XoYaZtccpccV5m+YJ/M9yPFdSk++cY
- kDNHTkEjT7UiMT9Y5fK1YfEBCEVTwWl1ikYqCk/ffEzP+vlB+o7uk0WbQGEOTjxMlohF
- Pn4RNliEOau86sDCQOXbmJXRBASCjb6/Fse1aIJBsh+qUdhriTx5lgdTXlmgp0KRvAuz
- RifA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=pbd4n/M22meHUIQalX8p8ooi6Pc9q3kPGPcgUXTOpNk=;
+ b=WfLgh59iU3JCoI8/PhEpp6UB6EuFcjK8TwWyQptwivkphA3DXjkjSGajMtiKeCsuC5
+ 6RYJ9X9XfqdDllZqs8duJst2fezAQpCxB0sBwu1OQmeMt0DfsxwyXxxasMCQPigglj+S
+ SqgZ7Ad9DqT3cUQx9xSHcmWb8QZkc8kbm5tJBPCHD3t5Mn8SErQp3txJMjm/dniMj1Rc
+ qSWPCpifPJD5p47dE+a5eA1C07EjXUtOdy5S4fXqhVQcbcL+a8+oSVF5K9IgCW/4BUdk
+ k9rBK7DE73Azv6wDwh/EqtOUCp1UfaUGKGJFKdyBs8gXcot3/lvdDOFMS2/PjFdt/jUM
+ PIcw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=sg2jHSuE
-Subject: [Buildroot] [PATCH 17/40] package/mtd: preserve /usr/sbin symlink
+ header.a=rsa-sha256 header.s=20251104 header.b=WfLgh59i
+Subject: [Buildroot] [PATCH 16/40] package/linux-tools: preserve /usr/sbin
+ symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -154,22 +155,22 @@ follow the existing path.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/mtd/mtd.mk | 2 +-
+ package/linux-tools/linux-tool-hv.mk.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 2a625fccce..032c486c66 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -157,7 +157,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FSCKUBIFS)	+= fsck.ubifs
+diff --git a/package/linux-tools/linux-tool-hv.mk.in b/package/linux-tools/linux-tool-hv.mk.in
+index e638fecfc6..0310d90c88 100644
+--- a/package/linux-tools/linux-tool-hv.mk.in
++++ b/package/linux-tools/linux-tool-hv.mk.in
+@@ -40,7 +40,7 @@ endif
  
- define MTD_INSTALL_TARGET_CMDS
- 	$(foreach f,$(MTD_TARGETS_y), \
--		$(INSTALL) -D -m 0755 $(@D)/$(f) $(TARGET_DIR)/usr/sbin/$(notdir $(f))
-+		$(INSTALL) -m 0755 $(@D)/$(f) $(TARGET_DIR)/usr/sbin/$(notdir $(f))
+ define HV_INSTALL_TARGET_CMDS
+ 	$(foreach prog,$(HV_PROGS_y), \
+-		$(INSTALL) -m 0755 -D $(LINUX_DIR)/tools/hv/$(prog) \
++		$(INSTALL) -m 0755 $(LINUX_DIR)/tools/hv/$(prog) \
+ 			$(TARGET_DIR)/usr/sbin/$(HV_$(prog))
  	)
- endef
- 
+ 	$(HV_KVP_HELPER)
 -- 
 2.53.0
 
