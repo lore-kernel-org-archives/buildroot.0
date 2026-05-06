@@ -4,82 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28746CD3439
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 16:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECF8CCD3439
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 17:03:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22269827BB;
-	Wed,  6 May 2026 16:50:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA55D81831;
+	Wed,  6 May 2026 17:03:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gz22X0ukVs6l; Wed,  6 May 2026 16:50:31 +0000 (UTC)
+ id sLi6TNbjNYNU; Wed,  6 May 2026 17:03:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5C8482733
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFA5381846
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778086231;
-	bh=KhXV6ppx73faK4B27S3KI9gKJYtCFkxCA5P2OSHySqE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1778087011;
+	bh=he57vgR89q3V064/kANVT3KUvrc+817M2KQiVDIS2xU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Ifu8XKbLg4h43qmdfgUbFBZK7IIVI7dEO0theCWcrG55kNHW9FqIdsACvR4lJmbE0
-	 8djgdNSG0J7ylRvUiR902ANmUvZUY05wAy7nTQlpd2Jr3x9aSUeTAvlSfyg1fyqn3L
-	 UKtAmn6CcxypIkLh+v2mPxrTrZGGpw8YVdmTutSsPCgbCKmxvgR73Q1jm3Ang69ouR
-	 Ms9OQ9kIvEYCruWQJ/+XSVw7UI31IzYJ/CAliG+Nb+QiHDe4yB/VP+i9zyjhgAuHW9
-	 0O3bygI743rg9QgwVhVo6J8mQpdhqQGdWUgBa3HgRhIm2WfJeFwJTEBCmYNrPdTt6D
-	 fhs6uG3EAYlJw==
+	b=JbShGmL+hv1CHW9aVj0yA5oju83MUC6epVswPVZLT89m8P8B+CTxYdCHfKfqzTZ5a
+	 kiPs4bfhG3Q148UZxyzSOLfDcGTlgnbTNHnAownsj8aC0oj6SmIZ7YnktNhSnadQSb
+	 /JrgodWVKP1T3t33DGgiwH0nllEqbMs7+HPmXui89/39YoU4LdmVXla6EI9hIaW3lf
+	 nWK70Rt6PdNsO29ArLo63ZRcJxAbgZ+ccIDjUXP8AjLRJCg6ixIwLR0UJC6X0ruy7e
+	 j/seLZaDVLNWv2GRyQ78dF91moKX4S2iO4suCdn2Gpzb4oOaEdvrPTccqFWCHHv+m/
+	 6Wghr7amZ91AQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5C8482733;
-	Wed,  6 May 2026 16:50:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BB2D11B
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:50:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFA5381846;
+	Wed,  6 May 2026 17:03:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AA09317
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 17:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D87F40EB7
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:50:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C68060E98
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 17:03:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MdhcH3_HZOwo for <buildroot@buildroot.org>;
- Wed,  6 May 2026 16:50:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A4B340EB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A4B340EB4
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A4B340EB4
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:50:29 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cc94.dip0.t-ipconnect.de [79.214.204.148])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A9101A4C0E73
- for <buildroot@buildroot.org>; Wed,  6 May 2026 18:50:27 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49460)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wKfS6-000000005s1-3eYB
- for buildroot@buildroot.org; Wed, 06 May 2026 16:50:27 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kojiUosIzg2y for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 17:03:28 +0000 (UTC)
+X-Greylist: delayed 371 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 06 May 2026 17:03:28 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6107660E95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6107660E95
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=54.37.254.54;
+ helo=kmf2.trabucayre.com; envelope-from=gwenj@trabucayre.com;
+ receiver=<UNKNOWN> 
+Received: from kmf2.trabucayre.com (kmf2.trabucayre.com [54.37.254.54])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6107660E95
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 17:03:28 +0000 (UTC)
+Received: from kmf3.. (localhost [127.0.0.1])
+ by kmf2.trabucayre.com (Postfix) with ESMTP id B9106161FE7;
+ Wed,  6 May 2026 16:57:15 +0000 (UTC)
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 To: buildroot@buildroot.org
-Date: Wed,  6 May 2026 18:50:27 +0200
-Message-ID: <20260506165027.1340687-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Date: Wed,  6 May 2026 16:57:14 +0000
+Message-Id: <20260506165714.1074180-1-gwenj@trabucayre.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1778086227;
- bh=x/gEzWKPOOSfMOtEy8S1wl7YBCWtV+88v0lszp7D3cA=;
- h=From:To:Subject:Date:From;
- b=bcxPK9CdKOi1l/yGueDS+VD4C7/SVENiPBNrmptg17DRDSE6HmOuBT/4vvmY/caUq
- v/MpdE6evflfzMkeJca6GrYlzfIC5KOvRy4dj79Qh09lc/q5iPM2GwlCc/0NmkEz5O
- H2LIqYJVydQyy4lngWNjuwXSE1j809VN2Q5bflqo1cEcyBl4EraInrL3q0qfvMTOUB
- 8d5u1rGSIex/AemiQ1dBq19YRDEgwjPSCC8v3DxWuaBAQaT/+jk0darmzHP8sXdS1l
- iBL3IHQk6TwQZutAtzbvqXWQJDYwBuCCp3sZ1BUhSQWVBJgHVCljRVY74P0+OWZl2Y
- sQfPzyysPPp5w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=trabucayre.com; s=mail; t=1778086635;
+ bh=JEYC2QXPWUAsRCgnUGHYMUPAI9hsHW/BwuWWPlpCC4c=;
+ h=From:To:Cc:Subject:Date:From;
+ b=OZyhbppc1uIXyJz9F6WuoPdRI6Nvb8z8tMSu96gu0ggF4niTCq6HqrWYNaRTIh9xu
+ AfG+nReYi49XpDBt9WkNUvgKs2J9C3KtpmU2I8EYh+Sx+utGU+rqsf0SwswogOZAd+
+ /NSoA5WVLhJzjqH7kbdCP718xBzBJHuFS29o5/9W+/cOjPvsdV5Nsx979W3IE5bN4q
+ MzulmdQQuWcF4l5KAlbtepWZfD2TFXDm2FRFIajv/atnaEbwNCYHjjC6p+QeEr/0yF
+ I7MUsnHEsMigtv2JITq/WEuDRT7u0b9I59Lc+u7Mt0iZzpHj+5PTq8CIRQ38K/gF8w
+ 6diT8pXBF4dtg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=bcxPK9Cd
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
- 21.0.7-Omega
+ header.from=trabucayre.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=trabucayre.com header.i=@trabucayre.com
+ header.a=rsa-sha256 header.s=mail header.b=OZyhbppc
+Subject: [Buildroot] [PATCH] package/openfpgaloader: bump to version 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,36 +94,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index ecec000e3d..8b5509d947 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+Bump openFPGALoader to latest version.
+Also adds a patch to fix cmake configuration when the libftdi
+version contains rcX.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ ...ses-regex-to-remove-potential-rcX-in.patch | 32 +++++++++++++++++++
+ package/openfpgaloader/openfpgaloader.hash    |  2 +-
+ package/openfpgaloader/openfpgaloader.mk      |  4 ++-
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+ create mode 100644 package/openfpgaloader/0001-CMakeLists.txt-uses-regex-to-remove-potential-rcX-in.patch
+
+diff --git a/package/openfpgaloader/0001-CMakeLists.txt-uses-regex-to-remove-potential-rcX-in.patch b/package/openfpgaloader/0001-CMakeLists.txt-uses-regex-to-remove-potential-rcX-in.patch
+new file mode 100644
+index 0000000000..bdc9f3de72
+--- /dev/null
++++ b/package/openfpgaloader/0001-CMakeLists.txt-uses-regex-to-remove-potential-rcX-in.patch
+@@ -0,0 +1,32 @@
++From ed6025645f506c8941ab245f142db701b9f9bf2a Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Wed, 6 May 2026 18:12:24 +0200
++Subject: [PATCH] CMakeLists.txt: uses regex to remove potential rcX in
++ LIBFTDI_VERSION_MINOR
++
++LIBFTDI_VERSION_XXX is used by FTDI_VERSION to adapts code according
++to libftdi version. But when rcX is present in LIBFTDI_VERSION_MINOR
++cmake fails with the math function.
++This PR adds a REGEX to only keep numeric value and drop rcX
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++[Upstream status: https://github.com/trabucayre/openFPGALoader/commit/ed6025645f506c8941ab245f142db701b9f9bf2a]
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 442327f..2bf20e1 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -200,6 +200,7 @@ if (USE_PKGCONFIG)
++ 			string(REPLACE "." ";" VERSION_LIST ${LIBFTDI_VERSION})
++ 			list(GET VERSION_LIST 0 LIBFTDI_VERSION_MAJOR)
++ 			list(GET VERSION_LIST 1 LIBFTDI_VERSION_MINOR)
+++			string(REGEX REPLACE "[^0-9].*" "" LIBFTDI_VERSION_MINOR "${LIBFTDI_VERSION_MINOR}")
++ 		endif()
++ 	else()
++ 		set(LIBFTDI_LIBRARY_DIRS "")
++-- 
++2.53.0
++
+diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
+index 33f798b7d4..b95402c10f 100644
+--- a/package/openfpgaloader/openfpgaloader.hash
++++ b/package/openfpgaloader/openfpgaloader.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  f6df1fa29ec3778f591281f57190099bf5a510c293c711ea978497556765352f  kodi-pvr-zattoo-21.0.6-Omega.tar.gz
-+sha256  d57efceff2f451cc8864d429abed6c7d808ea5092fddf3ece3f598d4a5e26b1f  kodi-pvr-zattoo-21.0.7-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 2de33b26b5..12d2d5ff09 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
+-sha256  cf19b596e5dea21891b1be3cb9a04be7a1501926ee0919dcc5c9f1b6d3bd0a96  openfpgaloader-1.0.0.tar.gz
++sha256  ca965f933c52a2a9dbb318df4d4de70fac5f095a8e64523f81036ab467a4b567  openfpgaloader-1.1.1.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
+index 06c8b2face..ca2ef4b97b 100644
+--- a/package/openfpgaloader/openfpgaloader.mk
++++ b/package/openfpgaloader/openfpgaloader.mk
+@@ -4,12 +4,14 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 21.0.6-Omega
-+KODI_PVR_ZATTOO_VERSION = 21.0.7-Omega
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+-OPENFPGALOADER_VERSION = 1.0.0
++OPENFPGALOADER_VERSION = 1.1.1
+ OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,v$(OPENFPGALOADER_VERSION))
+ OPENFPGALOADER_LICENSE = Apache-2.0
+ OPENFPGALOADER_LICENSE_FILES = LICENSE
+ OPENFPGALOADER_DEPENDENCIES = libftdi1 zlib
+ 
++OPENFPGALOADER_CONF_OPTS = "-DCMAKE_DISABLE_FIND_PACKAGE_LibFTDI1=ON"
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ OPENFPGALOADER_DEPENDENCIES += udev
+ OPENFPGALOADER_CONF_OPTS += -DENABLE_UDEV=ON
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
