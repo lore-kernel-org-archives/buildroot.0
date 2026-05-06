@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05AD9CD342C
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 22:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85E84CD3439
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 22:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DE8960F61;
-	Wed,  6 May 2026 22:17:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4AE560F54;
+	Wed,  6 May 2026 22:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oshBHXFaYkRV; Wed,  6 May 2026 22:17:18 +0000 (UTC)
+ id fPrBDxEpOxnu; Wed,  6 May 2026 22:17:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7FA4607CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB8E260F57
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778105837;
-	bh=JBUZsa3uPpFdSn5NTwVii9mwebK+5mh87j6c63arUSc=;
+	s=default; t=1778105838;
+	bh=QBoGvLbIlzz0af1z2umyDezm6fByiaJ13EX4WEEXfl0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ab7IyRnL+Gs1C9TQLtMe46XkpVUP0UWpMXLDxvLaDFEulHb55BYKhqf96GmFs7i8a
-	 SFWHeY1/+CXhZRkreYf4lU9LS3gpU1G58l6hUj2FsiK9LcSfY3Hd+uqB5t1E5IVO60
-	 bq/uFRtHMUs2eBl+U1teNW2HCUVvzS9hMp6lWqWlXJTCO9vhZNsh1lZDpbd5gPqHnA
-	 3E9K5WRCpDbRutg2kEFSPjaOP3bYqs/1NlCTz9tE4uYDXf9lKx5on3dXUfREmTa8Bl
-	 00poRZiHe2WQwH7/c8sAYJ7myx2kqWITdsyw8zC38aHie/XH819xIbbFNPR/EnP+sS
-	 PqZWXgy0igBPw==
+	b=Je+VQ54p3fJiWC85gSWXZFzNfX+Vow/EwRhtV4QnjZwaHP70KRORn5RkfQyegpOIV
+	 rJZtGQZcSVlaCgRIpgk2nlJcKPbgP053W+3HMTvMthS2x3WGnEgtPQru3Hk9QkQusi
+	 ycPl4/4wvXJU/Am0Ev8qJVMgy2+W1e4RhtY87Ul52iFQXKv7DAPEB+yyrUG5v7Wi/l
+	 tHqAm6DQRTcZCek8l/HcJkhZX7eRUjotzx8Ptx6a40YRm0qjIp9fKdhWMhoYU7AOdq
+	 5tjBl4RCWerJSZr4jcvCulCxcZ2TitpkqnjhfzpP2Thu0HzoGZhND6xreMMzsCcFQ/
+	 7S8vC2jcFZlNw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7FA4607CD;
-	Wed,  6 May 2026 22:17:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EB2A280
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB8E260F57;
+	Wed,  6 May 2026 22:17:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA35A280
  for <buildroot@buildroot.org>; Wed,  6 May 2026 22:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F6DD83323
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0BCD607CD
  for <buildroot@buildroot.org>; Wed,  6 May 2026 22:17:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oeboer3uBD0l for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X998L7dxntAP for <buildroot@buildroot.org>;
  Wed,  6 May 2026 22:17:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF68B83294
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B514260747
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF68B83294
+ by smtp3.osuosl.org (Postfix) with ESMTP id B514260747
  for <buildroot@buildroot.org>; Wed,  6 May 2026 22:17:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C33B84BC5; Wed,  6 May 2026 22:17:14 +0000 (UTC)
+ id 42A4084BC1; Wed,  6 May 2026 22:17:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 6 May 2026 23:14:09 +0200
+Date: Wed, 6 May 2026 23:13:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 951e07f0c40c52fc069c53c6cf9232dcc0e8b296
-X-Git-Newrev: c073c976179021c84e0c84f6f23e938b43783e75
+X-Git-Oldrev: 0f2e9cc8784715bdf18e72c433fe9bece4537f85
+X-Git-Newrev: 951e07f0c40c52fc069c53c6cf9232dcc0e8b296
 X-Patchwork-Hint: ignore
-Message-Id: <20260506221714.4C33B84BC5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 26.1.0
+Message-Id: <20260506221714.42A4084BC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: bump version to
+ 22.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,59 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c073c976179021c84e0c84f6f23e938b43783e75
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/951e07f0c40c52fc069c53c6cf9232dcc0e8b296
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://lists.freedesktop.org/archives/mesa-announce/2026-May/000849.html
+https://discourse.llvm.org/t/llvm-22-1-5-released/90734
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/llvm-project/llvm-project.hash | 4 ++--
+ package/llvm-project/llvm-project.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 1098aee9c1..ea6c328134 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 26.0.6
-+MESA3D_HEADERS_VERSION = 26.1.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index eed4265147..ae95f9cd3a 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2026-April/000848.html
--sha256  1d3c3b8a8363b8cc354175bb4a684ad8b035211cc1d6fa17aeb9b9623c513f89  mesa-26.0.6.tar.xz
--sha512  7f298234cb7b353ac40dc4d116866115160d1a52de6da8d4f1343af7ed47ca11e1a07b70aad8d24221906e0b520a4c140c12ffa7e7e706e3f25f301842a37e68  mesa-26.0.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2026-May/000849.html
-+sha256  a5095e6dc2986c78f0cef4c5555dc803e93b6bfe5670e991f9e8bd49395bae19  mesa-26.1.0.tar.xz
-+sha512  02972b1a2e6a2d10fa9c970ab579ddd6f0d3acfb782d82616b91cca7a28dd494b15fb14748fff333b1078898cf990a25666e9122d7fd41cb212a151caf933786  mesa-26.1.0.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b4179908c3..1eaa4c577e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index eb3775659f..9155ba8c53 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.4
+-sha256  3e68c90dda630c27d41d201e37b8bbf5222e39b273dec5ca880709c69e0a07d4  llvm-project-22.1.4.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.5
++sha256  7972b87b705a003ce70ab55f9f0fb495d156887cba0eb296d284731139118e2c  llvm-project-22.1.5.src.tar.xz
+ # locally calculated
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 1aa02e0800..eedef3a1c5 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 26.0.6
-+MESA3D_VERSION = 26.1.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.4
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
