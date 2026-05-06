@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2632CD343B
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 16:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027C0CD342C
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 16:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A92A240F57;
-	Wed,  6 May 2026 16:35:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD69E40F62;
+	Wed,  6 May 2026 16:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6bpvMDDEyhjj; Wed,  6 May 2026 16:35:03 +0000 (UTC)
+ id mfSwGpnZlXcR; Wed,  6 May 2026 16:35:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2853940F51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3048C40F58
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778085303;
-	bh=g/fq65/vLVczDRFLle51R0yTvmRBnt/CHg5YSnyw//I=;
+	s=default; t=1778085314;
+	bh=AdLv01MtExyvmxSBjsJ3UVmpw0EzZiJ1L1Jn/khSvjQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=eknKFfJ0EnKNscCPg3RPgHYr4vcpqsZfAaRfvD95hHXPukjiS+lCfklrMcxSSC1Xa
-	 6q1+e6DeBE3ejFA07J0ka45Ri7c9fv2pbwKXBy4NaY6MGT4S9xlubavN8fulMS+nC8
-	 cYXtjY/eY1/Gh9dUkNSkPyPae3HbvE85dQPGGb4/tntkY8Z4AEBpGc1By8GJWlh3cQ
-	 X0TZVQonjDOvBaTlRYLULGaJpMbECGqKXQb5vwel+VPsl0qZnl2cHprCzeoP1lhKw7
-	 RrGFKlHUpI/zR0RvfzLrzkRlAnaFNXOvREQAODoyNO4S0mJSdMS8eUp8nQiRaGgAbl
-	 dO4PT5X0rIXaQ==
+	b=NacZuozJeEkcZC0KWUG+ADqczQC/JT4nB63rlATlROdSms6XMnE5L0nUzwsryw6ww
+	 GzaEZbFkGgFEd+yUasRwyAAFR4Vd4rMK1jmy4RhI/3gGcE65gNOr1HtGgUge6wR8fL
+	 ebJ5NeSQJDlGWgBUhF0qkngMY7RENWphJ8pcLn2hf1ucOzU3sQrsr17i5FBdLFH3WI
+	 fJc/5VSfcEpzOqPa75QNCwlBFjsVcmU/FnG4d3EJ/ZFOE69LllWZNvnbYIzplUgpfk
+	 Tx+2DuHOvglGArfxmhCVa2SeXjnBT3H0VK0Hb1DmOPuJ/RrsG65WD6BMk5P3nCRG3c
+	 JmVTeDAeDwJJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2853940F51;
-	Wed,  6 May 2026 16:35:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F3F1317
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3048C40F58;
+	Wed,  6 May 2026 16:35:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76A0C11B
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7550040F51
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68B7160E92
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id smkMOmT6CMn2 for <buildroot@buildroot.org>;
- Wed,  6 May 2026 16:35:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h083K31qop-k for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 16:35:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6939140F4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6939140F4F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63AB460E93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63AB460E93
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6939140F4F
- for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63AB460E93
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 16:35:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc94.dip0.t-ipconnect.de [79.214.204.148])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C26CA4C20E0;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CAA82A4C20E4;
  Wed,  6 May 2026 18:31:56 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:51906)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wKf9y-000000002XI-1wpA;
+ (envelope-from <bernd@kuhls.net>) id 1wKf9y-000000002XI-2UtE;
  Wed, 06 May 2026 16:31:43 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  6 May 2026 18:31:28 +0200
-Message-ID: <20260506163136.1330722-16-bernd@kuhls.net>
+Date: Wed,  6 May 2026 18:31:29 +0200
+Message-ID: <20260506163136.1330722-17-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260506163136.1330722-1-bernd@kuhls.net>
 References: <20260506163136.1330722-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1778085116;
- bh=VMedpVoKaBKe5rGfcENCHg2AX16T5lnQR+HFOGMLgDg=;
+ bh=bWNhI1r3yyLPULUxeRm76DoW0v6JWSGkuWwUGWbp3u8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=CrpaOmlPISq9w1WV5jGpwjOfDmaFrlaD6kedPDRHkmt8J33ymGc5KU+aPgUfg3AM7
- HM4pNdQMciAjstPlUQ/bcjBXJn7HALMCxpv6YaGJeDczeYLBxMKIuno3nQ4Pxzw7UN
- /BKb9czLX8Lur+blXVaaQbVQLlbQmp7sZfslKl2diOnE3lMGmHBLFauRz+3/NdXOgD
- DfXoqbZQuRRCKHi9JK4TixCvi0zmgT+iIYpjatqNElyyPoMhF/UvDIxzPdgcHmIuzk
- WvhBvZNqKbxU92nUfH9vBPstaUAg6efLLheX5EgTWhz5GsY4yiIhGBzppktcLgJgoG
- 9JPWeVq6D9wGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=ckHTJuj7akePPekgKZq41eOFz4jtiKy3gr/su0HXBkuk4kwOjRcmFNZQpwCMBk0uF
+ CVShbrqUJJbZ9nSmxG0kj1HbUGb/EdhyLh2V6GJz7dTa4UsUTXRgEsXB1Ob3jWI1je
+ GUV4LuLKoqsbbhsTnNV/54tBCloR7h5YA8wSDf/F9AIwRWLpfKn/zhSCqTGQ6xrZ3y
+ DW6NMuqSabT2ZWs6Os7K2VPexpF0Qmmv5Ta2vLW4EvHBtEnBZHeA+Ux+SrXMa5qd+c
+ Z3oPKwQGrnxJ7kfhl1LhdifUAg0sRot6kcQQE8J3yiibjOtfhzlFneMQowYP0nqEur
+ NfSJsZyOBwzNQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=CrpaOmlP
-Subject: [Buildroot] [PATCH v5 15/22] package/binutils: add build fixes for
- gcc 16.x
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=ckHTJuj7
+Subject: [Buildroot] [PATCH v5 16/22] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_16 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,151 +107,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport patch from binutils 2.46 to fix build errors with gcc 16.x on
-or1k.
+In order to add gcc 16 support in follow-up commits, introduce
+BR2_TOOLCHAIN_GCC_AT_LEAST_16 symbol.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...Mark-undefined-TLS-symbol-as-STT_TLS.patch | 61 +++++++++++++++++++
- ...Mark-undefined-TLS-symbol-as-STT_TLS.patch | 61 +++++++++++++++++++
- 2 files changed, 122 insertions(+)
- create mode 100644 package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
- create mode 100644 package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch b/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
-new file mode 100644
-index 0000000000..f4121ee80f
---- /dev/null
-+++ b/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
-@@ -0,0 +1,61 @@
-+From d320649e1805e5330a09b103d4ca890a12815f56 Mon Sep 17 00:00:00 2001
-+From: "H.J. Lu" <hjl.tools@gmail.com>
-+Date: Tue, 18 Nov 2025 12:09:54 +0800
-+Subject: [PATCH] or1k: Mark undefined TLS symbol as STT_TLS
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 910cd103dc..5aa6cf8f6d 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -848,10 +848,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_16
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
 +
-+Update or1k_apply_fix to handle all TLS relocations.
-+
-+	PR gas/33426
-+	* config/tc-or1k.c (or1k_apply_fix): Handle all TLS relocations.
-+
-+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-+
-+Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d320649e1805e5330a09b103d4ca890a12815f56
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gas/config/tc-or1k.c | 18 ++++++++++++------
-+ 1 file changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/gas/config/tc-or1k.c b/gas/config/tc-or1k.c
-+index f5a20b94fa7..798cf6d6acc 100644
-+--- a/gas/config/tc-or1k.c
-++++ b/gas/config/tc-or1k.c
-+@@ -354,22 +354,28 @@ or1k_apply_fix (struct fix *f, valueT *t, segT s)
-+ 
-+   switch (f->fx_r_type)
-+     {
-++    case BFD_RELOC_OR1K_TLS_DTPMOD:
-++    case BFD_RELOC_OR1K_TLS_DTPOFF:
-+     case BFD_RELOC_OR1K_TLS_GD_HI16:
-++    case BFD_RELOC_OR1K_TLS_GD_LO13:
-+     case BFD_RELOC_OR1K_TLS_GD_LO16:
-+     case BFD_RELOC_OR1K_TLS_GD_PG21:
-+-    case BFD_RELOC_OR1K_TLS_GD_LO13:
-++    case BFD_RELOC_OR1K_TLS_IE_AHI16:
-++    case BFD_RELOC_OR1K_TLS_IE_HI16:
-++    case BFD_RELOC_OR1K_TLS_IE_LO13:
-++    case BFD_RELOC_OR1K_TLS_IE_LO16:
-++    case BFD_RELOC_OR1K_TLS_IE_PG21:
-+     case BFD_RELOC_OR1K_TLS_LDM_HI16:
-++    case BFD_RELOC_OR1K_TLS_LDM_LO13:
-+     case BFD_RELOC_OR1K_TLS_LDM_LO16:
-+     case BFD_RELOC_OR1K_TLS_LDM_PG21:
-+-    case BFD_RELOC_OR1K_TLS_LDM_LO13:
-+     case BFD_RELOC_OR1K_TLS_LDO_HI16:
-+     case BFD_RELOC_OR1K_TLS_LDO_LO16:
-+-    case BFD_RELOC_OR1K_TLS_IE_HI16:
-+-    case BFD_RELOC_OR1K_TLS_IE_LO16:
-+-    case BFD_RELOC_OR1K_TLS_IE_PG21:
-+-    case BFD_RELOC_OR1K_TLS_IE_LO13:
-++    case BFD_RELOC_OR1K_TLS_LE_AHI16:
-+     case BFD_RELOC_OR1K_TLS_LE_HI16:
-+     case BFD_RELOC_OR1K_TLS_LE_LO16:
-++    case BFD_RELOC_OR1K_TLS_LE_SLO16:
-++    case BFD_RELOC_OR1K_TLS_TPOFF:
-+       S_SET_THREAD_LOCAL (f->fx_addsy);
-+       break;
-+     default:
-+-- 
-+2.43.7
-+
-diff --git a/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch b/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
-new file mode 100644
-index 0000000000..f4121ee80f
---- /dev/null
-+++ b/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
-@@ -0,0 +1,61 @@
-+From d320649e1805e5330a09b103d4ca890a12815f56 Mon Sep 17 00:00:00 2001
-+From: "H.J. Lu" <hjl.tools@gmail.com>
-+Date: Tue, 18 Nov 2025 12:09:54 +0800
-+Subject: [PATCH] or1k: Mark undefined TLS symbol as STT_TLS
-+
-+Update or1k_apply_fix to handle all TLS relocations.
-+
-+	PR gas/33426
-+	* config/tc-or1k.c (or1k_apply_fix): Handle all TLS relocations.
-+
-+Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-+
-+Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d320649e1805e5330a09b103d4ca890a12815f56
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gas/config/tc-or1k.c | 18 ++++++++++++------
-+ 1 file changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/gas/config/tc-or1k.c b/gas/config/tc-or1k.c
-+index f5a20b94fa7..798cf6d6acc 100644
-+--- a/gas/config/tc-or1k.c
-++++ b/gas/config/tc-or1k.c
-+@@ -354,22 +354,28 @@ or1k_apply_fix (struct fix *f, valueT *t, segT s)
-+ 
-+   switch (f->fx_r_type)
-+     {
-++    case BFD_RELOC_OR1K_TLS_DTPMOD:
-++    case BFD_RELOC_OR1K_TLS_DTPOFF:
-+     case BFD_RELOC_OR1K_TLS_GD_HI16:
-++    case BFD_RELOC_OR1K_TLS_GD_LO13:
-+     case BFD_RELOC_OR1K_TLS_GD_LO16:
-+     case BFD_RELOC_OR1K_TLS_GD_PG21:
-+-    case BFD_RELOC_OR1K_TLS_GD_LO13:
-++    case BFD_RELOC_OR1K_TLS_IE_AHI16:
-++    case BFD_RELOC_OR1K_TLS_IE_HI16:
-++    case BFD_RELOC_OR1K_TLS_IE_LO13:
-++    case BFD_RELOC_OR1K_TLS_IE_LO16:
-++    case BFD_RELOC_OR1K_TLS_IE_PG21:
-+     case BFD_RELOC_OR1K_TLS_LDM_HI16:
-++    case BFD_RELOC_OR1K_TLS_LDM_LO13:
-+     case BFD_RELOC_OR1K_TLS_LDM_LO16:
-+     case BFD_RELOC_OR1K_TLS_LDM_PG21:
-+-    case BFD_RELOC_OR1K_TLS_LDM_LO13:
-+     case BFD_RELOC_OR1K_TLS_LDO_HI16:
-+     case BFD_RELOC_OR1K_TLS_LDO_LO16:
-+-    case BFD_RELOC_OR1K_TLS_IE_HI16:
-+-    case BFD_RELOC_OR1K_TLS_IE_LO16:
-+-    case BFD_RELOC_OR1K_TLS_IE_PG21:
-+-    case BFD_RELOC_OR1K_TLS_IE_LO13:
-++    case BFD_RELOC_OR1K_TLS_LE_AHI16:
-+     case BFD_RELOC_OR1K_TLS_LE_HI16:
-+     case BFD_RELOC_OR1K_TLS_LE_LO16:
-++    case BFD_RELOC_OR1K_TLS_LE_SLO16:
-++    case BFD_RELOC_OR1K_TLS_TPOFF:
-+       S_SET_THREAD_LOCAL (f->fx_addsy);
-+       break;
-+     default:
-+-- 
-+2.43.7
-+
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "16"	if BR2_TOOLCHAIN_GCC_AT_LEAST_16
+ 	default "15"	if BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	default "14"	if BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
 -- 
 2.47.3
 
