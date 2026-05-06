@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1904ACD3439
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 18:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3628ACD342C
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 18:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BB0F82BF4;
-	Wed,  6 May 2026 18:41:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DB1B60EDE;
+	Wed,  6 May 2026 18:41:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fGzML_fiOuVv; Wed,  6 May 2026 18:41:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZEU_bq9v3MAc; Wed,  6 May 2026 18:41:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DBD382BBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 591DC60ECF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778092889;
-	bh=+wmE4zBTALlBvGr7WKMBndylde+iu06cW/X90IeQDzw=;
+	s=default; t=1778092901;
+	bh=FJddR2aZ6T0x1DEi8+NdSq/N3uGlcZuJ+DJaTA+RfSc=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=C/Zpb0sRfgSBTrJKz2mfTjpzJDy+u0bmXx7wXZsT0DLMtsFLx8c1KZR6jNlHmoz1W
-	 Oz3hBweL/JJLVG4lq1EFhpcu5E8TQbFtOydOBjaTXX8xhfJi43w4iiqBq/xaaiEYKZ
-	 pwHmjpXe6CHj2iYJ91NyafTafqwrl3ppH6bPlujZNdmkWQHSMV+Fm7gL+ZIF4bnmKG
-	 pN2Y0/GsW262mlPih+XbmxMPuvAEpXuGrQuvPPF/9+93TVgJps/6z7C3JxkNb33U9f
-	 Bkp9yX1CKTIagyC2jWb4VBE6yfwfMuTPTeGzooqNz+Io/OkSfQAGpWsSX0LFY7PgvP
-	 0GcFdfYl6Zgfw==
+	b=lO4y5d7xnl3Kv68Q/1YO/TDhLm6a6T61qoNEPu8cJbFwFhQBp38nh5B4FrUNNCbLT
+	 4w9udDWKrBYSsco7VTGMeebslKbQZ9ZMAgA4Q6CUA4F4dsFeUtwC8Jh7cuH+sVksnw
+	 hiyMFsnxCQJ8mLCxr9QVcCo0wr7V+GifdUlqYjSiBbaCafzMl7T1U+ccIoSOX5t47L
+	 GDY0ENcoIw7HDqqDGf0gcyYTmFURseHsCstS8BL2ysp5NqqE//nEyPajUd2Srt6X9V
+	 7jSQGyq/KTlqXJQJnIki8c0e/XISvHED8OHOHr8SAQ0MbEXK/jPkCf40E6QpFbzedj
+	 UzFO9U9EjuB9w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DBD382BBC;
-	Wed,  6 May 2026 18:41:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C9C4A280
- for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 591DC60ECF;
+	Wed,  6 May 2026 18:41:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70CA1317
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFF1540F44
- for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6065F82C3B
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJHfEVmaBmY4 for <buildroot@buildroot.org>;
- Wed,  6 May 2026 18:41:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WWv0iUtzGe70 for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 18:41:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66E2740F3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66E2740F3E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A4C582BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A4C582BED
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66E2740F3E
- for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5A4C582BED
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 18:41:39 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bec8.dip0.t-ipconnect.de [84.161.190.200])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A6958A4C2096;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B2EE7A4C20BA;
  Wed,  6 May 2026 20:40:58 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:38038)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wKhB3-0000000040X-3zbK;
+ (envelope-from <bernd@kuhls.net>) id 1wKhB4-0000000040X-05Rp;
  Wed, 06 May 2026 18:40:58 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -62,34 +62,32 @@ Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Norbert Lange <nolange79@gmail.com>, Romain Naour <romain.naour@gmail.com>,
  Sen Hastings <sen@hastings.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Wed,  6 May 2026 20:40:46 +0200
-Message-ID: <20260506184057.665854-3-bernd@kuhls.net>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  6 May 2026 20:40:47 +0200
+Message-ID: <20260506184057.665854-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260506184057.665854-1-bernd@kuhls.net>
 References: <20260506184057.665854-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1778092858;
- bh=D+osnGSBmsspVvJ5+wMPqrq5abkNxtEqGiHFe737XmE=;
+ bh=+BsvQ9WMGRvX8q/QGtpv4NEIqGYZV7RfE2kTeTHDIOs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rXVk+TAJaovwAIUUtTCxGqWKK29O1X7GOlKqwK8RO2gbft3cNwJ6g9D0NYUG1zlya
- ELpae686GvmytQUgTXZRGzPM/qG2YSOxbEyvpLnYwArDxnaICAhIL4sNgghkvQpa0T
- AzoYYK2GqhO4pnTInTV2zMrt6scWU3dsl3SVIDCMyWM6HYM2P2khwCRPiqaZNPyhNW
- a8dBSeO/xCmd6NUNtAUK9qhaVKCehzgrFFl9W8pW6OSju37iq/M6LbYz34lGFXqj/W
- pJvFv1StSgecdt6eAyeqnogzMyQjAxlW0FBsXlbmfeqznvhCWHc/9L1ajJC74G+lyU
- 03hcpIHsh4J3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=ruT2xV00acCDioVQf5np5D2EmlaWdmAG9tOv+bqeXehNJa4/TNRkrgKJRsfXC3l7y
+ O1mFVJbI+0S2zFDMs99Z8c68JkP0rrGR2kyjm5u3SHHScLIn14d3NW1BFQsZKl5T56
+ vZ3VvjF6m9gCYGfzXZBxHgSygj1KY+FaWH3KRk9lb7U3oC11fz+HfFehs6ZBu+5F3F
+ Aqb33jsVFea8aY1EhysTReuA24OH53gPMO6D9XO5Ac2SCDRqBipglwS+XzD4OsERXP
+ XBFKbqmXpwzj4rx6vp+aCj8sGiRX+e29LEtp6B5Crm+z42AiMdDQ9jbEeaghCMxw8p
+ +rrBDKKyFrohg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=rXVk+TAJ
-Subject: [Buildroot] [PATCH 02/12] package/libudev: new virtual package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=ruT2xV00
+Subject: [Buildroot] [PATCH 03/12] package/libudev-zero: provides libudev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,55 +104,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/Config.in          | 1 +
- package/libudev/Config.in  | 6 ++++++
- package/libudev/libudev.mk | 7 +++++++
- 3 files changed, 14 insertions(+)
- create mode 100644 package/libudev/Config.in
- create mode 100644 package/libudev/libudev.mk
+ package/libudev-zero/Config.in       | 8 ++++++++
+ package/libudev-zero/libudev-zero.mk | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index b7c799d9db..1c0f6d8a29 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -530,6 +530,7 @@ endmenu
- 	source "package/libiec61850/Config.in"
- 	source "package/libmanette/Config.in"
- 	source "package/libubootenv/Config.in"
-+	source "package/libudev/Config.in"
- 	source "package/libuio/Config.in"
- 	source "package/linux-backports/Config.in"
- 	source "package/linux-serial-test/Config.in"
-diff --git a/package/libudev/Config.in b/package/libudev/Config.in
-new file mode 100644
-index 0000000000..2dbafe4991
---- /dev/null
-+++ b/package/libudev/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_LIBUDEV
-+	bool
+diff --git a/package/libudev-zero/Config.in b/package/libudev-zero/Config.in
+index 78263406a4..41f1d762f1 100644
+--- a/package/libudev-zero/Config.in
++++ b/package/libudev-zero/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBUDEV_ZERO
+ 	bool "libudev-zero"
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_HAS_LIBUDEV
+ 	help
+ 	  Daemonless replacement for libudev
+ 
+@@ -8,3 +9,10 @@ config BR2_PACKAGE_LIBUDEV_ZERO
+ 
+ comment "libudev-zero needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
++
++if BR2_PACKAGE_LIBUDEV_ZERO
 +
 +config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	string
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
-diff --git a/package/libudev/libudev.mk b/package/libudev/libudev.mk
-new file mode 100644
-index 0000000000..af1b3ddb51
---- /dev/null
-+++ b/package/libudev/libudev.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# libudev
-+#
-+################################################################################
++	default "libudev-zero"
 +
-+$(eval $(virtual-package))
++endif # BR2_PACKAGE_LIBUDEV_ZERO
+diff --git a/package/libudev-zero/libudev-zero.mk b/package/libudev-zero/libudev-zero.mk
+index 122ed2b7bf..b987b63cc9 100644
+--- a/package/libudev-zero/libudev-zero.mk
++++ b/package/libudev-zero/libudev-zero.mk
+@@ -9,6 +9,7 @@ LIBUDEV_ZERO_SITE = $(call github,illiliti,libudev-zero,$(LIBUDEV_ZERO_VERSION))
+ LIBUDEV_ZERO_LICENSE = ISC
+ LIBUDEV_ZERO_LICENSE_FILES = LICENSE
+ LIBUDEV_ZERO_INSTALL_STAGING = YES
++LIBUDEV_ZERO_PROVIDES = libudev
+ 
+ define LIBUDEV_ZERO_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
 -- 
 2.47.3
 
