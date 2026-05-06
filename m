@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCC63CD342C
-	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 20:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4557CD3439
+	for <buildroot@archiver.kernel.org>; Wed,  6 May 2026 20:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 765B460F29;
-	Wed,  6 May 2026 20:30:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6568E4060F;
+	Wed,  6 May 2026 20:30:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfjyYyNKn8el; Wed,  6 May 2026 20:30:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J8C_TjMwnYTU; Wed,  6 May 2026 20:30:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F05860F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2255440C48
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778099449;
-	bh=/F1VF1s3g5Apzc28nAZR77S2spPe11X1BGNjWJzsz8s=;
+	s=default; t=1778099453;
+	bh=3V9/z2ThlPXoS/VSCW04j/WYKcb53xTYkPcUQgSQ6eM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WOr4PGq1wl5QEDVbHWLkrrXrSU+SzHxtbm4TpBl1R24h6wi66EE6F9JHDP0nnxiwr
-	 JFQnnx0H36x8ATXK9Sv25+Bdh94r1v6twJoaujq8gRkrpYRXE3LwAIPQ5xsd6XCCuA
-	 OuqUU0JMug0BPGEyF3WlI5XGCJtL8ZKZQJLWlPiL7n2TOxoWXe3472jVUFjAt5oAZz
-	 JjoJnFHUOTb2+1EijJVNjSeFzWp/MTP8EQJM725KvqFRzvsO1IancI7AetYvW5MgIO
-	 9eWjKPrGn3826+GnnrdhE+4TwY6CusVJEU7QDsX//k/cxW249RZ2VgfaFKuOln3rWw
-	 WrJXhZqiJwvPg==
+	b=T7cpaTiVR0zlDGuXw8eujGBXLMGcFAswPny9jThywba8G9W8VNuZ0f0MsVoyDrPJK
+	 t32+ZB2bcwriTvYLPms55gtkGHUxqlhx1yYkN2qrqlVxCrxTYlz07wflHuKZ2aN/o5
+	 a9uc/yVVsK/Z+rQxvbPWk7OikwkVjC61mVNaHr1Kb8XzhcSiWgb1FBOqMVwqHYhA+y
+	 VQH98wteEPq7LfsmRlHQsevh3UPOOlI82Rhlm+OsXEscMYi+NPOZRGLo+WJ/YD3SzB
+	 MfEC06E9amXmxAOpRt+/aTyPi7sQHtye32+Ju4l0/1is0VCx+cxHuGxr3/k1RpItuF
+	 EJGG5QreM30gQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F05860F28;
-	Wed,  6 May 2026 20:30:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C9E1280
- for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2255440C48;
+	Wed,  6 May 2026 20:30:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8678E280
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4271E60F28
- for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C9B88315C
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xpNPJKcwUEua for <buildroot@buildroot.org>;
- Wed,  6 May 2026 20:30:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pL29fYvrZAHs for <buildroot@buildroot.org>;
+ Wed,  6 May 2026 20:30:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 102DD60825
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5262E82A2E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 102DD60825
- for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5262E82A2E
+ for <buildroot@buildroot.org>; Wed,  6 May 2026 20:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E76084A1B; Wed,  6 May 2026 20:30:44 +0000 (UTC)
+ id DDACE84A38; Wed,  6 May 2026 20:30:46 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 6 May 2026 22:21:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4fe009b6aa6f6dd74630656f55c8cc656611bd1b
-X-Git-Newrev: 0dd4196fa0bd11a63ff29ad4e90dcca009a4a069
+X-Git-Oldrev: dee4991cd16b1e03998e7b02576ac0b0922c9cd5
+X-Git-Newrev: 10ccbe079ca45e393f5f5c168c1bce56ce4eb2cc
 X-Patchwork-Hint: ignore
-Message-Id: <20260506203044.8E76084A1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: fix gcc-15 build with host
+Message-Id: <20260506203046.DDACE84A38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: fix gcc-13 build with host
  gcc 16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,25 +77,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0dd4196fa0bd11a63ff29ad4e90dcca009a4a069
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/10ccbe079ca45e393f5f5c168c1bce56ce4eb2cc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Backport patch that was applied upstream to the gcc-15 maintenance
-branch.
+Backport 2 patches from upstream maintenance branch. Same fixes as
+required for gcc-14.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  ...libcody-Make-it-buildable-by-C-11-to-C-26.patch | 261 +++++++++++++++++++++
- 1 file changed, 261 insertions(+)
+ ...sstream-and-memory-include-above-safe-cty.patch |  79 +++++++
+ 2 files changed, 340 insertions(+)
 
-diff --git a/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+diff --git a/package/gcc/13.4.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc/13.4.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
 new file mode 100644
-index 0000000000..8788a0c0bd
+index 0000000000..e1d6b5eb32
 --- /dev/null
-+++ b/package/gcc/15.2.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
++++ b/package/gcc/13.4.0/0005-libcody-Make-it-buildable-by-C-11-to-C-26.patch
 @@ -0,0 +1,261 @@
-+From 1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37 Mon Sep 17 00:00:00 2001
++From 51b9a0f7dfd2441a30e0ebfd4b30f18f86b4ea54 Mon Sep 17 00:00:00 2001
 +From: Jakub Jelinek <jakub@redhat.com>
 +Date: Fri, 21 Nov 2025 16:25:58 +0100
 +Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
@@ -123,7 +124,7 @@ index 0000000000..8788a0c0bd
 +
 +(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
 +Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37
++Upstream: https://gcc.gnu.org/git?p=gcc.git;a=commit;h=51b9a0f7dfd2441a30e0ebfd4b30f18f86b4ea54
 +---
 + libcody/client.cc | 36 +++++++++++++++++++-----------------
 + libcody/cody.hh   | 22 ++++++++++++++++++++++
@@ -353,6 +354,91 @@ index 0000000000..8788a0c0bd
 +   unsigned version = ParseUnsigned (words[1]);
 +   if (version == ~0u)
 +     return nullptr;
++-- 
++2.54.0
++
+diff --git a/package/gcc/13.4.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch b/package/gcc/13.4.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
+new file mode 100644
+index 0000000000..3b12747d68
+--- /dev/null
++++ b/package/gcc/13.4.0/0006-build-Move-sstream-and-memory-include-above-safe-cty.patch
+@@ -0,0 +1,79 @@
++From 9239757a9c6e3a6e8d94d56803329d556ec914d7 Mon Sep 17 00:00:00 2001
++From: Andrew Pinski <quic_apinski@quicinc.com>
++Date: Mon, 25 Nov 2024 14:03:27 -0800
++Subject: [PATCH] build: Move sstream and memory include above safe-ctype.h
++ [PR124830]
++
++This picks r15-5661-gf6e00226a4ca6 to older branches, also moving
++the <memory> include to fix build issues with a C++20 host compiler.
++
++sstream in some versions of libstdc++ include locale which might not have been
++included yet. safe-ctype.h defines the toupper, tolower, etc. as macros so the
++c++ header files needed to be included before hand as comment in system.h says:
++/* Include C++ standard headers before "safe-ctype.h" to avoid GCC
++   poisoning the ctype macros through safe-ctype.h */
++
++I don't understand how it was working before when memory was included after
++safe-ctype.h rather than before. But this makes sstream consistent with the
++other C++ headers.
++
++gcc/ChangeLog:
++
++	PR target/117771
++	PR c/124830
++	* system.h: Move the include of sstream and memory above safe-ctype.h.
++
++Signed-off-by: Andrew Pinski <quic_apinski@quicinc.com>
++(cherry picked from commit 046776dac7cc74bdbab36f450af80644a045858a)
++Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
++Upstream: https://gcc.gnu.org/git?p=gcc.git;a=commit;h=9239757a9c6e3a6e8d94d56803329d556ec914d7
++---
++ gcc/system.h | 21 +++++++++------------
++ 1 file changed, 9 insertions(+), 12 deletions(-)
++
++diff --git a/gcc/system.h b/gcc/system.h
++index 0354883ed3f..1f013d3ac7a 100644
++--- a/gcc/system.h
+++++ b/gcc/system.h
++@@ -222,6 +222,15 @@ extern int fprintf_unlocked (FILE *, const char *, ...);
++ #ifdef INCLUDE_FUNCTIONAL
++ # include <functional>
++ #endif
+++#ifdef INCLUDE_SSTREAM
+++# include <sstream>
+++#endif
+++/* Some of the headers included by <memory> can use "abort" within a
+++   namespace, e.g. "_VSTD::abort();", which fails after we use the
+++   preprocessor to redefine "abort" as "fancy_abort" below.  */
+++#ifdef INCLUDE_MEMORY
+++# include <memory>
+++#endif
++ # include <cstring>
++ # include <initializer_list>
++ # include <new>
++@@ -736,22 +745,10 @@ extern int vsnprintf (char *, size_t, const char *, va_list);
++ #define LIKELY(x) (__builtin_expect ((x), 1))
++ #define UNLIKELY(x) (__builtin_expect ((x), 0))
++ 
++-/* Some of the headers included by <memory> can use "abort" within a
++-   namespace, e.g. "_VSTD::abort();", which fails after we use the
++-   preprocessor to redefine "abort" as "fancy_abort" below.  */
++-
++-#ifdef INCLUDE_MEMORY
++-# include <memory>
++-#endif
++-
++ #ifdef INCLUDE_MUTEX
++ # include <mutex>
++ #endif
++ 
++-#ifdef INCLUDE_SSTREAM
++-# include <sstream>
++-#endif
++-
++ #ifdef INCLUDE_MALLOC_H
++ #if defined(HAVE_MALLINFO) || defined(HAVE_MALLINFO2)
++ #include <malloc.h>
 +-- 
 +2.54.0
 +
