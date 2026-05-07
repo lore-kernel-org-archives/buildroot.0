@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6B6CD343F
-	for <buildroot@archiver.kernel.org>; Thu,  7 May 2026 17:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D79CD3442
+	for <buildroot@archiver.kernel.org>; Thu,  7 May 2026 17:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 961E2411EC;
-	Thu,  7 May 2026 17:04:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E65F883C76;
+	Thu,  7 May 2026 17:05:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f5Pb-I-Kli9N; Thu,  7 May 2026 17:04:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ou74ijJmzlRw; Thu,  7 May 2026 17:05:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86A18411E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 584B883C6F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778173483;
-	bh=HljJDj67Io3/m75lQ/TCRbGTNQeDOO2cj0OBLT5xhS0=;
+	s=default; t=1778173532;
+	bh=PhIl5Zztg+HuyYa45TBwisyqNszSC0CTv9CG04GSS1E=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LvwPQzsShleIePyuI6BW6XlVrLCrehVCEAThraAx5i2P77kYippMzQMRledpqcUaA
-	 uKganCdFvJUAAcEmVL/DiBD8GwNChvTSgQlBT5HE5jIWPL29SNpYvDp34mssur3v/L
-	 bGNJZgK9KCHQgufgVUPy8WTC8PQI8x+D3zEk1zX32AF7rkbTRUrd5qGVziFV+b/bAw
-	 w9UlVZ6j7WwbdNGqlXCv5F3uorM28lkYFZcXNsy5/jcS9z07kvD6riqTtkJi076nJx
-	 rIrHZKdfewkcxT5Iu56Pw2TrpVY9eW0WivW0ktpNEzV0whk8TpBH07MmT6/jegmXIw
-	 +1TkXlMDHjLmw==
+	b=LkCc4vouh63lx4//TY9KXdwi9fYDTxE3oy85rw2QyV4XzTq8t0SCAkkFZOPU/6vhP
+	 ZAtfm1O57Nm/tD8ui3ng5nda+Mf6JdS+YRtAA/iq7QhO/xHnnuCA6BdCVaZetxltnA
+	 IbrySIlHsabtTk27sLW5Zs16iDC0rCeqyU/iKpbJtKI0wkXDwKlyo59Mo9MdmzAm+X
+	 FuR/7/YqWSOlqJVCxas7zKT/javaylQIe8aOzy+daqr/+NAOH++zu8wOiqttm77dG7
+	 MA/KZ4z5UNzwfheuWQEY5yyR6kT7S4AOFU5Sz+aguMl0LFlRZrZbaXgXgtSwXQygFK
+	 ohCLhJlkrjJqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86A18411E3;
-	Thu,  7 May 2026 17:04:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DBB75280
- for <buildroot@buildroot.org>; Thu,  7 May 2026 17:04:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 584B883C6F;
+	Thu,  7 May 2026 17:05:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9672280
+ for <buildroot@buildroot.org>; Thu,  7 May 2026 17:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD91F6108E
- for <buildroot@buildroot.org>; Thu,  7 May 2026 17:04:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F6B44080E
+ for <buildroot@buildroot.org>; Thu,  7 May 2026 17:05:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCS3jsMR-pSI for <buildroot@buildroot.org>;
- Thu,  7 May 2026 17:04:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QdHDM6KkjBgO for <buildroot@buildroot.org>;
+ Thu,  7 May 2026 17:05:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 406A26108B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 406A26108B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 884EB40637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 884EB40637
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 406A26108B
- for <buildroot@buildroot.org>; Thu,  7 May 2026 17:04:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 884EB40637
+ for <buildroot@buildroot.org>; Thu,  7 May 2026 17:05:30 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c188.dip0.t-ipconnect.de [79.214.193.136])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DD04FA4C06FC
- for <buildroot@buildroot.org>; Thu,  7 May 2026 19:04:34 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43856)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9B445A4C0A6E
+ for <buildroot@buildroot.org>; Thu,  7 May 2026 19:05:28 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38640)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wL29K-000000007xv-2ESg
- for buildroot@buildroot.org; Thu, 07 May 2026 17:04:34 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wL2AC-0000000087P-157Z
+ for buildroot@buildroot.org; Thu, 07 May 2026 17:05:28 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  7 May 2026 19:04:34 +0200
-Message-ID: <20260507170434.3967455-1-bernd@kuhls.net>
+Date: Thu,  7 May 2026 19:05:28 +0200
+Message-ID: <20260507170528.3967644-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778173474;
- bh=C1aDbn1hodfy49w9cODNftPFpoJz5eyIYKPRmX3nl+0=;
+ s=kas202511301023; t=1778173528;
+ bh=C3tFL1iqIfV1u2I2TnRYZqPWGgE5TJgsTmFC0rNf6Aw=;
  h=From:To:Subject:Date:From;
- b=oYp77DW9alp0CU3l62SlUNihuEpUl+/ORLf0wftlFmSZaHKtYfjO1Yvo+58FhZ3DX
- uEOTtC0sRAZ4roFhRAxUG982fTQvo6LMXAcN/4vr4/HNiFvjOJBTtsfFrTiGvJxSQ9
- N8ZIT1+ZOPYHWrnZkqWvFOk4Z75b4z/lyrmXU/WNoS8fshktnSLzbNLvqXC69u2ED6
- xX0pfnV/lOPX7MZo2F1iItyStcjUBjADVckrfRjGDnlHaLmV2uJI6l1pSQU8zpddKB
- YReLtgHhNjbolIFkzGs+xpzLtHXrEu+LecFjskspKk3snTNM2SzsmfYOSvF0miPn8D
- RK5SuEWl31UCA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=PfTvzc+nazG7Jgs6D1kztjC4QxPRMIlpeUjG4UB2VdQO8E/mY/ctQb3N5uYBgPJJ8
+ y3NuRwQMbzwtnhKORqs3b9wO9FzT39BCuwnwNdMR7yCIYYltbgXwqraTnA4AU9Exqc
+ 3jBDBzUPTPI7mHW2Pc+41CJ6dbWLtDW34echcqrRKXy61ElKBQ2E9G1jEu0g3k6WwO
+ 5I4QnP7kNxyP2DttCJBAXNihQ0TQFBfS5HgRldnRJMwCsROTB9jejsZIwlU6cBEjLO
+ 96eoMRu8+l37MxXteFb4TJENuHxKdA0crywLImJjrruHpmRTf/XsFfVY/RjDBKYy4d
+ MqOWs77DuvvqA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=oYp77DW9
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: bump version to 1.0.54
+ header.s=kas202511301023 header.b=PfTvzc+n
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{12,
+ 18}.x / 7.0.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,36 +97,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/jedisct1/pure-ftpd/blob/1.0.54/ChangeLog
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/pure-ftpd/pure-ftpd.hash | 2 +-
- package/pure-ftpd/pure-ftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/{7.0.3 => 7.0.4}                     | 0
+ linux/Config.in                            | 2 +-
+ linux/before-6.17/linux.hash               | 2 +-
+ linux/from-6.17/linux.hash                 | 4 ++--
+ package/linux-headers/{6.12.85 => 6.12.86} | 0
+ package/linux-headers/{6.18.26 => 6.18.27} | 0
+ package/linux-headers/{7.0.3 => 7.0.4}     | 0
+ package/linux-headers/Config.in.host       | 6 +++---
+ 8 files changed, 7 insertions(+), 7 deletions(-)
+ rename linux/{7.0.3 => 7.0.4} (100%)
+ rename package/linux-headers/{6.12.85 => 6.12.86} (100%)
+ rename package/linux-headers/{6.18.26 => 6.18.27} (100%)
+ rename package/linux-headers/{7.0.3 => 7.0.4} (100%)
 
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index b31afb2956..dfda62f0c1 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  329a1d524476d7a137dcf65af04ec79ddf1c225e2c4ac4a2e884663ef4897fa1  pure-ftpd-1.0.53.tar.bz2
-+sha256  c2bef41f9635c3a87efd65f089c16ca5df9fd02db199d9fdcf12b206b93d41a6  pure-ftpd-1.0.54.tar.bz2
- sha256  b0bc52c61f9265bc00c509bd40dab60950371166b59416a1484bf226f480796e  COPYING
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index bf2599ecaf..daf8e6eda8 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/7.0.3 b/linux/7.0.4
+similarity index 100%
+rename from linux/7.0.3
+rename to linux/7.0.4
+diff --git a/linux/Config.in b/linux/Config.in
+index cb81e55ccb..f742251ac7 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -143,7 +143,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
--PURE_FTPD_VERSION = 1.0.53
-+PURE_FTPD_VERSION = 1.0.54
- PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
- PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.0.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.0.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index ffdbcd8c27..7bae7e23ce 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  e35ac999f40a6874493d8d60f33f1150d7a89ae5841c428da82257fbcd070aed  linux-6.12.85.tar.xz
++sha256  edef22b327c7cbf39cdbf8d717fffa344f1ca299e513990e21705b3bf26dbb5d  linux-6.12.86.tar.xz
+ sha256  92f1e90d8be49f9d7f989e563c97a4f39cd7731025d7b81152814c68b5bd56c4  linux-6.6.137.tar.xz
+ sha256  b578912f79a5e8ea1a94ce4364d20a3902d2005be0e16deee9fbd0ad697c4944  linux-6.1.170.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index cd0214519d..4cbb89bc02 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  0bedadbf5788693ddebbcc913c893f1a97349af79ddde7144c2a80b401959f1c  linux-7.0.3.tar.xz
++sha256  d92081d84c925adb21a6a709042499e5dcad5dd93a1d9c683f05304fda9257a7  linux-7.0.4.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  53772f5d3776e043767c8d81a32240d1f3eb64e822a5d7a510b55ca40707b0ec  linux-6.18.26.tar.xz
++sha256  25017b93946f0ba2cbf71910b59640a29d9167a5b65ccd41b12cd991875ce2ea  linux-6.18.27.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/6.12.85 b/package/linux-headers/6.12.86
+similarity index 100%
+rename from package/linux-headers/6.12.85
+rename to package/linux-headers/6.12.86
+diff --git a/package/linux-headers/6.18.26 b/package/linux-headers/6.18.27
+similarity index 100%
+rename from package/linux-headers/6.18.26
+rename to package/linux-headers/6.18.27
+diff --git a/package/linux-headers/7.0.3 b/package/linux-headers/7.0.4
+similarity index 100%
+rename from package/linux-headers/7.0.3
+rename to package/linux-headers/7.0.4
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 709028ca8e..a0528d2e5d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -472,9 +472,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.15.204"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.170"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.137"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.85"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.26"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.3"		if BR2_KERNEL_HEADERS_7_0
++	default "6.12.86"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.27"	if BR2_KERNEL_HEADERS_6_18
++	default "7.0.4"		if BR2_KERNEL_HEADERS_7_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.47.3
 
