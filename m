@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 728A5CD3436
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 12:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFB2CD3447
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 12:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DE5384293;
-	Fri,  8 May 2026 12:35:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lh2OpRAIa66z; Fri,  8 May 2026 12:35:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16CC9841B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778243702;
-	bh=hAZxSzu2XPzTgEgbgYcSX0jA+fb2sfK9JnRP2EFvIFQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bnorBkCTTkxTdxoE2WaF7UFzhN+Ksqn1CclQDZ6+duZqMUQJYHtH1zVTFIEyuQIWk
-	 Q4RYvRAX+dVMLAMMj6V+1WY6NbVFW/TbV4IzH03sFY+mDeuQp/INvQc10f2Vfs1dxq
-	 nkgSG04IpO7b2suEEPDdiCEwcbqrsMS1SNtUDW1jf0uW8eY5UVxt4NRFdyaJ+QqQ6h
-	 gmWx8FbefZO2Bq4qc5aDbxYjQv0WxJpk+ePTWb9NcdI6ulhz+2jWpi4FA09qfcHGPH
-	 Hm3sHM43awftBZVCpjJgK5n9DR4ug+rGtlGdsrORTp0hcRGg2FDLP2s4duaQV6TVj5
-	 fPKKa09SWweMg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16CC9841B7;
-	Fri,  8 May 2026 12:35:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A534F317
- for <buildroot@buildroot.org>; Fri,  8 May 2026 12:35:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96CF841B5A
- for <buildroot@buildroot.org>; Fri,  8 May 2026 12:35:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD30841B79;
+	Fri,  8 May 2026 12:35:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L8jKQOuEbUDs for <buildroot@buildroot.org>;
- Fri,  8 May 2026 12:34:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A80941067
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A80941067
- for <buildroot@buildroot.org>; Fri,  8 May 2026 12:34:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3F1085463; Fri,  8 May 2026 12:34:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 8 May 2026 13:02:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fb6872d948e971a53fa88fef4a3472a98b942aec
-X-Git-Newrev: b9b88d2d6a569a05d8eb0f4f7fd73c4eaa5983ed
-X-Patchwork-Hint: ignore
-Message-Id: <20260508123456.C3F1085463@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ti_tda4vm_sk_defconfig: pick
+ id xJRarOjdN1yK; Fri,  8 May 2026 12:35:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DE9541B5B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778243711;
+	bh=jYNw2jCllwA6bK+L6+nS+cimynRETPGmPk4OVWcxV9w=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SaGanSlU1Rdv3cWn9hAEqgJA46j9OaS7LcPjAmVpoV2XaME2qE76hNccU8ItsNgeJ
+	 Nt8ElLdpBBH8gs5r6M5MAb8jJXDua0rHCgYdZ3RtZTcnbhI0HMo5dGasS/0xzjnv1x
+	 hmUcGhpf2i3JSWrrO2drVNodzGl2vKQ0YhiJmxJwPafVN0a9di6JaIXXgxzbmh6d1t
+	 KmqQ2zksHl0TXqoi+oG03fnNkaCcN7mH53KhR9rGcuKH8Y2d/ET4u/e8kQlMpfqHen
+	 nzVVw2YHOuZrVvhoqc1qpFKHUhyIQRARKTE6e3V02PqIS3+kQ3064oMwORSUqMfZxY
+	 aos/SmSENK3WQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DE9541B5B;
+	Fri,  8 May 2026 12:35:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F392317
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 12:35:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2496A8422E
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 12:35:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yAfsa1wmC8ln for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 12:35:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 45E15841B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45E15841B9
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 45E15841B9
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 12:35:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 7229619F738;
+ Fri,  8 May 2026 14:35:03 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 08 May 2026 14:35:03 +0200
+MIME-Version: 1.0
+Date: Fri, 08 May 2026 14:35:03 +0200
+To: Sofiane HAMAM <sofiane.hamam@smile.fr>
+Cc: buildroot@buildroot.org, Bryan Brattlof <bb@ti.com>
+In-Reply-To: <20260507202047.3809574-1-sofiane.hamam@smile.fr>
+References: <20260507202047.3809574-1-sofiane.hamam@smile.fr>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <63c4ad01d6dfd8d1d49bdfd436ff212d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778243705;
+ bh=Ly1Ot75KJ43I/KNCTTRZ7w4LtFJweNQg+twLVPgDL0c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RLFDVrVjoaziDSFaqFMNM+qr/2H37q4EZgWtewDUmi/BwJIqij9Lj4vtJg3q259CJ
+ +zoOkcpChDmc5XeGEgdUoxE9xQYgHRjtzg1aFsT06s9BEy0+CUGd4WDCPYMM8wn8pl
+ R09XcRvgtyavfRx2YeTj6NlRpfsa4Y/4SP7ehy72uAD308EkZlhPkBTq2ArPEWmBaP
+ j7IlG2qQd5Lh+g5onsY7bULgyqyWpqY/kmp7DdylncZ4J9Oawnw8B3aaAfCk/Q7f6t
+ /9LSDK+46zmIGdaY2I4SXjxASemN19QasbGMg7kDVMQbSMewUdr3kPQc+9j/3EiJ8Y
+ Ij3i6Cf46/4Xg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RLFDVrVj
+Subject: Re: [Buildroot] [PATCH 1/1] configs/ti_tda4vm_sk_defconfig: pick
  starter kit r5 and uboot defconfig files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,49 +95,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b9b88d2d6a569a05d8eb0f4f7fd73c4eaa5983ed
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 07/05/2026 22:20, Sofiane HAMAM via buildroot wrote:
+> Fix TDA4VM Starter-Kit defconfig pointing to TD4VM EVM instead of SK R5 
+> and uboot
+> defconfigs.
+> The starter kit board boots just fine with the evm defconfigs, but it 
+> is more accurate
+> to use the start kit defconfigs for the starter kit board.
+> 
+> Signed-off-by: Sofiane HAMAM <sofiane.hamam@smile.fr>
 
-Fix TDA4VM Starter-Kit defconfig pointing to TD4VM EVM instead of SK R5 and uboot
-defconfigs.
-The starter kit board boots just fine with the evm defconfigs, but it is more accurate
-to use the start kit defconfigs for the starter kit board.
-
-Note: those defconfigs have been present upstream since uboot v2024.10:
-https://source.denx.de/u-boot/u-boot/-/commit/c9507f07a1d6c92bd1f73fd64384f8c5994be9c2
-
-Signed-off-by: Sofiane HAMAM <sofiane.hamam@smile.fr>
-[Julien: add note in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/ti_tda4vm_sk_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/configs/ti_tda4vm_sk_defconfig b/configs/ti_tda4vm_sk_defconfig
-index 3da0fe77b2..be2529fb37 100644
---- a/configs/ti_tda4vm_sk_defconfig
-+++ b/configs/ti_tda4vm_sk_defconfig
-@@ -29,12 +29,12 @@ BR2_TARGET_OPTEE_OS_PLATFORM="k3-j721e"
- BR2_TARGET_TI_K3_R5_LOADER=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2026.01"
--BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="j721e_evm_r5"
-+BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="j721e_sk_r5"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_evm_a72"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_sk_a72"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
