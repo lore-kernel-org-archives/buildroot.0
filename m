@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0746CD3436
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:05:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52B08CD3436
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8171D41AFD;
-	Fri,  8 May 2026 09:05:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08AAC40782;
+	Fri,  8 May 2026 09:19:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a7TZ0RE8hSLc; Fri,  8 May 2026 09:05:38 +0000 (UTC)
+ id R6ZoAKnEfjz4; Fri,  8 May 2026 09:18:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A73041A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9294084B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778231138;
-	bh=N5AuiQPWdkfXKxy+DpcQD51dmqr9WIipTdFzkz0WYp0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mxSSoJbG70Vnhu3GUU2/68dcJgs+hvY3YqTulSd+z9wLAWtUMTNYnGiUu1AIDhK7S
-	 4NYSTC6hZS3ASspka3Utikihqk655iPmkWqcQcui41zuf4P6vRZUtTTzUurKOy8xmk
-	 jyN3eVqeB/UIzW5y67wkCOQIkyRrAqt6+xzkuhZcaIqfxdLdN2XX7UKbnt00dtaHlt
-	 5P2NZcTb6RYAb4F+e+K5wGbXNNISSSt4UfekShAo0GTfWJ96yvHG2hdaiFI6lM0Fhc
-	 SKjfsNK87sIO/u6QZ6X3+/0GBHQfKKAKtm1IzfFkM3/IN7IJ5jr0LOdsUUSePDLsj7
-	 dVLUuf6VLw+zQ==
+	s=default; t=1778231939;
+	bh=A8q2EbVi3BPXLMFKOVLedpcHacgKFvPQszPSwZEgeAM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=lPVw+iU1nsMLM6ZVAUNewpC4iaOuRLXUPMUvbJSK0qm9YhD5ilUg+2NEBp5momdQy
+	 nRP2K3XSIYzH1iZeCEUjr85z4442qNRa27WABxJQEqoXPZWGUomjLEjOMobaydK25t
+	 R9LUw9bvXJm0167kTHiF2IDVt+LpZaPfnDAN572T7Ik0n39ZIEWh6NVxlSSDjRdImP
+	 SOJT1RZ8mdtQc9gv2sIXmZS1ENoFOsviTEaWl+C0WSzBq85tZ32u1m3hryQ23zR2Y0
+	 AGVaNjSMK7lJc62rMGtXTlcRqLJ9nFUL0XlxN+drHRzhHVEx9RpXq0g+7CYOYX2otT
+	 Qhb3e7rrMIJPg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A73041A71;
-	Fri,  8 May 2026 09:05:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id ADBE9317
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:05:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F9294084B;
+	Fri,  8 May 2026 09:18:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 841ED317
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F8EF61516
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:05:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 581F284262
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v5qQrWY-qvWT for <buildroot@buildroot.org>;
- Fri,  8 May 2026 09:05:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C60A9614F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C60A9614F8
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C60A9614F8
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:05:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id D6E606012F;
- Fri,  8 May 2026 11:05:33 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 08 May 2026 11:05:33 +0200
-MIME-Version: 1.0
-Date: Fri, 08 May 2026 11:05:33 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260507202811.3399651-1-bernd@kuhls.net>
-References: <20260507202811.3399651-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <f733b7f9ef634bf8a857e655ae2cdcaa@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778231135;
- bh=meHgbK/jh5ji+Vxj1M3yIicoMPBIdIPXWm41xjix4xs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FUPm12DrEI3twLG/QNN8O8bE8ip3AGtMD2YkwH3sU1tVg8mKuwR5B2J20OLZMIMf7
- aDdmMZsZOtXbPI+CUPWNBquGV7YXVveqMpeYnrjmSBmYvCj2cYlHhJiBU2ZGuGlgkZ
- WnwW3MkZafUfS6h27xQQCgQgDbRUkQjzkxrv9mVGWrM0pBQrz8vOamfK/GdMRiz2BA
- YUpfXKV/uyZgD+WRWx7bbjbL7GAxHwZpS0fJRalJsQVmor2fBzjwIaf1CsKVBZMq+Y
- Rf/UYvLJPyyjtDJBbGOCU8PRHbQtto3ikRO/LS5JihWmm2wk+ohgbk1GD3bvtBg4td
- GwFG5U4Xxz1BQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FUPm12Dr
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 8.5.6
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aIr5RaVFR9A6 for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 09:18:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9711A84265
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9711A84265
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4E3FA85538; Fri,  8 May 2026 09:18:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 8 May 2026 11:06:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c465f0d8eb676cd10ef48a864766abde43ffb239
+X-Git-Newrev: c19e6d80fbcff18465a6839676195a91db18ace5
+X-Patchwork-Hint: ignore
+Message-Id: <20260508091853.4E3FA85538@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go-bootstrap-stage5: security bump
+ to version 1.25.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,24 +71,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/05/2026 22:28, Bernd Kuhls wrote:
-> https://www.php.net/ChangeLog-8.php#8.5.6
-> https://news-web.php.net/php.announce/492
-> https://github.com/php/php-src/blob/php-8.5.6/NEWS
-> 
-> Fixes CVE-2026-7263, CVE-2026-6735, CVE-2026-29078, CVE-2026-29079,
-> CVE-2026-7259, CVE-2026-6104, CVE-2025-14179, CVE-2026-6722,
-> CVE-2026-7261, CVE-2026-7262, CVE-2026-7568, CVE-2026-7258 &
-> CVE-2026-42371.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c19e6d80fbcff18465a6839676195a91db18ace5
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Fixes the following security issues:
+
+CVE-2026-33811: net: crash when handling long CNAME response
+CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given bad
+                SETTINGS_MAX_FRAME_SIZE
+CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
+CVE-2026-39819: md/go: "go bug" follows symlinks in predictable temporary
+                filenames
+CVE-2026-39820: net/mail: quadratic string concatenation in consumeComment
+CVE-2026-39823: html/template: bypass of meta content URL escaping causes
+                XSS
+CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with more
+                than urlmaxqueryparams parameters
+CVE-2026-39826: html/template: escaper bypass leads to XSS
+CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL byte on
+                Windows
+CVE-2026-42499: net/mail: quadratic string concatenation in consumePhrase
+CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum database
+
+go1.25.10 (released 2026-05-07) includes security fixes to the go command,
+the pack tool, and the html/template, net, net/http, net/http/httputil,
+net/mail, and syscall packages, as well as bug fixes to the go command, the
+compiler, the linker, the runtime, and the crypto/fips140, go/types, and os
+packages.
+
+https://go.dev/doc/devel/release#go1.25.10
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash | 2 +-
+ package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
+index 5e40ba7e6e..58391471d9 100644
+--- a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
++++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  e988d4a2446ac7fe3f6daa089a58e9936a52a381355adec1c8983230a8d6c59e  go1.25.8.src.tar.gz
++sha256  20cf04a92e5af99748e341bc8996fa28090c9ac98765fa115ec5ddf41d7af41d  go1.25.10.src.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
+index 9006e5bf44..85468414a2 100644
+--- a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
++++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
+@@ -6,7 +6,7 @@
+ 
+ # Use last Go version that go-bootstrap-stage4 can build: v1.25.x
+ # See https://go.dev/doc/go1.26#bootstrap
+-GO_BOOTSTRAP_STAGE5_VERSION = 1.25.8
++GO_BOOTSTRAP_STAGE5_VERSION = 1.25.10
+ GO_BOOTSTRAP_STAGE5_SITE = https://go.dev/dl
+ GO_BOOTSTRAP_STAGE5_SOURCE = go$(GO_BOOTSTRAP_STAGE5_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
