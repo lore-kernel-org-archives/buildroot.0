@@ -4,59 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A3D0CD342F
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F63CD3436
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58C9D615B5;
-	Fri,  8 May 2026 09:19:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55D78615B5;
+	Fri,  8 May 2026 09:19:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HBgffBF9RrL4; Fri,  8 May 2026 09:18:58 +0000 (UTC)
+ id PKNUVL8BZg4l; Fri,  8 May 2026 09:19:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2554C610F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28AFD61350
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778231938;
-	bh=TJdwUCUQCsBW3gzu+Fld6Zs5HBiOyyeQG94qv+Gx2PI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jwfamWjxxBorV471rknWQG4XrvEPiVWSEutZ7NIJqcCneTubCUwRUAImEtf9wEyIU
-	 PFgvHI3M5uuzXxlrRFe7YbZivTsxylKOQG2sBc1bzqbxTP/L/efrlKbFjdaNU3UoJk
-	 sy/OBlwiPoyM/ppp7BFF9ijSklnh60gAHpqEVPuoN0TIE6JLA6VBNF/apUHuqfSx1Z
-	 Ev+hV1r2/ipZG+evtha1+t4MeD7VWfK2VoFFYPZXwPm4GI36YEgkgNhEOputdjuX6n
-	 EVjLeTLsFu4iTeVHFv3qHt5diKOs5H+uPnXfHslNGaQPHtIWOcgnL8TbZFQzpMNmld
-	 1+JNdpdRcofPw==
+	s=default; t=1778231972;
+	bh=2ZLckdHdwrN+yvem7NeQgjYSYZHnpXMQaSl5gRILiNQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=rPqeiFPUXl0hkh5MGrSfUcmwoLPwjlJPS7n80xY9qIoir33v+1mXu8Sjy3scQEF8R
+	 U1NgLe9F4uR6rhKKwnhRKiT3O9+vek0uhjdktpT2qUvwValFz7hINmcLHHdruBI+qX
+	 ssCXZ7kOyPPY67esAE+kxb0YWqjkNiZ1+Zo2ji70IGOyVzzbo5fQ4orsBvWOuG3gtx
+	 1TuFoUJaZdshMUqCA1OQKFgi17MsDheavrnpAko8gXHx3+v8LKyVpqXNEFxpokldIi
+	 FvWaUPhImR9Pow5gxA0kqUL9ve7Il1xaeuEko01wpNyRcFXnZBpTcAR4aGK6Ddxqhm
+	 RICkvY4OjHniQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2554C610F6;
-	Fri,  8 May 2026 09:18:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 57E01317
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28AFD61350;
+	Fri,  8 May 2026 09:19:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C19B272
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DBC384267
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3999761350
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPEoMWUvr2kH for <buildroot@buildroot.org>;
- Fri,  8 May 2026 09:18:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E0F284263
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E0F284263
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:18:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C60885536; Fri,  8 May 2026 09:18:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 8 May 2026 11:06:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 952aa90078dcba233b5b9723f4855ade4a695b4c
-X-Git-Newrev: c465f0d8eb676cd10ef48a864766abde43ffb239
-X-Patchwork-Hint: ignore
-Message-Id: <20260508091853.3C60885536@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: security bump to version 1.26.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MqodC6q6ho9O for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 09:19:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57360610F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57360610F6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57360610F6
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0A71513F8AD;
+ Fri,  8 May 2026 11:19:24 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 08 May 2026 11:19:24 +0200
+MIME-Version: 1.0
+Date: Fri, 08 May 2026 11:19:24 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>
+In-Reply-To: <20260507195049.1002469-1-peter@korsgaard.com>
+References: <20260507195049.1002469-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <b303329ab2d2fa8be368e5756980d366@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778231968;
+ bh=BjxpZoYUSvkbty8ms2VqhGuysRCPC5FLcZ3YF1qpJM0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=u+Iy1aDHVsNo+Vc9qN5tGa+f4p1wx+reHScnAxHO0gvRsppM2H2J2iUfAuP2Q7Eb7
+ s+yiHUEmkula5wwt8XetcE+wvjda9Cti59OI3SJIAMKxQV6mQDmppZV/iDzX4245aC
+ ULPdGpA9SVymXP4mzf4v48ZSVguMvf/AQORoxZVd55WyF6WSMSgFRmfWgWNSF2v+in
+ Mh2RAMXzPWgk2if4v8vwH+ACrsqhlxDVGjOT5XN6CzZ/bb8A1Q658AropCSCrASoc/
+ KoE8Ta+6MHrlPEtaBSY+G+9gC/7mIYRkosWyuT2Z4A6zrHm5eoBMNMoUR5q50l5mlf
+ zT8hfJi/d9phA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=u+Iy1aDH
+Subject: Re: [Buildroot] [PATCH 1/2] package/go: security bump to version
+ 1.26.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,83 +96,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c465f0d8eb676cd10ef48a864766abde43ffb239
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 07/05/2026 21:50, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+> CVE-2026-33811: net: crash when handling long CNAME response
+> CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given 
+> bad
+>                 SETTINGS_MAX_FRAME_SIZE
+> CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
+> CVE-2026-39819: md/go: "go bug" follows symlinks in predictable 
+> temporary
+>                 filenames
+> CVE-2026-39820: net/mail: quadratic string concatenation in 
+> consumeComment
+> CVE-2026-39823: html/template: bypass of meta content URL escaping 
+> causes
+>                 XSS
+> CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with 
+> more
+>                 than urlmaxqueryparams parameters
+> CVE-2026-39826: html/template: escaper bypass leads to XSS
+> CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL 
+> byte on
+>                 Windows
+> CVE-2026-42499: net/mail: quadratic string concatenation in 
+> consumePhrase
+> CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum 
+> database
+> 
+> go1.26.3 (released 2026-05-07) includes security fixes to the go 
+> command,
+> the pack tool, and the html/template, net, net/http, net/http/httputil,
+> net/mail, and syscall packages, as well as bug fixes to the go command, 
+> the
+> go fix command, the compiler, the linker, the runtime, and the
+> crypto/fips140, crypto/tls, go/types, and os packages.
+> 
+> https://go.dev/doc/devel/release#go1.26.3
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes the following security issues:
-
-CVE-2026-33811: net: crash when handling long CNAME response
-CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given bad
-                SETTINGS_MAX_FRAME_SIZE
-CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
-CVE-2026-39819: md/go: "go bug" follows symlinks in predictable temporary
-                filenames
-CVE-2026-39820: net/mail: quadratic string concatenation in consumeComment
-CVE-2026-39823: html/template: bypass of meta content URL escaping causes
-                XSS
-CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with more
-                than urlmaxqueryparams parameters
-CVE-2026-39826: html/template: escaper bypass leads to XSS
-CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL byte on
-                Windows
-CVE-2026-42499: net/mail: quadratic string concatenation in consumePhrase
-CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum database
-
-go1.26.3 (released 2026-05-07) includes security fixes to the go command,
-the pack tool, and the html/template, net, net/http, net/http/httputil,
-net/mail, and syscall packages, as well as bug fixes to the go command, the
-go fix command, the compiler, the linker, the runtime, and the
-crypto/fips140, crypto/tls, go/types, and os packages.
-
-https://go.dev/doc/devel/release#go1.26.3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 77be843c83..69f2a3139c 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  2e91ebb6947a96e9436fb2b3926a8802efe63a6d375dffec4f82aa9dbd6fd43b  go1.26.2.src.tar.gz
--sha256  89835cdc4dfebde7fe28c9c6dc080bb3753f6b0354301966ff9f62d14991bd7d  go1.26.2.linux-386.tar.gz
--sha256  990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  go1.26.2.linux-amd64.tar.gz
--sha256  c958a1fe1b361391db163a485e21f5f228142d6f8b584f6bef89b26f66dc5b23  go1.26.2.linux-arm64.tar.gz
--sha256  0000e45577827b0a8868588c543cbe4232853def1d3d7a344ad6e60ce2b015c8  go1.26.2.linux-armv6l.tar.gz
--sha256  62b7645dd2404052535617c59e91cf03c7aa28e332dbaddbe4c0d7de7bcc6736  go1.26.2.linux-ppc64le.tar.gz
--sha256  410726ed10a0ea6745c2ea8da4f0e769fd3ce819cd4a41a67ad08b094d5dfc31  go1.26.2.linux-s390x.tar.gz
-+sha256  1c646875d0aa8799133184ed57cf79ff24bdefe8c8820470602a9d3d6d9192b8  go1.26.3.src.tar.gz
-+sha256  0ef3626a149b5811c813838c62b7d6618d03ea36047b32c90b0e4851cc42b1fa  go1.26.3.linux-386.tar.gz
-+sha256  2b2cfc7148493da5e73981bffbf3353af381d5f93e789c82c79aff64962eb556  go1.26.3.linux-amd64.tar.gz
-+sha256  9d89a3ea57d141c2b22d70083f2c8459ba3890f2d9e818e7e933b75614936565  go1.26.3.linux-arm64.tar.gz
-+sha256  d44133d4c66b1451a1e247da26db7716f76a081c0169a75e6c84e1871e394320  go1.26.3.linux-armv6l.tar.gz
-+sha256  dbd82b50530ead2beb1fd72215117380df3cb16332b51467116dc35b3691dd75  go1.26.3.linux-ppc64le.tar.gz
-+sha256  5c0605b7175449f1c8e8cb02efaba2695caab914fad4dcedc764c2f4c6dfe6ca  go1.26.3.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 67948dc405..ebd0d418ef 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.26.2
-+GO_VERSION = 1.26.3
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
