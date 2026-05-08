@@ -4,85 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F63CD3436
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15BA1CD342F
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 09:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55D78615B5;
-	Fri,  8 May 2026 09:19:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30352615B8;
+	Fri,  8 May 2026 09:22:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PKNUVL8BZg4l; Fri,  8 May 2026 09:19:32 +0000 (UTC)
+ id 7RRZ7fef8Epe; Fri,  8 May 2026 09:22:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28AFD61350
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE95761350
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778231972;
-	bh=2ZLckdHdwrN+yvem7NeQgjYSYZHnpXMQaSl5gRILiNQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rPqeiFPUXl0hkh5MGrSfUcmwoLPwjlJPS7n80xY9qIoir33v+1mXu8Sjy3scQEF8R
-	 U1NgLe9F4uR6rhKKwnhRKiT3O9+vek0uhjdktpT2qUvwValFz7hINmcLHHdruBI+qX
-	 ssCXZ7kOyPPY67esAE+kxb0YWqjkNiZ1+Zo2ji70IGOyVzzbo5fQ4orsBvWOuG3gtx
-	 1TuFoUJaZdshMUqCA1OQKFgi17MsDheavrnpAko8gXHx3+v8LKyVpqXNEFxpokldIi
-	 FvWaUPhImR9Pow5gxA0kqUL9ve7Il1xaeuEko01wpNyRcFXnZBpTcAR4aGK6Ddxqhm
-	 RICkvY4OjHniQ==
+	s=default; t=1778232154;
+	bh=n3W7T5tQMT7SH32Y1ETGv6fN7c+6PZSayqeflvSGGd8=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=ctaBMwI/qYWNm2JOPSqO6gCR/EPH5N/moO/n8bAWY5Uo8UXDRFV/1Cn5Qix/iCbYS
+	 FUuvR46b9Zy7oAKOTYalN1LjgorXgjbBjMYv68vpWSCXdZlBg4VkZTEnm6dvYQ66/A
+	 Kl+1PFCCO4+BTZGV35+zSj0LwcJ+bq0iOTF4/bj9sGawFy195nBMlqRON/xDYDNTQ3
+	 nNU0GfSJ0BFXuYS17YiFOH8bwu9nmnQczIlcI838aYnE/bI/4LaPiedCyozSftLpzO
+	 DuR2YvO32aLKpnCwiYzJ0+/uOsUXUoIhRBCK7/QtD+nmF7QEkibwBS4OpuLWkYYmrw
+	 3l3fCDFrUZZoA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28AFD61350;
-	Fri,  8 May 2026 09:19:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C19B272
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE95761350;
+	Fri,  8 May 2026 09:22:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AD0C317
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3999761350
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C9E761350
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:22:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqodC6q6ho9O for <buildroot@buildroot.org>;
- Fri,  8 May 2026 09:19:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57360610F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57360610F6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57360610F6
- for <buildroot@buildroot.org>; Fri,  8 May 2026 09:19:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 0A71513F8AD;
- Fri,  8 May 2026 11:19:24 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 08 May 2026 11:19:24 +0200
+ id voaXOntehNSG for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 09:22:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7169E610F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7169E610F6
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7169E610F6
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 09:22:31 +0000 (UTC)
+Received: from [192.168.178.20] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 623012C84162;
+ Fri, 08 May 2026 11:22:29 +0200 (CEST)
+Message-ID: <1da2125b-1f2a-4832-aa27-b76596789f08@bubu1.eu>
+Date: Fri, 8 May 2026 11:22:28 +0200
 MIME-Version: 1.0
-Date: Fri, 08 May 2026 11:19:24 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>,
- Christian Stewart <christian@aperture.us>
-In-Reply-To: <20260507195049.1002469-1-peter@korsgaard.com>
-References: <20260507195049.1002469-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <b303329ab2d2fa8be368e5756980d366@free.fr>
-X-Sender: ju.o@free.fr
+User-Agent: Mozilla Thunderbird
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
+ buildroot@buildroot.org
+References: <20260508081010.250838-1-chakrabortyshubham66@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20260508081010.250838-1-chakrabortyshubham66@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778231968;
- bh=BjxpZoYUSvkbty8ms2VqhGuysRCPC5FLcZ3YF1qpJM0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=u+Iy1aDHVsNo+Vc9qN5tGa+f4p1wx+reHScnAxHO0gvRsppM2H2J2iUfAuP2Q7Eb7
- s+yiHUEmkula5wwt8XetcE+wvjda9Cti59OI3SJIAMKxQV6mQDmppZV/iDzX4245aC
- ULPdGpA9SVymXP4mzf4v48ZSVguMvf/AQORoxZVd55WyF6WSMSgFRmfWgWNSF2v+in
- Mh2RAMXzPWgk2if4v8vwH+ACrsqhlxDVGjOT5XN6CzZ/bb8A1Q658AropCSCrASoc/
- KoE8Ta+6MHrlPEtaBSY+G+9gC/7mIYRkosWyuT2Z4A6zrHm5eoBMNMoUR5q50l5mlf
- zT8hfJi/d9phA==
+ d=bubu1.eu; s=bubu; 
+ t=1778232149; bh=NE51jrJXxO91xCe6kwDtCPHV9inhcdKRXg9GSonIjRs=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=gM/i8BIqeMSuJkv51zywG6toaBo0MqZ2vEsBK0RGXtd6SAFPz3tjfdnrEC3ym2D7F
+ 8eWeqiBEhz9lqAbUsu7KkDRNihKNA8x3t4haYRhRr+oQ4riHv76LoKHAHti/EnJmQx
+ bU8zaRO6VbuHDZaIy8MFpKNCx+6/uYJbus3XOfh7xt7SZxlTYXgBFPHB45wwlZZaOU
+ 5suBsHI64J5jvE0OESBw9V56hd9szgoKVAbXXceAcQabAUT9xsOORRyYDwK4PKWREd
+ cpAkFYzX2euevOfgEW+tk7vy0F3ooCP2N8ZeSUzN+YuBNXR+zOKcqw+H7uBz2V4eF6
+ QGcJLyngaR0bw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=u+Iy1aDH
-Subject: Re: [Buildroot] [PATCH 1/2] package/go: security bump to version
- 1.26.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=gM/i8BIq
+Subject: Re: [Buildroot] [PATCH 1/2] package/htop: bump to version 3.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,54 +92,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/05/2026 21:50, Peter Korsgaard wrote:
-> Fixes the following security issues:
-> 
-> CVE-2026-33811: net: crash when handling long CNAME response
-> CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given 
-> bad
->                 SETTINGS_MAX_FRAME_SIZE
-> CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
-> CVE-2026-39819: md/go: "go bug" follows symlinks in predictable 
-> temporary
->                 filenames
-> CVE-2026-39820: net/mail: quadratic string concatenation in 
-> consumeComment
-> CVE-2026-39823: html/template: bypass of meta content URL escaping 
-> causes
->                 XSS
-> CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with 
-> more
->                 than urlmaxqueryparams parameters
-> CVE-2026-39826: html/template: escaper bypass leads to XSS
-> CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL 
-> byte on
->                 Windows
-> CVE-2026-42499: net/mail: quadratic string concatenation in 
-> consumePhrase
-> CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum 
-> database
-> 
-> go1.26.3 (released 2026-05-07) includes security fixes to the go 
-> command,
-> the pack tool, and the html/template, net, net/http, net/http/httputil,
-> net/mail, and syscall packages, as well as bug fixes to the go command, 
-> the
-> go fix command, the compiler, the linker, the runtime, and the
-> crypto/fips140, crypto/tls, go/types, and os packages.
-> 
-> https://go.dev/doc/devel/release#go1.26.3
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Hi Shubham,
 
-Series applied to master, thanks.
+On 5/8/26 10:10, Shubham Chakraborty wrote:
+> This patch updates htop from version 3.5.0 to 3.5.1, a minor bugfix
+> release.
+> 
+> Key changes in this update:
+> 
+> - Bumped version from 3.5.0 to 3.5.1
+> - Updated hash from upstream source
+
+This is not that useful to add, as that's what happens with every 
+package bump and it's trivially visible in diff. No need to state the 
+obvious here.
+
+> 
+> Changelog:
+> https://github.com/htop-dev/htop/releases/tag/3.5.1
+
+There is no actual changelog here. The changelog lives at: 
+https://github.com/htop-dev/htop/blob/main/ChangeLog (best to link to 
+that file from the release tag though)
+
+> 
+> Builds Tested Using:
+> - utils/test-pkg -a -p htop
+> 
+> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> ---
+I'll mark this as changes-requested. But more importantly:
+
+Can I ask you to be a bit more diligent with the patches you send 
+please? Your help in keeping packages in buildroot up-to-date is 
+appreciated, but I'd like to not have to point out trivial things in 
+most of your submissions at some point.
+
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
