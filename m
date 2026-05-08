@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 324C2CD3436
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 05:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23643CD3436
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 07:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E99AB6137C;
-	Fri,  8 May 2026 05:57:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 267D3841BC;
+	Fri,  8 May 2026 07:35:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVrKUOrXy5We; Fri,  8 May 2026 05:57:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4V7MNgY-oNb8; Fri,  8 May 2026 07:35:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7810261373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7D8841B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778219856;
-	bh=hPV6yV0Url1V1mgDOEN8mfIKB6uU9fGjCZME3exwaDI=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1778225710;
+	bh=eG6xjGtSl53zdnOvK/np7LdTLPKcZtaAPOD/0oN8Cco=;
+	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=MggkRyugmXAHe9syHkhLmL9HPqfrkq1G8uN5Q/yFOkJw1meXU5otvt+bJlbcNHELe
-	 MZRdLqfJOcjbyK5ENUhpuajmZxPywzJkMfX9gSiybF+7GTaXrjGwzqBN3OvMfmCZLF
-	 sRYOIALJ3n/40xOprTwMH35Ho7iVz1VoFTc9P+NSlJbj0CVQpghNFiqkNtF+dCt39R
-	 ey9/MAVsZjwkLO53eXr3+1r5G8WE1criEY6+KXlyo/2v1J2D2q37cOBbkmwnes6MAP
-	 gUJDI0EH5d4nom4i42oPmVGuVX81G95k1PSgXicbKL/MKO1ZDJEKRt4rRLIDahiAK8
-	 9vcFPBGsd5Rhg==
+	b=UfPom5ffHE+6R+RB+Mm/KR0Vh7h11plTdqBHSYuQj/xDek//v4JjTEy2IvvKD2sIF
+	 WI6kxQaG6+xcjuUU1k2+A/ds+mGPIXuVEQ2AramsDcj//46pK3xmyJW4hZ2AeusKVU
+	 lol6fqb33AanmuMZb5EU9HvHxk4x+o22LsROi/RJsOmZi+z/tQAUih7p7kntonJ2J8
+	 4q0OaEoH6r4jmwwze1mGvy7xy+z9uQ3JXGBeJjM7uHJF7I+VQtjnx479xHKt9lLZqQ
+	 +uvyYwyryXNSaizuwsy35CZFWhBOXcdUZPagNtZIZwmkpz7jMw6WBdzArE90jinqTv
+	 vljztY7uE6DwA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7810261373;
-	Fri,  8 May 2026 05:57:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C9DE317
- for <buildroot@buildroot.org>; Fri,  8 May 2026 05:57:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A7D8841B6;
+	Fri,  8 May 2026 07:35:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F049A358
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 07:35:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42F0941681
- for <buildroot@buildroot.org>; Fri,  8 May 2026 05:57:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D60F440C34
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 07:35:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zj0AEEEF9kqZ for <buildroot@buildroot.org>;
- Fri,  8 May 2026 05:57:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rf72kF4pQjJf for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 07:35:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B0D74167C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B0D74167C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B0EA440C43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0EA440C43
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1B0D74167C
- for <buildroot@buildroot.org>; Fri,  8 May 2026 05:57:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0EA440C43
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 07:35:07 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 48AAB31E054F; Fri, 08 May 2026 07:57:30 +0200 (CEST)
-Date: Fri, 8 May 2026 07:57:29 +0200
+ id 1186531E0240; Fri, 08 May 2026 09:35:04 +0200 (CEST)
+Date: Fri, 8 May 2026 09:35:04 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <af17STLwSLfdAgT4@waldemar-brodkorb.de>
+Cc: Deividas Puplauskas <deividas.puplauskas@gmail.com>
+Message-ID: <af2SKCP2HeKD0y7-@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 6.12.85+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1778219850; bh=MB6PBbBPhAUKN80UlmAhGcNDNos/72fX6rTQWvb9I7E=;
- h=Date:From:To:Subject:From;
- b=Nc9XtsgeBJAp35qPPFQrJwOVL4qm8UcCxQauihe1VCEE6drxT6octamUNfL86RdR/
- GiabATnnVOmiTaBH0THwu3hLRGX5rCW7YyTZNC0ZP5hOFQtp5Zty24hdtiQ9nVS9eU
- 2sT5RVFYnI6x0GeR+7/9dvnYOreapW65Vyacdn0Tp7nls11mDCEKD05MQTkRTrDNOK
- 8diUH5XiTUgldpPT0LTZNUqoa5tx3KDOwVXKycauUywpXSCB36+w6oBAoX6rgfBPt7
- KoSlyiVaL9pWFQa+OqLW3bYjeJUyW5vlbgx1BXckeMNVz3ITRNrEPLJ9mD7eoHt+zA
- nsd6RgjDXbGow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1778225705; bh=n1bqh/aoPzp+YuE9xkaWmE39Pc0mugnR9kFORt+wQ1k=;
+ h=Date:From:To:Cc:Subject:From;
+ b=vqkcwIO+gxWFVGjQMzrO7LQNTZcszExHgPw3YrswB+z9PGGefl8X2wnTiL0MvDtlb
+ F875izffv+FieaYBN0aBfgrcKJi36wiuv2rYCf282Z/uiL8Z5KsqBUk/dUbP4DSudr
+ Ba0L7WI1kjl6zWy1G6CrECKpheVpmxWrTqWXh+LhAcayByUfnd6dAvLb/O9GYJE32Y
+ C1ckdixKcWIi/Yrv/CBpjC8w9UmvOPEMDNd5NPjKe6ikphEzLb/j88MZa1XSbobSIO
+ 8sRHKtAqC3YPZAZWs0vWRQaScmrHdUidJZj3Fgjw39a5lkG7CtWykHTh53p38CT7Yt
+ 2EiapVUHdy05A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-Subject: [Buildroot] [PATCH 2025.02.x] package/libxmlsec1: new package
+Subject: [Buildroot] [PATCH] package/perl-cgi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,109 +87,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added from Buildroot master.
+From: Deividas Puplauskas <deividas.puplauskas@gmail.com>
 
+See here for a description:
+https://metacpan.org/pod/CGI
+
+Signed-off-by: Deividas Puplauskas <deividas.puplauskas@gmail.com>
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-Is there a better way to do it?
-Do you want three cherry-picks from master to branch?
----
- package/Config.in                  |  1 +
- package/libxmlsec1/Config.in       | 12 +++++++++
- package/libxmlsec1/libxmlsec1.hash |  3 +++
- package/libxmlsec1/libxmlsec1.mk   | 42 ++++++++++++++++++++++++++++++
- 4 files changed, 58 insertions(+)
- create mode 100644 package/libxmlsec1/Config.in
- create mode 100644 package/libxmlsec1/libxmlsec1.hash
- create mode 100644 package/libxmlsec1/libxmlsec1.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/perl-cgi/Config.in                    | 12 +++++++
+ package/perl-cgi/perl-cgi.hash                |  6 ++++
+ package/perl-cgi/perl-cgi.mk                  | 14 ++++++++
+ .../testing/tests/package/test_perl_cgi.py    | 33 +++++++++++++++++++
+ 6 files changed, 67 insertions(+)
+ create mode 100644 package/perl-cgi/Config.in
+ create mode 100644 package/perl-cgi/perl-cgi.hash
+ create mode 100644 package/perl-cgi/perl-cgi.mk
+ create mode 100644 support/testing/tests/package/test_perl_cgi.py
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d849fa828a..f4fe6c4014 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3435,6 +3435,7 @@ F:	package/evilwm/
+ F:	package/fbv/
+ F:	package/libpam-pkcs11/
+ F:	package/mksh/
++F:	package/perl-cgi/
+ F:	package/ruby/
+ F:	package/uclibc/
+ F:	package/uclibc-ng-test/
 diff --git a/package/Config.in b/package/Config.in
-index 38da39033b..64225c03c8 100644
+index 9cae377fb5..7aa3a897ac 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1910,6 +1910,7 @@ menu "JSON/XML"
- 	source "package/libxmlb/Config.in"
- 	source "package/libxmlpp/Config.in"
- 	source "package/libxmlrpc/Config.in"
-+	source "package/libxmlsec1/Config.in"
- 	source "package/libxslt/Config.in"
- 	source "package/libyaml/Config.in"
- 	source "package/mxml/Config.in"
-diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
+@@ -813,6 +813,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-apache-logformat-compiler/Config.in"
+ 	source "package/perl-appconfig/Config.in"
+ 	source "package/perl-astro-suntime/Config.in"
++	source "package/perl-cgi/Config.in"
+ 	source "package/perl-class-inspector/Config.in"
+ 	source "package/perl-class-load/Config.in"
+ 	source "package/perl-class-method-modifiers/Config.in"
+diff --git a/package/perl-cgi/Config.in b/package/perl-cgi/Config.in
 new file mode 100644
-index 0000000000..4a686853ae
+index 0000000000..1c4292483c
 --- /dev/null
-+++ b/package/libxmlsec1/Config.in
++++ b/package/perl-cgi/Config.in
 @@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBXMLSEC1
-+	bool "libxmlsec1"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBXML2
++config BR2_PACKAGE_PERL_CGI
++	bool "perl-cgi"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_HTML_PARSER # runtime
++	select BR2_PACKAGE_PERL_URI # runtime
 +	help
-+	  XMLSec library provides C based implementation for major XML
-+	  Security standards:
-+	    - XML Signature Syntax and Processing
-+	    - XML Encryption Syntax and Processing
++	  Handle Common Gateway Interface requests and responses.
 +
-+	  https://www.aleksey.com/xmlsec/
-+	  https://github.com/lsh123/xmlsec
-diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
++	  https://metacpan.org/module/CGI
++
++comment "perl-cgi needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-cgi/perl-cgi.hash b/package/perl-cgi/perl-cgi.hash
 new file mode 100644
-index 0000000000..9e0e67e732
+index 0000000000..fa4544493c
 --- /dev/null
-+++ b/package/libxmlsec1/libxmlsec1.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  a631c8cd7a6b86e6adb9f5b935d45a9cf9768b3cb090d461e8eb9d043cf9b62f  xmlsec1-1.3.9.tar.gz
-+sha256  d5e9388534256360c6a009d4f19ab2b8d6ec0aa7ff32a51e22d899ed7beb5c48  Copyright
-diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
++++ b/package/perl-cgi/perl-cgi.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5  ea0c7b5b002f100f23b11ac9487088a9  CGI-4.72.tar.gz
++sha256  babc1ca72db188083a1c3812debe88c4473b943b1f7c662281cd57c580a8bdd9  CGI-4.72.tar.gz
++
++# computed by scancpan
++sha256  55a4d9005df91f82cd19aab29c3ad64c1a2e2d69a069f76570ee679bedd6b351  LICENSE
+diff --git a/package/perl-cgi/perl-cgi.mk b/package/perl-cgi/perl-cgi.mk
 new file mode 100644
-index 0000000000..29222bc16f
+index 0000000000..ca6968125c
 --- /dev/null
-+++ b/package/libxmlsec1/libxmlsec1.mk
-@@ -0,0 +1,42 @@
++++ b/package/perl-cgi/perl-cgi.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libxmlsec1
++# perl-cgi
 +#
 +################################################################################
 +
-+LIBXMLSEC1_VERSION = 1.3.9
-+LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
-+LIBXMLSEC1_SITE = https://github.com/lsh123/xmlsec/releases/download/$(LIBXMLSEC1_VERSION)
-+LIBXMLSEC1_LICENSE = MIT
-+LIBXMLSEC1_LICENSE_FILES = Copyright
-+LIBXMLSEC1_INSTALL_STAGING = YES
-+LIBXMLSEC1_DEPENDENCIES = libxml2 openssl
-+HOST_LIBXMLSEC1_DEPENDENCIES = host-libxml2 host-openssl
-+LIBXMLSEC1_AUTORECONF = YES
++PERL_CGI_VERSION = 4.72
++PERL_CGI_SOURCE = CGI-$(PERL_CGI_VERSION).tar.gz
++PERL_CGI_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEEJO
++PERL_CGI_LICENSE = Artistic-2.0
++PERL_CGI_LICENSE_FILES = LICENSE
++PERL_CGI_DISTNAME = CGI
 +
-+LIBXMLSEC1_CONF_OPTS = \
-+	--enable-crypto-dl=no \
-+	--with-openssl \
-+	--without-gnutls \
-+	--without-gcrypt \
-+	--without-nss \
-+	--disable-des
++$(eval $(perl-package))
+diff --git a/support/testing/tests/package/test_perl_cgi.py b/support/testing/tests/package/test_perl_cgi.py
+new file mode 100644
+index 0000000000..a6657ba78d
+--- /dev/null
++++ b/support/testing/tests/package/test_perl_cgi.py
+@@ -0,0 +1,33 @@
++from tests.package.test_perl import TestPerlBase
 +
-+HOST_LIBXMLSEC1_CONF_OPTS = \
-+	--enable-crypto-dl=no \
-+	--with-openssl \
-+	--without-gnutls \
-+	--without-gcrypt \
-+	--without-nss \
-+	--without-libxslt \
-+	--disable-des
 +
-+ifeq ($(BR2_PACKAGE_LIBXSLT),y)
-+LIBXMLSEC1_DEPENDENCIES += libxslt
-+LIBXMLSEC1_CONF_OPTS += --with-libxslt
-+else
-+LIBXMLSEC1_CONF_OPTS += --without-libxslt
-+endif
++class TestPerlCGI(TestPerlBase):
++    """
++    package:
++        CGI
++    direct dependencies:
++        HTML-Parser   XS
++        URI
++    indirect dependencies:
++        Clone   XS
++        Encode-Locale
++        HTML-Tagset
++        HTTP-Date
++        HTTP-Message
++        IO-HTML
++        LWP-MediaTypes
++        MIME-Base32
++        TimeDate
++    """
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++    config = TestPerlBase.config + \
++        """
++        BR2_PACKAGE_PERL=y
++        BR2_PACKAGE_PERL_CGI=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("Clone")
++        self.module_test("HTML::Parser")
++        self.module_test("CGI")
 -- 
 2.47.3
 
