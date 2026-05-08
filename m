@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53100CD342F
-	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 08:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7504CD3436
+	for <buildroot@archiver.kernel.org>; Fri,  8 May 2026 08:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0184041AB2;
-	Fri,  8 May 2026 08:52:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70F5841B14;
+	Fri,  8 May 2026 08:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6x3-OtCN4IeM; Fri,  8 May 2026 08:51:59 +0000 (UTC)
+ id KcChkJ_GxuoM; Fri,  8 May 2026 08:52:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3110D417A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D25F417A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778230319;
-	bh=dEe9aWSgMloPC0sLloMR16WE2cATfCTfdVOamGZC5J4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=inFN2CknWu/P14iADJjxA+HEs5fGZBYgA+/yrR9dTPftbjtp/66Op9eMktKRDM5Uz
-	 yFbgUfLA3mWQuZ73zdaVcBKY56UGn5wlJAbecU5nJ5akbYlOJ6Zq3iHZSuMopndH0p
-	 86kbnO09OqPbcorODnGePs+io7Jh/rtpFdvh7UwBSTdS5bHlXjrv6y8HfuIgQ/mi3X
-	 ZE6YEuQcuEtfY3xz+ADuBuchILBDO52xVzeK+MRrwAPx8FF8PwI8ID8wuwav0CzvnI
-	 LEOl92ea7ogLxLANyXX6ACeugxwyo9eur4/yk3dCBOhHNpK9PVudD1MNQyX60RHHoL
-	 fcjaJrDa3QLmQ==
+	s=default; t=1778230335;
+	bh=HccbeM6TC/YObQ2R1joYZoov93ELNG3GAHiyk2UnXw0=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=PQhTXEJuHgaXsbqyJJkBhKJjrelCGefvTBujCC0gO2eL7QGLq1g8jpU2fjTcu7Pqz
+	 PIOE/TfU3DtmZQZ6jS7HcfAnui6F+DCxDtDVyDtKR7o684RllOW4K4r91DgZ8iiQHN
+	 wh3bpJ0h8d2RcugMm+ufi6q62ije/hnhNapxZzxfoXrUOPcsOHMeoiuYDxoDmGGIWw
+	 vrBvAyDXE/ufijTMyj+U4q4tOC6EoqduERAcIbRE2vcBIC2PqcfK+wy0kW6992IBKG
+	 4MqQ8DIfR6mDmEAaEvrbVo0AzFaaxqZD1L1CUR6TWrYgN4CdMQpTT9Bwtv951mZ7eZ
+	 PmrWRRdTspxrw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3110D417A0;
-	Fri,  8 May 2026 08:51:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D2C6E317
- for <buildroot@buildroot.org>; Fri,  8 May 2026 08:51:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D25F417A0;
+	Fri,  8 May 2026 08:52:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9608E317
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 08:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B81B8841D0
- for <buildroot@buildroot.org>; Fri,  8 May 2026 08:51:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9341F40C7A
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 08:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HWpj6IuvttYb for <buildroot@buildroot.org>;
- Fri,  8 May 2026 08:51:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD073841CF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD073841CF
- for <buildroot@buildroot.org>; Fri,  8 May 2026 08:51:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9ED0D854C8; Fri,  8 May 2026 08:51:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 8 May 2026 10:29:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e049f6fef1fd1e1b0b6095e0ff9113312a7d7f81
-X-Git-Newrev: 108f51c1b35479a8c1c3c3d9ab58589ef26217f3
-X-Patchwork-Hint: ignore
-Message-Id: <20260508085154.9ED0D854C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bubblewrap: security bump to
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IZl3Y9b3BLDx for <buildroot@buildroot.org>;
+ Fri,  8 May 2026 08:52:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8CA634020C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA634020C
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CA634020C
+ for <buildroot@buildroot.org>; Fri,  8 May 2026 08:52:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id EF4585FFAF;
+ Fri,  8 May 2026 10:52:07 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 08 May 2026 10:52:07 +0200
+MIME-Version: 1.0
+Date: Fri, 08 May 2026 10:52:07 +0200
+To: Adrian Perez de Castro <aperez@igalia.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260507130813.67423-1-aperez@igalia.com>
+References: <20260507130813.67423-1-aperez@igalia.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <88771c8d42b899996e30f0b60396049a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778230329;
+ bh=QcDZtRcavdBeOVwrIGPdGIH9or9tdg1II4B0FVsL21o=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=E/+lERfJFRzo3ylL+0HVTLb5sbhQk2FL5Yd7rgtaisQUdeNz5rXFA/xbwrAj21qW5
+ GD1Z+rdO5PM0sm/gFFD8suKc8S0i/k0dTQQsbKDpWk63AQkmvUxzR2wjObrQbVwjBo
+ 9HsuqhmyXEvN5IKleanbn194oAFzffJIB48jQKalOckNvqNLVX7YQ4s49mXsrJ/GRt
+ msODvBEW2k5l+nnC0soYCvtVob7+ZNX6SykNJ29JSTVBhvBixEWpfvoh0DtTPpb3kw
+ eIMAvhWXiogoSxQsQf+P8gn5Iokm3ogBkYVpqkgLQHP1Mj0Qo0wGPrOqkrr1bHn24M
+ yQMMC7/0eKgJg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=E/+lERfJ
+Subject: Re: [Buildroot] [PATCH] package/bubblewrap: security bump to
  version 0.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,63 +96,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/108f51c1b35479a8c1c3c3d9ab58589ef26217f3
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 07/05/2026 15:08, Adrian Perez de Castro wrote:
+> Fixes CVE-2026-41163, which affects any system using bubblewrap 0.11.x
+> using a setuid bubblewrap.
+> 
+> Release notes:
+> 
+>   https://github.com/containers/bubblewrap/releases/tag/v0.11.2
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Fixes CVE-2026-41163, which affects any system using bubblewrap 0.11.x
-using a setuid bubblewrap.
-
-Release notes:
-
-  https://github.com/containers/bubblewrap/releases/tag/v0.11.2
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bubblewrap/bubblewrap.hash | 5 ++---
- package/bubblewrap/bubblewrap.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 696c20ee07..e87d3c81cb 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -1,6 +1,5 @@
--# Also checked GPG signature from
--# https://github.com/containers/bubblewrap/releases/tag/v0.11.1
--sha256  c1b7455a1283b1295879a46d5f001dfd088c0bb0f238abb5e128b3583a246f71  bubblewrap-0.11.1.tar.xz
-+# From https://github.com/containers/bubblewrap/releases/download/v0.11.2/bubblewrap-0.11.2.tar.xz.sha256sum
-+sha256  69abc30005d2186baf7737feacd8da35633b93cf5af38838ecff17c5f8e924f6  bubblewrap-0.11.2.tar.xz
- 
- # Hash for license files:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index afbb29eab9..7838ab90b3 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUBBLEWRAP_VERSION = 0.11.1
-+BUBBLEWRAP_VERSION = 0.11.2
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
-@@ -18,6 +18,7 @@ BUBBLEWRAP_CONF_OPTS = \
- 	-Dman=disabled \
- 	-Dpython=$(HOST_DIR)/bin/python \
- 	-Drequire_userns=false \
-+	-Dsupport_setuid=true \
- 	-Dtests=false
- 
- ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
