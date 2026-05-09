@@ -1,81 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0438CD37B2
-	for <buildroot@archiver.kernel.org>; Sat,  9 May 2026 20:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B952DCD37B2
+	for <buildroot@archiver.kernel.org>; Sat,  9 May 2026 20:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C1426F61F;
-	Sat,  9 May 2026 20:47:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C28014266A;
+	Sat,  9 May 2026 20:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lrJVsm4EADfH; Sat,  9 May 2026 20:47:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Dy1Lb60FrIQ; Sat,  9 May 2026 20:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE9E6F620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98F8E4223C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778359633;
-	bh=2YkXpNPVg+wAa+yEcvqyKPJjFnM1+unxmyQCjW2BDio=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=is6YBSkboQdQ2WshdGIMG//WHJOMVzRrFES3kWZe9td/NKjuA+aIf0uf7ouzEMgF2
-	 QdYd4grRyc02ARKaDfzFgHfBEQT0+en9QWCuunnodShaGa6LfTpyURipjQUpkRfR+a
-	 1B+QGxf6/h0xUxdkeeRoUwB+BoEI2AVzHRzRyFCFDWQo4SIlSc+P/G92N1VFB35s+2
-	 6cGxLnPx/re6yYQSTiK/xxbkvGlaQCrKcK8Xlbn1zLxLQfXV8ZtrhHt7Zhv2+1zwg1
-	 uukCzM2q2UTzbRexpnrs/d68k29b+7QuYcs4bhQbz8ccV41RgXyzhi7yEPfnkz8dJR
-	 TpgaD87VZ5ioQ==
+	s=default; t=1778359783;
+	bh=nECAAEcVRNnbcUSln1sKzS23ZWzv+xfVqZC/DwaHhmM=;
+	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=coNUeZJiTeTpdqN/hHmeFe4bw2snNgas6ET5Q5yCmtD5xwP4KW++hKo167EaNQK2f
+	 TJUlRsIGd7DGqMWUhy3bNuFO64slB3F9Ch7TBLwW/bxM0Ic7NyxSx+DJLPdgG2hUgq
+	 EkqvFYrN1yHQTkBWnequFbPMOyrnxmSrqsYmsJ8+rBg9WlvdZxK32Sus7ZY2T2ia+Q
+	 cE2FdhKC0avKekyhfKHMq5cmtr79PqrC+hmTi9GIvY3I565p6b8k3Zb3UYLNFCzc3g
+	 rfj96IWNzcUhFxQv6GZkrVh0TdHtKRxQzwH91LokYEgOxqpeq52JL1IS7s3xhv67Xh
+	 wAssnONZx8izg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE9E6F620;
-	Sat,  9 May 2026 20:47:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C12D9272
- for <buildroot@buildroot.org>; Sat,  9 May 2026 20:47:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98F8E4223C;
+	Sat,  9 May 2026 20:49:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68D02272
+ for <buildroot@buildroot.org>; Sat,  9 May 2026 20:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B19186F620
- for <buildroot@buildroot.org>; Sat,  9 May 2026 20:47:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59F834194F
+ for <buildroot@buildroot.org>; Sat,  9 May 2026 20:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e_CbjljE-CIt for <buildroot@buildroot.org>;
- Sat,  9 May 2026 20:47:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 539A96F61F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539A96F61F
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 539A96F61F
- for <buildroot@buildroot.org>; Sat,  9 May 2026 20:47:09 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6C6F65FFA3;
- Sat,  9 May 2026 22:47:05 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Sat,  9 May 2026 22:46:58 +0200
-Message-ID: <20260509204659.212149-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.54.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u3o3rA4V_T5c for <buildroot@buildroot.org>;
+ Sat,  9 May 2026 20:49:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ADA49403EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADA49403EC
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ADA49403EC
+ for <buildroot@buildroot.org>; Sat,  9 May 2026 20:49:40 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -470245033; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 09 May 2026 20:49:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wLocC-000000079VS-3p0P;
+ Sat, 09 May 2026 22:49:36 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <CADvTj4p1VpLavsumv0zp4dZic7ejyooSXGthS_=qqgP6=yd1Tg@mail.gmail.com>
+ (James Hilliard's message of "Sat, 9 May 2026 13:00:42 -0600")
+References: <20260509093853.1651716-1-peter@korsgaard.com>
+ <CADvTj4p1VpLavsumv0zp4dZic7ejyooSXGthS_=qqgP6=yd1Tg@mail.gmail.com>
+Date: Sat, 09 May 2026 22:49:36 +0200
+Message-ID: <87pl34pau7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778359626;
- bh=xWNJjNyyVp93K4xzCfqG0NWT05EQwjUjC05SP2VdvkI=;
- h=From:To:Cc:Subject:Date:From;
- b=mY5ZAkm/GvaH58NykWPVtztxAyLrtQ3Ib1lVkVppeaoKKywNzvnAqX0epnHJaBsEI
- mJD//4/Q1GljigZCVArGGfqrkjAdMoVsWM7f2tRCBgIEsqYjYeQwL68aYJz9a40DSI
- JB5qAEgDqg2EsItepoNP8DV2eg440tFxUABscD+I2wN3hwcbZ3/d8cHigAIZK8VlNC
- UAP2fjGCremFFZSPYhOB2uBiWvhQ2KwvnielX7nUuTjr8wkqFtIXrGdfy6xZVaVWu6
- n8ICdo3VUT/XdMo9nPsokhqy4cj+qaur8YueGqiTZvXA6H8zDNKWwYLQW0CyeINYTe
- 0aLik0QE6sTMQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Gmcp/NBIg5CA9tzdjuI9AfKsW/70X44FoK0w1+YFfzGs41/xQUCeR0pu0A1OUOkd1Nu4AC1ujkRCJ4v0KoYccRDdZk46WrVqt1uphD70Am0FOGVRkN3fKbYLh3CXBgC8QvoGrvN0Mq85eyuGESdLS8gcV/E4eGjoACc5R2iyND351lDk8BKmh6vLKCG7MMr7slXn2SliJ+d8rO4+l/dmfkVo6wdfs8iBHynSOR8NVOO9Rsh6yDU8mNAXgCK/K4tpL3BynH8/or585Ccl0T22Kw/PWURO+NumV60zlGMAuKF2jSthuX6gkrU7a/ME7luahmxVt2cTswTauXBZ8Hevpg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=LcLX+giPczfDSjb/K6D/QzZ3+AZsPMBS7UfcHaQ5pXg=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mY5ZAkm/
-Subject: [Buildroot] [PATCH 1/1] package/swipl: bump version to 10.0.2
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Gmcp/NBI
+Subject: Re: [Buildroot] [PATCH] Revert "package/python-setuptools: bump to
+ version 82.0.0"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,111 +93,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since version 9.2.9, see:
-https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.9&to=10.0.2
-
-This new version can no longer build in the source tree. Therefore,
-this commit adds SWIPL_SUPPORTS_IN_SOURCE_BUILD = NO. Also, the target
-swipl needs the host-swipl binary. It is searched by the cmake script.
-This commit changes SWIPL_NATIVE_FRIEND variable to point to the
-out-of-source build directory.
-
-swipl has now a stricter ABI check of its prolog library bytecode
-compiled files, compared to its builtin expected ABI:
-https://github.com/SWI-Prolog/swipl/blob/V10.0.2/src/pl-init.c#L263
-
-When cross-compiling, swipl is built on one side, and library files
-are built with the host-swipl. The ABI string of the host-swipl and
-target swipl must match. If not matching, swipl fail to start at
-runtime with the error:
-
-    FATAL: could not find SWI-Prolog home
-      Tried source: compiled in
-        Found /usr/lib/swipl: ABI mismatch
-
-This ABI string includes a signature of builtin modules. See:
-https://github.com/SWI-Prolog/swipl/blob/V10.0.2/src/pl-init.c#L1653
-https://github.com/SWI-Prolog/swipl/blob/V10.0.2/src/pl-ext.c#L330
-
-The swipl ncurses support is made with one those builtin module.
-ncurses development files are likely present on host and likely not
-enabled or needed on target, hence producing a different ABI
-signature. For that reason, this commit disables ncurses on both the
-host and target.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/14292359431
-https://gitlab.com/jolivain/buildroot/-/pipelines/2512763423
----
- package/swipl/swipl.hash | 2 +-
- package/swipl/swipl.mk   | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
-index efc3aa963f..4dada84df5 100644
---- a/package/swipl/swipl.hash
-+++ b/package/swipl/swipl.hash
-@@ -1,4 +1,4 @@
- # From https://www.swi-prolog.org/download/stable
--sha256  53f428e2d9bbdf30e53b06c9c42def9a13ff82fc36a111d410fc8b0bc889ee2d  swipl-9.2.9.tar.gz
-+sha256  e42cc098f7b8a6051c4f79a99b55162d467098aba60f69649bdc7583f0734b57  swipl-10.0.2.tar.gz
- # Locally calculated
- sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
-diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
-index 20faaefe7c..801e5b800a 100644
---- a/package/swipl/swipl.mk
-+++ b/package/swipl/swipl.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--SWIPL_VERSION = 9.2.9
-+SWIPL_VERSION = 10.0.2
- SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
- SWIPL_LICENSE = BSD-2-Clause
- SWIPL_LICENSE_FILES = LICENSE
- 
-+SWIPL_SUPPORTS_IN_SOURCE_BUILD = NO
-+
- HOST_SWIPL_DEPENDENCIES = host-zlib
- 
- SWIPL_DEPENDENCIES = host-swipl zlib
-@@ -16,6 +18,7 @@ SWIPL_DEPENDENCIES = host-swipl zlib
- # A host-swipl is needed to compile the target prolog boot
- # boot.prl file.
- HOST_SWIPL_CONF_OPTS = \
-+	-DHAVE_CURSES_H=0 \
- 	-DBUILD_PDF_DOCUMENTATION=OFF \
- 	-DSWIPL_PACKAGES=OFF \
- 	-DUSE_GMP=OFF \
-@@ -29,12 +32,13 @@ HOST_SWIPL_CONF_OPTS = \
- # the path set to this variable. Therefore, we cannot use the host
- # "swipl" binary installed in $(HOST_DIR)/usr/bin.
- SWIPL_CONF_OPTS = \
-+	-DHAVE_CURSES_H=0 \
- 	-DBUILD_PDF_DOCUMENTATION=OFF \
- 	-DHAVE_WEAK_ATTRIBUTE=1 \
- 	-DLLROUND_OK=1 \
- 	-DMODF_OK=1 \
- 	-DQSORT_R_GNU=1 \
--	-DSWIPL_NATIVE_FRIEND=$(HOST_SWIPL_SRCDIR) \
-+	-DSWIPL_NATIVE_FRIEND=$(HOST_SWIPL_BUILDDIR) \
- 	-DSWIPL_PACKAGES=OFF \
- 	-DUSE_TCMALLOC=OFF \
- 	-DCMAKE_CXX_COMPILER=true
--- 
-2.54.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkphbWVzIiA9PSBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNv
+bT4gd3JpdGVzOgoKID4gT24gU2F0LCBNYXkgOSwgMjAyNiBhdCAzOjM44oCvQU0gUGV0ZXIgS29y
+c2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiB3cm90ZToKID4+IAogPj4gVGhpcyByZXZlcnRz
+IGNvbW1pdCA1MTM2NWZmMDYzNzlhYWY2ZmNjOWE3NTFlOGZmMzJhYzY5NGYzZTkyLgogPj4gCiA+
+PiBUaGlzIGJyZWFrcyB1LWJvb3QgPCB2MjAyNS4xMCBidWlsZHMgdXNpbmcgYmlubWFuLCBzbyBy
+ZXZlcnQgaXQgZm9yIG5vdwogPj4gZ2l2ZW4gdGhhdCB2MjAyNS4xMCBpcyBhIHF1aXRlIHJlY2Vu
+dCByZWxlYXNlLgogPj4gCiA+PiBGaXhlczogaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vam9icy8xNDI0OTMzMjAxNgogPj4gQW5kIG1hbnkgbW9yZS4KID4+IAog
+Pj4gTG9uZ2VyIHRlcm0gd2UgZWl0aGVyIHdhbnQgdG8gdXBncmFkZSBhbGwgdGhlIGRlZmNvbmZp
+Z3MgKHdoaWNoIHdpbGwgbm90IGZpeAogPj4gdGhlIGlzc3VlIGZvciBleHRlcm5hbCB1c2Vycykg
+b3IgZmluZCBhIHdheSB0byBwYXRjaCBvbGRlciB1LWJvb3QgdmVyc2lvbnMuCgogPiBNYXliZSB3
+ZSBjYW4gaW5zdGFsbCB0aGlzIHNvbWVob3cgZm9yIGNvbXBhdGliaWxpdHk/OgogPiBodHRwczov
+L2dpdGh1Yi5jb20vcHlwYS9wa2dfcmVzb3VyY2VzCgpZZXMsIHRoYXQgbWF5IGJlIGEgc29sdXRp
+b24gbG9uZ2VyIHRlcm0uIEkgd291bGQgbGlrZSB0byB0YWcgLXJjMSB2ZXJ5CnNvb24sIHNvIEkg
+c3RpbGwgdGhpbmsgdGhhdCBhIHJldmVydCBpcyBtYXliZSB0aGUgYmVzdCBmb3IgMjAyNi4wNS4K
+Ci0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
