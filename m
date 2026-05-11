@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1532CD37BE
-	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 19:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A8B4CD484E
+	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 19:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80689407D1;
-	Mon, 11 May 2026 19:19:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16AE6407F8;
+	Mon, 11 May 2026 19:25:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ijGny5sXQ8_M; Mon, 11 May 2026 19:19:40 +0000 (UTC)
+ id DoIcG213YNFU; Mon, 11 May 2026 19:25:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B0B407C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AACA407F9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778527180;
-	bh=wtphnNw9MI0iTopgHQ+w91R8jkxWn6noJGm2Om0paNM=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Zc8h4PCdhYwNFHNzbUMlzc8aObmx5PUrVDSPH70FpSTqTRENyW/bzZ1W5QTwGvqm1
-	 qcG5+QkQijfWx2WM1eAtev+iktd+FK11BDmNS8bFwAF99lHKwQtQIpgMxu1aXwVD6i
-	 IeEJWIXMyeOiZT8CVyK8KTHp6+mLIA+bZC5MpBO/JiyhhzHtVq65nmxAzxXbQLHrIw
-	 47U2R+ROXugO1C994J3fk2TE5x1gkqlAFj2kf40cSbDrtuBgCN6t20w/ztylPTsPBM
-	 ys9pr6Or9glJ2HOC7M0BOH6LnRf3jj9eEimjlDwFrFvdG7/nvOI3ZQl3xoBiqVcWNV
-	 bPVILtpZr9HpQ==
+	s=default; t=1778527537;
+	bh=F64WCycKkynCNz4PmdlZN5qB6kjYbbr1s7iw3wyDn6w=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=kZemAXKdybgDPBRbSMCftcfVMsGttcEYzS7psXFdBdQdJBMPR1HdqitVhY8druc/Z
+	 xQj7L4bkJx3C2Z8gXAJkfmiJ7smVJJK0k5+GbOtRIAUfvcXwUf1UrRxTeSZ3nZT46L
+	 ktUQEz2mjwCeKDOQh1y0IMKUoga8zClxWlPpxPftutDYSiqlPjUIF67rzybuVtvzYZ
+	 iY+oeE07+6BIP0RT33BJVoHMyMFfNdu28dO5tCon/axNFSnicp94lFpaig4vi+laXm
+	 fPa/NS6MnmocWYf84zR80/cDf5iX2NaNgYy5C7MVdqFuBvFzJgGlkvpNmAan/KEktC
+	 b5HG5E09+tdBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0B0B407C9;
-	Mon, 11 May 2026 19:19:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3FCAA272
- for <buildroot@buildroot.org>; Mon, 11 May 2026 19:19:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AACA407F9;
+	Mon, 11 May 2026 19:25:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B6EB173
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 19:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 316CB407C9
- for <buildroot@buildroot.org>; Mon, 11 May 2026 19:19:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0CC940094
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 19:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fAJEiwRiyZX8 for <buildroot@buildroot.org>;
- Mon, 11 May 2026 19:19:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 12E93407C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12E93407C8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 12E93407C8
- for <buildroot@buildroot.org>; Mon, 11 May 2026 19:19:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 356CC19F574;
- Mon, 11 May 2026 21:19:34 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 11 May 2026 21:19:34 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DEZwdaqHz0Pc for <buildroot@buildroot.org>;
+ Mon, 11 May 2026 19:25:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.165;
+ helo=smtpdh20-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC2AA40093
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC2AA40093
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC2AA40093
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 19:25:31 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id MWFrwaJ7SEZ9tMWFswwkzR; Mon, 11 May 2026 21:25:28 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 11 May 2026 21:25:27 +0200
+Message-ID: <20260511192527.3886468-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Mon, 11 May 2026 21:19:34 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260510211832.2114019-1-giulio.benetti@benettiengineering.com>
-References: <20260510211832.2114019-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <ff3ea45ac708b589a941efe915a5f764@free.fr>
-X-Sender: ju.o@free.fr
+X-CMAE-Envelope: MS4xfMgGuwMlbqjaNtTbAqbx6VyBzvGpCABd58NA8nrBhboNrq3P35k4g/P54I61fZzLaAbrziNEXmc6wTGij9yDYlO53IDlzKVDBRDMYcF/noF7ptJZkjKf
+ AwtdKVjZMsDHfJPl2vcVUqfrqKm7AgNt5WEJrFRjUHl3kbn9GYEsByX8zrcLqN6xUFXZ5RNhnox3CJJcjw10u0xX+NYhfGTGY7y33q8DCYQmXsyLHxg2zI4/
+ ghqWtQlsA7DJv1bGGAM6Q/DrA9hppB3jWYcbBDhUlJ4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778527175;
- bh=pPGyhKBHVK/2hY7z5rrOajKyMqG86ROeHgoPy9Ieshw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=N41v8EXXfCoBQftR/bayhGyzS5I9K0lPVJnBcWYNdItDPA4tPKiqK+UzEppQhoZX6
- 1jMsIECpu987oWTFimxFcn21oBiuVbEO1wQXve5QBu3oriI555Q+kMIIDvgCbo6z+F
- ny/MiD7errmf5g+yMFpkheFqLLr+S1VSxGG6i5bWjgskDP4BD4RMhC9yISvN665noN
- qXCLZA9DG5KR0XFAuSO88hiSaHdZvjddPjOstCyu20e1Mfos3LuwSPPgHn7qq+hxH/
- u+n20r9ioxB9Et45++bLBGNUzcgxd1OCEfdqrO8ejP49HPuvinVbcptaZ+oElvAifz
- mD6ENY1PgbF7Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1778527528; bh=rErrzo9y+1QM59uIzPrftQ6bTceK29zu3/HX2dVil/4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Rjxc7K0CaARC+PiXM/OyUJ5NhbHt7laYJX9n02wRxEZfw6WPgp09lJ6FzGNtaMmN+
+ kcYFJLfzzpo+39D6LLwfFR2Wqfsolm8RpndW3Dgu3VUu3iaFsusr9XH7yLvxYYP4AK
+ Ynhxrwje833pI3UmzghXQbGGeDOyJv+u2I/JfWTOz3PzU3lsVwbFBVO4k9WlH98lJw
+ CXiNv4xgtP23tE9gwJATAqeA1+BhpV/W/9igSkZue5q7KKuNQ0MgevpfOgZjc/aDkI
+ DeVFq2E2RWbdJfczE7wT+6KEDPxSMCFuo01Pu0YWyIkkWFnnWNnpg/oDxr8Me3oqPv
+ l+otPSYFKIx7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=N41v8EXX
-Subject: Re: [Buildroot] [PATCH] package/dash: bump to version 0.5.13.4
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=Rjxc7K0C
+Subject: [Buildroot] [PATCH] package/libblockdev: fix build failure due to
+ missing dependency json-glib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,20 +91,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/05/2026 23:18, Giulio Benetti wrote:
-> For change log, see:
-> https://git.kernel.org/pub/scm/utils/dash/dash.git/log/?h=6a1533f24b646364ad514c542292b5c85b2adabf
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+When BR2_PACKAGE_LIBBLOCKDEV_LVM2 is enabled it requires package
+json-glib to be enabled starting from libblockdev version 3.5.0
+so let's enable it accordingly.
 
-Applied to master, thanks.
+Fixes:
+https://autobuild.buildroot.org/results/fceb64bb7fcfced61ef900b580b458135baa3713/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libblockdev/Config.in      | 1 +
+ package/libblockdev/libblockdev.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 08d618945b..e9e9faaa05 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -47,6 +47,7 @@ config BR2_PACKAGE_LIBBLOCKDEV_LVM2
+ 	bool "lvm2"
+ 	depends on BR2_ENABLE_LOCALE # parted
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # parted
++	select BR2_PACKAGE_JSON_GLIB
+ 	select BR2_PACKAGE_PARTED
+ 	select BR2_PACKAGE_LIBYAML
+ 	select BR2_PACKAGE_LVM2
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index e5cbe45b93..89a398c6e5 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -47,7 +47,7 @@ LIBBLOCKDEV_CONF_OPTS += --without-loop
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LVM2),y)
+-LIBBLOCKDEV_DEPENDENCIES += libyaml lvm2 parted
++LIBBLOCKDEV_DEPENDENCIES += json-glib libyaml lvm2 parted
+ LIBBLOCKDEV_CONF_OPTS += --with-lvm
+ else
+ LIBBLOCKDEV_CONF_OPTS += --without-lvm
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
