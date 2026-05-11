@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D79C0CD37BE
-	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 18:50:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA15CD37BE
+	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 18:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EDDA60655;
-	Mon, 11 May 2026 18:50:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85B796064E;
+	Mon, 11 May 2026 18:54:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rKL7y-BRnUNn; Mon, 11 May 2026 18:50:29 +0000 (UTC)
+ id QNvqrzEldhfi; Mon, 11 May 2026 18:54:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C058F60650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA91260651
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778525429;
-	bh=JEhbv7efF7pGPdzRYZWboLJXSvZj9OBsTiif/NHv0ag=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1778525692;
+	bh=ZiBLwXY2k0VLemSXu+AoOHvqh0rVgbW/9ON2KPAsff8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=HLOgBbwXoHeR4m+tnuAfiUCJvSswMpb/iTkqZqsI1hJ6UYOqOhEHgJqW2Hp+gk2F4
-	 kydSPE3JO3sR+VolTIOVyXB8F7wnZBhSGfsBG1Vmwa4yuA6UI0g/UYvlYH9Ngq9qla
-	 14z3lO3MCBCdL2cEtLzWTG1ki+jBNxuH2eRrjvCG+VFVi4vVtXUSBBbu2RgcOp4do8
-	 xnt5FP8ZsuesATcB21XYtSQahJ9dGieXDyjv6myXWOczk+A8U0KW6JeW3TKz9NkAy/
-	 lrDXxSUBVpiVaXs4VxwpSTcRDO2D9FQT9U7y+jr305ht1txOgR8HnulK3qDvQiaBMp
-	 WtDW0sD+qKp4g==
+	b=FdsEbUQP36/WHV3h3ssCxwBiYPNsmqTFSYTcJ8Q3b32Ugw5PCWIiPSfVU2z7KrUZ8
+	 2sktWSXfPpztwDU9p8RD+5Dya16/zyR4kZm7m0DZmNtuxEC1fHMXndE/8FRQR7BVBs
+	 A5of6fF6pIDPiTdeJ1HodkbtU8KZVhNJs8r03rb1EGz03LosW191bTRP0Y5LbXV485
+	 CKfu8TDoeY7Ob9Dr/1yzZjO1gBWjmgbZzS6hnUBGYxFNMxTGAddhkTV1Sgia5EOqRC
+	 bMdQvaVX4lFlFEt92/OhcwH7HD6iXE1ESvIvHJY1KxFehhzVlBbEk2Erjk5q901H8i
+	 ln06RJpkpijTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C058F60650;
-	Mon, 11 May 2026 18:50:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E1D5272
- for <buildroot@buildroot.org>; Mon, 11 May 2026 18:50:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA91260651;
+	Mon, 11 May 2026 18:54:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 340E0173
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 18:54:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5354040070
- for <buildroot@buildroot.org>; Mon, 11 May 2026 18:50:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 19AA24005E
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 18:54:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vNQeLA8AYGuz for <buildroot@buildroot.org>;
- Mon, 11 May 2026 18:50:27 +0000 (UTC)
+ id gsnmQ-bO-gCf for <buildroot@buildroot.org>;
+ Mon, 11 May 2026 18:54:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3C784005E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3C784005E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0F3D640074
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F3D640074
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F3C784005E
- for <buildroot@buildroot.org>; Mon, 11 May 2026 18:50:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F3D640074
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 18:54:49 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c559.dip0.t-ipconnect.de [79.214.197.89])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1D6B4A4C379B;
- Mon, 11 May 2026 20:50:25 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59168)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1D0EAA4C0A4F
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 20:54:48 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50866)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMVhw-000000003T4-1gfJ;
- Mon, 11 May 2026 18:50:24 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wMVmB-000000004Dp-1iYg
+ for buildroot@buildroot.org; Mon, 11 May 2026 18:54:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 May 2026 20:50:24 +0200
-Message-ID: <20260511185024.3025627-1-bernd@kuhls.net>
+Date: Mon, 11 May 2026 20:54:47 +0200
+Message-ID: <20260511185447.3298731-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778525425;
- bh=apgP1VyBZMwcslvYHHajgETX7dL7EWetkdb9zMkLuc8=;
- h=From:To:Cc:Subject:Date:From;
- b=apkpuP55/ro7geEF/adE8EApTE1k6T+WH4Yvc6JIVBU48s7TuW22OOBkVdAGxeNik
- 5aMLwhPpJ+blzByZ4G7jCmjjje9IiIpHbT90/kuH3AVFTeLeJt10Lsb17ifYP+ou0p
- 92mvSvzLLvj3id/uXxacTfrM4X2WmR/Ny+dNt2sxfe4GGTRoSgCk1cJosDUaFtAsnb
- O0Q+3xLJe0ZRSzsxqU3HTgj7ozJSidgTDWMtd+B3RXwpcCfbT6kNW4m1qAeElRNzG0
- uuL2180sJLu2ID8UPJCv3CCX4ReNHRlzhQ93JUujCC2+IZamItYRA8m6SNGad81d32
- B6O6mBFAw16mA==
+ s=kas202511301023; t=1778525688;
+ bh=bCMTdbNmYkPDxQAcJfAgQtVhMIVhaUcOP/lXLDj3GYg=;
+ h=From:To:Subject:Date:From;
+ b=Sh4kQ5ITMwq1+s8zwOjUnBQW24o4UEvO30TTExNjoO45Q19I8D851Zd72ISygbP1z
+ 4nxJH7J8nku2648mc/ftMJ3kJqXVRRRBF7s4yb/DbPWE8d5i36YBiJjWyJ8FQjzixd
+ Gt/G/xZQB1V7SaItf/ELTSNqH+wPDwivglltu4HXGCjdcUrlZ4AmWSGNWiDB/hWvpE
+ +wM6RblZTGN/wn4hFqbtDooHPbe6FFQcffK1M7yQ7V8bAEReVBazTUr2Ow0DRmICow
+ AHoBNrbbMGdDa1obYmwvgKxEybCMmePHRLpUGiGTNFcY5sUvsm0Q2iKEoBKyQbsWWN
+ +s6YVsi7IZJoA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=apkpuP55
-Subject: [Buildroot] [PATCH 1/1] package/mutt: bump version to 2.3.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Sh4kQ5IT
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: security bump version to
+ 2.92rel2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,38 +96,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-http://www.mutt.org/news.html
-http://www.mutt.org/relnotes/2.3/
-https://gitlab.com/muttmua/mutt/raw/stable/UPDATING
+https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q2/018471.html
+https://thekelleys.org.uk/dnsmasq/CVE/
+
+Fixes CVE-2026-2291, CVE-2026-4890, CVE-2026-4891, CVE-2026-4892,
+CVE-2026-4893 & CVE-2026-5172.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 4fd71fd6ab..40965d21fd 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 258f0b1e93..74ee5c415b 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
+-sha256  4bf50c2c1018f9fbc26037df51b90ecea0cb73d46162846763b92df0d6c3a458  dnsmasq-2.92.tar.xz
++# https://thekelleys.org.uk/dnsmasq/dnsmasq-2.92rel2.tar.xz.asc
++sha256  43d72b8c129bdf33d17bafedc98823f63e46b5005128066bf0d2a472a32ce06a  dnsmasq-2.92rel2.tar.xz
  # Locally calculated
--sha256  1d3109a743ad8b25eef97109b2bdb465db7837d0a8d211cd388be1b6faac3f32  mutt-2.2.16.tar.gz
-+sha256  9b4f7a442e41c057774ba7c36fa41aba2edd2e7a12a86031e6ebb113bab2c79e  mutt-2.3.2.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 503f2d283e..1be1f8b682 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 74fc053089..d7ae8a3312 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUTT_VERSION = 2.2.16
-+MUTT_VERSION = 2.3.2
- MUTT_SITE = http://ftp.mutt.org/pub/mutt
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+-DNSMASQ_VERSION = 2.92
++DNSMASQ_VERSION = 2.92rel2
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = https://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 -- 
 2.47.3
 
