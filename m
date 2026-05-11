@@ -4,82 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9E0CD37B2
-	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 15:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C439CD37B2
+	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 15:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3487812EB;
-	Mon, 11 May 2026 15:57:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8E8880306;
+	Mon, 11 May 2026 15:59:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wJPhfAABuWiQ; Mon, 11 May 2026 15:57:56 +0000 (UTC)
+ id g4349PJqV3O1; Mon, 11 May 2026 15:59:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9961E8116D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FC4680068
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778515076;
-	bh=GMRW1He+ehYn8gViQx1je0oMuqFkz5NOqmAS17xmyMY=;
+	s=default; t=1778515172;
+	bh=shW5yX8N79NPyO4IAJ7RG4vw2YlbSzp9Cig23+OngBg=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=UwkT/0M1sxpJbPLbHcnzod7QBXzTRfTkfZSiylUvNBfunYqBnWDWIaCSA/XUgBWrt
-	 8jTVAEQf7MHZa/buJFj/dwermmj5NXi2QRjRD2AWXIJP6pAORwmZ4APKp191pnysHm
-	 IHyXENpejY3nrpIJIL8bAWVfLTdr8abSrBoH9E7/tuK1DbLweQ/BwqsfDyYpuCs0u7
-	 UX2AZ5xO3vgB8p4qgxjg5exqHv7XmIgGu6qAfzaHo71+XZql4L/HvnO2In//Tvh3VI
-	 o+HPUzDxSaeyfQhze541vVlUdAUXaUbpY6DOlLcP7YaS2iP8k/E2o4u1/iv7VZ/DU+
-	 6gyKixJPQjToA==
+	b=W2o3I4i5IF2kcxWrHsSwInWvTApcTR08ueFpqC40qIhTN+dShuyRU5Wd3Me046h3K
+	 KShxuJZs+FflVGF03++FZmii/d0fhEGvQDn9WNiqZQ0o9BYjCwXgkhpfrm9l1WQTIO
+	 w55dryyJeTke8PoqWsVbMAdKoDmSkA9+1IOwobhmBsESLvjkOzKySVa+mS7e0QOnn/
+	 XkOw1oDLiyguuvoW0hiuax2v27LV5LQExlST4T8mF6eaBHz5NcYP9aQlA2la5clWRr
+	 u2Owdobrz9CahNliWuPTk5aD8um7PZwdtFyHmH/9TxzIMDmE4UP1m55CrJya++9VDa
+	 AFyBNL2aexyyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9961E8116D;
-	Mon, 11 May 2026 15:57:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FC4680068;
+	Mon, 11 May 2026 15:59:32 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71A44223
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 59A02223
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:59:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54811608D6
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EE9E60035
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:59:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id npgvqVLWwRNQ for <buildroot@buildroot.org>;
- Mon, 11 May 2026 15:57:54 +0000 (UTC)
+ id QblwjnvLpw1j for <buildroot@buildroot.org>;
+ Mon, 11 May 2026 15:59:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C9DC608D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C9DC608D1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 32B1A60034
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B1A60034
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C9DC608D1
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 32B1A60034
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:59:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c559.dip0.t-ipconnect.de [79.214.197.89])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EEF1BA4C3595
- for <buildroot@buildroot.org>; Mon, 11 May 2026 17:57:49 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46654)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C5755A4C3595
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 17:59:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60354)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMT0v-000000007GT-0b6g
- for buildroot@buildroot.org; Mon, 11 May 2026 15:57:49 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wMT2U-000000007Y2-0TCz
+ for buildroot@buildroot.org; Mon, 11 May 2026 15:59:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 11 May 2026 17:57:49 +0200
-Message-ID: <20260511155749.1223615-1-bernd@kuhls.net>
+Date: Mon, 11 May 2026 17:59:26 +0200
+Message-ID: <20260511155926.1225557-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778515070;
- bh=IgHXp92DfWi4nklSWA8Au8f5qBi2HhsIAJELE+DZAyc=;
+ s=kas202511301023; t=1778515166;
+ bh=zPOoO0LZsWn7EabtdMUpRco89I0D57sXGz2A64bWqew=;
  h=From:To:Subject:Date:From;
- b=JRgmKQmZ/Q/lFwqYmM2qNhqP2AfyxuzQ0c8pip4DHlVLgpk+7zOndmBL+iJ3rBZrf
- GhO+Si1mRAHm6+IcFKb3e3l9RWZ414Njlba8LE+zY0+15+kU7XKIIYK57ePJgZlkyd
- 3CNqd+xVTdjtMBXCmjZPySri5WuHsSJLBadxl1q2/LffMkiQnJzjGTIZx0M/Oh8vjt
- 5LXrz1LfeFym6LmQe+4zXzVbyn4DLO0bxPP7Ji2ZdZzrmTSg3JiibOGfxlJBzk8mTq
- cLzMWK5A3qCnP2TcMrGuA690XcNF8wjg2+ezNosc+R6jCzr7t5ga/Oj8eTRlVM5eG0
- jJjS09YSCOIyg==
+ b=GCHPfZSCpl89wev/mWwL2wZZ5xKy0MVDoEzNlFnMTqSPAVFd3cpQYG6+G2aC1BUrx
+ 3tiTLy+yHL+ZTMwi8VaM8BOZ4DqNS2SOYCr0n4Q/7UrUMzVhtzh9sv/xCF7hMkhdZn
+ MVx//tm/7B63iPDrdAuiYHokRL4MMLBeeRW1f275H7J4Ff43o99hsLoNiyk9vDjji2
+ laGcVVOdM9gx0+s/0s+ds/658pjGnJkowcitmYFMKgFD4M4GKXTlQUgym7EA/weKn3
+ RB8cChw9H4Gt6j+ZYi/1tgJ5erDagM/dFDEeeWYT/Fv43J4xURM6bDn6KPyspURt5+
+ 6Y1gnA6u8o8hA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=JRgmKQmZ
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: bump version to 0.195
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=GCHPfZSC
+Subject: [Buildroot] [PATCH 1/1] package/libksba: bump to version 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,77 +95,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://sourceware.org/pipermail/elfutils-devel/2026q2/009226.html
-
-Rebased patch 0002 due to upstream commits:
-https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=1fb2723c504588b60c3f796d91b535b50e0f4fd0
-https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=45bf7360166b30465d5aebb7822f93c26f370b1b
+https://github.com/gpg/libksba/blob/libksba-1.7.0/NEWS
+https://dev.gnupg.org/T8121
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...eally-make-Werror-conditional-to-BUILD_WERROR.patch | 10 +++++-----
- package/elfutils/elfutils.hash                         |  4 ++--
- package/elfutils/elfutils.mk                           |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch b/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
-index f35c2d48aa..c3d2713840 100644
---- a/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
-+++ b/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
-@@ -12,12 +12,12 @@ function [-Werror=maybe-uninitialized]
- cc1: all warnings being treated as errors
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index b7e1e2f9f5..afb9e5756d 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  ff1705f512ab18323571e009d8ead407f7d0279f  libksba-1.6.8.tar.bz2
+-sha256  0f4510f1c7a679c3545990a31479f391ad45d84e039176309d42f80cf41743f5  libksba-1.6.8.tar.bz2
++sha1  789ca7db1b1dcb87bca3eb2f53d5e6729810e943  libksba-1.7.0.tar.bz2
++sha256  e1d3a5745911f5a663fddecf526541c4241052a9e4cafbc92dc7f4096c7efdac  libksba-1.7.0.tar.bz2
  
- [Vincent: tweak patch for 0.166]
--[Bernd: rebased patch for 0.177 & 0.189]
- [Dario: make the patch to be applied with fuzz factor 0]
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased patch for 0.195]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  config/eu.am | 1 -
-@@ -27,10 +27,10 @@ diff --git a/config/eu.am b/config/eu.am
- index e6c241f9d88a..cad1baa27a5f 100644
- --- a/config/eu.am
- +++ b/config/eu.am
--@@ -99,7 +99,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
-- 	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
-+@@ -135,7 +135,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
-  	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
-- 	    $(USE_AFTER_FREE3_WARNING) \
-+ 	    $(USE_AFTER_FREE3_WARNING) $(MISSING_PARAMETER_NAME_WARNING) \
-+ 	    $(DEPRECATED_NON_PROTOTYPE_WARNING) $(FREE_LABELS_WARNING) \
- -	    $(if $($(*F)_no_Werror),,-Werror) \
-  	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
-  	    $(if $($(*F)_no_Wstack_usage),,$(STACK_USAGE_WARNING)) \
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index 933420d1dd..f06196f0a1 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
-@@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.194/sha512.sum
--sha512  5d00502f61b92643bf61dc61da4ddded36c423466388d992bcd388c5208761b8ed9db1a01492c085cd0984eef30c08f895a8e307e78e0df8df40b56ae35b78a5  elfutils-0.194.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.195/sha512.sum
-+sha512  e1e1fdf4f7f72bf520deb0103bb8fd208dc247bab14af100c6fb56d38c0ef6c6d54ff5bd15b84e4f70e2b2ea481e5999fea2842360f8932a861122df79b5fc8f  elfutils-0.195.tar.bz2
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 176dc79f79..65ac15e64a 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
+ # Hash for license files:
+ sha256  078dca2d4a2a5d19788b18dc05e039f7a63cb789f6f0b6f9e3fbe6284e6968bd  AUTHORS
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index f43693872e..10ec0ab2d5 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELFUTILS_VERSION = 0.194
-+ELFUTILS_VERSION = 0.195
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+-LIBKSBA_VERSION = 1.6.8
++LIBKSBA_VERSION = 1.7.0
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
 -- 
 2.47.3
 
