@@ -4,117 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F973CD37BE
-	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 15:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9E0CD37B2
+	for <buildroot@archiver.kernel.org>; Mon, 11 May 2026 15:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 143B483D1E;
-	Mon, 11 May 2026 15:39:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3487812EB;
+	Mon, 11 May 2026 15:57:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 63oniinbF1sB; Mon, 11 May 2026 15:39:30 +0000 (UTC)
+ id wJPhfAABuWiQ; Mon, 11 May 2026 15:57:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F069183CF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9961E8116D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778513970;
-	bh=fphjNUI4Zkve72ZRFCYXZGXX5kOwQDDpvSYN8cMQ5Lc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CzNn99X5px07RGPnGJe9/qN1XAPTQHWkHwg5Qcx4wrXWJJcRElCU0YtWmUCkOBbvz
-	 wIL3LjIVuf8Im1f51YN/meQee2ztLlw57zbk0Ri642hV+Zf51TonTrGabm8xUlJZ9B
-	 uWPpCeyQzqzu5QEl1uhq5lfIa0QuS1ZnL3i1KqVDmiY4F4sGpW6mCb1fEZG/ui06Jp
-	 6VHS5bHYqOuL75w344p7pVhpCK7NGRYXCug/Tm0Iq2BMX/NhnZgYNbUMMlMOr2h/Vx
-	 J/9F02gXuCGfN/AIKv9/kP1RTCjhfO8M99RHzZ2KfXOVMHfOzzjU3SeJPwwq7e8GKj
-	 0tHWEJ3PIBqWg==
+	s=default; t=1778515076;
+	bh=GMRW1He+ehYn8gViQx1je0oMuqFkz5NOqmAS17xmyMY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=UwkT/0M1sxpJbPLbHcnzod7QBXzTRfTkfZSiylUvNBfunYqBnWDWIaCSA/XUgBWrt
+	 8jTVAEQf7MHZa/buJFj/dwermmj5NXi2QRjRD2AWXIJP6pAORwmZ4APKp191pnysHm
+	 IHyXENpejY3nrpIJIL8bAWVfLTdr8abSrBoH9E7/tuK1DbLweQ/BwqsfDyYpuCs0u7
+	 UX2AZ5xO3vgB8p4qgxjg5exqHv7XmIgGu6qAfzaHo71+XZql4L/HvnO2In//Tvh3VI
+	 o+HPUzDxSaeyfQhze541vVlUdAUXaUbpY6DOlLcP7YaS2iP8k/E2o4u1/iv7VZ/DU+
+	 6gyKixJPQjToA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F069183CF5;
-	Mon, 11 May 2026 15:39:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 48EF8223
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:39:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9961E8116D;
+	Mon, 11 May 2026 15:57:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71A44223
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AD6D6066D
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:39:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54811608D6
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iOfvBY1WvQ4G for <buildroot@buildroot.org>;
- Mon, 11 May 2026 15:39:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E05606066C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E05606066C
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E05606066C
- for <buildroot@buildroot.org>; Mon, 11 May 2026 15:39:26 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-43d7e23defbso2595302f8f.0
- for <buildroot@buildroot.org>; Mon, 11 May 2026 08:39:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778513965; x=1779118765;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=3Pcidd9ITMsjhE93JiSkPueq1ZX2MzRENuywJt9IJHY=;
- b=at17iF3QWAhSPtUDhD14sNkOrgooTjpEyT8rocQ1191QpSx1wb6ESA3bjhoW/y2OKi
- z+4TB9RcbTVEHSq60iBgZ8HyhzrP7SHRt9UKufuszz7u5dwkc2U3ATyOFo7g5qguRhqT
- zmkqz5mXlT/u/rzGboDKRFHh9hys1ZJnoJSSXYCVxTTeMAZcomKWjc1BhF4sEo63zX2x
- +24V9JdHTBAUfe2XwkiHZVBgKWMEQwRAH5QeprGHHDiPd656FUXCKI+QyfmubdzQbxKd
- 8SixCsd1hGaqobG0DLMWGKu9Z9Y4i5RlqcgU8ruWSyL1QkI9Xk42xvrAzmODEQO6Vvq6
- wV0A==
-X-Forwarded-Encrypted: i=1;
- AFNElJ/wqglctaEfoIJFXRpGnhY7BBwQ+U0vzPLgXBxJdUK/rwzaIO0z4UVHGPOjoIu56XyRJilXgqMg9vU=@buildroot.org
-X-Gm-Message-State: AOJu0YzeB1jewaHk21ksiJwI/5m9uV0zegH2mTGWmV05YTnpSswDKS/u
- VHQIRzPQhBDiW4K65Kvtmz9o4v2g6zwStbI7YNI4VWK8MELMSVnNc/s/rf7uqifzogG8Lp60NzU
- IQVIO98Q=
-X-Gm-Gg: Acq92OFJRtmCYRKCVU3kSMIO/g6ZgqmipwddKETg6U2sK8vC3Izn19HRoO41Gxv0nJa
- 9G8kHA8Ff4EIoYEMCe1jVKa0xQ/02g8engpFZYN71oK1FRhDg+puwnVoKbkpnd1BFISm/uYKVWc
- dXjnd0s20owteJ6C6/p/v13p5XCsSj74SEIYk9sCSiE4y61BQssAXBRRR8xSzr6QL/tDuYzictf
- ZhQmWwXHEISZ4/oFqqGiinBbg+N7w6Ttobx6EkWIaBC7dN+LDXHPhy/PcnTwZawSgRHtFyh50fQ
- 1jbHaTv7fd9jKMFu9TJ1mQQ94dCmDRTuV8zslR/ez51Zj0mH+FdfqBoC0eQrrs2ly6FnIwFY9yo
- z19PDlewEH1YjcRlkjOEsMmlsDff0Zk2wL7nNMQ2YR9A9kpJ/dxGAXWBgzMmfs5/qjYMB4/XiO4
- OQ4cHaf5/TtBoy2MjdHVXLJVL4qgQU2BHW+LWhJWraUr+O6NdooC/JWes=
-X-Received: by 2002:a05:6000:4007:b0:44f:f454:8a4d with SMTP id
- ffacd0b85a97d-4568c19b209mr15166022f8f.23.1778513964626; 
- Mon, 11 May 2026 08:39:24 -0700 (PDT)
-Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-454919c13c9sm26015067f8f.27.2026.05.11.08.39.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 May 2026 08:39:24 -0700 (PDT)
-To: Jasper van der Neut <jasper@isotopic.nl>
-Cc: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 11 May 2026 17:39:23 +0200
-Message-ID: <20260511153923.339582-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260507161230.1986411-1-jasper@isotopic.nl>
-References: <20260507161230.1986411-1-jasper@isotopic.nl>
+ id npgvqVLWwRNQ for <buildroot@buildroot.org>;
+ Mon, 11 May 2026 15:57:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C9DC608D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C9DC608D1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C9DC608D1
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 15:57:52 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c559.dip0.t-ipconnect.de [79.214.197.89])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EEF1BA4C3595
+ for <buildroot@buildroot.org>; Mon, 11 May 2026 17:57:49 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46654)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
+ (envelope-from <bernd@kuhls.net>) id 1wMT0v-000000007GT-0b6g
+ for buildroot@buildroot.org; Mon, 11 May 2026 15:57:49 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Mon, 11 May 2026 17:57:49 +0200
+Message-ID: <20260511155749.1223615-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778513965; x=1779118765; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3Pcidd9ITMsjhE93JiSkPueq1ZX2MzRENuywJt9IJHY=;
- b=W25aGtZpph/ho/tPO1+X/KdheI5DWuUyMAzcvjfcIYXAfV0jWtTk9fIcrkrq8xQuzG
- zfcVQGCxKJsnYr/bDTIJn6csc0UiD1m67Tb0K3ODtyQcZ+AhmASH6/ZDzTpEGlHIrfZD
- MDdJyH2GsoN5qYEpQpFpaBAnvS1sclmmn/pHw7Mz3YhHvnZCTOaPxnMg+Bkrrt8iZ3kU
- pAHNgL19ZaSk8t8FUzL5h3DTONdbK0SlfKmydDt08eiwCjUCWeftgHGtycgH05BAOJsS
- LcOVHkwwapmkF/cnMhLYnMpNuUzAeiTQpzcjRUS+GvX7gAPesQFF0kqxkaisg1KOiLOC
- 9r5g==
+ d=kuhls.net; 
+ s=kas202511301023; t=1778515070;
+ bh=IgHXp92DfWi4nklSWA8Au8f5qBi2HhsIAJELE+DZAyc=;
+ h=From:To:Subject:Date:From;
+ b=JRgmKQmZ/Q/lFwqYmM2qNhqP2AfyxuzQ0c8pip4DHlVLgpk+7zOndmBL+iJ3rBZrf
+ GhO+Si1mRAHm6+IcFKb3e3l9RWZ414Njlba8LE+zY0+15+kU7XKIIYK57ePJgZlkyd
+ 3CNqd+xVTdjtMBXCmjZPySri5WuHsSJLBadxl1q2/LffMkiQnJzjGTIZx0M/Oh8vjt
+ 5LXrz1LfeFym6LmQe+4zXzVbyn4DLO0bxPP7Ji2ZdZzrmTSg3JiibOGfxlJBzk8mTq
+ cLzMWK5A3qCnP2TcMrGuA690XcNF8wjg2+ezNosc+R6jCzr7t5ga/Oj8eTRlVM5eG0
+ jJjS09YSCOIyg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=W25aGtZp
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/util-linux: fix
- loopdev-fl-nofollow patch
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=JRgmKQmZ
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: bump version to 0.195
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,77 +91,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jasper,
+https://sourceware.org/pipermail/elfutils-devel/2026q2/009226.html
 
-Thanks for sending the fix. I applied [1] which was sent before.
+Rebased patch 0002 due to upstream commits:
+https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=1fb2723c504588b60c3f796d91b535b50e0f4fd0
+https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=45bf7360166b30465d5aebb7822f93c26f370b1b
 
-Best regards,
-PERALE Thomas
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...eally-make-Werror-conditional-to-BUILD_WERROR.patch | 10 +++++-----
+ package/elfutils/elfutils.hash                         |  4 ++--
+ package/elfutils/elfutils.mk                           |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-[1] https://lore.kernel.org/r/<20260507135455.980874-1-buildroot@bubu1.eu>
+diff --git a/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch b/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
+index f35c2d48aa..c3d2713840 100644
+--- a/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
++++ b/package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch
+@@ -12,12 +12,12 @@ function [-Werror=maybe-uninitialized]
+ cc1: all warnings being treated as errors
+ 
+ [Vincent: tweak patch for 0.166]
+-[Bernd: rebased patch for 0.177 & 0.189]
+ [Dario: make the patch to be applied with fuzz factor 0]
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased patch for 0.195]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  config/eu.am | 1 -
+@@ -27,10 +27,10 @@ diff --git a/config/eu.am b/config/eu.am
+ index e6c241f9d88a..cad1baa27a5f 100644
+ --- a/config/eu.am
+ +++ b/config/eu.am
+-@@ -99,7 +99,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+- 	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
++@@ -135,7 +135,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+  	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
+- 	    $(USE_AFTER_FREE3_WARNING) \
++ 	    $(USE_AFTER_FREE3_WARNING) $(MISSING_PARAMETER_NAME_WARNING) \
++ 	    $(DEPRECATED_NON_PROTOTYPE_WARNING) $(FREE_LABELS_WARNING) \
+ -	    $(if $($(*F)_no_Werror),,-Werror) \
+  	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
+  	    $(if $($(*F)_no_Wstack_usage),,$(STACK_USAGE_WARNING)) \
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index 933420d1dd..f06196f0a1 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceware.org/elfutils/ftp/0.194/sha512.sum
+-sha512  5d00502f61b92643bf61dc61da4ddded36c423466388d992bcd388c5208761b8ed9db1a01492c085cd0984eef30c08f895a8e307e78e0df8df40b56ae35b78a5  elfutils-0.194.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.195/sha512.sum
++sha512  e1e1fdf4f7f72bf520deb0103bb8fd208dc247bab14af100c6fb56d38c0ef6c6d54ff5bd15b84e4f70e2b2ea481e5999fea2842360f8932a861122df79b5fc8f  elfutils-0.195.tar.bz2
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 176dc79f79..65ac15e64a 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.194
++ELFUTILS_VERSION = 0.195
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+-- 
+2.47.3
 
-In reply of:
-> ul_canonicalize_path is not available in util-linux 2.40, so build will
-> fail with an unresolved reference.
-> 
-> Signed-off-by: Jasper van der Neut <jasper@isotopic.nl>
-
-> ---
->  package/util-linux/0006-add-loopdev-fl-nofollow.patch | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/util-linux/0006-add-loopdev-fl-nofollow.patch b/package/util-linux/0006-add-loopdev-fl-nofollow.patch
-> index 21b1e2596c..228c570554 100644
-> --- a/package/util-linux/0006-add-loopdev-fl-nofollow.patch
-> +++ b/package/util-linux/0006-add-loopdev-fl-nofollow.patch
-> @@ -8,7 +8,7 @@ prevents symlink following in both path canonicalization and file open.
->  
->  When set:
->  - loopcxt_set_backing_file() uses strdup() instead of
-> -  ul_canonicalize_path() (which calls realpath() and follows symlinks)
-> +  canonicalize_path() (which calls realpath() and follows symlinks)
->  - loopcxt_setup_device() adds O_NOFOLLOW to open() flags
->  
->  The flag is set for non-root (restricted) mount operations in
-> @@ -28,13 +28,13 @@ Vulnerable Code Flow:
->            hook_loopdev.c: setup_loopdev()
->              backing_file = fstab source path ("/home/user/disk.img")
->              loopcxt_set_backing_file()       <-- calls realpath() as ROOT
-> -              ul_canonicalize_path()         <-- follows symlinks!
-> +              canonicalize_path()            <-- follows symlinks!
->              loopcxt_setup_device()
->                open(lc->filename, O_RDWR|O_CLOEXEC)  <-- no O_NOFOLLOW
->  
->  Two vulnerabilities in the path:
->  
-> -1) loopcxt_set_backing_file() calls ul_canonicalize_path() which uses
-> +1) loopcxt_set_backing_file() calls canonicalize_path() which uses
->     realpath() -- this follows symlinks as euid=0. If the attacker swaps
->     the file to a symlink before this call, lc->filename becomes the
->     resolved target path (e.g., /root/secret.img).
-> @@ -82,7 +82,7 @@ index c72fb2c40..3d2274693 100644
->  +	if (lc->flags & LOOPDEV_FL_NOFOLLOW)
->  +		lc->filename = strdup(filename);
->  +	else
-> -+		lc->filename = ul_canonicalize_path(filename);
-> ++		lc->filename = canonicalize_path(filename);
->   	if (!lc->filename)
->   		return -errno;
->   
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
