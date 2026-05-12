@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF4F6CD4F21
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 19:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A91A0CD343F
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 19:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 990298254A;
-	Tue, 12 May 2026 19:37:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C99D41015;
+	Tue, 12 May 2026 19:37:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DqZHZHlN8nV9; Tue, 12 May 2026 19:37:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NGo_m6ByPBlZ; Tue, 12 May 2026 19:37:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F54F82531
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DC9841006
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778614625;
-	bh=9Hj+eDHbwDGNbMvr29XbhZdMviR7KeUZD6ZiWVdbjAM=;
+	s=default; t=1778614626;
+	bh=5ru56uRkj8sLtHZAYx27f141OFShvM+mnWmBpdbFo1Q=;
 	h=From:Date:References:In-Reply-To:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=sufsmdMxzVhQ4ENqKBl1rky5Rondw84XQdBlJARCc54+MHjXIrOzmBscN7FXklNUF
-	 4WdANqH2JeaIr1ZFE4/739GBLs25vD1jKXx5IiWz9ZD5J86AbAcuTKx5nuGB44c8Le
-	 GFtXyeVUG4EKREeLcSAPCVYzAdu37U+nob0GAJNm6hXq/8nZbfSvRtaYLBC5b1iaF5
-	 oqKUa+1OO5MOT37v5blUIiYcC7mUT1x/ACdZNbyQn5AwcnnYvga7POytdmm+h9Lzs4
-	 5jmBpTfVbbIMMoq/UEJi5PyoWDSIZN3OpKx+6RjehilSOWSYo7epDU2FoLKrDxpzav
-	 dWTSEWlewL8lA==
+	b=jEnYYMZY8mRhJF8AcW4wJCC0vW+TgDsySgkgF58gKge5Hgwv2q/nIJOrd7Te/P2rX
+	 5z4JyeoK+Iq1iRoyCHJ7q9xMhujb1f1TK8ZuInM8NDSPgoFQpq2CmQZQWJaaMsUnwT
+	 dw3XDcypmAew3uY5VrdK0KlnidrWfe77Z/1ShiSi1UN37DkIN+SpixdnWweHX35bCK
+	 mNO6+piq751PQwYWOpjRuM8Km628/9/3YjMlyLbEJyRk1UjE60KzHBBzmpCiCNWAnQ
+	 xIlWPuchYGHsOA0SS/LAhHllzfdY2zUiyoJG+ZCj8ROXc8ueJbqvvfUl6PY6x8dDsA
+	 BBqlvwyRm4N3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F54F82531;
-	Tue, 12 May 2026 19:37:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C18C219
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DC9841006;
+	Tue, 12 May 2026 19:37:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBF0715F
  for <buildroot@buildroot.org>; Tue, 12 May 2026 19:37:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3167D82521
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE4EF41005
  for <buildroot@buildroot.org>; Tue, 12 May 2026 19:37:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4NI9qvIL6T4 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CKPR8vNh-x1n for <buildroot@buildroot.org>;
  Tue, 12 May 2026 19:37:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::436; helo=mail-pf1-x436.google.com;
+ client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5917C82531
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5917C82531
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
- [IPv6:2607:f8b0:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5917C82531
- for <buildroot@buildroot.org>; Tue, 12 May 2026 19:37:01 +0000 (UTC)
-Received: by mail-pf1-x436.google.com with SMTP id
- d2e1a72fcca58-83d5bbef760so2122959b3a.1
- for <buildroot@buildroot.org>; Tue, 12 May 2026 12:37:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C34C040C1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C34C040C1F
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
+ [IPv6:2607:f8b0:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C34C040C1F
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 19:37:02 +0000 (UTC)
+Received: by mail-pf1-x434.google.com with SMTP id
+ d2e1a72fcca58-8383fb7143aso2862657b3a.3
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 12:37:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778614621; x=1779219421;
+ d=1e100.net; s=20251104; t=1778614622; x=1779219422;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=F48KGPXrscFuJj5/Pg2l9FPUQstqEK+GKKmeftUgZGM=;
- b=dhy/C/9+mb6VvtvQ2Di1d1VQmknwiOaZuY5UadgEmqNu696NSWhLa5PhFbqnBr1z3X
- 8N6ZRarg3At7ctbqyrBYNHS0nd13WKsr/LdN5mAfxRSeQ6S6Q66AuqIbmrydIaBVn1Pi
- 9Ya1uTNPzNHtNJOMBIHDxZ/sVqVd9lWBJxiT8vkDJs9hIOk6r0oFCjsMEacXb0aZ6kda
- bicBoRn1vGl9lI1WCFMF2tiK1KNWCwCSOOEsgD8WOpE4l35QSQyyNSDxeNVRh19zCx+e
- cX62BZjuklxnpJ1A1N3RQrDRYNSeKtLQ9u7TzwjpDl9LI62XgpILMHaCw511OpkTLtDu
- /d+A==
-X-Gm-Message-State: AOJu0Yyte1jGno/J8qrhMQ/EXbRwb7P1kBpdeluNJ/FeIIeFq8LLy0fN
- 3UEx9BLLWyySdMMGZf0J+glXGzJqgvYWCTlyIy61MpJzME26lQLRAvTI
-X-Gm-Gg: Acq92OHVbbjiX2qmAsEj7FqEv3JkcH418x5vA6PNxDNO1dGiF6Pz33H4G0cvF4Mng+q
- je6egrwwHVweyjlU5VPCJ+DDDpoOS2rAIYjmoogw8SgHJhTKVvX1NGP+RxXnfTpsvEOnJ2sKVzD
- g9ePv5SJFVaFJbjPCqZK+M1PViUnp0flI8xWjMq/ecRD62P5/4Fa/f9yYVRJrghomzBDkRmBMHe
- RJSlYl4cTRVf/xmUTwU8PsmNHZjRhtu6IxLbh/L8b3m+bi40YPkwVAciZB00l26JPJqfXz9q8SX
- xqYJoWjYuDoqTvn4VlqvH6OJ45Prz8mXtBeIKneUvwYAY1R4Vy+drz/NioDmGkpNx7WoYaaYu6H
- X5jCYBVynQ1VO9YGUDp7BsEqK5I7tKtN5+9wsigrsD/NMeeWpkik2+cZZf3lXeLJ/u/p17hCfDj
- ykE9sxFJ+Scn7BCvYztUUeoN6C
-X-Received: by 2002:a05:6a00:420b:b0:82c:f035:6748 with SMTP id
- d2e1a72fcca58-83f042d52bamr49458b3a.42.1778614621173; 
+ bh=S98Nc00G74wjnqdC5XOuU2zeYFJXQJajuhmVBg+zNdM=;
+ b=To4gZXHXR6KjrlUyDkgC8pBQTn/wcXXu+yOiIjbSHhYhxj4cFJxj4YYbyUQFa6/VuT
+ +UKCh4Ipq3LRbqRuTLzTHhdiFDGqtaGHfHyDVwyIznHFCWuc004K4c11oO1wOfLjftsW
+ PV9QPCxkAzHP825cF9Ppgx/buHY3jbVMvKTnkkPTR14HiERHg/laZa5yozbchMaTo43U
+ aWPgIfxw0PmxfbIu/jkATUtp0hQvWcMDOi62hZz+EHSgZgdZdBhTRCq3bZRM80jkNezO
+ 50KzmcxaR4Ha5daAZyF9FFkYbrTPYTQEotSHu7KGWW9Z9H0Tw+PYAe+4KB4gjmiB1Y7L
+ l1AA==
+X-Gm-Message-State: AOJu0YzUMWkdEr9IQ2dBjJGbxAs++fveHjBvZwbFJ0hUAdFT7nDQI3UM
+ du+I9IDIA3WiEX+Bm4LH6XeN4W7WPwFslghQ3/hZLFprzKQVRc0ZYEV/
+X-Gm-Gg: Acq92OE2ft3TkGjTjBiCN/9vggiJPIqzUr0nrtum1s6h0aHigYu+LpxIr7KDaonLcTs
+ WtlWViARuVFor+mC46nDgPV7PADS1Vk1BzWBpfz890Zeu5WasC1HTGth4M+c/BtKnODiU5gmkFQ
+ SCvqLf7orF1AnFJGLrhYS+ryZmWWjXjMTw2O23gmV6D4zuuRYLG7nXYyubDSFV1MokIYKdvLuJi
+ ViHjoUFuDueJF3Ijy07/Atq4xVtbjZsrfIIV/irhwWmQFSH7XRpzW4p5b9ikyAOo4iMDfQXcWRk
+ SyAgOv+jayQ2vRzhSw6LuOt7Yzvkt0qTw5bMZtPyfy5ObtwarkHYHHiCAFE9KKiduSScr4AEVnW
+ z5zO8dxDUMt68LRg1zQMuPkNj63uP9GHPquEPTgHqTh9TdYlqoNWH33Sl02ea8CZer1etsnw6NO
+ GWs+gWBaJXbdWEoRzf3MIATxi5
+X-Received: by 2002:a05:6a00:244a:b0:834:e5a2:d089 with SMTP id
+ d2e1a72fcca58-83f042a1671mr51585b3a.33.1778614621787; 
  Tue, 12 May 2026 12:37:01 -0700 (PDT)
 Received: from wash-3.local ([50.120.90.9]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-839679c8634sm28932799b3a.39.2026.05.12.12.37.00
+ d2e1a72fcca58-839679c8634sm28932799b3a.39.2026.05.12.12.37.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 12 May 2026 12:37:00 -0700 (PDT)
+ Tue, 12 May 2026 12:37:01 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue, 12 May 2026 12:36:30 -0700
+Date: Tue, 12 May 2026 12:36:31 -0700
 MIME-Version: 1.0
-Message-Id: <20260512-virglrenderer-v5-1-1806e588eb59@gmail.com>
+Message-Id: <20260512-virglrenderer-v5-2-1806e588eb59@gmail.com>
 References: <20260512-virglrenderer-v5-0-1806e588eb59@gmail.com>
 In-Reply-To: <20260512-virglrenderer-v5-0-1806e588eb59@gmail.com>
 To: buildroot@buildroot.org
@@ -93,33 +93,33 @@ Cc: Adrian Perez de Castro <aperez@igalia.com>,
  Romain Naour <romain.naour@gmail.com>, 
  Joseph Kogut <joseph.kogut@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778614619; l=1974;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778614619; l=7700;
  i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
- bh=eHS0p8oY9m2jKzThjZd58Nvew/G16pSs3pcqFdEG578=;
- b=+quSwGnddCPNmNJHdQSvVhdyid+ZzMzVowBpq6EV48xZm9I4YH57+YNJKa21D1pH37inqo7lU
- Z9Ru1ENSonpDBQhM15TghF1DjAcD77PH48ju8V2s9wxOfJBW3M+enfw
+ bh=4g2WDVWyYU2C7OMqSnduMZrDWVZyQL3SCPfZzL/WW2M=;
+ b=QRru0q/S05zGXaMmd5Kv70/4f2JZQBkbvurDUZ0Mgx7c2R//Fu36zdMgB+cdB/1xXirTPQYoc
+ VmLo8ejbbJMBM0AVj8ImkpOEoLbaSOQmCykvg4HyXqy6vmQOaHVBP1H
 X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
  pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778614621; x=1779219421; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1778614622; x=1779219422; darn=buildroot.org;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=F48KGPXrscFuJj5/Pg2l9FPUQstqEK+GKKmeftUgZGM=;
- b=RvdlrYNSSSIpBdoazyeTE0Mw4CWtTnYrvCPu4qZKeuww9r85NXDk1EY6Ny9Wy8utm5
- XjUn7nVcSMeIcSTEdMzRoCj0c11ApfOtHPWIRVCZqP6N2BFqsoqwt/xbwkHO4kyifRbt
- Qm4YTxPbxRNIq1y5H83uqc+yS7IgL/wjeuBY2Iy0iC3Bqtxs7T9MBUBT8BHZzI7lRAeF
- C7m0pY/shee2yAgL32mxvxFTTOMpmNVaavnVGj/TNmOTaSpkHZZz8vgEqdEc0PlRzL5e
- RhvBkyJyEUXs2Y+pQw4Qy0e+SD1NN24asHLZn9XhDXYqCiMvVraPmrgGVgxqmS/XFnWr
- oRfQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=S98Nc00G74wjnqdC5XOuU2zeYFJXQJajuhmVBg+zNdM=;
+ b=ScJ6fFOEyaHHHVJ/gcPSQViZ6nYDDUs/PoNkjpXx4P/viCfgAdAmJhZV7w6cmoP3Eu
+ SHM6F0eAuIYjJdIJ9+nwYWLheSRG+VPY1CL3w98LwrrBktRsd2+P/hmaHxUKhXy5RpJy
+ SAgWYfLZm/lFIrZ4ZXpZervJ1yrQSDu8D8dUIKEOGgetmUOkbvsyq5fSHII3bBVIZObk
+ LtsduMR2mSS9+7k4SHkH3jXUCtdDtQV1sBYODD0I5W/7xLV+BJU69L7To4jE+9josoDD
+ DVdo/UKFQeA+rvhqtMD9u2DcD20Dkf7bDCsgOQpeOhH1Bv2ILxgvPoKJ/i7eDLIsNq0S
+ PQGw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=RvdlrYNS
-Subject: [Buildroot] [PATCH RESEND v5 1/5] package/libepoxy: remove gl/egl
- dependency
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=ScJ6fFOE
+Subject: [Buildroot] [PATCH RESEND v5 2/5] package/virglrenderer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,57 +136,227 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Libepoxy is a library for handling OpenGL function pointer management.
-
-It has backends for egl/glx, which may at one point have been mandatory
-to enable, but the library now builds with none of the above enabled
-features, as seen below.
-
-  libepoxy 1.5.10
-
-    User defined options
-      Cross files            : /home/joseph/br-test-pkg/arm-aarch64/build/libepoxy-1.5.10//buildroot-build/cross-compilation.conf
-      b_pie                  : false
-      b_staticpic            : true
-      buildtype              : release
-      build.cmake_prefix_path: /home/joseph/br-test-pkg/arm-aarch64/host/lib/cmake
-      default_library        : shared
-      docs                   : false
-      egl                    : no
-      glx                    : no
-      libdir                 : lib
-      build.pkg_config_path  : /home/joseph/br-test-pkg/arm-aarch64/host/lib/pkgconfig
-      prefix                 : /usr
-      strip                  : false
-      tests                  : false
-      x11                    : false
-
-Removing these dependencies allows for some applications that require it
-as a build dependency, but otherwise can run headless or without GL, to
-build and function.
+Add virglrenderer, an optional dependency of QEMU, which facilitates
+acceleration of rendering and optionally video decode through
+virtio-gpu.
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/libepoxy/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ DEVELOPERS                               |   1 +
+ package/Config.in                        |   1 +
+ package/virglrenderer/Config.in          | 101 +++++++++++++++++++++++++++++++
+ package/virglrenderer/virglrenderer.hash |   5 ++
+ package/virglrenderer/virglrenderer.mk   |  60 ++++++++++++++++++
+ 5 files changed, 168 insertions(+)
 
-diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
-index 9da190b895..27d2b968d2 100644
---- a/package/libepoxy/Config.in
-+++ b/package/libepoxy/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "libepoxy"
--	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	help
- 	  Epoxy is a library for handling OpenGL function pointer
- 	  management for you.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88a684d9ac..a34cf57923 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1766,6 +1766,7 @@ F:	package/python-xlib/
+ F:	package/sentry-cli/
+ F:	package/sentry-native/
+ F:	package/unclutter-xfixes/
++F:	package/virglrenderer/
  
- 	  https://github.com/anholt/libepoxy
--
--comment "libepoxy needs an OpenGL and/or OpenGL EGL backend"
--	depends on !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGL
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
+diff --git a/package/Config.in b/package/Config.in
+index 371a1c33e1..da54fc2704 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -366,6 +366,7 @@ comment "Graphic libraries"
+ 	source "package/sdl2_ttf/Config.in"
+ 	source "package/spirv-headers/Config.in"
+ 	source "package/tk/Config.in"
++	source "package/virglrenderer/Config.in"
+ 	source "package/vulkan-headers/Config.in"
+ 	source "package/vulkan-loader/Config.in"
+ 	source "package/vulkan-sdk/Config.in"
+diff --git a/package/virglrenderer/Config.in b/package/virglrenderer/Config.in
+new file mode 100644
+index 0000000000..fdf785288b
+--- /dev/null
++++ b/package/virglrenderer/Config.in
+@@ -0,0 +1,101 @@
++config BR2_PACKAGE_VIRGLRENDERER
++	bool "virglrenderer"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBEPOXY
++	help
++	  A library for accelerated graphics and compute in
++	  virtualized guests.
++
++	  https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
++
++if BR2_PACKAGE_VIRGLRENDERER
++config BR2_PACKAGE_VIRGLRENDERER_VIRGL
++	bool "virgl"
++	default y
++	depends on (BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGBM) \
++		|| BR2_PACKAGE_HAS_LIBGL
++	help
++	  Enable API-level OpenGL acceleration over virtio-gpu.
++
++	  Say 'y' if you want to run applications with OpenGL
++	  acceleration in virtualized guests. Requires host
++	  support for OpenGL.
++
++	  https://docs.mesa3d.org/drivers/virgl.html
++
++comment "virgl needs OpenGL or OpenGL EGL and libgbm"
++	depends on !((BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGBM) \
++		|| BR2_PACKAGE_HAS_LIBGL) \
++
++config BR2_PACKAGE_VIRGLRENDERER_VENUS
++	bool "venus"
++	default y if BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
++	depends on !BR2_STATIC_LIBS # vulkan-loader
++	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
++	select BR2_PACKAGE_VULKAN_HEADERS
++	select BR2_PACKAGE_VULKAN_LOADER
++	help
++	  Enable API-level Vulkan acceleration over virtio-gpu.
++
++	  Say 'y' if you want to run applications with Vulkan
++	  acceleration in virtualized guests. Requires host
++	  support for Vulkan.
++
++	  https://docs.mesa3d.org/drivers/venus.html
++
++config BR2_PACKAGE_VIRGLRENDERER_VAAPI
++	bool "vaapi support"
++	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBVA
++	help
++	  Enable hardware accelerated video encode/decode through
++	  libva over virtio-gpu.
++
++comment "DRM backends"
++
++config BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_AMDGPU
++	bool "amdgpu"
++	default y if BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++	default y if BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_AMDGPU
++	help
++	  Enable DRM backend for amdgpu, used by Gallium radeonsi
++	  and RADV vulkan drivers.
++
++config BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_INTEL
++	bool "intel"
++	default y if BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
++	default y if BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
++	default y if BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
++	select BR2_PACKAGE_LIBDRM
++	help
++	  Enable DRM backend for i915, used by Gallium i915/Iris
++	  and Intel vulkan drivers.
++
++config BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_MSM
++	bool "msm"
++	default y if BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
++	depends on !BR2_arm
++	select BR2_PACKAGE_LIBDRM
++	help
++	  Enable DRM backend for msm, used by Gallium freedreno
++	  driver.
++
++config BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_PANFROST
++	bool "panfrost"
++	default y if BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
++	default y if BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
++	select BR2_PACKAGE_LIBDRM
++	help
++	  Enable DRM backend for Panfrost, used by the panfrost
++	  Gallium/vulkan drivers.
++
++endif
++
++comment "virglrenderer needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/virglrenderer/virglrenderer.hash b/package/virglrenderer/virglrenderer.hash
+new file mode 100644
+index 0000000000..03da595091
+--- /dev/null
++++ b/package/virglrenderer/virglrenderer.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha256  065bc56e89e6f631f96101cd62eba0748e48eb888b434edc86e89d05395e76f3  virglrenderer-1.3.0.tar.gz
++
++# License
++sha256  3b32caf16e2402c2aff2b716858713f3e1feded85c25e71bf829816ee5009402  COPYING
+diff --git a/package/virglrenderer/virglrenderer.mk b/package/virglrenderer/virglrenderer.mk
+new file mode 100644
+index 0000000000..4e7bcbb849
+--- /dev/null
++++ b/package/virglrenderer/virglrenderer.mk
+@@ -0,0 +1,60 @@
++################################################################################
++#
++# virglrenderer
++#
++################################################################################
++
++VIRGLRENDERER_VERSION = 1.3.0
++VIRGLRENDERER_SITE = https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/$(VIRGLRENDERER_VERSION)
++VIRGLRENDERER_LICENSE = MIT
++VIRGLRENDERER_LICENSE_FILES = COPYING
++VIRGLRENDERER_INSTALL_STAGING = YES
++VIRGLRENDERER_DEPENDENCIES = \
++	libepoxy \
++	host-pkgconf \
++	host-python3 \
++	host-python-pyyaml
++VIRGLRENDERER_CPE_ID_VALID = YES
++
++ifeq ($(BR2_PACKAGE_VIRGLRENDERER_VIRGL),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGBM),yy)
++VIRGLRENDERER_PLATFORMS += egl
++VIRGLRENDERER_DEPENDENCIES += libegl \
++			      libgbm
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++VIRGLRENDERER_PLATFORMS += glx
++VIRGLRENDERER_DEPENDENCIES += libgl
++endif
++endif # BR2_PACKAGE_VIRGLRENDERER_VIRGL
++
++VIRGLRENDERER_CONF_OPTS += -Dplatforms=$(subst $(space),$(comma),$(VIRGLRENDERER_PLATFORMS))
++
++ifeq ($(BR2_PACKAGE_VIRGLRENDERER_VENUS),y)
++VIRGLRENDERER_CONF_OPTS += -Dvenus=true
++VIRGLRENDERER_DEPENDENCIES += vulkan-headers \
++			      vulkan-loader
++else
++VIRGLRENDERER_CONF_OPTS += -Dvenus=false
++endif
++
++VIRGLRENDERER_DRM_BACKENDS-$(BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_AMDGPU) += amdgpu-experimental
++VIRGLRENDERER_DRM_BACKENDS-$(BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_INTEL) += i915-experimental
++VIRGLRENDERER_DRM_BACKENDS-$(BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_MSM) += msm
++VIRGLRENDERER_DRM_BACKENDS-$(BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_PANFROST) += panfrost-experimental
++
++VIRGLRENDERER_CONF_OPTS += -Ddrm-renderers=$(subst $(space),$(comma),$(VIRGLRENDERER_DRM_BACKENDS-y))
++
++ifneq ($(VIRGLRENDERER_DRM_BACKENDS-y),)
++VIRGLRENDERER_DEPENDENCIES += libdrm
++endif
++
++ifeq ($(BR2_PACKAGE_VIRGLRENDERER_VAAPI),y)
++VIRGLRENDERER_CONF_OPTS += -Dvideo=true
++VIRGLRENDERER_DEPENDENCIES += libva libdrm
++else
++VIRGLRENDERER_CONF_OPTS += -Dvideo=false
++endif
++
++$(eval $(meson-package))
 
 -- 
 2.54.0
