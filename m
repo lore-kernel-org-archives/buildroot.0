@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FABCD4F21
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 20:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F30CCD4F21
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 20:38:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0F6B821CD;
-	Tue, 12 May 2026 20:18:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39E1681510;
+	Tue, 12 May 2026 20:38:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GwsF4OaGCyTH; Tue, 12 May 2026 20:18:40 +0000 (UTC)
+ id nCwuT_Iyb5xx; Tue, 12 May 2026 20:38:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0021E821C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 591CD8164B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778617120;
-	bh=OvzAIAVaDaliyVhZG7NegsfUWbX03ofMILB5P0mmWYU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=O+fOge1aWwuT1g/lszqs2opqq4YbusYLcG9Ehoxp11rbwZiW4ZZW5Pg6N6NLRk4YH
-	 wIjnHgk7d6QTkKzwl89M5hb3G8JEK6kPa3o0lECOKgaMV82Kn9uGxNDwJeadauIaTq
-	 ytf26Uk+AMMPQK0KroowMZxsITP+VHf3D9lpqUyuUoRUTveFFBuB8u/L1JHFm5cQw5
-	 oFEddD3YZ/pyYAnWgcvnpXnVg36Cmyh1Yy+ELZ7zfpua/Tj/c0Dj+4TK29lp9qy9Oj
-	 RcxvGkq2aRgxfD6C6MCEeBZTU8AdnxsxkmoNsQD16LtzFzwD9eMWkBoEAt0q1DGxaX
-	 1zDWqNYGkqrjw==
+	s=default; t=1778618284;
+	bh=BJJJAEouD4VngmxEOrF3Ot59b5Ki3ifrH30Akl/I8Os=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=I/EaBwBpwNBomYKI7JAuUuPxyczdYse8v6n9VeKzfE+pe6EIUJOqjvhIBXW+mSAxv
+	 2KARotnkekXoOPNLYuLffRtoE3WzPdLJiVGVAtm1XIs/jlCTWvB4pA4FDwmYfwnRIp
+	 FdqOleMS9FtmI+h89gYuzJk4hpxKlQVVzz4y7vYrx/r6NwziOxxdEdDm59ZyDtG7Nt
+	 syuEtB03FCVB3MfR2bUuyUz6nKwHYHoAHuK7R9197+FjAXzfEQFC6FBK5phh4/Cn4W
+	 vV4VMibZlM0DaMAoHlQfOcNj7domG1TITBmnZcaVKsjy35F/F4XVB1ADPo3mnJuGO5
+	 VqUvVYjKB+9sQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0021E821C4;
-	Tue, 12 May 2026 20:18:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3CB4270
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:18:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 591CD8164B;
+	Tue, 12 May 2026 20:38:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C48315F
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9FCA60DE5
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:18:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4244D41077
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KkmDU8z4yG2l for <buildroot@buildroot.org>;
- Tue, 12 May 2026 20:18:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7F1360C05
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7F1360C05
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D7F1360C05
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:18:37 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id AB3D960129;
- Tue, 12 May 2026 22:18:34 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 12 May 2026 22:18:34 +0200
-MIME-Version: 1.0
-Date: Tue, 12 May 2026 22:18:34 +0200
-To: Dowan Gullient <dowan.gullient@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260512080736.319856-1-dowan.gullient@smile.fr>
-References: <20260512080736.319856-1-dowan.gullient@smile.fr>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <8f74691ce9b08f1262295262435f95e0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778617115;
- bh=ljQ3KxMSkS4xZhRpWAXx+T+KxhK1d0wpM5QdU0nDzsU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ha1r4/cG+LchoZQYVy9gCpgj+J8JE9Jg98Vk+NW/RvmSJBimQ2qxaVRVuFexRdwcL
- hsCnj9MFBJRePZC1ECuF27eadVHd/ZJak79JJdIApey0QgKlOBdL/COmO1AXS6dOFb
- wLCY4Ot2HjEf75aNJFbN2Eup7uSDhlGneC6eUuzzec3+ePNl1ufKA3/8nOUlF68vq3
- ZUEnFcgzrWG1TnMu7qgK07LQ0ofNBUHUXPe7Eem9kT/Vz8PfkvDM4OA4G/jWzO8QL9
- jaOgPVcP6QCQd4x7YqjMet0MNAL3gyTbjAJBxsb+PYronPB8B0dvZLzkVKHbAlfBvf
- DgRwH2nw3KYtA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Ha1r4/cG
-Subject: Re: [Buildroot] [PATCH] support/testing : test_file_capabilities :
- Fix build failure
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kmg_1qOb3HRq for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 20:38:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89D3A41071
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89D3A41071
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2A77385FDA; Tue, 12 May 2026 20:37:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 12 May 2026 22:22:24 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9684cb9b4406e01683a9b5136100d81040d56aa0
+X-Git-Newrev: c6be4815e494aae813124db54f6ba2fab555a372
+X-Patchwork-Hint: ignore
+Message-Id: <20260512203757.2A77385FDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mutt: bump version to
+ 2.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,28 +71,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/05/2026 10:07, Dowan Gullient via buildroot wrote:
-> In my previous commit on this test I simply forgot to add the "arm/" 
-> prefix.
-> Since Linux 6.5, .dts files have been moved to "arch/arm/boot/dts/" and 
-> the
-> test was not able to find the file anymore, which caused the build to 
-> fail.
-> 
-> Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c6be4815e494aae813124db54f6ba2fab555a372
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Applied to master, thanks. For info, I slightly reworded the commit log. 
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/ba604325c4329f637834ad4e9b9feff14054cc9f
+http://www.mutt.org/news.html
+http://www.mutt.org/relnotes/2.3/
+https://gitlab.com/muttmua/mutt/raw/stable/UPDATING
 
-Best regards,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Julien.
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 4fd71fd6ab..40965d21fd 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1d3109a743ad8b25eef97109b2bdb465db7837d0a8d211cd388be1b6faac3f32  mutt-2.2.16.tar.gz
++sha256  9b4f7a442e41c057774ba7c36fa41aba2edd2e7a12a86031e6ebb113bab2c79e  mutt-2.3.2.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 503f2d283e..1be1f8b682 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 2.2.16
++MUTT_VERSION = 2.3.2
+ MUTT_SITE = http://ftp.mutt.org/pub/mutt
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
