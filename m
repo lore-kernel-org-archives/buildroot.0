@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A20ECD4851
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 14:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B7ACD4F24
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 14:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1818760DB8;
-	Tue, 12 May 2026 14:52:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E650F40C0C;
+	Tue, 12 May 2026 14:52:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rF-fLZew3nq9; Tue, 12 May 2026 14:52:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OhoI8-33ykdi; Tue, 12 May 2026 14:52:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352CD60DBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2186140C11
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778597522;
-	bh=2Xz3W8sEByRbBF5t8hOVxWFFB1vRm2/OlhFnsgUln+w=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=OBYVSdLpp9qek5D4QslDYElzl98VkdeBYfJfyYM4qftMlbUF12oNu7dR7pFriH2Qb
-	 k+GYKr3Slded9AkQ9/9BTD1s35usPhhZEy39SN3UosgAnl5oeajsDl9aHHfcyjhtEK
-	 TiYc/m1PkPBQnmRh7FrXAyRAjTxojbNb/AjsVpjn3PtYDxmdy8Mw1LcOqi+CfhMTbD
-	 mNbKngAT0WcmDzVQAn7LkMpY3LwaErw29QhGJpCbtdT3BzMMDya2umHZuXol2y2lrn
-	 Jsopzeox42sugEDihNu27RHCWyD7xyKDxcbSNFQTuqPDafXJb+QaWD3libx9KoxeBx
-	 LS7UzizQt2PLQ==
+	s=default; t=1778597535;
+	bh=Xpo1TSSAN/DFc0npL6ad9HUxKLjr6HikyMz2DXMbLXI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=FhIFj1n75bJwFn6ivIUR0DYwsye45STVTpMHaQxpvva/BRHIQwd8VZiaI8BdvhJzF
+	 HSVC3y6bqmR0/PAyoCzYEcfg5Z82tKQPokANqHGiN6Vue2VU1JjyBg9R4EnrTpfdUU
+	 pAVP6qGZ6AAee5TC2Cf8PBJpns7eTxM0duLGd4/LM3Mw4w5JaiWW8gk7M9t4pzok3+
+	 jvDd2jfSAyDyRkiNvUnZH9giL1PElzI+PncNHHoFETe4ISN5PJ0oFwnJv0KSoUR0FK
+	 gyElrzr0axU6VBYwhKBB6S5gXZCvcfJUaq6Ch+5vT0nkHbdwP6I1G+WfMMuWRZ1ZuE
+	 5tQq6z0YcX/JA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 352CD60DBB;
-	Tue, 12 May 2026 14:52:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 389F8223
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2186140C11;
+	Tue, 12 May 2026 14:52:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8084223
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A4238226A
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:52:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE0714065B
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f8RBDqz-A61t for <buildroot@buildroot.org>;
- Tue, 12 May 2026 14:52:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ymrGkR4GO8GH for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 14:52:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD031821FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD031821FE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 980DB4065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 980DB4065A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DD031821FE
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:51:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 980DB4065A
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:52:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b10b.dip0.t-ipconnect.de [84.161.177.11])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C0BAA4C00C3;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 78D58A4C0445;
  Tue, 12 May 2026 16:51:57 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45106)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMoSj-000000004ON-03bt;
+ (envelope-from <bernd@kuhls.net>) id 1wMoSj-000000004ON-0fpl;
  Tue, 12 May 2026 14:51:57 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Antoine Tenart <atenart@kernel.org>,
  Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Tue, 12 May 2026 16:51:49 +0200
-Message-ID: <20260512145156.320992-1-bernd@kuhls.net>
+Date: Tue, 12 May 2026 16:51:50 +0200
+Message-ID: <20260512145156.320992-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260512145156.320992-1-bernd@kuhls.net>
+References: <20260512145156.320992-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1778597517;
- bh=RR/CrsQ4MEaEkTuuieP7649lzQ0NuZT7quWwFzZvKeA=;
- h=From:To:Cc:Subject:Date:From;
- b=u7UveLjD8yTDC4ZeTQpD0da97E8zcKcON2d7qCzK6fljRxaC+S5QVd2dIXdd3pSgL
- ZxBZeMIK3dNgNPisb5fzu10t+PBprzLPAb4Ce40N0F1XY/TQMKrg5EJYqitf0zlGjF
- BApZ//o19lfVepKOVh4dotRGPjPtr+frrv4EN4qH2py+1HNM6GeADiNXdJV8t9Lvi4
- vil7QZRqHJwFwajd1itmbW0GOvlOGwSOOFN8sxwAa0J35nGauOjnerzGrEErqrfqN6
- 5DLmqAesHBYdc5iVba3NuRVWT6iMSHrHuLBYAARAfv2qHnqCWqHeSu9+i5LwuJ37fL
- VsjRuQAhdXkMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PtXzETDC9XSd/ya1RExhLAdDrAtrlsjfFbmpXwgcdjA=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=PEv51zk2qFR/UyNpGkF020WcAW2wV9rV0mw34wh362npbaNhB4nyBrneZJKsOzx85
+ IvfZg1nnIedER4svR2ccvdk4N3Y+eTC+YpSyH7r0RYILV7SxYZc8VNl2AgDXjUOiIO
+ eplHLlH80jMe3wrFy0IrIsfJ30xA7/6QxSjiYU0INQdHBI7bI6Z0rvh1SH2YC6hSDu
+ grTh6eqJXm0JCjS67mh3hlMYtvASRSF97Kz+jglOl8RJzoSUd1FQ2+U6uTUU9NTDVk
+ oGKS6Wkvtz15xlz7NrgxouHbTAYmuj0ZET8udSyKvePZhZZs7nuPYCWkYozTurRb3i
+ gsrqpjJdbER/A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=u7UveLjD
-Subject: [Buildroot] [PATCH/next 1/8] package/libselinux: bump version to
+ header.s=kas202511301023 header.b=PEv51zk2
+Subject: [Buildroot] [PATCH/next 2/8] package/checkpolicy: bump version to
  3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -101,121 +104,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://github.com/SELinuxProject/selinux/releases/tag/3.10
 
-Rebased patch 0001 due to inclusion of patch 0003 in this release.
-Removed patch 0003 which is included in this release.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...T-and-rely-on-the-installed-file-nam.patch |  4 +-
- ...akefile-build-python-module-without-.patch | 51 -------------------
- package/libselinux/libselinux.hash            |  2 +-
- package/libselinux/libselinux.mk              |  2 +-
- 4 files changed, 5 insertions(+), 54 deletions(-)
- delete mode 100644 package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-index 0d6db785ec..c2b6480af1 100644
---- a/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-+++ b/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-@@ -20,6 +20,8 @@ Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [Refreshed for 3.5]
- Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+[Refreshed for 3.10]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  src/Makefile | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
-@@ -38,7 +40,7 @@ index 190016e2af34..7ee22fd35da3 100644
-  RUBYINSTALL ?= $(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
- @@ -195,7 +194,7 @@ install: all
-  install-pywrap: pywrap
-- 	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-+ 	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --no-build-isolation --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-  	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
- -	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux$(PYCEXT) $(DESTDIR)$(PYTHONLIBDIR)/_selinux$(PYCEXT)
- +	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-diff --git a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch b/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-deleted file mode 100644
-index 7f4a76515b..0000000000
---- a/package/libselinux/0003-libselinux-src-Makefile-build-python-module-without-.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 8cfe4535f23a7768ee5efa615d11563a8404777c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
--Date: Mon, 27 Oct 2025 22:40:59 +0100
--Subject: [PATCH] libselinux/src/Makefile: build python module without
-- isolation
--
--The "pip install" logic in libselinux/src/Makefile tries to get
--setuptools from the network, which is not correct as during the
--build/installation, there shouldn't be any network access, or
--downloading of arbitrary resources from the network.
--
--This causes build issues in Debian:
--
--  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1121121
--
--And in Buildroot:
--
--  https://autobuild.buildroot.net/results/0e9/0e9de0c0d8b6ec57eea9f8834f02076b296ba4f1/build-end.log
--
--To fix this, we use the --no-build-isolation pip install argument so
--that pip install is allowed to use the system-provided setuptools,
--instead of wanting to download this one.
--
--This patch is derived from
--https://sources.debian.org/src/libselinux/3.9-4/debian/patches/Build-python-module-without-isolation-Closes-1119155.patch,
--with the change that --no-build-isolation is passed unconditionally,
--regardless of whether $(DESTDIR) is empty or not.
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://lore.kernel.org/selinux/20251227143911.1630813-1-thomas.petazzoni@bootlin.com/
-----
-- libselinux/src/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
--index e9141bb9..9bc10606 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -197,7 +197,7 @@ ifneq ($(DISABLE_SHARED),y)
-- endif
-- 
-- install-pywrap: pywrap
---	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
--+	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --no-build-isolation --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-- 	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
-- 	ln -sf --relative $(DESTDIR)$(PYTHONLIBDIR)/selinux/_selinux*.so $(DESTDIR)$(PYTHONLIBDIR)/
-- 
---- 
--2.52.0
--
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index 2f897e1287..f346297894 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 442ac883ee..302122426b 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
 @@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  e7ee2c01dba64a0c35c9d7c9c0e06209d8186b325b0638a0d83f915cc3c101e8  libselinux-3.9.tar.gz
-+sha256  1ef216c5b56fb7e0a51cd2909787a175a17ee391e0467894807873539ebe766b  libselinux-3.10.tar.gz
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  dd85b0173ca6e96b22ebf472bcbccf04eb10e1aa07add8f1b7e0e9e8e995e027  checkpolicy-3.9.tar.gz
++sha256  2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59  checkpolicy-3.10.tar.gz
  
  # Hash for license file
- sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index a77ee7659a..bcd130ac72 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index df3da2efdd..abeeed1033 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSELINUX_VERSION = 3.9
-+LIBSELINUX_VERSION = 3.10
- LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
+-CHECKPOLICY_VERSION = 3.9
++CHECKPOLICY_VERSION = 3.10
+ CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(CHECKPOLICY_VERSION)
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
