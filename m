@@ -4,83 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A807DCD4851
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 14:06:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85B27CD4F35
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 14:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCB1B40F62;
-	Tue, 12 May 2026 14:06:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 306EF40E38;
+	Tue, 12 May 2026 14:06:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V6EecmIiIxmj; Tue, 12 May 2026 14:06:17 +0000 (UTC)
+ id OwrmXKuCSWpa; Tue, 12 May 2026 14:06:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A25F40E57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 582FC40F21
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778594777;
-	bh=i+pj+PDvNyq6RPOx1vpomDsKl25exL/18GsyiaWJfl0=;
+	s=default; t=1778594806;
+	bh=i7msTnHbM6KbF51ASMeX5cVE92TYYUN5LCSrygjHcHg=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=cyKj5qN7aad5GU2qGUrCfyVJpm7Xm9CJwXXHcgjrU7bQ8dK5TjzmdrLE5zt+gosrp
-	 oYsI8n7yS+FJaszatx6V/TX6Ue5tcYy/Z9ZUI1ze/zo+PF/KCRbXlAjJcH1ulxrs+u
-	 0QiT2OQyow9l3kxK9igjGgZR9ntIKKNXuBgYh4hhNQKcVdS3cCbaoA4Gc1nKZr6zWt
-	 14tQNQqYcU2ZjY4BPWLK4zKNBp0jWvQUKG/o5ztD3Ot2qNxPCORued2PC8cskPMvG/
-	 9iDE9oruuhYdzBrHrKz65oVHIQH+JYMcKgqnXgIRAv1oiC5TvWwnE375/wlzARF7cF
-	 5D/xSu4vaVxGQ==
+	b=la025QPcUQsvh/EROSKazdiLY7TRWML0x7VNVNSjZDLx6m2iOim4iYKvPvYRmt9iJ
+	 A5QX+1cSIggUsdhX3nsyqGDzx9Ea7NxlutNxnOI2e9mAACmZFxz+FbbQ63BbP1+y/T
+	 20WbpHjT5tG/MOn07/Ki+vf9N38Z6Eh/3ps5xo9MUPgs4oO/3Gkg3mMHxCEHBXT4ow
+	 lAITZ684koVkwYlVQcZlNBw3Vz7DW54PoaY1a/oTyCHGVPcqeRpKc5QhZQxUq3zQmu
+	 mZayHVXJg41W6mmzgInR85iyLE/z0VUk/PHKaYbkrcnSEI4AR+4mbUe5FWcoAv+ffX
+	 ai2ckMpxrjyeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A25F40E57;
-	Tue, 12 May 2026 14:06:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 582FC40F21;
+	Tue, 12 May 2026 14:06:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 33C4315F
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 97CE6223
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2577160DA8
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 89B6E60DA8
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o3zjDsZq1bvT for <buildroot@buildroot.org>;
- Tue, 12 May 2026 14:06:15 +0000 (UTC)
+ id Pin5Q6GSAw1T for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 14:06:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7F79660DA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F79660DA6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 50EA560DA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50EA560DA6
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7F79660DA6
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 50EA560DA6
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 14:06:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b10b.dip0.t-ipconnect.de [84.161.177.11])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F24F3A4C0933
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:06:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39832)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 73271A4C0933
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 16:06:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40788)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMnkQ-000000004qc-2il1
- for buildroot@buildroot.org; Tue, 12 May 2026 14:06:10 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wMnkw-000000004wE-0fNC
+ for buildroot@buildroot.org; Tue, 12 May 2026 14:06:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 12 May 2026 16:06:10 +0200
-Message-ID: <20260512140610.52172-1-bernd@kuhls.net>
+Date: Tue, 12 May 2026 16:06:42 +0200
+Message-ID: <20260512140642.52234-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778594771;
- bh=7k59TzYC+blun4/41lL/CPeapFENPYTn4B9EecP0Xzw=;
+ s=kas202511301023; t=1778594802;
+ bh=BTar/O9cUjI22r0w0snZ8Rg2BAkOeFHqu3Ln/WuztJI=;
  h=From:To:Subject:Date:From;
- b=ecG0Rron8Xts/ObpA6QvTmDLR0PM6uODS+yKbSjIvrqhqtfyI53PAzBHhu3hxs5k9
- 9+ETHLKcgEhuTM9VNZPHfsFe4VdxZ/r2KGdPKUCzZd/MXimxk0LRMd4qROTyAWojzm
- fZAPC6pDW6Y3K9b0ALpS1PfOqm98se/HQPa5E0JwXOGG8CHdP6p00IooT6tXWSIVQy
- CqeOGcQ5mimMT16DG8vHMCO9vlvv/S4NUWBL37svUYS1hWqoaMq2+9GQndKvRgig1B
- GB1dQeheQqtZtwzkevv+l7Ss429XO5ql4fGIbuEcYo33qha6qmbj6dGbri1T4F0oiC
- tLHSqTj2Ne6Bw==
+ b=H+MZcom9Kfg1THKdR1X54MPz8P/E1CkLKLoRRb1lCWNThHTdqzZ39B+TTICDH5a62
+ KI23DlPSlTeE+/8nRl9VcRsEQ1T64sgW7EmrrX5UAukbdUFVeLj+HVddhmtFb7zlXh
+ f0bOIIVAZr4KeCqh7aky3+GYP2G/ky7NviNkZDza6G33fdM7Xi5mPh2Z08giY1+Kid
+ arWl+mXCSfA+NHEK8gc2iO4sYAqjC13mj2N6VdlUm/UZ1xFoEtHG2iBNR9HECNpwC7
+ 68uKLSo12STfxWRQ/yS3RNfVr9HIE8uCDyKl0/EmJKRNZ5MxWvJH7Bwi4kr1Tc5rCW
+ u9D76O7KztBcg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=ecG0Rron
-Subject: [Buildroot] [PATCH 1/1] package/liburiparser: security bump version
- to 1.0.2
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=H+MZcom9
+Subject: [Buildroot] [PATCH/next 1/1] package/taglib: bump version to 2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,40 +95,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/uriparser/uriparser/blob/uriparser-1.0.2/ChangeLog
-
-Fixes CVE-2026-44927 & CVE-2026-44928.
+https://github.com/taglib/taglib/blob/v2.3/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/liburiparser/liburiparser.hash | 4 ++--
- package/liburiparser/liburiparser.mk   | 2 +-
+ package/taglib/taglib.hash | 4 ++--
+ package/taglib/taglib.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index c18df8eb98..ad5bf40d47 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.1
--sha256  acd18cfb14d1851705f863f7a625be693fb3971fb85d4996faa21147f0315fcb  uriparser-1.0.1.tar.xz
-+# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.2
-+sha256  7b2496f9622b4b201186a3d159d278605f1fb7262402a10cc1c0824889798b00  uriparser-1.0.2.tar.xz
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index 0db3cfa8d6..b118f610ec 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/taglib/taglib/releases/tag/v2.2.1
+-sha256  7e76b5299dcef427c486bffe455098470c8da91cf3ccb9ea804893df57389b5e  taglib-2.2.1.tar.gz
++# From https://github.com/taglib/taglib/releases/tag/v2.3
++sha256  7349f6fd942418bc7009ebe743eb7c9d055f02921ec56fa436ec25007c47fd38  taglib-2.3.tar.gz
  # Locally calculated
- sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index d8dcc22063..9d1b9a1aac 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index cac9f924fc..924d3f339d 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBURIPARSER_VERSION = 1.0.1
-+LIBURIPARSER_VERSION = 1.0.2
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
+-TAGLIB_VERSION = 2.2.1
++TAGLIB_VERSION = 2.3
+ TAGLIB_SITE = https://taglib.org/releases
+ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_DEPENDENCIES = utfcpp
 -- 
 2.47.3
 
