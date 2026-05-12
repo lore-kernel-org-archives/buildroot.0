@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 245E0CD343F
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 20:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA9DCD343F
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 20:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A85094108D;
-	Tue, 12 May 2026 20:38:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E655E80C74;
+	Tue, 12 May 2026 20:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dIVwzBosjM7t; Tue, 12 May 2026 20:38:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KX6aaOGkk51W; Tue, 12 May 2026 20:42:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71AEF41073
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D829D80C76
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778618306;
-	bh=omOEbFNg3nFzkJCc+JxOtufyUVnjnYkS0sw07jzbz4Q=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nloNCS/2va/2cpZpdh+FVWxgLu+HHOkuHTTgnjKb5MD5mi1o6lwaEWEa7UrVtiNn4
-	 Ffdq3X7tBi8Oc18w714U/nOUXDyKEf2kD9Z1K44fweeqrt/Rx5HJqcb9zskfL6sbZa
-	 iC+9chNck6LFqicFwbSW5jquAXyKk88xn5gqN/Q5hlkA/OOMybnhhQnzm+yTUZISNM
-	 aOb9R8exqsj9QBO2EhIhyKa9zvJx4NyjcQV8yZQv+O4tEf1CdUHdFPuPxv/qRHSXIT
-	 eYsCuj55tgxhsjdnSfvFUuNRSWH78cforwrGg/17qT9/fGAuvFC+UUKswjcG3li02c
-	 1wmP79MVJyEiA==
+	s=default; t=1778618565;
+	bh=nzePXYAZ2w3TDQ/3X3ytJ7utGjvVvWGN+1/NNQwwa5I=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GYf5Ujn94mLpeTT9foe6N59eQP2JR7Agh9CBhf//P38JRONul4C2iPQMTZnkgZrde
+	 Ynv5gR9n24NbKnhPAcIEXryf7l0BJH56+p1phoSAd7lKJUDU7OHN6aF08PdwkJTdMP
+	 5Td7ju0BIHOezsgzt8+kQcPo57hrgp1QKRMCQSArMkykvcbCXd0lY7PAlgi4Z/TCCP
+	 +AdTCFrpwrZ5RGzhJa4CsII5rJvTnY7bVlgIjYu8Ns11LWixjHz8U6af5EEc3eEiyb
+	 8UMOJ6yGJJnMtBeUFVZY6jsJsXu1wwS6yKmoOZlMqG1rU9viMXAT09DSut/QC/WSEE
+	 1ekiF52sAgr6w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71AEF41073;
-	Tue, 12 May 2026 20:38:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 491BB15F
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D829D80C76;
+	Tue, 12 May 2026 20:42:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92DB715F
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A77441073
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78FC541073
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:42:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SkrrJUBwqnQl for <buildroot@buildroot.org>;
- Tue, 12 May 2026 20:38:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 131B641071
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 131B641071
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 131B641071
- for <buildroot@buildroot.org>; Tue, 12 May 2026 20:38:23 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 1BB475FFAA;
- Tue, 12 May 2026 22:38:19 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 12 May 2026 22:38:19 +0200
-MIME-Version: 1.0
-Date: Tue, 12 May 2026 22:38:19 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20260511185024.3025627-1-bernd@kuhls.net>
-References: <20260511185024.3025627-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <b5d1f83b37e77b582d53c7a8f1196c5d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778618301;
- bh=2ZYbt9PEX//kBH1MmrIknPR5Eu85mI5UEtMXSMND5rQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=hXW0A1DZAZ6+k9DxmWnx32T8knLJEJQDu4vsS0qKUYMQQuxtHNq52rpRxSBY/wE/V
- dYzX/m8ZKMbP6mxLO11f32tqA23JiiZnoBRrYKFKbAl7iNiu4iZ7TAgNRDJ4nmInQu
- IXnUw+vo6aNVT89wrU5FgwbwCWjnpAxs88bqLseVohlzXE7s+Gdb+Ghs4a7EGIUvQC
- 0e0O+s7rZFu8imFiSykTl8lc0xi1qrpagwMwQGpj8By4QTwkvbUoaaP+xGVbeoIWTb
- YQOHa3hb4iYPb67V/9keTeFfizSJOO7V9MvdMFWMQsOVD/OCOla4oD3r2UHDVtuyhQ
- SKlDCZXHigkKg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hXW0A1DZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: bump version to 2.3.2
+ id Mow0ryyQa5VS for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 20:42:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A49E408B7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A49E408B7
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 20:42:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27DD885FE7; Tue, 12 May 2026 20:42:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 12 May 2026 22:39:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ba604325c4329f637834ad4e9b9feff14054cc9f
+X-Git-Newrev: 258128aefef95cae78cb5fba8572dc6ce285c801
+X-Patchwork-Hint: ignore
+Message-Id: <20260512204239.27DD885FE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libvncserver: patch
+ CVE-2026-3285{3, 4}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,20 +71,231 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6650486072000317450=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/05/2026 20:50, Bernd Kuhls wrote:
-> http://www.mutt.org/news.html
-> http://www.mutt.org/relnotes/2.3/
-> https://gitlab.com/muttmua/mutt/raw/stable/UPDATING
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+--===============6650486072000317450==
+Content-Type: text/plain
 
-Applied to next, thanks.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/258128aefef95cae78cb5fba8572dc6ce285c801
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+- CVE-2026-32853:
+    LibVNCServer versions 0.9.15 and prior (fixed in commit 009008e)
+    contain a heap out-of-bounds read vulnerability in the UltraZip
+    encoding handler that allows a malicious VNC server to cause
+    information disclosure or application crash. Attackers can exploit
+    improper bounds checking in the HandleUltraZipBPP() function by
+    manipulating subrectangle header counts to read beyond the allocated
+    heap buffer.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-32853
+  - https://github.com/LibVNC/libvncserver/security/advisories/GHSA-87q7-v983-qwcj
+  - https://github.com/LibVNC/libvncserver/commit/009008e2f4d5a54dd71f422070df3af7b3dbc931
+
+- CVE-2026-32854:
+    LibVNCServer versions 0.9.15 and prior (fixed in commit dc78dee)
+    contain null pointer dereference vulnerabilities in the HTTP proxy
+    handlers within httpProcessInput() in httpd.c that allow remote
+    attackers to cause a denial of service by sending specially crafted
+    HTTP requests. Attackers can exploit missing validation of strchr()
+    return values in the CONNECT and GET proxy handling paths to trigger
+    null pointer dereferences and crash the server when httpd and proxy
+    features are enabled.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-32854
+  - https://github.com/LibVNC/libvncserver/security/advisories/GHSA-xjp8-4qqv-5x4x
+  - https://github.com/LibVNC/libvncserver/commit/dc78dee51a7e270e537a541a17befdf2073f5314
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...s-checks-to-UltraZip-subrectangle-parsing.patch | 74 ++++++++++++++++++++++
+ ...nter-dereferences-in-httpd-proxy-handlers.patch | 64 +++++++++++++++++++
+ package/libvncserver/libvncserver.mk               |  6 ++
+ 3 files changed, 144 insertions(+)
+
+diff --git a/package/libvncserver/0002-add-bounds-checks-to-UltraZip-subrectangle-parsing.patch b/package/libvncserver/0002-add-bounds-checks-to-UltraZip-subrectangle-parsing.patch
+new file mode 100644
+index 0000000000..fa4a7718cc
+--- /dev/null
++++ b/package/libvncserver/0002-add-bounds-checks-to-UltraZip-subrectangle-parsing.patch
+@@ -0,0 +1,74 @@
++From 009008e2f4d5a54dd71f422070df3af7b3dbc931 Mon Sep 17 00:00:00 2001
++From: Kazuma Matsumoto <269371721+y637F9QQ2x@users.noreply.github.com>
++Date: Sun, 22 Mar 2026 20:35:49 +0100
++Subject: [PATCH] libvncclient: add bounds checks to UltraZip subrectangle
++ parsing
++
++HandleUltraZipBPP() iterates over sub-rectangles using numCacheRects
++(derived from the attacker-controlled rect.r.x) without validating
++that the pointer stays within the decompressed data buffer. A malicious
++server can set a large numCacheRects value, causing heap out-of-bounds
++reads via the memcpy calls in the parsing loop.
++
++Add bounds checks before reading the 12-byte subrect header and before
++advancing the pointer by the raw pixel data size. Use uint64_t for the
++raw data size calculation to prevent integer overflow on 32-bit platforms.
++
++Upstream: https://github.com/LibVNC/libvncserver/commit/009008e2f4d5a54dd71f422070df3af7b3dbc931
++CVE: CVE-2026-32853
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/libvncclient/ultra.c | 16 +++++++++++++++-
++ 1 file changed, 15 insertions(+), 1 deletion(-)
++
++diff --git a/src/libvncclient/ultra.c b/src/libvncclient/ultra.c
++index 1d3aaba6a..5633b8cbb 100644
++--- a/src/libvncclient/ultra.c
+++++ b/src/libvncclient/ultra.c
++@@ -126,6 +126,7 @@ HandleUltraZipBPP (rfbClient* client, int rx, int ry, int rw, int rh)
++   int toRead=0;
++   int inflateResult=0;
++   unsigned char *ptr=NULL;
+++  unsigned char *ptr_end=NULL;
++   lzo_uint uncompressedBytes = ry + (rw * 65535);
++   unsigned int numCacheRects = rx;
++ 
++@@ -194,11 +195,18 @@ HandleUltraZipBPP (rfbClient* client, int rx, int ry, int rw, int rh)
++   
++   /* Put the uncompressed contents of the update on the screen. */
++   ptr = (unsigned char *)client->raw_buffer;
+++  ptr_end = ptr + uncompressedBytes;
++   for (i=0; i<numCacheRects; i++)
++   {
++     unsigned short sx, sy, sw, sh;
++     unsigned int se;
++ 
+++    /* subrect header: sx(2) + sy(2) + sw(2) + sh(2) + se(4) = 12 bytes */
+++    if (ptr + 12 > ptr_end) {
+++      rfbClientLog("UltraZip: subrect %d header exceeds decompressed data bounds\n", i);
+++      return FALSE;
+++    }
+++
++     memcpy((char *)&sx, ptr, 2); ptr += 2;
++     memcpy((char *)&sy, ptr, 2); ptr += 2;
++     memcpy((char *)&sw, ptr, 2); ptr += 2;
++@@ -213,8 +221,13 @@ HandleUltraZipBPP (rfbClient* client, int rx, int ry, int rw, int rh)
++ 
++     if (se == rfbEncodingRaw)
++     {
+++        uint64_t rawBytes = (uint64_t)sw * sh * (BPP / 8);
+++        if (rawBytes > (size_t)(ptr_end - ptr)) {
+++          rfbClientLog("UltraZip: subrect %d raw data exceeds decompressed data bounds\n", i);
+++          return FALSE;
+++        }
++         client->GotBitmap(client, (unsigned char *)ptr, sx, sy, sw, sh);
++-        ptr += ((sw * sh) * (BPP / 8));
+++        ptr += (size_t)rawBytes;
++     }
++   }  
++ 
++@@ -222,3 +235,4 @@ HandleUltraZipBPP (rfbClient* client, int rx, int ry, int rw, int rh)
++ }
++ 
++ #undef CARDBPP
+++
+diff --git a/package/libvncserver/0003-fix-NULL-pointer-dereferences-in-httpd-proxy-handlers.patch b/package/libvncserver/0003-fix-NULL-pointer-dereferences-in-httpd-proxy-handlers.patch
+new file mode 100644
+index 0000000000..2d3ee45be8
+--- /dev/null
++++ b/package/libvncserver/0003-fix-NULL-pointer-dereferences-in-httpd-proxy-handlers.patch
+@@ -0,0 +1,64 @@
++From dc78dee51a7e270e537a541a17befdf2073f5314 Mon Sep 17 00:00:00 2001
++From: Kazuma Matsumoto <269371721+y637F9QQ2x@users.noreply.github.com>
++Date: Thu, 19 Mar 2026 17:42:00 +0900
++Subject: [PATCH] libvncserver: fix NULL pointer dereferences in httpd proxy
++ handlers
++
++httpProcessInput() passes the return value of strchr() to atoi()
++and strncmp() without checking for NULL. If a CONNECT request
++contains no colon, or a GET request contains no slash, strchr()
++returns NULL, leading to a segmentation fault.
++
++Add NULL checks before using the strchr() return values.
++
++CVE: CVE-2026-32854
++Upstream: https://github.com/LibVNC/libvncserver/commit/dc78dee51a7e270e537a541a17befdf2073f5314
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/libvncserver/httpd.c | 24 ++++++++++++++----------
++ 1 file changed, 14 insertions(+), 10 deletions(-)
++
++diff --git a/src/libvncserver/httpd.c b/src/libvncserver/httpd.c
++index f4fe51c9..7cefadc4 100644
++--- a/src/libvncserver/httpd.c
+++++ b/src/libvncserver/httpd.c
++@@ -337,10 +337,11 @@ httpProcessInput(rfbScreenInfoPtr rfbScreen)
++ 
++ 
++     /* Process the request. */
++-    if(rfbScreen->httpEnableProxyConnect) {
+++if(rfbScreen->httpEnableProxyConnect) {
++ 	const static char* PROXY_OK_STR = "HTTP/1.0 200 OK\r\nContent-Type: octet-stream\r\nPragma: no-cache\r\n\r\n";
++ 	if(!strncmp(buf, "CONNECT ", 8)) {
++-	    if(atoi(strchr(buf, ':')+1)!=rfbScreen->port) {
+++	    char *colon = strchr(buf, ':');
+++	    if(colon == NULL || atoi(colon+1)!=rfbScreen->port) {
++ 		rfbErr("httpd: CONNECT format invalid.\n");
++ 		rfbWriteExact(&cl,INVALID_REQUEST_STR, strlen(INVALID_REQUEST_STR));
++ 		httpCloseSock(rfbScreen);
++@@ -353,14 +354,17 @@ httpProcessInput(rfbScreenInfoPtr rfbScreen)
++ 	    rfbScreen->httpSock = RFB_INVALID_SOCKET;
++ 	    return;
++ 	}
++-	if (!strncmp(buf, "GET ",4) && !strncmp(strchr(buf,'/'),"/proxied.connection HTTP/1.", 27)) {
++-	    /* proxy connection */
++-	    rfbLog("httpd: client asked for /proxied.connection\n");
++-	    rfbWriteExact(&cl,PROXY_OK_STR,strlen(PROXY_OK_STR));
++-	    rfbNewClientConnection(rfbScreen,rfbScreen->httpSock);
++-	    rfbScreen->httpSock = RFB_INVALID_SOCKET;
++-	    return;
++-	}	   
+++	if (!strncmp(buf, "GET ",4)) {
+++	    char *slash = strchr(buf, '/');
+++	    if (slash != NULL && !strncmp(slash,"/proxied.connection HTTP/1.", 27)) {
+++		/* proxy connection */
+++		rfbLog("httpd: client asked for /proxied.connection\n");
+++		rfbWriteExact(&cl,PROXY_OK_STR,strlen(PROXY_OK_STR));
+++		rfbNewClientConnection(rfbScreen,rfbScreen->httpSock);
+++		rfbScreen->httpSock = RFB_INVALID_SOCKET;
+++		return;
+++	    }
+++	}
++     }
++ 
++     if (strncmp(buf, "GET ", 4)) {
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 1180fc8dc7..49c94b8708 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -13,6 +13,12 @@ LIBVNCSERVER_INSTALL_STAGING = YES
+ LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
+ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+ 
++# 0002-add-bounds-checks-to-UltraZip-subrectangle-parsing.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2026-32853
++
++# 0003-fix-NULL-pointer-dereferences-in-httpd-proxy-handlers.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2026-32854
++
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
+
+--===============6650486072000317450==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6650486072000317450==--
