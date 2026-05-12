@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F6DCD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E00CD4851
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D5E18421C;
-	Fri, 15 May 2026 13:28:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 489CE41A54;
+	Fri, 15 May 2026 13:28:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kF5dgZ5Odi3O; Fri, 15 May 2026 13:28:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PS3XauoVKafE; Fri, 15 May 2026 13:28:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 565838420E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73C0B41A64
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778851707;
-	bh=JP3IQ9Bo6ovjLuAseJCJ2r/YAusmRVb8JQ1V7S9UAVU=;
+	s=default; t=1778851708;
+	bh=1zKv1ZyfERA2R8GxRWHKkmmcMDwN5c/6jac1r8gCars=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O2XlstyX8QvALVfiIyYrwRuJFwgxZ3d1rGbxqxkbBxLlTr561zkPS2WUWFNIfBMvj
-	 Lu6tZtzKwShiuB5YecPfmSyQOY4xId2pVHM2ZRTbSmtWzsEh/viMb2ZlaVurH7YAu9
-	 Pt2NUH+TIdIoiHk6lNlA4qBw4r6WuewZfBUDVcGjUwUbsHGnoUEXX+aLgRulcEooYd
-	 5CVscZrmdVxnhiAjzUP1M76IH90bgpb6wCXGzB0P0nyya0Sjv18c2yABvj/iyPFAZf
-	 DSjzITjy4WCEgP6treuylykT+gvlpaY4TyETalVZBl7V0JXBi7tQk0qXfp8s/xqp22
-	 6F6m54b2LRvDw==
+	b=HTm4lVyRY+PyVj82FrZ4XlXZsibIFikkpBFwukVzRHAAMPjHaEvJDcZA+xSqybG6L
+	 ZT9brkc0eKJ7oPRRl3neUlcGnR3+w+0+mjtqjxqVXk1Gxg/26rKIyifuPcMzaOEGlx
+	 hXrOj8IgAu9aLVzW/WEqG4NLigdT1WoKfNkS1kC2aZ63T9HylIZTM+ya9EzRCGRdj5
+	 nrrgPKQcToKYD1r6uBeSqCM+vxnnCnDzChdZtHVYYcCnsHbEfmD5/YNp6aVZAtT0ZF
+	 St96BfzP4GjK+yCBf+fsdugZu7TfebebGY7WH/yOUezn8hpCgJg6ra84VscOu2Ry8m
+	 ALyRlsHb8vC+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 565838420E;
-	Fri, 15 May 2026 13:28:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73C0B41A64;
+	Fri, 15 May 2026 13:28:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B2CE42B
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0939036E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AED9F61568
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 394EA61570
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ItD6wmyf0T4z for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:28:21 +0000 (UTC)
+ id M4V8I9Nbyi3K for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71E5161547
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B28EE6154E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71E5161547
+ by smtp3.osuosl.org (Postfix) with ESMTP id B28EE6154E
  for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B52AC86362; Fri, 15 May 2026 13:28:15 +0000 (UTC)
+ id 113678634F; Fri, 15 May 2026 13:28:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 12 May 2026 15:13:28 +0200
+Date: Tue, 12 May 2026 15:40:50 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 49dbc683e752d7b7defe08011eafdfd8ef77b71c
-X-Git-Newrev: f55a6134b7b7664322a594f89ba380d33499cbc7
+X-Git-Oldrev: 312a4013fd869ccd6393873a331fb30b8785efc9
+X-Git-Newrev: 9a5119629d110d3992e221b93034ee959b3d50b9
 X-Patchwork-Hint: ignore
-Message-Id: <20260515132815.B52AC86362@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/network-manager:
- drop obsolete dependency on host-intltool
+Message-Id: <20260515132816.113678634F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libpcap: security
+ bump to version 1.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,37 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f55a6134b7b7664322a594f89ba380d33499cbc7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a5119629d110d3992e221b93034ee959b3d50b9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-NetworkManager stopped requiring intltool with 1.40:
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/56b51b98fbb8627c4c09a483702e18fd8aee7ce1/NEWS#L434
+fix CVE-2025-11961: Fix OOBR and OOBW in pcap_ether_aton()
 
-Fixes: e7c20ad548818fad6924f19e31ef2defdc418875
+For change log, see:
+https://github.com/the-tcpdump-group/libpcap/blob/libpcap-1.10.6/CHANGES
 
-host-gettext is already an indirect dependency via package/libglib2.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-[Marcus: add reference to commit that updated NM to 1.40]
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit c393060c7e44fab3339d88286d0e407b0bc9b187)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 146c8a518d62f144275a73893b20d4fbf7ab0b98)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/network-manager/network-manager.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libpcap/libpcap.hash | 4 ++--
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 62595a0a36..a0f6af9ffd 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -16,7 +16,6 @@ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
- NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 7f53b99b8c..098b059fdb 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.tcpdump.org/release/libpcap-1.10.5.tar.gz.sig
+-sha256  37ced90a19a302a7f32e458224a00c365c117905c2cd35ac544b6880a81488f0  libpcap-1.10.5.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.6.tar.gz.sig
++sha256  872dd11337fe1ab02ad9d4fee047c9da244d695c6ddf34e2ebb733efd4ed8aa9  libpcap-1.10.6.tar.gz
  
- NETWORK_MANAGER_DEPENDENCIES = \
--	host-intltool \
- 	host-libxslt \
- 	host-pkgconf \
- 	dbus \
+ # Hash for license file:
+ sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 67adb0a978..c4feee5766 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.10.5
++LIBPCAP_VERSION = 1.10.6
+ LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
