@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8908ECD343F
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 16:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABA5BCD4F24
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 16:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54EE840F68;
-	Tue, 12 May 2026 16:32:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF91E60DD9;
+	Tue, 12 May 2026 16:35:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id StdvylKWb12I; Tue, 12 May 2026 16:32:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x_nYve9Bgh0t; Tue, 12 May 2026 16:35:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700D140F71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF9E160C18
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778603552;
-	bh=7BH7LBBe9Hyng3BlIJgTN1Yv45LYGRx/Er7chDHxpqU=;
+	s=default; t=1778603754;
+	bh=43FJtKNNX+p7c4n7fn8sLWjq4gHYG025peg4ndOgXAM=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=E13j5/Nfn82k+ePrP8TpLbHfNpR9fi4E2/E9oDW6bVoG4lKBWBd6k5sS1oKubECJI
-	 jAbxbxG37Tz0wTgOX6nJc4yawxXNgjDAFwMnSf2q+9jF2oruVZXXIlBJUZPWLyoR+e
-	 c7B8KBoWsmH2+0gN9Wqv13G30g50g49Fk3zrglRA5Uz8xPX4H6R3BIU8Z9ipsNGFte
-	 F6W1DEut4PpDWg4aaij0R3EBowM8rKhL6BnjDFXab+SwRF51CMOEAbdiDCB6S3vbcS
-	 zHNssX4l1dNmfhYhsjlkZChXiHYA9ENm1XwLCoGVX81yLT9oCZ6vavTgZFFgGwqG/p
-	 xEJWvjz2+4IHQ==
+	b=P46uaqGSZJtrVBXjpeKQyOZfMNEIwhfh/nDYhg0lZUhw5qiFzrwHFSntJJwnQ+ubD
+	 KqaNv24buT0Cs2yM9F+LC32LDGkVOYc/SfYnbnZnAA09XI75Thpd7PhrMoe7BsGuMs
+	 JHhv1MHWmeMwHGWCAuIpSBiUZUEp6MpdEICyqneMyjbxndXZz+n1A+9uw4aFRrxTqY
+	 X653qPrPNg5KjuJp7k9095HyFR2g4D3KGvO1vpzTr36c0iRfn7JaT3363tQ+OfzbEA
+	 Sle/shR7vpfe+EGAM6YzVKKlozsRgJreWZ/83h5N+xrjgySnVzNpv8GCs9bo/Pz/gU
+	 CUB8kgmexqo+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 700D140F71;
-	Tue, 12 May 2026 16:32:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AF88F223
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:32:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF9E160C18;
+	Tue, 12 May 2026 16:35:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A52B9223
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 16:35:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1503822E1
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:32:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FB6940670
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 16:35:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WctBaxhJ0Ahq for <buildroot@buildroot.org>;
- Tue, 12 May 2026 16:32:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 43yOexat_D6d for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 16:35:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 90BFA822D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90BFA822D8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81A224065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81A224065A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90BFA822D8
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:32:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81A224065A
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 16:35:52 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b10b.dip0.t-ipconnect.de [84.161.177.11])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B8DD0A4C0103;
- Tue, 12 May 2026 18:32:28 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59520)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A0C84A4C054B;
+ Tue, 12 May 2026 18:35:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40616)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMq20-0000000052H-1kG8;
- Tue, 12 May 2026 16:32:28 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wMq5G-000000005fn-1Mrb;
+ Tue, 12 May 2026 16:35:50 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Tue, 12 May 2026 18:32:28 +0200
-Message-ID: <20260512163228.3566740-1-bernd@kuhls.net>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 May 2026 18:35:50 +0200
+Message-ID: <20260512163550.3645280-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778603548;
- bh=4z0is4Yf2NxcDbV9rIwcvE3/gekhRwzc1zzEmyOQPWA=;
+ s=kas202511301023; t=1778603750;
+ bh=9b3RL/U3aC9ImFjFoV0xpLaguvtBnMJpxDfWMJ2EiIg=;
  h=From:To:Cc:Subject:Date:From;
- b=ZQcoE3ykQm9si/Dd3wvRMy6FDuiUUhCr8apaOODzlQADFiO6D5AhlDWSV15ONnq2t
- 3L0EcCbuYoTqcQIGJ7q25SVy++Y8gkaIXSVzXtoCgFqI1Y2p/lmSmzRKafOEJv6l/2
- +x+vi017vOqV60N8sODBnBdfr95KUHgTxvLA2vw1uNK7CnxH43/mHD0VlsEzTJVBVI
- xkUsqhMhbOkqyNZAtvEffMRyGeXhktSJ1E+49pZIN1wkOGaeNmJMRzNUmWPPgcxApK
- 9lb4Ii6pTP1fIQktwP1/KfuCTUXy1AylSmNf2tqEqS1zjfvmRX1/GiYt1vt5TqNkQ2
- Lb+9wTXHf0WFQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=dpFXFa03DXKrJ2GNGvAL42BTAoNljPDbeeGSVSKXw0rJ1WmeX0N4+YkX+H7PFkxkN
+ VK3CkuLAxPA/ALzdPtdysWwBESm3lxAwI/uvARxgDFuEw4mHKhZbcKg+jMt73oiw33
+ 2/FO6SKQmix2c5acXD4CZbQLhavNZyQdtkh6zMTvxmS+dZWpZeJW7+a69vOgdJjvVG
+ kCSwM0Li8QqDI1h3rA6NbPAhvvK/BxHHgllZw+GoEoA+wAWjkn8ksBIXcb4vCg/JuQ
+ ckCqNL642+Clc0Q1e42iWL1v51KW2bQ65+FG8p8OLvihs8/Eaw6NNElOYirMkRHasU
+ z7Yt8zxUU6uOw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ZQcoE3yk
-Subject: [Buildroot] [PATCH/next 1/1] package/libcoap: bump version to 4.3.5b
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=dpFXFa03
+Subject: [Buildroot] [PATCH/next 1/1] package/libmediaart: bump version to
+ 1.9.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,37 +97,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/obgm/libcoap/blob/v4.3.5b/ChangeLog
+https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.7.news
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libcoap/libcoap.hash | 2 +-
- package/libcoap/libcoap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libmediaart/libmediaart.hash | 4 ++--
+ package/libmediaart/libmediaart.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 17fce990fa..0ca4fd3901 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
-+sha256  383a17d8466cee7c1cb1d4dfbffad2651004850b29eb590e9591c7bedd46741d  libcoap-4.3.5b.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
- sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index bb1321f194..21b479fc16 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
+index 34094744a9..f5d052a61a 100644
+--- a/package/libmediaart/libmediaart.hash
++++ b/package/libmediaart/libmediaart.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
+-sha256  c3bc5025d7db380587f9c8eb800c611f6b5a16d6b4b78fcff93f62876a677f17  libmediaart-1.9.6.tar.xz
++# From https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.7.sha256sum
++sha256  2b43dd9f54f0d8d0b89e2addb83341ab06d7b98cb1b2e704383584af9c560f6b  libmediaart-1.9.7.tar.xz
+ 
+ # Locally computed:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index d4480dbe5d..3d454023f3 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCOAP_VERSION = 4.3.5a
-+LIBCOAP_VERSION = 4.3.5b
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
+ LIBMEDIAART_VERSION_MAJOR = 1.9
+-LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).6
++LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).7
+ LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
+ LIBMEDIAART_SITE = \
+ 	https://download.gnome.org/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
 -- 
 2.47.3
 
