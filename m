@@ -1,84 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FED2CD4F25
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 16:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52915CD343F
+	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 17:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26DCB40F77;
-	Tue, 12 May 2026 16:47:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6E02812E9;
+	Tue, 12 May 2026 17:14:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yLiOv7xqUuA7; Tue, 12 May 2026 17:14:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F33F580EBE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778606047;
+	bh=xOGtccLo28l943owOL6alDzI75fajndC/9uSydj44p4=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=B0uIIxorVHUsISSgAb7iglHS5rz/qw5QtAIBnIrqPGoTcSsMnab5eePLMu5TuDs37
+	 7KthD+tI+dJrFfqYkCYbfSNPs3sNcRdfBBlogB1G6MfeRtYzYuL31IvjueM8czvUwT
+	 23zj9XTa1ZZA7sQ97FYTe5VVB4p3/VH/cfJLQM3Cimy7yFYnaDjRrARvQL1rrVei3A
+	 YfQz08QKv/tXT0Q1mKxcPUO12hc7O7HpgtyOkJ2y7N3WcZXfS7YXR8Q3ziqiMRqY6Z
+	 JNQMEfw4eRJjsmyBKVl5Wh8XzvW/Po5tWe+W2Vkqw+auMkmG0mKjVGBbDutbd974SP
+	 XOjvcrw9fiLrQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F33F580EBE;
+	Tue, 12 May 2026 17:14:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ECC93223
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 17:14:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D28374067C
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 17:14:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ITQ43smba9gg; Tue, 12 May 2026 16:47:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7810E40F6A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778604453;
-	bh=nz1/VCWNmSbILaX3W43n9vsbQNrrLhdc1FSGVnqqr1E=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=JOOtQLeSQTpIY0IDpK89zQ3zoYIle6N8rXJ9QK+6AJ8twj8Qm5X6/1AaM+7qLWqD+
-	 rJrnhZBWjYyY+7ZwISSSKc9hArxuHfpiTOUAtkAgAgLtpRAR/rZWuMLtdQGYA6Nwgl
-	 yAn09zankqQYa5ASEOrSzcSbToPTSF+Qg+p2Td1f0+FB6vQ6c6XaxBQngIhawQN5j1
-	 S6LBqUwT7dUfMOmjxGBTUHEoPeExNwxDAouzdALa0O8Z4+AWz8Ea8wqZsTGbpZJIql
-	 yWL4+42a+vnmNVpMTXPRsS4mbisgkEGWNYoO+9sI2yeNTeiEcjI2pZGn818Qa5kT/v
-	 5u2p4tqP2NLGg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7810E40F6A;
-	Tue, 12 May 2026 16:47:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E4210223
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:47:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4DDC40673
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:47:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NK2JjyNJpJtL for <buildroot@buildroot.org>;
- Tue, 12 May 2026 16:47:31 +0000 (UTC)
+ id CzmM4P983yB2 for <buildroot@buildroot.org>;
+ Tue, 12 May 2026 17:14:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B16874066F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B16874066F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D40C9406C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D40C9406C7
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B16874066F
- for <buildroot@buildroot.org>; Tue, 12 May 2026 16:47:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D40C9406C7
+ for <buildroot@buildroot.org>; Tue, 12 May 2026 17:14:03 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b10b.dip0.t-ipconnect.de [84.161.177.11])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CCA6AA4C0939;
- Tue, 12 May 2026 18:47:28 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37532)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 69443A4C0A3F;
+ Tue, 12 May 2026 19:14:01 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49820)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.2)
- (envelope-from <bernd@kuhls.net>) id 1wMqGN-000000007ep-07sx;
- Tue, 12 May 2026 16:47:28 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wMqgD-000000003og-0B3I;
+ Tue, 12 May 2026 17:14:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 12 May 2026 18:47:18 +0200
-Message-ID: <20260512164718.3852205-1-bernd@kuhls.net>
+Cc: James Knight <james.knight@collins.com>
+Date: Tue, 12 May 2026 19:14:00 +0200
+Message-ID: <20260512171401.1972057-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1778604448;
- bh=4vSh1ZyXHHkhQxj+wEucrrarUhX52nmAxSeioAU3ZK8=;
+ s=kas202511301023; t=1778606041;
+ bh=rCswRgHl0mTXoUKnJuW1ju08+C8AjU9oBtGCn3EwxSg=;
  h=From:To:Cc:Subject:Date:From;
- b=ilDgLz1AhlLU5kLNuaLNjti2+qffDA8yIqKOLHHgerTbAdcGp7bsfe1Mjhuh/dFHC
- 8dgQwpwFxPg7Q239vSR0qQ1GISxR4Tgn3jpLsw1ztAXSfSkfs/2dOYYCn9JyDxbCgj
- uoOloG//Myd+aZbooo63VgULvzbuRO1TJ5k68VZoOaMB/s0yqgxY1D22Ryy8NeHx//
- jn4qVGtTRCovtuQqaaj7xtaCANhha7S1UU3UjDmi4liSSevTSKRhnQ8OkKxRStCX+d
- MprbyEFylsuGLT/8y6ja6+8of6AloBBeihPTI3WK9JUtdq6dN2u9xkc20vz04zZ6oL
- yJ77Y91Fst91A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=dI0MEJlLmvq4IFNC1u8zfZb5DpgT/JurQumgp5nBGOLz2EupXfRkOSb0/JtjKsY5B
+ 86Z4pER9Yi+59yGD9Ku7kmo9km5UKHB9oEHZm58Uqlqfqt5nGU39tkOBaILVAafwCm
+ xwXqkduaaS0Dki5S9dD8zqWhszgkZ0/XsSzsyN9Dndu6YrTmGh54Y6PgQZIecGh0Sb
+ qbilyhUxRC9xn0KJVqyJHbatRFplLBXd+WBd5949JNHom39ZS9Yyh7PiIYrd3vKlHi
+ sleqmvcN4XgGqu4wHqz7wBazs40ciYzyxascPbX3/ltbvdBFdhvgDsj5rm00EBoVfN
+ 6QBBWuMILu5iA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ilDgLz1A
-Subject: [Buildroot] [PATCH/next 1/1] package/libmbim: bump version to 1.34.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=dI0MEJlL
+Subject: [Buildroot] [PATCH/next 1/1] package/libpqxx: bump version to 8.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,43 +92,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Aleksander Morgado <aleksander@aleksander.es>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/blob/1.34.0/NEWS
+https://github.com/jtv/libpqxx/blob/8.0.1/NEWS
+
+https://github.com/jtv/libpqxx/blob/8.0.1/UPGRADING.md
+"You will need at least C++20 to compile libpqxx. Compiler support for
+ C++20 does not need to be absolutely complete, but the basics must be
+ there: concepts, ranges, spans, various utility functions in the
+ standard library, the new object lifetime rules, and so on."
+
+Raise minimum gcc version to 10 because concepts were implemented in gcc
+10.x: https://en.cppreference.com/cpp/compiler_support#cpp20
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpqxx/Config.in    | 6 +++---
+ package/libpqxx/libpqxx.hash | 4 ++--
+ package/libpqxx/libpqxx.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index d487b5156d..8e3ed5a8c4 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  7eca9f5af2eecfdb5e3a2a865a7f29d0ac9532ab187a9c6adce4d85f897eb385  libmbim-1.32.0.tar.gz
-+sha256  55bb88df358f8a36b6e01e63877500d7c6420f5907d2d3101812b4912eabe08f  libmbim-1.34.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 190f3547ec..e2ae0d83d0 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
+diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
+index 845692eae6..bbe29a9adf 100644
+--- a/package/libpqxx/Config.in
++++ b/package/libpqxx/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBPQXX
+ 	bool "libpqxx"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17/charconv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20 concepts
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libpqxx is the official C++ client API for PostgreSQL, the
+@@ -10,8 +10,8 @@ config BR2_PACKAGE_LIBPQXX
+ 
+ 	  http://pqxx.org/development/libpqxx/
+ 
+-comment "libpqxx needs toolchain w/ C++, gcc >= 9, threads"
++comment "libpqxx needs toolchain w/ C++, gcc >= 10, threads"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
+index 067a2c8d2a..ca26eec4cf 100644
+--- a/package/libpqxx/libpqxx.hash
++++ b/package/libpqxx/libpqxx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e578677d0c1b0f7ad37ac2d9ac373bc9738a3732083c70672da5f2c3028e6b03  libpqxx-7.10.4.tar.gz
+-sha256  2ccd31347a87796860a6600f57bf97ff4d54c203ecce4ea040425ba79774cf5f  COPYING
++sha256  24f878a1b4249035e4b6c07d49351506bf99f88df584d36bf198d58ebf293823  libpqxx-8.0.1.tar.gz
++sha256  b3410630dd87e37eb7a6e9c49eea2b3cf71f394e8921b7cd92ea2a42f9aea90f  COPYING
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+index 492370f7f5..f2b40e094c 100644
+--- a/package/libpqxx/libpqxx.mk
++++ b/package/libpqxx/libpqxx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMBIM_VERSION = 1.32.0
-+LIBMBIM_VERSION = 1.34.0
- LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
- LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
- LIBMBIM_LICENSE_FILES = \
+-LIBPQXX_VERSION = 7.10.4
++LIBPQXX_VERSION = 8.0.1
+ LIBPQXX_SITE = $(call github,jtv,libpqxx,$(LIBPQXX_VERSION))
+ LIBPQXX_INSTALL_STAGING = YES
+ LIBPQXX_DEPENDENCIES = postgresql
 -- 
 2.47.3
 
