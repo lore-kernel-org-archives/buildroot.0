@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3114CD4F21
-	for <buildroot@archiver.kernel.org>; Wed, 13 May 2026 19:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF143CD4F21
+	for <buildroot@archiver.kernel.org>; Wed, 13 May 2026 19:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76B7760758;
-	Wed, 13 May 2026 19:03:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id evVFikssGLbu; Wed, 13 May 2026 19:03:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F35B060749
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778698999;
-	bh=E0eHeE/9B1y25X3M+/iTtiXlLiPgf4aC5PrIoLU2hto=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=D1teGszPVy9U7Yp9j1HIiLsqKDYJI/iWLSsJaE6iK88h7ghDUc3MUJ84PkUflhB1F
-	 c27QhI0yTwSjnyk+snZMp+d8gb1jdkzvhs+8IJpgj+ZmWcNgdhRkCqcHnDQuF7sPsX
-	 4oNiKIhzWyIoyXBBsfwhrL2hCjB/GP4ULdOXEPpMfM+EqlBQ47fDVMeerCd4xbYG4u
-	 Spl3sfmpwPe3ES8cWqznUeMcEEwjrI3U4CTGV+ynvjuB6OnR3yjEXjat1BBobfSOGH
-	 KLX8R2CWQNHzqreH+R8LEs85dM1ryBM498ih68kVMkpd2EVuEHHMeRrHLOHZYHyUwF
-	 o818tpuHskbpw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F35B060749;
-	Wed, 13 May 2026 19:03:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A5D45270
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:03:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95C4880AA0
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:03:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC24C810BE;
+	Wed, 13 May 2026 19:05:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WnwxLGfuTn9k for <buildroot@buildroot.org>;
- Wed, 13 May 2026 19:03:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C148980805
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C148980805
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C148980805
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:03:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 779605FFAA;
- Wed, 13 May 2026 21:03:13 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 13 May 2026 21:03:13 +0200
-MIME-Version: 1.0
-Date: Wed, 13 May 2026 21:03:13 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260513142307.902102-1-romain.naour@smile.fr>
-References: <20260513142307.902102-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <7c7b1f492128b5c875e910c22d938906@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1778698994;
- bh=P2pW8qGE5j/Bm8JtpyNwY5UGdE0ja7YIQkNq7E/sPNk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=asAG3ALyxOb93yVoWIC3mNVWRf78VrffDggbnubkMDOHgz3Gc80ZaMHV6P/k1Lsap
- AWcNi7WTXTSZTWn5m3TGkOQnRx/zdrvtRuOlhFFsBx+pBqy8yKKoRqYdtEt1UU0LCA
- b1iveaXIpHK09PftAwUl8ecknblpUlYesUi9iGHqmZM3YExAfniBH4rz3ZAjy+6mUU
- NsmuLc0wOpdQ6kKycWsX/FmijOD8+MiMRwxErO123fAAe1KxVKmO+Is+bjPzRhCb4A
- 8sDc/a3VXT4pt1p+1OztYl8GZb6P4tkNijLaqWdaE6NJHrUOYQVWEepgUQ/63xrPBu
- n736E9CqWQWkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=asAG3ALy
-Subject: Re: [Buildroot] [PATCH] package/python-sdbus-modemmanager: fix
- sdbus-modemmanager intall path
+ id nkYtBDps7mza; Wed, 13 May 2026 19:05:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42642810B5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778699119;
+	bh=kiNp60AK5YZ4RA0fIsCmLPEa8L8+xmqCgeXFKF6atKQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=dtNMdUY3F3aOSkRsWOl2DQNqDFRfK9INWrgdLXRkMBs9imqTb9L/UYLxh5NOo5mW9
+	 4AIPwgQyD/y+DFGN8qVLdcKC2Kg3KDLZbMFQCsgkYE95cnBVIC/55NYO0hUCnCueIf
+	 nJFpUalazamf4jl41WH98EwHK11NHdV1BC+8+R3itwi0NkQJc9AQxZQNWsgZd/1rg8
+	 hlx4/RXpPewVQhdHI1RAvm+r54RAxxYvUQth29iOHLhwcolHayi6w201YViyKWKfVV
+	 x8Tn+EMziH+ti7cxUoaoMPMN9/uR+CsJK8v99o0teCBEGfF66F8ZlD2aZU2lGaiieH
+	 yQp2v92JmhV2Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42642810B5;
+	Wed, 13 May 2026 19:05:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FCC1270
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 19:05:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4FB8D60759
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 19:05:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wtGGklfz7F23 for <buildroot@buildroot.org>;
+ Wed, 13 May 2026 19:05:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60FC760758
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60FC760758
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 19:05:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8EB208613E; Wed, 13 May 2026 19:05:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 13 May 2026 21:03:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: af2f3208cf31de0289a53a2c93fa1422da5c3acb
+X-Git-Newrev: de4044a0c9854c761b42c45923a07eef9978a2b1
+X-Patchwork-Hint: ignore
+Message-Id: <20260513190512.8EB208613E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mongoose: fix typo in CPE vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,37 +70,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/05/2026 16:23, Romain Naour via buildroot wrote:
-> Since the last version bump in commit [1] python-sdbus-modemmanager
-> install step miss-behave following the switch to poetry (as reported
-> by [2]).
-> 
-> The sdbus-modemmanager python module is intalled in a second
-> "modemmanager" subdirectory:
-> 
->   
-> $(TARGET_DIR)/lib/python3.14/site-packages/sdbus_block/modemmanager/modemmanager/
-> 
-> This break existing python script using:
-> 
->   from sdbus_block.modemmanager import MMBearer
-> 
-> Fix tool.poetry install step by removing one "modemmanager".
-> 
-> [1] 7c30b1e522988ffe5d4b300b2447f912b83558ad
-> [2] https://github.com/zhanglongqi/python-sdbus-modemmanager/issues/24
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/13904075359
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/de4044a0c9854c761b42c45923a07eef9978a2b1
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+There is no CVE assigned with the vendor name "cesenta".
+
+The CPE ID introduced in [1], correctly reference "cesanta" as a CPE
+vendor but introduced a typo while writing the vendor metadata in
+`mongoose.mk`.
+
+[1] 3d632c941f package/mongoose: add MONGOOSE_CPE_ID_VENDOR
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mongoose/mongoose.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 432c20a54c..8250751eb8 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -8,7 +8,7 @@ MONGOOSE_VERSION = 7.21
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
+-MONGOOSE_CPE_ID_VENDOR = cesenta
++MONGOOSE_CPE_ID_VENDOR = cesanta
+ MONGOOSE_INSTALL_STAGING = YES
+ # static library
+ MONGOOSE_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
