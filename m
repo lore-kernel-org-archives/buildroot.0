@@ -1,133 +1,124 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CFE9CD4F21
-	for <buildroot@archiver.kernel.org>; Wed, 13 May 2026 19:37:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 163FFCD4F21
+	for <buildroot@archiver.kernel.org>; Wed, 13 May 2026 20:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB65B60703;
-	Wed, 13 May 2026 19:37:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B73B781216;
+	Wed, 13 May 2026 20:23:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ca2USLRSUFid; Wed, 13 May 2026 19:37:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5JKStpzj0f9s; Wed, 13 May 2026 20:23:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C8660705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8560811F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778701056;
-	bh=tXNsldvBf12P5PiICstT8+mK2ACizIJe8l0zjax2dGs=;
-	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=rXhd4KMw/Xqc2GK1zkh54/EuKyr6dB4Dv2t1yLAA2BO9Ojm6JkuwCEpL7VyO8Fifz
-	 ih9UblVTL4975MdngVffnx3MYmwrp+seMX9KXSVj79dZIXxuqXUsr6I5DcrBhn6g9K
-	 cUGTe10CvVHGpU3zs9HlZoXTJ40GyfKOjZW+ZbFCdoBt16ZVj5DJNrHjyYyv2Nah+s
-	 Kt1LZwZRvon2CxJpfY1P5K1q6L5AHe46gqnlta4HbYMAMlxCy2IJCnL4aRa05hkaav
-	 wwLCbVcwf/JfQ47niix7KqIYTs6wpsDLUBiOobapHqcM0zHrfZBwuJ9Nhm/OOCgiMY
-	 FU5BkV9tT3HYw==
+	s=default; t=1778703820;
+	bh=Ii4/cdqV98V2cuFAnLlWi+YqZ9ZbTl7TCk+29OkbY8o=;
+	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=mdxqP/lEDhMs+4AswZjV2xZHcEP72KivoaJetwbxnzCvLNy+BhAgnNGaAkVjRtqXs
+	 ke8Vvam4Iq6zhXi6WDaB0DPoIWt7EkNflfSiGwJU/ilBHnF1zit5zdoTfEXIIiLqkg
+	 YVKnpG6hhWhdM/rOSZ8Pt+B7BocZZ9vcAOsMC2JPB0gKDjibbObVJtvZ8ueEpoxZqL
+	 la4gfY3AI4Gss/bvoKqAUF7BWcEm1gHA5WgMV2lAdNzyEq2n8J/iokOfNawZB6TgHy
+	 tplVQVNbHWMSSffH5v9zufOPowtK1Q13QcAJybGi2fYCE+UiE1jgtjwRwbyplD3njt
+	 NuoFkbW7KMiwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1C8660705;
-	Wed, 13 May 2026 19:37:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 57664270
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:37:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8560811F6;
+	Wed, 13 May 2026 20:23:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F22E6270
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 20:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3980A60703
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:37:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D457B40A0F
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 20:23:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id toyfFPmGvzzX for <buildroot@buildroot.org>;
- Wed, 13 May 2026 19:37:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T_YT6sp9bdKO for <buildroot@buildroot.org>;
+ Wed, 13 May 2026 20:23:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32b; helo=mail-ot1-x32b.google.com;
- envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 83A5A606F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83A5A606F0
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
- [IPv6:2607:f8b0:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 83A5A606F0
- for <buildroot@buildroot.org>; Wed, 13 May 2026 19:37:34 +0000 (UTC)
-Received: by mail-ot1-x32b.google.com with SMTP id
- 46e09a7af769-7dbca22dbfeso4139531a34.1
- for <buildroot@buildroot.org>; Wed, 13 May 2026 12:37:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778701053; cv=none;
- d=google.com; s=arc-20240605;
- b=O1zhUhtPyugz0lIh998yLq4Rslk5mNHFqjZR0lo6FBq6pHo3tH9UMT8ym8jB59Luy7
- SmkVE45kZmD+XSxrSFeXHajI/1OE/DEDF+IdK6N8RjDYSuLy3U2yc80s7eWTRc9r9aFa
- 6TRMlnGX002Zm0VJWLDKFRdRWOtPudmxxWwgWwLTkSVE0PwvESlXArJPwIxiO8+e5uwc
- TGzZ7f5H1yw1FRP4XTwz7s+v/KaLPM3rjAkx91ATsN+AUoYQYEpGwtUrghFho8cZEuA9
- IFEuhLbVprcN19PN7zCJPn7QVewC79Fu0M19hRa2uAAXZOC5He3Lbtq6oLWN6efnlx0r
- Fq6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20240605; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:dkim-signature;
- bh=k4hv+gginROhzqhYcM4zNrp6I0ZkGEKQKM7DZunfxYg=;
- fh=t4FV3giSnaxhJeMavuQpQ8IxOnoseiSsY4+o7XDIOZQ=;
- b=IX9K04RRu062jDxg09xDnPlx5aztv/0AVlseANl6GY0C7FE1dtEREn+rsJwJcaVFmV
- Gkflr5IQcO2SRmz9ulckSWLQpmBZIlx26grJT1CWNGQMpUyOsoCDBeMnAU6GcXR/QdI8
- PJHU+d9vZEMXn6H4T9NRRlK4S3N76VHr8rwv57y+2JQnTpx8HYCwHkA9nLWXpAbojYCG
- hwIrz3RNy2zcA0CBKzhHyHggrdlc0MbBGdOYXsRndWEKAao3SyghWVssZB8iLDVmw7pa
- 5Bt3pHd7smvdmQj/PJYhgd7RAWSZ6uzvpIMVLFqLFBxgGdlgPYsgr9mlmR8XRniz08Zv
- W5sw==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+ client-ip=2607:f8b0:4864:20::52f; helo=mail-pg1-x52f.google.com;
+ envelope-from=joseph@anodize.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9DE0240A0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DE0240A0E
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9DE0240A0E
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 20:23:36 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id
+ 41be03b00d2f7-c70e27e2b74so3053411a12.0
+ for <buildroot@buildroot.org>; Wed, 13 May 2026 13:23:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778701053; x=1779305853;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=k4hv+gginROhzqhYcM4zNrp6I0ZkGEKQKM7DZunfxYg=;
- b=YsaGl89Lc3JIxvcwF0RznLwhYzEI3vGScarGaIZS6qdFc4CwGzmc13smGJOiKmPnVW
- h/hqu1gBv80HCtatqgaG24mOhoXHvpDJENOEoUNmCVAeGblmmqERytPcPYfOC2az+GIH
- M0lPdGOeRMqd+JaKXHohBMpseXX3luPKynOrcBK1ajifA1jcwvLIHAyOrHxPR3Ay6kpJ
- VdI25n9jChatPVeCfnjqu7uLOdawiBUK1Ty3r6FTEQI1zuR4O2hUUw55ibDb84o5TqB7
- AGh+lNeyMjnuow+11HeyBLQfNQJP4QVfHooBozaKR/RzHjTZ5pBwwulPh91lhUH/gV+N
- MYug==
-X-Forwarded-Encrypted: i=1;
- AFNElJ86Zf0xOJR8Vih948cTySzHF9MWlwSBJxynz5UzjZxlDNyABmORSrFjZ4JPffVFek/pMXUzs5gKV6o=@buildroot.org
-X-Gm-Message-State: AOJu0Yy1b3qdTzcE7ICbMtH2mJ827aUCr5KJsaWC/h/A/ahD+6K0rMqF
- Suy0nBNkJp+z44dD1sN1duLSvz0tGp69zPn1Zs4A8UuiUi6n9GdK0bzlNbin33p3c6kSPTi8JGK
- CcbyP7tziHiWmtXGDCz7lmNXJfqujaoE=
-X-Gm-Gg: Acq92OE4Y1MTmVVuYCYQqw/x3AQdn/0r5j8pxujCNG0oqBVh8qw7csgi5Sphzk6D8Mg
- ZiJKS6Xbt1L7VC5w9K/+37MtZi4vFn7YNhAM1gY6Itb5c+i7eQwNwfBFhMCWcIVXQZ0/gEji1Fz
- 9PALvvYx1sfi1BhWHWUtBX1t9+1rrG8h8yQ055NocnfE1p9CKaL8BEVZ9cE16xUFOlZ+N4rUz2p
- VLwNs8541BRAH9Uz0hvW8AqZ0aCmD2MqBOeKbx++1UPxOx16V8lVPueuLH5i5UmmxCG3H9L2CGo
- 92bt
-X-Received: by 2002:a05:6820:81c8:b0:699:a7d1:5fd5 with SMTP id
- 006d021491bc7-69b78e0e06emr2697403eaf.39.1778701053354; Wed, 13 May 2026
- 12:37:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260512-qemu-v11-0-0-v1-1-776ebffbb3af@anodize.com>
- <87tsscyngb.fsf@tarshish> <f40ce0c6-0441-4aa0-91a6-fe80a66b2821@gmx.de>
- <CAMWSM7jkykAM0HoAyYS4gOaGV2qpu9K5iY3E8ZR5RqKUSNOZiA@mail.gmail.com>
-In-Reply-To: <CAMWSM7jkykAM0HoAyYS4gOaGV2qpu9K5iY3E8ZR5RqKUSNOZiA@mail.gmail.com>
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 13 May 2026 12:36:57 -0700
-X-Gm-Features: AVHnY4LGW_Z01fDzwtIRGW6ux5IhZJwwi25W7ENOg3MCKxGyNeMMIbjG3VuuGAA
-Message-ID: <CAMWSM7jRsjmyMR0T+W1NckSVxscwXszNdvtWj0s6uuDSt-W2Kg@mail.gmail.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778701053; x=1779305853; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1778703816; x=1779308616;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=k4hv+gginROhzqhYcM4zNrp6I0ZkGEKQKM7DZunfxYg=;
- b=GMghiFSuYpWKM0bGWqaocHnI2KYI1OPHUNlNOZzJ3IJcgRG/H7RYwBA2sWLJx+ha5Q
- c6SCK8DpZlABTTJNht6oZ4xUmsMqKUpF9qAo9fEDfWZyY7e5Dh81fxr5DXu2P49EcGBX
- FiXr9Yoj/R5trBQMtktyYwC9weraAN40LvEx01vEDVLJY0eGAbe43DOIlEouKPNg9vn4
- a/vtoz2sF3V1DHyGpSH7ab1YuUivXKyVgHkZRePZJ36rsqdMpBfS4jk5t5HDKeKwI05J
- cOvpqh/lxxtDm7RR0EMZzCHvAwpc1hnrP3Zt3BxwL+VsVLRIwiA9/SUUtb/jEWERuOxn
- 8tow==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/mphbcLZpIc0gBnhO33tlOmuMDhdCGsPcnkfX+3Kc14=;
+ b=Y79v6LvMhHI90vipYxEu7lkl9+NGxSag7VYLrGBAD1/gUbjrAwY5HwGmERxPJH1Hpi
+ OJDTsT0exPo/H0cPtyI3Fe8f58yeT6+LPDcRY0Chxqg6l3bkYtDTWpfQukOPr09sbv9G
+ LO5LT4AHPSa5Lk+Qg5TvfDdmT1U7Iu0Zc1HObnhpz0C6TlVo5RtIEnZbUXEZqM0zoJVF
+ x6ugixn20ExJ600DZaTshfU0YEmhatiOWDpCqxNlBJ1Poqf58LUy0xOiPdt/KAO9q8mi
+ 3Qe+C4RWsaPWcSxvTHBIoICqS0X0Mv6GBVLSk0dr4xLwTHEP4lerT/7Hi2N8iGTNOZqE
+ MSXg==
+X-Gm-Message-State: AOJu0YwRzKzLxWV5H81BCluhSIJQPL6nU3Zf3T3iF/xl7tPSNV8rvbpa
+ 3beVjhJPqQKg+sSzXjChBBqA7xGcVpGpv4vSxsjhRLMt12ms/TDHbw5eH7s6EE45osk=
+X-Gm-Gg: Acq92OGErmLI66d1wnSo+ANNVLWytBzqBWOapwxF0WCt3wsxhKred+dsUPdd0pz2aa2
+ 3NB3fFEUktR8G9nNeU4NpWh1brC0DJy6ymhT9Iiou+ij63UqI+1NHKHs7CPIsNa69qW+t8wQEP0
+ RWJRJdTLnbx02EYxUIBXMMkb3hKVIhp4HXAJDX6fZFtHCyyOvp2OUJiIR6If7yrzoqFtKWBbh1B
+ VBQbSiQgcZWfmdW2gsnBaVdBjkGmzBbhDxe6n/zAiE49POJPfH4SGvew+Ne/gUsBDPX3xqFhW7B
+ vPeviThQ2YYVWKJ5lA9eFVzUhEM5pPURqyM2oDIzfjcgx1p6dlhNKUvUGaNOStxv+1pwtOZ13Sb
+ 1jhqxvixQ2ktDDYtPItc4BeuXWIgUHzrTRDx4/SSanq4g/f4gSZnowSxWWHadpeHEcSxXVZRoFT
+ gMLHRKj+r427W8PPV+Vco=
+X-Received: by 2002:a05:6a20:5497:b0:398:bda8:d8cd with SMTP id
+ adf61e73a8af0-3af7fb74ea0mr5188008637.7.1778703815669; 
+ Wed, 13 May 2026 13:23:35 -0700 (PDT)
+Received: from wash-3.local ([50.120.90.9]) by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-c82bb114c08sm99340a12.23.2026.05.13.13.23.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 13 May 2026 13:23:35 -0700 (PDT)
+From: Joseph Kogut <joseph@anodize.com>
+Date: Wed, 13 May 2026 13:23:32 -0700
+MIME-Version: 1.0
+Message-Id: <20260513-qemu-v11-0-0-v2-1-de2e8e3c5869@anodize.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WPzQ7CIBCEX8VwFlPor558D9MDSxfBpEWBErXpu
+ 1vqwfRg9jTZ2W9mJ+LRGfTktJuIw2i8scMi+H5HpBbDFanpFk14xqusZJw+sB9pZIxmaZqKg8q
+ h5lKS5eTuUJnniru0X+1HuKEMiZEcytmeBu1Q/LAFL7bYyCijUIqyPuZNpTo8i8F25o0HaftEA
+ eGRghOD1InSCx/QpYU2Plj3Wt+JLNX403yNqOsKQSmAXKhNRDvP8wc9wmzNGwEAAA==
+X-Change-ID: 20260512-qemu-v11-0-0-0862bf3b72cc
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, Fiona Klute <fiona.klute@gmx.de>, 
+ Joseph Kogut <joseph.kogut@gmail.com>, Joseph Kogut <joseph@anodize.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778703815; l=6143;
+ i=joseph@anodize.com; s=20251022; h=from:subject:message-id;
+ bh=dja+3wu2MUYdrHwlq8ecIKurv9gtnLl3zV8BixsOkbE=;
+ b=IjE8R6oq5CFvEDNjdmH7Gjom349h9FulV4/zGJpM6AvWtlDO+xx3CgEW7Gnxw6pRsyq8gWp8u
+ xtgvinyYMmYDgi6bGEYDMKXKS03ryG1y/1XHUrjxLslwEr3hB56kJHO
+X-Developer-Key: i=joseph@anodize.com; a=ed25519;
+ pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=anodize.com; s=google; t=1778703816; x=1779308616; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/mphbcLZpIc0gBnhO33tlOmuMDhdCGsPcnkfX+3Kc14=;
+ b=nX7ofc60edimMcr51FgKYF+tw937whHsjCcwsuMQzjcHgeVo/BSBbK5ZlEHDdxqb6N
+ wjH6lxGH7ACi+7x4ZZ19lD0/lDdfVmkJ3+/cG9aAdRVu6COa5s2F5cKpYXjx0JFqoSm2
+ THW3S9yTOMuIz+hlLJXBuoZ8iq40f9B6jIZRC3QQjKGBKjDDCM8vCX43tp8cKr/6+t7X
+ BAcVNAlhZE5+D7VnowmkCEuvcUUSMk/JIecb2y3chI2oydEyNrQMyCcMdgne2lNNwHtC
+ nPm/nzMnXzrRBC+rcSHvCRwb9qobLYOtGlJSNCRZjnqQFyLucYv26DU3ZGB7u/zUVXw/
+ HxUw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=GMghiFSu
-Subject: Re: [Buildroot] [PATCH RESEND] package/qemu: bump to version 11.0.0
+ header.from=anodize.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=anodize.com header.i=@anodize.com header.a=rsa-sha256
+ header.s=google header.b=nX7ofc60
+Subject: [Buildroot] [PATCH v2] package/qemu: bump to version 11.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,73 +130,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph@anodize.com>, Romain Naour <romain.naour@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpPbiBXZWQsIE1heSAxMywgMjAyNiBhdCA5OjM44oCvQU0gSm9zZXBoIEtvZ3V0IDxq
-b3NlcGgua29ndXRAZ21haWwuY29tPiB3cm90ZToKPgo+IEFzIEkgYWRkZWQgYWJvdmUsIHRoaXMg
-cGF0Y2ggbWlzc2VkIHVwZGF0aW5nIENvbmZpZy5pbi5ob3N0LCBzbyBJJ2xsCj4gdXBkYXRlIHRo
-ZSBjb21taXQgbG9nIHRvIG1vcmUgdGhvcm91Z2hseSBkb2N1bWVudCB0aGlzIGNoYW5nZSBiZWZv
-cmUKPiByZXN1Ym1pdHRpbmcuCj4KCkl0IHNlZW1zIEkgYWN0dWFsbHkgY29uZnVzZWQgbXlzZWxm
-LiBGdW5jdGlvbmFsbHksIHRoZSBzdWJtaXR0ZWQgcGF0Y2gKaXMgZmluZSAoYXMgZmFyIGFzIDMy
-LWJpdCBzdXBwb3J0IGdvZXMsIHNlZSBiZWxvdyksIENvbmZpZy5pbi5ob3N0CmRvZXNuJ3QgbmVl
-ZCB1cGRhdGVkIGZvciB0aGUgMzItYml0IGRyb3AsIGFzIHRoZSBBUkNIX1NVUFBPUlRTIGNvbmZp
-Z3MKc3BlY2lmeSBjb21wYXRpYmxlICp0YXJnZXRzKiwgcmF0aGVyIHRoYW4gdGhlIGhvc3QgYXJj
-aGl0ZWN0dXJlLgpSdW5uaW5nIHV0aWxzL3Rlc3QtcGtnIHdpdGggdGhlIGJlbG93IGNvbmZpZzoK
-CgpCUjJfUEFDS0FHRV9IT1NUX1FFTVU9eQpCUjJfUEFDS0FHRV9IT1NUX1FFTVVfU1lTVEVNX01P
-REU9eQpCUjJfUEFDS0FHRV9IT1NUX1BZVEhPTjM9eQpCUjJfUEFDS0FHRV9IT1NUX1BZVEhPTjNf
-U1NMPXkKCgokIHV0aWxzL3Rlc3QtcGtnIC1wIGhvc3QtcWVtdSAtYyBob3N0LXFlbXUuY29uZmln
-IC1hCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXJtLWFhcmNoNjQgWyAxLzMyXTogT0sK
-ICAgICAgICAgICAgICBib290bGluLWFhcmNoNjQtZ2xpYmMtb2xkIFsgMi8zMl06IE9LCiAgICAg
-ICAgICAgICAgICAgIGJvb3RsaW4tYWFyY2g2NC1nbGliYyBbIDMvMzJdOiBPSwogICAgICAgICAg
-ICAgIGJvb3RsaW4tYXJjbGUtaHMzOC11Y2xpYmMgWyA0LzMyXTogU0tJUFBFRAogICAgICAgICAg
-ICAgICAgICAgYm9vdGxpbi1hcm12NS11Y2xpYmMgWyA1LzMyXTogT0sKICAgICAgICAgICAgICAg
-ICAgICBib290bGluLWFybXY3LWdsaWJjIFsgNi8zMl06IE9LCiAgICAgICAgICAgICAgICAgICAg
-IGJvb3RsaW4tYXJtdjctbXVzbCBbIDcvMzJdOiBPSwogICAgICAgICAgICAgICAgICBib290bGlu
-LWFybXY3bS11Y2xpYmMgWyA4LzMyXTogT0sKICAgICAgICAgICAgICAgYm9vdGxpbi1tNjhrLTUy
-MDgtdWNsaWJjIFsgOS8zMl06IE9LCiAgICAgICAgICAgICAgYm9vdGxpbi1tNjhrLTY4MDQwLXVj
-bGliYyBbMTAvMzJdOiBPSwogICAgICAgICAgICBib290bGluLW1pY3JvYmxhemVlbC11Y2xpYmMg
-WzExLzMyXTogRkFJTEVECiAgICAgICAgICAgICAgICAgYm9vdGxpbi1taXBzNjRlbC1nbGliYyBb
-MTIvMzJdOiBPSwogICAgICAgICAgICAgICAgICBib290bGluLW1pcHNlbC11Y2xpYmMgWzEzLzMy
-XTogT0sKICAgICAgICAgICAgICAgYm9vdGxpbi1taXBzZWwzMnI2LWdsaWJjIFsxNC8zMl06IE9L
-CiAgICAgICAgICAgICAgICBib290bGluLW9wZW5yaXNjLXVjbGliYyBbMTUvMzJdOiBPSwogICAg
-ICAgICAgYm9vdGxpbi1wb3dlcnBjLWU1MDBtYy11Y2xpYmMgWzE2LzMyXTogT0sKICAgICAgIGJv
-b3RsaW4tcG93ZXJwYzY0bGUtcG93ZXI4LWdsaWJjIFsxNy8zMl06IE9LCiAgICAgICAgICAgICAg
-ICAgIGJvb3RsaW4tcmlzY3YzMi1nbGliYyBbMTgvMzJdOiBPSwogICAgICAgICAgICAgICAgICBi
-b290bGluLXJpc2N2NjQtZ2xpYmMgWzE5LzMyXTogT0sKICAgICAgICAgICAgICAgICAgIGJvb3Rs
-aW4tcmlzY3Y2NC1tdXNsIFsyMC8zMl06IE9LCiAgICAgICAgICAgICAgICBib290bGluLXMzOTB4
-LXoxMy1nbGliYyBbMjEvMzJdOiBPSwogICAgICAgICAgICAgICAgICAgICBib290bGluLXNoNC11
-Y2xpYmMgWzIyLzMyXTogT0sKICAgICAgICAgICAgICAgICAgIGJvb3RsaW4tc3BhcmMtdWNsaWJj
-IFsyMy8zMl06IE9LCiAgICAgICAgICAgICAgICAgIGJvb3RsaW4tc3BhcmM2NC1nbGliYyBbMjQv
-MzJdOiBPSwogICAgICAgICAgICAgICAgICAgYm9vdGxpbi14ODYtNjQtZ2xpYmMgWzI1LzMyXTog
-T0sKICAgICAgICAgICAgICAgICAgICBib290bGluLXg4Ni02NC1tdXNsIFsyNi8zMl06IE9LCiAg
-ICAgICAgICAgICAgICAgIGJvb3RsaW4teDg2LTY0LXVjbGliYyBbMjcvMzJdOiBPSwogICAgICAg
-ICAgICAgICAgICBib290bGluLXg4Ni1pNjg2LW11c2wgWzI4LzMyXTogT0sKICAgICAgICAgICAg
-ICAgICAgYm9vdGxpbi14dGVuc2EtdWNsaWJjIFsyOS8zMl06IE9LCiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIGJyLWFybS1iYXNpYyBbMzAvMzJdOiBPSwogICAgICAgICAgICAgICAgICAgYnIt
-YXJtLWZ1bGwtbm90aHJlYWQgWzMxLzMyXTogT0sKICAgICAgICAgICAgICAgICAgICAgYnItYXJt
-LWZ1bGwtc3RhdGljIFszMi8zMl06IE9LCjMyIGJ1aWxkcywgMSBza2lwcGVkLCAxIGJ1aWxkIGZh
-aWxlZCwgMCBsZWdhbC1pbmZvIGZhaWxlZCwgMCBzaG93LWluZm8gZmFpbGVkCgoKVGhlIGJ1aWxk
-IGxvZyBmb3IgdGhlIG9uZSBmYWlsaW5nIGJ1aWxkIHNob3dzOgogICAgIEVSUk9SOiBVbmtub3du
-IHRhcmdldCBuYW1lICdtaWNyb2JsYXplZWwtc29mdG1tdScKCkNoZWNraW5nIHRoZSBxZW11IGNv
-bmZpZ3VyZSBzY3JpcHQsIGl0IGxvb2tzIGxpa2UgbWljcm9ibGF6ZS1zb2Z0bW11CmlzIHN1cHBv
-cnRlZCwgYnV0IHRoZSBtaWNyb2JsYXplZWwtc29mdG1tdSB0YXJnZXQgd2FzIGRyb3BwZWQuIFRo
-ZQpoaXN0b3J5IHNob3dzIHdoeS4KCgpjb21taXQgNDZhMjVhZTNmMGU3NWUyMzBjMDZlMjE0MzU4
-NTBiMWNkMWM0NGYwNwpBdXRob3I6IFRob21hcyBIdXRoIDx0aHV0aEByZWRoYXQuY29tPgpEYXRl
-OiAgIFRodSBGZWIgMjYgMDk6NDY6MDYgMjAyNiArMDEwMAoKICAgUmVtb3ZlIHRoZSBxZW11LXN5
-c3RlbS1taWNyb2JsYXplZWwgdGFyZ2V0IGZyb20gdGhlIGJ1aWxkCgogICBJdCdzIGJlZW4gZGVw
-cmVjYXRlZCBzaW5jZSB0d28gcmVsZWFzZXMsIHNvIGl0IHNob3VsZCBiZSBmaW5lIHRvCiAgIHJl
-bW92ZSB0aGlzIG5vdy4gVXNlcnMgY2FuIHVzZSB0aGUgcWVtdS1zeXN0ZW0tbWljcm9ibGF6ZSBi
-aW5hcnkKICAgaW5zdGVhZCB0aGF0IGNhbiBoYW5kbGUgYm90aCBlbmRpYW5uZXNzZXMgbm93LgoK
-ICAgUmV2aWV3ZWQtYnk6IFBoaWxpcHBlIE1hdGhpZXUtRGF1ZMOpIDxwaGlsbWRAbGluYXJvLm9y
-Zz4KICAgU2lnbmVkLW9mZi1ieTogVGhvbWFzIEh1dGggPHRodXRoQHJlZGhhdC5jb20+CiAgIE1l
-c3NhZ2UtSUQ6IDwyMDI2MDIyNjA4NDYwOC4xMTI1MS01LXRodXRoQHJlZGhhdC5jb20+CgoKVGhp
-cyBjb21taXQgd2FzIGludHJvZHVjZWQgaW4gdjExLjAuMCwgYW5kIHRoaXMgZG9lcyBuZWVkIGZp
-eGVkLCBzbwpJJ2xsIGdvIGFoZWFkIGFuZCByZXN1Ym1pdCB3aXRoIHRoYXQuCgpCZXN0IHJlZ2Fy
-ZHMsCkpvc2VwaApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Changelog:
+https://wiki.qemu.org/ChangeLog/11.0
+
+Note:
+  - Support for all 32-bit host systems has been removed.
+  - Support for microblazeel has been folded into the microblaze target
+
+Qemu v11.0.0 drops 32-bit support for hosts, all qemu builds must now be
+64-bit. Hosts running 64-bit qemu builds can still emulate 32-bit
+targets.
+
+Confusingly, the qemu package is also capable of being built and running
+on buildroot hosts, and targets. In any case, qemu only supports running
+on 64-bit hosts (which may be buildroot targets), so adjust
+BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET to indicate no support for 32-bit
+buildroot targets, and drop configs for architectures like BR2_arm that
+are implicitly 32-bit only.
+
+Separately, the qemu microblazeel target was removed with commit
+46a25ae3f0e75e230c06e21435850b1cd1c44f07, as the microblaze (qemu)
+target supports both endiannesses, so that's fixed up in the package
+Makefile as well.
+
+Signed-off-by: Joseph Kogut <joseph@anodize.com>
+---
+Changes in v2:
+- Added Config.in comment documenting 64-bit requirement
+- Expanded commit message to explain 32-bit removal [Baruch]
+- Fixed build failure with microblazeel target
+- Added legacy config for microblazeel
+- Link to v1: https://patch.msgid.link/20260512-qemu-v11-0-0-v1-1-776ebffbb3af@anodize.com
+
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>
+---
+ Config.in.legacy       |  8 ++++++++
+ package/qemu/Config.in | 12 ++----------
+ package/qemu/qemu.hash |  2 +-
+ package/qemu/qemu.mk   |  8 +++++---
+ 4 files changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ead9ceaa08..1f42c1e68b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2026.05"
+ 
++config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
++	bool "qemu target microblazeel removed"
++	select BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
++	select BR2_LEGACY
++	help
++	  Version 11.0.0 of qemu dropped support for microblazeel,
++	  which is now supported by the microblaze target.
++
+ config BR2_KERNEL_HEADERS_6_19
+ 	bool "kernel headers version 6.19.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 0b16c8c284..c79f115b7a 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -1,11 +1,9 @@
+ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	bool
++	# qemu requires a 64-bit host
++	default n if !BR2_ARCH_IS_64
+ 	# Only tested on these architectures
+ 	default y if BR2_aarch64
+-	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+-	default y if BR2_i386
+-	default y if BR2_mips
+-	default y if BR2_mipsel
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+ 	default y if BR2_riscv
+@@ -223,12 +221,6 @@ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
+ 	help
+ 	  Xilinx MicroBlaze soft processor.
+ 
+-config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
+-	bool "microblazeel"
+-	select BR2_PACKAGE_QEMU_FDT if BR2_PACKAGE_QEMU_SYSTEM
+-	help
+-	  Xilinx MicroBlaze EL soft processor.
+-
+ config BR2_PACKAGE_QEMU_TARGET_MIPS
+ 	bool "mips"
+ 	help
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index f8e750225f..7c7325a6ce 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  9e30ad1b8b9f7b4463001582d1ab297f39cfccea5d08540c0ca6d6672785883a  qemu-10.2.0.tar.xz
++sha256  c04ca36012653f32d11c674d370cf52a710e7d3f18c2d8b63e4932052a4854d6  qemu-11.0.0.tar.xz
+ sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
+ sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index b7007e3b98..ff4a83ed72 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, check whether the list of supported targets
+ # needs to be updated.
+-QEMU_VERSION = 10.2.0
++QEMU_VERSION = 11.0.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = https://download.qemu.org
+ QEMU_SELINUX_MODULES = qemu virt
+@@ -70,7 +70,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-softmmu
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-softmmu
+@@ -107,7 +106,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-linux-user
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-linux-user
+@@ -386,6 +384,7 @@ HOST_QEMU_DEPENDENCIES = \
+ #       x86_64          x86_64
+ #       m68k            m68k
+ #       microblaze      microblaze
++#       microblazeel    microblaze
+ #       mips            mips
+ #       mipsel          mipsel
+ #       mips64          mips64
+@@ -416,6 +415,9 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),i686)
+ HOST_QEMU_ARCH = i386
+ endif
++ifeq ($(HOST_QEMU_ARCH),microblazeel)
++HOST_QEMU_ARCH = microblaze
++endif
+ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ HOST_QEMU_ARCH = ppc
+ endif
+
+---
+base-commit: 9684cb9b4406e01683a9b5136100d81040d56aa0
+change-id: 20260512-qemu-v11-0-0-0862bf3b72cc
+
+Best regards,
+--  
+Joseph Kogut <joseph@anodize.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
