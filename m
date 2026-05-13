@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C93CD343F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE719CD4F48
 	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F604841F7;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EB7E605A8;
 	Fri, 15 May 2026 13:28:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zBBHv1FiG1rV; Fri, 15 May 2026 13:28:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24A9884211
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778851714;
-	bh=esFnU0J1RxaEnBZUme+7qmlKuhtRNw7VpizmXN5RhaY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=liOE95R+12Wsvklnj8HFgL+jZOBGJ93Eu7xfXFIt8RSryzRywkN0Ah162h8stMLWU
-	 7quRDRyJkqftpm6Th6JqP/Ok0eTqqrRnYXvO1VNRVdKKF8et/BKCnZS9elFlMZ2RDm
-	 1UV8bNrUPboligSAj7AH7mn29dp8ZNqpMhdk7oODdvViGF1Cf+orddDjG3Lhxtr0KC
-	 kO91M0rDFoKwOd+rghiObzkScH1T/+JrfrlSRTuMLoMVHxkVTqYUY1l5HqjM4zXJA1
-	 iHauKUzU3t5zhwcykEahALfNn3oOzQmV8yBrdGkFZAEtTkLYHAXEbjyc0oP0dRF/RC
-	 2hzptOi82qarg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24A9884211;
-	Fri, 15 May 2026 13:28:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 28D5936F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AAEE61558
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOWGcIY_T_0y for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:28:21 +0000 (UTC)
+ id f5Ob4dX27VR6; Fri, 15 May 2026 13:28:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD8761578
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778851713;
+	bh=9SJI1wSlcyaBH4kTps8nlRfqxWZ+75ObeR4rjl9lx4s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=lt2bwIj2aDXb6MD7VUCi5Jp9OtzK5kNjsxlHMdY2dKxS0cwGajc3k1MBwhSl7PslW
+	 altxeMVkPCLdaKRMb83Rbq9DkgJlSFjGW0ehbOTpeijNWD7RzyWdNnACodWuqWsboE
+	 jfPj5dS47V5imeCGiSxcx8EM9QX81gvdk9Z+k1QeQvAmAMUfpOX0+NGLXPuO7mDkuJ
+	 qKEysQn+swWOprdqet2ehhcCD2tJA/Uso4aLPA1MN/dRg12MRcNsIk5JqCTj/Kf40y
+	 1kgzmVOFVq8990WnwKxoFiqSdpPQ/v/Ui+cNgJZmODGfGkzCKlawMR+k+SVRbNpr5u
+	 FZuMt6lHwBUJQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAD8761578;
+	Fri, 15 May 2026 13:28:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ED7542B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5713A8420E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qAB34Vr4uXEM for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B6EA61549
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B78E9841E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B6EA61549
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B78E9841E4
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C180E8634F; Fri, 15 May 2026 13:28:15 +0000 (UTC)
+ id 16A0986354; Fri, 15 May 2026 13:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 12 May 2026 15:18:41 +0200
+Date: Wed, 13 May 2026 15:18:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f55a6134b7b7664322a594f89ba380d33499cbc7
-X-Git-Newrev: 11f509d1d27b845c3fad1468cd8c80b0972dd9e7
+X-Git-Oldrev: f6c9fc252a4f6d8dddc9c639b40a49d6ba4b6a73
+X-Git-Newrev: 092e63a37b6ff85d50d8b3bcd5cc278ba9f5c14e
 X-Patchwork-Hint: ignore
-Message-Id: <20260515132815.C180E8634F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/lcms2: patch
- CVE-2026-41254, CVE-2026-42798
+Message-Id: <20260515132817.16A0986354@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/netsnmp: enable
+ parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,189 +72,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1391518365487279381=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1391518365487279381==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/11f509d1d27b845c3fad1468cd8c80b0972dd9e7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/092e63a37b6ff85d50d8b3bcd5cc278ba9f5c14e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-- CVE-2026-41254:
-    Little CMS (lcms2) through 2.18 has an integer overflow in CubeSize in
-    cmslut.c because the overflow check is performed after the
-    multiplication.
+Buildroot commit 7643670052a7adc1c2a5f275664774c6d50e6a3d disabled
+parallel builds in 2012.
 
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-41254
- - https://github.com/mm2/Little-CMS/commit/da6110b1d14abc394633a388209abd5ebedd7ab0
- - https://github.com/mm2/Little-CMS/commit/e0641b1828d0a1af5ecb1b11fe22f24fceefd4bc
+Upstream fixed the problem in 2021:
+https://github.com/net-snmp/net-snmp/commit/855e1c28dad53d6263c6c0c302438d2dc3128cc5
+https://github.com/net-snmp/net-snmp/commit/9ea3d8b93c9bb7da7fea13ee6c92356a6b82a5fb
+with version 5.9.1 which was added to buildroot with commit
+83b4337354014a5425a0ee081b94d4d0991f8d47.
 
-- CVE-2026-42798:
-    Little CMS (lcms2) 2.16 through 2.18 before 2.19 has an integer
-    overflow in ParseCube in cmscgats.c.
+Tested with -j100.
 
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-42798
- - https://github.com/mm2/Little-CMS/commit/6a686019825a89b715d16671f18d049523354176
-
-(cherry picked from commit c409050184c743ebcf65640cc8eb5c56cc9f570e)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit ae4c2baab90101216f52362eba7740353923f2e4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-Fix-integer-overflow-in-CubeSize.patch    | 28 ++++++++++++++++
- package/lcms2/0002-check-overflow.patch            | 34 +++++++++++++++++++
- ...seCube-integer-overflow-in-LUT-allocation.patch | 38 ++++++++++++++++++++++
- package/lcms2/lcms2.mk                             |  7 ++++
- 4 files changed, 107 insertions(+)
+ package/netsnmp/netsnmp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/lcms2/0001-Fix-integer-overflow-in-CubeSize.patch b/package/lcms2/0001-Fix-integer-overflow-in-CubeSize.patch
-new file mode 100644
-index 0000000000..84ccf4142b
---- /dev/null
-+++ b/package/lcms2/0001-Fix-integer-overflow-in-CubeSize.patch
-@@ -0,0 +1,28 @@
-+From da6110b1d14abc394633a388209abd5ebedd7ab0 Mon Sep 17 00:00:00 2001
-+From: Marti Maria <marti.maria@littlecms.com>
-+Date: Thu, 19 Feb 2026 09:07:20 +0100
-+Subject: [PATCH] Fix integer overflow in CubeSize()
-+
-+Thanks to @zerojackyi for reporting
-+
-+CVE: CVE-2026-41254
-+Upstream: https://github.com/mm2/Little-CMS/commit/da6110b1d14abc394633a388209abd5ebedd7ab0
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/cmslut.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/cmslut.c b/src/cmslut.c
-+index 10891486..b2452090 100644
-+--- a/src/cmslut.c
-++++ b/src/cmslut.c
-+@@ -460,7 +460,8 @@ void EvaluateCLUTfloatIn16(const cmsFloat32Number In[], cmsFloat32Number Out[],
-+ static
-+ cmsUInt32Number CubeSize(const cmsUInt32Number Dims[], cmsUInt32Number b)
-+ {
-+-    cmsUInt32Number rv, dim;
-++    cmsUInt32Number dim;
-++    cmsUInt64Number rv;
-+ 
-+     _cmsAssert(Dims != NULL);
-+ 
-diff --git a/package/lcms2/0002-check-overflow.patch b/package/lcms2/0002-check-overflow.patch
-new file mode 100644
-index 0000000000..4524db88fc
---- /dev/null
-+++ b/package/lcms2/0002-check-overflow.patch
-@@ -0,0 +1,34 @@
-+From e0641b1828d0a1af5ecb1b11fe22f24fceefd4bc Mon Sep 17 00:00:00 2001
-+From: Marti Maria <marti.maria@littlecms.com>
-+Date: Thu, 12 Mar 2026 22:57:35 +0100
-+Subject: [PATCH] check for overflow
-+
-+Thanks to Guanni Qu for detecting & reporting the issue
-+
-+CVE: CVE-2026-41254
-+Upstream: https://github.com/mm2/Little-CMS/commit/e0641b1828d0a1af5ecb1b11fe22f24fceefd4bc
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/cmslut.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/cmslut.c b/src/cmslut.c
-+index a60baf98..65c935fc 100644
-+--- a/src/cmslut.c
-++++ b/src/cmslut.c
-+@@ -468,12 +468,12 @@ cmsUInt32Number CubeSize(const cmsUInt32Number Dims[], cmsUInt32Number b)
-+     for (rv = 1; b > 0; b--) {
-+ 
-+         dim = Dims[b-1];
-+-        if (dim <= 1) return 0;  // Error
-+-
-+-        rv *= dim;
-++        if (dim <= 1) return 0;  
-+ 
-+         // Check for overflow
-+         if (rv > UINT_MAX / dim) return 0;
-++
-++        rv *= dim;
-+     }
-+ 
-+     // Again, prevent overflow
-diff --git a/package/lcms2/0003-Fix-for-ParseCube-integer-overflow-in-LUT-allocation.patch b/package/lcms2/0003-Fix-for-ParseCube-integer-overflow-in-LUT-allocation.patch
-new file mode 100644
-index 0000000000..d53c3ad7f2
---- /dev/null
-+++ b/package/lcms2/0003-Fix-for-ParseCube-integer-overflow-in-LUT-allocation.patch
-@@ -0,0 +1,38 @@
-+From 6a686019825a89b715d16671f18d049523354176 Mon Sep 17 00:00:00 2001
-+From: Marti Maria <marti.maria@littlecms.com>
-+Date: Thu, 19 Feb 2026 08:48:50 +0100
-+Subject: [PATCH] Fix for ParseCube integer overflow in LUT allocation
-+
-+thanks to @zerojackyi for reporting
-+
-+
-+CVE: CVE-2026-42798
-+Upstream: https://github.com/mm2/Little-CMS/commit/6a686019825a89b715d16671f18d049523354176
-+[thomas: backport  to 2.16]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/cmscgats.c | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/cmscgats.c b/src/cmscgats.c
-+index 252db22d..3d819fad 100644
-+--- a/src/cmscgats.c
-++++ b/src/cmscgats.c
-+@@ -3128,7 +3128,16 @@ cmsBool ParseCube(cmsIT8* cube, cmsStage** Shaper, cmsStage** CLUT, char title[]
-+ 
-+             if (lut_size > 0) {
-+ 
-+-                int nodes = lut_size * lut_size * lut_size;
-++                int nodes;
-++                
-++                /**
-++                * Professional LUT‑generation tools (e.g., Nobe LutBake) list 65×65×65 as their highest supported size.                
-++                */
-++                if (lut_size > 65)
-++                    return SynError(cube, "LUT size '%d' is over maximum of 65", lut_size);
-++
-++                nodes = lut_size * lut_size * lut_size;
-++
-+ 
-+                 cmsFloat32Number* lut_table = _cmsMalloc(cube->ContextID, nodes * 3 * sizeof(cmsFloat32Number));
-+                 if (lut_table == NULL) return FALSE;
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 92aeff8890..474e1a9de3 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -14,6 +14,13 @@ LCMS2_INSTALL_STAGING = YES
- # tiff is only used by tificc sample
- LCMS2_CONF_OPTS = --without-tiff
- 
-+# 0001-Fix-integer-overflow-in-CubeSize.patch
-+# 0002-check-overflow.patch
-+LCMS2_IGNORE_CVES += CVE-2026-41254
-+
-+# 0003-Fix-for-ParseCube-integer-overflow-in-LUT-allocation.patch
-+LCMS2_IGNORE_CVES += CVE-2026-42798
-+
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LCMS2_CONF_OPTS += --with-jpeg
- LCMS2_DEPENDENCIES += jpeg
-
---===============1391518365487279381==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 32d3b1aac0..9082599168 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -44,7 +44,6 @@ NETSNMP_CONF_OPTS = \
+ 	--disable-manuals
+ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+-NETSNMP_MAKE = $(MAKE1)
+ NETSNMP_CONFIG_SCRIPTS = net-snmp-config
+ # We're patching configure.d/config_project_types
+ NETSNMP_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1391518365487279381==--
