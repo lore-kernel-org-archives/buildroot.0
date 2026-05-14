@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 954EBCD4F39
-	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 13:44:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFE0CD4F25
+	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 15:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 544CC60E91;
-	Thu, 14 May 2026 13:44:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xg2xfUyKX18s; Thu, 14 May 2026 13:44:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AF3960E80
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778766245;
-	bh=ZxfcZSPOBVg4mJJKr1QB2dhwAGrU79aOn5eEI93wi8Q=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=P/FXCVbeCfdyoIV0AQ55V6bbVfq9LgOnFhGm2ylt6kRDkvrnErhiXFlbG9KD/Mnv8
-	 Q4uV1yJ3idnyVvmFUHWFN833nYW2o80q9rfNx8erLC5WGhK3IwwEitakASPnx1le2S
-	 LTD4r+DTI/FskFyxhxEoztldyVxqPqPx832kRRycrMEGQuSTcfwhbEp2V5kjyAT9bW
-	 kyN8i78eiazBC8+6W+3YPMK5kl/iBbZFHlLanwhT8zQEwdVLy67lZ+3ZWXhOVrsEvh
-	 5092fgr9RoJqseQgHI28Oa8rCdlnNM+YVCbL83WvgyfF5oaQFuDxMoTS8Y5BWlX7z5
-	 KW3F/0thBS5yQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AF3960E80;
-	Thu, 14 May 2026 13:44:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C0C8236F
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:44:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1B1582016
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:44:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B20998234B;
+	Thu, 14 May 2026 15:02:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVqXIq0MxRMr for <buildroot@buildroot.org>;
- Thu, 14 May 2026 13:44:03 +0000 (UTC)
+ id MpP19h9mkeHT; Thu, 14 May 2026 15:02:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E6A8234D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778770928;
+	bh=eb9khQLK9AveCrTlEkveWEKHCnkCH6g0pKT2iKznEOU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ZS+qOBYIVuaUifN3vN5nCHKVizNxeA8HT50Vbl5oF3lwlsTMmBu27SO6Zm0Vvyu7y
+	 qzK4bZgrAal9lyVzEu3acm0FdmbQz1rqWHIbTS8dQjvreJVn9XBmVDujkc6Bx1XtFJ
+	 fJmEpET4bLDerhyw8oZrE58xQXC5YJp2cJYqFXlSTQBIVvhtBTfAc1UEYMzilmkrzC
+	 +EC/tcSZORBm6g1EXEuyxVBAcrpAA95WWK9DTDOSChIDHwaBDxAMdJDH8EPgmRrUSC
+	 cfg1bf40NxUVkx2lGnL3D4hMEH9edMN45tubtUwPhstV7Z3NioZejKHf+hrJ2fa5HS
+	 wGCLTAJHWWpVQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0E6A8234D;
+	Thu, 14 May 2026 15:02:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52F4E37F
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 15:02:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C80F40F60
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 15:02:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kWIOgPVl4XoI for <buildroot@buildroot.org>;
+ Thu, 14 May 2026 15:02:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00F9981EAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E86940F56
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00F9981EAE
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:44:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E86940F56
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 15:02:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B240086220; Thu, 14 May 2026 13:43:57 +0000 (UTC)
+ id 4ED2B8622D; Thu, 14 May 2026 15:02:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 May 2026 15:27:38 +0200
+Date: Thu, 14 May 2026 15:44:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0452451195518ab694bb488b6e5e8b2d5073551e
-X-Git-Newrev: 11e5c1ffdff1bfb8609caeb769ef23c4a269dd30
+X-Git-Oldrev: 768f16502ad42b0b4496c8df1605173deeb50ff9
+X-Git-Newrev: a9b08e522c6641cc9bf18d054a88c9641fbd41b6
 X-Patchwork-Hint: ignore
-Message-Id: <20260514134357.B240086220@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-cachelib: bump
- version to 0.14.0
+Message-Id: <20260514150201.4ED2B8622D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/checkpolicy: bump
+ version to 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/11e5c1ffdff1bfb8609caeb769ef23c4a269dd30
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a9b08e522c6641cc9bf18d054a88c9641fbd41b6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+https://github.com/SELinuxProject/selinux/releases/tag/3.10
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-cachelib/python-cachelib.hash | 8 ++++----
- package/python-cachelib/python-cachelib.mk   | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-cachelib/python-cachelib.hash b/package/python-cachelib/python-cachelib.hash
-index 6a50350aa1..0ae8e5f10e 100644
---- a/package/python-cachelib/python-cachelib.hash
-+++ b/package/python-cachelib/python-cachelib.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cachelib/json
--md5  fc25e9c9165cd5fd42ce282c2ba540fd  cachelib-0.13.0.tar.gz
--sha256  209d8996e3c57595bee274ff97116d1d73c4980b2fd9a34c7846cd07fd2e1a48  cachelib-0.13.0.tar.gz
-+md5  4159f620b8800fbe104f20ea4702e16b  cachelib-0.14.0.tar.gz
-+sha256  73fedcadd0ba818fb2bb9f3c7cd5fcc2a71e86286f1842f55f28d500faee17f1  cachelib-0.14.0.tar.gz
- # Locally computed sha256 checksums
--sha256  cd418120812dc2626281ae027e81b648229d166b5aca7472cecd510038d36e7d  LICENSE.rst
--sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-+sha256  cd418120812dc2626281ae027e81b648229d166b5aca7472cecd510038d36e7d  LICENSE.txt
-+sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
-diff --git a/package/python-cachelib/python-cachelib.mk b/package/python-cachelib/python-cachelib.mk
-index 7361a21f4f..937925e1e3 100644
---- a/package/python-cachelib/python-cachelib.mk
-+++ b/package/python-cachelib/python-cachelib.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 442ac883ee..302122426b 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  dd85b0173ca6e96b22ebf472bcbccf04eb10e1aa07add8f1b7e0e9e8e995e027  checkpolicy-3.9.tar.gz
++sha256  2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59  checkpolicy-3.10.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index df3da2efdd..abeeed1033 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CACHELIB_VERSION = 0.13.0
-+PYTHON_CACHELIB_VERSION = 0.14.0
- PYTHON_CACHELIB_SOURCE = cachelib-$(PYTHON_CACHELIB_VERSION).tar.gz
--PYTHON_CACHELIB_SITE = https://files.pythonhosted.org/packages/1d/69/0b5c1259e12fbcf5c2abe5934b5c0c1294ec0f845e2b4b2a51a91d79a4fb
--PYTHON_CACHELIB_SETUP_TYPE = setuptools
-+PYTHON_CACHELIB_SITE = https://files.pythonhosted.org/packages/66/a5/5eb041dbee71766704d44cf5dfb6950ab018be0fd02cd763ade09869e33c
-+PYTHON_CACHELIB_SETUP_TYPE = flit
- PYTHON_CACHELIB_LICENSE = BSD-3-Clause
--PYTHON_CACHELIB_LICENSE_FILES = LICENSE.rst docs/license.rst
-+PYTHON_CACHELIB_LICENSE_FILES = LICENSE.txt docs/license.rst
- 
- $(eval $(python-package))
+-CHECKPOLICY_VERSION = 3.9
++CHECKPOLICY_VERSION = 3.10
+ CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(CHECKPOLICY_VERSION)
+ CHECKPOLICY_LICENSE = GPL-2.0
+ CHECKPOLICY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
