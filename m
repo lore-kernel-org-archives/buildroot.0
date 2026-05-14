@@ -4,111 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A346ACD4F25
-	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 16:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91BF1CD4F25
+	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 17:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B38060C1F;
-	Thu, 14 May 2026 16:45:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18E9060E7C;
+	Thu, 14 May 2026 17:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LvGCKZWEcbGN; Thu, 14 May 2026 16:45:02 +0000 (UTC)
+ id m92bHpJHUeYU; Thu, 14 May 2026 17:43:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E12160F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D654560BB1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778777102;
-	bh=12csxA4C1qzyWz6uOHmY1omHDsiQ/RZ5xpKOhDJkUjo=;
+	s=default; t=1778780619;
+	bh=1nMtAoLFdolCnmP8Y+c+a/vPfutwSyZ3dvNv14CDC1U=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LI21va5Oa0pBY3R0/Z0fEodIe7SfEO3bYW3JOwhMUGUeKhR6XqQJlaB+0US1yzM3a
-	 QP7fAkOHB6uuy+uGyOpF+QDKMQ1yGPaWpOxZRY8oEmxo2oDpa5zghlu+uti1lesjCY
-	 5d7UyPND5jmzYQvhSICMdyI/7Vlr5801XJyJel97vBANvIMy4xZtBvRjCrlrgSh1FR
-	 ZWsG78k6tq0I14jhHJ1A83X0m9jtyN4Ug6WW8hqFyGJUEaFTh+1HD+XtUCMtBkAvuQ
-	 KavNzZTfoZwtDPLYHbnRwN6n89a6L9uG1mPGTgy3b+lLxXPJplJMCl9r1K56vSnjo1
-	 IHTKAmm7Wfhyw==
+	b=cAdJULtd5QCjD9mDUm9aj+DvtEO04kYno61sI6xKHFr+2sQ+e7FPkWJ4wfNH9kYAs
+	 Ooi6KAL+AQYaMAe6auEjxT10fr4LQ7eRN7VOFUzvhqo2FPFS+05KGp4N/ipYv6U5rU
+	 OGHgopglG8vJjpAIfFJL9hn6a37p2ylKm8s3nsSqdHu5nVwUEuSdW4dHbAXLz6IiT3
+	 lzuK6bsQgz3xG4+mfHNnSpJMXI1xCqZyUGJuBJUK66UlljPjRolMAiCaohd8gnsTdq
+	 DAiGulCAaoLTldMChLYVAvQOTjEUD9H7NpM67MyarMpgue3zH7WWIXpbGjcAcTJJZu
+	 bZgccHrd1prqg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E12160F13;
-	Thu, 14 May 2026 16:45:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D654560BB1;
+	Thu, 14 May 2026 17:43:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A962236F
- for <buildroot@buildroot.org>; Thu, 14 May 2026 16:45:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EDCB737F
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 17:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A699540767
- for <buildroot@buildroot.org>; Thu, 14 May 2026 16:45:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF7034079D
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 17:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4gU7ks-Bq0bQ for <buildroot@buildroot.org>;
- Thu, 14 May 2026 16:45:01 +0000 (UTC)
+ id qRwug7w4uhtE for <buildroot@buildroot.org>;
+ Thu, 14 May 2026 17:43:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 024DD40738
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 024DD40738
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 024DD40738
- for <buildroot@buildroot.org>; Thu, 14 May 2026 16:45:00 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-366139223e4so5029653a91.0
- for <buildroot@buildroot.org>; Thu, 14 May 2026 09:45:00 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::f29; helo=mail-qv1-xf29.google.com;
+ envelope-from=rubacha.jack03@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CD8F040799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD8F040799
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
+ [IPv6:2607:f8b0:4864:20::f29])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD8F040799
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 17:43:37 +0000 (UTC)
+Received: by mail-qv1-xf29.google.com with SMTP id
+ 6a1803df08f44-8c921396e37so12156886d6.2
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 10:43:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778777100; x=1779381900;
+ d=1e100.net; s=20251104; t=1778780616; x=1779385416;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JADQay7f3GHOqgGFLhVexDrOZUrX5JpccD2+0PebL2Q=;
- b=WvD3EAuqjuYWctwgQXk5s+Nv4YyLQK3C7UonQD2ftwR6yIOrZaPVmuUjhA8b6Aks20
- 1QPyjcPJ02izvVhaPfhsx27aY7dT+kYNjkIHQkCFMSzcJmpZRyeB58XWq4MdrAIXJRAU
- iDdnfeKKgzfrlAQAIB58EaebehUAAXQNhYANDa4c3EBvaBmWNg9CmM7eoSqBHKzVO9VD
- oE/0fSOTFsUNBo/7cLmJuq+zAaMFaVUz5kMmtrMKCpx6lM+MsSQxcN00q7K3w0ogbRYV
- cOO9f6Iin+l2M85lkpDXi9o+xWZwPRX21Y6CNMpM2Zr4fZ8tFIdk13MSwSX4wkLKspN9
- amfA==
-X-Gm-Message-State: AOJu0Yy4aD7vOqOKqXjCG5LVaCb4kGB9cJje0EnrgWrlH5H9lXU8iM1q
- Tuxz2yk9dVS7PMJykanJx82ZmZy1W20eGZvJEL8aknxcMVbJFBaH4buRbXGs3jIDb7c=
-X-Gm-Gg: Acq92OGq2IuiC+JFtCxEk0IPwJeexn///spVrSxUtk7HVKB3ucsAxxN9iW38u2YQI5M
- v1EK3foBV9tN7cBIwzC+uiP6AKArMcJYE+Y/chOcMb94+nwAmdX5pwavOcbt0ntnwzcIUlRRrK9
- Mxsu+SQuwDucmA0z3RoGlsnYCpJ0el8ENFHBz9vU5PoOl0amCQslpCfKK3Ewe6FXblfYd3+Xp2M
- XUlqMyGmOhFE7vMMxpNLM9i8h9yp79eugVdrczViZQPk3K/S4FqQaWQfqITcjUV5DWSdoxzJZxr
- SWM2sh+bfSmpEEk8iMdZjA4Z/ohDY5wtXCNHEVjA1gqr+oepLimdP14WBQvRyKDyoxef39HzqMT
- 80tbcmEfHX0kbSBCD5DJuhDiwVIqifGW31zj75Ze7O2oGAR4SJGZXNdezbAiKCrkIfCYBxL49+w
- lz33ur/3nSfjJMnRWRbX1MCVX2zubUHHF378qP6VRj9tt+sgWGP9+UcDR0a87mtNHMDd8a
-X-Received: by 2002:a17:90b:2fc4:b0:368:85fb:7b8b with SMTP id
- 98e67ed59e1d1-36951cb936amr145566a91.22.1778777099620; 
- Thu, 14 May 2026 09:44:59 -0700 (PDT)
-Received: from fedora.taildae27b.ts.net
- ([2409:40e5:100a:b5ee:87c:e578:2b2e:422b])
+ bh=lmbBKaSEisGrAD7cU7F1lKmxxm19dQ5PA/5hxBcdULA=;
+ b=O/+WXMxTpI4ZlG1utd6uYO1JHuAVgf77wKLei6tjrXbqG7JC1pVh4AVbTk1tcDcPIW
+ VGLzwzXU4nP3Hehmk5zHIGiFu06DtJ+0ZRI/AzkH+K1429DTs30J62JFAPz4tu4vecD3
+ PiC6G2JGNc8jGczIzoxwO1XOHptlWHr6IPndqJ3Ue6AeU9nWBk/Hc9/9aCi4X+0l3tKc
+ BeWigMj1gcQ32n02kyVgcI/x08nuSa/Oq2y2QCNYxRRE1vzluFg97z/CL4fJjUALE4d9
+ QPNIMnnHGiF0Elnk8mnvSuBYi8xNc4aCibOpqVJ9KESsSRytIbBgAcd3c/lb+27q43ls
+ DmkA==
+X-Gm-Message-State: AOJu0YzqVMYEgY8wRKcurYGfFY9R0q6sffBCWke+z4TLXkjIa8BCz5DQ
+ uE/mwCZ9FuS8f4t4GzMdy2cbgTiJ/Jyxp0yn47mYuuJVJpTPLzCv9biBJoyBd87+
+X-Gm-Gg: Acq92OHv/WjYjZnxvzS7xmMSgWn3PT8RCvOLqurLL2gQ6gh3e7sB3u5WUw6kPs6cSJD
+ DfKqXOTYEkbDkXCtGxMJd2Ogx/hWVok/erdW3zsllgKYUhWDYLGmPjOqSiIFL+NMEyLf2zZXLs5
+ 0S2xLBb+umpMIqKh6Kl8zVwoVLUoArdyK9x/8NCDO5S9KpbL8kw77vQlAMGTQegvL5jkOdtTf/1
+ uplz3CR4zSNcceTWv4Rb+y/jZOT2dc+OTu4uhOoox4naxHlaQXMO17Py9FYeOHmlTJNkPGV5jg5
+ 9ZOJLvoM6jU1TMbfSs+z4S/z7lEN7oOUEtQKAnzH1XORSbjsrK6a5giU65xMbs1bB5stm2CKlwP
+ Ibe0GmoLiDgIURl0lhA7V0MbOxItpGPyRd/DTCPqnn6MjN7DwQGEBwGJyAPQ961v6b37pAHM9wX
+ zVMqAcLZNXRMfIotGki3pEj235977juB8Kqo/QxhouSqv+qYjWp8pxMw==
+X-Received: by 2002:a05:6214:1ccf:b0:8c2:f848:4962 with SMTP id
+ 6a1803df08f44-8ca0f66a36cmr7856186d6.17.1778780616165; 
+ Thu, 14 May 2026 10:43:36 -0700 (PDT)
+Received: from jack-xps159570.neu.edu ([68.191.46.179])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-369512424b2sm167148a91.3.2026.05.14.09.44.55
+ 6a1803df08f44-8c90c37bc64sm28242316d6.48.2026.05.14.10.43.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 May 2026 09:44:59 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Thu, 14 May 2026 10:43:35 -0700 (PDT)
+From: Jack Rubacha <rubacha.jack03@gmail.com>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>
-Date: Thu, 14 May 2026 22:14:47 +0530
-Message-ID: <20260514164448.92054-1-chakrabortyshubham66@gmail.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Jack Rubacha <rubacha.jack03@gmail.com>
+Date: Thu, 14 May 2026 13:41:21 -0400
+Message-ID: <20260514174120.17886-2-rubacha.jack03@gmail.com>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778777100; x=1779381900; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1778780616; x=1779385416; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JADQay7f3GHOqgGFLhVexDrOZUrX5JpccD2+0PebL2Q=;
- b=Kzk3GS6i3908VeDryZv8//JfdFoiM6xaOyaYvZWi4dpiTr25x5wHrIN2mGAvDJega/
- EPfPx1ELvG0LumHCYnzvwnKtyU42fYxC3ZA63f+kJCyHMgCq8uJp8t7ZTJ4egcbA80bf
- NkPT994G3pJQ9CAvPwA0mwgFYjEo6nWFXM35nZ9kkziZZ8wdnHH+ow0/BN4Qcs3fN8r/
- H4X7CT6hd0NWznp8axhh6nIRrgOaHhTcdwHpNZV3D4CQGVRFaQnUx1rDS8sUOnVqyy/h
- 0u8csyayiYg3jRpAaspR2Z9p+DRejiz9KdDZhsLn78/9Fr8+KA3NLsYwr1EyN3ZC2rpa
- C0yg==
+ bh=lmbBKaSEisGrAD7cU7F1lKmxxm19dQ5PA/5hxBcdULA=;
+ b=VM+yWPw5jKkR4yijUm6YWUpS+kMGRooEQCyIEZ24+MM1tm/IzySUoCDp4bsFhTk0If
+ 5lu3WFkHrmhAttcEeVrHrENPUtlWVGWXk5z9MPlwiLPI92dGFfofg4vAGo0c7icrHlGZ
+ kDiwaU4nwTEoVX7aJKQ6O4vppDevC9h4RSqu6iOKo594WD855aO/EHF0GPIm6NDfhe0M
+ GQh8Z2BXSldZtUGk7F6X4RbSxmmbgYxLbj97mjoAduP1GVGCPfYBwOpbyvx36gXpHzXc
+ wjdxT5ckDlwUahmZhCcQGZEZDJwdrw28d4+tatJLnsVfHvuSNtKaDZlraJtIK5u0oPQG
+ NRwg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=Kzk3GS6i
-Subject: [Buildroot] [PATCH] package/git: Fix build on older glibc
+ header.s=20251104 header.b=VM+yWPw5
+Subject: [Buildroot] [PATCH v4] package/qt6/qt6grpc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,79 +126,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The build of the 'git' package fails on older Linux toolchains (like
-bootlin-aarch64-glibc-old which uses glibc 2.24) with the following
-error:
-compat/posix.h:159:24: fatal error: sys/random.h: No such file or directory
- #include <sys/random.h>
+Adds the QT GRPC module (containing Qt Protobuf as well).
 
-This happens because Git recently made 'getrandom' the default
-CSPRNG_METHOD on Linux, which unconditionally includes <sys/random.h>.
-However, this header was only introduced in glibc 2.25.
-Fix this by using __has_include to check for the header's existence.
-If it's missing, undefine HAVE_GETRANDOM so Git falls back to its
-/dev/urandom implementation.
-
-Command to reproduce:
-- ./utils/test-pkg -p git -c git-subtree.config -T bootlin-aarch64-glibc-old
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Signed-off-by: Jack Rubacha <rubacha.jack03@gmail.com>
 ---
- .../git/0001-fix-build-on-older-glibc.patch   | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/git/0001-fix-build-on-older-glibc.patch
+Changes v3 -> v4:
+ - Update .hash to Qt 6.9.1
 
-diff --git a/package/git/0001-fix-build-on-older-glibc.patch b/package/git/0001-fix-build-on-older-glibc.patch
+Changes v2 -> v3:
+ - Make license GPL-3.0-only
+ - Add newline for readability
+ - Alphabetize host dependencies
+
+Changes v1 -> v2:
+ - Remove 'selects BR2_PACKAGE_HOST_QT6BASE' as it is a make dependency
+ - Changes help text to clearly state both modules
+ - Adds a git repository link to the help text
+ - Cleans up license files to show all necessary files, matches hashfile
+ - Make multiline clauses alphabetically ordered
+---
+ package/qt6/Config.in            |  1 +
+ package/qt6/qt6grpc/Config.in    |  7 ++++++
+ package/qt6/qt6grpc/qt6grpc.hash | 10 ++++++++
+ package/qt6/qt6grpc/qt6grpc.mk   | 43 ++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/qt6/qt6grpc/Config.in
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.hash
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.mk
+
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 10594691cf..9c297b321e 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -48,6 +48,7 @@ source "package/qt6/qt6charts/Config.in"
+ source "package/qt6/qt6core5compat/Config.in"
+ source "package/qt6/qt6declarative/Config.in"
+ source "package/qt6/qt6graphs/Config.in"
++source "package/qt6/qt6grpc/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
+ source "package/qt6/qt6mqtt/Config.in"
+ source "package/qt6/qt6multimedia/Config.in"
+diff --git a/package/qt6/qt6grpc/Config.in b/package/qt6/qt6grpc/Config.in
 new file mode 100644
-index 0000000000..b95ca94c23
+index 0000000000..3d82cfcb0c
 --- /dev/null
-+++ b/package/git/0001-fix-build-on-older-glibc.patch
-@@ -0,0 +1,45 @@
-+From c53f54a87503ae729640a6f12302778a980f84d9 Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Thu, 14 May 2026 21:09:07 +0530
-+Subject: [PATCH] compat/posix.h: fix build on older glibc (missing sys/random.h)
++++ b/package/qt6/qt6grpc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QT6GRPC
++	bool "qt6grpc"
++	help
++	  This package provides the Qt GRPC and Protobuf modules:
 +
-+The build of the 'git' package fails on older Linux toolchains (like
-+bootlin-aarch64-glibc-old which uses glibc 2.24) with the following
-+error:
++	  https://doc.qt.io/qt-6/qtgrpc-index.html
++	  https://code.qt.io/cgit/qt/qtgrpc.git/
+diff --git a/package/qt6/qt6grpc/qt6grpc.hash b/package/qt6/qt6grpc/qt6grpc.hash
+new file mode 100644
+index 0000000000..bbf30f2a2d
+--- /dev/null
++++ b/package/qt6/qt6grpc/qt6grpc.hash
+@@ -0,0 +1,10 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.1/submodules/qtgrpc-everywhere-src-6.9.1.tar.xz.sha256
++sha256  c34c869e203289b0fd695a1e5391840bc51b919a8b55e1ed1ff36b4cb923a750  qtgrpc-everywhere-src-6.9.1.tar.xz
 +
-+compat/posix.h:159:24: fatal error: sys/random.h: No such file or directory
-+                        
-+This happens because Git recently made 'getrandom' the default
-+CSPRNG_METHOD on Linux, which unconditionally includes <sys/random.h>.
-+However, this header was only introduced in glibc 2.25.
++# Hashes for license files:
++sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSE.Apache-2.0.txt
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSES/LicenseRef-protobuf.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6grpc/qt6grpc.mk b/package/qt6/qt6grpc/qt6grpc.mk
+new file mode 100644
+index 0000000000..8b1c511fef
+--- /dev/null
++++ b/package/qt6/qt6grpc/qt6grpc.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# qt6grpc
++#
++################################################################################
 +
-+Fix this by using __has_include to check for the header's existence.
-+If it's missing, undefine HAVE_GETRANDOM so Git falls back to its
-+/dev/urandom implementation.
++QT6GRPC_VERSION = $(QT6_VERSION)
++QT6GRPC_SITE = $(QT6_SITE)
++QT6GRPC_SOURCE = qtgrpc-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6GRPC_VERSION).tar.xz
++QT6GRPC_INSTALL_STAGING = YES
++QT6GRPC_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6GRPC_CMAKE_BACKEND = ninja
++QT6GRPC_LICENSE = GPL-3.0-only
 +
-+Upstream: N/A (Buildroot specific fallback)
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ compat/posix.h | 7 +++++++
-+ 1 file changed, 7 insertions(+)
++QT6GRPC_LICENSE_FILES = \
++	LICENSE.Apache-2.0.txt \
++	LICENSES/BSD-3-Clause.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LicenseRef-protobuf.txt \
++	LICENSES/Qt-GPL-exception-1.0.txt
 +
-+diff --git a/compat/posix.h b/compat/posix.h
-+index faaae1b..1632221 100644
-+--- a/compat/posix.h
-++++ b/compat/posix.h
-+@@ -155,6 +155,13 @@
-+ #ifdef HAVE_ARC4RANDOM_LIBBSD
-+ #include <bsd/stdlib.h>
-+ #endif
-++#if defined(HAVE_GETRANDOM) && defined(__linux__)
-++# if defined(__has_include)
-++#  if !__has_include(<sys/random.h>)
-++#   undef HAVE_GETRANDOM
-++#  endif
-++# endif
-++#endif
-+ #ifdef HAVE_GETRANDOM
-+ #include <sys/random.h>
-+ #endif
-+-- 
-+2.54.0
++QT6GRPC_CONF_OPTS = \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF \
++	-DQT_HOST_PATH=$(HOST_DIR)
++
++QT6GRPC_DEPENDENCIES = \
++	host-pkgconf \
++	host-qt6grpc \
++	qt6base
++
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
++QT6GRPC_DEPENDENCIES += qt6declarative
++endif
++
++HOST_QT6GRPC_DEPENDENCIES = \
++	host-protobuf \
++	host-qt6base
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.54.0
 
