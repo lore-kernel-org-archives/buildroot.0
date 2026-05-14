@@ -1,130 +1,127 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B3CECD4F39
-	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 21:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59FDDCD4F3D
+	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 21:43:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B4C460FDC;
-	Thu, 14 May 2026 19:38:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 141F382B97;
+	Thu, 14 May 2026 21:43:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s2ca6C3Yswzv; Thu, 14 May 2026 19:38:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jIn0_mUKclWP; Thu, 14 May 2026 21:43:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FD9760E70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2217B82BE5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778787517;
-	bh=UHv8ku2P1dSPU7be19u44wdRM0fdGLi4f8Sp+QboQIs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qKrHN0TCCLcl8G0dprM13OQSVu43CnYTVPcruu4xLJcoajFhjG021bUxMkx/brme1
-	 DUPAKiI5l3hal9/Br2RdjSu+M1UCXh7QHWseIMWCSwa2H5KENfT7ao3XkNUGYa6rfz
-	 hyg43frrKmdaEjRxKJxTqzZwBO1YuZ02RTu2Nu3eqRro3ivggY/eFOqggxyZPEfz69
-	 Fwj6Pj1eep7ICLJaO5KHSXUqP94iPyr5IjJXtd7+uiSa7T1ZDDy2yC1zXAT0ehykru
-	 cURQKaC3luCkkZuawSznMErPBalFCiON9XA1b9z5+18GgvWLqXRIgYjncQ8F0kdV2/
-	 rZhcUljLI5NJw==
+	s=default; t=1778795036;
+	bh=2CxcHpWHbmyYRS5y10NISjpqMJpwIFPHLIjPqVveAH8=;
+	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=n0ebCygYKJjvT/IauZ/LrXlUPgNq4miZZOmMKCsYhn8SP3MpNbhI9hdNcWlozVZ+h
+	 RU90PLOHtmvCUhfIO17rY+aZN0ZqHoPS1QMiyBW1B0/7Z6miDOKJexjBdsUcwkQpPR
+	 LBa06gRKcTv1EHXRtC3wODRKQPktCQDSBtPCfh7bTfl34YzWBmFaRG5NtZED6vUW7S
+	 HSZ/ZJ/TEzNoPchy4SraIJuTFGM8mmyiR/rMD9kdAWJVXim5a4pwH+fKzgV3YyReS5
+	 1VyjRePIizlSO8LHxGQnwuSvoe0TofXHa0PR+COHeC1wASq3gmkvjS50UghyUgGaK7
+	 AMnFkc8tsyOOw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FD9760E70;
-	Thu, 14 May 2026 19:38:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FF5837F
- for <buildroot@buildroot.org>; Thu, 14 May 2026 19:38:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2217B82BE5;
+	Thu, 14 May 2026 21:43:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A64637F
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 21:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0667960A75
- for <buildroot@buildroot.org>; Thu, 14 May 2026 19:38:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1026782BE5
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 21:43:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tWBGr3H5RppV for <buildroot@buildroot.org>;
- Thu, 14 May 2026 19:38:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RhumZqQr8wxJ for <buildroot@buildroot.org>;
+ Thu, 14 May 2026 21:43:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2C76260FEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C76260FEC
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2C76260FEC
- for <buildroot@buildroot.org>; Thu, 14 May 2026 19:38:31 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-441209fb77eso106756f8f.1
- for <buildroot@buildroot.org>; Thu, 14 May 2026 12:38:30 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ envelope-from=joseph@anodize.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3091D82B97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3091D82B97
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3091D82B97
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 21:43:54 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-2b458ca2296so57827085ad.0
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 14:43:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778787509; x=1779392309;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=m228tGSrhYF+o9AVToOQe2zvQoajD8mlSDKv23s00Ug=;
- b=IuH+ULE9uI0G5d3GitstRnSQkjWWxN+D+ND2dYMwIMCvmWOBXi7mSIfBRVkV7C0mS2
- bIyEXFaLatGpVHJZP5AesyRgo6KdzfCEY4bPcjuk8NSTkM3EdcRoUkEfo8eo4r8tNhj3
- 7eZrWXaKij+Leap7I9ut0QmNRIKoidBuUdjMIlr3wamDnY8+Bsq9qWMzVC4iCfPQ9wJU
- H3cHoUTIY+H0XKRYiVQ/JbOjGH/6+BVoaOHRxbuPExod9fmcrO6KCQYJ8i7smKCkMrdb
- k2gLbtRCUlrUoTyonlnk/P8dDTnPjbj1UsptfxSkQsyyDmwBUPuGTOw8IAafZuwttv+Q
- EJ7A==
-X-Forwarded-Encrypted: i=1;
- AFNElJ8oz6cNWIXLWv9fn5IokE0R5CbDRTXuPzsUXYSNu3iHvuaiv4n/YquhM64fZZY+C+/tlirp+6YCsiQ=@buildroot.org
-X-Gm-Message-State: AOJu0YycthxQPaWW51VDFbxkTFcrQk+uQ3aWtfRZIXmtwP8V38EpULnH
- QTuouP4E4A5073Eaj0oPSjKTznh8ORdH3p0xuhKXfCMcyTgVqDvPqiB6tPOLYkbu1YA=
-X-Gm-Gg: Acq92OE1wPdME3XQSszLn5Yr2hyU4lOL4jBSuHHvbIJ/FlHZREJrVvBmcsIpc+9RgOx
- 80dbEUjPGTyJ/UaXUOO0BWBQtZYvkbqZ7ltA0ddjBURdUfhL6qRKfz2Ad8/X69DJSzlAXBEKhsh
- J9E3TL1VvG8DkA+aTh9EJl4A/mI/OGPYdl5Zoo02Wfh3aWJBk8kpliv91WnG7m21DPhB852Dlng
- atCfMXSQUilXxoy2JUZcqLVGIFazd4iOWdynTe7eWPXDo3ndpB9USer0CY9CR6606PYOtoyC45x
- ZzKhOlvkDsYKIaC5D12k+3MZssbqj9kmEx9iok6qdf0eyay8yzZMdlyLVEvshwH5CxsXpHXizgi
- Ll1GESebj2lRt1VFaduAlDLHuX0LcgVzKq/bVKtxH7tZ463zpWblNlvlf9imL5Hlawc340omYlE
- OFE9vJGJTG0g66Nc/FebJewoy6XJXaynyyOMPC5uO/giM+BRLjsXc4/0ilyAEB5L2LdQW3h6mnB
- Nu3PLz2fN5dUp22SiNi4jlQm8o8fo0dApxWfuSz017Bz7EnzPm7Zg8T6zX2cbPuMrDHUHCdRk7l
-X-Received: by 2002:a5d:64c6:0:b0:446:708e:1e8d with SMTP id
- ffacd0b85a97d-45d955021f5mr7609914f8f.30.1778787509129; 
- Thu, 14 May 2026 12:38:29 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45d9e768acesm9415061f8f.7.2026.05.14.12.38.28
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 14 May 2026 12:38:28 -0700 (PDT)
-Message-ID: <3ca4025a-839d-490b-a952-15b6a592e477@smile.fr>
-Date: Thu, 14 May 2026 21:38:27 +0200
+ d=1e100.net; s=20251104; t=1778795033; x=1779399833;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=g2i5cCY8/d2YajR6k1QMj5enBDf1NFG+fQsfYj2SI50=;
+ b=FClKy8FF1YvQQkem4U6D1Vsvaqg0pJH5DhbW4/bHhWUDa5YgaOOOLZDggnMecnnI9s
+ qY/ZamhANn4PDhxfMyFz7s+CT18M1EnZrAJPqVI1Nte30SWb4/mx5DQCEs+hQXQtaHIS
+ w0mjXvuKJF0bjYAl9h2ubPGFlKsCxcThwOiZj3cDd6qfh955xErF+IymgI1M/6TDB/qk
+ Z2/StOuW/FEVaGIkB4isFgwF3Fcl/erDw/GBzv+73Yax0Om9dJyUYsGc1Vm95LuIHeX4
+ FK3wecAjoT0yBJS6PqMd4h/yS9NOG+r+db2sRNA+SmOvJTLk7sMuRFfyZ1yneE6X+dg5
+ 7+NA==
+X-Gm-Message-State: AOJu0YyckrJC9SxOSfOMukHhbI2dRR/Gedhup3wSNUNO5TAGGaOg5TYo
+ CH3X09HCv7j/MQxXJzj+1hp+gtOBpJtRpPYCKt75eJjL0/gzeH48KHm0EuF4yK2GIoQ=
+X-Gm-Gg: Acq92OFg+Qem9KdwxZ0ZiDLw9Xk1xhwpHO5Zyu8hYzWkieS8weberdTpzLIWKy+O/Ah
+ QPay1+CVHR+Bvropsv8XtFSKRzdgZENp1w7kvBgKn65GAeBT5+OazykJMa9Gnun5Kf/L3bK6uPz
+ HWP3PLlQPVs/HgpvFO/1pkBrSbAx8sKtZcaFcRehuAL+lYsIJ/yQEj/FUSJSvF7yG9B1ky2J5W1
+ +ASkG6ss2E+xjd5qLhmJkfLEi2grfBS2KrpWB/c7AKfP3CyMEKA8d30ZhD9pDDyX3OTv4p4rb+e
+ UPZTC5dAYDFzDm9mdM45DVSdwUUAiX15zHm0+4IhqcNtQDIv13qfT26vyd/JSjhAcR2HLSXxm1o
+ C1wSyHHs7Vpus+vnDgOcXmhTqrArFo/aqroXqxcTjl1S6CKvW8zDII/Uj+T/QIcaldVkNpGUSR4
+ qkuhCeT/pMrh7Wcg6HCzciSBO+MuDGrQ==
+X-Received: by 2002:a17:902:b085:b0:2b9:86ca:5bf2 with SMTP id
+ d9443c01a7336-2bd7e94c757mr8822745ad.30.1778795033250; 
+ Thu, 14 May 2026 14:43:53 -0700 (PDT)
+Received: from wash-3.local ([50.120.90.9]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2bd5c05f287sm49907305ad.24.2026.05.14.14.43.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 May 2026 14:43:52 -0700 (PDT)
+From: Joseph Kogut <joseph@anodize.com>
+Date: Thu, 14 May 2026 14:43:36 -0700
+Message-Id: <20260514-mesa3d-amdgpu-virtio-v3-0-dd75eca7fa50@anodize.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Gary Bisson <bisson.gary@gmail.com>,
- Alexander Clouter <alex+buildroot@digriz.org.uk>,
- Sergio Prado <sergio.prado@e-labworks.com>,
- Sergey Matyukevich <geomatsi@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
- Brandon Maier <brandon.maier@collins.com>,
- "Alvaro G . M" <alvaro.gamez@hazent.com>,
- Paul Cercueil <paul@crapouillou.net>, Refik Tuzakli
- <tuzakli.refik@gmail.com>, Doug Kehn <rdkehn@gmail.com>,
- Spenser Gilliland <spenser@gillilanding.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Marcus Hoffmann <bubu@bubu1.eu>, Pascal de Bruijn <p.debruijn@unilogic.nl>
-References: <20260506223341.1759760-1-james.hilliard1@gmail.com>
-Content-Language: fr
-In-Reply-To: <20260506223341.1759760-1-james.hilliard1@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WPwWrDMAyGX6X4PBdbSeOlp75H6UGJlUYDx0V2z
+ baSd1/cHcZgsOOHpO/X/1CJhCmp4+6hhAonjssGzctOjTMuV9LsN1ZgoDMHCzpQwsZrDP56u+v
+ Ckjlq8L11aBvXQqu205vQxO9P7fnyzek+vNGYq6tuTBKDzrMQ/ugB3N/6YrXRDXXeGt8S0nTCJ
+ Xr+pP0YQ7UNmEgPgss4V1vAlEnqYOaUo3w86xWo7/zTpECNMp17HVzv/NT/irqs6/oFzjIl/TM
+ BAAA=
+X-Change-ID: 20260512-mesa3d-amdgpu-virtio-2d917a137424
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Joseph Kogut <joseph.kogut@gmail.com>, 
+ Romain Naour <romain.naour@gmail.com>, Joseph Kogut <joseph@anodize.com>, 
+ Romain Naour <romain.naour@smile.fr>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778795031; l=3944;
+ i=joseph@anodize.com; s=20251022; h=from:subject:message-id;
+ bh=mRi/RhRlG0Y3sh4hR0sqcIPRjo5x/jFCVqMTkoOLQ6M=;
+ b=IMRSJyKZloflCJLLzMWxk4TKC0GCZX3+azAJpge2SqmgpeX53LSunWJ7NYCiRhQGB0j01natJ
+ sqD8msR2Q87BtwqmW7R0AQ33dQd1mROU++baagpvjd/mzH5DOBsc6ko
+X-Developer-Key: i=joseph@anodize.com; a=ed25519;
+ pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1778787509; x=1779392309; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=m228tGSrhYF+o9AVToOQe2zvQoajD8mlSDKv23s00Ug=;
- b=QvlkG5b39KHzKWUsRmTziJitMm2zatX0K0/Xal13BQWWIOpf1n9vnU/4jHtmVPmOIT
- ovsGbTbKrxfWUQX2dNWd1fvnan+up4Btd/pNquJqnOvV0EEh34l3eKa6et6i00qzW8jY
- LdciVQoi5u69OVoqtwELaBoVSN4DcgKuvxDAA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=QvlkG5b3
-Subject: Re: [Buildroot] [PATCH 01/40] package/arptables: preserve /usr/sbin
- symlink
+ d=anodize.com; s=google; t=1778795033; x=1779399833; darn=buildroot.org;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=g2i5cCY8/d2YajR6k1QMj5enBDf1NFG+fQsfYj2SI50=;
+ b=Ig98JlZkUlkuYYRGQbjPC6F5b5iDahQYdXbdvKuGgWyzwvWSnHFSAUZaR2Ph57W5Kq
+ 8fSaF21MZEyYANinDhLBRDgIwwJv9ng+qqBds+U1dnDigekAKmpjabdy3RVFv1d7Dyqk
+ b3MI1C6DNKak3iLtfTAYXbQ3m108OUpcOmPb3fXvTgaNS0nuWhfOPAcOCHuGcNYCGa1U
+ x36Rgn9TS1OLBd9cwLAXh6LuLEUkcf5sjoqzMppUEaACPcUxVCWSshqNY5EKHEvaeqEF
+ eH7dI5TfLcw4X6NTHDS+A9OR+PoDg+VT4wijDUeWeOZaiCGhPI1bQt92KNNxlMvehjgV
+ SzAw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=anodize.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=anodize.com header.i=@anodize.com header.a=rsa-sha256
+ header.s=google header.b=Ig98JlZk
+Subject: [Buildroot] [PATCH v3 0/4] package/mesa3d: add host native context
+ configs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,41 +133,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsIEFsbCwKCkxlIDA3LzA1LzIwMjYgw6AgMDA6MzMsIEphbWVzIEhpbGxpYXJk
-IGEgw6ljcml0wqA6Cj4gV2l0aCBCUjJfUk9PVEZTX01FUkdFRF9CSU49eSwgL3Vzci9zYmluIGlz
-IGEgc3ltbGluayB0byBiaW4uCj4gVXNpbmcgaW5zdGFsbCAtRCBmb3IgZmlsZXMgYmVsb3cgJChU
-QVJHRVRfRElSKS91c3Ivc2JpbiBjYW4gY3JlYXRlCj4gdGhlIHBhcmVudCBkaXJlY3RvcnkgcGF0
-aCBhbmQgcmVwbGFjZSB0aGF0IHN5bWxpbmsgd2l0aCBhIHJlYWwKPiBkaXJlY3RvcnkuCj4gCj4g
-V2l0aCBwZXItcGFja2FnZSBkaXJlY3RvcmllcywgdGhpcyBjYW4gbGF0ZXIgbWFrZSByc3luYyBm
-YWlsIHdoZW4gYQo+IHBhY2thZ2UgdGFyZ2V0IGRpcmVjdG9yeSBjb250YWlucyBhIG5vbi1lbXB0
-eSB1c3Ivc2JpbiBkaXJlY3RvcnkgYW5kCj4gdGhlIHNrZWxldG9uIHByb3ZpZGVzIHVzci9zYmlu
-IC0+IGJpbi4KCk1heWJlIHRoaXMgaXMgc29tZXRoaW5nIHdlIGhhdmUgdG8gZml4IGluIHRoZSBw
-YWNrYWdlIGluZnJhc3RydWN0dXJlPwoKPiAKPiBUaGUgc2tlbGV0b24gZGVwZW5kZW5jeSBoYXMg
-YWxyZWFkeSBjcmVhdGVkIC91c3Ivc2JpbiwgZWl0aGVyIGFzIGEKPiBkaXJlY3Rvcnkgb3IgYXMg
-dGhlIG1lcmdlZC1iaW4gc3ltbGluaywgc28gdXNlIHBsYWluIGluc3RhbGwgYW5kIGxldCBpdAo+
-IGZvbGxvdyB0aGUgZXhpc3RpbmcgcGF0aC4KClRoaXMgc2hvdWxkIGhhcHBlbiBpbiB0aGUgYXV0
-b2J1aWxkZXJzIHdoZW4gQlIyX1JPT1RGU19NRVJHRURfQklOIGFuZApCUjJfUEVSX1BBQ0tBR0Vf
-RElSRUNUT1JJRVMgYXJlIGJvdGggc2V0LiBDYW4geW91IHNoYXJlIGEgbGluayB0byB0aGUgaXNz
-dWU/CgpJIGNhbid0IHJlcHJvZHVjZSBoZXJlIHdpdGggYXJwdGFibGVzIHBhY2thZ2Ugd2l0aCBC
-UjJfUk9PVEZTX01FUkdFRF9CSU49eSBhbmQKQlIyX1BFUl9QQUNLQUdFX0RJUkVDVE9SSUVTPXku
-CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFy
-ZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KPiAtLS0KPiAgcGFja2FnZS9hcnB0YWJsZXMv
-YXJwdGFibGVzLm1rIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hcnB0YWJsZXMvYXJwdGFibGVz
-Lm1rIGIvcGFja2FnZS9hcnB0YWJsZXMvYXJwdGFibGVzLm1rCj4gaW5kZXggMzIwYTMzYmIzYy4u
-ZWM2NTIwMWM4NiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2FycHRhYmxlcy9hcnB0YWJsZXMubWsK
-PiArKysgYi9wYWNrYWdlL2FycHRhYmxlcy9hcnB0YWJsZXMubWsKPiBAQCAtMTUsNyArMTUsNyBA
-QCBkZWZpbmUgQVJQVEFCTEVTX0JVSUxEX0NNRFMKPiAgZW5kZWYKPiAgCj4gIGRlZmluZSBBUlBU
-QUJMRVNfSU5TVEFMTF9UQVJHRVRfQ01EUwo+IC0JJChJTlNUQUxMKSAtbSA3NTUgLUQgJChARCkv
-YXJwdGFibGVzLWxlZ2FjeSBcCj4gKwkkKElOU1RBTEwpIC1tIDc1NSAkKEBEKS9hcnB0YWJsZXMt
-bGVnYWN5IFwKPiAgCQkkKFRBUkdFVF9ESVIpL3Vzci9zYmluL2FycHRhYmxlcy1sZWdhY3kKPiAg
-ZW5kZWYKPiAgCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+The first patch adds a config for mesa to enable the virtio backend for
+amdgpu. The second patch enables the same feature for freedreno. The
+third patch rounds out the freedreno API support by adding a config to
+enable the vulkan driver (turnip), which can also be used with the
+virtio backend.
+
+This allows the mesa user-mode drivers that interface with the
+amdgpu kernel-mode driver (radeonsi, RADV) and freedreno KMD (freedreno,
+turnip) to do so inside virtualized guests over virtio-gpu, mediated by
+virglrenderer on the host.
+
+This combination, known as host native context [0], (sometimes referred
+to as vDRM) is an alternative to VirGL/Venus for accelerated graphics
+and compute in virtualized guests.
+
+Host native context runs the UMD directly in guests. Compared to API
+level virtualization through VirGL/Venus, host native context enables
+lower overhead, more complete API support, better security, and
+additional features like hardware accelerated video encode/decode.
+
+VMMs that support host native context currently include libkrun [1]
+based projects like muvm [2], and qemu as of v11.0.0. Also, VMMs which support
+rutabaga-gfx [4], including CrosVM and qemu (partial).
+
+See this video [5] for a demonstration of libkrun/muvm with host native
+context using the asahi UMD.
+
+Upstream mesa recently also merged support for i915 and panfrost host
+native context, which should be a part of v26.3. Those config options
+can be added once they become available in a supported release.
+
+See also the patches adding the virglrenderer package [6] to buildroot,
+and bumping qemu to v11.0.0 [7].
+
+[0] https://www.collabora.com/news-and-blog/blog/2025/01/15/the-state-of-gfx-virtualization-using-virglrenderer/
+[1] https://github.com/containers/libkrun
+[2] https://github.com/AsahiLinux/muvm
+[3] https://www.qemu.org/2026/04/22/qemu-11-0-0/
+[4] https://github.com/magma-gpu/rutabaga_gfx
+[5] https://www.youtube.com/watch?v=xRNu0XaXTng
+[6] https://lore.kernel.org/buildroot/20260512-virglrenderer-v5-0-1806e588eb59@gmail.com/
+[7] https://lore.kernel.org/buildroot/20260514-qemu-v11-0-0-v3-1-e64cbadaa8e5@anodize.com/T/#u
+
+Signed-off-by: Joseph Kogut <joseph@anodize.com>
+---
+Changes in v3:
+- Minor continuity fix in Config.in [Romain]
+- Link to v2: https://patch.msgid.link/20260512-mesa3d-amdgpu-virtio-v2-0-30678b797df9@anodize.com
+
+Changes in v2:
+- s/MESA3D_GALLIUM_DRIVER_FREEDRENO_KMDS/MESA3D_FREEDRENO_KMDS [Romain]
+- Link to v1: https://lore.kernel.org/buildroot/20260227-mesa3d-amdgpu-virtio-v1-3-3e6d10d4eaef@anodize.com/
+
+---
+Joseph Kogut (4):
+      package/mesa3d: add amdgpu-virtio config
+      package/mesa3d: add freedreno-virtio config
+      package/mesa3d: add freedreno vulkan driver config
+      DEVELOPERS: add package/mesa3d for Joseph Kogut
+
+ DEVELOPERS               |  1 +
+ package/mesa3d/Config.in | 39 +++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk | 17 +++++++++++++++++
+ 3 files changed, 57 insertions(+)
+---
+base-commit: 1cc6279d1144c0b61dc6051eb57ab8800931c96c
+change-id: 20260225-mesa3d-amdgpu-virtio-a5b4116ea08c
+
+Best regards,
+-- 
+Joseph Kogut <joseph@anodize.com>
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+---
+Joseph Kogut (4):
+      package/mesa3d: add amdgpu-virtio config
+      package/mesa3d: add freedreno-virtio config
+      package/mesa3d: add freedreno vulkan driver config
+      DEVELOPERS: add package/mesa3d for Joseph Kogut
+
+ DEVELOPERS               |  1 +
+ package/mesa3d/Config.in | 39 +++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk | 17 +++++++++++++++++
+ 3 files changed, 57 insertions(+)
+---
+base-commit: eb496bd63ef4a4466f9482fa4b3226e20cfb7f7b
+change-id: 20260512-mesa3d-amdgpu-virtio-2d917a137424
+
+Best regards,
+--  
+Joseph Kogut <joseph@anodize.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
