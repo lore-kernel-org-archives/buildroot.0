@@ -4,60 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE00CD4F39
-	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 13:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77032CD4F39
+	for <buildroot@archiver.kernel.org>; Thu, 14 May 2026 13:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FA0C60E7F;
-	Thu, 14 May 2026 13:12:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E02B60E84;
+	Thu, 14 May 2026 13:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sdowime_25Qu; Thu, 14 May 2026 13:12:58 +0000 (UTC)
+ id hTtMU5Bspq3j; Thu, 14 May 2026 13:13:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4672F60E80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 801C060E81
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778764378;
-	bh=darbYmynr6G+4rB3xkx/0Br0/Blemg/UAc/tMPJ+Tpw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WUvu5GRj8ddEbJadD3+YP5dnXp/dH+Uy57yCqV6sX7drcvI6F40aDnAyWDQreWa+O
-	 lHnOtUPAeK7rP4/QVcnbTzAXzy6aH4i8X33BWla/sWPisCLFgcbajSisPBLRz58M9w
-	 hdQcd5MAJwzD4n6MPBmo+ouaQx9eynJmU2Ry2utJM4C8B/GSmebu+rIB7IiWtS1zbX
-	 41n8pZMODn3Z/ANMA8RxJz0VAr2eZg44fR43dN/EJHLvzoTcjr5wsmenHU+EVujGyW
-	 VYRyb5tbx0+LQxPJbChUViGt8Z9V1jdnjYiJxSAT2p9wtN/QXUCVABxLpVatPLxEuP
-	 JXjAXBxNtLOhQ==
+	s=default; t=1778764403;
+	bh=YCbj8WiD9EgmakP9hxwfvx7RXtgOwXtEOhiSsGFXYM8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=BwRK3Npxp8L9aL5d+0OQtSv2a2LNPAT21vjzPM36YYIH/ZRvlrGFm3jJrJ0OhhGtO
+	 tvLY0XsvhBEcfwiOFa6mo80YqdiBGpNfkT87nJ5rFlyGJDNtNk5GJg+8jE2G41H5E4
+	 z9r2QDCus5EnqRYy+8/tylT4R4mjSJoYhMdlStB1Mccw/9rKhFsuMNTkXVQBUFsyxc
+	 aLa+xNO5JmOo/D7CS5j1UhEqjsemr/wid9u17PRURNTTRvPVLHP7i0W4E6w2s3wWDZ
+	 Hg/W9taIl6+Wo8plnLT2STlcUjB7/Q0TkwoWeV8sJiTVFYYi/N0eTbHxEIaVfVni1l
+	 cDxGHCwbN8mBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4672F60E80;
-	Thu, 14 May 2026 13:12:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 801C060E81;
+	Thu, 14 May 2026 13:13:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0398936F
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:12:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7054336F
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 13:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E91E460E7F
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:12:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6201C60E81
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 13:13:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZubRJ6OTPOwL for <buildroot@buildroot.org>;
- Thu, 14 May 2026 13:12:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE64E60E7D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE64E60E7D
- for <buildroot@buildroot.org>; Thu, 14 May 2026 13:12:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8397F86196; Thu, 14 May 2026 13:12:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 14 May 2026 14:57:09 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a562b8c3aa8f47976c4eb10dc9723f1dc86e5d56
-X-Git-Newrev: 62afff3baabd4535cb6909e7324779aea577ad85
-X-Patchwork-Hint: ignore
-Message-Id: <20260514131250.8397F86196@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/frr: Bump version to
- 10.5.4
+ id HgNiQKtOkcXi for <buildroot@buildroot.org>;
+ Thu, 14 May 2026 13:13:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8A99F60E7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A99F60E7D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8A99F60E7D
+ for <buildroot@buildroot.org>; Thu, 14 May 2026 13:13:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 966DEB00572;
+ Thu, 14 May 2026 15:13:15 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 14 May 2026 15:13:15 +0200
+MIME-Version: 1.0
+Date: Thu, 14 May 2026 15:13:15 +0200
+To: =?UTF-8?Q?Mattias_Walstr=C3=B6m?= <lazzer@gmail.com>
+Cc: buildroot@buildroot.org, Vadim Kochan <vadim4j@gmail.com>
+In-Reply-To: <20260513113637.3924259-1-lazzer@gmail.com>
+References: <20260513113637.3924259-1-lazzer@gmail.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <8c2d1e99e77c71356349e73c83b78ffa@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778764397;
+ bh=1n17ltLdg/xqGtjV9QsYV7zH9ECwIZttQUgj/SFGK/w=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=bbmgfHmhKbzKkuIJXcE4P4SySkmOdWZmIUFrWtDATInW1gWC8YYX9cKUdaRHiaMbL
+ mot8OeJ4WbzAp5ouhUWw/2GuTshouR/vP9GriXWV++7XvZosh1x0tuVH4i+vNC66xD
+ 0eneQZvgABpgM4HJ56OMV5cNVa+11xOLgtKXTil1Ab9zAbX4sstrhL4r0UZz274nfT
+ YYXVAKlRIH0AC5ntjwsQyHQV47LS0oaRC/lLKyVB6MhXrsjThPgqpPV6uUI9LKTJbn
+ TOiHDcuzBoFWhRkaoxz1wlpcj2NAlzAgat364Ey1Qc1uc8XSu2/47K0P2Un6ssABZK
+ o01dU6I9jojVg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bbmgfHmh
+Subject: Re: [Buildroot] [PATCH 1/1] package/frr: Bump version to 10.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,198 +94,13 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8811202768794279091=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8811202768794279091==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62afff3baabd4535cb6909e7324779aea577ad85
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
-
-For change log, see:
-https://github.com/FRRouting/frr/releases/tag/frr-10.5.4
-
-Summary of Changes:
-
-bfdd:
-    - cap IPv6 echo reflection to declared length
-    - account for FP offset in echo length checks
-    - fix recv errno filter logic in a few places
-    - tighten SBFD reflector packet sanity checks
-    - gate IPv6 echo reflection on known sessions
-    - tighten auth header parsing skeleton
-    - validate control packet length before session lookup
-
-bgpd:
-    - Fix memleak when configuring rd
-    - Validate if NHC BGPID TLV value is non-zero
-    - Avoid having a dangling pointer after we free NHC attribute
-    - Check if BGPID NHC TLV exists when IPv6 next-hop is link-local
-    - Do not allocate NHC TLV with an extra trailer
-    - migrate timers during peer_xfer_conn to fix stale route cleanup
-    - honor 'no activate' for dynamic neighbors in peer-group
-    - Return immediately when dynamic capability action is not valid
-    - Validate BGP role capability when handling it dynamically
-    - fix neighbor IP comparison for IPv6 memcmp return values
-    - Don't mark nexthop as changed if a set next-hop unchanged is applied
-    - Return BGP_PEER_INTERNAL when first peer's as type is set to auto
-    - Update peer sort cache when remote-as auto is used and AS number changed
-    - Check dynamic capability action before validating ENHE capability
-    - Do not allocate stream if route-refresh capability is not received
-    - Move rpki strict check to bgp_accept()
-    - Fix memory leak for nhc attribute if ipv6 is link-local address
-    - Fix compilation for Debian 11 when printing uint64 values
-    - Return zero labels if no BOS found and it's not a withdraw label
-    - Fix signed overflow in hexstr2num()
-    - Check the length also when parsing ENCAP attr sub-TLVs
-    - Validate prefixlen before subtracting when parsing labeled unicast NLRI
-    - Reset the stream to attr_start + attribute_len when WITHDRAWN
-    - Revalidate locally originated routes against RPKI changes
-    - Check if prefixlen is not 0 when parsing flowspec stuff
-    - Prevent len_string going negative when trying to display flowspec entries
-    - fix import vrf on non existing vrf
-    - fix no vrf import command
-    - Free hostname for FQDN capability if the parsing goes wrong
-    - Validate MP_REACH_NLRI attribute against incorrect next-hop
-    - Fix dynamic FQDN capability handling
-    - Check if the remaining length for subtracting TLV length is enough
-    - Fix the end pointer boundaries for dynamic graceful restart capability
-    - Add missing returns when parsing enhanced route-refresh
-    - Return original as-path when reconciling AS versus AS4
-    - Do not process route-refresh for AFI/SAFI if it's not negotiated
-    - Check if we are not overusing error_data buffer when unknown cap received
-    - fix NHT for explicit link-local BGP peers
-    - improve packet parsing for EVPN and ENCAP/VNC
-    - Prevent heap use-after-free for tunnel encapsulation attribute
-    - Return 0 if AS4 capability is malformed
-    - close dynamic peer socket in ttl error path
-    - fix logic handling EVPN_FLAG_DEFAULT_GW
-    - avoid early return in MPLSVPN NLRI processing
-    - remove unneeded asserts in packet reads
-
-eigrpd:
-    - fix byte order in Hello TLV decode functions
-    - Handling for malformed update packets
-    - enforce minimum TLV length in Hello handler
-    - reject invalid prefix mask len
-    - skip unknown and ignored TLVs
-    - Improve packet validation
-
-isisd:
-    - Reject SRv6 Locator TLV with Loc-Size of zero
-    - consume leftover bytes after FAD sub-sub-TLV loop
-    - use correct min size values for srv6 subtlvs
-    - improve validation of flex-algo decoder
-    - Fix missing neighbor address Sub-TLVs after link-params change
-    - add unit test for remove_excess_adjs() memory leak fix
-    - fix memory leak in remove_excess_adjs()
-    - fix edge condition in max_lsp_count computation
-
-ldpd:
-    - improve tlv validation in several places
-
-lib:
-    - Report IPv6 MTU and not IPv4 for if_update_state_mtu6
-    - disable warning in zlog.c to match master
-
-nhrpd:
-    - stop debugging auth credentials
-    - fix byte-order when comparing error code in shortcut path
-    - guard against zbuf_pulln NULL on truncated packets
-    - require auth for all received packet types
-    - harden debug packet parsing against malformed input
-    - validate AFI index in extension replies
-
-ospf6d:
-    - move log call out of priv block
-    - remove asserts in packet-handling paths
-    - fix issues in ospf6 auth trailer code
-
-ospfd:
-    - add LSA validation in the apiserver path
-    - add validation in several places before accessing
-
-pceplib:
-    - validate during of_list TLV decoding
-
-pimd:
-    - fix NOCACHE MFC resync detection log, add vrf name too
-    - use upstream-owned pim pointer in register and upstream timers
-    - use upstream-owned pim pointer in MSDP update paths
-    - avoid JP build deref through channel OIL
-    - guard RP RPF-failure mroute delete on detached OIL
-    - avoid null deref in upstream delete debug path
-    - guard channel OIL detach against stale pointers
-    - fix crash due to double free
-    - Ensure igmp message is of proper size
-    - Reject pim packets with a malformed header length
-    - Fix out of bounds read in AutoRP code
-    - igmpv3 never checks packet length and trusts the num-sources field
-    - Do not allow a register-stop message if not received from the RP
-    - Prevent received msg length from being larger than buffer
-    - Remove unnecessary asserts
-    - When receiving a register stop ensure we have enough data to read
-    - Ensure a register packet has enough space to read S,G data
-    - Ensure that header has space on packet
-
-ripngd:
-    - fix data handling in several places
-
-tests:
-    - Check if route-map with set nexthop unchanged does not prevent outgoing
-    - Check if mixed peer-group remote-as types can be used with auto
-    - Verify neighbor addr Sub-TLVs after link-params reset
-    - Expect return code being 0, not -1 when AS4 is empty or ASN is 0
-
-vrrpd:
-    - replace some asserts
-    - only support ethernet in GARP code
-    - limit advertised timers to 12-bits
-
-Signed-off-by: Mattias Walström <lazzer@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/frr/frr.hash | 2 +-
- package/frr/frr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index 349c56fc24..043d890b23 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ecc95009b88e66df2c91be02fbf0a3eb8e1de434fd652e0cbf46f19126f708ec  frr-10.5.3.tar.gz
-+sha256  1e8401e1bfcbb9b0dfefc9b335013733a3c77cdf85c79ff66d9e65167d9cfb1e  frr-10.5.4.tar.gz
- sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
- sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
- sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index c5a12f6992..5138b34dca 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FRR_VERSION = 10.5.3
-+FRR_VERSION = 10.5.4
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0+
- FRR_LICENSE_FILES = \
-
---===============8811202768794279091==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8811202768794279091==--
+T24gMTMvMDUvMjAyNiAxMzozNiwgTWF0dGlhcyBXYWxzdHLDtm0gd3JvdGU6ClsuLi5dCj4gU2ln
+bmVkLW9mZi1ieTogTWF0dGlhcyBXYWxzdHLDtm0gPGxhenplckBnbWFpbC5jb20+CgpBcHBsaWVk
+IHRvIG5leHQsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
