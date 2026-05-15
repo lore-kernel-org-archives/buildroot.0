@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BE3DCD4851
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7637ACD4F3D
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A1C2607B1;
-	Fri, 15 May 2026 09:56:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D61583FF7;
+	Fri, 15 May 2026 09:56:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilh75EnVDgHI; Fri, 15 May 2026 09:56:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f4aBbBOmYHsz; Fri, 15 May 2026 09:56:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC5661501
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22B4283E0A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778839003;
-	bh=Mcterjldu6Xrlv/wHa4Kx+8+HQW968b+E4Fn+FWVNJc=;
+	s=default; t=1778839002;
+	bh=h/07+C2XTCA4kNKqjocyd2pBcoFiLnz49OaFh9ndwNg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MAsahkh0/S41eyv8MZdAQs9U5mtDvWrCfnesoMaePFBsDPQBdNpohF5Ecpi12++1g
-	 jdUjob7fMlGYeNrIY50w3DAoVW4sxFwJ62Fq9dRISVqP+1m9mKkmotlYC4KGbJzPKD
-	 a+v69gEgpF8dxMn+GCjNJCIoLDgWsIZec2XoPtz/pfe+UqE018TI/dYx3PZ7O77Vih
-	 LM+mpXV92i/Oe5x35xW4U4VDBDEfp5GD0Jt8io1qnYyeSFdebKBBHx3d33sTl+2VN6
-	 e6k7pPad+aL7aQAIPfY3dl4wkqOZzICGmqeDd4CBaCLJXkJNBYB5d715Wsz6E8ZmpA
-	 9UuF/V78/lWqg==
+	b=BYa50BzYxUDpZM0c/q9Mum0ya5gwY6fgXFNjVvVL3XIuh19XUK34/vTu6o8q8/Yz2
+	 fp48kXSWQxt7fyfFPD6qAFjS6jaVKO/ptgVTIdLjIk3S3wm7/8+XkJNttbSKcBq59J
+	 hIbbu28Mnp7BvvUmHwmjYpjEbnmMO8FWfI8CrXJcDH+z84eOvsvVcmA6HtHRKn9S4X
+	 YOzgOPS71xWtSw5ktFGf5XgHkXp9ymwJxb4lmHM9DeKa2RSDlXyR4noT1PQeFWA8jD
+	 3Bk41oNkTDlvG3olnQmwno3pwAgUgP5TQSYUEfAWyx4eT7sTojEgPl2rAmnRpHYVc2
+	 lOUuPGvRL9RYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CC5661501;
-	Fri, 15 May 2026 09:56:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id F16DD42B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22B4283E0A;
+	Fri, 15 May 2026 09:56:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFA7636E
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1E6A41752
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5B2D40C7A
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xdwvxwy7DHr4 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1z8-wehHIulE for <buildroot@buildroot.org>;
  Fri, 15 May 2026 09:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11B8741747
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D49940144
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11B8741747
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D49940144
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64DE18632B; Fri, 15 May 2026 09:56:33 +0000 (UTC)
+ id 8183D8632E; Fri, 15 May 2026 09:56:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 11:12:36 +0200
+Date: Fri, 15 May 2026 11:39:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e125a47fabaf87de1730dcc7ec0f1f0283b49801
-X-Git-Newrev: 1254fd5c0e90d666abdb6daf60331d4afe065709
+X-Git-Oldrev: 1c5730ebb5e8b9a67433aa9997e5cfd6cae18cfe
+X-Git-Newrev: b335d2237cc154f15f45ba5641557c0a59e9a9aa
 X-Patchwork-Hint: ignore
-Message-Id: <20260515095633.64DE18632B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lm-sensors: bump
- version to 3.6.2
+Message-Id: <20260515095633.8183D8632E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libxmlb: bump version
+ to 0.3.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,180 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1254fd5c0e90d666abdb6daf60331d4afe065709
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b335d2237cc154f15f45ba5641557c0a59e9a9aa
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://github.com/lm-sensors/lm-sensors/blob/V3-6-2/CHANGES
+https://github.com/hughsie/libxmlb/blob/0.3.26/NEWS
 
-Removed patch 0002 which is included in this release:
-https://github.com/lm-sensors/lm-sensors/commit/e31cb3b2f8fa5f0a7a61b9bca919bb54e7c89eea
-
-Rebased and renumbered remaining patch.
-
-Updated license hash due to upstream commit
-https://github.com/lm-sensors/lm-sensors/commit/6128b9e8eb58d6a12d4c8a8d6a635a3f066a0127
+Switched to xz tarball and tarball hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  3 +-
- ...-ldconfig.patch => 0001-no-host-ldconfig.patch} |  6 +-
- package/lm-sensors/0001-static-build.patch         | 81 ----------------------
- package/lm-sensors/lm-sensors.hash                 |  4 +-
- package/lm-sensors/lm-sensors.mk                   |  2 +-
- 5 files changed, 8 insertions(+), 88 deletions(-)
+ package/libxmlb/libxmlb.hash | 3 ++-
+ package/libxmlb/libxmlb.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b2d5320045..3f6cdff263 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -567,8 +567,7 @@ package/lirc-tools/0002-configure-add-disable-doc-option.patch lib_patch.Upstrea
- package/lirc-tools/S25lircd lib_sysv.Indent lib_sysv.Variables
- package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch lib_patch.Upstream
- package/lldpd/S60lldpd Shellcheck lib_sysv.Indent lib_sysv.Variables
--package/lm-sensors/0001-static-build.patch lib_patch.Upstream
--package/lm-sensors/0002-no-host-ldconfig.patch lib_patch.Upstream
-+package/lm-sensors/0001-no-host-ldconfig.patch lib_patch.Upstream
- package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch lib_patch.Upstream
- package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch lib_patch.Upstream
- package/lmbench/0003-TOO_LONG-100-usec-to-prevent-memsize-from-timingout-.patch lib_patch.Upstream
-diff --git a/package/lm-sensors/0002-no-host-ldconfig.patch b/package/lm-sensors/0001-no-host-ldconfig.patch
-similarity index 86%
-rename from package/lm-sensors/0002-no-host-ldconfig.patch
-rename to package/lm-sensors/0001-no-host-ldconfig.patch
-index 51f7f6af01..24858624ed 100644
---- a/package/lm-sensors/0002-no-host-ldconfig.patch
-+++ b/package/lm-sensors/0001-no-host-ldconfig.patch
-@@ -10,14 +10,16 @@ need to link against a separate library. Therefore, this patch simply
- removes the libiconv handling.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Bernd: rebased for 3.6.2]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- 
- Index: b/prog/sensors/Module.mk
- ===================================================================
- --- a/prog/sensors/Module.mk
- +++ b/prog/sensors/Module.mk
--@@ -37,10 +37,8 @@
-- REMOVESENSORSBIN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(BINDIR)/%,$(PROGSENSORSTARGETS))
-+@@ -39,10 +39,8 @@
-  REMOVESENSORSMAN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(PROGSENSORSMAN1DIR)/%,$(PROGSENSORSMAN1FILES))
-+ REMOVESENSORSZSH := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(ZSHCOMPDIR)/%,$(PROGSENSORSZSHCOMPFILES))
-  
- -LIBICONV := $(shell if /sbin/ldconfig -p | grep -q '/libiconv\.so$$' ; then echo \-liconv; else echo; fi)
- -
-diff --git a/package/lm-sensors/0001-static-build.patch b/package/lm-sensors/0001-static-build.patch
-deleted file mode 100644
-index 63edd44f84..0000000000
---- a/package/lm-sensors/0001-static-build.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--Add support for static only build
--
--This patch adds support for a BUILD_SHARED_LIB variable that allows to
--enable/disable the build of the shared library, in order to support
--static-only builds.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -85,6 +85,9 @@
-- # Build and install static library
-- BUILD_STATIC_LIB := 1
-- 
--+# Build and install shared library
--+BUILD_SHARED_LIB := 1
--+
-- # Set these to add preprocessor or compiler flags, or use
-- # environment variables
-- # CFLAGS :=
--Index: b/lib/Module.mk
--===================================================================
----- a/lib/Module.mk
--+++ b/lib/Module.mk
--@@ -43,8 +43,14 @@
-- LIBSTLIBNAME := libsensors.a
-- LIBSHSONAME := libsensors.so.$(LIBMAINVER)
-- 
--+ifeq ($(BUILD_SHARED_LIB),1)
-- LIBTARGETS := $(MODULE_DIR)/$(LIBSHLIBNAME) \
--               $(MODULE_DIR)/$(LIBSHSONAME) $(MODULE_DIR)/$(LIBSHBASENAME)
--+LIBDEP_FOR_PROGS := $(LIBSHBASENAME)
--+else
--+LIBDEP_FOR_PROGS := $(LIBSTLIBNAME)
--+endif
--+
-- ifeq ($(BUILD_STATIC_LIB),1)
-- LIBTARGETS += $(MODULE_DIR)/$(LIBSTLIBNAME)
-- endif
--@@ -131,9 +137,11 @@
-- ifeq ($(BUILD_STATIC_LIB),1)
-- 	$(INSTALL) -m 644 $(LIB_DIR)/$(LIBSTLIBNAME) $(DESTDIR)$(LIBDIR)
-- endif
--+ifeq ($(BUILD_SHARED_LIB),1)
-- 	$(INSTALL) -m 755 $(LIB_DIR)/$(LIBSHLIBNAME) $(DESTDIR)$(LIBDIR)
-- 	$(LN) $(LIBSHLIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBSHSONAME)
-- 	$(LN) $(LIBSHSONAME) $(DESTDIR)$(LIBDIR)/$(LIBSHBASENAME)
--+endif
-- 	@if [ -z "$(DESTDIR)" -a "$(LIBDIR)" != "/usr/lib" -a "$(LIBDIR)" != "/lib" ] ; then \
-- 	   if [ -e "/usr/lib/$(LIBSHSONAME)" -o -e "/usr/lib/$(LIBSHBASENAME)" ] ; then \
-- 	     echo '******************************************************************************' ; \
--Index: b/prog/sensord/Module.mk
--===================================================================
----- a/prog/sensord/Module.mk
--+++ b/prog/sensord/Module.mk
--@@ -41,7 +41,7 @@
-- REMOVESENSORDBIN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(SBINDIR)/%,$(PROGSENSORDTARGETS))
-- REMOVESENSORDMAN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(PROGSENSORDMAN8DIR)/%,$(PROGSENSORDMAN8FILES))
-- 
---$(PROGSENSORDTARGETS): $(PROGSENSORDSOURCES:.c=.ro) lib/$(LIBSHBASENAME)
--+$(PROGSENSORDTARGETS): $(PROGSENSORDSOURCES:.c=.ro) lib/$(LIBDEP_FOR_PROGS)
-- 	$(CC) $(EXLDFLAGS) -o $@ $(PROGSENSORDSOURCES:.c=.ro) -Llib -lsensors -lrrd
-- 
-- all-prog-sensord: $(PROGSENSORDTARGETS)
--Index: b/prog/sensors/Module.mk
--===================================================================
----- a/prog/sensors/Module.mk
--+++ b/prog/sensors/Module.mk
--@@ -39,8 +39,8 @@
-- 
-- LIBICONV := $(shell if /sbin/ldconfig -p | grep -q '/libiconv\.so$$' ; then echo \-liconv; else echo; fi)
-- 
---$(PROGSENSORSTARGETS): $(PROGSENSORSSOURCES:.c=.ro) lib/$(LIBSHBASENAME)
---	$(CC) $(EXLDFLAGS) -o $@ $(PROGSENSORSSOURCES:.c=.ro) $(LIBICONV) -Llib -lsensors
--+$(PROGSENSORSTARGETS): $(PROGSENSORSSOURCES:.c=.ro) lib/$(LIBDEP_FOR_PROGS)
--+	$(CC) $(EXLDFLAGS) -o $@ $(PROGSENSORSSOURCES:.c=.ro) $(LIBICONV) -Llib -lsensors -lm
-- 
-- all-prog-sensors: $(PROGSENSORSTARGETS)
-- user :: all-prog-sensors
-diff --git a/package/lm-sensors/lm-sensors.hash b/package/lm-sensors/lm-sensors.hash
-index 0ca07b7e69..9ffbe1a32f 100644
---- a/package/lm-sensors/lm-sensors.hash
-+++ b/package/lm-sensors/lm-sensors.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0591f9fa0339f0d15e75326d0365871c2d4e2ed8aa1ff759b3a55d3734b7d197  lm-sensors-3-6-0.tar.gz
--sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  c6a0587e565778a40d88891928bf8943f27d353f382d5b745a997d635978a8f0  lm-sensors-3-6-2.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index 8975efaffa..1de826dba0 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libxmlb/libxmlb.hash b/package/libxmlb/libxmlb.hash
+index 0f91486a03..5a202ebfbf 100644
+--- a/package/libxmlb/libxmlb.hash
++++ b/package/libxmlb/libxmlb.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/hughsie/libxmlb/releases/tag/0.3.26
++sha256  a18bc447fff0dd0d76a2e6cd4a603b4712047c027f9bbbdc31ebc25f0e2c1ed9  libxmlb-0.3.26.tar.xz
+ # Locally computed:
+-sha256  7050a3e43c4e1f53020cfbdfcb6fd5dc664c6c240faceb5ae3c8830423918262  libxmlb-0.3.19.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
+diff --git a/package/libxmlb/libxmlb.mk b/package/libxmlb/libxmlb.mk
+index 1d5d339e4f..34e7233f4b 100644
+--- a/package/libxmlb/libxmlb.mk
++++ b/package/libxmlb/libxmlb.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--LM_SENSORS_VERSION = 3-6-0
-+LM_SENSORS_VERSION = 3-6-2
- LM_SENSORS_SITE = $(call github,lm-sensors,lm-sensors,V$(LM_SENSORS_VERSION))
- LM_SENSORS_INSTALL_STAGING = YES
- LM_SENSORS_DEPENDENCIES = host-bison host-flex
+-LIBXMLB_VERSION = 0.3.19
+-LIBXMLB_SITE = $(call github,hughsie,libxmlb,$(LIBXMLB_VERSION))
++LIBXMLB_VERSION = 0.3.26
++LIBXMLB_SITE = https://github.com/hughsie/libxmlb/releases/download/$(LIBXMLB_VERSION)
++LIBXMLB_SOURCE = libxmlb-$(LIBXMLB_VERSION).tar.xz
+ LIBXMLB_LICENSE = LGPL-2.1+
+ LIBXMLB_LICENSE_FILES = LICENSE
+ LIBXMLB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
