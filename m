@@ -1,118 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52191CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E383CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26CB861589;
-	Fri, 15 May 2026 13:33:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ctb0cslRE0VB; Fri, 15 May 2026 13:33:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46C50615AD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852034;
-	bh=FyX9zt/kRywodkrmn7C5MrNTh95lAexi1vNLSu0ZxkU=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=KvsDjmN1QZAnTx/wOnpIwo/hi05Wtwt7SOI6Qki2kCLciFCSfGN3hUbfYqhLAQTc/
-	 PCSOfsvF7IhLFZDE5Gv/buya0jXxSZTO9Opt/pZvsGkZhM62Q+Ugtcjl7vA+l5wLaE
-	 lpXtH5uLh1MIB3UqUVMiqVGFa+p4KZceIaY1bvgvISre+DC6aRa1WkdE7PNmwAowFS
-	 qeJSxwP5qgVPN7aq+0NIXgXaJVQ+An+pUzoERgpMNIyNYsph2DPRqNHEji45Lxlw+w
-	 yBaAgQM/I49YOSPsl6BAmbLWGNIVnyTqElzW47ms72PxWI1qhITm8QDOLMmwPipN/U
-	 eymXtiPFi8NGQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46C50615AD;
-	Fri, 15 May 2026 13:33:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A23336F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FEC784316
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65E6F84327;
+	Fri, 15 May 2026 13:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJpDo_NRt4ot for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:33:49 +0000 (UTC)
+ id l31_KuTRY4Em; Fri, 15 May 2026 13:33:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3318084325
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778852035;
+	bh=RfpEXh+RBDGlQzPbmy6KYiDm3xzQ9VFDQ2lzo20QRkg=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=aEcrGe6vFbY0GOvyNM6d0EFX/1LUh3uRwEzfVKxBumrGCf2mJcnbs4FBxUm4iVWto
+	 84zG5aXz42cR4cL8WNkBj6Zci0/xfMVyK6WyNqdA/t1iY3ZuSbGx71FUK8YD+4WlRi
+	 n3ucIJnI6VWN5SLfIbkPsq041JiPb77EclntlaK6fxCx1lynpT4+1GXcVVq4U+UyPM
+	 vcQ4Na0IgPxUi3qtMMQZrS11wmy6q0Hm09YTVMkdOJHF84ThAOHXfH8nwvwqPIC8ef
+	 YTF8V2DIzCrXVV2OPZEBR9hndXA0lBbS2/6WTAUKAD0BRt+oEkcjghZAw8+uTMwYpD
+	 Tq7d+bGO0RNTw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3318084325;
+	Fri, 15 May 2026 13:33:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67DDF36E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5982E84317
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cpm9DNoYFyjX for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:33:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0913D842A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0913D842A1
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0913D842A1
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:48 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-488b0e1b870so151925785e9.2
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:33:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2639B84309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2639B84309
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2639B84309
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:49 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-488b0046078so74691695e9.1
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:33:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778852027; x=1779456827;
+ d=1e100.net; s=20251104; t=1778852028; x=1779456828;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=73OOM25USkM54Nv+VBoyV5fS2CxvASgidDa5nQsp0TY=;
- b=JGIbwNZ4OTxg/PKzznkB4FUTP6ZR7HDytIAhwsl73++3NZ1dOh0OA+3f1NJ2tjsHfC
- UCu9isK+kkS98o61+ZYsp0HlFUnx/v0pP2cS0inUM8Ic1cAP73e25X8wvAj7/IDw/F3r
- PK/LNym7B0X53fK1T4+5oZMb0Ngsu4UPuJCzTC9pZiYk81F9OeqZm2QpgBvCnhH8gXBz
- zfs56oWVXn0DC5DvLsNzy3sO5vLnF7vw9m3AL+/PkOQsiV3lcGFzbWgcFqUIwCQElCt8
- f6M79eEYAR39nEgymaa5Xhgxcshzq9hnVLLyWwiI9NXzC6f6lDqNiBoNkCzlubpmzeu0
- QSvw==
+ bh=GVQJ7Is/slU2+O2ftuGuAS4CmA8djHSXrvbNPESqvI0=;
+ b=luDPHDmcculCCBaZxeHFhUzIOnlkK5woF2O8bCbSbEq+8vl9OFqa8uJvBrcDVYIIfa
+ Vm8U7qOaKyhGfHaSHwpOjDYZlF+l9Bj3ehpigWfg2RKKOaajkD9TlbaKCRlFzM8YcM8J
+ ZPFRrMDfjwXThFMjW37P3vhHdsqK8P3hS2Ab8rkW1lwx1t9DzG27mtpfLI2fNfbkLYMA
+ PkA4tqobW6UBaEXKp2IOcfwlPQDNkJvxpgspwauBnFb5wEkBZfHZqhiT6208QRPNS8EI
+ ghavGaCVDd9e7DEun2r8CWXGangRHCM4cSjBPldeevuwqS+APT6qML83DAPhUUW90ThM
+ kSiQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+8+2YGzCCxA47h0KClWy4jV4IiCGujemj+12+r3t86vA5l7g1vktVt4Tyebu1EObu3fkpIR1+1oaM=@buildroot.org
-X-Gm-Message-State: AOJu0Yy64qBkKTB8/BcYVS8cgKKQiHt/uLdvPzFPfHyWd8e4zQpRfNEL
- 1yGH9JfRUDvtJepJoDziH1d7rk3/XC0jlZ5/++AOriLWgAtl/kiNFARwN9Qe2EcUaG4=
-X-Gm-Gg: Acq92OEOHnEjhCz/bYnJI0setkGc9TcWr5pGk825Dy41haQiuRYKo6NvJSs8ZmR8GzI
- lgYCEh2Eaxmx3E2ZGHXIugwqnKF8C4A0liX78IfNhOHkqPJ7hdjAt1noN4SSKhbfoPo/y2FZGFz
- bBYmVhYKfB1lw05P5hGb96WK8EgjjhsT+7O63OMrKqT6czAqNzugfMNFqGiWcsie1sAfo33bubq
- XGzI5jZBpUVl7GNI0IxaXanTSUHBeZL3MmtybUOrHuYQHtHB+hjO8dsuLNM+PrLoqtu5xnDzVJD
- PHVv0aAzf5YGDb3deR/gYx5UxU/YAx6TFzwtpNhN1cAHlOKuczFN63/Dw6JC/K0IGbpEpqs1U2G
- 8+VL/uU7Hv/sIdxtNrCflk6Fu9n08+WKPjPeIlu84PyIG8oIQUGm2Ov/nmd5yqKO9mt4PmLJ/bS
- U7nwQ7+5fu70JazEzKBZmNrVpnkHsfMEvvtIrdmTxWLFb8WS/DUKUlWko=
-X-Received: by 2002:a05:600c:858d:b0:488:f453:b976 with SMTP id
- 5b1f17b1804b1-48fe651c8b1mr37630535e9.27.1778852026843; 
- Fri, 15 May 2026 06:33:46 -0700 (PDT)
+ AFNElJ/ck4A2HhSvYW4cHAccPAIGWaBkNvvoVwYPHIcql/nSQ9JvI1ZTab/nRwzil5xSQHy3ROOiVNwqImE=@buildroot.org
+X-Gm-Message-State: AOJu0YyOPGksNmOmpJvLaD7Ie5Uxub0ydebLh1al40EHH1cn4pj3zyQe
+ 59WFPjn0TH6R3njHeh7taALihonC2ayZA2lCsr9VLpRUKfpIa9nFkqMsCz1K00RcGAuJWhZBaVF
+ rSSyF
+X-Gm-Gg: Acq92OFX1vpCcoUz4MUO/KrbCWcxtOkmD3dqJPQeSN1iCr9oUi7zA1ac5OCTyGX68ZP
+ X6sMCbpjS8s6Dsh0upKIfiFrTrQLIlLMfnfyvFVQv5cogGggSYym6Z7uBsBGiW4RwU44O77mdxU
+ JClXX+i0q4jQj5zbIwg6NdxGIWGzAghlEvzQjtGf+D6FnvUvhrUigAkBYkCpEu00oOmpSErVKdB
+ bGviCs6wNU/tcQRdehHz+ljcw/82hhiUMCdUbGndZRMO9LIav0XwJD8gAJ5EkymYujSm0DZcAX9
+ Xvj2nlt3yYcox6OBk0Bdb1RRd1QNzmDFo3iNJ4zViJlxBz9DhV0m/Ap+xq/BodBDnHDwHQodZ/G
+ /auaU0WSDb281wAIWXxBLv4TFknMkN3Q8u94M3RYTu044EqnGpxb8HaEtzdTPzhtsZQ2C1HNpAv
+ S2AmY+DqWHNhiUg5GK+foq/6k/9pWaqpqWj35Ml4FqzlCn
+X-Received: by 2002:a05:600c:3096:b0:48a:5339:ef0e with SMTP id
+ 5b1f17b1804b1-48fe5fcdf39mr35893485e9.3.1778852028091; 
+ Fri, 15 May 2026 06:33:48 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45d9e768072sm14501197f8f.5.2026.05.15.06.33.46
+ 5b1f17b1804b1-48feaa2accfsm16462825e9.3.2026.05.15.06.33.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:33:46 -0700 (PDT)
+ Fri, 15 May 2026 06:33:47 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:33:46 +0200
-Message-ID: <20260515133346.315685-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:33:47 +0200
+Message-ID: <20260515133347.315739-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260501123100.1918951-26-bernd@kuhls.net>
-References: <20260501123100.1918951-26-bernd@kuhls.net>
+In-Reply-To: <20260501123100.1918951-45-bernd@kuhls.net>
+References: <20260501123100.1918951-45-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778852027; x=1779456827; darn=buildroot.org;
+ d=mind.be; s=google; t=1778852028; x=1779456828; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=73OOM25USkM54Nv+VBoyV5fS2CxvASgidDa5nQsp0TY=;
- b=T9ouGh6WVjwno0tvAV3ehKIHlqDVSHuiKNU09T+HuUls2hGhgsSif+xgbquUsfTsML
- XdDYM86SMwnbpXuiZHwipzkOHV12wLyh+AHJkRG/WixVnvchNCUF1WIZFimtCmAbfoAg
- mixK+rk2eXEXmo0jcefAgTfRfbatrGzx7vf1tE6nh0oMkR9YUGht5t9NkzFT67OntDkg
- UvHuXJHSubViOo1e5HDq4Qpda/C+zV5ySR4LjdqWx5k0ohw+Xme4nGMcH2DtEybwWqgv
- 2YHkuNdFaiJpc6P/MBdfiTdWT4Mj43aOdsOLSyzOr9/19k19NmRZBAHvv/DdMb3uC2gK
- fmLQ==
+ bh=GVQJ7Is/slU2+O2ftuGuAS4CmA8djHSXrvbNPESqvI0=;
+ b=dBIA4PMHhkGdku1oOG1Ab9qqS6J/FGGVEmsqVTET0Kzt4DPZj7jIdf4AFVI5g9+1pM
+ txNbLhqpQm7BjRtwUYGG1BBsTzFsQLRYjJx7lml8y+G8b7OiwibiDE1Jga10ULO91qay
+ vLGmshe6RqwW6antNNCfH+/F1IyqRNraZQvFE15hsjoAM+2+n3GVEJ3fQmjgW3YCbZu1
+ Vufz4rEIq+pAVPxWUTEH6xbkhKKa8+njxhCWgD1jvrS8pMgwfLK8h/ZI8ag2yU/0Azvf
+ f8srG93ntihHkFpxokn/aqDZS55Ve8ihJGSZKj6/ODTwfwMRGV/FCR/XDkoTEswFmgeI
+ Qhgg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=T9ouGh6W
-Subject: Re: [Buildroot] [PATCH 26/75] package/python-lmdb: security bump
- version to 2.2.0
+ header.a=rsa-sha256 header.s=google header.b=dBIA4PMH
+Subject: Re: [Buildroot] [PATCH 45/75] package/python-pyopenssl: security
+ bump version to 26.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,62 +133,48 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/jnwatson/py-lmdb/blob/py-lmdb_2.2.0/ChangeLog
+> https://github.com/pyca/pyopenssl/blob/26.1.0/CHANGELOG.rst
 > 
-> Version 2.1.0 fixes the following CVEs:
-> 
-> - **CVE-2019-16224**: heap buffer overflow via `MDB_DUPFIXED` without
->     `MDB_DUPSORT` in on-disk `md_flags`. (#429)
-> 
-> - **CVE-2019-16225**: `SIGSEGV` from `P_DIRTY` flag set on mmap'd disk pages,
->     causing `mdb_page_touch()` to skip copy-on-write. (#429)
-> 
-> - **CVE-2019-16226**: out-of-bounds `memmove` in `mdb_node_del` via corrupt
->     `mn_hi` making `NODEDSZ()` huge. (#429)
-> 
-> - **CVE-2019-16227**: NULL pointer dereference of `mc_xcursor` when
->     `F_DUPDATA` is set on a node in a non-DUPSORT database. (#429)
-> 
-> - **CVE-2019-16228**: divide-by-zero from zero `mm_psize` in meta page
->     header. (#429)
+> Version 26.1.0 fixes CVE-2026-40475
+> Version 26.0.0 fixes CVE-2026-27459 & CVE-2026-27448.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/python-lmdb/python-lmdb.hash | 4 ++--
->  package/python-lmdb/python-lmdb.mk   | 4 ++--
+>  package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
+>  package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-> index 679d552d1c..ad111605bc 100644
-> --- a/package/python-lmdb/python-lmdb.hash
-> +++ b/package/python-lmdb/python-lmdb.hash
+> diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+> index b42719e3ca..84f4b7fa60 100644
+> --- a/package/python-pyopenssl/python-pyopenssl.hash
+> +++ b/package/python-pyopenssl/python-pyopenssl.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/lmdb/json
-> -md5  de895e4a88eeb179aa0c185a08523d62  lmdb-1.8.1.tar.gz
-> -sha256  44ef24033929e9cc227a7e17287473c452b462d716f118db885c667c80f57429  lmdb-1.8.1.tar.gz
-> +md5  f6f491b825302966f63b3fdee2ef80fd  lmdb-2.2.0.tar.gz
-> +sha256  53020e20305c043ea6e68089bc242d744fba6073cdb268332299ba6dda2886d4  lmdb-2.2.0.tar.gz
+>  # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
+> -md5  d755732945157fb8ca98c2d66a55755d  pyopenssl-25.3.0.tar.gz
+> -sha256  c981cb0a3fd84e8602d7afc209522773b94c1c2446a3c710a75b06fe1beae329  pyopenssl-25.3.0.tar.gz
+> +md5  e48484d4a915a47a71064c10ede7e991  pyopenssl-26.1.0.tar.gz
+> +sha256  737f0a2275c5bc54f3b02137687e1a765931fb3949b9a92a825e4d33b9eec08b  pyopenssl-26.1.0.tar.gz
 >  # Locally computed sha256 checksums
->  sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-> index dbdc80bfda..ba3d257fdd 100644
-> --- a/package/python-lmdb/python-lmdb.mk
-> +++ b/package/python-lmdb/python-lmdb.mk
+>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+> index 2dee55d8cc..da31da5c5a 100644
+> --- a/package/python-pyopenssl/python-pyopenssl.mk
+> +++ b/package/python-pyopenssl/python-pyopenssl.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_LMDB_VERSION = 1.8.1
-> +PYTHON_LMDB_VERSION = 2.2.0
->  PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
-> -PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/23/19/392f028e7ebcc1cc8212fe8a315a909b7a556278456f0bab9234d3a3b665
-> +PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/21/44/d94934efaf8f887b6959f131fde740fcaa831edfd13eb5425574637cddd5
->  PYTHON_LMDB_LICENSE = OLDAP-2.8
->  PYTHON_LMDB_LICENSE_FILES = LICENSE
->  PYTHON_LMDB_DEPENDENCIES = host-python-cffi host-python-patch-ng
+> -PYTHON_PYOPENSSL_VERSION = 25.3.0
+> +PYTHON_PYOPENSSL_VERSION = 26.1.0
+>  PYTHON_PYOPENSSL_SOURCE = pyopenssl-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+> -PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/80/be/97b83a464498a79103036bc74d1038df4a7ef0e402cfaf4d5e113fb14759
+> +PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/8c/a8/26d36401e3ab8eed9030ad33f381da7856fcfad5691780fccd1b019718fc
+>  PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+>  PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
+>  PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
 > -- 
 > 2.47.3
 > 
