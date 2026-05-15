@@ -4,119 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37BBACD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 15:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF124CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 15:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA76B84229;
-	Fri, 15 May 2026 15:58:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEDC4843CC;
+	Fri, 15 May 2026 15:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LWh19SfON-Jc; Fri, 15 May 2026 15:58:38 +0000 (UTC)
+ id IR5lc3AR1RTr; Fri, 15 May 2026 15:59:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8268F841D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7269843CE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778860718;
-	bh=QwaaVNw0e6lGOErI2TYiPXgWH+CMKDSpGDqZC5Mfy/4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Q00dUm/22RxdWgGKF87LPk9a3B+yNYggfmhakA6JaDWhVwm8rJfdZxm6BHzZ5uLwY
-	 /UoM7GOxjsh+JCFE7R6NOhkyNMcVv2hrK6RKLSVswA/jh1czsS9m2vWdDiF3EcHm/z
-	 mbIF5mxyY6O/cL5xt9/OsIFYFbBu8jZx81j5HuCMarkIkq0/7cRrZm9ql2XqTrzBx/
-	 GcowWPsVx/f2laNKudZUmCZunXiBf+0Em1q8dFBp0b8OnvhRkPWdVWiT8lUEQxHPUA
-	 zWR/XPfKiPhVue7VXyEX+mhK9P+aKr5cKelpMj8WDt9DU993A377Uf/aUmkz36eZnP
-	 HOSn+dOBdRYEQ==
+	s=default; t=1778860754;
+	bh=RSGi7tkdBKeLBogUr+vldwJSFMgcaFT/flPWxumA86w=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=o3VQIkBwewgkUCFiUwaBIVW/5ZBG1KL9g+sdc1D2RhEmTVsDclGarl9qge3DrtnAK
+	 cnURC3fAVGYSZ6P8yYPraNsnGS8EPaIWp4R/6xoA5cO3Z4lQM+LCDuGwmRBIF/SJx0
+	 4yaQouTCHSVzZkAxGOekEU91w4CZZFCue1uf5R7O0L2UX4D6cUoX4SJXOm5ftLg5bl
+	 zQhg/593dugISfzN7ZMYBM9z3XYgcb22CXlKtcbO+cTJQx6Afx4IIe+EPwrHvxCsNW
+	 2D0wlyL41LNJhB+NUCDDusRkpS2iDpn6nmA2tjuRAzkjtj0F1P8qiUn5E+jMV3qhY4
+	 HMiGBtBF5HvOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8268F841D9;
-	Fri, 15 May 2026 15:58:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 74FD7E7
- for <buildroot@buildroot.org>; Fri, 15 May 2026 15:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7269843CE;
+	Fri, 15 May 2026 15:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4832DE7
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 15:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AE0940256
- for <buildroot@buildroot.org>; Fri, 15 May 2026 15:58:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DD69843CA
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 15:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ebk6F2AQ-qvv for <buildroot@buildroot.org>;
- Fri, 15 May 2026 15:58:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E11F240F1F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E11F240F1F
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E11F240F1F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 15:58:35 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-452169ae568so7233723f8f.3
- for <buildroot@buildroot.org>; Fri, 15 May 2026 08:58:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778860713; x=1779465513;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zkjgemEtKYD0RgHANdaZy+OJLVwWTCUbSE2XmilibCk=;
- b=WOM2rZCHCKtSth0P7sUN/MrpiK8ADyUJF7q4Z7oi0KyvzB/Iz2uadHHXm4ypTfqS7H
- ONJZkEs53sous0wDWnRbKBWDYMD/9KSI2MuCglvDPdsBClj5bcVSbW+ZlJAmoPEnO5S9
- D0cf1ibJ+519TJJt4YS+2azWBlBMRJ8lNNeodqVxtxDJdumaIcaVKL0mwLjPKGEKGEJG
- Xxmqb702n+iwAfk41SnyL16AdNdphLkEOmiMsD8Vyq36CsgEmyMjzrK+YFW2+DLOZ7bj
- aSEE35pQ3bK2xAxpTfQLmXQeUaYrsw2U3sbbt4LzBSoiBmsVqnjn/ZS+8W5allOaRaI8
- yfnA==
-X-Forwarded-Encrypted: i=1;
- AFNElJ+/63n8YU0mVmNnJOIhEvKNIa2wrItJMPb/GQ2zQfk2tZWZmQIAMeWxgtVfPF4nd6/3IcY03PCBc/g=@buildroot.org
-X-Gm-Message-State: AOJu0Yz1gyKDLZiaEtg/HU2qUtPk77OPotjPD4yTUoYVndT4jBVSTZyO
- 36EaUt4PCw5yCNP0lDMn5loCc4Fkq5v5DPMoOG9HwhQ+AdLHqKC2O05E7pYlDJt1uyY=
-X-Gm-Gg: Acq92OGqVZUbVxFBjik3HwYaFtfnWVQcSq7P2xnVHp+0vNrhRn/MmhLTc6jSe8Dy4kQ
- QcDMNZqPlX8eSpmte99UyhT6EggniRbqmBVIyn6u8VkSg7lMsZM52dBs2I7mZ00scf62u9t/YFw
- JnNjmQ4OuT7nae/2Z8zkPg/JJiwUCE9c9heK534KXgIHQAqQ5xIOH2fnMTRJgNhvwwknN6r4fA4
- V3QmrExIZ/bo0yD7RclZ5/GG0n/R3rLwas4xP8zfxyPCM6Frcu0bmeuUaaFjzUUMvI9g6uqPVYd
- /mZIUU3SvrodPppcMNtTyh34aZv9q+/TEITghstMBsAhgIbKdSmWKoekr/X6hnyntAckrNYNxoc
- A8SZYBHSd/G+pKdlYUSA4HdM2hCOeHeRhswS+40SC+gZY9Hu5tTwIP/GaqGO9MIkkMKTxwTIyUL
- TlOSXdGIHShPMTBl+hGE2ZpJBiCGLYJ4t7XhhK/GpkCMtzUMGqjvUOuxP6zoaPYnrF+BhyBV/y5
- kpOut1rTmlIDvKTI5+z+YnLZd/y8J71L97bPCFAcuLX5jB0/0VyzYpoE5wC1bXqHg==
-X-Received: by 2002:a5d:5f49:0:b0:446:96b1:f53 with SMTP id
- ffacd0b85a97d-45e5c6000acmr6648659f8f.26.1778860712733; 
- Fri, 15 May 2026 08:58:32 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45da0fe2464sm16347239f8f.32.2026.05.15.08.58.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 May 2026 08:58:32 -0700 (PDT)
-Message-ID: <f549471c-ba6d-4fe7-bf8c-10b18e2aee22@smile.fr>
-Date: Fri, 15 May 2026 17:58:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>, buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com
-References: <20260406134106.4145818-1-dario.binacchi@amarulasolutions.com>
- <b1d2ad5d-f081-4fea-903f-fd1ccd79a3e3@grenoble.cnrs.fr>
-Content-Language: fr
-In-Reply-To: <b1d2ad5d-f081-4fea-903f-fd1ccd79a3e3@grenoble.cnrs.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1778860713; x=1779465513; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=zkjgemEtKYD0RgHANdaZy+OJLVwWTCUbSE2XmilibCk=;
- b=EyXsbhsm+Jv5VhiVJ7R0nMlNoaqNk2z7pxZ8HDTQGDMng8yfVxITB3hy4v8E+hwuTy
- 2jZZsuaJE+FCiBxSJwHzNNSaa2ZkY0b32DE0ptgMzxqIW6GsrM+mNfaz7vFx0LWWulCY
- zCERCba/aqEdAQgtiZAO+MDVVg6j+2NsukEx4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=EyXsbhsm
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgphoto2: fix build with gcc
- >= 14
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mdjgP0aIWaAq for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 15:59:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BFB8843B9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BFB8843B9
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 15:59:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8B7AA86396; Fri, 15 May 2026 15:59:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 15 May 2026 17:33:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6d3cc38ec03835baca81ae971e02d3a5b72d546f
+X-Git-Newrev: d2ad5b883342b92c354c8a110ffbaf1ca7dda20f
+X-Patchwork-Hint: ignore
+Message-Id: <20260515155906.8B7AA86396@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgphoto2: fix build with gcc >=
+ 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,172 +71,198 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRGFyaW8sIEVkZ2FyLCBBbGwsCgpMZSAwNi8wNC8yMDI2IMOgIDIxOjUwLCBFZGdhciBC
-b25ldCB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gSGVsbG8gZXZlcnlib2R5IQo+IAo+IE9u
-IDIwMjYtMDQtMDYgYXQgMTU6NDEsIERhcmlvIEJpbmFjY2hpIHdyb3RlOgo+PiBUaGUgY29tbWl0
-IGFkZHMgYW4gdXBzdHJlYW0gcGF0Y2ggdG8gZml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVy
-ZToKPj4KPj4gamwyMDA1Yy9qbDIwMDViY2RfZGVjb21wcmVzcy5jOiBJbiBmdW5jdGlvbiAnamwy
-MDA1YmNkX2RlY29tcHJlc3MnOgo+PiBqbDIwMDVjL2psMjAwNWJjZF9kZWNvbXByZXNzLmM6MTYx
-OjQ2OiBlcnJvcjogcGFzc2luZyBhcmd1bWVudCAzIG9mICdqcGVnX21lbV9kZXN0JyBmcm9tIGlu
-Y29tcGF0aWJsZSBwb2ludGVyIHR5cGUgWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4+
-ICAgMTYxIHwgICAgICAgICBqcGVnX21lbV9kZXN0ICgmY2luZm8sICZqcGVnX2hlYWRlciwgJmpw
-ZWdfaGVhZGVyX3NpemUpOwo+PiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+Cj4+ICAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfAo+PiAgICAgICB8ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxvbmcgdW5zaWduZWQgaW50ICoKPj4K
-Pj4gRml4ZXM6Cj4+IC0gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2Ni
-OTgzZDlhZDkwMTcwYWE4ZDdmMmI5YTVkZmMzMDA1NWQ4M2I1ZGUKPj4KPj4gU2lnbmVkLW9mZi1i
-eTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+
-IAo+IFRlc3RlZC1ieTogRWRnYXIgQm9uZXQgPGJvbmV0QGdyZW5vYmxlLmNucnMuZnI+Cj4gCj4g
-SSBkaWQgYSBidWlsZC10ZXN0IGFzIGZvbGxvd3M6Cj4gCj4gICAgIGNhdCA+Z3Bob3RvMl9kZWZj
-b25maWcgPDxFT0YKPiAgICAgQlIyX21pcHM2NGVsPXkKPiAgICAgQlIyX1RPT0xDSEFJTl9CVUlM
-RFJPT1RfVUNMSUJDPXkKPiAgICAgQlIyX1BBQ0tBR0VfSlBFRz15Cj4gICAgIEJSMl9QQUNLQUdF
-X0xJQkdQSE9UTzI9eQo+ICAgICBFT0YKPiAgICAgbWFrZSBkZWZjb25maWcgQlIyX0RFRkNPTkZJ
-Rz1ncGhvdG8yX2RlZmNvbmZpZwo+ICAgICBtYWtlIGxpYmdwaG90bzIKPiAKPiBPbiBjb21taXQg
-YWRmOTlhNjM0YjM1NyAobWFzdGVyIGF0IHRoZSB0aW1lIG9mIHRoZSB0ZXN0KSwgdGhpcyB0ZXN0
-Cj4gcmVwcm9kdWNlcyB0aGUgYnVpbGQgZmFpbHVyZSBzZWVuIG9uIHRoZSBhdXRvYnVpbGRlci5b
-MV0gQXBwbHlpbmcgdGhpcwo+IHBhdGNoLCB0aGUgYnVpbGQgc3VjY2VlZHMuCj4gCj4gUmVnYXJk
-cywKPiAKPiBFZGdhciBCb25ldC4KPiAKPiBbMV0gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290
-Lm9yZy9yZXN1bHRzL2NiOTgzZDlhZDkwMTcwYWE4ZDdmMmI5YTVkZmMzMDA1NWQ4M2I1ZGUKClRo
-YW5rcyBFZGdhciBmb3IgdGhlIHRlc3QhCgpXZSBzdGlsbCBoYWQgdGhpcyBidWlsZCBpc3N1ZSBp
-biBvdXIgYXV0b2J1aWxkZXIgdG9kYXkuCgpodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3Jn
-L3Jlc3VsdHMvN2JlLzdiZTUxNzVhZmE0ODAyMzg5Y2FlZmI1YzBiMzEwZjQ2MDVkOGM1ZTQvYnVp
-bGQtZW5kLmxvZwoKQXBwbGllZCB0byBtYXN0ZXIuIFRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9t
-YWluCgo+IAo+PiAtLS0KPj4gIC4uLnMtZm9yLXRoZS1zaXplLXR5cGUtb2YtanBlZ19tZW1fZGVz
-dC5wYXRjaCB8IDE0MyArKysrKysrKysrKysrKysrKysKPj4gIHBhY2thZ2UvbGliZ3Bob3RvMi9s
-aWJncGhvdG8yLm1rICAgICAgICAgICAgICB8ICAgMiArCj4+ICAyIGZpbGVzIGNoYW5nZWQsIDE0
-NSBpbnNlcnRpb25zKCspCj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJncGhvdG8y
-LzAwMDEtYXV0b2NvbmYtY2hlY2tzLWZvci10aGUtc2l6ZS10eXBlLW9mLWpwZWdfbWVtX2Rlc3Qu
-cGF0Y2gKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZ3Bob3RvMi8wMDAxLWF1dG9jb25m
-LWNoZWNrcy1mb3ItdGhlLXNpemUtdHlwZS1vZi1qcGVnX21lbV9kZXN0LnBhdGNoIGIvcGFja2Fn
-ZS9saWJncGhvdG8yLzAwMDEtYXV0b2NvbmYtY2hlY2tzLWZvci10aGUtc2l6ZS10eXBlLW9mLWpw
-ZWdfbWVtX2Rlc3QucGF0Y2gKPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAw
-MDAwMDAwLi41NDM2NzgxODFiMDYKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9wYWNrYWdlL2xp
-YmdwaG90bzIvMDAwMS1hdXRvY29uZi1jaGVja3MtZm9yLXRoZS1zaXplLXR5cGUtb2YtanBlZ19t
-ZW1fZGVzdC5wYXRjaAo+PiBAQCAtMCwwICsxLDE0MyBAQAo+PiArRnJvbSBjYTQ0NDFmNDgxMTdj
-NjgxY2VjZmIzYzg4MzExNWUwNTQ2YWVkOTg1IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+PiAr
-RnJvbTogTWFyY3VzIE1laXNzbmVyIDxtYXJjdXNAamV0LmZyYW5rZW4uZGU+Cj4+ICtEYXRlOiBT
-dW4sIDI5IE1hciAyMDI2IDIxOjMxOjQ5ICswMjAwCj4+ICtTdWJqZWN0OiBbUEFUQ0hdIGF1dG9j
-b25mIGNoZWNrcyBmb3IgdGhlIHNpemUgdHlwZSBvZiBqcGVnX21lbV9kZXN0Cj4+ICsKPj4gK2Zp
-eGVzIGh0dHBzOi8vZ2l0aHViLmNvbS9ncGhvdG8vbGliZ3Bob3RvMi9wdWxsLzExNzYKPj4gKwo+
-PiArU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFz
-b2x1dGlvbnMuY29tPgo+PiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9ncGhvdG8vbGli
-Z3Bob3RvMi9jb21taXQvY2E0NDQxZjQ4MTE3YzY4MWNlY2ZiM2M4ODMxMTVlMDU0NmFlZDk4NQo+
-PiArLS0tCj4+ICsgY2FtbGlicy9heDIwMy9heDIwMy5jICAgICAgICAgICAgICAgICAgIHwgIDIg
-Ky0KPj4gKyBjYW1saWJzL2F4MjAzL2F4MjAzX2NvbXByZXNzX2pwZWcuYyAgICAgfCAgMiArLQo+
-PiArIGNhbWxpYnMvYXgyMDMvanBlZ19tZW1zcmNkZXN0LmggICAgICAgICB8ICAyICsrCj4+ICsg
-Y2FtbGlicy9qbDIwMDVjL2psMjAwNWJjZF9kZWNvbXByZXNzLmMgIHwgIDIgKy0KPj4gKyBjYW1s
-aWJzL2psMjAwNWMvanBlZ19tZW1zcmNkZXN0LmggICAgICAgfCAgMiArKwo+PiArIGNhbWxpYnMv
-cHRwMi9jaGRrLmMgICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4+ICsgbGliZ3Bob3RvMl9w
-b3J0L2dwaG90by1tNC9ncC1saWJqcGVnLm00IHwgMzIgKysrKysrKysrKysrKysrKysrKysrKysr
-Kwo+PiArIDcgZmlsZXMgY2hhbmdlZCwgNDAgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkK
-Pj4gKwo+PiArZGlmZiAtLWdpdCBhL2NhbWxpYnMvYXgyMDMvYXgyMDMuYyBiL2NhbWxpYnMvYXgy
-MDMvYXgyMDMuYwo+PiAraW5kZXggNjJmNTcyNjg2YzQ0Li5iOWRiOGViZGFiZjEgMTAwNjQ0Cj4+
-ICstLS0gYS9jYW1saWJzL2F4MjAzL2F4MjAzLmMKPj4gKysrKyBiL2NhbWxpYnMvYXgyMDMvYXgy
-MDMuYwo+PiArQEAgLTEyMDIsNyArMTIwMiw3IEBAIGF4MjAzX2VuY29kZV9pbWFnZShDYW1lcmEg
-KmNhbWVyYSwgaW50ICoqc3JjLCBjaGFyICpkZXN0LCB1bnNpZ25lZCBpbnQgZGVzdF9zaXplCj4+
-ICsgCXN0cnVjdCBqcGVnX2NvbXByZXNzX3N0cnVjdCBjaW5mbzsKPj4gKyAJc3RydWN0IGpwZWdf
-ZXJyb3JfbWdyIGpjZXJyOwo+PiArIAlKT0NURVQgKmpwZWdfZGVzdCA9IE5VTEw7Cj4+ICstCXVu
-c2lnbmVkIGxvbmcganBlZ19zaXplID0gMDsKPj4gKysJSlBFR19TSVpFIGpwZWdfc2l6ZSA9IDA7
-Cj4+ICsgCUpTQU1QTEUgcm93W2NhbWVyYS0+cGwtPndpZHRoICogM107Cj4+ICsgCUpTQU1QUk9X
-IHJvd19wb2ludGVyWzFdID0geyByb3cgfTsKPj4gKyAjZW5kaWYKPj4gK2RpZmYgLS1naXQgYS9j
-YW1saWJzL2F4MjAzL2F4MjAzX2NvbXByZXNzX2pwZWcuYyBiL2NhbWxpYnMvYXgyMDMvYXgyMDNf
-Y29tcHJlc3NfanBlZy5jCj4+ICtpbmRleCAxZWM3NTM0ZmY0ODQuLjIyMDY4YWZkNzljMCAxMDA2
-NDQKPj4gKy0tLSBhL2NhbWxpYnMvYXgyMDMvYXgyMDNfY29tcHJlc3NfanBlZy5jCj4+ICsrKysg
-Yi9jYW1saWJzL2F4MjAzL2F4MjAzX2NvbXByZXNzX2pwZWcuYwo+PiArQEAgLTEyNCw3ICsxMjQs
-NyBAQCBheDIwNl9jb21wcmVzc19qcGVnKENhbWVyYSAqY2FtZXJhLCBpbnQgKippbiwgdWludDhf
-dCAqb3V0YnVmLCBpbnQgb3V0X3NpemUsCj4+ICsgCWp2aXJ0X2JhcnJheV9wdHIgKmluX2NvZWZm
-aWNpZW50czsKPj4gKyAJdW5zaWduZWQgaW50IGksIHgsIHk7Cj4+ICsgCWludCBzdG9wLCBzaXpl
-LCByZXQsIG91dGM7Cj4+ICstCXVuc2lnbmVkIGxvbmcgcmVndWxhcl9qcGVnX3NpemUgPSAwLCBi
-dWZfc2l6ZSA9IDA7Cj4+ICsrCUpQRUdfU0laRSByZWd1bGFyX2pwZWdfc2l6ZSA9IDAsIGJ1Zl9z
-aXplID0gMDsKPj4gKyAJaW50IGxhc3RfZGNfdmFsWzNdID0geyAwLCAwLCAwIH07Cj4+ICsgCj4+
-ICsgCS8qIFdlIGhhdmUgYSByZ2IyNGJpdCBpbWFnZSBpbiB0aGUgZGVzaXJlZCBkaW1lbnNpb25z
-LCBmaXJzdCB3ZQo+PiArZGlmZiAtLWdpdCBhL2NhbWxpYnMvYXgyMDMvanBlZ19tZW1zcmNkZXN0
-LmggYi9jYW1saWJzL2F4MjAzL2pwZWdfbWVtc3JjZGVzdC5oCj4+ICtpbmRleCA2NzRhYjcxMjhm
-OGUuLjIyYmEyYWMxZTJjNyAxMDA2NDQKPj4gKy0tLSBhL2NhbWxpYnMvYXgyMDMvanBlZ19tZW1z
-cmNkZXN0LmgKPj4gKysrKyBiL2NhbWxpYnMvYXgyMDMvanBlZ19tZW1zcmNkZXN0LmgKPj4gK0BA
-IC01LDYgKzUsOCBAQAo+PiArIAo+PiArICNpZiBKUEVHX0xJQl9WRVJTSU9OIDwgODAgJiYgIWRl
-ZmluZWQoTUVNX1NSQ0RTVF9TVVBQT1JURUQpCj4+ICsgCj4+ICsrI2RlZmluZSBKUEVHX1NJWkUg
-dW5zaWduZWQgbG9uZwo+PiArKwo+PiArIHZvaWQKPj4gKyBqcGVnX21lbV9zcmMgKGpfZGVjb21w
-cmVzc19wdHIgY2luZm8sIHVuc2lnbmVkIGNoYXIgKiBidWZmZXIsCj4+ICsgCXVuc2lnbmVkIGxv
-bmcgYnVmc2l6ZSk7Cj4+ICtkaWZmIC0tZ2l0IGEvY2FtbGlicy9qbDIwMDVjL2psMjAwNWJjZF9k
-ZWNvbXByZXNzLmMgYi9jYW1saWJzL2psMjAwNWMvamwyMDA1YmNkX2RlY29tcHJlc3MuYwo+PiAr
-aW5kZXggZGZmMmQ2MjY0MDI1Li44YzMzMDdmZDYwOTggMTAwNjQ0Cj4+ICstLS0gYS9jYW1saWJz
-L2psMjAwNWMvamwyMDA1YmNkX2RlY29tcHJlc3MuYwo+PiArKysrIGIvY2FtbGlicy9qbDIwMDVj
-L2psMjAwNWJjZF9kZWNvbXByZXNzLmMKPj4gK0BAIC04NSw3ICs4NSw3IEBAIGpsMjAwNWJjZF9k
-ZWNvbXByZXNzICh1bnNpZ25lZCBjaGFyICpvdXRwdXQsIHVuc2lnbmVkIGNoYXIgKmlucHV0LAo+
-PiArIAlzdHJ1Y3QganBlZ19lcnJvcl9tZ3IgamNlcnIsIGpkZXJyOwo+PiArIAlKT0NURVQgKmpw
-ZWdfaGVhZGVyID0gTlVMTDsKPj4gKyAJaW50IG91dHB1dHNpemUgPSAwOwo+PiArLQl1bnNpZ25l
-ZCBsb25nIGpwZWdfaGVhZGVyX3NpemUgPSAwOwo+PiArKwlKUEVHX1NJWkUganBlZ19oZWFkZXJf
-c2l6ZSA9IDA7Cj4+ICsgCWludCBpLCB4LCB5LCB4MSwgeTEsIGpwZWdfZGF0YV9zaXplLCBqcGVn
-X2RhdGFfaWR4LCBlb2ksIHNpemUsIHJldDsKPj4gKyAJSlNBTVBMRSBncmVlbls4ICogMTZdOwo+
-PiArIAlKU0FNUExFIHJlZFs4ICogOF07Cj4+ICtkaWZmIC0tZ2l0IGEvY2FtbGlicy9qbDIwMDVj
-L2pwZWdfbWVtc3JjZGVzdC5oIGIvY2FtbGlicy9qbDIwMDVjL2pwZWdfbWVtc3JjZGVzdC5oCj4+
-ICtpbmRleCA0MzM0ZTA5OTY4OGEuLjk0ZmNhMDcwZDA1YiAxMDA2NDQKPj4gKy0tLSBhL2NhbWxp
-YnMvamwyMDA1Yy9qcGVnX21lbXNyY2Rlc3QuaAo+PiArKysrIGIvY2FtbGlicy9qbDIwMDVjL2pw
-ZWdfbWVtc3JjZGVzdC5oCj4+ICtAQCAtNSw2ICs1LDggQEAKPj4gKyAKPj4gKyAjaWYgSlBFR19M
-SUJfVkVSU0lPTiA8IDgwICYmICFkZWZpbmVkKE1FTV9TUkNEU1RfU1VQUE9SVEVEKQo+PiArIAo+
-PiArKyNkZWZpbmUgSlBFR19TSVpFIHVuc2lnbmVkIGxvbmcKPj4gKysKPj4gKyB2b2lkCj4+ICsg
-anBlZ19tZW1fc3JjIChqX2RlY29tcHJlc3NfcHRyIGNpbmZvLCB1bnNpZ25lZCBjaGFyICogYnVm
-ZmVyLAo+PiArIAl1bnNpZ25lZCBsb25nIGJ1ZnNpemUpOwo+PiArZGlmZiAtLWdpdCBhL2NhbWxp
-YnMvcHRwMi9jaGRrLmMgYi9jYW1saWJzL3B0cDIvY2hkay5jCj4+ICtpbmRleCAyNzg3YTcyNjFj
-NGEuLjI2NDZjM2JhMGZiMSAxMDA2NDQKPj4gKy0tLSBhL2NhbWxpYnMvcHRwMi9jaGRrLmMKPj4g
-KysrKyBiL2NhbWxpYnMvcHRwMi9jaGRrLmMKPj4gK0BAIC0xMTQ1LDcgKzExNDUsNyBAQCBzdGF0
-aWMgdm9pZCB5dXZfbGl2ZV90b19qcGVnKHVuc2lnbmVkIGNoYXIgKnBfeXV2LAo+PiArIAlzdHJ1
-Y3QJCWpwZWdfZXJyb3JfbWdyIGplcnI7Cj4+ICsgCUpTQU1QUk9XCXJvd19wdHJbMV07Cj4+ICsg
-CXVpbnQ4X3QJCSpvdXRidWYgPSBOVUxMLCAqdG1wcm93YnVmID0gTlVMTDsKPj4gKy0JdW5zaWdu
-ZWQgbG9uZwlvdXRsZW4gPSAwOwo+PiArKwlKUEVHX1NJWkUJb3V0bGVuID0gMDsKPj4gKyAJdW5z
-aWduZWQgaW50CXJvd19pbmM7Cj4+ICsgCWludAkJc3NoaWZ0LCBkc2hpZnQsIHhzaGlmdCwgc2tp
-cDsKPj4gKyAKPj4gK2RpZmYgLS1naXQgYS9saWJncGhvdG8yX3BvcnQvZ3Bob3RvLW00L2dwLWxp
-YmpwZWcubTQgYi9saWJncGhvdG8yX3BvcnQvZ3Bob3RvLW00L2dwLWxpYmpwZWcubTQKPj4gK2lu
-ZGV4IGNlOWU4MTZmZGJjZS4uNDg3MDg4MmE2ODZkIDEwMDY0NAo+PiArLS0tIGEvbGliZ3Bob3Rv
-Ml9wb3J0L2dwaG90by1tNC9ncC1saWJqcGVnLm00Cj4+ICsrKysgYi9saWJncGhvdG8yX3BvcnQv
-Z3Bob3RvLW00L2dwLWxpYmpwZWcubTQKPj4gK0BAIC03Nyw2ICs3NywzOCBAQCBmb3VuZCBhbmQg
-bWFkZSB0byB3b3JrLgo+PiArICAgICBHUF9DT05GSUdfTVNHKFtKUEVHIG1hbmdsaW5nIHN1cHBv
-cnRdLAo+PiArICAgICAgICAgICAgICAgICAgIFske2hhdmVfbGlianBlZ31dKQo+PiArICAgXSkK
-Pj4gKysgIGRubCBmaW5kIHR5cGUgb2YgbWVtZGVzdAo+PiArKyAgQUNfTEFOR19QVVNIKFtDXSkK
-Pj4gKysKPj4gKysgIEFDX01TR19DSEVDS0lORyhbdHlwZSBvZiBqcGVnX21lbV9kZXN0IHNpemVd
-KQo+PiArKyAgQUNfQ09NUElMRV9JRkVMU0UoWwo+PiArKyAgICAjaW5jbHVkZSA8c3RkaW8uaD4K
-Pj4gKysgICAgI2luY2x1ZGUgPHVuaXN0ZC5oPgo+PiArKyAgICAjaW5jbHVkZSA8anBlZ2xpYi5o
-Pgo+PiArKyAgICB2b2lkIGYoal9jb21wcmVzc19wdHIgY2luZm8sIHVuc2lnbmVkIGNoYXIgKiog
-b3V0YnVmZmVyLCB1bnNpZ25lZCBsb25nICogb3V0c2l6ZSkgewo+PiArKwkgICAganBlZ19tZW1f
-ZGVzdChjaW5mbywgb3V0YnVmZmVyLCBvdXRzaXplKTsKPj4gKysgICAgfQo+PiArKyAgXSxbCj4+
-ICsrICAgICBBQ19NU0dfUkVTVUxUKFt1bnNpZ25lZCBsb25nKl0pCj4+ICsrICAgICBBQ19ERUZJ
-TkUoW0pQRUdfU0laRV0sW3Vuc2lnbmVkIGxvbmddLCAiSlBFRyBtZW1kZXN0IHNpemUgdHlwZSIp
-Cj4+ICsrICBdLFsKPj4gKysgICAgIEFDX0NPTVBJTEVfSUZFTFNFKFsKPj4gKysgICAgI2luY2x1
-ZGUgPHN0ZGlvLmg+Cj4+ICsrICAgICNpbmNsdWRlIDx1bmlzdGQuaD4KPj4gKysgICAgI2luY2x1
-ZGUgPGpwZWdsaWIuaD4KPj4gKysgICAgdm9pZCBmKGpfY29tcHJlc3NfcHRyIGNpbmZvLCB1bnNp
-Z25lZCBjaGFyICoqIG91dGJ1ZmZlciwgc2l6ZV90ICogb3V0c2l6ZSkgewo+PiArKwkgICAganBl
-Z19tZW1fZGVzdChjaW5mbywgb3V0YnVmZmVyLCBvdXRzaXplKTsKPj4gKysgICAgfQo+PiArKyAg
-ICBdLFsKPj4gKysgICAgIEFDX01TR19SRVNVTFQoW3NpemVfdCpdKQo+PiArKyAgICAgQUNfREVG
-SU5FKFtKUEVHX1NJWkVdLFtzaXplX3RdLCAiSlBFRyBtZW1kZXN0IHNpemUgdHlwZSIpCj4+ICsr
-ICAgIF0sWwo+PiArKyAgICAgQUNfTVNHX1JFU1VMVChbdW5rbm93biwgdXNpbmcgdW5zaWduZWQg
-bG9uZypdKQo+PiArKyAgICAgQUNfREVGSU5FKFtKUEVHX1NJWkVdLFt1bnNpZ25lZCBsb25nXSwg
-IkpQRUcgbWVtZGVzdCBzaXplIHR5cGUiKQo+PiArKyAgICBdKQo+PiArKyAgXQo+PiArKyAgKQo+
-PiArKyAgQUNfTEFOR19QT1AoW0NdKQo+PiArIF0sCj4+ICsgW0FDX01TR19FUlJPUihbCj4+ICsg
-VW5oYW5kbGVkIHZhbHVlIGdpdmVuIHRvIC0td2l0aC1qcGVnOiAke3dpdGhfanBlZ30KPj4gKy0t
-IAo+PiArMi40My4wCj4+ICsKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZ3Bob3RvMi9saWJn
-cGhvdG8yLm1rIGIvcGFja2FnZS9saWJncGhvdG8yL2xpYmdwaG90bzIubWsKPj4gaW5kZXggOTVj
-MDE5MGVlNjNkLi40MjY1ZDFjNTdlMTAgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvbGliZ3Bob3Rv
-Mi9saWJncGhvdG8yLm1rCj4+ICsrKyBiL3BhY2thZ2UvbGliZ3Bob3RvMi9saWJncGhvdG8yLm1r
-Cj4+IEBAIC05LDYgKzksOCBAQCBMSUJHUEhPVE8yX1NPVVJDRSA9IGxpYmdwaG90bzItJChMSUJH
-UEhPVE8yX1ZFUlNJT04pLnRhci54ego+PiAgTElCR1BIT1RPMl9TSVRFID0gaHR0cHM6Ly9naXRo
-dWIuY29tL2dwaG90by9saWJncGhvdG8yL3JlbGVhc2VzL2Rvd25sb2FkL3YkKExJQkdQSE9UTzJf
-VkVSU0lPTikKPj4gIExJQkdQSE9UTzJfTElDRU5TRSA9IExHUEwtMi4xKywgR1BMLTIuMCAoYWRj
-NjUpLCBHUEwtMi4wKyAoc29tZSBjYW1saWJzKSwgXAo+PiAgCUxHUEwtMi4wIChzaXBpeCksIExH
-UEwtMy4wKyAocGVudGF4KSwgQlNELTMtQ2xhdXNlIChheDIwMy90aW55anBlZykKPj4gKyMgMDAw
-MS1hdXRvY29uZi1jaGVja3MtZm9yLXRoZS1zaXplLXR5cGUtb2YtanBlZ19tZW1fZGVzdC5wYXRj
-aAo+PiArTElCR1BIT1RPMl9BVVRPUkVDT05GID0gWUVTCj4+ICAjIFRoZXJlIGlzIGEgc2luZ2xl
-IGxpY2Vuc2UgZmlsZSBmb3IgdGhlIExHUEwtMi4xLCBubyBsaWNlbnNlIGZpbGVzCj4+ICAjIGZv
-ciBvdGhlciBsaWNlbnNlcwo+PiAgTElCR1BIT1RPMl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+
-IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVp
-bGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2ad5b883342b92c354c8a110ffbaf1ca7dda20f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+The commit adds an upstream patch to fix the following build failure:
+
+jl2005c/jl2005bcd_decompress.c: In function 'jl2005bcd_decompress':
+jl2005c/jl2005bcd_decompress.c:161:46: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
+  161 |         jpeg_mem_dest (&cinfo, &jpeg_header, &jpeg_header_size);
+      |                                              ^~~~~~~~~~~~~~~~~
+      |                                              |
+      |                                              long unsigned int *
+
+Fixes:
+- https://autobuild.buildroot.org/results/cb983d9ad90170aa8d7f2b9a5dfc30055d83b5de
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ ...checks-for-the-size-type-of-jpeg_mem_dest.patch | 143 +++++++++++++++++++++
+ package/libgphoto2/libgphoto2.mk                   |   2 +
+ 2 files changed, 145 insertions(+)
+
+diff --git a/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch b/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+new file mode 100644
+index 0000000000..543678181b
+--- /dev/null
++++ b/package/libgphoto2/0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
+@@ -0,0 +1,143 @@
++From ca4441f48117c681cecfb3c883115e0546aed985 Mon Sep 17 00:00:00 2001
++From: Marcus Meissner <marcus@jet.franken.de>
++Date: Sun, 29 Mar 2026 21:31:49 +0200
++Subject: [PATCH] autoconf checks for the size type of jpeg_mem_dest
++
++fixes https://github.com/gphoto/libgphoto2/pull/1176
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://github.com/gphoto/libgphoto2/commit/ca4441f48117c681cecfb3c883115e0546aed985
++---
++ camlibs/ax203/ax203.c                   |  2 +-
++ camlibs/ax203/ax203_compress_jpeg.c     |  2 +-
++ camlibs/ax203/jpeg_memsrcdest.h         |  2 ++
++ camlibs/jl2005c/jl2005bcd_decompress.c  |  2 +-
++ camlibs/jl2005c/jpeg_memsrcdest.h       |  2 ++
++ camlibs/ptp2/chdk.c                     |  2 +-
++ libgphoto2_port/gphoto-m4/gp-libjpeg.m4 | 32 +++++++++++++++++++++++++
++ 7 files changed, 40 insertions(+), 4 deletions(-)
++
++diff --git a/camlibs/ax203/ax203.c b/camlibs/ax203/ax203.c
++index 62f572686c44..b9db8ebdabf1 100644
++--- a/camlibs/ax203/ax203.c
+++++ b/camlibs/ax203/ax203.c
++@@ -1202,7 +1202,7 @@ ax203_encode_image(Camera *camera, int **src, char *dest, unsigned int dest_size
++ 	struct jpeg_compress_struct cinfo;
++ 	struct jpeg_error_mgr jcerr;
++ 	JOCTET *jpeg_dest = NULL;
++-	unsigned long jpeg_size = 0;
+++	JPEG_SIZE jpeg_size = 0;
++ 	JSAMPLE row[camera->pl->width * 3];
++ 	JSAMPROW row_pointer[1] = { row };
++ #endif
++diff --git a/camlibs/ax203/ax203_compress_jpeg.c b/camlibs/ax203/ax203_compress_jpeg.c
++index 1ec7534ff484..22068afd79c0 100644
++--- a/camlibs/ax203/ax203_compress_jpeg.c
+++++ b/camlibs/ax203/ax203_compress_jpeg.c
++@@ -124,7 +124,7 @@ ax206_compress_jpeg(Camera *camera, int **in, uint8_t *outbuf, int out_size,
++ 	jvirt_barray_ptr *in_coefficients;
++ 	unsigned int i, x, y;
++ 	int stop, size, ret, outc;
++-	unsigned long regular_jpeg_size = 0, buf_size = 0;
+++	JPEG_SIZE regular_jpeg_size = 0, buf_size = 0;
++ 	int last_dc_val[3] = { 0, 0, 0 };
++ 
++ 	/* We have a rgb24bit image in the desired dimensions, first we
++diff --git a/camlibs/ax203/jpeg_memsrcdest.h b/camlibs/ax203/jpeg_memsrcdest.h
++index 674ab7128f8e..22ba2ac1e2c7 100644
++--- a/camlibs/ax203/jpeg_memsrcdest.h
+++++ b/camlibs/ax203/jpeg_memsrcdest.h
++@@ -5,6 +5,8 @@
++ 
++ #if JPEG_LIB_VERSION < 80 && !defined(MEM_SRCDST_SUPPORTED)
++ 
+++#define JPEG_SIZE unsigned long
+++
++ void
++ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
++ 	unsigned long bufsize);
++diff --git a/camlibs/jl2005c/jl2005bcd_decompress.c b/camlibs/jl2005c/jl2005bcd_decompress.c
++index dff2d6264025..8c3307fd6098 100644
++--- a/camlibs/jl2005c/jl2005bcd_decompress.c
+++++ b/camlibs/jl2005c/jl2005bcd_decompress.c
++@@ -85,7 +85,7 @@ jl2005bcd_decompress (unsigned char *output, unsigned char *input,
++ 	struct jpeg_error_mgr jcerr, jderr;
++ 	JOCTET *jpeg_header = NULL;
++ 	int outputsize = 0;
++-	unsigned long jpeg_header_size = 0;
+++	JPEG_SIZE jpeg_header_size = 0;
++ 	int i, x, y, x1, y1, jpeg_data_size, jpeg_data_idx, eoi, size, ret;
++ 	JSAMPLE green[8 * 16];
++ 	JSAMPLE red[8 * 8];
++diff --git a/camlibs/jl2005c/jpeg_memsrcdest.h b/camlibs/jl2005c/jpeg_memsrcdest.h
++index 4334e099688a..94fca070d05b 100644
++--- a/camlibs/jl2005c/jpeg_memsrcdest.h
+++++ b/camlibs/jl2005c/jpeg_memsrcdest.h
++@@ -5,6 +5,8 @@
++ 
++ #if JPEG_LIB_VERSION < 80 && !defined(MEM_SRCDST_SUPPORTED)
++ 
+++#define JPEG_SIZE unsigned long
+++
++ void
++ jpeg_mem_src (j_decompress_ptr cinfo, unsigned char * buffer,
++ 	unsigned long bufsize);
++diff --git a/camlibs/ptp2/chdk.c b/camlibs/ptp2/chdk.c
++index 2787a7261c4a..2646c3ba0fb1 100644
++--- a/camlibs/ptp2/chdk.c
+++++ b/camlibs/ptp2/chdk.c
++@@ -1145,7 +1145,7 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
++ 	struct		jpeg_error_mgr jerr;
++ 	JSAMPROW	row_ptr[1];
++ 	uint8_t		*outbuf = NULL, *tmprowbuf = NULL;
++-	unsigned long	outlen = 0;
+++	JPEG_SIZE	outlen = 0;
++ 	unsigned int	row_inc;
++ 	int		sshift, dshift, xshift, skip;
++ 
++diff --git a/libgphoto2_port/gphoto-m4/gp-libjpeg.m4 b/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
++index ce9e816fdbce..4870882a686d 100644
++--- a/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
+++++ b/libgphoto2_port/gphoto-m4/gp-libjpeg.m4
++@@ -77,6 +77,38 @@ found and made to work.
++     GP_CONFIG_MSG([JPEG mangling support],
++                   [${have_libjpeg}])
++   ])
+++  dnl find type of memdest
+++  AC_LANG_PUSH([C])
+++
+++  AC_MSG_CHECKING([type of jpeg_mem_dest size])
+++  AC_COMPILE_IFELSE([
+++    #include <stdio.h>
+++    #include <unistd.h>
+++    #include <jpeglib.h>
+++    void f(j_compress_ptr cinfo, unsigned char ** outbuffer, unsigned long * outsize) {
+++	    jpeg_mem_dest(cinfo, outbuffer, outsize);
+++    }
+++  ],[
+++     AC_MSG_RESULT([unsigned long*])
+++     AC_DEFINE([JPEG_SIZE],[unsigned long], "JPEG memdest size type")
+++  ],[
+++     AC_COMPILE_IFELSE([
+++    #include <stdio.h>
+++    #include <unistd.h>
+++    #include <jpeglib.h>
+++    void f(j_compress_ptr cinfo, unsigned char ** outbuffer, size_t * outsize) {
+++	    jpeg_mem_dest(cinfo, outbuffer, outsize);
+++    }
+++    ],[
+++     AC_MSG_RESULT([size_t*])
+++     AC_DEFINE([JPEG_SIZE],[size_t], "JPEG memdest size type")
+++    ],[
+++     AC_MSG_RESULT([unknown, using unsigned long*])
+++     AC_DEFINE([JPEG_SIZE],[unsigned long], "JPEG memdest size type")
+++    ])
+++  ]
+++  )
+++  AC_LANG_POP([C])
++ ],
++ [AC_MSG_ERROR([
++ Unhandled value given to --with-jpeg: ${with_jpeg}
++-- 
++2.43.0
++
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+index 95c0190ee6..4265d1c57e 100644
+--- a/package/libgphoto2/libgphoto2.mk
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -9,6 +9,8 @@ LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.xz
+ LIBGPHOTO2_SITE = https://github.com/gphoto/libgphoto2/releases/download/v$(LIBGPHOTO2_VERSION)
+ LIBGPHOTO2_LICENSE = LGPL-2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+ 	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg)
++# 0001-autoconf-checks-for-the-size-type-of-jpeg_mem_dest.patch
++LIBGPHOTO2_AUTORECONF = YES
+ # There is a single license file for the LGPL-2.1, no license files
+ # for other licenses
+ LIBGPHOTO2_LICENSE_FILES = COPYING
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
