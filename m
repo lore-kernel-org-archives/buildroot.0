@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFCFCD4F49
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F38FCD4851
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBCA184191;
-	Fri, 15 May 2026 09:56:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 468E461510;
+	Fri, 15 May 2026 09:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SRSPDk1Q5qHS; Fri, 15 May 2026 09:56:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WDeQycgiYqJ7; Fri, 15 May 2026 09:56:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB2E8416C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E2C761511
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778839009;
-	bh=Ku+ER6uS5/rGM296YUIGbydZIrPDbq0Lpd9vAJcLAPc=;
+	s=default; t=1778839011;
+	bh=9/KL7rnE4A7Ak/ZeR3w0qdjMuur3gVv468JyYZU/+aQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gtMpMbP3fhHI68sa0knMmGOgRMuBXv3T1LyBFU3L4jY2zogNVknXM4ZUfYaNEDxr8
-	 01by3TxoQErMHDJOIcJHBVSzcs/6E+0EUMvAjAWFrzvvqvrub4ytvnBv8tRDDPxL48
-	 UqDp2aAXWl4qciqPg+KiIR9me94SDOui/NSfUU4fi9RZ9nc9OzAecBfGcAmXUJIBjt
-	 E8/LU6vloILggdt9NTvYueLloB1xCOZDiawFgePKjRQdQoDQNPhFWfN7HPKK4k8/vm
-	 AU0MmGEuBLbb+4+MOJRffcB7bQ/fX8+SnJfoWOZOygMrLeXHrux92l8lybXr5LC8dr
-	 TGMNF290m9VsQ==
+	b=JcZJHbj8Qbp41q/n7WDsxN3Q5rgEht4HePVFobUHVAxoiINcVCPsiWWx4sh2WKrEn
+	 K81ZTcsszpWUvN/mEXkwQWq55NEiwhi5P7iHa/reUs2BLD9hXx6F1k1PisZ35UI0BW
+	 f5L1jPhbCh02lQoJSYOKY144OptfG9pY8KzWBdrgJPp9lV5CNiK4qMjlUFm5JyACS/
+	 y9NSlsBpI5ICy5+GSb5/qTwdKT2wTStchQiGfSL87UZskDAFaNh3ZVw1vc4vnRC5T8
+	 TzzMA5Jq20drDlD8ueelaxBn0iJ/R57E2SrtXEVxjm/a9YScaiUJsrHQgLCxZES46c
+	 NOYVLoMNVPDbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDB2E8416C;
-	Fri, 15 May 2026 09:56:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 070AFE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E2C761511;
+	Fri, 15 May 2026 09:56:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 482F0E7
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5550783DD2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DC4D41747
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bmhBEHm4T2Hb for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zTUXwvkt1ajG for <buildroot@buildroot.org>;
  Fri, 15 May 2026 09:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91B8283E8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1AE14174F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91B8283E8F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1AE14174F
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 026CB8632D; Fri, 15 May 2026 09:56:34 +0000 (UTC)
+ id 131418632B; Fri, 15 May 2026 09:56:34 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 15 May 2026 11:39:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 73594f1d0e53f5be9f2676d33524cedd857fbffe
-X-Git-Newrev: 4e05cde6527621736cb6cbbc26958adc4a9942ca
+X-Git-Oldrev: 4e05cde6527621736cb6cbbc26958adc4a9942ca
+X-Git-Newrev: 7c941cb88b795e90b00892043c75c525b1d336f5
 X-Patchwork-Hint: ignore
-Message-Id: <20260515095634.026CB8632D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libmediaart: bump
- version to 1.9.7
+Message-Id: <20260515095634.131418632B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libmbim: bump version
+ to 1.34.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e05cde6527621736cb6cbbc26958adc4a9942ca
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c941cb88b795e90b00892043c75c525b1d336f5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.7.news
+https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/blob/1.34.0/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libmediaart/libmediaart.hash | 4 ++--
- package/libmediaart/libmediaart.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
-index 34094744a9..f5d052a61a 100644
---- a/package/libmediaart/libmediaart.hash
-+++ b/package/libmediaart/libmediaart.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.6.sha256sum:
--sha256  c3bc5025d7db380587f9c8eb800c611f6b5a16d6b4b78fcff93f62876a677f17  libmediaart-1.9.6.tar.xz
-+# From https://download.gnome.org/sources/libmediaart/1.9/libmediaart-1.9.7.sha256sum
-+sha256  2b43dd9f54f0d8d0b89e2addb83341ab06d7b98cb1b2e704383584af9c560f6b  libmediaart-1.9.7.tar.xz
- 
- # Locally computed:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index d4480dbe5d..3d454023f3 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index d487b5156d..8e3ed5a8c4 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  7eca9f5af2eecfdb5e3a2a865a7f29d0ac9532ab187a9c6adce4d85f897eb385  libmbim-1.32.0.tar.gz
++sha256  55bb88df358f8a36b6e01e63877500d7c6420f5907d2d3101812b4912eabe08f  libmbim-1.34.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-or-later.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 190f3547ec..e2ae0d83d0 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBMEDIAART_VERSION_MAJOR = 1.9
--LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).6
-+LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).7
- LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
- LIBMEDIAART_SITE = \
- 	https://download.gnome.org/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
+-LIBMBIM_VERSION = 1.32.0
++LIBMBIM_VERSION = 1.34.0
+ LIBMBIM_SITE = https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/$(LIBMBIM_VERSION)
+ LIBMBIM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (programs)
+ LIBMBIM_LICENSE_FILES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
