@@ -4,59 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1017CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 16:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E83CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 16:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71A7880DF4;
-	Fri, 15 May 2026 16:42:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8778B84374;
+	Fri, 15 May 2026 16:43:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2SQIxl04P9w; Fri, 15 May 2026 16:42:10 +0000 (UTC)
+ id M-q5nJd9NpI7; Fri, 15 May 2026 16:43:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93F1284420
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9682284420
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778863330;
-	bh=APqiZnX02gIQOQOTRHw5u+zvE6mS4bxBIW0kgL7xsXw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NLWuH1fJkIEI4yaA0pYxaxSMySM+fmhR/fH/LMfBqt1OTzciicnUgwzRL3OHPM2PR
-	 t298kAYy8A2UxuafezBub93oV4h8OTZETyupHWXbTBR+7FVc7PH/mU2bCK2TufSu/0
-	 DvXXy0lofXJPc9g8w2VEQS2c97LO76q7+bZ1ruLyDdvro/Sjpegvgo9cqfXt39r3vb
-	 TK/3fh/2XqpLFD+wkHm3a7h9aeLQ39cAkyJQg+z2KJqOL5G+fAmkoY04m4ao8r0AYN
-	 zczOPuGfdcRZOpvYIoP13FXG+4WSfWqVYdQCyyDAbqEI9WX3PN1fflCzYekEn6esbz
-	 cAz8iDwugA37Q==
+	s=default; t=1778863391;
+	bh=fp6XOypl6VSc+YspN9cxTSVqNcRLomQohhG1uJSLQHE=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=GK+rdijNS2h0M7URr/E6TwSB0oY09SidYEixcG06tp6fXrkwpid8iBgmkNacxht/6
+	 IKVZhlecji1mlwjgqwtebhdC4x0QAPYKkoOxQPEesoUnlGYFh3LKBpWEndfD4Wyg2e
+	 7YFF17pw4vnNoJZItyqGavQ5cOIcxVxLzCoC3e9zEOdm22VRVNyB0OPWWjiOvy+RFk
+	 uSP1KtGsap6ydgPCP9qHiXO3UhytQSB8+KOcIslrQbOH3UdpTgpORUgJ2UzapId5fv
+	 yqcyyrR8rPRn3P8RPmoVs9cZZXq6iwB5LO06o3alcIvbaBoi0yoygJXML5Ga+bbqYj
+	 6em5sdqt5aaWA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93F1284420;
-	Fri, 15 May 2026 16:42:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 33AC7282
- for <buildroot@buildroot.org>; Fri, 15 May 2026 16:42:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9682284420;
+	Fri, 15 May 2026 16:43:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E6F436F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 16:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1071040EEC
- for <buildroot@buildroot.org>; Fri, 15 May 2026 16:42:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8EB940EEC
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 16:43:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZMpPu5It9g8L for <buildroot@buildroot.org>;
- Fri, 15 May 2026 16:42:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18D964049D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18D964049D
- for <buildroot@buildroot.org>; Fri, 15 May 2026 16:42:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A362863B2; Fri, 15 May 2026 16:42:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 18:38:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40e9341b0b2955c0ed2fc7454a1a392e565d6e2d
-X-Git-Newrev: 955fb2f7c41f49e8d7fc8c60b8557f6f7c1d84c4
-X-Patchwork-Hint: ignore
-Message-Id: <20260515164201.4A362863B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libabseil-cpp: add patch to fix
+ id qEDtrGC1NqfF for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 16:43:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BC5174049D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC5174049D
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BC5174049D
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 16:43:09 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-488e1a8ac40so142005e9.2
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 09:43:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1778863387; x=1779468187;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0sUeCaV1mvoMKn9/jEJsUOt3TEGpynLaUO2hz7+GEPY=;
+ b=rW8YeCMWGMiSmvN0WYqIPxSwnM+x7VuV+2/1ZE1rTnbGkm2tjWLqs8QaEGeuAh78Vr
+ ZVRuDamvnvA5/sDLSJRb3BWlT2mbr/9Ch/KortSMDtZtYIyrBZ2Uuq616S4prOTrLcWq
+ YBfHw6lqgqnQ5z2WTlKExgCQfEAOGdCI5RdqsavoOU2rirbGRJa87Xc7Deh5drTZ0bMa
+ GpPPk2H5EXf4zXt6wHre0M59ZHYYhNWFUEaBwE0R1Ia9OTbZTd26nEe6VGvEZze4A8pb
+ TIy3AkL9cnqtNjCTigICKFTctidOyXlIyyKUPC6+aCzSjH2pDPZdJ5PfQLmdWVRFB2hl
+ cC0Q==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ/jtbZGYRommZu/haXmrKKHBQ08ezR0A+FA0Js00JfYCgMId3mgMIuKvOYEskAoZMrFKmR+2rDiyow=@buildroot.org
+X-Gm-Message-State: AOJu0YwX2W07+tHS4q4H2LXFF3ygK7AVizyZEHylLtcCP8RP+8SICSOf
+ JRgHqYVDwjGyvq4gEc0qAqEi6BtzPEkZJPY/87ZxIPFacZYHDbvHEeZOUJEKYSgvWJxKqB5LXab
+ YWE4MsII=
+X-Gm-Gg: Acq92OF9wK8qw/7NjtC0yapP5DiteHGzH3wyQNSs8ISYT1PGm/e/aGagid3BvmkEYWF
+ Wb8PH/DZ/tVXBb5O46BwCfcBwMpsVSkTWL1qNupjSdmdOoO9MddVu9KxRzBL7JcvBFEOGb5nq1D
+ bqDriNiOsgv8MEI0xHLpkcR3cRGmzsFvN13ave8SFiyE/OThFO67tBtrAnVx/FVA7rPk7C/Fkbz
+ MSBxO80jfe5BeCsmYzHGSHtrUn+Qw/x7fZQ1VgTnsbBqMBzFHHZTQENfkXDiETrEpnc/VplQZgH
+ BNpBot9y7vDezvPBSyX9jYaEMGPrDItLhk2Vxg2vsv/eoyXg6fGaimTvHqiPLRsoOPcgyyYZD/4
+ d/aT+ZdLKHFGesfktjTphYacjgixjMilKMlLjDc6dJ37nXgRI7g1JJ1A8+0fGWVUFTXD/rymLne
+ iMBLM9awOU75mQ094YNoQAuCg5RpPNcO91qmzLv57FOkU8ofueuBJVKrmtyTrryzkx38e0MlbMB
+ DpFKeAi2sXA+ktrVC3IXE9CWENPFleyhQN+SpKvzDLwefStNxXkY90nXIO9c0DzbCNUvt7B7luH
+X-Received: by 2002:a05:600c:34c4:b0:48a:89d9:a419 with SMTP id
+ 5b1f17b1804b1-48fe60ecdafmr70666365e9.11.1778863387397; 
+ Fri, 15 May 2026 09:43:07 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48fe537c516sm76369685e9.13.2026.05.15.09.43.06
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 May 2026 09:43:07 -0700 (PDT)
+Message-ID: <02586566-c1dd-4381-87c7-144d2f484346@smile.fr>
+Date: Fri, 15 May 2026 18:43:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20260427201606.896700-1-ju.o@free.fr>
+Content-Language: fr
+In-Reply-To: <20260427201606.896700-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1778863387; x=1779468187; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=0sUeCaV1mvoMKn9/jEJsUOt3TEGpynLaUO2hz7+GEPY=;
+ b=fbnp3M0+LqIscTXiqhd30DCYd3ZCmCtQ008jX4yE1qgV/8HrjgZoJF+0gYPeXBOaYQ
+ Lm+U003Q4khbtMJLYnsTjMGaLqecRSrLfWDHweCPdeqo6p7Z3F1x3O+jrgeKPSCdfn2a
+ J+TPFTtHmzO6T++SLY/wyBL2U7cZtlKPtxRMY=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=fbnp3M0+
+Subject: Re: [Buildroot] [PATCH 1/1] package/libabseil-cpp: add patch to fix
  build with gcc <= 12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,107 +127,87 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/955fb2f7c41f49e8d7fc8c60b8557f6f7c1d84c4
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-libabseil-cpp headers can break some packages build, like protobuf,
-when compiled with gcc 12. See [1] [2]. The issue has been reported
-in protobuf upstream, in [3].
-
-The issue is due to gcc <= 12 not supporting the mix of standard
-C++ attributes with GNU attributes. See [4].
-
-Gcc 12 has been removed from Buildroot internal toolchains in
-commit [5], but gcc 12 can still be present in external toolchains
-or on the host. This is currently the case of the Buildroot Docker
-reference image, based on Debian 12 (Bookworm).
-
-This commit fixes the issue by adding a package patch.
-
-Fixes:
-- [1] [2] and many more.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/13904066346
-[2] https://autobuild.buildroot.org/results/33f6cfd37cb48c15a53b3e7123d5ce8388a0f2ab
-[3] https://github.com/protocolbuffers/protobuf/issues/26383
-[4] https://gcc.gnu.org/PR69585
-[5] https://gitlab.com/buildroot.org/buildroot/-/commit/58cf7c51da3ae4804332f68ee934e153d695d047
-[6] https://github.com/abseil/abseil-cpp/pull/2044
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...ix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch b/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
-new file mode 100644
-index 0000000000..8f5e255795
---- /dev/null
-+++ b/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
-@@ -0,0 +1,55 @@
-+From 77326826119439c06e341c9d090633ecd9b520d6 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Mon, 27 Apr 2026 19:38:19 +0200
-+Subject: [PATCH] base: fix ABSL_ATTRIBUTE_WARN_UNUSED with gcc <= 12
-+
-+Gcc <= 12 does not support mixing standard C++ attributes with
-+GNU attributes. See [1].
-+
-+This can lead to build failures such as [2] [3] and [4]. In those
-+situations, the compilation fails with error such as:
-+
-+    /usr/include/absl/base/attributes.h:1076:36: error: expected identifier before '[' token
-+
-+Gcc maintainers mentioned in [1] comment 9 that this bugfix will
-+not be backported in Gcc 12. Gcc 12 is still used in LTS
-+distributions. For example, it is included in Debian 12 (Bookworm),
-+which is still supported until 2028. See [5].
-+
-+This commit adds a workaround for gcc <= 12 which uses
-+__attribute__ in that case, which fixes the compilation failure.
-+
-+[1] https://gcc.gnu.org/PR69585
-+[2] https://github.com/protocolbuffers/protobuf/issues/26383
-+[3] https://autobuild.buildroot.org/results/33f6cfd37cb48c15a53b3e7123d5ce8388a0f2ab/build-end.log
-+[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/13904066346
-+[5] https://www.debian.org/releases/bookworm/
-+
-+Upstream: https://github.com/abseil/abseil-cpp/pull/2044
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ absl/base/attributes.h | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/absl/base/attributes.h b/absl/base/attributes.h
-+index 5887fcaf..a26143e1 100644
-+--- a/absl/base/attributes.h
-++++ b/absl/base/attributes.h
-+@@ -1092,7 +1092,14 @@ struct AbslInternal_YouForgotToExplicitlyInitializeAField {
-+ // See https://clang.llvm.org/docs/AttributeReference.html#warn-unused and
-+ // https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html#index-warn_005funused-type-attribute
-+ #if ABSL_HAVE_CPP_ATTRIBUTE(gnu::warn_unused)
-++// Only GCC >= 13 allows mixing standard and gnu attributes.
-++// In case of gcc < 13, fallback on using __attribute__.
-++// https://gcc.gnu.org/PR69585
-++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 13
-++#define ABSL_ATTRIBUTE_WARN_UNUSED __attribute__((warn_unused))
-++#else
-+ #define ABSL_ATTRIBUTE_WARN_UNUSED [[gnu::warn_unused]]
-++#endif
-+ #else
-+ #define ABSL_ATTRIBUTE_WARN_UNUSED
-+ #endif
-+-- 
-+2.54.0
-+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKTGUgMjcvMDQvMjAyNiDDoCAyMjoxNiwgSnVsaWVuIE9saXZhaW4gdmlh
+IGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IGxpYmFic2VpbC1jcHAgaGVhZGVycyBjYW4gYnJlYWsg
+c29tZSBwYWNrYWdlcyBidWlsZCwgbGlrZSBwcm90b2J1ZiwKPiB3aGVuIGNvbXBpbGVkIHdpdGgg
+Z2NjIDEyLiBTZWUgWzFdIFsyXS4gVGhlIGlzc3VlIGhhcyBiZWVuIHJlcG9ydGVkCj4gaW4gcHJv
+dG9idWYgdXBzdHJlYW0sIGluIFszXS4KPiAKPiBUaGUgaXNzdWUgaXMgZHVlIHRvIGdjYyA8PSAx
+MiBub3Qgc3VwcG9ydGluZyB0aGUgbWl4IG9mIHN0YW5kYXJkCj4gQysrIGF0dHJpYnV0ZXMgd2l0
+aCBHTlUgYXR0cmlidXRlcy4gU2VlIFs0XS4KPiAKPiBHY2MgMTIgaGFzIGJlZW4gcmVtb3ZlZCBm
+cm9tIEJ1aWxkcm9vdCBpbnRlcm5hbCB0b29sY2hhaW5zIGluCj4gY29tbWl0IFs1XSwgYnV0IGdj
+YyAxMiBjYW4gc3RpbGwgYmUgcHJlc2VudCBpbiBleHRlcm5hbCB0b29sY2hhaW5zCj4gb3Igb24g
+dGhlIGhvc3QuIFRoaXMgaXMgY3VycmVudGx5IHRoZSBjYXNlIG9mIHRoZSBCdWlsZHJvb3QgRG9j
+a2VyCj4gcmVmZXJlbmNlIGltYWdlLCBiYXNlZCBvbiBEZWJpYW4gMTIgKEJvb2t3b3JtKS4KPiAK
+PiBUaGlzIGNvbW1pdCBmaXhlcyB0aGUgaXNzdWUgYnkgYWRkaW5nIGEgcGFja2FnZSBwYXRjaC4K
+PiAKPiBGaXhlczoKPiAtIFsxXSBbMl0gYW5kIG1hbnkgbW9yZS4KPiAKPiBbMV0gaHR0cHM6Ly9n
+aXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMzkwNDA2NjM0Ngo+IFsy
+XSBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMzNmNmNmZDM3Y2I0OGMx
+NWE1M2IzZTcxMjNkNWNlODM4OGEwZjJhYgo+IFszXSBodHRwczovL2dpdGh1Yi5jb20vcHJvdG9j
+b2xidWZmZXJzL3Byb3RvYnVmL2lzc3Vlcy8yNjM4Mwo+IFs0XSBodHRwczovL2djYy5nbnUub3Jn
+L1BSNjk1ODUKPiBbNV0gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290
+Ly0vY29tbWl0LzU4Y2Y3YzUxZGEzYWU0ODA0MzMyZjY4ZWU5MzRlMTUzZDY5NWQwNDcKPiBbNl0g
+aHR0cHM6Ly9naXRodWIuY29tL2Fic2VpbC9hYnNlaWwtY3BwL3B1bGwvMjA0NAoKRm9sbG93aW5n
+IHRoZSByZXBseSBmcm9tIERvd2FuOgpodHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3Qv
+MjkwNTcxNjUtNzIyMi00NDRmLTg3YjUtNzMxZmQ5OWU5NGQyQHNtaWxlLmZyLwoKQXBwbGllZCB0
+byBtYXN0ZXIuIFRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEp1bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+Cj4gLS0tCj4gIC4uLlNMX0FUVFJJQlVU
+RV9XQVJOX1VOVVNFRC13aXRoLWdjYy0xMi5wYXRjaCB8IDU1ICsrKysrKysrKysrKysrKysrKysK
+PiAgMSBmaWxlIGNoYW5nZWQsIDU1IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvbGliYWJzZWlsLWNwcC8wMDAyLWJhc2UtZml4LUFCU0xfQVRUUklCVVRFX1dBUk5f
+VU5VU0VELXdpdGgtZ2NjLTEyLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliYWJz
+ZWlsLWNwcC8wMDAyLWJhc2UtZml4LUFCU0xfQVRUUklCVVRFX1dBUk5fVU5VU0VELXdpdGgtZ2Nj
+LTEyLnBhdGNoIGIvcGFja2FnZS9saWJhYnNlaWwtY3BwLzAwMDItYmFzZS1maXgtQUJTTF9BVFRS
+SUJVVEVfV0FSTl9VTlVTRUQtd2l0aC1nY2MtMTIucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0
+NAo+IGluZGV4IDAwMDAwMDAwMDAuLjhmNWUyNTU3OTUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIv
+cGFja2FnZS9saWJhYnNlaWwtY3BwLzAwMDItYmFzZS1maXgtQUJTTF9BVFRSSUJVVEVfV0FSTl9V
+TlVTRUQtd2l0aC1nY2MtMTIucGF0Y2gKPiBAQCAtMCwwICsxLDU1IEBACj4gK0Zyb20gNzczMjY4
+MjYxMTk0MzljMDZlMzQxYzlkMDkwNjMzZWNkOWI1MjBkNiBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
+MDEKPiArRnJvbTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiArRGF0ZTogTW9uLCAy
+NyBBcHIgMjAyNiAxOTozODoxOSArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIGJhc2U6IGZpeCBB
+QlNMX0FUVFJJQlVURV9XQVJOX1VOVVNFRCB3aXRoIGdjYyA8PSAxMgo+ICsKPiArR2NjIDw9IDEy
+IGRvZXMgbm90IHN1cHBvcnQgbWl4aW5nIHN0YW5kYXJkIEMrKyBhdHRyaWJ1dGVzIHdpdGgKPiAr
+R05VIGF0dHJpYnV0ZXMuIFNlZSBbMV0uCj4gKwo+ICtUaGlzIGNhbiBsZWFkIHRvIGJ1aWxkIGZh
+aWx1cmVzIHN1Y2ggYXMgWzJdIFszXSBhbmQgWzRdLiBJbiB0aG9zZQo+ICtzaXR1YXRpb25zLCB0
+aGUgY29tcGlsYXRpb24gZmFpbHMgd2l0aCBlcnJvciBzdWNoIGFzOgo+ICsKPiArICAgIC91c3Iv
+aW5jbHVkZS9hYnNsL2Jhc2UvYXR0cmlidXRlcy5oOjEwNzY6MzY6IGVycm9yOiBleHBlY3RlZCBp
+ZGVudGlmaWVyIGJlZm9yZSAnWycgdG9rZW4KPiArCj4gK0djYyBtYWludGFpbmVycyBtZW50aW9u
+ZWQgaW4gWzFdIGNvbW1lbnQgOSB0aGF0IHRoaXMgYnVnZml4IHdpbGwKPiArbm90IGJlIGJhY2tw
+b3J0ZWQgaW4gR2NjIDEyLiBHY2MgMTIgaXMgc3RpbGwgdXNlZCBpbiBMVFMKPiArZGlzdHJpYnV0
+aW9ucy4gRm9yIGV4YW1wbGUsIGl0IGlzIGluY2x1ZGVkIGluIERlYmlhbiAxMiAoQm9va3dvcm0p
+LAo+ICt3aGljaCBpcyBzdGlsbCBzdXBwb3J0ZWQgdW50aWwgMjAyOC4gU2VlIFs1XS4KPiArCj4g
+K1RoaXMgY29tbWl0IGFkZHMgYSB3b3JrYXJvdW5kIGZvciBnY2MgPD0gMTIgd2hpY2ggdXNlcwo+
+ICtfX2F0dHJpYnV0ZV9fIGluIHRoYXQgY2FzZSwgd2hpY2ggZml4ZXMgdGhlIGNvbXBpbGF0aW9u
+IGZhaWx1cmUuCj4gKwo+ICtbMV0gaHR0cHM6Ly9nY2MuZ251Lm9yZy9QUjY5NTg1Cj4gK1syXSBo
+dHRwczovL2dpdGh1Yi5jb20vcHJvdG9jb2xidWZmZXJzL3Byb3RvYnVmL2lzc3Vlcy8yNjM4Mwo+
+ICtbM10gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzMzZjZjZmQzN2Ni
+NDhjMTVhNTNiM2U3MTIzZDVjZTgzODhhMGYyYWIvYnVpbGQtZW5kLmxvZwo+ICtbNF0gaHR0cHM6
+Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMzkwNDA2NjM0Ngo+
+ICtbNV0gaHR0cHM6Ly93d3cuZGViaWFuLm9yZy9yZWxlYXNlcy9ib29rd29ybS8KPiArCj4gK1Vw
+c3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vYWJzZWlsL2Fic2VpbC1jcHAvcHVsbC8yMDQ0Cj4g
+K1NpZ25lZC1vZmYtYnk6IEp1bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+Cj4gKy0tLQo+ICsg
+YWJzbC9iYXNlL2F0dHJpYnV0ZXMuaCB8IDcgKysrKysrKwo+ICsgMSBmaWxlIGNoYW5nZWQsIDcg
+aW5zZXJ0aW9ucygrKQo+ICsKPiArZGlmZiAtLWdpdCBhL2Fic2wvYmFzZS9hdHRyaWJ1dGVzLmgg
+Yi9hYnNsL2Jhc2UvYXR0cmlidXRlcy5oCj4gK2luZGV4IDU4ODdmY2FmLi5hMjYxNDNlMSAxMDA2
+NDQKPiArLS0tIGEvYWJzbC9iYXNlL2F0dHJpYnV0ZXMuaAo+ICsrKysgYi9hYnNsL2Jhc2UvYXR0
+cmlidXRlcy5oCj4gK0BAIC0xMDkyLDcgKzEwOTIsMTQgQEAgc3RydWN0IEFic2xJbnRlcm5hbF9Z
+b3VGb3Jnb3RUb0V4cGxpY2l0bHlJbml0aWFsaXplQUZpZWxkIHsKPiArIC8vIFNlZSBodHRwczov
+L2NsYW5nLmxsdm0ub3JnL2RvY3MvQXR0cmlidXRlUmVmZXJlbmNlLmh0bWwjd2Fybi11bnVzZWQg
+YW5kCj4gKyAvLyBodHRwczovL2djYy5nbnUub3JnL29ubGluZWRvY3MvZ2NjL0NfMDAyYl8wMDJi
+LUF0dHJpYnV0ZXMuaHRtbCNpbmRleC13YXJuXzAwNWZ1bnVzZWQtdHlwZS1hdHRyaWJ1dGUKPiAr
+ICNpZiBBQlNMX0hBVkVfQ1BQX0FUVFJJQlVURShnbnU6Ondhcm5fdW51c2VkKQo+ICsrLy8gT25s
+eSBHQ0MgPj0gMTMgYWxsb3dzIG1peGluZyBzdGFuZGFyZCBhbmQgZ251IGF0dHJpYnV0ZXMuCj4g
+KysvLyBJbiBjYXNlIG9mIGdjYyA8IDEzLCBmYWxsYmFjayBvbiB1c2luZyBfX2F0dHJpYnV0ZV9f
+Lgo+ICsrLy8gaHR0cHM6Ly9nY2MuZ251Lm9yZy9QUjY5NTg1Cj4gKysjaWYgZGVmaW5lZChfX0dO
+VUNfXykgJiYgIWRlZmluZWQoX19jbGFuZ19fKSAmJiBfX0dOVUNfXyA8IDEzCj4gKysjZGVmaW5l
+IEFCU0xfQVRUUklCVVRFX1dBUk5fVU5VU0VEIF9fYXR0cmlidXRlX18oKHdhcm5fdW51c2VkKSkK
+PiArKyNlbHNlCj4gKyAjZGVmaW5lIEFCU0xfQVRUUklCVVRFX1dBUk5fVU5VU0VEIFtbZ251Ojp3
+YXJuX3VudXNlZF1dCj4gKysjZW5kaWYKPiArICNlbHNlCj4gKyAjZGVmaW5lIEFCU0xfQVRUUklC
+VVRFX1dBUk5fVU5VU0VECj4gKyAjZW5kaWYKPiArLS0gCj4gKzIuNTQuMAo+ICsKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
