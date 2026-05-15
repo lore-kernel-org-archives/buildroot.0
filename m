@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29AC8CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306EDCD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 136F885707;
-	Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6467185537;
+	Tue,  9 Jun 2026 13:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P7l6QEBUVCoj; Tue,  9 Jun 2026 13:02:06 +0000 (UTC)
+ id vn_1pexUGCi5; Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EBEE856E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F0C856D4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010126;
-	bh=YPTNy9aPb+/op5sUVxzCtdv9xkB5+d+9RsbkMvdnqec=;
+	s=default; t=1781010129;
+	bh=lzpIWW5R1FOKj/xB7+uEU1VDM1hEry0ZQ8IyRh9u3H4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AdDOzk66GyYXPsteYbSUX/0yvisfw4N3k5tR2VV4LA4levCz6wB8R6C5/D8/twnjG
-	 zLUfKejO38jJ2mYKZmqmyNt5dcoxsEQVELBUBTMhhSYbjaF9JL9nfbpnFueVwTtlvR
-	 gSvge2ikDCQazsFZY/e7+dGIHMefn1EAk3jBazV9JDRvsrziMlkmUlCLVYRVJdB7jo
-	 v6mOZEywHic51vPzPDi1rUCDJGvDH3tJjR0/Jl+Rezu/oX9DBVdT43XFV1ZwZ7MUwD
-	 GpZV1dB48D2cggtyHchxpUmLGj8C7d9JxbF6S6nhPgyP+CZijTd8iB8RY9TLfjYoPH
-	 Q3CrEU0LWbvuw==
+	b=Bp+XmVsUaIIC+en02mW/khHBi8e87f+r/hjCdURfb41Yj2a32ZKAMz/YMtKgu18Io
+	 3yedm2tBBxGBRwRyd9SVWg10c6YE5eetu+mgZu2tC12s+RPkftt8OK4GHcxHxUWZhD
+	 vz1PFK8u3eraiIRWUYNOLJhc16IP3gi0Zvk/Uk82mwtCiWSdsOS9ZbWr6wYHQxoVQO
+	 Ud3V2hAxoylDi+P6UoNCvIc2psvMXZoFrVV5odXHdFYKBNls6HQPjRL6tNgjJ+zI5B
+	 qG4HmhlFxWEAtYKFVhBlGIAfiT1EnmQJxckl54LEUSpTXsaBXODT1Ehr0osaRxwB/b
+	 +9rwE4q8V0FkQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EBEE856E8;
-	Tue,  9 Jun 2026 13:02:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 93208196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28F0C856D4;
+	Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BFF5196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 853EA455DD
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52578423C1
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3IzbzSwKpVnp for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1VBcdS7zvyKY for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D503411F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27BF742561
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D503411F2
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27BF742561
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D544A87E8F; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
+ id 403F987E8D; Tue,  9 Jun 2026 13:01:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 21:09:10 +0200
+Date: Fri, 15 May 2026 13:21:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a1fc8176e4808551f9501f0ed8b5745deb28e59
-X-Git-Newrev: 418ee5a2b6cce22bfa9560ca0289fce728a2bde0
+X-Git-Oldrev: ab1de2ec7f6b6efb90cf84f1a56d5caa27ea7bc5
+X-Git-Newrev: 84dd56f072162552d9f196e19313fd9068d61fa4
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130116.D544A87E8F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] linux: Only run depmod during the finalize
- hook
+Message-Id: <20260609130114.403F987E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: add freedreno-virtio config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,56 +68,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/418ee5a2b6cce22bfa9560ca0289fce728a2bde0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/84dd56f072162552d9f196e19313fd9068d61fa4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Commit 82e765640095 ("linux: Allow modprobe for out-of-tre modules") added
-support for running depmod as part of the target finalize hook.
+Add a config for enabling the freedreno virtio KMD backend, in the same
+pattern as amdgpu-virtio.
 
-However, it also originally set DEPMOD to /dev/null, a hunk that was
-removed upon apply. The kernel depmod wrapper script uses `command` to
-verify that whatever is passed into DEPMOD is known to the shell.
-These days if the DEPMOD tool is set to something incorrect the depmod
-script will just warn [1], but there are trees where the depmod script will
-stop with a hard error. [2]
-
-Running depmod as part of out-of-tree module installations causes
-unnecessary files to be generated and installed.
-
-Since we're already running depmod in the finalize hook, stub this call to
-`true` as it's definitely a shell callable, and it will always succeed.
-This is what is done for other packaging scripts in the kernel tree. [3]
-
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/scripts/depmod.sh?id=914b087ff9e0e9a399a4927fa30793064afc0178 [1]
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/scripts/depmod.sh?id=934193a654c1f4d0643ddbf4b2529b508cae926e [2]
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/package/PKGBUILD?id=8bdd53e066012bed431667393676d1b5e8cce153#n70 [3]
-Signed-off-by: John Ernberg <j@j-ernberg.se>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Joseph Kogut <joseph@anodize.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mesa3d/Config.in | 11 +++++++++++
+ package/mesa3d/mesa3d.mk | 10 ++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c61089bfe0..3c7ebe7e9a 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -164,7 +164,7 @@ LINUX_MAKE_FLAGS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	WERROR=0 \
- 	REGENERATE_PARSERS=1 \
--	DEPMOD=$(HOST_DIR)/sbin/depmod
-+	DEPMOD=true
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 32d13bc747..40c3d25866 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -150,6 +150,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 	# the toolchain having sync4 primitives, which is always a given
+ 	# for arm/aarch64.
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_FREEDRENO
+ 	help
+ 	  Mesa driver for Freedreno GPUs.
+@@ -435,6 +436,16 @@ config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_AMDGPU
+ 	  Select this when running Mesa inside a virtual machine
+ 	  with virtio-gpu host native context support.
  
- ifeq ($(BR2_REPRODUCIBLE),y)
- LINUX_MAKE_ENV += \
++config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO
++	bool "freedreno-virtio"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
++	help
++	  Enable VirtIO support for freedreno native contexts
++	  used by the freedreno driver.
++
++	  Select this when running Mesa inside a virtual machine
++	  with virtio-gpu host native context support.
++
+ config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+ 	bool
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 34597966af..d9916ca359 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -157,6 +157,16 @@ else
+ MESA3D_CONF_OPTS += -Damdgpu-virtio=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO),y)
++MESA3D_FREEDRENO_KMDS = msm
++ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_FREEDRENO),y)
++MESA3D_FREEDRENO_KMDS += virtio
++endif
++
++MESA3D_CONF_OPTS += \
++	-Dfreedreno-kmds=$(subst $(space),$(comma),$(MESA3D_FREEDRENO_KMDS))
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
+ MESA3D_DEPENDENCIES += host-python-ply
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
