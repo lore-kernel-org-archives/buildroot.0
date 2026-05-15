@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35083CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4E7CD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 130BA8577E;
-	Tue,  9 Jun 2026 13:02:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B169685786;
+	Tue,  9 Jun 2026 13:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rzn_XWijByyp; Tue,  9 Jun 2026 13:02:18 +0000 (UTC)
+ id 37SdGzIWMsDw; Tue,  9 Jun 2026 13:02:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4A685752
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F319985744
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010137;
-	bh=oFkntOOMTmXLnXtLHC+FWlKI6clT8NNc0KzsZ7juI+M=;
+	s=default; t=1781010141;
+	bh=SCHgqb9TkArXR8LOx13eK2rrQPuTxVTOFJYfVdYM6hM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m2aR9YgPoVuIzj5TRVZn7YDEYLd5JxgAAAqBxGRXn5Uc8kwPtL5YAcdbB9w0Eo9Zz
-	 RYDSJwgg5ClYCZqnV0dKPtxKFkXbni70RIgxf1wn3JdkLIGJ7h4eNBUDxLOR7ygKZY
-	 q7qbvyv2aN5MAeEnCFcyQ/xOtrRaCaHRgxR6IOJRoizdXOUEarQuSVdD/SxJU0W+jm
-	 AsOms9k7dehneA7tNevUxiHUr5izO6Lkq6Gc71HrP2H0ErxjQRVZ9ztCWtiZ1+0Rtr
-	 IeLXkVCBYH6sOoLCHWC6JFny+JFHJ7R2Tj1e9qOh79yR9KcCWvzQeSltSCu4+1tAQu
-	 6NnlBna6jOaMw==
+	b=F8djDAsDKxVBXpP7hR0u0vARva36crkKo282U0xESeARWVWnvHu+8QhulHu+W0XTu
+	 fQLo+digg1t/YwNZTxNxr6EN8htAyMghu6TszA9j4YWHcN1HXliLKU9vyqamB8XGrj
+	 yiEOKoa+++MjIytUEmbVJ683rjcForAUPDx5V5ALxudjp/pDilAzVU45LUdO924YWu
+	 PRMucv6A2BRYrXYZJFDQSz6Eq/GI3z+6OnywThT79PBBLRRDMqYg1UntfwRB048CJT
+	 lXIDpLsCzVqofCR/oh/IQmlW0JnKHMD4Gmm5z8dZN77EAMVFJyTrweqcZ65eZP/xOz
+	 ZlV9UnxQMgGuQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4A685752;
-	Tue,  9 Jun 2026 13:02:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02545190
+	by smtp1.osuosl.org (Postfix) with ESMTP id F319985744;
+	Tue,  9 Jun 2026 13:02:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E2D3196
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A8B645A57
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0825E6F694
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4XSzx1573stn for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X8Yj0W9EKr01 for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53BB24103D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 430926F67E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53BB24103D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 430926F67E
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82CAA87E8D; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
+ id 6D65B87E7E; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 17:13:41 +0200
+Date: Fri, 15 May 2026 15:36:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a5369effd22011b52b82c91f702bacde690c41a
-X-Git-Newrev: 4ed01e7ed30379b0c1167a2173361269184a3c5d
+X-Git-Oldrev: 85a3edc0ba54abe02556682f661068c620596e83
+X-Git-Newrev: 9a5369effd22011b52b82c91f702bacde690c41a
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130116.82CAA87E8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] packge/swupdate: bump to version 2025.12
+Message-Id: <20260609130116.6D65B87E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: bump to version 11.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,220 +76,193 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4ed01e7ed30379b0c1167a2173361269184a3c5d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a5369effd22011b52b82c91f702bacde690c41a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-* backport locally patch [1] to fix build failure due to missing crypto
-  backend
-* libconfig is required by default[2] so let's select it
-* align swupdate.config to the most basic one with openssl crypto
-  backend enabled by default
-* drop HAVE_LIBCRYPTO since it's not used anymore by swupdate even if
-  present
-* add libgpgme support
+Changelog:
+https://wiki.qemu.org/ChangeLog/11.0
 
-[1]: https://github.com/sbabic/swupdate/commit/10334fb21796b75f3a1208a3d5a98a307712218b
-[2]: https://github.com/sbabic/swupdate/commit/4b9a71476c886be1a6affe21d6a0334b254a04e1
+Note:
+  - Support for all 32-bit host systems has been removed.
+  - Support for microblazeel has been folded into the microblaze target
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Qemu v11.0.0 drops 32-bit support for hosts, all qemu builds must now be
+64-bit. Hosts running 64-bit qemu builds can still emulate 32-bit
+targets.
+
+Confusingly, the qemu package is also capable of being built and running
+on buildroot hosts, and targets. In any case, qemu only supports running
+on 64-bit hosts (which may be buildroot targets), so adjust
+BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET to indicate no support for 32-bit
+buildroot targets, and drop configs for architectures like BR2_arm that
+are implicitly 32-bit only.
+
+Separately, the qemu microblazeel target was removed with commit
+46a25ae3f0e75e230c06e21435850b1cd1c44f07, as the microblaze (qemu)
+target supports both endiannesses, so that's fixed up in the package
+Makefile as well.
+
+Signed-off-by: Joseph Kogut <joseph@anodize.com>
+[Romain: remove duplicate --disable-download from QEMU_CONFIGURE_CMDS]
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...-fix-no-crypto-configuration-link-failure.patch | 67 ++++++++++++++++++++++
- package/swupdate/Config.in                         |  6 +-
- package/swupdate/swupdate.config                   |  2 -
- package/swupdate/swupdate.hash                     |  2 +-
- package/swupdate/swupdate.mk                       | 20 +++----
- 5 files changed, 81 insertions(+), 16 deletions(-)
+ Config.in.legacy       |  8 ++++++++
+ package/qemu/Config.in | 12 +-----------
+ package/qemu/qemu.hash |  2 +-
+ package/qemu/qemu.mk   | 16 ++++++++++++----
+ 4 files changed, 22 insertions(+), 16 deletions(-)
 
-diff --git a/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch b/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch
-new file mode 100644
-index 0000000000..15f33aa3ab
---- /dev/null
-+++ b/package/swupdate/0001-build-fix-no-crypto-configuration-link-failure.patch
-@@ -0,0 +1,67 @@
-+From 4e7c2f6c4b978efae69d777705de84411a01c147 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Tue, 24 Mar 2026 14:23:58 -0600
-+Subject: [PATCH] build: fix no-crypto configuration link failure
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ead9ceaa08..90606ebd4b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2026.05"
+ 
++config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
++	bool "qemu target microblazeel removed"
++	select BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
++	select BR2_LEGACY
++	help
++	  Version 11.0.0 of qemu folded microblazeel support into
++	  the microblaze target.
 +
-+When no crypto backend is selected, the crypto directory contributes
-+no objects, so this kbuild variant does not generate
-+crypto/built-in.o.
-+
-+The top-level build still linked that file unconditionally, causing
-+the final link to fail.
-+
-+Introduce a hidden SWUPDATE_CRYPTO helper selected by the Kconfig
-+options that actually populate crypto/, and only descend into the
-+crypto directory when that helper is enabled.
-+
-+Upstream: https://github.com/sbabic/swupdate/commit/10334fb21796b75f3a1208a3d5a98a307712218b
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ Makefile       | 3 ++-
-+ crypto/Kconfig | 5 +++++
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index aa9604aa..759fd191 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -369,7 +369,8 @@ include $(srctree)/Makefile.flags
-+ # This allow a user to issue only 'make' to build a kernel including modules
-+ # Defaults to vmlinux, but the arch makefile usually adds further targets
-+ 
-+-objs-y		:= core handlers crypto bootloader suricatta
-++objs-y		:= core handlers bootloader suricatta
-++objs-$(CONFIG_SWUPDATE_CRYPTO) += crypto
-+ libs-y		:= corelib mongoose parser fs containers
-+ bindings-y	:= bindings
-+ tools-y		:= tools
-+diff --git a/crypto/Kconfig b/crypto/Kconfig
-+index 4b9db821..cc953542 100644
-+--- a/crypto/Kconfig
-++++ b/crypto/Kconfig
-+@@ -23,9 +23,13 @@ menu "Crypto libraries"
-+ 		depends on HAVE_GPGME
-+ endmenu
-+ 
-++config SWUPDATE_CRYPTO
-++	bool
-++
-+ config HASH_VERIFY
-+ 	bool "Allow to add sha256 hash to each image"
-+ 	depends on SSL_IMPL_OPENSSL || SSL_IMPL_WOLFSSL || SSL_IMPL_MBEDTLS
-++	select SWUPDATE_CRYPTO
-+ 	help
-+ 	  Allow to add a sha256 hash to an artifact.
-+ 	  This is automatically set in case of Signed Image
-+@@ -83,6 +87,7 @@ menu "Encryption"
-+ config ENCRYPTED_IMAGES
-+ 	bool "Images can be encrypted with a symmetric key"
-+ 	depends on SSL_IMPL_OPENSSL || SSL_IMPL_WOLFSSL || SSL_IMPL_MBEDTLS
-++	select SWUPDATE_CRYPTO
-+ comment "Image encryption needs an SSL implementation"
-+ 	depends on !SSL_IMPL_OPENSSL && !SSL_IMPL_WOLFSSL && !SSL_IMPL_MBEDTLS
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 3708df0881..112e53a127 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_SWUPDATE
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBCONFIG
- 	select BR2_PACKAGE_LIBUBOOTENV
+ config BR2_KERNEL_HEADERS_6_19
+ 	bool "kernel headers version 6.19.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 0b16c8c284..2a6aa288d3 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -2,13 +2,9 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	bool
+ 	# Only tested on these architectures
+ 	default y if BR2_aarch64
+-	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+-	default y if BR2_i386
+-	default y if BR2_mips
+-	default y if BR2_mipsel
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+-	default y if BR2_riscv
++	default y if BR2_RISCV_64
+ 	default y if BR2_s390x
+ 	default y if BR2_x86_64
+ 
+@@ -223,12 +219,6 @@ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
  	help
- 	  swupdate provides a reliable way to update the software on
-@@ -25,8 +26,9 @@ config BR2_PACKAGE_SWUPDATE
- 	    want to have Lua support.
- 	  * Select BR2_PACKAGE_LIBCURL if you want to use the download
- 	    feature.
--	  * Select BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS if you
--	    want to add encryption support.
-+	  * Select at least one of these crypto backends:
-+	    BR2_PACKAGE_OPENSSL or BR2_PACKAGE_MBEDTLS or
-+	    BR2_PACKAGE_WOLFSSL or BR2_PACKAGE_LIBGPGME.
- 	  * Select BR2_PACKAGE_MTD if you want to use swupdate with
- 	    UBI partitions.
- 	  * Select BR2_PACKAGE_ZLIB if you want to deal with gzip
-diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-index a6b7a74948..0f672805be 100644
---- a/package/swupdate/swupdate.config
-+++ b/package/swupdate/swupdate.config
-@@ -2,7 +2,6 @@
- # Automatically generated file; DO NOT EDIT.
- # Swupdate Configuration
- #
--CONFIG_HAVE_DOT_CONFIG=y
+ 	  Xilinx MicroBlaze soft processor.
  
- #
- # Swupdate Settings
-@@ -24,7 +23,6 @@ CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
- #
- CONFIG_SOCKET_CTRL_PATH="/tmp/sockinstctrl"
- CONFIG_SOCKET_PROGRESS_PATH="/tmp/swupdateprog"
--CONFIG_SOCKET_REMOTE_HANDLER_DIRECTORY="/tmp/"
- 
- #
- # MTD support needs libmtd
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index bc911d1820..b3f43648f8 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  678b47fd2419727c4d0abf5c9f3bc0dc4b67e95951132bd1c8f5603e88947779  swupdate-2025.05.tar.gz
-+sha256  8517f3730eeb66e20e651b881dd4b9c10ca9ae05e3883db59b5df18ab1eaa533  swupdate-2025.12.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 05329d13b8..b2778d2aec 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2025.05
-+SWUPDATE_VERSION = 2025.12
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-@@ -18,7 +18,7 @@ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
- 	LICENSES/MIT.txt \
- 	LICENSES/OFL-1.1.txt
- SWUPDATE_INSTALL_STAGING = YES
--SWUPDATE_DEPENDENCIES = json-c libubootenv
-+SWUPDATE_DEPENDENCIES = json-c libconfig libubootenv
- 
- # swupdate uses $CROSS-cc instead of $CROSS-gcc, which is not
- # available in all external toolchains, and use CC for linking. Ensure
-@@ -51,13 +51,6 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBBLKID=n
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
--SWUPDATE_DEPENDENCIES += libconfig
--SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=y
--else
--SWUPDATE_MAKE_ENV += HAVE_LIBCONFIG=n
--endif
+-config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
+-	bool "microblazeel"
+-	select BR2_PACKAGE_QEMU_FDT if BR2_PACKAGE_QEMU_SYSTEM
+-	help
+-	  Xilinx MicroBlaze EL soft processor.
 -
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- SWUPDATE_DEPENDENCIES += libcurl
- SWUPDATE_MAKE_ENV += HAVE_LIBCURL=y
-@@ -82,6 +75,13 @@ else
- SWUPDATE_MAKE_ENV += HAVE_LIBGPIOD=n
- endif
+ config BR2_PACKAGE_QEMU_TARGET_MIPS
+ 	bool "mips"
+ 	help
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index f8e750225f..7c7325a6ce 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  9e30ad1b8b9f7b4463001582d1ab297f39cfccea5d08540c0ca6d6672785883a  qemu-10.2.0.tar.xz
++sha256  c04ca36012653f32d11c674d370cf52a710e7d3f18c2d8b63e4932052a4854d6  qemu-11.0.0.tar.xz
+ sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
+ sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index b7007e3b98..2199db38cf 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-+SWUPDATE_DEPENDENCIES += libgpgme
-+SWUPDATE_MAKE_ENV += HAVE_GPGME=y
-+else
-+SWUPDATE_MAKE_ENV += HAVE_GPGME=n
+ # When updating the version, check whether the list of supported targets
+ # needs to be updated.
+-QEMU_VERSION = 10.2.0
++QEMU_VERSION = 11.0.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = https://download.qemu.org
+ QEMU_SELINUX_MODULES = qemu virt
+@@ -28,6 +28,8 @@ QEMU_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-python-distlib \
++	host-python-setuptools \
++	host-python-wheel \
+ 	libglib2 \
+ 	zlib
+ 
+@@ -70,7 +72,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-softmmu
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-softmmu
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-softmmu
+@@ -107,7 +108,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-linux-user
+-QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-linux-user
+ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-linux-user
+@@ -318,6 +318,7 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-curses \
+ 			--disable-dbus-display \
+ 			--disable-docs \
++			--disable-download \
+ 			--disable-dsound \
+ 			--disable-hvf \
+ 			--disable-jack \
+@@ -345,7 +346,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-xen \
+ 			--enable-attr \
+ 			--enable-vhost-net \
+-			--disable-download \
+ 			--disable-hexagon-idef-parser \
+ 			$(QEMU_OPTS)
+ endef
+@@ -372,6 +372,8 @@ HOST_QEMU_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-python-distlib \
++	host-python-setuptools \
++	host-python-wheel \
+ 	host-slirp \
+ 	host-zlib
+ 
+@@ -386,6 +388,7 @@ HOST_QEMU_DEPENDENCIES = \
+ #       x86_64          x86_64
+ #       m68k            m68k
+ #       microblaze      microblaze
++#       microblazeel    microblaze
+ #       mips            mips
+ #       mipsel          mipsel
+ #       mips64          mips64
+@@ -416,6 +419,10 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),i686)
+ HOST_QEMU_ARCH = i386
+ endif
++ifeq ($(HOST_QEMU_ARCH),microblazeel)
++# since v11.0.0, microblazeel emulation is provided by the microblaze target
++HOST_QEMU_ARCH = microblaze
 +endif
-+
- ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
- SWUPDATE_DEPENDENCIES += liburiparser
- SWUPDATE_MAKE_ENV += HAVE_URIPARSER=y
-@@ -126,10 +126,8 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SWUPDATE_DEPENDENCIES += openssl
- SWUPDATE_MAKE_ENV += HAVE_LIBSSL=y
--SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=y
- else
- SWUPDATE_MAKE_ENV += HAVE_LIBSSL=n
--SWUPDATE_MAKE_ENV += HAVE_LIBCRYPTO=n
+ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ HOST_QEMU_ARCH = ppc
  endif
- 
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
+@@ -508,6 +515,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--disable-curl \
+ 		--disable-dbus-display \
+ 		--disable-docs \
++		--disable-download \
+ 		--disable-dsound \
+ 		--disable-jack \
+ 		--disable-libssh \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
