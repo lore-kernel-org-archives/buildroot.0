@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12957CD4F48
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DFD8CD4F49
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0A1E41D63;
-	Fri, 15 May 2026 17:45:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D95AF41D62;
+	Fri, 15 May 2026 17:45:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SeEqtaVNFfQa; Fri, 15 May 2026 17:45:17 +0000 (UTC)
+ id suirleWFWWct; Fri, 15 May 2026 17:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CFC141D6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2DC241D5B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867117;
-	bh=IeYMJMaPbrzjbbhLcwBV3NfRXeQGbGdBwlmk3SoWoWQ=;
+	s=default; t=1778867121;
+	bh=DR9XLpt5bNEXZaN++TSG4dixZvtntkkBtuZgG4n/S0Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qaIadOwrwFsxeVl6mfMZVNaj9V1BvkDL+mn2G5q88nSpOz33fIxQ8yXOF86bKXMkK
-	 NEH/PnjqCJGdAF/Z8fveVEziWw0mz0toVXUzdQVrWwtzuqtRJixqhzGjBSGwG9U10C
-	 jEZ23wORMFENN2NwLLIm//UHiSCe4denqzLCflazqyfzm9y65puSv5n4oQNB+vLo5O
-	 PjpxL4qv+AOiOcQyxOzhAoXp2LGkdbgXwDyOsaCADEGsgAXzw5VKqrESTfKJFczh7Q
-	 iqOWsBhOQ+eAJv0UB13XP9HcrvIAN/Oxd9ybhugoe+ciy91AxGvHxaZSGj60rysNG2
-	 Ja3Rlqk0VTdqQ==
+	b=BNiVz4HG1SYtg1+Hay3Gcf0IqHsbJqWUGmpVlIlJW7EvrznMyuUjNJmjkT3o4ynLs
+	 B2S/tgrWnRfzvYxlxy0Wh8miGMt+ee8nyZZ33U3oFxqxHDJ5/SNTZFQ33dZ0mufXFG
+	 +lyYkC2W6R2eGxEmVZNUyLumgW/Ta5PQbHDbtQ5LgWO9PapR7E3yiGAIUkWze6mOae
+	 uctcSkP1gZCyTuzPFxnzYU8ksi7HA0B4OaSy3Oytk8wN4hkujVJ/s2wHotTfbjYFOv
+	 CfytNFnlU1i4jgzjagh+r/rUbRB6GnHipFLnNMkgXTxhPaPDDnL2Wv/haW9HwucldV
+	 iHc6V8uSC8lPQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFC141D6A;
-	Fri, 15 May 2026 17:45:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DC3B45B
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:45:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2DC241D5B;
+	Fri, 15 May 2026 17:45:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0A3A23F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03C5684179
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ABCA61544
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P15tZk6VmMpN for <buildroot@buildroot.org>;
- Fri, 15 May 2026 17:44:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uy2wWiHCdfEC for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 17:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 715DB84169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11E036169C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 715DB84169
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 11E036169C
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0A2B863D3; Fri, 15 May 2026 17:44:48 +0000 (UTC)
+ id 4F3F6863D9; Fri, 15 May 2026 17:44:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:16:28 +0200
+Date: Fri, 15 May 2026 16:59:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 98224e76a240a5dafa901957697d7ac24609ac33
-X-Git-Newrev: 7f9fe97670f9d3d6dba05d0509c7c83b98c010cc
+X-Git-Oldrev: 1f1a302056bb5e51a8a5d0194bda1bf67573f49d
+X-Git-Newrev: 5c5c8f4b081262e697f07dfc7bcc9d7dd6dd36bf
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174448.A0A2B863D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/haproxy: bump
- version to 6.2.27
+Message-Id: <20260515174449.4F3F6863D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/scripts/pkg-stats: fix host/target infra filter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,159 +77,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7f9fe97670f9d3d6dba05d0509c7c83b98c010cc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5c5c8f4b081262e697f07dfc7bcc9d7dd6dd36bf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Bugfix release with large number of (security) fixes.
+The filter is supposed to exclude host/target infra from output if the
+respective package is not built with the current
+configuration.
 
-For 6.2.26:
+However, excluding host packages did not work correctly: If keep_host
+is False because the host package is not built, the next branch was
+checked and included the host infra in output with "target" type if
+the target package is built. For a package that support host and
+target build, but gets built only for the target, this leads to output
+like (Meson example):
 
-- a severe issue was found in the compression library (slz) where
-    specially crafted patterns with tune.bufsize above 17408 or
-    tune.maxrewrite below 964 (both non-default) could cause output
-    buffer overflows due to the overhead exceeding the promised
-    worst-case growth bound of 5 bytes and reach up to 1/16 of the
-    input contents. Given that the compression output is hardly
-    controllable, and the canaries at the end of the pools will catch
-    this at release time, the risk of exploitation by a hostile server
-    is close to zero, however it will cause repeated crashes if such a
-    crafted file is present on a server and regularly downloaded. A
-    workaround consists in keeping tune.maxrewrite at least 1/16 of
-    tune.bufsize or just not changing them since the defaults are safe.
-    A CVE was requested two weeks ago for this one, I'll mention it when
-    it arrives.
+meson (target)
+host-meson (target)
 
-  - HTTP/2 incomplete transfer detection was missing for HEADERS frames
-    carrying END_STREAM. When relayed to an HTTP/1.1 server that
-    responds before the end of the transfer, this can result in bytes
-    of the next request over the same connection to be ignored. Most of
-    the time it will cause the connection to be dropped due to an
-    unparsable request, but when combined with "http-reuse never", or
-    on totally idle servers, the client could expect the second request
-    to reuse the same connection and perform a content smuggling attack
-    that would allow to pass an unverified request to a server. For
-    those who can't upgrade, a temporary workaround is to disable
-    HTTP/2 by specifying "alpn http/1.1" on bind lines and adding
-    "disable-h2-upgrade" in HTTP frontends. A CVE will be requested for
-    this one.
+Skip host infra in the target branch instead. Also include
+Package.infra in Package.__str__() result, which was needed for
+debugging this bug.
 
-  - HTTP/1.1 bodyless messages announcing a non-null Content-Length did
-    not force close mode on the backend, potentially causing
-    desynchronisation between HAProxy and the server in conjunction
-    with other bugs.
-
-  - FCGI record length truncation with large bufsize (>=65544) could
-    enable request smuggling into PHP-FPM since the 16-bit
-    content_length field silently truncated to 65535 bytes.
-
-  - an unvalidated SNI name_len field in ClientHello could cause OOB
-    heap reads of up to 65KB via XXH3, smp_dup(), and log-format leaks
-    on any TCP frontend using req.ssl_sni, possibly causing crashes when
-    used.
-
-  - ECDSA JWT signatures with ES256/384/512 could cause a heap overflow
-    of ~14 bytes in the DER conversion before verification.
-
-  - Lua's httpclient headers conversion accepted more than 101 headers
-    without bound checking, causing a stack buffer overflow reachable
-    from any Lua action/task/service.
-
-  - peers dictionary cache updates accepted an unvalidated entry id as
-    array index, allowing OOB heap writes at attacker-controlled
-    offsets.
-
-  - Lua had a use-after-free of HTTP reason strings managed by Lua's GC
-    between set_status() and start_response(), potentially leaking
-    adjacent information from memory.
-
-  - the regsub sample function could leak ~9-50KB of stale heap data
-    when back-reference expansion overflowed the output buffer.
-
-  - SPOE decode_varint() had no iteration cap, allowing pointer
-    arithmetic to wrap and dereference memory ~64KB before the
-    allocation, causing SIGSEGV or parser confusion.
-
-  - in sample expressions, less common HTTP methods (PATCH etc.) are
-    represented by both an enum and a string. The string part was not
-    handled correctly in sample duplication functions, resulting in
-    their contents appearing empty when trying to fetch the method.
-
-  - QPACK varint decoding is now also limited to 62-bit, and had a risk
-    of 1-byte OOB reads on truncated streams, which could cause
-    incorrect header decoding.
-
-  - config: a few argument parsing errors in conditional expressions
-    used in ".if" could be misreported and even cause a crash during
-    the parsing. Also, a few keywords relying on warnif_misplaced_*
-    didn't check the return value and didn't count emitted warnings as
-    warnings.
-
-For more details, see the announcement:
-https://www.mail-archive.com/haproxy@formilux.org/msg47016.html
-
-For 6.2.27:
-
-A major issue were fixed by this release. It was related to the scheme-based
-normalization. The presence of commas in Host header and authority was permitted
-and would be used to compare the values, which then would differ when read via
-hdr(host) which splits them on commas, and under certain circumstances, trigger
-crashes (at least it did in the OSS-Fuzz environment when injecting the values
-directly at the HTX layer). The issue was fixed.  Remains the case of the comma
-characters in authorities. Even though the spec permits commas in authorities
-(not in domain names), there is currently no use case for this and it causes an
-ambiguity with the historical use of hdr(host), so we preferred to just deny
-them. The change was performed on the 3.4-dev10 and postponed for the next 3.3
-release. It will probably be backported to lower versions too.
-
-An issue in the FCGI multiplexer was fixed. The function responsible to emit
-FCGI_PARAM records was not handling cases of full buffer in a consistent
-way. The issue was quite limited, but the "http-send-name-header" option could
-be silently ignored. The issue was fixed by reworking this function.
-
-The scheme-based normalization was fixed to properly handle case of OPTIONS
-requests. As stated in RFC9110#4.2.3, when the scheme-based normalization is
-performed, an empty path must be normalized to "/", except for OPTIONS request.
-
-Finally, a memory leak on error path (tools) and other minor issues were also
-fixed.
-
-For more details, see the announcement:
-https://www.mail-archive.com/haproxy@formilux.org/msg47059.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 22f1e90d6ba61e9e6306d98461adad29debd6c7b)
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit e8dcebf4597d74dc12c86535118ae0bd16d272a0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 5c644356a6..6bb5dda804 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.25.tar.gz.sha256
--sha256  d861cacbe2ed51ae8ad5fa9ee5165b4e5e2bccaa5b9e04324711761d7d946be9  haproxy-2.6.25.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.27.tar.gz.sha256
-+sha256  ccdaf08e8653f9651992212b51af0b5513c2e2cf0cd822ca67c94cffe10386a6  haproxy-2.6.27.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 805cf4c4d9..a61c66d01f 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index a87bb23a8e..bbd1e3e6f0 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -205,7 +205,7 @@ class Package:
+                 infra = match.group(1)
+                 if infra.startswith("host-") and keep_host:
+                     self.infras.append(("host", infra[5:]))
+-                elif keep_target:
++                elif not infra.startswith("host-") and keep_target:
+                     self.infras.append(("target", infra))
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).25
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).27
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+     def set_license(self):
+@@ -342,9 +342,10 @@ class Package:
+         return self.path < other.path
+ 
+     def __str__(self):
+-        return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d)" % \
++        return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d, infras=%r)" % \
+             (self.name, self.path, self.is_status_ok('license'),
+-             self.is_status_ok('license-files'), self.status['hash'], self.patch_count)
++             self.is_status_ok('license-files'), self.status['hash'], self.patch_count,
++             self.infras)
+ 
+ 
+ def get_pkglist(trees, npackages, package_list):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
