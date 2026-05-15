@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694BECD343F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6749CD4F25
 	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D9A684577;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91D4D41D5B;
 	Fri, 15 May 2026 17:45:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hs6dOxze7z8z; Fri, 15 May 2026 17:45:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4191F41D2F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778867110;
+	bh=+XbCelKO+JsH+YC5pZeIjD6hJEoE8z+RCrZKFlERrFk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=KYJ7bNaLlaTFHoWz7IMBcFEge+OLeAEgjBbWmT0UBQyBkMso8aqoVFyZsF+8JHykV
+	 Z0XMFvnrWMzFohSCP/3WpR40YvoH4AUnvtywx+Ieu0hLzBHfETuVkaVAl95CoVxkeD
+	 QRmWtW0MdApr65T0ACqzmnwHWrmy1Fby9U6zFdwC9u5BsPSh6FuHxzCD7CcpmCOCCz
+	 sbq6qOm2OvoQLSn4XK8yqgks5jTWIWXJhA67hT2jpsWRntQHNG/QcV9YbjMQ1SN1/+
+	 eW/sbpnz7WsPdic60cONP0WSjfPoM/I1Im4+eBE2/4dJ/1TzOs8vGBxGxllydtua2r
+	 rRNyZTKvl6/Cw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4191F41D2F;
+	Fri, 15 May 2026 17:45:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A7D245B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8173F84189
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eRjpFEZj0SuU; Fri, 15 May 2026 17:45:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB86184569
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867108;
-	bh=08bFj0qjUrIjiPmCJT9wafz37Kd6oR03zwU2pIJrGfw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U5E1rsqvB/VCWJBLv43RtplQMCbhMl/bPu+ZuC3GWOYsJ1eebKReqZc/LlOl8oyEr
-	 PNUDlUY3xsPgM8Gj9EpJiJAHdTHUvrNaMEuH2A7wXH3SrJEFT9DS9RH3I9TtT9BWmT
-	 Nr625NrMEyFjE7UNybig4JzqipupXQHnXlMxkoINFr02f63yK5iA+k7of/RWfaVEX9
-	 Fh8cLb5Z5PCwJUehXjx1h7nZGgLQ5dAEDW9YeSOBHRAZ7Y3vtRt0hrGmqi+7Jd1NbB
-	 OkvdujPIKXEePU+BfS2XqiWpfm2SSwZixoy8yzQlwhBqK+dmRiNkmTUnVaROaAH8mN
-	 A3DdiP0SM5p7g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB86184569;
-	Fri, 15 May 2026 17:45:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A91423F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 658E06169D
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eOMeijM7aEQK for <buildroot@buildroot.org>;
+ id M0P2wlMqfSQ5 for <buildroot@buildroot.org>;
  Fri, 15 May 2026 17:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD78161698
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5570A8418A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD78161698
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5570A8418A
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27C41863B4; Fri, 15 May 2026 17:44:49 +0000 (UTC)
+ id 9422E86365; Fri, 15 May 2026 17:44:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:59:13 +0200
+Date: Fri, 15 May 2026 16:59:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bca59419d984ea64b0495169020907e45dd5de66
-X-Git-Newrev: e5fde3d4bfd6a67b52613fa092156b09cd95beac
+X-Git-Oldrev: bef1ae227e1463bf013c1e18e4b12f486a9875ed
+X-Git-Newrev: 6dc1c726967e7d99d63b642c2558a3b94e778e9c
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174449.27C41863B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/scripts/pkg-stats: search only Config.in{, .host} for URL
+Message-Id: <20260515174449.9422E86365@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ffmpeg: securty
+ bump version to 6.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e5fde3d4bfd6a67b52613fa092156b09cd95beac
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6dc1c726967e7d99d63b642c2558a3b94e778e9c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The previous Config.* glob also caught linux/Config.ext.in and
-package/php/Config.ext, as well as some backup files created by
-editors (e.g. Config.in~ after editing a Config.in file in Emacs),
-leading to wrong results depending on directory listing order.
+Fixes: CVE-2026-30997 - FFmpeg AV1 Decoding Out-of-Bounds Read Vulnerability [1]
 
-Also use "with" to automatically close the file when the block is
-left, even on error.
+Full changelog: https://code.ffmpeg.org/FFmpeg/FFmpeg/src/tag/n6.1.5/Changelog
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 77a464969c77f7c2a4feb9ec2d2ec3814c2dcb4e)
+License file hash changed due to removing U+000C unicode characters in [2].
+
+[1] https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/a44ab44236a99ae26594fb3e14fe0c956210673d
+[2] https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/735acddb8a12e9de2fb6ad92ece4422fe5a6a02e
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Marcus: mention security fix, use upstream url for changelog instead of videolan mirror]
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit 6cd936b8e72cf26a6024a8ecfa23345bbb22a608)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/pkg-stats | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 4 ++--
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 55aa63c861..efb85a7405 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -148,17 +148,17 @@ class Package:
-         Fills in the .url field
-         """
-         self.status['url'] = ("warning", "no Config.in")
--        for filename in os.listdir(self.pkgdir):
--            if fnmatch.fnmatch(filename, 'Config.*'):
--                fp = open(os.path.join(self.pkgdir, filename), "r")
--                for config_line in fp:
--                    if URL_RE.match(config_line):
--                        self.url = config_line.strip()
--                        self.status['url'] = ("ok", "found")
--                        fp.close()
--                        return
--                self.status['url'] = ("error", "missing")
--                fp.close()
-+        for filename in ('Config.in', 'Config.in.host'):
-+            try:
-+                with open(os.path.join(self.pkgdir, filename), "r") as fp:
-+                    for config_line in fp:
-+                        if URL_RE.match(config_line):
-+                            self.url = config_line.strip()
-+                            self.status['url'] = ("ok", "found")
-+                            return
-+                    self.status['url'] = ("error", "missing")
-+            except FileNotFoundError:
-+                continue
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 1ffef61309..4c489f168c 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a231e3d5742c44b1cdaebfb98ad7b6200d12763e0b6db9e1e2c5891f2c083a18  ffmpeg-6.1.4.tar.xz
++sha256  05fbe9db1f5452a3605bb1d9bf91da9d4bb08162891692e4f172b58c49109412  ffmpeg-6.1.5.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+-sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
++sha256  246041b6ecf9bc32d718a62c57877c78b5eb397b6467e74ed7ae2626ab189c30  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 798bc46b9f..d9f0d591d1 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     @property
-     def patch_count(self):
+-FFMPEG_VERSION = 6.1.4
++FFMPEG_VERSION = 6.1.5
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = https://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
