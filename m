@@ -4,109 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6F71CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72DECD4851
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:14:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8312361547;
-	Fri, 15 May 2026 13:05:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7255561374;
+	Fri, 15 May 2026 13:14:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qJk9QJDCCetK; Fri, 15 May 2026 13:05:54 +0000 (UTC)
+ id KQv6FKPhVW4Y; Fri, 15 May 2026 13:14:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7960161544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 823F6611D6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778850354;
-	bh=nDJYVHUd//+oSbHspiU5nfDgetfHVVXQ9WPsPnbEIMQ=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=fUanO3hSLUxK/eUYf916wMZnYsHy9RKT2RxRCFtmqjjzPu7oh+qdDbNJxr5wAJsSj
-	 Ovqk5c08S+07069NgIFFcZCbRpbxoq+2Mfv7CViKJqZIOVPvcj4IqFvnJ2ywvQ6Q7q
-	 RGyEYI5selHfFHFosmZNwq4sT7fbpMm5jI9boc0EpRUTrxPrdF6niSsJ1D7fi2fj9u
-	 tpaVp76Vqx6dACQ63kWm+wSagC5l4CyvdNoqZjMsX7N1Wy4Dm3/vYuvWuyfSsX13SK
-	 Am3+vI7R5WIZ9JyMW2UiYecQQt41R0NGCBs46lZgGxrSjFhrWj35j2XhEJSm2TtBnF
-	 3cw36paAz3eKA==
+	s=default; t=1778850850;
+	bh=vbaHVOKh31f8wSwRTlj3yn9jZ+dnIz9oj1sl2gNEP6c=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ug766CNBGoDMDBqcOJzHcJ+43UjvLO+Uxba6wlG09DXgdWKnUMw/d0sJtGXwj52/l
+	 7bLxCj8zB3E6vnux1CbgOAwHJUbL3pD5q4aM4gqRqVQbmRcvSkO05s4J+GLLEWnP7P
+	 cyWu9juA9iXCyjGabf6UH81/UAi2pj1rWXMD8xYE9YxVjfeXAnPpXEfcUuiFQZm1Pg
+	 Q/5OfHWk2LcOmIWE39/sSEMBGCAuQVxQtwOEn6YYI6cY0bvtVh4pw+Wijo1z7ZUSlt
+	 3j9MkukidDGtQLVzsW32tlZWBIGEaMEoKEhWEaNIo2njNUNfxV/c2wOlTqJP1+/vsS
+	 Gx1wexl5psdUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7960161544;
-	Fri, 15 May 2026 13:05:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D5F7D36E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:05:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 823F6611D6;
+	Fri, 15 May 2026 13:14:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05D5336E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C034C40E24
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:05:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB616841B3
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TSr04PtO-K_i for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:05:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10DEA40E23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10DEA40E23
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 10DEA40E23
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:05:50 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-44b052142e1so5128287f8f.1
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:05:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778850349; x=1779455149;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=erPQfEHN/6L5I2EZ6WUaO1HjT06W/P8uPxP8sSbFSjU=;
- b=l4baBgSp4mCrFqKLs9YWTi5uksq5Mn1rGWU9OlvkP8sbmYzmeZhIQOGPCX7DrzHhRO
- RAYhtIub/Ue7IY9xUjm+cSB8bCRYTnCxVk0JjFP2gG8FZZ1NnSPoZmQGDGeeqk0h0XiE
- 6flYvcUybAcjtSNHYKoKBQTnC6AHm8PoA/lYEKir+vuEt9HTkvActvQN50QLUk+CvAsp
- B9DCXxL18VRUnXWhUCmmNEgwTc9VuOEDXMKxEiyJplk1qrJshQVYDZrgpDCMHOuCLT7O
- d10ES4d+VPQUgb2/f0wK4ydZtIeJ8gr9+gvfI6Pu8JQswiEmRGukGBinFdt8pCYrHBNE
- GOtg==
-X-Gm-Message-State: AOJu0YxzNWgX3Qjy0pvUxHjeV9InPJVgRflLGwAX4tBNQY4n80IQPO7B
- SewdELF5whW5taicQZTLQLeo8pVLkbnBBHdhBrzEM9pkzoaZUIAuvRT114zG
-X-Gm-Gg: Acq92OHxCbxpF/Z4OO+s5GkMcJKDRIgLb0hQDoghGxG/Qupvx4qwjp4Hf+kIGlhvx+S
- TrSW2mxeBre+pRpgy1eElSeB38fHuQoE8C4R9l+AV1bfGUXPHQVdBMxqiWBxz9k1EZIJ9ojnV4f
- cAWpWNJAfNnr2B+G1ItcPhuh6KFIGok/Vty8bENhNS8Emfp1vBuLB375jBaAhanHbqTsg9ME6lL
- T84zZQ2syc4keKpBIdk1tVj7D50GLW4Py/XJP2JZ5UNDot1fBJIO0PXOejCNEnE3nraPgpIrvjJ
- 2EtS+uoPQu8RtQGmwgqwwGD7rJ0R0Hn3VhGiLutWxfNZqF5Epg+jk67ra6rTOD+Al3HE8zKfggn
- mNfThvIxCg2aJsBbT4P9CFUphwrwxEZ7G1YXeDvkNlmSkfgYi2Z1ODzdIkmH3vPgnz0dLxdAfw2
- i3PYceVvV5Kqax6aUBJRxknFBJvKn/h25PQxAN6Q==
-X-Received: by 2002:a05:6000:290e:b0:43d:7b90:fa23 with SMTP id
- ffacd0b85a97d-45e5c6019bdmr5308718f8f.29.1778850347947; 
- Fri, 15 May 2026 06:05:47 -0700 (PDT)
-Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45da0a178adsm15880087f8f.18.2026.05.15.06.05.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:05:47 -0700 (PDT)
-From: Alexander Shirokov <shirokovalexs@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rOkPMd18o1hR for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:14:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24F2B841B1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24F2B841B1
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5A0B286350; Fri, 15 May 2026 13:14:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Alexander Shirokov <shirokovalexs@gmail.com>
-Date: Fri, 15 May 2026 15:05:30 +0200
-Message-ID: <20260515130543.60511-1-shirokovalexs@gmail.com>
-X-Mailer: git-send-email 2.54.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778850349; x=1779455149; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=erPQfEHN/6L5I2EZ6WUaO1HjT06W/P8uPxP8sSbFSjU=;
- b=H184+UE7R6k7Y1d4gUIjG/3vwCoh9xKeMnynxsWDBDczZ7SU1+4HWmhFtfH+5Rm/jS
- tgG9eFco0lAVL+Twnz3S+KWUEiY4jwSJzAg3MdsCcMZkvgozz2AnfAnzrizxYoymNQlz
- /vo+c4zYiKDVwGTHQs+XhH/5zLramRpcMz6WANVlV6+O5pXOAgUFyPJfV6AdF6o1d94z
- 91WtHbwjjtmnpsKLi8MIJDWLVu2y+lay7D/igIvQG/66YfEdWvrYwd4NjceTEcDwrk83
- zw6nMcYED0bfK0EFU7H52AnkdLV8w7BKt5kM2x7ByX4TjU/oM2pdnaXqTXxBI6o+zNHt
- zV7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=H184+UE7
-Subject: [Buildroot] [PATCH 1/1] package/zellij: bump to version 0.44.3
+Date: Fri, 15 May 2026 15:13:56 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 0c73553d840697b78181c773786f76e318f03214
+X-Git-Newrev: 85a3edc0ba54abe02556682f661068c620596e83
+X-Patchwork-Hint: ignore
+Message-Id: <20260515131402.5A0B286350@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-gymnasium: bump
+ version to 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,44 +69,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/zellij-org/zellij/blob/v0.44.3/CHANGELOG.md
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/85a3edc0ba54abe02556682f661068c620596e83
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+https://github.com/Farama-Foundation/Gymnasium/releases/tag/v1.3.0
+
+Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/zellij/zellij.hash | 2 +-
- package/zellij/zellij.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-gymnasium/python-gymnasium.hash | 4 ++--
+ package/python-gymnasium/python-gymnasium.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
-index 635f5ff79a..014587cf3c 100644
---- a/package/zellij/zellij.hash
-+++ b/package/zellij/zellij.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  69a6209cb26ecba6cb9fa28d10abad328d82adaa7e79b2eb6c750e08a4500021  zellij-0.44.2-cargo5.tar.gz
-+sha256  73ce7518650496ed6620ded55617991ee170d5cf75f06f23b622bc57b525498f  zellij-0.44.3-cargo5.tar.gz
- sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
-diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
-index f1828cba78..4b4e7d6a3f 100644
---- a/package/zellij/zellij.mk
-+++ b/package/zellij/zellij.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-gymnasium/python-gymnasium.hash b/package/python-gymnasium/python-gymnasium.hash
+index b76e0a5710..9a3b598346 100644
+--- a/package/python-gymnasium/python-gymnasium.hash
++++ b/package/python-gymnasium/python-gymnasium.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/gymnasium/json
+-md5  b67cd4243af164eb11888fe731c91e11  gymnasium-1.2.3.tar.gz
+-sha256  2b2cb5b5fbbbdf3afb9f38ca952cc48aa6aa3e26561400d940747fda3ad42509  gymnasium-1.2.3.tar.gz
++md5  e401a13a7c39201ec6e55c2dac1f91f2  gymnasium-1.3.0.tar.gz
++sha256  6939e86e835d6b71b6ba6bfd360487420876deafc79bfb7bacba83a7c446bcf3  gymnasium-1.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7dacaa9772e856aee6943b32ef663d3634d91d72ec7bbc74d136943673f91e18  LICENSE
+diff --git a/package/python-gymnasium/python-gymnasium.mk b/package/python-gymnasium/python-gymnasium.mk
+index 1cf79a0baf..dd5ca59f30 100644
+--- a/package/python-gymnasium/python-gymnasium.mk
++++ b/package/python-gymnasium/python-gymnasium.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ZELLIJ_VERSION = 0.44.2
-+ZELLIJ_VERSION = 0.44.3
- ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
- ZELLIJ_LICENSE = MIT
- ZELLIJ_LICENSE_FILES = LICENSE.md
--- 
-2.54.0
-
+-PYTHON_GYMNASIUM_VERSION = 1.2.3
++PYTHON_GYMNASIUM_VERSION = 1.3.0
+ PYTHON_GYMNASIUM_SOURCE = gymnasium-$(PYTHON_GYMNASIUM_VERSION).tar.gz
+-PYTHON_GYMNASIUM_SITE = https://files.pythonhosted.org/packages/76/59/653a9417d98ed3e29ef9734ba52c3495f6c6823b8d5c0c75369f25111708
++PYTHON_GYMNASIUM_SITE = https://files.pythonhosted.org/packages/4d/ff/14b6880d703dfaca204490979d3254ccd280c99550798993319902873658
+ PYTHON_GYMNASIUM_SETUP_TYPE = setuptools
+ PYTHON_GYMNASIUM_LICENSE = MIT
+ PYTHON_GYMNASIUM_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
