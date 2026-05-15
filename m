@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECBA5CD4851
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 870C6CD4851
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2BF261240;
-	Fri, 15 May 2026 13:14:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53A7361558;
+	Fri, 15 May 2026 13:14:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pIDEZXpxea2a; Fri, 15 May 2026 13:14:13 +0000 (UTC)
+ id azlamTjW3dDv; Fri, 15 May 2026 13:14:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1ED861547
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BEED61374
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778850853;
-	bh=GKYp05DuKOzP0jVbM/xbDsSReLir7pu642w1ypkK4O8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=shlw6ADZzM1+PSXXnqTSLqVziUFsY4yak7ZpY7t9VWHHy57xkacvELF3kkFVd1ENx
-	 TUYSUCSmPlyZZoBDmUkgIUDs+8bsH+OrcCdychyKOqlUu61qSuxW4hXXcLGj0USI7C
-	 vILGsrywvNyu/Nuh1s0eFWhs1RUsg9mzuUrPdxJkCTHFjnzo2W1q+x9jPahW1Kxwau
-	 N2nvYPlrJ6IiWBtuZbMuqTLAuNMJ7ZHBG2ir5LGrm7V+OxkjJm7c3rbZl44qMJsJ3q
-	 u4Cn3P/85HvnrtVRB+J6HUN2W+VcjD6a5+pWQenWLGHVQ1lMrHq3KwzIpp8LTKXgBT
-	 Vzkq6RI17yFGA==
+	s=default; t=1778850896;
+	bh=jSwl9Xzgy//+ZRTx+bgleYZm054+FDJdGFv1rLCX8Gw=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=cLXwW7fyhbcCIDyWpFHnapSV15kTmzQcehKHb4jIiNjzWIoMiqb4o9jzwI9Bv6goX
+	 878PQ0Gkn5665Sv3YWaiVqk+eSlWzfhSXdBDNLjmfNRUJo0ap7pOp0HJ4XhMxcjJX1
+	 M/Mwn/fn99Z4pHebqo8WDRza9wR1hcn1GIBfJVs8eCqN6Oy0S4F94useRqZyZyPIj4
+	 12aI63dhd/34q9pITyJDZ804jLC1gjnPBW848qs1Vrt4xvvy2AWB79Py0Tex/9V3x3
+	 bHhVlf6iRlBj91ihbnunlHr1mRYpv7yRbmpC+gm8Ejxdr3sHWbWMkJ9V39mb2AXVe9
+	 TQqLaZFbbOxbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1ED861547;
-	Fri, 15 May 2026 13:14:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 14E4649E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BEED61374;
+	Fri, 15 May 2026 13:14:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9338B36E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06BF5611D6
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84B5340E24
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gRlbGdAQDwe for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:14:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF3C2611AA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF3C2611AA
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D1808634F; Fri, 15 May 2026 13:14:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:13:56 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 40ceef27819a51263310fc1c81f7bbe3d4e2fab5
-X-Git-Newrev: 0c73553d840697b78181c773786f76e318f03214
-X-Patchwork-Hint: ignore
-Message-Id: <20260515131402.4D1808634F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-farama-notifications: bump version to 0.0.6
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LAgrVSw4bwas for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:14:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7F37340E23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F37340E23
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F37340E23
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:14:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id E124CB0051E;
+ Fri, 15 May 2026 15:14:49 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 15 May 2026 15:14:49 +0200
+MIME-Version: 1.0
+Date: Fri, 15 May 2026 15:14:49 +0200
+To: Xukai Wang <kingxukai@zohomail.com>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20260428143020.2129906-1-kingxukai@zohomail.com>
+References: <20260428143020.2129906-1-kingxukai@zohomail.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <6f370e51856c3d3dd5319fa13f4d313d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778850892;
+ bh=POjazILMbJQNACFBmzFijjOEI/kBhJ8g5KJnUSb593I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pLO/Enm/0PUNmNacO2GjNGnlKYaCbC6t8aW9Ado88ZXy+Z3JQ61FpKHBNJT9ZphMP
+ usHF4j3vr/W6ILLOwOU53twir/5+96I5MucdH72qzAoJPGWBsgvDeioMZc1WYWG6IQ
+ Dx907aUcRDgFZlKkQW5lA+WEq3Ubso91HeyJcgUhm5aX5KFMokoaoAbaZ4wCUmj1Bh
+ dto/ia+C08TkNiFceEKH8Z7a27QkQf9dfzxWODBbKt+gj8mGVgtTfUFS5uv9A4S+I4
+ om6ngbYIc5zHvTj8M30x+2c5O6+fx/iMEYtgIDbxRDIE0xPldMtev/LDl8cTfkmUAv
+ U3yD11LJx1ggA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pLO/Enm/
+Subject: Re: [Buildroot] [PATCH 1/3] package/python-gymnasium: add missing
+ toolchain dependencies for numpy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,53 +95,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c73553d840697b78181c773786f76e318f03214
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 28/04/2026 16:30, Xukai Wang via buildroot wrote:
+> python-gymnasium selects python-numpy, but does not inherit the 
+> toolchain
+> requirements of numpy, which can lead to automatic selection of numpy
+> without proper toolchain support (C++, gcc >= 9, glibc/musl).
+> 
+> Fix this by adding all necessary toolchain dependencies that numpy
+> requires. Also update the help URL and add a comment explaining the
+> toolchain requirements.
+> 
+> Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
 
-https://github.com/Farama-Foundation/Farama-Notifications/releases/tag/0.0.6
-
-Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../python-farama-notifications/python-farama-notifications.hash    | 4 ++--
- package/python-farama-notifications/python-farama-notifications.mk  | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-farama-notifications/python-farama-notifications.hash b/package/python-farama-notifications/python-farama-notifications.hash
-index b8ef65f8a8..951f82e9ae 100644
---- a/package/python-farama-notifications/python-farama-notifications.hash
-+++ b/package/python-farama-notifications/python-farama-notifications.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/farama-notifications/json
--md5  5caeb9a1f37a2e4ccdeff13858f41444  Farama-Notifications-0.0.4.tar.gz
--sha256  13fceff2d14314cf80703c8266462ebf3733c7d165336eee998fc58e545efd18  Farama-Notifications-0.0.4.tar.gz
-+md5  34f4a8cdb0c313712c64c5c0234ea633  farama_notifications-0.0.6.tar.gz
-+sha256  b19acac4bb41d76e59e03394b5dd165f4761c86fa327f56307a35cbee3b60158  farama_notifications-0.0.6.tar.gz
- # Locally computed sha256 checksums
- sha256  7ff6336b33ae4c168086e899a11b7c91d369b6758cee20f9469d563f004f89eb  LICENSE
-diff --git a/package/python-farama-notifications/python-farama-notifications.mk b/package/python-farama-notifications/python-farama-notifications.mk
-index 2ed06ad150..14759d3b1d 100644
---- a/package/python-farama-notifications/python-farama-notifications.mk
-+++ b/package/python-farama-notifications/python-farama-notifications.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FARAMA_NOTIFICATIONS_VERSION = 0.0.4
--PYTHON_FARAMA_NOTIFICATIONS_SOURCE = Farama-Notifications-$(PYTHON_FARAMA_NOTIFICATIONS_VERSION).tar.gz
--PYTHON_FARAMA_NOTIFICATIONS_SITE = https://files.pythonhosted.org/packages/2e/2c/8384832b7a6b1fd6ba95bbdcae26e7137bb3eedc955c42fd5cdcc086cfbf
-+PYTHON_FARAMA_NOTIFICATIONS_VERSION = 0.0.6
-+PYTHON_FARAMA_NOTIFICATIONS_SOURCE = farama_notifications-$(PYTHON_FARAMA_NOTIFICATIONS_VERSION).tar.gz
-+PYTHON_FARAMA_NOTIFICATIONS_SITE = https://files.pythonhosted.org/packages/ec/91/14397890dde30adc4bee6462158933806207bc5dd10d7b4d09d5c33845cf
- PYTHON_FARAMA_NOTIFICATIONS_SETUP_TYPE = setuptools
- PYTHON_FARAMA_NOTIFICATIONS_LICENSE = MIT
- PYTHON_FARAMA_NOTIFICATIONS_LICENSE_FILES = LICENSE
+Series applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
