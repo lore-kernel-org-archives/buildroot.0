@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E4B0CD4F48
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CF2ACD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 772ED41D66;
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA73984574;
 	Fri, 15 May 2026 17:45:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ea63i65A8v4T; Fri, 15 May 2026 17:45:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eBZPgKFr3lZE; Fri, 15 May 2026 17:45:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E42F141D61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0ED18453F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867114;
-	bh=7zLdaoDqfhxwGBK4JXHqYm6aVY3sNB3LMhlwnqekPNo=;
+	s=default; t=1778867115;
+	bh=TMzTOzRRG1qzr8kmFIGx+KF01l/xoGDCRVen89+VrDw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XepJ8H5q1Msic4qMgOieQktRJC4fWVKmU0v35BRRNdDmemnAZxr7tY4FFxgIJN0Av
-	 G07449tx8k1SRiB75RA/NVq8UjJNbYSrCiCOTs0oBMuTLyXyA57/blcQG0wyaO6fG/
-	 I5PNAX86iMHn2OonTlBOawEhlkxCMj2JXP173zuQV/IjgV8YWOCoxUToqDDFfFfugn
-	 9TuAyNlSOuwoZyiRLqZWhY64VNM9ZlAn8gCrRrekSQ9AaDn8yZeMECGO43/xRJOiXr
-	 MJCU0s8RF1b/KRzZp0Ye8ssKO1Hh+P3tUIuyy6UJYiL1tGWFzrIhZkzpaLqcxFAptf
-	 Bv0OoFVVtplyA==
+	b=jgB6axAAtFhpTBcL07UJJg7e2qLd9ij4dkxflNhUCLp422dBvoIejCN7bW7y9aTzQ
+	 tigYxC1+8yvxUjipTVc87K2I0mZTC1y1q+HrLLXOJ7SbMcSqo8q/FWZqLYybGW670m
+	 1TXEC3Jo+YpghjtT8gpWZKyDfBtmeFsc4PlF/xyIFky1W82TrXcdPHvEwz0YfU495T
+	 LOVygU6aGJy43v3apdNQlMQYFY3NX2EWjzgYyRisWf9OdIIYKsxf8wBaUzt/KWruQc
+	 qXPMgcbAGJijWbx/4PCuue/MQxViu5sVi374AV4XVm4QUoZf4InktbhObfR3I2JVR6
+	 XOzKTJz59PVEA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E42F141D61;
-	Fri, 15 May 2026 17:45:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AD33623F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:45:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0ED18453F;
+	Fri, 15 May 2026 17:45:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EA2B45B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD7486169E
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC54B8416C
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gpe_eZW-OIIs for <buildroot@buildroot.org>;
- Fri, 15 May 2026 17:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5yT2luBusbbk for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 17:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89CD261623
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054E284179
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89CD261623
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 054E284179
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B824F863D9; Fri, 15 May 2026 17:44:48 +0000 (UTC)
+ id 437B986395; Fri, 15 May 2026 17:44:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:17:09 +0200
+Date: Fri, 15 May 2026 16:59:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7f9fe97670f9d3d6dba05d0509c7c83b98c010cc
-X-Git-Newrev: 15676615f6ae6c684d3c4584b03bb756a92d4303
+X-Git-Oldrev: 59e81d40902ab650533094c3f16caede77669c50
+X-Git-Newrev: 1f1a302056bb5e51a8a5d0194bda1bf67573f49d
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174448.B824F863D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mutt: bump
- version to 2.2.16
+Message-Id: <20260515174449.437B986395@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] linux/Config.in: add
+ kernel.org URL to help
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,64 +77,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/15676615f6ae6c684d3c4584b03bb756a92d4303
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f1a302056bb5e51a8a5d0194bda1bf67573f49d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Bugfix release fixing crash / NULL pointer access issues and gsasl
-authentication compatibility with Microsoft servers.
-
-Mutt 2.2.14 was released on February 20, 2025.  This is a bug-fix release,
-fixing a couple possible crashes, in GPGME and with IMAP when logging out,
-and correcting a small issue with unnecessary encoding of "." in attachment
-names (2231 encoding).
-
-Mutt 2.2.15 was released on October 2, 2025.  This is a bug-fix release,
-fixing an IMAP search/limit bug, a compilation issue, and containing a
-workaround for gsasl SMTP authentication issues with some MS servers.  A few
-parts of the documentation were also improved.
-
-Mutt 2.2.16 was released on November 22, 2025.  This is a bug-fix release,
-fixing a resource leak when compiled with OpenSSL/LibreSSL, which could
-eventually result in new connections failing.
-
-http://www.mutt.org/news.html
-
-The 2.2.16 release is not available on bitbucket, so change to the official
-ftp.mutt.org location instead.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 206cd3cd31e1bff61f42b2bde9f71e0e003f6c14)
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+[Arnout: add it to the main help text, where it belongs]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 2ab95cf0eea0349f91b82faf7308ad04ba9bcabb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 72c7924e9b..4fd71fd6ab 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eb23faddc1cc97d867693f3a4a9f30949ad93765ad5b6fdae2797a4001c58efb  mutt-2.2.13.tar.gz
-+sha256  1d3109a743ad8b25eef97109b2bdb465db7837d0a8d211cd388be1b6faac3f32  mutt-2.2.16.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 9a6be6d4a0..503f2d283e 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 9f7a42b2e8..22a87f1c9d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,6 +8,8 @@ config BR2_LINUX_KERNEL
+ 	  Enable this option if you want to build a Linux kernel for
+ 	  your embedded device
  
--MUTT_VERSION = 2.2.13
--MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
-+MUTT_VERSION = 2.2.16
-+MUTT_SITE = http://ftp.mutt.org/pub/mutt
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
- MUTT_CPE_ID_VENDOR = mutt
++	  https://www.kernel.org/
++
+ if BR2_LINUX_KERNEL
+ 
+ # Packages that need to have a kernel with support for loadable modules,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
