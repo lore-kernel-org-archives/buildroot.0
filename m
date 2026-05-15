@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6915CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCC78CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:01:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81F448564D;
-	Tue,  9 Jun 2026 13:01:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96CCA85667;
+	Tue,  9 Jun 2026 13:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id da1jecOctDwi; Tue,  9 Jun 2026 13:01:48 +0000 (UTC)
+ id SP_LaWt8A85M; Tue,  9 Jun 2026 13:01:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFACD8561E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A5C8563D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010105;
-	bh=WIIa+pVTFZ3NsIuHE6KZ5YAlTfj4PzsHt8K6T+mVyQQ=;
+	s=default; t=1781010108;
+	bh=jyB6kXUKtDgkh7Vaa+QEWeJQfjeLADP/cuOh9kcgbUM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZpxfNkJKCS2NG2wAarlWMV2Jzzv0+uxBJva5g1PHaqmw1HWrLgj3LjJfH4scQR6YN
-	 blk3uchsLPHZGwmc9mTna8vIVJcW+6DKAgFk5f0BH9iXFGKX/r66VSwW8Si8W2KcMP
-	 5CVpU/FdL8Q50vPk0fBGPEpAeGrB8UuVjtaz/FpQUau5Bx5KOK/TzarJ8OZhe0eDmx
-	 akVZiFdSqaX/anSHhqhMjWuI/lqor+yQoMUxEQrkspk4rgza6eJOWG2WQX+a2EgA1r
-	 DiwSH4loUIbipr4bB0xSSdpIFgpyrxJgjI874pZLEcrcOdtHU0/oV4l8qD0xfN3daa
-	 +IXCBrVLNZcdA==
+	b=A/Cm7BU21cljYGMLHxLP6Cti+fOjEUCfXeUlET4fRgMNdN+j2dEs2xbh7pHpnTUjx
+	 b7MFmNFrL21CftXxjkgrw7V/FFDWNAvC2YJNaesec3aQZxgIGw7M4Ae7cDRLccGnn4
+	 saKr7iBmYxmFtzjIdkNRDDZC6wxta3453e5ZFu7qbWiW4vF9DyJkh6H4hnG6wULxTZ
+	 kcJBUHObbgu4gTe2POgE1FR1qHAUlgd1KdPbzHGxbSxcGRvFdSf+qhak+6TfmAFDri
+	 ZbUb1dGoFLAYxKa37q54QH+Q7v7VotI0PB5PPd6ohsPAlR0Ev3hwhP37qd/WXArGbo
+	 3dKoHpsBmmImA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFACD8561E;
-	Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CB685190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40A5C8563D;
+	Tue,  9 Jun 2026 13:01:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17D762EE
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B1FA16F691
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07B1640DA8
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JfKXnThpcQkC for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GhzyNnIQV3go for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB0556F690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 362B54103D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB0556F690
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 362B54103D
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0549B87E7E; Tue,  9 Jun 2026 13:01:09 +0000 (UTC)
+ id 6133287E8D; Tue,  9 Jun 2026 13:01:09 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 15 May 2026 11:39:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c522110685426cd9dc8bf246998abfb7d8b7b86a
-X-Git-Newrev: 20275000f3ef1546328b595d46c3e81ec5711345
+X-Git-Oldrev: 372f0ea9cefceb2f56a5dfedf612631eea1f47bc
+X-Git-Newrev: 73594f1d0e53f5be9f2676d33524cedd857fbffe
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130109.0549B87E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libunwind: bump to version 1.8.3
+Message-Id: <20260609130109.6133287E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcoap: bump version to 4.3.5b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,46 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20275000f3ef1546328b595d46c3e81ec5711345
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/73594f1d0e53f5be9f2676d33524cedd857fbffe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/libunwind/libunwind/releases/tag/v1.8.2
-https://github.com/libunwind/libunwind/releases/tag/v1.8.3
-
-Switched to tarball hash provided by upstream.
+https://github.com/obgm/libcoap/blob/v4.3.5b/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libunwind/libunwind.hash | 4 ++--
- package/libunwind/libunwind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcoap/libcoap.hash | 2 +-
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
-index 512cc7b9b5..02aa2bcbd7 100644
---- a/package/libunwind/libunwind.hash
-+++ b/package/libunwind/libunwind.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256  ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157  libunwind-1.8.1.tar.gz
-+# From https://github.com/libunwind/libunwind/releases/tag/v1.8.3
-+sha256  be30d910e67f58d82e753231f1357f326a1a088acf126b21ff77e60aab19b90b  libunwind-1.8.3.tar.gz
- 
- # Hash for license file
- sha256  6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 3eb3b483d1..689902c787 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 17fce990fa..0ca4fd3901 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
++sha256  383a17d8466cee7c1cb1d4dfbffad2651004850b29eb590e9591c7bedd46741d  libcoap-4.3.5b.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+ sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index bb1321f194..21b479fc16 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNWIND_VERSION = 1.8.1
-+LIBUNWIND_VERSION = 1.8.3
- LIBUNWIND_SITE = https://github.com/libunwind/libunwind/releases/download/v$(LIBUNWIND_VERSION)
- LIBUNWIND_INSTALL_STAGING = YES
- LIBUNWIND_LICENSE_FILES = COPYING
+-LIBCOAP_VERSION = 4.3.5a
++LIBCOAP_VERSION = 4.3.5b
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
