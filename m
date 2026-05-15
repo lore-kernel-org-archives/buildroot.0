@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BAF9CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFAB6CD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53C8241D2D;
-	Fri, 15 May 2026 17:45:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 894E284565;
+	Fri, 15 May 2026 17:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xpDeQ5tV8FiM; Fri, 15 May 2026 17:45:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lSUoA4fVtPdE; Fri, 15 May 2026 17:45:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ADDB41D26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A411584566
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867106;
-	bh=MQprKzHWE4Nf7dUCBeLVhQno9ueGMFowW1FOG4kdDvY=;
+	s=default; t=1778867107;
+	bh=hcMmL1IzPPqAIM4TwiAojbDkA919HxZGxIoJmfM6o0o=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=c6et0Bi0N7WI9VvE4hPbrkuOLbvPiDHXMulqb0fxrxFNefOBPde1DFRCYnnjfvk7v
-	 3KB2rjmmg6R64w9Y11fvD5/AUZi1RotszEtum19VeQG+JwMzq3eayrGrccFR1IAYZm
-	 fcE4VEErtSIqfYM5AEF0NkRFpC/2dahkUuqd4G4vc3ZmI+7Vd2cYP2wyXgzQybarv2
-	 l50L2D7qaOWmppqhCK9TMU/uSmBpGXyAP6JS7zJ4jOgCxytsmZQTdqP6aAJFwW0Aan
-	 KnusoZDAKU3HdhTjIhfBImpvNElZg366DExYBvDO7plRf+n3PmvwqmY4pXAfeipksj
-	 PayQxtpfB/aEA==
+	b=s/vPLsISkBRQw8fWQqHLVvR1Wp67fkhZj+831UN9AIlKQKL+5mtxN7Jr7GO4ZNnej
+	 uqV8YtvzWatpsE8H01VmDfmh/zScxUId/2kvcNz2qDqN76QzULxw/UEEVHNMc9DRa0
+	 eRhcsYFQwqaeNGDSHZ+y7M/Tjt7Ev8vy4EqjhuKvaEeM8ffwIcQefinwSxjy2zT143
+	 h7JiqLxZI4jm0lRUFWC/VegxDDSrBMiW2hJLKaU3G21b1euPF737Zodli/JE9l4LJS
+	 ytmLAtzv1iMnKdjyT5r+TOPHfqbrn56jB8ZkM0Cfo1Kf8wJZ4Xwb9pOzaQhit5C46m
+	 +ZBLzx7XjF+rg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ADDB41D26;
-	Fri, 15 May 2026 17:45:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B1E623F
+	by smtp1.osuosl.org (Postfix) with ESMTP id A411584566;
+	Fri, 15 May 2026 17:45:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48A8E23F
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B8DE4027F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4671A8417F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DeA4tCJTFFCD for <buildroot@buildroot.org>;
- Fri, 15 May 2026 17:44:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FZt-TA0P7yM1 for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 17:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFFDC40F92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36F1984189
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFFDC40F92
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36F1984189
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:44:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 19BC2863D5; Fri, 15 May 2026 17:44:49 +0000 (UTC)
+ id 74C0486395; Fri, 15 May 2026 17:44:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:59:11 +0200
+Date: Fri, 15 May 2026 16:59:26 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f1167baf9e36bbf59919ad0fb8c6e79c73e3f50a
-X-Git-Newrev: bca59419d984ea64b0495169020907e45dd5de66
+X-Git-Oldrev: 3d586c429be838e9f55aabd21f9a269b53f15e61
+X-Git-Newrev: 924da55e477020ca678ab1a2dd3b67fec925998a
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174449.19BC2863D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove Martin
- Kepplinger from x11vnc
+Message-Id: <20260515174449.74C0486395@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/p7zip: security
+ bump to version v17.06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,48 +72,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4880961021143015908=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4880961021143015908==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bca59419d984ea64b0495169020907e45dd5de66
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/924da55e477020ca678ab1a2dd3b67fec925998a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-I don't use maintain x11vnc in buildroot anymore and can't easily test.
+What's Changed:
+  - Fix CVE-2021-3520 affected components Lz4 1.9.3 in p7zip17 (#239)
 
-Signed-off-by: Martin Kepplinger-Novaković <martink@posteo.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 81e72115a05fb9b32ccb9e613c1d5c4151980426)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>a
+[Marcus: mark as security bump]
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit 760e16dcc033bb743cacf56449011bc6cdaf7bed)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ package/p7zip/p7zip.hash | 2 +-
+ package/p7zip/p7zip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 711c973494..e7d89f6ace 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2274,7 +2274,6 @@ F:	package/python-webargs/
- N:	Martin Kepplinger <martink@posteo.de>
- F:	package/tslib/
- F:	package/x11r7/xdriver_xf86-input-tslib/
--F:	package/x11vnc/
+diff --git a/package/p7zip/p7zip.hash b/package/p7zip/p7zip.hash
+index f0b9c27113..d352965950 100644
+--- a/package/p7zip/p7zip.hash
++++ b/package/p7zip/p7zip.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d2788f892571058c08d27095c22154579dfefb807ebe357d145ab2ddddefb1a6  p7zip-17.05.tar.gz
++sha256  c35640020e8f044b425d9c18e1808ff9206dc7caf77c9720f57eb0849d714cd1  p7zip-17.06.tar.gz
+ sha256  555806657dcf0f1e720b581c52643c195ec86ae3f00bd18cc66d2e0f88ffa210  DOC/License.txt
+diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
+index 803fd38b7f..ee5a7d2e10 100644
+--- a/package/p7zip/p7zip.mk
++++ b/package/p7zip/p7zip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Martin Povišer <povik+lin@cutebit.org>
- F:	package/python-construct/
-
---===============4880961021143015908==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-P7ZIP_VERSION = 17.05
++P7ZIP_VERSION = 17.06
+ P7ZIP_SITE = $(call github,p7zip-project,p7zip,v$(P7ZIP_VERSION))
+ P7ZIP_LICENSE = LGPL-2.1+ with unRAR restriction
+ P7ZIP_LICENSE_FILES = DOC/License.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4880961021143015908==--
