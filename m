@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD563CD4F48
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12394CD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 986A7846EA;
-	Fri, 15 May 2026 17:47:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7159846FB;
+	Fri, 15 May 2026 17:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UpeUT3104o93; Fri, 15 May 2026 17:47:09 +0000 (UTC)
+ id YTD2DUwdJcUf; Fri, 15 May 2026 17:47:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C6984692
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E27D7846EF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867229;
-	bh=X8Y61i0kJTwUtX7dxD+a8f92E3j4XC/8eW/hp1//ptk=;
+	s=default; t=1778867231;
+	bh=EZkELTaZewd9tmdCaJE+jKIaknOOV5yci1wy5WcW5Gw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mg6jPZWMxMsuwqiVtRB7yJWLrOSBAHJDXRnV/FMSP9q02iu50DdDwP6hOdgLysMX6
-	 cXa2Vnz/iBrjwu3JJgB7lx4HAClFmeOlazCVXuOY8v5/TUM+NrQg2JglKLmktctvwF
-	 Iyjlr4ByHlO/oQs2eBPmjpL7Y6vIyT3ly8tdIodqhuOoqAwcaoeOZ8GKYge643HzfI
-	 dzUaRH1wn1HCvZUAiqpDSYkKMe2wdH8J2TLNszaLlh/BGuBiH1eOrEeXYBKGSPLlbL
-	 KtlC6C6YbMFHco6TFPWtJ9258IShByQ9EPuS7ApTaZo7qa42K9DhIb0UfnFwUKx17Z
-	 0dG1w87PW3AZw==
+	b=bb5wlbjtJnH/jadmrUowzrPffajTsEgQJh2v/qUIRMKTknx22yfpex5xknv5QGBgN
+	 mGb+EW3uKGG4jVEf1s+7O4BaZn8aYEAe8GwqduffHRptW6o5Zjrl65W1GlBzvOl1KO
+	 eOTRCT8UTNn2krlqzM4TjblFo9CCMWIlWntMLoKHmUKYUxT82ldNGcrjnaeo8L9s+Z
+	 2DmTds3IZT5jy8/nKNJF5iZmAkQpLaj+SH87jSefceVFSvE7Q4Z0e3V4CGQ4jsY/Hg
+	 RoVCimZRvhxNz5lKz9I+ONQSzi308em7L18rSdmsj+RBxCHPq5dZzb7+rc0gyLsws9
+	 f7tUtEMl1wTww==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5C6984692;
-	Fri, 15 May 2026 17:47:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C39423F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E27D7846EF;
+	Fri, 15 May 2026 17:47:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1764923F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FA0E40FB4
+ by smtp4.osuosl.org (Postfix) with ESMTP id D36DC41DA8
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wc0NcdLa0-oA for <buildroot@buildroot.org>;
- Fri, 15 May 2026 17:46:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7alJ0AA_53Ob for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 17:46:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC70040FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D805D41D9E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC70040FA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id D805D41D9E
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 16509863D7; Fri, 15 May 2026 17:46:40 +0000 (UTC)
+ id 220AA863DB; Fri, 15 May 2026 17:46:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:21:58 +0200
+Date: Fri, 15 May 2026 16:22:14 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 056588171daf829cd4ce72ea234aa1da27f43f1d
-X-Git-Newrev: 6ea66ebd69fa5fa2d06562d24b3ea06bfcb877b5
+X-Git-Oldrev: 6ea66ebd69fa5fa2d06562d24b3ea06bfcb877b5
+X-Git-Newrev: 34204529e0b19971991c458ce997ce180fe46aba
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174640.16509863D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] linux/Config.in: add
- kernel.org URL to help
+Message-Id: <20260515174640.220AA863DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ support/scripts/pkg-stats: fix host/target infra filter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,31 +77,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6ea66ebd69fa5fa2d06562d24b3ea06bfcb877b5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/34204529e0b19971991c458ce997ce180fe46aba
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
+The filter is supposed to exclude host/target infra from output if the
+respective package is not built with the current
+configuration.
+
+However, excluding host packages did not work correctly: If keep_host
+is False because the host package is not built, the next branch was
+checked and included the host infra in output with "target" type if
+the target package is built. For a package that support host and
+target build, but gets built only for the target, this leads to output
+like (Meson example):
+
+meson (target)
+host-meson (target)
+
+Skip host infra in the target branch instead. Also include
+Package.infra in Package.__str__() result, which was needed for
+debugging this bug.
+
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-[Arnout: add it to the main help text, where it belongs]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 2ab95cf0eea0349f91b82faf7308ad04ba9bcabb)
+(cherry picked from commit e8dcebf4597d74dc12c86535118ae0bd16d272a0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ support/scripts/pkg-stats | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 33dbfe2148..04da548c17 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,6 +8,8 @@ config BR2_LINUX_KERNEL
- 	  Enable this option if you want to build a Linux kernel for
- 	  your embedded device
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index a87bb23a8e..bbd1e3e6f0 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -205,7 +205,7 @@ class Package:
+                 infra = match.group(1)
+                 if infra.startswith("host-") and keep_host:
+                     self.infras.append(("host", infra[5:]))
+-                elif keep_target:
++                elif not infra.startswith("host-") and keep_target:
+                     self.infras.append(("target", infra))
  
-+	  https://www.kernel.org/
-+
- if BR2_LINUX_KERNEL
+     def set_license(self):
+@@ -342,9 +342,10 @@ class Package:
+         return self.path < other.path
  
- # Packages that need to have a kernel with support for loadable modules,
+     def __str__(self):
+-        return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d)" % \
++        return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d, infras=%r)" % \
+             (self.name, self.path, self.is_status_ok('license'),
+-             self.is_status_ok('license-files'), self.status['hash'], self.patch_count)
++             self.is_status_ok('license-files'), self.status['hash'], self.patch_count,
++             self.infras)
+ 
+ 
+ def get_pkglist(trees, npackages, package_list):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
