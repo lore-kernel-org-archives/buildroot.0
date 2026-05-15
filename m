@@ -4,115 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD06CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 14:33:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A05ACD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 14:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D74E140CE0;
-	Fri, 15 May 2026 14:33:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E4FF4112B;
+	Fri, 15 May 2026 14:36:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VXXh7cffsb2r; Fri, 15 May 2026 14:33:30 +0000 (UTC)
+ id N0dPVPhwkAFP; Fri, 15 May 2026 14:36:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E169340CE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49D9741130
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778855610;
-	bh=KdLSdYCNQlZMSV/sASYU2OPSva3uBl42hmQMS7pHNtw=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=IqT1o3LOAmbGw4SzvWYlCstFhl98yaAt6L1LUh9saH4PZBk+noDsZAmFz8h27IdCw
-	 VqGllIViafnbIkdHiHfU3YcdcbVFV3JDGHpIwW681sCoRLG/G21FgGmIfrEoozP/Vc
-	 MTJCHPyWKLdeOy4M14xpcwoP1EO0727GdGT+6dhvddxUWJED58mGqHTx63Q5b8dfBl
-	 hI458ZGxXhjGn+e6JzsVS3u9tI4x53rv1rQodGCE4/GGzdwhapj50LCNl1EMP+n0/+
-	 CO2IIi1nhM8GVJbEzCw2pAy5dL5v+gm8yPgOv4PYDb/FacJnCYJnT7BbDGihSXW9DN
-	 emnZhwuvntoaQ==
+	s=default; t=1778855772;
+	bh=6VdkQGpl860/H1vBjHRBYJ6piTghGEAxQ+ggbhGw1pI=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=AcA+9W6UEHLNYxNtzOaE/BcyoN8Z05OljGCh2JiP4pE3BBUG1NkINjnYy1eUppHAr
+	 27Gg/Su1D/LMRD2mejGKHhoYuBBA55japp/I6JjXq0RKMvsJdcy0WPTkxUTWo/jdPj
+	 0gh19JIFBh6ejwoaDVtF23eU9q4ntIx6EFDU1wIUCPKZzX9z8aXkgMY3dRz62aMKfq
+	 a/RiegFMmhrSzzHUQv9jeQP/7FN76PmpsWPQlIhPSsnOHZrS+53qnOvEkTMubrHLMC
+	 g0IQWgyVueIkiJm0rZOteOMxJs4PiDrp5OYD7C9/sC1Xio6kHLTyGrOedwKG9i7Wf/
+	 HHDE+Huj5w9yA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E169340CE4;
-	Fri, 15 May 2026 14:33:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 89A78E7
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:33:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49D9741130;
+	Fri, 15 May 2026 14:36:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48CAEE7
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A8E140E24
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:33:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3479041130
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 77zYrQIDtU1H for <buildroot@buildroot.org>;
- Fri, 15 May 2026 14:33:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NEh550s5Yvh3 for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 14:36:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5677A40E70
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5677A40E70
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5677A40E70
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:33:27 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-43d76dd4ee8so8589724f8f.2
- for <buildroot@buildroot.org>; Fri, 15 May 2026 07:33:27 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0D5F4112B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D5F4112B
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0D5F4112B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:36:08 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-44509921fbcso4777054f8f.3
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 07:36:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778855605; x=1779460405;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=8FSBlxjPTDYILt9Tjk+hFZ9SQEahoLxfV3ylwvrmlNA=;
- b=Ij0zCSJm7a9wR0lxx0jHhCvM31KYguuggeX23+TiJmTuV7Kv8tHmXQFGs6WzaTtVft
- cNlYNci8enDaCz0oWysvbcd3X2Q5UKGbp9+kTCRBRjZdlf7XKU2KidboDFoIrgKZYcMY
- G7msEK3Vzup+QAov/82KMq6CRYZLcewXBkiNlas75DPwFnWckf9+sexSzkZ8Vh+I27rT
- Qtjf+qsnmlTSPHRs2tfbYp1GKWRWoRVlhXFuTUA0Mj+rl8lg+OKHEoWxrtA2Fjuy0iG3
- ttGGJVpJUIaDCagdZy3sxVyqgZKDPpErqpc1lGlh1Gz0hPrcEj89AhlFLDB5Cm+PCYtV
- Mh9Q==
+ d=1e100.net; s=20251104; t=1778855766; x=1779460566;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=v0X3ZRMxQtxwmA7ID0k3Vq5zVGRxPQx/YoWeCwUQ+hA=;
+ b=qbmsoo2VW6QXyemBzINXibIblvXh51pGAhwUBrincYROOBcCqba500WUaVxF9Hljsa
+ JXFz4EbJDzKBRw1ZASWNM0tOLuQLCf18xgoD/+rI+Sw4UA01BFU+HEbrI+hIhdgJeeIj
+ yzquD4kUMbtqqO5NTnozojWZb8u18kVBzfxIT/84dN4RforA4SN5vpZ9HX5UGoHkniWc
+ iwn6jCbWjbecFZGUJJpjdUhnyu79Aqom72us8AqyRO2VXEacKXo6b4qOHiau9X27cSIE
+ RS2k46FzrYgkxMUODPKpbV1ijSSz+RE3smbVM9dmRQhP/glZrZYtmPcsjQsiAzF/7hiU
+ DK7A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+oyjvxGFzaLhm3JwBPLf3yUPSt/66Zg9OruBcHfgzZUiPXgcVPEKKXbFluEvCF43uRW3mKrvhdbg0=@buildroot.org
-X-Gm-Message-State: AOJu0YzSXR+edPenCQjGVaMB570Fkz/rfKHYChMtqBlUuOJmXJKiqEV0
- hRQUz1ATh/hNWBpalhz8fv+ji88N0SibAYLnT9oaWZP2JJK9T79cH4wKUGhapRGQ6vA=
-X-Gm-Gg: Acq92OHvcqzziNYjjZIJkH2V9l3xK9orxSvMMVvEZu0m/N6JWz1rrn+SRy4o0WP0qe5
- L4Nt3wQr0549F92WdgvlJ1dQQztb1VkFLEOQKRyl1ca6RKnAuSEg4veQm4BVw3TF2Rop+Yfnl+7
- yKe/qo6CgD7XjI7elfu67kaZDYw9d7svFGTyV/6IgokBwwOQFEHJA6CFgKutI3TxuKBYVEMjTeE
- Nz+BMHHQDLZAFUp44M8tT5eQjxpqqzUpby9r5Vv1rQX8rWVq1PFNSmLbd/09AefwWKFcv11A4x4
- S8JiA2afkkirzZTtSfdeAh86b5A/Nuhvnl1VkmbC65m82y+S1/KmC6LRRmIB03ooi/6aXhMUFCe
- C1qmrzx00naD4mfeCxvdKgDt3bh8igHDLtVJLf/8x/u+Q7QYZ5xj6BFXXSjBviRn/1EKA0OlUNg
- 28YTSoWAWXVJK0u6UEanzvOtUFWhQSlaGOZOpCYeK/NGs5
-X-Received: by 2002:a5d:588f:0:b0:43d:77e1:6a69 with SMTP id
- ffacd0b85a97d-45e5c5a4dbdmr5688163f8f.38.1778855605344; 
- Fri, 15 May 2026 07:33:25 -0700 (PDT)
-Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
+ AFNElJ9jlBJZ+niFppixwhN8RPni5rJzeyeeNl1uOwM9tBO7jST4fDU5C1XTdgLd/3UyIDf+yuqIKuE9RsY=@buildroot.org
+X-Gm-Message-State: AOJu0YyviQYssVSr6xBQPI0sBnCoVwagMZzo5rl7/1VSCZMao6tXJ/9r
+ +xhYvqdKVVWXJsCBNXtzALAuOy4VSv6BC4VpumQ/F9EVdvRewaX2WJWD2nlDxfHWeOB+vuS6TfV
+ epA80CCE=
+X-Gm-Gg: Acq92OFRSZdfBSb6vaGEVZv23JRTW5u8Oc6wKv8Vdjep3u1NWyBqrz6nJzQOXANmvAY
+ /qwQavUpqkbzDPDdh9rVKwypEzXZ0bUtXY5PsGE/Ys+qInlZFAAddU2oBXguSOyJbN1+z/UbNeC
+ fMkm291AOezlQ9IrqUajkZHJMZ8EjCFZ4hAOo44H/Ex+gBfErcakn9VeTlD5XAIiUoA4FxCsYBy
+ wenRrY7+MlHK8Jhfn2mBx91f93RGXX4L2X0VKkLIx53p/QB98LmyFClSsiRTMbxRLoHdIdxPf+N
+ jiFSCDbz1bvRhP08EdYlM0v56I4z2gdhU8o/HsfvEaiovz+8KqkaiFIql5TAQqM98XnKGMKbpwr
+ 0gKQ+cLnYX22A7TBQGgnNlOlp8dsv4sY7/Iuue/Az3gZrcDybTYMlSTTxUNTlBwBhReHOZULUZD
+ OOE8KTIBJqHv1LG+u8rT3Db3wixO5jYYgaORO13iIR50FufEfUjXJiaotibtOLF2gjji8BgyyU4
+ eyyni9JFuMERcKMFks1mcoFTx96C0zCxf4STNIaMX6jTUvVLWqKOeIUJTapAJ0jjA==
+X-Received: by 2002:a05:600c:1389:b0:48f:de4e:882b with SMTP id
+ 5b1f17b1804b1-48fe60e524dmr57805655e9.6.1778855766232; 
+ Fri, 15 May 2026 07:36:06 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45d9e767d0bsm13962927f8f.3.2026.05.15.07.33.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 07:33:25 -0700 (PDT)
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:33:24 +0200
-Message-ID: <20260515143324.413499-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260506101646.131940-1-buildroot@bubu1.eu>
-References: <20260506101646.131940-1-buildroot@bubu1.eu>
+ 5b1f17b1804b1-48fe5ab3977sm71477805e9.9.2026.05.15.07.36.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 May 2026 07:36:05 -0700 (PDT)
+Message-ID: <9b2f8fe9-71ca-4bd0-b2fa-ff1cb72224a2@smile.fr>
+Date: Fri, 15 May 2026 16:36:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20260221184550.3080991-1-giulio.benetti@benettiengineering.com>
+Content-Language: fr, en-US
+In-Reply-To: <20260221184550.3080991-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778855605; x=1779460405; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8FSBlxjPTDYILt9Tjk+hFZ9SQEahoLxfV3ylwvrmlNA=;
- b=S1sySNxMndY7SJy33RJAWpEZNcXTENSPAPiDI8eyf7jtE3T4wJlAuUAcDOnp6AkrsQ
- w58TxT5s6KkM9W4CyGsJKk0soWp1BIlkpm3Xd8L3f1OyAKQySfNHQViFhOi7MI2JZTy1
- YtHIgOufwytf39rysuhvJ9myDTUoA4GSHeeI+1Jhk1ZNGMYeyR6Yy48A9nrPKLcy/KsJ
- ecR31tXjsw/OHy1C4hqSKOcHoGC6NaxatmurGHkVEz/LBa/Q8kNW9KmJc72f7RIWsmRb
- QWqqNmHETjSjC+XzLGIad4fgNp9/TiGJiqj4xK9vD/mpMHhx+n7icuRz16mvcUoBlDff
- /tDg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S1sySNxM
-Subject: Re: [Buildroot] [PATCH 2025.02.x 1/2] package/gcc: bump 12.x series
- to 12.5
+ d=smile.fr; s=google; t=1778855766; x=1779460566; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=v0X3ZRMxQtxwmA7ID0k3Vq5zVGRxPQx/YoWeCwUQ+hA=;
+ b=sOY+XQ0KCzukj7t5RI4yjTk7fyh078qhz/6hkIpSwVr189bh3z0VinHTQmIPeotarp
+ xP9pvQxGCK3FDIDW1Qg9/wJXdYhZwpdhAES1XqteUP5JC57UCH1cSAZbX6OgEODRaJKA
+ xbz3qH9qH3nKLopmK+tuz10XgjOlVRDLN/uIo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=sOY+XQ0K
+Subject: Re: [Buildroot] [PATCH] package/zlib-ng: fix build failure for
+ PowerPC soft-float
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,97 +127,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Changes (linked from https://gcc.gnu.org/gcc-12/changes.html):
-> https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=12.5
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-
-Applied to 2025.02.x. Thanks
-
-> ---
->  .../0001-disable-split-stack-for-non-thread-builds.patch      | 0
->  ...02-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 0
->  .../0003-xtensa-add-.note.GNU-stack-section-on-linux.patch    | 0
->  .../0004-Remove-crypt-and-crypt_r-interceptors.patch          | 0
->  ...Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 0
->  ...libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch | 0
->  package/gcc/Config.in.host                                    | 2 +-
->  package/gcc/gcc.hash                                          | 4 ++--
->  8 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/gcc/{12.4.0 => 12.5.0}/0001-disable-split-stack-for-non-thread-builds.patch (100%)
->  rename package/gcc/{12.4.0 => 12.5.0}/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch (100%)
->  rename package/gcc/{12.4.0 => 12.5.0}/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch (100%)
->  rename package/gcc/{12.4.0 => 12.5.0}/0004-Remove-crypt-and-crypt_r-interceptors.patch (100%)
->  rename package/gcc/{12.4.0 => 12.5.0}/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch (100%)
->  rename package/gcc/{12.4.0 => 12.5.0}/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch (100%)
-> 
-> diff --git a/package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.5.0/0001-disable-split-stack-for-non-thread-builds.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-> rename to package/gcc/12.5.0/0001-disable-split-stack-for-non-thread-builds.patch
-> diff --git a/package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/12.5.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-> rename to package/gcc/12.5.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-> diff --git a/package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/12.5.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-> rename to package/gcc/12.5.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-> diff --git a/package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/12.5.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-> rename to package/gcc/12.5.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-> diff --git a/package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/12.5.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-> rename to package/gcc/12.5.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-> diff --git a/package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/12.5.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-> similarity index 100%
-> rename from package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-> rename to package/gcc/12.5.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index bdf644f527..e6dc4a04ba 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -70,7 +70,7 @@ config BR2_GCC_SUPPORTS_DLANG
->  config BR2_GCC_VERSION
->  	string
->  	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
-> -	default "12.4.0"    if BR2_GCC_VERSION_12_X
-> +	default "12.5.0"    if BR2_GCC_VERSION_12_X
->  	default "13.4.0"    if BR2_GCC_VERSION_13_X
->  	default "14.3.0"    if BR2_GCC_VERSION_14_X
->  	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-> index 168c6643ce..720bf6595f 100644
-> --- a/package/gcc/gcc.hash
-> +++ b/package/gcc/gcc.hash
-> @@ -1,7 +1,7 @@
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
->  sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-> -# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.4.0/sha512.sum
-> -sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
-> +# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.5.0/sha512.sum
-> +sha512  c76020e4c844b53485502cb8a4e295221c9d37487d66c9f4559031fb14c85de20602e6387310005386cb0ef25e55067d2cfef141423bb445f3b77e7456a23533  gcc-12.5.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.4.0/sha512.sum
->  sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
-> -- 
-> 2.54.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR2l1bGlvLCBBbGwsCgpMZSAyMS8wMi8yMDI2IMOgIDE5OjQ1LCBHaXVsaW8gQmVuZXR0
+aSBhIMOpY3JpdMKgOgo+IEFzIHN1Z2dlc3RlZCBpbiB0aGlzIHJldmlld1sxXSwgd2hlbiBidWls
+ZGluZyBmb3IgUG93ZXJQQyB3aXRoIHNvZnQtZmxvYXQKPiBlbmFibGVkLCBsZXQncyBhbHNvIGRp
+c2FibGUgYm90aCBXSVRIX1BPV0VSOC85IHRoYXQgaW4gb3JkZXIgZGlzYWJsZXMKPiBhbGwgdGhl
+IHBvc3NpYmxlIFBvd2VyUEMgYWNjZWxlcmF0aW9uIGluc3RydWN0aW9ucy4KPiAKPiBGaXhlczoK
+PiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvYTBmYTVhMTc1YzU0Njk5
+M2Q4MTgzNzFhMGRlOTNiMmU5ODQ1YTE4My8KPiAKPiBbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS96
+bGliLW5nL3psaWItbmcvcHVsbC8yMTUxL2NoYW5nZXMjcjI4MDMyNjQ4ODIKPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5n
+LmNvbT4KPiAtLS0KPiAgcGFja2FnZS96bGliLW5nL3psaWItbmcubWsgfCA1ICsrKysrCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS96
+bGliLW5nL3psaWItbmcubWsgYi9wYWNrYWdlL3psaWItbmcvemxpYi1uZy5tawo+IGluZGV4IDU5
+ZTRlMTUyODIuLjkyZTM2NTliNTkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS96bGliLW5nL3psaWIt
+bmcubWsKPiArKysgYi9wYWNrYWdlL3psaWItbmcvemxpYi1uZy5tawo+IEBAIC0zMCw2ICszMCwx
+MCBAQCBlbHNlCj4gIFpMSUJfTkdfQ09ORl9PUFRTICs9IC1EV0lUSF9ORU9OPU9GRgo+ICBlbmRp
+Zgo+ICAKPiAraWZlcSAoJChCUjJfUE9XRVJQQ19TT0ZUX0ZMT0FUKSx5KQo+ICsjIEV4cGxpY2l0
+bHkgZGlzYWJsZSBQb3dlclBDIGFjY2VsZXJhdGlvbnMKPiArWkxJQl9OR19DT05GX09QVFMgKz0g
+LURXSVRIX1BPV0VSOD1PRkYgLURXSVRIX1BPV0VSOT1PRkYKPiArZWxzZQo+ICBpZmVxICgkKEJS
+Ml9wb3dlcnBjX3Bvd2VyOCkseSkKPiAgWkxJQl9OR19DT05GX09QVFMgKz0gLURXSVRIX1BPV0VS
+OD1PTgo+ICBlbHNlCj4gQEAgLTQxLDUgKzQ1LDYgQEAgWkxJQl9OR19DT05GX09QVFMgKz0gLURX
+SVRIX1BPV0VSOT1PTgo+ICBlbHNlCj4gIFpMSUJfTkdfQ09ORl9PUFRTICs9IC1EV0lUSF9QT1dF
+Ujk9T0ZGCj4gIGVuZGlmCj4gK2VuZGlmCgpJIHdvdWxkIHN1Z2dlc3QgYWRkaW5nIEJSMl9QT1dF
+UlBDX1NPRlRfRkxPQVQgaW4gZWFjaCBpZiBjbGF1c2U6CgojIHpsaWItbmcgUG93ZXJQQyBhY2Nl
+bGVyYXRpb24gaW5zdHJ1Y3Rpb25zIGFyZSBub3Qgc3VwcG9ydGVkIGZvciBQb3dlclBDIHdpdGgK
+c29mdC1mbG9hdC4KaWZlcSAoJChCUjJfcG93ZXJwY19wb3dlcjgpOiQoQlIyX1BPV0VSUENfU09G
+VF9GTE9BVCkseTopClpMSUJfTkdfQ09ORl9PUFRTICs9IC1EV0lUSF9QT1dFUjg9T04KZWxzZQpa
+TElCX05HX0NPTkZfT1BUUyArPSAtRFdJVEhfUE9XRVI4PU9GRgplbmRpZgoKaWZlcSAoJChCUjJf
+cG93ZXJwY19wb3dlcjkpOiQoQlIyX1BPV0VSUENfU09GVF9GTE9BVCkseTopClpMSUJfTkdfQ09O
+Rl9PUFRTICs9IC1EV0lUSF9QT1dFUjk9T04KZWxzZQpaTElCX05HX0NPTkZfT1BUUyArPSAtRFdJ
+VEhfUE9XRVI5PU9GRgplbmRpZgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gIAo+ICAkKGV2YWwg
+JChjbWFrZS1wYWNrYWdlKSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
