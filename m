@@ -4,115 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03DEECD4F48
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B52E2CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF9E541C2A;
-	Fri, 15 May 2026 13:34:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9159841C29;
+	Fri, 15 May 2026 13:34:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tyhbU4dOak7o; Fri, 15 May 2026 13:34:35 +0000 (UTC)
+ id g9ieyaR6DuvE; Fri, 15 May 2026 13:34:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D326041C2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7CC541C1F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852075;
-	bh=DLQ+Wny5+Ld4dThO9tqTylhvZCcUk6iA3sh2hEzoJss=;
+	s=default; t=1778852073;
+	bh=o90FAlksme3++U0+HV656sobi6MNUhlAQnc8NEe+Rpc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TvtJhsewjfgAblE+1+nZHG+ikBIA/a6oY2jeGRAWYJveYtiaXuRA5gXWdMmBX4tyh
-	 VhQ3G8TLlhtecwZR+3f5VE5BxIgQAWdcPjjP3ZOzO7vWwwpha2TgC2GlhLFZkh9zol
-	 730sHomqeFLUtkJeQhvFM5RwVpalNbtrXG1si9ZOCdYH25VJp7zdWqTl4v0ZBod/EL
-	 hGQIQryXv2leIHaQf3Idt34He6MkdBP8/FiaCrZ+/z/DN9gHn/h6nyFA9AEskXwhHz
-	 ZsAtBlIoEf/52yA2pjOce5MCjP6R+H2pqvax9ALtqudlsfx/554dfaTK7Ti2zZCx4H
-	 iqTq6eCG4ninQ==
+	b=CjwJKl+eDCG5XOmigQfeVIjyl40vmDo90ISLaUbHTYHCOWNcfoCw43DNs3nVRdVqy
+	 gtWrBEYHjfpRFYU0PE0P3ehWWZh0qpwHU6+ddP6r47GrGaVQffxYabD28y2jxIDEnu
+	 psiO7EpZftt0cWoTKSo+YtuZj8HwEjIaqkitpc+Uggk4JuHF/eot1xp7NYYvsKMl6t
+	 iJeDvbGtPoIs4YyT4Z3VfUyScCvBSzqQsbcQMldHGUV6pHJfQCpcfkzWlkvr2y+Liw
+	 axYK9/bQcmEhvR7R6mhV4tvOcBb3mvbierpR5uoux6EZPnwdeqvvI0stZlvGuJfbKK
+	 WA1pYUs9oc7ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D326041C2C;
-	Fri, 15 May 2026 13:34:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43AB836E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7CC541C1F;
+	Fri, 15 May 2026 13:34:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7AF7636E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35B0661664
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60E4B40E24
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bb5IdtnVA1-G for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:34:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wbqWNFxFRqNw for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:34:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1240F6157C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1240F6157C
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1240F6157C
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:25 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-48a3e9862f0so5936625e9.1
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:25 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0F70340E23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F70340E23
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F70340E23
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:22 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-488b150559bso72549255e9.1
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778852064; x=1779456864;
+ d=1e100.net; s=20251104; t=1778852061; x=1779456861;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=6Vmua4+Kue4xG3Z9BZ8MDB7IrVZHHBjDLTvjDOw4/yI=;
- b=RpKZknPk/wb2dI+HA3IhVV48V96zP7Olyk8Mc2mKddZkN9jwPwx4AptWUj73V5B1xb
- il0FVQHhzwgkGXcm6iouECItu15Tghl8gvb55ektiT3Y7oPzrYCMLa4KQPMNqzAEwQk4
- 1rVar+DR4ffoj33i76TreHthtXbx02etcPPKB/+EfzlNnLDsVXxVaEQGE2pYf6qAqTps
- 5F04L1DP9Cr3QcUeX9Nu4nuONgIhIKMlxa8wE3wcdoYE4bSNtxUSnEwQn8ckwUYlaT9U
- jm1pHDGpWhLAKmrP+6+wMDVHc4Cts+63Vruh+xP3z7GADwNWM2zR9KMpwuPlkXrhNqiy
- 33aw==
+ bh=/N20gJ3gEmMH6Yj6bLXxVdYwK54Rpo1rWZL60jMJSwc=;
+ b=QmQ6KNzW7K7bAxiN4s9vwxJg0uRycfwIVrB7VnArU7kPyRNdiLO5UpqO8bq1UkI9aw
+ V9+sC60hHI17iRCcF6lpM4UyUOBt4AfpXPqgUSIUnV5Cq1oBD7/HShgW1kvI7BhuW7LM
+ ZN8m1Si+IqiSRbc5+R5YB4NgCjpCyCJ959y8+qP6Vub2Xt2h38Se2dBtr+rG+V16SiwD
+ VWHvA0vRXUfV0pOzIjflH8htufCtzoIEnvmB7k8ln+pGcChq6x5K7XISuDnjsfmZ97o5
+ kre9fq50gQ2jSVBeonKqsMjN8Lzx/RlQ0gPVn0ZAt4Lzu04cwJqcalaBVAD2+o8H0EwS
+ P8/Q==
 X-Forwarded-Encrypted: i=1;
- AFNElJ95iN/PXRykPMQzgrdzEMrCLQ/3bXZbgUdWgYL1X7uZv5Cj2FQ70tMYmWr0S6YNvmx3mWf96sGTABE=@buildroot.org
-X-Gm-Message-State: AOJu0YyounNwCbkOkbkKAIQNu/mIRshKSYfQzbmMhasMZLFJq0gxW4wj
- 7UBDCMVEPrgOUQ3w7yYdxExUDrAcM6E+RMudqVw/e5B4C4O+XkV3mbd0b1h7RedSy0LzsY074du
- 56noF
-X-Gm-Gg: Acq92OFzLSnqF3f+LPLPEMQIDjUeUxgIEpZ26jVDuTV9zdvY05C3gb/0rEZUuLwz2K1
- eH5USLyitK+RqnY+3mFy3mCj3S04V9a8YI4EVdi7Yug6YQVuHv/CnhGyhXIEsI655Gk3o8cz0jc
- tZOBSbSqe75tQvvvn7PWy/kRStWqc8adFFWY7iyJR6hDKcSXMX3lbOnm+eJUsOLAu61ewQ1bf85
- Q/h0UI7rd5hpuo9SGwz+MvqL+iZTqEuwhtkIHjQUZ6WwfX3wc2Dk6DGn+AofeElkP71PJjNBDbk
- 74Kg2yaQZBpj1Vyd2JGRE9Big9dvuPPuPu6EZBQxgTPA4lLscEhLIsitK5PuC4dNPdcf4CrYeJ2
- +AMAh2hJiahW2A337KHXwbbp7xc4BlxtojioC8XHLOfO9o+il+8pWbu03Be0JW/hDXYRL3zXIfg
- sTO1LbKWlKRZVKgZzx5f9n0wm66LRbU5NhgIDC22vY/gOm
-X-Received: by 2002:a05:600c:46d0:b0:489:1abb:5559 with SMTP id
- 5b1f17b1804b1-48fe4dad784mr52333205e9.5.1778852063830; 
- Fri, 15 May 2026 06:34:23 -0700 (PDT)
+ AFNElJ8aSG6thCKV/CptyiPjou/li4g7USpZSHu2vtwgOhoIW1NgiHT66jzyyTsltiaNEsLlBR+KDgjaiNU=@buildroot.org
+X-Gm-Message-State: AOJu0Yy1nR2d0gAJ7l7Ad0d9ZCbwKMzSuOO6EITkZBn5RJ8mHagkd9zF
+ V2NpeeY5OfzmTAg/X8JWYNgS2fG4Q/xLyWSiBqNxK/5vJke1vUCuPuCtdjD5hFlE2N4=
+X-Gm-Gg: Acq92OGQGB/iQgFKnyG3gOw5Z+kDfmbWnapUDwaZke3xU1Rv7uMXnGBGftpYQUxa/TI
+ j8CoL0o6j42wYHw3K9HIBi9avWvDkQOY3s4qs+q34LsoBPJ4IQ1PL1vpPid7V0VAkvGF+YIep33
+ r7W1sesx7WB3LyHPWKlXHDyJCrsvfKoxVcfP8uxBLORgbc+UNg1g+WunX3c5IuGnOM8gO1J22It
+ 9KY9HMayYZZIyac41DAFZ8F9hB/tma1gnF3tfHgI3PS3JCg3rwi2bZEBNY85K0s/KYaa9sDBOHu
+ wKKPPWIvYfS8+NYeFuwzU3TkDxgeGYSzof02NE0/HatVFqZcAp/244oTxf//21lOuNomqH/ODfq
+ TMtJZxZ3pcfdMRwlzRa5qT7ieFEBIwv0UY9Fwt5/1qhghch7R9w1CEEY8Gd08SFi8EwvVj7gWOr
+ +REUMquorWxyNLtZfyygndOAn6UgfzCq01UlFElkBGbmzmkp401EFpcmU=
+X-Received: by 2002:a05:600c:34ca:b0:48a:7676:30bc with SMTP id
+ 5b1f17b1804b1-48fe60ee4c7mr59131225e9.14.1778852061114; 
+ Fri, 15 May 2026 06:34:21 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48fe53767ecsm58159955e9.10.2026.05.15.06.34.23
+ 5b1f17b1804b1-48febe7dd22sm18782115e9.7.2026.05.15.06.34.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:34:23 -0700 (PDT)
+ Fri, 15 May 2026 06:34:20 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:34:23 +0200
-Message-ID: <20260515133423.317151-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:34:20 +0200
+Message-ID: <20260515133420.316984-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260502170253.2852221-1-bernd@kuhls.net>
-References: <20260502170253.2852221-1-bernd@kuhls.net>
+In-Reply-To: <20260501123100.1918951-10-bernd@kuhls.net>
+References: <20260501123100.1918951-10-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778852064; x=1779456864; darn=buildroot.org;
+ d=mind.be; s=google; t=1778852061; x=1779456861; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6Vmua4+Kue4xG3Z9BZ8MDB7IrVZHHBjDLTvjDOw4/yI=;
- b=CbjhcKCll6Dvsf5yK8lVcZFb071y8EXc/ry1rFttG1/4LI9o7PP+deKNJrybaCXRSA
- 4827aqd9X8Pi8L6TfRFW8JoNgFT9iv+riThAVnbXlHq4OX6J30MB1TBfIiNUxFR8lVjI
- BrOGgmVaeHJIRc3sSIJ+PssEW92ZqQI8plErf/nBlFvUFmKxZVMFdjkpTFOweo0Bpj/B
- 8kPPa/UFemqwjR3DC8+Jr4V4W4E/fr+JRJ4gKnlCYXI6nKaVJuV5g4/9UBhsVYDI9Ev0
- Yg1sAvEN4W4+rR+2rE18cPnxyN96RbZ24172GrYjm6TALSWEBbKN44tt2uvJpOdhD3C7
- bhwQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/N20gJ3gEmMH6Yj6bLXxVdYwK54Rpo1rWZL60jMJSwc=;
+ b=AtTWhjJeimSnZvv3bI5fBNUBhTHYB9PV2DxY9T856CNrav/KXWaiT1Szb8mxpgJ2SE
+ rABSAxyL8ZDlCfGc1TCw9kK/GC1lTqBBwN1aHCaU+dGG9FD0JUJe/7GNZzp3mo0y4T+J
+ gSFp4Q8TSxYuUhNkgE/O2Z0pKJar+IMvYLXTd7HvezlIv5+Fw7vtZLwbsE6jzfTuIaV0
+ VfaeNL9+lIHPyvLH9AOum5oYvh49fKVkEhmvZBaaloupwh7oFrVnVmsCMa7IxegS3x5a
+ a2tH372RByo9kwtv3LV+brMgd5hoEErvMdBvUiVDN4Ly5WpYSzknBhFVJmKfN22cE1Nj
+ zG1g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CbjhcKCl
-Subject: Re: [Buildroot] [PATCH 1/1] package/netsnmp: enable parallel build
+ header.a=rsa-sha256 header.s=google header.b=AtTWhjJe
+Subject: Re: [Buildroot] [PATCH 10/75] package/python-certifi: bump version
+ to 2026.4.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,37 +132,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit 7643670052a7adc1c2a5f275664774c6d50e6a3d disabled
-> parallel builds in 2012.
-> 
-> Upstream fixed the problem in 2021:
-> https://github.com/net-snmp/net-snmp/commit/855e1c28dad53d6263c6c0c302438d2dc3128cc5
-> https://github.com/net-snmp/net-snmp/commit/9ea3d8b93c9bb7da7fea13ee6c92356a6b82a5fb
-> with version 5.9.1 which was added to buildroot with commit
-> 83b4337354014a5425a0ee081b94d4d0991f8d47.
-> 
-> Tested with -j100.
-> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/netsnmp/netsnmp.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  package/python-certifi/python-certifi.hash | 4 ++--
+>  package/python-certifi/python-certifi.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index 4d3367e12c..0ec4cfaa76 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -38,7 +38,6 @@ NETSNMP_CONF_OPTS = \
->  	--disable-manuals
->  NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
->  NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
-> -NETSNMP_MAKE = $(MAKE1)
->  NETSNMP_CONFIG_SCRIPTS = net-snmp-config
+> diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+> index 2a2390eb42..5f4706fd37 100644
+> --- a/package/python-certifi/python-certifi.hash
+> +++ b/package/python-certifi/python-certifi.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/certifi/json
+> -md5  1583dc0160782da8326204a90d7f5861  certifi-2026.2.25.tar.gz
+> -sha256  e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7  certifi-2026.2.25.tar.gz
+> +md5  238385f505d22767cd1860661f1c5743  certifi-2026.4.22.tar.gz
+> +sha256  8d455352a37b71bf76a79caa83a3d6c25afee4a385d632127b6afb3963f1c580  certifi-2026.4.22.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
+> diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+> index be6ce924f8..474b147873 100644
+> --- a/package/python-certifi/python-certifi.mk
+> +++ b/package/python-certifi/python-certifi.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
 >  
->  define NETSNMP_USERS
+> -PYTHON_CERTIFI_VERSION = 2026.2.25
+> +PYTHON_CERTIFI_VERSION = 2026.4.22
+>  PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+> -PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/af/2d/7bf41579a8986e348fa033a31cdd0e4121114f6bce2457e8876010b092dd
+> +PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/25/ee/6caf7a40c36a1220410afe15a1cc64993a1f864871f698c0f93acb72842a
+>  PYTHON_CERTIFI_SETUP_TYPE = setuptools
+>  PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+>  PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 > -- 
 > 2.47.3
 > 
