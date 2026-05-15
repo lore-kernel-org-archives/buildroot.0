@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C0DCD4851
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F285DCD4F48
 	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A685141B65;
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD574615F4;
 	Fri, 15 May 2026 13:30:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ckrtOwTeRXcy; Fri, 15 May 2026 13:30:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1TIZ0KuB6afv; Fri, 15 May 2026 13:30:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9AB341B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFEA1615C8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778851814;
-	bh=XhLKqA7rteT6HiwjuYbPOAOyTzMGIipLmX5UdGjIwss=;
+	s=default; t=1778851816;
+	bh=CZxc3Njvihkc3eQBHS4Hvppaeh2Ih6wHZklAFKUcuq8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E0MEv3ZGiPHIZq5VrTMhHpMWbvKFF2iL15cXY8OiucnTupwwqRkDxTA8gGhbSdf6H
-	 9vveEO7uwQVecLigo/EBOHXlwmkSnPSatezB8Nuixm7Nz3hsdpTjfjGv/ClGVfNC+Z
-	 Ll3mom3V1Wavd3P1xpDUMnr5Cykcpts8a54Y/J/KOuVlJTuiTn6YgBhqHa5J+xTQz6
-	 6KpZQMIV4Jiw87ScJV/yVeJQ/tITxp31vE3XsZdCX06sDLkulI4MWPyksCX6m9G8Dr
-	 NVBK55b1rTv8Ojp1Y/+P+NihIZbbscYTr5rn8WIviVDN+g19/osI0IKcrGxbXhfzS0
-	 ZXdIy13NXoiog==
+	b=Hx2Tz/r6q26Nz8UG6oSKvRmwvoRv9BUlhRHV9zMVXQs2ga8vkT7qjKs9zLUarRjB4
+	 /A+kL0LIFhFTipv4PfBajbHHdAZL8YfFjg9zgZ1lHxng0t7zD5+XbNIvE7snXPCceA
+	 tHR0LmkTZiQG2O7tYVzQ7g1G/rO085mbiUo+wMwCq7+gCwgcxLT4p6XEuF1Dz9iaSJ
+	 mCnbBXLqiz88KZKT3dGRjwM5vLhpYE6KLswjOi8fnmLjnkJu1p7lGN9rIJUpZ3fZPZ
+	 I8Dm1u2IFFJaKxd9JTjYoaXo59VycpnYMoTxUre4AGU6abxy4h6aTTdZ9eejav5Mn4
+	 V7ovD5lfQa3YQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9AB341B47;
-	Fri, 15 May 2026 13:30:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D68736F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:30:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFEA1615C8;
+	Fri, 15 May 2026 13:30:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F65636E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F03FC40A78
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:29:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 403B961575
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:29:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LO6vNgQ1KBu6 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l72AVTihrFY9 for <buildroot@buildroot.org>;
  Fri, 15 May 2026 13:29:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ECED41ABD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 027016156C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ECED41ABD
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:29:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 027016156C
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:29:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2E8586354; Fri, 15 May 2026 13:29:48 +0000 (UTC)
+ id 5643186356; Fri, 15 May 2026 13:29:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 13 May 2026 13:57:53 +0200
+Date: Fri, 15 May 2026 14:27:17 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: fc08d9c32c813247d3018778ac457dd16e35d928
-X-Git-Newrev: e90e6c7aa9811c933647c70769a08f540afd3f04
+X-Git-Oldrev: 9da6e86831e6066690ae25c5a9e1a3a0275be6ca
+X-Git-Newrev: 2a872f30321236c5bc6ef375457887969dc073e5
 X-Patchwork-Hint: ignore
-Message-Id: <20260515132948.E2E8586354@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/python-cbor2:
- security bump version to 5.9.0
+Message-Id: <20260515132949.5643186356@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libpjsip:
+ security bump version to 2.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e90e6c7aa9811c933647c70769a08f540afd3f04
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2a872f30321236c5bc6ef375457887969dc073e5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://github.com/agronholm/cbor2/blob/5.9.0/docs/versionhistory.rst
+https://github.com/pjsip/pjproject/releases/tag/2.17
 
-Fixes CVE-2026-26209.
+Fixes the following CVEs:
+
+CVE-2026-25994, CVE-2026-26203, CVE-2026-26967, CVE-2026-29068,
+CVE-2026-28799, CVE-2026-32942, CVE-2026-32945, CVE-2026-33069,
+CVE-2026-34235, CVE-2026-40614, CVE-2026-40892, CVE-2026-41416,
+CVE-2026-41415, CVE-2026-42225.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b676a4f51b99ac9faf437eecc637293914809d88)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit e1f77168d11cb5992166610283a631c8bc777b96)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-cbor2/python-cbor2.hash | 4 ++--
- package/python-cbor2/python-cbor2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index 2c72626637..b4d3025889 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  43d53d2eedc711252f5f66b1e05389a5  cbor2-5.8.0.tar.gz
--sha256  b19c35fcae9688ac01ef75bad5db27300c2537eb4ee00ed07e05d8456a0d4931  cbor2-5.8.0.tar.gz
-+md5  21a7e1096c25ef19a81730e2c0ce05a6  cbor2-5.9.0.tar.gz
-+sha256  85c7a46279ac8f226e1059275221e6b3d0e370d2bb6bd0500f9780781615bcea  cbor2-5.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index 6f8bc31996..859ee4a1b5 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index 65f52bf3b1..5f8e4b0eda 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3af2e481d51aaa095897820fa2ee26c30e530590c6ca56d23e4133bbdad369eb  pjproject-2.16.tar.gz
++sha256  065fe06c06788d97c35f563796d59f00ce52fe9558a52d7b490a042a966facce  pjproject-2.17.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 38adeff626..449e44586d 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CBOR2_VERSION = 5.8.0
-+PYTHON_CBOR2_VERSION = 5.9.0
- PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/d9/8e/8b4fdde28e42ffcd741a37f4ffa9fb59cd4fe01625b544dfcfd9ccb54f01
-+PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/bd/cb/09939728be094d155b5d4ac262e39877875f5f7e36eea66beb359f647bd0
- PYTHON_CBOR2_SETUP_TYPE = setuptools
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+-LIBPJSIP_VERSION = 2.16
++LIBPJSIP_VERSION = 2.17
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
