@@ -1,63 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F0CCCD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F6F7CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6300684232;
-	Fri, 15 May 2026 13:37:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id way_RBpe3e46; Fri, 15 May 2026 13:37:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C3A98426A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852238;
-	bh=puClpc3e0lkjDWxTK3OSmbhbnnFP7E+DNqacj+/aM0Q=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SPC7weS+E/HtsacuAHrjFgUMWQq8zJElVzYse3hlFcTiaFShNwpJRSjJWym9AJtnV
-	 3ZSJATh0lT10TpIh/UCdNQ8QI0I3K6DHTkOu4BIf1OHYsqBn3ObF9ZrtcIlUPDXEUa
-	 C4wpGmwIwogWO327aR0qieSSk82y3rn2jDhTD6RCjekkWbJX7APdSBFr4YX1jwiWJj
-	 YUEs+MRoTo+a8PEBBo8nF6uYLVTCll0AG/rmiLT0mikTzaWGp5Y6SuakGzM7qFwJDR
-	 LP0+SGlg5EybVs4XWeR+Zg7B3y24Bc7GI2Z+LvzFSBWFF3CO1mv3tj7kPUo4iV6wgS
-	 J8syQBUqidYvw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C3A98426A;
-	Fri, 15 May 2026 13:37:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84F5836F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:37:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AE8F40CFE
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:37:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53CC74137E;
+	Fri, 15 May 2026 13:54:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C5FzYAD0mXkA for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:37:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F316406D0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F316406D0
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:37:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBE7B86365; Fri, 15 May 2026 13:37:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:36:14 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 85a3edc0ba54abe02556682f661068c620596e83
-X-Git-Newrev: 9a5369effd22011b52b82c91f702bacde690c41a
-X-Patchwork-Hint: ignore
-Message-Id: <20260515133708.CBE7B86365@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qemu: bump to version
- 11.0.0
+ id L3db2Td-F2_Y; Fri, 15 May 2026 13:54:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7760A4137F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778853271;
+	bh=hVqj3RXG1T9Me389eUk2sjHZ1Whiv5IjvyLkQd0PG9s=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=frIYjmYs6rRutXk3rYHq4HSmxSp3NHBv+cRU2HBW+rffl+OTiavLqFqSN8NvhfUQg
+	 A3F2bYGDLT8cqQI9wCnLU5YWztgehpTwPOQO0Ifkgfl+QDPTZivzt28NQ3DKUmBi2w
+	 M6DdbTKiOP59XZjIQDlA7OlAM+5KJ+NJdk6WE4V8RYiMk4VFJXLXWT/LZWg6sj7ZeD
+	 wlRCHsG9McrwCM8/fR830MB0hWBXug1BI8pizWh9NP1veyHYAVouYU5LQqwch15tpT
+	 3N+aDH5/bA1j3QOxUTe0zzOYl72mbphuNpFpIEHSGOun0Kaccud8fQMQrf+/cTr+7r
+	 +St4GYdTHACZQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7760A4137F;
+	Fri, 15 May 2026 13:54:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 552E036F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:54:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3ACEF826EF
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:54:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lNX7iEIOqpVu for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:54:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE645826BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE645826BB
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE645826BB
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:54:28 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-43fe608cb92so5803310f8f.2
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:54:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1778853266; x=1779458066;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2g6UnATPaqA3Up+65wnbPUOE5yfPFezefS4FXVaFPjo=;
+ b=SgFSyOh5CIRHwr9qLE/zdoopBAr3LMaTPmqQf0fdbvHm3f3upVDmTNO2DF951z9Qwv
+ huxzAdoBocLpZOGJ3Owmh5txNOmMyvN8NwkeVxaMmxWBscR1PKO/hZluevBCrr7pLw3F
+ 4yiczTNiX6Sflq87H619eb5uOePK0ivI7gV4hgxT+xqCIt6EBt8hiBF14jG48P3HfkB8
+ xn1NwkuvJqY8DHrk0d/xgUxRnjWp2JVEEwX+h1/3P/5x8h+BUlmh0bTsIpgqhKxj8ASG
+ 8dthM5rqEGk3hjj84cvighevP9fxIm3xAkOSSL9u069xgqlbrQ4p2YvCo0sIjMt9D2tl
+ vsdA==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ+X9q/L2+euW3AzO/0TFsB4J7x4UsuskJ/qFgJHVnpWLQ/9g+7IggKkj6+sosgezlC2hdfMpJeMo0o=@buildroot.org
+X-Gm-Message-State: AOJu0YzHTSQUeggjLcUFC3WnrkW8rOzP4IBpTPD0spJIlNZsqr4nldF0
+ AIHo6lUyPWVNgKnc8nnH3t0h2fa6ttynnLHE8jl1E/HfQIVEBn7tq/fweIxV0fsy1oXk3qzpic2
+ piOpPaUs=
+X-Gm-Gg: Acq92OGGpaBI9vKS+JbppAFURz0QBkUxqMVaGt16Pld1dDiW9lD0GM/H/6cWJkgDVrz
+ Sv/2P7wnFzjycSYtHnGVpgGzTtlaKraCR967SqNDQCbttoRvpc05oTqiQpML18CnqyfwZlIg8pH
+ TM/RIDQ7HYtJ+tXePDmrRRVXReS3bJa7LnQcZMJ5f8sn/H47QvKHqML0J8AE/quyTyHij9Avd1T
+ S4a38Ea9NhDg/UJ25H9XdmEXXGq6q5qsUTHGuRwUmjNO491669oaUZVF1GlbkLdcPrgQMky6//h
+ p4c3jzRqk9oLVHIn/COBrgT4FDSCQ6V/pxNxcQKRdQllrV+CLqrhrMSiBnBMaG6mQPBHsrpj4cX
+ mRkUKZVNDzKQOubCBHiV+RhBUuuJpm6uvEI7tj7zx6rqfrNxZoqT4uuu9FFfwLWTwHTnD6IvFsz
+ vHzYLK7adzs/NtGYiI5Y9fRItW2k4lm5x1I0eiq0uKbuZBjrjFHLIWov6kszA902ArKKOW+/hSr
+ JUltdARD+TRprFkOEyU+wXMFCC2kd2fUgsXTb5bzQhLhlnrU3ufPw2ihgVvUM3+93qpCYJKhOvo
+X-Received: by 2002:a05:6000:26cf:b0:43d:7a97:78b5 with SMTP id
+ ffacd0b85a97d-45e5c5ccbe0mr5595343f8f.33.1778853266417; 
+ Fri, 15 May 2026 06:54:26 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-45da0a17a22sm15071706f8f.22.2026.05.15.06.54.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 15 May 2026 06:54:26 -0700 (PDT)
+Message-ID: <c24af83c-1300-4961-857b-db077ac8cbc0@smile.fr>
+Date: Fri, 15 May 2026 15:54:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>
+References: <20260219-qemu-tcg-interpreter-v1-1-d7f11b967f49@gmail.com>
+Content-Language: fr, en-US
+In-Reply-To: <20260219-qemu-tcg-interpreter-v1-1-d7f11b967f49@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1778853266; x=1779458066; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=2g6UnATPaqA3Up+65wnbPUOE5yfPFezefS4FXVaFPjo=;
+ b=3DHa+7xjVzxeLihDag/ILgFpAJluAK36BM99cAqltgEpKfQMqzZZojkyYyYGILX/87
+ dEmatimuFIRevyTYbtXPA+/bk9PM6CkRD0J2Jn4vfFjvD5/G1SdOOBwwOK+w9Firb2px
+ zzxrZlXt87kKgMfd9faTPrGA7w1r6PG6JyBNI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=3DHa+7xj
+Subject: Re: [Buildroot] [PATCH] package/qemu: conditionally enable TCG
+ interpreter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,200 +128,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a5369effd22011b52b82c91f702bacde690c41a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
-
-Changelog:
-https://wiki.qemu.org/ChangeLog/11.0
-
-Note:
-  - Support for all 32-bit host systems has been removed.
-  - Support for microblazeel has been folded into the microblaze target
-
-Qemu v11.0.0 drops 32-bit support for hosts, all qemu builds must now be
-64-bit. Hosts running 64-bit qemu builds can still emulate 32-bit
-targets.
-
-Confusingly, the qemu package is also capable of being built and running
-on buildroot hosts, and targets. In any case, qemu only supports running
-on 64-bit hosts (which may be buildroot targets), so adjust
-BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET to indicate no support for 32-bit
-buildroot targets, and drop configs for architectures like BR2_arm that
-are implicitly 32-bit only.
-
-Separately, the qemu microblazeel target was removed with commit
-46a25ae3f0e75e230c06e21435850b1cd1c44f07, as the microblaze (qemu)
-target supports both endiannesses, so that's fixed up in the package
-Makefile as well.
-
-Signed-off-by: Joseph Kogut <joseph@anodize.com>
-[Romain: remove duplicate --disable-download from QEMU_CONFIGURE_CMDS]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- Config.in.legacy       |  8 ++++++++
- package/qemu/Config.in | 12 +-----------
- package/qemu/qemu.hash |  2 +-
- package/qemu/qemu.mk   | 16 ++++++++++++----
- 4 files changed, 22 insertions(+), 16 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ead9ceaa08..90606ebd4b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2026.05"
- 
-+config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
-+	bool "qemu target microblazeel removed"
-+	select BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
-+	select BR2_LEGACY
-+	help
-+	  Version 11.0.0 of qemu folded microblazeel support into
-+	  the microblaze target.
-+
- config BR2_KERNEL_HEADERS_6_19
- 	bool "kernel headers version 6.19.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 0b16c8c284..2a6aa288d3 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -2,13 +2,9 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	bool
- 	# Only tested on these architectures
- 	default y if BR2_aarch64
--	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
--	default y if BR2_i386
--	default y if BR2_mips
--	default y if BR2_mipsel
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
--	default y if BR2_riscv
-+	default y if BR2_RISCV_64
- 	default y if BR2_s390x
- 	default y if BR2_x86_64
- 
-@@ -223,12 +219,6 @@ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZE
- 	help
- 	  Xilinx MicroBlaze soft processor.
- 
--config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
--	bool "microblazeel"
--	select BR2_PACKAGE_QEMU_FDT if BR2_PACKAGE_QEMU_SYSTEM
--	help
--	  Xilinx MicroBlaze EL soft processor.
--
- config BR2_PACKAGE_QEMU_TARGET_MIPS
- 	bool "mips"
- 	help
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index f8e750225f..7c7325a6ce 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  9e30ad1b8b9f7b4463001582d1ab297f39cfccea5d08540c0ca6d6672785883a  qemu-10.2.0.tar.xz
-+sha256  c04ca36012653f32d11c674d370cf52a710e7d3f18c2d8b63e4932052a4854d6  qemu-11.0.0.tar.xz
- sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
- sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b7007e3b98..2199db38cf 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, check whether the list of supported targets
- # needs to be updated.
--QEMU_VERSION = 10.2.0
-+QEMU_VERSION = 11.0.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = https://download.qemu.org
- QEMU_SELINUX_MODULES = qemu virt
-@@ -28,6 +28,8 @@ QEMU_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-python3 \
- 	host-python-distlib \
-+	host-python-setuptools \
-+	host-python-wheel \
- 	libglib2 \
- 	zlib
- 
-@@ -70,7 +72,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-softmmu
--QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-softmmu
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-softmmu
-@@ -107,7 +108,6 @@ QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_I386) += i386-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_LOONGARCH64) += loongarch64-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_M68K) += m68k-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZE) += microblaze-linux-user
--QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL) += microblazeel-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS) += mips-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64) += mips64-linux-user
- QEMU_TARGET_LIST_$(BR2_PACKAGE_QEMU_TARGET_MIPS64EL) += mips64el-linux-user
-@@ -318,6 +318,7 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-curses \
- 			--disable-dbus-display \
- 			--disable-docs \
-+			--disable-download \
- 			--disable-dsound \
- 			--disable-hvf \
- 			--disable-jack \
-@@ -345,7 +346,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-xen \
- 			--enable-attr \
- 			--enable-vhost-net \
--			--disable-download \
- 			--disable-hexagon-idef-parser \
- 			$(QEMU_OPTS)
- endef
-@@ -372,6 +372,8 @@ HOST_QEMU_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-python3 \
- 	host-python-distlib \
-+	host-python-setuptools \
-+	host-python-wheel \
- 	host-slirp \
- 	host-zlib
- 
-@@ -386,6 +388,7 @@ HOST_QEMU_DEPENDENCIES = \
- #       x86_64          x86_64
- #       m68k            m68k
- #       microblaze      microblaze
-+#       microblazeel    microblaze
- #       mips            mips
- #       mipsel          mipsel
- #       mips64          mips64
-@@ -416,6 +419,10 @@ endif
- ifeq ($(HOST_QEMU_ARCH),i686)
- HOST_QEMU_ARCH = i386
- endif
-+ifeq ($(HOST_QEMU_ARCH),microblazeel)
-+# since v11.0.0, microblazeel emulation is provided by the microblaze target
-+HOST_QEMU_ARCH = microblaze
-+endif
- ifeq ($(HOST_QEMU_ARCH),powerpc)
- HOST_QEMU_ARCH = ppc
- endif
-@@ -508,6 +515,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--disable-curl \
- 		--disable-dbus-display \
- 		--disable-docs \
-+		--disable-download \
- 		--disable-dsound \
- 		--disable-jack \
- 		--disable-libssh \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSm9zZXBoLAoKTGUgMjAvMDIvMjAyNiDDoCAwMjo0NSwgSm9zZXBoIEtvZ3V0IGEgw6lj
+cml0wqA6Cj4gUWVtdSBoYXMgdHdvIGZsYWdzIHJlbGF0ZWQgdG8gZW5hYmxpbmcgdGhlIFRpbnkg
+Q29kZSBHZW5lcmF0b3IgKFRDRykKPiBmZWF0dXJlLiBVc2luZzoKPiAKPiAgIC0tZW5hYmxlLXRj
+Zwo+IAo+IFNpbXBseSBlbmFibGVzIHRoZSBUQ0cgYmFja2VuZCBmb3IgSklUIGNvZGUgZ2VuZXJh
+dGlvbi4gSG93ZXZlciwgc29tZQo+IGFyY2hpdGVjdHVyZXMgYXJlbid0IHN1cHBvcnRlZCBieSB0
+aGUgY29kZSBnZW5lcmF0b3IsIGFuZCB0aGUgYnVpbGQKPiB3aWxsIGZhaWwgZHVyaW5nIGNvbmZp
+Z3VyYXRpb24sIHN1Y2ggYXMgaW4gdGhpcyBib290bGluLW1pcHNlbDMycjYtZ2xpYmMKPiBidWls
+ZDoKPiAKPiAuLi9tZXNvbi5idWlsZDo5MjM6NjogRVJST1I6IFByb2JsZW0gZW5jb3VudGVyZWQ6
+IFVuc3VwcG9ydGVkIENQVSAsIHRyeSAtLWVuYWJsZS10Y2ctaW50ZXJwcmV0ZXIKPiAKPiBFbmFi
+bGluZyB0aGUgVENHIGludGVycHJldGVyIFswXSBhbGxvd3MgZm9yIGEgc29mdHdhcmUgaW50ZXJw
+cmV0ZXIgdG8KPiBleGVjdXRlIFRDRyBjb2RlIGluIGNhc2VzIHdoZXJlIG5hdGl2ZSBjb2RlIGdl
+bmVyYXRpb24gaXMgdW5zdXBwb3J0ZWQsCj4gd2hpY2ggZml4ZXMgdGhlIGJ1aWxkLgo+IAo+IFsw
+XSBodHRwczovL3dpa2kucWVtdS5vcmcvRmVhdHVyZXMvVENJCj4gCj4gU2lnbmVkLW9mZi1ieTog
+Sm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgo+IC0tLQo+ICBwYWNrYWdlL3Fl
+bXUvcWVtdS5tayB8IDMgKystCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xZW11L3FlbXUubWsgYi9wYWNr
+YWdlL3FlbXUvcWVtdS5tawo+IGluZGV4IDk3ZjhlMjIwOTEuLmY1MDgwNTkxN2IgMTAwNjQ0Cj4g
+LS0tIGEvcGFja2FnZS9xZW11L3FlbXUubWsKPiArKysgYi9wYWNrYWdlL3FlbXUvcWVtdS5tawo+
+IEBAIC01Niw3ICs1Niw4IEBAIFFFTVVfT1BUUyArPSAtLWRpc2FibGUta3ZtCj4gIGVuZGlmCj4g
+IAo+ICBpZmVxICgkKEJSMl9QQUNLQUdFX1FFTVVfU1lTVEVNX1RDRyksIHkpCj4gLVFFTVVfT1BU
+UyArPSAtLWVuYWJsZS10Y2cKPiArUUVNVV9PUFRTICs9IC0tZW5hYmxlLXRjZyBcCj4gKwkgICAg
+IC0tZW5hYmxlLXRjZy1pbnRlcnByZXRlcgoKVXNpbmcgLS1lbmFibGUtdGNnLWludGVycHJldGVy
+IHdoZW4gYSBuYXRpdmUgVENHIGV4ZWN1dGlvbiBiYWNrZW5kIGF2YWlsYWJsZQp3aWxsIHRocm93
+IGEgd2FybmluZyBhdCBjb25maWd1cmUgdGltZToKCmh0dHBzOi8vZ2l0bGFiLmNvbS9xZW11LXBy
+b2plY3QvcWVtdS8tL2Jsb2IvdjExLjAuMC9tZXNvbi5idWlsZD9yZWZfdHlwZT10YWdzI0w5MjEK
+Ci0tZW5hYmxlLXRjZy1pbnRlcnByZXRlciBpcyBuZWVkZWQgd2hlbiB0aGUgdGFyZ2V0IGFyY2hp
+dGVjdHVyZSBpcyBub3QgaW4gdGhpcwpsaXN0OgoKc3VwcG9ydGVkX2NwdXMgPSBbJ3BwYzY0Jywg
+J3MzOTB4JywgJ3Jpc2N2NjQnLCAneDg2XzY0JywKICAnYWFyY2g2NCcsICdsb29uZ2FyY2g2NCcs
+ICdtaXBzNjQnLCAnc3BhcmM2NCcsICd3YXNtNjQnXQoKSXQgd291bGQgYmUgYmV0dGVyIHRvIGhh
+dmUgYSBmaW5lIGNvbnRyb2wgb2YgY29uZmlndXJlIGZsYWdzLgpDYW4geW91IHVzZSAtLWVuYWJs
+ZS10Y2ctaW50ZXJwcmV0ZXIgb25seSBmb3IgbWlwczMyIGFuZCBhbGwgb3RoZXIgbm9uIFRHQwpz
+dXBwb3J0ZWQgYXJjaGl0ZWN0dXJlcz8KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAgZWxzZQo+
+ICBRRU1VX09QVFMgKz0gLS1kaXNhYmxlLXRjZwo+ICBlbmRpZgo+IAo+IC0tLQo+IGJhc2UtY29t
+bWl0OiA2YzgzYTBiOGU1NjU4YjkwMWRkMzVhZTIzMjE3MDc1ZjAzNWFmOTk4Cj4gY2hhbmdlLWlk
+OiAyMDI2MDIxOS1xZW11LXRjZy1pbnRlcnByZXRlci1kYjM2YmY1MmI3YmUKPiAKPiBCZXN0IHJl
+Z2FyZHMsCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
