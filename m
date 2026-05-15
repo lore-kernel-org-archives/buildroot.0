@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26836CD4F47
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF603CD4F48
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF2E615C0;
-	Fri, 15 May 2026 13:29:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A766A84217;
+	Fri, 15 May 2026 13:29:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3wfqJ9RObfS; Fri, 15 May 2026 13:29:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ifqyZDfmTbGk; Fri, 15 May 2026 13:29:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE1B661575
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B125184215
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778851745;
-	bh=LUUfThcOiY4hGJld8WtTZgwCs50ydyFfghU+yrHa5Ps=;
+	s=default; t=1778851748;
+	bh=y8hB6WPR8eexjVq/pLBaUijUADbZ7MWYA7ubO5sqSSU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=chXUvfjzy8KaPGzlNEBXykrfYJUvaPXtPOtitJV5zk+gc51hISMn97IicbU9YaXPQ
-	 sl8WM/Zdoscv3OnK5ccWLjP9oAnjZKNj0R9ctKu9B3o9JzlvL1gKU56SJew1ubUfxI
-	 DL0Z8/Vmw2mGuIejkFxo729AEfXniR4P7Yh6ex+z2+qTwPocN1nBL0vsTnsRdS4QEW
-	 1Tyn9hAlMdkCkOZzwRBTfwXcSsboftBCD2qDLmPP9MlhtHe3gPradaieXeWRiVRtFM
-	 AwqrN0bugm6PMB6rBZXloZ+CJaSa/JfOKRbsEMJ3W6y6ias/zO//9p8Kqc7NtNgERu
-	 /Be4pvlNH33TA==
+	b=orWsr9Tm1zG5CQujZPH64a6teMQK3rJrnF0yH2c6547tNkaqeFUY5Y8wcefj8wa4G
+	 HfhItsSR/7BRic+faKI9U7zEhLxVnd8w0qA/al5sqJnUsQGSJR9GKlt8kEj2SImhih
+	 fUL4kgbjOYjd9A8g10M7j52zN/9Ampd8q8TmLgfgz2eQeeEq8rorVOD5vkd7B4Tqfm
+	 Yq+lNkUjPcNxAbiHO2/EuRcvC+EVlY7oo0t8J+YQX8pZ2zZpMgfmWFDJeaYUMbms3G
+	 LBVT1xcJeEWkyFeq0Qiu7LKbwCR7HYFimm+FJuDrWUJ7uPh5cpiWty0k5dc2Rs1pfn
+	 JeDv5VTz+Fopw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE1B661575;
-	Fri, 15 May 2026 13:29:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B125184215;
+	Fri, 15 May 2026 13:29:08 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 130D436E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03EAD36F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33BC26155E
+ by smtp3.osuosl.org (Postfix) with ESMTP id F003C61575
  for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoEi6m1OQ1gs for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:28:23 +0000 (UTC)
+ id fUaOhe5NU0EX for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:28:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DBF46155C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09BFA6156C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DBF46155C
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09BFA6156C
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:28:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70BC08634F; Fri, 15 May 2026 13:28:16 +0000 (UTC)
+ id 5B1458634F; Fri, 15 May 2026 13:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 13 May 2026 13:56:58 +0200
+Date: Fri, 15 May 2026 14:27:06 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e7e63acb7783c2c3d499dcf2c347f23ffd01400a
-X-Git-Newrev: 3ac354d5f3270accc5b84fea472d2eff38e50f49
+X-Git-Oldrev: 1717031cb685e46d35a4cfc82eda83eb661008e4
+X-Git-Newrev: 761c4f74a9d631ee1c02118012c3d8d93eaaf1e9
 X-Patchwork-Hint: ignore
-Message-Id: <20260515132816.70BC08634F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/thrift: security
- bump version to 0.23.0
+Message-Id: <20260515132817.5B1458634F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libpjsip: enable
+ parallel builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,64 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3ac354d5f3270accc5b84fea472d2eff38e50f49
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/761c4f74a9d631ee1c02118012c3d8d93eaaf1e9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/apache/thrift/blob/v0.23.0/CHANGES.md
+Parallel builds were disabled in 2016 by buildroot commit
+781ce19d746efb6a5408b4d50b30626784eff324.
 
-Fixes the following CVEs:
+In 2020 upstream added two commits which fix parallel builds
+https://github.com/pjsip/pjproject/commit/ddf48e2045fa155ef5242d9d7dcec27f8c5ed873
+https://github.com/pjsip/pjproject/commit/78683646c8bc670ec730a42494e075f671a08e28
+to version 2.11 which was added to buildroot with commit
+2c7ad667ec4a25226848baba809e492ca0ff06da.
 
-CVE-2026-41636: https://seclists.org/oss-sec/2026/q2/236
-CVE-2026-41607: https://seclists.org/oss-sec/2026/q2/237
-CVE-2026-41606: https://seclists.org/oss-sec/2026/q2/238
-CVE-2026-41605: https://seclists.org/oss-sec/2026/q2/239
-CVE-2026-41604: https://seclists.org/oss-sec/2026/q2/240
-CVE-2026-41602: https://seclists.org/oss-sec/2026/q2/241
-CVE-2026-41603: https://seclists.org/oss-sec/2026/q2/242
-CVE-2025-48431: https://seclists.org/oss-sec/2026/q2/243
-
-This commit also adds "Public Domain" in THRIFT_LICENSE, after
-upstream commit [1] added a new sha256 implementation with that
-license. The LICENSE file hash is also updated accordingly.
-
-[1] https://github.com/apache/thrift/commit/1e5fa4b9b35ad6bfeb238d19897ace7826eda057
+Tested with -j100.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6935bc74121967ab6a01950d55c3bb9a14f0f833)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit 3ddeb7a9d3938fd216ea8d218dd58b26b89e3bf6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/thrift/thrift.hash | 6 +++---
- package/thrift/thrift.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libpjsip/libpjsip.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/thrift/thrift.hash b/package/thrift/thrift.hash
-index a517900c82..406c65fd25 100644
---- a/package/thrift/thrift.hash
-+++ b/package/thrift/thrift.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.apache.org/thrift/0.22.0/thrift-0.22.0.tar.gz.sha256
--sha256  794a0e455787960d9f27ab92c38e34da27e8deeda7a5db0e59dc64a00df8a1e5  thrift-0.22.0.tar.gz
-+# From https://downloads.apache.org/thrift/0.23.0/thrift-0.23.0.tar.gz.sha256
-+sha256  1859d932d2ae1f13d16c5a196931208c116310a5ff50f2bfd11d3db03be8f46f  thrift-0.23.0.tar.gz
- # License files, locally calculated
--sha256  d315e6cdedc07c478de6992027bfb66f220886c6216fd7e9885ced30c3703646  LICENSE
-+sha256  89aa7b27868669299bd8a6c53b72ec4beadce42dad6c8336797cc26e1e8df98d  LICENSE
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 177b75903b..34f4671239 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 8cea8e3abc..38adeff626 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -13,7 +13,6 @@ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_CPE_ID_VENDOR = teluu
+ LIBPJSIP_CPE_ID_PRODUCT = pjsip
+ LIBPJSIP_INSTALL_STAGING = YES
+-LIBPJSIP_MAKE = $(MAKE1)
  
--THRIFT_VERSION = 0.22.0
-+THRIFT_VERSION = 0.23.0
- THRIFT_SITE = https://downloads.apache.org/thrift/$(THRIFT_VERSION)
--THRIFT_LICENSE = Apache-2.0
-+THRIFT_LICENSE = Apache-2.0, Public Domain (sha256.h)
- THRIFT_LICENSE_FILES = LICENSE
- THRIFT_CPE_ID_VENDOR = apache
+ LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
  
 _______________________________________________
 buildroot mailing list
