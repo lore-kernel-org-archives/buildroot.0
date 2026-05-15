@@ -1,118 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A6F6CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E23C2CD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75BFD84357;
-	Fri, 15 May 2026 13:34:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB15A6165D;
+	Fri, 15 May 2026 13:34:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0AHxBAXM_qrh; Fri, 15 May 2026 13:34:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7pgPxsy7Ylbr; Fri, 15 May 2026 13:34:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABEFF84378
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE4E961664
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852065;
-	bh=Xi1c0YsMhwENUbW3iq7m1rA1EktQbl4VvAjskCj2q0k=;
+	s=default; t=1778852067;
+	bh=PMA29pEAklhaHpiQ0EDEMhISlHYFvuNEpPlmUKSeyFQ=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Po6PDtRj+mtA118gdf/hH8CrVYjn/ghvICi+J+BDU7W1j/7iEfG2/EwyU9nccMBxT
-	 ondBqGkIXG5x/LsZuZt3bAdAONI3bc7BQHSfmUT6AYCYAcYZUOoEJFp7uKxbjuxqQw
-	 VpsGWvRrPS3rWGwc4t/534w9sxJFHpVEvZF7csRYWXUs+ekOK/Ftd9RZLbCM0UcUsG
-	 PbkburpOmjR59MrjjKTCaWjpcW7mpi3ada+b7FyGFASfhpY7EYGdmqCExQAKVnrPFn
-	 ltxNwMRK600/FZkAu59Da//laxgkwOeUMyz5jkOQf0qgP/w4nf9YOY9h9GvUWa9JVS
-	 yisOiJuu9lvgg==
+	b=Y+j9FaaBlV3sy9kaUzO8fYjOUDjuwHYoxTc9JgxwSCHTZ/LmE67m74LcwPi+dB0qG
+	 iAO08/u4ZDH/eOwNc8XFrrK2VW8enXPKSa2loLbb/oO8Dnn5C3+LIZdPwOoAsCYIPF
+	 DJNS8jrU2EUTdGsCIZFosC5l3EPWiOqG0pDJA9gntIFytjpik4CH5sNjOoPxLldgxe
+	 AbvoYu4gAqGKASBt8gvgA+jabfIIVSnEGUEromkvA+AfUSk4BaK8Q0/4aDAPplC3WE
+	 XjQnjMHa7r35ZbOHiIElvFbykHYyUEf3Ozs8ijHGhKBMK1fAGUbbooQwq6feUwfP6a
+	 n2xlARPcrCQZg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABEFF84378;
-	Fri, 15 May 2026 13:34:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E24D336F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE4E961664;
+	Fri, 15 May 2026 13:34:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5302136F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D35EB4123B
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44A3640E35
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ezqJ6tTATzFb for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TXWwMHoLeoQb for <buildroot@buildroot.org>;
  Fri, 15 May 2026 13:34:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5770241123
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5770241123
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5770241123
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:19 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-488a14c31eeso62012805e9.0
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 50E6C40E33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50E6C40E33
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 50E6C40E33
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:22 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-448528f4e69so5272149f8f.3
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778852057; x=1779456857;
+ d=1e100.net; s=20251104; t=1778852060; x=1779456860;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=YgV8/PSnXek+rbE/5fFO3cOqooaf3GOK2n4H9BEMIFM=;
- b=I9/sgl/tT3qa6PCs4imTuExd8CKM0WvlevLZHX0/IcWWGSh2I4iNJDQtF6cxpi7uQ8
- pES/BcEjonR6uQha81ymVH+nFZPOmFc3f7JjUIlOu8POyBGyt0MJUGWsj5S+Cr69tCC+
- jU3w6XkPmqI95914q8EYCWoErS/pO7ggpMfqn74CjOcQnBxCV6kc5T+rbGQsxSftaOXt
- PErfPSfIOzDVpDueasjgYliI4v6ypCkeAVttU3AjUVyn3uIHMgua4xGP4Hps7RYgtU9J
- ZzSw1pHJjyBOO+xWiKiHQif+zbKpo1QGKW7BrkW0Dn/wNqJglJXeb3QY8Dd/exp27XLf
- 1Oow==
+ bh=SztPZr4821j9tSPY0PJbMZg4S10YhYKpOw9OEKVDYgk=;
+ b=M57agR+rTsXcjoAyUjuCkHr1XonQL0ReQQ2g1H1AWZ2zn1aUAcYidC2c44//LJ7Uhk
+ SYuCdRE8+yuczm4rU7JczDWM6lc7V98fqwX3Q5GEIJmN8U1LF5Drvs36ziMNWxs31Mqd
+ TN0hlgOBTZcHC59teI2TbuNvuoT9y1WmeavFyMPVljA9mgfDbC12A3dquYiaM/Or09L1
+ eVEpMIxaDX8TFB7X/MEREbGnx4+D/bDv/BFvEJKtd5DDV9j4wUm4pTvx9ev/e2s6BHvc
+ yKg0BoikXjwoNQJAqh1aIz94qbtTGpxZyVc8wc575hSrynCXKXXVRPaSQGEbv4+x+Eyw
+ Uxqw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8LHWIPdz4CVkH/3OZZybuIIEJgubNYNoo6H/Vac7Yz2SfAfn1viGdo9N4zaZox1QqU0Hj3fC0z1cI=@buildroot.org
-X-Gm-Message-State: AOJu0YxEmOrsBJcgSagOzcjcGJtvnrlzgVXBSSz5s56uCDgjy0/gJy7m
- 2skElAHHqz0q+jiEdlSaet450PgHfU2V//zOIAzX/q/CZVg7nmylIkgEDR0SOnYg8PY=
-X-Gm-Gg: Acq92OGeLviFkCuLvuTkuBoySF6Nv+MZtRNYhemSPn/9jNY4llM7ESZFSwEvo6riGVo
- E23ShTz0+xEbQL+Q5ARviiNd0CkgirVbmesOeMyNkijM2rH9/YWdjPPdJmayBdg+/hsxGHy1DKZ
- BCdEk7S1Z+ZC2+Gc5u/iy4DEijP/Q60Uj79VlcSe2ZKhaCALYkWXF/e6L3sq+/ajPvzc+FvppL2
- 0t0ol/8ta6ZxOcPQnm1NDeuuNtOasa0V7bdjxGgIDBF0t/rigsgZOE1b8261Ya3Km3KCh9CCDD1
- +76ISz1iwDhpJtXwnnkw3MUZXESu8s1bWu/bfiGPZvRPUiRcBB4NouPPCoGoi0EWUqJ2wvJwlAp
- +W/bpI3V6Z3vFtEiMgjBaHY3oZUEJ6pMGSemf07lTBkfFHQXpKKAVNDS1XIOQDdECrfrQN0rse3
- PnlZkTHgXUTcd/jI6bANkcSivZ/upfOECrQR1TXA/CShJJOTF8F3S028Q=
-X-Received: by 2002:a05:600c:858d:b0:48f:e230:80a3 with SMTP id
- 5b1f17b1804b1-48fe6514c31mr45334965e9.33.1778852057238; 
- Fri, 15 May 2026 06:34:17 -0700 (PDT)
+ AFNElJ9EZfvnm1pohYSSh4lmnk4s6fko+OOi/kkvDH45d30CM/qvEA4WqMxx+0A2tRh3mrTJqAsK/tkyXLM=@buildroot.org
+X-Gm-Message-State: AOJu0YzfEyzk2dQIi0bY+v20UumoK3Il6GfUW6K0PyUKlsxCxemj/CrT
+ 8BjEr62jQsqFR8tzmaoI/tmMV3N8IOr44fX5IxSU6VvcG5qCUkNVLqGFbB+JDhadj4E=
+X-Gm-Gg: Acq92OEW4SHKALvdEtbJEyRbmlHFO2wrHKj+MRWodSAkXW3I5TSoHNAhoWXTLSDSynS
+ ohP1HBmLxf43yl9S1mZVimuGrRax64x1xYuynQzNfJ/T56oDxp79o3tLbFVDmwdhbxUums4KxnC
+ q+y8eYshfV0ayOeAfFuSMlXX9jMiTAqYiiXBwqCWRKPnQMde6me3obc8CYslO1yB5qkJx1LBsPH
+ Hmbgb4AJ1DpySZz9R/xlBkNTwYSgvs5X+WsFd+tgR8cOiX7+oZy0YFISres1z8prtTxcy2M+bHX
+ 9fEBmUFnyJowYojaUxzxvbXNuqtOO8tbHYeKXvNvYwVZQrbki+Y1Hg9vdAt1dkoZ3/AeZag4igx
+ hTzLRqEQ82HU2EhCECbaNvdJzY1AQu1CtgqbLW9niz05w/WMXtj20CgJKckt487ik9hqXLaKw9r
+ lS/+f75Ag97bmN6IqQoN3EKo2vn+tnqPceClSymb7RJfkyTICgzzKxcCk=
+X-Received: by 2002:a05:6000:2302:b0:44f:c886:89b4 with SMTP id
+ ffacd0b85a97d-45e5c589d83mr5708936f8f.15.1778852060320; 
+ Fri, 15 May 2026 06:34:20 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48fe53ab6aasm71454015e9.2.2026.05.15.06.34.16
+ ffacd0b85a97d-45da0fe248dsm14283773f8f.30.2026.05.15.06.34.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:34:16 -0700 (PDT)
+ Fri, 15 May 2026 06:34:20 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:34:16 +0200
-Message-ID: <20260515133416.316723-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:34:19 +0200
+Message-ID: <20260515133419.316930-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260430183544.2362642-2-bernd@kuhls.net>
-References: <20260430183544.2362642-2-bernd@kuhls.net>
+In-Reply-To: <20260430185635.2999959-1-bernd@kuhls.net>
+References: <20260430185635.2999959-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778852057; x=1779456857; darn=buildroot.org;
+ d=mind.be; s=google; t=1778852060; x=1779456860; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=YgV8/PSnXek+rbE/5fFO3cOqooaf3GOK2n4H9BEMIFM=;
- b=MgFeYYXhq4iAb3b8WsBt+G35A7PU1h5iao9tfntpfIaempkXQ86zHKkUDUo0Zzj5z0
- FbEPAA55QoGs0qicWoZxfjXV3r9fjIeX+OwCQmeFRgeWXlV6KPKRSzH8ZVrwWZ6GA0Om
- sUsq2riqIa394X/FsRaJxXKz4T9euCn6UzRyXZCKJvTgd8U2MnhzW2zhsLXW9eaeCF5d
- jAUGI6S+cEqYHZMoC9Aj9JPalGwK+NIywKL0hGaOQ0EDIz2mLHE6rTYSMwA5UtZrz7Oj
- 1w4ge6pL8wH6VDztjYyCZRJrRRz7bDW86m1+pIM8StVAU5AWUf8L+P/B/8VHWFIeba+C
- AaxQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SztPZr4821j9tSPY0PJbMZg4S10YhYKpOw9OEKVDYgk=;
+ b=chxHHGtRqhdZo8mCE4LcL1b1GRnpjjh/wdkZue4tKykpkr0+V3xZeIyh1NsCrRF43f
+ irCYwwg0VG5k5OOMx+9Gyh6YJR6FWBfGGKVMq+GjKFZWAnNUueM/GaGPhlgUQDYtMlmf
+ 6w5qnyRx2lxk6SineCUGZUVqKyhcTvbK/GdfkWHLnaVmyBb7IF40W41g+sDPc539RyJN
+ 4UHkKgMGD0OXbK32qAM0XEJ8PJ0IvNLZ0wU1E+uByXasY7maz3iocf6v6y8Pyq7IJYEw
+ U4aLQW+6Zkzyn1KYFOCpLVhbVdpTyQtaMxZsInwLnSw7uG7dL7tX+f8vSzncvQN+3tKR
+ aZBA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MgFeYYXh
-Subject: Re: [Buildroot] [PATCH 2/2] package/libpjsip: security bump version
- to 2.17
+ header.a=rsa-sha256 header.s=google header.b=chxHHGtR
+Subject: Re: [Buildroot] [PATCH 1/1] package/thrift: security bump version
+ to 0.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,46 +132,52 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/pjsip/pjproject/releases/tag/2.17
+> https://github.com/apache/thrift/blob/v0.23.0/CHANGES.md
 > 
 > Fixes the following CVEs:
 > 
-> CVE-2026-25994, CVE-2026-26203, CVE-2026-26967, CVE-2026-29068,
-> CVE-2026-28799, CVE-2026-32942, CVE-2026-32945, CVE-2026-33069,
-> CVE-2026-34235, CVE-2026-40614, CVE-2026-40892, CVE-2026-41416,
-> CVE-2026-41415, CVE-2026-42225.
+> CVE-2026-41636: https://seclists.org/oss-sec/2026/q2/236
+> CVE-2026-41607: https://seclists.org/oss-sec/2026/q2/237
+> CVE-2026-41606: https://seclists.org/oss-sec/2026/q2/238
+> CVE-2026-41605: https://seclists.org/oss-sec/2026/q2/239
+> CVE-2026-41604: https://seclists.org/oss-sec/2026/q2/240
+> CVE-2026-41602: https://seclists.org/oss-sec/2026/q2/241
+> CVE-2026-41603: https://seclists.org/oss-sec/2026/q2/242
+> CVE-2025-48431: https://seclists.org/oss-sec/2026/q2/243
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/libpjsip/libpjsip.hash | 2 +-
->  package/libpjsip/libpjsip.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/thrift/thrift.hash | 4 ++--
+>  package/thrift/thrift.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-> index 65f52bf3b1..5f8e4b0eda 100644
-> --- a/package/libpjsip/libpjsip.hash
-> +++ b/package/libpjsip/libpjsip.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  3af2e481d51aaa095897820fa2ee26c30e530590c6ca56d23e4133bbdad369eb  pjproject-2.16.tar.gz
-> +sha256  065fe06c06788d97c35f563796d59f00ce52fe9558a52d7b490a042a966facce  pjproject-2.17.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-> index 38adeff626..449e44586d 100644
-> --- a/package/libpjsip/libpjsip.mk
-> +++ b/package/libpjsip/libpjsip.mk
+> diff --git a/package/thrift/thrift.hash b/package/thrift/thrift.hash
+> index a517900c82..ff69f16849 100644
+> --- a/package/thrift/thrift.hash
+> +++ b/package/thrift/thrift.hash
+> @@ -1,4 +1,4 @@
+> -# From https://downloads.apache.org/thrift/0.22.0/thrift-0.22.0.tar.gz.sha256
+> -sha256  794a0e455787960d9f27ab92c38e34da27e8deeda7a5db0e59dc64a00df8a1e5  thrift-0.22.0.tar.gz
+> +# From https://downloads.apache.org/thrift/0.23.0/thrift-0.23.0.tar.gz.sha256
+> +sha256  1859d932d2ae1f13d16c5a196931208c116310a5ff50f2bfd11d3db03be8f46f  thrift-0.23.0.tar.gz
+>  # License files, locally calculated
+>  sha256  d315e6cdedc07c478de6992027bfb66f220886c6216fd7e9885ced30c3703646  LICENSE
+> diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+> index cee7adb8ed..68b9faa3e4 100644
+> --- a/package/thrift/thrift.mk
+> +++ b/package/thrift/thrift.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBPJSIP_VERSION = 2.16
-> +LIBPJSIP_VERSION = 2.17
->  LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
->  LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
->  
+> -THRIFT_VERSION = 0.22.0
+> +THRIFT_VERSION = 0.23.0
+>  THRIFT_SITE = https://downloads.apache.org/thrift/$(THRIFT_VERSION)
+>  THRIFT_LICENSE = Apache-2.0
+>  THRIFT_LICENSE_FILES = LICENSE
 > -- 
 > 2.47.3
 > 
