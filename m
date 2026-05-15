@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 667B6CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB101CD4F47
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F37F48053D;
-	Fri, 15 May 2026 17:47:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 923F681DCB;
+	Fri, 15 May 2026 17:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hEmebFASwiJU; Fri, 15 May 2026 17:47:39 +0000 (UTC)
+ id o29xdPmc4-z0; Fri, 15 May 2026 17:47:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE23814DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DCD6821B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867259;
-	bh=ITA4RRdqVcI0Ucuk1oR6t5Ha8DmEJHTA1i2rN/kfB6Q=;
+	s=default; t=1778867261;
+	bh=d6I4yO0shEd0sWqsZkPam3/N5E+aS9M1tJRlQJSh+JQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DcEHCs5iC1zNifPzCSIUPPfpGhsfjUj4EyWT5HngZ5V0WTt1cwRlsknBQFxLuLIIL
-	 0MUlRhgHpdBOmNQjL+PdqgRGIJosuuBcKQZnyh6yXzz9gjUctD5pe9OlqzteS8QA6l
-	 EfHdDOUmr1IQ+caHHNiC7Wy7YssQrGXPEtOzDWfe2C//PC/4X0zaSmLvVquGXoAniD
-	 BTA8VWm6+TT4uEtsrnsP95l/4SecjcBVRsDl0iOXXOToCb+YVOTBJtmZwZaDaKvTem
-	 RbT4MuA+7ropeBSK7ok1OnyxRIrP9jBZHNNPpEVQyIfbkm0eerSjBcsbnDDHv+ZDXx
-	 4v+/ibQv2GPJQ==
+	b=Sg/CFc+XT1yDx1lCqfIsnbFTHKNVqZmVPOg9Rn7UR0M2HsUq4EyBf4VM7bSS3wlKM
+	 RTi2QsaJzVELTW1VUTzItku+yAWW11byQykSaZfKXbKrHC2SCXLYr0HndGVXvI7Xok
+	 XugyO3cnKVrAWMrEFAq6tsN9drzWTPPGoVJW8FKSEme+056UDCuTDAXI9rTQqmDKFp
+	 jwO1KCd/q1Sg7X3DguNvrRjowLbm3Ma0t03QUUg61WHutnD0obkZ/0tRGN+mtoLgkp
+	 RcFjrme8Ux7U+1+Oadi1EkYPQpIb99DuQSMiltzH92slKDL/Y8kQQVoNZXBDrS0tmk
+	 xCjZUG8wbpl0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EE23814DB;
-	Fri, 15 May 2026 17:47:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BB46545B
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DCD6821B9;
+	Fri, 15 May 2026 17:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0427445B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB6BD40FA4
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B325341DAB
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 39cqdJcXomUo for <buildroot@buildroot.org>;
- Fri, 15 May 2026 17:46:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UqlNYQMGaAeK for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 17:46:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75ED040FA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C781E41D58
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75ED040FA9
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C781E41D58
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A70E786334; Fri, 15 May 2026 17:46:39 +0000 (UTC)
+ id 11E40863DA; Fri, 15 May 2026 17:46:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:18:15 +0200
+Date: Fri, 15 May 2026 16:52:42 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: ce4d425a53fa6a0e2980deaf8abe181820817fb1
-X-Git-Newrev: c7e20789e8e302de7b0bff3f670032fcb21370c5
+X-Git-Oldrev: e876211a2323801975da063a2b757937415efdb5
+X-Git-Newrev: f204a673370e69e2de13e577f36ec4a52589e8e5
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174639.A70E786334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/openssh:
- explicitly configure PID file directory
+Message-Id: <20260515174641.11E40863DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ package/go-bootstrap-stage5: security bump to version 1.25.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +77,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c7e20789e8e302de7b0bff3f670032fcb21370c5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f204a673370e69e2de13e577f36ec4a52589e8e5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-OpenSSH checks during ./configure if the default location /var/run
-exists on the build host, and defaults to ${sysconfdir} (/etc/ssh in
-Buildroot) if not. This can break e.g. in a sandbox with its own mount
-namespace where there is no reason to create a /var.
+Fixes the following security issues:
 
-On the target this leads to errors when starting/stopping the service
-from the init script, which expects the PID file at /var/run/sshd.pid if
-sshd is running. A "stop" (including as part of "restart") or "reload"
-will always fail with
+CVE-2026-33811: net: crash when handling long CNAME response
+CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given bad
+                SETTINGS_MAX_FRAME_SIZE
+CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
+CVE-2026-39819: md/go: "go bug" follows symlinks in predictable temporary
+                filenames
+CVE-2026-39820: net/mail: quadratic string concatenation in consumeComment
+CVE-2026-39823: html/template: bypass of meta content URL escaping causes
+                XSS
+CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with more
+                than urlmaxqueryparams parameters
+CVE-2026-39826: html/template: escaper bypass leads to XSS
+CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL byte on
+                Windows
+CVE-2026-42499: net/mail: quadratic string concatenation in consumePhrase
+CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum database
 
-    no /usr/sbin/sshd found; none killed
+go1.25.10 (released 2026-05-07) includes security fixes to the go command,
+the pack tool, and the html/template, net, net/http, net/http/httputil,
+net/mail, and syscall packages, as well as bug fixes to the go command, the
+compiler, the linker, the runtime, and the crypto/fips140, go/types, and os
+packages.
 
-from start-stop-daemon, even though sshd is running (because the PID
-file doesn't exist where start-stop-daemon tries to read it).
+https://go.dev/doc/devel/release#go1.25.10
 
-On the other hand, a "start" command will try to start sshd even if it
-is already running, because it cannot detect the running instance.
-Unfortunately sshd does not fail directly in that situation (so the init
-script completes), but something like the following appears in the log:
-
-    [May 04 14:48:05] auth sshd[4592]: error: Bind to port 22 on 0.0.0.0
-    failed: Address in use.
-    [May 04 14:48:05] auth sshd[4592]: error: Bind to port 22 on :: failed:
-    Address in use.
-    [May 04 14:48:05] auth sshd[4592]: fatal: Cannot bind any address.
-
-Explicitly setting --with-pid-dir=/var/run overrides either default,
-and only logs a warning if /var/run does not exist.
-
-[1] https://github.com/openssh/openssh-portable/blob/5fa60ae0d2ed3fc441f54c9349afbd63b6301929/configure.ac#L5568-L5576
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-[Marcus: expand commit message after discussion on ML]
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-(cherry picked from commit c09bec68f14f39e99b40eda89e538a6f4075fe98)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c19e6d80fbcff18465a6839676195a91db18ace5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/openssh/openssh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash | 2 +-
+ package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index bcbfc39755..3ba7a41cc7 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -20,6 +20,7 @@ OPENSSH_CONF_ENV = \
- OPENSSH_CPE_ID_VENDOR = openbsd
- OPENSSH_CONF_OPTS = \
- 	--sysconfdir=/etc/ssh \
-+	--with-pid-dir=/var/run \
- 	--with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
- 	$(if $(BR2_PACKAGE_OPENSSH_SANDBOX),--with-sandbox,--without-sandbox) \
- 	--disable-lastlog \
+diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
+index 5e40ba7e6e..58391471d9 100644
+--- a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
++++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  e988d4a2446ac7fe3f6daa089a58e9936a52a381355adec1c8983230a8d6c59e  go1.25.8.src.tar.gz
++sha256  20cf04a92e5af99748e341bc8996fa28090c9ac98765fa115ec5ddf41d7af41d  go1.25.10.src.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
+index 9006e5bf44..85468414a2 100644
+--- a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
++++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
+@@ -6,7 +6,7 @@
+ 
+ # Use last Go version that go-bootstrap-stage4 can build: v1.25.x
+ # See https://go.dev/doc/go1.26#bootstrap
+-GO_BOOTSTRAP_STAGE5_VERSION = 1.25.8
++GO_BOOTSTRAP_STAGE5_VERSION = 1.25.10
+ GO_BOOTSTRAP_STAGE5_SITE = https://go.dev/dl
+ GO_BOOTSTRAP_STAGE5_SOURCE = go$(GO_BOOTSTRAP_STAGE5_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
