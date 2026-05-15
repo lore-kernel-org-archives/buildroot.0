@@ -1,120 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78295CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F6A6CD4F47
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CAE841A6F;
-	Fri, 15 May 2026 13:33:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC425840D4;
+	Fri, 15 May 2026 13:33:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hE4lqZ1iUsJr; Fri, 15 May 2026 13:33:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9a-EUInt0YVt; Fri, 15 May 2026 13:33:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA4A341A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED3CC83DEB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852002;
-	bh=5eiQDJzHSpvWk1HLwyLwPc2DrkwUXaS3bkriv6ouxlc=;
+	s=default; t=1778852004;
+	bh=I/VIQ68RHZ7flZtPoclotLXvVQFhwJlbatX4v4/yVic=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XSxYwSuM6u90GyoVhCTuKLHF3Wadl6d3Hb9xqQZohJyb7lGXYi34iT9QsCUwmU3sg
-	 707/sTRjul5RT+7INbhr3iE7gPsHC9PbdPeU9yzr7VyiAzxo+wILP6EA1AyHtuTIAZ
-	 ySQuCEX22MH7wREXZ9uPoX0cKD1UawvsDIFpA9Fj3knboGIg/Ie9M9rP+r8ZAQxM4s
-	 Ak7GiOX3UMMd6N3D8oo9OskScMxx6MCP0+HrBcs7csUUvspKiR7UznD/hLYYaCGNcZ
-	 v+fsHhqLHHQmBP2Ulne30ERAPvXNACxVHHNsdZhkXjDzWbn0rV3hSlK8FISYbLPnAg
-	 nFotJXq8/Ppzw==
+	b=o01A2rI9Fh4juPki+azwE/DbviSRTzQ2e9uiX6vhOU3r1/C0YuXOHKbynOBRoT1Zy
+	 t+osxyQ0dfTtZtbmOPl2gEg+M3jXU3dB6AYG9dzgqItodlCfkQD2uqImuyfupGukc8
+	 FqlaThZZe03TeoBFtOfYPV429hl6NMo70KIRGe57c2GOrCt5ISi6ysvHoy+MLSK3Ri
+	 hjymgmd7KiBbc5ud6PXOBINv3oJV1tuXjxUc7V9B4imj72Ex7T48TgsNnmIZzvDfjn
+	 2RfXUQyebg592I5wGlA/ysxiGa5G6d1+2i0o6nJe4CKiw+Ph/qtPPPx+PEXoqXLUo3
+	 j0Dt8HQhAO0CQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA4A341A50;
-	Fri, 15 May 2026 13:33:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EEE736F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED3CC83DEB;
+	Fri, 15 May 2026 13:33:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BBEC36F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C73F40E24
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11D6683E0A
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BgznuQ9Bs7VU for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:33:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zON9WrFTFp77 for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:33:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 806AC40E23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 806AC40E23
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 806AC40E23
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:18 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-449d6c68ed8so8095079f8f.0
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:33:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D263D83F1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D263D83F1B
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D263D83F1B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:33:20 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-488a14c31eeso62006585e9.0
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:33:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778851996; x=1779456796;
+ d=1e100.net; s=20251104; t=1778851999; x=1779456799;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=oaA8DneTheGmBBZ+iD6O2k8iFGLmb/GMoWzfoZupAUs=;
- b=Zk2DTKnVZB5mBWxc71hTirJk1dZmVND+rwCJFo9+x4Qe0Vk24hUpCrvV4FIkrn6bPX
- jJb8whw003Tq8XOnb5ginESXZLGp8fOetqNOcMZ887NjWdSqJq0i6dmDm50PjA/0xAUM
- YJLW+aJtF/X7m3j6mg21sQi0gYA211a2MM/GcMMURqChelwj5a4XKBS8v+bmBm8Ghu3H
- 2cxCTbYSzvuDWTx3QBHdGmxuTHC7ajkgQgxjPEaLNiJyAWm6RPtXt+xOoWLL3fo8slP9
- kZN2mKfZVL/6pA3KgJAtwtuVLeBnDAWuIOf7Ssg6QC1NvJKtISVmwwC5GEMs2GwP+Eqy
- zUNQ==
+ bh=kvwAe7UeJV6aAyRqfOqsfLMo9kdt6n3kkeGXOJX2r0c=;
+ b=iZgiwBBFYduYvmycuitMdXd6jVaai3eyHnol/Qt+XpWh2NQYbp9wUlVQeybwbVUOfS
+ SVB2UFuyTKTM6pw068/XEj+N9mXXmCxI2qUGDwebE+D3K3nyAtqnoHbTmTkBPy+RylB5
+ dp2599U96DDnHhL44WaE/04LdM4S5vzKv1zKodLQpiXvj2SDj8vC0DZNWSLwjo0VXu3z
+ Dt+Ayalcr2XsTFPF8fRxJbewfjQ97RYELP0IPrDLfT9uhgZsCd6tWG5qQO+5kZJd4N5i
+ 2fqq5tReKjO0Z1YquKiobKZ9c4pI75DAY6TIbIL48DYA8+CD+eITaMQG22wGv3+nnSXM
+ F6RA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ954KTw0BP6D7CAt+UbH068cAF81Zldb9089dCVqNJ+81PjK+Q3RkK5H+vQDXd5wRq1T/lQ/nMXV/Q=@buildroot.org
-X-Gm-Message-State: AOJu0Yyp9GM3Hnu176HeQfiGD6VYtWUvu0ddXoAa/Ur88yAO73q9jp4R
- /gfybv8H0vH/gOATroR7vdfnqvNoBEN3HumSTnrXzPK/s+Hu2sV6Julpn5B6HCqtTUKbymEGPOP
- Xp8Mh
-X-Gm-Gg: Acq92OGBuOOltgchraMNxW/td6DpLztHcQSzjarWErd79BOTwtILc8UJzAjSnsIdxfP
- C6iFE2hNN3xkJ9bVfqCjV+fECW5amFz1lzDj13Qb1OOE7yt4YGPplvlBXP1cNflnT+CzOXYA+oB
- QfwcmuVtxDWs2hqfgr8tD4jAYKC7lGXkgqRd6Am7iTRteHepq9+j+mRTFoqdjjM5+gN7TkY/0HH
- qES86xzkQVYdqMY/7FabhfBTIb8AdDdB+qNwLflKTVsZvPtNKpIar7RxtjLnAcK3GWxCPP4OP9V
- 7Fm0qbBCw6gOEy808EAFHoc2/E6wrSFUVBNnP7oCPPr1DqnpjFXANljyujgk/NUIKTrsqulJoYT
- O3issFXiKdb4W/l0HptY3dBLHknPeF29IHdArvN6cwXrC7Tjj3CPFcXSUKf884BzfqzIvQMfgio
- 8CytDM4l3p2tGFnwLXTCIoL5sUQLZgkRb/x89aMKRdIqB0
-X-Received: by 2002:a05:6000:1ace:b0:43b:3b80:6776 with SMTP id
- ffacd0b85a97d-45e5c594c2cmr5319841f8f.30.1778851996499; 
- Fri, 15 May 2026 06:33:16 -0700 (PDT)
+ AFNElJ8uIyrivvoDdJDjc5uwabSfCxcxwxm/SH7eoL4/ymatvqMHszgsCM2P1QBg64OhTQENh67iIVObHyA=@buildroot.org
+X-Gm-Message-State: AOJu0YwdQmyLhx2eLArqcrTkprmVdRP8f5R+8tsOWN53DQnwNqewsWzI
+ 2YRQUMv07R3osb2bcyqMHw87WP3sWVHpnvjA49q6hq6QDxyaGYp0GQKBszn+G3mZnHxduJT+7Ll
+ VNLyB
+X-Gm-Gg: Acq92OGboATNkXp6VyWDWKW5gOclcDId8dts6PzJtBprrT+q7FlAgqV1v7bRsxwXqS8
+ F4cGPGaashtXmyB02EoQiW8JVpDLSGiVknnUbADgLxUEV0NLb3tX7rs55SCha1W8lnCWJzMviqI
+ 7IOejPA/Rp15efCTLPzmECd8bO1Yt4MdqGOaGpWOASIYPuZhdJZFTGQo1sXdaGyl/P42s2VCCWr
+ k5Tl7CDixamunth1VGiudsne7TYXOS09FCGkg5z8K2cai2kJZKIk2YR079GpltTWO8wZScB14hr
+ T1+YXnrA45P+lX3fnsqnoCOuAgx3Cwwnc64llzx/PfXlUqci6wnlgLgkok1iJ2cA79E3f2PHAPb
+ PQh+hZPXKYVqSc1yNEPtOKWboqyly9TfNYALvynVXhWA5whI9iOFwQ7pYVlDtGdTcTRparf/e73
+ 2b+lQm9fGK2oeLP6h8DYaA+t+GUpxV1vBMF5E+gfoVw4ow
+X-Received: by 2002:a05:600d:8:b0:48a:5565:ec3d with SMTP id
+ 5b1f17b1804b1-48fe61f7a92mr56720085e9.22.1778851998624; 
+ Fri, 15 May 2026 06:33:18 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45da0a1aeafsm14508825f8f.23.2026.05.15.06.33.16
+ ffacd0b85a97d-45da0a19a0csm14831370f8f.20.2026.05.15.06.33.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:33:16 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 15 May 2026 06:33:18 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:33:15 +0200
-Message-ID: <20260515133315.314789-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:33:17 +0200
+Message-ID: <20260515133317.314898-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20251013175513.86276-23-bernd@kuhls.net>
-References: <20251013175513.86276-23-bernd@kuhls.net>
+In-Reply-To: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de>
+References: <aWpqtkIY1vt9B4w5@waldemar-brodkorb.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778851996; x=1779456796; darn=buildroot.org;
+ d=mind.be; s=google; t=1778851999; x=1779456799; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=oaA8DneTheGmBBZ+iD6O2k8iFGLmb/GMoWzfoZupAUs=;
- b=d2TT/kpM8OwmyeAG3vwYmb1aovH3rZKRLlPL7raveo7L0BkH+wiGSFkQ9/PLv9P7to
- 1vYaoNFh9XFu3R3lIz4lxogQbIejA0YHjFEkiaQaWoqjAbo3oMtRhN/Y2flA5aRbDtuA
- yFYTC/+helX830hf0Iusd/y4qOhsBh2p65SDJhyX3fdIKrcaZrcxEWFZgn41Spk+4tlU
- uPcIfLlxouepEZW3+rPGSAmTH/MVeUDADQf67xljpPyP/8fVwLES/IHTsCwd5RMHohZR
- RNlFoygmH+JDp1IVd1KmLeA33yqc0xkqUUkXzj/5A23iBSIJ6D3vTW5VZmSjpKJnlepl
- kP2w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=kvwAe7UeJV6aAyRqfOqsfLMo9kdt6n3kkeGXOJX2r0c=;
+ b=djMriYjMvjJPVYvsPARR0cXhlSxNBApIJoGpCcVL5iatWiYKIfKqYp6EOKOpZbFf2l
+ Vkvz7MD26CF1NAD0KQV1/RrKm2TXvV2P76y/X6DD3xGEUmXZFGWEE/z3sIpz4pAA8Hjs
+ +yR1L6AWsOiOw1zd6hRRbCxaaOFGepFwJCpKSQuTfi8+wd6D4G6XIU/TwqyTa3qKZnmY
+ 5ICBTsFmL6u8zx3K06GUeXhymKEHcqldX2Lr7Yf9ivSK+mvjRv+KrSrvqRi4WI3UXjyb
+ UOCTUN8J3M1YjKgqa928W3chE3+/1A0EI6l5EACRCBXnhr5zuENqP7NddfobLOHH7kQY
+ 5FLg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=d2TT/kpM
-Subject: Re: [Buildroot] [PATCH 23/36] package/python-requests: bump version
- to 2.32.5
+ header.s=google header.b=djMriYjM
+Subject: Re: [Buildroot] [PATCH v2] package/nginx: security bump to 1.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,43 +133,96 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> See here for changes:
+> https://nginx.org/en/CHANGES-1.28
+> 
+> Following security related issues are fixed:
+>     *) Security: processing of a specially crafted login/password when using
+>        the "none" authentication method in the ngx_mail_smtp_module might
+>        cause worker process memory disclosure to the authentication server
+>        (CVE-2025-53859).
+>     *) Security: insufficient check in virtual servers handling with TLSv1.3
+>        SNI allowed to reuse SSL sessions in a different virtual server, to
+>        bypass client SSL certificates verification (CVE-2025-23419).
+>     *) Security: processing of a specially crafted mp4 file by the
+>        ngx_http_mp4_module might cause a worker process crash
+>        (CVE-2024-7347).
+>        Thanks to Nils Bars.
+>     *) Security: when using HTTP/3, processing of a specially crafted QUIC
+>        session might cause a worker process crash, worker process memory
+>        disclosure on systems with MTU larger than 4096 bytes, or might have
+>        potential other impact (CVE-2024-32760, CVE-2024-31079,
+>        CVE-2024-35200, CVE-2024-34161).
+>        Thanks to Nils Bars of CISPA.
+> 
+> Update patch 0007, which does not apply cleanly.
+> License file was changed, year was bumped to 2025.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/python-requests/python-requests.hash | 4 ++--
->  package/python-requests/python-requests.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> v1->v2:
+>  - forgot to mention license file update
+> ---
+>  ...nix-ngx_linux_config.h-only-include-dlfcn.h-.patch | 11 ++++-------
+>  package/nginx/nginx.hash                              |  4 ++--
+>  package/nginx/nginx.mk                                |  2 +-
+>  3 files changed, 7 insertions(+), 10 deletions(-)
 > 
-> diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-> index c391d553c9..1bc440667b 100644
-> --- a/package/python-requests/python-requests.hash
-> +++ b/package/python-requests/python-requests.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/requests/json
-> -md5  4a380c14fe0f4465c9dbf79ffacefd8f  requests-2.32.4.tar.gz
-> -sha256  27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422  requests-2.32.4.tar.gz
-> +md5  cb3d3c58f07cf23f12c345f2c96a6f12  requests-2.32.5.tar.gz
-> +sha256  dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf  requests-2.32.5.tar.gz
->  # Locally computed sha256 checksums
->  sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
-> diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-> index c782060d57..e5aa7006ee 100644
-> --- a/package/python-requests/python-requests.mk
-> +++ b/package/python-requests/python-requests.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch b/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+> index c10fcd11c9..4656634bd3 100644
+> --- a/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+> +++ b/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+> @@ -10,11 +10,11 @@ Signed-off-by: Martin Bark <martin@barkynet.com>
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>  
+>  diff --git a/src/os/unix/ngx_linux_config.h b/src/os/unix/ngx_linux_config.h
+> -index 2f6129d..4244086 100644
+> +index d99358c93..612935524 100644
+>  --- a/src/os/unix/ngx_linux_config.h
+>  +++ b/src/os/unix/ngx_linux_config.h
+> -@@ -55,10 +55,12 @@
+> - #include <crypt.h>
+> +@@ -54,10 +54,12 @@
+> + #include <sys/ioctl.h>
+>   #include <sys/utsname.h>        /* uname() */
+>   
+>  -#include <dlfcn.h>
+> @@ -27,7 +27,4 @@ index 2f6129d..4244086 100644
+>  +#endif
+>   
+>   
+> - #if (NGX_HAVE_POSIX_SEM)
+> --- 
+> -2.8.2
+> -
+> + #if (NGX_HAVE_CRYPT_H)
+> diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+> index 77220665f3..7b79036b20 100644
+> --- a/package/nginx/nginx.hash
+> +++ b/package/nginx/nginx.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  69ee2b237744036e61d24b836668aad3040dda461fe6f570f1787eab570c75aa  nginx-1.26.3.tar.gz
+> +sha256  40e7a0916d121e8905ef50f2a738b675599e42b2224a582dd938603fed15788e  nginx-1.28.1.tar.gz
+>  # License files, locally calculated
+> -sha256  f19c4caea60247490199c5a6d0134281e3fb20b3d7577e6873c628597f5381d9  LICENSE
+> +sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
+> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+> index 6ca1ac2075..41490caee2 100644
+> --- a/package/nginx/nginx.mk
+> +++ b/package/nginx/nginx.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_REQUESTS_VERSION = 2.32.4
-> +PYTHON_REQUESTS_VERSION = 2.32.5
->  PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
-> -PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/e1/0a/929373653770d8a0d7ea76c37de6e41f11eb07559b103b1c02cafb3f7cf8
-> +PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/c9/74/b3ff8e6c8446842c3f5c837e9c3dfcfe2018ea6ecef224c710c85ef728f4
->  PYTHON_REQUESTS_SETUP_TYPE = setuptools
->  PYTHON_REQUESTS_LICENSE = Apache-2.0
->  PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+> -NGINX_VERSION = 1.26.3
+> +NGINX_VERSION = 1.28.1
+>  NGINX_SITE = https://nginx.org/download
+>  NGINX_LICENSE = BSD-2-Clause
+>  NGINX_LICENSE_FILES = LICENSE
 > -- 
 > 2.47.3
 > 
