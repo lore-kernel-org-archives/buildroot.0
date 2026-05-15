@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF86CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E590CD4851
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DC338416A;
-	Fri, 15 May 2026 09:56:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEBD584178;
+	Fri, 15 May 2026 09:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qp1G4iBopzLF; Fri, 15 May 2026 09:56:44 +0000 (UTC)
+ id 7W5q7HuWrDjV; Fri, 15 May 2026 09:56:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B4CB84168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE62783FC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778839004;
-	bh=rRvQiIHLDXL6EaGcHWMTfDzjBpamWuoo5PooDj3Gvi8=;
+	s=default; t=1778839005;
+	bh=bnSWsGo4B3E44bRWOGPsTK8z/Lnd03dG9VZU5pqpQNE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BIAqLDrpALS6SIY50Ah/qU+5TsVkSDg00qsd4JMpaH543N8rafaA4waRX5FsMM78E
-	 /ld34NWUS4Ce5Mf4g8eSO1hn+YhtgHDy733optz8bgz1PQAd+Wm9Jchw1eqwTWs6eO
-	 8f9NoKABxvOgUfEKFeZB2Zgl9r+CT6kQsAPSCACgnFbrFyRKqeSJcKJlfCTsGO2avJ
-	 4I5n0S3Nmnuefe4oTFM1OIg9evWzGqurWDLX1Vi6ZJD1E8yZA3C/0Ae3pEZshyE6nC
-	 Mpx5eId8i+uOOBl2ZS2ONYxg0GlLu9sdalW4K5SvdO999x193/HptLQOALf+rqxHsr
-	 4Zc9qIsX2uEVA==
+	b=abLnIS55jx55hScjm5E/QPI90m6PFzFTYfO5Y3HcxEjy3uscylaNBil1B/NLoj2nu
+	 lYx+yxYYa/Dh2XyuBpUSiDc7Pwzmsh6ct4SR+UDeynX+l2ihT3JKq2JspJ+Kj4OFvi
+	 8uy5VK2LSsC7GRBuLAudSgswe+AhxiZ6L9ODZxAGDl5YPDSxq2cwqBWDPJwbQ7gMhe
+	 qkIIe2IfOZ+BUOQTQMSkbP8fC5OC8f+lQY9SQ24XUl5ezMDAd7AiHEOMjdaK84LizW
+	 qKcHCCAiwMwJm/aI461oy/EKCL7psgMvRrXs9NppAwqA2GBHLe0RobhsMX4U1g4nEP
+	 2ndl3osLUHr9Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B4CB84168;
-	Fri, 15 May 2026 09:56:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 35AFB36E
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE62783FC3;
+	Fri, 15 May 2026 09:56:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 364D342B
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BE5683DD2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C4F241747
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 33MUcwGOsaY8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LKUSDaxMGijg for <buildroot@buildroot.org>;
  Fri, 15 May 2026 09:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DB0583E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B0C4174D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DB0583E8A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62B0C4174D
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B60958632E; Fri, 15 May 2026 09:56:33 +0000 (UTC)
+ id C82C88632B; Fri, 15 May 2026 09:56:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 15 May 2026 11:39:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c522110685426cd9dc8bf246998abfb7d8b7b86a
-X-Git-Newrev: 20275000f3ef1546328b595d46c3e81ec5711345
+X-Git-Oldrev: 20275000f3ef1546328b595d46c3e81ec5711345
+X-Git-Newrev: 4f92439320ed1da7c6ab1285adbc1e16cf80af8d
 X-Patchwork-Hint: ignore
-Message-Id: <20260515095633.B60958632E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libunwind: bump to
- version 1.8.3
+Message-Id: <20260515095633.C82C88632B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libdecor: bump version
+ to 0.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20275000f3ef1546328b595d46c3e81ec5711345
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f92439320ed1da7c6ab1285adbc1e16cf80af8d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://github.com/libunwind/libunwind/releases/tag/v1.8.2
-https://github.com/libunwind/libunwind/releases/tag/v1.8.3
-
-Switched to tarball hash provided by upstream.
+https://gitlab.freedesktop.org/libdecor/libdecor/-/commits/0.2.5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libunwind/libunwind.hash | 4 ++--
- package/libunwind/libunwind.mk   | 2 +-
+ package/libdecor/libdecor.hash | 4 ++--
+ package/libdecor/libdecor.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
-index 512cc7b9b5..02aa2bcbd7 100644
---- a/package/libunwind/libunwind.hash
-+++ b/package/libunwind/libunwind.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256  ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157  libunwind-1.8.1.tar.gz
-+# From https://github.com/libunwind/libunwind/releases/tag/v1.8.3
-+sha256  be30d910e67f58d82e753231f1357f326a1a088acf126b21ff77e60aab19b90b  libunwind-1.8.3.tar.gz
- 
- # Hash for license file
- sha256  6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 3eb3b483d1..689902c787 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
+diff --git a/package/libdecor/libdecor.hash b/package/libdecor/libdecor.hash
+index 69163f3227..d2b74878f9 100644
+--- a/package/libdecor/libdecor.hash
++++ b/package/libdecor/libdecor.hash
+@@ -1,4 +1,4 @@
+-# From https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/0.2.4/downloads/libdecor-0.2.4.tar.xz.sha256sum
+-sha256  b17cf420e8dcb526bf82da5d36f8443a91fad0777083fa4ec5c1df8ee877416f  libdecor-0.2.4.tar.xz
++# From https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/0.2.5/downloads/libdecor-0.2.5.tar.xz.sha256sum
++sha256  7fd50f780a4fee90a03f7b2c09055033e488654cbaff4a0c4bbae616bac9cd1c  libdecor-0.2.5.tar.xz
+ # Locally calculated
+ sha256  508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1  LICENSE
+diff --git a/package/libdecor/libdecor.mk b/package/libdecor/libdecor.mk
+index 26f4be40a6..e92c8a8040 100644
+--- a/package/libdecor/libdecor.mk
++++ b/package/libdecor/libdecor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNWIND_VERSION = 1.8.1
-+LIBUNWIND_VERSION = 1.8.3
- LIBUNWIND_SITE = https://github.com/libunwind/libunwind/releases/download/v$(LIBUNWIND_VERSION)
- LIBUNWIND_INSTALL_STAGING = YES
- LIBUNWIND_LICENSE_FILES = COPYING
+-LIBDECOR_VERSION = 0.2.4
++LIBDECOR_VERSION = 0.2.5
+ LIBDECOR_SOURCE = libdecor-$(LIBDECOR_VERSION).tar.xz
+ LIBDECOR_SITE = https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/$(LIBDECOR_VERSION)/downloads
+ LIBDECOR_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
