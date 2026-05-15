@@ -1,118 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 856E1CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92205CD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59A89408C1;
-	Fri, 15 May 2026 13:34:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68FDB61633;
+	Fri, 15 May 2026 13:34:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5yLmuOQRoUmz; Fri, 15 May 2026 13:34:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4JC5ciBZLRsi; Fri, 15 May 2026 13:34:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7306B40BE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 924BC6163A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852052;
-	bh=qiiIy4gPMvjuAjkGfqycleFdd0CX6WFjnrX4kMkow7w=;
+	s=default; t=1778852053;
+	bh=RRCk69ZZONAOOS1pbq3XZoCZkM2ewAMfQsZrXxfBK9s=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Y6nYBwRouGGYKeLvhgEd+5SdUU5MPSgx9Q4BX8fc3fFfe2vnXQzRu8O3vGogkE6Y5
-	 eN+U9otf5Gt+byw2/BqVelwTB2yD+eg0OpMpf8WYZy1EtWVvy6Xo1at99Hun17bPIB
-	 1hgNi5o8oQ5VXn9a2VpLjNfpKJzh03IzCuvxKR5B/8A65FojQyLSGLxv2RrJsdc3tN
-	 qIOcPYK2J8OAy8ppGb87MK2cXnxrKLy3vjqQ5HHHyzhCocPf0La6u2orTAGjjBjazx
-	 pB/yIvKRpufXi2d/k9OfqH6h9glVMonU2w0BUaFt8vT+GgiS+dKegD67QvkE7V3IqF
-	 LEHuZT8lK/TXQ==
+	b=Z9PfET6vRnAkAkSEVLajqUd7IFYrliYIdBS/VKzMIFA28IOqsxsy2o4RJ/psrwH1n
+	 k9N2L0ifI086+XIlcAFJ2xhG6giVqjWUeSuw4jEJk6/hBNjF8v4s26RZkDREJxJcix
+	 ThI1Onzemllyqg8xQeLCeQsBNFSospBQVxdfMbgVBvTgTa3I57kL3nKHjesLdAUDtL
+	 3Yn8tomn41SBUpGqVhVQRFHhoAkJ/fQ5z9umOjPeu5GaZitYPEKfuP5M8Vlrk9S2GK
+	 DilHeJUpDikzhT1MHPqAjB3xme5u9SCixjhT5s8abLtd+wiatX0rD3cOLpvYy9Tgx4
+	 LKVTmQ22LIzpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7306B40BE3;
-	Fri, 15 May 2026 13:34:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 924BC6163A;
+	Fri, 15 May 2026 13:34:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DC24136F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1004836E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C195040A49
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0161E408B6
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i6lx9Yw3vBQp for <buildroot@buildroot.org>;
- Fri, 15 May 2026 13:34:09 +0000 (UTC)
+ id Zl1mRrUYN1_Q for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 13:34:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AAE0B40595
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAE0B40595
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AAE0B40595
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:08 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-444826c16ffso7662500f8f.1
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0520B4059E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0520B4059E
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0520B4059E
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:09 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-48a563e4ef7so83205995e9.0
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778852047; x=1779456847;
+ d=1e100.net; s=20251104; t=1778852048; x=1779456848;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=RcbAmTMQOWKyPYo/xhc2HnluUcINdnT3Tcz2HTxsETA=;
- b=D8/67mZtxdKanxupbODCXfUyWKh7kDIiBlVVxlMU5B8+viQ2B05KyLMnY7K9TCrMYA
- SxSLRnYkPjWs1FVhvpj+JzzQ8m9g84fwVanWNB//nDyFHeBN9e0bWlsDpzQd7JMYTTen
- zFqbsAp7TGi+mh/80kP4vop9RFRqbjR2OUSJ27TD6VJwRJl016Laaa4es63VHDc1WjK7
- oXhH4K3PX6nXpAJdeON8LXJ7nVtYJLa7XgrJ6tV03WHKf9YmCVV3Sox276yDJK3nqEMb
- 5ArFEvnt5QdXoPTbqwo2h9O1i0TBodavVyKS6F6n3+LVouizkhWHLC28yJEMS4+xGcmh
- i7Uw==
+ bh=AcLpNUjJ668syw3f7Yxswc5p6A0GCAD6zJvvSaf95uM=;
+ b=DX1sEH3mg/DPn3JpEUSCKc7w9Ec7JL3haRcpcseTnvFOBVimE9BhJoCqwPbrjLA+Qm
+ rX4Fvu8VXUof5n5k6/mf096QDFK7AkVMPCEKl0/Sm+nBW8Xf//gcQAXhjSiUC93EsE0Z
+ dS5ZKYKHZhvbKA6uN1ZR1kxAHMj1oyfk419w9Asb2lymxrqUbQrkq51QPggfjw/QuNqG
+ ydAXVOuX9faQCcLPSK2j7dwU5LF4KWmqXu1G276UsPlpEnG9Xy3kd4kur2nhFJCmKOb8
+ RgwdOhvciAV3OyvEbYE2ojVq+NfHEivYvY0VUsA56P2jLr5JeW09mVMWrWJyrYgp+9WC
+ 9K/w==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9KJROVuJKF8LPGQ9vezrS0LKS3DdPsvokahq+FzD2RoQrsxdldvd9yadaz6z7kQQz7gMQSCWUgCqk=@buildroot.org
-X-Gm-Message-State: AOJu0YydfjepzpTptBD1trIO8/T3gVN29SSkscPuLevkwK1pG1e+JIU5
- qmFFddZDu9cBdfTyj2AB6AsOH7kHnZPZqaUbcaA+TOQZTkQhFno/1XFESDzPbW2JX0g=
-X-Gm-Gg: Acq92OGH0ViFjntRnytsmVwW5h20cRsnOmdkAXa3bFv/MT9fGgjPHJG9CF6FUy1EZ+D
- wMyz+OZjoVn7OZcfMuH+feF0btZWafcpbItrZiTZ11XhB1EvsW9N6UU2+jrrbMsNpX2Gl4bUIly
- 86cf9ufbq0qdPfW195kjpGUMdRzIQGi+8zoGaxNNQRTiTU5062dFHKo/kOMePA1SzTSVNHvF8xQ
- UP1zxF6XgUwLXzhCx1lXyQ8WgCrKs3iV3d31wGwNtFASg+hmy5u5DCHiOJDs1PVkuBNGET4UJds
- m8bOWKNH+YJKj7KnRPCV6CMNpS7/nOPhTiA5/4+XEiqXJBZtohmnW1wbJWwMIzDf5QU/JDhJL5m
- d6H5VAz/P+GbzFtf/17LyR5F+iZOt01utQwjF/Rn0o/AvsnW0R7zB5N0919k/l9EQo/FQCn5Lqy
- +tW47r3fQVGuZ/R4ZXhGhLluRZUrvRh4fytMp9hsHgLN2c
-X-Received: by 2002:a05:6000:1867:b0:43d:dd:8ca4 with SMTP id
- ffacd0b85a97d-45e5c36bd24mr5719641f8f.14.1778852046625; 
- Fri, 15 May 2026 06:34:06 -0700 (PDT)
+ AFNElJ/M7lii/H0jwuAiwy9dV9XybWkeqkXqa1gTwuyX8Vkzqe8+jT+a2Q6Mw4hrCFgaYjCeqiI96Qzc5WI=@buildroot.org
+X-Gm-Message-State: AOJu0YwDRLhmQ6O2AzS018rfyEJJP97IVM4b/rXvm3ScNqoCr8huuMUv
+ NHjQrjUmb1rCT/yYBYsAbCGiGgszE4xiaWTVPtX+OtZknU1E/utK6yHNvEZESjdFbEiztFhluW2
+ 5dJDn
+X-Gm-Gg: Acq92OHibfxZRKh/zy6qX2bTdJnfjydc3WfNp95RT2ysoxAjLNcSFS08XfGFESaaw3+
+ iF7KOLlbk3t/OW/DiQKVX4TVOFMwJ86WBFDDZ6B6nB0O8aq8OysiuDmrJL+kuSudq3Zx04hDOFZ
+ kDAK1aN4cVmCv9qJh+N8ieUuu0UZmADmhb9zMs/A/ZPtWrJUJg+/LCoL70IMYupXy8farNmgVks
+ raHaACUpfEiq2Wrh1lD6m0rb/F3lKFEtOeNwGJkRPafsABj6PtwdBp4XT4g0uvphbZZ6rSkx/0G
+ LoglkgdP/35srpVdipG8MEQRp6Gx+QfQkYF0E6UEjF1OkUD/NCmi8r3NITHtctFWE30xkggHM46
+ qC29t4mCe4mPkeptrmJmW6hpA7VTDF2YHULgbxkvGkFMD1S3liaRwvJlKFTWXeT8TSIJLEq5TeA
+ hmCzQ7HIXwaI6KiTCI9fx/zfr0PfzaYz5nGhDwzzBjz2kh
+X-Received: by 2002:a05:600c:4fd4:b0:48a:581c:ead with SMTP id
+ 5b1f17b1804b1-48fe60ed7b7mr50955975e9.10.1778852047714; 
+ Fri, 15 May 2026 06:34:07 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45da0fe222bsm11931945f8f.27.2026.05.15.06.34.06
+ 5b1f17b1804b1-48fe4c833fcsm59640915e9.2.2026.05.15.06.34.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:34:06 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 15 May 2026 06:34:07 -0700 (PDT)
+To: Eugen Hristev <ehristev@kernel.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:34:05 +0200
-Message-ID: <20260515133405.316221-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:34:06 +0200
+Message-ID: <20260515133406.316272-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260427153731.3792798-1-peter@korsgaard.com>
-References: <20260427153731.3792798-1-peter@korsgaard.com>
+In-Reply-To: <20260428-maintainers-v1-1-9aa4552ce96a@kernel.org>
+References: <20260428-maintainers-v1-1-9aa4552ce96a@kernel.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778852047; x=1779456847; darn=buildroot.org;
+ d=mind.be; s=google; t=1778852048; x=1779456848; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=RcbAmTMQOWKyPYo/xhc2HnluUcINdnT3Tcz2HTxsETA=;
- b=K9gFeGLQjxBewcB04aCn6Tt68hDYYnh271+7uDYz/9AJW9M9O12yr3BNXcOo8SgdWn
- oR+k3cNIqFMJtC+DVzq6GkOSUUaU6mwTDbrIg/rFWs0JBFnTHTTEBEEQUxNZRM+Z2K9y
- gSRmEuYnUtb5w6dUmQlSsP/0Y7L/zXWXjsgv6N379z+JAsHssGSf8rUIbRWa93TWJb2O
- vllQm866GEfxxrEIzngzn2ucS1q5JlMAVqUdhNAALyYIDoy3guwCprXcNb1CZRiuiL+G
- mVVPdmDDsIfXkMSjK+e5OKeDOEtYoLK8SNBNFk3WY9YEwF4SyPv2TTzh+Q7gbr5d+qOz
- gung==
+ bh=AcLpNUjJ668syw3f7Yxswc5p6A0GCAD6zJvvSaf95uM=;
+ b=JXIA4Mu7nQIKUyj/q2VyaHyc4uNQ7VCCi0Ehr3og/vXYcJxX5daidciJUvX83Zgwl/
+ Ifc9o2wcKLGNpyO/GtwNOSeVPCf7odV6btGEewm4azc7Ykd7y8tlPoJB7qj9unhbRB93
+ CkKYzrJ2625dvdX+v7Zgc3zLdYX6XQRbs02pqfG0NjhiFR+gaynceH6gIwiiBKteOCID
+ SFMHHisTNt6C3TVdZUnAI4SrsC91ENJFWloUDE2rtR56e3xXQDX8f1+ebUukwoD9YJW7
+ p1gCnDXx6BgshsF9cS/IuR7+b/XUwyLYy3grpvsQDnFemIIJy8NXBUw9C+XvW00VF/EV
+ /Ymw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=K9gFeGLQ
-Subject: Re: [Buildroot] [PATCH] package/liburiparser: security bump to
- version 1.0.1
+ header.a=rsa-sha256 header.s=google header.b=JXIA4Mu7
+Subject: Re: [Buildroot] [PATCH RESEND] DEVELOPERS: Update email for Eugen
+ Hristev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,49 +133,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerability:
+> Replace old bouncing email address.
 > 
-> CVE-2026-42371: integer overflow in text range comparison
-> https://github.com/uriparser/uriparser/pull/298
-> 
-> For details, see the announcement:
-> https://www.openwall.com/lists/oss-security/2026/04/27/2
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Eugen Hristev <ehristev@kernel.org>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/liburiparser/liburiparser.hash | 4 ++--
->  package/liburiparser/liburiparser.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  DEVELOPERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-> index f8d7124b7f..c18df8eb98 100644
-> --- a/package/liburiparser/liburiparser.hash
-> +++ b/package/liburiparser/liburiparser.hash
-> @@ -1,4 +1,4 @@
-> -# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.0
-> -sha256  154a3f649d80a78d5095fc461ec032ffb45f5ed3619edec923ac68cff29a088d  uriparser-1.0.0.tar.xz
-> +# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.1
-> +sha256  acd18cfb14d1851705f863f7a625be693fb3971fb85d4996faa21147f0315fcb  uriparser-1.0.1.tar.xz
->  # Locally calculated
->  sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
-> diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-> index 731739e582..d8dcc22063 100644
-> --- a/package/liburiparser/liburiparser.mk
-> +++ b/package/liburiparser/liburiparser.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c6c228ae91c9..1270365ef0e1 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -968,7 +968,7 @@ F:	package/optee-client/
+>  F:	package/optee-examples/
+>  F:	package/optee-test/
 >  
-> -LIBURIPARSER_VERSION = 1.0.0
-> +LIBURIPARSER_VERSION = 1.0.1
->  LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
->  LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
->  LIBURIPARSER_LICENSE = BSD-3-Clause
+> -N:	Eugen Hristev <eugen.hristev@microchip.com>
+> +N:	Eugen Hristev <ehristev@kernel.org>
+>  F:	board/atmel/readme.txt
+>  F:	board/microchip/sama7g5ek/
+>  F:	configs/microchip_sama7g5ek*
+> 
+> ---
+> base-commit: 3a488674b52f2515b3cc54526253682749553d11
+> change-id: 20260428-maintainers-d796e332862a
+> 
+> Best regards,
+> --
+> Eugen Hristev <ehristev@kernel.org>
 > -- 
-> 2.47.3
+> Eugen Hristev <ehristev@kernel.org>
 > 
 > _______________________________________________
 > buildroot mailing list
