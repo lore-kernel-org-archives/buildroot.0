@@ -1,119 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B07CCD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD06CD4F47
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 13:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3343140A73;
-	Fri, 15 May 2026 13:34:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 560A261622;
+	Fri, 15 May 2026 13:34:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xJbLbLpSrNXl; Fri, 15 May 2026 13:34:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K9SzXpdSsyHt; Fri, 15 May 2026 13:34:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F03640968
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76C7B61626
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778852049;
-	bh=dZyhL3jNnLFy0/5nxnCqO+ep1YK339QkWhu5S+JmXhE=;
+	s=default; t=1778852050;
+	bh=pnolD+B8xpNVnfIxNcmkVd6Xvd3KOiOVBTOAUkMVyvQ=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ciQI+b8ggV33Mr8b7yPTupOQXeo7CGghlWdScDzGmG64or5AA1IWF+o+L3tm6D4RV
-	 TznuEpiKfV8x9jHEfchkZZsCCHl6+BK+SMhZkAKhhnlj2uHjMRXELbrZ0C1WDGMUiM
-	 Af2hyo7hLfaw6yDFP9Df8D+d04JXCo8X4bvk4ZxtLtqE5TphpkM3NAuXzS6lzmdF5Q
-	 PX2JmiIefgLu0wainZhOIhCTz39TwxMRmwGtyJTcYQRa+sYtsACFRtNUHdvNsKZ5r4
-	 AGxHNSW9jlieEFu6X5xoDDhXgPQt/5gKYibl8bW4FkJAbdS2sRnkUmvxQhYSEBGzOs
-	 P13nX4D6Hx+Xg==
+	b=Jg6hRfdYfXy6V2Y+TNE0QtxFDpO+dbM2WZuVkN/c4JRfAGBAnmkcMCMj8/4hpHNn7
+	 LrfXyWok58kErYUq9LOr9u8fzJDBQ4bN89B+3GY9n21AbkyfdnRC1IGTnKDmY4roOv
+	 V1PL3SeJHywt2foMXFTTIOv3pcbiOq+wYzFY+O1d58v9UM+/QAEOPH4m2cH/Bk3EfA
+	 QTSSu6dCCJlVmH5YFpi43t3ckd90B7nq8AdTzgZIrjgn971Y4VM6vmUkUAMRKEKT+Z
+	 SvWRvUfHUgvbsMHv0Tz+YxFaMp0UI9tPmx+Fola4uLBWuIMZeYnHPyaKf/RbWzYsFo
+	 uIxzzBClzvxIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F03640968;
-	Fri, 15 May 2026 13:34:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CF32136F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76C7B61626;
+	Fri, 15 May 2026 13:34:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0771936F
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B519984338
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA9CC4059A
  for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcVHa-enHxYy for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K9cJgHw1cjmJ for <buildroot@buildroot.org>;
  Fri, 15 May 2026 13:34:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BAB0F84333
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAB0F84333
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BAB0F84333
- for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:06 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4891e86fabeso105808165e9.1
- for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:06 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DAF95405FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAF95405FF
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DAF95405FF
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 13:34:05 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-44ccbd3290aso7548682f8f.2
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 06:34:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778852044; x=1779456844;
+ d=1e100.net; s=20251104; t=1778852043; x=1779456843;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=DAW42+7cM38fhpPJ6Zz6ydtIs+hgjQRnQhljYmbAZKk=;
- b=GAP+syUB0KO+NXp2wCBga3Y7TdTPiXTv1WOMKwTW+mpE4KI54CGaQrjXZAlAythh02
- CbuV21Xu0Y/NEPLTIUM9A3roX3i32lChnuNRN1DBLGwj4rISbJhglnTydANIjfHwTpvt
- ESwHyow+Ori2SGl5OIJcVi+CGmkp2qk/h+W9GgS0w0yY43aovPhUqIgCxJ8uUaB6+CdY
- TZE3f57Yc6D0HCd2s/R2Q6CmcDFS5Tz92+xqAEjfAr0qBjGqkQzvd0R0gB+Ow3wwN55G
- 1CAS7573Xg2VL6snj960fQQKEL2FuwjnpXB4RPB9dSKcASzebNWq+mbO2QGkUhEtjgYq
- nv4g==
+ bh=nIKItXzQSqc2zwnBw95knF+K+HCaBTKRZ3etV5Nqpfc=;
+ b=jglNJqGK5jqW+MibA64Z9vbBP3RmFJAo3/RfC47ZPe7Eu62l1+qAvBuDPTzblQ5B5g
+ XysyHmqNa974iUCF0PRtcZnzB5Zc9rtIcfz2slVljkWKfh3Uj6mpNAhWJwabPCdPZuAH
+ 54E2t61Muc4cUppH2KMpK7e9JCKKpEGeW/bOj3k9mnIXeMY+8V/P3uBadfwVg/6hHgdG
+ l44doTP+9K2owwJuHXaQZbSRyVqvh64xpSSDOpXdMPfqBAcA2HfO4FKmz3M0omf4KkbS
+ 6qndHKB4tEpyKOKJfxF9hyUt09vskVZ/72so1wjOWo4b7Hcf8x84l8O18CJCPOd1OnTT
+ +jtQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/C6AD9H58kSfKMKRLK6LCCHTNOwgAqWcx/OpM62MtXprNFJ15O664Pd/WZ7XM3VcMHwatmhQlPUjk=@buildroot.org
-X-Gm-Message-State: AOJu0YzU7IN0qAAGdY1aUvWhG+FvVXC3n+DXTLl9ap9zChiPnCDGWFHW
- Z5MhZVSC3YcUDbYGDxEgKZEYbwYy0izytbG0fSGjgsCcmI9fd/e0WC76vfsZjmMbtiCzPGguDwo
- vs4To
-X-Gm-Gg: Acq92OHv46jstf3ys6ag6jJLpKJB5nNQV39s+wHRvTkMtn/pwcAq1b8SZzaYBmg1KYy
- Ngz2FtQZdXm7qIsAgMBnL3kM35NqEtghz/Zg0sHg3ApaTgaDCbEDuFYq4gfyyNADa/A099QV1vJ
- eVK7eWgcVbt7Oe+fOgLnQK8xxaj1gTTN+mDluUipFKtF/r4yXM/5BCmcoH7wJGV9A4ROTWMrxzL
- Fg5jQK3/Kk4cI8+U8GJ8kFJ+tZ6xRbu4Barbe+tyQReh28K/Hvj5maibZCbtkfsA4aSX6AQj7OP
- 8MydRY2Q1VjSvqT9THW9u1Amsm5DstFZiMyhRoBryHMlERmGqEaB2ceo5EXCs5rftYLQMQDevrd
- +Bn4nKsM7t/wWJ9sbXRU9fxO29B5vRnTojL2vzu+dgT1QKR6LUh1C7HfdPQ65Zv4N9i+zN3bdAS
- nRl9yTY5opmUbXTLZtiQ6gRgWRv/ZJTAe4ieLpUw41ILrw
-X-Received: by 2002:a05:600c:a11c:b0:48f:81ea:ebbb with SMTP id
- 5b1f17b1804b1-48fe60e4ddfmr39395705e9.6.1778852044566; 
- Fri, 15 May 2026 06:34:04 -0700 (PDT)
+ AFNElJ+bOWWY/Fp3jwDkibWBj9U3jMksrD7KihWKHQ8PajBWvpFu7XZAkfPe1mQRtGfHNnhKgv0VwcYu/NA=@buildroot.org
+X-Gm-Message-State: AOJu0YwsJnV0f/B6+HxfG+eVNfNpmyu6beivyOslyW4z4F07qelA715G
+ m9Vh7Fh3tnpoq5Lgg1KNipFo230mU6dsxAGmWD8OVP8eRL1KLWMBD5dNjMoZHdV7NxI=
+X-Gm-Gg: Acq92OGEosM+95THK/D4yoU2jzL8yNHBlu23jQlaJT92CdYapwWak/FrDJEx6u8HjxE
+ fEXcdCDCnvXb604Q8lNKKDfvPhMXYMtvA8qDe92j1mH6oxJVpe+yns8g+3eC4PPGwnvnNeFlOlt
+ hR7H82+vYKFbJpr8xE6GVOGJ8E1T/UwmVliukUBLCLm7Dzi69pHPQR2zBRTA1oUijClBj0qvrL/
+ dzG6U1q9Z5Tv0ySpC0d6safs0htGiKpJXfka2vYR1EHsznBpS11PQor+lwgEct0gbK2uGVPbuNO
+ bUsPhm7FDq2Ps1urPlLu5pMnOWLspVI7Z+PfMezqeqhUMKWxGbtHsWWB6Na/puAvKnP/buhxlzr
+ cjYk5cqiqptUXXGAJGyjedzHr/hbMRyTeNqczQjHgpa7jNY7JFH8vPmnPxnE3dzU3fHA7dJVDOF
+ uDns22072LNsFJu1ugu+06gUp467nK+xtU/BYRqFt7NHudEJwqOK3qf48=
+X-Received: by 2002:a05:6000:1845:b0:44a:47a4:ce91 with SMTP id
+ ffacd0b85a97d-45e5c58d4b5mr5506411f8f.25.1778852043471; 
+ Fri, 15 May 2026 06:34:03 -0700 (PDT)
 Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-48fe537c788sm60358325e9.12.2026.05.15.06.34.04
+ ffacd0b85a97d-45d9e768c4fsm14950353f8f.8.2026.05.15.06.34.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 06:34:04 -0700 (PDT)
+ Fri, 15 May 2026 06:34:02 -0700 (PDT)
 To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 15 May 2026 15:34:03 +0200
-Message-ID: <20260515133403.316116-1-thomas.perale@mind.be>
+Date: Fri, 15 May 2026 15:34:02 +0200
+Message-ID: <20260515133402.316064-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260425121200.810180-1-fiona.klute@gmx.de>
-References: <20260425121200.810180-1-fiona.klute@gmx.de>
+In-Reply-To: <20260425101513.784747-1-fiona.klute@gmx.de>
+References: <20260425101513.784747-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1778852044; x=1779456844; darn=buildroot.org;
+ d=mind.be; s=google; t=1778852043; x=1779456843; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=DAW42+7cM38fhpPJ6Zz6ydtIs+hgjQRnQhljYmbAZKk=;
- b=M5kndWaHqejsOsRs5fS0cICl8PPqValzIwR/6JZHEN0ru0TxQeFwJUZzPotZ/ffqcG
- HoHeOQ+mRNi1vV6hXiuc3/9RYUZSAob2wqNBxd12FB3yNW6xD3GSKD3x0YRM9bEwexId
- JmoNXHPXtgCBxa1Ie7HADbw8aHOAWRLNnmsO3H16pGaIh0tfDWtcOhO/NIunlHAvU6VE
- s1uup+uZr7dO6Ifj3bMipWWirOllyojWn+s3kO72vsAUSiv1qqKr82CDIAvzO7+y5Gyu
- 10tA1wKfRwadUK+ZtfsM3EbhDGAIjefFHUkRSzCWBZ6bnKcp5b3pNMeesfP8+NQ1qMTj
- ns4g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=nIKItXzQSqc2zwnBw95knF+K+HCaBTKRZ3etV5Nqpfc=;
+ b=Rrp3/ZmvdBD/q2newB7CMEy/sKr/17jxyklpBBC54dbpjfnd32jqVWEtXpKJ/PdzIz
+ 04wScLdR6Vgv1Wi9/hKCcq13Tw/6c1LiYVSMb92zQORN8c3xiH6Ug8REymIJnRETD4gz
+ aK8QoqC0a63sN6wszKYu5YHIxQox1E8spMqV3aCTmJxPz90SVhXi9rKJPfeGD9IJVyyb
+ AgGdeMrYufISrX1SOL5S847zgDNqXksS9LvtEMUFp6VCbh+ebghQUBgC/jQd4EFH4hnH
+ lbHbNVsOU0HOZ3EO6EZ/byeesozj6F+V0AQAU2coRTHvuxpYY/EkvrGrLRGe7cZ4QOeI
+ jCVw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=M5kndWaH
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3/Config.in.host: remove
- select on BR2_PACKAGE_HOST_OPENSSL
+ header.a=rsa-sha256 header.s=google header.b=Rrp3/Zmv
+Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: drop obsolete
+ dependency on host-intltool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,30 +132,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> There is no such option, and according to the commit history never
-> was. If BR2_PACKAGE_HOST_PYTHON3_SSL=y the build adds host-openssl to
-> HOST_PYTHON3_DEPENDENCIES directly.
+> NetworkManager stopped requiring intltool with 1.40:
+> https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/56b51b98fbb8627c4c09a483702e18fd8aee7ce1/NEWS#L434
+> 
+> host-gettext is already an indirect dependency via package/libglib2.
 > 
 > Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/python3/Config.in.host | 1 -
+> I hope Marcus' series to update NM to 1.56.0 [1] can be merged soon,
+> but this patch applies either way.
+> 
+> [1] https://patchwork.ozlabs.org/project/buildroot/list/?series=492286
+> 
+>  package/network-manager/network-manager.mk | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
-> index f3fcd63567..28fc0dbaf8 100644
-> --- a/package/python3/Config.in.host
-> +++ b/package/python3/Config.in.host
-> @@ -24,7 +24,6 @@ config BR2_PACKAGE_HOST_PYTHON3_CURSES
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 76f4b09fbe..763caa6754 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -16,7 +16,6 @@ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+>  NETWORK_MANAGER_SELINUX_MODULES = networkmanager
 >  
->  config BR2_PACKAGE_HOST_PYTHON3_SSL
->  	bool "ssl"
-> -	select BR2_PACKAGE_HOST_OPENSSL
->  	help
->  	  _ssl module for host Python3.
->  
+>  NETWORK_MANAGER_DEPENDENCIES = \
+> -	host-intltool \
+>  	host-libxslt \
+>  	host-pkgconf \
+>  	dbus \
 > -- 
 > 2.53.0
 > 
