@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 629B4CD343F
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 667B6CD4F25
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 17:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D72D813DC;
-	Fri, 15 May 2026 17:47:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F37F48053D;
+	Fri, 15 May 2026 17:47:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UOQyVqCVP7BE; Fri, 15 May 2026 17:47:37 +0000 (UTC)
+ id hEmebFASwiJU; Fri, 15 May 2026 17:47:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 712D981343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE23814DB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778867257;
-	bh=19kmpUt9HSaDMwdNDLeSBpVR0xIedokBPNwSfda2wv8=;
+	s=default; t=1778867259;
+	bh=ITA4RRdqVcI0Ucuk1oR6t5Ha8DmEJHTA1i2rN/kfB6Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=osQ8Tkwi3iuWY3XCCIJh7sw+Vuu+qfJgy3KxQJkW57sLaFosZBnVF40D+EwUSVgK1
-	 /pOxseL3YB7yW/QyloZC2/8PsLXNthRqmRdHRWXs3ImfYjPe7hRNyHDvxUFM8c1fKY
-	 GQmRmXEvyoDHG469EP21f8+EYqkQIyGvlh0/IOjbIJSHGuO1dTk92emaGq94O6FGFS
-	 5kxgYwV5imqq1wuhA84hgMP+jr1DHETCscpiQt2gIwxvwkkwYL1XFkWI5uBh0Z9zL9
-	 0fRkndZ3ngT4ooQigoGC8eUyvVa1pab/xbZ+0wNtkgg8mRkUo49uuN5Q2OVDy41Fgc
-	 GYAqvepSadJrA==
+	b=DcEHCs5iC1zNifPzCSIUPPfpGhsfjUj4EyWT5HngZ5V0WTt1cwRlsknBQFxLuLIIL
+	 0MUlRhgHpdBOmNQjL+PdqgRGIJosuuBcKQZnyh6yXzz9gjUctD5pe9OlqzteS8QA6l
+	 EfHdDOUmr1IQ+caHHNiC7Wy7YssQrGXPEtOzDWfe2C//PC/4X0zaSmLvVquGXoAniD
+	 BTA8VWm6+TT4uEtsrnsP95l/4SecjcBVRsDl0iOXXOToCb+YVOTBJtmZwZaDaKvTem
+	 RbT4MuA+7ropeBSK7ok1OnyxRIrP9jBZHNNPpEVQyIfbkm0eerSjBcsbnDDHv+ZDXx
+	 4v+/ibQv2GPJQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 712D981343;
-	Fri, 15 May 2026 17:47:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EE23814DB;
+	Fri, 15 May 2026 17:47:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AAFDD23F
- for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BB46545B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9206540FAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB6BD40FA4
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfV26DH4awWS for <buildroot@buildroot.org>;
+ id 39cqdJcXomUo for <buildroot@buildroot.org>;
  Fri, 15 May 2026 17:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2F8140FA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75ED040FA9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2F8140FA4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75ED040FA9
  for <buildroot@buildroot.org>; Fri, 15 May 2026 17:46:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F12DD863D7; Fri, 15 May 2026 17:46:39 +0000 (UTC)
+ id A70E786334; Fri, 15 May 2026 17:46:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 16:21:12 +0200
+Date: Fri, 15 May 2026 16:18:15 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 9a29752770cb72d5d5e1d5923cd285de07b4e99e
-X-Git-Newrev: 54a773003349512e986cc0c09e5889d10f936db8
+X-Git-Oldrev: ce4d425a53fa6a0e2980deaf8abe181820817fb1
+X-Git-Newrev: c7e20789e8e302de7b0bff3f670032fcb21370c5
 X-Patchwork-Hint: ignore
-Message-Id: <20260515174639.F12DD863D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x]
- support/scripts/pkg-stats: search only Config.in{, .host} for URL
+Message-Id: <20260515174639.A70E786334@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/openssh:
+ explicitly configure PID file directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/54a773003349512e986cc0c09e5889d10f936db8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c7e20789e8e302de7b0bff3f670032fcb21370c5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The previous Config.* glob also caught linux/Config.ext.in and
-package/php/Config.ext, as well as some backup files created by
-editors (e.g. Config.in~ after editing a Config.in file in Emacs),
-leading to wrong results depending on directory listing order.
+OpenSSH checks during ./configure if the default location /var/run
+exists on the build host, and defaults to ${sysconfdir} (/etc/ssh in
+Buildroot) if not. This can break e.g. in a sandbox with its own mount
+namespace where there is no reason to create a /var.
 
-Also use "with" to automatically close the file when the block is
-left, even on error.
+On the target this leads to errors when starting/stopping the service
+from the init script, which expects the PID file at /var/run/sshd.pid if
+sshd is running. A "stop" (including as part of "restart") or "reload"
+will always fail with
+
+    no /usr/sbin/sshd found; none killed
+
+from start-stop-daemon, even though sshd is running (because the PID
+file doesn't exist where start-stop-daemon tries to read it).
+
+On the other hand, a "start" command will try to start sshd even if it
+is already running, because it cannot detect the running instance.
+Unfortunately sshd does not fail directly in that situation (so the init
+script completes), but something like the following appears in the log:
+
+    [May 04 14:48:05] auth sshd[4592]: error: Bind to port 22 on 0.0.0.0
+    failed: Address in use.
+    [May 04 14:48:05] auth sshd[4592]: error: Bind to port 22 on :: failed:
+    Address in use.
+    [May 04 14:48:05] auth sshd[4592]: fatal: Cannot bind any address.
+
+Explicitly setting --with-pid-dir=/var/run overrides either default,
+and only logs a warning if /var/run does not exist.
+
+[1] https://github.com/openssh/openssh-portable/blob/5fa60ae0d2ed3fc441f54c9349afbd63b6301929/configure.ac#L5568-L5576
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 77a464969c77f7c2a4feb9ec2d2ec3814c2dcb4e)
+[Marcus: expand commit message after discussion on ML]
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit c09bec68f14f39e99b40eda89e538a6f4075fe98)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/pkg-stats | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ package/openssh/openssh.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 55aa63c861..efb85a7405 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -148,17 +148,17 @@ class Package:
-         Fills in the .url field
-         """
-         self.status['url'] = ("warning", "no Config.in")
--        for filename in os.listdir(self.pkgdir):
--            if fnmatch.fnmatch(filename, 'Config.*'):
--                fp = open(os.path.join(self.pkgdir, filename), "r")
--                for config_line in fp:
--                    if URL_RE.match(config_line):
--                        self.url = config_line.strip()
--                        self.status['url'] = ("ok", "found")
--                        fp.close()
--                        return
--                self.status['url'] = ("error", "missing")
--                fp.close()
-+        for filename in ('Config.in', 'Config.in.host'):
-+            try:
-+                with open(os.path.join(self.pkgdir, filename), "r") as fp:
-+                    for config_line in fp:
-+                        if URL_RE.match(config_line):
-+                            self.url = config_line.strip()
-+                            self.status['url'] = ("ok", "found")
-+                            return
-+                    self.status['url'] = ("error", "missing")
-+            except FileNotFoundError:
-+                continue
- 
-     @property
-     def patch_count(self):
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index bcbfc39755..3ba7a41cc7 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -20,6 +20,7 @@ OPENSSH_CONF_ENV = \
+ OPENSSH_CPE_ID_VENDOR = openbsd
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
++	--with-pid-dir=/var/run \
+ 	--with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+ 	$(if $(BR2_PACKAGE_OPENSSH_SANDBOX),--with-sandbox,--without-sandbox) \
+ 	--disable-lastlog \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
