@@ -4,117 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C100CD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 14:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF02DCD343F
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 14:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D693413E4;
-	Fri, 15 May 2026 14:13:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8853D41B40;
+	Fri, 15 May 2026 14:13:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAGsh0z8LSLW; Fri, 15 May 2026 14:13:39 +0000 (UTC)
+ id lKC5i4wCOXhA; Fri, 15 May 2026 14:13:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A06413E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82FB94170A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778854419;
-	bh=v03dZvHLhQlfHu5CJl2xXPQGhFOwPA9hemGsaAbkfv8=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=Aorc7gsWCnh03kkQHua0vkruhmYi+gF38pRJakT5imWVWOQYtdYu8ccBwXlsArEOi
-	 vVyDmsQce/z7ae19l11B+Ol+QjonsDfNw7YvSDYmJ4yXDpNdL5c0lMHKDp9A+tcU/0
-	 AG+jIZmKIqxkNLSc2iMiwW9DmSyboLjlqb8ohxyRXxFFvryoQeiJRz1ceOjvSy+koY
-	 0bM/mvtuXEg8xN3zFaVgiGw1n+0RqPuKjQQnn0gxSxH2eZLpZmG6SL9bz/ePV7Umn6
-	 DbsvYm3D6r9JDmBQO8xwkHkkfeWZ+o7wtMbSJ2g4yg7CSkxNzqqCNJfEf4WmReyVzE
-	 tXlOh4GIxl/Kg==
+	s=default; t=1778854434;
+	bh=ZjkagdwvWBu4RtLPH4aB32H00ufIQG8EamxCeU13oHk=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=aUkdXvanAFyhOal3NZHl2mdBW0aGjitimd/GHexrYft627TQYYPj9VnSgWJ/OLm7L
+	 XJXpgNmQnHGy8YBPEmDsQTNOtvuDpfXv5GVNuCgjlFJTK+F3k0yAIZS7TnFr8F2gjD
+	 IkljfLL77SW1VWRFKwsoNt5tYZWHd60GrqBNi5duxygkx15ju0dn2NMSI5QUcsi+xX
+	 b/NeoTWpaUDoQfmeksQmkMuDMUUeU9ML49iF8tuSloUNSEAqflxJz1tVokUt52Ob9E
+	 scIxgVL1hDs7Pv9WxeJSxVs4JuTXq2VdWPI4XuGcsAt1mX3AK/5W+/ruxeHqqyIuG2
+	 RCggqtHEJDXaA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79A06413E7;
-	Fri, 15 May 2026 14:13:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6890836E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82FB94170A;
+	Fri, 15 May 2026 14:13:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E8D7E7
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59BE940E49
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33F556126B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IatoBXtzaFOl for <buildroot@buildroot.org>;
- Fri, 15 May 2026 14:13:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ex5oxzeqCiy3 for <buildroot@buildroot.org>;
+ Fri, 15 May 2026 14:13:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 486D440E24
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 486D440E24
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 486D440E24
- for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:37 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-452169ae568so7135451f8f.3
- for <buildroot@buildroot.org>; Fri, 15 May 2026 07:13:37 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B27D607AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B27D607AA
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B27D607AA
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 14:13:51 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-453903ee4adso7955622f8f.3
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 07:13:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778854415; x=1779459215;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IjM9ieRZsv9pChPdA9eayrVOiRzGI/pg3yU/m+8Hyfo=;
- b=jDWZx0ILg8mmIUVBm/BJM62eoSpmmpF1KxY09COKs0N+ZQP0YXzRJOPz40ti/fnEZW
- y6gYv1weT5ZAh8tuRnNO/bqWuS/J6Np4m6e/PJFgw5BktZHCRvm3+B1u07UTnK2kTUI6
- zhr1ZJdUAN5YhORzpCdO+ZTos3ml6e2uC6NkG2KpVsdyyoz5Rz6Zt375Io4oWGHDbcQ3
- dyLQDnJSuZshOGssQPKJYoQQmuNJxamP2TTjp092DZAW/X9ZbXS2XXSgGGtdrvtd/23q
- wpKQMbEw6n1i8fWG5KHE//NeYKzDGyY8idVvT/xzaWpixFMupXsC917vw6FbaJA7YZFK
- /kIg==
-X-Forwarded-Encrypted: i=1;
- AFNElJ/gkMKI5csMdDcEGTRNlZk64ntZv7sSirWE++wJlNPCUBcSvOp3fUnWFiSS+UJ3ZThAoxw4kAVOtgo=@buildroot.org
-X-Gm-Message-State: AOJu0Yw8CMiwQdCxMIgrCstR9iiIPeCf6iPR5AnPBCxhxHZ5xbVvxJtt
- 9Lyuz8qlD62BQSpTrd2EXJ9QYyrIHDeKFl+Ox3rlNSeJhxTRn7FYvNQWvnc0LLMBFajWPQKVj/m
- cTJ03QBQ=
-X-Gm-Gg: Acq92OF8v2PdFkh3my1PHJyj0y3uCcWBlHH6V14jSvitbnQ1cULyGGN4MdWicgHOziI
- F2yjpmrp+QwarrXElx8Vpn+HEjDVW5QrLUtVJimedwPcex1h/13EOtoKU8mRdNWeSSGRKGVtVlg
- 5KFr2IUdP9KoK8V7pjOOF783tF33qqxWnksY0y5nDGfCiWlF0ZBmxxCJuH3ZCkRa9HkvxhZxTvu
- Mb+cPv/7lFf7d2HsRZnJwUvI95ecrPW0PwB4qQE2CIw+KiG74m1f9zZyVrPHWCny/14MQkx0bd9
- L30Br8nrtYOTvo12GELSGYK3UZJQtH1LTVn+5qRmKcGBpXKtwUu3Ra9qJ17NQ+L2226JIPvjuri
- 4BsHzzdP8SYEVsZYMzHFATcvhNoY+3Oci0T6ji/oG0aWZZApCPj41vA1OLznZU+JWhs8rOWrvdE
- jXr///L/SCgUSx824Eh5iG+ix62jae8CMi9EL5IH9abSQCjY3qKcNZVikriL0+FSU7LN+nFhYt2
- YfZre8q32MrkQi15gIUrKHNkBebIIlflC5NzUPkNhuOjzXNTAfio5K4rAzOIxDJ6w==
-X-Received: by 2002:a05:6000:1862:b0:43d:7946:baee with SMTP id
- ffacd0b85a97d-45e5c5fd6cdmr5704619f8f.23.1778854414937; 
- Fri, 15 May 2026 07:13:34 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45d9ec3acf7sm15211880f8f.12.2026.05.15.07.13.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 15 May 2026 07:13:34 -0700 (PDT)
-Message-ID: <bbc73d85-0c71-4d83-82a1-5ca62a156b0d@smile.fr>
-Date: Fri, 15 May 2026 16:13:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20260511192527.3886468-1-giulio.benetti@benettiengineering.com>
-Content-Language: fr
-In-Reply-To: <20260511192527.3886468-1-giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1778854415; x=1779459215; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
+ d=1e100.net; s=20251104; t=1778854429; x=1779459229;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=IjM9ieRZsv9pChPdA9eayrVOiRzGI/pg3yU/m+8Hyfo=;
- b=3r6BGB1IyXzWXL+xRDoFIX7rc+JuYvZpVP3xKXmcsgS7IGcxjBJ6Xyc+hPFfEDnauG
- SQBodcMBUo+nSP5qB2f4PWJSptuu2VJnpMbdgc9xeA8Rq92pxzoxVnx/mb1nO9RBJMyg
- SxoR3Enim48PaaXFigtngJ0M5IEcXMFRXaAw0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=3r6BGB1I
-Subject: Re: [Buildroot] [PATCH] package/libblockdev: fix build failure due
- to missing dependency json-glib
+ bh=GjdwbhtWtk8EDIhhast86aViSsqMU5JKwlQXQNukYkA=;
+ b=JNimG/HatVHGM5tibmX58vxBzAOk9OsAtzE8V8iwaW/RYlKnsbAhsdlfrU67BhA2Ai
+ p87rhuEMmDxsaQav355IIAE45maF2vhDoXhPlw0zqygUQL1UWaSKLbr8CL1KYKsQgDy/
+ HXEsl0MXQ9sm0EKu4QOBaah4L1tH8PJxtzQ5TSeOSasj9nV42Eg3AzDsZb9+ATUXBHv0
+ krl3FGN+lUr2GlFKaQgdTvMwDrTNqggiIUAVyGVMcY0WwRn1th5jwfZuz6MEplG3fqlB
+ X0T7xfoWoSrrys5hfkOlZMAc3W6biZ+a2Y90Ic/xDYn4D1Qnl1yYm0eqaXvienhetd21
+ DVNQ==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ9xEHJHy46/tSvT1Suac4+6WDQBtmXQVGuBSBJm5qcN2tWVh/FAi3hiw6ofMML7y6NQAYNTjo3k39o=@buildroot.org
+X-Gm-Message-State: AOJu0YxvI/6sBFzTB0DhrH8VIAaPnh+IkzWsZ8SnY3sxBerW03mIZWeH
+ QR7KM8ZvdDJTqgfWX/abS8XgJA+K274UjzFQi9U+O/BmYXVMld8gw++NaUVeG7J+zd0=
+X-Gm-Gg: Acq92OEiSDNB0KQ1Fi0YU7YXjK/8Y0c7qpVfH4eTwkv6y7vYvGB5/AenO6LRGtWNu9D
+ VM+shTNUCE8uLy53l6WqvF5TAEc11gGc07iNy27AjTJzGdrfUxrcN3QboM77g/PFD9ryseRRxnM
+ +ivXQk78uj8SegW7iMSLYAGVpeArYcN/R9S7+t4m2fdnJCkWIiAZdMay9Zo91vAnSSrEJrSacKl
+ rM8OTtaKMRpjJquL4QAt/c4jF3y/bSG43WWaQTuM76y1Xr/VaJV58LjxJ1oN+UfON1mIu4okbAd
+ 2JvOHOKofa58bG80o84gvCRF68Up5kt/9UoSUKhSr6odNRdx5Hmd9DFbsBiL6XX5puDB8diTubi
+ OSFEF6wW+s45q+tHe3tZ9JjbKV4+jYr7rYrc/IA+dQaW0QHzu3PKpaauKuiGxOiVMf3yyJeR9Om
+ DfjnTfwHYMBdfYUUqDP2Q7M44rvO5DNJWiSOn8Km9Q6kq0qirzBnCHop0=
+X-Received: by 2002:a05:600c:6206:b0:489:5022:39a4 with SMTP id
+ 5b1f17b1804b1-48fe60e79fdmr61982065e9.9.1778854429576; 
+ Fri, 15 May 2026 07:13:49 -0700 (PDT)
+Received: from arch (94.105.117.13.dyn.edpnet.net. [94.105.117.13])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-48febe6b9efsm24697295e9.5.2026.05.15.07.13.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 15 May 2026 07:13:49 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 15 May 2026 16:13:48 +0200
+Message-ID: <20260515141348.350163-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <af17STLwSLfdAgT4@waldemar-brodkorb.de>
+References: <af17STLwSLfdAgT4@waldemar-brodkorb.de>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1778854429; x=1779459229; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GjdwbhtWtk8EDIhhast86aViSsqMU5JKwlQXQNukYkA=;
+ b=es1CsH9vhiMPCk3CMHb6MQ5mvMmSGRKo5B31iH3GRmf2+6caLj5hxKhQXk4gOot8KZ
+ THZTG6j3VH+jYA+1IJsx47pGTjzj+SxLSLrYxcUysYA+zKXiWQ3zirnRNs1wzO1E6jp5
+ RFl/++60vGuZkCT1fxhct6S02KtrM6dEGaZhstq5u5Nm8mJRi3Ji2+vsejXt4qq9BvCZ
+ +7DW1SbJGZkjXXVFf/jWH24WyHSwHeMpZPOIkTRCBlC4/Cv0Z48pj/Qls97Qx04qtl2I
+ +NHpaYts+TlSPWRHZ/B3pUcZ22BkQzjXnI6hRgAjqAnonPKJHt1bwjDZCmoGWLG8I1PG
+ NUIA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=es1CsH9v
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/libxmlsec1: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,42 +123,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gR2l1bGlvLCBBbGwsCgpMZSAxMS8wNS8yMDI2IMOgIDIxOjI1LCBHaXVsaW8gQmVuZXR0
-aSBhIMOpY3JpdMKgOgo+IFdoZW4gQlIyX1BBQ0tBR0VfTElCQkxPQ0tERVZfTFZNMiBpcyBlbmFi
-bGVkIGl0IHJlcXVpcmVzIHBhY2thZ2UKPiBqc29uLWdsaWIgdG8gYmUgZW5hYmxlZCBzdGFydGlu
-ZyBmcm9tIGxpYmJsb2NrZGV2IHZlcnNpb24gMy41LjAKPiBzbyBsZXQncyBlbmFibGUgaXQgYWNj
-b3JkaW5nbHkuCj4gCj4gRml4ZXM6Cj4gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9y
-ZXN1bHRzL2ZjZWI2NGJiN2ZjZmNlZDYxZWY5MDBiNTgwYjQ1ODEzNWJhYTM3MTMvCj4gCj4gU2ln
-bmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVl
-cmluZy5jb20+CgpJIGFkZGVkIHRoZSBjb21taXQgaGFzaCBpbnRyb2R1Y2luZyB0aGUgYnVpbGQg
-aXNzdWUuCgpBcHBsaWVkIHRvIG1hc3Rlci4gVGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4K
-Cj4gLS0tCj4gIHBhY2thZ2UvbGliYmxvY2tkZXYvQ29uZmlnLmluICAgICAgfCAxICsKPiAgcGFj
-a2FnZS9saWJibG9ja2Rldi9saWJibG9ja2Rldi5tayB8IDIgKy0KPiAgMiBmaWxlcyBjaGFuZ2Vk
-LCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9saWJibG9ja2Rldi9Db25maWcuaW4gYi9wYWNrYWdlL2xpYmJsb2NrZGV2L0NvbmZpZy5pbgo+
-IGluZGV4IDA4ZDYxODk0NWIuLmU5ZTlmYWFhMDUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJi
-bG9ja2Rldi9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2xpYmJsb2NrZGV2L0NvbmZpZy5pbgo+
-IEBAIC00Nyw2ICs0Nyw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJCTE9DS0RFVl9MVk0yCj4g
-IAlib29sICJsdm0yIgo+ICAJZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIHBhcnRlZAo+
-ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF81ICMgcGFydGVkCj4gKwlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfSlNPTl9HTElCCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUEFSVEVE
-Cj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCWUFNTAo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0xW
-TTIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJibG9ja2Rldi9saWJibG9ja2Rldi5tayBiL3Bh
-Y2thZ2UvbGliYmxvY2tkZXYvbGliYmxvY2tkZXYubWsKPiBpbmRleCBlNWNiZTQ1YjkzLi44OWEz
-OThjNmU1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliYmxvY2tkZXYvbGliYmxvY2tkZXYubWsK
-PiArKysgYi9wYWNrYWdlL2xpYmJsb2NrZGV2L2xpYmJsb2NrZGV2Lm1rCj4gQEAgLTQ3LDcgKzQ3
-LDcgQEAgTElCQkxPQ0tERVZfQ09ORl9PUFRTICs9IC0td2l0aG91dC1sb29wCj4gIGVuZGlmCj4g
-IAo+ICBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQkJMT0NLREVWX0xWTTIpLHkpCj4gLUxJQkJMT0NL
-REVWX0RFUEVOREVOQ0lFUyArPSBsaWJ5YW1sIGx2bTIgcGFydGVkCj4gK0xJQkJMT0NLREVWX0RF
-UEVOREVOQ0lFUyArPSBqc29uLWdsaWIgbGlieWFtbCBsdm0yIHBhcnRlZAo+ICBMSUJCTE9DS0RF
-Vl9DT05GX09QVFMgKz0gLS13aXRoLWx2bQo+ICBlbHNlCj4gIExJQkJMT0NLREVWX0NPTkZfT1BU
-UyArPSAtLXdpdGhvdXQtbHZtCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi,
+
+I added it to 2025.02.x.
+
+In reply of:
+> Added from Buildroot master.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+> ---
+> Is there a better way to do it?
+> Do you want three cherry-picks from master to branch?
+
+I think this is fine, I would have still kept the description of the original
+commit. I wanted to add it myself but then forgot before commiting.
+
+PERALE Thomas
+
+> ---
+>  package/Config.in                  |  1 +
+>  package/libxmlsec1/Config.in       | 12 +++++++++
+>  package/libxmlsec1/libxmlsec1.hash |  3 +++
+>  package/libxmlsec1/libxmlsec1.mk   | 42 ++++++++++++++++++++++++++++++
+>  4 files changed, 58 insertions(+)
+>  create mode 100644 package/libxmlsec1/Config.in
+>  create mode 100644 package/libxmlsec1/libxmlsec1.hash
+>  create mode 100644 package/libxmlsec1/libxmlsec1.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 38da39033b..64225c03c8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1910,6 +1910,7 @@ menu "JSON/XML"
+>  	source "package/libxmlb/Config.in"
+>  	source "package/libxmlpp/Config.in"
+>  	source "package/libxmlrpc/Config.in"
+> +	source "package/libxmlsec1/Config.in"
+>  	source "package/libxslt/Config.in"
+>  	source "package/libyaml/Config.in"
+>  	source "package/mxml/Config.in"
+> diff --git a/package/libxmlsec1/Config.in b/package/libxmlsec1/Config.in
+> new file mode 100644
+> index 0000000000..4a686853ae
+> --- /dev/null
+> +++ b/package/libxmlsec1/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_LIBXMLSEC1
+> +	bool "libxmlsec1"
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBXML2
+> +	help
+> +	  XMLSec library provides C based implementation for major XML
+> +	  Security standards:
+> +	    - XML Signature Syntax and Processing
+> +	    - XML Encryption Syntax and Processing
+> +
+> +	  https://www.aleksey.com/xmlsec/
+> +	  https://github.com/lsh123/xmlsec
+> diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
+> new file mode 100644
+> index 0000000000..9e0e67e732
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256  a631c8cd7a6b86e6adb9f5b935d45a9cf9768b3cb090d461e8eb9d043cf9b62f  xmlsec1-1.3.9.tar.gz
+> +sha256  d5e9388534256360c6a009d4f19ab2b8d6ec0aa7ff32a51e22d899ed7beb5c48  Copyright
+> diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
+> new file mode 100644
+> index 0000000000..29222bc16f
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# libxmlsec1
+> +#
+> +################################################################################
+> +
+> +LIBXMLSEC1_VERSION = 1.3.9
+> +LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
+> +LIBXMLSEC1_SITE = https://github.com/lsh123/xmlsec/releases/download/$(LIBXMLSEC1_VERSION)
+> +LIBXMLSEC1_LICENSE = MIT
+> +LIBXMLSEC1_LICENSE_FILES = Copyright
+> +LIBXMLSEC1_INSTALL_STAGING = YES
+> +LIBXMLSEC1_DEPENDENCIES = libxml2 openssl
+> +HOST_LIBXMLSEC1_DEPENDENCIES = host-libxml2 host-openssl
+> +LIBXMLSEC1_AUTORECONF = YES
+> +
+> +LIBXMLSEC1_CONF_OPTS = \
+> +	--enable-crypto-dl=no \
+> +	--with-openssl \
+> +	--without-gnutls \
+> +	--without-gcrypt \
+> +	--without-nss \
+> +	--disable-des
+> +
+> +HOST_LIBXMLSEC1_CONF_OPTS = \
+> +	--enable-crypto-dl=no \
+> +	--with-openssl \
+> +	--without-gnutls \
+> +	--without-gcrypt \
+> +	--without-nss \
+> +	--without-libxslt \
+> +	--disable-des
+> +
+> +ifeq ($(BR2_PACKAGE_LIBXSLT),y)
+> +LIBXMLSEC1_DEPENDENCIES += libxslt
+> +LIBXMLSEC1_CONF_OPTS += --with-libxslt
+> +else
+> +LIBXMLSEC1_CONF_OPTS += --without-libxslt
+> +endif
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
