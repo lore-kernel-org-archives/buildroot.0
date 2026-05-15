@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9809CCD4F25
-	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4903ECD4F3D
+	for <buildroot@archiver.kernel.org>; Fri, 15 May 2026 09:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CC0861503;
-	Fri, 15 May 2026 09:56:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 24I3bLno2arv; Fri, 15 May 2026 09:56:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C3316150E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778839007;
-	bh=oKCcZgmscYZlIedR3zarDJykOsziwGgieOGuuP/5bq8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=P6KL0AvBCQKzzAOmtzZvkzPnslw+5Iz6hE1PM94C6pGH6eAr1+uVcZZYcxQGckgyw
-	 rWH0GIGrIiB00Szok1h8ZwqzA+DUnKkggmZvWnAaV3e4C38Pqj9mK1reMV95Elb5cc
-	 tB6TKT2BwWeHprAJ3tH2eOVetdWm8o1BMawujar5gOsGE5luBVsnDP4c8/5I8SPc1D
-	 b7JXRfirccbaPsVWS1Bmw28muIC9jUN1C5GXSvcTFZs4s6Pl999pBtawSRA01gEPhz
-	 Ku03Z3rYfsVke6eCKyESXDsKNjen9Lhaedl4d1/SKjOAHlN5DNZEr6Y32DD7Qe42k6
-	 4PZ00LhkQ4/BQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C3316150E;
-	Fri, 15 May 2026 09:56:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3428D36E
- for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 298A183E8A
- for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8244084184;
+	Fri, 15 May 2026 09:56:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fYvsW85uyKkL for <buildroot@buildroot.org>;
+ id LbGdVjMP406l; Fri, 15 May 2026 09:56:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98BD68416C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1778839008;
+	bh=KPkNgzBrxkhXWvak6mLS2dFG6wFmBPhfFns9z8kKPYU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kI9R2zBZj9JByiAfVNwFZ2YSXxGlhZA6hpfDYyI3QM8oJZmXqmeOB9TVdu8BFieDJ
+	 9LVABfbJ4LQ+pt+FhOy2csC6TBqj5U2/oW2YSXGAegvegRcbGiyvGfh/3gZwZYWgrE
+	 H0pMpXpb6aoUFX7F9tICrNIRFcYZy3HPF/Tk4p2bbJj5HVxzqWaWhPuZrHe/tvrfcV
+	 qSnO0SjYRxRnXAJbpeSHqkfa6YB/5eA/G9k/AG8CGxO1ssOQBDjx7IkCCjr70y9AMY
+	 la0cCah2aAP3Cboe3xottWEc3OmUvTn3/OVwqJXPjpf9rxS90mDox/kIuakt4rX8Dr
+	 VTclX0IGQuUXQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98BD68416C;
+	Fri, 15 May 2026 09:56:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A46B42B
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 369F24174D
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AjjBafkF1ixn for <buildroot@buildroot.org>;
  Fri, 15 May 2026 09:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 420A783E0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 855E94174E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 420A783E0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 855E94174E
  for <buildroot@buildroot.org>; Fri, 15 May 2026 09:56:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A63B98632D; Fri, 15 May 2026 09:56:33 +0000 (UTC)
+ id E9E1C8632B; Fri, 15 May 2026 09:56:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 15 May 2026 11:39:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b77485f2016908b14e4e6f9721801abcf57c2bf4
-X-Git-Newrev: c522110685426cd9dc8bf246998abfb7d8b7b86a
+X-Git-Oldrev: 372f0ea9cefceb2f56a5dfedf612631eea1f47bc
+X-Git-Newrev: 73594f1d0e53f5be9f2676d33524cedd857fbffe
 X-Patchwork-Hint: ignore
-Message-Id: <20260515095633.A63B98632D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libssh: bump version
- to 0.12.0
+Message-Id: <20260515095633.E9E1C8632B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcoap: bump version
+ to 4.3.5b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c522110685426cd9dc8bf246998abfb7d8b7b86a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/73594f1d0e53f5be9f2676d33524cedd857fbffe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://gitlab.com/libssh/libssh-mirror/-/tags/libssh-0.12.0
-https://www.libssh.org/2026/02/10/libssh-0-12-0-and-0-11-4-security-releases/
+https://github.com/obgm/libcoap/blob/v4.3.5b/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libssh/libssh.hash | 4 ++--
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libcoap/libcoap.hash | 2 +-
+ package/libcoap/libcoap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 5a103eb593..8c40dea2e5 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.11/libssh-0.11.4.tar.xz.asc
-+# https://www.libssh.org/files/0.12/libssh-0.12.0.tar.xz.asc
- # with key 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
--sha256  002ac320e3d66c9e100ec6576e3e84aa0c48949efde3bf5b40a2802992297701  libssh-0.11.4.tar.xz
-+sha256  1a6af424d8327e5eedef4e5fe7f5b924226dd617ac9f3de80f217d82a36a7121  libssh-0.12.0.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 56de66d6ea..017ff2c197 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 17fce990fa..0ca4fd3901 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  bca78a2076ebb02179f93ab6cf2363b1256d878b540f810c238ea231ad5948ab  libcoap-4.3.5a.tar.gz
++sha256  383a17d8466cee7c1cb1d4dfbffad2651004850b29eb590e9591c7bedd46741d  libcoap-4.3.5b.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+ sha256  1ba383ac337111d18334b2e230d02831b60913d137c3b653585d8e8675824111  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index bb1321f194..21b479fc16 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSSH_VERSION_MAJOR = 0.11
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
-+LIBSSH_VERSION_MAJOR = 0.12
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).0
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+-LIBCOAP_VERSION = 4.3.5a
++LIBCOAP_VERSION = 4.3.5b
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
