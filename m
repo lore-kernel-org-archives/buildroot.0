@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A483CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67416CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99735856D5;
-	Tue,  9 Jun 2026 13:02:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31035856E4;
+	Tue,  9 Jun 2026 13:02:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jcv2VirxPQJn; Tue,  9 Jun 2026 13:02:01 +0000 (UTC)
+ id TytZyasshUVR; Tue,  9 Jun 2026 13:02:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 534BE8569C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B41368569C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010121;
-	bh=1YiQUjHMQtZ+im0h2rBTumrmQz+gBKao1kl3vb/EwI4=;
+	s=default; t=1781010122;
+	bh=T4RLak0innUehoZ2O7yf8jHlo/5IFmsPDDX35Ua6VII=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DZdxCkoH3XO00xco2Hddq/fCW2u3KbNt7E5tywyn6Yv5TYO2f0O9S1FAYKQ0Q22xN
-	 8BkePDKdUZF6QAME/g10NC+DxPD5cLUsDzWYE2HwWKxg7k8qs18qAm4/jFaC08vmtC
-	 F3Z9vQfICI/TN/5GKGuBd26PeiJUICXfEfLngLNBo9H8cZ6Lge6qHgks7+kImlqLPb
-	 /Rx7m80RlwfIb5pVrevEhEN8w8c1hpldZDahka6MSvXlvFJ8XoS4ezfZgBoMUJapPA
-	 XBxzYzakewXhtStbOO0bADIACsSbq6XKlBSUVRdygRlqE5n9/RS1MaOmwCqby7tY53
-	 ZfST+Y8OymznA==
+	b=KS8DSkYWSTSXgIMC6L2dA5pdUNINOR4CCCq2RDi9HCGK7Z7WpLlFHIum+6aQrQpgG
+	 AxgfYQtelOZz00TElvM2tfuMPZ9y/A19gCpyXD+oTPWtvtgiHeuYbwldKhKK8oc/sw
+	 +UJ7U4zVG5DTOZHumniLZzjyrScVXJKZ3Z1VLiBtFvEceNPrKkuPNwWcfk5cDaju2i
+	 NAP5gxPyTBUYCbbNHRFz/OjyolgFayR2l9fBp/1ui2Jy0a60ESH0ZjxV/+7wBYTyrk
+	 h3ae2EdOpYP+LQYNXHgenZKLTECRahmmT92JFFo1PY6SqKkx0SO0V2bWaTXefKPxaP
+	 qDkbTCLjDWl3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 534BE8569C;
-	Tue,  9 Jun 2026 13:02:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D45B190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B41368569C;
+	Tue,  9 Jun 2026 13:02:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11CB5190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37C08855DA
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 004C442552
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IUFp_6P071LG for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ae7I7C4WmbNX for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED93E855BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F2FD423C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED93E855BD
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F2FD423C0
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80B9887E7E; Tue,  9 Jun 2026 13:01:13 +0000 (UTC)
+ id 6E7CD87E8D; Tue,  9 Jun 2026 13:01:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 15 May 2026 13:21:25 +0200
+Date: Fri, 15 May 2026 15:13:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a24698054b4cf6c994c91d49513bbe5e7b270201
-X-Git-Newrev: ab1de2ec7f6b6efb90cf84f1a56d5caa27ea7bc5
+X-Git-Oldrev: 2195c46d2d10c4254d328cd791f2455c08791ab2
+X-Git-Newrev: 40ceef27819a51263310fc1c81f7bbe3d4e2fab5
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130113.80B9887E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: add amdgpu-virtio config
+Message-Id: <20260609130115.6E7CD87E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gymnasium: add missing
+ toolchain dependencies for numpy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,92 +69,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ab1de2ec7f6b6efb90cf84f1a56d5caa27ea7bc5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/40ceef27819a51263310fc1c81f7bbe3d4e2fab5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Add a config section for host native context drivers, which currently
-use virtio-gpu as a backend to mediate access to the host kernel's DRM
-uAPI.
+python-gymnasium selects python-numpy, but does not inherit the toolchain
+requirements of numpy, which can lead to automatic selection of numpy
+without proper toolchain support (C++, gcc >= 9, glibc/musl).
 
-https://www.collabora.com/news-and-blog/blog/2025/01/15/the-state-of-gfx-virtualization-using-virglrenderer/
+Fix this by adding all necessary toolchain dependencies that numpy
+requires. Also update the help URL and add a comment explaining the
+toolchain requirements.
 
-Signed-off-by: Joseph Kogut <joseph@anodize.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d/Config.in | 19 +++++++++++++++++++
- package/mesa3d/mesa3d.mk |  6 ++++++
- 2 files changed, 25 insertions(+)
+ package/python-gymnasium/Config.in | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 8cdb548fb6..32d13bc747 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -253,6 +253,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	depends on BR2_USE_MMU # libdrm
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
- 	select BR2_PACKAGE_LIBDRM_AMDGPU
- 	select BR2_PACKAGE_LIBDRM_RADEON
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-@@ -345,6 +346,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
- 	select BR2_PACKAGE_LIBDRM_AMDGPU
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-+	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+diff --git a/package/python-gymnasium/Config.in b/package/python-gymnasium/Config.in
+index 19185f267c..b93fe6ccc8 100644
+--- a/package/python-gymnasium/Config.in
++++ b/package/python-gymnasium/Config.in
+@@ -1,11 +1,22 @@
+ config BR2_PACKAGE_PYTHON_GYMNASIUM
+ 	bool "python-gymnasium"
+-	select BR2_PACKAGE_PYTHON_CLOUDPICKLE # runtime
+-	select BR2_PACKAGE_PYTHON_FARAMA_NOTIFICATIONS # runtime
+-	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+-	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP  # python-numpy
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL  # python-numpy
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9  # python-numpy
++	depends on BR2_HOST_GCC_AT_LEAST_9  # host-python-numpy
++	select BR2_PACKAGE_PYTHON_CLOUDPICKLE  # runtime
++	select BR2_PACKAGE_PYTHON_FARAMA_NOTIFICATIONS  # runtime
++	select BR2_PACKAGE_PYTHON_NUMPY  # runtime
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS  # runtime
  	help
- 	  RADV is a userspace driver that implements the
-@@ -419,6 +421,23 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_VIRTIO
- 	help
- 	  Vulkan VirtIO (venus) driver.
+ 	  A standard API for reinforcement learning and a diverse set
+ 	  of reference environments (formerly Gym).
  
-+comment "Host native context drivers"
-+	depends on BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+-	  https://farama.org
++	  https://gymnasium.farama.org
 +
-+config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_AMDGPU
-+	bool "amdgpu-virtio"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
-+		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD
-+	help
-+	  Enable VirtIO support for AMDGPU native contexts
-+	  used by the radeonsi (OpenGL) and RADV (Vulkan) drivers.
-+
-+	  Select this when running Mesa inside a virtual machine
-+	  with virtio-gpu host native context support.
-+
-+config BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
-+	bool
-+
- if BR2_PACKAGE_MESA3D_DRIVER
- 
- comment "OpenGL API Support"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1eaa4c577e..34597966af 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -151,6 +151,12 @@ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_DEPENDENCIES += host-python-pycparser
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_DRIVER_AMDGPU),y)
-+MESA3D_CONF_OPTS += -Damdgpu-virtio=true
-+else
-+MESA3D_CONF_OPTS += -Damdgpu-virtio=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
- MESA3D_DEPENDENCIES += host-python-ply
- endif
++comment "python-gymnasium needs a glibc or musl toolchain w/ C++, gcc >= 9"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
++		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
