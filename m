@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F3F7CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92B21CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98C1F85754;
-	Tue,  9 Jun 2026 13:02:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78DBD85736;
+	Tue,  9 Jun 2026 13:02:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvtTgkyGTqhf; Tue,  9 Jun 2026 13:02:16 +0000 (UTC)
+ id 8NVJ-SdgDfVt; Tue,  9 Jun 2026 13:02:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AC058572A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58C4785733
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010136;
-	bh=Z0kLivdG5xFDLG2FEv3MRqmKBzNQUTfxywJ74qu/WJU=;
+	s=default; t=1781010139;
+	bh=yylxMyQvspPR2jGsnbRPN1HAXkwVUuV+NPgeqilkMYI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O1cCNnCxRijEBHmUBe4rerJMg8G1t7Z8YggFOw3GDl6p2kJ/rDR9Kba/AQtprGCiC
-	 KLtmJy4b2/mVTbK5Yuk8vhvypERCt1iU0liNIn10oYDYpxde5E2vxNCek1lfCVtK16
-	 RIav0Yie6AByJMkADGvEX0idZ+SRFLYc/C3bFXpOI6ZJu8sbjFOeFYiRlrT4MVQ0Sa
-	 mYW0Sh15ZbDV6yS0ksnHm4EBjqzopnu7eRcK9ZGxw/LYAM5BiAO1c7G2Kbt+td/iHI
-	 bjFSkCrdGp2ud8yrLEIR5guanKnWf8ZZ9PzBX4QaAuc14DFNQ1vWoJsSSJR+mBGNrk
-	 Wn6STA0tIClmQ==
+	b=AJRUqqd5xfHerHuOh1JosKa7qVnZ8vm/vqRvzB716bRMGAK7shkk5gfqJmlkf8bPK
+	 lnid6acUf0eYtyJbwzN3Z3pb2h8qpCzPTO+V4YfCli2K3bG7Yre4lrL+bbq5MYo8uW
+	 M1j+Z7IEJSuXXdCH9XuO8l9ImLtYNoWuiXkpv6rBYNvYs5XbDS09pCb0JnIl7dVOmR
+	 jGyLFrNBgTtKyTbOMKunoxkDCXogWa2cSrSl/1f8AneHXxcXudZPA56q9SCMvXSBb2
+	 WU0lwB1LOBcl+ITRZjog0nvGfGcM0ZNf7u7YYlqeT0lCMhjsvTzRFFZ64+X7PSlbZz
+	 on9hkoBdNqHKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AC058572A;
-	Tue,  9 Jun 2026 13:02:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 216A6324
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58C4785733;
+	Tue,  9 Jun 2026 13:02:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FCDA2EE
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 747836F690
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B0C1426F2
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O9iaJYmDQ2A8 for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uon3IxUwo5Hj for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 310A06F694
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5941442561
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 310A06F694
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5941442561
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F82287E7E; Tue,  9 Jun 2026 13:01:18 +0000 (UTC)
+ id 9319087E8E; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 May 2026 10:53:03 +0200
+Date: Sat, 16 May 2026 17:40:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d78ca8ad60e0988762f9b91e5102fae978c4de8
-X-Git-Newrev: c7fef3704c704e6337b4f8f6ff467c6c70991443
+X-Git-Oldrev: 4ed01e7ed30379b0c1167a2173361269184a3c5d
+X-Git-Newrev: b5124a6ab3c34e8fafe858239ca4f54fa4a457ff
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130118.5F82287E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: bump to 1.0.58
+Message-Id: <20260609130116.9319087E8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in.legacy: fix release where
+ BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL was removed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,101 +72,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2379351355234396690=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2379351355234396690==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c7fef3704c704e6337b4f8f6ff467c6c70991443
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b5124a6ab3c34e8fafe858239ca4f54fa4a457ff
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-New release with following changes:
+Commit 9a5369effd22011b52b82c91f702bacde690c41a which removed the
+BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL symbol but forgot to introduce the
+new "Legacy options removed in 2026.08" comment.
 
-Adam Lackorzynski (1):
-      termios.h: Add IBSHIFT
+So the legacy symbol was incorrectly placed under
+"Legacy options removed in 2026.05" comment.
 
-Charles Mirabile (11):
-      riscv: add defconfigs
-      riscv: add support for static pie binaries
-      riscv: add support for ucontext functions
-      pipe: directly invoke pipe2 from kernel when !UCLIBC_LINUX_SPECIFIC
-      Fix {g,s}ettimeofday when !UCLIBC_HAS_REALTIME
-      Fix build with static-pie but without nptl threads
-      do not remove bits/uClibc_ctype.h when !UCLIBC_HAS_CTYPE_TABLES
-      getopt-susv3: remove call to gettext `_` macro
-      readdir{,_r}: remove loop to skip files with d_ino == 0
-      spawn: allow file actions on no-mmu targets
-      getopt-susv3: add support for reseting the scan by setting optind to zero
+Fix that.
 
-Marcus Haehnel (1):
-      aarch64/fpu_control.h: Don't use gcc-internal types
-
-Jan Klötzke (1):
-      elf/dl-support.c: remove unnecessary memset
-
-Ramin Moussavi (9):
-      libsanitizer: arm/ucontext: fix VFP save/restore to use uc_regspace area
-      libsanitizer: arm/ucontext.h: add glibc-style REG_R0..REG_R15 aliases
-      libsanitizer: link.h/dl-iterate-phdr: expose dl_phdr_info TLS fields
-      libsanitizer: ldso: track _dl_load_adds/_dl_load_subs counters
-      libsanitizer: ldso: implement _dl_tls_get_addr_soft for dl_phdr_info::dlpi_tls_data
-      libsanitizer: drop __pagesize, make _dl_pagesize the single source of truth
-      libsanitizer: sys/user.h: remove obsolete BFD trad-core NBPG/UPAGES defines
-      libsanitizer: features.h: hard-wire _FILE_OFFSET_BITS=64 to match library's 64-bit off_t/ino_t
-      libsanitizer: fts.h: drop the bogus _FILE_OFFSET_BITS==64 #error
-
-Waldemar Brodkorb (7):
-      bits/statx.h: add some missing defines
-      bits/statx.h: sync struct with glibc
-      sys/fanotify.h: sync with musl
-      libiconv: fix typedef of iconv_t
-      misc: add unicode character functions (c11)
-      netinet/tcp.h: sync with glibc
-      bump version for 1.0.58 release
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reported-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index e0dba1b6b4..4c2a579ddf 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
--sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.58/uClibc-ng-1.0.58.tar.xz.sha256
-+sha256  9e8100a442f7079b9728ca286e3035f67df0578606166ea2d1ef865a4a12ddb9  uClibc-ng-1.0.58.tar.xz
- # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0c91a176fa..6f3668715b 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 90606ebd4b..8095991b25 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,7 +144,7 @@ endif
  
--UCLIBC_VERSION = 1.0.57
-+UCLIBC_VERSION = 1.0.58
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
-
---===============2379351355234396690==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ###############################################################################
+ 
+-comment "Legacy options removed in 2026.05"
++comment "Legacy options removed in 2026.08"
+ 
+ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
+ 	bool "qemu target microblazeel removed"
+@@ -154,6 +154,8 @@ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
+ 	  Version 11.0.0 of qemu folded microblazeel support into
+ 	  the microblaze target.
+ 
++comment "Legacy options removed in 2026.05"
++
+ config BR2_KERNEL_HEADERS_6_19
+ 	bool "kernel headers version 6.19.x are no longer supported"
+ 	select BR2_LEGACY
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2379351355234396690==--
