@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B84DCD343F
-	for <buildroot@archiver.kernel.org>; Sat, 16 May 2026 02:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95F93CD4F3D
+	for <buildroot@archiver.kernel.org>; Sat, 16 May 2026 02:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5152842088;
-	Sat, 16 May 2026 02:03:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5025184A6B;
+	Sat, 16 May 2026 02:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vRh-mBk4aTsO; Sat, 16 May 2026 02:03:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VDpTJD_HjVDS; Sat, 16 May 2026 02:03:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E67F42097
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D8BA84A73
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778897016;
-	bh=EZ3TBfglZlDRxOIbeg+7+I67p4yztFnqgE/skDGC164=;
+	s=default; t=1778897017;
+	bh=aoxTAyQJoZh4NbGCcC4HngCS4/PY6ahJpFK3MRZRZtQ=;
 	h=From:Date:References:In-Reply-To:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=hkbFYvVxetQD38vA5ElbQ9/MAj4dmyTR5vs4iToO6+Z3gOHvZox5XAIBjtC0EMqeO
-	 aCdza55PGpoTFrYQNsvnYTNaIdzNJ7tA5shrv7g6q5saSHMVbwKiajYpSTznM6ILW2
-	 olTVEPgMnUQilOYEHlidjNsNl66gZBryRBfrV82uzPE7dW2N+gcWk0PFfDa15qToP0
-	 AhzBnh/oBzGq/W0OsQj1EntP9NUaTrPw/pr8NihD45hFkhS8t9WjFK+3HbKvVIB9nr
-	 KL4uCC29GnAN5LLr5Yetq93IfDp3znXlCrWpNbKXfPRz/bpGgF7N5RP/b8CCPCo5XR
-	 vQJ2+fO0cWO0g==
+	b=FcEUa5BLYBxqJOOwx0chqBhKFJd2cH4UzRcAuS6sReP8aU9dzUfunBiakBe5Pc8cF
+	 OmvygM8oT7arGvXIQYdV81c9YfXLaSBaatWTEHpKAy/47MfM3WyHTMWtBC1VPsCOVs
+	 DwkIsL3bSTqLbPKyUqRyNP/5Yea8A2yyl5z+bwYxq8VNXIhy8Um4S0PCfStiNJxgz4
+	 naMKKtxhvsVxh49dVGNIU6Q/R+26F7dtB6LNjhM/bK7j6GoGjB3VbUm7be7hn44a6M
+	 KQBqkhLc/9DYTn0JgqgSSfJcLGPgsgsIxo0ZV4zLsEyGcnUN7MIRcP+b1egyZShAUA
+	 DNr1m2Br/41CA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E67F42097;
-	Sat, 16 May 2026 02:03:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D545F206
- for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D8BA84A73;
+	Sat, 16 May 2026 02:03:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B416045B
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAF0361B65
- for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A607A84A73
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FsH2VnffpLsI for <buildroot@buildroot.org>;
- Sat, 16 May 2026 02:03:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H2ZwZsVYUzfl for <buildroot@buildroot.org>;
+ Sat, 16 May 2026 02:03:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F242B61B5D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F242B61B5D
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F242B61B5D
- for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:32 +0000 (UTC)
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-2ba0714574fso2675315ad.2
- for <buildroot@buildroot.org>; Fri, 15 May 2026 19:03:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5DF5D84A68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DF5D84A68
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DF5D84A68
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 02:03:34 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-2bcd3ac3307so3031255ad.0
+ for <buildroot@buildroot.org>; Fri, 15 May 2026 19:03:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1778897012; x=1779501812;
+ d=1e100.net; s=20251104; t=1778897014; x=1779501814;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=2P9X5Pvg6FHzELmdGLTQnl30Qae+KdwHPQA3JLf48Aw=;
- b=G0MX3PjVi1nVYIuxD2L2TePZAEu15f8k481+N2VBtJq1V7pLv4selXfXAPwxlFOmvw
- ClsRjLf6Oa6rA7eVrVMJ2mGTuNMQ0MWsU61qSRjcf9+IbjpKmCVELA95vX3duJX6BEnt
- ekUy/P9LG0+z7DgvLeErbLn18jXiR7hYXpRUHzI3TJ0DkcxyO7L5uBUnAeskU5t87exz
- VSjHt3/IDmkIFzYPBiRBOAs+IJXA1vitQmrFWcklwbjB1pl0NJaBsSAE3aVfwK8hhpBe
- clfRYxpmhpYnmy6d1Y0Dw5IAVowFzv8kWAVhrTTJ7jTxoCqaOVu/I+JzMTija8lGSFT+
- rCDg==
-X-Gm-Message-State: AOJu0YwRYulx1EkIdt+XfFZM9rXkUuDfN8RP3A9tfx6/gGYvMmgY7SkV
- rjrH2v3ELW4y3dcmBhQcr/5XC0H0aKLvCfhXLKEoq+e9thNOTgFqZbMkPrPjZdGkDrA=
-X-Gm-Gg: Acq92OG/eXUAVdCEaLOU4wtrSlhoFonuxT2xGYPD2i3ZVZbHqxV0C7KlBA8+XNJ/90z
- DleHCEX/RCpRwWQkHtuoAs6CWHFghSKf07C2Q+EDJE+qApd0pVKjHaLQ4/utSb9+7gNFWkhUgs4
- P5smZEDqAK6yPOXCKFe7xIUJWh5jGgvEXTd2yGkowQ/zdF862fruyan21UYC1pj9B0/JRmUJhR5
- TVLCNgI1Wu0MRvNlJw34apFQ6RxYQJDLIq54UnsyPK6upLYUCVIrIqnC9dMJH74Dj9rTG5njm3H
- I/QRW6ScNd/nTQMosZ97fjWfX3QvRtNCThTQQU4HeqAXkOF3p7l8qdnwClIKqNJ2NZk+5xx95hq
- DvuTgWHqmCQcnS+dgOo8LNZ4YmpGOYmkpZtdcBGb0yQ7eTFRODNzTougF+y+csjY7IIspKXQTrn
- klBwMO7qrRita8FUbdWe1NMqE9
-X-Received: by 2002:a17:902:fc84:b0:2b2:eb9d:1648 with SMTP id
- d9443c01a7336-2bd7e9a02e3mr67218195ad.37.1778897012241; 
- Fri, 15 May 2026 19:03:32 -0700 (PDT)
+ bh=RWcLS3ess6IN8bwHy3bpI/dGbESuDeqa5EaA0hYHw/E=;
+ b=dzeMAf50pLT9VIB97VtMnOAj+foX55FwsoK4+VHAtKSLgnoGaXOu81buH725P9id0l
+ PMKB/rIAcJheVfxrPoitkSpv/wPve/7PHQ8iloTTMm68E6A2PAMsd7vIowVevKtFoEFp
+ Kd90VBCQ7dAT3T6J4hGQ2wFxAA6cRoJvRyJ9K/WJG79q1fcwYkNfKU9VGpIly5MBCEKE
+ ryIF7xCgtM7sQDUYQEYCw6RIyDl85EnwT8AFtrp5AJCOEQCE6vgjkL4cLPrtGQFcHEZI
+ WEzJegMXzg0GtOFdsd1yYwxYcrE7aODRWGfB0rhn7/Uw0Qlgy7AzzDAr3fD5IyJ5ik7H
+ tEyw==
+X-Gm-Message-State: AOJu0Yx5RxlR0i+xO8k4942txDNDLXxy4+O+Gi3guvhpFsc1jTHk64bV
+ MK1J7SUoY0GiEWyQU+mchpEdqssDlh/mLCXwZaoNzYGf43mAOPrTZ8qB
+X-Gm-Gg: Acq92OG2vfMPyTN9r5v8F0vrTBpfPb9zO107+ISV/M+sZurEj1xVoaxyUGTjUm9FjKg
+ VqVxHdiaQteLKrl57PSQ8VAnRM5e2sNanZjj6wtsVD1lRKKaYAT+cLioc9WARWiFdAHYu1btpx5
+ 6cOR9ar/+1kg/yrkjVtTCrMuF6RLLVN+GTxKRmIX6N6JqYAqpWvOHtk7oXFB5OH7Vwostxwft3I
+ Awm2DgWO859uWQ36g4nj/IfABkKDTRWkHVqUrEkhavpfuseqqOfGKElUkCWnRQzFtszGqRoxtDt
+ Eb0ZPa8O7ETZbl/0DfMd9CXwTivqld0Hu1BCp2ex2OjbM3Va3pX8IGe5f5JOZJtoza21UYQKnui
+ jS44U0ivt89Lpex/DOMPXrGr/gnctNDfO4zjVfQKvkUMeEuCMNGfY+fBpSjIPnl/fd156OrnFTD
+ pxfMLkkRQjmRr1hl3VN0Mt0BiVmxRrpUXRGzs=
+X-Received: by 2002:a17:902:768c:b0:2b4:5cea:f619 with SMTP id
+ d9443c01a7336-2bd7e97d3ffmr51120205ad.22.1778897013734; 
+ Fri, 15 May 2026 19:03:33 -0700 (PDT)
 Received: from wash-3.local ([50.120.90.9]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2bd5c16ac4asm68201375ad.33.2026.05.15.19.03.30
+ d9443c01a7336-2bd5c16ac4asm68201375ad.33.2026.05.15.19.03.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 May 2026 19:03:31 -0700 (PDT)
+ Fri, 15 May 2026 19:03:32 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Fri, 15 May 2026 19:03:16 -0700
+Date: Fri, 15 May 2026 19:03:17 -0700
 MIME-Version: 1.0
-Message-Id: <20260515-virglrenderer-v7-7-1f1814b65ccd@gmail.com>
+Message-Id: <20260515-virglrenderer-v7-8-1f1814b65ccd@gmail.com>
 References: <20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com>
 In-Reply-To: <20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com>
 To: buildroot@buildroot.org
@@ -95,33 +95,32 @@ Cc: Adrian Perez de Castro <aperez@igalia.com>,
  Raphael Pavlidis <raphael.pavlidis@gmail.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778897001; l=2147;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778897001; l=7926;
  i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
- bh=WorTG7Cn1mk88oB/qqsExm51CAY8PoiqL55jhFOujcU=;
- b=Mb8RULVgccVeJacBzd2lP12wzUFyqCLJ4Z4ndoH9nD5XxHDMbaG4QucUQFAMOs4zKINVhXLJ1
- ROxC0AQ1xPABuVoZtqMsiKxJMcgfuVvw8ywiDVKn9CoqqwKgrt/dllC
+ bh=NwTrcKQTRmJOMPzZw47EgnWjnqLOf0jdxBl47WVXREI=;
+ b=ZM4HF8U8ZrKL4JMfbhg6wbxAfy8EwogUFlBhEWzdGUP+Oo0pYlCeyaSqD4ZdesSz5qYY/Au/H
+ Q8VuWEBvO3gCIrAVpkV5Qm7v6iAI+eim0IMNQpv7DEzWgvUbtai8i+T
 X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
  pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1778897012; x=1779501812; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1778897014; x=1779501814; darn=buildroot.org;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2P9X5Pvg6FHzELmdGLTQnl30Qae+KdwHPQA3JLf48Aw=;
- b=jw9ORKR1hYclBKdfTYmZa/c013JG/JMmrQOVFsGuByTkMT9NRZQrRXaLMt4nm0ZeJg
- m/3/2tXep4T1GoP2W63y0WVr3b+3C9N0UqeEQ95NAx3c7DLOZI3eTJFUiR843cmuBUGY
- CoRwYtJQ2W5fhzgI+kT67xhX1Fq6oMqkHWB9I8qsZ4hgey6kI25Uvoh8Igzfb331FiRK
- 0b1DQMyfJ+ZlaqmSI4nm5o+hzeg6cF8GHdByQeDlwnPEWOhX5AkB95TsTn/KZsuZMU/9
- 1CoOouID2Bc48WELjfzMrDanZI3nkHx7QE0Z1UnfJUj060x7wYl+Zxj5amsovoAYkU6U
- +9Mw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=RWcLS3ess6IN8bwHy3bpI/dGbESuDeqa5EaA0hYHw/E=;
+ b=ZC6s8fvlURMFmoFIwRQTKNY4YiZCWA4jq8iDS7RqwgCKaJYa9QYHL+2jf9vrBUpG5x
+ vpzYLhlDkT0hbqfASGLnw2PHUcv0JCxetTT8yG0eSrvhMwCajrTETYbKp0TzXOUaZpDe
+ 1vN1bniU8GSOl/doGR/cJDfYELLuFOlwDoRhS5uKUAC5eeQwz078mUWlPM3hPZr/hF6r
+ MCOld6WwCyI7SbmcwG3qWUdE/c9l12uZNYxiqQbpug/N21fWkncn0Z6kIW8bM3v3tP87
+ rauVACnoLzrfV1rGg+xPhei7XWp63VeWHDgk+TmmoT+STpBgHiPAiByxB/p+EegLvYB/
+ bZmw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=jw9ORKR1
-Subject: [Buildroot] [PATCH v7 7/8] package/qemu: add virglrenderer
- integration
+ header.a=rsa-sha256 header.s=20251104 header.b=ZC6s8fvl
+Subject: [Buildroot] [PATCH v7 8/8] support/testing: add virglrenderer test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,67 +137,197 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add optional virglrenderer integration, along with enabling OpenGL when
-necessary.
+Add basic smoke test for glmark2 running in a nested qemu guest with
+virtio-gpu-gl-pci.
 
-https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
+The outer machine uses the Mesa softpipe driver for GLES support with
+minimal dependencies. Just test virgl for now, as lavapipe
+(software Vulkan driver) requires LLVM, and this validates
+virglrenderer.
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/qemu/Config.in | 21 +++++++++++++++++++++
- package/qemu/qemu.mk   |  7 +++++++
- 2 files changed, 28 insertions(+)
+ DEVELOPERS                                         |   1 +
+ .../testing/tests/package/test_virglrenderer.py    | 117 +++++++++++++++++++++
+ .../test_virglrenderer/linux-virgl.fragment        |   6 ++
+ .../test_virglrenderer/remove-qemu-blobs.sh        |  12 +++
+ .../rootfs-overlay/etc/profile.d/stty-raw.sh       |   3 +
+ 5 files changed, 139 insertions(+)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index d4e4e37a3e..dbae7c4de4 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -126,6 +126,27 @@ config BR2_PACKAGE_QEMU_OPENGL
- comment "OpenGL support needs an OpenGL and/or OpenGL EGL backend"
- 	depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 774eb0b746..0c0779e8b3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1766,6 +1766,7 @@ F:	package/sentry-cli/
+ F:	package/sentry-native/
+ F:	package/unclutter-xfixes/
+ F:	package/virglrenderer/
++F:	support/testing/tests/package/test_virglrenderer.py
  
-+config BR2_PACKAGE_QEMU_VIRGLRENDERER
-+	bool "Enable virglrenderer"
-+	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_QEMU_OPENGL
-+	select BR2_PACKAGE_VIRGLRENDERER
-+	help
-+	  Say 'y' to enable qemu support for virglrenderer.
-+	  virglrenderer backends such as virgl, venus, or DRM native
-+	  context are configured under the virglrenderer package.
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
+diff --git a/support/testing/tests/package/test_virglrenderer.py b/support/testing/tests/package/test_virglrenderer.py
+new file mode 100644
+index 0000000000..521a4b67cd
+--- /dev/null
++++ b/support/testing/tests/package/test_virglrenderer.py
+@@ -0,0 +1,117 @@
++import os
 +
-+	  Run qemu with `-device virtio-gpu-gl`
++import infra
++import infra.basetest
 +
-+	  https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
 +
-+comment "virglrenderer needs OpenGL accelerated display frontend support"
-+	depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
++class TestVirglrendererNestedQemu(infra.basetest.BRTest):
++    # We reuse the same initramfs-enabled kernel for the outer target and
++    # nested guest. This fragment adds initramfs and 9p support so the outer
++    # target can mount the runner's images directory and launch the same kernel
++    # under target-side QEMU. We also enable DRM_VGEM to create the necessary
++    # DRI device node, a requirement of qemu when using virgl.
++    kern_frag = \
++        infra.filepath("tests/package/test_virglrenderer/linux-virgl.fragment")
++    post_build = \
++        infra.filepath("tests/package/test_virglrenderer/remove-qemu-blobs.sh")
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_virglrenderer/rootfs-overlay")
 +
-+comment "virglrenderer needs virgl, venus, or a DRM backend for guest acceleration"
-+	depends on BR2_PACKAGE_QEMU_VIRGLRENDERER
-+	depends on !BR2_PACKAGE_VIRGLRENDERER_HAS_BACKEND
++    # Softpipe has no hardware dependencies and does not pull LLVM into the
++    # build, unlike llvmpipe/lavapipe.
++    config = \
++        f"""
++        BR2_x86_64=y
++        BR2_x86_nehalem=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
++        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{post_build}"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++        # BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
++        BR2_PACKAGE_GLMARK2=y
++        BR2_PACKAGE_LIBGLVND=y
++        BR2_PACKAGE_MESA3D=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
++        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
++        BR2_PACKAGE_MESA3D_OPENGL_ES=y
++        BR2_PACKAGE_QEMU=y
++        BR2_PACKAGE_QEMU_SYSTEM=y
++        # BR2_PACKAGE_QEMU_SYSTEM_KVM is not set
++        BR2_PACKAGE_QEMU_SYSTEM_TCG=y
++        BR2_PACKAGE_QEMU_CHOOSE_TARGETS=y
++        BR2_PACKAGE_QEMU_TARGET_X86_64=y
++        BR2_PACKAGE_QEMU_VIRGLRENDERER=y
++        BR2_TARGET_ROOTFS_INITRAMFS=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
- config BR2_PACKAGE_QEMU_FDT
- 	bool "Enable FDT"
- 	select BR2_PACKAGE_DTC
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index aff1762fb9..4f4786532c 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -279,6 +279,13 @@ else
- QEMU_OPTS += --disable-opengl
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_VIRGLRENDERER),y)
-+QEMU_OPTS += --enable-virglrenderer
-+QEMU_DEPENDENCIES += virglrenderer
-+else
-+QEMU_OPTS += --disable-virglrenderer
-+endif
++    def boot_outer(self):
++        kern = os.path.join(self.builddir, "images", "bzImage")
++        img_dir = os.path.join(self.builddir, "images")
++        virtfs_tag = "br-imgs"
++        virtfs_opts = [
++            f"local,path={img_dir}",
++            f"mount_tag={virtfs_tag}",
++            "security_model=mapped-xattr",
++            "readonly=on"
++        ]
++        self.emulator.boot(arch="x86_64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyS0"],
++                           options=["-cpu", "Nehalem",
++                                    "-m", "1536M",
++                                    "-smp", "4",
++                                    "-vga", "none",
++                                    "-virtfs", ",".join(virtfs_opts)])
++        self.emulator.login()
++        self.assertRunOk(f"mount -t 9p {virtfs_tag} /mnt/")
 +
- ifeq ($(BR2_STATIC_LIBS),y)
- QEMU_OPTS += --static
- endif
++    def boot_nested(self):
++        qemu_cmd = "env LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=softpipe"
++        qemu_cmd += " qemu-system-x86_64"
++        qemu_cmd += " -M q35,accel=tcg"
++        qemu_cmd += " -cpu Nehalem"
++        qemu_cmd += " -m 512M"
++        qemu_cmd += " -smp 4"
++        qemu_cmd += " -nodefaults"
++        qemu_cmd += " -display egl-headless,gl=on"
++        qemu_cmd += " -device virtio-gpu-gl-pci"
++        qemu_cmd += " -serial stdio"
++        qemu_cmd += " -kernel /mnt/bzImage"
++        qemu_cmd += " -append 'console=ttyS0 br-nested-virgl'"
++
++        # qemu runs in the foreground on the current serial console. Once it
++        # starts, the next login prompt belongs to the nested guest.
++        self.emulator.qemu.sendline(qemu_cmd)
++        self.emulator.login(timeout=180)
++
++    def test_run(self):
++        self.boot_outer()
++        self.assertRunOk("while [ ! -e /dev/dri/renderD128 ]; do sleep 1; done",
++                         timeout=30)
++
++        self.boot_nested()
++
++        out, ret = self.emulator.run("cat /proc/cmdline")
++        self.assertEqual(ret, 0)
++        self.assertIn("br-nested-virgl", out[0])
++
++        cmd = "env MESA_LOADER_DRIVER_OVERRIDE=virtio_gpu"
++        cmd += " glmark2-es2-drm --validate --off-screen"
++        cmd += " --benchmark build:use-vbo=false"
++        out, ret = self.emulator.run(cmd, timeout=60)
++        self.assertEqual(ret, 0)
++
++        renderer = "\n".join([line for line in out if "GL_RENDERER:" in line])
++        self.assertRegex(renderer, r"(?i)virgl")
++        self.assertRegex(renderer, r"(?i)softpipe")
+diff --git a/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment b/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment
+new file mode 100644
+index 0000000000..1023aedc6f
+--- /dev/null
++++ b/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment
+@@ -0,0 +1,6 @@
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_DRM_VGEM=y
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_9P_FS=y
++CONFIG_9P_FS_POSIX_ACL=y
+diff --git a/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh b/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh
+new file mode 100755
+index 0000000000..ff040aa96b
+--- /dev/null
++++ b/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++set -eu
++
++qemu_dir="${TARGET_DIR}/usr/share/qemu"
++
++find "${qemu_dir}" -type f \
++	! -name 'bios-256k.bin' \
++	! -name 'kvmvapic.bin' \
++	! -name 'linuxboot.bin' \
++	! -name 'linuxboot_dma.bin' \
++	-delete
+diff --git a/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh b/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh
+new file mode 100644
+index 0000000000..bc1857a910
+--- /dev/null
++++ b/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh
+@@ -0,0 +1,3 @@
++# Avoid double-cooking the nested serial console, otherwise the test
++# infrastructure cannot reliably retrieve return codes.
++grep -Fq br-nested-virgl /proc/cmdline && stty raw
 
 -- 
 2.54.0
