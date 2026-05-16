@@ -4,60 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E622CCD4F3C
-	for <buildroot@archiver.kernel.org>; Sat, 16 May 2026 15:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A46CDCD4F21
+	for <buildroot@archiver.kernel.org>; Sat, 16 May 2026 15:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C299485341;
-	Sat, 16 May 2026 15:41:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ECC685339;
+	Sat, 16 May 2026 15:41:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QG3CKsyR7Nqo; Sat, 16 May 2026 15:40:59 +0000 (UTC)
+ id yX-1Uovl2IlL; Sat, 16 May 2026 15:41:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50CE98533A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CDB885342
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778946059;
-	bh=ne1qVFvr48WelWMp3RN/ebcOjlCzDpvmr4zP11BOzf0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LTkFNcciEFY+YoNfgO4HWjI1DbpmnvgxWp+ieK/7WutTCW3PQ5uHH5lh4C3s30nXp
-	 bp/sPvo7AWF06yc7TtMayZuZUab/NFpQoNYcG6OoBOSALh3pKutMy0LIrADYfof8qs
-	 UF6WgJK8hkhvsqhIfTcbEVsgXRKYPGDplBrQqf1nwyTjA3PgSalQLdYJng3Ns1ZLxm
-	 H0wCKBXam4DsA/2zGXXKmtrJiEzI1KcoCs4eQLQ/QbqOEeR28zro2EbEjxM7NXJHRh
-	 3mHSIjZkJtoinDuC64uilBzOr21ggmlZzPK/KO9iW5TFMS8+bg+gzLoUppwiVoOx7d
-	 z7syJmi9+HzxA==
+	s=default; t=1778946071;
+	bh=wB9UZhWwowHLRJOZe8N95L2v5fwwmS6envak985O+0U=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=MlEjaKgt82t6tV1TQnCjRjpeHv4AbwwGVIvSbvF4v4y+PtzkAyaPPoPDbHUngTr2b
+	 XZDLmHtGFl+ggq53Sk2euK8wD8C/JnJYr++KMm117U8YkZ3WJkAqntgkEWM7spOWbU
+	 ipIc7IfpRlS1urb+kuvwguy77oUVJObRCTLz3Ske+8IGcxcDqTTcD3inpPq4mRqT/P
+	 Ln/ODmuFG7WPwSDgy5gntbeZxDlQdZ2kWJEhN25FyD+7eODL9A9q3LuHnDsN7oCweb
+	 Ii3yzqTWSYm8IHg0BtQQc0J/FIPkivure4O1GRUsrWbd1sV+jqOnjBI/6eUP1qcI1q
+	 db7/NfYoGb2ew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50CE98533A;
-	Sat, 16 May 2026 15:40:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9984D206
- for <buildroot@buildroot.org>; Sat, 16 May 2026 15:40:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CDB885342;
+	Sat, 16 May 2026 15:41:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3F74282
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 15:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F0996F649
- for <buildroot@buildroot.org>; Sat, 16 May 2026 15:40:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C59F56F649
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 15:41:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6aAbuLrcIV3r for <buildroot@buildroot.org>;
- Sat, 16 May 2026 15:40:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AC936F5DE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AC936F5DE
- for <buildroot@buildroot.org>; Sat, 16 May 2026 15:40:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2DDBB86447; Sat, 16 May 2026 15:40:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 16 May 2026 17:40:27 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4ed01e7ed30379b0c1167a2173361269184a3c5d
-X-Git-Newrev: b5124a6ab3c34e8fafe858239ca4f54fa4a457ff
-X-Patchwork-Hint: ignore
-Message-Id: <20260516154051.2DDBB86447@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in.legacy: fix release
- where BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL was removed
+ id Jw9bTq-wpF5i for <buildroot@buildroot.org>;
+ Sat, 16 May 2026 15:41:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 500826F5DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 500826F5DE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 500826F5DE
+ for <buildroot@buildroot.org>; Sat, 16 May 2026 15:41:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 00F3C780375;
+ Sat, 16 May 2026 17:41:03 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 16 May 2026 17:41:03 +0200
+MIME-Version: 1.0
+Date: Sat, 16 May 2026 17:41:03 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260515162105.2267034-1-romain.naour@smile.fr>
+References: <20260515162105.2267034-1-romain.naour@smile.fr>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <a2590e0cd06bcaed587c4bc5ded0690c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1778946065;
+ bh=vRY8F9xPA+fbJJB82V9ZvULawn5qb7jKRw8XyLbmaoE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=S4013jrYuS9vd1cHQYz/BBCHcT1rejQQ/CRboKtmMwDXWwOJ+ltt0u2DLrykLHx4Z
+ 7IyxyeVpRk6Mn3wYn4g8GXayozJzIYwIvDW25DjN3uOGmOjFgWeC3Hw3PLtPFsgzJA
+ wdL0Hm1waGeIBSavVNAbr0DUQ+/NHsj4XDkCNRgtF7mbq1gygZqKsIUogTCu6Amf8k
+ 2ZPqW3+peXVXxoXKLSWuID0WRGtGRZPDBbYdXCJNVfW0kdyEUCmPflwsMmyKzDp8Wp
+ Aue/GpA/Oagian6fN5UxnwVU+RLC9slF46lIpAQkMl9C3ni2/UQyQvNEAUHIYAw3Mw
+ 07MVbBzGX2EVw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=S4013jrY
+Subject: Re: [Buildroot] [for-next] Config.in.legacy: fix release where
+ BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL was removed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,53 +96,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b5124a6ab3c34e8fafe858239ca4f54fa4a457ff
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 15/05/2026 18:21, Romain Naour via buildroot wrote:
+> Commit 9a5369effd22011b52b82c91f702bacde690c41a which removed the
+> BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL symbol but forgot to introduce the
+> new "Legacy options removed in 2026.08" comment.
+> 
+> So the legacy symbol was incorrectly placed under
+> "Legacy options removed in 2026.05" comment.
+> 
+> Fix that.
+> 
+> Reported-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Commit 9a5369effd22011b52b82c91f702bacde690c41a which removed the
-BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL symbol but forgot to introduce the
-new "Legacy options removed in 2026.08" comment.
-
-So the legacy symbol was incorrectly placed under
-"Legacy options removed in 2026.05" comment.
-
-Fix that.
-
-Reported-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- Config.in.legacy | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 90606ebd4b..8095991b25 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,7 +144,7 @@ endif
- 
- ###############################################################################
- 
--comment "Legacy options removed in 2026.05"
-+comment "Legacy options removed in 2026.08"
- 
- config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
- 	bool "qemu target microblazeel removed"
-@@ -154,6 +154,8 @@ config BR2_PACKAGE_QEMU_TARGET_MICROBLAZEEL
- 	  Version 11.0.0 of qemu folded microblazeel support into
- 	  the microblaze target.
- 
-+comment "Legacy options removed in 2026.05"
-+
- config BR2_KERNEL_HEADERS_6_19
- 	bool "kernel headers version 6.19.x are no longer supported"
- 	select BR2_LEGACY
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
