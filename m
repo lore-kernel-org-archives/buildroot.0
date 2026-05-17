@@ -1,81 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA6FCD4F3D
-	for <buildroot@archiver.kernel.org>; Sun, 17 May 2026 20:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C981CD4F3C
+	for <buildroot@archiver.kernel.org>; Sun, 17 May 2026 20:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7F7884AB6;
-	Sun, 17 May 2026 20:38:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E01476F81F;
+	Sun, 17 May 2026 20:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qDUq331SVwV7; Sun, 17 May 2026 20:38:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vYLz0e7UMPnf; Sun, 17 May 2026 20:38:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C911E855F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D213C6F818
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779050305;
-	bh=6HRIiaclgiTKNLtehf3CrtBhNThkV1DQhwQ/ODnLFPM=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=O6LOI5zxvj65i4Xncz/6wu9Kj2jkVvv3/i9hjpUlFYx3hwsv4/Xg+4jmuXtYGn8zG
-	 KAP1fi8Iz+zxR36QBPFxZy3t9SN0Yo2R58QuPCoe6EmrADRYBSJnYV+L9gBPuTdKfa
-	 7hPngHejcLMjlVq3XCMHAVJQV0ASCf/DAsYqPVH3VgZiwgsHT7upHm1M+qvVBwb9yo
-	 58g2YKgenAw61Rhi0yIaWa2rwYqo8ti7rWYtZaMZfKwIQpRCo934pB8TlZoer9/NeN
-	 cPN2tnSFYcuxhoXmPb/GByoqDB1LtFCKiix+AFxhGPF2QDiQ5+clKF+h99D/q6GiQ6
-	 vRGveW0qwjntQ==
+	s=default; t=1779050311;
+	bh=e5+VlvzPgK1iUKH6JUvfu4ruTyB2LepC8Y+FdlkWlTA=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DBdW3EZrpoWptFiFEihKywfTgZC49dnn/DjQeJBMJ4pbF+yS9OVWRAs2sgDpqtRFU
+	 u9JirB+HAiZtfoX24xXI3bfJ+DlJjvWvu4QYCb5S+ag1ebJtrGhdCElIieH5vR7h0w
+	 usLxetP31gj99zclfKIa2UdEeoSjpCS7ttWP3wSx39qa59eRZL99373ZB3kiZIth2U
+	 SHf2Zxw25hIozu58RkNPFA6VqvPlwanVvNE8y1gjWBLtmnAVXJUA4U+NlvpJge0aLj
+	 kiwtgQNAHqwiUeXyuhHGOUv83YB6GiMc/Pq3oGg6Eimn4DXGHQhr//puOUNAP6eB7A
+	 4XSxV7Q+lJgOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C911E855F2;
-	Sun, 17 May 2026 20:38:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 67710265
- for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D213C6F818;
+	Sun, 17 May 2026 20:38:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94FCC390
+ for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D4C640095
- for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86C5C42315
+ for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dCW_F605BUXo for <buildroot@buildroot.org>;
- Sun, 17 May 2026 20:38:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p7EU3wJw7eav for <buildroot@buildroot.org>;
+ Sun, 17 May 2026 20:38:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
  helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 515DA42018
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 515DA42018
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7942641CD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7942641CD3
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 515DA42018
- for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7942641CD3
+ for <buildroot@buildroot.org>; Sun, 17 May 2026 20:38:28 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6A0E05FFA3;
- Sun, 17 May 2026 22:38:16 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9F8D86012D;
+ Sun, 17 May 2026 22:38:21 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Martin Bark <martin@barkynet.com>, Richard Braun <rbraun@sceen.net>,
  Julien Olivain <ju.o@free.fr>
-Date: Sun, 17 May 2026 22:38:05 +0200
-Message-ID: <20260517203806.375813-1-ju.o@free.fr>
+Date: Sun, 17 May 2026 22:38:06 +0200
+Message-ID: <20260517203806.375813-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260517203806.375813-1-ju.o@free.fr>
+References: <20260517203806.375813-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1779050300;
- bh=3OUrR5AUeK84IeNBZcEaQLGoW8nKhefFMgaJnHATSBo=;
- h=From:To:Cc:Subject:Date:From;
- b=i8Lj599aOmGG5bl15CWFzYpEnJloVFjmwUYFp87NG9lG5e5vABnziDSW7Hp5mb3Qr
- jv48CSdszbpJnC16EQTJErY0vp9JlcT2sXaNd39nCG4tc/d9AxAr09SlbqUxL14F4q
- mS6gqhsTYgPm0d2p5FEznTzpcQUNWaIwIDqgYyGqmR47I267KVIT/zdtueQfbFoY0t
- tWhz2OUo5z+J+zOqENalaUN+hPHY29RKjpjx0CrrRvuirkl1Y63AufwQZfkX91WszC
- EwnY2pJuT/2OB6uLTYv94g72AKb+tKSGq2uSUtoIpS8lHV9VFQPQqgrm8ZtCDysS26
- eLOtxb2XkFmIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1779050306;
+ bh=Zh3Z1Cc92/TYdsSMwJhB2BlhonTWBJ4v7bz6nlVWYqI=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=QWi28xL9YBCnPldTB9Eb8T+0K+sNiwgyQ1XEeHWJOi63lI7tMOOefXs+Ef+7dI0GN
+ AF/k2kfRXFOYSdIiOrRwHLXcyUNBu4f392zPhEOTBGQ+96Y6o74jo7QDNdI1pU5vLN
+ tPduJr4Mz7Li8lj90QS6I3avVRdgppph0E7+IbafGdwG7OH9JPiBoI1Wvf+cnuF1LY
+ lt5fBckmO0ZEqNaFZ03d/1QhoArgo43hB0zhd5cULkdN6J9MTK/v/y4wHgywAa45qT
+ DiT0WiRKX/O7bobrnBifcii8KcCsmq7xIBcVXHH6TNSI0GrPOOWH7i8wiE/d12zCsS
+ NnCR/RyaS9ybQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=i8Lj599a
-Subject: [Buildroot] [PATCH next 1/2] package/zic: bump to 2026b
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QWi28xL9
+Subject: [Buildroot] [PATCH next 2/2] package/tzdata: bump to 2026b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,34 +103,34 @@ https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTY
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 7fe7582f10..75242a306f 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index fcf7bffd24..4d4d410ce1 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
 @@ -1,4 +1,4 @@
 -# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
--sha512  d14bc0680b9cb33d6526a2c0e483f2abafc2593cfe5fbfe7dcab940aafdc1baaec065dbaa1bb58b03586a8631ffdf43ebb22ff5a70503298b6ea2cf061d82c16  tzcode2025c.tar.gz
+-sha512  1e33f7212fd0ae2ad3c16e68f0c1fc7a6ad26a126b8406c379a5768d79604c6a816054bd0fe3a63228d70cd6a1fc2b1bae2a9f8014e102d3727eb9d21affa1f1  tzdata2025c.tar.gz
 +# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTYZNBBKFFWM7ZCI6TVCXP/
-+sha512  55b44d52a83c9db151be32c3d78376ea7f9d4311ef15ed6fe34b855b08fc546531e51309d178d9c175a6d5d7d0b058440e45a55d200ca8925e3798dac9bc739f  tzcode2026b.tar.gz
++sha512  a44882258c0a7fbe587e8b73d6bb3cd5be7d4788976ea742adbbf176eb3b33e5bd7d1714b2fffe2972b1a42e7335eac39ed0bd63e819bb421550f8cae1df4f2f  tzdata2026b.tar.gz
  # Locally computed:
  sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 06d8ebaf15..43e74e64c8 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index a7b6dd8f65..71f8fc3ac1 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZIC_VERSION = 2025c
-+ZIC_VERSION = 2026b
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = https://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+-TZDATA_VERSION = 2025c
++TZDATA_VERSION = 2026b
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_SELINUX_MODULES = tzdata
 -- 
 2.54.0
 
