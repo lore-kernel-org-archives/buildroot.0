@@ -1,68 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1210CD4F24
-	for <buildroot@archiver.kernel.org>; Tue, 12 May 2026 14:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A36CD4F4A
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51F9540F6E;
-	Tue, 12 May 2026 14:17:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFCA6606A6;
+	Mon, 18 May 2026 18:11:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2wUXB-D-Exiv; Tue, 12 May 2026 14:17:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mvih5bgP8ELP; Mon, 18 May 2026 18:11:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E10F40E4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1F4A6069A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1778595435;
-	bh=8N81OzTG/VRRzlpwgNsa4eO8fcIQLHvZr2GsaSYcHgg=;
-	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=i8Agcw9bAKmIQZAFs0AsuIfzyxAoDBOk9D/DqUqDwQ3TAFbhuN0IQRx9P9o/mnE8V
-	 jARk947559VJXrcmzfEflSTtaY9kjLSmnaS9V2SO/0B4sLVZmcwX1hk2ciTJ0J6/8V
-	 lsyXUk9VJS6x8HpImJBt7b034Q4uDUyZ8GZuXfRpZaj6t6El4cxZFcRtTLEYBDBVNV
-	 pvnO2sNd9cwRM+rn2TkOP12FMZhR1xG5kJ2VrrlT0iX0W/Wcv90KujlmywZ69xkPUq
-	 oHOTbEFQcY5O5WydZRlTI5UKe6YUiSy7g0BGt+syNjzgEUfm5FB7vIkYoyNuvlTui8
-	 teHYwxcK9l1cQ==
+	s=default; t=1779127864;
+	bh=femvXSohB7fesVBq6CKJAR2A9u6RphMIOqkXdp/RQFs=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=MbwEuWm9f8Bf+D1Lp9RnbO6EW7K+s2BszPnjHZyf3+dVB6Z/QEaIrOEGvhIXmWsVL
+	 liEMkm/nNVusmVdbboAQK0ex22yISRpralrjtrW7PBtaoi2RqdYkxizwoQvWPKZT43
+	 OP9e/mPFa8AFFSixb2+Vb/wvtRPK5kqHOQzlz3WO6MZJRTaiIJk+4q8HrhxiqaVO0D
+	 0iPEFpl9QPt3L+oAL2lMj0CF6JfvcixmWZ+7mLzYI0LSaCBOn9g6H7MINYumRyGK3s
+	 iXENfsShrHgheJOPMaw+PbcRqMk1u5otLxPFyANZvMiWkJ73QkBu3CiR704QVdhg8c
+	 hbp6D4tb04Dtw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E10F40E4C;
-	Tue, 12 May 2026 14:17:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 81ADF223
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:17:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1F4A6069A;
+	Mon, 18 May 2026 18:11:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB94E282
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73B4340E4C
- for <buildroot@buildroot.org>; Tue, 12 May 2026 14:17:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD78E408BA
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:11:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hm3TDBb9GdFS for <buildroot@buildroot.org>;
- Tue, 12 May 2026 14:17:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 45A0740E44
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A0740E44
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 45A0740E44
- for <buildroot@uclibc.org>; Tue, 12 May 2026 14:17:13 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wMnv3-0001wv-Nd
- for buildroot@uclibc.org; Tue, 12 May 2026 16:17:09 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 12 May 2026 16:16:59 +0200
-Message-ID: <pan$9f6b$206c566b$c7682ce9$c6aec0d3@ID-313208.user.individual.net>
-References: <20251214121359.610963-1-preyas17__13571.0177755513$1765715401$gmane$org@zohomail.in>
-Mime-Version: 1.0
-User-Agent: Pan/0.162 (Pokrosvk)
+ id Jvb7KPmlDu-P for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 18:11:02 +0000 (UTC)
+X-Greylist: delayed 350 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 18 May 2026 18:11:01 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7E94407DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E94407DE
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7E94407DE
+ for <buildroot@uclibc.org>; Mon, 18 May 2026 18:11:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4BADDB97BDDC; Mon, 18 May 2026 20:05:08 +0200 (CEST)
+Message-ID: <82c062f9-6151-4363-8344-f0fdba96f032@rnout.be>
+Date: Mon, 18 May 2026 20:05:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@uclibc.org,
+ Vincent Stehle <vincent.stehle@laposte.net>
+References: <69fea782.050a0220.8af99.ac9e__38452.1139830881$1778296731$gmane$org@mx.google.com>
+ <pan$51872$1013c278$a74b50e3$2f703bba@ID-313208.user.individual.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <pan$51872$1013c278$a74b50e3$2f703bba@ID-313208.user.individual.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1779127508; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=fogtXKfsqDTruOzIwWDgzcB1lRBXqGmyuko68oWFAb0=;
+ b=eYZRrxRMFGZXbNRbqbmQNLNFcyKttPr3VTD2jHWdPWta3M/rW0vx83+jruiCHWrlo69isi
+ y5kuXNsPNsLZfU5BrFH8ZzDyjksFf/bpfdEna5pgJI1VZay7polu8MgUJX2HSbNrqXbyYm
+ YRGDdzN2yTQGjI4iqS6mdgyuZKDYbZ5tAbGkaa6jCplBQKXu4vK4IxZRKEPyp6pWhT8iFo
+ ydZNlTdLrPK/FtJuPlWEwBv38nPKVDxJK70GbcDkE3rWoB7q4KBwe4zFTh1Hjs2TbHkXp2
+ erDBhzl61rCdWcrSkfb4vlsxgDzfJ62G0h+J+kPuByBbzCZ+JQgmRCPQj8LNvA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH] package/libwebsockets: bump to 4.5.2
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=eYZRrxRM
+Subject: [Buildroot] HPPA fails to build , was: Analysis of build errors,
+ was: Re: [autobuild.buildroot.org] Daily results for 2026-05-08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,23 +93,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 14 Dec 2025 12:13:59 +0000 schrieb Preyas via buildroot:
+  Hi Vincent,
 
-Hi Preyas,
+On 09/05/2026 09:00, Bernd Kuhls wrote:
+>> glibc-2.43-22-g8362e8ce10b2... | 2
+> fails only on hppa, no upstream fix in sight, what about reverting
+> 1822f07e94951c5a37f78c1009d54fc95d01d39c?
 
-> -LIBWEBSOCKETS_VERSION = 4.4.1
-> +LIBWEBSOCKETS_VERSION = 4.5.2
+  Since glibc is the only libc for HP-PA, I think this means we'll have to throw 
+out HP-PA entirely. Or do you see a solution?
 
-this patch is superseded by various newer version bumps:
-https://gitlab.com/buildroot.org/buildroot/-/commits/master/package/libwebsockets
-
-Regards, Bernd
-
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
