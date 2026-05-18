@@ -4,59 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3989DCD4F50
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C578CD4F50
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7149606B6;
-	Mon, 18 May 2026 18:18:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C1516069C;
+	Mon, 18 May 2026 18:30:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f2mZENpzNDSv; Mon, 18 May 2026 18:18:56 +0000 (UTC)
+ id yqm4cBytDZ0q; Mon, 18 May 2026 18:30:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E2AB605EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C96C606BF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779128335;
-	bh=0R1zHGAqSmQIAOSQ+/01EebPcYwdfLM37xGOQfatq3s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FKVw3WlCDsiZt8mPRx7SiN58CSfAaHIqAyxe8rfQaek18mWfI+Iw14EPO47bt6uDw
-	 eypYR1MuJzouv6Gm/RrcqLh9o2Gkgw5XK47U8aWho4lgVRniXajkz8CPAQBz3sQ5Y1
-	 ZMi+WeoPlnl3mEkBVmmse+vCjAJn5GNmeds/gq464eQEULUBvVUNqHhTH+ZdPbm710
-	 DBcgeTQUtveWse97b84S9d0QQ4p4UK0ph3busi73opur6hSqSailIOFhbbhbNDbiJ3
-	 N5iQg8eTYLxM1h0dwjwNAQ2KBNsoyXtBTQYd9QGil0WcZghs9RkoP+8LlHo4itaNcA
-	 yLKmBjj8x40Hg==
+	s=default; t=1779129047;
+	bh=vghWFd5yC+KVYanZmQdaUsZg67OJgRsi0vT4aNA9pJk=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=KPjvcyREoAuHqP3R9Oasd7gxPNcZBEdZj2Pz0HdsUd/BF1eTs+Hdc0VvdVVXTvJ/Y
+	 ZJkIIc1JFkR2NjntlTssNEEhQhdwtUxraPiAxZtv7utCKnmeoOat3d8ChQZh7RvqIX
+	 t8EfFZ+1rRA26X/SrWZrEM5xDzIt+MqUUbP8BCxH0F6fY4b2/jmCsnnzQVbtFjoGNU
+	 iVRZEeY7GZYDmhM9eWokfCbVgkaMh5OO/uCOAq4r930+y8A/zgl7Np1J1wvDTCcXLE
+	 Y1bOf7ASXKcH6c3yEWhjesmw8bpv4SCALE2UVoYDKOq14VoxpSTBsPTsnBzxrm/aOn
+	 PZKPlgESrot3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E2AB605EE;
-	Mon, 18 May 2026 18:18:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A0C64282
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:18:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C96C606BF;
+	Mon, 18 May 2026 18:30:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B01D41B2
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87150408E8
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:18:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92C72606BF
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nxKIQdqWSeG4 for <buildroot@buildroot.org>;
- Mon, 18 May 2026 18:18:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD4FC408F2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD4FC408F2
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:18:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AC318667E; Mon, 18 May 2026 18:18:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 20:18:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 721a44f935d80bb3daaa8240ffc6c3f5a01107c1
-X-Git-Newrev: b2e35216855d61020d6fe205a1c2c109b8f154cc
-X-Patchwork-Hint: ignore
-Message-Id: <20260518181844.8AC318667E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tzdata: bump to 2026b
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HDSNB0o4Etg0 for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 18:30:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA1EE6069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA1EE6069C
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA1EE6069C
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:30:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 24F89B97BC21; Mon, 18 May 2026 20:30:42 +0200 (CEST)
+Message-ID: <65ec2e6d-de9e-4dd3-a388-104d405c3eb8@rnout.be>
+Date: Mon, 18 May 2026 20:30:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
+References: <20260517085341.1338094-1-thomas.devoogdt@barco.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260517085341.1338094-1-thomas.devoogdt@barco.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1779129042; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=3HGVb7tNWPnbVEtrr5hjAQ0MRebaQfn4gV4Jjqx9IBw=;
+ b=TYuHT1K2uEbC8dbLTPufaZBFM9jJjZoD6Yyt0GL66iLTfIM+rF561FiH0qGr6e5Ihkd88X
+ B/t3vzKIj2i5+uEF+8TK+wbEpOAAUNIIFUVdkNZL35qSl4Im7wOLbGwtTG9cwrPmKp0HUi
+ elqXRDh7AUH48j7qIQU3CJqk5IuKH4Io+wzsn3rDBtXkmoCGoqSUuA9wrv/yKaJ9rMTGQl
+ nqs8AzvvkmoCSeCDpTTSmqiotYZhamAqBReyHG3eTmTwZFEV30ma95rhYLQNmvB4Eg1Bs6
+ o7GnnaiQ3umPKSOb2KBy2mqEXP/UAEgyFEVhU4L+vaZsDrINGa2I98rX9KSBnw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=TYuHT1K2
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/mesa3d: add Gallium VA-API
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,49 +93,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b2e35216855d61020d6fe205a1c2c109b8f154cc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-For release notes, see:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTYZNBBKFFWM7ZCI6TVCXP/
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 17/05/2026 10:53, Thomas Devoogdt wrote:
+> Since commit 361bfbc70b2b (package/mesa3d: disable libva support),
+> VA-API has been unconditionally disabled in mesa3d due to a circular
+> dependency between mesa3d, libva and libgl.
+> 
+> The circular dependency only occurs when mesa3d is the libgl provider,
+> i.e. when GLX is enabled without libglvnd. In that case:
+>    mesa3d -> libva -> libgl -> mesa3d
+> 
+> Re-enable VA-API support as a new BR2_PACKAGE_MESA3D_GALLIUM_VA option,
+> guarded by a dependency that prevents the circular case. This allows
+> hardware video acceleration on AMD, Intel and other GPUs with Gallium
+> drivers.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index fcf7bffd24..4d4d410ce1 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
--sha512  1e33f7212fd0ae2ad3c16e68f0c1fc7a6ad26a126b8406c379a5768d79604c6a816054bd0fe3a63228d70cd6a1fc2b1bae2a9f8014e102d3727eb9d21affa1f1  tzdata2025c.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTYZNBBKFFWM7ZCI6TVCXP/
-+sha512  a44882258c0a7fbe587e8b73d6bb3cd5be7d4788976ea742adbbf176eb3b33e5bd7d1714b2fffe2972b1a42e7335eac39ed0bd63e819bb421550f8cae1df4f2f  tzdata2026b.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index a7b6dd8f65..71f8fc3ac1 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2025c
-+TZDATA_VERSION = 2026b
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_SELINUX_MODULES = tzdata
+  Since the Signed-off-by has your barco address, I used that as the author 
+address as well.
+
+  Applied to next with that changed, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/mesa3d/Config.in | 13 +++++++++++++
+>   package/mesa3d/mesa3d.mk |  7 +++++--
+>   2 files changed, 18 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 66ebe04394..bfd072d6d0 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -461,6 +461,19 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
+>   
+>   endif # BR2_PACKAGE_MESA3D_DRIVER
+>   
+> +config BR2_PACKAGE_MESA3D_GALLIUM_VA
+> +	bool "Gallium VA-API"
+> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	# circular dependency: mesa3d -> libva -> libgl -> mesa3d
+> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_GLX || BR2_PACKAGE_LIBGLVND
+> +	select BR2_PACKAGE_LIBVA
+> +	help
+> +	  Enable VA-API video acceleration support in Gallium drivers.
+> +
+> +comment "Gallium VA-API needs a gallium driver, incompatible with GLX w/o libglvnd"
+> +	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER || \
+> +		(BR2_PACKAGE_MESA3D_OPENGL_GLX && !BR2_PACKAGE_LIBGLVND)
+> +
+>   config BR2_PACKAGE_PROVIDES_LIBGBM
+>   	default "mesa3d" if BR2_PACKAGE_MESA3D_GBM
+>   
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 1eaa4c577e..98f1c6c2bb 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -182,9 +182,12 @@ endif
+>   #   - Building OpenGL ES without OpenGL is not supported, so always keep opengl enabled.
+>   MESA3D_CONF_OPTS += -Dopengl=true
+>   
+> -# libva and mesa3d have a circular dependency
+> -# we do not need libva support in mesa3d, therefore disable this option
+> +ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_VA),y)
+> +MESA3D_CONF_OPTS += -Dgallium-va=enabled
+> +MESA3D_DEPENDENCIES += libva
+> +else
+>   MESA3D_CONF_OPTS += -Dgallium-va=disabled
+> +endif
+>   
+>   # libGL is only provided for a full xorg stack, without libglvnd
+>   ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
