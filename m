@@ -4,80 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1618ACD4F50
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69A93CD4F50
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0C31605BD;
-	Mon, 18 May 2026 18:41:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A50DF6073E;
+	Mon, 18 May 2026 18:48:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KG5iNT5Wm1Mp; Mon, 18 May 2026 18:41:42 +0000 (UTC)
+ id wmqeJyixK7Qa; Mon, 18 May 2026 18:48:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8CD360646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC96360728
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779129701;
-	bh=upIdZgdmOutvYsyYZDUF2A5aZKYDjj5rsSrgGFqXRmI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=fkiHc2FK1LBsslUN2bTV/jOC6yIcj5mpy2sSE5xnIp7xA6JzuBdFEpHn7iBEsA0qJ
-	 66yKMImXozl1HQK+mOOZITtHdbUY3weR7CEbUMT8Zz0gwF6Ji/snQwQ2m618duNKZf
-	 OiyQp5aVwfjN+2q3zlWdse8HXxXmE1d+3T36x+ulTHpLkoEd7jJzZ7y16SvKICPoZr
-	 ZSYTPz0qID60UpuVkcl3HaAELGbHaBBjxovc2CLmTb/KXN1c5dYVn14X25lLSpBvH4
-	 biJsdmCrjTVVgCAiPWGUeRjSGTE3qfVGjPqZmZyiPDjba1TfmBQLKSLdkDJ29IC6y6
-	 Y7zuvHHL92+Fw==
+	s=default; t=1779130081;
+	bh=JMt03Td0ctt0WyvB71yjuIzyE90DqgidXe9py/pseW0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=U0aIGKx7N5TLh8OXlG1WmxJjFz1fB8luo6jhZp9GdBH4yJdJXmg5JUO2rtk7tRFUt
+	 F3tHi4lGtaAjlDcAzJdlz5jRfHeGuzr7CzvDhyfinZ6temkktxL558weaYBvrjfpor
+	 B3gM4tdRE4b74W4C1C7E9Q1YoK39WxZY4Q/6slAjcNIUTHKnpwmzmAIZ0J3n5bdn1B
+	 qGqsvv0Dkyl/yNXKo4jwdNTIbb91wACCBieIusI7mkrSf73SvydxTuNK3i6OnERYgc
+	 8nd1yQsBFgI9vz3BNkDNP+IbfDce0w1QQpGGjZ4XUAPhm+jAj0Ezp+AGwtxoFXQ1dO
+	 C8zHpAgKCPTMw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8CD360646;
-	Mon, 18 May 2026 18:41:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EA542282
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:41:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC96360728;
+	Mon, 18 May 2026 18:48:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF0281B2
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC0A580F04
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:41:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0EA6804A7
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:48:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cGjmYPymU48N for <buildroot@buildroot.org>;
- Mon, 18 May 2026 18:41:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F33D480F00
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F33D480F00
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F33D480F00
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:41:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D6FC4B97C0CC; Mon, 18 May 2026 20:41:36 +0200 (CEST)
-Message-ID: <1a85ea51-ed54-4bdd-a652-4a187f275369@rnout.be>
-Date: Mon, 18 May 2026 20:41:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Andreas Mohr <and@gmx.li>, buildroot@buildroot.org
-Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>
-References: <20260516081236.7065-1-and@gmx.li>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260516081236.7065-1-and@gmx.li>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1779129698; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=guq6LKNerCUfT9b1WDK8nM/lEUgDMAhTyxSE+45e+ok=;
- b=fS3q8pRAmeAD6vhdtfbFTq5ZElwcERvBwjFAfj0IZiEi3hp4MlIH3IeNMPfjFBTFpNwLLa
- PPldwVP8eVYwT7ZUsWPdUsYtlzH7vPH1+3DL/8xTW9pTZch5ufWcpRa72kHKUxIy9Ttazb
- /APJISygd1JHR8PXwTg6Ug3AAh08breylV9JbTXKgMzLxlxzUlpnWjA5TXOEypk3D7LIBC
- E2Yx4OOkQdpudGI+9P70pk62WlRZ6WrHLkaucz/bTcmz4VFpZoQ0oJp+PNcYfkDpB9cQs6
- xbVW583gF5YiCFtxWutMXmye6xw8R0f4xs5p7nV67HTvXuIi0Q8wFHet8i+Uag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=fS3q8pRA
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/libargon2: conditionally
- shared/static lib build
+ id wJae-OhC2WbX for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 18:47:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA5D980487
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA5D980487
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:47:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9092D8669A; Mon, 18 May 2026 18:47:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 18 May 2026 20:45:02 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c4cd1d52408bdc955fe14fb138d98a37494f5abe
+X-Git-Newrev: 9a1fc8176e4808551f9501f0ed8b5745deb28e59
+X-Patchwork-Hint: ignore
+Message-Id: <20260518184752.9092D8669A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6grpc: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,90 +71,116 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Andreas,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a1fc8176e4808551f9501f0ed8b5745deb28e59
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-  Sorry to give you feedback only when you're already at v3...
+Adds the QT GRPC module (containing Qt Protobuf as well).
 
-On 16/05/2026 10:12, Andreas Mohr via buildroot wrote:
-> libargon2 build shared and static lib by default.
-> 
-> Add conditionally BR2_SHARED_LIBS and BR2_STATIC_LIBS support
-> and add version to pkg-config.
+Signed-off-by: Jack Rubacha <rubacha.jack03@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/qt6/Config.in            |  1 +
+ package/qt6/qt6grpc/Config.in    |  7 +++++++
+ package/qt6/qt6grpc/qt6grpc.hash | 10 ++++++++++
+ package/qt6/qt6grpc/qt6grpc.mk   | 43 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
 
-  That second part really should be a separate patch. With a bit more 
-explanation too because I don't understand what exactly this does, or what 
-happens if you don't set this. Can be as simple as "Without this, pkg-config 
---package-version libargon2 reports Buildroot's version instead of libargon2's 
-version" (if that is actually what happens, of course :-)
-
-> 
-> Signed-off-by: Andreas Mohr <and@gmx.li>
-> ---
-> Changes in v3:
-> - add version to pkg-config
-> Changes in v2:
-> - add conditionally shared lib build
-> ---
->   package/libargon2/Config.in    | 5 -----
->   package/libargon2/libargon2.mk | 7 +++++++
->   2 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/libargon2/Config.in b/package/libargon2/Config.in
-> index 6bba74cfb2..73c1e0d777 100644
-> --- a/package/libargon2/Config.in
-> +++ b/package/libargon2/Config.in
-> @@ -1,12 +1,7 @@
->   config BR2_PACKAGE_LIBARGON2
->   	bool "libargon2"
->   	depends on BR2_USE_MMU
-> -	depends on !BR2_STATIC_LIBS
-
-  This dependency was propagated to other symbols, e.g. 
-BR2_PACKAGE_PHP_EXT_LIBARGON2, BR2_PACKAGE_PYTHON_ARGON2_CFFI_BINDINGS, 
-BR2_PACKAGE_CRYPTSETUP, and should be removed from there (or the comments updated).
-
-  Regards,
-  Arnout
-
->   	help
->   	  A modern password hashing algorithm
->   
->   	  https://password-hashing.net/#argon2
-> -
-> -comment "libargon needs a toolchain w/ dynamic library"
-> -	depends on BR2_USE_MMU
-> -	depends on BR2_STATIC_LIBS
-> diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
-> index b3f6e1b216..e968aa08a3 100644
-> --- a/package/libargon2/libargon2.mk
-> +++ b/package/libargon2/libargon2.mk
-> @@ -11,6 +11,7 @@ LIBARGON2_LICENSE_FILES = LICENSE
->   LIBARGON2_INSTALL_STAGING = YES
->   
->   LIBARGON2_OPTS = LIBRARY_REL=lib
-> +LIBARGON2_OPTS += ARGON2_VERSION=$(LIBARGON2_VERSION)
->   
->   # GCC_TARGET_ARCH is not defined for all architectures, but libargon2
->   # only uses it to detect if some x86 optimizations can be used, and
-> @@ -23,6 +24,12 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
->   LIBARGON2_OPTS += NO_THREADS=1
->   endif
->   
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +LIBARGON2_OPTS += LIB_SH= LINKED_LIB_SH=
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +LIBARGON2_OPTS += LIB_ST=
-> +endif
-> +
->   define LIBARGON2_BUILD_CMDS
->   	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->   		$(LIBARGON2_OPTS)
-
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 10594691cf..9c297b321e 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -48,6 +48,7 @@ source "package/qt6/qt6charts/Config.in"
+ source "package/qt6/qt6core5compat/Config.in"
+ source "package/qt6/qt6declarative/Config.in"
+ source "package/qt6/qt6graphs/Config.in"
++source "package/qt6/qt6grpc/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
+ source "package/qt6/qt6mqtt/Config.in"
+ source "package/qt6/qt6multimedia/Config.in"
+diff --git a/package/qt6/qt6grpc/Config.in b/package/qt6/qt6grpc/Config.in
+new file mode 100644
+index 0000000000..3d82cfcb0c
+--- /dev/null
++++ b/package/qt6/qt6grpc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QT6GRPC
++	bool "qt6grpc"
++	help
++	  This package provides the Qt GRPC and Protobuf modules:
++
++	  https://doc.qt.io/qt-6/qtgrpc-index.html
++	  https://code.qt.io/cgit/qt/qtgrpc.git/
+diff --git a/package/qt6/qt6grpc/qt6grpc.hash b/package/qt6/qt6grpc/qt6grpc.hash
+new file mode 100644
+index 0000000000..bbf30f2a2d
+--- /dev/null
++++ b/package/qt6/qt6grpc/qt6grpc.hash
+@@ -0,0 +1,10 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.1/submodules/qtgrpc-everywhere-src-6.9.1.tar.xz.sha256
++sha256  c34c869e203289b0fd695a1e5391840bc51b919a8b55e1ed1ff36b4cb923a750  qtgrpc-everywhere-src-6.9.1.tar.xz
++
++# Hashes for license files:
++sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSE.Apache-2.0.txt
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSES/LicenseRef-protobuf.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6grpc/qt6grpc.mk b/package/qt6/qt6grpc/qt6grpc.mk
+new file mode 100644
+index 0000000000..8b1c511fef
+--- /dev/null
++++ b/package/qt6/qt6grpc/qt6grpc.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# qt6grpc
++#
++################################################################################
++
++QT6GRPC_VERSION = $(QT6_VERSION)
++QT6GRPC_SITE = $(QT6_SITE)
++QT6GRPC_SOURCE = qtgrpc-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6GRPC_VERSION).tar.xz
++QT6GRPC_INSTALL_STAGING = YES
++QT6GRPC_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6GRPC_CMAKE_BACKEND = ninja
++QT6GRPC_LICENSE = GPL-3.0-only
++
++QT6GRPC_LICENSE_FILES = \
++	LICENSE.Apache-2.0.txt \
++	LICENSES/BSD-3-Clause.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LicenseRef-protobuf.txt \
++	LICENSES/Qt-GPL-exception-1.0.txt
++
++QT6GRPC_CONF_OPTS = \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF \
++	-DQT_HOST_PATH=$(HOST_DIR)
++
++QT6GRPC_DEPENDENCIES = \
++	host-pkgconf \
++	host-qt6grpc \
++	qt6base
++
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
++QT6GRPC_DEPENDENCIES += qt6declarative
++endif
++
++HOST_QT6GRPC_DEPENDENCIES = \
++	host-protobuf \
++	host-qt6base
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
