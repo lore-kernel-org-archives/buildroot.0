@@ -4,84 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34B5ECD4F4A
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 20:31:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA480CD343F
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 20:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0099C6076C;
-	Mon, 18 May 2026 20:31:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A89E0607D9;
+	Mon, 18 May 2026 20:46:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P7AIQVYwzqYb; Mon, 18 May 2026 20:31:50 +0000 (UTC)
+ id Fpnf2EhwVCSj; Mon, 18 May 2026 20:46:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98DE60741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E68DB607CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779136310;
-	bh=63iOErts/4T9SNN5YStOKCqlZXPJAVI1xQfxem7zuCs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WhSsxB0mVrSgeN6/5D16CHyCpEhr7oOlke9UjB+IAn9lcm+Pcji/aheiFTnSNBPZF
-	 o9yQkZD/EezoOU08z1qGAyXMq6KLjSuCHmh7aOb7jRFWTSxhMavXetLC4D3gM4Bcih
-	 w5YuN+xh5Y1JnAyo51qaSIxPYtyVnZQzXyeSmwerU+1YopDoXNTzCjfr07io9+zxBD
-	 IYimyVQz0jrAX9U6GN1AmXfJUTDNIf9ZWyVEh1oVyZX25R8OOLgOKyFSg6Ez/lF+JM
-	 t38LKlEJWotlrEbKzrZh2BpZ+5ekeIsGMBu7KoNNGNKkk8W2FvQ5Zg8bCEuo1f9uC9
-	 vEAIcNzaH2z7w==
+	s=default; t=1779137173;
+	bh=/aWzFigzxugDGw7JbOsRwNDweVFfL+V8gmSlFWF8qMA=;
+	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From;
+	b=lpVaevp6E1aatvboXbtuw0bYCmxHuK/phwMUM2UBlnWFROM5/ken+n+PVXtnGhWey
+	 5Ey4ytu89ZFy2otiKflQkFpyQxxE+NdiHSa/FMFZQAp9bZ74BWG78T/a5yTrA23mMI
+	 zQjLmMMgxNMbvHDilFB245edEhqKDDXZF/PjaZlFSR/i8XBxqg9+3XoXc/XQmUiNz7
+	 W4ClmHGMHc8Ssw9wd5XSRhBd2AmBH64yIDIHYIskrYv8d6SrsfkyFOQTZ9ixpgtGUL
+	 zFSw5GcdjW2oiYIKo+jCeLZugHnOpgdOJ5uPKDK9m1DI9QHuKfNZBjoQvhA0GusJ4V
+	 EGdVtXwT+RxhA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A98DE60741;
-	Mon, 18 May 2026 20:31:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D13891B2
- for <buildroot@buildroot.org>; Mon, 18 May 2026 20:31:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E68DB607CF;
+	Mon, 18 May 2026 20:46:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB799282
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 20:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6DD7409AF
- for <buildroot@buildroot.org>; Mon, 18 May 2026 20:31:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91792811F9
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 20:46:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NqjJyb0Grc3c for <buildroot@buildroot.org>;
- Mon, 18 May 2026 20:31:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B34AE409AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B34AE409AC
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B34AE409AC
- for <buildroot@uclibc.org>; Mon, 18 May 2026 20:31:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EDC12B97BDDC; Mon, 18 May 2026 22:31:45 +0200 (CEST)
-Message-ID: <3d090bc3-d851-4d60-9a00-740f0d51a103@rnout.be>
-Date: Mon, 18 May 2026 22:31:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@uclibc.org,
- Vincent Stehle <vincent.stehle@laposte.net>
-References: <69fea782.050a0220.8af99.ac9e__38452.1139830881$1778296731$gmane$org@mx.google.com>
- <pan$51872$1013c278$a74b50e3$2f703bba@ID-313208.user.individual.net>
- <82c062f9-6151-4363-8344-f0fdba96f032@rnout.be>
- <agtXnGstcPCbQEyK@waldemar-brodkorb.de>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <agtXnGstcPCbQEyK@waldemar-brodkorb.de>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1779136306; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=dLbWBAGejpbwnMZ5GMBMFKqPUAzpTGctwiZMHkjslO0=;
- b=j4ecFGlljqDLHdPD/6cLLbY1ZSi7Cxkto0o0gxHHpd0MEGMIOd5ZMEQ/zvHcAiRH6nymly
- w2IHl/HzUUred4IpYR/LO5bkbZI/G/FnkHDfNWFMMVpOgTyYSdnlZvlW4SHo14Qc902VvY
- wskKfRedBDmY60Skv1c9sDjOq3mv9kFye1KM5/xs8IY9ONyZENzhNdVXry2kNo2x4Cu5W+
- 1Godwx21Ay4nvQ2qpndKyCiSLiT5eYYt2TH2/sSgITLULqV/Sg91FVMipf5XOIGGgrkcQv
- OxIF0T/WDESLfcO8SbHI0vgKjtbha7cHM5obs7aFFD9wWc++rrIJfCFwkBt98g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=j4ecFGll
-Subject: Re: [Buildroot] HPPA fails to build , was: Analysis of build errors,
- was: Re: [autobuild.buildroot.org] Daily results for 2026-05-08
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ozxzjf0IhMtm for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 20:46:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A3AC811F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A3AC811F7
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6A3AC811F7
+ for <buildroot@uclibc.org>; Mon, 18 May 2026 20:46:09 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wP4qk-0003b6-La
+ for buildroot@uclibc.org; Mon, 18 May 2026 22:46:06 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Mon, 18 May 2026 22:45:34 +0200
+Message-ID: <pan$7b7e2$11f918fb$bc78faab$1070d19@ID-313208.user.individual.net>
+References: <20260517085341.1338094-1-thomas.devoogdt__44574.7323495866$1779008053$gmane$org@barco.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.162 (Pokrosvk)
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=kuhls.net
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/mesa3d: add Gallium VA-API
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,43 +75,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Am Sun, 17 May 2026 10:53:40 +0200 schrieb Thomas Devoogdt:
 
+> Re-enable VA-API support as a new BR2_PACKAGE_MESA3D_GALLIUM_VA option,
+> guarded by a dependency that prevents the circular case. This allows
+> hardware video acceleration on AMD, Intel and other GPUs with Gallium
+> drivers.
 
-On 18/05/2026 20:17, Waldemar Brodkorb wrote:
-> Hi Arnout,
-> Arnout Vandecappelle via buildroot wrote,
-> 
->>   Hi Vincent,
->>
->> On 09/05/2026 09:00, Bernd Kuhls wrote:
->>>> glibc-2.43-22-g8362e8ce10b2... | 2
->>> fails only on hppa, no upstream fix in sight, what about reverting
->>> 1822f07e94951c5a37f78c1009d54fc95d01d39c?
->>
->>   Since glibc is the only libc for HP-PA, I think this means we'll have to
->> throw out HP-PA entirely. Or do you see a solution?
-> 
-> That is not entirely true :). uClibc-ng has support for HP-PA, but only
-> static support no ld.so support.
+Hi Thomas,
 
-  I meant, the only libc that Buildroot supports (at the moment).
+it seems not all drivers support gallium-va:
 
-  I'm definitely not going to invest any effort in HP-PA. We only added support 
-for it because it seemed low-effort (from a maintainer POV).
+output/build/mesa3d-26.1.0/meson.build:742:3: ERROR: Feature gallium-va 
+cannot be enabled: VA state tracker requires at least one of the following 
+gallium drivers: r600, radeonsi, nouveau, d3d12 (with option gallium-
+d3d12-video), virgl.
 
-  Regards,
-  Arnout
+Snippet of the configure options:
 
-> 
-> best regards
->   Waldemar
+-Dmicrosoft-clc=disabled -Dllvm=enabled -Dcpp_rtti=true -Dgallium-
+rusticl=false -Dglx=disabled -Dgallium-vc4-neon=disabled -Dgallium-
+drivers=iris -Dgallium-extra-hud=true -Damdgpu-virtio=false -Dmesa-
+clc=system -Dprecomp-compiler=system -Ddisplay-info=disabled -Dvulkan-
+drivers= -Dopengl=true -Dgallium-va=enabled -Dvideo-codecs=all_free 
+-Dplatforms= -Dgbm=enabled -Degl=enabled -Dgles1=enabled -Dgles2=enabled 
+-Dvalgrind=enabled -Dlibunwind=disabled -Dlmsensors=enabled -Dzstd=enabled 
+-Dglvnd=disabled
+
+$ grep -s ^BR2_PACKAGE_MESA3D .config
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER=y
+BR2_PACKAGE_MESA3D_LLVM=y
+BR2_PACKAGE_MESA3D_OPENCL=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER=y
+BR2_PACKAGE_MESA3D_DRIVER=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_GBM=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_MESA3D_GALLIUM_VA=y
+
+Regards, Bernd
 
 _______________________________________________
 buildroot mailing list
