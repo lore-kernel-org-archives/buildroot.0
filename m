@@ -4,83 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49AFDCD4F3C
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B3EFCD4F3C
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 094876067F;
-	Mon, 18 May 2026 18:05:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAD61606A6;
+	Mon, 18 May 2026 18:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-HY3VXDaujG; Mon, 18 May 2026 18:05:07 +0000 (UTC)
+ id XKYLdHwVfOMg; Mon, 18 May 2026 18:07:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3231060683
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B816F60693
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779127507;
-	bh=bbS0LeWY60aI4Xs9haBixl3UtycnQQkh9Abwl8KHtMY=;
+	s=default; t=1779127651;
+	bh=/p0ScDSewlp7vF8uKHH06L5biH2ild1t63zSnTrFM7Y=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Avo0k4efr8CRD4foW3jANBda85iX22moME01gABfon/pKgDJSAhE37hVMhC92y9No
-	 ztT7oMOs2X19KVLFXA5g/aqBUo578ST30cpEiWp8zUZAwh2GmWsIquWFQ/2NNH7+wt
-	 J8pGmlZVYtt3wuPRZSVSygB1+Ygpxog6b+ab2qGhMuBafPd2LIRgBTRW9Ke6j3IzxM
-	 j8R9c2dpzzA0fDArq6RZBPZ5H7WkenPO7F/KrRpdQAqW28panvh5r+2rO/SMw+AJYu
-	 PNIXiqHM33LOABLRcXrnTYWJy08ZbQhvbwXi1TTGoHu5H6XTUaVwaIU98OND/3LEPL
-	 UYE3ep3ffKmlw==
+	b=lNJyEjtt0bOForfrGT9aOBhsRa6WD2S9qXUWoLbfSBtm943sDGIN9ivgIiEwj7UOT
+	 +vXClXqQBZPwkOaYP9qlr7KRFFyBFhIEQTOxxmuWfv2clSsN8n85qisjhm8WbBrMc8
+	 Fd4n4onLUNL/2/0DgO1mZqygKd+AXgRD9E7pzC6hNyc0eydEDIuGKzeH6tqLi4wsI1
+	 hXQqL0/pXNaseCfT1cg+B6sRQOgDd+gn8q9oQIKyX78U+IxGRJRjROUMMetBrHYilE
+	 YP+NQyWH6OzqyrJ0/DwgWkt4xcmsghigsDHkPAV8FHS2NYLJjLLqJLrmUO/GBTK3ne
+	 dxDgyyK1aeGyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3231060683;
-	Mon, 18 May 2026 18:05:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C50C265
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:05:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B816F60693;
+	Mon, 18 May 2026 18:07:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C51B1B2
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:07:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3230D40078
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:05:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02CB04060F
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:07:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_4Z8SnGADck for <buildroot@buildroot.org>;
- Mon, 18 May 2026 18:05:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eVVV7XyRJJOl for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 18:07:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A6D024004E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6D024004E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F06BA40619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F06BA40619
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A6D024004E
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:05:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F06BA40619
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:07:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b8c8.dip0.t-ipconnect.de [84.161.184.200])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3A5F3A4C10D8
- for <buildroot@buildroot.org>; Mon, 18 May 2026 20:05:01 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49320)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C78EA4C02BC
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 20:07:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48348)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wP2Kr-000000006uV-0RcC
- for buildroot@buildroot.org; Mon, 18 May 2026 18:05:00 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wP2NC-000000007KJ-1FIP
+ for buildroot@buildroot.org; Mon, 18 May 2026 18:07:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 20:05:00 +0200
-Message-ID: <20260518180500.101442-1-bernd@kuhls.net>
+Date: Mon, 18 May 2026 20:07:26 +0200
+Message-ID: <20260518180726.110871-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1779127501;
- bh=hzXyTktq9utN47E1EX/CWVVSDkzfDy7NhULg155UxOY=;
+ s=kas202511301023; t=1779127646;
+ bh=i5dstftVCO8q8HUEuQym3haUZMiASXuwICpnLMVCPNg=;
  h=From:To:Subject:Date:From;
- b=Qic5OdbTraoMn6P39+t1noFNNd0xNYCOezYImTpKkcM4WVF5LjJhNrQumifATyCuG
- faEk8j/04ZROL/A5ZHeyUxtA0xRjYOph0JQ8FuzwQFJrhGcGi+Z7ts/O8iDgeP7cBh
- E+gZKdjg99K4clSoLDPvQYv6nYg+5PvYoUehgAaYFvRuxnYQ06I2S5mOGPECbAEUeC
- /YaxB5lvex2asZTWUNw3vA93deM1nralZV+Pa9G5ufedfMSLQHEOx6LChbvv7QcqNr
- 6GfKo8gf+0afEKxp6ZW52ZiJLegCbs5VLp1kJXjkmTB0gyoWzlMsKGmPJv4sbphVP3
- 3kiTf9M/3wxuw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=qGbvHnavUL0qcER/ljOThEKr4W5YJ74+LkQdxEAiRhbU3wxh8mbR0eaY+VQSqR0UQ
+ hjMIT6PmZTdCx8QOiZRYlCj2B9+cI1v0iEwg5Cblem6cQl/b9tbBemKwzS+wgApkaR
+ GzV+XUVKGki/AroZ6CGfK2S+LFZJoHR6QUW2O4cB144pJ4ZbdUieR3pxObYv27iETR
+ uaa/VFiEDQ8GH8tKQTdpDaCNqkG8gJcYnQ+hbgRdVxsVXwEajYUPVOdW0NeX/mtgj8
+ fzuzoKeweom29P/WN51bMKEMkjKo6Pal22O+OFPvbNn5WcqNsro7ISWeap2bNBWG4O
+ 8GTU1pmuM7FZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=Qic5OdbT
-Subject: [Buildroot] [PATCH/next 1/1] package/libinput: bump version to
- 1.31.2
+ header.s=kas202511301023 header.b=qGbvHnav
+Subject: [Buildroot] [PATCH/next 1/1] package/utfcpp: bump version to 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,38 +96,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lore.freedesktop.org/wayland-devel/agWtsIBqMXTVknR_@quokka/T/#u
+https://github.com/nemtrif/utfcpp/releases/tag/v4.1.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libinput/libinput.hash | 2 +-
- package/libinput/libinput.mk   | 2 +-
+ package/utfcpp/utfcpp.hash | 2 +-
+ package/utfcpp/utfcpp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index ec6e52e1e2..c813993358 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  e0bb6537de892ce7c63fc5be9ad373eae894b7655c92220ef00316cc33097356  libinput-1.31.1.tar.bz2
-+sha256  1daebac6cb5b8946139c9669a7e5c0e4c8f17320de232a6b9bf470f37dc569e4  libinput-1.31.2.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 8b930805b2..33fd012076 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/utfcpp/utfcpp.hash b/package/utfcpp/utfcpp.hash
+index 4b43eb330b..bde4a223f4 100644
+--- a/package/utfcpp/utfcpp.hash
++++ b/package/utfcpp/utfcpp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  397a9a2a6ed5238f854f490b0177b840abc6b62571ec3e07baa0bb94d3f14d5a  utfcpp-4.0.9.tar.gz
++sha256  9a45cbeefacf512879971eaf57fe52133b73a0152d5354f3adeaf8d103cff0f3  utfcpp-4.1.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
+index 72a590eeb3..de6d6f6f86 100644
+--- a/package/utfcpp/utfcpp.mk
++++ b/package/utfcpp/utfcpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.31.1
-+LIBINPUT_VERSION = 1.31.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
+-UTFCPP_VERSION = 4.0.9
++UTFCPP_VERSION = 4.1.0
+ UTFCPP_SITE = $(call github,nemtrif,utfcpp,v$(UTFCPP_VERSION))
+ UTFCPP_LICENSE = BSL-1.0
+ UTFCPP_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
