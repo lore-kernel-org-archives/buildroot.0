@@ -4,80 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2DCACD4F4A
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:54:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9D28CD4F50
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 19:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1CAE605A7;
-	Mon, 18 May 2026 18:54:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EEEA60746;
+	Mon, 18 May 2026 19:02:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0w_LRO0k1kGO; Mon, 18 May 2026 18:54:06 +0000 (UTC)
+ id BYeXjTBsTZPG; Mon, 18 May 2026 19:02:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0402605AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFF2560750
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779130446;
-	bh=JQJCYg9bgGYMvcmBHmATzYrkZM4tpijIbX8riIY0BEY=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Jh0zOUddUwXBM3souVWvdTWeaFNghK1uUfD6DvK74yPc6lQ8OFUr9wYfLAuuI/XUb
-	 xWQALnCudxXv7wpP/M1ZTxyugIZresiwwz2OzjdqbuCS8KB0LIZxZZaB8LSOFxXOlE
-	 jHWoZZIR9AHa2Jq/kGZApmabfE/J/9dNnj2g8VKxY3wIuQbtHyRT4QbVf4AJIRmg6b
-	 FVyKC60KA2FFj7AvdHDIUOwpM7B56qgySENZLJhYDpyXlC23nYuF8HjRcYXmupC8YP
-	 cDaffyJUHMYYVas36xrnbjqVzvUSs6fXj+1Ya4YPzotCB1vy4MzgucYhYcTML5Uhi5
-	 GjiDT6jDbPOTQ==
+	s=default; t=1779130933;
+	bh=8snxXPueeMWiVW+K0hOq5G7fl8w+X+uHAM53SggzxqE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Ed5NCvA1SVvFkcted+A15Om9MWXQJBPBoYqnESfMPqHSlMIA4KZMAAAKGQa/b2dwW
+	 x1rUNJyq6kWrO40MliwVQAQ5hsjr8ZGbYsXUkCxoYNJYzQITeRwZks/NqT78FK1EDs
+	 dqg4/F5tYeHog5sr5wrd1aEGAqfAPRpiSM9WFdROha1UR6Aq83hkk9WxqP0r9Yqw7w
+	 D1Q5zLW1pkoYh5UHf2oI1ViYpIScq+LEH3OEIPIYvZ65LO9h+xOudm22Bt3KybYz4z
+	 YEtwFnsRoFsP9N6rDY5CBK1TfDP2i5ouuD3fR5hkpT5bhodyVodi+spPVJ25my1bHH
+	 XJURsVSSu0R6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0402605AD;
-	Mon, 18 May 2026 18:54:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 18B151B2
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:54:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFF2560750;
+	Mon, 18 May 2026 19:02:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C1DD1B2
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 19:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AA58402EC
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:54:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DE3760749
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 19:02:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zi3gjJpxqONu for <buildroot@buildroot.org>;
- Mon, 18 May 2026 18:54:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 42FF6402E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42FF6402E9
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 42FF6402E9
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:54:05 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A40C6B97BDDC; Mon, 18 May 2026 20:54:02 +0200 (CEST)
-Message-ID: <9cec7fb3-4244-4401-beba-692be643af11@rnout.be>
-Date: Mon, 18 May 2026 20:54:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- buildroot@buildroot.org
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20260514164448.92054-1-chakrabortyshubham66@gmail.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260514164448.92054-1-chakrabortyshubham66@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1779130443; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=rAkxm1EMSBWeBetDNcwyr87fE8ppfdRMMqhYRZHJ0mw=;
- b=Jz3O0bh3kJRbY3h2UrHFaWwBBuvnTKrUjpQlpdumRRaQjp/HBprxBwLbeE3dfU/MGUp+TY
- HRqE8N+fZ+QqXg8YzzcKBk9FlshRoNT/Ecr1MeTDx4W4510dTMKDySGQ5EgWfrrSjAyKWi
- UoTdgwYHNBKXsq0WRd0nqbCU49dO8pvZZ0hcSXUC40aL/VAj7SNV8Sf9n8KD/W6l3cukKV
- H7YUtbbAr1TFHEC6AXaYB95b7A96Lu45bLmd70+WGMVzhQfgq/dMN2bHPzQaYC0qrK+9/C
- yt5y94FHWghgNu/xxaXTPpMf5i1/HFC9PY/UxTxoz9niBPrBWMHKP7Cmb5V6uw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Jz3O0bh3
-Subject: Re: [Buildroot] [PATCH] package/git: Fix build on older glibc
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UDAwRnW2J_OB for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 19:02:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5F6360746
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5F6360746
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 19:02:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6AE83866A6; Mon, 18 May 2026 19:02:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 18 May 2026 20:57:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b2e35216855d61020d6fe205a1c2c109b8f154cc
+X-Git-Newrev: b28aeeab1f64c1cdda38f0d2442dd28cb0a28913
+X-Patchwork-Hint: ignore
+Message-Id: <20260518190202.6AE83866A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnupg2: security bump version to
+ 2.5.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,109 +69,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Shubham,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b28aeeab1f64c1cdda38f0d2442dd28cb0a28913
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-  Thank you for this patch!
+https://lists.gnupg.org/pipermail/gnupg-announce/2026q2/000505.html
+"This release adds two features to gpgsm and fixes a some minor security
+ bugs."
 
-On 14/05/2026 18:44, Shubham Chakraborty wrote:
-> The build of the 'git' package fails on older Linux toolchains (like
-> bootlin-aarch64-glibc-old which uses glibc 2.24) with the following
-> error:
-> compat/posix.h:159:24: fatal error: sys/random.h: No such file or directory
->   #include <sys/random.h>
-> 
-> This happens because Git recently made 'getrandom' the default
-> CSPRNG_METHOD on Linux, which unconditionally includes <sys/random.h>.
-> However, this header was only introduced in glibc 2.25.
-> Fix this by using __has_include to check for the header's existence.
-> If it's missing, undefine HAVE_GETRANDOM so Git falls back to its
-> /dev/urandom implementation.
-> 
-> Command to reproduce:
-> - ./utils/test-pkg -p git -c git-subtree.config -T bootlin-aarch64-glibc-old
-> 
-> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> ---
->   .../git/0001-fix-build-on-older-glibc.patch   | 45 +++++++++++++++++++
->   1 file changed, 45 insertions(+)
->   create mode 100644 package/git/0001-fix-build-on-older-glibc.patch
-> 
-> diff --git a/package/git/0001-fix-build-on-older-glibc.patch b/package/git/0001-fix-build-on-older-glibc.patch
-> new file mode 100644
-> index 0000000000..b95ca94c23
-> --- /dev/null
-> +++ b/package/git/0001-fix-build-on-older-glibc.patch
-> @@ -0,0 +1,45 @@
-> +From c53f54a87503ae729640a6f12302778a980f84d9 Mon Sep 17 00:00:00 2001
-> +From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> +Date: Thu, 14 May 2026 21:09:07 +0530
-> +Subject: [PATCH] compat/posix.h: fix build on older glibc (missing sys/random.h)
-> +
-> +The build of the 'git' package fails on older Linux toolchains (like
-> +bootlin-aarch64-glibc-old which uses glibc 2.24) with the following
-> +error:
-> +
-> +compat/posix.h:159:24: fatal error: sys/random.h: No such file or directory
-> +
-> +This happens because Git recently made 'getrandom' the default
-> +CSPRNG_METHOD on Linux, which unconditionally includes <sys/random.h>.
-> +However, this header was only introduced in glibc 2.25.
-> +
-> +Fix this by using __has_include to check for the header's existence.
-> +If it's missing, undefine HAVE_GETRANDOM so Git falls back to its
-> +/dev/urandom implementation.
-> +
-> +Upstream: N/A (Buildroot specific fallback)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  I don't think this should be configured Buildroot specific. Nobody says that 
-git shouldn't work on older platforms.
-
-  Except of course that we're still on autotools and upstream is moving to 
-meson. And in fact, meson.build already has:
-
-elif csprng_backend in ['auto', 'getrandom'] and 
-compiler.has_header_symbol('sys/random.h', 'getrandom', required: csprng_backend 
-== 'getrandom')
-
-so I think the proper fix is not to patch anything, but rather to switch to 
-meson as the build system.
-
-  Regards,
-  Arnout
-
-> +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-> +---
-> + compat/posix.h | 7 +++++++
-> + 1 file changed, 7 insertions(+)
-> +
-> +diff --git a/compat/posix.h b/compat/posix.h
-> +index faaae1b..1632221 100644
-> +--- a/compat/posix.h
-> ++++ b/compat/posix.h
-> +@@ -155,6 +155,13 @@
-> + #ifdef HAVE_ARC4RANDOM_LIBBSD
-> + #include <bsd/stdlib.h>
-> + #endif
-> ++#if defined(HAVE_GETRANDOM) && defined(__linux__)
-> ++# if defined(__has_include)
-> ++#  if !__has_include(<sys/random.h>)
-> ++#   undef HAVE_GETRANDOM
-> ++#  endif
-> ++# endif
-> ++#endif
-> + #ifdef HAVE_GETRANDOM
-> + #include <sys/random.h>
-> + #endif
-> +--
-> +2.54.0
-
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 2aab6111b4..f69b7c6eac 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  dbe9ce2aca9d553ed4367692575cee15204a95a6  gnupg-2.5.19.tar.bz2
+-sha256  722aa8a426dd9b44e0d194b73bfee3a3e617d65674cd4d1d062e6df29f1788c6  gnupg-2.5.19.tar.bz2
++sha1  96371ec0260da5a22edbf8e4d3bf0e54b3ea5b8e  gnupg-2.5.20.tar.bz2
++sha256  6461266e99c308419a379abe6c356d54c214136c4589bd65951091138989ffc6  gnupg-2.5.20.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 499532c551..7756023798 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.5.19
++GNUPG2_VERSION = 2.5.20
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
