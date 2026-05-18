@@ -1,151 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EADA1CD4F3C
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 07:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A630BCD4F3C
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 07:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9986942B75;
-	Mon, 18 May 2026 07:27:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AB5185672;
+	Mon, 18 May 2026 07:29:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DKyOYIjU6738; Mon, 18 May 2026 07:27:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cnu0pWg_XeQf; Mon, 18 May 2026 07:29:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2A1342B7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6DA385AA9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779089252;
-	bh=ak2oqIfUEJPkA1pRImwuN+MglY0XJM+qtCzVUjkh2Z0=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	s=default; t=1779089375;
+	bh=93FfPKUW08CfhTDM9NN73BTvrBnylOt4zPvss/NBJMw=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=jYUdDvmVDiM42SYWCStYOjwhAX6VuhWfam9+twqki8RV+LEzRqjJRAzDyQQ48yqTm
-	 lC5vSSL8qxLypzjZlIiBrLhqYlkc6ZIlovcqsybklrp8p6JmRgzDe5TQPG3Vi1mSix
-	 gS07pz60NAkJSnQrzVzaIUpOTk88FKyb07BZB4eVOUhSSoNz9yWJ/SOui/2ERc5V80
-	 qeJ3Z8/tK/nhc7pYESDSM9D6KljXljvKlukIl5xplFV0O2kqpiq/AEU3Vt7xVRSa5V
-	 WUWUAq568VhqJfA15q/jL0jzUIpGmJhObJUXE2Ss1bcAZrYpdlUnbwzEtviYxVH3k5
-	 NNxW7AoRIgO0g==
+	b=T0txzSI8f90bMlgjK2DBF+trq74pRF+eJzq6No72I9RP2TD4TmhJQmuum/ixTQwF6
+	 7lAD/oukLmDkvA+pTxfyhGl+Mwxx6AMBmJhV0fq5Pc4dwMfjG8gcu/vYah1+E3Eb/7
+	 C5AAfGCKE1Kl0qbuCafM9bWxBCrRWIDvReV4l3PjReW2/6sMKP2lfHLV+S4hhjLsQz
+	 QaDruzo7CmSyjhe6eb0zokn3OtXh1z6EfijjTLc4HNsviA0+J+e+84RJ+tVg32roca
+	 MaGY6E9VqorrNkipGZ6x12lufYwbfbaev5TUdVCKituJnpxppOpMWeODsS2F3XxsQT
+	 G+zof/t6DoTVA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2A1342B7E;
-	Mon, 18 May 2026 07:27:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2870A265
- for <buildroot@buildroot.org>; Mon, 18 May 2026 07:27:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6DA385AA9;
+	Mon, 18 May 2026 07:29:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17F8E265
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 07:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1942042B7E
- for <buildroot@buildroot.org>; Mon, 18 May 2026 07:27:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14D5142B5D
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 07:29:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KI3r80oDQN_s for <buildroot@buildroot.org>;
- Mon, 18 May 2026 07:27:30 +0000 (UTC)
-X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 18 May 2026 07:27:29 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6DF1A42B75
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DF1A42B75
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.72.192.74;
- helo=mout.kundenserver.de;
- envelope-from=nicolas.cavallari@green-communications.fr; receiver=<UNKNOWN> 
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DF1A42B75
- for <buildroot@buildroot.org>; Mon, 18 May 2026 07:27:28 +0000 (UTC)
-Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue106
- [212.227.15.153]) with ESMTPSA (Nemesis) id 1N7yz7-1xSTVt0tnv-00sjBX for
- <buildroot@buildroot.org>; Mon, 18 May 2026 09:22:22 +0200
-Message-ID: <e90a9b79-9f95-4a2a-b2f5-d37b8c3ebac2@green-communications.fr>
-Date: Mon, 18 May 2026 09:22:21 +0200
+ id BLXHtBIbVJ9f for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 07:29:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B94741B89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B94741B89
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6B94741B89
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 07:29:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id EB220B979259; Mon, 18 May 2026 09:29:29 +0200 (CEST)
+Message-ID: <a82cb31d-fa76-44d3-a868-e45e48d007c4@rnout.be>
+Date: Mon, 18 May 2026 09:29:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-References: <6a0a857a.ac75277f.2ba7f3.42f2@mx.google.com>
-Content-Language: en-US
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Autocrypt: addr=Nicolas.Cavallari@green-communications.fr; keydata=
- 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
-In-Reply-To: <6a0a857a.ac75277f.2ba7f3.42f2@mx.google.com>
-X-Provags-ID: V03:K1:c/IYKSdVpW3M85yy+BcrDL5T6BN8ILeKOLfAQYklNYROAjLGF41
- D+NCJ1se0lkW/x+ehcy3hJ2/IJulQgdtEGGcinewNgaFqHfd7Rc0bR6Hr13pzlMP3ZBXxLA
- fsBYiJ/0VxkmH0KP4o+bn99ZcYr85FoKND+S4w1ruxGJffq/k5Lnjk0PtdIYIpdisCEAyGd
- Ji5+LFXm+/nmsO0mG+57g==
-UI-OutboundReport: notjunk:1;M01:P0:j0vKxSlfDpA=;hix2EmunKZl6CwqBNIEkQFx9fVU
- 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
- =
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20260517213626.3730308-1-romain.naour@smile.fr>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260517213626.3730308-1-romain.naour@smile.fr>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1779089370; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=IfXNVvzthDx9/LvkbLSEwhQ4IHvFA/xHuyUzK8olvv4=;
+ b=exfuJAMtsbL+MsrM6fu2KG0xkE86mZIHLTq0ZDhJLKXaHYwt1jdeI6ZsXHCTW7HgJ3MuDK
+ hh3Glf53phaWbGVpSW/eqevB2ZZOlaO0pLHHr/2r/qW3AeI+n9EmUOpf6uWY9t621C+7OB
+ okNwv/CEkj4TiJWMN+cs0jpiYJBZGRQz4yPYoulxrOf8eYiWdSBWZ0qTRRs7f05Rdb8K1g
+ sS7uEOKOM+m01TuNlAIjpM1Xo5+/IV4xakaLaTqQSRPa9ZQU+WZ0gdapp0Y8NxEFs6hjfC
+ krDlNj+okK83AXCg0h2xnNG3P65GIpI9CIDw7wwYrgHvsSTInLMwDz5OP3pWew==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=green-communications.fr
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2026-05-17
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=exfuJAMt
+Subject: Re: [Buildroot] [PATCH 1/3] support/testing: add gitlab-runner.json
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,15 +88,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMTgvMDUvMjAyNiDDoCAwNToyMCwgQnVpbGRyb290IE5vdGlmaWNhdGlvbnMgYSDDqWNyaXTC
-oDoKPiBQYWNrYWdlcyBoYXZpbmcgYSBuZXdlciB2ZXJzaW9uCj4gPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PQoKVGhpcyBwYXJ0IG5lZWQgdG8gdGFyZ2V0IHRoZSBuZXh0IGJyYW5jaCBu
-b3cuICBJZiBJIHJlbWVtYmVyIGNvcnJlY3RseSwgdGhpcyAKbXVzdCBiZSBkb25lIG1hbnVhbGx5
-LgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+  Hi Romain,
+
+  First remark: I don't think splitting in 3 commits is very useful, it actually 
+makes it harder to see the whole picture.
+
+On 17/05/2026 23:36, Romain Naour via buildroot wrote:
+> GitLab offers the following machine types for hosted runners on Linux
+> x86-64 [1]:
+> 
+> Runner Tag						vCPUs	Memory	Storage
+> saas-linux-small-amd64 (default)			2	8 GB	30 GB
+> saas-linux-medium-amd64				4	16 GB	50 GB
+> saas-linux-large-amd64 (Premium and Ultimate only)	8	32 GB	100 GB
+> saas-linux-xlarge-amd64 (Premium and Ultimate only)	16	64 GB	200 GB
+> saas-linux-2xlarge-amd64 (Premium and Ultimate only)	32	128 GB	200 GB
+> 
+> Thanks to GitLab OSS program, Buildroot benefit a free Gold
+
+  Ultimate, actually.
+
+> subscription and can use Gitlab shared runners tagged with
+> saas-linux-{large, xlarge, 2xlarge}-amd64.
+> 
+> In order to use one of thoses tags in Buildroot Gitlab-CI jobs, we have
+> to classify all tests by ressource requirement.
+
+  s/ressource/resource/
+
+> 
+> Most of our tests are fast (checkpackage, test_external_bootlin...), so
+> saas-linux-small-amd64 runner tag is enough. Note that untagged jobs
+> run on the small Linux x86-64 runner [3].
+
+  AFAIU, if it has _any_ tag, it will never run on a shared runner. And we 
+always add the buildroot-runner tag.
+
+  Maybe that's what you meant, but it's not so clear from this paragraph.
+
+
+> Shared Gitlab-CI runners time out after 3 hours but some of our tests
+> requires more time to finish. Some tests may also requires more storage
+> due to download sources and generated files, so such test must use a
+> runner that provide more storage.
+> 
+> Introduce a "Tier list" that will be used to select the Runner Tag.
+> 
+>    Tier1 S (default)
+>    Tier2 M
+>    Tier3 L
+>    Tier4 XL
+>    Tier5 2XL
+
+  Nitpick: generally Tier1 means "the best".
+
+  Actually I don't think it makes much sense to use Tier terminology, why not 
+just stick to small/medium/...?
+
+> Gitlab runners owned by the Buildroot project can still run any
+> job using "buildroot-runner" tag. We expect such runners able to
+> run any jobs without any limitation.
+> 
+> If a test can't be executed by any shared Gitlab-CI runner, we have to
+> use a runner owned by the Buildroot project. In this case we have to
+> use a specific tag "buildroot-runner-only".
+
+  Is there anything where 2XL won't work?
+
+> [1] https://docs.gitlab.com/ci/runners/hosted_runners/linux/#machine-types-available-for-linux---x86-64
+> [2] https://gitlab.com/buildroot.org/gitlab-oss
+> [3] https://docs.gitlab.com/ci/runners/hosted_runners/#gitlabcom-hosted-runner-workflow
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>   support/testing/gitlab-runner.json | 765 +++++++++++++++++++++++++++++
+>   1 file changed, 765 insertions(+)
+>   create mode 100644 support/testing/gitlab-runner.json
+> 
+> diff --git a/support/testing/gitlab-runner.json b/support/testing/gitlab-runner.json
+> new file mode 100644
+> index 0000000000..c163b4b1fa
+> --- /dev/null
+> +++ b/support/testing/gitlab-runner.json
+
+  Instead of a separate file, wouldn't it be easier to put the information 
+directly in the test file itself? I think the path to the source file can be 
+easily subst-ed from the test name, and from there we can parse a comment.
+
+> @@ -0,0 +1,765 @@
+> +{
+> +    "tests": {
+> +        "tests.boot.test_atf.TestATFAllwinner.test_run": { "runner": "Tier1" },
+> +        "tests.boot.test_atf.TestATFAllwinner.test_run": { "runner": "Tier1" },
+
+  Can't we drop everything which is Tier1 from the list and just default to it?
+
+  If not, we'll need a check-package check that every test is mentioned in 
+gitlab-runner.json.
+
+  How did you decide on Tier1/2/...? Can that be documented?
+
+
+[snip]
+
+  Regards,
+  Arnout
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
