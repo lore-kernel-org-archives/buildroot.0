@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 382B4CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29AC8CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0666F85594;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 136F885707;
 	Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EL4ZnxadOPmA; Tue,  9 Jun 2026 13:02:08 +0000 (UTC)
+ id P7l6QEBUVCoj; Tue,  9 Jun 2026 13:02:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B47A2856D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EBEE856E8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010127;
-	bh=vvpFEqOYWUCkodaSvISguGSjsBRpXpTBRPeeNYEoGDc=;
+	s=default; t=1781010126;
+	bh=YPTNy9aPb+/op5sUVxzCtdv9xkB5+d+9RsbkMvdnqec=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RgQiyCzYGIbGyrtIgWuJzwcsQqY8xbZHG/rfRemfZgiQqj2SfFn9uxZCD2dRtwTO6
-	 QGFO3baIrMq6SulgZ12LRUmdjofYftpPv0a2gkh5lB3IG1knLLA8VTdQ94OrOwewXf
-	 FFMIuZnuqbRLrjYij7LnnP2VTerdqhJUvsLlPyrV+SF48FpsL6cUSS58VJuDoGzUG3
-	 HewUis28Sym8sKH1pG+5H4P00/MCOo/uWfDukydu1F5rOecAWTjgoI8tcdI7ossea8
-	 oKwRkTNo0KdNt7yFxXkKmpd1PFmcRUllZkBhVADDS87lQKaUILGpiLkbwr5Gh2ISfr
-	 zmV9PT6zWSfgg==
+	b=AdDOzk66GyYXPsteYbSUX/0yvisfw4N3k5tR2VV4LA4levCz6wB8R6C5/D8/twnjG
+	 zLUfKejO38jJ2mYKZmqmyNt5dcoxsEQVELBUBTMhhSYbjaF9JL9nfbpnFueVwTtlvR
+	 gSvge2ikDCQazsFZY/e7+dGIHMefn1EAk3jBazV9JDRvsrziMlkmUlCLVYRVJdB7jo
+	 v6mOZEywHic51vPzPDi1rUCDJGvDH3tJjR0/Jl+Rezu/oX9DBVdT43XFV1ZwZ7MUwD
+	 GpZV1dB48D2cggtyHchxpUmLGj8C7d9JxbF6S6nhPgyP+CZijTd8iB8RY9TLfjYoPH
+	 Q3CrEU0LWbvuw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B47A2856D4;
-	Tue,  9 Jun 2026 13:02:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C7342EE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EBEE856E8;
+	Tue,  9 Jun 2026 13:02:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93208196
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D7766F698
+ by smtp4.osuosl.org (Postfix) with ESMTP id 853EA455DD
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cVHF_60MA9Yj for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3IzbzSwKpVnp for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FF526F691
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D503411F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FF526F691
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D503411F2
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F6BE87E68; Tue,  9 Jun 2026 13:01:18 +0000 (UTC)
+ id D544A87E8F; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 May 2026 20:10:54 +0200
+Date: Mon, 18 May 2026 21:09:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9e5b93f78228c9bcaa210eaa99332000c9bf86d
-X-Git-Newrev: 2d78ca8ad60e0988762f9b91e5102fae978c4de8
+X-Git-Oldrev: 9a1fc8176e4808551f9501f0ed8b5745deb28e59
+X-Git-Newrev: 418ee5a2b6cce22bfa9560ca0289fce728a2bde0
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130118.4F6BE87E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/amlogic-boot-fip: bump version
+Message-Id: <20260609130116.D544A87E8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: Only run depmod during the finalize
+ hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,49 +69,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d78ca8ad60e0988762f9b91e5102fae978c4de8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/418ee5a2b6cce22bfa9560ca0289fce728a2bde0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Bump amlogic-boot-fip to the latest commit on the LibreELEC/amlogic-boot-fip
-master branch.
+Commit 82e765640095 ("linux: Allow modprobe for out-of-tre modules") added
+support for running depmod as part of the target finalize hook.
 
-Signed-off-by: Viacheslav Bocharov <v@baodeep.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+However, it also originally set DEPMOD to /dev/null, a hunk that was
+removed upon apply. The kernel depmod wrapper script uses `command` to
+verify that whatever is passed into DEPMOD is known to the shell.
+These days if the DEPMOD tool is set to something incorrect the depmod
+script will just warn [1], but there are trees where the depmod script will
+stop with a hard error. [2]
+
+Running depmod as part of out-of-tree module installations causes
+unnecessary files to be generated and installed.
+
+Since we're already running depmod in the finalize hook, stub this call to
+`true` as it's definitely a shell callable, and it will always succeed.
+This is what is done for other packaging scripts in the kernel tree. [3]
+
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/scripts/depmod.sh?id=914b087ff9e0e9a399a4927fa30793064afc0178 [1]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/scripts/depmod.sh?id=934193a654c1f4d0643ddbf4b2529b508cae926e [2]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/package/PKGBUILD?id=8bdd53e066012bed431667393676d1b5e8cce153#n70 [3]
+Signed-off-by: John Ernberg <j@j-ernberg.se>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/amlogic-boot-fip/amlogic-boot-fip.hash | 2 +-
- package/amlogic-boot-fip/amlogic-boot-fip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.hash b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-index 1a08341532..f9f0e8b018 100644
---- a/package/amlogic-boot-fip/amlogic-boot-fip.hash
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2cc06bc7d5647fd8c0025181fa42c4a8ef0ed16b918a1fa2060ea83c22e47b20  amlogic-boot-fip-e96b6a694380ff07d5a9e4be644ffe254bd18512.tar.gz
-+sha256  dede20dd7666a33b33442252b994f4033cfafe3fb6d11c86019dc3ae61d55227  amlogic-boot-fip-42d372123631066fb77fbcbb612dc3eb41a3f6f9.tar.gz
- sha256  4255537f71b1cd0d487de0fa2b8eddf1eb96ed96d119507336dde8b3782b86e6  LICENSE
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.mk b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-index f98887cfcd..552e785066 100644
---- a/package/amlogic-boot-fip/amlogic-boot-fip.mk
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c61089bfe0..3c7ebe7e9a 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -164,7 +164,7 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
+ 	REGENERATE_PARSERS=1 \
+-	DEPMOD=$(HOST_DIR)/sbin/depmod
++	DEPMOD=true
  
--AMLOGIC_BOOT_FIP_VERSION = e96b6a694380ff07d5a9e4be644ffe254bd18512
-+AMLOGIC_BOOT_FIP_VERSION = 42d372123631066fb77fbcbb612dc3eb41a3f6f9
- AMLOGIC_BOOT_FIP_SITE = $(call github,LibreELEC,amlogic-boot-fip,$(AMLOGIC_BOOT_FIP_VERSION))
- AMLOGIC_BOOT_FIP_LICENSE = PROPRIETARY
- AMLOGIC_BOOT_FIP_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_REPRODUCIBLE),y)
+ LINUX_MAKE_ENV += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
