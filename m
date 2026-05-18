@@ -4,82 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A048CD4F3C
-	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E78CD4F4A
+	for <buildroot@archiver.kernel.org>; Mon, 18 May 2026 18:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69F79606B0;
-	Mon, 18 May 2026 18:12:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14D96606BF;
+	Mon, 18 May 2026 18:13:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fwZoSaejt7x3; Mon, 18 May 2026 18:12:31 +0000 (UTC)
+ id SGaIsgg_isw3; Mon, 18 May 2026 18:13:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BFA46069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F19D606B4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779127951;
-	bh=iLLNXrT+uPQFccMD+nU2zG9UX92L1AMycA0gDFHYNVE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=hQLokNwmT6QAe6dQRox13Sbq3KoCxp1yNJ1jEHh6pi4SHVbvfWPx7DBpbLU7iY0mE
-	 p7Mo0mSaJ8y5fJta8KV/k3tORItW2aI1IX0+S+/O2X01yXFw4849XXHiBy5IaYPRxY
-	 VTlhG+zY2S/HL3xxHTuNSkiuqD4Lr7sfTeqL3Rha+VnYpzWglRDMEZ8Hmo4srmraMl
-	 fDS15iP6rstFZrmbn2jccAU9QQmhrEDBEKJAK3DRfPXcQObQmwjpJML5ZWmIEMH5Om
-	 X+CAYVQyYFjODuwxsRzv9gY7f18YbSEeE4d+VORU/SgqYl3pvPwNapKrzLupyxkjDs
-	 blXzURCUYexpQ==
+	s=default; t=1779127985;
+	bh=jwCsXSy+UFxWa7NwQIhtD3PQRmce327y7w2Zrjd5ljU=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=QjpU58NKCGjx37/+HAhaUW0Pa2t9AliNWIp5D7YYygmP/iuCUti43ZAYTkIbntU0M
+	 bQnYzVuFNHw7nAMS/vAgeGuyIMAWmDYEkkAuU4bgC2b6X58ka9rNKL2v7Jco5+YUSf
+	 4UhzGlUlrVd+2OEkfasKhqaJbD7OocN76G5uR6oKbWScDT/ACNJWS/3PFrEEg6NsAZ
+	 O36Iq9LcdEtaQF3TxiYLVBrnGLz0bjDVOwVTiSt81VN3O1OlYqU1LQ/fRnWq7PvFoT
+	 oXXSo3dwYY3bPQazXwbO77hEpDZoE7nAtsntXm7Wsv4jeiQHV1w+UUr/kg8SpO00Ff
+	 LfdbwuSmLup5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BFA46069C;
-	Mon, 18 May 2026 18:12:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A89FF1B2
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:12:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F19D606B4;
+	Mon, 18 May 2026 18:13:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 943531B2
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A97B408E0
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:12:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79DFD80CF0
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8439HTgDNV7 for <buildroot@buildroot.org>;
- Mon, 18 May 2026 18:12:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 981F2408D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 981F2408D7
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 981F2408D7
- for <buildroot@buildroot.org>; Mon, 18 May 2026 18:12:28 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b8c8.dip0.t-ipconnect.de [84.161.184.200])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AAD15A4C02BC;
- Mon, 18 May 2026 20:12:26 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44964)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wP2S2-000000008Bo-2Fd1;
- Mon, 18 May 2026 18:12:26 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 May 2026 20:12:26 +0200
-Message-ID: <20260518181226.112680-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wwAOENDNS29q for <buildroot@buildroot.org>;
+ Mon, 18 May 2026 18:13:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 664A980CED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 664A980CED
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 664A980CED
+ for <buildroot@buildroot.org>; Mon, 18 May 2026 18:13:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C2DE8B97BDDC; Mon, 18 May 2026 20:13:00 +0200 (CEST)
+Message-ID: <01e1c6ce-21db-48c1-b6fe-1894b1f881bb@rnout.be>
+Date: Mon, 18 May 2026 20:12:58 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: +
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
+References: <20260518173643.52118-1-ju.o@free.fr>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260518173643.52118-1-ju.o@free.fr>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779127946;
- bh=dXNuzsq+6S01DIDC3e7WMW/Knbv8rU0RabYfGPJJgLw=;
- h=From:To:Cc:Subject:Date:From;
- b=WUEuG4a2Ay+Vga2jTEkymx5bxykXiEReZrCQnJJFrF1F+Uf8nOGdkjfPL/7frVDRn
- 7Do7Im3CLnH0IMHhUIExDJOsjW2TINODDN/ZMi388OpuBqd5cXwms4I1jW0VkcHgUQ
- UybPdnPpMUAUwLNf7LO5z6biremU/eU6xom+6L/15PLpkPsf+unBNL6IQaWmbtyotP
- BWOxVT7S2P1UmZzQlQwfPBExa20RKR151v8No7quBMjF2gJppc1+vu4NxI6NaQ/TLc
- ir3kiAyJUhbhM/ayyyXFY8j+WzWyM/lAGEVPNNuLOjOdSN4ih5WqBkzTaNO50jCvb1
- vcQpvSeLXJvVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=WUEuG4a2
-Subject: [Buildroot] [PATCH 1/1] package/lcms2: bump version to 2.19.1
+ d=rnout.be; s=dkim; 
+ t=1779127981; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=oNEf+D/Nr3F39hWcoYdJT7s8c9lJTFw9K2PBOjvdFi0=;
+ b=X6EvZsepl6wEyqFM429IdIkzU7CPmg5tHfNmBb9tPpdAwdxzlus+uL3MnyBEJR0nxKpZMY
+ p1+X+COOCHecWpbamxkfyBnLfc/UWVMk9LMu1ZdmcM4pJ2TIIT5Nu7LlAEfawHxm6MAP9v
+ UVoVQ220IO3h5DnuT03dgs4aSafjf7VUsJ3DOioAeNTj1rt0D5cd/TPXpFWqZZ3e5U1fBG
+ xAQvTLzYI2v7kcdOl5MqcjRr/lFkTC8y2A9EYkZOCGOW9t5SxKqm9YgTRGFaOyITPV2q19
+ ATh1HsBECQIrg5vPNoJwNyJiZfodbmUWArIzYy4GXPv73t+NRTZ0hAXWJu0y3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=X6EvZsep
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-google-api-core:
+ propagate python-google-auth dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,52 +90,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/mm2/Little-CMS/releases/tag/lcms2.19.1
-"lcms2-2.19.1 is a hot-fix release"
 
-https://github.com/mm2/Little-CMS/blob/lcms2.19.1/ChangeLog
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/lcms2/lcms2.hash | 8 ++++----
- package/lcms2/lcms2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On 18/05/2026 19:36, Julien Olivain via buildroot wrote:
+> Fixes:
+> 
+> WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_GOOGLE_AUTH
+>    Depends on [n]: BR2_PACKAGE_PYTHON3 [=y] && BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS [=n]
+>    Selected by [y]:
+>    - BR2_PACKAGE_PYTHON_GOOGLE_API_CORE [=y] && BR2_PACKAGE_PYTHON3 [=y] && BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS [=y]
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index 0ff881158f..f9a64b9527 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.19
--sha1  bedb39ede32b76bc2cb24ee531d7433cf787b319  lcms2-2.19.tar.gz
--# From https://github.com/mm2/Little-CMS/releases/tag/lcms2.19
--sha256  49e7e134e4299733dd0eda434fa468997a28ab3d33fa397c642b03644f552216  lcms2-2.19.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.19.1/
-+sha1  b66f8317db40a775cb46cc465f66eb841c11aebf  lcms2-2.19.1.tar.gz
-+# From https://github.com/mm2/Little-CMS/releases/tag/lcms2.19.1
-+sha256  bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8  lcms2-2.19.1.tar.gz
- # Locally computed:
- sha256  6dbd60437f8ef91d8de1f08ad75882547fd4931bfcc3566a0735f28db1484d31  LICENSE
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 32a78a4f35..6f99e3b454 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LCMS2_VERSION = 2.19
-+LCMS2_VERSION = 2.19.1
- LCMS2_SITE = https://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = LICENSE
--- 
-2.47.3
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/python-google-api-core/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/python-google-api-core/Config.in b/package/python-google-api-core/Config.in
+> index 5ddc8b3b22..88bc8326b5 100644
+> --- a/package/python-google-api-core/Config.in
+> +++ b/package/python-google-api-core/Config.in
+> @@ -1,6 +1,7 @@
+>   config BR2_PACKAGE_PYTHON_GOOGLE_API_CORE
+>   	bool "python-google-api-core"
+>   	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # python-proto-plus
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-google-auth -> python-cryptography
+>   	select BR2_PACKAGE_PYTHON_GOOGLE_AUTH # runtime
+>   	select BR2_PACKAGE_PYTHON_GOOGLEAPIS_COMMON_PROTOS # runtime
+>   	select BR2_PACKAGE_PYTHON_PROTO_PLUS # runtime
 
 _______________________________________________
 buildroot mailing list
