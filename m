@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58ECECD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9B5BCD8CAA
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 373908578D;
-	Tue,  9 Jun 2026 13:02:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0D6B857B3;
+	Tue,  9 Jun 2026 13:02:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3ZLhujP66QS; Tue,  9 Jun 2026 13:02:22 +0000 (UTC)
+ id cV7J7p-VilXN; Tue,  9 Jun 2026 13:02:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACE6F85777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22E9E85789
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010142;
-	bh=ZUqpP4KSyB2BX615PIFdZTKlWoGSwJnr62wbuBi04kA=;
+	s=default; t=1781010144;
+	bh=lyzh1X7yP5wOlzQnbb0C1RA3aucf4+ADbciB9Fo98j0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m3IEW0hH9fSzSOW0LaoqBLvJLD7PzPo/KQNreQVblqMface6cM3QS8x5389GVBnbj
-	 ovdUR1fZ5nnlNzP1KeDlDPwHMwL61H7nqYGJh5Q+qXoVVkiZhmp8SBZE8PdypeXAtB
-	 rTwH5ND6CG/0cs5o0UBvlMIThfTGiWh1ANSqxjFTv+re77iYhimasqtBpHwRtOFW7B
-	 QKCdpjZ1T1v9tAT87sYViu4YQsM17v6kxRmq2sNJmoXl9jz2vNVVKkBXxhMrJPLwP1
-	 C59Z09+t6VGS3/Zx4g2DK7RtBN/U7fQX29iTCOrUX0+toExaaj7V3Ew6p3gyJaxmsj
-	 Nr5JvPw68322g==
+	b=DtOLJSGUkcW2KLUz6Uk1Pt0b/GkmFT4Af9P1p1nrJMQFHKbELdKmcyyemeebwrNjq
+	 H2M3QIUT8VUfVk84Z+fZ9GQpiKFG9c5AYG1/rOzjcJWY5zFoHzVHziFy5klQ6VSAWm
+	 uvUgsZRWEDwrgB5qTVuP6ekxsWcTD7RkvH3NUIcWh37zHheYIRQ6Cwz39EW5BWItxd
+	 Gl5pS3Y/xY+YgG9UC3beGJxBG+wBTLLKnBeOw8z4rY/ZlaVljcDWFGlUTynGK5qGAP
+	 eMOfbPCEXo+igEX/wu9EScYNkp6HSSplAxWF6SYS6Y5OTvNaUit8rHfiqFGByXejCD
+	 mrVRX+p7fLL1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACE6F85777;
-	Tue,  9 Jun 2026 13:02:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D729190
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22E9E85789;
+	Tue,  9 Jun 2026 13:02:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26899190
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F221423C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC8DD45AC6
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 39yAPieIwpGP for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w07vb2arElQs for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02430426D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8498B411B2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02430426D6
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8498B411B2
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DB6B87E7E; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
+ id B388087E8D; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 21:54:13 +0200
+Date: Mon, 18 May 2026 20:28:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6fda245fea3d162b47472240bd1f0af7bd98753a
-X-Git-Newrev: c537913fb9bef85c4667b22dc6841b000b93c6c4
+X-Git-Oldrev: 460700d38e1bb9ddb83bf8de81d69a2448099165
+X-Git-Newrev: c4cd1d52408bdc955fe14fb138d98a37494f5abe
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130117.3DB6B87E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tpm2-tss: Correctly depend on
- util-linux-libs for fapi support
+Message-Id: <20260609130116.B388087E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: add option to enable
+ patented video codecs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c537913fb9bef85c4667b22dc6841b000b93c6c4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c4cd1d52408bdc955fe14fb138d98a37494f5abe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-tpm2-tss is a dependency of systemd, which when enabled becomes a
-dependency of util-linux.
+By default, mesa uses -Dvideo-codecs=all_free which only includes
+royalty-free codecs (AV1, VP9, MPEG-1/2, JPEG).
 
-tpm2-tss only really wants libuuid, so depend on util-linux-libs instead
-breaking the dependency cycle.
+Add a new BR2_PACKAGE_MESA3D_PATENTED_VIDEO_CODECS option to set
+-Dvideo-codecs=all, which additionally enables patent-encumbered
+codecs (H.264, H.265, VC-1) for both Gallium VA-API and Vulkan
+video decode/encode.
 
-Signed-off-by: John Ernberg <j@j-ernberg.se>
-[Arnout: also select UTIL_LINUX_LIBS in Config.in]
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+[Arnout: add PATENTED to the config symbol name]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/tpm2-tss/Config.in   | 1 +
- package/tpm2-tss/tpm2-tss.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ package/mesa3d/mesa3d.mk |  6 ++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index d87c1e0d8d..9ce3c22763 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -40,6 +40,7 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  This option allows to enable Feature API (FAPI).  Feature
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 08ff401328..11da37a5b4 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -33,7 +33,7 @@ TPM2_TSS_CONF_OPTS = \
- TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 0fab2e3ba8..e4a444efbb 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -520,6 +520,20 @@ comment "Gallium VA-API needs a gallium driver, incompatible with GLX w/o libglv
+ 	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER || \
+ 		(BR2_PACKAGE_MESA3D_OPENGL_GLX && !BR2_PACKAGE_LIBGLVND)
  
- ifeq ($(BR2_PACKAGE_TPM2_TSS_FAPI),y)
--TPM2_TSS_DEPENDENCIES += json-c libcurl util-linux
-+TPM2_TSS_DEPENDENCIES += json-c libcurl util-linux-libs
- TPM2_TSS_CONF_OPTS += --enable-fapi
- else
- TPM2_TSS_CONF_OPTS += --disable-fapi --disable-policy
++config BR2_PACKAGE_MESA3D_PATENTED_VIDEO_CODECS
++	bool "patented video codecs (H.264, H.265)"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_VA || BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	help
++	  Enable patent-encumbered video codec support (H.264, H.265,
++	  VC-1 decode/encode) for Gallium VA-API and/or Vulkan video.
++
++	  Without this, only royalty-free codecs are supported
++	  (AV1, VP9, MPEG-1/2, JPEG).
++
++comment "patented video codecs need Gallium VA-API or a Vulkan driver"
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_VA && \
++		!BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++
+ config BR2_PACKAGE_PROVIDES_LIBGBM
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_GBM
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e1eb037a84..f46c50e878 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -206,6 +206,12 @@ else
+ MESA3D_CONF_OPTS += -Dgallium-va=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_PATENTED_VIDEO_CODECS),y)
++MESA3D_CONF_OPTS += -Dvideo-codecs=all
++else
++MESA3D_CONF_OPTS += -Dvideo-codecs=all_free
++endif
++
+ # libGL is only provided for a full xorg stack, without libglvnd
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgl)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
