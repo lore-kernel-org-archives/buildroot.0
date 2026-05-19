@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A578CD4F5B
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 21:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A016CD4F5B
+	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 21:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3660060BFC;
-	Tue, 19 May 2026 21:00:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DABC860BE5;
+	Tue, 19 May 2026 21:04:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FWzA33buJytb; Tue, 19 May 2026 21:00:03 +0000 (UTC)
+ id CpZfB-oxyrry; Tue, 19 May 2026 21:04:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CD5860BFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FBCC60BCD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779224403;
-	bh=WkyHPkQqsstTYTaTZPkjRzRPTZ8azuQ/DuhsIw5pkRA=;
+	s=default; t=1779224695;
+	bh=BaWP3QI/ErTPQbSyNMkeRts6jlhe6eoRvDkmFmiqPfE=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=ejAZJih6iVbbwz69FXDi039rUKQEgmETwxzg3btWuBllaHP14gReYmXdKEx/dDGYP
-	 jhGZ3uXXq14h6Sq0tLPK1p7K5CtIRM+Tk/lE5/oADhTiyWo+NgHkKI18RXxr8XRiWc
-	 k7kFE9kk/NuAg6Lgs+2FosCJiKmtL/z2r8aUe7ygsm39DKDS47v+1+xIvmi9YKCb3+
-	 YYnW4kJUI034jc6lOAiE/K80LKBfGExCIagL/TcWvZB4auKLcfzmRG6/Vwnq9qNWtt
-	 u68NRkKW3VeOQ8U1stiXiVUXrK2bKaRBxN7BXDV/rxk8ESeHYI5jo1ZE4mDKSP7LSJ
-	 i7RaEY4oEtMSg==
+	b=b/CUh5xzi8AIV9I9QHSbbKhUh/B5s1kko9fcVkVd1RfWlwPXqHx+/yQzwZP481Ncu
+	 lY1jx59+yf7bP3GbVHaHkfZkgU4st9n4uxPGTZYn+fVRtMCOjrQ4Qb9kMGW6L/RpWu
+	 FKjpxNjyPoKG7UU3UZqsI8mJDlgkGB/sU/PQYPRJi+16SsgYTIkoYgPEO+So1CbP1x
+	 z/t20RXLG7JQAd/4qkUE8aKPpTlIRJMNmyrZWU8JN4y0t6c6AZ/HLOmUiNWoCHPkJs
+	 dHj+YkVBCXHWWW1NDraabK11xVY94WCN2nd1w9fkHPXQoCkRfi4+NqltstEpnJkv7L
+	 WwKXSX5UbFnFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CD5860BFD;
-	Tue, 19 May 2026 21:00:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FBCC60BCD;
+	Tue, 19 May 2026 21:04:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C2A44265
- for <buildroot@buildroot.org>; Tue, 19 May 2026 21:00:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 39DE6265
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 21:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7C79405A5
- for <buildroot@buildroot.org>; Tue, 19 May 2026 21:00:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27A0E405A5
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 21:04:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eDAtZXWQgSLV for <buildroot@buildroot.org>;
- Tue, 19 May 2026 21:00:00 +0000 (UTC)
+ id Qp-RXscVZ0hI for <buildroot@buildroot.org>;
+ Tue, 19 May 2026 21:04:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 70C11405A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70C11405A2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A688C405A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A688C405A1
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 70C11405A2
- for <buildroot@buildroot.org>; Tue, 19 May 2026 21:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A688C405A1
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 21:04:52 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0431.dip0.t-ipconnect.de [91.58.4.49])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8E2ECA4C0B8B;
- Tue, 19 May 2026 22:59:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47878)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1B06CA4C2D52;
+ Tue, 19 May 2026 23:04:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39938)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wPRXi-000000007r6-1XXC;
- Tue, 19 May 2026 20:59:58 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wPRcP-000000000Fb-3l4G;
+ Tue, 19 May 2026 21:04:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 May 2026 22:59:58 +0200
-Message-ID: <20260519205958.1155754-1-bernd@kuhls.net>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 19 May 2026 23:04:49 +0200
+Message-ID: <20260519210449.1158179-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1779224398;
- bh=xhiuwOEukPbFpz/Qx2wCchNa1r7XTAKtZA6BbSSt5vw=;
+ s=kas202511301023; t=1779224690;
+ bh=ZcwTu5ZawpUIdCivYa3qxemykV8QxAbto46QTYNTRyg=;
  h=From:To:Cc:Subject:Date:From;
- b=YJ1Mox0rY12wk+9B5PMXs5Eqx6HllY8kWkLafGSP57sW8qP6T9sBesVaBl7almC9n
- vFGC/K7SrPCNt3EOKPhAI82vaQEGyzNWrIEKBefYe2VvBxxYDUtjoLWBome1cZhuK2
- AM9ynKVFQfOOzqfew2oav0Q8pSzlfTSb+fcJPuSao3qG3Fkf7hHZSxPJXZbg9woVTT
- kZONpZjKqI3WSuyd4dtu0Vuotae1FycVPwZQnQFwopuLYSCgx5sYQZCS3lLm7rQM52
- j8SZMlIByh/gJJ64piR6mINa+d2GFaKmPr4lDZWMGs9bfGYy9HwY38YiAEirvI3pyq
- QVTSL7COqgxaQ==
+ b=DrCSsHaowLQFNgAqGCnzFjwtOmYhept2OOdaCPFLCy7Cca+INhAd0Q35AWK+0m9U3
+ /h2bzrxzdgqXBznNjpMnEoApSQG5eKW7BHFO0KcgXvBP7vw0KXifcEFHJEcbNo1H+V
+ d7kAVKiTM1Ly8W711BepoxLP6ORsXb13w0o98XIugvgPCRKaCMX7TXiOy5YWtc5z5a
+ jYxoPuUFnTHo3vQZJmDHBV0qlbQTxhxLF/+kKWNU3jeByVT6t50BepjHZ459Hgvm+x
+ P4+46Tw8V8VgBccO51SJgnNoQ5QSqrJc3vO4qmNLZqa2fBZgjzKMDEBagSK3HxIRSh
+ unSSNckch3u6w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=YJ1Mox0r
-Subject: [Buildroot] [PATCH/next 1/1] package/libffi: bump version to 3.5.2
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=DrCSsHao
+Subject: [Buildroot] [PATCH/next v2 1/1] package/util-linux: bump version to
+ 2.42.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,46 +97,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/libffi/libffi/releases/tag/v3.5.0
-https://github.com/libffi/libffi/releases/tag/v3.5.1
-https://github.com/libffi/libffi/releases/tag/v3.5.2
+https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42.1-ReleaseNotes
+https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42-ReleaseNotes
 
-Switched to sha256 tarball hash provided by upstream.
-
-Updated license hash due to copyright year bump:
-https://github.com/libffi/libffi/commit/8b0eab28cb45c6862b30f5cadfc1a7fe996b072c
+The security fixes mentioned in the release notes were also fixed in
+2.41.4:
+https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.4-ReleaseNotes
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libffi/libffi.hash | 6 +++---
- package/libffi/libffi.mk   | 2 +-
+v2: added note that this bump is not security-related (Marcus)
+
+ package/util-linux/util-linux.hash | 4 ++--
+ package/util-linux/util-linux.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
-index 75be5bbcef..11e30e0e44 100644
---- a/package/libffi/libffi.hash
-+++ b/package/libffi/libffi.hash
-@@ -1,4 +1,4 @@
--# Locally calculated
--sha256  bc9842a18898bfacb0ed1252c4febcc7e78fa139fd27fdc7a3e30d9d9356119b  libffi-3.4.8.tar.gz
-+# From https://github.com/libffi/libffi/releases/tag/v3.5.2
-+sha256  f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc  libffi-3.5.2.tar.gz
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 5a5656212c..631d0b5651 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/sha256sums.asc
+-sha256  a8c213cc06048862602a42b2d299b340001f6d05c4407b549f3e03521df83688  util-linux-2.41.4.tar.xz
++# From https://www.kernel.org/pub/linux/utils/util-linux/v2.42/sha256sums.asc
++sha256  82e9158eb12a9b0b569d84e1687fed9dd18fe89ccd8ef5ac3427218a7c0d7f7f  util-linux-2.42.1.tar.xz
  # License files, locally calculated
--sha256  67894089811f93fca47a76f85e017da6f8582d4ba0905963c6e0f1ad6df7a195  LICENSE
-+sha256  d5699fa516968e3a1550e6c902b7441c78856f2603d61bedd0b0662a26655366  LICENSE
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 7ea61dac1e..2f3208333c 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3  README.licensing
+ sha256  527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1  Documentation/licenses/COPYING.BSD-2-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a7c5cea8bb..d540e75807 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -7,8 +7,8 @@
+ # When making changes to this file, please check if
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
--LIBFFI_VERSION = 3.4.8
-+LIBFFI_VERSION = 3.5.2
- LIBFFI_SITE = \
- 	https://github.com/libffi/libffi/releases/download/v$(LIBFFI_VERSION)
- LIBFFI_LICENSE = MIT
+-UTIL_LINUX_VERSION_MAJOR = 2.41
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).4
++UTIL_LINUX_VERSION_MAJOR = 2.42
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
 -- 
 2.47.3
 
