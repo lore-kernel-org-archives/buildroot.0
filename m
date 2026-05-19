@@ -1,88 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0702ECD4F54
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 20:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FB5DCD4F5B
+	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 20:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEFE660BE4;
-	Tue, 19 May 2026 20:50:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3759B81DFB;
+	Tue, 19 May 2026 20:51:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vivuNEdFrLGc; Tue, 19 May 2026 20:51:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0965081DFD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779223874;
+	bh=VjDAbAOwgKuLHyAPzE1ZBSNQkqxfrcoEtJC7v23pHjU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=QOai+dWtTlfgJz45u0hsFLmNxAzEdA0ortpwM7rKmrC5MXnba7v23RH4A3QLlPN3K
+	 t0Ry798ie8MZyncQej1nuXRIUprR1rt+xVML9XJInb47S31VSJIkG0sCr4CLmuAZdY
+	 9pv9LZLG3yrNtLJgX+crt8L0Cf206ilsJg6Xwbnq3tiDOdN2jk6opWxDclsEGHeGLs
+	 wrVcQwKqiKciXN/DowgNSlFajFPnj2a+noD60VItL0PRsSDmZzcrdrDwWsnwG4TnVT
+	 3BY7r6RP/RL/kYKH66YaqD0AagH8E8hK0R5YBtv1bISjQr4Jg2VPxtO3p+QApr1if1
+	 BmCPlJ/89fC0Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0965081DFD;
+	Tue, 19 May 2026 20:51:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 959D7265
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:51:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78A3D60BE1
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:51:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7VDlMTMz6JRK; Tue, 19 May 2026 20:50:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE00F60BDE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779223803;
-	bh=wB55Sw9H1ov/C+DJI0pbqq8hWAeLrdLGyJwU3cuz7pk=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=eNtd3QdeW1wHOEeNjY2qBfmH338s+0GzMD8ABVyQwmmyg1PtI/AmxwENMdS1se2D3
-	 add1SPzhwX2XDVioS8eg3n7Qh1nIFyrS1Z7KpgnYksQp+JzfjX3/ozQO4wv2LU/fzb
-	 X5h7kv6wVRbhIgYi/ev8IIllutXz4lEZB1T/Mc90Z9KWhGENEO6/N/is0bC+fy/MIA
-	 G/UttXtolWSGmzvzqVrV1CPmhs2uNKuRxMqEoWOoAixPHQEHZ4d1H1Q7aSFctAtOy6
-	 t3phPksjNKbseD2tdMLY225M/PomdClrXNHr2qfeLd0pEilSSSUxxN4xqEN8zcYLfo
-	 G/MOElH2Tw9nQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE00F60BDE;
-	Tue, 19 May 2026 20:50:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EC67C265
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:50:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1BDE4056E
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:50:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0J7p8-n0QaO for <buildroot@buildroot.org>;
- Tue, 19 May 2026 20:49:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 315C340208
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315C340208
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 315C340208
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:49:58 +0000 (UTC)
-Received: from [192.168.11.192] (ip-109-42-117-151.web.vodafone.de
- [109.42.117.151])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id B89F02C86EC7;
- Tue, 19 May 2026 22:49:55 +0200 (CEST)
-Message-ID: <4d31d112-c1d7-4673-aabd-059a54f84d90@bubu1.eu>
-Date: Tue, 19 May 2026 22:49:53 +0200
+ id bWaq9v9ff5aw for <buildroot@buildroot.org>;
+ Tue, 19 May 2026 20:51:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A40FF60BDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A40FF60BDB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A40FF60BDB
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:51:10 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0431.dip0.t-ipconnect.de [91.58.4.49])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 42C1AA4C037D
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 22:51:07 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48242)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wPRP9-000000006JM-0HDA
+ for buildroot@buildroot.org; Tue, 19 May 2026 20:51:06 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Tue, 19 May 2026 22:51:06 +0200
+Message-ID: <20260519205106.1059607-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20260519182049.890882-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20260519182049.890882-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1779223796; bh=0W4OzfEXnm1RRhD1OCYoIARnotjuj048sQexTGeQVqY=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=Fej8TZAmiWzxWw5wVzZ6u4zl0TsLM46djDm68Iitco4j/Ak7OSAOCkX7cD4diW2Yx
- qBer9OzTuSdIq7D6u3DWloER95M1/FBKfZnkK5bz9bzoAJIAsdI4449q4YAJdbHPYj
- 8nKd+4n+X6TMNHw1XAL43bP6WqSHe50jhTpw5WcO51ulQJmBpGR6ZRgBQEESONb7NX
- LzQNGQCS27O/g4QZ2Q7hM0P3Nlsko4L/qiPozV+3aOe/ix8COcDEGMiHscqmtxPk/E
- TrvCJzILN0mtAY3qg9k/OgUT8mHk2flq2nBpOwJhgIm+S9mzAckj829HoVSNjF5FXL
- 0FKHXAUvJL0lQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1779223867;
+ bh=Os744KoG13N/FQSD6LOjXW5x3dRnJIlew/jQz+dnCCc=;
+ h=From:To:Subject:Date:From;
+ b=omEAgQjsoDQwlZS3X6gViNg53CigWYeqzWZtY42sCV/6aWBKv6gVSyO1mRiiXWdMo
+ HtQfkFCcLARC6pa5DVHddNg/SiY3tj+6ADgA1CmXQ2WJOiV8ztY0w5bSmlqk4W9xEX
+ 9fRpqAt+wTmr/ldnrExZId/MqgxLCp/nwHDSgs9Esky+wgMgzhPd2ztSlltkEc9e6y
+ gAIIKXjs6g623OnhaOdc+zChuTiofhkqWaKIRfEyv+8oiBR6k/9jsAvrUNBaCa4trp
+ EoHRLKP73d+O9OkzqIXEfikmnhDyghhe8ps/6lzQRPGLXNTMxN+FE17wpncFBg1Kk2
+ OwZ0r8euwGwUw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=Fej8TZAm
-Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: security bump
- version to 2.42.1
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=omEAgQjs
+Subject: [Buildroot] [PATCH 1/1] package/memcached: security bump version to
+ 1.6.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,43 +92,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+https://github.com/memcached/memcached/wiki/ReleaseNotes1642
 
-On 5/19/26 20:20, Bernd Kuhls wrote:
-> https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42.1-ReleaseNotes
-> 
-> https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42-ReleaseNotes
-> "Security fixes:
-> 
->   CVE-2026-27456 - mount(8) TOCTOU symlink attack via loop device.
->     The SUID mount follows symlinks when resolving loop backing file
->     paths. On systems where non-root users are permitted to mount loop
->     devices (via 'user' option in fstab), this allows access to
->     arbitrary files.
-> 
->   CWE-190 - Integer overflow in libblkid parse_dos_extended().
->     A crafted MBR disk image can cause uint32_t wraparound in EBR
->     chain processing, causing reported partitions to not match the
->     on-disk layout. Tools like udisks may then register a partition
->     at logical sector 0."
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Both of these where also fixed in 2.41.4: 
-https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.4-ReleaseNotes
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index fc6ad5eb88..f241723111 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.6.40.tar.gz.sha1
+-sha1  f2513db7079ee4c6558eb11fabb55e1adf1fdf38  memcached-1.6.40.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.42.tar.gz.sha1
++sha1  de453f58745238c70091fe243549c406aabdc3c5  memcached-1.6.42.tar.gz
+ 
+ # Locally computed
+-sha256  a3d360e9da2221a49bf9aae4e6880f2d44da6b2a2fae39b1911b9ca76488fbfd  memcached-1.6.40.tar.gz
++sha256  50f08b879d4f9d36dea9d905e9eaade15c708e38db7e9a73fc21dc8b45395de7  memcached-1.6.42.tar.gz
+ sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index d3ec9d36d7..a164e82a51 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.6.40
++MEMCACHED_VERSION = 1.6.42
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+2.47.3
 
-So as far as I can see, this is not a security bump.
-
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-Best,
-Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
