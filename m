@@ -1,114 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860C9CD4F54
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 20:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0702ECD4F54
+	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 20:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37B4F81ABB;
-	Tue, 19 May 2026 20:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEFE660BE4;
+	Tue, 19 May 2026 20:50:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxKIQXHOqNLS; Tue, 19 May 2026 20:44:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7VDlMTMz6JRK; Tue, 19 May 2026 20:50:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6530C81AC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE00F60BDE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779223471;
-	bh=6DG+ZHpoo8jsAfL3C1XlaE3NVt1Npe2j5Ohi971zmoY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ArPR/dslxcNQMfHX+78yOF540+ne5EawVDCwiNUcjhzNKzMB2amLycfgaeJdAVyb5
-	 yD94vZ9ylI21WOz7rTLF7QnE0/4mVLWPmzuLmMrdccqmVD5ANrjmPVALvk/nmXyOhg
-	 ndxiv+ZxECnZsd4Z6tA42NkLOmBJbkhVoICyHu5fAJy/ey+Mvqhifet4+U5CJE1K6f
-	 i5PSq/7Is8sERAI+B/T0/wOdif4halHdG0V7j325aFKLggLl3tn9Ee2aHeBMKrYR1w
-	 hah4cQJtP+Gyff6aOAxoo1dO4H+fRBMSAVIVPmtt/LbOafQ+YEckwM0QtWwjhYsHCz
-	 iRt8oYgd9YjqA==
+	s=default; t=1779223803;
+	bh=wB55Sw9H1ov/C+DJI0pbqq8hWAeLrdLGyJwU3cuz7pk=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=eNtd3QdeW1wHOEeNjY2qBfmH338s+0GzMD8ABVyQwmmyg1PtI/AmxwENMdS1se2D3
+	 add1SPzhwX2XDVioS8eg3n7Qh1nIFyrS1Z7KpgnYksQp+JzfjX3/ozQO4wv2LU/fzb
+	 X5h7kv6wVRbhIgYi/ev8IIllutXz4lEZB1T/Mc90Z9KWhGENEO6/N/is0bC+fy/MIA
+	 G/UttXtolWSGmzvzqVrV1CPmhs2uNKuRxMqEoWOoAixPHQEHZ4d1H1Q7aSFctAtOy6
+	 t3phPksjNKbseD2tdMLY225M/PomdClrXNHr2qfeLd0pEilSSSUxxN4xqEN8zcYLfo
+	 G/MOElH2Tw9nQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6530C81AC1;
-	Tue, 19 May 2026 20:44:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BCD1265
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:44:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE00F60BDE;
+	Tue, 19 May 2026 20:50:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC67C265
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4EE281AD1
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:44:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1BDE4056E
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o5LGvDO4qq1D for <buildroot@buildroot.org>;
- Tue, 19 May 2026 20:44:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::330; helo=mail-ot1-x330.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2CDDF81AC1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDDF81AC1
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com
- [IPv6:2607:f8b0:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2CDDF81AC1
- for <buildroot@buildroot.org>; Tue, 19 May 2026 20:44:29 +0000 (UTC)
-Received: by mail-ot1-x330.google.com with SMTP id
- 46e09a7af769-7dcdd23fcdfso2117206a34.3
- for <buildroot@buildroot.org>; Tue, 19 May 2026 13:44:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779223468; x=1779828268;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5nJbDyMSp4Fk9OQ1bA9AKamWtc6q8iMNHyPoI/sOfxU=;
- b=fRsA+30Wf7FGwEknZSAHiW6Flu18joLtcUI1LMEdEdhfjgnzd+nl7uhVt3nr+XOHwR
- EETjUh9dqqxDnRkEBwaS4Oi8/IrGUSIFWPIXGDBrngfau3U8JDVKZLigMpcCfGpavcVa
- mF+fq6ATktVCt+QAj8LUTGbxnMtx2nsjeku4NP8Iui8Xg7kKgLPU6MlYUipxwPncvxuU
- /qlYNqIkgiEcn87JUSZBpTaPasJODg3FKTDFxcsXE6B3xiPP/ltrsZrbywAEvyYGBF0x
- 3bXgn2JQP38pCPPf028NGv3PxJ4EZBBfh72DagSMJIJazNofm4bzh5o4suWlMwKf60lD
- j8Fg==
-X-Gm-Message-State: AOJu0YzO609bOl20rb7pF4yeAkgWjmWhbYIjVWvE0w2eiiDX009L3x/t
- vrtc1sRwfOIXLMD9i7Ti9Zlb0LHRtuCNlD3c0yTja1ghqFu8R/2ziXmQu+wQZE//
-X-Gm-Gg: Acq92OHPzWGrmUvc2La8URa0uuk1CP2BBY6cKvcpgIrv5I5YfXruBikZxqp4ChohZLx
- Vy9Kx+vU/5FhvYEn4PzDeQPiwtUN42FVdfrmFP5oZKJxIdd7O6M0tfRJOykEGxyQjt6XRBxrhD8
- gMP6UBmY2P3MpX8C4MWqPfJz1uCPY1T9SeOrW9y8R7paaX86MTzBOdYK6OmTBOfhtU2xcQ41NSs
- MAxruul9muNL5Vf6YqsHHGiBSEo14aIZlWxRgnwvUsT44/lcH5Pt4+tXzFGDPgCF/7cNbceG76T
- 2/OtBaS/ym/G8mVMqsc4jgjfqdlF6dAArhpUevfEbMIV4RiPaozDlKOQQtCuLPxi5eQdP5Q2se8
- e4ckR6pD9f1rDZ7uMbhYUiF2jIeEsX5Plv91yJg1pdTknSwQnVq3zHgTv77j0yNwfLh7bLiWa6v
- COpxWePwM7D2gj628tdEB1zs4/nl9uo+FWTE9J9KYjRweYF5WkoySINiaBEg9KfUmqqOvqWwPlt
- i6cJX3hzdBQagHRKJYkKlOOXuXMeo/HQ9Gq1dG1y4JINaloACQY1DpbHIyC05ypqUKIWw==
-X-Received: by 2002:a05:6820:6ac4:b0:69b:5f97:de79 with SMTP id
- 006d021491bc7-69c942fe211mr13158446eaf.19.1779223467679; 
- Tue, 19 May 2026 13:44:27 -0700 (PDT)
-Received: from james-x399.tailafd1a.ts.net (184-96-146-19.hlrn.qwest.net.
- [184.96.146.19]) by smtp.gmail.com with ESMTPSA id
- 006d021491bc7-69d049384f6sm7971060eaf.14.2026.05.19.13.44.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 May 2026 13:44:27 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 19 May 2026 14:44:22 -0600
-Message-ID: <20260519204422.744236-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q0J7p8-n0QaO for <buildroot@buildroot.org>;
+ Tue, 19 May 2026 20:49:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 315C340208
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315C340208
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 315C340208
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 20:49:58 +0000 (UTC)
+Received: from [192.168.11.192] (ip-109-42-117-151.web.vodafone.de
+ [109.42.117.151])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id B89F02C86EC7;
+ Tue, 19 May 2026 22:49:55 +0200 (CEST)
+Message-ID: <4d31d112-c1d7-4673-aabd-059a54f84d90@bubu1.eu>
+Date: Tue, 19 May 2026 22:49:53 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779223468; x=1779828268; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5nJbDyMSp4Fk9OQ1bA9AKamWtc6q8iMNHyPoI/sOfxU=;
- b=F6D/ZCPs2JxrND45OWbn0ig5Z2JKqPMbxGgbzaBQaQcv1dxA37AhMPpuOYl/Etbxg+
- xM/lCALhghT1HjiLVg8bUylWLPLoEY7Sn9QanOxlHKidhmWh7p2WzyxVGTQ0NyZkFP53
- IucezuyupdOPPZ8x0yGlqcb0hGZ53vBdoNmkaZdgs6C5hbJr8/85549zhqXBOwj9HcKv
- sINPgV/UQHYBAQCa0lww/4BCX6P5DuCpELVs9JzjqOkTxRfx4AsvPt1c/JEpnY1dH95k
- 58JhRYTRwc0Ei5H5ukZvxMCxpsg0WPILtCCJBDRStHGFuPej93y6URIgGN0YUGbuTKTl
- 8AQQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20260519182049.890882-1-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260519182049.890882-1-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1779223796; bh=0W4OzfEXnm1RRhD1OCYoIARnotjuj048sQexTGeQVqY=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=Fej8TZAmiWzxWw5wVzZ6u4zl0TsLM46djDm68Iitco4j/Ak7OSAOCkX7cD4diW2Yx
+ qBer9OzTuSdIq7D6u3DWloER95M1/FBKfZnkK5bz9bzoAJIAsdI4449q4YAJdbHPYj
+ 8nKd+4n+X6TMNHw1XAL43bP6WqSHe50jhTpw5WcO51ulQJmBpGR6ZRgBQEESONb7NX
+ LzQNGQCS27O/g4QZ2Q7hM0P3Nlsko4L/qiPozV+3aOe/ix8COcDEGMiHscqmtxPk/E
+ TrvCJzILN0mtAY3qg9k/OgUT8mHk2flq2nBpOwJhgIm+S9mzAckj829HoVSNjF5FXL
+ 0FKHXAUvJL0lQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=F6D/ZCPs
-Subject: [Buildroot] [PATCH 1/1] scripts/autobuild-run: add support for
- --branch option
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=Fej8TZAm
+Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: security bump
+ version to 2.42.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,74 +94,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In some cases it only makes sense to run tests against a specific
-branch, such as when testing new genrandconfig flags.
+Hi Bernd,
 
-Add a config option to override the branch selection.
+On 5/19/26 20:20, Bernd Kuhls wrote:
+> https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42.1-ReleaseNotes
+> 
+> https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42-ReleaseNotes
+> "Security fixes:
+> 
+>   CVE-2026-27456 - mount(8) TOCTOU symlink attack via loop device.
+>     The SUID mount follows symlinks when resolving loop backing file
+>     paths. On systems where non-root users are permitted to mount loop
+>     devices (via 'user' option in fstab), this allows access to
+>     arbitrary files.
+> 
+>   CWE-190 - Integer overflow in libblkid parse_dos_extended().
+>     A crafted MBR disk image can cause uint32_t wraparound in EBR
+>     chain processing, causing reported partitions to not match the
+>     on-disk layout. Tools like udisks may then register a partition
+>     at logical sector 0."
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- scripts/autobuild-run | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Both of these where also fixed in 2.41.4: 
+https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.4-ReleaseNotes
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index c375f7b..29272d2 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -202,7 +202,7 @@ class SystemInfo:
- class Builder:
-     def __init__(self, instance, njobs, sysinfo,
-                  http_url, http_login, http_password,
--                 submitter, make_opts, nice, toolchains_csv,
-+                 submitter, make_opts, branch, nice, toolchains_csv,
-                  repo, upload, buildpid, debug, hung_build_timeout):
-         self.instance = instance
-         self.njobs = njobs
-@@ -212,6 +212,7 @@ class Builder:
-         self.http_password = http_password
-         self.submitter = submitter
-         self.make_opts = make_opts
-+        self.branch = branch
-         self.nice = nice
-         self.toolchains_csv = toolchains_csv
-         self.repo = repo
-@@ -260,6 +261,8 @@ class Builder:
-         list. This way, branches with a higher weight are more likely to
-         be selected.
-         """
-+        if self.branch:
-+            return self.branch
-         csv_branches = []
-         with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
-             for l in r.readlines():
-@@ -782,6 +785,11 @@ def main():
-                         help="string of extra options to pass to Buildroot "
-                              "make, such as specific command wrappers",
-                         type=str)
-+    parser.add_argument("--branch",
-+                        help="Restrict builds to a specific branch. "
-+                             "Useful for situations where it only makes sense "
-+                             "to run tests on a specific branch.",
-+                        type=str)
-     parser.add_argument("--pid-file",
-                         help="path to a file where to store the PID",
-                         type=pathlib.Path, default=pathlib.Path("/tmp/buildroot-autobuild.pid"))
-@@ -875,6 +883,7 @@ def main():
-             http_password = args.http_password,
-             submitter = args.submitter,
-             make_opts = (args.make_opts or ''),
-+            branch = args.branch,
-             nice = (args.nice or 0),
-             toolchains_csv = args.toolchains_csv,
-             repo = args.repo,
--- 
-2.53.0
+So as far as I can see, this is not a security bump.
 
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
