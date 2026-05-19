@@ -1,63 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400EFCD4F57
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 07:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CBD6CD4F52
+	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 08:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98CD381314;
-	Tue, 19 May 2026 07:34:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE55A40AF6;
+	Tue, 19 May 2026 08:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7agSGezghvT4; Tue, 19 May 2026 07:34:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 91vF2SRe_q6O; Tue, 19 May 2026 08:30:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DC3E8107F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D847040B0C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779176076;
-	bh=PxRonD6grBXR57N/mGwV2wFm2XDEneVp95fymtHYh54=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Sw9ne8z8qxnOOxeZ5Midcc2fr1e4H94wvP7o60UfeuxjNfFe3exwRIA/z3Dj7fJ5J
-	 QpBkHBiEjlrdXZe+x1h/lKOOlzbiPr8g55DzEyowNX/7N+8fgiVaveE8janigmM8GB
-	 IpTZ5lSFT0oc6+BlRPzppVdnuQKuOH1Bs0rR1WaJwOYaM0Faoshz5H6p4xfumsO4+F
-	 bajeC2m9qVaMmxNNDq5gZqHnPwGeEhqGS6LrjjwUPaOLWA4g9BGjieKXIDwOZDvcIO
-	 JPv9UdAYsaghTd5Tc5wSAn9UuWajK5WEtUA6mIL0V35UHD6fR1jHGnQ4V5UH6ZZ/FJ
-	 7GRQTMtwLIthw==
+	s=default; t=1779179400;
+	bh=T/5IB2wTrSw07sSv+5w+BkgS6v+vYrL5914YxQioIjw=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=F1sZE3elk7svNHEhlKB10w1xukfi1Wew6QZx/pM4o1XOl2T9PWsA8w68R+18ySms9
+	 wDQsAPAZKOQ1mRmhTJCIo8nhutWiTMiPThESL3nDDQosAclpRlBtg/1I2IHQY5IuHQ
+	 b+JkGdffwrKJzhEbCU/YFATX7x8J/ppqdlLDDGMO+3du7w57hxTyN4rzjWMuJiUmV9
+	 raxA28tItTJwPDK50Sdz8RUpFm1246E1+oSwR7VRoCJQAd4cMp8wE6fDLneBGBtkMs
+	 /YZTJThVOA8xfKlhPh9WXSsyPEBcha+LaWvcFEXIiOMTyZAalrUeb1cRgH5ivPFaox
+	 FnHnpI8pwwQsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DC3E8107F;
-	Tue, 19 May 2026 07:34:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0D1E282
- for <buildroot@buildroot.org>; Tue, 19 May 2026 07:34:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D847040B0C;
+	Tue, 19 May 2026 08:30:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2EF7265
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 08:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D228340377
- for <buildroot@buildroot.org>; Tue, 19 May 2026 07:34:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC6E660891
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 08:29:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VUBEW-qNT8PV for <buildroot@buildroot.org>;
- Tue, 19 May 2026 07:34:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBD8F40370
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBD8F40370
- for <buildroot@buildroot.org>; Tue, 19 May 2026 07:34:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 665398674A; Tue, 19 May 2026 07:34:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 14:18:59 +0200
-X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: f204a673370e69e2de13e577f36ec4a52589e8e5
-X-Git-Newrev: d1d3cf26d24590e73c214d319e95e4cceac0dad5
-X-Patchwork-Hint: ignore
-Message-Id: <20260519073426.665398674A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 6.18.x series
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1rujkHO86AvZ for <buildroot@buildroot.org>;
+ Tue, 19 May 2026 08:29:57 +0000 (UTC)
+X-Greylist: delayed 905 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 19 May 2026 08:29:56 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A9FC46088D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9FC46088D
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A9FC46088D
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 08:29:55 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Tue, 19 May
+ 2026 10:14:46 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.2507.061; Tue, 19 May 2026 10:14:46 +0200
+To: Arnout Vandecappelle <arnout@rnout.be>, John Ernberg <j@j-ernberg.se>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [RESEND PATCH 6/8] package/pkg-generic: Purge files
+ that should not be installed by INSTALL_CMDS
+Thread-Index: AQHc4LSeZUofNSCdq0KBdEFuo3n2ArYUGLgAgADTcYA=
+Date: Tue, 19 May 2026 08:14:46 +0000
+Message-ID: <319a870a-1ea0-4bb9-ac93-cded4c2b6373@actia.se>
+References: <20260510193826.2846038-1-j@j-ernberg.se>
+ <20260510193826.2846038-7-j@j-ernberg.se>
+ <a9341fd4-57b1-4964-926a-81a7a27770bf@rnout.be>
+In-Reply-To: <a9341fd4-57b1-4964-926a-81a7a27770bf@rnout.be>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.63]
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B1445F617164
+Content-ID: <4C6476FC3360154B92ECAAAA052A3720@actia.se>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=actia.se
+Subject: Re: [Buildroot] [RESEND PATCH 6/8] package/pkg-generic: Purge files
+ that should not be installed by INSTALL_CMDS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,88 +94,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: John Ernberg via buildroot <buildroot@buildroot.org>
+Reply-To: John Ernberg <john.ernberg@actia.se>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d1d3cf26d24590e73c214d319e95e4cceac0dad5
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
-
-Update the latest kernel releases to:
- - 6.12.84 -> 6.12.90
- - 6.6.136 -> 6.6.140
- - 6.1.169 -> 6.1.173
- - 5.15.203 -> 5.15.207
- - 5.10.253 -> 5.10.256
- - 6.18.25 -> 6.18.32
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- linux/before-6.17/linux.hash         | 10 +++++-----
- linux/from-6.17/linux.hash           |  2 +-
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
-index d9f1290f9c..19dc977938 100644
---- a/linux/before-6.17/linux.hash
-+++ b/linux/before-6.17/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  d56e463a7b1f5355794ae83a102453ad930a51f9cb46b295fcf24a717bff52dd  linux-6.12.84.tar.xz
--sha256  6fb2d21a98281d786ee5fc63760e6f2c33e567e178e83c605bf0359eabbcf471  linux-6.6.136.tar.xz
--sha256  e0cbe674801749075b93008d8854dbf1c8d300805ada0b60f6f907bbb83aef2c  linux-6.1.169.tar.xz
-+sha256  1f1a1ff057468b8a6284d3ce1d181278259beb5670ea16724c46dbf8820fa2a8  linux-6.12.90.tar.xz
-+sha256  d67c9674a2d4307f3747183935a5d434391df0fc5f5bf0e00691e059f664b7db  linux-6.6.140.tar.xz
-+sha256  c4f32c6cfbe8c31478f18a4b2a50f89e73f8641ba1d683d80efc16c898876d98  linux-6.1.173.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  0bebe7d82a57e98792a407109566f1813fde97aaf7f735c1c7e6feebe833dc64  linux-5.15.203.tar.xz
--sha256  ec0724928050e8e2f6226fe8bbb206f42a951c0ed2dbb533c5462789f6d75ac8  linux-5.10.253.tar.xz
-+sha256  50eb7fa307745f30e5cae4c17e188fc42ce6a72f7d925d5ea7e3c2135de6148e  linux-5.15.207.tar.xz
-+sha256  f1e9dac8ec41e5bd7b1811158c7b72269696ce1c37fbdd17a898b293b54d8e5f  linux-5.10.256.tar.xz
- # Locally computed
- sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
- sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index a8c9a7ce78..e401c64996 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  cde8bf6739be4a0777fedbbba5330b8188c55680c45a922a4dfa289cbec6f185  linux-6.19.14.tar.xz
--sha256  29680a07d4430b269af6ce68079b0e81dbd60f03e6f351e0661991fe39bd1898  linux-6.18.25.tar.xz
-+sha256  067dadd445578284ea6158f312f7970d8940fed3e094dbe49cff66d188d3bda4  linux-6.18.32.tar.xz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3b517283a7..12b44624c1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -464,12 +464,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.10.253"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.203"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.169"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.136"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.84"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.25"	if BR2_KERNEL_HEADERS_6_18
-+	default "5.10.256"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.207"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.173"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.140"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.90"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.32"	if BR2_KERNEL_HEADERS_6_18
- 	default "6.19.14"	if BR2_KERNEL_HEADERS_6_19
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LA0KDQpPbiA1LzE4LzI2IDk6MzcgUE0sIEFybm91dCBWYW5kZWNhcHBlbGxlIHdy
+b3RlOg0KPiANCj4gDQo+IE9uIDEwLzA1LzIwMjYgMjE6MzgsIEpvaG4gRXJuYmVyZyB3cm90ZToN
+Cj4+IFBhY2thZ2VzIHN1Y2ggYXMgbXV0dCwgYmFzaCBhbmQgZ2RiIGFyZSBlaXRoZXIgZ2VuZXJh
+dGluZyB0aGVpciB0YXItYmFsbHMNCj4+IGluY29ycmVjdGx5LCBvciBicmVhayBhdXRvbWFrZSB3
+aXRoIGN1c3RvbSBkaXJlY3RpdmVzLCBpbiBzdWNoIGEgd2F5IHRoYXQNCj4+IEFNX1VQREFURV9J
+TkZPX0RJUj1ubyBkb2Vzbid0IHdvcmsgdG8gYXZvaWQgdXBkYXRpbmcgdGhlDQo+PiAvdXNyL3No
+YXJlL2luZm8vZGlyIGZpbGUuDQo+Pg0KPj4gQWRkIGEgcG9zdC1pbnN0YWxsIGhvb2sgdG8gYm90
+aCBzdGFnaW5nIGFuZCB0YXJnZXQgdG8gZGVsZXRlIGZpbGVzIA0KPj4gdGhhdCBhcmUNCj4+IG5l
+ZWRsZXNzbHkgZ2VuZXJhdGVkIGFuZCBjb25mbGljdCB3aXRoIG90aGVyIHBhY2thZ2VzIHBvc3Qt
+aW5zdGFsbCB3aGVuDQo+PiBidWlsZGluZyB3aXRoIFBQRCBlbmFibGVkLg0KPj4NCj4+IFNpbmNl
+IHRoZSBjdXJyZW50bHkgbGlzdGVkIGZpbGUgaXMgZG9jdW1lbnRhdGlvbiByZWxhdGVkLCB3aGlj
+aCBlbmRzIHVwDQo+PiBkZWxldGVkIGFueXdheSwgdGhlcmUgaXMgbm8gVEFSR0VUX0ZJTkFMSVpF
+IGhvb2sgcHJvdmlkZWQgdG8gZ2VuZXJhdGUgdGhlDQo+PiBmaWxlIGF0IGEgbGF0ZXIgcG9pbnQu
+DQo+Pg0KPj4gVGhlIHBvc3QtaW5zdGFsbCBob29rIGlzIGFkZGVkIGF0IHRoZSBnbG9iYWwgbGV2
+ZWwgZm9yIGVhc2llciANCj4+IGV4dGVuc2lvbiBhbmQNCj4+IGFsc28gY292ZXIgbm9uLWF1dG9t
+YWtlIGJhc2VkIHBhY2thZ2VzIHRoYXQgY291bGQgYmUgc2ltaWxhcmx5IGJyb2tlbi4NCj4gDQo+
+ICDCoElzbid0IHRoaXMgYWxyZWFkeSBkb25lIGJ5IHJlbW92ZS1jb25mbGljdGluZy11c2VsZXNz
+LWZpbGVzPyBJZiB0aGF0IA0KPiBkb2Vzbid0DQo+IHdvcmssIHBsZWFzZSB0cnkgdG8gZml4IGl0
+IHJhdGhlciB0aGFuIGFkZGluZyB5ZXQgYW5vdGhlciBtZWNoYW5pc20uDQo+IA0KPiAgwqAoTWFy
+a2VkIGFzIENoYW5nZXMgUmVxdWVzdGVkIGluIHBhdGNod29yay4pDQo+IA0KPiAgwqBSZWdhcmRz
+LA0KPiAgwqBBcm5vdXQNCj4gDQpJIHdhcyBsb29raW5nIGZvciBhbiBleGlzdGluZyBtZWNoYW5p
+c20gYW5kIGNvbXBsZXRlbHkgbWlzc2VkIGl0LCBoZW5jZSANCnRoaXMgb25lLg0KDQpMb29raW5n
+IGF0IGl0LCBpdCBsb29rcyBsaWtlIGl0J3MgYWxyZWFkeSB0cnlpbmcgdG8gaGFuZGxlIHRoaXMg
+c2FtZSANCmZpbGUgYW5kIGZhaWxzIGJlY2F1c2UgdGhlIHBhdGggaXMgd3JvbmcuLi4gSSdsbCBo
+YXZlIGEgZGlnIGFuZCBzZW5kIFYyIA0Kd2hlbiBJIGhhdmUgc29tZXRoaW5nLg0KDQpUaGFua3Mh
+IC8vIEpvaG4gRXJuYmVyZwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
