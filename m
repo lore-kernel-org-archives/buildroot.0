@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22B7CD4F52
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 08:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30870CD4F57
+	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 09:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B32CD81303;
-	Tue, 19 May 2026 08:30:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 513E2812EC;
+	Tue, 19 May 2026 09:15:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D2mLTU0GUQPK; Tue, 19 May 2026 08:30:11 +0000 (UTC)
+ id fbFCNabngDOG; Tue, 19 May 2026 09:15:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBF5681304
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 886F8812DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779179410;
-	bh=idKTaqQHIcTLnXho9Of7FDG70mWe+T2c/ZRng81JURA=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=AEMJnZUXKkVXs13YKzWLPeaXJxGkgyRAiNU6jE0sIPvD2Bin7W5tzACu3B9sYBFmX
-	 BtXqlgalLZ5v0l8MpWNgshyRHpLPXBh4vVb4C3yrbceryKos1AO3nOh0UPeCIc9NS8
-	 674XprCBhbTalc0A8XIRRNKfmGAHbMDhf5es+g+LTRQbIZRr9/j86dvdeEq1qN+g10
-	 Wy0cB5atAqpY1EKbf8JIj6Wfi28vWmhmXbg8HtOTBknYFlOxCoH3impjBS0+Qh+3Is
-	 V1YCs8ozCzZNSowMIK3qtdtXy3zRWN8dH7epDm23vIo+u/KcFXDV66COxg4YCAbH0h
-	 psUjiRakdOhVQ==
+	s=default; t=1779182157;
+	bh=NBYHvPjbEy/VLISLQy16/iPdJ4PBrSBwt1SAvBa/Sew=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=EuFMyjYIqSO3p8NQQk9g8asvv6Za3h6XklsKKXeRQ/3g01DOQ5HbxTSdS79HT/v+I
+	 gKeH2bbAsyE1W7g+iE1k04jkL/iuNp+luS9xzPX5WxYBFXMFAz0oqmg/l2WMbNtiAd
+	 CZhs1BE8JrG9u52itzY5ewI8CA1yflFis6fo2ZleIUaeXNvGyVWZtsOmlUDp4ZHbW7
+	 zFijQymTmDTm3cgKXGVhm12IfjRil9aBk2nBdXBBAKUmBoRza3D+Um7mdT8SV57a+Y
+	 Sij0nNGB8k4DEqkkvw+ZkOYXt3xcr1zrTZpY2tPX+VYsWC07eGDZiZrJksU9h2QOkm
+	 rDiXvYNP+cjcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBF5681304;
-	Tue, 19 May 2026 08:30:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C9EC3265
- for <buildroot@buildroot.org>; Tue, 19 May 2026 08:30:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 886F8812DD;
+	Tue, 19 May 2026 09:15:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1208C265
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 09:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFFE960891
- for <buildroot@buildroot.org>; Tue, 19 May 2026 08:30:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBF82608AA
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 09:15:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sac5wZ5dYJKz for <buildroot@buildroot.org>;
- Tue, 19 May 2026 08:30:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
- helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4A57C6088D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A57C6088D
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A57C6088D
- for <buildroot@buildroot.org>; Tue, 19 May 2026 08:30:08 +0000 (UTC)
-Received: from S036ANL.actianordic.se (10.12.31.117) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61; Tue, 19 May
- 2026 10:30:03 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
- 15.01.2507.061; Tue, 19 May 2026 10:30:03 +0200
-To: Arnout Vandecappelle <arnout@rnout.be>, John Ernberg <j@j-ernberg.se>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [RESEND PATCH 8/8] package/tpm2-tss: Correctly
- depend on util-linux-libs for fapi support
-Thread-Index: AQHc4LSjPZZWXQ9OwkebnNmEgMwF+LYUHwYAgADRaoA=
-Date: Tue, 19 May 2026 08:30:03 +0000
-Message-ID: <0d3ac09e-9899-4cea-b929-f8c866645ff3@actia.se>
-References: <20260510193826.2846038-1-j@j-ernberg.se>
- <20260510193826.2846038-9-j@j-ernberg.se>
- <9576707c-2397-4598-b083-fec5a0271d21@rnout.be>
-In-Reply-To: <9576707c-2397-4598-b083-fec5a0271d21@rnout.be>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.12.12.63]
-x-esetresult: clean, is OK
-x-esetid: 37303A2956B1445F617164
-Content-ID: <EE0398E794A41B44A455BF97B897AD00@actia.se>
+ id Yqi2lavTcgqR for <buildroot@buildroot.org>;
+ Tue, 19 May 2026 09:15:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.116;
+ helo=smtpcmd11116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3D62A60882
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D62A60882
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D62A60882
+ for <buildroot@buildroot.org>; Tue, 19 May 2026 09:15:52 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id PGYHwfkDLiOfFPGYHwqKsl; Tue, 19 May 2026 11:15:50 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Tue, 19 May 2026 11:15:48 +0200
+Message-ID: <20260519091548.2867405-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfPGWK1J1L35MuXdgsaWOf/QlorpT7r/qlbtMi3awgIXfhYzQsdG0WCkSO87EBmLYnLZJnwBZrSI/bWZxG/dBLnGlgkYivxJSAevRFa8gMbxzv5Dge0Qz
+ JUBG6G+MQvFi+aO+s0M4ejZbFVo3578X9JWbns48YU+n/LGLJsCnMRzhfsTsFXi4fjifJ8oEfGbQOgiUwQNmcXvlxJ6opx8EIme/zav5AktBbYvJ2Nqx0vLl
+ UYTY7ucyIeSsA7U6bU+iojxl9NgOQWvko8ujh4pC55aeBEdoKTEGVTAazXM4XO7lwO/2pJUfn3Kd15Xcndt8Hg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1779182150; bh=Q0E9bRPZfPtG1GoMazevwuRwfHzRRwQjLEPipizPyS0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=N+fUJijjG5eKlz3LyRjCulO7SqnRpKfLHe2lYmicxBLe3vluy5NdsqaWhXk526V3o
+ vrcIA7pUe6EElSFwAU7+x7QZO6fVJ0tKbXZRMU+x5s5OU2kq7kZZXyv16AeyPhb5Ev
+ WzhFQx0zhulCkXVGOy6GXuiGfcje6uKv84LWf9fEVRa4vkJBucdKfv2ziWu7oJZX0X
+ O19yt5Q5UFQj2JxJt2bpRj+wMGuYOqfeGOoBmsnrDWKUid1CDzSQwAF3mMshL2ADbr
+ KUfGSSGd4KojeOVvTjaqUMJIn+wn2ZhIZhNojiCTr5e3blTWYR3FwEGFrVhrXmXvMI
+ 7CZLWDFcTXFLg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=actia.se
-Subject: Re: [Buildroot] [RESEND PATCH 8/8] package/tpm2-tss: Correctly
- depend on util-linux-libs for fapi support
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=N+fUJijj
+Subject: [Buildroot] [PATCH] package/rtl8188eu: fix build failure with linux
+ 7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,41 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: John Ernberg via buildroot <buildroot@buildroot.org>
-Reply-To: John Ernberg <john.ernberg@actia.se>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LA0KDQpPbiA1LzE4LzI2IDEwOjAwIFBNLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3
-cm90ZToNCj4gDQo+IA0KPiBPbiAxMC8wNS8yMDI2IDIxOjM4LCBKb2huIEVybmJlcmcgd3JvdGU6
-DQo+PiB0cG0yLXRzcyBpcyBhIGRlcGVuZGVuY3kgb2Ygc3lzdGVtZCwgd2hpY2ggd2hlbiBlbmFi
-bGVkIGJlY29tZXMgYQ0KPj4gZGVwZW5kZW5jeSBvZiB1dGlsLWxpbnV4Lg0KPj4NCj4+IHRwbTIt
-dHNzIG9ubHkgcmVhbGx5IHdhbnRzIGxpYnV1aWQsIHNvIGRlcGVuZCBvbiB1dGlsLWxpbnV4LWxp
-YnMgaW5zdGVhZA0KPj4gYnJlYWtpbmcgdGhlIGRlcGVuZGVuY3kgY3ljbGUuDQo+Pg0KPj4gU2ln
-bmVkLW9mZi1ieTogSm9obiBFcm5iZXJnIDxqQGotZXJuYmVyZy5zZT4NCj4+IC0tLQ0KPj4NCj4+
-IFJFU0VORDoNCj4+IMKgIC0gRm9yZ290IHRvIHN1YnNjcmliZSB0aGlzIGUtbWFpbCB0byB0aGUg
-bGlzdA0KPj4NCj4+IMKgIHBhY2thZ2UvdHBtMi10c3MvdHBtMi10c3MubWsgfCAyICstDQo+PiDC
-oCAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4+DQo+PiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS90cG0yLXRzcy90cG0yLXRzcy5tayBiL3BhY2thZ2UvdHBtMi10
-c3MvdHBtMi10c3MubWsNCj4+IGluZGV4IDA4ZmY0MDEzMjguLjExZGEzN2E1YjQgMTAwNjQ0DQo+
-PiAtLS0gYS9wYWNrYWdlL3RwbTItdHNzL3RwbTItdHNzLm1rDQo+PiArKysgYi9wYWNrYWdlL3Rw
-bTItdHNzL3RwbTItdHNzLm1rDQo+PiBAQCAtMzMsNyArMzMsNyBAQCBUUE0yX1RTU19DT05GX09Q
-VFMgPSBcDQo+PiDCoCBUUE0yX1RTU19DT05GX0VOViArPSBDRkxBR1M9IiQoVEFSR0VUX0NGTEFH
-UykgLXN0ZD1jOTkiDQo+Pg0KPj4gwqAgaWZlcSAoJChCUjJfUEFDS0FHRV9UUE0yX1RTU19GQVBJ
-KSx5KQ0KPj4gLVRQTTJfVFNTX0RFUEVOREVOQ0lFUyArPSBqc29uLWMgbGliY3VybCB1dGlsLWxp
-bnV4DQo+PiArVFBNMl9UU1NfREVQRU5ERU5DSUVTICs9IGpzb24tYyBsaWJjdXJsIHV0aWwtbGlu
-dXgtbGlicw0KPiANCj4gIMKgVGhpcyBhbHNvIHJlcXVpcmVzIHNlbGVjdGluZyBVVElMX0xJTlVY
-X0xJQlMgaW4gQ29uZmlnLmluLCBvdGhlcndpc2UgDQo+IHlvdSBnZXQNCj4gdGhlIGZvbGxvd2lu
-ZyBlcnJvciB3aGVuIG9ubHkgdHBtMi10c3MgaXMgc2VsZWN0ZWQgKGFuZCBub3QgZS5nLiBzeXN0
-ZW1kKS4NCj4gDQo+ICoqKiB1dGlsLWxpbnV4LWxpYnMgaXMgaW4gdGhlIGRlcGVuZGVuY3kgY2hh
-aW4gb2YgdHBtMi10c3MgdGhhdCBoYXMgDQo+IGFkZGVkIGl0IHRvDQo+IGl0cyBfREVQRU5ERU5D
-SUVTIHZhcmlhYmxlIHdpdGhvdXQgc2VsZWN0aW5nIGl0IG9yIGRlcGVuZGluZyBvbiBpdCBmcm9t
-IA0KPiBDb25maWcuaW4uDQo+IA0KDQpJIGRpZCBub3Qgc2VlIHRoYXQgZXJyb3Igd2hlbiBJIHdh
-cyB0ZXN0aW5nIG15IHBhdGNoLiBJcyB0aGVyZSBzb21ldGhpbmcgDQpzcGVjaWZpYyBJIGNhbiBy
-dW4gdGhhdCBJIG92ZXJsb29rZWQgdG8gYmV0dGVyIGNhdGNoIHRoZXNlIHRoaW5ncyBiZWZvcmUg
-DQpzZW5kaW5nIHRoZSBwYXRjaGVzPw0KDQpUaGFua3MhIC8vIEpvaG4gRXJuYmVyZwpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Bump to version 2026-05-19 on branch v5.2.2.4 to fix build failure with
+Linux 7.1.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index 74f12fef29..2e21e45224 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bed53ce2ce2b947795f795538d823a8ecdf3845f2f7571d54ba351ddf4ddb243  rtl8188eu-2ef2819d2d3ef7701a739c66525bca4731c6abbf.tar.gz
++sha256  8ec126dc722b4e0837c866ec3f73eea9f0835d518fef38b880e2c37fd2fac55a  rtl8188eu-cca7c28087db740d7d745e81e4096c9eb9084f9a.tar.gz
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 5efa5aefec..5f378e0b6e 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8188EU_VERSION = 2ef2819d2d3ef7701a739c66525bca4731c6abbf
++RTL8188EU_VERSION = cca7c28087db740d7d745e81e4096c9eb9084f9a
+ RTL8188EU_SITE = $(call github,benetti-engineering,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
