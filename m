@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A00BCD8CBF
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FF42CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E022285978;
-	Tue,  9 Jun 2026 13:03:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B53D285977;
+	Tue,  9 Jun 2026 13:03:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uze4Qhyv58fD; Tue,  9 Jun 2026 13:03:10 +0000 (UTC)
+ id kfbBvtXJ8fYS; Tue,  9 Jun 2026 13:03:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65F698591E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D1948592A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010180;
-	bh=2slM9esatLbICtQLsQV9f1JLuvKVHyHOK/lBXLDUjSA=;
+	s=default; t=1781010182;
+	bh=pxHU0wqI4JBZtH2HrNP7bn9p9Ja71OMyGQQYCinMSZs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RCiSwGqVX2IJ+Fe6TkYde9Xtim9/I2CVhZcy3ODIDc50ED4cDFf064iJBI+xJ81wS
-	 v7mkgSHRHl2G2pXBEpQ1MC2w9rVGghNoQkuBF/JOE3/eQn9yfOF2qI3nBqiFzUqThI
-	 eueDN3ZarmNHt6sc4G2b2PQUlGmSDN5ZHvpaCIkS/zRYYWHfUBdeZ/8j8Ghx7Ngn3J
-	 017HeVRDMrRvFN89fARfPvMbnxddmLfijDn3NPo1lQ8xb96iq89tOlquJ3iFTf8o7d
-	 YRTFoaoodW9CKZvDMbWWwkHR4nIGMgjF0i7QQVF4HECUeFP7LMln4tpuBmNErIJaPv
-	 gnvRtavHYffCQ==
+	b=CP/pGUBvThZTrZHqAz0E9KZDm0+kllZEUGun22z8cx8dGF+V1Wva6fMEMPnv1sTLj
+	 37qYM8WNIYaDQ5KIWrHyNJGIwF8A+iTYVFmUGi5HXsqyEXEZY4PZXtnvdWHMFBwiiz
+	 vqOvs+x6l/GaGGWBoLBA3vmac6Y0JLLikTkfl8tszh2JWSvHXfo7EIAGoCXxR2EGL/
+	 jZwftUUSzMTd8sA23Uak/Fv0NH4hJFRzTkg3UdekxOnlM6yfTLzUvOrSfc4G7Mkrwi
+	 T3vpcDv/XwuhBtJsFjzU8lr+BeVaitsrl7hUX0ZqS8znpfqgphgQS+OyG9J5KPnsCg
+	 G6tmD3JKerHtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65F698591E;
-	Tue,  9 Jun 2026 13:03:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BF698190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D1948592A;
+	Tue,  9 Jun 2026 13:03:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEA8E190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A130545AEB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 530E8426E5
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lcPtw3pwqw94 for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id snwA7Nbya6EJ for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13FAC41216
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65BD4426DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 13FAC41216
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65BD4426DB
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 508B587E8D; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
+ id A11F287E7E; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 19 May 2026 21:09:34 +0200
+Date: Wed, 20 May 2026 21:25:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c537913fb9bef85c4667b22dc6841b000b93c6c4
-X-Git-Newrev: 7c887cd87866c7c7453ec07cc4a89cf41fb3a880
+X-Git-Oldrev: 1c393bfa6374a378550305ad70d096d4c16cf88b
+X-Git-Newrev: 29ffdc0dda39e19ccf01874511326b50c039a105
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130117.508B587E8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.31.2
+Message-Id: <20260609130117.A11F287E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libargon2: support static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,50 +68,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c887cd87866c7c7453ec07cc4a89cf41fb3a880
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/29ffdc0dda39e19ccf01874511326b50c039a105
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://lore.freedesktop.org/wayland-devel/agWtsIBqMXTVknR_@quokka/T/#u
+There are options to build only static or only shared libs. The default
+is to build both.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Also update reverse dependencies. Note that lua-argon2 doesn't have the
+"# libargon2" comment so presumably it needs shared libs itself.
+
+Signed-off-by: Andreas Mohr <and@gmx.li>
+[Arnout: also update reverse dependencies]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/libinput/libinput.hash | 2 +-
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/Config.in                  | 2 +-
+ package/libargon2/Config.in                   | 5 -----
+ package/libargon2/libargon2.mk                | 6 ++++++
+ package/python-argon2-cffi-bindings/Config.in | 1 -
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index ec6e52e1e2..c813993358 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  e0bb6537de892ce7c63fc5be9ad373eae894b7655c92220ef00316cc33097356  libinput-1.31.1.tar.bz2
-+sha256  1daebac6cb5b8946139c9669a7e5c0e4c8f17320de232a6b9bf470f37dc569e4  libinput-1.31.2.tar.bz2
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index f36883ea47..2773a93dd3 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	bool "cryptsetup"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2, libargon2
+-	depends on !BR2_STATIC_LIBS # lvm2, libargon2
++	depends on !BR2_STATIC_LIBS # lvm2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_PACKAGE_LIBSSH && \
+ 		(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/libargon2/Config.in b/package/libargon2/Config.in
+index 6bba74cfb2..73c1e0d777 100644
+--- a/package/libargon2/Config.in
++++ b/package/libargon2/Config.in
+@@ -1,12 +1,7 @@
+ config BR2_PACKAGE_LIBARGON2
+ 	bool "libargon2"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  A modern password hashing algorithm
  
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 8b930805b2..33fd012076 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  https://password-hashing.net/#argon2
+-
+-comment "libargon needs a toolchain w/ dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
+index b3f6e1b216..8ca0071a15 100644
+--- a/package/libargon2/libargon2.mk
++++ b/package/libargon2/libargon2.mk
+@@ -23,6 +23,12 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ LIBARGON2_OPTS += NO_THREADS=1
+ endif
  
--LIBINPUT_VERSION = 1.31.1
-+LIBINPUT_VERSION = 1.31.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBARGON2_OPTS += LIB_SH= LINKED_LIB_SH=
++else ifeq ($(BR2_SHARED_LIBS),y)
++LIBARGON2_OPTS += LIB_ST=
++endif
++
+ define LIBARGON2_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		$(LIBARGON2_OPTS)
+diff --git a/package/python-argon2-cffi-bindings/Config.in b/package/python-argon2-cffi-bindings/Config.in
+index 2e6a4a6c96..3ac283c833 100644
+--- a/package/python-argon2-cffi-bindings/Config.in
++++ b/package/python-argon2-cffi-bindings/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_ARGON2_CFFI_BINDINGS
+ 	bool "python-argon2-cffi-bindings"
+ 	depends on BR2_USE_MMU # libargon2
+-	depends on !BR2_STATIC_LIBS # libargon2
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	select BR2_PACKAGE_LIBARGON2
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
