@@ -4,106 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B281CD4F3C
-	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 11:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DCEDCD4F3C
+	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 12:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0052B4136A;
-	Wed, 20 May 2026 11:52:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BF8941350;
+	Wed, 20 May 2026 12:02:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yQYDIjn2MrzS; Wed, 20 May 2026 11:52:48 +0000 (UTC)
+ id pAx2oGmPLaiq; Wed, 20 May 2026 12:02:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA10F4130F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0836241356
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779277967;
-	bh=pPOd8yU/TUI635OPs9j8l5Q/zXVykOhSpqYK/OwI0JI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=eG8v+XJUP9FGqOJ5MCdBa6sxuGouDLRDTj8Dd0twhYhgcp88uri440z7A4JPI59zK
-	 1k08fCxLZDQtQQOWmt5/qCXhz1+Zvlx43tdCyRzVZNmpzWiu/VxrZWj7I0tqKamCV2
-	 gM5AV+tLyv/yerVW7nZrL6SnNp+GWo7TN3o9wWmVYTmvYJ8k3gbAtPPnZ1gfrdT5ZO
-	 +/NlHNHZP0N8YDQnBJy47QFw3mEdCCFYjoML+jH9NL4IuTOKGQK3Fm0dNKiYpRWIjh
-	 fmXmqrMOLZhIRa2YwSBppNm9AgZ8LTeJCnZK/XVuz/vcHj6eGuA+tP6Z73IAzMsTa3
-	 IW9Avr03TPUqw==
+	s=default; t=1779278526;
+	bh=hXax308wILT8kXAcnY8QozD3jqK5cSrBTxy1rvDSFAg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=RZEkopzRLiawUBmfuyZhYL4pYohUYz2iVvxe5PnfOr9NraN/cLazrtrS615pmDt4y
+	 E6dGAsgn/XgsXPGtKAUCgu+iRdyP0hYcoGBWn7ptlcu/mvWXfVy+8HCDYZ6RADpANi
+	 bW4YPQ3l450yezXMA97rw8+RQ74oZAvJvXC/Fz9oUYPVzv2F7d0QEGdPkLl+cVEzfj
+	 sU8OUMBLZ1lQfZxgmTLQM66VBVdID+GeAFU7BsJS1vshbbMJtMC88WYoOGLWW6IIsq
+	 +kGnJn8mp5K6J9snj+Y/URmD6tPdu7OtqxEaZnO7XGsYCfo0qd+41PgIRc05/tkAGN
+	 YeNAqaBXRlg3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA10F4130F;
-	Wed, 20 May 2026 11:52:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 097C3282
- for <buildroot@buildroot.org>; Wed, 20 May 2026 11:52:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0836241356;
+	Wed, 20 May 2026 12:02:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43EF71B2
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 12:02:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2F6C4130F
- for <buildroot@buildroot.org>; Wed, 20 May 2026 11:52:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A2B341358
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 12:02:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EEXVjkdd5Cv6 for <buildroot@buildroot.org>;
- Wed, 20 May 2026 11:52:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
- envelope-from=jonhenrik@qbee.io; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E3B21412EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B21412EC
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3B21412EC
- for <buildroot@buildroot.org>; Wed, 20 May 2026 11:52:45 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id
- 2adb3069b0e04-5a8f9841616so4147796e87.0
- for <buildroot@buildroot.org>; Wed, 20 May 2026 04:52:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779277962; x=1779882762;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=kam80sY8azfh2DXdmjECSd2vtJ3DeM3d+0smrigQxUs=;
- b=J2PM3s/cY5OoASzyNPbTsSE7UeJPmrC349OK8JMNt15lEDKGdVQKjeM79Wt1JQW02D
- I2pqdafFKVydn/OSzHJu+rESBcxB/fYpkz85gYBcCHritkr+ULcdRAR1D3kkv+jiyVGR
- oztkK07aMALGfpMnF+XCFP48iiGQg/1LBUvFQREV23wqJmUCDMbMgwoiPDTXlXHCibxe
- waHPgyXsNK+7ryjBbQhvPHmJ2p8LrtBJH4cUrk3ovwsY3MTqJnC1B7Zn8lZGkM7VaqlM
- gSYxUpxTlCR4U/YXUro6/yoY8qtKppz/13NkqOmxCqT1pxBHNRcuY7KSa8KgHi+c2wrW
- k2Sw==
-X-Gm-Message-State: AOJu0YzY+f+n7dHBX3AmreIw7aURZ2K4pok7BIMWU7igTzoOEsVPJ4cV
- 7K22nBvd/smT+eg/Ijsy/nSss3lUIapk0BGUSw5T6yeK0fgs3sc2/drDV8yTROiSSN4rHOio9u9
- 9wFjAFJw=
-X-Gm-Gg: Acq92OG5E7Ql5Fj2Qn0zF1hIvgvcAUxms3gvOyXo5My17T9p5MZU/1u5OZdn70wShuH
- Sq3/ruTVecfWgauAPkCj6AeUPQ7l/kOTtgzLy0NTOnQrOp/zRH+Bm3WH11qpjSmsdKVRBie4H/n
- hQQ37/O0YKEdL8tTa+H7XSXPETuBg8TtlbJ563gniynfOcmcBow82pYAdEx0R3RDbAlph4AxQSp
- 3VVd9qZ1xUcCqqgRjVdRQNN+hGwwD+EOylrsEYkXHRGaEFNq4w+J50AKbvqKL/y0+9rXnz4ojsu
- UwvmFtZpFrkOsnlS70xfEDsS4gOwOt3aq+QbkKpsANuzfOmCmexiEacHTPbm+u4N4VeiCasWPUp
- ij86uKz3llnrFTdT65mfgPnZFCrRuQHnvot8Ai4zfpUCxa4OgCbD0fpzyzNo8nLcI84E7kl8fqJ
- A2rH8YIRjmex0aLzLzuSdAmUsBciscYE5L
-X-Received: by 2002:a05:6512:3c97:b0:5a3:ffc6:6600 with SMTP id
- 2adb3069b0e04-5aa0e73c26cmr7825221e87.31.1779277961940; 
- Wed, 20 May 2026 04:52:41 -0700 (PDT)
-Received: from nola.getinternet.no ([2a02:fe1:410c:a500:cc94:a9a5:3b7b:9bfb])
- by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-395887bcea5sm27629171fa.38.2026.05.20.04.52.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 20 May 2026 04:52:41 -0700 (PDT)
+ id HWm22bfRvGYC for <buildroot@buildroot.org>;
+ Wed, 20 May 2026 12:02:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE8C541350
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE8C541350
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 12:02:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BFE0A8689E; Wed, 20 May 2026 12:01:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Jon=20Henrik=20Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
-Date: Wed, 20 May 2026 13:52:37 +0200
-Message-Id: <20260520115237.1843693-1-jonhenrik@qbee.io>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=qbee.io; s=google; t=1779277962; x=1779882762; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kam80sY8azfh2DXdmjECSd2vtJ3DeM3d+0smrigQxUs=;
- b=CDi7s+QczsLZwskhktAoNkjskLErVVCQh7TLgKRr4rsx1DE3t2JEdp+MvTxQMuSTKF
- u1JMrtmYLqzc4J5fuh0bsTgg7l4i9GsawCwXknn5NBM6rVBmwWPrgxzNAbjxwvt7gESB
- tObCalQNEVhotkDqQ6vwEKe8cRjdRxuLQh+jk=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=qbee.io
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=qbee.io header.i=@qbee.io header.a=rsa-sha256
- header.s=google header.b=CDi7s+Qc
-Subject: [Buildroot] [PATCH 1/1] package/qbee-agent: bump version to 2026.19
+Date: Wed, 20 May 2026 11:56:06 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: bcba0ceef591e0bc6f4c4fcaee20450f599ca718
+X-Git-Newrev: 92f968895230a54f4408fe852a9f8efa207ef109
+X-Patchwork-Hint: ignore
+Message-Id: <20260520120154.BFE0A8689E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] CHANGES: Update for
+ 2025.02.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,40 +69,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Jon_Henrik_Bj=C3=B8rnstad_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Jon=20Henrik=20Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogSm9uIEhlbnJpayBCasO4cm5zdGFkIDxqb25oZW5yaWtAcWJlZS5pbz4K
-LS0tCiBwYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5oYXNoIHwgMiArLQogcGFja2FnZS9x
-YmVlLWFnZW50L3FiZWUtYWdlbnQubWsgICB8IDQgKystLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGlu
-c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9xYmVlLWFn
-ZW50L3FiZWUtYWdlbnQuaGFzaCBiL3BhY2thZ2UvcWJlZS1hZ2VudC9xYmVlLWFnZW50Lmhhc2gK
-aW5kZXggMjA5MGQwMTY5Mi4uMmY3ZGExNDM0ZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9xYmVlLWFn
-ZW50L3FiZWUtYWdlbnQuaGFzaAorKysgYi9wYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5o
-YXNoCkBAIC0xLDMgKzEsMyBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgNWYxY2E3
-MzNhZjU5NmFlYmRlYzQ5Yzg5MGI1OWU1NDA2YjQyMTdlMjhkYTAwZTYxNmI3MTcwNmY3ZGU5OGI4
-NyAgcWJlZS1hZ2VudC0yMDI2LjEwLWdvMi50YXIuZ3oKK3NoYTI1NiAgZGU3MmM5NzU0ZjQ2ZDYz
-YzNkNmRkMjg2ZTRmYTk2N2M0YjU5MmMyNjc5YjE3MmZmOGNlOWU3ZTZhZTEzYTRkNCAgcWJlZS1h
-Z2VudC0yMDI2LjE5LWdvMi50YXIuZ3oKIHNoYTI1NiAgMDJkMDdkOTZiZTk5ZWIwNDJiMDFiYTY1
-MDA3OWE0NDBjZTI2YTc4YzVlMGUxZTgwNjBjMzNhOGM5ZTIwMDQwNCAgTElDRU5TRQpkaWZmIC0t
-Z2l0IGEvcGFja2FnZS9xYmVlLWFnZW50L3FiZWUtYWdlbnQubWsgYi9wYWNrYWdlL3FiZWUtYWdl
-bnQvcWJlZS1hZ2VudC5tawppbmRleCBjNGY4OTFiMGZhLi5jY2JmN2NhYjQwIDEwMDY0NAotLS0g
-YS9wYWNrYWdlL3FiZWUtYWdlbnQvcWJlZS1hZ2VudC5taworKysgYi9wYWNrYWdlL3FiZWUtYWdl
-bnQvcWJlZS1hZ2VudC5tawpAQCAtNSwxMiArNSwxMiBAQAogIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKIAogIyBrZWVwIFFCRUVfQUdFTlRfQ09NTUlUX0lEIGluIHN5bmMgd2hlbiB1cGRhdGluZwot
-UUJFRV9BR0VOVF9WRVJTSU9OID0gMjAyNi4xMAorUUJFRV9BR0VOVF9WRVJTSU9OID0gMjAyNi4x
-OQogUUJFRV9BR0VOVF9TSVRFID0gJChjYWxsIGdpdGh1YixxYmVlLWlvLHFiZWUtYWdlbnQsJChR
-QkVFX0FHRU5UX1ZFUlNJT04pKQogUUJFRV9BR0VOVF9MSUNFTlNFID0gQXBhY2hlLTIuMAogUUJF
-RV9BR0VOVF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQogCi1RQkVFX0FHRU5UX0NPTU1JVF9JRCA9
-IGNmZWVjOTkxYjk3NjQ4YWFlY2I4OTRkNGM5Mzg5ZmZkZTc3MTFhYTgKK1FCRUVfQUdFTlRfQ09N
-TUlUX0lEID0gOTlhMGI1YTU2YmIwYWUyZDdkZWMyOWFiY2YyNWQyOWJlMTZmMmMzNgogCiBRQkVF
-X0FHRU5UX0dPTU9EID0gZ28ucWJlZS5pby9hZ2VudAogCi0tIAoyLjM0LjEKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/92f968895230a54f4408fe852a9f8efa207ef109
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ CHANGES | 134 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
+
+diff --git a/CHANGES b/CHANGES
+index 9d87a9242a..42e7b3a7a9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,137 @@
++2025.02.14, released May 20, 2026
++
++	Changes with potentially large impact:
++
++	- ficl was downgraded to version 3.065 because ficl4 is no longer
++	  maintained.
++
++	Important / security related fixes:
++
++	apache: CVE-2026-23918, CVE-2026-24072, CVE-2026-28780, CVE-2026-29168,
++	  CVE-2026-29169, CVE-2026-33006, CVE-2026-33007, CVE-2026-33523,
++	  CVE-2026-33857, CVE-2026-34032, CVE-2026-34059
++	bubblewrap: CVE-2026-41163
++	cups: CVE-2026-27447, CVE-2026-34978, CVE-2026-34979, CVE-2026-34980,
++	  CVE-2026-34990, CVE-2026-39314, CVE-2026-39316, CVE-2026-41079
++	dash: CVE-2026-31323
++	dropbear: CVE-2019-6111, CVE-2026-35385
++	exim: CVE-2026-40684, CVE-2026-40685, CVE-2026-40686, CVE-2026-40687
++	expat: CVE-2026-7210, CVE-2026-41080
++	ffmpeg: CVE-2026-30997
++	freetype: CVE-2026-23865
++	ghostscript: (no CVE assigned)
++	giflib: CVE-2021-40633, CVE-2025-31344, CVE-2026-23868
++	gnutls: CVE-2026-33845, CVE-2026-33846, CVE-2026-3832, CVE-2026-3833,
++	  CVE-2026-42009, CVE-2026-42010, CVE-2026-42011, CVE-2026-42012,
++	  CVE-2026-42013, CVE-2026-42014, CVE-2026-42015, CVE-2026-5260,
++	  CVE-2026-5419
++	imagemagick: CVE-2026-28493, CVE-2026-28494, CVE-2026-28686,
++	  CVE-2026-28687, CVE-2026-28688, CVE-2026-28689, CVE-2026-28690,
++	  CVE-2026-28691, CVE-2026-28692, CVE-2026-28693, CVE-2026-30883,
++	  CVE-2026-30929, CVE-2026-30931, CVE-2026-30935, CVE-2026-30936,
++	  CVE-2026-30937, CVE-2026-31853, CVE-2026-32259, CVE-2026-32636,
++	  CVE-2026-33535, CVE-2026-33536, CVE-2026-33899, CVE-2026-33900,
++	  CVE-2026-33901, CVE-2026-33902, CVE-2026-33905, CVE-2026-33908,
++	  CVE-2026-34238, CVE-2026-40169, CVE-2026-40183, CVE-2026-40310,
++	  CVE-2026-40311, CVE-2026-40312
++	lcms2: CVE-2026-41254, CVE-2026-42798
++	libcap: CVE-2026-4878
++	libcurl: CVE-2026-7168, CVE-2026-7009, CVE-2026-6429, CVE-2026-6276,
++	  CVE-2026-6253, CVE-2026-5773, CVE-2026-5545, CVE-2026-4873
++	libexif: CVE-2026-40386, CVE-2026-40385, CVE-2026-32775
++	libjxl: CVE-2025-12474, CVE-2026-1837
++	libmicrohttpd: (no CVE assigned)
++	libpcap: CVE-2025-11961
++	libpjsip: CVE-2026-25994, CVE-2026-26203, CVE-2026-26967,
++	  CVE-2026-29068, CVE-2026-28799, CVE-2026-32942, CVE-2026-32945,
++	  CVE-2026-33069, CVE-2026-34235, CVE-2026-40614, CVE-2026-40892,
++	  CVE-2026-41416, CVE-2026-41415, CVE-2026-42225, CVE-2025-65102
++	libspdm: GHSA-m4wc-xmvg-369f, GHSA-j54w-759w-xj3m
++	liburiparser: CVE-2026-42371
++	libxml2: CVE-2026-6732
++	log4cxx: CVE-2025-54812, CVE-2025-54813, CVE-2026-40023
++	mbedtls: CVE-2025-66442, CVE-2026-25833, CVE-2026-25834,
++	  CVE-2026-25835, CVE-2026-34871, CVE-2026-34872, CVE-2026-34873,
++	  CVE-2026-34874, CVE-2026-34875, CVE-2026-34876, CVE-2026-34877
++	musl: CVE-2026-6042, CVE-2026-40200
++	nginx: CVE-2026-27654, CVE-2026-27784, CVE-2026-32647, CVE-2026-27651,
++	  CVE-2026-28753, CVE-2026-28755, CVE-2025-53859, CVE-2025-23419,
++	  CVE-2024-7347, CVE-2024-32760, CVE-2024-31079, CVE-2024-35200,
++	  CVE-2024-34161
++	opensc: CVE-2025-13763, CVE-2025-49010, CVE-2025-66215, CVE-2025-66038,
++	  CVE-2025-66037
++	openvpn: CVE-2026-40215, CVE-2026-35058
++	p11-kit: CVE-2026-2100
++	p7zip: CVE-2021-3520
++	proftpd: CVE-2026-42167
++	python-cbor2: CVE-2026-26209, CVE-2025-64076, CVE-2025-68131
++	python-django: CVE-2026-3902, CVE-2026-4277, CVE-2026-4292,
++	  CVE-2026-33033, CVE-2026-33034
++	python-pyasn1: CVE-2026-30922
++	python-pyopenssl: CVE-2026-27448, CVE-2026-27459
++	python-requests: CVE-2026-25645
++	python3: CVE-2024-6923, CVE-2025-13836, CVE-2025-59375
++	rsync: (no CVE assigned)
++	ruby: CVE-2026-41316
++	sqlite: CVE-2025-70873
++	strongswan: CVE-2026-25075
++	systemd: CVE-2026-40226
++	thrift: CVE-2025-48431, CVE-2026-41602, CVE-2026-41603, CVE-2026-41604,
++	  CVE-2026-41605, CVE-2026-41606, CVE-2026-41607, CVE-2026-41636,
++	  CVE-2026-43868, CVE-2026-43869, CVE-2026-43870
++	tor: CVE-2026-44597, CVE-2026-44599, CVE-2026-44600, CVE-2026-44601,
++	  CVE-2026-44602, CVE-2026-44603
++	util-linux: CVE-2026-27456
++	webkitgtk: CVE-2026-20643, CVE-2026-20664, CVE-2026-20665,
++	  CVE-2026-20691, CVE-2026-28857, CVE-2026-28859, CVE-2026-28861,
++	  CVE-2026-28871, CVE-2025-43457, CVE-2025-46299, CVE-2026-20608,
++	  CVE-2026-20635, CVE-2026-20636, CVE-2026-20644, CVE-2026-20652,
++	  CVE-2026-20676
++	wolfssl: CVE-2026-5264, CVE-2026-5263, CVE-2026-5295, CVE-2026-5466,
++	  CVE-2026-5477, CVE-2026-5447, CVE-2026-5500, CVE-2026-5501,
++	  CVE-2026-5503, CVE-2026-5187, CVE-2026-5188, CVE-2026-5448,
++	  CVE-2026-5772, CVE-2026-5778, CVE-2026-3548, CVE-2026-3549,
++	  CVE-2026-3547, CVE-2026-0819, CVE-2026-1005, CVE-2026-2645,
++	  CVE-2026-3230, CVE-2025-12888, CVE-2025-11936, CVE-2025-11935,
++	  CVE-2025-11934, CVE-2025-11933, CVE-2025-11931, CVE-2025-11932,
++	  CVE-2025-12889, CVE-2025-13912, CVE-2025-7395, CVE-2025-7394,
++	  CVE-2025-7396
++	wolftpm: CVE-2025-7844
++	xlib_libXpm: CVE-2026-4367
++	xserver_xorg-server: CVE-2026-33999, CVE-2026-34000, CVE-2026-34001,
++	  CVE-2026-34002, CVE-2026-34003
++	xwayland: CVE-2026-33999, CVE-2026-34000, CVE-2026-34001,
++	  CVE-2026-34002, CVE-2026-34003
++	xz: CVE-2025-31115, CVE-2026-34743
++
++	Toolchain:
++
++	- gcc: fix GCC 12, 13 and 14 build with host gcc 16, bump 12.x series
++	  to 12.5.0
++	- linux-headers: bump to 6.12.90, 6.6.140, 6.1.173, 5.15.207, 5.10.256
++
++	Infrastructure updates/fixes:
++
++	- Various improvements to pkg-stats.
++
++	New packages: libxmlsec1
++
++	Updated / fixed packages: apache, btrfs-progs, bubblewrap, c-icap,
++	  ca-certificates, cmake, cups, dash, dropbear, exim, expat, ffmpeg,
++	  ficl, freetype, frr, gcc, ghostscript, giflib, gnutls, haproxy,
++	  imagemagick, initscripts, kmod, lcms2, libarchive, libcap, libcurl,
++	  libexif, libinput, libjxl, libmicrohttpd, libpcap, libpjsip, libpng,
++	  libsodium, libspdm, liburiparser, libxml2, linux, linux-headers,
++	  log4cxx, mbedtls, mkpasswd, musl, mutt, neon, netsnmp,
++	  network-manager, nginx, opensc, openssh, openvpn, p11-kit, p7zip,
++	  proftpd, python-cbor2, python-certifi, python-django,
++	  python-magic-wormhole, python-pyasn1, python-pyopenssl,
++	  python-requests, python3, rsync, ruby, sqlite, strongswan, sudo,
++	  systemd, thrift, tor, util-linux, watchdogd, webkitgtk,
++	  wireless-regdb, wolfssl, wolftpm, xdg-dbus-proxy, xlib_libXpm,
++	  xserver_xorg-server, xwayland, xz
++
++
+ 2025.02.13, released April 21, 2026
+ 
+ 	Changes with potentially large impact:
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
