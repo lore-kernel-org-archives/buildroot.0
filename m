@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE90CD4F3D
-	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 16:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F8ACD5BAA
+	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 16:36:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D31FA817B1;
-	Wed, 20 May 2026 16:36:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC42D407E8;
+	Wed, 20 May 2026 16:36:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ETRHXPo2_jYg; Wed, 20 May 2026 16:36:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zcBByepIFtiM; Wed, 20 May 2026 16:36:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9A7B83CF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0603340735
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779294968;
-	bh=lIHRj46BvViOVhpctmS94WSkFoG2oAQAE2wc+wrgPEY=;
+	s=default; t=1779295018;
+	bh=Vh0NS4/EZxj5I01Qru8CTl9V1nCLVrfXQUTseSKOR5M=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=nkErQ7KCOOo3Na/tSgFAqDEpwO6cH5ipRvFNJ3LJU5ZtCzZ38P4aXS9fQDXJx3Ppd
-	 YprN5JdHZLJGwsK5+fKhfZEN1RvG0ff76jhirk3V7+LD/ChPP9zVGSKuDsQbeISCRD
-	 5OJ4eAyTaC8BzHOlctwoF5km/VG+5I51FydalCow6A9RtBW9VTcLEsKqYqmAMeSm7H
-	 X2xGZ9LPKXHPRPDZ6IXvgIa/httf+os76wjBXwT+ZC/0o8xgt/Rd4edpVizYYaZDFE
-	 uSzEY/fgIqzWVrcKLxMrQ8Iaaep41/lMJWcOOKKLJrdWvHuCGEnPhf6/qkW87ayI7S
-	 Qr1VN9cjiox7Q==
+	b=OvjdMilD6JDWj060whmOSAp/49ZlWfKoSp2DQSVtr4Sq8aoY7pYNv9Zh/z+86I7lA
+	 9amB2vHtNn+yRPF8NTubtq3vtI1SCkzzjLZ2hVRIiT71K0QKlg9hknXAu6kGiTUjyR
+	 8kbGqOLBxkY7ajmvEPJxTn47qHUlJqecTwoh3lGkj7JoZyz3qWgcFKEtw8xJmtISwg
+	 S+l6ic7JAMd7Dcz4C/U02LSA81JfyZsKt7kyEDmg44zHLdzZI66iIdywcn0vc0GEBE
+	 V8WOBpbGZWUEb7euTyq7rjw7fZr0v7an2iucPbk6XRBEnqj+rjZgIgOEAPcrEh/obN
+	 e/A4BagkGcBXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9A7B83CF9;
-	Wed, 20 May 2026 16:36:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 13B1F265
- for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0603340735;
+	Wed, 20 May 2026 16:36:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D1DA265
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0319F83CF9
- for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A65A61151
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R-kXRAsXQkVb for <buildroot@buildroot.org>;
- Wed, 20 May 2026 16:36:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9mS9vHi_19LW for <buildroot@buildroot.org>;
+ Wed, 20 May 2026 16:36:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CE58817B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CE58817B1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AE4166114B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE4166114B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5CE58817B1
- for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE4166114B
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 16:36:55 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0ef6.dip0.t-ipconnect.de [91.58.14.246])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 57399A4C174E
- for <buildroot@buildroot.org>; Wed, 20 May 2026 18:35:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42692)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D4109A4C174E
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 18:36:53 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47296)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wPjta-000000005Pi-3HVt
- for buildroot@buildroot.org; Wed, 20 May 2026 16:35:46 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wPjuf-000000005cP-2sV4
+ for buildroot@buildroot.org; Wed, 20 May 2026 16:36:53 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 20 May 2026 18:35:45 +0200
-Message-ID: <20260520163546.1067214-1-bernd@kuhls.net>
+Date: Wed, 20 May 2026 18:36:53 +0200
+Message-ID: <20260520163653.1086908-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1779294947;
- bh=lzqfSmpc2C0Pe5ox5OfnvtKG93K2WhhCskVw2IIr5dU=;
+ s=kas202511301023; t=1779295013;
+ bh=My9iXqTtgYDGzj6XfX4G7PTUjKtAatsQTLCHguAZrAs=;
  h=From:To:Subject:Date:From;
- b=HjvPACp7GgmR/W3Ubgue6cPLZhJNJq4t+NJR/p7vFKk4nDxXlBzOMymzk6SbIBQKH
- Mw8ZNaaJIlyIZgP4MFFbXahWu30xyF8GBiiejfk7Q5Gp3kVNg6IfEl7sKtb8ejbcMz
- EE4b1SeL6l7gH6ExinKcNXVqajdWuVNbBze92ehAHaH+LyR/b0Z2uBLHogBoRXPHVf
- L2pCM/UDh5fgQRsFojYNtvl9COG777kORS7X0hKXegKGYqDN9YggiAPgzj/zvLgH+x
- ArW5w1CWPx2maflcUWm7y5cOt3wHY283dsMj/iJ4kGyYOEhHt93ec/eh1d4/sOq9Ki
- PbRjcmdAJctzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=nfayO3me1W2HvIVkmIs+qjvDsoMDNEbscftQlVS6IQjje+yFrMlVhTB1cK2Xh5x2C
+ k37vM84HXrzbYhBb07PsW6iKESdVkF6ZxBEkZwOTuLQAphoLUGtPyCkwvDIIY9xZkh
+ 8z0TZH4Q/6HcABNj+8RDpTMCTm5qVZq7b7+CP+k9j9Sb08LLb/qeJe1x76NuK9I4qG
+ H/UCmPwdYFdXDDlXAKvOBor86j2/oQtCcxnWe6bEmzK5xNXko9VHIdq0fKVaFe/gCO
+ Ld0gcID5uHKHl/+dbfjt49uv11fXj4djbMLemb2GEV/2pjyqzeW/vx5AN8Hz6pvs9T
+ Gfiq9LY4YVA7Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=HjvPACp7
-Subject: [Buildroot] [PATCH 1/2] package/libheif: security bump version to
- 1.22.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=nfayO3me
+Subject: [Buildroot] [PATCH 1/1] package/rsync: security bump version to
+ 3.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,60 +97,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/strukturag/libheif/releases/tag/v1.22.0
+https://download.samba.org/pub/rsync/NEWS#3.4.3
 
-Fixes the following CVEs/advisories:
-
-CVE-2026-32738 (GHSA-7f2h-cmpf-v9ww) : Heap OOB Read / SEGV Crash via Zero samples_per_chunk in stsc
-CVE-2026-32739 (GHSA-j9g7-q9hv-gq8c) : Infinite Loop DoS in stts Sample Duration Lookup
-CVE-2026-32740 (GHSA-frfr-f3vg-2g6j) : Heap-Buffer-Overflow Write in Grid Tile Chroma Compositing
-CVE-2026-32741 (GHSA-j3w5-7whq-p37q) : heap buffer overflow in decode_mask_image()
-CVE-2026-32814 (GHSA-4m8r-34pg-rvwc) : Uninitialized Heap Memory Information Leak via Failed Grid Tiles
-CVE-2026-32882 (GHSA-hg7q-rjr2-8x46) : Heap Buffer OOB Read in overlay compositing due to wrong alpha stride
-CVE-2026-41069 (GHSA-p82x-fpmv-576r) : Out-of-bounds vector access leading to invalid dereference
-CVE-2026-41071 (GHSA-xj92-xjff-h8w3) : Heap buffer over-read in SampleAuxInfoReader via crafted HEIF sequence file with mismatched saiz sample count
-CVE-2026-47178 (GHSA-5x55-x5pf-9c6g) : Heap Out Of Bounds Write in unci subsystem
-CVE-2026-47247 (GHSA-2vh6-whr3-cmq3) : Heap Information Disclosure via Grid Image Gap + Uninitialized Pixel Plane Allocation
-CVE-2026-47251 (GHSA-p6q9-fhf2-vj9v) : Incomplete fix for CVE-2026-3949: integer overflow bypass in vvdec_push_data2
-CVE-2026-47254 (GHSA-wqjg-4x9g-6cvg) : Heap Buffer Overflow in Track::get_next_sample_raw_data() -- OOB Chunk Vector Access
-CVE-2026-47709 (GHSA-4h72-vqgp-9376) : NULL pointer dereference in heif_image_handle_get_image_tiling for malformed unci image missing ispe
-CVE-2026-47714 (GHSA-h4wm-6wwf-qvhx) : Integer overflow in inline mask size calculation causes undersized buffer allocation
-CVE TBD (GHSA-6x5f-qchq-cxqv) : heap OOB read in ImageItem_Grid::decode_grid_tile via irot-induced tile-coordinate underflow
-(GHSA-95jx-g5vf-cpp8) : Integer Overflow in SampleAuxInfoReader Offset Calculation
-(GHSA-p4r6-6972-g26m) : Incorrect byte-count initialization in BitstreamRange constructor allows container-boundary check bypass
-(GHSA-jh2w-m72q-q595) : Out-of-bounds read and assertion-based DoS in EXIF parsing (find_exif_tag / read32) with short EXIF TIFF payload
-(GHSA-9h96-c44j-jpq9) : Heap buffer overflow via uint32_t stride overflow in image plane allocation
+Fixes CVE-2026-29518, CVE-2026-43617, CVE-2026-43618, CVE-2026-43619,
+CVE-2026-43620 & CVE-2026-45232.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libheif/libheif.hash | 4 ++--
- package/libheif/libheif.mk   | 2 +-
+ package/rsync/rsync.hash | 4 ++--
+ package/rsync/rsync.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
-index 0daabcb5dc..b88784b309 100644
---- a/package/libheif/libheif.hash
-+++ b/package/libheif/libheif.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/strukturag/libheif/releases/tag/v1.21.2
--sha256  75f530b7154bc93e7ecf846edfc0416bf5f490612de8c45983c36385aa742b42  libheif-1.21.2.tar.gz
-+# From https://github.com/strukturag/libheif/releases/tag/v1.22.0
-+sha256  8bd20cfa3201997b8f63266cddfabea2e1481467d7f992e6a2595e0bec691fc2  libheif-1.22.0.tar.gz
- # Locally computed:
- sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index 77435dda5c..e47620b167 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 933d330323..666bb5cf99 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.2.tar.gz.asc
+-sha256  ff10aa2c151cd4b2dbbe6135126dbc854046113d2dfb49572a348233267eb315  rsync-3.4.2.tar.gz
++# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.3.tar.gz.asc
++sha256  c72e63ca3021cbc80ba86ec30102773f4c5631fbc492b52e773b3958f82a53d3  rsync-3.4.3.tar.gz
+ # Locally calculated
+ sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 3282a759c6..5b4345d036 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHEIF_VERSION = 1.21.2
-+LIBHEIF_VERSION = 1.22.0
- LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
- LIBHEIF_LICENSE = LGPL-3.0+
- LIBHEIF_LICENSE_FILES = COPYING
+-RSYNC_VERSION = 3.4.2
++RSYNC_VERSION = 3.4.3
+ RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+ with exceptions
+ RSYNC_LICENSE_FILES = COPYING
 -- 
 2.47.3
 
