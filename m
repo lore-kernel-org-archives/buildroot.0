@@ -1,84 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 435AECD4F3C
-	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 10:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED4ECD4F54
+	for <buildroot@archiver.kernel.org>; Wed, 20 May 2026 10:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71B156101E;
-	Wed, 20 May 2026 10:07:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53434412FD;
+	Wed, 20 May 2026 10:11:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QtZ-XsfTZt6m; Wed, 20 May 2026 10:07:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m2G3EOuTmtps; Wed, 20 May 2026 10:11:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A1C61014
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02E41412E1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779271655;
-	bh=UVR7WyvAtL0jo0q9/qAx+xLpagbIiHS0INJ20o/WZ1M=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=futdZDY48jkZ+wEytQfapGRYNG+YKQW0y8BSSyO29fbwHttivJI/EcMAumhpoEiwn
-	 l/PADQL9gbiznfxKJIDespaTzdU+nCp6WKVFAnc57Zt+hqIYpwvv9L8p7Pi4pEGo6O
-	 s4nKGl2bKDHsh5UaRQgRybIO2DQkrKY+nL58GgIyS+7qwhcu8m6jPJG4x35pYxRnWV
-	 Yogew28GJFefcfpMENgK2GP1b/xZXk8RYTQ3YqulPCCdhGRVBg7daxeQPo/uOHPamZ
-	 FtY4ZJK5Y+kvmWRVQPuQ7m7xvMtrMI8buw3lAkvx85++8Cb2lxs9LnyOKMqK1sXU5M
-	 iIR98gFz9EqXQ==
+	s=default; t=1779271864;
+	bh=H7VfVDM0WLRajjBuVaxK3kysqitmxX7B62o8RfCznU8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=QarrqtbnuH0JZ3YalOUJpDO0C5OgukaCTqXQI3KFcU8K2dSf6DOHJIbAEjc7SGkqK
+	 cFK6W59BedQh9T8TQKwLH9PVH0RTEik8YAtSd0gS5dhJWpobEor6LlL7fA1dwHtI7s
+	 ZMdIBk60jY6oLet9ugBYSHfBFdDHgHNxknWjXrSF9saDWpLhOs36LD9qFih4GfLgu4
+	 IkwWVP9v2xXJK8mkR9I7+t/9Uz5iUMBIsbVN1N3EV47oVsudXdKPq9oc+Vq8t+NR+V
+	 eCof7njo28mSDmtaDoSLJelktQyXurgT1FH079sxAZ1geX6XO/Vd/NGKqj7MHH/AZC
+	 r3ydBY5HWQSpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92A1C61014;
-	Wed, 20 May 2026 10:07:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 162B6265
- for <buildroot@buildroot.org>; Wed, 20 May 2026 10:07:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02E41412E1;
+	Wed, 20 May 2026 10:11:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82103265
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 10:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F01CE60F2A
- for <buildroot@buildroot.org>; Wed, 20 May 2026 10:07:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 646BB4084C
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 10:11:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2yqSPv1dpGLY for <buildroot@buildroot.org>;
- Wed, 20 May 2026 10:07:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.132;
- helo=smtpcmd04132.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6EE961014
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6EE961014
-Received: from smtpcmd04132.aruba.it (smtpcmd04132.aruba.it [62.149.158.132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B6EE961014
- for <buildroot@buildroot.org>; Wed, 20 May 2026 10:07:29 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id PdpnwRFnPJWrEPdpnwo8nB; Wed, 20 May 2026 12:07:27 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 20 May 2026 12:07:26 +0200
-Message-ID: <20260520100726.535469-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SeSgT_x31Dzq for <buildroot@buildroot.org>;
+ Wed, 20 May 2026 10:11:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.3;
+ helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B08F40846
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B08F40846
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B08F40846
+ for <buildroot@buildroot.org>; Wed, 20 May 2026 10:11:01 +0000 (UTC)
+Received: from tianyuanhao3$163.com (
+ [240e:40e:2302:974e:2184:6203:d67e:884d] ) by ajax-webmail-wmsvr-40-129
+ (Coremail) ; Wed, 20 May 2026 18:10:56 +0800 (CST)
+X-Originating-IP: [240e:40e:2302:974e:2184:6203:d67e:884d]
+Date: Wed, 20 May 2026 18:10:56 +0800 (CST)
+From: "TIAN Yuanhao" <tianyuanhao3@163.com>
+To: "James Hilliard" <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260403(27802f6d) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <20260316195726.690352-1-james.hilliard1@gmail.com>
+References: <20260316195726.690352-1-james.hilliard1@gmail.com>
+X-NTES-SC: AL_Qu2cC/6cvkAu4CKQbekfmksSgOg6X8CxuP8g3IRWO5x+jADp6DAhR21pD3nt3v+fKweOkjKlUSRy+sBCWIBWeYkk+t1Qrc+c4eizhPiwGwoaqg==
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfCkGQoZdGKeFE/1fF1rFiNCcIM9qJawOMwi6kSrK4KhCMn9sYoECYGlLybteY2hDOyS4gxtmgtmW/tSIBQYVck7QXe+mgeVDlxBX1lVmLTd/pnFWOhhp
- ltP6d4Wxw429AJzy4v8oUsLzgGvh5VfK670UmpHRTVBSxlWC9gbJmOofXX2bjq/tZi73I1xo/Ple/6Ozq9j4k5Kxjt0IdgW+mN+3AGpyo1OhOELJOzHhrbSW
- jotHt3FcSc1JN9aXYiwB1hKb+t9HI/igs8TMuka9dwY=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1779271647; bh=cpPGhwHh00HLkOj0dlWuiu3qv5vhAr6SaTnQVwQ733g=;
- h=From:To:Subject:Date:MIME-Version;
- b=DfXu2pdAz5kPip3Q7avwRIFCsPtQNIp6B7JwiY+UlhsDcAEszBWoSLQTnx5GngU9D
- r9MqpxQzNgx4mkduNO+4CuFS0Otj7rvlfIwQffmJ+siDRT0GbkP9t7RwSxZcAawcFZ
- /rcGIK8o/+NfcHPTv+x5dMA7G05yrHjWz2dDTNVTGG/J/rsVTBbPMk6A6FMcjig6Rq
- rLo3ukaUz05PgBnQu6R+vbn2vKJWx2Mo8ZG16dTUJ2oE1CbviF1b6ROHsCQiSKgvgZ
- Mtb3p027kfiBwgZmKCJosnyiJs4PfAH3xLVmzfnx4LZEaYJME1IEYN6gNWEVarPJD8
- VrYvwLtW32vcQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Message-ID: <2a597fd1.96d8.19e44ddf0a8.Coremail.tianyuanhao3@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: gSgvCgDn_xywiA1qjRSoAA--.8841W
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbC-hAsuWoNiLCsHAAA3U
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=163.com; 
+ s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+ Message-ID; bh=KbdazHaAn36vEYPunfiDXp2p4PdDIWi6PwbBFpEXYwY=; b=D
+ jhZalFJGrw75tpXc6qI//Z/lAwpY3/aotPbkqyP7QpdttDIcqScUIGSZste5dyUp
+ L4SyAdPIF8fjjXg/u+6xfIJO7YSYPtkCNx6uiY+7ttn3TIC8CuJJMq2rKglucCDJ
+ RWhUGgdzu/s513hiMTVfvOiSFtCxQBuOUv0S0d7SWo=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=DfXu2pdA
-Subject: [Buildroot] [PATCH] package/wireshark: bump to v4.4.16
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=DjhZalFJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/tailscale: don't overwrite
+ tailscaled when using merged bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,45 +100,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For more information on the version bump, see:
-  - https://www.wireshark.org/docs/relnotes/wireshark-4.4.16.html
+Tested-by: TIAN Yuanhao <tianyuanhao3@163.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 037f2f509a..2c15d4f0f4 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.15.txt
--sha1  dd591df261c7866e7eaac3f015c904ab21d9d51d  wireshark-4.4.15.tar.xz
--sha256  05e884da8d91929bd1fb6a91c26836d69145ecd439b97c2d82698388de221570  wireshark-4.4.15.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.16.txt
-+sha1  1424ea22b4959f94eb85c1fc3c510f281766144e  wireshark-4.4.16.tar.xz
-+sha256  0bda0e34a4c5da72ea9009134d733783d08189c07462198e53a4f533fd1201fd  wireshark-4.4.16.tar.xz
- 
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 1ded080906..ab393b8a48 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.4.15
-+WIRESHARK_VERSION = 4.4.16
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.47.3
-
+At 2026-03-17 03:57:26, "James Hilliard" <james.hilliard1@gmail.com> wrote:
+>When merged bin was enabled in systemd in buildroot commit
+>a530492cd3e6de7ed5f9406f7573fe7b9061b3d5 the tailscaled package
+>started overwriting the tailscaled binary with a broken symlink as it
+>assumed /usr/bin and /usr/sbin were not merged.
+>
+>To ensure this doesn't happen only apply the symlink when
+>BR2_ROOTFS_MERGED_BIN is not selected.
+>
+>Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>---
+> package/tailscale/tailscale.mk | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
+>index 86039fd4b1..f231022476 100644
+>--- a/package/tailscale/tailscale.mk
+>+++ b/package/tailscale/tailscale.mk
+>@@ -22,10 +22,12 @@ define TAILSCALE_INSTALL_INIT_SYSTEMD
+> 		$(TARGET_DIR)/usr/lib/systemd/system/tailscaled.service
+> endef
+> 
+>+ifeq ($(BR2_ROOTFS_MERGED_BIN),)
+> define TAILSCALE_INSTALL_SYMLINK
+> 	ln -f -s ../bin/tailscaled $(TARGET_DIR)/usr/sbin/tailscaled
+> endef
+> TAILSCALE_POST_INSTALL_TARGET_HOOKS += TAILSCALE_INSTALL_SYMLINK
+>+endif
+> 
+> define TAILSCALE_LINUX_CONFIG_FIXUPS
+> 	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6)
+>-- 
+>2.43.0
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
