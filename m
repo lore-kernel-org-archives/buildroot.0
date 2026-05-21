@@ -1,88 +1,138 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 605AACD5BAB
-	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 20:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0B0CD5BAF
+	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 20:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3C3C423EF;
-	Thu, 21 May 2026 20:45:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7VEEFvg3Rsh7; Thu, 21 May 2026 20:45:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1E2F423F3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779396310;
-	bh=UxazxbS08xBuurMgtukxeBrLoB6b3g4A9C7QCNxmG1g=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BnRb9aLf9KAvtMx/6BOTnnSAHNeRvRCWg5M8IYpqxRt3G/tGAK+5rGD6PYTAVT/bl
-	 0Dp9356BjzqO6XO62E4jr51/TV3qePEOdr0hRR+4rLHHhYREYCYlsWbJhMdfZ6w+Ch
-	 GXSJNP72VV4URy0HwfRH6jZAOhp6RQbaKhE9YfZ5Le36ExbgSmlPRr3og1h9V/AcN0
-	 wTR91gIalGVLk7lw13+4RfLFMgfhTBh7Z5Lc1QVE8pzfC13cD/s53QFSUQqI4i5bPs
-	 svv32CSBR2ShBMV5BasruCbOLV2PlrYGGqcOQ+ethwY6KKK4U9gzqwp33xgEu1ol5r
-	 VG6M8cLCHkpXg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1E2F423F3;
-	Thu, 21 May 2026 20:45:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BED3282
- for <buildroot@buildroot.org>; Thu, 21 May 2026 20:45:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F28A584C5C
- for <buildroot@buildroot.org>; Thu, 21 May 2026 20:45:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5E7784C61;
+	Thu, 21 May 2026 20:51:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8GT195kXVZi5 for <buildroot@buildroot.org>;
- Thu, 21 May 2026 20:45:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 00D8884C5B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D8884C5B
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 00D8884C5B
- for <buildroot@buildroot.org>; Thu, 21 May 2026 20:45:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D67BDB97C54F; Thu, 21 May 2026 22:45:04 +0200 (CEST)
-Message-ID: <53fc8164-bce9-4383-ba06-1a99f7b995d9@rnout.be>
-Date: Thu, 21 May 2026 22:45:02 +0200
+ id 9_KNugaY1dYy; Thu, 21 May 2026 20:51:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ED6884C5B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779396715;
+	bh=Y9/lPGSPuXQzVwd2NF4amAlEYoGAt0vhrnWI0cZLtbY=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=NGnyRbZK9rO8ZmFQpzBAIHPtWLHgYjm+3QRWhj8vGK+IjUmR5/rGH3cVkZ0Hp1KW4
+	 wnoInBPOJW6KSRF7Ztn1yMFRoxwMAW4sJ9NEJjxnOQoUG6Kp4ucHv9AOoGqaMELXVc
+	 vBy7M8EUpQUHHwYDTB5Cac08GYBFa29V6qD+qMFtWBJEs6D3yv1Qx5MB1D4GkXWCkp
+	 uf7X7mww23eFz0TeVckRDyQWHu+CFouG/B44AQtXYIQ5Cie4OR7idfpWbSQtpb/o3W
+	 NUDLgchyxHcZM84v8amE2LD4Lzo2QokxG4tKvSteZUkhtPt0PZIGuYp7q8AwEWPkq3
+	 UN9V5gU/NSwBg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ED6884C5B;
+	Thu, 21 May 2026 20:51:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D617F265
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 20:51:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C469D4240E
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 20:51:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CFJkrVz3HfZO for <buildroot@buildroot.org>;
+ Thu, 21 May 2026 20:51:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::c31; helo=mail-oo1-xc31.google.com;
+ envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29C2C42408
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29C2C42408
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com
+ [IPv6:2607:f8b0:4864:20::c31])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 29C2C42408
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 20:51:53 +0000 (UTC)
+Received: by mail-oo1-xc31.google.com with SMTP id
+ 006d021491bc7-6969c864c89so3700816eaf.2
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 13:51:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779396712; cv=none;
+ d=google.com; s=arc-20240605;
+ b=JOoYr12zN3ZKbwtyVFpUpnCCHRyszEH0YVUNVvAA136BRV0Fl7z3vjNbrlRhKd1HSs
+ YmLKh6/RRokW3I7VIhlBSGoEosS7tIzPhy/yCjY5MRFGDEaW4IoVaqsaSdIak+Lb/B/R
+ qvBpN1QZ3x1wBYyAN3b5DRPNsOFe1hv6aBesevqC3pfbU/driONIZSpl2S805o5Kp/yY
+ 5bg19aeTZ+0MX3F84Wi59frz4CtOtgUsgeF4BbFQdNcyLbaf4ytq7bf/+wD4dPl8FM9z
+ YGQPrJuXev4NPyH/A5RAS+azVEsSkQ6U4dK96nlwSlw0fU7ZNIShQte4GkQ7tfKBtzly
+ KyMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20240605; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=4T9/H9U8Bv8zP7m3dr2FM4eEzijZBllwKltzOEYBBWc=;
+ fh=I4P7DB3IEMGfKF4XS7p6fy0ZkU+/rl9KxnXFSk/s7Ks=;
+ b=V6DTfW+3zWyAnJ6SuGvEPuXJw4NxM2zY9Ns2fBfGPqgR6LypTga+3KTuK8pZp+SzpJ
+ G6WwVBfQB4FBbOd4YZ89KSiFTxgA3c+xVjVwI5Dv7ZZHf3Ki8vAZBVE0swssUTAInCqd
+ 1gEGMDkKcbpXmyGObKLxFMSBXiG+JX9RG49HVE316efks38IOvNYcPBpL27EfvCD5I7l
+ rU4iZXTexSQKvJRPkI5YV10WQi2O/TAXhankiwJ/FBjfFlYiVDBVjCzBeDbWqRVFFjzO
+ TTEsbNnjO9MChCvoYFWSnk0LjeQdUGLK33i5gruuL3OTjzgrZ+PcuqFCqHskoo3L11VB
+ tIQg==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1779396712; x=1780001512;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=4T9/H9U8Bv8zP7m3dr2FM4eEzijZBllwKltzOEYBBWc=;
+ b=YH+UMPRJHtqanbHuN5SfzT6GNrPYdLRpzShR0RrSI/edH8WvbEpZzC3xUC8SmP6nHh
+ X+CLJm1A8EmH7Vzsi01WAxqiYJUTJ4Hn5zyr6rWlquBm9lQOocptnKS7xXdf69x7iX8L
+ c+ofXi9QRaVeNM5yaPSSS1uh6Jk0PtpI6xp8zjZnR1ILhG++waSBtMXfpKccU0ZQ+/Xs
+ K4r05amSF6upWIgSwUwpEnw+HddRgfJrp/m9CTgH/4br5P9cX/ZCwXZazMY06GDrjAHT
+ LBtJsDMwhkaSflMrMQ+Jwx/FKc9JIIVF9m40oVZjPVY0W2j4LMpu+cCChrioqdY4lSJL
+ 08VA==
+X-Gm-Message-State: AOJu0YzG8x43UcmldpwfAnGK9pDcBsBzLAppU+F5mkKAMAa73m+90OTi
+ 7f08S9QU93TVOMQdthsWlGWddzUyEbdnOT9Q8Xe61/9LddrKJgcZXopRW773nYsMcDbyD2LPinc
+ QpTvP82xBhlHko0AdNZjW5b+OfvBU4FyIuTtw
+X-Gm-Gg: Acq92OFPnUJqW4tOmB1Rw1qLgrFKQFQy5qz0KlCGk6ujONFr+tk4bWhyt8EsnQsmNSF
+ hN1bUC8CyQu8H5eGg18v5RII9hfFKHHORUOzppmi26nZVfjh98yE1z9C4jpgFr5nZ+NMdUs/qax
+ dg2VmSaBJIQhZcoeef7wGRdJAjkOgpuEStHk9dzcgNPYlV1p9Owa8h+U1TE751XtO30FSgmbygH
+ CjVH1gUNjPKC45Z7VR93DBLnQvNTcXKYmO7PuCh22Uv16JZJXh1Vaq5uoE3+Ddh465a/XmuURuk
+ Gx+OmgjZ/VOI4vs1dME8/mXObSi0ImwOHIDeEzUuETN5YHx0hqI=
+X-Received: by 2002:a05:6820:55c5:10b0:688:29ff:2dc0 with SMTP id
+ 006d021491bc7-69d7ec4b234mr306637eaf.39.1779396711944; Thu, 21 May 2026
+ 13:51:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Romain Naour <romain.naour@gmail.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com>
- <20260515-virglrenderer-v7-8-1f1814b65ccd@gmail.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260515-virglrenderer-v7-8-1f1814b65ccd@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+ <20260515-virglrenderer-v7-7-1f1814b65ccd@gmail.com>
+ <3bca72e7-9bc3-42d8-a642-dfb70cd0a473@rnout.be>
+In-Reply-To: <3bca72e7-9bc3-42d8-a642-dfb70cd0a473@rnout.be>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 21 May 2026 15:51:41 -0500
+X-Gm-Features: AVHnY4J3LYM3Myla4pp9_Vy1gGaaOYAHvBM75lYW3U3B3LCyLi9tjUhbDFAyJ-4
+Message-ID: <CAMWSM7giP4eAmNeDb9SNf9Z+nVxm3h9jn3q8pe1CzG8Pep5TFw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@rnout.be>
+Cc: buildroot <buildroot@buildroot.org>,
+ Adrian Perez de Castro <aperez@igalia.com>, 
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Romain Naour <romain.naour@gmail.com>, 
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1779396305; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=6JahgYAVwjJ0Mu8u5s0jaaxCjmXhHh53715rF5ynmJQ=;
- b=RWDNii1FzKBoK/LdVrA45sh/Z5K3t6HHrd2YUukn3PpTyvpBqxxOh5xZl1+oby33gj4mPN
- 1QMMJs6QT89erS15plnInuFb7hnufULHweU60QJUybXzseANb3e5OPeGZB1rnXoKzaPh7F
- wCKfS2vvMGLSY6CKFcsBx6LOZlymHRzcrlWZXgYaAu/mt7/spQIIOSykgMFbncIgGENljm
- RPOt/LFq7gFf5eWeNy6FHBkkL4z8MSWceMAOUJFqQV5NGWFV3fSFC0dW2YGBoGWIWUdiEq
- Lgiz2oue17/Pz5TzfOHJfTKPj8Z2FobHVH44M9/vG2AaKe8DzM7sAxMCQ/7xKQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=RWDNii1F
-Subject: Re: [Buildroot] [PATCH v7 8/8] support/testing: add virglrenderer
- test
+ d=gmail.com; s=20251104; t=1779396712; x=1780001512; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=4T9/H9U8Bv8zP7m3dr2FM4eEzijZBllwKltzOEYBBWc=;
+ b=bH8lrYsDmS93XFdMW8BZk+AkOtmHGmmsrCkoazOpG9rrJNRuZBCRy/IsbDvcKYgnCg
+ +cSiPRjFVyBHOXKRmio1YxZNKsDKwSLIQZb3CwW7yFFTj/VcMmLk1RKgM6lG2Zmq2+ih
+ 0ydcqA3gJfRUAR1P/Ckg1BRdk+bjLuY7h0Lw8c3iGB1O3n5HMhish1Uryr/v1cb2ehxZ
+ xOYMCATNQxSxUFwHBts5G2VkfDBbBIy8KvXxcT0AiRTR7Sq5OscOKDVC8sF3CCv9hx4S
+ svM7heimpnnuKjQawWvxnnFt8CZqJcMwvq7awa7MzdLvivWdgrfUR5RrX7Vv94My1iIS
+ MXkA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=bH8lrYsD
+Subject: Re: [Buildroot] [PATCH v7 7/8] package/qemu: add virglrenderer
+ integration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,248 +144,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============7128341581439505210=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============7128341581439505210==
+Content-Type: multipart/alternative; boundary="000000000000ee16b806525a14aa"
+
+--000000000000ee16b806525a14aa
+Content-Type: text/plain; charset="UTF-8"
+
+Hello Arnout,
+
+On Thu, May 21, 2026, 15:24 Arnout Vandecappelle <arnout@rnout.be> wrote:
+
+>
+>
+> On 16/05/2026 04:03, Joseph Kogut wrote:
+> > Add optional virglrenderer integration, along with enabling OpenGL when
+> > necessary.
+> >
+> >
+> https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
+> >
+> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> > ---
+> >   package/qemu/Config.in | 21 +++++++++++++++++++++
+> >   package/qemu/qemu.mk   |  7 +++++++
+> >   2 files changed, 28 insertions(+)
+> >
+> > diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> > index d4e4e37a3e..dbae7c4de4 100644
+> > --- a/package/qemu/Config.in
+> > +++ b/package/qemu/Config.in
+> > @@ -126,6 +126,27 @@ config BR2_PACKAGE_QEMU_OPENGL
+> >   comment "OpenGL support needs an OpenGL and/or OpenGL EGL backend"
+> >       depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+> >
+> > +config BR2_PACKAGE_QEMU_VIRGLRENDERER
+> > +     bool "Enable virglrenderer"
+> > +     depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+> > +     select BR2_PACKAGE_QEMU_OPENGL
+> > +     select BR2_PACKAGE_VIRGLRENDERER
+> > +     help
+> > +       Say 'y' to enable qemu support for virglrenderer.
+> > +       virglrenderer backends such as virgl, venus, or DRM native
+> > +       context are configured under the virglrenderer package.
+> > +
+> > +       Run qemu with `-device virtio-gpu-gl`
+> > +
+> > +
+> https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
+> > +
+> > +comment "virglrenderer needs OpenGL accelerated display frontend
+> support"
+> > +     depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+> > +
+> > +comment "virglrenderer needs virgl, venus, or a DRM backend for guest
+> acceleration"
+> > +     depends on BR2_PACKAGE_QEMU_VIRGLRENDERER
+> > +     depends on !BR2_PACKAGE_VIRGLRENDERER_HAS_BACKEND
+>
+>   Does it actually work if you have a DRM backend but no virgl or venus?
+> I'm
+> confused again...
+>
 
 
-On 16/05/2026 04:03, Joseph Kogut wrote:
-> Add basic smoke test for glmark2 running in a nested qemu guest with
-> virtio-gpu-gl-pci.
-> 
-> The outer machine uses the Mesa softpipe driver for GLES support with
-> minimal dependencies. Just test virgl for now, as lavapipe
-> (software Vulkan driver) requires LLVM, and this validates
-> virglrenderer.
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->   DEVELOPERS                                         |   1 +
->   .../testing/tests/package/test_virglrenderer.py    | 117 +++++++++++++++++++++
->   .../test_virglrenderer/linux-virgl.fragment        |   6 ++
->   .../test_virglrenderer/remove-qemu-blobs.sh        |  12 +++
->   .../rootfs-overlay/etc/profile.d/stty-raw.sh       |   3 +
->   5 files changed, 139 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 774eb0b746..0c0779e8b3 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1766,6 +1766,7 @@ F:	package/sentry-cli/
->   F:	package/sentry-native/
->   F:	package/unclutter-xfixes/
->   F:	package/virglrenderer/
-> +F:	support/testing/tests/package/test_virglrenderer.py
->   
->   N:	Joshua Henderson <joshua.henderson@microchip.com>
->   F:	package/qt5/qt5wayland/EGL_NOT_INITIALIZED
-> diff --git a/support/testing/tests/package/test_virglrenderer.py b/support/testing/tests/package/test_virglrenderer.py
-> new file mode 100644
-> index 0000000000..521a4b67cd
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_virglrenderer.py
-> @@ -0,0 +1,117 @@
-> +import os
-> +
-> +import infra
-> +import infra.basetest
-> +
-> +
-> +class TestVirglrendererNestedQemu(infra.basetest.BRTest):
-> +    # We reuse the same initramfs-enabled kernel for the outer target and
+Yes, it does actually work. I understand your confusion though. :)
 
-  I think it's better to separate them, that makes it more clear what should be 
-enabled in the host and what should be enabled in the guest. For the kernel it's 
-OK to reuse them, but I think the rootfs's should be separated.
+TL;DR: VirGL forwards OpenGL to the host, Venus does the same but for
+Vulkan. The host requirement is OpenGL or Vulkan support.
 
-  Therefore also I think it's better to use a cpio than an initramfs.
+DRM backends are used in combination with the native UMD (radeonsi, i1915,
+freedreno, etc.) running inside the guest, which generally provide both GL
+and Vulkan, with better security and less overhead. However, you need
+specific GPU hardware on the host, which is why the test uses VirGL.
 
-> +    # nested guest. This fragment adds initramfs and 9p support so the outer
-> +    # target can mount the runner's images directory and launch the same kernel
-> +    # under target-side QEMU. We also enable DRM_VGEM to create the necessary
+Best,
+Joseph
 
-  I guess that's the only reason why one of the prebuilt kernels can't be used...
+--000000000000ee16b806525a14aa
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +    # DRI device node, a requirement of qemu when using virgl.
-> +    kern_frag = \
-> +        infra.filepath("tests/package/test_virglrenderer/linux-virgl.fragment")
-> +    post_build = \
-> +        infra.filepath("tests/package/test_virglrenderer/remove-qemu-blobs.sh")
-> +    rootfs_overlay = \
-> +        infra.filepath("tests/package/test_virglrenderer/rootfs-overlay")
-> +
-> +    # Softpipe has no hardware dependencies and does not pull LLVM into the
-> +    # build, unlike llvmpipe/lavapipe.
+<div dir=3D"auto"><div>Hello Arnout,<br><br><div class=3D"gmail_quote gmail=
+_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, May 21, 202=
+6, 15:24 Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@rnout.be">arnout=
+@rnout.be</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><br>
+<br>
+On 16/05/2026 04:03, Joseph Kogut wrote:<br>
+&gt; Add optional virglrenderer integration, along with enabling OpenGL whe=
+n<br>
+&gt; necessary.<br>
+&gt; <br>
+&gt; <a href=3D"https://qemu.readthedocs.io/en/v10.0.3/system/devices/virti=
+o-gpu.html#virtio-gpu-virglrenderer" rel=3D"noreferrer noreferrer" target=
+=3D"_blank">https://qemu.readthedocs.io/en/v10.0.3/system/devices/virtio-gp=
+u.html#virtio-gpu-virglrenderer</a><br>
+&gt; <br>
+&gt; Signed-off-by: Joseph Kogut &lt;<a href=3D"mailto:joseph.kogut@gmail.c=
+om" target=3D"_blank" rel=3D"noreferrer">joseph.kogut@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0package/qemu/Config.in | 21 +++++++++++++++++++++<br>
+&gt;=C2=A0 =C2=A0package/qemu/<a href=3D"http://qemu.mk" rel=3D"noreferrer =
+noreferrer" target=3D"_blank">qemu.mk</a>=C2=A0 =C2=A0|=C2=A0 7 +++++++<br>
+&gt;=C2=A0 =C2=A02 files changed, 28 insertions(+)<br>
+&gt; <br>
+&gt; diff --git a/package/qemu/Config.in b/package/qemu/Config.in<br>
+&gt; index d4e4e37a3e..dbae7c4de4 100644<br>
+&gt; --- a/package/qemu/Config.in<br>
+&gt; +++ b/package/qemu/Config.in<br>
+&gt; @@ -126,6 +126,27 @@ config BR2_PACKAGE_QEMU_OPENGL<br>
+&gt;=C2=A0 =C2=A0comment &quot;OpenGL support needs an OpenGL and/or OpenGL=
+ EGL backend&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_P=
+ACKAGE_HAS_LIBGL)<br>
+&gt;=C2=A0 =C2=A0<br>
+&gt; +config BR2_PACKAGE_QEMU_VIRGLRENDERER<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;Enable virglrenderer&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_=
+HAS_LIBGL<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QEMU_OPENGL<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_VIRGLRENDERER<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Say &#39;y&#39; to enable qemu support for=
+ virglrenderer.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0virglrenderer backends such as virgl, venu=
+s, or DRM native<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0context are configured under the virglrend=
+erer package.<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Run qemu with `-device virtio-gpu-gl`<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://qemu.readthedocs.io/en/=
+v10.0.3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer" rel=3D"nor=
+eferrer noreferrer" target=3D"_blank">https://qemu.readthedocs.io/en/v10.0.=
+3/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer</a><br>
+&gt; +<br>
+&gt; +comment &quot;virglrenderer needs OpenGL accelerated display frontend=
+ support&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAG=
+E_HAS_LIBGL)<br>
+&gt; +<br>
+&gt; +comment &quot;virglrenderer needs virgl, venus, or a DRM backend for =
+guest acceleration&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_QEMU_VIRGLRENDERER<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_VIRGLRENDERER_HAS_BACKEND=
+<br>
+<br>
+=C2=A0 Does it actually work if you have a DRM backend but no virgl or venu=
+s? I&#39;m <br>
+confused again...<br></blockquote></div></div><div dir=3D"auto"><br></div><=
+div dir=3D"auto"><br></div><div dir=3D"auto">Yes, it does actually work. I =
+understand your confusion though. :)</div><div dir=3D"auto"><br></div><div =
+dir=3D"auto">TL;DR: VirGL forwards OpenGL to the host, Venus does the same =
+but for Vulkan. The host requirement is OpenGL or Vulkan support.</div><div=
+ dir=3D"auto"><br></div><div dir=3D"auto">DRM backends are used in combinat=
+ion with the native UMD (radeonsi, i1915, freedreno, etc.) running inside t=
+he guest, which generally provide both GL and Vulkan, with better security =
+and less overhead. However, you need specific GPU hardware on the host, whi=
+ch is why the test uses VirGL.</div><div dir=3D"auto"><br></div><div dir=3D=
+"auto">Best,</div><div dir=3D"auto">Joseph</div></div>
 
-  Since there are no hardware dependencies, we can actually run it on aarch64 
-(or arm) instead off x86_64, no? That is preferable, because that we detect 
-cross-compilation issues and everything is emulated so there's definitely no 
-dependency on the build environment.
+--000000000000ee16b806525a14aa--
 
-> +    config = \
-> +        f"""
-> +        BR2_x86_64=y
-> +        BR2_x86_nehalem=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
-> +        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-
-  Why do we need eudev?
-
-> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-> +        BR2_ROOTFS_POST_BUILD_SCRIPT="{post_build}"
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-> +        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-> +        # BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
-> +        BR2_PACKAGE_GLMARK2=y
-> +        BR2_PACKAGE_LIBGLVND=y
-> +        BR2_PACKAGE_MESA3D=y
-> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-
-  This again confuses me - why do you need both softpipe and virgl? Or is it 
-just because we are reusing the same binary in the host and guest?
-
-> +        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> +        BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> +        BR2_PACKAGE_QEMU=y
-> +        BR2_PACKAGE_QEMU_SYSTEM=y
-> +        # BR2_PACKAGE_QEMU_SYSTEM_KVM is not set
-> +        BR2_PACKAGE_QEMU_SYSTEM_TCG=y
-> +        BR2_PACKAGE_QEMU_CHOOSE_TARGETS=y
-> +        BR2_PACKAGE_QEMU_TARGET_X86_64=y
-> +        BR2_PACKAGE_QEMU_VIRGLRENDERER=y
-> +        BR2_TARGET_ROOTFS_INITRAMFS=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def boot_outer(self):
-> +        kern = os.path.join(self.builddir, "images", "bzImage")
-> +        img_dir = os.path.join(self.builddir, "images")
-> +        virtfs_tag = "br-imgs"
-> +        virtfs_opts = [
-> +            f"local,path={img_dir}",
-> +            f"mount_tag={virtfs_tag}",
-> +            "security_model=mapped-xattr",
-> +            "readonly=on"
-> +        ]
-> +        self.emulator.boot(arch="x86_64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=["console=ttyS0"],
-> +                           options=["-cpu", "Nehalem",
-> +                                    "-m", "1536M",
-> +                                    "-smp", "4",
-
-  Any reason to use more than one CPU?
-
-> +                                    "-vga", "none",
-> +                                    "-virtfs", ",".join(virtfs_opts)])
-> +        self.emulator.login()
-> +        self.assertRunOk(f"mount -t 9p {virtfs_tag} /mnt/")
-> +
-> +    def boot_nested(self):
-> +        qemu_cmd = "env LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=softpipe"
-> +        qemu_cmd += " qemu-system-x86_64"
-> +        qemu_cmd += " -M q35,accel=tcg"
-> +        qemu_cmd += " -cpu Nehalem"
-> +        qemu_cmd += " -m 512M"
-> +        qemu_cmd += " -smp 4"
-> +        qemu_cmd += " -nodefaults"
-> +        qemu_cmd += " -display egl-headless,gl=on"
-> +        qemu_cmd += " -device virtio-gpu-gl-pci"
-> +        qemu_cmd += " -serial stdio"
-> +        qemu_cmd += " -kernel /mnt/bzImage"
-> +        qemu_cmd += " -append 'console=ttyS0 br-nested-virgl'"
-> +
-> +        # qemu runs in the foreground on the current serial console. Once it
-> +        # starts, the next login prompt belongs to the nested guest.
-> +        self.emulator.qemu.sendline(qemu_cmd)
-> +        self.emulator.login(timeout=180)
-> +
-> +    def test_run(self):
-> +        self.boot_outer()
-> +        self.assertRunOk("while [ ! -e /dev/dri/renderD128 ]; do sleep 1; done",
-> +                         timeout=30)
-> +
-> +        self.boot_nested()
-> +
-> +        out, ret = self.emulator.run("cat /proc/cmdline")
-> +        self.assertEqual(ret, 0)
-> +        self.assertIn("br-nested-virgl", out[0])
-> +
-> +        cmd = "env MESA_LOADER_DRIVER_OVERRIDE=virtio_gpu"
-> +        cmd += " glmark2-es2-drm --validate --off-screen"
-> +        cmd += " --benchmark build:use-vbo=false"
-> +        out, ret = self.emulator.run(cmd, timeout=60)
-> +        self.assertEqual(ret, 0)
-
-  So, this would fail if qemu wasn't built with virglrenderer?
-> +
-> +        renderer = "\n".join([line for line in out if "GL_RENDERER:" in line])
-> +        self.assertRegex(renderer, r"(?i)virgl")
-
-  Or just this one?
-
-> +        self.assertRegex(renderer, r"(?i)softpipe")
-> diff --git a/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment b/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment
-> new file mode 100644
-> index 0000000000..1023aedc6f
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_virglrenderer/linux-virgl.fragment
-> @@ -0,0 +1,6 @@
-> +CONFIG_BLK_DEV_INITRD=y
-> +CONFIG_DRM_VGEM=y
-> +CONFIG_NET_9P=y
-> +CONFIG_NET_9P_VIRTIO=y
-> +CONFIG_9P_FS=y
-> +CONFIG_9P_FS_POSIX_ACL=y
-> diff --git a/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh b/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh
-> new file mode 100755
-> index 0000000000..ff040aa96b
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_virglrenderer/remove-qemu-blobs.sh
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +
-> +set -eu
-> +
-> +qemu_dir="${TARGET_DIR}/usr/share/qemu"
-> +
-> +find "${qemu_dir}" -type f \
-> +	! -name 'bios-256k.bin' \
-> +	! -name 'kvmvapic.bin' \
-> +	! -name 'linuxboot.bin' \
-> +	! -name 'linuxboot_dma.bin' \
-> +	-delete
-
-  Why do you need to remove those? Is it just because otherwise the cpio becomes 
-too big to be used for an initramfs?
-
-  Regards,
-  Arnout
-
-> diff --git a/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh b/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh
-> new file mode 100644
-> index 0000000000..bc1857a910
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_virglrenderer/rootfs-overlay/etc/profile.d/stty-raw.sh
-> @@ -0,0 +1,3 @@
-> +# Avoid double-cooking the nested serial console, otherwise the test
-> +# infrastructure cannot reliably retrieve return codes.
-> +grep -Fq br-nested-virgl /proc/cmdline && stty raw
-> 
+--===============7128341581439505210==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7128341581439505210==--
