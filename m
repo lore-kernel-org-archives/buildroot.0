@@ -1,80 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B28C7CD4F3D
-	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 05:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEB59CD343F
+	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 06:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34EB3614F1;
-	Thu, 21 May 2026 05:24:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC0541DAC;
+	Thu, 21 May 2026 06:27:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k_bO11C__sTG; Thu, 21 May 2026 05:24:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o9xi8NC7Kkyv; Thu, 21 May 2026 06:27:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1ACC61580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6376141DA8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779341042;
-	bh=yKZ++i6WmmcqvS1pyr4wmNZX8zFBNSZgeu+F61ixvb4=;
+	s=default; t=1779344850;
+	bh=Dp+0JVNNYuTEHXw2dH8bt3UUWnbbnEoJmhiLX6POsSE=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=glNlojtKWoqg6tm9dMrj5AJgDq+x24sAg1PWIT1mBo0R06RAgxGFB2Z7OCHvrLc7J
-	 IjVcEbU0dS1uMz+DryL9xE0wkZKMUCFEGSoXRjM0TrV5Ad1RbdSDh97ouv9oBkb73Z
-	 TG2WR3WLaKhjCOhAUZdfQjEjHhHLmMFvyD+zh8H+E4QexDFRAbaItIeylSw1IFRvhU
-	 XzZO8zLZBA5WNE7hmXrZq2nBQEAUY5ojXZNH4GuCe7gmmPZ2g1MwwXiR5Uh3WZtpb5
-	 SWDupde6fTtqTGPIhGeq1d9hrUB3l5sXDHtSzqTW+6TTqTB1FdgoT8qxuZWhhD2EOv
-	 U3beCO94WbKvQ==
+	b=gcc6HFvVLvoDyC29sZ1Fo4mEa7o9Z1bFMBJw05WFe8Kxv3rBggcOhupikexXIV0hZ
+	 GiFUgOTNnNF2H/uje939Q6YzriKSV7mP2SxTwP1nebmuJTuRYJQoi6ggE9074xs+VQ
+	 buIn4RN+uH+8TLZEbRooTGp3oiem+kT3tkmSdTRfuaOwFHpXSFH3rwyhDWU3ElNZF6
+	 gfamYPKI7NKqyqd1mvgz/u3rey/JXee9kcUkmsXx2LEaUjqcuO6qWmbKWETK79cFWj
+	 eh4ZLEsG9ig3UhhcSz33/nl1TTWoOfScc2l2ai0Sucw8GmNYGMsUSdM2WExXqJwhlR
+	 b2PafHgIW5xVQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1ACC61580;
-	Thu, 21 May 2026 05:24:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2BDC265
- for <buildroot@buildroot.org>; Thu, 21 May 2026 05:24:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6376141DA8;
+	Thu, 21 May 2026 06:27:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D7047D3
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 06:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B456A8446A
- for <buildroot@buildroot.org>; Thu, 21 May 2026 05:24:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8ED2413C2
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 06:27:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LhjPRBeN4cCX for <buildroot@buildroot.org>;
- Thu, 21 May 2026 05:23:59 +0000 (UTC)
-X-Greylist: delayed 167374 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 21 May 2026 05:23:58 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8127E84468
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8127E84468
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8127E84468
- for <buildroot@buildroot.org>; Thu, 21 May 2026 05:23:57 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id C4B1ABDE0169;
- Thu, 21 May 2026 07:23:53 +0200 (CEST)
-From: Andreas Ziegler <br025@umbiko.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eZ5fX1kpQone for <buildroot@buildroot.org>;
+ Thu, 21 May 2026 06:27:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B4C4413BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B4C4413BA
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B4C4413BA
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 06:27:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b5dd.dip0.t-ipconnect.de [84.161.181.221])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4BEB2A4C00FD;
+ Thu, 21 May 2026 08:27:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44366)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wPwsM-000000005rQ-0FKw;
+ Thu, 21 May 2026 06:27:22 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Andreas Ziegler <br025@umbiko.net>
-Date: Thu, 21 May 2026 07:23:31 +0200
-Message-ID: <20260521052333.2780480-1-br025@umbiko.net>
-X-Mailer: git-send-email 2.53.0
+Cc: Daniel Lang <dalang@gmx.at>
+Date: Thu, 21 May 2026 08:27:22 +0200
+Message-ID: <20260521062722.122772-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1779341034; bh=Kn1Z3Xh48CRXhIhdqwZAL7uJ0piPA/Nqwa+Zjea8XDY=;
- h=From:To:Cc:Subject:Date;
- b=X+uiACoaCHfHpBhcgWOOnFkWjga1ZhMo0azaNV/RFBl/0P/7DkJFHPE7W4oTbdYJO
- pclZDPI6DEDb4EF4qDAgJV9rXrAKFGp+hZnSObI1d1OctpQnDgmw9vUXRa7eAHzMg6
- bo0K7o5pR+CCxb3QFSVxkdpzueRsyOrMq+wWlDG0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=X+uiACoa
-Subject: [Buildroot] [PATCH 1/1] package/mpd: update version to 0.24.12
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1779344843;
+ bh=CNfR6DHg5t/yhIIev7N4kbaQtcWuhDqB8qFJBq6UyWY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GYlVt4heX2jJZeSptmUty9dEjhdHZe0gitErdmJcCiAY6e9nrKWNTGTSwpx5rMROs
+ B6UdLekeMezwOhNeGvjDoXWSpMBFQd5iVTuD4e/GUd636Qwzp7gGejX0EURkKqrjuS
+ weSj+K5dRApCWuKcUb9rddA1Ure77GMJOl1KNFThb9jQHm7UNwTnowZra8mdKYxsGC
+ I2KYrhDq5SPhxuoGzKfjsfTUWGCLbZHQhKz4mcCMl12dj5bXYeQ5D74NbVFVbauOry
+ PS38bIB6NZMsV/sI4R25BVWzj4hxAbFkcqGrjWdEklV65SpVX96ywUAPFpiRNARbe6
+ N2CHqJUBsw48Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=GYlVt4he
+Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump version to 22.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,56 +97,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fix of bug fix. Changes from version 0.24.10 -> 0.24.12: 
+Release notes of this bugfix release:
+https://discourse.llvm.org/t/llvm-22-1-6-released/90838
 
-* protocol
-  - fix path traversal bug
-  - allow empty URI in "lsinfo", "add" etc. (0.24.11 regression)
-* playlist: do not allow newlines in song URIs
-* input
-  - curl: require version 7.85.0
-* decoder
-  - pcm: fix stack buffer overflow
-  - sidplay: fall back to SIDLiteBuilder if ReSIDfpBuilder is unavailable
-
-Signed-off-by: Andreas Ziegler <br025@umbiko.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+ package/llvm-project/llvm-project.hash | 4 ++--
+ package/llvm-project/llvm-project.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested on:
-  i386      build, run
-  x86_64    build
-  aarch64   build, run
-
-Tested-by: Andreas Ziegler <br025@umbiko.net>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index e3e2cde023..1c02e0fe20 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  867f10fd83cde20c240617222b38fbf6885f902015d0da424a28fbafc675e1dd  mpd-0.24.10.tar.xz
-+sha256  14223ca883c35fbf711994bcf745726cecc9d898e3d3964265cf3a2c7519a360  mpd-0.24.12.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index eb40f0ccc3..e94858897a 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index 9155ba8c53..4f2c07414e 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.5
+-sha256  7972b87b705a003ce70ab55f9f0fb495d156887cba0eb296d284731139118e2c  llvm-project-22.1.5.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.6
++sha256  6e0b376a1f6d9873e7dfb09ae6e04b9c7024400f01733fa4c29be69d5c138bc2  llvm-project-22.1.6.src.tar.xz
+ # locally calculated
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index eedef3a1c5..2f137b871b 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.24
--MPD_VERSION = $(MPD_VERSION_MAJOR).10
-+MPD_VERSION = $(MPD_VERSION_MAJOR).12
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf fmt
+ LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.6
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
+ 
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
