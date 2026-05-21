@@ -1,85 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3074CD5BAF
-	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 16:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1662CD4F3D
+	for <buildroot@archiver.kernel.org>; Thu, 21 May 2026 18:45:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D61461B17;
-	Thu, 21 May 2026 16:42:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5960D84AA0;
+	Thu, 21 May 2026 18:45:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tt-b6pPQdcyJ; Thu, 21 May 2026 16:42:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DwSnpZIjT1fQ; Thu, 21 May 2026 18:45:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C9EA61B14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A0B84A9D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779381752;
-	bh=c6Y/3VO/1rwt953xWTLe8u9gwy8HFUnZdTvGR9C5h4c=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=b59ldLL3Bcd4Bo/nqoqaRNEFxxfnN7cUVHawUbPuDEUo4EGo5kwVblmYszETzrE6H
-	 I3xIKpdE4ZvNkiQoocoDTMHpZPEvD4oQ78WhCXedcbdhFajfV/IPunC+7SHt619CqH
-	 L6aIgW2J3qM9VdN3sTfNpHQqzOw9uFmQ8cqvVB0x5SAy0eTpaFk5ievr4wi1Q5dwH/
-	 lQI/KcYS2otzEcg3RZzljqJkm+mfGZpP0NvgtdyhWApZNv+lgrTwE9O2CdjYBli0ND
-	 /rYivj4O72uN2bOWbxVV4M9BMqvatof7WKOO3E5FrZSqoKkGKs1WHZuR/gXof+gjOt
-	 OezpFQnU7HWMA==
+	s=default; t=1779389154;
+	bh=L4w7O8jQfz3Ej2ghmPxykl+ufYWSJCP2ZaJSskA9i+w=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=g4Adw3z1aVacM2MJCZqKGw5hXjLqbQdjPiXRDDSUi4AnFxqACf+eaFhW4fwWx69Lm
+	 xs4ZNMqPwv4m+HzfSee2HFIeMTJTsjtDdaLe+WbsABe9gUcSCGsAKNC818WvlfiojF
+	 3aOxrW/ilsYDTiYXRv2nPlV0ykSbPhMW3rSfw6E8sJHOQlyURTObnBEvZVVGTSBjgF
+	 7/K++30YONqCRTnZ2QkxvzTtHeHIL77Cr37KWNt4EvbanqxqHpkKFwLU7INDkvAmVG
+	 c8FZxDjqYG1Sven1pNc5P28ooGIBv9GFi2cNddJjqURDhuglfHMdS9kUaef5ePt5st
+	 bt6cciSYdJSNg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C9EA61B14;
-	Thu, 21 May 2026 16:42:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DF375D3
- for <buildroot@buildroot.org>; Thu, 21 May 2026 16:42:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68A0B84A9D;
+	Thu, 21 May 2026 18:45:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 038CF3B9
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 18:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF9FA61B14
- for <buildroot@buildroot.org>; Thu, 21 May 2026 16:42:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6A1384A9D
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 18:45:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Huc0-9vnyXk8 for <buildroot@buildroot.org>;
- Thu, 21 May 2026 16:42:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 249B461797
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 249B461797
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 249B461797
- for <buildroot@buildroot.org>; Thu, 21 May 2026 16:42:28 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b5dd.dip0.t-ipconnect.de [84.161.181.221])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 575D2A4C072D
- for <buildroot@buildroot.org>; Thu, 21 May 2026 18:42:25 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40396)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wQ6TY-000000001po-35O0
- for buildroot@buildroot.org; Thu, 21 May 2026 16:42:25 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 21 May 2026 18:42:24 +0200
-Message-ID: <20260521164224.1462806-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NrhshGDScly0 for <buildroot@buildroot.org>;
+ Thu, 21 May 2026 18:45:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B236C84A9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B236C84A9B
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B236C84A9B
+ for <buildroot@buildroot.org>; Thu, 21 May 2026 18:45:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2E946B97C54A; Thu, 21 May 2026 20:45:45 +0200 (CEST)
+Message-ID: <acf35b98-a846-429e-9686-6fff29515002@rnout.be>
+Date: Thu, 21 May 2026 20:45:42 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: +
+User-Agent: Mozilla Thunderbird
+To: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com>
+ <20260515-virglrenderer-v7-1-1f1814b65ccd@gmail.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260515-virglrenderer-v7-1-1f1814b65ccd@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779381745;
- bh=ssqM2yQOf4Hcz2qFtcZ8VWPI80iA9PZt5suxkpmAX7g=;
- h=From:To:Subject:Date:From;
- b=NfTw+1/XAm5VGMZz5Mpjq4HhSz9xL6hfDhMOMCeSUhQhX2FI7regg6S3tQQMGIkXo
- kLcG939tli9+dBKzYzaB3Ig0vboeqOGZAG4JNtm1/Oy1XWE/4bO/yene7nXTDqSyNJ
- rAgk49WVUDWcJGZI3k2aoC8AVcljxx3Ld+3KNvV0OH6jvnRzn60zBDN2kIrXULLk26
- oT0ocs3pLPoU2VfVvUUyFuD5v94fxfzSKLgRACUC06ZowRUO+D3cAxhnuhaRnK+eM4
- vBjJZmamflLi6sN3l+iHhyNATltlnDDCnrdOXf8fmHl9DzgJ4hkYqcktXescxzJ6Rg
- 709izrdtFbUVw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=rnout.be; s=dkim; 
+ t=1779389147; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=BAhKeg1Pc3Y5rWdNMigQaqFTG/ALAm0gWg+QLDK1/SA=;
+ b=Jp/VxGitOXV3o18J6XBgVgTIFifD7JpQgxiHVxHvfaJSIpmZkm0OYeKr6EweGOnuYPpN2d
+ xLOd7n8WCvcobQiOU8/EFqmSNN7TxFQrYwnY2vyjtpIu+E2Hkr471jtSm/K//za30MbRM/
+ HkQaI5nxHAK3J7v77QLXENowmX7sCzQZki0SVdgtkQsY4EiOASUEl8o09qDV9r4RpKYN9q
+ i3+FcvGJceiv0Of2oyWtVOfHf3Ck8PZPjqDpl6IXdIwhNj2RrOg70LXMYjPXvihVNmlcAe
+ hPtuvVHOeruTtByX92vqeBQkVi/ZS3pKL6F7jkw1ce91ZSvbeNb2pX3sQUoQ2g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=NfTw+1/X
-Subject: [Buildroot] [PATCH/next 1/1] package/utfcpp: bump version to 4.1.1
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=Jp/VxGit
+Subject: Re: [Buildroot] [PATCH v7 1/8] package/weston: add EGL dependency
+ for XWayland
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,43 +95,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/nemtrif/utfcpp/releases/tag/v4.1.1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/utfcpp/utfcpp.hash | 2 +-
- package/utfcpp/utfcpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/utfcpp/utfcpp.hash b/package/utfcpp/utfcpp.hash
-index bde4a223f4..779bd2d282 100644
---- a/package/utfcpp/utfcpp.hash
-+++ b/package/utfcpp/utfcpp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9a45cbeefacf512879971eaf57fe52133b73a0152d5354f3adeaf8d103cff0f3  utfcpp-4.1.0.tar.gz
-+sha256  1ca68016f0abc24172998e39ce0d8f8e2b7a26f7579a0ff85d4e1b9a7aea56f8  utfcpp-4.1.1.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
-index de6d6f6f86..0ec08bd54e 100644
---- a/package/utfcpp/utfcpp.mk
-+++ b/package/utfcpp/utfcpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UTFCPP_VERSION = 4.1.0
-+UTFCPP_VERSION = 4.1.1
- UTFCPP_SITE = $(call github,nemtrif,utfcpp,v$(UTFCPP_VERSION))
- UTFCPP_LICENSE = BSL-1.0
- UTFCPP_LICENSE_FILES = LICENSE
--- 
-2.47.3
+On 16/05/2026 04:03, Joseph Kogut wrote:
+> BR2_PACKAGE_WESTON_XWAYLAND currently depends on BR2_PACKAGE_LIBEPOXY,
+> which implicitly requires either libGL or libEGL. However, the XWayland
+> glamor support uses libepoxy with EGL, so express that dependency
+
+  This sounds like the current situation was actually wrong, because we could 
+enable glamor in xwayland when libgl and no libegl is available.
+
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XWAYLAND=y
+BR2_PACKAGE_LIBEPOXY=y
+
+fails with:
+
+In file included from ../glamor/glamor_priv.h:73,
+from ../glamor/glamor_composite_glyphs.c:25:
+../glamor/glamor_context.h:27:10: fatal error: epoxy/egl.h: No such file or 
+directory
+27 | #include <epoxy/egl.h>
+    |          ^~~~~~~~~~~~~
+
+  Therefore I updated the commit message and applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> directly.
+> 
+> This avoids relying on libepoxy's package-level dependencies to provide
+> the EGL backend.
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>   package/weston/Config.in           | 6 ++++--
+>   package/x11r7/xwayland/xwayland.mk | 2 +-
+>   2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index 774b75d5fb..6f61c3c561 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -123,6 +123,7 @@ comment "X11 (nested) compositor needs X.org enabled"
+>   
+>   config BR2_PACKAGE_WESTON_XWAYLAND
+>   	bool "XWayland support"
+> +	depends on BR2_PACKAGE_HAS_LIBEGL
+>   	depends on BR2_PACKAGE_LIBEPOXY
+>   	depends on BR2_PACKAGE_XORG7 # xwayland
+>   	depends on BR2_USE_MMU # xwayland
+> @@ -136,8 +137,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+>   	select BR2_PACKAGE_XLIB_LIBXCURSOR
+>   	select BR2_PACKAGE_XWAYLAND
+>   
+> -comment "XWayland support needs libepoxy and X.org enabled"
+> -	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+> +comment "XWayland support needs libepoxy w/ EGL and X.org enabled"
+> +	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_XORG7 || \
+> +		!BR2_PACKAGE_LIBEPOXY
+>   
+>   comment "XWayland support needs a toolchain w/ threads, dynamic library"
+>   	depends on BR2_USE_MMU
+> diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+> index 8fa5260f47..5902f85d4f 100644
+> --- a/package/x11r7/xwayland/xwayland.mk
+> +++ b/package/x11r7/xwayland/xwayland.mk
+> @@ -30,7 +30,7 @@ XWAYLAND_CONF_OPTS = \
+>   	-Ddtrace=false \
+>   	-Ddocs=false
+>   
+> -ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
+> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+>   XWAYLAND_CONF_OPTS += -Dglamor=true
+>   XWAYLAND_DEPENDENCIES += libepoxy
+>   else
+> 
 
 _______________________________________________
 buildroot mailing list
