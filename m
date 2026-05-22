@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB7E4CD5BB1
-	for <buildroot@archiver.kernel.org>; Fri, 22 May 2026 12:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C92D3CD5BB3
+	for <buildroot@archiver.kernel.org>; Fri, 22 May 2026 17:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77BCD85034;
-	Fri, 22 May 2026 12:29:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5515842B2B;
+	Fri, 22 May 2026 17:21:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bPadB3eLTQjC; Fri, 22 May 2026 17:21:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A875942B2C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779470503;
+	bh=So04Eq86Rt/zxmdTkVfDDYC7nxG3fRELXyzmhyw0IzQ=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=qWYsK8dRxt3g2mr+vEEGlyt2/mvv7vlpdVKGryLv6sHO/ywN1JK0Npb64PDyaTgZp
+	 ErEOKVqdm6xkJO4WdM3whkL2eaWV9KcbUs0GhRs3CUJcSMQOebxzt6HTISMZv+/Qfx
+	 twBHHq05vZ4zzKrFqyrsWNfS9X6S91r04PQOU+2FX7yfiPKSxIpob+BHGD+2gHLp1b
+	 lm96mgejcKJmvPAqVKtgqOzay5NnYAtXfUKiLGupaB6tsqpEuaXN6zwVbTFt7U4WYz
+	 V+mlaR1TJu5m4xviUvTsp7SyyLiPp2egR5jNvuwg/XERopsj4TxLvcTag9oeTMPvKW
+	 lLPCn7EK9Idtw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A875942B2C;
+	Fri, 22 May 2026 17:21:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E184E265
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 17:21:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D316D854BA
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 17:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbb6j6USYDZS; Fri, 22 May 2026 12:29:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B35085023
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779452948;
-	bh=VOBW/pT2utKZdy6Axii2IzCDFSjQ6BmxesCFsxLr1ws=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=OrbwaTsAwdEq6c2SoqTlu/209rud1jPwfa5vQbTbQnwUNn0plLKIuZTVkTg3TXeRC
-	 jIGIFwpv3P6KDUTCZjaz/zG6CgfW+/iN0Le5qkFsEIB+NNzK4AqIlBLXfZ/EyY2Iv8
-	 7O7Hg0OLN4PXK6cfGrzxKoyBis/UYCPdYU3o6vODoQQDW9GcvUHB12sIDvEGOMixpo
-	 BMhetZSAeW6aFwA85/Gn9c8oohkHMGFRpbzC4ho/FucBU5nXsepMFt77Mrzpk+g0Ud
-	 eXBQnh0p5WDe7no693iRV5cekqZPIqo+Tk5MLdUMad/pUTZNh51fuRJ7+nvL7gT0vg
-	 M/k0N/BXhOLEw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B35085023;
-	Fri, 22 May 2026 12:29:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B21A3B9
- for <buildroot@buildroot.org>; Fri, 22 May 2026 12:29:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 086AA6F6C9
- for <buildroot@buildroot.org>; Fri, 22 May 2026 12:29:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id guFfu11bAqAX for <buildroot@buildroot.org>;
- Fri, 22 May 2026 12:29:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F25E6F55E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F25E6F55E
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6F25E6F55E
- for <buildroot@buildroot.org>; Fri, 22 May 2026 12:29:04 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 154561384; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 22 May 2026 12:28:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wQOzk-0000000Cf7y-335q;
- Fri, 22 May 2026 14:28:52 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <20260515132816.DE2738634F@busybox.osuosl.org> (Thomas Perale via
- buildroot's message of "Wed, 13 May 2026 15:18:09 +0200")
-References: <20260515132816.DE2738634F@busybox.osuosl.org>
-Date: Fri, 22 May 2026 14:28:52 +0200
-Message-ID: <87qzn3aarf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ id QTcKYDhq3peS for <buildroot@buildroot.org>;
+ Fri, 22 May 2026 17:21:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2ADAD854B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ADAD854B9
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2ADAD854B9
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 17:21:40 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b5dd.dip0.t-ipconnect.de [84.161.181.221])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 11346A4C03B7;
+ Fri, 22 May 2026 19:21:37 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42200)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wQTZ2-000000006vc-0bUD;
+ Fri, 22 May 2026 17:21:36 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
+ Neal Frager <neal.frager@amd.com>
+Date: Fri, 22 May 2026 19:21:36 +0200
+Message-ID: <20260522172136.115768-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=P3vpAcI1SCdlf31dG0T1F3hDhPr9rUw4jqHkmAbEi81QfDLrxup9lM515ojTVdtmHMJdG9mk9nDpcbRAk2ZbTGQbncqE1gwBBEBR08DxvfHtcSHfJ4rOpVEm7vBqJB2egKZDowdGrA6ZgqTxzFpW/6OsyCwDYV9gQEpTFJ9ETOFbt9zqb8tHboPkvG5aLSdjc/DwIqao66DZ25Hle9IAA3lDYxfdKEcLAfIYQmd2MSsR1gTrz+Wf0RGk8W/s7ErOfIG5JMEM15CjGQWGest0bLOe8aLHGpaQYuF3lz3UKA7cPtnLFrj+kU1WkkeegJLwGRqjSavYqa5KtC/lYwztoQ==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=XdZlYbHM9LTj9UxV6B4QTYh2MQeH7j8gNTLqIMPwPlk=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: -
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1779470497;
+ bh=bNnAVmR89ntzJ82GP4bekVLt7OOOrJc1Ul2TCTXuSfA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=B4Q7hf81NGGcN82EGXj/1H9fftMNUvlvxudPVj9SiIUMsheVEmry3yJlqSTasI33P
+ x2FIo6cMtVTptuejsyxOVeo53vDD1gplEVVm1uhCuHTXxlS4fRTNZFGYKMhF3fzMjt
+ vR2/rd2wJOhhacz4ZbOQZpXMJQ0CwiTiFrabvGJRs+SJ+sye0K4chkGTGk/MOs87ac
+ r42DxuH90rVD29rhk5TVii7E5U2ruQT70NjIPLc+vEuYVCtZMsK46M9W3a09Iux5hD
+ AONnOO2+CjG71Klv+Y1DcXyS9cN+6qGxx4/r/UTRZ36Xoc7bfho4bqtFoKCKv/QHw6
+ lf0An3IgSRuYw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=P3vpAcI1
-Subject: Re: [Buildroot] [git commit branch/2025.02.x] package/dropbear:
- patch CVE-2019-6111 CVE-2026-35385
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=B4Q7hf81
+Subject: [Buildroot] [PATCH 1/1] package/gcc-bare-metal: fix build with host
+ gcc 16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,28 +99,301 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+Fixes:
+https://autobuild.buildroot.net/results/3ff/3ff8d6a1d7bbc02be9118afff243709de43d186d/
 
-Hi,
+/home/autobuild/autobuild/instance-16/output-1/build/host-gcc-bare-metal-15.2.0/libcody/cody.hh:
+ In member function 'void Cody::Detail::MessageBuffer::Space()':
+/home/autobuild/autobuild/instance-16/output-1/build/host-gcc-bare-metal-15.2.0/libcody/cody.hh:113:24:
+ error: no matching function for call to 'S2C(const char8_t [2])'
+  113 |     Append (Detail::S2C(u8" "));
+      |             ~~~~~~~~~~~^~~~~~~
+  * there is 1 candidate
+    * candidate 1: 'template<unsigned int I> constexpr char Cody::Detail::S2C(const char (&)[I])'
+      /home/autobuild/autobuild/instance-16/output-1/build/host-gcc-bare-metal-15.2.0/libcody/cody.hh:51:16:
+         51 | constexpr char S2C (char const (&s)[I])
+            |                ^~~
+      * template argument deduction/substitution failed:
+        *   mismatched types 'const char' and 'const char8_t'
 
- > commit: https://gitlab.com/buildroot.org/buildroot/-/commit/30d1791eb26a8ef46a952d1ef66e163de1eade07
- > branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...dy-Make-it-buildable-by-C-11-to-C-26.patch | 263 ++++++++++++++++++
+ 1 file changed, 263 insertions(+)
+ create mode 100644 package/gcc-bare-metal/0001-libcody-Make-it-buildable-by-C-11-to-C-26.patch
 
- > While CVE-2019-6111 was already fixed in 2025.89, the version 2026.90
- > provided a follow up of that fix.
-
-What was the reason for cherry pick those commits over moving to
-2026.91?
-
-I see this triggers the same reallocarray() build issues that 2026.90
-did:
-
-https://autobuild.buildroot.org/results/275/275c521bbbe6466649209069318e45a9e4de666e/build-end.log
-
-Which were then fixed in 2026.91.
-
+diff --git a/package/gcc-bare-metal/0001-libcody-Make-it-buildable-by-C-11-to-C-26.patch b/package/gcc-bare-metal/0001-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+new file mode 100644
+index 0000000000..7d6116a9c5
+--- /dev/null
++++ b/package/gcc-bare-metal/0001-libcody-Make-it-buildable-by-C-11-to-C-26.patch
+@@ -0,0 +1,263 @@
++From 1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37 Mon Sep 17 00:00:00 2001
++From: Jakub Jelinek <jakub@redhat.com>
++Date: Fri, 21 Nov 2025 16:25:58 +0100
++Subject: [PATCH] libcody: Make it buildable by C++11 to C++26
++
++The following builds with -std=c++11 and c++14 and c++17 and c++20 and c++23
++and c++26.
++
++I see the u8 string literals are mixed e.g. with strerror, so in
++-fexec-charset=IBM1047 there will still be garbage, so am not 100% sure if
++the u8 literals everywhere are worth it either.
++
++2025-11-21  Jakub Jelinek  <jakub@redhat.com>
++
++	* cody.hh (S2C): For __cpp_char8_t >= 201811 use char8_t instead of
++	char in argument type.
++	(MessageBuffer::Space): Revert 2025-11-15 change.
++	(MessageBuffer::Append): For __cpp_char8_t >= 201811 add overload
++	with char8_t const * type of first argument.
++	(Packet::Packet): Similarly for first argument.
++	* client.cc (CommunicationError, Client::ProcessResponse,
++	Client::Connect, ConnectResponse, PathnameResponse, OKResponse,
++	IncludeTranslateResponse): Cast u8 string literals to (const char *)
++	where needed.
++	* server.cc (Server::ProcessRequests, ConnectRequest): Likewise.
++
++(cherry picked from commit 07a767c7a50d1daae8ef7d4aba73fe53ad40c0b7)
++
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=1f0224e8ddb3d3d0bf4c7a11769b193a4df5cc37
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ libcody/client.cc | 36 +++++++++++++++++++-----------------
++ libcody/cody.hh   | 22 ++++++++++++++++++++++
++ libcody/server.cc | 28 ++++++++++++++--------------
++ 3 files changed, 55 insertions(+), 31 deletions(-)
++
++diff --git a/libcody/client.cc b/libcody/client.cc
++index ae69d190cb77..147fecdbe500 100644
++--- a/libcody/client.cc
+++++ b/libcody/client.cc
++@@ -97,7 +97,7 @@ int Client::CommunicateWithServer ()
++ 
++ static Packet CommunicationError (int err)
++ {
++-  std::string e {u8"communication error:"};
+++  std::string e {(const char *) u8"communication error:"};
++   e.append (strerror (err));
++ 
++   return Packet (Client::PC_ERROR, std::move (e));
++@@ -110,33 +110,34 @@ Packet Client::ProcessResponse (std::vector<std::string> &words,
++     {
++       if (e == EINVAL)
++ 	{
++-	  std::string msg (u8"malformed string '");
+++	  std::string msg ((const char *) u8"malformed string '");
++ 	  msg.append (words[0]);
++-	  msg.append (u8"'");
+++	  msg.append ((const char *) u8"'");
++ 	  return Packet (Client::PC_ERROR, std::move (msg));
++ 	}
++       else
++-	return Packet (Client::PC_ERROR, u8"missing response");
+++	return Packet (Client::PC_ERROR, (const char *) u8"missing response");
++     }
++ 
++   Assert (!words.empty ());
++-  if (words[0] == u8"ERROR")
+++  if (words[0] == (const char *) u8"ERROR")
++     return Packet (Client::PC_ERROR,
++-		   words.size () == 2 ? words[1]: u8"malformed error response");
+++		   words.size () == 2 ? words[1]
+++		   : (const char *) u8"malformed error response");
++ 
++   if (isLast && !read.IsAtEnd ())
++     return Packet (Client::PC_ERROR,
++-		   std::string (u8"unexpected extra response"));
+++		   std::string ((const char *) u8"unexpected extra response"));
++ 
++   Assert (code < Detail::RC_HWM);
++   Packet result (responseTable[code] (words));
++   result.SetRequest (code);
++   if (result.GetCode () == Client::PC_ERROR && result.GetString ().empty ())
++     {
++-      std::string msg {u8"malformed response '"};
+++      std::string msg {(const char *) u8"malformed response '"};
++ 
++       read.LexedLine (msg);
++-      msg.append (u8"'");
+++      msg.append ((const char *) u8"'");
++       result.GetString () = std::move (msg);
++     }
++   else if (result.GetCode () == Client::PC_CONNECT)
++@@ -199,7 +200,7 @@ Packet Client::Connect (char const *agent, char const *ident,
++ 			  size_t alen, size_t ilen)
++ {
++   write.BeginLine ();
++-  write.AppendWord (u8"HELLO");
+++  write.AppendWord ((const char *) u8"HELLO");
++   write.AppendInteger (Version);
++   write.AppendWord (agent, true, alen);
++   write.AppendWord (ident, true, ilen);
++@@ -211,7 +212,8 @@ Packet Client::Connect (char const *agent, char const *ident,
++ // HELLO $version $agent [$flags]
++ Packet ConnectResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"HELLO" && (words.size () == 3 || words.size () == 4))
+++  if (words[0] == (const char *) u8"HELLO"
+++      && (words.size () == 3 || words.size () == 4))
++     {
++       char *eptr;
++       unsigned long val = strtoul (words[1].c_str (), &eptr, 10);
++@@ -247,7 +249,7 @@ Packet Client::ModuleRepo ()
++ // PATHNAME $dir | ERROR
++ Packet PathnameResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"PATHNAME" && words.size () == 2)
+++  if (words[0] == (const char *) u8"PATHNAME" && words.size () == 2)
++     return Packet (Client::PC_PATHNAME, std::move (words[1]));
++ 
++   return Packet (Client::PC_ERROR, u8"");
++@@ -256,7 +258,7 @@ Packet PathnameResponse (std::vector<std::string> &words)
++ // OK or ERROR
++ Packet OKResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"OK")
+++  if (words[0] == (const char *) u8"OK")
++     return Packet (Client::PC_OK);
++   else
++     return Packet (Client::PC_ERROR,
++@@ -319,11 +321,11 @@ Packet Client::IncludeTranslate (char const *include, Flags flags, size_t ilen)
++ // PATHNAME $cmifile
++ Packet IncludeTranslateResponse (std::vector<std::string> &words)
++ {
++-  if (words[0] == u8"BOOL" && words.size () == 2)
+++  if (words[0] == (const char *) u8"BOOL" && words.size () == 2)
++     {
++-      if (words[1] == u8"FALSE")
++-	return Packet (Client::PC_BOOL, 0);
++-      else if (words[1] == u8"TRUE")
+++      if (words[1] == (const char *) u8"FALSE")
+++	return Packet (Client::PC_BOOL);
+++      else if (words[1] == (const char *) u8"TRUE")
++ 	return Packet (Client::PC_BOOL, 1);
++       else
++ 	return Packet (Client::PC_ERROR, u8"");
++diff --git a/libcody/cody.hh b/libcody/cody.hh
++index 789ce9e70b75..93bce93aa94d 100644
++--- a/libcody/cody.hh
+++++ b/libcody/cody.hh
++@@ -47,12 +47,21 @@ namespace Detail  {
++ 
++ // C++11 doesn't have utf8 character literals :(
++ 
+++#if __cpp_char8_t >= 201811
+++template<unsigned I>
+++constexpr char S2C (char8_t const (&s)[I])
+++{
+++  static_assert (I == 2, "only single octet strings may be converted");
+++  return s[0];
+++}
+++#else
++ template<unsigned I>
++ constexpr char S2C (char const (&s)[I])
++ {
++   static_assert (I == 2, "only single octet strings may be converted");
++   return s[0];
++ }
+++#endif
++ 
++ /// Internal buffering class.  Used to concatenate outgoing messages
++ /// and Lex incoming ones.
++@@ -123,6 +132,13 @@ public:
++       Space ();
++     Append (str, maybe_quote, len);
++   }
+++#if __cpp_char8_t >= 201811
+++  void AppendWord (char8_t const *str, bool maybe_quote = false,
+++		   size_t len = ~size_t (0))
+++  {
+++    AppendWord ((const char *) str, maybe_quote, len);
+++  }
+++#endif
++   /// Add a word as with AppendWord
++   /// @param str the string to append
++   /// @param maybe_quote string might need quoting, as for Append
++@@ -264,6 +280,12 @@ public:
++     : string (s), cat (STRING), code (c)
++   {
++   }
+++#if __cpp_char8_t >= 201811
+++  Packet (unsigned c, const char8_t *s)
+++    : string ((const char *) s), cat (STRING), code (c)
+++  {
+++  }
+++#endif
++   Packet (unsigned c, std::vector<std::string> &&v)
++     : vector (std::move (v)), cat (VECTOR), code (c)
++   {
++diff --git a/libcody/server.cc b/libcody/server.cc
++index e2fa069bb933..c18469fae843 100644
++--- a/libcody/server.cc
+++++ b/libcody/server.cc
++@@ -36,12 +36,12 @@ static RequestPair
++   const requestTable[Detail::RC_HWM] =
++   {
++     // Same order as enum RequestCode
++-    RequestPair {u8"HELLO", nullptr},
++-    RequestPair {u8"MODULE-REPO", ModuleRepoRequest},
++-    RequestPair {u8"MODULE-EXPORT", ModuleExportRequest},
++-    RequestPair {u8"MODULE-IMPORT", ModuleImportRequest},
++-    RequestPair {u8"MODULE-COMPILED", ModuleCompiledRequest},
++-    RequestPair {u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
+++    RequestPair {(const char *) u8"HELLO", nullptr},
+++    RequestPair {(const char *) u8"MODULE-REPO", ModuleRepoRequest},
+++    RequestPair {(const char *) u8"MODULE-EXPORT", ModuleExportRequest},
+++    RequestPair {(const char *) u8"MODULE-IMPORT", ModuleImportRequest},
+++    RequestPair {(const char *) u8"MODULE-COMPILED", ModuleCompiledRequest},
+++    RequestPair {(const char *) u8"INCLUDE-TRANSLATE", IncludeTranslateRequest},
++   };
++ }
++ 
++@@ -135,21 +135,21 @@ void Server::ProcessRequests (void)
++ 	  std::string msg;
++ 
++ 	  if (err > 0)
++-	    msg = u8"error processing '";
+++	    msg = (const char *) u8"error processing '";
++ 	  else if (ix >= Detail::RC_HWM)
++-	    msg = u8"unrecognized '";
+++	    msg = (const char *) u8"unrecognized '";
++ 	  else if (IsConnected () && ix == Detail::RC_CONNECT)
++-	    msg = u8"already connected '";
+++	    msg = (const char *) u8"already connected '";
++ 	  else if (!IsConnected () && ix != Detail::RC_CONNECT)
++-	    msg = u8"not connected '";
+++	    msg = (const char *) u8"not connected '";
++ 	  else
++-	    msg = u8"malformed '";
+++	    msg = (const char *) u8"malformed '";
++ 
++ 	  read.LexedLine (msg);
++-	  msg.append (u8"'");
+++	  msg.append ((const char *) u8"'");
++ 	  if (err > 0)
++ 	    {
++-	      msg.append (u8" ");
+++	      msg.append ((const char *) u8" ");
++ 	      msg.append (strerror (err));
++ 	    }
++ 	  resolver->ErrorResponse (this, std::move (msg));
++@@ -176,7 +176,7 @@ Resolver *ConnectRequest (Server *s, Resolver *r,
++     return nullptr;
++ 
++   if (words.size () == 3)
++-    words.emplace_back (u8"");
+++    words.emplace_back ((const char *) u8"");
++   unsigned version = ParseUnsigned (words[1]);
++   if (version == ~0u)
++     return nullptr;
++-- 
++2.43.7
++
 -- 
-Bye, Peter Korsgaard
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
