@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF6BECD5BAC
-	for <buildroot@archiver.kernel.org>; Fri, 22 May 2026 20:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86BB0CD5BAC
+	for <buildroot@archiver.kernel.org>; Fri, 22 May 2026 20:04:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90F3085634;
-	Fri, 22 May 2026 20:04:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6cIBYMbsNqH1; Fri, 22 May 2026 20:04:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4D1885635
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779480279;
-	bh=KFmkqSJN9PBqaVI1w8FodPUqQAXD75PfvlfVOOUCLbw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Nmew/YpXejVx8SvMpR+AEwiy+5onWEfacOPf2FC2Lc2jGLTUK29nDuFcbZFt1Kwkt
-	 rpzGto5vdcA2XEA3CfbA0cfeuYxU9pzKCMfZOzuD6dYQPZ7pRs79cCT7V16zgR+Tmi
-	 zKDSa8bZFMseWkrFbN1BxtrB4Wr8ikUd6vptpxIRSRL0zvuBzu1R7gSGec+PSDiJKb
-	 Xcs7AHInhNPKUgMy8AHvrjUJ8jvjPL+Ls1f6OAB2bsPHL6+s9c8byB9GEj++9UsMav
-	 bin+fICq0dY5n6XOxBWvHongG80t4QaSNR8h4HPIQc5kAVWvhQ9XIyygIKnTg364+u
-	 Qe1NbG59tf4QQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4D1885635;
-	Fri, 22 May 2026 20:04:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AB731265
- for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C33261C0B
- for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40D946F764;
+	Fri, 22 May 2026 20:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YbOmZGh3Zi36 for <buildroot@buildroot.org>;
- Fri, 22 May 2026 20:04:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9B6E61BA4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9B6E61BA4
- for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AEC0D86C3A; Fri, 22 May 2026 20:04:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 22 May 2026 21:50:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94b0b0c6c10471443bf75637ccf6d528177babdf
-X-Git-Newrev: 9d6949b1b145d82c43423e62c777e11667ce754e
-X-Patchwork-Hint: ignore
-Message-Id: <20260522200428.AEC0D86C3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update version to 0.24.12
+ id 3YNBAKiwRpSS; Fri, 22 May 2026 20:04:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBBBB61C0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779480296;
+	bh=fcu8BayfCcalTB39nhke52IMWRZLa17lXlXfloLZMic=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NcPq3krMTZHj8HiZWQKd2aalM561/GnNcoWEP36QAsAT06KV16A6M0URPickl+Jo9
+	 pnNhUQSO4xBKmPxT49JtsT4kcnzEX91mIaU52WzGEm8jXNze8p1BDJSm7iwKEZGYC1
+	 f9udcj2ImSheNtq+ykjxTZhPE4kFXkjkP1KMCViMWiJbxoxSwwmNtaFubh059Q0t8w
+	 VDbhQ5VRe0ClkMkQ2WcAMaXck9U6gFhDla507HPp2E/CJXzkhrDl/CsptSQrBe5xZq
+	 0Xqlt6Qf3PiZGjNnMoG5hJyp7TIU7Y0xjj+0dJ/3aLM9UsbxgDYTjyeVBTyeOwMfZg
+	 lburRTrB/Po7w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBBBB61C0B;
+	Fri, 22 May 2026 20:04:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D549265
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62F7340085
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TtBenWYWDqFP for <buildroot@buildroot.org>;
+ Fri, 22 May 2026 20:04:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B039841EAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B039841EAF
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B039841EAF
+ for <buildroot@buildroot.org>; Fri, 22 May 2026 20:04:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id C85AF19F57E;
+ Fri, 22 May 2026 22:04:49 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 22 May 2026 22:04:49 +0200
+MIME-Version: 1.0
+Date: Fri, 22 May 2026 22:04:49 +0200
+To: Andreas Ziegler <br025@umbiko.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260521052333.2780480-1-br025@umbiko.net>
+References: <20260521052333.2780480-1-br025@umbiko.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <8751b89cbab51edbf676f5536e7388bf@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1779480290;
+ bh=5GwIvH5MsFz/upOpDqAVJAbUBSO3bNwURTzlt3soeSY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=V6Po5V6h+PWR27pkmrdgDA5zW14xloNcv1aoJqReofYgF9/YrnzDEMbWg76UdRG2G
+ 4LnM4xA7rr+3EYTTrmHjAAIs+BM0JVP4XvA/QqKZjcq4i1gEazpmMBPAC82iCOK503
+ TEaGL+2OlQt0bJWzZ/UJCwmso2iwi27TvvVbHbjY7dH1GM9vhU0ZAIeyU4CForGoFN
+ Y6pmoPV0lpLMLhxHEIGzuogFO8+pTdDNqWpDYa5agpuZZSuiaQOCDDBT54C3KKXIQ+
+ A/33PFh1GHrULyjFggTg5FlvKoww4ZQRPDz6YUJg7PGhCG5TtPtNYyfmHE0O5Dy9GO
+ xUIlhV/wlsGrw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=V6Po5V6h
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update version to 0.24.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,56 +95,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9d6949b1b145d82c43423e62c777e11667ce754e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 21/05/2026 07:23, Andreas Ziegler wrote:
+> Bug fix of bug fix. Changes from version 0.24.10 -> 0.24.12:
+> 
+> * protocol
+>   - fix path traversal bug
+>   - allow empty URI in "lsinfo", "add" etc. (0.24.11 regression)
+> * playlist: do not allow newlines in song URIs
+> * input
+>   - curl: require version 7.85.0
+> * decoder
+>   - pcm: fix stack buffer overflow
+>   - sidplay: fall back to SIDLiteBuilder if ReSIDfpBuilder is 
+> unavailable
+> 
+> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 
-Bug fix of bug fix. Changes from version 0.24.10 -> 0.24.12:
-
-* protocol
-  - fix path traversal bug
-  - allow empty URI in "lsinfo", "add" etc. (0.24.11 regression)
-* playlist: do not allow newlines in song URIs
-* input
-  - curl: require version 7.85.0
-* decoder
-  - pcm: fix stack buffer overflow
-  - sidplay: fall back to SIDLiteBuilder if ReSIDfpBuilder is unavailable
-
-Signed-off-by: Andreas Ziegler <br025@umbiko.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index e3e2cde023..1c02e0fe20 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  867f10fd83cde20c240617222b38fbf6885f902015d0da424a28fbafc675e1dd  mpd-0.24.10.tar.xz
-+sha256  14223ca883c35fbf711994bcf745726cecc9d898e3d3964265cf3a2c7519a360  mpd-0.24.12.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index eb40f0ccc3..e94858897a 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.24
--MPD_VERSION = $(MPD_VERSION_MAJOR).10
-+MPD_VERSION = $(MPD_VERSION_MAJOR).12
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf fmt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
