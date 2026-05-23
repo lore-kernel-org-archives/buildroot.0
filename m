@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2845CCD5BB1
-	for <buildroot@archiver.kernel.org>; Sat, 23 May 2026 09:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF084CD5BB1
+	for <buildroot@archiver.kernel.org>; Sat, 23 May 2026 09:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0362440ED1;
-	Sat, 23 May 2026 09:12:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0B6A809DD;
+	Sat, 23 May 2026 09:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gx89-KMAeX5e; Sat, 23 May 2026 09:12:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GtZ-PBya4Xvv; Sat, 23 May 2026 09:12:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C64DF40EE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D161E809E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779527558;
-	bh=5zQx7MZT86A+Eqdjj40JgixKOSfQ1Ewh3O3TB3JDGCw=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1779527571;
+	bh=40LqIa7DIvLaIEKxMndprXPNvEL+cLQvMUhm2qMrVu8=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=iSvWGU6yiYUrejq8xObfxbZBud2eL9fQxl7BmrcgZYNgfehr58jhks+JJphB3HaK7
-	 nyz1apUc9P/Q5XvnTaYwg32D4mDLVhXX2DgOXqZLprYAZmyx0JfgWCJty+G/RiGbdS
-	 Jd2m42dCirHWxR8nI30q3GiJEBXYpMNYGUgxKn0SMioDoD9453A0dFxCphqNhvE6n5
-	 0RdTdbdb2x69x9gE+PqZJSM3mtH78eiLB22HxDUBPvibxEDEaJEqGMEW5Z7DQpz7+N
-	 jy+GK1Ctaa5fPC7eXRHVmVDRBNQENuFYCxAoysEjbNfNXP0a7Npgb62iVznhMIIhhd
-	 UvekPNAa8XCQw==
+	b=HMsXUljI6x7ITurbVst75X0QDkmJ82yh1nka6ZfoDuELn0lqHqO6Pp9XEg+Zy9g2X
+	 E1s76x/VPnM3BZ1spVgSvTvbY0/4KeXqFLfH49DFaE1tBrULJzipkQNO+u3JDUV5q8
+	 55iXBm5z2UfJcvbdJsYrLmGBdU3kxBdICG8wj6kmE0ydhyAuCeQlMbDi9EuO7JRWJy
+	 4BOvhg9s0Xf/0U8vpDFIzO86/whYvTJ3HK1Ouvb229JrCh6lbrOxuQpWIK4v7ogpCm
+	 vBV7UI7ICt6knv0nHvnTrDRRCoaWLhEXENHR/hTQFyrqnIeUlqPDMq/zP8ZFB0U0YO
+	 Xz+h9ge5XnaqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C64DF40EE2;
-	Sat, 23 May 2026 09:12:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32AB0263
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D161E809E7;
+	Sat, 23 May 2026 09:12:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3742282
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 187CB40EE2
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A540A60883
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6BKuXM_EOW76 for <buildroot@buildroot.org>;
- Sat, 23 May 2026 09:12:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oJx9D16P13Wk for <buildroot@buildroot.org>;
+ Sat, 23 May 2026 09:12:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DCB6540ED1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB6540ED1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A04960673
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A04960673
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCB6540ED1
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A04960673
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 09:12:49 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b5dd.dip0.t-ipconnect.de [84.161.181.221])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 51B2CA4C013E
- for <buildroot@buildroot.org>; Sat, 23 May 2026 11:12:01 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 80A5AA4C027E;
+ Sat, 23 May 2026 11:12:01 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36918)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wQiOi-000000001HG-40iW
- for buildroot@buildroot.org; Sat, 23 May 2026 09:11:57 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wQiOk-000000001HG-3T0r;
+ Sat, 23 May 2026 09:11:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 23 May 2026 11:11:55 +0200
-Message-ID: <20260523091156.112718-4-bernd@kuhls.net>
+Cc: Grzegorz Blach <grzegorz@blach.pl>
+Date: Sat, 23 May 2026 11:11:56 +0200
+Message-ID: <20260523091156.112718-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260523091156.112718-1-bernd@kuhls.net>
 References: <20260523091156.112718-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1779527521;
- bh=Kg0x2XNa7upo56JA42PmSFW9778VKPpJgwbnztQupIE=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=H0oFELlmXDiFMIzu/w86AeCGDbqu3IJBl0O6WLO2C85wurC4/MU5pZq1noevJaCBw
- USx8YvhsfH2NZVpHl5gMiOdCfGyFEZreDMBdd6zxMgtUP6WOfcS8ZsbBgvOmVTrON1
- BfshFs5F8LBYXYwEh+wTc/X7hqypb9iL4v+t/NfjtjHUDMZS+PypgiNt5+gRmYu3Rr
- kQqaYEI3x5vyRhFGlR0AOoexUsEQCtFkqXiIE9a81j4urLTnp842W+1e1VbpUXCmRO
- e+w34NSCIAYGZ7DhHyjcQxYthwkHfc7Aj7SOAI4PhcL6kMAtbSopxDP3GYTMeaoAsU
- Hzmx5TYIWVrgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=V81ZCmoSNnaN8eKx+sjgSifKBshswx9rk2+DcPFY+Wc=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=EuYwXmVwB4d4LMP+2tAA+SOpXERL/LVERuouekwV7pGn9L0KzubDEZyXYIM/W0x0p
+ YJvzqaKOjld0T3zBhrwULcuyjvLoB8d2s6lkXBccOr8F0qOfWE5IADFamdJWzZq+5u
+ r4+iXZG/DTA94lXc2/EUFUmPkiRHd/NFb5Omn3lhIP1eQ7y8y/fGJi5Pr//yOJNJdB
+ cxsQBylUGdfRibEKXK4uSXbM29ozy4zvjIEhBK/ovvniWCMImPsjx9o7Fd/tKwcKyn
+ 0P7fbZhBQ5wTxyG3GcC11qftJQlvtGSSkhr9cZcF/FqJycRS5lkW7wk/mVsWpSECSQ
+ 7uV5GWZd+gxNQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=H0oFELlm
-Subject: [Buildroot] [PATCH 4/5] package/xml-security-c: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=EuYwXmVw
+Subject: [Buildroot] [PATCH 5/5] package/pigpio: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,242 +99,252 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://santuario.apache.org/
-"July 2024
- As announced early this year, the C++ library has been officially
- retired. A fork of this code base has been migrated to the Shibboleth
- Project, which has been the sole maintainer for a number of years now.
- See the Shibboleth wiki for notable caveats regarding usage of this
- code."
+Build is broken with gcc 15.x.
 
-https://shibboleth.atlassian.net/wiki/spaces/DEV/pages/3726671873/Santuario
-"The C++ xml-security-c library has been retired at Apache and is now
- solely maintained by the Shibboleth Project for our use only. Use by
- any other project, while permitted freely under the license, is
- ill-advised and unsupported by the Shibboleth Project. While we
- continue to publish a fork of the code in our repository, and will
- accept bug reports and certainly security reports, we do not promise
- any responsiveness to third parties, and urge that no other projects
- rely on this code. Existing users should seek alternatives or consider
- forking the code for their own use."
+Debian removed the package in 2025:
+https://tracker.debian.org/news/1668850/pigpio-removed-from-testing/
 
-The package is unmaintained and will cause build errors with the
-upcoming bump of OpenSSL to 4.0.0. No other package depends on it so we
-can safely remove it from buildroot.
+Last upstream commit: March 2021
+Open PR: 21
+Open issues: 87
+
+One of the open issues mentions incompatibility with Pi 5+:
+https://github.com/joan2937/pigpio/issues/589
+
+Fixes:
+https://autobuild.buildroot.net/results/09e/09e2213727205674284204ce0604d34b10a5a543/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Grzegorz Blach <grzegorz@blach.pl>
 ---
- .checkpackageignore                           |  1 -
- Config.in.legacy                              |  7 ++
- package/Config.in                             |  1 -
- .../0001-fix-build-with-libressl-3.5.0.patch  | 91 -------------------
- package/xml-security-c/Config.in              | 20 ----
- package/xml-security-c/xml-security-c.hash    |  3 -
- package/xml-security-c/xml-security-c.mk      | 18 ----
- 7 files changed, 7 insertions(+), 134 deletions(-)
- delete mode 100644 package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch
- delete mode 100644 package/xml-security-c/Config.in
- delete mode 100644 package/xml-security-c/xml-security-c.hash
- delete mode 100644 package/xml-security-c/xml-security-c.mk
+ .checkpackageignore           |  1 -
+ Config.in.legacy              |  7 +++++
+ DEVELOPERS                    |  1 -
+ package/Config.in             |  1 -
+ package/pigpio/Config.in      | 14 ----------
+ package/pigpio/S50pigpio      | 50 ----------------------------------
+ package/pigpio/pigpio.hash    |  3 ---
+ package/pigpio/pigpio.mk      | 51 -----------------------------------
+ package/pigpio/pigpio.service | 10 -------
+ 9 files changed, 7 insertions(+), 131 deletions(-)
+ delete mode 100644 package/pigpio/Config.in
+ delete mode 100644 package/pigpio/S50pigpio
+ delete mode 100644 package/pigpio/pigpio.hash
+ delete mode 100644 package/pigpio/pigpio.mk
+ delete mode 100644 package/pigpio/pigpio.service
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 822260dad0..34f4d5bdcd 100644
+index 34f4d5bdcd..5d4cccd76e 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -992,7 +992,6 @@ package/xen/0002-Fix-build-with-64-bits-time_t.patch lib_patch.Upstream
- package/xen/0003-libs-light-fix-tv_sec-printf-format.patch lib_patch.Upstream
- package/xen/0004-libs-light-fix-tv_sec-fprintf-format.patch lib_patch.Upstream
- package/xl2tp/xl2tpd lib_shellscript.TrailingSpace
--package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch lib_patch.Upstream
- package/yajl/0001-Let-the-shared-and-the-static-library-have-the-same-.patch lib_patch.Upstream
- package/yajl/0002-cmake-disable-shared-library-build-when-BUILD_SHARED.patch lib_patch.Upstream
- package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch lib_patch.Upstream
+@@ -744,7 +744,6 @@ package/php/0004-Call-apxs-with-correct-prefix.patch lib_patch.Upstream
+ package/pifmrds/0001-Makefile-cross-compile-friendly.patch lib_patch.Upstream
+ package/pifmrds/0002-Makefile-use-LDFLAGS.patch lib_patch.Upstream
+ package/pifmrds/0003-Makefile-fix-static-link.patch lib_patch.Upstream
+-package/pigpio/S50pigpio Shellcheck lib_sysv.Variables
+ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch lib_patch.Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 5359459cd6..7a9dc41d06 100644
+index 7a9dc41d06..6a7a4ac1d5 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.05"
  
-+config BR2_PACKAGE_XML_SECURITY_C
-+	bool "xml-security-c removed"
++config BR2_PACKAGE_PIGPIO
++	bool "pigpio removed"
 +	select BR2_LEGACY
 +	help
-+	  xml-security-c was no longer maintained upstream, so it has
-+	  been dropped.
++	  pigpio was no longer maintained upstream, so it has been
++	  dropped.
 +
- config BR2_PACKAGE_LIBPHIDGET
- 	bool "libphidget"
+ config BR2_PACKAGE_XML_SECURITY_C
+ 	bool "xml-security-c removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de0d0d6f76..5ae5f4ef8c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1357,7 +1357,6 @@ F:	fs/f2fs/
+ F:	package/bluez5_utils-headers/
+ F:	package/f2fs-tools/
+ F:	package/graphicsmagick/
+-F:	package/pigpio/
+ F:	package/python-aioblescan/
+ F:	package/python-bluezero/
+ F:	package/python-crontab/
 diff --git a/package/Config.in b/package/Config.in
-index f5e93688a5..23a76bd9b0 100644
+index 23a76bd9b0..f32fcd8723 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1913,7 +1913,6 @@ menu "JSON/XML"
- 	source "package/tinyxml2/Config.in"
- 	source "package/valijson/Config.in"
- 	source "package/xerces/Config.in"
--	source "package/xml-security-c/Config.in"
- 	source "package/yajl/Config.in"
- 	source "package/yaml-cpp/Config.in"
- 	source "package/zix/Config.in"
-diff --git a/package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch b/package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch
+@@ -573,7 +573,6 @@ endmenu
+ 	source "package/picocom/Config.in"
+ 	source "package/picotool/Config.in"
+ 	source "package/pifmrds/Config.in"
+-	source "package/pigpio/Config.in"
+ 	source "package/powertop/Config.in"
+ 	source "package/pps-tools/Config.in"
+ 	source "package/pru-software-support/Config.in"
+diff --git a/package/pigpio/Config.in b/package/pigpio/Config.in
 deleted file mode 100644
-index 1b2591aa36..0000000000
---- a/package/xml-security-c/0001-fix-build-with-libressl-3.5.0.patch
+index 2180ab0de6..0000000000
+--- a/package/pigpio/Config.in
 +++ /dev/null
-@@ -1,91 +0,0 @@
--From 66d1d626cf1405119d89c6fd0fb7e9019bd67f6c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 6 Jun 2022 10:24:58 +0200
--Subject: [PATCH] fix build with libressl >= 3.5.0
--
--Fix the following build failure with libressl >= 3.5.0:
--
--In file included from ../xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp:36:0,
--                 from enc/OpenSSL/OpenSSLCryptoKeyRSA.cpp:35:
--../xsec/enc/OpenSSL/OpenSSLSupport.hpp:92:20: error: field 'mp_ctx_store' has incomplete type 'EVP_ENCODE_CTX {aka evp_Encode_Ctx_st}'
--     EVP_ENCODE_CTX mp_ctx_store;
--                    ^~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e908e59ec5b8e1ac505c44900dcb39527f0ec1d3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://issues.apache.org/jira/browse/SANTUARIO-588]
-----
-- xsec/enc/OpenSSL/OpenSSLCryptoBase64.cpp | 3 ++-
-- xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp | 3 ++-
-- xsec/enc/OpenSSL/OpenSSLSupport.cpp      | 5 +++--
-- xsec/enc/OpenSSL/OpenSSLSupport.hpp      | 3 ++-
-- 4 files changed, 9 insertions(+), 5 deletions(-)
--
--diff --git a/xsec/enc/OpenSSL/OpenSSLCryptoBase64.cpp b/xsec/enc/OpenSSL/OpenSSLCryptoBase64.cpp
--index a8ea9f1d..a9a84e3f 100644
----- a/xsec/enc/OpenSSL/OpenSSLCryptoBase64.cpp
--+++ b/xsec/enc/OpenSSL/OpenSSLCryptoBase64.cpp
--@@ -48,7 +48,8 @@ XERCES_CPP_NAMESPACE_USE
-- //           Construction/Destruction
-- // --------------------------------------------------------------------------------
-- 
---#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
--+	((defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L))
-- OpenSSLCryptoBase64::OpenSSLCryptoBase64() : mp_ectx(&m_ectx_store), mp_dctx(&m_dctx_store) { }
-- OpenSSLCryptoBase64::~OpenSSLCryptoBase64() { }
-- #else
--diff --git a/xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp b/xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp
--index 82aeb0a1..7c947d50 100644
----- a/xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp
--+++ b/xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp
--@@ -205,7 +205,8 @@ private :
--     EVP_ENCODE_CTX *mp_ectx;              // Encode context
--     EVP_ENCODE_CTX *mp_dctx;              // Decode context
-- 
---#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
--+	((defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L))
--     EVP_ENCODE_CTX m_ectx_store;
--     EVP_ENCODE_CTX m_dctx_store;
-- #endif 
--diff --git a/xsec/enc/OpenSSL/OpenSSLSupport.cpp b/xsec/enc/OpenSSL/OpenSSLSupport.cpp
--index cf874f82..c4453004 100644
----- a/xsec/enc/OpenSSL/OpenSSLSupport.cpp
--+++ b/xsec/enc/OpenSSL/OpenSSLSupport.cpp
--@@ -273,7 +273,8 @@ int ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s)
-- 
-- #endif
-- 
---#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
--+	 ((defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L))
-- EvpEncodeCtxRAII::EvpEncodeCtxRAII() : mp_ctx(&mp_ctx_store) { };
-- EvpEncodeCtxRAII::~EvpEncodeCtxRAII() { }
-- #else
--@@ -289,4 +290,4 @@ EVP_ENCODE_CTX
--     return mp_ctx;
-- }
-- 
---#endif
--\ No newline at end of file
--+#endif
--diff --git a/xsec/enc/OpenSSL/OpenSSLSupport.hpp b/xsec/enc/OpenSSL/OpenSSLSupport.hpp
--index b5f67f26..09d50899 100644
----- a/xsec/enc/OpenSSL/OpenSSLSupport.hpp
--+++ b/xsec/enc/OpenSSL/OpenSSLSupport.hpp
--@@ -88,7 +88,8 @@ public:
-- 
-- private:
--     EVP_ENCODE_CTX *mp_ctx;
---#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
--+	((defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L))
--     EVP_ENCODE_CTX mp_ctx_store;
-- #endif    
-- };
---- 
--2.35.1
--
-diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
-deleted file mode 100644
-index c7963be69a..0000000000
---- a/package/xml-security-c/Config.in
-+++ /dev/null
-@@ -1,20 +0,0 @@
--config BR2_PACKAGE_XML_SECURITY_C
--	bool "xml-security-c"
--	depends on BR2_INSTALL_LIBSTDCPP # xerces
--	depends on !BR2_STATIC_LIBS # xerces
--	depends on BR2_USE_WCHAR # xerces
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
--	depends	on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_XERCES
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_PIGPIO
+-	bool "pigpio"
+-	depends on BR2_aarch64 || BR2_arm
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
 -	help
--	  The xml-security-c library is a C++ implementation of
--	  the XML Digital Signature and Encryption specifications.
+-	  Pigpio is a library for the Raspberry Pi which allows
+-	  control of the General Purpose Input Outputs (GPIO).
 -
--	  https://santuario.apache.org/cindex.html
+-	  http://abyz.me.uk/rpi/pigpio/
 -
--comment "xml-security-c needs a toolchain w/ C++, wchar, dynamic library, threads, gcc >= 4.7"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
+-comment "pigpio needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_aarch64 || BR2_arm
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/pigpio/S50pigpio b/package/pigpio/S50pigpio
 deleted file mode 100644
-index f4b7041a63..0000000000
---- a/package/xml-security-c/xml-security-c.hash
+index 8b7b6815c8..0000000000
+--- a/package/pigpio/S50pigpio
++++ /dev/null
+@@ -1,50 +0,0 @@
+-#!/bin/sh
+-
+-DAEMON="pigpiod"
+-PIDFILE="/var/run/pigpio.pid"
+-
+-PIGPIOD_ARGS=""
+-
+-[ -r "/etc/default/pigpio" ] && . "/etc/default/pigpio"
+-
+-start() {
+-	printf 'Starting %s: ' "$DAEMON"
+-	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" -- $PIGPIOD_ARGS
+-	status=$?
+-	if [ "$status" -eq 0 ]; then
+-		echo "OK"
+-	else
+-		echo "FAIL"
+-	fi
+-	return "$status"
+-}
+-
+-stop() {
+-	printf 'Stopping %s: ' "$DAEMON"
+-	start-stop-daemon -K -q -p "$PIDFILE"
+-	status=$?
+-	if [ "$status" -eq 0 ]; then
+-		rm -f "$PIDFILE"
+-		echo "OK"
+-	else
+-		echo "FAIL"
+-	fi
+-	return "$status"
+-}
+-
+-restart() {
+-	stop
+-	sleep 1
+-	start
+-}
+-
+-case "$1" in
+-	start|stop|restart)
+-		"$1";;
+-	reload)
+-		# Restart, since there is no true "reload" feature.
+-		restart;;
+-	*)
+-		echo "Usage: $0 {start|stop|restart|reload}"
+-		exit 1
+-esac
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+deleted file mode 100644
+index fecb7ccbeb..0000000000
+--- a/package/pigpio/pigpio.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.4.tar.gz.sha256
--sha256  a78da6720f6c2ba14100d2426131e0d33eac5a2dba5cc11bdd04974b7eb89003  xml-security-c-2.0.4.tar.gz
--sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
+-# Locally calculated
+-sha256  c5337c0b7ae888caf0262a6f476af0e2ab67065f7650148a0b21900b8d1eaed7  pigpio-79.tar.gz
+-sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
 deleted file mode 100644
-index fda9af4798..0000000000
---- a/package/xml-security-c/xml-security-c.mk
+index e34974972a..0000000000
+--- a/package/pigpio/pigpio.mk
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,51 +0,0 @@
 -################################################################################
 -#
--# xml-security-c
+-# pigpio
 -#
 -################################################################################
 -
--XML_SECURITY_C_VERSION = 2.0.4
--XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
--XML_SECURITY_C_LICENSE = Apache-2.0
--XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
--XML_SECURITY_C_DEPENDENCIES = openssl xerces
--XML_SECURITY_C_INSTALL_STAGING = YES
+-PIGPIO_VERSION = 79
+-PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
+-PIGPIO_LICENSE = Unlicense
+-PIGPIO_LICENSE_FILES = UNLICENCE
+-PIGPIO_INSTALL_STAGING = YES
 -
--XML_SECURITY_C_CONF_ENV = \
--	xml_cv_func_getcwd_null=yes \
--	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+-define PIGPIO_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
 -
--$(eval $(autotools-package))
+-define PIGPIO_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/pig2vcd $(TARGET_DIR)/usr/bin/pig2vcd
+-	$(INSTALL) -D -m 0755 $(@D)/pigpiod $(TARGET_DIR)/usr/bin/pigpiod
+-	$(INSTALL) -D -m 0755 $(@D)/pigs $(TARGET_DIR)/usr/bin/pigs
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so.1
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so.1
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so.1
+-	ln -sf libpigpio.so.1 $(TARGET_DIR)/usr/lib/libpigpio.so
+-	ln -sf libpigpiod_if.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if.so
+-	ln -sf libpigpiod_if2.so.1 $(TARGET_DIR)/usr/lib/libpigpiod_if2.so
+-endef
+-
+-define PIGPIO_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so.1
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so.1
+-	$(INSTALL) -D -m 0755 $(@D)/libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so.1
+-	$(INSTALL) -D -m 0644 $(@D)/pigpio.h $(STAGING_DIR)/usr/include/pigpio.h
+-	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if.h $(STAGING_DIR)/usr/include/pigpiod_if.h
+-	$(INSTALL) -D -m 0644 $(@D)/pigpiod_if2.h $(STAGING_DIR)/usr/include/pigpiod_if2.h
+-	ln -sf libpigpio.so.1 $(STAGING_DIR)/usr/lib/libpigpio.so
+-	ln -sf libpigpiod_if.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if.so
+-	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
+-endef
+-
+-define PIGPIO_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/pigpio/S50pigpio \
+-		$(TARGET_DIR)/etc/init.d/S50pigpio
+-endef
+-
+-define PIGPIO_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/pigpio/pigpio.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/pigpio.service
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/pigpio/pigpio.service b/package/pigpio/pigpio.service
+deleted file mode 100644
+index 135624cc43..0000000000
+--- a/package/pigpio/pigpio.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=Pigpio daemon
+-After=network.target
+-
+-[Service]
+-EnvironmentFile=-/etc/default/pigpio
+-ExecStart=/usr/bin/pigpiod -g $PIGPIOD_ARGS
+-
+-[Install]
+-WantedBy=multi-user.target
 -- 
 2.47.3
 
