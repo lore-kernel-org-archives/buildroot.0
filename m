@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47695CD5BAC
-	for <buildroot@archiver.kernel.org>; Sat, 23 May 2026 09:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F09A4CD5BAC
+	for <buildroot@archiver.kernel.org>; Sat, 23 May 2026 11:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2C8140EC3;
-	Sat, 23 May 2026 09:33:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99CE5608C6;
+	Sat, 23 May 2026 11:50:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jr24yAAfHZar; Sat, 23 May 2026 09:33:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rNcSJtb51_Sx; Sat, 23 May 2026 11:50:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B29940ED1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6C33608C7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779528806;
-	bh=TdChjTB+OjGoF1WdX6yncc99a3r91Qq9CfJRGyEd7Ho=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=oVLC7Z+bmC8g6/reyR/AWF58oDd0NoLjKCVA3Ry+K77qR10nUHBd8Jr8ouSpQKRsU
-	 /+4K++yzjDg3zIQH4gWgUWySS3x7tQ2KGAGbmTmxPhSZjRzIylsJgLC/v06uMVBtOH
-	 BGtpr9+wfjNFQzmfH/zbfZO4xTCMU9uFCOjSPLP66vqId9ZexWol29XAydWgWSkPkO
-	 CaGOw9Npv6MA8v/C6sSbTYlux2g3CFmsLmdWxPCHKBueheJU+2plsOwY71moc3/PKo
-	 sjyA/qcN2pAHj6iRc9k+OsOfhdhq65X2WDs+PB9rVtESbIcogKFjYddnX58+3sk0bv
-	 jZdO6TYal4v3Q==
+	s=default; t=1779537024;
+	bh=kESztGgx8IAd7ejXv71uuHggvg6A0xkQHo+dKfU6JEo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=MLph2F87K3BtucFb435sRcVAklkJykct3n5CrxkcSqCeqoR9wFLLQ9e3znDrVWDUN
+	 HC1xTlJPdBNSMh54hmMxQaz3UAXICn4xSMTKPJeTWXBcHloD/V4RE49X0nu475xblN
+	 +/KvsV1gir4QRPAlOEpTIjZEcXOJNobbC7tLBB7cFg9ZN2x3xg2HK+frROSE3UZoBR
+	 N394H7UHtX400iwD3zu1exwbgSsEkihrvaZZYAOe6ZoKLwZPV5r/x6Uiw+BXDgbSut
+	 CFPk5J3hrLKtk8oVHRiUH3MDD+ATLoKd6DUmoKuNJ3zjjFE8WnH4RwY0f3epOrbKT7
+	 D7fykSotxvfsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B29940ED1;
-	Sat, 23 May 2026 09:33:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AEB6A263
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:33:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6C33608C7;
+	Sat, 23 May 2026 11:50:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 275E7282
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 11:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A01FB813B7
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:33:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 215D64039A
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 11:50:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mKXpBh9oEK8F for <buildroot@buildroot.org>;
- Sat, 23 May 2026 09:33:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9873A81396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9873A81396
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9873A81396
- for <buildroot@buildroot.org>; Sat, 23 May 2026 09:33:23 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b5dd.dip0.t-ipconnect.de [84.161.181.221])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AB505A4C05B8
- for <buildroot@buildroot.org>; Sat, 23 May 2026 11:33:08 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41374)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wQijE-000000004vl-0FvU
- for buildroot@buildroot.org; Sat, 23 May 2026 09:33:08 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WWoJVk5TfmHe for <buildroot@buildroot.org>;
+ Sat, 23 May 2026 11:50:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E95154038A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E95154038A
+ for <buildroot@buildroot.org>; Sat, 23 May 2026 11:50:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5B32686B5E; Sat, 23 May 2026 11:50:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 May 2026 11:33:08 +0200
-Message-ID: <20260523093308.186597-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260523093308.186597-1-bernd@kuhls.net>
-References: <20260523093308.186597-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779528788;
- bh=IbFP0xyJU9HbxV8wywMnviJyV3Xrae2ALdZCOjtj3NQ=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=YAJrCQkDpU+zaLs+ZDcI6zniaybIT9PhtlqbLgyjqZqenXB9QzW++9VEU/m7qBmNC
- /mafXcpkjfTLn/AP1HYwJ62hm1njFLUqArFA2yMBe0gSTk8NdPoH1LoWlq1Rzn8+e3
- 6wv0o//YR+MgaJ/kOjJGhtuNiwLE/2hIHjk98lf17yC5swm/KFDbqbBM0UzYvaomqT
- QP/LvY/U/Zp7xBnG9PBPThkF+bSLpSbpylMcQ/1wKxE/B31EGXvWOD37PQ1/rjZQ+k
- KsN65bHPZ5ORvsM8UG47KiTKq8ZjNc3Vjw38KhKv8v1nFfi575Lb+uv7K5xr8GkVg8
- x4CScH6R3J2Dg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=YAJrCQkD
-Subject: [Buildroot] [PATCH/next 2/2] package/fontconfig: bump version to
- 2.18.0
+Date: Sat, 23 May 2026 11:01:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9d6949b1b145d82c43423e62c777e11667ce754e
+X-Git-Newrev: f778891f10733d988e232a52aec67a729e0923ca
+X-Patchwork-Hint: ignore
+Message-Id: <20260523115012.5B32686B5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: bump version to
+ 22.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,47 +69,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://lists.freedesktop.org/archives/fontconfig/2026-May/007334.html
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f778891f10733d988e232a52aec67a729e0923ca
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Release notes of this bugfix release:
+https://discourse.llvm.org/t/llvm-22-1-6-released/90838
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fontconfig/fontconfig.hash | 4 ++--
- package/fontconfig/fontconfig.mk   | 2 +-
+ package/llvm-project/llvm-project.hash | 4 ++--
+ package/llvm-project/llvm-project.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index e6f2e0771c..ab102216bb 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
-@@ -1,5 +1,5 @@
--# From https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.17.1/fontconfig-2.17.1.tar.xz.sha256sum
--sha256  9f5cae93f4fffc1fbc05ae99cdfc708cd60dfd6612ffc0512827025c026fa541  fontconfig-2.17.1.tar.xz
-+# From https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.18.0/fontconfig-2.18.0.tar.xz.sha256sum
-+sha256  e7064a4725431ddba06ff8b971ec5a4b422e23b0169ce215747beedcb30e9073  fontconfig-2.18.0.tar.xz
- 
- # Locally calculated
- sha256  51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067  COPYING
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 639f6ed51d..12673babf9 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index 9155ba8c53..4f2c07414e 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.5
+-sha256  7972b87b705a003ce70ab55f9f0fb495d156887cba0eb296d284731139118e2c  llvm-project-22.1.5.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.6
++sha256  6e0b376a1f6d9873e7dfb09ae6e04b9c7024400f01733fa4c29be69d5c138bc2  llvm-project-22.1.6.src.tar.xz
+ # locally calculated
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index eedef3a1c5..2f137b871b 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--FONTCONFIG_VERSION = 2.17.1
-+FONTCONFIG_VERSION = 2.18.0
- FONTCONFIG_SITE = https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/$(FONTCONFIG_VERSION)
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
- FONTCONFIG_INSTALL_STAGING = YES
--- 
-2.47.3
-
+ LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.6
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
