@@ -1,86 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23493CD5BAB
-	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 17:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF04CD5BAB
+	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 17:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0A3A40F6E;
-	Sun, 24 May 2026 17:46:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2025260ABB;
+	Sun, 24 May 2026 17:47:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IV7pTdx5lWeL; Sun, 24 May 2026 17:47:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3612060AD9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779644870;
+	bh=ylvacDeuiQwSYusjSIEDm+0msMLfXVTT+OZzOvz/TLg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=k0F6Z1Nr5fjBBeyJ0nkEiEl5XyVoPwAe5yhNK+c2iFTJIA4amlsSFQELKy0stHUJ4
+	 vkQGgiz4V7si/+QGE6LNQDWnpcV43BBnslKhROGBpdObkmv2rgEyxcsPT7xoQs21bz
+	 6MUncRR5Tw/qHDXcr4ALH/cBliGVA8sLJ+ekZWBWrFEsQXS1jxYt9TqOzVXNia4sU0
+	 xhzQa2wAR5ZzzaXUNClzvNETbpyrNaS7R7BmrE/drNWBnIdoS0yMVCMD4XcL8FxE3G
+	 fEXZQm3KVqO8oD7ctsJTU+O4yS/cnXiLjWed/4RwuZ1aINAmovC5kgTryCUWpr30ku
+	 3FJDbt6GvMtNQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3612060AD9;
+	Sun, 24 May 2026 17:47:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37A9B69
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 17:47:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D48140FFD
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 17:47:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9jZp9usbq9G; Sun, 24 May 2026 17:46:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0917A40FFD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779644810;
-	bh=ItUlHJEyPvYMxiUfWnXWr2m6TVRSb3IpqtOmuoKg2sE=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=B9DSWJiADFpuVcrnEpWmE3KL+GNnxa9FLbBGbNxsWdKJ1fXiPk76ejZhLGR1xvUdX
-	 iMA4t5PRdxxopyhgMwXZVMJiAtzZh7gOc8dJI/yF/zUyf2827bR2T367gcLxYVM38a
-	 E8mH3MlgY43a//eCeHnKbqL0HfRj5zokCDeAZ9rKVUsvIFNTgHkDxWGFqNIwPsS7Co
-	 giXMRajgWzLbJhBNlkeKru2fiHHLqkHHf2nzTRANTQeKGbvKGqb7GiSqB8Zht+tHYC
-	 la7GqZyBZsCAsmpc4Xs6UIh3MkdIJvlYX9s0SaIMjtUxO5Dm8bu9MUYBTDlH5edJUE
-	 QZUu+P3+W4sfQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0917A40FFD;
-	Sun, 24 May 2026 17:46:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B75569
- for <buildroot@buildroot.org>; Sun, 24 May 2026 17:46:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 310874046C
- for <buildroot@buildroot.org>; Sun, 24 May 2026 17:46:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rQpTKlGi_wnr for <buildroot@buildroot.org>;
- Sun, 24 May 2026 17:46:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C4F04043E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C4F04043E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C4F04043E
- for <buildroot@buildroot.org>; Sun, 24 May 2026 17:46:48 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1beef.dip0.t-ipconnect.de [84.161.190.239])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3CA06A4C0E4C;
- Sun, 24 May 2026 19:46:46 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58586)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wRCuT-000000006cD-1soC;
- Sun, 24 May 2026 17:46:45 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 08sW3ML3xgEv for <buildroot@buildroot.org>;
+ Sun, 24 May 2026 17:47:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5104540F6E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5104540F6E
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 17:47:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1835086DB2; Sun, 24 May 2026 17:47:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Stefan Ott <stefan@ott.net>
-Date: Sun, 24 May 2026 19:46:45 +0200
-Message-ID: <20260524174645.3772462-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: -
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779644806;
- bh=lCeNi83K9NdUN4bDMhhmDmqYvkapou2heurHogC8NJQ=;
- h=From:To:Cc:Subject:Date:From;
- b=StobRZIyNs2R4q8Iwgdaw0k6SdLv/HUVSTmJk+bphh99WrwyM5trcHHZoQ62Mt8WD
- 7giblqvjKPuBhdzoU1GHV9+k733vF2L6/WyEWOo6stSUgRZADMmKHnZjle2IPUevQx
- wjklxH4vVvLzrlAdfwMRSVALZlXxZeTVvYXzwaBoK5ZRcrPEuKVwPmOxh6lnPGx1m2
- 8lqEo05HxRIVqrqcp2JB+BgmxNe19jKH/Gf7QgPzAGu+l9XLZwsV/Rt4+ft4AH44/j
- 8gvlZg44ywTo1+fV4qH0YWF7jk0WVhaF4VH2tSEuvGS1gBJaap4B9NtQQFRaPeqawH
- zHClfJYP4rypg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=StobRZIy
-Subject: [Buildroot] [PATCH 1/1] package/unbound: security bump version to
- 1.25.1
+Date: Sun, 24 May 2026 19:42:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7418ff13895be20ccdd6ad6d460e6dbf73727637
+X-Git-Newrev: 8181bc6e06b55965d39126bacfafa6e2bfb2cf55
+X-Patchwork-Hint: ignore
+Message-Id: <20260524174737.1835086DB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kexec: fix powerpc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,59 +68,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://nlnetlabs.nl/projects/unbound/download/
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8181bc6e06b55965d39126bacfafa6e2bfb2cf55
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Used new signing key to verify the source tarball:
-https://nlnetlabs.nl/signing-keys/
+Added two upstream commits to fix build errors on powerpc.
 
-Fixes CVE-2026-33278, CVE-2026-42944, CVE-2026-42959, CVE-2026-32792,
-CVE-2026-40622, CVE-2026-41292, CVE-2026-42534, CVE-2026-42923,
-CVE-2026-42960, CVE-2026-44390 and CVE-2026-44608.
+The build error also occurs with kexec 2.0.30 on the 2025.02.x branch
+so a backport to LTS branches should be considered:
+https://autobuild.buildroot.net/results/2ec/2ec0d85c658f8264fcc4eef2deb6c67671e3e7ae/
+
+Fixes:
+https://autobuild.buildroot.net/results/53b/53bafc454533aeafc21116a99d87391b3049e12a/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/unbound/unbound.hash | 8 ++++----
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...rpc-Fix-function-signature-of-comparefunc.patch | 42 +++++++++++++++++
+ ...declarations-in-read-memory_region_limits.patch | 54 ++++++++++++++++++++++
+ 2 files changed, 96 insertions(+)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 19966d889e..46b88900e6 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,8 +1,8 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
- # After checking pgp signature from:
--# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
--# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
--sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
-+# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
-+# with key: 231018690C4D903EF419146AA144323DEAACDF45
-+sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
- 
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index a702f4762d..589b286c26 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.24.2
-+UNBOUND_VERSION = 1.25.1
- UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
- UNBOUND_INSTALL_STAGING = YES
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
--- 
-2.47.3
-
+diff --git a/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
+new file mode 100644
+index 0000000000..809e91e939
+--- /dev/null
++++ b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
+@@ -0,0 +1,42 @@
++From b89799f7f20d4b2476e99e95e6795450f2f1c111 Mon Sep 17 00:00:00 2001
++From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
++Date: Wed, 22 Oct 2025 13:44:12 +0200
++Subject: kexec-tools: powerpc: Fix function signature of comparefunc()
++
++Fixes the following build error on 32-bit PowerPC:
++
++kexec/arch/ppc/fs2dt.c: In function 'putnode':
++kexec/arch/ppc/fs2dt.c:338:51: error: passing argument 4 of 'scandir' from incompatible pointer type [-Wincompatible-pointer-types]
++  338 |         numlist = scandir(pathname, &namelist, 0, comparefunc);
++      |                                                   ^~~~~~~~~~~
++      |                                                   |
++      |                                                   int (*)(const void *, const void *)
++
++Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
++Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
++Signed-off-by: Simon Horman <horms@kernel.org>
++
++Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=b89799f7f20d4b2476e99e95e6795450f2f1c111
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ kexec/arch/ppc/fs2dt.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/kexec/arch/ppc/fs2dt.c b/kexec/arch/ppc/fs2dt.c
++index fed499b..d03b995 100644
++--- a/kexec/arch/ppc/fs2dt.c
+++++ b/kexec/arch/ppc/fs2dt.c
++@@ -292,7 +292,8 @@ static void putprops(char *fn, struct dirent **nlist, int numlist)
++  * Compare function used to sort the device-tree directories
++  * This function will be passed to scandir.
++  */
++-static int comparefunc(const void *dentry1, const void *dentry2)
+++static int comparefunc(const struct dirent **dentry1,
+++		       const struct dirent **dentry2)
++ {
++ 	char *str1 = (*(struct dirent **)dentry1)->d_name;
++ 	char *str2 = (*(struct dirent **)dentry2)->d_name;
++-- 
++cgit 1.3-korg
++
+diff --git a/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
+new file mode 100644
+index 0000000000..ed6c7bb392
+--- /dev/null
++++ b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
+@@ -0,0 +1,54 @@
++From 8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6 Mon Sep 17 00:00:00 2001
++From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
++Date: Wed, 22 Oct 2025 13:44:13 +0200
++Subject: kexec-tools: powerpc: Fix pointer declarations in
++ read_memory_region_limits()
++
++Fixes the following two build errors on 32-bit PowerPC:
++
++kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
++kexec/arch/ppc/kexec-ppc.c:106:11: error: assignment to 'long long unsigned int *' from incompatible pointer type 'long unsigned int *' [-Wincompatible-pointer-types]
++  106 |         p = (unsigned long*)buf;
++      |           ^
++
++kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
++kexec/arch/ppc/kexec-ppc.c:112:19: error: assignment to 'long unsigned int *' from incompatible pointer type 'long long unsigned int *' [-Wincompatible-pointer-types]
++  112 |                 p = (unsigned long long *)p + 1;
++      |                   ^
++
++Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
++Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
++Signed-off-by: Simon Horman <horms@kernel.org>
++
++Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ kexec/arch/ppc/kexec-ppc.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/kexec/arch/ppc/kexec-ppc.c b/kexec/arch/ppc/kexec-ppc.c
++index d3dad0f..e173433 100644
++--- a/kexec/arch/ppc/kexec-ppc.c
+++++ b/kexec/arch/ppc/kexec-ppc.c
++@@ -91,7 +91,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
++ 				unsigned long long *end)
++ {
++ 	char buf[MAXBYTES];
++-	unsigned long *p;
+++	unsigned long long *p;
++ 	unsigned long nbytes = dt_address_cells + dt_size_cells;
++ 
++ 	if (lseek(fd, 0, SEEK_SET) == -1) {
++@@ -103,7 +103,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
++ 		return -1;
++ 	}
++ 
++-	p = (unsigned long*)buf;
+++	p = (unsigned long long*)buf;
++ 	if (dt_address_cells == sizeof(unsigned long)) {
++ 		*start = p[0];
++ 		p++;
++-- 
++cgit 1.3-korg
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
