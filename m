@@ -1,133 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CB44CD5BB1
-	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 17:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EAECCD5BAB
+	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 17:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1DD4607A5;
-	Sun, 24 May 2026 17:23:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D623C83ADB;
+	Sun, 24 May 2026 17:23:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z_-pAIo5uioq; Sun, 24 May 2026 17:23:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KLR75l6f5Mu; Sun, 24 May 2026 17:23:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF48B607BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E7583AE0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779643435;
-	bh=Ho+nkRu8itoAqgNdQFVI71HzrQ7hcsxQNC+hWXucNXQ=;
+	s=default; t=1779643436;
+	bh=fTNbD/md7ShhRc1QHLUU4Vut/aBzm9XG9T8SMkQoJaM=;
 	h=From:Date:References:In-Reply-To:To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JISYsdCeOeBLz5nMKPmzGGdQw0LMrMl8k8DemKWnjAxsP7+mrgv7/uEEQKfp/un29
-	 2KXtV2k9jorlmHadOHute4YzuDUTwehQ5YJzYh1NPQMUH48JIq425QhmRAJbhLlwLk
-	 h8effYJNJpa/50zodmeV2+ehrn1CtNaSlmRRMCWt2D88xgeDN4Wi8dRUtVDbdtIcdE
-	 gcc58rAUstl1OIaNoJNuE9MBRoFXBgLFw+FjwykX0zwcxRuvRh1SXJXa0NGsX9J0y9
-	 EUFNezbN9Zl1tcbsIsnC4bTOQn5pcE2I783GSi24xlTlu7cEWEYLRVjZ++Z5JCiiT+
-	 0NPQF2yTEZLAw==
+	b=S/FjAVPATbZtJ4jnvX6zVq/IQ9vLEIkWKBu2kCjQikIxqJlzKYHKAp2Ay4TQ053DT
+	 cTCXAsS8ygqNnCiYjdVA29Rsdzn4d0l7ZjepIpZXmFpcLpp016olWJI0OvTnZsmbst
+	 3DM4k+IPSSF5nOtUHQcTdNSoEMJWV/rh7tkXZzax3bDNi6zLHanBAoKH+CBo9aBW7Z
+	 Ej8uXOVl65hofvoyHEeh3lItbcjWeY1QQJO1fCJ3MD6GoYJNCrEbuIwGPEfamj3WOr
+	 IUjwoTteBFPKQ1fIHh5VxlMW+ZmheLHc1i4rp7oaKu7kVmruszN3UEcm6gGdn921LZ
+	 MNXtqn+xUyvcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF48B607BB;
-	Sun, 24 May 2026 17:23:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E91D69
- for <buildroot@buildroot.org>; Sun, 24 May 2026 17:23:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1E7583AE0;
+	Sun, 24 May 2026 17:23:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18499263
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 17:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3459640C33
+ by smtp1.osuosl.org (Postfix) with ESMTP id F264C83AE0
  for <buildroot@buildroot.org>; Sun, 24 May 2026 17:23:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id chOC-usC4sN1 for <buildroot@buildroot.org>;
- Sun, 24 May 2026 17:23:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uToA8FVSM82n for <buildroot@buildroot.org>;
+ Sun, 24 May 2026 17:23:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=obbardc@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E7C1240C2A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7C1240C2A
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E7C1240C2A
- for <buildroot@buildroot.org>; Sun, 24 May 2026 17:23:51 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-44b330c5cc6so6787523f8f.1
- for <buildroot@buildroot.org>; Sun, 24 May 2026 10:23:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B975583ADB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B975583ADB
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B975583ADB
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 17:23:52 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4906238c62eso3102895e9.3
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 10:23:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779643430; x=1780248230;
+ d=1e100.net; s=20251104; t=1779643431; x=1780248231;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=3MDIXdamq/INvrgxYJ/0iRelPffiY0N2MAeFiy/Px9E=;
- b=C6XLtSSuHeZbPrI0KfqPpL2CB2dIUIX3mKprQNjWZ77F7EtVhG+2PlJEO9LOIKgaQi
- adx4TJF9PyCnZ2k+VX4h3RQ5SQJTnwfxVqW/36PwXmwAqmk1507z/3m6gBxBOmgzXqF/
- JQQO4A+fUo1yIB445Ss9ONYftrHNUmqYuQNiQrqTle98gvVaBPbEPidaS3Tpxcogn+QO
- nR1dWscL9z7SJN0xoQ1hcB3wRiFSwHunCDyhLk733mZDN8ejuqP/OwSUMkmD9PcKMC4b
- DPRahgnTZTMgx+2tz8BaFMpTfl8e2Di2RxiVBVAap6nNQ2Ep2KRJYspFmcNU8ZHp5JCP
- U9fg==
-X-Gm-Message-State: AOJu0YzyBYmHqo/DLR1dZzYsLaKnjNKCTWvqP2cUmtayo1nPxCaemrJo
- TRflU5/mkJjc6pCN2KHsGLkx4kPIN6LmrXpWy8Dfmm/L+rkmf0Fawt45
-X-Gm-Gg: Acq92OGwauVdgafE326bwaDAmDl7Oj8C2YwwjxzSXiIdgWmeg7YVbND1lNgCYmr7+YX
- JIMP68B4xNLXfZ9mTf6IdsASsqVCeCpO9pZAcbs1eiQuBPiVU1v47o33Gb9GIoqftgLO6Qx06qq
- dmVs9pgMsKN9q8sQu08ccZ8GbxZHYcQGieh9cOSKKY9quWCC35E/s6uPxBOi5e1aRrNUX4YEowZ
- lre34oWxgbTv1Z0YXcZtMC7TYG+DP+N0yRf74XNiRHz9lOhZj4k9adRGr+4E0LNZcXzTQ4243YY
- DAAhMstwUoF2sDipPZow8h9/Mlpl5f7DfDytbgb0Sa806R28mPP94RrOMuP4TiOBm+oqmH+JZ6C
- 1mCSz/8z9E7qUvqLP0Pb0DCVrfdowV5Gwl3zEL2aZL35o3qaA7IlpJwH94e75GNPE5XednH1Cxi
- 9eeerxYfQsy1NkdZ4wQipXxAORE4Qr1JQEirq9LHmt8HVsQdB9fNgV/1Eyl2kglSwA5/8mniHld
- TniDGWy2OmcQI8+QQoOSw7/I7I4c9UqeRWx2WsyJD+RtH91KCHqDodBWwU3mVNtkTQW5SFqeTem
- FD5jBeN1sEPH7l2Zmyz9cT3CiAPTSJhm8j7C1KMRq7aMTd51lmRC0qcWjuB1Idsd6KR4+w==
-X-Received: by 2002:a5d:64e1:0:b0:43d:7d24:b510 with SMTP id
- ffacd0b85a97d-45eb38af491mr19695320f8f.22.1779643429609; 
- Sun, 24 May 2026 10:23:49 -0700 (PDT)
+ bh=BI75Q6taNePf7X1+5s60mX6citQoGcX+D/+4tN0hMaA=;
+ b=qlH0aoc2OPyNQNgiY+rdY+G9uEAGiD8AMBMuMLydiAI6vsD+AVTziSIlpV7NkE9JVk
+ yvKRZn1ZC7KNlYtrqLmft/3n6hfCi7flhiuwprfFrW6OOfalSiteV6CNSWY6o1GhRmOX
+ i3mN1iq/LO5IME4Hi73FgeUZ6DZE0GRhoDClBS10FkWlNQULGFTAeoiA99i3SLo0bDpy
+ VpCWXMBMRpumCVr32KJe9CHZZ5GrdboAO4Ozjcr+eU/zM5lmWTizlxEt99A/mKlM2aYa
+ MIuUqwMxeb56DqhuNbZJasJaYWjAsk8oijVdM1r0W3cYo+8LxdUcapxyiNWrtF75kIVy
+ zm4Q==
+X-Gm-Message-State: AOJu0YzO9aDFG5j6IrgXkxekTj3iaFBy/J2LsIXCprYIklHj1ZBf67Wa
+ +pYPkUOc3dv5ZdkX4I72oMlTN098ryr/iFxurFwLZ4aQAVnUF2Jryb/o
+X-Gm-Gg: Acq92OHYAyYhANTa3PMQ0+x9BDDLC5FGiGi0ox5pGObU6VRHeQf737as+Y07s5TBEPs
+ c25x9ICxdFlTJHrXuLSMCJGlUVLgetH5+xWgpxyKUreBXNZCrC1Yvh0YArs/vYGAcs5hoctWwG9
+ sBjUBIFDmaK3qpMAJE6aeykybLdXe8awC3ySLg1mBre8pOl/q6cnfX3m3cY3IaYEY367dmhtGsz
+ ft4YL4pJPoCOhKoIPnUeUDAVHDw8k4XYNbzUF+im5P81Wxazu7opKDQAWHw9wKLQsrO/IS59Jr9
+ 3HAgCzObiUavqRsOhhlyT4i+B5DVzhX+8XJpsSVi9LwyHcm9tWT7OX7rIWMNAioM2OEwA3bTJR6
+ sFJ2jC341yW4jIdydNM9/Z3hlASt+T+Cr4fwstd2TqcJXcG7OVJbzJfpkaWYqwbw3TJvFuleAct
+ wschtIxsK9v0WADJNrKqnCFagxnZZTnVgihDZvOff65EcYOxOObM6Zz8lr6LSbGky9KJcyRw/WQ
+ 7p2pYCQ26o5u2wajwsqqF2xCcGVV4i+y2iYYgj0Nk8ooOcg5TWAit3KjDQbUD+oElBqqqdYI7Ms
+ NsUDunXVb4SFKrl6AC1mFbkDD7ZUWhIGO6Dq4GzHGQ2wTQHJGjx8sJDxm6ngKtcsC3Zfkg==
+X-Received: by 2002:a05:600c:6995:b0:490:482c:4384 with SMTP id
+ 5b1f17b1804b1-490482c44ddmr175545815e9.24.1779643430610; 
+ Sun, 24 May 2026 10:23:50 -0700 (PDT)
 Received: from localhost (host86-170-11-80.range86-170.btcentralplus.com.
  [86.170.11.80]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45eb6bc5479sm22396022f8f.0.2026.05.24.10.23.48
+ 5b1f17b1804b1-490454b1ab3sm217005775e9.14.2026.05.24.10.23.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 May 2026 10:23:48 -0700 (PDT)
+ Sun, 24 May 2026 10:23:50 -0700 (PDT)
 From: Christopher Obbard <obbardc@gmail.com>
-Date: Sun, 24 May 2026 18:23:38 +0100
+Date: Sun, 24 May 2026 18:23:39 +0100
 MIME-Version: 1.0
-Message-Id: <20260524-wip-obbardc-boot-efibootguard-initial-pkg-v3-1-47fc8262591b@gmail.com>
+Message-Id: <20260524-wip-obbardc-boot-efibootguard-initial-pkg-v3-2-47fc8262591b@gmail.com>
 References: <20260524-wip-obbardc-boot-efibootguard-initial-pkg-v3-0-47fc8262591b@gmail.com>
 In-Reply-To: <20260524-wip-obbardc-boot-efibootguard-initial-pkg-v3-0-47fc8262591b@gmail.com>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6243; i=obbardc@gmail.com;
- h=from:subject:message-id; bh=AUvvGp3sq+H8m4pBqRHVWMZkzeX6Jpp1JoPBUKDveP8=;
- b=owEBbQKS/ZANAwAKAWNNxPBocEb4AcsmYgBqEzQiLm6Pv9Gw/J93qOI1uP5XxRaSWils1hOkH
- k6KLMS34U6JAjMEAAEKAB0WIQTxi9yLbCX5CqI9UXRjTcTwaHBG+AUCahM0IgAKCRBjTcTwaHBG
- +FEgD/sGZTIQEhmvoH1VxCAg8ixKYpn2+2YxyqWexUJhiH/pIY6YMRH8I/blFYmT1/ncR633kUJ
- YhATk9eJGcGB7BC6A5KkwB6lv7e0QO/Fdz9VrPVbvvg1z/3bmpJEJkarcWN7qdwsy1lgswjvSG7
- NsK1KvAKNpJOY9lYMGALIasOOSW1DWP+2y8s/TSAzNu+WXIZngAGxaeZvFiy2vO+Y8ywy2f/5un
- ZMC+fEivj3ruxkT1klGRR50d0p+FuorPTpTT/hnPt4e70n3iBptIbZo1Bw0f1OmgLq53aID55eC
- xoYuIr5ymIaj44W56KytDj223pXkfkjOfH4uCCF+lKxVXQxUcMumUWYbNsRJh6cyby/0zyKRmrL
- EljOSqemzPo/FKzOKPVvCqFqypkZFaO1BhVCYyGJ9OiNn5F9jBy+Zzt1MtDh+Ih4i9R1ya9ClV7
- +F6AC4mlT/IuAqn+4Bq51wbGBHBhC6Nz0krQGLPuRVOyiVrr9MQ796ksj/v1ekQcgBM7BYaIfw2
- QMcdjNviQpjTpi77ZbG3uTJVwHXrgQckKLrJwKMcp9OQgb8exBj063rIqfXl9b+Q2liRVG4HkLc
- cMbkjW7ietdsEXOrN8TW2Xa/oVc0vfUfHtDWqqSBJafpMynaAYZbW9iU0pqKxOozj0yeof591Me
- CDlF0XJGze3CCjw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11230; i=obbardc@gmail.com;
+ h=from:subject:message-id; bh=sD4eimSQ5/XLuZI68iL4I4yejgEJVyzpKbtKn3jI0tk=;
+ b=owEBbQKS/ZANAwAKAWNNxPBocEb4AcsmYgBqEzQjr2nVe9sOOzGetRa53gfaqJ47I2YXrnLRz
+ wQggsk4rwuJAjMEAAEKAB0WIQTxi9yLbCX5CqI9UXRjTcTwaHBG+AUCahM0IwAKCRBjTcTwaHBG
+ +BTTD/9ImejE+9irAQpyBcDkdrQiEXYmf61GrFVl7/NdzAAywk3axO+p6WK8dTyMtAQ56WAEwXH
+ RCsegrp0IioFkEudz9RS6xyAAGTBB7neyggBKGj8c++PUFnY4QsYoMno8Y55qvWPraqaTH9C3sD
+ AgKWbbuFlr59eZZq5AcJThciB741tkqnCy1pchsqqRH1O1Ncqv6hnsrHVfnF9zJLO6+Kr/BG5AB
+ QHl/gK6ozYZwYpsyGHs2UkbuBFEiVfCJy2QbNWewunVDBLUJKF59d7SFoVL4bAluS3BzO3ZC+Jj
+ SLZo3677D/2p13EDXEwZC3NTemkdpmdzefe9fwQ6v+GmD4jo9Gv2JJ68v/sQdaRfTZfuE+9A/tN
+ U+y8iIEmxr9tY7EJKLFtaD4naa8I7PK12yoGqjAqN6IYIFdE0nj/AWok659UB0V1kKTKScqjYGR
+ R0bSmOhaYe5yowH/2BsuiIPnfURg8IL7CNabyMdP2klcLGzTSqvXkw2hG90DKqXxpDaPMl0ASy7
+ Y2nmv0RD//lpKW3APBzlFVj7m4jreTxsftXQei9OQnKGqyVf1y3yBcGvXVxruGEGLISuRtv8uS7
+ fNHic3Rlm/dG3BVFvNqyJPrng+SBm5mtZ20mEybmVhKj1xx9Bw5n7ZiaZjwDMttLvlV9vnTDey1
+ GOSASuxBE9g0FZA==
 X-Developer-Key: i=obbardc@gmail.com; a=openpgp;
  fpr=F18BDC8B6C25F90AA23D5174634DC4F0687046F8
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779643430; x=1780248230; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1779643431; x=1780248231; darn=buildroot.org;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3MDIXdamq/INvrgxYJ/0iRelPffiY0N2MAeFiy/Px9E=;
- b=H6QGZ3BSdJkgaARDVdvGum3aN05JPNh6YequBTLYA+tLoKcLQiDi+JZOrTn5i9zM08
- FC7ckrlxSSkqRyMCN1AfwEAQUna6ADEQI0bekNRB7GRc224DjgCNR/jmLtVU1ZbrtajS
- HGx0DCF+yiEb2uLuEjTJXcVbg7uicNtgkDssaQTlKLaQdLIUisGoRnsIIqFw5wJIr85W
- Dgk3T8YbdEEja4cnkIoQ9YgGOVEnSNUbSTm8lRaSJ99oEAUh3a9pb3EL+65iOe+rI9AK
- pQBNTiwOK1riRexSJn/7SBl6ZO0pk9RxX7DyO5L7OJeK4GhCZ1TUCfxVaZ6ldBdXrMaR
- 9wDg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=BI75Q6taNePf7X1+5s60mX6citQoGcX+D/+4tN0hMaA=;
+ b=ZinUCA6+gVJPb0CD+L3Ko9W5FwHXxxubOBOrb35VWwBAmjnmZIq91RyB0OQlQfzujv
+ /HB3s/fqfY3xA5jtGI3SYH1maOFTKXz/io3b+I7ywX4YKN1AmcVKhGvlVJ1X8Di7+wII
+ k581TXks3diCbgucPYp5vul56WX7XLIl0ynqBiFxiGJCOKC/bMJrUwM27ZRjoHP+D4rO
+ /3j1P+jLCepMzm7Aq8D47WXqo5l7mqlZBDN5hvXDg1yQlSK+iQL77rG2GgXaXLDhong1
+ 5uIr3H7k5YB05lG/HqsQmq9gR/+WBW9A4fDoHbqXomVJbGkHwY4mGZIkxQL5snfvfcJl
+ BpjQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=H6QGZ3BS
-Subject: [Buildroot] [PATCH v3 1/2] boot/efibootguard: new boot package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=ZinUCA6+
+Subject: [Buildroot] [PATCH v3 2/2] board/pc-efibootguard: add example EFI
+ Boot Guard recipe
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,189 +147,353 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a new boot package to Buildroot to build the
-EFI Boot Guard bootloader from the https://github.com/siemens/efibootguard
-repository.
+Add an example recipe (based on configs/pc_x86_64_efi_defconfig) to
+generate an x86-64 image which boots the system using the EFI Boot Guard
+bootloader. The recipe is an example of how to create an image using
+EFI Boot Guard, including how to create the disk image & how to configure
+the bootloader.
 
-EFI Boot Guard can be chainloaded as an EFI application or used as a
-standalone bootloader and can be useful when booting A/B systems.
+The created example image contains two boot slots; one of which contains
+the environment built by Buildroot and the other is an empty, dummy slot
+(e.g. cannot be booted from).
 
-Add a recipe to build the EFI bootloader application, user-space
-tooling & host tooling (both of which are used to manage EFI Boot Guard
-configuration).
+EFI Boot Guard provides a tool for generating UKI images, which can then
+be signed for Secure Boot. For simplicity, this is not enabled in the
+example recipe.
 
-EFI Boot Guard can be built for multiple architectures, but this initial
-patch only builds the EFI bootloader for x86_64.
+Also add instructions (and a script) to boot the example image in QEMU.
 
 Signed-off-by: Christopher Obbard <obbardc@gmail.com>
 ---
- DEVELOPERS                          |  3 ++
- boot/Config.in                      |  2 ++
- boot/efibootguard/Config.in         | 37 +++++++++++++++++++++++
- boot/efibootguard/Config.in.host    |  8 +++++
- boot/efibootguard/efibootguard.hash |  3 ++
- boot/efibootguard/efibootguard.mk   | 60 +++++++++++++++++++++++++++++++++++++
- 6 files changed, 113 insertions(+)
+ DEVELOPERS                               |  2 +
+ board/pc-efibootguard/README.md          | 89 ++++++++++++++++++++++++++++++++
+ board/pc-efibootguard/genimage.cfg       | 59 +++++++++++++++++++++
+ board/pc-efibootguard/linux.fragment     | 15 ++++++
+ board/pc-efibootguard/post-build.sh      | 33 ++++++++++++
+ board/pc-efibootguard/post-image.sh      |  7 +++
+ board/pc-efibootguard/run-image-qemu.sh  |  9 ++++
+ configs/pc_x86_64_efibootguard_defconfig | 51 ++++++++++++++++++
+ 8 files changed, 265 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 125e7f8248..246b1aa44e 100644
+index 246b1aa44e..ddc71d9639 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -703,6 +703,9 @@ F:	package/perl-sys-mmap/
- F:	package/perl-time-parsedate/
+@@ -704,7 +704,9 @@ F:	package/perl-time-parsedate/
  F:	package/perl-x10/
  
-+N:	Christopher Obbard <obbardc@gmail.com>
-+F:	boot/efibootguard/
-+
+ N:	Christopher Obbard <obbardc@gmail.com>
++F:	board/pc-efibootguard/
+ F:	boot/efibootguard/
++F:	configs/pc_x86_64_efibootguard_defconfig
+ 
  N:	Colin Foster <colin.foster@in-advantage.com>
  F:	package/python-tftpy/
- F:	package/rauc-hawkbit-updater/
-diff --git a/boot/Config.in b/boot/Config.in
-index d73d221431..8e6dc7a5cc 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -15,6 +15,8 @@ source "boot/barebox/Config.in"
- source "boot/binaries-marvell/Config.in"
- source "boot/boot-wrapper-aarch64/Config.in"
- source "boot/edk2/Config.in"
-+source "boot/efibootguard/Config.in"
-+source "boot/efibootguard/Config.in.host"
- source "boot/grub2/Config.in"
- source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
-diff --git a/boot/efibootguard/Config.in b/boot/efibootguard/Config.in
+diff --git a/board/pc-efibootguard/README.md b/board/pc-efibootguard/README.md
 new file mode 100644
-index 0000000000..47fd478e8b
+index 0000000000..1bbeff4c48
 --- /dev/null
-+++ b/boot/efibootguard/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_TARGET_EFIBOOTGUARD_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_x86_64
-+	depends on BR2_USE_MMU
++++ b/board/pc-efibootguard/README.md
+@@ -0,0 +1,89 @@
++# EFI Boot Guard Example Recipe
 +
-+config BR2_TARGET_EFIBOOTGUARD
-+	bool "efibootguard"
-+	depends on BR2_TARGET_EFIBOOTGUARD_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GNU_EFI
-+	select BR2_PACKAGE_PCIUTILS if BR2_TARGET_EFIBOOTGUARD_INSTALL_TOOLS
-+	help
-+	  EFI Boot Guard is a UEFI bootloader intended for robust
-+	  A/B style updates. It arms a hardware watchdog before
-+	  handing over control to the OS and supports a fail-safe
-+	  boot mechanism to roll back if a boot attempt fails.
++This recipe creates a basic x86 disk image using [EFI Boot Guard](https://github.com/siemens/efibootguard/tree/master)
++as the bootloader with two root filesystem slots.
 +
-+	  https://github.com/siemens/efibootguard
++The image is intended to demonstrate a typical A/B boot layout. The first slot is
++populated with the root filesystem generated as part of the Buildroot build,
++while the second slot is left empty so that it can be used later by an update
++tool, which is out-of-scope for this example recipe.
 +
-+if BR2_TARGET_EFIBOOTGUARD
++The recipe also creates the EFI system partition and installs the EFI Boot Guard
++bootloader components needed to select and boot one of the available slots. Each
++slot has its own EFI Boot Guard environment, containing the kernel image and
++configuration.
 +
-+config BR2_TARGET_EFIBOOTGUARD_X86_64
-+	bool "x86-64"
-+	depends on BR2_x86_64
-+	help
-+	  Select this option if the platform you're targeting has a
-+	  64 bits EFI BIOS.
++This example is deliberately minimal. It is intended as a reference for users who
++want to integrate EFI Boot Guard into their own platform-specific images, rather
++than as a complete production-ready update setup.
 +
-+config BR2_TARGET_EFIBOOTGUARD_INSTALL_TOOLS
-+	bool "install tools"
-+	help
-+	  Install the efibootguard user-space tools (e.g.
-+	  bg_printenv and bg_setenv) on the target. These tools
-+	  allow reading and updating efibootguard's configuration
-+	  in user-space.
++This recipe was designed to be ran in QEMU and may need additional changes to run
++on real hardware.
 +
-+endif # BR2_TARGET_EFIBOOTGUARD
-diff --git a/boot/efibootguard/Config.in.host b/boot/efibootguard/Config.in.host
++
++## Build the image
++
++Configure Buildroot with:
++
++```
++$ make pc_x86_64_efibootguard_defconfig
++```
++
++
++Build the image with:
++
++```
++$ make
++```
++
++The raw disk image is available under `output/images/disk.img`.
++
++
++## Emulation in QEMU
++
++Emulate the system in QEMU with:
++
++```
++$ qemu-system-x86_64 \
++    -M pc \
++    -drive if=pflash,format=raw,readonly=on,file=</path/to/OVMF_CODE.fd> \
++    -drive file=output/images/disk.img,if=virtio,format=raw \
++    -boot menu=on \
++    -net nic,model=virtio \
++    -net user
++```
++
++Note that `</path/to/OVMF.fd>` needs to point to a valid x86_64 UEFI
++firmware image for qemu. It may be provided by your distribution as a
++edk2 or OVMF package, in a path such as `/usr/share/OVMF/OVMF_CODE_4M.fd` in
++Debian.
++
++
++## EFI Boot Guard userspace tools
++
++The example image includes the EFI Boot Guard userspace tools. These can be used
++to inspect and update the boot metadata stored in each slot environment.
++
++`bg_printenv` prints the current EFI Boot Guard boot configuration:
++
++```
++# bg_printenv
++```
++
++`bg_setenv` updates the state and revision of a slot. For example, the following
++commands initialise both slots and prefers booting from slot `0`:
++
++```
++# bg_setenv --part 0 --ustate OK --revision 1
++# bg_setenv --part 1 --ustate OK --revision 0
++```
++
++In this example, both slots are marked as usable, but slot `0` has the higher
++revision. EFI Boot Guard will therefore select it before slot `1`.
++
++For more information on configuring EFI Boot Guard, see the
++[upstream documentation](https://github.com/siemens/efibootguard/blob/master/README.md).
++
++An update framework (such as RAUC) can use these tools to switch the preferred
++boot slot after installing an update and to mark a slot as failed if the updated
++system does not boot successfully.
+diff --git a/board/pc-efibootguard/genimage.cfg b/board/pc-efibootguard/genimage.cfg
 new file mode 100644
-index 0000000000..845c14c079
+index 0000000000..2437a89b63
 --- /dev/null
-+++ b/boot/efibootguard/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_TARGET_HOST_EFIBOOTGUARD
-+	bool "host efibootguard"
-+	help
-+	  Build efibootguard companion tools for the host. These
-+	  can be used during image creation to inspect and
-+	  modify the efibootguard configuration data.
++++ b/board/pc-efibootguard/genimage.cfg
+@@ -0,0 +1,59 @@
++image EFI.vfat {
++	vfat {
++		file EFI/BOOT/BOOTX64.EFI {
++			image = "efibootguard/efibootguardx64.efi"
++		}
++	}
 +
-+	  https://github.com/siemens/efibootguard
-diff --git a/boot/efibootguard/efibootguard.hash b/boot/efibootguard/efibootguard.hash
++	size = 16352K # 16MB - 32KB
++}
++
++image boot-a.vfat {
++	vfat {}
++
++	size = 128M
++	srcpath = "output/images/boot-a-part"
++}
++
++# # boot-b is a placeholder
++image boot-b.vfat {
++	vfat {}
++
++	size = 128M
++	srcpath = "output/images/boot-b-part"
++}
++
++image disk.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	partition EFI {
++		image = "EFI.vfat"
++		partition-type-uuid = esp
++		offset = 32K
++		bootable = true
++	}
++
++	partition boot-a {
++		partition-type-uuid = fat32
++		image = "boot-a.vfat"
++	}
++
++	partition boot-b {
++		partition-type-uuid = fat32
++		image = "boot-b.vfat"
++	}
++
++	partition system-a {
++		partition-type-uuid = root-x86-64
++		image = "rootfs.ext4"
++		size = 2G
++	}
++
++	# system-b is a placeholder
++	partition system-b {
++		partition-type-uuid = root-x86-64
++		size = 2G
++	}
++}
+diff --git a/board/pc-efibootguard/linux.fragment b/board/pc-efibootguard/linux.fragment
 new file mode 100644
-index 0000000000..6f5a5cf25c
+index 0000000000..f9f2c3fd06
 --- /dev/null
-+++ b/boot/efibootguard/efibootguard.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  6c68c541311dcc8c2be0042f7887acc2a24d2ac68a88d426380fdbda9f476ae8  efibootguard-0.22.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/boot/efibootguard/efibootguard.mk b/boot/efibootguard/efibootguard.mk
++++ b/board/pc-efibootguard/linux.fragment
+@@ -0,0 +1,15 @@
++# efistub
++CONFIG_EFI=y
++CONFIG_EFI_STUB=y
++CONFIG_EFIVAR_FS=y
++CONFIG_EFI_PARTITION=y
++
++# efibootguard tools (bg_printenv / bg_setenv) use fat partition
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_EFI_PARTITION=y
++CONFIG_FAT_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_NLS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
+diff --git a/board/pc-efibootguard/post-build.sh b/board/pc-efibootguard/post-build.sh
+new file mode 100755
+index 0000000000..4f3e3254d8
+--- /dev/null
++++ b/board/pc-efibootguard/post-build.sh
+@@ -0,0 +1,33 @@
++#!/bin/sh
++
++set -e
++
++# Kernel cmdline to append
++KERNEL_CMDLINE=""
++
++# Create efibootguard boot-a slot configuration
++mkdir -p "${BINARIES_DIR}"/boot-a-part
++printf "boot-a" | iconv -f ascii -t UTF-16LE > "${BINARIES_DIR}"/boot-a-part/EFILABEL
++"${HOST_DIR}"/bin/bg_setenv \
++    --verbose \
++    --watchdog=0 \
++    --filepath="${BINARIES_DIR}"/boot-a-part/BGENV.DAT \
++    --revision=2 \
++    --ustate=OK \
++    --kernel="C:boot-a:bzImage" \
++    --args="root=PARTLABEL=system-a $KERNEL_CMDLINE"
++
++# Create efibootguard boot-a slot configuration (unbootable)
++mkdir -p "${BINARIES_DIR}"/boot-b-part
++printf "boot-b" | iconv -f ascii -t UTF-16LE > "${BINARIES_DIR}"/boot-b-part/EFILABEL
++"${HOST_DIR}"/bin/bg_setenv \
++    --verbose \
++    --watchdog=0 \
++    --filepath="${BINARIES_DIR}"/boot-b-part/BGENV.DAT \
++    --revision=1 \
++    --ustate=FAILED \
++    --kernel="C:boot-b:bzImage" \
++    --args="root=PARTLABEL=system-b $KERNEL_CMDLINE"
++
++# Copy kernel into boot-a.
++cp "${BINARIES_DIR}"/bzImage "${BINARIES_DIR}"/boot-a-part/
+diff --git a/board/pc-efibootguard/post-image.sh b/board/pc-efibootguard/post-image.sh
+new file mode 100755
+index 0000000000..eec88f707d
+--- /dev/null
++++ b/board/pc-efibootguard/post-image.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++
++set -e
++
++UUID=$(dumpe2fs "$BINARIES_DIR/rootfs.ext2" 2>/dev/null | sed -n 's/^Filesystem UUID: *\(.*\)/\1/p')
++sed "s/UUID_TMP/$UUID/g" board/pc-efibootguard/genimage.cfg > "$BINARIES_DIR/genimage.cfg"
++support/scripts/genimage.sh -c "$BINARIES_DIR/genimage.cfg"
+diff --git a/board/pc-efibootguard/run-image-qemu.sh b/board/pc-efibootguard/run-image-qemu.sh
+new file mode 100755
+index 0000000000..32be727c3e
+--- /dev/null
++++ b/board/pc-efibootguard/run-image-qemu.sh
+@@ -0,0 +1,9 @@
++#!/bin/sh
++
++qemu-system-x86_64 \
++  -M pc \
++  -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \
++  -drive file=output/images/disk.img,if=virtio,format=raw \
++  -boot menu=on \
++  -net nic,model=virtio \
++  -net user
+diff --git a/configs/pc_x86_64_efibootguard_defconfig b/configs/pc_x86_64_efibootguard_defconfig
 new file mode 100644
-index 0000000000..c40cef13ac
+index 0000000000..7220b2d7ce
 --- /dev/null
-+++ b/boot/efibootguard/efibootguard.mk
-@@ -0,0 +1,60 @@
-+################################################################################
-+#
-+# efibootguard
-+#
-+################################################################################
-+
-+EFIBOOTGUARD_VERSION = 0.22
-+EFIBOOTGUARD_SITE = $(call github,siemens,efibootguard,refs/tags/v$(EFIBOOTGUARD_VERSION))
-+EFIBOOTGUARD_LICENSE = GPL-2.0-only
-+EFIBOOTGUARD_LICENSE_FILES = COPYING
-+
-+EFIBOOTGUARD_DEPENDENCIES = \
-+	gnu-efi \
-+	host-autoconf-archive
-+
-+ifeq ($(BR2_TARGET_EFIBOOTGUARD_INSTALL_TOOLS),y)
-+EFIBOOTGUARD_DEPENDENCIES += pciutils
-+EFIBOOTGUARD_INSTALL_TARGET = YES
-+else
-+EFIBOOTGUARD_INSTALL_TARGET = NO
-+endif
-+
-+EFIBOOTGUARD_INSTALL_IMAGES = YES
-+
-+EFIBOOTGUARD_AUTORECONF = YES
-+
-+EFIBOOTGUARD_AUTORECONF_OPTS = \
-+	-I $(HOST_DIR)/share/autoconf-archive
-+
-+EFIBOOTGUARD_CONF_OPTS = \
-+	--with-gnuefi-sys-dir=$(STAGING_DIR) \
-+	--with-gnuefi-include-dir=$(STAGING_DIR)/usr/include/efi \
-+	--with-gnuefi-lib-dir=$(STAGING_DIR)/usr/lib \
-+	--disable-completion \
-+	--disable-tests
-+
-+# TODO: Perhaps take inspiration from Debian patch https://salsa.debian.org/debian/efibootguard/-/blob/master/debian/patches/always-override-stack-protector-variables-in-EFI-bui.patch?ref_type=heads
-+EFIBOOTGUARD_CONF_ENV = \
-+	LDFLAGS="$(LDFLAGS) -no-pie"
-+
-+define EFIBOOTGUARD_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -d $(BINARIES_DIR)/efibootguard
-+	$(INSTALL) -m 0644 $(@D)/efibootguardx64.efi $(BINARIES_DIR)/efibootguard/
-+endef
-+
-+HOST_EFIBOOTGUARD_DEPENDENCIES = \
-+	host-autoconf-archive
-+
-+HOST_EFIBOOTGUARD_AUTORECONF = YES
-+
-+HOST_EFIBOOTGUARD_AUTORECONF_OPTS = \
-+	-I $(HOST_DIR)/share/autoconf-archive
-+
-+HOST_EFIBOOTGUARD_CONF_OPTS = \
-+	--disable-bootloader \
-+	--disable-completion \
-+	--disable-tests
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++++ b/configs/pc_x86_64_efibootguard_defconfig
+@@ -0,0 +1,51 @@
++BR2_x86_64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/pc/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc-efibootguard/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc-efibootguard/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc-efibootguard/linux.fragment"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=y
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
++BR2_PACKAGE_ACPID=y
++BR2_PACKAGE_CONNMAN=y
++BR2_PACKAGE_CONNMAN_WIFI=y
++BR2_PACKAGE_CONNMAN_CLIENT=y
++BR2_PACKAGE_WIRELESS_REGDB=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_EFIBOOTGUARD=y
++BR2_TARGET_EFIBOOTGUARD_X86_64=y
++BR2_TARGET_EFIBOOTGUARD_INSTALL_TOOLS=y
++BR2_TARGET_HOST_EFIBOOTGUARD=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 
 -- 
 2.53.0
