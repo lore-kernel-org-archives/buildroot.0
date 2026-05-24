@@ -1,63 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2DD3CD5BAB
-	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 19:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7375FCD5BB1
+	for <buildroot@archiver.kernel.org>; Sun, 24 May 2026 19:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6927540895;
-	Sun, 24 May 2026 19:44:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42DA183BC4;
+	Sun, 24 May 2026 19:44:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vykYsM2NBR6f; Sun, 24 May 2026 19:44:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Olf1_dW3AUa5; Sun, 24 May 2026 19:44:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B896406AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E08583B7D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779651852;
-	bh=hzKS37BTGxUONb1UWpb6gz4ZRyMmiriQXm7UKEfTB0U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YaUkiQ4kKveYFZYzglMCxPV1g4/O8wdPfgaaPylxhuNL7S/oY50pPjMCGyhB7t6Bl
-	 MYY77ke1qit3LumS7w60CLpKMdx3T1VengejOo22JchYjsapWsFKiZIkZjVkHu4HWU
-	 PBnJdcmo2t3ijdvQ9C7TbCLXrUYZikXslMaNNjIeBghApPbgVxjUPNmg+Reugj8IkL
-	 MrkLlAXczeZgqTMHvSGGJpPyGVWKULSpraYYEAm2P76JfdMI8Ta26mKU7L9wAQ/5OL
-	 Sjw1SG1/O0WDlvUftwftuRCTXoaAB/NTiThckai+Akd1DR4RqEuygf2oZyfcsDn0/e
-	 Aa6+y2r+Wvr1g==
+	s=default; t=1779651886;
+	bh=T82K2lB5qT1DTqPXwlMiKRax4Woe+z101R8BD1bFZ4M=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Zrqbc6ry52ViEeMIcSJYlCdrJi5/Qk8QW5GtjNc4KqOo8yQGfx+l35+l5lJtPz4bM
+	 mBUoUKAwBSV/j3ZyRZh4z777QtoJVpxzKwkDKLTVzeIjK0Laxh+DfdgBafYKaHfRoT
+	 CZFh8e+m3uY2IqbF+5S7VRrsv/tghiSFXMM7sl+QllaFZTsUXzCrQmpqz9tr7pOHCT
+	 o2KDdlQbD2NKdMBm9JMphHhjaOcsklZhZDRaKA+E2hCLxz/c23L1NfOGRFvjgrz8lQ
+	 mZHPw1X5hyaVHLpF1509won/8COLu92ZVjM+Zq7umm9uySchCNMKi5nSc12+YdywtO
+	 GrTxRuemRGKOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B896406AF;
-	Sun, 24 May 2026 19:44:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5098F263
- for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E08583B7D;
+	Sun, 24 May 2026 19:44:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC169265
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EE3E4065C
- for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D9DC404CE
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6vOSilysY_Iw for <buildroot@buildroot.org>;
- Sun, 24 May 2026 19:44:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E2BE406AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E2BE406AF
- for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F195A86E3B; Sun, 24 May 2026 19:43:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 May 2026 20:10:54 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c9e5b93f78228c9bcaa210eaa99332000c9bf86d
-X-Git-Newrev: 2d78ca8ad60e0988762f9b91e5102fae978c4de8
-X-Patchwork-Hint: ignore
-Message-Id: <20260524194359.F195A86E3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/amlogic-boot-fip: bump
- version
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9yRLnJirphEr for <buildroot@buildroot.org>;
+ Sun, 24 May 2026 19:44:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BD29F404C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD29F404C7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD29F404C7
+ for <buildroot@buildroot.org>; Sun, 24 May 2026 19:44:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id A702613F8B5;
+ Sun, 24 May 2026 21:44:37 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 24 May 2026 21:44:37 +0200
+MIME-Version: 1.0
+Date: Sun, 24 May 2026 21:44:37 +0200
+To: Viacheslav Bocharov <v@baodeep.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260519121911.69065-1-v@baodeep.com>
+References: <20260519121911.69065-1-v@baodeep.com>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <84aea6749e2fa0c39f3d02877073d13e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1779651879;
+ bh=LA0P5nTaNroR87QlEWZeGk+UWIe3VMBRJK1wUD9rXNY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZZkcQYgXaDnU0nDjdSK9v89FtTfzmUb3g12Bg2VGWaCCSNN8kpB3w/AuoXFPa2Sky
+ DW2WsGpUlceu1yEWp3VS1OydoP26Mz46b5JNoFnpnGwcJc/giPymljahbjuaoa0+AL
+ Ct8Ti9gQj4fMWaWbA3iuYqYgle2Xfx/hPMhFUoqjU/WBhiq4EhpBFPibO8OzofKvd7
+ CjthBAer8WMlQimzPVTyWnVRgYSLsp8/dfc88/NYLaijjitxjaQkxJj1rXhQLF/gHW
+ H91aoceMbZIx3fxzHnK0UJwKCAqz9HQ+SnOhT9pMRLEGZ2ESeyjGzlYYSAnleOuWKz
+ CuKLSM+22+mwA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZZkcQYgX
+Subject: Re: [Buildroot] [PATCH] package/amlogic-boot-fip: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,47 +94,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d78ca8ad60e0988762f9b91e5102fae978c4de8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On 19/05/2026 14:19, Viacheslav Bocharov via buildroot wrote:
+> Bump amlogic-boot-fip to the latest commit on the 
+> LibreELEC/amlogic-boot-fip
+> master branch.
+> 
+> Signed-off-by: Viacheslav Bocharov <v@baodeep.com>
 
-Bump amlogic-boot-fip to the latest commit on the LibreELEC/amlogic-boot-fip
-master branch.
-
-Signed-off-by: Viacheslav Bocharov <v@baodeep.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/amlogic-boot-fip/amlogic-boot-fip.hash | 2 +-
- package/amlogic-boot-fip/amlogic-boot-fip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.hash b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-index 1a08341532..f9f0e8b018 100644
---- a/package/amlogic-boot-fip/amlogic-boot-fip.hash
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2cc06bc7d5647fd8c0025181fa42c4a8ef0ed16b918a1fa2060ea83c22e47b20  amlogic-boot-fip-e96b6a694380ff07d5a9e4be644ffe254bd18512.tar.gz
-+sha256  dede20dd7666a33b33442252b994f4033cfafe3fb6d11c86019dc3ae61d55227  amlogic-boot-fip-42d372123631066fb77fbcbb612dc3eb41a3f6f9.tar.gz
- sha256  4255537f71b1cd0d487de0fa2b8eddf1eb96ed96d119507336dde8b3782b86e6  LICENSE
-diff --git a/package/amlogic-boot-fip/amlogic-boot-fip.mk b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-index f98887cfcd..552e785066 100644
---- a/package/amlogic-boot-fip/amlogic-boot-fip.mk
-+++ b/package/amlogic-boot-fip/amlogic-boot-fip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AMLOGIC_BOOT_FIP_VERSION = e96b6a694380ff07d5a9e4be644ffe254bd18512
-+AMLOGIC_BOOT_FIP_VERSION = 42d372123631066fb77fbcbb612dc3eb41a3f6f9
- AMLOGIC_BOOT_FIP_SITE = $(call github,LibreELEC,amlogic-boot-fip,$(AMLOGIC_BOOT_FIP_VERSION))
- AMLOGIC_BOOT_FIP_LICENSE = PROPRIETARY
- AMLOGIC_BOOT_FIP_LICENSE_FILES = LICENSE
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
