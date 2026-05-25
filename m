@@ -1,86 +1,125 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D86CCD5BB1
-	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 16:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 532E7CD5BC9
+	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 16:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEB881EAE;
-	Mon, 25 May 2026 16:21:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Un-CyATZAZk; Mon, 25 May 2026 16:20:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C47EF81E6D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779726058;
-	bh=vQ5B3XYPw8mOqlq6XYhqYlrPx8yt8JskJrPqK6veb+I=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=fmIlE7RAiL9qFSFlgFVeMkICjgfBOqLnmcK9GXfes+0L+rVrUxl988t1YY2AHMtcQ
-	 H7KR8NXtm0+jSaEAuNa/W+f6Yyn1zOGrCD4u1n6RMDjttuG39EGL6GtapEfpRxRtwt
-	 3ec5tFoqqYsmVaCtyTAztHhZQKkCX+EOAZkT1rCS/AFwMVDWcOa1ZoP6KVjlAfj3aD
-	 iuNfPBFBUhpGSAnvAU9c/FmdQAi8HJ5UjSoZgnECwATT5xAMh7ixnkBYpAkJKJFhIC
-	 ZJNY+/6nLAzH/rtjo08QYa1eKyMcLIdy/pSDoS2YCGxKyfzLqhxD7YVel52L3iAAEk
-	 0lXRSzUqUEPiA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C47EF81E6D;
-	Mon, 25 May 2026 16:20:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D8C521F
- for <buildroot@buildroot.org>; Mon, 25 May 2026 16:20:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5382C606F7
- for <buildroot@buildroot.org>; Mon, 25 May 2026 16:20:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 072816071D;
+	Mon, 25 May 2026 16:38:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o8w7iCXz4HhC for <buildroot@buildroot.org>;
- Mon, 25 May 2026 16:20:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B5D1606B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B5D1606B1
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B5D1606B1
- for <buildroot@buildroot.org>; Mon, 25 May 2026 16:20:56 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 489A4A4C08DD;
- Mon, 25 May 2026 18:20:54 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45098)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wRY2v-000000001Un-2D5O;
- Mon, 25 May 2026 16:20:54 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Mon, 25 May 2026 18:20:53 +0200
-Message-ID: <20260525162053.1455403-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id pMSKySc2bCO4; Mon, 25 May 2026 16:38:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07A996070D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779727108;
+	bh=pUo8/lCpUpAydth2aZa+wraScf1CdXr0DA4rkY/GOXM=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=kkJql5vQJqexOxphe8RUCT/wbFGOafvglEzM0yXfYZvdxlTILScU0dnYGz9/EpD1y
+	 9fBDEWyV8iLGDwSaomuCchu6bHLNzlZ0G5q7Drcp2B594rAkI8+KZMehtRC2fKB3wf
+	 4P1X/0DUWZUMVmzqS2kgnwSlpMqikE9Gwcsh8VosyFzk94mRG6BtG+YJmwtgqE7/bx
+	 KeRPMn30jiETfnvXlB2Bbf6klbB5jg5UA+Qyzm9q4qkO+kUixYDFDUcKwvVxY5r9aT
+	 kB9HL0MZtxsYotcbdmMuuQo1BpNJUBef0dDUTU2cAsg4TAhhmpYX+winxaXvMeBYUI
+	 DLUYLxohZh2Og==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07A996070D;
+	Mon, 25 May 2026 16:38:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91E9521F
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 16:38:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F1C24007E
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 16:38:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WeZnisgibUtU for <buildroot@buildroot.org>;
+ Mon, 25 May 2026 16:38:25 +0000 (UTC)
+X-Greylist: delayed 923 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 25 May 2026 16:38:24 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DABAC40010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DABAC40010
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.9;
+ helo=send170.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+Received: from send170.i.mail.ru (send170.i.mail.ru [95.163.59.9])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DABAC40010
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 16:38:24 +0000 (UTC)
+Received: from [10.113.63.23] (port=33998 helo=send217.i.mail.ru)
+ by exim-fallback-f8ccb84c5-grdtr with esmtp (envelope-from
+ <fido_max@inbox.ru>) id 1wRY58-00000000IwI-2INy
+ for buildroot@buildroot.org; Mon, 25 May 2026 19:23:10 +0300
+Received: by exim-smtp-8466d5ddfc-846nb with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1wRY4w-00000000P9a-0BZr; Mon, 25 May 2026 19:22:58 +0300
+Message-ID: <a56e82d8-0a2c-4f8c-bdd9-d69035e06419@inbox.ru>
+Date: Mon, 25 May 2026 19:22:57 +0300
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779726054;
- bh=Wxl98F/nW76JNQIV/A+6HijjjpK0IeIWf4ah0yuTywE=;
- h=From:To:Cc:Subject:Date:From;
- b=uWzNVij36gXgtTHNQB2hTqy587HBE/PDf/orSmoS19Z567yhQkkL3Zp8wOh3ckL1o
- zGbR8dsXhGGveY+jPFO7NvL8PLpPvWn+4qT062oCqkkYakZWhZP6d/Mwwzmy6JhTtI
- HZrAG4wEi5/M9BTgyrsLDEwz+FeIGPEkj9bmXWEsrhFPktgafg0A4+dcnDD3RPynfM
- bhGpiOTy2+UA8hBSAktZbWuuaYf61Tv4J/2jnz1SfxPGhCTt3Nr7zHWEnLsdLcolZP
- m4b7v/6Uz1Jc+DFlcmY2oB2ItMP7l1IxXZ9Q+3SZKAcNEZn5ZWa0lups3hYMUmOprF
- DMSaMFr5RNYNw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=uWzNVij3
-Subject: [Buildroot] [PATCH/next 1/1] package/snmppp: bump version to 3.6.5
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260525154624.188492-1-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20260525154624.188492-1-bernd@kuhls.net>
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD98DC58EE55F2C5C37235345BD62AE6C9C712A59D0E6C829EB00894C459B0CD1B9C61250B0309B9B8506104296DCCA83D28E167D9963657CC1975C56EB723B0DBD4B72E82432766FBE
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE784354AC09E4761BEEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006371D5B197C6EC5B4BE8638F802B75D45FF914D58D5BE9E6BC1A93B80C6DEB9DEE97C6FB206A91F05B2EF12EF7F2F840BCC2E070BE324C7D3C4593031450F75F568BB0A4F435E46E6718B35066C979671628AA50765F79006376B023E84F73EF47C389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0C26CFBAC0749D213D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B292D688DDAD4E7BC389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC3A703B70628EAD7BE2021AF6380DFAD18AA50765F79006371BCC3D0A94B9E03222CA9DD8327EE4930A3850AC1BE2E735F43AACC0BCEB2632C4224003CC83647689D4C264860C145E
+X-87b9d050: 1
+X-C1DE0DAB: 0D63561A33F958A5FE6018145424D03B5002B1117B3ED6967166518E82B577826E5F408120975D33823CB91A9FED034534781492E4B8EEAD2739D626790C8313BDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34CAB70F9BE574AE9C625B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659828EE571F9A8B49C445A074226DDAAD36B6B63E8E27881D6B6D208A43B45E978442C25CE77241C6FB8341EE9D5BE9A0AFBE6DB3BF599BE5912FF6BF3E6A1AE237853E79AD58DF7F58CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVax5M0mESuWmODucFl3aZ6I=
+X-Mailru-Sender: 689FA8AB762F7393520AF17B8A65FDE27FA848891D73CF8733ADE439464599208C7CE2582D5CF35190DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailru-Src: fallback
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4253C1AE593082A99F15FEC50743827BEDD4349255E2BED7D049FFFDB7839CE9EAB38C4147240D8FE06742D9854C81A9621A3F404D85154B42DCC4EC7FCFDCD2FA946DFE8DEE998C6
+X-7FA49CB5: 0D63561A33F958A52076C9DA5A1DC7675002B1117B3ED696B98C0721BF5806C68E3074072ED0045E02ED4CEA229C1FA827C277FBC8AE2E8B26FC1AAA2885278A
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+OYcBso8Zm+oliTz8oZwnDrFsY77LZRcHyw5ht0smWrfSeTW5FiI8avd9v29gUBslpEZ9wIMwqVP4jLQVQ+dVm7x9BpDHadBV9RMjI809PraZ7gwlXMytaDnzOOaknfrqlQ==
+X-Mailru-MI: 20000000020000000000000800
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
+ :To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive:X-Cloud-Ids;
+ bh=vefgfuzWzsiTPhVNeXtQzokUio1NYyOCK7eGjU15Z5g=; t=1779727104; x=1779817104; 
+ b=XqavmC6P83KOWT3pJn9vp42DtGvP4XWQxldOx3VTWFqJpLF+/IncvTeDWLEhtAHOBfW+iA0HTWa
+ Na3wRnVn5nrsVR3G+NV/q/LngvqW8vKySxjio/Pae9fnRLB5Wa+Ah5g9mmYd/nfFyQK7K43JYi8ox
+ 2B+jxnFLGf2O9gyYwqgIngR2uloqjDjewM7BkeCszAUCOiiH+jEFDIIbdxVZkSHvCPFVsl4bwaOww
+ heBN7TotlQ1M9bsoPlzbU8s+B8439PaU7yj+Kx4YF8ML2bPXh7BpV3skyHV8E/MxTXhw6uJIXphVR
+ FWrNKcn8lKQEhGczHPbgvEEAXMQiyffUQztw==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
+ :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
+ Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+ List-Archive:X-Cloud-Ids:Disposition-Notification-To;
+ bh=vefgfuzWzsiTPhVNeXtQzokUio1NYyOCK7eGjU15Z5g=; t=1779726190; x=1779816190; 
+ b=C3zOo+uMMh7eRlHFCJrxgGQV/VLla9HvjZPovBReCSjLiGucByZJ/Z093QGOjQdWUFuKX4au/J6
+ 3CV8JemMB0svR+bB5+RwGDgTTSC6U2vSgOjm/QBlcFlN3mKr9Yb3gkJFs2/WB2ioG1Lcqmn3nR5Xd
+ hf2CQUNl1oOdh+cHwc88t8ZZuasMFRBHQLC+VuPHfqMeImqpLjcpUzRpm5u+yTiy2d+SJGhgM6ksI
+ xImLe/ff3neZBPktXupsld/AY34EbKLmzf7mqxOnBWYpwfF1l7XP0W5hn0smoEBjMh9uZJIx0tXQ5
+ KQ+UY2re3T6DhXuhVKxYwnzIhZebKkYMYRtw==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=XqavmC6P; 
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=C3zOo+uM
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/timescaledb: bump version
+ to 2.27.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,43 +131,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.agentpp.com/download/changes_snmp++v3.txt
+25.05.2026 18:46, Bernd Kuhls wrote:
+> https://github.com/timescale/timescaledb/blob/2.27.1/CHANGELOG.md
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/snmppp/snmppp.hash | 2 +-
- package/snmppp/snmppp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
-index e81bd8886f..450d24821a 100644
---- a/package/snmppp/snmppp.hash
-+++ b/package/snmppp/snmppp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  52c038426d6e13d627832aadb905549ee32b5ca4b707ac446bedac05abdfd1bf  snmp++-3.6.3.tar.gz
-+sha256  6c1a383085105805302b52ed922e35be00b1fe36981bdf7c34b35ffc635043ac  snmp++-3.6.5.tar.gz
- sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 9a84d74f95..10d1b6f8d0 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNMPPP_VERSION = 3.6.3
-+SNMPPP_VERSION = 3.6.5
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
--- 
-2.47.3
 
 _______________________________________________
 buildroot mailing list
