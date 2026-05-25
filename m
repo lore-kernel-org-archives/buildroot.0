@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEB92CD5BB1
-	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 13:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81AD5CD5BD0
+	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 13:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F5F860F84;
-	Mon, 25 May 2026 13:03:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4555360FA2;
+	Mon, 25 May 2026 13:03:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6W8GL_6v_AEn; Mon, 25 May 2026 13:03:13 +0000 (UTC)
+ id wrlYtJNtbIe9; Mon, 25 May 2026 13:03:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29CE360F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09DC360F8D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779714193;
-	bh=Puc/nzpZwlcNXOClXZm/hWTNlvGMtF8U7oj9SrOuvu4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RXQYg0vZofz4jeZjPXpvZugjgouFz6xlzU5/CEni65ZkmMY8xcjIZ3lOxvRFv1e+Q
-	 u9rQBtT04bE2yIjbjfOvhM8HMVcwGQdAwEISvyUCWUJopeTN7V1UQR5A1eYu/P6pQy
-	 z0Bzd+wa04YAFJK6BYGSfOGw/k48S3N0p/HFguQc+XnUYub31anw1jTGxaU6orpehX
-	 UmIr6OHcAeF1pCVA2RfCapIDOMONxSj4ifYqSPBPvxCSvrdgIhSZu3tSFLWCmKvRSR
-	 Fsu968IsG1G5tSedLP5pDU+HWJIvcdq2ulKVmc+ulOU0FZ0gu3ZFVVMj6KI3SOdGM/
-	 onLi3QNEt8i4w==
+	s=default; t=1779714205;
+	bh=2+pRehGEZtVSF5Yj7h5INgOrjYNH7BaPIlUzUTO0LS4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=AQon1drobFT/VN6rpRt9HbadReULu8jHFJiHDb1k8j1s+y+kEbPZ2GiFQhXi+kDzV
+	 45LuyePRumZdmO9wAMTVLX1lfxqLxmGkut1cMJM5/5x1oIaRm7gfFTwpW40sUQ/lmR
+	 zWJU0R9q4QKWwohWucNAOgWQTVBD+kM1Croi8Qc7whjpx5BNSSJCsKzWnvWkpQu/l0
+	 cf9EeCIT4t0/7XPsG5GIcBgCnYsXxnlI7N0ClAq81IaZzRNhLp2WCJ8Sph1N768lf8
+	 b+izd2at/vJ3dANXeVCYR/Xmo3/N6ZxuFdlYMYB+CSYjFAK9PaajF0OYWx5if5qlZw
+	 CtgT1co5YHznQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29CE360F89;
-	Mon, 25 May 2026 13:03:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D4F5E21F
- for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09DC360F8D;
+	Mon, 25 May 2026 13:03:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 715C3265
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C635A41175
- for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57168406A1
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9-IatUHRBwly for <buildroot@buildroot.org>;
- Mon, 25 May 2026 13:03:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE80E4115C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE80E4115C
- for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A64086ED3; Mon, 25 May 2026 13:03:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 25 May 2026 14:38:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d4d79f9aebd7974ecab60c9c335190ef974aece
-X-Git-Newrev: 3ddacc46e4bf6934e33c993963a3782022d16ca1
-X-Patchwork-Hint: ignore
-Message-Id: <20260525130300.5A64086ED3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mariadb: security bump version to
- 10.11.17
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gd-7Jy7QB2D9 for <buildroot@buildroot.org>;
+ Mon, 25 May 2026 13:03:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 783184037F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 783184037F
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 783184037F
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 13:03:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 9666E2003C8;
+ Mon, 25 May 2026 15:03:18 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 25 May 2026 15:03:18 +0200
+MIME-Version: 1.0
+Date: Mon, 25 May 2026 15:03:18 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260525123125.2919307-1-bernd@kuhls.net>
+References: <20260525123125.2919307-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.14
+Message-ID: <f22ad2d91ba6d7ca67343ac51a330297@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1779714199;
+ bh=a3irhr1jB7CoIfJCnwAohpUtZrM+DkO9/l0qJaG79pg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=jLkcRrFlNDzlTcw1st1lb88Ctn7Hx9kSKfdehBoHmq7Azwu2tS11J4p5iuqzE5yLq
+ 78cUVz54JdLZWuyUAQpNGffbb3rWf81TSwF0NTzTQa1I4B5c5Sexr10QwbsSaleiz1
+ /N3LjuSZ+aT74vIllgF3W4A7PkMkDLmZKI0+xGTcBYLkxRisR47gIBFl9IDqPePlBJ
+ k9l6jUrkfMDQDTaul1/jxD7rVhrWYKagloZ+r92l/h88XsIZNnlXae6HZ/zZKluTeh
+ 66WnOpWAY9WR0XqAGIH8lUvzFxoQROUIbCZKRKBr+u5+nwxEG/vXJsbslBByo+uyCJ
+ hANAf4A9mUG0w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jLkcRrFl
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: security bump version
+ to 10.11.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,58 +95,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3ddacc46e4bf6934e33c993963a3782022d16ca1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 25/05/2026 14:31, Bernd Kuhls wrote:
+> https://mariadb.com/docs/release-notes/community-server/10.11/10.11.17
+> https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.17
+> 
+> Fixes CVE-2026-44168, CVE-2026-44169, CVE-2026-44170, CVE-2026-44171,
+> CVE-2026-44172 & CVE-2026-44173.
+> 
+> https://mariadb.com/docs/release-notes/community-server/10.11/10.11.16
+> https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.16
+> 
+> Fixes CVE-2026-3494 & CVE-2026-34303.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://mariadb.com/docs/release-notes/community-server/10.11/10.11.17
-https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.17
-
-Fixes CVE-2026-44168, CVE-2026-44169, CVE-2026-44170, CVE-2026-44171,
-CVE-2026-44172 & CVE-2026-44173.
-
-https://mariadb.com/docs/release-notes/community-server/10.11/10.11.16
-https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.16
-
-Fixes CVE-2026-3494 & CVE-2026-34303.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 216b3be7e3..ca23b36a38 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.11.15
--sha512  98d1e54954b69cf87a96be7d76f80333f27832a29279e6b0a9615b830e171713222abcb9ec9b9a545c0fc4a0f9f8e3d4774babcabf534a6fa3cb3dfdaed0dedc  mariadb-10.11.15.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.11.17
-+sha512  788803b15afbb6193111774a233d0db0604f27ebae3b4b439368e2d7caeffb662846e530fa65f453a6d77541cedb99112ea319c7c0c2ce5074c32aefb06a51aa  mariadb-10.11.17.tar.gz
- 
- # Hash for license files
- sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index e2c0cee3d5..c718c1ce7b 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.11.15
-+MARIADB_VERSION = 10.11.17
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
