@@ -1,88 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 160BFCD5BB1
-	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 17:11:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2B94CD5BB1
+	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 17:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC4D16072B;
-	Mon, 25 May 2026 17:11:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E375813F8;
+	Mon, 25 May 2026 17:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 48UvnAzuLBhk; Mon, 25 May 2026 17:11:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pcXtoKvEqQgE; Mon, 25 May 2026 17:19:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAC3F60727
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95FC6813D5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779729111;
-	bh=JJnPFOdPxDbTaRWFtqz25H/faLt4ZEwEv4FcpGzmIxU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Sm+nmuxUxmqJeaLyO4zbWYb9b5wmPOhZqY4ibF/vcAnFgPSPd1JT9mOCp+FmywL8d
-	 OtuDU9szCbHXCHmobVS1zR710QraUnS/1kK1bnjDPez+9HLifBtX+ZkcDeM05dbd4H
-	 3bd/Rp6Ql1u1DlwONYtCFiaoAjGg5B/MjvAUQCME+HqAYd8W2JGxAVYX5X/e8eSWWu
-	 I5Xb0iyCFJCkzXLhCwJGiQSwWv8oVio0MKVVZS25hXVG5MlJz3O2kHlOENcIY37/Gc
-	 +J1zXRAvgZS6LZoTcbvdBCY/8H43QCtIPLHd4KT/25ZeexXgZSlAux6WwF4KdNncpe
-	 cL5SCjs5sK41w==
+	s=default; t=1779729571;
+	bh=AunLVTF1Oqg5vFLtcvm1cTKv1QDUERBRCUzcHB1hAH8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=V6Lsod2/Fr1I5vMx0gFsDF57wpX13/dUsTG2zVAfKfCdZ/hmDCd6Ni9JGHg6VyS6S
+	 /hTqiyGtQBI+ls5Ima5qWmjSuh5+7pAzWvpgeHcdsGuyEQ52iU3ObLkqhEJIZtcTG4
+	 0B5ONlC9s+aoEHSRSDw4vlKPpQXZ/NI0gAnaTff3qbUuCi7CeBj2nnKAzGKG3i8LWT
+	 KeOpCpd9Zd4zCvomCfVM6WcroQCfarGF4UfNUn6g+9QsyMObrv7LmXZxX41/LnxCtA
+	 u+tMWDSudbRCkClDRJYBchOKMgnXUUI8UXK7kE1imb7ZK5Ux5kDS0pHjCaISgAkYQM
+	 J8q+yLIbv1OYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAC3F60727;
-	Mon, 25 May 2026 17:11:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6B8C265
- for <buildroot@buildroot.org>; Mon, 25 May 2026 17:11:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95FC6813D5;
+	Mon, 25 May 2026 17:19:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C34F8265
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 17:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C817B40094
- for <buildroot@buildroot.org>; Mon, 25 May 2026 17:11:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F09C040A31
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 17:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EgWCUC-zgyZV for <buildroot@buildroot.org>;
- Mon, 25 May 2026 17:11:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A2E9340082
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2E9340082
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A2E9340082
- for <buildroot@buildroot.org>; Mon, 25 May 2026 17:11:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 77D13B00592;
- Mon, 25 May 2026 19:11:43 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 25 May 2026 19:11:43 +0200
-MIME-Version: 1.0
-Date: Mon, 25 May 2026 19:11:43 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Maxim Kochetkov <fido_max@inbox.ru>
-In-Reply-To: <20260525154624.188492-1-bernd@kuhls.net>
-References: <20260525154624.188492-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <a0b0099907da0e7e8730bfd697351cc3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1779729105;
- bh=BAKgbxb4+ZMnSJO/WOlU6h2S5g7LBd5wUuHqdhGH3ME=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Oe9pd4XbWMYRvonwIwhhIj29zVS+cKViY0UE5o6jYFs2+jCHA42gWbeZwjy4tbXVv
- A/YpIF1E60T7chK7KKKDQoQfnsjsag5WTuSB4wqxzPpg2AgHnvXpIYKpAcaD+VGlUS
- cuguFT9AeI89eyw42YazXug+4I1NC/Nf3td3nSB4WlUgCAJgPInrgDIZg00a05PRop
- JCqytnqtrO0VTFVu1YLxZQM0LDe1Lt2c5Jl3pWkc4+yqgRu745djUMkUmkeXlnTV8s
- Hq2D/8oexi7LiRAESEssFHSbwS9LUR+V5W23+/uzXJuBAvBNq5UMbSZLNpyNmccXmA
- +NCnHIk98wADg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Oe9pd4Xb
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/timescaledb: bump version
- to 2.27.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cBRutdcRs7Ss for <buildroot@buildroot.org>;
+ Mon, 25 May 2026 17:19:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A56F40564
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A56F40564
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 17:19:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 97AC6861B0; Mon, 25 May 2026 17:19:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 25 May 2026 19:12:25 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 5d4a6f8ae675fbc97eb36511395060d7528a846c
+X-Git-Newrev: a85bcf789d2ccc844c77a1c6238c53e8518ea380
+X-Patchwork-Hint: ignore
+Message-Id: <20260525171917.97AC6861B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/snmppp: bump version
+ to 3.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,17 +71,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/05/2026 17:46, Bernd Kuhls wrote:
-> https://github.com/timescale/timescaledb/blob/2.27.1/CHANGELOG.md
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a85bcf789d2ccc844c77a1c6238c53e8518ea380
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Applied to next, thanks.
+https://www.agentpp.com/download/changes_snmp++v3.txt
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/snmppp/snmppp.hash | 2 +-
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index e81bd8886f..450d24821a 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  52c038426d6e13d627832aadb905549ee32b5ca4b707ac446bedac05abdfd1bf  snmp++-3.6.3.tar.gz
++sha256  6c1a383085105805302b52ed922e35be00b1fe36981bdf7c34b35ffc635043ac  snmp++-3.6.5.tar.gz
+ sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 9a84d74f95..10d1b6f8d0 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.6.3
++SNMPPP_VERSION = 3.6.5
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
