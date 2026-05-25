@@ -4,83 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E1ECD5BB1
-	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 12:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3ED6CD5BD0
+	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 12:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 699B860EE2;
-	Mon, 25 May 2026 12:31:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1EC260BD0;
+	Mon, 25 May 2026 12:35:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2zzvvr2CxZ0; Mon, 25 May 2026 12:31:33 +0000 (UTC)
+ id N-A83-mxcTrG; Mon, 25 May 2026 12:35:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 523D060F85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF69A60EE2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779712293;
-	bh=xnAJz3N4YrafRdGBvIf7P0aQxnE+yb9he+Jx3y5CH7o=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=cvdRcqox/zzbOP3WAZUMMCM+yuBrhCPhciMQLbfGZg3H5CPWi8snX9PN1DoXVoXOH
-	 nt8uCATUhLADcVczxpD3YHuKG9mQANXigwmiHboLBflw7V2q1hiEXpiVR0cWM181Hq
-	 1ExxhNaFlLMr9Od4g6rhlWNOWs9QB02lBWVA42Owhzu6KGIabg9nwX9FjbAhsrihCO
-	 vn3Zvbypco/vhynBTevorKnmKHBa++w9v6m9bRE6oUdM4occgzUx9szJkiwVENWdzw
-	 jFzsL/FrGKeV8oKYm5R0D/KJ6h6BnkaSk958XB56G06eAUc/dLH2C4TrcVTvQOTWdM
-	 r57RnOVTIyhbA==
+	s=default; t=1779712553;
+	bh=sFLvBlAs56Gwycxdhcw7c1I6QtxT7VKnq3QBPV1pOVk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=UtEpxgyaoHhQ51AYX6PvQ6tl0xQ1Q7Aikox7sj65SpjxVaxiuy5gL+E19zX5UxoL9
+	 sk7DnAWBme/tPE2aot9rU/rZ9cLoiUJBUjERTX01TuoclffNsUxEJH8YoFvTkuTmpM
+	 eHuWaOMOdPOxALY/BsErCluOHNeu7YWs/ZbxfZ3tzF7KO7GhTUapBcamPiLl4P2dkf
+	 k2P4TX/UDBgGvXZwuSfgp0NeOSuB9nP4ebJqAjfHuqxRua/AH4W5cT7QGsjKtHfiiF
+	 IVFJUEDbvp/85z7BLLni511a/5wAYJYPIIW+UylIUQuHTetkqtgNX2RrV/PrHsH1BV
+	 KfII/z+cBfMzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 523D060F85;
-	Mon, 25 May 2026 12:31:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BAA7721F
- for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF69A60EE2;
+	Mon, 25 May 2026 12:35:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B95A9265
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABE884037F
- for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADA6560EE2
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:35:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gTfWj5v3EYRD for <buildroot@buildroot.org>;
- Mon, 25 May 2026 12:31:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 01E884025D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01E884025D
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01E884025D
- for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:29 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 353CAA4C0EEA
- for <buildroot@buildroot.org>; Mon, 25 May 2026 14:31:26 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33682)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wRUSq-000000008BG-3vSG
- for buildroot@buildroot.org; Mon, 25 May 2026 12:31:25 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nRwKR8C67qlb for <buildroot@buildroot.org>;
+ Mon, 25 May 2026 12:35:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E5FF60BD0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E5FF60BD0
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:35:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EC62C86ED0; Mon, 25 May 2026 12:35:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 May 2026 14:31:25 +0200
-Message-ID: <20260525123125.2919307-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779712286;
- bh=iu4CahmfaXnr9PKyQgSVmHlcXNzMfxHLYldpye+ni44=;
- h=From:To:Subject:Date:From;
- b=kYt261bKGnXr96KeLECFHbEx165kAy7qYZZm7o9VkgkL7KSEmLxbkG2397/YB2MqU
- 4GSEvKyNH4DH/894/kdJRAxRnJACSmLxcDLZbDShBXDNLIfCJobhOvO0e1CNQnH9MA
- 8n2f09zACUtA48FiNRKOy6Z7tMh2TCCpKh1mh+F+2BA5TZvDW+HIY/JwUKSpaMaS1k
- TxT/zBS8eHhE0NKCesG/D8bY9yvviJ9aJiscXWEe2S+KUUfJgh1BAKn7mtyPh+3imb
- ItMQf1idAC8ncSGdfc6Xhkc7Ne9GW4DvVvuD2N8Z9Leb8x1xCijkOD36wKFBP4HwGe
- 8md/cKp7/XwYw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=kYt261bK
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump version to
- 10.11.17
+Date: Mon, 25 May 2026 10:53:03 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 2d78ca8ad60e0988762f9b91e5102fae978c4de8
+X-Git-Newrev: c7fef3704c704e6337b4f8f6ff467c6c70991443
+X-Patchwork-Hint: ignore
+Message-Id: <20260525123540.EC62C86ED0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uclibc: bump to 1.0.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,57 +68,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1590774116479197164=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://mariadb.com/docs/release-notes/community-server/10.11/10.11.17
-https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.17
+--===============1590774116479197164==
+Content-Type: text/plain
 
-Fixes CVE-2026-44168, CVE-2026-44169, CVE-2026-44170, CVE-2026-44171,
-CVE-2026-44172 & CVE-2026-44173.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c7fef3704c704e6337b4f8f6ff467c6c70991443
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://mariadb.com/docs/release-notes/community-server/10.11/10.11.16
-https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.16
+New release with following changes:
 
-Fixes CVE-2026-3494 & CVE-2026-34303.
+Adam Lackorzynski (1):
+      termios.h: Add IBSHIFT
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Charles Mirabile (11):
+      riscv: add defconfigs
+      riscv: add support for static pie binaries
+      riscv: add support for ucontext functions
+      pipe: directly invoke pipe2 from kernel when !UCLIBC_LINUX_SPECIFIC
+      Fix {g,s}ettimeofday when !UCLIBC_HAS_REALTIME
+      Fix build with static-pie but without nptl threads
+      do not remove bits/uClibc_ctype.h when !UCLIBC_HAS_CTYPE_TABLES
+      getopt-susv3: remove call to gettext `_` macro
+      readdir{,_r}: remove loop to skip files with d_ino == 0
+      spawn: allow file actions on no-mmu targets
+      getopt-susv3: add support for reseting the scan by setting optind to zero
+
+Marcus Haehnel (1):
+      aarch64/fpu_control.h: Don't use gcc-internal types
+
+Jan Klötzke (1):
+      elf/dl-support.c: remove unnecessary memset
+
+Ramin Moussavi (9):
+      libsanitizer: arm/ucontext: fix VFP save/restore to use uc_regspace area
+      libsanitizer: arm/ucontext.h: add glibc-style REG_R0..REG_R15 aliases
+      libsanitizer: link.h/dl-iterate-phdr: expose dl_phdr_info TLS fields
+      libsanitizer: ldso: track _dl_load_adds/_dl_load_subs counters
+      libsanitizer: ldso: implement _dl_tls_get_addr_soft for dl_phdr_info::dlpi_tls_data
+      libsanitizer: drop __pagesize, make _dl_pagesize the single source of truth
+      libsanitizer: sys/user.h: remove obsolete BFD trad-core NBPG/UPAGES defines
+      libsanitizer: features.h: hard-wire _FILE_OFFSET_BITS=64 to match library's 64-bit off_t/ino_t
+      libsanitizer: fts.h: drop the bogus _FILE_OFFSET_BITS==64 #error
+
+Waldemar Brodkorb (7):
+      bits/statx.h: add some missing defines
+      bits/statx.h: sync struct with glibc
+      sys/fanotify.h: sync with musl
+      libiconv: fix typedef of iconv_t
+      misc: add unicode character functions (c11)
+      netinet/tcp.h: sync with glibc
+      bump version for 1.0.58 release
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 216b3be7e3..ca23b36a38 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.11.15
--sha512  98d1e54954b69cf87a96be7d76f80333f27832a29279e6b0a9615b830e171713222abcb9ec9b9a545c0fc4a0f9f8e3d4774babcabf534a6fa3cb3dfdaed0dedc  mariadb-10.11.15.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.11.17
-+sha512  788803b15afbb6193111774a233d0db0604f27ebae3b4b439368e2d7caeffb662846e530fa65f453a6d77541cedb99112ea319c7c0c2ce5074c32aefb06a51aa  mariadb-10.11.17.tar.gz
- 
- # Hash for license files
- sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index e2c0cee3d5..c718c1ce7b 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index e0dba1b6b4..4c2a579ddf 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.57/uClibc-ng-1.0.57.tar.xz.sha256
+-sha256  8bc734b584e23ff6ae3d0ebb4c0fb1d1d814c58c82822b93130d436afa7ace8b  uClibc-ng-1.0.57.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.58/uClibc-ng-1.0.58.tar.xz.sha256
++sha256  9e8100a442f7079b9728ca286e3035f67df0578606166ea2d1ef865a4a12ddb9  uClibc-ng-1.0.58.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0c91a176fa..6f3668715b 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.11.15
-+MARIADB_VERSION = 10.11.17
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
--- 
-2.47.3
+-UCLIBC_VERSION = 1.0.57
++UCLIBC_VERSION = 1.0.58
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+
+--===============1590774116479197164==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1590774116479197164==--
