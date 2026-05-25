@@ -4,72 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253F8CD5BBF
-	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 06:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E1ECD5BB1
+	for <buildroot@archiver.kernel.org>; Mon, 25 May 2026 12:31:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98C9A60AC3;
-	Mon, 25 May 2026 06:26:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 699B860EE2;
+	Mon, 25 May 2026 12:31:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gXdy-c63KDv; Mon, 25 May 2026 06:26:40 +0000 (UTC)
+ id F2zzvvr2CxZ0; Mon, 25 May 2026 12:31:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8BBC60EE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 523D060F85
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779690400;
-	bh=rAUrwIHXmb2EtCH/droi9akBw4nIFi49+a0IQ5cddC4=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1779712293;
+	bh=xnAJz3N4YrafRdGBvIf7P0aQxnE+yb9he+Jx3y5CH7o=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=QkNc16dPmF1s+nJywc5EEL2Y9khp/I7SqWJnLJvd7/5eu4shYsDBZfaHTxk53r87o
-	 phkSlZacBjoYtNwSUSBnPPCxS/e9G+hAh3EsUk0xDLP9lxJfn/Gv30ze5CcYzSChXt
-	 K1a70cg5JVuGESEIJHKww1tLbX40R5gk4YbMh1CIhx7s7Vxqs6jqFk9809EOkeP3bQ
-	 VVwedeUiLQL0zHtvdiczgausIk0L9ip98YySP1hrH+VeaUTojRHj1BxcMZAxecllGf
-	 rBq+G7N4GkfqFLm0UgyPu0+CAK7HkVS072NsfT5DGgLDme6Ow6ZfVPj7RB5jvrBE8x
-	 Wo7cUzju5f6Tw==
+	b=cvdRcqox/zzbOP3WAZUMMCM+yuBrhCPhciMQLbfGZg3H5CPWi8snX9PN1DoXVoXOH
+	 nt8uCATUhLADcVczxpD3YHuKG9mQANXigwmiHboLBflw7V2q1hiEXpiVR0cWM181Hq
+	 1ExxhNaFlLMr9Od4g6rhlWNOWs9QB02lBWVA42Owhzu6KGIabg9nwX9FjbAhsrihCO
+	 vn3Zvbypco/vhynBTevorKnmKHBa++w9v6m9bRE6oUdM4occgzUx9szJkiwVENWdzw
+	 jFzsL/FrGKeV8oKYm5R0D/KJ6h6BnkaSk958XB56G06eAUc/dLH2C4TrcVTvQOTWdM
+	 r57RnOVTIyhbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8BBC60EE2;
-	Mon, 25 May 2026 06:26:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F0859265
- for <buildroot@buildroot.org>; Mon, 25 May 2026 06:26:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 523D060F85;
+	Mon, 25 May 2026 12:31:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAA7721F
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E17BF83D6D
- for <buildroot@buildroot.org>; Mon, 25 May 2026 06:26:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABE884037F
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GRP9JjzcxJ3Z for <buildroot@buildroot.org>;
- Mon, 25 May 2026 06:26:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EEC3983D1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEC3983D1E
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EEC3983D1E
- for <buildroot@buildroot.org>; Mon, 25 May 2026 06:26:38 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id DA4DE31E0700; Mon, 25 May 2026 08:26:35 +0200 (CEST)
-Date: Mon, 25 May 2026 08:26:35 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gTfWj5v3EYRD for <buildroot@buildroot.org>;
+ Mon, 25 May 2026 12:31:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 01E884025D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01E884025D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 01E884025D
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 12:31:29 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 353CAA4C0EEA
+ for <buildroot@buildroot.org>; Mon, 25 May 2026 14:31:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33682)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wRUSq-000000008BG-3vSG
+ for buildroot@buildroot.org; Mon, 25 May 2026 12:31:25 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Message-ID: <ahPrm_0gVDGw5B5-@waldemar-brodkorb.de>
+Date: Mon, 25 May 2026 14:31:25 +0200
+Message-ID: <20260525123125.2919307-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.85+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1779690395; bh=vtZBntgFzyRvT73ZTUpjiq0rMzwEadfl0d/K3PJDtpE=;
- h=Date:From:To:Subject:From;
- b=FOfD2mp8iGB7cf2B4R1tR8CgRhW71gmjBAkOOeHIlVHSymjfB5LpllfkFvcX9BAEG
- 4+0p4/19yN7vN63qotZWY2Y/vHjQjejqJ8nBLuWxgA5fh+byOKKVKLtHgTR8fOt864
- dnecE7gnzs2kaDRGbPkplYB757USKV1N+ToOtzLg8nbVT13a3TmiYNXcS8Osthkxzi
- GXNitQcyAa5n4Kgf+nFBEaq1Z/E7zqg8l6sGmyrqMYzIkvpJEnDP2ooHeg8zeKgx0t
- XimNYPuWlEc4VmuvOK+hyEFMjcp+bSCoNTbQMEJKe4bc7JsqHdwVkY/2kUXHjSEjgJ
- KIqS+LY61V39w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH for next] package/uclibc: bump to 1.0.58
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1779712286;
+ bh=iu4CahmfaXnr9PKyQgSVmHlcXNzMfxHLYldpye+ni44=;
+ h=From:To:Subject:Date:From;
+ b=kYt261bKGnXr96KeLECFHbEx165kAy7qYZZm7o9VkgkL7KSEmLxbkG2397/YB2MqU
+ 4GSEvKyNH4DH/894/kdJRAxRnJACSmLxcDLZbDShBXDNLIfCJobhOvO0e1CNQnH9MA
+ 8n2f09zACUtA48FiNRKOy6Z7tMh2TCCpKh1mh+F+2BA5TZvDW+HIY/JwUKSpaMaS1k
+ TxT/zBS8eHhE0NKCesG/D8bY9yvviJ9aJiscXWEe2S+KUUfJgh1BAKn7mtyPh+3imb
+ ItMQf1idAC8ncSGdfc6Xhkc7Ne9GW4DvVvuD2N8Z9Leb8x1xCijkOD36wKFBP4HwGe
+ 8md/cKp7/XwYw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=kYt261bK
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump version to
+ 10.11.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,69 +92,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmV3IHJlbGVhc2Ugd2l0aCBmb2xsb3dpbmcgY2hhbmdlczoKCkFkYW0gTGFja29yenluc2tpICgx
-KToKICAgICAgdGVybWlvcy5oOiBBZGQgSUJTSElGVAoKQ2hhcmxlcyBNaXJhYmlsZSAoMTEpOgog
-ICAgICByaXNjdjogYWRkIGRlZmNvbmZpZ3MKICAgICAgcmlzY3Y6IGFkZCBzdXBwb3J0IGZvciBz
-dGF0aWMgcGllIGJpbmFyaWVzCiAgICAgIHJpc2N2OiBhZGQgc3VwcG9ydCBmb3IgdWNvbnRleHQg
-ZnVuY3Rpb25zCiAgICAgIHBpcGU6IGRpcmVjdGx5IGludm9rZSBwaXBlMiBmcm9tIGtlcm5lbCB3
-aGVuICFVQ0xJQkNfTElOVVhfU1BFQ0lGSUMKICAgICAgRml4IHtnLHN9ZXR0aW1lb2ZkYXkgd2hl
-biAhVUNMSUJDX0hBU19SRUFMVElNRQogICAgICBGaXggYnVpbGQgd2l0aCBzdGF0aWMtcGllIGJ1
-dCB3aXRob3V0IG5wdGwgdGhyZWFkcwogICAgICBkbyBub3QgcmVtb3ZlIGJpdHMvdUNsaWJjX2N0
-eXBlLmggd2hlbiAhVUNMSUJDX0hBU19DVFlQRV9UQUJMRVMKICAgICAgZ2V0b3B0LXN1c3YzOiBy
-ZW1vdmUgY2FsbCB0byBnZXR0ZXh0IGBfYCBtYWNybwogICAgICByZWFkZGlyeyxfcn06IHJlbW92
-ZSBsb29wIHRvIHNraXAgZmlsZXMgd2l0aCBkX2lubyA9PSAwCiAgICAgIHNwYXduOiBhbGxvdyBm
-aWxlIGFjdGlvbnMgb24gbm8tbW11IHRhcmdldHMKICAgICAgZ2V0b3B0LXN1c3YzOiBhZGQgc3Vw
-cG9ydCBmb3IgcmVzZXRpbmcgdGhlIHNjYW4gYnkgc2V0dGluZyBvcHRpbmQgdG8gemVybwoKTWFy
-Y3VzIEhhZWhuZWwgKDEpOgogICAgICBhYXJjaDY0L2ZwdV9jb250cm9sLmg6IERvbid0IHVzZSBn
-Y2MtaW50ZXJuYWwgdHlwZXMKCkphbiBLbMO2dHprZSAoMSk6CiAgICAgIGVsZi9kbC1zdXBwb3J0
-LmM6IHJlbW92ZSB1bm5lY2Vzc2FyeSBtZW1zZXQKClJhbWluIE1vdXNzYXZpICg5KToKICAgICAg
-bGlic2FuaXRpemVyOiBhcm0vdWNvbnRleHQ6IGZpeCBWRlAgc2F2ZS9yZXN0b3JlIHRvIHVzZSB1
-Y19yZWdzcGFjZSBhcmVhCiAgICAgIGxpYnNhbml0aXplcjogYXJtL3Vjb250ZXh0Lmg6IGFkZCBn
-bGliYy1zdHlsZSBSRUdfUjAuLlJFR19SMTUgYWxpYXNlcwogICAgICBsaWJzYW5pdGl6ZXI6IGxp
-bmsuaC9kbC1pdGVyYXRlLXBoZHI6IGV4cG9zZSBkbF9waGRyX2luZm8gVExTIGZpZWxkcwogICAg
-ICBsaWJzYW5pdGl6ZXI6IGxkc286IHRyYWNrIF9kbF9sb2FkX2FkZHMvX2RsX2xvYWRfc3VicyBj
-b3VudGVycwogICAgICBsaWJzYW5pdGl6ZXI6IGxkc286IGltcGxlbWVudCBfZGxfdGxzX2dldF9h
-ZGRyX3NvZnQgZm9yIGRsX3BoZHJfaW5mbzo6ZGxwaV90bHNfZGF0YQogICAgICBsaWJzYW5pdGl6
-ZXI6IGRyb3AgX19wYWdlc2l6ZSwgbWFrZSBfZGxfcGFnZXNpemUgdGhlIHNpbmdsZSBzb3VyY2Ug
-b2YgdHJ1dGgKICAgICAgbGlic2FuaXRpemVyOiBzeXMvdXNlci5oOiByZW1vdmUgb2Jzb2xldGUg
-QkZEIHRyYWQtY29yZSBOQlBHL1VQQUdFUyBkZWZpbmVzCiAgICAgIGxpYnNhbml0aXplcjogZmVh
-dHVyZXMuaDogaGFyZC13aXJlIF9GSUxFX09GRlNFVF9CSVRTPTY0IHRvIG1hdGNoIGxpYnJhcnkn
-cyA2NC1iaXQgb2ZmX3QvaW5vX3QKICAgICAgbGlic2FuaXRpemVyOiBmdHMuaDogZHJvcCB0aGUg
-Ym9ndXMgX0ZJTEVfT0ZGU0VUX0JJVFM9PTY0ICNlcnJvcgoKV2FsZGVtYXIgQnJvZGtvcmIgKDcp
-OgogICAgICBiaXRzL3N0YXR4Lmg6IGFkZCBzb21lIG1pc3NpbmcgZGVmaW5lcwogICAgICBiaXRz
-L3N0YXR4Lmg6IHN5bmMgc3RydWN0IHdpdGggZ2xpYmMKICAgICAgc3lzL2Zhbm90aWZ5Lmg6IHN5
-bmMgd2l0aCBtdXNsCiAgICAgIGxpYmljb252OiBmaXggdHlwZWRlZiBvZiBpY29udl90CiAgICAg
-IG1pc2M6IGFkZCB1bmljb2RlIGNoYXJhY3RlciBmdW5jdGlvbnMgKGMxMSkKICAgICAgbmV0aW5l
-dC90Y3AuaDogc3luYyB3aXRoIGdsaWJjCiAgICAgIGJ1bXAgdmVyc2lvbiBmb3IgMS4wLjU4IHJl
-bGVhc2UKClNpZ25lZC1vZmYtYnk6IFdhbGRlbWFyIEJyb2Rrb3JiIDx3YnhAb3BlbmFkay5vcmc+
-Ci0tLQogcGFja2FnZS91Y2xpYmMvdWNsaWJjLmhhc2ggfCA0ICsrLS0KIHBhY2thZ2UvdWNsaWJj
-L3VjbGliYy5tayAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS91Y2xpYmMvdWNsaWJjLmhhc2ggYi9w
-YWNrYWdlL3VjbGliYy91Y2xpYmMuaGFzaAppbmRleCBlMGRiYTFiNmI0Li40YzJhNTc5ZGRmIDEw
-MDY0NAotLS0gYS9wYWNrYWdlL3VjbGliYy91Y2xpYmMuaGFzaAorKysgYi9wYWNrYWdlL3VjbGli
-Yy91Y2xpYmMuaGFzaApAQCAtMSw0ICsxLDQgQEAKLSMgRnJvbSBodHRwczovL2Rvd25sb2Fkcy51
-Y2xpYmMtbmcub3JnL3JlbGVhc2VzLzEuMC41Ny91Q2xpYmMtbmctMS4wLjU3LnRhci54ei5zaGEy
-NTYKLXNoYTI1NiAgOGJjNzM0YjU4NGUyM2ZmNmFlM2QwZWJiNGMwZmIxZDFkODE0YzU4YzgyODIy
-YjkzMTMwZDQzNmFmYTdhY2U4YiAgdUNsaWJjLW5nLTEuMC41Ny50YXIueHoKKyMgRnJvbSBodHRw
-czovL2Rvd25sb2Fkcy51Y2xpYmMtbmcub3JnL3JlbGVhc2VzLzEuMC41OC91Q2xpYmMtbmctMS4w
-LjU4LnRhci54ei5zaGEyNTYKK3NoYTI1NiAgOWU4MTAwYTQ0MmY3MDc5Yjk3MjhjYTI4NmUzMDM1
-ZjY3ZGYwNTc4NjA2MTY2ZWEyZDFlZjg2NWE0YTEyZGRiOSAgdUNsaWJjLW5nLTEuMC41OC50YXIu
-eHoKICMgTG9jYWxseSBjYWxjdWxhdGVkCiBzaGEyNTYgIGVjNjBiOTkzODM1ZTJjNmI3OWU2ZDky
-MjYzNDVmNGU2MTRlNjg2ZWI1N2RjMTNiNjQyMGMxNWEzM2E4OTk2ZTUgIENPUFlJTkcuTElCCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL3VjbGliYy91Y2xpYmMubWsgYi9wYWNrYWdlL3VjbGliYy91Y2xp
-YmMubWsKaW5kZXggMGM5MWExNzZmYS4uNmYzNjY4NzE1YiAxMDA2NDQKLS0tIGEvcGFja2FnZS91
-Y2xpYmMvdWNsaWJjLm1rCisrKyBiL3BhY2thZ2UvdWNsaWJjL3VjbGliYy5tawpAQCAtNCw3ICs0
-LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLVVDTElCQ19WRVJTSU9OID0gMS4w
-LjU3CitVQ0xJQkNfVkVSU0lPTiA9IDEuMC41OAogVUNMSUJDX1NPVVJDRSA9IHVDbGliYy1uZy0k
-KFVDTElCQ19WRVJTSU9OKS50YXIueHoKIFVDTElCQ19TSVRFID0gaHR0cHM6Ly9kb3dubG9hZHMu
-dWNsaWJjLW5nLm9yZy9yZWxlYXNlcy8kKFVDTElCQ19WRVJTSU9OKQogVUNMSUJDX0xJQ0VOU0Ug
-PSBMR1BMLTIuMSsKLS0gCjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+https://mariadb.com/docs/release-notes/community-server/10.11/10.11.17
+https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.17
+
+Fixes CVE-2026-44168, CVE-2026-44169, CVE-2026-44170, CVE-2026-44171,
+CVE-2026-44172 & CVE-2026-44173.
+
+https://mariadb.com/docs/release-notes/community-server/10.11/10.11.16
+https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.16
+
+Fixes CVE-2026-3494 & CVE-2026-34303.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 216b3be7e3..ca23b36a38 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.11.15
+-sha512  98d1e54954b69cf87a96be7d76f80333f27832a29279e6b0a9615b830e171713222abcb9ec9b9a545c0fc4a0f9f8e3d4774babcabf534a6fa3cb3dfdaed0dedc  mariadb-10.11.15.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.11.17
++sha512  788803b15afbb6193111774a233d0db0604f27ebae3b4b439368e2d7caeffb662846e530fa65f453a6d77541cedb99112ea319c7c0c2ce5074c32aefb06a51aa  mariadb-10.11.17.tar.gz
+ 
+ # Hash for license files
+ sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index e2c0cee3d5..c718c1ce7b 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.11.15
++MARIADB_VERSION = 10.11.17
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
