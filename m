@@ -1,84 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D00DCD5BB1
-	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 13:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3245ACD5BC8
+	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 17:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B52640FE3;
-	Tue, 26 May 2026 13:28:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBCD4819C8;
+	Tue, 26 May 2026 17:51:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CTJakztJoZXZ; Tue, 26 May 2026 17:51:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E04798196A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779817917;
+	bh=ph0aCyVVFwGE++ihKIPTo2IR2J43rsO+lPH5mb3AWfM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HJbAt0nJUEm1YMCr3b/aAyJT2DO1aQcK5tCyrlMhF4pg3O7s6KrkqHJVBbEH7HMYW
+	 1S1GNyhpMNHDIh4jknUUj3393XpurjsDcwdLv2cBpjHYhVAO8TCDAUaYqNvvjoYZ2f
+	 FP0Ni60Wybh+PhM+klH1frEZantBwv4szFD2TcNFNxP1DMXQogq7BHASAtV+N4aKGI
+	 BSuCklayz+JTbyZwzzRaotsHy1+5qt1gRprnze3GmwKXy4c71fIoiADF37SZfhoLJ4
+	 PzR4JRToCRqjW9nOtdSnNm2/Waq+EwSKFzT8dUYCfxScJGfYgcYq1YBJGZjc9zSYEz
+	 XpqXClTfdZo2g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E04798196A;
+	Tue, 26 May 2026 17:51:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CB8C421F
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 17:51:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B457940653
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 17:51:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJMkI4EKL_xo; Tue, 26 May 2026 13:28:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41ACD40FEB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779802120;
-	bh=FFN2dtTUcvZNt3Ou/gnXzRnzPKcSwR2iXjNHnOsFiH8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=Oq7j/DutgR73P9Wbr3haSE3KOK6AJd2rhCXar9bDDlb3O0+jl6Z0kqadRzhI1aK0e
-	 WyQAiAev8UlfFtNKHbsQ+qAF2ylRbVbpHlexlBM3DTnyYaax99q3Sl54azG2h3fEZJ
-	 /qN//3f4hWpA7HSsAKMMXb+gVlmE+RhTWbBk2Pu2GooXbfxArtxoji+1/cZSs+p81e
-	 8sNyIuzPQW6CtLev2/VYyh59r3zlR1kLlvjInB5xlDOOm85rFK/oBGfIvM0p+P6U1x
-	 L3OrjmDwIbsNNBrGQ5Sz2vWhqYXup1YA6gtJEkB7ITsEw1GMPfXloTkGWnm4hgtKrp
-	 WeCt/uQqkcDnQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41ACD40FEB;
-	Tue, 26 May 2026 13:28:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 728DF265
- for <buildroot@buildroot.org>; Tue, 26 May 2026 13:28:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57F4960BB7
- for <buildroot@buildroot.org>; Tue, 26 May 2026 13:28:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TFeBcjoJR4tv for <buildroot@buildroot.org>;
- Tue, 26 May 2026 13:28:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E91E60BB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E91E60BB4
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7E91E60BB4
- for <buildroot@buildroot.org>; Tue, 26 May 2026 13:28:36 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1926116416; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 26 May 2026 13:28:33 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wRrpf-00000000uKt-2iY9;
- Tue, 26 May 2026 15:28:31 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id CuQZzzaIDZAo for <buildroot@buildroot.org>;
+ Tue, 26 May 2026 17:51:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2A7C24059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A7C24059A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A7C24059A
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 17:51:53 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1BEB2A4C26F7
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 19:51:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35272)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wRvwT-000000002dy-1QRu
+ for buildroot@buildroot.org; Tue, 26 May 2026 17:51:49 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 26 May 2026 15:28:26 +0200
-Message-ID: <20260526132827.216542-1-peter@korsgaard.com>
+Date: Tue, 26 May 2026 19:51:49 +0200
+Message-ID: <20260526175149.1414751-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Nzhv2QbSdvi7G/MQzhOrjvM1+ZF2wJmDMz1eeKfyOZV15PJvbwqI7TNPOP2bQU2AOdFmMLIAV7PSfZz23r8rLeyMF4kYkacqwY+ZdW7pZWTER3Bq2yfrdRX5w5ILv3JlGnKt/EU55T2Mc3Bm8/38Piy5Og4zCv4IE0pIdv1pJJwgGqthS1xEprySWj+FuALYZ1WwJe+hsjDZ0bZSbbDQxU8+QJVdonvkTF3b+Vo4e6T1mFQcSDAOtL3OWYVgdV/eCso97Wx+lHPAu8wzv+BuaDFhHXKxP3KsI31Dmg8QvpANh4FgBpaOD8HoO1OPtHtyNkofdQhS2+Ny6bUoz3SHzA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=fPik91eWQSMgQTd0njtY7gb6vo1G4c0w2DIxNHNnsrY=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: -
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1779817910;
+ bh=OpdU7Weq+hF6lqF7XEjWBA3A7oD1tjEZJl3pdvGUc80=;
+ h=From:To:Subject:Date:From;
+ b=NB4VNtLGYCRfkxUihlPbMPB3X3xucyZ79gvKQg381Msj/ZA22spiSTRnJm1+7vmjx
+ GNOWY+cHeZJtMDpW7lGJO6a2sRcAZMK7DgSFoxL13lnqiX3cT7R5s6UfADPF3SyO8/
+ vPCEUPnOcDrYNnDiKnvWHX/C0qge6+S+xU0HL/LHc9eN1OHXmDZ185Fll8cqyBZU2u
+ iGQ4TyTiMGsan0bRA6yrSABkAZwyXNiFYEaCU0WHj5zpVOYbXSkzEZX0OrfLjK+Gn/
+ czOPOwgrNvZ7lP2xmR+OYbwpXd67u6r5cngVAWnAimaoFhj2fUM/kCHtTizdUtoD+L
+ 6sCpWHtRU9F7A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=Nzhv2QbS
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/python-urllib3: security bump to
- version 2.7.0
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=NB4VNtLG
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.24.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,61 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+https://www.samba.org/samba/history/samba-4.24.3.html
 
-CVE-2026-44431: Sensitive headers forwarded across origins in proxied
-low-level redirects
+Fixes CVE-2026-4408, CVE-2026-4480, CVE-2026-2340, CVE-2026-3012,
+CVE-2026-3238 and CVE-2026-1933.
 
-https://github.com/urllib3/urllib3/security/advisories/GHSA-qccp-gfcp-xxvc
-
-CVE-2026-44432: Decompression-bomb safeguards bypassed in parts of the
-streaming API
-
-https://github.com/urllib3/urllib3/security/advisories/GHSA-mf9v-mfxr-j63j
-
-For more details, see the release notes:
-https://urllib3.readthedocs.io/en/stable/changelog.html#id1
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 858b8ca3a3..92425d125b 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  2c381874816fe551f50a2551abae62b3  urllib3-2.6.3.tar.gz
--sha256  1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed  urllib3-2.6.3.tar.gz
-+md5  e79707b798a66c8165c9c441440f4e80  urllib3-2.7.0.tar.gz
-+sha256  231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c  urllib3-2.7.0.tar.gz
- # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 7f7f0b03d2..8e598818a1 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 765ccdad55..83e77f039b 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.24.2.tar.asc
+-sha256  ac24583f271a82ac324f7c6fad7327f65b591ad3492e1dccfee988e2c1c81dd1  samba-4.24.2.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.24.3.tar.asc
++sha256  4a5e0ed1ea192b798c873d9957c50a5767c10c2767cccb00d56ecc427e94f8e9  samba-4.24.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 2a151f4f61..2d6bc80b9e 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 2.6.3
-+PYTHON_URLLIB3_VERSION = 2.7.0
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+-SAMBA4_VERSION = 4.24.2
++SAMBA4_VERSION = 4.24.3
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.47.3
 
