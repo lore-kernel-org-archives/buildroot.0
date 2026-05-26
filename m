@@ -1,64 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F9D6CD5BD0
-	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 11:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B03CD5BD0
+	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 11:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D195440E31;
-	Tue, 26 May 2026 11:25:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Scoz0-YFPaEz; Tue, 26 May 2026 11:25:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E33440E73
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779794734;
-	bh=zLhk3dT7nV6jO+2srFTyJe1Uy3VXnttk+RTrdLau5bo=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Kjl9qWCDyanxO37om8BpBDMGTbt2jMynZRhk/iZYa+2qpConc4xGmjIAZBFA4nWNh
-	 JGbP8SL7MST0KDjdwcYunujx3bqZxpA6SWZlsmrHY97rFHT7ccjUn/zALrCXO0knLz
-	 tx1ZdXk14LE3KS5Uyc349peQGrAIMFr+17/oEnySTfTy9n0yDOux1pu8p/mneAfdu8
-	 AwC8Kf0Dh5VcaLWAAlVmy0mOp+qa19N2A10NhmCVKU8uO47oUjBGBOIoJW0Mp7tqx0
-	 PCPnJwnbdL1RndKLLRnWuViMbXr8dAM2oxkS7/CKRMxuX0UzqTrhdorlr8ev4HfwEz
-	 7Md63xy71fiBw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E33440E73;
-	Tue, 26 May 2026 11:25:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A16E21F
- for <buildroot@buildroot.org>; Tue, 26 May 2026 11:25:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 872D260EC1
- for <buildroot@buildroot.org>; Tue, 26 May 2026 11:25:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35B9D606F5;
+	Tue, 26 May 2026 11:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Luah9fY0vYmf for <buildroot@buildroot.org>;
- Tue, 26 May 2026 11:25:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE3A460EE7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE3A460EE7
- for <buildroot@buildroot.org>; Tue, 26 May 2026 11:25:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD24286F12; Tue, 26 May 2026 11:25:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id zEXDiAaKk50Z; Tue, 26 May 2026 11:28:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FDE660EBB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779794884;
+	bh=IT+5TftzpEtKMV1M2q7cpHEEkYSpuV/Y7AdHeATyrdo=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=XOljRKh5AG9JSR+9k16RmFLj3YcXdba3UDqEOZDvakA9WJLCFZZZbPaWzR/6mFmoT
+	 tHTCNvFtvhqeFHojAvf6MrMTvg75u8ytfzMsR0BAwhYlx04aLlqiiiNVBQFPxzaG25
+	 xACUBnPVx6htDxRAiEULE/5Tki8Wau+cfjoWbuAkVWaAZP1ofnrAKSNEL5lBag/zBd
+	 ohMDkTM1FnqbObZu+wOtx536PJRsYyMs3thCeJIVojzN4R3XXCosB6p7wJuZox21p0
+	 LN/u5eehE69yTLQIe1+oOgB9MctfLjD+WDp+PdLLN3b8g5jT42hvdaHnbAWW3MDpjF
+	 hqtCpYYzAjvvw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FDE660EBB;
+	Tue, 26 May 2026 11:28:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39822297
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 11:28:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2ABDA60EBB
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 11:28:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S28RDx22yBKV for <buildroot@buildroot.org>;
+ Tue, 26 May 2026 11:28:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 172C7606F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 172C7606F5
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 172C7606F5
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 11:28:01 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-45ea19f412aso3002990f8f.3
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 04:28:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1779794880; x=1780399680;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=d1L4qGfzVkIEEYSvqqvUCYGIGh1RjOG00dFJP6uNNr8=;
+ b=dkK2dMwVT1jRyzVgCFOf6NkgqhE0oUkvbSsrEO1EQ9LOUyJVPyMZweipMd0dHc7io0
+ H08dlrjAamcFrQ1GWBxvciZoQKECk0Bb2tbb9p9bpHt7ph7oUaF/8WGKhN5td+0GOcr6
+ xFv6UsCB4gF9xt9lQggBMPExQ5mGwz32UAsF2iOaMqwRd0SglH3RbLqWLDuUJN9KEULP
+ XU5Do7+6YmuI4b5oKfdbLSQ5/tjvpiIrmfp4MkBt79wBUXCZCxRFEf1aOyoStkRI3kbk
+ DDS9sJ6ymbz4Jv5ujP75HUCtrCc+VFylngQz00d9iIJ+K9UR58GgRV84+LMzvqJpyld5
+ zx1A==
+X-Gm-Message-State: AOJu0YxGwuOCj55F/3JDlCEbr+MKmdXrnZekpKpdJBog2K/cCCWJswpp
+ 7iyivcSKTgoix7tWcovl9iD/wRFMRePZGvLrAMcrPBXfR0EypxRQcSARW1Xg
+X-Gm-Gg: Acq92OFgnoG7rFYojXrTT4h4UfPTFI1CQgumVn5WpcV/G0J4sP+m5no0aiSWLvJnL8R
+ BnanYatZJcobm/8dMJjOKdtgLchNKxncZD0jPCQmHP3txVfNd/g2stZ9qjYGei3CrU0dHJpKc+y
+ ciNzsbsksSOmQleMxEGD/5RVhklGSa184pPY5QuI0Z4nP3XuJvQCuUd8XULdU08kC3bTLtYatBB
+ kuYjrCkwg24gSQ0kN8/gN2glKNwFMpDIwfhj6a0mnOeTwtzPtTIsG1y/mPRH8xQqGHpMwx3vAfv
+ 9cO55HaajUN0nuieHeAcD4P2nYLjhiNExMt1WJvbs/6XBCMTGvwgNjzdYOJLwingGqOG2yGwCjE
+ 0X7zQs6jx749ALKZn542rk2xRNTM/d0Zg54LFpcM9gMycqXkQFrJObRK8V99Xhyi5Cv1cX0qBnw
+ I336+/tyBDMqT6pxnjJF47C2haPovNgkn3ZWDzO4lxz0uD0Rjb
+X-Received: by 2002:a05:6000:1a87:b0:43f:dd91:b022 with SMTP id
+ ffacd0b85a97d-45eb38d7d0emr31183674f8f.35.1779794879769; 
+ Tue, 26 May 2026 04:27:59 -0700 (PDT)
+Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-45eb6d4903bsm32269437f8f.21.2026.05.26.04.27.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 26 May 2026 04:27:59 -0700 (PDT)
+From: Alexander Shirokov <shirokovalexs@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 May 2026 13:20:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 74aed5e8619cd4674e12659ce16798851486e7ff
-X-Git-Newrev: 0455e2571d35b642115e9122159ace0ce803fceb
-X-Patchwork-Hint: ignore
-Message-Id: <20260526112521.CD24286F12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nginx: security bump version to
- 1.30.2
+Cc: Alexander Shirokov <shirokovalexs@gmail.com>
+Date: Tue, 26 May 2026 13:27:37 +0200
+Message-ID: <20260526112755.317745-1-shirokovalexs@gmail.com>
+X-Mailer: git-send-email 2.54.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1779794880; x=1780399680; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=d1L4qGfzVkIEEYSvqqvUCYGIGh1RjOG00dFJP6uNNr8=;
+ b=mc5nKT/34aOu1g/Y76UXWUtmFhDX+R1+WI91ZV1M7Ps0hSOlYvXwOBG6r7b09No00o
+ tBrez1wCCvCVtfTd43zw1gGnH7tjxN+mT9KyLntHTbbrPRKzoShHMJrBym2H81aUBWX1
+ efsg6fJ3E+HXApoyTOQPf8Aa1ZmdyaZZOp9x+HZBCbWaLrYujeYY64oGrlSVkjxrkwYE
+ ic2/DuOT82OSfTpa/XPSHhWYJbNcCQe3I7C/5kPMUKvt1B70EHrAmZe4yCK06R2BgSsX
+ iWOVy7qGpF7vmFNrvZtX4XcLl0vb5KJ4T/T+RDQ8MWaHLgQBZ7ai3hQOeZsZL8ho3Uhi
+ /lqw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=mc5nKT/3
+Subject: [Buildroot] [PATCH 1/1] package/broot: bump to version 1.56.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,58 +118,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0455e2571d35b642115e9122159ace0ce803fceb
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Changelog: https://github.com/Canop/broot/blob/v1.56.4/CHANGELOG.md
 
-https://nginx.org/en/CHANGES-1.30
-
-https://nginx.org/en/security_advisories.html
-
-1.30.2: Fixes CVE-2026-9256
-1.30.1: Fixes CVE-2026-42926 (only from 1.29.4), CVE-2026-42945,
-CVE-2026-42946, CVE-2026-42934, CVE-2026-40460 & CVE-2026-40701.
-
-Updated license hash due to copyright year bump:
-https://github.com/nginx/nginx/commit/7fa941a55e211ebd57f512fbfb24d59dbb97940d
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Peter: clarify CVE-2026-42926]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 ---
- package/nginx/nginx.hash | 4 ++--
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/broot/broot.hash | 2 +-
+ package/broot/broot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 1d11937987..5055b4bd57 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918  nginx-1.28.3.tar.gz
-+sha256  7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c  nginx-1.30.2.tar.gz
- # License files, locally calculated
--sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
-+sha256  08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c  LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index a8b7ee7319..3f6aecebef 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/broot/broot.hash b/package/broot/broot.hash
+index 56168b5a38..b311fb3404 100644
+--- a/package/broot/broot.hash
++++ b/package/broot/broot.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  dde0da41fe9ee0f03c7f2895134360a4d2e003ed1ebc726c7394009dd9ad0f07  broot-1.56.2-cargo5.tar.gz
++sha256  ba989fcdc8a939e64c880208f6b491f6202f48b5d003a69f033469af91c37af1  broot-1.56.4-cargo5.tar.gz
+ sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
+diff --git a/package/broot/broot.mk b/package/broot/broot.mk
+index dfd9629d12..4f21205bf3 100644
+--- a/package/broot/broot.mk
++++ b/package/broot/broot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.28.3
-+NGINX_VERSION = 1.30.2
- NGINX_SITE = https://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-BROOT_VERSION = 1.56.2
++BROOT_VERSION = 1.56.4
+ BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
+ BROOT_LICENSE = MIT
+ BROOT_LICENSE_FILES = LICENSE
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
