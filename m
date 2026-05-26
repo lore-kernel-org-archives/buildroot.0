@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E95CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32B47CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EF6785A5D;
-	Tue,  9 Jun 2026 13:03:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DB3085A38;
+	Tue,  9 Jun 2026 13:03:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBnXLcrQ_FPB; Tue,  9 Jun 2026 13:03:37 +0000 (UTC)
+ id fH18QG1HF9Qp; Tue,  9 Jun 2026 13:03:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34D1185A02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA3DA8596B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010212;
-	bh=6JkfTN6L1DFKHXLo7rfJMV1mNpcT/rvqQZo/R6IdUYI=;
+	s=default; t=1781010210;
+	bh=bAJ2Z02/f8FsLl/ZjzNH3+HLv774nTyPQoZzOsuZ/Jw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FPXu/SJk6/U5L51rW8O72BrCgNs7XKCtfez8ImGRcMNiLm25YS7PmfQSqJigUiCEH
-	 UWgJixQcoY8XqOXZ2RjxvuOv/4PaSSQI1jwQXijts2QMpeMjxn1w18ftHUPfXBKrkn
-	 xoZxlzEnkYjnCt6J+TuVVPt46KJ88mPR3BxWc4THap7ZEEcMBu9XfGQbS76G7fl5HH
-	 Fvu0K4lVPqB0Eg+Yz7nwfh1/2zWlzO0z83y00r5mC5zCwbqKRkv7WFGgNpdVOwFSDx
-	 NXFXL4y049tpTSkPxxCg5/zxJhlQbKwsJX7kUAvYKUFljXyiZJ/nl82dqw8JdBnbVn
-	 pwqkDFbDWkJKg==
+	b=SJoG9cB+SY6alUituwsynrg04kZ5hfqkHcL/bCEcUMF9ZNZJUC7s1pqcBDhvPmiaN
+	 R5VhztsnZ92SjYRSQYpjSR+9cJcnxutl6uIx0bwzvqFB4Mmzje4e/d8HOdzubrIJUD
+	 9LYnhObtkwByhExI3n36lgNaa8q2/lBZUfPZH/010Po5/MajPfFAy1No4Akt5qT5Ir
+	 O+NKVBGfZpVnPXglvcagpzSelK5LIy3EEbeGIQxAvg3LxbY0/ifBe50/trAmHpW9dQ
+	 wT8CsIZhc1uhWOMK3o6tBiJhpcdNwh0IlD17b4dkcYhYhiF2QRPkC6NDZYgmouW4O0
+	 DgByLUX2ZRl0Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34D1185A02;
-	Tue,  9 Jun 2026 13:03:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48FA82EE
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA3DA8596B;
+	Tue,  9 Jun 2026 13:03:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A4AB190
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22609426C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E49645BF2
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jclZ6NGqjiLP for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2fdfcrLExAsP for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88AE4426F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5426743B5B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88AE4426F0
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5426743B5B
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3EC087E68; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
+ id 8F82887E7E; Tue,  9 Jun 2026 13:01:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 15:36:59 +0200
+Date: Tue, 26 May 2026 20:25:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f22ee807403a440b4f66ad8a5741d8f5fc04cd74
-X-Git-Newrev: 3f24135c56f6aa8f0524307b7339512fecfa6f92
+X-Git-Oldrev: a85bcf789d2ccc844c77a1c6238c53e8518ea380
+X-Git-Newrev: f5ff9e3cca644ee9a8401cd3c950f80d8ea7b083
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130119.C3EC087E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: only needs libudev,
- not udev daemon
+Message-Id: <20260609130118.8F82887E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pure-ftpd: bump version to 1.0.54
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,59 +68,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3f24135c56f6aa8f0524307b7339512fecfa6f92
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f5ff9e3cca644ee9a8401cd3c950f80d8ea7b083
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Bernd: adjusted for libudev-zero]
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/libinput/Config.in   | 6 +++---
- package/libinput/libinput.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+https://github.com/jedisct1/pure-ftpd/blob/1.0.54/ChangeLog
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index f5253dfec2..eb5ed75c85 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBINPUT
- 	bool "libinput"
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_LIBEVDEV
- 	help
- 	  libinput is a library to handle input devices in Wayland
-@@ -34,5 +34,5 @@ config BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/pure-ftpd/pure-ftpd.hash | 2 +-
+ package/pure-ftpd/pure-ftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+index b31afb2956..dfda62f0c1 100644
+--- a/package/pure-ftpd/pure-ftpd.hash
++++ b/package/pure-ftpd/pure-ftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  329a1d524476d7a137dcf65af04ec79ddf1c225e2c4ac4a2e884663ef4897fa1  pure-ftpd-1.0.53.tar.bz2
++sha256  c2bef41f9635c3a87efd65f089c16ca5df9fd02db199d9fdcf12b206b93d41a6  pure-ftpd-1.0.54.tar.bz2
+ sha256  b0bc52c61f9265bc00c509bd40dab60950371166b59416a1484bf226f480796e  COPYING
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index bf2599ecaf..daf8e6eda8 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "libinput needs udev /dev management"
--	depends on !BR2_PACKAGE_HAS_UDEV
-+comment "libinput needs libudev"
-+	depends on !BR2_PACKAGE_HAS_LIBUDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 33fd012076..7d7db01b10 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -7,7 +7,7 @@
- LIBINPUT_VERSION = 1.31.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
--LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
-+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev libudev
- LIBINPUT_INSTALL_STAGING = YES
- LIBINPUT_LICENSE = MIT
- LIBINPUT_LICENSE_FILES = COPYING
+-PURE_FTPD_VERSION = 1.0.53
++PURE_FTPD_VERSION = 1.0.54
+ PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
+ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
