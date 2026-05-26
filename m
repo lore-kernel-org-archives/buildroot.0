@@ -1,113 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C6B7CD5BB1
-	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 20:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1886CD5BB1
+	for <buildroot@archiver.kernel.org>; Tue, 26 May 2026 20:19:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 123A68202E;
-	Tue, 26 May 2026 20:16:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2C63610A1;
+	Tue, 26 May 2026 20:19:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fJoKFvAc5mzO; Tue, 26 May 2026 20:16:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MS4UekmQ1ZVJ; Tue, 26 May 2026 20:19:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECF718200D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC75F610A2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779826589;
-	bh=A2VwE7sSDGQAiGNJPe7JbqpIylVbjaokUhr8VSo/X88=;
+	s=default; t=1779826790;
+	bh=SSm8bph8l78zeAjgz4eioqzLg1sEs9bDaEJgyk4qKq0=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=hLyOjqWjndE6rG57O9DfwBaKwYvtH5vEmcyOG6M3J0jjE+tfLKhmIKalG8kVgH3aW
-	 DlkLgS8SsjEOnGbJ0ONyTtkSAsUPkHJmeV2wNs0jhia2E6i2v4bLoz3PyspVss2pun
-	 Yd/B+PgsTDssVUtvP2f1WFteWX4UDI8/ib62VPqZ9k1bfIX+mswXGXQrsHiuxfvZ5y
-	 2HbJFo6tDjPTCN+tRw4cOFl6AnXdoHBdsijUNSA9NGNGcOnX7kgWrZLapjAFzHLv20
-	 ZpgU5X0C1Z75QydjTEaCmIGev34fQH5R3jMy2F10tZo01pd+WHmCSTf4Xo2aqdciTy
-	 72MehDQoI2jLQ==
+	b=TsIshLwr10r9yicf9AGuU/M8b83ZJpUp0DcgPDrI/GjCytum1eoeD3Z9chv9OhZgE
+	 bUUF9Cd0L9CcMYkRhrE/jt0ReKafutezBYp1rOJpNGi2DSsUkHfm4hbI7uHcoV4ZtA
+	 7tZjGg5v/GDwSMWzosZjDNRUOF3v5g9b4s7R7fjkLnJj12ZdHrXntfE+hbpVHQfjP+
+	 Mme5AfI8ko2rmTZze/9axpsET0jpbOnNLlROXi9GmNW80iCjMdGLtvCs3tUhu52dqP
+	 svYFVUCkzPfgBN31rB8epuyHxnKrS+BM+nMTyX5agaMhKy76KyY16SMyYheAX3z5ue
+	 z1ObA0+SqbmXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECF718200D;
-	Tue, 26 May 2026 20:16:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC75F610A2;
+	Tue, 26 May 2026 20:19:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B3DB1297
- for <buildroot@buildroot.org>; Tue, 26 May 2026 20:16:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C9E123F
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 20:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A54328200D
- for <buildroot@buildroot.org>; Tue, 26 May 2026 20:16:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2260680C71
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 20:19:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RnuKpViD5u22 for <buildroot@buildroot.org>;
- Tue, 26 May 2026 20:16:27 +0000 (UTC)
+ id Vzn-6EieREIT for <buildroot@buildroot.org>;
+ Tue, 26 May 2026 20:19:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::235; helo=mail-oi1-x235.google.com;
+ client-ip=2607:f8b0:4864:20::230; helo=mail-oi1-x230.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B746A81F41
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B746A81F41
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B746A81F41
- for <buildroot@buildroot.org>; Tue, 26 May 2026 20:16:26 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id
- 5614622812f47-4855e69a4c0so3410555b6e.1
- for <buildroot@buildroot.org>; Tue, 26 May 2026 13:16:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3037A80AFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3037A80AFA
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3037A80AFA
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 20:19:48 +0000 (UTC)
+Received: by mail-oi1-x230.google.com with SMTP id
+ 5614622812f47-4855003fa6cso2963262b6e.3
+ for <buildroot@buildroot.org>; Tue, 26 May 2026 13:19:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779826585; x=1780431385;
+ d=1e100.net; s=20251104; t=1779826787; x=1780431587;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=UAHvyfegOz/PxyjtXwl/pdnx/h8hbEFjyPa8zuzclk0=;
- b=o2iMaxi3TGYN4dTPE99iLlHkgxWeZABC1y+np0AaH5jtjC5uVJRJrgp6mvbfjOSRO0
- 1/pm/7oM21wI4O5g4aoy1dBN/ON4AWfnf5jL1OD8VdOx0Fdj9p7HsVbXO/wy2OCVrp3a
- h6tLAbRhWSLcbW0mjBGm3yv6BWvhV+bDHfUwoH+JCsW1bdLEoZNfWNzrXov5g1K9wPwg
- WwYFLdIMIxPPSoipXPZ5YMfnXf2AMDpOjjJCd2uzzyANcsDUlzeymyg3R00pfqVCGagP
- dTb2Xh4Srb2sfCig6AhmTA4sj8FmnuORfLLDx7JbcBpvFYzcNvub6Xq3b4/6E+Sniuku
- eUZw==
-X-Gm-Message-State: AOJu0YyeOeaE71jdova8SEIVb/0rZJi1K887+++eYS4iXReSkVATWblz
- DRpYcGRPs5oOrx5mfclQHrTRKfIp1FOBA2sV/Pvdjs9PCuyarWlE4fgNAwY2vw==
-X-Gm-Gg: Acq92OFniax3IU5ppgqkm3T7jHAR1SDVNJiKrC8WserBTjCZOywoRBp8sV4zM7VlW30
- cksWNTxenZ/G+WveA5JTXmdp/eOJgkLxyphPkc/dY5dL2q4mZRubac2Kjhukh/IDvKLIquBEu7c
- I9/uaUrojDVVSnFrbJSP7rjpdBEjG0I7PvEoUAzQEFxyR2JR+CZbVtxIoTxBHYKlR+8/3ExNb4G
- vJCjjyQz6xeL4lQgck4V/Qw2R2mvQPA4v1becz/O8xkUT/hphpF2ELq2r+m5oKuwukbBnA8EfWx
- Wp7xsLYrYDJgXnBkRlKEPRryBMjujofY6uKJX2uKmj2EBOozEt0ebxEHi6lEG5mgvWo5mFVd7Bw
- Q502V3zZEV7JagI4rbXV8Apd5Wal6TurGTdf5qrDWeqeuHbGeaOsGAbs/F1UbW1WCe2iV09LDMe
- p3MwKEBPdaoClNqXiCWqfHFkWIujBcv9diV7Jsuy0sYTnI0gkHHlelZ8KnLWJ+OGEpgpjb71nvm
- SNMPL/PmmATQruqE6+keHZ44MpTJtxy8CsKYnbQn1lYY074xDRVFIHjiRMTAnM163ZXew==
-X-Received: by 2002:a05:6808:144a:b0:485:4601:9c7c with SMTP id
- 5614622812f47-4854a2ba33fmr11620638b6e.40.1779826585431; 
- Tue, 26 May 2026 13:16:25 -0700 (PDT)
+ bh=UZ7kEBZM9q7spYP93nVrmoigGu4Z1b802MuwvkTyk+U=;
+ b=XDm+z6/UAWb/YB326vh9ShIuawrzFGdPjwgsNfFD3KZx4T4pkav1hH0yGv64/cvV6q
+ O67erg/sWwyuzQXrneG+/jNuNMnkFSohNLZ4hdDN7M3mXheQroe0UJ0sUNE0/leORNhW
+ ZjTdu4mfolwg8ZXo1Ru2l666FBVZwmFUGTi2E3cysu1sNJxA0jvyQDgDi3aCSA/Y5gMR
+ q+E9eXuSX0dgY0KLFORH4TrrAbZVoL7XzDYZ2283vKN+Kmx93Oe4wyZvR7MgRpx0swij
+ 2T/1zdMHyJ3hVYMeUbxmV2KMfaJDbCOJKCxoTb4fYFckaw84ViZe7IZnUnr1+ZXggF6h
+ 2Upg==
+X-Gm-Message-State: AOJu0YyZHVQm0Dl0BYc99AfnqZxNN6vZrjKs5HOjv8C2iHh3vhQTj4DL
+ tlQERTW+rx8Hv2YXzUJnCVY/rc3gxh8fcz1/Z6B2pIEfuAgBeRz+FWVcfPy0BA==
+X-Gm-Gg: Acq92OGH4tgCDxUndk7wMOeiNyP1TJwANtl6w6ruq01AI25qlBVHCdZW9aTWDKXRTYf
+ +T9StHKM//GmigmJZUAT1oK1V/H6DN1ZR89lrPoq+pcIq34hrsAAO3mzVtnQN58kK7aw5AvaffH
+ Kb+Z+IhlzQkDoYfD0hx1AUn8w1h2viYZhTdl5Ka+CDKllqkttPehm0A2rD0jT3Wi6Ei7J0Hzl3H
+ naQVRiZNcL9jwdRlgJiU+4+drbw/xudhPWtbuh48FQ9QrQKOZJAZn+VmxjWlSMlN3Rvh3Q83Tif
+ z/b+8NNm7oiFMe4bOCYJbD22YQcXjRSwvuRsK4JYCTLBfe8venMbNGlvz1S+8ivYihryoPgX12t
+ kRNn4MPFzz5ZQ37xm6J/8snemly2kEEfhgkgV8wDvKCTATJEh3SntMJw1RTMlvKp/kHb+uTQd9K
+ RXI0sRXxHuNKdgPaonUh11dv5aMJflBWA8hGYhrhMllvPoC2MpfpGLg5sKuFAWLFh9kl1p9GHF0
+ 7R8ymJx6SeCa+Dg2m9UxXS53GCKWOTybwxc6rHg6QnIQa0wGz0Ku6AOgft1GIeeYADty5DSyd8m
+ pkac
+X-Received: by 2002:a05:6808:1b10:b0:482:e5d4:151f with SMTP id
+ 5614622812f47-4854a178862mr12332228b6e.29.1779826786864; 
+ Tue, 26 May 2026 13:19:46 -0700 (PDT)
 Received: from james-x399.tailafd1a.ts.net (184-96-131-78.hlrn.qwest.net.
  [184.96.131.78]) by smtp.gmail.com with ESMTPSA id
- 5614622812f47-48554538d1bsm6402983b6e.8.2026.05.26.13.16.24
+ 5614622812f47-485544b10e8sm6398445b6e.1.2026.05.26.13.19.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 May 2026 13:16:25 -0700 (PDT)
+ Tue, 26 May 2026 13:19:46 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 May 2026 14:16:22 -0600
-Message-ID: <20260526201622.375239-1-james.hilliard1@gmail.com>
+Date: Tue, 26 May 2026 14:19:44 -0600
+Message-ID: <20260526201944.379676-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779826585; x=1780431385; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1779826787; x=1780431587; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UAHvyfegOz/PxyjtXwl/pdnx/h8hbEFjyPa8zuzclk0=;
- b=WV4mH9moAL5gF7dnog4vGZWAMQw/XXl0afp1KSUViNhDQTFMn0xlTaB1/FTfmWxoDJ
- wuvVr8Ag7B8Om1+qT9P6/g4F1DkGCiQn5JiOjV+deCL9fCU4DJnq2pMmqZd7r4VS9TgO
- i4twMu9oBxpyNUasLEOteEHeLsId4ThlYmATF5EjnbdMcZ5KQ6xyEYg49XVxsq9686rh
- xoFTJTWqEtqxeW2oL2Q8P3CTKfhuo3RNMj/J+OGXX3JkJkxOZd5U9kN1Ky5yy3APBYPd
- UTJ3rNIGF7uCBtIPRuBmIL9UK4hSD07+p7elqlCbKEPsmklCdDj8N9aCLpVQJz6f/sEk
- mhng==
+ bh=UZ7kEBZM9q7spYP93nVrmoigGu4Z1b802MuwvkTyk+U=;
+ b=TKdvbslCPiYOmtCYluM9f/JIhBKwqdriytLlLxwVIKErGFyBKr1/5nusViAiZAsr2M
+ ofUgAw9v+dwSR3g6hZWw6VXmMPk7kKdJP+rjujaRdar9swYuBCyk92tTlnSmy07lJs6M
+ uER16ahLyQ5UownGnKECoNvZ90SuAKb2pts1xDHV+uFElTLfp0QC134IR0QximpB0hWq
+ Hy4Af31Ez2FRSw9/vovQVle/vS6AjuzTNV00a+4VMdICbcue340GI7Jupszt8czEQkYP
+ EOI3fEMD3hWMMPzWWjuvmvsDSEhg6IidX/wFU1LYRcuspEmxse9UjhGbRzwY/WysqMdx
+ 47kw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=WV4mH9mo
-Subject: [Buildroot] [PATCH 1/1] package/python-fastapi: bump to version
- 0.136.3
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=TKdvbslC
+Subject: [Buildroot] [PATCH 1/1] package/python-starlette: bump to version
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,55 +125,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new python-typing-inspection runtime dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-fastapi/Config.in           | 1 +
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
-index 0dd4499a3f..01163c60f5 100644
---- a/package/python-fastapi/Config.in
-+++ b/package/python-fastapi/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_FASTAPI
- 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
- 	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_INSPECTION # runtime
- 	help
- 	  FastAPI framework, high performance, easy to learn, fast to
- 	  code, ready for production.
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 35988ef77c..3882212eed 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index 4aa8d75119..bed49bf689 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  ce568586b56db35b344df5c23d130ada  fastapi-0.136.1.tar.gz
--sha256  7af665ad7acfa0a3baf8983d393b6b471b9da10ede59c60045f49fbc89a0fa7f  fastapi-0.136.1.tar.gz
-+md5  5e22f728ab9ea5c99a29a0137b4b8b55  fastapi-0.136.3.tar.gz
-+sha256  e487fae93ad408e6f47641ee4dfe389864fd7bec92e547ea8498fc13f43e83ab  fastapi-0.136.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  2c35b502eb0f34a3708d743b3e817186  starlette-1.0.0.tar.gz
+-sha256  6a4beaf1f81bb472fd19ea9b918b50dc3a77a6f2e190a12954b25e6ed5eea149  starlette-1.0.0.tar.gz
++md5  2d1e880ba9520c487e52dec610a0dfc5  starlette-1.1.0.tar.gz
++sha256  e83c7fe0ddecd8719c5b840080325aec0260acec86e9832899e377b91d65e90f  starlette-1.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index d99a55c754..60e0a83369 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index 8d369d53ab..20126e11ae 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.136.1
-+PYTHON_FASTAPI_VERSION = 0.136.3
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/5d/45/c130091c2dfa061bbfe3150f2a5091ef1adf149f2a8d2ae769ecaf6e99a2
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/81/2d/ff8d91d7b564d464629a0fd50a4489c97fcb836ac230bf3a7269232a9b1f
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 1.0.0
++PYTHON_STARLETTE_VERSION = 1.1.0
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/81/69/17425771797c36cded50b7fe44e850315d039f28b15901ab44839e70b593
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/95/66/4d20cdf39a8d6a51e663b7038e3b828ff211d3891a43a713fe7e4643f3a8
+ PYTHON_STARLETTE_SETUP_TYPE = hatch
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 -- 
 2.53.0
 
