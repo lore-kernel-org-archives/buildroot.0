@@ -4,83 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BBC2CD5BD0
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 21:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D499CD5BD0
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 21:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 576A54243A;
-	Wed, 27 May 2026 21:06:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C275A42472;
+	Wed, 27 May 2026 21:38:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QIaGdP-fH4QF; Wed, 27 May 2026 21:06:52 +0000 (UTC)
+ id luPCjueUuQEW; Wed, 27 May 2026 21:38:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 724A242419
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39F842473
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779916012;
-	bh=IRqTelP/brs559O44nm4YqcP+xYuZXwcl2cR4ahLHwI=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=AmKrVGLTv+JDmHspNO7PCWhe6nvVAvj/YOgvE0pTiO3hfzYRYywAf2AC8qwoiuFVB
-	 x5dEmLiRTJ04K6UdL5RvCD8pz5Lxb4ps/INmf/KmujMl2tYim987U8BCz9NbaWZZ4Q
-	 7KguiW/iC6UQc7T+Pr5HiinqJEMhjKN7rVh8DYakD4YNkoiHAK1F1ty31xuQBtzUWE
-	 utzDJTWVtuksKn1BgXJS3cL4dzXbziJ/QHzmaF4cySUS4LnEaEdezZlEpb1cixtOdc
-	 qA0/7auJ6DmI1Zgo+uXqP6vQoteHKU2rsNMdMoL6pFs+HV3mM6dfBoEOrJKV9xuA47
-	 eDVnOFbdPpocA==
+	s=default; t=1779917894;
+	bh=hqXTCT66YAfCKaQa5DPsd1YqEYV1yXVLyzEN7S2lEtY=;
+	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Reply-To:Cc:From;
+	b=aSVjCxcLeuM91LVZ2RtRtZ+L+I/vR+raiwnAWgOcRXy39V+DRJB/jB2OpqaArH74x
+	 oCKuamjKPE7qenHGRCWa4JTSmdSlCqk2sfLAgNBXUpsxZeOqaw0A809DrwSAbrh1u2
+	 fPVq8Joxs+OzYDiwT9ZOgjm3pv6uhp3H/f7fqyyF8P1bn2HWfHmOyzxWdqQzrDsi70
+	 ddcxx3H63PqlK197Y4LQOPMyhEf8uYK55O5uvRypW25WQ1HmlnmXqSE9LP0MR2oW+u
+	 BP1YRV2cc9KFxVSFwRbj36dKhW2ogNIiPhsCDiphBMyF7KreR+5ClG82/Q4QGfDkbV
+	 XY7IkhIlW3DgA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 724A242419;
-	Wed, 27 May 2026 21:06:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 84189288
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:06:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E39F842473;
+	Wed, 27 May 2026 21:38:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB53928A
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73839615C3
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:06:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C14E84653
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HK-f-6SeyMhD for <buildroot@buildroot.org>;
- Wed, 27 May 2026 21:06:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 813DB615C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 813DB615C2
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 813DB615C2
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:06:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3EEFBA4C2050;
- Wed, 27 May 2026 23:06:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42376)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
- (envelope-from <bernd@kuhls.net>) id 1wSLSg-000000006LV-1zmZ;
- Wed, 27 May 2026 21:06:46 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Will Newton <will.newton@gmail.com>
-Date: Wed, 27 May 2026 23:06:46 +0200
-Message-ID: <20260527210646.3568047-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xwBLzSXs8WTj for <buildroot@buildroot.org>;
+ Wed, 27 May 2026 21:38:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77FBD84652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77FBD84652
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 77FBD84652
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:11 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-bd4d7f4fa02so2056904366b.3
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 14:38:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1779917889; x=1780522689;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=D6WvnGDbVevsJcoBptw2PR8ytmBr0uSSEyF0Jm6CUrI=;
+ b=rAo7USaIgcYIkJjc4UTDXbf21mwzIPscRmCcNisseWbqmlfHJlqlSRa83GsN/tLhMe
+ s2uTBZgbw10pQaLQJjdrYebO/fHtaBY1O6DA7xkvCojYTbMF4vaibyjkhYW55Gg7Prab
+ oQzk2AKfdWQ33HWFYwk1G8LmXcSFiWUgT97EMEuPhbor7XsfptMZK7UZQYDBUDKfUICn
+ Jk3onjlDOK/OW10ZPKAvpEBMYZkWMJSNALEkwJRJjSArnXAT6U8g+k1IKNFVY6TvaDMa
+ L4O1FN9iiD3+UJvnCWJ6zo8udHDRHePru469M2FZO+FFRewz+oWZlyaDh4ElHkwOQB9g
+ tSDg==
+X-Gm-Message-State: AOJu0YxMvL+WmaLRJXPhQrrWh6OXyeg8AeySEwne9hOPbIOv1wua01OA
+ TvW2uzbGfkStZFDW8gHuQpVTQgYSdpmliOUWBi2fL7jXmWYKAschHUMChpeb72ks
+X-Gm-Gg: Acq92OHr3kbzfD5dRmybSNYOmBjLNO43rhLJtuwFeGb2I6ZrGqFF5i4RyggZQNSkCMN
+ JZL03D4rGc17n+iX6I60KSct/GFrut6+NQFmeqQKQisGW/jY9/IchoYIqDw9cQ+x2cotSWnKWtr
+ pyNQPuhct38/RNJPEY/SYUxcjeZeabCk1JtYbg/Dv+l1XSaxXOOz+Y0s40mqdSvKKrCnKiiBZG6
+ y5KnMluNoFQlt+6SmEpzIpnPE9bmvNujEkq4M3mMzjLRvIMI9JcgVBjltQRzj2rtgphEtKML9st
+ KaRvFPwqguMbv72p3pE8fWzsbLzBsIUxRV7qnJBzCLFJSLUP2Va0HyD1mOOIsCGdxUsfZhvp14M
+ xNXoOHNk2yj0CyoNkOR7XJfKHaDxI0tQ2ExNOrtDDYNpk6uTytBJl0/w7p7oMPm+sna992Ef9KX
+ sqfuorqtzyBC2ui5PZLZdodtZXQXh7W+iqJdJeLXvlvQWf/1puywTw4QRVOr2AmJMTTF8Ixs35+
+ KA9qEdOmf1/XNH8
+X-Received: by 2002:a17:906:8a4f:b0:bd9:1f8:cd74 with SMTP id
+ a640c23a62f3a-bdd23cfd9a6mr1111400666b.8.1779917888898; 
+ Wed, 27 May 2026 14:38:08 -0700 (PDT)
+Received: from pevik (94-40-87-20.alarmadi.pl. [94.40.87.20])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-bddc30528a7sm650605866b.21.2026.05.27.14.38.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 May 2026 14:38:08 -0700 (PDT)
+Date: Wed, 27 May 2026 23:38:05 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20260527213805.GA271095@pevik>
+References: <20260527194041.2109092-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20260527194041.2109092-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1779916007;
- bh=C0w7lFbT067nNvHUKJSB3exVCMj5AvpcT8RA0yZJUOc=;
- h=From:To:Cc:Subject:Date:From;
- b=I9xrvjWRxB0gbk3rgB1rz/x1DNj1x0aaNVmVAFUBQcWuH0ZqNbgxpnXXmMzqXhQ30
- wfsoBU6kD4kDfgc5Di8r0jf+CZ4msSc49D5+s14uxkN7ZOv1fLmdybHIivAu9qAw1M
- U6YjbJLtGAKmuglVcCwzd9oXabccKxfhZAoyc/o0J+XrNwLZkNRAUr2+cktvuddA0W
- zTmkhMx0BCjJrpga+2aR2B6NENfKuoF8eZh1lMJq3cTUyqe2s0NtZwV0d7cYoPYYJ8
- 6CRas/L5NCmSvCQrsaTwjho/6gFAwKjetQ3SPz7mAZyGNoSkjJWdVjBw47WQf7zHXy
- ns3QpH2kR1j5g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20251104; t=1779917889; x=1780522689; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=D6WvnGDbVevsJcoBptw2PR8ytmBr0uSSEyF0Jm6CUrI=;
+ b=H9OUezfeo3zzO/xmoewa4p4Et+b3Vqn/BzG4Bldr3ihsJqw0H7JX8SU6M1StxEEb3U
+ lvPjB2NqxO9T8/prO1QaNkVTzROP1R/DmSSjaDpNtCr4AfKPD48aVLb3E1AJ1/2LD7t5
+ drT9z8We7BR3fynnU+nA7ScNQQRMdlLtAfQwUuGd9z3xVpzWRw2ziew/uLS0mRHrzXYv
+ sVLUqQopQmdDm1dO45h5Hv5VW8iUAOjOmMon640U/V2WBA238q0yWmTPYLieXdGFhCEA
+ BsresvZR4MzAaADmZyoCu0FntGYnZ+n0YJY8roskTUEFSJzOoD1c7ww8lW3u4jwkvN4v
+ xznQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=I9xrvjWR
-Subject: [Buildroot] [PATCH v2 1/1] package/libmicrohttpd: needs host-pkgconf
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=H9OUezfe
+Subject: Re: [Buildroot] [PATCH] package/rpcbind: bump version to 1.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,54 +122,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 712121326f84e2508ab161053c2b04e45511c79f bumped the
-package to 1.0.5 which includes upstream commit
-https://github.com/Karlson2k/libmicrohttpd/commit/a1f937422658d3c6d53853c587bc025274afac4d
-that breaks the build if pkgconf was not found:
-https://github.com/Karlson2k/libmicrohttpd/blame/master/m4/pkg.m4#L84
+Hi Giulio, all,
 
-Fixes:
-https://autobuild.buildroot.net/results/e3e/e3e25753c670b5d86d042d850582e2e1e0eedca5/
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14386351826
+[ Cc Arnout ]
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: added host-pkgconf as mandatory dependency (Romain)
-    Gitlab pipeline passed:
-    https://gitlab.com/bkuhls/buildroot/-/pipelines/2557122497
+> Changelog:
+> https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/1.2.9-ChangeLog/download
 
- package/libmicrohttpd/libmicrohttpd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks!
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 7a243b42cf..a3b24d363c 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -9,6 +9,7 @@ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
- LIBMICROHTTPD_INSTALL_STAGING = YES
-+LIBMICROHTTPD_DEPENDENCIES = host-pkgconf
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
- LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
-@@ -16,7 +17,7 @@ LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPL-2.1+
--LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls
-+LIBMICROHTTPD_DEPENDENCIES += gnutls
- LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr
- else
- LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
--- 
-2.47.3
+@Arnout IMHO worth to backport due memory leak fixes.
 
+Kind regards,
+Petr
+
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/rpcbind/rpcbind.hash | 6 +++---
+>  package/rpcbind/rpcbind.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+> index e268a0733a..3059751050 100644
+> --- a/package/rpcbind/rpcbind.hash
+> +++ b/package/rpcbind/rpcbind.hash
+> @@ -1,6 +1,6 @@
+> -# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.8/
+> -sha1  2f733aba26075ca91fda3787890232da3d07c06e  rpcbind-1.2.8.tar.bz2
+> +# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/
+> +sha1  111058e312e0634f8bd23a783ea4f99912ced085  rpcbind-1.2.9.tar.bz2
+>  
+>  # Locally computed:
+> -sha256  964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5  rpcbind-1.2.8.tar.bz2
+> +sha256  ce5f1a87c566ef0b2897a28f50a75c1dc23fec413a46a7f4183423b6b6aa991b  rpcbind-1.2.9.tar.bz2
+>  sha256  2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
+> diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+> index 3b496ee2c6..96025624ff 100644
+> --- a/package/rpcbind/rpcbind.mk
+> +++ b/package/rpcbind/rpcbind.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RPCBIND_VERSION = 1.2.8
+> +RPCBIND_VERSION = 1.2.9
+>  RPCBIND_SITE = https://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+>  RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+>  RPCBIND_LICENSE = BSD-3-Clause
+> -- 
+> 2.47.3
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
