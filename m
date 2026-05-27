@@ -4,113 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D499CD5BD0
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 21:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 056BCCD4F54
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 22:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C275A42472;
-	Wed, 27 May 2026 21:38:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 855E14267B;
+	Wed, 27 May 2026 22:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id luPCjueUuQEW; Wed, 27 May 2026 21:38:14 +0000 (UTC)
+ id AjhUC_8rniUk; Wed, 27 May 2026 22:56:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39F842473
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77DDF42678
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779917894;
-	bh=hqXTCT66YAfCKaQa5DPsd1YqEYV1yXVLyzEN7S2lEtY=;
-	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1779922601;
+	bh=IVlfijnhcwV+600y5xkK9RwM52++rhx9IJWDuRKT9oA=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Reply-To:Cc:From;
-	b=aSVjCxcLeuM91LVZ2RtRtZ+L+I/vR+raiwnAWgOcRXy39V+DRJB/jB2OpqaArH74x
-	 oCKuamjKPE7qenHGRCWa4JTSmdSlCqk2sfLAgNBXUpsxZeOqaw0A809DrwSAbrh1u2
-	 fPVq8Joxs+OzYDiwT9ZOgjm3pv6uhp3H/f7fqyyF8P1bn2HWfHmOyzxWdqQzrDsi70
-	 ddcxx3H63PqlK197Y4LQOPMyhEf8uYK55O5uvRypW25WQ1HmlnmXqSE9LP0MR2oW+u
-	 BP1YRV2cc9KFxVSFwRbj36dKhW2ogNIiPhsCDiphBMyF7KreR+5ClG82/Q4QGfDkbV
-	 XY7IkhIlW3DgA==
+	 From;
+	b=j7COODyb8hXuh71cUd1i8MEQi67DhGvD3cpxRBCRN00Y8TqckLWmTrz7p1RAb3OZa
+	 62vvTl2JAMgoqmUzzJr7D+uGlNRhG/jDDQOejW032yWHgjbDKDRFIlRNxCpr30KRsh
+	 SA9vlLETlWWn5ozvAo0kbQHrAWj3lZEZjfNHO4VOQYaDoyUcE2VYetJRTKxTXqEdTH
+	 +h3FPtZlW2ZPave8K7RrBv+Lvc28gAr4xp8TXDJw0dNEWU5CLnhhCK5xCHuG1kQZ91
+	 n8f0NoFQlNKNfee7LctG0mMNc4Ux3fUXxZj/Ow1PCKyH3gNt8STlRdJhvGvuTHID1c
+	 y3Kd29K1qsk8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E39F842473;
-	Wed, 27 May 2026 21:38:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB53928A
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77DDF42678;
+	Wed, 27 May 2026 22:56:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88E9428A
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 22:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C14E84653
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 673ED42667
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 22:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xwBLzSXs8WTj for <buildroot@buildroot.org>;
- Wed, 27 May 2026 21:38:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77FBD84652
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77FBD84652
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77FBD84652
- for <buildroot@buildroot.org>; Wed, 27 May 2026 21:38:11 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-bd4d7f4fa02so2056904366b.3
- for <buildroot@buildroot.org>; Wed, 27 May 2026 14:38:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779917889; x=1780522689;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=D6WvnGDbVevsJcoBptw2PR8ytmBr0uSSEyF0Jm6CUrI=;
- b=rAo7USaIgcYIkJjc4UTDXbf21mwzIPscRmCcNisseWbqmlfHJlqlSRa83GsN/tLhMe
- s2uTBZgbw10pQaLQJjdrYebO/fHtaBY1O6DA7xkvCojYTbMF4vaibyjkhYW55Gg7Prab
- oQzk2AKfdWQ33HWFYwk1G8LmXcSFiWUgT97EMEuPhbor7XsfptMZK7UZQYDBUDKfUICn
- Jk3onjlDOK/OW10ZPKAvpEBMYZkWMJSNALEkwJRJjSArnXAT6U8g+k1IKNFVY6TvaDMa
- L4O1FN9iiD3+UJvnCWJ6zo8udHDRHePru469M2FZO+FFRewz+oWZlyaDh4ElHkwOQB9g
- tSDg==
-X-Gm-Message-State: AOJu0YxMvL+WmaLRJXPhQrrWh6OXyeg8AeySEwne9hOPbIOv1wua01OA
- TvW2uzbGfkStZFDW8gHuQpVTQgYSdpmliOUWBi2fL7jXmWYKAschHUMChpeb72ks
-X-Gm-Gg: Acq92OHr3kbzfD5dRmybSNYOmBjLNO43rhLJtuwFeGb2I6ZrGqFF5i4RyggZQNSkCMN
- JZL03D4rGc17n+iX6I60KSct/GFrut6+NQFmeqQKQisGW/jY9/IchoYIqDw9cQ+x2cotSWnKWtr
- pyNQPuhct38/RNJPEY/SYUxcjeZeabCk1JtYbg/Dv+l1XSaxXOOz+Y0s40mqdSvKKrCnKiiBZG6
- y5KnMluNoFQlt+6SmEpzIpnPE9bmvNujEkq4M3mMzjLRvIMI9JcgVBjltQRzj2rtgphEtKML9st
- KaRvFPwqguMbv72p3pE8fWzsbLzBsIUxRV7qnJBzCLFJSLUP2Va0HyD1mOOIsCGdxUsfZhvp14M
- xNXoOHNk2yj0CyoNkOR7XJfKHaDxI0tQ2ExNOrtDDYNpk6uTytBJl0/w7p7oMPm+sna992Ef9KX
- sqfuorqtzyBC2ui5PZLZdodtZXQXh7W+iqJdJeLXvlvQWf/1puywTw4QRVOr2AmJMTTF8Ixs35+
- KA9qEdOmf1/XNH8
-X-Received: by 2002:a17:906:8a4f:b0:bd9:1f8:cd74 with SMTP id
- a640c23a62f3a-bdd23cfd9a6mr1111400666b.8.1779917888898; 
- Wed, 27 May 2026 14:38:08 -0700 (PDT)
-Received: from pevik (94-40-87-20.alarmadi.pl. [94.40.87.20])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-bddc30528a7sm650605866b.21.2026.05.27.14.38.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 May 2026 14:38:08 -0700 (PDT)
-Date: Wed, 27 May 2026 23:38:05 +0200
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20260527213805.GA271095@pevik>
-References: <20260527194041.2109092-1-giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c4goWrfravSF for <buildroot@buildroot.org>;
+ Wed, 27 May 2026 22:56:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C76D24267A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C76D24267A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C76D24267A
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 22:56:37 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -608745044; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 27 May 2026 22:56:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wSNAv-000000014dP-35uf;
+ Thu, 28 May 2026 00:56:33 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,  Romain Naour
+ <romain.naour@gmail.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260527122510.674604-1-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Wed, 27 May 2026 14:25:10 +0200")
+References: <20260527122510.674604-1-thomas.perale@mind.be>
+Date: Thu, 28 May 2026 00:56:33 +0200
+Message-ID: <87y0h4lavy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260527194041.2109092-1-giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779917889; x=1780522689; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=D6WvnGDbVevsJcoBptw2PR8ytmBr0uSSEyF0Jm6CUrI=;
- b=H9OUezfeo3zzO/xmoewa4p4Et+b3Vqn/BzG4Bldr3ihsJqw0H7JX8SU6M1StxEEb3U
- lvPjB2NqxO9T8/prO1QaNkVTzROP1R/DmSSjaDpNtCr4AfKPD48aVLb3E1AJ1/2LD7t5
- drT9z8We7BR3fynnU+nA7ScNQQRMdlLtAfQwUuGd9z3xVpzWRw2ziew/uLS0mRHrzXYv
- sVLUqQopQmdDm1dO45h5Hv5VW8iUAOjOmMon640U/V2WBA238q0yWmTPYLieXdGFhCEA
- BsresvZR4MzAaADmZyoCu0FntGYnZ+n0YJY8roskTUEFSJzOoD1c7ww8lW3u4jwkvN4v
- xznQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=IPQucG6Awdu3NFktQmAnLO7YRh0SgoIL/6nwkHgzu7Gg9qObYyeWs541G1wu89ySaWEbiB5iKj4e2Oaad1/QgJ5vLdwrWbfyaMLvq5ErBwqZYAMS777iM/czN8rUFi1x86PkGt4iKJMi3aj1RlvIKCPtYGbUumR3C1Wp30+VKrw03iCtmatytqVTVGamIVo3TqP0L54Ew4Suaz3JKb195G/H4iSN/VQOR55QRe3z3G+B5ZdFmnUneLqLOp0qPcoGTXrcEHIvpf+oetr8A+jIKWlA1m9nGIBAwLpVEBL5q19Jc9d1nHIGwPmSdoJuWB7BlR5ZJzDnIPFcTpTJ9qOs0A==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=Gj4KKFR6Oo/e1Uohr0vLpyGKnCajjAXa8qHR8X/z7gQ=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=H9OUezfe
-Subject: Re: [Buildroot] [PATCH] package/rpcbind: bump version to 1.2.9
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=IPQucG6A
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/{glibc,
+ localedef}: security bump to version glibc-2.41-137-gb676adadb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,64 +94,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio, all,
+>>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
-[ Cc Arnout ]
+ > Fixes the following vulnerabilities:
+ > - CVE-2026-4046:
+ >     The iconv() function in the GNU C Library versions 2.43 and earlier
+ >     may crash due to an assertion failure when converting inputs from the
+ >     IBM1390 or IBM1399 character sets, which may be used to remotely crash
+ >     an application.    This vulnerability can be trivially mitigated by
+ >     removing the IBM1390 and IBM1399 character sets from systems that do
+ >     not need them.
 
-> Changelog:
-> https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/1.2.9-ChangeLog/download
+ > For more information, see:
+ >   - https://www.cve.org/CVERecord?id=CVE-2026-4046
+ >   - glibc-2.41-135-g61737f43b1f0d9f64a6f16649625476b70f9f4d3
 
-Thanks!
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+ > - CVE-2026-4437:
+ >     Calling gethostbyaddr or gethostbyaddr_r with a configured
+ >     nsswitch.conf that specifies the library's DNS backend in the GNU C
+ >     Library version 2.34 to version 2.43 could, with a crafted response
+ >     from the configured DNS server, result in a violation of the DNS
+ >     specification that causes the application to treat a non-answer
+ >     section of the DNS response as a valid answer.
 
-@Arnout IMHO worth to backport due memory leak fixes.
+ > For more information, see:
+ >   - https://www.cve.org/CVERecord?id=CVE-2026-4437
+ >   - glibc-2.41-131-gdbd8335c8ce8af11226ee1514d7a020b15c63345
 
-Kind regards,
-Petr
+ > - CVE-2026-4438:
+ >     Calling gethostbyaddr or gethostbyaddr_r with a configured
+ >     nsswitch.conf that specifies the library's DNS backend in the GNU C
+ >     library version 2.34 to version 2.43 could result in an invalid DNS
+ >     hostname being returned to the caller in violation of the DNS
+ >     specification.
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/rpcbind/rpcbind.hash | 6 +++---
->  package/rpcbind/rpcbind.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
-> index e268a0733a..3059751050 100644
-> --- a/package/rpcbind/rpcbind.hash
-> +++ b/package/rpcbind/rpcbind.hash
-> @@ -1,6 +1,6 @@
-> -# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.8/
-> -sha1  2f733aba26075ca91fda3787890232da3d07c06e  rpcbind-1.2.8.tar.bz2
-> +# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/
-> +sha1  111058e312e0634f8bd23a783ea4f99912ced085  rpcbind-1.2.9.tar.bz2
->  
->  # Locally computed:
-> -sha256  964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5  rpcbind-1.2.8.tar.bz2
-> +sha256  ce5f1a87c566ef0b2897a28f50a75c1dc23fec413a46a7f4183423b6b6aa991b  rpcbind-1.2.9.tar.bz2
->  sha256  2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
-> diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-> index 3b496ee2c6..96025624ff 100644
-> --- a/package/rpcbind/rpcbind.mk
-> +++ b/package/rpcbind/rpcbind.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RPCBIND_VERSION = 1.2.8
-> +RPCBIND_VERSION = 1.2.9
->  RPCBIND_SITE = https://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
->  RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
->  RPCBIND_LICENSE = BSD-3-Clause
-> -- 
-> 2.47.3
-> 
+ > For more information, see:
+ >   - https://www.cve.org/CVERecord?id=CVE-2026-4438
+ >   - glibc-2.41-132-g502861645bb1baf650d58e2ddd6b230bc26676c9
+
+ >> git shortlog 2.41-123-gfb4db64a0..glibc-2.41-137-gb676adadb
+
+ > Carlos O'Donell (2):
+ >       resolv: Count records correctly (CVE-2026-4437)
+ >       resolv: Check hostname for validity (CVE-2026-4438)
+
+ > DJ Delorie (1):
+ >       include: isolate __O_CLOEXEC flag for sys/mount.h and fcntl.h
+
+ > Florian Weimer (8):
+ >       Switch currency symbol for the bg_BG locale to euro
+ >       nss: Introduce dedicated struct nss_database_for_fork type
+ >       Linux: In getlogin_r, use utmp fallback only for specific errors
+ >       nss: Missing checks in __nss_configure_lookup, __nss_database_get (bug 28940)
+ >       iconvdata: Fix invalid pointer arithmetic in ANSI_X3.110 module
+ >       posix: Run tst-wordexp-reuse-mem test
+ >       Use pending character state in IBM1390, IBM1399 character sets (CVE-2026-4046)
+ >       Linux: Only define OPEN_TREE_* macros in <sys/mount.h> if undefined (bug 33921)
+
+ > Michael Jeanson (1):
+ >       tests: fix tst-rseq with Linux 7.0
+
+ > Xi Ruoyao (1):
+ >       elf: parse /proc/self/maps as the last resort to find the gap for tst-link-map-contiguous-ldso
+
+ > Yury Khrustalev (1):
+ >       posix: Fix invalid flags test for p{write,read}v2
+
+ > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
