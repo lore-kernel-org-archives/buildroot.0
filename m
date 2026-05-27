@@ -4,131 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76049CD4F54
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 19:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F6A2CD4F54
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 19:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FC6F42351;
-	Wed, 27 May 2026 19:54:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E93E441DF3;
+	Wed, 27 May 2026 19:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 207ktVYy8VxJ; Wed, 27 May 2026 19:54:34 +0000 (UTC)
+ id fuu_YQipBk-W; Wed, 27 May 2026 19:56:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 604304234D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 253C041DDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779911674;
-	bh=Exp6m82k9ahcR5mDkaXYBvXpEHGP0T6USE4/w/8lR/U=;
-	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1779911799;
+	bh=mi+JNBPu0vb4mGj7sSGBjMZ2k0v4JU8o+hJ3vlI8X4U=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=I/7j0GwI7sxRyCq6ZEZ4DRGD+TI2usySoh9uxpTIywyii8HrAQSh8vAs1MxdNU/DN
-	 z7zkI2rNecCWucBlniKzav8EWsxmJwAza2hzQ+zfnFju3pWUhkMihY+q8M6PRBLgJf
-	 kx/ra94q/Y+xp7RZCwGha+FshcykQwj7c2SL8Jx/039JfCYHBp+DLdLalSXcn9gWx3
-	 lnxkIJlRzgSXNJvOHqUiuwCWYgYqldAM95pzQot2Gjkt7vzMPWkhnxUdF8KaX8rD2A
-	 lslbWspi8eNo2XR8tFMD3lPK1DtM3xsoFnZ2GU2eg+0FXaar9e+zBvBwl3xlc/lVT/
-	 C4f2k7r19sUnQ==
+	b=b0EylU00ayt+FqyBv4iLOalUqMWywv6Xr5NHjvuUg8hUqNGWcOglNjjln5sRVOoA/
+	 Ffxz+KUknXwKsJdOLg6xK2EMQJKNSVI3YDtHw5rLxWKzngoO6f3V5RdXTLVFFffDVm
+	 ZvtrKVZR5XFBQON1hTzFHTkjpRfiRf8oWGXG27nzljO2pDUCAfmAztnLtrLNIwBX0X
+	 ddB5OCWdfYdFiQfjd2JqUBFS2GzC2LuxN4i8x0RzDYEZYKT4o9UHfgjrEvfKqoC/lb
+	 rtdL/r4+d6uYhC/Y7TnMbV8wRH32E9b3gaAoY1r26r4/Vg618Kj+pzufYlXfS/H39V
+	 QUlpJUOyCs5Tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 604304234D;
-	Wed, 27 May 2026 19:54:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 253C041DDD;
+	Wed, 27 May 2026 19:56:39 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E4B928A
- for <buildroot@buildroot.org>; Wed, 27 May 2026 19:54:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FAD9288
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 19:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D06680F6D
- for <buildroot@buildroot.org>; Wed, 27 May 2026 19:54:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1B70843FC
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 19:56:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rzeXgpDfHlop for <buildroot@buildroot.org>;
- Wed, 27 May 2026 19:54:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7CC1E80F61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC1E80F61
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7CC1E80F61
- for <buildroot@buildroot.org>; Wed, 27 May 2026 19:54:31 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-48984d29fe3so126922045e9.0
- for <buildroot@buildroot.org>; Wed, 27 May 2026 12:54:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779911669; x=1780516469;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=GJhU7HHWUUR6DYgNkcobH1NbvCYSe/I9vJm/8HCSgx0=;
- b=ik2BjabiFPfWgzZc8uSYbZXb3N1P+82R7phkl0mBkqHZw2QpFJzzMtUr+39h62zccw
- xhN3FmjCkMKU+wbmAs8ahrQzIFhlCUeHMDaZFOwj/XyNLhGOybeUUFnxYH54ZSu6VsUE
- rwoCDtv/eALpodrmZToK5IGSKW3HR9yPI66pGgx35I5Hg8zGXBu1DZs5/3GRDGpaaKnp
- 8ILrfOrbmQVEoezuc0K2NzlRP6AgTnGzyV1V4a2B2z+F+gquWBw9TjvKf/3TKd/Gxesw
- XmWvNQhwr01Kd0wc5lGDrxhtrLCASGWENH/8qGalMzR8L1g+rEPwa2agV9fqYC0+DBvT
- L/aw==
-X-Gm-Message-State: AOJu0YyTADvFRdZkih03pOxj56l7W/Y88euXAUyFuIUF/FtapSxCd24N
- /gl5gViM5HEOgMsB5nlQXZsdR8gTTAC4EFkhVBpMMapPSEVs8ho2N3yYd2igPQ==
-X-Gm-Gg: Acq92OH9S3LDZWECUXdTlUStXs1umHf+Ljd/ytYkqDhItyPpcpFjTGzaBMF5vuGJQt6
- SqoitBIHITEHneifPQOhKaOoCa08PDWW/9FphRFhy0Kb/s+ukGxAeMiw2AvX4xQbBFwudeGlcBd
- zERdqAzAOZF+zjhnCp03tG8SfQcwHyewUcEvDpPtaQ3RIEwRl6+fe1U6Q/CMtdMIj+vGGrmIq0d
- JYjDE/eCB71xUAQcXruM7CeqEKSrvUVAyknHKCygOAB/DTcPv56iKtzAgR3wtyYZXPXXColl8cp
- XSQ+bGCKBv0t287Ufy8SxaGeFRkji74Y3V18Pk/7cD20z5WJvxKZdYJElxNptxB7p+mVj9KQm14
- 8sTdaCd+OJSE3RqhLlHRJ338Dsu6PkCjRcgJ8My6VujVbWq4/ae4ChgPGZVWfp0JE6SD1v4m+q6
- c7S4JEFbG6ddGgEwFZGu/L2GFT8Fh3/f+b2Lw=
-X-Received: by 2002:a05:600c:4ecc:b0:490:3c15:7146 with SMTP id
- 5b1f17b1804b1-490426cd872mr394240735e9.19.1779911669005; 
- Wed, 27 May 2026 12:54:29 -0700 (PDT)
-Received: from localhost ([2001:861:3385:e20:f99c:d6cf:27e6:2b03])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45edb558449sm7702243f8f.13.2026.05.27.12.54.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 May 2026 12:54:28 -0700 (PDT)
-From: =?utf-8?q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
-Date: Wed, 27 May 2026 21:53:52 +0200
-MIME-Version: 1.0
-Message-Id: <20260527-master-v1-1-0d975f3b3f0d@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM2wpAUBCF4VfRXNvFlOOryMXYBqMc2oOUvLuNy
- 6/+tS5QdsIKZXCB40NUltkjDgOwA809G2m9ASNMowQzM5Fu7AxygkVBRLkl8PHquJPzO6rq37o
- 3I9vtXcN9PwFxiVtqAAAA
-X-Change-ID: 20260527-master-2e5299aaa8ca
+ id VQ30Nk0HgznF for <buildroot@buildroot.org>;
+ Wed, 27 May 2026 19:56:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3B22843F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3B22843F5
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3B22843F5
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 19:56:36 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c0c6.dip0.t-ipconnect.de [79.214.192.198])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AE20BA4C2118
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 21:56:33 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39932)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wSKMi-000000002Z6-3saw
+ for buildroot@buildroot.org; Wed, 27 May 2026 19:56:33 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=rgallaispou@gmail.com; 
- h=from:subject:message-id;
- bh=Xdhzk9oI5DRxuqk/K1cKHdS4s3kgL7vPpFRBvBTpOfs=; 
- b=owEBbQKS/ZANAwAKAechimjUEsK1AcsmYgBqF0vTddyDMCh04qIZx49nypPBmlPD+ovw5ukBH
- X/pxc+kopqJAjMEAAEKAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCahdL0wAKCRDnIYpo1BLC
- tTqeD/9/5TUMqz2KhDuGqaS5wVlGO0K/KKbHZ5mlTPisB2H+za5sBD+ecc2AzLIDTiK7423Zn8q
- NroQby8v09OZgtW746tbxD/G1Kl8WkR4O1D87q/vXrP51stBOh5FWErRxEIjOXow81R8Wc5rBVZ
- //fpmArzzyA3uNvSwK6faxJKVLgMffCLNF5qPH/YPcsBH7OPcUpsa7jvP2Lq7OClTBgZ4VDxtgy
- ps0vhv0VsxTuys0N1MEpUoZTqUft1hFsUy5KRD5Vm8pmql+j8q/udsUKe5TS2PxmXKvQSNtlHlv
- NTZmODxrCVmwh2B4EoCKthVVrUNUbzx6vXIIV1DMP+KtDPN/Jd3LBp8qHBfX4E5XCTLohqAeMrI
- 4cS9P3/lVq/eF9uNojSVjp48o7FiBiLtGNMDKZ+ANevhQLmw4MLEH5dc3NAxyE91ZgVrq6EgSwU
- rN57pEuwgBgjH/yPtdSFr54ZHbN0muuXjj3iwK7l4Am+fU38PKUJYKYByxgNzngsxPcuKwMQIHD
- XJUE266MT67NMXHv3l1i4IAwHwItPXfkJy6MWevCllszq55uLRyokPCZ5RwA+cIG5hplJXBF9Ba
- 5lNmsMGNpJ3ISiXLfYSiTtkHZDFx06MqZ0stFrp7zUSz069C8FDCTLT8cm4v3HPUTYShM7Imwk5
- cq+4aSFUjVMeQZg==
-X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
- fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
+Date: Wed, 27 May 2026 21:56:33 +0200
+Message-ID: <20260527195633.3540374-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779911669; x=1780516469; darn=buildroot.org;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GJhU7HHWUUR6DYgNkcobH1NbvCYSe/I9vJm/8HCSgx0=;
- b=T3kDjIqKBBm5vhKqwFJ1hk5R+mxdBgb/xJsaceKZrKCgIKCNBFRkC+QzyaT5R4jS8o
- RTnonIHiXNbg5jl/OzSIcnSlrgaW5Hla22Xgi3L4kcpFYBiq6/a1i5TCz5B/HOgZSy0o
- YxoP4GdTVZ4v8lK2i8B44grY7xmeNwQRR1YQIOZMcKgVVSPD5G+Fdyn4d5sxLnB4FB/j
- cODbXSC7ZaCcXAk9kbDF/tdInFz3yanXEiKiylRX+jsDS9iSsNaeICC4Ql/erIIiIdD9
- yTOvM+Oan6RobktQsARiidiNa8Q2df6pO3RXWX7wOY8IPmjVCkWH83GjhjUSIrDRNxJr
- tMMw==
+ d=kuhls.net; 
+ s=kas202511301023; t=1779911793;
+ bh=sqMTMMR/ESIFCXU+bKOrY1w6CMeVG493GLV2FpP969c=;
+ h=From:To:Subject:Date:From;
+ b=pg1ZrsJdOo56wwgSMCCdBzosCb8fgHO+z5X2xbvDtYDJePX1Bu+pYbw/WClSd8GE6
+ jNcOTkX87hw6mKhaFTjctFUppIctKaCzr6azItAy6tTYbxpu3Ezqr9k8vT7OXbhZ1r
+ hDctlM71GjCQKHzvLJbPB84TuaG5grEB0tZWxV5OLytA+Eg3Cg9AQdvtOcItTAwhYt
+ JUgvipLRl+SuUae8GaLfIFn69deXHO8gBE5ehHt5X2+6HHCLfFM37++ft2vJK88csX
+ /POBlm2eSdsskZhn9DeGa6VksgDaTxbxpuEpnEmLNB9z23+vGOEh3N3FDMwFo6cOTw
+ JNrAYiySiQIuQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=T3kDjIqK
-Subject: [Buildroot] [PATCH] package/libxkbcommon: provide xkbregistry when
- libxml2 is enabled
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=pg1ZrsJd
+Subject: [Buildroot] [PATCH v2 1/1] package/vorbis-tools: Fix build with gcc
+ 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,36 +92,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-eGticmVnaXN0cnkgaXMgZGlzYWJsZWQgYnkgZGVmYXVsdC4gIFlldCwgaXQgb25seSBuZWVkcyBs
-aWJ4bWwyIHRvIGJlCmJ1aWx0LCB3aGljaCBpcyBhbHJlYWR5IHN1cHBvcnRlZC4KCkFkZCB0aGUg
-Y29tcGlsZSBmbGFncyB0byBidWlsZCB4a2JyZWdpc3RyeSB3aGVuIHBvc3NpYmxlLgoKU2lnbmVk
-LW9mZi1ieTogUmFwaGHDq2wgR2FsbGFpcy1Qb3UgPHJnYWxsYWlzcG91QGdtYWlsLmNvbT4KLS0t
-CiBwYWNrYWdlL2xpYnhrYmNvbW1vbi9saWJ4a2Jjb21tb24ubWsgfCAxMCArKysrKysrKy0tCiAx
-IGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbGlieGtiY29tbW9uL2xpYnhrYmNvbW1vbi5tayBiL3BhY2thZ2UvbGlieGti
-Y29tbW9uL2xpYnhrYmNvbW1vbi5tawppbmRleCAyMWEyYjkzN2VmMDIuLjk4MTU0MzY5YjQxOSAx
-MDA2NDQKLS0tIGEvcGFja2FnZS9saWJ4a2Jjb21tb24vbGlieGtiY29tbW9uLm1rCisrKyBiL3Bh
-Y2thZ2UvbGlieGtiY29tbW9uL2xpYnhrYmNvbW1vbi5tawpAQCAtMTIsOCArMTIsNyBAQCBMSUJY
-S0JDT01NT05fQ1BFX0lEX1ZFTkRPUiA9IHhrYmNvbW1vbgogTElCWEtCQ09NTU9OX0lOU1RBTExf
-U1RBR0lORyA9IFlFUwogTElCWEtCQ09NTU9OX0RFUEVOREVOQ0lFUyA9IGhvc3QtYmlzb24gaG9z
-dC1mbGV4CiBMSUJYS0JDT01NT05fQ09ORl9PUFRTID0gXAotCS1EZW5hYmxlLWRvY3M9ZmFsc2Ug
-XAotCS1EZW5hYmxlLXhrYnJlZ2lzdHJ5PWZhbHNlCisJLURlbmFibGUtZG9jcz1mYWxzZQogCiBp
-ZmVxICgkKEJSMl9QQUNLQUdFX1hPUkc3KSx5KQogTElCWEtCQ09NTU9OX0NPTkZfT1BUUyArPSAt
-RGVuYWJsZS14MTE9dHJ1ZQpAQCAtMjIsNiArMjEsMTMgQEAgZWxzZQogTElCWEtCQ09NTU9OX0NP
-TkZfT1BUUyArPSAtRGVuYWJsZS14MTE9ZmFsc2UKIGVuZGlmCiAKK2lmZXEgKCQoQlIyX1BBQ0tB
-R0VfTElCWE1MMikseSkKK0xJQlhLQkNPTU1PTl9DT05GX09QVFMgKz0gLURlbmFibGUteGticmVn
-aXN0cnk9dHJ1ZQorTElCWEtCQ09NTU9OX0RFUEVOREVOQ0lFUyArPSBsaWJ4bWwyCitlbHNlCitM
-SUJYS0JDT01NT05fQ09ORl9PUFRTICs9IC1EZW5hYmxlLXhrYnJlZ2lzdHJ5PWZhbHNlCitlbmRp
-ZgorCiBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQlhLQkNPTU1PTl9UT09MUykseSkKIExJQlhLQkNP
-TU1PTl9DT05GX09QVFMgKz0gLURlbmFibGUtdG9vbHM9dHJ1ZQogZWxzZQoKLS0tCmJhc2UtY29t
-bWl0OiAwOGYzNzU3YjBmMjEzM2IwZWQ1MGUxZWYzZDdhNWExZDljODBkZTFjCmNoYW5nZS1pZDog
-MjAyNjA1MjctbWFzdGVyLTJlNTI5OWFhYThjYQoKQmVzdCByZWdhcmRzLAotLSAgClJhcGhhw6ts
-IEdhbGxhaXMtUG91IDxyZ2FsbGFpc3BvdUBnbWFpbC5jb20+CgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+Buildroot commit ce5d1735710d11b135fc6cb235e976b306833e7d removed
+0001-fix-build-with-gcc-14.patch which the version bump to 1.4.3.
+
+The patch originally not only fixed share/utf8.c but also
+ogginfo/codec_skeleton.c. Upstream only applied the fix for
+ogginfo/codec_skeleton.c:
+https://github.com/xiph/vorbis-tools/commit/68c5a33685f5b86e7f18f239ceb8861484fee552
+so the build still fails:
+
+utf8.c: In function 'convert_buffer':
+utf8.c:271:9: error: implicit declaration of function 'charset_convert'
+ [-Wimplicit-function-declaration]
+  271 |   ret = charset_convert(fromcode, tocode, from, fromlen, to, tolen);
+
+Added upstream commit to fix the problem.
+
+Fixes:
+https://autobuild.buildroot.net/results/135/13520e3cbf6b6d169985f4d1378c2a1baab852e0/
+
+The build error can be reproduced by this minimal defconfig:
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PACKAGE_VORBIS_TOOLS=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: replaced backported patch from Fabrice with upstream commit
+    added result of Gitlab pipeline:
+    https://gitlab.com/bkuhls/buildroot/-/pipelines/2556996655
+
+ ...r-charset.h-to-find-charset_convert-.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/vorbis-tools/0001-Added-include-for-charset.h-to-find-charset_convert-.patch
+
+diff --git a/package/vorbis-tools/0001-Added-include-for-charset.h-to-find-charset_convert-.patch b/package/vorbis-tools/0001-Added-include-for-charset.h-to-find-charset_convert-.patch
+new file mode 100644
+index 0000000000..3e97976fd8
+--- /dev/null
++++ b/package/vorbis-tools/0001-Added-include-for-charset.h-to-find-charset_convert-.patch
+@@ -0,0 +1,32 @@
++From 5155bf98a5b10fdf950dfa8f6edad624c0db7030 Mon Sep 17 00:00:00 2001
++From: Petter Reinholdtsen <pere@debian.org>
++Date: Sun, 22 Feb 2026 23:33:59 +0100
++Subject: [PATCH] Added include for "charset.h" to find charset_convert()
++ prototype with gcc >= 14.
++
++Patch from Bernd Kuhls.
++
++Fixes #2334.
++
++Upstream: https://github.com/xiph/vorbis-tools/commit/5155bf98a5b10fdf950dfa8f6edad624c0db7030
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ share/utf8.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/share/utf8.c b/share/utf8.c
++index e1199bc..1e6965f 100644
++--- a/share/utf8.c
+++++ b/share/utf8.c
++@@ -28,6 +28,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ 
+++#include "charset.h"
++ #include "utf8.h"
++ 
++ 
++-- 
++2.47.3
++
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
