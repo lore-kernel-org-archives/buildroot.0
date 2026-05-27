@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FAAFCD4F54
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 22:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7129CD6E44
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 22:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73B6984649;
-	Wed, 27 May 2026 22:59:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 846C042681;
+	Wed, 27 May 2026 22:59:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DmodcvVtgSA0; Wed, 27 May 2026 22:59:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jP1TslwUGbpo; Wed, 27 May 2026 22:59:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9434380F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B66EB42686
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779922789;
-	bh=v9BNgGqQXROsbRXgE6nEOMZXg+CIW4alcbOpceyZG0Y=;
+	s=default; t=1779922792;
+	bh=BV5q8+AlmMuRkXcbt1xbn0e8i+FHtV4K4WepXMNVQ2M=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=oMVDJwtegZRijrTTF208M5h0tEFkP7XeK62VSbZZkDU+xKz4xTb3NEW5PW6fP3Fna
-	 4nMplqSVb8Xuotc8esemjomDU7wcC+dbYzUCFCe3HG/0aSXqSBirRGk8TBi8UZ6aZu
-	 gesd41QzQ3Xrc4umFPBJLoVwqspPj0xBL/A1gWhU7Wt/KmhBa6IGW9OCgX8twSCNuu
-	 ZWaEPXhpCg/5YPZge1ttukXVuC4gVeywivOWfI5mWDz7totYVUC7/Z5Ofvv6xV8KYu
-	 e23RmyjZUokSDl4A3+/ouM2k/ui8P40XCHgSIbnXMu7JCC0WmmqnIqe+9qwT7wpP1F
-	 Qh6FqDGmJSZUQ==
+	b=CRyF1Bpmmkc78WxvGJk8ZikKwrmxlB5FdUtJwfL3zgZ4qaPCfYbMmWzwABia2kQ5U
+	 BtZswh1Erai37r/qdbhpXz7nbia4HPe1+C3jCcLQFI50fil/uGqLQB7WRMsk97q7vG
+	 pbO9D4NzCNMvA7tKXzft8dc3qTaynJynISl1G7gwvtMtQYbnjL8DLE/F2LiBMya5vn
+	 2vkrnePKdt6Fbn17EdceepKXC0cPojDGlNAMNvpqELEr05GPcIxvBBWmWurMV1V5rc
+	 bykV0tFChVMt0fUqqQMyhFKzuCg4z4Thf0tSBuGSUREWXH5Gjb3sBeuWI5LKmr6qnR
+	 Zx8FMQrZNlQ0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9434380F34;
-	Wed, 27 May 2026 22:59:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B66EB42686;
+	Wed, 27 May 2026 22:59:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B05828A
- for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B76428A
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3348C6155E
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF39661663
  for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s3AMB2tgFFQR for <buildroot@buildroot.org>;
+ id XSPG-fhhMfq5 for <buildroot@buildroot.org>;
  Wed, 27 May 2026 22:59:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62EA261663
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AEC0615EF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62EA261663
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AEC0615EF
  for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A4078708D; Wed, 27 May 2026 22:59:34 +0000 (UTC)
+ id 91A878708C; Wed, 27 May 2026 22:59:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 00:58:29 +0200
+Date: Thu, 28 May 2026 00:53:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f51769b7e9796906bc11d463c1436efe5de7073f
-X-Git-Newrev: b2800531808e0648ffa5bb5340a761a3c32c811f
+X-Git-Oldrev: 38358daba978181f08a0b135782116f87c73562d
+X-Git-Newrev: f51769b7e9796906bc11d463c1436efe5de7073f
 X-Patchwork-Hint: ignore
-Message-Id: <20260527225934.9A4078708D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libde265: security bump version to
- 1.1.0
+Message-Id: <20260527225934.91A878708C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libde265: disable neon support for
+ armv7m
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,53 +76,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b2800531808e0648ffa5bb5340a761a3c32c811f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f51769b7e9796906bc11d463c1436efe5de7073f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/strukturag/libde265/releases/tag/v1.1.0
+Buildroot commit d4b8a42fb253116befe539e5529ac4efd97ab421 bumped the
+package from 1.0.16 to 1.0.18.
+Upstream added optional neon support in version 1.0.17:
+https://github.com/strukturag/libde265/commit/f22cf00a86f4a47f9423deb3b1daa35d981b2ec9
 
-"Security fixes
+The configure check detects neon support:
 
-- CVE TBD (GHSA-g2rg-wj66-w594) - Out-of-bounds write in
- process_reference_picture_set via predicted short-term RPS
-- CVE TBD (GHSA-vv8h-932h-7r86) - Heap buffer overflow in
- de265_image_get_buffer via SPS dimension integer overflow
-- CVE TBD (GHSA-g5hj-rf9f-7vxm) - Unbounded memory accumulation via
- orphaned slice headers in read_slice_NAL
-- (GHSA-x27c-jp65-g395) - Quadratic CPU consumption in NAL parser
- (remove_stuffing_bytes, resize)
+-- Performing Test HAVE_NEON
+-- Performing Test HAVE_NEON - Success
+
+but causes a build error at linking stage:
+
+[100%] Linking CXX executable dec265
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-armv7m-uclibc/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real:
+ error: ../libde265/libde265.a(hevcdsp_qpel_neon.S.o):
+ conflicting architecture profiles A/M
+
+so we add a configure option to disable neon support.
+
+The build error was not yet detected by the autobuilders but can be
+reproduced using this defconfig:
+
+BR2_arm=y
+BR2_cortex_m4=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE=y
+BR2_PACKAGE_LIBDE265=y
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libde265/libde265.hash | 4 ++--
- package/libde265/libde265.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libde265/libde265.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
-index 0412936d42..71a0221089 100644
---- a/package/libde265/libde265.hash
-+++ b/package/libde265/libde265.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/strukturag/libde265/releases/tag/v1.0.19
--sha256  bb19a0b485d2643e0eeb7e91f3ab32d1ad617e7c487dbedc91214ca3dbd8d7eb  libde265-1.0.19.tar.gz
-+# From https://github.com/strukturag/libde265/releases/tag/v1.1.0
-+sha256  afc19dd28e2fc523de5952bba5224ee1d28e286c72436d2843df126cca1181fd  libde265-1.1.0.tar.gz
- # Locally computed
- sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
 diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
-index b559a9f607..2a10dce6d0 100644
+index d7e3df83ca..b559a9f607 100644
 --- a/package/libde265/libde265.mk
 +++ b/package/libde265/libde265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -16,4 +16,8 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LIBDE265_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
  
--LIBDE265_VERSION = 1.0.19
-+LIBDE265_VERSION = 1.1.0
- LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
- LIBDE265_LICENSE = LGPL-3.0+
- LIBDE265_LICENSE_FILES = COPYING
++ifeq ($(BR2_ARM_CPU_ARMV7M):$(BR2_ARM_CPU_HAS_NEON),y:)
++LIBDE265_CONF_OPTS += -DHAVE_NEON=OFF
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
