@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C06ECD6E41
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 08:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD875CD5BDE
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 08:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71F9480DA2;
-	Wed, 27 May 2026 08:24:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GC1o-lZ16neu; Wed, 27 May 2026 08:24:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7415580C10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779870271;
-	bh=8rNX9Xxh8qD9fRmGa4XA/yKJ/7m2BC3fq4VgpYPisNA=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=cWz0cLfA6Y+fpdXpf2ZqaNGYNLMF1KOHgQhhRaoIr7Ui4G9dA8ZOofAvayuxrJSHW
-	 SHNUZFhsmB/RRvzgfYOvlKB/8/suhj71RZ/KM+UwfRbCiZ1UZw8BHCAfo0LOEJ4gB1
-	 A0RK87WYJ8K4JDjNf7SvJB+qgAU8yVMGiiQX93sAee7rQP9mpHF/RpKRXHX7Gue4a9
-	 fvPSqOBdqQbxlGR6FgOjR7G74J5T05nrA1IyTD2WXGwMKipLKC/agFvDpV4Vy6t3Zn
-	 Bu8DSWutKSqB9Z+jsdlxkNUSYvTC+aDZiH/39Vp3a2v3nQ4XoKCMW6LGKNFNeVU7Yh
-	 j3ERbUKEjmIDQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7415580C10;
-	Wed, 27 May 2026 08:24:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33F9C21F
- for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA44E41F91
- for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B40B41FCD;
+	Wed, 27 May 2026 08:24:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zkC2Dbvlexee for <buildroot@buildroot.org>;
- Wed, 27 May 2026 08:24:23 +0000 (UTC)
+ id N7UgqNT9x8XP; Wed, 27 May 2026 08:24:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CFA841FC0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1779870272;
+	bh=sA4ux5TIduVbrj85CUWdhUrjPsCakcP513HnCA88HLw=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=acGbEpM7PtQF1vDhOUvFMnP05AxU9nS3antgqmNtGuL3H4Y9GrsBsJ3jPqe5zVuxw
+	 FbG4amTpUkQT+wY8RNOxurvbX5Tlnvvu6bAs1iaWH1XtN6MQfXbkOPCw8qZ6JD3kn3
+	 P4vqHfsJlmFNy1sPwYCfiQrmeLgDsydxG/AWZjiaymIxfhgElRzhbKxtQFBQG4xzpp
+	 ZChS/IC/H9VQOk1mM9ZxyVYhxOdeIVy7sdYld2j0FLRR7xH2oQWsH7K1gjNk77JsLa
+	 S7zN9IGwQRFNG48h+aU4xuMTQaWmI7TCO5BiDdv3x+P6yz2ZN1VnmDStUSArxu/NbI
+	 b8mFTeKqHHXAQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CFA841FC0;
+	Wed, 27 May 2026 08:24:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBB6121F
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98CBB80899
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oUuMcmdoEfi4 for <buildroot@buildroot.org>;
+ Wed, 27 May 2026 08:24:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9388E41F93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9388E41F93
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9388E41F93
- for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:22 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4904fd4f6aeso37392825e9.2
- for <buildroot@buildroot.org>; Wed, 27 May 2026 01:24:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 758AD80892
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758AD80892
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 758AD80892
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 08:24:24 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4903f7a90d1so44527565e9.2
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 01:24:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779870260; x=1780475060;
+ d=1e100.net; s=20251104; t=1779870262; x=1780475062;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=hsRGUuzxiKaDakL4IODYkh65pLPJ1OH2fT/LnkQJXWs=;
- b=tCzuFUD8HjMqiVDdAAGBhfiOTziZoewCMgNBPT9OEL4pMYu60h/Wt90qQ2XmQF2DRk
- vHneCQMGAYCMnnA+TNIiBuRMOzi+4O2lbM+h0ddvBTpf9Ttt1EFDWtupE5UaPMv1ryW/
- PPgJDEt85ukZh1faDUyK/pQLQAEiOqmXOfAC4qmQiOhBzhAQ6RIvXspqFFnFXU3F/JPE
- TMXCkimAf1SbKWZQlVt6enobxudD1Mg4bwulHx3PKZa1cFQOchaXErVVmDPkR8PxVMti
- kL2ybvk/PPWQhFwixc7TOvpuPzywBdk1WHOx67jr4h1diSpUfYkAxggUWUleFD1tzHOA
- QeuQ==
-X-Gm-Message-State: AOJu0YyWJw8pCKI0w/F+pEfVONBj5I48sB6tzqxduIBhFf3r7QM3R4Tr
- bR6tQg65PQ4jSm+CgHuxK6KycaeY/+hDZQSvJYKfMWzacYqzwkFchNffh4jx9lBOMi5S9Ppp3sk
- KqvrH
-X-Gm-Gg: Acq92OFWEgOlT0R9Guq0KxS+RvxlKCl3h/o0aG9XXEO3DoTWPJelROqiEBsptaRbi+6
- DK6a4e3HLtJfThc2EFb36nB77DOO2uQIGHDZHkk/Q2lII+kfqq1TT4qs7E3F2UavbrJUJ+7OFtH
- sa/kXeX/hf+qXYUpIz2tnibt3wHB0G20qECu5e1kqTr7or/Ofm/OEAiDK5wpu59jMKQGb99ku8k
- pu68yGMBfUzuqOb9EejgShWN9VY3dGc4M8PxvASzn6em+6hT3aY7uOcjxmD4s7w1ygXbKvwu/qX
- ZiA1UH4q7B5efARzyOhw3XS+Sc2Ri0T7vXYQ+G2w1vJKQvsCBe5c9+UgQ08gnA2Xd1iyQimtYL4
- kd5/RD0th3MWA7cs8/DaqTtJ2cl0iuQdbN37hKXPCb6guul6oBuQ5OzAHZgoVexfXGNskhgpsew
- 9to3yX3+OwZt7bRg0UeSkKAPoRe5umst/h4t4hnDQRIuSTLOYXYHHsQQ8Vsw==
-X-Received: by 2002:a05:600c:3e12:b0:490:40f1:5314 with SMTP id
- 5b1f17b1804b1-49042482845mr392292635e9.1.1779870260386; 
- Wed, 27 May 2026 01:24:20 -0700 (PDT)
+ bh=mwQ8Kn8a7Mh8QfDiPAsKiFX1hN1z1t9KP0Rcb0uS094=;
+ b=jMXlJRbhgjs2Rft2pfoiim6ZsZfl18u9TSulZpUNttKycZGZnyFX+zpgf+EbjO00mt
+ 8ncK4tAJak/eeZGJMBmqQj1YazjTVYMhdy2mSQh8lHiXGO3HrnnJvwFGA065hYgZgYDr
+ XRqF4+ugou18ih6yDPdaRu+sxv0EL6cT7pZg+gpFH06Youi9ZLxWq79l2ttKiz28exJR
+ atgb+CpoyNgQhI6taphqD8cn00M8Ib66xPELjemsFnGNpW8KSElCKqhocCSjfDZ9lxa6
+ xIFn57mcUBaGdccbTl6v3saVz28L3AKHtfu8saCVVcO8+C6S+k57gopCbp3/udYDKGmN
+ Iubg==
+X-Gm-Message-State: AOJu0YwgBm/S0tuM2xrrBrt3unhceWRvIldmEOAHa6B9uHKhjTyL9/2c
+ UTI+KlZQzxtghfhxrZbeNXvOz8s2as5Z64Z05hOpfU3RiEAE9Z+r5Py8luAC+Of50BfNz2trlnh
+ u6/D9
+X-Gm-Gg: Acq92OGSZb4pJ6ZR7RjISYl2f0aWXPgp6/9imHTF3mPQowIj7EaYY6a1JL3nSVEBIkE
+ 8sUKiIcc4/OoHylUPB5Vt1YGHTTz0GENNx5yQUjV4OpDSPwsV5JT4fqBrsGrPdxq+u4xXI09Hus
+ 851ti36UfGs1I7+1heByr895IFkVxIYIGmOV1OR+qUUOHgcl89v45TL3Y/DmaIrKZPzTNLRFD8M
+ d+ipFcOldMXYmd2Is/BfFzQO5YPi3mJYyIPv1kmL2HPJHCPJqzul8AgJs1YSQN9fZfnLum2u7+9
+ rAHFDcJxaeK8sLTOQNjpJp4nAamUjPKTazdYCJ1oCaQCJoMKr3EbW8jAErcA0aW2SQliDpgqxSR
+ amZLsjq6b68LIVaScohm0Qj4MOsZDGfXshhxjEPZLwifwN5omwRElxVsi8fEfiuUSjMySkGQNwK
+ +mBJyobPb75gJJLE5ccR9EWQg0VzG+OXhv80EFF9QFZLXDW3k=
+X-Received: by 2002:a05:600c:5298:b0:48f:e230:1d12 with SMTP id
+ 5b1f17b1804b1-490428dd63emr384640085e9.31.1779870262152; 
+ Wed, 27 May 2026 01:24:22 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4904561a160sm437803495e9.9.2026.05.27.01.24.20
+ 5b1f17b1804b1-4904561a160sm437803495e9.9.2026.05.27.01.24.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 May 2026 01:24:20 -0700 (PDT)
+ Wed, 27 May 2026 01:24:21 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>,
  Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 27 May 2026 10:24:12 +0200
-Message-ID: <20260527082418.151980-4-thomas.perale@mind.be>
+Date: Wed, 27 May 2026 10:24:16 +0200
+Message-ID: <20260527082418.151980-8-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260527082418.151980-1-thomas.perale@mind.be>
 References: <20260527082418.151980-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1779870260; x=1780475060; darn=buildroot.org;
+ d=mind.be; s=google; t=1779870262; x=1780475062; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=hsRGUuzxiKaDakL4IODYkh65pLPJ1OH2fT/LnkQJXWs=;
- b=Lr1J0H8hGIM+Nttyxam3YdHMQJ5wU7q2HMaR5qBZLjeOy4h62Tv4BrLAojrVlhRYMG
- ynZWgyPLcqxDMhmdXrB9H5nNbZTeQg2coh6tHI1UztXWqj4ymVzkKahSGyDKLddtuwc9
- SPGCfFDHt9BuqU7ziP5wJSkcNF1CxXN7riKDFO4abXK+wje5OjabhgQt2+xmcXi0mJKp
- o/wXPs3Z2VDAj0UN0TrTJEDv6RQghVUXgnEsl23pi5wm3I+coNuPAxnIVTPJa3fUtVkC
- cHQNchStY3NAnHiaj4uvornUR+xKHw4cOgqtsMSysMnKXZegAcsj8O2Lv60MoaGw9XBi
- tEKA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=mwQ8Kn8a7Mh8QfDiPAsKiFX1hN1z1t9KP0Rcb0uS094=;
+ b=SaHsOPNKj+QOSm/uNxjceqKWtVL0vTjI54tmva8sCo13V9P1VwFDXtjtYY/mpgFcXR
+ YZ/4tvfr2/kguNPJbrOuTf3EkwJbuuEWyJtMm8iZRX3Dkd/TVMFFToHNKt5FeGOJdUMn
+ HMNledVGUFIPmt+5rXoIe6M0NoJL8FDooFXanqbADM69CHd6PC4kgvb/8spCFq+rjBaE
+ NfE5Gmcrmfju38PSeTTWV76NDlbltLe+Qxlba2gMm5JLkoEh7QrQmCguFSe024HePJbo
+ uD1KVyBGqqqieVf6ii/NJ49DDjO7Pj7yWoZXG2gbO6xB+3BQ1bfuTP5Wc1f8J0LOAGvs
+ ifFA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Lr1J0H8h
-Subject: [Buildroot] [PATCH 2025.02.x 3/9] package/go: security bump to
- version 1.25.5
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=SaHsOPNK
+Subject: [Buildroot] [PATCH 2025.02.x 7/9] package/go: security bump to
+ version 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,114 +131,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Bernd Kuhls <bernd@kuhls.net>
+From: Christian Stewart <christian@aperture.us>
 
-Release notes:
-https://go.dev/doc/devel/release#go1.25.5
-https://groups.google.com/g/golang-announce/c/8FJoBkPddm4
-Fixes CVE-2025-61727 & CVE-2025-61729.
+go1.26.2 (released 2026-04-07) includes security fixes to the go command, the
+compiler, and the archive/tar, crypto/tls, crypto/x509, html/template, and os
+packages, as well as bug fixes to the go command, the go fix command, the
+compiler, the linker, the runtime, and the net, net/http, and net/url packages.
 
-https://go.dev/doc/devel/release#go1.25.4
-https://groups.google.com/g/golang-announce/c/tVVHm9gnwl8
+CVE-2026-32289: html/template: JS template literal context incorrectly tracked
+CVE-2026-33810: crypto/x509: excluded DNS constraints not properly applied to wildcard domains
+CVE-2026-27144: cmd/compile: no-op interface conversion bypasses overlap checking
+CVE-2026-27143: cmd/compile: possible memory corruption after bound check elimination
+CVE-2026-32288: archive/tar: unbounded allocation when parsing old format GNU sparse map
+CVE-2026-32283: crypto/tls: multiple key update handshake messages can cause connection to deadlock
+CVE-2026-27140: cmd/go: trust layer bypass when using cgo and SWIG
+CVE-2026-32280: crypto/x509: unexpected work during chain building
+CVE-2026-32281: crypto/x509: inefficient policy validation
 
-Updated _SITE because previous URL returns 403.
+https://go.dev/doc/devel/release#go1.26.2
+https://github.com/golang/go/issues?q=milestone%3AGo1.26.2+label%3ACherryPickApproved
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Christian Stewart <christian@aperture.us>
+[Julien: add "security" in commit log title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit eed28fd448ffe39822ee2d8d82c040fd7045865e)
+(cherry picked from commit 82518f8cb41f1377b7a65abc659adc96ffcbe05b)
 Signed-off-by: Thomas Perale <perale.thomas@gmail.com>
 ---
- .../go/go-bootstrap-stage2/go-bootstrap-stage2.mk  |  2 +-
- .../go/go-bootstrap-stage3/go-bootstrap-stage3.mk  |  2 +-
- .../go/go-bootstrap-stage4/go-bootstrap-stage4.mk  |  2 +-
- package/go/go-src/go-src.mk                        |  2 +-
- package/go/go.hash                                 | 14 +++++++-------
- package/go/go.mk                                   |  2 +-
- 6 files changed, 12 insertions(+), 12 deletions(-)
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
-index 98bf624b57..47e4d157eb 100644
---- a/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
-+++ b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
-@@ -7,7 +7,7 @@
- # Use last Go version that go-bootstrap-stage1 can build: v1.19.x
- # See https://golang.org/doc/install/source#bootstrapFromSource
- GO_BOOTSTRAP_STAGE2_VERSION = 1.19.13
--GO_BOOTSTRAP_STAGE2_SITE = https://storage.googleapis.com/golang
-+GO_BOOTSTRAP_STAGE2_SITE = https://go.dev/dl
- GO_BOOTSTRAP_STAGE2_SOURCE = go$(GO_BOOTSTRAP_STAGE2_VERSION).src.tar.gz
- 
- GO_BOOTSTRAP_STAGE2_LICENSE = BSD-3-Clause
-diff --git a/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk b/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
-index bdc8459595..732888d305 100644
---- a/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
-+++ b/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
-@@ -7,7 +7,7 @@
- # Use last Go version that go-bootstrap-stage2 can build: v1.21.x
- # See https://go.dev/doc/go1.22#bootstrap
- GO_BOOTSTRAP_STAGE3_VERSION = 1.21.8
--GO_BOOTSTRAP_STAGE3_SITE = https://storage.googleapis.com/golang
-+GO_BOOTSTRAP_STAGE3_SITE = https://go.dev/dl
- GO_BOOTSTRAP_STAGE3_SOURCE = go$(GO_BOOTSTRAP_STAGE3_VERSION).src.tar.gz
- 
- GO_BOOTSTRAP_STAGE3_LICENSE = BSD-3-Clause
-diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
-index db0c85e3d0..7c5beb1c9d 100644
---- a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
-+++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
-@@ -7,7 +7,7 @@
- # Use last Go version that go-bootstrap-stage3 can build: v1.23.x
- # See https://go.dev/doc/go1.24#bootstrap
- GO_BOOTSTRAP_STAGE4_VERSION = 1.23.12
--GO_BOOTSTRAP_STAGE4_SITE = https://storage.googleapis.com/golang
-+GO_BOOTSTRAP_STAGE4_SITE = https://go.dev/dl
- GO_BOOTSTRAP_STAGE4_SOURCE = go$(GO_BOOTSTRAP_STAGE4_VERSION).src.tar.gz
- 
- GO_BOOTSTRAP_STAGE4_LICENSE = BSD-3-Clause
-diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
-index 9a18b6afe8..ead535f4e0 100644
---- a/package/go/go-src/go-src.mk
-+++ b/package/go/go-src/go-src.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GO_SRC_VERSION = $(GO_VERSION)
--GO_SRC_SITE = https://storage.googleapis.com/golang
-+GO_SRC_SITE = https://go.dev/dl
- GO_SRC_SOURCE = go$(GO_VERSION).src.tar.gz
- GO_SRC_DL_SUBDIR = go
- 
 diff --git a/package/go/go.hash b/package/go/go.hash
-index 1dc1b99756..7c689f9144 100644
+index bae223882a..77be843c83 100644
 --- a/package/go/go.hash
 +++ b/package/go/go.hash
 @@ -1,9 +1,9 @@
  # sha256 checksum from https://go.dev/dl/
--sha256  a81a4ba593d0015e10c51e267de3ff07c7ac914dfca037d9517d029517097795  go1.25.3.src.tar.gz
--sha256  acb585c13e7acb10e3b53743c39a7996640c745dffd7d828758786bde92f44ca  go1.25.3.linux-386.tar.gz
--sha256  0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f  go1.25.3.linux-amd64.tar.gz
--sha256  1d42ebc84999b5e2069f5e31b67d6fc5d67308adad3e178d5a2ee2c9ff2001f5  go1.25.3.linux-arm64.tar.gz
--sha256  3992bd28316484be0af36494124588581aa27e0659a436d607b11d534045bc1f  go1.25.3.linux-armv6l.tar.gz
--sha256  68d1a08bf3567f330717d821b266a0be1c5080bd05dc238b5a43a24ca0c47d7c  go1.25.3.linux-ppc64le.tar.gz
--sha256  a0b5ccd631743f01230030412fdc9252b18d96b4e63d44ba1c4e9469e79cfcb1  go1.25.3.linux-s390x.tar.gz
-+sha256  22a5fd0a91efcd28a1b0537106b9959b2804b61f59c3758b51e8e5429c1a954f  go1.25.5.src.tar.gz
-+sha256  db908a86e888574ed3432355ba5372ad3ef2c0821ba9b91ceaa0f6634620c40c  go1.25.5.linux-386.tar.gz
-+sha256  9e9b755d63b36acf30c12a9a3fc379243714c1c6d3dd72861da637f336ebb35b  go1.25.5.linux-amd64.tar.gz
-+sha256  b00b694903d126c588c378e72d3545549935d3982635ba3f7a964c9fa23fe3b9  go1.25.5.linux-arm64.tar.gz
-+sha256  0b27e3dec8d04899d6941586d2aa2721c3dee67c739c1fc1b528188f3f6e8ab5  go1.25.5.linux-armv6l.tar.gz
-+sha256  f0904b647b5b8561efc5d48bb59a34f2b7996afab83ccd41c93b1aeb2c0067e4  go1.25.5.linux-ppc64le.tar.gz
-+sha256  a5d0a72b0dfd57f9c2c0cdd8b7e0f401e0afb9e8c304d3410f9b0982ce0953da  go1.25.5.linux-s390x.tar.gz
+-sha256  3172293d04b209dc1144698e7ba13f0477f6ba8c5ffd0be66c20fdbc9785dfbb  go1.26.1.src.tar.gz
+-sha256  da75d696c6b9440fe9fb6418429f29eaeee947707ee8c6ddb567c558051a1cc2  go1.26.1.linux-386.tar.gz
+-sha256  031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a  go1.26.1.linux-amd64.tar.gz
+-sha256  a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7  go1.26.1.linux-arm64.tar.gz
+-sha256  c9937198994dc173b87630a94a0d323442bef81bf7589b1170d55a8ebf759bda  go1.26.1.linux-armv6l.tar.gz
+-sha256  f56eed002998f5f51fa07fd4ed0c5de5e02d51cec7a4007f771c7576620d9d45  go1.26.1.linux-ppc64le.tar.gz
+-sha256  60fe623ef63e6338c055ec0e0e3f4fa85c97a056de2d2f6ee38591e2bfa9cdde  go1.26.1.linux-s390x.tar.gz
++sha256  2e91ebb6947a96e9436fb2b3926a8802efe63a6d375dffec4f82aa9dbd6fd43b  go1.26.2.src.tar.gz
++sha256  89835cdc4dfebde7fe28c9c6dc080bb3753f6b0354301966ff9f62d14991bd7d  go1.26.2.linux-386.tar.gz
++sha256  990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  go1.26.2.linux-amd64.tar.gz
++sha256  c958a1fe1b361391db163a485e21f5f228142d6f8b584f6bef89b26f66dc5b23  go1.26.2.linux-arm64.tar.gz
++sha256  0000e45577827b0a8868588c543cbe4232853def1d3d7a344ad6e60ce2b015c8  go1.26.2.linux-armv6l.tar.gz
++sha256  62b7645dd2404052535617c59e91cf03c7aa28e332dbaddbe4c0d7de7bcc6736  go1.26.2.linux-ppc64le.tar.gz
++sha256  410726ed10a0ea6745c2ea8da4f0e769fd3ce819cd4a41a67ad08b094d5dfc31  go1.26.2.linux-s390x.tar.gz
  sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
 diff --git a/package/go/go.mk b/package/go/go.mk
-index 85a40d4d36..c932baf018 100644
+index 6c57be0ad7..67948dc405 100644
 --- a/package/go/go.mk
 +++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.25.3
-+GO_VERSION = 1.25.5
+-GO_VERSION = 1.26.1
++GO_VERSION = 1.26.2
  
  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
