@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4BF1CD5BD0
-	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 22:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FAAFCD4F54
+	for <buildroot@archiver.kernel.org>; Wed, 27 May 2026 22:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8360D42678;
-	Wed, 27 May 2026 22:59:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73B6984649;
+	Wed, 27 May 2026 22:59:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hfryqzibPxjT; Wed, 27 May 2026 22:59:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DmodcvVtgSA0; Wed, 27 May 2026 22:59:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC82C42679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9434380F34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779922788;
-	bh=oY7nVRxWy1m09ipPTOgPfaZsJwBr25J3/OvN/u4YFtE=;
+	s=default; t=1779922789;
+	bh=v9BNgGqQXROsbRXgE6nEOMZXg+CIW4alcbOpceyZG0Y=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=QYAxodU82IClAVWhC+COfkjU4YpXLkM4THVtK9K+lzmC4dLFchWOd3IXFRAa6lzQg
-	 R+EDt39SethWj/ug/sHflSTUigg90jtMUrRo0fQosLrhxix1XliTnioi3iAs6n0i/p
-	 ZJbstlxwVPj0ipfYuW0IfENF6kavedpCbWjDCGXw71E68kA0i6FIOk4lWnbEBwjUZ+
-	 NEoH4nCpY+NdFuLsvunI16QR6mnpXezyznGjs+WLTjekXzm0h1StXiLHBu73AFHOL/
-	 Ts3Uht1lht76VlKYk+0dLsluGfk3B2UlmxbF7xzrToCs2FxRHMWBJC0rYmz2z5mR3A
-	 Gvb3owyNz0rfw==
+	b=oMVDJwtegZRijrTTF208M5h0tEFkP7XeK62VSbZZkDU+xKz4xTb3NEW5PW6fP3Fna
+	 4nMplqSVb8Xuotc8esemjomDU7wcC+dbYzUCFCe3HG/0aSXqSBirRGk8TBi8UZ6aZu
+	 gesd41QzQ3Xrc4umFPBJLoVwqspPj0xBL/A1gWhU7Wt/KmhBa6IGW9OCgX8twSCNuu
+	 ZWaEPXhpCg/5YPZge1ttukXVuC4gVeywivOWfI5mWDz7totYVUC7/Z5Ofvv6xV8KYu
+	 e23RmyjZUokSDl4A3+/ouM2k/ui8P40XCHgSIbnXMu7JCC0WmmqnIqe+9qwT7wpP1F
+	 Qh6FqDGmJSZUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC82C42679;
-	Wed, 27 May 2026 22:59:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9434380F34;
+	Wed, 27 May 2026 22:59:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11F882E9
- for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B05828A
+ for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 013CE61664
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3348C6155E
  for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2l-nZVbSluAO for <buildroot@buildroot.org>;
+ id s3AMB2tgFFQR for <buildroot@buildroot.org>;
  Wed, 27 May 2026 22:59:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55ACB6155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62EA261663
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55ACB6155E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62EA261663
  for <buildroot@buildroot.org>; Wed, 27 May 2026 22:59:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AB1C8708B; Wed, 27 May 2026 22:59:34 +0000 (UTC)
+ id 9A4078708D; Wed, 27 May 2026 22:59:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 00:52:13 +0200
+Date: Thu, 28 May 2026 00:58:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 08f3757b0f2133b0ed50e1ef3d7a5a1d9c80de1c
-X-Git-Newrev: 38358daba978181f08a0b135782116f87c73562d
+X-Git-Oldrev: f51769b7e9796906bc11d463c1436efe5de7073f
+X-Git-Newrev: b2800531808e0648ffa5bb5340a761a3c32c811f
 X-Patchwork-Hint: ignore
-Message-Id: <20260527225934.8AB1C8708B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libde265: link with libatomic if
- needed
+Message-Id: <20260527225934.9A4078708D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libde265: security bump version to
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,39 +76,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/38358daba978181f08a0b135782116f87c73562d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b2800531808e0648ffa5bb5340a761a3c32c811f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit d4b8a42fb253116befe539e5529ac4efd97ab421 bumped the
-package to version 1.0.18 which introduced build errors on sparc:
+https://github.com/strukturag/libde265/releases/tag/v1.1.0
 
-/home/autobuild/autobuild/instance-21/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/15.2.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
- ../libde265/libde265.so.0.1.12: undefined reference to
- `__atomic_fetch_add_4'
+"Security fixes
 
-Fixes:
-https://autobuild.buildroot.net/results/605/605dc19e86f113662cc35fe055c64c52698d70b4/
+- CVE TBD (GHSA-g2rg-wj66-w594) - Out-of-bounds write in
+ process_reference_picture_set via predicted short-term RPS
+- CVE TBD (GHSA-vv8h-932h-7r86) - Heap buffer overflow in
+ de265_image_get_buffer via SPS dimension integer overflow
+- CVE TBD (GHSA-g5hj-rf9f-7vxm) - Unbounded memory accumulation via
+ orphaned slice headers in read_slice_NAL
+- (GHSA-x27c-jp65-g395) - Quadratic CPU consumption in NAL parser
+ (remove_stuffing_bytes, resize)
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libde265/libde265.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libde265/libde265.hash | 4 ++--
+ package/libde265/libde265.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/libde265/libde265.hash b/package/libde265/libde265.hash
+index 0412936d42..71a0221089 100644
+--- a/package/libde265/libde265.hash
++++ b/package/libde265/libde265.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/strukturag/libde265/releases/tag/v1.0.19
+-sha256  bb19a0b485d2643e0eeb7e91f3ab32d1ad617e7c487dbedc91214ca3dbd8d7eb  libde265-1.0.19.tar.gz
++# From https://github.com/strukturag/libde265/releases/tag/v1.1.0
++sha256  afc19dd28e2fc523de5952bba5224ee1d28e286c72436d2843df126cca1181fd  libde265-1.1.0.tar.gz
+ # Locally computed
+ sha256  02cc1585a20677992e0ba578fa692635dc193735f2691dc81de924b51c4e8020  COPYING
 diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
-index 8c2fa4a3c3..d7e3df83ca 100644
+index b559a9f607..2a10dce6d0 100644
 --- a/package/libde265/libde265.mk
 +++ b/package/libde265/libde265.mk
-@@ -11,4 +11,9 @@ LIBDE265_LICENSE_FILES = COPYING
- LIBDE265_CPE_ID_VENDOR = struktur
- LIBDE265_INSTALL_STAGING = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBDE265_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
- $(eval $(cmake-package))
+-LIBDE265_VERSION = 1.0.19
++LIBDE265_VERSION = 1.1.0
+ LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+ LIBDE265_LICENSE = LGPL-3.0+
+ LIBDE265_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
