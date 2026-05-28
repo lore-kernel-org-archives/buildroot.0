@@ -4,109 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E08CD5BD5
-	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 17:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A99CD5BD5
+	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 17:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E7D242AE0;
-	Thu, 28 May 2026 17:25:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40F3D42B00;
+	Thu, 28 May 2026 17:28:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hgBD9389LR47; Thu, 28 May 2026 17:25:19 +0000 (UTC)
+ id NOvRI0l6Bdbr; Thu, 28 May 2026 17:28:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF5A742AE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A1FB42AF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779989119;
-	bh=7fLp25X9z3y1hSuA99qolu1ZrwBEbyDn/nDTELPkk58=;
+	s=default; t=1779989311;
+	bh=oaxtu9Wknzg8+tyqzRk2FKQWO1gPZmX5B6tumMtmNZ4=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=pRuT1KWbQSt6U+xFMjTrrV85giPYhyPher8ArcaZPybf6so7dQEJw3Nzf3hA6jsLd
-	 Mcx888v6RjdI9SOBtoczc5C3HOkwscCxeEUHmuKik6HpmryEWoTSM4pkULPZVqAMWK
-	 cNVTAAs43J7ssy8hNlgREta9hLPuXiTsO1seD6xS/jjeUryYn/K8yhu0+tW2ZWHDx9
-	 vn4Jnj90jo2XqmaKtRjPeskkVZgfMbv+qA0iOXoSPII4qr8RMj3eQoYhLLEeSFnMVx
-	 DMtaJ8397Fpfe1Kj5dILdmv8tq2/kt5GS9vJykrmydUbXtxExXW+pUXZcr91h9iDr6
-	 DGSgdp0wdRpPA==
+	b=Ju2kGlcU2Ru2369qWce79W3CUmv7+hIW+DOOLRtyB2vTEvBqBz7iYnRRcQizUvA7A
+	 fSRQABsmSZMDHDiYjTTVsKQSuftRWnPVRcxizvWFy7pwwfxDy5npiHfNK5tMbFkGim
+	 ZVSppWOcfIm1WMgQ+T3LJKezmQ5xfsqpvLZ0OQMP01IHgW2ZN6JOkrEd5dFUWCKKR3
+	 E+aJopVvezCE0uiTM1ysWuBGR4x3HJyOw23S4bXxT3QYkMcWqqIKjE/ElfrPzpqT1i
+	 rgbG38NL2UIickjVoMzSVgmpM9yMhDMaWNohsaYK4v8YvrOCGPBw/4CBqWR/9xubKh
+	 ygeKxQ5I5fXZg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF5A742AE3;
-	Thu, 28 May 2026 17:25:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A45A288
- for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A1FB42AF7;
+	Thu, 28 May 2026 17:28:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39F27D3
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E439940494
- for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36F02608EA
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KMB_3qLmjaDV for <buildroot@buildroot.org>;
- Thu, 28 May 2026 17:25:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kGBHd8NjhP-j for <buildroot@buildroot.org>;
+ Thu, 28 May 2026 17:28:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AB3CD40492
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB3CD40492
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB3CD40492
- for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:12 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4905529b933so46725055e9.0
- for <buildroot@buildroot.org>; Thu, 28 May 2026 10:25:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2444C608AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2444C608AA
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2444C608AA
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:28:28 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4891c0620bcso84255545e9.1
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 10:28:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779989110; x=1780593910;
+ d=1e100.net; s=20251104; t=1779989307; x=1780594107;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gg+rm1Skk56fOwFvp2DTHPGO8R+xahQFjHn4oieFdJA=;
- b=FDixWJU3tPx8a13CstqnxTwUwWW71oj6AHrE8WcyhgTyHuYyeRNaPHvTbxuhduNwb5
- LN2WeF4H4lKP2FThzwk/Oy6gXumLaCv6ANJpuLG4sQqQgYZ389hfelO47UAYXLbOvRGe
- c7dOwTGgQCCB3cB1T5sGHwfgB/Y5jYcAj3raRDbRLjsn3b1UeURLT5HZWKvlbPKbhoU1
- WvCyWvZrQ1h7ugJ3PZ+8DUSJUjUwB/EvZ4HFRnL0hAN/cj8fx9ozvtIrrEiXCiuwFCiR
- IYkoZU1v6puQAKQV3bK2yjc94XaN1RYFe+6xAMUzqXEdEd9cFy2L6rJ0ked2qvSYMP2b
- 4/KQ==
-X-Gm-Message-State: AOJu0YyC2iIQjVpQaDVEtO9u6LOsH6lYf3yqgkc6cq9ePYrT7RZGW4/H
- qbzJ7EGPw3wszLt/bBHCToBJTA5f5Hlo8p+KGgResBrvvkW4lGtYCUS9xIqi3A==
-X-Gm-Gg: Acq92OFG18+pwxZQKtzqEhbhQMikN1nfI0O0apV02LBkvGKIt+f90WJB7QQr/LxzR1h
- a4NlRqXaaP0qtjtLyJQJestPxXldKqVZ0pzFecu04BjA1hAmT2jwrYXCc/iStqNI8zkF7+VZhPb
- Myix02hS3B/NZAOlFqoNK8m6E+SCi6tLClBenS8c+6DGMHpfgGWeo29iLpKi3JH1lOFUPZH6SM7
- zXUPTw5XSc6c8VuKLOVk+xEEpIuwF3Jq8x/RQ+s1QMBZgW5wb73kwNljo9a8McSD6xs1aPLS/Ep
- uKmNLT7yo5eXIqXNo4zkinLik1KbuTWOtSzZY16WciX1mdZRuFLuWGHpRem0Nzbh1BL1Z2jYnh6
- JcdojopvZ1uvWnK36KRZThJ1CJGlT1clLgkSCqQq0mNtp1YotHhvxQ9s+frbIsE3k+q1EBpATre
- bpdm7DALahN7AZXPnVCCobPKqdtxK0lVhDyx7MxdX/UQ==
-X-Received: by 2002:a05:600c:3581:b0:490:482c:4391 with SMTP id
- 5b1f17b1804b1-490482c4586mr500479415e9.23.1779989110314; 
- Thu, 28 May 2026 10:25:10 -0700 (PDT)
+ bh=zsudfxnVHJJivVtPxKLg5L4D8RJ211PgOrTPb1w9Bgo=;
+ b=mcvAMlXY1O48hrFf2BT1McjtAyd0wdGIPItQ/KoGC289YZiioZyRF6yVixa4Ycpubb
+ 97wBVtfJR5cRt10kDSuOZeVNtpcPZL5zFNxjprgbhpufU7iih3N3pbyO9r9yY2999lu/
+ 8pGL4J6VEP1Js68RZ8SKfMfd+tyTZoMMQ2fn1NZxlcFSLIUalFtGpbw+pBeyWLTElVTv
+ ko+djIgiMC4ljVcyLC0KOsn+HauqfI7maL2aNezYotFBye/YEryecUAVMJ4fvKXnhcY4
+ aUilIML9lloH7i2wBrNge4Z6al8s9Amf2zPHKXICIx11wMi88L/MbyXptavJQjBFuSds
+ QkQg==
+X-Gm-Message-State: AOJu0YwIt0ErUFH8mky6jIKjFLWTawO546IlOvNO1nngP3YvOqCf0Ygd
+ yhbuE3b0bbyHMGMCQT8HQ6nB6FuPuYbh0gc3XVE4xC9u+Jt3rW8nm187QfW1Tg==
+X-Gm-Gg: Acq92OHQfLJ9j8Ow/KVwdU+enLUQ30LGV2HHDtdTonHYWsJ/k+o3lDAURPhrbz/E9Bs
+ UB+Sb00K2aovdzcuq1ztvFvGSCyQZdEPBLFCy/FscL/EgxE5seKsDVr3pLo72h05dbr9xpxuHkZ
+ P7Ek8l48W+0UJN1SgXgjih6GusR4+XXB6pFYLdN5g+LdBBoDUF5l2NC0ge2ZYtGk6qqpDMVnoQQ
+ U7QQE5qQnaZ1JSh5WpEsjGMd18PuBf7h/nz7r0BDkab+sBrLMI9Njq41nq6yVJGN9MB2P5J2gic
+ tIFp7j/sYZMqIdzsa8jGUSXmNNYHQMKB+1f3ONu0Drs12gRuAog3TUFUaklQLuUdEvHdZggWYXx
+ zAzm5dYyzZEk0pd8/tb3co4Bby6kkEvMY6LPs6x4qxRrz/YWr8+Pkbb7zVQBD+lUET22Id2v3qZ
+ IkjQLusGvE30iZvfpDnEbHVTxncEKgBX8flUq5tbSFdg==
+X-Received: by 2002:a05:600c:45ce:b0:490:5cd8:d20a with SMTP id
+ 5b1f17b1804b1-4905cd8d2b2mr300544735e9.11.1779989306674; 
+ Thu, 28 May 2026 10:28:26 -0700 (PDT)
 Received: from LinkMed ([2a02:8070:2483:7e00:c64b:8476:a88e:af45])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909a52ca5fsm1098045e9.2.2026.05.28.10.25.09
+ 5b1f17b1804b1-4909235f8c3sm50424395e9.2.2026.05.28.10.28.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 May 2026 10:25:09 -0700 (PDT)
+ Thu, 28 May 2026 10:28:26 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Thu, 28 May 2026 19:24:52 +0200
-Message-ID: <20260528172452.25273-1-raphael.pavlidis@gmail.com>
+Date: Thu, 28 May 2026 19:28:18 +0200
+Message-ID: <20260528172818.26277-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779989110; x=1780593910; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1779989307; x=1780594107; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gg+rm1Skk56fOwFvp2DTHPGO8R+xahQFjHn4oieFdJA=;
- b=ossEkS0LKOfvVFG8VO8WBZ7FN/cydJaBckb+iI3e21TYabQClzG2xHY4mDJwFJQ5sS
- cLzMDjlXiqejB4et1CYG7kyyXmhH3d2ukgg4YtcJQlRG8fjYPOFh3yhUCzn4V13QO57e
- UXavqrZvi/gg1nuCa0SZZMkYS3qqOm8qusn87ku7fzNMD7KgJ5wkFk/Ikm75Ve1PboIV
- 5bKRdITQ7p2gsJy58ipxXJSr38o5HNEVfMzQDKXm4pQxaDUKC2pUijJGV3BBsF5lYZDF
- XxyvuwfXQ1Al6/vGTTfSxmLentpimCuJllm/qtK8JR2I0i8Ee9SSEy4d1+DslqDAN3R7
- WSsA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=zsudfxnVHJJivVtPxKLg5L4D8RJ211PgOrTPb1w9Bgo=;
+ b=FT5rHjzdz97H6zoniffWUWILsIergxnWm5Migtr2RQP0Toz2/y4EqJsoMWbd8SuTGP
+ AGxWCOngem3Bqc/aGKHdgQywrC5zp27+XN1l3YuRfhdHwKhjlzobrogo4pe6X3QwO4sM
+ o4X1ddRCHFgktPuqmDq3D9HOVn6QWDjpYIJXJwmLDPTDWKb6MRjREkbWCqAMk9VIcuAB
+ i29mXzNlumsofg8EVPJNFKK7npcpZEYplNCd3hr5hbQF91rqXWpEW/u6cn+7z1js0UcF
+ 6qCm/5dYFhAWuQBfzbI700MsbRNcC3hkFR4YngOflExRIN0WrvBHQS9Nwm8O23jOVI7v
+ joXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=ossEkS0L
-Subject: [Buildroot] [PATCH v1 1/1] package/xwayland: bump to version 24.1.11
+ header.s=20251104 header.b=FT5rHjzd
+Subject: [Buildroot] [PATCH v1 1/1] package/sway: bump to version 1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,41 +123,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Also fix the current build error with 1.11, because sway 1.11 cannot be
+build with wlroots 0.20.0.
+
 Changelog:
-https://lists.x.org/archives/xorg-announce/2026-April/003697.html
+https://github.com/swaywm/sway/releases/tag/1.12
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sway/sway.hash | 5 +++--
+ package/sway/sway.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index ba84d20b9f..6204400852 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2026-April/003679.html
--sha256  459762be8ea046c94386687d77a87add6073868bee14f02913eafebb945b7aa0  xwayland-24.1.10.tar.xz
--sha512  bceba1db7f4d7ac92d2b2a3c8f6f7ab0cc093f396fe89406f8dba25e32ffc3edfa552df246cbfb3b0708c1d28b3e179694d11870b063d5b8f9ab2db9fb861a8f  xwayland-24.1.10.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-April/003697.html
-+sha256  27115a1a8819078409bf6fecfeb7724e8137bd36426de7005a5b3aae0a2138ff  xwayland-24.1.11.tar.xz
-+sha512  586d7e60c8bf0d92cec66451284c6c43b960010f14a1e204b5de722c610dc067481fd6ece0ffae615ca53ca2d0262e2a3dbb916d04811b8d57c1085bc363f5e9  xwayland-24.1.11.tar.xz
- 
- # Locally calculated
- sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 5902f85d4f..0643cc5c4c 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
+diff --git a/package/sway/sway.hash b/package/sway/sway.hash
+index 46f2bee753..2b8a8ee990 100644
+--- a/package/sway/sway.hash
++++ b/package/sway/sway.hash
+@@ -1,5 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/swaywm/sway/releases/download/1.11/sway-1.11.tar.gz.sig
++# https://github.com/swaywm/sway/releases/download/1.12/sway-1.12.tar.gz.sig
+ # with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
+-sha256  0e37a55b7c3379230e97e1ad982542b75016a0c7d6676198604e557f9b373dae  sway-1.11.tar.gz
++# Unfortunately, the keys expired on 2025-04-03.
++sha256  a7b1becc217433c11c6284d36bcea0687b87b77b0ed26a384565292ec321f2b1  sway-1.12.tar.gz
+ sha256  bd35722bff46327f5eded1d211207277bbe043d2a22048b282c42ef801593b8b  LICENSE
+diff --git a/package/sway/sway.mk b/package/sway/sway.mk
+index a497a2cbe7..56d18ef6f9 100644
+--- a/package/sway/sway.mk
++++ b/package/sway/sway.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 24.1.10
-+XWAYLAND_VERSION = 24.1.11
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-SWAY_VERSION = 1.11
++SWAY_VERSION = 1.12
+ SWAY_SITE = https://github.com/swaywm/sway/releases/download/$(SWAY_VERSION)
+ SWAY_LICENSE = MIT
+ SWAY_LICENSE_FILES = LICENSE
 -- 
 2.54.0
 
