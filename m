@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8A39CD6E45
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA493CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E3C341E66;
-	Fri, 29 May 2026 08:26:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A278183C76;
+	Fri, 29 May 2026 08:26:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3_ZWlH30qtz; Fri, 29 May 2026 08:26:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YaxwsItpTPm0; Fri, 29 May 2026 08:26:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 968CE41F74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B02C283C69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043181;
-	bh=sdusZFxBUfHIy0t0d0uRkd4bpkDxJ0J3IzBXGVD+tT4=;
+	s=default; t=1780043182;
+	bh=nKQGNivYEkRERHPKKtz62WMJjSShh1lQ1PL5J3BVtXk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MD3SDTO1IW4vGpjBsDEf8ynh400zLjiFcJAts3nmW7+5b1iiAq+b608Cn4/Ab1d/Y
-	 8472r2qLXwnK/liTVqyq/JweHs3kZnx0Ij8ioi1md1YdCwHq/FsLkYbkP1eqyoV96s
-	 +60lqGvq+Wgf+hETZ6aNjWJsvtvVrA59CrDWzNZzBwWOkwMiZiKiRDbSy79/ZV9Ysh
-	 m6mtGU3i4BGvwz2ucHEvyEj5WKO5t/M3BetRskiiL2XB1q+pLZfyN9Aohscqm5Dbzi
-	 k9StaDI4OiVCoUhQGykOFpTy0Iq3+oSBeBhgyUi1jNUnuSluquXlr2ZvEbWZXPNOVK
-	 Gca9B29wiKA8A==
+	b=csLRr1TQdgPO5cgnxk3AJ+DKYIN2qDhl5FWAaP9O4ox3q1+hEpdv1T6u8HLcXx+X+
+	 topVDD/sBQmhxsTz7NQTFIOeEonMnEWrVGjZsLvVJySzrVlUWADJr67UKznfOz023l
+	 MFljiizlXwslDoCUNKgXJYGTLTp25dnrFSD1doWEirbuE6gEJ9JzPc6GzCPzDaCJCE
+	 QILIG5Yu57+LUo1ZKe6x5Ks/ioSB1br3f7zpfaf1ZxMHeSimZTD34ChInV9grvQe0B
+	 QVGk7hX8OcY/FwYLprD2h+I2grhHK8lE0m825f00gctS4h6HCCN4ue42b6hpCDeelx
+	 v+nEhSjSiLXyg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 968CE41F74;
-	Fri, 29 May 2026 08:26:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B02C283C69;
+	Fri, 29 May 2026 08:26:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11AB128E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11AA8288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36BD941F58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AEA841F9E
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PFCN5JfzPEY1 for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:25 +0000 (UTC)
+ id CAbMm6ymlsOm for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F50D41F95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A13D41F78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F50D41F95
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A13D41F78
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D32C787334; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id DDECB870C6; Fri, 29 May 2026 08:25:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 14:37:34 +0200
+Date: Thu, 28 May 2026 11:40:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ac41813e665c3225e3bd91e716b2df4fe3b4cbba
-X-Git-Newrev: 1080933197ceff87556cad71e2a57819c47b5120
+X-Git-Oldrev: 1a33b41f56b37ef31257aa19b35effb7c1fa2b92
+X-Git-Newrev: 71726bf7ccb15b25b3177d75298472ca17693f9b
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.D32C787334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
- to version 1.26.3
+Message-Id: <20260529082506.DDECB870C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: bump
+ version to 1.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1080933197ceff87556cad71e2a57819c47b5120
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/71726bf7ccb15b25b3177d75298472ca17693f9b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following security issues:
+https://github.com/strukturag/libheif/releases/tag/v1.21.0
+https://github.com/strukturag/libheif/releases/tag/v1.21.1
 
-CVE-2026-33811: net: crash when handling long CNAME response
-CVE-2026-33814: net/http: infinite loop in HTTP/2 transport when given bad
-                SETTINGS_MAX_FRAME_SIZE
-CVE-2026-39817: cmd/go: "go tool pack" does not sanitize output paths
-CVE-2026-39819: md/go: "go bug" follows symlinks in predictable temporary
-                filenames
-CVE-2026-39820: net/mail: quadratic string concatenation in consumeComment
-CVE-2026-39823: html/template: bypass of meta content URL escaping causes
-                XSS
-CVE-2026-39825: net/http/httputil: ReverseProxy forwards queries with more
-                than urlmaxqueryparams parameters
-CVE-2026-39826: html/template: escaper bypass leads to XSS
-CVE-2026-39836: net: panic in Dial and LookupPort when handling NUL byte on
-                Windows
-CVE-2026-42499: net/mail: quadratic string concatenation in consumePhrase
-CVE-2026-42501: cmd/go: malicious module proxy can bypass checksum database
-
-go1.26.3 (released 2026-05-07) includes security fixes to the go command,
-the pack tool, and the html/template, net, net/http, net/http/httputil,
-net/mail, and syscall packages, as well as bug fixes to the go command, the
-go fix command, the compiler, the linker, the runtime, and the
-crypto/fips140, crypto/tls, go/types, and os packages.
-
-https://go.dev/doc/devel/release#go1.26.3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c465f0d8eb676cd10ef48a864766abde43ffb239)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a8aed698c706ec534ddc41cdce651c18016c28ca)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ ...01-fix-wrong-copy-width-in-overlay-images.patch | 26 ----------------------
+ package/libheif/libheif.hash                       |  2 +-
+ package/libheif/libheif.mk                         |  5 +----
+ 3 files changed, 2 insertions(+), 31 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 77be843c83..69f2a3139c 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  2e91ebb6947a96e9436fb2b3926a8802efe63a6d375dffec4f82aa9dbd6fd43b  go1.26.2.src.tar.gz
--sha256  89835cdc4dfebde7fe28c9c6dc080bb3753f6b0354301966ff9f62d14991bd7d  go1.26.2.linux-386.tar.gz
--sha256  990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  go1.26.2.linux-amd64.tar.gz
--sha256  c958a1fe1b361391db163a485e21f5f228142d6f8b584f6bef89b26f66dc5b23  go1.26.2.linux-arm64.tar.gz
--sha256  0000e45577827b0a8868588c543cbe4232853def1d3d7a344ad6e60ce2b015c8  go1.26.2.linux-armv6l.tar.gz
--sha256  62b7645dd2404052535617c59e91cf03c7aa28e332dbaddbe4c0d7de7bcc6736  go1.26.2.linux-ppc64le.tar.gz
--sha256  410726ed10a0ea6745c2ea8da4f0e769fd3ce819cd4a41a67ad08b094d5dfc31  go1.26.2.linux-s390x.tar.gz
-+sha256  1c646875d0aa8799133184ed57cf79ff24bdefe8c8820470602a9d3d6d9192b8  go1.26.3.src.tar.gz
-+sha256  0ef3626a149b5811c813838c62b7d6618d03ea36047b32c90b0e4851cc42b1fa  go1.26.3.linux-386.tar.gz
-+sha256  2b2cfc7148493da5e73981bffbf3353af381d5f93e789c82c79aff64962eb556  go1.26.3.linux-amd64.tar.gz
-+sha256  9d89a3ea57d141c2b22d70083f2c8459ba3890f2d9e818e7e933b75614936565  go1.26.3.linux-arm64.tar.gz
-+sha256  d44133d4c66b1451a1e247da26db7716f76a081c0169a75e6c84e1871e394320  go1.26.3.linux-armv6l.tar.gz
-+sha256  dbd82b50530ead2beb1fd72215117380df3cb16332b51467116dc35b3691dd75  go1.26.3.linux-ppc64le.tar.gz
-+sha256  5c0605b7175449f1c8e8cb02efaba2695caab914fad4dcedc764c2f4c6dfe6ca  go1.26.3.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 67948dc405..ebd0d418ef 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch b/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch
+deleted file mode 100644
+index 4d845b2f90..0000000000
+--- a/package/libheif/0001-fix-wrong-copy-width-in-overlay-images.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From b8c12a7b70f46c9516711a988483bed377b78d46 Mon Sep 17 00:00:00 2001
+-From: Dirk Farin <dirk.farin@gmail.com>
+-Date: Tue, 11 Nov 2025 19:47:50 +0100
+-Subject: [PATCH] fix wrong copy width in overlay images (thanks to Aldo
+- Ristori for reporting this)
+-
+-CVE: CVE-2025-68431
+-Upstream: https://github.com/strukturag/libheif/commit/b8c12a7b70f46c9516711a988483bed377b78d46
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- libheif/pixelimage.cc | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libheif/pixelimage.cc b/libheif/pixelimage.cc
+-index f202c61049..84a8dd739e 100644
+---- a/libheif/pixelimage.cc
+-+++ b/libheif/pixelimage.cc
+-@@ -1508,7 +1508,7 @@ Error HeifPixelImage::overlay(std::shared_ptr<HeifPixelImage>& overlay, int32_t
+-       if (!has_alpha) {
+-         memcpy(out_p + out_x0 + (out_y0 + y - in_y0) * out_stride,
+-                in_p + in_x0 + y * in_stride,
+--               in_w - in_x0);
+-+               in_w);
+-       }
+-       else {
+-         for (uint32_t x = in_x0; x < in_w; x++) {
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index da2516a583..3da82e3e27 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  68ac9084243004e0ef3633f184eeae85d615fe7e4444373a0a21cebccae9d12a  libheif-1.20.2.tar.gz
++sha256  9799b4b1c19006f052bcf399c761cc147e279762683cefaf16871dbb9b4ea2a1  libheif-1.21.1.tar.gz
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index b69e699bf9..acd302d847 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.26.2
-+GO_VERSION = 1.26.3
+-LIBHEIF_VERSION = 1.20.2
++LIBHEIF_VERSION = 1.21.1
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
+@@ -23,9 +23,6 @@ LIBHEIF_CONF_OPTS = \
+ 	-DWITH_REDUCED_VISIBILITY=ON \
+ 	-DWITH_SvtEnc=OFF
  
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+-# 0001-fix-wrong-copy-width-in-overlay-images.patch
+-LIBHEIF_IGNORE_CVES += CVE-2025-68431
+-
+ ifeq ($(BR2_PACKAGE_DAV1D),y)
+ LIBHEIF_CONF_OPTS += -DWITH_DAV1D=ON
+ LIBHEIF_DEPENDENCIES += dav1d
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
