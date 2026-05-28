@@ -4,60 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194F6CD5BD5
-	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 22:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A72BCD4F54
+	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 22:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68947608D7;
-	Thu, 28 May 2026 22:20:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AAA1608DE;
+	Thu, 28 May 2026 22:27:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gEdwKWdwUtFp; Thu, 28 May 2026 22:20:56 +0000 (UTC)
+ id OmSWIBO7mbhr; Thu, 28 May 2026 22:27:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FA50608C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3620D608E3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780006856;
-	bh=0nmpg9hPOIZ79VugABUInZkQ2GM92WUd0s/Z8Rh+OI4=;
+	s=default; t=1780007251;
+	bh=lyksY7ZIWOnshVcpu0Ac1Id4LhDLlX/ki6aID50SEzU=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=IGVIk/QtsxiBxfcvaiOf3AZbsv9GMIg3ueSeUFb1DiMXILSdeaFb0obC+YYTyhPmZ
-	 zLdD00S5nr7+A/Wg7/hWyPTOKZp7HgQDTxk7gIdLuLN59v9T8OAQ2kCiVOeAVGgj7O
-	 GOasdyUywJtq/BgwMEbGmtq+iVAeFClA7sbT/Sz3Q3CCEL7rSt7Nmew3GZax0yr8/o
-	 j8bqV04rM8Fe8B+NAqMjqXOPjcjJsxMrjv81ESwIRH8rQyieAxyb0cN6fKcZqLLqsy
-	 OylmPdionmRFf2ssdre7QHud6RclrNEim+Iv4zLM0y9iPQBBJAVwQiopxBqMs9lhSn
-	 wT6ysGoTQO/EA==
+	b=Rk/fDz5f1HOI04t24ptUVFvsE9LcwScw//xMVjMXhW7PfqWyL/1DTH/ZYM1JPgXjd
+	 +/Gl2WL6fse7hmZdgMbj0saQ0OymLOehyJp40fMFIDE/c+4eyaau9aIwFQUVgAfzjq
+	 8JyGHcbKizecia4803c06IXF3GqXA2NjKAfXoRj8eidkWp+WwyjaMmp6IYnif1Y0q1
+	 SJDJWlEoXUVWE/HIOZUAbVZvguhixQCZBj60A0pwHI7lhJarD7ZIBNZasJKr56+3Cu
+	 V0IZWeROorw+uxAFWFeGoTHQFQpXZvqibtMUZXJJ9vEfBwRQSQGnJeCpWf3ifqQAOR
+	 RT4hzTvKoXPuQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FA50608C8;
-	Thu, 28 May 2026 22:20:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DA6428E
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3620D608E3;
+	Thu, 28 May 2026 22:27:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9909E28E
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A997817C0
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8785F81916
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QHfCBp3i8bsW for <buildroot@buildroot.org>;
- Thu, 28 May 2026 22:20:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id Xo3B_igqUQ7m for <buildroot@buildroot.org>;
+ Thu, 28 May 2026 22:27:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8B5081786
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8B5081786
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88BE887172; Thu, 28 May 2026 22:20:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44F5681911
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44F5681911
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 44F5681911
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:27 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 240492739
+ for <buildroot@buildroot.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 28 May 2026 22:27:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wSjC4-00000001UMj-0QlE
+ for buildroot@buildroot.org; Fri, 29 May 2026 00:27:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 00:20:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f5601740113111269cd0717062fdef039b17763d
-X-Git-Newrev: d5aef8a047cf83e70868174da22891edd603003b
-X-Patchwork-Hint: ignore
-Message-Id: <20260528222041.88BE887172@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2026.05-rc3
+Date: Fri, 29 May 2026 00:27:11 +0200
+Message-ID: <8733zbkw5c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=RBlIt0hnh7Xa7XPQ3Lv+O6uS4R7NO6uIrupDuqMsGzKApgn2xv6xL11CfIxtuXZMo9iHCsBgBMo37KCeCFzrRQVyEcDtUQmALhSDoOE/7ffRkK03Q8lFMg/GhYl0vONJNxm2VTK1/KxDYISwkI/w7OKTpA/74PfsPiXrwaQn/G1PIVKQGR3mr7ecIenqzsJm321Y298uKDeiuumUATvOhfqIUoAw/4b58+vmmfCHHbNsU6KTF8WiW7vHcq/vjpLI6KRqjf9CGdi66L84N57K/8l/ePcHCmvtgrlySAY6F8UFXIFBqJDONcsuylX+iev3B2139zAscc6QtqRUPKpPYw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=OMglWH9JmnGLwgSkl2ByBtiKbxNL27xuQTOCxg1P6yY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=RBlIt0hn
+Subject: [Buildroot] Buildroot 2026.05-rc3 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,124 +88,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5aef8a047cf83e70868174da22891edd603003b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    |  8 ++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 14 +++++++-------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 38 insertions(+), 9 deletions(-)
+Buildroot 2026.05-rc3 is released - Go download it at:
 
-diff --git a/CHANGES b/CHANGES
-index 7108e98fcd..568908d144 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,11 @@
-+2026.05-rc3, released May 29th, 2026
-+
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: kexec, libde265, libheif,
-+	llvm-project, mariadb, mesa3d, mpd, nginx, putty,
-+	python-urllib3, radvd, samba4, unbound
-+
- 2026.05-rc2, released May 21th, 2026
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index ffba8ba6a2..cb52a1d668 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2026.05-rc2
-+export BR2_VERSION := 2026.05-rc3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1779398000
-+BR2_VERSION_EPOCH = 1780006000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index c1d8a366ce..0b03034886 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -21,25 +21,25 @@
-           <th>2026.05.x</th>
-           <td>September 2026</td>
-           <td>
--            2026.05-rc2<br/>
--            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc2/CHANGES">
-+            2026.05-rc3<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">
-               Changelog
-             </a>
-           </td>
--          <td>2026-05-21</td>
-+          <td>2026-05-29</td>
-           <td>
--            <a href="/downloads/buildroot-2026.05-rc2.tar.gz">
-+            <a href="/downloads/buildroot-2026.05-rc3.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-               .tar.gz
-             </a><br/>
--            <a href="/downloads/buildroot-2026.05-rc2.tar.gz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2026.05-rc3.tar.gz.sign">[PGP sig]</a>
-           </td>
-           <td>
--            <a href="/downloads/buildroot-2026.05-rc2.tar.xz">
-+            <a href="/downloads/buildroot-2026.05-rc3.tar.xz">
-               <img src="images/package.png" width="24" alt="">
-               .tar.xz
-             </a><br/>
--            <a href="/downloads/buildroot-2026.05-rc2.tar.xz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2026.05-rc3.tar.xz.sign">[PGP sig]</a>
-           </td>
-         </tr>
-         <tr>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 6e48090b1f..b0b32892cd 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2026.05-rc3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 May 2026</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>Another week, another release candidate with more cleanups and build fixes. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">CHANGES</a>
-+	  file for more details.</p>
-+
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2026.05-rc3.tar.xz">2026.05-rc3
-+	  release</a>, and report any problems found to the
-+         <a href="support.html">mailing list</a> or
-+         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+https://buildroot.net/downloads/buildroot-2026.05-rc3.tar.gz
+
+or
+
+https://buildroot.net/downloads/buildroot-2026.05-rc3.tar.xz
+
+Or get it from Git:
+
+https://gitlab.com/buildroot.org/buildroot.git (2026.05-rc3 tag)
+
+Another week, another release candidate. For details, see the CHANGES
+file:
+
+https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2026.05-rc2..
+
+    13  Bernd Kuhls
+     3  Peter Korsgaard
+     1  Andreas Ziegler
+     1  Viacheslav Bocharov
+
+Expect the final 2026.05 release within a few days, unless anything big
+shows up.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
