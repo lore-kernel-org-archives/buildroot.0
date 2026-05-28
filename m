@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76983CD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D61CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E5B840C5E;
-	Fri, 29 May 2026 08:26:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13B6583BD9;
+	Fri, 29 May 2026 08:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SSRl4YXuVkSw; Fri, 29 May 2026 08:26:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M1Q7XwS-1nc6; Fri, 29 May 2026 08:26:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C659412A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A6D283BDA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043175;
-	bh=tzu9E15VY8U8oGM3ft+Oz7+2T/O0U6nnQ0fTTNyvXXo=;
+	s=default; t=1780043176;
+	bh=wMz5lLugGl/YBkDQ+kTZYWPQFx/4vfzlh2P9el99Oe8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aIZY9Oekj/hTZIb+ru8IyyRxX9GKpqKQpd3rhxikrhSIljEwfqfYtnQ/Q+E/GwY+u
-	 Crpgo+FbW1xFm6ARDMj9tVJ6qwaocLKRshNkS1RVR9w6tLBoyspva+jWKjcZO3Wbw6
-	 ej4XOi+zZDrkEUxm2IYf75l3PZTHkCcI8RK2tpVqZcGxxTnV04a4UKetphunOQ3awO
-	 QedLGDlWByfg6BDZnu0t6MnhjqLy1B51EE2+UKgP0NqGpz3WAYEt09UpP/9TLJLLvU
-	 spuK2hkbDHJExlYmUInZWugUTTuU2U3VGvVw5INDr2d8jsACCakHOi4vPf2pjXSkDy
-	 YG2do4Ccxl7kQ==
+	b=Ls52ltlayn/LRqu0iTkrCym1uaGbxTyNN51t7nnu+L/gF++u6ZFmGmSZlINM9xoPF
+	 q1FwHtp9gbh7zHflL9wIiOQCRfKQqrz09Fel883ZJ0G7KsI23H72PFnXv1BBiYt8aW
+	 G4DRFhU9nTMq4taoNbDRO9EcJ7DQkHMsJtdBAXlQaIjSGjSUTftvMjczIpCtbTGnJt
+	 Yjd0f0+LIdgZhzq2We4yWhM7tdo/i56PJcLPze9kdlAXw/FuVYlLhx/4Wyp/SUUsxa
+	 BKJacMRAAg5aZQEVuhRw2tO5WQvd1910CwLxgrg9GYki+AeGoZ/czOGpD2zM87CmU6
+	 DtmAHxTbuoNUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C659412A1;
-	Fri, 29 May 2026 08:26:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A6D283BDA;
+	Fri, 29 May 2026 08:26:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10EBE28E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1162028E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25C2D41F5C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63D6B41F93
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Qt-kSx54oxn for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:25 +0000 (UTC)
+ id DzFbIDyXS4R8 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E3F241F93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D90DA41F8A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E3F241F93
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D90DA41F8A
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C22DB870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id 78D5C87171; Fri, 29 May 2026 08:25:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 14:37:12 +0200
+Date: Thu, 28 May 2026 11:50:45 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c8000a13ed103c826918f4635926fdd4f17b2e2d
-X-Git-Newrev: 131ffd8b36941361f41ee287eaad42b33d944b5b
+X-Git-Oldrev: d4e5a990a1488d6e13a530a4b98e5b9f833e78f4
+X-Git-Newrev: b1ba7f0c8d715f509a88a237fa498a332731d054
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.C22DB870C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
- to version 1.26.1
+Message-Id: <20260529082507.78D5C87171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/unbound: security
+ bump version to 1.25.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,306 +77,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/131ffd8b36941361f41ee287eaad42b33d944b5b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b1ba7f0c8d715f509a88a237fa498a332731d054
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Building Go 1.26 and later requires Go 1.24.6 or later for bootstrap.
+https://nlnetlabs.nl/projects/unbound/download/
 
-To support this we use Go version 1.25.8 as the version for
-go-bootstrap-stage5 and have the build for Go 1.26.1 depend on
-go-bootstrap-stage5.
+Used new signing key to verify the source tarball:
+https://nlnetlabs.nl/signing-keys/
 
-Go version 1.25.8 is the latest Go version we can build using
-go-bootstrap-stage4.
+Fixes CVE-2026-33278, CVE-2026-42944, CVE-2026-42959, CVE-2026-32792,
+CVE-2026-40622, CVE-2026-41292, CVE-2026-42534, CVE-2026-42923,
+CVE-2026-42960, CVE-2026-44390 and CVE-2026-44608.
 
-The package build for go-bootstrap-stage5 is effectively identical to
-go-bootstrap-stage4 with only the Go version and stage number changed.
-
-Go 1.28 is expected to require a minor release of Go 1.26 for bootstrap.
-
-Fixes the following security vulnerabilities:
-
-- CVE-2026-25679: net/url: reject IPv6 literal not at start of host
-- CVE-2026-27142: html/template: URLs in meta attribute actions not escaped
-- CVE-2026-27137: crypto/x509: incorrect enforcement of email constraints
-- CVE-2026-27138: crypto/x509: panic in name constraint checking: certificates
-- CVE-2026-27139: os: FileInfo can escape from a Root
-
-For full release notes, see:
-https://go.dev/doc/devel/release#go1.26.0
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 43d132319652258666a9896b23c32fb5c419a6e0)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 74aed5e8619cd4674e12659ce16798851486e7ff)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/go/Config.in.host                          |  9 +--
- ...t-buildvcs-false-when-building-go-bootstr.patch | 71 ++++++++++++++++++++++
- package/go/go-bootstrap-stage5/Config.in.host      |  4 ++
- .../go-bootstrap-stage5/go-bootstrap-stage5.hash   |  3 +
- .../go/go-bootstrap-stage5/go-bootstrap-stage5.mk  | 54 ++++++++++++++++
- package/go/go-src/go-src.mk                        |  4 +-
- package/go/go.hash                                 | 14 ++---
- package/go/go.mk                                   |  2 +-
- 8 files changed, 147 insertions(+), 14 deletions(-)
+ package/unbound/unbound.hash | 8 ++++----
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 7ba70c9843..79950983c1 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -2,7 +2,7 @@
- config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 	# See https://go.dev/doc/install/source#environment
- 	# See src/go/build/syslist.go for the list of supported architectures
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
-@@ -34,7 +34,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 19966d889e..46b88900e6 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,8 +1,8 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
+ # After checking pgp signature from:
+-# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
+-# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
+-sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
++# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
++# with key: 231018690C4D903EF419146AA144323DEAACDF45
++sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
  
- # CGO linking for the host. Since we use the same compiler for target
- # and host, if the target can't do CGO linking, then the host can't.
-@@ -57,7 +57,7 @@ if BR2_PACKAGE_HOST_GO
- 
- choice
- 	prompt "Go compiler variant"
--	default BR2_PACKAGE_HOST_GO_SRC if BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
-+	default BR2_PACKAGE_HOST_GO_SRC if BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS
- 	default BR2_PACKAGE_HOST_GO_BIN if BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 	help
- 	  Select a Go compiler variant.
-@@ -66,7 +66,7 @@ choice
- 
- config BR2_PACKAGE_HOST_GO_SRC
- 	bool "host go (source)"
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS
- 	help
- 	  This package will build the go compiler for the host.
- 
-@@ -91,3 +91,4 @@ source "package/go/go-bootstrap-stage1/Config.in.host"
- source "package/go/go-bootstrap-stage2/Config.in.host"
- source "package/go/go-bootstrap-stage3/Config.in.host"
- source "package/go/go-bootstrap-stage4/Config.in.host"
-+source "package/go/go-bootstrap-stage5/Config.in.host"
-diff --git a/package/go/go-bootstrap-stage5/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go-bootstrap-stage5/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-new file mode 100644
-index 0000000000..58f4581b02
---- /dev/null
-+++ b/package/go/go-bootstrap-stage5/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-@@ -0,0 +1,71 @@
-+From 6b05378097c6a386ed9912d2471976dc39504e86 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@aperture.us>
-+Date: Thu, 27 Jul 2023 21:28:47 -0700
-+Subject: [PATCH] cmd/dist: set buildvcs=false when building go-bootstrap
-+
-+When building go-bootstrap as part of the make.bash process, the cmd/dist
-+invokes the bootstrap Go compiler to build the go_bootstrap tool:
-+
-+${GOROOT_BOOTSTRAP}/bin/go install -tags=math_big_pure_go compiler_bootstrap purego bootstrap/cmd/...
-+
-+If there is an invalid .git directory in a parent of ${GOROOT_BOOTSTRAP},
-+make.bash will fail. Reproduction of the issue:
-+
-+  mkdir go-issue-61620
-+  cd ./go-issue-61620
-+  wget https://go.dev/dl/go1.19.11.src.tar.gz
-+  mkdir go-bootstrap
-+  tar -xf go1.19.11.src.tar.gz -C ./go-bootstrap --strip-components=1
-+  cd ./go-bootstrap/src/
-+  bash make.bash
-+  cd ../../
-+  wget https://go.dev/dl/go1.20.6.src.tar.gz
-+  mkdir go
-+  tar -xf go1.20.6.src.tar.gz -C ./go/ --strip-components=1
-+  printf "gitdir: ../../does/not/exist/.git" > ./.git
-+  cd ./go/src/
-+  GOROOT_BOOTSTRAP=$(pwd)/../../go-bootstrap/ bash make.bash
-+
-+The build fails with the following error:
-+
-+  Building Go toolchain1 using [snip]/go-1.19.10.
-+  error obtaining VCS status: exit status 128
-+    Use -buildvcs=false to disable VCS stamping.
-+  go tool dist: FAILED: [snip]/go-1.19.10/bin/go install -tags=math_big_pure_go \
-+    compiler_bootstrap purego bootstrap/cmd/...: exit status 1
-+
-+This change unconditionally sets -buildvcs=false when compiling go-bootstrap. We
-+don't need the revision information in those binaries anyway. Setting this flag
-+was previously not done as we were unsure if the go-bootstrap compiler would be
-+new enough to support the buildvcs build flag. Since Go 1.20.x, Go 1.19.x is the
-+minimum version for go-bootstrap, and supports -buildvcs=false. We can now set
-+-buildvcs=false without worrying about compatibility.
-+
-+Related: https://github.com/golang/go/issues/54852
-+Fixes: https://github.com/golang/go/issues/61620
-+
-+Upstream: https://github.com/golang/go/pull/61621
-+
-+Signed-off-by: Christian Stewart <christian@aperture.us>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ src/cmd/dist/buildtool.go | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
-+index a528d7aa76..3b411d6ebb 100644
-+--- a/src/cmd/dist/buildtool.go
-++++ b/src/cmd/dist/buildtool.go
-+@@ -221,6 +221,9 @@ func bootstrapBuildTools() {
-+ 	cmd := []string{
-+ 		pathf("%s/bin/go", goroot_bootstrap),
-+ 		"install",
-++		// Fixes cases where an invalid .git is present in a parent of GOROOT_BOOTSTRAP.
-++		// See: https://github.com/golang/go/issues/61620
-++		"-buildvcs=false",
-+ 		"-tags=math_big_pure_go compiler_bootstrap purego",
-+ 	}
-+ 	if vflag > 0 {
-+--
-+2.41.0
-+
-diff --git a/package/go/go-bootstrap-stage5/Config.in.host b/package/go/go-bootstrap-stage5/Config.in.host
-new file mode 100644
-index 0000000000..393780f21c
---- /dev/null
-+++ b/package/go/go-bootstrap-stage5/Config.in.host
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE5_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
-diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
-new file mode 100644
-index 0000000000..5e40ba7e6e
---- /dev/null
-+++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.hash
-@@ -0,0 +1,3 @@
-+# From https://go.dev/dl
-+sha256  e988d4a2446ac7fe3f6daa089a58e9936a52a381355adec1c8983230a8d6c59e  go1.25.8.src.tar.gz
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
-new file mode 100644
-index 0000000000..9006e5bf44
---- /dev/null
-+++ b/package/go/go-bootstrap-stage5/go-bootstrap-stage5.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# go-bootstrap-stage5
-+#
-+################################################################################
-+
-+# Use last Go version that go-bootstrap-stage4 can build: v1.25.x
-+# See https://go.dev/doc/go1.26#bootstrap
-+GO_BOOTSTRAP_STAGE5_VERSION = 1.25.8
-+GO_BOOTSTRAP_STAGE5_SITE = https://go.dev/dl
-+GO_BOOTSTRAP_STAGE5_SOURCE = go$(GO_BOOTSTRAP_STAGE5_VERSION).src.tar.gz
-+
-+GO_BOOTSTRAP_STAGE5_LICENSE = BSD-3-Clause
-+GO_BOOTSTRAP_STAGE5_LICENSE_FILES = LICENSE
-+
-+# Use go-bootstrap-stage4 to bootstrap.
-+HOST_GO_BOOTSTRAP_STAGE5_DEPENDENCIES = host-go-bootstrap-stage4
-+
-+HOST_GO_BOOTSTRAP_STAGE5_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE5_VERSION)
-+
-+# The go build system is not compatible with ccache, so use
-+# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
-+HOST_GO_BOOTSTRAP_STAGE5_MAKE_ENV = \
-+	GO111MODULE=off \
-+	GOCACHE=$(HOST_GO_HOST_CACHE) \
-+	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE4_ROOT) \
-+	GOROOT_FINAL=$(HOST_GO_BOOTSTRAP_STAGE5_ROOT) \
-+	GOROOT="$(@D)" \
-+	GOBIN="$(@D)/bin" \
-+	GOOS=linux \
-+	CC=$(HOSTCC_NOCCACHE) \
-+	CXX=$(HOSTCXX_NOCCACHE) \
-+	CGO_ENABLED=0
-+
-+define HOST_GO_BOOTSTRAP_STAGE5_BUILD_CMDS
-+	cd $(@D)/src && \
-+		$(HOST_GO_BOOTSTRAP_STAGE5_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
-+endef
-+
-+define HOST_GO_BOOTSTRAP_STAGE5_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/bin/gofmt
-+
-+	cp -a $(@D)/lib $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/
-+
-+	mkdir -p $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/pkg
-+	cp -a $(@D)/pkg/include $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/pkg/
-+	cp -a $(@D)/pkg/tool $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/pkg/
-+
-+	# The Go sources must be installed to the host/ tree for the Go stdlib.
-+	cp -a $(@D)/src $(HOST_GO_BOOTSTRAP_STAGE5_ROOT)/
-+endef
-+
-+$(eval $(host-generic-package))
-diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
-index ead535f4e0..7bdde1a8c1 100644
---- a/package/go/go-src/go-src.mk
-+++ b/package/go/go-src/go-src.mk
-@@ -16,7 +16,7 @@ GO_SRC_CPE_ID_PRODUCT = go
- 
- HOST_GO_SRC_PROVIDES = host-go
- HOST_GO_SRC_DEPENDENCIES = \
--	host-go-bootstrap-stage4 \
-+	host-go-bootstrap-stage5 \
- 	$(HOST_GO_DEPENDENCIES_CGO)
- 
- ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
-@@ -37,7 +37,7 @@ endif
- HOST_GO_SRC_MAKE_ENV = \
- 	GO111MODULE=off \
- 	GOCACHE=$(HOST_GO_HOST_CACHE) \
--	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE4_ROOT) \
-+	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE5_ROOT) \
- 	GOROOT_FINAL=$(HOST_GO_ROOT) \
- 	GOROOT="$(@D)" \
- 	GOBIN="$(@D)/bin" \
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 9a9a5a571a..bae223882a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  178f2832820274b43e177d32f06a3ebb0129e427dd20a5e4c88df2c1763cf10a  go1.25.7.src.tar.gz
--sha256  2866517e9ca81e6a2e85a930e9b11bc8a05cfeb2fc6dc6cb2765e7fb3c14b715  go1.25.7.linux-386.tar.gz
--sha256  12e6d6a191091ae27dc31f6efc630e3a3b8ba409baf3573d955b196fdf086005  go1.25.7.linux-amd64.tar.gz
--sha256  ba611a53534135a81067240eff9508cd7e256c560edd5d8c2fef54f083c07129  go1.25.7.linux-arm64.tar.gz
--sha256  1ba07e0eb86b839e72467f4b5c7a5597d07f30bcf5563c951410454f7cda5266  go1.25.7.linux-armv6l.tar.gz
--sha256  42124c0edc92464e2b37b2d7fcd3658f0c47ebd6a098732415a522be8cb88e3f  go1.25.7.linux-ppc64le.tar.gz
--sha256  c6b77facf666dc68195ecab05dbf0ebb4e755b2a8b7734c759880557f1c29b0c  go1.25.7.linux-s390x.tar.gz
-+sha256  3172293d04b209dc1144698e7ba13f0477f6ba8c5ffd0be66c20fdbc9785dfbb  go1.26.1.src.tar.gz
-+sha256  da75d696c6b9440fe9fb6418429f29eaeee947707ee8c6ddb567c558051a1cc2  go1.26.1.linux-386.tar.gz
-+sha256  031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a  go1.26.1.linux-amd64.tar.gz
-+sha256  a290581cfe4fe28ddd737dde3095f3dbeb7f2e4065cab4eae44dfc53b760c2f7  go1.26.1.linux-arm64.tar.gz
-+sha256  c9937198994dc173b87630a94a0d323442bef81bf7589b1170d55a8ebf759bda  go1.26.1.linux-armv6l.tar.gz
-+sha256  f56eed002998f5f51fa07fd4ed0c5de5e02d51cec7a4007f771c7576620d9d45  go1.26.1.linux-ppc64le.tar.gz
-+sha256  60fe623ef63e6338c055ec0e0e3f4fa85c97a056de2d2f6ee38591e2bfa9cdde  go1.26.1.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index a9c7d1ddc6..6c57be0ad7 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index b435839020..fab6e67455 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.25.7
-+GO_VERSION = 1.26.1
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+-UNBOUND_VERSION = 1.24.2
++UNBOUND_VERSION = 1.25.1
+ UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
+ UNBOUND_INSTALL_STAGING = YES
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
