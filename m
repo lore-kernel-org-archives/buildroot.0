@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F05BECD6E50
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5665CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2E1483B33;
-	Fri, 29 May 2026 08:25:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACDC541F5A;
+	Fri, 29 May 2026 08:25:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zak5Qp371qnC; Fri, 29 May 2026 08:25:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H4f-DUje4GSC; Fri, 29 May 2026 08:25:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E265483B3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9BBB41F7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043150;
-	bh=n9qchdMPRYyKRXUdQ8tVi8OiWAxJdZomOPCdr1sNYkE=;
+	s=default; t=1780043148;
+	bh=IlrBEazr4E0/SeoxJDnz1S/OBNBSvmhBOhpNVci9FME=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=E5O4LzvVqs44ps+evHyiMfsfR9JscuOzlOM6W9tpYwzPV1zkbDjx2fbJ4wFQaCvVK
-	 BRUIbNsuZDYzIl8TWIEsD+DyIzqcDouWxUDLTAUr8zmRZ2Vas0bkr14A6GK4k5uxT1
-	 x3jS+ycY/aOUTODg4P7hGJJkle/KW6or7/2y+5QWa9mbDPLi3h+ONTHvtg/TuXG6bD
-	 bv83sk8fzQ3t3Hcz6Jb+sn+uNcn9vQXnscv7r3UbY4tw4bJAstLq//6qmfVVH8MdwF
-	 tCPFnEb8yD23FOEa7Q+O/g5pzuklVKBClbwCLjtHQPxoj5KfH73212Tc6VEaiHLkuD
-	 ucVQsuiAqJ8Xw==
+	b=rK83FlAf5j+eE5MwByWpEJYhEiqNm+r5T/5rfBHhEQtbSt6oMKP4GzBUYfOsidkzC
+	 xfUHENlscYfdWZ6CzwUU8CyKQ7P/xTiPGT8ITK5QPlpyhY2LvxXrHjQTR8eFxeOEpb
+	 7IOTi0yVAZj+/Qv3VaoZvA8xozKcXeu74iyC3YfrfMBt9ic4h6K4UzWox/H6w82Ue0
+	 jAzEHn0ifAzzdcutnRY/eSOvUydhiOyQCfJ5v3feoZaWK5qYpy9nMtGL5J8LoPYaDR
+	 xFRPblZNWGy62huA0PI0qVqzC0B4IYHSBaMdCSblYBkJElcEQCZ6C/9WEoj9q5tMjq
+	 4y+tyO4iv93IQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E265483B3B;
-	Fri, 29 May 2026 08:25:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9BBB41F7F;
+	Fri, 29 May 2026 08:25:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13D5728E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12A3C288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7438C41F77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6474C41F69
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CTsZSF0E-kKd for <buildroot@buildroot.org>;
+ id n-O9rqrfLcpp for <buildroot@buildroot.org>;
  Fri, 29 May 2026 08:25:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89DB241F80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80CC641F7F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89DB241F80
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80CC641F7F
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29B1787171; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id 20890870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 11:46:55 +0200
+Date: Thu, 28 May 2026 11:46:34 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a5b99684c2fcca80aaa1ca395038730914574880
-X-Git-Newrev: 304f893561beeacb28537212757761f6853c70b9
+X-Git-Oldrev: ec4feb89ab57c8bc167f334cc3eed3541754286e
+X-Git-Newrev: a5b99684c2fcca80aaa1ca395038730914574880
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.29B1787171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: security
- bump to version 9.18.49
+Message-Id: <20260529082507.20890870C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rsync: security
+ bump version to 3.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/304f893561beeacb28537212757761f6853c70b9
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a5b99684c2fcca80aaa1ca395038730914574880
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.49/doc/arm/html/notes.html
+https://download.samba.org/pub/rsync/NEWS#3.4.3
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.49/doc/arm/html/changelog.html
+Fixes CVE-2026-29518, CVE-2026-43617, CVE-2026-43618, CVE-2026-43619,
+CVE-2026-43620 & CVE-2026-45232.
 
-Fixes CVE-2026-3592, CVE-2026-3039, CVE-2026-5946, CVE-2026-5950.
-
-Fixes bugs:
-GL #5804
-https://gitlab.isc.org/isc-projects/bind9/-/issues/5804
-GL #3589
-https://gitlab.isc.org/isc-projects/bind9/-/issues/3589
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 5528e00b10c5b98356550585324f775db2e4ea02)
+(cherry picked from commit 47b5cbb1cac5215a66590eb91937e29a7936d252)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
+ package/rsync/rsync.hash | 4 ++--
+ package/rsync/rsync.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 7b268a49b4..b719012de7 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.48/bind-9.18.48.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.49/bind-9.18.49.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  c742a69bff2561c23099d7c70c6984c145bcca1c1e3c67fac1f68a8132e8e7c5  bind-9.18.48.tar.xz
-+sha256  c43ce4548ebed788cd9df63658a7de105ceafba43fcd63fa352b1093e525cd24  bind-9.18.49.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 17ea50c5f4..6c0d2f8a03 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 933d330323..666bb5cf99 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.2.tar.gz.asc
+-sha256  ff10aa2c151cd4b2dbbe6135126dbc854046113d2dfb49572a348233267eb315  rsync-3.4.2.tar.gz
++# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.3.tar.gz.asc
++sha256  c72e63ca3021cbc80ba86ec30102773f4c5631fbc492b52e773b3958f82a53d3  rsync-3.4.3.tar.gz
+ # Locally calculated
+ sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 3282a759c6..5b4345d036 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.18.48
-+BIND_VERSION = 9.18.49
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+-RSYNC_VERSION = 3.4.2
++RSYNC_VERSION = 3.4.3
+ RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+ with exceptions
+ RSYNC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
