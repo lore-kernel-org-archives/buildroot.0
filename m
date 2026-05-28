@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5665CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E1DCCD5BD2
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACDC541F5A;
-	Fri, 29 May 2026 08:25:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4A3A613BF;
+	Fri, 29 May 2026 08:25:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H4f-DUje4GSC; Fri, 29 May 2026 08:25:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2kcVjfWzJyyr; Fri, 29 May 2026 08:25:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9BBB41F7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0F19613AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043148;
-	bh=IlrBEazr4E0/SeoxJDnz1S/OBNBSvmhBOhpNVci9FME=;
+	s=default; t=1780043151;
+	bh=r3aOQy1vc1/1jtPeQFYqEpgIEnvE3Gqq5cyYesJKm4Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rK83FlAf5j+eE5MwByWpEJYhEiqNm+r5T/5rfBHhEQtbSt6oMKP4GzBUYfOsidkzC
-	 xfUHENlscYfdWZ6CzwUU8CyKQ7P/xTiPGT8ITK5QPlpyhY2LvxXrHjQTR8eFxeOEpb
-	 7IOTi0yVAZj+/Qv3VaoZvA8xozKcXeu74iyC3YfrfMBt9ic4h6K4UzWox/H6w82Ue0
-	 jAzEHn0ifAzzdcutnRY/eSOvUydhiOyQCfJ5v3feoZaWK5qYpy9nMtGL5J8LoPYaDR
-	 xFRPblZNWGy62huA0PI0qVqzC0B4IYHSBaMdCSblYBkJElcEQCZ6C/9WEoj9q5tMjq
-	 4y+tyO4iv93IQ==
+	b=brP7EyIy/UMS/mXHagmR7Cj3MkXFR2G/FCLSKo3HTn5S0+M3AEl0H57O0vyMmjYJ5
+	 7LRaysZenYB9xx1IV0RN5Pff8tjIVPMFpQiOzw8Sl+Yvwv6XjOOtReAPGfstlBxaEf
+	 2TNNQr9sWsTkJ5IfcuabQwEqfMBtcxuxT1CHJTh9lCFjNZiZehaSjoU6zThYFdP3Bw
+	 dvsAmue5EbGA5DC0rTyfRSw4TjOauDzBFRGBi6NJgpMdWqw2SF1I9FKqLI8cpEjvaw
+	 tXC9IzichvbhHHzsPF4g1ypC4bN+/4XTKqLUOW4tl+v+PsJCpX5MIiWKNv8Cb7UfjV
+	 4dnvNSUeNalXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9BBB41F7F;
-	Fri, 29 May 2026 08:25:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0F19613AA;
+	Fri, 29 May 2026 08:25:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12A3C288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 131AA288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6474C41F69
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A0CD41F7B
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n-O9rqrfLcpp for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:22 +0000 (UTC)
+ id NFk3NXdUvfRn for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80CC641F7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F4D41F75
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80CC641F7F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37F4D41F75
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 20890870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id CBD9487171; Fri, 29 May 2026 08:25:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 11:46:34 +0200
+Date: Thu, 28 May 2026 11:36:47 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ec4feb89ab57c8bc167f334cc3eed3541754286e
-X-Git-Newrev: a5b99684c2fcca80aaa1ca395038730914574880
+X-Git-Oldrev: cfb43d9d382e167afcd1c05f56dbdce6d8e46b38
+X-Git-Newrev: 1ed6a45be82b22093b280e3620da1457c2e8646d
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.20890870C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rsync: security
- bump version to 3.4.3
+Message-Id: <20260529082506.CBD9487171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libargon2: fix
+ pkgconfig version string
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a5b99684c2fcca80aaa1ca395038730914574880
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ed6a45be82b22093b280e3620da1457c2e8646d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://download.samba.org/pub/rsync/NEWS#3.4.3
+Current build generated pkgconfig/libargon2.pc has wrong version string.
+    Version: ZERO
 
-Fixes CVE-2026-29518, CVE-2026-43617, CVE-2026-43618, CVE-2026-43619,
-CVE-2026-43620 & CVE-2026-45232.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Andreas Mohr <and@gmx.li>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 47b5cbb1cac5215a66590eb91937e29a7936d252)
+(cherry picked from commit 1ef471a61da87e356054d39e406edbb16878bd89)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rsync/rsync.hash | 4 ++--
- package/rsync/rsync.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libargon2/libargon2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
-index 933d330323..666bb5cf99 100644
---- a/package/rsync/rsync.hash
-+++ b/package/rsync/rsync.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.2.tar.gz.asc
--sha256  ff10aa2c151cd4b2dbbe6135126dbc854046113d2dfb49572a348233267eb315  rsync-3.4.2.tar.gz
-+# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.3.tar.gz.asc
-+sha256  c72e63ca3021cbc80ba86ec30102773f4c5631fbc492b52e773b3958f82a53d3  rsync-3.4.3.tar.gz
- # Locally calculated
- sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index 3282a759c6..5b4345d036 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
+index b3f6e1b216..1f3acbe042 100644
+--- a/package/libargon2/libargon2.mk
++++ b/package/libargon2/libargon2.mk
+@@ -11,6 +11,7 @@ LIBARGON2_LICENSE_FILES = LICENSE
+ LIBARGON2_INSTALL_STAGING = YES
  
--RSYNC_VERSION = 3.4.2
-+RSYNC_VERSION = 3.4.3
- RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPL-3.0+ with exceptions
- RSYNC_LICENSE_FILES = COPYING
+ LIBARGON2_OPTS = LIBRARY_REL=lib
++LIBARGON2_OPTS += ARGON2_VERSION=$(LIBARGON2_VERSION)
+ 
+ # GCC_TARGET_ARCH is not defined for all architectures, but libargon2
+ # only uses it to detect if some x86 optimizations can be used, and
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
