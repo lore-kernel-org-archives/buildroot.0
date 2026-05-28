@@ -4,111 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 935A2CD4F54
-	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 16:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E08CD5BD5
+	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 17:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2762F42AAE;
-	Thu, 28 May 2026 16:58:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E7D242AE0;
+	Thu, 28 May 2026 17:25:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dCt8NOybImc4; Thu, 28 May 2026 16:58:52 +0000 (UTC)
+ id hgBD9389LR47; Thu, 28 May 2026 17:25:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21EDF42AB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF5A742AE3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779987532;
-	bh=J4si3IqrXbsNgMKtwwMl6+3HWYmzW7mj8jrNxY/3/nQ=;
+	s=default; t=1779989119;
+	bh=7fLp25X9z3y1hSuA99qolu1ZrwBEbyDn/nDTELPkk58=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=XnnG28kkSYE5UZ6Zb1N/h/fJr0FKfKh+FO5DkAe7htfybs5e8mTUnBZQnhDRFxosB
-	 opcuyrT6tprUP/nmssw8LWaA7Q623Q1e3vxTjRo1M1Ly389QqTkKI822lC4pwXaOXc
-	 ow751BvU5jmVzUGsttV7LAoClms8yId8rb5/7yiWfM3n8rm0xnUpaRs2K+QfBcRy0D
-	 zeLZzs3SHCOeWdrAZtZyT8YiY0LdppKSvuqFn6iuzaJHVM1CaEORavABAC/uSmuesm
-	 BEFGcIp1dtyNP6Kyzrg3oXmbM4P9NvThOgVjGQLW17o+p9U8VqcmJlK6jdkpawVAMv
-	 xL4l5kyhl1k4A==
+	b=pRuT1KWbQSt6U+xFMjTrrV85giPYhyPher8ArcaZPybf6so7dQEJw3Nzf3hA6jsLd
+	 Mcx888v6RjdI9SOBtoczc5C3HOkwscCxeEUHmuKik6HpmryEWoTSM4pkULPZVqAMWK
+	 cNVTAAs43J7ssy8hNlgREta9hLPuXiTsO1seD6xS/jjeUryYn/K8yhu0+tW2ZWHDx9
+	 vn4Jnj90jo2XqmaKtRjPeskkVZgfMbv+qA0iOXoSPII4qr8RMj3eQoYhLLEeSFnMVx
+	 DMtaJ8397Fpfe1Kj5dILdmv8tq2/kt5GS9vJykrmydUbXtxExXW+pUXZcr91h9iDr6
+	 DGSgdp0wdRpPA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21EDF42AB0;
-	Thu, 28 May 2026 16:58:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AE45D288
- for <buildroot@buildroot.org>; Thu, 28 May 2026 16:58:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF5A742AE3;
+	Thu, 28 May 2026 17:25:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A45A288
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9354C4256B
- for <buildroot@buildroot.org>; Thu, 28 May 2026 16:58:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E439940494
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRc63vnB-ycz for <buildroot@buildroot.org>;
- Thu, 28 May 2026 16:58:49 +0000 (UTC)
+ id KMB_3qLmjaDV for <buildroot@buildroot.org>;
+ Thu, 28 May 2026 17:25:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62d; helo=mail-pl1-x62d.google.com;
- envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5C933404A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C933404A8
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
- [IPv6:2607:f8b0:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5C933404A8
- for <buildroot@buildroot.org>; Thu, 28 May 2026 16:58:49 +0000 (UTC)
-Received: by mail-pl1-x62d.google.com with SMTP id
- d9443c01a7336-2ba856db1c0so95157345ad.3
- for <buildroot@buildroot.org>; Thu, 28 May 2026 09:58:49 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AB3CD40492
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB3CD40492
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AB3CD40492
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 17:25:12 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4905529b933so46725055e9.0
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 10:25:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1779987529; x=1780592329;
+ d=1e100.net; s=20251104; t=1779989110; x=1780593910;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gz2zo5P3C4Elz5ouri/zybdsAiO1nUUfktmSMCxSE50=;
- b=USLYsPCsejODHBsI41C8t3pQpow4sL4f2OsmVR8nuCJXIbROZaOuhO2tVZyK0qIXxj
- gSud7ao9E3bzGA+QgHb0UTF3Wfro2MHUBYXHsCDJZNEHstJXitEx9/rlDiyvTDGCiO1Q
- FqxhVSufyeO69ZdJ8SSl+2vT0rT/MJIMGsHDy48E1qtoeFZ7KkoU5E9R7MPSjyxBYzC6
- O9qbuFcqeKnzm32mh1t2vVxIre2s4275ydwpk1dI05O2HYgPEvl12ih+qMcKTo+7wXqg
- Kpc/tH+gVftYtjMH+EDN1QYRJt0MWrrAEm4kDOPzdLiWPUgjHs3T0Q/HF7ysR+I5kPrC
- wCVA==
-X-Gm-Message-State: AOJu0Yym4VkF5KA3KoTMsGvDuJG2m9QkG6NBjnDJ24L79667yCYt+ML+
- 83mbudHVWqkrBnK898Ei/lkjDieAA38hN4NIxC8d9LhoopgaVJJspJilgtKU9RIX
-X-Gm-Gg: Acq92OGZoVaLoiGfyBml8N5Cuk+1f2c6OTdKDIo6YQ9iOTCP3MLBPM5ga+pA/FDKTw6
- WUrHUEFyorn5zwqx8BJI0Lg0PoUSNXNwmupLqYknb0PjSaWeTaXmQAYYrfDnryu7CjPnqgsjQvO
- HndrrlIxHgN6ETxV29rqYPpffi040Wtye1k6nOBte+2Wnl1Qdpb9pH1CKWziAyzeWjP08p8kYsk
- K4sYkNwojipbLU3Wr3R2csTBGmbxrMOE3AwD/t3hVtxGhn52fq7jd679NAuywHlsw+eiAQ8yb4E
- aalrOIBTCANo9kvy1CEYHDdyiMZnhVCxDnPcvuItCyqQo5T6zkHgPLccLNb3Jp5WNtT/PZCwIIm
- SGyy/BqO9UzUHhwVXTAopAvMKwcmX2SYp6wXTN1XGo+nC/1TdcBA9ZsDi7EgOBECuMaY9bRVjfk
- 6Nro8n9Y+x+bTQoEzT6oAsT3zxlvD/t4zZpsq7ZZ7QAx8rbp/9ls2q766rsqE1HH2J/QNd3t08z
- bB3b+vy
-X-Received: by 2002:a17:903:1a23:b0:2b4:5cea:f61c with SMTP id
- d9443c01a7336-2beb0631933mr331209925ad.4.1779987528518; 
- Thu, 28 May 2026 09:58:48 -0700 (PDT)
-Received: from fedora.taildae27b.ts.net
- ([2409:40e5:11fc:6ef9:8efe:5b07:2a87:801f])
+ bh=gg+rm1Skk56fOwFvp2DTHPGO8R+xahQFjHn4oieFdJA=;
+ b=FDixWJU3tPx8a13CstqnxTwUwWW71oj6AHrE8WcyhgTyHuYyeRNaPHvTbxuhduNwb5
+ LN2WeF4H4lKP2FThzwk/Oy6gXumLaCv6ANJpuLG4sQqQgYZ389hfelO47UAYXLbOvRGe
+ c7dOwTGgQCCB3cB1T5sGHwfgB/Y5jYcAj3raRDbRLjsn3b1UeURLT5HZWKvlbPKbhoU1
+ WvCyWvZrQ1h7ugJ3PZ+8DUSJUjUwB/EvZ4HFRnL0hAN/cj8fx9ozvtIrrEiXCiuwFCiR
+ IYkoZU1v6puQAKQV3bK2yjc94XaN1RYFe+6xAMUzqXEdEd9cFy2L6rJ0ked2qvSYMP2b
+ 4/KQ==
+X-Gm-Message-State: AOJu0YyC2iIQjVpQaDVEtO9u6LOsH6lYf3yqgkc6cq9ePYrT7RZGW4/H
+ qbzJ7EGPw3wszLt/bBHCToBJTA5f5Hlo8p+KGgResBrvvkW4lGtYCUS9xIqi3A==
+X-Gm-Gg: Acq92OFG18+pwxZQKtzqEhbhQMikN1nfI0O0apV02LBkvGKIt+f90WJB7QQr/LxzR1h
+ a4NlRqXaaP0qtjtLyJQJestPxXldKqVZ0pzFecu04BjA1hAmT2jwrYXCc/iStqNI8zkF7+VZhPb
+ Myix02hS3B/NZAOlFqoNK8m6E+SCi6tLClBenS8c+6DGMHpfgGWeo29iLpKi3JH1lOFUPZH6SM7
+ zXUPTw5XSc6c8VuKLOVk+xEEpIuwF3Jq8x/RQ+s1QMBZgW5wb73kwNljo9a8McSD6xs1aPLS/Ep
+ uKmNLT7yo5eXIqXNo4zkinLik1KbuTWOtSzZY16WciX1mdZRuFLuWGHpRem0Nzbh1BL1Z2jYnh6
+ JcdojopvZ1uvWnK36KRZThJ1CJGlT1clLgkSCqQq0mNtp1YotHhvxQ9s+frbIsE3k+q1EBpATre
+ bpdm7DALahN7AZXPnVCCobPKqdtxK0lVhDyx7MxdX/UQ==
+X-Received: by 2002:a05:600c:3581:b0:490:482c:4391 with SMTP id
+ 5b1f17b1804b1-490482c4586mr500479415e9.23.1779989110314; 
+ Thu, 28 May 2026 10:25:10 -0700 (PDT)
+Received: from LinkMed ([2a02:8070:2483:7e00:c64b:8476:a88e:af45])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2bf13d83264sm12309415ad.17.2026.05.28.09.58.45
+ 5b1f17b1804b1-4909a52ca5fsm1098045e9.2.2026.05.28.10.25.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 May 2026 09:58:47 -0700 (PDT)
-From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ Thu, 28 May 2026 10:25:09 -0700 (PDT)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 28 May 2026 22:28:36 +0530
-Message-ID: <20260528165838.14156-1-chakrabortyshubham66@gmail.com>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Date: Thu, 28 May 2026 19:24:52 +0200
+Message-ID: <20260528172452.25273-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1779987529; x=1780592329; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1779989110; x=1780593910; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gz2zo5P3C4Elz5ouri/zybdsAiO1nUUfktmSMCxSE50=;
- b=jE3XX9J6QnlcHfK7u608zUdkj/PUSeC2cKw7R0jNlEZvX4jUx3sDMEu0qlv9SOECxS
- LESvA27k7aM6B5ZW3dyPnDj7FnVeF+v0U56sTz2Uzqe1caYGS1asMw8u6AglLejfLrNw
- /4oDCRAjbmV8XVc//aKNQ+m5y6Q+XFwJYnr+tj1FdTl2zMcPjWbrBPmqXbriglj98nQv
- 3kVE1no8YSSxCZ+B72gEU4qxKq/GDVGOLOD2JYGYTEccvQVen6R2xuVBmgT7f3e7M3dr
- hlBqrkJALCX5jBT7v+RbG/lIhEBMTgowmV5u6deDExiCUGDXWURTRZnr7QOF+dAbfbRk
- 9wKQ==
+ bh=gg+rm1Skk56fOwFvp2DTHPGO8R+xahQFjHn4oieFdJA=;
+ b=ossEkS0LKOfvVFG8VO8WBZ7FN/cydJaBckb+iI3e21TYabQClzG2xHY4mDJwFJQ5sS
+ cLzMDjlXiqejB4et1CYG7kyyXmhH3d2ukgg4YtcJQlRG8fjYPOFh3yhUCzn4V13QO57e
+ UXavqrZvi/gg1nuCa0SZZMkYS3qqOm8qusn87ku7fzNMD7KgJ5wkFk/Ikm75Ve1PboIV
+ 5bKRdITQ7p2gsJy58ipxXJSr38o5HNEVfMzQDKXm4pQxaDUKC2pUijJGV3BBsF5lYZDF
+ XxyvuwfXQ1Al6/vGTTfSxmLentpimCuJllm/qtK8JR2I0i8Ee9SSEy4d1+DslqDAN3R7
+ WSsA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=jE3XX9J6
-Subject: [Buildroot] [PATCH] package/libapparmor: bump version to 5.0.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=ossEkS0L
+Subject: [Buildroot] [PATCH v1 1/1] package/xwayland: bump to version 24.1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,73 +123,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-AppArmor 5.0 is a major new release of the AppArmor that is in development.
-
 Changelog:
-- https://gitlab.com/apparmor/apparmor/-/wikis/Release_Notes_5.0.0
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+https://lists.x.org/archives/xorg-announce/2026-April/003697.html
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/apparmor/apparmor.hash       | 4 ++--
- package/apparmor/apparmor.mk         | 4 ++--
- package/libapparmor/libapparmor.hash | 4 ++--
- package/libapparmor/libapparmor.mk   | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
-index ef7dd81aaf..43c4b10de1 100644
---- a/package/apparmor/apparmor.hash
-+++ b/package/apparmor/apparmor.hash
-@@ -1,5 +1,5 @@
--# From https://gitlab.com/apparmor/apparmor/-/releases/v4.1.1
--sha256  f125aae32964e4e84443fec005f37f37abd5164f30620239c42864655a1b0281  apparmor-v4.1.1.tar.gz
-+# From https://gitlab.com/apparmor/apparmor/-/releases/v5.0.0
-+sha256  37494c3640baeca9301879baa6f741272c57ac121ec1fc3bc42b4a27f5bb93be  apparmor-v5.0.0.tar.gz
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index ba84d20b9f..6204400852 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2026-April/003679.html
+-sha256  459762be8ea046c94386687d77a87add6073868bee14f02913eafebb945b7aa0  xwayland-24.1.10.tar.xz
+-sha512  bceba1db7f4d7ac92d2b2a3c8f6f7ab0cc093f396fe89406f8dba25e32ffc3edfa552df246cbfb3b0708c1d28b3e179694d11870b063d5b8f9ab2db9fb861a8f  xwayland-24.1.10.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-April/003697.html
++sha256  27115a1a8819078409bf6fecfeb7724e8137bd36426de7005a5b3aae0a2138ff  xwayland-24.1.11.tar.xz
++sha512  586d7e60c8bf0d92cec66451284c6c43b960010f14a1e204b5de722c610dc067481fd6ece0ffae615ca53ca2d0262e2a3dbb916d04811b8d57c1085bc363f5e9  xwayland-24.1.11.tar.xz
  
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index febd1d5eb0..54261d028f 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -5,8 +5,8 @@
+ # Locally calculated
+ sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 5902f85d4f..0643cc5c4c 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version here, please also update the libapparmor package
--APPARMOR_VERSION_MAJOR = 4.1
--APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).1
-+APPARMOR_VERSION_MAJOR = 5.0
-+APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).0
- APPARMOR_SOURCE = apparmor-v$(APPARMOR_VERSION).tar.gz
- APPARMOR_SITE = https://gitlab.com/apparmor/apparmor/-/archive/v$(APPARMOR_VERSION)
- APPARMOR_DL_SUBDIR = apparmor
-diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-index d0603c0a3a..6e8391adfb 100644
---- a/package/libapparmor/libapparmor.hash
-+++ b/package/libapparmor/libapparmor.hash
-@@ -1,5 +1,5 @@
--# From https://gitlab.com/apparmor/apparmor/-/releases/v4.1.1
--sha256  f125aae32964e4e84443fec005f37f37abd5164f30620239c42864655a1b0281  apparmor-v4.1.1.tar.gz
-+# From https://gitlab.com/apparmor/apparmor/-/releases/v5.0.0
-+sha256  37494c3640baeca9301879baa6f741272c57ac121ec1fc3bc42b4a27f5bb93be  apparmor-v5.0.0.tar.gz
- 
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index 64442fcc16..a6dad38c74 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- # When updating the version here, please also update the apparmor package
--LIBAPPARMOR_VERSION_MAJOR = 4.1
--LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).1
-+LIBAPPARMOR_VERSION_MAJOR = 5.0
-+LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).0
- LIBAPPARMOR_SOURCE = apparmor-v$(LIBAPPARMOR_VERSION).tar.gz
- LIBAPPARMOR_SITE = https://gitlab.com/apparmor/apparmor/-/archive/v$(LIBAPPARMOR_VERSION)
- LIBAPPARMOR_LICENSE = LGPL-2.1
+-XWAYLAND_VERSION = 24.1.10
++XWAYLAND_VERSION = 24.1.11
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 -- 
 2.54.0
 
