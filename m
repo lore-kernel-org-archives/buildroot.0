@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06B67CD6E50
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40AFCD6E4C
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D01736135E;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68C4241F98;
 	Fri, 29 May 2026 08:25:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NMCW_lNGKI8P; Fri, 29 May 2026 08:25:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UwcgAXS108NR; Fri, 29 May 2026 08:25:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 971DA6131A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92E2341FB2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043131;
-	bh=XQisge46IxD575ONliOO5c/BGUZ3XVcBGv6YZSqNrrk=;
+	s=default; t=1780043132;
+	bh=rH0PP9sIEL3FrWXr/sL39sAYVMf5xJyz6KF2kTquIb4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=I+4AkW8K8p3Dcmanm5IC4R1KUCofLC+rzJdY3S0P7quZ0el3ye/Oi/gnIQEHU6dMZ
-	 x3wfuhVsBb8taR5GQwYmmFG3k4HFSHT5waUISJM2ukNQ29HA6nopk0K/RkKqTXqf0S
-	 y7GzdXYpfpjHhucSQJfWmzdwLRV6JhPct8XKTHCuQO8wcflxtcm50eF3wN2Es72h3N
-	 pTWrlLYjDyNdlV6NjWRddTBkVAuW7Yi9FKteaclLRoY4w8fHS/qz1BzWGRYEwVKOMX
-	 uIacFY0A3M1bI0pauoVEQcAyUImwNYsgevqojmKfx2kS5Iio56GyBNBsmZMVwZrvBz
-	 NTCYEESPQzfrw==
+	b=cZHaPlrI6f+//BOOrdMwIplhH3Wv4G70L3y+CnkguWrgodmi53RvWsLXB5SrRB3vh
+	 0oiOP4zpgFA8Unu1zc3RDQ18kIE+NeNgDMK6F9E2Jj9G7F1tPdjZDV9DdwBwX4oNTM
+	 pD5zpvc+c81LqKQZIe1zcmFZnVgLVsCpB2AvvRIGBFAuPUzdL6FaPBxUhdHX+IuGLO
+	 vIuzKqVqifeYdgZbCyiqZm7Y5hGOfuQkKaDpQrRtivPC/bBhqar5dIJmzYd1q2nMy2
+	 E5+/cgq3wv3Dd6CYdiUl4xvqlLZVEvCIb3CgEvFPvVohYFIVrZrnarL3SUG6ndXTPT
+	 qZEkiKBAYYjYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 971DA6131A;
-	Fri, 29 May 2026 08:25:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92E2341FB2;
+	Fri, 29 May 2026 08:25:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CA1028E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02CAE28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE26941F5B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D46EC41F5E
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eepGg3KyoVxl for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:19 +0000 (UTC)
+ id gcNSYCXD_zeA for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95F1541F5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FFF041F5C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95F1541F5E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FFF041F5C
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35BB287334; Fri, 29 May 2026 08:25:06 +0000 (UTC)
+ id 1128C87391; Fri, 29 May 2026 08:25:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 10:26:43 +0200
+Date: Thu, 28 May 2026 10:19:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 209a227a6ddf9f982eb8791db960675b47fccf98
-X-Git-Newrev: 137fae85b3a8cadbb50788f5c217f4307d434a4d
+X-Git-Oldrev: d3463e71b1aab6ec14ad369fd25fbf31adf27cb5
+X-Git-Newrev: 7079d11c75931489f5f8706c008f4a92156c101c
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082506.35BB287334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dos2unix: update
- upstream URLs
+Message-Id: <20260529082506.1128C87391@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libgpg-error:
+ bump version to 1.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,65 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/137fae85b3a8cadbb50788f5c217f4307d434a4d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7079d11c75931489f5f8706c008f4a92156c101c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The old upstream page [1] is being deprecated. It currently shows:
-"""
-This page will go offline on 1 July 2026. Go to the new page at
-https://waterlander.net/dos2unix/
-"""
+https://dev.gnupg.org/T8112
 
-This commit updates the homepage, download site and hash file URL
-to the new upstream location [2].
-
-[1] http://waterlan.home.xs4all.nl/dos2unix.html
-[2] https://waterlander.net/dos2unix/
-
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-[Julien: add info in commit log]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 44f60e9f708ff01ee9b4631b252923cab11c79d5)
+(cherry picked from commit c41092cc9851b689f803114e88ee5d0f1c39af58)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dos2unix/Config.in     | 2 +-
- package/dos2unix/dos2unix.hash | 2 +-
- package/dos2unix/dos2unix.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-index cfb5ba4b79..928605ae37 100644
---- a/package/dos2unix/Config.in
-+++ b/package/dos2unix/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_DOS2UNIX
- 	help
- 	  dos2unix converts text file line endings between CRLF and LF
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index ede1a2113e..1e52e78d22 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  a9876a9e4cb54298960bd4202baf891642060428  libgpg-error-1.58.tar.bz2
+-sha256  f943aea9a830a8bd938e5124b579efaece24a3225ff4c3d27611a80ce1260c27  libgpg-error-1.58.tar.bz2
++sha1  851a1619aee8f7723ed50f09cb6a186c483c280c  libgpg-error-1.60.tar.bz2
++sha256  11b2a738e212f3eab0fe8637bc341d3181ca964e97bb2654de91aab7dae4ce09  libgpg-error-1.60.tar.bz2
  
--	  http://waterlan.home.xs4all.nl/dos2unix.html
-+	  https://waterlander.net/dos2unix/
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index d4d682cd0c..621bb5ca40 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.2.tar.gz.asc
-+# https://waterlander.net/dos2unix/files/dos2unix-7.5.2.tar.gz.asc
- sha256  264742446608442eb48f96c20af6da303cb3a92b364e72cb7e24f88239c4bf3a  dos2unix-7.5.2.tar.gz
- sha256  03b60fa2cf28b2c6dd585a13b32377c1f87b8f016db44ce2ab6bc7eb306220e2  COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index e30fc999d4..846354035d 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 5207d926df..808339b935 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOS2UNIX_VERSION = 7.5.2
--DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
-+DOS2UNIX_SITE = https://waterlander.net/dos2unix/files
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
- DOS2UNIX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+-LIBGPG_ERROR_VERSION = 1.58
++LIBGPG_ERROR_VERSION = 1.60
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
