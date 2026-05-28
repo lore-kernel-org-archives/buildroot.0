@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCDBBCD6E4C
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41BFFCD5BD2
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B35D4613C5;
-	Fri, 29 May 2026 08:25:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i1fxCRrnBSlM; Fri, 29 May 2026 08:25:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1841F613AB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043154;
-	bh=DFUlNNsDjGTiEZcmPKruHUt1Cg2snMGIEgn8hzDeifY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SpL8kqFnUJzyJRrwd4Dd7Ap7jCBpyrJFGhFB/lVUYA7RbR4wqefxrT/cbLPNEtFI4
-	 OMJFunGhxej+yFTpxfTXn4CT3NVOpQLC79OkUJ+Sd8wh8lK3P3DcgWM1Yk73U+wWX6
-	 RL/09Glwt6sdqaGENpwjFCwMsCrhrnhE5SQ0Xt0nUlURTito6mw1yC3QUowzvnw03t
-	 jWJvx7upYqjGres2Iw0KbOXKn957hYQcopFiB25ta6yl0c3TM44h0zQScot8pksixy
-	 hAZrY/Ut1W0ihf7tBHNhhFXY6b0D+KIZW9UZ7tdOcRZotwZOplPb0j9j1orGbwed01
-	 y78KOwEvi1rDg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1841F613AB;
-	Fri, 29 May 2026 08:25:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10539288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D48C441F65
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17E7641F80;
+	Fri, 29 May 2026 08:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VojliGf6zVad for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:23 +0000 (UTC)
+ id Cv9uwmeUvbh3; Fri, 29 May 2026 08:25:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2222241F82
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780043155;
+	bh=RkLZfJTXbmlWdGw60FHOFwhRC259aXub7ySXcl1pgFU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=DrxHsH7S1h0yt4N6aLNQ7vdUhWki7KjL3IxniurGZvNYCMTrLu3r8tsbPrB9htu36
+	 YQIX0YAfzTkuoOlXOSttu6XIbKCeF12gNw0VtTFuFhC2MtmWD2LDSKnjybQESwqPJA
+	 vy+NTxoG2NcJwd38UTavmayWoGGTuodEfTkpPbnoSPWUkmjV7qc1q1NUntJ8DfxIvB
+	 yfSpvu3bvSoLUsOuAtksyiZy21K0NiXWGrXafLSh5wv/9dJXG9dXSVKQYcXSPxAg02
+	 ESSQjaTXAZH9Q2G0ZYwjIc4DGhW2KJdvP8ZGlZZneunfCq7QfE+ixZ5jdYzRN77Ewi
+	 3VjqZM1dk/AUg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2222241F82;
+	Fri, 29 May 2026 08:25:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11C64288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C44C41F7F
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SFMnTPR09WEi for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B7E841F82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6544941F7C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B7E841F82
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6544941F7C
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B398870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id 05244870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 11:48:00 +0200
+Date: Thu, 28 May 2026 11:44:10 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 81faf63cb48440257e8ce596d7e696f5bb187a93
-X-Git-Newrev: bb3974cb61c8dc3833d090bfc8cd69b7f9c041ed
+X-Git-Oldrev: 5f3e810e9a38e2ad39b029c5e62214b3f16062d9
+X-Git-Newrev: d30c7b8564e34b67393508181822040ca70520d9
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.3B398870C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/memcached:
- security bump version to 1.6.42
+Message-Id: <20260529082507.05244870C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: security
+ bump version to 1.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bb3974cb61c8dc3833d090bfc8cd69b7f9c041ed
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d30c7b8564e34b67393508181822040ca70520d9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes1642
+https://github.com/strukturag/libheif/releases/tag/v1.22.0
+
+Fixes the following CVEs/advisories:
+
+CVE-2026-32738 (GHSA-7f2h-cmpf-v9ww) : Heap OOB Read / SEGV Crash via Zero samples_per_chunk in stsc
+CVE-2026-32739 (GHSA-j9g7-q9hv-gq8c) : Infinite Loop DoS in stts Sample Duration Lookup
+CVE-2026-32740 (GHSA-frfr-f3vg-2g6j) : Heap-Buffer-Overflow Write in Grid Tile Chroma Compositing
+CVE-2026-32741 (GHSA-j3w5-7whq-p37q) : heap buffer overflow in decode_mask_image()
+CVE-2026-32814 (GHSA-4m8r-34pg-rvwc) : Uninitialized Heap Memory Information Leak via Failed Grid Tiles
+CVE-2026-32882 (GHSA-hg7q-rjr2-8x46) : Heap Buffer OOB Read in overlay compositing due to wrong alpha stride
+CVE-2026-41069 (GHSA-p82x-fpmv-576r) : Out-of-bounds vector access leading to invalid dereference
+CVE-2026-41071 (GHSA-xj92-xjff-h8w3) : Heap buffer over-read in SampleAuxInfoReader via crafted HEIF sequence file with mismatched saiz sample count
+CVE-2026-47178 (GHSA-5x55-x5pf-9c6g) : Heap Out Of Bounds Write in unci subsystem
+CVE-2026-47247 (GHSA-2vh6-whr3-cmq3) : Heap Information Disclosure via Grid Image Gap + Uninitialized Pixel Plane Allocation
+CVE-2026-47251 (GHSA-p6q9-fhf2-vj9v) : Incomplete fix for CVE-2026-3949: integer overflow bypass in vvdec_push_data2
+CVE-2026-47254 (GHSA-wqjg-4x9g-6cvg) : Heap Buffer Overflow in Track::get_next_sample_raw_data() -- OOB Chunk Vector Access
+CVE-2026-47709 (GHSA-4h72-vqgp-9376) : NULL pointer dereference in heif_image_handle_get_image_tiling for malformed unci image missing ispe
+CVE-2026-47714 (GHSA-h4wm-6wwf-qvhx) : Integer overflow in inline mask size calculation causes undersized buffer allocation
+CVE TBD (GHSA-6x5f-qchq-cxqv) : heap OOB read in ImageItem_Grid::decode_grid_tile via irot-induced tile-coordinate underflow
+(GHSA-95jx-g5vf-cpp8) : Integer Overflow in SampleAuxInfoReader Offset Calculation
+(GHSA-p4r6-6972-g26m) : Incorrect byte-count initialization in BitstreamRange constructor allows container-boundary check bypass
+(GHSA-jh2w-m72q-q595) : Out-of-bounds read and assertion-based DoS in EXIF parsing (find_exif_tag / read32) with short EXIF TIFF payload
+(GHSA-9h96-c44j-jpq9) : Heap buffer overflow via uint32_t stride overflow in image plane allocation
+
+Added upstream commit to fix build error with imagemagick which would
+be introduced by this bump.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit d08416a5a27006b287395fa32037c20076002089)
+(cherry picked from commit 944f41e9e20554191d87bc9efee238b9237f9efd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...001-heif_properties.h-fix-bad_pixels-type.patch | 28 ++++++++++++++++++++++
+ package/libheif/libheif.hash                       |  4 ++--
+ package/libheif/libheif.mk                         |  2 +-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index fc6ad5eb88..f241723111 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.40.tar.gz.sha1
--sha1  f2513db7079ee4c6558eb11fabb55e1adf1fdf38  memcached-1.6.40.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.42.tar.gz.sha1
-+sha1  de453f58745238c70091fe243549c406aabdc3c5  memcached-1.6.42.tar.gz
- 
- # Locally computed
--sha256  a3d360e9da2221a49bf9aae4e6880f2d44da6b2a2fae39b1911b9ca76488fbfd  memcached-1.6.40.tar.gz
-+sha256  50f08b879d4f9d36dea9d905e9eaade15c708e38db7e9a73fc21dc8b45395de7  memcached-1.6.42.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index d3ec9d36d7..a164e82a51 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
+new file mode 100644
+index 0000000000..69c5d170fe
+--- /dev/null
++++ b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
+@@ -0,0 +1,28 @@
++From ef124f9988e57a06ad6d102c236d2bb4b82aef5d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=C8=98tefan=20Talpalaru?= <stefantalpalaru@yahoo.com>
++Date: Wed, 20 May 2026 00:37:24 +0200
++Subject: [PATCH] heif_properties.h: fix "bad_pixels" type
++
++Upstream: https://github.com/strukturag/libheif/commit/ef124f9988e57a06ad6d102c236d2bb4b82aef5d
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ libheif/api/libheif/heif_properties.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libheif/api/libheif/heif_properties.h b/libheif/api/libheif/heif_properties.h
++index 9432bd46..0dec3a37 100644
++--- a/libheif/api/libheif/heif_properties.h
+++++ b/libheif/api/libheif/heif_properties.h
++@@ -335,7 +335,7 @@ heif_error heif_image_add_sensor_bad_pixels_map(heif_image*,
++                                                  uint32_t num_bad_columns,
++                                                  const uint32_t* bad_columns,
++                                                  uint32_t num_bad_pixels,
++-                                                 const heif_bad_pixel* bad_pixels);
+++                                                 const struct heif_bad_pixel* bad_pixels);
++ 
++ // Returns the number of sensor bad pixels maps on this image (0 if none).
++ LIBHEIF_API
++-- 
++2.47.3
++
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 0daabcb5dc..b88784b309 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/strukturag/libheif/releases/tag/v1.21.2
+-sha256  75f530b7154bc93e7ecf846edfc0416bf5f490612de8c45983c36385aa742b42  libheif-1.21.2.tar.gz
++# From https://github.com/strukturag/libheif/releases/tag/v1.22.0
++sha256  8bd20cfa3201997b8f63266cddfabea2e1481467d7f992e6a2595e0bec691fc2  libheif-1.22.0.tar.gz
+ # Locally computed:
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 77435dda5c..e47620b167 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.6.40
-+MEMCACHED_VERSION = 1.6.42
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-LIBHEIF_VERSION = 1.21.2
++LIBHEIF_VERSION = 1.22.0
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
