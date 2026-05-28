@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40AFCD6E4C
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F380ACD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68C4241F98;
-	Fri, 29 May 2026 08:25:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C10C583AD6;
+	Fri, 29 May 2026 08:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwcgAXS108NR; Fri, 29 May 2026 08:25:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id axNLEroi4vEN; Fri, 29 May 2026 08:25:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92E2341FB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD0883AF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043132;
-	bh=rH0PP9sIEL3FrWXr/sL39sAYVMf5xJyz6KF2kTquIb4=;
+	s=default; t=1780043133;
+	bh=fZWsv7il6HhmT4ClRDKpAkWGbs58x4KtwNAPZtdG020=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cZHaPlrI6f+//BOOrdMwIplhH3Wv4G70L3y+CnkguWrgodmi53RvWsLXB5SrRB3vh
-	 0oiOP4zpgFA8Unu1zc3RDQ18kIE+NeNgDMK6F9E2Jj9G7F1tPdjZDV9DdwBwX4oNTM
-	 pD5zpvc+c81LqKQZIe1zcmFZnVgLVsCpB2AvvRIGBFAuPUzdL6FaPBxUhdHX+IuGLO
-	 vIuzKqVqifeYdgZbCyiqZm7Y5hGOfuQkKaDpQrRtivPC/bBhqar5dIJmzYd1q2nMy2
-	 E5+/cgq3wv3Dd6CYdiUl4xvqlLZVEvCIb3CgEvFPvVohYFIVrZrnarL3SUG6ndXTPT
-	 qZEkiKBAYYjYQ==
+	b=DyJmp2CQQUZQxiQpujR0quHbGahB8l3qotbmQYmjqbWLYPrB0KQnYRNi/W9k9fKz3
+	 cCaQq9K4zp7fnWb5CtLPtbtmh/Id88VhLzVZLS8mwNgM2gEcyaJcbCM4qUzcwNEuRl
+	 aynFB3kWnshfCt3nnLv0JPdVNNBc08kvzCMywc/pPP8XDxdrjb2DZ/wmCVbEtcPME7
+	 d2tk4U+y19S+x5jwlmzHTh1wkYbRU57gXrkEvCuRcxZ1WhwpCI4ooYSlwp85FcOio2
+	 /pDM3zz/l6Kj3aYfNp/PqJdQZhJAZ5qGvavAfgoIODLdjAVHk3OD+G7LgvJBTQ6rZG
+	 4YgkXdniusH9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92E2341FB2;
-	Fri, 29 May 2026 08:25:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD0883AF7;
+	Fri, 29 May 2026 08:25:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02CAE28E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10BBC288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D46EC41F5E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 123D841F5C
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcNSYCXD_zeA for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:18 +0000 (UTC)
+ id QPIhZ-9JvY6x for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FFF041F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0A2141F5F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FFF041F5C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0A2141F5F
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1128C87391; Fri, 29 May 2026 08:25:06 +0000 (UTC)
+ id 3EFC1870C6; Fri, 29 May 2026 08:25:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 10:19:23 +0200
+Date: Thu, 28 May 2026 10:28:22 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d3463e71b1aab6ec14ad369fd25fbf31adf27cb5
-X-Git-Newrev: 7079d11c75931489f5f8706c008f4a92156c101c
+X-Git-Oldrev: 137fae85b3a8cadbb50788f5c217f4307d434a4d
+X-Git-Newrev: edfb5487c37d56dfac93a19b3871bf0e58286435
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082506.1128C87391@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libgpg-error:
- bump version to 1.60
+Message-Id: <20260529082506.3EFC1870C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/liburiparser:
+ security bump version to 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7079d11c75931489f5f8706c008f4a92156c101c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/edfb5487c37d56dfac93a19b3871bf0e58286435
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://dev.gnupg.org/T8112
+https://github.com/uriparser/uriparser/blob/uriparser-1.0.2/ChangeLog
+
+Fixes CVE-2026-44927 & CVE-2026-44928.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c41092cc9851b689f803114e88ee5d0f1c39af58)
+(cherry picked from commit f328822cf17a1b5f5931522207edc64bba4b4456)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libgpg-error/libgpg-error.hash | 4 ++--
- package/libgpg-error/libgpg-error.mk   | 2 +-
+ package/liburiparser/liburiparser.hash | 4 ++--
+ package/liburiparser/liburiparser.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index ede1a2113e..1e52e78d22 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,6 +1,6 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  a9876a9e4cb54298960bd4202baf891642060428  libgpg-error-1.58.tar.bz2
--sha256  f943aea9a830a8bd938e5124b579efaece24a3225ff4c3d27611a80ce1260c27  libgpg-error-1.58.tar.bz2
-+sha1  851a1619aee8f7723ed50f09cb6a186c483c280c  libgpg-error-1.60.tar.bz2
-+sha256  11b2a738e212f3eab0fe8637bc341d3181ca964e97bb2654de91aab7dae4ce09  libgpg-error-1.60.tar.bz2
- 
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index c18df8eb98..ad5bf40d47 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.1
+-sha256  acd18cfb14d1851705f863f7a625be693fb3971fb85d4996faa21147f0315fcb  uriparser-1.0.1.tar.xz
++# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.2
++sha256  7b2496f9622b4b201186a3d159d278605f1fb7262402a10cc1c0824889798b00  uriparser-1.0.2.tar.xz
  # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 5207d926df..808339b935 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+ sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index d8dcc22063..9d1b9a1aac 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.58
-+LIBGPG_ERROR_VERSION = 1.60
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBURIPARSER_VERSION = 1.0.1
++LIBURIPARSER_VERSION = 1.0.2
+ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
+ LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
