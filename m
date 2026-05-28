@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B50CD5BD5
-	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 19:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194F6CD5BD5
+	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 22:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BD4B80F00;
-	Thu, 28 May 2026 19:46:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VaS8Zh9COQYh; Thu, 28 May 2026 19:45:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBE7B80EE2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779997558;
-	bh=1I0k9+orgKj7ihPKHQ1Nq6UmZ0JqxCJNDwz14SQfeNc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=cLr2W3hmdThHdv4EB/chlvTqRRlqNLJmlnJNK4CKz4IBmzg4gKvvXgYoOjLIWuxpT
-	 fsDS8AcuwJanOUwc/9whSpcQocaW199RMoa7meeYg8IEMl7hotJ4IZt9zdN+bdgWMB
-	 AlrAFNzRyCYE7tOufYJ6EY8cdkHMkxTU6839/7PxYhGFT5yVeFzoDn3oPCAMcDqwF+
-	 MwccuB+gq4mtq2NXWN+Ng6jEmaFXBtfglWAa1FWdA5e7ka+cZQpNeqdvUczuqJH5Rx
-	 yeyn4CptwwCYOY0ettvdDkPsrottnh6mwdod5mhRdkX0SKu9CAv0aBU0qXdMHnYcrl
-	 sOmnyyoLgtxUQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBE7B80EE2;
-	Thu, 28 May 2026 19:45:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B8FEE28E
- for <buildroot@buildroot.org>; Thu, 28 May 2026 19:45:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AB6E606DC
- for <buildroot@buildroot.org>; Thu, 28 May 2026 19:45:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68947608D7;
+	Thu, 28 May 2026 22:20:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4YmVOIPgh-HT for <buildroot@buildroot.org>;
- Thu, 28 May 2026 19:45:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 344FE606DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344FE606DB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 344FE606DB
- for <buildroot@buildroot.org>; Thu, 28 May 2026 19:45:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 6AF4D780395;
- Thu, 28 May 2026 21:45:52 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 28 May 2026 21:45:52 +0200
-MIME-Version: 1.0
-Date: Thu, 28 May 2026 21:45:52 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260528085044.344439-1-peter@korsgaard.com>
-References: <20260528085044.344439-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <03828d34c8447281af5399a89d6c457b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1779997553;
- bh=TEox0Wt2emJb75sG4dPM78INGLR8zyKppT16xWl9p88=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=j9cfVTbUU1QLOHyXZAoGiyRLNAEmx8nhC6l4f/Awc1I5/2dY15rwAy8ZnJXuypNga
- JYKVxGJo4KG0GhcZPnBq7XE8sFGjx+6vswi4MFU8iNGv+V34mQHjzzTe0na5ykmVX6
- VHffpQ9+Tc6HHcsuJxkqI83gF9gvHxBfg7kt/wIx/D8rRGjNbtaRtZ0u6qbsj2nsWT
- 6U7yjPFTvMzizZYeJtNJ/BaBbuS+OSnXKrtYRfClCoFbNWZF4OqF/S2HtLpRLnA4a2
- UxSmWQYpPvMWXlxPBpnU3MaI22NnFTlRM5Njm1MiMjiO0vgMtAvuZmixVAedi0bS0p
- 0zY9FPBW7WThg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=j9cfVTbU
-Subject: Re: [Buildroot] [PATCH] package/radvd: security bump to version 2.21
+ id gEdwKWdwUtFp; Thu, 28 May 2026 22:20:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FA50608C8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780006856;
+	bh=0nmpg9hPOIZ79VugABUInZkQ2GM92WUd0s/Z8Rh+OI4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=IGVIk/QtsxiBxfcvaiOf3AZbsv9GMIg3ueSeUFb1DiMXILSdeaFb0obC+YYTyhPmZ
+	 zLdD00S5nr7+A/Wg7/hWyPTOKZp7HgQDTxk7gIdLuLN59v9T8OAQ2kCiVOeAVGgj7O
+	 GOasdyUywJtq/BgwMEbGmtq+iVAeFClA7sbT/Sz3Q3CCEL7rSt7Nmew3GZax0yr8/o
+	 j8bqV04rM8Fe8B+NAqMjqXOPjcjJsxMrjv81ESwIRH8rQyieAxyb0cN6fKcZqLLqsy
+	 OylmPdionmRFf2ssdre7QHud6RclrNEim+Iv4zLM0y9iPQBBJAVwQiopxBqMs9lhSn
+	 wT6ysGoTQO/EA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FA50608C8;
+	Thu, 28 May 2026 22:20:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DA6428E
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A997817C0
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QHfCBp3i8bsW for <buildroot@buildroot.org>;
+ Thu, 28 May 2026 22:20:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8B5081786
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8B5081786
+ for <buildroot@buildroot.org>; Thu, 28 May 2026 22:20:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 88BE887172; Thu, 28 May 2026 22:20:41 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 29 May 2026 00:20:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f5601740113111269cd0717062fdef039b17763d
+X-Git-Newrev: d5aef8a047cf83e70868174da22891edd603003b
+X-Patchwork-Hint: ignore
+Message-Id: <20260528222041.88BE887172@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2026.05-rc3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,32 +69,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/05/2026 10:50, Peter Korsgaard wrote:
-> Fixes the following vulnerability:
-> 
-> CVE-2026-48715: Stack Buffer Overflow in radvdump Route Information 
-> Option
-> Parser
-> 
-> https://github.com/radvd-project/radvd/security/advisories/GHSA-52px-gh9p-m379
-> 
-> Release notes:
-> https://github.com/radvd-project/radvd/releases/tag/v2.21
-> 
-> The release is now done on github, and a .tar.xz version is available 
-> so use
-> that. Notice that we cannot use the github macro.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5aef8a047cf83e70868174da22891edd603003b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    |  8 ++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 14 +++++++-------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 38 insertions(+), 9 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 7108e98fcd..568908d144 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,11 @@
++2026.05-rc3, released May 29th, 2026
++
++	Fixes all over the tree.
++
++	Updated/fixed packages: kexec, libde265, libheif,
++	llvm-project, mariadb, mesa3d, mpd, nginx, putty,
++	python-urllib3, radvd, samba4, unbound
++
+ 2026.05-rc2, released May 21th, 2026
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index ffba8ba6a2..cb52a1d668 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2026.05-rc2
++export BR2_VERSION := 2026.05-rc3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1779398000
++BR2_VERSION_EPOCH = 1780006000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index c1d8a366ce..0b03034886 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -21,25 +21,25 @@
+           <th>2026.05.x</th>
+           <td>September 2026</td>
+           <td>
+-            2026.05-rc2<br/>
+-            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc2/CHANGES">
++            2026.05-rc3<br/>
++            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">
+               Changelog
+             </a>
+           </td>
+-          <td>2026-05-21</td>
++          <td>2026-05-29</td>
+           <td>
+-            <a href="/downloads/buildroot-2026.05-rc2.tar.gz">
++            <a href="/downloads/buildroot-2026.05-rc3.tar.gz">
+               <img src="images/zip.png" width="24" alt="">
+               .tar.gz
+             </a><br/>
+-            <a href="/downloads/buildroot-2026.05-rc2.tar.gz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2026.05-rc3.tar.gz.sign">[PGP sig]</a>
+           </td>
+           <td>
+-            <a href="/downloads/buildroot-2026.05-rc2.tar.xz">
++            <a href="/downloads/buildroot-2026.05-rc3.tar.xz">
+               <img src="images/package.png" width="24" alt="">
+               .tar.xz
+             </a><br/>
+-            <a href="/downloads/buildroot-2026.05-rc2.tar.xz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2026.05-rc3.tar.xz.sign">[PGP sig]</a>
+           </td>
+         </tr>
+         <tr>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 6e48090b1f..b0b32892cd 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2026.05-rc3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 May 2026</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups and build fixes. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2026.05-rc3.tar.xz">2026.05-rc3
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
