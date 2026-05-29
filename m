@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFD4CD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 06:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5630CCD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 07:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D081D41EBE;
-	Fri, 29 May 2026 06:58:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D6C361115;
+	Fri, 29 May 2026 07:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0P-mA2Xwwton; Fri, 29 May 2026 06:58:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tEUVUdQTX4WQ; Fri, 29 May 2026 07:01:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13F2941EB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9EB61117
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780037886;
-	bh=fSRdv0ZkKHWz4JzRDdkj9OxHp3iOr/9Y4Uus9/Kk6j0=;
+	s=default; t=1780038066;
+	bh=kShhHIvQdg6q0ynAI+HBNm+AGo0AHVdaf2VcO1083KQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jKKtbE8lnJVQRYb++9HPTK+TpDnHTLYhizGoM/susfhIO0h2jhYsB0PhDFe5W1kLW
-	 W9d92vKPGkJM+C0wMTnw0R0uxcLBhrtuzKPWSMPLZ877HtP1s8ptAypNOUpVBIcJVC
-	 ZQC5ZNNvTjUoLJ0Qrjdt7akkUgPghpfUjwNSztYUx3bBMdmXYVoan3M6UA1R/pR02L
-	 vfARTMiPdM4Ls/7jDuW5HbCqiE0TYpR41PK4+F1rviaa/BsxlIedglgx6MXCbQf8MT
-	 c44EV14sumUs/iV/wU5NM72vkvM1pX8Q7JzKK7P5NGGtTuneZzrCEV66KGD/74OP3U
-	 t+25eSStWUGvw==
+	b=NetkvpLimd8zAcvx5CYoDj57rajDrG2E/j0r31FNevPXROToKqp1nZ63MoTEQgxbu
+	 0BCne4oqe/JyCggpoM/WPyYsyFcNx5TNAIAr4LwPu4fLl4xWi/RxwShtNe8+wGeakc
+	 V8fCZ+QMnMXWN03ClAv+VMcS445opguI0QOcGAEYEFKq4sqnzu2FsptmHkGYD79hhq
+	 csmGHdRXU4E2uZKXKfawc2G/Y23vnpOanGlhbT+KChSaSRPpDzlkkwEmgtLd1W9j16
+	 Jr0/X7OpbtTx8iWHRP9hnD9eqX4eVdeV+llcYVc7Ei85YBD5XJo/BM3bdU6WTqrbIy
+	 tp+GCtyulOTJA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13F2941EB9;
-	Fri, 29 May 2026 06:58:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9EB61117;
+	Fri, 29 May 2026 07:01:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 71A4828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 06:58:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CFBF28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 07:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5276041EB7
- for <buildroot@buildroot.org>; Fri, 29 May 2026 06:58:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0AA940606
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 07:01:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SqRQNVI-MrYr for <buildroot@buildroot.org>;
- Fri, 29 May 2026 06:58:03 +0000 (UTC)
+ id z3Bj0hO6f02Y for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 07:01:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9029841EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16564400C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9029841EB6
- for <buildroot@buildroot.org>; Fri, 29 May 2026 06:58:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16564400C6
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 07:01:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23B7D873A0; Fri, 29 May 2026 06:57:51 +0000 (UTC)
+ id 9C411873A1; Fri, 29 May 2026 07:00:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 08:55:02 +0200
+Date: Fri, 29 May 2026 09:00:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5aef8a047cf83e70868174da22891edd603003b
-X-Git-Newrev: e5a723f35d57d25a084a9e907e07d281cb17d3c0
+X-Git-Oldrev: e5a723f35d57d25a084a9e907e07d281cb17d3c0
+X-Git-Newrev: b057c91e4e8eb758b034b6b9f0587104ea52ac0d
 X-Patchwork-Hint: ignore
-Message-Id: <20260529065751.23B7D873A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-generic: Add
- /usr/share/info/dir to $(2)_DROP_FILES_OR_DIRS
+Message-Id: <20260529070051.9C411873A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpcbind: bump version to 1.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,36 +76,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e5a723f35d57d25a084a9e907e07d281cb17d3c0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b057c91e4e8eb758b034b6b9f0587104ea52ac0d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This is the file the original commit d8898380984f ("package/pkg-generic.mk:
-Remove Info documents dir entry") wanted to delete.
+Changelog:
+https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/1.2.9-ChangeLog/download
 
-However, it only works for host packages. Target packages are (usually)
-installed with prefix /usr, so the info dir is /usr/share/info. Simply
-remove both of them, even if one of them only exists for host packages
-and the other only for target packages.
+Fixes some memory leaks.
 
-Signed-off-by: John Ernberg <j@j-ernberg.se>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rpcbind/rpcbind.hash | 6 +++---
+ package/rpcbind/rpcbind.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index dd440e4062..83f3506913 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -863,7 +863,7 @@ endif
- endif
+diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+index e268a0733a..3059751050 100644
+--- a/package/rpcbind/rpcbind.hash
++++ b/package/rpcbind/rpcbind.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.8/
+-sha1  2f733aba26075ca91fda3787890232da3d07c06e  rpcbind-1.2.8.tar.bz2
++# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.9/
++sha1  111058e312e0634f8bd23a783ea4f99912ced085  rpcbind-1.2.9.tar.bz2
  
- # Globally remove following conflicting and useless files
--$(2)_DROP_FILES_OR_DIRS += /share/info/dir
-+$(2)_DROP_FILES_OR_DIRS += /share/info/dir /usr/share/info/dir
+ # Locally computed:
+-sha256  964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5  rpcbind-1.2.8.tar.bz2
++sha256  ce5f1a87c566ef0b2897a28f50a75c1dc23fec413a46a7f4183423b6b6aa991b  rpcbind-1.2.9.tar.bz2
+ sha256  2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 3b496ee2c6..96025624ff 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($$($(2)_TYPE),host)
- $(2)_POST_INSTALL_HOOKS += REMOVE_CONFLICTING_USELESS_FILES_IN_HOST
+-RPCBIND_VERSION = 1.2.8
++RPCBIND_VERSION = 1.2.9
+ RPCBIND_SITE = https://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
