@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8920BCD6E49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D087CD6E4C
 	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 616416145B;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ABAA83D3A;
 	Fri, 29 May 2026 08:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bge4JSyR8rMY; Fri, 29 May 2026 08:28:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pyLxhoyxakkr; Fri, 29 May 2026 08:28:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75D1761404
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7401F83D3C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043283;
-	bh=lIj8gqSQl6gte5rS3Rxlecf+7zERE04r4mzdhfbLvj4=;
+	s=default; t=1780043285;
+	bh=tqk6znEWnc1O5NJrbYv4y1W7GxiAT85a7iVBvQQdWOQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=n0As5ZxWHdq2M5yjjL6Ep89F0hBNOsKPB/chJJRBPNlNC+GXqRO0FpecDyBBhBUdQ
-	 ZKjjPu4ak8FJsb9MK4vAXeQa3Ionx1p9p57h+GJXtKfovGkxB9OpsEg9rL0sG9vYRO
-	 z2RKMiyjhrd/lqXkhgTKZwGVOcpiIUUyyv+ipk2u7JayVrPu5GPLgbWEyvx09bZyKk
-	 amZ6+x0drdj3TNuSXjSAWv75KeluNlfn7UGz8r4hkAV2t3LgVTA27bnvGj76RAJDhE
-	 pMbMJn0c9+Vtx280su6U0OiGaYFTaTBhSEMdLA+6fZJ8gaA9yYACNWPPjfrRo9E9um
-	 /72lw56l1E5GA==
+	b=C4wKjjZTNc4WzFMBDmoNPFVuKpAbmyQfGejBMDYp4YbOsJSZs1wUZyBN9SJSIa/EJ
+	 8tutUF8kRFnxLHN9pC2hGCk3llUsbkIv7HfMJ2dxzOvcyKr4gb5zZ7d2xZWcx0F9ay
+	 C6yaqH52ebedb1ln/TZ4k9wtLJM3C3wquaH068mf3/tKwDgpAkVe4BEsmx/HuWgQSV
+	 vHJDcgjs9NuATJhLW9N8RAswnRrPIz/nul/On6y795CC7SpJ2TMgvWPwhrIAUwYMP2
+	 30EqoVZErpvEVvyeRGQRagYHHnCBAWWbT4VYhQez3eYQTqHVJ8FFPaqU7TzyVnAixY
+	 lu14b80bwcEdw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75D1761404;
-	Fri, 29 May 2026 08:28:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CFE2328E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7401F83D3C;
+	Fri, 29 May 2026 08:28:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 59C13288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B19B261363
+ by smtp4.osuosl.org (Postfix) with ESMTP id D60C441F69
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y7r4GDOkmCuG for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:27:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bNhXbNnBl_2J for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:28:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D66E161320
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BABF41F9D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D66E161320
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:27:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BABF41F9D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6395A873A6; Fri, 29 May 2026 08:27:47 +0000 (UTC)
+ id 9F6FE873A7; Fri, 29 May 2026 08:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:25:38 +0200
+Date: Fri, 29 May 2026 10:25:47 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 81ce186262ce7e20bef3c5186c9ae484ed0fe80b
-X-Git-Newrev: a780e6094a229d5b58b142585eb65c21298e67a0
+X-Git-Oldrev: 509daa69c08cd13d2de3ca9d4c4eebf198f178ee
+X-Git-Newrev: 9efcaa28af0221d30eefac02692784ac663d6f9b
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082747.6395A873A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/expat: security
- bump to version 2.8.1
+Message-Id: <20260529082747.9F6FE873A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libgpg-error:
+ bump version to 1.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a780e6094a229d5b58b142585eb65c21298e67a0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9efcaa28af0221d30eefac02692784ac663d6f9b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-fixes CVE-2026-45186
+https://dev.gnupg.org/T8112
 
-see https://github.com/libexpat/libexpat/blob/R_2_8_1/expat/Changes
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a96ad6205b968c0b691fe4c64560cf7dd46192b4)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c41092cc9851b689f803114e88ee5d0f1c39af58)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/expat/expat.hash | 4 ++--
- package/expat/expat.mk   | 2 +-
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index a0f8b514a8..5d34adfc8d 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_0
--sha256  a37bfae0aa9775bd8521ebd85dc456d486f0ff31138f6c91fd902ea732624542  expat-2.8.0.tar.xz
-+# From https://github.com/libexpat/libexpat/releases/tag/R_2_8_1
-+sha256  10b195ee78160a908388180a8fe3603d4e9a12f4755fbf5f3816b23a9d750da0  expat-2.8.1.tar.xz
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index ede1a2113e..1e52e78d22 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  a9876a9e4cb54298960bd4202baf891642060428  libgpg-error-1.58.tar.bz2
+-sha256  f943aea9a830a8bd938e5124b579efaece24a3225ff4c3d27611a80ce1260c27  libgpg-error-1.58.tar.bz2
++sha1  851a1619aee8f7723ed50f09cb6a186c483c280c  libgpg-error-1.60.tar.bz2
++sha256  11b2a738e212f3eab0fe8637bc341d3181ca964e97bb2654de91aab7dae4ce09  libgpg-error-1.60.tar.bz2
+ 
  # Locally calculated
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 07c209543e..3b529c3390 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 5207d926df..808339b935 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.8.0
-+EXPAT_VERSION = 2.8.1
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+-LIBGPG_ERROR_VERSION = 1.58
++LIBGPG_ERROR_VERSION = 1.60
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
