@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 585E8CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB1ECD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F9E885637;
+	by smtp1.osuosl.org (Postfix) with ESMTP id A105F85A93;
 	Tue,  9 Jun 2026 13:03:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNvRxVmk_OMB; Tue,  9 Jun 2026 13:03:40 +0000 (UTC)
+ id x3nZFFJdurgT; Tue,  9 Jun 2026 13:03:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEFE685A68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50D5085A55
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010216;
-	bh=9e5djRvAVKGXArD3H5GQG2nEYQUYWN95vz3poRciw70=;
+	s=default; t=1781010215;
+	bh=OI59kP3wYSH2CZsJBjfrHZMTEFYF7ictEey4vsAAJ9U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fqTbHENDasw+hR5rEQ7OIFDlmLlKFXBHlDD4zjcC5DHI8qHN+Kh4ocr4CePtntSGx
-	 OORM9KkBn4V1kpvbeqV+HUtnTIAk0QC3vNj7IAEhNnRn/I0rKOZgaNITwamDh+oiam
-	 2O4gtbLnJYfrMZSkvL454dKYWNexGtpUvqy8lyGrxdFeNOjTOK1YYuRcuII2CsDhKm
-	 Zu6nE1G89BCz5kR4E8T9pzlwGA/dx4PE97bgJRY6iNElya/g3NTMlIFMyKE43H5y47
-	 so5gvas2aMzzfol4zcdfVwdh4DoaweHdF2rpk1/xhE/Ws4qNBYdfWaAHXC0XY106zf
-	 hUAMchVo7eZaQ==
+	b=g97wRqnV+UdEv7mBad5EUWtHy3KMEv1zmxnYq8vUPEiY8x2uep9rT6ZeJJZGcXAzN
+	 2+viZ1WqQ689Aly9Vs5EdlrwXFqO6pLRfyxY37JJDrnSD2EAxzGaDqc0yfumn2zDug
+	 Ghfvta5k5cuT/HgMbgjHTjOVXjUL2rz2Dob/a+qExWz4zd6DW1AnMunPu0RqF+0oH+
+	 bWvVide5JN0hBRoh/fvixvPq9Ixl8X/w18t6pHiLVLuOGRBdZWIA2bKV9YvEbkyVNU
+	 DVZagV/rYck1wS2EHQhr+JL7V6ltn21rfj1+chLq+dYoNj/RuQ/pbJUUafvduUBCQ3
+	 4nC48FMWYwfCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BEFE685A68;
-	Tue,  9 Jun 2026 13:03:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11179190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50D5085A55;
+	Tue,  9 Jun 2026 13:03:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74283196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8139B457F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62E234270A
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jwKujg36YpyC for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z65TIdW_-0KL for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5095941EF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34683423C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5095941EF2
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34683423C0
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C4DD87E8D; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
+ id 7097587E68; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 19 May 2026 21:54:25 +0200
+Date: Fri, 29 May 2026 15:36:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95f86e5d8ea50ac12ce667307bec2af7e9a1b145
-X-Git-Newrev: 1c393bfa6374a378550305ad70d096d4c16cf88b
+X-Git-Oldrev: 0cbfc9e9911471ff60ba7630dec7ef8f88bdaf3e
+X-Git-Newrev: 190bb8890e2098b1362609f387a3db42eaf784db
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130117.8C4DD87E8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pine64: enable
- BR2_DOWNLOAD_FORCE_CHECK_HASHES
+Message-Id: <20260609130119.7097587E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libudev-zero: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,87 +68,294 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1c393bfa6374a378550305ad70d096d4c16cf88b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/190bb8890e2098b1362609f387a3db42eaf784db
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Enable BR2_DOWNLOAD_FORCE_CHECK_HASHES, add custom hashes in
-board/pine64/pine64/patches directory and remove the exception from
-.checkpackageignore.
-
-Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Arnout: rewrite install steps so they use the same make arguments as
+the build step.]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .checkpackageignore                                                | 1 -
- .../pine64/patches/arm-trusted-firmware/arm-trusted-firmware.hash  | 3 +++
- board/pine64/pine64/patches/linux/linux.hash                       | 7 +++++++
- board/pine64/pine64/patches/uboot/uboot.hash                       | 3 +++
- configs/pine64_defconfig                                           | 2 ++
- 5 files changed, 15 insertions(+), 1 deletion(-)
+ DEVELOPERS                                         |   1 +
+ package/Config.in                                  |   1 +
+ .../0001-Avoidable-OOM-on-small-systems-62.patch   | 176 +++++++++++++++++++++
+ package/libudev-zero/Config.in                     |  10 ++
+ package/libudev-zero/libudev-zero.hash             |   3 +
+ package/libudev-zero/libudev-zero.mk               |  27 ++++
+ 6 files changed, 218 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3f6cdff263..25c94b9562 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -130,7 +130,6 @@ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
--configs/pine64_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
- configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/pine64/pine64/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/pine64/pine64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 25a047cb3e..fea3311076 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -446,6 +446,7 @@ F:	package/libsidplay2/
+ F:	package/libsilk/
+ F:	package/libsndfile/
+ F:	package/libsoundtouch/
++F:	package/libudev-zero/
+ F:	package/libudfread/
+ F:	package/libunibreak/
+ F:	package/liburiparser/
+diff --git a/package/Config.in b/package/Config.in
+index 9cae377fb5..b7c799d9db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1860,6 +1860,7 @@ menu "Hardware handling"
+ 	source "package/libsigrokdecode/Config.in"
+ 	source "package/libsoc/Config.in"
+ 	source "package/libss7/Config.in"
++	source "package/libudev-zero/Config.in"
+ 	source "package/libusb/Config.in"
+ 	source "package/libusb-compat/Config.in"
+ 	source "package/libusbgx/Config.in"
+diff --git a/package/libudev-zero/0001-Avoidable-OOM-on-small-systems-62.patch b/package/libudev-zero/0001-Avoidable-OOM-on-small-systems-62.patch
 new file mode 100644
-index 0000000000..649ae8df44
+index 0000000000..275581becf
 --- /dev/null
-+++ b/board/pine64/pine64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  3ab7e90d6fc3364815ad7770d7aa7af9cfd68edde43da7123f5f38f80e034c44  arm-trusted-firmware-lts-v2.12.1-git4.tar.gz
-+sha256  b2c79635797bafcde84c6edadadde290b9d5e05deb3ea16a847210fd2ca83669  docs/license.rst
-diff --git a/board/pine64/pine64/patches/linux/linux.hash b/board/pine64/pine64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..e810c7aa76
---- /dev/null
-+++ b/board/pine64/pine64/patches/linux/linux.hash
-@@ -0,0 +1,7 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  067dadd445578284ea6158f312f7970d8940fed3e094dbe49cff66d188d3bda4  linux-6.18.32.tar.xz
++++ b/package/libudev-zero/0001-Avoidable-OOM-on-small-systems-62.patch
+@@ -0,0 +1,176 @@
++From 5eca08d71d51074bfe7b14fcf7d89318f4f6ff47 Mon Sep 17 00:00:00 2001
++From: liamHowatt <30486941+liamHowatt@users.noreply.github.com>
++Date: Tue, 5 Dec 2023 04:15:26 -0500
++Subject: [PATCH] Avoidable OOM on small systems (#62)
 +
-+# Locally calculated
-+sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-+sha256  8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa  LICENSES/preferred/GPL-2.0
-+sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-diff --git a/board/pine64/pine64/patches/uboot/uboot.hash b/board/pine64/pine64/patches/uboot/uboot.hash
++* bandaid fix OOM
++
++* refactor fix OOM
++
++* Makefile: remove no longer needed -pthread option
++
++* libudev.pc.in: remove threads requirement
++
++---------
++
++Co-authored-by: illiliti <illiliti@protonmail.com>
++
++Upstream: https://github.com/illiliti/libudev-zero/commit/5eca08d71d51074bfe7b14fcf7d89318f4f6ff47
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Makefile         |  2 +-
++ libudev.pc.in    |  1 -
++ udev_enumerate.c | 65 +++++++++++-------------------------------------
++ 3 files changed, 15 insertions(+), 53 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 4e970b8..1fc5a1f 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -5,7 +5,7 @@ PREFIX = /usr/local
++ LIBDIR = ${PREFIX}/lib
++ INCLUDEDIR = ${PREFIX}/include
++ PKGCONFIGDIR = ${LIBDIR}/pkgconfig
++-XCFLAGS = ${CPPFLAGS} ${CFLAGS} -std=c99 -fPIC -pthread -D_XOPEN_SOURCE=700 \
+++XCFLAGS = ${CPPFLAGS} ${CFLAGS} -std=c99 -fPIC -D_XOPEN_SOURCE=700 \
++ 		  -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wstrict-prototypes \
++ 		  -Wno-unused-parameter
++ XLDFLAGS = ${LDFLAGS} -shared -Wl,-soname,libudev.so.1
++diff --git a/libudev.pc.in b/libudev.pc.in
++index 7e29d8c..2d3f0b0 100644
++--- a/libudev.pc.in
+++++ b/libudev.pc.in
++@@ -9,5 +9,4 @@ Description: Daemonless replacement for libudev
++ Version: @VERSION@
++ URL: https://github.com/illiliti/libudev-zero
++ Libs: -L${libdir} -ludev
++-Libs.private: -pthread
++ Cflags: -I${includedir}
++diff --git a/udev_enumerate.c b/udev_enumerate.c
++index c553269..6fd49c0 100644
++--- a/udev_enumerate.c
+++++ b/udev_enumerate.c
++@@ -21,7 +21,6 @@
++ #include <string.h>
++ #include <limits.h>
++ #include <fnmatch.h>
++-#include <pthread.h>
++ 
++ #include "udev.h"
++ #include "udev_list.h"
++@@ -38,13 +37,6 @@ struct udev_enumerate {
++     int refcount;
++ };
++ 
++-struct udev_enumerate_thread {
++-    struct udev_enumerate *udev_enumerate;
++-    pthread_mutex_t *mutex;
++-    char path[PATH_MAX];
++-    pthread_t thread;
++-};
++-
++ int udev_enumerate_add_match_subsystem(struct udev_enumerate *udev_enumerate, const char *subsystem)
++ {
++     return udev_enumerate ? !!udev_list_entry_add(&udev_enumerate->subsystem_match, subsystem, NULL, 0) - 1 : -1;
++@@ -231,31 +223,27 @@ static int filter_sysattr(struct udev_enumerate *udev_enumerate, struct udev_dev
++     return 1;
++ }
++ 
++-static void *add_device(void *ptr)
+++static void add_device(struct udev_enumerate *udev_enumerate, const char *path)
++ {
++-    struct udev_enumerate_thread *thread = ptr;
++     struct udev_device *udev_device;
++ 
++-    udev_device = udev_device_new_from_syspath(thread->udev_enumerate->udev, thread->path);
+++    udev_device = udev_device_new_from_syspath(udev_enumerate->udev, path);
++ 
++     if (!udev_device) {
++-        return NULL;
+++        return;
++     }
++ 
++-    if (!filter_subsystem(thread->udev_enumerate, udev_device) ||
++-        !filter_sysname(thread->udev_enumerate, udev_device) ||
++-        !filter_property(thread->udev_enumerate, udev_device) ||
++-        !filter_sysattr(thread->udev_enumerate, udev_device)) {
+++    if (!filter_subsystem(udev_enumerate, udev_device) ||
+++        !filter_sysname(udev_enumerate, udev_device) ||
+++        !filter_property(udev_enumerate, udev_device) ||
+++        !filter_sysattr(udev_enumerate, udev_device)) {
++         udev_device_unref(udev_device);
++-        return NULL;
+++        return;
++     }
++ 
++-    pthread_mutex_lock(thread->mutex);
++-    udev_list_entry_add(&thread->udev_enumerate->devices, udev_device_get_syspath(udev_device), NULL, 0);
++-    pthread_mutex_unlock(thread->mutex);
+++    udev_list_entry_add(&udev_enumerate->devices, udev_device_get_syspath(udev_device), NULL, 0);
++ 
++     udev_device_unref(udev_device);
++-    return NULL;
++ }
++ 
++ static int filter_dot(const struct dirent *de)
++@@ -265,9 +253,7 @@ static int filter_dot(const struct dirent *de)
++ 
++ static int scan_devices(struct udev_enumerate *udev_enumerate, const char *path)
++ {
++-    struct udev_enumerate_thread *thread;
++-    pthread_mutex_t mutex;
++-    int i, cnt, ret = 1;
+++    int i, cnt;
++     struct dirent **de;
++ 
++     cnt = scandir(path, &de, filter_dot, NULL);
++@@ -276,41 +262,18 @@ static int scan_devices(struct udev_enumerate *udev_enumerate, const char *path)
++         return 0;
++     }
++ 
++-    thread = calloc(cnt, sizeof(*thread));
++-
++-    if (!thread) {
++-        ret = 0;
++-        goto free_de;
++-    }
++-
++-    pthread_mutex_init(&mutex, NULL);
++-
++     for (i = 0; i < cnt; i++) {
++-        thread[i].mutex = &mutex;
++-        thread[i].udev_enumerate = udev_enumerate;
++-
++-        snprintf(thread[i].path, sizeof(thread[i].path), "%s/%s", path, de[i]->d_name);
++-
++-        if (pthread_create(&thread[i].thread, NULL, add_device, &thread[i]) != 0) {
++-            ret = 0;
++-            break;
++-        }
+++        char device_path[PATH_MAX];
+++        snprintf(device_path, sizeof(device_path), "%s/%s", path, de[i]->d_name);
+++        add_device(udev_enumerate, device_path);
++     }
++ 
++-    for (i = 0; i < cnt; i++) {
++-        pthread_join(thread[i].thread, NULL);
++-    }
++-
++-    free(thread);
++-    pthread_mutex_destroy(&mutex);
++-
++-free_de:
++     for (i = 0; i < cnt; i++) {
++         free(de[i]);
++     }
++ 
++     free(de);
++-    return ret;
+++    return 1;
++ }
++ 
++ int udev_enumerate_scan_devices(struct udev_enumerate *udev_enumerate)
++-- 
++2.47.3
++
+diff --git a/package/libudev-zero/Config.in b/package/libudev-zero/Config.in
 new file mode 100644
-index 0000000000..d20ea61576
+index 0000000000..78263406a4
 --- /dev/null
-+++ b/board/pine64/pine64/patches/uboot/uboot.hash
++++ b/package/libudev-zero/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBUDEV_ZERO
++	bool "libudev-zero"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Daemonless replacement for libudev
++
++	  https://github.com/illiliti/libudev-zero
++
++comment "libudev-zero needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libudev-zero/libudev-zero.hash b/package/libudev-zero/libudev-zero.hash
+new file mode 100644
+index 0000000000..4d8e19148a
+--- /dev/null
++++ b/package/libudev-zero/libudev-zero.hash
 @@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index a2e19b1a4b..9a77452a51 100644
---- a/configs/pine64_defconfig
-+++ b/configs/pine64_defconfig
-@@ -3,6 +3,8 @@ BR2_ARM_FPU_VFPV4=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/pine64/pine64/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
++# Locally computed
++sha256  0bd89b657d62d019598e6c7ed726ff8fed80e8ba092a83b484d66afb80b77da5  libudev-zero-1.0.3.tar.gz
++sha256  9169cc15bda9e4597784ea29530d6754af6fb00adce5907bf0a794c575591d3f  LICENSE
+diff --git a/package/libudev-zero/libudev-zero.mk b/package/libudev-zero/libudev-zero.mk
+new file mode 100644
+index 0000000000..3097beccfb
+--- /dev/null
++++ b/package/libudev-zero/libudev-zero.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libudev-zero
++#
++################################################################################
++
++LIBUDEV_ZERO_VERSION = 1.0.3
++LIBUDEV_ZERO_SITE = $(call github,illiliti,libudev-zero,$(LIBUDEV_ZERO_VERSION))
++LIBUDEV_ZERO_LICENSE = ISC
++LIBUDEV_ZERO_LICENSE_FILES = LICENSE
++LIBUDEV_ZERO_INSTALL_STAGING = YES
++
++define LIBUDEV_ZERO_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define LIBUDEV_ZERO_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		DESTDIR=$(STAGING_DIR) PREFIX=/usr install
++endef
++
++define LIBUDEV_ZERO_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
