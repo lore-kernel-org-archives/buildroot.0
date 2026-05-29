@@ -1,119 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FFDDCD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388DDCD6E45
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05BE0422EB;
-	Fri, 29 May 2026 08:30:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 117B1842B6;
+	Fri, 29 May 2026 08:30:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJ5ENih8_WM8; Fri, 29 May 2026 08:30:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhsYWms2zu62; Fri, 29 May 2026 08:30:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BCCA422EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A77C842B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043407;
-	bh=D01hzCmqBkJLW7aebpjHhcW771huNuWk97018SYOcXg=;
+	s=default; t=1780043408;
+	bh=poNkL6gf8+VcFiTz8SwUNy7W7yJCbQ/UAfcFOrERV28=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Y92aEF0SBXH2mZOvr0QahDD+Kd/F6cxa02/zv17+z4HdDPniWAlovZJuavMtk0RJu
-	 l6pMulJLpHgp8pbVBkhdC/emJ7fFozbfnNyOzH7OiG7IVRQOYa7nHKLHMBB5BZkHNF
-	 kZAssMVTBqZ3fkOi0h7SgYY6v6R75Wl+SSwCWIj0ot3NcZR0n2Kp+zE/ov2MQ2BVy5
-	 NtF7VG6JLiLCSdn0HgQzGM4iLBB6xVhShCO4z7KAQPpUgQSZCUizLkOC1PQsNU6AQc
-	 mDbmqN4y0WP5Dsme/l+jdQH5cZQi+yYLqQdIeg4NPfUuJ/qpoeOtfBohFXBpKFVrWt
-	 Z7bAAZcV/KDnA==
+	b=LEICxmXjCpLkYgkYRLQA2VMlo0ZDD6pm7Q/bTdCy69ESTeJHQsbFqpVqzE6bNDN4H
+	 9VhmQktw/2TZYAXm5xg7aA1Rb/zIOtVq/dgYC7ZJUbVVWo733lFFvuX+MLK2P/LgwV
+	 cVxfh1yHLS1mFKHaLqDWwTEHtgSU0HZU+Xj9OO4FrMH1B8nLNi3jbjAu5x2XCqtbUz
+	 +JC+pAogV4DT8GMNi/m7CSZL1zvDUhwMgvWCbc5V+30PU0uKSAcLKSwW90tP44NG4D
+	 hh1EkbeenPWdjkbM3ddKR9x4J/mkUG3gmU/B+xRlA6xLi0zRbO86y845JL7lIKdrSi
+	 Pi4QdIReOrKaQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BCCA422EC;
-	Fri, 29 May 2026 08:30:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B264828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A77C842B8;
+	Fri, 29 May 2026 08:30:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C1A3288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 87AD06158B
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D75D406F3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FbAQn1q_qLrJ for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JJBk54vhc2WP for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 649C061573
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 649C061573
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 649C061573
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:04 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-490686877a1so37906655e9.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 206E24070D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 206E24070D
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 206E24070D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:05 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-49050bfe053so42488035e9.3
  for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043402; x=1780648202;
+ d=1e100.net; s=20251104; t=1780043403; x=1780648203;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=p34evkNETdwMsxQsNjmCJ2QGtrR79ttSmmO+FGyUT9c=;
- b=Hl+GbofuiuNTn4lu8z8bPO4gyq1SkzDxVfAtcICyMb1lcQ3IYjZj5vCHWNF+57q71c
- 3afte7m/QNpMbP22xY+kdRXr162kc+UgLH7+f8xnsk9s0krI6ymICoEkL372ts13xwxc
- 61JxZcdXC4ZQikmDub7+s5WZQz0sVaE2baWFs8Znm3ZBH1ol3Vtr0sxu0SWgGn8+QLXN
- uxZ+hdXzaqJ2RBanaJ79DrhWrspqYE2nusfa6RyPaxqYsSAZTcmueSBvGEcV3LHhs1Y1
- EgXdb4VGNspdduSsU3hsEQTs2/vJPB5+5iNZEOrA9trOYOaIMor1tgzhWU9L7qgZ0PM6
- 8XLQ==
+ bh=joHkBjroMuVvn1ocCcckqS/zKTdbWIaDLqQwkQSY79E=;
+ b=Orzn1el6nlmjffEz7sPEXK18yA1hIMuvIruLph56cdz3AfPBeAs+D2dyIrQHkgBODT
+ Pd8izj3EVOlCSv1YUbzfvm9nTbl+tB6GgLfxf/4DvCN2TuH5lH1OSlQ+paIyMLgpNF7S
+ sX9XeGwNvQCnA2oHoSggwWbFt9TCQp5i9y8jT0pUADNabLDoSQgcv3aOL+DJtMc0M/Q4
+ 1yZcvf/bVs9+OyaqEUJwq1hkffS5LyPP1YD0Dn5KUZFM00++MAjNkayl/IHKngRDAgjL
+ Q+gGEjM8mxdx7AXRBXqho91LHV4Z9TuaKn33CVOWOlPmr3+pGwSZOwVNTe0Lcv4TVD3u
+ kEIg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+obav3LOCnfPOrBXiyqNxpmjld5nz7U01kv0q0yqO3c+iub8oT6csi2XGrKF7W4EPFjsVoIbnEL/o=@buildroot.org
-X-Gm-Message-State: AOJu0YwXhK96Lzw55ifRktgBhx+0f7iG19KtWEXIribDd/o4COKjeC3c
- OZ1qW6EexARxeHNoKK+HSR+CyriEM5xZaJR95BPz3T0jZyN6FVYVaE4IWtl9g6YlVRVviKnZjAT
- kXMdq
-X-Gm-Gg: Acq92OH0XNmB7oswSvxkKyZ9jO93kpzrPAHeZk3X6irn6+umcsAgarc/7j0hBpGQPfr
- 2IxM8WKx5lbPnZUNF0oIq782twg4UWTNlBZu70X8TWcBgxzxMK1xUENPZ6uD8Sh513zzVN4hzc7
- jxA3H+6kCXtCVbMUheWn1BjZhPQvTR3hG+IVLqcO5opQLOeItG3kFNb/kwcc/n2rbHdJO4excjU
- gc31yhBfO2l/nYQW5fvNpe+yN4p9gd3kdyxC/K7Z7Vhd9Zj9XONhBFJR5kuy8eEIRU7wD2SO/4d
- BQI1jELoFfFEO5+beJwv6Gbs1WQlGBy1bcvfq2mBgN3qFnyt4xvXuZGP9VCfC2prQwmTPaf82Y/
- eIRCR0YHpPnOfrw30Qc6XUF7EwbNAz1PHKyLqsIElCa1oc3dhffY1TMsFuyzgiWkxrA8O5zFFZ1
- jeYLKmBboQCxHKOWKTiLIyzBFHDvI+thBuhAtWXFvRDBryTSaAB3DAQbwJgw==
-X-Received: by 2002:a05:600c:3b18:b0:490:8b0b:d3b1 with SMTP id
- 5b1f17b1804b1-4909c62909bmr23782555e9.12.1780043402187; 
+ AFNElJ+tYfO4MegwxT7Ja4RmB21FyY6GbSNOf7mLgEr7vl7GvU5YRybxTiP23lyN+u8HH6tRWjC98abIn6Y=@buildroot.org
+X-Gm-Message-State: AOJu0Yzem21yoo2nTboBAQPIPZ/LqexUkM+dMRlflN3fPfFKIyUkTG9A
+ 90Gp1AEJofQ7/JXVGk+sAVOvDNTTdQmgMOUUakhZsmI9Dru1+spyo7GB5zjcTDrKGyI=
+X-Gm-Gg: Acq92OHANwQN2nYZTv4VDUqlUj59yktrxujs+qyF1JW6BmHgC/j2+eM8RdGGfs40+94
+ jSMt/UY4vXHlXwscWWF+nq2FqIqe7Wmbv/rvGUmuRQcoamehdi0+0tzmRcfbymcjUTvGX8I6Ih3
+ yE34Xa7CrDNAlxRuBNBIF0xpPAv9oz7bi96GwvEl/VuB3eUabIVkWygdPrwbvnWqbrmoJOtavJS
+ cOKy9uRybvvRW317/Jvji0QsfcNx9dbRnJJMoNzPJNp32Aqij8KO0ld+VTntOOBr/FXGZ7G3OSs
+ k9DkSLf2UgfnVQzTKXkOL+vc42wSwVCxFUa2fMAzvxHhb2ja04i7M33G2il+5B8kpoRnOFA9jkw
+ 2kLyUnWxQx83XLvL+xc6WoSHSia2i+1w5buCW7gUpKhyGB1E2Fu+raqtSYuLBqUm+mUi8Jy8J59
+ /s845+BFhhXjUPQ+Air8rDKEHJf5rMdSDXEmmS5b2268/WymRTFm+4MHKZrA==
+X-Received: by 2002:a05:600c:6219:b0:490:9df1:f0cf with SMTP id
+ 5b1f17b1804b1-4909df1f29bmr22830635e9.2.1780043402930; 
  Fri, 29 May 2026 01:30:02 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909cab0e94sm28691545e9.12.2026.05.29.01.30.01
+ ffacd0b85a97d-45ef34a03f8sm2016513f8f.7.2026.05.29.01.30.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:01 -0700 (PDT)
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ Fri, 29 May 2026 01:30:02 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:01 +0200
-Message-ID: <20260529083001.58493-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:02 +0200
+Message-ID: <20260529083002.58550-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20251229170331.1299723-1-giulio.benetti@benettiengineering.com>
-References: <20251229170331.1299723-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20260209203227.3837422-1-bernd@kuhls.net>
+References: <20260209203227.3837422-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043402; x=1780648202; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043403; x=1780648203; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=p34evkNETdwMsxQsNjmCJ2QGtrR79ttSmmO+FGyUT9c=;
- b=D4wIRRhH5rIbp0bx0Lu1TuIKMC01ZOxJSdy43MKDj67ei8y9lmP1ZeCSdhwU3EiGHX
- 03Ppu+EH7F+dm3XKKJmcUYletyBu3svA+d21TS99fT9vwHNgfo0fYoRUSI/r9ytltY89
- MPf6j4W4YFXApDHvFJopJjMOy8+blHBRfUImSVdIQSCDZO+65n1rdPfWdGI/pysv5Qi1
- UuI/73O+8jpP2LXWH7aOZsC1JFM0tFsv+EviflMdpEaJ17w6hwgVbOpcK/4y8cG7KkEC
- lRKite29IianPH6lUloxTuUMM3+87boXuGObHoeYtwVENJwcgs4yG3nmsfI+mDey79sh
- V93w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=joHkBjroMuVvn1ocCcckqS/zKTdbWIaDLqQwkQSY79E=;
+ b=EIu93NPbMLeDi5+XOpVnZsKEwzT8gfcpZdZd84L5ji5n+JCR+zvxNCfSlgIQcN+oXd
+ RESggIC3ApzbgldtcpQ0ZYQmVi54MH0yxv6cDrmQedjmMReFTXU2GpXhVpSbhjwk8CLQ
+ Fx+8CqGbh0Wxl3UbIk+3xuTlZTWUiATKFiO6bx/YbtI4Huy+xKNzzHUzGfrCaC3p457Z
+ /r3ZL29s2OUNy1skWkAQE54ouz1nKyCKgkv+5+pWDCQiba9KjtJajN1FBXFX2fWceNh/
+ T9wSb/Z7QjYRJ/UcE9HtrUOTO+imq44BYHIJhoTKN1g0dBdtvpNOLeBiC3MzNB907R2l
+ WrEg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=D4wIRRhH
-Subject: Re: [Buildroot] [PATCH] package/libnss: fix Makefile ifndef
- FREEBL_NO_DEPEND
+ header.a=rsa-sha256 header.s=google header.b=EIu93NPb
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: bump version to 1.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,55 +131,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> NSS Makefile build system is pretty weak if used with parallel build. In
-> this case what happens is that 'ifndef FREEBL_NO_DEPEND' appears in
-> lib/freebl/manifest.mn and coreconf/Linux.mk. When parallel building
-> variable FREEBL_NO_DEPEND gets defined if not defined to 1, but in the
-> 2 occurences we end up having on variable set to 1 and 1 still not
-> defined. This results in:
-> `
-> /home/giuliobenetti/br-reproduce/3e046c996825447f48377f7c4361b5db26b84f95/output/host/lib/gcc/arm-buildroot-linux-musleabi/14.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: Linux2.6_arm_arm-buildroot-linux-musleabi-gcc.br_real_glibc_PTH_DBG.OBJ/Linux_SINGLE_SHLIB/lowhash_vector.o: in function `loader_GetOriginalPathname':
-> lowhash_vector.c:(.text.loader_GetOriginalPathname+0x68): undefined reference to `PR_SetError'
-> collect2: error: ld returned 1 exit status
-> `
-> So let's pass FREEBL_NO_DEPEND=1 when building to define that variable
-> instead to let NSS Makefile to calculate it.
+> https://github.com/strukturag/libheif/releases/tag/v1.21.2
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/ad4/ad40536728303c56d1d0968e38ac36da12cca416//
+> Use sha256 tarball hash provided by upstream.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/libnss/libnss.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/libheif/libheif.hash | 3 ++-
+>  package/libheif/libheif.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index b6be6dbc8c..db71c0018d 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -57,7 +57,8 @@ LIBNSS_BUILD_VARS = \
->  	OS_ARCH="Linux" \
->  	OS_RELEASE="2.6" \
->  	OS_TEST=$(BR2_PACKAGE_LIBNSS_ARCH) \
-> -	NSS_ENABLE_WERROR=0
-> +	NSS_ENABLE_WERROR=0 \
-> +	FREEBL_NO_DEPEND=1
+> diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+> index 3da82e3e27..0daabcb5dc 100644
+> --- a/package/libheif/libheif.hash
+> +++ b/package/libheif/libheif.hash
+> @@ -1,3 +1,4 @@
+> +# From https://github.com/strukturag/libheif/releases/tag/v1.21.2
+> +sha256  75f530b7154bc93e7ecf846edfc0416bf5f490612de8c45983c36385aa742b42  libheif-1.21.2.tar.gz
+>  # Locally computed:
+> -sha256  9799b4b1c19006f052bcf399c761cc147e279762683cefaf16871dbb9b4ea2a1  libheif-1.21.1.tar.gz
+>  sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index acd302d847..b96dca4d98 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
->  # Disable Altivec if not supported
-> @@ -136,7 +137,8 @@ HOST_LIBNSS_BUILD_VARS = \
->  	NSS_USE_SYSTEM_SQLITE=1 \
->  	SQLITE_INCLUDE_DIR=$(HOST_DIR)/include \
->  	ZLIB_INCLUDE_DIR=$(HOST_DIR)/include \
-> -	NSS_ENABLE_WERROR=0
-> +	NSS_ENABLE_WERROR=0 \
-> +	FREEBL_NO_DEPEND=1
->  
->  HOST_LIBNSS_DEPENDENCIES = host-libnspr host-sqlite host-zlib
->  
+> -LIBHEIF_VERSION = 1.21.1
+> +LIBHEIF_VERSION = 1.21.2
+>  LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+>  LIBHEIF_LICENSE = LGPL-3.0+
+>  LIBHEIF_LICENSE_FILES = COPYING
 > -- 
 > 2.47.3
 > 
