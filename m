@@ -1,118 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E08BECD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FB25CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B28A6422CB;
-	Fri, 29 May 2026 08:29:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32DE961526;
+	Fri, 29 May 2026 08:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KxAyzCP696GZ; Fri, 29 May 2026 08:29:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nMRl0Dh2kMqF; Fri, 29 May 2026 08:29:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402E2422CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A10461540
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043392;
-	bh=Ys+pX5sWOTH8bxwKu9slI2sY9qjzKyZ/Q+8hu/CgqK4=;
+	s=default; t=1780043398;
+	bh=sVkw7xDs0lzAL+NcZsVNahW77BNxLextfQLav8XbM0c=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=nod9tHEBqYbTigc9fnf2l76VjbtR/Q/bM/rYN8BgVinF0czRDT5sUHF+hDugPEmiq
-	 N4Fk5ru7oQ6XQsZkfUBm7DpmgVRhnYlV4bOEOpDZhSThqmsM4saPsfthsoVD2J+W7N
-	 CT3JTsxS35YSzaBFtLsVAFpB5NLkYtqHf3GBw52yVk8QNwdF5F/J6XWsNT6rwomzqz
-	 0GjBvgWtjfjCJIKK+Mk7NacN9rFD/+ZdkZRQKq8vJtv8Zok7Z54RYxSyGzegQJxLl0
-	 OsvQ6j/ZaKgH0DzZ9AcNCYyKo6qazv65eNXUrCmPgdh8e3VyCZXa1uUGBdNJ3AZJsQ
-	 gF/qvvLMSlRkA==
+	b=Q97aLSezfye8xtjLV1FP+a27wMJVNy1csI6R3PAUwrPZwcyuEl57b4zRXANUJbwX6
+	 L+2a5UmgRjwx6XFLKcmYNjIf8jPEnQYlXmom+G6RAxXsX0s2gmNg7MuSV6uDjUzx9V
+	 a+JH0CkZjY1yXRoBvumAq+/i72MDpp7RSmBcIVubDmLRz+fLCtqHK/LpAG4FeRWLyX
+	 /iYdIF0csCrDxushOlLm3yI0e0cwAGjYX1nrqTkn4mrfsEUzVZMF2dfWZKdTTwe9pn
+	 tgoWdh9WgI9ka2P+4xEt0VcPyyv+suIgq5aestHPJNUZPs5NPaoPwc6vxxW12kau8W
+	 VvOhffzuTRSJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 402E2422CD;
-	Fri, 29 May 2026 08:29:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CA9F828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A10461540;
+	Fri, 29 May 2026 08:29:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2832B288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9CA84070D
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17E9261570
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NgPbdz0vUXVu for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:29:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OVpUfK2F9o-R for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:29:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 920FC406F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 920FC406F3
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 920FC406F3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:48 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4909e3fa4b2so2773065e9.0
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BBA4561563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBA4561563
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BBA4561563
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4904127c32cso46406565e9.2
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043386; x=1780648186;
+ d=1e100.net; s=20251104; t=1780043388; x=1780648188;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=SECXsSVKBOQQvRua/etw+Lu9whafIwg4tx2bDVOydhc=;
- b=afjRwwlP/5HG1LzppofzFFUjkVpoi2Nir4v6uGAe6NLAwRvp3ZHSE3hgNHlE/lpFHV
- mfjJ+0VsHcgR0g7VZzVOooe4NTu1TTQMNnzSrWCB+RBXo7cMxUeiqD2oSAxBozjqCSSN
- JtHxgYCBjbdTseflNydUubNBpB9XjWgx1oHnrGGSqm1LLKuszNESXxBdrSSezIzlS6xA
- oJvkvb9I96MN9Q3vWRoCX91ifEWbYMYi6x08Uwzolxf9JEWDiXS/WsxvBjWDTuVMDYpR
- 97AmVac4ZxnY7899kui2WkyZvtVusv+kzOi2y7g7AD466VhkO5KUDyPRasqmk7OMNm8T
- ch2A==
-X-Forwarded-Encrypted: i=1;
- AFNElJ+7mJyP7acTCLE0wFP1krMUqS4rMU0bdZIlK3f77P27glesYz/yeUkR4apWA9Ymx1oIAT5qZsvNtKc=@buildroot.org
-X-Gm-Message-State: AOJu0Yz+sT0h0gJKkJ4UMdwjCPV9M36ikxtg8S5tJ+dsUCyNXETlqVzK
- fl9LOppQdzosg41dEzDAUH2SxGOwaXbxrRBPJ4/KWucyKZXjBXc163gBSQRinQwRzio=
-X-Gm-Gg: Acq92OGzm3ICJpWSwQ05P/mp4eDQYYd64SBXdLn9fWp0uPbVDETQUPq8UhM6r6s6on+
- MB9M0+Hb/zmARp/pcpY00fLC30GewwwcahYv476O1gtoJ60Z1OK5J5yi/VFG8mYaEZ93iO6ohrP
- qxVOCm3SWnLrd/uFkkeZVkxvgIC62/OOJ5FeO7ZaPnOZv6VEOLQYnXX4pI8UMt35e3Kv/c2PtbQ
- WdtLFitjPlfaw4OfFqI3xUr9RXQC/iDdka7YQuxuHa34CeHEiE6Ki3KM5LJm1jUoa81NZ+JRVRy
- r93sQikwHeTtAWUD64E+cIbbcBmjT5ZOQAM9sorVYHBEaAJF72OEwMae78O+/ZzGgObJpJsDUW9
- n/qshZ/R/g5ZHt4enK8HWxc6o5B7XGFl+L9GAWx7CZoWV1X+iUXSAD7SIGEfGQ5cB5OX9p0bHYb
- 1KtZDgeyHRnpMVWtpkyV56sbrDUTieRxAvJE0H49EcpuwMpE1VQGgvr6+ZfQ==
-X-Received: by 2002:a05:600c:e489:10b0:490:778:4fe4 with SMTP id
- 5b1f17b1804b1-4909c0c570bmr24026685e9.26.1780043386510; 
- Fri, 29 May 2026 01:29:46 -0700 (PDT)
+ bh=AR35Kg7i5VsXtzmfNthfRvgfj/rYborlIm6f/HYr2Yo=;
+ b=NROR305h4hDp6mBDxYi8Pk+zwFKXbp8/4tQn53MqPR+up43K5GkljEFLIIKPSan0YS
+ 1m1odMkYxeK/a7rVARS23I9gmMuj8GNmtDHnUwAnGwMcuxuTqXFs3tCv6F1/NlCuiwfb
+ WKlrWdYED0dqVjiNuPkDAxhnkXHomfEumG8B6UEHYhaE3xcAqMaAeHNu5Zk8MRG1XBmM
+ L3ob9Rcswa1/ZtBnbcQfhqKGBdyx6kqIZOXQo+dijH9RZTXUwm8VqtQMypthN5U4xuqs
+ eAGWSpEIQPT+btneiiO8a2WDm5HxpKLHDOz/JgtG7kIlpCc670vsWJCP6MhKko9qWMFa
+ HmIw==
+X-Gm-Message-State: AOJu0YwcKSKFulYlWsxw/wwhwWTEFx9SLsECoVVRlbrptKETXRKB9Sng
+ VGV7uEfnaSdI6SWvPAymdaqg6UtN37O/5rFwg8+gcf3k6JrmElTv/JslsRZdu4DJwt+ftpVYSDD
+ pRh5e
+X-Gm-Gg: Acq92OEX6SdDBv3+rwiEIG0kipBHF5f9UyZO89hc9rNMydHzeA6KxetVnc5V/6TEZtm
+ 8231ffCBQkUEhI+HZxh2jAHrabI5cAWEtdwn2JINdesMLJ60NgSB0mRw6eB2Ca2DSjkd9DhR5ff
+ oOk+OVtf9C2PuqIN12y1F+iQdFhCcIuoK1E8SkIIZ99IzjXdnRRhz4NWFX0FMXg0UxW2ACGLH7s
+ dzs9552nDMPP1/RHQfPj3UB3vrhcRDG5TOZ+sS5p2t3Ljy1KgxTfp0h3UdnrUGwcIKibPNcMo1m
+ 0sHSl0eVyqmjY7Ya1mhpbFf3SFL8vThm3duG0HjUj4lXI0fLWbDqQBTv3/qITU62FUsCTqzxk4k
+ bm45u7+Ie9nO5ttVwymuNlRu7jKXdttRZ08EyCvXP5ixZkVF/jsZzVGu0Qfpcrqj0DcjO/z/3EK
+ K7cCcTz8zhBmCEPwuqQgbAg+w/zaazZOBYv2y8M1s1HS1qAtNReRG8pY6Z9A==
+X-Received: by 2002:a05:600c:304a:b0:490:6e12:a40f with SMTP id
+ 5b1f17b1804b1-4909c08df1cmr19751635e9.12.1780043387521; 
+ Fri, 29 May 2026 01:29:47 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909cab0e94sm28678965e9.12.2026.05.29.01.29.46
+ 5b1f17b1804b1-4909d6eb470sm20231855e9.10.2026.05.29.01.29.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:29:46 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:29:45 +0200
-Message-ID: <20260529082945.58201-1-thomas.perale@mind.be>
+ Fri, 29 May 2026 01:29:47 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri, 29 May 2026 10:29:46 +0200
+Message-ID: <20260529082946.58279-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260524070704.2828646-1-bernd@kuhls.net>
-References: <20260524070704.2828646-1-bernd@kuhls.net>
+In-Reply-To: <20260527122537.699943-1-thomas.perale@mind.be>
+References: <20260527122537.699943-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043386; x=1780648186; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043388; x=1780648188; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=SECXsSVKBOQQvRua/etw+Lu9whafIwg4tx2bDVOydhc=;
- b=LdRQkUKe4xdwwKiqkrUOVnKpoZCvfwkNUW6zgWCAxNRn/I68VzVYM8A1KfdStPcJJ9
- Vhf7WIccAkIRAKxZYyw3xuqsSjqNMeIHpVT7PHF8DczsE5fWEoBAycLKeMg72LA3lmsm
- WhbKLH/OzVYIzE6qke8+2JXXuxB1UQPj1MKoMLOWqLwxA6mc64pMnEaQxomYi6J8nhky
- Vca4qwlAga95CS8Ji/j7GaRzMK0GPMW8QUt0+xBMftfnGdMS6g1NDsJcFY/P7AlBqa5O
- aIblpd5fAFLLqP5AX9ynfU0CJ8HsLE8Vd1PeesxKoHYvc9QEIjVYkvGg3UbyFrQm4s/C
- nm3Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=AR35Kg7i5VsXtzmfNthfRvgfj/rYborlIm6f/HYr2Yo=;
+ b=TbQkYxrUveVbX+vQHk1DopCUEEmVCgkP43qbEtFE1UjrvXbAoSsDD3XVUig9/RskzS
+ 90Vl43+80rUJP/yiB45EayJO41HJzCm0Zrxy5DBbrF6AF1I4fYjZwO0sQE97DzOAcp4e
+ gK1odbZATeqR4DrYxWQhSxDwM6Pbpmk7KLDQY7Hgd5l+7pthf+sakGZhVPT4ps1GwWHz
+ MQOvraFo1rv0nU3Lv10uPqI6sEvcXC/wN/x8Dkax65j9hr1ICzBGJX0/femMrikdW8Fa
+ j1/JJqrix4VyzFDTHvK9RjYd+pCDV/sgMF0TIxbosEYV+MWigplZh1Df/D1GG+gKtiYN
+ HqXg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LdRQkUKe
-Subject: Re: [Buildroot] [PATCH 1/1] package/putty: security bump version to
- 0.84
+ header.a=rsa-sha256 header.s=google header.b=TbQkYxrU
+Subject: Re: [Buildroot] [PATCH 2026.02.x] package/{glibc,
+ localedef}: security bump to version glibc-2.42-67-g4ebd33dd7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,72 +130,178 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://lists.tartarus.org/pipermail/putty-announce/2026/000042.html
+> Fixes the following vulnerabilities:
 > 
-> Updated license hash due to copyright year bump in upstream commit
-> 995b63a82bac4f6985958cb92943e807a9f35736. A link to this commit can not
-> be provided due to the shutdown of the upstream gitweb interface:
-> https://git.tartarus.org/?p=simon/putty.git
+> - CVE-2026-4046:
+>     The iconv() function in the GNU C Library versions 2.43 and earlier
+>     may crash due to an assertion failure when converting inputs from the
+>     IBM1390 or IBM1399 character sets, which may be used to remotely crash
+>     an application.    This vulnerability can be trivially mitigated by
+>     removing the IBM1390 and IBM1399 character sets from systems that do
+>     not need them.
 > 
-> Switched URLs to https.
+> For more information, see:
+>   - glibc-2.42-62-gf13c1bb0f97fbc12a6ba1ab5669ce561ea32b80a
+>   - https://www.cve.org/CVERecord?id=CVE-2026-4046
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> - CVE-2026-4437:
+>     Calling gethostbyaddr or gethostbyaddr_r with a configured
+>     nsswitch.conf that specifies the library's DNS backend in the GNU C
+>     Library version 2.34 to version 2.43 could, with a crafted response
+>     from the configured DNS server, result in a violation of the DNS
+>     specification that causes the application to treat a non-answer
+>     section of the DNS response as a valid answer.
+> 
+> For more information, see:
+>   - glibc-2.42-58-g8e863fb1c92360520704a69dc948be6bb4a17cb3
+>   - https://www.cve.org/CVERecord?id=CVE-2026-4437
+> 
+> - CVE-2026-4438:
+>     Calling gethostbyaddr or gethostbyaddr_r with a configured
+>     nsswitch.conf that specifies the library's DNS backend in the GNU C
+>     library version 2.34 to version 2.43 could result in an invalid DNS
+>     hostname being returned to the caller in violation of the DNS
+>     specification.
+> 
+> For more information, see:
+>   - glibc-2.42-59-g426378547e6ddead92f28f5558a124eb0821d2f9
+>   - https://www.cve.org/CVERecord?id=CVE-2026-4438
+> 
+> - CVE-2026-5450:
+>     Calling the scanf family of functions with a %mc (malloc'd character
+>     match) in the GNU C Library version 2.7 to version 2.43 with a format
+>     width specifier with an explicit width greater than 1024 could result
+>     in a one byte heap buffer overflow.
+> 
+> For more information, see:
+>   - glibc-2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc
+>   - https://www.cve.org/CVERecord?id=CVE-2026-5450
+> 
+> - CVE-2026-5928:
+>     Calling the ungetwc function on a FILE stream with wide characters
+>     encoded in a character set that has overlaps between its single byte
+>     and multi-byte character encodings, in the GNU C Library version 2.43
+>     or earlier, may result in an attempt to read bytes before an allocated
+>     buffer, potentially resulting in unintentional disclosure of
+>     neighboring data in the heap, or a program crash.  A bug in the wide
+>     character pushback implementation (_IO_wdefault_pbackfail in
+>     libio/wgenops.c) causes ungetwc() to operate on the regular character
+>     buffer (fp->_IO_read_ptr) instead of the actual wide-stream read
+>     pointer (fp->_wide_data->_IO_read_ptr). The program crash may happen
+>     in cases where fp->_IO_read_ptr is not initialized and hence points to
+>     NULL. The buffer under-read requires a special situation where the
+>     input character encoding is such that there are overlaps between
+>     single byte representations and multibyte representations in that
+>     encoding, resulting in spurious matches. The spurious match case is
+>     not possible in the standard Unicode character sets.
+> 
+> For more information, see:
+>   - glibc-2.42-66-gb4bca35ab9e76890504c4dbdd5eaf15a93514580
+>   - https://www.cve.org/CVERecord?id=CVE-2026-5928
+> 
+> > git shortlog 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125..2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc
+> 
+> Carlos O'Donell (2):
+>       resolv: Count records correctly (CVE-2026-4437)
+>       resolv: Check hostname for validity (CVE-2026-4438)
+> 
+> DJ Delorie (1):
+>       include: isolate __O_CLOEXEC flag for sys/mount.h and fcntl.h
+> 
+> Florian Weimer (8):
+>       Switch currency symbol for the bg_BG locale to euro
+>       nss: Introduce dedicated struct nss_database_for_fork type
+>       Linux: In getlogin_r, use utmp fallback only for specific errors
+>       nss: Missing checks in __nss_configure_lookup, __nss_database_get (bug 28940)
+>       iconvdata: Fix invalid pointer arithmetic in ANSI_X3.110 module
+>       posix: Run tst-wordexp-reuse-mem test
+>       Use pending character state in IBM1390, IBM1399 character sets (CVE-2026-4046)
+>       Linux: Only define OPEN_TREE_* macros in <sys/mount.h> if undefined (bug 33921)
+> 
+> H.J. Lu (1):
+>       abilist.awk: Handle weak unversioned defined symbols
+> 
+> Michael Jeanson (1):
+>       tests: fix tst-rseq with Linux 7.0
+> 
+> Rocket Ma (2):
+>       libio: Fix ungetwc operating on byte stream [BZ #33998]
+>       stdio-common: Fix buffer overflow in scanf %mc [BZ #34008]
+> 
+> Xi Ruoyao (1):
+>       elf: parse /proc/self/maps as the last resort to find the gap for tst-link-map-contiguous-ldso
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/putty/Config.in  |  2 +-
->  package/putty/putty.hash | 10 +++++-----
->  package/putty/putty.mk   |  4 ++--
->  3 files changed, 8 insertions(+), 8 deletions(-)
+>  package/glibc/glibc.hash       |  2 +-
+>  package/glibc/glibc.mk         | 17 ++++++++++++++++-
+>  package/localedef/localedef.mk |  2 +-
+>  3 files changed, 18 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/putty/Config.in b/package/putty/Config.in
-> index f89283b99a..f0484ec20f 100644
-> --- a/package/putty/Config.in
-> +++ b/package/putty/Config.in
-> @@ -8,7 +8,7 @@ config BR2_PACKAGE_PUTTY
->  	  and puttygen are built; enable GTK2 or GTK3 for the
->  	  graphical client.
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index 0a11cfdb5e..b8738b3505 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated (fetched from git)
+> -sha256  737e3b2bfee2e3e209e514133f4ff7d2bef0d0dc903fd46b4e2244f6c998f7b2  glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125-git4.tar.gz
+> +sha256  5c278e563779ed471a8ee8b607d29274d1c83ac91c88ea127a3c1ecdc22b14a1  glibc-2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc-git4.tar.gz
 >  
-> -	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
-> +	  https://www.chiark.greenend.org.uk/~sgtatham/putty/
+>  # Hashes for license files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 80d21b86ed..12a4034ce0 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,7 +7,7 @@
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+>  # When updating the version, please also update localedef
+> -GLIBC_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+> +GLIBC_VERSION = 2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc
+>  GLIBC_SITE = https://sourceware.org/git/glibc.git
+>  GLIBC_SITE_METHOD = git
 >  
->  comment "putty needs a toolchain w/ wchar"
->  	depends on BR2_USE_MMU
-> diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-> index 33a9666bc2..362467e2d7 100644
-> --- a/package/putty/putty.hash
-> +++ b/package/putty/putty.hash
-> @@ -1,7 +1,7 @@
-> -# Hashes from: http://the.earth.li/~sgtatham/putty/0.83/{sha1,sha256,sha512}sums
-> -sha1  f9fd9ab5e3849bf8c22b218cdb7697dcdd1d8c9e  putty-0.83.tar.gz
-> -sha256  718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6  putty-0.83.tar.gz
-> -sha512  4781616b7e9c5a779a54e6a8486513e0aa947d4a36e9dbfd4ffc0d32981a5ad4868cddbde0363467236ed67c43f990408a9326d10354954be716a270d587c0a6  putty-0.83.tar.gz
-> +# Hashes from: https://the.earth.li/~sgtatham/putty/0.84/{sha1,sha256,sha512}sums
-> +sha1  d3ed01106667b42de322b266266e0d21b70adf12  putty-0.84.tar.gz
-> +sha256  06057862ae198f1dbd219d0c7493080d59f606194bb5056c549e342aa01b69fe  putty-0.84.tar.gz
-> +sha512  647c84490c01f8c0f9cf02f565081d80ea2ea4fb90207cfb2fbe13ba5e8c3cea7c4807504363d3d3a851df5edb6087c3b39084820bf20e818dd551db54af0765  putty-0.84.tar.gz
+> @@ -31,6 +31,21 @@ GLIBC_IGNORE_CVES += CVE-2026-0915
+>  # Fixed by glibc-2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+>  GLIBC_IGNORE_CVES += CVE-2025-15281
 >  
->  # Locally calculated
-> -sha256  c18aac5045fd30bff639b07884be44cb8c68eef16efe8c5e18deda1f58cacdfb  LICENCE
-> +sha256  3b02f87e0063430289d9681727a98818c844fc8a4d79b24b76047fa061e77f13  LICENCE
-> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-> index 9071fea208..82b16b250c 100644
-> --- a/package/putty/putty.mk
-> +++ b/package/putty/putty.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -PUTTY_VERSION = 0.83
-> -PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
-> +PUTTY_VERSION = 0.84
-> +PUTTY_SITE = https://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
->  PUTTY_LICENSE = MIT
->  PUTTY_LICENSE_FILES = LICENCE
->  PUTTY_CPE_ID_VENDOR = putty
+> +# Fixed by glibc-2.42-58-g8e863fb1c92360520704a69dc948be6bb4a17cb3
+> +GLIBC_IGNORE_CVES += CVE-2026-4437
+> +
+> +# Fixed by glibc-2.42-59-g426378547e6ddead92f28f5558a124eb0821d2f9
+> +GLIBC_IGNORE_CVES += CVE-2026-4438
+> +
+> +# Fixed by glibc-2.42-62-gf13c1bb0f97fbc12a6ba1ab5669ce561ea32b80a
+> +GLIBC_IGNORE_CVES += CVE-2026-4046
+> +
+> +# Fixed by glibc-2.42-66-gb4bca35ab9e76890504c4dbdd5eaf15a93514580
+> +GLIBC_IGNORE_CVES += CVE-2026-5928
+> +
+> +# Fixed by glibc-2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc
+> +GLIBC_IGNORE_CVES += CVE-2026-5450
+> +
+>  # This CVE is considered as not being security issues by
+>  # upstream glibc:
+>  #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index 4da110417a..1f9533ba62 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -7,7 +7,7 @@
+>  # Use the same VERSION and SITE as target glibc
+>  # As in glibc.mk, generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> -LOCALEDEF_VERSION = 2.42-51-gcbf39c26b25801e9bc88499b4fd361ac172d4125
+> +LOCALEDEF_VERSION = 2.42-67-g4ebd33dd77eabe8d4c45232bed4b42a31d2f9edc
+>  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION)$(BR_FMT_VERSION_git).tar.gz
+>  LOCALEDEF_SITE = https://sourceware.org/git/glibc.git
+>  LOCALEDEF_SITE_METHOD = git
 > -- 
-> 2.47.3
+> 2.54.0
 > 
 > _______________________________________________
 > buildroot mailing list
