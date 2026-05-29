@@ -1,119 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8D6CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E72FACD5BD2
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D08C84398;
-	Fri, 29 May 2026 08:31:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1D336162C;
+	Fri, 29 May 2026 08:31:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TTeqs8xHK1pl; Fri, 29 May 2026 08:31:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LXBGPmQKVuiI; Fri, 29 May 2026 08:31:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B6C484399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB2C76161C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043462;
-	bh=8kcSFzMPSRxzM+n02N9ykeUWVAxJ60uddZmFQQEeS9U=;
+	s=default; t=1780043464;
+	bh=Wi26fxxHB/sUoGqHPTZbE0m99PQSib6sXIcVSERMj7Y=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cns66gBCisJ6tIbiMBV7RmEzJwPOsNNKto3plznfi1xNyk0gSqJAizActFfSdtO11
-	 ckzQgqcTRYogDn5Wj/Urac76rPmkdQNeKuo/taPHl9tUewP8ysGzw1/Yj6wn8bai5a
-	 fbcSKo/EV6mr/MlE5gQHbc0i7tfxdjGQziiJJVQKD/rg8u55MmXOCc6vQOpLHDghKt
-	 GUBhXKITbT1NcLmXh7rc980+lu2Lr0dk0CXiwH5TC6+5sXnHbiMzLpJUcQJQA1yP5O
-	 H7l769nRSAGR2yTE/MO2Tq+747Qqzm4ciLorvgL5gFD8ns2OYUu5EMjvPFza12yLZN
-	 Ox3zcDp0IqsSQ==
+	b=EeMQI2ZDvoKQke7TwDNCdEfmMofW7ZGlDa1q20HWwgj53DQe7w/KIff8egc0tGyp1
+	 q4W55kvqQqH2xYE89nuyK8gWjhGtDhJBSagtfx/VjNkdIvUnx43Et/N7oKrZ39sYZ1
+	 lLL4Sck6ATd3Sdyn4es5Kk5hhMReg1XJ352jjsTSPhCuGocgC+H/eB9urLUQ9kZaFZ
+	 Blq3prUs1dO129F1YMHdIwP63OlQI1y5haArfJkQ5YXYubCVL0jcT1C7y0a3PggYTo
+	 acekSnQa4XkHlVwiodVnAlc5qMP8k+9kJeX2r1GTiAuRZIzF/JNjpGULB7zpuBtIM5
+	 /qitvHURscekw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B6C484399;
-	Fri, 29 May 2026 08:31:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB2C76161C;
+	Fri, 29 May 2026 08:31:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 65580288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BA4FC28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 543A84070D
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9C2B4070D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZcsfIDTBUAs5 for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:43 +0000 (UTC)
+ id 6zQueyKGGjyc for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 517F8406F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 517F8406F3
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 517F8406F3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:43 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4909e3fa4b2so2784105e9.0
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 94390406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94390406F3
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94390406F3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-49050bfe053so42495745e9.3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043441; x=1780648241;
+ d=1e100.net; s=20251104; t=1780043443; x=1780648243;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=8TN28LjxrZEvxzURqSxoR7kbBRvHjUkhwQfCfN4acFk=;
- b=levtqNjOfwJWuqkcsNHZ0NtLLKOyGrgJ4Ci+IyjudhQsDcYnMUWqDadJsBfDvu0BPS
- FRbhVu9bu/pvIB/bEBjzs0ox9TX7wNyhcLHYN/N0xzXyIcx5fwUdRe22jlpQPwYTY6Oy
- 84BodY80DMEtz3QHDqhL5s8T+GpOneyvJZS5eBSb1uL12ZcLeO64dAAA/G9k6J2wc0M9
- an4sspwEQcq82H3KaKVF7wjiKeQhjSW3jOkMOsMKHwlaLSFHgud38SmTlBSZxEsnVslb
- tmu/WzqBb3Uah/3mdthLGU2LvS8y43vcIBY97A49Ix4LDv31df2hy9qeC6nRNX/ngzJL
- W+5A==
+ bh=f9HKxHIgud5J5kj4SkdfY4HptGIBd60tr5/vIYDTI0U=;
+ b=g/Y9XzGGRHURF9lyeHseeE6kidjOMmU4MA6QJA/CPcOV6uofDB0EPDnStyuBR/1buG
+ EEDkMKwBU6uNkyP62vjH8NIFFvfL2zb9XppjKDiJ+hNJamlW/anfbDUkV/vQS5n46hE0
+ 74jRgF9iLKjtcoxve3+RVN4tsLYa9y5cP+hYhNOC5wg7FPt7ZKvQ5SDEwBvwa+5VQnWS
+ /6JZ6B7YR8jYpOHAGmVs+Uug472VKNu15DFWrQWPVIt+0kIcsJvihTTwpsL5wGO4TVUW
+ DbSJpJ4LQDfqdZBmNr6tdz2XnvwZvsujPnw8XTR9LbuKxMd8veWSXOzlWjJWWk9oPv+3
+ Wd3w==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8xT3aRlr4OmvBibK4TWWndkeXYqq+ct6pm3firFTpV9KnVRhMnhpBTLZu2ktEcDolLMKWNg06AAAk=@buildroot.org
-X-Gm-Message-State: AOJu0YzU1xX0tR+Y0p4/fwFqohSEnD/IR5wyF/aebgHrjsITeRSIw8VA
- LdfaluiTnrrU5snFc6vBA0+xLvxWOhKx1PvfesrI1VZgfIeI2vHIlHOYnrhkcdcVWWLk9RacHYB
- hhQ4U
-X-Gm-Gg: Acq92OEBvuTtw+LJk+5CrJiz+o583xLkIvZKVfADMOPsGVAckmjiN9H5Y9kU5Z+rmhv
- 76qV5vhAdDjOBW0ZelqAiRG4YFQVCjgACpm1/bIKmOZ7TbmpECYU1/Ni7IRts4+4CRWNB/NnO3K
- YfUALMarBECG2mKpBVNIRgAwJ9/whe74IrFrLNjkFaW7d/alyAz9IsbTkgnlAkt5mXwk6kc/ttb
- jKlPBCy8s5E8N9C+6GSVdBMihtZO0X75oi/VYYgmDZ3fnuMurKnvnXJXw7jP3MmPqzAdWzorgjS
- 9B+qyRvypEE0pjVGZqmHzrJBrQMT+n6KgVPr0bKwxOQ7ClmQz2LxYJMZRwKIsc8kHGwRlRVSNOw
- yFu1Yf6eR50NfXeHeAY655EO1mpbUS5Jgsujp1PeP+b5fkkxVpgqeg471SHWVVLSl1QzHp5t6pQ
- DGku6ztZl8u+5qkkcIQ34s3gljSGBoaEno26iTsPNsjBcPSaV96m4+xUmb/y7mBQHjouug
-X-Received: by 2002:a05:600c:5697:b0:48f:d5e8:758c with SMTP id
- 5b1f17b1804b1-4909c0b3493mr22138385e9.16.1780043441229; 
- Fri, 29 May 2026 01:30:41 -0700 (PDT)
+ AFNElJ+EyKY3iQUaDjnFQpUJc12FPZ8dYELlegoaTq3OGwETOkYSEhbUs+zn+OE3fcSl7mkhuQJAEVjY5u4=@buildroot.org
+X-Gm-Message-State: AOJu0Yw/IFZx1EnCKIoaqml9Jo06WfTM61KvfNJWI8LWm0+eOIflRlzc
+ xz8CHhKuNDhu2hTXw8JqJddae70geUFBJSO8DFrFQAL70MSo+s/hyFJmO8OELNQZOcQ=
+X-Gm-Gg: Acq92OH+yPX1ebPk8wrfZ7xS67h6KZlYqRo17ot34ggDba+TMtL4GFE6oyJ918dsbVN
+ 7IkCUNV0TDcgbPRvz6xuqPHjf+UR+1jbUKy62lS03es4PCNzMwVREuk/9KU/OJgXl27bNJOp25h
+ 3uYT5FNJVrQxU090YpGDUwHhScQUI9uCrX5yCPF0ZT9V4AhRYXWVvZP5OSm+PyXDpgg3oeP8Wki
+ ap3D0Nq8K2ofJDk1k/bEaYY4PRxNyknVpD0mhuO3azCKi95cxKcJiM3PvOcumTaQyUINQtCCsuw
+ lXXC+Kttzelbyh1MhO45CaY0IICInae37gvTmUSyS8HGkM3ybuwyJKoCHX6Pc4GgpK96H61OyMd
+ jtrkt/ciJdmPjXmqNqwY73vmCkjFa1YNjQSuiUqApk+TOJGOdKNixupf4Vng6XzNOYQdaqMhFIz
+ rNUzwHQkmc1Rl6I+o/0SRghXZ6ELkkT8qE/9o6SN+9Nl0JFh4Z+vHfh1pA97ln9vMBB0D6
+X-Received: by 2002:a7b:c358:0:b0:490:53b0:9e53 with SMTP id
+ 5b1f17b1804b1-4909c078feamr21319945e9.1.1780043442564; 
+ Fri, 29 May 2026 01:30:42 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909cabfd6esm30368715e9.15.2026.05.29.01.30.40
+ 5b1f17b1804b1-4909cab7b00sm29625165e9.14.2026.05.29.01.30.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:40 -0700 (PDT)
+ Fri, 29 May 2026 01:30:42 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:40 +0200
-Message-ID: <20260529083040.60382-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:41 +0200
+Message-ID: <20260529083041.60443-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260524174645.3772462-1-bernd@kuhls.net>
-References: <20260524174645.3772462-1-bernd@kuhls.net>
+In-Reply-To: <20260525123125.2919307-1-bernd@kuhls.net>
+References: <20260525123125.2919307-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043441; x=1780648241; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043443; x=1780648243; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8TN28LjxrZEvxzURqSxoR7kbBRvHjUkhwQfCfN4acFk=;
- b=Qvxc6EAktf5QeDNAS+mqwwEsKTUvVNaKHj03rCakuCIwmE7rvr/IkUU2FNGegh4oG7
- bytWcKUD9VV+asrYbT+uyXmlWsZdAgkABfQFqXFsM8YZvq/OGsACZ9N51x/TNeEwiK0b
- X1nGslsBGU0+pUycaBZbGwGxAJ/qdvPrqObGBAV9zUFjcU5WE3B1/eb9rjRwtImJJrFI
- gCLZkw/gxgralGy4i7MgwhrssVPOlxgotfzD05JA45x2zQzC202SnPQM86Xx8p2Xv080
- +CNznasRW/wuUHCih/vxR/FGSX9m8HW5NMbb7mUT/or67KuhEY1gS9T9kJqz3cklBYzp
- 2IVw==
+ bh=f9HKxHIgud5J5kj4SkdfY4HptGIBd60tr5/vIYDTI0U=;
+ b=Q1rXg28kHOt2xkgyiEG+4Wgp5vKHlGjXOtUDhQI+LQsxAmsBdlBm0I7YgMWFrz1ouz
+ Q4I5/8kCmFJgecHSgDFKLhS4TAPL/brTLsWEgWzhfnYpLr9B/BcwOeGhi9C3OGgGYOzn
+ 9smczQlhlb2Afl6uVmQqRzLocNmG5AcEtFauP0ps5LPfACJCabzNiOVRk7SvrEa1QIkC
+ 60HOxta9jHgK0XRhESvy6M2N4svN/c2rDkn5yA2yclKDshwXFHdRz7lT1GAzV5gvu/oJ
+ 0/NJFtX96C/Ff7F13u8LB+s/Z9l/0WDo+EZjSZPdPHerXbTfoTGZ59tH4ACFPZTc5/6I
+ nyNA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Qvxc6EAk
-Subject: Re: [Buildroot] [PATCH 1/1] package/unbound: security bump version
- to 1.25.1
+ header.a=rsa-sha256 header.s=google header.b=Q1rXg28k
+Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: security bump version
+ to 10.11.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,54 +132,51 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://nlnetlabs.nl/projects/unbound/download/
+> https://mariadb.com/docs/release-notes/community-server/10.11/10.11.17
+> https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.17
 > 
-> Used new signing key to verify the source tarball:
-> https://nlnetlabs.nl/signing-keys/
+> Fixes CVE-2026-44168, CVE-2026-44169, CVE-2026-44170, CVE-2026-44171,
+> CVE-2026-44172 & CVE-2026-44173.
 > 
-> Fixes CVE-2026-33278, CVE-2026-42944, CVE-2026-42959, CVE-2026-32792,
-> CVE-2026-40622, CVE-2026-41292, CVE-2026-42534, CVE-2026-42923,
-> CVE-2026-42960, CVE-2026-44390 and CVE-2026-44608.
+> https://mariadb.com/docs/release-notes/community-server/10.11/10.11.16
+> https://mariadb.com/docs/release-notes/community-server/changelogs/10.11/10.11.16
+> 
+> Fixes CVE-2026-3494 & CVE-2026-34303.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/unbound/unbound.hash | 8 ++++----
->  package/unbound/unbound.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/mariadb/mariadb.hash | 4 ++--
+>  package/mariadb/mariadb.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-> index 19966d889e..46b88900e6 100644
-> --- a/package/unbound/unbound.hash
-> +++ b/package/unbound/unbound.hash
-> @@ -1,8 +1,8 @@
-> -# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
-> +# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
->  # After checking pgp signature from:
-> -# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
-> -# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
-> -sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
-> +# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
-> +# with key: 231018690C4D903EF419146AA144323DEAACDF45
-> +sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
+> diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+> index 216b3be7e3..ca23b36a38 100644
+> --- a/package/mariadb/mariadb.hash
+> +++ b/package/mariadb/mariadb.hash
+> @@ -1,5 +1,5 @@
+> -# From https://downloads.mariadb.org/mariadb/10.11.15
+> -sha512  98d1e54954b69cf87a96be7d76f80333f27832a29279e6b0a9615b830e171713222abcb9ec9b9a545c0fc4a0f9f8e3d4774babcabf534a6fa3cb3dfdaed0dedc  mariadb-10.11.15.tar.gz
+> +# From https://downloads.mariadb.org/mariadb/10.11.17
+> +sha512  788803b15afbb6193111774a233d0db0604f27ebae3b4b439368e2d7caeffb662846e530fa65f453a6d77541cedb99112ea319c7c0c2ce5074c32aefb06a51aa  mariadb-10.11.17.tar.gz
 >  
->  # Locally calculated
->  sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-> diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-> index a702f4762d..589b286c26 100644
-> --- a/package/unbound/unbound.mk
-> +++ b/package/unbound/unbound.mk
+>  # Hash for license files
+>  sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index e2c0cee3d5..c718c1ce7b 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -UNBOUND_VERSION = 1.24.2
-> +UNBOUND_VERSION = 1.25.1
->  UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
->  UNBOUND_INSTALL_STAGING = YES
->  UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+> -MARIADB_VERSION = 10.11.15
+> +MARIADB_VERSION = 10.11.17
+>  MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+>  MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+>  # Tarball no longer contains LGPL license text
 > -- 
 > 2.47.3
 > 
