@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB1E5CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B44DCCD6E4C
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83A8F841B6;
-	Fri, 29 May 2026 08:28:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C8C0614C8;
+	Fri, 29 May 2026 08:28:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WuEHdl4mbFBj; Fri, 29 May 2026 08:28:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uQf9s7d2X0He; Fri, 29 May 2026 08:28:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF6D841C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8808614C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043323;
-	bh=SaO/FGWs/ioUcjrq48/mpdDh6dQCqSlKCXbC4xFuRVM=;
+	s=default; t=1780043324;
+	bh=+QMPnQ2Rsh9SKVGWDbt0iXKRQy57kODXHHT1CQEIIgQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gpQ2U/8uhJ8kxMLNXn/+sLwJh+8aSyKxZfpwmfZ3jChwqZsvvqT0e36u5GfcBOllx
-	 qc7cCRIKVK9WAg/0or/zLkl744TtgMMiX/VDmD2NFAM3jp1geRLKQ/2iX2aC1qs362
-	 QJRsVfysa53gnWgXOVrWkxcDKdTA6RVEEdpaWDFkH0Re1xDoe8K6MmddmWxzF7pti4
-	 8YUiopDqkoBlx9wnEPu0g0cs+fpM8LKVSzZcGQ9ZYhvHaDa8I1i7kfCaSxjadIprbm
-	 Tdi1GB1Q5MbyYdYybw0Qa/XpC4j0P6YIxyR7cyyk8gBjJRrYsqVH+loTrSK7vjw7CK
-	 a7iev/Jna6r2Q==
+	b=UZE1YcQ3iXlxbzG9zbjk+aVFMa3Oked1zoJDgwOlDFd3OjPmnE/RD7MEQcfl0QOax
+	 CJz3edPAlpC4v90DyNrywZc2oUPwxf+9SretwP9tpap5bHyL1s9PB4AtgfR1vXw695
+	 14H5x92hbhYcbTNc8USIXvK8vFCq/dkEjkPnBE/PoTzv60bZhLf4TcZV/QR4hqEVll
+	 HhwcyRy2RkGKMQ89h8ALSUowrQdsS1EUt6Y32uCAJvjR3Ejpw5WonxYTahXg+XXI+7
+	 x2Vxec3ltj7jfaI+tRwuNu0LmsUi3kNVj982XLeDZ6447dyWSi26QoIUGbX+XIPak2
+	 vOqr7ISGjNU7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAF6D841C0;
-	Fri, 29 May 2026 08:28:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8808614C6;
+	Fri, 29 May 2026 08:28:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11F9A288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 115E028E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7386160E10
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF33B61456
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3_wqGaWgD8Y for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:28:04 +0000 (UTC)
+ id uNshpLb0Wq9O for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:28:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5926A610CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8684E61356
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5926A610CB
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8684E61356
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA06987171; Fri, 29 May 2026 08:27:49 +0000 (UTC)
+ id 24D62873A6; Fri, 29 May 2026 08:27:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:27:12 +0200
+Date: Fri, 29 May 2026 10:26:06 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: d40bb7279334fba78a6852cfa7f05923add0ec5e
-X-Git-Newrev: 815e765c1a5a25ea0510610ec499d08620d1863e
+X-Git-Oldrev: 726c6f959166ac7424eaf84673acd38b15fae26b
+X-Git-Newrev: 6d5e591cdf437fc645642d16c13f7a559d281fd1
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082749.EA06987171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/python-aiodns:
- bump to version 4.0.0
+Message-Id: <20260529082748.24D62873A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/intel-microcode:
+ bump version to 20260227
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/815e765c1a5a25ea0510610ec499d08620d1863e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d5e591cdf437fc645642d16c13f7a559d281fd1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20260227
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b9c60c567587dc7a9957e5ec29fe2558b76e75e7)
+(cherry picked from commit f489b40190e47ad13f2d7566abefffee8214cea0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-aiodns/python-aiodns.hash | 4 ++--
- package/python-aiodns/python-aiodns.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-index a4a242670a..4cde1c4b1d 100644
---- a/package/python-aiodns/python-aiodns.hash
-+++ b/package/python-aiodns/python-aiodns.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiodns/json
--md5  c1552fe562a1f9c98ea4c2311a2c75ba  aiodns-3.6.1.tar.gz
--sha256  b0e9ce98718a5b8f7ca8cd16fc393163374bc2412236b91f6c851d066e3324b6  aiodns-3.6.1.tar.gz
-+md5  c69a64f09c0999f63ed759f5046d5bb4  aiodns-4.0.0.tar.gz
-+sha256  17be26a936ba788c849ba5fd20e0ba69d8c46e6273e846eb5430eae2630ce5b1  aiodns-4.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
-diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-index 7476c76b72..6befbff203 100644
---- a/package/python-aiodns/python-aiodns.mk
-+++ b/package/python-aiodns/python-aiodns.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 41041370e2..588cf7cde3 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9232313161ce9dee5facd2870a7bd361d6000b1d409552b5c12efc6498e7f402  intel-microcode-20260210-rev1.tar.gz
++sha256  fcac5a08d7559a2ce4ad3b1ce5d59619c8adb364b9c51988fedd94220392bb37  intel-microcode-20260227.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 9f6592132a..321272e10d 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AIODNS_VERSION = 3.6.1
-+PYTHON_AIODNS_VERSION = 4.0.0
- PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
--PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/85/2f/9d1ee4f937addda60220f47925dac6c6b3782f6851fd578987284a8d2491
-+PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/10/da/97235e953109936bfeda62c1f9f1a7c5652d4dc49f2b5911f9ae1043afa9
- PYTHON_AIODNS_SETUP_TYPE = setuptools
- PYTHON_AIODNS_LICENSE = MIT
- PYTHON_AIODNS_LICENSE_FILES = LICENSE
+-INTEL_MICROCODE_VERSION = 20260210-rev1
++INTEL_MICROCODE_VERSION = 20260227
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
