@@ -4,60 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB61ECD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13587CD6E45
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0CA7614D1;
-	Fri, 29 May 2026 08:28:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF7AA614E8;
+	Fri, 29 May 2026 08:29:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gu2UQeY51Vs1; Fri, 29 May 2026 08:28:51 +0000 (UTC)
+ id ROE9No6VDXOR; Fri, 29 May 2026 08:29:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0CE5614D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F2A161341
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043331;
-	bh=VGt/iMiIU2mujsZwQ/Wh5YxELZspdBbGMNKcg+RI10c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YEos2mnGSBxYYT/U1VEjVdUUgoRVqQfNoLFGKx4MKPFwkScdV8ZZT2w7Dffj1wffx
-	 29LAO02CO3u5yWtcN9IoMqcrdeNIPquz1sBk0vVaFmQDizIa0xl2WjjQbtaPnc+txv
-	 jOhGx89yPf2dxsZYloC6tsFMNAiFFn7TZvNzC44iB4F2cHA7UxFtaH9e6KAm7ASpx/
-	 CT4OfY4Qj8I2IZzRk3+IldBkZbn99Dy/5w/a+OggXTP6E6LTJXvy0xPv7FcYDjeNaj
-	 4whF29XvB9sgix7lh8CskwAhju7lCabhLy3qGNi3eg6+9nhFYjjuKwDdZmc2uTD4eQ
-	 dXPQWuo3zn9dA==
+	s=default; t=1780043349;
+	bh=+mIzf4OVzCaqk4icciBNKeYRk5NlMTrYE8Ptudb3rgU=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SMZDDXqzP7P1rIvZNWvizSCHfazfcIYY/tOttO4EIWhUJTmV5u6zpxVaKQn1Gj6TG
+	 /qEtdo5dB2mgl6FgvfsrwVckfsFvVC6G5n+SEBCeUjfmo7v4S3yL/yK0Ic2xtVroZf
+	 VCKRZ49Y1GDGnc+aXNSAjuMolvg7XNqOkg6Im+fYrwzo5yNRbYVhyew54cKxhTeJGU
+	 791FKkD7jQV6KMyBaqJpmzzWloRiq6lTek0OhmJKryrfLk69SAPRPQQSZJ0gs5+0o0
+	 6pU7LqK1oSvsf/o0lFBdT25r/ZI5c2MNLYL64XkncZ1WXZcYLnhqr8tGXlB2N6cXJD
+	 CnuVGaz0QpMvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0CE5614D4;
-	Fri, 29 May 2026 08:28:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 11B64288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F2A161341;
+	Fri, 29 May 2026 08:29:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A83EF28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 595646146A
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 968E484203
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vaJbD0Nb8900 for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:28:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3958560DDB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3958560DDB
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAF89873A5; Fri, 29 May 2026 08:27:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:27:08 +0200
-X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 7b9cb42f231bece4fe706659aeefaa1d747e0b2d
-X-Git-Newrev: 6c722cafd2c76e4b46b59f2db4e66d16ce2d742d
-X-Patchwork-Hint: ignore
-Message-Id: <20260529082749.CAF89873A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/unbound: security
- bump version to 1.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s_MDJl-MF6HM for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:29:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB3F684200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB3F684200
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB3F684200
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:07 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4893940bb5eso73528395e9.3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780043345; x=1780648145;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=/HLNhabFyd7mlbFosxxt3MuAyjZ7TxnThOfbA2tnur0=;
+ b=NtFiHTV4JoiIerTcpOQytPWsgjtp3rtPUgH9QxGVd0/FLz+YS8UbgSGg1UO11fe591
+ o/HbfNbL50iGYVK5JkhLNI9lnP1THVOxJHSJ+eT2kUtIEinV9TILUpiWwUdm/pZjdLXP
+ yZCgwn4BvsRBHlMxOnHeuWhg8FHeKKb3I35AvFOmnkhLYPiOwR0n+AOkHzMTgDkbOoaj
+ lVOhAXeTR/3t6fQuW6X3V8s6LpBqdszAQc3V6g3W6HHoX8/hvuNa1BnY4REQTJs7JDLm
+ /I074cJynWtuNkGeFjrnZk3DjYH2epgFPb3/CL0LbVuhL7R5vN06OroWutlnb4skxQ92
+ KVAQ==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ95Hw163vCXUKQnbZubg2Dj9kO9K5gAVjBpGhC0uZiQJQPwpkb9f393NcJ/rvtJe2ugC0ezcPL8UTg=@buildroot.org
+X-Gm-Message-State: AOJu0YwVET0uRPK7cY+8p7V7XYxV9GdidJDBB+4kWnNHuAljAWOlEYuC
+ BpdoLvBbserw7VO5ceA/94pp5GjrBi+98qpUMeoSjwN20x448oWCZLh5B0BZQeugjuw=
+X-Gm-Gg: Acq92OEB3bo0sbMFlZEohUC9Z8FRU0GyFXnYKErbKPiXo2O85Uu4zjGrdSSxiUbnl+z
+ vw2RMk7rd4qRvvUX+9j0OUZvvfU2xaWK3J44YTyWiRyeYRjR0HWomfLXgZE1IsxKnW5uIUhZH6O
+ rwStiGPVKMXzKCUnKhAyytA8v+FkX6aNI6GcE5QOgaO++X5YLaNfyoybRgBjqJLy8MYa1/hwXH/
+ eP13r9aelJ2N8KFQDy53J9Klxl4mfvoAZHZohh7qf/RHmuFi6Acn274E/i8ksTVvZ2O90OvxAHA
+ 5mwM5rIh6qj0XVIR73D2BBITVNb+CHM1Z1ebTZYfEMCuimga3zzn1JOol7SitiYinu86COytIbc
+ QCq89G5GIpvBPJKFAZPZNKFoE0MQUYQQdydfPUAdFIkzVKvl6z6y0rb6EMl4AH3IdTweritNktx
+ O7ehTIzUsjhmWfJlcDkoxPGYYcD3/ZUrbdK3zSTVHuf2zsbhc161X0PkIumg==
+X-Received: by 2002:a05:600c:1507:b0:490:48b7:c1ff with SMTP id
+ 5b1f17b1804b1-4909c0ac8ccmr21302655e9.17.1780043345477; 
+ Fri, 29 May 2026 01:29:05 -0700 (PDT)
+Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4909c09abadsm9625455e9.1.2026.05.29.01.29.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 29 May 2026 01:29:05 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 29 May 2026 10:29:04 +0200
+Message-ID: <20260529082904.56344-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20251003201335.2430390-1-bernd@kuhls.net>
+References: <20251003201335.2430390-1-bernd@kuhls.net>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1780043345; x=1780648145; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=/HLNhabFyd7mlbFosxxt3MuAyjZ7TxnThOfbA2tnur0=;
+ b=QRk3ArE9QLtgs10KIUR3EMiInzMmc5+sxm/dYN1UMAX7dAM6dnwckjiyHG0Q8DlUV4
+ zn87ta5TlsjGwzAm9wYq+Ifi1Eumoxr85rHXY+vNT04Dn68t0wFMKQzHHLOcXD0nweTc
+ Gk6geve7WuOTUw1w/bdFECpgWcSgGpwtSr5/Y9xGmRBHqvoXQnZiplLPEr5J8S2f2DxG
+ pHPVZFj45FTU+EnCEqFGY54HCPybk1nIWvU8ccqzO9YkQ473PoxdDm6GH1ZCS9BDWg7y
+ EHLlcnqRS4A0xeYddg5jRB9+GOTUIoKGKZWg45nnjBfvcjVrlLsvdRajI/ta6f7O1bRc
+ mv2w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=QRk3ArE9
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: bump version to 1.20.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,63 +126,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c722cafd2c76e4b46b59f2db4e66d16ce2d742d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
+In reply of:
+> Release notes: https://github.com/strukturag/libheif/releases/tag/v1.20.2
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-https://nlnetlabs.nl/projects/unbound/download/
+Applied to 2025.02.x. Thanks
 
-Used new signing key to verify the source tarball:
-https://nlnetlabs.nl/signing-keys/
-
-Fixes CVE-2026-33278, CVE-2026-42944, CVE-2026-42959, CVE-2026-32792,
-CVE-2026-40622, CVE-2026-41292, CVE-2026-42534, CVE-2026-42923,
-CVE-2026-42960, CVE-2026-44390 and CVE-2026-44608.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 74aed5e8619cd4674e12659ce16798851486e7ff)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/unbound/unbound.hash | 8 ++++----
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 19966d889e..46b88900e6 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,8 +1,8 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
- # After checking pgp signature from:
--# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
--# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
--sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
-+# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
-+# with key: 231018690C4D903EF419146AA144323DEAACDF45
-+sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
- 
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index b435839020..fab6e67455 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.24.2
-+UNBOUND_VERSION = 1.25.1
- UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
- UNBOUND_INSTALL_STAGING = YES
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+> ---
+>  package/libheif/libheif.hash | 2 +-
+>  package/libheif/libheif.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+> index 6c129873cb..da2516a583 100644
+> --- a/package/libheif/libheif.hash
+> +++ b/package/libheif/libheif.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  55cc76b77c533151fc78ba58ef5ad18562e84da403ed749c3ae017abaf1e2090  libheif-1.20.1.tar.gz
+> +sha256  68ac9084243004e0ef3633f184eeae85d615fe7e4444373a0a21cebccae9d12a  libheif-1.20.2.tar.gz
+>  sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index f6e14888eb..13e8295b0e 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBHEIF_VERSION = 1.20.1
+> +LIBHEIF_VERSION = 1.20.2
+>  LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+>  LIBHEIF_LICENSE = LGPL-3.0+
+>  LIBHEIF_LICENSE_FILES = COPYING
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
