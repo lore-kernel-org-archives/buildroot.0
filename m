@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A840CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E58FACD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AAFD85A05;
-	Tue,  9 Jun 2026 13:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAB2C85A22;
+	Tue,  9 Jun 2026 13:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gA3y5uXVC7bU; Tue,  9 Jun 2026 13:03:33 +0000 (UTC)
+ id RJw4zc-d_m2K; Tue,  9 Jun 2026 13:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C032F85A1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7E8D85A2A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010206;
-	bh=D5oo3s0kXfhHHRTcW0sjfg75SQ09g53gFfRMayj0cuM=;
+	s=default; t=1781010209;
+	bh=964QEiNKr3T6JBQbsAGlDR7h+gliBw5P+dO5CgMLJpQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KZrDOKPnHu4+JzErZwKzSPoFTq293a4YW7v6gZQQ1S9H63UHgd1Gt2Doh7gezrVlZ
-	 U6FcM+WurH/lXQvKy5lxC5hYapYALyLKCsOF/kXTTQXnYyp1AyNPUEebYTAi3r8OtW
-	 yMx76i5AyKtNVQldgGoFaC+o3TBHX2BXZqtiZSofCXJ9HllrY7G4boGKHxo5FnRhxk
-	 fG+idbuhP+4kXgv4in1SIrwjbCx6iv3s4A+n3hyNLe/jBl/Fyjqo6g6DaMnQm6ln0p
-	 7Pgq/SBJK538V38682A0CvT3H8dOGxuqhudNHQ5DvaOGTHgi+mFbSiqBNjrnwEQWme
-	 akvIs1hf9UxKA==
+	b=ZvXcoCiLG/toR2XxCmQK5bXllOHjOUgDgjAM0/uM2B92U/u4XUpS0MURdFG1HMCYl
+	 F3rkznvytZTAJFKvvQKWQ7sJdaAQB561dPaIPhrDJjCE+3ZjHatSEzW4nBZ4RkH2nv
+	 Vv8uo+C5ptMxKM7Ekafy/aLz3tvOKxrK9LVEocrR2JyDj+zsE4l3/A2Fv4YfHVggSo
+	 nRnanLui3IME8PtPQjlO/pAlqb6t66nt+tnySbxZ+MjEyX5boo0te0jTgOWWMrw3XB
+	 vC6HOKzwHrxpP2o+PnXbfpOadp4S2qIeF/bak/17kF3GWDuWah206JBkVRtLKX1pPZ
+	 LHAvUci4K7/aA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C032F85A1E;
-	Tue,  9 Jun 2026 13:03:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 10680196
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7E8D85A2A;
+	Tue,  9 Jun 2026 13:03:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C55B196
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B8AF426F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C9414542E
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fXlXG0DqllsI for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xuPa7R_JiJjh for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD0B6426C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CFD9454B4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD0B6426C0
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CFD9454B4
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8E9887E7E; Tue,  9 Jun 2026 13:01:16 +0000 (UTC)
+ id B6F0F87E7E; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 18 May 2026 21:10:58 +0200
+Date: Fri, 29 May 2026 15:36:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 418ee5a2b6cce22bfa9560ca0289fce728a2bde0
-X-Git-Newrev: 319eeda6fa83b5bd21b14dc795f407fc5495953d
+X-Git-Oldrev: d6768a2b6820142c31d95b5f84722caada1aa000
+X-Git-Newrev: f22ee807403a440b4f66ad8a5741d8f5fc04cd74
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130116.E8E9887E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{clang,
- llvm}: Move removal of opt-viewer to the correct package
+Message-Id: <20260609130119.B6F0F87E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5base: optionally use libudev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,51 +76,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/319eeda6fa83b5bd21b14dc795f407fc5495953d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f22ee807403a440b4f66ad8a5741d8f5fc04cd74
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The files are installed by llvm but deleted by clang, this causes a
-mismatch in the packaging.
+qt5base only requires libudev, not a full udev daemon.
 
-Remove the files from the correct package.
-
-Cc: Daniel Lang <dalang@gmx.at>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Signed-off-by: John Ernberg <j@j-ernberg.se>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/llvm-project/clang/clang.mk | 1 -
- package/llvm-project/llvm/llvm.mk   | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/llvm-project/clang/clang.mk b/package/llvm-project/clang/clang.mk
-index 116389449b..7eae54556c 100644
---- a/package/llvm-project/clang/clang.mk
-+++ b/package/llvm-project/clang/clang.mk
-@@ -84,7 +84,6 @@ CLANG_FILES_TO_REMOVE = \
- 	/usr/libexec/c++-analyzer \
- 	/usr/libexec/ccc-analyzer \
- 	/usr/share/clang \
--	/usr/share/opt-viewer \
- 	/usr/share/scan-build \
- 	/usr/share/scan-view \
- 	/usr/share/man/man1/scan-build.1 \
-diff --git a/package/llvm-project/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
-index 577128bb1e..fb59aa64e8 100644
---- a/package/llvm-project/llvm/llvm.mk
-+++ b/package/llvm-project/llvm/llvm.mk
-@@ -316,7 +316,9 @@ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 3ad2bdfc04..e465969f64 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -101,8 +101,8 @@ ifneq ($(QT5BASE_CONFIG_FILE),)
+ QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
+ endif
  
- # By default llvm-tblgen is built and installed on the target but it is
- # not necessary. Also erase LLVMHello.so from /usr/lib
-+# opt-viewer is not necessary either, remove that too
- define LLVM_DELETE_LLVM_TBLGEN_TARGET
-+	rm -rf $(TARGET_DIR)/usr/share/opt-viewer
- 	rm -f $(TARGET_DIR)/usr/bin/llvm-tblgen $(TARGET_DIR)/usr/lib/LLVMHello.so
- endef
- LLVM_POST_INSTALL_TARGET_HOOKS = LLVM_DELETE_LLVM_TBLGEN_TARGET
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-QT5BASE_DEPENDENCIES += udev
++ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
++QT5BASE_DEPENDENCIES += libudev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CUPS), y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
