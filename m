@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAFA8CD6E55
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 15:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095E2CD6E4A
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 15:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EDEA61340;
-	Fri, 29 May 2026 15:36:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KZmJEzcdxOYP; Fri, 29 May 2026 15:36:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24F4060EE3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780068978;
-	bh=AobcbrQ6ZGNQm8e0HEl/7fwHocfPS3hp7S6sU8TU4NM=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Q7VT9vZmkEfn/6BkaKX52mNn8XBcaVpnzVC2WVmDWBIBq32sLeO5Y6QsZa9LgTg7Q
-	 5fpo3dViNvazPjXvkOBMp4UxNc1carowM93HckUYD+SsxXl6HML0BRoiPZamSDLh8l
-	 xJRleO/8QtZWZQaIlUoaHU6/VTSLRZ9ordxZSGU6iV59LCV/7APtgqpKWCqul+iPRQ
-	 PdZSlJM6Rmmlz6ldH/Z9G+qNKcbOwzTZqaP4kW9YtXeRIWcRlFBqYYvETfNtPjjXk2
-	 SBctajuTMrHCmVa1yISrH1cKNveHRCg9yHMkz2bEpPT3xLWZELm1vsuf1MsmhExif5
-	 YgG8O3a9pZ5NA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24F4060EE3;
-	Fri, 29 May 2026 15:36:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2365B288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 15:36:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BBE0406E2
- for <buildroot@buildroot.org>; Fri, 29 May 2026 15:36:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAA2441F24;
+	Fri, 29 May 2026 15:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id afZMWjsAM8Wa for <buildroot@buildroot.org>;
- Fri, 29 May 2026 15:36:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id ZPptxP80wBOx; Fri, 29 May 2026 15:38:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07B0841F5C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780069112;
+	bh=REuqGsg5zPXhhA+CoT7LM1P+BRXAX/fO4DNWKAQwHSQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jCOmcUheY1qDz8E5jd8gPgBhKiPOUdIhGRY1t8lVmFXmqJ59NTiMSBMKthObukJIN
+	 KRdivAv8PlUOtUWUquZ3elBIOx2qT5vuWBXGox5gfjPTZwavulUsFKakEapFMiUiqJ
+	 59VREdBMGXaC0yVdhF9NjhUIgNf5THA3DbbXPZ/kqrbbzPstEsevOcz+FRueMFnqo1
+	 th4HDWCntlibkjbxOPOhfq9yVfDkWf85mhYywY+9zxS2lykrEIYRQ4XS9W/DNjHBTT
+	 P0rF2PDWxahWLGXgNFov947Vbe+23MDzOVfMTyrdv6YbKe2F9iM+5tyXIeDEbkQFmk
+	 rTd4xEYefmquw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07B0841F5C;
+	Fri, 29 May 2026 15:38:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03C9FD3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 15:38:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D871061306
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 15:38:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SsJenN5P4Oq3 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 15:38:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 16367406CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16367406CF
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 16367406CF
- for <buildroot@buildroot.org>; Fri, 29 May 2026 15:36:15 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id B6F0EC6245E;
- Fri, 29 May 2026 15:36:14 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 08277601FA;
- Fri, 29 May 2026 15:36:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6D14310888CC2; 
- Fri, 29 May 2026 17:36:13 +0200 (CEST)
-Date: Fri, 29 May 2026 17:36:12 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Message-ID: <ahmyNyrnNa_0uwdI@windsurf>
-References: <20260529150631.447940-1-thomas.perale@mind.be>
- <20260529150631.447940-2-thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260529150631.447940-2-thomas.perale@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780068973; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=x70ayKmpQ8wegtSmOX8N01J8r162Zvg/V7W96aOq+3A=;
- b=HYNFuVuHezyO6gqoe+0zh/fmPugZJ3eXHwIG4VUEIU4gt6ANju6iG1q5ENWI7cMYdCBef2
- 97mdHj/fE6ftn/dtZQrJ98ojDwDHUnkPjzK8iHMdTHlrBVuOp7529qsJEpfWp7UQ8CUpGf
- pxpjc95W0Xz1Qo9ah0AK1DPWafzkh+xXooump3g+STzEhvHYkV1hHYPJvurOp/jndRsPNM
- nAv1jtJI+WHrP2mvoyTmPbpP3CwqUk881fLHKMWGLvmleQpyXePqSdfNGrYpYqUmcMjSIX
- I0PR5fULBs1HgAxIffv7agMO/MK1Cz8PAdbgE6L6zQv67g8ugLpOJcNokLCb3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=HYNFuVuH
-Subject: Re: [Buildroot] [PATCH v2 2/5] support/scripts/cve-check: add
- indication how to run
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37B0F61323
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37B0F61323
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 15:38:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 941B7873ED; Fri, 29 May 2026 15:38:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 29 May 2026 17:36:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 646356162b321df8bf20f622c98e0b8495ed86fe
+X-Git-Newrev: af55c1a39b34a4359edf9cc6f65244ff6a0738ee
+X-Patchwork-Hint: ignore
+Message-Id: <20260529153817.941B7873ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/cve-check: remove
+ 'bom-ref' for vulnerabilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,28 +71,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af55c1a39b34a4359edf9cc6f65244ff6a0738ee
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Fri, May 29, 2026 at 05:06:28PM +0200, Thomas Perale via buildroot wrote:
-> Always run this script from the output of 'generate-cyclonedx'. Do not re-run
-> this script over an already analysed SBOMs.
+The 'bom-ref' are optional and since we don't reference the
+vulnerabilities from anywhere else in the SBOM they are not necessary in
+this case.
 
-Minor nit: "an already analysed SBOM" (singular) or "already analysed
-SBOMs" (plural). I've chosen the first form, in the commit message and
-in the code itself.
+In the following commit, cve-check will potentially emit multiple
+vulnerabilities that have the same id. So using the vulnerability id
+as 'bom-ref' won't be correct as the 'bom-ref' needs to be unique
+unlike the id property.
 
-Applied to master with this very minor nit fixed.
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/cve-check | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/scripts/cve-check b/support/scripts/cve-check
+index 0d0ad833a2..4d01fa5f23 100755
+--- a/support/scripts/cve-check
++++ b/support/scripts/cve-check
+@@ -147,7 +147,6 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+     [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities
+     """
+     vulnerability = {
+-        "bom-ref": nvd_cve["id"],
+         "id": nvd_cve["id"],
+         "description": cve_api_get_lang_from_list(nvd_cve.get("descriptions", [])) or "",
+         "source": {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
