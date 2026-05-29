@@ -1,75 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49EA6CD6E43
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 02:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62748CD5BD2
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 05:57:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5DCB41206;
-	Fri, 29 May 2026 02:52:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE01B82E14;
+	Fri, 29 May 2026 05:57:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qJJU3QNC1HNm; Fri, 29 May 2026 02:52:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KvLTjvlaEIVV; Fri, 29 May 2026 05:57:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C267F41207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 413B782D7C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780023165;
-	bh=XPw2hsAYHH8tAf9+6heUMvym5ZtmGJfPhVlrvOkDZHA=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1780034267;
+	bh=fGiHjawujRSozxJ3Rr9JFQST2/MTjpP4iu4nRlYFHrc=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=L/Oep2THnhUbw9tfzmoGXtmpahfhBoCQuzMk2k1p4JSDb6/+MPitLIfW8+Xb64HTH
-	 azhJ5hg4CzgMLOcfngmCAyPXhegaKpIclMIbdYpkGnj29BJEzcqm2JJlFN/MUuYbx2
-	 91YkoiBhJrg41/7JasyDasVdvlYKsFZnaqKDnzbyN5q86mjrFEFFPphFs6Nx1BX6M0
-	 jKVBl3+/QV3kNRr+WCiSzxjdkIKA/19MGyEJWHM7n2BddpBkcXObrrKA0J9Tlo8VrI
-	 onPpiEFVJStMSqTR3aloE66BhIQtGS+teempAstfZDKBjz97e3t4aBo9dSrTeGSDXq
-	 me/CmpR7hbNfA==
+	b=I984tZRTh7M8VId7YeNNcj0jYEhjL1WYEAmZXwJ9mxIZEgKT3tBBx6ITXzb0E7B2t
+	 yNynQb09d3JAg2Bg+zLz+0OzvIdJNpOKc0Ex9unqQCbD2pDJpkkgJ9fX0lvp0NXeMH
+	 nvEiN7CXoNoWwN41f8yHyz2eAYXG1wO2b4kkxD9ueFXPweLTdTJ4Lf5FyucRsD2AVe
+	 vROaMOkXYaD4wchzcW7SXh9gHAFDoD9sCuNoryIsCt1Y5agIiysEk80vFe4HYbvNj0
+	 73XRUXvw13IHkVMjZx3JfR8kYxY3xych8sG65iNH2PTQ601XzNGANbzK9l3oo0cEiT
+	 wXHAhmqiRWxzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C267F41207;
-	Fri, 29 May 2026 02:52:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F08828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 413B782D7C;
+	Fri, 29 May 2026 05:57:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56914288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 05:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 802CD41207
- for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45E5C40820
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 05:57:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1KD7mCTU0L9i for <buildroot@buildroot.org>;
- Fri, 29 May 2026 02:52:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5EEAF41206
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EEAF41206
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5EEAF41206
- for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:43 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 8CEF831E03CF; Fri, 29 May 2026 04:52:40 +0200 (CEST)
-Date: Fri, 29 May 2026 04:52:40 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tN-RnBAZkIPk for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 05:57:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C74B3402D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C74B3402D8
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C74B3402D8
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 05:57:43 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a09fc.dip0.t-ipconnect.de [91.58.9.252])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D7E39A4C0568;
+ Fri, 29 May 2026 07:57:39 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47830)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wSqDy-000000004QT-2C0n;
+ Fri, 29 May 2026 05:57:39 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Message-ID: <ahj_eBXQ0dJThOrD@waldemar-brodkorb.de>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 29 May 2026 07:57:38 +0200
+Message-ID: <20260529055738.7676-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1780023160; bh=rAPSAnMaBVCJ+xPWRPl7um7pfg/1Igk3HmjxWqajUSI=;
- h=Date:From:To:Subject:From;
- b=kQYZbeI5sidr+oJLzWTJBat09zAAwnbbjIvfnxosQD8l4UU0/WPBGWaFI6pudSEeu
- 6g//8RWFCTqXwXRWcWE6R7k0YDLHAIDpOrZLPk2ilDUeLdKSn2ABsLCUpL3vKJS4a2
- uQFt7xYj5fbHOHf9vZ6oZKVH+PjeNkjVnqbbgk7Owcqs2m2HRN0DaXU/kZUYF6irn2
- c8hBFGqKiTqCmCJoGUQxCQfQ3PdDUJEu5IGV/9vCXuI4yQbRA6okVwMF8chmwn+EX8
- zF+aOEnTFwOXnJORKrjCv2KoY/tM1pbqtJF/EOBKENHXov7KWM1/Od0IJ7CHtoqYc+
- 7WpM9Pu5Q7VGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH] package/asterisk: security bump to 22.9.0
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1780034259;
+ bh=iSwOeebBG7zOBxxTYLqbyE2ANEvSuFeWBNPw2Sk9sdw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=WevTJ15YRSk5paAN59XQATCCaJowmjxorX/LFdxGKjwpbhFPCKi+B7c1ltx4UMA4B
+ b4pfwu9ctc7SzqpLv4KwS88FtbXcfaijNdP5C0sur1R+n0nUxgMqHXMEz7ZBSdkBMh
+ LASXYB/Trp7wH4o+RPiGFPSdoRpEVQVQlchG8Led0fmDgonp1jgI0T+xKdPRLJXuOT
+ +bQzOE52kbOZIU20QxBds4J144UriDyoCxzELmBXm6FBP+PFPD/5NtRTbm/ZcNuM00
+ 85re+PkEtlUsjwxJlj2O/MJKtUuEcbVcUssKXimjpFPG5s1VK3vnU9/XFSleqjd+ye
+ PtGIGCLXZzU/A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=WevTJ15Y
+Subject: [Buildroot] [PATCH 1/1] package/{rust,
+ rust-bin}: security bump to version 1.96.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,76 +98,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a changelog:
-https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22-current.html
+https://blog.rust-lang.org/2026/05/28/Rust-1.96.0/
 
-Pjsip was updated to 2.16.
+Fixes the following CVEs:
+CVE-2026-5222: https://blog.rust-lang.org/2026/05/25/cve-2026-5222/
+CVE-2026-5223: https://blog.rust-lang.org/2026/05/25/cve-2026-5223/
 
-Fixes some security issues in pjsip:
-
-Author: Mike Bradeen Date: 2026-03-23
-Address the following pjproject security vulnerabilities
-
-GHSA-j29p-pvh2-pvqp - Buffer overflow in ICE with long username
-GHSA-8fj4-fv9f-hjpc - Heap use-after-free in PJSIP presense subscription termination header
-GHSA-g88q-c2hm-q7p7 - ICE session use-after-free race conditions
-GHSA-x5pq-qrp4-fmrj - Out-of-bounds read in SIP multipart parsing
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+ package/rust-bin/rust-bin.hash | 132 ++++++++++++++++-----------------
+ package/rust-bin/rust-bin.mk   |   2 +-
+ package/rust/rust.hash         |   4 +-
+ package/rust/rust.mk           |   2 +-
+ 4 files changed, 70 insertions(+), 70 deletions(-)
 
-I want to stay with the LTS version for asterisk.
-Bernd sent an update to latest version.
-
----
- package/asterisk/asterisk.hash | 4 ++--
- package/asterisk/asterisk.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 3a8274b458..8d620a0ee3 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index c63f74a754..a957d756e8 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -1,72 +1,72 @@
+ # Generated with utils/update-rust
+ # Do not edit manually
+ 
+-# From https://static.rust-lang.org/dist/rust-1.95.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-sha256  094c9c36531911c5cc7dd6ab2d3069ab8dcd744d6239b0bda1387b243dfc391e  rust-1.95.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-i686-unknown-linux-gnu.tar.xz.sha256
+-sha256  49954c2ea9d36fea90169b350734b0eb4f53237f62274a73c68f315dcceb8fcd  rust-1.95.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-sha256  5a0332509dae5f6a25f7b6d8dbaf7ff8389a091b5fcfa5248521f6f80c0bb3a2  rust-1.95.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  8ec8f0ce92eadf6e9f3388165de23e3752cf260073ab46e89ee197e287f8a9f4  rust-1.95.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-sha256  d301b5064ae68180ec1218b533ef0b26aaf83bba20720a0cbfdd1ad09f295133  rust-1.95.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-sha256  172b80cc2c600c2681f2a2199cee9f490427c2ba548ee9bd449483a0c34cd691  rust-1.95.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-sha256  0f313ee40d8b94e7b86b9d0c02bddbae895cb8198e2cad4000e1e943452db1d0  rust-1.95.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-1.95.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-sha256  2e0338f18ecbaa4a0f631b9e80e8b8e26bb6fe77dd5454fba8a70cf96c1e84a1  rust-1.95.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-aarch64-unknown-linux-gnu.tar.xz.sha256
+-sha256  3a21b271b1ff973b94d69b25e7a39992f9fbcae1ab6d9475844a23e6ad3908ac  rust-std-1.95.0-aarch64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-aarch64-unknown-linux-musl.tar.xz.sha256
+-sha256  f6710416ed9a7d5cf2a15efa761eb79a1deeb43f9961bbe05cc97bec4ef9064a  rust-std-1.95.0-aarch64-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-arm-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  f6cd592dacdf41f724ee90a2f34db028e37ca2a7fb26fa86e93e8fd68e24d066  rust-std-1.95.0-arm-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
+-sha256  fda8408ea17881c6529e27e58672d6c628f786cad557fac92856077e7a610239  rust-std-1.95.0-arm-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-arm-unknown-linux-musleabi.tar.xz.sha256
+-sha256  62f21fabc209fd0de53156764fc426da74c59525bb60cb4c1c3ffd1be0bbe00b  rust-std-1.95.0-arm-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-arm-unknown-linux-musleabihf.tar.xz.sha256
+-sha256  2842ce67f7a4c68c6e8b30ad3bb36484fb745edcc2694b2a36bf0609cf758044  rust-std-1.95.0-arm-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  5b2c1ba1e35f7ecac1ab7d7a6ffbe6da466d244bba747e64547eeb57c3b07715  rust-std-1.95.0-armv5te-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
+-sha256  4c23aa73d76c0c5f52283c739f197a4f757926079983ab10d914544de47a5dea  rust-std-1.95.0-armv5te-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
+-sha256  e23454d6ca7fc3f5eb7cf9241572765176d86e9f45d4f394de31a5fd794e523f  rust-std-1.95.0-armv7-unknown-linux-gnueabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+-sha256  bd319e18ca2dad0450f76277874d56356330da536be8cf271509f8e6f28ac6de  rust-std-1.95.0-armv7-unknown-linux-gnueabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv7-unknown-linux-musleabi.tar.xz.sha256
+-sha256  a49bc987e0531800f92825ce61402b5734ea747caa8970d3373506742ed7daa6  rust-std-1.95.0-armv7-unknown-linux-musleabi.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
+-sha256  77f9aaff4669c076edc96cdb99dc21749d2c692c862232b52176572c289fe671  rust-std-1.95.0-armv7-unknown-linux-musleabihf.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-i586-unknown-linux-gnu.tar.xz.sha256
+-sha256  dc5187f4062d617561e0d7885ecd4d4d3f995435b38d8c53d6451b56808946b8  rust-std-1.95.0-i586-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-i586-unknown-linux-musl.tar.xz.sha256
+-sha256  acbdc18dea9bc942a1872cf8c85b0ed353323f6a9c6757e04f837dd9cefb6094  rust-std-1.95.0-i586-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-i686-unknown-linux-gnu.tar.xz.sha256
+-sha256  527c5d5249a7f77b48d3c9da3ac512d27b47f43d08dbe3c6f82a3d5b35d8aa27  rust-std-1.95.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-i686-unknown-linux-musl.tar.xz.sha256
+-sha256  af4d3e7aabb63d39a7a2ff5435cc993b65ff38a2d2e23f1967e519037a1b0455  rust-std-1.95.0-i686-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-powerpc-unknown-linux-gnu.tar.xz.sha256
+-sha256  59e0abbaa246502521e37c55b8d6cf88d5b8a697b0c70c61ec189937308f7246  rust-std-1.95.0-powerpc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  cc7fb9aa289ff1756502ae16a05e2885289165f01ed94a7c2db6576b3dae74a6  rust-std-1.95.0-powerpc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-sha256  2370d9266051a0b23346d42e43a00f91b2daff22a963fb03e28ae50cb0b76c50  rust-std-1.95.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
+-sha256  50fe7869e166bb4c990a0e1664366b1ffdbe669664b7663cd03c079bd0efdcac  rust-std-1.95.0-riscv64gc-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-riscv64gc-unknown-linux-musl.tar.xz.sha256
+-sha256  e01bdbf5d6fa3e529671d49e87ba81dc9612101144f3ee5a0e1de3c48f27b47c  rust-std-1.95.0-riscv64gc-unknown-linux-musl.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-s390x-unknown-linux-gnu.tar.xz.sha256
+-sha256  31978c1286afff9a0bb7f01c2ae4a39f40727b6100a82b6d934f146b06cde510  rust-std-1.95.0-s390x-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-sparc64-unknown-linux-gnu.tar.xz.sha256
+-sha256  88619b2413d218c119a2060e583a9e835fa5f9cf6ac038070eec10b02c191056  rust-std-1.95.0-sparc64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-sha256  047ea7098803d3500fa1072e9cee5392697e21525559e4458128a2bf874aa382  rust-std-1.95.0-x86_64-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/rust-std-1.95.0-x86_64-unknown-linux-musl.tar.xz.sha256
+-sha256  aee540abf132920f791ef781489851a078d69dff493fb628d49c1d573f92bb3a  rust-std-1.95.0-x86_64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz.sha256
++sha256  371eadcca97062219cbd8593628eb5d2802bc370515d085fedce1b56b2baed57  rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-i686-unknown-linux-gnu.tar.xz.sha256
++sha256  9f1f65f624e4c5e41b45be61d1c7e6cd595b77001f66cb9b830ac0e502d2d301  rust-1.96.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-powerpc-unknown-linux-gnu.tar.xz.sha256
++sha256  491ad70cce1b874420ed93724871e968a03406433fee971a64bc5d253406f8bd  rust-1.96.0-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
++sha256  d356154ab4d25693c652e34ce14ddd0ca6d5df5ce9c97bab5077928837ad2c58  rust-1.96.0-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++sha256  fea8e9155c69740415f1c96fa8879e61b16238e26cfee62d15f4f93aa83cb8d5  rust-1.96.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++sha256  74902bc33de609a6ac89782fa987f0e35b08bf32cc5e838eb7c542a18c7ec554  rust-1.96.0-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-s390x-unknown-linux-gnu.tar.xz.sha256
++sha256  fba86103d04611dcf342d84abc8b5ad31fc80c24fb80ca79a1584c0f52ed1324  rust-1.96.0-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++sha256  c295047583a56238ea06b43f849f4b877fa12bfd4c7103f8d9a74c94c9c4e108  rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-aarch64-unknown-linux-gnu.tar.xz.sha256
++sha256  538e85452709687797d990579a491ff9b02f8bffba4a5d54cfa945e28868053e  rust-std-1.96.0-aarch64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-aarch64-unknown-linux-musl.tar.xz.sha256
++sha256  e7d89a29abcc2cf2f31cfe3d898c1713fb12f395e788809d3b01b23fdd5813b4  rust-std-1.96.0-aarch64-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-arm-unknown-linux-gnueabi.tar.xz.sha256
++sha256  2e4bca102be6c39e1a0bc3efe2cd5807eb66aa92ad994cc8e9f3a4ce53c8310c  rust-std-1.96.0-arm-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
++sha256  8921e7ce73fdaf42e277def64f87c37e22ed5b8059db63dc77a38f8143792138  rust-std-1.96.0-arm-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-arm-unknown-linux-musleabi.tar.xz.sha256
++sha256  3a09829f19860e3fa85e8324e0349826f2f5243e7febeea15d44a08320f8ba7a  rust-std-1.96.0-arm-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-arm-unknown-linux-musleabihf.tar.xz.sha256
++sha256  c69514c229fa42cd05ad145e1338b77c4c941b39585fad14268667cfe6ce8f33  rust-std-1.96.0-arm-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
++sha256  680de9708dde0f626e06725b2f2e4c798fff36f51facdc077f725e4736fe26b2  rust-std-1.96.0-armv5te-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
++sha256  258e9e6f41d583036e4b48a03a98eab2054437303ad18bc408ef1dbc7292c9c2  rust-std-1.96.0-armv5te-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
++sha256  ee3afa3fc218741abe8d1c02359eabcf3b1ec1b808d2598856d9bbeb139e3e9c  rust-std-1.96.0-armv7-unknown-linux-gnueabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
++sha256  460140e9be152e2b5a125d45a8cd11d9d956cb0e6cf8bc30c45ac009b4bfc896  rust-std-1.96.0-armv7-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv7-unknown-linux-musleabi.tar.xz.sha256
++sha256  45b2fb049f37495eb3669936923b694720534d46f14ac1ad940ffcff5d65d428  rust-std-1.96.0-armv7-unknown-linux-musleabi.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
++sha256  18a10d9a1a78d91eca8e378ed87e4d754704ec2f7d5a5bcaa878b629c0e426f8  rust-std-1.96.0-armv7-unknown-linux-musleabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-i586-unknown-linux-gnu.tar.xz.sha256
++sha256  3f42faca55ac0df4e94aa5ac3c6b86c4a4d5a623cfc084bb41b76674a7705d35  rust-std-1.96.0-i586-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-i586-unknown-linux-musl.tar.xz.sha256
++sha256  6eea0bd0b88ce657b91ff3a710a7040d042d93194504fba78d1baf9fe0f9a62f  rust-std-1.96.0-i586-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-i686-unknown-linux-gnu.tar.xz.sha256
++sha256  2d13b8c801c9ad1ff55dceacaf1d1777601e328bc56cd390c4209a2f61d76ce2  rust-std-1.96.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-i686-unknown-linux-musl.tar.xz.sha256
++sha256  c9b71e301ce9fc34fee2cb373924423472450497942e676ad7ef232ebefafc04  rust-std-1.96.0-i686-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-powerpc-unknown-linux-gnu.tar.xz.sha256
++sha256  d434927909a92ec1298bd9ea51a3d251c1d5ef44c7ed334353cb832a7e124a7b  rust-std-1.96.0-powerpc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
++sha256  cf273029a7a8dba56fe4fd517ae4c8bd862a3e27c56369a8b9d6411c8d74085d  rust-std-1.96.0-powerpc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++sha256  347ff4e5dd463849f21391b9db90093dee33578d98f30b42bbb78b4777921747  rust-std-1.96.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
++sha256  595e4a980dccb7571441f330782cad6cd23d64f331ed453de57dd386665f5615  rust-std-1.96.0-riscv64gc-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-riscv64gc-unknown-linux-musl.tar.xz.sha256
++sha256  c65e85287b948cd5f3a2c8a18f51d44a9768829d9ee13d99e81953eee440f500  rust-std-1.96.0-riscv64gc-unknown-linux-musl.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-s390x-unknown-linux-gnu.tar.xz.sha256
++sha256  92e5a9dcd09892d399963ab0e8de121e0027f2213168f32e13014641c0bfb13b  rust-std-1.96.0-s390x-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-sparc64-unknown-linux-gnu.tar.xz.sha256
++sha256  687a80cee4631d02b820e7a652bd4e30661772a684fa0ce2f936cdd932f31d51  rust-std-1.96.0-sparc64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++sha256  c09c7c646248f14f473f5f7a029af15ee57c3a9f9bc93dfa72d9621938586b82  rust-std-1.96.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.96.0-x86_64-unknown-linux-musl.tar.xz.sha256
++sha256  4db24564076c243b377585bec0b938388638301ea5003d6245c4cbf9d86b11d0  rust-std-1.96.0-x86_64-unknown-linux-musl.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index f72250bef0..8549d293d6 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_BIN_VERSION = 1.95.0
++RUST_BIN_VERSION = 1.96.0
+ RUST_BIN_SITE = https://static.rust-lang.org/dist
+ RUST_BIN_LICENSE = Apache-2.0 or MIT
+ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index 039ce7071d..fc505b9337 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
 @@ -1,8 +1,8 @@
- # Locally computed
--sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asterisk-22.8.2.tar.gz
-+sha256  dd664a9600874d0b0c0e63a8fda2e08efc9f5fdc95781022fbf39ed9b15196f6  asterisk-22.9.0.tar.gz
+ # Generated with utils/update-rust
+ # Do not edit manually
  
- # Locally computed
--sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
-+sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
- sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+-# From https://static.rust-lang.org/dist/rustc-1.95.0-src.tar.xz.sha256
+-sha256  62b67230754da642a264ca0cb9fc08820c54e2ed7b3baba0289876d4cdb48c08  rustc-1.95.0-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.96.0-src.tar.xz.sha256
++sha256  b99ce16cdf0ecfc761b585ac84d131b46733465a02f8ecd0ff2de9713c62ee09  rustc-1.96.0-src.tar.xz
+ # Locally generated
+ sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
+ sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5da61ffc19..c9129c2680 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -6,7 +6,7 @@
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index e2fdb189fa..b15a83f6f8 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 22.8.2
-+ASTERISK_VERSION = 22.9.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-@@ -12,13 +12,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
- # compilation with the external pjsip produces a non-working asterisk, which
- # segfaults. The reason behind this is unclear.
- # https://github.com/asterisk/asterisk/issues/671
--ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
-+ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
- ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
- ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
- ASTERISK_EXTRA_DOWNLOADS = \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
--	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
-+	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
- 	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
- 
- ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ # When updating this version, check whether support/download/cargo-post-process
+ # still generates the same archives.
+-RUST_VERSION = 1.95.0
++RUST_VERSION = 1.96.0
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
 -- 
 2.47.3
 
