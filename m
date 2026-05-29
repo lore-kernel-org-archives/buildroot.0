@@ -1,93 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E6EFCD6E43
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 11:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D39B3CD6E4A
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 12:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 144D26146A;
-	Fri, 29 May 2026 11:12:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C3A480CF8;
+	Fri, 29 May 2026 12:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sn3CSyy6i7Wo; Fri, 29 May 2026 11:12:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id srYyVnMyOUf6; Fri, 29 May 2026 12:07:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 407E161476
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 860BE8297F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780053137;
-	bh=XG4L5G0plSBzz8pLFg0Htc3yuDq6pViJrBYKebIyMto=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qjVcVAfEJ/PxVyLCgQhqb6lynsnrkl0Me49JpADylLnGzBRAs+qfwfUVhHLMB1If5
-	 vq+1iv0lAXBFw5tsD6FSxFt3orV2Bbu35jqYHRKnxE+5KRZPavvav7748Dfln71Q4d
-	 Ixx31jc73AMZkxtzODvCDsNY9lokliXHxwqeYU0DtEKXKFYdnTbmeQj2o8Qv1C5IgQ
-	 OKpD85SKr7wEItrTa1ciXO9ifuEoVw2q9pP/MjKJxCe+H+bLIzm2I+cf3HDFfst7kk
-	 T1P4aait7P5MNGVhPj3ag/M8HLwd52YCWvGiyZ9YHXbhZcj96HtY7ako3dQNb9CKYS
-	 0cjxi7Q21uwkQ==
+	s=default; t=1780056423;
+	bh=4tVZyzlbE2mLzcHpmBik+8xMCOHoroJGZG8iWY7m3mE=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=FOdXfhig35oe+vDpvM5KW5UG37PWXe1d2bRFYsFWTnw7jNE1QgyZuJb3ENZvaUzPR
+	 iFBouOCqT2Bp9LbwVRxY0o3w/bN7hAE2Lbq2396A79q+b3TrFY645BEUzplBHILf2a
+	 kTNicKBAjT65ETsNNakank7G0FNVSrUoCoKNaUkhiz1/Q78bu4PvlNR8X97lM98Q1N
+	 18gnJmfrZWKqRYp8F5OWUZ9BnFJuYiTUEFxOfc/qwAfO02pmcXk7pL3EQLUt/KX41W
+	 EI09qoGwoyKm3XBej/LlsIHf1i+Xm7kPHXBI2fqSLWcXNJ17PWwkxafF+JRGINInKT
+	 uVoeDBuMdO1dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 407E161476;
-	Fri, 29 May 2026 11:12:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 860BE8297F;
+	Fri, 29 May 2026 12:07:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 498C3F4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 11:12:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D2DDF4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 12:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38ECC40719
- for <buildroot@buildroot.org>; Fri, 29 May 2026 11:12:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E6924073C
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 12:07:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IKusUueIeAa0 for <buildroot@buildroot.org>;
- Fri, 29 May 2026 11:12:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5BE3740361
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BE3740361
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5BE3740361
- for <buildroot@buildroot.org>; Fri, 29 May 2026 11:12:15 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id CB92B4E42D88;
- Fri, 29 May 2026 11:12:12 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 998E1601FA;
- Fri, 29 May 2026 11:12:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0EA521088805F; 
- Fri, 29 May 2026 13:12:10 +0200 (CEST)
-Date: Fri, 29 May 2026 13:12:10 +0200
-To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- Ismael Luceno <ismael@iodev.co.uk>, Romain Naour <romain.naour@gmail.com>
-Message-ID: <ahl0QDec-S1DSz4Y@windsurf>
-References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
- <20260424132326.825570-6-jeanmichel.hautbois@yoseli.org>
+ id DjNDsmc2t-RB for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 12:07:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1898C40399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1898C40399
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1898C40399
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 12:07:00 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a09fc.dip0.t-ipconnect.de [91.58.9.252])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A0F6CA4C0357;
+ Fri, 29 May 2026 14:06:57 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51646)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wSvzM-0000000015f-2Kqs;
+ Fri, 29 May 2026 12:06:57 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 May 2026 14:06:56 +0200
+Message-ID: <20260529120656.1259760-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260424132326.825570-6-jeanmichel.hautbois@yoseli.org>
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780053132; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=t6H1tP7RvNu5fCMYznDZFoqo0g6MihxQFWRwWErPt4g=;
- b=L4oN4ZFtaREfgyUUY8drotjOSXC64fH/3uPrxvBXrA4Py9JlMgW5l/Vxmd5y14ZNPyd0+0
- zLrEzK3+4QXcOfbF8ctxx/aTwfUws31j1E1chlGWvIHaC76bwZgSEZqG/V4A2HbN4G/LVy
- 7s9iG/+16cs2VqRuLixwSKgDciJWs8wurZt+vWmGKAL/cVluFH+XU0qu1N4n4yVGe05ZCl
- PchvhmU9WtoQISNOwB7jZAtu8z2qZbXtJpwt5cGpPg6huvDuMdeGjhg3xc6caFdNLAOW47
- q3Y37jCyqNBxd31pJ/e8DO1wm6BNyCvzrMW2VRec24wnnLkQmZrEP1vE1ltvFg==
+ d=kuhls.net; 
+ s=kas202605290044; t=1780056417;
+ bh=2cUcYL6wh8zdeQVdxKHw345ZEnPmr/bxySY0l42kIvU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=fnk/R45s8sSdTTAX7AmHyigAwYaDz1/MViOT6Qv4ZQeYwdWcjqZfpWXGesLawHGsE
+ CZ9AufpDowADRXTbshAJA4NXIC3xYxcyLvM7jRXcwJfQmHONryT/jm9eaqa4V4q0T3
+ PjB9KRjYEaj2Jm+CDlyH86WBYz4yd62GoZZCenJYiAv7g9yG/Eow9WLsl0SoGNxXPS
+ uTnC93seePnXCaUIfmf708rPPTCWXgndo+Oa+HcvCIN9qzgccWH84+79KJHTwz9VwS
+ 4wP4I9XDVum1iOiqGGA7I+IU442aYZICa65izW3ROkJQiU1r5J/RpXW0NvIyJW55EV
+ izudk8KU+AV4g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=L4oN4ZFt
-Subject: Re: [Buildroot] [PATCH 05/11] package/gdb: use static libgcc on
- m68k ColdFire
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=fnk/R45s
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: remove zeek
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,36 +92,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Buildroot commit 948f819d955cce4917c12a4d65ccc55c29f5e501 removed the
+zeek package but forgot to remove its package/Config.in entry.
 
-On Fri, Apr 24, 2026 at 03:23:20PM +0200, Jean-Michel Hautbois wrote:
-> On m68k ColdFire, libgcc.a exports __sync_* atomic built-in functions
-> as hidden symbols. GDB links against libstdc++ which references these
-> symbols, causing linker errors when building as a dynamically linked
-> executable.
-> 
-> Use -static-libstdc++ and -static-libgcc to avoid the hidden symbol
-> issue.
+Fixes error:
 
-A bit the same comment as on the previous patch. Is this an inherent
-limitation? A bug?
+  package/Config.in:2675: can't open file "package/zeek/Config.in"
 
-Is this affecting all Coldfire processors? Only the brand new one?
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f32fcd8723..b2305ca019 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2672,7 +2672,6 @@ endif
+ 	source "package/xl2tp/Config.in"
+ 	source "package/xtables-addons/Config.in"
+ 	source "package/zabbix/Config.in"
+-	source "package/zeek/Config.in"
+ 	source "package/znc/Config.in"
+ 
+ endmenu
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
