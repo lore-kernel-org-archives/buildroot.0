@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C30CD6E45
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F26B8CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18817420F5;
-	Fri, 29 May 2026 08:28:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C983860DDB;
+	Fri, 29 May 2026 08:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ULRap-MJYx3U; Fri, 29 May 2026 08:28:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qvg5xdcjLLyl; Fri, 29 May 2026 08:28:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBECB420B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F032661475
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043287;
-	bh=ocNqNo4CidTbuqKUs7jZsHGGHTWhMN0QS2UZxN0pPBI=;
+	s=default; t=1780043290;
+	bh=RI6ES4GZfaKjCiZnoe2Mpk/HBwAM7+22DYrmuPFl72A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=N8UrjNSpKyO2UTuhyO0d2GuCwbCO/gOr4zTscGNCGOlehohwa5/WcdlQ71PmlVvR5
-	 5eDTeBpEMObr07xCPE+Cdym9eTZB68+R+4s4asgbM3aXW0leWEqGjM3bzYudMQdcaS
-	 BlbGCuwoNOUi0AcL7KIBT00QY3o8bQaYBmOqxIsiZdVeoLbv1sZnA6wHmStdB9Tc8O
-	 JLjjh1UTZV1sd6PAiOr6VW+1SJfcimcit/8rB3gM6oTMQjjDYuDgWeMmIYRbf+Pm8b
-	 r7EyMImyuCvbb2/exolltZJ8OqUdhqs9Iz3sBcOvD4cGkw/8AWbyqnVryk5unbdsLD
-	 7VtbduDgWJIeg==
+	b=O+2pLban8IyNkAgQDYnddX1dYnnu5ulB2eAHb2/VJX2dGJFB8b+R8YI8hiGd+sds8
+	 tn5JDZ2UHh1+xuagANs9xzx1fA1KSPiRB7Gs7EovG7BMkrnFoBpRcmNY9Pq2SrQAB/
+	 qWzBfFYWZENOxvhUsLs5s1xm26Yaxxkid7Pehr4BX50d4BSAk0+ClFfL8vycPSS3rC
+	 NrQNIo+VQ0Ccci61zTDQx04IPUIc+s00ZgZdFUE0SXJkjYbBMm+wcCeAm6vjY0kkg3
+	 O/vZM8QPwf5yKkUamWqBczAgcIS9mpWQUc9mP+piXaAYqpFmHWKUecIOWxzxQiFYml
+	 bzp6sKjY/xu5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBECB420B1;
-	Fri, 29 May 2026 08:28:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F032661475;
+	Fri, 29 May 2026 08:28:09 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10FF12E9
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 136C4288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 530F7420A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4EE9420A7
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59Bm4D6p8jKy for <buildroot@buildroot.org>;
+ id tovy3NhPdh5G for <buildroot@buildroot.org>;
  Fri, 29 May 2026 08:28:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 255BC41FD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3929B420A2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 255BC41FD6
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:27:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3929B420A2
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 588F1873A5; Fri, 29 May 2026 08:27:47 +0000 (UTC)
+ id CBA29873A7; Fri, 29 May 2026 08:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:25:36 +0200
+Date: Fri, 29 May 2026 10:25:53 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 71d1dddae12e7cbf322d96864d7757f459801f47
-X-Git-Newrev: 81ce186262ce7e20bef3c5186c9ae484ed0fe80b
+X-Git-Oldrev: b09763e6d96de908c353ea2439bbcb3c9cd1a700
+X-Git-Newrev: efee1ec45347e3e08869ff330b2045488ecaaf2d
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082747.588F1873A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/dropbear:
- security bump to version 2026.90
+Message-Id: <20260529082747.CBA29873A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/dos2unix: update
+ upstream URLs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,479 +77,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/81ce186262ce7e20bef3c5186c9ae484ed0fe80b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/efee1ec45347e3e08869ff330b2045488ecaaf2d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2026.90
-https://matt.ucc.asn.au/dropbear/CHANGES
+The old upstream page [1] is being deprecated. It currently shows:
+"""
+This page will go offline on 1 July 2026. Go to the new page at
+https://waterlander.net/dos2unix/
+"""
 
-Fixes CVE-2019-6111 & CVE-2026-35385.
+This commit updates the homepage, download site and hash file URL
+to the new upstream location [2].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] http://waterlan.home.xs4all.nl/dos2unix.html
+[2] https://waterlander.net/dos2unix/
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+[Julien: add info in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5b136c89ffed35c30dff1802924a4dcf9bdab798)
-[thomas: reverts commit 3db14ab765265ba6f821b8a843c3fe058f74f792]
+(cherry picked from commit 44f60e9f708ff01ee9b4631b252923cab11c79d5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dropbear/0001-CVE-2019-6111.patch  | 364 -----------------------------
- package/dropbear/0002-CVE-2026-35385.patch |  40 ----
- package/dropbear/dropbear.hash             |   2 +-
- package/dropbear/dropbear.mk               |   8 +-
- 4 files changed, 2 insertions(+), 412 deletions(-)
+ package/dos2unix/Config.in     | 2 +-
+ package/dos2unix/dos2unix.hash | 2 +-
+ package/dos2unix/dos2unix.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dropbear/0001-CVE-2019-6111.patch b/package/dropbear/0001-CVE-2019-6111.patch
-deleted file mode 100644
-index 6ec149444a..0000000000
---- a/package/dropbear/0001-CVE-2019-6111.patch
-+++ /dev/null
-@@ -1,364 +0,0 @@
--From 143291baca6ebb3407a0c25c85bd53bf041a6ab7 Mon Sep 17 00:00:00 2001
--From: Matt Johnston <matt@ucc.asn.au>
--Date: Mon, 20 Apr 2026 20:57:11 +0800
--Subject: [PATCH] scp: more CVE-2019-6111 fix
--
--Cherrypicked from OpenSSH portable
--
--commit 3d896c157c722bc47adca51a58dca859225b5874
--djm Sun Feb 10 11:15:52 2019 +0000
--
--upstream: when checking that filenames sent by the server side
--
--match what the client requested, be prepared to handle shell-style brace
--alternations, e.g. "{foo,bar}".
--
--"looks good to me" millert@ + in snaps for the last week courtesy
--deraadt@
--
--Upstream: https://github.com/mkj/dropbear/commit/143291baca6ebb3407a0c25c85bd53bf041a6ab7.patch
--CVE: CVE-2019-6111
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- src/scp.c | 281 +++++++++++++++++++++++++++++++++++++++++++++++++++---
-- 1 file changed, 269 insertions(+), 12 deletions(-)
--
--diff --git a/src/scp.c b/src/scp.c
--index bf98986c..d151587c 100644
----- a/src/scp.c
--+++ b/src/scp.c
--@@ -74,7 +74,6 @@
--  */
-- 
-- #include "includes.h"
---/*RCSID("$OpenBSD: scp.c,v 1.130 2006/01/31 10:35:43 djm Exp $");*/
-- 
-- #include <fnmatch.h>
-- 
--@@ -600,6 +599,253 @@ tolocal(int argc, char **argv)
-- 	}
-- }
-- 
--+/* Appends a string to an array; returns 0 on success, -1 on alloc failure */
--+static int
--+append(char *cp, char ***ap, size_t *np)
--+{
--+	char **tmp;
--+
--+	if ((tmp = reallocarray(*ap, *np + 1, sizeof(*tmp))) == NULL)
--+		return -1;
--+	tmp[(*np)] = cp;
--+	(*np)++;
--+	*ap = tmp;
--+	return 0;
--+}
--+
--+/*
--+ * Finds the start and end of the first brace pair in the pattern.
--+ * returns 0 on success or -1 for invalid patterns.
--+ */
--+static int
--+find_brace(const char *pattern, int *startp, int *endp)
--+{
--+	int i;
--+	int in_bracket, brace_level;
--+
--+	*startp = *endp = -1;
--+	in_bracket = brace_level = 0;
--+	for (i = 0; i < INT_MAX && *endp < 0 && pattern[i] != '\0'; i++) {
--+		switch (pattern[i]) {
--+		case '\\':
--+			/* skip next character */
--+			if (pattern[i + 1] != '\0')
--+				i++;
--+			break;
--+		case '[':
--+			in_bracket = 1;
--+			break;
--+		case ']':
--+			in_bracket = 0;
--+			break;
--+		case '{':
--+			if (in_bracket)
--+				break;
--+			if (pattern[i + 1] == '}') {
--+				/* Protect a single {}, for find(1), like csh */
--+				i++; /* skip */
--+				break;
--+			}
--+			if (*startp == -1)
--+				*startp = i;
--+			brace_level++;
--+			break;
--+		case '}':
--+			if (in_bracket)
--+				break;
--+			if (*startp < 0) {
--+				/* Unbalanced brace */
--+				return -1;
--+			}
--+			if (--brace_level <= 0)
--+				*endp = i;
--+			break;
--+		}
--+	}
--+	/* unbalanced brackets/braces */
--+	if (*endp < 0 && (*startp >= 0 || in_bracket))
--+		return -1;
--+	return 0;
--+}
--+
--+/*
--+ * Assembles and records a successfully-expanded pattern, returns -1 on
--+ * alloc failure.
--+ */
--+static int
--+emit_expansion(const char *pattern, int brace_start, int brace_end,
--+    int sel_start, int sel_end, char ***patternsp, size_t *npatternsp)
--+{
--+	char *cp;
--+	int o = 0, tail_len = strlen(pattern + brace_end + 1);
--+
--+	if ((cp = malloc(brace_start + (sel_end - sel_start) +
--+	    tail_len + 1)) == NULL)
--+		return -1;
--+
--+	/* Pattern before initial brace */
--+	if (brace_start > 0) {
--+		memcpy(cp, pattern, brace_start);
--+		o = brace_start;
--+	}
--+	/* Current braced selection */
--+	if (sel_end - sel_start > 0) {
--+		memcpy(cp + o, pattern + sel_start,
--+		    sel_end - sel_start);
--+		o += sel_end - sel_start;
--+	}
--+	/* Remainder of pattern after closing brace */
--+	if (tail_len > 0) {
--+		memcpy(cp + o, pattern + brace_end + 1, tail_len);
--+		o += tail_len;
--+	}
--+	cp[o] = '\0';
--+	if (append(cp, patternsp, npatternsp) != 0) {
--+		free(cp);
--+		return -1;
--+	}
--+	return 0;
--+}
--+
--+/*
--+ * Expand the first encountered brace in pattern, appending the expanded
--+ * patterns it yielded to the *patternsp array.
--+ *
--+ * Returns 0 on success or -1 on allocation failure.
--+ *
--+ * Signals whether expansion was performed via *expanded and whether
--+ * pattern was invalid via *invalid.
--+ */
--+static int
--+brace_expand_one(const char *pattern, char ***patternsp, size_t *npatternsp,
--+    int *expanded, int *invalid)
--+{
--+	int i;
--+	int in_bracket, brace_start, brace_end, brace_level;
--+	int sel_start, sel_end;
--+
--+	*invalid = *expanded = 0;
--+
--+	if (find_brace(pattern, &brace_start, &brace_end) != 0) {
--+		*invalid = 1;
--+		return 0;
--+	} else if (brace_start == -1)
--+		return 0;
--+
--+	in_bracket = brace_level = 0;
--+	for (i = sel_start = brace_start + 1; i < brace_end; i++) {
--+		switch (pattern[i]) {
--+		case '{':
--+			if (in_bracket)
--+				break;
--+			brace_level++;
--+			break;
--+		case '}':
--+			if (in_bracket)
--+				break;
--+			brace_level--;
--+			break;
--+		case '[':
--+			in_bracket = 1;
--+			break;
--+		case ']':
--+			in_bracket = 0;
--+			break;
--+		case '\\':
--+			if (i < brace_end - 1)
--+				i++; /* skip */
--+			break;
--+		}
--+		if (pattern[i] == ',' || i == brace_end - 1) {
--+			if (in_bracket || brace_level > 0)
--+				continue;
--+			/* End of a selection, emit an expanded pattern */
--+
--+			/* Adjust end index for last selection */
--+			sel_end = (i == brace_end - 1) ? brace_end : i;
--+			if (emit_expansion(pattern, brace_start, brace_end,
--+			    sel_start, sel_end, patternsp, npatternsp) != 0)
--+				return -1;
--+			/* move on to the next selection */
--+			sel_start = i + 1;
--+			continue;
--+		}
--+	}
--+	if (in_bracket || brace_level > 0) {
--+		*invalid = 1;
--+		return 0;
--+	}
--+	/* success */
--+	*expanded = 1;
--+	return 0;
--+}
--+
--+/* Expand braces from pattern. Returns 0 on success, -1 on failure */
--+static int
--+brace_expand(const char *pattern, char ***patternsp, size_t *npatternsp)
--+{
--+	char *cp, *cp2, **active = NULL, **done = NULL;
--+	size_t i, nactive = 0, ndone = 0;
--+	int ret = -1, invalid = 0, expanded = 0;
--+
--+	*patternsp = NULL;
--+	*npatternsp = 0;
--+
--+	/* Start the worklist with the original pattern */
--+	if ((cp = strdup(pattern)) == NULL)
--+		return -1;
--+	if (append(cp, &active, &nactive) != 0) {
--+		free(cp);
--+		return -1;
--+	}
--+	while (nactive > 0) {
--+		cp = active[nactive - 1];
--+		nactive--;
--+		if (brace_expand_one(cp, &active, &nactive,
--+		    &expanded, &invalid) == -1) {
--+			free(cp);
--+			goto fail;
--+		}
--+		if (invalid)
--+			fatal("%s: invalid brace pattern \"%s\"", __func__, cp);
--+		if (expanded) {
--+			/*
--+			 * Current entry expanded to new entries on the
--+			 * active list; discard the progenitor pattern.
--+			 */
--+			free(cp);
--+			continue;
--+		}
--+		/*
--+		 * Pattern did not expand; append the finename component to
--+		 * the completed list
--+		 */
--+		if ((cp2 = strrchr(cp, '/')) != NULL)
--+			*cp2++ = '\0';
--+		else
--+			cp2 = cp;
--+		if (append(xstrdup(cp2), &done, &ndone) != 0) {
--+			free(cp);
--+			goto fail;
--+		}
--+		free(cp);
--+	}
--+	/* success */
--+	*patternsp = done;
--+	*npatternsp = ndone;
--+	done = NULL;
--+	ndone = 0;
--+	ret = 0;
--+ fail:
--+	for (i = 0; i < nactive; i++)
--+		free(active[i]);
--+	free(active);
--+	for (i = 0; i < ndone; i++)
--+		free(done[i]);
--+	free(done);
--+	return ret;
--+}
--+
-- void
-- source(int argc, char **argv)
-- {
--@@ -841,7 +1087,8 @@ sink(int argc, char **argv, const char *src)
-- 	off_t size, statbytes;
-- 	int setimes, targisdir, wrerrno = 0;
-- 	char ch, *cp, *np, *targ, *why, *vect[1], buf[2048];
---	char *src_copy = NULL, *restrict_pattern = NULL;
--+	char **patterns = NULL;
--+	size_t n, npatterns = 0;
-- 	struct timeval tv[2];
-- 
-- #define	atime	tv[0]
--@@ -868,16 +1115,13 @@ sink(int argc, char **argv, const char *src)
-- 		 * Prepare to try to restrict incoming filenames to match
-- 		 * the requested destination file glob.
-- 		 */
---		if ((src_copy = strdup(src)) == NULL)
---			fatal("strdup failed");
---		if ((restrict_pattern = strrchr(src_copy, '/')) != NULL) {
---			*restrict_pattern++ = '\0';
---		}
--+		if (brace_expand(src, &patterns, &npatterns) != 0)
--+			fatal("%s: could not expand pattern", __func__);
-- 	}
-- 	for (first = 1;; first = 0) {
-- 		cp = buf;
-- 		if (atomicio(read, remin, cp, 1) != 1)
---			return;
--+			goto done;
-- 		if (*cp++ == '\n')
-- 			SCREWUP("unexpected <newline>");
-- 		do {
--@@ -900,7 +1144,7 @@ sink(int argc, char **argv, const char *src)
-- 		}
-- 		if (buf[0] == 'E') {
-- 			(void) atomicio(vwrite, remout, "", 1);
---			return;
--+			goto done;
-- 		}
-- 		if (ch == '\n')
-- 			*--cp = 0;
--@@ -956,9 +1200,14 @@ sink(int argc, char **argv, const char *src)
-- 			run_err("error: unexpected filename: %s", cp);
-- 			exit(1);
-- 		}
---		if (restrict_pattern != NULL &&
---		    fnmatch(restrict_pattern, cp, 0) != 0)
---			SCREWUP("filename does not match request");
--+		if (npatterns > 0) {
--+			for (n = 0; n < npatterns; n++) {
--+				if (fnmatch(patterns[n], cp, 0) == 0)
--+					break;
--+			}
--+			if (n >= npatterns)
--+				SCREWUP("filename does not match request");
--+		}
-- 		if (targisdir) {
-- 			static char *namebuf = NULL;
-- 			static size_t cursize = 0;
--@@ -1123,7 +1372,15 @@ bad:			run_err("%s: %s", np, strerror(errno));
-- 			break;
-- 		}
-- 	}
--+done:
--+	for (n = 0; n < npatterns; n++)
--+		free(patterns[n]);
--+	free(patterns);
--+	return;
-- screwup:
--+	for (n = 0; n < npatterns; n++)
--+		free(patterns[n]);
--+	free(patterns);
-- 	run_err("protocol error: %s", why);
-- 	exit(1);
-- }
-diff --git a/package/dropbear/0002-CVE-2026-35385.patch b/package/dropbear/0002-CVE-2026-35385.patch
-deleted file mode 100644
-index 59c9f4bb69..0000000000
---- a/package/dropbear/0002-CVE-2026-35385.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 443ccc1fd1b9a4e3747f6b5cd644b7af49064308 Mon Sep 17 00:00:00 2001
--From: Matt Johnston <matt@ucc.asn.au>
--Date: Sat, 2 May 2026 08:17:25 +0800
--Subject: [PATCH] scp: clear setuid/setgid bits on received files
--
--From openssh-portable 487e8ac146f7d6616f65c125d5edb210519b833a
--Tracked as CVE-2026-35385
--
--upstream: when downloading files as root in legacy (-O) mode and
--
--without the -p (preserve modes) flag set, clear setuid/setgid bits from
--downloaded files as one might expect.
--
--AFAIK this bug dates back to the original Berkeley rcp program.
--
--Reported by Christos Papakonstantinou of Cantina and Spearbit.
--
--Upstream: https://github.com/mkj/dropbear/commit/443ccc1fd1b9a4e3747f6b5cd644b7af49064308.patch
--CVE: CVE-2026-35385
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- src/scp.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/scp.c b/src/scp.c
--index 09297a5b..79b0a12d 100644
----- a/src/scp.c
--+++ b/src/scp.c
--@@ -1106,8 +1106,10 @@ sink(int argc, char **argv, const char *src)
-- 
-- 	setimes = targisdir = 0;
-- 	mask = umask(0);
---	if (!pflag)
--+	if (!pflag) {
--+		mask |= 07000;
-- 		(void) umask(mask);
--+	}
-- 	if (argc != 1) {
-- 		run_err("ambiguous target");
-- 		exit(1);
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index b3f532b1b7..81296375a1 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  0d1f7ca711cfc336dc8a85e672cab9cfd8223a02fe2da0a4a7aeb58c9e113634  dropbear-2025.89.tar.bz2
-+sha256  16be820347723271b0fea6049ffeed6d6680d7429c65406d8af37776393a0250  dropbear-2026.90.tar.bz2
+diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+index cfb5ba4b79..928605ae37 100644
+--- a/package/dos2unix/Config.in
++++ b/package/dos2unix/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_DOS2UNIX
+ 	help
+ 	  dos2unix converts text file line endings between CRLF and LF
  
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 36acd7a4e4..beb635e15e 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
+-	  http://waterlan.home.xs4all.nl/dos2unix.html
++	  https://waterlander.net/dos2unix/
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index 3e9bf7882e..7fae29fea7 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
++# https://waterlander.net/dos2unix/files/dos2unix-7.5.3.tar.gz.asc
+ sha256  28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2  dos2unix-7.5.3.tar.gz
+ sha256  bff21c3509fe7348c8327745b2f80d8847b04868073c6d0861bf8c773db66515  COPYING.txt
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 4c57a4de5f..a9829e4889 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DROPBEAR_VERSION = 2025.89
-+DROPBEAR_VERSION = 2026.90
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-@@ -14,12 +14,6 @@ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
- DROPBEAR_CPE_ID_VENDOR = dropbear_ssh_project
- DROPBEAR_CPE_ID_PRODUCT = dropbear_ssh
- 
--# 0001-CVE-2019-6111.patch
--DROPBEAR_IGNORE_CVES += CVE-2019-6111
--
--# 0002-CVE-2026-35385.patch
--DROPBEAR_IGNORE_CVES += CVE-2026-35385
--
- # Disable hardening flags added by dropbear configure.ac, and let
- # Buildroot add them when the relevant options are enabled. This
- # prevents dropbear from using SSP support when not available.
+ DOS2UNIX_VERSION = 7.5.3
+-DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
++DOS2UNIX_SITE = https://waterlander.net/dos2unix/files
+ DOS2UNIX_LICENSE = BSD-2-Clause
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
+ DOS2UNIX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
