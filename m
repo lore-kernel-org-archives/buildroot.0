@@ -4,60 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1318CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 17:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 895B1CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 17:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AB5184475;
-	Fri, 29 May 2026 17:52:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 587B480E30;
+	Fri, 29 May 2026 17:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4CEXHchFvZmY; Fri, 29 May 2026 17:52:28 +0000 (UTC)
+ id 6jc2Q45NZ82X; Fri, 29 May 2026 17:54:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7660B84452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C64F80DA9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780077148;
-	bh=uiDj6DsthhrQj9mL3cu1bzSEl3FSQnwWE1fly6LzYT8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=h3HAVaDJ4EsZEmpiNl5VeZEeV3y+phvwrmzgHk4xYgEw/BH8X3XihLlT/5AL1VmSQ
-	 yUbyldHzSBqndbBTM6q7tglj8Yxtxg1PoGQKXw8yT5WrHvzyYs3dN5Gege5BOmWftY
-	 6W5l3aPZzjzVse13CiceYBm33bD1iwFU/XMiqv7o6qsNtY6S27C3QbDQPQtSANI2N3
-	 CzOvIIatklH/xI3i+YuQoxh6YvXmgBHapdOMMfe5+A0twDHZwFLFzc3qwicud5xdFO
-	 zTc8PNcvtkOu4+KG/9LREL7HQwIZY1KIAWmw01gDGWP39YFxF2/zO1NvcKZp3yE6DB
-	 FM+shuv56Jokw==
+	s=default; t=1780077283;
+	bh=jW5AETxqZL+WqxjpwVApYfGttn5qcoPr6UPjTUBq+sI=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=PvxCBxjcIrt75HFEF6soY40cBfzFlsN7IxixeVNYfZimf8h/00NhOsHKZTNFYuj8E
+	 gc8TUNnrlSF8md57I4sdYvkIwROasc5/ZMrUR1nhOPLKSsgXXYgfkKRQk+91JGQ9eP
+	 CHiYuu2tzYSwVmEHFmuye5BS699bs3I5pAJNWy8gZVwRhc8mEXCamfyKqkmMPRxGw1
+	 h5Y36Yeqr7VVrsaAxsYv9FNM45lYcK0dVUZfRbGzDAeMuVnFatjbacZcCbsdwkG0n4
+	 D6AqZwdVexSyajHzhyEoo6L1Ogj53xs3BiUjrc8nOSL3tkZOt1FbhStm8ScgH+mUt+
+	 VnkuBQl5KSnOA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7660B84452;
-	Fri, 29 May 2026 17:52:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C64F80DA9;
+	Fri, 29 May 2026 17:54:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EF853F4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:52:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AA702D3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF89441FD3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:52:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98B6341FD3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U_iUqETW5c7O for <buildroot@buildroot.org>;
- Fri, 29 May 2026 17:52:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF16E40431
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF16E40431
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:52:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DE5287400; Fri, 29 May 2026 17:52:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 19:49:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4234bc46d0d955691cab27e925706c42c10ac590
-X-Git-Newrev: 526b89cfd883073c048e32cabe4597e2c83084bd
-X-Patchwork-Hint: ignore
-Message-Id: <20260529175213.4DE5287400@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/efl: re-add patches to fix
- drm-related build errors
+ id TbBDsZmLLIHn for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 17:54:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4BD7440431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BD7440431
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BD7440431
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:54:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 13893B97C6DE; Fri, 29 May 2026 19:54:38 +0200 (CEST)
+Message-ID: <77a20abe-a404-442f-92f7-3839904a3a63@rnout.be>
+Date: Fri, 29 May 2026 19:54:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260524153436.919328-1-bernd@kuhls.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260524153436.919328-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1780077278; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=mJjsbU1/IRtolXxcRRVc3tp4bPKv8ghdTIRc36XmK+4=;
+ b=G+w8RZNP+DbOjUzOXCAvM5216vn32LSPHcjfxBBVY/haUK1WWG3WsDyRI9UbKiKerRuUew
+ S5LHQ7C1VXSV8evaUKC3JeiEL6k/B9EdTFH7FKzTlX5+vSbEgIctgpkLXKiodMAZ9mzeSh
+ 29BL7jIJD9Q+Aph0oPUKHabKxGcs/n7bWcBxD5YoAJ84lsmuF/inT+qldpTtXQaD1sl5b6
+ 83iob2YCMTpxbgBfQclC3vt9G8pYTRnZf+g6yWQby9SWkYqMKeOdEQ377wVrvfSYGmDqiH
+ NFYp8PSAqL6CUwWGN1xx1lQH/K71H0UBTcJaj7zST5DVAZAT8JrkcQF0Z1zZNQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=G+w8RZNP
+Subject: Re: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ disable qsv support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,139 +90,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/526b89cfd883073c048e32cabe4597e2c83084bd
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit c7a1b73f1758855e47c188c38617dd309b2c2428 removed
-patches 0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
-and 0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch.
 
-This defconfig
+On 24/05/2026 17:34, Bernd Kuhls wrote:
+> https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/64ed6075b782578d57edd09b3463071d6e5a4342
+> added support for the Intel Quick Sync Video Encoder with version 1.22.0
+> that was added to buildroot with commit
+> 895840edd2784492d9b7066330b43842b703343b.
+> 
+> On unsupported platform the build is broken:
+> 
+> In file included from ../sys/qsv/libmfx/api/vpl/mfxdispatcher.h:10,
+>                   from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.h:24,
+>                   from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.cpp:7:
+> ../sys/qsv/libmfx/api/vpl/mfxdefs.h:75:6: error: #error Unknown packing
+>     75 |     #error Unknown packing
+> 
+> caused by
+> https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/1.24.13/subprojects/gst-plugins-bad/sys/qsv/libmfx/api/vpl/mfxdefs.h?ref_type=tags#L75
+> 
+> For now we disable qsv support to fix build errors on
+> 
+> arc: https://autobuild.buildroot.net/results/2d5/2d5666324db2fca7ab0419e28481829edca949b3/
+> m68k: https://autobuild.buildroot.net/results/53b/53ba2e9d09c25fe85e96b6e1fc9adbfcf5a637b2/
+> microblazeel: https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
+> or1k: https://autobuild.buildroot.net/results/17e/17e3dac016a08da8db58d735d0f2d3acc259f81f/
+> sparc: https://autobuild.buildroot.net/results/f07/f07995804faa0be38bbba462c52be86c6c69822b/
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_EFL=y
-BR2_PACKAGE_EFL_DRM=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_LUAJIT=y
+  Applied to master, thanks.
 
-is broken now during configure stage
+  Regards,
+  Arnout
 
-output/build/efl-1.28.1/src/modules/ecore_evas/engines/drm/meson.build:6:18:
- ERROR: Unknown variable "engine_gl_drm".
+> ---
+>   package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index c6fb669e13..ac554749c9 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -39,6 +39,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+>   	-Davtp=disabled \
+>   	-Dopensles=disabled \
+>   	-Dmsdk=disabled \
+> +	-Dqsv=disabled \
+>   	-Dvoamrwbenc=disabled \
+>   	-Dbs2b=disabled \
+>   	-Dchromaprint=disabled \
 
-which is fixed by former patch 0001.
-
-Later a build error occurs which is fixed by former patch 0002.
-
-The error was not yet caught by the autobuilders.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- ...engines-drm-meson.build-use-gl_deps-as-en.patch | 37 +++++++++++++++++++++
- ...engines-drm-meson.build-fix-gl_drm-includ.patch | 38 ++++++++++++++++++++++
- 2 files changed, 75 insertions(+)
-
-diff --git a/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
-new file mode 100644
-index 0000000000..dd6ac1ae25
---- /dev/null
-+++ b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
-@@ -0,0 +1,37 @@
-+From 00833baac6935bd1e3e9856211bc165c5b02a7bd Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 1 Aug 2020 02:25:47 +0200
-+Subject: [PATCH] ecore_evas/engines/drm/meson.build: use "gl_deps" as engine
-+ dependencies
-+
-+Meson trigger an error since "engine_gl_drm" variable doesn't exist.
-+
-+src/modules/ecore_evas/engines/drm/meson.build:10:2: ERROR: Unknown variable "engine_gl_drm".
-+
-+Instead use "gl_deps" as engine dependencies.
-+
-+Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075016/
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Bernd: added Upstream: tag]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/modules/ecore_evas/engines/drm/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
-+index 58071010d0..0741d7fccd 100644
-+--- a/src/modules/ecore_evas/engines/drm/meson.build
-++++ b/src/modules/ecore_evas/engines/drm/meson.build
-+@@ -3,7 +3,7 @@ engine_deps = [ecore_drm2, ecore_input, eeze, elput, libdrm, engine_drm]
-+ 
-+ if get_option('opengl') != 'none'
-+   config_h.set('BUILD_ECORE_EVAS_GL_DRM', '1')
-+-  engine_deps += [engine_gl_drm]
-++  engine_deps += [gl_deps]
-+ endif
-+ 
-+ engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
-+-- 
-+2.31.1
-+
-diff --git a/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
-new file mode 100644
-index 0000000000..e71a1705c0
---- /dev/null
-+++ b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
-@@ -0,0 +1,38 @@
-+From a21e71cc2284a19a34c913aff757e656e3a8c14a Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 1 Aug 2020 01:01:00 +0200
-+Subject: [PATCH] ecore_evas/engines/drm/meson.build: fix "gl_drm" include
-+ directory
-+
-+The Evas_Engine_GL_Drm.h file is in "gl_drm" directory, not "drm".
-+
-+../src/modules/ecore_evas/engines/drm/ecore_evas_drm.c:23:11: fatal error: Evas_Engine_GL_Drm.h: No such file or directory
-+   23 | # include <Evas_Engine_GL_Drm.h>
-+      |           ^~~~~~~~~~~~~~~~~~~~~~
-+compilation terminated.
-+
-+Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075004/
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Bernd: added Upstream: tag]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/modules/ecore_evas/engines/drm/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
-+index 0741d7fccd..edda1abd71 100644
-+--- a/src/modules/ecore_evas/engines/drm/meson.build
-++++ b/src/modules/ecore_evas/engines/drm/meson.build
-+@@ -6,7 +6,7 @@ if get_option('opengl') != 'none'
-+   engine_deps += [gl_deps]
-+ endif
-+ 
-+-engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
-++engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'gl_drm'))
-+ 
-+ shared_module(mod_full_name, engine_src,
-+   include_directories : config_dir + [engine_include_dir],
-+-- 
-+2.31.1
-+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
