@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D95ECD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF321CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 307716160B;
-	Fri, 29 May 2026 18:10:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C21884521;
+	Fri, 29 May 2026 18:10:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XX1JlQ79D7aw; Fri, 29 May 2026 18:10:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZFtB7mKq09zl; Fri, 29 May 2026 18:10:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D86461617
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 217278451F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780078237;
-	bh=irww+6akkTEbMx5aynRdUrIE52at7IXSEe2g7e2LwgI=;
+	s=default; t=1780078236;
+	bh=gyK235rBms+HS1vF5JAhP84erOmE5np0drPWNCwyB+w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iVIn4Qd5YVhonF7KCLnnjXV0RN3Lv4JQgcre5eZjnStHJYnw1P7PmCkdGVTn4zJdH
-	 je9oZxDOQ/Tj5tCbyzI1gQ8B6fVaxh3v/szIwZ8vpkGWtfwALZV0ujB7wuH+LHMEAr
-	 9MeGDPAyUoRc5MMa8EgLF7aeF9MBkFer+QBv+BuG3hyh41Tht6W6kINGYPObe9UJPe
-	 pGz7xcOBGBp073IUaZyWCT5AMWzzWIQiSoCqE+sWbvZTHfOPRY86DE9hasVlWofMTW
-	 5QMwX+O+zsRkRy95J8v9t9G4RtNPf1GINcfwtCp4LFjWCtC5ld8TPeM/pI/W85erEM
-	 cVkCZNP97hqaA==
+	b=jn4X28ijOPHrJIGjjxrNOz0cKPrZM+z82sLCUrGNZWHAMkcOdQpdmmjQ5ESGvDrw1
+	 g7VKjXb/ipm1p4VoXyQDEassUjdxSX4ca6Kbiz/1NP5gk1NaZ/g9OHxYuyj3BSmmyk
+	 4K2h1UfHNZdQx39oSWDP4pZRP/tw8AVmssG+W/RflsC1fO0iXbhiat3Xu8ehpgTc+P
+	 LhudgUEJ/l11G9N2GdU6svFdlOUsv+mn9/8JCAjTwDPDG0YpmV+jXC5zvWcuRoqAPV
+	 VZNj1WMOjh7FFRv/1sKQSn8m74IOQ1BVbWL1D/DcNriZuZemdpw8ys+dyiseoxFjoJ
+	 guGOxX+yYuIqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D86461617;
-	Fri, 29 May 2026 18:10:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D132BD3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 217278451F;
+	Fri, 29 May 2026 18:10:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C13F1372
  for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEF55420E4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FD46844D5
  for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r-eAjjKHjZ6v for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vwS0KInp1L0t for <buildroot@buildroot.org>;
  Fri, 29 May 2026 18:10:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A8B34210D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F5E084511
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A8B34210D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F5E084511
  for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA6DB87412; Fri, 29 May 2026 18:10:18 +0000 (UTC)
+ id C33E287410; Fri, 29 May 2026 18:10:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 20:05:38 +0200
+Date: Fri, 29 May 2026 20:08:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8aff626d5c0d62ebc6cc0184c806109c494c320c
-X-Git-Newrev: f8ea3ae2a51f06310f414d89aa382bbf90a7ef82
+X-Git-Oldrev: f8ea3ae2a51f06310f414d89aa382bbf90a7ef82
+X-Git-Newrev: 17b434cf07f2696d9c3b5290c85b7dfb54eff134
 X-Patchwork-Hint: ignore
-Message-Id: <20260529181018.BA6DB87412@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/odhcp6c: needs gcc >= 10
+Message-Id: <20260529181018.C33E287410@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/odhcp6c: fix build with gcc >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,72 +71,148 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4832567460135206730=="
+Content-Type: multipart/mixed; boundary="===============0320668979021192559=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4832567460135206730==
+--===============0320668979021192559==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f8ea3ae2a51f06310f414d89aa382bbf90a7ef82
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/17b434cf07f2696d9c3b5290c85b7dfb54eff134
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Fixes build errors seen with Gitlab pipeline and this defconfig:
-support/config-fragments/autobuild/bootlin-aarch64-glibc-old.config
+Detected by Gitlab pipeline when testing the other build fixes in this
+series. Autobuilders did not detect the problem due to the build error
+with glibc 2.43.
 
-https://gitlab.com/bkuhls/buildroot/-/jobs/14570080455
+https://gitlab.com/bkuhls/buildroot/-/jobs/14571737512
 
-aarch64-linux-gcc.br_real: error: unrecognized command line option
- ‘-Wimplicit-fallthrough=5’; did you mean ‘-Wno-fallthrough’?
-aarch64-linux-gcc.br_real: error: unrecognized command line option
- ‘-Wshadow=local’; did you mean ‘-Wshadow-ivar’?
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-powerpc-e500mc-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
+ error: comparison of integer expressions of different signedness:
+ ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
+ 1395 | if (ia_hdr->iaid != htonl(ifindex) && otype == DHCPV6_OPT_IA_NA)
 
-Removing all the unrecognized command line options from CMakeLists.txt
-showed more build errors during compile:
+https://gitlab.com/bkuhls/buildroot/-/jobs/14571737510
 
-output/build/odhcp6c-24485bb4b35ab84c17c2e87bd561d026d4c15c00/src/odhcp6c.h:47:46:
- error: expected ‘)’ before ‘__VA_OPT__’
- #define error(fmt, ...) __iflog(LOG_ERR, fmt __VA_OPT__(, ) __VA_ARGS__)
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-openrisc-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
+ error: comparison of integer expressions of different signedness:
+ ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
 
-Another pipeline with gcc 9 showed other errors:
-https://gitlab.com/bkuhls/buildroot/-/jobs/14570080479
+https://gitlab.com/bkuhls/buildroot/-/jobs/14571737505
 
-/builds/bkuhls/buildroot/br-test-pkg/br-arm-basic/build/odhcp6c-24485bb4b35ab84c17c2e87bd561d026d4c15c00/src/dhcpv6.c:1126:4:
- error: a label can only be part of a statement and a declaration is not a statement
- 1126 |    struct dhcpv6_auth *r = (void*)&odata[-DHCPV6_OPT_HDR_SIZE];
-
-so we raise the minimum gcc version to 10.
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-68040-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
+ error: comparison of integer expressions of different signedness:
+ ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/odhcp6c/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .../0002-dhcpv6-use-stable-IAID-for-IA_NA.patch    | 95 ++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
 
-diff --git a/package/odhcp6c/Config.in b/package/odhcp6c/Config.in
-index 83b38755c3..0acaff7fed 100644
---- a/package/odhcp6c/Config.in
-+++ b/package/odhcp6c/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_ODHCP6C
- 	bool "odhcp6c"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # libubox
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
- 	select BR2_PACKAGE_LIBUBOX
- 	help
-@@ -10,7 +11,7 @@ config BR2_PACKAGE_ODHCP6C
- 
- 	  https://git.openwrt.org/project/odhcp6c.git
- 
--comment "odhcp6c needs a toolchain w/ dynamic library"
-+comment "odhcp6c needs a toolchain w/ dynamic library, gcc >= 10"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch b/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch
+new file mode 100644
+index 0000000000..fc70205ccc
+--- /dev/null
++++ b/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch
+@@ -0,0 +1,95 @@
++From 9a4d6fe802d21e4fc1b84f7d55b5c3c23e71d6ba Mon Sep 17 00:00:00 2001
++From: Paul Donald <newtwen+github@gmail.com>
++Date: Thu, 18 Dec 2025 15:10:24 +0100
++Subject: [PATCH] dhcpv6: use stable IAID for IA_NA
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++https://www.rfc-editor.org/rfc/rfc8415.html#section-12
++
++   ........  The IAID is chosen by the client.  For any given use of an
++   IA by the client, the IAID for that IA MUST be consistent across
++   restarts of the DHCP client.  The client may maintain consistency by
++   either storing the IAID in non-volatile storage or using an algorithm
++   that will consistently produce the same IAID as long as the
++   configuration of the client has not changed.
++
++Signed-off-by: Paul Donald <newtwen+github@gmail.com>
++Link: https://github.com/openwrt/odhcp6c/pull/140
++Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
++
++Upstream: https://github.com/openwrt/odhcp6c/commit/9a4d6fe802d21e4fc1b84f7d55b5c3c23e71d6ba
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/dhcpv6.c  | 15 +++++++++++++--
++ src/odhcp6c.h |  1 +
++ 2 files changed, 14 insertions(+), 2 deletions(-)
++
++diff --git a/src/dhcpv6.c b/src/dhcpv6.c
++index d8bb8be..97860b1 100644
++--- a/src/dhcpv6.c
+++++ b/src/dhcpv6.c
++@@ -262,6 +262,9 @@ static struct dhcpv6_stats dhcpv6_stats = {0};
++ // config
++ static struct config_dhcp* config_dhcp = NULL;
++ 
+++// store unique ifname hash to use as IA->IAID
+++static uint32_t ifname_hash_iaid = 0;
+++
++ static uint32_t ntohl_unaligned(const uint8_t *data)
++ {
++ 	uint32_t buf;
++@@ -542,6 +545,12 @@ void dhcpv6_reset_stats(void)
++ 	memset(&dhcpv6_stats, 0, sizeof(dhcpv6_stats));
++ }
++ 
+++uint32_t hash_ifname(const char *s) {
+++	uint32_t h = 0;
+++	while (*s) h = h * 31 + *s++;
+++	return h;
+++}
+++
++ int init_dhcpv6(const char *ifname)
++ {
++ 	config_dhcp = config_dhcp_get();
++@@ -566,6 +575,8 @@ int init_dhcpv6(const char *ifname)
++ 	if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0)
++ 		goto failure;
++ 
+++	ifname_hash_iaid = hash_ifname(ifname);
+++
++ 	ifindex = ifr.ifr_ifindex;
++ 
++ 	// Set the socket to non-blocking mode
++@@ -838,7 +849,7 @@ static void dhcpv6_send(enum dhcpv6_msg req_msg_type, uint8_t trid[3], uint32_t
++ 	struct dhcpv6_ia_hdr hdr_ia_na = {
++ 		.type = htons(DHCPV6_OPT_IA_NA),
++ 		.len = htons(sizeof(hdr_ia_na) - DHCPV6_OPT_HDR_SIZE),
++-		.iaid = htonl(ifindex),
+++		.iaid = htonl(ifname_hash_iaid),
++ 		.t1 = 0,
++ 		.t2 = 0,
++ 	};
++@@ -1392,7 +1403,7 @@ static int dhcpv6_handle_reply(enum dhcpv6_msg orig, _o_unused const int rc,
++ 						continue;
++ 
++ 					// Test ID
++-					if (ia_hdr->iaid != htonl(ifindex) && otype == DHCPV6_OPT_IA_NA)
+++					if (ia_hdr->iaid != htonl(ifname_hash_iaid) && otype == DHCPV6_OPT_IA_NA)
++ 						continue;
++ 
++ 					uint16_t code = DHCPV6_Success;
++diff --git a/src/odhcp6c.h b/src/odhcp6c.h
++index aa73bbc..c57f885 100644
++--- a/src/odhcp6c.h
+++++ b/src/odhcp6c.h
++@@ -540,6 +540,7 @@ struct odhcp6c_opt {
++ 	const char *str;
++ };
++ 
+++uint32_t hash_ifname(const char *s);
++ int init_dhcpv6(const char *ifname);
++ int dhcpv6_get_ia_mode(void);
++ int dhcpv6_promote_server_cand(void);
 
---===============4832567460135206730==
+--===============0320668979021192559==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -147,4 +223,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4832567460135206730==--
+--===============0320668979021192559==--
