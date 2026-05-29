@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A07CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 16:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9733ACD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 16:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 487C384263;
-	Fri, 29 May 2026 16:22:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 567CF80C13;
+	Fri, 29 May 2026 16:24:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YJBzbKIyiV8A; Fri, 29 May 2026 16:22:50 +0000 (UTC)
+ id e8cIQoqnBTDn; Fri, 29 May 2026 16:24:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B8D484276
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E28E80C1C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780071770;
-	bh=BOFnBrK8sgVIp8XNTCmMkpHQSCFnNo6yUDgr1yO8Ujk=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Fvyg2vjZV3shUuVHVr8dvcfs3dtbX10E6HLKyiX3lxQiqb3Dcrhea5dpRvyT0KyTF
-	 YWQRSjPskKM1K6NOeCWQgfdzJAcMRgvYrICVGPPnbfkFLVp9qjcBzPYoZAeHvZsQW+
-	 mqIhd/Hbd0FPA9Bi3fG5Xy8dDmJ35kFpsJjHIPF9s/4OHMphMUdZwuvvHUGdHMPNFZ
-	 7PYKmV0M6c7pTaH7tBjyPR9rkpWrLyjcspXzXUZRqqebbyETRbgxPGfBzblxJyG9XL
-	 ZkvS/yFJ8h4vYD+FPy7Gwis/wD8GNilOgmlQBQtjBHtj1HUba/nkioQgG8LYdeugeb
-	 3RG5KblWsOjQQ==
+	s=default; t=1780071870;
+	bh=HsW6bdyApL/J3CW5GR+Hxoy2tUU2yV1aFEXgfNwLq9U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Zh2B2SeAYEt1KNN1K/uPtVjXxEjJq3+YV/XIAqgHo5/cwufa0h1LxHpf1gSuTJO4l
+	 fC/VeRxoydoh3g3IH+upZAtq/igBoYiJmZRgL43Ru+EtoWtWqO1S01A7ts2qUqRq2m
+	 88sOBrC13mXW98ugMEi1LQ0qxKlTNR3MyKgufx/VCaPZo2LPoiVs+jcLShLaV4cJ30
+	 6dTmnUVcLlj2x6OKBvs7D5I34KRT6KEebvhp5/j44OG5PaOYtzVu7WoASbtH8p1otE
+	 BzgKgU1IktBo3VL9bKZRqo2Hw3w6XLaKErz3VT8sfGiOoul69Ac3vQOgMM0e5MhumA
+	 xUqAcqY/OUxUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B8D484276;
-	Fri, 29 May 2026 16:22:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F8FBF4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:22:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E28E80C1C;
+	Fri, 29 May 2026 16:24:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11991F4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:24:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 002B94221E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:22:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E3296151E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:24:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iF8BIroPzm1p for <buildroot@buildroot.org>;
- Fri, 29 May 2026 16:22:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LBwmdoNodoCH for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 16:24:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4BD42226
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 359256150F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E4BD42226
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:22:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 359256150F
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:24:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0E4E873F4; Fri, 29 May 2026 16:22:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 81504873F4; Fri, 29 May 2026 16:24:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 18:21:57 +0200
+Date: Fri, 29 May 2026 18:24:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dd151e7a1096260e128ec6ea7e7fcc4fbfd8e32c
-X-Git-Newrev: d5c28aa439b6b4774efaaf02ef53a58481006996
+X-Git-Oldrev: d5c28aa439b6b4774efaaf02ef53a58481006996
+X-Git-Newrev: 87b2b49d0016815d825115b12a9bac70e77dcd8a
 X-Patchwork-Hint: ignore
-Message-Id: <20260529162235.B0E4E873F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl-cgi: new package
+Message-Id: <20260529162416.81504873F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
+ to 3.124
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,143 +69,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d5c28aa439b6b4774efaaf02ef53a58481006996
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/87b2b49d0016815d825115b12a9bac70e77dcd8a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-See here for a description:
-https://metacpan.org/pod/CGI
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/4b5e60e1b567c823a2a9c3a218d7122868d3c4fb/doc/rst/releases/nss_3_124.rst
 
-Signed-off-by: Deividas Puplauskas <deividas.puplauskas@gmail.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/perl-cgi/Config.in                     | 12 ++++++++++
- package/perl-cgi/perl-cgi.hash                 |  6 +++++
- package/perl-cgi/perl-cgi.mk                   | 14 +++++++++++
- support/testing/tests/package/test_perl_cgi.py | 33 ++++++++++++++++++++++++++
- 6 files changed, 67 insertions(+)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fea3311076..28fe821a6a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3437,6 +3437,7 @@ F:	package/evilwm/
- F:	package/fbv/
- F:	package/libpam-pkcs11/
- F:	package/mksh/
-+F:	package/perl-cgi/
- F:	package/ruby/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
-diff --git a/package/Config.in b/package/Config.in
-index 1c0f6d8a29..c4f279efbb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -814,6 +814,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-apache-logformat-compiler/Config.in"
- 	source "package/perl-appconfig/Config.in"
- 	source "package/perl-astro-suntime/Config.in"
-+	source "package/perl-cgi/Config.in"
- 	source "package/perl-class-inspector/Config.in"
- 	source "package/perl-class-load/Config.in"
- 	source "package/perl-class-method-modifiers/Config.in"
-diff --git a/package/perl-cgi/Config.in b/package/perl-cgi/Config.in
-new file mode 100644
-index 0000000000..1c4292483c
---- /dev/null
-+++ b/package/perl-cgi/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PERL_CGI
-+	bool "perl-cgi"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_HTML_PARSER # runtime
-+	select BR2_PACKAGE_PERL_URI # runtime
-+	help
-+	  Handle Common Gateway Interface requests and responses.
-+
-+	  https://metacpan.org/module/CGI
-+
-+comment "perl-cgi needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-cgi/perl-cgi.hash b/package/perl-cgi/perl-cgi.hash
-new file mode 100644
-index 0000000000..fa4544493c
---- /dev/null
-+++ b/package/perl-cgi/perl-cgi.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5  ea0c7b5b002f100f23b11ac9487088a9  CGI-4.72.tar.gz
-+sha256  babc1ca72db188083a1c3812debe88c4473b943b1f7c662281cd57c580a8bdd9  CGI-4.72.tar.gz
-+
-+# computed by scancpan
-+sha256  55a4d9005df91f82cd19aab29c3ad64c1a2e2d69a069f76570ee679bedd6b351  LICENSE
-diff --git a/package/perl-cgi/perl-cgi.mk b/package/perl-cgi/perl-cgi.mk
-new file mode 100644
-index 0000000000..ca6968125c
---- /dev/null
-+++ b/package/perl-cgi/perl-cgi.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-cgi
-+#
-+################################################################################
-+
-+PERL_CGI_VERSION = 4.72
-+PERL_CGI_SOURCE = CGI-$(PERL_CGI_VERSION).tar.gz
-+PERL_CGI_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEEJO
-+PERL_CGI_LICENSE = Artistic-2.0
-+PERL_CGI_LICENSE_FILES = LICENSE
-+PERL_CGI_DISTNAME = CGI
-+
-+$(eval $(perl-package))
-diff --git a/support/testing/tests/package/test_perl_cgi.py b/support/testing/tests/package/test_perl_cgi.py
-new file mode 100644
-index 0000000000..a6657ba78d
---- /dev/null
-+++ b/support/testing/tests/package/test_perl_cgi.py
-@@ -0,0 +1,33 @@
-+from tests.package.test_perl import TestPerlBase
-+
-+
-+class TestPerlCGI(TestPerlBase):
-+    """
-+    package:
-+        CGI
-+    direct dependencies:
-+        HTML-Parser   XS
-+        URI
-+    indirect dependencies:
-+        Clone   XS
-+        Encode-Locale
-+        HTML-Tagset
-+        HTTP-Date
-+        HTTP-Message
-+        IO-HTML
-+        LWP-MediaTypes
-+        MIME-Base32
-+        TimeDate
-+    """
-+
-+    config = TestPerlBase.config + \
-+        """
-+        BR2_PACKAGE_PERL=y
-+        BR2_PACKAGE_PERL_CGI=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("Clone")
-+        self.module_test("HTML::Parser")
-+        self.module_test("CGI")
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 0f5ec9c8ee..4d08187fcb 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_123_1_RTM/src/SHA256SUMS
+-sha256  42065a3ff780a9710a3dddcd1cee9b9be2aa40628883cea851d562eb58b178b0  nss-3.123.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_124_RTM/src/SHA256SUMS
++sha256  80da9f1cbcb267293b2248818d288bc02f874d6a34f1989a2828401d74a0bc9b  nss-3.124.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 29b15d8a16..94bb129ac7 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.123.1
++LIBNSS_VERSION = 3.124
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
