@@ -1,103 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2016CD4F5B
-	for <buildroot@archiver.kernel.org>; Tue, 19 May 2026 23:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30C59CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C70E40F7A;
-	Tue, 19 May 2026 23:36:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TkHFEgM_Q-zg; Tue, 19 May 2026 23:36:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A8F140F76
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1779233783;
-	bh=+fFB7uH9WU8Tdz3KsoMLzFbnId74mcUdhHMFKdamDrg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iFfJVeMWimVYxZZ/OcvN1v9b+h5cuRX3v377eXB2KAFuKCXztCQeKIkPvJ8aS1lpe
-	 LFaGynuQgXlOGF300Oq2RE1sXOeJmCDDU5Hfb10Jv0p+vW4EaSpHFd9WYn+kfZgE3S
-	 EjO8ZlizkaHIN6dvDal3phBhcsc5u3iI/xM3d+ubWSvQRcd1m/iZR3kVqFSTjGQ2Ad
-	 olasLMP+uoOld8G+zf1s/LBjcbVOQ77+w61MgCgrJFGbRfVp1J4R78WF6e/3rQkhCf
-	 OwOhjpSotQOWHUWzartOaaoASWYaIqKwbUiBUzbO7PlTkvQqs/nVzJFSDeDsPoJW7W
-	 xd+z7Yw+gWIdw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A8F140F76;
-	Tue, 19 May 2026 23:36:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B6FD7265
- for <buildroot@buildroot.org>; Tue, 19 May 2026 23:36:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99A2160DC1
- for <buildroot@buildroot.org>; Tue, 19 May 2026 23:36:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88E2E61672;
+	Fri, 29 May 2026 18:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Rp2WbeS8a9u for <buildroot@buildroot.org>;
- Tue, 19 May 2026 23:36:20 +0000 (UTC)
-X-Greylist: delayed 7220 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 19 May 2026 23:36:19 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 33D2A60DC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D2A60DC0
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.107;
- helo=smtp-outgoing-1903.laposte.net; envelope-from=vincent.stehle@laposte.net;
+ id ctFBgXgt0PLX; Fri, 29 May 2026 18:48:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 582DD6134E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780080492;
+	bh=cstS3sShn2efZh/siyhM+tXkFNQdxxP1jTr/H6KeLlM=;
+	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From;
+	b=YHYIOOFbEKd2NUURNy5XaC1ZRqSUo3a9ZjAlLfjGSE9dJ7fV8YeUL74wvm3EhuFD6
+	 ai3FTg3MwoBJxVqmmV1quRyo4VyoDW7yIJTw89hZh5dvou8pyehIeIhMONzswzmGbU
+	 gE5FqkG3NN2S2pGQhRZpCZI7sLKIWZG2Nmc79NgeK1gRfm9DuLcuedIRljrRQz/IpP
+	 POI4aLMUGo116ApHbnDD3obBmElKdlgQ9YQasBsMr93JBwaC8U2YsQJ9Cmy20UhYwI
+	 SDPEW5boXsYOifv9I1Zvp+zvBGU/JbLrVk3a16Pcq43G2dOdB/M8Z8Z7iEFPWVMqff
+	 WsgWZXtRSxgrg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 582DD6134E;
+	Fri, 29 May 2026 18:48:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACEA7288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:48:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D24F404A2
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:48:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CkIjjPiY-pEr for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 18:48:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-Received: from smtp-outgoing-1903.laposte.net (smtp-outgoing-1903.laposte.net
- [160.92.124.107])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 33D2A60DC0
- for <buildroot@uclibc.org>; Tue, 19 May 2026 23:36:19 +0000 (UTC)
-X-mail-filterd: {"version":"1.9.5","queueID":"4gKnzH3FrSzFpTt","contextId":
- "43755fc7-bb05-49bb-87ac-b7877f9d5bd4"}
-Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
- by mlpnf0101.laposte.net (SMTP Server) with ESMTP id 4gKnzH3FrSzFpTt;
- Tue, 19 May 2026 23:35:55 +0200 (CEST)
-X-mail-filterd: {"version":"1.9.5","queueID":"4gKnzH14mFzFpTZ","contextId":
- "b518ce4d-432d-4bf3-bd2f-abed467e808c"}
-X-lpn-mailing: LEGIT
-X-lpn-spamrating: 36
-X-lpn-spamlevel: not-spam
-Received: from romuald.bergerie (88-160-203-96.subs.proxad.net [88.160.203.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mlpnf0101.laposte.net (SMTP Server) with ESMTPSA id 4gKnzH14mFzFpTZ;
- Tue, 19 May 2026 23:35:55 +0200 (CEST)
-Received: by romuald.bergerie (Postfix, from userid 1000)
- id E604E6FFE2F3; Tue, 19 May 2026 23:33:50 +0200 (CEST)
-Date: Tue, 19 May 2026 23:33:50 +0200
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@uclibc.org,
- Vincent Stehle <vincent.stehle@laposte.net>
-Message-ID: <agzXPmTQKc6zGniW@romuald.bergerie>
-Mail-Followup-To: Arnout Vandecappelle <arnout@rnout.be>,
- Bernd Kuhls <bernd@kuhls.net>, buildroot@uclibc.org,
- Vincent Stehle <vincent.stehle@laposte.net>
-References: <69fea782.050a0220.8af99.ac9e__38452.1139830881$1778296731$gmane$org@mx.google.com>
- <pan$51872$1013c278$a74b50e3$2f703bba@ID-313208.user.individual.net>
- <82c062f9-6151-4363-8344-f0fdba96f032@rnout.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <82c062f9-6151-4363-8344-f0fdba96f032@rnout.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=laposte.net; s=lpn-wlmd; t=1779233777;
- bh=C0eJbWP6g4LzkKM5D+PUgJBLyB0Sj41Q+7oRV/+Ny1U=;
- h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
- b=E61Tnm1F+7eNAoy7oenQbJdVkvINUjgGGizj/Nzy/a6K9M+ZmTj5P757UTGv5JKf5Un978t0YJd17diys9Lv4CNBUKS85m/9RNyscWqt9r3/j9VeyxfqO/Zqx2hsxSzcBAWzZGIl3FvHUoyP5qha4IcAEjx7E1ItyjxhyH9Wkans/G+QhWIHgfFvfTWmsfq6f9UjKaPifbbutwmMlMnpJsbGeOiFRkGPBfkZbWkb6Gp/Hl3CLO/DSdJYepRkSvXTQRjRaRII76Pr8w5kOjwRSafh6yKjVWo67SLFxPXq5I6rdVOp8ix2g0TMIrcfuBsxQD+p5ZRilNmORFvJr5+1rg==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=laposte.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=laposte.net header.i=@laposte.net header.a=rsa-sha256
- header.s=lpn-wlmd header.b=E61Tnm1F
-Subject: Re: [Buildroot] HPPA fails to build , was: Analysis of build errors,
- was: Re: [autobuild.buildroot.org] Daily results for 2026-05-08
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2EA940449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EA940449
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E2EA940449
+ for <buildroot@uclibc.org>; Fri, 29 May 2026 18:48:08 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wT2Fa-0006fs-Cg
+ for buildroot@uclibc.org; Fri, 29 May 2026 20:48:06 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Fri, 29 May 2026 20:47:43 +0200
+Message-ID: <pan$329ad$675a0f33$beb8094b$c7eec0f1@ID-313208.user.individual.net>
+References: <20260501183421.2459291-1-bernd@kuhls.net>
+ <ahnci7WYFV3NQ8rS__9339.37163078866$1780079876$gmane$org@windsurf>
+Mime-Version: 1.0
+User-Agent: Pan/0.162 (Pokrosvk)
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=kuhls.net
+Subject: Re: [Buildroot] [PATCH 1/5] package/stellarium: fix qt5serialport
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,36 +76,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@laposte.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, May 18, 2026 at 08:05:05PM +0200, Arnout Vandecappelle wrote:
->  Hi Vincent,
-> 
-> On 09/05/2026 09:00, Bernd Kuhls wrote:
-> > > glibc-2.43-22-g8362e8ce10b2... | 2
-> > fails only on hppa, no upstream fix in sight, what about reverting
-> > 1822f07e94951c5a37f78c1009d54fc95d01d39c?
-> 
->  Since glibc is the only libc for HP-PA, I think this means we'll have to
-> throw out HP-PA entirely. Or do you see a solution?
+Hi Thomas,
 
-Hi Arnout,
+Am Fri, 29 May 2026 20:37:29 +0200 schrieb Thomas Petazzoni via buildroot:
 
-This might end up being the only solution, but that would be sad.
-How about thinking it through during the Buildroot Hackathon in Nice next week?
+> So Qt is used when gps support is enabled *OR* when the telescope
+> control plugin is enabled, and this plugin is apparently enabled by
+> default.
 
-Best regards,
-Vincent.
+we disable the telescope plugin by default:
 
+https://gitlab.com/buildroot.org/buildroot/-/blob/
+727c2981cb59ebf6a3ee4e3ef03829cc8ae48536/package/stellarium/
+stellarium.mk#L25
+
+>> A backport to the LTS branches should be considered, the wrong order of
+>> dependencies in buildroot exists for years and is not caused by recent
+>> upstream changes.
 > 
->  Regards,
->  Arnout
-> 
+> I don't understand the "wrong order of dependencies". Is this fixing a
+> bug?
+
+Currently qt5serialport is added as dependency even if BR2_PACKAGE_GPSD
+is disabled, in this case Stellarium ignores qt5serialport.
+
+I re-ordered, or you can say merged, these dependencies in a way that 
+qt5serialport is only used when both packages, qt5serialport and gpsd, are 
+enabled at the same time.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
