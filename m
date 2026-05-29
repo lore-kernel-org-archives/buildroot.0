@@ -1,119 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CCA0CD6E49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96C2ECD6E45
 	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1474C42208;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C5C661514;
 	Fri, 29 May 2026 08:29:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lvQ1FgDpSzxX; Fri, 29 May 2026 08:29:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lKGclD-LA1CM; Fri, 29 May 2026 08:29:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D4094220C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B9EB6150D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043358;
-	bh=N9EoEq3salAuoFT97Z+In1/jiayTafe3PUhVXSUjwb0=;
+	s=default; t=1780043357;
+	bh=HgpEpCJaNduBGi0yUns/qMACH1GlOS0tAelzd2KXA1o=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=E53HyiPHUwbAUqIrKQqNTSzjEm+nhgFL96YvxGyLuHQBbtbthlsi3eyBzVBF52npo
-	 kXCNoRNYAOmEeNG7jZ9kzespevPPQR6Koem5IYLfun+ork+6xiKkf3Gk9LNWC4kOyX
-	 46AiuCs5gJ5JLeLH+Yi+/od2xNSqweHblbqooogWZ1EUWXGG2d/bSfgnInwb0Qx5FB
-	 7VDcrXJybHE6OjElCmzrbRQtSCK4FpOaVIp/gFsYx7OK+RN9uRabN3wlcuSPri/mOB
-	 TFEmgww5eS6CcWGSxCAzBYf9cC2vaakZYtiEER1AmFc25aRS89N7euHpkpnqWuYi0o
-	 P8l6QkT+PxkYg==
+	b=ioonx8MPZGgWaowh1T0Il6TB5BmrsG86x6ZO4wThtCsOp4Ya9XCNqzN5jvtLFnD56
+	 bYha/m/stcPeWG1lmiEJFfn97JXavvscU69ANevuc9dzTLkctvSiu8thoYyRNz0j7u
+	 qoKa5wveg1rCXrPWEHWmyz+SejtZZrZAYNYrFYdZZyKXT2WWaZTzjGxP1m4zLyzzVr
+	 /Lj5d0G16R4ols2FZTeerSrc1uM9ah3qVf+0t8b0oHzXuI98Z5KqSL5pIqXdQ73eZ7
+	 puDIgVXWV9ffEURk98gyj5rLqMUeveClfRRe3ePNFcf/q1EvDcTN2BwRZ7Vf1ogPV1
+	 VpMo4ks8L1f/A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D4094220C;
-	Fri, 29 May 2026 08:29:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0111128E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B9EB6150D;
+	Fri, 29 May 2026 08:29:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D787B28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD9C34070D
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B630A421FF
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l-eqNVI0ymkq for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IxMwR7hoIRON for <buildroot@buildroot.org>;
  Fri, 29 May 2026 08:29:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C46B4406F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C46B4406F3
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C46B4406F3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:11 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-45eedcdaeaaso897311f8f.3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7C4B5421F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C4B5421F7
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C4B5421F7
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:12 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-49042aeeb75so91063035e9.1
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043349; x=1780648149;
+ d=1e100.net; s=20251104; t=1780043350; x=1780648150;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=7KNQ6fq2shDUdE+AGKIXgP84/4mUdkXlAy8hyS2p+40=;
- b=KVHlWCyQnTSVMpk8WcKvtoGeQWXle77dLu1LfP9jMkPi3Lt6QraWQfODPabjmHl3wP
- haY1Eoq1r0Hkai+cAfljH7J+m6eQ4/c3MWEJ/B6ForvMbJLwFY6hPjscrkhAa0VNes/2
- fP+zMz1tl49w3Okze7bU9AyjwT0M9RkJHz2fueJiHLTnr72QagYqm49UXApxlmbXUaxg
- n4egHKTRAxciuN8E75f/USMePIlrU1fgQYIXqD0n42AsCP/ZJMpnCBQaW8SjQowyzM+O
- GutXYuFhGw70Oc5QDMAa2z9ryXoYkXejmlrpUAF9koxNTOmgFQgkwy2YRCwZ4gVhDo5c
- nn7w==
+ bh=Tx+LmyE3NAIhN9zJ0zNl2BfNbtUsPhZMuuj3gpHSq0U=;
+ b=n9whbOuM0V/wc3j1EbfQc3X54CGp/o/5w6Szal+OUHeoy78nDELl2PelFrqunHej+b
+ Gb7UcQ3BX2taiG/8gg5jPllJlntZrJgt6lhz340RKp7fp7WGIHYBLDBwViqP8TayJPvG
+ 1dEa47XDCTHcpKgbslOEpEAtR/csUEtpxdRzZnDqJwt7rM+eiWB2gcnT6Ue+xiF3yX5T
+ Ks1EkRurrzOcMIiqqIkJqnAc4oCpXlUHhAdV/AjnlB63nP/cMWJwi/NgDyj17kJiIEAs
+ pNMvMW9hNESLifvp4lKR8LMwjSjNk56qBpLk1VJmsTnErWm3RsvFvqCk121KOTKWBqXY
+ jwDg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/X+ohAfSRLw4mFRq6HDMOo1Pop2qZKNWZxNLzYAH2r6A/kPj3qFgc/4JC4mFdwJhynknPFTQSqBPc=@buildroot.org
-X-Gm-Message-State: AOJu0YygZWvkkxPrxucN8OOFUyE6t1gj4ziM2SE9owq+md0P7GOJSbrb
- QnXCJd6U1ZxqY3TQySq6CkZfS5JPCMljhLbabn8A4C9hS1IGUdwSiCjJKQm6e2W+6MKEYjb7xIE
- Gh63j
-X-Gm-Gg: Acq92OHjKQcadD5b+1/wdO/5z0jeznXq3+HKNWya9cH95FKQUJGmZFor7jmvXPdU+XX
- ITEkuLYnMTigyx3WvLNZsUjd5bQGieUF30inYuXMPJOsYgQMHtnuJiCYb2Ioa9Gx9+jTRWhsgLE
- FgD4j9NKbjxBlOseE5rMYq/kGoNjne8GvKJ3BarvHsInuCqBj1lOCj34jGMBWBXOYZ3TVW1sKMv
- mnzAXvOyjZnWYFmoiW9Sh0S5lg5vQmAld30JfdavunyWeulcUai4FHWvAJDVbb6YmiraR8pz/Vs
- QZ5+21ZcvIsZrLhM7C05wk5wUz6VjklSlew5I8EVkVibsS8sT8ueXD6OJ3yD8FD0+7Ssg44hDo5
- AZJMeRnqFLG0Vw3DWZPYnmzzQVzROiLkcvfpIa/paQ53RjcTqrtDLXkQtsdgXVjEEPZvkYBAEiQ
- FcSXngvUyX3oEkv8a01SG3M4I31cK/NWvDoRzTajFiijkmizdzT0KWw8gk8iY9Ky22jbEc
-X-Received: by 2002:a5d:5270:0:b0:45e:db3b:921d with SMTP id
- ffacd0b85a97d-45ef144ad78mr2438576f8f.31.1780043349499; 
- Fri, 29 May 2026 01:29:09 -0700 (PDT)
+ AFNElJ+N6azc0PhO17GrGyiF0V18UJYZaQIpALwk4ihVp/qWqXH4TTIZFT9hAgsihV+ORQ/Km0SPDNX88rU=@buildroot.org
+X-Gm-Message-State: AOJu0YyvEhJt3/4QmAenD3FfOWU8CpqtTmELAuVzxcfQudsMBh+ze33X
+ SOACIRUYATkZ4xVYZ/58hq6jATsutag3gZGiKPXHNTriKeb7/4NY1EVci7KfsASwqUU=
+X-Gm-Gg: Acq92OEddZ5mpu4VdriviIHl0qGL03dpzTT48r5XKmGNiQ/A67w2099v5JFAi1ub4PW
+ y0eozWasytC0Pcs8nWKZhvjMEeMAqufLLaJBOf5y53gpi2hqyUOeND9/0Kt7+rSqEx/1dU0RG7/
+ W+bAD2/XXl8i4Rlg4xGX1kYM+mGOkZcM7m02PrThiDyHtmN2P9232xu/lexz/gdURfC9rUENKeN
+ iviw/uhPsyp9PFuy/OWouZEbq8hpTAPZpJbD+lNCJ1IlpE3Tj7T+RkoRo75a+epu9FrU3iy1Deu
+ PgRJMnTJfYkEfYHk78qoqjUeOrL+t6RmUpKbPqsUcrcb+QETgROdMyFpQ6GsTDQV7l9t4km+hnS
+ 0p2Xqft2Ctx3/fpa6Z0WZ6XABc5LVih54ewALvaEYMD1Mx/1GuiIHnBmiiz+RcppAMcDblySdCN
+ o3JefFnHP53uFGA0duLzWF0jBRh+WozzdyanWTa0IOUskgzZT3DDMWkZmtmA==
+X-Received: by 2002:a05:600c:154f:b0:490:3c15:7146 with SMTP id
+ 5b1f17b1804b1-4909c0cfa25mr31378005e9.19.1780043350407; 
+ Fri, 29 May 2026 01:29:10 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef34a065esm1912118f8f.5.2026.05.29.01.29.09
+ 5b1f17b1804b1-4909d68980csm31883385e9.1.2026.05.29.01.29.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:29:09 -0700 (PDT)
+ Fri, 29 May 2026 01:29:10 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:29:08 +0200
-Message-ID: <20260529082908.56627-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:29:09 +0200
+Message-ID: <20260529082909.56734-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20251215201128.2334659-1-bernd@kuhls.net>
-References: <20251215201128.2334659-1-bernd@kuhls.net>
+In-Reply-To: <20260102141225.167269-1-bernd@kuhls.net>
+References: <20260102141225.167269-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043349; x=1780648149; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043350; x=1780648150; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7KNQ6fq2shDUdE+AGKIXgP84/4mUdkXlAy8hyS2p+40=;
- b=YnmcA31yxZ6pVoADhMAzzG9iYOa+NWvhJi+JSEq0Ycs9yLC3viaG8R2qVvxz11GvOP
- pDkqf7Mc78Xm8eW+O/6EK202THPp33n94lNaY6skZoFz6GCqqqBnMsLs2TGVae0PHc6Z
- mUooepv+c8y2cOm2HcovC2j6H4tM9X9vEjMdT36W2+h3xuuCJiMwmPhWpwWmAUV6Ae5F
- +oMaga7qxuD04p83bvD5VHMc6QjTwAI0w0bwFQ2wl64JgrS131TmpHhioGJseCEs/UOs
- MsfL1T4Qeq9xARtKnpJ5xcYjWk7+h4avVaI9e6YXvBX2eLaUztohlIdDSuguntB8m18P
- TNwQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Tx+LmyE3NAIhN9zJ0zNl2BfNbtUsPhZMuuj3gpHSq0U=;
+ b=ITwGM3X4yKsZtuX0DAxFm1Y3VMc+ZwhT47raW2NCp2VjkJeb2Web1Dau8MVQ181ox5
+ NDh0e8DirNgvkvtm3WlQ7rpXN+XG/6A/CgzZbWRrO4bP/GPgNX5jMuSuxssze4JHwtQ+
+ 6C3RLtRQTIqea5aOlyDOows9Cwu/Ihscoz2IVuaR2fvtIfhXi8BKN8mkrHL9BIbTbRta
+ xuKigBvhJOIenrLEDTgRR3V8EGhN0FsEZb3GSHUlLAatBzZ6fiKF2ob3gQLFupIKj5wo
+ Ex/er6btXlyY9IuuRkwYcRtSbtXOSZbfi4LgH3hNhaEB5hsbeJsXFDUiC78U9Zr2P3Ay
+ y6+g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YnmcA31y
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgpg-error: bump version to
- 1.58
+ header.a=rsa-sha256 header.s=google header.b=ITwGM3X4
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: security bump version
+ to 1.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,43 +132,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;h=c60ad85d84da2a1721e6bb8c4ae95e645be1b201;hb=e880193c55f0321bbefc16be3194fdbb7a48078f
+> https://github.com/strukturag/libheif/releases/tag/v1.21.0
+> https://github.com/strukturag/libheif/releases/tag/v1.21.1
+> 
+> Fixes CVE-2025-68431.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/libgpg-error/libgpg-error.hash | 4 ++--
->  package/libgpg-error/libgpg-error.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libheif/libheif.hash | 2 +-
+>  package/libheif/libheif.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-> index d02983d1ca..ede1a2113e 100644
-> --- a/package/libgpg-error/libgpg-error.hash
-> +++ b/package/libgpg-error/libgpg-error.hash
-> @@ -1,6 +1,6 @@
->  # From https://www.gnupg.org/download/integrity_check.html
-> -sha1  6db7c51778e424c928993e1d49ccf6ad6866b185  libgpg-error-1.56.tar.bz2
-> -sha256  82c3d2deb4ad96ad3925d6f9f124fe7205716055ab50e291116ef27975d169c0  libgpg-error-1.56.tar.bz2
-> +sha1  a9876a9e4cb54298960bd4202baf891642060428  libgpg-error-1.58.tar.bz2
-> +sha256  f943aea9a830a8bd938e5124b579efaece24a3225ff4c3d27611a80ce1260c27  libgpg-error-1.58.tar.bz2
->  
->  # Locally calculated
->  sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-> index 1fb1076ef3..5207d926df 100644
-> --- a/package/libgpg-error/libgpg-error.mk
-> +++ b/package/libgpg-error/libgpg-error.mk
+> diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+> index da2516a583..3da82e3e27 100644
+> --- a/package/libheif/libheif.hash
+> +++ b/package/libheif/libheif.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  68ac9084243004e0ef3633f184eeae85d615fe7e4444373a0a21cebccae9d12a  libheif-1.20.2.tar.gz
+> +sha256  9799b4b1c19006f052bcf399c761cc147e279762683cefaf16871dbb9b4ea2a1  libheif-1.21.1.tar.gz
+>  sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index d82ec6a0ec..acd302d847 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBGPG_ERROR_VERSION = 1.56
-> +LIBGPG_ERROR_VERSION = 1.58
->  LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
->  LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
->  LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+> -LIBHEIF_VERSION = 1.20.2
+> +LIBHEIF_VERSION = 1.21.1
+>  LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+>  LIBHEIF_LICENSE = LGPL-3.0+
+>  LIBHEIF_LICENSE_FILES = COPYING
 > -- 
 > 2.47.3
 > 
