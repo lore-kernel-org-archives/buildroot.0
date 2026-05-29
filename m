@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A5A1CD6E4C
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0441ACD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E66941F9E;
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBE3483C87;
 	Fri, 29 May 2026 08:26:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pSazHlkIzq_Q; Fri, 29 May 2026 08:26:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AKK31q0ibjMq; Fri, 29 May 2026 08:26:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C60F141FA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5D6C83C75
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043184;
-	bh=VrGjJZLwaSKyG0oXe1NMBYZfaokjvIVi+Oz5rr/5Izg=;
+	s=default; t=1780043185;
+	bh=QS2tDUGGBGcZHhipjRasRaNIk222BjaPeaqGleZ68EM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M4NzM0FtB2LmqwpZoH8Qwd6C1XZVWkWxTuGXvwS5Xh0Hi/c9e3fxUgTJM0ftqckSu
-	 /h5HJQ9oJCyGhyf5rmsyibTZrEQnU7pu+xTBMaVvtTGxZTIoaexvYe9czl5Bc3BmbM
-	 pJne+AdaLP5FSHATlxcRTPzEKZ3jh7SHWpsFdlRY2K4Tvmellg4yrruc00jzAtjAv7
-	 YMIOm7X3NRyvjXj5k74957VuCXA3DlA5ENYhn7D9Vn4LQz+7q28DFIF5Fzkp76Ayf5
-	 os0EOdoECTLRKaKWNkBU2QlyoLQcDEBvWm0hFdH+0FBeqKHr6KdRikoj00JUGKb9c8
-	 fbDU+QANIuGRA==
+	b=LVFlzx94e9kcwdtoiRsPCCC3cnoD6VYB9f2ENtWBQRNj6/ATdbbqwc/besJ6MfnKG
+	 Wju6j71xAYAs06aWDbS2CLtDG/UzlAnf62oNAGE0YqrKfRCDnI8hgxn4XSOQayHOHH
+	 a+mD3ZY4B2gtCuE9U/EayleUR1na5XjTJpM5ifkW3Pgef4HQvb1rhVK5lSSodqcFKK
+	 93LN82L3NCwzR78cX8wfRwX7opqqcLvqZm7l7cwWT2TPTFU7W/YHJB1u8KRpUlBu7x
+	 a8eNdDl00kQQDhPu0eXle9VYlLNchGDWH9LOm0mKl2EnTmQLIKNrgv9JTgvxCes0OP
+	 hi0B2c0jUYTcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C60F141FA1;
-	Fri, 29 May 2026 08:26:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5D6C83C75;
+	Fri, 29 May 2026 08:26:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 128EF28E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FF3E28E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3223041FA8
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC5A741F89
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Rlh5xQd5h5O for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:25:23 +0000 (UTC)
+ id 3bpYKd24qITB for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:25:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B643141F85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5298A41F98
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B643141F85
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5298A41F98
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:25:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56046870C6; Fri, 29 May 2026 08:25:07 +0000 (UTC)
+ id E604B87171; Fri, 29 May 2026 08:25:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 May 2026 11:49:35 +0200
+Date: Fri, 29 May 2026 08:34:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b262cd01bb72a6a289dbedb0ff518cbcd58ab41b
-X-Git-Newrev: 789c75925881c4f9276dc5fa371982d9a238fe49
+X-Git-Oldrev: 0d24f9515f080ac6f5a5697d0d7a52598e8d5cc1
+X-Git-Newrev: d2eda853cac4e3044aebb8aadad6ffbc03f1adfe
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082507.56046870C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/putty: patch
- CVE-2026-4885{0, 1, 2}
+Message-Id: <20260529082507.E604B87171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,345 +69,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7214311855076107884=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7214311855076107884==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/789c75925881c4f9276dc5fa371982d9a238fe49
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2eda853cac4e3044aebb8aadad6ffbc03f1adfe
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-- CVE-2026-48850:
-    PuTTY 0.72 before 0.84 has a double free in RSA KEX.
+Update the latest kernel releases to:
+ - 6.12.90 -> 6.12.91
+ - 6.6.140 -> 6.6.141
+ - 6.1.173 -> 6.1.174
+ - 5.15.207 -> 5.15.208
+ - 5.10.256 -> 5.10.257
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-48850
-
-- CVE-2026-48851:
-    PuTTY 0.77 before 0.84 uses a copy of the PuTTY icon as a trust
-    indication for TELNET data but the trust status is not cleared between
-    proxy authentication and the main session.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-48851
-
-- CVE-2026-48852:
-    PuTTY 0.71 before 0.84 has an assertion failure in ECDSA signature
-    verification.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-48852
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/putty/0002-CVE-2026-48850.patch |  53 ++++++++++++++++
- package/putty/0003-CVE-2026-48851.patch | 108 ++++++++++++++++++++++++++++++++
- package/putty/0004-CVE-2026-48852.patch |  90 ++++++++++++++++++++++++++
- package/putty/putty.mk                  |   7 +++
- 4 files changed, 258 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/putty/0002-CVE-2026-48850.patch b/package/putty/0002-CVE-2026-48850.patch
-new file mode 100644
-index 0000000000..1c7b378f1d
---- /dev/null
-+++ b/package/putty/0002-CVE-2026-48850.patch
-@@ -0,0 +1,53 @@
-+From ba3ed53e0bf6682f89940bc2c3e83da6b1524024 Mon Sep 17 00:00:00 2001
-+From: Simon Tatham <anakin@pobox.com>
-+Date: Thu, 14 May 2026 18:15:56 +0100
-+Subject: [PATCH] Don't call sfree after ssh_rsakex_freekey.
-+
-+ssh_rsakex_freekey(), given an RSAKey structure, calls freersakey() to
-+free all the pieces dangling off it, and then finally frees the RSAKey
-+itself. So calling ssh_rsakex_freekey() and _then_ sfree() is a double
-+free.
-+
-+Upstream: https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ba3ed53e0bf6682f89940bc2c3e83da6b1524024
-+CVE: CVE-2026-48850
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ ssh/kex2-server.c | 4 +---
-+ ssh/transport2.c  | 4 +---
-+ 2 files changed, 2 insertions(+), 6 deletions(-)
-+
-+diff --git a/ssh/kex2-server.c b/ssh/kex2-server.c
-+index 570d7750..8c3dc2f4 100644
-+--- a/ssh/kex2-server.c
-++++ b/ssh/kex2-server.c
-+@@ -321,10 +321,8 @@ void ssh2kex_coroutine(struct ssh2_transport_state *s, bool *aborted)
-+         put_mp_ssh2(s->kex_shared_secret, K);
-+         mp_free(K);
-+ 
-+-        if (s->rsa_kex_key_needs_freeing) {
-++        if (s->rsa_kex_key_needs_freeing)
-+             ssh_rsakex_freekey(s->rsa_kex_key);
-+-            sfree(s->rsa_kex_key);
-+-        }
-+         s->rsa_kex_key = NULL;
-+         s->rsa_kex_key_needs_freeing = false;
-+ 
-+diff --git a/ssh/transport2.c b/ssh/transport2.c
-+index 64f40560..60a99c29 100644
-+--- a/ssh/transport2.c
-++++ b/ssh/transport2.c
-+@@ -251,10 +251,8 @@ static void ssh2_transport_free(PacketProtocolLayer *ppl)
-+     if (s->kex_shared_secret) strbuf_free(s->kex_shared_secret);
-+     if (s->dh_ctx)
-+         dh_cleanup(s->dh_ctx);
-+-    if (s->rsa_kex_key_needs_freeing) {
-++    if (s->rsa_kex_key_needs_freeing)
-+         ssh_rsakex_freekey(s->rsa_kex_key);
-+-        sfree(s->rsa_kex_key);
-+-    }
-+     if (s->ecdh_key)
-+         ecdh_key_free(s->ecdh_key);
-+     if (s->exhash)
-+-- 
-+2.54.0
-+
-diff --git a/package/putty/0003-CVE-2026-48851.patch b/package/putty/0003-CVE-2026-48851.patch
-new file mode 100644
-index 0000000000..1985369061
---- /dev/null
-+++ b/package/putty/0003-CVE-2026-48851.patch
-@@ -0,0 +1,108 @@
-+From 64712be3cbc4a02bda4a92ca97e8d4f294abbe9a Mon Sep 17 00:00:00 2001
-+From: Simon Tatham <anakin@pobox.com>
-+Date: Thu, 27 Feb 2025 12:51:18 +0000
-+Subject: [PATCH] Non-SSH backends: delay setting trust status to false.
-+
-+A user reported recently that if you connect to a Telnet server via a
-+proxy that requires authentication, and enter the auth details
-+manually in the PuTTY terminal window, then the entire Telnet session
-+is shown with trust sigils to its left.
-+
-+This happens because telnet.c calls seat_set_trust_status(false) as
-+soon as it's called new_connection() to make the Socket. But the
-+interactive proxy authentication dialogue hasn't happened yet, at that
-+point. So the proxy resets the trust status to true and asks for a
-+username and password, and then nothing ever resets it to false,
-+because telnet.c thought it had already done that.
-+
-+The solution is to defer the Telnet backend's change of trust status
-+to when we get the notification that the socket is properly connected,
-+which arrives via plug_log(PLUGLOG_CONNECT_SUCCESS).
-+
-+The same bug occurs in raw.c and supdup.c, but not in rlogin.c,
-+because Rlogin has an initial authentication exchange known to the
-+protocol, and already delays resetting the trust status until after
-+that has concluded.
-+
-+Upstream: https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=64712be3cbc4a02bda4a92ca97e8d4f294abbe9a
-+CVE: CVE-2026-48851
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ otherbackends/raw.c    | 6 +++---
-+ otherbackends/supdup.c | 4 +++-
-+ otherbackends/telnet.c | 6 +++---
-+ 3 files changed, 9 insertions(+), 7 deletions(-)
-+
-+diff --git a/otherbackends/raw.c b/otherbackends/raw.c
-+index 9fc5e4c8..01c776e2 100644
-+--- a/otherbackends/raw.c
-++++ b/otherbackends/raw.c
-+@@ -46,6 +46,9 @@ static void raw_log(Plug *plug, Socket *s, PlugLogType type, SockAddr *addr,
-+         raw->socket_connected = true;
-+         if (raw->ldisc)
-+             ldisc_check_sendok(raw->ldisc);
-++
-++        /* No local authentication phase in this protocol */
-++        seat_set_trust_status(raw->seat, false);
-+     }
-+ }
-+ 
-+@@ -209,9 +212,6 @@ static char *raw_init(const BackendVtable *vt, Seat *seat,
-+     if ((err = sk_socket_error(raw->s)) != NULL)
-+         return dupstr(err);
-+ 
-+-    /* No local authentication phase in this protocol */
-+-    seat_set_trust_status(raw->seat, false);
-+-
-+     loghost = conf_get_str(conf, CONF_loghost);
-+     if (*loghost) {
-+         char *colon;
-+diff --git a/otherbackends/supdup.c b/otherbackends/supdup.c
-+index f9680f30..8f814797 100644
-+--- a/otherbackends/supdup.c
-++++ b/otherbackends/supdup.c
-+@@ -570,6 +570,9 @@ static void supdup_log(Plug *plug, Socket *s, PlugLogType type, SockAddr *addr,
-+         supdup->socket_connected = true;
-+         if (supdup->ldisc)
-+             ldisc_check_sendok(supdup->ldisc);
-++
-++        /* No local authentication phase in this protocol */
-++        seat_set_trust_status(supdup->seat, false);
-+     }
-+ }
-+ 
-+@@ -812,7 +815,6 @@ static char *supdup_init(const BackendVtable *x, Seat *seat,
-+      * We next expect a connection message followed by %TDNOP from the server
-+      */
-+     supdup->state = CONNECTING;
-+-    seat_set_trust_status(supdup->seat, false);
-+ 
-+     /* Make sure the terminal is in UTF-8 mode. */
-+     c_write(supdup, (unsigned char *)utf8, strlen(utf8));
-+diff --git a/otherbackends/telnet.c b/otherbackends/telnet.c
-+index 2f12722c..7f1e4977 100644
-+--- a/otherbackends/telnet.c
-++++ b/otherbackends/telnet.c
-+@@ -632,6 +632,9 @@ static void telnet_log(Plug *plug, Socket *s, PlugLogType type, SockAddr *addr,
-+         telnet->socket_connected = true;
-+         if (telnet->ldisc)
-+             ldisc_check_sendok(telnet->ldisc);
-++
-++        /* No local authentication phase in this protocol */
-++        seat_set_trust_status(telnet->seat, false);
-+     }
-+ }
-+ 
-+@@ -782,9 +785,6 @@ static char *telnet_init(const BackendVtable *vt, Seat *seat,
-+     if ((err = sk_socket_error(telnet->s)) != NULL)
-+         return dupstr(err);
-+ 
-+-    /* No local authentication phase in this protocol */
-+-    seat_set_trust_status(telnet->seat, false);
-+-
-+     telnet->pinger = pinger_new(telnet->conf, &telnet->backend);
-+ 
-+     /*
-+-- 
-+2.54.0
-+
-diff --git a/package/putty/0004-CVE-2026-48852.patch b/package/putty/0004-CVE-2026-48852.patch
-new file mode 100644
-index 0000000000..34cbb986ac
---- /dev/null
-+++ b/package/putty/0004-CVE-2026-48852.patch
-@@ -0,0 +1,90 @@
-+From 65b8f37c34cd80680693e813e0081cdafaf58324 Mon Sep 17 00:00:00 2001
-+From: Simon Tatham <anakin@pobox.com>
-+Date: Sat, 28 Mar 2026 19:25:24 +0000
-+Subject: [PATCH] Remove bogus assertion in ecc_weierstrass_add.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The comment next to the assertion says that it's checking for either
-+identical inputs or mutually inverse ones: that is, input curve points
-+with the same affine x-coordinate. But in that case we should have
-+checked lambda_n, the _numerator_ of the slope of the line through the
-+input points. Instead we were accidentally checking lambda_d, the
-+denominator.
-+
-+ecc_weierstrass_add_general gets this right: it checks lambda_n to
-+decide whether to use the output of the unequal-point addition formula
-+or the doubling formula.
-+
-+The obvious fix is to replace the assertion with one checking
-+lambda_n. But that doesn't work, because it's possible during
-+legitimate operation to cause a call to ecc_weierstrass_add that would
-+fail the fixed version of the assertion! Because of constant-time
-+considerations, every time ecc_weierstrass_multiply consumes a bit of
-+the exponent, it calculates both of two possible outputs of that
-+iteration step, and then selects between them. And sometimes one of
-+those outputs _does_ involve passing mutually inverse values to
-+ecc_weierstrass_add. That's harmless if the result of that calculation
-+is thrown away by the caller – except that it's not harmless if you
-+fail an assertion and crash before getting back _to_ the caller!
-+
-+(With the current style of exponentiation loop, the case that would
-+fail the 'right' assertion involves raising a point P to its own order
-+minus 1, because we're consuming the exponent from the MSB downwards,
-+so at every stage we choose between P^(2k) and P^(2k+1). But switching
-+to the LSB-upwards style of repeatedly squaring to make P^{2^n} and
-+conditionally multiplying in each of those, you'd still have the same
-+failure, just in a different place – the failing case would involve
-+raising P to the power of its own order with the leading 1 bit
-+removed.)
-+
-+So that's why we can't replace the bogus assertion with a better one.
-+Instead, the only thing to do is remove the assertion completely, and
-+rely on callers to have already checked that exponents are in
-+range (hence the precautionary fix in ecdsa_public in the previous
-+commit).
-+
-+What about triggering the _actual_ wrong assertion? Guido Vranken
-+reported this issue and included a test case that demonstrates that
-+it's possible to trigger the bug deliberately. His example case is a
-+P256 curve point P such that 10P and 11P have the same y-coordinate,
-+and therefore trying to compute 21P will add those values together and
-+fail the previous assertion. Worse, it's easy to construct a malicious
-+P256 public key and signature such that attempting to verify that
-+signature provokes the same crash – no matter what the message is. So
-+this is a DoS vector for an on-path attacker, who can make PuTTY crash
-+by substituting this fixed P256 key and signature in the cleartext
-+initial key exchange of any SSH connection.
-+
-+(Only a DoS, though: PuTTY is always compiled with assertions enabled,
-+so it won't do anything _worse_ than crash with an unhelpful message.)
-+
-+Upstream: https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=65b8f37c34cd80680693e813e0081cdafaf58324
-+CVE: CVE-2026-48852
-+[thomas: backport and remove tests]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ crypto/ecc-arithmetic.c |  6 ------
-+ 1 files changed, 6 deletions(-)
-+
-+diff --git a/crypto/ecc-arithmetic.c b/crypto/ecc-arithmetic.c
-+index ed2abf39..23695369 100644
-+--- a/crypto/ecc-arithmetic.c
-++++ b/crypto/ecc-arithmetic.c
-+@@ -308,12 +308,6 @@ WeierstrassPoint *ecc_weierstrass_add(WeierstrassPoint *P, WeierstrassPoint *Q)
-+     ecc_weierstrass_add_prologue(
-+         P, Q, &Px, &Py, &Qx, &denom, &lambda_n, &lambda_d);
-+ 
-+-    /* Never expect to have received two mutually inverse inputs, or
-+-     * two identical ones (which would make this a doubling). In other
-+-     * words, the two input x-coordinates (after putting over a common
-+-     * denominator) should never have been equal. */
-+-    assert(!mp_eq_integer(lambda_n, 0));
-+-
-+     /* Now go to the common epilogue code. */
-+     ecc_weierstrass_epilogue(Px, Qx, Py, denom, lambda_n, lambda_d, S);
-+ 
-+-- 
-+2.54.0
-+
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 617518e647..c061c02a96 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -12,6 +12,13 @@ PUTTY_CPE_ID_VENDOR = putty
- PUTTY_DEPENDENCIES = host-pkgconf
- PUTTY_CONF_OPTS = -DPUTTY_GSSAPI=OFF
+diff --git a/linux/Config.in b/linux/Config.in
+index 836012a880..dd209666f4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -139,7 +139,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
-+# 0002-CVE-2026-48850.patch
-+PUTTY_IGNORE_CVES += CVE-2026-48850
-+# 0003-CVE-2026-48851.patch
-+PUTTY_IGNORE_CVES += CVE-2026-48851
-+# 0004-CVE-2026-48852.patch
-+PUTTY_IGNORE_CVES += CVE-2026-48852
-+
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- PUTTY_DEPENDENCIES += libgtk3
- else ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-
---===============7214311855076107884==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.90" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.91" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.246-cip66" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.246-cip66-rt29" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0040c266ed..e14d164f5d 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -2,12 +2,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  1f1a1ff057468b8a6284d3ce1d181278259beb5670ea16724c46dbf8820fa2a8  linux-6.12.90.tar.xz
+-sha256  d67c9674a2d4307f3747183935a5d434391df0fc5f5bf0e00691e059f664b7db  linux-6.6.140.tar.xz
+-sha256  c4f32c6cfbe8c31478f18a4b2a50f89e73f8641ba1d683d80efc16c898876d98  linux-6.1.173.tar.xz
++sha256  0ff2ab9e169f9f1948557471fbb450d3018f8c5b77caf288e1a3982582597969  linux-6.12.91.tar.xz
++sha256  3bc2652eb62ab90a90a8b0aa156b91d276f92eb84702971df62fe1a3f1eb7fe1  linux-6.6.141.tar.xz
++sha256  ed88346df623ae9150d11b5feb16ddb52c25aef563bb7803ab160bb4493fe06e  linux-6.1.174.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  50eb7fa307745f30e5cae4c17e188fc42ce6a72f7d925d5ea7e3c2135de6148e  linux-5.15.207.tar.xz
+-sha256  f1e9dac8ec41e5bd7b1811158c7b72269696ce1c37fbdd17a898b293b54d8e5f  linux-5.10.256.tar.xz
++sha256  b53d7036e327a627595f42349cb5c9d55b4db8262ab473e08274bd8d3028b172  linux-5.15.208.tar.xz
++sha256  08b1fde1b563d7f5b0f429b283105b8a0e255463590e50fdce0abbc07a66f0d1  linux-5.10.257.tar.xz
+ sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
+ # Locally computed
+ sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 250e618a35..87bcdd9001 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -429,11 +429,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.256"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.207"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.173"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.140"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.90"	if BR2_KERNEL_HEADERS_6_12
++	default "5.10.257"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.208"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.174"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.141"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.91"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7214311855076107884==--
