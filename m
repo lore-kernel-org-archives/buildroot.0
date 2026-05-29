@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8824CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE68CD6E45
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F4986132B;
-	Fri, 29 May 2026 08:28:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 270B842115;
+	Fri, 29 May 2026 08:28:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 05jhg21zOaDh; Fri, 29 May 2026 08:28:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NyWEhuH3DJ9y; Fri, 29 May 2026 08:28:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D7266136C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B23C42132
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043295;
-	bh=KcutEqOeIGtt2gEd0JIuwXLp8BiQ6TLVQTSUj2vsQEE=;
+	s=default; t=1780043296;
+	bh=7mauXNUOd9slpVIBqZR9wEqSDCmgMWlgRG9JbyK4zTY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DjVHy7mnngHmfEHfecFcuiFywzKF28Y4C5Qrqqqw9UeL6OLSVZnOIijPPAi63BbSq
-	 4VHackn8LZxpIAf2vI6lgoQXKsqxXvRD+JgKCmJ4XH8Zn3gazTFS5LubcG5rFJhbrj
-	 dnXsLH3O4+USyxZf6HukuSmBB0VSHs7AjHiuamDP4kUZasWZY5q+9A9etASohYqtCm
-	 b7wh901x6etQjjp3GBRyWlYxrYRnh2+kI8KjGeYAq2Rne6aBwe31Yl+8RqKh8K0ouH
-	 Iq+pOcnNQftBGLefaF1DueKwql2lDmDbu+Ued1G6B+u9VpVGGn/QBGT8+vMBe+sELr
-	 +mj4FTPpO3xyQ==
+	b=gJwja/rEwqHLDMu53gj77xW8HrNKJJ77NsXdLc0ju+BiYDHT8VAVydKbLhlRZ7AgV
+	 Dzarokzn3QkPCdKkqsiM8KavtdK4yDo0uD0bkm1d0w0vyNe2/OgQqxv/w2LQYdC/uP
+	 lCpEw4wp//dUyjiy5Bk5F9Q4WLgdacmcEjeCr4k+1DDCgvlxb3DzFofV+JzJHgjmpJ
+	 9jDNyUE13CKvJOPsRbsV/3qMnHOPgrH9fgFaVqgGF/ANr6F3XU3rHl0wTOFM9xfoft
+	 eBOOGzt9fqYR04JKMX8KMc/9swWMPh45A7/w8rDJVtNos9twl55KqLtoegIiRtN91z
+	 6Tcbi0Spg+uCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D7266136C;
-	Fri, 29 May 2026 08:28:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B23C42132;
+	Fri, 29 May 2026 08:28:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1942C288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02A4728E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 306F760D93
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43EA560E0A
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KASUZy0PzwKF for <buildroot@buildroot.org>;
+ id 7UX_7RLDiRhj for <buildroot@buildroot.org>;
  Fri, 29 May 2026 08:28:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B21026136C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A160B61360
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B21026136C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A160B61360
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F29E87099; Fri, 29 May 2026 08:27:48 +0000 (UTC)
+ id 3F3BD873A6; Fri, 29 May 2026 08:27:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:26:12 +0200
+Date: Fri, 29 May 2026 10:26:10 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 66127b61bb7e226e2ea55371572875a8dd7fab12
-X-Git-Newrev: 33ec270f8a4235ae76d99d8c5ae1634eef47a98b
+X-Git-Oldrev: 3c502cc273246fa47e98beb9450b3cca9726b4f3
+X-Git-Newrev: 66127b61bb7e226e2ea55371572875a8dd7fab12
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082748.4F29E87099@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libnss: fix
- Makefile ifndef FREEBL_NO_DEPEND
+Message-Id: <20260529082748.3F3BD873A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/sed: security
+ bump version to 4.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/33ec270f8a4235ae76d99d8c5ae1634eef47a98b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/66127b61bb7e226e2ea55371572875a8dd7fab12
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-NSS Makefile build system is pretty weak if used with parallel build. In
-this case what happens is that 'ifndef FREEBL_NO_DEPEND' appears in
-lib/freebl/manifest.mn and coreconf/Linux.mk. When parallel building
-variable FREEBL_NO_DEPEND gets defined if not defined to 1, but in the
-2 occurences we end up having on variable set to 1 and 1 still not
-defined. This results in:
-`
-/home/giuliobenetti/br-reproduce/3e046c996825447f48377f7c4361b5db26b84f95/output/host/lib/gcc/arm-buildroot-linux-musleabi/14.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: Linux2.6_arm_arm-buildroot-linux-musleabi-gcc.br_real_glibc_PTH_DBG.OBJ/Linux_SINGLE_SHLIB/lowhash_vector.o: in function `loader_GetOriginalPathname':
-lowhash_vector.c:(.text.loader_GetOriginalPathname+0x68): undefined reference to `PR_SetError'
-collect2: error: ld returned 1 exit status
-`
-So let's pass FREEBL_NO_DEPEND=1 when building to define that variable
-instead to let NSS Makefile to calculate it.
+https://lists.gnu.org/archive/html/sed-devel/2026-04/msg00027.html
+"'sed --follow-symlinks -i' no longer has a TOCTOU race [...]"
 
-Fixes:
-https://autobuild.buildroot.net/results/ad4/ad40536728303c56d1d0968e38ac36da12cca416//
+Fixes CVE-2026-5958: https://cert.pl/en/posts/2026/04/CVE-2026-5958/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 6d3cc38ec03835baca81ae971e02d3a5b72d546f)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit eb496bd63ef4a4466f9482fa4b3226e20cfb7f7b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libnss/libnss.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/sed/sed.hash | 4 ++--
+ package/sed/sed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index b1e10749c4..c7354290b1 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -57,7 +57,8 @@ LIBNSS_BUILD_VARS = \
- 	OS_ARCH="Linux" \
- 	OS_RELEASE="2.6" \
- 	OS_TEST=$(BR2_PACKAGE_LIBNSS_ARCH) \
--	NSS_ENABLE_WERROR=0
-+	NSS_ENABLE_WERROR=0 \
-+	FREEBL_NO_DEPEND=1
+diff --git a/package/sed/sed.hash b/package/sed/sed.hash
+index 10e2c36d8f..1f1a578813 100644
+--- a/package/sed/sed.hash
++++ b/package/sed/sed.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz.sig
++# https://ftp.gnu.org/gnu/sed/sed-4.10.tar.xz.sig
+ # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  6e226b732e1cd739464ad6862bd1a1aba42d7982922da7a53519631d24975181  sed-4.9.tar.xz
++sha256  b8e72182b2ec96a3574e2998c47b7aaa64cc20ce000d8e9ac313cc07cecf28c7  sed-4.10.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 8165083658..cf6d263b06 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
- # Disable Altivec if not supported
-@@ -136,7 +137,8 @@ HOST_LIBNSS_BUILD_VARS = \
- 	NSS_USE_SYSTEM_SQLITE=1 \
- 	SQLITE_INCLUDE_DIR=$(HOST_DIR)/include \
- 	ZLIB_INCLUDE_DIR=$(HOST_DIR)/include \
--	NSS_ENABLE_WERROR=0
-+	NSS_ENABLE_WERROR=0 \
-+	FREEBL_NO_DEPEND=1
- 
- HOST_LIBNSS_DEPENDENCIES = host-libnspr host-sqlite host-zlib
- 
+-SED_VERSION = 4.9
++SED_VERSION = 4.10
+ SED_SOURCE = sed-$(SED_VERSION).tar.xz
+ SED_SITE = $(BR2_GNU_MIRROR)/sed
+ SED_LICENSE = GPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
