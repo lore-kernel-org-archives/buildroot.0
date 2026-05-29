@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8422CD6E45
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB1E5CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 889D842183;
-	Fri, 29 May 2026 08:28:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83A8F841B6;
+	Fri, 29 May 2026 08:28:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEIxiq-EuczA; Fri, 29 May 2026 08:28:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WuEHdl4mbFBj; Fri, 29 May 2026 08:28:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DCF421C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF6D841C0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043322;
-	bh=7mf4u0o+0zwxVe2cjKX9s1sgIuY+et605w4VTEv55qo=;
+	s=default; t=1780043323;
+	bh=SaO/FGWs/ioUcjrq48/mpdDh6dQCqSlKCXbC4xFuRVM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jdmF6cO/LTfjkjuXhzFPzz6hKyBMeoKDF9pdmbI8xQ5mpHbVymctEcZ6TYYaE/gYu
-	 5BeGCUtR83cwTnd+k8D2QWPPGfXKUuAqQCShMYTzuKWg5lA6EQg1QZ0bIJ3xAbbyKW
-	 JEIJ6yKsuXGO0HOQzADLuYlF3t9gUh2KQE5YqjaufUJruQm0DP4povtQvYY8w2wtZN
-	 arNZiUpIik0iYMFN/S7cWWsb6Y3fJq/cL4M70F65AdBicFmLWLM+MO9uZ5r2cz/3rL
-	 V581XeqdujUYC15y5skamrnuoV8k1j1itNGx7mL6G8e7aeWuk1w33P4pIuIStUvWtz
-	 raOA2DEiBealw==
+	b=gpQ2U/8uhJ8kxMLNXn/+sLwJh+8aSyKxZfpwmfZ3jChwqZsvvqT0e36u5GfcBOllx
+	 qc7cCRIKVK9WAg/0or/zLkl744TtgMMiX/VDmD2NFAM3jp1geRLKQ/2iX2aC1qs362
+	 QJRsVfysa53gnWgXOVrWkxcDKdTA6RVEEdpaWDFkH0Re1xDoe8K6MmddmWxzF7pti4
+	 8YUiopDqkoBlx9wnEPu0g0cs+fpM8LKVSzZcGQ9ZYhvHaDa8I1i7kfCaSxjadIprbm
+	 Tdi1GB1Q5MbyYdYybw0Qa/XpC4j0P6YIxyR7cyyk8gBjJRrYsqVH+loTrSK7vjw7CK
+	 a7iev/Jna6r2Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91DCF421C4;
-	Fri, 29 May 2026 08:28:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAF6D841C0;
+	Fri, 29 May 2026 08:28:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15093288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11F9A288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DEF66136A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7386160E10
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpZnaYHI8Mdx for <buildroot@buildroot.org>;
+ id A3_wqGaWgD8Y for <buildroot@buildroot.org>;
  Fri, 29 May 2026 08:28:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4732D60E10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5926A610CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4732D60E10
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5926A610CB
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D916B868A0; Fri, 29 May 2026 08:27:49 +0000 (UTC)
+ id EA06987171; Fri, 29 May 2026 08:27:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:27:10 +0200
+Date: Fri, 29 May 2026 10:27:12 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 6c722cafd2c76e4b46b59f2db4e66d16ce2d742d
-X-Git-Newrev: d40bb7279334fba78a6852cfa7f05923add0ec5e
+X-Git-Oldrev: d40bb7279334fba78a6852cfa7f05923add0ec5e
+X-Git-Newrev: 815e765c1a5a25ea0510610ec499d08620d1863e
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082749.D916B868A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 6.18.x series
+Message-Id: <20260529082749.EA06987171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/python-aiodns:
+ bump to version 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d40bb7279334fba78a6852cfa7f05923add0ec5e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/815e765c1a5a25ea0510610ec499d08620d1863e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Update the latest kernel releases to:
- - 6.12.90 -> 6.12.91
- - 6.6.140 -> 6.6.141
- - 6.1.173 -> 6.1.174
- - 5.15.207 -> 5.15.208
- - 5.10.256 -> 5.10.257
- - 6.18.32 -> 6.18.33
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit b9c60c567587dc7a9957e5ec29fe2558b76e75e7)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/before-6.17/linux.hash         | 10 +++++-----
- linux/from-6.17/linux.hash           |  2 +-
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ package/python-aiodns/python-aiodns.hash | 4 ++--
+ package/python-aiodns/python-aiodns.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
-index 19dc977938..c0b37d02de 100644
---- a/linux/before-6.17/linux.hash
-+++ b/linux/before-6.17/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  1f1a1ff057468b8a6284d3ce1d181278259beb5670ea16724c46dbf8820fa2a8  linux-6.12.90.tar.xz
--sha256  d67c9674a2d4307f3747183935a5d434391df0fc5f5bf0e00691e059f664b7db  linux-6.6.140.tar.xz
--sha256  c4f32c6cfbe8c31478f18a4b2a50f89e73f8641ba1d683d80efc16c898876d98  linux-6.1.173.tar.xz
-+sha256  0ff2ab9e169f9f1948557471fbb450d3018f8c5b77caf288e1a3982582597969  linux-6.12.91.tar.xz
-+sha256  3bc2652eb62ab90a90a8b0aa156b91d276f92eb84702971df62fe1a3f1eb7fe1  linux-6.6.141.tar.xz
-+sha256  ed88346df623ae9150d11b5feb16ddb52c25aef563bb7803ab160bb4493fe06e  linux-6.1.174.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  50eb7fa307745f30e5cae4c17e188fc42ce6a72f7d925d5ea7e3c2135de6148e  linux-5.15.207.tar.xz
--sha256  f1e9dac8ec41e5bd7b1811158c7b72269696ce1c37fbdd17a898b293b54d8e5f  linux-5.10.256.tar.xz
-+sha256  b53d7036e327a627595f42349cb5c9d55b4db8262ab473e08274bd8d3028b172  linux-5.15.208.tar.xz
-+sha256  08b1fde1b563d7f5b0f429b283105b8a0e255463590e50fdce0abbc07a66f0d1  linux-5.10.257.tar.xz
- # Locally computed
- sha256  93408e0c5d70ff0ab63dcf9edec6fda2b8524281d611a88e56590436bda43914  linux-cip-5.10.246-cip66.tar.gz
- sha256  b3454708b98016f02604433e41060be2c1feb595c2bddeb25292596f047f0915  linux-cip-5.10.246-cip66-rt29.tar.gz
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index e401c64996..068fe418f3 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  cde8bf6739be4a0777fedbbba5330b8188c55680c45a922a4dfa289cbec6f185  linux-6.19.14.tar.xz
--sha256  067dadd445578284ea6158f312f7970d8940fed3e094dbe49cff66d188d3bda4  linux-6.18.32.tar.xz
-+sha256  6f16ff302599f6fe34742890322cf0775703105fbd8767449682fca6af0fb782  linux-6.18.33.tar.xz
+diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
+index a4a242670a..4cde1c4b1d 100644
+--- a/package/python-aiodns/python-aiodns.hash
++++ b/package/python-aiodns/python-aiodns.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiodns/json
+-md5  c1552fe562a1f9c98ea4c2311a2c75ba  aiodns-3.6.1.tar.gz
+-sha256  b0e9ce98718a5b8f7ca8cd16fc393163374bc2412236b91f6c851d066e3324b6  aiodns-3.6.1.tar.gz
++md5  c69a64f09c0999f63ed759f5046d5bb4  aiodns-4.0.0.tar.gz
++sha256  17be26a936ba788c849ba5fd20e0ba69d8c46e6273e846eb5430eae2630ce5b1  aiodns-4.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
+diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
+index 7476c76b72..6befbff203 100644
+--- a/package/python-aiodns/python-aiodns.mk
++++ b/package/python-aiodns/python-aiodns.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 12b44624c1..756548b266 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -464,12 +464,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.10.256"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.207"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.173"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.140"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.90"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.32"	if BR2_KERNEL_HEADERS_6_18
-+	default "5.10.257"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.208"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.174"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.141"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.91"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.33"	if BR2_KERNEL_HEADERS_6_18
- 	default "6.19.14"	if BR2_KERNEL_HEADERS_6_19
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-PYTHON_AIODNS_VERSION = 3.6.1
++PYTHON_AIODNS_VERSION = 4.0.0
+ PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
+-PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/85/2f/9d1ee4f937addda60220f47925dac6c6b3782f6851fd578987284a8d2491
++PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/10/da/97235e953109936bfeda62c1f9f1a7c5652d4dc49f2b5911f9ae1043afa9
+ PYTHON_AIODNS_SETUP_TYPE = setuptools
+ PYTHON_AIODNS_LICENSE = MIT
+ PYTHON_AIODNS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
