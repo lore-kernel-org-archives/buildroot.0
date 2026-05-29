@@ -4,89 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7686CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 19:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA20CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 20:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5CCB8472B;
-	Fri, 29 May 2026 19:13:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74B22848ED;
+	Fri, 29 May 2026 20:42:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jEAR2UniJoyo; Fri, 29 May 2026 19:13:47 +0000 (UTC)
+ id lgEYzlgLwNZq; Fri, 29 May 2026 20:42:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E3E3813CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8864848E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780082027;
-	bh=KU+zrHgliqviSqdt3S3CciH7RmeYboscZ9Un7XBclyQ=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=osxQjfrLTJCF9aghQFKgJB87HPiLB9m9TDhwHeiDnEu7XnWD4JwGGceB71b3BcKNg
-	 OGRlUtFQ+31N1S9iKmL5RYZ0AibzcoJdyFISpfMIgoMYugLbc61qQ5z5oeudoZrGFX
-	 gqv4Xys1eVTT1Ywrt/wyrDAWOiCFWV3hbJAfDq5m3E8zQsKgJO7URJLKD2RcrurXDt
-	 z73aECNj2OD0ZwEk3JSb3JMbhLfCaOF0rjq18toTq32RZ24yy5v4OIlw60rBY5vcTL
-	 LPnIM4wkonjHMTP3RxjuGS2FQmEqD1aGBttDwbyxajXZDNlgxZnAgcFw8TC6Xc/cc7
-	 agq1CZhIZbgvA==
+	s=default; t=1780087367;
+	bh=wtOduBdFaAPh2kbPZ6alEfWHDu53fjeWaiDWfYbNGPo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=qStdTTCGua87EE2JguvZ30jlUSSSJ7HTQJCjzG5G+w8zqyFyDngn3ZcsYRGsVbMS3
+	 hx8rSRaiaqzF2tNulYe7ZZ7/Cy1mumV+hsIjeY3g/7+920hgbDXffxxntz22KQ7PsY
+	 ZrPla7/E4NjbnAg8SBALe0PtaLbJj+QTmx60bjCC8uuS1pjW2OUDha6crm4vjcfAHG
+	 ikEMazEHpANStDhGOZhUnengUzYIkbdet9LW0amq11pY/KvK+eBOMOTFAguYShlwTw
+	 +xjW/CtNtSUmg6lIrpciNmyhbYvBeNsKxfl0OxBjmrreqJnimkn1mqWDdZFlkIn0KG
+	 YsXqlvWZxz5lQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E3E3813CA;
-	Fri, 29 May 2026 19:13:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8864848E9;
+	Fri, 29 May 2026 20:42:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AF714D3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:13:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E0EBD3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E1C142270
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:13:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EDC7404A1
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YPgzsKvFjiN0 for <buildroot@buildroot.org>;
- Fri, 29 May 2026 19:13:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id ugWUJsWolfwU for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 20:42:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B41BA4226D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B41BA4226D
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B41BA4226D
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:13:44 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 043DE1A3729;
- Fri, 29 May 2026 19:13:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BAA4A601FA;
- Fri, 29 May 2026 19:13:41 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id AB81F10888650; 
- Fri, 29 May 2026 21:13:39 +0200 (CEST)
-Date: Fri, 29 May 2026 21:13:38 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Jesse Van Gavere <jesseevg@gmail.com>, 
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <ahnlP2lj_zl11I3b@windsurf>
-References: <20260501183421.2459291-1-bernd@kuhls.net>
- <ahnci7WYFV3NQ8rS@windsurf>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ahnci7WYFV3NQ8rS@windsurf>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780082021; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=2r3bR2AiyoKDRpMGhfj9wnqNf8BoUygWhicllhgNY+s=;
- b=UU5hbafc0B1RcYsxTxqayaZeOoYJjsXxZqbBXptBIEsUu6PQhxATIzWcUe7BEqoJLoS0lt
- s82V9Hu6CAsoeUPGT0JUsNXe0QMAK7sUt4aLHlgRduSOE4u+uhMVusawq3ruqr1gpeNNoD
- fSENcPEYZMQr1Vjo1wTME1HGXD8etzjMBCWLz6A2TvhZ7clFArh03Bv1rbe+dQpDFRMh8I
- HL5veCq5UfaULmySWCmfV30OFUYSCEBTFC/aSszQJvHBvSM8LyAawAk0Xt59CVX02ZzGrr
- e74q8C+ngsoGT2xxtjkM6KQgnNhYi4I0chKgvAfbi29MqFnjjhY6mG15vePhkA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=UU5hbafc
-Subject: Re: [Buildroot] [PATCH 1/5] package/stellarium: fix qt5serialport
- dependency
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D17A422E9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D17A422E9
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6EE3587472; Fri, 29 May 2026 20:42:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 29 May 2026 21:23:20 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: e5c7b43494c4d6aa57c6ef314bd4e636aacc14fc
+X-Git-Newrev: e4fefb5f616c9d6b8f61348352bd947554bcf40c
+X-Patchwork-Hint: ignore
+Message-Id: <20260529204232.6EE3587472@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/palo: bump to 2.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,46 +68,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6157071954969062447=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, May 29, 2026 at 08:37:32PM +0200, Thomas Petazzoni wrote:
-> Hello Bernd,
-> 
-> On Fri, May 01, 2026 at 08:34:17PM +0200, Bernd Kuhls wrote:
-> > qt5serialport is only needed when GPS support is enabled:
-> > https://github.com/Stellarium/stellarium/blob/v26.1/CMakeLists.txt#L632
-> 
-> Well, it seems like you're pointing to code that shows your statement
-> is not correct:
-> 
-> IF(USE_PLUGIN_TELESCOPECONTROL OR ENABLE_GPS)
->      FIND_PACKAGE(Qt${QT_VERSION_MAJOR} COMPONENTS SerialPort REQUIRED)
-> ENDIF()
-> 
-> So Qt is used when gps support is enabled *OR* when the telescope
-> control plugin is enabled, and this plugin is apparently enabled by
-> default.
+--===============6157071954969062447==
+Content-Type: text/plain
 
-On this I am wrong, we disable building the telescope control plugin:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e4fefb5f616c9d6b8f61348352bd947554bcf40c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-        -DUSE_PLUGIN_TELESCOPECONTROL=OFF \
+Changelog:
+* psc_misc: Add function to get PDC firmware version
+* ipl: Fix mfg mode on C8000, rp34x0 and rp44x0
 
-> I don't understand the "wrong order of dependencies". Is this fixing a
-> bug?
+This has been tested on hp 712, booting from network and from disk.
 
-Still interested by some feedback on this.
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/palo/palo.hash | 2 +-
+ boot/palo/palo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/boot/palo/palo.hash b/boot/palo/palo.hash
+index 2a7e2ef89a..9019d00f04 100644
+--- a/boot/palo/palo.hash
++++ b/boot/palo/palo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  73db9f60d439c4ae9d31b049671283e01d95ae364fc78b4db37eed5523218d6c  palo-2.28.tar.gz
++sha256  bca096116d403b7d370794d84853c4f4a4703d604c01a645d1fbd1c5be42a7e0  palo-2.29.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/boot/palo/palo.mk b/boot/palo/palo.mk
+index dadb0cde92..d2761042f5 100644
+--- a/boot/palo/palo.mk
++++ b/boot/palo/palo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PALO_VERSION = 2.28
++PALO_VERSION = 2.29
+ PALO_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/deller/palo.git/snapshot
+ PALO_LICENSE = GPL-2.0
+ PALO_LICENSE_FILES = COPYING
+
+--===============6157071954969062447==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6157071954969062447==--
