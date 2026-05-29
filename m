@@ -1,96 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6893BCD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B37D2CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6BED8465A;
-	Fri, 29 May 2026 18:42:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hfBLrS8TuMIP; Fri, 29 May 2026 18:42:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18CBB84654
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780080162;
-	bh=8z2rJJj7yJ73lb/jfzgyk9CCB3YA8Jdlk1WUjQ4J3u8=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ATcaoXTbLh56WgkbMfnNVnxneTuGWohhuZwnrtpkaeuO8dUcgAnaf0kghaXB2NWTO
-	 GOeHtvjtNrg7Sr2Vxu4fCr2sb/eOU1mej6ZBlzZMJi4Hi0HxGnsOsQh7/WeJ3+SOvC
-	 7IEJaew3bTMbvYVspWOamnaUSVilEdNM+RXqWZDzkXudUYNVocewKT2Z3ITfAbb/mp
-	 RQVdCWOqGAE8Yl1ABeiyyuwNvvmwuZj+OJSAhLx8sAsHfne7+RgV9Ak8HwyElTkDK4
-	 0okENkEKOX742eQeEWUR2A4+DQNDJTg49sU1MuYxb4yxV79+cS6qTYTOgjW3SVbn2F
-	 8TPsi9Xm3ciMg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18CBB84654;
-	Fri, 29 May 2026 18:42:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C839BD3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:42:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B770161661
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:42:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7126960ABD;
+	Fri, 29 May 2026 18:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2rYySqEYjIqC for <buildroot@buildroot.org>;
- Fri, 29 May 2026 18:42:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
+ id YHmZXeBhVoUH; Fri, 29 May 2026 18:49:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 985C56134E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780080581;
+	bh=NYeVzqUz3hlJGmP+ecfPqC5veEZDzZ1MnkGXcNzCbgY=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=szuSKZkFjtFvhWpfnLsfWp7a/dGyGemM/0SUcWko9lF9e++vymCNxiLjTaF230Sh8
+	 FnIwoVHb8r5gesHfbOkimduV+dB7cNcQfHnrlcUUYt1k80vVd8VmBVhD+j5ti4WzBr
+	 D+r9KUgs/ZET0TKqNKkErysJ71SWPOqx2c4iSIYyIOpBRJOdPotFfH0LbxRPjeqtX9
+	 YrqmhvZhzSpAIbgxPyks/uXTGQX2gCsgwPGfdOtjpFaMLsT9lUS7sg55IsnG9h8LAC
+	 3U+tztwLa5wqB2jcSATFynU+i1UPG/af5SBLRtFJxyTnXxA9kzhOfsKy3WjmCNRWD6
+	 b4oEheoKJ38cQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 985C56134E;
+	Fri, 29 May 2026 18:49:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9086288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:49:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A139404A2
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:49:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id neeAKq5m6X43 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 18:49:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 915CA6163C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 915CA6163C
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 915CA6163C
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:42:39 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 92AD2580CAF
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:52:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 19E1E20662
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:51:59 +0000 (UTC)
-Message-ID: <73dfe5c1-4240-4f84-ae46-1ed0e1889c0f@yoseli.org>
-Date: Fri, 29 May 2026 19:51:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 94DD140449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94DD140449
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94DD140449
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:49:38 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1450696126; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 May 2026 18:49:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1wT2H1-000000041IJ-2XtB;
+ Fri, 29 May 2026 20:49:35 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
- <20260424132326.825570-12-jeanmichel.hautbois@yoseli.org>
- <ahmWzUWlNIgPZGjS@windsurf>
-Content-Language: fr-FR, en-US, en-GB
-From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-In-Reply-To: <ahmWzUWlNIgPZGjS@windsurf>
-X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: dmFkZTFhZWfm07ySF0ddIkUlNQQ9dAvbXZeyYqUrfevG0x/N0s1iQDncUHy56WfBrakVTsPtwr/9Mebyz9OuZMSnCINyq6auI6/+hscF960OobaSpIsJ0S6r/IoT3kdeU523dvN//tAEYWhJ5FrVUiO1aMPQnRQ0OEt5V1gcS88Aj9e3Mx2fOy/h0KoxwqgI4U9D1qHo4l4wk/6mTmYn+t0rBl5eQXQMGX0HQKOM4sNjLD1Gw5UbVaRv9TF5eM+pIXVmq0dykJE3mNHF/hyg5ePT0irwVq+rKGdlfsqYFmefYgSuU6HiU+FUZb64tBZAqVrmgyWxmCv8MNJ2cXeFvep7uaxItrdWZKvO/C8WoUDFJI9hrGF+IRH8wvxd87Ypteu8OxTe7e+ml7VhTCUxmgD3r4IDiwOEa/rMQMU6G8tNc6AY1bB2P8Q9MFgA9r2CVQ2wjLxZrJ5So1I9ZCc3IyBtGIUFWFrdjekNusivtNCALZ3D0xKJblNsEpnSF27Z3FkyBkqgs7HWz+dY4kyvfMvgo/tkyjRVicPu9O0uy2KG40pFbQD/6/Zc4ws+ZRDJxEF7nSY0f8hsktDOaomB0073c3Po0U5dxWCmvyD47DVmILxhtf46kX5S/1mpIRi/+VjXQDTBhJXM7IOTItgFvDgE9+SXOGQk3o2Qex/FWXZeaIZh8w
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1780077120;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=y/eV3LmgCdmsUXqTJWlUaFtWnVBEulgnK0G2Cr50fgY=;
- b=RkiAkpKkbbI+mV+ZZrbe2OtAfuCzjwzK2bLYHbdUJ9+hLGGPekZywWSIjg4/BnwNvwKwRo
- pF/X2LvBn+3wZ/hlKFbPAXLY58sPlpkkrfSxsNYRsgmTOdzlltbWErZqiyHymwYFsSGBPy
- 5NiuDLtBCtfIBI1LZbh5AHfE8yz9S8uECcydL0AyhtPbAgjtJaNLq94HlwJwwLamYQ9K73
- rdcUzo5adVqo22ilmgOKwh6/xSUP+JXXgRlC3Tc3RWTrFEbYYlEQkaMPpjNC5VKHKl2u4y
- 8IgStfUHeGNvAe84t94m3pjLXwPf84bVvsUcuvb0hpkhIGTCygJi6CH0NDdUIg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=yoseli.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Date: Fri, 29 May 2026 20:49:33 +0200
+Message-ID: <20260529184934.958274-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=IeZSrLA+thHC708vmMq401XNsJNiqC1DxXS13J29QR3oQs1XfyQWAQ47x6AFvA+hGPlZX0UJn+yYNE7PREHti8Zc3cQBUFcZzJ4lT8x3rsbKP91BNgUQx3FCcA6j+9Y1cTooaRZA6VQbrtDdaEMrUuFLUd6hI3xjtG8NYqLa706Dr00mpq/ecjVqYZv/IW7L6otMZianGo7D5IKfwmT/RS7oj88F9mAHLXeoTF3GYz1I3hMPQBcVJl44hAW3YjoAxcXp2LmqOTVLbS/gcOStSk0KZx1hLs+BLBxMKNswkaCQ7Z9MNFCu9mAJU43EE4UunRipK//dXKVFcpatut3Hug==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=sfYW68Ifqby49yLgBf2M370TaZucmv7gEP77rDOd0Ys=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=RkiAkpKk
-Subject: Re: [Buildroot] [PATCH 11/11] package/libglib2: add m68k ColdFire
- support
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=IeZSrLA+
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/{aardvark-dns,
+ netavark}: security bump to versions 1.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,53 +90,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKTGUgMjkvMDUvMjAyNiDDoCAxNTo0NCwgVGhvbWFzIFBldGF6em9uaSB2aWEg
-YnVpbGRyb290IGEgw6ljcml0wqA6Cj4gSGVsbG8sCj4gCj4gT24gRnJpLCBBcHIgMjQsIDIwMjYg
-YXQgMDM6MjM6MjZQTSArMDIwMCwgSmVhbi1NaWNoZWwgSGF1dGJvaXMgd3JvdGU6Cj4+IE9uIG02
-OGsgQ29sZEZpcmUsIGxpYmdpbyBleGNlZWRzIHRoZSBkZWZhdWx0IDE2LWJpdCBHT1QgZW50cnkg
-bGltaXQKPj4gKDgxOTIgZW50cmllcykuIEFkZCAtbXhnb3QgdG8gdXNlIDMyLWJpdCBHT1Qgb2Zm
-c2V0cy4KPiAKPiBXaHkgaXNuJ3QgdGhpcyBhbHJlYWR5IGhhcHBlbmluZyBmb3IgZXhpc3Rpbmcg
-Q29sZGZpcmUgY29uZmlndXJhdGlvbnM/Cj4gCgotbXhnb3QgaXMgcmVxdWlyZWQgb25jZSBsaWJn
-aW8ncyBHT1QgZXhjZWVkcyB0aGUgMTYtYml0IG9mZnNldCB3aW5kb3cgCig4MTkyIGVudHJpZXMp
-LgpJdCBpcyBub3QgdGllZCB0byBhIHBhcnRpY3VsYXIgQ29sZEZpcmUgY29yZSBidXQgdG8gYnVp
-bGRpbmcgYSBsYXJnZSAKZW5vdWdoIHNoYXJlZCBsaWJyYXJ5LgoKVGhlIG9ubHkgQ29sZEZpcmUg
-Y3VycmVudGx5IHN1cHBvcnRlZCwgdGhlIDUyMDgsIGlzIGEgbm8tTU1VIChGTEFUKSAKdGFyZ2V0
-IHRoYXQgaXMgbm90IGJ1aWx0IHdpdGggdGhlIGZ1bGwgc2hhcmVkIGxpYmdpbyB0aGF0IG92ZXJm
-bG93cyB0aGUgCkdPVCwgc28gdGhlIGxpbWl0IHdhcyBuZXZlciBoaXQgYmVmb3JlIEFGQUlDVC4K
-ClRoZSBNQ0Y1NDQxeCBpcyBhbiBNTVUgY29yZSBidWlsdCB3aXRoIHNoYXJlZCBsaWJyYXJpZXMg
-YW5kIHRoZSBjb21wbGV0ZSAKZ2lvLCB3aGljaCByZWFjaGVzIGl0LgoKPj4gQWxzbyBlbmFibGUg
-Yl9zdGF0aWNwaWM9dHJ1ZSB0byBhbGxvdyBsaW5raW5nIHN0YXRpYyBpbnRlcm5hbAo+PiBsaWJy
-YXJpZXMgKGdpcmVwb3NpdG9yeS1pbnRlcm5hbHMpIGludG8gc2hhcmVkIGxpYnJhcmllcwo+PiAo
-bGliZ2lyZXBvc2l0b3J5KSwgd2hpY2ggcmVxdWlyZXMgcG9zaXRpb24taW5kZXBlbmRlbnQgY29k
-ZS4KPiAKPiBXaHkgaXMgdGhpcyBDb2xkZmlyZSBzcGVjaWZpYz8KPiAKCllvdSBhcmUgcmlnaHQs
-IGl0IHNob3VsZCBub3QgYmUgZG9uZSBoZXJlICEKClRoZSByZWFsIGNhdXNlIGlzIHRoZSBDb2xk
-RmlyZSBWMi9WMyBjb3JlcyAoSVNBX0EvSVNBX0ErLCBlLmcuIHRoZSAKNTIwOCk6IHRoZXkgaGF2
-ZSBubyAzMi1iaXQgUEMtcmVsYXRpdmUgYnJhbmNoLCBzbyBhIC1mUElDIGZ1bmN0aW9uIHdob3Nl
-IApib2R5IGV4Y2VlZHMgdGhlIDE2LWJpdCBicmFuY2ggcmFuZ2UgY2Fubm90IGJlIGFzc2VtYmxl
-ZCwgc2VlOgoKIlRyaWVkIHRvIGNvbnZlcnQgUEMgcmVsYXRpdmUgYnJhbmNoIHRvIGFic29sdXRl
-IGp1bXAiLCBHQ0MgUFIgMTAxOTcxLCAKY2xvc2VkIGFzIGludmFsaWQgZm9yIHRoaXMgcmVhc29u
-LgoKVGhhdCBpcyB3aHkgYl9zdGF0aWNwaWMgd2FzIGRpc2FibGVkIGZvciB0aGUgd2hvbGUgQ29s
-ZEZpcmUgZmFtaWx5IGluCmNvbW1pdCBlNzBmZWZhM2I4IGJhY2sgd2hlbiB0aGUgNTIwOCB3YXMg
-dGhlIG9ubHkgQ29sZEZpcmUgc3VwcG9ydGVkLgoKVGhlIFY0L1Y0ZSBjb3JlcyAoSVNBX0IvSVNB
-X0MpLCBpbmNsdWRpbmcgdGhlIE1DRjU0NDF4LCBnYWluZWQgdGhlIAozMi1iaXQgYnJhLmwvYnNy
-LmwgYW5kIGJ1aWxkIFBJQyBjb2RlIGZpbmUuCgpJIHZlcmlmaWVkIHRoaXMgd2l0aCBib3RoIGdj
-YyAxNC4zLjAgYW5kIDE1LjIuMC4KU28gcmF0aGVyIHRoYW4gb3ZlcnJpZGluZyBiX3N0YXRpY3Bp
-YyBpbiBsaWJnbGliMiwgSSBwcm9wb3NlIHRvIGRyb3AgCnRoaXMgaHVuayBhbmQgaW5zdGVhZCBy
-ZXN0cmljdCB0aGUgd29ya2Fyb3VuZCBpbiBwa2ctbWVzb24ubWsgdG8gCkJSMl9tNjhrX2NmNTIw
-OCwgd2hpY2ggbGV0cyBuZXdlciBDb2xkRmlyZSBjb3JlcyBrZWVwIGJfc3RhdGljcGljIAplbmFi
-bGVkIChhcyBnaXJlcG9zaXRvcnktaW50ZXJuYWxzIG5lZWRzKS4KClRoYXQgd291bGQgYmUgYSBz
-ZXBhcmF0ZSBwYXRjaCBpbiB2Mi4KCj4+IERpc2FibGUgc3lzcHJvZiBwcm9maWxpbmcgc3VwcG9y
-dCB3aGljaCBpcyBub3QgdXNlZnVsIG9uIGVtYmVkZGVkCj4+IHRhcmdldHMgYW5kIGFkZHMgdW5u
-ZWNlc3NhcnkgYnVpbGQgY29tcGxleGl0eS4KPiAKPiBUaGlzIHNob3VsZCBkZWZpbml0ZWx5IGJl
-IGRvbmUgYXMgYSBzZXBhcmF0ZSBwYXRjaCwgYW5kIGV2ZW4gaXMKPiBzb21ldGhpbmcgeW91IGNh
-biBzZW5kIHNlcGFyYXRlbHkgZnJvbSB0aGUgQ29sZGZpcmUgc2VyaWVzIHNvIHRoYXQgd2UKPiBj
-YW4gbWVyZ2UgaXQgcmlnaHQgYXdheS4KPiAKCkluZGVlZC4gSSB3aWxsIHNwbGl0IGl0IGludG8g
-YSBzdGFuZGFsb25lIHBhdGNoLgoKVGhhbmtzICEKSk0KCj4gVGhhbmtzIQo+IAo+IFRob21hcwoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fixes the following security issue:
+
+CVE-2026-35406: netavark has incorrect error handling for malformed tcp
+packets
+
+https://github.com/advisories/GHSA-hfpq-x728-986j
+
+aardvark-dns and netavark needs to be bumped in sync, so update both.
+
+https://github.com/containers/aardvark-dns/releases/tag/v1.17.1
+https://github.com/containers/netavark/releases/tag/v1.17.1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/aardvark-dns/aardvark-dns.hash | 2 +-
+ package/aardvark-dns/aardvark-dns.mk   | 2 +-
+ package/netavark/netavark.hash         | 2 +-
+ package/netavark/netavark.mk           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
+index b3b742089a..d0a42c2ca5 100644
+--- a/package/aardvark-dns/aardvark-dns.hash
++++ b/package/aardvark-dns/aardvark-dns.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bf046c3bc7bc9f1f04220a89393b9189bcab1c61c204f247b3a5415d0ac27117  aardvark-dns-v1.17.0-git4-cargo5.tar.gz
++sha256  9742d4a31d2136028221f386cf21f377cbad129626a70813f2bedad1162174ad  aardvark-dns-v1.17.1-git4-cargo5.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
+index c0dc7eb2a7..3f2a32ac88 100644
+--- a/package/aardvark-dns/aardvark-dns.mk
++++ b/package/aardvark-dns/aardvark-dns.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version here, also update netavark in lockstep
+-AARDVARK_DNS_VERSION = v1.17.0
++AARDVARK_DNS_VERSION = v1.17.1
+ AARDVARK_DNS_SITE = https://github.com/containers/aardvark-dns
+ AARDVARK_DNS_SITE_METHOD = git
+ 
+diff --git a/package/netavark/netavark.hash b/package/netavark/netavark.hash
+index f7ab17de3e..b53311c574 100644
+--- a/package/netavark/netavark.hash
++++ b/package/netavark/netavark.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9ff98fe9bcb6478ef558ae277b32aad67dbd7e7b72cac66df24084cb4f9038d9  netavark-v1.17.0-git4-cargo5.tar.gz
++sha256  3bfc0d3bb40965ecd4908f9a03a4fcf59228bacfaf6a7b73736b5019181e8499  netavark-v1.17.1-git4-cargo5.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
+index d47cee0fe1..e7126e3d4b 100644
+--- a/package/netavark/netavark.mk
++++ b/package/netavark/netavark.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version here, also update aardvark-dns in lockstep
+-NETAVARK_VERSION = v1.17.0
++NETAVARK_VERSION = v1.17.1
+ NETAVARK_SITE = https://github.com/containers/netavark
+ NETAVARK_SITE_METHOD = git
+ 
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
