@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8093CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEADACD6E4C
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A2CF4223E;
-	Fri, 29 May 2026 08:29:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qr9qgfGHbeTS; Fri, 29 May 2026 08:29:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DD642246
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043363;
-	bh=M7VXDcGea0te/xwK2vYBDab3Sx3GkHz3JNp02/7Rf+Q=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RWeAJb0LCwEIQBj25uuFuzOLzp2EAAyiXgeemfEeXJKT1eWCJIDYFYCi5weedH7HO
-	 oc6edAAm5e/hHb/iawfG3imLOlDkjW7k8/uRucH5gy4dkjGZZTGbGgPaOpUoCOh3Jd
-	 XzbT16xI20trhpv0wqdcKXjDC5ABYEdcQPko+Af/vRE9GQlu/qCI0Ls7UxZwcGxry+
-	 60PIfb/k3vDA/D4suLuklIzx31g7vHsehcOGz87cCgCBpJhgg+U83lLjqvVgGmnYK5
-	 w+dgH5MIy7duvnM/pWXpZ/y73NOwnqFIDLS6YfN3CkWsOvNByHp7D6+N9dHJBXBu/g
-	 zS8pdTIpMU4hg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91DD642246;
-	Fri, 29 May 2026 08:29:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B9A92E9
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CAB38421A
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C46A780E3D;
+	Fri, 29 May 2026 08:29:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 43OheHq7MJ3q for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:29:17 +0000 (UTC)
+ id ozx34x7teqmG; Fri, 29 May 2026 08:29:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0D7680E3F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780043364;
+	bh=Nj4fXpgozYf7hMbMYvidb01mabz5VOXM3wcFTfDtxkI=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=hk0xjMxjhLoisFrKhIdP1jfPN77N55OHC82qj3Sg6v5alyUsMhOfDz8BeEL3+9aKr
+	 RStVsdEoI0uDaN584OAmpPOaZYvSj4b3sws5MH97UTykyBpml0oAJJZaHjQ9oGlofJ
+	 xBFF+j616dEoyaBpmGMeF2MeO6LdPaRsPet2y3QzFEyIiyykzhdyQZj1t2Inc0Sf50
+	 WjPe30cEJWe76kgekGlV8pt0O7Z0oaZXLJuF9TuFuDB1z7L7J76r5FPiFw5Kx9xAvi
+	 Y8kYO8KcpNzIQH9sbGYZHrcmTKgGkVbIYJz3cHEia2TlgKen7B0iajMBaxuTXrhWWP
+	 siCJiP8aD2AwA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0D7680E3F;
+	Fri, 29 May 2026 08:29:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78A9028E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6585B42234
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rd5JqOY70eup for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:29:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5BC2A8420B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BC2A8420B
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5BC2A8420B
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:17 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4905e190c71so62545965e9.3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A806142222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A806142222
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A806142222
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:18 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-459bf19e87bso8248557f8f.1
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043355; x=1780648155;
+ d=1e100.net; s=20251104; t=1780043357; x=1780648157;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=R38ig/MrSBZPc9kOZniwitXQ1BJge25z+4xkTBCx9Gw=;
- b=mli9IxXzK3utGeY004E/dJnxtnIp/JnMd8eRjAq1VEGwWgGUt1dzMHGB2xEctzfzV7
- fEs6yFhiHuwyiIYtvw0/4EKB/hk1YuXhzVIMr0p2AgGcP7OrOyRyzCr18bhXv/ccrC3l
- DCTOYqmEvmmJp2fb85bDwrLuFpWmVO5Tx38KBYyJiiq/OLiRkll9WHIIgxwmitbEdTLF
- xSAdWIMpibYCmNZbqBaKX0069PPPD3rkeR/yqMeEok32UEeTd20Irue216dsNjxjXEmY
- nTFQObYX/AXtTa3qKlnChjA4VPqwLa0x87r5NOf602qOWCd9sJyawwHDTDIkqTD+73cz
- meIg==
+ bh=nJz1rr8csdPkFrJIGrge0SEAgRemn7t36HFCLbjGWx0=;
+ b=ZuYIl2AWfc+mxzgymY8rKn2WGmMdPVodxeJDb2AjZnkw+T33MV0bKX/vGyX9DGDHrj
+ x5mMbvx0xT8IHNlz3dL2/cayuAGIVzNg7OjU+WQXgkZ88khpkRstb3Em7lpYCP71tpAE
+ z3yE4ihimmT5urb04vR8A5DFcU+xxbbzplPP8ldFe+YfJhEWWMzSs7A4JX+BwGWRVZ2A
+ 4oXiwjira1gAxlEO3Q/kuh86eOZr8mWwZCZC9SVq7inK9N3lOAhnz2/BXcOJJunJSQRe
+ 1Hrb540gt8t11Tj/DmFFT+kuNaFu36BgeoQIrNDPfWLW5J+jV4WvGbql4ut6ao8Kh3Ug
+ ZG0g==
 X-Forwarded-Encrypted: i=1;
- AFNElJ86vyaebAHOZN8qEJHS996V+dnvJA/mhR13sTp6zOBoehVA/EMlHK8R//LtwF3TuOVUUPnOpToLKVg=@buildroot.org
-X-Gm-Message-State: AOJu0YwBfWGLsMtpBtFp6l8+1vha1dSmDz/JH1cJb0bcOsYMZym17go6
- caZF/Q067ys3zkNmywIUo54ooDKYaULbZyskDzBDUmKbPuBVJ3UKRl5nkuvtvIqa9+4=
-X-Gm-Gg: Acq92OFitu6KsyUMJpzHHMXA8FvWCXkIUtizyX/Pol3Wkay0ovyGztEoAskXL+xBJUN
- CFIFsCK1t3WujBpQhcpH2feJQV+rzUmUttja4IdxzhU9wY6URm4MmKhtdL/QB46GPp4dWw/pUf3
- 2ZpQAUbIliSfY+RaNafxtxMOO3Od4bCTgyjh1W3AHGBDHws76YV8uURai9XLvLyr7IJXGOXaG90
- k/Q7C3oX/y7ejDYNS3eD5HDMaf0kIRdX0TYFyBuz2ScexJmRWotlSuzF0pjITykc3JWI184/cRq
- MxJTU6oP9S9H33TLYRTt2hEBe56vwzx/i1GcnXAl5h+esZOV3Q8naecCbxAuLsAD4Cpefw/wv2G
- PSM+pzusS1S9qCAN4aFhLThQVEbdikZfbcEbDpO09UM5qrLcISEEgsAHMP7kpTuvVisMKGQmWpJ
- 2Td2KB2TLzWcpaN0dy/fx/EriTtqC4FuWwMEzRwMM64rdDwOHS2XZ+6WS5XnNa/dtocXdO
-X-Received: by 2002:a05:600c:574d:b0:490:778:4fe8 with SMTP id
- 5b1f17b1804b1-4909c0ba8c9mr21975695e9.25.1780043355268; 
- Fri, 29 May 2026 01:29:15 -0700 (PDT)
+ AFNElJ8VsI7oQ0FaGdFptpYHPQVr7hu08ZKC1WR1AZCt9dJFoKP4sq/PIa3Zutde7NDnxZ0kadq+cIl8apQ=@buildroot.org
+X-Gm-Message-State: AOJu0YwPOssryXbUlaxm8RaLPWdgbt19CGW/fiWtQQN8C9yxTNcyhM0a
+ z36gUJQzkqtrC39LtnXy7+uybxsf3MA8KJ3a3EQmHIzw8pw1y8B5faW83+20LC6HVvs=
+X-Gm-Gg: Acq92OEQ1Sj2Esx9JZUc7gjrg5W+w3xNm1yRLHtJfl9ZmX5Q1EW32H+uwAKzs4L7vlk
+ HbEdFAisF8KpTVEVaGqn00nTVaSbLrUT3DNDA/JuPQlL5wHBw0cxG5Teiu69tFvCW5qEhPse4Ja
+ NM0C+D1CfsGFf7eyprWVKwiJV8ZOOaU7E3ykhb969bzTQOLsN4uw5ZQ/CN5/4uzdE5VeiJ/ABkV
+ IArAVOeY++S5cUR4ZCy1ioEj+YJpHqMW8Ukw2CAubi9uiJKONigCF2LSRxjHVL6j0WbypL8z1IM
+ I5GD9WxNwjWE/wBdlKgx950T4AtxVIKEvyR19we+o2yoh/wHzfu82cr5tz9YVIwr29PU6moMuaP
+ ZQzDtho1ttIenN1w4VfiXh3+082t63Z/CbAXzBFTauRHNWm8TGbo/mQt7V+cMzrxV/cnFX7E8Rg
+ GuJLNSqHCO3tQDjgo2RlnfqtqrB0shWDmZHurbKAt3IClQk/3QM34JZTUNLw==
+X-Received: by 2002:a5d:5241:0:b0:45e:779a:302c with SMTP id
+ ffacd0b85a97d-45ef14721b1mr2587591f8f.29.1780043356465; 
+ Fri, 29 May 2026 01:29:16 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909c12d2c5sm12536645e9.7.2026.05.29.01.29.14
+ ffacd0b85a97d-45ef34bd896sm1900716f8f.14.2026.05.29.01.29.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:29:15 -0700 (PDT)
-To: James Hilliard <james.hilliard1@gmail.com>
+ Fri, 29 May 2026 01:29:16 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:29:14 +0200
-Message-ID: <20260529082914.57132-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:29:15 +0200
+Message-ID: <20260529082915.57186-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260304172729.3622901-1-james.hilliard1@gmail.com>
-References: <20260304172729.3622901-1-james.hilliard1@gmail.com>
+In-Reply-To: <20260307185425.729667-1-bernd@kuhls.net>
+References: <20260307185425.729667-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043355; x=1780648155; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043357; x=1780648157; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=R38ig/MrSBZPc9kOZniwitXQ1BJge25z+4xkTBCx9Gw=;
- b=Cm7KW71RkMzzC11SIlt5I5FyPuXZTzMlgxFHS/xoFntmz/mPkYrZ0n69Xp0jQEc/VV
- MLQcch3g7YPwFVUl/Ela4zpvhTAJMdX+6tFUZiZda8l4oOMH+2sQx13X5eP6JbEYNlZ3
- IZV3vb5AJiJKtepryed0aT1Ag8Igg/rXTOsCg9jYoF/YSGzY0OEds07Ruen5mOKgQRdK
- Uc9LlvVfh1TCIu+8KEAT+xQpV3dyb8jmTT+J679DzlhenDxkohBbyUcOmx1vsdn+fUvq
- D5AJA8EBvhilmSDZtvDrsGcgzLCqWvOO1ScsXT7R4I9syeOIfnC2HDP6vlWVOnHyjBr9
- 0nbw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=nJz1rr8csdPkFrJIGrge0SEAgRemn7t36HFCLbjGWx0=;
+ b=QpzeZvjBJXIAeC+sYPXXLqzM7UogJsj60YyVXVtOrLBzp+QYwusdqsBAgY61oe5/ov
+ sd2vnnwE3mD8+y1+szRxnRkmEMv/8LQP5+pblFK1PPJNet/gsOM0jRXe5ZpkB5XAAS13
+ s2/TEDFcFysVFEbiOCKQ38QvEsVOVS9AdGjXU9/fjMQzfFKiYpjZ7uHxQ/PE4zrypwwL
+ p8XBa2ybXJ9tb8ZfuIZUr/XsPj1dy3XB5Q5mgQKvmUfQbnzA8xxAcS3dstm6KRuFVEmM
+ uFXZVJeaZXVJMK96uTLRLLA/YogYnpUfe93XMi08axP2ayKHfNXbIzLRCcUx5eaFCi70
+ jq0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Cm7KW71R
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiodns: bump to version
- 4.0.0
+ header.a=rsa-sha256 header.s=google header.b=QpzeZvjB
+Subject: Re: [Buildroot] [PATCH 1/1] package/libheif: needs gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,45 +131,108 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Fixes build error with gcc 9.x:
+> 
+> output/build/libheif-1.21.1/libheif/nclx.h:128:50: error:
+>  'bool nclx_profile::operator==(const nclx_profile&)
+>  const' cannot be defaulted
+> 
+>  using this defconfig:
+> 
+>   BR2_arm=y
+>   BR2_TOOLCHAIN_EXTERNAL=y
+>   BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>   BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>   BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.11.2.tar.bz2"
+>   BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+>   BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+>   BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>   # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>   BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>   BR2_STATIC_LIBS=y
+>   BR2_PACKAGE_LIBHEIF=y
+> 
+> According to https://github.com/strukturag/libheif/issues/1615#issuecomment-3457979167
+> gcc >= 10 with support for C++20 is needed for the package.
+> 
+> The failing code was introduced upstream in version 0.21.0 with commit
+> https://github.com/strukturag/libheif/commit/a62f933e380e165dc2c12a879d0ceed1529b3efa
+> which was added to buildroot with commit
+> a8aed698c706ec534ddc41cdce651c18016c28ca.
+> 
+> Also removed -std=c++11 from CXXFLAGS.
+> 
+> The build error was not yet recorded by the autobuilders.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/python-aiodns/python-aiodns.hash | 4 ++--
->  package/python-aiodns/python-aiodns.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/kodi-imagedecoder-heif/Config.in | 6 +++---
+>  package/libheif/Config.in                | 6 +++---
+>  package/libheif/libheif.mk               | 1 -
+>  3 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-> index a4a242670a..4cde1c4b1d 100644
-> --- a/package/python-aiodns/python-aiodns.hash
-> +++ b/package/python-aiodns/python-aiodns.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/aiodns/json
-> -md5  c1552fe562a1f9c98ea4c2311a2c75ba  aiodns-3.6.1.tar.gz
-> -sha256  b0e9ce98718a5b8f7ca8cd16fc393163374bc2412236b91f6c851d066e3324b6  aiodns-3.6.1.tar.gz
-> +md5  c69a64f09c0999f63ed759f5046d5bb4  aiodns-4.0.0.tar.gz
-> +sha256  17be26a936ba788c849ba5fd20e0ba69d8c46e6273e846eb5430eae2630ce5b1  aiodns-4.0.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
-> diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-> index 7476c76b72..6befbff203 100644
-> --- a/package/python-aiodns/python-aiodns.mk
-> +++ b/package/python-aiodns/python-aiodns.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
+> diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
+> index f41b164ff4..d77f10ee98 100644
+> --- a/package/kodi-imagedecoder-heif/Config.in
+> +++ b/package/kodi-imagedecoder-heif/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+>  	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libheif
+>  	select BR2_PACKAGE_LIBDE265
+>  	select BR2_PACKAGE_LIBHEIF
+>  	select BR2_PACKAGE_TINYXML2
+> @@ -12,7 +12,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
 >  
-> -PYTHON_AIODNS_VERSION = 3.6.1
-> +PYTHON_AIODNS_VERSION = 4.0.0
->  PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
-> -PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/85/2f/9d1ee4f937addda60220f47925dac6c6b3782f6851fd578987284a8d2491
-> +PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/10/da/97235e953109936bfeda62c1f9f1a7c5652d4dc49f2b5911f9ae1043afa9
->  PYTHON_AIODNS_SETUP_TYPE = setuptools
->  PYTHON_AIODNS_LICENSE = MIT
->  PYTHON_AIODNS_LICENSE_FILES = LICENSE
+>  	  https://github.com/xbmc/imagedecoder.heif
+>  
+> -comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 4.8"
+> +comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 10"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
+> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
+> index 0ae86a07f4..9e88fb826d 100644
+> --- a/package/libheif/Config.in
+> +++ b/package/libheif/Config.in
+> @@ -2,14 +2,14 @@ config BR2_PACKAGE_LIBHEIF
+>  	bool "libheif"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+>  	  libheif is an HEIF and AVIF file format decoder and encoder.
+>  
+>  	  https://github.com/strukturag/libheif
+>  
+> -comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
+> +comment "libheif needs a toolchain w/ C++, threads, gcc >= 10"
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+>  		!BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+> index acd302d847..c4196f9353 100644
+> --- a/package/libheif/libheif.mk
+> +++ b/package/libheif/libheif.mk
+> @@ -11,7 +11,6 @@ LIBHEIF_LICENSE_FILES = COPYING
+>  LIBHEIF_CPE_ID_VENDOR = struktur
+>  LIBHEIF_INSTALL_STAGING = YES
+>  LIBHEIF_CONF_OPTS = \
+> -	-DCMAKE_CXX_FLAGS="-std=c++11" \
+>  	-DENABLE_PLUGIN_LOADING=OFF \
+>  	-DWITH_AOM_DECODER=OFF \
+>  	-DWITH_AOM_ENCODER=OFF \
 > -- 
-> 2.43.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
