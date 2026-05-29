@@ -1,119 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5CA5CD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A071CD6E4F
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74D64615FB;
-	Fri, 29 May 2026 08:31:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qheaVFQzULR; Fri, 29 May 2026 08:31:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E51261600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043460;
-	bh=L1IzI53hz5ruQWdK/OYUPNODvTeNXZorvWLXNX4MIro=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qscKk58p4cogSckpn+/QGli0uhk0DY8mEVMOdiAWOucM0+ghWUhhvI5srBHYd0wQQ
-	 EPtesZ27LFMukjuvvEEjG7CyS2WjHk9un4rh9+nc09pXLYWyYXAwXB9vKUksthgeyS
-	 /7DIegjuJ9wk1vGNlbYZ71CiHpiPuQvzl9+29wc5Ti8xZde1pSI92MXPj6unzdChTp
-	 wK6+Cjw2gjx3kIoGxXo6F7fSwDHGeK7fvWUDMkLiSD/VGvvrLTRVW60qetc8D34G0F
-	 KPMRclDFE4tI8VGujs9h3NFDOaxZnvHvFZ39zbWcEFVpPBuiZO/JfBOPk8auC1ZWzS
-	 I92YwWbFziwJg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E51261600;
-	Fri, 29 May 2026 08:31:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F81828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8330B42367
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E3BE423A2;
+	Fri, 29 May 2026 08:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RsJLp4ar56Wa for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:41 +0000 (UTC)
+ id wxtZea_StreA; Fri, 29 May 2026 08:31:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BE2E4239F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780043461;
+	bh=sLMZBj1RM+NfXXHLGvunGwSSQP4aL4Q1hWDyEA1l120=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NpflwNBevztOaXEANq5tEn7LFtG9uveI6vmoo/hUT8YelAlGpVWmc5bP2GBbWocnr
+	 vv/3RhnOt6jgXVdoAohEUSolaM3u5uJHtXvihMEwuEXmPOKNmvWJmf0V/YR2/1EIFW
+	 ToNw3fXjPYas947t1TIRSXE9GB4NDcmjxXfyXgNQ7bfLHwJLzthfdLQZVmmj6c8iwj
+	 Utq4460d29zC6L2GWmfmM1YkGm/STF4oxEsgyy0JfoQ07K3D1NNcrhyet+OeX3d0HL
+	 QlLmYpcy8pJll0bIfDQAbtQ33UncYTzGjZ3Aynq08JgCtQhx7t5DU+mrxSXvLJfND1
+	 lmlqd44JlOYSQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BE2E4239F;
+	Fri, 29 May 2026 08:31:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 128F9288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82DC442367
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 66KZSjqImcGg for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E24542364
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E24542364
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E24542364
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:40 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-45e8a834cc2so8380158f8f.1
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 45D4542370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45D4542370
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 45D4542370
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:42 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-49068493267so37337795e9.1
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043438; x=1780648238;
+ d=1e100.net; s=20251104; t=1780043440; x=1780648240;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=DjIyvU5sTYxRMR//qhk06UoPGDqbkqTpQYRxgXXjzV0=;
- b=HqdFvyazjCzI5x3l/YJumYdQuEYr8Mz/L8dt3K4fSV97yxuIjAMdQyqpZOJj3O4hT/
- R9N0y1KniwTfHESlazuS06lsZsQZPlJ/9mBpiVn2HdUH2ak5gOQa34JysIQydIT2rYUC
- w6m8DfgEOyPyj0kuBjO3vmvta4oya0i0ywSa7RlNXs9JQA5VevPdq5WZmeQK3Vy6EqrN
- CbebYo0Bh0BvQLiDO8yIxVeK3X8vNy3QaYkPXrKoDLwSTCyJW/Ct9VlZiYK8R3ZijE/v
- yLT7LsFc/iY5l2aMVilQkksitCHnexD8KyvFKPgXxMhuNsUCCjNf0mRYW1T6jiaJx3+J
- z6Og==
+ bh=5sfenPUe31Vvg9sO+gt8VslB3h5+TRqdj8d3TBX5SRs=;
+ b=FWFVZt0qfKOU3a0+TJnhRqUnok+Q+oTlDDd+b2SlrhTfE4Fx+xYJHQRBobwYGgSR9q
+ a+Y+YSfo8FJv49LgSgpr6kRo4yu5mkykSAobbE4eTxeZ8Tn9IZgSpdOnVinMMPfr7u/w
+ mNDVqGFUeBPP2IkYp4ksxlWXRXyDyTsWvUHy2SJbbx52BQP8KRpof11pX3gyL/W8Ma5i
+ apLCbKdNJNJ1RWdcSsrZ3PYzIDLbQdoTLr/uI6VNcUby6c0Q9mTUCvK775BIkR5DBiwp
+ sXUzZ2Bjk6Et0TAE/S5l011pTCRmlaGJA81FSJ3K2AkRRLXxfZDgytiEqJxf8pr4CsPT
+ gfNw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/i2/Yfmfjb1IsZTCYTrnKoklacIKukY17tJbAVMlkgl4zUCJQvyehMAUA54f4HZwxr+pSzA2s4bJg=@buildroot.org
-X-Gm-Message-State: AOJu0YyYlEeH8dN3Jn9Jv3NLp8BZg4v54YR3Mbt3n3HbsmToX0YHeiOm
- N7Siby06TdtAKRPqAjd9HZJvnCkjlOCbgt6/gV1qVSVAmZ79GzxrPYVYtncH5F5rG18/g0G5kgx
- 2ywYS
-X-Gm-Gg: Acq92OGOMjeHUy0YHSzrAi48fTjAGgZx/TaeKFCDfna0fracGQEorx8AlmaU6f/UN8o
- A16GuvdXKkE14wMAh9FoNyE8+oSRYdtceIAwJ5Jx+7znsfxeY/QuReXyLaqbQ3WQA3ItwFTtiRm
- qr5O3XjYh0E0onZRlZSKgbbqwg3F+AShf6w5Lt5dfzame0mvcRfWWCqOzGWwj0rukzuW+w1x+rj
- y5gUGyu5S6S81Kf4QoIFkgzxgk08oZFsAbNzYOpEF+EHfIpYgK3Jx+8CZ8PcH8y8Bk254KxB0ww
- MT+Mx5/BodJsdTxUFQ0wJLopmQuJlmQWdhHY/t74lk6ezCm/T5m5bPE19p7Dbxh6wuKKOBRsWys
- d1gNNNiUc3L0JwjCmKNAek9Hilu/8Z34pwS9EfEzlZQUOywASMJ83b9bFvy3G/B/tOlY34fWzkT
- 0s74ltJsJnL5mJMrIFCel3gQQWquPZd50zQw2DI/BwXOydYnpC6Qo+DKe5eQ==
-X-Received: by 2002:a5d:6551:0:b0:43b:5097:6f62 with SMTP id
- ffacd0b85a97d-45ef146a6b2mr2341221f8f.36.1780043438189; 
- Fri, 29 May 2026 01:30:38 -0700 (PDT)
+ AFNElJ+U1hb6ubqjFVZqhkl1wZTfZxTOT6lHlEW0e44CaBgL7uhVZTH0tIP8aM8fF+bUqtB/Hzck5rI5Xow=@buildroot.org
+X-Gm-Message-State: AOJu0Yy3ztYUfDxn5MtCbbJJ8UvkMa8OoFc/IpYOsFILmC0jhVw0G3cg
+ vcez9To9lqk/odtrwe7ty8IMTW50j74fqqLZ3pZFrZBRZIwNTG29kShgNZtmFqjcN/8=
+X-Gm-Gg: Acq92OEYjcF2TrUAKty2VvyCOU6xls3wefeeao4jKp/OendSalORbgbdNkBtJzh8PaN
+ ysVjJoGQY/SzjTxJq92yBO64JcuPf3+Ev9oOpXH4tN6i6tuedGvg/y4v2n5nmBjAa38c9QTBQxS
+ es2BBcRlK93/xWf1OIJtgxcrIOc393d0fR0MuldJkiIkWcHk/y6FDUoD5n9TWfN70P5aA/JfIow
+ 4xdvL0a9ccPvZNvFve9d5A4HT+zzdhxbntmvloc3rR57CZyvsWrqzVQQF5vfta1htzP30HRQDtq
+ ar4Tkfh6OG9f2nORhi0O1ApIBwLKBjLaOwl7dtGVjNi5oOVfC2qD6uTb87MIMg8RUK0Z7Gwj2M8
+ peWXW9CknzdeNO0oApsdlU9HfHeeiIEU2UaT19mCK9O1e3XFJqdidVliBF/j9FTlVndn6cL3IsJ
+ DUAm/dDZWxz6Us4xPGfLc4yri59RDieB+03YQFs52J4dU2KwnwZ0QmQlPcxg==
+X-Received: by 2002:a05:600c:468a:b0:490:5cb3:e94a with SMTP id
+ 5b1f17b1804b1-4909c8558c2mr31350095e9.2.1780043440174; 
+ Fri, 29 May 2026 01:30:40 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef34bd896sm1908447f8f.14.2026.05.29.01.30.37
+ 5b1f17b1804b1-4909d68b853sm24754615e9.3.2026.05.29.01.30.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:37 -0700 (PDT)
+ Fri, 29 May 2026 01:30:39 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:37 +0200
-Message-ID: <20260529083037.60208-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:39 +0200
+Message-ID: <20260529083039.60328-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260520180023.338276-1-bernd@kuhls.net>
-References: <20260520180023.338276-1-bernd@kuhls.net>
+In-Reply-To: <20260524170129.3211403-1-bernd@kuhls.net>
+References: <20260524170129.3211403-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043438; x=1780648238; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043440; x=1780648240; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=DjIyvU5sTYxRMR//qhk06UoPGDqbkqTpQYRxgXXjzV0=;
- b=BTVAzNvAWabm+41ZXEMnDuOIccW8k/jgZN9CLXyuWTWWLLqSA1Yor3ELLR5R7TRJAz
- 97+4HKJ1/xgG+Ip6P/qB3FGBruD1CVSbOkt5soHeTxDLSzVG1fzf+DbtZi3Lx8IOsjJ5
- /J2YZb6fV19t20oe7edQwo2RgvARHYvFYFp4DD3MBIIEX+X2mtU5sFDH4uYnpw5Xp38q
- L+mKJTi2Q2uNBKaatpeA8fYQhu4qXrh7ie/vdjL8vPMZFsuHEEGSc3jvmxnhIz9PEdMx
- ND//sokFV/3wQQv++xru3jjA2yR17XDIK7vWtOTmHj5NmbaROFgD9wSBfk1mo2mfdd32
- Gljg==
+ bh=5sfenPUe31Vvg9sO+gt8VslB3h5+TRqdj8d3TBX5SRs=;
+ b=PTAkTkqnxLwvl0/r9Wcf+/om1Gv9fZOkVPA9ycsmucPTIZpIu/vlRcaJ01Ov5gHvad
+ D8KLsTg0AYaFpd5DJYmB4YGlg7I5DKoxGd+zPPcpdM35zXodRX4enLoNfVxotZu9LkOl
+ 8qoY7CCAm3GeAqLO/dNbhOyHKUYTwhb2jUNURdTBUevYJ2S8yXRtlbubnS1uFd7HhVze
+ 337HEd9NSnuzuCFuQQ36K7VYG3Y4JVC17N7Ey7ZDF2EbajAsLommSio00qfeXFpme1rW
+ 1wBtqbjcd70sspWcIJIZ+DctMYDpd1zX+ix0FU672krHlfzHGPNHnsQEuiNEpwNDuWMn
+ 84WA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=BTVAzNvA
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/libheif: security bump
- version to 1.22.0
+ header.a=rsa-sha256 header.s=google header.b=PTAkTkqn
+Subject: Re: [Buildroot] [PATCH 1/1] package/kexec: fix powerpc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,104 +131,134 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/strukturag/libheif/releases/tag/v1.22.0
+> Added two upstream commits to fix build errors on powerpc.
 > 
-> Fixes the following CVEs/advisories:
+> The build error also occurs with kexec 2.0.30 on the 2025.02.x branch
+> so a backport to LTS branches should be considered:
+> https://autobuild.buildroot.net/results/2ec/2ec0d85c658f8264fcc4eef2deb6c67671e3e7ae/
 > 
-> CVE-2026-32738 (GHSA-7f2h-cmpf-v9ww) : Heap OOB Read / SEGV Crash via Zero samples_per_chunk in stsc
-> CVE-2026-32739 (GHSA-j9g7-q9hv-gq8c) : Infinite Loop DoS in stts Sample Duration Lookup
-> CVE-2026-32740 (GHSA-frfr-f3vg-2g6j) : Heap-Buffer-Overflow Write in Grid Tile Chroma Compositing
-> CVE-2026-32741 (GHSA-j3w5-7whq-p37q) : heap buffer overflow in decode_mask_image()
-> CVE-2026-32814 (GHSA-4m8r-34pg-rvwc) : Uninitialized Heap Memory Information Leak via Failed Grid Tiles
-> CVE-2026-32882 (GHSA-hg7q-rjr2-8x46) : Heap Buffer OOB Read in overlay compositing due to wrong alpha stride
-> CVE-2026-41069 (GHSA-p82x-fpmv-576r) : Out-of-bounds vector access leading to invalid dereference
-> CVE-2026-41071 (GHSA-xj92-xjff-h8w3) : Heap buffer over-read in SampleAuxInfoReader via crafted HEIF sequence file with mismatched saiz sample count
-> CVE-2026-47178 (GHSA-5x55-x5pf-9c6g) : Heap Out Of Bounds Write in unci subsystem
-> CVE-2026-47247 (GHSA-2vh6-whr3-cmq3) : Heap Information Disclosure via Grid Image Gap + Uninitialized Pixel Plane Allocation
-> CVE-2026-47251 (GHSA-p6q9-fhf2-vj9v) : Incomplete fix for CVE-2026-3949: integer overflow bypass in vvdec_push_data2
-> CVE-2026-47254 (GHSA-wqjg-4x9g-6cvg) : Heap Buffer Overflow in Track::get_next_sample_raw_data() -- OOB Chunk Vector Access
-> CVE-2026-47709 (GHSA-4h72-vqgp-9376) : NULL pointer dereference in heif_image_handle_get_image_tiling for malformed unci image missing ispe
-> CVE-2026-47714 (GHSA-h4wm-6wwf-qvhx) : Integer overflow in inline mask size calculation causes undersized buffer allocation
-> CVE TBD (GHSA-6x5f-qchq-cxqv) : heap OOB read in ImageItem_Grid::decode_grid_tile via irot-induced tile-coordinate underflow
-> (GHSA-95jx-g5vf-cpp8) : Integer Overflow in SampleAuxInfoReader Offset Calculation
-> (GHSA-p4r6-6972-g26m) : Incorrect byte-count initialization in BitstreamRange constructor allows container-boundary check bypass
-> (GHSA-jh2w-m72q-q595) : Out-of-bounds read and assertion-based DoS in EXIF parsing (find_exif_tag / read32) with short EXIF TIFF payload
-> (GHSA-9h96-c44j-jpq9) : Heap buffer overflow via uint32_t stride overflow in image plane allocation
-> 
-> Added upstream commit to fix build error with imagemagick which would
-> be introduced by this bump.
+> Fixes:
+> https://autobuild.buildroot.net/results/53b/53bafc454533aeafc21116a99d87391b3049e12a/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
-> v2: added imagemagick fix
+>  ...ix-function-signature-of-comparefunc.patch | 42 +++++++++++++++
+>  ...rations-in-read-memory_region_limits.patch | 54 +++++++++++++++++++
+>  2 files changed, 96 insertions(+)
+>  create mode 100644 package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
+>  create mode 100644 package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
 > 
->  ...eif_properties.h-fix-bad_pixels-type.patch | 28 +++++++++++++++++++
->  package/libheif/libheif.hash                  |  4 +--
->  package/libheif/libheif.mk                    |  2 +-
->  3 files changed, 31 insertions(+), 3 deletions(-)
->  create mode 100644 package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
-> 
-> diff --git a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
+> diff --git a/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
 > new file mode 100644
-> index 0000000000..69c5d170fe
+> index 0000000000..809e91e939
 > --- /dev/null
-> +++ b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
-> @@ -0,0 +1,28 @@
-> +From ef124f9988e57a06ad6d102c236d2bb4b82aef5d Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?=C8=98tefan=20Talpalaru?= <stefantalpalaru@yahoo.com>
-> +Date: Wed, 20 May 2026 00:37:24 +0200
-> +Subject: [PATCH] heif_properties.h: fix "bad_pixels" type
+> +++ b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
+> @@ -0,0 +1,42 @@
+> +From b89799f7f20d4b2476e99e95e6795450f2f1c111 Mon Sep 17 00:00:00 2001
+> +From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> +Date: Wed, 22 Oct 2025 13:44:12 +0200
+> +Subject: kexec-tools: powerpc: Fix function signature of comparefunc()
 > +
-> +Upstream: https://github.com/strukturag/libheif/commit/ef124f9988e57a06ad6d102c236d2bb4b82aef5d
+> +Fixes the following build error on 32-bit PowerPC:
+> +
+> +kexec/arch/ppc/fs2dt.c: In function 'putnode':
+> +kexec/arch/ppc/fs2dt.c:338:51: error: passing argument 4 of 'scandir' from incompatible pointer type [-Wincompatible-pointer-types]
+> +  338 |         numlist = scandir(pathname, &namelist, 0, comparefunc);
+> +      |                                                   ^~~~~~~~~~~
+> +      |                                                   |
+> +      |                                                   int (*)(const void *, const void *)
+> +
+> +Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> +Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
+> +Signed-off-by: Simon Horman <horms@kernel.org>
+> +
+> +Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=b89799f7f20d4b2476e99e95e6795450f2f1c111
 > +
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > +---
-> + libheif/api/libheif/heif_properties.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> + kexec/arch/ppc/fs2dt.c | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
 > +
-> +diff --git a/libheif/api/libheif/heif_properties.h b/libheif/api/libheif/heif_properties.h
-> +index 9432bd46..0dec3a37 100644
-> +--- a/libheif/api/libheif/heif_properties.h
-> ++++ b/libheif/api/libheif/heif_properties.h
-> +@@ -335,7 +335,7 @@ heif_error heif_image_add_sensor_bad_pixels_map(heif_image*,
-> +                                                  uint32_t num_bad_columns,
-> +                                                  const uint32_t* bad_columns,
-> +                                                  uint32_t num_bad_pixels,
-> +-                                                 const heif_bad_pixel* bad_pixels);
-> ++                                                 const struct heif_bad_pixel* bad_pixels);
-> + 
-> + // Returns the number of sensor bad pixels maps on this image (0 if none).
-> + LIBHEIF_API
+> +diff --git a/kexec/arch/ppc/fs2dt.c b/kexec/arch/ppc/fs2dt.c
+> +index fed499b..d03b995 100644
+> +--- a/kexec/arch/ppc/fs2dt.c
+> ++++ b/kexec/arch/ppc/fs2dt.c
+> +@@ -292,7 +292,8 @@ static void putprops(char *fn, struct dirent **nlist, int numlist)
+> +  * Compare function used to sort the device-tree directories
+> +  * This function will be passed to scandir.
+> +  */
+> +-static int comparefunc(const void *dentry1, const void *dentry2)
+> ++static int comparefunc(const struct dirent **dentry1,
+> ++		       const struct dirent **dentry2)
+> + {
+> + 	char *str1 = (*(struct dirent **)dentry1)->d_name;
+> + 	char *str2 = (*(struct dirent **)dentry2)->d_name;
 > +-- 
-> +2.47.3
+> +cgit 1.3-korg
 > +
-> diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
-> index 0daabcb5dc..b88784b309 100644
-> --- a/package/libheif/libheif.hash
-> +++ b/package/libheif/libheif.hash
-> @@ -1,4 +1,4 @@
-> -# From https://github.com/strukturag/libheif/releases/tag/v1.21.2
-> -sha256  75f530b7154bc93e7ecf846edfc0416bf5f490612de8c45983c36385aa742b42  libheif-1.21.2.tar.gz
-> +# From https://github.com/strukturag/libheif/releases/tag/v1.22.0
-> +sha256  8bd20cfa3201997b8f63266cddfabea2e1481467d7f992e6a2595e0bec691fc2  libheif-1.22.0.tar.gz
->  # Locally computed:
->  sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
-> diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-> index 77435dda5c..e47620b167 100644
-> --- a/package/libheif/libheif.mk
-> +++ b/package/libheif/libheif.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBHEIF_VERSION = 1.21.2
-> +LIBHEIF_VERSION = 1.22.0
->  LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
->  LIBHEIF_LICENSE = LGPL-3.0+
->  LIBHEIF_LICENSE_FILES = COPYING
+> diff --git a/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
+> new file mode 100644
+> index 0000000000..ed6c7bb392
+> --- /dev/null
+> +++ b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
+> @@ -0,0 +1,54 @@
+> +From 8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6 Mon Sep 17 00:00:00 2001
+> +From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> +Date: Wed, 22 Oct 2025 13:44:13 +0200
+> +Subject: kexec-tools: powerpc: Fix pointer declarations in
+> + read_memory_region_limits()
+> +
+> +Fixes the following two build errors on 32-bit PowerPC:
+> +
+> +kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
+> +kexec/arch/ppc/kexec-ppc.c:106:11: error: assignment to 'long long unsigned int *' from incompatible pointer type 'long unsigned int *' [-Wincompatible-pointer-types]
+> +  106 |         p = (unsigned long*)buf;
+> +      |           ^
+> +
+> +kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
+> +kexec/arch/ppc/kexec-ppc.c:112:19: error: assignment to 'long unsigned int *' from incompatible pointer type 'long long unsigned int *' [-Wincompatible-pointer-types]
+> +  112 |                 p = (unsigned long long *)p + 1;
+> +      |                   ^
+> +
+> +Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> +Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
+> +Signed-off-by: Simon Horman <horms@kernel.org>
+> +
+> +Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + kexec/arch/ppc/kexec-ppc.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/kexec/arch/ppc/kexec-ppc.c b/kexec/arch/ppc/kexec-ppc.c
+> +index d3dad0f..e173433 100644
+> +--- a/kexec/arch/ppc/kexec-ppc.c
+> ++++ b/kexec/arch/ppc/kexec-ppc.c
+> +@@ -91,7 +91,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
+> + 				unsigned long long *end)
+> + {
+> + 	char buf[MAXBYTES];
+> +-	unsigned long *p;
+> ++	unsigned long long *p;
+> + 	unsigned long nbytes = dt_address_cells + dt_size_cells;
+> + 
+> + 	if (lseek(fd, 0, SEEK_SET) == -1) {
+> +@@ -103,7 +103,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
+> + 		return -1;
+> + 	}
+> + 
+> +-	p = (unsigned long*)buf;
+> ++	p = (unsigned long long*)buf;
+> + 	if (dt_address_cells == sizeof(unsigned long)) {
+> + 		*start = p[0];
+> + 		p++;
+> +-- 
+> +cgit 1.3-korg
+> +
 > -- 
 > 2.47.3
 > 
