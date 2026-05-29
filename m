@@ -1,82 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A72BCD4F54
-	for <buildroot@archiver.kernel.org>; Thu, 28 May 2026 22:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49EA6CD6E43
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 02:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AAA1608DE;
-	Thu, 28 May 2026 22:27:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5DCB41206;
+	Fri, 29 May 2026 02:52:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OmSWIBO7mbhr; Thu, 28 May 2026 22:27:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qJJU3QNC1HNm; Fri, 29 May 2026 02:52:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3620D608E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C267F41207
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780007251;
-	bh=lyksY7ZIWOnshVcpu0Ac1Id4LhDLlX/ki6aID50SEzU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1780023165;
+	bh=XPw2hsAYHH8tAf9+6heUMvym5ZtmGJfPhVlrvOkDZHA=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Rk/fDz5f1HOI04t24ptUVFvsE9LcwScw//xMVjMXhW7PfqWyL/1DTH/ZYM1JPgXjd
-	 +/Gl2WL6fse7hmZdgMbj0saQ0OymLOehyJp40fMFIDE/c+4eyaau9aIwFQUVgAfzjq
-	 8JyGHcbKizecia4803c06IXF3GqXA2NjKAfXoRj8eidkWp+WwyjaMmp6IYnif1Y0q1
-	 SJDJWlEoXUVWE/HIOZUAbVZvguhixQCZBj60A0pwHI7lhJarD7ZIBNZasJKr56+3Cu
-	 V0IZWeROorw+uxAFWFeGoTHQFQpXZvqibtMUZXJJ9vEfBwRQSQGnJeCpWf3ifqQAOR
-	 RT4hzTvKoXPuQ==
+	b=L/Oep2THnhUbw9tfzmoGXtmpahfhBoCQuzMk2k1p4JSDb6/+MPitLIfW8+Xb64HTH
+	 azhJ5hg4CzgMLOcfngmCAyPXhegaKpIclMIbdYpkGnj29BJEzcqm2JJlFN/MUuYbx2
+	 91YkoiBhJrg41/7JasyDasVdvlYKsFZnaqKDnzbyN5q86mjrFEFFPphFs6Nx1BX6M0
+	 jKVBl3+/QV3kNRr+WCiSzxjdkIKA/19MGyEJWHM7n2BddpBkcXObrrKA0J9Tlo8VrI
+	 onPpiEFVJStMSqTR3aloE66BhIQtGS+teempAstfZDKBjz97e3t4aBo9dSrTeGSDXq
+	 me/CmpR7hbNfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3620D608E3;
-	Thu, 28 May 2026 22:27:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9909E28E
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C267F41207;
+	Fri, 29 May 2026 02:52:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F08828E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8785F81916
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 802CD41207
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xo3B_igqUQ7m for <buildroot@buildroot.org>;
- Thu, 28 May 2026 22:27:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44F5681911
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44F5681911
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 44F5681911
- for <buildroot@buildroot.org>; Thu, 28 May 2026 22:27:27 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 240492739
- for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 28 May 2026 22:27:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wSjC4-00000001UMj-0QlE
- for buildroot@buildroot.org; Fri, 29 May 2026 00:27:12 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1KD7mCTU0L9i for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 02:52:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5EEAF41206
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EEAF41206
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5EEAF41206
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 02:52:43 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 8CEF831E03CF; Fri, 29 May 2026 04:52:40 +0200 (CEST)
+Date: Fri, 29 May 2026 04:52:40 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 00:27:11 +0200
-Message-ID: <8733zbkw5c.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Message-ID: <ahj_eBXQ0dJThOrD@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=RBlIt0hnh7Xa7XPQ3Lv+O6uS4R7NO6uIrupDuqMsGzKApgn2xv6xL11CfIxtuXZMo9iHCsBgBMo37KCeCFzrRQVyEcDtUQmALhSDoOE/7ffRkK03Q8lFMg/GhYl0vONJNxm2VTK1/KxDYISwkI/w7OKTpA/74PfsPiXrwaQn/G1PIVKQGR3mr7ecIenqzsJm321Y298uKDeiuumUATvOhfqIUoAw/4b58+vmmfCHHbNsU6KTF8WiW7vHcq/vjpLI6KRqjf9CGdi66L84N57K/8l/ePcHCmvtgrlySAY6F8UFXIFBqJDONcsuylX+iev3B2139zAscc6QtqRUPKpPYw==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=OMglWH9JmnGLwgSkl2ByBtiKbxNL27xuQTOCxg1P6yY=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1780023160; bh=rAPSAnMaBVCJ+xPWRPl7um7pfg/1Igk3HmjxWqajUSI=;
+ h=Date:From:To:Subject:From;
+ b=kQYZbeI5sidr+oJLzWTJBat09zAAwnbbjIvfnxosQD8l4UU0/WPBGWaFI6pudSEeu
+ 6g//8RWFCTqXwXRWcWE6R7k0YDLHAIDpOrZLPk2ilDUeLdKSn2ABsLCUpL3vKJS4a2
+ uQFt7xYj5fbHOHf9vZ6oZKVH+PjeNkjVnqbbgk7Owcqs2m2HRN0DaXU/kZUYF6irn2
+ c8hBFGqKiTqCmCJoGUQxCQfQ3PdDUJEu5IGV/9vCXuI4yQbRA6okVwMF8chmwn+EX8
+ zF+aOEnTFwOXnJORKrjCv2KoY/tM1pbqtJF/EOBKENHXov7KWM1/Od0IJ7CHtoqYc+
+ 7WpM9Pu5Q7VGA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=RBlIt0hn
-Subject: [Buildroot] Buildroot 2026.05-rc3 released
+ header.from=openadk.org
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to 22.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,40 +86,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+See here for a changelog:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22-current.html
 
-Buildroot 2026.05-rc3 is released - Go download it at:
+Pjsip was updated to 2.16.
 
-https://buildroot.net/downloads/buildroot-2026.05-rc3.tar.gz
+Fixes some security issues in pjsip:
 
-or
+Author: Mike Bradeen Date: 2026-03-23
+Address the following pjproject security vulnerabilities
 
-https://buildroot.net/downloads/buildroot-2026.05-rc3.tar.xz
+GHSA-j29p-pvh2-pvqp - Buffer overflow in ICE with long username
+GHSA-8fj4-fv9f-hjpc - Heap use-after-free in PJSIP presense subscription termination header
+GHSA-g88q-c2hm-q7p7 - ICE session use-after-free race conditions
+GHSA-x5pq-qrp4-fmrj - Out-of-bounds read in SIP multipart parsing
 
-Or get it from Git:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
 
-https://gitlab.com/buildroot.org/buildroot.git (2026.05-rc3 tag)
+I want to stay with the LTS version for asterisk.
+Bernd sent an update to latest version.
 
-Another week, another release candidate. For details, see the CHANGES
-file:
+---
+ package/asterisk/asterisk.hash | 4 ++--
+ package/asterisk/asterisk.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2026.05-rc2..
-
-    13  Bernd Kuhls
-     3  Peter Korsgaard
-     1  Andreas Ziegler
-     1  Viacheslav Bocharov
-
-Expect the final 2026.05 release within a few days, unless anything big
-shows up.
-
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 3a8274b458..8d620a0ee3 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,8 +1,8 @@
+ # Locally computed
+-sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asterisk-22.8.2.tar.gz
++sha256  dd664a9600874d0b0c0e63a8fda2e08efc9f5fdc95781022fbf39ed9b15196f6  asterisk-22.9.0.tar.gz
+ 
+ # Locally computed
+-sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
++sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
+ sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index e2fdb189fa..b15a83f6f8 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 22.8.2
++ASTERISK_VERSION = 22.9.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+@@ -12,13 +12,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ # compilation with the external pjsip produces a non-working asterisk, which
+ # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+-ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
+ ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
+ 	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
 -- 
-Bye, Peter Korsgaard
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
