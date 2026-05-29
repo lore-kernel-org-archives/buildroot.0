@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00462CD6E4A
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 16:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2AA7CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 16:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C616261547;
-	Fri, 29 May 2026 16:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A22276072F;
+	Fri, 29 May 2026 16:48:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ce0xj3jKbMoI; Fri, 29 May 2026 16:44:31 +0000 (UTC)
+ id 5rzas1Ftja6E; Fri, 29 May 2026 16:48:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3DCA61543
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C22F60733
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780073071;
-	bh=/p1oX5cGJtaCveSTw7Y3gPeEGqmcLFF1+k6tXtL31YA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aXH2CMlkzZ6zZFjZKtHoDQxBAVaIOXT7pgvBWWqWoSml2htDW7Wiv61iAUd2ZLVor
-	 /wx+R/AUioUQXmFFp4ghdkx4FtAZUr8GMxQvCigKQHF7ftQl46EXcyGb1hhptZ+iyo
-	 TJQSFi/bbiEYg/U1v7+yR0vCDgjYMzvTuOXCH1YGltplmWBdsiXs0BLhdCD45qHBW6
-	 ULw+aEziPEXT8JtY7cbVcnZdIiJzJKhas26wEZiul+x+jLBY7zt4tZXOOUVxK11nxg
-	 GQMakqx0zaBatMTCN3U6xB94hLIIL0kxDvQoajp5BRwfklcVYTNvZTsJlhVJognS6O
-	 pGv1+0u8H+PNA==
+	s=default; t=1780073287;
+	bh=OhjX9Hg9HOHuVl66BHlE+jgdtjk3jiz94pA+KvTUfWk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=I323eB1ZWt1Pr2bckKP4gL+Zj20DgsJM4Mt4nuhkD3NyT9Y2oNKuXLgsq/JXxZKXs
+	 9EwRdgvVd0r59u9b9f26QX9mZPIybXF5wcH/csoQcu7A4EpeHOWP3OQgVe5CGyY1qI
+	 DOUspuTG8tdrfzlDXmiru5ZAVEKX2zgOFUasjeFVZeelDVqhffRdJW6k2i9d2bBnze
+	 GgKjXRgtfaoW4KdjzcIsHl2tL5a/jSLzLHyQRQGB8OT+pyMUgenBX8LzstrZynWCEU
+	 V09TIWHaB1/KGMCG2ZcFWyfWESZsq6glflstvkkLeaRjxvCiKRsuu1gdq88AftzJu9
+	 HG+7VtyyuiRjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3DCA61543;
-	Fri, 29 May 2026 16:44:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C22F60733;
+	Fri, 29 May 2026 16:48:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19FA5288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:44:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C4E66288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EECFA41EB7
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:44:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B35FC41EB7
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J-CRe_i_hQIN for <buildroot@buildroot.org>;
- Fri, 29 May 2026 16:44:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FDBD41ECB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FDBD41ECB
- for <buildroot@buildroot.org>; Fri, 29 May 2026 16:44:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C8A6487404; Fri, 29 May 2026 16:44:12 +0000 (UTC)
+ id 4jGFTu4dF35P for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 16:48:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B19841EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B19841EB6
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B19841EB6
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 16:48:04 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a09fc.dip0.t-ipconnect.de [91.58.9.252])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 677FCA4C3047;
+ Fri, 29 May 2026 18:48:01 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34884)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.3)
+ (envelope-from <bernd@kuhls.net>) id 1wT0NM-000000002vI-2SSo;
+ Fri, 29 May 2026 16:48:01 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 18:44:15 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5a761ac88c6bdb9a6a0f77d65fb92b0d25544677
-X-Git-Newrev: 0c2e0f1e9821c2e96b5060d003e773464ded62c2
-X-Patchwork-Hint: ignore
-Message-Id: <20260529164412.C8A6487404@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-cryptography:
- bump to version 48.0.0
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Fri, 29 May 2026 18:48:01 +0200
+Message-ID: <20260529164801.1299592-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1780073281;
+ bh=jUOJ6I4ghGGHH4hABvaCNGwZiQY87CYehIJQZQluXXs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=OtlqniH6+tLFT3PQnWAubREm3ITjSA2Lq9i083zcnnNPdsRdeH6N3Y/QEMHEqWYom
+ GmDw165BkzIq0wq7tW8FqZfHq8aC6dZF3zc2NOy2yBmsuGHs8APiJs5NfVIHLUfJsy
+ CT6hloSuVBtwV3Uxns61jkZhjlcEP4JZUt6YMrCS379QBuWI6qq+KovdV6nj/MIP30
+ L1fgj075rzf8FdHDgWo6yCYSAD/7DuwX437eFCn0BrIEuUOT7DpbAgHpXD2t9wbCEe
+ LKNLN25ZQ4n7Dl0ANYEOjIv/F1iaUbDk8CYQz4rfSgsohYCTxGDWS2I2ggiBzXPsYu
+ +ls8h1G/1v0PQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=OtlqniH6
+Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to
+ 4.99.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,55 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c2e0f1e9821c2e96b5060d003e773464ded62c2
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+https://lists.exim.org/lurker/message/20260529.143857.4c75d7df.en.html
+https://www.exim.org/static/doc/security/EXIM-Security-2026-05-19.1/EXIM-Security-2026-05-19.1.txt
 
-Changelog:
-https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst#4800---2026-05-04
+Fixes CVE-2026-48840.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Marcus: add changelog link]
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/3861000877a0a8330b7c6b66a5c9d7aeb4bdcb89
+
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index bd91df3abe..4498dfd45d 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  6cfe2745f466960344bf699234a12e16d6cd16f87e50cc2d15857351732daeb0  python-cryptography-47.0.0-cargo5.tar.gz
-+sha256  99bb9d438282237d394309a95f1effa4f91ca1f64f7ad0a0cff0f35e294d07b4  python-cryptography-48.0.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 1d5dad3367..bb4a5084cc 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index e95f7f5efe..cbf29c3f5d 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  663e76d2a0d9b8fc5b373d0008e44ae044f10feb22bc9dbae8c7f21345ebfb3b  exim-4.99.3.tar.xz
++sha256  87ff38815700dfb1ee4eb7e8dba7916df7a755905354d2d0faa1ae1790c4fd9d  exim-4.99.4.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  7c4109f499497e2432b71ad3f3f1cac358e63b1b693a352047e6990619d7fd619d3a966ba585482c58e0b23b3fa4f385d15720c455fda29633411e35db1d2e7f  exim-4.99.3.tar.xz
++sha512  30fa01a301f8f4fe0c069f3da9e5247f0e22b19f64119cb8cccaf10aada8280ce02061a4671d110ad29b08af9e23ba3c3e8c7483874c7b1c992d90b51681ca9a  exim-4.99.4.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index c72e25a2c4..60870474c4 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 47.0.0
-+PYTHON_CRYPTOGRAPHY_VERSION = 48.0.0
- PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/ef/b2/7ffa7fe8207a8c42147ffe70c3e360b228160c1d85dc3faff16aaa3244c0
-+PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/9f/a9/db8f313fdcd85d767d4973515e1db101f9c71f95fced83233de224673757
- PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+-EXIM_VERSION = 4.99.3
++EXIM_VERSION = 4.99.4
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
