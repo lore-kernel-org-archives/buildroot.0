@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF321CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 712A3CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:10:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C21884521;
+	by smtp1.osuosl.org (Postfix) with ESMTP id D856584510;
 	Fri, 29 May 2026 18:10:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZFtB7mKq09zl; Fri, 29 May 2026 18:10:38 +0000 (UTC)
+ id mttgsBwgX5R9; Fri, 29 May 2026 18:10:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 217278451F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F84784525
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780078236;
-	bh=gyK235rBms+HS1vF5JAhP84erOmE5np0drPWNCwyB+w=;
+	s=default; t=1780078238;
+	bh=Rv0KhX/p+Ogr7V5KHGQk65va+VZ//01NCrvsbisWFWg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jn4X28ijOPHrJIGjjxrNOz0cKPrZM+z82sLCUrGNZWHAMkcOdQpdmmjQ5ESGvDrw1
-	 g7VKjXb/ipm1p4VoXyQDEassUjdxSX4ca6Kbiz/1NP5gk1NaZ/g9OHxYuyj3BSmmyk
-	 4K2h1UfHNZdQx39oSWDP4pZRP/tw8AVmssG+W/RflsC1fO0iXbhiat3Xu8ehpgTc+P
-	 LhudgUEJ/l11G9N2GdU6svFdlOUsv+mn9/8JCAjTwDPDG0YpmV+jXC5zvWcuRoqAPV
-	 VZNj1WMOjh7FFRv/1sKQSn8m74IOQ1BVbWL1D/DcNriZuZemdpw8ys+dyiseoxFjoJ
-	 guGOxX+yYuIqA==
+	b=CXlhHb/3E91qMF5tWq3d8ZhilzE6Cpf1gHBgW5IidHydkhWyiu3XkBduo+WMoCVQK
+	 vrUoCltvtTeZ1Wajytud4Y/eo6yDB8DD2KNfLBUkrwNPCZEqJ5sc7CG/LcZJbOB05n
+	 1ihB8u6lBYvyeUJTDBCvYr0WoQxhjRqDLKFHHgMHlkq1rVPHYNo1TVQdPA9wateh1n
+	 cpz+PpHtqVGl4iBuoplYcams1KyyQSLGifbkk6ekqbG99fOsAYS/4R17NQVJdPwp7Z
+	 tqaSYliwuhLh3n9fV/2/eN5fr6wYdMDVj35hLHS2shhhbgEjva8DU+qffvHGjefKu+
+	 eFUPKP/hH2w3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 217278451F;
-	Fri, 29 May 2026 18:10:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C13F1372
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F84784525;
+	Fri, 29 May 2026 18:10:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D65B2D3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FD46844D5
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B737B420E4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vwS0KInp1L0t for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pC7rXaSImCfp for <buildroot@buildroot.org>;
  Fri, 29 May 2026 18:10:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F5E084511
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EDB542112
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F5E084511
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EDB542112
  for <buildroot@buildroot.org>; Fri, 29 May 2026 18:10:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C33E287410; Fri, 29 May 2026 18:10:18 +0000 (UTC)
+ id B167787411; Fri, 29 May 2026 18:10:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 20:08:05 +0200
+Date: Fri, 29 May 2026 20:03:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8ea3ae2a51f06310f414d89aa382bbf90a7ef82
-X-Git-Newrev: 17b434cf07f2696d9c3b5290c85b7dfb54eff134
+X-Git-Oldrev: 07f872bfe20615261ab51d76b598ae62573e06d9
+X-Git-Newrev: 8aff626d5c0d62ebc6cc0184c806109c494c320c
 X-Patchwork-Hint: ignore
-Message-Id: <20260529181018.C33E287410@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/odhcp6c: fix build with gcc >= 14.x
+Message-Id: <20260529181018.B167787411@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/odhcp6c: fix build with glibc >=
+ 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,156 +72,144 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0320668979021192559=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0320668979021192559==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/17b434cf07f2696d9c3b5290c85b7dfb54eff134
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8aff626d5c0d62ebc6cc0184c806109c494c320c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Detected by Gitlab pipeline when testing the other build fixes in this
-series. Autobuilders did not detect the problem due to the build error
-with glibc 2.43.
+Buildroot commit 227378b5930b681c79a13476ae60a98753a98a03 bumped glibc
+to 2.43 causing build errors in odhcp6c like:
 
-https://gitlab.com/bkuhls/buildroot/-/jobs/14571737512
+/home/autobuild/autobuild/instance-10/output-1/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/config.c:
+ In function 'config_parse_opt_string':
+/home/autobuild/autobuild/instance-10/output-1/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/config.c:338:21:
+ error: initialization discards 'const' qualifier from pointer target
+ type [-Werror=discarded-qualifiers]
+  338 |         char *sep = strpbrk(src, ARRAY_SEP);
 
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-powerpc-e500mc-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
- error: comparison of integer expressions of different signedness:
- ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
- 1395 | if (ia_hdr->iaid != htonl(ifindex) && otype == DHCPV6_OPT_IA_NA)
+Add upstream commit to fix the problem.
 
-https://gitlab.com/bkuhls/buildroot/-/jobs/14571737510
-
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-openrisc-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
- error: comparison of integer expressions of different signedness:
- ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
-
-https://gitlab.com/bkuhls/buildroot/-/jobs/14571737505
-
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-m68k-68040-uclibc/build/odhcp6c-f19dd37fb467c9cf10cad57aefa0d048312d7dfd/src/dhcpv6.c:1395:58:
- error: comparison of integer expressions of different signedness:
- ‘uint32_t’ {aka ‘unsigned int’} and ‘int’ [-Werror=sign-compare]
+Fixes:
+https://autobuild.buildroot.net/results/efb/efb43d2dc069f5ba9c56816d670a8a2a3682d9ae/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .../0002-dhcpv6-use-stable-IAID-for-IA_NA.patch    | 95 ++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
+ ...-odhcp6c-const-cast-for-c23-compatibility.patch | 102 +++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
-diff --git a/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch b/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch
+diff --git a/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch b/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch
 new file mode 100644
-index 0000000000..fc70205ccc
+index 0000000000..cdb26a7434
 --- /dev/null
-+++ b/package/odhcp6c/0002-dhcpv6-use-stable-IAID-for-IA_NA.patch
-@@ -0,0 +1,95 @@
-+From 9a4d6fe802d21e4fc1b84f7d55b5c3c23e71d6ba Mon Sep 17 00:00:00 2001
-+From: Paul Donald <newtwen+github@gmail.com>
-+Date: Thu, 18 Dec 2025 15:10:24 +0100
-+Subject: [PATCH] dhcpv6: use stable IAID for IA_NA
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/odhcp6c/0001-odhcp6c-const-cast-for-c23-compatibility.patch
+@@ -0,0 +1,102 @@
++From 3b69378125aba61b3391bf5fe607983ce75b839c Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Wed, 8 Apr 2026 14:14:56 -0700
++Subject: [PATCH] odhcp6c: const cast for c23 compatibility
 +
-+https://www.rfc-editor.org/rfc/rfc8415.html#section-12
++strpbrk is now a macro that returns const based on the parameter. Cast
++it away when we don't want const.
 +
-+   ........  The IAID is chosen by the client.  For any given use of an
-+   IA by the client, the IAID for that IA MUST be consistent across
-+   restarts of the DHCP client.  The client may maintain consistency by
-+   either storing the IAID in non-volatile storage or using an algorithm
-+   that will consistently produce the same IAID as long as the
-+   configuration of the client has not changed.
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
 +
-+Signed-off-by: Paul Donald <newtwen+github@gmail.com>
-+Link: https://github.com/openwrt/odhcp6c/pull/140
-+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-+
-+Upstream: https://github.com/openwrt/odhcp6c/commit/9a4d6fe802d21e4fc1b84f7d55b5c3c23e71d6ba
++Upstream: https://github.com/openwrt/odhcp6c/pull/156
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/dhcpv6.c  | 15 +++++++++++++--
-+ src/odhcp6c.h |  1 +
-+ 2 files changed, 14 insertions(+), 2 deletions(-)
++ src/config.c | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
 +
-+diff --git a/src/dhcpv6.c b/src/dhcpv6.c
-+index d8bb8be..97860b1 100644
-+--- a/src/dhcpv6.c
-++++ b/src/dhcpv6.c
-+@@ -262,6 +262,9 @@ static struct dhcpv6_stats dhcpv6_stats = {0};
-+ // config
-+ static struct config_dhcp* config_dhcp = NULL;
-+ 
-++// store unique ifname hash to use as IA->IAID
-++static uint32_t ifname_hash_iaid = 0;
-++
-+ static uint32_t ntohl_unaligned(const uint8_t *data)
++diff --git a/src/config.c b/src/config.c
++index 54e2d35..c1a3a99 100644
++--- a/src/config.c
+++++ b/src/config.c
++@@ -338,7 +338,7 @@ static int config_parse_opt_u8(const char *src, uint8_t **dst)
++ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool array)
 + {
-+ 	uint32_t buf;
-+@@ -542,6 +545,12 @@ void dhcpv6_reset_stats(void)
-+ 	memset(&dhcpv6_stats, 0, sizeof(dhcpv6_stats));
-+ }
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
 + 
-++uint32_t hash_ifname(const char *s) {
-++	uint32_t h = 0;
-++	while (*s) h = h * 31 + *s++;
-++	return h;
-++}
-++
-+ int init_dhcpv6(const char *ifname)
++ 	if (sep && !array)
++ 		return -1;
++@@ -362,7 +362,7 @@ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool ar
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -371,7 +371,7 @@ static int config_parse_opt_string(const char *src, uint8_t **dst, const bool ar
++ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const bool array)
 + {
-+ 	config_dhcp = config_dhcp_get();
-+@@ -566,6 +575,8 @@ int init_dhcpv6(const char *ifname)
-+ 	if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0)
-+ 		goto failure;
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
 + 
-++	ifname_hash_iaid = hash_ifname(ifname);
-++
-+ 	ifindex = ifr.ifr_ifindex;
++ 	if (sep && !array)
++ 		return -1;
++@@ -399,7 +399,7 @@ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const boo
++ 		src = sep;
 + 
-+ 	// Set the socket to non-blocking mode
-+@@ -838,7 +849,7 @@ static void dhcpv6_send(enum dhcpv6_msg req_msg_type, uint8_t trid[3], uint32_t
-+ 	struct dhcpv6_ia_hdr hdr_ia_na = {
-+ 		.type = htons(DHCPV6_OPT_IA_NA),
-+ 		.len = htons(sizeof(hdr_ia_na) - DHCPV6_OPT_HDR_SIZE),
-+-		.iaid = htonl(ifindex),
-++		.iaid = htonl(ifname_hash_iaid),
-+ 		.t1 = 0,
-+ 		.t2 = 0,
-+ 	};
-+@@ -1392,7 +1403,7 @@ static int dhcpv6_handle_reply(enum dhcpv6_msg orig, _o_unused const int rc,
-+ 						continue;
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
 + 
-+ 					// Test ID
-+-					if (ia_hdr->iaid != htonl(ifindex) && otype == DHCPV6_OPT_IA_NA)
-++					if (ia_hdr->iaid != htonl(ifname_hash_iaid) && otype == DHCPV6_OPT_IA_NA)
-+ 						continue;
++ 	return o_len;
++@@ -408,7 +408,7 @@ static int config_parse_opt_dns_string(const char *src, uint8_t **dst, const boo
++ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
 + 
-+ 					uint16_t code = DHCPV6_Success;
-+diff --git a/src/odhcp6c.h b/src/odhcp6c.h
-+index aa73bbc..c57f885 100644
-+--- a/src/odhcp6c.h
-++++ b/src/odhcp6c.h
-+@@ -540,6 +540,7 @@ struct odhcp6c_opt {
-+ 	const char *str;
-+ };
++ 	if (sep && !array)
++ 		return -1;
++@@ -433,7 +433,7 @@ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array
++ 		src = sep;
 + 
-++uint32_t hash_ifname(const char *s);
-+ int init_dhcpv6(const char *ifname);
-+ int dhcpv6_get_ia_mode(void);
-+ int dhcpv6_promote_server_cand(void);
-
---===============0320668979021192559==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -442,7 +442,7 @@ static int config_parse_opt_ip6(const char *src, uint8_t **dst, const bool array
++ static int config_parse_opt_user_class(const char *src, uint8_t **dst, const bool array)
++ {
++ 	int o_len = 0;
++-	char *sep = strpbrk(src, ARRAY_SEP);
+++	char *sep = strpbrk((char*)src, ARRAY_SEP);
++ 
++ 	if (sep && !array)
++ 		return -1;
++@@ -471,7 +471,7 @@ static int config_parse_opt_user_class(const char *src, uint8_t **dst, const boo
++ 		src = sep;
++ 
++ 		if (sep)
++-			sep = strpbrk(src, ARRAY_SEP);
+++			sep = strpbrk((char*)src, ARRAY_SEP);
++ 	} while (src);
++ 
++ 	return o_len;
++@@ -555,7 +555,7 @@ int config_parse_opt(const char *opt)
++ 	struct odhcp6c_opt *dopt = NULL;
++ 	int ret = -1;
++ 
++-	data = strpbrk(opt, ":");
+++	data = strpbrk((char*)opt, ":");
++ 	if (!data)
++ 		return -1;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0320668979021192559==--
