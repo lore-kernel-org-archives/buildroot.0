@@ -1,117 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A071CD6E4F
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8D6CD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E3BE423A2;
-	Fri, 29 May 2026 08:31:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D08C84398;
+	Fri, 29 May 2026 08:31:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wxtZea_StreA; Fri, 29 May 2026 08:31:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TTeqs8xHK1pl; Fri, 29 May 2026 08:31:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BE2E4239F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B6C484399
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043461;
-	bh=sLMZBj1RM+NfXXHLGvunGwSSQP4aL4Q1hWDyEA1l120=;
+	s=default; t=1780043462;
+	bh=8kcSFzMPSRxzM+n02N9ykeUWVAxJ60uddZmFQQEeS9U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=NpflwNBevztOaXEANq5tEn7LFtG9uveI6vmoo/hUT8YelAlGpVWmc5bP2GBbWocnr
-	 vv/3RhnOt6jgXVdoAohEUSolaM3u5uJHtXvihMEwuEXmPOKNmvWJmf0V/YR2/1EIFW
-	 ToNw3fXjPYas947t1TIRSXE9GB4NDcmjxXfyXgNQ7bfLHwJLzthfdLQZVmmj6c8iwj
-	 Utq4460d29zC6L2GWmfmM1YkGm/STF4oxEsgyy0JfoQ07K3D1NNcrhyet+OeX3d0HL
-	 QlLmYpcy8pJll0bIfDQAbtQ33UncYTzGjZ3Aynq08JgCtQhx7t5DU+mrxSXvLJfND1
-	 lmlqd44JlOYSQ==
+	b=cns66gBCisJ6tIbiMBV7RmEzJwPOsNNKto3plznfi1xNyk0gSqJAizActFfSdtO11
+	 ckzQgqcTRYogDn5Wj/Urac76rPmkdQNeKuo/taPHl9tUewP8ysGzw1/Yj6wn8bai5a
+	 fbcSKo/EV6mr/MlE5gQHbc0i7tfxdjGQziiJJVQKD/rg8u55MmXOCc6vQOpLHDghKt
+	 GUBhXKITbT1NcLmXh7rc980+lu2Lr0dk0CXiwH5TC6+5sXnHbiMzLpJUcQJQA1yP5O
+	 H7l769nRSAGR2yTE/MO2Tq+747Qqzm4ciLorvgL5gFD8ns2OYUu5EMjvPFza12yLZN
+	 Ox3zcDp0IqsSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BE2E4239F;
-	Fri, 29 May 2026 08:31:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 128F9288
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B6C484399;
+	Fri, 29 May 2026 08:31:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65580288
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82DC442367
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 543A84070D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 66KZSjqImcGg for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZcsfIDTBUAs5 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 45D4542370
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45D4542370
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 45D4542370
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:42 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-49068493267so37337795e9.1
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 517F8406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 517F8406F3
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 517F8406F3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:43 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4909e3fa4b2so2784105e9.0
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043440; x=1780648240;
+ d=1e100.net; s=20251104; t=1780043441; x=1780648241;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=5sfenPUe31Vvg9sO+gt8VslB3h5+TRqdj8d3TBX5SRs=;
- b=FWFVZt0qfKOU3a0+TJnhRqUnok+Q+oTlDDd+b2SlrhTfE4Fx+xYJHQRBobwYGgSR9q
- a+Y+YSfo8FJv49LgSgpr6kRo4yu5mkykSAobbE4eTxeZ8Tn9IZgSpdOnVinMMPfr7u/w
- mNDVqGFUeBPP2IkYp4ksxlWXRXyDyTsWvUHy2SJbbx52BQP8KRpof11pX3gyL/W8Ma5i
- apLCbKdNJNJ1RWdcSsrZ3PYzIDLbQdoTLr/uI6VNcUby6c0Q9mTUCvK775BIkR5DBiwp
- sXUzZ2Bjk6Et0TAE/S5l011pTCRmlaGJA81FSJ3K2AkRRLXxfZDgytiEqJxf8pr4CsPT
- gfNw==
+ bh=8TN28LjxrZEvxzURqSxoR7kbBRvHjUkhwQfCfN4acFk=;
+ b=levtqNjOfwJWuqkcsNHZ0NtLLKOyGrgJ4Ci+IyjudhQsDcYnMUWqDadJsBfDvu0BPS
+ FRbhVu9bu/pvIB/bEBjzs0ox9TX7wNyhcLHYN/N0xzXyIcx5fwUdRe22jlpQPwYTY6Oy
+ 84BodY80DMEtz3QHDqhL5s8T+GpOneyvJZS5eBSb1uL12ZcLeO64dAAA/G9k6J2wc0M9
+ an4sspwEQcq82H3KaKVF7wjiKeQhjSW3jOkMOsMKHwlaLSFHgud38SmTlBSZxEsnVslb
+ tmu/WzqBb3Uah/3mdthLGU2LvS8y43vcIBY97A49Ix4LDv31df2hy9qeC6nRNX/ngzJL
+ W+5A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+U1hb6ubqjFVZqhkl1wZTfZxTOT6lHlEW0e44CaBgL7uhVZTH0tIP8aM8fF+bUqtB/Hzck5rI5Xow=@buildroot.org
-X-Gm-Message-State: AOJu0Yy3ztYUfDxn5MtCbbJJ8UvkMa8OoFc/IpYOsFILmC0jhVw0G3cg
- vcez9To9lqk/odtrwe7ty8IMTW50j74fqqLZ3pZFrZBRZIwNTG29kShgNZtmFqjcN/8=
-X-Gm-Gg: Acq92OEYjcF2TrUAKty2VvyCOU6xls3wefeeao4jKp/OendSalORbgbdNkBtJzh8PaN
- ysVjJoGQY/SzjTxJq92yBO64JcuPf3+Ev9oOpXH4tN6i6tuedGvg/y4v2n5nmBjAa38c9QTBQxS
- es2BBcRlK93/xWf1OIJtgxcrIOc393d0fR0MuldJkiIkWcHk/y6FDUoD5n9TWfN70P5aA/JfIow
- 4xdvL0a9ccPvZNvFve9d5A4HT+zzdhxbntmvloc3rR57CZyvsWrqzVQQF5vfta1htzP30HRQDtq
- ar4Tkfh6OG9f2nORhi0O1ApIBwLKBjLaOwl7dtGVjNi5oOVfC2qD6uTb87MIMg8RUK0Z7Gwj2M8
- peWXW9CknzdeNO0oApsdlU9HfHeeiIEU2UaT19mCK9O1e3XFJqdidVliBF/j9FTlVndn6cL3IsJ
- DUAm/dDZWxz6Us4xPGfLc4yri59RDieB+03YQFs52J4dU2KwnwZ0QmQlPcxg==
-X-Received: by 2002:a05:600c:468a:b0:490:5cb3:e94a with SMTP id
- 5b1f17b1804b1-4909c8558c2mr31350095e9.2.1780043440174; 
- Fri, 29 May 2026 01:30:40 -0700 (PDT)
+ AFNElJ8xT3aRlr4OmvBibK4TWWndkeXYqq+ct6pm3firFTpV9KnVRhMnhpBTLZu2ktEcDolLMKWNg06AAAk=@buildroot.org
+X-Gm-Message-State: AOJu0YzU1xX0tR+Y0p4/fwFqohSEnD/IR5wyF/aebgHrjsITeRSIw8VA
+ LdfaluiTnrrU5snFc6vBA0+xLvxWOhKx1PvfesrI1VZgfIeI2vHIlHOYnrhkcdcVWWLk9RacHYB
+ hhQ4U
+X-Gm-Gg: Acq92OEBvuTtw+LJk+5CrJiz+o583xLkIvZKVfADMOPsGVAckmjiN9H5Y9kU5Z+rmhv
+ 76qV5vhAdDjOBW0ZelqAiRG4YFQVCjgACpm1/bIKmOZ7TbmpECYU1/Ni7IRts4+4CRWNB/NnO3K
+ YfUALMarBECG2mKpBVNIRgAwJ9/whe74IrFrLNjkFaW7d/alyAz9IsbTkgnlAkt5mXwk6kc/ttb
+ jKlPBCy8s5E8N9C+6GSVdBMihtZO0X75oi/VYYgmDZ3fnuMurKnvnXJXw7jP3MmPqzAdWzorgjS
+ 9B+qyRvypEE0pjVGZqmHzrJBrQMT+n6KgVPr0bKwxOQ7ClmQz2LxYJMZRwKIsc8kHGwRlRVSNOw
+ yFu1Yf6eR50NfXeHeAY655EO1mpbUS5Jgsujp1PeP+b5fkkxVpgqeg471SHWVVLSl1QzHp5t6pQ
+ DGku6ztZl8u+5qkkcIQ34s3gljSGBoaEno26iTsPNsjBcPSaV96m4+xUmb/y7mBQHjouug
+X-Received: by 2002:a05:600c:5697:b0:48f:d5e8:758c with SMTP id
+ 5b1f17b1804b1-4909c0b3493mr22138385e9.16.1780043441229; 
+ Fri, 29 May 2026 01:30:41 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909d68b853sm24754615e9.3.2026.05.29.01.30.39
+ 5b1f17b1804b1-4909cabfd6esm30368715e9.15.2026.05.29.01.30.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:39 -0700 (PDT)
+ Fri, 29 May 2026 01:30:40 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:39 +0200
-Message-ID: <20260529083039.60328-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:40 +0200
+Message-ID: <20260529083040.60382-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260524170129.3211403-1-bernd@kuhls.net>
-References: <20260524170129.3211403-1-bernd@kuhls.net>
+In-Reply-To: <20260524174645.3772462-1-bernd@kuhls.net>
+References: <20260524174645.3772462-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043440; x=1780648240; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043441; x=1780648241; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5sfenPUe31Vvg9sO+gt8VslB3h5+TRqdj8d3TBX5SRs=;
- b=PTAkTkqnxLwvl0/r9Wcf+/om1Gv9fZOkVPA9ycsmucPTIZpIu/vlRcaJ01Ov5gHvad
- D8KLsTg0AYaFpd5DJYmB4YGlg7I5DKoxGd+zPPcpdM35zXodRX4enLoNfVxotZu9LkOl
- 8qoY7CCAm3GeAqLO/dNbhOyHKUYTwhb2jUNURdTBUevYJ2S8yXRtlbubnS1uFd7HhVze
- 337HEd9NSnuzuCFuQQ36K7VYG3Y4JVC17N7Ey7ZDF2EbajAsLommSio00qfeXFpme1rW
- 1wBtqbjcd70sspWcIJIZ+DctMYDpd1zX+ix0FU672krHlfzHGPNHnsQEuiNEpwNDuWMn
- 84WA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=8TN28LjxrZEvxzURqSxoR7kbBRvHjUkhwQfCfN4acFk=;
+ b=Qvxc6EAktf5QeDNAS+mqwwEsKTUvVNaKHj03rCakuCIwmE7rvr/IkUU2FNGegh4oG7
+ bytWcKUD9VV+asrYbT+uyXmlWsZdAgkABfQFqXFsM8YZvq/OGsACZ9N51x/TNeEwiK0b
+ X1nGslsBGU0+pUycaBZbGwGxAJ/qdvPrqObGBAV9zUFjcU5WE3B1/eb9rjRwtImJJrFI
+ gCLZkw/gxgralGy4i7MgwhrssVPOlxgotfzD05JA45x2zQzC202SnPQM86Xx8p2Xv080
+ +CNznasRW/wuUHCih/vxR/FGSX9m8HW5NMbb7mUT/or67KuhEY1gS9T9kJqz3cklBYzp
+ 2IVw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PTAkTkqn
-Subject: Re: [Buildroot] [PATCH 1/1] package/kexec: fix powerpc build
+ header.a=rsa-sha256 header.s=google header.b=Qvxc6EAk
+Subject: Re: [Buildroot] [PATCH 1/1] package/unbound: security bump version
+ to 1.25.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,134 +133,54 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Added two upstream commits to fix build errors on powerpc.
+> https://nlnetlabs.nl/projects/unbound/download/
 > 
-> The build error also occurs with kexec 2.0.30 on the 2025.02.x branch
-> so a backport to LTS branches should be considered:
-> https://autobuild.buildroot.net/results/2ec/2ec0d85c658f8264fcc4eef2deb6c67671e3e7ae/
+> Used new signing key to verify the source tarball:
+> https://nlnetlabs.nl/signing-keys/
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/53b/53bafc454533aeafc21116a99d87391b3049e12a/
+> Fixes CVE-2026-33278, CVE-2026-42944, CVE-2026-42959, CVE-2026-32792,
+> CVE-2026-40622, CVE-2026-41292, CVE-2026-42534, CVE-2026-42923,
+> CVE-2026-42960, CVE-2026-44390 and CVE-2026-44608.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  ...ix-function-signature-of-comparefunc.patch | 42 +++++++++++++++
->  ...rations-in-read-memory_region_limits.patch | 54 +++++++++++++++++++
->  2 files changed, 96 insertions(+)
->  create mode 100644 package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
->  create mode 100644 package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
+>  package/unbound/unbound.hash | 8 ++++----
+>  package/unbound/unbound.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
-> new file mode 100644
-> index 0000000000..809e91e939
-> --- /dev/null
-> +++ b/package/kexec/0001-kexec-tools-powerpc-Fix-function-signature-of-comparefunc.patch
-> @@ -0,0 +1,42 @@
-> +From b89799f7f20d4b2476e99e95e6795450f2f1c111 Mon Sep 17 00:00:00 2001
-> +From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> +Date: Wed, 22 Oct 2025 13:44:12 +0200
-> +Subject: kexec-tools: powerpc: Fix function signature of comparefunc()
-> +
-> +Fixes the following build error on 32-bit PowerPC:
-> +
-> +kexec/arch/ppc/fs2dt.c: In function 'putnode':
-> +kexec/arch/ppc/fs2dt.c:338:51: error: passing argument 4 of 'scandir' from incompatible pointer type [-Wincompatible-pointer-types]
-> +  338 |         numlist = scandir(pathname, &namelist, 0, comparefunc);
-> +      |                                                   ^~~~~~~~~~~
-> +      |                                                   |
-> +      |                                                   int (*)(const void *, const void *)
-> +
-> +Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> +Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
-> +Signed-off-by: Simon Horman <horms@kernel.org>
-> +
-> +Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=b89799f7f20d4b2476e99e95e6795450f2f1c111
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + kexec/arch/ppc/fs2dt.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/kexec/arch/ppc/fs2dt.c b/kexec/arch/ppc/fs2dt.c
-> +index fed499b..d03b995 100644
-> +--- a/kexec/arch/ppc/fs2dt.c
-> ++++ b/kexec/arch/ppc/fs2dt.c
-> +@@ -292,7 +292,8 @@ static void putprops(char *fn, struct dirent **nlist, int numlist)
-> +  * Compare function used to sort the device-tree directories
-> +  * This function will be passed to scandir.
-> +  */
-> +-static int comparefunc(const void *dentry1, const void *dentry2)
-> ++static int comparefunc(const struct dirent **dentry1,
-> ++		       const struct dirent **dentry2)
-> + {
-> + 	char *str1 = (*(struct dirent **)dentry1)->d_name;
-> + 	char *str2 = (*(struct dirent **)dentry2)->d_name;
-> +-- 
-> +cgit 1.3-korg
-> +
-> diff --git a/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
-> new file mode 100644
-> index 0000000000..ed6c7bb392
-> --- /dev/null
-> +++ b/package/kexec/0002-kexec-tools-powerpc-Fix-pointer-declarations-in-read-memory_region_limits.patch
-> @@ -0,0 +1,54 @@
-> +From 8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6 Mon Sep 17 00:00:00 2001
-> +From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> +Date: Wed, 22 Oct 2025 13:44:13 +0200
-> +Subject: kexec-tools: powerpc: Fix pointer declarations in
-> + read_memory_region_limits()
-> +
-> +Fixes the following two build errors on 32-bit PowerPC:
-> +
-> +kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
-> +kexec/arch/ppc/kexec-ppc.c:106:11: error: assignment to 'long long unsigned int *' from incompatible pointer type 'long unsigned int *' [-Wincompatible-pointer-types]
-> +  106 |         p = (unsigned long*)buf;
-> +      |           ^
-> +
-> +kexec/arch/ppc/kexec-ppc.c: In function 'read_memory_region_limits':
-> +kexec/arch/ppc/kexec-ppc.c:112:19: error: assignment to 'long unsigned int *' from incompatible pointer type 'long long unsigned int *' [-Wincompatible-pointer-types]
-> +  112 |                 p = (unsigned long long *)p + 1;
-> +      |                   ^
-> +
-> +Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> +Reviewed-by: Khalid Aziz <khalid@gonehiking.org>
-> +Signed-off-by: Simon Horman <horms@kernel.org>
-> +
-> +Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=8ac3a7e08957fcb3fa59c9fc4e9c283b9a072ce6
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + kexec/arch/ppc/kexec-ppc.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/kexec/arch/ppc/kexec-ppc.c b/kexec/arch/ppc/kexec-ppc.c
-> +index d3dad0f..e173433 100644
-> +--- a/kexec/arch/ppc/kexec-ppc.c
-> ++++ b/kexec/arch/ppc/kexec-ppc.c
-> +@@ -91,7 +91,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
-> + 				unsigned long long *end)
-> + {
-> + 	char buf[MAXBYTES];
-> +-	unsigned long *p;
-> ++	unsigned long long *p;
-> + 	unsigned long nbytes = dt_address_cells + dt_size_cells;
-> + 
-> + 	if (lseek(fd, 0, SEEK_SET) == -1) {
-> +@@ -103,7 +103,7 @@ int read_memory_region_limits(int fd, unsigned long long *start,
-> + 		return -1;
-> + 	}
-> + 
-> +-	p = (unsigned long*)buf;
-> ++	p = (unsigned long long*)buf;
-> + 	if (dt_address_cells == sizeof(unsigned long)) {
-> + 		*start = p[0];
-> + 		p++;
-> +-- 
-> +cgit 1.3-korg
-> +
+> diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+> index 19966d889e..46b88900e6 100644
+> --- a/package/unbound/unbound.hash
+> +++ b/package/unbound/unbound.hash
+> @@ -1,8 +1,8 @@
+> -# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
+> +# From https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.sha256
+>  # After checking pgp signature from:
+> -# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
+> -# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
+> -sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
+> +# https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz.asc
+> +# with key: 231018690C4D903EF419146AA144323DEAACDF45
+> +sha256  0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f  unbound-1.25.1.tar.gz
+>  
+>  # Locally calculated
+>  sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+> diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+> index a702f4762d..589b286c26 100644
+> --- a/package/unbound/unbound.mk
+> +++ b/package/unbound/unbound.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -UNBOUND_VERSION = 1.24.2
+> +UNBOUND_VERSION = 1.25.1
+>  UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
+>  UNBOUND_INSTALL_STAGING = YES
+>  UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 > -- 
 > 2.47.3
 > 
