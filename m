@@ -4,94 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2842CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 19:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32316CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 19:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 610BB83AB9;
-	Fri, 29 May 2026 19:07:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBB4C84725;
+	Fri, 29 May 2026 19:12:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N60hGoBFrxgE; Fri, 29 May 2026 19:07:14 +0000 (UTC)
+ id nLhihWlUBxtT; Fri, 29 May 2026 19:12:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B458C846F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4238681369
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780081634;
-	bh=eClMKByVLzW0n+4s0/EHAXnaS08Dwi2rVxRzcxyq9sI=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=XEpcqdgH/mxuSlnknEadlZWDkDNoVrSkm3mFamDqn24fzmA7y65i2m7gdy4qkPopo
-	 zjuu7cOQUwTJ87SDdv0qj7qWOcpM2zHxHG8wzJipbsLHvPP9vCy7Iib52zJHZPphPP
-	 jbydAfiKtwBb5bY0Ix4o2Utws35yPlG8GKYJJwUXczhG3Z00u4AK9QAFHi9ITCx2Rd
-	 wwT3OURby3QLU+uEK5lGXw4n72VBk+XTWbNtgjhRthuvBSz88vMkLdaaGygeT4WYc3
-	 cWaTz8CL30DLrv0ARTdRAOhuRy77t8LPkywWuAaYgJi0A0I+l9laq0ywPN0B8b6HTa
-	 rBkqyJQEAlR2w==
+	s=default; t=1780081966;
+	bh=D08UfxAtO/CU0gQsOLw5u10C79cMS47aTn7N2FVxj5I=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=pgG9AJZgZLqH9nvOb+HfEQ6Qr+g9z154kSDTId9s86vHaU8ZgurkGEghzjQqRvxON
+	 pAIeYVJuo7s/Z4gxVfk+Zj6Ti3o8vT+3Z9rP1VQcjHFmbrTVicv2+R8hmOUp/vlYES
+	 AWT3zVqGBQHGIag8mma8dEh979qrzDeoiG5aBeMuuCT/87NwpRUEzeCPXhwxVugI0o
+	 TBsq0x4dqfR/ETeVL8pdTfDvRR1ugAZaSAY8zsdqFeGsUiovKeJq3GUSdyMx7dRpr+
+	 CvxgRGuf3bvaVq5EXMrsHAvnPuWLC8BDbu6gvDKl5Gt4CI4zPn1mQjlqQbdJp4YKaf
+	 HazfNzOTNp9wQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B458C846F4;
-	Fri, 29 May 2026 19:07:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 11548288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:07:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4238681369;
+	Fri, 29 May 2026 19:12:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9A464D3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 19:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3F7E42259
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:07:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FDA040FDE
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 19:12:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uk0_3slWidRN for <buildroot@buildroot.org>;
- Fri, 29 May 2026 19:07:12 +0000 (UTC)
-X-Greylist: delayed 7215 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 29 May 2026 19:07:10 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9BAAA40449
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BAAA40449
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.103;
- helo=smtp-outgoing-1802.laposte.net; envelope-from=vincent.stehle@laposte.net;
- receiver=<UNKNOWN> 
-Received: from smtp-outgoing-1802.laposte.net (smtp-outgoing-1802.laposte.net
- [160.92.124.103])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9BAAA40449
- for <buildroot@buildroot.org>; Fri, 29 May 2026 19:07:10 +0000 (UTC)
-X-mail-filterd: {"version":"1.9.5","queueID":"4gRqXB0hDbz14K0D","contextId":
- "05cdf57c-2bcd-4b84-b9f9-05917fea81b6"}
-Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
- by mlpnf0109.laposte.net (SMTP Server) with ESMTP id 4gRqXB0hDbz14K0D;
- Fri, 29 May 2026 19:06:50 +0200 (CEST)
-X-mail-filterd: {"version":"1.9.5","queueID":"4gRqX95sSXz14K0b","contextId":
- "fda3b3b5-4a80-4bac-9b28-7c3c7e9ac49a"}
-X-lpn-mailing: LEGIT
-X-lpn-spamrating: 40
-X-lpn-spamlevel: not-spam
-Received: from romuald.bergerie (88-160-203-96.subs.proxad.net [88.160.203.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mlpnf0109.laposte.net (SMTP Server) with ESMTPSA id 4gRqX95sSXz14K0b;
- Fri, 29 May 2026 19:06:49 +0200 (CEST)
-Received: from radicelle (radicelle.bergerie [192.168.42.3])
- by romuald.bergerie (Postfix) with ESMTP id 836627038AE7;
- Fri, 29 May 2026 19:04:45 +0200 (CEST)
-Received: from vincent by radicelle with local (Exim 4.99.1)
- (envelope-from <vincent@radicelle.bergerie>)
- id 1wT0fT-000000001JL-3hDX; Fri, 29 May 2026 19:06:43 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCnX32pPAakz for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 19:12:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3E8FF40F50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E8FF40F50
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E8FF40F50
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 19:12:42 +0000 (UTC)
+Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
+ by nyx.n621.de (Postfix) with ESMTP id 76404E00261;
+ Fri, 29 May 2026 21:12:39 +0200 (CEST)
+From: Florian Larysch <fl@n621.de>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Fri, 29 May 2026 19:06:41 +0200
-Message-ID: <20260529170641.4981-1-vincent.stehle@laposte.net>
-X-Mailer: git-send-email 2.53.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Florian Larysch <fl@n621.de>
+Date: Fri, 29 May 2026 21:12:37 +0200
+Message-ID: <20260529191238.17385-1-fl@n621.de>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=laposte.net; s=lpn-wlmd; t=1780081628;
- bh=HrnbuI/yGya6dOHp32/OU4xoPMJQrmODhKFdAIZciM4=;
- h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
- b=DdyxZduaoYjQdgxxYr81vkK4M2uQBs9gV8PkRzGg1c28pCt6dDaEuTmMz+9urCBttr21/8ORBPtrlloe/BRWjuca6WQkQ44IDQn54RaBSHEULqMk5+252z1nfMpQAIVkcpl2wO86NA4Hh4zIXkMmF53Nygaw+z4JFNBwP6MHwuZguC4RMdlIR1lYcTz/Mzvr8XmHcMI+W4g/kfNiMxA+KTOKRq7VXMWmKFFONy5O/ZsVMV8OvVYd0hoglShDNifhRmfV5yg5EjaaJxxhuVA5y79XpSW3v7LYMbRoBH0T9yBv3aLONBRVKXy9u6RB0varqmXgZRMSOkkOF/Vo5r38Xw==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=laposte.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=laposte.net header.i=@laposte.net header.a=rsa-sha256
- header.s=lpn-wlmd header.b=DdyxZdua
-Subject: [Buildroot] [PATCH next] boot/palo: bump to 2.29
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=n621.de; s=dkim; t=1780081959;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=85VYUhQ1SqDDs5JAUCUNXUmyklL/0oR9jj9rFwKgjRk=;
+ b=KgJIro3WUegx6kwEo62SayxOFjQ72xJqgXmnXrj340FrxPLtRl1aqfMzS7w3TU2T/RumTT
+ wAdP6WZbExMXLL0v6o60F9XSeCh66pg+2c4QxPDxGqN9p7TlEWVS8K03N7cCwbarh+nbu1
+ dLiqRPtJviDCUNPjHb5+a5MaC5q1JWI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=n621.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=KgJIro3W
+Subject: [Buildroot] [PATCH next 1/1] package/sigsum-c: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,35 +86,193 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q2hhbmdlbG9nOgoqIHBzY19taXNjOiBBZGQgZnVuY3Rpb24gdG8gZ2V0IFBEQyBmaXJtd2FyZSB2
-ZXJzaW9uCiogaXBsOiBGaXggbWZnIG1vZGUgb24gQzgwMDAsIHJwMzR4MCBhbmQgcnA0NHgwCgpU
-aGlzIGhhcyBiZWVuIHRlc3RlZCBvbiBocCA3MTIsIGJvb3RpbmcgZnJvbSBuZXR3b3JrIGFuZCBm
-cm9tIGRpc2suCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxl
-QGxhcG9zdGUubmV0PgotLS0KIGJvb3QvcGFsby9wYWxvLmhhc2ggfCAyICstCiBib290L3BhbG8v
-cGFsby5tayAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVs
-ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYm9vdC9wYWxvL3BhbG8uaGFzaCBiL2Jvb3QvcGFsby9w
-YWxvLmhhc2gKaW5kZXggMmE3ZTJlZjg5YS4uOTAxOWQwMGYwNCAxMDA2NDQKLS0tIGEvYm9vdC9w
-YWxvL3BhbG8uaGFzaAorKysgYi9ib290L3BhbG8vcGFsby5oYXNoCkBAIC0xLDMgKzEsMyBAQAog
-IyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgNzNkYjlmNjBkNDM5YzRhZTlkMzFiMDQ5Njcx
-MjgzZTAxZDk1YWUzNjRmYzc4YjRkYjM3ZWVkNTUyMzIxOGQ2YyAgcGFsby0yLjI4LnRhci5negor
-c2hhMjU2ICBiY2EwOTYxMTZkNDAzYjdkMzcwNzk0ZDg0ODUzYzRmNGE0NzAzZDYwNGMwMWE2NDVk
-MWZiZDFjNWJlNDJhN2UwICBwYWxvLTIuMjkudGFyLmd6CiBzaGEyNTYgIGZhNWZjMWQxZWVjMzk1
-MzJlYTUxNzUxOGVlZWZkN2I2ZTNjMTQzNDFhNTVlNTg4MGEwZTJhNDllZWU0N2E1YjcgIENPUFlJ
-TkcKZGlmZiAtLWdpdCBhL2Jvb3QvcGFsby9wYWxvLm1rIGIvYm9vdC9wYWxvL3BhbG8ubWsKaW5k
-ZXggZGFkYjBjZGU5Mi4uZDI3NjEwNDJmNSAxMDA2NDQKLS0tIGEvYm9vdC9wYWxvL3BhbG8ubWsK
-KysrIGIvYm9vdC9wYWxvL3BhbG8ubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIwogCi1QQUxPX1ZFUlNJT04gPSAyLjI4CitQQUxPX1ZFUlNJT04gPSAyLjI5CiBQ
-QUxPX1NJVEUgPSBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dp
-dC9kZWxsZXIvcGFsby5naXQvc25hcHNob3QKIFBBTE9fTElDRU5TRSA9IEdQTC0yLjAKIFBBTE9f
-TElDRU5TRV9GSUxFUyA9IENPUFlJTkcKLS0gCjIuNTMuMAoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Add the sigsum-c library, which is a more lightweight alternative to
+sigsum-go when only proof verification is needed or needs to be embedded
+in some other program.
+
+Signed-off-by: Florian Larysch <fl@n621.de>
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...001-Make-command-line-tools-optional.patch | 71 +++++++++++++++++++
+ package/sigsum-c/Config.in                    | 17 +++++
+ package/sigsum-c/sigsum-c.hash                |  3 +
+ package/sigsum-c/sigsum-c.mk                  | 21 ++++++
+ 6 files changed, 114 insertions(+)
+ create mode 100644 package/sigsum-c/0001-Make-command-line-tools-optional.patch
+ create mode 100644 package/sigsum-c/Config.in
+ create mode 100644 package/sigsum-c/sigsum-c.hash
+ create mode 100644 package/sigsum-c/sigsum-c.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fea3311076..d76c9013f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1141,6 +1141,7 @@ F:	package/cpulimit/
+ 
+ N:	Florian Larysch <fl@n621.de>
+ F:	package/casync-nano/
++F:	package/sigsum-c/
+ F:	package/sigsum-go/
+ 
+ N:	Floris Bos <bos@je-eigen-domein.nl>
+diff --git a/package/Config.in b/package/Config.in
+index 1c0f6d8a29..5660c0a006 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1658,6 +1658,7 @@ menu "Crypto"
+ 	source "package/parsec-tool/Config.in"
+ 	source "package/pkcs11-helper/Config.in"
+ 	source "package/rhash/Config.in"
++	source "package/sigsum-c/Config.in"
+ 	source "package/tinydtls/Config.in"
+ 	source "package/tpm2-openssl/Config.in"
+ 	source "package/tpm2-pkcs11/Config.in"
+diff --git a/package/sigsum-c/0001-Make-command-line-tools-optional.patch b/package/sigsum-c/0001-Make-command-line-tools-optional.patch
+new file mode 100644
+index 0000000000..3ce986b8bd
+--- /dev/null
++++ b/package/sigsum-c/0001-Make-command-line-tools-optional.patch
+@@ -0,0 +1,71 @@
++From 5c74c6d0dd2dd1707b178083815f3a165e3e7dc3 Mon Sep 17 00:00:00 2001
++From: Florian Larysch <fl@n621.de>
++Date: Fri, 22 May 2026 14:36:02 +0200
++Subject: [PATCH] Make command line tools optional
++
++When only using the sigsum-c library in another program, the
++dedicated sigsum-c-verify tool might be redundant.
++
++Allow disabling it to save space/avoid littering /bin.
++
++Upstream: https://git.glasklar.is/sigsum/core/sigsum-c/-/commit/5c74c6d0dd2dd1707b178083815f3a165e3e7dc3
++Signed-off-by: Florian Larysch <fl@n621.de>
++---
++ Makefile.in  |  4 ++--
++ configure.ac | 11 +++++++++++
++ 2 files changed, 13 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 0648adb..771551a 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -12,7 +12,7 @@ lib:
++ tools: lib
++ 	cd tools && $(MAKE) all
++ 
++-all:	lib @IF_PARSERS@ tools
+++all:	lib @IF_TOOLS@ tools
++ 
++ clean distclean:
++ 	cd lib && $(MAKE) $@
++@@ -34,7 +34,7 @@ install-lib: lib
++ install-tools: tools
++ 	cd tools && $(MAKE) install
++ 
++-install: install-lib @IF_PARSERS@ install-tools
+++install: install-lib @IF_TOOLS@ install-tools
++ 
++ # Remake configure-generated files.
++ # From the autoconf manual (4.8.5 Automatic Remaking)
++diff --git a/configure.ac b/configure.ac
++index 37a18b7..8305789 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -19,6 +19,16 @@ else
++    IF_PARSERS='#'
++ fi
++ 
+++AC_ARG_ENABLE(tools,
+++	AS_HELP_STRING([--disable-tools], [Do not build or install command-line tools.]),,
+++	[enable_tools="$enable_parsers"])
+++
+++if test "$enable_tools" = yes ; then
+++   IF_TOOLS=''
+++else
+++   IF_TOOLS='#'
+++fi
+++
++ AC_ARG_ENABLE(static,
++   AS_HELP_STRING([--disable-static], [Do not build any static library]),,
++   [enable_static=yes])
++@@ -47,6 +57,7 @@ if test -z "$PIC_CFLAGS" ; then
++ fi
++ 
++ AC_SUBST(IF_PARSERS)
+++AC_SUBST(IF_TOOLS)
++ AC_SUBST(IF_STATIC)
++ AC_SUBST(IF_SHARED)
++ AC_SUBST(IF_NOT_SHARED)
++-- 
++2.54.0
++
+diff --git a/package/sigsum-c/Config.in b/package/sigsum-c/Config.in
+new file mode 100644
+index 0000000000..afc5942e83
+--- /dev/null
++++ b/package/sigsum-c/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_SIGSUM_C
++	bool "sigsum-c"
++	select BR2_PACKAGE_NETTLE
++	help
++	  C library and command-line utility for verifying Sigsum
++	  proofs.
++
++	  https://git.glasklar.is/sigsum/core/sigsum-c/
++
++if BR2_PACKAGE_SIGSUM_C
++
++config BR2_PACKAGE_SIGSUM_C_TOOLS
++	bool "Enable tools"
++	help
++	  Build CLI tools like sigsum-c-verify.
++
++endif
+diff --git a/package/sigsum-c/sigsum-c.hash b/package/sigsum-c/sigsum-c.hash
+new file mode 100644
+index 0000000000..5941eafc5d
+--- /dev/null
++++ b/package/sigsum-c/sigsum-c.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  147ab839b22c5584aa9982c912bdb629cc717dcd978528233889789544e5fe51  sigsum-c-v1.0.0-git4.tar.gz
++sha256  f592312f5d5756846c43becd06fc1d826eafe05b1b45f88e95af460d59d24ad0  LICENSE
+diff --git a/package/sigsum-c/sigsum-c.mk b/package/sigsum-c/sigsum-c.mk
+new file mode 100644
+index 0000000000..a6021f0587
+--- /dev/null
++++ b/package/sigsum-c/sigsum-c.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# sigsum-c
++#
++################################################################################
++
++SIGSUM_C_VERSION = v1.0.0
++SIGSUM_C_SITE = https://git.glasklar.is/sigsum/core/sigsum-c
++SIGSUM_C_SITE_METHOD = git
++SIGSUM_C_LICENSE = BSD-2-Clause
++SIGSUM_C_LICENSE_FILES = LICENSE
++SIGSUM_C_INSTALL_STAGING = YES
++SIGSUM_C_DEPENDENCIES = nettle
++
++SIGSUM_C_AUTORECONF = YES
++
++ifneq ($(BR2_PACKAGE_SIGSUM_C_TOOLS),y)
++SIGSUM_C_CONF_OPTS += --disable-tools
++endif
++
++$(eval $(autotools-package))
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
