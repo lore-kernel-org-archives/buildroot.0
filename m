@@ -1,94 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79BEFCD6E4A
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 13:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56F43CD6E51
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 13:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A35841FC3;
-	Fri, 29 May 2026 13:37:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DE3B8427E;
+	Fri, 29 May 2026 13:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYxQZ35iIIaI; Fri, 29 May 2026 13:37:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GtHKUMMxT8_G; Fri, 29 May 2026 13:38:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5DD241EC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C96C984265
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780061868;
-	bh=Jt6ukfLWd+JzNNLTct7QA74FcMiUwmE2gEttoe9NADU=;
+	s=default; t=1780061890;
+	bh=CQJ6Q6nNBWhEIuiubCENdfP6stjH+Z5CLPbjMdLxCbw=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=hbjDqiCoI23NWTm/bxCveHA3aSXDdcAyfG+PGxWIq0oRtK9pPE++Ghak3CA2TaNbf
-	 ijDXZUA+9S/onlHu1ifuas4Q8bTYz+bI80QuzGtJRjkd7ji5NaWknpZIks1RoXOATf
-	 FQDVCobRvih0g1avLo5MUknUPssMIDaAsQVM6uN84QSgy3a5A7cU9BacGCs7RZiV4Z
-	 THw/npQl3X0Tu0p+Vmc2BV0mmii+V50qRju5tUpR4RTOP3Se6PBEO/ITkUda5PFyWD
-	 NdWWDFhqEkN8WDfMQX0Vo+pMLJ6F4bOp7eZXceObbaZq/pUktg6nRFFyJW5KTEYLd5
-	 3dfCoanyPsdMQ==
+	b=g2ytE+ci/7Nq8KF4ivoN9t4rPWiYqU55dasOFRl5E0G47xNxAH0RBGn50e/yoVu8l
+	 eZPKyHqL3ZzHZu0QefaD7kkCBseBqTSUtkgWgRwO5qrEyn6OFJe4MCKtUxfkeV4FRN
+	 aL3BA+2pKgLZxwFubs5JuAnT/F3jXetxVAJXcyRl6luhPxhumZpsGu7o0r8rvcsZWV
+	 ocdrkSNcRW6IjcUQjYf/SnqMLyqRnW2amNX+yB44EA5s7/nplGeNvPd80y99XS4mn+
+	 r2FM0RGR3r2Ld5SI0L/2vkupZ+hFLAWIHX5+mcZ+4EWSakUPWjauFUFvSBs47NSPHJ
+	 NYL6CJ72KtjGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5DD241EC3;
-	Fri, 29 May 2026 13:37:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C89F288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 13:37:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C96C984265;
+	Fri, 29 May 2026 13:38:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DD6B288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 13:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74F2861405
- for <buildroot@buildroot.org>; Fri, 29 May 2026 13:37:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F07B610CB
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 13:38:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QDCtE_hqibVK for <buildroot@buildroot.org>;
- Fri, 29 May 2026 13:37:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 796C7613D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 796C7613D6
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 796C7613D6
- for <buildroot@buildroot.org>; Fri, 29 May 2026 13:37:45 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id AA4EAC6245D;
- Fri, 29 May 2026 13:37:43 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E4B20601FA;
- Fri, 29 May 2026 13:37:42 +0000 (UTC)
+ id aSQ-IJV1_l3d for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 13:38:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 51B20608F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51B20608F5
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 51B20608F5
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 13:38:08 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id B76AF10888644; 
- Fri, 29 May 2026 15:37:40 +0200 (CEST)
-Date: Fri, 29 May 2026 15:37:39 +0200
-To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- Ismael Luceno <ismael@iodev.co.uk>, Romain Naour <romain.naour@gmail.com>
-Message-ID: <ahmWPGlMHd0ZUKzs@windsurf>
-References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
- <20260424132326.825570-10-jeanmichel.hautbois@yoseli.org>
+ with ESMTPSA id 88FA9B97C6DC; Fri, 29 May 2026 15:38:05 +0200 (CEST)
+Message-ID: <1f4c78fe-9df2-4703-a17e-17584fd170b2@rnout.be>
+Date: Fri, 29 May 2026 15:38:03 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260424132326.825570-10-jeanmichel.hautbois@yoseli.org>
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Norbert Lange <nolange79@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Sen Hastings <sen@hastings.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20260506184057.665854-1-bernd@kuhls.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260506184057.665854-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780061862; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=VTUKz9NDiqyjZenGhC8zqQobPJe7hIqo3ty9/pwLM+c=;
- b=1SPY3BVOIadzzTduuHmSvKMvTro2pNMR0UPT+nH7Kn049VmD+sJmbX9KaHMp83efv/NO1X
- GWtn/twgtQxmmX4qF9XghtaWrIpg4K4o2VWWvyeRU5oxo0Kc747lMLM1d26zQynPkf240t
- VfipKbXL3v3ZQQqc+XFszAw9hn54GIuzfW7xMztCBpSmipKa77PV1G+Ih4kvIEVL3ZE9Wt
- WR/JzEcWNWKEpk5n/vhsJ8aGYnN2iuxilC/tJRwc7B6N35gEnatjeJM5DBwS3KRDtNqGPZ
- RAhftRZrI/6TOKOMWCcZf7luhImCtELvN77SwYn67um8Mi4H1zYNPANwgigU4w==
+ d=rnout.be; s=dkim; 
+ t=1780061886; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=Mzd6mq6CR8ArefqFvZxYSJVLBWUytTzGgKSzl+RiFmQ=;
+ b=cNXl0CL8fnGpjqOzPLmvKGp0uyFb84vOeSbSf+4u1AIGPAzLkXg3xi6fKJRqXLo5tzAYAx
+ SJ0sZTi+z9D/6e5eFxa0KR4q1oBCLEEnUZL1RN7rdCdBo7GN/JlaxbqTAX5mA4lFSF24LU
+ wfDDtQIzGGWT/pYvxj08YHtSHXsucDPBkjY2DVYKFBo7ZInS2UXiFmZroz9iXQGWz1bibg
+ LaxiqdFVuANvLHwO81Xi35HB/fjaE8cHzB/1zKmINRRlqj734J2UNVcc5weDYUM9eM/+AJ
+ JgBB9Tfqmn+lAIHqOetN8tBZes665XbFwdZnvf67C9D9dnsgx9w5q0h2z0bOVg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=1SPY3BVO
-Subject: Re: [Buildroot] [PATCH 09/11] package/nginx: add m68k ColdFire TLS
- support
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=cNXl0CL8
+Subject: Re: [Buildroot] [PATCH 00/12] Add libudev-zero as provider for
+ libudev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,54 +94,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Apr 24, 2026 at 03:23:24PM +0200, Jean-Michel Hautbois wrote:
-> On m68k ColdFire, nginx with OpenSSL requires reduced optimization
-> (-O1) and -fno-strict-aliasing to avoid aliasing violations in the
-> OpenSSL/nginx interaction that cause segfaults in HTTPS handling.
+
+
+On 06/05/2026 20:40, Bernd Kuhls wrote:
+> Hi,
 > 
-> Also enforce strict alignment (-mstrict-align) and explicitly link
-> against the system crypto libraries including libatomic.
+> this is a new try to get packages which need libudev, but not a full
+> udev-daemon, working on systems that use
+> BR2_ROOTFS_DEVICE_CREATION_STATIC=y.
 > 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-> ---
->  package/nginx/nginx.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+> A couple of years ago a patch series splitting the eudev package into a
+> non-daemon/with-daemon version ended up into a discussion about space
+> saving and complexity:
+> https://lists.buildroot.org/pipermail/buildroot/2023-August/735616.html
 > 
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index 41490caee2..35d53c3ec1 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -87,6 +87,12 @@ else
->  NGINX_CONF_OPTS += --without-pcre
->  endif
->  
-> +ifeq ($(BR2_m68k_cf),y)
-> +NGINX_CFLAGS += -O1 -fno-strict-aliasing -mstrict-align
-> +NGINX_CONF_ENV += LIBS="-lssl -lcrypto -lz -ldl -lpcre"
-> +NGINX_CONF_OPTS += --with-ld-opt="-L$(STAGING_DIR)/usr/lib -lssl -lcrypto -lpcre2-8 -latomic -lz -ldl -lpthread"
+> This new series still introduces a new virtual package, libudev, with
+> eudev and systemd as possible providers but otherwise keeps these
+> packages untouched.
+> 
+> The third provider is the new package libudev-zero which is a daemonless
+> replacement for libudev.
+> 
+> Run-time tested kodi with libcec and intel_gpu_top.
+> 
+> Regards, Bernd
 
-This is clearly very, very hacky, and will not fly. Yes, it probably
-solves your immediate problem, but if we were solving all problems
-this way, Buildroot would be just a pile of hacks (which hopefully it
-isn't at the moment!).
+  Series applied to next, thanks!
 
-All the library stuff should not be needed. For the -O1, is it to
-workaround a gcc bug? Was it reported upstream?
+> Additional note: eudev seems unmaintained upstream:
+> https://github.com/eudev-project/eudev/issues/296#issuecomment-3651442802
 
-The strict aliasing stuff, why is it related to building on Coldfire?
+  With libudev-zero there is less and less reason to have eudev. OTOH as long as 
+it works, we can keep it.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+  Regards,
+  Arnout
+
+> 
+> Bernd Kuhls (8):
+>    package/libudev-zero: new package
+>    package/libudev-zero: provides libudev
+>    package/eudev: provides libudev
+>    package/libv4l: optionally use libudev
+>    package/libcec: optionally use libudev
+>    package/igt-gpu-tools: only needs libudev, not udev daemon
+>    package/kodi: only needs libudev, not udev daemon
+>    package/mesa3d: add optional dependency to libudev
+> 
+> Yann E. MORIN (4):
+>    package/libudev: new virtual package
+>    package/systemd: provides libudev
+>    package/qt5base: optionally use libudev
+>    package/libinput: only needs libudev, not udev daemon
+> 
+>   DEVELOPERS                                    |   1 +
+>   package/Config.in                             |   2 +
+>   package/eudev/Config.in                       |   4 +
+>   package/eudev/eudev.mk                        |   2 +-
+>   package/igt-gpu-tools/Config.in               |   6 +-
+>   package/igt-gpu-tools/igt-gpu-tools.mk        |   2 +-
+>   package/kodi/Config.in                        |   6 +-
+>   package/kodi/kodi.mk                          |   4 +-
+>   package/libcec/libcec.mk                      |   4 +-
+>   package/libinput/Config.in                    |   6 +-
+>   package/libinput/libinput.mk                  |   2 +-
+>   ...01-Avoidable-OOM-on-small-systems-62.patch | 176 ++++++++++++++++++
+>   package/libudev-zero/Config.in                |  18 ++
+>   package/libudev-zero/libudev-zero.hash        |   3 +
+>   package/libudev-zero/libudev-zero.mk          |  29 +++
+>   package/libudev/Config.in                     |   6 +
+>   package/libudev/libudev.mk                    |   7 +
+>   package/libv4l/libv4l.mk                      |   4 +-
+>   package/mesa3d/mesa3d.mk                      |   4 +
+>   package/qt5/qt5base/qt5base.mk                |   4 +-
+>   package/systemd/Config.in                     |   4 +
+>   package/systemd/systemd.mk                    |   2 +-
+>   22 files changed, 275 insertions(+), 21 deletions(-)
+>   create mode 100644 package/libudev-zero/0001-Avoidable-OOM-on-small-systems-62.patch
+>   create mode 100644 package/libudev-zero/Config.in
+>   create mode 100644 package/libudev-zero/libudev-zero.hash
+>   create mode 100644 package/libudev-zero/libudev-zero.mk
+>   create mode 100644 package/libudev/Config.in
+>   create mode 100644 package/libudev/libudev.mk
+> 
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
