@@ -4,61 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E0BCD6E4A
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EFB9CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 858088458E;
-	Fri, 29 May 2026 18:25:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EA98845C6;
+	Fri, 29 May 2026 18:25:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhhJHefKamW6; Fri, 29 May 2026 18:25:27 +0000 (UTC)
+ id r0zb-GSpfkYG; Fri, 29 May 2026 18:25:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC9B845A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4905845B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780079127;
-	bh=BND2X+8ozqiT5EcmeGe4GoWdG51K0lKKG5RQ7J5bAfM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=C7QFp3Ed4ugIRj52xvXWBkoIpeOWqo7Xz5bJoxEARyWnLGXOfCfBB/XjHTz/rud5q
-	 RsJ/3LJJ31UEmHSMyJnibmeZ/6eviS/LAc66cdm8w7LcJ1s7+N3z5FhxuwZCwVj0Ws
-	 MyJv7+xxQjtVP1gEZn6DxR+N3dP31cgbC8gIi0eASDo5DXKHz7P2pKyhicb23bOydW
-	 S/4brZ4beJWXNJmneXetGvGW8bO3h5gPHwZWUffc+55zSZK+DmVgUm9CXdn2y/6FNo
-	 CCpF0uoGo2o4CBVaLEUxujVIk8v7Oz4CYN2x/eCGSTjvXu/4eUf23JZIAT77UbivKP
-	 Ck1jSJLaWMyeA==
+	s=default; t=1780079134;
+	bh=om8GkoJ5BX5+AxKbgGauWvBooJ4Afyze7d2aGTc33Fg=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=oSmqZjyJr2GYGMY3264RtfP11u+pzsnmEYC4+v4H+auTzsNINjXIJPHrvojnMsI/X
+	 9osdMa5x4RDOdDYOUQoBgMkoTdJtaVv0zoKW4ROn38GqDxZIXCj060+uUqmB0/mSvb
+	 7lB3GjZVdgslOVS30TPBUQ97F3aC7/h83F3L/W9A0BCDbArMGuvN7DLK5ll7j6Qnlu
+	 9WDzEMMl8tZQ83jbp0y7uo8hjPPzN74TmsNXoIjW/pzQpRch9xFwqwXi6K+sjUo1cM
+	 E8h4+/Zd6IF1EqHRyW/xfJ6HICo2ywIxWwd5iwOLwo6vFdOxQaVy0v8YEgy03NFS9f
+	 m2ow7bvlzBywQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAC9B845A6;
-	Fri, 29 May 2026 18:25:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4905845B8;
+	Fri, 29 May 2026 18:25:33 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CE3D6372
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E79B2D3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE89C84597
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5D258458D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HoWnsWMZ5Qfq for <buildroot@buildroot.org>;
- Fri, 29 May 2026 18:25:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id CpH7rB4m1Nu5 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 18:25:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D964A845A9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D964A845A9
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3780287421; Fri, 29 May 2026 18:25:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 20:24:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dbdc45e9b0d610bccda7a55a03addc03e3ca3c00
-X-Git-Newrev: 727c2981cb59ebf6a3ee4e3ef03829cc8ae48536
-X-Patchwork-Hint: ignore
-Message-Id: <20260529182512.3780287421@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exim: security bump version to
- 4.99.4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE834845B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE834845B6
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE834845B6
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 18:25:31 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 13D681A373C;
+ Fri, 29 May 2026 18:25:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id DE1F3601FA;
+ Fri, 29 May 2026 18:25:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 9F7BF10888CCD; 
+ Fri, 29 May 2026 20:25:27 +0200 (CEST)
+Date: Fri, 29 May 2026 20:25:26 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, 
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <ahnZwDLIPUGRd0Gp@windsurf>
+References: <20260426102215.3100043-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260426102215.3100043-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1780079128; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=Sdq6/PDglKwk8pbjPn6KCQMRQzzGeJnLb0/MJsxhqsA=;
+ b=G8PybytB7C8LCHHTjkojsvdx1gvAhir4dPzSAbQdlECEVLLkZpuJa//dgAAOxddDUq0rxS
+ jmL43GP4+frdYgNGn56yVMoBoUbKwjdBHORQvQVhi7GFx2xDSeE6OY55C+ggkP2wGfhUdq
+ Vot0DKVRZ0oID6rRWOh4cwV+mENHTxZuc+TrPhjDeDtS917qCJFBbN3Uqc7qQbbdVCzZtm
+ LK2QSmy8EAdhQLcXlJi5FH3AjL/br72WVfDp5wskYQtDRl84h1UOXsSH4xrzKimtgplOM5
+ KqUAqlmQ0mJTiAzt+S8zPk/UEZVPX6oHrWV+xVilq97z3xEhQH/cZg0K2lTZsQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=G8PybytB
+Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: fix non-MMU build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,53 +96,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/727c2981cb59ebf6a3ee4e3ef03829cc8ae48536
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hello Bernd,
 
-https://lists.exim.org/lurker/message/20260529.143857.4c75d7df.en.html
-https://www.exim.org/static/doc/security/EXIM-Security-2026-05-19.1/EXIM-Security-2026-05-19.1.txt
+On Sun, Apr 26, 2026 at 12:22:15PM +0200, Bernd Kuhls wrote:
+> Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped the
+> package from 2.40.2 to 2.41.1. This bump includes upstream commit
+> https://github.com/util-linux/util-linux/commit/a3f1255f1891ddbaf3bb6a32af28569c0e6f3b91
+> which was added to version 2.41 and includes the usage of
+> pthread_atfork() causing build errors on non-MMU platforms:
+> 
+> libuuid/src/gen_uuid.c: In function 'uuid_generate_time_generic':
+> libuuid/src/gen_uuid.c:629:17: error: implicit declaration of function
+>  'pthread_atfork'; did you mean 'pthread_join'?
+>  [-Wimplicit-function-declaration]
+>   629 |                 pthread_atfork(NULL, NULL, reset_uuidd_cache);
+> 
+> The oldest build error of this kind can be found on the 2025.11.x
+> branch with version 2.41.1:
+> https://autobuild.buildroot.net/results/87c/87c74435be14956fd45f730269eac102e70d56da/
+> 
+> A backport of this patch to the LTS branches should be considered.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/a21e81e64eccc866b575a4f3b1376c50f2ffd837/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/util-linux/util-linux.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 1271bc7dc0..99a6be976e 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -130,6 +130,11 @@ UTIL_LINUX_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -Dstatic_assert=_Static_assert"
+>  UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LINK_LIBS)"
+>  UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LINK_LIBS)"
+>  
+> +# pthread support uses pthread_atfork, which is not available on nommu
+> +ifneq ($(BR2_USE_MMU),y)
+> +UTIL_LINUX_CONF_ENV += ac_cv_lib_pthread_pthread_atfork=no
+> +endif
 
-Fixes CVE-2026-48840.
+Thanks for the patch and the detailed explanation. However, the
+configure script has a check to see if pthread_atfork() is available
+or not. Why is this configure check finding that pthread_atfork()
+exists... and the build then fails because it doesn't exist?
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Basically, your patch is papering over the real problem/question of
+why the configure check is not working as it should.
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index e95f7f5efe..cbf29c3f5d 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  663e76d2a0d9b8fc5b373d0008e44ae044f10feb22bc9dbae8c7f21345ebfb3b  exim-4.99.3.tar.xz
-+sha256  87ff38815700dfb1ee4eb7e8dba7916df7a755905354d2d0faa1ae1790c4fd9d  exim-4.99.4.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  7c4109f499497e2432b71ad3f3f1cac358e63b1b693a352047e6990619d7fd619d3a966ba585482c58e0b23b3fa4f385d15720c455fda29633411e35db1d2e7f  exim-4.99.3.tar.xz
-+sha512  30fa01a301f8f4fe0c069f3da9e5247f0e22b19f64119cb8cccaf10aada8280ce02061a4671d110ad29b08af9e23ba3c3e8c7483874c7b1c992d90b51681ca9a  exim-4.99.4.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index c72e25a2c4..60870474c4 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.99.3
-+EXIM_VERSION = 4.99.4
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+I've started a build to have a look, but if you have some insights,
+I'm interested.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
