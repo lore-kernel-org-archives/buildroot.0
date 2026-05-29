@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFCE6CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 365C3CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BB2585676;
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEF6F85AD8;
 	Tue,  9 Jun 2026 13:03:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UgZYGKoSQ8th; Tue,  9 Jun 2026 13:03:51 +0000 (UTC)
+ id WI6Lu9OHeDxV; Tue,  9 Jun 2026 13:03:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56A3385AC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F127085ADB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010229;
-	bh=lZjcJlRk3zRMlGZB84lWrOakpTf/d5nFU1UdsGNQBWY=;
+	s=default; t=1781010231;
+	bh=1PyjL8cxt/CKP9FqNlMUPAFySdynyrvm9I/j0uZt8BE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RqrB5UwaSWJ7Jj7xnJYCG5S+ekNC+vSGCe8hQY6fp4XFpe3JIi3UIkAU3IRhToKcZ
-	 XED6IIfdh/WuiXT3D9+OreAYIoB9xVPrsBBHXx19qsQ72lfcits9WKHyptex5zbkaa
-	 TWG8r0g8upfxFWIP8NCqscbY6tveynfYqsaz7GzN+ObjqtS0b0fYK+NWytz8jYKrF8
-	 MIh9IjsSfqcyOS2nSFHgpAVGCMLg9aaayLsABPsx8bm39ucKVwquFgioFlRKdXBqXB
-	 sg3r+ZiFi5//z05AMwQHV+w8xjd/OYUaCgGX2ZCjXXTWwaMZiaa33hD9+8D3cdSKBF
-	 xkgQvplX3brNQ==
+	b=Dkm+BirYJNuLutir3qGmPhgTXNltIvQKa/ww31pkT2r7pSMl1OxS5Bnl9MCShVTom
+	 hJGuGB6DFXdVWlLYt+7QycU5jDzp6HzqTu6xhhQrQmE+YtLoztIz4jwRx0eZyIVECa
+	 7Vh+ROCInYETNeN4bDN4np0OKN2a4rS3IHT6dHY96GQ18b2IitvSV6ax6erzJsl+ER
+	 yhGgXXKPWoU0gI09/4P+SDcAwhlmihU7O9WBQnbML5nzTyUSXtBQyKrhNj/lFvXsIU
+	 krVELvi/SMTE8/6ZLnTBcxQCMf7fNAg5mmSENLG1cUqFlDW8HVcwpAd4G/BjGjF+0E
+	 D9mk/6eObqEWQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56A3385AC5;
-	Tue,  9 Jun 2026 13:03:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5DE4196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F127085ADB;
+	Tue,  9 Jun 2026 13:03:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10A68196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC436426FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB037411B2
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oSTBaonH_K7n for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OyhzzU3cd3EW for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E6CE426EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94F9B411F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E6CE426EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94F9B411F2
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA5DC87E68; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
+ id D095B87E7E; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 15:36:57 +0200
+Date: Fri, 29 May 2026 15:36:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03108175ce3b1067709b1235a9703f7abedf50d2
-X-Git-Newrev: d6768a2b6820142c31d95b5f84722caada1aa000
+X-Git-Oldrev: 3f24135c56f6aa8f0524307b7339512fecfa6f92
+X-Git-Newrev: 87c525ddb7046b96ee1640f56c5ac555771e496c
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130119.AA5DC87E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: provides libudev
+Message-Id: <20260609130119.D095B87E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libv4l: optionally use libudev
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,53 +76,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d6768a2b6820142c31d95b5f84722caada1aa000
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/87c525ddb7046b96ee1640f56c5ac555771e496c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Bernd: adjusted for libudev-zero]
+libv4l only requires libudev, not a full udev daemon.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/systemd/Config.in  | 4 ++++
- package/systemd/systemd.mk | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/libv4l/libv4l.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index f507a55ceb..5200e4a8f9 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -26,6 +26,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_ROOTFS_MERGED_BIN
-+	select BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
- 	select BR2_PACKAGE_LIBCAP
-@@ -107,6 +108,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index a70cec79d3..f2069390a3 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -42,9 +42,9 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ LIBV4L_DEPENDENCIES += libgl
+ endif
  
- if BR2_PACKAGE_SYSTEMD
- 
-+config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	default "systemd"
-+
- config BR2_PACKAGE_PROVIDES_UDEV
- 	default "systemd"
- 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9ce4f8fef2..3223915d40 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -62,7 +62,7 @@ SYSTEMD_DEPENDENCIES = \
- 
- SYSTEMD_SELINUX_MODULES = systemd udev xdg
- 
--SYSTEMD_PROVIDES = udev
-+SYSTEMD_PROVIDES = libudev udev
- 
- SYSTEMD_CONF_OPTS += \
- 	-Dcreate-log-dirs=false \
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
+ LIBV4L_CONF_OPTS += -Dlibdvbv5=enabled -Dudevdir=/usr/lib/udev
+-LIBV4L_DEPENDENCIES += udev
++LIBV4L_DEPENDENCIES += libudev
+ else
+ LIBV4L_CONF_OPTS += -Dlibdvbv5=disabled
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
