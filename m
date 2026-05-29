@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E85CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550E1CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D96382123;
-	Tue,  9 Jun 2026 13:04:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09C0782012;
+	Tue,  9 Jun 2026 13:04:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KRQ5BGASyVNc; Tue,  9 Jun 2026 13:04:23 +0000 (UTC)
+ id bnJUl0e0_wwN; Tue,  9 Jun 2026 13:04:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33FD8815D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E717D82217
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010263;
-	bh=Ofr9bnrK6RMUz9FbiZYBNblDj6uf2X4kqV4dFaM0M5k=;
+	s=default; t=1781010265;
+	bh=hgiVdC8Urym1KExeXUqbIdNU9hCDXRuiiCmB0as93n0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KjFR6lD3cPlF+BHiA2RasGwZ/DJUEDrp+4vNdmZhelm2F0Zl+waaAqtZekb1/JmSF
-	 C2BvCVVrwFeQOZqUNhBcDUllubxNFgEGi0RguhM74YrRroO0V3YjX2mlQrtd8h1Nq8
-	 1na/0O0KuQIFuEfgjyuSUPxs9MAb+R6LLUaddHjqvdC+qJutn1Xd49AC3TpAKt+VCQ
-	 6h7aCytR5ZUamLhOFWGVLte4z9E6fhg72N2pjrhJTPb1STl0ZTKu9fe1GKkuVnHGGT
-	 RKLzEitmoxAHdA6I8xJKfr+9jjW/jKv5jT/Oz8rA9vSQnIr0fHJfVPP3uQzqT505uz
-	 9Gt5fVxTATPXQ==
+	b=OxKeGFDi3qfQDv1/Tj95pa002jM6iIkiJLslhcYj9qle8p7PD7pSJI+Q8sN7IJNDU
+	 S5jMsnqYDNs1PC5ovjkjUMmQFyLVOXnGLOCrBtOJ/vOPDzMP2d/m7GzPTSvShCLRKq
+	 I07bXqkkNB3MttIRoxhsQoizQwUMFMylrhN1zsKtu4Hrcc2ZoWSS7e5ybb37purRx3
+	 LV2nUsRyCPOJn84EoLXkdcxd++NAdWAxSzi29L0e1+BzR+t9LRVs2rjxY9rRmiq7lE
+	 mHINkZLZcqY/OznOn2gjcJvdDbktvU76h4bID4fTmz7ClypYD2iBvGM+1ZKcRFbqQV
+	 eU3ljo8XeDUzQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33FD8815D5;
-	Tue,  9 Jun 2026 13:04:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A840190
+	by smtp1.osuosl.org (Postfix) with ESMTP id E717D82217;
+	Tue,  9 Jun 2026 13:04:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0C49190
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C83B4631A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4ABFD426EC
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SZZbGKLSCu0n for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QCDDkdtfgxuk for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C44D54595C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7E18426C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C44D54595C
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7E18426C6
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BB5987E68; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
+ id F339387E68; Tue,  9 Jun 2026 13:01:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:48:42 +0200
+Date: Fri, 29 May 2026 21:23:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 27ebca4af2cce6a24fdd9b9f1f8ce280f4c381c0
-X-Git-Newrev: b3329ed3e027f7a57f5b96a2a842643bebbee693
+X-Git-Oldrev: e5c7b43494c4d6aa57c6ef314bd4e636aacc14fc
+X-Git-Newrev: e4fefb5f616c9d6b8f61348352bd947554bcf40c
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130123.0BB5987E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/Config.in: add
- BR2_TOOLCHAIN_GCC_AT_LEAST_16 blind option
+Message-Id: <20260609130120.F339387E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/palo: bump to 2.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,44 +71,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4468482207179712694=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b3329ed3e027f7a57f5b96a2a842643bebbee693
+--===============4468482207179712694==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e4fefb5f616c9d6b8f61348352bd947554bcf40c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-In order to add gcc 16 support in follow-up commits, introduce
-BR2_TOOLCHAIN_GCC_AT_LEAST_16 symbol.
+Changelog:
+* psc_misc: Add function to get PDC firmware version
+* ipl: Fix mfg mode on C8000, rp34x0 and rp44x0
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This has been tested on hp 712, booting from network and from disk.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ boot/palo/palo.hash | 2 +-
+ boot/palo/palo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 910cd103dc..5aa6cf8f6d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -848,10 +848,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	bool
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
+diff --git a/boot/palo/palo.hash b/boot/palo/palo.hash
+index 2a7e2ef89a..9019d00f04 100644
+--- a/boot/palo/palo.hash
++++ b/boot/palo/palo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  73db9f60d439c4ae9d31b049671283e01d95ae364fc78b4db37eed5523218d6c  palo-2.28.tar.gz
++sha256  bca096116d403b7d370794d84853c4f4a4703d604c01a645d1fbd1c5be42a7e0  palo-2.29.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/boot/palo/palo.mk b/boot/palo/palo.mk
+index dadb0cde92..d2761042f5 100644
+--- a/boot/palo/palo.mk
++++ b/boot/palo/palo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_16
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "16"	if BR2_TOOLCHAIN_GCC_AT_LEAST_16
- 	default "15"	if BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	default "14"	if BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
+-PALO_VERSION = 2.28
++PALO_VERSION = 2.29
+ PALO_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/deller/palo.git/snapshot
+ PALO_LICENSE = GPL-2.0
+ PALO_LICENSE_FILES = COPYING
+
+--===============4468482207179712694==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4468482207179712694==--
