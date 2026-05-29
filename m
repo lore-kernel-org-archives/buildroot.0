@@ -4,84 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD53CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 20:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971D2CD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 20:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBF08848FE;
-	Fri, 29 May 2026 20:43:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42481848FC;
+	Fri, 29 May 2026 20:44:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N4_5KEPu71Dd; Fri, 29 May 2026 20:42:58 +0000 (UTC)
+ id HesCmQHIcmr2; Fri, 29 May 2026 20:44:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C49A3848F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE75E848EE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780087378;
-	bh=2S3RJ/0qLv3q34lcguwptgI4EJQx6rKbkYvNBhAbSfo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LTn6k7WoVi+L+dzgi0BJ/T/tE8O5LL0Y1KEZfz5Eu77JmwaTQi9fMhN0fWldH+JSC
-	 F/YzGhOG98q1xkq3dzp5/Jf1zKbnAvvklNGm7bnDY5+yzCqE/cMnIQSfzwOGt/4vQz
-	 GQi+o+L2YU446yZnhW1pAfjw18xMcL1GAvUsiEl9/dhmt6QpQg+8bh46hTQ/SzQBuy
-	 vyQqWXD6F5kN3sO+FjKtwb+D03A0USFlbbUJGYCy8SS1OM/SVkoyT0GjY10dn81IQ4
-	 WgZNVtFTUuH5Q0CK9bhezHdXnf7B6Q2txSXFvWGjYG/aLME+LYaW0aajrcj267TJju
-	 2ntrcahQk6U5A==
+	s=default; t=1780087453;
+	bh=4/r353qLogZdGGKdzGLNvXylHl7l+6zs6dprnfms60M=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Ys+lMIIgZK4Jn2Igs59eE0V06+DRu7kgads6Ts27BaSMyRuvQX4sFE22T/9rubME/
+	 rfNr4g8dSmxKKWtpuTCyM21f85CUIzUsTIck2yGGnKXvNKdr21VjoaQLIBlr/2EYVt
+	 88xkIHo5+e0UtZZWCJ/E/zhe5SR6Ybakh1bFHjEoVFUE2VKzi+Kz6wShENrQkiWHgU
+	 PlFD6vVDhAcvkgyJvIU4pt+81vUdJEX0qS8FNqtJmf8fR/11yjL0C1xuhY4hUMhsQ+
+	 kEF6HT4NruNMCWuoIWUPORzDgJ/8Krcx8BPcK5OP+bo/p8PcIjJxsxjdlgmo5pCzj+
+	 iLofuL4x+fV7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C49A3848F9;
-	Fri, 29 May 2026 20:42:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4853DF4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE75E848EE;
+	Fri, 29 May 2026 20:44:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7EAA7F4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36ED5848F7
- for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D6A8422E9
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:44:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yxvqXR5qAYoA for <buildroot@buildroot.org>;
- Fri, 29 May 2026 20:42:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D3202848F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3202848F3
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D3202848F3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 20:42:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 5B26E5FFAF;
- Fri, 29 May 2026 22:42:52 +0200 (CEST)
-Received: from 2a01:e0a:1015:b940:caf0:d340:4af7:8ed3
- via 2a01:e0a:1015:b940:caf0:d340:4af7:8ed3 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 29 May 2026 22:42:52 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qn4vqCiCyNm4 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 20:44:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DE55A404A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE55A404A1
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE55A404A1
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 20:44:10 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 511710526; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 May 2026 20:43:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1wT43b-000000044pt-3PAz;
+ Fri, 29 May 2026 22:43:51 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 29 May 2026 22:43:49 +0200
+Message-ID: <20260529204350.971888-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Fri, 29 May 2026 22:42:52 +0200
-To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260529170641.4981-1-vincent.stehle@laposte.net>
-References: <20260529170641.4981-1-vincent.stehle@laposte.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <d926036fc5415600e37ae9ec1395d653@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780087373;
- bh=Rt8rnjSO9WB5nMBL49EziEmBPrtd10sCBc42XfD/IEU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=rdmivLnCosRdx0Mtr2CvtrbGs2GYZs4i/WA/uqjaQa6qQtT9+HnD7Cz2GhfH6WRjs
- d3f0A7rm784RQMuJellAy9xyFMkEt4gtvh2p8pr/e6mK7kIeiY1jIWIgP2dYPA2wo9
- euFShLFgji41pzKu5aK++JU3yqsRC04uxgOm8ITWlWbSlCXDxgvThcYcHrBt4ZtPAV
- 324/wgftdUnQDfYV70XV8koPPRxArSjLT2U6WI79Ppf9lqJH/57ub1dI7SIucHEflD
- Nzhi441XjAbQDkTVB/sCBCzb5hO9B5a5DM4JKA/mwbDooq8N1wvF63Z0+wkJKOrRzo
- AheDeb8MUeSfQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Jyl0i2FG0is3XWtl2KQqJ13AtfDJFrfQpMz2VP/aq8ai5loFJLR3yjlEgHqfXkCg9tflrNT3CE0Sqpm9k3hHMZ5H1I6AOPnk2SY0PmyWCqOhu81L/BPgdp2ps+kszExxI7Y5HNsV205HXM5LxOgVfWV2pzb6S+AnS8ychWrEJN7LOapdZpnU6UaqD8z0MBvw8uor4FmSjhi0Wv7wFeeJaNX3pzmYU8QEPZJswfpsz+aqtqoS7RdMVpj2oZoIORL/JXRPPx9D0urWlHKylLCb8iBiuQTZBUEE+qjXslrp9Gn8RJgyiTTi6nC2zSUFJTv+g6PxDnxZqBIYI5WUTD2WFg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=mvV5s++39lEW3cKtAYSGpfKswSVJ/R644Z5/JCXliTU=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=rdmivLnC
-Subject: Re: [Buildroot] [PATCH next] boot/palo: bump to 2.29
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Jyl0i2FG
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/podman: ignore CVE-2026-33414
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,19 +89,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjkvMDUvMjAyNiAxOTowNiwgVmluY2VudCBTdGVobMOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
-Cj4gQ2hhbmdlbG9nOgo+ICogcHNjX21pc2M6IEFkZCBmdW5jdGlvbiB0byBnZXQgUERDIGZpcm13
-YXJlIHZlcnNpb24KPiAqIGlwbDogRml4IG1mZyBtb2RlIG9uIEM4MDAwLCBycDM0eDAgYW5kIHJw
-NDR4MAo+IAo+IFRoaXMgaGFzIGJlZW4gdGVzdGVkIG9uIGhwIDcxMiwgYm9vdGluZyBmcm9tIG5l
-dHdvcmsgYW5kIGZyb20gZGlzay4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kg
-PHZpbmNlbnQuc3RlaGxlQGxhcG9zdGUubmV0PgoKQXBwbGllZCB0byBuZXh0LCB0aGFua3MuCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+As stated in the advisory:
+
+The affected code is only used on Windows, all other operating systems are
+not affected by this and can thus ignore the CVE patch.
+
+https://github.com/containers/podman/security/advisories/GHSA-hc8w-h2mf-hp59
+
+So mark it as ignored.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/podman/podman.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/podman/podman.mk b/package/podman/podman.mk
+index 80107f3d9e..f601f7e6d7 100644
+--- a/package/podman/podman.mk
++++ b/package/podman/podman.mk
+@@ -33,6 +33,10 @@ PODMAN_TAGS += libsubid
+ 
+ PODMAN_CPE_ID_VERSION = $(subst v,,$(PODMAN_VERSION))
+ 
++# Windows only issue:
++# https://github.com/containers/podman/security/advisories/GHSA-hc8w-h2mf-hp59
++PODMAN_IGNORE_CVES += CVE-2026-33414
++
+ ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
+ PODMAN_DEPENDENCIES += btrfs-progs
+ define PODMAN_LINUX_CONFIG_FIXUPS_BTRFS
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
