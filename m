@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 482B0CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C466CCD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0DDF85453;
-	Tue,  9 Jun 2026 13:04:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DA5C8571A;
+	Tue,  9 Jun 2026 13:04:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fTMWVgucMoMu; Tue,  9 Jun 2026 13:04:36 +0000 (UTC)
+ id pdtk6YcPLl3s; Tue,  9 Jun 2026 13:04:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BF1684716
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86F6D854ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010274;
-	bh=2RC2KfliJQmPUap6ySRwvkeca5B59aM1LaoBsb6Drz4=;
+	s=default; t=1781010278;
+	bh=45x0CeFxPQuK+rQfzBJPR/40QUYs7ZDfa9JC2icluhw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Mm0WXFlTPf6PPfjr1BCb99oDgZdF3+hyoh3STE84kKkvex4B3sneEoVXlKIdF9o5z
-	 IczuXsebecyhY1RvABkc5tuAroTJr7HkKfF6GTevMNiyZZ8hyUBft6yfUpLeiefEVD
-	 UE1e8t8ZcZV65ecEIxy2aScgo16jhgTqmrM0lhK+lAckfwVt9sFgoA9wM6u2QCAAH1
-	 JaqjduadgjA6ACD4GaINqLBB41thhdxGkMnjhpCK9e/419JQdZU6+qy2B7V8FYhK8y
-	 /l7ysxHBGdVJ0XFduiuBDqgd+7HMTSbw97PVdt4xWCIC3h0DVTnzGW1mxj9liSKU4a
-	 Zb1rPuO97lhhg==
+	b=C7Eu4Xhbf3VLtmEAxCcov5TU249q7ivxkJAKgJ4hpzomIEu8rdACZpI3vH8+6QKAE
+	 UF/I4DdiGegSYEQ5Bq7NOpczp+IFN333CQ8oWCB6OX0CDPdD1czKBWcROZpyDaLxjD
+	 f7oEkqY6g8+HhRHpBgEtCqbY/+8tDHQufsurwNIM1cwJ8Go+M0HhUG+8quGJ1g6U0O
+	 6u/rvnR6qzPbAyr6xq2yVxL2tLbrT8buVojFaUH85zLpSdLpmdWDLgsZj+5GsYvoqC
+	 ZQSWK4PcFUhnCHmA3W3CiIgaWgHLeNQmOnW9E9MDINt6ZUMiYE8AbVsOdL18RBoo0T
+	 7dSED7+Q5Sfrg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BF1684716;
-	Tue,  9 Jun 2026 13:04:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86F6D854ED;
+	Tue,  9 Jun 2026 13:04:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 96169196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9840A2EE
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB35142723
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA0B142725
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YFe67UR4-Os7 for <buildroot@buildroot.org>;
+ id Hth9tCISKMUB for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F473426FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2D7E426EB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F473426FC
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2D7E426EB
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB34A87E7E; Tue,  9 Jun 2026 13:01:20 +0000 (UTC)
+ id 0ACEF87E68; Tue,  9 Jun 2026 13:01:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 20:53:55 +0200
+Date: Fri, 29 May 2026 10:41:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1681beaba367b43657c64832b66f99cf5224444d
-X-Git-Newrev: 1c1fa6ce67448ef8bab16d795623be730ff658ea
+X-Git-Oldrev: fd0751a86ca3860992e00164ee3fb4cd41664eb1
+X-Git-Newrev: bd0fcfbe8f7f20fefa72af2460005c60050acf2a
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130120.BB34A87E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/pc/linux.config: enable
- CONFIG_EFI_STUB
+Message-Id: <20260609130119.0ACEF87E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/skopeo: remove lvm2
+ !BR2_STATIC_LIBS entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,59 +69,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1c1fa6ce67448ef8bab16d795623be730ff658ea
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bd0fcfbe8f7f20fefa72af2460005c60050acf2a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-When the Linux Kernel image does not include the EFI stub [1],
-Grub2 EFI linux loader fallback to the legacy i386 loading.
-See [2] [3]. Grub 2.14 enabled the NX compatible for the EFI
-image in [4].
+Remove lvm2 !BR2_STATIC_LIBS dependency
 
-When booting a Linux Kernel without the EFI stub with Grub 2.14 with
-NX flag, the boot fails before starting the kernel with a EDK2 page
-fault error [5]:
+(It still depends on !BR2_STATIC_LIBS by BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS)
 
-!!!! X64 Exception Type - 0E(#PF - Page-Fault)  CPU Apic ID - 00000000 !!!!
-ExceptionData - 0000000000000003  I:0 R:0 U:0 W:1 P:1 PK:0 SS:0 SGX:0
-
-This commit adds CONFIG_EFI_STUB to board/pc/linux.config to make sure
-grub will load the Kernel using its efi loading code.
-
-This commit is needed with EDK2 with NX protection enabled and
-Grub 2.14 also enabling NX.
-
-[1] https://docs.kernel.org/admin-guide/efi-stub.html
-[2] https://gitlab.freedesktop.org/gnu-grub/grub/-/blob/grub-2.14/grub-core/loader/efi/linux.c#L532
-[3] https://gitlab.freedesktop.org/gnu-grub/grub/-/blob/grub-2.14/grub-core/loader/i386/linux.c#L675
-[4] https://gitlab.freedesktop.org/gnu-grub/grub/-/commit/f5bb766e688b1180e0ace3417d4947a934957a31
-[5] https://github.com/tianocore/edk2/blob/edk2-stable202602/UefiCpuPkg/Library/CpuExceptionHandlerLib/X64/ArchExceptionHandler.c#L273
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Andreas Mohr <and@gmx.li>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- board/pc/linux.config | 1 +
- 1 file changed, 1 insertion(+)
+ package/skopeo/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/board/pc/linux.config b/board/pc/linux.config
-index 43b15c94be..cbc4f5a6b0 100644
---- a/board/pc/linux.config
-+++ b/board/pc/linux.config
-@@ -5,6 +5,7 @@ CONFIG_SMP=y
- CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
- CONFIG_EFI=y
-+CONFIG_EFI_STUB=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
+diff --git a/package/skopeo/Config.in b/package/skopeo/Config.in
+index b0229873d4..91d10d1357 100644
+--- a/package/skopeo/Config.in
++++ b/package/skopeo/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_SKOPEO
+ 	depends on BR2_USE_MMU  # btrfs-progs, libgpgme, lvm2
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on !BR2_STATIC_LIBS  # lvm2
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_BTRFS_PROGS
+ 	select BR2_PACKAGE_CONTAINERS_IMAGE_CONFIG  # runtime
+@@ -17,10 +16,9 @@ config BR2_PACKAGE_SKOPEO
+ 
+ 	  https://github.com/containers/skopeo
+ 
+-comment "skopeo needs a toolchain w/ NPTL, sahred libs"
++comment "skopeo needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+-		|| BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
