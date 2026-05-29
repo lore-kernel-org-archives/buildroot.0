@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58F8ACD6E4C
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A16BCD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CC9D60C1C;
-	Fri, 29 May 2026 08:28:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B7B742188;
+	Fri, 29 May 2026 08:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m0J2v3OSsZXx; Fri, 29 May 2026 08:28:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Va5j6mLzXgFK; Fri, 29 May 2026 08:28:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 402FF614B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F1F4421B4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043318;
-	bh=BVxcl72DP9ZCL/iB5NQaBGSKcwGD6vPoEQkSdk7H+jA=;
+	s=default; t=1780043319;
+	bh=u4HvfQQAW9IK0Cap8oYzyBxA5M5rEp2zDW1fGrFsB18=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hHTG4oMYE5VEA1YFZwtLZ6MruZTSumuNi3kqTQUKLXTB1854c4T+fMHqrMH/PQzGl
-	 9jQ3FR16POzcA65gt0d/nfN9JnRxlv06wIpXgK6NnI2ys9lmxvzrLtqCwm8yVAfehM
-	 fTSsbXnufUR4ymDB6NiPOZsGKAg/eLifRUsVpWsp/yST4LAo9ArIwlFf95x8oaeImA
-	 A7lWH34gdIumSpR9exYy1PIMizz7TOJtySGDtIO8VDW3kpKxuWCIRZTjeAz7Ey83pc
-	 McVdKOG/1H7QjJoVSNygB1ZL5DBlIII6SheK5KRtJK2kVgNTccklTM2D5NPddx3fTB
-	 +Y01uHLvLAiXg==
+	b=a1xYhbjUnv6k+0inGpTFnfRGsYcMG/qB0Y///AVxA3liylopvXOo3w+9NPYkmztqg
+	 MQoJY2u/Q80DytI9jko9ULfsd9SGIrHFHOf8G79aZ0LT/LIZSkUubuG7rNatpVkAXX
+	 FWMwJXgwQO/HIoP3scQsnPpH7PPg/mqj8Km73pK+W71P+A6oZJWxwgvMy8Ftu7osyF
+	 303kJE2KbmRWDCyVNJF02bbmFztoR8AdSEIribDt/Ny83TvJONsnFEmhR0thsQQjsZ
+	 QelezHv98Bt6Bcj8Mx9YLp6gvxi8yNtFcaUx0Lq9K4h1jr0eQWKMgs5eelX702pkcY
+	 pJciwe8u2xG1A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 402FF614B3;
-	Fri, 29 May 2026 08:28:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F1F4421B4;
+	Fri, 29 May 2026 08:28:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10D91288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11702288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1393605C4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 082596145D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IvX8CXQvy8Qp for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:28:04 +0000 (UTC)
+ id 2PIy4YA79sIz for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:28:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1DB66145D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF4F6142D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1DB66145D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2EF4F6142D
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:28:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9039687334; Fri, 29 May 2026 08:27:49 +0000 (UTC)
+ id C0E4D87334; Fri, 29 May 2026 08:27:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:26:59 +0200
+Date: Fri, 29 May 2026 10:26:30 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 979aa00de416bea58979c0a92d0c3ff218f6e1ff
-X-Git-Newrev: af42bd7679f06ddc85416e2cb60ca78e13cc41a4
+X-Git-Oldrev: 5712f79b8741f07437bfab5aabc751a832ed3891
+X-Git-Newrev: 18dd343da4383ccf8cc9c8e31669a60855c0665e
 X-Patchwork-Hint: ignore
-Message-Id: <20260529082749.9039687334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/putty: security
- bump version to 0.84
+Message-Id: <20260529082748.C0E4D87334@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/tzdata: bump to
+ 2026b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af42bd7679f06ddc85416e2cb60ca78e13cc41a4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/18dd343da4383ccf8cc9c8e31669a60855c0665e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://lists.tartarus.org/pipermail/putty-announce/2026/000042.html
+For release notes, see:
+https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTYZNBBKFFWM7ZCI6TVCXP/
 
-Updated license hash due to copyright year bump in upstream commit
-995b63a82bac4f6985958cb92943e807a9f35736. A link to this commit can not
-be provided due to the shutdown of the upstream gitweb interface:
-https://git.tartarus.org/?p=simon/putty.git
-
-Switched URLs to https.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7418ff13895be20ccdd6ad6d460e6dbf73727637)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit b2e35216855d61020d6fe205a1c2c109b8f154cc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/putty/Config.in  |  2 +-
- package/putty/putty.hash | 10 +++++-----
- package/putty/putty.mk   |  4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-index f89283b99a..f0484ec20f 100644
---- a/package/putty/Config.in
-+++ b/package/putty/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_PUTTY
- 	  and puttygen are built; enable GTK2 or GTK3 for the
- 	  graphical client.
- 
--	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
-+	  https://www.chiark.greenend.org.uk/~sgtatham/putty/
- 
- comment "putty needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 33a9666bc2..362467e2d7 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.83/{sha1,sha256,sha512}sums
--sha1  f9fd9ab5e3849bf8c22b218cdb7697dcdd1d8c9e  putty-0.83.tar.gz
--sha256  718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6  putty-0.83.tar.gz
--sha512  4781616b7e9c5a779a54e6a8486513e0aa947d4a36e9dbfd4ffc0d32981a5ad4868cddbde0363467236ed67c43f990408a9326d10354954be716a270d587c0a6  putty-0.83.tar.gz
-+# Hashes from: https://the.earth.li/~sgtatham/putty/0.84/{sha1,sha256,sha512}sums
-+sha1  d3ed01106667b42de322b266266e0d21b70adf12  putty-0.84.tar.gz
-+sha256  06057862ae198f1dbd219d0c7493080d59f606194bb5056c549e342aa01b69fe  putty-0.84.tar.gz
-+sha512  647c84490c01f8c0f9cf02f565081d80ea2ea4fb90207cfb2fbe13ba5e8c3cea7c4807504363d3d3a851df5edb6087c3b39084820bf20e818dd551db54af0765  putty-0.84.tar.gz
- 
- # Locally calculated
--sha256  c18aac5045fd30bff639b07884be44cb8c68eef16efe8c5e18deda1f58cacdfb  LICENCE
-+sha256  3b02f87e0063430289d9681727a98818c844fc8a4d79b24b76047fa061e77f13  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 9071fea208..82b16b250c 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index fcf7bffd24..4d4d410ce1 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/TAGXKYLMAQRZRFTERQ33CEKOW7KRJVAK/
+-sha512  1e33f7212fd0ae2ad3c16e68f0c1fc7a6ad26a126b8406c379a5768d79604c6a816054bd0fe3a63228d70cd6a1fc2b1bae2a9f8014e102d3727eb9d21affa1f1  tzdata2025c.tar.gz
++# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/VX2Z3CBO6KHTYZNBBKFFWM7ZCI6TVCXP/
++sha512  a44882258c0a7fbe587e8b73d6bb3cd5be7d4788976ea742adbbf176eb3b33e5bd7d1714b2fffe2972b1a42e7335eac39ed0bd63e819bb421550f8cae1df4f2f  tzdata2026b.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index a7b6dd8f65..71f8fc3ac1 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.83
--PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
-+PUTTY_VERSION = 0.84
-+PUTTY_SITE = https://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CPE_ID_VENDOR = putty
+-TZDATA_VERSION = 2025c
++TZDATA_VERSION = 2026b
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_SELINUX_MODULES = tzdata
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
