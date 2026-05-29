@@ -1,118 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7822CD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21321CD6E45
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB1568430E;
-	Fri, 29 May 2026 08:30:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC3FF615C1;
+	Fri, 29 May 2026 08:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 439gAa-qGAaW; Fri, 29 May 2026 08:30:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zlcdj31qbnlB; Fri, 29 May 2026 08:30:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B419A84309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDC2E615B6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043428;
-	bh=lHGQmcZWpUMbyYpltPRiJnzLkOh4F12tRC70gQxxVKA=;
+	s=default; t=1780043429;
+	bh=wbomTgbKEmhX3UlVwHxsGTDL1KcUWxKxXzRFTZ492NA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=U2kNtawKRzWJ+wtgq4HZ+wT9z6Fb7kkNPGKSLpj9Vr7meCgUTYn7QzQo9vawNss+r
-	 gc3jCl1bhLdYWeOxyhrNrn1VUlyM271/4UiglEgumsKKkiOxbOs4/PqxSBzCv2PzzE
-	 bH1jATgd/0XeuU+GvxEnZ8XEybaHlK2vDtaowtOBHMOSVZVGfR82/oPzPkthoDXt59
-	 WUo4fI4r54BiXMiOodcB7ECNePP81iVV/nOb/ofmmd5ESsnKYvtpCMNxW2Ayn0qt+0
-	 T3meAhktMW4cSvdOuJL1zRDrunckWfCIZBuDPWNbvQrQecH/v94VW6vAMa3x/FWm3k
-	 Le2VTZAhG8Tgg==
+	b=KJd7gu+hGagufGgxjaMqVGx8s46yFLYzo9c1G74QC4y9xHuyARsT8CuJXzVrWUpxQ
+	 kYxY3EULUdBhSKMx4MIlaUrNn8NTJIrk5Wul3wbAf4W0Gf7t8aROvhqRzFOGnFtaQ3
+	 cbTqRMI28GVqLoIRn9XKUyerxKuAVgP8VtcehyF2r/nVTf8HQhgPymSBZh6aiPXVM1
+	 qb/XdsJk5O0iBd7uN9cVbzT7NqE0ncI7r6FMCF08/wizUFKGplfJ9jE75DLK9ggeJ5
+	 GRv0gbC26P0Gzmthp8APFgjx1j9mkDV4fv7gN+SX7KHtUrSaQag2Ue9w9hHl3KcNJl
+	 LKC2BvwPndrNA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B419A84309;
-	Fri, 29 May 2026 08:30:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6ED32288
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDC2E615B6;
+	Fri, 29 May 2026 08:30:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E728028E
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 503514230A
+ by smtp1.osuosl.org (Postfix) with ESMTP id D57E6842DE
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tP9IDtP4XwIs for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w7BZG2H19-Fx for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 30BC94231C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BC94231C
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 30BC94231C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CCAD9842E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCAD9842E8
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CCAD9842E8
  for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:18 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-45ef1629ff4so275035f8f.0
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4909def6a21so1451565e9.3
  for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043416; x=1780648216;
+ d=1e100.net; s=20251104; t=1780043417; x=1780648217;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ELmhYdPt0NRkbNWYFdx6GRl2sa/I0ie44r22uPxoBMI=;
- b=kyy5rKAa3qu+Spl5sctEMgoGl6dXmdc2+9WO9roFN5no0Nm74NZDHfG68fC556jLzn
- YFAUuPzhGCGEkE4J1kcAy0LcxaBF1ul9LnBAF9U643hRP+VjXHz0EAz4isZZUQPGdG+c
- TC2M5TWoCx7pkbKv3TEW0vAM3khzjWJjf+hmkaecQUNPkZKLsAvaMwxvxtEJ0g/ipfc2
- BvWK6KAZeosyyl1nXLW2R/bKc0DSRbiH29kuvUVWG2MIWyMu/W2R9RhylsSZiPCXM+r0
- 5lCQvSMpFpaMk8Lzx8pMZ2OXmSP3feNtsZiTYun2+66SvYurk470HokJZtYZjvH1GO33
- 6NaA==
+ bh=kGEUv1fmPUL5XxDqVY3jh1LUhZxKqygBM4wU62YLl9Q=;
+ b=rLkZLkd4wKCWIoXjj38LEuczAKj28K0r/KUWePom63iyAjyyobMAR/1j9iodtdhH0b
+ Y9IOMzXRj9IPjrhKjuvrH+B3+KaxMYWZhcrYssJyra10Lywc7oLY0RSHIuy4YTRWqJSx
+ HnQWKY/0lrJolcZobQ7uGhE5WUuUkuX/q/g1o56VNdsbBbRk0lhQs7PUXiF+hH0eIWD/
+ 3tTBMjebTmiUqcUOn9dQUkVNSdvxTGOQtfERBv+Vf7RzuTwd2HZKzBQ0KvfR4Nv/4GAO
+ K74y4odOVFLzMG4REbd/6ImZkp8nu9T2fLGNSkUXGqagMFdfzmuPLFPsvd6MZF4UHBlq
+ AkIQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/2oFBI8YzHNuxq8/iljAG/Ni4sT0VxR3UGD/0xYT2tOUWcbe5JvMrq0xT30jEGxZ2drXM8OBGQBDw=@buildroot.org
-X-Gm-Message-State: AOJu0Yzw602ki7SOouf5n6E2O1xYvfeXxxQtCDRWPnsn05Pv725mLFvD
- Q+25u8YhSEUnyuI+5RudVmOg0oeGVyXJSIBkMA/EXdKxQW/rjYDQbjYdB4GJZj9ZHtE=
-X-Gm-Gg: Acq92OGY+SQn5iTvZwhWST8Oi4Vo3Lt+kB6U9N2qkfJLPX3Qo4Q9PSbAOMkZyFZkr8S
- 0+qfCb+qMRbRH6Z/8hPaxSmlkLK8o84/I8owMo4DoYYJpgHGdwxKE7gp0duqkmnAjBjz0QxBI1i
- WbYaq+C+6cl4JkftxM9FeMuj/1a+DuspuWSc6uP/A3rV4T5NDJwdoiXkt/3uzX7RqcVmQ6z9T4s
- 4OrWYkENBEaDgOXfO/Dc1cEyD8JY9RRBaygxvLNp0iapud2fp1X60FPBMOVPPphIExbF4G3NlJC
- +01XWaOoNGmt059h6xa0JkBTX4DbMoDrP0M/xfgnqcslgtd3YL85fUAUvtSef5JWRnWCY1bXByG
- iUDE0Y9+KpnGyWQCHaIVHklqIz0glpVoSD+mNFbUUa5qBhqHTE+OzgB3Rwjf0IywMlKa2GsNID6
- aal9+5vSDpV2rLrrRS77H9RvxsjyiBQFcMahxk0gm/Uy35q9XFIiuNiL73pw==
-X-Received: by 2002:a5d:46c4:0:b0:45e:de5c:f64f with SMTP id
- ffacd0b85a97d-45ef1458969mr2183185f8f.34.1780043415497; 
- Fri, 29 May 2026 01:30:15 -0700 (PDT)
+ AFNElJ8Gr3X8gxI5AwbI59Zj3bA5EFfZ7DqJAGa/nyUT5Kb1nd+S6hHbcpyzEqx1d6apoq94SYvgUZHqens=@buildroot.org
+X-Gm-Message-State: AOJu0YwDFe38gLxWZy4218WM9MDL3DJvAuPfnvx7cv6ZIUf3Iu6it2Sx
+ ayrhOsYY7BvQvrRCZee1fpsvpvqMHr8FuEi6CYGe5qUAyoWsmKwg61iQAjMjLTBpCvonw46zUVU
+ mYi7Y
+X-Gm-Gg: Acq92OED66Q+6dBIOf389K0H1hEMUNWOmSWIcmp9ocyyMYNqlFb2mWRCKRpOAnqA+nY
+ H8/qvPQSeSToc/6BirjFb9miSQzAtaeMwYsLlse6Tcb/KFPszp39NhIE3mAOHLqPpExk8i11BZ3
+ zzEPcSNN0FtZo128LFSpq3OzSTubyTOrYkv0WTiYkDYVXtyZ8FW7oRVd13I1GWGpZlp3tjIJ42s
+ pZ9c3qYj1bC9sYYda2CBmxUrs5C/DoD/1696LbtRgTGNkGtFZ9y2T/lM1CXA3mCRcuNCNT7FX9P
+ QeZ5IGFn2HjbHZ/CCwRveqQMCsNTDne4DKe2MlA5K3VQ0KpfYzeM8bRf0LolHCJTy5se2e4Q9c8
+ 1bn5/Lrxd+9OTxJv+GKyvz3aSdzhZvHPGK8oqUiJlekiduBpQaBf+d7XXN8g9wNW0Z72r7CsJce
+ LnSUmeN5znZe0+g9nBMVaSSa/XdVWa4o4cM+2Cdz2hT8FLzkDSSjPZwkqNkg==
+X-Received: by 2002:a05:600d:848a:b0:490:4e3e:b483 with SMTP id
+ 5b1f17b1804b1-4909c0aa276mr19451505e9.22.1780043416798; 
+ Fri, 29 May 2026 01:30:16 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef354cd87sm1723520f8f.24.2026.05.29.01.30.14
+ 5b1f17b1804b1-4909c12f4d0sm9857085e9.34.2026.05.29.01.30.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:14 -0700 (PDT)
+ Fri, 29 May 2026 01:30:16 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:14 +0200
-Message-ID: <20260529083014.59213-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:16 +0200
+Message-ID: <20260529083016.59267-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260512164319.3691172-1-bernd@kuhls.net>
-References: <20260512164319.3691172-1-bernd@kuhls.net>
+In-Reply-To: <20260512140610.52172-1-bernd@kuhls.net>
+References: <20260512140610.52172-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043416; x=1780648216; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043417; x=1780648217; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ELmhYdPt0NRkbNWYFdx6GRl2sa/I0ie44r22uPxoBMI=;
- b=LkV+GE5CKv88+5FZgOXiB86JK5tC9X7WFiIVntRKY6LDl7CWjXzrYu7AYRntuwe4uI
- cZyOdqRRIDGXMJ/WD0TcdkOr6pvP4SMcaW/AsoIxbm0BXgXnSMG7QqBZHOcajvULMrVi
- kSYPb7H2+0TFvr2/Hh7OsAG4fhPi7eKsuQ8xW2HqDWCy0HDDo0KJ9NLAJya1CGrHOtAP
- 53pHTZk62m1mECnRr+pm94xQjlSI//C/0KnpD515LnJgUyGNgCNtRGrw0fwmQcZrDZg3
- BXPoZMqdXFpbdlxZ7pb2r2iOZBthbi7n+ok8aKtXOaMPr5g45YlxBNpRk+d2Sxoc6m76
- voMA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=kGEUv1fmPUL5XxDqVY3jh1LUhZxKqygBM4wU62YLl9Q=;
+ b=A5opgNP4jyoLl1Ks3QNtsoyAV2OunizAmSRQ5QIP4ZbC2gHaSGH6QfvpanOFIkZn5a
+ VLOVlm84lKjSoZgx3a/+2ksOXcIkdB9Cm3sntZ5Ur6lG8GATK6oWIP/TjDO2i+5hNQvr
+ VVapPS8cYxYTyOKv8dHRR2z7/rspxJ/E7tbMWJfwWUCJOHE9Oje/Kxcu9wEEDuvzrYrR
+ rSm62aT4K3XVwwHH0t9vENLOqIVZwIE7EsHKNBeepVHPAi3z5xyn0vrkQvfzeJDGZgve
+ y6ZU3qo2odxm46vlTedxIQlVv3ylSXU40X0nTvhol+UJsYMTSw94RMgj+UNdowZK0t8l
+ aQNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LkV+GE5C
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: security bump
- version to 3.0.15
+ header.a=rsa-sha256 header.s=google header.b=A5opgNP4
+Subject: Re: [Buildroot] [PATCH 1/1] package/liburiparser: security bump
+ version to 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,71 +133,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://github.com/owasp-modsecurity/ModSecurity/blob/v3.0.15/CHANGES
+> https://github.com/uriparser/uriparser/blob/uriparser-1.0.2/ChangeLog
 > 
-> Fixes CVE-2026-42268 & CVE-2026-30923.
-> 
-> Rebased patch 0001 due to upstream commit
-> https://github.com/owasp-modsecurity/ModSecurity/commit/f38b5b7296d87e7b1744ef6b5f3dca11fe7cf886
+> Fixes CVE-2026-44927 & CVE-2026-44928.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .../libmodsecurity/0001-modsecurity.pc.in-add-lstdc.patch   | 6 ++++--
->  package/libmodsecurity/libmodsecurity.hash                  | 4 ++--
->  package/libmodsecurity/libmodsecurity.mk                    | 2 +-
->  3 files changed, 7 insertions(+), 5 deletions(-)
+>  package/liburiparser/liburiparser.hash | 4 ++--
+>  package/liburiparser/liburiparser.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libmodsecurity/0001-modsecurity.pc.in-add-lstdc.patch b/package/libmodsecurity/0001-modsecurity.pc.in-add-lstdc.patch
-> index 9e0b672c8d..43d1cc73f6 100644
-> --- a/package/libmodsecurity/0001-modsecurity.pc.in-add-lstdc.patch
-> +++ b/package/libmodsecurity/0001-modsecurity.pc.in-add-lstdc.patch
-> @@ -14,6 +14,8 @@ Fixes:
->  
->  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
-> +[Bernd: rebased for 3.0.15]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->  ---
->   modsecurity.pc.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> @@ -26,8 +28,8 @@ index 96cdf5ca..7c895ddc 100644
->   Version: @MSC_VERSION_WITH_PATCHLEVEL@
->   Cflags: -I@includedir@
->   Libs: -L@libdir@ -lmodsecurity
-> --Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@
-> -+Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@ -lstdc++
-> +-Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @PCRE2_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@
-> ++Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @PCRE2_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@ -lstdc++
->  -- 
->  2.39.2
->  
-> diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
-> index 821459f6b9..aab9d14d67 100644
-> --- a/package/libmodsecurity/libmodsecurity.hash
-> +++ b/package/libmodsecurity/libmodsecurity.hash
+> diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+> index c18df8eb98..ad5bf40d47 100644
+> --- a/package/liburiparser/liburiparser.hash
+> +++ b/package/liburiparser/liburiparser.hash
 > @@ -1,4 +1,4 @@
-> -# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v3.0.14/modsecurity-v3.0.14.tar.gz.sha256
-> -sha256  f7599057b35e67ab61764265daddf9ab03c35cee1e55527547afb073ce8f04e8  modsecurity-v3.0.14.tar.gz
-> +# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v3.0.15/modsecurity-v3.0.15.tar.gz.sha256
-> +sha256  c276c838df6b61d96aa52075aee17d426af52755e16d09edca9f9d718696fda7  modsecurity-v3.0.15.tar.gz
+> -# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.1
+> -sha256  acd18cfb14d1851705f863f7a625be693fb3971fb85d4996faa21147f0315fcb  uriparser-1.0.1.tar.xz
+> +# From https://github.com/uriparser/uriparser/releases/tag/uriparser-1.0.2
+> +sha256  7b2496f9622b4b201186a3d159d278605f1fb7262402a10cc1c0824889798b00  uriparser-1.0.2.tar.xz
 >  # Locally calculated
->  sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-> diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-> index a90fa1d614..c06d890979 100644
-> --- a/package/libmodsecurity/libmodsecurity.mk
-> +++ b/package/libmodsecurity/libmodsecurity.mk
+>  sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
+> diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+> index d8dcc22063..9d1b9a1aac 100644
+> --- a/package/liburiparser/liburiparser.mk
+> +++ b/package/liburiparser/liburiparser.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBMODSECURITY_VERSION = 3.0.14
-> +LIBMODSECURITY_VERSION = 3.0.15
->  LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
->  LIBMODSECURITY_SITE = https://github.com/owasp-modsecurity/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
->  LIBMODSECURITY_INSTALL_STAGING = YES
+> -LIBURIPARSER_VERSION = 1.0.1
+> +LIBURIPARSER_VERSION = 1.0.2
+>  LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
+>  LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+>  LIBURIPARSER_LICENSE = BSD-3-Clause
 > -- 
 > 2.47.3
 > 
