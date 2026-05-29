@@ -4,115 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D2CFCD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8184FCD5BD2
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54CDB61594;
-	Fri, 29 May 2026 08:30:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57CBF61597;
+	Fri, 29 May 2026 08:30:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7xSCtHJyy5KZ; Fri, 29 May 2026 08:30:15 +0000 (UTC)
+ id yBvG5cvfatIe; Fri, 29 May 2026 08:30:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 577BC613D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F6B861598
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043415;
-	bh=q3W7uzvYxaBspsHowQu2+T+0pm6KM3wt2pyxznIqseU=;
+	s=default; t=1780043418;
+	bh=2siuOGxf9KJEUazoJcqwWEamn3bddjPMvZf0rpdZiCc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=qh5KGNgW5Ld8f+eVIa6XACA/Tb3Mv51sXKo6opzByWYVtQOB4iu0naNH290INPMGe
-	 bHok6JuDcY5X1ClK6VhHaoCTXugmQNIkeu9ztblrCt66Lqrm8ADC+uKFJi2+5854YD
-	 SuaLFCmrwXkUGjcyZPFj1Q2ilPC7J5W2/NLUJVfK6qqq6dV/tMP6UjKoc5X2nZHyGJ
-	 pCbxDt535IEspf1Cn+zqh7q5OuaR2mt2V7bNPHFDhO0YtN7uarmMiDa4KJNOqLJXBp
-	 WS9nds855iY2aDGlz8sGnWsCIIsGtkHgLAveqeCi+sZtAC5nXacNYSPcFJ541U57QW
-	 0Ye+XsVTGcUkQ==
+	b=AtgVLF1cIza5mc0toDKmnXnXgCjpt9pKMRng7YL1oAttrnPy1vgBKvITuqhhPJTYI
+	 v1V3+eX2tmxtsru7ekfyR0rdgAbJaRmOvN5D2LFDg3VJWG4zwWvpIIzuWx81leHA+y
+	 OwudQKaCnFyRQbb3m6ykjLl4QD8LHf+ail+6PpjX3QLnNjiGCQLXayH3E71w+n+SMG
+	 kJDeYXb40GJX14AypaobVv8GPV29+3li2xItO6OxsBHxTivjZneAPKlQOpKsQu3nXZ
+	 nIns8YRKjIfpYCcdZQt+Gl5u3VSiKF0MFuTlj/qkQ79a5K/Gzw1ptvtUKpBJe8u8wJ
+	 wZK3NJtc4R1SA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 577BC613D0;
-	Fri, 29 May 2026 08:30:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71655288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F6B861598;
+	Fri, 29 May 2026 08:30:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52C8E288
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52E9E613C6
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50332422FF
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zo_tZe-FeCxx for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:30:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uE8p2yPy_ca8 for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:30:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 37B3261389
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37B3261389
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 37B3261389
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:09 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4891e86fabeso46272105e9.1
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AB3F42300
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AB3F42300
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4AB3F42300
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:30:12 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-48fde648a71so90489205e9.0
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:30:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043407; x=1780648207;
+ d=1e100.net; s=20251104; t=1780043410; x=1780648210;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=wVPRRZ8DhVTTcGE3eRpgQU20pey7Q1E9xtVNbanoS4U=;
- b=fmbtvDH4XM3+hldWdlclGq1E4cF/HVEH198BKapjkPELVnviVijm/6d5trLzsSZ0q8
- +Woy1Qq0EKIU+whidezDqKd/7NIPwbED7L0XPmHO3t3MDES9ST2BGmxHTfpUXAROZby/
- eGQ3JoBuknX3skgs6jOeuyuAeZ7R4t3HCt/VvMGi62Rv/31e9DK/F87dwnUfi8eW5a09
- X3AyIgVsD6Y8iBjkf91H660VCIIBrDmot6bffrPL+6Uewt7B0YNrcd/bFSzLi3ShH3N+
- F5+0ViZ0cr4L6ppgYEbtPse+otT8wBnxLLCEChOY49XzusCfOL69wdBlbDYOzqIelyx5
- 9RRQ==
+ bh=UvObHUaTPgSbDzhIFi8nYXtbmjxfy7HKrE0QA6jN5ZY=;
+ b=Pt78DgcRAsBWNtYdvsmV8DnuR2nFHstHfBp9eeppjG2UnmqepTx+Gs5/BGsc57ajjJ
+ HHXGEBYVK2+xE2k9M1kXmL+NXbwBvYzQVlOjIj5nfNXuPak4XQKHas/xwq+dsJ3PzMTt
+ 8/1dwCRx4tQObla1cofg44MFs6iSdD49qA68CBCpfnTJQilpBhtprsQ6DJNhFGZtBUsE
+ 4hNaDz8qCaRZUupZVhX98J5dIFQeCnh80B9Hd9MztJdvjgGqshbZKniKowQBhjxyCCcL
+ NgzokvN1bCMWKzyiWm9eIlN+etRqd+HVYKgPXSC2qlBJwlzPtdnoVANQ6Etq6Y4J1vH0
+ bkzQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/yd/dJJAZ+AMlD4l01Vsbeq82sKJ/UdDuyoz9ggnI0A4YBLI4y+r7z+YP/wptEkdM1J78jo+fxV7c=@buildroot.org
-X-Gm-Message-State: AOJu0Yy71ugOA5olebWM2cD1t22ITJlSe6CvMSik0JYd/1TaDxe0KiQy
- VSwcLMIRguC8p8gaxEvD5LPRONlXyStl22NCQkEaTLg+OLdSNSSTEhwwohgH6xW0xE4=
-X-Gm-Gg: Acq92OEwzd3fBqFTVmFLx2K7HvSGPxP05c+wqKtswzSDUxLwUeby5QeL+SK/o6F4guc
- bQeMlLlLAeQI/jdg1JxU0l4s5gVWOapHiraxJZ+7a8mfqacgHE29HaqxfysSoyYl1LOMqalD3uF
- 9HnYAwY9Rrkw0Sg1SfoZgp/PRi6gWjWcNX9LQapu/8jR9vx0R77WV0q3+7M8U24flAZFTAiUkL0
- MxKlM2yoc99/QZn92CewmG1mhy7gTeThTK9N5aX/6PsawdFp2RBW8Gn19R5mm9tirWc9k99piUm
- /rdV0qS8HssXenb1NtYDYkOjmK4xoXzr1DSv7rIoC8QHhdcy0fZlaPoxUkSxKulu1SXr3dTgMVD
- aAcGUd+uPgoYavTZH1quOMCGPcSubBwgsL9josdcb31yeCkUqbsxjPfG1KDnH7vFK304/6i/0P/
- gdU2tNxpfWSFJ6yZaIiIUqTrrinuQVnVJ7HwfHfPg1ocb5wNLMGwM2VROZNw==
-X-Received: by 2002:a05:600c:6219:b0:490:9df1:f0cf with SMTP id
- 5b1f17b1804b1-4909df1f29bmr22837425e9.2.1780043406917; 
- Fri, 29 May 2026 01:30:06 -0700 (PDT)
+ AFNElJ+ErpWw+KrI4gPhwSxBazt4m4ZjVXyOW9OLH12muqrMKl4kI+YyMADuV76PbUCCbrhaVTFYvY9i9Ic=@buildroot.org
+X-Gm-Message-State: AOJu0YwnsEwF3nTavPx8lRum62oHNSW2ShadJzxysVqfWVCi7SK951g5
+ ZnxCsewLmRHgr6Dyp9y1/wFTH87bctZxSvXUrltcfKC9TyNJKHH3Oz3hweCwZcQVJSY=
+X-Gm-Gg: Acq92OEMC6SIDgHibzkcNBzs7YQiswv2lPpHGnV036aU3cjshYkz5ulTIV9dl4g/FRu
+ Rcd6aJ8uQddzEYLsetzXtNvK2LfUJCj58WMkT/L2RdbuVbaTS2QmUZ9CxGfWdxpLTjNbFWRIQUW
+ 2hsXnNEvCw91n+dHvMqeQJXCSkk6H+ibh0vGAZJAObg9A7imnvaWigKGH9la8WBjesfJ3179Biv
+ zsRflSjU30FqwE0LvWWBRJ+QVHjniYJlHZbLJ8YM1hrOwZI2c0L0NLJW4NC8CYhRx+54xDFNNoS
+ wPH/fyT4yw/o8KceSJFYnNlVb0VufgOuVfJbOtcc3ysZboy8TE8QGMImYHj7ohlpLc9zxDBN4Ee
+ V2QqKZ3jGPerrhfEsk2QPNuK9ODmIcaCH8UgrFS8ioElKU2fqB8aLarEHWCSsJM5yOMNpeKL2fa
+ 58wAO0OCEaLPpzqQaNLyDNZSXo688MuC5+r51AGQ066XCzMf7SC1itrwhufb5PMaWRW2cM
+X-Received: by 2002:a05:600c:8207:b0:48f:e044:927d with SMTP id
+ 5b1f17b1804b1-4909c62336fmr23106835e9.10.1780043409740; 
+ Fri, 29 May 2026 01:30:09 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909c0ac831sm9738865e9.10.2026.05.29.01.30.06
+ 5b1f17b1804b1-4909ca6db64sm29608255e9.6.2026.05.29.01.30.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:30:06 -0700 (PDT)
-To: Julien Olivain <ju.o@free.fr>
+ Fri, 29 May 2026 01:30:09 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:30:05 +0200
-Message-ID: <20260529083005.58764-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:30:09 +0200
+Message-ID: <20260529083009.58939-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260427201606.896700-1-ju.o@free.fr>
-References: <20260427201606.896700-1-ju.o@free.fr>
+In-Reply-To: <20260508184329.3669575-1-bernd@kuhls.net>
+References: <20260508184329.3669575-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043407; x=1780648207; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043410; x=1780648210; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wVPRRZ8DhVTTcGE3eRpgQU20pey7Q1E9xtVNbanoS4U=;
- b=MZ2SPgmtoobswnqXlYoy/ufrKacTrhRZXU9vARKvT/NAnrUN3HxWZcZp5NhRDZaEOL
- OWkRmMr7e/54iAaZOzKiqKcEDtWNFMAMgmtu2G+cRLH5I05QWvdUKKSPolaKSC0KllYs
- hoT999wHKmJ+fo139JsXDru/p8HeZbyY0VZCX4v0h13DPb3Ui5pPPsMne8gLr8Lvusyr
- qJtVJxut27hUeUyzAjd0BHjuT2BWfGE08uW/Xvo08DdMwtB6lN93qFYvk5Mg53mSzENK
- 0m9GvcyF/vQIqj63rVl0MgvtKoXkTAzVpRxYiueAi9G7y6XaqiZzxU7VCAnwGd0L3xzT
- mb9A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UvObHUaTPgSbDzhIFi8nYXtbmjxfy7HKrE0QA6jN5ZY=;
+ b=fo3McMNOZY8ggquVO42XVWaKVI8yd3uxXH9hQLWNc8xy7LO7e8WlV4MER60luWJQUW
+ f+Saz0ZPCZmKf0m5JsoRW6l/G/zQSrdVclKYPhaq77Rkz3W5GCF2w4hJI41VEUc34iM4
+ 8r8Oxp4lHcW8AmKDCHdK1bu8+ghb7q0PHuBP7VyRemMHR2nOHe3RzNLedY41bfQu4XBz
+ CxjsICH+Y//aq12lqKdTrlnRp+l4iYHmo6yIIO6whxo2Ki+u06Unh5hLgpB0JxszY/nn
+ WpAfsQvxvXCy8mO2vRv2XesVk/S9Am2GJIQeuiOOlAz+l4nQ5C/XJGCJI4AQDpbE7zio
+ ue+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MZ2SPgmt
-Subject: Re: [Buildroot] [PATCH 1/1] package/libabseil-cpp: add patch to fix
- build with gcc <= 12
+ header.a=rsa-sha256 header.s=google header.b=fo3McMNO
+Subject: Re: [Buildroot] [PATCH 1/3] package/libks: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,102 +132,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> libabseil-cpp headers can break some packages build, like protobuf,
-> when compiled with gcc 12. See [1] [2]. The issue has been reported
-> in protobuf upstream, in [3].
+> libks makes use of ERR_* functions defined in openssl/err.h which are
+> included by openssl/engine.h resulting in a build failure when
+> !BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
+> 623d3bbe43e9193aa8e3395367d01af59071b859:
 > 
-> The issue is due to gcc <= 12 not supporting the mix of standard
-> C++ attributes with GNU attributes. See [4].
-> 
-> Gcc 12 has been removed from Buildroot internal toolchains in
-> commit [5], but gcc 12 can still be present in external toolchains
-> or on the host. This is currently the case of the Buildroot Docker
-> reference image, based on Debian 12 (Bookworm).
-> 
-> This commit fixes the issue by adding a package patch.
+> /home/buildroot/instance-0/output-1/build/libks-2.0.5/src/ks_ssl.c:111:17:
+>  error: implicit declaration of function 'ERR_free_strings'; did you mean
+>  'ERR_load_EC_strings'? [-Wimplicit-function-declaration]
+>   111 |                 ERR_free_strings();
 > 
 > Fixes:
-> - [1] [2] and many more.
+> https://autobuild.buildroot.net/results/aac/aac25e5c584ede962cac95c353afd64bf720199c/
 > 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/13904066346
-> [2] https://autobuild.buildroot.org/results/33f6cfd37cb48c15a53b3e7123d5ce8388a0f2ab
-> [3] https://github.com/protocolbuffers/protobuf/issues/26383
-> [4] https://gcc.gnu.org/PR69585
-> [5] https://gitlab.com/buildroot.org/buildroot/-/commit/58cf7c51da3ae4804332f68ee934e153d695d047
-> [6] https://github.com/abseil/abseil-cpp/pull/2044
+> The oldest build error on the master branch dates back to Feb 2025:
+> https://autobuild.buildroot.net/results/83a/83a207bee796afbc619b62c5ecf89c662484170f/
+> so a backport to LTS branches should be considered.
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  ...SL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
+>  package/libks/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch b/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
-> new file mode 100644
-> index 0000000000..8f5e255795
-> --- /dev/null
-> +++ b/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
-> @@ -0,0 +1,55 @@
-> +From 77326826119439c06e341c9d090633ecd9b520d6 Mon Sep 17 00:00:00 2001
-> +From: Julien Olivain <ju.o@free.fr>
-> +Date: Mon, 27 Apr 2026 19:38:19 +0200
-> +Subject: [PATCH] base: fix ABSL_ATTRIBUTE_WARN_UNUSED with gcc <= 12
-> +
-> +Gcc <= 12 does not support mixing standard C++ attributes with
-> +GNU attributes. See [1].
-> +
-> +This can lead to build failures such as [2] [3] and [4]. In those
-> +situations, the compilation fails with error such as:
-> +
-> +    /usr/include/absl/base/attributes.h:1076:36: error: expected identifier before '[' token
-> +
-> +Gcc maintainers mentioned in [1] comment 9 that this bugfix will
-> +not be backported in Gcc 12. Gcc 12 is still used in LTS
-> +distributions. For example, it is included in Debian 12 (Bookworm),
-> +which is still supported until 2028. See [5].
-> +
-> +This commit adds a workaround for gcc <= 12 which uses
-> +__attribute__ in that case, which fixes the compilation failure.
-> +
-> +[1] https://gcc.gnu.org/PR69585
-> +[2] https://github.com/protocolbuffers/protobuf/issues/26383
-> +[3] https://autobuild.buildroot.org/results/33f6cfd37cb48c15a53b3e7123d5ce8388a0f2ab/build-end.log
-> +[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/13904066346
-> +[5] https://www.debian.org/releases/bookworm/
-> +
-> +Upstream: https://github.com/abseil/abseil-cpp/pull/2044
-> +Signed-off-by: Julien Olivain <ju.o@free.fr>
-> +---
-> + absl/base/attributes.h | 7 +++++++
-> + 1 file changed, 7 insertions(+)
-> +
-> +diff --git a/absl/base/attributes.h b/absl/base/attributes.h
-> +index 5887fcaf..a26143e1 100644
-> +--- a/absl/base/attributes.h
-> ++++ b/absl/base/attributes.h
-> +@@ -1092,7 +1092,14 @@ struct AbslInternal_YouForgotToExplicitlyInitializeAField {
-> + // See https://clang.llvm.org/docs/AttributeReference.html#warn-unused and
-> + // https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html#index-warn_005funused-type-attribute
-> + #if ABSL_HAVE_CPP_ATTRIBUTE(gnu::warn_unused)
-> ++// Only GCC >= 13 allows mixing standard and gnu attributes.
-> ++// In case of gcc < 13, fallback on using __attribute__.
-> ++// https://gcc.gnu.org/PR69585
-> ++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 13
-> ++#define ABSL_ATTRIBUTE_WARN_UNUSED __attribute__((warn_unused))
-> ++#else
-> + #define ABSL_ATTRIBUTE_WARN_UNUSED [[gnu::warn_unused]]
-> ++#endif
-> + #else
-> + #define ABSL_ATTRIBUTE_WARN_UNUSED
-> + #endif
-> +-- 
-> +2.54.0
-> +
+> diff --git a/package/libks/Config.in b/package/libks/Config.in
+> index 4781d188bf..17a008d7a0 100644
+> --- a/package/libks/Config.in
+> +++ b/package/libks/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBKS
+>  	depends on !BR2_STATIC_LIBS # dlfcn.h
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
+>  	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+>  	select BR2_PACKAGE_UTIL_LINUX
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
