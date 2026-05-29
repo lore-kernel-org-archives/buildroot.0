@@ -4,60 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9EE7CD6E49
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 17:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11BAACD4F54
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 17:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68E16615F0;
-	Fri, 29 May 2026 17:55:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB1F8615F4;
+	Fri, 29 May 2026 17:56:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4DKVCMTk10Il; Fri, 29 May 2026 17:55:02 +0000 (UTC)
+ id Zwo9Zv-g_k6W; Fri, 29 May 2026 17:56:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B961615F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11BFC615FC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780077302;
-	bh=bquZ1Mvj9T7cfghFJb7pJ6h7H+Qyvo6c3t9m1ZKcJMM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iE+nSs4D1I7cPyC5XjRJfhofLFGdC4md06nz4AHYXqNFpXyqCzFHBV7SbNTOLzt0D
-	 au2lO81QK5Uu47vH3TpJrpfrzlayx0hQciyUdRNRT9p70Qy07VeS9sucGwO5t8EeeT
-	 wsX1EhuS/s0YbHUtTUNoUm4yngrzRoqW1yEsQmgU/yxUrdv1zOAPXf/p8zyzXWQp1S
-	 /4KZ29+GtRkhaVIvs3GLmfvsiW+MGeE3LF6TsCadJ1hPOHxW2pChv2FFimmyTbqfWO
-	 EVfWOtAFSMw7HSNOdWhgZcWqfs3fcU+wR/mv44dquNQsttBBXJg71bMxDKbTkoBPVC
-	 vytS49n8eaHGQ==
+	s=default; t=1780077380;
+	bh=CCdeDiDGXX471Qf5JDaBwiCgRqCv9rKa0u2qGlXDl3Q=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=mu0LIGypJfFCufLAhRAF9OdMdrX2rw8vfbUqdStoVBdl/lV6qBpHtubo1cQwhU4zq
+	 0nA75igtn3X6n5PdqQWcdv5yA2EoN9wE7hrCkWcrHPCnuzn1PoMg7A6LBkVaTlXWXU
+	 aJtAzRGjItztHJ0xhjVyvr4MJmyy1OL62pPjM7HmYIp1geM2InDfpNYDBOwKsHEGgp
+	 CNRpZJr2E34bx1yAb/LyAPWj5sRZqcuHYua3RasFpRY5aeUqqQdsAhrs+OFMxNJRj0
+	 /LUEmh5M7PEW/moiQKu8we3A6M60XtOxzldqoh01m4aJSzWwXig8BuBpK26zwJN+Ri
+	 0ZLhJTZKB34gg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B961615F1;
-	Fri, 29 May 2026 17:55:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 00DCCF4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:55:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11BFC615FC;
+	Fri, 29 May 2026 17:56:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19262F4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D52E9423BA
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:55:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15DE140431
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-HOKsIQar8g for <buildroot@buildroot.org>;
- Fri, 29 May 2026 17:55:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 047C7423B9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 047C7423B9
- for <buildroot@buildroot.org>; Fri, 29 May 2026 17:55:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EF1E8740D; Fri, 29 May 2026 17:54:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 19:52:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 526b89cfd883073c048e32cabe4597e2c83084bd
-X-Git-Newrev: d0cacc6acfb9357bc5aec61f7d9e330c2e41a190
-X-Patchwork-Hint: ignore
-Message-Id: <20260529175447.4EF1E8740D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad:
- disable qsv support
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TIBAtGI2sVtG for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 17:56:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0FB0440348
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FB0440348
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0FB0440348
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 17:56:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 9C2D1B97C44C; Fri, 29 May 2026 19:56:15 +0200 (CEST)
+Message-ID: <caf8baa1-eaf9-4e3a-aac2-d7d234d795a1@rnout.be>
+Date: Fri, 29 May 2026 19:56:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20260527184641.3533110-1-bernd@kuhls.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260527184641.3533110-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1780077375; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=zZMvshRKdNcdJM+127adZZhfP1DesLBaP+gyrCAsQe8=;
+ b=Me4jTXjc6F0E7yMqzwBlyik2gjysGPLWR9K8DGDQWmBxTO/TmTSzcRhszKEihkx2php6jp
+ 0mIHk96fD0rBPyiyPlby3Oz1mRowwjKq8iDZgKe+3FH7Z2dgLXMzbTehqQp4cKaNP5E9Lx
+ rCWzlPv2Y+Dz+URpwU8dXEeA/nEnG3WSS9HJerV79QJenRYGKkA7rt07QDezZDVE8fZaBH
+ wjDxKeBsb9hzkCxdXEKA5b7jaKcmgpidJk4rMVCGhMfdWLwv/vfs1maCx0A1rL+5wK9VoH
+ tbgXjvEAbj6rwgybcHQCZK0cVhVHdcAaIZXBFLj22ttwQ4rSn3XTy9EnmoE0qQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=Me4jTXjc
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/ustream-ssl: needs OpenSSL
+ ssl-trace
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,60 +90,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d0cacc6acfb9357bc5aec61f7d9e330c2e41a190
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/64ed6075b782578d57edd09b3463071d6e5a4342
-added support for the Intel Quick Sync Video Encoder with version 1.22.0
-that was added to buildroot with commit
-895840edd2784492d9b7066330b43842b703343b.
 
-On unsupported platform the build is broken:
+On 27/05/2026 20:46, Bernd Kuhls wrote:
+> Buildroot commit e1050a3a50886c72d3ff2416dd8db2fe3c389973 bumped the
+> package which includes upstream commit
+> https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=956fba242ac0a4bcfe3db103d4d1f41545c924fb
+> that adds the usage of SSL_trace causing a build error when OpenSSL was
+> built without ssl-trace support:
+> 
+> /home/autobuild/autobuild/instance-10/output-1/build/ustream-ssl-5a81c108d20e24724ed847cc4be033f2a74e6635/ustream-openssl.c:
+>   In function '__ustream_ssl_set_debug':
+> /home/autobuild/autobuild/instance-10/output-1/build/ustream-ssl-5a81c108d20e24724ed847cc4be033f2a74e6635/ustream-openssl.c:490:44:
+>   error: 'SSL_trace' undeclared (first use in this function); did you mean 'SSL_write'?
+>    490 |         SSL_CTX_set_msg_callback(ctx->ssl, SSL_trace);
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/17c/17c88282c32f2edfa0991e0e10cb45013c947be9/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-In file included from ../sys/qsv/libmfx/api/vpl/mfxdispatcher.h:10,
-                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.h:24,
-                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.cpp:7:
-../sys/qsv/libmfx/api/vpl/mfxdefs.h:75:6: error: #error Unknown packing
-   75 |     #error Unknown packing
+  Applied to master, thanks.
 
-caused by
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/1.24.13/subprojects/gst-plugins-bad/sys/qsv/libmfx/api/vpl/mfxdefs.h?ref_type=tags#L75
+  Regards,
+  Arnout
 
-For now we disable qsv support to fix build errors on
+> ---
+> v2: added result of Gitlab pipeline
+>      https://gitlab.com/bkuhls/buildroot/-/pipelines/2556948372
+> 
+>   package/ustream-ssl/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
+> index c328a6ea12..6fc54f3bef 100644
+> --- a/package/ustream-ssl/Config.in
+> +++ b/package/ustream-ssl/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_USTREAM_SSL
+>   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
+>   	select BR2_PACKAGE_LIBUBOX
+>   	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+> +	select BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL_TRACE if BR2_PACKAGE_LIBOPENSSL
+>   	help
+>   	  ustream SSL wrapper
+>   
 
-arc: https://autobuild.buildroot.net/results/2d5/2d5666324db2fca7ab0419e28481829edca949b3/
-m68k: https://autobuild.buildroot.net/results/53b/53ba2e9d09c25fe85e96b6e1fc9adbfcf5a637b2/
-microblazeel: https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
-or1k: https://autobuild.buildroot.net/results/17e/17e3dac016a08da8db58d735d0f2d3acc259f81f/
-sparc: https://autobuild.buildroot.net/results/f07/f07995804faa0be38bbba462c52be86c6c69822b/
-
-Fixes:
-https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index c6fb669e13..ac554749c9 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -39,6 +39,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	-Davtp=disabled \
- 	-Dopensles=disabled \
- 	-Dmsdk=disabled \
-+	-Dqsv=disabled \
- 	-Dvoamrwbenc=disabled \
- 	-Dbs2b=disabled \
- 	-Dchromaprint=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
