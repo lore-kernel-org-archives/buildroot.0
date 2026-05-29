@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B219ACD6E49
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB79DCD4F54
 	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 21:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81CFA40707;
+	by smtp3.osuosl.org (Postfix) with ESMTP id B821E61B83;
 	Fri, 29 May 2026 21:53:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OD1Xe_XHVBwP; Fri, 29 May 2026 21:53:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ya4go_1Kyddo; Fri, 29 May 2026 21:53:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ED1342844
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96C0361609
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780091626;
-	bh=O+LncldeHokvMFFQz9NF2VQyLw+Co4hSxY1jFZ+XuvI=;
+	s=default; t=1780091625;
+	bh=9SgGolneKY94L7WRrzRbk2slLZ5q/TXCjdbADVnHGGU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dBywf6r3pjUKlIg6CqrD1+PlqggGkDxZ5UP60quk0+7y8fVeqmw2uoHaSfbgPUstN
-	 x7gOi89GoEpl/cBLhBhffvm5Tktuu7Yvqq0ve6A4gEE9GliomjPcyTbPWJEwR9ptBP
-	 Ty1yQwh2MnMdDRKpU9iLUR/qHwMBQbcwyw8HnlzEK114UwYlmgwPSIpSGe5QZ8HVJl
-	 BT9wfiDrHzHpJBBFlvjf8lwIUhAC4LYzvkrqIDfcdshPuYCQrbhRaBltK3QZZIgOJx
-	 r72m+0GSpjoSPHY8/zjTkAFTSBWr7Yu9Y9IdePdtuXM1nvdfBOgJHYtZ5gthCNZU01
-	 D/DqnMAufAQmg==
+	b=Odji/6mHyeuuseQomNmkclsHJP9aiXai7UVTsR6q/xSDiGvaQgrTIJ7NWgFXQ4euW
+	 UzQjQ8gFi1H2x1QN5X4eqtuIX2qCp/CV94iT12+qCVNCT+0XHtmuZcsTls17SyTdEi
+	 bABdpj+WSl/Jp4LcSGb+yTmUjrrtMCudTsdIgOeAe0K4ITU2Hz1IlcA7W6RwMSyVPr
+	 EnUMmInWvoVtoIZsehklsGTeQ8Vu5EGJrGaYp/m98Vupco0AWQppY0+sHnvHNeEU0P
+	 dH9YboHa5y7SWcQv5lSKArIQDnIrNUpmtZip70yjP4w3T+tuAwd4sSgtzxiHi1zdkI
+	 bENVIY8B4H7Kw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ED1342844;
-	Fri, 29 May 2026 21:53:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96C0361609;
+	Fri, 29 May 2026 21:53:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A320F4
- for <buildroot@buildroot.org>; Fri, 29 May 2026 21:53:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 77ECFF4
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 21:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C38084ACA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4113C84AC5
  for <buildroot@buildroot.org>; Fri, 29 May 2026 21:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M5eVTcB8S2cG for <buildroot@buildroot.org>;
+ id SFMZx2p-NwOt for <buildroot@buildroot.org>;
  Fri, 29 May 2026 21:53:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D96084ACC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C39A84ACA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D96084ACC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C39A84ACA
  for <buildroot@buildroot.org>; Fri, 29 May 2026 21:53:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C7FA2874AF; Fri, 29 May 2026 21:53:26 +0000 (UTC)
+ id E99C0874B2; Fri, 29 May 2026 21:53:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 23:52:10 +0200
+Date: Fri, 29 May 2026 23:52:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e4fefb5f616c9d6b8f61348352bd947554bcf40c
-X-Git-Newrev: c70315608afb4d5188cafe5d3df92edc929ce1c8
+X-Git-Oldrev: ce1394ee0ed07c2d06223dc5b1bbf73482316896
+X-Git-Newrev: abcaada9fd31abf697253d37e645485cd220cadb
 X-Patchwork-Hint: ignore
-Message-Id: <20260529215326.C7FA2874AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libenca: fix C23
- compatibility for getenv/getopt prototypes
+Message-Id: <20260529215326.E99C0874B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add Shubham
+ Chakraborty for libenca
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,106 +77,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c70315608afb4d5188cafe5d3df92edc929ce1c8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/abcaada9fd31abf697253d37e645485cd220cadb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
-
-GCC 15 defaults to C23, which removes support for K&R-style
-unprototyped function declarations. This causes build failures
-with strict modern C libraries.
-
-Add proper function prototypes for getopt, getopt_long,
-getopt_long_only, getenv, and _getopt_internal to comply
-with C23 requirements.
-
-Fixes build with musl libc and GCC 15.
-
-Upstream: https://github.com/Project-OSS-Revival/enca/pull/97
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/982831f380ba21a28d4a9a0cb100d055771898e2/
 
 Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-compatibility-for-getenv-getopt-prototyp.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch b/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch
-new file mode 100644
-index 0000000000..74e92ce677
---- /dev/null
-+++ b/package/libenca/0001-src-fix-C23-compatibility-for-getenv-getopt-prototyp.patch
-@@ -0,0 +1,69 @@
-+From 1782ea5dd749cd66b38b03aa02bd0c2f9d558f83 Mon Sep 17 00:00:00 2001
-+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Sat, 18 Apr 2026 14:25:27 +0530
-+Subject: [PATCH] src: fix C23 compatibility for getenv/getopt prototypes
-+
-+GCC 15 defaults to C23, which no longer supports unprototyped function
-+declarations (K&R style). This fixes conflicts with strict prototypes
-+in modern C libraries like musl.
-+
-+Build-tested in Buildroot using musl libc and C23.
-+
-+Upstream: https://github.com/Project-OSS-Revival/enca/pull/97
-+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+---
-+ src/getopt.h      | 16 +++++++++++-----
-+ src/getopt_long.c |  2 +-
-+ 2 files changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/getopt.h b/src/getopt.h
-+index 2eae587..91647ae 100644
-+--- a/src/getopt.h
-++++ b/src/getopt.h
-+@@ -144,7 +144,7 @@ struct option
-+    errors, only prototype getopt for the GNU C library.  */
-+ extern int getopt (int __argc, char *const *__argv, const char *__shortopts);
-+ # else /* not __GNU_LIBRARY__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char * const argv[], const char *shortopts);
-+ # endif /* __GNU_LIBRARY__ */
-+ 
-+ # ifndef __need_getopt
-+@@ -161,12 +161,18 @@ extern int _getopt_internal (int __argc, char *const *__argv,
-+ 			     int __long_only);
-+ # endif
-+ #else /* not __STDC__ */
-+-extern int getopt ();
-++extern int getopt (int argc, char * const argv[], const char *shortopts);
-+ # ifndef __need_getopt
-+-extern int getopt_long ();
-+-extern int getopt_long_only ();
-++extern int getopt_long (int argc, char *const *argv, const char *shortopts,
-++		        const struct option *longopts, int *longind);
-++extern int getopt_long_only (int argc, char *const *argv,
-++			     const char *shortopts,
-++		             const struct option *longopts, int *longind);
-+ 
-+-extern int _getopt_internal ();
-++extern int _getopt_internal (int __argc, char *const *__argv,
-++			     const char *__shortopts,
-++		             const struct option *__longopts, int *__longind,
-++			     int __long_only);
-+ # endif
-+ #endif /* __STDC__ */
-+ 
-+diff --git a/src/getopt_long.c b/src/getopt_long.c
-+index caba753..a55fe2a 100644
-+--- a/src/getopt_long.c
-++++ b/src/getopt_long.c
-+@@ -199,7 +199,7 @@ static char *posixly_correct;
-+    whose names are inconsistent.  */
-+ 
-+ #ifndef getenv
-+-extern char *getenv ();
-++extern char *getenv (const char *name);
-+ #endif
-+ 
-+ static char *
-+-- 
-+2.53.0
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 28fe821a6a..0d67faa0e2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3053,6 +3053,7 @@ N:	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+ F:	package/ccache/
+ F:	package/dos2unix/
+ F:	package/hyperfine/
++F:	package/libenca/
+ F:	package/pv/
+ 
+ N:	Simon Dawson <spdawson@gmail.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
