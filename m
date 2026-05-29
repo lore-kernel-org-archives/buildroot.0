@@ -1,119 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F3DDCD5BD2
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E08BECD6E49
+	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53DF961563;
-	Fri, 29 May 2026 08:29:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Drmbe5-MjXK8; Fri, 29 May 2026 08:29:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5567C61570
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043391;
-	bh=jk1iGPAWsRz33yBpCYWJG7JYA8UCe91j+EmqhBLk6iI=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=AidlPeYu79vLiY2+fjcAQQCpQj5bCb9vp4QfOkunulsxBPUhvkVFs4Qp6Vqk3nX7I
-	 ZcwJ7tzUc/K+5/7jOAgy7rz/s/vp8atsQWUemThVUoWh1fr9CYAiPZpJVFT1z6SDCZ
-	 GMUsOnAY4eYWknkd4Vn6j7wcWcRWBnQbCgc4xvD612k3L36LW149Sg+7Lg+RxPe5/C
-	 qGND4KaKD3HZOYWcrFkb8R9rzOI/lwYgH69XdI29O4VxsLS2Y+HO2FpQRHGVBY5bRz
-	 8U0fA0flSI0tWkJkRAiY6sPpgAnSK8sqe4+kYyggjUlBZISpmnI1++ZDsq39WL5cmZ
-	 d8i8DRcwl4ZEQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5567C61570;
-	Fri, 29 May 2026 08:29:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 334CF288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22B58422C0
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B28A6422CB;
+	Fri, 29 May 2026 08:29:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6s54AIrps0aD for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:29:48 +0000 (UTC)
+ id KxAyzCP696GZ; Fri, 29 May 2026 08:29:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402E2422CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780043392;
+	bh=Ys+pX5sWOTH8bxwKu9slI2sY9qjzKyZ/Q+8hu/CgqK4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=nod9tHEBqYbTigc9fnf2l76VjbtR/Q/bM/rYN8BgVinF0czRDT5sUHF+hDugPEmiq
+	 N4Fk5ru7oQ6XQsZkfUBm7DpmgVRhnYlV4bOEOpDZhSThqmsM4saPsfthsoVD2J+W7N
+	 CT3JTsxS35YSzaBFtLsVAFpB5NLkYtqHf3GBw52yVk8QNwdF5F/J6XWsNT6rwomzqz
+	 0GjBvgWtjfjCJIKK+Mk7NacN9rFD/+ZdkZRQKq8vJtv8Zok7Z54RYxSyGzegQJxLl0
+	 OsvQ6j/ZaKgH0DzZ9AcNCYyKo6qazv65eNXUrCmPgdh8e3VyCZXa1uUGBdNJ3AZJsQ
+	 gF/qvvLMSlRkA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 402E2422CD;
+	Fri, 29 May 2026 08:29:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA9F828E
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9CA84070D
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NgPbdz0vUXVu for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:29:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1FAFB422B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FAFB422B2
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FAFB422B2
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:46 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4904127c32cso46406275e9.2
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 920FC406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 920FC406F3
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 920FC406F3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:48 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4909e3fa4b2so2773065e9.0
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043385; x=1780648185;
+ d=1e100.net; s=20251104; t=1780043386; x=1780648186;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qXQAfKDgZyiEWt7peIuCFDVpiAO+vGFB7f8L2Ax8SeM=;
- b=jy8tTQiCV4PAgxqQLP/Z2EnmfbEV1jwSkLToSp3CfWqJFkr9gyK0g0merpbNp4cnKM
- HQdJs8Ct6iqlvN6bKWakQtipvfLax3+x7xZORU0XGQArEwzrJ1p8H73CAYyHwt2opjZC
- 6ILwhIWrAFDtxImkcSqUfznU7somI3qYJ3ZoZcW4+u+MKX171v2/f047Bf6N6HJMgHTz
- HC3MRRtH0UgdyQgpm6mQw8M+PWdHnn4gmixIK9FmTu4V9BOGCIr6drvGSBwDSbW32wdr
- CuH+diRCtJ12+WYiwuTzZ6SB01jglLc/qtoMeRKNVQ92wc3Y8O13dpsqRKdy9jp2t9Bs
- X2GQ==
+ bh=SECXsSVKBOQQvRua/etw+Lu9whafIwg4tx2bDVOydhc=;
+ b=afjRwwlP/5HG1LzppofzFFUjkVpoi2Nir4v6uGAe6NLAwRvp3ZHSE3hgNHlE/lpFHV
+ mfjJ+0VsHcgR0g7VZzVOooe4NTu1TTQMNnzSrWCB+RBXo7cMxUeiqD2oSAxBozjqCSSN
+ JtHxgYCBjbdTseflNydUubNBpB9XjWgx1oHnrGGSqm1LLKuszNESXxBdrSSezIzlS6xA
+ oJvkvb9I96MN9Q3vWRoCX91ifEWbYMYi6x08Uwzolxf9JEWDiXS/WsxvBjWDTuVMDYpR
+ 97AmVac4ZxnY7899kui2WkyZvtVusv+kzOi2y7g7AD466VhkO5KUDyPRasqmk7OMNm8T
+ ch2A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9CPsdhKvVH4zrL8gfY/wS0NESGihVVL0O5MAf9i5o6UzzWfBKh5L2bbVI66YKyl1Tyme1wz2kJBRk=@buildroot.org
-X-Gm-Message-State: AOJu0YyuguGPYg52AIhg2wYlRG80ujsuRvlAx2ucDQR0kP0hNR12wvls
- UbYHQXJjthtorqgo0UlBEx782kaysp0T7nQ/6xdS5camWuDGL5xC1l5ZByIBDkV0VDZ6n8juVCG
- sRCTQ
-X-Gm-Gg: Acq92OHJDggFQXDBxBnQNK3SGzSuZPUPW/TaM7uo6uLVMsi7a/pZm+5ylnQ3af4q2wF
- sQqaJfzIQ2kcJjHP9Ci74Zb/LidZkKnHCWSBCrkmJhgqW8MBtxpkpCmT1c21gzy5MhzQ0SJaPxQ
- fsJCVG+JmWBEDVvqBvlSr6/rnEi7v6+PkGeUcmTeQqQUAIkhOqSV3XxAWpcJV3C5QTedb9nbAye
- 6mslZJote4LCmmtBd7NtyRITtbm1T3DJKMiXJ3C0B7mBbzATy0zPJE2DpCSbBW6SDhYMnOyVDNF
- /GIJ/eHgfb/c7lo7sP5VcThzixGQUcZRCoBfkr3dKZzVrgQLMAHEumK3wKLQBYysFNLqoVEKM68
- hRRzwFjUEOCxrro84q/Mv4ICDB/Do0RXkI/g8BDxoke+WjOlnu6f9SD7DnxEDqfehoA0be0mgYy
- PllpMQedNvtnLJ453vEJkTGI7lHt0ixeC085fOEWwHd3iyooMtHI9YghJDEw==
-X-Received: by 2002:a05:600c:c8f:b0:490:9d1b:f05c with SMTP id
- 5b1f17b1804b1-4909d1bf0demr29156405e9.33.1780043384622; 
- Fri, 29 May 2026 01:29:44 -0700 (PDT)
+ AFNElJ+7mJyP7acTCLE0wFP1krMUqS4rMU0bdZIlK3f77P27glesYz/yeUkR4apWA9Ymx1oIAT5qZsvNtKc=@buildroot.org
+X-Gm-Message-State: AOJu0Yz+sT0h0gJKkJ4UMdwjCPV9M36ikxtg8S5tJ+dsUCyNXETlqVzK
+ fl9LOppQdzosg41dEzDAUH2SxGOwaXbxrRBPJ4/KWucyKZXjBXc163gBSQRinQwRzio=
+X-Gm-Gg: Acq92OGzm3ICJpWSwQ05P/mp4eDQYYd64SBXdLn9fWp0uPbVDETQUPq8UhM6r6s6on+
+ MB9M0+Hb/zmARp/pcpY00fLC30GewwwcahYv476O1gtoJ60Z1OK5J5yi/VFG8mYaEZ93iO6ohrP
+ qxVOCm3SWnLrd/uFkkeZVkxvgIC62/OOJ5FeO7ZaPnOZv6VEOLQYnXX4pI8UMt35e3Kv/c2PtbQ
+ WdtLFitjPlfaw4OfFqI3xUr9RXQC/iDdka7YQuxuHa34CeHEiE6Ki3KM5LJm1jUoa81NZ+JRVRy
+ r93sQikwHeTtAWUD64E+cIbbcBmjT5ZOQAM9sorVYHBEaAJF72OEwMae78O+/ZzGgObJpJsDUW9
+ n/qshZ/R/g5ZHt4enK8HWxc6o5B7XGFl+L9GAWx7CZoWV1X+iUXSAD7SIGEfGQ5cB5OX9p0bHYb
+ 1KtZDgeyHRnpMVWtpkyV56sbrDUTieRxAvJE0H49EcpuwMpE1VQGgvr6+ZfQ==
+X-Received: by 2002:a05:600c:e489:10b0:490:778:4fe4 with SMTP id
+ 5b1f17b1804b1-4909c0c570bmr24026685e9.26.1780043386510; 
+ Fri, 29 May 2026 01:29:46 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909d7002e8sm34122015e9.15.2026.05.29.01.29.44
+ 5b1f17b1804b1-4909cab0e94sm28678965e9.12.2026.05.29.01.29.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:29:44 -0700 (PDT)
+ Fri, 29 May 2026 01:29:46 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:29:44 +0200
-Message-ID: <20260529082944.58082-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:29:45 +0200
+Message-ID: <20260529082945.58201-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260517164102.3570510-1-bernd@kuhls.net>
-References: <20260517164102.3570510-1-bernd@kuhls.net>
+In-Reply-To: <20260524070704.2828646-1-bernd@kuhls.net>
+References: <20260524070704.2828646-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043385; x=1780648185; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043386; x=1780648186; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qXQAfKDgZyiEWt7peIuCFDVpiAO+vGFB7f8L2Ax8SeM=;
- b=gexepH+q9oQ8xqNA/jum/aRmdgdUIVx9uTz5WmkoctPNV4e1dXWB16ux+uFd2J56CS
- nXBxmfVwHsXo8LWSOvtMEnrKg451NK2KQG3aD1r/6dNHoZ3FxvPsxpb0ghHlljtqnzEP
- kL80WZ+wciZn3/NL8ZIoxBc3TZTp/LlMpTQQepj3AB5K+diabsOCEYlzozRQ2LVXKTwn
- Wx7CZQZcQTnqja52iM2JQLWy++w/DJpWoAd2xmsEgfcXKnv+VqoVE5V8YT4yu/+cFlMO
- QruAtpizWlSz60p8PyctaqTsWjUz5TIRJBfnv6URI1tGcLJIYkJGlZAvmshXhbc4/exc
- VXUg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SECXsSVKBOQQvRua/etw+Lu9whafIwg4tx2bDVOydhc=;
+ b=LdRQkUKe4xdwwKiqkrUOVnKpoZCvfwkNUW6zgWCAxNRn/I68VzVYM8A1KfdStPcJJ9
+ Vhf7WIccAkIRAKxZYyw3xuqsSjqNMeIHpVT7PHF8DczsE5fWEoBAycLKeMg72LA3lmsm
+ WhbKLH/OzVYIzE6qke8+2JXXuxB1UQPj1MKoMLOWqLwxA6mc64pMnEaQxomYi6J8nhky
+ Vca4qwlAga95CS8Ji/j7GaRzMK0GPMW8QUt0+xBMftfnGdMS6g1NDsJcFY/P7AlBqa5O
+ aIblpd5fAFLLqP5AX9ynfU0CJ8HsLE8Vd1PeesxKoHYvc9QEIjVYkvGg3UbyFrQm4s/C
+ nm3Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=gexepH+q
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 18.4
+ header.a=rsa-sha256 header.s=google header.b=LdRQkUKe
+Subject: Re: [Buildroot] [PATCH 1/1] package/putty: security bump version to
+ 0.84
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,45 +132,70 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://www.postgresql.org/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/
+> https://lists.tartarus.org/pipermail/putty-announce/2026/000042.html
 > 
-> Fixes CVE-2026-6472, CVE-2026-6473, CVE-2026-6474, CVE-2026-6475,
-> CVE-2026-6476, CVE-2026-6477, CVE-2026-6478, CVE-2026-6479,
-> CVE-2026-6575, CVE-2026-6637, CVE-2026-6638.
+> Updated license hash due to copyright year bump in upstream commit
+> 995b63a82bac4f6985958cb92943e807a9f35736. A link to this commit can not
+> be provided due to the shutdown of the upstream gitweb interface:
+> https://git.tartarus.org/?p=simon/putty.git
+> 
+> Switched URLs to https.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/postgresql/postgresql.hash | 4 ++--
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/putty/Config.in  |  2 +-
+>  package/putty/putty.hash | 10 +++++-----
+>  package/putty/putty.mk   |  4 ++--
+>  3 files changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index 58eab8e548..be57f216f1 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.postgresql.org/pub/source/v18.3/postgresql-18.3.tar.bz2.sha256
-> -sha256  d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f  postgresql-18.3.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v18.4/postgresql-18.4.tar.bz2.sha256
-> +sha256  81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094  postgresql-18.4.tar.bz2
->  # License file, Locally calculated
->  sha256  3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd  COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index fed3887ef5..16ed591df4 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/putty/Config.in b/package/putty/Config.in
+> index f89283b99a..f0484ec20f 100644
+> --- a/package/putty/Config.in
+> +++ b/package/putty/Config.in
+> @@ -8,7 +8,7 @@ config BR2_PACKAGE_PUTTY
+>  	  and puttygen are built; enable GTK2 or GTK3 for the
+>  	  graphical client.
+>  
+> -	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
+> +	  https://www.chiark.greenend.org.uk/~sgtatham/putty/
+>  
+>  comment "putty needs a toolchain w/ wchar"
+>  	depends on BR2_USE_MMU
+> diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+> index 33a9666bc2..362467e2d7 100644
+> --- a/package/putty/putty.hash
+> +++ b/package/putty/putty.hash
+> @@ -1,7 +1,7 @@
+> -# Hashes from: http://the.earth.li/~sgtatham/putty/0.83/{sha1,sha256,sha512}sums
+> -sha1  f9fd9ab5e3849bf8c22b218cdb7697dcdd1d8c9e  putty-0.83.tar.gz
+> -sha256  718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6  putty-0.83.tar.gz
+> -sha512  4781616b7e9c5a779a54e6a8486513e0aa947d4a36e9dbfd4ffc0d32981a5ad4868cddbde0363467236ed67c43f990408a9326d10354954be716a270d587c0a6  putty-0.83.tar.gz
+> +# Hashes from: https://the.earth.li/~sgtatham/putty/0.84/{sha1,sha256,sha512}sums
+> +sha1  d3ed01106667b42de322b266266e0d21b70adf12  putty-0.84.tar.gz
+> +sha256  06057862ae198f1dbd219d0c7493080d59f606194bb5056c549e342aa01b69fe  putty-0.84.tar.gz
+> +sha512  647c84490c01f8c0f9cf02f565081d80ea2ea4fb90207cfb2fbe13ba5e8c3cea7c4807504363d3d3a851df5edb6087c3b39084820bf20e818dd551db54af0765  putty-0.84.tar.gz
+>  
+>  # Locally calculated
+> -sha256  c18aac5045fd30bff639b07884be44cb8c68eef16efe8c5e18deda1f58cacdfb  LICENCE
+> +sha256  3b02f87e0063430289d9681727a98818c844fc8a4d79b24b76047fa061e77f13  LICENCE
+> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+> index 9071fea208..82b16b250c 100644
+> --- a/package/putty/putty.mk
+> +++ b/package/putty/putty.mk
+> @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -POSTGRESQL_VERSION = 18.3
-> +POSTGRESQL_VERSION = 18.4
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
+> -PUTTY_VERSION = 0.83
+> -PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+> +PUTTY_VERSION = 0.84
+> +PUTTY_SITE = https://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+>  PUTTY_LICENSE = MIT
+>  PUTTY_LICENSE_FILES = LICENCE
+>  PUTTY_CPE_ID_VENDOR = putty
 > -- 
 > 2.47.3
 > 
