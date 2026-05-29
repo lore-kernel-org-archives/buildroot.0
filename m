@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A060FCD5BD2
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8093CD6E49
 	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 08:29:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67D706150B;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A2CF4223E;
 	Fri, 29 May 2026 08:29:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2v4X3WprNf_g; Fri, 29 May 2026 08:29:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qr9qgfGHbeTS; Fri, 29 May 2026 08:29:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AC296151A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DD642246
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780043360;
-	bh=YxCra4D1kW7KuekxI8VNIajG+rRNPuvMSIp8PBKEGIs=;
+	s=default; t=1780043363;
+	bh=M7VXDcGea0te/xwK2vYBDab3Sx3GkHz3JNp02/7Rf+Q=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=akKxPnePAW+j6KwyM7iuBJ/geHrDDci5qkaK0O9DTO7uc2w9r7zlzzCSIVfxdQ0IY
-	 r0wh9wwVt6qCHVGrOuiXXn9oDFGQlRjfG6c45QKfuB07TcwXqhAt7r1n13S8ZOcXFx
-	 pDnoH80owm0sX69wzF5HkjtB6HQ67ILYD7um4l263CFp+zJLTi/51oTUFsTTCxkj/S
-	 uPEL5s2TxDxNt1NrLPb3Ue0mwRNoYtoS7e62ipdk0bYi5Lafq1aof62fPdzQGNM+N7
-	 Acn48JOhALZIrVwa+i+2MNcr9HOgB0mpJUljjTwNUNQCWSVfwEYo3A5bfvBzIwXPhj
-	 dxIesRJoJ3Fbw==
+	b=RWeAJb0LCwEIQBj25uuFuzOLzp2EAAyiXgeemfEeXJKT1eWCJIDYFYCi5weedH7HO
+	 oc6edAAm5e/hHb/iawfG3imLOlDkjW7k8/uRucH5gy4dkjGZZTGbGgPaOpUoCOh3Jd
+	 XzbT16xI20trhpv0wqdcKXjDC5ABYEdcQPko+Af/vRE9GQlu/qCI0Ls7UxZwcGxry+
+	 60PIfb/k3vDA/D4suLuklIzx31g7vHsehcOGz87cCgCBpJhgg+U83lLjqvVgGmnYK5
+	 w+dgH5MIy7duvnM/pWXpZ/y73NOwnqFIDLS6YfN3CkWsOvNByHp7D6+N9dHJBXBu/g
+	 zS8pdTIpMU4hg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AC296151A;
-	Fri, 29 May 2026 08:29:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C1EF828E
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91DD642246;
+	Fri, 29 May 2026 08:29:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B9A92E9
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 865714070D
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CAB38421A
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gea-hENO3s8t for <buildroot@buildroot.org>;
- Fri, 29 May 2026 08:29:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 43OheHq7MJ3q for <buildroot@buildroot.org>;
+ Fri, 29 May 2026 08:29:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 665ED406F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 665ED406F3
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 665ED406F3
- for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:14 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-45ef42dfb26so58026f8f.2
- for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5BC2A8420B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BC2A8420B
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5BC2A8420B
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 08:29:17 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4905e190c71so62545965e9.3
+ for <buildroot@buildroot.org>; Fri, 29 May 2026 01:29:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780043352; x=1780648152;
+ d=1e100.net; s=20251104; t=1780043355; x=1780648155;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=4csp2gLAWRE1YsxFZ8OiPKiDEJrsVrSPZlgRYOBtgWY=;
- b=hpAzVPfoOx/7aFZqqSysMFUfEP+G2JJfsXqrUa5lEuqm9yjVz2dfRnxBM4xps/+HDa
- d4vc/jRDdiC/7K5cgWBHfPbw9ILYakHMB4KpB4J77qGGwvDPjYKe4qknHIh70UMeV4Sv
- XveVyl2mhf6egZdL5HovdgpwjH/Dyw9cu+0PPEoWfFHAcsqSokO++5ru2bHdwguSXIan
- atdDVUHvK/mDhPtI5m9xKP+hxzXFz/PEhSjd7rjI9n6cUKjv26L9l92clIVb52KYCrMM
- NR6+O4PplQ3YRqTkD0aHoFht3PCyQ9JjSv6X2zpXpJp/lYk8SUHuhvfTN0UmwHwpZAmi
- vO+Q==
+ bh=R38ig/MrSBZPc9kOZniwitXQ1BJge25z+4xkTBCx9Gw=;
+ b=mli9IxXzK3utGeY004E/dJnxtnIp/JnMd8eRjAq1VEGwWgGUt1dzMHGB2xEctzfzV7
+ fEs6yFhiHuwyiIYtvw0/4EKB/hk1YuXhzVIMr0p2AgGcP7OrOyRyzCr18bhXv/ccrC3l
+ DCTOYqmEvmmJp2fb85bDwrLuFpWmVO5Tx38KBYyJiiq/OLiRkll9WHIIgxwmitbEdTLF
+ xSAdWIMpibYCmNZbqBaKX0069PPPD3rkeR/yqMeEok32UEeTd20Irue216dsNjxjXEmY
+ nTFQObYX/AXtTa3qKlnChjA4VPqwLa0x87r5NOf602qOWCd9sJyawwHDTDIkqTD+73cz
+ meIg==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+R7l8x70/TyYrNZLshXgmm5/K8RHrT+3xwFYZ21Jv3NGfbstKMlpV3/KAhNiks+SKsuwnezF+5GHk=@buildroot.org
-X-Gm-Message-State: AOJu0YxX6+P0iszYfSp9pQ4xQ+nfwluCI5v8+sG1/uBQuuFGpW7ITX+2
- KbABSnp8LcGGTcx9udN7m2dwRofkxN/wJw3DLjBS7I160sf/XINjcTCoSdY+nS2hRhY=
-X-Gm-Gg: Acq92OFLyxxgTszRao/2IvOYOfb5wKkrwnBVar3LezQ1KoxoniippLGUozh58HNvxEV
- Q//lEPCF1wZy5nNZUQW3f/4qkgisJn9YQ/qndJQfkQmsjcI1JA+EZAsxtBoU9IYJW1MQq8bD2bY
- LY20PFl9onjR2PLPQU76ImMulIAHT0aDG78nWGX6t2L/w6BLS4xJC2QQjCxdVMqEyEI7Zmgn7Iy
- egG5GQSjQB1KfTTKcjKwHss19vPOw06pLz1vT7PGDbR8Rws5QNr+jhYwHGUH940AUZf+7r/YLHg
- Voy0L16yZPZCkVyKOgSVFl4scnp91Zr/p2k/ne7QvBLQkLLq4mUy5LfG8cYSYw+uXL+Wr4a7SqI
- nIuczhu13cjR+ZOuTp3gpBqITH8Y+/B6tCjMYKY+Pma+65bRQtyTfjUpM2Aeaafw+KfSw8A5lka
- TC9N+EZXqWc1UkGh2Th/CxrJqyEWopw2bDw4QXDrdGTZu/qAHjLPzBR7hGLw==
-X-Received: by 2002:a05:6000:21c6:b0:45e:7418:a3f2 with SMTP id
- ffacd0b85a97d-45ef14481a4mr2087013f8f.26.1780043352147; 
- Fri, 29 May 2026 01:29:12 -0700 (PDT)
+ AFNElJ86vyaebAHOZN8qEJHS996V+dnvJA/mhR13sTp6zOBoehVA/EMlHK8R//LtwF3TuOVUUPnOpToLKVg=@buildroot.org
+X-Gm-Message-State: AOJu0YwBfWGLsMtpBtFp6l8+1vha1dSmDz/JH1cJb0bcOsYMZym17go6
+ caZF/Q067ys3zkNmywIUo54ooDKYaULbZyskDzBDUmKbPuBVJ3UKRl5nkuvtvIqa9+4=
+X-Gm-Gg: Acq92OFitu6KsyUMJpzHHMXA8FvWCXkIUtizyX/Pol3Wkay0ovyGztEoAskXL+xBJUN
+ CFIFsCK1t3WujBpQhcpH2feJQV+rzUmUttja4IdxzhU9wY6URm4MmKhtdL/QB46GPp4dWw/pUf3
+ 2ZpQAUbIliSfY+RaNafxtxMOO3Od4bCTgyjh1W3AHGBDHws76YV8uURai9XLvLyr7IJXGOXaG90
+ k/Q7C3oX/y7ejDYNS3eD5HDMaf0kIRdX0TYFyBuz2ScexJmRWotlSuzF0pjITykc3JWI184/cRq
+ MxJTU6oP9S9H33TLYRTt2hEBe56vwzx/i1GcnXAl5h+esZOV3Q8naecCbxAuLsAD4Cpefw/wv2G
+ PSM+pzusS1S9qCAN4aFhLThQVEbdikZfbcEbDpO09UM5qrLcISEEgsAHMP7kpTuvVisMKGQmWpJ
+ 2Td2KB2TLzWcpaN0dy/fx/EriTtqC4FuWwMEzRwMM64rdDwOHS2XZ+6WS5XnNa/dtocXdO
+X-Received: by 2002:a05:600c:574d:b0:490:778:4fe8 with SMTP id
+ 5b1f17b1804b1-4909c0ba8c9mr21975695e9.25.1780043355268; 
+ Fri, 29 May 2026 01:29:15 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef354b5bdsm1780317f8f.21.2026.05.29.01.29.11
+ 5b1f17b1804b1-4909c12d2c5sm12536645e9.7.2026.05.29.01.29.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 May 2026 01:29:11 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 29 May 2026 01:29:15 -0700 (PDT)
+To: James Hilliard <james.hilliard1@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 29 May 2026 10:29:11 +0200
-Message-ID: <20260529082911.56968-1-thomas.perale@mind.be>
+Date: Fri, 29 May 2026 10:29:14 +0200
+Message-ID: <20260529082914.57132-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260127164715.309118-1-peter@korsgaard.com>
-References: <20260127164715.309118-1-peter@korsgaard.com>
+In-Reply-To: <20260304172729.3622901-1-james.hilliard1@gmail.com>
+References: <20260304172729.3622901-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780043352; x=1780648152; darn=buildroot.org;
+ d=mind.be; s=google; t=1780043355; x=1780648155; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4csp2gLAWRE1YsxFZ8OiPKiDEJrsVrSPZlgRYOBtgWY=;
- b=hm0WNk3MIKA3+LmNAFNWVD9xc/j3YBJSQ3uZwwD03gdufxlym65a2yM1bfnAuer0ro
- kRccOwSq6E5EytSENXwdveVprb78PupE54252dqgBDVyv37UD/x4mN0Difk9R/Yu+rMK
- mlTMq16dMjxXzyK4NjrQBel5r+/+6npo3D6EddnR5wxJD9lX2cDbrFutaGMuNgiv3BSQ
- jjcXDopPrnv6eFq0dui2/X8qyr23PgE8SbU2gnJ34vD1MClaD2iuEqrKnVBBq7yoMTxm
- zW3pzWCg6BRX7XwRhzgjmrZkcLtvAADpmzc1s0Aa4/K6QAbAcL7QD0unOfJT+CPD9o0S
- RbMg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=R38ig/MrSBZPc9kOZniwitXQ1BJge25z+4xkTBCx9Gw=;
+ b=Cm7KW71RkMzzC11SIlt5I5FyPuXZTzMlgxFHS/xoFntmz/mPkYrZ0n69Xp0jQEc/VV
+ MLQcch3g7YPwFVUl/Ela4zpvhTAJMdX+6tFUZiZda8l4oOMH+2sQx13X5eP6JbEYNlZ3
+ IZV3vb5AJiJKtepryed0aT1Ag8Igg/rXTOsCg9jYoF/YSGzY0OEds07Ruen5mOKgQRdK
+ Uc9LlvVfh1TCIu+8KEAT+xQpV3dyb8jmTT+J679DzlhenDxkohBbyUcOmx1vsdn+fUvq
+ D5AJA8EBvhilmSDZtvDrsGcgzLCqWvOO1ScsXT7R4I9syeOIfnC2HDP6vlWVOnHyjBr9
+ 0nbw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hm0WNk3M
-Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.25.6
+ header.a=rsa-sha256 header.s=google header.b=Cm7KW71R
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiodns: bump to version
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,115 +132,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerabilities:
-> 
-> - CVE-2025-61728: archive/zip: denial of service when parsing arbitrary ZIP
->   archives
-> 
->   archive/zip used a super-linear file name indexing algorithm that is
->   invoked the first time a file in an archive is opened.  This can lead to a
->   denial of service when consuming a maliciously constructed ZIP archive.
-> 
-> - CVE-2025-61726: net/http: memory exhaustion in Request.ParseForm
-> 
->   When parsing a URL-encoded form net/http may allocate an unexpected amount
->   of memory when provided a large number of key-value pairs.  This can
->   result in a denial of service due to memory exhaustion.
-> 
-> - CVE-2025-68121: crypto/tls: Config.Clone copies automatically generated
->   session ticket keys, session resumption does not account for the
->   expiration of full certificate chain
-> 
->   The Config.Clone methods allows cloning a Config which has already been
->   passed to a TLS function, allowing it to be mutated and reused.
-> 
->   If Config.SessionTicketKey has not been set, and
->   Config.SetSessionTicketKeys has not been called, crypto/tls will generate
->   random session ticket keys and automatically rotate them.  Config.Clone
->   would copy these automatically generated keys into the returned Config,
->   meaning that the two Configs would share session ticket keys, allowing
->   sessions created using one Config could be used to resume sessions with
->   the other Config.  This can allow clients to resume sessions even though
->   the Config may be configured such that they should not be able to do so.
-> 
-> - CVE-2025-61731: cmd/go: unexpected code execution when invoking toolchain
-> 
->   The Go toolchain supports multiple VCS which are used retrieving modules
->   and embedding build information into binaries.
-> 
->   On systems with Mercurial installed (hg) downloading modules (e.g.  via go
->   get or go mod download) from non-standard sources (e.g.  custom domains)
->   can cause unexpected code execution due to how external VCS commands are
->   constructed.
-> 
->   On systems with Git installed, downloading and building modules with
->   malicious version strings could allow an attacker to write to arbitrary
->   files on the system the user has access to.  This can only be triggered by
->   explicitly providing the malicious version strings to the toolchain, and
->   does not affect usage of @latest or bare module paths.
-> 
->   The toolchain now uses safer VCS options to prevent misinterpretation of
->   untrusted inputs.  In addition, the toolchain now disallows module version
->   strings prefixed with a "-" or "/" character.
-> 
-> - CVE-2025-61730: crypto/tls: handshake messages may be processed at the
->   incorrect encryption level
-> 
->   During the TLS 1.3 handshake if multiple messages are sent in records that
->   span encryption level boundaries (for instance the Client Hello and
->   Encrypted Extensions messages), the subsequent messages may be processed
->   before the encryption level changes.  This can cause some minor
->   information disclosure if a network-local attacker can inject messages
->   during the handshake.
-> 
-> For details, see the announcement:
-> https://groups.google.com/g/golang-announce/c/Vd2tYVM8eUc
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/go/go.hash | 14 +++++++-------
->  package/go/go.mk   |  2 +-
->  2 files changed, 8 insertions(+), 8 deletions(-)
+>  package/python-aiodns/python-aiodns.hash | 4 ++--
+>  package/python-aiodns/python-aiodns.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 7c689f9144..6134ec5f75 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,9 +1,9 @@
->  # sha256 checksum from https://go.dev/dl/
-> -sha256  22a5fd0a91efcd28a1b0537106b9959b2804b61f59c3758b51e8e5429c1a954f  go1.25.5.src.tar.gz
-> -sha256  db908a86e888574ed3432355ba5372ad3ef2c0821ba9b91ceaa0f6634620c40c  go1.25.5.linux-386.tar.gz
-> -sha256  9e9b755d63b36acf30c12a9a3fc379243714c1c6d3dd72861da637f336ebb35b  go1.25.5.linux-amd64.tar.gz
-> -sha256  b00b694903d126c588c378e72d3545549935d3982635ba3f7a964c9fa23fe3b9  go1.25.5.linux-arm64.tar.gz
-> -sha256  0b27e3dec8d04899d6941586d2aa2721c3dee67c739c1fc1b528188f3f6e8ab5  go1.25.5.linux-armv6l.tar.gz
-> -sha256  f0904b647b5b8561efc5d48bb59a34f2b7996afab83ccd41c93b1aeb2c0067e4  go1.25.5.linux-ppc64le.tar.gz
-> -sha256  a5d0a72b0dfd57f9c2c0cdd8b7e0f401e0afb9e8c304d3410f9b0982ce0953da  go1.25.5.linux-s390x.tar.gz
-> +sha256  58cbf771e44d76de6f56d19e33b77d745a1e489340922875e46585b975c2b059  go1.25.6.src.tar.gz
-> +sha256  59fe62eee3cca65332acef3ebe9b6ff3272467e0a08bf7f68f96334902bf23b9  go1.25.6.linux-386.tar.gz
-> +sha256  f022b6aad78e362bcba9b0b94d09ad58c5a70c6ba3b7582905fababf5fe0181a  go1.25.6.linux-amd64.tar.gz
-> +sha256  738ef87d79c34272424ccdf83302b7b0300b8b096ed443896089306117943dd5  go1.25.6.linux-arm64.tar.gz
-> +sha256  679f0e70b27c637116791e3c98afbf8c954deb2cd336364944d014f8e440e2ae  go1.25.6.linux-armv6l.tar.gz
-> +sha256  bee02dbe034b12b839ae7807a85a61c13bee09ee38f2eeba2074bd26c0c0ab73  go1.25.6.linux-ppc64le.tar.gz
-> +sha256  3d97cc5670a0da9cb177037782129f0bf499ecb47abc40488248548abd2c2c35  go1.25.6.linux-s390x.tar.gz
->  sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index c932baf018..91e5fbf347 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
+> index a4a242670a..4cde1c4b1d 100644
+> --- a/package/python-aiodns/python-aiodns.hash
+> +++ b/package/python-aiodns/python-aiodns.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/aiodns/json
+> -md5  c1552fe562a1f9c98ea4c2311a2c75ba  aiodns-3.6.1.tar.gz
+> -sha256  b0e9ce98718a5b8f7ca8cd16fc393163374bc2412236b91f6c851d066e3324b6  aiodns-3.6.1.tar.gz
+> +md5  c69a64f09c0999f63ed759f5046d5bb4  aiodns-4.0.0.tar.gz
+> +sha256  17be26a936ba788c849ba5fd20e0ba69d8c46e6273e846eb5430eae2630ce5b1  aiodns-4.0.0.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
+> diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
+> index 7476c76b72..6befbff203 100644
+> --- a/package/python-aiodns/python-aiodns.mk
+> +++ b/package/python-aiodns/python-aiodns.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -GO_VERSION = 1.25.5
-> +GO_VERSION = 1.25.6
->  
->  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
->  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+> -PYTHON_AIODNS_VERSION = 3.6.1
+> +PYTHON_AIODNS_VERSION = 4.0.0
+>  PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
+> -PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/85/2f/9d1ee4f937addda60220f47925dac6c6b3782f6851fd578987284a8d2491
+> +PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/10/da/97235e953109936bfeda62c1f9f1a7c5652d4dc49f2b5911f9ae1043afa9
+>  PYTHON_AIODNS_SETUP_TYPE = setuptools
+>  PYTHON_AIODNS_LICENSE = MIT
+>  PYTHON_AIODNS_LICENSE_FILES = LICENSE
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
