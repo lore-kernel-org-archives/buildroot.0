@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A40A8CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 08:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E8FCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 08:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C7F6851BA;
-	Sat, 30 May 2026 08:36:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ADC540909;
+	Sat, 30 May 2026 08:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qeCnieAIyaq7; Sat, 30 May 2026 08:36:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KhTVA0y5Yc_0; Sat, 30 May 2026 08:40:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B397B84FFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63028412FF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780130160;
-	bh=H+3CvvKkYvYfm9r/bXaKegB73BqXu0L/Gb4SmkHN4Gg=;
+	s=default; t=1780130443;
+	bh=s9km25nkXgQTfIic7mpZtHsz+WNC+W1OK94UKenqs4M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=m/buvoBLT7jwimir3LLKi1beSDbLYlCashzKIMaG6X9b7rRfXRQETrghANpZ/2DAH
-	 +2/sW76rbv4gYqIXqENrt6toHmAGaH8D1C7h6oIXd2aB+bpvXfNqj0Ze8VKU86azcZ
-	 HGsZOGrVruHZQmu86uaVXjHDZ+xjLTvld31eZ7amgNJrZojcs2OA3tAEvXwJr/RlFp
-	 NsXxyix7pzCzEk/xaeOpB6mN/Xt6qFDigN8rcwhoBXdSN1VQilV1Qad5JHZY/D5i9z
-	 Sp4GRjP+DeVzpLLiKpRXwwkzxrQLwdOIS/q8a3ZI+T5DPbzisXyZgAM2Vz5eFQCSVM
-	 wsM3D1W6JMblQ==
+	b=XLbViKDrRoV9hD07ZDFBY1AXn/8USkVouvzS1KWIZNPfY3DBWMxs59MfmV4Gcs0Nm
+	 IsdnNoAKqpAhIl7igW5SbT/UW3y+5Q0P/5pIHhFXQD3mx65tfRATwLOeZSPEvcyqc2
+	 b/mGMlYeZ4zmyfZ5oSogmswP+a3TChvobTJ7Na3kcUo+6U3ooWw/20yMdV6jXzHSY1
+	 FuUJ1lU4ERqiO7MkEE5SwjVW8tNNPMeSaIc/19x2bTSJETIdyByv8VXIDo0g7xPGoc
+	 JmnkGWjoavkwfx1kC6KQZjJuaE9sAv3Y8OuAFGvp4tLnJxDJ3zVQAmac80ZzzXB3rH
+	 GMNh+jgBZhWyw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B397B84FFE;
-	Sat, 30 May 2026 08:36:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6152FD3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:35:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63028412FF;
+	Sat, 30 May 2026 08:40:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E35AFF4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E9D984FFE
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:35:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2454412FF
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:40:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MyKeaSbzfexV for <buildroot@buildroot.org>;
- Sat, 30 May 2026 08:35:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JwsO9fPSYoMs for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 08:40:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA6A484FAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDCB40909
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA6A484FAE
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:35:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBDCB40909
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:40:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D281C86441; Sat, 30 May 2026 08:35:43 +0000 (UTC)
+ id F394B86A1A; Sat, 30 May 2026 08:40:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 10:33:41 +0200
+Date: Sat, 30 May 2026 10:37:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 232f8b5ca7aee3af04632df6616aa6919bd36d0e
-X-Git-Newrev: 196070ae5e0242293af0b208b0fe41ad49de6888
+X-Git-Oldrev: 196070ae5e0242293af0b208b0fe41ad49de6888
+X-Git-Newrev: 6fec4282a07842eadb43dd8ce41bcef08bc3c433
 X-Patchwork-Hint: ignore
-Message-Id: <20260530083543.D281C86441@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: add entry for Shubham
- Chakraborty (xterm)
+Message-Id: <20260530084027.F394B86A1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdrm: link with libatomic if
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,27 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/196070ae5e0242293af0b208b0fe41ad49de6888
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6fec4282a07842eadb43dd8ce41bcef08bc3c433
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Fixes:
+https://autobuild.buildroot.net/results/ea0/ea085cdea8458768c5f0ddb16f618a572406e65a/
+
+The oldest build error dates back to May 2024
+https://autobuild.buildroot.net/results/8ff/8ff4e16bb79294c5e289989855b5875851342909/
+so a backport to LTS branches should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/libdrm/libdrm.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 941b12b0b7..877aa56d96 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3026,6 +3026,7 @@ F:	package/htop/
- F:	package/hyperfine/
- F:	package/pv/
- F:	package/unrar/
-+F:	package/xterm/
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 240c09b8b1..cafff8781e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -19,6 +19,8 @@ LIBDRM_CONF_OPTS = \
+ 	-Dcairo-tests=disabled \
+ 	-Dman-pages=disabled
  
- N:	Simon Dawson <spdawson@gmail.com>
- F:	boot/at91bootstrap3/
++LIBDRM_LDFLAGS = $(TARGET_LDFLAGS)
++
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+ LIBDRM_DEPENDENCIES += libatomic_ops
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+@@ -26,6 +28,11 @@ LIBDRM_CFLAGS = $(TARGET_CFLAGS) -DAO_NO_SPARC_V9
+ endif
+ endif
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBDRM_LDFLAGS += -latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+ LIBDRM_CONF_OPTS += -Dintel=enabled
+ LIBDRM_DEPENDENCIES += libpciaccess
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
