@@ -4,60 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B69CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB0BCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CBE6853F7;
-	Sat, 30 May 2026 17:32:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49C98853E7;
+	Sat, 30 May 2026 17:34:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZSyxSI0pXqM2; Sat, 30 May 2026 17:32:34 +0000 (UTC)
+ id PETwMZDpYpSs; Sat, 30 May 2026 17:33:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 075E0853EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9322B853DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780162354;
-	bh=7PwZ/Rf0RILyT4xgNEfjzUOHLNczSOcP+UlCnX1HeyY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Z7sfcqmVL8568OtTD/7wDf0qv658znRsdue7RBcWyaOLmuPQPVIR4NN2kwRrHgZfs
-	 4AyNtVwvrtyrek0HgJajaEUlQN4N3rZoqkLj735yaYZyzN0Fb0Hh2Ews7Keb+Vb7fa
-	 fTKJcSXfPz8bHZJ5x3qieiJ5qn2vI92FWRYYnXynU3wL/1pKvu/EfAyLoWG7XlnWHF
-	 TRaWgHdudPhM57JOZeGUdb8ddTZx2yVSTouskK15utgQz1g0Jexzkin+zFOjqiBj7a
-	 PSkJBzrlbb0YpSZ6AE5WBa8ZgrpHZdJHN3gHXhF10+bbMwH3MgmJ0Bj1KCzgJJBmvo
-	 4Q6n0nG14JBNg==
+	s=default; t=1780162439;
+	bh=6WLmZJv+ty55XnlTkT/CCvKLASeLOw/hDswytkjIHGk=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=FshDuh9fD/5rew+SavQDLehMSCC/NSTZsUjlcV/KD2hDJilmeAd9EOhHgVfy+OotF
+	 bHLWCr7aPaACxFkXnkINtQ5q/nnvYvqFQPOA2DR3vBPfJE2rPWFJL9Fna1qwc9pnBp
+	 H+cS6ewbUslhptmBLf2aCnEabj4tJjEHAPwMh6tFXvozvtMPV8MPd16ZL4AML6ybHf
+	 fUGUjiBsCyi6KquqChQ20KXfEYnmU9DFvdDDmpAZCnbApvB8QzMu/0WkGQgEP9iQNv
+	 hq4AgV2dbf1dWjpfbKDkvaAms9l6kZc0DPNzws+wDQQ3OJ2+poFFs+zWZWGW07ZXp7
+	 MFUCmMmQgRe5Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 075E0853EA;
-	Sat, 30 May 2026 17:32:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DCC81F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:32:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9322B853DC;
+	Sat, 30 May 2026 17:33:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9A12D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97DE540064
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:32:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB45042698
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:33:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F4EYCisbVM81 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 17:32:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id gHgnWpcxinjs for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 17:33:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A79744269B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A79744269B
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:32:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89AA78753B; Sat, 30 May 2026 17:32:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 592AF40064
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 592AF40064
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 592AF40064
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:33:56 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -173867640; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 30 May 2026 17:33:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1wTNZK-00000005Qt5-068v;
+ Sat, 30 May 2026 19:33:54 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 19:30:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11e380fb0300265b5e896a153e2dff2f0762fa1c
-X-Git-Newrev: 2deee0c87dfc5db94da8ac9213f5d09a4d9a3038
-X-Patchwork-Hint: ignore
-Message-Id: <20260530173215.89AA78753B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine-chromium: fix
- zlib license hash
+Date: Sat, 30 May 2026 19:33:51 +0200
+Message-ID: <20260530173352.1294980-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=boGokWom5+4khc4br1aECD3AfYGdCw4cXeralK5r68vsfypJnEHfh4vPh71TJAjsUXQXgShBNggZNpw3JtHW1dFST+goUYRAyzLB/NIAa9V6nGK+xsH359zXukV7fUvQjSmePlU6R7RDq1lbC918OH4GiYNoF/DBXXJJRXl45bnsz/UrH5OOtzAMg+b9hiuRC8EKiI2bPHEiQT4iqK7bR6L3HPWVVNtwWA22lI1DvtVwb77HZYs+bJcBxQRY3Hpi3rZu/VmE6lfAItgDfiFcI4TfJrl13mkc0GfWOag8iWhXJiINIxA5yfppWG5BMWwzpcRWOAp9/PfDvDn1qJHYeg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=5p4hleu22R+yEtAEb6UKN+cU2k0Ie9e02wKKsnuYmE4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=boGokWom
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: correct cpe-id
+ version logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,62 +90,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
+Cc: Sergey Matyukevich <geomatsi@gmail.com>, Dick Olsson <hi@senzilla.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2deee0c87dfc5db94da8ac9213f5d09a4d9a3038
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Commit 53bb7eafb2 ("package/arm-trusted-firmware: add
+ARM_TRUSTED_FIRMWARE_CPE_ID_*") added logic to set the cpe-id version from
+the package version by dropping a v or lts- prefix, but it used subst
+instead of patsubst - So it would replace "v" and "lts-" anywhere in the
+version and not only in the beginning of it.
 
-Commit c53455ea4ffa ("package/qt5/qt5webengine-chromium: bump version
-after qtwebengine bump") bumped qt5webengine-chromium but forgot to
-update the licenses.
+Change to patsubst to fix that.
 
-The diff of the license is reported by
-git diff 0ad2814370799a2161057d92231fe3ee00e2fe98..18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e -- chromium/third_party/zlib/LICENSE
-as the following:
+E.G. with the following defconfig:
+BR2_aarch64=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="version-with-v-or-lts-in-it"
 
-  diff --git a/chromium/third_party/zlib/LICENSE b/chromium/third_party/zlib/LICENSE
-  index 9f056865b57..8aca25d8c7a 100644
-  --- a/chromium/third_party/zlib/LICENSE
-  +++ b/chromium/third_party/zlib/LICENSE
-  @@ -1,6 +1,6 @@
-  -version 1.2.11, January 15th, 2017
-  +version 1.2.12, March 27th, 2022
+before:
+make printvars VARS=ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION
+ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION=ersion-with--or-in-it
 
-  -Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
-  +Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler
+after:
+make printvars VARS=ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION
+ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION=ersion-with-v-or-lts-in-it
 
-   This software is provided 'as-is', without any express or implied
-   warranty.  In no event will the authors be held liable for any damages
-
-so it doesn't change its actual license, let's simply fix the sha256 to
-the new value.
-
-Fixes: c53455ea4ffa ("package/qt5/qt5webengine-chromium: bump version after qtwebengine bump")
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash | 2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-index 270da153c6..8026c3f697 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-@@ -1231,7 +1231,7 @@ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  chromi
- sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  chromium/third_party/xcbproto/src/COPYING
- sha256  b244f73c3d21edaf44ec253b9a7c389ec43313c417f52f8b71914b0c40d87325  chromium/third_party/xdg-utils/LICENSE
- sha256  1cf71700f3403ca26f002e2dc1d1861dcb3d2af9bb9d98d529a903be9d7f06fc  chromium/third_party/xstream/LICENSE
--sha256  942755efa272dbfbcd7afea7a38556801e36c16dcad002d572378367094a2593  chromium/third_party/zlib/LICENSE
-+sha256  e1cfcc55c325b3f78cf55df9664abaa066e2271dffe8213347d9fccdfbac8f2c  chromium/third_party/zlib/LICENSE
- sha256  1744e977d24e20e77b1e97d745fe43779430a1b84247b6c0e89d16e116e7ff92  chromium/third_party/zxcvbn-cpp/LICENSE.txt
- sha256  a4c8c5abf82b36c22f8c9f8bd6229584f32eb9f7a2429dd9664dda43e63e9fda  chromium/tools/grit/third_party/six/LICENSE
- sha256  63f0c0039b477857e54708d9501ed91b7a46e828ac3c623bedbc318129ceb174  chromium/tools/origin_trials/third_party/ed25519/LICENSE
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index c3c4a581da..1b52f36783 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -8,7 +8,7 @@ ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_V
+ ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
+ ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
+ ARM_TRUSTED_FIRMWARE_CPE_ID_PRODUCT = trusted_firmware-a
+-ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(subst v,,$(subst lts-,,$(ARM_TRUSTED_FIRMWARE_VERSION)))
++ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(patsubst v%,%,$(patsubst lts-%,%,$(ARM_TRUSTED_FIRMWARE_VERSION)))
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL),y)
+ # Handle custom ATF tarballs as specified by the configuration
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
