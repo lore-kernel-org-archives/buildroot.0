@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0DF6CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 18:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765FFCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 20:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60F49853C0;
-	Sat, 30 May 2026 18:39:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2767884C96;
+	Sat, 30 May 2026 20:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aitn4XGiqHfm; Sat, 30 May 2026 18:39:11 +0000 (UTC)
+ id 2KHJmEIHzb55; Sat, 30 May 2026 20:59:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 559DB853B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4298E8529D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780166351;
-	bh=Q7IFOfWJHxNENHK6Op1zifBEd8TQSGQFdaV8KyWqlhI=;
+	s=default; t=1780174754;
+	bh=lx9fuVqvk4HX4EXUP0OLHo3S6cDRuKrkv3CPVRXlCVM=;
 	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=jHNQmng1pioTCZ/h+GErBD24KgGBrXIrfjOimprw+5i20W6hxTlPA97Cga95ah63c
-	 VS82AVw81SM8ObYC0mtNV5WtSMY4TeYIv6Iyp+Rda3gFr37VyaB0/59zFMHdOchMF5
-	 gJoeFK0IN3A6l86eoNocp8AdIlfvmarg70zExG6ai47wrXJamaOZQZW2P4DuAB8phh
-	 J8KcGnkzJXHulHNcxTZE7ftHiS1aAaThb8kEExJkYyhq5A1Eg3Ma/yQCpsXrmpBJpt
-	 hpHpo8RROxPqCq0lhKMg9gW8WuaS+GzB71aXac3Mztp8augNmTa4XEE5TOLKQGB0JG
-	 x+6oehvVCtN1A==
+	b=cZTrnVzAJd/U8wmAz8Gh84mcL3DEQ/1CmZO17bWK1PbJxu7NKc+xTNHJ3rEpuT3sn
+	 Yj3dM6QOD5TtxewZr9ZhwcTpZQ0uRErChsy9Dey0fo+Srl6qiv6Okw2h1BJqbxbVTZ
+	 oPlG7+4Pcxb3usMVzsBqLaOye+Oz5o9Y2UYJvcvao7z8EvNT4yB/8EddtsZe1+UpJP
+	 4zM6UXMoAzPEsGQMZtzTQ1MsrBinGrriaHLFQbGER/R53B1XRETMNazMrcU4G0DHhC
+	 W0AkLJXZ+XXbFgIWJsH/jMz7ZT/E259th4XJHQ+TZK3qSOBn1YvUNPFC8E6XMWV4Wo
+	 hQYHKTCD+O8fg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 559DB853B7;
-	Sat, 30 May 2026 18:39:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B80E12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 18:39:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4298E8529D;
+	Sat, 30 May 2026 20:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7C9212F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 20:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D0A942F60
- for <buildroot@buildroot.org>; Sat, 30 May 2026 18:39:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8CC48529D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 20:59:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WctbZpTYafeh for <buildroot@buildroot.org>;
- Sat, 30 May 2026 18:39:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2qRNAs7wF0wj for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 20:59:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9DC6D42F5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DC6D42F5C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B6D2184C96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D2184C96
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9DC6D42F5C
- for <buildroot@uclibc.org>; Sat, 30 May 2026 18:39:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B6D2184C96
+ for <buildroot@uclibc.org>; Sat, 30 May 2026 20:59:10 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wTOaQ-0001Ue-BY
- for buildroot@uclibc.org; Sat, 30 May 2026 20:39:06 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wTQlv-0003gs-1e
+ for buildroot@uclibc.org; Sat, 30 May 2026 22:59:07 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sat, 30 May 2026 20:38:02 +0200
-Message-ID: <pan$3ff23$85d4d336$2d667857$26c30f95@ID-313208.user.individual.net>
-References: <20260421185136.2577202-1-bernd@kuhls.net>
- <ahsK2eJNNKDZBkrZ__17811.6684591927$1780157262$gmane$org@windsurf>
+Date: Sat, 30 May 2026 22:58:13 +0200
+Message-ID: <pan$b370e$2092f81$879e2c5e$4444ebba@ID-313208.user.individual.net>
+References: <20260530190023.2108688-1-bernd@kuhls.net>
+ <9c1fb04c-d11e-4d24-8985-2cd962098179__44922.5743462861$1780171356$gmane$org@rnout.be>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/gettext-gnu: bump version to
- 1.0
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/lrzsz: fix build with gcc >=
+ 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,43 +81,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Am Sat, 30 May 2026 22:02:12 +0200 schrieb Arnout Vandecappelle via
+buildroot:
 
-Am Sat, 30 May 2026 18:07:15 +0200 schrieb Thomas Petazzoni via buildroot:
-
-> Aside from those 3 packages, how much did you checked whether other
-> packages might now need this explicit path to /usr/share/gettext/m4 ?
-
-The patch was used in the last weeks in my work repo where I created the 
-gcc 16.x bump, its allyesconfig-based defconfig has more than 3000 options 
-enabled:
-
-$ grep "=y" .config  | grep -v BR2_PACKAGE_HOST_ | wc -l
-3495
-
-I cannot guarantee that no build errors will occur but they are unlikely 
-or so weird like the linknx error:
-
->> +LINKNX_AUTORECONF = YES
->> +LINKNX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/gettext/m4
+>> +Upstream: N/A, patching generated file
 > 
-> This change is weird. What are you adding AUTORECONF = YES? If this
-> package does not need to autoreconf, I suppose it doesn't need the
-> custom autoreconf opts?
+>   That's not a good reason actually. You can still send a patch upstream 
+that 
+> fixes configure.in.
 
-A build occurs with this defconfig:
+Hi Arnout,
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_SYSTEM_ENABLE_NLS=y
-BR2_PACKAGE_LINKNX=y
+as you can see I decided against dropping this package although the last 
+release dates back to 1998 (no joke!): https://www.ohse.de/uwe/software/
+lrzsz.html
 
-The patch description of v5 of this patch carries more details:
-https://patchwork.ozlabs.org/project/buildroot/patch/
-20260530182706.1679355-1-bernd@kuhls.net/
+There is no active upstream but various distros provide the package:
+https://tracker.debian.org/pkg/lrzsz
+https://packages.fedoraproject.org/pkgs/lrzsz/lrzsz/
+https://openwrt.org/packages/pkgdata/lrzsz
+https://layers.openembedded.org/layerindex/recipe/326216/
 
-The build error does not occur without the gettext bump.
+so I opted for a fix.
 
 Regards, Bernd
 
