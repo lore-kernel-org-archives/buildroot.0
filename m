@@ -4,60 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D31CD6E53
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E761ECD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C233812D8;
-	Sat, 30 May 2026 21:34:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE01D84BD0;
+	Sat, 30 May 2026 21:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TEyn_xbqS1Jx; Sat, 30 May 2026 21:34:39 +0000 (UTC)
+ id mEYvTUciPeyH; Sat, 30 May 2026 21:34:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F701812F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AD6E84BB8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780176879;
-	bh=iggXX0sSq3OxBo5WHviRBAv3TzAB2AfsTgKx9b+o2oo=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KF3qdGvJtLKw9BaNq19nS/MPZKzCQQfOY00A2n0jM3ZEqmH8iq9FDQRYb5ywAvVEB
-	 8N29nFqvSXwEILDs043xfScMIoSBXv3VnK/6IQhlKDRzB1oj6NAXvSLqGQBzouJXJf
-	 1SuV//6FDHq1/vql1IEMSqYznfwm2ozU2M+xGKpO6EgZXx2Q9ps9pVV+7uQkcRmkwu
-	 6dLcAA4Ajo6S8AczwMLo4Zvshh17VEm2HbbZZFHf20LKKyFx1uGpqr2j4odRlVbmH1
-	 l78UBXRIlTbFY9Syn+ZJDN0KJnEMNp3ujxqZgicK5JJgPe8B9CCOxAT5qp6ofdpumm
-	 +UmvPeyVA0JtQ==
+	s=default; t=1780176898;
+	bh=im2DX+BQTBvcGVbHM0UcdcUT6h2mOE5UVSXF8aUO+iM=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=CvY7Of2daT17ny32icjYINiQ41xceIrQ50HQwCCKUrP4a8NuwzrCB2yT4INLjUI7q
+	 aOaQU+LWfwYy7d7/nbyxKNW05p+W+tI4uZ5vPniHI4pdO8cEg6pL/Yv1NuyRBesXz5
+	 8tWkyh6xWTdnGZXMTgvtDwydNS9PqQTnCujL+bWbDxkg8DmqhmUJ2d8xM8ZC7eHPIp
+	 d7g0BXS7GqlLd81tl6+x2QybZCrA6IYp/kHZm2T2ls6I5zERSCkcAKTSmFJf/Qy+6c
+	 O4ZRha7ioc092AzkUS5KFXIiktxRsQn9ZoIBvMzUTmN3BFKFvfJ2w1oHHDX1RHWzus
+	 kGHrIAUHWm4ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F701812F1;
-	Sat, 30 May 2026 21:34:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A155F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AD6E84BB8;
+	Sat, 30 May 2026 21:34:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B58B0F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E42378129A
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6F326F4F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vXlPjyow4iVj for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:34:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l5ogZTKmvzkL for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:34:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7AB6812A3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7AB6812A3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B96C987624; Sat, 30 May 2026 21:34:22 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 23:33:52 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0c9e239bd364f63ff4df5b36c77285e1708924a5
-X-Git-Newrev: c58fb5f97b7cc6177c1ac675467f0ec43de44b8e
-X-Patchwork-Hint: ignore
-Message-Id: <20260530213422.B96C987624@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sigsum-c: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D052C61C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D052C61C37
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D052C61C37
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:55 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 2009E1A3751
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:34:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id E9ADB6073B;
+ Sat, 30 May 2026 21:34:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4EDF010888CC7; 
+ Sat, 30 May 2026 23:34:53 +0200 (CEST)
+Date: Sat, 30 May 2026 23:34:52 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
+Message-ID: <ahtX8NyfFVmQOCEk@windsurf>
+References: <20260519091548.2867405-1-giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260519091548.2867405-1-giulio.benetti@benettiengineering.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1780176893; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=0guky874BX4skz8UxYOejU5M/98+q3eLg7BGbVs6Zzo=;
+ b=cE6XC3gzNCwNr/F0wI/m7EXond4vJjq1tSe6/QTQxtEnvB+jmJY5yXpD/e2hjyUUc5gytD
+ EoQueXq+TV//aVej7SC4/ruw9LvJLf7J6zG1rzBeA1bO8LZ/qRWbHz97WUocOUe7Inrv87
+ ZLE7uYbEqqS4ashj1Dom+/l7Jm+61AfvORTcDYXvIGGceZz3lrAKIvhzGorY8NTH9CX5Lr
+ 8ya4gGOht6DoKhW8iqF94yA2SdxsdrwE4Z0l36N+p67B1JIw47IY7kCl68zpCT1P9LaaoZ
+ WXGJwPtJ4x4wWJZn1UgJMeMecHa+eH/gW+cwFtGUjTJ1m69erWvqrMWVMmb/Pw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=cE6XC3gz
+Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: fix build failure with
+ linux 7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,190 +95,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c58fb5f97b7cc6177c1ac675467f0ec43de44b8e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+On Tue, May 19, 2026 at 11:15:48AM +0200, Giulio Benetti wrote:
+> Bump to version 2026-05-19 on branch v5.2.2.4 to fix build failure with
+> Linux 7.1.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/rtl8188eu/rtl8188eu.hash | 2 +-
+>  package/rtl8188eu/rtl8188eu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Add the sigsum-c library, which is a more lightweight alternative to
-sigsum-go when only proof verification is needed or needs to be embedded
-in some other program.
+Applied to next, thanks!
 
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-Make-command-line-tools-optional.patch    | 71 ++++++++++++++++++++++
- package/sigsum-c/Config.in                         | 17 ++++++
- package/sigsum-c/sigsum-c.hash                     |  3 +
- package/sigsum-c/sigsum-c.mk                       | 21 +++++++
- 6 files changed, 114 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index beabe134b9..c71640b6b5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1146,6 +1146,7 @@ F:	package/cpulimit/
- 
- N:	Florian Larysch <fl@n621.de>
- F:	package/casync-nano/
-+F:	package/sigsum-c/
- F:	package/sigsum-go/
- 
- N:	Floris Bos <bos@je-eigen-domein.nl>
-diff --git a/package/Config.in b/package/Config.in
-index ed003562da..166b666ad8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1661,6 +1661,7 @@ menu "Crypto"
- 	source "package/parsec-tool/Config.in"
- 	source "package/pkcs11-helper/Config.in"
- 	source "package/rhash/Config.in"
-+	source "package/sigsum-c/Config.in"
- 	source "package/tinydtls/Config.in"
- 	source "package/tpm2-openssl/Config.in"
- 	source "package/tpm2-pkcs11/Config.in"
-diff --git a/package/sigsum-c/0001-Make-command-line-tools-optional.patch b/package/sigsum-c/0001-Make-command-line-tools-optional.patch
-new file mode 100644
-index 0000000000..3ce986b8bd
---- /dev/null
-+++ b/package/sigsum-c/0001-Make-command-line-tools-optional.patch
-@@ -0,0 +1,71 @@
-+From 5c74c6d0dd2dd1707b178083815f3a165e3e7dc3 Mon Sep 17 00:00:00 2001
-+From: Florian Larysch <fl@n621.de>
-+Date: Fri, 22 May 2026 14:36:02 +0200
-+Subject: [PATCH] Make command line tools optional
-+
-+When only using the sigsum-c library in another program, the
-+dedicated sigsum-c-verify tool might be redundant.
-+
-+Allow disabling it to save space/avoid littering /bin.
-+
-+Upstream: https://git.glasklar.is/sigsum/core/sigsum-c/-/commit/5c74c6d0dd2dd1707b178083815f3a165e3e7dc3
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ Makefile.in  |  4 ++--
-+ configure.ac | 11 +++++++++++
-+ 2 files changed, 13 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 0648adb..771551a 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -12,7 +12,7 @@ lib:
-+ tools: lib
-+ 	cd tools && $(MAKE) all
-+ 
-+-all:	lib @IF_PARSERS@ tools
-++all:	lib @IF_TOOLS@ tools
-+ 
-+ clean distclean:
-+ 	cd lib && $(MAKE) $@
-+@@ -34,7 +34,7 @@ install-lib: lib
-+ install-tools: tools
-+ 	cd tools && $(MAKE) install
-+ 
-+-install: install-lib @IF_PARSERS@ install-tools
-++install: install-lib @IF_TOOLS@ install-tools
-+ 
-+ # Remake configure-generated files.
-+ # From the autoconf manual (4.8.5 Automatic Remaking)
-+diff --git a/configure.ac b/configure.ac
-+index 37a18b7..8305789 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -19,6 +19,16 @@ else
-+    IF_PARSERS='#'
-+ fi
-+ 
-++AC_ARG_ENABLE(tools,
-++	AS_HELP_STRING([--disable-tools], [Do not build or install command-line tools.]),,
-++	[enable_tools="$enable_parsers"])
-++
-++if test "$enable_tools" = yes ; then
-++   IF_TOOLS=''
-++else
-++   IF_TOOLS='#'
-++fi
-++
-+ AC_ARG_ENABLE(static,
-+   AS_HELP_STRING([--disable-static], [Do not build any static library]),,
-+   [enable_static=yes])
-+@@ -47,6 +57,7 @@ if test -z "$PIC_CFLAGS" ; then
-+ fi
-+ 
-+ AC_SUBST(IF_PARSERS)
-++AC_SUBST(IF_TOOLS)
-+ AC_SUBST(IF_STATIC)
-+ AC_SUBST(IF_SHARED)
-+ AC_SUBST(IF_NOT_SHARED)
-+-- 
-+2.54.0
-+
-diff --git a/package/sigsum-c/Config.in b/package/sigsum-c/Config.in
-new file mode 100644
-index 0000000000..afc5942e83
---- /dev/null
-+++ b/package/sigsum-c/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_SIGSUM_C
-+	bool "sigsum-c"
-+	select BR2_PACKAGE_NETTLE
-+	help
-+	  C library and command-line utility for verifying Sigsum
-+	  proofs.
-+
-+	  https://git.glasklar.is/sigsum/core/sigsum-c/
-+
-+if BR2_PACKAGE_SIGSUM_C
-+
-+config BR2_PACKAGE_SIGSUM_C_TOOLS
-+	bool "Enable tools"
-+	help
-+	  Build CLI tools like sigsum-c-verify.
-+
-+endif
-diff --git a/package/sigsum-c/sigsum-c.hash b/package/sigsum-c/sigsum-c.hash
-new file mode 100644
-index 0000000000..5941eafc5d
---- /dev/null
-+++ b/package/sigsum-c/sigsum-c.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  147ab839b22c5584aa9982c912bdb629cc717dcd978528233889789544e5fe51  sigsum-c-v1.0.0-git4.tar.gz
-+sha256  f592312f5d5756846c43becd06fc1d826eafe05b1b45f88e95af460d59d24ad0  LICENSE
-diff --git a/package/sigsum-c/sigsum-c.mk b/package/sigsum-c/sigsum-c.mk
-new file mode 100644
-index 0000000000..a6021f0587
---- /dev/null
-+++ b/package/sigsum-c/sigsum-c.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# sigsum-c
-+#
-+################################################################################
-+
-+SIGSUM_C_VERSION = v1.0.0
-+SIGSUM_C_SITE = https://git.glasklar.is/sigsum/core/sigsum-c
-+SIGSUM_C_SITE_METHOD = git
-+SIGSUM_C_LICENSE = BSD-2-Clause
-+SIGSUM_C_LICENSE_FILES = LICENSE
-+SIGSUM_C_INSTALL_STAGING = YES
-+SIGSUM_C_DEPENDENCIES = nettle
-+
-+SIGSUM_C_AUTORECONF = YES
-+
-+ifneq ($(BR2_PACKAGE_SIGSUM_C_TOOLS),y)
-+SIGSUM_C_CONF_OPTS += --disable-tools
-+endif
-+
-+$(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
