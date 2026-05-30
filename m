@@ -4,85 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02E4DCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5136DCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9D4260F9B;
-	Sat, 30 May 2026 22:46:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37F726F5F3;
+	Sat, 30 May 2026 22:50:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wKip6t4z32pV; Sat, 30 May 2026 22:46:46 +0000 (UTC)
+ id ndzsHBbL7akJ; Sat, 30 May 2026 22:50:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA3A16F576
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F40F66F5D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780181206;
-	bh=u7GKutU5PzRW3E0ouULNTh78ZY+4a9ld5shukSjySME=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pT818GwjdnIVwuUCa/uf7fuEI/Ag7aiz8NPYjWwE4R2uFRWPzhQ0eqTfthaerOWN2
-	 na1xQStU9Ty/jOlLF2bgpjGgiKMpoIw9NpQt57R5FCCwM9OrWXQcDsCh5XLQvSg/w0
-	 jkkICcBOPCYEELcV5FMdtXNmwMQdDcpR4HqQXEDFoZ+SaehHHOjxhIt0AVMHefLoh3
-	 9AGHF9XGUrmstGjMgQNBC2w9wRK56ODc690V498YYtElNiUYtw8VmMDjavNSxPZ6xr
-	 k05dbN00w6JM76YAMeirIjwcpUBlyka0jA2iAzlE7O2ukUvKUKJGDDwnspcowJYjrH
-	 Ap9zUF7xIze8g==
+	s=default; t=1780181448;
+	bh=sTfWAMaWVUkztpLL7kaHe39/SJIxAk5m8n8k2VmKo+M=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=FyUI1I5xDbOgaIITcow0RAJOl0B26mINSb6uH0Q8wAYLeIlgmYec2LpUCRUBdRd9c
+	 UNfHZG/RiisTggmbPSvGb/HKMkZzbNmqoPQiedZsS7proBNC32Ru3wZgkvO/Aejxfu
+	 jQsjkPb6TjsndmTeIAw7oEz5jpshDQ/q911sWwlpzZAHMeuATQCzPmkhyTf0/P1hcn
+	 7h468zhyieOh4wRxkztUN8kFhIHHl3hNGSrtY44Cf5TN4jD/aof9JnSXmG870Z0+R0
+	 YGNtuS0KxvParQr/NyfqPQ3+IygbpOTMgxVProdEspZWB28gM4qQ48zpgdK64n+Ae0
+	 oVPRsPeocl/Uw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA3A16F576;
-	Sat, 30 May 2026 22:46:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C84A9F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:46:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F40F66F5D3;
+	Sat, 30 May 2026 22:50:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F93D389
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C521F401F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:46:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0512C401F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:50:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X4aMd5TVjGMe for <buildroot@buildroot.org>;
- Sat, 30 May 2026 22:46:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B0B514014D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0B514014D
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B0B514014D
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:46:43 +0000 (UTC)
-Received: from [192.168.1.80] (82-65-127-30.subs.proxad.net [82.65.127.30])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 473452C84106;
- Sun, 31 May 2026 00:46:41 +0200 (CEST)
-Message-ID: <7ff2942c-4efa-4769-847e-6848a93a64cd@bubu1.eu>
-Date: Sun, 31 May 2026 00:46:40 +0200
+ id JREUNlJcnNEr for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 22:50:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D780B4014D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D780B4014D
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D780B4014D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:50:45 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4909e3fa4b2so16735475e9.0
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 15:50:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780181444; x=1780786244;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=50+aEC6LfQjLoC6hWs9sLltqrlQlMyyk3W9mZtkpLsY=;
+ b=qW656FOiResoKf7iFpQGI/zBIe1I9FHSFgsPEFMav6aytvWcv7mJ2XbTcZL7HmmR4l
+ 9OL0zuTD0X8qmN5YcQErdX1v2mdZMMwb2GXuzLfOVkeMqdz4WLD2F0dCksh/pz3VxS+M
+ A70M/3i+7Zbn+CtOZT3meS6F8LI+2udf8Hq+2GcXMN+FgCSM4OTK82rh78RWD52J8amR
+ oToape0VT5+qhaN0enMlerHJkPqFpgco7Z9+XM+9rEE7ZAPJyzr4aZBJbbsAhvVUqmXj
+ XI41XI5ljC8Ond6BXi4cvyDJCXql26RXePcASlziwWHV9ddNt9N+ldMUtQy5C39OiTxU
+ KxUA==
+X-Gm-Message-State: AOJu0YyPNtJ/ndpBbGhnonPSIm6II1m4ZKwVl3lAW1GCUjN5J/6NZOT3
+ vZEffV8M5fAmltYLbuHP6rd6WLQVfowr5g/oslp+gylj4wEo1hI8wDW9Cc96ZvNTW0kU0nRpbCZ
+ XdzB/
+X-Gm-Gg: Acq92OEBCUm1eOlxEUtpb85td2S3yJsKpUTveOy3Tzu91NY2M8cTbLHkQfqxRxkqC/T
+ ZpFD5FF4GfFjMcCclF8r7eDV8YrsoayhZ7qRgY7iZt2D5XYOV1VXcdkZbjzJmUpXdbzfRGnLK8t
+ 560ANT9Ft5u/VX7yyCDjToqmPYahyXSehXZBTkxSZNv8sbzWUSfGIEX2GG9G3QTthVCisMGIgpc
+ 9IYIrky0O7BEVEDchPVkENJCtdUnfd8/Wmxd4cYvKQjeyj9BEVZEwY10v/EmertLiesTYCfrtiU
+ Zqn+LB7oao3jQ/qpiX72Yk6JYSm1Fo+wq8Sf1b+UALhKFkZQdOaLjWynu/KvGlPSa5m3J6O8ymf
+ TpFtqmhSn/vQyrp4zCvg5o2Qof9Ul/V3sioaSjah4myAuXYs8jM3uj040bx7ghFCbIIkP0hkb4M
+ n2hEiosdLuzAIcMOol6GvaVbP7e6T7iDJ4Tt67ezw=
+X-Received: by 2002:a05:600c:6091:b0:490:5cd8:d213 with SMTP id
+ 5b1f17b1804b1-490a2b6b211mr78213895e9.15.1780181443702; 
+ Sat, 30 May 2026 15:50:43 -0700 (PDT)
+Received: from dragon ([2a01:e0a:1015:b940:d4d1:7b69:edd2:59ef])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4909d68980csm153635425e9.1.2026.05.30.15.50.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 May 2026 15:50:43 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Sun, 31 May 2026 00:50:29 +0200
+Message-ID: <20260530225029.1833814-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Alexandre Ondet <frcomdev@gmail.com>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260428171652.2544-1-frcomdev@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260428171652.2544-1-frcomdev@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1780181201; bh=bKduGwYJIW1JqwX2VLSNYeAM28Sdl15YtztiZgDiK60=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=UTAV68J972eejC7Oj0P0FZWX/FQbPSWjAhtECtVYdeknUc8J4+aB3PYO+fe+N/oF0
- TllbSf4EWCJ76dgK7klOasug+3ANgf6sBgu6txWe8+6SIHPSrogjSDAwFyuFpqOAkM
- ViWMpeplYHDVQcAqtEcSBoB1LxgTB1DbVf6HT32q0hOwLqgL8mGeMzgNf4nLIShXoI
- nCWracygx1OJal7BoB2k1gxCeX3DJ1sJhpX4++6gH1eOh2Fnsg+lfbjy33w0iJATVW
- 1Zzf1BtzKGJF+L2hxXXKgHjvKM2y8/9YTt+CH4CoWDlKYW116Vj6kzA8ap/o5FbRUN
- qbq+9fnUrOXZw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1780181444; x=1780786244; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=50+aEC6LfQjLoC6hWs9sLltqrlQlMyyk3W9mZtkpLsY=;
+ b=CkrM/JYbakeVUU+d4/qVJ0UCxb6k4whCHexnUdY3kuClNQ1Cm9gtoMF5c9Q90vQ+DY
+ sPLsurnz1Cr/SAf9FB3NfaQTH9yzwkKe9v5y4n7ps2xxm7w4MoGvaCiPutKFC+bBLQdE
+ vxs3RygRXvR7zitdtwmjwMrJy8nFjtUw8pvQViRQu+3PbupoApWZkdTTTItIIHFBsw/c
+ IoucbcATjNo24JWZSuO2kNK35YP7kN9WMW3z7ojclQ0voBzAaC/A0xFyfCn1jxf/cUWS
+ fbZGwOz28GLXo5ohlKdRN9w3trxPjQac3u1LPrK2SJK8kPeGEq+0/tApHqWJVoVzB+uq
+ Ey6Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=UTAV68J9
-Subject: Re: [Buildroot] [PATCH 01/13] package/python-cpu-load-generator:
- new package
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CkrM/JYb
+Subject: [Buildroot] [PATCH] package/samba4: fix build on uclibc with GCC 14+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,98 +116,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Alexamdre,
-I also have a question about this package, see below.
+iconv types are defined differently in glibc (as pointers) and uclibc
+(as integers). With changes in GCC14, -Wint-conversion has now become
+an error, which shed some light on the issue.
 
-On 4/28/26 19:16, Alexandre Ondet wrote:
-> Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
-> ---
->   package/Config.in                                  |  1 +
->   package/python-cpu-load-generator/Config.in        |  6 ++++++
->   .../python-cpu-load-generator.hash                 |  4 ++++
->   .../python-cpu-load-generator.mk                   | 14 ++++++++++++++
->   4 files changed, 25 insertions(+)
->   create mode 100644 package/python-cpu-load-generator/Config.in
->   create mode 100644 package/python-cpu-load-generator/python-cpu-load-generator.hash
->   create mode 100644 package/python-cpu-load-generator/python-cpu-load-generator.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9cae377fb5..407966b37c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1059,6 +1059,7 @@ menu "External python modules"
->   	source "package/python-construct/Config.in"
->   	source "package/python-contourpy/Config.in"
->   	source "package/python-couchdb/Config.in"
-> +	source "package/python-cpu-load-generator/Config.in"
->   	source "package/python-crayons/Config.in"
->   	source "package/python-crc/Config.in"
->   	source "package/python-crc16/Config.in"
-> diff --git a/package/python-cpu-load-generator/Config.in b/package/python-cpu-load-generator/Config.in
-> new file mode 100644
-> index 0000000000..fceb6fdb32
-> --- /dev/null
-> +++ b/package/python-cpu-load-generator/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CPU_LOAD_GENERATOR
-> +	bool "python-cpu-load-generator"
-> +	help
-> +	  Generate a configurable CPU load for testing and benchmarking.
-> +
-> +	  https://pypi.org/project/cpu-load-generator/
+The actual fix for that problem is released in uclibc 1.0.58 [1].
+However, because these type definitions are in toolchain headers,
+this means that the toolchain used to build samba must also include
+uclibc>=1.0.58 (either an external toolchain that includes the uclibc fix,
+or a Buildroot toolchain after the uclibc fix is merged in Buildroot [2]).
 
-This links to https://github.com/sirtyman/CPULoadGenerator which is 
-forked from https://github.com/GaetanoCarlucci/CPULoadGenerator but 
-actually way older? So I don't really understand why you would want to 
-use and package the fork instead of the original version which seems to 
-be a lot more active and maintained? (it does not seem to be on pypi, is 
-the only thing, I think?)
+Until then, provide a workaround for samba itself.
 
-But both of these version require psutil, so you would need to select 
-BR2_PACKAGE_PYTHON_PSUTIL which is missing in your patch.
+No autobuilder failure on this (yet). It can be reproduced with
+    > ./utils/test-pkg -p samba4 -T bootlin-armv5-uclibc
 
-> diff --git a/package/python-cpu-load-generator/python-cpu-load-generator.hash b/package/python-cpu-load-generator/python-cpu-load-generator.hash
-> new file mode 100644
-> index 0000000000..6cf8c4dac4
-> --- /dev/null
-> +++ b/package/python-cpu-load-generator/python-cpu-load-generator.hash
-> @@ -0,0 +1,4 @@
-> +# From https://pypi.org/pypi/cpu-load-generator/1.2.0/json
-> +sha256  41586edd59e5d9e75a39a0c8c86e8baa8eac0550dc4dab8c0bef9eeac328b8af  cpu-load-generator-1.2.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  0de0992ffa96771645e251c62628bcb546ffaf1c13d5a42240a9a17941101e9e  LICENCE
-> diff --git a/package/python-cpu-load-generator/python-cpu-load-generator.mk b/package/python-cpu-load-generator/python-cpu-load-generator.mk
-> new file mode 100644
-> index 0000000000..f81170d8b8
-> --- /dev/null
-> +++ b/package/python-cpu-load-generator/python-cpu-load-generator.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-cpu-load-generator
-> +#
-> +################################################################################
-> +
-> +PYTHON_CPU_LOAD_GENERATOR_VERSION = 1.2.0
-> +PYTHON_CPU_LOAD_GENERATOR_SOURCE = cpu-load-generator-$(PYTHON_CPU_LOAD_GENERATOR_VERSION).tar.gz
-> +PYTHON_CPU_LOAD_GENERATOR_SITE = https://files.pythonhosted.org/packages/source/c/cpu-load-generator
-> +PYTHON_CPU_LOAD_GENERATOR_SETUP_TYPE = setuptools
-> +PYTHON_CPU_LOAD_GENERATOR_LICENSE = MIT
-> +PYTHON_CPU_LOAD_GENERATOR_LICENSE_FILES = LICENCE
-> +
-> +$(eval $(python-package))
+[1] https://github.com/wbx-github/uclibc-ng/commit/328e14e55f35ee333e5a19c5717cb4bbf426c3f1
+[2] https://lore.kernel.org/buildroot/ahPrm_0gVDGw5B5-@waldemar-brodkorb.de/
 
-I'm marking this as changes requested in patchwork.
+Assisted-by: Claude:claude-opus-4.8
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ ...-iconv-fix-build-when-iconv_t-is-not.patch | 98 +++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+ create mode 100644 package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch
 
-Best,
-Marcus
+diff --git a/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch b/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch
+new file mode 100644
+index 0000000000..b270deaf98
+--- /dev/null
++++ b/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch
+@@ -0,0 +1,98 @@
++From aab0668cc358e443b243528939947c3eea93ca27 Mon Sep 17 00:00:00 2001
++From: Titouan Christophe <titouan.christophe@mind.be>
++Date: Sat, 30 May 2026 00:30:00 +0200
++Subject: [PATCH] charset: fix iconv_t int/pointer conversion on uClibc
++
++The iconv handles cd_pull, cd_push and cd_direct are stored as 'void *'
++in struct smb_iconv_s, but iconv_open() returns and iconv()/iconv_close()
++take an iconv_t. On glibc this is harmless because iconv_t is itself a
++'void *', so the implicit conversions are between identical types.
++
++On uClibc however iconv_t is a 'long int', so storing iconv_open()'s
++result into a 'void *' field (and passing those fields back to iconv()
++and iconv_close()) is an implicit integer<->pointer conversion. Since
++GCC 14 -Wint-conversion is an error by default, this breaks the build:
++
++  iconv.c: In function 'sys_iconv':
++  iconv.c:166:38: error: passing argument 1 of 'iconv' makes integer
++    from pointer without a cast [-Wint-conversion]
++  iconv.c: In function 'smb_iconv_open_ex':
++  iconv.c:403:30: error: assignment to 'void *' from 'iconv_t'
++    {aka 'long int'} makes pointer from integer without a cast
++    [-Wint-conversion]
++
++Add explicit casts between iconv_t and void * so the conversions are
++intentional and the code builds on both glibc and uClibc.
++
++Upstream: not applicable to samba, because uclibc has already released
++          a fix, but this isn't included yet in Buildroot prebuilt toolchains.
++          The problem is therefore to be patched in Buildroot itself.
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ lib/util/charset/iconv.c | 30 +++++++++++++++---------------
++ 1 file changed, 15 insertions(+), 15 deletions(-)
++
++diff --git a/lib/util/charset/iconv.c b/lib/util/charset/iconv.c
++index 074794a26e3..90389d6a954 100644
++--- a/lib/util/charset/iconv.c
+++++ b/lib/util/charset/iconv.c
++@@ -163,7 +163,7 @@ static size_t sys_iconv(void *cd,
++ 	size_t ret = iconv((iconv_t)cd,
++ 			   discard_const_p(char *, inbuf), inbytesleft,
++ 			   outbuf, outbytesleft);
++-	if (ret == (size_t)-1) iconv(cd, NULL, NULL, NULL, NULL);
+++	if (ret == (size_t)-1) iconv((iconv_t)cd, NULL, NULL, NULL, NULL);
++ 	return ret;
++ }
++ #endif
++@@ -345,12 +345,12 @@ static int smb_iconv_t_destructor(smb_iconv_t hwd)
++ 	}
++ #endif
++ #ifdef HAVE_NATIVE_ICONV
++-	if (hwd->cd_pull != NULL && hwd->cd_pull != (iconv_t)-1)
++-		iconv_close(hwd->cd_pull);
++-	if (hwd->cd_push != NULL && hwd->cd_push != (iconv_t)-1)
++-		iconv_close(hwd->cd_push);
++-	if (hwd->cd_direct != NULL && hwd->cd_direct != (iconv_t)-1)
++-		iconv_close(hwd->cd_direct);
+++	if (hwd->cd_pull != NULL && hwd->cd_pull != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_pull);
+++	if (hwd->cd_push != NULL && hwd->cd_push != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_push);
+++	if (hwd->cd_direct != NULL && hwd->cd_direct != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_direct);
++ #endif
++ 
++ 	return 0;
++@@ -400,19 +400,19 @@ _PUBLIC_ smb_iconv_t smb_iconv_open_ex(TALLOC_CTX *mem_ctx, const char *tocode,
++ 	 * conversions */
++ 
++ 	if (from == NULL) {
++-		ret->cd_pull = iconv_open("UTF-16LE", fromcode);
++-		if (ret->cd_pull == (iconv_t)-1)
++-			ret->cd_pull = iconv_open("UCS-2LE", fromcode);
++-		if (ret->cd_pull != (iconv_t)-1) {
+++		ret->cd_pull = (void *)iconv_open("UTF-16LE", fromcode);
+++		if (ret->cd_pull == (void *)(iconv_t)-1)
+++			ret->cd_pull = (void *)iconv_open("UCS-2LE", fromcode);
+++		if (ret->cd_pull != (void *)(iconv_t)-1) {
++ 			ret->pull = sys_iconv;
++ 		}
++ 	}
++ 
++ 	if (to == NULL) {
++-		ret->cd_push = iconv_open(tocode, "UTF-16LE");
++-		if (ret->cd_push == (iconv_t)-1)
++-			ret->cd_push = iconv_open(tocode, "UCS-2LE");
++-		if (ret->cd_push != (iconv_t)-1) {
+++		ret->cd_push = (void *)iconv_open(tocode, "UTF-16LE");
+++		if (ret->cd_push == (void *)(iconv_t)-1)
+++			ret->cd_push = (void *)iconv_open(tocode, "UCS-2LE");
+++		if (ret->cd_push != (void *)(iconv_t)-1) {
++ 			ret->push = sys_iconv;
++ 		}
++ 	}
++-- 
++2.54.0
++
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
