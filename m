@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E44ECD6E54
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1EE9CD6E52
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8D3C6F5D6;
-	Sat, 30 May 2026 13:52:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3CFE6F5A5;
+	Sat, 30 May 2026 13:52:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yzyo4j9V1V6s; Sat, 30 May 2026 13:52:55 +0000 (UTC)
+ id 6ULWT2hV8uDT; Sat, 30 May 2026 13:52:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 647CB6F5A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4196F5B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149170;
-	bh=9EuFjDf2Dbt2dfFGabM0j6bJyULqA6T4P+80EWCKCK0=;
+	s=default; t=1780149172;
+	bh=dBFDKK6xAk6Om9WAXCJdh27Q/ZzBopDOxO4/F04yg9Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=I2yHTk/5iL+RX7URFd2DAgeE/lz1kWTbO9Uqzd23HAp6pzIejgW3WxwS45KGkKv06
-	 rBhusgfBgIz7wc26cHEhfcSCREUVGk05or5znunRWbjPvC6MPZbQxRIArqpUJVeQ8S
-	 ebO2tXWiS4pkMLi2on8Of82ZsxBEuY0ynrzRT2xui3yOPO498aZk4B5v8qqgM6hP9M
-	 7QP9kws/rLx9yRv5MIKisuCrEcbfhxKPbklWoecafMU6FdRIOmPWMcqWX8QxYRwZL4
-	 mWDBMtebFLtJfz14WtMazTiF/ZCgjLz7O8sQkeMb6/ZGM6J6bZwHHoEXQES+8fja/W
-	 ulxKQtigcYvTg==
+	b=Zz3R8ci+XE4iyM3MjAxlAb8kTbtQd9eI+x+JusLBz/5fyXtiXDGZwFWjd/31c5JZe
+	 aps1uEp2tNjMrT7EgZy/aijB4zgsnmWJSe/a05J3Xr69CY91yz7JIWN6JsSkjhXA26
+	 u5FJDoe/+5FjE6/uz/fcBDu70z0/9ta5AmNK6PRtiJb0l5GhJmF3YwUkYJ5a+bWdm3
+	 q6XMvlq9XkvJZqWmblJ/v/yiwQwXRxVSHcGV3J8y+vwwKzeQDg/tloSn5IHAekDE3r
+	 A4xfaqnu7gIUEI6n+0RZFvnMsp3XVcnUAyO5PVuHIo/VKoHbo82GDnLJuPi/mCjfdl
+	 5oAE+d05s03Bg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 647CB6F5A1;
-	Sat, 30 May 2026 13:52:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E4196F5B5;
+	Sat, 30 May 2026 13:52:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A939F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 61CC612F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE96D42DC7
+ by smtp4.osuosl.org (Postfix) with ESMTP id E69D342DC0
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8bxTOTTPeMGI for <buildroot@buildroot.org>;
- Sat, 30 May 2026 13:52:34 +0000 (UTC)
+ id PUYdwN90JRAM for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5918942DC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9684C42EC6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5918942DC0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9684C42EC6
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FF2B8750C; Sat, 30 May 2026 13:52:21 +0000 (UTC)
+ id 9A0EE8750A; Sat, 30 May 2026 13:52:21 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 30 May 2026 15:48:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0d7224802004a23229d8144a9e01755fc1974b24
-X-Git-Newrev: 1927e8edbe1543071f68537a0cb0ca46838f45ba
+X-Git-Oldrev: 44c7f9b2dd16ca3d78318a4036cc7237bcfcf2c8
+X-Git-Newrev: 27ebca4af2cce6a24fdd9b9f1f8ce280f4c381c0
 X-Patchwork-Hint: ignore
-Message-Id: <20260530135221.4FF2B8750C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cups-filters: add
- upstream patch to fix CVE-2025-64524
+Message-Id: <20260530135221.9A0EE8750A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/binutils: add build
+ fixes for gcc 16.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,122 +77,153 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1927e8edbe1543071f68537a0cb0ca46838f45ba
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/27ebca4af2cce6a24fdd9b9f1f8ce280f4c381c0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add "CVE:" tag in patch]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ddde78c1bd251225c07f1910d6f9db2fc5189365)
----
- ...x.c-Fix-infinite-loop-caused-by-crafted-f.patch | 84 ++++++++++++++++++++++
- package/cups-filters/cups-filters.mk               |  3 +
- 2 files changed, 87 insertions(+)
+Backport patch from binutils 2.46 to fix build errors with gcc 16.x on
+or1k.
 
-diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch | 61 ++++++++++++++++++++++
+ ...or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch | 61 ++++++++++++++++++++++
+ 2 files changed, 122 insertions(+)
+
+diff --git a/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch b/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
 new file mode 100644
-index 0000000000..8badcfd429
+index 0000000000..f4121ee80f
 --- /dev/null
-+++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
-@@ -0,0 +1,84 @@
-+From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
-+From: Zdenek Dohnal <zdohnal@redhat.com>
-+Date: Wed, 12 Nov 2025 16:02:20 +0100
-+Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
++++ b/package/binutils/2.44/0004-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
+@@ -0,0 +1,61 @@
++From d320649e1805e5330a09b103d4ca890a12815f56 Mon Sep 17 00:00:00 2001
++From: "H.J. Lu" <hjl.tools@gmail.com>
++Date: Tue, 18 Nov 2025 12:09:54 +0800
++Subject: [PATCH] or1k: Mark undefined TLS symbol as STT_TLS
 +
-+Infinite loop happened because of crafted input raster file, which led
-+into heap buffer overflow of `CompressBuf` array.
++Update or1k_apply_fix to handle all TLS relocations.
 +
-+Based on comments there should be always some `count` when compressing
-+the data, and processing of crafted file ended with offset and count
-+being 0.
++	PR gas/33426
++	* config/tc-or1k.c (or1k_apply_fix): Handle all TLS relocations.
 +
-+Fixes CVE-2025-64524
++Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 +
-+Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
++Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d320649e1805e5330a09b103d4ca890a12815f56
 +
-+CVE: CVE-2025-64524
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ filter/rastertopclx.c | 25 +++++++++++++++++++++++--
-+ 1 file changed, 23 insertions(+), 2 deletions(-)
++ gas/config/tc-or1k.c | 18 ++++++++++++------
++ 1 file changed, 12 insertions(+), 6 deletions(-)
 +
-+diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
-+index 3e7c129da..1015308da 100644
-+--- a/filter/rastertopclx.c
-++++ b/filter/rastertopclx.c
-+@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
-+   }
++diff --git a/gas/config/tc-or1k.c b/gas/config/tc-or1k.c
++index f5a20b94fa7..798cf6d6acc 100644
++--- a/gas/config/tc-or1k.c
+++++ b/gas/config/tc-or1k.c
++@@ -354,22 +354,28 @@ or1k_apply_fix (struct fix *f, valueT *t, segT s)
 + 
-+   if (header->cupsCompression)
-+-    CompBuffer = malloc(DotBufferSize * 4);
-++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
-+ 
-+   if (header->cupsCompression >= 3)
-+-    SeedBuffer = malloc(DotBufferSize);
-++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
-+ 
-+   SeedInvalid = 1;
-+ 
-+@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+               seed ++;
-+               count ++;
-+             }
-++
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-+ 	  }
-+ 
-+          /*
-+@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+ 
-+             count = line_ptr - start;
-+ 
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-++
-+ #if 0
-+             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
-+ 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
-+@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+ 
-+             count = (line_ptr - start) / 3;
-+ 
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-++
-+            /*
-+             * Place mode 10 compression data in the buffer; each sequence
-+ 	    * starts with a command byte that looks like:
++   switch (f->fx_r_type)
++     {
+++    case BFD_RELOC_OR1K_TLS_DTPMOD:
+++    case BFD_RELOC_OR1K_TLS_DTPOFF:
++     case BFD_RELOC_OR1K_TLS_GD_HI16:
+++    case BFD_RELOC_OR1K_TLS_GD_LO13:
++     case BFD_RELOC_OR1K_TLS_GD_LO16:
++     case BFD_RELOC_OR1K_TLS_GD_PG21:
++-    case BFD_RELOC_OR1K_TLS_GD_LO13:
+++    case BFD_RELOC_OR1K_TLS_IE_AHI16:
+++    case BFD_RELOC_OR1K_TLS_IE_HI16:
+++    case BFD_RELOC_OR1K_TLS_IE_LO13:
+++    case BFD_RELOC_OR1K_TLS_IE_LO16:
+++    case BFD_RELOC_OR1K_TLS_IE_PG21:
++     case BFD_RELOC_OR1K_TLS_LDM_HI16:
+++    case BFD_RELOC_OR1K_TLS_LDM_LO13:
++     case BFD_RELOC_OR1K_TLS_LDM_LO16:
++     case BFD_RELOC_OR1K_TLS_LDM_PG21:
++-    case BFD_RELOC_OR1K_TLS_LDM_LO13:
++     case BFD_RELOC_OR1K_TLS_LDO_HI16:
++     case BFD_RELOC_OR1K_TLS_LDO_LO16:
++-    case BFD_RELOC_OR1K_TLS_IE_HI16:
++-    case BFD_RELOC_OR1K_TLS_IE_LO16:
++-    case BFD_RELOC_OR1K_TLS_IE_PG21:
++-    case BFD_RELOC_OR1K_TLS_IE_LO13:
+++    case BFD_RELOC_OR1K_TLS_LE_AHI16:
++     case BFD_RELOC_OR1K_TLS_LE_HI16:
++     case BFD_RELOC_OR1K_TLS_LE_LO16:
+++    case BFD_RELOC_OR1K_TLS_LE_SLO16:
+++    case BFD_RELOC_OR1K_TLS_TPOFF:
++       S_SET_THREAD_LOCAL (f->fx_addsy);
++       break;
++     default:
 +-- 
-+2.47.3
++2.43.7
 +
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index dcfb2e9500..6bc4610376 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
- # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
- CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
- 
-+# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
-+CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
+diff --git a/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch b/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
+new file mode 100644
+index 0000000000..f4121ee80f
+--- /dev/null
++++ b/package/binutils/2.45.1/0003-or1k-Mark-undefined-TLS-symbol-as-STT_TLS.patch
+@@ -0,0 +1,61 @@
++From d320649e1805e5330a09b103d4ca890a12815f56 Mon Sep 17 00:00:00 2001
++From: "H.J. Lu" <hjl.tools@gmail.com>
++Date: Tue, 18 Nov 2025 12:09:54 +0800
++Subject: [PATCH] or1k: Mark undefined TLS symbol as STT_TLS
 +
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- 
- CUPS_FILTERS_CONF_OPTS = \
++Update or1k_apply_fix to handle all TLS relocations.
++
++	PR gas/33426
++	* config/tc-or1k.c (or1k_apply_fix): Handle all TLS relocations.
++
++Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
++
++Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d320649e1805e5330a09b103d4ca890a12815f56
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gas/config/tc-or1k.c | 18 ++++++++++++------
++ 1 file changed, 12 insertions(+), 6 deletions(-)
++
++diff --git a/gas/config/tc-or1k.c b/gas/config/tc-or1k.c
++index f5a20b94fa7..798cf6d6acc 100644
++--- a/gas/config/tc-or1k.c
+++++ b/gas/config/tc-or1k.c
++@@ -354,22 +354,28 @@ or1k_apply_fix (struct fix *f, valueT *t, segT s)
++ 
++   switch (f->fx_r_type)
++     {
+++    case BFD_RELOC_OR1K_TLS_DTPMOD:
+++    case BFD_RELOC_OR1K_TLS_DTPOFF:
++     case BFD_RELOC_OR1K_TLS_GD_HI16:
+++    case BFD_RELOC_OR1K_TLS_GD_LO13:
++     case BFD_RELOC_OR1K_TLS_GD_LO16:
++     case BFD_RELOC_OR1K_TLS_GD_PG21:
++-    case BFD_RELOC_OR1K_TLS_GD_LO13:
+++    case BFD_RELOC_OR1K_TLS_IE_AHI16:
+++    case BFD_RELOC_OR1K_TLS_IE_HI16:
+++    case BFD_RELOC_OR1K_TLS_IE_LO13:
+++    case BFD_RELOC_OR1K_TLS_IE_LO16:
+++    case BFD_RELOC_OR1K_TLS_IE_PG21:
++     case BFD_RELOC_OR1K_TLS_LDM_HI16:
+++    case BFD_RELOC_OR1K_TLS_LDM_LO13:
++     case BFD_RELOC_OR1K_TLS_LDM_LO16:
++     case BFD_RELOC_OR1K_TLS_LDM_PG21:
++-    case BFD_RELOC_OR1K_TLS_LDM_LO13:
++     case BFD_RELOC_OR1K_TLS_LDO_HI16:
++     case BFD_RELOC_OR1K_TLS_LDO_LO16:
++-    case BFD_RELOC_OR1K_TLS_IE_HI16:
++-    case BFD_RELOC_OR1K_TLS_IE_LO16:
++-    case BFD_RELOC_OR1K_TLS_IE_PG21:
++-    case BFD_RELOC_OR1K_TLS_IE_LO13:
+++    case BFD_RELOC_OR1K_TLS_LE_AHI16:
++     case BFD_RELOC_OR1K_TLS_LE_HI16:
++     case BFD_RELOC_OR1K_TLS_LE_LO16:
+++    case BFD_RELOC_OR1K_TLS_LE_SLO16:
+++    case BFD_RELOC_OR1K_TLS_TPOFF:
++       S_SET_THREAD_LOCAL (f->fx_addsy);
++       break;
++     default:
++-- 
++2.43.7
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
