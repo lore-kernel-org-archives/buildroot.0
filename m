@@ -4,87 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED711CD6E54
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 16:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27881CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 16:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A140642F0C;
-	Sat, 30 May 2026 16:07:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7788411DC;
+	Sat, 30 May 2026 16:22:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K78jbwH7JITi; Sat, 30 May 2026 16:07:25 +0000 (UTC)
+ id gfKnZwIcEgwO; Sat, 30 May 2026 16:22:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9FA542F00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97CFD4107E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780157245;
-	bh=4+56cHTowzdmofx2b5G/zT+TgESB8m1iNrTUp7I9kKg=;
+	s=default; t=1780158134;
+	bh=JXXhhISkwPwZ33VPqAPH0DFbkLDuIjIhQ2KfBvUhVho=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YOeF9tO9bdJ+XR+tKBSfv2HvxhXHdOk7utmf+iS/81RBM9P+SJMjbC1xI8cJvgZ+i
-	 ZIJAjtJavi+c5lcUjNwWmr2UjPADyGAIdJLHyOlzonzeGXS/zW8dTIER6cH7QEfyOm
-	 tyi2j9ZXvgCAPcc5PzccH4GHcGYblgKBXKM8GFOnnU1tsSUP9bldLP8teJs0SUAX7G
-	 HuSZP3jLe44hjYuAnUezxS++5IJ8Hyxtf57aXENf6PTDu1mwASBUSQS7Ndf+ks1ocq
-	 m6tF6mkG7XewNJj2iCoEs3Gr6+p0FQkpwUFH6Hg7TLh1H688Eq2dr7r7jpx1UDFgQn
-	 tshd95Gpz0dhA==
+	b=SNnjoD3oF0BcSRRQ5ZCNilJ53j5mPYPjV05cOGU89sB0rtnwFjvCymCG5Oh1kVarn
+	 oo77jAtJiql5xEzJCoC74N2ndPkhuBOGePlRYyAC39lRm1W1tiET9JaFlvYt8R941F
+	 DeGxZN+wuLulK+lZ9xGAXZqLOGAfTTEOICDrDnBKHlAqkimWLPejClU6sXN2otc92u
+	 sFc+INPEb/Uzi1aaX6d8XI02XAa4zpA6rrkgcaMxSQONC3JRaTtSyxxF3//nt5nhzq
+	 EAdB0JpvCzBipXbw6xQj5xhBCQDfio8cOU9hvsFOXJJey6ywIGDQPbg6uehbRSJLoe
+	 8JD4shxs49sdQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9FA542F00;
-	Sat, 30 May 2026 16:07:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CB6612F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:07:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97CFD4107E;
+	Sat, 30 May 2026 16:22:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73D9C12F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A8746F5B7
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:07:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6515D853AD
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yohcpmL9u4B1 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 16:07:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 20DAF61B61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20DAF61B61
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 20DAF61B61
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:07:21 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 3B8FA4E42DA4;
- Sat, 30 May 2026 16:07:19 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E456B6073B;
- Sat, 30 May 2026 16:07:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rtJA_s4Bm-NE for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 16:22:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8CCE985379
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CCE985379
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8CCE985379
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:22:12 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CEED410888CD6; 
- Sat, 30 May 2026 18:07:15 +0200 (CEST)
-Date: Sat, 30 May 2026 18:07:15 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Vadim Kochan <vadim4j@gmail.com>
-Message-ID: <ahsK2eJNNKDZBkrZ@windsurf>
-References: <20260421185136.2577202-1-bernd@kuhls.net>
+ with ESMTPSA id C2F57B97C5F9; Sat, 30 May 2026 18:22:09 +0200 (CEST)
+Message-ID: <9b48e521-cabd-4b67-8770-2e76b189b405@rnout.be>
+Date: Sat, 30 May 2026 18:22:07 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260421185136.2577202-1-bernd@kuhls.net>
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Qais Yousef <qais.yousef@arm.com>, Romain Naour <romain.naour@gmail.com>
+References: <20260425211641.479665-1-bernd@kuhls.net>
+ <20260425211641.479665-4-bernd@kuhls.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260425211641.479665-4-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780157238; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=HXgI7lU5cw7rSfYjHQ2g5AQxdsKQaV0LGVYv/iLzv3A=;
- b=r9eQFEgANMPGYiBp+lExawLdQC7ImG4Faz6325dVZsPh1r1X/X+XSmeX62J/fA6fouFyJv
- YFWBIqmwpe418N0g5/bcz3YXY0KvI3CqyjrMF8ic/FXU28h23FOD/2D7KBjvmUjfcTuaf/
- NPDtcG6kPex1AfSDyFTN6xKIiprcR8BF63oebiZb7WpvQkK0Q7uyZlnl2as7ZQYWKNBUIt
- 1MuQJFUAWn8tCJ6ymwfcDcYtFqgKO27wNEc9VPHHOUsqoRlvxjNXpQCcentEWXYL044JwA
- 1/QZB+0uQbnbpa+MPB3QZS5dWIAfiGx2CW88HEpT/M4Mr8LvBI2Q+fodKchoTg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=rnout.be; s=dkim; 
+ t=1780158130; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=XtX/lEtr3UOUp8t/rR4mkBw3W0m9qbpsY8dTGNfswV0=;
+ b=QemOqebqTA0WyntSxsQwvG7HBil7j3slHhAtqeV5genux3NbRRxuh6t7e4RzrbIhURtNeF
+ N0TJL7IyFHpyAxlo8cPISYjg6p5CaAK99qWIsh7ECUHzXa8vvrALhcr840Wj+e3x4IqtcW
+ FLgqIJxYrHHWDXiheds5M9nZN5ZDMQPFR8kVaenby/CsMm8EZdbo/Tf/sZrYtiL3FPjLps
+ SOfNVhtoFAEkFjc+eUT/MBvhxEyT7wzGcwSRvHKDU6vNTMbx0f8++5vqIVYWFt8owgLEhJ
+ l1h9X3rhsV/e3bxyyuofYY/BrH8W8o9PJqpK9ubDycq8nSUrtBG/MlfgKr0iiw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=r9eQFEgA
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/gettext-gnu: bump version to
- 1.0
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=QemOqebq
+Subject: Re: [Buildroot] [PATCH 4/8] package/libbpf: fix bpftrace build with
+ kernel headers 5.{9, 10}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,48 +90,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
 
-On Tue, Apr 21, 2026 at 08:51:36PM +0200, Bernd Kuhls wrote:
 
-> Since upstream version 0.25 installed m4 files were moved from
-> /usr/share/aclocal/ to /usr/share/gettext/m4/:
-> https://lists.gnu.org/archive/html/bug-gettext/2025-05/msg00041.html
-> https://bugzilla.redhat.com/show_bug.cgi?id=2366708#c10
-> Added corresponding _AUTORECONF_OPTS to dovecot, libfuse & linknx.
+On 25/04/2026 23:16, Bernd Kuhls wrote:
+> Buildroot added the bpftrace package in 2024 with commit
+> 338acb27ff3e07560290085d7c6a2feab633c869
+> which initially provided version 0.19.1.
 
-Aside from those 3 packages, how much did you checked whether other
-packages might now need this explicit path to /usr/share/gettext/m4 ?
+[snip]
+> diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+> index 65061a82bc..cded3734b4 100644
+> --- a/package/libbpf/libbpf.mk
+> +++ b/package/libbpf/libbpf.mk
+> @@ -18,13 +18,14 @@ define LIBBPF_BUILD_CMDS
+>   		-C $(@D)/src
+>   endef
+>   
+> -# bpf/bpf.h installed by libbpf uses bpf_iter_link_info that was added since
+> -# kernel 5.9, so we need to update some uapi headers in STAGING_DIR if the
+> -# toolchain is build with linux-headers < 5.9.
+> -# Otherwise bpf/bpf.h is broken due to out of date linux/bpf.h installed by the
+> -# toolchain.
+> -# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a5cbe05a6673b85bed2a63ffcfea6a96c6410cff
+> -ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9),)
+> +# bpftrace uses variables from bpf_btf_info that were added since kernel
+> +# 5.11, so we need to update some uapi headers in STAGING_DIR if the
+> +# toolchain is build with linux-headers < 5.11.
+> +# Otherwise bpftrace is broken due to out of date linux/bpf.h installed
+> +# by the toolchain.
+> +# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=5329722057d41aebc31e391907a501feaa42f7d9
+> +# https://github.com/bpftrace/bpftrace/commit/fea31939899db48fa6d28f5ce880bfc39250ec9f
+> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11),)
 
-> diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-> index d67f010093..8402429d8a 100644
-> --- a/package/linknx/linknx.mk
-> +++ b/package/linknx/linknx.mk
-> @@ -9,6 +9,9 @@ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
->  LINKNX_LICENSE = GPL-2.0+
->  LINKNX_LICENSE_FILES = LICENSE
->  LINKNX_INSTALL_STAGING = YES
-> +LINKNX_AUTORECONF = YES
-> +LINKNX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/gettext/m4
+  I think changing this based on what is done in bpftrace is just pushing the 
+problem forward. I think the proper approach is to use whatever version is in 
+libbpf - that way you can be sure it's OK for _all_ users. You can find that in 
+CHECKPOINT-COMMIT - currently it's 6.17 and after the bump it becomes 7.1.
 
-This change is weird. What are you adding AUTORECONF = YES? If this
-package does not need to autoreconf, I suppose it doesn't need the
-custom autoreconf opts?
+  There should also be a comment in there that explains that it should be 
+updated based on CHECKPOINT-COMMIT.
 
-Thanks for your feedback!
+  Still, this patch series is progress so I applied 1-6 to master. I marked 7 
+and 8 as Changes Requested.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+  Regards,
+  Arnout
+
+>   LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
+>   LIBBPF_POST_INSTALL_STAGING_HOOKS += LIBBPF_FIX_STAGING_PC
+>   endif
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
