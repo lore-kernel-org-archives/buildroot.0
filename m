@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 307A0CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2417DCD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 020F56089A;
-	Sat, 30 May 2026 22:10:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7B27615F4;
+	Sat, 30 May 2026 22:14:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOasz2E5bNPo; Sat, 30 May 2026 22:10:39 +0000 (UTC)
+ id e8Y9aAJQPNab; Sat, 30 May 2026 22:14:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D21B6089F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0112861658
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780179039;
-	bh=5lifsw+4z6ugJrWKkFhGSSiYFgHBhypWaBJ8bSOemGk=;
+	s=default; t=1780179274;
+	bh=cpp3NH0gEMfrOUtm+hWaECMraU8oeaptfV65xPgNSBA=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=PCpEakEsxomPZXcojKixba1KTc7NLs8b7jMT+wNC0SVMJH4ltmMR5S8Qg6zBh3Keg
-	 TaPabac+4iDZ2ZELUXEqLkKVW7L4cInx/Exf/uUWc/087rxMpK6hsTGsGIyQGI02tE
-	 8FIYkNeGgG9corKs6wA/2dqnQX28AeTQyDiXe5bjpIUtOdu6VGqgkUEcfXQ2OdCAWH
-	 1DWjEnTpe4ajZ16bvH7W7RUZfC/ftm9XfyCxIIE5dZEvJoqZdLqFYUlmDH9Jpbp5lT
-	 rhwY2IRpjW/B38Ix1DkF3CKQZyZ53xClmwlBaY6Q3okN/mlKFfAzt2Sr4g6hfXKVa5
-	 blPoZ2CLkz+eQ==
+	b=KiwcRTXByqQAlJ86lefB+qbbEVVF2x3kg7IM8PZ3VR1ikx1ZnNUuWuSTfaTbDDksA
+	 LDT4cW8lXsFsXIPuJnEcbW4m5oFl9Hxn5uqSksAiE/MfGeVnYfgFtOsFr/QmTzwvia
+	 wlDsjSxBInDlADibKhVA8KpK3apllJzMqJtti33VQeaPoQZNDKNArgRzV++OolJVKP
+	 JV9KVR6g3H8QWxWYHjMWAX1phcTOCOhd6/l6HYwNXnCtvZHgJl6qsJyj8FnXBQK/nq
+	 VkflBvopj69uWOEU+6ub+Z91A3wdRtmcvloEePr/WPqiHF6Tw2+hWXBTQM88j3DzQk
+	 fExKPNXHfIgqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D21B6089F;
-	Sat, 30 May 2026 22:10:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BEB4AF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:10:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0112861658;
+	Sat, 30 May 2026 22:14:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 563AAF4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B09606089F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:10:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4473C4014D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:14:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GWlnU_5U0Hj0 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 22:10:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SOvZQY_T4t9V for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 22:14:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C0AE56089A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0AE56089A
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0AE56089A
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:10:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3274F4010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3274F4010F
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3274F4010F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:14:31 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id E2AB8C6246A
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:10:34 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 088DB4E42DA5
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:14:30 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 809676073B;
- Sat, 30 May 2026 22:10:33 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 9F1496073B;
+ Sat, 30 May 2026 22:14:29 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 94E1A10888CC7; 
- Sun, 31 May 2026 00:10:32 +0200 (CEST)
-Date: Sun, 31 May 2026 00:10:31 +0200
+ with ESMTPSA id C699110888CC7; 
+ Sun, 31 May 2026 00:14:28 +0200 (CEST)
+Date: Sun, 31 May 2026 00:14:28 +0200
 To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <ahtflblRB-XoMzK1@windsurf>
-References: <20260412182023.96383-1-chakrabortyshubham66@gmail.com>
+Message-ID: <ahtgsypO31LpWfYa@windsurf>
+References: <20260402152156.653017-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260412182023.96383-1-chakrabortyshubham66@gmail.com>
+In-Reply-To: <20260402152156.653017-1-chakrabortyshubham66@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1780179032; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=PxYVsW49V7bsUUYrWw+xx2cIAdnNhh2o8kjUzsaV+RI=;
- b=k/XRXxRi2ktyJReTc/3ZVz4vgYZEMbhvqEGz6YUywee/kLXO5dhSsfS9OTsexdSqGkxtdh
- N4bC4PMmGgeMi83L8XcGM/PUDPjliLUnC54iV/ALxTluTt1lvylitsVI4WFIpUphL2ngFY
- Z/E35rqrD1c7x1JlTI43DJ5UL1mttMldND3zYdMwR61ruH+9Cu61qotD0TvEYwmFLEUPg7
- rHxweLtuAne/JNrXgmy1XzNbLiEyLx9dwUits0ZzqjHACRiP6rVv4gVhsN6hPatAFJO6F4
- V3ycNrDzwIyL7AEQQ/IaEA/gThSa7Xi12zvNGkZ7qHnIyzJKiahC1xNgn3Gb+g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ t=1780179269; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=mfuXR+QOGZetFgnq5FqyuvgvvMksB3wy9tJbC5NnlHA=;
+ b=mhZpQsuAUSl2Ba+zrh+GQMQ5vr5oK8fpGfdmETZNcAwEvOjYbmLiFnMvK5qwgZqCWsk4YO
+ p0Lof608gQpCPC1WT5sXMJC35LYUh1h99Op9tV6I7Z7fkP15xqFlXn/KbfhAmrq/famvdO
+ vOqiav8EZJxtechfYhbnwI7YvdGdtg6uZjOm2PNUvJozVCr7jo/JTiYh6FWNU+7+j2AsQ6
+ uaIugxUpAbFWmM1hqS/MiwVNvn6kHUuAv0NpiCwRoVN25MGhsVWYWaPjmslAjGGDg/fKMq
+ uAo5xqP6HmPo5JXBP9n7+1/nteDes25KRz48mRlp85++1nbVFx9zMhAi503X0w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=k/XRXxRi
-Subject: Re: [Buildroot] [PATCH] package/bash-completion: bump to version
- 2.17.0
+ header.a=rsa-sha256 header.s=dkim header.b=mhZpQsuA
+Subject: Re: [Buildroot] [PATCH] package/ncurses: improve EGREP detection in
+ configure script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,45 +102,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Apr 12, 2026 at 11:50:22PM +0530, Shubham Chakraborty wrote:
-> - Enhanced smartctl completion support
-> - Added recursive directory handling improvements
-> - Fixed rsync/scp/ssh file type handling
-> - Improved BSD compatibility for rsync
-> - Fixed chgrp completion typo
+On Thu, Apr 02, 2026 at 08:51:55PM +0530, Shubham Chakraborty wrote:
+> Building host-ncurses fails on systems where a non-standard 'ggrep'
+> script is present in the PATH (e.g., from Android build tools).
+> The ncurses configure script picks up 'ggrep' because it searches
+> for it before 'grep'.
+> 
+> The existing check for EGREP only verifies the exit code of:
+>   echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+> 
+> The problematic 'ggrep' script returns 0 but does not process stdin
+> correctly, causing it to be selected as a working EGREP. This leads
+> to failures later when the script is used to extract version numbers
+> from dist.mk, resulting in:
+>   configure: error: Release major-version value is empty
+> 
+> Improve the check by verifying that the output of the test command
+> matches the expected value 'a'. This ensures the selected tool
+> is a functional grep.
+> 
+> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> ---
+>  ...-EGREP-detection-in-configure-script.patch | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+> 
+> diff --git a/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+> new file mode 100644
+> index 0000000000..e43fd737cc
+> --- /dev/null
+> +++ b/package/ncurses/0001-Improve-EGREP-detection-in-configure-script.patch
+> @@ -0,0 +1,43 @@
+> +From 8fb8ef42710bec224ea4cd8940007d6c85268f0a Mon Sep 17 00:00:00 2001
+> +From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> +Date: Thu, 2 Apr 2026 20:33:10 +0530
+> +Subject: [PATCH] Improve EGREP detection in configure script
+> +
+> +The ncurses configure script searches for ggrep before grep. To verify
+> +if a found grep works as an extended grep (EGREP), it currently only
+> +checks the exit code of the following command:
+> +  echo a | $GREP -E '\''(a|b)'\'' >/dev/null 2>&1
+> +
+> +On systems where a tool or script named 'ggrep' is present in the PATH
+> +but does not behave like a standard GNU grep (for example, a specialized
+> +wrapper script that ignores stdin but returns an exit code of 0), the
+> +configure script incorrectly identifies it as a working EGREP. This
+> +leads to a failure later in the configuration process (e.g., "Release
+> +major-version value is empty") because the tool fails to extract
+> +information from source files like dist.mk.
+> +
+> +This patch improves the robustness of the check by verifying that the
+> +output of the test command matches the expected value, ensuring that
+> +the selected GREP actually processes input correctly.
+> +
+> +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> +---
+> + configure | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Where does this invented changelog comes from? Seems like a vague
-summary generated by AI. Stop using AI to generate Buildroot
-patches. We will reject all your patches if you continue to spam us
-with contributions generated by AI.
+This patch is wrong for two reasons:
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9e9c8a5a0f..9b123af415 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3062,6 +3062,7 @@ F:	package/wolfssl/
->  N:	Shubham Chakraborty <chakrabortyshubham66@gmail.com>
->  F:	package/ccache/
->  F:	package/hyperfine/
-> +F:	package/bash-completion/
+- You are patching configure, you should be patching configure.in
 
-Alphabetic ordering is not correct.
-
-> diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
-> index 7e952e5b02..294ab65a2b 100644
-> --- a/package/bash-completion/bash-completion.hash
-> +++ b/package/bash-completion/bash-completion.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  73a8894bad94dee83ab468fa09f628daffd567e8bef1a24277f1e9a0daf911ac  bash-completion-2.11.tar.xz
-> -sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> +sha256  dd9d825e496435fb3beba3ae7bea9f77e821e894667d07431d1d4c8c570b9e58  bash-completion-2.17.0.tar.xz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-
-Changes to license files must be explained in the commit message.
-
-But again: stop using AI. Focus on quality instead of quantity. You
-are burning limited and precious maintainer review time.
+- You did not submit this patch upstream
 
 Best regards,
 
