@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB32ACD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527DDCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FB8B6F5AA;
-	Sat, 30 May 2026 21:27:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17304853E6;
+	Sat, 30 May 2026 21:27:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y6zabcto1ejy; Sat, 30 May 2026 21:27:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TsAxKbsGVWRK; Sat, 30 May 2026 21:27:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2768B6F576
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36D7F8544A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780176447;
-	bh=q+kgdhuVa6MHIkq9DMTT67kEfQsUs0dl+Esn6boHohM=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pIFWcPRCxDvsHGjj268bKdJDYmiGuihnxJvBejbCVA8X+vUO/JhyZUVTnI+uJerOs
-	 leeMce/3XHFOWVUyNH1QupBFSZRkeTAvkGnwey3vYc9KSxYl3EGTB/Y9AR8Gca5TQs
-	 F7Rt+Fn7MxMzZnmTUFP+rPmcvzoyRgYsuiSvY3ZuhLEB2DTVGU/6f82KBFZtZs61Uz
-	 3xg1XYqJK2dMuxKIZ/Yb/y1vOIgjSD/F0wnWhrp8ijUAcLC7ryxXF+Y2D/wY6Y9OWY
-	 gd+iTtbPfL7DOEoivrxTAy+kdsksJG3Y5mvay3qZJfy+tOAShkv7yRUPxynFbQqWyJ
-	 OtWY9jntCs/nQ==
+	s=default; t=1780176476;
+	bh=PDzRiXzoedcyaPmTQyyzmZuFEcS1pJh9dnc/mTAgDv8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=i+zb/p5hh4Aa3sg2R/fS+X9h1N6YN224pDCWjSiPjZBTHMY5ezA8wLkyvv4x8Mnjr
+	 lOJUFAYzym4e92bsWSuAvPdlA5BYunVNjWEKRF80bK0rPdUkxU7cI7pY+eAeEzuqTJ
+	 vg7ic8YZ/cSVB/EuGL5rC1p2JNW8NFxgqOqpYUS7yOnL30VsbW1tPA8lAe37fsCYQ3
+	 Fr6Vw+jX9U2hkaRgQRT4BRKQn50v+1whOJtRwabPKpaSNs4SC7832iOH2UU/w7Qsnj
+	 zNEGtfFBKx+dC79E3+c6rpueqmqpCf4k5j/Lxfadd31BmnWFGpjDlEf9+Ee2WgUmpb
+	 8CgnqkDM9rSbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2768B6F576;
-	Sat, 30 May 2026 21:27:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA14D12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36D7F8544A;
+	Sat, 30 May 2026 21:27:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B6CB9F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFF2D6F576
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A82BC42F50
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id miPaGG9WWRao for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:27:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pMbDxcPCcD9h for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:27:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DC7D461B48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC7D461B48
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DC7D461B48
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:24 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id B9ADE1A3755;
- Sat, 30 May 2026 21:27:22 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 858D06073B;
- Sat, 30 May 2026 21:27:22 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 33DED10888CC7; 
- Sat, 30 May 2026 23:27:20 +0200 (CEST)
-Date: Sat, 30 May 2026 23:27:20 +0200
-To: Daniel Houck <Software@drhouck.me>
-Cc: buildroot@buildroot.org, Chris Packham <judge.packham@gmail.com>
-Message-ID: <ahtVrc-CD9fLtDgO@windsurf>
-References: <20260508235516.3028284-1-Software@DRHouck.me>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260508235516.3028284-1-Software@DRHouck.me>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780176441; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=UZO0g4GaqUrtjudrv3QlrJD45dSdONLBLWzwGpHpW84=;
- b=TDk5ZYgOntTbiEPDF+HpZBdW2Eo3ORU/panVuvUzt+43UsoPOuzen7hb71uKnppTlzu+sV
- miecK3nDLJpoo5HDg0gge6AtqMh6cDYlnJkfmZ7OunrBsY7W/kgSWwhraWAPUgF5+sMWxr
- 2mTyPB7m69xFMaiif6hvY1yOLxH+YsSoC1f5xeB6qGm7fmNTgVai0Fs2wfH2/Nb+AGiIoS
- 6xsbqx4ijs0Ga9uJNVIsQ5g1Vc/Hy6Redrp2v/mbcjI1EPs/NWEblc8GO5HBDP2oh4DU94
- 4bCXuRjG38tQ/jaOh9o32JpGUht7Vr1/rL6gEnSt9h91/FlmiuyFrc2t0CZXaQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=TDk5ZYgO
-Subject: Re: [Buildroot] [PATCH 1/1] package/micropython: bump to version
- 1.28.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBB5B42F33
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBB5B42F33
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:27:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A6BD3875F1; Sat, 30 May 2026 21:27:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 23:27:33 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 8a26e08b3609e3d7114c17db7751d5bc356f3dd8
+X-Git-Newrev: 9a43bf6593aa981040e5ab91e69946af4fe0cee2
+X-Patchwork-Hint: ignore
+Message-Id: <20260530212740.A6BD3875F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
+ v0.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,67 +71,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Daniel,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a43bf6593aa981040e5ab91e69946af4fe0cee2
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Thanks for patch, and the very good commit log. Nevertheless, I have a
-few questions, see below.
+Changelog:
+https://git.linuxtv.org/libcamera.git/tag/?h=v0.7.1
 
-On Fri, May 08, 2026 at 07:52:36PM -0400, Daniel Houck wrote:
+libcamera is now using C++20. This minimal gcc version is increased
+to gcc-10. This commit also removes the gcc >= 5 requirement for
+the lc-compliance sub-option and the CXXFLAGS condition in the .mk
+file. Those are no longer needed. The Config.in comments about the
+required gcc version are also updated.
 
-> +if BR2_PACKAGE_MICROPYTHON_LIB
-> +
-> +config BR2_PACKAGE_MICROPYTHON_LIB_UNIXFFI
-> +	bool "micropython-lib unix-ffi modules"
-> +	default y
-> +	select BR2_PACKAGE_LIBFFI
-> +	select BR2_PACKAGE_PCRE2 # runtime
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcamera/Config.in      | 11 +++++------
+ package/libcamera/libcamera.hash |  2 +-
+ package/libcamera/libcamera.mk   |  6 ++----
+ 3 files changed, 8 insertions(+), 11 deletions(-)
 
-So libffi is only needed as a dependency when
-BR2_PACKAGE_MICROPYTHON_LIB_UNIXFFI=y?
-
->  # When building from a tarball we don't have some of the dependencies that are in
->  # the git repository as submodules
->  MICROPYTHON_MAKE_OPTS += \
-> @@ -71,7 +64,8 @@ ifeq ($(BR2_PACKAGE_MICROPYTHON_LIB),y)
->  define MICROPYTHON_COLLECT_LIBS
->  	$(EXTRA_ENV) PYTHONPATH=$(@D)/tools \
->  		package/micropython/collect_micropython_lib.py \
-> -		$(@D) $(@D)/.built_pylib
-> +		$(@D) $(@D)/.built_pylib \
-> +		$(if $(BR2_PACKAGE_MICROPYTHON_LIB_UNIXFFI),--ffi,--no-ffi)
-
-If yes, then this change is not needed. Indeed:
-
-ifeq ($(BR2_PACKAGE_LIBFFI),y)
-MICROPYTHON_DEPENDENCIES += host-pkgconf libffi
-MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=1
-else
-MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=0
-endif
-
-will continue to bring libffi as a dependency if BR2_PACKAGE_LIBFFI is
-enabled.
-
-> diff --git a/package/micropython/collect_micropython_lib.py b/package/micropython/collect_micropython_lib.py
-> index 8dce78337a..5fb74787a9 100755
-> --- a/package/micropython/collect_micropython_lib.py
-> +++ b/package/micropython/collect_micropython_lib.py
-
-Could you perhaps improve a tiny bit the commit message to explain the
-changes being brought to this script?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 15812a0e2f..74b861b4c1 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -9,7 +9,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR # gnutls
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3 # clone3()
+@@ -97,22 +97,21 @@ config BR2_PACKAGE_LIBCAMERA_COMPLIANCE
+ 	depends on BR2_USE_WCHAR # gtest
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gtest
+ 	depends on BR2_INSTALL_LIBSTDCPP # gtest
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # gtest
+ 	depends on BR2_USE_MMU # gtest
+ 	select BR2_PACKAGE_GTEST
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  lc-compliance test application
+ 
+-comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads, gcc >= 5"
++comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		!BR2_INSTALL_LIBSTDCPP
+ 
+ endif # BR2_PACKAGE_LIBCAMERA
+ 
+-comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8, headers >= 5.3"
++comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 10, headers >= 5.3"
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index e00e1257ad..d1d7576533 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9e684bfcb8679e5e7ec7fb0da9dec68e71f0b75a6b0c8edcd892b26a92726a92  libcamera-v0.7.0-git4.tar.gz
++sha256  7c5728f6a51d717542cfdd2ff368ac78fa2e50e8a7360a38bb37952e9293e008  libcamera-v0.7.1-git4.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index e8f502b253..945207888b 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.7.0
++LIBCAMERA_VERSION = v0.7.1
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+@@ -41,9 +41,7 @@ LIBCAMERA_LICENSE_FILES = \
+ 	LICENSES/Linux-syscall-note.txt \
+ 	LICENSES/MIT.txt
+ 
+-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y)
+-LIBCAMERA_CXXFLAGS = -faligned-new
+-endif
++LIBCAMERA_CXXFLAGS = $(TARGET_CXXFLAGS) -faligned-new
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAMERA_PYTHON),y)
+ LIBCAMERA_DEPENDENCIES += python3 python-pybind
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
