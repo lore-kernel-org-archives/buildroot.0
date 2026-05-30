@@ -4,84 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8A33CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 824F1CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 844956F595;
-	Sat, 30 May 2026 14:02:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3744560F2F;
+	Sat, 30 May 2026 14:17:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HE86S8SjtT8; Sat, 30 May 2026 14:02:20 +0000 (UTC)
+ id tOKIZ7hQ6_Uu; Sat, 30 May 2026 14:17:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD2B86F4F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7444460F36
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149740;
-	bh=2Ak5AuAVuymTP5zewCyXj+4LRlSmU55Sx5LGtUZmC4A=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Q7YuGwvjWAv+sdkQ4uoz8AnWZs8zav8qjvv1e9nBpzoR4n1e2zrfCaPZ/gI9NdF9l
-	 4MNZ2axjiGUPz6+g6tq5fEWfPUHEl6iVyu5blb4f40QiNkaPLoGrA6TuAlh65HtwRj
-	 6TBd5pgm5R2vkPzn6jt+tNGPpK2/yFoOMtn2mR6bkJNZGRFroTWhmY0NXKV/FFNWWX
-	 t+baie3ojjIFoaXsEbFYnwtabKrKCaHpyKcqHErMSsGlZyTNvsQX/NjjY0DdzhtOjz
-	 IF9RH/jnwA6wois1Mf9xGy6P8R0tUXHfbQsin3t4oKgcr5W5P/eqQXJO3+7zB2hgbT
-	 zUrqts6BSyxeg==
+	s=default; t=1780150648;
+	bh=4R4g97t1ox7IeyjNjAM6mamsf8p5ZHoRj6egYBavo38=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Lbkx9Zx//fiEhaUoaZqJx0lIijJA85CSgi8gpm54ZAePelnS8vIer/g2Z63MBWJEk
+	 5iZYVeySqxq1XD3H8WexcCXtNfn7B2kxkv9Z2RMvixg1pc8ofH0CvBuRvNccOBxUeI
+	 7B05RQg2seW0Lh0xiWxp60ugsKqvP1AoNVJHzWCAqMDO6ymJVODjIYQnfOUy5p9LCM
+	 Mdlp3RDr7GWJX9cAH7ENLo/FqH7dua7zP0WOqVTgySNZ9J6JpjR0toPiuBywHbMGTN
+	 uI+7C3eV+yuLTEPWKFQZ84kQLNxvxRbSnLcILVqOWdhXak3sVoKshvMHYkKFeGTDz6
+	 5ZipBluRcR7TA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD2B86F4F4;
-	Sat, 30 May 2026 14:02:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 452B7F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7444460F36;
+	Sat, 30 May 2026 14:17:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 038A6F4;
+ Sat, 30 May 2026 14:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3699540D70
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DDD2D42ADA;
+ Sat, 30 May 2026 14:17:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CeNHJj3WZAXI for <buildroot@buildroot.org>;
- Sat, 30 May 2026 14:02:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0186740D54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0186740D54
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0186740D54
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:17 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1407742718; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 30 May 2026 14:02:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wTKGO-00000005HMB-31WQ;
- Sat, 30 May 2026 16:02:08 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260530102749.608157-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 30 May 2026 12:27:49 +0200")
-References: <20260530102749.608157-1-bernd@kuhls.net>
-Date: Sat, 30 May 2026 16:02:08 +0200
-Message-ID: <87o6hxm1wf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ id r4nkvccIY2od; Sat, 30 May 2026 14:17:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 28E3942AD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28E3942AD8
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 28E3942AD8;
+ Sat, 30 May 2026 14:17:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 31849B97C654; Sat, 30 May 2026 16:17:24 +0200 (CEST)
+Message-ID: <54dbbc89-59d2-43d1-a60f-77b1d48f828e@rnout.be>
+Date: Sat, 30 May 2026 16:17:22 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Cj1MFdEugfGJkF4VpMAvrepoKxEihNTGxX2qYc+uIzgXWDsU1+zEHyebHICjwg1Mp49NbQZf/bohFwHfvPEIjMl2BiQh+BkQhvo/aLzpKyuDLp1A0cuaUHNm14xRCUTTiDnJUDa3PHnJrqAvGfSuPXdJZPyJZUr+4pQkGi7fWYDTUga5RIa/Vhc3/a3A7LB9EMO8ZCJlM1LOQnbQCCn9uH4lVzr8u9U4ZZbmRZpIfDBSHdXibj1O/1iYBgANBkFcWmvQdq21H0p9f3vJAbJxf3FwYGfdawwg7yprjgUhGJ5yyW8yM6lC2iKXw0Ep5qiyjjQqKKZ/kzVciaEqCVTzXA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=rl6dZCaDOLvHETfxMZ5NP7puc6By7SFFt2wPfB3mKfo=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB, fr-BE
+To: Buildroot Mailing List <buildroot@buildroot.org>,
+ ML_BuildrootUsers <buildroot-users@buildroot.org>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1780150644; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language;
+ bh=boEvEueO8my1he29bwZ8FmaUjWPXAupGq/tKSEJWv4I=;
+ b=j7jzUDn29hKjzV1QajTKS218ZwY1aLtwW2dsq1NjD23Afu+B7iGqAqP7ivahh5odDhZPiL
+ MqMG/RYuLO6Y8vX0XF0csCBjnjKm6W61xXBFLP3pJMhSgGrR65sfjwra5vK3VKLALZvFWJ
+ 0uvnduO0XfHCNvOmOfXCo0Z8OcmotAboa9f88X8PdRtsIUu4RXmbCUjn2xPxCJJfiUnXSl
+ 5KEccoAbFN/UTVbjXqLEa+0fiNEeQmGb1+EsYPJa67KjoQBudKCDpIld8U6MmE29SWViSC
+ TMEkKSUnjxPHZ1ZW5WpCNWROIWBMQCSNOvNh5GKX5SH+82g/rEZsue0GUHU0uw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Cj1MFdEu
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/collectd: fix wchar
- dependency of mariadb
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=j7jzUDn2
+Subject: [Buildroot] PSA: old 20aa.bb.x branches removed from git server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,41 +84,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+  Hi all,
 
- > Fmt depends on BR2_USE_WCHAR since its introduction in 2017 by buildroot
- > commit 81fe75c855f9a598695f83b7384713820383efe4.
+  We performed some cleanup activity and removed all old stable branches from 
+the git server. Their commits are still reachable through the release tags.
 
- > Buildroot commit 821f9dee8112dc02fe58d60273d0dfdabbc46d1f added fmt as
- > dependency to mariadb in July 2023, including the wchar dependency.
+  Some of these branches didn't have a tag at their tip (i.e. we added some 
+commits to it but never made a release for it). For those, we added a tag 
+following the normal pattern, but a non-annotated tag and without release 
+announcement and download etc. So also those commits are still reachable.
 
- > Buildroot commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 from March
- > 2024, which replaced the mysql virtual package with mariadb, causes
- > build errors due to the wchar dependency not being propagated.
+  Regards,
+  Arnout
 
- > Fixes:
- > https://autobuild.buildroot.net/results/ef2/ef201a7d04330463ce46b93e6d5702dfefc6ad6c/
-
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- > v3: Gitlab pipeline passed:
- > https://gitlab.com/bkuhls/buildroot/-/commits/ea3608057a7d9d9381810aef18b83cab4a7a7157
-
- > with the exception of bootlin-riscv32-glibc and bootlin-sparc-uclibc
- > where build errors in mariadb occur that are unrelated to collectd.
-
- > v2: updated patch description, git-formatted patch and pointed source
- >     URL to versioned git tree
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
