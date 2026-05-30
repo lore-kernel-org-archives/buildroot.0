@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8874ECD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AEBBCD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5796B85024;
-	Sat, 30 May 2026 21:46:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1CF1850E5;
+	Sat, 30 May 2026 21:50:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tO9JfJeJZVBM; Sat, 30 May 2026 21:46:13 +0000 (UTC)
+ id dxorqhFLsBJz; Sat, 30 May 2026 21:50:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE3458501D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45B78850D8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780177573;
-	bh=txF2G7r1q34q8D7m+G9DQI0Kscpcw68IwvOFJXg8Xyg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=obmz8aa8vEZoTze6uIEucMROME6d0NXAEaYGOKKxqjzIzyDMJhGrwB1tmTdRqPIpm
-	 smcde8dlpSjYoIslpCNSgA3kKMPLTJnCuiBJi6HvdQzqo9uGJb348jkjW0ejUAY1KE
-	 zX9MshrXToW+I6k6ofd3kuRego3YGU1k3M4rtbkNsERpFVp/dXoGsWHUxLuSVDajrz
-	 4jdmghMsDBfLvPJHu8AxNjoyaoyzvW4En/M2who7zAoVqgihKbP/Lb/+zQB42qkcL/
-	 NxqtTsr2Aj9GHbyxTV7dBdT/5GpdkKRQ2x5B+3W4fn9bh/KZd0jcyBkLNBJj/8OTAr
-	 F+Pa6VAyg0RZQ==
+	s=default; t=1780177825;
+	bh=kPQSGNrKMiK8bb/y9Vtvq8OTxXAQl5FmHidRUq/E1ag=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=cpREyj3mAfb4M5DLe42VpRe8YTRQGht3+QkJHdy9SA7VPND3b5saf2lRtFO+kiKCI
+	 shNPXQL1QGbiqqQV4Xh047u9qszHPqOrBGMSMPyo/8bJ/xEd3qBI4/KJfrASm34G8v
+	 6ZVYODtRzxu/Ie++FGWg75xPVZbBcboDHoLUz3bVo1o6NFyr+zHcZga8CXcZQ6FQC0
+	 OgDhxvlqK1uk8rb+WT8eZlz8fJzlQ3AO1SmC0YSO0vrzqSXVbWrliec1ItCAy1zBW0
+	 yT9u4ARwvbBHMz4fYE9e+VUYq2fruunWqKqw0fZoJcDKwc3tUw15o5Hx22YuUzFza2
+	 0iOrwlebHrzHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE3458501D;
-	Sat, 30 May 2026 21:46:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 23D0EF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:46:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45B78850D8;
+	Sat, 30 May 2026 21:50:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA3B1D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08F6A8501C
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:46:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBF4940225
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uFeeydxK484Y for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:46:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wbqKK6I3BIgE for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:50:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5368385014
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5368385014
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:46:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 167838762A; Sat, 30 May 2026 21:45:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 23:45:58 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c58fb5f97b7cc6177c1ac675467f0ec43de44b8e
-X-Git-Newrev: 35f52c7dc55898eaf063ff5782f3e17e8b228f99
-X-Patchwork-Hint: ignore
-Message-Id: <20260530214558.167838762A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qbee-agent: bump
- version to 2026.19
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A079C4010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A079C4010F
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A079C4010F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:22 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1963638310; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 30 May 2026 21:50:18 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wTRZQ-00000005oGn-17tr;
+ Sat, 30 May 2026 23:50:16 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20260426071710.363519-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sun, 26 Apr 2026 09:17:10 +0200")
+References: <20260426071710.363519-1-bernd@kuhls.net>
+Date: Sat, 30 May 2026 23:50:16 +0200
+Message-ID: <87cxycin3b.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=hZRE3mWGn6niNy0hZPG7UnChu+QmxxLaNaoWdJdTfz/o/YXKlzRVLZmtR9PhXeqsZ2DUUzrlYiCBbeHRP/sRXq5Od6dV6cOUXTdw/W3SeDLXRxyp9595WhHrsPDCqVgJFmeLJv3+WK6WrnqjoF/Ov7iWH2js46fg2kc0JOAxyfBM9YAGAHH260yU4okiBoBeAZujaxFhHT3oPvtSFcdgLYV6z6BYwXFCJ6bnuyVXnYjLth/6qfi1xjhlFXyIuud5DGZh+UTUyhs2ZiqlilfMBA3c6oBAeCxs9xT7VljD/kC/EKFMjtoQZd0yO7CFS9ZlH174uSxPiT7RMzzxwChK2g==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=nhX+5j1dEKFTjF47PMZAY+wf6qRnLwX0t6GehE03K9A=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=hZRE3mWG
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump version to 1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,64 +93,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6186499126290286747=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6186499126290286747==
-Content-Type: text/plain
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/35f52c7dc55898eaf063ff5782f3e17e8b228f99
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+ > https://mesonbuild.com/Release-notes-for-1-11-0.html
+ > Removed patch which is included in this bump.
 
-Signed-off-by: Jon Henrik Bjørnstad <jonhenrik@qbee.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qbee-agent/qbee-agent.hash | 2 +-
- package/qbee-agent/qbee-agent.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Disabled the usage of ccache in mesa3d with BR2_PACKAGE_MESA3D_RUSTICL=y
+ > due to upstream commit:
+ > https://github.com/mesonbuild/meson/commit/aac5f78580a3ea1cf0cae487cb46cab68a048660
+ > (bisected https://github.com/mesonbuild/meson/compare/1.10.1...1.10.2 to
+ >  find the offending commit, the same defconfig works with meson 1.10.1)
 
-diff --git a/package/qbee-agent/qbee-agent.hash b/package/qbee-agent/qbee-agent.hash
-index 2090d01692..2f7da1434f 100644
---- a/package/qbee-agent/qbee-agent.hash
-+++ b/package/qbee-agent/qbee-agent.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5f1ca733af596aebdec49c890b59e5406b4217e28da00e616b71706f7de98b87  qbee-agent-2026.10-go2.tar.gz
-+sha256  de72c9754f46d63c3d6dd286e4fa967c4b592c2679b172ff8ce9e7e6ae13a4d4  qbee-agent-2026.19-go2.tar.gz
- sha256  02d07d96be99eb042b01ba650079a440ce26a78c5e0e1e8060c33a8c9e200404  LICENSE
-diff --git a/package/qbee-agent/qbee-agent.mk b/package/qbee-agent/qbee-agent.mk
-index c4f891b0fa..ccbf7cab40 100644
---- a/package/qbee-agent/qbee-agent.mk
-+++ b/package/qbee-agent/qbee-agent.mk
-@@ -5,12 +5,12 @@
- ################################################################################
- 
- # keep QBEE_AGENT_COMMIT_ID in sync when updating
--QBEE_AGENT_VERSION = 2026.10
-+QBEE_AGENT_VERSION = 2026.19
- QBEE_AGENT_SITE = $(call github,qbee-io,qbee-agent,$(QBEE_AGENT_VERSION))
- QBEE_AGENT_LICENSE = Apache-2.0
- QBEE_AGENT_LICENSE_FILES = LICENSE
- 
--QBEE_AGENT_COMMIT_ID = cfeec991b97648aaecb894d4c9389ffde7711aa8
-+QBEE_AGENT_COMMIT_ID = 99a0b5a56bb0ae2d7dec29abcf25d29be16f2c36
- 
- QBEE_AGENT_GOMOD = go.qbee.io/agent
- 
+ > Without this change mesa3d configure is broken:
 
---===============6186499126290286747==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ > output/build/mesa3d-26.0.3/src/gallium/frontends/rusticl/meson.build:420:27:
+ >  ERROR: No build machine compiler for 'src/gallium/frontends/rusticl/proc/lib.rs'
 
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6186499126290286747==--
