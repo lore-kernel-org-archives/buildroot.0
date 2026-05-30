@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FDD6CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 08:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D269BCD6E4A
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 08:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B658840D28;
-	Sat, 30 May 2026 08:56:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46F2C42E22;
+	Sat, 30 May 2026 08:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jKiviqKOEf4f; Sat, 30 May 2026 08:56:18 +0000 (UTC)
+ id xOo4Ex7p3oKY; Sat, 30 May 2026 08:59:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C1740CBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD59440D97
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780131378;
-	bh=5Y4kwzKHJKzikliw9vCo30v2ly36lUNmAHY8mF18cX4=;
+	s=default; t=1780131588;
+	bh=Vwkain1Q5qE3lSbelFOkcO0NBnI7QUIFeDGuknR1s6g=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=fUo56wrTHtXK+VMAJ0mANiyLKnQ6LK8AgqjjEBzgdvB2iAiS80k51NzVep9u2IhX8
-	 gHf6fSrpLY2wcdpMdr81QOwxGx5nGBkXiBS1W2UerM0c+oy+zPHZXsXFvuukM7TNsx
-	 fUoFZJXEMJLFXdCoEhHsgw3j+aEHEhERQBYQ1kd7hmV1sHgaZ1xxx3N+juGBYzYca+
-	 k9ZjQEK2CB3ZYKf/qHRIiqaFidkldFSLs86TDvIIMVx4SNCDhMQ3NFkwR6jVVZQPyK
-	 NsvMjUPczlMtx4TN+XLZVM336Oo3OyZCn2P5b/eojda7cNcMJDmlI3qSCPAgiBC2OZ
-	 pf94KbqLeRACg==
+	b=Fi4rFkfhXGKUnQOdTok+uIF0gr22QiITtm7ct1BvLSE3SxTS20gvIlk9sCMtDr6UG
+	 zEbRzd3VOReMlP3cN4Fw3g2I0X2/u+2g0OSOwW8DGvMW6Gi1qcE++SWGn3YQuhDDVH
+	 KqKaU8NblDSkVCMI5rG9G2jIlaXEqP/+1nfJEf+daCmh1CSpUd+kwyKCj41lSvxc24
+	 Orwt/5Mli5AUNOK8XA/zDxgUNOQP3j45DXVT5yvtaVHlLh58cyyoy2kXJmKYZFqzkg
+	 m0egfFZ/u8tFdYrjlCeDKJnC9oc9HfHvQ5Gd9XiO4HiTRNRGFA1HKD0w21TWoiKO/M
+	 7+cM8MNp6/ZDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03C1740CBC;
-	Sat, 30 May 2026 08:56:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 350D1F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:56:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD59440D97;
+	Sat, 30 May 2026 08:59:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1784F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:59:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24B6260F6F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:56:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B08A940D97
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:59:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8NzAkktgEEA1 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 08:56:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id befz7ghLd8Lr for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 08:59:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18C8160BF3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18C8160BF3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9050040D35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9050040D35
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18C8160BF3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 08:56:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9050040D35
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 08:59:45 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -770797078; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1240658933; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 30 May 2026 08:56:10 +0000 (UTC)
+ Sat, 30 May 2026 08:59:42 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wTFUH-00000004jDO-17f4;
- Sat, 30 May 2026 10:56:09 +0200
+ (envelope-from <peter@korsgaard.com>) id 1wTFXh-00000004jVl-1MnP;
+ Sat, 30 May 2026 10:59:41 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Perale via buildroot <buildroot@buildroot.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,  Daniel Price
@@ -66,27 +66,27 @@ Cc: Thomas Perale <thomas.perale@mind.be>,  Daniel Price
  <danomimanchego123@gmail.com>,  Titouan Christophe
  <titouan.christophe@mind.be>,  Olivier Schonken
  <olivier.schonken@gmail.com>
-In-Reply-To: <20260529094514.178266-3-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Fri, 29 May 2026 11:45:10 +0200")
+In-Reply-To: <20260529094514.178266-4-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Fri, 29 May 2026 11:45:11 +0200")
 References: <20260529094514.178266-1-thomas.perale@mind.be>
- <20260529094514.178266-3-thomas.perale@mind.be>
-Date: Sat, 30 May 2026 10:56:09 +0200
-Message-ID: <87bjdx8edy.fsf@dell.be.48ers.dk>
+ <20260529094514.178266-4-thomas.perale@mind.be>
+Date: Sat, 30 May 2026 10:59:41 +0200
+Message-ID: <877bol8e82.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=TF4pN0SPmiMKYwJgwQ3zi6s3X9H4y6A1HxkqOwp6uvd+Eu9fA7fJ8gTrKBwLaGkXs9f2sY94a7Oq1QFcW51QJp/G9TKx4tKOYmXntgHSEHnYqWgRjLX/p4xR1wu5Nk2vaiIu02O/opMUu6OSbkenNKC5T2Bi/pJuXmX1B+f3TM486S17NinA4KnmppK5CJWaW/BwrgIYj1flpJ4D7deoghzicTTkFsgqE6QGG34igpGXh8/K20G+frgxokV+yQYTM1TdncwUNi/iHDo9pwrk74J8e358i3ahCfWsS38baDf4iYt3SfDVb8VrI7PXC5DgqdRIVjsHsnM67LbCpz37CQ==;
+ b=CfdiMUxnmE+Vcrew3nMDR3VOklYv4G7swwGQG0SqtXyhFRb4F2B/Dcuyb+ySdRtZGjZiMNV5v7Y91D7hXJ6VXvrD8lUBQfKISHAD7G2/VF7zAQCUZuykUQgo6WMqwFnHtNP/zVDuwP/HZvJSzUhwnHQBhz2N/QDsOWQi6c//yGR7MfdzcEZkBhN3Myyhvc/0K4gr7r3tFnrUAAo9AxEPz31+K/rd8DYh3/qN861UvmjHVZyDnHhXfDha5yATWHOmLOlE1Kxsm87SgUg9g+beIAejaxA7vpIFh4D8TuCC9H+dbPc55BECiuQWR13ccJbhyIDQm6l09JDbfDH2RU+klw==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=Hkgxh7spXfF5fFDoqRNCR4LKCH1Ptb81FvVZlfsfiNQ=;
+ bh=8U28L6g+obdzudskcKPh0zsNhgehA/INn5LFKyElBng=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=TF4pN0SP
-Subject: Re: [Buildroot] [PATCH] package/redis: update CPE vendor
+ header.a=rsa-sha256 header.s=purelymail1 header.b=CfdiMUxn
+Subject: Re: [Buildroot] [PATCH] package/cups-filter: update CPE vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,17 +105,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
- > The CPE "cpe:2.3:a:redis:redis:*:*:*:*:*:*:*:*" is valid for this
- > package.
+ > The CPE "cpe:2.3:a:openprinting:cups-filters:*:*:*:*:*:*:*:*" is valid
+ > for this pacakge.
 
- > See the GHSA [1] and the associated CVE [2].
+s/pacakge/package/.
 
- > [1] https://github.com/redis/redis/security/advisories/GHSA-c8h9-259x-jff4
- > [2] https://nvd.nist.gov/vuln/detail/CVE-2026-25243
-
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-Committed, thanks.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
