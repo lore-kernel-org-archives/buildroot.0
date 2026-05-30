@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4957CD6E52
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D02DCD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57B4C42EDB;
-	Sat, 30 May 2026 13:53:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2066F6F4F4;
+	Sat, 30 May 2026 13:53:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RalavjgXp7rO; Sat, 30 May 2026 13:53:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j6pVVQi3WIfd; Sat, 30 May 2026 13:53:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1143A42ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48EA36F5DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149184;
-	bh=xXXt075Jub848DhtKttqYim3hWkPNNS6zcjJK0ctPKc=;
+	s=default; t=1780149178;
+	bh=4NSgBQSkDtH7QjUMpIaOnri9xhxAujmH9Te+yNl5aCE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OEXMX+NthbHrwmtNWTwG3wsN5It7sst3f1PiXqNDm75w/FJlpsGAKWfVRMY29EiTm
-	 uOBXEN2kV9+QMS4UwzUbnpSs9kpZWWKwVyfI2aP4D5Qns1ImC1jvll3UYUQ9+gLGSp
-	 l866oL8leYVdfQNioBrzc0hcl7ZtZrtYvttU+AjDLYAexEDGBIO8A47+NPU4Tn8CYG
-	 qQ4OaRpiByWEaA7svSCJSdFOebnsjEPil6BMu/4mwU9zWCGV4ag1ZXX3WGxnb9KOsJ
-	 DAZUrLjpBC2kxcQ3CUayVRiOlX45zI/f5S0L0qyrfp+/9ewA7dAS2GGhwkLSlRhrDu
-	 78sKkAF5SJxTQ==
+	b=nkNPEigrDeQtBwDnOWtRW1xtAn2jgZ/GIrvMvM3uZLk3L//TbK4EJmQ/u0jPMPNvS
+	 lbQwrsldvPRILouryzYj04YGEAvPwRTEOfs8XEyLecwhLfSzFgYIxC53X8Vgtc8Mke
+	 6EKXMxoOVph9wLgW1nQjPlaJgHcWOzecNsKx6v1ffVczxgDxETkxHSWMD5fTGQu/eR
+	 iomiG1cvdyHCVtOi6+ezHCheTkQrzxqmzey8VqMg8o4d/JfbSf1dixF2MttdYq6b3n
+	 4b7fik0s8X9KN2eRfNvWCZ/k9METfEfXMPmMYFfk7hrkbW4nxwkmv+Ka26RQst4vYJ
+	 KnfdnRJGWhsEQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1143A42ED3;
-	Sat, 30 May 2026 13:53:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48EA36F5DC;
+	Sat, 30 May 2026 13:52:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05D3312F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12516218
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6552D42DC7
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5636F42D4E
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y6A73uuQtLST for <buildroot@buildroot.org>;
+ id U_UwLEWbTWPy for <buildroot@buildroot.org>;
  Sat, 30 May 2026 13:52:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D56D42E97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F6D442EA2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D56D42E97
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8F6D442EA2
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80A868750A; Sat, 30 May 2026 13:52:21 +0000 (UTC)
+ id 9213E8750B; Sat, 30 May 2026 13:52:21 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 30 May 2026 15:48:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d0e7bea04d7c38a0be8c321e79ab4517ebc06213
-X-Git-Newrev: 6106c2c21cc5b9157141c5fe0abeddf54c934e9d
+X-Git-Oldrev: 3a795fa19a752dfd9f04f2a848e04879abf638a1
+X-Git-Newrev: 44c7f9b2dd16ca3d78318a4036cc7237bcfcf2c8
 X-Patchwork-Hint: ignore
-Message-Id: <20260530135221.80A868750A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openjdk{-bin}: add
- OpenJDK25 and configure it as latest
+Message-Id: <20260530135221.9213E8750B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rocksdb: bump version
+ to 11.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,547 +77,553 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6106c2c21cc5b9157141c5fe0abeddf54c934e9d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44c7f9b2dd16ca3d78318a4036cc7237bcfcf2c8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-OpenJDK 25 is the latest release.
-See: https://endoflife.date/oracle-jdk
+https://github.com/facebook/rocksdb/blob/v11.0.4/HISTORY.md
 
-- BR2_OPENJDK_VERSION_LATEST is now set to 25.
+Removed patch 0001 which is included in this release:
+https://github.com/facebook/rocksdb/commit/53c8f739fd266bb9e755eccceea7adb4d5126083
 
-- Add version-specific patches for 25.0.2+10:
-  - 0001: Add ARCv2 ISA processors support to Zero
-  - 0002: Compile OpenJDK in headless mode without requirements
-  - 0003: Fix ambiguous cmp() overload in aarch64 macro assembler
-          (older GCC 6.x compatibility)
-  - 0004: Fix constexpr on non-literal type in Shenandoah GC
-          (older GCC 6.x compatibility)
+Added upstream PR to fix build error.
 
-- Add -fpermissive to fix template definition error with older GCC.
+Updated hash of README.md due to various upstream commits:
+https://github.com/facebook/rocksdb/commits/v10.7.5/README.md
 
-- Update HOST_OPENJDK_BIN_VERSION for OpenJDK 25.
+Switched build system to cmake.
 
-- Update the expectedVersion variable in JniTest.java from 0x00150000
-  (JNI 21) to 0x00180000 (JNI 24/25).
+Added configure parameter -DFAIL_ON_WARNINGS=OFF which converts many
+"may be used uninitialized" errors into warnings which fixes build
+errors introduced by the upcoming gcc version 16.x.
 
-Tested with:
-$ ./support/testing/run-tests -o ~/br-test-py/ -d ~/br-test-dl/ \
-    tests.package.test_openjdk.TestOpenJdk
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-[Bernd:
- - rebased on bump of versions 17 & 21
- - build-tested with gcc 16-snapshot]
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien:
- - add .checkpackageignore entry to fix check-package error
- - reformat patches with without numbering to fix check-package error
-]
+[Julien: remove .checkpackageignore entry to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |   1 +
- package/openjdk-bin/25.0.2_10/openjdk-bin.hash     |   7 +
- package/openjdk-bin/openjdk-bin.mk                 |   6 +-
- ...-Add-ARCv2-ISA-processors-support-to-Zero.patch | 109 ++++++++++++++++
- ...pile-OpenJDK-in-headless-mode-without-req.patch | 144 +++++++++++++++++++++
- ...c-hotspot-aarch64-macro-assembler-fix-cmp.patch |  43 ++++++
- ...hotspot-share-gc-shenandoah-fix-constexpr.patch |  42 ++++++
- package/openjdk/Config.in                          |   7 +-
- package/openjdk/openjdk.hash                       |   1 +
- package/openjdk/openjdk.mk                         |  10 +-
- .../openjdk/package/openjdk-jni-test/JniTest.java  |   2 +-
- 11 files changed, 364 insertions(+), 8 deletions(-)
+ .checkpackageignore                                |   1 -
+ ...-unused-parameter-when-Snappy-is-disabled.patch |  24 ++
+ ...d_tools-build_detect_platform-fix-C-tests.patch | 325 ---------------------
+ package/rocksdb/rocksdb.hash                       |   4 +-
+ package/rocksdb/rocksdb.mk                         |  81 ++---
+ 5 files changed, 46 insertions(+), 389 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 1e11ea4773..db2c321858 100644
+index db2c321858..9a06d5526a 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -701,6 +701,7 @@ package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
- package/open2300/0001-fix-makefile.patch lib_patch.Upstream
- package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
- package/openjdk/21.0.10+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
-+package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
- package/openldap/0001-fix-bignum.patch lib_patch.Upstream
- package/openldap/0002-disable-docs.patch lib_patch.Upstream
- package/openntpd/S49ntp Shellcheck lib_sysv.Variables
-diff --git a/package/openjdk-bin/25.0.2_10/openjdk-bin.hash b/package/openjdk-bin/25.0.2_10/openjdk-bin.hash
+@@ -829,7 +829,6 @@ package/restorecond/S02restorecond Shellcheck
+ package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch lib_patch.Upstream
+ package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch lib_patch.Upstream
+ package/rng-tools/S21rngd Shellcheck lib_sysv.Variables
+-package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch lib_patch.Upstream
+ package/rpcbind/0001-Remove-yellow-pages-support.patch lib_patch.Upstream
+ package/rpcbind/S30rpcbind lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
+ package/rt-tests/0001-Fix-a-build-issue-with-uClibc-ng.patch lib_patch.Upstream
+diff --git a/package/rocksdb/0001-Fix-unused-parameter-when-Snappy-is-disabled.patch b/package/rocksdb/0001-Fix-unused-parameter-when-Snappy-is-disabled.patch
 new file mode 100644
-index 0000000000..42892b1e6c
+index 0000000000..413473d35e
 --- /dev/null
-+++ b/package/openjdk-bin/25.0.2_10/openjdk-bin.hash
-@@ -0,0 +1,7 @@
-+# From https://github.com/adoptium/temurin25-binaries/releases
-+sha256  987387933b64b9833846dee373b640440d3e1fd48a04804ec01a6dbf718e8ab8  OpenJDK25U-jdk_x64_linux_hotspot_25.0.2_10.tar.gz
-+sha256  a9d73e711d967dc44896d4f430f73a68fd33590dabc29a7f2fb9f593425b854c  OpenJDK25U-jdk_aarch64_linux_hotspot_25.0.2_10.tar.gz
++++ b/package/rocksdb/0001-Fix-unused-parameter-when-Snappy-is-disabled.patch
+@@ -0,0 +1,24 @@
++From cfd448002d601159feab4908a616ae09c444b39e Mon Sep 17 00:00:00 2001
++From: Youngjae Lee <ls4154.lee@gmail.com>
++Date: Thu, 26 Jun 2025 21:51:03 +0900
++Subject: [PATCH] Fix unused parameter warning when Snappy is disabled
 +
-+# Locally calculated
-+sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-+sha256  75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33  legal/java.prefs/ASSEMBLY_EXCEPTION
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 819bf9052b..5f1922dea5 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -4,7 +4,11 @@
- #
- ################################################################################
- 
--ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
-+ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_25),y)
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 25
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.2
-+HOST_OPENJDK_BIN_VERSION_BUILD = 10
-+else ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 21
- HOST_OPENJDK_BIN_VERSION_MINOR = 0.10
- HOST_OPENJDK_BIN_VERSION_BUILD = 7
-diff --git a/package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-new file mode 100644
-index 0000000000..5cbc30ddd6
---- /dev/null
-+++ b/package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-@@ -0,0 +1,109 @@
-+From 86aee60f0457bd9716c4221da53bcd9d893359b3 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Mon, 18 Oct 2021 05:20:05 -0700
-+Subject: [PATCH] Add ARCv2 ISA processors support to Zero
++Upstream: https://github.com/facebook/rocksdb/pull/13732
 +
-+This adds ARCv2 processors support in OpenJDK via
-+"Zero Assembly Project" (see https://openjdk.java.net/projects/zero).
-+
-+That' a purely interpretive mode, so likely not that fast
-+as JIT'ed version, but for starters it's much better than nothing.
-+
-+Once all the logistical problems are solved hopefully this
-+change will be accepted upstream.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ make/autoconf/libraries.m4        | 8 ++++++++
-+ make/autoconf/platform.m4         | 8 ++++++++
-+ src/hotspot/os/linux/os_linux.cpp | 8 +++++++-
-+ 3 files changed, 23 insertions(+), 1 deletion(-)
++ util/compression.cc | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/make/autoconf/libraries.m4 b/make/autoconf/libraries.m4
-+index 8dc3d55ed0c..96f377c2f99 100644
-+--- a/make/autoconf/libraries.m4
-++++ b/make/autoconf/libraries.m4
-+@@ -141,6 +141,14 @@ AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
-+     BASIC_JVM_LIBS="$BASIC_JVM_LIBS -lrt"
-+   fi
-+ 
-++  # Libatomic library
-++  # 32-bit ARC needs fallback library for 8-byte atomic ops
-++  # Inspired by a fix for MIPS, see https://github.com/openjdk/jdk/commit/1b3aa3af
-++  if test "x$OPENJDK_TARGET_OS" = xlinux &&
-++      (test "x$OPENJDK_TARGET_CPU" = xarc); then
-++    BASIC_JVM_LIBS="$BASIC_JVM_LIBS -latomic"
-++  fi
-++
-+   # perfstat lib
-+   if test "x$OPENJDK_TARGET_OS" = xaix; then
-+     BASIC_JVM_LIBS="$BASIC_JVM_LIBS -lperfstat"
-+diff --git a/make/autoconf/platform.m4 b/make/autoconf/platform.m4
-+index 31451d0c37f..8d2b95d4399 100644
-+--- a/make/autoconf/platform.m4
-++++ b/make/autoconf/platform.m4
-+@@ -54,6 +54,12 @@ AC_DEFUN([PLATFORM_EXTRACT_VARS_FROM_CPU],
-+       VAR_CPU_BITS=64
-+       VAR_CPU_ENDIAN=little
-+       ;;
-++    arc)
-++      VAR_CPU=arc
-++      VAR_CPU_ARCH=arc
-++      VAR_CPU_BITS=32
-++      VAR_CPU_ENDIAN=little
-++      ;;
-+     arm*)
-+       VAR_CPU=arm
-+       VAR_CPU_ARCH=arm
-+@@ -571,6 +577,8 @@ AC_DEFUN([PLATFORM_SETUP_LEGACY_VARS_HELPER],
-+     HOTSPOT_$1_CPU_DEFINE=RISCV64
-+ 
-+   # The cpu defines below are for zero, we don't support them directly.
-++  elif test "x$OPENJDK_$1_CPU" = xarc; then
-++    HOTSPOT_$1_CPU_DEFINE=ARC
-+   elif test "x$OPENJDK_$1_CPU" = xsparc; then
-+     HOTSPOT_$1_CPU_DEFINE=SPARC
-+   elif test "x$OPENJDK_$1_CPU" = xppc; then
-+diff --git a/src/hotspot/os/linux/os_linux.cpp b/src/hotspot/os/linux/os_linux.cpp
-+index 49125ae8954..317e779782d 100644
-+--- a/src/hotspot/os/linux/os_linux.cpp
-++++ b/src/hotspot/os/linux/os_linux.cpp
-+@@ -1757,6 +1757,9 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
-+ #ifndef EM_AARCH64
-+   #define EM_AARCH64    183               /* ARM AARCH64 */
-+ #endif
-++#ifndef EM_ARC_COMPACT2
-++  #define EM_ARC_COMPACT2 195             /* ARC ARCv2 ISA */
-++#endif
-+ #ifndef EM_RISCV
-+   #define EM_RISCV      243               /* RISC-V */
-+ #endif
-+@@ -1781,6 +1784,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
-+     {EM_SH,          EM_SH,      ELFCLASS32, ELFDATA2MSB, (char*)"SuperH BE"},
-+ #endif
-+     {EM_ARM,         EM_ARM,     ELFCLASS32, ELFDATA2LSB, (char*)"ARM"},
-++    {EM_ARC_COMPACT2, EM_ARC_COMPACT2, ELFCLASS32, ELFDATA2LSB, (char*)"ARC"},
-+     // we only support 64 bit z architecture
-+     {EM_S390,        EM_S390,    ELFCLASS64, ELFDATA2MSB, (char*)"IBM System/390"},
-+     {EM_ALPHA,       EM_ALPHA,   ELFCLASS64, ELFDATA2LSB, (char*)"Alpha"},
-+@@ -1811,6 +1815,8 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
-+   static  Elf32_Half running_arch_code=EM_PPC;
-+ #elif  (defined AARCH64)
-+   static  Elf32_Half running_arch_code=EM_AARCH64;
-++#elif  (defined ARC)
-++  static  Elf32_Half running_arch_code=EM_ARC_COMPACT2;
-+ #elif  (defined ARM)
-+   static  Elf32_Half running_arch_code=EM_ARM;
-+ #elif  (defined S390)
-+@@ -1833,7 +1839,7 @@ void * os::dll_load(const char *filename, char *ebuf, int ebuflen) {
-+   static  Elf32_Half running_arch_code=EM_LOONGARCH;
++diff --git a/util/compression.cc b/util/compression.cc
++index 0aa473b179d..ca1649571ca 100644
++--- a/util/compression.cc
+++++ b/util/compression.cc
++@@ -693,6 +693,7 @@ class BuiltinDecompressorV2SnappyOnly : public BuiltinDecompressorV2 {
++     args.uncompressed_size = uncompressed_length;
++     return Status::OK();
 + #else
-+     #error Method os::dll_load requires that one of following is defined:\
-+-        AARCH64, ALPHA, ARM, AMD64, IA32, LOONGARCH64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
-++        AARCH64, ALPHA, ARC, ARM, AMD64, IA32, LOONGARCH64, M68K, MIPS, MIPSEL, PARISC, __powerpc__, __powerpc64__, RISCV, S390, SH, __sparc
+++    (void)args;
++     return Status::NotSupported("Snappy not supported in this build");
 + #endif
-+ 
-+   // Identify compatibility class for VM's architecture and library's architecture
-+-- 
-+2.43.0
-+
-diff --git a/package/openjdk/25.0.2+10/0002-8376684-Compile-OpenJDK-in-headless-mode-without-req.patch b/package/openjdk/25.0.2+10/0002-8376684-Compile-OpenJDK-in-headless-mode-without-req.patch
-new file mode 100644
-index 0000000000..78ab31ff62
---- /dev/null
-+++ b/package/openjdk/25.0.2+10/0002-8376684-Compile-OpenJDK-in-headless-mode-without-req.patch
-@@ -0,0 +1,144 @@
-+From 434d082d9082c1ce2d9ea46ec3c90420442567b9 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Wed, 4 Feb 2026 06:48:59 +0000
-+Subject: [PATCH] 8376684: Compile OpenJDK in headless mode without required
-+ X11 libraries
-+
-+Reviewed-by: erikj, aivanov
-+
-+Upstream: https://github.com/openjdk/jdk/pull/28310
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ doc/building.html                                |  7 +++----
-+ doc/building.md                                  |  6 ++----
-+ make/autoconf/libraries.m4                       |  8 ++++----
-+ make/modules/java.desktop/lib/AwtLibraries.gmk   | 16 ++++++++++++++--
-+ .../unix/native/common/awt/utility/rect.h        |  4 ++--
-+ 5 files changed, 25 insertions(+), 16 deletions(-)
-+
-+diff --git a/doc/building.html b/doc/building.html
-+index da8465bc532..f8d815a5474 100644
-+--- a/doc/building.html
-++++ b/doc/building.html
-+@@ -1380,10 +1380,9 @@ <h4 id="alsa-1">ALSA</h4>
-+ can specify it by <code>--with-alsa</code>.</p></li>
-+ </ul>
-+ <h4 id="x11-1">X11</h4>
-+-<p>You will need X11 libraries suitable for your <em>target</em> system.
-+-In most cases, using Debian's pre-built libraries work fine.</p>
-+-<p>Note that X11 is needed even if you only want to build a headless
-+-JDK.</p>
-++<p>When not building a headless JDK, you will need X11 libraries
-++suitable for your <em>target</em> system. In most cases, using Debian's
-++pre-built libraries work fine.</p>
-+ <ul>
-+ <li><p>Go to <a href="https://www.debian.org/distrib/packages">Debian
-+ Package Search</a>, search for the following packages for your
-+diff --git a/doc/building.md b/doc/building.md
-+index 1a9fe6b2e78..92ebd3d32c7 100644
-+--- a/doc/building.md
-++++ b/doc/building.md
-+@@ -1173,10 +1173,8 @@ #### ALSA
-+ 
-+ #### X11
-+ 
-+-You will need X11 libraries suitable for your *target* system. In most cases,
-+-using Debian's pre-built libraries work fine.
-+-
-+-Note that X11 is needed even if you only want to build a headless JDK.
-++When not building a headless JDK, you will need X11 libraries suitable for your
-++*target* system. In most cases, using Debian's pre-built libraries work fine.
-+ 
-+ * Go to [Debian Package Search](https://www.debian.org/distrib/packages),
-+   search for the following packages for your *target* system, and download them
-+diff --git a/make/autoconf/libraries.m4 b/make/autoconf/libraries.m4
-+index 96f377c2f99..8f02b7ec8a7 100644
-+--- a/make/autoconf/libraries.m4
-++++ b/make/autoconf/libraries.m4
-+@@ -42,12 +42,12 @@ m4_include([lib-tests.m4])
-+ AC_DEFUN_ONCE([LIB_DETERMINE_DEPENDENCIES],
-+ [
-+   # Check if X11 is needed
-+-  if test "x$OPENJDK_TARGET_OS" = xwindows || test "x$OPENJDK_TARGET_OS" = xmacosx; then
-+-    # No X11 support on windows or macosx
-++  if test "x$OPENJDK_TARGET_OS" = xwindows ||
-++     test "x$OPENJDK_TARGET_OS" = xmacosx ||
-++     test "x$ENABLE_HEADLESS_ONLY" = xtrue; then
-+     NEEDS_LIB_X11=false
-+   else
-+-    # All other instances need X11, even if building headless only, libawt still
-+-    # needs X11 headers.
-++    # All other instances need X11 for libawt.
-+     NEEDS_LIB_X11=true
-+   fi
-+ 
-+diff --git a/make/modules/java.desktop/lib/AwtLibraries.gmk b/make/modules/java.desktop/lib/AwtLibraries.gmk
-+index 463e09e12dc..8b6b50b9e62 100644
-+--- a/make/modules/java.desktop/lib/AwtLibraries.gmk
-++++ b/make/modules/java.desktop/lib/AwtLibraries.gmk
-+@@ -88,6 +88,10 @@ LIBAWT_EXTRA_HEADER_DIRS := \
-+ 
-+ LIBAWT_CFLAGS := -D__MEDIALIB_OLD_NAMES -D__USE_J2D_NAMES -DMLIB_NO_LIBSUNMATH
-+ 
-++ifeq ($(ENABLE_HEADLESS_ONLY), true)
-++  LIBAWT_CFLAGS += -DHEADLESS
-++endif
-++
-+ ifeq ($(call isTargetOs, windows), true)
-+   LIBAWT_CFLAGS += -EHsc -DUNICODE -D_UNICODE -DMLIB_OS64BIT
-+   LIBAWT_RCFLAGS ?= -I$(TOPDIR)/src/java.base/windows/native/launcher/icons
-+@@ -167,11 +171,18 @@ ifeq ($(call isTargetOs, windows macosx), false)
-+       $(TOPDIR)/src/$(MODULE)/$(OPENJDK_TARGET_OS_TYPE)/native/common/awt \
-+       #
-+ 
-++  LIBAWT_HEADLESS_EXCLUDE_FILES := \
-++      GLXGraphicsConfig.c \
-++      GLXSurfaceData.c \
-++      X11PMBlitLoops.c \
-++      X11Renderer.c \
-++      X11SurfaceData.c \
-++      #
-++
-+   LIBAWT_HEADLESS_EXTRA_HEADER_DIRS := \
-+       $(LIBAWT_DEFAULT_HEADER_DIRS) \
-+       common/awt/debug \
-+       common/font \
-+-      common/java2d/opengl \
-+       java.base:libjvm \
-+       #
-+ 
-+@@ -191,7 +202,8 @@ ifeq ($(call isTargetOs, windows macosx), false)
-+   $(eval $(call SetupJdkLibrary, BUILD_LIBAWT_HEADLESS, \
-+       NAME := awt_headless, \
-+       EXTRA_SRC := $(LIBAWT_HEADLESS_EXTRA_SRC), \
-+-      EXCLUDES := medialib, \
-++      EXCLUDES := medialib opengl, \
-++      EXCLUDE_FILES := $(LIBAWT_HEADLESS_EXCLUDE_FILES), \
-+       ONLY_EXPORTED := $(LIBAWT_HEADLESS_ONLY_EXPORTED), \
-+       OPTIMIZATION := LOW, \
-+       CFLAGS := -DHEADLESS=true $(CUPS_CFLAGS) $(FONTCONFIG_CFLAGS) \
-+diff --git a/src/java.desktop/unix/native/common/awt/utility/rect.h b/src/java.desktop/unix/native/common/awt/utility/rect.h
-+index ceea38f4349..91b5a17ec58 100644
-+--- a/src/java.desktop/unix/native/common/awt/utility/rect.h
-++++ b/src/java.desktop/unix/native/common/awt/utility/rect.h
-+@@ -28,7 +28,7 @@
-+ #ifndef _AWT_RECT_H
-+ #define _AWT_RECT_H
-+ 
-+-#ifndef MACOSX
-++#if !defined(HEADLESS) && !defined(MACOSX)
-+ #include <X11/Xlib.h>
-+ typedef XRectangle RECT_T;
-+ #else
-+@@ -39,7 +39,7 @@ typedef struct {
-+     int width;
-+     int height;
-+ } RECT_T;
-+-#endif /* !MACOSX */
-++#endif /* !HEADLESS && !MACOSX */
-+ 
-+ #define RECT_EQ_X(r1,r2)        ((r1).x==(r2).x && (r1).width==(r2).width)
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/openjdk/25.0.2+10/0003-src-hotspot-aarch64-macro-assembler-fix-cmp.patch b/package/openjdk/25.0.2+10/0003-src-hotspot-aarch64-macro-assembler-fix-cmp.patch
-new file mode 100644
-index 0000000000..db050aa60f
---- /dev/null
-+++ b/package/openjdk/25.0.2+10/0003-src-hotspot-aarch64-macro-assembler-fix-cmp.patch
-@@ -0,0 +1,43 @@
-+From ac1110be8a65b230a3413890c77565cead5fa44f Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sat, 21 Feb 2026 15:45:42 +0100
-+Subject: [PATCH] src: hotspot: aarch64: macro assembler: fix cmp
-+
-+Older GCC versions (e.g., GCC 6.x from bootlin toolchains) cannot
-+resolve the overload ambiguity when passing an InstanceKlass::ClassState
-+enum value to cmp(). The compiler sees both cmp(Register, unsigned char)
-+and the deleted cmp(Register, unsigned int) as candidates.
-+
-+Explicitly cast the enum value to unsigned char to fix the build with
-+older toolchains.
-+
-+Fixes:
-+
-+  * For target hotspot_variant-server_libjvm_objs_macroAssembler_aarch64.o:
-+  /home/thomas/br-test-pkg/bootlin-aarch64-glibc-old/build/openjdk-25.0.2+10/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp: In member function 'void MacroAssembler::clinit_barrier(Register, Register, Label*, Label*)':
-+  /home/thomas/br-test-pkg/bootlin-aarch64-glibc-old/build/openjdk-25.0.2+10/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp:2048:48: error: call of overloaded 'cmp(Register&, InstanceKlass::ClassState)' is ambiguous
-+     cmp(scratch, InstanceKlass::fully_initialized);
-+                                                  ^
-+
-+Upstream: https://github.com/openjdk/jdk/pull/29856
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp b/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp
-+index a424bd7f275..5cf4b1d981f 100644
-+--- a/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp
-++++ b/src/hotspot/cpu/aarch64/macroAssembler_aarch64.cpp
-+@@ -2045,7 +2045,7 @@ void MacroAssembler::clinit_barrier(Register klass, Register scratch, Label* L_f
-+   // Fast path check: class is fully initialized
-+   lea(scratch, Address(klass, InstanceKlass::init_state_offset()));
-+   ldarb(scratch, scratch);
-+-  cmp(scratch, InstanceKlass::fully_initialized);
-++  cmp(scratch, (unsigned char)InstanceKlass::fully_initialized);
-+   br(Assembler::EQ, *L_fast_path);
-+ 
-+   // Fast path check: current thread is initializer thread
-+-- 
-+2.43.0
-+
-diff --git a/package/openjdk/25.0.2+10/0004-src-hotspot-share-gc-shenandoah-fix-constexpr.patch b/package/openjdk/25.0.2+10/0004-src-hotspot-share-gc-shenandoah-fix-constexpr.patch
-new file mode 100644
-index 0000000000..00cc22a3ed
---- /dev/null
-+++ b/package/openjdk/25.0.2+10/0004-src-hotspot-share-gc-shenandoah-fix-constexpr.patch
-@@ -0,0 +1,42 @@
-+From 87cb37e3341a33c5a8fac361972c53b1edc56799 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sat, 21 Feb 2026 15:50:42 +0100
-+Subject: [PATCH] src: hotspot: share: gc: shenandoah: fix constexpr
-+
-+Older GCC versions (e.g., GCC 6.x from bootlin toolchains) enforce
-+C++14 rules more strictly and do not allow constexpr member functions
-+on non-literal types. ShenandoahSimpleBitMap is not a literal type
-+because it has a non-trivial destructor or other disqualifying members.
-+
-+Remove constexpr from ShenandoahSimpleBitMap::alignment() to fix the
-+build with older toolchains. The function can still be inlined and
-+optimized.
-+
-+Fixes:
-+
-+  /home/thomas/br-test-pkg/bootlin-aarch64-glibc-old/build/openjdk-25.0.2+10/src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp:93:26: error: enclosing class of constexpr non-static member function 'idx_t ShenandoahSimpleBitMap::alignment() const' is not a literal type
-+     inline constexpr idx_t alignment() const {
-+                            ^~~~~~~~~
-+
-+Upstream: https://github.com/openjdk/jdk/pull/29856
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp b/src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp
-+index 3a4cb8cf742..451c11e2e58 100644
-+--- a/src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp
-++++ b/src/hotspot/share/gc/shenandoah/shenandoahSimpleBitMap.hpp
-+@@ -90,7 +90,7 @@ class ShenandoahSimpleBitMap {
-+     return array_idx;
 +   }
-+ 
-+-  inline constexpr idx_t alignment() const {
-++  inline idx_t alignment() const {
-+     return BitsPerWord;
-+   }
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index 7f29e7a489..022ded8dbb 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -53,8 +53,8 @@ if BR2_PACKAGE_OPENJDK
- choice
- 	prompt "openjdk version"
- 	default BR2_PACKAGE_OPENJDK_VERSION_17 if BR2_OPENJDK_VERSION_LTS # legacy
--	default BR2_PACKAGE_OPENJDK_VERSION_21 if BR2_OPENJDK_VERSION_LATEST # legacy
--	default BR2_PACKAGE_OPENJDK_VERSION_21
-+	default BR2_PACKAGE_OPENJDK_VERSION_25 if BR2_OPENJDK_VERSION_LATEST # legacy
-+	default BR2_PACKAGE_OPENJDK_VERSION_25
- 	help
- 	  Select the version of OpenJDK you wish to use.
- 
-@@ -64,6 +64,9 @@ config BR2_PACKAGE_OPENJDK_VERSION_17
- config BR2_PACKAGE_OPENJDK_VERSION_21
- 	bool "OpenJDK 21"
- 
-+config BR2_PACKAGE_OPENJDK_VERSION_25
-+	bool "OpenJDK 25"
-+
- endchoice
- 
- config BR2_PACKAGE_OPENJDK_X11
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 72a6ff2e27..3f83ab48f8 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,5 @@
- # Locally computed
-+sha256  9b3164cedf78d7a76a59499d7a6833145c7e0269ec7b664bfe5ee03ced2f449e  openjdk-25.0.2+10.tar.gz
- sha256  6500906cb7cc49268ce4ca368db3ddf3541b40afd25eecb378e13d5a72f43214  openjdk-21.0.10+7.tar.gz
- sha256  7ebfcc2aafd514c23df3fe5280e1a34630b9b1d429c65a80dd5a4b6e7f177bc3  openjdk-17.0.18+8.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index e5d9d5e630..fbc860019c 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -4,11 +4,14 @@
- #
- ################################################################################
- 
--ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
-+ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_25),y)
-+OPENJDK_VERSION_MAJOR = 25
-+OPENJDK_VERSION_MINOR = 0.2
-+OPENJDK_VERSION_BUILD = 10
-+else ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
- OPENJDK_VERSION_MINOR = 0.10
- OPENJDK_VERSION_BUILD = 7
+diff --git a/package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch b/package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch
+deleted file mode 100644
+index ced4a3a3d9..0000000000
+--- a/package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch
++++ /dev/null
+@@ -1,325 +0,0 @@
+-From 23739c6f9694d7fc436967439f170173dbb4c6b4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 24 Feb 2020 10:22:13 +0100
+-Subject: [PATCH] build_tools/build_detect_platform: fix C++ tests
 -
- else
- OPENJDK_VERSION_MAJOR = 17
- OPENJDK_VERSION_MINOR = 0.18
-@@ -80,7 +83,6 @@ OPENJDK_CONF_ENV = \
+-Replace -o /dev/null by -o test.o when testing for C++ features such as
+--faligned-new otherwise tests will fail with some bugged binutils
+-(https://sourceware.org/bugzilla/show_bug.cgi?id=19526):
+-
+-output/host/bin/xtensa-buildroot-linux-uclibc-g++ -faligned-new -x c++ - -o /dev/null <<EOF
+-            struct alignas(1024) t {int a;};
+-            int main() {}
+-EOF
+-/home/fabrice/buildroot/output/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: final link failed: file truncated
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/facebook/rocksdb/pull/6479]
+----
+- build_tools/build_detect_platform | 66 +++++++++++++++----------------
+- 1 file changed, 33 insertions(+), 33 deletions(-)
+-
+-diff --git a/build_tools/build_detect_platform b/build_tools/build_detect_platform
+-index 2535d8124..64a0ae76c 100755
+---- a/build_tools/build_detect_platform
+-+++ b/build_tools/build_detect_platform
+-@@ -172,7 +172,7 @@ case "$TARGET_OS" in
+-         PLATFORM_LDFLAGS="$PLATFORM_LDFLAGS -lpthread -lrt -ldl"
+-         if test $ROCKSDB_USE_IO_URING; then
+-             # check for liburing
+--            $CXX $PLATFORM_CXXFLAGS -x c++ - -luring -o /dev/null 2>/dev/null  <<EOF
+-+            $CXX $PLATFORM_CXXFLAGS -x c++ - -luring -o test.o 2>/dev/null  <<EOF
+-               #include <liburing.h>
+-               int main() {
+-                 struct io_uring ring;
+-@@ -245,7 +245,7 @@ if [ "$CROSS_COMPILE" = "true" -o "$FBCODE_BUILD" = "true" ]; then
+- else
+-     if ! test $ROCKSDB_DISABLE_FALLOCATE; then
+-         # Test whether fallocate is available
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <fcntl.h>
+-           #include <linux/falloc.h>
+-           int main() {
+-@@ -261,7 +261,7 @@ EOF
+-     if ! test $ROCKSDB_DISABLE_SNAPPY; then
+-         # Test whether Snappy library is installed
+-         # http://code.google.com/p/snappy/
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <snappy.h>
+-           int main() {}
+- EOF
+-@@ -276,7 +276,7 @@ EOF
+-         # Test whether gflags library is installed
+-         # http://gflags.github.io/gflags/
+-         # check if the namespace is gflags
+--        if $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null << EOF
+-+        if $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null << EOF
+-           #include <gflags/gflags.h>
+-           using namespace GFLAGS_NAMESPACE;
+-           int main() {}
+-@@ -323,7 +323,7 @@ EOF
+-           COMMON_FLAGS="$COMMON_FLAGS -DGFLAGS=1"
+-           PLATFORM_LDFLAGS="$PLATFORM_LDFLAGS -lgflags"
+-         # check if namespace is gflags
+--        elif $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null << EOF
+-+        elif $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null << EOF
+-             #include <gflags/gflags.h>
+-             using namespace gflags;
+-             int main() {}
+-@@ -285,7 +285,7 @@ EOF
+-           COMMON_FLAGS="$COMMON_FLAGS -DGFLAGS=1 -DGFLAGS_NAMESPACE=gflags"
+-           PLATFORM_LDFLAGS="$PLATFORM_LDFLAGS -lgflags"
+-         # check if namespace is google
+--        elif $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null << EOF
+-+        elif $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null << EOF
+-             #include <gflags/gflags.h>
+-             using namespace google;
+-             int main() {}
+-@@ -299,7 +299,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_ZLIB; then
+-         # Test whether zlib library is installed
+--        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <zlib.h>
+-           int main() {}
+- EOF
+-@@ -312,7 +312,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_BZIP; then
+-         # Test whether bzip library is installed
+--        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <bzlib.h>
+-           int main() {}
+- EOF
+-@@ -325,7 +325,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_LZ4; then
+-         # Test whether lz4 library is installed
+--        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <lz4.h>
+-           #include <lz4hc.h>
+-           int main() {}
+-@@ -339,7 +339,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_ZSTD; then
+-         # Test whether zstd library is installed
+--        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <zstd.h>
+-           int main() {}
+- EOF
+-@@ -352,7 +352,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_NUMA; then
+-         # Test whether numa is available
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null -lnuma 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o -lnuma 2>/dev/null  <<EOF
+-           #include <numa.h>
+-           #include <numaif.h>
+-           int main() {}
+-@@ -366,7 +366,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_TBB; then
+-         # Test whether tbb is available
+--        $CXX $PLATFORM_CXXFLAGS $LDFLAGS -x c++ - -o /dev/null -ltbb 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $LDFLAGS -x c++ - -o test.o -ltbb 2>/dev/null  <<EOF
+-           #include <tbb/tbb.h>
+-           int main() {}
+- EOF
+-@@ -379,7 +379,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_JEMALLOC; then
+-         # Test whether jemalloc is available
+--        if echo 'int main() {}' | $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null -ljemalloc \
+-+        if echo 'int main() {}' | $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o -ljemalloc \
+-           2>/dev/null; then
+-             # This will enable some preprocessor identifiers in the Makefile
+-             JEMALLOC=1
+-@@ -400,7 +400,7 @@ EOF
+-     fi
+-     if ! test $JEMALLOC && ! test $ROCKSDB_DISABLE_TCMALLOC; then
+-         # jemalloc is not available. Let's try tcmalloc
+--        if echo 'int main() {}' | $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null \
+-+        if echo 'int main() {}' | $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o \
+-           -ltcmalloc 2>/dev/null; then
+-             PLATFORM_LDFLAGS="$PLATFORM_LDFLAGS -ltcmalloc"
+-             JAVA_LDFLAGS="$JAVA_LDFLAGS -ltcmalloc"
+-@@ -409,7 +409,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_MALLOC_USABLE_SIZE; then
+-         # Test whether malloc_usable_size is available
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <malloc.h>
+-           int main() {
+-             size_t res = malloc_usable_size(0);
+-@@ -424,7 +424,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_MEMKIND; then
+-         # Test whether memkind library is installed
+--        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -lmemkind -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -lmemkind -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <memkind.h>
+-           int main() {
+-             memkind_malloc(MEMKIND_DAX_KMEM, 1024);
+-@@ -486,7 +486,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_PTHREAD_MUTEX_ADAPTIVE_NP; then
+-         # Test whether PTHREAD_MUTEX_ADAPTIVE_NP mutex type is available
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <pthread.h>
+-           int main() {
+-             int x = PTHREAD_MUTEX_ADAPTIVE_NP;
+-@@ -439,7 +439,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_BACKTRACE; then
+-         # Test whether backtrace is available
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <execinfo.h>
+-           int main() {
+-             void* frames[1];
+-@@ -451,7 +451,7 @@ EOF
+-             COMMON_FLAGS="$COMMON_FLAGS -DROCKSDB_BACKTRACE"
+-         else
+-             # Test whether execinfo library is installed
+--            $CXX $PLATFORM_CXXFLAGS -lexecinfo -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+            $CXX $PLATFORM_CXXFLAGS -lexecinfo -x c++ - -o test.o 2>/dev/null  <<EOF
+-               #include <execinfo.h>
+-               int main() {
+-                 void* frames[1];
+-@@ -468,7 +468,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_PG; then
+-         # Test if -pg is supported
+--        $CXX $PLATFORM_CXXFLAGS -pg -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -pg -x c++ - -o test.o 2>/dev/null  <<EOF
+-           int main() {
+-             return 0;
+-           }
+-@@ -480,7 +480,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_SYNC_FILE_RANGE; then
+-         # Test whether sync_file_range is supported for compatibility with an old glibc
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <fcntl.h>
+-           int main() {
+-             int fd = open("/dev/null", 0);
+-@@ -494,7 +494,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_SCHED_GETCPU; then
+-         # Test whether sched_getcpu is supported
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <sched.h>
+-           int main() {
+-             int cpuid = sched_getcpu();
+-@@ -508,7 +508,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_AUXV_GETAUXVAL; then
+-         # Test whether getauxval is supported
+--        $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null 2>/dev/null  <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o 2>/dev/null  <<EOF
+-           #include <sys/auxv.h>
+-           int main() {
+-             uint64_t auxv = getauxval(AT_HWCAP);
+-@@ -522,7 +522,7 @@ EOF
+- 
+-     if ! test $ROCKSDB_DISABLE_ALIGNED_NEW; then
+-         # Test whether c++17 aligned-new is supported
+--        $CXX $PLATFORM_CXXFLAGS -faligned-new -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+        $CXX $PLATFORM_CXXFLAGS -faligned-new -x c++ - -o test.o 2>/dev/null <<EOF
+-             struct alignas(1024) t {int a;};
+-             int main() {}
+- EOF
+-@@ -536,7 +536,7 @@ fi
+- # -Wshorten-64-to-32 breaks compilation on FreeBSD i386
+- if ! [ "$TARGET_OS" = FreeBSD -a "$TARGET_ARCHITECTURE" = i386 ]; then
+-   # Test whether -Wshorten-64-to-32 is available
+--  $CXX $PLATFORM_CXXFLAGS -x c++ - -o /dev/null -Wshorten-64-to-32 2>/dev/null  <<EOF
+-+  $CXX $PLATFORM_CXXFLAGS -x c++ - -o test.o -Wshorten-64-to-32 2>/dev/null  <<EOF
+-     int main() {}
+- EOF
+-   if [ "$?" = 0 ]; then
+-@@ -603,7 +603,7 @@ if test "$TRY_SSE_ETC"; then
+-   TRY_LZCNT="-mlzcnt"
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_SSE42 -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_SSE42 -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   #include <nmmintrin.h>
+-   int main() {
+-@@ -617,7 +617,7 @@ elif test "$USE_SSE"; then
+-   echo "warning: USE_SSE specified but compiler could not use SSE intrinsics, disabling" >&2
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_PCLMUL -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_PCLMUL -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   #include <wmmintrin.h>
+-   int main() {
+-@@ -634,7 +634,7 @@ elif test "$USE_SSE"; then
+-   echo "warning: USE_SSE specified but compiler could not use PCLMUL intrinsics, disabling" >&2
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_AVX2 -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_AVX2 -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   #include <immintrin.h>
+-   int main() {
+-@@ -649,7 +649,7 @@ elif test "$USE_SSE"; then
+-   echo "warning: USE_SSE specified but compiler could not use AVX2 intrinsics, disabling" >&2
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_BMI -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_BMI -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   #include <immintrin.h>
+-   int main(int argc, char *argv[]) {
+-@@ -739,7 +739,7 @@ elif test "$USE_SSE"; then
+-   echo "warning: USE_SSE specified but compiler could not use BMI intrinsics, disabling" >&2
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_LZCNT -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS $TRY_LZCNT -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   #include <immintrin.h>
+-   int main(int argc, char *argv[]) {
+-@@ -753,7 +753,7 @@ elif test "$USE_SSE"; then
+-   echo "warning: USE_SSE specified but compiler could not use LZCNT intrinsics, disabling" >&2
+- fi
+- 
+--$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+$CXX $PLATFORM_CXXFLAGS $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null <<EOF
+-   #include <cstdint>
+-   int main() {
+-     uint64_t a = 0xffffFFFFffffFFFF;
+-@@ -666,7 +666,7 @@ fi
+- # succeed because the cross-compiler flags are added by the Makefile, not this
+- # script.
+- if [ "$PLATFORM" != IOS ]; then
+--  $CXX $COMMON_FLAGS -x c++ - -o /dev/null 2>/dev/null <<EOF
+-+  $CXX $COMMON_FLAGS -x c++ - -o test.o 2>/dev/null <<EOF
+-   #if defined(_MSC_VER) && !defined(__thread)
+-   #define __thread __declspec(thread)
+-   #endif
+-@@ -685,7 +685,7 @@ if [ "$FBCODE_BUILD" != "true" -a "$PLATFORM" = OS_LINUX ]; then
+-   void dummy_func() {}
+- EOF
+-   if [ "$?" = 0 ]; then
+--    $CXX $COMMON_FLAGS $PLATFORM_SHARED_LDFLAGS test_dl.o -o /dev/null 2>/dev/null
+-+    $CXX $COMMON_FLAGS $PLATFORM_SHARED_LDFLAGS test_dl.o -o test.o 2>/dev/null
+-     if [ "$?" = 0 ]; then
+-       EXEC_LDFLAGS+="-ldl"
+-       rm -f test_dl.o
+--- 
+-2.25.0
+-
+diff --git a/package/rocksdb/rocksdb.hash b/package/rocksdb/rocksdb.hash
+index 935b498c55..fc2668a635 100644
+--- a/package/rocksdb/rocksdb.hash
++++ b/package/rocksdb/rocksdb.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-sha256  c6502c7aae641b7e20fafa6c2b92273d935d2b7b2707135ebd9a67b092169dca  rocksdb-6.20.3.tar.gz
++sha256  b4dfd75199f385ec76056f81d33cde8f4cb446ea2ed1821feec7b996b3409f67  rocksdb-11.0.4.tar.gz
  
- OPENJDK_CONF_OPTS = \
- 	--disable-full-docs \
--	--disable-manpages \
- 	--disable-warnings-as-errors \
- 	--enable-openjdk-only \
- 	--enable-unlimited-crypto \
-@@ -90,7 +92,7 @@ OPENJDK_CONF_OPTS = \
- 	--with-debug-level=release \
- 	--with-devkit=$(HOST_DIR) \
- 	--with-extra-cflags="$(TARGET_CFLAGS)" \
--	--with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
-+	--with-extra-cxxflags="$(TARGET_CXXFLAGS) -fpermissive" \
- 	--with-extra-ldflags="-Wl,-rpath,$(OPENJDK_INSTALL_BASE)/lib,-rpath,$(OPENJDK_INSTALL_BASE)/lib/$(OPENJDK_JVM_VARIANT)" \
- 	--with-giflib=system \
- 	--with-jobs=$(PARALLEL_JOBS) \
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
-index 21d9679788..97dec8b804 100644
---- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
-@@ -33,7 +33,7 @@ public class JniTest
- 	public static void main(String[] args)
- 	{
- 		var actualVersion = JniWrapper.get_jni_version();
--		var expectedVersion = 0x00150000;
-+		var expectedVersion = 0x00180000;
- 		JniTest.Test(
- 			"Get JNI Version",
- 			actualVersion,
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.Apache
+ sha256  b568f1f37a5a1d37a3e981e7c8b7fc4856ca33b2ca0a45bc8e847aaaf7afe485  LICENSE.leveldb
+-sha256  e62e4f73402cf6a16969673f0b7eb46bc91782e50a2afe400dd0157547bc09f0  README.md
++sha256  99d85d5d88c6d853c2e6fda21de51fa33288a51d3aa4959dd2b68535f768894b  README.md
+diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
+index bed0634134..d4265b52cf 100644
+--- a/package/rocksdb/rocksdb.mk
++++ b/package/rocksdb/rocksdb.mk
+@@ -4,104 +4,63 @@
+ #
+ ################################################################################
+ 
+-ROCKSDB_VERSION = 6.20.3
++ROCKSDB_VERSION = 11.0.4
+ ROCKSDB_SITE = $(call github,facebook,rocksdb,v$(ROCKSDB_VERSION))
+ ROCKSDB_LICENSE = GPL-2.0 or Apache-2.0
+ ROCKSDB_LICENSE_FILES = COPYING LICENSE.Apache LICENSE.leveldb README.md
+ ROCKSDB_INSTALL_STAGING = YES
+-
+-ROCKSDB_MAKE_OPTS = \
+-	PORTABLE=1 \
+-	PREFIX=/usr
+-
+-# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
+-ifeq ($(BR2_m68k_cf),y)
+-ROCKSDB_EXTRA_CXXFLAGS += -fno-defer-pop
+-endif
++ROCKSDB_CONF_OPTS = \
++	-DFAIL_ON_WARNINGS=OFF \
++	-DPORTABLE=1 \
++	-DWITH_TESTS=OFF
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ ROCKSDB_DEPENDENCIES += bzip2
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
++ROCKSDB_CONF_OPTS += -DWITH_BZ2=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=1
++ROCKSDB_CONF_OPTS += -DWITH_BZ2=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GFLAGS),y)
+ ROCKSDB_DEPENDENCIES += gflags
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_GFLAGS=0
++ROCKSDB_CONF_OPTS += -DWITH_GFLAGS=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_GFLAGS=1
++ROCKSDB_CONF_OPTS += -DWITH_GFLAGS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JEMALLOC),y)
+ ROCKSDB_DEPENDENCIES += jemalloc
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_JEMALLOC=0
++ROCKSDB_CONF_OPTS += -DWITH_JEMALLOC=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_JEMALLOC=1
++ROCKSDB_CONF_OPTS += -DWITH_JEMALLOC=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LZ4),y)
+ ROCKSDB_DEPENDENCIES += lz4
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_LZ4=0
++ROCKSDB_CONF_OPTS += -DWITH_LZ4=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_LZ4=1
++ROCKSDB_CONF_OPTS += -DWITH_LZ4=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SNAPPY),y)
+ ROCKSDB_DEPENDENCIES += snappy
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_SNAPPY=0
++ROCKSDB_CONF_OPTS += -DWITH_SNAPPY=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_SNAPPY=1
++ROCKSDB_CONF_OPTS += -DWITH_SNAPPY=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ROCKSDB_DEPENDENCIES += zlib
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_ZLIB=0
++ROCKSDB_CONF_OPTS += -DWITH_ZLIB=ON
+ else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_ZLIB=1
++ROCKSDB_CONF_OPTS += -DWITH_ZLIB=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZSTD),y)
+ ROCKSDB_DEPENDENCIES += zstd
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_ZSTD=0
+-else
+-ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_ZSTD=1
+-endif
+-
+-ifeq ($(BR2_ENABLE_LTO),y)
+-ROCKSDB_MAKE_OPTS += USE_LTO=1
++ROCKSDB_CONF_OPTS += -DWITH_ZSTD=ON
+ else
+-ROCKSDB_MAKE_OPTS += USE_LTO=0
++ROCKSDB_CONF_OPTS += -DWITH_ZSTD=OFF
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ROCKSDB_BUILD_TARGETS += static_lib
+-ROCKSDB_INSTALL_TARGETS += install-static
+-ROCKSDB_EXTRA_CXXFLAGS += -DROCKSDB_NO_DYNAMIC_EXTENSION
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-ROCKSDB_BUILD_TARGETS += shared_lib
+-ROCKSDB_INSTALL_TARGETS += install-shared
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-ROCKSDB_BUILD_TARGETS += shared_lib static_lib
+-ROCKSDB_INSTALL_TARGETS += install-shared install-static
+-endif
+-
+-ROCKSDB_MAKE_OPTS += EXTRA_CXXFLAGS="$(ROCKSDB_EXTRA_CXXFLAGS)"
+-
+-define ROCKSDB_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
+-		$(ROCKSDB_BUILD_TARGETS)
+-endef
+-
+-define ROCKSDB_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
+-		DESTDIR=$(STAGING_DIR) $(ROCKSDB_INSTALL_TARGETS)
+-endef
+-
+-define ROCKSDB_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) $(ROCKSDB_INSTALL_TARGETS)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
