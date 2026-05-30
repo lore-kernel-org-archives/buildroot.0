@@ -1,117 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 480ABCD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 12:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2FE5CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 12:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99D766F543;
-	Sat, 30 May 2026 12:56:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q27Tmoo5bjYs; Sat, 30 May 2026 12:56:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 347016F545
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780145765;
-	bh=zxENo85UqLbK/5azkasnjxTyhtSMQL1xMD3D4cK3RMc=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=UJNXImI/68ghXa79jkpltvNT7wXWIf4wO9mSkF+Bz9N4ylgr556fIhyvaJRHDA2KW
-	 O4cXhkLJU1XarWNdrwLiq9aXrl28wMiDz8oL9WeOcHWs6vJrzjPJWwRnA+c1dPZlES
-	 gyVlDZ+D+OkDUCzH/7ddYgoTBaEZfcIIPycz7P3BQg46zikhgdkzH8p1qPoAbg7Sjc
-	 u51WLG6FF/Cm+fp6CMWEjeiNqzzzHFpCL2ef19OiXVtcuk1zKIcix24037av/14JD9
-	 UwR1YbbaeCcvwpiEFOPRboqFBkwgdUjwTHLKROBTp+cGQz5+bZLKxCwNJazpaPDOmN
-	 CZ6ZasTXumvWw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 347016F545;
-	Sat, 30 May 2026 12:56:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 486BDF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F42440291
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1688B40953;
+	Sat, 30 May 2026 12:56:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vXsI_oE5U6mR for <buildroot@buildroot.org>;
- Sat, 30 May 2026 12:56:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E74EB407D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E74EB407D9
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E74EB407D9
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:02 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-49050ff7cbdso74617275e9.2
- for <buildroot@buildroot.org>; Sat, 30 May 2026 05:56:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780145761; x=1780750561;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cIN//1sXp+tQYveb3i5Ace2/fxUwCzlzoXwF7J3X9Kc=;
- b=DaihjW4q3fwdmNJpjhUgJlTGb+qZaZa1gdZBC3sne3UZMl5zlxeXLghmYVMcPYStJn
- J4VmFYbYmTkelrvoTw+zkjYLdtVtrMkEDyuNYrnB5DxDgLrhcqT6lEYEKR3hew5tLFVr
- vIYRddnR/vnb0yYzPT4mOw1s0C5bTrqt/Ld5HFnTtL0ZenE5RcRUkDF9CZ1VERPzmIca
- q2TbfcnNajLsSMpZM6QU6qVsIhnb2GbI+fPZKu9h8WrnxWit3gCWZXr8dxq8V+kKNb8P
- Aw3HZeKe7KYi1Ocmvn5Bo1/WYA9iGA64coq6l1ZC5RljeUQnb78Mgp6C8FQsSlOJT+/L
- y5jg==
-X-Gm-Message-State: AOJu0YxI3LqRrk15PtcjDk4deIG+4EOr1fjAwxakkwn0onL+vCZlieND
- 1Dp5DEJO5LvH5XOEGuHcZVjfG+bQS9/ZS1zV861jTirQISu38E6p1qMuDOoJj4pK1rPYlmIdBum
- aLSK2
-X-Gm-Gg: Acq92OG9r/bP2RI9w32/v/yGa5C9udERCq3TJ1MqE1IPLmewxH62fIJCbN04TFm3Y54
- vAHBQhF4HsrMDvPLjseXD1eujB5EaeTjHxCCjtzmPqR5P4rJL8eosBcY3OlGeqGIjz8BibqZXQA
- 8Ha+CarziUELcNcWDHohznfJ+ZxGEffj5HQn3IjuI+Xo3UQm8B2uWWaYgedFJT4hI3h1yNiX0w2
- a483tG9YOKgtcLBq42aHATM/eyywqcjrj8I+8Jf2VBEtbY2VkKOMazxH32wi+B0hwusUy7DMoHW
- yzYlknsv8eVHt0WcEreZrndN3Qm8gTvlvwobBc2YrzSYjsIyACumMq3ySZEF12gCpYuTHXryPaz
- 6S7HFIIqQLZUpmOQ83xwnofIiips9bZhMWG5fmNyS6vgzAmnvwMDs6vhBdQcRdzUnuWwnRdLRnW
- IGjxgZ+HZuJs+zj/ZjfsP8a2xR6A6iP5n7SfXaCSyb9aS5J4bzLCkfDWJBAjv3sZyD8DI3DHQzm
- 7ECKQALV3otNpNp2/0NSYy3EXg1G9ZNhJL66cl/Y1JEOWV3OOF3U8C+gy/DgzoqMbqTKo3IZpe/
- UY+QF2UoNvgbj+7+CzSaFg/QdLcvvorMB9z7aGog4LI=
-X-Received: by 2002:a05:600c:5306:b0:490:a455:f882 with SMTP id
- 5b1f17b1804b1-490a455f915mr45582955e9.24.1780145760318; 
- Sat, 30 May 2026 05:56:00 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-87-0-96-182.retail.telecomitalia.it. [87.0.96.182])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909c0b862dsm34510515e9.15.2026.05.30.05.55.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 May 2026 05:55:59 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 May 2026 14:55:56 +0200
-Message-ID: <20260530125556.3957719-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ id M1SzGrjKrsjA; Sat, 30 May 2026 12:56:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20BD940810
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780145772;
+	bh=4WByyexcLEozg4cQl9sBaFuZq/GoE2md/nQ3qM+H4u4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=R/mBMw9Lk1vY9ks/WxpIdYdqD1bmHI4TRkKAXpQNcajZoPrRYeWdHrtf0nmLREdTb
+	 xuc7FtujDl0sTq+1/JHym27Gz6Tv5z39qWaf0x/AxEqhE6oNYX/bWi01JGcRBx5EvS
+	 kdvkj6WYO6U5Lc69WGN6TIAC1Iux1Y4rwG7XS23vhDB/D6Pqv2gJ+pL+RDnpWRImy9
+	 ZEGOcyCJfJj+7eBgHLz+h6FDPjfTJ7LO2HCZdZMZEoxrclgQrFgC2vly/iUW21g40c
+	 O4bmnvK5Pzx0FVMfX7pA+DrlJ+AEC7nS2UrS9EDsuPVHFDD1IuJKH2IBoYZG+rY6+U
+	 S6EQK/IKGTgkA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20BD940810;
+	Sat, 30 May 2026 12:56:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7F59D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8DA8C407FD
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5bCMsDP8SBNn for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 12:56:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7C200407A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C200407A3
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C200407A3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 78780B97C6E0; Sat, 30 May 2026 11:38:06 +0200 (CEST)
+Message-ID: <4e9ce8c7-0add-487a-a699-3e4d0fdbb422@rnout.be>
+Date: Sat, 30 May 2026 11:38:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: Chen Pei <cp0613@linux.alibaba.com>,
+ Kory Maincent <kory.maincent@bootlin.com>
+References: <20260518185248.237609-1-ju.o@free.fr>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260518185248.237609-1-ju.o@free.fr>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1780145761; x=1780750561;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cIN//1sXp+tQYveb3i5Ace2/fxUwCzlzoXwF7J3X9Kc=;
- b=n6FNEbwQvXq6j5ZS3+D/U58IzTH1aM8j81uVqsVG+KQs50+XgfjLjgtQ18pL5914Uh
- JbfoA9kEa0YW9ELhiddGPoZMtfI9ovI7Set5e81KszbdaLNHtz9M9p3gErIzQj+zt7Qa
- mzw/1wuy4oNqUVshcrbT7X2t/Qsy108BLbois=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=n6FNEbwQ
-Subject: [Buildroot] [PATCH v2 1/1] package/babeld: disable for musl
- toolchains
+ d=rnout.be; s=dkim; 
+ t=1780133888; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=2T+Hdecklpj9ll+td5njqmnghvtQfKLslkFeKLUcoII=;
+ b=T8pxs3+jeCyPZ2g+g21uPvAlOQoigwrCUq1Bi+ypmzwlkqSki4LNxdk/J+eakBMj/wpJL1
+ lEZdL5HP0QbU4XB6WrjbB8smXxYFLQ1gFMTeyC6DgU9rc49aNoS0Er5+70tyvRKFBu41B0
+ 9aEv4Lf10/RrssrnfTGI5pWB+td4Se1f9Lt2YJt4+wu9D3Sq/qhX/GIBr4Z9tu6ojjU8BM
+ +MyTVAlrvQICgXgaAGsvdK0IF7ErCaB+g6iEhSTWEjxrkY6qmCwHSFYLPtobXJCqfk9zRH
+ mF75+w0sbGqd+7gBrW45mKAIE6x2OeC8KoDLWUUY9ukWwAY1c4Zm+MUM8N9spQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=T8pxs3+j
+Subject: Re: [Buildroot] [PATCH 1/2] package/drm-info: propagate json-c
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,56 +90,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building babeld with a musl toolchain fails with:
-  ld: read-only segment has dynamic relocations
 
-This happens because babeld uses text relocations (textrels), which
-are not supported by the musl dynamic loader and would cause a
-runtime crash (segmentation fault).
 
-Since Buildroot passes '-ztext' to detect these unsafe relocations
-at build time, disable babeld entirely for musl configurations.
+On 18/05/2026 20:52, Julien Olivain via buildroot wrote:
+> Fixes:
+> 
+> WARNING: unmet direct dependencies detected for BR2_PACKAGE_JSON_C
+>    Depends on [n]: BR2_TOOLCHAIN_HAS_SYNC_4 [=n]
+>    Selected by [y]:
+>    - BR2_PACKAGE_DRM_INFO [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Fixes:
-https://autobuild.buildroot.org/results/c75643713fd5f27fe063c226630680d26a8b9487/
+  Applied both to master, thanks.
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+  Regards,
+  Arnout
 
----
-
-Changes v1 -> v2:
-- Drop the initial approach of filtering LDFLAGS
-- Disable the package entirely for MUSL toolchains since it requires textrels
-
- package/babeld/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/babeld/Config.in b/package/babeld/Config.in
-index 80d27082306f..a39da7a8af07 100644
---- a/package/babeld/Config.in
-+++ b/package/babeld/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_BABELD
- 	bool "babeld"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  Babel is a loop-avoiding distance-vector routing protocol for
- 	  IPv6 and IPv4 with fast convergence properties.
- 
- 	  https://www.irif.fr/~jch/software/babel/
-+
-+comment "babeld needs a uClibc or glibc toolchain"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_USES_MUSL
--- 
-2.43.0
+> ---
+>   package/drm-info/Config.in | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/drm-info/Config.in b/package/drm-info/Config.in
+> index 49b8fd6f2c..1a6e11e696 100644
+> --- a/package/drm-info/Config.in
+> +++ b/package/drm-info/Config.in
+> @@ -1,5 +1,6 @@
+>   config BR2_PACKAGE_DRM_INFO
+>   	bool "drm_info"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+>   	select BR2_PACKAGE_JSON_C
+>   	select BR2_PACKAGE_LIBDRM
+> @@ -9,4 +10,5 @@ config BR2_PACKAGE_DRM_INFO
+>   	  https://gitlab.freedesktop.org/emersion/drm_info
+>   
+>   comment "drm_info needs a toolchain w/ threads"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
 _______________________________________________
 buildroot mailing list
