@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF1BCD6E4A
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 09:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CDACD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 09:49:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 855BC85013;
-	Sat, 30 May 2026 09:40:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22432851D1;
+	Sat, 30 May 2026 09:49:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yafxqL8M49iE; Sat, 30 May 2026 09:40:25 +0000 (UTC)
+ id SD6swcY2eKrD; Sat, 30 May 2026 09:49:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C2985005
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36D18851D4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780134025;
-	bh=NYPENYSapOIkGj8HwAc64+yj6xCm2aDqef1QrBY8+vc=;
+	s=default; t=1780134556;
+	bh=W5yKxTFRFWVIZ4CozGNn5KZxyT1hzzaNQzeVVU9YnXo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cxtHw8b/iD4krClvIkerRoGDQ2mqEnVWmbBleGgTZpYG84BOi3yg++Aj6t6w7KhhR
-	 9/L5LFPR8+dTNllpNbeYDacHQKAz+6Z8ahaJHQoj8Y4mqU4W9loNWmACz5V5jiksfi
-	 jxO4RIsmUuirVQVQwrNG4SQS6QZjeNR0pG53B7mWVZScudwAexVidcLmAsHaANSOlE
-	 i1ekpNDz9WNuH2h+jxEkPQkxTVxRziLK/u/m1P0H8DMgR3imYf/HZWvxCTI6uBifTk
-	 A2e+IGcZwNzW4q8wMSPzyX37iO+wBRkJVWcLr2hdgkh0bRnwGkavBrFuKpkaJtW2VT
-	 YV+YSaIIs9uyQ==
+	b=l82mUok39YwGB+fYS4td1yL7+FlyIDodLG3PraW+JSq0N37i2N/4pwdEFkU2i/N37
+	 LBYvykk03rwCef1CLbFJQl7fMFxu8rV13HyDw01GfFso7jQVtYcIjjmYbtnNqbFRYU
+	 jxZaoaDQ2vvdhkBbyLpAfz0Xi4tzgxLgnYOkcUlmkpwK/W5II2kB6tgMmwspDtyyqs
+	 pNSHOnBuqRUwGHgTk8EDEaE94C1gdImULDCamNtatfLg8PXZTCtK8byujMDyXk8YBV
+	 D0IFdvcBTW8A4aO98eUh6OsFg36JRMlkHY59HffRwsLYXX22X/kZI9YTxmj0WZI1Cs
+	 xe40AYKxksIbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10C2985005;
-	Sat, 30 May 2026 09:40:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84396D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 09:40:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36D18851D4;
+	Sat, 30 May 2026 09:49:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABF21D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 09:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72B9A42B98
- for <buildroot@buildroot.org>; Sat, 30 May 2026 09:40:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C954851D4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 09:49:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ce8HPId8LgEA for <buildroot@buildroot.org>;
- Sat, 30 May 2026 09:40:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pin1PPFU5qsg for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 09:49:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9705A42B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE154851D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9705A42B90
- for <buildroot@buildroot.org>; Sat, 30 May 2026 09:40:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE154851D1
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 09:49:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A808E86E6F; Sat, 30 May 2026 09:40:09 +0000 (UTC)
+ id D24858705E; Sat, 30 May 2026 09:49:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 11:40:07 +0200
+Date: Sat, 30 May 2026 11:48:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 82f1e6f50e95796e474edbd9ba8698ab7f0d47cf
-X-Git-Newrev: 60a04a145aa176609bc0fde9e743ea8b5d93a054
+X-Git-Oldrev: 60a04a145aa176609bc0fde9e743ea8b5d93a054
+X-Git-Newrev: c44987411c79256c47dfd34c0c48b2235c56cf4f
 X-Patchwork-Hint: ignore
-Message-Id: <20260530094009.A808E86E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openblas: bump to version v0.3.33
+Message-Id: <20260530094900.D24858705E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/readline: fix a segfault in
+ connmanctl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,47 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60a04a145aa176609bc0fde9e743ea8b5d93a054
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c44987411c79256c47dfd34c0c48b2235c56cf4f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-For change log since v0.3.32, see:
-https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.33
+Reported via IRC in #buildroot connmanctl segfaults randomly
+on startup and keyboard input is not echoed back.
 
-This commit reuses the sha256 hash published upstream.
+Could be reproduced with Raspberry PI4 (32 Bit) defconfig and glibc
+based userland.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/openblas/openblas.hash | 6 +++---
- package/openblas/openblas.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...3-patch-2-fix-crash-if-the-calling-applic.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-index a1e1cfc851..37685185b8 100644
---- a/package/openblas/openblas.hash
-+++ b/package/openblas/openblas.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.32
--md5  021eb76c3fc66290b6ce14fa4c1ff3de  openblas-0.3.32.tar.gz
-+# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.33
-+md5  96c5cd9013013faefc294bc57830c77d  openblas-0.3.33.tar.gz
-+sha256  6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab  openblas-0.3.33.tar.gz
- # Locally calculated
--sha256  f8a1138e01fddca9e4c29f9684fd570ba39dedc9ca76055e1425d5d4b1a4a766  openblas-0.3.32.tar.gz
- sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index e8836a9d27..9a3bb42496 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENBLAS_VERSION = 0.3.32
-+OPENBLAS_VERSION = 0.3.33
- OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
- OPENBLAS_LICENSE = BSD-3-Clause
- OPENBLAS_LICENSE_FILES = LICENSE
+diff --git a/package/readline/0002-Readline-8.3-patch-2-fix-crash-if-the-calling-applic.patch b/package/readline/0002-Readline-8.3-patch-2-fix-crash-if-the-calling-applic.patch
+new file mode 100644
+index 0000000000..50df37fd4a
+--- /dev/null
++++ b/package/readline/0002-Readline-8.3-patch-2-fix-crash-if-the-calling-applic.patch
+@@ -0,0 +1,22 @@
++From 9a3a2388e376eb2b43a2fe3dd8c5ce6e62ee3cc0 Mon Sep 17 00:00:00 2001
++From: Chet Ramey <chet.ramey@case.edu>
++Date: Wed, 10 Dec 2025 11:34:13 -0500
++Subject: [PATCH] Readline-8.3 patch 2: fix crash if the calling application
++ sets rl_prompt to NULL without setting a new value
++
++Upstream: https://cgit.git.savannah.gnu.org/cgit/readline.git/commit/?id=9a3a2388e376eb2b43a2fe3dd8c5ce6e62ee3cc0
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff --git a/display.c b/display.c
++index 9aa8c7b..edb525d 100644
++--- a/display.c
+++++ b/display.c
++@@ -783,7 +783,7 @@ _rl_optimize_redisplay (void)
++ 
++ /* Useful shorthand used by rl_redisplay, update_line, rl_move_cursor_relative */
++ #define INVIS_FIRST()	(local_prompt_invis_chars[0])
++-#define WRAP_OFFSET(line, offset)  ((line <= prompt_last_screen_line) ? local_prompt_invis_chars[line] : 0)
+++#define WRAP_OFFSET(line, offset)  ((line <= prompt_last_screen_line && local_prompt_invis_chars) ? local_prompt_invis_chars[line] : 0)
++ 
++ #define W_OFFSET(line, offset) ((line) == 0 ? offset : 0)
++ #define VIS_LLEN(l)	((l) > _rl_vis_botlin ? 0 : (vis_lbreaks[l+1] - vis_lbreaks[l]))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
