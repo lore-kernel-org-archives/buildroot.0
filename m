@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74270CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 16:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 197FDCD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 16:25:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4422342F1A;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4B076F5BA;
 	Sat, 30 May 2026 16:25:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3V_yN4296YQ; Sat, 30 May 2026 16:25:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2210042F28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780158314;
-	bh=2+aPA5cQQdApc6wkICeH1RRwKBNSzkNTJXCBXB73bZA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ca6JV+g4AcsKOrai+K1OSH97ETZsMWyw2fFr4sVv5cHiY1PQSBGBRdtEHGZTxOLHR
-	 Bw2c1SS0yq8ZXo3HFrh0o9JvzAK3LQWsdZ3mIWRDdFNjvnTELdeyiVGViizqZeAXCu
-	 FArYtU6yteq7MUpi1SP6QkWsA03bqnWcD42HFVzZG5jQvQczdqNirNRzIAPKjhVmJ+
-	 1VWRHeom7P18yRKZ3vloxuqS2C+5rTHKczTmRZZU9yUXppxG5770UEOQdIC9+56hzM
-	 TIKDYGtqwL2wWAgODflitoQVrSis+zPSuimNB+kpZHw8SpXjkcc2AkBPz6rDM7sUOq
-	 JK/fRte+72P0Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2210042F28;
-	Sat, 30 May 2026 16:25:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 74A1B12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2BB06F579
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H4sm35reVOOA for <buildroot@buildroot.org>;
- Sat, 30 May 2026 16:25:09 +0000 (UTC)
+ id zsGJM-WlYXqF; Sat, 30 May 2026 16:25:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CC9D6F5C4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780158316;
+	bh=MprmnyUmKXHDptgxri04EPd/sQtf3OWJJenJ9wxGIpU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=oKtWvL/3lZZlAe/FnboOdjP1ZZd0kq8xJTUQMyjOGf1AmyshHrS3/zW0la1RO5Ia2
+	 5UO3MyaJAiTshi+vJWnrOGzF+qQ8vY81T8abSbUu3pu6ENwOTRQABSyW3+SyAYUu1L
+	 8WQDJHHQ6s6G+u+gGNIWSueXDRlwyO5mDVjhjncypWgcK6mG+aVSYbhbvulqimHuiS
+	 rXFo7S/GCMawhdUQAMLy5K9OwrZCYwY4XC9vtkTQUYX3zCLJ0JQprxD2HA3rkAv/mB
+	 Cdmr44ea/85lYgZkUFhyY4ZMbZm28PtW+Sb40VUxx2bmW34JOxiqnbYePDysG9d/JY
+	 Efxu/R4knYJ2g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CC9D6F5C4;
+	Sat, 30 May 2026 16:25:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FD2CF4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61ACE8534D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hVT8Swin9eOH for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 16:25:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E9586F5B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8436280F7F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E9586F5B8
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8436280F7F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 029478752D; Sat, 30 May 2026 16:24:56 +0000 (UTC)
+ id 69F0E835C8; Sat, 30 May 2026 16:24:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 18:01:18 +0200
+Date: Sat, 30 May 2026 18:08:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7716db8a1254b15f06f4c17e27faa89d3d30a2d6
-X-Git-Newrev: f07fb2bcd2ece6b7a85763858a55c2bdf7d1e6de
+X-Git-Oldrev: 7102aa5ffdbb8b9b7f2a7475fffb6486c0cd04fb
+X-Git-Newrev: 513f800cf32041274d0af3c8947a38aa89bbe57f
 X-Patchwork-Hint: ignore
-Message-Id: <20260530162456.029478752D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftrace: fix build with
- per-package directories
+Message-Id: <20260530162459.69F0E835C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbpf: fix bpftrace build with
+ kernel headers 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,136 +77,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f07fb2bcd2ece6b7a85763858a55c2bdf7d1e6de
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/513f800cf32041274d0af3c8947a38aa89bbe57f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit f7b8508e4fe9c96bf679cc5423cc1500b6523e83 in 2021.08-rc1
-added the libbpf package which contains the usage of the
-'install_uapi_headers' make target to update toolchain headers older
-than kernel version 5.9.  This does not work with per-package
-directories.
+Buildroot commit 97e2f63bdf4cc992787c570b17b099c41c5535d2 bumped
+bpftrace from 0.23.3 to 0.24.2.
 
-Building this defconfig that includes all packages depending on libbpf:
+This release includes upstream commit
+https://github.com/bpftrace/bpftrace/commit/7578314df67df6bbdffaf493ff3b4d182b235b34
+which was added to version 0.24.0 and makes use of
+bpf_iter_link_info.task that was added to the linux kernel in version
+6.1:
+https://github.com/torvalds/linux/commit/f0d74c4da1f060d2a66976193712a5e6abd361f5
 
-  BR2_x86_64=y
-  BR2_x86_rocketlake=y
-  BR2_KERNEL_HEADERS_VERSION=y
-  BR2_DEFAULT_KERNEL_VERSION="5.8.18"
-  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-  BR2_TOOLCHAIN_BUILDROOT_CXX=y
-  BR2_PER_PACKAGE_DIRECTORIES=y
-  BR2_PACKAGE_BPFTRACE=y
-  BR2_PACKAGE_DPDK=y
-  BR2_PACKAGE_IPROUTE2=y
-  BR2_PACKAGE_HOST_PAHOLE=y
-
-on the 2026.02.x branch as of 0be927b89a319c9ac35249354558e9f4cb102fd0
-is broken:
+causing build errors when the toolchain contains kernel headers version
+6.0 because the libbpf package does not update their headers:
 
 output/build/bpftrace-0.24.2/src/attached_probe.cpp: In static member
  function 'static bpftrace::Result<std::unique_ptr<bpftrace::AttachedIterProbe> >
  bpftrace::AttachedIterProbe::make(bpftrace::Probe&,
  const bpftrace::BpfProgram&, std::optional<int>)':
-output/build/bpftrace-0.24.2/src/attached_probe.cpp:1435:30: error:
- aggregate 'bpf_iter_link_info linfo' has incomplete type and cannot be
- defined
- 1435 |     union bpf_iter_link_info linfo;
+output/build/bpftrace-0.24.2/src/attached_probe.cpp:1437:11: error:
+ 'union bpf_iter_link_info' has no member named 'task'
+ 1437 |     linfo.task.pid = *pid;
 
-libbpf overwrites kernel header files installed in $STAGING_DIR when
-they are too old by adding 'install_uapi_headers' as make target. In
-the case of per-package directories these header files are stored only
-in output/per-package/libbpf/.
+The build error can be reproduced with this defconfig
 
-When output/per-package/bpftrace/ is populated, the content of
-output/per-package/ from other packages overwrites the header files
-installed by libbpf because the list of rsync'ed packages is sorted
-alphabetically:
-https://gitlab.com/buildroot.org/buildroot/-/blob/2026.02.1/package/pkg-generic.mk#L796
+BR2_aarch64=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="6.0.19"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_PACKAGE_BPFTRACE=y
 
-To prevent this problem let libbpf install the updated kernel headers in
-a new directory.
-
-Other packages need to find this directory. This mostly happens through
-pkg-config, but bpftrace doesn't use that:
-https://github.com/bpftrace/bpftrace/blob/v0.25.1/cmake/FindLibBpf.cmake#L9
-Therefore, use a configure option in bpftrace to set the correct path.
-
-Please note that libbpf will add '/linux' to the path provided in
-$UAPIDIR:
-https://github.com/libbpf/libbpf/blob/v1.7.0/src/Makefile#L169
-so the headers end up in the previously non-existing directory
-$(STAGING_DIR)/usr/include/bpf/linux/:
-
-$ find output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/ -iname bpf.h -exec ls -lao {} \;
--rw-r--r-- 1 bernd 26434 25. Apr 13:15 output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/bpf/bpf.h
--rw-r--r-- 1 bernd 283012 25. Apr 13:15 output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/bpf/linux/bpf.h
--rw-r--r-- 12 bernd 160166 25. Apr 13:08 output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/bpf.h
-
-bpf.h with 283012 bytes is the update-to-date version needed for bpftrace:
-
-$ grep -m1 bpf_iter_link_info output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/bpf/linux/bpf.h
-union bpf_iter_link_info {
-$
-
-$ grep -m1 bpf_iter_link_info output/per-package/libbpf/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/linux/bpf.h
-$
-
-By adding '-I$(STAGING_DIR)/usr/include/bpf' to the CXXFLAGS of bpftrace
-its include finds the correct header:
-https://github.com/bpftrace/bpftrace/blob/v0.25.1/src/bpfprogram.cpp#L3
-
-  #include <linux/bpf.h>
-
-The dpdk package uses pkg-config` to detect libbpf and will use the updated
-.pc file:
-https://github.com/DPDK/dpdk/blob/v25.11/drivers/net/tap/bpf/meson.build#L7
-
-The iproute2 package is not affected by the problem because it contains
-"matching sanitized kernel headers":
-https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/README?h=v6.17.0#n44
-
-As a host package pahole is also not affected.
+on the 2026.02.x branch as of 0be927b89a319c9ac35249354558e9f4cb102fd0.
 
 Fixes:
-https://autobuild.buildroot.net/results/d8b/d8b416e40bf7bd019cd93e6f2d42c98fc12d4160/
+https://autobuild.buildroot.net/results/146/14671c54fdf0a2e44bcce7ff61ca9b89a925eca9/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/bpftrace/bpftrace.mk | 1 +
- package/libbpf/libbpf.mk     | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/libbpf/libbpf.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
-index 35c8dec29c..f530d4861b 100644
---- a/package/bpftrace/bpftrace.mk
-+++ b/package/bpftrace/bpftrace.mk
-@@ -28,6 +28,7 @@ endif
- BPFTRACE_CONF_OPTS += \
- 	-DBUILD_SHARED_LIBS:BOOL=OFF \
- 	-DBUILD_TESTING:BOOL=OFF \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include/bpf" \
- 	-DENABLE_MAN:BOOL=OFF
- 
- $(eval $(cmake-package))
 diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index 3a728867d8..a4bd270cbd 100644
+index a141497d6c..5a6d574331 100644
 --- a/package/libbpf/libbpf.mk
 +++ b/package/libbpf/libbpf.mk
-@@ -25,7 +25,12 @@ endef
- # toolchain.
- # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a5cbe05a6673b85bed2a63ffcfea6a96c6410cff
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9),)
--LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers
-+LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
-+
-+define LIBBPF_FIX_STAGING_PC
-+	$(SED) 's/-I$${includedir}/-I$${includedir}\/bpf -I$${includedir}/' $(STAGING_DIR)/usr/lib/pkgconfig/libbpf.pc
-+endef
-+LIBBPF_POST_INSTALL_STAGING_HOOKS += LIBBPF_FIX_STAGING_PC
- endif
+@@ -18,14 +18,14 @@ define LIBBPF_BUILD_CMDS
+ 		-C $(@D)/src
+ endef
  
- define LIBBPF_INSTALL_STAGING_CMDS
+-# bpftrace uses btf_enum64 that was added since kernel 6.0 so we need to
+-# update some uapi headers in STAGING_DIR if the toolchain is build with
+-# linux-headers < 6.0.
++# bpftrace uses bpf_iter_link_info.task that was added since kernel 6.1
++# so we need to update some uapi headers in STAGING_DIR if the toolchain
++# is build with linux-headers < 6.1.
+ # Otherwise bpftrace is broken due to out of date linux/bpf.h installed
+ # by the toolchain.
+-# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6089fb325cf737eeb2c4d236c94697112ca860da
+-# https://github.com/bpftrace/bpftrace/commit/d4f58382270c21b2c718aa0a6574c105f29e77a9
+-ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0),)
++# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f0d74c4da1f060d2a66976193712a5e6abd361f5
++# https://github.com/bpftrace/bpftrace/commit/7578314df67df6bbdffaf493ff3b4d182b235b34
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1),)
+ LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
+ 
+ define LIBBPF_FIX_STAGING_PC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
