@@ -1,90 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C4EDCD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:35:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF67CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 515986F5FC;
-	Sat, 30 May 2026 21:35:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A9BA84FD6;
+	Sat, 30 May 2026 21:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p4x-_IGjje4z; Sat, 30 May 2026 21:35:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HoA0HRtITNYo; Sat, 30 May 2026 21:45:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7727F61C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B34F884FCB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780176954;
-	bh=+mGdFknXlSOWGLBLczn3ajk1MJ0vwuoEMrE7lg55nb8=;
+	s=default; t=1780177545;
+	bh=ddjKYBHRIxkET5PpWe0MU1NMyrY7NXkNa77CzXgTExw=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=o4YdEIwSRbLyax2grsODqynmnHIQnpGZBPe6CAD3hJGCNhwS2MrdE8doMvKic0+Bu
-	 ztkVM1zcdtuIGsIw5J6a5iQjDNopK5Pc68/PZdCUCGxA6yanrEcklFFztyie12lDIT
-	 jhIS/+ctS8Gjo5x6RYzy1SJh+FcIclqkhrKoHJ0nsC90K2leREN+E1S96PgoMqG/6q
-	 D1d3OU9iz0kpyf29i/K3SXpXNCc27RVuaX0891hm52VzeKrypCWFJoDFJBNq6J/EG0
-	 0RF7Ykxk91U03pw+TkxOwudQ7mqPaYFqfyH9B94wYy9VhB0QX53GK0UNkxVYMPEhWa
-	 8bs58xPMkpekw==
+	b=IiA0IWrGmDeYJZ2UiKGH6JbsKl2GTQdySz0Aw5kDrKPVN6RBai6sUGhq12/CKvyg+
+	 FkDi71AXU6oFML4e7mWn3Qg0zFiqE3x5yZjunGaH3veRCUuHqe7cT1oK8wZL3gstAx
+	 iOwXoVybGM2rodXdaO+/9OVRYXqNLBT89Lbr1be3tSA809OSBjsIV6G22Cqu6gyopW
+	 8yhoxixwAPyR0fauSFEsO2Q4bZ1LkAoWqNAotTZDOfStC7zQih2ckBjf6vco3Ffsbg
+	 eGzKYeJ24dkqtABLJnxZWCZhdPQNYfZaZcihXeRKQU2G2YsWsRp+LUXLE08OnQtj9c
+	 9dxp3ue7NBlxA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7727F61C38;
-	Sat, 30 May 2026 21:35:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B34F884FCB;
+	Sat, 30 May 2026 21:45:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DA21C12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:35:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A7979D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:45:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBE7F61C38
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:35:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D86D6F5F3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:45:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YUvyafhDfV4u for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:35:52 +0000 (UTC)
+ id jeoJZj5gjv3T for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:45:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C334A61C37
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C334A61C37
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B2F606086F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2F606086F
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C334A61C37
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:35:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B2F606086F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:45:43 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 274111A3751;
- Sat, 30 May 2026 21:35:50 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 82C211A3755
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:45:41 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id EA89C6073B;
- Sat, 30 May 2026 21:35:49 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 50BEE6073B;
+ Sat, 30 May 2026 21:45:41 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1854E10888CC7; 
- Sat, 30 May 2026 23:35:49 +0200 (CEST)
-Date: Sat, 30 May 2026 23:35:48 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
-Message-ID: <ahtYKKiaJ5Y-vZTq@windsurf>
-References: <20260519091548.2867405-1-giulio.benetti@benettiengineering.com>
- <ahtX8NyfFVmQOCEk@windsurf>
+ with ESMTPSA id 7D21B10888CC7; 
+ Sat, 30 May 2026 23:45:40 +0200 (CEST)
+Date: Sat, 30 May 2026 23:45:39 +0200
+To: Jon Henrik =?utf-8?Q?Bj=C3=B8rnstad?= <jonhenrik@qbee.io>
+Cc: buildroot@buildroot.org
+Message-ID: <ahtZ_LsN2SQaRPwx@windsurf>
+References: <20260520115237.1843693-1-jonhenrik@qbee.io>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <ahtX8NyfFVmQOCEk@windsurf>
+In-Reply-To: <20260520115237.1843693-1-jonhenrik@qbee.io>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1780176949; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=qlXzBvyCylaVOlIuAk6vWKOxuDCzeohpB1aWNZW56cE=;
- b=bSXFwdJV4ncx3z4NNmMrb+Y+VpG6l1ntUMRLV1W5drZfRPSlB/rgRnK5Ac1SItm8QC2QYL
- gxmR8bnkj/mVuHKWfI/J5N+2tlIuwf3tv3XPxJGw7TC5jXL03N+pV2LNGBXPqHhfEws4Y1
- fU6omXPHZKLA+Ot3qaR53eMaMjM3nwrX8pghFTAAkox0EYhR7Dj8Wfyz4kzSN22dRbIcnd
- pHiFbbmbtKG977xVjzAkeX5V+1W4FG8QDsQPq5Bz3BDhp2GNaoUgX7BNMbrX6R3W60svLF
- e85tMOYZVTfGAy5jA6wb0OWbCYU9bHNowPMnG0RfztTqw4qzBQTn/jIxNx/O8Q==
+ t=1780177540; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=4s/7xwn1r1diXlmQzoZafnaH/2vluULZhVGPox87+Vw=;
+ b=sr0jn1xcs51KYNjy7CO+B4F1xdJ/+gNMLdW1AJHvC9XJjLem56dLdY7RQVJEtJAqr3axG6
+ lU0nnDd5vxBU/bejLDIvmYtGzq/WkWKB5RbAnDkTDuF/mbXWpFzD6YSRSToA/9O0O7jGxA
+ Y+ChsvG8o3yFSIoZCEuQTA9wdVrWn+U0s5ZI6XQSpKbz4LHAlf4UGVdG8S+uuRiFQ+0wXd
+ S3G4PhhSAENk5IeLoxWrcLJT3Ev25pGHFCy2/WWwg4x0bV0wr03s6zOx5c5CjGRHiGdrVY
+ iK4tDrtNNJTHVUJDFxb6ZrooRTXz2McSh7zHCdlDnGBhNIGsRG4wLI5ATPnzPQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=bSXFwdJV
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: fix build failure with
- linux 7.1
+ header.a=rsa-sha256 header.s=dkim header.b=sr0jn1xc
+Subject: Re: [Buildroot] [PATCH 1/1] package/qbee-agent: bump version to
+ 2026.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,28 +98,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, May 30, 2026 at 11:34:54PM +0200, Thomas Petazzoni wrote:
-> On Tue, May 19, 2026 at 11:15:48AM +0200, Giulio Benetti wrote:
-> > Bump to version 2026-05-19 on branch v5.2.2.4 to fix build failure with
-> > Linux 7.1.
-> > 
-> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> > ---
-> >  package/rtl8188eu/rtl8188eu.hash | 2 +-
-> >  package/rtl8188eu/rtl8188eu.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> Applied to next, thanks!
+On Wed, May 20, 2026 at 01:52:37PM +0200, Jon Henrik Bj=F8rnstad via buildr=
+oot wrote:
+> Signed-off-by: Jon Henrik Bj=F8rnstad <jonhenrik@qbee.io>
+> ---
+>  package/qbee-agent/qbee-agent.hash | 2 +-
+>  package/qbee-agent/qbee-agent.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Wrong: I applied to master, not next.
+Applied to next, thanks!
 
 Thomas
--- 
+-- =
+
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
 https://bootlin.com
