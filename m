@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC34CCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:54:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D66A5CD6E52
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:54:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90AC26F5C3;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B278D42EA2;
+	Sat, 30 May 2026 13:54:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Q4HgxT2IeQe; Sat, 30 May 2026 13:54:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFEB042ED0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780149275;
+	bh=iHwGZ2sVIhDnQJTVJTCFwN9GZE+G5GT8VXiLpjpLe3A=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FvgAxfEQuTGOTpXT84dcE9UaNMY18AGlcn+Ble/AzaFLD7w1lUUcPLnfZnhrOPYFQ
+	 3YDO1LUChDunW14SJtfw6tmB7NvtSLvMTpuNSzBBZFtDk03qNuBrIoggPSVOUsUHZv
+	 63yO0RorRzfbI3jl0Xfswmrzfk86zlgCcqGHJciZFQZNuljK3SZQtPLSkRVBLyTA6F
+	 +aBiyUsS2dgziHKRUXz8Y0kQO8WiDdswWfU8jewVQnUlsK9+21MkioYKJNwHeSWCZ8
+	 lYlZjCRbAh2jybWtHzER/m4pbVPPtOyzTLmcYKqcXVRvkANOcUYakbG7GWNtUHPW2N
+	 2p/lHNTGkjVRQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFEB042ED0;
 	Sat, 30 May 2026 13:54:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE801F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C450B6F4F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZsBhqOAavTWl; Sat, 30 May 2026 13:54:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 694A26F57C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149273;
-	bh=KUGGL/xtOux951sCn/rkU0vbchiwV6JjCGVand+glV8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=f1NB7U+HCGA1vT6l2iaY6+1sTeCJRoxlAhlKobABEb+3h2qzqK3pvmR9kDPRjJUgI
-	 ecPKTSnBwZVJrPzStZmYYYAqkEmvghH/5+Eb3kwwiPzme4VrGbuwyJwyH9Vawv/E26
-	 Ij5U45rqfy3dussct2EirH5eqDdjg31WD3yNP4tDfPeVJRSRHb8aceUpw3Sw5p7VaU
-	 hu5fxOlrZSv1/iWeb8HYwh9ueJtMSaN0iicMBGsUi0Vm4qwnsSAH8hZaI2FOKtxu5J
-	 lKCvwJ6sEH5IV6xVdneoFDtD4UQJ7/HP6g6XfyxxX01KadZO+89C9iE3VIXWEBDLiS
-	 1bxmc89nwoAsQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 694A26F57C;
-	Sat, 30 May 2026 13:54:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AACE4218
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C4F98066B
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7edXBIMHu823 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 13:54:30 +0000 (UTC)
+ id lFFENoz7UA5M for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:54:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3C18805E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB8C661BDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3C18805E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB8C661BDA
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B867B8750B; Sat, 30 May 2026 13:54:17 +0000 (UTC)
+ id E03D78750B; Sat, 30 May 2026 13:54:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:54:05 +0200
+Date: Sat, 30 May 2026 15:54:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 929e7cb0056854061325ea4c7bf85405723dca3b
-X-Git-Newrev: cc41cc3fcdce839227c0d64e469b6e3fe43884bd
+X-Git-Oldrev: 1791b7942250435e056dbbc726bbb1f4ad9a9612
+X-Git-Newrev: e8c54ffb3d1b92b7e8744824ca0f28fe0d19440d
 X-Patchwork-Hint: ignore
-Message-Id: <20260530135417.B867B8750B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/generate-cyclonedx: remove indirect
- dependencies from root component
+Message-Id: <20260530135417.E03D78750B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/generate-cyclonedx: generate vcs
+ externalReferences for source repos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,78 +77,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cc41cc3fcdce839227c0d64e469b6e3fe43884bd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e8c54ffb3d1b92b7e8744824ca0f28fe0d19440d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Commit dc4af8bfa979 ("utils/generate-cyclonedx: use direct dependencies")
-removes indirect dependencies from any listed component, as required by
-CycloneDX. The root component, however, still includes indirect dependencies,
-as it just takes the components from the show-info output.
+Some packages do not have a http/https download URL for a source tarball,
+but are acquired over a version control system like git. If so, add
+externalReferences of type "vcs" for such URLs.
 
-Fix this by collecting all component dependencies, and then filter the root
-component dependencies to include direct dependencies only.
+As most git repositories use a https:// transport that may not indicated the
+repository type, add a "comment" due to the lack of a better mechanism in
+CycloneDX.
+
+While the hashes are calculated over a tarball created locally, it still may
+be useful, so add them for "vcs" externalReferences as well.
 
 Signed-off-by: Martin Willi <martin@strongswan.org>
 Acked-By: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .../testing/tests/utils/test_generate_cyclonedx.py  |  3 +++
- utils/generate-cyclonedx                            | 21 ++++++++++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
+ .../testing/tests/utils/test_generate_cyclonedx.py | 30 +++++++++++++++++++++-
+ utils/generate-cyclonedx                           |  8 ++++++
+ 2 files changed, 37 insertions(+), 1 deletion(-)
 
 diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-index ddad92598b..54250058a0 100644
+index 0a13fdb6ad..e6640fbd0d 100644
 --- a/support/testing/tests/utils/test_generate_cyclonedx.py
 +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-@@ -129,6 +129,9 @@ class TestGenerateCycloneDX(unittest.TestCase):
-         bar_deps = next(d for d in result["dependencies"] if d["ref"] == "package-bar")
-         self.assertEqual(bar_deps["dependsOn"], ["package-foo"])
+@@ -147,6 +147,8 @@ class TestGenerateCycloneDX(unittest.TestCase):
+             {
+                 "source": "foo-1.2.tar.gz",
+                 "uris": [
++                    "git+git://git.example.org/foo",
++                    "svn+https://svn.example.org/foo",
+                     "https+https://sources.buildroot.net/foo",
+                     "http|https+https://mirror.example.org/foo",
+                 ],
+@@ -160,10 +162,20 @@ class TestGenerateCycloneDX(unittest.TestCase):
+         self.assertEqual(
+             foo["externalReferences"],
+             [
++                {
++                    "type": "vcs",
++                    "url": "git://git.example.org/foo",
++                    "comment": "git repository",
++                },
++                {
++                    "type": "vcs",
++                    "url": "https://svn.example.org/foo",
++                    "comment": "svn repository",
++                },
+                 {
+                     "type": "source-distribution",
+                     "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
+-                },
++                }
+             ],
+         )
  
-+        project_deps = next(d for d in result["dependencies"] if d["ref"] == "buildroot")
-+        self.assertEqual(project_deps["dependsOn"], ["host-tool", "package-foo"])
-+
-     def test_virtual(self):
-         result = self._run_script(["--virtual"])
- 
+@@ -183,6 +195,7 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 {
+                     "source": "foo-1.2.tar.gz",
+                     "uris": [
++                        "git+git://git.example.org/foo",
+                         "http|https+https://mirror.example.org/foo",
+                     ],
+                 },
+@@ -194,6 +207,21 @@ class TestGenerateCycloneDX(unittest.TestCase):
+         self.assertEqual(
+             foo["externalReferences"],
+             [
++                {
++                    "type": "vcs",
++                    "url": "git://git.example.org/foo",
++                    "comment": "git repository",
++                    "hashes": [
++                        {
++                            "alg": "SHA-256",
++                            "content": "1111111111111111111111111111111111111111111111111111111111111111",
++                        },
++                        {
++                            "alg": "SHA-1",
++                            "content": "2222222222222222222222222222222222222222",
++                        },
++                    ]
++                },
+                 {
+                     "type": "source-distribution",
+                     "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 35198a47cf..f4d5afd847 100755
+index 382d91ce55..4166abd9ff 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -385,6 +385,25 @@ def br2_parse_deps(ref, show_info_dict, virtual=False) -> list:
-     return list(deps)
+@@ -325,6 +325,7 @@ def cyclonedx_external_refs(comp):
+         dict: External reference information in CycloneDX format, or empty dict
+     """
+     SOURCE_DIST_SCHEMES = {"http", "https"}
++    VCS_SCHEMES = {"git", "svn", "cvs", "hg", "bzr"}
  
- 
-+def br2_root_deps(show_info_dict, virtual=False) -> list:
-+    """Retrieve the list of direct dependencies of the root component.
-+
-+    This function returns all components that are not a dependency of any
-+    other component.
-+
-+    Args:
-+        show_info_dict (dict): The JSON output of the show-info command.
-+        virtual (bool): Whether to resolve virtual dependencies to their providers.
-+
-+    Returns:
-+        list: List of direct dependencies of the root component.
-+    """
-+    indirect = set()
-+    for ref in show_info_dict:
-+        indirect.update(br2_parse_deps(ref, show_info_dict, virtual))
-+    return [ref for ref in show_info_dict if ref not in indirect]
-+
-+
- def main():
-     parser = argparse.ArgumentParser(
-             description='''Create a CycloneDX SBoM for the Buildroot configuration.
-@@ -447,7 +466,7 @@ def main():
-             cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
-         ],
-         "dependencies": [
--            cyclonedx_dependency(args.project_name, list(filtered_show_info_dict)),
-+            cyclonedx_dependency(args.project_name, br2_root_deps(filtered_show_info_dict, args.virtual)),
-             *[cyclonedx_dependency(ref, br2_parse_deps(ref, show_info_dict, args.virtual))
-               for ref in filtered_show_info_dict],
-         ],
+     refs = []
+     for download in comp.get("downloads", []):
+@@ -336,6 +337,13 @@ def cyclonedx_external_refs(comp):
+                     "url": f"{uri}/{source}",
+                     **cyclonedx_source_hashes(comp, source),
+                 })
++            elif set(schemes) & VCS_SCHEMES:
++                refs.append({
++                    "type": "vcs",
++                    "url": uri,
++                    "comment": f"{schemes[0]} repository",
++                    **cyclonedx_source_hashes(comp, source),
++                })
+     if refs:
+         return {"externalReferences": refs}
+     return {}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
