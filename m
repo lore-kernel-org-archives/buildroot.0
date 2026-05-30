@@ -1,63 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A1DCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 10:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35482CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 11:04:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8EEB85300;
-	Sat, 30 May 2026 10:54:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U81ALe5PDEfv; Sat, 30 May 2026 10:54:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0149985173
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780138449;
-	bh=K0la8vfCnAddPuzegCSbgzm8dO0xs6UwlnceNG40tl8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Vdx90IB1j3Mlwv1WMGGf6VcPh7GmkRROXDCFEuf2rLGwHXmmtHkA+kjndvEWAas2K
-	 GsOsGlp78ew8iOs6ghxocoGZiG+Q0H+hiHDFMHxgo8lOKqeg8uhMdSqQwXRnkG7jek
-	 N7T4VItk/cSTSj3U+bVBYcAJ02pAnpiBtI2DnOrs5zPPWiWWGQ6Nnr4Ic7OiPya2Ih
-	 SfVuhdFqJpHAiXjefkO2UG95oRLYltQDBt9cxly4Oer7VhY5ysaJYzQs8tib0w7c70
-	 6JWDBBkPUqQsA9eefIrkbVvJoFgPi/9p3+4jV08yW+r9jg6NAf2XRyZ2ymJ6vbhkk0
-	 z30i00HRdjb1Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0149985173;
-	Sat, 30 May 2026 10:54:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 592DC12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EEFA61C91
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0492861C8F;
+	Sat, 30 May 2026 11:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QADLCV0ntGdF for <buildroot@buildroot.org>;
- Sat, 30 May 2026 10:54:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AE046F4A7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AE046F4A7
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C0D48749A; Sat, 30 May 2026 10:53:52 +0000 (UTC)
+ id 3Xkhey4P55wu; Sat, 30 May 2026 11:03:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13F3E61C91
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780139039;
+	bh=KSjGCJhjQx1FOGPLcTPJ4yXcC7OWZSokSx7glXnraAs=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=b3iw9y3AGsAGplblL2Y+qUxTfzgCK6J0DDa+Oq77/hu+w1DGViAAxObipmD9uPq+k
+	 bHaSOfShnyknIEkelt5we7nIr9vcYuZc2rhE8m27tpuReRMham0eph5Lyue56oUbKL
+	 haY1Owkgadpr6NabxE4I7x5lX50PE8Td4y0CosJ271/s69xOvgpGfBjOuJzvp85F8n
+	 rqQOFyFOYHgnfh/17tjVXUywgeKynG6jTaGJ31AE2V6rL4FmMk7J7gg/oFJ346F/GJ
+	 bkm09Tq0m0Y9KyyGl+SC5dI9sP40aCMT/TvdOz9Y+xtuJXooRInHyzgHhpPL4wd9Dq
+	 SoGtKJXIQQ3iQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13F3E61C91;
+	Sat, 30 May 2026 11:03:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D919212F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:03:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA83F4081F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:03:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X6h03UJnh618 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 11:03:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B09D9407DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B09D9407DB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B09D9407DB
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:03:56 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F351CA4C2D33
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:03:53 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43634)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wTHTu-000000000qw-03CB
+ for buildroot@buildroot.org; Sat, 30 May 2026 11:03:53 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 12:52:03 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b6a2f494290d85a26798564992ddd1ac46c1a48d
-X-Git-Newrev: 7b977650468d0b296d9d9fcc96ef929adc53eed7
-X-Patchwork-Hint: ignore
-Message-Id: <20260530105352.2C0D48749A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in: remove
- BR2_NEEDS_HOST_JAVA
+Date: Sat, 30 May 2026 13:03:53 +0200
+Message-ID: <20260530110353.615220-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1780139034;
+ bh=LlkQYLbkkOCXu3WYSbtxhOUq21doGpPbp86LWfkeFSQ=;
+ h=From:To:Subject:Date:From;
+ b=EbteRUh5qQVbWwuBoJjmHPgb2xBFnRiSLSkzGIFX3M2McfM7bkA69K+ZcwNmdjwtx
+ Srf/eI5ASJv0EiSWT8xzmFByfHLq9eGf/BIZXPVjVYI+4XO0y6NMYt+XH/ybdDeWxh
+ cKxqLmxe76/gxybSIvjvDUgEVsjR2xiT8Y3+p3ep7BN+2CXJnfDZRpaqLPyUioBhqw
+ lHVcmyWTWtpEwEwteAfwXnS8oODO/gQ2DVRfPW9oLyAt3QCRfCiJBiCwGSY4qggFRy
+ NSATo5P9MtKqOsXEEn7A2Vm+cmxdx4OyAiw+4yAUZU0PF3Lzw6V8I9K/jw6DfD+BzG
+ 1AnNdx2NTxo1g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=EbteRUh5
+Subject: [Buildroot] [PATCH/next v3 1/1] package/rtptools: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,86 +90,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7b977650468d0b296d9d9fcc96ef929adc53eed7
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+Switched _SITE to github, previous site is offline.
 
-Buildroot commit aac3d2b402fd2b8b91f125cf9314f4805b88f72a added a hidden
-boolean option that packages which depend on java on the host can select.
+https://github.com/irtlab/rtptools/commit/26f6daeeaa3217a98cb63e9463d60286f7fb90d8
+replaced the autotools-based build system with a hand-written script
+which is broken when cross-compiling due to runtime tests:
+https://github.com/irtlab/rtptools/blob/master/configure#L115
 
-Since buildroot commit 5366b8f734fe7aff7e95c1f92627265c5a75becc we can
-provide our own host-openjdk-bin package.
+Added various options to configure.local which is read by the configure
+script: https://github.com/irtlab/rtptools/blob/master/configure#L68
 
-Kodi previously used BR2_NEEDS_HOST_JAVA but was switched to host-open-
-jdk-bin in this series.
-The option BR2_NEEDS_HOST_JAVA is now unused and can be removed.
+Fixes:
+https://autobuild.buildroot.net/results/136/13649109c910f3a278baf63fbe99df1041907ede/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- Config.in                            |  5 -----
- support/dependencies/dependencies.sh | 11 -----------
- utils/genrandconfig                  |  2 --
- 3 files changed, 18 deletions(-)
+v3: Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/cf31214dbc2c14e7c37dde476552507683d83403
 
-diff --git a/Config.in b/Config.in
-index 0bfe6d1ab5..ac58c685d1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -101,11 +101,6 @@ config BR2_HOST_GCC_AT_LEAST_15
- # When adding new entries above, be sure to update
- # the HOSTCC_MAX_VERSION variable in the Makefile.
+v2: added more options to configure.local to fix cross builds (Thomas)
+
+ package/rtptools/Config.in     |  2 +-
+ package/rtptools/rtptools.hash |  2 +-
+ package/rtptools/rtptools.mk   | 22 +++++++++++++++++++---
+ 3 files changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/package/rtptools/Config.in b/package/rtptools/Config.in
+index 80bbb7a7a0..1aa803e60e 100644
+--- a/package/rtptools/Config.in
++++ b/package/rtptools/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_RTPTOOLS
+ 	  The rtptools distribution consists of a number of small
+ 	  applications that can be used for processing RTP data.
  
--# Hidden boolean selected by packages in need of Java in order to build
--# (example: kodi)
--config BR2_NEEDS_HOST_JAVA
--	bool
--
- # Hidden boolean selected by pre-built packages for x86, when they
- # need to run on x86-64 machines (example: pre-built external
- # toolchains, binary tools, etc.).
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 9c2aeaf23f..f44723678e 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -217,17 +217,6 @@ if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
- 	fi
- fi
+-	  http://www.cs.columbia.edu/irt/software/rtptools/
++	  https://github.com/irtlab/rtptools
+diff --git a/package/rtptools/rtptools.hash b/package/rtptools/rtptools.hash
+index 6988483b81..a2e7e627e6 100644
+--- a/package/rtptools/rtptools.hash
++++ b/package/rtptools/rtptools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2c76b2a423fb943820c91194372133a44cbdc456ebf69c51616ec50eeb068c28  rtptools-1.22.tar.gz
++sha256  c78c5b60bfddfc3505670230ff2b92514f62766c5bdf53e78c3ad88a12bbc27a  rtptools-520c0a3722f37cd243d6908063d86a0306ace088.tar.gz
+ sha256  f864592065e232c0b444ae9682a7a1a2c6aafe96712999f794bec24d4441a6a9  LICENSE
+diff --git a/package/rtptools/rtptools.mk b/package/rtptools/rtptools.mk
+index 2148b759ac..d42360c486 100644
+--- a/package/rtptools/rtptools.mk
++++ b/package/rtptools/rtptools.mk
+@@ -4,10 +4,26 @@
+ #
+ ################################################################################
  
--if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
--	check_prog_host "java"
--	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
--	if [ ! -z "$JAVA_GCJ" ] ; then
--		echo
--		echo "$JAVA_GCJ is not sufficient to compile your package selection."
--		echo "Please install an OpenJDK/IcedTea/Oracle Java."
--		exit 1 ;
--	fi
--fi
--
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 	if test ! -f /lib/ld-linux.so.2 ; then
- 		echo
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 5ebd552a1d..727c8193c4 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -113,8 +113,6 @@ async def fixup_config(sysinfo, configfile):
+-RTPTOOLS_VERSION = 1.22
+-RTPTOOLS_SITE = http://www.cs.columbia.edu/irt/software/rtptools/download
++RTPTOOLS_VERSION = 520c0a3722f37cd243d6908063d86a0306ace088
++RTPTOOLS_SITE = $(call github,irtlab,rtptools,$(RTPTOOLS_VERSION))
+ RTPTOOLS_LICENSE = BSD-3-Clause
+ RTPTOOLS_LICENSE_FILES = LICENSE
+-RTPTOOLS_CONF_ENV = ac_cv_prog_FOUND_CLANG=no
++
++define RTPTOOLS_CONFIGURE_LOCAL
++	( \
++	echo 'PREFIX="$(TARGET_DIR)"'; \
++	echo 'HAVE_BIGENDIAN=$(if $(filter "BIG",$(BR2_ENDIAN)),1,0)'; \
++	echo 'HAVE_ERR=1'; \
++	echo 'HAVE_GETOPT=1'; \
++	echo 'HAVE_GETTIMEOFDAY=1'; \
++	echo 'HAVE_MSGCONTROL=1'; \
++	echo 'HAVE_LNSL=0'; \
++	echo 'HAVE_LSOCKET=0'; \
++	echo 'HAVE_PROGNAME=1'; \
++	echo 'HAVE_STRTONUM=1'; \
++	echo 'HAVE_WINDOWS=0'; \
++	) > $(@D)/configure.local
++endef
++RTPTOOLS_PRE_CONFIGURE_HOOKS += RTPTOOLS_CONFIGURE_LOCAL
  
-     ROOTFS_SIZE = '5G'
- 
--    if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not await sysinfo.has("java"):
--        return False
-     # libffi not available on ARMv7-M, but propagating libffi arch
-     # dependencies in Buildroot is really too much work, so we handle
-     # this here.
+ $(eval $(autotools-package))
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
