@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EAE0CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 636A3CD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1707F85CC5;
-	Tue,  9 Jun 2026 13:04:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 525AA85CCE;
+	Tue,  9 Jun 2026 13:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SVG3IqFgDy0z; Tue,  9 Jun 2026 13:04:51 +0000 (UTC)
+ id Zpq1mHYshh4I; Tue,  9 Jun 2026 13:04:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1149A855BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C84985CAC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010288;
-	bh=E1njpuouId2z78IW3WGChOCF6sKEcN92qyx0liT1lcI=;
+	s=default; t=1781010291;
+	bh=TzN2ZYtRrXFKOq9AKfDKd86nXy4HP0RlIfH0uExxKoE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FSJevpD5blfpzPWevaXU0VIPOMf0Sp2exLmyxY9Rwwtdqv+bMehTbjmXUGJX+/AGI
-	 H+OKNBG0UkErqCs6s94aGiEpBzMDtx/Lj9YdxiNnXHq1LQh6Yxi3cPdoenZFjkGup3
-	 Xm6de8lTFsNx1dZRd+ZjVKNkW6UWi9rxk04H0TYEd/Z+/vIQRuyrXjWIZIkIgmDRPm
-	 +/4UClXF3W2adgHPBr2srICd2Ulx70Tcyobl8w5IqYLQyNKSg6K39afgvuGaWjMHgi
-	 +r9vTeEqJ2f8w7SFdil8a3aBCMoBFCFQ7ebpP4jbvOp9HopG56tBdncjfdmTC7xGGL
-	 tHfwo5CvUPJgA==
+	b=VhqCcydSPgZVF2vlUGptvsHhZ2SHo8dGMYXLhqXffZXT7OuxYuZoOytaTO4LvLKTD
+	 hf6kOe7AqXAP5Ym2OphYcGo7babkHm0G+25lh3L26UB0dAMGs0wpg1lOEty+ET8jjJ
+	 HQoX3eZ8a6u4xDhFmqGIprEpvkiNmDaB7pmPbBojeutFHkNDzVtIXOZVfxW2zEEJDL
+	 x3ao65go/8JCZ0yQ1MqxCJqEYh9eOkLBvzH1U01CfKd2MqcZUS7VNgiF8p0bMQkgLz
+	 lmJwdt/PQums1LySxJqHsZYsuDc9Vw1/Hr3YB0PzpvKsm4tpHvkKwyjcGttgcCytYI
+	 xgs2w1iTy8DuQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1149A855BF;
-	Tue,  9 Jun 2026 13:04:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C84985CAC;
+	Tue,  9 Jun 2026 13:04:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B5BF7196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C3AEA190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 291E542700
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3630342708
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RReGmSB7RKHM for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
+ id uAdAVkgxpQAv for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 522B142708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78DB942714
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 522B142708
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78DB942714
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E47E87E7E; Tue,  9 Jun 2026 13:01:22 +0000 (UTC)
+ id B510787E7E; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:48:42 +0200
+Date: Sat, 30 May 2026 16:52:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c35794d2f3628a11b4a5e4722e05f5a8682d555e
-X-Git-Newrev: 045c5270cfdff50d975a2007b1555519afc9b46f
+X-Git-Oldrev: da1b45dd00fd28e9db3f24dbb7b10ad2e7a024e7
+X-Git-Newrev: a3c6c0cbad95f03dc031b1effdff414bb2525493
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130122.8E47E87E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cups-filters: fix build against
- qpdf 12
+Message-Id: <20260609130123.B510787E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_ppc64le_powernv11: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,338 +69,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8164007091111271830=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8164007091111271830==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/045c5270cfdff50d975a2007b1555519afc9b46f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a3c6c0cbad95f03dc031b1effdff414bb2525493
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This patch adds fixes for cups-filters so it can be build with newer
-versions of qpdf that made changes to PointerHolder:
-https://github.com/qpdf/qpdf/blob/v12.3.2/manual/design.rst#smart-pointers
+The Power11 CPU is supported by the Linux Kernel since v6.9
+(see upstream commit [1]), and the Powernv11 machine is supported
+in qemu since version v10.2.0 (see upstream commit [2]).
 
-Build-tested using this defconfig:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=c2ed087ed35ca569d8179924ba560be248c758e5
+[2] https://gitlab.com/qemu-project/qemu/-/commit/73a911e966acd8314e39a4ce4bc58e2254e68324
 
-BR2_PACKAGE_CUPS=y
-BR2_PACKAGE_CUPS_FILTERS=y
-
-                             arm-aarch64 [ 1/32]: OK
-                   bootlin-aarch64-glibc [ 2/32]: OK
-               bootlin-aarch64-glibc-old [ 3/32]: SKIPPED
-               bootlin-arcle-hs38-uclibc [ 4/32]: OK
-                    bootlin-armv5-uclibc [ 5/32]: OK
-                     bootlin-armv7-glibc [ 6/32]: OK
-                   bootlin-armv7m-uclibc [ 7/32]: SKIPPED
-                      bootlin-armv7-musl [ 8/32]: OK
-                bootlin-m68k-5208-uclibc [ 9/32]: SKIPPED
-               bootlin-m68k-68040-uclibc [10/32]: OK
-             bootlin-microblazeel-uclibc [11/32]: OK
-                  bootlin-mips64el-glibc [12/32]: OK
-                bootlin-mipsel32r6-glibc [13/32]: OK
-                   bootlin-mipsel-uclibc [14/32]: OK
-                 bootlin-openrisc-uclibc [15/32]: OK
-        bootlin-powerpc64le-power8-glibc [16/32]: OK
-           bootlin-powerpc-e500mc-uclibc [17/32]: OK
-                   bootlin-riscv32-glibc [18/32]: OK
-                   bootlin-riscv64-glibc [19/32]: OK
-                    bootlin-riscv64-musl [20/32]: OK
-                 bootlin-s390x-z13-glibc [21/32]: OK
-                      bootlin-sh4-uclibc [22/32]: OK
-                   bootlin-sparc64-glibc [23/32]: OK
-                    bootlin-sparc-uclibc [24/32]: OK
-                    bootlin-x86-64-glibc [25/32]: OK
-                     bootlin-x86-64-musl [26/32]: OK
-                   bootlin-x86-64-uclibc [27/32]: OK
-                   bootlin-x86-i686-musl [28/32]: OK
-                   bootlin-xtensa-uclibc [29/32]: OK
-                            br-arm-basic [30/32]: SKIPPED
-                    br-arm-full-nothread [31/32]: SKIPPED
-                      br-arm-full-static [32/32]: SKIPPED
-
-32 builds, 6 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-This solution avoids[1] a version bump of this package while keeping
-compatibility with the newest version of qpdf. The bump of qpdf is
-needed to fix build errors with gcc 16.x.
-
-[1] https://lists.buildroot.org/pipermail/buildroot/2025-August/784931.html
-Thomas: "which means duplicating all the crazy dependencies of
-libcupsfilters yes :/"
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...cupsfilters-Fixed-building-with-QPDF-11.x.patch |  57 +++++++
- ...4-Updated-code-to-be-built-with-QPDF-12.x.patch | 165 +++++++++++++++++++++
- package/cups-filters/cups-filters.mk               |   4 +
- 3 files changed, 226 insertions(+)
+ board/qemu/ppc64le-powernv11/readme.txt  | 14 ++++++++++++++
+ configs/qemu_ppc64le_powernv11_defconfig | 19 +++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/cups-filters/0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch b/package/cups-filters/0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
+diff --git a/board/qemu/ppc64le-powernv11/readme.txt b/board/qemu/ppc64le-powernv11/readme.txt
 new file mode 100644
-index 0000000000..f4dc04d3cf
+index 0000000000..368bad0264
 --- /dev/null
-+++ b/package/cups-filters/0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
-@@ -0,0 +1,57 @@
-+From 0cce0968980e8fdd9053cba436a66246b2303a84 Mon Sep 17 00:00:00 2001
-+From: Till Kamppeter <till.kamppeter@gmail.com>
-+Date: Wed, 6 Dec 2023 22:56:41 +0100
-+Subject: [PATCH] libcupsfilters: Fixed building with QPDF 11.x
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/board/qemu/ppc64le-powernv11/readme.txt
+@@ -0,0 +1,14 @@
++Run the emulation with:
 +
-+Set CXXFLAGS="-DPOINTERHOLDER_TRANSITION=0" to silence QPDF warnings
++qemu-system-ppc64 \
++    -M powernv11 \
++    -kernel output/images/vmlinux \
++    -append "console=hvc0 rootwait root=/dev/nvme0n1" \
++    -device nvme,bus=pcie.3,addr=0x0,drive=drive0,serial=1234 \
++    -drive file=output/images/rootfs.ext2,if=none,id=drive0,format=raw,cache=none \
++    -device e1000e,netdev=net0,mac=C0:FF:EE:00:01:03,bus=pcie.1,addr=0x0 \
++    -netdev user,id=net0 \
++    -serial mon:stdio \
++    -nographic # qemu_ppc64le_powernv11_defconfig
 +
-+QPDF 11 issues warnings about deprecated "PointerHolder", even if the
-+code does not use "PointerHolder" any more. This compiler macro
-+suppresses the warnings.
-+
-+See /usr/include/qpdf/PointerHolder.hh of QPDF 11.
-+
-+Backported from libcupsfilters (2.x), commit 076a994fce
-+
-+Added "-std=c++17" C++ compiler flag (PR#18)
-+
-+Needed as otherwise the QPDF.hh file of QPDF 11 causes the error
-+
-+    ‘std::string_view’ has not been declared
-+
-+Adding the "-std=c++17" to CXXFLAGS fixes this. See also
-+
-+    https://stackoverflow.com/questions/58295334/error-stdstring-view-has-no
-+t-been-declared
-+
-+Backported from libcupsfilters (2.x), commit e1daf27c59
-+
-+Upstream: https://github.com/OpenPrinting/cups-filters/commit/0cce0968980e8fdd9053cba436a66246b2303a84
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 083aecb83..f293e803b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -837,7 +837,10 @@ AS_IF([test x"$GCC" = "xyes"], [
-+ 	CXXFLAGS="$CXXFLAGS -Wall " # -Weffc++" # TODO: enable when it does not print 1MB of warnings
-+ ])
-+ CFLAGS="$CFLAGS -D_GNU_SOURCE"
-+-CXXFLAGS="$CXXFLAGS -D_GNU_SOURCE"
-++CXXFLAGS="$CXXFLAGS -D_GNU_SOURCE -DPOINTERHOLDER_TRANSITION=0"
-++#                                   ^^ Silence deprecation warnings of QPDF 11
-++#                                      See /usr/include/qpdf/PointerHolder.hh
-++CXXFLAGS="$CXXFLAGS -std=c++17" # Needed to build with current QPDF (11.x)
-+ 
-+ # ==========================
-+ # Braille embossing/liblouis
-+-- 
-+2.47.3
-+
-diff --git a/package/cups-filters/0004-Updated-code-to-be-built-with-QPDF-12.x.patch b/package/cups-filters/0004-Updated-code-to-be-built-with-QPDF-12.x.patch
++The login prompt will appear in the terminal window.
+diff --git a/configs/qemu_ppc64le_powernv11_defconfig b/configs/qemu_ppc64le_powernv11_defconfig
 new file mode 100644
-index 0000000000..8996a6afce
+index 0000000000..94266a22d5
 --- /dev/null
-+++ b/package/cups-filters/0004-Updated-code-to-be-built-with-QPDF-12.x.patch
-@@ -0,0 +1,165 @@
-+From 7b6e46ea6237763104bf2a22eca66ba92a6b71a4 Mon Sep 17 00:00:00 2001
-+From: Till Kamppeter <till.kamppeter@gmail.com>
-+Date: Wed, 12 Nov 2025 16:10:51 +0100
-+Subject: [PATCH] Updated code to be built with QPDF 12.x
-+
-+- Set `#define POINTERHOLDER_TRANSITION 3`
-+- Explicitly `#include <qpdf/PointerHolder.hh>`
-+- `ph = (PointerHolder<Buffer>) new Buffer(buff, profile_size);` in `rastertopdf.cpp`
-+- Removed `-DPOINTERHOLDER_TRANSITION=0` from `CXXFLAGS` in `configure.ac`
-+- Replaced all `replaceOrRemoveKey()` by `replaceKey()`
-+
-+Upstream: https://github.com/OpenPrinting/cups-filters/commit/7b6e46ea6237763104bf2a22eca66ba92a6b71a4
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac                               |  3 ---
-+ filter/pdf.cxx                             |  2 ++
-+ filter/pdftopdf/qpdf_pdftopdf_processor.cc | 18 +++++++++---------
-+ filter/pdftopdf/qpdf_xobject.cc            |  2 ++
-+ filter/rastertopdf.cpp                     |  4 +++-
-+ filter/urftopdf.cpp                        |  2 ++
-+ 6 files changed, 18 insertions(+), 13 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 32180d0da..702b58a0a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -793,9 +793,6 @@ AS_IF([test x"$GCC" = "xyes"], [
-+ 	CXXFLAGS="$CXXFLAGS -Wall " # -Weffc++" # TODO: enable when it does not print 1MB of warnings
-+ ])
-+ CFLAGS="$CFLAGS -D_GNU_SOURCE"
-+-CXXFLAGS="$CXXFLAGS -D_GNU_SOURCE -DPOINTERHOLDER_TRANSITION=0"
-+-#                                   ^^ Silence deprecation warnings of QPDF 11
-+-#                                      See /usr/include/qpdf/PointerHolder.hh
-+ CXXFLAGS="$CXXFLAGS -std=c++17" # Needed to build with current QPDF (11.x)
-+ 
-+ # ==========================
-+diff --git a/filter/pdf.cxx b/filter/pdf.cxx
-+index 68b1af912..7d592dc95 100644
-+--- a/filter/pdf.cxx
-++++ b/filter/pdf.cxx
-+@@ -21,6 +21,8 @@
-+ #include <vector>
-+ #include <string>
-+ #include <cstring>
-++#define POINTERHOLDER_TRANSITION 3
-++#include <qpdf/PointerHolder.hh>
-+ #include <qpdf/QPDF.hh>
-+ #include <qpdf/QPDFObjectHandle.hh>
-+ #include <qpdf/QPDFWriter.hh>
-+diff --git a/filter/pdftopdf/qpdf_pdftopdf_processor.cc b/filter/pdftopdf/qpdf_pdftopdf_processor.cc
-+index beffc2423..3c21a6512 100644
-+--- a/filter/pdftopdf/qpdf_pdftopdf_processor.cc
-++++ b/filter/pdftopdf/qpdf_pdftopdf_processor.cc
-+@@ -83,10 +83,10 @@ QPDFObjectHandle QPDF_PDFTOPDF_PageHandle::get() // {{{
-+     page.getKey("/Resources").replaceKey("/XObject",QPDFObjectHandle::newDictionary(xobjs));
-+     content.append("Q\n");
-+     page.getKey("/Contents").replaceStreamData(content,QPDFObjectHandle::newNull(),QPDFObjectHandle::newNull());
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(rotation));
-++    page.replaceKey("/Rotate",makeRotate(rotation));
-+   } else {
-+     Rotation rot=getRotate(page)+rotation;
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(rot));
-++    page.replaceKey("/Rotate",makeRotate(rot));
-+   }
-+   page=QPDFObjectHandle(); // i.e. uninitialized
-+   return ret;
-+@@ -181,9 +181,9 @@ Rotation QPDF_PDFTOPDF_PageHandle::crop(const PageRect &cropRect,Rotation orient
-+   page.assertInitialized();
-+   Rotation save_rotate = getRotate(page);
-+   if(orientation==ROT_0||orientation==ROT_180)
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(ROT_90));
-++    page.replaceKey("/Rotate",makeRotate(ROT_90));
-+   else
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(ROT_0));
-++    page.replaceKey("/Rotate",makeRotate(ROT_0));
-+ 
-+   PageRect currpage= getBoxAsRect(getTrimBox(page));
-+   double width = currpage.right-currpage.left;
-+@@ -242,7 +242,7 @@ Rotation QPDF_PDFTOPDF_PageHandle::crop(const PageRect &cropRect,Rotation orient
-+   //Cropping.
-+   // TODO: Borders are covered by the image. buffer space?
-+   page.replaceKey("/TrimBox",makeBox(currpage.left,currpage.bottom,currpage.right,currpage.top));
-+-  page.replaceOrRemoveKey("/Rotate",makeRotate(save_rotate));
-++  page.replaceKey("/Rotate",makeRotate(save_rotate));
-+   return getRotate(page);
-+ }
-+ 
-+@@ -251,14 +251,14 @@ bool QPDF_PDFTOPDF_PageHandle::is_landscape(Rotation orientation)
-+   page.assertInitialized();
-+   Rotation save_rotate = getRotate(page);
-+   if(orientation==ROT_0||orientation==ROT_180)
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(ROT_90));
-++    page.replaceKey("/Rotate",makeRotate(ROT_90));
-+   else
-+-    page.replaceOrRemoveKey("/Rotate",makeRotate(ROT_0));
-++    page.replaceKey("/Rotate",makeRotate(ROT_0));
-+ 
-+   PageRect currpage= getBoxAsRect(getTrimBox(page));
-+   double width = currpage.right-currpage.left;
-+   double height = currpage.top-currpage.bottom;
-+-  page.replaceOrRemoveKey("/Rotate",makeRotate(save_rotate));
-++  page.replaceKey("/Rotate",makeRotate(save_rotate));
-+   if(width>height)
-+     return true;
-+   return false;
-+@@ -665,7 +665,7 @@ void QPDF_PDFTOPDF_Processor::autoRotateAll(bool dst_lscape,Rotation normal_land
-+       // TODO? other rotation direction, e.g. if (src_rot==ROT_0)&&(param.orientation==ROT_270) ... etc.
-+       // rotation=ROT_270;
-+ 
-+-      page.replaceOrRemoveKey("/Rotate",makeRotate(src_rot+rotation));
-++      page.replaceKey("/Rotate",makeRotate(src_rot+rotation));
-+     }
-+   }
-+ }
-+diff --git a/filter/pdftopdf/qpdf_xobject.cc b/filter/pdftopdf/qpdf_xobject.cc
-+index 12732f1e9..2550bdd4f 100644
-+--- a/filter/pdftopdf/qpdf_xobject.cc
-++++ b/filter/pdftopdf/qpdf_xobject.cc
-+@@ -1,5 +1,7 @@
-+ #include "qpdf_xobject.h"
-+ //#include <qpdf/Types.h>
-++#define POINTERHOLDER_TRANSITION 3
-++#include <qpdf/PointerHolder.hh>
-+ #include <qpdf/QPDF.hh>
-+ #include <qpdf/Pl_Discard.hh>
-+ #include <qpdf/Pl_Count.hh>
-+diff --git a/filter/rastertopdf.cpp b/filter/rastertopdf.cpp
-+index ad5dd34c5..6a1aa218f 100644
-+--- a/filter/rastertopdf.cpp
-++++ b/filter/rastertopdf.cpp
-+@@ -39,6 +39,8 @@
-+ #include <arpa/inet.h>   // ntohl
-+ 
-+ #include <vector>
-++#define POINTERHOLDER_TRANSITION 3
-++#include <qpdf/PointerHolder.hh>
-+ #include <qpdf/QPDF.hh>
-+ #include <qpdf/QPDFWriter.hh>
-+ #include <qpdf/QUtil.hh>
-+@@ -481,7 +483,7 @@ QPDFObjectHandle embedIccProfile(QPDF &pdf)
-+     cmsSaveProfileToMem(colorProfile, buff, &profile_size);
-+ 
-+     // Write ICC profile buffer into PDF
-+-    ph = new Buffer(buff, profile_size);  
-++    ph = (PointerHolder<Buffer>) new Buffer(buff, profile_size);
-+     iccstream = QPDFObjectHandle::newStream(&pdf, ph);
-+     iccstream.replaceDict(QPDFObjectHandle::newDictionary(streamdict));
-+ 
-+diff --git a/filter/urftopdf.cpp b/filter/urftopdf.cpp
-+index 4e7f6535a..e5c9f1f33 100644
-+--- a/filter/urftopdf.cpp
-++++ b/filter/urftopdf.cpp
-+@@ -32,6 +32,8 @@
-+ #include <arpa/inet.h>   // ntohl
-+ 
-+ #include <vector>
-++#define POINTERHOLDER_TRANSITION 3
-++#include <qpdf/PointerHolder.hh>
-+ #include <qpdf/QPDF.hh>
-+ #include <qpdf/QPDFWriter.hh>
-+ #include <qpdf/QUtil.hh>
-+-- 
-+2.47.3
-+
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 6bc4610376..eaad301c6d 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -10,6 +10,10 @@ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+,
- CUPS_FILTERS_LICENSE_FILES = COPYING
- CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
- 
-+# 0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
-+# 0004-Updated-code-to-be-built-with-QPDF-12.x.patch
-+CUPS_FILTERS_AUTORECONF = YES
-+
- # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
- CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
- 
-
---===============8164007091111271830==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++++ b/configs/qemu_ppc64le_powernv11_defconfig
+@@ -0,0 +1,19 @@
++BR2_powerpc64le=y
++BR2_powerpc_power11=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.7"
++BR2_LINUX_KERNEL_DEFCONFIG="powernv"
++BR2_LINUX_KERNEL_VMLINUX=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8164007091111271830==--
