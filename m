@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 920E1CD6E4A
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 10:53:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D30CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 10:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F82742CBB;
-	Sat, 30 May 2026 10:53:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EFzNjv-V4BI8; Sat, 30 May 2026 10:53:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13CB742C9D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780138435;
-	bh=9uxGJ6FHRgNibbN6nYHsL/QQS6bRYOnLUAKq/WDRSWw=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=W4UBKUpXpSfzcV5tKfAa40E7AnnxOuL1lYyzq8ufLRZhJg2gwebZYUOoywmUl3NdC
-	 QnCxAlrRWpttezdzhhyAb0zpubA1XVT4+SGAqY/rtlZpoQpScCNU7WqqcUQa4vP5r+
-	 fJLuWbY3xHYgbefDx/Ha/zUYJyOnslv8bqVyHxdh4r7wSjc3o0+C3sj8Rj6Xv6GR/i
-	 3E1g3kNAnKc0oyUhcP3+z1H8QFud273WhV22S+NicCCuRpYSX8NyTNqy2MWVE4WsJe
-	 SzSXvkzInu1CLuxoWiJ0EyH2Mtv5z1G/LlIPHlZwfl/zcISICb1QK8lNiG/q79LJsX
-	 tVnv5uGQl/Y5w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13CB742C9D;
-	Sat, 30 May 2026 10:53:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1226812F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:53:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 032EA85178
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:53:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFA09852E8;
+	Sat, 30 May 2026 10:54:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s8vzpJWkxbgN for <buildroot@buildroot.org>;
- Sat, 30 May 2026 10:53:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 0-I4fY9yJ4eZ; Sat, 30 May 2026 10:54:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CA3785178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780138447;
+	bh=5k0d6+H89M7N1rBou6Vy9vR6rDsH5einEFGQL7W7mN0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=qukeh3RyCISwZJ2jRSfFodmeKbCTlLAQyTa4y5+4P/xMxAaxfFjPrvfDQMShqffZF
+	 TqB9dF1kZTryJVD3Ja8LtISzBfpIl1W8q+/3LjzfPCEleX/RGXDiWe/p2fpF4A2gNw
+	 aFiWOTgztHxxf+FKw1nE1k1mWCsIfkq+IrPYpaBRkOjJlCmd/CTm80rKt20b/3/o2a
+	 eqOF2X06ebThnimiefwYYeWqRX5wQZV/1jxC/Bb74utecnBLih6mksdRmT4f0IuZjN
+	 os9j0Fiy0rLH6khgs2RL6AedqTi1A36ryPxJmZS2+IvnxA2GyPaF83OgDWt3wKxvsY
+	 nDerv/m/JzCqA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CA3785178;
+	Sat, 30 May 2026 10:54:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE4D512F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC1966F4AA
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wyv4yYngKeZq for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 10:54:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 290BD85173
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 290BD85173
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 290BD85173
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:53:52 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 37F1C1A3746
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:53:50 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 075B86073B;
- Sat, 30 May 2026 10:53:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1042210888650; 
- Sat, 30 May 2026 12:53:48 +0200 (CEST)
-Date: Sat, 30 May 2026 12:53:46 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, 
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <ahrBlxVTN-8GtJpY@windsurf>
-References: <20260116232717.937891-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260116232717.937891-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780138429; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=hmAPo09aYsAN2QFTwecKn7/aRVv29WQD/1bPWcEQ1GM=;
- b=nQjB09J4F4z+c3FPlxUZTRusNL17+R1+xGCV4OnuQ71ZO8kVrBoDcXrZM8unMwGGoAuBBi
- ieMBVxozTiUNcDPRVOMJeVKYUtmy84zhMOIXrhOrBSs/MFfcbLjouBp7n9xbe9Ij/ISJwx
- 8qxri0g4OVuf9kdM1+hoxx7xpCeaJdVT0ODbdi+eJmI+Eugrus6pzZwx/oo2lydUFI/ifi
- pnmrBuYABocBXX8Qev9Fqmvac6fCptq1ShtSMScp/kEtaviPE0M0MsumiwK2pBh/ABZtAj
- tiPSx9t5KA7uyq8aKeKjxJxl0346Xgg4641A3v0sjycVYflSzUALbyoMaNsVvA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=nQjB09J4
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/util-linux: optionally add
- libpthread to uuid.pc
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D83E61C91
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D83E61C91
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:54:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 21C968747E; Sat, 30 May 2026 10:53:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 12:51:42 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 8d6c49f8d86eb81e143e8dee7806d9896f3eaec1
+X-Git-Newrev: b6a2f494290d85a26798564992ddd1ac46c1a48d
+X-Patchwork-Hint: ignore
+Message-Id: <20260530105352.21C968747E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: depend on
+ host-openjdk-bin instead of selecting BR2_NEEDS_HOST_JAVA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,36 +69,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Jan 17, 2026 at 12:27:17AM +0100, Bernd Kuhls wrote:
-> Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped
-> util-linux from version 2.40.2 to 2.41.1.
-> 
-> Upstream release 2.40.3 contains
-> https://github.com/util-linux/util-linux/commit/e143539d30fd18afb3ba6d3c6e50a260d4219895
-> which unconditionally adds -lpthread to uuid.pc causing build errors for
-> other packages using non-threaded toolchains like erofs-utils.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/582/5827995db2a805e0c8a04fde8498eff6f28aa6d8/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b6a2f494290d85a26798564992ddd1ac46c1a48d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Thanks, applied to master, after renumbering to 0002, adding the
-proper upstream link now that it has been merged upstream, and also
-adding the patch for util-linux-libs.
+This patch removes the dependency on java being installed on the host,
+instead we make use of our host-openjdk-bin package.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Build-tested using this defconfig
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
+
+by running 'utils/docker-run make kodi'.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/kodi/Config.in | 2 +-
+ package/kodi/kodi.mk   | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index e91b8cfb96..25b4832164 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
++	default y if BR2_PACKAGE_HOST_OPENJDK_BIN_ARCH_SUPPORTS
+ 	# i386: needs sse (see upstream PR 10351)
+ 	depends on !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+ 	depends on BR2_USE_MMU # libcdio, and others
+@@ -66,7 +67,6 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_PACKAGE_PYTHON3_PYC_ONLY
+-	select BR2_NEEDS_HOST_JAVA
+ 	select BR2_HOST_CMAKE_AT_LEAST_3_24
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_GPL
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 85c15926ae..6a49f5df0c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -33,6 +33,7 @@ KODI_DEPENDENCIES = \
+ 	host-kodi-jsonschemabuilder \
+ 	host-kodi-texturepacker \
+ 	host-nasm \
++	host-openjdk-bin \
+ 	host-swig \
+ 	host-xmlstarlet \
+ 	jpeg \
+@@ -100,6 +101,7 @@ KODI_CONF_OPTS += \
+ 	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
+ 	-DENABLE_TESTING=OFF \
+ 	-DENABLE_DEBUGFISSION=OFF \
++	-DJAVA_HOME=$(HOST_OPENJDK_BIN_ROOT_DIR) \
+ 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python \
+ 	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON_PATH=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
