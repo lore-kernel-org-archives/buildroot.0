@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31288CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35755CD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E27E85B76;
-	Tue,  9 Jun 2026 13:04:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B820385B88;
+	Tue,  9 Jun 2026 13:04:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MO6WHI2hGrE2; Tue,  9 Jun 2026 13:04:08 +0000 (UTC)
+ id RfdKPZf0pKsM; Tue,  9 Jun 2026 13:04:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F18885B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3C8A85B69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010248;
-	bh=/MTTkQx7d0mZ9DeppeGBz3s4etrK/2vlItw/z5lLcLc=;
+	s=default; t=1781010249;
+	bh=zF63NG3qRdevTl0VSdwsZ0ns6bUfo4By2XOswrMvsiA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mD3THLaLBTTa8nk2/HWKA98h+1nnSgSLV6rzlmkz7+Qav6t6+qQ95trrxOZAhTYYe
-	 JVSq3GACdG43PNsNkwEhB3ctFJ8ALqICJrmxe+QHKBAKS2e1SDrp4olFl8ZLNs/s9G
-	 ivwon70XWqBZBNwUg+FhXh3xxhE0E0MDKRY0oU7do076jh6vfUB8BHEykHiKxqxnkr
-	 hKBgjapF6M0BF2aB0hSxVOacf+HMxFIFwrdK7r6eIGR44g/Hjtd6u82EX8BzekeKGy
-	 z7Uho7rkH8CvWNgPB5Q3whBIP3WWALaPQDw5o3lGLNalB8IRmLuUJRW8DeBGlucyJK
-	 C81q27gdAGCyQ==
+	b=n9+jNahoTGp75LPBK1Q9DdOn5yu8eeST7JtpYrsrsYf/BeWKEDinuSSb8jIT/Tqkk
+	 uIfoT0P8w56Yf8E+Utb+5DyNlLkhIIwBRpE6kWdkwlUdP3N1ntltwtDXRpAdxQinN7
+	 fA4wF9Y/B4e7G5UPjC7BJKfx2hCAat2FHg4NjEHCdPORL+svhXnZYazN2+ECJXyVF+
+	 6xwdu3Dy2hpvpGY+grm9XhOY+++Xvn81GWPQSTTX7JzdGZxrXjpMts31JhMKyE3FSK
+	 +r5fi7JpngrwMHOTaWPnSyG94A0O9J+3VYFMOHiLFkl7k7ACtVCYErJ6L9UnyBPsza
+	 mykOQF89cQO4g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F18885B69;
-	Tue,  9 Jun 2026 13:04:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D817196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3C8A85B69;
+	Tue,  9 Jun 2026 13:04:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EB93196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E88B426E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3C81460C3
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id znrYK6q0Hody for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aNMZjfunk9VK for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CCDC426D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6176D43B5B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CCDC426D6
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6176D43B5B
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77C6287E7E; Tue,  9 Jun 2026 13:01:20 +0000 (UTC)
+ id 9DC3F87E68; Tue,  9 Jun 2026 13:01:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 18:44:15 +0200
+Date: Sat, 30 May 2026 15:48:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a761ac88c6bdb9a6a0f77d65fb92b0d25544677
-X-Git-Newrev: 0c2e0f1e9821c2e96b5060d003e773464ded62c2
+X-Git-Oldrev: 045c5270cfdff50d975a2007b1555519afc9b46f
+X-Git-Newrev: ceec8746a9e60108b758b1fc0f7f7f6557a5371b
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130120.77C6287E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cryptography: bump to
- version 48.0.0
+Message-Id: <20260609130122.9DC3F87E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups-filters: needs autoreconf to
+ fix build with gcc 16.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,55 +69,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c2e0f1e9821c2e96b5060d003e773464ded62c2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ceec8746a9e60108b758b1fc0f7f7f6557a5371b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Changelog:
-https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst#4800---2026-05-04
+Add comment to clarify that autoreconf is still needed even after the
+patches are removed to update ax_cxx_compile_stdcxx.m4 for compatibility
+with gcc >= 16.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Marcus: add changelog link]
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-cryptography/python-cryptography.hash | 2 +-
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cups-filters/cups-filters.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index bd91df3abe..4498dfd45d 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  6cfe2745f466960344bf699234a12e16d6cd16f87e50cc2d15857351732daeb0  python-cryptography-47.0.0-cargo5.tar.gz
-+sha256  99bb9d438282237d394309a95f1effa4f91ca1f64f7ad0a0cff0f35e294d07b4  python-cryptography-48.0.0-cargo5.tar.gz
- # Locally computed sha256 checksums
- sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 1d5dad3367..bb4a5084cc 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index eaad301c6d..2c682b92f3 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -12,6 +12,7 @@ CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
  
--PYTHON_CRYPTOGRAPHY_VERSION = 47.0.0
-+PYTHON_CRYPTOGRAPHY_VERSION = 48.0.0
- PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/ef/b2/7ffa7fe8207a8c42147ffe70c3e360b228160c1d85dc3faff16aaa3244c0
-+PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/9f/a9/db8f313fdcd85d767d4973515e1db101f9c71f95fced83233de224673757
- PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ # 0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
+ # 0004-Updated-code-to-be-built-with-QPDF-12.x.patch
++# ax_cxx_compile_stdcxx.m4 needs to be updated for gcc 16.x (C++20)
+ CUPS_FILTERS_AUTORECONF = YES
+ 
+ # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
