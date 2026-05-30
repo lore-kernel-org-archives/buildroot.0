@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A792CD6E54
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4B3CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:54:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E49B6F5EF;
-	Sat, 30 May 2026 13:54:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2222142EDD;
+	Sat, 30 May 2026 13:54:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BSM7z2jBWZym; Sat, 30 May 2026 13:54:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tl3_Qz8Qt3GE; Sat, 30 May 2026 13:54:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD4F6F5AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3598142EF6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149277;
-	bh=0mhqXQ5m146LsO1fDHdknNZAMmY9eiFyiHJ5yzv7woQ=;
+	s=default; t=1780149279;
+	bh=6NmDyseAi1/fL2VhEwwEwVwGN47+774AN4HKT7HTO3Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jdGPYW2Yyvsld9Zd7LvYKCOuHm+K+ZqcuGz7Q2SvdCdCoWPvOyZdeHhQQ23+1LPli
-	 88lT2LwSuGKs5xLASrwTpKfNHn+b/G9blQHZMjZofOd/8pY77nFWpeha9KLK8M5DaB
-	 3kSOJbLx1/GEWR/qwKeInQhHPwEGCTC4zy7Eor3Dg7w/JpoTpKuLO1k37yk2ME1onI
-	 I+E8qiGfrHHlp+iupyYxFXVlmJ+fbHb1uXi4ValtDHelmHUJSfb4/PvomJc2KMnAw7
-	 7kCHaqxPmOfZ50uGSS7c8gnqtXrynRQcE0oK3mkw9scDNh2Ccp9uCyIp/vK9AoNWAr
-	 LQ5enJrkWT+3w==
+	b=h+sOxyyxgoASmCB08GqFzL/6MPhFDwCMnmXp0O+nUI59sgUroXFYmigjmM5GkxH3q
+	 gE7LQgkjfFRJERHhZ2cQoVexdfTouF31Liqzi1VADTEAHAH+grrL+3+4IIXZDJP5sM
+	 oQvFvq/E7sH4ZRHZ1S5EwVvGqbRqITpoD3kf5ZVoByRGpysi6MBzZhQBkFalHk9ldV
+	 eY4SlVgKZAlnLP6B/FqkmwzsGnzfvKjFbtipbHCs05YZuy0L6AN/4sZiOnuy3FJUgh
+	 S5u+ObSR9XBQOkpAUPGPhxQvPuprHolEqRBdFqbIGQ84OedBDC2qUliksqXa+jKzmm
+	 BBu5nnO+FW53w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCD4F6F5AF;
-	Sat, 30 May 2026 13:54:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 68235218
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3598142EF6;
+	Sat, 30 May 2026 13:54:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7CE5F4
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A0BC6F4F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7B64805E4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kff1o82tDvNT for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UKChE0qmwydW for <buildroot@buildroot.org>;
  Sat, 30 May 2026 13:54:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B139261AAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6328805E6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B139261AAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6328805E6
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:54:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF7848750A; Sat, 30 May 2026 13:54:17 +0000 (UTC)
+ id D6A168750D; Sat, 30 May 2026 13:54:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:54:05 +0200
+Date: Sat, 30 May 2026 15:54:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1517a34bc7d525f731816b66f1eacf35815e48a
-X-Git-Newrev: 929e7cb0056854061325ea4c7bf85405723dca3b
+X-Git-Oldrev: 619d44b23ab3f1999539091e4f521ed333115945
+X-Git-Newrev: 1791b7942250435e056dbbc726bbb1f4ad9a9612
 X-Patchwork-Hint: ignore
-Message-Id: <20260530135417.AF7848750A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/utils: add basic tests for
- utils/generate-cyclonedx
+Message-Id: <20260530135417.D6A168750D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/generate-cyclonedx: add hashes from
+ .hash files to externalReferences
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,186 +77,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/929e7cb0056854061325ea4c7bf85405723dca3b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1791b7942250435e056dbbc726bbb1f4ad9a9612
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Introduce unit-tests for the generate-cyclonedx script, covering basic
-script invocation, patch CVE extraction and virtual packages.
+BSI TR-03183-2 5.2.5 [1] lists the "Hash value of the source code of the
+component" under "Optional data fields for each component", and as such
+CycloneDX "MAY additionally include the [...] information, if it exists".
+
+As hash values are available in Buildroot, iterate over .hash file paths
+from show-info input and read hash values for the source distribution. Add
+all found hashes to externalReferences source-distribution entries.
+
+[1] https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03183/BSI-TR-03183-2_v2_1_0.pdf?__blob=publicationFile&v=5
 
 Signed-off-by: Martin Willi <martin@strongswan.org>
 Acked-By: Thomas Perale <thomas.perale@mind.be>
-[Arnout: fix check-package errors]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .../testing/tests/utils/test_generate_cyclonedx.py | 139 +++++++++++++++++++++
- .../0001-cve_upstream.patch                        |  14 +++
- 2 files changed, 153 insertions(+)
+ .../testing/tests/utils/test_generate_cyclonedx.py | 44 ++++++++++++++++++++++
+ utils/generate-cyclonedx                           | 34 +++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
 diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-new file mode 100644
-index 0000000000..ddad92598b
---- /dev/null
+index a036d23d7d..0a13fdb6ad 100644
+--- a/support/testing/tests/utils/test_generate_cyclonedx.py
 +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-@@ -0,0 +1,139 @@
-+"""Unit tests for utils/generate-cyclonedx."""
+@@ -166,3 +166,47 @@ class TestGenerateCycloneDX(unittest.TestCase):
+                 },
+             ],
+         )
 +
-+import json
-+import os
-+import subprocess
-+import tempfile
-+import unittest
-+from pathlib import Path
++    def test_external_references_hashes(self):
++        with tempfile.TemporaryDirectory() as tmpdir:
++            hash_file = Path(tmpdir) / "foo.hash"
++            hash_file.write_text(
++                "# source archive checksums\n"
++                "sha256 1111111111111111111111111111111111111111111111111111111111111111 foo-1.2.tar.gz\n"
++                "sha1 2222222222222222222222222222222222222222 foo-1.2.tar.gz\n"
++                "sha256 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa LICENSE\n"
++            )
 +
-+import infra
++            info = self._make_show_info()
++            info["package-foo"]["hashes"] = [str(hash_file)]
++            info["package-foo"]["downloads"] = [
++                {
++                    "source": "foo-1.2.tar.gz",
++                    "uris": [
++                        "http|https+https://mirror.example.org/foo",
++                    ],
++                },
++            ]
 +
-+PATCH = "support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch"
-+SCHEMA_LICENSES = ["MIT", "Apache-2.0", "GPL-3.0-only"]
-+
-+
-+class TestGenerateCycloneDX(unittest.TestCase):
-+    def setUp(self):
-+        # Provide a fake SPDX schema so the script never hits the network.
-+        self.schema_dir = tempfile.TemporaryDirectory()
-+        self.addCleanup(self.schema_dir.cleanup)
-+
-+        cyclonedx_dir = Path(self.schema_dir.name) / "cyclonedx"
-+        cyclonedx_dir.mkdir(parents=True)
-+        schema_path = cyclonedx_dir / "spdx-1.6.schema.json"
-+        schema_path.write_text(json.dumps({"enum": SCHEMA_LICENSES}))
-+
-+        self.env = os.environ.copy()
-+        self.env["BR2_DL_DIR"] = self.schema_dir.name
-+        self.script = infra.basepath("utils/generate-cyclonedx")
-+        self.cwd = infra.basepath()
-+
-+    def _make_show_info(self) -> dict:
-+        return {
-+            "package-foo": {
-+                "name": "foo",
-+                "version": "1.2",
-+                "type": "target",
-+                "virtual": False,
-+                "licenses": "MIT",
-+                "cpe-id": "cpe:2.3:a:example:foo:1.2:*:*:*:*:*:*:*",
-+                "patches": [PATCH],
-+                "provides": ["package-virtual"],
-+                "dependencies": ["skeleton-baz", "package-bar"],
-+                "ignore_cves": ["CVE-2025-0001"],
-+                "package_dir": "package/package-foo",
-+            },
-+            "skeleton-baz": {
-+                "name": "skeleton-baz",
-+                "version": "0.1",
-+                "type": "target",
-+                "virtual": False,
-+                "licenses": "Apache-2.0",
-+                "dependencies": [],
-+                "package_dir": "package/skeleton-baz",
-+            },
-+            "package-bar": {
-+                "name": "bar",
-+                "version": "0.2",
-+                "type": "target",
-+                "virtual": False,
-+                "licenses": "MIT",
-+                "ignore_cves": ["CVE-2025-0002"],
-+                "dependencies": ["package-virtual"],
-+                "package_dir": "package/package-bar",
-+            },
-+            "host-tool": {
-+                "name": "host-tool",
-+                "version": "0.3",
-+                "type": "host",
-+                "virtual": False,
-+                "licenses": "GPL-3.0-only",
-+                "dependencies": [],
-+                "package_dir": "package/host-tool",
-+            },
-+            "package-virtual": {
-+                "name": "virtual-provider",
-+                "virtual": True,
-+                "type": "target",
-+                "dependencies": ["package-foo"],
-+                "package_dir": "package/package-virtual",
-+            },
-+        }
-+
-+    def _run_script(self, extra_args=(), show_info=None):
-+        data = show_info if show_info is not None else self._make_show_info()
-+        completed = subprocess.run(
-+            [self.script, *extra_args],
-+            cwd=self.cwd,
-+            env=self.env,
-+            input=json.dumps(data),
-+            text=True,
-+            capture_output=True,
-+            check=True,
-+        )
-+        return json.loads(completed.stdout)
-+
-+    def _find_component(self, result: dict, name: str) -> dict:
-+        for component in result["components"]:
-+            if component["bom-ref"] == name:
-+                return component
-+        self.fail(f"component {name} missing")
-+
-+    def test_default(self):
-+        result = self._run_script()
-+
-+        self.assertEqual(len(result["components"]), 4)
-+        self.assertIn("vulnerabilities", result)
-+        vulnerabilities = {v["id"]: v for v in result["vulnerabilities"]}
-+        self.assertEqual(len(vulnerabilities), 2)
-+        self.assertEqual(vulnerabilities["CVE-2025-0001"]["analysis"]["state"], "resolved_with_pedigree")
-+        self.assertEqual(vulnerabilities["CVE-2025-0002"]["analysis"]["state"], "in_triage")
++            result = self._run_script(show_info=info)
 +
 +        foo = self._find_component(result, "package-foo")
-+        patch = foo["pedigree"]["patches"][0]
-+        self.assertIn("text", patch["diff"])
-+        self.assertIn("content", patch["diff"]["text"])
++        self.assertEqual(
++            foo["externalReferences"],
++            [
++                {
++                    "type": "source-distribution",
++                    "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
++                    "hashes": [
++                        {
++                            "alg": "SHA-256",
++                            "content": "1111111111111111111111111111111111111111111111111111111111111111",
++                        },
++                        {
++                            "alg": "SHA-1",
++                            "content": "2222222222222222222222222222222222222222",
++                        },
++                    ],
++                }
++            ],
++        )
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index a3b7293f9a..382d91ce55 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -283,6 +283,39 @@ def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
+                 yield scheme.split("|"), stripped_uri
+ 
+ 
++def cyclonedx_source_hashes(comp, source):
++    """Create CycloneDX hashes for a source distribution.
 +
-+        host = self._find_component(result, "host-tool")
-+        self.assertEqual(host["properties"][0]["value"], "host")
++    Args:
++        comp (dict): The component information from the show-info output.
++        source (str): The source distribution filename to look for in the hash file.
++    Returns:
++        dict: Hash information in CycloneDX format, or empty dict
++    """
++    MAPPING = {
++        "sha1": "SHA-1",
++        "sha256": "SHA-256",
++        "sha512": "SHA-512",
++        "md5": "MD5",
++    }
 +
-+        names = {c["bom-ref"] for c in result["components"]}
-+        self.assertIn("skeleton-baz", names)
-+        self.assertIn("package-bar", names)
-+        self.assertNotIn("package-virtual", names)
++    hashes = []
++    for hash_file in comp.get("hashes", []):
++        with Path(hash_file).open() as f:
++            for line in f:
++                line = line.strip()
++                if not line.startswith("#") and line.endswith(f" {source}"):
++                    parts = line.split()
++                    if len(parts) >= 3 and parts[0] in MAPPING:
++                        hashes.append({
++                            "alg": MAPPING[parts[0]],
++                            "content": parts[1],
++                        })
++    if hashes:
++        return {"hashes": hashes}
++    return {}
 +
-+        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
-+        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
 +
-+        bar_deps = next(d for d in result["dependencies"] if d["ref"] == "package-bar")
-+        self.assertEqual(bar_deps["dependsOn"], ["package-foo"])
-+
-+    def test_virtual(self):
-+        result = self._run_script(["--virtual"])
-+
-+        names = {c["bom-ref"] for c in result["components"]}
-+        self.assertEqual(names, {"package-foo", "skeleton-baz", "host-tool", "package-virtual", "package-bar"})
-+
-+        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
-+        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
-diff --git a/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
-new file mode 100644
-index 0000000000..75d8830203
---- /dev/null
-+++ b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
-@@ -0,0 +1,14 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+
-+CVE: CVE-2025-0001
-+Upstream: https://patches.example/foo.patch
-+
-+Signed-off-by: the contributor
-+
-+diff --git a/foo.txt b/foo.txt
-+index 0000001..0000002 100644
-+--- a/foo.txt
-++++ b/foo.txt
-+@@
-+-foo
-++bar
+ def cyclonedx_external_refs(comp):
+     """Create CycloneDX external references for a component.
+ 
+@@ -301,6 +334,7 @@ def cyclonedx_external_refs(comp):
+                 refs.append({
+                     "type": "source-distribution",
+                     "url": f"{uri}/{source}",
++                    **cyclonedx_source_hashes(comp, source),
+                 })
+     if refs:
+         return {"externalReferences": refs}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
