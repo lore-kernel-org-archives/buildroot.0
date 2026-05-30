@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE60CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDBE7CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:03:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2CA585B0A;
-	Tue,  9 Jun 2026 13:03:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B31DF85B18;
+	Tue,  9 Jun 2026 13:03:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l74NK8w1XbTi; Tue,  9 Jun 2026 13:03:55 +0000 (UTC)
+ id 2ZShypsJI_nC; Tue,  9 Jun 2026 13:03:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18B7385556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA97685AFC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010235;
-	bh=PN0jI9ERvzTJb7RAJx2rgifGaC1bssHPWMygdGhnab4=;
+	s=default; t=1781010236;
+	bh=gACpBQhwabu43PUQew3z9wM4cBw4b7xvlnHeNRX5FhA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=F7Nvi6T5JMW79v/zilpt3H2DbBFcQXMc/TtKg5/UYVn7OxE3jBhpiSheYxBsWmg+K
-	 SdRaLRGlEc6kXxlZy0UV80VhUeHGA3cfzTUEg3rKA5aIxjhzoFXfhvCVLqKKINo+5i
-	 MrXWI6/ynl/IfxErBz+T4RFrdw8WmweKyCc3y9PM1pxmV+0yf/J27Z/NOS5l4UEGU0
-	 vhUt+K4ZCX//JtplPX3dGJ43LZIWtjb/MZxyfpU1NCNmh4BXf6pwtTAUIXSCIclHAr
-	 Mbbi9r1SpInND2MXK3iq+SoKg9e/5/0aDvb8U9gD2nSg02mLFMLTFHqiSmgHY8105d
-	 QSqg2qpd+ST+w==
+	b=CcW0D3nXp7CibjRn/2JFlrbwSWRDvjvg7gOXI1JcAquWwtFWhhDuwFQWM/XCOm3Hw
+	 aU1WeCUNqJw1ORwnXuxfs6282LNjvQYaqbZnXIkjoHOVfRztpl6lk5cxHZaRPJCE49
+	 k9Grd+v5tA5n67npGolQgBhZSh0O5neu83wd5Z5DGrsxuz9zjPJ9dmqweiHrxnCtae
+	 mvldkj6mAJMp/Vg0TSjDCQGxxGMl9ljLoP1JdMYrrSIPKbRjjE2ZT7w4h49Z8jkEgU
+	 X0Eq4csKj03GiQ15g+7CbpH7BEqBcVOTCK+1T1pfxHBr+AKhL1M8DQQK1G2N/IYkLR
+	 mYjGQR52SWywQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18B7385556;
-	Tue,  9 Jun 2026 13:03:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 89E45196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA97685AFC;
+	Tue,  9 Jun 2026 13:03:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13040196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F34EA42710
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2207F45F30
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VrQNoFLtd9wl for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B7DNUTk28dlu for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9FD3426DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 944AA4242C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9FD3426DF
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 944AA4242C
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E67C287E7E; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
+ id D032087E68; Tue,  9 Jun 2026 13:01:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 22 May 2026 21:29:24 +0200
+Date: Sat, 30 May 2026 14:59:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2f0bd4cdfa4e276a167dee6e39c7c1a032eafa6a
-X-Git-Newrev: 1a173d9918b228d73eeb159b0a3771843712a257
+X-Git-Oldrev: 9233cf95933f69fe3e3f4aa23fbb26da148e09cc
+X-Git-Newrev: f009a9f804b8a148490e2301fc2831aa1d0601de
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130117.E67C287E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxmlb: bump version to 0.3.27
+Message-Id: <20260609130121.D032087E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tpm2-totp: bump version to 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,50 +68,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1a173d9918b228d73eeb159b0a3771843712a257
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f009a9f804b8a148490e2301fc2831aa1d0601de
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/hughsie/libxmlb/blob/0.3.27/NEWS
+https://github.com/tpm2-software/tpm2-totp/releases/tag/v0.3.0
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Andreas Mohr <and@gmx.li>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libxmlb/libxmlb.hash | 4 ++--
- package/libxmlb/libxmlb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tpm2-totp/tpm2-totp.hash | 2 +-
+ package/tpm2-totp/tpm2-totp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxmlb/libxmlb.hash b/package/libxmlb/libxmlb.hash
-index 5a202ebfbf..a7a0c53be1 100644
---- a/package/libxmlb/libxmlb.hash
-+++ b/package/libxmlb/libxmlb.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/hughsie/libxmlb/releases/tag/0.3.26
--sha256  a18bc447fff0dd0d76a2e6cd4a603b4712047c027f9bbbdc31ebc25f0e2c1ed9  libxmlb-0.3.26.tar.xz
-+# From https://github.com/hughsie/libxmlb/releases/tag/0.3.27
-+sha256  63fa0275f7454d77c10e0af37f79dfdb071821caf429a57dbd9598ea3a9defd6  libxmlb-0.3.27.tar.xz
+diff --git a/package/tpm2-totp/tpm2-totp.hash b/package/tpm2-totp/tpm2-totp.hash
+index f7cf06162c..54de933e8d 100644
+--- a/package/tpm2-totp/tpm2-totp.hash
++++ b/package/tpm2-totp/tpm2-totp.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
- sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
-diff --git a/package/libxmlb/libxmlb.mk b/package/libxmlb/libxmlb.mk
-index 34e7233f4b..e9829e4c4b 100644
---- a/package/libxmlb/libxmlb.mk
-+++ b/package/libxmlb/libxmlb.mk
+-sha256  0b2b63cc7ea74f5a6952f2cd689896c08f6b94ee6865f48af609f9a8ac247dc1  tpm2-totp-0.2.1.tar.gz
++sha256  1a8c83dc0d0dc58bd85a3fbfc9da6e39414c0d33f1a19886cde20f063f0c527b  tpm2-totp-0.3.0.tar.gz
+ sha256  67bc21a0bff2b0890307cfaa883bd3f5337f461eb6d8a612a015cea6d704e9ed  LICENSE
+diff --git a/package/tpm2-totp/tpm2-totp.mk b/package/tpm2-totp/tpm2-totp.mk
+index 42607c0b73..1fd0a30d03 100644
+--- a/package/tpm2-totp/tpm2-totp.mk
++++ b/package/tpm2-totp/tpm2-totp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXMLB_VERSION = 0.3.26
-+LIBXMLB_VERSION = 0.3.27
- LIBXMLB_SITE = https://github.com/hughsie/libxmlb/releases/download/$(LIBXMLB_VERSION)
- LIBXMLB_SOURCE = libxmlb-$(LIBXMLB_VERSION).tar.xz
- LIBXMLB_LICENSE = LGPL-2.1+
+-TPM2_TOTP_VERSION = 0.2.1
++TPM2_TOTP_VERSION = 0.3.0
+ TPM2_TOTP_SITE = https://github.com/tpm2-software/tpm2-totp/releases/download/v$(TPM2_TOTP_VERSION)
+ TPM2_TOTP_LICENSE = BSD-3-Clause
+ TPM2_TOTP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
