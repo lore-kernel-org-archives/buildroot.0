@@ -1,64 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B85CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 641E6CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21B4B850E5;
-	Sat, 30 May 2026 21:50:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FA5840CF0;
+	Sat, 30 May 2026 21:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lFU97eHiugqf; Sat, 30 May 2026 21:50:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 66-kpcET9xnm; Sat, 30 May 2026 21:51:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 375D6850EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E04D40CF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780177841;
-	bh=/jAvT1mSt0K+otLw9qJI5X3pF5ExTLxl7oVpfQtwapM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=gCCD7QMoUkRgw2y0cDJ5xnmKVC5MqOHkqU4dXsup9lUS2nfKiXCrkx4v8Jj6kr5fm
-	 PRUSZInhDEwhKS3TIKR0PLBsW7h8abFwNvTNC6EVSgI6dKE1KTt7GG3OhhhVcSlkgx
-	 76oQUkWBm22Uw1BUn1LhF/HXxwobQ/flvIYW5BUiN2dzwcktfzEKmicIfMUvIMYlnv
-	 oDtDaYUWSfavy6dFRDiFIZMyUDWev27YHOGMQzspBlqht4VGuL3FvsdSFVDLAd4iDO
-	 WAxOVV1ib2ydQ3YItF0t6PBu2CqD+n6PThr33hX/dwkaQfoubQMjQqQ+iEJnon//fD
-	 Lu+1iDMBIWhww==
+	s=default; t=1780177892;
+	bh=HjjuGXAM3sowTl0PNUT5o5Oie6Mw4pF1uHXslCrESCo=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=FBLpb/nRPhWHggTi2Aw2/6LCeGXBWWysVnMwYMDDOsX+qkAbjInvlI8mFB+Yn8sZi
+	 aQI8drxjM56LHxk6Kw0vpmxeD1XhEpQ2nTAVXx0T7/vH2HwF4fonJ1JiS3lkUOyU2W
+	 eoRKngRUcLqoqeGv9ajbYimOE3Z2F+YptGhB20t+pECQ5YSXgoUPPjmFeAtPUY9LWO
+	 tVX72kk3l9SZ8zbvIwv4FRWiMylOIiPNapFi4+EoyGHxRX3HC02XpjFDwfCwkrFCPE
+	 j1FE/cpcDbaPyY5e7rjC9Vd9fB3Zdbymvrv/NDfq8xlxpEDvB5GhCEajCSPPo9GVxa
+	 mWsyBSRsiZ88w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 375D6850EE;
-	Sat, 30 May 2026 21:50:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 56F50F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E04D40CF7;
+	Sat, 30 May 2026 21:51:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C62A2D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 485C14230C
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B77F74230C
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ceRTgaWDJjTe for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:50:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 585C54010F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 585C54010F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:50:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 321CC87634; Sat, 30 May 2026 21:50:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id NJvoA3XHHtzE for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:51:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A62234010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A62234010F
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A62234010F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:51:29 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-490a7877068so1219315e9.3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:51:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780177887; x=1780782687;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=iL99UOMGu030PaSJwYvOk+0IGHBJjOH1MDw/y5McIpo=;
+ b=oaTjoxONVDlNvWboCs4PzXE8gTmr5wuXwNdMDyND7pRodyF8tQbIUI0rSY5nFzLRHF
+ DdoRMhBrV7GSJ8p8xi2Z0xvldbVPZ1mn35HgndnTUWqrs0s9XxNB9uiL2wchJR/ow5dK
+ k6IivjAOdGoEDd4sh/VT+mUitQQ9G7DFoH5fbWIrO6mMimqo0dZt1KDzO+I2DtNtOrw3
+ HCs6++yX7dkwJkXMM131EvC5DQcvoTd6q0R0TzVUXq/UZnGVUCdKnG41CLNowtTayo8s
+ P7DpfRewKiBqrGHZbp6N2zPAbXV6XXaRDvtVR47j2gE+R/syDoMTJDGNwjM9XlX1sa1e
+ bq9g==
+X-Gm-Message-State: AOJu0YyM0RWmqsuKG8e2ZcOi5UvpFCh3UtKBWohTZiY160Ln4xhSG7I5
+ a3tBp/xzPfVI2Ty6G25ok4lxU7Cwz31gROCFOF5Vk/y1FaL35kR4q9/zgYNmQOcRKeCmALRUEfr
+ mz9DX
+X-Gm-Gg: Acq92OFP8iSsm33qLJeDKNmsBIKisc2FZ5MLBaSfnOAiWwHE+ySjmHc3OdfmfjArIxC
+ uDYziIdPAVvkgKfoMzyV7l86GFh9S4hS6yCbe+kBmkEAH+xxXuShqXF1ClOx29p/gAa4uzwEb3l
+ p2XlKJGxgTMGlbLGWZpmHyxKyZFw1aELVsQuU9HmrDW/lFj9W/vEGcaP+/DF12NNj4th6Js2099
+ +96w8FnZfuyRrPdT6Os4ibGPtfIMAsq72u2YUZ28d+wpDEdkGjfbw8iE/HiQLTAjJhO4LdchgyF
+ ohk1p80IDAJf4bDv2XV3Ar0tgEp1ToElK0wIoGn+apN26w85uTkvaPrZu0ype8GTePPTE6ww6bn
+ bIlEEm521pNKMDy5bZJNdKbAR64B1/FU9dZjEYYeLDEqU8uZJV+CpqavI6HMdddaLtTM5gqgvae
+ QEP2ZOjndoDysaf9MV80/5aTdSALhWWD/A40vA/Vk=
+X-Received: by 2002:a05:600c:5544:b0:48e:6db3:ff33 with SMTP id
+ 5b1f17b1804b1-490a29438camr68525635e9.14.1780177887253; 
+ Sat, 30 May 2026 14:51:27 -0700 (PDT)
+Received: from dragon ([2a01:e0a:1015:b940:d4d1:7b69:edd2:59ef])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4909d68a925sm207321005e9.2.2026.05.30.14.51.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 May 2026 14:51:26 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 23:50:24 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 35f52c7dc55898eaf063ff5782f3e17e8b228f99
-X-Git-Newrev: 72a022ec2c5be7552403d5199ec8bd01e3a64641
-X-Patchwork-Hint: ignore
-Message-Id: <20260530215026.321CC87634@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/meson: bump version to
- 1.11.1
+Cc: Alistair Francis <alistair@alistair23.me>,
+	vincent.stehle@arm.com
+Date: Sat, 30 May 2026 23:51:23 +0200
+Message-ID: <20260530215124.1786348-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.54.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1780177887; x=1780782687; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=iL99UOMGu030PaSJwYvOk+0IGHBJjOH1MDw/y5McIpo=;
+ b=Rektl3W+WaQ7ypYmm8ydhV7/Po5sy+76gtVHKrGLx+yBQS9IjRYAWwMclHT1cw0a8f
+ ZaEkBRitwyajtmAOzFfuctpyVnF3RHtwQ225g7ktgTPrxKoOKhCpeGE8FAwxxFcJ1xvN
+ Ah6Ntcad/YqFHpqkbLgJv8qwCfLES5YwU6WCIBwvTV/OaYq/o2pFVC3VfjmP5D+5oJqU
+ 1/RzU/6rXNELrej10HBHlPXYX/p7ALiAi3S7AKKJjW4PT5kmMzzYO+407Urkg/G997T0
+ MynmMoY9+KXfViyOD6dgoxbt8fVLZjbAku7eEbeaPQp977IPifXVuHPyu37pAMN+MQ89
+ V/Mw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Rektl3W+
+Subject: [Buildroot] [PATCH RFC 0/1] package/xen: bump to v4.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,133 +118,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/72a022ec2c5be7552403d5199ec8bd01e3a64641
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
-
-https://mesonbuild.com/Release-notes-for-1-11-0.html
-
-Removed patch which is included in this bump.
-
-Disabled the usage of ccache in mesa3d with BR2_PACKAGE_MESA3D_RUSTICL=y
-due to upstream commit:
-https://github.com/mesonbuild/meson/commit/aac5f78580a3ea1cf0cae487cb46cab68a048660
-(bisected https://github.com/mesonbuild/meson/compare/1.10.1...1.10.2 to
- find the offending commit, the same defconfig works with meson 1.10.1)
-
-Without this change mesa3d configure is broken:
-
-output/build/mesa3d-26.0.3/src/gallium/frontends/rusticl/meson.build:420:27:
- ERROR: No build machine compiler for 'src/gallium/frontends/rusticl/proc/lib.rs'
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Tested-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d/mesa3d.mk                           |  6 +++
- ...d-do-not-fail-if-only-the-build-machine-u.patch | 45 ----------------------
- package/meson/meson.hash                           |  4 +-
- package/meson/meson.mk                             |  2 +-
- 4 files changed, 9 insertions(+), 48 deletions(-)
-
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d3874766d0..eec7a925a2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -71,6 +71,12 @@ MESA3D_CONF_OPTS += \
- 	-Drust_std=2021 \
- 	-Dmesa-clc-bundle-headers=enabled
- 
-+# meson does not allow ccache
-+# https://github.com/mesonbuild/meson/commit/aac5f78580a3ea1cf0cae487cb46cab68a048660
-+MESA3D_CONF_ENV += \
-+	CC_FOR_BUILD="$(HOSTCC_NOCCACHE)" \
-+	CXX_FOR_BUILD="$(HOSTCXX_NOCCACHE)"
-+
- MESA3D_MESON_EXTRA_BINARIES += \
- 	rust=['$(HOST_DIR)/bin/rustc','--target=$(RUSTC_TARGET_NAME)'] \
- 	rust_ld='$(TARGET_CROSS)gcc'
-diff --git a/package/meson/0003-ninjabackend-do-not-fail-if-only-the-build-machine-u.patch b/package/meson/0003-ninjabackend-do-not-fail-if-only-the-build-machine-u.patch
-deleted file mode 100644
-index 22f9ace42e..0000000000
---- a/package/meson/0003-ninjabackend-do-not-fail-if-only-the-build-machine-u.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From c1db93be859b360b64fe20d49a286278b56df64e Mon Sep 17 00:00:00 2001
--From: Paolo Bonzini <pbonzini@redhat.com>
--Date: Tue, 3 Feb 2026 12:56:36 +0100
--Subject: [PATCH] ninjabackend: do not fail if only the build machine uses C++
--
--This is caused by the introduction of the cpp_importstd option; while
--target_uses_import_std() tries to protect from the option not existing,
--this does not work if cpp_importstd exists but build.cpp_importstd does
--not, and get_option_for_target() wants to look at the latter.
--
--Just return false on a KeyError for simplicity.
--
--Fixes: #15497
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
--
--Upstream: https://github.com/mesonbuild/meson/commit/c1db93be859b360b64fe20d49a286278b56df64e
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- mesonbuild/backend/ninjabackend.py | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/mesonbuild/backend/ninjabackend.py b/mesonbuild/backend/ninjabackend.py
--index 42f24d47d..e0aaa39c4 100644
----- a/mesonbuild/backend/ninjabackend.py
--+++ b/mesonbuild/backend/ninjabackend.py
--@@ -3297,11 +3297,11 @@ https://gcc.gnu.org/bugzilla/show_bug.cgi?id=47485'''))
--     def target_uses_import_std(self, target: build.BuildTarget) -> bool:
--         if 'cpp' not in target.compilers:
--             return False
---        if 'cpp_importstd' not in self.environment.coredata.optstore:
---            return False
---        if self.environment.coredata.get_option_for_target(target, 'cpp_importstd') == 'false':
--+        try:
--+            if self.environment.coredata.get_option_for_target(target, 'cpp_importstd') == 'true':
--+                return True
--+        except KeyError:
--             return False
---        return True
-- 
--     def handle_cpp_import_std(self, target: build.BuildTarget, compiler):
--         istd_args = []
---- 
--2.47.3
--
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 7ac7c8364d..b2fff8974d 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/mesonbuild/meson/releases/tag/1.10.1
--sha256  c42296f12db316a4515b9375a5df330f2e751ccdd4f608430d41d7d6210e4317  meson-1.10.1.tar.gz
-+# From https://github.com/mesonbuild/meson/releases/tag/1.11.1
-+sha256  6788ae299979643f8d841bcaf64352558436cae45a0355148a3aeeccf7913866  meson-1.11.1.tar.gz
- # Locally computed
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 6b2a25f1dd..0a61cc9c0b 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 1.10.1
-+MESON_VERSION = 1.11.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBzZXJpZXMgaXMgYSBmb2xsb3ctdXAgb24gYW4gZWFybGllciwgbW9yZSBhbWJpdGlvdXMg
+aW5pdGFsIHBhdGNoIGJ1bXBpbmcKWGVuIHRvIHY0LjIwIFswXS4gVGhpcyBmb2xsb3ctdXAgY2Fy
+cmllcyB0aGUgd29yayBmcm9tIFZpbmNlbnQgWzFdLCB3aXRoCnRoZSBmb2xsb3dpbmcgY2hhbmdl
+czoKCi0gUmViYXNlIG9uIHRvcCBvZiB0aGUgbGF0ZXN0IEJ1aWxkcm9vdCBtYXN0ZXIgKGFzIG9m
+IDIwMjYtMDUtMzApCi0gUmVudW1iZXIgcGF0Y2hlcyB0byAwMDAxLTAwMDQKLSBTcXVhc2ggYWxs
+IGluZGl2aWR1YWwgdmVyc2lvbiBidW1wcyBmcm9tIDQuMTQgdG8gNC4xOSBpbiBhIHNpbmdsZSBw
+YXRjaAotIEJ1bXAgZnVydGhlciB0byBYZW4gNC4xOS41CgpUaGlzIGluaXRpYWwgcHJvcG9zYWwg
+aXMgUkZDLCBhcyB0aGVyZSB3ZXJlIGEgZmV3IHRoaW5ncyBpbiBWaW5jZW50J3MgcHJvcG9zYWwK
+SSB3b3VsZCBsaWtlIHRvIGNsYXJpZnkgYW5kIGZpeCB1cCBiZWZvcmUgc3VibWl0dGluZyB0aGUg
+YWN0dWFsIHBhdGNoLgoKQm90aCBYZW4gcnVudGltZSB0ZXN0cyAoZm9yIEFybVY3IGFuZCBBYXJj
+aDY0KSBhcmUgc3RpbGwgcGFzc2luZy4KCkBWaW5jZW50OiBoZXJlIGFyZSBhIGZldyBxdWVzdGlv
+bnMgZm9yIHlvdToKCi0gQ291bGQgeW91IGJyaWVmbHkgZXhwbGFpbiB3aHkgdGhlIHBhdGNoICJO
+byB0cmFjZSBiYWNrZW5kIiBpcyBuZWVkZWQgPwotIFlvdSBoYWQgYSBwYXRjaCB0aGF0IHdhcyBv
+bmx5IG5hbWVkICJEZWJ1ZyIgdGhhdCBJIHJlbmFtZWQgdG8gIlVwZGF0ZSBsaW5rZXIKICBmbGFn
+cyIuIENvdWxkIHlvdSBoZWxwIG1lIHdyaXRpbmcgZG93biBhIGJldHRlciBkZXNjcmlwdGlvbiBm
+b3IgaXQgPwotIEkgZG9uJ3QgbGlrZSBkaXNhYmxpbmcgdGhlIC1XZXJyb3IgZmxhZywgYXMgd2Ug
+Z2VuZXJhbGx5IHdhbnQgdG8gY2F0Y2ggYXMKICBtdWNoIHByb2JsZW1zIGFzIHBvc3NpYmxlLiBJ
+IHVuZGVyc3RhbmQgdGhpcyBzZWVtcyB0byBiZSBuZWVkZWQgdG8gdGhlCiAgaGVhZGVyIGluY2x1
+c2lvbiBvcmRlciBpbiB5b3VyIHBhdGNoIGluaXRpYWxseSBuYW1lZCAiRGVidWciLCBidXQgdGhl
+cmUKICBjb3VsZCBiZSBhIGJldHRlciBvcHRpb24gPwoKRmluYWxseSwgdGhlIG5leHQgc3RlcCB3
+b3VsZCBiZSB0byBidW1wIHRvIFhlbiA0LjIwIGFuZCBldmVuIDQuMjEsIGJ1dCB0aGlzIGlzCmxl
+c3MgdHJpdmlhbCBhcyB0aGV5IGFyZSBzaWduaWZpY2FudCBjaGFuZ2VzIGluIHRoZSBidWlsZCBz
+eXN0ZW0gZm9yIHFlbXUKdGhhdCBpcyBzaGlwcGVkIGludGVybmFsbHkgd2l0aCBYZW4uCgpbMF0g
+aHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI1
+MTAwNzE2NDc1Ni44OTMyNjQtMS10aXRvdWFuLmNocmlzdG9waGVAbWluZC5iZS8KWzFdIGh0dHBz
+Oi8vZ2l0aHViLmNvbS92c3RlaGxlL2J1aWxkcm9vdC9jb21wYXJlLzc0ZGNkYTI1NDQuLi5mb3It
+dGl0b3VhbgoKQmVzdCByZWdhcmRzLApUaXRvdWFuCi0tClZpbmNlbnQgU3RlaGzDqSAoMSk6CiAg
+cGFja2FnZS94ZW46IGJ1bXAgdG8gdjQuMTkuMgoKIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAg
+ICAgICAgICAgICAgICAgICAgICB8ICAgNSArLQogLi4uZGUtbGludXgtbGltaXRzLmgtZm9yLVhB
+VFRSX1NJWkVfTUFYLnBhdGNoIHwgIDE1ICstCiAuLi4vMDAwMi1GaXgtYnVpbGQtd2l0aC02NC1i
+aXRzLXRpbWVfdC5wYXRjaCAgfCAgOTUgLS0tLS0tLQogcGFja2FnZS94ZW4vMDAwMi1Oby10cmFj
+ZS1iYWNrZW5kLnBhdGNoICAgICAgIHwgIDM1ICsrKwogLi4uLUFybS1wbGF0Zm9ybXMtZml4LWJ1
+aWxkLXdpdGgtZ2NjMTUucGF0Y2h9IHwgIDE2ICstCiAuLi4tbGlicy1saWdodC1maXgtdHZfc2Vj
+LXByaW50Zi1mb3JtYXQucGF0Y2ggfCAgNjMgLS0tLS0KIHBhY2thZ2UveGVuLzAwMDQtVXBkYXRl
+LWxpbmtlci1mbGFncy5wYXRjaCAgICB8ICA4MCArKysrKysKIC4uLmxpYnMtbGlnaHQtZml4LXR2
+X3NlYy1mcHJpbnRmLWZvcm1hdC5wYXRjaCB8ICAzMCAtLS0KIC4uLi1kcm9wLWJvZ3VzLWFuZC1v
+YnNvbGV0ZS1wdHlmdW5jcy5tNC5wYXRjaCB8IDI1MyAtLS0tLS0tLS0tLS0tLS0tLS0KIC4uLl9p
+cnFfdG9fZGVzYy10by1maXgtYnVpbGQtd2l0aC1nY2MxNC5wYXRjaCB8ICA2MiAtLS0tLQogLi4u
+ZC0ucm9kYXRhLXRvLWJlLW1hcmtlZC1hcy1leGVjdXRhYmxlLnBhdGNoIHwgIDU4IC0tLS0KIC4u
+LnNvbGFyaXMtc3ludGF4LWZvci0uc2VjdGlvbi1kaXJlY3Rpdi5wYXRjaCB8ICA3MyAtLS0tLQog
+cGFja2FnZS94ZW4vQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxICsKIHBh
+Y2thZ2UveGVuL3hlbi5oYXNoICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQogcGFj
+a2FnZS94ZW4veGVuLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA3ICstCiAxNSBm
+aWxlcyBjaGFuZ2VkLCAxMzggaW5zZXJ0aW9ucygrKSwgNjU3IGRlbGV0aW9ucygtKQogZGVsZXRl
+IG1vZGUgMTAwNjQ0IHBhY2thZ2UveGVuLzAwMDItRml4LWJ1aWxkLXdpdGgtNjQtYml0cy10aW1l
+X3QucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3hlbi8wMDAyLU5vLXRyYWNlLWJh
+Y2tlbmQucGF0Y2gKIHJlbmFtZSBwYWNrYWdlL3hlbi97MDAwOS1Bcm0tcGxhdGZvcm1zLWZpeC1i
+dWlsZC13aXRoLWdjYzE1LnBhdGNoID0+IDAwMDMtQXJtLXBsYXRmb3Jtcy1maXgtYnVpbGQtd2l0
+aC1nY2MxNS5wYXRjaH0gKDcyJSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3hlbi8wMDAz
+LWxpYnMtbGlnaHQtZml4LXR2X3NlYy1wcmludGYtZm9ybWF0LnBhdGNoCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgcGFja2FnZS94ZW4vMDAwNC1VcGRhdGUtbGlua2VyLWZsYWdzLnBhdGNoCiBkZWxldGUg
+bW9kZSAxMDA2NDQgcGFja2FnZS94ZW4vMDAwNC1saWJzLWxpZ2h0LWZpeC10dl9zZWMtZnByaW50
+Zi1mb3JtYXQucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3hlbi8wMDA1LXRvb2xz
+LWRyb3AtYm9ndXMtYW5kLW9ic29sZXRlLXB0eWZ1bmNzLm00LnBhdGNoCiBkZWxldGUgbW9kZSAx
+MDA2NDQgcGFja2FnZS94ZW4vMDAwNi1Bcm02NC1hZGp1c3QtX19pcnFfdG9fZGVzYy10by1maXgt
+YnVpbGQtd2l0aC1nY2MxNC5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UveGVuLzAw
+MDcteGVuLWFybTMyLWF2b2lkLS5yb2RhdGEtdG8tYmUtbWFya2VkLWFzLWV4ZWN1dGFibGUucGF0
+Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3hlbi8wMDA4LWFybS1Bdm9pZC11c2luZy1z
+b2xhcmlzLXN5bnRheC1mb3ItLnNlY3Rpb24tZGlyZWN0aXYucGF0Y2gKCi0tIAoyLjU0LjAKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
