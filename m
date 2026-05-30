@@ -4,61 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B712CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 364ABCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 21:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8CB785447;
-	Sat, 30 May 2026 21:02:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF42F853CB;
+	Sat, 30 May 2026 21:12:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VQwMOgF__jSx; Sat, 30 May 2026 21:02:39 +0000 (UTC)
+ id A9ptYda2RNRn; Sat, 30 May 2026 21:12:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67FF7853C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1439C853C7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780174959;
-	bh=D5uP+g7W8Q6LGwvyrdiMBeK/NSInFpZIS54bYWNA8g4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=c89n7iJPpVHG8AGLguLJESQILPDum5iEatcbCrMjvujFuyiXQOCcQr+xBOOdDbEG2
-	 IEydlf45Eb/pfwKY6q0xitoYdivrantiJMR7CTdyt3FEBqmbi2vN1U09+H7YbNdRHD
-	 PxVf2N9EwCldmVtPxL7/5ERbcCY0PHuqYI5QrFLLqhCITMi0fvcJetav+PbAuYyFNQ
-	 qPA1vSEll97LiGupxokwveujHHZ3dF4M6dSBAtBhgA8HB01Hp091+FuXXv9tlIgUno
-	 7tfBuvQxzASzhgFCYziTBiRQj6Comtkblc7A1gkQh9i6yzzDeNB7M5eJWLWC20brRZ
-	 acSOzgDMSL85g==
+	s=default; t=1780175523;
+	bh=2PvNOHzpEqJdIyb0G68LbCBk6qrPARBq96VumhJvVwM=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=d2+YtjxGE2XeO3jGDlq8SlmD+TKVmdtJFmdnFNL3mFbac58BStKvXoWNMl2nahhz9
+	 QYANmNjOKkEQuvTauf1ftjKQdz9eigXbiCrnOmtH/I0OQdEmucfqumVbrVGshhavIu
+	 H137z92BjDMfXgpkVljFe8JVlGLQqDU52XKVQmesW6YRMSZ3l+4xG5nelK1fX/wIwS
+	 v5GJyGLYxMA84MMO36wbOQtM3YQarx4+4kBuEqtj8Y2PPJeA2OjlTEJpLjx680exGH
+	 Y9RqC5vchmcPUJolxluvQaw8EXMJCR0EnqKj60qrGiyl9uYrYra7Z9AcuIpesUI3xB
+	 OYZpZR1P6p3ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67FF7853C0;
-	Sat, 30 May 2026 21:02:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D963CF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:02:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1439C853C7;
+	Sat, 30 May 2026 21:12:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9585EF4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE89342F4E
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:02:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92AEA401E3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:12:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tqF3GfEnqse7 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 21:02:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sXVVTxN75RyW for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 21:12:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0EA942F21
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D0EA942F21
- for <buildroot@buildroot.org>; Sat, 30 May 2026 21:02:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C1A9875B8; Sat, 30 May 2026 21:02:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3EDBD4010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EDBD4010F
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3EDBD4010F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 21:11:59 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1051110784; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 30 May 2026 21:11:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wTQyH-00000005YwF-2dHj;
+ Sat, 30 May 2026 23:11:53 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 22:54:08 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ce9bbefb56b3d51b385455d3efb0cdad93f14117
-X-Git-Newrev: 722c2f30ac4e430d8d83256a584a50f45a41d2bc
-X-Patchwork-Hint: ignore
-Message-Id: <20260530210222.9C1A9875B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fio: bump version to
- 3.42
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+In-Reply-To: <20260530095958.604071-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 30 May 2026 11:59:57 +0200")
+References: <20260530095958.604071-1-bernd@kuhls.net>
+Date: Sat, 30 May 2026 23:11:53 +0200
+Message-ID: <87zf1giova.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=ulGj1PXixD4vXCbE45b+szvSR5NuXgvN+kn7ENaUCpcHrI6t4pvvr/vECLiMoE7yZ4qKeEyQdQRMiwEsqgULoIF2ts7RtdublUNWyNOp7sG0IDxJ2ixsGTKz+pHfsFh2sLqh0SyVbwpLjO9Tq0Z+REMonx58EIusz7S1kVGyg44G0wV0ASQxlyZDqf9Qr//Wlc0Bi/eHEU8Xx20PCEkBeMcCFlQWiXjhfg9UdJSfBOlcdJLExdZSQnkJ1bKkrChKM4B7m6dB3TD2so4yiGAi8iDjsZwPB6jM98nAgNn4EaZNP1VrpYdBEAlRiAV2y28d4d2hS7885bcKWzS3ZjroFw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=5SqEfwoRwqPq58dIajjW9S9lv84jB4OgEGnx1yj9W5E=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=ulGj1PXi
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/fio: bump version to 3.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,148 +92,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/722c2f30ac4e430d8d83256a584a50f45a41d2bc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-https://github.com/axboe/fio/releases/tag/fio-3.42
+ > https://github.com/axboe/fio/releases/tag/fio-3.42
+ > Removed patch which is included in this release.
 
-Removed patch which is included in this release.
+ > Added upstream commit to fix build error with musl introduced by
+ > upstream commit
+ > https://github.com/axboe/fio/commit/0b554ec1705ce71f366ac3fe2156b05b0c301623
+ > which was first included in this bump.
 
-Added upstream commit to fix build error with musl introduced by
-upstream commit
-https://github.com/axboe/fio/commit/0b554ec1705ce71f366ac3fe2156b05b0c301623
-which was first included in this bump.
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ove-linux-prctl.h-include-to-fix-musl-con.patch | 36 ++++++++++++++++++++
- package/fio/0001-fix-musl-builds.patch             | 38 ----------------------
- package/fio/fio.hash                               |  6 ++--
- package/fio/fio.mk                                 |  2 +-
- 4 files changed, 40 insertions(+), 42 deletions(-)
+Committed to next, thanks.
 
-diff --git a/package/fio/0001-backend-remove-linux-prctl.h-include-to-fix-musl-con.patch b/package/fio/0001-backend-remove-linux-prctl.h-include-to-fix-musl-con.patch
-new file mode 100644
-index 0000000000..0704b02aef
---- /dev/null
-+++ b/package/fio/0001-backend-remove-linux-prctl.h-include-to-fix-musl-con.patch
-@@ -0,0 +1,36 @@
-+From a84eece62edd46c1f4c8047f1052ac6181fc8b3e Mon Sep 17 00:00:00 2001
-+From: Lucas Hecht <lucas.hecht@agdsn.de>
-+Date: Tue, 26 May 2026 18:49:48 +0200
-+Subject: [PATCH] backend: remove linux/prctl.h include to fix musl conflict
-+
-+Building with musl fails due to a duplicate definition of prctl_mm_map.
-+This is because musl redefines linux/prctl.h in sys/prctl.h.
-+
-+This commit removes the linux/prctl.h include.
-+
-+Fixes: #2096
-+
-+Signed-off-by: Lucas Hecht <lucas.hecht@agdsn.de>
-+
-+Upstream: https://github.com/axboe/fio/commit/a84eece62edd46c1f4c8047f1052ac6181fc8b3e
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ backend.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/backend.c b/backend.c
-+index f6023d0e..e2b33b14 100644
-+--- a/backend.c
-++++ b/backend.c
-+@@ -32,7 +32,6 @@
-+ #include <pthread.h>
-+ 
-+ #ifdef CONFIG_LINUX
-+-#include <linux/prctl.h>
-+ #include <sys/prctl.h>
-+ #endif
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/fio/0001-fix-musl-builds.patch b/package/fio/0001-fix-musl-builds.patch
-deleted file mode 100644
-index 16c3d3836d..0000000000
---- a/package/fio/0001-fix-musl-builds.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From ccce76d2850d6e52da3d7986c950af068fbfe0fd Mon Sep 17 00:00:00 2001
--From: Arthur Gautier <arthur.gautier@arista.com>
--Date: Sat, 13 Dec 2025 20:07:11 -0800
--Subject: [PATCH] fix musl builds
--
--This commit fixes the build on musl which fails with the following
--error:
--```
--oslib/linux-blkzoned.c: In function 'blkzoned_move_zone_wp':
--oslib/linux-blkzoned.c:389:37: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
--  389 |                 ret = fallocate(fd, FALLOC_FL_ZERO_RANGE, z->wp, length);
--      |                                     ^~~~~~~~~~~~~~~~~~~~
--oslib/linux-blkzoned.c:389:37: note: each undeclared identifier is reported only once for each function it appears in
--make: *** [Makefile:501: oslib/linux-blkzoned.o] Error 1
--make: *** Waiting for unfinished jobs....
--```
--
--Signed-off-by: Arthur Gautier <arthur.gautier@arista.com>
--
--Upstream: https://github.com/axboe/fio/commit/ccce76d2850d6e52da3d7986c950af068fbfe0fd
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- oslib/linux-blkzoned.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/oslib/linux-blkzoned.c b/oslib/linux-blkzoned.c
--index 78e25fca91..c45ef623de 100644
----- a/oslib/linux-blkzoned.c
--+++ b/oslib/linux-blkzoned.c
--@@ -25,6 +25,7 @@
-- #ifndef BLKFINISHZONE
-- #define BLKFINISHZONE _IOW(0x12, 136, struct blk_zone_range)
-- #endif
--+#include <linux/falloc.h>
-- 
-- /*
--  * If the uapi headers installed on the system lacks zone capacity support,
-diff --git a/package/fio/fio.hash b/package/fio/fio.hash
-index 015f2e3fbe..0a86e4092c 100644
---- a/package/fio/fio.hash
-+++ b/package/fio/fio.hash
-@@ -1,8 +1,8 @@
- # From https://brick.kernel.dk/snaps/MD5SUMS
--md5  3cd7ea766be83b560a14c909cdd35889  fio-3.41.tar.gz
-+md5  0e817db93ecf11a4797aea757f29c91d  fio-3.42.tar.gz
- # Locally computed after checking gpg signature from
--# https://brick.kernel.dk/snaps/fio-3.41.tar.gz.asc
-+# https://brick.kernel.dk/snaps/fio-3.42.tar.gz.asc
- # with key C0FC392DCADE26D975FA5E4AF7D358FB2971E0A6
--sha256  a40b45112005e30a67bab6be4860b198c35104a628b6ec4d15720d62b5d1bab9  fio-3.41.tar.gz
-+sha256  9128d0c81bd7bffab0dd06cbfb755a05ef92f3b8a0b0c61f1b3538df6750f1e0  fio-3.42.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 38e7aa7967..890631e9fa 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIO_VERSION = 3.41
-+FIO_VERSION = 3.42
- FIO_SITE = https://brick.kernel.dk/snaps
- FIO_LICENSE = GPL-2.0
- FIO_LICENSE_FILES = COPYING MORAL-LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
