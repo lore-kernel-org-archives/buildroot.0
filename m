@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD93CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3552CCD6E52
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26A9F42ED0;
-	Sat, 30 May 2026 13:52:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DFAD6F591;
+	Sat, 30 May 2026 13:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Pmn6EpuhQOw; Sat, 30 May 2026 13:52:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id incHTzaUsSsF; Sat, 30 May 2026 13:52:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 126C442DC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C236F598
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149165;
-	bh=J0rvWy5sopgSt5eLkRIHXO/V5cN6gWtHg9Gsm5MfSJo=;
+	s=default; t=1780149166;
+	bh=PDe/iYEgoQWr+uFhi5Dfnuz4VyVHxQHcHO2TQzVUwsA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MvRFEV/UTdk2P8FaeDvVDbmQvRp5wLQRszZZ0FJC78z62lQZ5NbeyhCHOpSKtKJcF
-	 21rm7W9+fTD/UnSeo0i3k2WJhMcEnpokcOhdmm7i+d6ePsq36nJ/aBx/hJfDJIM480
-	 zBp98NECBdJ0aMJOxPNWN7dc4NFlX7eCLYQvofE6wBWyLpGaLfzhC1cJDhNvIb/mr5
-	 013fcgygdIgq9/k2DebvGSPvaQdiH4Uw0j1hVxRYl0P7oAt4NEgmZSFSpE/hbdl0b3
-	 E0I32w68rBomWoI6+XkFD1OYGAg7TvGUN3UptWyteAIUXjlw0g7cmc0SU/FP+MIt0p
-	 oXl+xbdAsawfw==
+	b=DIzNHGfKYestRQH5U1C1fwA5dZOYAMq7QizGKtoUN/3SawofL7GP9qJSV8CByoOD+
+	 LS+TxuwgGGW7cAy8I/xCUQnpRbsHDM28ANoTHzx2dooDGtr/Sw1L0f82xgSL7zdkd7
+	 CxToWv/VHDQmJNBAi+P2o8ix+4/EG7ruMpi+s/LE0ldr7C/i7CeFbMMQzxe/pvumPe
+	 GM5k/HUNJG3ziqC6PjAZaI96+EwZUyFqzWUB/joxp8ByPddZSQsVAgUqEwoJN559KR
+	 YbIEaaul42sMw+LpUJRIL+oC8O87M2yqMSc1vzkUG8Udybs9qGAfXACR8Tt9fYMewz
+	 1DZ+myXjjOlpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 126C442DC7;
-	Sat, 30 May 2026 13:52:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 35A50F4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26C236F598;
+	Sat, 30 May 2026 13:52:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FE3612F
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61E6942D4E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A59D4025D
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uVz2nTYH0Ng8 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L1a2r6uT8IAf for <buildroot@buildroot.org>;
  Sat, 30 May 2026 13:52:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734C042DF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8594742674
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 734C042DF6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8594742674
  for <buildroot@buildroot.org>; Sat, 30 May 2026 13:52:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76BD38750B; Sat, 30 May 2026 13:52:21 +0000 (UTC)
+ id 88C4D8750C; Sat, 30 May 2026 13:52:21 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 30 May 2026 15:48:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ceec8746a9e60108b758b1fc0f7f7f6557a5371b
-X-Git-Newrev: d0e7bea04d7c38a0be8c321e79ab4517ebc06213
+X-Git-Oldrev: 6106c2c21cc5b9157141c5fe0abeddf54c934e9d
+X-Git-Newrev: 3a795fa19a752dfd9f04f2a848e04879abf638a1
 X-Patchwork-Hint: ignore
-Message-Id: <20260530135221.76BD38750B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openjdk{-bin}: bump
- versions to latest 17.x and 21.x series
+Message-Id: <20260530135221.88C4D8750C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/snappy: enable rtti
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,152 +76,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d0e7bea04d7c38a0be8c321e79ab4517ebc06213
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a795fa19a752dfd9f04f2a848e04879abf638a1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-utils/docker-run support/testing/run-tests -k -d dl -o output_folder \
-  tests.package.test_openjdk.TestOpenJdk.test_run
+Added patch to enable rtti, needed for upcoming bump of rocksdb to fix
+link error:
 
-passed without issue.
-
-This bump fixes build errors with current gcc 16-snapshot.
+output/per-package/rocksdb/host/bin/../lib/gcc/x86_64-buildroot-linux-
+gnu/15.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+ librocksdb.so.10.7.5: undefined reference to `typeinfo for snappy::Sink'
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: update .checkpackageignore entry to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                                 | 4 ++--
- package/openjdk-bin/{17.0.12_7 => 17.0.18_8}/openjdk-bin.hash       | 4 ++--
- package/openjdk-bin/{21.0.4_7 => 21.0.10_7}/openjdk-bin.hash        | 4 ++--
- package/openjdk-bin/openjdk-bin.mk                                  | 6 +++---
- .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch             | 0
- .../0002-awt-fix-HEADLESS-compilation-without-X11.patch             | 0
- .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch             | 0
- .../0002-awt-fix-HEADLESS-compilation-without-X11.patch             | 0
- .../0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch | 0
- package/openjdk/openjdk.hash                                        | 4 ++--
- package/openjdk/openjdk.mk                                          | 6 +++---
- 11 files changed, 14 insertions(+), 14 deletions(-)
+ .../snappy/0002-add-option-to-enable-rtti.patch    | 52 ++++++++++++++++++++++
+ package/snappy/snappy.mk                           |  5 ++-
+ 2 files changed, 56 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b5c30bf691..1e11ea4773 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -699,8 +699,8 @@ package/olsr/0006-build-patch-for-gpsd-3-25.patch lib_patch.Upstream
- package/olsr/S50olsr Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch lib_patch.Upstream
- package/open2300/0001-fix-makefile.patch lib_patch.Upstream
--package/openjdk/17.0.12+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
--package/openjdk/21.0.4+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
-+package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
-+package/openjdk/21.0.10+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
- package/openldap/0001-fix-bignum.patch lib_patch.Upstream
- package/openldap/0002-disable-docs.patch lib_patch.Upstream
- package/openntpd/S49ntp Shellcheck lib_sysv.Variables
-diff --git a/package/openjdk-bin/17.0.12_7/openjdk-bin.hash b/package/openjdk-bin/17.0.18_8/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-rename to package/openjdk-bin/17.0.18_8/openjdk-bin.hash
-index 4a7c84eb87..c2169350c1 100644
---- a/package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-+++ b/package/openjdk-bin/17.0.18_8/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  9d4dd339bf7e6a9dcba8347661603b74c61ab2a5083ae67bf76da6285da8a778  OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
--sha256  8257de06bf37f0c8f19f8d542e2ab5a4e17db3ca5f29d041bd0b02ab265db021  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.12_7.tar.gz
-+sha256  0c94cbb54325c40dcf026143eb621562017db5525727f2d9131a11250f72c450  OpenJDK17U-jdk_x64_linux_hotspot_17.0.18_8.tar.gz
-+sha256  592a6702b3a07a0e0b82cb38aaab149bfce1b0c24d6b57ddb410bd9009333095  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.18_8.tar.gz
+diff --git a/package/snappy/0002-add-option-to-enable-rtti.patch b/package/snappy/0002-add-option-to-enable-rtti.patch
+new file mode 100644
+index 0000000000..e82328b0ff
+--- /dev/null
++++ b/package/snappy/0002-add-option-to-enable-rtti.patch
+@@ -0,0 +1,52 @@
++From 376f14b5933e91d08ade6a503fdd657a6e01a149 Mon Sep 17 00:00:00 2001
++From: Max <tchristy001@outlook.com>
++Date: Wed, 24 Nov 2021 12:16:23 -0600
++Subject: [PATCH] add option to enable rtti, set default to current behavior
++
++Upstream: https://github.com/google/snappy/pull/147 (rejected)
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[rebased for 1.2.2]
++---
++ CMakeLists.txt | 14 ++++++++++----
++ 1 file changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 6eef485..aefd35b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -53,8 +53,10 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
++   add_definitions(-D_HAS_EXCEPTIONS=0)
++ 
++   # Disable RTTI.
++-  string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+++  if(NOT SNAPPY_ENABLE_RTTI)
+++    string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+++  endif(SNAPPY_ENABLE_RTTI)
++ else(MSVC)
++   # Use -Wall for clang and gcc.
++   if(NOT CMAKE_CXX_FLAGS MATCHES "-Wall")
++@@ -78,8 +80,10 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
++ 
++   # Disable RTTI.
++-  string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+++  if(NOT SNAPPY_ENABLE_RTTI)
+++    string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+++  endif(SNAPPY_ENABLE_RTTI)
++ endif(MSVC)
++ 
++ # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to make
++@@ -98,6 +102,8 @@ option(SNAPPY_REQUIRE_AVX2 "Target processors with AVX2 support." OFF)
++ 
++ option(SNAPPY_INSTALL "Install Snappy's header and library" ON)
++ 
+++option(SNAPPY_ENABLE_RTTI "Enable RTTI for Snappy's library" OFF)
+++
++ include(TestBigEndian)
++ test_big_endian(SNAPPY_IS_BIG_ENDIAN)
++ 
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index 57c688b673..cd61bbb078 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -10,6 +10,9 @@ SNAPPY_LICENSE = BSD-3-Clause
+ SNAPPY_LICENSE_FILES = COPYING
+ SNAPPY_CPE_ID_VENDOR = google
+ SNAPPY_INSTALL_STAGING = YES
+-SNAPPY_CONF_OPTS = -DSNAPPY_BUILD_BENCHMARKS=OFF -DSNAPPY_BUILD_TESTS=OFF
++SNAPPY_CONF_OPTS = \
++	-DSNAPPY_BUILD_BENCHMARKS=OFF \
++	-DSNAPPY_BUILD_TESTS=OFF \
++	-DSNAPPY_ENABLE_RTTI=ON
  
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/21.0.4_7/openjdk-bin.hash b/package/openjdk-bin/21.0.10_7/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-rename to package/openjdk-bin/21.0.10_7/openjdk-bin.hash
-index a73bea1a77..8d9efacba1 100644
---- a/package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-+++ b/package/openjdk-bin/21.0.10_7/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/adoptium/temurin21-binaries/releases
--sha256  51fb4d03a4429c39d397d3a03a779077159317616550e4e71624c9843083e7b9  OpenJDK21U-jdk_x64_linux_hotspot_21.0.4_7.tar.gz
--sha256  d768eecddd7a515711659e02caef8516b7b7177fa34880a56398fd9822593a79  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.4_7.tar.gz
-+sha256  ea3b9bd464d6dd253e9a7accf59f7ccd2a36e4aa69640b7251e3370caef896a4  OpenJDK21U-jdk_x64_linux_hotspot_21.0.10_7.tar.gz
-+sha256  357fee29fb0d5c079f6730db98b28942df13a6eed426f6c61cd4ad703ab27b9a  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.10_7.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index e6c74cf6d8..819bf9052b 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,12 +6,12 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 21
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.4
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.10
- HOST_OPENJDK_BIN_VERSION_BUILD = 7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.12
--HOST_OPENJDK_BIN_VERSION_BUILD = 7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.18
-+HOST_OPENJDK_BIN_VERSION_BUILD = 8
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-diff --git a/package/openjdk/17.0.12+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-similarity index 100%
-rename from package/openjdk/17.0.12+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-rename to package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-diff --git a/package/openjdk/17.0.12+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch b/package/openjdk/17.0.18+8/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-similarity index 100%
-rename from package/openjdk/17.0.12+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-rename to package/openjdk/17.0.18+8/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-diff --git a/package/openjdk/21.0.4+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/21.0.10+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-similarity index 100%
-rename from package/openjdk/21.0.4+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-rename to package/openjdk/21.0.10+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-diff --git a/package/openjdk/21.0.4+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch b/package/openjdk/21.0.10+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-similarity index 100%
-rename from package/openjdk/21.0.4+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-rename to package/openjdk/21.0.10+7/0002-awt-fix-HEADLESS-compilation-without-X11.patch
-diff --git a/package/openjdk/21.0.4+7/0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch b/package/openjdk/21.0.10+7/0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch
-similarity index 100%
-rename from package/openjdk/21.0.4+7/0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch
-rename to package/openjdk/21.0.10+7/0003-autoconf-libraries-drop-the-need-for-X11-in-headless.patch
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 209004a292..72a6ff2e27 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  b8b37fa6fcc284d91e7458c703ca4c893a1dd5a6e0f6b9e198e7d13cd8efd24d  openjdk-21.0.4+7.tar.gz
--sha256  ccb7d37c24f9f5808f9d25419d93680570dc600f292e68944032338cb4b2c51e  openjdk-17.0.12+7.tar.gz
-+sha256  6500906cb7cc49268ce4ca368db3ddf3541b40afd25eecb378e13d5a72f43214  openjdk-21.0.10+7.tar.gz
-+sha256  7ebfcc2aafd514c23df3fe5280e1a34630b9b1d429c65a80dd5a4b6e7f177bc3  openjdk-17.0.18+8.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 58b266c4e9..e5d9d5e630 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,13 +6,13 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
--OPENJDK_VERSION_MINOR = 0.4
-+OPENJDK_VERSION_MINOR = 0.10
- OPENJDK_VERSION_BUILD = 7
- 
- else
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.12
--OPENJDK_VERSION_BUILD = 7
-+OPENJDK_VERSION_MINOR = 0.18
-+OPENJDK_VERSION_BUILD = 8
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
