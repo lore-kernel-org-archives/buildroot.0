@@ -4,87 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C158CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6EC7CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F085060F34;
-	Sat, 30 May 2026 13:28:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E21060F08;
+	Sat, 30 May 2026 13:33:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KgZCKNJdN91m; Sat, 30 May 2026 13:28:30 +0000 (UTC)
+ id Rb-6Wxld34EX; Sat, 30 May 2026 13:33:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32F5C60F74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93E2C60F0A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780147710;
-	bh=UdujeY9qmkDsIoUk1Yl+a9rb6w//CvTE9LyxOChot0Q=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=GYBvRWup72Tm9OPx2pcgAxHbdrtDHwGj9bZQbhaObR9l5Dp27ZmCNiJ4hwAQiRJma
-	 nxJzi8aeoUofJTNMFF1lSJsANugfv8ii8YaSt+WLyKHgCAa6Z2thz249OeLLXRUwQO
-	 utOrCKrAc0TYDApNb982x4YJ3Hm8PhBO8Zaqxe4uEoE22Puxdvjh42YBt5RNYDnDcz
-	 YBDzM5BWmfp02EnNZYxF345K6f3Y/A2/2JhDLjQ73O0ie1ngjbB2Zo/1H6RuXHgqAj
-	 8xdU+Ji6+pFLLwTByVC5ZrqH542bAyBBpFkGiCxPswm+Z3S3KeY7BbSGw/v8xmwcGW
-	 70c9Hf0arpPFw==
+	s=default; t=1780147982;
+	bh=1jFrH1txEWY5FQIptwfsObMfr7Ej0wbKiLywifNnfpA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ivpzu8j0IWYqX2nNFcyYz4vCYc0jCTg7t4cKHhnpU3LzDerHVX4yAkm70LpA46fCJ
+	 wIC3rgwidizWr/uOPOuZhPIjNOuf7+VHEBCELf+YZNtcFXr94iYAJSvCQOGdrUK/Vo
+	 rInjlV3k+i+D97BuzMClKfe8fesTP6O51HQWzcX3fLoTyBl2DGKxWiJsmGhzJbHXBm
+	 htbdhwoiTpruMxH8UaGj6SkMd2PsbjmVjNd+CU4tTh0FGLbe7pxbrIa6eFxA4yMlhy
+	 2g6My6HbzSOcA5PzAvCkkGxt6xenSgFP/gDNbxQqgzvcN5a2JofpoEAGRhCLna4izS
+	 xybu9eBW9FXcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32F5C60F74;
-	Sat, 30 May 2026 13:28:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E6AE7D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:28:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93E2C60F0A;
+	Sat, 30 May 2026 13:33:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E7B6F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D871F60F74
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:28:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84A8540608
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:33:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QoxqSVzBhpEG for <buildroot@buildroot.org>;
- Sat, 30 May 2026 13:28:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F-k4r90OwcG9 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:32:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B9CB60F34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B9CB60F34
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B9CB60F34
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:28:27 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id D074EC6246B;
- Sat, 30 May 2026 13:28:25 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8F17D6073B;
- Sat, 30 May 2026 13:28:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5707010888650; 
- Sat, 30 May 2026 15:28:23 +0200 (CEST)
-Date: Sat, 30 May 2026 15:28:22 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
-Message-ID: <ahrl6W6ke617j5_Y@windsurf>
-References: <20260530125556.3957719-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260530125556.3957719-1-dario.binacchi@amarulasolutions.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780147703; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=xjNq8ueNhdpOmZ1tdNbUJRNHLA0JQkIONLE4yUO3kkU=;
- b=OKf0VaxApdM4wKZQa8hV9Fs/DkbkJKcYpskyNEsVuItzPaS0QzX8pBqfupDbOauTUpS42w
- CEmAvvhH4WApAhGfH3PhVEK1iMe1D/ioKITNCRbAzeO/COjGc8K1Pn0mDfiIgD3mC/lRCJ
- IvEDMqiyPVkVzQYp7oIzCTe35Hm30IAm7Kp5j3FiNfn2Hww0EeiRe47nHEREWern/0D9Ak
- 1G9z1mhtH6UiOhtjq5x5pk1mObvC9eSMRzuOmVBcrhja8gSkCAQjfjtj5Ssol4d7b5QCbO
- /Q5uwiRkZ1MqQDGIlFW0cZW6ObdGhIZW6NkbfbBFViWgIMx+v6Ha8DyCBLGx3g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=OKf0VaxA
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/babeld: disable for musl
- toolchains
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C35CA4025D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C35CA4025D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:32:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9FAD387506; Sat, 30 May 2026 13:32:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 15:32:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cf2cb9f77408de8c7bbcd9163c68f2589ce453eb
+X-Git-Newrev: a01c1258fe3e8d1403a5a8281257edf85123430b
+X-Patchwork-Hint: ignore
+Message-Id: <20260530133246.9FAD387506@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/babeld: disable for musl toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,35 +70,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, May 30, 2026 at 02:55:56PM +0200, Dario Binacchi wrote:
-> Building babeld with a musl toolchain fails with:
->   ld: read-only segment has dynamic relocations
-> 
-> This happens because babeld uses text relocations (textrels), which
-> are not supported by the musl dynamic loader and would cause a
-> runtime crash (segmentation fault).
-> 
-> Since Buildroot passes '-ztext' to detect these unsafe relocations
-> at build time, disable babeld entirely for musl configurations.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/c75643713fd5f27fe063c226630680d26a8b9487/
-> 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a01c1258fe3e8d1403a5a8281257edf85123430b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Building babeld with a musl toolchain fails with:
+  ld: read-only segment has dynamic relocations
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+This happens because babeld uses text relocations (textrels), which
+are not supported by the musl dynamic loader and would cause a
+runtime crash (segmentation fault).
+
+Since Buildroot passes '-ztext' to detect these unsafe relocations
+at build time, disable babeld entirely for musl configurations.
+
+Fixes:
+https://autobuild.buildroot.org/results/c75643713fd5f27fe063c226630680d26a8b9487/
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/babeld/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/babeld/Config.in b/package/babeld/Config.in
+index 80d2708230..0624621d0a 100644
+--- a/package/babeld/Config.in
++++ b/package/babeld/Config.in
+@@ -1,8 +1,14 @@
+ config BR2_PACKAGE_BABELD
+ 	bool "babeld"
+ 	depends on BR2_USE_MMU # fork()
++	# uses textrel
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  Babel is a loop-avoiding distance-vector routing protocol for
+ 	  IPv6 and IPv4 with fast convergence properties.
+ 
+ 	  https://www.irif.fr/~jch/software/babel/
++
++comment "babeld needs a uClibc or glibc toolchain"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_USES_MUSL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
