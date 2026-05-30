@@ -1,91 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FAEDCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 20:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D289CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 20:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14F3D84ECC;
-	Sat, 30 May 2026 20:33:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C9486F5E4;
+	Sat, 30 May 2026 20:36:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5P55-5JxVVSO; Sat, 30 May 2026 20:33:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cjCB_GZCfzKd; Sat, 30 May 2026 20:35:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3949884ECD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E0056F5D8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780173190;
-	bh=JyuPYeFM9a92jtk2T6gKSNnElf6VnHH/v8q3TR+tszo=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pKcU4U0izfk5dwXwc0qGTZVk9yFRc14Uk2yye+OF0TYBeWHA82r/3xo4Tr6us9+Dg
-	 S9VwnayF3x8BFlRGlq4NOAEd4vuGLFuC+14M61fkY2piqTxLgEkRixwVV+bPuJLEyO
-	 R0AaBJDu7r+HX9GafT1DlUuZazNOt9XRhXQ1U5eyhuwRZ75Ywgzoq00yEoN10Jb2Rw
-	 qq5vXraZzBlG4WiLmRaSFM2p9gOdRGROON87Ew/DB/bU0IECDyijdkL0H9jLT97jXO
-	 AJqv1s/LqUNJcESLRm7M3i7h2iBWY2CNw407RLe1MmiNMFkzomyjVZv4h4HAPY6ERX
-	 yAF+ujZmrDjmA==
+	s=default; t=1780173358;
+	bh=rsrQaI+XQEP6iJdb+7g8dI3OvotVUqTShqlttXEKVeI=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=Yghhw3jxSb6DctCpO00+NDXpEdOmq7g5rGLlo8mxKiS2qpouxAy5rEnBCw8jWQIDo
+	 CkSwk9lYSyiBymyt3vD86CX+OKqCJ74yUV8wZDniN4oH0mj2ABvv/jAyQrg1Bq/Vo4
+	 QM0N9wMSBVam8vMLN2TsqfgUfeQmj0ul+9NN+xys/TrvbFore/P5oAW/viy184M5GD
+	 LE1u2/87GGYSfwh5n47v9xAJHzB1mFF3TtGbqYWsFJp2pKNVEzT9ALA4M7XGU/qXmv
+	 cL04trnh6gVFJS6PAIfCmFxk+3z8vnhRZdSlzJrpu7RSLJ1zf6ckEBCStIPWUBYbiU
+	 BTy9DeBkdETdg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3949884ECD;
-	Sat, 30 May 2026 20:33:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 67C03D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 20:33:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E0056F5D8;
+	Sat, 30 May 2026 20:35:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70C5D12F
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 20:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58E5D426C2
- for <buildroot@buildroot.org>; Sat, 30 May 2026 20:33:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 624976F5D7
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 20:35:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bIlo_pnQZHoT for <buildroot@buildroot.org>;
- Sat, 30 May 2026 20:33:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7ED4C40137
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ED4C40137
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7ED4C40137
- for <buildroot@buildroot.org>; Sat, 30 May 2026 20:33:06 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id F27254E42D9B;
- Sat, 30 May 2026 20:33:04 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id C6AC16073B;
- Sat, 30 May 2026 20:33:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dR_aWCWkv9cJ for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 20:35:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9FDF16F5CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FDF16F5CB
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9FDF16F5CB
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 20:35:55 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 81EA710888CC7; 
- Sat, 30 May 2026 22:33:03 +0200 (CEST)
-Date: Sat, 30 May 2026 22:33:02 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Jesse Van Gavere <jesseevg@gmail.com>, 
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <ahtJNrS18lS6lbyh@windsurf>
-References: <20260530155718.657095-1-bernd@kuhls.net>
+ with ESMTPSA id 463FBB97C716; Sat, 30 May 2026 22:35:53 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Arnout Vandecappelle <arnout@rnout.be>
+Date: Sat, 30 May 2026 22:35:44 +0200
+Message-ID: <20260530203544.1383862-1-arnout@rnout.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260530155718.657095-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780173184; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=F+vGuW0UeQfdYaf2x6X6offFp3+2VpFYVdxtGx7fHgw=;
- b=fkl1LDxMUOVdxhsn9hf3FcK6pJMOPRsJHDh3EHAfvQkmSULsWsCpU0FGM9Wi253Yy/m8CR
- heIBbA1wCgg2oyN8Layqf8lnjcgLPTPRFEDjfseuxYPuXIyODoTkZSZrIrCV6rCvhmAbeX
- Zcoz+m/ydWq/TpFhA/oKeZRyeXl2DXZn6ui9UyPvj2nwSbjD73lr2lhgmWx7zU2+piNuqo
- hRLWovKeN0e+Dq0PdPFASaP05//P2YniPh0Q63jPJ1M5/YBrPA+HFnUxcvEuTjktAacq24
- sTcPS9AotPviWZfqxu2Y7rEKMpdpoQOjMRYgBXU/05csfSo9iXZaR0Jq0YcZyg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=rnout.be; s=dkim; 
+ t=1780173353; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ptCVbmzSBAUHxkQ9sX2cpCPhAfjERH/7ZHAzOwS9dJU=;
+ b=Jpf0Za7OssFcCfFXqLcnmrsQb3z1mL7ZNCBZAdAfAAWSi65IXNvfisf9DN8Wq14SLbQWo4
+ QjcK6ZKgB7wuzx5FjHxzy/cJAC3NpuE+dFeIHJIaSvvE/O01us+wPlw+ow+lNUS3oaABbx
+ SQsaqlev6AE/uy18HPSo4vAXTFdG/d0j4akjWBiZdtPEAIqJIsox/SFsvcb5ydb9ch8GmB
+ unCTvKNkgxcPjV6n5E+9+j5Om3z8VKRFl3jn89EyJ9teOlwTnPjX5ngxSzAIep6GDE5YPA
+ 7e61zMDYx2mQ0LTVNpAZAyLI81DfXXwUTPOs64LNBVEdFkBU0ZRFT2+O9kuacA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=fkl1LDxM
-Subject: Re: [Buildroot] [PATCH v2 1/5] package/stellarium: fix
- qt5serialport dependency
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=Jpf0Za7O
+Subject: [Buildroot] [PATCH] support/scripts/generate-gitlab-ci-yml: use
+ large runners for defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,39 +85,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, May 30, 2026 at 05:57:14PM +0200, Bernd Kuhls wrote:
-> qt5serialport is only needed when GPS support is enabled:
-> https://github.com/Stellarium/stellarium/blob/v25.4/CMakeLists.txt#L623
-> 
-> Please note that we disable telescope support by default so only gpsd
-> enables the usage of qt5serialport.
-> 
-> A backport to the LTS branches should be considered, adding
-> qt5serialport as dependency without gpsd support causes the unneeded
-> build of qt5serialport for stellarium. This situation exists for years
-> and is not caused by recent upstream changes.
+defconfigs are very unlikely to successfully build on a small runner
+because they build a kernel (and often a toolchain). They're also likely
+to benefit a lot from the additional parallelism on larger runners.
 
-This is not correct. qt5serialport would only be pulled as a
-dependency of stellarium if BR2_PACKAGE_QT5SERIALPORT=y. So in *any*
-case qt5serialport would be part of the build. The only difference is
-that it is a build dependency of stellarium for no reason. This is not
-that much of a problem and probably doesn't deserve being backported,
-so I dropped this paragraph, and applied your patch to master.
+For now, always build them on large runners. There may be some for which
+even the large runners don't have sufficient disk space or memory, but
+we'll solve that when it happens.
 
-Thanks a lot!
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 2a8c9be5f5..00ca826228 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -120,7 +120,7 @@ gen_tests() {
+ 
+     if ${do_basics:-false}; then
+         for tst in "${basics[@]}"; do
+-            printf 'check-%s: { extends: .check-%s_base }\n' "${tst}" "${tst}"
++            printf 'check-%s: { extends: [ .check-%s_base, .runner-large ] }\n' "${tst}" "${tst}"
+         done
+     fi
+ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
