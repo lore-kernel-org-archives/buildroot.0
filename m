@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A6BCD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 485D2CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6794857EE;
-	Tue,  9 Jun 2026 13:02:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4272C857F2;
+	Tue,  9 Jun 2026 13:02:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RSq8ackyXJ-P; Tue,  9 Jun 2026 13:02:31 +0000 (UTC)
+ id K-8QjFNYH28d; Tue,  9 Jun 2026 13:02:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB823857DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E0CF857C8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010151;
-	bh=rIk6FCm+q1tLhZZDTvUDlu8MbMFwTjnis8ZQqKFuH9k=;
+	s=default; t=1781010152;
+	bh=2f084UENZVPMSvHgbU3V585eMjlqEby7EYgZzR28WTw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WY9fjg6lOxxF+0peXooZUKfLUkli3qlOXacFAxSq1W+vR9gfcK0RVbc9ENz9o3WxM
-	 A8Tj//56b0eW16YHAnlTx2eGBCS3vYTqCo45T0H0edFoUuPVOnjOFYpX60Ti9E4mBD
-	 4pyBggVLh/uTEXEzJJv9vM3n6aaMZlHmmGgOtIQTRF0OBKAy64Q2lPs5ESSK34PbsV
-	 v0bUjaZqfzkBIAStmCGpkjwoZnwdHmKmC4Fn5ig2M1Vy6zniWqKUlhdrzzC9LwaBKp
-	 zAJV43+iTZPhmyXYamNKPArEHZxLNcFLmKSYbMc4ATFGPFZtdc0YdFkmMiHBiRQ+og
-	 pCjquYkscZDEA==
+	b=mikk4Wp7t9s4SbIfqBITGa/uNVut5U0EUqQ87G02JQW2hpCtC7K8cMk7qk4bhjTjW
+	 T9FtTskjmUhyoQc8cDXUfqugRwNKPIHWAnbTZGn3hy73m0dlQPVqRPvLEjhEkFF09n
+	 s81zCOwN0gXnOdEX7LDMjrLrlo5UWxiuOKjZ8iD5QkHMxVmPK4YjZfs2j+NwJpLQAq
+	 0+6QzK7eeD4mKLnuSQAp0Hym7O70lk4irXUJTHFnUXHznNxuKuE+FJVkftsaJv774e
+	 6L9oGTg9lkwocRcO33LpBL6WUCPvUHnWmWZd1TIjM/CK12GDX9yxqiWmX30xqzOPuF
+	 sAGAcEVcVX1+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB823857DD;
-	Tue,  9 Jun 2026 13:02:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DC3A196
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E0CF857C8;
+	Tue,  9 Jun 2026 13:02:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EA84190
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED6D645AC9
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 216BF6F67E
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m6PCWvIyvRGx for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oEelRtx4unTC for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A3EC412CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E50D6F690
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A3EC412CE
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E50D6F690
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66F9287E8D; Tue,  9 Jun 2026 13:01:17 +0000 (UTC)
+ id 8D53087E8E; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 19 May 2026 21:54:25 +0200
+Date: Sat, 30 May 2026 16:51:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04371efa4416388a0d3962b8cd17359b257b9f78
-X-Git-Newrev: cc2621ef40b78a66da14f97efa6068189fa91651
+X-Git-Oldrev: 10088b538115d9d23136fae98ef764cfc5602104
+X-Git-Newrev: 3523e1ac79c15c5199a15589692e269191abd546
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130117.66F9287E8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pine64: bump Linux, TF-A and U-Boot
+Message-Id: <20260609130123.8D53087E8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/Config.in.powerpc: add Power10 CPU
+ type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,68 +69,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cc2621ef40b78a66da14f97efa6068189fa91651
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3523e1ac79c15c5199a15589692e269191abd546
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-- bump linux from 6.6.48 to 6.18.32
-- bump arm-trusted-firmware from 2.10.5 to 2.12.1
-- bump U-Boot from 2024.07 to 2026.04
+This commit adds the IBM Power10 CPU type. See [1].
 
-U-Boot now needs GnuTLS for the mkeficapsule tool.
+This CPU is supported in gcc since v11.1.0 (see upstream commit [2]),
+and in binutils since v2.35 (the gas -mpower10 option is documented
+since upstream commit [3]).
 
-Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
+[1] https://en.wikipedia.org/wiki/Power10
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=5d9d0c94588c8834a33eca6847b0a1401353300b
+[3] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=1424c35d071e7d49a4a219c7dee8c88ffd60ddca
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pine64_defconfig | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/Config.in.powerpc | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index 8975f3b1a2..e19b7b5012 100644
---- a/configs/pine64_defconfig
-+++ b/configs/pine64_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pine64/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.32"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-pine64"
-@@ -16,16 +16,17 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.10.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.12.1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 3f4d348d5f..a2605ca6a9 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -144,6 +144,11 @@ config BR2_powerpc_power9
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_VSX
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++config BR2_powerpc_power10
++	bool "power10"
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
++	select BR2_POWERPC_CPU_HAS_VSX
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+ endchoice
+ 
+ config BR2_POWERPC_SOFT_FLOAT
+@@ -207,6 +212,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "power7"	if BR2_powerpc_power7
+ 	default "power8"	if BR2_powerpc_power8
+ 	default "power9"	if BR2_powerpc_power9
++	default "power10"	if BR2_powerpc_power10
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "PowerPC"	if BR2_powerpc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
