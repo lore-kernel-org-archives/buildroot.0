@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD4BCD8CAA
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6D90CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 809F285640;
-	Tue,  9 Jun 2026 13:05:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A71D2470A7;
+	Tue,  9 Jun 2026 13:06:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tdCE8fBJ1Kb; Tue,  9 Jun 2026 13:05:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1ziFEg1nRszN; Tue,  9 Jun 2026 13:06:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DACE85E38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF6E49823
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010340;
-	bh=rSxbofJ0ADdWSQ7tePreNbhkYdBEGfrBpZDPDk6IbwY=;
+	s=default; t=1781010362;
+	bh=IO7ViGchfUQ0ZITFhb9gC1JlrNtJiKAdJdLCQbpjuZI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=neUlmfJykt+mkSm/aLfRVsx8pTy64znxS2Mj57WPrbhvgWpzsZKznx44LqqZ9PTot
-	 iXg3AK+4xjTpauy8DCCYsMQu5bD8H8Hd7tGaMmy7/l8gjhrYkP1cH8YamTgXTFxJKT
-	 8NUctrgRLH47xaqBVMDEkk+cWk/m3WhDG76NsY6ydqgeqGOaeI6z5O3bfx77f9XzrX
-	 tiVl0UFTMV043EGBWl1ILz+AJBn1rfJHZbKMQWB/R0bcsBxWX1IQ0GbjI/KhqbAmqY
-	 LrUlGGShCs/L00Eme0AqCTEV5tYrxwjKOQsrqWALZGPj32phaVM+EYzXjOy8CpA1si
-	 ub4/JdoIR5gUw==
+	b=A5Fnp0jAGcV8T5yvgZoY+8GKRN8K++KWIltsoraIvGyHcdkxNet4UFZP4Tisy7zPv
+	 VSZiaINEB8lJ7xZpGkwhi1LAUqCHEjd3kcxc46vdWVeSWtCAdmvqa57ulBSEHq6whi
+	 FeNEldPMWaWp+sz72QT6M5TkGiEyXJZdhwpvZB1/dM+IGqE5jrsKYX3OHlsWOnmC6W
+	 45pKB+MR8ZV837HkWWOlZ+Q6GB7RP6ETGgmibWwPSNktpt9hdcuCLEIrOlkb3NxtMU
+	 zLHvDYUPVn1EIBDmvygHNCSUW3S3tNBCvS0XoUXyZDWcX6AlNgO0sPOX2HuG1EYD+k
+	 dEnxWPISzv//g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DACE85E38;
-	Tue,  9 Jun 2026 13:05:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABF6E49823;
+	Tue,  9 Jun 2026 13:06:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6EE64190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C600A2EE
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E97742552
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BC4A426BF
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQQlQ8xUhV2i for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
+ id r90ukt4W8S8k for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB72442712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98190426D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB72442712
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98190426D6
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E789B87E8B; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
+ id D3A6D87E7E; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jun 2026 22:14:25 +0200
+Date: Sat, 30 May 2026 17:24:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d85c36577f19715545cdfc6bee792913377e096
-X-Git-Newrev: e2870919b2943c2d4a62127201a0d334fdb5a461
+X-Git-Oldrev: 9874899101ee9b7436296841d03cb8e0940c5d7c
+X-Git-Newrev: a295c5bb0cc8c6f18c005bcc9dfc42c731b4a92a
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130125.E789B87E8B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sane-backends: bump version to
- 1.4.0
+Message-Id: <20260609130123.D3A6D87E7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ltp-testsuite: bump version to
+ 20260529
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,147 +69,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1932552851573237681=="
+Content-Type: multipart/mixed; boundary="===============7870392514382310644=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1932552851573237681==
+--===============7870392514382310644==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e2870919b2943c2d4a62127201a0d334fdb5a461
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a295c5bb0cc8c6f18c005bcc9dfc42c731b4a92a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://gitlab.com/sane-project/backends/-/releases/1.2.1
-https://gitlab.com/sane-project/backends/-/releases/1.3.1
-https://gitlab.com/sane-project/backends/-/releases/1.4.0
+Changelog:
+https://github.com/linux-test-project/ltp/releases/tag/20260529
 
-Removed patch which is included in this release.
+Removed patch backported from this release.
 
-Added sha256 tarball provided by upstream.
-
-The build of the umax_pp backend fails for microblazeel/mipsel/powerpc
-when used with uClibc (detected by the Gitlab pipelines):
-
-umax_pp_low.c: In function ‘sanei_umax_pp_initPort’:
-umax_pp_low.c:835:7: error: implicit declaration of function 'iopl'
- [-Wimplicit-function-declaration]
-  835 |   if (iopl (3) != 0)
-
-Fix this by disabling that backend under those conditions. The proper
-way to do that would be to patch configure.ac to add an option to
-exclude specific backends, and then give the corresponding CONF_OPT.
-However, that's quite a complex patch for such a corner case, so instead
-simply patch configure to remove the umax_pp backend from ALL_BACKENDS.
-We only want to do this conditionally, so do it with sed in a post-patch
-hook rather than with a patch.
-
-Fixes:
-https://autobuild.buildroot.net/results/364/364bfa29f9df16079dd10be628ddefcf80f581f9/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Arnout: do it in a post-patch instead of post-extract hook]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...0002-sm3600.h-Fix-build-with-standard-C23.patch | 38 ----------------------
- package/sane-backends/sane-backends.hash           |  6 ++--
- package/sane-backends/sane-backends.mk             | 13 ++++++--
- 3 files changed, 15 insertions(+), 42 deletions(-)
+ ...t2-define-_GNU_SOURCE-and-include-fcntl.h.patch | 84 ----------------------
+ package/ltp-testsuite/ltp-testsuite.hash           |  4 +-
+ package/ltp-testsuite/ltp-testsuite.mk             |  2 +-
+ 3 files changed, 3 insertions(+), 87 deletions(-)
 
-diff --git a/package/sane-backends/0002-sm3600.h-Fix-build-with-standard-C23.patch b/package/sane-backends/0002-sm3600.h-Fix-build-with-standard-C23.patch
+diff --git a/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch b/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch
 deleted file mode 100644
-index 287de48285..0000000000
---- a/package/sane-backends/0002-sm3600.h-Fix-build-with-standard-C23.patch
+index e4b654b319..0000000000
+--- a/package/ltp-testsuite/0001-openat2-define-_GNU_SOURCE-and-include-fcntl.h.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From 90815a9f2576c2428287a500cab6caeddb80f9a8 Mon Sep 17 00:00:00 2001
--From: Zdenek Dohnal <zdohnal@redhat.com>
--Date: Wed, 5 Feb 2025 13:19:11 +0100
--Subject: [PATCH] sm3600.h: Fix build with standard C23
+@@ -1,84 +0,0 @@
+-From 767b3e519e85095dfee3a47d15a373a403fe3dab Mon Sep 17 00:00:00 2001
+-From: Li Wang <liwang@redhat.com>
+-Date: Tue, 3 Feb 2026 10:43:19 +0800
+-Subject: [PATCH] openat2: define _GNU_SOURCE and include <fcntl.h>
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--bool, true and false are keywords in the standard C23 - the sm3600
--backend defines them on its own, which is forbidden with the new
--standard.
+-On Fedora Rawhide (glibc 2.43+), libc exposes openat2() and struct open_how,
+-so our configure script defines HAVE_OPENAT2 and the fallback definition in
+-lapi/openat2.h gets skipped. But openat20*.c never included <fcntl.h> (and
+-lacked _GNU_SOURCE), so the libc-provided prototype and struct stayed hidden,
+-so compilation failed:
 -
--The patch adds ifdef guards for the affected typedef - the old code
--will be used for older standards, C23 will define TBool as bool.
+-  # uname -r
+-  6.18.0-65.fc44.x86_64
 -
--Upstream: https://gitlab.com/sane-project/backends/-/commit/90815a9f2576c2428287a500cab6caeddb80f9a8
+-  # rpm -qf /usr/include/fcntl.h
+-  glibc-devel-2.43-1.fc44.x86_64
+-
+-  # nm -D /usr/lib64/libc.so.6 | grep -w openat2
+-  00000000000eb890 W openat2@@GLIBC_2.43
+-
+-  # make -C testcase/kernel/syscalls/openat2
+-  openat201.c:27:62: error: invalid application of ‘sizeof’ to incomplete type ‘struct open_how’
+-    27 |         {&dir_fd, TEST_FILE, O_RDWR, S_IRWXU, 0, &how, sizeof(*how)},
+-
+-Define _GNU_SOURCE and include <fcntl.h> in openat2 tests to make the
+-prototype available and fix the build.
+-
+-Signed-off-by: Li Wang <liwang@redhat.com>
+-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+-
+-Upstream: https://github.com/linux-test-project/ltp/commit/767b3e519e85095dfee3a47d15a373a403fe3dab
 -
 -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- backend/sm3600.h | 4 ++++
-- 1 file changed, 4 insertions(+)
+- testcases/kernel/syscalls/openat2/openat201.c | 3 +++
+- testcases/kernel/syscalls/openat2/openat202.c | 3 +++
+- testcases/kernel/syscalls/openat2/openat203.c | 3 +++
+- 3 files changed, 9 insertions(+)
 -
--diff --git a/backend/sm3600.h b/backend/sm3600.h
--index 2ecbeb236..5d8a8d809 100644
----- a/backend/sm3600.h
--+++ b/backend/sm3600.h
--@@ -77,7 +77,11 @@ Start: 2.4.2001
+-diff --git a/testcases/kernel/syscalls/openat2/openat201.c b/testcases/kernel/syscalls/openat2/openat201.c
+-index ecd63b150e4..40ac2f6d9ad 100644
+---- a/testcases/kernel/syscalls/openat2/openat201.c
+-+++ b/testcases/kernel/syscalls/openat2/openat201.c
+-@@ -4,6 +4,9 @@
+-  *
+-  * Basic openat2() test.
+-  */
+-+#define _GNU_SOURCE
+-+#include <fcntl.h>
+-+
+- #include "tst_test.h"
+- #include "lapi/openat2.h"
 - 
-- /* ====================================================================== */
+-diff --git a/testcases/kernel/syscalls/openat2/openat202.c b/testcases/kernel/syscalls/openat2/openat202.c
+-index 6d1b5a67c7d..329c6a4a5cb 100644
+---- a/testcases/kernel/syscalls/openat2/openat202.c
+-+++ b/testcases/kernel/syscalls/openat2/openat202.c
+-@@ -4,6 +4,9 @@
+-  *
+-  * openat2() tests with various resolve flags.
+-  */
+-+#define _GNU_SOURCE
+-+#include <fcntl.h>
+-+
+- #include "tst_test.h"
+- #include "lapi/openat2.h"
 - 
--+#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L
-- typedef enum { false, true } TBool;
--+#else
--+typedef bool TBool;
--+#endif /* GCC < 15 */
+-diff --git a/testcases/kernel/syscalls/openat2/openat203.c b/testcases/kernel/syscalls/openat2/openat203.c
+-index 6ac49ef4c9e..cd0c00d7523 100644
+---- a/testcases/kernel/syscalls/openat2/openat203.c
+-+++ b/testcases/kernel/syscalls/openat2/openat203.c
+-@@ -4,6 +4,9 @@
+-  *
+-  * Basic openat2() test to check various failures.
+-  */
+-+#define _GNU_SOURCE
+-+#include <fcntl.h>
+-+
+- #include "tst_test.h"
+- #include "lapi/openat2.h"
 - 
-- typedef SANE_Status TState;
-- 
---- 
--GitLab
--
-diff --git a/package/sane-backends/sane-backends.hash b/package/sane-backends/sane-backends.hash
-index 4282798d65..c2e032c130 100644
---- a/package/sane-backends/sane-backends.hash
-+++ b/package/sane-backends/sane-backends.hash
-@@ -1,5 +1,7 @@
--# From https://gitlab.com/sane-project/backends/uploads/d7cf858db3e2abb8fad09cf6b944fc10/sane-backends-1.1.1.sha512.txt
--sha512  25bd9f90d550cfe6a6d01c48e83716a53f4b0e3a294287e455ecb5e5b80c8fe1699f45c6c87f694475cceb85745c70597e18a7b1094669d5091c5fb183dfe94d  sane-backends-1.1.1.tar.gz
-+# From https://gitlab.com/-/project/429008/uploads/34e1650a4242a94212983245f375cb8c/sane-backends-1.4.0.sha256.txt
-+sha256  f99205c903dfe2fb8990f0c531232c9a00ec9c2c66ac7cb0ce50b4af9f407a72  sane-backends-1.4.0.tar.gz
-+# From https://gitlab.com/-/project/429008/uploads/d83587250844bbcfb8678ddb40d643bc/sane-backends-1.4.0.sha512.txt
-+sha512  a5ec0cb9e12075be3c4d5eb445a290216c5699645bb6885845868a8323848cef3aafec30f0c380638195a0a8085a8cff4e190741e79ae8f2f70b4d71abeee572  sane-backends-1.4.0.tar.gz
- 
- # Hash for license file
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index e1861ae4e4..1284362138 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,4 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20260130/ltp-full-20260130.tar.xz.sha256
+-sha256  5effc9d3eb3f5cd45d47e8ac3d78f59cb8f3f73c8598a2f182ef5b40ddfff311  ltp-full-20260130.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20260529/ltp-full-20260529.tar.xz.sha256
++sha256  685d83c6e370ac09201fb79593412f868fe031ee2890e204b5727fedcf51fb47  ltp-full-20260529.tar.xz
+ # Locally computed
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index fe89e7747d..e8fb7038d4 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 2e4767b1a5..d1fb40ed55 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SANE_BACKENDS_VERSION = 1.1.1
-+SANE_BACKENDS_VERSION = 1.4.0
- SANE_BACKENDS_SITE = \
--	https://gitlab.com/sane-project/backends/uploads/7d30fab4e115029d91027b6a58d64b43
-+	https://gitlab.com/-/project/429008/uploads/843c156420e211859e974f78f64c3ea3
- SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
- SANE_BACKENDS_LICENSE = GPL-2.0+
- SANE_BACKENDS_LICENSE_FILES = COPYING
-@@ -81,6 +81,15 @@ endef
+-LTP_TESTSUITE_VERSION = 20260130
++LTP_TESTSUITE_VERSION = 20260529
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
  
- SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
- 
-+# uClibc does not provide iopl() on these platforms:
-+# umax_pp_low.c:835:7: error: implicit declaration of function 'iopl'
-+ifeq ($(BR2_microblazeel)$(BR2_mipsel)$(BR2_powerpc)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
-+define SANE_BACKENDS_DISABLE_UMAX_PP
-+	$(SED) 's/umax_pp //' $(@D)/configure
-+endef
-+SANE_BACKENDS_POST_PATCH_HOOKS += SANE_BACKENDS_DISABLE_UMAX_PP
-+endif
-+
- define SANE_BACKENDS_USERS
- 	saned -1 saned -1 * /etc/sane.d - - Saned User
- endef
 
---===============1932552851573237681==
+--===============7870392514382310644==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -220,4 +221,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1932552851573237681==--
+--===============7870392514382310644==--
