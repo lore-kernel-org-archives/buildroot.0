@@ -1,63 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B68E2CD6E4C
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 16:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CB0CCD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7378B42F49;
-	Sat, 30 May 2026 16:25:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CkZHxyghAU7Q; Sat, 30 May 2026 16:25:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 116A842F34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780158315;
-	bh=ar7WlkJ4C6No2bDwAZHTLwpAlopykdHJe9DNSkto43g=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GOs1/PjNFazl/yri6iUIVD2fxCfnQs0nbZ3KmCvshOuDw3zUjoWo1jq6dOt2ApmZG
-	 G9NcVCPRPlaZEFw1YmizoMGz5E8q+8wNzmM0SNrmfQ2cz2+2hgZyozAig6s+SY7Qrg
-	 XAiLS5FGERqUReSPdomMzpBhjmLzf4FDFJWVj0/67ZeD64IOah81U8/2TmkeGhc2Vg
-	 NoJWRK0OWy1ns8Tn4MV2nv2mBZq86iLJQDWbKmmFAMOD+FvspCmzVviMUc+ZLraHPt
-	 qAPDJ5U92D04By7WqZqkh71fNIOUE0iEmQcBKo9Yr3I9mrbIxJzeW1xI6rqxYdGyfT
-	 8EtAd5d4DA1GA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 116A842F34;
-	Sat, 30 May 2026 16:25:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 46A5712F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48AD96F5BC
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6853D6F5CB;
+	Sat, 30 May 2026 17:07:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JCUzIwRUfQ-f for <buildroot@buildroot.org>;
- Sat, 30 May 2026 16:25:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 460736F5BA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 460736F5BA
- for <buildroot@buildroot.org>; Sat, 30 May 2026 16:25:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A18A835C8; Sat, 30 May 2026 16:24:56 +0000 (UTC)
+ id h6rmWgm3xLpX; Sat, 30 May 2026 17:07:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A522F6F5BC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780160861;
+	bh=ntd6Lk+9qDbaeg7DXsS4XpSZ4tJl0prgJ09k40z/6tU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=GuIT5LtUv5jcttYu1U3U8CQkF2rXkWzYJ8NyauFQllbKqcYDTbw5q2K7gDNlFRJbx
+	 USbD0xrGYVr0TPZUbri6co0Qg69WiEknv6GourgjHLz9W0Eo95xoMZDxTEUIQBjyOT
+	 KRFo7dpJNEpciSIW1alcLIT3NLPMWzD1beZScbbqNaRLWTeYYeOIJbFmuSByf6/HfQ
+	 I8euFmSlSWhSNuaHjqI9TUcawcELfnOPjdu99zrhsfZVJZ+sLfufGBEO6s03Em6+Ay
+	 PTSzBeibGxr2nVoFmUOrmwESQjAHduw3hijsEDJ7AeF9KkICpn+CpTtNV+96D8ylW2
+	 eZvERWO7Qq3UA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A522F6F5BC;
+	Sat, 30 May 2026 17:07:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE7B8F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3D5C42E01
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qmofCvLCMvD4 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 17:07:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1035; helo=mail-pj1-x1035.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DD16742DFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD16742DFF
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
+ [IPv6:2607:f8b0:4864:20::1035])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD16742DFF
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:38 +0000 (UTC)
+Received: by mail-pj1-x1035.google.com with SMTP id
+ 98e67ed59e1d1-36b9033d230so1328907a91.1
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:07:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780160858; x=1780765658;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=T306Wv+htIbc79h7MX/6DmhwNaEGnXwNNEzwTkHgaEE=;
+ b=B1Sb9ncGFEhUrMIDAG4R6S0dDUEWdmTRLmLaAN4zzNqWQPwedJZYMkWq7q8EyCZuTK
+ Je0gIY+4KuNUvWlt447CPDZPPmTKtqs7v75b2YcZQmPktCBDSgJrbbpuUjTQcmrRBAsl
+ ILWEAbRccRGuFemh//DRvMzGEKQeUZyit9l+6zL2fcmfrrcigVyEsak56RG+KkoH++kz
+ P+/1lBBEzAWvCG9CYHqP94+3vwBSlgTpb3R43kbmLH31EgJVhbjyWIoq7uREMV7paoGR
+ /HYcJsG5/INL+cu6trFeyd6HwT/kgj9a4WVz0my6LWBBaEPMvIJtuZ7NZlA2ZhdtXz4M
+ XsfQ==
+X-Gm-Message-State: AOJu0YyEd0H6sWROPzJVbRDm3gU42p2TFQgL+SnEvpx6THsKyO+FQb0i
+ TyXRSMQY7uc2O0nXexKOH6QpQhxIB5AhzeiId9B6+wBvlgavqq/4LTA/qB8nbveEFFg=
+X-Gm-Gg: Acq92OELlAYsfvpmrGXxQyo/bv+hR61Cr0HfcSnFXcZYgEp4gy6bNp5Tqso7cxcDzjX
+ T/2u5mZIF+r0d4/0lec9Ih+07fEhFz5YG8S0ehgP4HXAc8JvJeNKlSCzxAV+NjheNyEpunot9ZL
+ ler1FTK23jAKmGg35LAtNCa8mrM1dFhhG+/WYJHtXpIyopzz8fOZUSwQ16kL4QAx/5BO9c55ySD
+ 81jirTCHSQMM0nM+T6IFxl/sFocsMG1/2hwr4B+UKyEy7IHEYYmlJYkyHv1BwbZIT640WJej73f
+ yWVg3kFGBXMGNVcZ73baWLC7BHEHoD9R6N0ZPDFK7pmGc0eBLDwki4xjK1pFp/PxJywAnImOqAt
+ PfAWsVQPGtoEr9DpIV5TQJkx6TYwSyxIwTydLgGpGmVol5BvXfBSoYb+/oSb3rGf1AQY/ssPOCF
+ hx8E28Ls5frqxEW1Y2rCFYglKeXpT+cQouGAHdshIKSp5xk9opIvGhaM3rCXIaPfvgkDA=
+X-Received: by 2002:a17:90a:e70c:b0:36d:633a:c7fc with SMTP id
+ 98e67ed59e1d1-36d633acf08mr2118261a91.10.1780160857975; 
+ Sat, 30 May 2026 10:07:37 -0700 (PDT)
+Received: from fedora.taildae27b.ts.net
+ ([2409:40e5:11f0:fc06:1f55:1e4:b17b:8dd7])
+ by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-36bc10c8746sm4199985a91.0.2026.05.30.10.07.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 May 2026 10:07:37 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 18:01:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f07fb2bcd2ece6b7a85763858a55c2bdf7d1e6de
-X-Git-Newrev: 7e5241e14aab1b6ff31c30bca05f9fa2ce81b6c1
-X-Patchwork-Hint: ignore
-Message-Id: <20260530162456.2A18A835C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libbpf: fix bpftrace build with
- kernel headers 5.{9, 10}
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Sat, 30 May 2026 22:33:39 +0530
+Message-ID: <20260530170343.19119-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.54.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1780160858; x=1780765658; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=T306Wv+htIbc79h7MX/6DmhwNaEGnXwNNEzwTkHgaEE=;
+ b=Gval7hOuUMwsTHcdA0tD1VpM7bpDyGppqIqC0bqOpjDpQ1WiUV2WZkbWr2lkumydl4
+ eU3nwrl1SLVQTqVh0y34GHufwwFOafsDjCLVb/ewq0ujRo3zhuiLpejGsWDRbiuwyZ67
+ O+EyhMSsD58M4imZqpELoPqr19SvwJV/Z4rEnHZQDAE//zeGFGhdNUoyTUPlqJi7g0Is
+ ffKxMvpgBsrahtQ/cCq1BfFXvAl5qt+24UKqclXn05wUbjxyywQJ4FFv6W1utGTvmzHx
+ EdoUFHyEoJI38i2sDKtRRGeP7B5ENP/QpTNFYyqQEYvaqa6OQzfc6T3XPPvCSJfnWdhY
+ eVJg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=Gval7hOu
+Subject: [Buildroot] [PATCH 0/2] package/libzlib: fix musl build failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,109 +118,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7e5241e14aab1b6ff31c30bca05f9fa2ce81b6c1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+This series fixes two build failures in libzlib when cross-compiling
+for musl-based toolchains:
 
-Buildroot added the bpftrace package in 2024 with commit
-338acb27ff3e07560290085d7c6a2feab633c869
-which initially provided version 0.19.1.
+1/2: HWCAP_S390_VX is not defined in musl's <sys/auxv.h>, breaking
+     the s390x CRC32 vector extension build.
 
-This release includes upstream commit
-https://github.com/bpftrace/bpftrace/commit/fea31939899db48fa6d28f5ce880bfc39250ec9f
-which was added to version 0.17.0 in 2022 and makes use of certain
-variables of struct bpf_btf_info which were added to the linux kernel in
-2020 with version 5.11:
-https://github.com/torvalds/linux/commit/5329722057d41aebc31e391907a501feaa42f7d9
+2/2: <errno.h> is not included when NO_STRERROR is defined, but
+     errno/EAGAIN/EWOULDBLOCK are used unconditionally in gzread.c
+     and gzwrite.c.
 
-+	__aligned_u64 name;
-+	__u32 name_len;
-+	__u32 kernel_btf;
+Both fixes have been submitted upstream:
+  - https://github.com/madler/zlib/pull/1253
+  - https://github.com/madler/zlib/pull/1254
 
-The libbpf package updates toolchain headers with its bundled version
-only when the toolchain headers are version 5.8 or older, this condition
-is part of the initial version of the package added in 2020 with
-buildroot commit f7b8508e4fe9c96bf679cc5423cc1500b6523e83. This version
-limit should have been raised when the bpftrace package was added to
-avoid build errors when the toolchain contains header versions 5.9 or
-5.10.
+Shubham Chakraborty (2):
+  package/libzlib: fix build failure with musl on s390x
+  package/libzlib: always include errno.h on non-Windows-CE platforms
 
-This situation caused build errors in the autobuilder, the last one in
-February 2025:
+ ...fix-build-failure-with-musl-on-s390x.patch | 42 +++++++++++++++++
+ .../0002-gzguts-always-include-errno-h.patch  | 45 +++++++++++++++++++
+ 2 files changed, 87 insertions(+)
+ create mode 100644 package/libzlib/0001-crc32_vx-fix-build-failure-with-musl-on-s390x.patch
+ create mode 100644 package/libzlib/0002-gzguts-always-include-errno-h.patch
 
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:
- In member function 'bool bpftrace::BPFfeature::has_module_btf()':
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:573:8:
- error: 'struct bpf_btf_info' has no member named 'name'
-  573 |   info.name = (__u64)name;
-      |        ^~~~
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:574:8:
- error: 'struct bpf_btf_info' has no member named 'name_len'
-  574 |   info.name_len = sizeof(name);
+-- 
+2.54.0
 
-The problem disappeared from the autobuilders due to newer headers
-versions used for the buildroot toolchain or other build errors occurring
-earlier, like llvm version mismatches.
-
-The build error can today still be reproduced with this defconfig
-
-BR2_aarch64=y
-BR2_KERNEL_HEADERS_5_10=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_BPFTRACE=y
-
-on the 2026.02.x branch as of 0be927b89a319c9ac35249354558e9f4cb102fd0.
-
-To fix the problem we raise the BR2_TOOLCHAIN_HEADERS_AT_LEAST_ version
-number.
-
-Fixes:
-https://autobuild.buildroot.net/results/dbe/dbecf88c7edba357cee8fea31294ddb9f4d188ad/
-https://autobuild.buildroot.net/results/df5/df59e038de47f63d14e1be7bd12dd16a69636f79/
-https://autobuild.buildroot.net/results/359/3595d39dd53a686bbf996dd4e532ced44906b9e3/
-https://autobuild.buildroot.net/results/e4f/e4f95a5f30a605eadb81802075ea6bb1e2880684/
-https://autobuild.buildroot.net/results/bd0/bd075cb8c55f9f8a017711dc804b8d81ae89b4c5/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/libbpf/libbpf.mk | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index a4bd270cbd..4b742ab966 100644
---- a/package/libbpf/libbpf.mk
-+++ b/package/libbpf/libbpf.mk
-@@ -18,13 +18,14 @@ define LIBBPF_BUILD_CMDS
- 		-C $(@D)/src
- endef
- 
--# bpf/bpf.h installed by libbpf uses bpf_iter_link_info that was added since
--# kernel 5.9, so we need to update some uapi headers in STAGING_DIR if the
--# toolchain is build with linux-headers < 5.9.
--# Otherwise bpf/bpf.h is broken due to out of date linux/bpf.h installed by the
--# toolchain.
--# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a5cbe05a6673b85bed2a63ffcfea6a96c6410cff
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9),)
-+# bpftrace uses variables from bpf_btf_info that were added since kernel
-+# 5.11, so we need to update some uapi headers in STAGING_DIR if the
-+# toolchain is build with linux-headers < 5.11.
-+# Otherwise bpftrace is broken due to out of date linux/bpf.h installed
-+# by the toolchain.
-+# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=5329722057d41aebc31e391907a501feaa42f7d9
-+# https://github.com/bpftrace/bpftrace/commit/fea31939899db48fa6d28f5ce880bfc39250ec9f
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11),)
- LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
- 
- define LIBBPF_FIX_STAGING_PC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
