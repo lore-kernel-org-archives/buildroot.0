@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C539CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5311CD8CAA
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C025D84701;
-	Tue,  9 Jun 2026 13:04:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A597F852D4;
+	Tue,  9 Jun 2026 13:04:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1IrY0sf9q_Pp; Tue,  9 Jun 2026 13:04:31 +0000 (UTC)
+ id L4kfnAEBJI-Q; Tue,  9 Jun 2026 13:04:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8051F82217
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0C62846A5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010271;
-	bh=R7w/zuPJ1Iddbd3CfHjGR8j53MEJSig3xldi2Q83900=;
+	s=default; t=1781010272;
+	bh=kM9wTwTW7fzcsqaYQImJA6MuIXi3EwzKM2IhN2kCZEI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Btw1gRb0Q+WqnG42B8dxXBP1VGD5Tn79LHeCEtdTJ3IABFxmKFEEHlpZbeHdzsmc+
-	 AD/1wqyNUiAOkdwmg5hIj59i7ENGP6IF12RVjaHU7YqJE69T/e3kOdXxju21Xl2EUC
-	 8Pkb0K9tOB8QdCIk3vIP1cJTj7FeivzerUnfN08pYxZerRnMQUkei1mtmMm4aXYv/q
-	 VllMDkNLyorsGrBZD4a/fB+tNrKFLeXcfqBvMvPGoN1QgCSfsBi+8hWlVrpGGLKHgf
-	 EALPfe6jJ8l0FSYjvFYYubzWI0K8PODyLvB1j1+hV2zpSIUtipQis+NnHpcu6n7l/Y
-	 3FsCVoPgQ5lRQ==
+	b=JWW7rEOr34wDJFEHSI3bz74Xq99qgceFUouZyS7Ic0sIMvyirUJfvsJZdTR5Cagp1
+	 zSvlBZwhPlKiYn7uZPqwJLSZWH8ikwRnOuKiC9hASdVa8i1L9YsM+HHULIwnJT7vPQ
+	 zXMtyqPdu3N4b8fbuAQtsxXN7tucsbQabcuJ4NS6tGrQa7KnbtDiO/hXR/JfbnvQsU
+	 weoodjhAiViOgbZAE12xarUKRq8Mu8kM5IAQfLc8GgUKvkcs5AxD9AjyWJqReYho98
+	 TgdmueY9wqfQm10jkN2+fPji/9c7VQWSh1XDTxYIXnrO7cabg2OaCrFU6HADEm36uj
+	 gU8h8U9wSftRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8051F82217;
-	Tue,  9 Jun 2026 13:04:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 881CD2EE
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0C62846A5;
+	Tue,  9 Jun 2026 13:04:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BBA9196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 820BA4271C
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFF0B41EF2
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DCzqB21OwtfN for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FSULA4QHAKo8 for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A44E942705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052A2411F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A44E942705
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 052A2411F2
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E0A9E87E7E; Tue,  9 Jun 2026 13:01:21 +0000 (UTC)
+ id 40BCC87E8D; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:05:54 +0200
+Date: Sat, 30 May 2026 15:48:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f009a9f804b8a148490e2301fc2831aa1d0601de
-X-Git-Newrev: 354b8442f89b88c031c8f36f6a7c3d6a3cc5b975
+X-Git-Oldrev: 1b290781cf3782576091dbeacdd7d1a30b051856
+X-Git-Newrev: a75b8623f5515d99bec48f96586115953150558e
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130121.E0A9E87E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luajit: bump to version
- 707c12bf00dafdfd3899b1a6c36435dbbf6c7022
+Message-Id: <20260609130123.40BCC87E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: switch to GCC 15.x as the
+ default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,53 +69,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/354b8442f89b88c031c8f36f6a7c3d6a3cc5b975
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a75b8623f5515d99bec48f96586115953150558e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-diff COPYRIGHT:
-    -Copyright (C) 2005-2025 Mike Pall. All rights reserved.
-    +Copyright (C) 2005-2026 Mike Pall. All rights reserved.
+Now that GCC 16.x support has been added, follow our usual strategy of
+making GCC 15.x the default GCC version.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/luajit/luajit.hash | 4 ++--
- package/luajit/luajit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index e147845e4c..4ac36b1af6 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ab3f16d82df6946543565cfb0d2810d387d79a3a43e0431695b03466188e2680  luajit-871db2c84ecefd70a850e03a6c340214a81739f0.tar.gz
-+sha256  ac2defd1e9b4ab07ac0a52f2403318ffb0d54505b975dff0cfc49a927ab84d90  luajit-707c12bf00dafdfd3899b1a6c36435dbbf6c7022.tar.gz
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index b9dd37471f..e218b13bd2 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -5,7 +5,7 @@ choice
+ 	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_POWERPC_CPU_HAS_SPE
+-	default BR2_GCC_VERSION_14_X
++	default BR2_GCC_VERSION_15_X
+ 	help
+ 	  Select the version of gcc you wish to use.
  
- # Locally calculated
--sha256  5b79fb4754728487cf43d55b213bb68369912484f2dd7ab68380435e994bce39  COPYRIGHT
-+sha256  6cda3076a8c09b31bb1f90da614ea89e7ee194589626eeac613e522849604e47  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index ed44e165c2..bbd423ad02 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAJIT_VERSION = 871db2c84ecefd70a850e03a6c340214a81739f0
-+LUAJIT_VERSION = 707c12bf00dafdfd3899b1a6c36435dbbf6c7022
- LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
