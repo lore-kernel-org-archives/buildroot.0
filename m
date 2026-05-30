@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98A0CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F23A3CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA25E42FA4;
-	Sat, 30 May 2026 22:00:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q53J8eZlTtnZ; Sat, 30 May 2026 22:00:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1A3242FAE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780178454;
-	bh=XurW7hymD7VurfzxMd98acUzpac1qtJxwZXf3Hu8cMA=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pijhrsNe/QlRALr4YI/XCW/pe0LI/FhTxASO6+6WW8MeDoAZucQFZmlO9gow4y4eJ
-	 Dd6EXVuyaD+gdftNakyLPmESMs7WJtF/FumIRvf7KjXzxPGfcbkpXnCfViNVro/cc9
-	 OY8JdsgZoY7SamxXYMYS1g2l1dDoh9/omW458PDpLBr6JtWsHd80nqYltvuIdB9KoD
-	 hXEt44Gi8mxT5VyoOWt/LO0f9qqqdCc8coQXTkb2jHVmvdOl7bvhcAxzS9vkH0w4p4
-	 rjODceTxAy68XOBU0o9c69OL4TxYKP0/ODbG6fYlnDqWiAlEAuxBHFIUdbJq7xD4hM
-	 yhk3KRNneC8WQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1A3242FAE;
-	Sat, 30 May 2026 22:00:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C5AFF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8200A61B58
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04D2B6F5FC;
+	Sat, 30 May 2026 22:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5bcxBrsVkGBN for <buildroot@buildroot.org>;
- Sat, 30 May 2026 22:00:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7982A61B4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7982A61B4B
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7982A61B4B
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:52 +0000 (UTC)
-Received: from [192.168.1.80] (82-65-127-30.subs.proxad.net [82.65.127.30])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 12FDC2C83044;
- Sun, 31 May 2026 00:00:50 +0200 (CEST)
-Message-ID: <be29a7bb-f97e-49a2-96ca-8a4983c155af@bubu1.eu>
-Date: Sun, 31 May 2026 00:00:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Alexandre Ondet <frcomdev@gmail.com>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260428172000.2671-1-frcomdev@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260428172000.2671-1-frcomdev@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1780178450; bh=lQ94yJcLPhYGP3xphI+ZxhsW4JqlN8HcQMtr+wsUqM0=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=FJlihi1zxsYPvTzPzIkCj8mAEDwzE8WoahjukWNJnfML5g2/zWZEJKfSnDh0hIa2w
- wy33jrlFMdcp26Jw2pe5DoDAI/t4H6Q+joSR4hF3iL/SvMruGcu/HQd7xkjXDxrpt8
- e4uUI5a3tLHBRnY4FdyocXSvl57mPvgrRlw5iyBbx4Os/cmSYGErs+FCFxks7fbq0N
- 8w7L9VY9efFKvZKU338Td4VlnJ2QxZG0QZMCDzpnIH/Jbcr0ASMXhcDZQ7O6tloHe7
- j5K5V3h1UOoEbKd+zkBZQLPROjoOtQJ5y5QxY10Yn6W2Iz/+9tum9UO+useTHHZrLy
- rq0lxQtlYLX0w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=FJlihi1z
-Subject: Re: [Buildroot] [PATCH 06/13] package/python-nmcli: new package
+ id 4tF5Ip8po5a0; Sat, 30 May 2026 22:00:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD72D61B58
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780178457;
+	bh=HbKBMuv3cC/YW7S0KazJEAKZO1ZTvQIF+gVaeng3Em8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=AwydDy0C1MrsbktrEM3A8P5bqpVgmH0V7eLftkic+L/SWhYr+wjRxCYxL/byR+mhW
+	 Z+uacUwsh9HQLy0wxWuCiLcvnT3yU7mGD95bt9vkP/ju6bTdMF3QVmHpVbTS//EE96
+	 PFMdLvXwuucSvaX/efcUu+pcUhKfZ9N5rIFnEyWa01LXoLJj6SnunHuGeuDtjpK+xq
+	 jqL0eyTLMqjz8EZbBanVCrBhMTLHmOr/kSh6ovOBt8NCojy0rTfoFNPkEF9feaQqkg
+	 5wXjcjUjYX98qxaH4PT92HDagCjO8zFr/9q1Q3MEap2EjQUXpH7ozcNoh9u/ZUeTVd
+	 O2mMyFOGPX1ew==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD72D61B58;
+	Sat, 30 May 2026 22:00:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C610CD3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABB8685489
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wc_RT9XpMltR for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 22:00:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D31F185487
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D31F185487
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:00:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A90D98764A; Sat, 30 May 2026 22:00:40 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 23:58:44 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 72a022ec2c5be7552403d5199ec8bd01e3a64641
+X-Git-Newrev: 6be20a5df1b8208b8d156fee292954d4738a4b3e
+X-Patchwork-Hint: ignore
+Message-Id: <20260530220040.A90D98764A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/paho-mqtt-c: bump
+ version to 1.3.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,111 +70,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Alexandre,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6be20a5df1b8208b8d156fee292954d4738a4b3e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-some comments below.
+Release notes:
+https://github.com/eclipse-paho/paho.mqtt.c/releases/tag/v1.3.16
 
-On 4/28/26 19:20, Alexandre Ondet wrote:
-> Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
-> ---
->   package/Config.in                      |  1 +
->   package/python-nmcli/Config.in         |  6 ++++++
->   package/python-nmcli/python-nmcli.hash |  3 +++
->   package/python-nmcli/python-nmcli.mk   | 14 ++++++++++++++
->   4 files changed, 24 insertions(+)
->   create mode 100644 package/python-nmcli/Config.in
->   create mode 100644 package/python-nmcli/python-nmcli.hash
->   create mode 100644 package/python-nmcli/python-nmcli.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 754bdee9f4..83c9e0809c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1261,6 +1261,7 @@ menu "External python modules"
->   	source "package/python-netifaces/Config.in"
->   	source "package/python-networkmanager/Config.in"
->   	source "package/python-networkx/Config.in"
-> +	source "package/python-nmcli/Config.in"
->   	source "package/python-numpy/Config.in"
->   	source "package/python-oauthlib/Config.in"
->   	source "package/python-opcua-asyncio/Config.in"
-> diff --git a/package/python-nmcli/Config.in b/package/python-nmcli/Config.in
-> new file mode 100644
-> index 0000000000..acdb6a1423
-> --- /dev/null
-> +++ b/package/python-nmcli/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_NMCLI
-> +	bool "python-nmcli"
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This should depend on BR2_PACKAGE_NETWORK_MANAGER, as it probably 
-doesn't make any sense to have this package without also having 
-network-manager on your device?
-
-And then you can select BR2_PACKAGE_NETWORK_MANAGER_CLI to ensure the 
-nmcli part also gets enabled automatically when you enable python-nmcli.
-
-> +	help
-> +	  Python wrapper for nmcli (NetworkManager).
-> +
-> +	  https://github.com/ushiboy/nmcli
-> \ No newline at end of file
-> diff --git a/package/python-nmcli/python-nmcli.hash b/package/python-nmcli/python-nmcli.hash
-> new file mode 100644
-> index 0000000000..d11842e3e8
-> --- /dev/null
-> +++ b/package/python-nmcli/python-nmcli.hash
-> @@ -0,0 +1,3 @@
-> +# From https://pypi.org/pypi/nmcli/1.7.0/json
-> +sha256  4fb17b6c33d276a264a27b7109fa1d70987570536fa8852b51830f9f7732f982  nmcli-1.7.0.tar.gz
-> +sha256  9dbbc4debacc85f5f5f074614cd9cadd61da09eaa19f98f6bbb5463c34133820  LICENSE.txt
-> \ No newline at end of file
-> diff --git a/package/python-nmcli/python-nmcli.mk b/package/python-nmcli/python-nmcli.mk
-> new file mode 100644
-> index 0000000000..449131974d
-> --- /dev/null
-> +++ b/package/python-nmcli/python-nmcli.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-nmcli
-> +#
-> +################################################################################
-> +
-> +PYTHON_NMCLI_VERSION = 1.7.0
-> +PYTHON_NMCLI_SOURCE = nmcli-$(PYTHON_NMCLI_VERSION).tar.gz
-> +PYTHON_NMCLI_SITE = https://files.pythonhosted.org/packages/source/n/nmcli
-> +PYTHON_NMCLI_SETUP_TYPE = setuptools
-> +PYTHON_NMCLI_LICENSE = MIT
-> +PYTHON_NMCLI_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> \ No newline at end of file
-
-Please make sure your files all have a newline at the end.
-
-A general note for these type of packages with runtime dependencies 
-(which applies to python packages in general but also for this 
-specifically for the network-manager dependency): it would be really 
-good to add a runtime test together with the package [1]. It helps to 
-test the package when reviewing and ensures it doesn't silently break 
-with some network-manager update.
-
-I've marked this as changes requested in patchwork.
-
-
-Best,
-Marcus
-
-[1] 
-https://nightly.buildroot.org/manual.html#_using_the_runtime_tests_framework
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 8ca597c4f9..59c74cd044 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  60ce2cfdc146fcb81c621cb8b45874d2eb1d4693105d048f60e31b8f3468be90  paho-mqtt-c-1.3.15.tar.gz
++sha256  8b960f51edc7e03507637d987882bc486d8f4be6e79431bf99e2763344fd14c5  paho-mqtt-c-1.3.16.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index acff7d5cc3..3a6a4e4b31 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PAHO_MQTT_C_VERSION = 1.3.15
++PAHO_MQTT_C_VERSION = 1.3.16
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
