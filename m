@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD71CD6E55
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 15:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A9ECD6E54
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 15:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 965E86F5B5;
-	Sat, 30 May 2026 15:37:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A91B8528C;
+	Sat, 30 May 2026 15:37:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GgMpibvvhKKy; Sat, 30 May 2026 15:37:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bjnR2zrX2aaJ; Sat, 30 May 2026 15:37:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F8C36F5A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 876318539A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780155465;
-	bh=s+FSaIfE7Vi1yfNNs982r0Qq22VQuFzjNRXr29fH8Q0=;
+	s=default; t=1780155463;
+	bh=Lv05B68oPDL+A7p49ibSLM3fb2NAh+ACtT9riE0d19A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bxhjKdztGOnsgDGZ0dsukinFf2283TWo6lIEyipe/655tGyfmG/m3MwJD3S2SEARI
-	 APzKat9YIhmoezuXGCQA11Ihu9tDLvkWCX03xLnwC2iAhicT2SBiO/uiDoATOLJUXO
-	 H6Oh/isdsvzpmUQB9RAlwOyTpaqlXEzjhJfVBvUkECE5AhiMu5lf/DAY1ods6jspZX
-	 N+dKrdr1tMDrWnU+XBiKF5RfZ6N7nRZaI1MFEi3ICxYcJrlFm6nGVfe5luJbNws0aq
-	 mU7QcmNXdMjLsoKOCmKWALyn604VANyKTxSguauu4qcfsgAYF6NAJOE9m+HwhAeatc
-	 NYFulJrft9jZQ==
+	b=eXEaZSFI6Dq4pzPaLMaqkUi74WsKIBVF2HJ+dHu0ML8g4Z2+rbViFfno1uBjITeyn
+	 QXLM9hP7bDqXMR+sllSWWHCl7OgVv3H9wGnORrFvRAzahA/kXpoi+j6S7eS8LEJenB
+	 7oskJip7B0QEiZN3BBl78GbX9vrYO9CILJvuJwwt0KgcKyTEWxPr/akNiXR7EEzAcK
+	 untwZhEz6zr49tasCgsZj0j8CMsom8InL94/IjYSJ5k+BZBCJkb1hmkLVsK3fCLPVj
+	 TJVzXWkGahJIi2gyPKuXaHgmprI5xH7BA6COsiLtIWCad+v25UxQFaljPNIkIs5wFs
+	 mENejuWedEd2w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F8C36F5A8;
-	Sat, 30 May 2026 15:37:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 728B1D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 15:37:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 876318539A;
+	Sat, 30 May 2026 15:37:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 023BC218
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 15:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58D2C6F5A1
- for <buildroot@buildroot.org>; Sat, 30 May 2026 15:37:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E83DA6F5A6
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 15:37:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dYUzluP8sqrX for <buildroot@buildroot.org>;
+ id S2z0C4Xybh_9 for <buildroot@buildroot.org>;
  Sat, 30 May 2026 15:37:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD8E6F5A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 099656F5A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0DD8E6F5A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 099656F5A1
  for <buildroot@buildroot.org>; Sat, 30 May 2026 15:37:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE3B787528; Sat, 30 May 2026 15:37:25 +0000 (UTC)
+ id 01AAD87529; Sat, 30 May 2026 15:37:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 17:34:04 +0200
+Date: Sat, 30 May 2026 17:34:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e2df83809ee200d1134f9a7a54fe7fe79b49cf9
-X-Git-Newrev: 28f9f29b5e4b79e9a7061066b3d22656bfd9bbc3
+X-Git-Oldrev: 28f9f29b5e4b79e9a7061066b3d22656bfd9bbc3
+X-Git-Newrev: 17c9deb115cd216aa2c6a6f625327c7ac9dfb83a
 X-Patchwork-Hint: ignore
-Message-Id: <20260530153725.EE3B787528@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ca-certificates: enable host
- package variant
+Message-Id: <20260530153726.01AAD87529@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/generate-cyclonedx: hint at missing
+ Buildroot host package on a specific error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,114 +77,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/28f9f29b5e4b79e9a7061066b3d22656bfd9bbc3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/17c9deb115cd216aa2c6a6f625327c7ac9dfb83a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The host ca-certificates is needed to download the SPDX schema on
-CycloneDX's GitHub when using Buildroot's host Python, see
-urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH) in
-utils/generate-cyclonedx.
+Since last commit, utils/generate-cyclonedx can now be used with
+Buildroot host tools, provided the user either externally install the
+SPDX schema in the DL_DIR themselves or have
+BR2_PACKAGE_HOST_PYTHON3_SSL and BR2_PACKAGE_HOST_CA_CERTIFICATES both
+enabled. If the latter is missing, Python will complain with:
 
-Note that unlike the target package which uses a _TARGET_FINALIZE_HOOKS
-since commit 2bc8e72bafed ("package/ca-certificates: create the bundle
-as target-finalize hook"), the host package doesn't have this option as
-there's no such hook for host packages. Therefore, the target's
-CA_CERTIFICATES_INSTALL_TARGET_CMDS and CA_CERTIFICATES_GEN_BUNDLE are
-merged and adapted into HOST_CA_CERTIFICATES_INSTALL_CMDS.
-This of course has the same shortcomings as the target package had
-before commit 2bc8e72bafed ("package/ca-certificates: create the bundle
-as target-finalize hook").
-The adaptations were:
-- replaced $(TARGET_MAKE_ENV) with $(HOST_MAKE_ENV)
-- replaced $(TARGET_DIR) to $(HOST_DIR)
-- replaced $(HOST_DIR)/usr with $(HOST_DIR)
-- replaced find usr/share/ca-certificates with find share/ca-certificates
-  (since it's done from within $(HOST_DIR)
+Traceback (most recent call last):
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1321, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1358, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1404, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1353, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1113, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1057, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/buildroot/build/host/lib/python3.14/http/client.py", line 1499, in connect
+    self.sock = self._context.wrap_socket(self.sock,
+                ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+                                          server_hostname=server_hostname)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sock=sock,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        session=session
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/buildroot/build/host/lib/python3.14/ssl.py", line 1076, in _create
+    self.do_handshake()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/buildroot/build/host/lib/python3.14/ssl.py", line 1372, in do_handshake
+    self._sslobj.do_handshake()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
+    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
+    with contextlib.closing(urlopen(url, data)) as fp:
+                            ~~~~~~~^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 504, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1369, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1324, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+
+Provide some hint as to what could be missing from Buildroot host.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/Config.in.host                     |  1 +
- package/ca-certificates/Config.in.host     | 12 ++++++++++++
- package/ca-certificates/ca-certificates.mk | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
+ utils/generate-cyclonedx | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index bb6732a639..df57cc0c17 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -14,6 +14,7 @@ menu "Host utilities"
- 	source "package/bmap-writer/Config.in.host"
- 	source "package/bootgen/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
-+	source "package/ca-certificates/Config.in.host"
- 	source "package/casync-nano/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
-diff --git a/package/ca-certificates/Config.in.host b/package/ca-certificates/Config.in.host
-new file mode 100644
-index 0000000000..950f5854dc
---- /dev/null
-+++ b/package/ca-certificates/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_CA_CERTIFICATES
-+	bool "Host CA Certificates"
-+	help
-+	  This package includes PEM files of CA certificates to allow
-+	  SSL-based applications to check for the authenticity of SSL
-+	  connections on the host.
-+
-+	  It includes, among others, certificate authorities used by the
-+	  Debian infrastructure and those shipped with Mozilla's
-+	  browsers.
-+
-+	  https://salsa.debian.org/debian/ca-certificates
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 1f3f192d4a..f5675b754d 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -8,6 +8,7 @@ CA_CERTIFICATES_VERSION = 20260223
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
- CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20260223T202245Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
-+HOST_CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
- CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 7cfeefbc5b..11edc05d80 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -52,7 +52,12 @@ if not SPDX_SCHEMA_PATH.exists():
  
-@@ -43,4 +44,33 @@ define CA_CERTIFICATES_GEN_BUNDLE
- endef
- CA_CERTIFICATES_TARGET_FINALIZE_HOOKS += CA_CERTIFICATES_GEN_BUNDLE
+     # Download the CycloneDX SPDX schema JSON, and cache it locally
+     cyclonedxpath.mkdir(parents=True, exist_ok=True)
+-    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
++    try:
++        urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
++    except urllib.error.URLError as e:
++        if "CERTIFICATE_VERIFY_FAILED" in str(e.reason):
++            raise Exception("Couldn't verify certificate. Try enabling BR2_PACKAGE_HOST_CA_CERTIFICATES.")
++        raise e
  
-+define HOST_CA_CERTIFICATES_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean all
-+endef
-+
-+define HOST_CA_CERTIFICATES_INSTALL_CMDS
-+	$(INSTALL) -d -m 0755 $(HOST_DIR)/share/ca-certificates
-+	$(INSTALL) -d -m 0755 $(HOST_DIR)/etc/ssl/certs
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(HOST_DIR)
-+	rm -f $(HOST_DIR)/sbin/update-ca-certificates
-+	# Remove any existing certificates under /etc/ssl/certs
-+	rm -f $(HOST_DIR)/etc/ssl/certs/*
-+
-+	# Create symlinks to certificates under /etc/ssl/certs
-+	# and generate the bundle
-+	cd $(HOST_DIR) ;\
-+	for i in `find share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
-+		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
-+		cat $$i ;\
-+	done >$(BUILD_DIR)/ca-certificates.crt
-+
-+	# Create symlinks to the certificates by their hash values
-+	$(HOST_DIR)/bin/c_rehash $(HOST_DIR)/etc/ssl/certs
-+
-+	# Install the certificates bundle
-+	$(INSTALL) -D -m 644 $(BUILD_DIR)/ca-certificates.crt \
-+		$(HOST_DIR)/etc/ssl/certs/ca-certificates.crt
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ try:
+     with SPDX_SCHEMA_PATH.open() as f:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
