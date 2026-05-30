@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E482CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 313FBCD8CBF
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75E6D41EF2;
-	Tue,  9 Jun 2026 13:05:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72232858BE;
+	Tue,  9 Jun 2026 13:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QkLc6boototl; Tue,  9 Jun 2026 13:05:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Ehowlyruu2J; Tue,  9 Jun 2026 13:05:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BA99420E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B4185CC9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010303;
-	bh=D62DLQ0l3DYDb4rGRGg8I9ZdIyP9NVZ1dOyalVRmvmI=;
+	s=default; t=1781010296;
+	bh=EXHKkmfSHF51uBQLHmTbCLPNXJBb1p9CjUq1yjqjDhU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fHi0VgzUH819OE49JJx8Id5TiRZD9enMiRQpEtyNBYI08Qm4EdvwfYGqSeSBYoV+f
-	 2nQUSOeKI1AJlFt1jz4pU0YQ/1jlvbKS3Lia6r3UqIUafPOMC9LbkoMzpX0jsSPT6P
-	 995H54GQ14NGiTZxO6FUTq6OreD0N+wIVZFIZakfrXeVsQDT9KZo2ASDS9AFsvnJMw
-	 4a7V2tVyuE+xHmklQ5yhpRA6KO52iG4tYzQ5mShUwFVpKJdUV6J0lIihLeLlcxtltY
-	 ElPsmZBdviPbhyzgJCMoQp6AMcRpU5dd6JoQt3Fn5RQ1oshKtp0ZmMSR8IRM7q44WB
-	 RCVIiUcujkT8Q==
+	b=UUwOs6SZBvbvacMmMYfnznbJQvSC07FZ6cKWCVyzUYZhw2hn1Aiagiq7DFZHr+9ed
+	 BWq2njFVhc3eAz4A4KEpDPDmjiTqviVR3YcXxI+RoWkdoaHJo5WG0qpHHZSExMP5Tf
+	 ixU1wulwYR8siEeZaYG+5PRLautgUV8t8KYxQbGyqOEG6VzgGi0ZjHwGsFvWE+NmK5
+	 WwCLCXKARIsRYREBDkhDbvXS+fR98/n7P+ud//ncrcGsaHiu3oHxWy/kMFJdO+x++V
+	 WgSu6OfjyGWMzYr8Q9ZhkQAByk3gj2DRhPr2FgGadFmPAwwrjZ4NttdEVKIk0iXQcf
+	 tgipyQ11ZFmFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BA99420E4;
-	Tue,  9 Jun 2026 13:05:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9B4185CC9;
+	Tue,  9 Jun 2026 13:04:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CDDB4196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B74FF190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B28C645FEA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84FB8452D8
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JskLy1EHrUAs for <buildroot@buildroot.org>;
+ id g62sUUiZjALt for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 469A9455DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C772045BBB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 469A9455DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id C772045BBB
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7678387E7E; Tue,  9 Jun 2026 13:01:23 +0000 (UTC)
+ id 0FA3887E8B; Tue,  9 Jun 2026 13:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 16:17:18 +0200
+Date: Sat, 30 May 2026 19:44:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50d017a2d681e10458f8aac72103a7661e18134d
-X-Git-Newrev: 3872cf8a7555774d3093bbf324a9c478be837359
+X-Git-Oldrev: 5394df6400912efa7da4f97c7ea68a81a9f77c1d
+X-Git-Newrev: d1abbae02ed573ebd29b3c0984bb9a8f04232ff3
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130123.7678387E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-libyang: new package
+Message-Id: <20260609130124.0FA3887E8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/font-awesome: bump to version 7.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,184 +76,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3872cf8a7555774d3093bbf324a9c478be837359
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d1abbae02ed573ebd29b3c0984bb9a8f04232ff3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Python CFFI bindings for the libyang YANG library, providing the
-'libyang' Python module for YANG data modeling operations.
+This release updates the upstream icon set and related assets.
+Refresh the source hash for the new release. Also drop the "v" tag
+prefix as upstream dropped it starting from v5.0.
 
-This package is used by higher-level tooling such as python-sysrepo.
+License changes:
+- Upstream introduced SVG icons as a first-class feature alongside the
+  traditional icon fonts starting with v5.0.
+- The new icon designs (delivered as SVG and JS assets) are licensed
+  under CC-BY-4.0 (attribution is satisfied by the copyright comments
+  in the files).
+- The webfont files themselves remain under OFL-1.1, and helper styles
+  and build code remain under the MIT license.
+- Hence, the license is updated to: OFL-1.1 (fonts), MIT (code), CC-BY-4.0 (icons)
+- Add LICENSE.txt for hash verification.
 
-https://github.com/CESNET/libyang-python
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Vincent Cruz <mooz@blockos.org>
+Directory changes:
+- Drop "less" and "fonts". LESS support has been completely dropped by
+  upstream in v7.0, and the old font files directory was renamed.
+- Add "webfonts", which contains the newer .woff2 webfonts.
+- Add "js", which contains scripts for the SVG + JS rendering method.
+- Add "sprites" and "svgs", which contain SVG sprite sheets and raw SVG
+  icons (the CC-BY-4.0 assets) respectively.
+- Installing all these directories allows users to choose between the
+  various rendering methods (CSS+webfonts, SVG+JS, CSS sprite sheets,
+  or direct SVG usage) for their target systems.
+
+For detailed Chngelog
+- https://fontawesome.com/changelog
+
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-libyang/Config.in                   | 18 +++++++++
- package/python-libyang/python-libyang.hash         |  5 +++
- package/python-libyang/python-libyang.mk           | 21 ++++++++++
- .../testing/tests/package/sample_python_libyang.py | 46 ++++++++++++++++++++++
- .../testing/tests/package/test_python_libyang.py   | 12 ++++++
- 7 files changed, 104 insertions(+)
+ package/font-awesome/Config.in         | 4 ++--
+ package/font-awesome/font-awesome.hash | 3 ++-
+ package/font-awesome/font-awesome.mk   | 9 +++++----
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7f99e8cb53..76d4df4a29 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3368,6 +3368,7 @@ F:	package/dpdk/
- F:	package/libecoli/
- F:	package/libnss-ato/
- F:	package/libyang-cpp/
-+F:	package/python-libyang/
- F:	package/sysrepo-cpp/
+diff --git a/package/font-awesome/Config.in b/package/font-awesome/Config.in
+index 694d74e5a8..40cadaf433 100644
+--- a/package/font-awesome/Config.in
++++ b/package/font-awesome/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_FONT_AWESOME
+ 	bool "font-awesome"
+ 	help
+-	  Font Awesome is a full suite of 605 pictographic icons for
+-	  easy scalable vector graphics on websites.
++	  Font Awesome is a full suite of thousands of pictographic
++	  icons for easy scalable vector graphics on websites.
  
- N:	Vincent Prince <vincent.prince.fr@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 19c4ac2221..c70a64e968 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1211,6 +1211,7 @@ menu "External python modules"
- 	source "package/python-libevdev/Config.in"
- 	source "package/python-librt/Config.in"
- 	source "package/python-libusb1/Config.in"
-+	source "package/python-libyang/Config.in"
- 	source "package/python-lmdb/Config.in"
- 	source "package/python-lockfile/Config.in"
- 	source "package/python-log-rate-limit/Config.in"
-diff --git a/package/python-libyang/Config.in b/package/python-libyang/Config.in
-new file mode 100644
-index 0000000000..0442bb2e90
---- /dev/null
-+++ b/package/python-libyang/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_PYTHON_LIBYANG
-+	bool "python-libyang"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libyang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libyang
-+	depends on !BR2_STATIC_LIBS # libyang
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	help
-+	  Python CFFI bindings for the libyang YANG library.
-+
-+	  This package provides the 'libyang' Python module, used by
-+	  higher-level tooling such as python-sysrepo.
-+
-+	  https://github.com/CESNET/libyang-python
-+
-+comment "python-libyang needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/python-libyang/python-libyang.hash b/package/python-libyang/python-libyang.hash
-new file mode 100644
-index 0000000000..077d97cdd8
---- /dev/null
-+++ b/package/python-libyang/python-libyang.hash
-@@ -0,0 +1,5 @@
-+# From https://pypi.org/pypi/libyang/3.3.0/json
-+sha256  97da2c908a8a3607ac834f2acec224ea53a4b9e9770c13e5598513641decf637  libyang-3.3.0.tar.gz
-+
-+# Locally computed
-+sha256  c8d554f918d32b1467f35829e1cfb753764dd683c6edcecc877a4d7e9f05b2a7  LICENSE
-diff --git a/package/python-libyang/python-libyang.mk b/package/python-libyang/python-libyang.mk
-new file mode 100644
-index 0000000000..2e4d1f3b90
---- /dev/null
-+++ b/package/python-libyang/python-libyang.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python-libyang
-+#
-+################################################################################
-+
-+PYTHON_LIBYANG_VERSION = 3.3.0
-+PYTHON_LIBYANG_SOURCE = libyang-$(PYTHON_LIBYANG_VERSION).tar.gz
-+PYTHON_LIBYANG_SITE = https://files.pythonhosted.org/packages/source/l/libyang
-+
-+PYTHON_LIBYANG_LICENSE = MIT
-+PYTHON_LIBYANG_LICENSE_FILES = LICENSE
-+
-+# pyproject.toml (PEP517)
-+PYTHON_LIBYANG_SETUP_TYPE = pep517
-+
-+PYTHON_LIBYANG_DEPENDENCIES = \
-+	libyang \
-+	host-python-cffi
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_libyang.py b/support/testing/tests/package/sample_python_libyang.py
-new file mode 100644
-index 0000000000..29b2c6cadd
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_libyang.py
-@@ -0,0 +1,46 @@
-+# test from https://github.com/CESNET/libyang-python/blob/master/README.rst
-+
-+import libyang
-+from xml.etree import ElementTree
-+
-+ctx = libyang.Context()
-+
-+module = ctx.parse_module_str('''
-+module example {
-+  namespace "urn:example";
-+  prefix "ex";
-+  container data {
-+    list interface {
-+      key name;
-+      leaf name {
-+        type string;
-+      }
-+      leaf address {
-+        type string;
-+      }
-+    }
-+    leaf hostname {
-+      type string;
-+    }
-+  }
-+}
-+''')
-+
-+node = module.parse_data_dict({
-+    'data': {
-+        'hostname': 'foobar',
-+        'interface': [
-+            {'name': 'eth0', 'address': '1.2.3.4/24'},
-+            {'name': 'lo', 'address': '127.0.0.1'},
-+        ],
-+    },
-+})
-+
-+xml = node.print_mem('xml', pretty=True)
-+tree = ElementTree.fromstringlist(xml)
-+assert tree.tag == '{urn:example}data'
-+assert tree.find('.//{*}hostname').text == 'foobar'
-+assert len(tree.find('.//{*}interface')) == 2
-+
-+node.free()
-+ctx.destroy()
-diff --git a/support/testing/tests/package/test_python_libyang.py b/support/testing/tests/package/test_python_libyang.py
-new file mode 100644
-index 0000000000..ea31b0bc5d
---- /dev/null
-+++ b/support/testing/tests/package/test_python_libyang.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonLibyang(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON3_PYEXPAT=y
-+        BR2_PACKAGE_PYTHON_LIBYANG=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_libyang.py"]
+ 	  https://github.com/FortAwesome/Font-Awesome
+diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
+index 89bc411f66..29c64cd40f 100644
+--- a/package/font-awesome/font-awesome.hash
++++ b/package/font-awesome/font-awesome.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256  de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43  font-awesome-4.7.0.tar.gz
++sha256  8f433b74d3d4bbba2a6374a0a0ddf53be8e127809341e4c2578719229b43903a  font-awesome-7.2.0.tar.gz
++sha256  20c6f40715a567c97b80f6944beb8bb325835cab47ea7dcab89ee3b8e077eced  LICENSE.txt
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+index 5211ac22a5..2b1de910ce 100644
+--- a/package/font-awesome/font-awesome.mk
++++ b/package/font-awesome/font-awesome.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-FONT_AWESOME_VERSION = 4.7.0
+-FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,v$(FONT_AWESOME_VERSION))
+-FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
+-FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
++FONT_AWESOME_VERSION = 7.2.0
++FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
++FONT_AWESOME_LICENSE = OFL-1.1 (fonts), MIT (code), CC-BY-4.0 (icons)
++FONT_AWESOME_LICENSE_FILES = LICENSE.txt
++FONT_AWESOME_DIRECTORIES_LIST = css js scss webfonts sprites svgs
+ 
+ define FONT_AWESOME_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
