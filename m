@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA806CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 10:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81D79CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 10:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14AA084FD7;
-	Sat, 30 May 2026 10:46:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FEC642C16;
+	Sat, 30 May 2026 10:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xVwH3BZ-HBu0; Sat, 30 May 2026 10:46:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qMx4fg4SJtz0; Sat, 30 May 2026 10:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4CDA84FB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B1A742C19
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780137990;
-	bh=SDv/NpCcr44a0SFAJFSpIIDpzzG0joQUZgqnp3sC5iQ=;
+	s=default; t=1780138187;
+	bh=RclsRdI4xJs7V19eVJ7INYIFZxOK6n2XPHOJL7otIJw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Wbt7QO1fUIFx74+Uexk3FfTo3SIkS6Pepj/iAPqY0NcCkgc5aJWKhXL/IQcWalGzP
-	 a6a/ZAuDlMarptRgmaYbI1US00KXFiqqz7vOOOnoPINfJXz9Fz3/2eEHiI5BloSn+I
-	 bmByu6a9Yn4VOSHqOQLYr5yP9fImuSnVFA9jNN2ONtRQKSf4SzJ1IqqCRJwYIVsqHV
-	 sKozmZ2Fy7+4aExAP3feV/lP9ZVKDDUDXWyDZ6lC83AcZNCIP/oRU0gVI1h/d6JoWH
-	 QGalRZGrHzv2aK3hzGQD+rAYxfSYLJk24zkXIvMxsPCkkKBQiMxOlmGdqo9LzTOk5B
-	 7wSOTf10x32cA==
+	b=TdtQZ/h5CYwaRRtz88UrrZXZjC7TbivAzj6MQbTZrtFnaDKFqxNLYuneN9P9tZliG
+	 SgHHD4M0po7iBQMNXwomKxv/kQabVuwKsicVQ8O3/YKioZZlewvM4fZQA6EGfu8y8u
+	 Y51Zy3epAeNtQm+edY5mCkuYKYSey3PqlIINV0+o2EdrfqrDcACu7DmoxR39SzpLam
+	 CM6lz52tCNtDH9KtBSyBG1xA5UrUkQtJzIZiBws0fFecqwhiyxTryyaZadfo7BDUzV
+	 uyfBK2P9MEwTex+xDzf8dQAignjUdmzarkHrhE1UerSUxVd4lqZshN/ba1x40hzGKO
+	 63ldrOeXTwXUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4CDA84FB2;
-	Sat, 30 May 2026 10:46:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EAB3AF4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:46:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B1A742C19;
+	Sat, 30 May 2026 10:49:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E14D2F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9B9C84EE3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:46:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D01E442C19
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1m3UQ6wyPRqP for <buildroot@buildroot.org>;
- Sat, 30 May 2026 10:46:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwXRjBPE4Txu for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 10:49:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DA0D84FB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F422742C16
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DA0D84FB2
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:46:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F422742C16
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:49:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 187C28747E; Sat, 30 May 2026 10:46:16 +0000 (UTC)
+ id CF86183795; Sat, 30 May 2026 10:49:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 12:45:40 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 23e70547ca1746c638a4e327548eefeb205faeff
-X-Git-Newrev: 8d6c49f8d86eb81e143e8dee7806d9896f3eaec1
+Date: Sat, 30 May 2026 12:49:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 31e1088bbaa873db28323b1e122fdb83148cc299
+X-Git-Newrev: dd4161c39d97c7a651625dca18fa2aaab9298fa6
 X-Patchwork-Hint: ignore
-Message-Id: <20260530104616.187C28747E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/jemalloc: bump version
- to 5.3.1
+Message-Id: <20260530104931.CF86183795@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/util-linux: optionally add
+ libpthread to uuid.pc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,54 +69,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8d6c49f8d86eb81e143e8dee7806d9896f3eaec1
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd4161c39d97c7a651625dca18fa2aaab9298fa6
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/jemalloc/jemalloc/blob/5.3.1/ChangeLog
+Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped
+util-linux from version 2.40.2 to 2.41.1.
 
-Although it's a patchlevel bump, it contains a _large_ number of new
-features, optimizations and refactors.
+Upstream release 2.40.3 contains
+https://github.com/util-linux/util-linux/commit/e143539d30fd18afb3ba6d3c6e50a260d4219895
+which unconditionally adds -lpthread to uuid.pc causing build errors for
+other packages using non-threaded toolchains like erofs-utils.
 
-Switched to sha256 tarball hash provided by upstream.
+Fixes:
+https://autobuild.buildroot.net/results/582/5827995db2a805e0c8a04fde8498eff6f28aa6d8/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jemalloc/jemalloc.hash | 3 ++-
- package/jemalloc/jemalloc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...ools-optionally-add-libpthread-to-uuid.pc.patch | 42 ++++++++++++++++++++++
+ ...ools-optionally-add-libpthread-to-uuid.pc.patch | 42 ++++++++++++++++++++++
+ package/util-linux/util-linux.mk                   |  3 ++
+ 3 files changed, 87 insertions(+)
 
-diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
-index 214fe8062b..7abaccd6b3 100644
---- a/package/jemalloc/jemalloc.hash
-+++ b/package/jemalloc/jemalloc.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/jemalloc/jemalloc/releases/tag/5.3.1
-+sha256  3826bc80232f22ed5c4662f3034f799ca316e819103bdc7bb99018a421706f92  jemalloc-5.3.1.tar.bz2
- # Locally calculated
--sha256  2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa  jemalloc-5.3.0.tar.bz2
- sha256  94aa2caa98c25d942f58b956c71dba6a99ff98fc3a31cbc669fe2a4cd0268b53  COPYING
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-index bd8a2d7654..c351620c26 100644
---- a/package/jemalloc/jemalloc.mk
-+++ b/package/jemalloc/jemalloc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch b/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
+new file mode 100644
+index 0000000000..ef59e458e1
+--- /dev/null
++++ b/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
+@@ -0,0 +1,42 @@
++From a06adacd1009174b7ca35f529a2db165f6c1f3aa Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Fri, 16 Jan 2026 23:33:34 +0100
++Subject: [PATCH] autotools: optionally add libpthread to uuid.pc
++
++Fixes https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
++
++Upstream: https://github.com/util-linux/util-linux/commit/d88a62e4cd385e07b3cb8fb309bbb03981ea2970
++
++[Bernd: backported to 2.41.3]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Makefile.am        | 1 +
++ libuuid/uuid.pc.in | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 01e99701d..cd1d157ce 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -189,6 +189,7 @@ edit_cmd = sed \
++ 	 -e 's|@usrbin_execdir[@]|$(usrbin_execdir)|g' \
++ 	 -e 's|@usrsbin_execdir[@]|$(usrsbin_execdir)|g' \
++ 	 -e 's|@SOCKET_LIBS[@]|$(SOCKET_LIBS)|g' \
+++	 -e 's|@PTHREAD_LIBS[@]|$(PTHREAD_LIBS)|g' \
++ 	 -e 's|@VERSION[@]|$(VERSION)|g' \
++ 	 -e 's|@ADJTIME_PATH[@]|$(ADJTIME_PATH)|g' \
++ 	 -e 's|@LIBUUID_VERSION[@]|$(LIBUUID_VERSION)|g' \
++diff --git a/libuuid/uuid.pc.in b/libuuid/uuid.pc.in
++index 51929fe80..a40dc6644 100644
++--- a/libuuid/uuid.pc.in
+++++ b/libuuid/uuid.pc.in
++@@ -7,5 +7,5 @@ Name: uuid
++ Description: Universally unique id library
++ Version: @LIBUUID_VERSION@
++ Cflags: -I${includedir}/uuid
++-Libs.private: @SOCKET_LIBS@ -lpthread
+++Libs.private: @SOCKET_LIBS@ @PTHREAD_LIBS@
++ Libs: -L${libdir} -luuid
++-- 
++2.47.3
++
+diff --git a/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch b/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
+new file mode 100644
+index 0000000000..ef59e458e1
+--- /dev/null
++++ b/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
+@@ -0,0 +1,42 @@
++From a06adacd1009174b7ca35f529a2db165f6c1f3aa Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Fri, 16 Jan 2026 23:33:34 +0100
++Subject: [PATCH] autotools: optionally add libpthread to uuid.pc
++
++Fixes https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
++
++Upstream: https://github.com/util-linux/util-linux/commit/d88a62e4cd385e07b3cb8fb309bbb03981ea2970
++
++[Bernd: backported to 2.41.3]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Makefile.am        | 1 +
++ libuuid/uuid.pc.in | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 01e99701d..cd1d157ce 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -189,6 +189,7 @@ edit_cmd = sed \
++ 	 -e 's|@usrbin_execdir[@]|$(usrbin_execdir)|g' \
++ 	 -e 's|@usrsbin_execdir[@]|$(usrsbin_execdir)|g' \
++ 	 -e 's|@SOCKET_LIBS[@]|$(SOCKET_LIBS)|g' \
+++	 -e 's|@PTHREAD_LIBS[@]|$(PTHREAD_LIBS)|g' \
++ 	 -e 's|@VERSION[@]|$(VERSION)|g' \
++ 	 -e 's|@ADJTIME_PATH[@]|$(ADJTIME_PATH)|g' \
++ 	 -e 's|@LIBUUID_VERSION[@]|$(LIBUUID_VERSION)|g' \
++diff --git a/libuuid/uuid.pc.in b/libuuid/uuid.pc.in
++index 51929fe80..a40dc6644 100644
++--- a/libuuid/uuid.pc.in
+++++ b/libuuid/uuid.pc.in
++@@ -7,5 +7,5 @@ Name: uuid
++ Description: Universally unique id library
++ Version: @LIBUUID_VERSION@
++ Cflags: -I${includedir}/uuid
++-Libs.private: @SOCKET_LIBS@ -lpthread
+++Libs.private: @SOCKET_LIBS@ @PTHREAD_LIBS@
++ Libs: -L${libdir} -luuid
++-- 
++2.47.3
++
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 1271bc7dc0..fcce9a7dc8 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -37,6 +37,9 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
  
--JEMALLOC_VERSION = 5.3.0
-+JEMALLOC_VERSION = 5.3.1
- JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
- JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
- JEMALLOC_LICENSE = BSD-2-Clause
+ UTIL_LINUX_CPE_ID_VENDOR = kernel
+ 
++# 0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
++UTIL_LINUX_AUTORECONF = YES
++
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = \
+ 	host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
