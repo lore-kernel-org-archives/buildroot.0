@@ -1,62 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E398CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81F07CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79582853E9;
-	Sat, 30 May 2026 17:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D60196F5D8;
+	Sat, 30 May 2026 17:40:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cvnozuRPvSuW; Sat, 30 May 2026 17:40:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38EC16F56A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780162840;
+	bh=GxUymwT8hcX8irCg1Fucu5brJw5o6xoocJKcJijfgCU=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Oxq+VxfdwihxK1ARrzpu2QJWvKGMbwNOX0J5t8PekkvZ54SP/8cSabSmZViwtP/J/
+	 VOv58m2yMM3pcbhYnoQjLYcMj+rCsQPMfwDAsFvH5zWCpp4j0YyGGLh4rqIskHw8gC
+	 yD0Ci0gF+fvwp4XUaZCUgITzILU2bXJMhb2S4evcboisiUXiGDCRSqPvZWqQeS1eHd
+	 zZI66GxGuxyLACUNQbsRrm+8nOiGpZok6Iwwn5aFoN5JsfWYh1PjLuFyiUeCn13q+v
+	 m6Wh7+9pxt8YrI+1aietjLYYfuYta3vrt3rpteySRQVNgwTb1kj0P/nOegNqfcXWa7
+	 B/KQvdZkPcHQA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38EC16F56A;
+	Sat, 30 May 2026 17:40:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9913F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:40:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE98285384
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:40:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rGCj60y3rBX4; Sat, 30 May 2026 17:38:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4193853DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780162734;
-	bh=2Uw24wF3PS22ZL5Qgc/iC6QXa4GLir0fAPnU4tD9h8I=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=C3IvPqwX21u8reB/y9l8H74nScFBev5KABsvNK5fGp8EwncWllrkIw3wGe/EGKXlz
-	 6+Uk2kTn4NkT7dEp8Pyxr5ME0ohhsDPcc656t8Tpyo93ijpM3tN62WSHROSqrLYJ3H
-	 OhxCavqjDe2Ei0F+lxEmWVatQ2F1TkBLip4JHNNKdVhyuJGjBQn032U2IKYxYxXSlo
-	 Rx0w8DlkEh2b3GxJBUvclK4T/kfw3nT6fL7KKzapYWW4e/9iYEgKZNbXkIqneydJpc
-	 k+s4nCjm7Rol3Kib8yEQQ7bOT5u1PB1Q5l2teiHXjkl7IYJeWRq9P5nKsp7dGlfHIC
-	 fBrgQNijcOfNA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4193853DC;
-	Sat, 30 May 2026 17:38:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CF785D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:38:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0CBA42698
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:38:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p_P7SkbhFjmT for <buildroot@buildroot.org>;
- Sat, 30 May 2026 17:38:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id HaVLaviykPVN for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 17:40:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C3B40064
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3C3B40064
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:38:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B234487532; Sat, 30 May 2026 17:38:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 19:34:41 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2d7cf86aaafed925bd2a24f0d58a4dcd0bfd518a
-X-Git-Newrev: 5394df6400912efa7da4f97c7ea68a81a9f77c1d
-X-Patchwork-Hint: ignore
-Message-Id: <20260530173838.B234487532@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tpm2-tss: add Mbed-TLS
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF11481F3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF11481F3A
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF11481F3A
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:40:38 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id DFB311A374E;
+ Sat, 30 May 2026 17:40:34 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A07A46073B;
+ Sat, 30 May 2026 17:40:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id CD20E10888CC7; 
+ Sat, 30 May 2026 19:40:33 +0200 (CEST)
+Date: Sat, 30 May 2026 19:40:33 +0200
+To: Andreas Mohr <and@gmx.li>
+Cc: buildroot@buildroot.org
+Message-ID: <ahsgyVS7hNGl9oHC@windsurf>
+References: <20260529182727.2044-1-and@gmx.li>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260529182727.2044-1-and@gmx.li>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1780162834; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=xyJOLFYJBn+PBnklBXKUOXO1NifFPY9t0aTwyL4rNNA=;
+ b=NB08sx3XH2R9Lrtt6a8jTRRptRLWzjTIv2WChmGcoOUKdUGylkEdjhxFsoy4uzURw+t+3P
+ 6OP7gA7eMI248axd3I/++qfmBIIvqEBcNXkB1bxCC+x/airczzBUmO15MKRVTYODmkPK8n
+ 1sBKQZREBoqA2HMFpIW8VrRx7OZuZWHsKrVTK+LlmQCZLLFO6idBq7x4Eio5Wphq3pxO0g
+ lT2+vhd2k8v3KVkPqonp8F9tEyorrKrUg1y4cbwDFSPRsqCady215lPZYKxclU5gAS7D3R
+ NneJG0SlNHQf7i3Ul1QKewBP6s0pQaYAvpGDjWwhbcOVE9u2PvduWEvG4Siiqg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=NB08sx3X
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/tpm2-tss: add Mbed-TLS
  crypto backend support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,85 +98,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5394df6400912efa7da4f97c7ea68a81a9f77c1d
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
+Hello Andreas,
 
-Add mbedtls crypto backend support for lightweight build
+On Fri, May 29, 2026 at 06:27:27PM +0000, Andreas Mohr via buildroot wrote:
+> Add mbedtls crypto backend support for lightweight build
+> 
+> BR2_PACKAGE_TPM2_TSS_FAPI depends on openssl explicitly
+> 
+> Rewrite fapi -> FAPI
+> 
+> Signed-off-by: Andreas Mohr <and@gmx.li>
 
-BR2_PACKAGE_TPM2_TSS_FAPI depends on openssl explicitly
+Thanks, applied to next, after one change.
 
-Rewrite fapi -> FAPI
+> +ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +TPM2_TSS_DEPENDENCIES += mbedtls
+> +TPM2_TSS_CONF_OPTS += --with-crypto=mbed
+> +else
+> +TPM2_TSS_DEPENDENCIES += openssl
+> +TPM2_TSS_CONF_OPTS += --with-crypto=ossl
+> +endif
 
-Signed-off-by: Andreas Mohr <and@gmx.li>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tpm2-tss/Config.in   | 10 +++++++---
- package/tpm2-tss/tpm2-tss.mk | 11 +++++++++--
- 2 files changed, 16 insertions(+), 5 deletions(-)
+Changed to:
 
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 9ce3c22763..91337ce48d 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_TPM2_TSS
- 	bool "tpm2-tss"
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL if !BR2_PACKAGE_MBEDTLS
- 	help
- 	  OSS implementation of the Trusted Computing Group's (TCG) TPM2
- 	  Software Stack (TSS). This stack consists of the following
-@@ -35,8 +35,9 @@ config BR2_PACKAGE_TPM2_TSS
- if BR2_PACKAGE_TPM2_TSS
- 
- config BR2_PACKAGE_TPM2_TSS_FAPI
--	bool "fapi support"
-+	bool "FAPI support"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on !BR2_PACKAGE_MBEDTLS # configure: FAPI has to be compiled with OpenSSL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_UTIL_LINUX
-@@ -54,6 +55,9 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
- 	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_FAPI_v0.94_r04_pubrev.pdf
- 	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_JSON_Policy_v0.7_r04_pubrev.pdf
- 
-+comment "FAPI not supported with Mbed TLS backend"
-+	depends on BR2_PACKAGE_MBEDTLS
-+
- endif
- 
- comment "tpm2-tss needs a toolchain w/ dynamic library"
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 11da37a5b4..b9653ad33f 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -11,7 +11,7 @@ TPM2_TSS_LICENSE_FILES = LICENSE
- TPM2_TSS_CPE_ID_VENDOR = tpm2_software_stack_project
- TPM2_TSS_CPE_ID_PRODUCT = tpm2_software_stack
- TPM2_TSS_INSTALL_STAGING = YES
--TPM2_TSS_DEPENDENCIES = openssl host-pkgconf
-+TPM2_TSS_DEPENDENCIES = host-pkgconf
- 
- # systemd-sysusers and systemd-tmpfiles are only used at install time
- # to trigger the creation of users and tmpfiles, which we do not care
-@@ -25,10 +25,17 @@ TPM2_TSS_CONF_OPTS = \
- 	ac_cv_prog_systemd_tmpfiles=no \
- 	ac_cv_prog_useradd=yes \
- 	ac_cv_prog_groupadd=yes \
--	--with-crypto=ossl \
- 	--disable-doxygen-doc \
- 	--disable-defaultflags
- 
 +ifeq ($(BR2_PACKAGE_OPENSSL),y)
 +TPM2_TSS_DEPENDENCIES += openssl
 +TPM2_TSS_CONF_OPTS += --with-crypto=ossl
@@ -157,10 +133,19 @@ index 11da37a5b4..b9653ad33f 100644
 +TPM2_TSS_DEPENDENCIES += mbedtls
 +TPM2_TSS_CONF_OPTS += --with-crypto=mbed
 +endif
-+
- # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
- TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
- 
+
+My reasoning being: if a configuration exists with openssl and
+mbedtls, it will continue to prefer openssl as the crypto backend for
+tpm2-tss, and only configurations that only have mbedtls would use the
+mbedtls backend. This preserves the existing behavior.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
