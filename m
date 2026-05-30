@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6360FCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B36C6CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 392B442B49;
-	Sat, 30 May 2026 13:10:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63C0161BDC;
+	Sat, 30 May 2026 13:20:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cicjZyUDXOMq; Sat, 30 May 2026 13:09:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KT3olbZMaOwA; Sat, 30 May 2026 13:20:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6831E42B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C1BC6F544
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780146599;
-	bh=pHjmG6RIZtZt+RUytJLSwD3glNzDpp9D3Y9EScB8Wfs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=JxpQXdLIzX7UfQ/k6OfUvATD30Xe6e6n/a5qq8VGafOtwMI7qwfBPzJlTjd9ZrjLD
-	 5LBSkGo/LVuRrzapE/dlfyiBXBkZrHv9yMQUYMMdk4PPrQ2oSvXoYBPGjTkpMDXqES
-	 VB16jNduj0RuibO7oF6SrNl2hZliBI1IAsTXyEizNw38Jqz6VP9RpuoPZfQmJrFHds
-	 Qo/FyuJ34q11mD6KYvIumnqx3wHwfkZl4cY4HZruSK4CzdRRaTKdigvzc5jDT1HeWe
-	 P5mRSEOUjaJEupuET+3QmguGP51ZDCgODU03s2uAXFc8oaAhf1wF7iR4j4si2Q43AF
-	 RqgKlc/fOUrAQ==
+	s=default; t=1780147225;
+	bh=7JzuoFP2aLzqidWPDDcBxov+xcijKrNBfwR6cuUZj/U=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=T/sz9rpJQ5k79Hk76QZFsg0Kcm4KiBdWFMgxj24WZsr4l/oG6C95wtBEjcw2gBCed
+	 ZslN5CeICDJuvizLr/zm1mPycJg+ajFnal7JswPVcjM6zaX1GNqR/e2OqhlJIhxXVt
+	 aNKJJXM80iB6u4fsRWoCo76cuZcd+HCKuG+W2t7GTRePm0QzgVQxV56kh5+g+F4DiL
+	 j8pRYfFje8CjaVZCrCt7lOMXaKwFvPeKp0Da/lfHAjppLGYB9SOKF2TZ+hYicqzH50
+	 2gAD18UYOu7V6whH9j74BwX43KoHOino4Vt/pZ7DqpoyqzkAQcWsxIPZVe1mfOwxjq
+	 EsR6AaWs1XvJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6831E42B69;
-	Sat, 30 May 2026 13:09:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 933F1F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C1BC6F544;
+	Sat, 30 May 2026 13:20:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EBE3F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 848BC42B69
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44C4784843
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:20:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kc5oClOnUdTC for <buildroot@buildroot.org>;
- Sat, 30 May 2026 13:09:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ElFjSXrVxoB3 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:20:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A85AC42B49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC7884833
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A85AC42B49
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CC7884833
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:20:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA3F3874F6; Sat, 30 May 2026 13:09:44 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 71EF487500; Sat, 30 May 2026 13:20:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 15:09:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ddde78c1bd251225c07f1910d6f9db2fc5189365
-X-Git-Newrev: b854bce8b00b879c6cae3a6c5ad0d96cb3d6b05a
+Date: Sat, 30 May 2026 15:19:17 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 354b8442f89b88c031c8f36f6a7c3d6a3cc5b975
+X-Git-Newrev: 8c73968354a75608b24ea59877471f4568cc824e
 X-Patchwork-Hint: ignore
-Message-Id: <20260530130944.AA3F3874F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/hppa: remove pa-risc 1.0
+Message-Id: <20260530132010.71EF487500@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dtui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,92 +68,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0580260052196466997=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0580260052196466997==
-Content-Type: text/plain
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8c73968354a75608b24ea59877471f4568cc824e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b854bce8b00b879c6cae3a6c5ad0d96cb3d6b05a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+DTUI is a small TUI for introspecting the state of the system/session
+D-Bus. It shows current services and lets you introspect objects and
+their interfaces.
 
-The new glibc 2.43 we have in Buildroot since commit [1] introduced changes
-around 64B atomics [2], which break the build for PA-RISC 1.0. [3]
+This package is built with Rust/Cargo.
 
-This is the only C library we support at this point; forcing soft-float
-seems to be a workaround, but as this architecture version was not as
-widely used as the later 1.1 and we have no hardware or simulator for it at
-this point, remove it completely instead to spare the autobuilders.
-
-Link: https://gitlab.com/buildroot.org/buildroot/-/commit/227378b5930b681c79a13476ae60a98753a98a03 [1]
-Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=9da0585852e5599ad6e849ccdf2f6f9b04038a3c [2]
-Link: https://autobuild.buildroot.org/results/905c7e8db0f8b9014f26925c6e1379a0c54ad446/ [3]
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Upstream: https://github.com/Troels51/dtui
+License: MIT
+Signed-off-by: Christopher Obbard <obbardc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy    | 7 +++++++
- arch/Config.in.hppa | 2 --
- arch/arch.mk.hppa   | 4 +---
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ DEVELOPERS             |  3 +++
+ package/Config.in      |  1 +
+ package/dtui/Config.in | 18 ++++++++++++++++++
+ package/dtui/dtui.hash |  3 +++
+ package/dtui/dtui.mk   | 13 +++++++++++++
+ 5 files changed, 38 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8fed4b72c1..a872d229ce 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -278,6 +278,13 @@ config BR2_BINUTILS_VERSION_2_43_X
- 	  binutils 2.43 has been removed, select a newer version
- 	  instead.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0d67faa0e2..1adeaf7efe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -704,6 +704,9 @@ F:	package/perl-sys-mmap/
+ F:	package/perl-time-parsedate/
+ F:	package/perl-x10/
  
-+config BR2_parisc10
-+	bool "PA-RISC architecture version 1.0 support removed"
-+	select BR2_LEGACY
-+	help
-+	  Following the build issues with glibc 2.43, Buildroot has
-+	  removed support for this architecture version.
++N:	Christopher Obbard <obbardc@gmail.com>
++F:	package/dtui/
 +
- comment "Legacy options removed in 2026.02"
- 
- config BR2_PACKAGE_QEMU_TARGET_CRIS
-diff --git a/arch/Config.in.hppa b/arch/Config.in.hppa
-index 5768469f30..16c826dd9e 100644
---- a/arch/Config.in.hppa
-+++ b/arch/Config.in.hppa
-@@ -3,8 +3,6 @@ choice
- 	help
- 	  Architecture type (or version) to use.
- 
--config BR2_parisc10
--	bool "PA-RISC 1.0"
- config BR2_parisc11
- 	bool "PA-RISC 1.1"
- endchoice
-diff --git a/arch/arch.mk.hppa b/arch/arch.mk.hppa
-index 9d22e4371f..f4a9ac41d2 100644
---- a/arch/arch.mk.hppa
-+++ b/arch/arch.mk.hppa
-@@ -4,9 +4,7 @@
- 
- ifeq ($(BR2_hppa),y)
- 
--ifeq ($(BR2_parisc10),y)
--GCC_TARGET_ARCH := 1.0
--else ifeq ($(BR2_parisc11),y)
-+ifeq ($(BR2_parisc11),y)
- GCC_TARGET_ARCH := 1.1
- endif
- 
-
---===============0580260052196466997==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ N:	Colin Foster <colin.foster@in-advantage.com>
+ F:	package/python-tftpy/
+ F:	package/rauc-hawkbit-updater/
+diff --git a/package/Config.in b/package/Config.in
+index c4f279efbb..19c4ac2221 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2811,6 +2811,7 @@ menu "System tools"
+ 	source "package/docker-credential-acr-env/Config.in"
+ 	source "package/docker-credential-gcr/Config.in"
+ 	source "package/docker-engine/Config.in"
++	source "package/dtui/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+diff --git a/package/dtui/Config.in b/package/dtui/Config.in
+new file mode 100644
+index 0000000000..65d51df7d5
+--- /dev/null
++++ b/package/dtui/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_DTUI
++	bool "dtui"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS # runtime
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  dtui is a minimal TUI for introspecting the state of the
++	  system/session D-Bus. It shows current services and lets
++	  you introspect objects and their interfaces.
++
++	  https://github.com/Troels51/dtui
++
++comment "dtui needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dtui/dtui.hash b/package/dtui/dtui.hash
+new file mode 100644
+index 0000000000..a1189ba0d1
+--- /dev/null
++++ b/package/dtui/dtui.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  59d430ad546c7a0af3a1fce08aaf05dc17e9b295ba56dbfbd64ddb67e3525ba2  dtui-3.0.0-cargo5.tar.gz
++sha256  b7b3cd0d92fc6638f0a7bd2306d715c747d040c6d851ed821a45c5538663e57a  LICENSE
+diff --git a/package/dtui/dtui.mk b/package/dtui/dtui.mk
+new file mode 100644
+index 0000000000..fad5f818b4
+--- /dev/null
++++ b/package/dtui/dtui.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# dtui
++#
++################################################################################
++
++DTUI_VERSION = 3.0.0
++DTUI_SITE = $(call github,Troels51,dtui,v$(DTUI_VERSION))
++
++DTUI_LICENSE = MIT
++DTUI_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0580260052196466997==--
