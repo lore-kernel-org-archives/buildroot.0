@@ -4,79 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE7C1CD6E54
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 12:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3FF7CD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFC8B6F559;
-	Sat, 30 May 2026 12:56:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2B236F543;
+	Sat, 30 May 2026 13:00:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VHGMXBEQ2mGE; Sat, 30 May 2026 12:56:20 +0000 (UTC)
+ id OlDdJ4TD1DeE; Sat, 30 May 2026 13:00:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B12EB6F560
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D447E6F544
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780145780;
-	bh=MT9MCgccuQGv2oREKlVcU0A4bg2ru65bwUFSFDVcPqo=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=j4yvOgaEMh3QeMyvxRBB1MtJxmrhUqSCAGsyeTUZOLwUK8ePxnZTi2/MEJIasoA1g
-	 Fd2LTJBLYEQmA0fEo9yQWIdNOmSz9RCA4HxobRaT8fILaXzH2CwsJesYH8KTJmiwmw
-	 aBx8oqVIqDptXWT3rEYG+yu2pl3VUF57WqR8VOu4WjhGUcqhTdF+5T/OPdNWKbXkW0
-	 U6IIkWmYgl4MXWJBvurGUVLKy7CCj+zgVmEb0WvyJ5V6t9dujIEIrm1ozdF1+BBe3c
-	 UfZpAEKskHAbSA1a3mDuyjL3efI6UlVX0d6Vod9bjxn+0xHGF6to3bluc7xZhObSi+
-	 hY0Jhw5v2V5yw==
+	s=default; t=1780146005;
+	bh=pRcCTy9lu/Fyse1M922S61kldtzmddtyRAzKjJFOoT0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NAoW15iRgiSgm5Y3DEFKwyTGiUQhphC9yqjh5a1qKDHz1ZkIKoOTT9w5JmEzFHTgq
+	 V7ksTYf30dsDZnQVnnZCrxLOF1w+BY4TKP8F5HSgqy9K/PtCh8+DYKgxJk/ogGtF52
+	 wdSndNpd69epDNj+9MsCOOvB3aV4r+1Ab2Uxerl7nbZVDTdb6zI2we+NXegcgtoXev
+	 cd3VwEzbKQSHowH55MnaELF3Ns6fofVVquRPvA3u/yZ191+juH3SF6HaNHc222G5re
+	 5aO+U3p/A9w1ED2FsdYpynGm+Iw4o+V+d3xPOz3i1W0wiQEtNcxFh6rwTa6C244Mdo
+	 Qj8hZjfvZAXGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B12EB6F560;
-	Sat, 30 May 2026 12:56:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CB9FD3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D447E6F544;
+	Sat, 30 May 2026 13:00:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9EB0F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E457849F4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB67E6F544
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qoQc-Fuwx0Pc for <buildroot@buildroot.org>;
- Sat, 30 May 2026 12:56:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9BA5849F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9BA5849F5
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9BA5849F5
- for <buildroot@buildroot.org>; Sat, 30 May 2026 12:56:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 488F5B97C703; Sat, 30 May 2026 11:13:13 +0200 (CEST)
-Message-ID: <c1ceda06-ea13-450e-8dd2-3fcc7ba93da1@rnout.be>
-Date: Sat, 30 May 2026 11:13:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-References: <20260529175156.572429-1-thomas.perale@mind.be>
- <12951dcc-30e0-4004-bab4-50190ed6cb17@rnout.be>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <12951dcc-30e0-4004-bab4-50190ed6cb17@rnout.be>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1780132393; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=Qyy+JfI35OdAndnB4afoHHj3/voqF4uCC6nIv/vnTss=;
- b=ao4HbAwaSvTHoBK5+cWyUIvH7XdjV70kV/CqR1VJMKADsTbPapaiGE6WIPhcqgVlffif7S
- MdcEsGiBfJbSe33s6HjGcFec4M24/VmuCEzwRGm2+IxCrnpfsAGPamE4Dy6stk1PIxrQkA
- 2ctFFryJnmWbUl39dmYZ8vzy0lp8dujB3amWnMDU3Vj58FbT4KUP//lFNHynwFov0anlCl
- TztsLQGUKI/qfL+sE16pDrdEmWo45g1Kh1FPzbt5VDOykuRW20JwihMSwKl+dOXfdpF822
- ZBYnDz9UIp0RHQ8lzwxmHaJSc0BdEd0l3JqaAxYixPARmAuKxT48a0H0Qo8gHg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ao4HbAwa
-Subject: Re: [Buildroot] [PATCH v3 1/2] Makefile: add 'show-info-all'
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id izny31loWwkP for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:00:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6C8D6F543
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6C8D6F543
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:00:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C8481874F5; Sat, 30 May 2026 12:59:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 14:58:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b45e479b9658fdcc6b8ee5e6ea4034d5f452c37f
+X-Git-Newrev: ddde78c1bd251225c07f1910d6f9db2fc5189365
+X-Patchwork-Hint: ignore
+Message-Id: <20260530125950.C8481874F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups-filters: add upstream patch
+ to fix CVE-2025-64524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,131 +69,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAzMC8wNS8yMDI2IDExOjA4LCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPiAKPiAK
-PiBPbiAyOS8wNS8yMDI2IDE5OjUxLCBUaG9tYXMgUGVyYWxlIHZpYSBidWlsZHJvb3Qgd3JvdGU6
-Cj4+IFRoZSBtYWludGFpbmFuY2UgYW5kIHRlc3Rpbmcgd29ya2Zsb3cgc29tZXRpbWVzIHJlcXVp
-cmVzIHRvIG91dHB1dCBhCj4+IGxpc3Qgb2YgZXZlcnkgZXhpc3RpbmcgcGFja2FnZXMgb24gQnVp
-bGRyb290Ogo+Pgo+PiAtIEdlbmVyYXRpbmcgYW4gU0JPTSBvZiB0aGUgd2hvbGUgQnVpbGRyb290
-IHRyZWUgZm9yCj4+IMKgwqAgc2VjdXJpdHkuYnVpbGRyb290Lm9yZwo+PiAtIExpc3QgZXZlcnkg
-c291cmNlcyBmb3IgZXZlcnkgcGFja2FnZXMgZm9yIHNvdXJjZS5idWlsZHJvb3Qub3JnCj4+Cj4+
-IFRoZSBwcmV2aW91cyBzb2x1dGlvbiByZWxpZWQgb24gYG1ha2UgYWxseWVzY29uZmlnYCBidXQg
-YWx3YXlzIHJhbiBpbnRvCj4+IGNvbmZsaWN0cyB0aGF0IG5lZWRlZCBtYW51YWwgcmVzb2x1dGlv
-bi4gQWxzbyBzb21lIHBhY2thZ2VzIHdvdWxkIG5vdCBiZQo+PiBwcmVzZW50IGJlY2F1c2UgdGhl
-eSBhcmUgYXJjaGljdHVyZSBkZXBlbmRhbnQuCj4+Cj4+IFRvIGF2b2lkIGhhdmluZyB0byBtYW51
-YWxseSBtb2RpZnkgdGhlICdzaG93LWluZm8nIGNvbW1hbmQgdGhpcyBjb21taXQKPj4gYWRkcyB0
-aGUgJ3Nob3ctaW5mby1hbGwnIGNvbW1hbmQuIEl0IGFjY2Vzc2VzIHRoZSBQQUNLQUdFU19BTEwg
-dmFyaWFibGUKPj4gd2l0aCBhbGwgdGhlIHBhY2thZ2VzIHByZXNlbnQgb24gQnVpbGRyb290IGlu
-ZGVwZW5kZW50bHkgb2YgdGhlCj4+IGFyY2hpY3R1cmUgb3IgYW55IGNvbmZpZyBlbnRyaWVzLgo+
-Pgo+PiBJdCBmb3JjZXMgdGhlIGBCUjJfSEFWRV9ET1RfQ09ORklHYCB2YXJpYWJsZSB0byBiZSBz
-ZXQgdG8gZm9yY2UgdGhlCj4+IHJlYWRpbmcgb2YgdGhlIHBhY2thZ2VzIG1rIGZpbGVzLgo+Pgo+
-PiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGVyYWxlIDx0aG9tYXMucGVyYWxlQG1pbmQuYmU+Cj4g
-Cj4gIMKgQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcywgd2l0aCBvbmUgY2hhbmdlIGFuZCBzb21l
-IHVwZGF0ZXMgdG8gdGhlIGNvbW1pdCAKPiBtZXNzYWdlLgoKICBJIGZvcmdvdCB0byBhZGQ6IGl0
-IHdvdWxkIGJlIHVzZWZ1bCB0byBhZGQgYSB0ZXN0IGZvciB0aGlzLiBQcmVmZXJhYmx5IGFzIGEg
-CmNvbXBsZXRlbHkgc2VwYXJhdGUgZ2l0bGFiLWNpIGpvYiAodGhhdCBhbHdheXMgcnVucywgbGlr
-ZSB0aGUgb3RoZXIgY2hlY2tzKSB0aGF0IApzaW1wbHkgY2FsbHMgc2hvdy1pbmZvLWFsbCBhbmQg
-c3RvcmVzIHRoZSByZXN1bHQgYXMgYW4gYXJ0aWZhY3QuIFBlcmhhcHMgCmNoZWNraW5nIHRoYXQg
-aXQncyB2YWxpZCBKU09OIHRvby4gSXQgc2hvdWxkIHRoZW4gYmUgYSAoc2ltcGxlKSBzY3JpcHQg
-aW4gdXRpbHMvIApvciBzdXBwb3J0L3NjcmlwdHMgc28gdGhlIGNoZWNrIGNhbiBlYXNpbHkgYmUg
-ZG9uZSBtYW51YWxseSBhcyB3ZWxsLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPj4gLS0tCj4+
-Cj4+IHYxIC0tPiB2MjogcmVtb3ZlZCBUQVJHRVRTX1JPT1RGUyBhbmQgcmVjdXJzaXZlIGRlcGVu
-ZGVuY2llcy4gSXQKPj4gwqDCoCBpbnRyb2R1Y2VkICJob3N0LSIgcGFja2FnZSB3aXRoIG5vIG5h
-bWUgdGhhdCBpbnRyb2R1Y2VkIGFuIGVtcHR5Cj4+IMKgwqAgZW50cnkgd2hlbiBnZW5lcmF0aW5n
-IGFuIHNib20gd2hlbiBgbWFrZSBzaG93LWluZm8tYWxsYCBpcyByYW4gd2l0aG91dAo+PiDCoMKg
-IGRlZmNvbmZpZy4KPj4gwqDCoCBDaGVja2VkIHRoZSBkaWZmIGJldHdlZW4gdGhlIHByZXZpb3Vz
-IHZlcnNpb24gYW5kIHRoZSBuZXcgb25lIGFuZAo+PiDCoMKgIGV4Y2VwdCB0aGUgZW1wdHkgZW50
-cnkgbm90aGluZyBpcyBjaGFuZ2VkIGJ5IGp1c3QgaXRlcmF0aW5nIG92ZXIKPj4gwqDCoCBQQUNL
-QUdFU19BTEwuCj4+Cj4+IHYyIC0tPiB2MzoKPj4gwqAgLSBhZGQgZG9jdW1lbnRhdGlvbiB0byBt
-YWtlIGhlbHAgYW5kIG1hbnVhbAo+PiDCoCAtIGZpeCB0aGUgZXJyb3IgbWVzc2FnZSBmcm9tIGNo
-ZWNrLWhvc3QtY21ha2Uuc2ggd2hlbiBjbWFrZTMgaXMgcHJlc2VudAo+PiDCoMKgwqAgaW4gdGhl
-IHBhdGgKPj4gLS0tCj4+IMKgIE1ha2VmaWxlwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHwgMjQgKysrKysrKysrKysrKysrKysrKysrKy0tCj4+IMKgIGRvY3MvbWFu
-dWFsL2NvbW1vbi11c2FnZS5hZG9jIHwgMTIgKysrKysrKysrKysrCj4+IMKgIDIgZmlsZXMgY2hh
-bmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBh
-L01ha2VmaWxlIGIvTWFrZWZpbGUKPj4gaW5kZXggY2I1MmExZDY2OC4uYjRjZTM2M2Y1YiAxMDA2
-NDQKPj4gLS0tIGEvTWFrZWZpbGUKPj4gKysrIGIvTWFrZWZpbGUKPj4gQEAgLTEyNiw3ICsxMjYs
-NyBAQCBub2NvbmZpZ190YXJnZXRzIDo9IG1lbnVjb25maWcgbmNvbmZpZyBnY29uZmlnIHhjb25m
-aWcgCj4+IGNvbmZpZyBvbGRjb25maWcgcmFuZGNvbmYKPj4gwqDCoMKgwqDCoCBkZWZjb25maWcg
-JV9kZWZjb25maWcgYWxseWVzY29uZmlnIGFsbG5vY29uZmlnIGFsbGRlZmNvbmZpZyBzeW5jY29u
-ZmlnIAo+PiByZWxlYXNlIFwKPj4gwqDCoMKgwqDCoCByYW5kcGFja2FnZWNvbmZpZyBhbGx5ZXNw
-YWNrYWdlY29uZmlnIGFsbG5vcGFja2FnZWNvbmZpZyBcCj4+IMKgwqDCoMKgwqAgcHJpbnQtdmVy
-c2lvbiBvbGRkZWZjb25maWcgZGlzdGNsZWFuIG1hbnVhbCBtYW51YWwtJSBjaGVjay1wYWNrYWdl
-IFwKPj4gLcKgwqDCoCBjaGVjay1wYWNrYWdlLWV4dGVybmFsCj4+ICvCoMKgwqAgY2hlY2stcGFj
-a2FnZS1leHRlcm5hbCBzaG93LWluZm8tYWxsCj4+IMKgICMgU29tZSBnbG9iYWwgdGFyZ2V0cyBk
-byBub3QgdHJpZ2dlciBhIGJ1aWxkLCBidXQgYXJlIHVzZWQgdG8gY29sbGVjdAo+PiDCoCAjIG1l
-dGFkYXRhLCBvciBkbyB2YXJpb3VzIGNoZWNrcy4gV2hlbiBzdWNoIHRhcmdldHMgYXJlIHRyaWdn
-ZXJlZCwKPj4gQEAgLTE0Miw3ICsxNDIsNyBAQCBub2J1aWxkX3RhcmdldHMgOj0gc291cmNlICUt
-c291cmNlIFwKPj4gwqDCoMKgwqDCoCBjbGVhbiBkaXN0Y2xlYW4gaGVscCBzaG93LXRhcmdldHMg
-Z3JhcGgtZGVwZW5kcyBcCj4+IMKgwqDCoMKgwqAgJS1ncmFwaC1kZXBlbmRzICUtc2hvdy1kZXBl
-bmRzICUtc2hvdy12ZXJzaW9uIFwKPj4gwqDCoMKgwqDCoCBncmFwaC1idWlsZCBncmFwaC1zaXpl
-IGxpc3QtZGVmY29uZmlncyBcCj4+IC3CoMKgwqAgc2F2ZWRlZmNvbmZpZyB1cGRhdGUtZGVmY29u
-ZmlnIHByaW50dmFycyBzaG93LXZhcnMKPj4gK8KgwqDCoCBzYXZlZGVmY29uZmlnIHVwZGF0ZS1k
-ZWZjb25maWcgcHJpbnR2YXJzIHNob3ctdmFycyBzaG93LWluZm8tYWxsCj4+IMKgIGlmZXEgKCQo
-TUFLRUNNREdPQUxTKSwpCj4+IMKgIEJSX0JVSUxESU5HID0geQo+PiDCoCBlbHNlIGlmbmVxICgk
-KGZpbHRlci1vdXQgJChub2J1aWxkX3RhcmdldHMpLCQoTUFLRUNNREdPQUxTKSksKQo+PiBAQCAt
-MjM2LDYgKzIzNiwxMyBAQCBCUjJfQ09ORklHID0gJChDT05GSUdfRElSKS8uY29uZmlnCj4+IMKg
-IGlmZXEgKCQoZmlsdGVyICQobm9jb25maWdfdGFyZ2V0cyksJChNQUtFQ01ER09BTFMpKSwpCj4+
-IMKgIC1pbmNsdWRlICQoQlIyX0NPTkZJRykKPj4gwqAgZW5kaWYKPj4gKyMgc2hvdy1pbmZvLWFs
-bCBuZWVkcyB0byBhY2Nlc3MgdGhlIFBBQ0tBR0VTX0FMTCB2YXJpYWJsZS4gVGhpcyB2YXJpYWJs
-ZQo+PiArIyBjb250YWlucyBhIHJlZmVyZW5jZSB0byBldmVyeSBwYWNrYWdlIHByZXNlbnQgaW4g
-QnVpbGRyb290Lgo+PiArIyBTaW5jZSB0aGUgJ3Nob3ctaW5mby1hbGwnIGNvbW1hbmQgbWlnaHQg
-YmUgdXNlZCB3aXRob3V0IGFjdHVhbGx5IGhhdmluZyBhCj4+ICsjIGRvdGNvbmZpZyB0aGlzIGNv
-bmRpdGlvbiBpcyBmb3JjZWQgdG8gYmUgc2V0IHRydWUuCj4+ICtpZmVxICgkKE1BS0VDTURHT0FM
-Uyksc2hvdy1pbmZvLWFsbCkKPj4gK0JSMl9IQVZFX0RPVF9DT05GSUcgPSB5Cj4+ICtlbmRpZgo+
-PiDCoCBpZmVxICgkKEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklFUyksKQo+PiDCoCAjIERpc2Fi
-bGUgdG9wLWxldmVsIHBhcmFsbGVsIGJ1aWxkIGlmIHBlci1wYWNrYWdlIGRpcmVjdG9yaWVzIGlz
-IG5vdAo+PiBAQCAtOTQ4LDYgKzk1NSwxNyBAQCBzaG93LWluZm86Cj4+IMKgwqDCoMKgwqDCoMKg
-wqDCoCApIFwKPj4gwqDCoMKgwqDCoCApCj4+ICsuUEhPTlk6IHNob3ctaW5mby1hbGwKPj4gK3No
-b3ctaW5mby1hbGw6Cj4+ICvCoMKgwqAgQDoKPj4gK8KgwqDCoCAkKGluZm8gJChjYWxsIGNsZWFu
-LWpzb24sIFwKPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgeyAkKGZvcmVhY2ggcCwgXAo+PiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICQoc29ydCAkKFBBQ0tBR0VTX0FMTCkpLCBc
-Cj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgJChjYWxsIGpzb24taW5mbywkKGNh
-bGwgVVBQRVJDQVNFLCQocCkpKSQoY29tbWEpIFwKPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-KSB9IFwKPj4gK8KgwqDCoMKgwqDCoMKgICkgXAo+PiArwqDCoMKgICkKPiAKPiAgwqBUaGlzIGlz
-IHRoZSBzYW1lIHN0cnVjdHVyZSBhcyBzaG93LWluZm8sIHNvIEkgcmVmYWN0b3JlZCB0aGUgdHdv
-IHdpdGggYW4gCj4gYWRkaXRpb25hbCBzaG93LWluZm8taW5uZXIgZ29hbC4KPiAKPiAgwqBSZWdh
-cmRzLAo+ICDCoEFybm91dAo+IAo+PiArCj4+IMKgIC5QSE9OWTogcGtnLXN0YXRzCj4+IMKgIHBr
-Zy1zdGF0czoKPj4gwqDCoMKgwqDCoCBAY2QgIiQoQ09ORklHX0RJUikiIDsgXAo+PiBAQCAtMTIx
-Myw2ICsxMjMxLDggQEAgaGVscDoKPj4gwqDCoMKgwqDCoCBAZWNobyAnwqAgZXh0ZXJuYWwtZGVw
-c8KgwqDCoMKgwqDCoMKgwqDCoCAtIGxpc3QgZXh0ZXJuYWwgcGFja2FnZXMgdXNlZCcKPj4gwqDC
-oMKgwqDCoCBAZWNobyAnwqAgbGVnYWwtaW5mb8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAtIGdl
-bmVyYXRlIGluZm8gYWJvdXQgbGljZW5zZSBjb21wbGlhbmNlJwo+PiDCoMKgwqDCoMKgIEBlY2hv
-ICfCoCBzaG93LWluZm/CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAtIGdlbmVyYXRlIGluZm8g
-YWJvdXQgcGFja2FnZXMsIGFzIGEgCj4+IEpTT04gYmx1cmInCj4+ICvCoMKgwqAgQGVjaG8gJ8Kg
-IHNob3ctaW5mby1hbGzCoMKgwqDCoMKgwqDCoMKgwqAgLSBnZW5lcmF0ZSBpbmZvIGFib3V0IGFs
-bCBwYWNrYWdlcyBpbiAKPj4gQnVpbGRyb290LCcKPj4gK8KgwqDCoCBAZWNobyAnwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZWdhcmRsZXNzIG9m
-IGNvbmZpZ3VyYXRpb24gb3IgdGFyZ2V0IAo+PiBhcmNoaXRlY3R1cmUnCj4+IMKgwqDCoMKgwqAg
-QGVjaG8gJ8KgIHBrZy1zdGF0c8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0gZ2VuZXJhdGUg
-aW5mbyBhYm91dCBwYWNrYWdlcyBhcyBKU09OIAo+PiBhbmQgSFRNTCcKPj4gwqDCoMKgwqDCoCBA
-ZWNobyAnwqAgcHJpbnR2YXJzwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLSBkdW1wIGludGVy
-bmFsIHZhcmlhYmxlcyBzZWxlY3RlZCB3aXRoIAo+PiBWQVJTPS4uLicKPj4gwqDCoMKgwqDCoCBA
-ZWNobyAnwqAgc2hvdy12YXJzwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLSBkdW1wIGFsbCBp
-bnRlcm5hbCB2YXJpYWJsZXMgYXMgYSBKU09OIAo+PiBibHVyYjsgdXNlIFZBUlM9Li4uJwo+PiBk
-aWZmIC0tZ2l0IGEvZG9jcy9tYW51YWwvY29tbW9uLXVzYWdlLmFkb2MgYi9kb2NzL21hbnVhbC9j
-b21tb24tdXNhZ2UuYWRvYwo+PiBpbmRleCA3NDM3YTdjM2MwLi42MzFjMmY3Nzg4IDEwMDY0NAo+
-PiAtLS0gYS9kb2NzL21hbnVhbC9jb21tb24tdXNhZ2UuYWRvYwo+PiArKysgYi9kb2NzL21hbnVh
-bC9jb21tb24tdXNhZ2UuYWRvYwo+PiBAQCAtMTcwLDYgKzE3MCwxOCBAQCBieSB1c2luZyB0aGUg
-K3Nob3ctaW5mbysgbWFrZSB0YXJnZXQ6Cj4+IMKgIG1ha2Ugc2hvdy1pbmZvCj4+IMKgIC0tLS0K
-Pj4gK0J1aWxkcm9vdCBjYW4gYWxzbyBwcm9kdWNlIGluZm9ybWF0aW9uIGluIHRoZSArc2hvdy1p
-bmZvKyBmb3JtYXQgYWJvdXQgYWxsCj4+ICtwYWNrYWdlcyByZWdhcmRsZXNzIG9mIHRoZSBjb25m
-aWd1cmF0aW9uIG9yIGFyY2hpdGVjdHVyZSBieSB1c2luZwo+PiArK3Nob3ctaW5mby1hbGwrLgo+
-PiArVGhpcyBpcyB1c2VkIGZvciBtYWludGVuYW5jZSB0YXNrcyB0aGF0IHJlcXVpcmUgaW5mb3Jt
-YXRpb24gYWJvdXQgZXZlcnkKPj4gK3BhY2thZ2UgaW4gdGhlIHRyZWUsIHN1Y2ggYXMgZ2VuZXJh
-dGluZyBhIGZ1bGwtdHJlZSBTQk9NIGZvcgo+PiAraHR0cHM6Ly9zZWN1cml0eS5idWlsZHJvb3Qu
-b3JnW10uCj4+ICtJdCBkb2VzIG5vdCByZXF1aXJlIGEgKy5jb25maWcrIGZpbGU6Cj4+ICsKPj4g
-Ky0tLS0KPj4gK21ha2Ugc2hvdy1pbmZvLWFsbAo+PiArLS0tLQo+PiArCj4+IMKgIEJ1aWxkcm9v
-dCBjYW4gYWxzbyBwcm9kdWNlIGRldGFpbHMgYWJvdXQgcGFja2FnZXMgYXMgSFRNTCBhbmQgSlNP
-Tgo+PiDCoCBvdXRwdXQgdXNpbmcgdGhlICtwa2ctc3RhdHMrIG1ha2UgdGFyZ2V0LiBBbW9uZ3N0
-IG90aGVyIHRoaW5ncywgdGhlc2UKPj4gwqAgZGV0YWlscyBpbmNsdWRlIHdoZXRoZXIga25vd24g
-Q1ZFcyAoc2VjdXJpdHkgdnVsbmVyYWJpbGl0aWVzKSBhZmZlY3QKPiAKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ddde78c1bd251225c07f1910d6f9db2fc5189365
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add "CVE:" tag in patch]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...x.c-Fix-infinite-loop-caused-by-crafted-f.patch | 84 ++++++++++++++++++++++
+ package/cups-filters/cups-filters.mk               |  3 +
+ 2 files changed, 87 insertions(+)
+
+diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+new file mode 100644
+index 0000000000..8badcfd429
+--- /dev/null
++++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+@@ -0,0 +1,84 @@
++From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
++From: Zdenek Dohnal <zdohnal@redhat.com>
++Date: Wed, 12 Nov 2025 16:02:20 +0100
++Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
++
++Infinite loop happened because of crafted input raster file, which led
++into heap buffer overflow of `CompressBuf` array.
++
++Based on comments there should be always some `count` when compressing
++the data, and processing of crafted file ended with offset and count
++being 0.
++
++Fixes CVE-2025-64524
++
++Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
++
++CVE: CVE-2025-64524
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ filter/rastertopclx.c | 25 +++++++++++++++++++++++--
++ 1 file changed, 23 insertions(+), 2 deletions(-)
++
++diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
++index 3e7c129da..1015308da 100644
++--- a/filter/rastertopclx.c
+++++ b/filter/rastertopclx.c
++@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
++   }
++ 
++   if (header->cupsCompression)
++-    CompBuffer = malloc(DotBufferSize * 4);
+++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
++ 
++   if (header->cupsCompression >= 3)
++-    SeedBuffer = malloc(DotBufferSize);
+++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
++ 
++   SeedInvalid = 1;
++ 
++@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++               seed ++;
++               count ++;
++             }
+++
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
++ 	  }
++ 
++          /*
++@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = line_ptr - start;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++ #if 0
++             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
++ 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
++@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = (line_ptr - start) / 3;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++            /*
++             * Place mode 10 compression data in the buffer; each sequence
++ 	    * starts with a command byte that looks like:
++-- 
++2.47.3
++
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index f2b85aa9d5..da882ab838 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = openprinting
+ # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
+ 
++# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
++CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
++
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
+ CUPS_FILTERS_CONF_OPTS = \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
