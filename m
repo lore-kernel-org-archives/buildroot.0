@@ -4,115 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72EDCD6E4C
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB9E4CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77B098513E;
-	Sat, 30 May 2026 17:07:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 837CB85171;
+	Sat, 30 May 2026 17:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IFn3TAH7D_Pf; Sat, 30 May 2026 17:07:45 +0000 (UTC)
+ id zwbZ6Tud4DnC; Sat, 30 May 2026 17:07:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0C868514C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B787E8516B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780160865;
-	bh=MZeWtO6LcD1Grixq1SR1IWtK6apfPR6hcFU6WCMPMEs=;
+	s=default; t=1780160871;
+	bh=AvSnfm9kpUjTgjrqCUkJT79b2irbwKM3j51q5zqAJYM=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=c2CdKJm1uh7/uTajpEyjbR3ZV3sCNpiefz6zK7JHCD3Qa8nMDT9GqoV1I2nikxVkJ
-	 vJDL73IdFcT+LtPYPVbmG/rVDDUvtKNYcA+7OD/WzxjJQ6CFdgOjhlpQe6tYLo8Jfl
-	 dkAAXjQdypbNs7DXyEk40j1XVQ630pSuzm1eLCS6rOjE7+FwUg7GOHGVBai5sWQmPo
-	 R/JfIwSKR09rqqzm4yox6CTr6yf4lhkpA8tSuv13qxAZVR5x0K1WKN+fozG7paRC5E
-	 uB2Z/INNJTu5N8T6NziYWbmHM4Gv0pAu5taLf9axBNkF/58DKOP28XHb6idqfns7Zz
-	 3fx82V/YZTtJw==
+	b=EYgwlv6VhjwfGe0tL6YNxzk5d5hSYTgKe2SLBebdCu/H5t3loiJhfZlrIjjQbo8tZ
+	 N4EpMWf9vNdV7Dc6VPxXOoXHqIX5eeFAmNF+PkJD+4lj86VElrYAvtSbyui7Q+d/8A
+	 f1T6BtDDfg4fyG+pghP5tkeApI9oKgOlwsrVtgjVOyb8UaSv2UQvxEr1uyb+6+BUkB
+	 NDGvfV17DqwLqZ/3rOD5dGe2tQx6iWZMgYyKlBeh9GiykpryVlkAVqSXTrkcIKqKHj
+	 H6i4Dk5Ru93uwTOIloUKiSqrP4Nuks0rQrrkOY7QgAu+c0bu6L4gl8HmBXzgXLvMjm
+	 qwtEeWEwbkMBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0C868514C;
-	Sat, 30 May 2026 17:07:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AD56BD3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B787E8516B;
+	Sat, 30 May 2026 17:07:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F26A5D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9328A40072
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4A686F5C6
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eCVyVzT7Nm9G for <buildroot@buildroot.org>;
- Sat, 30 May 2026 17:07:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bEr-1m9xWoh6 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 17:07:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102d; helo=mail-pj1-x102d.google.com;
+ client-ip=2607:f8b0:4864:20::1030; helo=mail-pj1-x1030.google.com;
  envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B28C840064
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B28C840064
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B28C840064
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:43 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- 98e67ed59e1d1-36d6bb38b44so306363a91.0
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:07:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1A5406F5C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A5406F5C1
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com
+ [IPv6:2607:f8b0:4864:20::1030])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A5406F5C1
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 17:07:48 +0000 (UTC)
+Received: by mail-pj1-x1030.google.com with SMTP id
+ 98e67ed59e1d1-36b8e1760ccso1657808a91.0
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 10:07:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780160863; x=1780765663;
+ d=1e100.net; s=20251104; t=1780160868; x=1780765668;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=sB27A0Yc+aNmCKIResQsWe0e3F0z8sZZzfNiLYBX610=;
- b=NCU/2Bt/0V7tqQ2JVWeeZct9lB6KvIgKPC4nBEDbBMz6MLSzOBkEYnCQNuZicmkwx9
- RIDMwRIdL23ckWQjv2MF0zjj2+FhebzQms9uHeZs6OnXM7QtcvcK8xj6ANe9GujsmHJS
- H3yp7itp29oNY+q77G7CL8LVr3L+dCb73NcNHcy7WqdY4POrvp7nKhI+wU3GIiOIa1bw
- aTqa29PWnKlq+10DNh4JxTERm1j9MWctX7t4Fkzk3F4/tGrSVqdAoq15LD85gEOj1ULi
- mNrJ+SKSvQbXVqWUaKm8t5YVNurt7U++MDoorOpk1i7RZCC/OQrGLRwyB8u9K1uT5cRu
- DqeA==
-X-Gm-Message-State: AOJu0YwN11FlX3KE/rqJm+XemsV+iLDw7lwRmiJ07cxy1akkt7S0FVnW
- xINgHrkaWyVD3MvyPmk33Ag2fTwV77bazhOGn0xBR5WB2HoMPm2NlsYq9o9kzq33gM0=
-X-Gm-Gg: Acq92OHWwZsVN005lyfxZlFSSVNbfW9Rp0SYoGMH4mMtw1W5EAH+pjiZ2/i00Y+ixDd
- O/qPh+dw9lnsSChU5biSYA/DIMpps5dLFKg/ZCr/+0tjkqYMb2nfsXrbWeaeGrAIiX6ikTIoQui
- 67OTTYoEVddZHLxLeF9LseGzq7MAP4dxZeXX0tODvrQiHF9dfRA/yQmcHP0BxA5E7cNTFNtBPKs
- JMgZpNFaOVMl7XhHJqfhUlPhnwE9xqa+bMc84DTeGpSfzEtx8/RNbbnAIk0NaEtCgz+moKyo3Xa
- 3wzpl4vDx/zyOKo8bfozWYGod+4FqJVSvGPMqD146Z84oFtkK43ZK8FCdxkWXO0zZpnEQZtRQJw
- zujmWKql4jqCurT0vFt+IMLBnVzhHLw9M8U3HajVxthUFOAzO9rqjDBjhscLnhjuVkXb/Ontzf2
- mN1drHllI5YopuzX0ybiItmE4FH5nbjM2rVwWxWM8pda3XfFaVdGG02RJcLDCZBP/N57I=
-X-Received: by 2002:a17:90b:5212:b0:36b:af1e:9b20 with SMTP id
- 98e67ed59e1d1-36c50214e23mr4791624a91.22.1780160862930; 
- Sat, 30 May 2026 10:07:42 -0700 (PDT)
+ bh=ufzrTO7t8fL906nf3YCpX4CsyC9qEKgHn/uH0gG5e6w=;
+ b=JQZs+lIsbyd+HH1BHNTC1ckDPDuSdGK5shoaYWaf12ipDHjR8/CAjxXipjHGc7MUpB
+ 7liHZXBbpsvH39AS7KIKuzZtf0sAJOM/Zrd2LRVOat85a3CBU+Py7zIp5JUozpurj4s9
+ itbOTgy8gb1REUgeEawDl6FynwiVfnHMOSeu6o6HgzZM5Z6sfrA1t9mgMWmlTQ9HVX0T
+ 0+NENdHsMkBuOWDBD6lLAgYyvzkun5e1iOBgm2TM/kaJIKifSXFueozJAhN+vWJVSENu
+ jV6d2hYiaWn/Xo30ENMP9MrrYj6d3+FZYK36+f9B9LIcsNlkIYKpalx31Qc4eZeU7VTL
+ VezQ==
+X-Gm-Message-State: AOJu0Yw0wbxj5KYLN3LfrOkrhxhsmTaXYzoKAXZq45wPZXPKE+zdEvOv
+ vgwBihQKTs9OxutnuoCGVKJWi5/WF7MoIjVcPzUr03HS1co4six4qI+2bUFFvqH2qW4=
+X-Gm-Gg: Acq92OHHKanYzHmIH53OlX3TrdYiAO+dT752ON3x6I7LijBDNUZOXNHCSBHLRTdLVlF
+ e2m7zvAs1+wzzm15JCYNB38Qwnz1d9WzjL2MHigYMNUhbdRjy3PUYHiO1kSCD3nAfJpFV5Wu6ab
+ cGyfYgcGVUSOlIqA3gMOrsOqj/DS5M0oIF0eXuPOAaiPkg1DznFW24c5wF4xnt98yiJ4RGEo5Gg
+ VEBqUF2pCqcMRGjIbdwUWi2bm+BNw/gjQt1HRZowaGA9fETcB6UZts9e21Bk9wvbt3q9JKSlSOR
+ DPh/oimkT0qnn8Axu5qV5LT/Ei7eg/gxZIlaWgPjm2L+UbfNC1xaqUAJlXkLlXdsmlLUnRHzrXa
+ fDVl/sAv1FgpmEsFP1FZwY54O0ypJSFH37P1OltDC5/UFJGma4MDjolJ2ttp9jwJk6oCk6hnJeP
+ gZdRzVMOj5gZ9rG61awx2f+qvhbMyfwLpsUQSaFOQM17VYle7p/KM3Ham90sqYoQrs+dN6uJlfY
+ sUsNA==
+X-Received: by 2002:a17:90b:3a4e:b0:36b:bbee:fb28 with SMTP id
+ 98e67ed59e1d1-36c4fef34f6mr4035770a91.2.1780160868253; 
+ Sat, 30 May 2026 10:07:48 -0700 (PDT)
 Received: from fedora.taildae27b.ts.net
  ([2409:40e5:11f0:fc06:1f55:1e4:b17b:8dd7])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-36bc10c8746sm4199985a91.0.2026.05.30.10.07.40
+ 98e67ed59e1d1-36bc10c8746sm4199985a91.0.2026.05.30.10.07.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 May 2026 10:07:42 -0700 (PDT)
+ Sat, 30 May 2026 10:07:47 -0700 (PDT)
 From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 To: buildroot@buildroot.org
 Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Date: Sat, 30 May 2026 22:33:40 +0530
-Message-ID: <20260530170343.19119-2-chakrabortyshubham66@gmail.com>
+Date: Sat, 30 May 2026 22:33:41 +0530
+Message-ID: <20260530170343.19119-3-chakrabortyshubham66@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260530170343.19119-1-chakrabortyshubham66@gmail.com>
 References: <20260530170343.19119-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780160863; x=1780765663; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1780160868; x=1780765668; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sB27A0Yc+aNmCKIResQsWe0e3F0z8sZZzfNiLYBX610=;
- b=GgLTr0Lpl+2Mosx6Yxrbp2wZw9ltU9MWPoE+mHUHPmxxe7EeyLKdI6ZUupBoJOfRC0
- +gBKbyCuRtSLDGUsrFQy9meZyxzb5atzIe263+ybWuAEsqo8ZO2HiP/UPU4AZ2zpE9Jq
- O2jfD8OlraCCeMsjj5mryF4A7x+827OmoV1hZOdm54EIkI2eiGMckW3/35m+PoN+lBeY
- DOJAK0Grus1mLvzKRjfoEIQ9GfFmLtyc+IfbxHD/XVchT9ijyJpVbZ8qJJq9PkXOA5HX
- XF5lFGZmN9uF7XHKxWgM0SvtGnywDqqAZFO4kBtlwk8vCF9XHE5q+D2/7IZy90zK2+GV
- NSbw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ufzrTO7t8fL906nf3YCpX4CsyC9qEKgHn/uH0gG5e6w=;
+ b=JiMyqpTmIwA/OHxX7ceVz1XXIkVFC+L4q17A8j4xBh1gwkBBSqFFVn8DohLiMIW4zB
+ UEiVMGCdS2j77CdTlMybP8GeeEVitLZ/mWiFfRnli91BqT+l2G/vfVPydkp3Mn9f5WF+
+ OcSZZ6WR2+yaC5aD4gdFuGZ0C0wWAT7HmxJWHDKcibGiQRpdCgL1K0zwO1pfd5IBUOpd
+ h1wgCqQbMPlFdJohPo52Dr6SaxM5AfqAVRkgaE9qhu6z/t6ujkZx0sKaAlarXQ6+8XGf
+ x1Q7vmZNWXODSv5E0F7SAL/PJbsbEll1SgdLIc8xn447HtYmjXYvi/JIASN6fElK9GWI
+ 4EUg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=GgLTr0Lp
-Subject: [Buildroot] [PATCH 1/2] package/libzlib: fix build failure with
- musl on s390x
+ header.s=20251104 header.b=JiMyqpTm
+Subject: [Buildroot] [PATCH 2/2] package/libzlib: always include errno.h on
+ non-Windows-CE platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,65 +130,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On musl libc, HWCAP_S390_VX is not defined in <sys/auxv.h>,
-causing a compilation failure in contrib/crc32vx/crc32_vx.c
-when cross-compiling for s390x.
+When NO_STRERROR is defined, gzguts.h skips including <errno.h>,
+but gzread.c and gzwrite.c use errno, EAGAIN, and EWOULDBLOCK
+unconditionally, causing build failures with musl.
 
-Add a patch to define HWCAP_S390_VX to its standard Linux ABI
-value (1UL << 11) when not provided by the system headers.
+Add a patch to move the #include <errno.h> outside the
+#ifndef NO_STRERROR guard.
 
-Upstream: https://github.com/madler/zlib/pull/1253
+Upstream: https://github.com/madler/zlib/pull/1254
 Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 ---
- ...fix-build-failure-with-musl-on-s390x.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libzlib/0001-crc32_vx-fix-build-failure-with-musl-on-s390x.patch
+ .../0002-gzguts-always-include-errno-h.patch  | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/libzlib/0002-gzguts-always-include-errno-h.patch
 
-diff --git a/package/libzlib/0001-crc32_vx-fix-build-failure-with-musl-on-s390x.patch b/package/libzlib/0001-crc32_vx-fix-build-failure-with-musl-on-s390x.patch
+diff --git a/package/libzlib/0002-gzguts-always-include-errno-h.patch b/package/libzlib/0002-gzguts-always-include-errno-h.patch
 new file mode 100644
-index 0000000000..fc0ec69ceb
+index 0000000000..2b959f976c
 --- /dev/null
-+++ b/package/libzlib/0001-crc32_vx-fix-build-failure-with-musl-on-s390x.patch
-@@ -0,0 +1,42 @@
-+From 31caaf5d4e688f7de15fc6914ebd1af032fdc348 Mon Sep 17 00:00:00 2001
++++ b/package/libzlib/0002-gzguts-always-include-errno-h.patch
+@@ -0,0 +1,45 @@
++From 1e25c967e34d9d2be5fd0877bce207db2f398971 Mon Sep 17 00:00:00 2001
 +From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Date: Sat, 30 May 2026 21:40:46 +0530
-+Subject: [PATCH] crc32_vx: fix build failure with musl on s390x
++Date: Sat, 30 May 2026 21:41:20 +0530
++Subject: [PATCH] gzguts: always include errno.h on non-Windows-CE platforms
 +
-+On musl libc, the HWCAP_S390_VX constant is not defined in
-+<sys/auxv.h>, unlike glibc which provides it. This leads to a
-+compilation failure when cross-compiling for s390x with musl
-+(discovered during Buildroot builds):
++When NO_STRERROR is defined (e.g. under certain musl static
++configurations where strerror is detected as unavailable),
++gzguts.h does not include <errno.h>. However, gzread.c and
++gzwrite.c use errno, EAGAIN, and EWOULDBLOCK unconditionally,
++leading to compilation failures (discovered during Buildroot
++cross-compilation builds with musl):
 +
-+  contrib/crc32vx/crc32_vx.c: In function 's390_crc32_setup':
-+  crc32_vx.c:242:17: error: 'HWCAP_S390_VX' undeclared (first use
-+  in this function); did you mean 'HWCAP_S390_VXRS'?
++  gzread.c: In function 'gz_load':
++  gzread.c:24:5: error: 'errno' undeclared (first use in this
++  function)
++  gzread.c:36:22: error: 'EAGAIN' undeclared (first use in this
++  function)
 +
-+Define HWCAP_S390_VX to its standard Linux ABI value of 2048
-+(1UL << 11) if it is not already provided by the system headers,
-+allowing the build to succeed under musl libc.
++Move the #include <errno.h> outside the #ifndef NO_STRERROR
++guard so that errno and the error constants are always available,
++regardless of whether strerror() itself is present.
 +
 +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-+Upstream: https://github.com/madler/zlib/pull/1253
++Upstream: https://github.com/madler/zlib/pull/1254
 +---
-+ contrib/crc32vx/crc32_vx.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ gzguts.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-))
 +
-+diff --git a/contrib/crc32vx/crc32_vx.c b/contrib/crc32vx/crc32_vx.c
-+index e718e34..6b852e9 100644
-+--- a/contrib/crc32vx/crc32_vx.c
-++++ b/contrib/crc32vx/crc32_vx.c
-+@@ -20,6 +20,10 @@
-+ #include <vecintrin.h>
-+ #include <sys/auxv.h>
-+ 
-++#ifndef HWCAP_S390_VX
-++#  define HWCAP_S390_VX (1UL << 11)
-++#endif
-++
-+ #ifdef __clang__
-+ #  if ((__clang_major__ == 18) || (__clang_major__ == 19 && (__clang_minor__ < 1 || (__clang_minor__ == 1 && __clang_patchlevel__ < 2))))
-+ # error crc32_vx optimizations are broken due to compiler bug in Clang versions: 18.0.0 <= clang_version < 19.1.2. \
++diff --git a/gzguts.h b/gzguts.h
++index 266305d..68f2a80 100644
++--- a/gzguts.h
+++++ b/gzguts.h
++@@ -128,8 +128,8 @@
++ #  include <windows.h>
++ #  define zstrerror() gz_strwinerror((DWORD)GetLastError())
++ #else
+++#  include <errno.h>
++ #  ifndef NO_STRERROR
++-#    include <errno.h>
++ #    define zstrerror() strerror(errno)
++ #  else
++ #    define zstrerror() "stdio error (consult errno)"
 +-- 
 +2.54.0
 +
