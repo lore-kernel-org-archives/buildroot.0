@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98FE2CD6E49
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B4DCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 22:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5ECE185487;
-	Sat, 30 May 2026 22:05:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TwCpEg_sThBZ; Sat, 30 May 2026 22:05:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E73784A12
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780178756;
-	bh=TiH1yNJ5qm5QDWhNLrHiMEpVKby+QahI+ZALhDPuIGU=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qQGz3/wEqU4z8UbVOW6imgCGlp9wgesgn3neb3eIVNSu6PF9AUkgWtNgJE2eAQp/M
-	 jkGKcTZvt/2FKrSKMo5hQg+fEa/VfhQCmZ0v7bpcvIzdcPIruudhb0/j8dj1i8kfwA
-	 mJkD7asOUyYg1Ldea6ll/VGDMGQZgL1Z9bri7faXgw4G18f+QQxYVCGY5sA1ttr61I
-	 ZhaCy9PPAH/flWQ+e+6rcljRgVwWUWyZboSJ13t1cDSG/J+impXamiBQvz/Q1mWpYX
-	 qMIciwF91zHKGf4AMxpoMNkbVrGQdP7BF8fZolT3c8hkGmfDDeYG8vOd5qSNfLsYtV
-	 3GRyAaVpnXK4Q==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E73784A12;
-	Sat, 30 May 2026 22:05:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B76E0D3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:05:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8FD942FAC
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:05:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B189741DFC;
+	Sat, 30 May 2026 22:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id abyfib18-uVH for <buildroot@buildroot.org>;
- Sat, 30 May 2026 22:05:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 3df5YVcUyKVJ; Sat, 30 May 2026 22:06:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 712FF412A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780178773;
+	bh=VAuTGYSeudWMTWbnCuKdlProewqxEvQZuSVGM6ZvUEE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HpBoRzTEZ90+FnCovpkERDXXhqAOQmqVDHyUM1N+/5fx9XzVXG0oD4BqHOuCO9R1+
+	 tjPfbCkowGXmk16w5B3xZrKv7YAVEqTY2LOkvtYmtxeCtZaDOJHSJlowbLmJ+yajJs
+	 o+EY68kh5SDUp6sK7DytIUErCqBONv92oBHGRMBI4GAJ+0+nMHZc0JqT96ZLkTuFyU
+	 W74ngwlyCChAU5zjkQf7Oe6+6zwYyA0OouDjXoapLTj7mrgZn7lvscZbTTFatzb4Xe
+	 EmGwAoMtgHOgRPSDlxu12HTUdhgdcL8xfGOSUBYDCKGXR1rdWG63SkGxwi8/SOxNcs
+	 9jyyx+xzEv4qA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 712FF412A6;
+	Sat, 30 May 2026 22:06:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F145D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:06:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BF6D84A12
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:06:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nxD2HcyDBsWo for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 22:06:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D2BF542FA4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2BF542FA4
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D2BF542FA4
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:05:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 7FF3B1A3755
- for <buildroot@buildroot.org>; Sat, 30 May 2026 22:05:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 42E0B6073B;
- Sat, 30 May 2026 22:05:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6972010888CC7; 
- Sun, 31 May 2026 00:05:51 +0200 (CEST)
-Date: Sun, 31 May 2026 00:05:50 +0200
-To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <ahte4jnN6VBRtafn@windsurf>
-References: <20260502173806.2666814-1-chakrabortyshubham66@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260502173806.2666814-1-chakrabortyshubham66@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780178751; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=XJ+l0YyJSTHHBDVLUuM+yZrsBB00+nUZRlqp0LSCkVA=;
- b=m9gLt0UJ6WpCMyQbDzGqvIRbMtft/P6xv72377unz6k54EYoK9ZjfZflwpBVH9KmUHLDfW
- Xc5HSyVYNin7jCxlBy4OsT60LQgqqEeQqIHFAlrRq/3ZEIB0fEepzdQYvpwmUCrCNgal59
- iB37H7VBRK0Wzmfyi0gke0jzBu4sm7Hlc6aniHQBbIjJBiM8rOtosU3zWAiIuvNgjs8bbz
- kULXbvjCKPPVaqY25M2IecHkMx9b8RN+PYmsKnPxBbby2aL16D96eTHdgJ1S4/byUr3Lii
- 133X7mu2ea/3pUf6Sz2IXc4Ixx7QCJB+TM1kIaZpQJ6F+exBFT841bTpmbGLTA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=m9gLt0UJ
-Subject: Re: [Buildroot] [PATCH] package/ncurses: bump to version
- 6.6-20260425
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6248585465
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6248585465
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 22:06:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3A67987658; Sat, 30 May 2026 22:05:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 31 May 2026 00:02:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9737b2135c67f14f3243b4a34b85eb4eb5fe39d3
+X-Git-Newrev: dd1430b39f7f796e663881599439ea192c8fc432
+X-Patchwork-Hint: ignore
+Message-Id: <20260530220558.3A67987658@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/esp-hosted: fix build failure with
+ Linux >= 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,32 +71,179 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, May 02, 2026 at 11:08:05PM +0530, Shubham Chakraborty wrote:
-> - Fix poll() handling for closed input with proper errno
-> - Security fixes: limit-checks in _nc_write_object, _nc_trim_sgr0,
->   read_SGR, and _nc_mouse_parse
-> - Terminal updates: konsole-direct, mintty, linux-alt1049
-> - Various bug fixes and improvements
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd1430b39f7f796e663881599439ea192c8fc432
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Where did you get this text from? It is nowhere to be found in
-https://invisible-island.net/ncurses/NEWS.html.
+Add local patch pending upstream to fix build failure with Linux >= 7.1.0.
 
-Also, you're updating from 20251231 to 20260425, there have been
-multiple releases, so surely the changelog is longer than that.
+Fixes:
+still not occured
 
-If you're using AI to generate those patches and their commit logs,
-stop immediately. We don't have the time to review AI slop.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch | 147 +++++++++++++++++++++
+ 1 file changed, 147 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch b/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch
+new file mode 100644
+index 0000000000..90076b4956
+--- /dev/null
++++ b/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch
+@@ -0,0 +1,147 @@
++From fa27d70495e3b4f92c9de43b33aa09813a318495 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 18 May 2026 16:44:57 +0200
++Subject: [PATCH] fix(esp_hosted_ng): Fix build for kernel 7.1
++
++With commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=033fe322f5852d5144a85978e880e01b1787fd0d
++many functions esp_cfg80211_*() have argument struct netdevice * subsituted
++with struct wireless_dev *. So let's add separate function headers and
++retrieve struct netdev * from struct wireless_dev * if Linux version >= 7.1.
++
++Upstream: https://github.com/espressif/esp-hosted/pull/736
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ esp_hosted_ng/host/esp_cfg80211.c | 50 +++++++++++++++++++++++++++++++
++ 1 file changed, 50 insertions(+)
++
++diff --git a/esp_hosted_ng/host/esp_cfg80211.c b/esp_hosted_ng/host/esp_cfg80211.c
++index c68f7983e6..1009df1fd5 100644
++--- a/esp_hosted_ng/host/esp_cfg80211.c
+++++ b/esp_hosted_ng/host/esp_cfg80211.c
++@@ -533,22 +533,38 @@ static int esp_cfg80211_set_default_key(struct wiphy *wiphy,
++ }
++ 
++ static int esp_cfg80211_set_default_mgmt_key(struct wiphy *wiphy,
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++					     struct wireless_dev *wdev, INT_LINK_ID u8 key_index)
+++#else
++ 					     struct net_device *ndev, INT_LINK_ID u8 key_index)
+++#endif
++ {
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_del_key(struct wiphy *wiphy, struct wireless_dev *wdev,
+++#else
++ static int esp_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
+++#endif
++ 				INT_LINK_ID u8 key_index, bool pairwise,
++ 				const u8 *mac_addr)
++ {
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_add_key(struct wiphy *wiphy, struct wireless_dev *wdev,
+++				INT_LINK_ID u8 key_index, bool pairwise,
+++				const u8 *mac_addr, struct key_params *params)
+++{
+++	struct net_device *dev = wdev->netdev;
+++#else
++ static int esp_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
++ 				INT_LINK_ID u8 key_index, bool pairwise,
++ 				const u8 *mac_addr, struct key_params *params)
++ {
+++#endif
++ 	struct esp_wifi_device *priv = NULL;
++ 
++ 	if (!wiphy || !dev || !params) {
++@@ -564,7 +580,11 @@ static int esp_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
++ 	esp_dbg("\n");
++ 
++ 	if (params->key_len == 0) {
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++		return esp_cfg80211_del_key(wiphy, wdev, ZERO_LINK_ID key_index, pairwise, mac_addr);
+++#else
++ 		return esp_cfg80211_del_key(wiphy, dev, ZERO_LINK_ID key_index, pairwise, mac_addr);
+++#endif
++ 	}
++ 	return cmd_add_key(priv, key_index, pairwise, mac_addr, params);
++ }
++@@ -783,9 +803,16 @@ static int esp_cfg80211_set_tx_power(struct wiphy *wiphy,
++ 	return cmd_set_tx_power(priv, priv->tx_pwr);
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_get_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+++				    const u8 *mac, struct station_info *sinfo)
+++{
+++	struct net_device *ndev = wdev->netdev;
+++#else
++ static int esp_cfg80211_get_station(struct wiphy *wiphy, struct net_device *ndev,
++ 				    const u8 *mac, struct station_info *sinfo)
++ {
+++#endif
++ 	struct esp_wifi_device *priv = NULL;
++ 
++ 	priv = netdev_priv(ndev);
++@@ -1034,9 +1061,16 @@ static int esp_cfg80211_probe_client(struct wiphy *wiphy, struct net_device *dev
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_del_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+++					struct station_del_parameters *params)
+++{
+++	struct net_device *dev = wdev->netdev;
+++#else
++ static int esp_cfg80211_del_station(struct wiphy *wiphy, struct net_device *dev,
++ 					struct station_del_parameters *params)
++ {
+++#endif
++ 	struct esp_wifi_device *priv = NULL;
++ 
++ 	if (!wiphy || !dev) {
++@@ -1055,10 +1089,18 @@ static int esp_cfg80211_del_station(struct wiphy *wiphy, struct net_device *dev,
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_add_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+++				    const u8 *mac,
+++				    struct station_parameters *params)
+++{
+++	struct net_device *dev = wdev->netdev;
+++#else
++ static int esp_cfg80211_add_station(struct wiphy *wiphy, struct net_device *dev,
++ 				    const u8 *mac,
++ 				    struct station_parameters *params)
++ {
+++#endif
++ 	struct esp_wifi_device *priv = NULL;
++ 
++ 	if (!wiphy || !dev) {
++@@ -1078,10 +1120,18 @@ static int esp_cfg80211_add_station(struct wiphy *wiphy, struct net_device *dev,
++ 	return 0;
++ }
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+++static int esp_cfg80211_change_station(struct wiphy *wiphy,
+++				       struct wireless_dev *wdev, const u8 *mac,
+++				       struct station_parameters *params)
+++{
+++	struct net_device *dev = wdev->netdev;
+++#else
++ static int esp_cfg80211_change_station(struct wiphy *wiphy,
++ 				       struct net_device *dev, const u8 *mac,
++ 				       struct station_parameters *params)
++ {
+++#endif
++ 	struct esp_wifi_device *priv = NULL;
++ 
++ 	if (!wiphy || !dev) {
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
