@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F21CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6360FCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 13:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D7256F56D;
-	Sat, 30 May 2026 13:09:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 392B442B49;
+	Sat, 30 May 2026 13:10:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5QbIAKUxyfQP; Sat, 30 May 2026 13:09:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cicjZyUDXOMq; Sat, 30 May 2026 13:09:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63D6F6F560
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6831E42B69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780146574;
-	bh=keP7DZjsqIR/2tgx01FGoPN7CaE7nj2z49xxtRx1Y1Y=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=UBQDHhLJsGhqzVPVr2sQdlBKCQMeGsILVwoJPWnAcJ/JmO1KBwEBU8gLcIMd1K+yC
-	 lvRwyP1CP651mjcm9S1B0QwWsDezJN5M7eYdDnHh4EBUTiFQDikcvuHSGNfJ0hWmwr
-	 Psaa9BX0c5buQQf/xcg4eOuxrr5Q8EkCReBbjX+YkC95HypJsi5UjdZ4zTroDmWH4P
-	 7sy5kezeB50ViaYjiZdqlCtqXqYOZbVFmo2UIP6SFXsDqp+TPxi6oauBca56v94vgz
-	 KONLJgaauG3KIXdF0BqZ8739Hw7MHCxIqFk512D5+f9lMF009us/4DgpM5oIsY2bep
-	 IDXNeYcG5zgRw==
+	s=default; t=1780146599;
+	bh=pHjmG6RIZtZt+RUytJLSwD3glNzDpp9D3Y9EScB8Wfs=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=JxpQXdLIzX7UfQ/k6OfUvATD30Xe6e6n/a5qq8VGafOtwMI7qwfBPzJlTjd9ZrjLD
+	 5LBSkGo/LVuRrzapE/dlfyiBXBkZrHv9yMQUYMMdk4PPrQ2oSvXoYBPGjTkpMDXqES
+	 VB16jNduj0RuibO7oF6SrNl2hZliBI1IAsTXyEizNw38Jqz6VP9RpuoPZfQmJrFHds
+	 Qo/FyuJ34q11mD6KYvIumnqx3wHwfkZl4cY4HZruSK4CzdRRaTKdigvzc5jDT1HeWe
+	 P5mRSEOUjaJEupuET+3QmguGP51ZDCgODU03s2uAXFc8oaAhf1wF7iR4j4si2Q43AF
+	 RqgKlc/fOUrAQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63D6F6F560;
-	Sat, 30 May 2026 13:09:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A74AAD3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6831E42B69;
+	Sat, 30 May 2026 13:09:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 933F1F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D23881304
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 848BC42B69
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0i1k6p62__s3 for <buildroot@buildroot.org>;
- Sat, 30 May 2026 13:09:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kc5oClOnUdTC for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 13:09:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB437812CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB437812CA
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB437812CA
- for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:30 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 600214806; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 30 May 2026 13:09:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wTJRP-00000005ETw-2xij;
- Sat, 30 May 2026 15:09:27 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A85AC42B49
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A85AC42B49
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 13:09:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AA3F3874F6; Sat, 30 May 2026 13:09:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Vincent =?utf-8?Q?Stehl=C3=A9?= via buildroot <buildroot@buildroot.org>
-Cc: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@laposte.net>
-In-Reply-To: <20260530101218.14545-1-vincent.stehle@laposte.net> ("Vincent
- =?utf-8?Q?Stehl=C3=A9?= via buildroot"'s message of "Sat, 30 May 2026
- 12:12:18 +0200")
-References: <20260530101218.14545-1-vincent.stehle@laposte.net>
-Date: Sat, 30 May 2026 15:09:27 +0200
-Message-ID: <8733z96o3c.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Lzg0UtIfyLQ7/OooKJc8MYdJ6cPn+DdCMcyIX2kBizc4g86VzuwOZBlOPa6Lww9blWP0XRNtGBMuyXavKq/Y+zWUeG9A7GPimmk6OmqJ2p6pm/xHTtXwwRvSpzkj9VdEdOHQ2ydPOU9RQhr+srhKksh6EkVcFFRLW2njOIElFPEdAo48UNPS8BX2bw583+jxiiuVo8XTNrGoSQYqdB7uAHn7AhQKmYNqrUYcxWhwLZHARsCRBTaF4/Mj/DqZe3KV200DguFH3esZmTcs5GOeqs6iwvCzKPZOc1U3Es1/lVxzOceMnFByqa+AP8P2HUXLi8qWNouvsoYJXK53t+lDOQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=/D13PGwMiSvrLvBiupudIpZ6GCFJ4YzShSaaTb2GDY4=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Lzg0UtIf
-Subject: Re: [Buildroot] [PATCH] arch/hppa: remove pa-risc 1.0
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 15:09:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ddde78c1bd251225c07f1910d6f9db2fc5189365
+X-Git-Newrev: b854bce8b00b879c6cae3a6c5ad0d96cb3d6b05a
+X-Patchwork-Hint: ignore
+Message-Id: <20260530130944.AA3F3874F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/hppa: remove pa-risc 1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,28 +69,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0580260052196466997=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlZpbmNlbnQiID09IFZpbmNlbnQgU3RlaGzDqSB2aWEgYnVpbGRyb290IDxidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gVGhlIG5ldyBnbGliYyAyLjQzIHdlIGhhdmUg
-aW4gQnVpbGRyb290IHNpbmNlIGNvbW1pdCBbMV0gaW50cm9kdWNlZCBjaGFuZ2VzCiA+IGFyb3Vu
-ZCA2NEIgYXRvbWljcyBbMl0sIHdoaWNoIGJyZWFrIHRoZSBidWlsZCBmb3IgUEEtUklTQyAxLjAu
-IFszXQoKID4gVGhpcyBpcyB0aGUgb25seSBDIGxpYnJhcnkgd2Ugc3VwcG9ydCBhdCB0aGlzIHBv
-aW50OyBmb3JjaW5nIHNvZnQtZmxvYXQKID4gc2VlbXMgdG8gYmUgYSB3b3JrYXJvdW5kLCBidXQg
-YXMgdGhpcyBhcmNoaXRlY3R1cmUgdmVyc2lvbiB3YXMgbm90IGFzCiA+IHdpZGVseSB1c2VkIGFz
-IHRoZSBsYXRlciAxLjEgYW5kIHdlIGhhdmUgbm8gaGFyZHdhcmUgb3Igc2ltdWxhdG9yIGZvciBp
-dCBhdAogPiB0aGlzIHBvaW50LCByZW1vdmUgaXQgY29tcGxldGVseSBpbnN0ZWFkIHRvIHNwYXJl
-IHRoZSBhdXRvYnVpbGRlcnMuCgogPiBMaW5rOgogPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRy
-b290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvMjI3Mzc4YjU5MzBiNjgxYzc5YTEzNDc2YWU2MGE5
-ODc1M2E5OGEwMwogPiBbMV0KID4gTGluazoKID4gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQv
-P3A9Z2xpYmMuZ2l0O2E9Y29tbWl0O2g9OWRhMDU4NTg1MmU1NTk5YWQ2ZTg0OWNjZGYyZjZmOWIw
-NDAzOGEzYwogPiBbMl0KID4gTGluazogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9y
-ZXN1bHRzLzkwNWM3ZThkYjBmOGI5MDE0ZjI2OTI1YzZlMTM3OWEwYzU0YWQ0NDYvIFszXQogPiBT
-aWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGxhcG9zdGUubmV0
-PgoKQ29tbWl0dGVkLCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============0580260052196466997==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b854bce8b00b879c6cae3a6c5ad0d96cb3d6b05a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+The new glibc 2.43 we have in Buildroot since commit [1] introduced changes
+around 64B atomics [2], which break the build for PA-RISC 1.0. [3]
+
+This is the only C library we support at this point; forcing soft-float
+seems to be a workaround, but as this architecture version was not as
+widely used as the later 1.1 and we have no hardware or simulator for it at
+this point, remove it completely instead to spare the autobuilders.
+
+Link: https://gitlab.com/buildroot.org/buildroot/-/commit/227378b5930b681c79a13476ae60a98753a98a03 [1]
+Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=9da0585852e5599ad6e849ccdf2f6f9b04038a3c [2]
+Link: https://autobuild.buildroot.org/results/905c7e8db0f8b9014f26925c6e1379a0c54ad446/ [3]
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy    | 7 +++++++
+ arch/Config.in.hppa | 2 --
+ arch/arch.mk.hppa   | 4 +---
+ 3 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8fed4b72c1..a872d229ce 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -278,6 +278,13 @@ config BR2_BINUTILS_VERSION_2_43_X
+ 	  binutils 2.43 has been removed, select a newer version
+ 	  instead.
+ 
++config BR2_parisc10
++	bool "PA-RISC architecture version 1.0 support removed"
++	select BR2_LEGACY
++	help
++	  Following the build issues with glibc 2.43, Buildroot has
++	  removed support for this architecture version.
++
+ comment "Legacy options removed in 2026.02"
+ 
+ config BR2_PACKAGE_QEMU_TARGET_CRIS
+diff --git a/arch/Config.in.hppa b/arch/Config.in.hppa
+index 5768469f30..16c826dd9e 100644
+--- a/arch/Config.in.hppa
++++ b/arch/Config.in.hppa
+@@ -3,8 +3,6 @@ choice
+ 	help
+ 	  Architecture type (or version) to use.
+ 
+-config BR2_parisc10
+-	bool "PA-RISC 1.0"
+ config BR2_parisc11
+ 	bool "PA-RISC 1.1"
+ endchoice
+diff --git a/arch/arch.mk.hppa b/arch/arch.mk.hppa
+index 9d22e4371f..f4a9ac41d2 100644
+--- a/arch/arch.mk.hppa
++++ b/arch/arch.mk.hppa
+@@ -4,9 +4,7 @@
+ 
+ ifeq ($(BR2_hppa),y)
+ 
+-ifeq ($(BR2_parisc10),y)
+-GCC_TARGET_ARCH := 1.0
+-else ifeq ($(BR2_parisc11),y)
++ifeq ($(BR2_parisc11),y)
+ GCC_TARGET_ARCH := 1.1
+ endif
+ 
+
+--===============0580260052196466997==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0580260052196466997==--
