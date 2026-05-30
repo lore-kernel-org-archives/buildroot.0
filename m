@@ -4,61 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83134CD6E55
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8A33CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:02:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95F7D6F58D;
-	Sat, 30 May 2026 14:01:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 844956F595;
+	Sat, 30 May 2026 14:02:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mydK-zbkWgTu; Sat, 30 May 2026 14:01:47 +0000 (UTC)
+ id 7HE86S8SjtT8; Sat, 30 May 2026 14:02:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B3661C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD2B86F4F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780149707;
-	bh=6whvMyeRpufXaFKcez23Dpj1HA3X+x9n+t6iJ7n4/+w=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=fdLlpW969Hf8It6cNglxpugOrqv3R/+KrQ2TrUO/kHv6nKQhEXFl907U3byn9giHn
-	 ASnxj67bW2fHCj8Kq5zzlf3aWLrTZCN+Tyr1eKZ9z22tUH11leh+JzI/kbplAtDTds
-	 Wqo/Q1VLBBGYHELKiBDd5t93foPnJoIkxXy9T3vS8F78zLlZ5ue4I2x/xhkwHc2fre
-	 A3SratvC6JzEtJHrU6H7WoZyHq+l/7lqGd0TFxDRyNXJvyu3hQsitg1UcbAyWWiiFz
-	 xRzLifPyzMEC9VIIIHwUpVBMZfUYkEWlmpFe7Q3h8NX987Fkm+QW3rwUnI0cItFMf2
-	 APQ7390p+hfmQ==
+	s=default; t=1780149740;
+	bh=2Ak5AuAVuymTP5zewCyXj+4LRlSmU55Sx5LGtUZmC4A=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Q7YuGwvjWAv+sdkQ4uoz8AnWZs8zav8qjvv1e9nBpzoR4n1e2zrfCaPZ/gI9NdF9l
+	 4MNZ2axjiGUPz6+g6tq5fEWfPUHEl6iVyu5blb4f40QiNkaPLoGrA6TuAlh65HtwRj
+	 6TBd5pgm5R2vkPzn6jt+tNGPpK2/yFoOMtn2mR6bkJNZGRFroTWhmY0NXKV/FFNWWX
+	 t+baie3ojjIFoaXsEbFYnwtabKrKCaHpyKcqHErMSsGlZyTNvsQX/NjjY0DdzhtOjz
+	 IF9RH/jnwA6wois1Mf9xGy6P8R0tUXHfbQsin3t4oKgcr5W5P/eqQXJO3+7zB2hgbT
+	 zUrqts6BSyxeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5B3661C13;
-	Sat, 30 May 2026 14:01:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4589712F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:01:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD2B86F4F4;
+	Sat, 30 May 2026 14:02:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 452B7F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36B4B40C09
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:01:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3699540D70
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0HgjK4kq67Q for <buildroot@buildroot.org>;
- Sat, 30 May 2026 14:01:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id CeNHJj3WZAXI for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 14:02:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821FD40BBF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 821FD40BBF
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:01:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 743C78750A; Sat, 30 May 2026 14:01:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0186740D54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0186740D54
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0186740D54
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:02:17 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1407742718; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 30 May 2026 14:02:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wTKGO-00000005HMB-31WQ;
+ Sat, 30 May 2026 16:02:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 16:01:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e8c54ffb3d1b92b7e8744824ca0f28fe0d19440d
-X-Git-Newrev: 58b9eb270e47db8ba25ebc703ead84367b36d707
-X-Patchwork-Hint: ignore
-Message-Id: <20260530140133.743C78750A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/collectd: fix wchar dependency of
- mariadb
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260530102749.608157-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sat, 30 May 2026 12:27:49 +0200")
+References: <20260530102749.608157-1-bernd@kuhls.net>
+Date: Sat, 30 May 2026 16:02:08 +0200
+Message-ID: <87o6hxm1wf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Cj1MFdEugfGJkF4VpMAvrepoKxEihNTGxX2qYc+uIzgXWDsU1+zEHyebHICjwg1Mp49NbQZf/bohFwHfvPEIjMl2BiQh+BkQhvo/aLzpKyuDLp1A0cuaUHNm14xRCUTTiDnJUDa3PHnJrqAvGfSuPXdJZPyJZUr+4pQkGi7fWYDTUga5RIa/Vhc3/a3A7LB9EMO8ZCJlM1LOQnbQCCn9uH4lVzr8u9U4ZZbmRZpIfDBSHdXibj1O/1iYBgANBkFcWmvQdq21H0p9f3vJAbJxf3FwYGfdawwg7yprjgUhGJ5yyW8yM6lC2iKXw0Ep5qiyjjQqKKZ/kzVciaEqCVTzXA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=rl6dZCaDOLvHETfxMZ5NP7puc6By7SFFt2wPfB3mKfo=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Cj1MFdEu
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/collectd: fix wchar
+ dependency of mariadb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,58 +93,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/58b9eb270e47db8ba25ebc703ead84367b36d707
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Fmt depends on BR2_USE_WCHAR since its introduction in 2017 by buildroot
-commit 81fe75c855f9a598695f83b7384713820383efe4.
+ > Fmt depends on BR2_USE_WCHAR since its introduction in 2017 by buildroot
+ > commit 81fe75c855f9a598695f83b7384713820383efe4.
 
-Buildroot commit 821f9dee8112dc02fe58d60273d0dfdabbc46d1f added fmt as
-dependency to mariadb in July 2023, including the wchar dependency.
+ > Buildroot commit 821f9dee8112dc02fe58d60273d0dfdabbc46d1f added fmt as
+ > dependency to mariadb in July 2023, including the wchar dependency.
 
-Buildroot commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 from March
-2024, which replaced the mysql virtual package with mariadb, causes
-build errors due to the wchar dependency not being propagated.
+ > Buildroot commit 8708f3a23a7e28fdb04fc57406e13e6b7ff4a337 from March
+ > 2024, which replaced the mysql virtual package with mariadb, causes
+ > build errors due to the wchar dependency not being propagated.
 
-Fixes:
-https://autobuild.buildroot.net/results/ef2/ef201a7d04330463ce46b93e6d5702dfefc6ad6c/
+ > Fixes:
+ > https://autobuild.buildroot.net/results/ef2/ef201a7d04330463ce46b93e6d5702dfefc6ad6c/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/collectd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > ---
+ > v3: Gitlab pipeline passed:
+ > https://gitlab.com/bkuhls/buildroot/-/commits/ea3608057a7d9d9381810aef18b83cab4a7a7157
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 127bcace6d..d1ed36ef5e 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -393,15 +393,17 @@ config BR2_PACKAGE_COLLECTD_MYSQL
- 	bool "mysql"
- 	depends on BR2_INSTALL_LIBSTDCPP # mysql
- 	depends on BR2_USE_MMU # mysql
-+	depends on BR2_USE_WCHAR # fmt -> mariadb
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MARIADB
- 	help
- 	  Connects to a MySQL database and issues a "show status"
- 	  command.
- 
--comment "mysql needs a toolchain w/ C++, threads"
-+comment "mysql needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_COLLECTD_NETLINK
- 	bool "netlink"
+ > with the exception of bootlin-riscv32-glibc and bootlin-sparc-uclibc
+ > where build errors in mariadb occur that are unrelated to collectd.
+
+ > v2: updated patch description, git-formatted patch and pointed source
+ >     URL to versioned git tree
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
