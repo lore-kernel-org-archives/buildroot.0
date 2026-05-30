@@ -1,93 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE48CD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 11:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00123CD6E4A
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 11:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C22E61B46;
-	Sat, 30 May 2026 11:56:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B24DA852DA;
+	Sat, 30 May 2026 11:56:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id feJktHeomBXB; Sat, 30 May 2026 11:56:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eo1z70fwHDpD; Sat, 30 May 2026 11:56:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D97DF61B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9E2A852D0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780142178;
-	bh=iSIdOTZXBP9g2SMS5LwKwFYhzByWjGk00DCxmcdiQn8=;
+	s=default; t=1780142202;
+	bh=shSYg+XcZgcsUCrZbzb9HqfzLMDiqFUWIWFbA71ZPhw=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=NvapXph09MKQYYaTuMaYeyaliDTLR499zoWLUfoQasnOMIEK4Zr+xObgCaEdnH6VG
-	 NKyU1PQaHO7DoBWEzXy9hj4T0Fr5TkhfGAQZ76MinQNL+PgjAamoEYpGqxPeQtoB+i
-	 xr3drJ0lkI9H/f0EqLxtknUbQkjh8lKCS0lCaKdKiXGHQqmHxfy14ufhnETF6lhFtu
-	 aFrB2jGKRBj0SUepgMNkC2vW0z54DAUggWJiAOj/VWPsON4kur/XYNOAHZBdSmTAoR
-	 c9QFI+w8dGuqyfNSj/kqEwMun2qYbIUn26dmHA3fzkLiQSeFSS8PKIej1DWB04TbId
-	 P936M2rd9P0qw==
+	b=Aszy44GdCvr+BlSKF4EhMXRJnx/SPMQiG6bjYtTTnBqQQUofdYZ4WMY/noFpyz5Lr
+	 A12K5N1S5X30eLs2htkudXOHH9vTPvGFtxo0ZDKYI91w8wtXQw/Y1zjI9RKdDiaUnN
+	 yHt69qcqLSdbZlr8gRn68rUHkK/skrvYvmkqtKt9xQFFpQ+4IzePZrmoacee3YNvu5
+	 vNPDLxoBEes9FN5/IH8f0xMH2qXEW/Tjt5gfxiKpwtcsgtsyvmF/F8frA7RRyR7IhC
+	 KTtn/2JJqmneNiGdn4bG5liZASa+v3q9W+TsMu4BGfWW7MTGdxhykWRvMke1zgWwcn
+	 NNar4cJxwXuQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D97DF61B47;
-	Sat, 30 May 2026 11:56:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0549F12F
- for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9E2A852D0;
+	Sat, 30 May 2026 11:56:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D9C6D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7C5940935
- for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F367852CD
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id coJM0gUGFKQH for <buildroot@buildroot.org>;
- Sat, 30 May 2026 11:56:17 +0000 (UTC)
-X-Greylist: delayed 1138 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 30 May 2026 11:56:15 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A6C6407ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A6C6407ED
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wE2d8xKU2lBw for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 11:56:40 +0000 (UTC)
+X-Greylist: delayed 1167 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 30 May 2026 11:56:40 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85A19852CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85A19852CC
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a02:598:96:8a00::1200:706; helo=mxd-3-706.seznam.cz;
+ client-ip=2a02:598:64:8a00::1000:a08; helo=mxd-2-a08.seznam.cz;
  envelope-from=havran.jan@email.cz; receiver=<UNKNOWN> 
-Received: from mxd-3-706.seznam.cz (mxd-3-706.seznam.cz
- [IPv6:2a02:598:96:8a00::1200:706])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A6C6407ED
- for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:15 +0000 (UTC)
-Received: from email.seznam.cz by smtpc-mxd-85fb448c55-l247v
- (smtpc-mxd-85fb448c55-l247v [2a02:598:96:8a00::1200:706])
- id 1b4d5b579baa31ca19396539; Sat, 30 May 2026 13:56:14 +0200 (CEST)
+Received: from mxd-2-a08.seznam.cz (mxd-2-a08.seznam.cz
+ [IPv6:2a02:598:64:8a00::1000:a08])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 85A19852CC
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 11:56:40 +0000 (UTC)
+Received: from email.seznam.cz by smtpc-mxd-f659df87d-k746b
+ (smtpc-mxd-f659df87d-k746b [2a02:598:64:8a00::1000:a08])
+ id 349f8ea2b478e43f36ebb0cc; Sat, 30 May 2026 13:56:38 +0200 (CEST)
 Received: from arch-zen ([2a02:8308:b086:3c00:3636:4bcf:b8c2:e5cf])
  by smtpd-relay-5698866cf-d84zp (szn-email-smtpd/2.0.73) with ESMTPA
- id 7dccbb98-7806-40b1-aeb3-f7c432501343;
- Sat, 30 May 2026 13:36:53 +0200
+ id eda13432-b11d-488d-b612-2a5facd66dac;
+ Sat, 30 May 2026 13:36:55 +0200
 From: Jan Havran <havran.jan@email.cz>
 To: buildroot@buildroot.org
 Cc: Jagan Teki <jagan@amarulasolutions.com>, Jan Havran <havran.jan@email.cz>
-Date: Sat, 30 May 2026 13:35:41 +0200
-Message-ID: <20260530113540.26204-4-havran.jan@email.cz>
+Date: Sat, 30 May 2026 13:35:42 +0200
+Message-ID: <20260530113540.26204-5-havran.jan@email.cz>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260530113540.26204-2-havran.jan@email.cz>
 References: <20260530113540.26204-2-havran.jan@email.cz>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=email.cz; s=szn1; 
- t=1780142174; bh=D8rgC1Zi+OimZS9gqySpKauHPyyWSxuRWDQqfk9ePsA=;
+ t=1780142198; bh=QjO5R3AjkpwFGZ+7NNzPFVMdyv5pIypsq2i/VTKKgqs=;
  h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding;
- b=Lxw1Fcxq/NMj6jCPoF01QrjZzQFaed7LDtfglKDEaBp8DrH6L6X7sX72Z3qo4JTLh
- UjD/RzKUUOv3f8W+xgkq+OxLxjehfOm3XnZQf+poZsQWEnWVE0Gt7wHlyKh77fUwJ1
- x8nAdnoDBalGxZn3OP3KA6d/3mBMcBL3viN0BVwHiJNxadF0PwzMotI5Br8r1ZcOmQ
- 15F9fCvJaCej6i6CwsPLghVBuexgiUyXs/s4kmkFzd35HS8to99VwVGflRe9U8c8nc
- nPh2mtWSeVpUZY5GHSmVFNmNOjD3DtmTfZ+mVcKeX4ywufQp8kXbLxPEnJK96Lrj2g
- ZWcwIqcmPVymg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=GyvQ+QJZqcLyHeKbouqRsAtRlEqPuT75H4srHWb5wUtkCoV8E9dbZWjrCwDD0XdEz
+ dYVwzQjlV4E4ag5EC6p5uqLluSYKKPKF7PMiUMnyrTl9MfPscVeBBJgsDvX4MLaGZl
+ znAHSzPMIZ5MNW+Ih5yU28damWt+fxmu6wXYnpU6IujKAPby+eDgdiihEr7DI3u7BM
+ gSctfsmDQZGnD6yxSlK1ldVGAgBDOHaqHYG95nj7CyXBAKYk25L5xtTdi3V+S3eD7C
+ eMewaMu/mQ3QH4oe2r/1MeQ1lcFYY7fKXc7EJ7zYNHo7X7BGrSJ/zDlObGrglGr4Vb
+ lQUGM1yFmpEGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=email.cz
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=email.cz header.i=@email.cz header.a=rsa-sha256
- header.s=szn1 header.b=Lxw1Fcxq
-Subject: [Buildroot] [PATCH 2/3] configs/pine64_pinecube: switch to external
- Bootlin toolchain
+ header.s=szn1 header.b=GyvQ+QJZ
+Subject: [Buildroot] [PATCH 3/3] configs/pine64_pinecube: enable
+ FORCE_CHECK_HASHES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,21 +106,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Jan Havran <havran.jan@email.cz>
 ---
- configs/pine64_pinecube_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .checkpackageignore                            | 1 -
+ board/pine64/pinecube/patches/linux/linux.hash | 2 ++
+ board/pine64/pinecube/patches/uboot/uboot.hash | 2 ++
+ configs/pine64_pinecube_defconfig              | 2 ++
+ 4 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100644 board/pine64/pinecube/patches/linux/linux.hash
+ create mode 100644 board/pine64/pinecube/patches/uboot/uboot.hash
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 691e2b8138..c4249786fc 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -131,7 +131,6 @@ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+-configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_lichee_rv_dock_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/pine64/pinecube/patches/linux/linux.hash b/board/pine64/pinecube/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..788483030c
+--- /dev/null
++++ b/board/pine64/pinecube/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  6f16ff302599f6fe34742890322cf0775703105fbd8767449682fca6af0fb782  linux-6.18.33.tar.xz
+diff --git a/board/pine64/pinecube/patches/uboot/uboot.hash b/board/pine64/pinecube/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..36322a6a90
+--- /dev/null
++++ b/board/pine64/pinecube/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  ac7c04b8b7004923b00a4e5d6699c5df4d21233bac9fda690d8cfbc209fff2fd  u-boot-2026.04.tar.bz2
 diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
-index 8fc55d80a5..742be94d17 100644
+index 742be94d17..2a0c567d76 100644
 --- a/configs/pine64_pinecube_defconfig
 +++ b/configs/pine64_pinecube_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+@@ -4,6 +4,8 @@ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/pine64/pinecube/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
  BR2_TARGET_GENERIC_HOSTNAME="pinecube"
  BR2_TARGET_GENERIC_ISSUE="Welcome to Pine64 Pinecube"
  BR2_SYSTEM_DHCP="eth0"
