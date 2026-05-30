@@ -4,113 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F0FBCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 17:58:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE445CD6E49
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 18:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F395E42F55;
-	Sat, 30 May 2026 17:58:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5416C42D48;
+	Sat, 30 May 2026 18:27:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2O1wX9i1XtiT; Sat, 30 May 2026 17:58:49 +0000 (UTC)
+ id kFjvIN6e60NS; Sat, 30 May 2026 18:27:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89A5142F47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 800FC42E44
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780163926;
-	bh=ETce4pd6tiqvP0X7KC12UEAKEChVJfh2rG0Ne+7I3cI=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=J1IprFfkklEWcqveteno/zNotLfO3fsO7C7wVDfAsjZnV2UqYcHWn9LAlzwhwyyI6
-	 7cGa9jTivMmS2OeXGAvaG/qK9MfqWXqR4GH9DQbcfliS03IFnKP7Trdur0PegoZi9s
-	 AJJiDhmBnrx/NayAJ2ChdZfZtxg/JQZiNT8oNoGrGjg5ZoaUFdZYiRDj3+afplXIMw
-	 UtGmK6MJRMoBm0EIhJZIeqfXx+nFk4wKWPaKBusge64UaQvR4NPaAOEQQUGHPTvdOi
-	 w8eSNtZ1xh08Usk3SR8UR12c5l3Zv5yjeg5OmPhbh/irXDLGzMy7ARNA+9R6T/to+T
-	 o+IrV762h4NDQ==
+	s=default; t=1780165633;
+	bh=Cdv7dHEUvGZgmHIXwdL/59o5MWK6csk8Z3SpmvYBqVI=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=PzmjgLPgeT8Ebxhl7Etbj496Fb2jUbJSdzKwV4MUb6Qnpg5D/LBxnSCsjM9CuwQ4J
+	 kd6yG2iHrFz+SHCuwLVPeergb3jhoYUzS3jU9Fh+noghLfNXy97KIUBQGMbVqOc2eC
+	 uhde8QNCDHvm2kY1cCJcFxESJHjy3vgwzgi5MuZT34s9IsWUzpcePwDep3Y6AUvUdb
+	 KIPXv8LA+hHxBfrTppXd5VT+HIwcVTe7KXSG8eUbmlKrOCn6FZ+bkwzDghoamEm+fk
+	 /ztbZjs+VrxNmArheRSTWUKW4Zf6VdO+PMgFt/EIIYBkGCMHZ+Sd/nig89sISPmchz
+	 Edx/xMHJIaggQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89A5142F47;
-	Sat, 30 May 2026 17:58:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F7EED3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:58:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 800FC42E44;
+	Sat, 30 May 2026 18:27:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B484F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 18:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF51E42CCC
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:58:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A5846F5AA
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 18:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6r5hSCSU4poK for <buildroot@buildroot.org>;
- Sat, 30 May 2026 17:58:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9237842C87
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9237842C87
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9237842C87
- for <buildroot@buildroot.org>; Sat, 30 May 2026 17:58:39 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-490a7877068so371455e9.3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 10:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780163917; x=1780768717;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=vfyVsFcjEQRt8JNK78XzBBuLkR3us65NIN9PPyHH/Gg=;
- b=EGdGoS8tAGQzraR+FXkciSK4t45X/6AjK1JghSE1j3Uau4k/MfXMxoOWVOe5dSLAXN
- V+rzq7q7Z8mVpMY0nVS8cUhZuTjUuJYdUUNQZ7ElULQ8Gc3JhQtWUa6CUSZh0AzHN2qI
- inGI+PGdfUVOKsZBB8xfjbdDTueO+16jCfdz4ytsPBedsUrIZ/f9CUZysHkgQBjAgtHZ
- NOw0u/amKm+NR8m4LVDq3Ea9lpKY9S8zRHDzRirA9uCcrLEo+Q1XXCo8e6Ra9+2U6P8c
- NTK/rONNgM+74pcLZwjDb2bF9mclHoumlR22YdUnK1S8iyMoZxnX6ZHDxDtTsrqw3EJv
- 2y3g==
-X-Gm-Message-State: AOJu0Yy0uKbnNueCy4N+ipXhiZSVNVVikYcm2emvNyPeCHYBVpeDQPVq
- oSiiJsYLUpOGYXbZHQHmDx16esx92NAn3YFokKAUDUlorO077btspikZSK7YDpl+KmJYvVxMIFB
- yf1In
-X-Gm-Gg: Acq92OG7y/yiM8iucIglNqUH9qHMZrwIo/r3ZWfBhuChefd6m6naZIEFm4qvTWkM8PO
- WKbjlYJJ56PvhegK9VIySGIsMUbLv/Cx8qjqLmDTTrtXF2pqM1ElA9QORrgTrZXdbxzH9ZQLMzS
- yXWgZdy/o7THkZ/0JQfhT4QyoD44dLwo5nMqnHob0KzLc3H/9yVPh4LqF+zwJjc8wj/3ksp/waI
- 12uDJhNJXUaWbIoapNVO9FPKwWAEmNc9qbef/7yZovXDtkzvDyDTYQGgJdUnWDS9M0w/93NUZ0Y
- lR6/g0n9ivLNllArL0XKT8BQ+sC+PyXPjq8U6iYE1oZxTG/F5e3vR6SaLNZeI9mDFrQ24HdIQq2
- PQwAjAwzy3k2kbG0/c7u8Z2SG/MuoXrTNxZl3DHrEV7PVPege+XbsXGGTbydc/Vj3z28MtSUimL
- Vm1MIhwOqCyRacZGO38Bu+QhsNFfuxm2NqU32biZx0xuUNqKSjwqq4OPyb4UIr3zpMlO9HF5/Mi
- DDtSLHWMt651vRQbqynFsn/de0x5VmaLC57
-X-Received: by 2002:a05:600c:6214:b0:490:44eb:c1d7 with SMTP id
- 5b1f17b1804b1-490a297e571mr95071165e9.30.1780163917213; 
- Sat, 30 May 2026 10:58:37 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909cabfd6esm128117435e9.15.2026.05.30.10.58.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 30 May 2026 10:58:36 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RCMdtIM0slS6 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 18:27:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6577C60656
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6577C60656
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6577C60656
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 18:27:09 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3EADFA4C35AB;
+ Sat, 30 May 2026 20:27:07 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49302)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wTOOp-0000000023J-0fcN;
+ Sat, 30 May 2026 18:27:06 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 19:58:30 +0200
-Message-ID: <20260530175831.1806461-2-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260530175831.1806461-1-romain.naour@smile.fr>
-References: <20260530175831.1806461-1-romain.naour@smile.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Date: Sat, 30 May 2026 20:27:06 +0200
+Message-ID: <20260530182706.1679355-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780163917; x=1780768717; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=vfyVsFcjEQRt8JNK78XzBBuLkR3us65NIN9PPyHH/Gg=;
- b=aKHHsI+cRZQBst7PzChNxsSuzVBeueByEmvU4XPqU6GB19rZer/P2up7AHi/VSW8TF
- JKFN5+n88z8DohDdd0Scc3vyDdzWqc32tUDz5zeKW9dqz1oDWPjmr5+zPfjp/8Hn4S0J
- VMpD3op/w8Efx6tL49jtjCicI1gpLNibSRjRg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=aKHHsI+c
-Subject: [Buildroot] [PATCH 2/3] support/testing: generate runtime test jobs
- with runner tags
+ d=kuhls.net; 
+ s=kas202605290044; t=1780165627;
+ bh=GUl6MIxxORu9rFt9df7O52oUdtRYMRw9BGAp1Je5lXk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=V3o3bfAyTuONM6C9D+lwiuqp7aXbprjQLQPjq6HJB2wOVCO192zds65lGax92W6rZ
+ SUrisRVJU7k2ooiXUnHx7PMyS1ePzj9NsEf0H6M0jr2j5EOy8ur/dGPPtGNz3gp5fp
+ 1Vol1RfxU3ea9pYBALH3gXhwBmLOrxFR3by78XBoho2dVY8coCsGjNlQsE91X+mrj0
+ swTK+gfDyEHl/bwqK6I6+y1N4KI/xKwUQNLhilyvmTUwwTUH3WDK7G269L9cPjDOg8
+ TWRW9TU3SV7BDkr1r6uy8L3IEHvZXuJcwq6YXrUvvZTOjuN2qgh6/kXN9TE9wVpheZ
+ LLeu1+618angg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=V3o3bfAy
+Subject: [Buildroot] [PATCH v5 1/1] package/gettext-gnu: bump version to 1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,991 +92,212 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We have our own GitLab-CI runner, but with only one we can't run many
-jobs in parallel so it takes a very long time before all the tests have
-completed. In addition, if that runner goes down, we have nothing at
-all.
+Release notes:
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=blob;f=NEWS;h=565fc8ec95e591a810be2cef179acd130ba8f9c4;hb=53bcae93fbd26e0e816f0e8e6dd3524ebdc67618
 
-GitLab offers the following machine types for hosted runners on Linux
-x86-64 [1]. The default is the "small" runner. Using a larger runner
-increases the "Cost factor" [2].
+Updated license hash due to upstream commit
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commitdiff;h=f58d3e697ecd8e5d73e9fbc558627870308856aa
 
-For opensource projects, the Cost factor is reduced to 0,5 (1 minute per
-2 minutes of job time) whatever the runner type.
+Disabled unneeded selinux support for host builds to avoid build errors
+on selinux-enabled hosts.
 
-Runner Tag                                             vCPUs   Memory  Storage  Cost factor (OSS)
-saas-linux-small-amd64 (default)                           2     8 GB    30 GB     1 (0,5)
-saas-linux-medium-amd64                                    4    16 GB    50 GB     2 (0,5)
-saas-linux-large-amd64 (Premium and Ultimate only)         8    32 GB   100 GB     3 (0,5)
-saas-linux-xlarge-amd64 (Premium and Ultimate only)       16    64 GB   200 GB     6 (0,5)
-saas-linux-2xlarge-amd64 (Premium and Ultimate only)      32   128 GB   200 GB    12 (0,5)
+Updated sed filter to include "install-tests" which was added with
+upstream commit:
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commitdiff;h=04f810d72742259c1c198d2505fe03fa330e9d7d
 
-Compute minutes consumed by a job is calculated by:
+Updated GETTEXT_TINY_EXTRA_GETTEXT_FILES due to various rename commits:
 
-  Job duration / 60 * Cost factor
+- gettext-tools/misc/gettextize.in:
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commit;h=21a3caa8011d5bbe595f00451ba3b0264f3cea4b
 
-(Job duration: The time, in seconds, that a job took to run, not
-including time spent in the created or pending statuses.)
+- gettext-tools/po/Makevars.template:
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commit;h=8c716a85ec676bbc3eaba21f973d83e846a62f0c
 
-Thanks to the GitLab OSS program [3], Buildroot benefits from a free
-Ultimate subscription and can use GitLab shared runners tagged with
-saas-linux-{large, xlarge, 2xlarge}-amd64. In addition, we receive
-50,000 free runner minutes per month.
+- gettext-runtime/po/insert-header.sin &
+  gettext-runtime/po/remove-potcdate.sin :
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commit;h=fe3b543701e51c9cfd66b96c0e9100b1a9f36e1a
+https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commit;h=9a4589466bb18cb018ea6588e6836f034ee37a44
 
-In order to use one of those tags in Buildroot GitLab-CI jobs, we have
-to classify all tests by resource requirement, to make sure the job
-doesn't fail because it times out or has insufficient memory or disk
-space. While we usually shouldn't use the largest runner for
-everything, we can use larger runner without cost penalty thanks to
-the cost factor reduced to 0,5 for opensource projects. This will
-reduce the CI minute consumed by a CPU intensive job.
+Since upstream version 0.25 installed m4 files were moved from
+/usr/share/aclocal/ to /usr/share/gettext/m4/:
+https://lists.gnu.org/archive/html/bug-gettext/2025-05/msg00041.html
+https://bugzilla.redhat.com/show_bug.cgi?id=2366708#c10
 
-First we introduce some new templates used to add the corresponding
-runner tag to a runtime test job (reusing the GitLab terminology).
+Added corresponding _AUTORECONF_OPTS to dovecot & libfuse.
 
-    .runner-{small,medium,large,xlarge,2xlarge}
+Also added autoreconf and _AUTORECONF_OPTS to linknx to fix an error
+during build which starts autoreconf:
 
-Most of our tests are fast (checkpackage, test_external_bootlin...), so
-saas-linux-small-amd64 runner tag is enough. Default to this tag if
-nothing else is specified.
+>>> linknx 0.0.1.39 Building
+[...]
+configure.ac:13: warning: macro 'AM_ICONV' not found in library
+[...]
+configure.ac:13: error: possibly undefined macro: AM_ICONV
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+make[2]: *** [Makefile:376: configure] Error 1
 
-Add a comment next to the test class to provide the runner tag.
-This runner tag is retrieved when generating the
-generated-gitlab-ci.yml file used to create the child pipeline where
-the runtime test jobs are executed.
+seen with this defconfig:
 
-We use the list of runtime tests returned by node2:
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_SYSTEM_ENABLE_NLS=y
+BR2_PACKAGE_LINKNX=y
 
-  "tests.boot.test_edk2.TestEdk2.test_run"
-
-We convert each element of this list to get the path to the test source
-file and the name of the test:
-
-  "support/testing/tests/boot/test_edk2.py"
-
-  TestEdk2
-
-With that, we can grep into the test source file to retrieve the runner
-tag placed one line above the test class:
-
-  # GitLab-runner: large
-  class TestEdk2(infra.basetest.BRTest):
-
-Once the runner tag is retrieved, it's used to use the corresponding
-runner template to the runtime test job:
-
-  tests.boot.test_edk2.TestEdk2.test_run: { extends: [ .runtime_test_base, .runner-large ]}
-
-GitLab runners hosted by the Buildroot project should be able to run
-any jobs, so they should be tagged with Gitlab runner tags
-(saas-linux-{small,medium,large,xlarge,2xlarge}-amd64).
-A specific runner tag "buildroot-runner" can be used to allow running
-a job only on such runners.
-
-If a test can't be executed by any shared GitLab-CI runners, we have
-to use a runner owned by the Buildroot project. In this case we have
-to use a specific template ".runner-buildroot-runner-only" in order to
-add the specific runner tag "buildroot-runner" to the job running the
-test. There is no such runtime test at the moment.
-
-The proposed classification is based on a previous pipeline analysis
-[5]:
-
-  - Tests lasting more than 3 hours will use 2xlarge runners.
-  - Tests lasting more than 2 hours will use xlarge runners.
-  - Tests lasting more than 1 hours will use large runners.
-  - Tests building a kernel or a toolchain will use medium runners.
-  - All other tests will use small runners when possible.
-
-CI minute cost estimate:
-
-tests.package.test_clang.TestClangCompilerRT.test_run lasts 4h25 on the
-Buildroot runner. If we this duration for 2xlarge runners, the CI
-minute consumed would be:
-
-  (15900 / 60) * 0.5 = 133
-
-With 6 jobs using a 2xlarge runners we used ~795 CI minutes.
-
-tests.package.test_kmscube.TestKmsCube.test_run list 2h04 on the
-Buildroot runner. If we	this duration for xlarge runners, the CI
-minute consumed would be:
-
-  (7440 / 60) * 0.5 = 62
-
-With 4 jobs using a xlarge runners we used ~248 CI minutes.
-
-tests.package.test_weston.TestWeston.test_run last 1h15 on th
-Buildroot runner. If we this duration for large runners, the CI
-minute consumed would be:
-
-  (4500 / 60) * 0.5 = 37.5
-
-With 28 jobs using a large runners we used ~1050 CI minutes.
-
-tests.package.test_gstreamer1.TestGstreamer1.test_run last 46min on the
-Buildroot runner. If we this duration for large runners, the CI
-minute consumed would be:
-
-  (2760 / 60) * 0.5 = 23
-
-With 31 jobs using a medium runners we used ~713 CI minutes.
-
-tests.package.test_python.TestPython3Py.test_run last 13min on the
-Buildroot runner. If we this duration for large runners, the CI
-minute consumed would be:
-
-  (780 / 60) * 0.5 = 6.5
-
-With 691 jobs using a medium runners we used ~4491 CI minutes.
-
-In total, one pipeline for the runtime tests cost ~7297 CI minutes.
-After a first try [6], we are actually using 8000 CI minutes per
-pipeline.
-
-We run such pipeline once a week (on Monday), one for each Buildroot
-releases every 3 month, one for each stable and LTS release per month,
-and one for each release candidate (3).
-
-Worst case (release month):
-(4 weeks + 1 release + 1 stable + 1 LTS + 3 release candidate) * 8000 CI
-minutes: 80000 CI minutes / 50000.
-
-So we would spend the minutes very quickly in the worst case senario.
-We have to keep one pipeline under 5000 CI minutes.
-
-[1] https://docs.gitlab.com/ci/runners/hosted_runners/linux/#machine-types-available-for-linux---x86-64
-[2] https://docs.gitlab.com/ci/pipelines/compute_minutes/#cost-factors
-    https://docs.gitlab.com/ci/pipelines/compute_minutes/#compute-usage-calculation
-    https://docs.gitlab.com/ci/pipelines/compute_minutes/#cost-factors-of-hosted-runners-for-gitlabcom
-[3] https://gitlab.com/buildroot.org/gitlab-oss
-[4] https://docs.gitlab.com/ci/runners/hosted_runners/#gitlabcom-hosted-runner-workflow
-[5] https://gitlab.com/buildroot.org/buildroot/-/pipelines/2416603721
-[6] https://gitlab.com/buildroot.org/buildroot/-/pipelines/2562421098
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-[Arnout:
- - simplify parsing of test_file and test_name;
- - match the entire test_name instead of substring;
- - assume "small" by default;
- - remove the "small" tags;
- - use "gitlab-runner" instead of "Gitlab-runner".
-]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v3: fix CI minute cost estimate
-    rework the commit log
-    No change in the commit itself
----
- support/misc/gitlab-ci.yml.in                 | 24 +++++++++++++++++++
- support/scripts/generate-gitlab-ci-yml        | 12 ++++++++--
- support/testing/tests/boot/test_edk2.py       |  1 +
- support/testing/tests/boot/test_grub.py       |  3 +++
- support/testing/tests/init/test_systemd.py    | 23 ++++++++++++++++++
- support/testing/tests/package/test_aichat.py  |  1 +
- support/testing/tests/package/test_bcc.py     |  1 +
- support/testing/tests/package/test_bitcoin.py |  1 +
- support/testing/tests/package/test_clang.py   |  1 +
- .../package/test_distribution_registry.py     |  1 +
- .../tests/package/test_docker_compose.py      |  2 ++
- .../testing/tests/package/test_dosfstools.py  |  1 +
- .../testing/tests/package/test_firewalld.py   |  2 ++
- .../testing/tests/package/test_fluidsynth.py  |  1 +
- support/testing/tests/package/test_flutter.py |  1 +
- support/testing/tests/package/test_fwts.py    |  1 +
- .../tests/package/test_glslsandbox_player.py  |  1 +
- support/testing/tests/package/test_glxinfo.py |  1 +
- .../testing/tests/package/test_gnuradio.py    |  1 +
- .../testing/tests/package/test_gstreamer1.py  |  1 +
- support/testing/tests/package/test_kmscube.py |  1 +
- .../testing/tests/package/test_libcamera.py   |  1 +
- .../testing/tests/package/test_llama_cpp.py   |  1 +
- support/testing/tests/package/test_mender.py  |  1 +
- support/testing/tests/package/test_mesa3d.py  |  1 +
- support/testing/tests/package/test_nodejs.py  |  3 +++
- .../testing/tests/package/test_openblas.py    |  1 +
- support/testing/tests/package/test_openjdk.py |  1 +
- .../tests/package/test_perl_dbd_mysql.py      |  1 +
- .../tests/package/test_python_pyqt5.py        |  1 +
- .../tests/package/test_python_scipy.py        |  1 +
- support/testing/tests/package/test_rust.py    |  1 +
- .../package/test_uboot_openssl_pkgconfig.py   |  1 +
- support/testing/tests/package/test_weston.py  |  1 +
- support/testing/tests/package/test_wine.py    |  1 +
- support/testing/tests/package/test_xen.py     |  2 ++
- support/testing/tests/package/test_zfs.py     |  3 +++
- .../tests/toolchain/test_aarch64_64k.py       |  3 +++
- 38 files changed, 103 insertions(+), 2 deletions(-)
+v5: added defconfig and description for linknx fix (Thomas)
+v4: Added _AUTORECONF_OPTS to linknx as well
+v3: Added _AUTORECONF_OPTS to libfuse as well
+v2: rebased in connection with the bump of e2fsprogs to 1.47.4
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index ada36d0d60..81c380a4ed 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -5,6 +5,30 @@ stages:
- before_script:
-   - git config --global --add safe.directory ${CI_PROJECT_DIR}
- 
-+.runner-small:
-+    tags:
-+        - saas-linux-small-amd64
-+
-+.runner-medium:
-+    tags:
-+        - saas-linux-medium-amd64
-+
-+.runner-large:
-+    tags:
-+        - saas-linux-large-amd64
-+
-+.runner-xlarge:
-+    tags:
-+        - saas-linux-xlarge-amd64
-+
-+.runner-2xlarge:
-+    tags:
-+        - saas-linux-2xlarge-amd64
-+
-+.runner-buildroot-runner-only:
-+    tags:
-+        - buildroot-runner
-+
- .check-check-package_base:
-     stage: test
-     script:
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index be2b8f0fe9..2a8c9be5f5 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -24,7 +24,7 @@ _EOF_
- gen_tests() {
-     local -a basics defconfigs runtimes
-     local do_basics do_defconfigs do_runtime do_testpkg
--    local defconfigs_ext cfg tst
-+    local defconfigs_ext cfg runner tst
- 
-     basics=( check-package check-symbol DEVELOPERS package symbol )
- 
-@@ -133,7 +133,15 @@ gen_tests() {
- 
-     if ${do_runtime:-false}; then
-         printf 'runtime_test_download: { extends: .runtime_test_download }\n'
--        printf '%s: { extends: .runtime_test_base }\n' "${runtimes[@]}"
-+        for test in "${runtimes[@]}"; do
-+            test_file=$(echo "${test}" | tr '.' '/' | sed 's%\(.*/test_[^/]*\)/.*test_run$%support/testing/\1.py%g')
-+            test_name=$(echo "${test}" | sed 's/.test_run$//g' | sed 's/.*\.//')
-+            runner=$(grep -w -B 1 "${test_name}" "${test_file}" | head -1 | sed -n 's/^.*# gitlab-runner: \(.*\)/\1/p' ) || true
-+            if [ -z "${runner}" ]; then
-+                runner="small"
-+            fi
-+            printf '%s: { extends: [ .runtime_test_base, .runner-%s ]}\n' "${test}" "${runner}"
-+        done
-     fi
- 
-     if [ -n "${do_testpkg}" ]; then
-diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
-index 8489e82860..452697e085 100644
---- a/support/testing/tests/boot/test_edk2.py
-+++ b/support/testing/tests/boot/test_edk2.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestEdk2(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/boot/test_grub.py b/support/testing/tests/boot/test_grub.py
-index e873683b5a..8f081f927b 100644
---- a/support/testing/tests/boot/test_grub.py
-+++ b/support/testing/tests/boot/test_grub.py
-@@ -32,6 +32,7 @@ class TestGrubi386BIOS(infra.basetest.BRTest):
-         self.emulator.login()
- 
- 
-+# gitlab-runner: large
- class TestGrubX8664EFI(infra.basetest.BRTest):
-     config = \
-         """
-@@ -84,6 +85,7 @@ class TestGrubX8664EFI(infra.basetest.BRTest):
-         self.assertRunOk(cmd)
- 
- 
-+# gitlab-runner: large
- class TestGrubAArch64EFI(infra.basetest.BRTest):
-     config = \
-         """
-@@ -125,6 +127,7 @@ class TestGrubAArch64EFI(infra.basetest.BRTest):
-         self.assertRunOk(cmd)
- 
- 
-+# gitlab-runner: large
- class TestGrubRiscV64EFI(infra.basetest.BRTest):
-     scripts = [
-         "board/qemu/post-image.sh",
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 893cc17408..472a65db57 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -65,6 +65,7 @@ class InitSystemSystemdBase(InitSystemBase):
-         self.check_network("eth0")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -77,6 +78,7 @@ class TestInitSystemSystemdRoNetworkd(InitSystemSystemdBase):
-         self.check_systemd("squashfs")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -88,6 +90,7 @@ class TestInitSystemSystemdRwNetworkd(InitSystemSystemdBase):
-         self.check_systemd("ext2")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -101,6 +104,7 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
-         self.check_systemd("squashfs")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbroker(TestInitSystemSystemdRoIfupdown):
-     config = TestInitSystemSystemdRoIfupdown.config + \
-         """
-@@ -117,6 +121,7 @@ class TestInitSystemSystemdRoIfupdownDbusbroker(TestInitSystemSystemdRoIfupdown)
-         self.assertEqual(len(out), 1)
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbrokerDbus(TestInitSystemSystemdRoIfupdownDbusbroker):
-     config = TestInitSystemSystemdRoIfupdownDbusbroker.config + \
-         """
-@@ -124,6 +129,7 @@ class TestInitSystemSystemdRoIfupdownDbusbrokerDbus(TestInitSystemSystemdRoIfupd
-         """
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -136,6 +142,7 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-         self.check_systemd("ext2")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRwIfupdownDbusbroker(TestInitSystemSystemdRwIfupdown):
-     config = TestInitSystemSystemdRwIfupdown.config + \
-         """
-@@ -152,6 +159,7 @@ class TestInitSystemSystemdRwIfupdownDbusbroker(TestInitSystemSystemdRwIfupdown)
-         self.assertEqual(len(out), 1)
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRwIfupdownDbusbrokerDbus(TestInitSystemSystemdRwIfupdownDbusbroker):
-     config = TestInitSystemSystemdRwIfupdownDbusbroker.config + \
-         """
-@@ -159,6 +167,7 @@ class TestInitSystemSystemdRwIfupdownDbusbrokerDbus(TestInitSystemSystemdRwIfupd
-         """
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -188,6 +197,7 @@ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
-         self.check_systemd("squashfs")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -257,6 +267,7 @@ class InitSystemSystemdBaseFactory():
-         self.assertEqual(out[0], "foobar")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoNetworkdFactory(
-     InitSystemSystemdBaseFactory,
-     TestInitSystemSystemdRoNetworkd,
-@@ -265,6 +276,7 @@ class TestInitSystemSystemdRoNetworkdFactory(
-         TestInitSystemSystemdRoNetworkd.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownFactory(
-     InitSystemSystemdBaseFactory,
-     TestInitSystemSystemdRoIfupdown,
-@@ -273,6 +285,7 @@ class TestInitSystemSystemdRoIfupdownFactory(
-         TestInitSystemSystemdRoIfupdown.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbrokerFactory(
-     InitSystemSystemdBaseFactory,
-     TestInitSystemSystemdRoIfupdownDbusbroker,
-@@ -281,6 +294,7 @@ class TestInitSystemSystemdRoIfupdownDbusbrokerFactory(
-         TestInitSystemSystemdRoIfupdownDbusbroker.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbrokerDbusFactory(
-     InitSystemSystemdBaseFactory,
-     TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
-@@ -289,6 +303,7 @@ class TestInitSystemSystemdRoIfupdownDbusbrokerDbusFactory(
-         TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoFullFactory(
-     InitSystemSystemdBaseFactory,
-     TestInitSystemSystemdRoFull,
-@@ -348,6 +363,7 @@ class InitSystemSystemdBaseOverlayfs():
-         self.assertEqual(out[0], "foobar")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoNetworkdOverlayfs(
-     InitSystemSystemdBaseOverlayfs,
-     TestInitSystemSystemdRoNetworkd,
-@@ -356,6 +372,7 @@ class TestInitSystemSystemdRoNetworkdOverlayfs(
-         TestInitSystemSystemdRoNetworkd.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownOverlayfs(
-     InitSystemSystemdBaseOverlayfs,
-     TestInitSystemSystemdRoIfupdown,
-@@ -364,6 +381,7 @@ class TestInitSystemSystemdRoIfupdownOverlayfs(
-         TestInitSystemSystemdRoIfupdown.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbrokerOverlayfs(
-     InitSystemSystemdBaseOverlayfs,
-     TestInitSystemSystemdRoIfupdownDbusbroker,
-@@ -372,6 +390,7 @@ class TestInitSystemSystemdRoIfupdownDbusbrokerOverlayfs(
-         TestInitSystemSystemdRoIfupdownDbusbroker.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoIfupdownDbusbrokerDbusOverlayfs(
-     InitSystemSystemdBaseOverlayfs,
-     TestInitSystemSystemdRoIfupdownDbusbrokerDbus,
-@@ -380,6 +399,7 @@ class TestInitSystemSystemdRoIfupdownDbusbrokerDbusOverlayfs(
-         TestInitSystemSystemdRoIfupdownDbusbrokerDbus.config
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoFullOverlayfs(
-     InitSystemSystemdBaseOverlayfs,
-     TestInitSystemSystemdRoFull,
-@@ -388,6 +408,7 @@ class TestInitSystemSystemdRoFullOverlayfs(
-         TestInitSystemSystemdRoFull.config
- 
- 
-+# gitlab-runner: medium
- class InitSystemSystemdBaseOverlayfsVarBacking(InitSystemBase):
-     @classmethod
-     def gen_config(cls, overlaydir: str) -> str:
-@@ -402,6 +423,7 @@ class InitSystemSystemdBaseOverlayfsVarBacking(InitSystemBase):
-         self.assertRunOk("grep '^other-var-backing-store /run/buildroot/mounts/var tmpfs' /proc/mounts")
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoFullOverlayfsVarBackingMountUnit(
-     TestInitSystemSystemdRoFullOverlayfs,
-     InitSystemSystemdBaseOverlayfsVarBacking,
-@@ -415,6 +437,7 @@ class TestInitSystemSystemdRoFullOverlayfsVarBackingMountUnit(
-         self.check_var_mounted()
- 
- 
-+# gitlab-runner: medium
- class TestInitSystemSystemdRoFullOverlayfsVarBackingFstab(
-     TestInitSystemSystemdRoFullOverlayfs,
-     InitSystemSystemdBaseOverlayfsVarBacking,
-diff --git a/support/testing/tests/package/test_aichat.py b/support/testing/tests/package/test_aichat.py
-index 50c07f87dc..009d6e98a3 100644
---- a/support/testing/tests/package/test_aichat.py
-+++ b/support/testing/tests/package/test_aichat.py
-@@ -5,6 +5,7 @@ import time
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestAiChat(infra.basetest.BRTest):
-     rootfs_overlay = \
-         infra.filepath("tests/package/test_aichat/rootfs-overlay")
-diff --git a/support/testing/tests/package/test_bcc.py b/support/testing/tests/package/test_bcc.py
-index 51f175a5b4..b98c37077d 100644
---- a/support/testing/tests/package/test_bcc.py
-+++ b/support/testing/tests/package/test_bcc.py
-@@ -4,6 +4,7 @@ import time
- import infra.basetest
- 
- 
-+# gitlab-runner: 2xlarge
- class TestBcc(infra.basetest.BRTest):
-     # This test is using a Kernel >= 5.2, so it will use
-     # CONFIG_IKHEADERS. Those Kernel headers are unpacked from
-diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
-index a942504af4..186240b280 100644
---- a/support/testing/tests/package/test_bitcoin.py
-+++ b/support/testing/tests/package/test_bitcoin.py
-@@ -5,6 +5,7 @@ import time
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestBitcoin(infra.basetest.BRTest):
-     # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
-     # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
-index bc44a5804a..439e5b9cd2 100644
---- a/support/testing/tests/package/test_clang.py
-+++ b/support/testing/tests/package/test_clang.py
-@@ -5,6 +5,7 @@ import infra.basetest
- FUZZ_TIMEOUT = 120
- 
- 
-+# gitlab-runner: 2xlarge
- class TestClangCompilerRT(infra.basetest.BRTest):
-     br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
-     # Without this option the test fails due to insufficient address space for 64-bit allocator
-diff --git a/support/testing/tests/package/test_distribution_registry.py b/support/testing/tests/package/test_distribution_registry.py
-index 35942db29c..66e0b5d39d 100644
---- a/support/testing/tests/package/test_distribution_registry.py
-+++ b/support/testing/tests/package/test_distribution_registry.py
-@@ -3,6 +3,7 @@ import os
- import time
- 
- 
-+# gitlab-runner: large
- class TestDistributionRegistry(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index db7e50914c..ad9a46ac16 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -76,11 +76,13 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         self.python_docker_test()
- 
- 
-+# gitlab-runner: large
- class TestDockerComposeRunc(BaseTestDockerCompose):
-     def test_run(self):
-         self.do_test()
- 
- 
-+# gitlab-runner: large
- class TestDockerComposeCrun(BaseTestDockerCompose):
-     config = BaseTestDockerCompose.config + """
-         BR2_PACKAGE_CRUN=y
-diff --git a/support/testing/tests/package/test_dosfstools.py b/support/testing/tests/package/test_dosfstools.py
-index f32ff81c01..a63dbad38f 100644
---- a/support/testing/tests/package/test_dosfstools.py
-+++ b/support/testing/tests/package/test_dosfstools.py
-@@ -4,6 +4,7 @@ import subprocess
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestDosFsTools(infra.basetest.BRTest):
-     # This test needs a Kernel with vfat and NLS support. The vfat
-     # filesystem also needs character set conversion libraries, since
-diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
-index 1093873b38..9a1bd41f62 100644
---- a/support/testing/tests/package/test_firewalld.py
-+++ b/support/testing/tests/package/test_firewalld.py
-@@ -4,6 +4,7 @@ import time
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestFirewalldSystemd(infra.basetest.BRTest):
-     """Build the kernel as firewalld requires several the nftable options."""
- 
-@@ -62,6 +63,7 @@ class TestFirewalldSystemd(infra.basetest.BRTest):
-         self.assertEqual(exit_code, 0)
- 
- 
-+# gitlab-runner: large
- class TestFirewalldSysVInit(infra.basetest.BRTest):
-     """Build the kernel as firewalld requires several nftable options."""
- 
-diff --git a/support/testing/tests/package/test_fluidsynth.py b/support/testing/tests/package/test_fluidsynth.py
-index 909c878b75..7ebbf5e642 100644
---- a/support/testing/tests/package/test_fluidsynth.py
-+++ b/support/testing/tests/package/test_fluidsynth.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestFluidsynth(infra.basetest.BRTest):
-     # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it is
-     # armv5 and based on qemu versatilepb which is limited to 256MB of
-diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
-index 19406b7cb1..95cccb529d 100644
---- a/support/testing/tests/package/test_flutter.py
-+++ b/support/testing/tests/package/test_flutter.py
-@@ -5,6 +5,7 @@ import infra.basetest
- from ..graphics_base import GraphicsBase
- 
- 
-+# gitlab-runner: xlarge
- class TestFlutter(infra.basetest.BRTest, GraphicsBase):
-     config = f"""
-         BR2_aarch64=y
-diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
-index a58f9ccb80..86ae99ac9f 100644
---- a/support/testing/tests/package/test_fwts.py
-+++ b/support/testing/tests/package/test_fwts.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestFwts(infra.basetest.BRTest):
-     kernel_fragment = \
-         infra.filepath("tests/package/test_fwts/linux-efi-test.fragment")
-diff --git a/support/testing/tests/package/test_glslsandbox_player.py b/support/testing/tests/package/test_glslsandbox_player.py
-index f72ac2adce..669292ca75 100644
---- a/support/testing/tests/package/test_glslsandbox_player.py
-+++ b/support/testing/tests/package/test_glslsandbox_player.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: xlarge
- class TestGlslsandboxPlayer(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
-index 8680477b15..2c3181d9fb 100644
---- a/support/testing/tests/package/test_glxinfo.py
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -5,6 +5,7 @@ import infra.basetest
- GLXINFO_TIMEOUT = 120
- 
- 
-+# gitlab-runner: large
- class TestGlxinfo(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_gnuradio.py b/support/testing/tests/package/test_gnuradio.py
-index 1fc0479d21..9b8ab2f558 100644
---- a/support/testing/tests/package/test_gnuradio.py
-+++ b/support/testing/tests/package/test_gnuradio.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestGnuradio(infra.basetest.BRTest):
-     # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
-     # not include: BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-diff --git a/support/testing/tests/package/test_gstreamer1.py b/support/testing/tests/package/test_gstreamer1.py
-index 82829dab98..3b2899b9fe 100644
---- a/support/testing/tests/package/test_gstreamer1.py
-+++ b/support/testing/tests/package/test_gstreamer1.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestGstreamer1(infra.basetest.BRTest):
-     # This test creates a full, yet simple, Gstreamer pipeline which
-     # encodes/decodes a video, using only plugins from Base and Good
-diff --git a/support/testing/tests/package/test_kmscube.py b/support/testing/tests/package/test_kmscube.py
-index 4a0eb07c32..1e75948c20 100644
---- a/support/testing/tests/package/test_kmscube.py
-+++ b/support/testing/tests/package/test_kmscube.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: xlarge
- class TestKmsCube(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_libcamera.py b/support/testing/tests/package/test_libcamera.py
-index c785e340d6..bc52498a75 100644
---- a/support/testing/tests/package/test_libcamera.py
-+++ b/support/testing/tests/package/test_libcamera.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestLibCamera(infra.basetest.BRTest):
-     # A specific configuration is needed for testing libcamera:
-     # a kernel config fragment enables v4l2 vimc driver.
-diff --git a/support/testing/tests/package/test_llama_cpp.py b/support/testing/tests/package/test_llama_cpp.py
-index 4462be0a5b..682ee0b172 100644
---- a/support/testing/tests/package/test_llama_cpp.py
-+++ b/support/testing/tests/package/test_llama_cpp.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: medium
- class TestLlamaCpp(infra.basetest.BRTest):
-     config = """
-         BR2_aarch64=y
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-index 0c83c5644e..14440c9527 100644
---- a/support/testing/tests/package/test_mender.py
-+++ b/support/testing/tests/package/test_mender.py
-@@ -57,6 +57,7 @@ class TestMenderRO(TestMenderInfra):
-         self.run_mender_test()
- 
- 
-+# gitlab-runner: large
- class TestMenderSystemd(TestMenderInfra):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_mesa3d.py b/support/testing/tests/package/test_mesa3d.py
-index f5133c2eef..24fc6df59e 100644
---- a/support/testing/tests/package/test_mesa3d.py
-+++ b/support/testing/tests/package/test_mesa3d.py
-@@ -4,6 +4,7 @@ import infra.basetest
- RUSTICL_TIMEOUT = 180
- 
- 
-+# gitlab-runner: 2xlarge
- class TestMesa3DRusticl(infra.basetest.BRTest):
-     config = """
-         BR2_aarch64=y
-diff --git a/support/testing/tests/package/test_nodejs.py b/support/testing/tests/package/test_nodejs.py
-index 2884529c6e..0e679a0ddd 100644
---- a/support/testing/tests/package/test_nodejs.py
-+++ b/support/testing/tests/package/test_nodejs.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: 2xlarge
- class TestNodeJSBasic(infra.basetest.BRTest):
-     config = \
-         """
-@@ -28,6 +29,7 @@ class TestNodeJSBasic(infra.basetest.BRTest):
-         self.assertRunOk("node sample_nodejs_basic.js")
- 
- 
-+# gitlab-runner: large
- class TestNodeJSModuleHostBin(infra.basetest.BRTest):
-     config = \
-         """
-@@ -55,6 +57,7 @@ class TestNodeJSModuleHostBin(infra.basetest.BRTest):
-         self.assertRunOk("node sample_nodejs_module.js")
- 
- 
-+# gitlab-runner: 2xlarge
- class TestNodeJSModuleHostSrc(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_openblas.py b/support/testing/tests/package/test_openblas.py
-index 9cfe08ef2c..edfd08c55c 100644
---- a/support/testing/tests/package/test_openblas.py
-+++ b/support/testing/tests/package/test_openblas.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestOpenBLAS(infra.basetest.BRTest):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-index 0dc69b7c49..d57bc0a711 100644
---- a/support/testing/tests/package/test_openjdk.py
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestOpenJdk(infra.basetest.BRTest):
-     br2_external = [infra.filepath("tests/package/br2-external/openjdk")]
-     config = \
-diff --git a/support/testing/tests/package/test_perl_dbd_mysql.py b/support/testing/tests/package/test_perl_dbd_mysql.py
-index 93551b420f..b9dfd97347 100644
---- a/support/testing/tests/package/test_perl_dbd_mysql.py
-+++ b/support/testing/tests/package/test_perl_dbd_mysql.py
-@@ -2,6 +2,7 @@ from tests.package.test_perl import TestPerlBase
- import os
- 
- 
-+# gitlab-runner: xlarge
- class TestPerlDBDmysql(TestPerlBase):
-     """
-     package:
-diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
-index 65130f9c03..fd933ba560 100644
---- a/support/testing/tests/package/test_python_pyqt5.py
-+++ b/support/testing/tests/package/test_python_pyqt5.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestPythonPyQt5(infra.basetest.BRTest):
-     # We use a specific configuration for:
-     # - using Aarch64, to have more than 256MB memory,
-diff --git a/support/testing/tests/package/test_python_scipy.py b/support/testing/tests/package/test_python_scipy.py
-index 608a3f6e87..af7aa8f0c0 100644
---- a/support/testing/tests/package/test_python_scipy.py
-+++ b/support/testing/tests/package/test_python_scipy.py
-@@ -3,6 +3,7 @@ import os
- from tests.package.test_python import TestPythonPackageBase
- 
- 
-+# gitlab-runner: large
- class TestPythonPy3SciPy(TestPythonPackageBase):
-     __test__ = True
-     # Need to use a different toolchain than the default due to
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 763125ca20..5602aee3e7 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -35,6 +35,7 @@ class TestRustBin(TestRustBase):
-         self.assertRunOk("rg Buildroot /etc/issue")
- 
- 
-+# gitlab-runner: 2xlarge
- class TestRust(TestRustBase):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-index 55a45f44fc..6d6be9fa7b 100644
---- a/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-+++ b/support/testing/tests/package/test_uboot_openssl_pkgconfig.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestUbootOpensslPkgConfig(infra.basetest.BRTest):
-     config = infra.basetest.MINIMAL_CONFIG + \
-         """
-diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-index c4a522c95b..1b25d5ac5e 100644
---- a/support/testing/tests/package/test_weston.py
-+++ b/support/testing/tests/package/test_weston.py
-@@ -5,6 +5,7 @@ import infra.basetest
- from ..graphics_base import GraphicsBase
- 
- 
-+# gitlab-runner: large
- class TestWeston(infra.basetest.BRTest, GraphicsBase):
-     config = \
-         """
-diff --git a/support/testing/tests/package/test_wine.py b/support/testing/tests/package/test_wine.py
-index 8c7b80f522..77f233fef4 100644
---- a/support/testing/tests/package/test_wine.py
-+++ b/support/testing/tests/package/test_wine.py
-@@ -3,6 +3,7 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestWine(infra.basetest.BRTest):
-     # Wine depends on i386 architecture. The pre-build runtime test
-     # Kernel (for armv5) cannot be used. The config also uses a ext4
-diff --git a/support/testing/tests/package/test_xen.py b/support/testing/tests/package/test_xen.py
-index 23efb2055d..8793ec6762 100644
---- a/support/testing/tests/package/test_xen.py
-+++ b/support/testing/tests/package/test_xen.py
-@@ -149,6 +149,7 @@ class TestXenBase(infra.basetest.BRTest):
-         self.assertRunOk("brctl show")
- 
- 
-+# gitlab-runner: large
- class TestXenAarch64(TestXenBase):
-     # Test Xen on 64b Arm.
-     # Boot flow: Qemu Devicetree -> U-Boot -> Xen UEFI -> Linux
-@@ -189,6 +190,7 @@ class TestXenAarch64(TestXenBase):
-         self.run_xen_test(arch="aarch64", options=qemu_opts)
- 
- 
-+# gitlab-runner: large
- class TestXenArmv7(TestXenBase):
-     # Test Xen on 32b Arm v7.
-     # Boot flow: Qemu Devicetree -> U-Boot -> Xen -> Linux
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-index 384fad7e33..ba9c8d3e90 100644
---- a/support/testing/tests/package/test_zfs.py
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -63,6 +63,7 @@ class TestZfsBase(infra.basetest.BRTest):
-             self.assertRunOk(cmd, timeout=self.timeout)
- 
- 
-+# gitlab-runner: medium
- class TestZfsGlibc(TestZfsBase):
-     config = TestZfsBase.config + \
-         """
-@@ -73,6 +74,7 @@ class TestZfsGlibc(TestZfsBase):
-         TestZfsBase.base_test_run(self)
- 
- 
-+# gitlab-runner: large
- class TestZfsUclibc(TestZfsBase):
-     # The Bootling aarch64 uclibc stable 2025.08-1 needs to be
-     # rebuild with uClibc-ng 1.0.55.
-@@ -92,6 +94,7 @@ class TestZfsUclibc(TestZfsBase):
-         TestZfsBase.base_test_run(self)
- 
- 
-+# gitlab-runner: medium
- class TestZfsMusl(TestZfsBase):
-     config = TestZfsBase.config + \
-         """
-diff --git a/support/testing/tests/toolchain/test_aarch64_64k.py b/support/testing/tests/toolchain/test_aarch64_64k.py
-index 7cdbdb9faf..9962fea813 100644
---- a/support/testing/tests/toolchain/test_aarch64_64k.py
-+++ b/support/testing/tests/toolchain/test_aarch64_64k.py
-@@ -42,6 +42,7 @@ class TestAarch64Pages64kBase(infra.basetest.BRTest):
-         self.assertEqual(2 ** order * 64 * 1024, size)
- 
- 
-+# gitlab-runner: large
- class TestAarch64Pages64kGlibc(TestAarch64Pages64kBase):
-     __test__ = True
-     config = TestAarch64Pages64kBase.config + \
-@@ -50,6 +51,7 @@ class TestAarch64Pages64kGlibc(TestAarch64Pages64kBase):
-         """
- 
- 
-+# gitlab-runner: large
- class TestAarch64Pages64kuClibc(TestAarch64Pages64kBase):
-     __test__ = True
-     config = TestAarch64Pages64kBase.config + \
-@@ -58,6 +60,7 @@ class TestAarch64Pages64kuClibc(TestAarch64Pages64kBase):
-         """
- 
- 
-+# gitlab-runner: large
- class TestAarch64Pages64kMusl(TestAarch64Pages64kBase):
-     __test__ = True
-     config = TestAarch64Pages64kBase.config + \
+ package/dovecot/dovecot.mk             |  1 +
+ package/gettext-gnu/gettext-gnu.hash   |  4 ++--
+ package/gettext-gnu/gettext-gnu.mk     |  7 ++++---
+ package/gettext-tiny/gettext-tiny.hash |  2 +-
+ package/gettext-tiny/gettext-tiny.mk   | 14 +++++++-------
+ package/libfuse/libfuse.mk             |  1 +
+ package/linknx/linknx.mk               |  2 ++
+ 7 files changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index a4c799221c..c6ec7cd8c5 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -13,6 +13,7 @@ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+ DOVECOT_CPE_ID_VENDOR = dovecot
+ DOVECOT_SELINUX_MODULES = dovecot
+ DOVECOT_AUTORECONF = YES
++DOVECOT_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/gettext/m4
+ 
+ # add host-gettext for AM_ICONV macro needed for autoreconf
+ DOVECOT_DEPENDENCIES = \
+diff --git a/package/gettext-gnu/gettext-gnu.hash b/package/gettext-gnu/gettext-gnu.hash
+index 7c649843f4..83f5e54dce 100644
+--- a/package/gettext-gnu/gettext-gnu.hash
++++ b/package/gettext-gnu/gettext-gnu.hash
+@@ -1,5 +1,5 @@
+ # Please keep in sync with package/gettext-tiny/gettext-tiny.hash
+ # Locally calculated
+-sha256  29217f1816ee2e777fa9a01f9956a14139c0c23cc1b20368f06b2888e8a34116  gettext-0.22.4.tar.xz
++sha256  71132a3fb71e68245b8f2ac4e9e97137d3e5c02f415636eb508ae607bc01add7  gettext-1.0.tar.xz
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+-sha256  3fe5361f24b7c49ba12911c08f5a33f9cb18871d95d9fb881f5b8a4793e04288  gettext-runtime/intl/COPYING.LIB
++sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  gettext-runtime/intl/COPYING.LIB
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index b7d0cf213c..680c1ab7e8 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -6,7 +6,7 @@
+ 
+ # Please keep in sync with GETTEXT_TINY_ARCHIVE_VERSION in
+ # gettext-tiny/gettext-tiny.mk
+-GETTEXT_GNU_VERSION = 0.22.4
++GETTEXT_GNU_VERSION = 1.0
+ GETTEXT_GNU_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
+ GETTEXT_GNU_INSTALL_STAGING = YES
+@@ -40,7 +40,8 @@ HOST_GETTEXT_GNU_CONF_OPTS = \
+ 	--disable-native-java \
+ 	--disable-csharp \
+ 	--disable-relocatable \
+-	--without-emacs
++	--without-emacs \
++	--without-selinux
+ 
+ # Force the build of libintl, even if the C library provides a stub
+ # gettext implementation
+@@ -62,7 +63,7 @@ HOST_GETTEXT_GNU_SUBDIR = .
+ # and the build of documentation and tests of gettext-runtime.
+ define HOST_GETTEXT_GNU_DISABLE_UNNEEDED
+ 	$(SED) '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/examples$$//' $(@D)/gettext-tools/Makefile.in
+-	$(SED) '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/tests$$//' $(@D)/gettext-runtime/Makefile.in
++	$(SED) '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/tests install-tests$$//' $(@D)/gettext-runtime/Makefile.in
+ endef
+ 
+ GETTEXT_GNU_POST_PATCH_HOOKS += HOST_GETTEXT_GNU_DISABLE_UNNEEDED
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index f7ed50b49f..fd18b28c22 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -3,4 +3,4 @@ sha256  29cc165e27e83d2bb3760118c2368eadab550830d962d758e51bd36eb860f383  gettex
+ sha256  4c938aa3d8fa3c184bba5e87a8a2febc89560627c9d0567536879e3eca1a7b4f  LICENSE
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  extra/COPYING
+ # Locally Computed:
+-sha256  29217f1816ee2e777fa9a01f9956a14139c0c23cc1b20368f06b2888e8a34116  gettext-0.22.4.tar.xz
++sha256  71132a3fb71e68245b8f2ac4e9e97137d3e5c02f415636eb508ae607bc01add7  gettext-1.0.tar.xz
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 3fe8a781d9..1a6dd940b2 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -15,17 +15,17 @@ GETTEXT_TINY_PROVIDES = gettext
+ 
+ # needed for gettextize
+ # Please keep in sync with package/gettext-gnu/gettext-gnu.mk
+-GETTEXT_TINY_ARCHIVE_VERSION = 0.22.4
++GETTEXT_TINY_ARCHIVE_VERSION = 1.0
+ 
+ GETTEXT_TINY_EXTRA_GETTEXT_FILES = \
+-	gettext-tools/misc/gettextize.in \
+-	gettext-tools/po/Makevars.template \
++	gettext-tools/wizard/gettextize.in \
++	gettext-tools/wizard/po-templates/traditional/Makevars.template \
+ 	gettext-runtime/po/boldquot.sed \
+ 	gettext-runtime/po/en@boldquot.header \
+ 	gettext-runtime/po/en@quot.header \
+-	gettext-runtime/po/insert-header.sin \
++	gettext-runtime/po/insert-header.sed \
+ 	gettext-runtime/po/quot.sed \
+-	gettext-runtime/po/remove-potcdate.sin \
++	gettext-runtime/po/remove-potcdate.sed \
+ 	gettext-runtime/po/Rules-quot \
+ 	gettext-runtime/po/Makefile.in.in \
+ 	COPYING
+@@ -87,9 +87,9 @@ define HOST_GETTEXT_TINY_INSTALL_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/boldquot.sed $(HOST_DIR)/share/gettext-tiny/po/boldquot.sed
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/en@boldquot.header $(HOST_DIR)/share/gettext-tiny/po/en@boldquot.header
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/en@quot.header $(HOST_DIR)/share/gettext-tiny/po/en@quot.header
+-	$(INSTALL) -m 0644 -D $(@D)/extra/insert-header.sin $(HOST_DIR)/share/gettext-tiny/po/insert-header.sin
++	$(INSTALL) -m 0644 -D $(@D)/extra/insert-header.sed $(HOST_DIR)/share/gettext-tiny/po/insert-header.sed
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/quot.sed $(HOST_DIR)/share/gettext-tiny/po/quot.sed
+-	$(INSTALL) -m 0644 -D $(@D)/extra/remove-potcdate.sin $(HOST_DIR)/share/gettext-tiny/po/remove-potcdate.sin
++	$(INSTALL) -m 0644 -D $(@D)/extra/remove-potcdate.sed $(HOST_DIR)/share/gettext-tiny/po/remove-potcdate.sed
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/Rules-quot $(HOST_DIR)/share/gettext-tiny/po/Rules-quot
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/Makevars.template $(HOST_DIR)/share/gettext-tiny/po/Makevars.template
+ 
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 147b38b2e2..859efbafb8 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -13,6 +13,7 @@ LIBFUSE_CPE_ID_VALID = YES
+ LIBFUSE_INSTALL_STAGING = YES
+ # We're patching configure.ac
+ LIBFUSE_AUTORECONF = YES
++LIBFUSE_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/gettext/m4
+ # add host-gettext for AM_ICONV macro
+ LIBFUSE_DEPENDENCIES = \
+ 	host-gettext \
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index d67f010093..035a7725f8 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -9,6 +9,8 @@ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
+ LINKNX_LICENSE = GPL-2.0+
+ LINKNX_LICENSE_FILES = LICENSE
+ LINKNX_INSTALL_STAGING = YES
++LINKNX_AUTORECONF = YES
++LINKNX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/gettext/m4
+ LINKNX_CONF_OPTS = \
+ 	--without-cppunit \
+ 	--without-pth-test \
 -- 
-2.54.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
