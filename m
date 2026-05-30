@@ -4,87 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DBFFCD5BD0
-	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 080FFCD5BD0
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 14:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACBE542ECD;
-	Sat, 30 May 2026 14:55:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6A3542EC9;
+	Sat, 30 May 2026 14:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z-LChiMV_77j; Sat, 30 May 2026 14:55:05 +0000 (UTC)
+ id fbNYoWu1graj; Sat, 30 May 2026 14:55:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 441D742C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C21C42C79
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780152905;
-	bh=uK8Ty6l6j10d7GJy+9F9dfeEjpBADbU3dd9HhZj9RtI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NCIpoojgaBb5c8kK4L283+bVRAWFrh5nDMWmdd483d4kN/YnT8q7sZUZMOCZUnHHb
-	 v/JjFgUP8GiwrfO4Znv6/UDWnu9y8sNEAeTpDS32h5Mu7wJz9OA37BH07CrUjfuk88
-	 zna+H1k0M0DPCMnUz1UdBh6Atbc9bsTAUE4KqSKp4A1fYX+Y3Kjga84T6EVK7YjV0j
-	 cZ0sPKkr9Mv6rv286s/ZPT7Md+T+a3acrhnA8lWLmAJawmcMgMmAgDFosGz0FA4O/g
-	 fmxKU4D0O83GbHgSKS93toh0f+2uQ0pfC3KF3IaJZVdAkZ4DE087iQXMLTM05VhKNG
-	 c7P2lDk7e/c/A==
+	s=default; t=1780152959;
+	bh=qSHMyPIcOeB42zAV8qtculuES0EhrVdMluYbCgcrQrY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=brAsqLpHzvV0xm9SYToLP+rpaHU+MxYgzfpGHdHneuI/a84sI/v6eORH9pc1VNmK2
+	 VXrchJ28Bx3W/96KzyM+/LKWv9qUi81C2igUAqxKbPaQ7AmXhf/RIVXRIfUKXOcccH
+	 NVp0GWFHTDAEmCnbqOJNOtYNCeUzn0xQmG9QMxn1Df1jWZe2ol/Qn8yddBcc06YofY
+	 HVPKnWfrr7nMEAiVe2fHXRogUt+Rm3ojmMtsp6TZvi6LWGw1uf7KRp7JTarCAX7cqo
+	 5bB9yEAK8HeengkPjCH82VWbade0QSGUUcPAKE/IgpQtJ84pEP1ImB2UguFQqLvDbB
+	 LS+KJ/oqL6X/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 441D742C99;
-	Sat, 30 May 2026 14:55:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C4BFD3
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C21C42C79;
+	Sat, 30 May 2026 14:55:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F25C9D3
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30AB96F4CE
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E421285305
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oCUe5ugdRlBx for <buildroot@buildroot.org>;
- Sat, 30 May 2026 14:55:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 26b2yafT8Ze6 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 14:55:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 50D5D61B58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50D5D61B58
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 50D5D61B58
- for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:02 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 8BACF4E42DA3;
- Sat, 30 May 2026 14:55:00 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 471136073B;
- Sat, 30 May 2026 14:55:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 273A610888CD8; 
- Sat, 30 May 2026 16:54:59 +0200 (CEST)
-Date: Sat, 30 May 2026 16:54:58 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Cyril Bur <cyrilbur@gmail.com>, 
- Romain Naour <romain.naour@gmail.com>
-Message-ID: <ahr6NNVATOAqBk1x@windsurf>
-References: <20260504203035.1729184-1-ju.o@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260504203035.1729184-1-ju.o@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780152899; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=d/vD0qbXUyg8+fP3JrQejJEWu/W56KnnRu5OSrVoFNg=;
- b=fyZTzz9y19EP1Js9k2wmzw8PkDuqjuXbIP3uJwN5nZU4iK5KHYv9Y7SBMPn7R9mfpyHcQJ
- IH6E5tBvSdYDGVkQdUCuBKaB4qyCIfrcxwcKBzBsG5/GRYJAeFW+mkOTd7nJQijW633r7S
- NcKd51l/a6Ijij7OwgTBWZ0bcTUpHhiJERNmM/vjfCTx1ir9WbVKjIrFWZYTv/mei8r7A4
- ahsPGtIp922Ev0FBUqGe2Qr38r7IZF8+MWEy8KG8uZieQdnhDD+kYs4nJy3/PtWsos4g3z
- etczN4YT6pR7hZ2l/uZUuT6jdOYnnVf4lJvcZxQMe9BHODdjNCJoxFLU/71Rvg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=fyZTzz9y
-Subject: Re: [Buildroot] [PATCH 1/4] arch/Config.in.powerpc: add Power10 CPU
- type
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 168F0852E0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 168F0852E0
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 14:55:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 104208750A; Sat, 30 May 2026 14:55:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 30 May 2026 16:55:25 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: a3c6c0cbad95f03dc031b1effdff414bb2525493
+X-Git-Newrev: 9874899101ee9b7436296841d03cb8e0940c5d7c
+X-Patchwork-Hint: ignore
+Message-Id: <20260530145544.104208750A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xmrig: bump version to
+ 6.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,31 +71,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, May 04, 2026 at 10:30:32PM +0200, Julien Olivain via buildroot wrote:
-> This commit adds the IBM Power10 CPU type. See [1].
-> 
-> This CPU is supported in gcc since v11.1.0 (see upstream commit [2]),
-> and in binutils since v2.35 (the gas -mpower10 option is documented
-> since upstream commit [3]).
-> 
-> [1] https://en.wikipedia.org/wiki/Power10
-> [2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=5d9d0c94588c8834a33eca6847b0a1401353300b
-> [3] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=1424c35d071e7d49a4a219c7dee8c88ffd60ddca
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9874899101ee9b7436296841d03cb8e0940c5d7c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-Thanks, series applied to next!
+https://github.com/xmrig/xmrig/blob/v6.26.0/CHANGELOG.md
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index 5aa1630b14..b06e5e7ba6 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  55e415792f2a4ef2430cb26829b0b7d96fc52f51c6274831e9fe76b8aef28593  xmrig-6.25.0.tar.gz
++sha256  5005144e78571f26586410c2b2ede2b0c72afe22f97f1708ea24cfb253c3939b  xmrig-6.26.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index bfd2a98e12..ec493c335a 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XMRIG_VERSION = 6.25.0
++XMRIG_VERSION = 6.26.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
