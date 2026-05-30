@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30C59CD4F54
-	for <buildroot@archiver.kernel.org>; Fri, 29 May 2026 18:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D79CD6E4A
+	for <buildroot@archiver.kernel.org>; Sat, 30 May 2026 06:28:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88E2E61672;
-	Fri, 29 May 2026 18:48:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98BED61517;
+	Sat, 30 May 2026 06:28:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ctFBgXgt0PLX; Fri, 29 May 2026 18:48:12 +0000 (UTC)
+ id aTMxK9JhrZiN; Sat, 30 May 2026 06:28:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 582DD6134E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE05C617AE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780080492;
-	bh=cstS3sShn2efZh/siyhM+tXkFNQdxxP1jTr/H6KeLlM=;
+	s=default; t=1780122498;
+	bh=Ms15Qu431uHXNlPnO8bVls3OraMoWsdprqtk14DD0bc=;
 	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=YHYIOOFbEKd2NUURNy5XaC1ZRqSUo3a9ZjAlLfjGSE9dJ7fV8YeUL74wvm3EhuFD6
-	 ai3FTg3MwoBJxVqmmV1quRyo4VyoDW7yIJTw89hZh5dvou8pyehIeIhMONzswzmGbU
-	 gE5FqkG3NN2S2pGQhRZpCZI7sLKIWZG2Nmc79NgeK1gRfm9DuLcuedIRljrRQz/IpP
-	 POI4aLMUGo116ApHbnDD3obBmElKdlgQ9YQasBsMr93JBwaC8U2YsQJ9Cmy20UhYwI
-	 SDPEW5boXsYOifv9I1Zvp+zvBGU/JbLrVk3a16Pcq43G2dOdB/M8Z8Z7iEFPWVMqff
-	 WsgWZXtRSxgrg==
+	b=YWUOEM2JUNDFCottOPi/lIciAWCQYy0ki1qzKWTuY4L7oLK+pefNr09fQFdvW4UDS
+	 wF2t6WcpYtCYljdyGUW6Ake/mm758vJ12hUNMPZND4qMTh73b3KYPQVSxwUT0hzThc
+	 a9Ff6GO4IgW5O7fJyoi8Lhv1EamfBJJ/HHBJYFGxKBDS3SGTgp9bMuY+jy1859wRKb
+	 nsbpccT+9iY5hAmI3Sq/lCHxvTkOdSvwgtOvJv9fzzv9xrRjUUgcLgveLAbw1CIZDk
+	 2mkwAJzPVGGGZyPrxogf5oAjg6XQCJ7jZwCFCIuP58tEMQg/CB4/hyQQ+rLoupg81t
+	 ngg0qxuQk/sHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 582DD6134E;
-	Fri, 29 May 2026 18:48:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE05C617AE;
+	Sat, 30 May 2026 06:28:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id ACEA7288
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:48:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 47896F4
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 06:28:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D24F404A2
- for <buildroot@buildroot.org>; Fri, 29 May 2026 18:48:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 282E14263D
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 06:28:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CkIjjPiY-pEr for <buildroot@buildroot.org>;
- Fri, 29 May 2026 18:48:09 +0000 (UTC)
+ id YnIIDgJgqMn6 for <buildroot@buildroot.org>;
+ Sat, 30 May 2026 06:28:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2EA940449
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2EA940449
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C8A540346
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C8A540346
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E2EA940449
- for <buildroot@uclibc.org>; Fri, 29 May 2026 18:48:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C8A540346
+ for <buildroot@uclibc.org>; Sat, 30 May 2026 06:28:11 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wT2Fa-0006fs-Cg
- for buildroot@uclibc.org; Fri, 29 May 2026 20:48:06 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1wTDB2-0008WR-8Y
+ for buildroot@uclibc.org; Sat, 30 May 2026 08:28:08 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Fri, 29 May 2026 20:47:43 +0200
-Message-ID: <pan$329ad$675a0f33$beb8094b$c7eec0f1@ID-313208.user.individual.net>
+Date: Sat, 30 May 2026 08:27:04 +0200
+Message-ID: <pan$16178$56b44c08$a21319fd$f79b1379@ID-313208.user.individual.net>
 References: <20260501183421.2459291-1-bernd@kuhls.net>
- <ahnci7WYFV3NQ8rS__9339.37163078866$1780079876$gmane$org@windsurf>
+ <20260501183421.2459291-3-bernd@kuhls.net>
+ <ahoCoXu7k68axiSL__21429.6951702394$1780089650$gmane$org@windsurf>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/5] package/stellarium: fix qt5serialport
- dependency
+Subject: Re: [Buildroot] [PATCH 3/5] package/stellarium: add extra downloads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,31 +83,61 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Thomas,
 
-Am Fri, 29 May 2026 20:37:29 +0200 schrieb Thomas Petazzoni via buildroot:
+Am Fri, 29 May 2026 23:20:22 +0200 schrieb Thomas Petazzoni via buildroot:
 
-> So Qt is used when gps support is enabled *OR* when the telescope
-> control plugin is enabled, and this plugin is apparently enabled by
-> default.
-
-we disable the telescope plugin by default:
-
-https://gitlab.com/buildroot.org/buildroot/-/blob/
-727c2981cb59ebf6a3ee4e3ef03829cc8ae48536/package/stellarium/
-stellarium.mk#L25
-
->> A backport to the LTS branches should be considered, the wrong order of
->> dependencies in buildroot exists for years and is not caused by recent
->> upstream changes.
+> On Fri, May 01, 2026 at 08:34:19PM +0200, Bernd Kuhls wrote:
+>> Building Stellarium includes the download of external tarballs during
+>> configure.
 > 
-> I don't understand the "wrong order of dependencies". Is this fixing a
-> bug?
+> But is this due to the bump in your PATCH 2/5, or already happening with
+> the current stellarium version? I did a build of the current stellarium
+> version, and a brief look at the configure step output doesn't show
+> anything being downloaded.
 
-Currently qt5serialport is added as dependency even if BR2_PACKAGE_GPSD
-is disabled, in this case Stellarium ignores qt5serialport.
+here configure is broken:
 
-I re-ordered, or you can say merged, these dependencies in a way that 
-qt5serialport is only used when both packages, qt5serialport and gpsd, are 
-enabled at the same time.
+-- Found CMake 4.3.2
+[...]
+-- Building Stellarium 25.4 (v25.4.0; Mode: Release)
+[...]
+-- CPM: Adding package md4c@0.5.2 (0.5.2)
+[...]
+[ 22%] Performing download step (download, verify and extract) for 'md4c-
+populate'
+-- Downloading...
+   dst='/home/bernd/buildroot/output/build/stellarium-25.4/_deps/md4c-
+subbuild/md4c-populate-prefix/src/release-0.5.2.tar.gz'
+[...]
+-- Using src='https://github.com/mity/md4c/archive/refs/tags/
+release-0.5.2.tar.gz'
+CMake Error at md4c-subbuild/md4c-populate-prefix/src/md4c-populate-stamp/
+download-md4c-populate.cmake:163 (message):
+  Each download failed!
+
+    error: downloading 'https://github.com/mity/md4c/archive/refs/tags/
+release-0.5.2.tar.gz' failed
+          status_code: 1
+          status_string: "Unsupported protocol"
+          log:
+          --- LOG BEGIN ---
+          Protocol "https" not supported
+
+using this defconfig
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
+BR2_FORCE_HOST_BUILD=y
+BR2_PACKAGE_STELLARIUM=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_XORG7=y
+
+I will send v2 to clarify that this is an existing error and not caused by 
+the version bump.
 
 Regards, Bernd
 
