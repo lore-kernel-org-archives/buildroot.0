@@ -4,59 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 363E3CD6E56
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D1ACCD6E56
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAC6D60DEA;
-	Sun, 31 May 2026 17:38:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22F3D60EA7;
+	Sun, 31 May 2026 17:39:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T0yH5zZn_GyC; Sun, 31 May 2026 17:38:53 +0000 (UTC)
+ id gjQRPyGk1ITj; Sun, 31 May 2026 17:39:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13B8460E3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1507760E98
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780249133;
-	bh=DUPkF0HfcAVe4TkmMsbxiFJcABzRM/ZWfVR8I1WE/JY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SyHz5ytrr258mIxY2KkLGbnYzOJHdiL+azavJd8V4X96p7GYjQtnGGZbu3MWVXKWT
-	 RDMldq7R1EOWqvsGixXLwXOQjvVyLTR8vhqlgdsMr5k2S8PeneC0Vj4AgWWQby3B7p
-	 rcPwdTZeUUH3A1jodlcxN1Wz+jMnLs4p9PK7mjatnKLuWVeKqilwwqOHP3tN++Qoxm
-	 NGADZSqnWQtW0xxhci8Ci5MdSnuk1QH9V4p4twa1XT0tcplRfJP/zpakU+9kyse/oC
-	 2hZ1M/AWpEZ09rn1Z+bSK4MrIqGEdeqlGn9bqw3nezPaOZyi78hfQxQ1YmRgC7V0O6
-	 xVaSZ+DyuZSPg==
+	s=default; t=1780249175;
+	bh=naLB40uq00DRl3yWmULX7Qh5yE6Kj6pXB8b8wveY2g4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=B0o7W1MLRST0FGQQIKxsy6oJ4kBaueHIYehV7xfPgnW3+uKsnhC0F425b/D6qY9ee
+	 38dIoGKjyxCTSPMZ/F9j/UzO2Ne71k/ChJs5w98wSAJ9S9BB8Z74DngVZoV1F+aeLq
+	 Euk0CsfGmN3HIcDLqk2mi9yIWSl0PfITeXJKkysPy0+2AVArWZg71RptOSjmvBg6Jr
+	 SO7nPkA540+OAd2H8smB1MDtxBAo/uGZtWWttTdHbhribmYuqqjSLHlMGWTSwjaQjW
+	 j/m/15Ccb8Bc1ubWLGHiJvatsKVZlN06ZLXK8WJ+hkguXjpN58fdP9KFIiDUQWkSYy
+	 pT5Zv2hfCVI8Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13B8460E3B;
-	Sun, 31 May 2026 17:38:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 00B68F4
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:38:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1507760E98;
+	Sun, 31 May 2026 17:39:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A8006F4
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F224D42876
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:38:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 996BC40232
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:39:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6TAmlvV_hzl4 for <buildroot@buildroot.org>;
- Sun, 31 May 2026 17:38:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dx3BFbjTvleT for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 17:39:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A951427EB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A951427EB
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:38:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EDC8876F9; Sun, 31 May 2026 17:38:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 19:38:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bfe1da97054413814d26e4d1705fb2fc77cffa8
-X-Git-Newrev: ba8016aa03f57304c8537c62b21fe632ac706634
-X-Patchwork-Hint: ignore
-Message-Id: <20260531173836.8EDC8876F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: needs C++
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BEFA1401E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEFA1401E9
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BEFA1401E9
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:39:32 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 012861A3774
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:39:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BBA5F60230;
+ Sun, 31 May 2026 17:39:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8C22910888CC7; 
+ Sun, 31 May 2026 19:39:28 +0200 (CEST)
+Date: Sun, 31 May 2026 19:39:23 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <ahxyO-iz69-Qi7ym@windsurf>
+References: <20260531171447.1675303-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20260531171447.1675303-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1780249169; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=zr4Wx1pZ6D+UBh+UAiuZEDlfDwAwc5n3+j6O+8S73vQ=;
+ b=CR6jAZCaWxh6nm6CLUUA3HLiH+qDT4VJa6pdQNbqfdZDtjfKvnGEKIaPbRQcyZiwVFFd2g
+ QgtoKfdDsnoeb0dRj0uqKgcH8EmgEQE2kqsDpVlIxrefufbxGe4c0GIui9jwM+XQlFQhwr
+ RwmT62zUBBv8oaJ7lx1b2lfeP0E0x1C/GfeV0TW1h21nzVuAJjv0RxxV7G5rBiJTtedZ4H
+ 8jMmoR/DYRw9C2FpaQAbIt3MBAy4pWzu9wgXjIyVPoGAaQErBZHfEODzTZ0z/SnJ98gFs6
+ wuxZTqIY0FIP+kln95gaY275XgjajiFN7UTGG/+cA+jjkmge2wKglxD9q4N17g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=CR6jAZCa
+Subject: Re: [Buildroot] [PATCH 1/1] package/weston: needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,48 +96,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ba8016aa03f57304c8537c62b21fe632ac706634
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, May 31, 2026 at 07:14:47PM +0200, Bernd Kuhls wrote:
+> Buildroot commit 2e6b2b82d5301977cf2f59adfd633d8774830f69 bumped the
+> package to version 15.0.0 but forgot to add a dependency to C++ which is
+> needed due to upstream commit
+> https://gitlab.freedesktop.org/wayland/weston/-/commit/bdfe7a3e588c26a5b3eca0636a2353de2af24ff6
+> which was first included in this release.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/297/2971e8cd37224f08e5a9932cb62d2fdde0c397d1/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Buildroot commit 2e6b2b82d5301977cf2f59adfd633d8774830f69 bumped the
-package to version 15.0.0 but forgot to add a dependency to C++ which is
-needed due to upstream commit
-https://gitlab.freedesktop.org/wayland/weston/-/commit/bdfe7a3e588c26a5b3eca0636a2353de2af24ff6
-which was first included in this release.
+Thanks, applied to master.
 
-Fixes:
-https://autobuild.buildroot.net/results/297/2971e8cd37224f08e5a9932cb62d2fdde0c397d1/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/weston/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 6f61c3c561..abd996482a 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,10 +1,11 @@
--comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
-+comment "weston needs udev and a toolchain w/ C++, locale, threads, dynamic library, headers >= 3.0"
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
--		!BR2_ENABLE_LOCALE
-+		!BR2_ENABLE_LOCALE || !BR2_INSTALL_LIBSTDCPP
- 
- config BR2_PACKAGE_WESTON
- 	bool "weston"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
