@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26C43CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF2DCD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5FA185DA8;
-	Tue,  9 Jun 2026 13:05:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZvtWeIYKfCI7; Tue,  9 Jun 2026 13:05:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96FAD85DA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010317;
-	bh=WkCxFEJgfC0QSDfkwSEKO4VFNX0Vub74rIeV21wBZxU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LYEOGUh1kZnaf+iunqsMG2aCsP1f1/OK0mMozPIbAcvzOGJWrcaCvuSlJ+/Vxykz/
-	 5xKKKMqVd3oqtE0+1W0921bSvcMxxZkfLMG/hEsRHLk2hMuGUVUC+NieSvC7NRHJaY
-	 xwbhRmG0qIf2Vg32i9ZaeBF4aspqJkNB/CBfVZIcClFq/B5pELwbxjFCXUklVKEkhf
-	 7yaUrYTuUnzXMdIcStxiY5DIy4ElSFwJ2sZmypAQDy0O/cElZmXqkZJA7xvFS7rk8a
-	 0an2E8clVnGWlTyqzr5k8C0rpcMS5CwGe4SWK94ukOgAGqWn5+GK/8rZsxQjA1h5nQ
-	 1Me4eaAJ/tzNg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96FAD85DA2;
-	Tue,  9 Jun 2026 13:05:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07DC8196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68F40464C9
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA6445AC9;
+	Tue,  9 Jun 2026 13:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8FhOsfv53LGM for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
+ id l6NWlf4ysDmc; Tue,  9 Jun 2026 13:05:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5FDD45CE4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781010331;
+	bh=tvhqqMf3zItf8mjOLpCChm65vbaqh8bAUJeQh+SJydU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IsvkyZs+O/y3/mpiMWPm6qEkz/rQUQJrRjejntx32OBvQm0SMv3xuX13ylvbq+NCm
+	 wyrHEB3EK8VpGuA+0sLLOvw2cLjITAQykseUtfYTo92SFu/Xac2Ov+ZyyAQGpyoBkf
+	 gDfxV0VYp3RN0Y7BQbHWjyNCgYoazr9gAhsIAc2ZUAD2ZFDoiDQGD2OFFlARrpeFat
+	 /DT2A9CSFTLJrobhVgxnFa5NxoKptsEB+th9mdrgNz+u57QkdU0J/BgpvNp8wKd5oo
+	 CPI3gRgrDElc14XGzAO6wgEHpiykJqA3/zuhpYeNA81XO6bqvoCluCZ7e139wuqYAf
+	 mLAEXbhiEXhFA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5FDD45CE4;
+	Tue,  9 Jun 2026 13:05:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50452196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBE164272A
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5QFUf3HTE-JL for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 577A04639D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8787B426DE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 577A04639D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8787B426DE
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9359487E8D; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
+ id C426E87E87; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 16:22:13 +0200
+Date: Sun, 31 May 2026 17:40:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0c3c8ea77915342f1424f70adcfb481c3640e56
-X-Git-Newrev: 13325a9ba3897308ec00857963fdbf7fb350ce0a
+X-Git-Oldrev: 7bf73cbdd7a073774e33b84195cb2c2e92737143
+X-Git-Newrev: 51d8351e286a6528b88ddb9f2dbfd1c5c86aba7b
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130125.9359487E8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireplumber: mark broken on uClibc
+Message-Id: <20260609130125.C426E87E87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nut: bump version to 2.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,76 +71,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0317155368862040042=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0317155368862040042==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/13325a9ba3897308ec00857963fdbf7fb350ce0a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/51d8351e286a6528b88ddb9f2dbfd1c5c86aba7b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-../lib/wp/log.c:780:49: error: implicit declaration of function ‘gettid’;
- did you mean ‘getgid’? [-Wimplicit-function-declaration]
-  780 |   g_autofree gchar *tid = g_strdup_printf("%d", gettid());
-
-The problem was hidden by pipewire being broken with uClibc since at
-least Sep 2024: https://autobuild.buildroot.net/results/ee5/ee50c8331946814c2fecb0ca56ca51c1bb0bc551/
-
-Pipewire was bumped from 0.3.81 to 1.2.2 in Aug 2024 with buildroot commit
-93b72692c36f8357e867650f4b8fac91dff375f5 which afaics caused all uClibc
-builds to fail due to missing tss_t() whose usage was added to pipewire in
-version 1.1.81, see
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/de0db48f17aa391917ff5b430b7b9fe1dac443fe
-and later removed with
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/9c19284f7f062a50e059b0593068429b345acf34
-in version 1.3.81.
-
-In wireplumber the relevant part of code with gettid() was added in
-version 0.5.9. Buildroot bumped wireplumber from 0.5.5 directly to 0.5.10
-with commit c42b26bb471a260e2bb3da7988af77f78b2b4280.
+Updated license hash due to upstream commit:
+https://github.com/networkupstools/nut/commit/d5b040b2a9e7eb86d819b534a0ba274f76616dfa
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: unwrap URLs in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wireplumber/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/nut/nut.hash | 6 +++---
+ package/nut/nut.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireplumber/Config.in b/package/wireplumber/Config.in
-index 6528a2e102..5f07a7c664 100644
---- a/package/wireplumber/Config.in
-+++ b/package/wireplumber/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_WIREPLUMBER
- 	depends on BR2_PACKAGE_LUA_5_3 || BR2_PACKAGE_LUA_5_4
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # gettid
- 	depends on BR2_USE_MMU # libglib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
-@@ -15,8 +16,9 @@ config BR2_PACKAGE_WIREPLUMBER
+diff --git a/package/nut/nut.hash b/package/nut/nut.hash
+index 0d78324818..43560d5028 100644
+--- a/package/nut/nut.hash
++++ b/package/nut/nut.hash
+@@ -1,7 +1,7 @@
+-# From https://github.com/networkupstools/nut/releases/download/v2.8.4/nut-2.8.4.tar.gz.sha256
+-sha256  0130ba82ea79f04ba4f34c5249a85943977efd984ed7df6aec1a518d5a3594f8  nut-2.8.4.tar.gz
++# From https://github.com/networkupstools/nut/releases/download/v2.8.5/nut-2.8.5.tar.gz.sha256
++sha256  18bf32e59eb764b13da3c4fa70384926d7fa584cb31d2fe7f137a570633eeec1  nut-2.8.5.tar.gz
  
- 	  https://pipewire.pages.freedesktop.org/wireplumber/
+ # Locally computed
+-sha256  40885775f43463c404d74bbd00a59fac6c0fe73f838d4520472d721917412577  COPYING
++sha256  a6c3d535c77fbfcecb33a3545668cfa0354a5ad517930c255eb39f135f7213db  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE-GPL2
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  LICENSE-GPL3
+diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+index 4fc461a993..3b4aef28ce 100644
+--- a/package/nut/nut.mk
++++ b/package/nut/nut.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "wireplumber needs a toolchain w/ wchar, threads and Lua >= 5.3"
-+comment "wireplumber needs a glibc or musl toolchain w/ wchar, threads and Lua >= 5.3"
- 	depends on BR2_PACKAGE_PIPEWIRE
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_TOOLCHAIN_USES_UCLIBC || \
- 		(!BR2_PACKAGE_LUA_5_3 && !BR2_PACKAGE_LUA_5_4)
-
---===============0317155368862040042==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-NUT_VERSION = 2.8.4
++NUT_VERSION = 2.8.5
+ NUT_SITE = https://github.com/networkupstools/nut/releases/download/v$(NUT_VERSION)
+ NUT_LICENSE = GPL-2.0+, GPL-3.0+ (python scripts), GPL/Artistic (perl client)
+ NUT_LICENSE_FILES = COPYING LICENSE-GPL2 LICENSE-GPL3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0317155368862040042==--
