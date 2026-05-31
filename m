@@ -1,114 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 906D3CD6E52
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 13:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CC4DCD6E52
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 13:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7B760F4E;
-	Sun, 31 May 2026 13:25:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9A9785039;
+	Sun, 31 May 2026 13:42:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZMHJ5SfPn1k; Sun, 31 May 2026 13:25:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bcEVXQMBAOVn; Sun, 31 May 2026 13:42:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E22560E3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F9F685028
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780233942;
-	bh=7IwBh2T7GmEInNTHKCWHcH5mK5KNvyoj9I9rJ9NOqbY=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=IUkHznPD9DZzzdQETMGzk2YyJvMZFeKDga74E8nSvhCGyl81umiSf72i9hDBFK8uX
-	 QcWKF2M9pmzQzWjABXBuMedNVokkqNF1cyfg6rutBAASuDNY+qRitwpzHoyXxIfTMf
-	 Dp47DxJQjmwdxQvXQptCbnRNSOC2lbzCoCQloXu+lG74+/MQZmkdo6aT1LxqS5rtct
-	 rsv6yJSyDx7eFfFhsweq6QL3r48fS4iJmJpyFtX4v/NIMIMfq08T/qtTq9vg3S+ODC
-	 Jd+KwnAIfOFt2eoYjVGklyf8nTVg9TxsLWJCoH27O6/OzQABB4gHkgmeZv1uUzwR15
-	 Mg8ws60KaHO5Q==
+	s=default; t=1780234922;
+	bh=9/yyA78rtfRazypi7yVFI3Rs2Z1q4mUTkSqP52Ik4I4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=QIeylfVETIgdYoy+WEixs2vr6Rw0pboNX2uOkYtrwZ5B2zwefZ8k42WD4UIfoXxbe
+	 UYoKoEBUTk2ohF/RUzu8rQAoTgkgCjThwyjZf5h95r4g5239nncOlvGySM6I50Q5c9
+	 quFq71/UcD4Q96DDX05VZ1xoul61bGCBiA2WhV5zH6cW995n64Fpu6tMVRjDoNdZ/7
+	 dtSVZluqabQWAfjh58Aa9fwtRWmkZ7lTWXuQEAwea6DwHJtHXrl48wdavPXk82bos7
+	 nScRsMSVklE0pgpm9X6ZYUnQIn/85BB04ftzL1eduRgJ+beouLMsOaLhODM7h9TyuR
+	 3IUYZPFAHEoKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E22560E3B;
-	Sun, 31 May 2026 13:25:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 672572AA
- for <buildroot@buildroot.org>; Sun, 31 May 2026 13:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F9F685028;
+	Sun, 31 May 2026 13:42:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BD58257
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 13:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62C9540183
- for <buildroot@buildroot.org>; Sun, 31 May 2026 13:25:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81D1542A80
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 13:42:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hysySdJSST0a for <buildroot@buildroot.org>;
- Sun, 31 May 2026 13:25:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CD3E1400C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD3E1400C4
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CD3E1400C4
- for <buildroot@buildroot.org>; Sun, 31 May 2026 13:25:39 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-490426d72f7so81320375e9.3
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780233937; x=1780838737;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=D1kwLBZT/at0rSPeyOBHxyBBIi5dPix8AtY1ckDwOi4=;
- b=cYq84bkmN7mhgqNS1Jc/gDJV/aHM3qesIfG+hxITuSAlOYezuiK5u1RGVD9R6U8cIW
- F5PoNhrS/0AdLWe5ItnqolhAWFAM0iVy9K3aUgL+h9twE9jFFedwAO2sKNQgXBYl1Ak5
- pMV/Zt5ZH6pIL99D8UQ5Av/9bV4KWLs2P7Yq7bLTo4TP0o/y7vU8YBhVSqavFBhCrSuA
- 8FkUr4cTrvg3lTjb9cgAOSCvQukNV8njdyoMPVnMafcTFemi+y58fucyXV0g/sD+YGk+
- lp8xQCDYuduQk19Izvj0BlQzgUvOy1nQ1ce1L1gZARSKlcrQ+0Hkr+d9pwT5pY3av3iS
- VHxg==
-X-Gm-Message-State: AOJu0YwYO5IZLPWPIoaIZrN/wtqLU89LZ9O3D7flhlq3NDDqSSSjnbbJ
- cT88t4siX26DEVIv3xAmN9iWyx8lLEPfKZcK0GHiQyToJR+/AM/buoPs+6NDq7HA/HWIN5Unmgj
- zx4j4
-X-Gm-Gg: Acq92OFDzx/HUe0s84DgUmJmRLO2Xo96FbQ6yASyVOjpVZGxAed9zuoFWd0GVMVvvy7
- BD22/oDfh+r6FpwI2ITJriem7rcuxBhlqqm0oYYnr3XQKonhRcTPkDW1v22/bOwU5bIC1WHq2Kt
- j4Kac3wUlLRZq5MKUzuXE/YFOrF2whXNWjyztKg4HA5PLXEhIIP7f2tJfbkdpxUWSAi1vLuEVtO
- ieYpoV4P/O++zveh1W1GS8SO4cs0/2rtHMrG6lphp+1pnkUAhhn9FWcUM29S6ojX67rNOd6zfI1
- mKpM9n9nkyX0g0PyVn4XD/2CV5MpVntc0+KLy6V3J10oRg7BiJn34wFJuthldNaG5wHXmuzgRNj
- J6nqr3vZxV+ggnv8vJhujzdSv6iO9+4wWnDgMWLGHIJEIE4NAzZHhFmiVBiV/7/bYCnW5Dcwr2b
- dXeWFO0DRFsOjdoRbbSxhBx+f52z0hnqqcxqERMRLlNFY03VHUQl2Pi3xVVDYTFJZu/y/OtoWzI
- MMYGVZc6N+AkLh8rYBW2/cSkTe2P9Yklqxk
-X-Received: by 2002:a05:600d:8648:10b0:48f:e245:394e with SMTP id
- 5b1f17b1804b1-490a2943943mr101969385e9.27.1780233937490; 
- Sun, 31 May 2026 06:25:37 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef354bb62sm17101730f8f.19.2026.05.31.06.25.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 May 2026 06:25:37 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iHA665ei8qo3 for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 13:41:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFC8442A7F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFC8442A7F
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 13:41:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 59400876D4; Sun, 31 May 2026 13:41:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>,
-	Julien Olivain <ju.o@free.fr>
-Date: Sun, 31 May 2026 15:25:33 +0200
-Message-ID: <20260531132533.643062-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.54.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780233937; x=1780838737; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=D1kwLBZT/at0rSPeyOBHxyBBIi5dPix8AtY1ckDwOi4=;
- b=XU4mJtTlIrXN9NwQ6dATWaQ5IXwYPu/MzEPseLSb1dw18W76pfymfb93kYVLJNI5gT
- JEp0dMx4wApBEwrwbkPRssPPf7UQYETnlWpQDzFpmLzKXU5udm4+NMckYaudZso/nFmM
- UIWC1HeGDrFXOTS9fyqHnVPf/4He6XtoaqBOY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=XU4mJtTl
-Subject: [Buildroot] [PATCH] support/testing: TestPppd: force the baudrate
- for pppd
+Date: Sun, 31 May 2026 15:39:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 44b7435c7a2e11ac2c52398c66cc3f5ae6ef854a
+X-Git-Newrev: 50d772b66bb0ab281aef2bade584de39b4cd6da5
+X-Patchwork-Hint: ignore
+Message-Id: <20260531134146.59400876D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestPppd: force the
+ baudrate for pppd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,12 +69,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/50d772b66bb0ab281aef2bade584de39b4cd6da5
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Since the ARM AArch64 toolchain toolchain bump [1], the TestPppd fail
 at runtime since ttyppp0 and ttyppp1 interfaces were not created
@@ -151,6 +104,7 @@ https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335920 (TestPppd)
 
 Fix-suggested-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  support/testing/tests/package/test_pppd.py | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
@@ -177,9 +131,6 @@ index 015f10f02d..0ba1ff7ee2 100644
          self.assertRunOk(cmd)
  
          # We wait again...
--- 
-2.54.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
