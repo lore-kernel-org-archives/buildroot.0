@@ -1,170 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C908CD6E56
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C63EBCD6E52
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4474860FBE;
-	Sun, 31 May 2026 17:57:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DCCE82AB9;
+	Sun, 31 May 2026 17:58:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7aseutdZ1L4F; Sun, 31 May 2026 17:57:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TNaD_2Vm0Fuk; Sun, 31 May 2026 17:58:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4884A60C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AFC082C61
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780250220;
-	bh=7qDVNNiOxPf1WNrAO5hpnzqlQb+g0yPM76aV9ZwnQRQ=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=DhUJivdcItOg5fTYFZY7dtOvhDWsbujkOaspCm3WRGf/Gmlj7kV+4/UWwQY5Vm/Jg
-	 kecHxOL8zwEBO+gbDi96ae7zna6TvtNojG2hpMPYh9EW0pUV4IIf9tcn/ywvESY9w2
-	 2vSq9rmR1RU0JbUjGLKlLGVSa54zv1K73DCBTEj8DDJy3YV4kd5UAIZiaU8E+fJkSS
-	 cXJEdvZcZICn2hKzyfAaaappaviefAbJ1MlUZESGOJ6i/tptC0n7U/X3z7ZMK+FQtC
-	 +Np7dXmP9OPW0HWWfb72mjOCQFGp07uGBHjBlEkyXSmkdfCNx0YrGONNLiShMQmN0V
-	 TWdEd9NBBertQ==
+	s=default; t=1780250281;
+	bh=quo4js/Fj8RmWzkeoBUUVlCh8EDPTR8z8BpkcmrCqTs=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=DkScEsiLtT6jsEMo2wglB0DZ9xm/9/lgkmqInlN+/s4ZbBZiv5KhQugqSoK48j2JH
+	 0vtM+lH8k2ErRjpSsr3HcGtWITkKw8fmFQQVq1Z2AAt/H0T5wlpq2aAyeyKqaAzOXE
+	 mViCsXaxLr6OWE0uVMUesTVJpFT701LzpNvgPVmyDG/HChWFQoA7CjabM5xSd3uLub
+	 tSHGlFky0Jb0lqfSsmmQpuMlaGfXkOeh1YD0NVu17KwYE1cM4ewnFaHAIaNdwyw6XV
+	 hPOGAsYf3D1KUnTc8d3csNEBeSVi0XprjkbTvyhlCpm7pnAQ7NPASlwnNlXCC3SPOh
+	 L5oMqKNdOGZ/Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4884A60C12;
-	Sun, 31 May 2026 17:57:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E662F2AA
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:56:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AFC082C61;
+	Sun, 31 May 2026 17:58:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E8652AA
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D763240232
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:56:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F402682C61
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:57:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sCKq6BQvBc18 for <buildroot@buildroot.org>;
- Sun, 31 May 2026 17:56:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
- helo=mout.gmx.net; envelope-from=and@gmx.li; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5B933401E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B933401E9
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B933401E9
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:56:56 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N5GDv-1xSY9S07z3-014Rl4; Sun, 31
- May 2026 19:56:55 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1LPZ-5huksA9 for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 17:57:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E48D182D96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E48D182D96
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E48D182D96
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:57:58 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C6C03A4C2C3F;
+ Sun, 31 May 2026 19:57:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39430)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wTkQ8-000000001uf-38bG;
+ Sun, 31 May 2026 17:57:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 31 May 2026 17:56:50 +0000
-Message-ID: <20260531175650.23525-1-and@gmx.li>
-X-Mailer: git-send-email 2.53.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 May 2026 19:57:56 +0200
+Message-ID: <20260531175756.1682979-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ZQyr47PcQ+lJ1/3I8JVBnWQAMCdLt4yWQz3iQtKLPhGpTt4n1uI
- DAvk069ECiEQg1hpRcuwqwZ2KY9+Hc9Ghv4r2o85YOosxgfvBAHX+uZXWMoMwGIvYsCQPP2
- xB5Yhf7WeHaD/2gAhV8mWNCAJHsgTH+fnlLWpEj7eVqfZSOygo1tB29q3Hkg/HAGm4+KRJu
- YVje+xltZnMm9JiRefSoQ==
-UI-OutboundReport: notjunk:1;M01:P0:OrO/4aLe69Q=;LBWdIxhhQCTo8/MChwBxpwVxxWw
- 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
- rmNRX4eM4=
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.li; 
- s=s31663417; t=1780250215; x=1780855015; i=and@gmx.li;
- bh=b0KrOStrjwWmpFMozVaF6wtAkTefDwDI8JcR0zO/lkU=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=iX6aQ3FGy/RqPE/SJrcRyGWnCgn2Q9DuTNrloXqQpSsb5uIWCdFAM59epy9vzRgb
- oqNB3HwBiQ+78WGKf0XZVm9CL+CYCaC2cxrhzZaUYfMTcM2SyMxUFB/6lACuiSX2t
- j1iOaK2Xm1GHSA+/nb2nD+ea5R2y69hcbDS/ulRvgfNn4+7Sxs7drFV+GGEiB4hmj
- zG9pFkjab/sR2unujwJxApNBzsPF4mJIPGS30DqcAphTT1T02wTOyurbgsuXj0KE4
- apXr1xfi9ttFSaCv4Ck3WJ0gedceOO60aFW6ujaLQIA7j7/yTO604RolOll1byDiD
- vau8O5Mnep6vzSXNWg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.li
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.li header.i=and@gmx.li header.a=rsa-sha256
- header.s=s31663417 header.b=iX6aQ3FG
-Subject: [Buildroot] [PATCH/next 1/1] package/cryptsetup: add argon2
- implementation choice
+ d=kuhls.net; 
+ s=kas202605290044; t=1780250276;
+ bh=H32fTKPxHGDqPgn9ednPrr2M2zmykzjkvSjnjdc9rwI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=dcAhnpwgz0iPM+8XZLXMDSQi2lyZ0IB6znflGn4XXsP/+VwzdVUJqiL9QZFxdMhyO
+ q25zixvwB4QpU8A386SMvEsoXnTf+8LNZ+ag/qYRJ0iIeJl7Fs6TPVkVvQxLdcmk06
+ eZ/Fpl3MfEIzoF889JkyN19WxKVgp60EQO5IqfA6+EByYjkFAvG9i18EAVLEexG/TR
+ RquUjz9IfPcRtwxbB8mDtVCQ/y+DJo2juLMe3SmW7iaqitE2eZYl/ETX9W8Y1i7Nul
+ f75QzJ1tD5+dZyQy2oxZd2EjwwU18WK8YP+LfpVVzZFseBeZVeISOgpYXKDxAcTAg5
+ 7GWMEUbEIX9rw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=dcAhnpwg
+Subject: [Buildroot] [PATCH/next 1/1] package/weston: bump version to 15.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,96 +91,218 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Mohr via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Mohr <and@gmx.li>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support argon2 implementation choice for less dependency and lightweight builds.
+https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
 
-The internal reference implementation may be slower, set default to system libargon2
+Removed patch which is included in this release.
 
-(configure: Argon2 bundled (slow) reference implementation will be used, please consider to use system library with --enable-libargon2)
-
-Signed-off-by: Andreas Mohr <and@gmx.li>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/cryptsetup/Config.in     | 25 +++++++++++++++++++++++++
- package/cryptsetup/cryptsetup.mk | 15 +++++++++++++--
- 2 files changed, 38 insertions(+), 2 deletions(-)
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/d75285f87704c195b5b608f5d03c2d6bb73b6001
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 00424af8b8..304f4bf97f 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -18,6 +18,31 @@ config BR2_PACKAGE_CRYPTSETUP
+with the exception of bootlin-aarch64-glibc-old:
+
+  ../shared/client-buffer-util.c:31:27: fatal error: linux/dma-buf.h:
+   No such file or directory
+
+This error is not introduced by this bump, weston 15.0.0 shows the same
+error: https://gitlab.com/bkuhls/buildroot/-/commits/284ee6da92fba0f075876209c534e99f54060afd
+
+ ...guard-surface-output-creation-with-b.patch | 151 ------------------
+ package/weston/weston.hash                    |   6 +-
+ package/weston/weston.mk                      |   2 +-
+ 3 files changed, 4 insertions(+), 155 deletions(-)
+ delete mode 100644 package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch
+
+diff --git a/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch b/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch
+deleted file mode 100644
+index 8d88730336..0000000000
+--- a/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch
++++ /dev/null
+@@ -1,151 +0,0 @@
+-From 60e0ec39183f932b7b4ba60070a5b2ac64b42d30 Mon Sep 17 00:00:00 2001
+-From: Erico Nunes <nunes.erico@gmail.com>
+-Date: Thu, 5 Mar 2026 17:29:06 +0100
+-Subject: [PATCH] vulkan-renderer: guard surface output creation with backend
+- defines
+-
+-Fix compilation errors when compiling with x11 or wayland backends
+-disabled or not available.
+-
+-Fixes: 8f56d03d ("libweston: Vulkan renderer")
+-
+-Upstream: https://gitlab.freedesktop.org/wayland/weston/-/commit/ba10e6d81462fc8628dd340ba9404e13745eae18
+-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+----
+- .../vulkan-renderer-internal.h                | 17 ++++++++++----
+- libweston/renderer-vulkan/vulkan-renderer.c   | 22 +++++++++++++++----
+- 2 files changed, 31 insertions(+), 8 deletions(-)
+-
+-diff --git a/libweston/renderer-vulkan/vulkan-renderer-internal.h b/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-index aadfc6e4..f8604227 100644
+---- a/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-+++ b/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-@@ -35,17 +35,21 @@
+- #include <stdbool.h>
+- #include <time.h>
+- 
+--#include <wayland-util.h>
+- #include <vulkan/vulkan.h>
+- #include "shared/helpers.h"
+- #include "libweston/libweston.h"
+- #include "libweston/libweston-internal.h"
+--#include <xcb/xcb.h>
+- 
+--#define VK_USE_PLATFORM_XCB_KHR
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- #define VK_USE_PLATFORM_WAYLAND_KHR
+- #include <vulkan/vulkan_wayland.h>
+-+#endif
+-+
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+#define VK_USE_PLATFORM_XCB_KHR
+-+#include <xcb/xcb.h>
+- #include <vulkan/vulkan_xcb.h>
+-+#endif
+- 
+- #define MAX_NUM_IMAGES 5
+- #define MAX_CONCURRENT_FRAMES 2
+-@@ -173,10 +177,15 @@ struct vulkan_renderer {
+- 	struct wl_list pipeline_list;
+- 	struct dmabuf_allocator *allocator;
+- 
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	PFN_vkCreateWaylandSurfaceKHR create_wayland_surface;
+--	PFN_vkCreateXcbSurfaceKHR create_xcb_surface;
+- 	PFN_vkGetPhysicalDeviceWaylandPresentationSupportKHR get_wayland_presentation_support;
+-+#endif
+-+
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+	PFN_vkCreateXcbSurfaceKHR create_xcb_surface;
+- 	PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support;
+-+#endif
+- 
+- 	PFN_vkGetImageMemoryRequirements2KHR get_image_memory_requirements2;
+- 	PFN_vkGetMemoryFdPropertiesKHR get_memory_fd_properties;
+-diff --git a/libweston/renderer-vulkan/vulkan-renderer.c b/libweston/renderer-vulkan/vulkan-renderer.c
+-index 9f701913..b15eff46 100644
+---- a/libweston/renderer-vulkan/vulkan-renderer.c
+-+++ b/libweston/renderer-vulkan/vulkan-renderer.c
+-@@ -303,16 +303,20 @@ static const struct vulkan_extension_table vulkan_inst_ext_table[] = {
+- 		.name = VK_KHR_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_SURFACE,
+- 	},
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	{
+- 		.name = VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_WAYLAND_SURFACE,
+- 		.instance_dep = EXTENSION_KHR_SURFACE,
+- 	},
+-+#endif
+-+#if defined(BUILD_X11_COMPOSITOR)
+- 	{
+- 		.name = VK_KHR_XCB_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_XCB_SURFACE,
+- 		.instance_dep = EXTENSION_KHR_SURFACE,
+- 	},
+-+#endif
+- };
+- 
+- /* Keep in sync with vulkan-renderer-internal.h. */
+-@@ -3455,9 +3459,12 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 	struct vulkan_renderer *vr = get_renderer(ec);
+- 	struct vulkan_output_state *vo = get_output_state(output);
+- 	VkResult result;
+--	VkBool32 supported;
+-+	VkBool32 supported = 0;
+- 	assert(vulkan_instance_has(vr, EXTENSION_KHR_SURFACE));
+- 
+-+	vo->swapchain.surface = VK_NULL_HANDLE;
+-+
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	if (options->wayland_display && options->wayland_surface) {
+- 		assert(vulkan_instance_has(vr, EXTENSION_KHR_WAYLAND_SURFACE));
+- 
+-@@ -3472,7 +3479,10 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 		result = vr->create_wayland_surface(vr->inst, &wayland_surface_create_info, NULL,
+- 						    &vo->swapchain.surface);
+- 		check_vk_success(result, "vkCreateWaylandSurfaceKHR");
+--	} else if (options->xcb_connection && options->xcb_window) {
+-+	}
+-+#endif
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+	if (options->xcb_connection && options->xcb_window) {
+- 		assert(vulkan_instance_has(vr, EXTENSION_KHR_XCB_SURFACE));
+- 
+- 		supported = vr->get_xcb_presentation_support(vr->phys_dev, 0, options->xcb_connection, options->xcb_visualid);
+-@@ -3486,9 +3496,9 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 		result = vr->create_xcb_surface(vr->inst, &xcb_surface_create_info, NULL,
+- 						&vo->swapchain.surface);
+- 		check_vk_success(result, "vkCreateXcbSurfaceKHR");
+--	} else {
+--		assert(0);
+- 	}
+-+#endif
+-+	assert(vo->swapchain.surface != VK_NULL_HANDLE);
+- 
+- 	vkGetPhysicalDeviceSurfaceSupportKHR(vr->phys_dev, 0, vo->swapchain.surface, &supported);
+- 	assert(supported);
+-@@ -4190,15 +4200,19 @@ load_instance_proc(struct vulkan_renderer *vr, const char *func, void *proc_ptr)
+- static void
+- vulkan_renderer_setup_instance_extensions(struct vulkan_renderer *vr)
+- {
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	if (vulkan_instance_has(vr, EXTENSION_KHR_WAYLAND_SURFACE)) {
+- 		load_instance_proc(vr, "vkCreateWaylandSurfaceKHR", &vr->create_wayland_surface);
+- 		load_instance_proc(vr, "vkGetPhysicalDeviceWaylandPresentationSupportKHR", &vr->get_wayland_presentation_support);
+- 	}
+-+#endif
+- 
+-+#if defined(BUILD_X11_COMPOSITOR)
+- 	if (vulkan_instance_has(vr, EXTENSION_KHR_XCB_SURFACE)) {
+- 		load_instance_proc(vr, "vkCreateXcbSurfaceKHR", &vr->create_xcb_surface);
+- 		load_instance_proc(vr, "vkGetPhysicalDeviceXcbPresentationSupportKHR", &vr->get_xcb_presentation_support);
+- 	}
+-+#endif
+- }
+- 
+- static void
+--- 
+-2.43.0
+-
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 24f0f08bab..b002942696 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lore.freedesktop.org/wayland-devel/aZbDU-xtVMLhB0wD@xpredator/
+-sha256  58c6186d29a5d2f0be0dec4882af71cc190a11da803f6ed1bf0b2c74120da973  weston-15.0.0.tar.xz
+-sha512  1196db00b473f036ba290e1073729c2b9e29ac061d9687b30dfad14e3b139313d3ca9c8000838e1b9c39713e96a2c544ec05d80bafad0b8ea1d1f380befa250d  weston-15.0.0.tar.xz
++# From https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
++sha256  551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d  weston-15.0.1.tar.xz
++sha512  555731ddfaf7e3ef9bf43be682e20338ee207b434a72011b730c9b0ebde4daeaeb9cc9d09a707c32798f0184a55144f64e818551efe7e71413876e45e3cb3523  weston-15.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index e160c89477..5caf5903d1 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://gitlab.com/cryptsetup/cryptsetup
- 
-+if BR2_PACKAGE_CRYPTSETUP
-+
-+choice
-+	prompt "argon2 support"
-+	default BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM
-+	help
-+	  Use cryptsetup internal reference implementation to save space on embedded systems.
-+
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM
-+	bool "system library (default)"
-+	select BR2_PACKAGE_LIBARGON2
-+
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL_SSE
-+	bool "internal reference/SSE implementation (slower)"
-+
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL
-+	bool "internal reference implementation (even slower)"
-+
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_NONE
-+	bool "none (not recommended for LUKS2)"
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_CRYPTSETUP
-+
- comment "cryptsetup needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 758d8ef403..daa3bc3264 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -9,7 +9,7 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
--	lvm2 popt host-pkgconf json-c libargon2 \
-+	lvm2 popt host-pkgconf json-c \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
- 	$(TARGET_NLS_DEPENDENCIES)
- CRYPTSETUP_LICENSE = Apache-2.0, CC-BY-SA-4.0, GPL-2.0+ (programs), LGPL-2.1+ (library)
-@@ -23,7 +23,18 @@ CRYPTSETUP_CPE_ID_VALID = YES
- CRYPTSETUP_INSTALL_STAGING = YES
- 
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
--CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2 --disable-asciidoc
-+CRYPTSETUP_CONF_OPTS += --enable-blkid --disable-asciidoc
-+
-+ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM),y)
-+CRYPTSETUP_DEPENDENCIES += libargon2
-+CRYPTSETUP_CONF_OPTS += --enable-libargon2 --disable-internal-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL_SSE),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --enable-internal-sse-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --enable-internal-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_NONE),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --disable-internal-argon2
-+endif
- 
- # cryptsetup uses OpenSSL by default, but can be configured to use libgcrypt,
- # nettle, libnss or kernel crypto modules instead
+-WESTON_VERSION = 15.0.0
++WESTON_VERSION = 15.0.1
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
