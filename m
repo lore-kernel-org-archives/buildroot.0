@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6602CD5BD1
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41906CD5BD1
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 07:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C3CA82105;
-	Sun, 31 May 2026 06:59:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0FEC851F1;
+	Sun, 31 May 2026 07:01:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E19e-jKzojS8; Sun, 31 May 2026 06:59:50 +0000 (UTC)
+ id BRP3DU1iBc0Y; Sun, 31 May 2026 07:01:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80AC820DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4076E847BF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780210789;
-	bh=o7XnO2UJyQvtOgPkPmfRhYth8ixKQCxdxW80BMjlpbE=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=K4NmLRLeg0r5o6Ln/lI2OjAH5R31cyF0GxNJtuxW9ek1q4CjcFarBV4s9N065HQfK
-	 ftLlEoI0mAGd4xAIjQukITa56vdkVcT3oO+/d7QzA9ngsSOo/cn10Dd/4ChldlXHQO
-	 AcgM2n/7g/wym5Q1nxBE4BV46scaiQ8x4DPfR+dBLMrD8Mvr2ePJR4d4U4JtJdPGIZ
-	 fvGjhCU1inmzV7dPBbIVZYeP3nywdJiwosPMeSYXnHr3A4QZHrQLPanpc2xxzLc8me
-	 x19nVp6MDczowtVdJoJUkkoOZRnNolvaa1JfJ9WbCA23vKdsqkMtqZh/OQk20N5umT
-	 rOeapRp6qFI9A==
+	s=default; t=1780210866;
+	bh=zPpaw2BnGpviwmZHgM9Rk92vQtcdWkPn/g0CXUz8s6E=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=n3vRoruc1jqszcjd1/0KnlQK7CSx+AAXDhIdkZr/WTMoIc7vPphxI0fsHNWk3DwjH
+	 jH/w5a6/lCfMDxGK3ZTEZvHmWYNBFUvO5dkbdypVRxoLwrifzy7U6tK2exCm1hmGkc
+	 PgFD7CmEWCx8Jhoidgb86plgmeAGCAkTe7ELG0fHa0LzczSy3BrY2hgjkeXXbO1Bmb
+	 OnCiM+h123i2tu+/0Nr3B0sgIj22dP9tGvqmVKFEnvRE+4ozI4NnLAAcMQ/7yCvrHB
+	 8iElF+APldJr4cUVlpPwskeOaII6p5GZn1qx171U34v9ONu9ahNdl8pFCxYTm3025P
+	 sx62nyJeag+0w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D80AC820DE;
-	Sun, 31 May 2026 06:59:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4076E847BF;
+	Sun, 31 May 2026 07:01:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E98D5389
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:59:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CABBF4
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 07:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DACD240422
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:59:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1223440422
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 07:01:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S9BBoj_XXrGb for <buildroot@buildroot.org>;
- Sun, 31 May 2026 06:59:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id bIVTg6St-E9j for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 07:01:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B4A94403DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4A94403DA
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B4A94403DA
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:59:47 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1407965492; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 31 May 2026 06:59:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wTa97-00000006gZW-2UoU;
- Sun, 31 May 2026 08:59:41 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68ED3403DA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68ED3403DA
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 07:01:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0BAE0876A2; Sun, 31 May 2026 07:00:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260118140107.2331715-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 18 Jan 2026 15:01:07 +0100")
-References: <20260118140107.2331715-1-bernd@kuhls.net>
-Date: Sun, 31 May 2026 08:59:41 +0200
-Message-ID: <87ik84dpya.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=aQf//OCFZ2QL2phw/nTKRe7cAZMsQvv/npXOTEo9W4NnNeJPlnNlsSGzZBA55/Lr9cxXaHMWrKmmR1oxBoNpkFy7D6rL2qTwfITdJiCuUyYXesMJ4gTEZbxwoD9fTstbWP4OMrAIiDo4wNjtsv01Tgmb7AS3cZEbXd8L7zOFCfAQdjkaDseMCvo0P0NJlqwQ5dTOrY8x4zy2BedyPWOi2yWYAqKb2jHS2UAHxF1u+7Xhc9vJ1z2M19cUQI6D87f3+9aM97am9EA2vnqfoDTkU02IGhHRTOOu2Dfyt8br/14YdzYyIwRtB5Nst6EIsryIBAKNmBXM4so3Dwt+Vw8uEQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=+QuGVrGMfjBFKsLuvPTDouKapL+rBq8aaMuP8nGkN0k=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=aQf//OCF
-Subject: Re: [Buildroot] [PATCH 1/1] package/lua-sdl2: fix cmake 4
- compatibility
+To: buildroot@buildroot.org
+Date: Sun, 31 May 2026 09:00:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 299567b78eb393b0b90a28c208f7b1716a8a1f7b
+X-Git-Newrev: ce3b3bf876a527da0e4be925ae28f3d40c25c250
+X-Patchwork-Hint: ignore
+Message-Id: <20260531070051.0BAE0876A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-sdl2: fix cmake 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,22 +69,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ce3b3bf876a527da0e4be925ae28f3d40c25c250
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > Fixes:
- > https://autobuild.buildroot.net/results/f75/f75d1d0b83c90c0cb5dc7781ea8ce7ff1d67512a/
+Fixes:
+https://autobuild.buildroot.net/results/f75/f75d1d0b83c90c0cb5dc7781ea8ce7ff1d67512a/
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...use-a-better-FindSDL2-based-on-components.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
+new file mode 100644
+index 0000000000..ce3a96e5a3
+--- /dev/null
++++ b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
+@@ -0,0 +1,29 @@
++From 8bb1cbb2b346502d6285a40e25e52d3e41551afb Mon Sep 17 00:00:00 2001
++From: David Demelier <markand@malikania.fr>
++Date: Sun, 24 Jan 2021 14:28:15 +0100
++Subject: [PATCH] cmake: use a better FindSDL2 based on components
++
++Upstream: https://github.com/Tangent128/luasdl2/commit/feb49bb1eea77aa953313f2a641576e515f0ec3b
++
++[Bernd: Partially backported to fix build error with cmake 4]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f5b59de..cc28bdf 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -17,7 +17,7 @@
++ # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ #
++ 
++-cmake_minimum_required(VERSION 2.8)
+++cmake_minimum_required(VERSION 3.10)
++ project(Lua-SDL2 C)
++ 
++ # Project information
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
