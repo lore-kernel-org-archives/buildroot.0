@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72361CD5BD1
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C2ACD6E51
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 486EA84BB1;
-	Sun, 31 May 2026 06:21:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC2F584E54;
+	Sun, 31 May 2026 06:25:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZjuPBPle_eW; Sun, 31 May 2026 06:21:08 +0000 (UTC)
+ id 2usBfDz5aDEj; Sun, 31 May 2026 06:25:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 729E884BB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C88984E5C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780208468;
-	bh=wCez3NOKENQIoNPE5rLw6dx1siQ2be/etXP1Bxmxty8=;
+	s=default; t=1780208731;
+	bh=l0xhsUikPufs7xDkxT392VZfAuVw325Vqa2YKFgz6tY=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=LIeYdcYfdqqawX8ZSLU+/zpwtyCaBZQJShGijshBtaN9IvJ+VkxTiRjNmnFT7SmHf
-	 zbwIWx5idgNsqI487PUEG0FLqHksV5cTUakRt4BPkgxkgA50q8aPDTXaD6qwt71dfS
-	 i3/f1sZNXJcnQnFGjBJ1yqxNiSo/UOvacjbjR6alagc5LnG8etCeIrYP0VohTOHk9/
-	 jFdEUk/6GhCEuZlLV8k/LrZS4mWrHOUZ62RS4IelXsvQanF1s2Ev+Co2xgFkdJgBT1
-	 pQpgQvke/MMiYcUP9ieUSJLo/lI/V3aIuytt1aft074T/wyNcTmWxytJPrPtzvFjwe
-	 3YNYIZH1Cuchw==
+	b=h90AZR4wJw8XBCwYF/ZbFZQ33WfWZYdl+Ite3dzhfX76z1KVABNMtUYg2X5iYrT2o
+	 B6+0l4JEPw4F9oYELtezyhhtJLN8XBjSJjAQ7mKGDiRM+6J+B7TX8pk2XrYzToMPlb
+	 TEpdsmVD+k7xela8VWBKqs4j/jbwJFrVsuDD4jTGSmpq84bPjTHdsvM6jDq7bSUKqs
+	 aVe5HD7q8/J5FdLL5bog119ae7bNecSJekd4MytAQZtwdjLgcGLpNGo2f9KSCGGt9l
+	 a4u60XoULvBdjIKKxCBjsZ8oJRgyIkLQ1dH2vBlt3qdyI9xINnmfyKRXPaC/HVMcrm
+	 Im+SmGr4JvseA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 729E884BB8;
-	Sun, 31 May 2026 06:21:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C98E257
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:21:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C88984E5C;
+	Sun, 31 May 2026 06:25:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 167D7389
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 851CB401EF
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:21:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08479429C2
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gl8ppxE-PDEb for <buildroot@buildroot.org>;
- Sun, 31 May 2026 06:21:05 +0000 (UTC)
+ id KJS6hNGQwQ6b for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 06:25:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 63ACD405A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63ACD405A3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CA54F429BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA54F429BE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 63ACD405A3
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:21:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CA54F429BE
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8597BA4C115A;
- Sun, 31 May 2026 08:21:03 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:38400)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B592FA4C115A;
+ Sun, 31 May 2026 08:25:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50040)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wTZXj-000000007s4-2LJp;
- Sun, 31 May 2026 06:21:03 +0000
+ (envelope-from <bernd@kuhls.net>) id 1wTZby-000000000BO-33DC;
+ Sun, 31 May 2026 06:25:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 31 May 2026 08:21:03 +0200
-Message-ID: <20260531062103.7093-1-bernd@kuhls.net>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 31 May 2026 08:25:23 +0200
+Message-ID: <20260531062526.7792-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202605290044; t=1780208463;
- bh=HMi4RaASpavIB22IXJYYTpLADTu2aB8s/Ed6Su1xT/8=;
+ s=kas202605290044; t=1780208726;
+ bh=s0Sm/9w10exaDwl8JjRMQcxgu2fh6YLVkWu4Akm3GBM=;
  h=From:To:Cc:Subject:Date:From;
- b=EnzQdHT92saUp3O6Bx+QDGitOmbw3eN7yP5VNKfJBmEsIygGwyJC+H5SSE2OtL5hD
- VN5H8sgU0mrLde9kym9qSxr8b4t0lELZC0j70aKEmdehvS+pK2uFUd/o4Arys/Y8Ie
- lxI699QR3cemL76VMFVz4qy/P177XBkCiQYaNS13F7IjxCk4/lniwWXGRLOKhCMjLa
- Qc2sXSToD0JwdBB0C7ixXQ7+FSniubaEHGLwejt3HDx4+1/UfUr+uqmVSqLUpCNpvs
- aQP2ZWyPK7pHsg+24IRxJ1E37yPKXz2wUlSO2Y5RoHgnyBIlCMRhr1OtNSBKE0p9z5
- ppJSZX2XdXT6w==
+ b=j2nIc80K2VTx4OCya0M5hg9OAIjttXozWVjgMXhMznPypHje9WHVilpaN3e4SgfpN
+ FsL8CKWxdwd6lB6/nCy21/KYohMWImzQf2HDL4fB1oTT3MbOroAWQNK31TeOOuKKx+
+ ya/0YjaVc0MDVvxy99Qg4Qk+TzbSVgspAmEfFuSw1vCYxyhVvcZYRkVepk5+Dmds5d
+ ENhCjEK7fAdBhnzk+4mnj26dzTX+pf3ewwxCrZ4UQFv5aofBVT0OSlDQmY8qpWcfP2
+ Rb3w4uMpMWKB+pneaDVvDeWqxXO6M8q1ijhuG3S8AgC9Skdo/+tLD2MfecsA8/sbso
+ bZRiZgKny5kGw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=EnzQdHT9
-Subject: [Buildroot] [PATCH/next v2 1/1] package/lensfun: bump version
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=j2nIc80K
+Subject: [Buildroot] [PATCH/next v2 1/4] package/pipewire: bump version to
+ 1.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,107 +92,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Last release dates back to Jul 2023 with >3000 commits since then:
-https://github.com/lensfun/lensfun/issues/2634
-
-Removed patch which is included in this version.
-
-Renamed CMake option PYTHON to INSTALL_PYTHON_MODULE:
-Upstream renamed PYTHON to PYTHONINTERP_FOUND with commit
-https://github.com/lensfun/lensfun/commit/824b9d36c13f97b415a94d271e35c815ea576b21
-and later guarded the python code with a new CMake option
-INSTALL_PYTHON_MODULE which we now use.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/3a36bc303f757b5941ae0a859f56b2626c832965
-
- package/lensfun/0001-cmake4.patch | 29 -----------------------------
- package/lensfun/lensfun.hash      |  2 +-
- package/lensfun/lensfun.mk        |  8 +++++---
- 3 files changed, 6 insertions(+), 33 deletions(-)
- delete mode 100644 package/lensfun/0001-cmake4.patch
-
-diff --git a/package/lensfun/0001-cmake4.patch b/package/lensfun/0001-cmake4.patch
-deleted file mode 100644
-index d7973f4cb7..0000000000
---- a/package/lensfun/0001-cmake4.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 011de2e85813ff496a85404b30891352555de077 Mon Sep 17 00:00:00 2001
--From: Jonas <git@jonas-ott.de>
--Date: Fri, 17 Feb 2023 18:26:01 +0100
--Subject: [PATCH] cmake: use FindPython3 (#1983)
--
--@jonas-ott Thank you for contributing!
--
--Upstream: https://github.com/lensfun/lensfun/commit/011de2e85813ff496a85404b30891352555de077
--
--[Bernd: partial backport to version 0.3.4]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- CMakeLists.txt       |  4 ++--
-- apps/CMakeLists.txt  | 55 +++++++++++++++++++++-----------------------
-- tests/CMakeLists.txt |  4 ++--
-- 3 files changed, 30 insertions(+), 33 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 5ccb9976d..7bb7a6878 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,5 +1,5 @@
---# require at least cmake 2.8.12
---CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR )
--+# require at least cmake 3.12
--+CMAKE_MINIMUM_REQUIRED(VERSION 3.12 FATAL_ERROR)
-- 
-- # path for helper modules
-- set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules")
-diff --git a/package/lensfun/lensfun.hash b/package/lensfun/lensfun.hash
-index 5cb4fe37cd..f73ea46e17 100644
---- a/package/lensfun/lensfun.hash
-+++ b/package/lensfun/lensfun.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112  lensfun-0.3.4.tar.gz
-+sha256  656fb82a0501616b4024854fc716f004cf07d28443ee09fcf436afb6722da561  lensfun-268821c02495c0ffff8332417f0d59bdbefa545d.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  docs/gpl-3.0.txt
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  docs/lgpl-3.0.txt
-diff --git a/package/lensfun/lensfun.mk b/package/lensfun/lensfun.mk
-index 59f008ce6d..d9b4faa8d5 100644
---- a/package/lensfun/lensfun.mk
-+++ b/package/lensfun/lensfun.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LENSFUN_VERSION = 0.3.4
--LENSFUN_SITE = $(call github,lensfun,lensfun,v$(LENSFUN_VERSION))
-+LENSFUN_VERSION = 268821c02495c0ffff8332417f0d59bdbefa545d
-+LENSFUN_SITE = $(call github,lensfun,lensfun,$(LENSFUN_VERSION))
- LENSFUN_LICENSE = LGPL-3.0+ (libraries), GPL-3.0+ (programs)
- LENSFUN_LICENSE_FILES = docs/gpl-3.0.txt docs/lgpl-3.0.txt
- LENSFUN_INSTALL_STAGING = YES
-@@ -42,6 +42,8 @@ endif
- 
- # Don't install helper scripts (which require python3 and gksudo).
- # Don't run setup.py on the host.
--LENSFUN_CONF_OPTS += -DINSTALL_HELPER_SCRIPTS=OFF -DPYTHON=OFF
-+LENSFUN_CONF_OPTS += \
-+	-DINSTALL_HELPER_SCRIPTS=OFF \
-+	-DINSTALL_PYTHON_MODULE=OFF
- 
- $(eval $(cmake-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmVsZWFzZSBub3RlczoKaHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL3BpcGV3aXJlL3Bp
+cGV3aXJlLy0vYmxvYi8xLjYuNi9ORVdTCgpmZm1wZWcgc3VwcG9ydCBuZWVkcyBzd3NjYWxlIHN1
+cHBvcnQ6Cmh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9waXBld2lyZS9waXBld2lyZS8t
+L2NvbW1pdC8yY2JjZGJjNTc5YmJmZmE2ODIwODhmYmVkYmNhMTBlMjc4ZTA2MWRkCgpSZW5hbWVk
+IGNvbmZpZ3VyZSBvcHRpb24gJ3N5c3RlbWQnIHRvICdsaWJzeXN0ZW1kJyBkdWUgdG8gY29tbWl0
+Cmh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9waXBld2lyZS9waXBld2lyZS8tL2NvbW1p
+dC9mMmM4NzhhMmMxNzVkMGJlY2U0NTcxZGY2OTFhOGFmMDJlN2EzYWI3CgpEaXNhYmxlZCBqYWNr
+MiBzdXBwb3J0IGZvciB1Q2xpYmMgdG8gZml4IGEgYnVpbGQgZXJyb3I6CgouLi9waXBld2lyZS1q
+YWNrL3NyYy9waXBld2lyZS1qYWNrLmM6MTM6MTA6IGZhdGFsIGVycm9yOiB0aHJlYWRzLmg6IE5v
+IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKICAgMTMgfCAjaW5jbHVkZSA8dGhyZWFkcy5oPgoKUmVt
+b3ZpbmcgdGhpcyBpbmNsdWRlIHdpbGwgbm90IGZpeCB0aGUgcHJvYmxlbToKCi4uL3BpcGV3aXJl
+LWphY2svc3JjL3BpcGV3aXJlLWphY2suYzoxMjc6MjA6IGVycm9yOiBleHBlY3RlZCDigJg74oCZ
+IGJlZm9yZSDigJhmbG9hdOKAmQogIDEyNyB8IHN0YXRpYyB0aHJlYWRfbG9jYWwgZmxvYXQgbWlk
+aV9zY3JhdGNoW01JRElfU0NSQVRDSF9GUkFNRVNdOwoKRml4ZXM6Cmh0dHBzOi8vYXV0b2J1aWxk
+LmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8yMTcvMjE3ZjQ1MDBhN2RhZGYwODliOTA0MzhlMWViMDZh
+YWE5YzUwZjRjNS8KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+
+Ci0tLQp2MjogR2l0bGFiIHBpcGVsaW5lcyBwYXNzZWQ6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9ia3Vo
+bHMvYnVpbGRyb290Ly0vY29tbWl0cy8xMzI5YTEzMDdiMmNhZWI5ODliOTBmNTIyODlkMmRlY2Zj
+NGY2Y2UxCgogcGFja2FnZS9waXBld2lyZS9Db25maWcuaW4gICAgIHwgMSArCiBwYWNrYWdlL3Bp
+cGV3aXJlL3BpcGV3aXJlLmhhc2ggfCAyICstCiBwYWNrYWdlL3BpcGV3aXJlL3BpcGV3aXJlLm1r
+ICAgfCA5ICsrKysrLS0tLQogMyBmaWxlcyBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDUgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9waXBld2lyZS9Db25maWcuaW4gYi9wYWNr
+YWdlL3BpcGV3aXJlL0NvbmZpZy5pbgppbmRleCA5ZDJkZTZjODY2Li4zOGEzMjFkNTAwIDEwMDY0
+NAotLS0gYS9wYWNrYWdlL3BpcGV3aXJlL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL3BpcGV3aXJl
+L0NvbmZpZy5pbgpAQCAtNyw2ICs3LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1BJUEVXSVJFCiAJ
+c2VsZWN0IEJSMl9QQUNLQUdFX0FMU0FfTElCX1VDTSBpZiBCUjJfUEFDS0FHRV9BTFNBX0xJQgog
+CXNlbGVjdCBCUjJfUEFDS0FHRV9BTFNBX0xJQl9TRVEgaWYgQlIyX1BBQ0tBR0VfQUxTQV9MSUIK
+IAlzZWxlY3QgQlIyX1BBQ0tBR0VfQkxVRVo1X1VUSUxTX1BMVUdJTlNfQVVESU8gaWYgQlIyX1BB
+Q0tBR0VfQkxVRVo1X1VUSUxTICMgcnVudGltZQorCXNlbGVjdCBCUjJfUEFDS0FHRV9GRk1QRUdf
+U1dTQ0FMRSBpZiBCUjJfUEFDS0FHRV9GRk1QRUcKIAloZWxwCiAJICBQaXBlV2lyZSBpcyBhIHNl
+cnZlciBhbmQgdXNlciBzcGFjZSBBUEkgdG8gZGVhbCB3aXRoCiAJICBtdWx0aW1lZGlhIHBpcGVs
+aW5lcy4KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGlwZXdpcmUvcGlwZXdpcmUuaGFzaCBiL3BhY2th
+Z2UvcGlwZXdpcmUvcGlwZXdpcmUuaGFzaAppbmRleCAyZTZhOWFlM2FhLi44ZTcwMWJmZDRiIDEw
+MDY0NAotLS0gYS9wYWNrYWdlL3BpcGV3aXJlL3BpcGV3aXJlLmhhc2gKKysrIGIvcGFja2FnZS9w
+aXBld2lyZS9waXBld2lyZS5oYXNoCkBAIC0xLDQgKzEsNCBAQAogIyBMb2NhbGx5IGNhbGN1bGF0
+ZWQKLXNoYTI1NiAgNzY3MGY2MTcyMjBjYzA1Mzk0OGZjOGYyYzFmZjc4ODE5MjQ3OWVmNWQ0ZjM3
+M2Q4NzhhYzhhN2NhYjc2YTcxYyAgcGlwZXdpcmUtMS4yLjgudGFyLmJ6Mgorc2hhMjU2ICAyZmRm
+MDczODY5YmQxNzFkMjlhOTJkYzY4NTc5Nzk4NjRiNTNlM2RjMWE3OWFjNzZjMTVkYjc4ZTViMTJk
+OWY4ICBwaXBld2lyZS0xLjYuNi50YXIuYnoyCiBzaGEyNTYgIDg5MDljMzE5YTdlMjdkYmIzM2Ex
+NWI5MDM1Zjg5YWIzYjdiMmY2YTEyZjhiY2RkYzc1NTIwNmE4ZGIxYWRhNDQgIENPUFlJTkcKIHNo
+YTI1NiAgYmU0YmU1ZDc3NDI0ODMzZWRmMzFmNTNmYzFmMWNlY2I2OTk2YjllMmQ3NDdkOWU2ZmI4
+Zjg3ODM2MmViYzkyYiAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9waXBld2lyZS9waXBl
+d2lyZS5tayBiL3BhY2thZ2UvcGlwZXdpcmUvcGlwZXdpcmUubWsKaW5kZXggYzFkYzJhYTBjYy4u
+YzUxMjdiOWE5ZCAxMDA2NDQKLS0tIGEvcGFja2FnZS9waXBld2lyZS9waXBld2lyZS5taworKysg
+Yi9wYWNrYWdlL3BpcGV3aXJlL3BpcGV3aXJlLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMKIAotUElQRVdJUkVfVkVSU0lPTiA9IDEuMi44CitQSVBFV0lSRV9W
+RVJTSU9OID0gMS42LjYKIFBJUEVXSVJFX1NPVVJDRSA9IHBpcGV3aXJlLSQoUElQRVdJUkVfVkVS
+U0lPTikudGFyLmJ6MgogUElQRVdJUkVfU0lURSA9IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9w
+Lm9yZy9waXBld2lyZS9waXBld2lyZS8tL2FyY2hpdmUvJChQSVBFV0lSRV9WRVJTSU9OKQogUElQ
+RVdJUkVfTElDRU5TRSA9IE1JVCwgTEdQTC0yLjErIChsaWJzcGEtYWxzYSksIEdQTC0yLjAgKGxp
+YmphY2tzZXJ2ZXIpCkBAIC03MCwxMyArNzAsMTMgQEAgZW5kaWYKIAogaWZlcSAoJChCUjJfUEFD
+S0FHRV9TWVNURU1EKSx5KQogUElQRVdJUkVfQ09ORl9PUFRTICs9IFwKLQktRHN5c3RlbWQ9ZW5h
+YmxlZCBcCisJLURsaWJzeXN0ZW1kPWVuYWJsZWQgXAogCS1Ec3lzdGVtZC1zeXN0ZW0tc2Vydmlj
+ZT1lbmFibGVkIFwKIAktRHN5c3RlbWQtdXNlci1zZXJ2aWNlPWVuYWJsZWQKIFBJUEVXSVJFX0RF
+UEVOREVOQ0lFUyArPSBzeXN0ZW1kCiBlbHNlCiBQSVBFV0lSRV9DT05GX09QVFMgKz0gXAotCS1E
+c3lzdGVtZD1kaXNhYmxlZCBcCisJLURsaWJzeXN0ZW1kPWRpc2FibGVkIFwKIAktRHN5c3RlbWQt
+c3lzdGVtLXNlcnZpY2U9ZGlzYWJsZWQgXAogCS1Ec3lzdGVtZC11c2VyLXNlcnZpY2U9ZGlzYWJs
+ZWQKIGVuZGlmCkBAIC0xMDAsNyArMTAwLDggQEAgZWxzZQogUElQRVdJUkVfQ09ORl9PUFRTICs9
+IC1EYXZhaGk9ZGlzYWJsZWQKIGVuZGlmCiAKLWlmZXEgKCQoQlIyX1BBQ0tBR0VfSkFDSzIpLHkp
+CisjIHVDbGliYyBkb2VzIG5vdCBpbXBsZW1lbnQgdGhyZWFkX2xvY2FsCitpZmVxICgkKEJSMl9Q
+QUNLQUdFX0pBQ0syKTokKEJSMl9UT09MQ0hBSU5fVVNFU19VQ0xJQkMpLHk6KQogUElQRVdJUkVf
+Q09ORl9PUFRTICs9IC1EcGlwZXdpcmUtamFjaz1lbmFibGVkIC1EamFjaz1lbmFibGVkCiBQSVBF
+V0lSRV9ERVBFTkRFTkNJRVMgKz0gamFjazIKIGVsc2UKLS0gCjIuNDcuMwoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
