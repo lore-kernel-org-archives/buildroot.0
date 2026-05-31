@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DF2ACD5BD1
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5115ECD5BD1
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18B4561AAF;
-	Sun, 31 May 2026 06:25:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2844161C13;
+	Sun, 31 May 2026 06:25:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sYQy9z416dPy; Sun, 31 May 2026 06:25:44 +0000 (UTC)
+ id X7Vn02qbn3LO; Sun, 31 May 2026 06:25:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC2D61AC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB62861BDA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780208744;
-	bh=DrI4gKg+8vaBWN92SpEk1avzw7/f08L1lj3+6z17G/s=;
+	s=default; t=1780208757;
+	bh=/k7xRsrqNZlCazTzCcnzsu1s33C6tvuHpqqJdD4C0l4=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=EpEZ1ohU0BOOJKR1v+GjLP3l7xrLkrJjXobc6uAWFRhJeJsNMI1XEsRZAcvJH4XKN
-	 D6Y4VKRYRbJH1vTGUy8nw7rJAvaHonFBONCfuuqo58eJbck2o6f+uRcB5p5fNuUWt5
-	 Jf0gdbN0+YLQrgcSCdSiF01juTxiRwA7y0OgL7gpgmWKnPJrnL3+hHMjMMiF9y5AAe
-	 nmQ0SV2I2k12tbWtjk7YF5tYHefZLnpAKpnyIeiMq/BWxraU7veNweaAIaNsmfQuB+
-	 PYa1z7hwKJqQ7hLku5idXJqpLbXP7rxaGk8O7pMiu3I0suQmie3xXon0LZFYkx+Y+W
-	 iEvDb2gWSD9ag==
+	b=MBhm0h0VBJnitfKkQDW7ZB6XzZJjNMsEDRJ8+x5oAq6LdkFaOoOMFOnN95hp5vSEk
+	 7nxuwid0ahieYIiAm7Q8ifoqnxjYO9JpszJjPrbp9t+hmORU9uLOxfx/igbreMwflD
+	 kLZlAb5z1t5YSH/A6tYQtM5feyOjaggbS6kfmX+w4Lzd7RT4333JM0B7WFJ0S5GKH3
+	 Aj87RncbeqZ3/xtdsuUfhA6z8lYzXIFRxp88qd39aD9T9bKs+TeYlnSTJ+P7ei8YNj
+	 r0rhUrOdyn4mxy9pVhF0hDZnzX9cIRukvS4OsevTkxbvD5LmMtYKJkj2HDS/ePfd1m
+	 SB5XbGL0ok65A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FC2D61AC4;
-	Sun, 31 May 2026 06:25:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CB6C3257
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB62861BDA;
+	Sun, 31 May 2026 06:25:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C8AB257
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B11FB84F4D
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2230E40438
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OJWByYvtX9iU for <buildroot@buildroot.org>;
- Sun, 31 May 2026 06:25:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4K6clebA586O for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 06:25:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A15BB84F4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A15BB84F4C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0860F40422
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0860F40422
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A15BB84F4C
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0860F40422
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:25:54 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CEDDEA4C35B9;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D3A10A4C3914;
  Sun, 31 May 2026 08:25:26 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50040)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wTZby-000000000BO-3U5D;
+ (envelope-from <bernd@kuhls.net>) id 1wTZby-000000000BO-3q10;
  Sun, 31 May 2026 06:25:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 31 May 2026 08:25:24 +0200
-Message-ID: <20260531062526.7792-2-bernd@kuhls.net>
+Date: Sun, 31 May 2026 08:25:25 +0200
+Message-ID: <20260531062526.7792-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260531062526.7792-1-bernd@kuhls.net>
 References: <20260531062526.7792-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202605290044; t=1780208726;
- bh=TPu4vfQNHIUbCddvK/YrdwGVS7QfBknMLmilODzH3V0=;
+ bh=F+FbtvRxOjFTTSYY5BzXP0guqhYxOCU5y5SYQdhNZy0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=MaCf1athmvfdlCYhe3f60czeS1YdxFWMvOVBavar1Tf6AnZ6eik250t1LLk1kHYCI
- wyLAkxTVcv3hSqxWFijeP2BXXRP/7tW+POTfjJPFdIdFNU4/dJibtB6cJPuvF+YuaW
- N3Oo/k964PsJRzS0Knh2TzsNif2+AdMedsGEm3fo9wsCXla0m08rTGTxt4kInZLS1Y
- 4I7ldRwFtmO/I6NqGq+cG3aaLY4gBoVajyTdM8DRc8SHZtOGOfDR09GCkg8fgnxb0p
- r8JC+cbvaQW+YoDCGt23K7kYLyE9GO91SglgHfeFUdXat/+/O3mDfBezsDi/e8ojGU
- 09AB3YaPA8bOw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=DhthSSQGaudpVHPzPeD/zwbG69ddh2g10BSlBsvNRV+AjiAb6qdyKpR5Rr9f8Y8gJ
+ 2yitslSv5BGHsnjSi/Ve12hM+MC13cWP1NlPg2c1ZlioWM/4mxW+8oOX2gygNhOCaG
+ DRSQpFNOo75BPiqBfVXOurGOP+Br6eA6nrqUxSh+Khult+53FljKSs2+O7JT/h3osk
+ mrhqlMPX3dDIt//1HEB9yf74w8AH8DABRjJZ9Z2EIduy41VXYJO9KGS7WIzj/8YRLD
+ MrQ3Q/wTUNMMoM6cIQpWomUpzQX7VUFWj5rHWjnfdBPDfqmnSTQ1nRAr57+zu86szE
+ qvU2T5h7rSa5Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=MaCf1ath
-Subject: [Buildroot] [PATCH/next v2 2/4] package/wireplumber: mark broken on
- uClibc
+ header.s=kas202605290044 header.b=DhthSSQG
+Subject: [Buildroot] [PATCH/next v2 3/4] package/wireplumber: bump version
+ to 0.5.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,51 +96,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Li4vbGliL3dwL2xvZy5jOjc4MDo0OTogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1
-bmN0aW9uIOKAmGdldHRpZOKAmTsKIGRpZCB5b3UgbWVhbiDigJhnZXRnaWTigJk/IFstV2ltcGxp
-Y2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQogIDc4MCB8ICAgZ19hdXRvZnJlZSBnY2hhciAqdGlk
-ID0gZ19zdHJkdXBfcHJpbnRmKCIlZCIsIGdldHRpZCgpKTsKClRoZSBwcm9ibGVtIHdhcyBoaWRk
-ZW4gYnkgcGlwZXdpcmUgYmVpbmcgYnJva2VuIHdpdGggdUNsaWJjIHNpbmNlIGF0CmxlYXN0IFNl
-cCAyMDI0OiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvZWU1L2VlNTBj
-ODMzMTk0NjgxNGMyZmVjYjBjYTU2Y2E1MWMxYmIwYmM1NTEvCgpQaXBld2lyZSB3YXMgYnVtcGVk
-IGZyb20gMC4zLjgxIHRvIDEuMi4yIGluIEF1ZyAyMDI0IHdpdGggYnVpbGRyb290IGNvbW1pdAo5
-M2I3MjY5MmMzNmY4MzU3ZTg2NzY1MGY0YjhmYWM5MWRmZjM3NWY1IHdoaWNoIGFmYWljcyBjYXVz
-ZWQgYWxsIHVDbGliYwpidWlsZHMgdG8gZmFpbCBkdWUgdG8gbWlzc2luZyB0c3NfdCgpIHdob3Nl
-IHVzYWdlIHdhcyBhZGRlZCB0byBwaXBld2lyZSBpbgp2ZXJzaW9uIDEuMS44MSAoaHR0cHM6Ly9n
-aXRsYWIuZnJlZWRlc2t0b3Aub3JnL3BpcGV3aXJlL3BpcGV3aXJlLy0vY29tbWl0LwpkZTBkYjQ4
-ZjE3YWEzOTE5MTdmZjViNDMwYjdiOWZlMWRhYzQ0M2ZlKSBhbmQgbGF0ZXIgcmVtb3ZlZCB3aXRo
-IGh0dHBzOi8vCmdpdGxhYi5mcmVlZGVza3RvcC5vcmcvcGlwZXdpcmUvcGlwZXdpcmUvLS9jb21t
-aXQvCjljMTkyODRmN2YwNjJhNTBlMDU5YjA1OTMwNjg0MjliMzQ1YWNmMzQgaW4gdmVyc2lvbiAx
-LjMuODEuCgpJbiB3aXJlcGx1bWJlciB0aGUgcmVsZXZhbnQgcGFydCBvZiBjb2RlIHdpdGggZ2V0
-dGlkKCkgd2FzIGFkZGVkIGluCnZlcnNpb24gMC41LjkuIEJ1aWxkcm9vdCBidW1wZWQgd2lyZXBs
-dW1iZXIgZnJvbSAwLjUuNSBkaXJlY3RseSB0byAwLjUuMTAKd2l0aCBjb21taXQgYzQyYjI2YmI0
-NzFhMjYwZTJiYjNkYTc5ODhhZjc3Zjc4YjJiNDI4MC4KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1
-aGxzIDxiZXJuZEBrdWhscy5uZXQ+Ci0tLQp2MjogR2l0bGFiIHBpcGVsaW5lcyBwYXNzZWQ6Cmh0
-dHBzOi8vZ2l0bGFiLmNvbS9ia3VobHMvYnVpbGRyb290Ly0vY29tbWl0cy8xMzI5YTEzMDdiMmNh
-ZWI5ODliOTBmNTIyODlkMmRlY2ZjNGY2Y2UxCgogcGFja2FnZS93aXJlcGx1bWJlci9Db25maWcu
-aW4gfCA0ICsrKy0KIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
-LSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3dpcmVwbHVtYmVyL0NvbmZpZy5pbiBiL3BhY2thZ2Uv
-d2lyZXBsdW1iZXIvQ29uZmlnLmluCmluZGV4IDY1MjhhMmUxMDIuLjVmMDdhN2M2NjQgMTAwNjQ0
-Ci0tLSBhL3BhY2thZ2Uvd2lyZXBsdW1iZXIvQ29uZmlnLmluCisrKyBiL3BhY2thZ2Uvd2lyZXBs
-dW1iZXIvQ29uZmlnLmluCkBAIC00LDYgKzQsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfV0lSRVBM
-VU1CRVIKIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xVQV81XzMgfHwgQlIyX1BBQ0tBR0VfTFVB
-XzVfNAogCWRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGxpYmdsaWIyCiAJZGVwZW5kcyBvbiBC
-UjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgbGliZ2xpYjIKKwlkZXBlbmRzIG9uICFCUjJfVE9P
-TENIQUlOX1VTRVNfVUNMSUJDICMgZ2V0dGlkCiAJZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGxp
-YmdsaWIyCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdMSUIyCiAJaGVscApAQCAtMTUsOCArMTYs
-OSBAQCBjb25maWcgQlIyX1BBQ0tBR0VfV0lSRVBMVU1CRVIKIAogCSAgaHR0cHM6Ly9waXBld2ly
-ZS5wYWdlcy5mcmVlZGVza3RvcC5vcmcvd2lyZXBsdW1iZXIvCiAKLWNvbW1lbnQgIndpcmVwbHVt
-YmVyIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzIGFuZCBMdWEgPj0gNS4zIgor
-Y29tbWVudCAid2lyZXBsdW1iZXIgbmVlZHMgYSBnbGliYyBvciBtdXNsIHRvb2xjaGFpbiB3LyB3
-Y2hhciwgdGhyZWFkcyBhbmQgTHVhID49IDUuMyIKIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1BJ
-UEVXSVJFCiAJZGVwZW5kcyBvbiBCUjJfVVNFX01NVQogCWRlcGVuZHMgb24gIUJSMl9VU0VfV0NI
-QVIgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgXAorCQlCUjJfVE9PTENIQUlOX1VT
-RVNfVUNMSUJDIHx8IFwKIAkJKCFCUjJfUEFDS0FHRV9MVUFfNV8zICYmICFCUjJfUEFDS0FHRV9M
-VUFfNV80KQotLSAKMi40Ny4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+https://gitlab.freedesktop.org/pipewire/wireplumber/-/blob/0.5.14/NEWS.rst
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/1329a1307b2caeb989b90f52289d2decfc4f6ce1
+
+ package/wireplumber/wireplumber.hash | 2 +-
+ package/wireplumber/wireplumber.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/wireplumber/wireplumber.hash b/package/wireplumber/wireplumber.hash
+index a254b68cca..b180d9d2be 100644
+--- a/package/wireplumber/wireplumber.hash
++++ b/package/wireplumber/wireplumber.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c89fa29694e89939c0e57cade5c9a7da8e5da21c19071862978ef5f3a346f1e7  wireplumber-0.5.10.tar.bz2
++sha256  2807a9d1e97075ba10f8b7b8156e31175817d620fa7fc84442b5474123eff5db  wireplumber-0.5.14.tar.bz2
+ sha256  ff2eb9af5b05d92ac3a38cffcad27582ef555a31ff1781e1c1d4e087f77c9c81  LICENSE
+diff --git a/package/wireplumber/wireplumber.mk b/package/wireplumber/wireplumber.mk
+index 8818662059..2fc9098108 100644
+--- a/package/wireplumber/wireplumber.mk
++++ b/package/wireplumber/wireplumber.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREPLUMBER_VERSION = 0.5.10
++WIREPLUMBER_VERSION = 0.5.14
+ WIREPLUMBER_SOURCE = wireplumber-$(WIREPLUMBER_VERSION).tar.bz2
+ WIREPLUMBER_SITE = https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/$(WIREPLUMBER_VERSION)
+ WIREPLUMBER_LICENSE = MIT
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
