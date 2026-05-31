@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 043B0CD6E52
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 15:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70227CD6E5D
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 15:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2E2D60F63;
-	Sun, 31 May 2026 15:36:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43A8C844E8;
+	Sun, 31 May 2026 15:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v436j8zSevr1; Sun, 31 May 2026 15:36:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8eNTIa6XJ41U; Sun, 31 May 2026 15:36:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D260860F8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C4BD85070
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780241791;
-	bh=xzxD/o9mUQetlKL0ReVX53cnKX+ktckMQjY//10UUJE=;
+	s=default; t=1780241794;
+	bh=WkuHvZY4NDdr5h+TYR1NuV1jJFiI1MeK1JSuCu/WBP8=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=D6198hOW3as+U9pTMMwRp+s/qJQUAPMJaeRpuKJETm6OAOKbEsUlShQ3eR9N3jW1Z
-	 dter05aAHNxP4HN7dMMjf2VZ/cSH30n7EQXzj12GYl65+pihJ/puQZ+TzPADN6S9ZG
-	 HB2QtGjxEPorvmJ9Q9joyUgX/mZWL+pbIr6xz2VuVoyiRMR/MAJsjsFLwmOSGjhijz
-	 NW3GBSvzN4pGffId6VqkksSQT5HU1w/U82HLuRHsW4s/YtrKe3SyoCuDh6hcUDuqRe
-	 GjItS9EIOzoUWrPZDvnYzfIs3olUAybLu+GNWvZCaCxmkvPHcrREDJf5el5dJgboQ5
-	 0i+8JWHFJ1Teg==
+	b=oS0g5vKwVhsIsgY3eY+mMO766HyNIrOBEro+Y/FbByzEfoOpFFpRmbJYxgSrtgSU/
+	 1vPhP9gsNiS/HCgZ+pqT8E1S+NQe4UZNF8Kjo2wN5SfwiuSV91jhKZRSS+bmy+C3Ki
+	 778tZmgScfo561lGDH1/2bO8ae96IcZVPD33LcaWFl7aa8pmdblnADWk/86xcpPUYj
+	 xobY8TZ/5ge9RTJKG3nNUW/lg1jMrlUWcoO8xa5c5dytxmQVkHL+cJ4uYaF2VMpnwb
+	 4NJmOktUzG5O2TZNhzVddLj3SwQYcQTXpk7LRc6/PWlKTcCtK5fy03gPZsSgZ6KThm
+	 9yh/YcqccbcSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D260860F8B;
-	Sun, 31 May 2026 15:36:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EF54DF4
- for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C4BD85070;
+	Sun, 31 May 2026 15:36:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B30A5389
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC3FB405DC
- for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9672E40788
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3ZwWok4Udt0T for <buildroot@buildroot.org>;
- Sun, 31 May 2026 15:36:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K1W4MfPcwYK2 for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 15:36:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F522405D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F522405D8
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F522405D8
- for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:27 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-49050bfe053so60606305e9.3
- for <buildroot@buildroot.org>; Sun, 31 May 2026 08:36:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DC89E4077F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC89E4077F
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC89E4077F
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 15:36:28 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-49042aeeb75so111903695e9.1
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 08:36:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780241786; x=1780846586;
+ d=1e100.net; s=20251104; t=1780241787; x=1780846587;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=OkYFsdeVLPgp/Hjw8AZohN+9jJSds1Tb8FVjf2oB12U=;
- b=d7KduhQx3Ee2Eb5AkyEXRaDCUnJX2FK/VXQ0qeOxVENZprN0pFV0kXXFaRm6C9/+0B
- /c4WUKhHMwMwC0Em/8AuFgecGEGcrrIgt+47d3eVM/DhyThyQTfH+aTg7pan3P5HGHVS
- 4S11YowcSQnBcqh7/hJ/NTopRo6t4zFSXdvu8V9M+rlNSsXjklNgkNuFXyu5Dfs9VuQ/
- RWOKmUEOlJ2Halye17lTBx6dGYFxk83G9X/C8a5GN/uWbqlLwLyWPONM3mmxc5WFdxtk
- yBzTszObDe293HScbhu5NEIOn1glVuL2kXagiX9dUQZVzmc1EphV4O+6ceqlPr52TI96
- 1apw==
-X-Gm-Message-State: AOJu0Yw0AlsDof0EegqXN/WLnm7MdZAj88fD72uEbVnmdEjUXm/ReQ1r
- /6Yau3vntbT7WpLk6DMPDaR3HZhI6SVGqOkcfeEptMaqwnQNTich/SbvdDbvnqAiFUPBWGieAW4
- atQSWwnw=
-X-Gm-Gg: Acq92OEApGLWJpi8BuE/VAVYXQo3pIfQjtwJ/UVtU5Glo0QEyV2Sde+SBZqJkAnwfZF
- uEZFCshipScP7h4kSMOvKxB1jI+BlRVnIBeb1qV0hBiHfiY7rE/pzB1L8UkhRkveL14U/6LBzjX
- IoiOOqtD5/fvnVCGvjXwm+s9PW+ei0vZX5WKSBRwlbrTLjUPnfZk0UPQSszDNbKymOJzSRCpMKQ
- kSh+aM6przXJyFV6SGtvk5bhH/U/erJyS2Em2bAFfZF3Y7WDlmHSxTJOhx+U1Engzt/YC4hR0yB
- 9mNxuuMA+cQqRe0dGLDEOTjGrWzFHqiMGi4SPHwRX2sxBxj4NLYYbN/VM7+gpZLWcGEygR4OOH2
- zZH8Ex7Z4J9KCeSfvGDdZ0PKzb5z8DVwIy4AaswHplYmkkdSdlIyiCko75n8cxKE3lC6rw79K+l
- zY6u9fZO018mjCKvzcjrcUeMT/mkzlCaGHHBr2jt3UE1FwRfaBF8U7rbXsutp27ucmxoAzoAIqW
- ao2Wcse4+/GXAMWWKeRVbnzUFJY78aT
-X-Received: by 2002:a05:600c:314e:b0:48f:e518:d110 with SMTP id
- 5b1f17b1804b1-490a2968857mr138613585e9.32.1780241786196; 
+ bh=g6ZDOxh0G5c0vAaAIJbs3Bwcj29gtJRTG1vcHtbQZ4A=;
+ b=fESzramzyOOdliCyX6ZhjZRLvhSG32voR4E7LspMjgcMEPFuBKpgiW+2u0Ezy3U6qw
+ K8JQdvylI8CeKmJWbVnzE4YBdzytGXC9cule13f8s16kZEjhe75WK28djtnaN8TOIn0K
+ O8cV8ntf91zF//nU6x1LSbkwE9OwUd3QJCVXh3xw1azZJQLKC8tcVZUkdB+7RPyaMYOf
+ Y0FednZZlvRibf0b2QVis3ps0XFzCSFIOI+YD8Kc74WycLlI8TbF+91OG6K9CI8PqgcB
+ mxw9jklYKUW9ulGt3DfoM+fmxMRLdVPsdjhvF0FWD/YFcocEAUXVFgUVoGMQwfGoOcsP
+ 6f7A==
+X-Gm-Message-State: AOJu0YxFCMYDc0y6YefJgt5zCjeN34ZU6Aj17V2SxesEgaN92djXfzkn
+ dkX36hMF3mRjdH7wjOXbbi+vJKVV2I5/+sSovKa7s25usIiAXJQN4PpP9yNVLiLx4yIBDSA/alY
+ qvikENdc=
+X-Gm-Gg: Acq92OFqpHg2V8B2VsDWwefuC93DdbbHT901lzMxLzULizc0uUL8Jt3crOp9UEfOJws
+ nemgK5APGAPRHeq9Yo0uPAMgcNT1f8NoXCNLlUaDLcUPNsfcVg+19tDIbqY3hm7FrCQzSPq+F8f
+ Llufzp/HW9ALiMFcGH/GTAvIwIR9IqFEH2kwmX5o7SE91eALJHXUkb1QAe3/uJqDNGCnz9YjKEo
+ 8+oSdEI49EYStKIl9OncSjuQM27/z/x7/AUHEfc472E66yG9p9TA15N+SWTXbplpRqnSTJ8oMLK
+ 1R8M4g5s31oeF+rR3JbxxC6AquPwEJOjrZxhJZWYRNO1d2XFopttjks9ofn/YUM+d9Uyh/oWYU/
+ x4EaXjbSIwqAkTF7TJZ1tf7zwUqQUdZtWca6Bt3C+Fhpp68c8evVm0vvnkg4KlhTQnYsLG8I89l
+ JCDaCMJ8t8Mi9Zr+Fu7/OuRpow4LypflfxAPW554WAvcr1qtCwOGHRhqN0tvWZL8ih2lAZM/Xdf
+ d+RflxtjQRKLoKhneYjKNPhbA35cT87
+X-Received: by 2002:a05:600c:450b:b0:490:3fa2:1b93 with SMTP id
+ 5b1f17b1804b1-490a291fa5bmr148808505e9.13.1780241786911; 
  Sun, 31 May 2026 08:36:26 -0700 (PDT)
 Received: from dragon.localdomain
  (lputeaux-658-1-173-117.w92-154.abo.wanadoo.fr. [92.154.108.117])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909ca6575csm278098585e9.4.2026.05.31.08.36.25
+ 5b1f17b1804b1-4909ca6575csm278098585e9.4.2026.05.31.08.36.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 May 2026 08:36:25 -0700 (PDT)
+ Sun, 31 May 2026 08:36:26 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 17:35:52 +0200
-Message-ID: <20260531153557.2375580-9-titouan.christophe@mind.be>
+Date: Sun, 31 May 2026 17:35:53 +0200
+Message-ID: <20260531153557.2375580-10-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260531153557.2375580-1-titouan.christophe@mind.be>
 References: <20260531153557.2375580-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780241786; x=1780846586; darn=buildroot.org;
+ d=mind.be; s=google; t=1780241787; x=1780846587; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=OkYFsdeVLPgp/Hjw8AZohN+9jJSds1Tb8FVjf2oB12U=;
- b=CjWELlCKoy+jEUsVovBnd04jGxlcckxYS7wFtFzEzyXP4OlOa4ouER3of5D4cnTdIC
- e3PhpHx5BNPgyaenLLvrd2iGZao0e6H0SgxSPvWh3cCDcMqHV49osxZvmZYK5Q0q58Ys
- dqWSZ5mtwm5MhHkPprJkPDEBbyyMKC8IcsPX+/VbxDf2JCU0NCVquOpRKLp5RA9FV2kK
- nxj1KwUzOtXgz1EB4Y0Cmbs4JEkEr3QBapW8dy6j25ZVjCjQS2RCbH8LuMP/3jFFgPnH
- QVI3dOQvaUVcONzujiW2I3IL7oA7zxxIIZOAGIQYS/V1HVVAKBoQyCUGOue0TyoNqMnO
- Pmmg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=g6ZDOxh0G5c0vAaAIJbs3Bwcj29gtJRTG1vcHtbQZ4A=;
+ b=KwORswUMk7h/cyFHwQrLXauNMD3QhB2+vLqZEDD9pG7t2SS9S0woZbNr8BA9Mktybi
+ iqTcUP8YYvMJOZne6fHtAbty2Lozy+lE9mUuFdkDCrZ+7ltoO5qxd+Yc+xh/hl1o7fYa
+ MuL4MiSyACIYu14qrM5fSrcb48uU23WI1RM/yHWRzhYpCwCRHbyw3aw9DspVw9b+gaFj
+ yAL2jK13xbzTbQwi7C7FhPLboKt+3UKpZRRdnoGP41tJ7i5yaSGatrRBubSol9/cmNxK
+ 1bxJcN11QyIk1AEz3FKlGisnCTUc8xQWvq+FmNhjLDPMyMWa6GJ4jO2no1Rt6YveyYJF
+ fv0w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=CjWELlCK
-Subject: [Buildroot] [PATCH v4 8/9] docs: update the Buildroot manual for
- kconfig variables expansion
+ header.a=rsa-sha256 header.s=google header.b=KwORswUM
+Subject: [Buildroot] [PATCH v4 9/9] Makefile: add new target "yellowconfig"
+ based on kconfiglib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,60 +132,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the update of kconfig, $VARIABLES are no longer expanded.
-Update the Buildoot user manual accordingly.
+As informally proposed during the 2026 Buildroot dev meeting,
+this introduces a new kconfig user interface based on Zephyr's kconfiglib.
+The name "yellowconfig" is inspired by the yellow-themed curses interface,
+as opposed to the classical blue "menuconfig".
+Read more about kconfiglib: https://github.com/zephyrproject-rtos/Kconfiglib
+
+To run that target, one has to install kconfiglib beforehand,
+for example by issuing the following command:
+> pip install kconfiglib
+
+In terms of user interface differences, Zephyr's kconfig brings:
+- searching symbols as you type, and more symbols are visible in a single
+  page of search results [1]
+- symbols that aren't selectable (because of unmet dependencies) can be
+  viewed (toggling them on or off with the key "A") [2]
+- symbols y/n dependencies are displayed more clearly, each one on a newline.
+  This is especially appreciable when there are many of them, whereas in the
+  classical menuconfig one has to scroll left/right to view them [3]
+
+Having this as a new make target allow for Buildroot users to try it out
+and forge their opinion on this different interface without breaking
+habits and usual workflows. However, in the longer run, this could possibly
+allow to replace the custom-patched kconfig programs we ship in Buildroot
+with an unmodified upstream supported codebase.
+
+Moreover, as unselectable symbols can be displayed in the interface, this
+would remove the need for comments in the like "<pkg> needs <condition>",
+where we need to invert and maintain conditional dependencies.
+
+As a final nice addition, having a Python based kconfiglib allows for
+programmatic access to kconfig symbols and settings in scripts, which
+could be useful in testing scenarios.
+
+[1] https://gitlab.com/-/project/2648174/uploads/8ae29a772927e7e555f85f6d31876bb4/2026-02-04-105501_958x1015_scrot.png
+[2] https://gitlab.com/-/project/2648174/uploads/8d27510cf738cab9fd95ffdd81f75bc9/2026-02-04-105514_958x1015_scrot.png
+[3] https://gitlab.com/-/project/2648174/uploads/6d51a4b608fce076ac8c0c84623531f2/2026-02-04-105522_958x1015_scrot.png
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- docs/manual/customize-outside-br.adoc | 12 ++++++------
- docs/manual/migrating.adoc            |  7 +++++++
- 2 files changed, 13 insertions(+), 6 deletions(-)
+ Makefile                    | 3 +++
+ docs/manual/quickstart.adoc | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/docs/manual/customize-outside-br.adoc b/docs/manual/customize-outside-br.adoc
-index 8a76f3a998..ab9557923b 100644
---- a/docs/manual/customize-outside-br.adoc
-+++ b/docs/manual/customize-outside-br.adoc
-@@ -154,8 +154,8 @@ The main usage of this is to store package recipes. The recommended way
- to do this is to write a +Config.in+ file that looks like:
+diff --git a/Makefile b/Makefile
+index 0a245c937c..d647792fc9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1017,6 +1017,9 @@ gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
+ menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
  
- ----
--source "$BR2_EXTERNAL_BAR_42_PATH/package/package1/Config.in"
--source "$BR2_EXTERNAL_BAR_42_PATH/package/package2/Config.in"
-+source "$(BR2_EXTERNAL_BAR_42_PATH)/package/package1/Config.in"
-+source "$(BR2_EXTERNAL_BAR_42_PATH)/package/package2/Config.in"
- ----
- 
- Then, have an +external.mk+ file that looks like:
-@@ -244,10 +244,10 @@ illustration, of course):
-   |     `----
-   |
-   |- Config.in
--  |     |source "$BR2_EXTERNAL_BAR_42_PATH/toolchain/toolchain-external-mine/Config.in.options"
--  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-1/Config.in"
--  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-2/Config.in"
--  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/my-jpeg/Config.in"
-+  |     |source "$(BR2_EXTERNAL_BAR_42_PATH)/toolchain/toolchain-external-mine/Config.in.options"
-+  |     |source "$(BR2_EXTERNAL_BAR_42_PATH)/package/pkg-1/Config.in"
-+  |     |source "$(BR2_EXTERNAL_BAR_42_PATH)/package/pkg-2/Config.in"
-+  |     |source "$(BR2_EXTERNAL_BAR_42_PATH)/package/my-jpeg/Config.in"
-   |     |
-   |     |config BAR_42_FLASH_ADDR
-   |     |    hex "my-board flash address"
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index d8d86d8945..fe3d34d740 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -247,3 +247,10 @@ In 2026.02, the network-manager package stopped selecting the gnutls package as
- a cryptography backend automatically. Manually enable the gnutls or libnss
- package if you require features that depend on a cryptography backend, such as
- certificate-based authentication.
++yellowconfig: outputmakefile
++	@$(COMMON_CONFIG_ENV) CONFIG_= python -m menuconfig $(CONFIG_CONFIG_IN)
 +
-+Following the update of the bundled kconfig programs suite, variable names
-+in `source` statements must now be enclosed in parentheses. For example,
-+`source "$BR2_EXTERNAL_FOO_PATH/bar"` should now be rewritten as
-+`source "$(BR2_EXTERNAL_FOO_PATH)/bar"`.
-+This is affecting **all buildroot externals**, which must therefore be
-+updated accordingly to support Buildroot 2026.02 and upper
+ nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+diff --git a/docs/manual/quickstart.adoc b/docs/manual/quickstart.adoc
+index 605031037f..d8e788ca97 100644
+--- a/docs/manual/quickstart.adoc
++++ b/docs/manual/quickstart.adoc
+@@ -27,6 +27,13 @@ for the original curses-based configurator, or
+ 
+ for the new curses-based configurator, or
+ 
++----
++ $ make yellowconfig
++----
++
++for the https://pypi.org/project/kconfiglib/[Python kconfiglib]
++curses-based configurator, or
++
+ ----
+  $ make xconfig
+ ----
 -- 
 2.54.0
 
