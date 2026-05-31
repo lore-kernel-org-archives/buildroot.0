@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E03CD6E5E
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 14:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8A8CD6E5D
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 14:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E31660F38;
-	Sun, 31 May 2026 14:30:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F2B160F31;
+	Sun, 31 May 2026 14:30:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EmPtbIpWhudg; Sun, 31 May 2026 14:30:26 +0000 (UTC)
+ id Ras8WOephGMB; Sun, 31 May 2026 14:30:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9455E60F2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94B2860F2E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780237826;
-	bh=moLs+ox0pjgFIjse+C/PyMWaptUNNbBB+MLLtffNjdg=;
+	s=default; t=1780237827;
+	bh=ldH7QZ2nQ+LkYi7EPOs4jNlCD8PvE7MA7Apx9IQWF0A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CvBmo36YvzkjDVxWJIy7S480bwQXsoHpHGZbvP579EJM8Gc3iusgKGOtuD1kuZs7x
-	 QBeIWux1mbARxUXW5oXhHM15vY7Vq4PTEQZyJsx4LKDvkHHNL6RdNJLIfcWU0Uzpx3
-	 0vBsktDc8dP4vOPdv6mN5Wb98HUk8Y4UxM3KR5vNSnjyQ7CaOmaEdtpBwq4ecfburR
-	 G9gLRNgiLgJDM4He92HdySmyYXoXPEkxDt8MeZ/l9+NLqq7PLZI2viekyQaKr7gzRF
-	 ZW2kX9r/Himy50JxbNMqorN+vAkBY7+I/4ORC2bkMlhbWEmVMCFohLDglktHT78nkN
-	 ZwII949Y3t3lg==
+	b=E0zZQ1gDQsidJCz4DIs1Zv+ezkte7MSiEql9trhKQpzn/UvOu5Pk0aXJAad6v7cXf
+	 0ECI1XzzSLaelj/BE76IGSlOjyu3/J4rc9HYSL5iK1W29l+VsWqG11p26ulrPuKrZT
+	 BAhkoN7KoDq1jPslKcu3MpZMg2IU1t2WGkt/HDaLMfp1L4vcfUFAQPrB0N4toOaHHE
+	 ThE1Mwb+NROhzgziKCSpIetwbxdeqjMjTGBzP5pjwvcbYh8vglpGCJ7sxnDq3dubW+
+	 sjywOEiWjTlac+HlV9ofdBfwlAibuFOIoFvl0L2vQIUtHE3LK2XLFEVPYbbYVO611y
+	 SkBFGtpQh25mA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9455E60F2E;
-	Sun, 31 May 2026 14:30:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F2926389
- for <buildroot@buildroot.org>; Sun, 31 May 2026 14:30:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94B2860F2E;
+	Sun, 31 May 2026 14:30:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 311FE257
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 14:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D87834032F
- for <buildroot@buildroot.org>; Sun, 31 May 2026 14:30:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16D7942939
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 14:30:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X0ArAxlq3I1H for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id matwc15hMVWC for <buildroot@buildroot.org>;
  Sun, 31 May 2026 14:30:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 346AC40183
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBE64293E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 346AC40183
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EBE64293E
  for <buildroot@buildroot.org>; Sun, 31 May 2026 14:30:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6D5C876DD; Sun, 31 May 2026 14:30:09 +0000 (UTC)
+ id 9CB98876CB; Sun, 31 May 2026 14:30:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 16:22:13 +0200
+Date: Sun, 31 May 2026 16:19:09 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0c3c8ea77915342f1424f70adcfb481c3640e56
-X-Git-Newrev: 13325a9ba3897308ec00857963fdbf7fb350ce0a
+X-Git-Oldrev: e16546abbc2b17abe3cd5b0fd68235b3247d01db
+X-Git-Newrev: f0c3c8ea77915342f1424f70adcfb481c3640e56
 X-Patchwork-Hint: ignore
-Message-Id: <20260531143009.A6D5C876DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wireplumber: mark
- broken on uClibc
+Message-Id: <20260531143009.9CB98876CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pipewire: bump version
+ to 1.6.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,68 +72,109 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8873929524692870135=="
+Content-Type: multipart/mixed; boundary="===============0548093862567298489=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8873929524692870135==
+--===============0548093862567298489==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/13325a9ba3897308ec00857963fdbf7fb350ce0a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f0c3c8ea77915342f1424f70adcfb481c3640e56
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-../lib/wp/log.c:780:49: error: implicit declaration of function ‘gettid’;
- did you mean ‘getgid’? [-Wimplicit-function-declaration]
-  780 |   g_autofree gchar *tid = g_strdup_printf("%d", gettid());
+Release notes:
+https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/1.6.6/NEWS
 
-The problem was hidden by pipewire being broken with uClibc since at
-least Sep 2024: https://autobuild.buildroot.net/results/ee5/ee50c8331946814c2fecb0ca56ca51c1bb0bc551/
+ffmpeg support needs swscale support:
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/2cbcdbc579bbffa682088fbedbca10e278e061dd
 
-Pipewire was bumped from 0.3.81 to 1.2.2 in Aug 2024 with buildroot commit
-93b72692c36f8357e867650f4b8fac91dff375f5 which afaics caused all uClibc
-builds to fail due to missing tss_t() whose usage was added to pipewire in
-version 1.1.81, see
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/de0db48f17aa391917ff5b430b7b9fe1dac443fe
-and later removed with
-https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/9c19284f7f062a50e059b0593068429b345acf34
-in version 1.3.81.
+Renamed configure option 'systemd' to 'libsystemd' due to commit
+https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/f2c878a2c175d0bece4571df691a8af02e7a3ab7
 
-In wireplumber the relevant part of code with gettid() was added in
-version 0.5.9. Buildroot bumped wireplumber from 0.5.5 directly to 0.5.10
-with commit c42b26bb471a260e2bb3da7988af77f78b2b4280.
+Disabled jack2 support for uClibc to fix a build error:
+
+../pipewire-jack/src/pipewire-jack.c:13:10: fatal error: threads.h: No such file or directory
+   13 | #include <threads.h>
+
+Removing this include will not fix the problem:
+
+../pipewire-jack/src/pipewire-jack.c:127:20: error: expected ‘;’ before ‘float’
+  127 | static thread_local float midi_scratch[MIDI_SCRATCH_FRAMES];
+
+Fixes:
+https://autobuild.buildroot.net/results/217/217f4500a7dadf089b90438e1eb06aaa9c50f4c5/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: unwrap URLs in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wireplumber/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/pipewire/Config.in     | 1 +
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 9 +++++----
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/wireplumber/Config.in b/package/wireplumber/Config.in
-index 6528a2e102..5f07a7c664 100644
---- a/package/wireplumber/Config.in
-+++ b/package/wireplumber/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_WIREPLUMBER
- 	depends on BR2_PACKAGE_LUA_5_3 || BR2_PACKAGE_LUA_5_4
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # gettid
- 	depends on BR2_USE_MMU # libglib2
- 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 9d2de6c866..38a321d500 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PIPEWIRE
+ 	select BR2_PACKAGE_ALSA_LIB_UCM if BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ if BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO if BR2_PACKAGE_BLUEZ5_UTILS # runtime
++	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
  	help
-@@ -15,8 +16,9 @@ config BR2_PACKAGE_WIREPLUMBER
+ 	  PipeWire is a server and user space API to deal with
+ 	  multimedia pipelines.
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 2e6a9ae3aa..8e701bfd4b 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  7670f617220cc053948fc8f2c1ff788192479ef5d4f373d878ac8a7cab76a71c  pipewire-1.2.8.tar.bz2
++sha256  2fdf073869bd171d29a92dc6857979864b53e3dc1a79ac76c15db78e5b12d9f8  pipewire-1.6.6.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index c1dc2aa0cc..c5127b9a9d 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://pipewire.pages.freedesktop.org/wireplumber/
+-PIPEWIRE_VERSION = 1.2.8
++PIPEWIRE_VERSION = 1.6.6
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -70,13 +70,13 @@ endif
  
--comment "wireplumber needs a toolchain w/ wchar, threads and Lua >= 5.3"
-+comment "wireplumber needs a glibc or musl toolchain w/ wchar, threads and Lua >= 5.3"
- 	depends on BR2_PACKAGE_PIPEWIRE
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_TOOLCHAIN_USES_UCLIBC || \
- 		(!BR2_PACKAGE_LUA_5_3 && !BR2_PACKAGE_LUA_5_4)
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PIPEWIRE_CONF_OPTS += \
+-	-Dsystemd=enabled \
++	-Dlibsystemd=enabled \
+ 	-Dsystemd-system-service=enabled \
+ 	-Dsystemd-user-service=enabled
+ PIPEWIRE_DEPENDENCIES += systemd
+ else
+ PIPEWIRE_CONF_OPTS += \
+-	-Dsystemd=disabled \
++	-Dlibsystemd=disabled \
+ 	-Dsystemd-system-service=disabled \
+ 	-Dsystemd-user-service=disabled
+ endif
+@@ -100,7 +100,8 @@ else
+ PIPEWIRE_CONF_OPTS += -Davahi=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_JACK2),y)
++# uClibc does not implement thread_local
++ifeq ($(BR2_PACKAGE_JACK2):$(BR2_TOOLCHAIN_USES_UCLIBC),y:)
+ PIPEWIRE_CONF_OPTS += -Dpipewire-jack=enabled -Djack=enabled
+ PIPEWIRE_DEPENDENCIES += jack2
+ else
 
---===============8873929524692870135==
+--===============0548093862567298489==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -144,4 +185,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8873929524692870135==--
+--===============0548093862567298489==--
