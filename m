@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFC5CD5BD1
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A793CD5BD1
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0E3F6178C;
-	Sun, 31 May 2026 06:18:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C932D81351;
+	Sun, 31 May 2026 06:19:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wjLaAKnCwsBo; Sun, 31 May 2026 06:18:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PTqkKafKZv8u; Sun, 31 May 2026 06:19:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8FF56179B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCCC7811C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780208327;
-	bh=WLP5BXEcHibc7/xZg4MWTZbbP93M+hSKab1lrzxXWnc=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Uwbj8hiEMMUdNNhAKkBINW+mkOoOY1pIfihasYDs2zZVL0p07fiwviXjGXzxNgMdz
-	 A8EgC1rGY7idQyAx3u7q0e5ttgaiV3SoMEJj7GpvmfHbpx3VGKExrtc8TPElJBAEBA
-	 KHhC+Izs32lk7SQBD+DOnVPzKOVJFwp8/gwkKcyNiJLLXsuriSSX2G4oVF1HhsHZck
-	 l3p9oZAJRsq18Po0ug1irgFHZwq1eGUJa9CNHhyyn7FK5LYIg0J13nKoGmUcU3BIx7
-	 8efcS/yc5q09j5l5SpgyYAfNUuOSFSD4rz5Wg8+9HbAQUE5rfZPusvxzfpvKRBCASP
-	 qCN2hNt2wUVzw==
+	s=default; t=1780208376;
+	bh=UTK0pOlAM1V+c+RGM6dEI+rlvZ70bWJrODMQpFFvgh0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LXn43EVq23JGHuiDa1bEDM8s+BW7vuUJwY7cTFvtj29VkKs6ZJBF57IWKLlMiA4yK
+	 rOIhrJVUQ+1BiJ4xFtu6O0VQ5glGv1BrQMvDCbgOP3qyajCizPX0QIAqanuZABOhrI
+	 RTJwMJ06mGBOhHywJObvESfljAur+sOoLpv7CiQwwrUOKiI63afg6fCYejigmm1vWA
+	 ijPjccLP63a1n8K/jMZkD8z8R3KDDxPAyr1Bqind8ZjW4HWNOWatmeT6l5ZFXViKMS
+	 zzYmqTeYxU0QAZlwMALKRqg0rqQd4g2rL3EjztL9DCJGSHIAZsrQWIm/k//QiUVmOz
+	 Mo/J/kGGD2qoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8FF56179B;
-	Sun, 31 May 2026 06:18:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCCC7811C9;
+	Sun, 31 May 2026 06:19:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A94D9257
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:18:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 62A22257
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B6866179B
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:18:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 498C161AC1
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:19:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AHY7dQHqSY-3 for <buildroot@buildroot.org>;
- Sun, 31 May 2026 06:18:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E73D46178C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E73D46178C
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E73D46178C
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:18:44 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0bc7.dip0.t-ipconnect.de [91.58.11.199])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F3674A4C115A;
- Sun, 31 May 2026 08:18:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46944)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wTZVR-000000007Sk-03Ua;
- Sun, 31 May 2026 06:18:40 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 31 May 2026 08:18:40 +0200
-Message-ID: <20260531061840.6748-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id lEBZNx9D_-gn for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 06:19:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BC95617AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BC95617AE
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4BC95617AE
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:19:33 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id C5D25C62473;
+ Sun, 31 May 2026 06:19:32 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 3B5E4604EC;
+ Sun, 31 May 2026 06:19:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0CD7210888CC7; 
+ Sun, 31 May 2026 08:19:29 +0200 (CEST)
+Date: Sun, 31 May 2026 08:19:29 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Johan Oudinet <johan.oudinet@gmail.com>
+Message-ID: <ahvSs1F6Z7DgktE5@windsurf>
+References: <20260428215547.3059152-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20260428215547.3059152-1-giulio.benetti@benettiengineering.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1780208321;
- bh=W7KrZmgSWsbqcbCH0AbVeYgb3v+YWumHEkU7TXdUC9E=;
- h=From:To:Cc:Subject:Date:From;
- b=JTuCruEFrHzn8rGEx5AFtoiM/8v3IUftLV5FhzvYD2/Av5JrmTJdIlg0exWksdT7F
- i2eTn442xoZPs02oRMvdQ/8glEW/X/WURQNTdKmAPx00eer2aGWDM6a5MMsi1ey2eo
- 11tzPIpzKltxyl2w5xSFIAdlupK/pWo2gO/Xw4O6SHlKozAqV7j8XzzjDf6GJ4aZfo
- srMrbBSw5aPEMZc6Mbf9wWjFsJxMX5GYvlKMJZCflN+MMxIKAaTGIWwpJdSItkhRKH
- SMCLfv/rgFaDgFIxUGTwMAEEfl4l8BF9wyK+j5rAuXDPuE6RZe1DnQuS0q85ihjFCC
- nHQuFDaPAK41Q==
+ d=bootlin.com; s=dkim; 
+ t=1780208370; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=FpMxXl0IsLNxaFZmb47lOh8VGkHjLD0XHDmPXFUtOTw=;
+ b=SVyuWbpD5IGR/LeDkD1SPWtRy71db64E2z0UqedYdqzToPkPZbBv8PMYGuQDrsWaMgr4R7
+ NNoXnLblXcZDEQWvOsMDdpl/b4DNmO7TuqTmyGAE5Mo2wvgNxEygrEdtk9962c8zddeyh0
+ XuIolCdjfUYVyue6/Xc2jH0eHdH4jU7vWBH2rWHux0EwoxeW8qL3s3GWCyqbyCduoWF1Cl
+ A7/GSFjwiYCiZClD9IlS/Wq+5jqinyiHd+fOHuoz1OhJkDM1IcsZzbvhLZROfhHmn5FjMj
+ WaYG540WwDVXe9o3Xj2v6x31Gh6xlIzuHKBM3IGikckvmQI/QmJ3F0C7yslb7A==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=JTuCruEF
-Subject: [Buildroot] [PATCH v2 1/1] package/crucible: needs NPTL
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=SVyuWbpD
+Subject: Re: [Buildroot] [PATCH v2] package/erlang-jiffy: bump to version
+ 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,52 +95,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gcc_stack_unix.c: In function 'x_cgo_getstackbound':
-gcc_stack_unix.c:28:9: error: implicit declaration of function 'pthread_getattr_np';
- did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
-   28 |         pthread_getattr_np(pthread_self(), &attr);  // GNU extension
+On Tue, Apr 28, 2026 at 11:55:46PM +0200, Giulio Benetti wrote:
+> Release Notes:
+> https://github.com/davisp/jiffy/releases/tag/2.0.0
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * fixed LICENSE hash as pointed by Julien Olivain
 
-Fixes:
-https://autobuild.buildroot.net/results/e07/e07198d7864331027d21cd2109054d86e7ac1c3d/
+Thanks for fixing the LICENSE hash, but such changes must be explained
+in the commit message, otherwise having hashes for license files is
+completely useless: the goal of those hashes is to detect changes in
+license terms, in order to update license information in the package
+.mk file if needed. Therefore we require license file hashes to be
+justified in the commit message, with an explanation of what changed.
 
-The build error also occured in Oct 2024 so a backport to buildroot
-LTS branches should be considered:
-https://autobuild.buildroot.net/results/ebb/ebbd051010c27f97fafc0b203b22c8b0af7e5ccd/
+Thanks a lot!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/b600aef918fe6b2f9c65b6fd267426f7ca70f76d
-
- package/crucible/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/crucible/Config.in b/package/crucible/Config.in
-index 1e1b29c3df..e18e393a05 100644
---- a/package/crucible/Config.in
-+++ b/package/crucible/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_CRUCIBLE
- 	bool "crucible"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_getattr_np()
- 	select BR2_PACKAGE_HOST_GO
- 	help
- 	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
- 	  i.MX family.
- 
- 	  https://github.com/usbarmory/crucible
-+
-+comment "crucible needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
