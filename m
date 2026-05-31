@@ -1,168 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD244CD6E52
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 18:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D8F9CD6E56
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 19:47:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F9C760F8E;
-	Sun, 31 May 2026 18:49:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B303A41F81;
+	Sun, 31 May 2026 19:47:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Li1d6UvpwVUq; Sun, 31 May 2026 18:49:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oYEqidKYLpbA; Sun, 31 May 2026 19:47:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80B2460F97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0440F41E7A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780253381;
-	bh=D74/oxvKeeL54aVga64L1zFZnmH8xtMWnKffsNz4HYE=;
+	s=default; t=1780256867;
+	bh=n9RfZEm5niYDln+P0bWKHHKSjTQAzhl0bqoRqBsumX8=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=swqw7bIHC3linVvmAFag7YL+7Fba32FKkFqHiNxms4FnnvysmcsnNapcaBfkOQr09
-	 oIutIJpgZkuGjmU90Mt3XVNjOV+jtOur5ud2eVBlWGW/GRiFIHEbZQnGI0Yn4ZZjNU
-	 Hztdv1Ga+u/6EoVjFQQJsWd1yzYz67bkbj26alGACjR3zF2Y9ghWqneezYD5JRZK2c
-	 NxEYXB52K7wuWjA/e4A7sqkOvjvPhqJ919jck6Avm4nw7PTvNVTZ8xQT2qmz3ttRdd
-	 JT599OHb74KoRs0RJjylVCP26URBOoSSy6qB3GbZ2v4v8y+bXY/y9pCC60negoU1wS
-	 fnoQMZtCtveuA==
+	b=PKWFR07KMOlTigpR81TC8odCXWrFG8GUA/lM1BOSymgalwHw/2GkA8fZs9C7uVKu8
+	 ARx3/fRfj0W5xXgfGappyNkjE//FHVlS89BglG1uO/FjyVFGbv+n176gyzjddz1GZi
+	 z+AkIlCCgwf5I11n2w33Qaj4a1eJJyyiYVW0U72ugK29PpKApMTLKr1fsd8K7JUcMU
+	 HXr5HZ4IbRta5hq/Ha5CMiu5d1v+CcsyeRJ1tfgFqv7LF+e3Tc8Bz49wOOkki2qfRw
+	 fza4X7pCFF8ofStnJnlhflEMGUmAg+o04oojLTaL/Y6bopi1lJXbsWMxwi416MavdX
+	 JMBvLqBPmpauQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80B2460F97;
-	Sun, 31 May 2026 18:49:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0440F41E7A;
+	Sun, 31 May 2026 19:47:47 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 77E04257
- for <buildroot@buildroot.org>; Sun, 31 May 2026 18:49:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F313AF4
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 19:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69C0060F97
- for <buildroot@buildroot.org>; Sun, 31 May 2026 18:49:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9322608F9
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 19:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OmayDQhvq9ME for <buildroot@buildroot.org>;
- Sun, 31 May 2026 18:49:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=and@gmx.li; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DD84F60F8E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD84F60F8E
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD84F60F8E
- for <buildroot@buildroot.org>; Sun, 31 May 2026 18:49:38 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQMuX-1whK0P0QC1-00K3Qb; Sun, 31
- May 2026 20:49:36 +0200
+ id RiWuCfFYwGaV for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 19:47:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A24E160F2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A24E160F2D
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A24E160F2D
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 19:47:44 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-490388fd0dbso97882485e9.0
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 12:47:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780256862; x=1780861662;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=AsPebawF2nsWW75fZE0vfKIzuyKdawE9fpvYCFHGJsA=;
+ b=JzARhQiliuWs/yg1ZeYuauk8TDe1//wkcjuXam6Mcp+F3g2HZwyiZgiRvKMAUUgcWE
+ eZ3vy5oaLTrMgS96S8sClkNSp2wKbwWS+05zlpx7X2pnr7g/YhfpUIx0FUeDq4XCA7dN
+ VJn7G1WfnjH/7/7atBzjTK6jRe9XyX9WwHdkENIkkfh/r2Zqug98qUd9bSe2fie8O8xH
+ glcYH7dYdskmoRjixtb8V3uLhyjrNJwjDgOWKuLgeBseLcijvCdf9Q20SqhVDsmuMxH8
+ CPrMIr7u6Eaq/v3672TfwiyEmVvFXvUnJPlpY+UNSgrMnVZpJ6BlEGweOLwomMjUpy/J
+ fK6A==
+X-Gm-Message-State: AOJu0YxIgBByB267yj97OOxUJz3z59bKjlHkmEAiW0chUb6IEMscaFDc
+ 3o8uGED0kMw1y2v8giISfFDQpPcMFSkbrRLT9MDCWeFJuh9SUExbOyPQZzP8qvc24KqDkkYNoOY
+ VHexY
+X-Gm-Gg: Acq92OGwNPKSMGb8i0423zCzeAoBGQ7SPg7fHCKWrAYIziVTUSBsx83ln5BxdENXyXY
+ 7YFDt+O3oys00Q/wtFXQxlD7CV6GHRPjj7GZV+Vk35TlgiPAOoDcnSyYXlvC9KwzpAf0rHAExLF
+ v5ZBKkqInP1vtdcWtQZFj8mzWDEm0jHSG4dZ8qMWgS3oq+gnguK66GPqYYBNy+9i1/8KOPdD5fG
+ 2MgSSzFricksEhTKbqR9BgbymYjmUoN36rAD9BxsKCy8rRg6z2pqbZrPZTEBaT5mG96jIBS6zdO
+ 0e+8s9hTNqh3VOeG3mAt0i+iXUv63miUmz/8ziJQDh5B3YO7dshxM8FtYR0HDjGujTC+oLGEPK4
+ H8l+JkH4voAv4O+aOsAiA6yvrmM0tt09pr6+SfoIrQfKVSccbdH2zJP3wcQdacgXnADU8X51ABM
+ 7uWHT7c8yQ5B1MvqUChREi3pyA1CEVojtjmgrH5h9Bevae8e7Sc37zQnAuXs8V9gHAwh9XkTOZX
+ wh0NvFp+DZtd2touc76wRgRPFsLcl9NgGVDVcTMsB49ZCo=
+X-Received: by 2002:a05:600d:11:b0:490:3d62:f5e1 with SMTP id
+ 5b1f17b1804b1-490a2963b8emr133291825e9.22.1780256861992; 
+ Sun, 31 May 2026 12:47:41 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-45ef34c3081sm20110598f8f.15.2026.05.31.12.47.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 31 May 2026 12:47:41 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 31 May 2026 18:49:31 +0000
-Message-ID: <20260531184931.27838-1-and@gmx.li>
-X-Mailer: git-send-email 2.53.0
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 31 May 2026 21:47:38 +0200
+Message-ID: <20260531194738.1379915-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Lt0Nx3RZby5iYFNFxbBlzrypf5x428D+rgzVtAWPbfyF2GFRxvR
- 6anIkuATtDeGdvTwVYUDaJwOiu09ymT8r+dKDClBW4LJAJ4/J7iRiF/fUZ/JIPI2eY48p01
- WlKzOm4U/TNbqniDJuoNOV9fOMumyIsZC9s2fR+c7lZOzj4EAxf7yjxe/zGb9MrT3nnHnI3
- pM6nL15AV0lXH0Bsn+4Mw==
-UI-OutboundReport: notjunk:1;M01:P0:mUqlMtJckBQ=;h9RhFCmWDBs9P4zHDIhdno2c+I7
- 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
- 6NQ9bAG+ew+7vK54ZWcbNHEYID+Mq4mlbXHJd2v
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.li; 
- s=s31663417; t=1780253376; x=1780858176; i=and@gmx.li;
- bh=4vbopkZ6ttIpXFtAtjkXJeeETTBbtni1Zb8IznEaBYo=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=ENpjtcI8vbkOG4FB1nbfxHMmuH0S6JFzgACc+NH7pyDBA3Ju5aUNxvKVvPeflqzX
- HENgqqy0XOVGjnITEJ6Z1OrSTv01JZPzMRqepFSXkj8aW9Rl7wBenn1EWtAp19fwx
- CH78RuHWeQXxRQgEef/wiYsdCMI/xQvSlQ++M/36FABgAnG4l39Z6AQOtf3Ip9/Zk
- 5PXLs/8R5tCWenTyutntDH1x3oEAW7+kv/Lq1hASngsoYswzPDzJei6oED83/kbYv
- vRwdKGn1fXGpfxGelanq/uTnO44hYN6sV+suKA00HCegd6E3XFbY/eTr3w0DmYukB
- /cB9oGW9xch/TLCYxQ==
+ d=smile.fr; s=google; t=1780256862; x=1780861662; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=AsPebawF2nsWW75fZE0vfKIzuyKdawE9fpvYCFHGJsA=;
+ b=GYBos8ln0mLjh/q30EWY3rbz/8Zz5vXn36UhL1vgb8sDE8hHGfXsccH9bwoSpfF3at
+ VEEvuc48d6UYtNWDxpCbW/4UkYenPpEZSGtt39UYoQXxvkoOiBM5K6pSuyPS4LrZzHUN
+ 4CCz8wqlLMCOcz9MscF7Qjow0qJaesVW5wzrQ=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.li
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.li header.i=and@gmx.li
- header.a=rsa-sha256 header.s=s31663417 header.b=ENpjtcI8
-Subject: [Buildroot] [PATCH/next v3 1/1] package/cryptsetup: add argon2
- implementation choice
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=GYBos8ln
+Subject: [Buildroot] [PATCH] support/testing: TestXfs: fix build on Gitlab
+ runners
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,109 +119,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Mohr via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Mohr <and@gmx.li>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support argon2 implementation choice for less dependency and lightweight builds.
+Our CI uses "/builds/buildroot.org/buildroot" as build directory.
+Unlikely the xfsprogs build system misbehave when a directory in
+the path contain ".o".
 
-The internal reference implementation may be slower, set default to system libargon2
+While generating .ltdep, the sed command used to convert object file
+(.o) to libtool object(.lo) replace buildroot.org by buildroot.lorg.
 
-(configure: Argon2 bundled (slow) reference implementation will be used, please consider to use system library with --enable-libargon2)
+  .ltdep: $(CFILES) $(HFILES)
+    $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
 
-Signed-off-by: Andreas Mohr <and@gmx.li>
+Building libfrog
+    [CC]     gen_crc32table
+    [GENERATE] crc32table.h
+gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
+
+Update the sed command to avoid this effect.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-Changes v2->v3:
-- set default LUKS2 pbkdf to pbkdf2 if argon2 is not available
+ .../0002-include-buildrules-fix-ltdep.patch   | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
 
-Changes v1->v2:
-- forgot to remove main BR2_PACKAGE_LIBARGON2
----
- package/cryptsetup/Config.in     | 26 +++++++++++++++++++++++++-
- package/cryptsetup/cryptsetup.mk | 15 +++++++++++++--
- 2 files changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 00424af8b8..a27987144f 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -11,13 +11,37 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_JSON_C
--	select BR2_PACKAGE_LIBARGON2
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
- 
- 	  https://gitlab.com/cryptsetup/cryptsetup
- 
-+if BR2_PACKAGE_CRYPTSETUP
+diff --git a/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
+new file mode 100644
+index 0000000000..f17dc51edb
+--- /dev/null
++++ b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
+@@ -0,0 +1,48 @@
++From cddc06c0eef874c01293cdb6e60090771a347c56 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sun, 31 May 2026 21:08:09 +0200
++Subject: [PATCH] include/buildrules: fix ltdep
 +
-+choice
-+	prompt "argon2 support"
-+	default BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM
-+	help
-+	  Use cryptsetup internal reference implementation to save space on embedded systems.
++Our CI uses "/builds/buildroot.org/buildroot" as build directory.
++Unlikely the xfsprogs build system misbehave when a directory in
++the path contain ".o".
 +
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM
-+	bool "system library (default)"
-+	select BR2_PACKAGE_LIBARGON2
++While generating .ltdep, the sed command used to convert object file
++(.o) to libtool object (.lo) replace buildroot.org by buildroot.lorg.
 +
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL_SSE
-+	bool "internal reference/SSE implementation (slower)"
++  .ltdep: $(CFILES) $(HFILES)
++    $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
 +
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL
-+	bool "internal reference implementation (even slower)"
++Building libfrog
++    [CC]     gen_crc32table
++    [GENERATE] crc32table.h
++gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
 +
-+config BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_NONE
-+	bool "none (not recommended for LUKS2)"
++Update the sed command to avoid this effect.
 +
-+endchoice
++Upstream: https://lore.kernel.org/linux-xfs/20260531194553.1378795-1-romain.naour@smile.fr/T/#u
 +
-+endif # BR2_PACKAGE_CRYPTSETUP
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
 +
- comment "cryptsetup needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 758d8ef403..ad19e0a24e 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -9,7 +9,7 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
--	lvm2 popt host-pkgconf json-c libargon2 \
-+	lvm2 popt host-pkgconf json-c \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
- 	$(TARGET_NLS_DEPENDENCIES)
- CRYPTSETUP_LICENSE = Apache-2.0, CC-BY-SA-4.0, GPL-2.0+ (programs), LGPL-2.1+ (library)
-@@ -23,7 +23,18 @@ CRYPTSETUP_CPE_ID_VALID = YES
- CRYPTSETUP_INSTALL_STAGING = YES
- 
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
--CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2 --disable-asciidoc
-+CRYPTSETUP_CONF_OPTS += --enable-blkid --disable-asciidoc
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ include/buildrules | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_SYSTEM),y)
-+CRYPTSETUP_DEPENDENCIES += libargon2
-+CRYPTSETUP_CONF_OPTS += --enable-libargon2 --disable-internal-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL_SSE),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --enable-internal-sse-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_INTERNAL),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --enable-internal-argon2
-+else ifeq ($(BR2_PACKAGE_CRYPTSETUP_SUPPORT_ARGON2_NONE),y)
-+CRYPTSETUP_CONF_OPTS += --disable-libargon2 --disable-internal-argon2 --with-luks2-pbkdf=pbkdf2
-+endif
- 
- # cryptsetup uses OpenSSL by default, but can be configured to use libgcrypt,
- # nettle, libnss or kernel crypto modules instead
++diff --git a/include/buildrules b/include/buildrules
++index 871e92db..3fabbe5a 100644
++--- a/include/buildrules
+++++ b/include/buildrules
++@@ -140,7 +140,7 @@ rmltdep:
++ 	$(Q)rm -f .ltdep
++ 
++ .ltdep: $(CFILES) $(HFILES)
++-	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
+++	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o:,\1.lo:,' > .ltdep
++ 
++ depend: rmdep .dep
++ 
++-- 
++2.54.0
++
 -- 
-2.53.0
+2.54.0
 
 _______________________________________________
 buildroot mailing list
