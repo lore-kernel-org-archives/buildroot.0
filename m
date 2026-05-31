@@ -4,86 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08349CD6E52
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38AA7CD6E52
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 17:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3CFD60F8E;
-	Sun, 31 May 2026 17:08:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDD6C60F8B;
+	Sun, 31 May 2026 17:10:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0uTVTZoijIsy; Sun, 31 May 2026 17:08:40 +0000 (UTC)
+ id WpxFf8-Cdcfh; Sun, 31 May 2026 17:10:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE57460E6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1192160F8E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780247320;
-	bh=MbOMUL/NlqenCGVHAQb/e4R87oB+uxJLOQ6sCo4/npg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Kcc13HBLz0VEL4HBgjLnCnCtqOU6adivAHzU6mtpvFaRsymJr3eEHn6P+KFklq3xs
-	 VXFmPVDFA2ZGJMAXsxLYhHqBSDjofE1dGJoM2dWB9wJwrJ8QvgxP/gaWjzNkEauNdR
-	 ISLJPZ3BYBendRduL9wbK8i46jtoC8cQ/wXA2s56ehzIDVImFs6xsXn7lboBx04eW0
-	 +6I2k5JSxiqTP/iNY0DtxJEx7AE95suYLt5m94jLPc0zgHdbrMj6XzGIlEWmg/nVCk
-	 CFAkj1c/b6PUPBQyU/bZoDgsO58l/ooNnRm02kPDMPQ3APVsDk2nraSR6L/TK/5QcM
-	 n0Haryx7FOEow==
+	s=default; t=1780247445;
+	bh=4bUJrIUjrc0KGbXYuMO1eOzHvi46AsdlZYb4Ug7pceo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HRphuHoCHHdT/Mj6+5a1/BLmYQWILpIsyQMdt88Eykmr7uFI5uiBWbHtzMUEIY6M+
+	 CtGNd1EH+Ybz0hOZa7LfAQ+yzBVV6JY04BM9E2vdSPCUUQyrhS+J9VEHygDriUWJIT
+	 ozGvOmzMGFmrwJ3mHTkrjg3eEZhFcR+ZFZz0d8JOzaA5AMH5WlqBzhhAAuiwjnWmjf
+	 6vK4vhQG+RQ1qEimit+DVjAyPHwjzHDMTZMsR4wJfy5RRbfhEIIxUb9IAwvfE94Fve
+	 9/gx6WGJeo0piLoSutkQXRSQZyspS0j++JBqtx7GfCgHZakvnWdh4DqfDDxQUaU08J
+	 q3nwaxNueMarA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE57460E6B;
-	Sun, 31 May 2026 17:08:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E17A2AA
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:08:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1192160F8E;
+	Sun, 31 May 2026 17:10:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C4391F4
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F6E58502E
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:08:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B583885027
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:10:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X_k45GgCNqzp for <buildroot@buildroot.org>;
- Sun, 31 May 2026 17:08:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id GdKtEB_OWmGN for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 17:10:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 34DD48502B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34DD48502B
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34DD48502B
- for <buildroot@buildroot.org>; Sun, 31 May 2026 17:08:36 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 3FDC71A3772;
- Sun, 31 May 2026 17:08:35 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 14AC460230;
- Sun, 31 May 2026 17:08:35 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C53C510888CCD; 
- Sun, 31 May 2026 19:08:33 +0200 (CEST)
-Date: Sun, 31 May 2026 19:08:32 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Message-ID: <ahxrA8FVmAd-k0Vw@windsurf>
-References: <20260531160251.2333017-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260531160251.2333017-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780247314; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=kdpCkvDGy1MraGgtuma5ox2YLbEuYmKDsxAVg3GhC+E=;
- b=VAT74V73aHHVhzx6Tm/8tJGhPe7VFkRuI16MkHkLgmhBoa7A5PFYjHhuuH0mnLelQOR35Q
- 0wK4M7fTzyD/wD+WzOOCKhEA2FEX3SIV8aXADAsV8o0bNyC+hUpnsmguvhT506/USAv6kB
- IL4NrxkSHUDAkDTShvlJgobnqu3lZaowHWHr0wkxT3UZrdenI/2V0KbduLEGJ+Hvi6yB5v
- P50XjaDLdHNGIXTUUUEOVJTsmoUki7MUgywwCRvtB0tuc+hq1VAC4xOXgLWbAT730H2xIX
- xFHJL2caejlNGoLZGt068pXSOJEl+jNiOAsuReH5adDK7L6Pd2yV6zf6ACB8NA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=VAT74V73
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpthsem: update project URL
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA0EF84C0E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA0EF84C0E
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 17:10:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6732E876F1; Sun, 31 May 2026 17:10:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 31 May 2026 19:10:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c6ebe16f34df84561466f435a5f4f4c40c9208bf
+X-Git-Newrev: a72da6d7f5bba1113d5b6962498f2f8540ac31fa
+X-Patchwork-Hint: ignore
+Message-Id: <20260531171029.6732E876F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libheif: security bump version to
+ 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,39 +71,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, May 31, 2026 at 06:02:51PM +0200, Bernd Kuhls wrote:
-> The previous site went offline, the last entry dates back to April 2026:
-> https://web.archive.org/web/20260401000000*/http://www.auto.tuwien.ac.at/~mkoegler/pth/
-> 
-> Update _SITE to the bcusdk project which depends on libpthsem and stores
-> the original tarball. Update project URL to github mirror provided by the
-> linknx project which also depends on libpthsem.
-> 
-> Fixes download error:
-> 
-> ERROR: while checking hashes from package/libpthsem/libpthsem.hash
-> ERROR: pthsem_2.0.8.tar.gz has wrong sha256 hash:
-> ERROR: expected: 4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01
-> ERROR: got     : 01d9027268f27aab3ca5c6c649a7f7a444db5bc889e496d80c8704e4e120346e
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/0d9/0d9e957540d15302ac55bc5a2207db0c45279b37/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a72da6d7f5bba1113d5b6962498f2f8540ac31fa
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+https://github.com/strukturag/libheif/releases/tag/v1.23.0
+https://github.com/strukturag/libheif/security/advisories/GHSA-jvmp-j3cw-84mh
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libheif/libheif.hash | 4 ++--
+ package/libheif/libheif.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 22697f307c..780059facf 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/strukturag/libheif/releases/tag/v1.22.2
+-sha256  eea48e4841f83fbe51d029337ffd2d14512d0203015dad40b90213d872958af3  libheif-1.22.2.tar.gz
++# From https://github.com/strukturag/libheif/releases/tag/v1.23.0
++sha256  4c9182b18897617182eed12ab5eb9f9d855b3aa3a736d6bdb31abc034ec7d393  libheif-1.23.0.tar.gz
+ # Locally computed:
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 4b23f1fda3..be97b18bd0 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHEIF_VERSION = 1.22.2
++LIBHEIF_VERSION = 1.23.0
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
