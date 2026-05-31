@@ -1,88 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03661CD5BD1
-	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16463CD5BD1
+	for <buildroot@archiver.kernel.org>; Sun, 31 May 2026 06:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4D5661BF9;
-	Sun, 31 May 2026 06:31:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCBC3851B5;
+	Sun, 31 May 2026 06:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tu-JSzSBMrxi; Sun, 31 May 2026 06:31:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cIAladw1y1cp; Sun, 31 May 2026 06:52:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5660561ADD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9605851B8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780209112;
-	bh=YhLeD8ZKMtGbV3KMw3JOkwcO6MT2+BcK1/2+ilRGpaI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1780210368;
+	bh=Nfusi2+7PIKiWR9cjChQMvMBLTTeN/zxpnM0NWZACHY=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=f//OzPWJ6R2ipe1Z3+k4O4s5eCbzeVqnK81D7DbsGtndRlB2QjlGUV1JMVLFq8rX5
-	 A3b5iCHtA70ClkrA1g/nkNXfgfopz7/deo4mj5C2anY7TvbE98nLbllSiLOXITg5AC
-	 S+VN7XRXMz28ndUi3QlyEgf83dln7aStZ4c4lb4FiX/3QxNrtPVATJp3SsvZlhusQe
-	 HlunxJu3fqqvxgU/KkmakdFfExCBISTattPFv9eMYZiwB5kiC/sxBREcghjJ9I5Y55
-	 rwpx+9cZLQTcCIJi4KewYYE5VVCQ2Y6V6MiJYvwgso59P0KhqrusCmzcTb5Q2C9DP7
-	 kyJn2/st+QbDQ==
+	 From;
+	b=IyAHHY3RtvnRaeaR50ZnHkfVfA+bn+A6J+T5WscJpTn0RUfAABq4bg011xt0tInrf
+	 j7kuOkHTdAIZxIgWh6bcIxqZd9BY8oNC6fAeZc9sxHUHtiHjbKghXlJf/IVOg0xKd8
+	 iA6PfXlirhlL9LASp0NdznPFyLP960lkBC1gB717z8SCqzmqp+CH55p4WDsVnRUrL1
+	 4XN+SMgkWc3p5MEQjqhNU5IRAWhfZh81IC99b5vweT9iw57or8TxMz+qzIYfsNbOgD
+	 DqVGvxWPiCKAajh7hov1rjo/hT/+StvIYCD+LeoGp4uM/VmkpoirBJCrCcL6RdZ+lp
+	 qAn69/HrMgGiw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5660561ADD;
-	Sun, 31 May 2026 06:31:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A80B1389
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:31:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9605851B8;
+	Sun, 31 May 2026 06:52:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FD8A389
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99B3261ADD
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:31:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00D74851B8
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:52:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L1Rh6bB3u5e6 for <buildroot@buildroot.org>;
- Sun, 31 May 2026 06:31:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 238326161C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 238326161C
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 238326161C
- for <buildroot@buildroot.org>; Sun, 31 May 2026 06:31:48 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id BB0BE4E42DAF;
- Sun, 31 May 2026 06:31:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 7B726604EC;
- Sun, 31 May 2026 06:31:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 921AF10888CC7; 
- Sun, 31 May 2026 08:31:45 +0200 (CEST)
-Date: Sun, 31 May 2026 08:31:44 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabio Estevam <festevam@gmail.com>
-Message-ID: <ahvVqPi5qI7zbOTZ@windsurf>
-References: <20260531061840.6748-1-bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bOb1X03OvrYW for <buildroot@buildroot.org>;
+ Sun, 31 May 2026 06:52:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::435; helo=mail-pf1-x435.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24FA8851B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24FA8851B5
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
+ [IPv6:2607:f8b0:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24FA8851B5
+ for <buildroot@buildroot.org>; Sun, 31 May 2026 06:52:44 +0000 (UTC)
+Received: by mail-pf1-x435.google.com with SMTP id
+ d2e1a72fcca58-842307473b5so586937b3a.2
+ for <buildroot@buildroot.org>; Sat, 30 May 2026 23:52:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780210364; x=1780815164;
+ h=in-reply-to:content-disposition:mime-version:references
+ :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pKKA6JR7t44RGjLKA9XUT7R3E0k0Sm6L2jXhxpLOLUE=;
+ b=kXN921qcvYjnSP0xHnSlfoxraSg5XSGR05wXhsWKlKs5C3LRBS+yG8Bv2c0gL0+E2n
+ 2SkTHJLIurChG7mNdXlHm0tDKxK0TqqzaDGAnLszm0j4nN2H8NzBc0ASppbI83RusIYL
+ X6Hrg8/0souzXKjqAvYsQNadYmGi7zduK7KfV9KOqaPr4NYlobmh8d0HynaqOwvYnsEB
+ djG+SgcCKh4MTD0osJibgbodpqqV0MzyG/yX+xzEG6SDXsYwtfHfKaNthpCBZvvsgRnW
+ vXzLtOtcm3yGNm251xDwo6hhfFMlGjOx8knh9K+js+wwEMYJMuQYi1cDAZ/qQT78GBqo
+ bWhw==
+X-Gm-Message-State: AOJu0YzuOoSeo6autuclKCZne4vIZXgLlPq1ugqpHSIPO7UxJ5h0y0Tz
+ Udb6bnq//eNuWHv9/pCQAgyhmqh2pDDEfm1G5i7AbOC2axLpsNODf/9QLtChuINf
+X-Gm-Gg: Acq92OExHbwSwAg85uAGJcer/3pmiuZcGLV/1rpOZ+m8cqu4vS6myMtsm6IxozOvcu2
+ EuncvtKGVwSufvvCEoewdyY1vobqDJ9oYR93aMZn9rn39Y9y4Z5bL8Nbqx8kt7rbzOaozI8DsNf
+ HJaJqgWbDodmisBr+AlNl9xQp1fHwLWnS1+vHSubxsF/X2tEayKXKTsryJokn0X9e+RIjFG2JFV
+ eplsOXrFeYFlUVE5RtAbMd9fexVp+PRLj0LuzI4BZhe/eCpeqE/ZjEmoszcHr6bBL1lEflwIsnt
+ +M5zt1mAM5ErL86P5ik3Av5P09TbBRxA/LqmZqnEbMsckclgc8xOj3hRMpOALM80Y61emgZseOP
+ lbw1ofpj+0TfJsT5/Gg4kzpfGM0YMYB2xnCeI0Z/N9h3jZdJIoQM10+2rg8T2dHL6tC/CW5aYXb
+ L87OT34oU2xmHz3NVAKoBvgPhx7V/zDXXcJmlE9liXzeXxKg==
+X-Received: by 2002:a05:6a00:340c:b0:823:1c5f:1c43 with SMTP id
+ d2e1a72fcca58-842258a1f7fmr5819980b3a.36.1780210364131; 
+ Sat, 30 May 2026 23:52:44 -0700 (PDT)
+Received: from fedora ([2409:40e5:104a:da47:4380:deff:ea92:2138])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-8423a790c04sm2112722b3a.16.2026.05.30.23.52.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 30 May 2026 23:52:43 -0700 (PDT)
+Date: Sun, 31 May 2026 12:22:38 +0530
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Message-ID: <ahvO8oJniQoAzSPz@fedora>
+Mail-Followup-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ buildroot@buildroot.org
+References: <20260502173806.2666814-1-chakrabortyshubham66@gmail.com>
+ <ahte4jnN6VBRtafn@windsurf>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20260531061840.6748-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <ahte4jnN6VBRtafn@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1780209105; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=UfTQLxK3aSGcQ6Lh/P59DMPJHWGfw8Nb7gmhUlfZtAo=;
- b=2TwryhhRzQtjLwTiR7idQXaI6HSWqi1Rs78tUhmeGKQTTQ9KazxYbzgexa0tgve18SchY2
- 2SwQ8NdZyQcHHWHd1fN8bd8vTle4dOYHayzR4k0mvyMcTbHbO13CUagbvPvdCnvrxDkZYp
- a2V9fUEK+i6bVmUQCxEsj/rL/UBa0VPj0iVbOzLpYWIiOxzaYJANpPCFwfaTskouUlwJBe
- z+Q6/QVgtqLD9n2vd+KhRv0DiSdcGI07s7k3Rj80ryjnhzNNDE9RhQoWA/lRfFJebZhsDh
- twqmQ2jDn1LH7kFQhRkLWkeF/OF+IEQRpeLIVCmUOdfrPkp9tcrFnCDJ0iuPlw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=2TwryhhR
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/crucible: needs NPTL
+ d=gmail.com; s=20251104; t=1780210364; x=1780815164; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references
+ :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=pKKA6JR7t44RGjLKA9XUT7R3E0k0Sm6L2jXhxpLOLUE=;
+ b=NpCU8bS2kOhNeB4ChIxRkPlTaiB69wtm8PG9O974pq8kH7H2CntXeremCRhwBb7jh+
+ CntnQaXDdLAnntnBuroiQe/iDLsHh5CAHaaEswgvOd3ICKoR7RnzsBBAUwlLup2JQFG3
+ 2TwwaBychwLqpLdhVikqZjbt7VjCperdvDtHKKxpQyBxIiuGa7C/y/UfSsY7sjauGNP/
+ J/5KZj0l+Ck6Xj2mg9yHfOWOZfbwcpCVgO9gLxovvgonoDfJZE5bi1BdyvmTFVmddWcy
+ f0DE32UdQNUTZHHtXN0QkmkUNiwWhxRQA0ZqRsOd1n9SwPVIJaGjlk8VllPBofplUYcU
+ mGxg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=NpCU8bS2
+Subject: Re: [Buildroot] [PATCH] package/ncurses: bump to version
+ 6.6-20260425
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,66 +126,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Sun, May 31, 2026 at 08:18:40AM +0200, Bernd Kuhls wrote:
-> gcc_stack_unix.c: In function 'x_cgo_getstackbound':
-> gcc_stack_unix.c:28:9: error: implicit declaration of function 'pthread_getattr_np';
->  did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
->    28 |         pthread_getattr_np(pthread_self(), &attr);  // GNU extension
+On 2026-05-31 00:05, Thomas Petazzoni wrote:
+> On Sat, May 02, 2026 at 11:08:05PM +0530, Shubham Chakraborty wrote:
+> > - Fix poll() handling for closed input with proper errno
+> > - Security fixes: limit-checks in _nc_write_object, _nc_trim_sgr0,
+> >   read_SGR, and _nc_mouse_parse
+> > - Terminal updates: konsole-direct, mintty, linux-alt1049
+> > - Various bug fixes and improvements
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/e07/e07198d7864331027d21cd2109054d86e7ac1c3d/
+> Where did you get this text from? It is nowhere to be found in
+> https://invisible-island.net/ncurses/NEWS.html.
+
+I got the reference to the page from the repo itself
+- https://github.com/mirror/ncurses/blob/master/ANNOUNCE
+
+"Full manual pages are provided for the library and tools.
+
+   The ncurses distribution is available at ncurses' homepage:
+
+     https://invisible-island.net/archives/ncurses/ or
+     https://invisible-mirror.net/archives/ncurses/ 
+"
+
+The changelog can also be found in:
+- https://github.com/mirror/ncurses/blob/master/NEWS
+
 > 
-> The build error also occured in Oct 2024 so a backport to buildroot
-> LTS branches should be considered:
-> https://autobuild.buildroot.net/results/ebb/ebbd051010c27f97fafc0b203b22c8b0af7e5ccd/
+> Also, you're updating from 20251231 to 20260425, there have been
+> multiple releases, so surely the changelog is longer than that.
+
+I paraphrased the changelog incorrectly and incompletely:                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                        
+- The poll()/errno fix is from 20260411:                                                                                                                                                                                                                                                                            
+  https://invisible-island.net/ncurses/NEWS.html#t20260411                                                                                                                                                                                                                                                          
+- The _nc_write_object, _nc_trim_sgr0, and read_SGR fixes are from                                                                                                                                                                                                                                                  
+  20260418:                                                                                                                                                                                                                                                                                 
+  https://invisible-island.net/ncurses/NEWS.html#t20260418                                                                                                                                                                                                                                                          
+- The _nc_mouse_parse fix and konsole-direct/mintty/linux-alt1049                                                                                                                                                                                                                                                   
+  are from 20260404:                                                                                                                                                                                                                                                                                                
+  https://invisible-island.net/ncurses/NEWS.html#t20260404                                                                                                                                                                                                                                                          
+                                                                    
+ 
+> If you're using AI to generate those patches and their commit logs,
+> stop immediately. We don't have the time to review AI slop.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Thanks, applied to master, after fixing one small thing.
+I used AI assistance when drafting the commit message, which contributed 
+to the inaccurate summaries. I should have verified the generated text more 
+carefully against the upstream changelog before submitting.
 
-> diff --git a/package/crucible/Config.in b/package/crucible/Config.in
-> index 1e1b29c3df..e18e393a05 100644
-> --- a/package/crucible/Config.in
-> +++ b/package/crucible/Config.in
-> @@ -1,9 +1,13 @@
->  config BR2_PACKAGE_CRUCIBLE
->  	bool "crucible"
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+I will send a v2 with a proper commit message covering all intermediate 
+snapshots, written from the upstream NEWS file.              
 
-You forgot to replicate this dependency...
-
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_getattr_np()
->  	select BR2_PACKAGE_HOST_GO
->  	help
->  	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
->  	  i.MX family.
->  
->  	  https://github.com/usbarmory/crucible
-> +
-> +comment "crucible needs a toolchain w/ NPTL"
-
-...here.
-
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-
-Fixed while applying.
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Best Regards,
+Shubham
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
