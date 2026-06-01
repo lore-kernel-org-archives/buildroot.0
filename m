@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C2CBCD6E56
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 09:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F9CCD6E56
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 09:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2743461075;
-	Mon,  1 Jun 2026 09:33:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bdJ9Kbg-RV0E; Mon,  1 Jun 2026 09:32:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D7656105D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780306378;
-	bh=OOgnRLggP4ep3tgvCZvzpFPvEmSoWvf4nsAFb6o3IZI=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=tGuxwkF0IvxJiJ9loXgnb0SAFeGrjG5UXMl9RyoXSPaBH0dqby252YSf5sJxm2Wo8
-	 OPJR/u0wCcyi2TtJtX22VmyYC+ffPrvzgHtq4zRxgpeQo/OpQVRKauNuBnaneemKVZ
-	 o25rEugtzCW2bk02ykcxi4FmdCg4HDGgCCvFb3yWf6COi/BGb55+gPT7xWcihWCDcS
-	 RhCZ7zZTsZgBQVW59xjsqj//lTTG69wqkSZ/vO6wXmvpnfQszOSeGOER5VlKJfVIho
-	 RkTWF8AQvwQQYYAJrySxdqT2qcXno+bgXVau4h14neOX5CHMebyMwoXo1NaDOo8peA
-	 OfoCdacSSv96g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D7656105D;
-	Mon,  1 Jun 2026 09:32:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FB6D257
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:32:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8108641EDC
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:32:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59BBF41EDC;
+	Mon,  1 Jun 2026 09:33:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J2eY_XSUd13Z for <buildroot@buildroot.org>;
- Mon,  1 Jun 2026 09:32:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id IPL7i9YkEoVC; Mon,  1 Jun 2026 09:33:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E2941EF1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780306398;
+	bh=ODDkXkeeLYXOkKTg/mEpKfBA3n0nBB7OtYCYzOjX+Z8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=OFakp2CS/GSHwk+KG7WqHbLq3/SHfEMktyuQC+nGmsZcsBWLYyyOswwIYMJe8pJMp
+	 mMsu9kjTbyWjJnfoHnINGSXUNDU7S3lyl+2fIa9iAdQx/UGdGoDbFPf6YNX+t7plEy
+	 8uqL6oTLcJ+BLehqsMFznUrS8ZMlIyf6MB10vaHU2cO5nWenyIPKxKG88nqdct2KYg
+	 lenXuSxuly3UxUwufrvMeE98EptUQ72CJPRtmIARfulhKgDBtiXGBUJMGRq+3OfjFQ
+	 jXSvWnuZcz/EqvIDUuAf7/t9l+4h7186qkiP3hqvEqgmwoMNTbzMNq8gpc3V7jExZc
+	 b3HpQZXxltUSw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81E2941EF1;
+	Mon,  1 Jun 2026 09:33:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE764294
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:33:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9433D84CBC
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:33:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a7p2x09mPoGX for <buildroot@buildroot.org>;
+ Mon,  1 Jun 2026 09:33:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4187F41EA5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4187F41EA5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4187F41EA5
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:32:56 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1370365359; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 01 Jun 2026 09:32:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wTz0v-00000007YLD-3h1d;
- Mon, 01 Jun 2026 11:32:53 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEC1F84CAE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CEC1F84CAE
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 09:33:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D5069876F3; Mon,  1 Jun 2026 09:33:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour via buildroot <buildroot@buildroot.org>
-Cc: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20260531202439.1471287-1-romain.naour@smile.fr> (Romain Naour
- via buildroot's message of "Sun, 31 May 2026 22:24:39 +0200")
-References: <20260531202439.1471287-1-romain.naour@smile.fr>
-Date: Mon, 01 Jun 2026 11:32:53 +0200
-Message-ID: <871peqehbu.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=M4H4v8/suFqTsgkglvHFx6gGIWmgkd5CPk9mqbQ3ehG5eAXQGDDIY0f5TtEtjNh/UqRTD8JIZ5xv0WPuQ9G/qwhWQXIhFYcM0lseAv6k7ibwETQ4xlp0r2A0Bzak+FRKbiH2gATl7qwh/0HwRHE3JTovHX61WfLNhev03vh9NEi+/jJ/XFAfJZ2hRt4JC7FRu8yz6UW24FLshg1+U/L+kQK2incnme4r+JC1DhvvNes+avBGEdasiYFsQ0UWVIJhlJ3AAXwpjUptJW4/L13jOsEy69o2uXrs+eik/kc8LKuhtzlkjkeuKPlwDN5X2lA4hk57yNxxMEdBaU6xWc/l5A==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=dCphZUYmspCfYGef3hcA+HBfrks2MnBsVrpid62xAlg=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=M4H4v8/s
-Subject: Re: [Buildroot] [PATCH] package/libmodsecurity: needs host-pkgconf
+To: buildroot@buildroot.org
+Date: Mon, 1 Jun 2026 11:32:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7a9486d7d6595d37b0a8c096408a51503a1d1f59
+X-Git-Newrev: db75a8eea0bda678e651fe2b2ba85c3e0b2bed31
+X-Patchwork-Hint: ignore
+Message-Id: <20260601093302.D5069876F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmodsecurity: needs host-pkgconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,27 +69,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour via buildroot <buildroot@buildroot.org> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/db75a8eea0bda678e651fe2b2ba85c3e0b2bed31
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > The configure script was regenerated for the 3.0.15 release but it now
- > error out if pkg-config is missing.
+The configure script was regenerated for the 3.0.15 release but it now
+error out if pkg-config is missing.
 
- > Add host-pkgconf in build dependency.
+Add host-pkgconf in build dependency.
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335870 (TestNginxModsecurity)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335870 (TestNginxModsecurity)
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmodsecurity/libmodsecurity.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index c06d890979..8920cb012e 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -13,7 +13,7 @@ LIBMODSECURITY_LICENSE_FILES = LICENSE
+ LIBMODSECURITY_CPE_ID_VENDOR = trustwave
+ LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
+ 
+-LIBMODSECURITY_DEPENDENCIES = pcre2
++LIBMODSECURITY_DEPENDENCIES = pcre2 host-pkgconf
+ LIBMODSECURITY_CONF_OPTS = \
+ 	--without-pcre \
+ 	--with-pcre2="$(STAGING_DIR)/usr" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
