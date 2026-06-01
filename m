@@ -1,121 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B286CD6E60
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 20:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88941CD5BD1
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 20:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24B21405B3;
-	Mon,  1 Jun 2026 20:47:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EC7A606C2;
+	Mon,  1 Jun 2026 20:47:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EoCPTg9bS6BX; Mon,  1 Jun 2026 20:47:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tT7RiMPViHp2; Mon,  1 Jun 2026 20:47:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B22407DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75F5060729
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780346874;
-	bh=jMgku2KTASTDGYMlW92ggj4xkcQleWjMHb/cpSCnx0s=;
+	s=default; t=1780346877;
+	bh=Z6GDRAmN8eraVW0QH8oAmCPBBrM+jfjR7llyV7uyBI8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=JFDsTnSF3l+20/vlLdApzFjvOUt7aCCVzhgmUtJaoeP/E0NaFupHyfIXAyd1bi3Wm
-	 oOI1MMAMQtwqQPhYr0lj6YsZcs5YA5BKTLKGsBEkJYL8bi07quyBIc+5s2kns5P370
-	 4e3+AmRkE4wc0+3xu/K8ly/uAYYirSzVenQ3sfpVilojPCZJbfGiNuo4vfHJiKi5Z8
-	 vuHzUKnVUbB70DxgCWSlPL1WsyL5PaGgWsqj+sl9f88Rg8V4PZOxh7xk0URBX2F6g4
-	 2Fw2lXlIiurWcQxYArqAMU2YHEhPneprKIJHSC6jgvP+XyxHM3ajy8lILDt4jZAjgw
-	 94UjmnQeU70Ag==
+	b=cJx4DM7ejT/UUmjy8938GDI2Biv3vy2uAGmXfiJs9HCzrTXCERJTquKejNDAdygrn
+	 UEMH9sOlulruS+p06ZPbpu67xCl4EGzDEaAZn6wlWb4pKzBacf/MpsXLARBSGA5/r2
+	 9AVG7EjnVp8nvew2CmaPyslUsj9WMTWCh7zUiGUaJ0te87LKO3uwYnU4Nw1VSK5GzF
+	 s3YoaUivsVmQyCi/0oDFm2v1SvF9ZU/tSGEYb/XKyOHie7Acd5yaPwthX6c47pjRWT
+	 JO7lF0wvc9ARj06BpuYOyhEhA5wYSsaSkIgO8rpXo0TdJY+PzlxLEAINjdcOYru0QE
+	 +lI2UGJHE+Csw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41B22407DE;
-	Mon,  1 Jun 2026 20:47:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C58AF4
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75F5060729;
+	Mon,  1 Jun 2026 20:47:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B697F4
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C4A7405B7
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51951409BF
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y5sspq5Jy5GN for <buildroot@buildroot.org>;
- Mon,  1 Jun 2026 20:47:51 +0000 (UTC)
+ id zmtWl9Y1A0MQ for <buildroot@buildroot.org>;
+ Mon,  1 Jun 2026 20:47:55 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
  envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D33E2404F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33E2404F2
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D33E2404F2
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:50 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-3965adfd75fso30754641fa.1
- for <buildroot@buildroot.org>; Mon, 01 Jun 2026 13:47:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A8DDA4094C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8DDA4094C
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8DDA4094C
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:47:54 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-3966c0d5ac9so23630581fa.2
+ for <buildroot@buildroot.org>; Mon, 01 Jun 2026 13:47:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780346868; x=1780951668;
+ d=1e100.net; s=20251104; t=1780346872; x=1780951672;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=OJcjcO1ob1ci1fEpS9qhoBlyxsfw/N7f64AA+x7iXPA=;
- b=XXbq/TQYKTJ7KYwdv1DaDMjH0v2rSkioxHNU3giI8UEasHJxu/hMtSueDT6jCILhI5
- 8fUP7pl6ETctFUujDmI0C6kGJacXUP8L7eaqXszW8Wff+d1/71IbMFJ9t4Nq4BM15Wb1
- WWe6tVGuK3mBu2kK38girMq53I0671986jnD7W6mfNi8tLYSwT+khutYB/e1Y91QFEQn
- m/Gd+hMJSnYjAuEmfYsX2bh2lZ8VGyx/Fy7qhI11/zFVRytVUC2p9pZtreYY2p+IUw0x
- Aaag5vKphll5lvhhXQBf+cT9Z1hRNNqd0xJ4pZEZ1CdZw3ddQuoYzjmd4HlKVcvUBEpn
- fmqg==
-X-Gm-Message-State: AOJu0Yxuxrje0dlanIPvJj3kxu8rfCJQW3PKob0Ue/dZHZIV14WcjEsr
- Di8I30uDh067AKBlsqWgFxVxAatQPPOFRmgDXeRqcezW8Pfly15X5oVoqlBeYtIHnqgyoCPmgZp
- G4ED143Stbw==
-X-Gm-Gg: Acq92OEUK9grMN71eyt8PxYfsjSiy8zqbjGYw9NebRHBHSh2zoKyeZFWtVhNl5wkwi2
- ZHsJB0pQiP3Rzs+400SO6QJB8zxxJdsOiK9vEJvdCyBW8V5IakI7KRuuB7APo/2ASJxksO00Fzk
- rvuQXqlZZ2NKRHTCillKoWWwq4TIKQXx4OPOSHgRtR05sG7wKKhJ6C8EcBkI/IuSMPvQ/J9wMuS
- sFgfAOqCjgF1ZEf8sXX+lbiNG4foSRRS1gOb4MEP5TBSFMP6PYCsjHJgBKoWTJhw1RojHjzrSCM
- GYVl+kDD8GhgxKD+yTHxxMBSAgHwnsTH3XriPsWzV9L8xwWY3gQIUAiOoHFN1d58ZgVpiuuy6Db
- ZiMg5Ir3BftpvC+UuRqb5D+4Wp35GHWdc9+XLfwqRPAcs1NCqLfkvjTMhGTkLQda9Hx7ti2D1to
- b1+iHkU6Dy2UDdzK/ObfEx96CArc+qQk5ri6w6HV5LyqTdk81KVGN3HvXVoylpSQ==
-X-Received: by 2002:a05:651c:324f:b0:394:7f1:510f with SMTP id
- 38308e7fff4ca-39664fb25e4mr40639771fa.25.1780346868425; 
- Mon, 01 Jun 2026 13:47:48 -0700 (PDT)
+ bh=yiujKNTTXQ5V/X4fm6brIoWjKkEuCijxZKIb2kc0OGo=;
+ b=q5+3OOSz2q6KxTVzAku9g8lnVQDYHgk4lQxj7ZqZoFaYpTb7SRA0a5uzqi3qr5ermM
+ 2guGfivoX12+sUVV/Nm4Xvcb2uqgxbgob5bb7h8ITMyHbI2b+JYA0YYedVbGLkc7xjbV
+ 8lMur3SnoVmxgNI762+hkOqdeyw81t4qbmIFosumJkh6qpZmsuwt9U/O2SvAA2Ug/Rh+
+ IMa2/9iYoj7oTA9ojEJJch5LFmjsIm4SGDzMhUcFXpEDkyBCOIEuthPsKNiiHfDVe4m7
+ RBRtPzAoJlzFiAkNt354FXTLfiMgKPFhwUwvkn5bchSgy6TSmUIn7KgDu18QMCB5wvzo
+ WHwA==
+X-Gm-Message-State: AOJu0YySMaI26jkIo8OTw6pyS6CgYJy8wKuFxst5xobwn8Cj6+14IydZ
+ T7fx7Bl9ptn0NU0G5Rf0s1E0QcaMaLlVDO01ttlJ9413gnqathCF47Pc/vol+yJTfbC5dY/Y9bW
+ ScTurbtKnZA==
+X-Gm-Gg: Acq92OFqSFWDUvqgVVdE+AACHMcoaOu0BsnjNB2dZ2B3gj8JxsjBLPXNtGrM+/tyP2n
+ T2NYQ/XAma7/avuZfcofdNIMJMe1sc0fN37JKKwM47taHZNAxn4xISdRaVlWhOwfYIHmenIC+8G
+ +Dn0ebVh5sIqCjKo2EVgTkOoKia5Rgufx9w1BLI56gGSDDqVfI+FHNOVM7gx0ruUWTdCtRLYaZT
+ DTAOLhxp1T7gbfRKVEJu8C4xdUXqELGStDXGZqL4mxJN3WuJqBGPxgLWQfCuoVVrxPmWeuRaAxq
+ 160PjUozJBgE04J7qrLvJ2sLvssyDdRi9vz85YWvjgaAywqDin3SIFmttBiNJu4ttdRaieAuGgN
+ FTmcDvbA747RgcJ+c9S14bRoNq9+jof96wlUKZPoKCcxmbiSBnXfCwQw7DtOfcyjdO952KaLdOC
+ ln19aD8TsN53XyqB/Yws/iJIW9Osz/dTe11nuV1P8VYQnuoH9o6WWUc4VCUa3yNg==
+X-Received: by 2002:a05:651c:54c:b0:394:3edb:eb82 with SMTP id
+ 38308e7fff4ca-39664e6171fmr38288591fa.1.1780346872228; 
+ Mon, 01 Jun 2026 13:47:52 -0700 (PDT)
 Received: from localhost (78-71-152-124-no2360.tbcn.telia.com. [78.71.152.124])
  by smtp.gmail.com with UTF8SMTPSA id
- 38308e7fff4ca-39659de42fasm27782141fa.19.2026.06.01.13.47.46
+ 38308e7fff4ca-39659de42fasm27782341fa.19.2026.06.01.13.47.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 01 Jun 2026 13:47:46 -0700 (PDT)
+ Mon, 01 Jun 2026 13:47:50 -0700 (PDT)
 From: John Ernberg <j@j-ernberg.se>
 To: buildroot@buildroot.org
 Cc: John Ernberg <john.ernberg@actia.se>, John Ernberg <j@j-ernberg.se>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Mon,  1 Jun 2026 22:47:29 +0200
-Message-ID: <20260601204735.888967-4-j@j-ernberg.se>
+ Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>
+Date: Mon,  1 Jun 2026 22:47:30 +0200
+Message-ID: <20260601204735.888967-5-j@j-ernberg.se>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260601204735.888967-1-j@j-ernberg.se>
 References: <20260601204735.888967-1-j@j-ernberg.se>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1780346868; x=1780951668;
+ d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1780346872; x=1780951672;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=OJcjcO1ob1ci1fEpS9qhoBlyxsfw/N7f64AA+x7iXPA=;
- b=BkZbHnoMIU1zfrlD2XDWPNQtySUWyH9WCAj2HIvFGskV1MKEJK5aYzOZeoI6ELlBFX
- XSOVEt6HyvcReRnaE5KGwnx7gqn6lirwVHtHazbN0Q3Img1HiqO6ybOJ16Cy3khXKjVj
- +btnAGJa28YIIcqcC7kaeJ6DXnWk8eB50/VDBD0ZjN+KKK8cK2NX6OP8EWGSy/n0mFMB
- 0Q3saqRsRyO5yXVKqkFzqWC0fQGu3mxbPAavdP97fp3Z35YyQHprR4UCY5aWjpqlhpqs
- 7ZIYYeYofSDC+/Uu+DHt/iiwgUcPBG9bm/6tYKAhbpW21+peiqmIB/3XTLG4E15hu1/F
- bwLw==
+ bh=yiujKNTTXQ5V/X4fm6brIoWjKkEuCijxZKIb2kc0OGo=;
+ b=01U/sNN5EXFtjeSU4TLaOCstHJC3DKPSVFuu96EMChWbS1KDc7TwaIU6EyqGrj2Pwn
+ YLDMcC42649FavZZZIv0X7XJjexBAIBfwPSy9qrQGbjyZhF4khUJFbraP7ziRPgiYfMl
+ A3fl+iOwNv8wNSxrtoMy4CLiCsjZNbZj5J6gzTwDz1tOO3+4gloMXxry21iuBl/dNhFZ
+ NeuFKHoJLLTxpoNl+YJtaw6/xks38d5q5ajdRWOKGOG0MvINv1sMk7n9Lbafg7o2ZU/6
+ 6gDVVK44P11TmhpfhSEI0Yja3GRDfjhRoaLkHSHwWjneclaRJ4RLYmvwR3oxGyYElCc+
+ 0r3g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=j-ernberg.se
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=j-ernberg-se.20251104.gappssmtp.com
  header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=BkZbHnoM
-Subject: [Buildroot] [RFC PATCH 3/9] package/rtl8188eu: Select
- linux-firmware for the firmware
+ header.s=20251104 header.b=01U/sNN5
+Subject: [Buildroot] [RFC PATCH 4/9] package/{skeleton-init-,
+ }systemd: Install legacy.conf from the systemd package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,69 +131,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Due to partial rtl8188eu support in the upstream Linux kernel
-linux-firmware packages the firmware for this chip now.
+systemd since version 257 installs legacy.conf again, but a different
+version of the file compared to buildroot.  version 260 will once again
+stop installing it.
 
-It's packaged under the same filename, but is a later version (v28) from
-2017 [1] while the firmware blob bundled in the repository is from over 13
-years ago [2].
+Move the buildroot custom legacy.conf to the systemd package and install it
+from there ensuring the expected legacy.conf is the one installed in all
+cases.
 
-The LICENSE is updated for the same reason, the appropriate license will
-be provided by the linux-firmware package.
-
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/WHENCE?id=fe1a0a75caa69da62849cbf549c32531c6d1da4b#n3628
-Link: https://github.com/Benetti-Engineering/rtl8188eu/commit/a27737ea39d72040d7421600949373982d78a0d2
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Sen Hastings <sen@hastings.org>
 Signed-off-by: John Ernberg <j@j-ernberg.se>
 
 ---
 
-RFC/RFT: I don't have any of the hardware for this chip and cannot test
-that this doesn't break stuff.
+RFC: I don't know systemd well enough to judge if the legacy.conf from
+systemd should be used over the buildroot one.
 ---
- package/rtl8188eu/Config.in    | 2 ++
- package/rtl8188eu/rtl8188eu.mk | 8 +-------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ .../skeleton-init-systemd/skeleton-init-systemd.mk  |  1 -
+ .../{skeleton-init-systemd => systemd}/legacy.conf  |  0
+ package/systemd/systemd.mk                          | 13 ++++++++++++-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+ rename package/{skeleton-init-systemd => systemd}/legacy.conf (100%)
 
-diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-index 102e8d7bf7..397ce4c080 100644
---- a/package/rtl8188eu/Config.in
-+++ b/package/rtl8188eu/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_RTL8188EU
- 	bool "rtl8188eu"
- 	depends on !BR2_s390x
- 	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LINUX_FIRMWARE # runtime
-+	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX # runtime
- 	help
- 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
- 
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 5f378e0b6e..a4b6b89e3d 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -6,7 +6,7 @@
- 
- RTL8188EU_VERSION = cca7c28087db740d7d745e81e4096c9eb9084f9a
- RTL8188EU_SITE = $(call github,benetti-engineering,rtl8188eu,$(RTL8188EU_VERSION))
--RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
-+RTL8188EU_LICENSE = GPL-2.0
- RTL8188EU_LICENSE_FILES = COPYING
- RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
- 
-@@ -18,11 +18,5 @@ define RTL8188EU_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index b312fe33e4..e06890fee8 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -93,7 +93,6 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+ 	ln -s ../run $(TARGET_DIR)/var/run
+ 	# prevent install scripts to create var/lock as directory
+ 	ln -s ../run/lock $(TARGET_DIR)/var/lock
+-	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
+ 	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
  endef
  
--define RTL8188EU_INSTALL_FIRMWARE
--	$(INSTALL) -D -m 644 $(@D)/rtl8188eufw.bin \
--		$(TARGET_DIR)/lib/firmware/rtlwifi/rtl8188eufw.bin
--endef
--RTL8188EU_POST_INSTALL_TARGET_HOOKS += RTL8188EU_INSTALL_FIRMWARE
--
- $(eval $(kernel-module))
- $(eval $(generic-package))
+diff --git a/package/skeleton-init-systemd/legacy.conf b/package/systemd/legacy.conf
+similarity index 100%
+rename from package/skeleton-init-systemd/legacy.conf
+rename to package/systemd/legacy.conf
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 9ce4f8fef2..428f49e4db 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -670,12 +670,23 @@ endef
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_INIT_HOOK
+ endif
+ 
++# During the deprecation process of sysvinit support systemd has gone back and forth
++# on installing the legacy.conf file and to which extent.
++# Override it with a customized version.
++# See systemd commits:
++# - https://github.com/systemd/systemd/commit/5ca9149464c100548701ab0839712c57f67e2652
++# - https://github.com/systemd/systemd/commit/fcff83a5347679bde1e3bff1398cdc557a432f9d
++define SYSTEMD_INSTALL_CUSTOM_LEGACY_CONF_HOOK
++	$(INSTALL) -m 0644 $(SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d
++endef
++
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+-	SYSTEMD_INSTALL_MACHINEID_HOOK
++	SYSTEMD_INSTALL_MACHINEID_HOOK \
++	SYSTEMD_INSTALL_CUSTOM_LEGACY_CONF_HOOK
+ 
+ define SYSTEMD_INSTALL_IMAGES_CMDS
+ 	$(SYSTEMD_INSTALL_BOOT_FILES)
 -- 
 2.53.0
 
