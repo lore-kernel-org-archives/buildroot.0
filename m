@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FF4CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D3FCD8CAA
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF42885E96;
-	Tue,  9 Jun 2026 13:06:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7B1E85EEA;
+	Tue,  9 Jun 2026 13:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bhBPB0cnBekN; Tue,  9 Jun 2026 13:06:05 +0000 (UTC)
+ id WR8nmGv8erfJ; Tue,  9 Jun 2026 13:06:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 908EE85AEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBEB185EB8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010360;
-	bh=O6Zbj8AfRo5rVWuVFyQj9OXK1Bl7l1VJbMF3RTHvjXA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KbOkrT1b4YLkhfUJg08nO5sKePs8tIiC1LZb7rjis0QxTMJGFZhKLiFjQ5HbzdODU
-	 2Nmk3GXBVPfIinUNlSkjseOdCNm0cGTCK3ftVjj8Hutt/a7j3QT6xrhTUWK/NKuBe4
-	 /Yxl049ZvCNsisbvDJIrI+gbpTwaGZLPgL5nTkaWeycvLtNt8Vke2N2x9WTPQXRI52
-	 ljd2F18Ae4Z2vZnNXBpr7Tut1x0Aq4TbTX1KjuJ9foC9HNVZyyaNSMrE+i/8eauzGy
-	 NoGd0OjufBouBBIgoCTBWL5RQNIQsbmYofCxbklVqJGvLrHczMl3We+2o4o/UxzSKb
-	 jIfq31IOQEtzA==
+	s=default; t=1781010363;
+	bh=pyEklFxfBFt1vu41fAmp9gsHwmbXJRlktSuAmJ7jLuY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=MjAPkPPRGiXopH06KNdR1PXj7KDx/DSIbSAeaFiv0cE7wAG28/Gp/RLPEpUFg/LPo
+	 3M3VbzeDZUWaLBDCm6tc0InxaE7w7X9YT4NzjYX11N1dBEau8WjrZNU9EzzHGzqqAb
+	 wmn5vi2YS4lRqabJZCaMcS6QRMO2uEyGo95dyJfprAhCJFD1sxLBGuajYb7yu7UdIq
+	 aNUqcQuhljoJOSgacFgWY8225R4wWWOTIpxr4+Ij2W+jsVkoZcodFP4Iro8+Q7CxPU
+	 f/F8MB4G7WrCVkXfdvzVOHGI5TC8lhvKllp2lIdvW1DnFxsmfCyfdkmryarhTbJ4D+
+	 hMNBQntteQOHQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 908EE85AEA;
-	Tue,  9 Jun 2026 13:06:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBEB185EB8;
+	Tue,  9 Jun 2026 13:06:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B1709190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B75BF196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9B904528A
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69BF3411F2
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ly0it3NXSPq0 for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
+ id ukyZfvei9tnF for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C63FB411F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9916145BBB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C63FB411F2
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9916145BBB
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E2B587E8C; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D4E0C87E68; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 23:58:44 +0200
+Date: Mon, 1 Jun 2026 21:19:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 72a022ec2c5be7552403d5199ec8bd01e3a64641
-X-Git-Newrev: 6be20a5df1b8208b8d156fee292954d4738a4b3e
+X-Git-Oldrev: 51d8351e286a6528b88ddb9f2dbfd1c5c86aba7b
+X-Git-Newrev: 9d85c36577f19715545cdfc6bee792913377e096
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130125.0E2B587E8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: bump version to 1.3.16
+Message-Id: <20260609130125.D4E0C87E68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/weston: bump version to 15.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,49 +68,211 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6be20a5df1b8208b8d156fee292954d4738a4b3e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9d85c36577f19715545cdfc6bee792913377e096
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Release notes:
-https://github.com/eclipse-paho/paho.mqtt.c/releases/tag/v1.3.16
+https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Removed patch which is included in this release.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...erer-guard-surface-output-creation-with-b.patch | 151 ---------------------
+ package/weston/weston.hash                         |   6 +-
+ package/weston/weston.mk                           |   2 +-
+ 3 files changed, 4 insertions(+), 155 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 8ca597c4f9..59c74cd044 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  60ce2cfdc146fcb81c621cb8b45874d2eb1d4693105d048f60e31b8f3468be90  paho-mqtt-c-1.3.15.tar.gz
-+sha256  8b960f51edc7e03507637d987882bc486d8f4be6e79431bf99e2763344fd14c5  paho-mqtt-c-1.3.16.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index acff7d5cc3..3a6a4e4b31 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+diff --git a/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch b/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch
+deleted file mode 100644
+index 8d88730336..0000000000
+--- a/package/weston/0001-vulkan-renderer-guard-surface-output-creation-with-b.patch
++++ /dev/null
+@@ -1,151 +0,0 @@
+-From 60e0ec39183f932b7b4ba60070a5b2ac64b42d30 Mon Sep 17 00:00:00 2001
+-From: Erico Nunes <nunes.erico@gmail.com>
+-Date: Thu, 5 Mar 2026 17:29:06 +0100
+-Subject: [PATCH] vulkan-renderer: guard surface output creation with backend
+- defines
+-
+-Fix compilation errors when compiling with x11 or wayland backends
+-disabled or not available.
+-
+-Fixes: 8f56d03d ("libweston: Vulkan renderer")
+-
+-Upstream: https://gitlab.freedesktop.org/wayland/weston/-/commit/ba10e6d81462fc8628dd340ba9404e13745eae18
+-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+----
+- .../vulkan-renderer-internal.h                | 17 ++++++++++----
+- libweston/renderer-vulkan/vulkan-renderer.c   | 22 +++++++++++++++----
+- 2 files changed, 31 insertions(+), 8 deletions(-)
+-
+-diff --git a/libweston/renderer-vulkan/vulkan-renderer-internal.h b/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-index aadfc6e4..f8604227 100644
+---- a/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-+++ b/libweston/renderer-vulkan/vulkan-renderer-internal.h
+-@@ -35,17 +35,21 @@
+- #include <stdbool.h>
+- #include <time.h>
+- 
+--#include <wayland-util.h>
+- #include <vulkan/vulkan.h>
+- #include "shared/helpers.h"
+- #include "libweston/libweston.h"
+- #include "libweston/libweston-internal.h"
+--#include <xcb/xcb.h>
+- 
+--#define VK_USE_PLATFORM_XCB_KHR
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- #define VK_USE_PLATFORM_WAYLAND_KHR
+- #include <vulkan/vulkan_wayland.h>
+-+#endif
+-+
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+#define VK_USE_PLATFORM_XCB_KHR
+-+#include <xcb/xcb.h>
+- #include <vulkan/vulkan_xcb.h>
+-+#endif
+- 
+- #define MAX_NUM_IMAGES 5
+- #define MAX_CONCURRENT_FRAMES 2
+-@@ -173,10 +177,15 @@ struct vulkan_renderer {
+- 	struct wl_list pipeline_list;
+- 	struct dmabuf_allocator *allocator;
+- 
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	PFN_vkCreateWaylandSurfaceKHR create_wayland_surface;
+--	PFN_vkCreateXcbSurfaceKHR create_xcb_surface;
+- 	PFN_vkGetPhysicalDeviceWaylandPresentationSupportKHR get_wayland_presentation_support;
+-+#endif
+-+
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+	PFN_vkCreateXcbSurfaceKHR create_xcb_surface;
+- 	PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support;
+-+#endif
+- 
+- 	PFN_vkGetImageMemoryRequirements2KHR get_image_memory_requirements2;
+- 	PFN_vkGetMemoryFdPropertiesKHR get_memory_fd_properties;
+-diff --git a/libweston/renderer-vulkan/vulkan-renderer.c b/libweston/renderer-vulkan/vulkan-renderer.c
+-index 9f701913..b15eff46 100644
+---- a/libweston/renderer-vulkan/vulkan-renderer.c
+-+++ b/libweston/renderer-vulkan/vulkan-renderer.c
+-@@ -303,16 +303,20 @@ static const struct vulkan_extension_table vulkan_inst_ext_table[] = {
+- 		.name = VK_KHR_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_SURFACE,
+- 	},
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	{
+- 		.name = VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_WAYLAND_SURFACE,
+- 		.instance_dep = EXTENSION_KHR_SURFACE,
+- 	},
+-+#endif
+-+#if defined(BUILD_X11_COMPOSITOR)
+- 	{
+- 		.name = VK_KHR_XCB_SURFACE_EXTENSION_NAME,
+- 		.flag = EXTENSION_KHR_XCB_SURFACE,
+- 		.instance_dep = EXTENSION_KHR_SURFACE,
+- 	},
+-+#endif
+- };
+- 
+- /* Keep in sync with vulkan-renderer-internal.h. */
+-@@ -3455,9 +3459,12 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 	struct vulkan_renderer *vr = get_renderer(ec);
+- 	struct vulkan_output_state *vo = get_output_state(output);
+- 	VkResult result;
+--	VkBool32 supported;
+-+	VkBool32 supported = 0;
+- 	assert(vulkan_instance_has(vr, EXTENSION_KHR_SURFACE));
+- 
+-+	vo->swapchain.surface = VK_NULL_HANDLE;
+-+
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	if (options->wayland_display && options->wayland_surface) {
+- 		assert(vulkan_instance_has(vr, EXTENSION_KHR_WAYLAND_SURFACE));
+- 
+-@@ -3472,7 +3479,10 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 		result = vr->create_wayland_surface(vr->inst, &wayland_surface_create_info, NULL,
+- 						    &vo->swapchain.surface);
+- 		check_vk_success(result, "vkCreateWaylandSurfaceKHR");
+--	} else if (options->xcb_connection && options->xcb_window) {
+-+	}
+-+#endif
+-+#if defined(BUILD_X11_COMPOSITOR)
+-+	if (options->xcb_connection && options->xcb_window) {
+- 		assert(vulkan_instance_has(vr, EXTENSION_KHR_XCB_SURFACE));
+- 
+- 		supported = vr->get_xcb_presentation_support(vr->phys_dev, 0, options->xcb_connection, options->xcb_visualid);
+-@@ -3486,9 +3496,9 @@ vulkan_renderer_output_window_create_swapchain(struct weston_output *output,
+- 		result = vr->create_xcb_surface(vr->inst, &xcb_surface_create_info, NULL,
+- 						&vo->swapchain.surface);
+- 		check_vk_success(result, "vkCreateXcbSurfaceKHR");
+--	} else {
+--		assert(0);
+- 	}
+-+#endif
+-+	assert(vo->swapchain.surface != VK_NULL_HANDLE);
+- 
+- 	vkGetPhysicalDeviceSurfaceSupportKHR(vr->phys_dev, 0, vo->swapchain.surface, &supported);
+- 	assert(supported);
+-@@ -4190,15 +4200,19 @@ load_instance_proc(struct vulkan_renderer *vr, const char *func, void *proc_ptr)
+- static void
+- vulkan_renderer_setup_instance_extensions(struct vulkan_renderer *vr)
+- {
+-+#if defined(BUILD_WAYLAND_COMPOSITOR)
+- 	if (vulkan_instance_has(vr, EXTENSION_KHR_WAYLAND_SURFACE)) {
+- 		load_instance_proc(vr, "vkCreateWaylandSurfaceKHR", &vr->create_wayland_surface);
+- 		load_instance_proc(vr, "vkGetPhysicalDeviceWaylandPresentationSupportKHR", &vr->get_wayland_presentation_support);
+- 	}
+-+#endif
+- 
+-+#if defined(BUILD_X11_COMPOSITOR)
+- 	if (vulkan_instance_has(vr, EXTENSION_KHR_XCB_SURFACE)) {
+- 		load_instance_proc(vr, "vkCreateXcbSurfaceKHR", &vr->create_xcb_surface);
+- 		load_instance_proc(vr, "vkGetPhysicalDeviceXcbPresentationSupportKHR", &vr->get_xcb_presentation_support);
+- 	}
+-+#endif
+- }
+- 
+- static void
+--- 
+-2.43.0
+-
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 24f0f08bab..b002942696 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lore.freedesktop.org/wayland-devel/aZbDU-xtVMLhB0wD@xpredator/
+-sha256  58c6186d29a5d2f0be0dec4882af71cc190a11da803f6ed1bf0b2c74120da973  weston-15.0.0.tar.xz
+-sha512  1196db00b473f036ba290e1073729c2b9e29ac061d9687b30dfad14e3b139313d3ca9c8000838e1b9c39713e96a2c544ec05d80bafad0b8ea1d1f380befa250d  weston-15.0.0.tar.xz
++# From https://lore.freedesktop.org/wayland-devel/aespQ3LKAOy5O3Hx@xpredator/T/#u
++sha256  551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d  weston-15.0.1.tar.xz
++sha512  555731ddfaf7e3ef9bf43be682e20338ee207b434a72011b730c9b0ebde4daeaeb9cc9d09a707c32798f0184a55144f64e818551efe7e71413876e45e3cb3523  weston-15.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index e160c89477..5caf5903d1 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHO_MQTT_C_VERSION = 1.3.15
-+PAHO_MQTT_C_VERSION = 1.3.16
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+-WESTON_VERSION = 15.0.0
++WESTON_VERSION = 15.0.1
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
