@@ -4,84 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 415BBCD5BD1
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 20:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C23F0CD6E55
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 20:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 146EC4072F;
-	Mon,  1 Jun 2026 20:17:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A6F240A41;
+	Mon,  1 Jun 2026 20:27:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBONn-xmRpJq; Mon,  1 Jun 2026 20:17:52 +0000 (UTC)
+ id NAZRjdVQL8Qp; Mon,  1 Jun 2026 20:27:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69C5A4065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9DA540A3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780345072;
-	bh=5eFF3ITC3hFIETmWs34UAhDILpicLsjAA3tkKh7rI0U=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kAY6gfsRBGxRtWoSzZGfd7ahj6Y4UKJBT9MAJnK7MSgvGipVen7kwyh9YrZbcYWYG
-	 9gr8GDfx41Izho9HHuZxGrfytIn2ulJ9KRyRnjnfBxVNARHyW8bmAMEToNPfT9ahip
-	 GwJrNiwCxM21bgzjbIxTYBTdNP7hF8zvOkEMnzzLacNFlGnk4aRtfnCZPKV4Qzh27L
-	 vlJCA+H6ibb0kVDWleJW3rUq2FeSrrc1SkrKuke6FAR8Mtog6NlBVD8zUrj9Y37s70
-	 y30CJK3CBnPMtuvWL2ADlbLXUJEcLOHuuYmtOJA1aRentF1x5tWxJVtdECjpxMQZSU
-	 QOF23TTxwqxZA==
+	s=default; t=1780345635;
+	bh=PdkW4/iO+MruqZCRff3rk4iE80C5NKyNIjs0qYJ2WsE=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=Wmz6MP+HTs3BvCJ6/qdFioUE7KIoXs+ZRnuC3NBhqly3nZ+jMZIbqlKMkLmX98faB
+	 GL4V54ta05GSZoNAmugwA3jshXXU94xLG9k5+tDAenjTaENV23nut74RNxwwwFbQ3f
+	 P89vHu89YR1Kn31Uan7sNWn/bsZCyuLczCU2RGsQ/NP8txQh9GSq9zjQ54a8cjVb4Z
+	 jaKQQqH/CIae9HAlSIw7dhenw7wrzfe6w1fafxOrNpVrxByLAuh9pijoShihOCS20N
+	 o5T1J/DmDIbmrRphTznE1K3i7JOdQPJUSGnM+roMD6OzCaZDQ9F5cAcar2yFe9R4VA
+	 zCzzmAw0oT51Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69C5A4065F;
-	Mon,  1 Jun 2026 20:17:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 29AFA223
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:17:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9DA540A3E;
+	Mon,  1 Jun 2026 20:27:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CB69223
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BCE74015E
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:17:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22E2440A3E
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8UhY5j3D2WOK for <buildroot@buildroot.org>;
- Mon,  1 Jun 2026 20:17:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E9454015A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E9454015A
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E9454015A
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:17:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 7761813F8B5;
- Mon,  1 Jun 2026 22:17:45 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 01 Jun 2026 22:17:45 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9aKtP3GzCfCb for <buildroot@buildroot.org>;
+ Mon,  1 Jun 2026 20:27:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6325140A3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6325140A3C
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6325140A3C
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 20:27:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 3C316B97C76C; Mon,  1 Jun 2026 22:27:11 +0200 (CEST)
+Message-ID: <59f5a749-6fb6-4459-a54d-2390beb532b8@rnout.be>
+Date: Mon, 1 Jun 2026 22:27:09 +0200
 MIME-Version: 1.0
-Date: Mon, 01 Jun 2026 22:17:45 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260601192158.3687045-1-bernd@kuhls.net>
-References: <20260601192158.3687045-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.14
-Message-ID: <978aed3dfbee5f3ad47858e12b76671f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780345066;
- bh=V/zKr9BmV7GmiHsaN8z2sPrwRmbfe+b4Sv9piz25ZyY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TuGCybMxr8g848AS2Jjdx74txNz825uGI/u/CsbJdgFEnnxdMDwHtW/4M//8GtS5Z
- yX8P5HWN8CmdsTICHWZV2U2rdaYcm5YGMMRxtFX9Lu+0+ADQfRpG1Pj7RSIEcthXy8
- CWzCluFYhyu0Zqlu6YxhcWP4aYUbgGi/0yalsVwChRnGhHc1bI9hGdag/+5Fo7wPeA
- oJMQ/GOUJL4gRI/llRIdpkicI1OlIyIsLtbIHzYJEEq+sUaGSWdA+cFtDr4YhwA4UI
- Lt2n7i0FNgio2PSs8/2yIKoj5zYsxQweOSDh2v7jjUB0Kn1ZwX1l+UJOWUex4/el21
- qU+ve0ekUVPZQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TuGCybMx
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
- 0.4.9.9
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+References: <20260529161826.517403-1-thomas.perale@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260529161826.517403-1-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1780345631; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=ypUD7fnq546VHKC3ahkEaUP5uO6y3hLuRPvmh8wEHMQ=;
+ b=Ov1UN4qv1cdWFSiJG7ETAotSvY2YFDXXPgXNV+uIopg4Dq060Vgb4mzlWb8z1RtyqRZc4J
+ Vy+wes6xIvX4xZrCOEzLO4aisbvDh3wnXu0W57h4ZEgBoVIBiobPqfWNBJtQz9hiF96FpC
+ y3DIenKC0aemgUVogub9bL3+k6wF8hD/w66t5vnHnNKcrtCP4f/NVHQ3k9eaItcXw81r1k
+ ArzMNyaOBe1WKzPdAsPl/VWYJ7KROKFBId3VtiXWjYjFlEU9kNGFkYS+gI4txuJi/jfizU
+ 0S0DKJwfBZrznACFkSbTtUs5uuUBzKqc+TFMd0KFf4LrWxtZsW8g9o+koBbAxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=Ov1UN4qv
+Subject: Re: [Buildroot] [PATCH 1/5] package/busybox: re-introduce
+ IGNORE_CVES for CVE-2023-42366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,24 +88,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/06/2026 21:21, Bernd Kuhls wrote:
-> https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.9/ReleaseNotes
-> 
-> Fixes
-> TROVE-2026-013, TROVE-2026-014, TROVE-2026-015, TROVE-2026-016,
-> TROVE-2026-017, TROVE-2026-018, TROVE-2026-019, TROVE-2026-020,
-> TROVE-2026-021 & TROVE-2026-022.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+  Hi Thomas,
 
-Applied to master, thanks.
+On 29/05/2026 18:18, Thomas Perale via buildroot wrote:
+> The patch `0008-awk.c-fix-CVE-2023-42366-bug-15874.patch` was introduced
+> in [1]. The IGNORE_CVES entry was removed while the patch is still
+> present in [2].
+
+  I was going to apply but it generates conflicts since we bumped busybox to 
+1.38.0 on Saturday (though that patch was already pending a couple of weeks).
+
+  Could you re-check which of the exclusions still apply?
+
+> 
+> Re-introduce this IGNORE_CVES entry.
+> 
+> [1] 75c594d446 package/busybox: fix pending CVEs
+> [2] f88537c46b package/busybox: drop stale IGNORE_CVES entries
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>   package/busybox/busybox.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index ebe169cdb9..7e0b3d5766 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -15,6 +15,10 @@ BUSYBOX_CPE_ID_VENDOR = busybox
+>   # 0004-nslookup-sanitize-all-printed-strings-with-printable.patch
+>   BUSYBOX_IGNORE_CVES += CVE-2022-28391
+>   
+> +# This is not stale just wrong NVD entry.
+
+  It would be useful to specify "This is not stale, NVD incorrectly says up to 
+version 1.3X".
+
+  Series marked as Changes Requested.
+  Regards,
+  Arnout
+
+> +# 0008-awk.c-fix-CVE-2023-42366-bug-15874.patch
+> +BUSYBOX_IGNORE_CVES += CVE-2023-42366
+> +
+>   # 0012-archival-libarchive-sanitize-filenames-on-output.patch
+>   # 0013-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
+>   BUSYBOX_IGNORE_CVES += CVE-2025-46394
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
