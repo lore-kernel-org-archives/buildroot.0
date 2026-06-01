@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54FC8CD6E55
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 21:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527F1CD5BD1
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 21:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0083160777;
-	Mon,  1 Jun 2026 21:24:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 172C3811E3;
+	Mon,  1 Jun 2026 21:25:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h97lOF-vsQQq; Mon,  1 Jun 2026 21:24:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MnxFFpnZVb7F; Mon,  1 Jun 2026 21:25:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12E1060778
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33D51811E8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780349088;
-	bh=hTqX8E6HY1FTeIKfSLfZanbtrdXA8FF9FbjXxPmLvBA=;
+	s=default; t=1780349153;
+	bh=2JXzURRaLISni7cGkMWynCH8zQRYqySMNIc10AiWCEc=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=a2ctTcAMQC0iQq54TQfi3GwRJV8AyAPisc5bjEFOEghh6Yf2oeKTMWT23c6KgRhCF
-	 LSsT3Ungg63LNc7ywJvpLCJDMPFS9u2sY7CrW/ReFjGXaFp1clGR1OROA1DHN8C88U
-	 a2hua5b0ddyPe5SNhL2ap04j8DB9KMUjKT7SDiG9PjCPk2eatDPma/iUXIVNRpOI28
-	 j836Jo1cLoVamo3Jy0n6CkLLQv6kvA7KxvHxn59yNYvnZ+GZqynmptmsIyp8snbTXg
-	 vWi32GhWdVl1bal3FMVRjF/xlla1CzcIcZQlL8vvZNSjb5i8k62fmBmTWfO0w5+su9
-	 9i92fAl/6bFiA==
+	b=M/1gvBDUuNTOm5xaHJq8BfJ8SyWNqriQ7JmuMnQAvSawONBz3OVbuzxDjlQL0YFv4
+	 rH5SIPsk6eLatOmC/newEVValLbUKeYfsXRA3gb+tQqMx3QjXdCE1XRO0lenS6Va2h
+	 M7nYlvI9aaeAc2MUybycNAzW80/sQoDiNAbIlXrrKuRFf59o5iIzMmBXiTNOvpoCmN
+	 X0gNY7n40m+niqU9dbgRLLtd3QaCyIz7TCysBudlB+A6kFz64eNd3MZPLsz21mkxLv
+	 KYXcX8f0aTs5jGo6gsfNXTaBH4UdSSIti9M450MIBKdqQ2RYU7yBkqVmLsYqvZlfrJ
+	 MYTNtxtXgsS2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12E1060778;
-	Mon,  1 Jun 2026 21:24:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AAF02223
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:24:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33D51811E8;
+	Mon,  1 Jun 2026 21:25:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53CB7223
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B23E40830
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:24:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 510C060771
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:25:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eAHMgpukIr8v for <buildroot@buildroot.org>;
- Mon,  1 Jun 2026 21:24:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8LawUL376nmy for <buildroot@buildroot.org>;
+ Mon,  1 Jun 2026 21:25:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 970EF40826
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 970EF40826
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3FC2C60778
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC2C60778
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 970EF40826
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:24:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FC2C60778
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 21:25:51 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A1B71B97C77B; Mon,  1 Jun 2026 23:24:42 +0200 (CEST)
-Message-ID: <76afaa08-abdd-4464-aef3-4a8c5afa4612@rnout.be>
-Date: Mon, 1 Jun 2026 23:24:40 +0200
+ with ESMTPSA id D26D8B97C39F; Mon,  1 Jun 2026 23:25:48 +0200 (CEST)
+Message-ID: <4dedc041-a046-47d6-a21d-eb8d93a7e808@rnout.be>
+Date: Mon, 1 Jun 2026 23:25:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: John Ernberg <j@j-ernberg.se>, buildroot@buildroot.org
 Cc: John Ernberg <john.ernberg@actia.se>,
- Marcus Folkesson <marcus.folkesson@gmail.com>
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 References: <20260601204735.888967-1-j@j-ernberg.se>
- <20260601204735.888967-6-j@j-ernberg.se>
+ <20260601204735.888967-7-j@j-ernberg.se>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260601204735.888967-6-j@j-ernberg.se>
+In-Reply-To: <20260601204735.888967-7-j@j-ernberg.se>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1780349083; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1780349149; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=dIqMq/bq/mTZoihRw07HoT88BslR9htd07bQQdS6FLY=;
- b=kMc6XjQNLCszOuuKH13l0aBuiHhix4z4qMC7EHFP2Q4BPuNwTjpfroNLExKy7koLSIh4rD
- Q89TUa7eDj98FRBv25ijZfpEq5x768hYOsMQB+DrmOAHD5ZuiY4cLyZbXtyzrDntRq/dul
- 6RsmoE1ECTgDT1GTZQZy3S7xStVRHNKe3dHige42iyqKr0XMKwScCp+6S0tZ2/Bmka+Dpr
- ljB9mkaGiAik/b1eHmzjM4PlstTe/g1YcoBkL/R1LqejtkydhHSRqpVnBeI31Kz6+2s/oN
- tI+ZN4HT3nmfOrxX0vqtEAAUW126tMiLl373kWjicLMEQaxfVRJ1QI3/Ek+s6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=1RmbANR/vlwHJyWEs3lpRvuHpLT+ilXGdqeHVqSx3y4=;
+ b=dxuiLgG2tFXnKwsMWRf3Gtd2gKbc81Gorni/usUH2MLcA04XRfCtj27Euz+hlWy2KF51Sj
+ vphiFVnmEKwnJvCvCEk8+xMRIdoliejY1uD4FJXmpxmmmi4gH7pyg8OtkLvV2vKhKWz3Z2
+ 2OOCGjcRFIcrTS/uldi3P1NeSftV35FfopElbYUEvZMbg9gb1tib+EdKrhxNfoERbrjpjr
+ RQeFM/PMf3RoMCFSgQfgYyYbTZyiIcKK9ss2ST9Ae5NCEfazicUF2K9yoz06zPIaNdid2u
+ qNb6942kitn1t16nOcaGlY5sxV+gpQdONG6+0N0sFUlAZ7nh6mV7jJZ/Rfu4yA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=kMc6XjQN
-Subject: Re: [Buildroot] [RFC PATCH 5/9] package/libcamera-apps: Only enable
- EGL if both epoxy and xlib_libX11 are selected
+ header.a=rsa-sha256 header.s=dkim header.b=dxuiLgG2
+Subject: Re: [Buildroot] [RFC PATCH 6/9] package/util-linux-libs: Do not
+ install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,47 +101,46 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 01/06/2026 22:47, John Ernberg wrote:
-> Since release 0.2 of the rpicam-apps these dependencies have been required
-> if enable_egl=True is given to meson. [1]
+> util-linux-libs was introduced as an intermediate package to help break
+> circular dependencies with util-linux, and therefor only exists to provide
+> more basic versions of the libraries util-linux provide, to break these
+> dependency chains.
 > 
-> The dependency check was broken since commit 3fac163b9315
-> ("package/libcamera-apps: bump to version 1.1.0") in early 2023.
+> There is no need to install these to target as they will never be used
+> there.
 > 
-> Link: https://github.com/raspberrypi/rpicam-apps/commit/c8351a09174f143424884081a69b6dd8018f4ba3#diff-a2468a39040f9f883e5b03e1523dd4e73fd43ad9ea87f600772477b890cdd655L18-R22
-> Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-> Signed-off-by: John Ernberg <j@j-ernberg.se>
-> 
-> ---
-> 
-> RFC: I can't figure out if this is the correct way to do this kind of check.
-> ---
->   package/libcamera-apps/libcamera-apps.mk | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-> index df7be41496..eea6e98c00 100644
-> --- a/package/libcamera-apps/libcamera-apps.mk
-> +++ b/package/libcamera-apps/libcamera-apps.mk
-> @@ -36,10 +36,8 @@ else
->   LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=disabled
->   endif
->   
-> -ifeq ($(BR2_PACKAGE_XORG7),y)
-> -LIBCAMERA_APPS_DEPENDENCIES += \
-> -	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
-> -	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
-> +ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_XLIB_LIBX11),yyy)
+> Under all circumstances the libraries are built and installed by the main
+> util-linux package.
 
-  The XORG7 condition is redundant, BR2_PACKAGE_XLIB_LIBX11 can't be selected 
-without it.
+  Does this actually solve the conflict? It still exists in the staging (=host) 
+directory, no?
 
   Regards,
   Arnout
 
-> +LIBCAMERA_APPS_DEPENDENCIES += libepoxy xlib_libX11
->   LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=enabled
->   else
->   LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=disabled
+> 
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: John Ernberg <j@j-ernberg.se>
+> ---
+>   package/util-linux/util-linux-libs/util-linux-libs.mk | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
+> index 6716a656d2..d434a8f461 100644
+> --- a/package/util-linux/util-linux-libs/util-linux-libs.mk
+> +++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
+> @@ -24,6 +24,11 @@ UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
+>   # 0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
+>   UTIL_LINUX_LIBS_AUTORECONF = YES
+>   
+> +# This package is only used to build other packages that have a depdendency
+> +# on util-linux libraries which in turn may be dependencies for the full
+> +# util-linux build. The libraries that are actually used on target are built
+> +# by the util-linux package.
+> +UTIL_LINUX_LIBS_INSTALL_TARGET = NO
+>   UTIL_LINUX_LIBS_INSTALL_STAGING = YES
+>   UTIL_LINUX_LIBS_DEPENDENCIES = \
+>   	host-pkgconf \
 
 _______________________________________________
 buildroot mailing list
