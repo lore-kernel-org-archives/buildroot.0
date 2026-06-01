@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE10CD6E60
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78283CD6E55
 	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 19:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3897060684;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EB8C407D0;
 	Mon,  1 Jun 2026 19:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HsmBPJkATeOF; Mon,  1 Jun 2026 19:01:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AwYzU2_5jogk; Mon,  1 Jun 2026 19:01:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D5FB60678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65AE9407AC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780340478;
-	bh=f57VNRLptnwACYi3E13xgVF6/3kVbuu4f9tXTBr2D4g=;
+	s=default; t=1780340477;
+	bh=g3IVsWHgLlB+Z29XN37BAkiOBwL/DGHdmtvH7unyPnA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hYikDdsb28wGI6xIliD1bs4pov+VXnfHSsbpdq5xmuUKfHY3uZDC3S/qDQ1Cac5HJ
-	 cDOD1FqMKwhEyye6ZQ380uI8UURJEnJiFBPErR4ydiu7/jiEf8AGQ1479an51QPXrh
-	 MleHKh8AuZrazNk1VIS/Lhcqvlcp1HaeaabbZvutd3zs40IryC5kn4Z3YbdGkIO5cA
-	 a0iA3lFHN/yTImHJEmW0bEVXzVcIyWr5OqQXSDf7B0q4C2mSksPe3i3uRxOZIOWDYA
-	 ixL7VxnzvX8GI6pI/oq7UIGwJRgI7pqgFLVZ31eOTJDwtUOFOp61tOM2eD97qUsr5f
-	 ZMtnPIliutrgA==
+	b=OD4514qqI7WnD05xlgMho9RUsX2wl9YieiMc5BwXOgCFLVp9zZ6qpKlzxgN+YtJcw
+	 YG+9Ma2uJCKGcr952xzDMpfpZd5VmtXVWl7jiClUjIt2vlQFzSZ74emty6Kz5H262P
+	 hlmu2nO4/beKdiadtEnAXArSEte6yx+Z/re7QIDbNKwTWUMPKeHV1WCKra5X8UymEB
+	 sz1sFUNFIHMSKsbWopyZyvCLO/xinniZgZDBib//9Nel3BitzLjvCbCWy7UEGWAadT
+	 YWDkQSEZBqEIKpNCZv5a/wSGZa3UEX2Nu2dxeiBMZvt0yeE6GZfGm8qzoSleyZthsW
+	 YbE7Ss59+cZcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D5FB60678;
-	Mon,  1 Jun 2026 19:01:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 281B5F4
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 19:01:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65AE9407AC;
+	Mon,  1 Jun 2026 19:01:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36620499
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 19:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95904407A1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B5DC407B5
  for <buildroot@buildroot.org>; Mon,  1 Jun 2026 19:01:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GuEBaz4CvAyA for <buildroot@buildroot.org>;
+ id wTHnpAaetSCz for <buildroot@buildroot.org>;
  Mon,  1 Jun 2026 19:01:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49802407AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CECA407A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49802407AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CECA407A1
  for <buildroot@buildroot.org>; Mon,  1 Jun 2026 19:01:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D9138780D; Mon,  1 Jun 2026 19:01:01 +0000 (UTC)
+ id 130E38780B; Mon,  1 Jun 2026 19:01:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jun 2026 20:53:19 +0200
+Date: Mon, 1 Jun 2026 20:46:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccf15ef72b01398fa6e7063c470492742ca9f8bc
-X-Git-Newrev: b9d10eed1f580bdd66a554b405122d624f38142d
+X-Git-Oldrev: 0a9bc387b64e3f946f782af04418a15e43404225
+X-Git-Newrev: bd633fe5b4785435d7822251d02289082a0d1b5e
 X-Patchwork-Hint: ignore
-Message-Id: <20260601190101.2D9138780D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv4: respect LoongArch SIMD
- selection
+Message-Id: <20260601190101.130E38780B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/bump-stable-kernel-versions: update
+ for split hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,78 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b9d10eed1f580bdd66a554b405122d624f38142d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bd633fe5b4785435d7822251d02289082a0d1b5e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-OpenCV probes the host compiler for LSX/LASX by trying to compile a
-small test program with '-mlsx' / '-mlasx'. With Buildroot's toolchain
-this probe succeeds even when the target CPU lacks the matching ISA
-extension, and the resulting libraries then contain LSX/LASX
-instructions. This causes SIGILL at runtime on, e.g., the LA264.
+Since Buildroot commit 0e3ddc9dc85e29cd00338cc79ea4be1d634a75ba,
+linux hash files are split between pre- and post-6.17.
 
-Map Buildroot's BR2_LOONGARCH_SIMD_* selection to OpenCV's
-CPU_BASELINE / CPU_DISPATCH knobs:
+With buildroot commit da01b7271a4a9048ae8e8ae18753edc5da785a44 the
+script was updated for the new situation but still needs to update the
+version-numbered links to the directories with the correct hash files.
 
-  BR2_LOONGARCH_SIMD_NONE  -> no baseline, no dispatch
-  BR2_LOONGARCH_SIMD_LSX   -> baseline = LSX,  no dispatch
-  BR2_LOONGARCH_SIMD_LASX  -> baseline = LSX,  dispatch = LASX
-
-The block is gated on BR2_loongarch64, so the existing auto detection
-remains in effect for every other architecture.
-
-Signed-off-by: Pengji Li <wjjsn@qq.com>
-Reviewed-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/opencv4/opencv4.mk | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ utils/bump-stable-kernel-versions | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index 695355c308..0e2567eb6f 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -120,6 +120,41 @@ OPENCV4_CONF_OPTS += \
- 	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
- 	-DENABLE_VFPV3=OFF
+diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
+index 6303bf4010..0e76cd1168 100755
+--- a/utils/bump-stable-kernel-versions
++++ b/utils/bump-stable-kernel-versions
+@@ -78,6 +78,10 @@ update_linux_hash() {
+                 echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
+                 sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
+                     package/linux-headers/Config.in.host linux/Config.in
++                git mv package/linux-headers/"${old_version}" package/linux-headers/"${new_version}"
++                if [ -d linux/"${old_version}" ]; then
++                    git mv linux/"${old_version}" linux/"${new_version}"
++                fi
  
-+# LoongArch: OpenCV probes the host compiler for LSX/LASX by trying to
-+# compile a small test program with '-mlsx' / '-mlasx'. With Buildroot's
-+# toolchain this check succeeds even when the target CPU does not have
-+# the matching ISA extension, and the resulting OpenCV libraries end up
-+# containing LSX/LASX instructions, causing SIGILL at runtime on CPUs
-+# such as the LA264.
-+#
-+# Trust Buildroot's own LoongArch SIMD selection (BR2_LOONGARCH_SIMD_*)
-+# as the source of truth and translate it to OpenCV's CPU_BASELINE /
-+# CPU_DISPATCH knobs (OpenCV knows LSX and LASX on LoongArch):
-+#
-+#   BR2_LOONGARCH_SIMD_NONE  -> no baseline, no dispatch
-+#   BR2_LOONGARCH_SIMD_LSX   -> baseline = LSX,  no dispatch
-+#   BR2_LOONGARCH_SIMD_LASX  -> baseline = LSX,  dispatch = LASX
-+#                              (LASX implies LSX; OpenCV's own upstream
-+#                              combination matches BR2's choice above.)
-+#
-+# We only enter this block on LoongArch, so the existing OpenCV auto
-+# detection still applies for all other architectures.
-+ifeq ($(BR2_loongarch64),y)
-+ifeq ($(BR2_LOONGARCH_SIMD_NONE),y)
-+OPENCV4_CONF_OPTS += \
-+	-DCPU_BASELINE= \
-+	-DCPU_DISPATCH=
-+else ifeq ($(BR2_LOONGARCH_SIMD_LSX),y)
-+OPENCV4_CONF_OPTS += \
-+	-DCPU_BASELINE=LSX \
-+	-DCPU_DISPATCH=
-+else ifeq ($(BR2_LOONGARCH_SIMD_LASX),y)
-+OPENCV4_CONF_OPTS += \
-+	-DCPU_BASELINE=LSX \
-+	-DCPU_DISPATCH=LASX
-+endif
-+endif
-+
- # Cuda stuff
- OPENCV4_CONF_OPTS += \
- 	-DBUILD_CUDA_STUBS=OFF \
+                 updated_releases_list="${updated_releases_list} ${release_version}.x"
+                 updated_versions="${updated_versions}\n - ${old_version} -> ${new_version}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
