@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32441CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3720CCD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9972685DF9;
-	Tue,  9 Jun 2026 13:05:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3038685E08;
+	Tue,  9 Jun 2026 13:05:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z1VnhZ60jgNZ; Tue,  9 Jun 2026 13:05:29 +0000 (UTC)
+ id o4bqHKTQTy3c; Tue,  9 Jun 2026 13:05:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBD4D85638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 366B185DFC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010329;
-	bh=iT6PPESKXRBlc0i8Hc5uB27QB6WXJkMGE6PdUNYMtBU=;
+	s=default; t=1781010330;
+	bh=h/+9y7YWAAN0aSy8IEI0STjTi7k8G8LQRMXD+vJ9d/A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=tBkX0AiU/JmZ+zKxESul8NgtZpGEobWTtatIP43enceTew8LElGUvLdf/MWnUvGXC
-	 X8ZiyFw8pdWBu+7bvQNFmXNPO2r7ae36AKvIO807p/CGxnm1xk+VTws1Gj7jiBPKi6
-	 iq1NgxJx3IEJuVfNv/uBPGGfd8AiuYVea2dlOLLy4Rs5WdlGu0ji9yVX4UBIiulbGO
-	 +Z9Su2+Up2nTtqeqrsgLzEcyD4oDSQcZYNqxqmLzxBYU/tQsOrCuPPKOHYrOA6MLS2
-	 mIpZLe6wSvl5mW5stLg61vUbJuClDKoxY+iW/7vXsk8YS7qG8/Qi4lk58ZNxMjLADF
-	 fxBuhS4KCKMhg==
+	b=R6xYGLtXXtGIRTYK5zqNj4WWLA4u/VtQlAeQdJ6c++thEKCANL3l2dxayXCCWp6vf
+	 xCeSOz3xnkosZ81YnhLzODYtafH9r4UqfWKq05SVFw48QuQ02AG5Hd+NiRjF6sv/zz
+	 ecEV1HSyJS+Krlkq45D1kdBLKqcYU7yKYi1FEZ8h8WtJu59n/40gnA+guP2aKQZ5oA
+	 RPpADIPIUutPfde19ul95AiV5ReV4k7fWvL+u5Troil5/Mw8RtKpo5Ak2mYCF8EZ5d
+	 tEL05QtVkUauc6iNhtOwQtb1VT7eX8G3SIyl2rjs7YoR88txqFyDgPw6jr6Yja+qsI
+	 9DDrrKO+70NNQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBD4D85638;
-	Tue,  9 Jun 2026 13:05:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 42208190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 366B185DFC;
+	Tue,  9 Jun 2026 13:05:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3035B196
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE20D426EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA1F045969
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqpF4PxKCHb5 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1eqJo4FjP1rX for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 676B14272A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9CFF455DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 676B14272A
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9CFF455DD
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3FB887E87; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
+ id 0258087E87; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 16:24:31 +0200
+Date: Mon, 1 Jun 2026 22:14:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13325a9ba3897308ec00857963fdbf7fb350ce0a
-X-Git-Newrev: 6c4187b92589985627fd375ea1d8820e7e157ecd
+X-Git-Oldrev: e2870919b2943c2d4a62127201a0d334fdb5a461
+X-Git-Newrev: 5242ac9a144ef34b52241fb82903038c6f2b2721
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130125.A3FB887E87@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wireplumber: bump version to 0.5.14
+Message-Id: <20260609130126.0258087E87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sane-airscan: bump version to
+ 0.99.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,48 +69,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6c4187b92589985627fd375ea1d8820e7e157ecd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5242ac9a144ef34b52241fb82903038c6f2b2721
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://gitlab.freedesktop.org/pipewire/wireplumber/-/blob/0.5.14/NEWS.rst
+https://github.com/alexpevzner/sane-airscan/compare/0.99.36...0.99.37
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/wireplumber/wireplumber.hash | 2 +-
- package/wireplumber/wireplumber.mk   | 2 +-
+ package/sane-airscan/sane-airscan.hash | 2 +-
+ package/sane-airscan/sane-airscan.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireplumber/wireplumber.hash b/package/wireplumber/wireplumber.hash
-index a254b68cca..b180d9d2be 100644
---- a/package/wireplumber/wireplumber.hash
-+++ b/package/wireplumber/wireplumber.hash
+diff --git a/package/sane-airscan/sane-airscan.hash b/package/sane-airscan/sane-airscan.hash
+index affd7031d5..e1faa08195 100644
+--- a/package/sane-airscan/sane-airscan.hash
++++ b/package/sane-airscan/sane-airscan.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c89fa29694e89939c0e57cade5c9a7da8e5da21c19071862978ef5f3a346f1e7  wireplumber-0.5.10.tar.bz2
-+sha256  2807a9d1e97075ba10f8b7b8156e31175817d620fa7fc84442b5474123eff5db  wireplumber-0.5.14.tar.bz2
- sha256  ff2eb9af5b05d92ac3a38cffcad27582ef555a31ff1781e1c1d4e087f77c9c81  LICENSE
-diff --git a/package/wireplumber/wireplumber.mk b/package/wireplumber/wireplumber.mk
-index 8818662059..2fc9098108 100644
---- a/package/wireplumber/wireplumber.mk
-+++ b/package/wireplumber/wireplumber.mk
+ # Locally computed
+-sha256  43d3436c0199496ee18aca4f875fe3926a40a0fae781bc280cdb96f7b5068ac0  sane-airscan-0.99.36.tar.gz
++sha256  b012d4ca8b526e28b0baf1e0dcc1504a1f67118914ee9362201d04a37dbf7e5f  sane-airscan-0.99.37.tar.gz
+ sha256  a2631c1b81992bd6f66db6be8b009ed7e3e998d1e2db4de497fa82d65011d373  LICENSE
+diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
+index 46948ab547..911761317e 100644
+--- a/package/sane-airscan/sane-airscan.mk
++++ b/package/sane-airscan/sane-airscan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREPLUMBER_VERSION = 0.5.10
-+WIREPLUMBER_VERSION = 0.5.14
- WIREPLUMBER_SOURCE = wireplumber-$(WIREPLUMBER_VERSION).tar.bz2
- WIREPLUMBER_SITE = https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/$(WIREPLUMBER_VERSION)
- WIREPLUMBER_LICENSE = MIT
+-SANE_AIRSCAN_VERSION = 0.99.36
++SANE_AIRSCAN_VERSION = 0.99.37
+ SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
+ SANE_AIRSCAN_DEPENDENCIES = avahi gnutls jpeg libpng libxml2 sane-backends tiff
+ SANE_AIRSCAN_LICENSE = GPL-2.0+-with-exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
