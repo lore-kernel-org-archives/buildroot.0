@@ -1,112 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B42CD5BD1
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 14:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67BFCCD5BD1
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jun 2026 15:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83E2760FBA;
-	Mon,  1 Jun 2026 14:50:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D911D84185;
+	Mon,  1 Jun 2026 15:41:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qD5BqWj5okn3; Mon,  1 Jun 2026 14:50:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mWfliBD0HyYI; Mon,  1 Jun 2026 15:41:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9108160FA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7A4684746
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780325411;
-	bh=oEAtGfUjGdRFCAeC2g9babo9PLl4uLIBd9/zbfr17dk=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=DLcCRZfk69J1RGyE3ZrtGxQOOeV0jJRsEeQc6zSHGu/MevLfLRX8QOILC/EEx9+q2
-	 USx7m0WUjZoHfMSGpByrhgTxn6X+O27teP3LHfppN55sWkm+sNm3ur11H/Eoj6lQFT
-	 5fP1/5dOy90ToNi5VxqspoVk6OhXL3Wg8Z0zCRUvLN9oCwUVSyCI6con93G3YwVucH
-	 9leoQdleT/oYUMTieEcvxey/X+tYgLvBT04lMm+UzpXtmy9Vii/DqjB3bFcddnE+Ng
-	 j4WBWGGTWJzb/Yo22wXpQzhnUQyIp0LcCLia4ZvtSUa/S8alqcrkcOh60Nn6b6quV8
-	 I09YtIXAaiMsw==
+	s=default; t=1780328516;
+	bh=xHK+2NMBZCBavdI3iwUW7E4G2AzmIaoItZbw1y2h1EQ=;
+	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=A0T3P/wt4Im3tbBSNlzIl1Sh5ScLjO6jngcDNKfq96QouEpcqRQr5INFelxu75wDg
+	 ufRCCjVgTvlcnKxcu9tzOgKKntPUosOy+UgZsvZQhuciUnwBqqyEcOOHslBi4XrClh
+	 Pv34m3oRXIOAFiXLmSfqMdrtPbXlad1fwjFxhSct9kRpcPtC+HAD6/G3K1blyn+y5K
+	 lNzsMZVeWjR/0wR4euWSeHggv9w3eTYFAp0OUU+fw6Zz1gvJ/TLw37AKA0svRbVYo/
+	 YtGbpKe2AJaaZzn9nXNDyOH4Jvop4lvGFK+SJ8QUH6eeIyWQcpna2gkSsIGDQPVyjW
+	 jCGgN2qbm1DQw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9108160FA4;
-	Mon,  1 Jun 2026 14:50:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 88DE4F4
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 14:50:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7A4684746;
+	Mon,  1 Jun 2026 15:41:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B0B8294
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 15:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A0BA42722
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 14:50:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1002484746
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 15:41:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DiDeuSKQ7I-Q for <buildroot@buildroot.org>;
- Mon,  1 Jun 2026 14:50:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 469rfkT7MYGP for <buildroot@buildroot.org>;
+ Mon,  1 Jun 2026 15:41:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3ED2442721
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ED2442721
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3ED2442721
- for <buildroot@buildroot.org>; Mon,  1 Jun 2026 14:50:08 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-490a7a9f81bso11953025e9.1
- for <buildroot@buildroot.org>; Mon, 01 Jun 2026 07:50:08 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::52c; helo=mail-ed1-x52c.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12C6984185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C6984185
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12C6984185
+ for <buildroot@buildroot.org>; Mon,  1 Jun 2026 15:41:53 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-68ca6f01079so2381879a12.0
+ for <buildroot@buildroot.org>; Mon, 01 Jun 2026 08:41:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780328512; cv=none;
+ d=google.com; s=arc-20240605;
+ b=UI1467NveqWnzKVMS6Osv5fLv9trJuL4pqbftnGo25Nidwa790gTX7Fo6ld4ICwpjK
+ kkMpbukmlRpxCbYA5qhYjj7HqhJ9pZy3qQmqeqF6Eju9BWYQiNG5n7m9aovYaX2HAfMR
+ v7K8xeTCWn3aKlc+/p/xH17eF+J+9q4wVQDlyXOo8jGWBFkIqcswHJRmBEL+ZdeeSeI2
+ 1/EHb5SpR4b5w3hR0/wTwOINrSSMTc3gScIx9njU3BGPk3k+ye739hBv0ZgduOimZHUB
+ Q6DvHXUUV21z6Ju5cMyyR4nAVc6u1q8TMpmV/A/f6mdw2nLnq4oK/zPZUJ9qlQ5XIyA4
+ 6plw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20240605; 
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :dkim-signature;
+ bh=rF0f8Zg34x2ZAH4M1Y5Zi4pMfTkhmAZzlaim2N+AVPE=;
+ fh=6fgkHrNdJSOQsJPtGLPwnv6V5xq5cGsb4wO9kqOVz8k=;
+ b=JrjJxdEnjgHNshcX3LiDWizf+j26rapc1EKCZ0EnMycYB6T6Jp6qVD7cTON2zBNxgv
+ pyjJyMHQC4MEjIRR5mn40sqrpuUrbTh+eglpl7l5Mogrenr8wKPyT6WICryAYkGRSu/6
+ ZtWKfgD57FPrKzkFcMa1RcnwUDEalzWPHGCGkYfPzcEPsbLUU2jsDmuFxV7y6vS8a9IK
+ AZHymhxwqMAQLzXMvdcZMK/Xw+gGAnIXKcg+LhXFMBC5GliGbMQgQTZ3cvKFgU/Kk+Wg
+ iL/+iT06CTA1HtG0ANDKPEcpd81ePWvXYjkjFuqAbeJk8CmNAEi96IcdFNbFNSWCNjOn
+ tQMw==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780325407; x=1780930207;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mrhP9se7Embh24LTIs87T7OVvVZ08g0Whh+1OM0sn7U=;
- b=Zz1z41W0oxtQQQdeiv5X8wHFKt/hMhFXeEtZ0msH9Pw33Q3bvhcqG/6PVZeU6M/1sc
- D7xmK6deDi30jQ1G8PjYovmLoVhLpCGp1gWrckNaqHEfAbm5YHt0QRgQYOputWehSy0r
- fCW+ywBu+hgbxpNbZZ1wSmvfx3EaxRjUFf3iimAM2xaDplibAo64zvScP+H74zmZHQBN
- cc9UuKhun6aSx5lft8IaTExr4c0QFoSjVsD6qaG3uRnn9sDol+g5EndupNHt2s9jcpP1
- GVTqIelJ9wA4k4AjeGIfUtJZp1KbakfB7brR41JZaqHx7BpOBzMIiHCyLhnqpfMqgMcQ
- GT5w==
-X-Gm-Message-State: AOJu0YwriDIVm1L+G1lVVFhcn4d11sQNyq7Un1Z9FTfE8JQy8dcgMuV/
- yXCNmihgo4si8JKOeVKFKQvdtzQ1h3/CPEt59yHyH51CnndGzZ0QlVevq5bZTRyqVAJMAUQWkw4
- 9/bms
-X-Gm-Gg: Acq92OF1IMcX288ZbycjA8Fzi/Qc9IdOKPHpnpiWbD+cKvGcv06awYZVJDUP9wkUPnO
- x5QqoU4ZBkd7w/NN2O3ib2iuXxhUuktMg/4uX6tlfSkFKuVTC9vw2p7udjuF2MwUNKZsBAW7wqE
- SW61r+nLOP9GcV9SRLS1gr1RFMTbP77lonxxkfJWiJ2liYmrD/bLbKFOEAW8ZqMa81dQ9SNd/c4
- JpOrSETo/TfAMOLiUNoj1HOtky8D/63XZzE8qREZ3uDjvrxZ2C4B9WRON96UEOjRfus35CPfdzh
- AoYipN0ZKpsSCx7NU7qJrkfyCMGjRCMbs2kxfO8y5qFCg3mbpzizrgtJbkRvCPgFD7OzJG1H4wV
- Y4Exm0dHM0TS3WgOctgRP0Y04LVOvT8aOjCTwaNxMVkbU0dVkWqKxL0bc1OWJbG5hqIXouuIWPp
- yc8AKIKayj4Ip5hBpjnY7+5SGkLxP3P17Smwu6TYQfdUF9//D/cTcKgGIxYbOVOjGxHhE+CmRF4
- rBSSOa2tj+fy6YdQT7WkARG4Z9d0Ro=
-X-Received: by 2002:a05:600c:5254:b0:48f:e044:927d with SMTP id
- 5b1f17b1804b1-490a2a43b6cmr170866725e9.10.1780325406836; 
- Mon, 01 Jun 2026 07:50:06 -0700 (PDT)
-Received: from P-NAN-NAPALM..
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490ab55d39csm16696635e9.35.2026.06.01.07.50.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jun 2026 07:50:06 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Dowan GULLIENT <dowan.gullient@smile.fr>
-Date: Mon,  1 Jun 2026 16:49:54 +0200
-Message-ID: <20260601144955.74171-1-dowan.gullient@smile.fr>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20251104; t=1780328512; x=1780933312;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=rF0f8Zg34x2ZAH4M1Y5Zi4pMfTkhmAZzlaim2N+AVPE=;
+ b=WXlspFicM7xb6gF5IBlRaMuKR3+FDZJHNzd2peW6x11nCiShvXb1eezuuVPEE4wJz+
+ FllzcEnpeDsdaSI8wMD+66H9RDQIAxAuzUe6ZGFRIRhHj6l0VP7AbKSuND1j4+0SIsqR
+ k/x/fT0xo9q0ZloPJt84YaOl7/AUY16EWgNnHThuRMe5ZVmIBngVhXZIFfTZOaG+PfxJ
+ pfljIAMlMhSoJ2AwT7vcZcyz+m8NKmScC3PFvAslSvQ86EZlwAIay0jiAAzOnvmP3QM4
+ 0O7eRTXFJrVhXSo2WsIOrWt7aIAXRfi0O0rzxouKI4YJjdmiW+8HpXq1WaBTHuTABzUB
+ 1R4Q==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ9iHxLUGFmtlTq4Cp3ubS1Z548A1DjrHtDrcu/UrLtJM6g8/d91prb3sGtcvUC6OYB8+l93/mOKc90=@buildroot.org
+X-Gm-Message-State: AOJu0Yyah0iz3YNeBtNCTLwpl7fKuB/HnOl+7pb3gmwFJsIkLIfTPZt1
+ 92HxR6+XfP0AAHnJUQcndMLJ/MPtuoz8tocT13jlJLyiTOuISl2l9m0LDxl9GqvdcvsJWNb6wRy
+ nWl4UUI4tNESqLBEBZJw5Nk0rrCh+zWLp3FAmyP4=
+X-Gm-Gg: Acq92OHylCwZA5/W0lAho8txawWYzibb1Sf4f3oFewBSHDYo6tuU+rQm9di60HJQJ7S
+ to1sAWrGDNetiKe9XE9tUANgGXxKYt//CbXaiDtdeKVJf2xLGSwYHI8ZXBxg2Geehgoax6YaYeY
+ xq/rXAgAdytsnWd05tJexMSLfVnGZ5cE9MA6Us/pNynLE9ErgTqbjAYHc3JgXD5Qj/qiQSZHVKo
+ JgMcm4lKmlfo9P9IQkxzskjT2hsDceq0iwFQO2Zq1zH3B54jA9u89AHLc7RlXz9gVCqpmzobstc
+ LanQUzRaXr0+jQWT9gO8hMQZE9l1
+X-Received: by 2002:a05:6402:2112:b0:68b:583:fb37 with SMTP id
+ 4fb4d7f45d1cf-68c8ae13bc3mr6068471a12.10.1780328511582; Mon, 01 Jun 2026
+ 08:41:51 -0700 (PDT)
 MIME-Version: 1.0
+References: <20260311092713.17598-1-chakrabortyshubham66@gmail.com>
+ <ahvQc8ZxTUgP4HvY@windsurf> <ahvu3dxZGAj2X-lO@fedora>
+In-Reply-To: <ahvu3dxZGAj2X-lO@fedora>
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Mon, 1 Jun 2026 21:11:40 +0530
+X-Gm-Features: AVHnY4KYtSEkgemlNh8_xbh3rgTJ1dbnmQBg4BlX0_fUZVuS5djYYdFs_Vxd3AY
+Message-ID: <CABvxksxyUPqs4oHuzePcKkF+XDzpC_WVr4ee-7u=cfarvoBfkg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780325407; x=1780930207; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mrhP9se7Embh24LTIs87T7OVvVZ08g0Whh+1OM0sn7U=;
- b=1wFmuJr23t04S/tNXeeTDLI76fan5Wl7PJdm6EB9KFqpKzWNV4/HCLJ4Sy2UnH/HA+
- 7QchjPh0G5xqHk90+Cl94lGYWbhKbyvwIjH0t29exq8PnrGW2khJANAW/9bqOuP7ezZL
- BDqvz4xbdas8ip0DYF4TlTfJe+XCup6plnMGk=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=1wFmuJr2
-Subject: [Buildroot] [PATCH v3 1/1] support/testing: test_podman.py : kernel
- version bump and add kernel fragment to fix iptables errors caused by this
- modification
+ d=gmail.com; s=20251104; t=1780328512; x=1780933312; darn=buildroot.org;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=rF0f8Zg34x2ZAH4M1Y5Zi4pMfTkhmAZzlaim2N+AVPE=;
+ b=VSiYY4nr3jcQwLUM/klrKdUyCMjzU9L+suyT8UOoexTCwLZ5pCa4M6IyvMb55dX83f
+ lHNa4AzV/5WQIczKUFdNBVnyAdK0AaEMbvpPDHsOnhmZLCC4o+AXxDJ6g0wdgMaCntS+
+ 7kxRpXck6aOmw6Y0vN+UmiPsE1pkvMT2VQB5YAcK64DYf8qhX7bbD9X1irjRyfF8Sbzm
+ qfH3bICIQwPyOgLUZ0LTSg2JLJFOp47WQQWyfY5V+QgAT3xzEzmYrkxSSNNVagzLa/C1
+ vFxH1IWODxGr2/xQg353pVzUzl4rPGOKzWYZX9BhuSTZ/zvX7JVoaFeUa5AB3GfLKURr
+ lz/A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=VSiYY4nr
+Subject: Re: [Buildroot] [PATCH v4] package/which: fix getopt prototype for
+ GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,128 +139,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dowan Gullient via buildroot <buildroot@buildroot.org>
-Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4920427057434559056=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Dowan GULLIENT <dowan.gullient@smile.fr>
+--===============4920427057434559056==
+Content-Type: multipart/alternative; boundary="00000000000084374106533308d0"
 
-This patch is a new version of the patch
-https://patchwork.ozlabs.org/project/buildroot/patch/20260505100553.4100688-3-dowan.gullient@smile.fr/mbox/
-that bumps the kernel version and adds a Linux kernel fragment for Podman
-tests to resolve "Protocol not supported" and "Table does not exist" errors
-when using iptables-based networking which appeared due to the bump of the
-kernel version (5.10->6.18) Indeed, the new kernel version requires additional
-configuration options due to the switch to nftables, and to support Podman's
-networking features, especially when using iptables-based networking.
+--00000000000084374106533308d0
+Content-Type: text/plain; charset="UTF-8"
 
-This fragment enables the specific networking options required by the test:
+Hi Thomas,
 
-    * VETH & BRIDGE:
-    Required for Podman to successfully execute `podman network create buz`
-    and attach containers to virtual bridge interfaces.
+Upon further investigation, I found out that patching the source c file is
+not the only way to resolve this build error.
 
-    * IP_NF_IPTABLES, IP_NF_NAT, TARGET_MASQUERADE (and legacy variants):
-    Fixes "Table does not exist" and "modprobe: module ip_tables not found"
-    errors. These are strictly required for Netavark to set up
-    SNAT/Masquerading, allowing the container to successfully `wget google.com`
-    during the test. [1]
+The issue can also be fixed by passing a compiler flag to set the C
+standard version to gnu17:
 
-    * NFT_COMPAT & NF_TABLES:
-    Fixes "Protocol not supported" errors. If the userspace `iptables` tool
-    is built as an nftables wrapper, it requires this kernel compatibility
-    layer to successfully register legacy rules.
+WHICH_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
 
-    * NETFILTER_XT_MATCH_* (ADDRTYPE, CONNTRACK, COMMENT, MARK):
-    Specific xtables match modules utilized by the Netavark CNI backend to
-    isolate bridge traffic and manage container port forwarding.
+Could you please guide me on which approach would be preferred in Buildroot
+context?
 
-Note: Parent dependencies (e.g., NETFILTER, NETFILTER_ADVANCED, NF_CONNTRACK)
-are explicitly enabled to unlock the options listed above. Options globally
-required by the Podman package (like NET_NS, USER_NS, MEMCG) are intentionally
-omitted here as they are already enforced by PODMAN_LINUX_CONFIG_FIXUPS.
+Should I proceed with the source code patch, or would it be better to
+implement this configuration change in the .mk file instead?
 
-Some dependencies in the configuration file were verified by the check-config
-script from the Moby project [2].
+Best regards,
 
-This configuration was tested and podman tests now pass successfully without
-the previous errors.
+Shubham
 
-[1] Gentoo Wiki (Podman Kernel Requirements):
-https://wiki.gentoo.org/wiki/Podman#Configure_the_kernel [2] Moby/Docker
-Check-config Script:
-https://github.com/moby/moby/blob/master/contrib/check-config.sh
+--00000000000084374106533308d0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
----
- support/testing/tests/package/test_podman.py  |  5 +--
- .../package/test_podman/linux-podman.fragment | 32 +++++++++++++++++++
- 2 files changed, 35 insertions(+), 2 deletions(-)
- create mode 100644 support/testing/tests/package/test_podman/linux-podman.fragment
+<div dir=3D"ltr"><p class=3D"gmail-isSelectedEnd">Hi Thomas,</p><p class=3D=
+"gmail-isSelectedEnd">Upon further investigation, I found out that patching=
+ the source c file is not the only way to resolve this build error.</p><p c=
+lass=3D"gmail-isSelectedEnd">The issue can also be fixed by passing a compi=
+ler flag to set the C standard version to gnu17:</p><p class=3D"gmail-isSel=
+ectedEnd">WHICH_CONF_ENV +=3D CFLAGS=3D&quot;$(TARGET_CFLAGS) -std=3Dgnu17&=
+quot;</p><p class=3D"gmail-isSelectedEnd">Could you please guide me on whic=
+h approach would be preferred in Buildroot context?=C2=A0</p><p class=3D"gm=
+ail-isSelectedEnd">Should I proceed with the source code patch, or would it=
+ be better to implement this configuration change in the .mk file instead?<=
+/p><p class=3D"gmail-isSelectedEnd">Best regards,</p><p class=3D"gmail-isSe=
+lectedEnd">Shubham</p><br><br></div>
 
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-index 9d86a06129..9b4a7dedaf 100644
---- a/support/testing/tests/package/test_podman.py
-+++ b/support/testing/tests/package/test_podman.py
-@@ -15,10 +15,11 @@ class PodmanBase(infra.basetest.BRTest):
-         BR2_SYSTEM_DHCP="eth0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.21"
-         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="support/testing/tests/package/test_podman/linux-podman.fragment"
-         BR2_LINUX_KERNEL_DTS_SUPPORT=y
--        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
-         BR2_PACKAGE_PODMAN=y
-         BR2_PACKAGE_UTIL_LINUX=y
-         BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-diff --git a/support/testing/tests/package/test_podman/linux-podman.fragment b/support/testing/tests/package/test_podman/linux-podman.fragment
-new file mode 100644
-index 0000000000..386a3d0438
---- /dev/null
-+++ b/support/testing/tests/package/test_podman/linux-podman.fragment
-@@ -0,0 +1,32 @@
-+# --- Core Container System Support ---
-+CONFIG_VETH=y
-+CONFIG_BRIDGE=y
-+
-+# --- Netfilter Infrastructure (Core) ---
-+CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_NETLINK=y
-+CONFIG_NETFILTER_ADVANCED=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NF_TABLES=y
-+CONFIG_NF_TABLES_IPV4=y
-+CONFIG_NFT_COMPAT=y
-+CONFIG_NF_NAT=y
-+CONFIG_NFT_NAT=y
-+CONFIG_NETFILTER_XTABLES=y
-+
-+# --- IPv4 Support & IPTABLES Compatibility ---
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_IPTABLES_LEGACY=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+
-+# --- Xtables Match Modules required by Podman/Netavark ---
-+CONFIG_NETFILTER_XTABLES_LEGACY=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_COMMENT=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_NAT=y
-+CONFIG_BRIDGE_NETFILTER=y
--- 
-2.43.0
+--00000000000084374106533308d0--
+
+--===============4920427057434559056==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4920427057434559056==--
