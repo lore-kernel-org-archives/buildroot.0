@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520B0CD6E64
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56056CD6E65
 	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 07:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D9DF40F1A;
-	Tue,  2 Jun 2026 07:27:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMWSgUQHBb-f; Tue,  2 Jun 2026 07:27:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76E8240721
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780385232;
-	bh=j4j5kRmnEEgyhvq5IRXgwYJGxia2UKgoqaSYoZbR+N0=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=D7Lg4q7EjxsEd0qS6xN85W/HpvMkZlbzvB+AuLJ/+sJdCygijHnHREyGena79v9qV
-	 fsxDuutU1ZvOGJzUC4OfCu8aw8jpMDze5SzRl0U3pxA2939JjCbfmqh2HnHAEiS7E5
-	 u23ju7no4EroydJyO58HaPesfWMWX5ecddu850lcnikU+sj1HH59XptsA8FbrRWrDW
-	 XIWlvUQME4HOUlvwgwP12oxMZAQc7SvF2T2GGkZQZYZLcOBpaP+NI2svfl1cAndIkQ
-	 mPXfnJeiSxC3uqU6v5mTdrmg4hz0e3P5bo1XsoTwDxtiSvgXyLs5hgM2NShAnOjSTs
-	 s1bHo5uB53o8w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76E8240721;
-	Tue,  2 Jun 2026 07:27:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D88DD33C
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D689C81EC6
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C095A81EB8;
+	Tue,  2 Jun 2026 07:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J8v7uPbNJXeZ for <buildroot@buildroot.org>;
+ id tjcGLZgXyWAY; Tue,  2 Jun 2026 07:27:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94AEE81EC5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780385233;
+	bh=BR1I1YXDlwTQiXdoo2/zyr9EeHbSI14/Fy5fVi2U90E=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=ia1eDEz6MaAjnKUp2IVefAAEh5YeVU10D/TecLyl8j9LiV0oTfVJzSala9IvZbJ6U
+	 zIFQFDyedFQ61GBPCAMooZhanVpVmPTqNb5tFhIZPy2Px5+UhBVe6JIWNHr/xATBGi
+	 lEWLXAiaf38NxO3R46ytlls/xU2W6M7TSzWyoa/pJVNY64/tYaGIXPOBGVy/RisNRo
+	 fmJ4mfZqtUVoMxucYjiXaAjlMCUFFEY+zhv95NwZTnEhWSCoOZnd33KUzysAeDK576
+	 owyqoQ9SBt2nnB6p/5D7Sz+0BZrO6VZeWT2b1XzeLA9r4GBRNyKLdi8L3eSimLN6BZ
+	 2Lzpd3C+20ktQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94AEE81EC5;
+	Tue,  2 Jun 2026 07:27:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CD4D33C
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32AC281EC6
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DDeeKt8Zxpod for <buildroot@buildroot.org>;
  Tue,  2 Jun 2026 07:27:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4CF4F81EB8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CF4F81EB8
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4CF4F81EB8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C8F7381EC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8F7381EC0
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C8F7381EC0
  for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:09 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-490b211ee6aso2870495e9.3
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-490a7876f8cso20522845e9.3
  for <buildroot@buildroot.org>; Tue, 02 Jun 2026 00:27:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780385227; x=1780990027;
+ d=1e100.net; s=20251104; t=1780385228; x=1780990028;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=PfGzIZkPQ7JlXtMQq0LBwxFHfzcUcbvXQsZpN7nNR2w=;
- b=JyiCZr8Cmo+uGdVCw5eQBLGyHKre1ggaAnkDoS0X6/EKbIlGto3kCCTNYloxcld+P/
- HfuAHeZTU98hg05WVzxvcsnUxukrlg4woMI12WscDjrPfwjvxrgxWle/KcM1EtaIYtjq
- WxE3NbkiFEhH3wEXNyI5yTN6kbUfOONUY8vbwuP4GtjldFi9+180gqBUG8WLEdgLVuNi
- 39le3xJZKTjPvC+D9K+ioE/m/YmRZH6LjRCtg04b7soQLDwNKdLysHCunHMCUtLh0EHj
- GwQAJitM5GmnITLHCCPERLfxGKMSkQonWwDXni8Xz/DcraxXf37JSmgY528S0NTkmNIe
- Og7A==
-X-Gm-Message-State: AOJu0YyHH+31w9Jg9o8br/BCfHcSiJ8Gm5GlomwL6KmpOVQDtZJrqF8G
- Y7FRmCucRmaU03PKDYCZN6FZLqOSF5PP+vIvzjtJt4wTGGtTuGmDxHJ7rBqNNMvsexVM7r15SBO
- hMHr9
-X-Gm-Gg: Acq92OHV8W7mvB5f5ZIJWkUHAY+0GNdl0E1l0tPCYzs4QuWHyOk/zExf1Z4xAytdItJ
- ExlP6UDs698LXCtZk2DyY81EBies7BBCvcn/VJTCpHlUGfpQq+qSG3UXTUelrh7cZFlmClYO/To
- VpKk2/GUZj7Xyu4jib/tJrQ87EnXJUl2lfRXDo1UpMsRATcSucsVzMGq0ZR3wzhKrFvhn0026xb
- TlkRBTrSnYP3I3//BL5JFvxGckRaMIky8DICltLgMBPNbBsJ4Dr9izniQB2SxluGRgXb9uPLFIP
- AKC6RO68tyzErZgnk93tUuwxcF/kkCdZ8+6LN/23VmBSdrOkVwRIZuOKV3ET0PlZkLx3jDABCY8
- WzyO0DpYbO7HemLRxY8NzEvgUAknJzncRgL5MPhZ7u12pldUKD8CCJShTMbx9+TCeypaBgCj5gb
- JrXjksXDIOzshsnxu7HzPZ8cGEDfSs/6i+EcG+TRNFm5FNXqa3HXriJCUEjnwgi1pNVkB/
-X-Received: by 2002:a05:600c:c492:b0:490:a2dc:1612 with SMTP id
- 5b1f17b1804b1-490a2dc16f6mr247040775e9.10.1780385226963; 
- Tue, 02 Jun 2026 00:27:06 -0700 (PDT)
+ bh=dsPc5/AgZIzcO2ykoloO5JVULzmf6M89wgdaChM0txA=;
+ b=p6DZCvUNUb5bSFvi4l5vVncpleejD6m3XAW4K/T+3C5gohqqAIKTtXXguTdx2Y4ZQ0
+ YI2liUc7ZPKOPqDNU8pKpZQLu1gJX3CvTUF3EkkQogHfIUxk9Vyzg0Cxy9pHpwjAwXQI
+ xkM3j/Iz/fVAS8UJ5VLA+mg6ivS2q6zxqOLxl6FM/x8CJlB0HIzHlppdb7ZQ6c3/TWJp
+ KlQx1ftvxgYUYM49C9zUww6zLXpn5U+xvzN2bKobmpOUsOEt6kVoV1JZf7OBjwysp06+
+ P5XG+/C/Arwqz87pbRo5vVrzwOiLfxVRJ7+69nvAOdnCkHdtGupcmai8dxTn/YYNGR/K
+ sjog==
+X-Gm-Message-State: AOJu0YyBzOzysAcCoeE+ExvRhX8nwUtDNZHespAtydZtE4+sdaUSfuRn
+ hX1b+UFju6ks4I3mFZL7csqR6Qzo8GS7cMNz6b9qibrH/WbFa6yd9cMcuxIMakRtFTxwU1PSG+T
+ CqFQV
+X-Gm-Gg: Acq92OGYwthdJtBb6SkJ0GV/1Qhocn/lEug9iQFTmIwK59O4Q5omUmPyXRM49CZIUVQ
+ k/1TZg/Q/cdQMo/XuFyxFqHdI6dCLZqr1B7DYYPbxcPnstGG5qofHxEWRU7hxqqvsJc9nBHHYZW
+ tqgKAFGwCXOjLEbvlt5sVdZ+dx+RjgYOtv5/d/t+cG8KkfvUNLeFwq/TSvqGPfWmNSNI78CiyuQ
+ E5AX0U5fF+Mtddca6pEttgyjGR3aovKmVo2P40rxEztAJVwKTwcnZov5PJD5Gg/aLROgdUjRgtP
+ NnohSvR7wuo2JmTdDTlX2k4LTYXZYuKnjlo1ZREyfHbHdCbh7h26eFFjp1Q98UIU7zEDrFf4V7z
+ eRB/BOrNBb0m95URl3KUTwB7+VU8N9Wspda/q6YhCv1hmNTo3quM88GkJ9jEpuE96S5s8QlnrPL
+ 5BQz0vBRkNGEefwg/sTtWRz96bRmCj3IXyGiv1D7dyQgNw7gB6nl5yvABMVA==
+X-Received: by 2002:a05:600c:a315:b0:490:9bc2:bf8b with SMTP id
+ 5b1f17b1804b1-490a2912132mr190851535e9.5.1780385227469; 
+ Tue, 02 Jun 2026 00:27:07 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4909c09ab75sm93869395e9.6.2026.06.02.00.27.06
+ 5b1f17b1804b1-4909c09ab75sm93869395e9.6.2026.06.02.00.27.07
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jun 2026 00:27:06 -0700 (PDT)
+ Tue, 02 Jun 2026 00:27:07 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue,  2 Jun 2026 09:27:03 +0200
-Message-ID: <20260602072705.43945-3-thomas.perale@mind.be>
+Date: Tue,  2 Jun 2026 09:27:04 +0200
+Message-ID: <20260602072705.43945-4-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260602072705.43945-1-thomas.perale@mind.be>
 References: <20260602072705.43945-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780385227; x=1780990027; darn=buildroot.org;
+ d=mind.be; s=google; t=1780385228; x=1780990028; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PfGzIZkPQ7JlXtMQq0LBwxFHfzcUcbvXQsZpN7nNR2w=;
- b=Jj5ix4kPlCUlnSM+yw6tuuYJBV/ma+1ORhisEb47M/4XGYM1ftL0Fhxweo8rTgKULI
- UC1FSx/fhwPwq2TTk/IYhWeNkjOG/w3fHouuUcKkvEDznYmjM2sUCrgSRmWxL5lRze9u
- TjYu0KuTtZS7kuswb/9BKGobend/7e+k6mtKezj31oSUrG7KO90cFx0AtGvKTSTaorXa
- EZ8JU2ki7vhwGpdFJoiN7iinDbnorxf8B864k2i9NUy31q2YssoEVoj3McPY/TgKxcb2
- /MT4PgiQqV+Aet8kN/NQ6qpY6cc3+s9qzzaOD2YX0ZfgJFQhqVSaI4l+x62GYKXintmW
- +lgQ==
+ bh=dsPc5/AgZIzcO2ykoloO5JVULzmf6M89wgdaChM0txA=;
+ b=WtRIYUIcRn8MCIZ6s7VuoMXKwL9Vj4P8kTWn2MSIYrVPezmTLVi3CIPvBFS1RTSrU3
+ pYfyQZwW1zVyAaQXvo3jjbANJVRjbyqiMXTfpgKyI/gvjqQdMNMEMBg1lk3T1FQnl5Xz
+ An4a/EnD6FXsPXctQDFTGY0EsBAhEPWV2TDrq0rxEpM8lRAUN2Tb8KPyLet83cU8DGM/
+ +k1WMIQOPnv+0JNuHn0FjU15Vm1HXPTw2NxKNVVUtsCStgFvo9xmJMUD9Ms9IMl8fN7T
+ 48oWSg0G5JDQxiMBSqlTn2RjX/qSoVAEnWDHM4YJlvtVTDBve4j77VYgQGvsnyuv/UaM
+ fAYw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Jj5ix4kP
-Subject: [Buildroot] [PATCH 2025.02.x 3/5] package/busybox: patch
- CVE-2024-58251
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=WtRIYUIc
+Subject: [Buildroot] [PATCH 2025.02.x 4/5] package/busybox: patch
+ CVE-2026-2615{7, 8}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,96 +129,301 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Based on the work of the Debian community, this patch fixes the
-following vulnerability:
+Based on the work of the OpenEmbedded community. This commit patches the
+following vulnerabilities:
 
-- CVE-2024-58251:
-    In netstat in BusyBox through 1.37.0, local users can launch of
-    network application with an argv[0] containing an ANSI terminal escape
-    sequence, leading to a denial of service (terminal locked up) when
-    netstat is used by a victim.
+- CVE-2026-26157:
+    A flaw was found in BusyBox. Incomplete path sanitization in its
+    archive extraction utilities allows an attacker to craft malicious
+    archives that when extracted, and under specific conditions, may write
+    to files outside the intended directory. This can lead to arbitrary
+    file overwrite, potentially enabling code execution through the
+    modification of sensitive system files.
 
-For more information, see:
-  - https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-  - https://www.cve.org/CVERecord?id=CVE-2024-58251
+    https://www.cve.org/CVERecord?id=CVE-2026-26157
+
+- CVE-2026-26158:
+    A flaw was found in BusyBox. This vulnerability allows an attacker to
+    modify files outside of the intended extraction directory by crafting
+    a malicious tar archive containing unvalidated hardlink or symlink
+    entries. If the tar archive is extracted with elevated privileges,
+    this flaw can lead to privilege escalation, enabling an attacker to
+    gain unauthorized access to critical system files.
+
+    https://www.cve.org/CVERecord?id=CVE-2026-26158
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-sanitize-argv0-for-p-CVE-2024-58251.patch | 50 +++++++++++++++++++
- package/busybox/busybox.mk                    |  3 ++
- 2 files changed, 53 insertions(+)
- create mode 100644 package/busybox/0016-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
+ ...tar-strip-unsafe-hardlink-components.patch | 198 ++++++++++++++++++
+ ...rip-unsafe-components-from-hardlinks.patch |  38 ++++
+ package/busybox/busybox.mk                    |   4 +
+ 3 files changed, 240 insertions(+)
+ create mode 100644 package/busybox/0017-tar-strip-unsafe-hardlink-components.patch
+ create mode 100644 package/busybox/0018-only-strip-unsafe-components-from-hardlinks.patch
 
-diff --git a/package/busybox/0016-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch b/package/busybox/0016-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
+diff --git a/package/busybox/0017-tar-strip-unsafe-hardlink-components.patch b/package/busybox/0017-tar-strip-unsafe-hardlink-components.patch
 new file mode 100644
-index 0000000000..5891424c00
+index 0000000000..604f1a4f9b
 --- /dev/null
-+++ b/package/busybox/0016-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-@@ -0,0 +1,50 @@
-+From: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Date: Thu, 21 Aug 2025 12:31:53 +0000
-+Subject: netstat: CVE-2024-58251 - sanitize argv0 for -p
-+Bug-Debian: https://bugs.debian.org/1104009
++++ b/package/busybox/0017-tar-strip-unsafe-hardlink-components.patch
+@@ -0,0 +1,198 @@
++From 3fb6b31c716669e12f75a2accd31bb7685b1a1cb Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Thu, 29 Jan 2026 11:48:02 +0100
++Subject: [PATCH] tar: strip unsafe hardlink components - GNU tar does the same
 +
-+Signed-off-by: Valery Ushakov <valery.ushakov@bell-sw.com>
-+Upstream: https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+CVE: CVE-2024-58251
++Defends against files like these (python reproducer):
++
++import tarfile
++ti = tarfile.TarInfo("leak_hosts")
++ti.type = tarfile.LNKTYPE
++ti.linkname = "/etc/hosts"  # or "../etc/hosts" or ".."
++ti.size = 0
++with tarfile.open("/tmp/hardlink.tar", "w") as t:
++	t.addfile(ti)
++
++function                                             old     new   delta
++skip_unsafe_prefix                                     -     127    +127
++get_header_tar                                      1752    1754      +2
++.rodata                                           106861  106856      -5
++unzip_main                                          2715    2706      -9
++strip_unsafe_prefix                                  102      18     -84
++(add/remove: 1/0 grow/shrink: 1/3 up/down: 129/-98)            Total: 31 bytes
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++
++CVE: CVE-2026-26157
++CVE: CVE-2026-26158
++Upstream: https://git.busybox.net/busybox/commit/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb
++Upstream: https://gogs.librecmc.org/OWEALS/busybox/commit/3fb6b31c716669e12f75a2accd31bb7685b1a1cb
++Signed-off-by: Hitendra Prajapati <hprajapati@mvista.com>
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ networking/netstat.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/networking/netstat.c b/networking/netstat.c
-+index 807800a62..d979f6079 100644
-+--- a/networking/netstat.c
-++++ b/networking/netstat.c
-+@@ -41,6 +41,7 @@
++ archival/libarchive/data_extract_all.c      |  7 +++--
++ archival/libarchive/get_header_tar.c        | 11 ++++++--
++ archival/libarchive/unsafe_prefix.c         | 30 +++++++++++++++++----
++ archival/libarchive/unsafe_symlink_target.c |  1 +
++ archival/tar.c                              |  2 +-
++ archival/unzip.c                            |  2 +-
++ include/bb_archive.h                        |  3 ++-
++ 7 files changed, 42 insertions(+), 14 deletions(-)
 + 
++diff --git a/archival/libarchive/data_extract_all.c b/archival/libarchive/data_extract_all.c
++index 8a69711..b84b960 100644
++--- a/archival/libarchive/data_extract_all.c
+++++ b/archival/libarchive/data_extract_all.c
++@@ -66,8 +66,8 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
++ 	}
++ #endif
++ #if ENABLE_FEATURE_PATH_TRAVERSAL_PROTECTION
++-	/* Strip leading "/" and up to last "/../" path component */
++-	dst_name = (char *)strip_unsafe_prefix(dst_name);
+++	/* Skip leading "/" and past last ".." path component */
+++	dst_name = (char *)skip_unsafe_prefix(dst_name);
++ #endif
++ // ^^^ This may be a problem if some applets do need to extract absolute names.
++ // (Probably will need to invent ARCHIVE_ALLOW_UNSAFE_NAME flag).
++@@ -185,8 +185,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
++ 
++ 		/* To avoid a directory traversal attack via symlinks,
++ 		 * do not restore symlinks with ".." components
++-		 * or symlinks starting with "/", unless a magic
++-		 * envvar is set.
+++		 * or symlinks starting with "/"
++ 		 *
++ 		 * For example, consider a .tar created via:
++ 		 *  $ tar cvf bug.tar anything.txt
++diff --git a/archival/libarchive/get_header_tar.c b/archival/libarchive/get_header_tar.c
++index cc6f3f0..1c40ece 100644
++--- a/archival/libarchive/get_header_tar.c
+++++ b/archival/libarchive/get_header_tar.c
++@@ -454,8 +454,15 @@ char FAST_FUNC get_header_tar(archive_handle_t *archive_handle)
++ #endif
++ 
++ 	/* Everything up to and including last ".." component is stripped */
++-	overlapping_strcpy(file_header->name, strip_unsafe_prefix(file_header->name));
++-//TODO: do the same for file_header->link_target?
+++	strip_unsafe_prefix(file_header->name);
+++	if (file_header->link_target) {
+++		/* GNU tar 1.34 examples:
+++		 * tar: Removing leading '/' from hard link targets
+++		 * tar: Removing leading '../' from hard link targets
+++		 * tar: Removing leading 'etc/../' from hard link targets
+++		 */
+++		strip_unsafe_prefix(file_header->link_target);
+++	}
++ 
++ 	/* Strip trailing '/' in directories */
++ 	/* Must be done after mode is set as '/' is used to check if it's a directory */
++diff --git a/archival/libarchive/unsafe_prefix.c b/archival/libarchive/unsafe_prefix.c
++index 6670811..89a371a 100644
++--- a/archival/libarchive/unsafe_prefix.c
+++++ b/archival/libarchive/unsafe_prefix.c
++@@ -5,11 +5,11 @@
 + #include "libbb.h"
-+ #include "inet_common.h"
-++#include "unicode.h"
++ #include "bb_archive.h"
 + 
-+ //usage:#define netstat_trivial_usage
-+ //usage:       "[-"IF_ROUTE("r")"al] [-tuwx] [-en"IF_FEATURE_NETSTAT_WIDE("W")IF_FEATURE_NETSTAT_PRG("p")"]"
-+@@ -314,9 +315,12 @@ static int FAST_FUNC dir_act(struct recursive_state *state,
-+ 		return FALSE;
-+ 	cmdline_buf[n] = '\0';
-+ 
-++	/* don't write process-controlled argv[0] to the user's terminal as-is */
-++	const char *argv0base = printable_string(bb_basename(cmdline_buf));
++-const char* FAST_FUNC strip_unsafe_prefix(const char *str)
+++const char* FAST_FUNC skip_unsafe_prefix(const char *str)
++ {
++ 	const char *cp = str;
++ 	while (1) {
++-		char *cp2;
+++		const char *cp2;
++ 		if (*cp == '/') {
++ 			cp++;
++ 			continue;
++@@ -22,10 +22,25 @@ const char* FAST_FUNC strip_unsafe_prefix(const char *str)
++ 			cp += 3;
++ 			continue;
++ 		}
++-		cp2 = strstr(cp, "/../");
+++		cp2 = cp;
+++ find_dotdot:
+++		cp2 = strstr(cp2, "/..");
++ 		if (!cp2)
++-			break;
++-		cp = cp2 + 4;
+++			break; /* No (more) malicious components */
 ++
-+ 	/* go through all files in /proc/PID/fd and check whether they are sockets */
-+ 	strcpy(proc_pid_fname + len - (sizeof("cmdline")-1), "fd");
-+-	pid_slash_progname = concat_path_file(pid, bb_basename(cmdline_buf)); /* "PID/argv0" */
-++	pid_slash_progname = concat_path_file(pid, argv0base); /* "PID/argv0" */
-+ 	n = recursive_action(proc_pid_fname,
-+ 			ACTION_RECURSE | ACTION_QUIET,
-+ 			add_to_prg_cache_if_socket,
-+@@ -686,6 +690,7 @@ int netstat_main(int argc UNUSED_PARAM, char **argv)
-+ 	unsigned opt;
+++		/* We found "/..something" */
+++		cp2 += 3;
+++		if (*cp2 != '/') {
+++			if (*cp2 == '\0') {
+++				/* Trailing "/..": malicious, return "" */
+++				/* (causes harmless errors trying to create or hardlink a file named "") */
+++				return cp2;
+++			}
+++			/* "/..name" is not malicious, look for next "/.." */
+++			goto find_dotdot;
+++		}
+++		/* Found "/../": malicious, advance past it */
+++		cp = cp2 + 1;
++ 	}
++ 	if (cp != str) {
++ 		static smallint warned = 0;
++@@ -37,3 +52,8 @@ const char* FAST_FUNC strip_unsafe_prefix(const char *str)
++ 	}
++ 	return cp;
++ }
+++
+++void FAST_FUNC strip_unsafe_prefix(char *str)
+++{
+++	overlapping_strcpy(str, skip_unsafe_prefix(str));
+++}
++diff --git a/archival/libarchive/unsafe_symlink_target.c b/archival/libarchive/unsafe_symlink_target.c
++index f8dc803..d764c89 100644
++--- a/archival/libarchive/unsafe_symlink_target.c
+++++ b/archival/libarchive/unsafe_symlink_target.c
++@@ -36,6 +36,7 @@ void FAST_FUNC create_links_from_list(llist_t *list)
++ 				*list->data ? "hard" : "sym",
++ 				list->data + 1, target
++ 			);
+++			/* Note: GNU tar 1.34 errors out only _after_ all links are (attempted to be) created */
++ 		}
++ 		list = list->link;
++ 	}
++diff --git a/archival/tar.c b/archival/tar.c
++index 9de3759..cf8c2d1 100644
++--- a/archival/tar.c
+++++ b/archival/tar.c
++@@ -475,7 +475,7 @@ static int FAST_FUNC writeFileToTarball(struct recursive_state *state,
++ 	DBG("writeFileToTarball('%s')", fileName);
 + 
-+ 	INIT_G();
-++	init_unicode();
++ 	/* Strip leading '/' and such (must be before memorizing hardlink's name) */
++-	header_name = strip_unsafe_prefix(fileName);
+++	header_name = skip_unsafe_prefix(fileName);
 + 
-+ 	/* Option string must match NETSTAT_xxx constants */
-+ 	opt = getopt32(argv, NETSTAT_OPTS);
++ 	if (header_name[0] == '\0')
++ 		return TRUE;
++diff --git a/archival/unzip.c b/archival/unzip.c
++index 691a2d8..5844215 100644
++--- a/archival/unzip.c
+++++ b/archival/unzip.c
++@@ -860,7 +860,7 @@ int unzip_main(int argc, char **argv)
++ 
++ 		/* Guard against "/abspath", "/../" and similar attacks */
++ // NB: UnZip 6.00 has option -: to disable this
++-		overlapping_strcpy(dst_fn, strip_unsafe_prefix(dst_fn));
+++		strip_unsafe_prefix(dst_fn);
++ 
++ 		/* Filter zip entries */
++ 		if (find_list_entry(zreject, dst_fn)
++diff --git a/include/bb_archive.h b/include/bb_archive.h
++index e0ef8fc..1dc77f3 100644
++--- a/include/bb_archive.h
+++++ b/include/bb_archive.h
++@@ -202,7 +202,8 @@ char get_header_tar_xz(archive_handle_t *archive_handle) FAST_FUNC;
++ void seek_by_jump(int fd, off_t amount) FAST_FUNC;
++ void seek_by_read(int fd, off_t amount) FAST_FUNC;
++ 
++-const char *strip_unsafe_prefix(const char *str) FAST_FUNC;
+++const char *skip_unsafe_prefix(const char *str) FAST_FUNC;
+++void strip_unsafe_prefix(char *str) FAST_FUNC;
++ void create_or_remember_link(llist_t **link_placeholders,
++ 		const char *target,
++ 		const char *linkname,
 +-- 
-+2.34.1
++2.50.1
+diff --git a/package/busybox/0018-only-strip-unsafe-components-from-hardlinks.patch b/package/busybox/0018-only-strip-unsafe-components-from-hardlinks.patch
+new file mode 100644
+index 0000000000..bcfbf5d4d2
+--- /dev/null
++++ b/package/busybox/0018-only-strip-unsafe-components-from-hardlinks.patch
+@@ -0,0 +1,38 @@
++From 599f5dd8fac390c18b79cba4c14c334957605dae Mon Sep 17 00:00:00 2001
++From: Radoslav Kolev <radoslav.kolev@suse.com>
++Date: Mon, 16 Feb 2026 11:50:04 +0200
++Subject: [PATCH] tar: only strip unsafe components from hardlinks, not
++ symlinks
 +
++commit 3fb6b31c7 introduced a check for unsafe components in
++tar archive hardlinks, but it was being applied to symlinks too
++which broke "Symlinks and hardlinks coexist" tar test.
++
++Signed-off-by: Radoslav Kolev <radoslav.kolev@suse.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++
++CVE: CVE-2026-26157
++CVE: CVE-2026-26158
++Upstream: https://git.busybox.net/busybox/commit/?id=599f5dd8fac390c18b79cba4c14c334957605dae
++Upstream: https://gogs.librecmc.org/OWEALS/busybox/commit/599f5dd8fac390c18b79cba4c14c334957605dae
++Signed-off-by: Hitendra Prajapati <hprajapati@mvista.com>
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ archival/libarchive/get_header_tar.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++ 
++diff --git a/archival/libarchive/get_header_tar.c b/archival/libarchive/get_header_tar.c
++index 1c40ece..606d806 100644
++--- a/archival/libarchive/get_header_tar.c
+++++ b/archival/libarchive/get_header_tar.c
++@@ -455,7 +455,7 @@ char FAST_FUNC get_header_tar(archive_handle_t *archive_handle)
++ 
++ 	/* Everything up to and including last ".." component is stripped */
++ 	strip_unsafe_prefix(file_header->name);
++-	if (file_header->link_target) {
+++	if (file_header->link_target && !S_ISLNK(file_header->mode)) {
++ 		/* GNU tar 1.34 examples:
++ 		 * tar: Removing leading '/' from hard link targets
++ 		 * tar: Removing leading '../' from hard link targets
++-- 
++2.50.1
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c5e56c7829..0923f20965 100644
+index 0923f20965..e26a760f8f 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
-@@ -22,6 +22,9 @@ BUSYBOX_IGNORE_CVES += CVE-2023-42366
- # 0015-archival-disallow-path-traversals-CVE-2023-39810.patch
- BUSYBOX_IGNORE_CVES += CVE-2023-39810
+@@ -32,6 +32,10 @@ BUSYBOX_IGNORE_CVES += CVE-2025-46394
+ # 0014-wget-dont-allow-control-characters-or-spaces-in-the-URL.patch
+ BUSYBOX_IGNORE_CVES += CVE-2025-60876
  
-+# 0016-netstat-sanitize-argv0-for-p-CVE-2024-58251.patch
-+BUSYBOX_IGNORE_CVES += CVE-2024-58251
++# 0017-tar-strip-unsafe-hardlink-components.patch
++# 0018-only-strip-unsafe-components-from-hardlinks.patch
++BUSYBOX_IGNORE_CVES += CVE-2026-26157 CVE-2026-26158
 +
- # 0012-archival-libarchive-sanitize-filenames-on-output.patch
- # 0013-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
- BUSYBOX_IGNORE_CVES += CVE-2025-46394
+ BUSYBOX_CFLAGS = \
+ 	$(TARGET_CFLAGS)
+ 
 -- 
 2.54.0
 
