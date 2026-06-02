@@ -4,108 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78BCECD6E5D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 20:23:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E51BCD6E57
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 20:24:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3777782F19;
-	Tue,  2 Jun 2026 20:23:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC43D82083;
+	Tue,  2 Jun 2026 20:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FONxth7G-JFQ; Tue,  2 Jun 2026 20:23:27 +0000 (UTC)
+ id wNnal0hrKEUx; Tue,  2 Jun 2026 20:24:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF31F82EF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED50F80E2F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780431807;
-	bh=OiZI5EVhstUIiXj8R3BpXcxCCzx7uOAZT84LCT4Ge/s=;
+	s=default; t=1780431889;
+	bh=lm8JwiQRUKlVwczpjy7jwmQXUNSnvh8rTpdwGI/388Q=;
 	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=oawwVtAhxKqMifKm7JV4XoeRgA1/kfBdtc10286xbEgsS6TLjNTwR2HPGtFluT7gX
-	 EPcMswdngcqolmVnPIwZlUG14QVNLRKY0+ymJamI+Wc/221XQoH5A1GKsQHSk+97dS
-	 LHKDD/CwglRlwqRYkkrjDUP+uJKf3MOfqWNDgATFXvpb3CTE+UzOWXclB+a7uznNXG
-	 oTi8QgtugxJI8aJb4epdC8D8/m5xYnGQeoW55hqMSc4gWM3ALiGbsf7JOqmVLCmOLn
-	 perk/IBtYAJAuPfKJ8IOnUSNpMXu+l4nRS5qW3Y/khhFCrI7oN/g2qwBDtfs9H2PMj
-	 Tiv0c9eWp+Mvg==
+	b=p7G2dr0VV/icn6k0XkJnhq1j7cUjOqqlz/pcK6iMiqkvLn1cur93hzhNRlhodQbbJ
+	 eYjGghcXImT1cwpexEDC7KpsB/1tFZW1M/rq09Q8RQ8nA21guJ/8EbOUsFYSQfAhEX
+	 5zwn8ojYKIZrOO0cwiZ/MHMroEaFSNjSHLrFYxoRBCP7OJFlXzC2AxG0HsW0eCQIhb
+	 G2eZF2x6Mx2ngQ8MNUs4JIOQfumyyWC7f38qk9EfbR/euzZaluSOoyHBuKxbJAkoBo
+	 BPwMXh/vU2M37vbt+PNz3A1XaGE9rumKr8dGk4ZdN5/IGrKs8vSOdbW3iENRXd8TnB
+	 bgOyLaeHUCSwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF31F82EF1;
-	Tue,  2 Jun 2026 20:23:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 73D34D3
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:23:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED50F80E2F;
+	Tue,  2 Jun 2026 20:24:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1FD2D3
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5AAF760D69
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:23:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D361B80DEF
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:24:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MfUK0_Gl76pZ for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 20:23:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id esTgU6ddPUWJ for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 20:24:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8600D60B34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8600D60B34
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8600D60B34
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:23:25 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-45ee5cdbd28so3693937f8f.1
- for <buildroot@buildroot.org>; Tue, 02 Jun 2026 13:23:25 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD9ED80DC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9ED80DC1
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD9ED80DC1
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:24:46 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-45ef6565cfdso2163309f8f.0
+ for <buildroot@buildroot.org>; Tue, 02 Jun 2026 13:24:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780431803; x=1781036603;
+ d=1e100.net; s=20251104; t=1780431885; x=1781036685;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=w785cA4ql6fbJq4J0vLUAIgE/0WFFUCLvXgSZ2a52Q4=;
- b=EfZ7zZEXpVQdebjmTiRxy0/2znOCjEvQGqH1sJgeWvJwYRlJYT/1SIEfbmDXKja/yD
- jjxhaxZ2tvY/l63yVjtWmEGMR44tKKe6bfbYFpUVSjuZipSl4NHyUDfA9heO6up4T/ZR
- DOeSM00NvG1avtJ2lpBRYKiHfhnSUM3bte0xz79LTYegVPz2CngXA2wsWZFNIvAjUPNq
- CzSuY862PsbbKOT6Iqtd66nDwIV67slAaVPy8qila9mIkH+/9SJ6BJhmob51YR7M1IEh
- J7jtA1IBUKtrz0yoANY4qlDc2KthuuRzBQB78g5TjgMKsBRLytB7PjRvnjmbqdR/EKSU
- WQBg==
-X-Gm-Message-State: AOJu0YzdzI+ZzFbR+kMT+KSDZCDrqgAZVoTZkqqw+USLVHf673Wp0smi
- UVzuD2jhZxR57T7BLfj+kVvczhS0mAwMvdWxUg9hqUz21JdLAx1SOYdG/v07LAvXItihASpqKQs
- ggp1M
-X-Gm-Gg: Acq92OH1COi93mNppXNz1X9ls5TARePMKNdAUQSHrAjgD3UBc+zwiwT03lY4xpunCm1
- Ls6uvKvtVwSj+E6GoY5iAc4vedvTZEQl5mLgtgInjPPvr7iK1mhsxnQgs9b92rN31W8GUHpno4U
- yRJs6paYh8olCjytGGIfsjL3uWLibuVdon9uXeFL2H43zThseBA3unEB5jnKkuYjqLkYkK68KKR
- UBN58nX7zqKE3jLLA8JZwkGbPu+W5dJCF6ItRumhL+yI7TZBVjb6NqIoqv4aCYJaVYo/zrz1Msu
- DZEB05aNjFH9bcEU66I2uuX3eDsOMNehDA9M6iG30aOwRqcIPCrge2hw2ZUSlATTFzudZfnvvCe
- nYxs8s2/YXMAGw3paDxQ6fujMAM/nOy+jkaxo9vG3uy+sdRaAADwKVHg6CJ7nGZin6RyWbPe5TR
- h2imuiSMGllk/txQzs0t9hmpP2dFC/tkDhQd0tw0mvNidB9kBUC0di8oJbgg==
-X-Received: by 2002:a05:6000:701:b0:460:11a7:f82e with SMTP id
- ffacd0b85a97d-460212cd4dfmr358071f8f.8.1780431803337; 
- Tue, 02 Jun 2026 13:23:23 -0700 (PDT)
+ bh=l+V7oAWPpqPtL6vv5SdyovBhMl/IX3QeC9D3Rniwsx4=;
+ b=l5eShk4JK9cHRdyF3pCyfCz+YbfmMEm9lj67BOF7fZN/BDLNVbWqmfE3ETofIJxnHZ
+ SNuTzOL50DrBJOT3kCrcQKDi0vA9qtdzxHTa7XnOLqsOTDkVQsIRn14Oto1tUW1EC7Mf
+ Yt0M08/nckr7Wqbmdq3tZpyHP4DEedW9bECJEC2DrmSTfnn/zDR+3kU1fKoYOml2we0I
+ lLQk13TShON5pnLfRSmj0RcNiiv0OJMbNi9LkJOj2O4J236Auhm2HFZMRMFcUAC9h8wa
+ uVrIVKPgke+Js3ndR1xZRe2ZgExG0D+Djj+AMvoKrHqi6nRYS9e0JNNIwGFXPx22l810
+ cX1w==
+X-Gm-Message-State: AOJu0YxiTQyQT6TBlVT2Ha+qBlsG5x1CjeKkzHAinTjKkryAespX+23E
+ yvQJXHv5W6dA4YMtiRGW6epYe4SDV7zt4akokT/mMGEmsTRZkiEsUYwF60prKQTjwWdWojIRZFY
+ EGigu
+X-Gm-Gg: Acq92OG20HamK4D4mPlzP3w5WbyH/5FXs0ToSAYaOF29Rjj3vdm2a2LKt3crHAHvbpp
+ OBrnP1h/9zvAym/v5XAycqVp4AbT/WYtYDF4Qz/vTd1LjoPdevmAFXXWUOgHw08IaWt8GvrpE9I
+ 5uf0Vz51AV8Y5iqF9FjoOF49sdAGzUiVgCEweeACHPZV4AmTAJkuIWW0+VkoY2myUcWV6EihLPJ
+ I/NA9+okoQdchpxbvlnqS10W2/A1tuumPHKFubUXBff9+ZNmQ2J7A9SO7FwtcpxBUaTkc+KOXFh
+ 7OKL1QIhxOQaybq4f5homOBNuBeT+UWli+XUNgHQvcTXnQLk58CKQG/Boig6w4FFy+w1tNgWCx7
+ jN8LKS2Xs5BstMI/v5Y5w54RtrZIriiAEnKOiSyml3g7yUlLltN4BxvezmSS99+O5oycwsA767w
+ 6zhayBcgUJv/Qf3hekwi0vNvCb7qDz5l6OXUa5hqbsh5X70/DWQyxQ+3XKzA==
+X-Received: by 2002:a05:600c:8b61:b0:490:b1b4:d437 with SMTP id
+ 5b1f17b1804b1-490b5d3e1d5mr6579555e9.0.1780431884594; 
+ Tue, 02 Jun 2026 13:24:44 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f344541sm1512081f8f.22.2026.06.02.13.23.22
+ 5b1f17b1804b1-490b575aaa4sm3389545e9.3.2026.06.02.13.24.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jun 2026 13:23:23 -0700 (PDT)
+ Tue, 02 Jun 2026 13:24:44 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Date: Tue,  2 Jun 2026 22:23:22 +0200
-Message-ID: <20260602202322.52208-1-thomas.perale@mind.be>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Tue,  2 Jun 2026 22:24:43 +0200
+Message-ID: <20260602202443.54352-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780431803; x=1781036603; darn=buildroot.org;
+ d=mind.be; s=google; t=1780431885; x=1781036685; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=w785cA4ql6fbJq4J0vLUAIgE/0WFFUCLvXgSZ2a52Q4=;
- b=TANrWpSxJ8728D+DzGJN0GySO82ZEUtnUN94EEWeURw7Pv1BrfqwYIZgct/JDScKUD
- y62uygsX9xpTNfP70J/giYIoRpl6/k5mY4Q6q84WFbq8KroSKCFERN3Yr1N+C6I6eS6g
- 0+oFtv3X8zepCo5CNrSCsQ3752uJKLYzfZM1WOF8lzYHiQMdy3xe3HnNXSxVy3d9IOiI
- WeHyJt/jKgfNqu6THkl6PBijiQOfZYAMJSdORMG6iCWMUEp+aSimHvoIxaYpEsH5NvWc
- J2zJHPkwDrVL8YLNNP9r11n0aIxZJUtK7RBzucD/htv0GCaIZticvWI4OZZgxKGqJuo7
- k6DA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=l+V7oAWPpqPtL6vv5SdyovBhMl/IX3QeC9D3Rniwsx4=;
+ b=gohMmnc/Qutsl9A4l76yfX69n5AL0nkEXZsnNWNEsag/u+3OboZXoYwjRJKQ0CirOb
+ bS9OuxG3AJ+CVZXef2RBFty58T7qXTIBB1BiX/8V0Gy8FjWDWfrKQQOZfsT8HxG/ZTGr
+ Jb7RPn+Ks/x6WMNnFI7MzIF0v3WXpUu1dTKGWGDDux3j3hT7DBO/c0cs6X/lW0Q04l9+
+ uf7YYb2sBqdTImFtbShGYrdqmWa8tUN2keFXHcAayLnggODJ9mB1dgwdjL0gp+/Hp7uv
+ eCIY+OGoeH41EY9LcT1OsFWxF0LDu9G0ADjuIK9+mFrTi4BDMGKAhI/DsGQVmmAMZyLv
+ 3/Hg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TANrWpSx
-Subject: [Buildroot] [PATCH] package/ntp: ignore CVE-2015-7977
+ header.a=rsa-sha256 header.s=google header.b=gohMmnc/
+Subject: [Buildroot] [PATCH] package/unzip: patch CVE-2021-4217
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,40 +124,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The NVD database schema has the following entry
+The patch is provided thanks to the Ubuntu community.
 
-```
-{
-  "vulnerable": true,
-  "criteria": "cpe:2.3:a:ntp:ntp:*:*:*:*:*:*:*:*",
-  "versionEndIncluding": "4.2.8",
-},
-```
+- CVE-2021-4217:
+    A flaw was found in unzip. The vulnerability occurs due to improper
+    handling of Unicode strings, which can lead to a null pointer
+    dereference. This flaw allows an attacker to input a specially crafted
+    zip file, leading to a crash or code execution.
 
-Which make every patch revision of the package ntp match to the
-CVE-2015-7977.
-
-This commit ignore this entry.
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2021-4217
+ - https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
+ - https://bugs.launchpad.net/ubuntu/+source/unzip/+bug/1957077
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ntp/ntp.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...erence-and-use-of-uninitialized-data.patch | 57 +++++++++++++++++++
+ package/unzip/unzip.mk                        |  3 +
+ 2 files changed, 60 insertions(+)
+ create mode 100644 package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index f481c5d79b..29770642a0 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -25,6 +25,9 @@ NTP_CONF_OPTS = \
- 	--with-yielding-select=yes \
- 	--disable-local-libevent
- 
-+# NVD Entry incorrectly match on every patch revision. Fixed in 4.2.8p6.
-+NTP_IGNORE_CVES += CVE-2015-7977
+diff --git a/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
+new file mode 100644
+index 0000000000..4f9c4c1858
+--- /dev/null
++++ b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
+@@ -0,0 +1,57 @@
++From 731d698377dbd1f5b1b90efeb8094602ed59fc40 Mon Sep 17 00:00:00 2001
++From: Nils Bars <nils.bars@t-online.de>
++Date: Mon, 17 Jan 2022 16:53:16 +0000
++Subject: [PATCH] Fix null pointer dereference and use of uninitialized data
 +
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
++This fixes a bug that causes use of uninitialized heap data if `readbuf` fails
++to read as many bytes as indicated by the extra field length attribute.
++Furthermore, this fixes a null pointer dereference if an archive contains an
++`EF_UNIPATH` extra field but does not have a filename set.
++
++Upstream: https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
++CVE: CVE-2021-4217
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ fileio.c  | 5 ++++-
++ process.c | 6 +++++-
++ 2 files changed, 9 insertions(+), 2 deletions(-) 
++ 
++diff --git a/fileio.c b/fileio.c
++index 14460f3..1dc319e 100644
++--- a/fileio.c
+++++ b/fileio.c
++@@ -2310,8 +2310,11 @@ int do_string(__G__ length, option)   /* return PK-type error code */
++             seek_zipf(__G__ G.cur_zipfile_bufstart - G.extra_bytes +
++                       (G.inptr-G.inbuf) + length);
++         } else {
++-            if (readbuf(__G__ (char *)G.extra_field, length) == 0)
+++            unsigned bytes_read = readbuf(__G__ (char *)G.extra_field, length);
+++            if (bytes_read == 0)
++                 return PK_EOF;
+++            if (bytes_read != length)
+++                return PK_ERR;
++             /* Looks like here is where extra fields are read */
++             if (getZip64Data(__G__ G.extra_field, length) != PK_COOL)
++             {
++diff --git a/process.c b/process.c
++index 5f8f6c6..de843a5 100644
++--- a/process.c
+++++ b/process.c
++@@ -2067,10 +2067,14 @@ int getUnicodeData(__G__ ef_buf, ef_len)
++           G.unipath_checksum = makelong(offset + ef_buf);
++           offset += 4;
++ 
+++          if (!G.filename_full) {
+++            /* Check if we have a unicode extra section but no filename set */
+++            return PK_ERR;
+++          }
+++
++           /*
++            * Compute 32-bit crc
++            */
++-
++           chksum = crc32(chksum, (uch *)(G.filename_full),
++                          strlen(G.filename_full));
++ 
++-- 
++2.25.1
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 5436c7a46c..129b749a9e 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -51,6 +51,9 @@ UNZIP_IGNORE_CVES += CVE-2019-13232
+ # 0028-cve-2022-0529-and-cve-2022-0530.patch
+ UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
  
++# 0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
++UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
++
+ # unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
+ # necessary, redefining it on the command line causes some warnings.
+ UNZIP_TARGET_CFLAGS = \
 -- 
 2.54.0
 
