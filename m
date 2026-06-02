@@ -4,118 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D614CD6E57
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 20:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EE9CD6E5D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 20:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69C04830A8;
-	Tue,  2 Jun 2026 20:42:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6A1980F11;
+	Tue,  2 Jun 2026 20:52:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5xTnvJvzV4dA; Tue,  2 Jun 2026 20:42:18 +0000 (UTC)
+ id PiCXmyh8kWZc; Tue,  2 Jun 2026 20:52:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38C7D830C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5541F8318C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780432938;
-	bh=AcdzNUYAmGxjA9pIEcE8k7z0ACkJFzRozyjBFru1SBA=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=VsZ7sojKq/PH7o5bCcmK3j8XYLR7A3mZFXkxmBMoLPegzAYm7ERyLimSFnS7NENG7
-	 1HkHJMmXAYvAtvkzJMK1eR+RDjnbxs3R+Dj4nzelzqK1TItDNWByna+Cn06g+gojtK
-	 j1UD386UF6adHcZhCCTY3ND2NSXomFn9YsUqXUATHvYBCgLtGWJZiEK/7npVxAwbg3
-	 /9s4EVjWNAIcVIsOh19HLJwRZ8Hfy5z7Q7XJf2jUaZC0jH4gcPHiM3ILrJHAezPMoA
-	 tyOhPclDaEeX26gzXI/6zvm/WImSnVwN8/VtPX273AcIludIBA6ldRkCGV2zqMcy9J
-	 kKfV36/XzH/1A==
+	s=default; t=1780433525;
+	bh=ZpZqC76RdiWLyewsF4c+noAEkLEalngN68Fj4zGyWLA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=Cc8SXwhTqP/mgMw8sXfFzA6PAX6/v4Q27BYpIwR1U9Bq8mejeap4+F7X1RUQKL3bT
+	 6sdXyzrAkDXCczMgJH/gtSir50QsY/0ksKGM8AH1GOAPB/Poj6y34VKSKAjpYUQtmN
+	 E7xDJ9znUD7o6NtQEEEJr3MOmYBfz7DnmMe6LOyH5fTC6sW2rfwxYExhe38rzNCsFo
+	 TLoEA99lcxV5mGxx714PnkVgDhyC3e897cnnq+CCx96NRT6gw5YnAugPNoXk0e714t
+	 MBa36xBPwUUrPth/Ok5yy7Of63QasG/CZnZ6Z4F6JYyQRh0pcatyooHaVV2NCOiHtx
+	 7OdUONYHuLGew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38C7D830C0;
-	Tue,  2 Jun 2026 20:42:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 55BA7381
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:42:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5541F8318C;
+	Tue,  2 Jun 2026 20:52:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE2F6187
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 473D740829
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:42:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF9478318C
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:52:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yIR4w6H0miDW for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 20:42:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fKL9z3UyRk96 for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 20:52:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B8C5440128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8C5440128
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B8C5440128
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:42:15 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-460166910e6so1293684f8f.2
- for <buildroot@buildroot.org>; Tue, 02 Jun 2026 13:42:15 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 39F7380F11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39F7380F11
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 39F7380F11
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:52:00 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-49068493267so69319395e9.1
+ for <buildroot@buildroot.org>; Tue, 02 Jun 2026 13:52:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780432933; x=1781037733;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=T14sIPwrrP0LogT6zbcQVdxrUAUgtUOZB2qZSbvXCUA=;
- b=LT0aq9XvlpCKxLB/SbL35IOobZ1aWcm+QOWc7SmMWY2yWIf3Y+lEEJUrVafvWAlAfo
- OAKsmWuaHTytoNN+cA6d5vHQCeA7re1r26wYXj97LAXeCVkmS1wCKGwVoyEPmXOJwHfC
- 0ADw2gc33xCrQmDnGQujGkVk5F8oDhY1ra2qe4j8iLqjjPJLaWdh17XfJ1yvWnZfb0wQ
- xfe0IdrtOV+eE3R1uSwLEylzaw09MtmDMgclPRYLpoezn/C6AZLa4O2aSq30exesPOBR
- YOVEE8+8eJlZtdNiFLc0Br8+YvSM2y8ibHHNCjyDELG1/1iEYoxsfjg+9xYE+x1oAbxA
- JumQ==
-X-Forwarded-Encrypted: i=1;
- AFNElJ/IkODCNwdqxQQIJ1s9LDSIQfwSuLf99NZybfsbBXXEZto5nnsvxwbmufnzyeBZyebCT5vQZOo4DTU=@buildroot.org
-X-Gm-Message-State: AOJu0YwKaZ1YepPCgaeq/g4Kaqoq2tyAiS3ewgqWfl5mNDbwd5LAeSN+
- zNA19qYCtnTT/i7/yiL3UIledgKeja7AyQHZtzSIeJj6P5+YreyYdRyaDrantuHYlmY=
-X-Gm-Gg: Acq92OH1f2zVD1+tSl/wkZ2VSdnLj+qX2qdTpTFEAwtR8SiOwE2iV18GFc8W7ayzeZv
- X/2bpA6YYLu95oEc1XnNnGILKCI2lPmmh85ef+n9PXO3RZv7tDlEeytgda/KehyPk8agIZakIDr
- mFlPi7iauP68NmRC43qcGf0jUipE+TFJSO6mcU31axY8rnUTt7g/x5Mko1PojwUP4jocEuU6pAK
- zLfVDqByKB1UxL5pjKmNoW5xAHA+9lJFIt5pMzIna7WadyqgAC2UhUggVdiyNFVtj/Gw4XzMYyS
- vUydqr0kcsL1oF2pvC7ip9ot7GV2ajB3B2SVRHhhX7Nb3/aXcNW+4MycvCJ6OYACJMj5asglwZH
- KR2qWn29f/csh/RLz75Ycjk/ruSHfGvo7HHiP2atSUn+A0g8gnY4NLnYP38SVnbezKTxcrttHG4
- JA0hBlA1QdrWioA4fkIsul9C34XtvWdW/+pmb8wKtVOEBtVZwrFphab20IxSZdJ6hGCd/UZuIz7
- 7Kq8h3fRSntPaVvMO+tUtBEsN8RSpif6JYn4OLKD/JJhYHLvAg79p3kzjY+VGrREJDueHcM5VVx
-X-Received: by 2002:a5d:640e:0:b0:43c:fc5c:a9fe with SMTP id
- ffacd0b85a97d-4602182bbe9mr62998f8f.20.1780432933012; 
- Tue, 02 Jun 2026 13:42:13 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ d=1e100.net; s=20251104; t=1780433518; x=1781038318;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=lnuU01KsmsteH8SPJtFdYjNUPoIbdJbUFapy0Gm/B2w=;
+ b=p0hI1tVUiduZooSQZThRlUIUi8udXTwT6kedjhGOwDv3zzShGtG1a2Rj31ImLZ1nuv
+ d8iNRctCQSU8/ufM7xvHgFBgBt4uxfHl98j2nlW8uJ1V8q2Jmp0la3yJD3Wg3FNsrmVu
+ TA5lnSROnnxEneqkDpXNqhDH1L8CWDCQIC4XCLInuMyYqhDVEbYFz6oK1T2lHLTYZtU1
+ 3jrkROyliegNQ9GWeydwY0yKytcO+cTIyKqYpVxv44++QYEaSVYhQd+1NCH4hloHj0vX
+ Pg7ELhRYfFrUKkMzUTsk4gVygos7JxZxGgQmN70/0B0Q5misoLSn6nv/sDMKBiQ4cVWH
+ V+6A==
+X-Gm-Message-State: AOJu0Yxz6ViYlD+bHBtIVQPx7IBEZkVI36Vass/2IaH+e1pBW+yvmtYo
+ P6QurOt6U05KJfNe0a2/+lFGqibFAJQxnmEX6+7trOybpxUASNU1KVSf29KCA2jShDPJwikdovA
+ 4pN4s
+X-Gm-Gg: Acq92OE5WKkFnvD9mltCraHSMa+zzFJ2ouuqDw1g6gmilfK0gfCRqoibqQSvqsbOoLH
+ 5nhEBmMagNWZthjX/SoFvOvZ1VyzaQaxH31x11AkmBax20y7QQEhFFBZlmBwag8PORjni744P9r
+ IA02AfF01Ivm5F6MUXyH5X83NqC5hD1IihY2dOMp2av5VxsmJKXCWpoGqRI5mH/EhaoOWTBXyDE
+ P3zVf8qVg7kPoH6RHbQ/uImnfAursgJP36HxyNd+uZa6m0Xhajrg1Qh1+qcyHtQSn1vXYuqMu/s
+ i3xJVvVv9iEWEQaPXw2DUPHQBE0UfZalAn0ysiwdpQAevPknBEB12GcSaFYWfuwjwlJ86JAXArn
+ boEVOe/uSsfxoEG0t7q8wnNoC4Z18EmKVTJWl6cEeuN8smSs4AAtqmnRpKpGnJKVNZQW9XlZNlE
+ vbPDw1Iyl44zC5Zd2WF9cQJxQJROJT8yTmgfK14OW9UaKDo5opixywpx7meg==
+X-Received: by 2002:a05:600c:444c:b0:490:b2c9:e284 with SMTP id
+ 5b1f17b1804b1-490b60e3cc1mr5695085e9.30.1780433518543; 
+ Tue, 02 Jun 2026 13:51:58 -0700 (PDT)
+Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f35f2e6sm1766384f8f.32.2026.06.02.13.42.12
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jun 2026 13:42:12 -0700 (PDT)
-Message-ID: <8b817f4c-b876-412a-84d0-0226b11b7282@smile.fr>
-Date: Tue, 2 Jun 2026 22:42:11 +0200
+ ffacd0b85a97d-4601f2dc412sm2305563f8f.4.2026.06.02.13.51.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 Jun 2026 13:51:58 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue,  2 Jun 2026 22:51:57 +0200
+Message-ID: <20260602205157.124479-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: John Ernberg <j@j-ernberg.se>, buildroot@buildroot.org
-Cc: John Ernberg <john.ernberg@actia.se>,
- Carlo Caione <carlo.caione@gmail.com>, Julien Olivain <ju.o@free.fr>
-References: <20260601204735.888967-1-j@j-ernberg.se>
- <20260601204735.888967-8-j@j-ernberg.se>
-Content-Language: fr
-In-Reply-To: <20260601204735.888967-8-j@j-ernberg.se>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780432933; x=1781037733; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=T14sIPwrrP0LogT6zbcQVdxrUAUgtUOZB2qZSbvXCUA=;
- b=oQHw8Kz0cooMdIZOr8t+j4acAalypJv/v9jLuxEOvDeG3Apkhsd7cn3cIpWVkIhSP5
- M7cLoLS2mWcoQg51y5bXHeIJDnipQKvyG6THWjPdTRphMdBalamaCp95kT8TT3o0BRoL
- Hyw2Jc9FP16hE0FBsy5Td32Tp7+odT1G3p2m0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=oQHw8Kz0
-Subject: Re: [Buildroot] [RFC PATCH 7/9] package/jailhouse: Drop the package
+ d=mind.be; s=google; t=1780433518; x=1781038318; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lnuU01KsmsteH8SPJtFdYjNUPoIbdJbUFapy0Gm/B2w=;
+ b=fip42ZrV5osiAqSKRtKHo65eNVng839lyHmzOyHmXcIKxJCF+gmou6YFSx3F0ikOvF
+ rKg7ZG0pPGI0vlKrgqDatdvZyobGY0IirDjCHDMclXyugVgV7atq0tCZl1Cv5PBbygI3
+ bex5BgYCaXVNbPDcKZC8QGiOIMxO7xC09OL1JO8LH6ciiBjigp4ryWp+QSe69eD7dK+x
+ FLbXOGAp+53pIBKDm45qpIbCNWmlUE2CehHi3V7IrQPrXFCMDDtnRJSIP+HZlugGO3Tq
+ 1tf6SE9Puz3tSa8+zIuHYohHNQORTy0PhjofRnPLeLXyGu2AgcGJdGrMDaWYmtHO0B71
+ Ck0Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fip42ZrV
+Subject: [Buildroot] [PATCH] package/capnproto: patch CVE-2026-322{39,40}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,237 +116,229 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Koen Martens <gmc@sonologic.nl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9obiwgQWxsLAoKTGUgMDEvMDYvMjAyNiDDoCAyMjo0NywgSm9obiBFcm5iZXJnIGEg
-w6ljcml0wqA6Cj4gVXBzdHJlYW0gaGFzIG5vdCBzZWVuIGFueSBhY3Rpdml0eSBzaW5jZSAyMDIy
-IFsxXSwgc2FtZSBmb3IgdGhlIG1haWxpbmcKPiBsaXN0Lgo+IAo+IEl0IGRvZXMgbm90IGNvbXBp
-bGUgd2l0aCBtb2Rlcm4ga2VybmVscy4gVGhlcmUgaGFzIGJlZW4gbm8gY29tcGxhaW50cyBvcgo+
-IGZpeGVzIGZyb20gdXNlcnMgeWV0IGFib3V0IHRoaXMgd2l0aCBtb2Rlcm4ga2VybmVscy4KCk5v
-dCBvbmx5IHdpdGggbW9kZXJuIGtlcm5lbHMgYnV0IGFsc28gd2l0aCBsYXRlc3QgZ2NjIHJlbGVh
-c2UgdXNpbmcgYzIzLiBTaW5jZQp0aGUgYnVpbGQgc3lzdGVtIGRvZXNuJ3Qgc3BlY2lmeSBhbnkg
-dmVyc2lvbnMgb2YgdGhlIEMgc3RhbmRhcmQsIGl0IGRvZXNuJ3QKYnVpbGQgd2l0aCBnY2MgMTUu
-CgpUaGUgamFpbGhvdXNlIHJ1bnRpbWUgdGVzdCBkb2Vzbid0IGJ1aWxkIHNpbmNlIHRoZSBsZXN0
-IEFSTSBhYXJjaDY0IHRvb2xjaGFpbgp2ZXJzaW9uIGJ1bXA6CgogIGh0dHBzOi8vZ2l0bGFiLmNv
-bS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvMTQ2MjI4NDM0NjMKCkRvIHlvdSBoYXZl
-IGFueSBpbmZvcm1hdGlvbiBzYXlpbmcgdGhhdCB0aGUgcHJvamVjdCBpcyBubyBsb25nZXIgbWFp
-bnRhaW5lZD8KCkJlc3QgcmVnYXJkcywKUm9tYWluCgo+IAo+IEZpeGVzOgo+ICAtIGh0dHBzOi8v
-YXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy85MGY2MTNhMjAwZGZhN2I1N2ExOWVjZGRj
-MjZhOTM1ZmFkYWM0NTk4Lwo+ICAtIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
-dWx0cy9jOGE2MWE2MDVlYmFjNmZkYjVlZmI3MTU5ZmJhMzZhNzZkYTU5ZjU2Lwo+IAo+IExpbms6
-IGh0dHBzOi8vZ2l0aHViLmNvbS9zaWVtZW5zL2phaWxob3VzZSBbMV0KPiBDYzogQ2FybG8gQ2Fp
-b25lIDxjYXJsby5jYWlvbmVAZ21haWwuY29tPgo+IENjOiBKdWxpZW4gT2xpdmFpbiA8anUub0Bm
-cmVlLmZyPgo+IFNpZ25lZC1vZmYtYnk6IEpvaG4gRXJuYmVyZyA8akBqLWVybmJlcmcuc2U+Cj4g
-Cj4gLS0tCj4gCj4gUkZDOiBJcyB0aGlzIGdyb3VuZHMgZW5vdWdoIGZvciBhIHJlbW92YWwsIG9y
-IHNob3VsZCBpdCBrZXB0IGFyb3VuZCBmb3IKPiB0aGUgQ0lQIGtlcm5lbHMgb3Igb3RoZXIgb2xk
-ZXIga2VybmVscyB1c2VycyBtYXkgYmUgdXNpbmc/Cj4gLS0tCj4gIENvbmZpZy5pbi5sZWdhY3kg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxOSArKysrCj4gIERFVkVMT1BFUlMgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiAtCj4gIHBhY2thZ2UvQ29uZmln
-LmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSAtCj4gIHBhY2thZ2UvamFpbGhv
-dXNlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICB8ICAyOCAtLS0tLQo+ICBwYWNrYWdlL2ph
-aWxob3VzZS9qYWlsaG91c2UuaGFzaCAgICAgICAgICAgICAgfCAgIDMgLQo+ICBwYWNrYWdlL2ph
-aWxob3VzZS9qYWlsaG91c2UubWsgICAgICAgICAgICAgICAgfCAgNzEgLS0tLS0tLS0tLS0tCj4g
-IC4uLi90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9qYWlsaG91c2UucHkgICB8IDEwMyAtLS0t
-LS0tLS0tLS0tLS0tLS0KPiAgNyBmaWxlcyBjaGFuZ2VkLCAxOSBpbnNlcnRpb25zKCspLCAyMDgg
-ZGVsZXRpb25zKC0pCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2phaWxob3VzZS9Db25m
-aWcuaW4KPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvamFpbGhvdXNlL2phaWxob3VzZS5o
-YXNoCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2phaWxob3VzZS9qYWlsaG91c2UubWsK
-PiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rf
-amFpbGhvdXNlLnB5Cj4gCj4gZGlmZiAtLWdpdCBhL0NvbmZpZy5pbi5sZWdhY3kgYi9Db25maWcu
-aW4ubGVnYWN5Cj4gaW5kZXggYWE4NDM3ZTI4Zi4uN2ZkYjAxNGMwYiAxMDA2NDQKPiAtLS0gYS9D
-b25maWcuaW4ubGVnYWN5Cj4gKysrIGIvQ29uZmlnLmluLmxlZ2FjeQo+IEBAIC0xNDQsNiArMTQ0
-LDI1IEBAIGVuZGlmCj4gIAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+ICtjb21tZW50
-ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjYueHgiCj4gKwo+ICtjb25maWcgQlIyX1BB
-Q0tBR0VfSkFJTEhPVVNFX0hFTFBFUl9TQ1JJUFRTCj4gKwlib29sICJqYWlsaG91c2UgaGVscGVy
-IHNjcmlwdHMgcmVtb3ZlZCIKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9KQUlMSE9VU0UKPiArCXNl
-bGVjdCBCUjJfTEVHQUNZCj4gKwloZWxwCj4gKwkgIEphaWxob3VzZSBkb2VzIG5vdCBidWlsZCB3
-aXRoIG1vZGVybiBrZXJuZWxzLgo+ICsJICBMYXN0IGNvbW1pdCB0byB0aGUgdXBzdHJlYW0gcmVw
-b2lzdG9yeSB0b29rIHBsYWNlIGluIDIwMjIuCj4gKwkgIFRoZSB1cHN0cmVhbSBwcm9qZWN0IGlz
-IG5vIGxvbmdlciBtYWludGFpbmVkLgo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX0pBSUxIT1VT
-RQo+ICsJYm9vbCAiamFpbGhvdXNlIHJlbW92ZWQiCj4gKwlzZWxlY3QgQlIyX0xFR0FDWQo+ICsJ
-aGVscAo+ICsJICBKYWlsaG91c2UgZG9lcyBub3QgYnVpbGQgd2l0aCBtb2Rlcm4ga2VybmVscy4K
-PiArCSAgTGFzdCBjb21taXQgdG8gdGhlIHVwc3RyZWFtIHJlcG9pc3RvcnkgdG9vayBwbGFjZSBp
-biAyMDIyLgo+ICsJICBUaGUgdXBzdHJlYW0gcHJvamVjdCBpcyBubyBsb25nZXIgbWFpbnRhaW5l
-ZC4KPiArCj4gIGNvbW1lbnQgIkxlZ2FjeSBvcHRpb25zIHJlbW92ZWQgaW4gMjAyNi4wNSIKPiAg
-Cj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJIREhPTUVSVU4KPiBkaWZmIC0tZ2l0IGEvREVWRUxP
-UEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCA5YWFmZmEyOWE5Li4wMzA4ZDFlZjQxIDEwMDY0NAo+
-IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTU4OSw3ICs1ODksNiBA
-QCBGOgljb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZwo+ICBGOgljb25maWdzL3RpX2FtNjR4
-X3NrX2RlZmNvbmZpZwo+ICAKPiAgTjoJQ2FybG8gQ2Fpb25lIDxjYXJsby5jYWlvbmVAZ21haWwu
-Y29tPgo+IC1GOglwYWNrYWdlL2phaWxob3VzZS8KPiAgRjoJcGFja2FnZS9zdW54aS1ib2FyZHMv
-Cj4gIAo+ICBOOglDYXJzdGVuIFNjaG9lbmVydCA8Yy5zY2hvZW5lcnRAZ21haWwuY29tPgo+IEBA
-IC0xOTEyLDcgKzE5MTEsNiBAQCBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0
-X2lwZXJmMy5weQo+ICBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2lwcm91
-dGUyLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfaXB0YWJsZXMu
-cHkKPiAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9pcHV0aWxzLnB5Cj4g
-LUY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfamFpbGhvdXNlLnB5Cj4gIEY6
-CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfanEucHkKPiAgRjoJc3VwcG9ydC90
-ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9qcS8KPiAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
-L3BhY2thZ2UvdGVzdF9rZXhlYy5weQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBi
-L3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggN2U2OWQwMjVlMC4uYjY5NzgyZWM2YiAxMDA2NDQK
-PiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAg
-LTI4MTcsNyArMjgxNyw2IEBAIG1lbnUgIlN5c3RlbSB0b29scyIKPiAgCXNvdXJjZSAicGFja2Fn
-ZS9pb3RvcC9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvaXBydXRpbHMvQ29uZmlnLmlu
-Igo+ICAJc291cmNlICJwYWNrYWdlL2lycWJhbGFuY2UvQ29uZmlnLmluIgo+IC0Jc291cmNlICJw
-YWNrYWdlL2phaWxob3VzZS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uva2V5dXRpbHMv
-Q29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2ttb2QvQ29uZmlnLmluIgo+ICAJc291cmNl
-ICJwYWNrYWdlL2ttb24vQ29uZmlnLmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2phaWxob3Vz
-ZS9Db25maWcuaW4gYi9wYWNrYWdlL2phaWxob3VzZS9Db25maWcuaW4KPiBkZWxldGVkIGZpbGUg
-bW9kZSAxMDA2NDQKPiBpbmRleCA0NDU0MTQxNjJmLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2Fn
-ZS9qYWlsaG91c2UvQ29uZmlnLmluCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDI4ICswLDAgQEAK
-PiAtY29uZmlnIEJSMl9QQUNLQUdFX0pBSUxIT1VTRQo+IC0JYm9vbCAiamFpbGhvdXNlIgo+IC0J
-ZGVwZW5kcyBvbiBCUjJfYWFyY2g2NCB8fCBCUjJfeDg2XzY0Cj4gLQlkZXBlbmRzIG9uIEJSMl9M
-SU5VWF9LRVJORUwKPiAtCWhlbHAKPiAtCSAgVGhlIEphaWxob3VzZSBwYXJ0aXRpb25pbmcgSHlw
-ZXJ2aXNvciBiYXNlZCBvbiBMaW51eC4KPiAtCj4gLQkgIGh0dHBzOi8vZ2l0aHViLmNvbS9zaWVt
-ZW5zL2phaWxob3VzZQo+IC0KPiAtaWYgQlIyX1BBQ0tBR0VfSkFJTEhPVVNFCj4gLQo+IC1jb25m
-aWcgQlIyX1BBQ0tBR0VfSkFJTEhPVVNFX0hFTFBFUl9TQ1JJUFRTCj4gLQlib29sICJoZWxwZXIg
-c2NyaXB0cyIKPiAtCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfUFlUSE9OMwo+IC0Jc2VsZWN0IEJS
-Ml9QQUNLQUdFX1BZVEhPTl9NQUtPICMgcnVudGltZQo+IC0JaGVscAo+IC0JICBQeXRob24tYmFz
-ZWQgaGVscGVycyBmb3IgdGhlIEphaWxob3VzZSBIeXBlcnZpc29yLgo+IC0KPiAtCSAgaHR0cHM6
-Ly9naXRodWIuY29tL3NpZW1lbnMvamFpbGhvdXNlCj4gLQo+IC1jb21tZW50ICJoZWxwZXIgc2Ny
-aXB0cyByZXF1aXJlIFB5dGhvbjMiCj4gLQlkZXBlbmRzIG9uICFCUjJfUEFDS0FHRV9QWVRIT04z
-Cj4gLQo+IC1lbmRpZgo+IC0KPiAtY29tbWVudCAiamFpbGhvdXNlIG5lZWRzIGEgTGludXgga2Vy
-bmVsIHRvIGJlIGJ1aWx0Igo+IC0JZGVwZW5kcyBvbiBCUjJfYWFyY2g2NCB8fCBCUjJfeDg2XzY0
-Cj4gLQlkZXBlbmRzIG9uICFCUjJfTElOVVhfS0VSTkVMCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-amFpbGhvdXNlL2phaWxob3VzZS5oYXNoIGIvcGFja2FnZS9qYWlsaG91c2UvamFpbGhvdXNlLmhh
-c2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCA5NmQ1ODE5ODQ3Li4wMDAwMDAw
-MDAwCj4gLS0tIGEvcGFja2FnZS9qYWlsaG91c2UvamFpbGhvdXNlLmhhc2gKPiArKysgL2Rldi9u
-dWxsCj4gQEAgLTEsMyArMCwwIEBACj4gLSMgTG9jYWxseSBjb21wdXRlZDoKPiAtc2hhMjU2ICAz
-OGVhNWQyZDk2NzJjZTdmNzZmZDBjMTYzZWRhYTg5Njg3MTFhY2E1OGYyNDVhZWMzYzg5MzRmMTQw
-ZTgyOGI2ICBqYWlsaG91c2UtZTU3ZDFlZmY2ZDU1YWVlZDVmOTc3ZmU0ZTJhY2ZiNmNjYmRkNzU2
-MC50YXIuZ3oKPiAtc2hhMjU2ICAzYWFmYjMxYTI0MzYxNzgzMjM2NjNlMDA1MTFmMTZkNThmYzM2
-ZWE2NTRiMTQ1NzUzMmU3OWQwMTcyMDVlZmQ4ICBDT1BZSU5HCj4gZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvamFpbGhvdXNlL2phaWxob3VzZS5tayBiL3BhY2thZ2UvamFpbGhvdXNlL2phaWxob3VzZS5t
-awo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IGExYzg2ZjBlOTEuLjAwMDAwMDAw
-MDAKPiAtLS0gYS9wYWNrYWdlL2phaWxob3VzZS9qYWlsaG91c2UubWsKPiArKysgL2Rldi9udWxs
-Cj4gQEAgLTEsNzEgKzAsMCBAQAo+IC0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+IC0jCj4gLSMg
-amFpbGhvdXNlCj4gLSMKPiAtIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAtCj4gLUpBSUxIT1VT
-RV9WRVJTSU9OID0gZTU3ZDFlZmY2ZDU1YWVlZDVmOTc3ZmU0ZTJhY2ZiNmNjYmRkNzU2MAo+IC1K
-QUlMSE9VU0VfU0lURSA9ICQoY2FsbCBnaXRodWIsc2llbWVucyxqYWlsaG91c2UsJChKQUlMSE9V
-U0VfVkVSU0lPTikpCj4gLUpBSUxIT1VTRV9MSUNFTlNFID0gR1BMLTIuMAo+IC1KQUlMSE9VU0Vf
-TElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiAtSkFJTEhPVVNFX0RFUEVOREVOQ0lFUyA9IFwKPiAt
-CWxpbnV4Cj4gLQo+IC1KQUlMSE9VU0VfTUFLRV9PUFRTID0gXAo+IC0JQ1JPU1NfQ09NUElMRT0i
-JChUQVJHRVRfQ1JPU1MpIiBcCj4gLQlBUkNIPSIkKEtFUk5FTF9BUkNIKSIgXAo+IC0JS0RJUj0i
-JChMSU5VWF9ESVIpIiBcCj4gLQlERVNURElSPSIkKFRBUkdFVF9ESVIpIiBcCj4gLQlwcmVmaXg9
-L3Vzcgo+IC0KPiAtaWZlcSAoJChCUjJfUEFDS0FHRV9KQUlMSE9VU0VfSEVMUEVSX1NDUklQVFMp
-LHkpCj4gLUpBSUxIT1VTRV9ERVBFTkRFTkNJRVMgKz0gXAo+IC0JaG9zdC1weXRob24tbWFrbyBc
-Cj4gLQlob3N0LXB5dGhvbi1zZXR1cHRvb2xzIFwKPiAtCXB5dGhvbjMKPiAtSkFJTEhPVVNFX01B
-S0VfT1BUUyArPSBcCj4gLQlIQVNfUFlUSE9OX01BS089InllcyIgXAo+IC0JUFlUSE9OX1BJUF9V
-U0FCTEU9InllcyIKPiAtZWxzZQo+IC1KQUlMSE9VU0VfTUFLRV9PUFRTICs9IFwKPiAtCUhBU19Q
-WVRIT05fTUFLTz0ibm8iIFwKPiAtCVBZVEhPTl9QSVBfVVNBQkxFPSJubyIKPiAtZW5kaWYKPiAt
-Cj4gLWlmZXEgKCQoQlIyX1BBQ0tBR0VfSkFJTEhPVVNFX0hFTFBFUl9TQ1JJUFRTKSx5KQo+IC1k
-ZWZpbmUgSkFJTEhPVVNFX0JVSUxEX0hFTFBFUl9TQ1JJUFRTCj4gLQljZCAkKEBEKSAmJiBcCj4g
-LQkkKFBLR19QWVRIT05fU0VUVVBUT09MU19FTlYpIFwKPiAtCSQoSE9TVF9ESVIpL2Jpbi9weXRo
-b24gc2V0dXAucHkgXAo+IC0JCWJ1aWxkCj4gLWVuZGVmCj4gLWRlZmluZSBKQUlMSE9VU0VfSU5T
-VEFMTF9IRUxQRVJfU0NSSVBUUwo+IC0JY2QgJChARCkgJiYgXAo+IC0JJChQS0dfUFlUSE9OX1NF
-VFVQVE9PTFNfRU5WKSBcCj4gLQkkKEhPU1RfRElSKS9iaW4vcHl0aG9uIHNldHVwLnB5IFwKPiAt
-CQlpbnN0YWxsIC0tbm8tY29tcGlsZSBcCj4gLQkJJChQS0dfUFlUSE9OX1NFVFVQVE9PTFNfSU5T
-VEFMTF9PUFRTKSBcCj4gLQkJLS1yb290PSQoVEFSR0VUX0RJUikKPiAtZW5kZWYKPiAtZW5kaWYK
-PiAtCj4gLWRlZmluZSBKQUlMSE9VU0VfQlVJTERfQ01EUwo+IC0JJChUQVJHRVRfTUFLRV9FTlYp
-ICQoTUFLRSkgJChKQUlMSE9VU0VfTUFLRV9PUFRTKSAtQyAkKEBEKQo+IC0KPiAtCSQoSkFJTEhP
-VVNFX0JVSUxEX0hFTFBFUl9TQ1JJUFRTKQo+IC1lbmRlZgo+IC0KPiAtZGVmaW5lIEpBSUxIT1VT
-RV9JTlNUQUxMX1RBUkdFVF9DTURTCj4gLQkkKFRBUkdFVF9NQUtFX0VOVikgJChNQUtFKSAkKEpB
-SUxIT1VTRV9NQUtFX09QVFMpIC1DICQoQEQpIG1vZHVsZXNfaW5zdGFsbCBmaXJtd2FyZV9pbnN0
-YWxsIHRvb2xfaW5tYXRlc19pbnN0YWxsCj4gLQkkKFRBUkdFVF9NQUtFX0VOVikgJChNQUtFKSAk
-KEpBSUxIT1VTRV9NQUtFX09QVFMpIC1DICQoQEQpL3Rvb2xzIHNyYz0kKEBEKS90b29scyBpbnN0
-YWxsCj4gLQo+IC0JJChJTlNUQUxMKSAtZCAtbSAwNzU1ICQoVEFSR0VUX0RJUikvZXRjL2phaWxo
-b3VzZQo+IC0JJChJTlNUQUxMKSAtRCAtbSAwNjQ0ICQoQEQpL2NvbmZpZ3MvKi8qLmNlbGwgJChU
-QVJHRVRfRElSKS9ldGMvamFpbGhvdXNlCj4gLQo+IC0JJChJTlNUQUxMKSAtZCAtbSAwNzU1ICQo
-VEFSR0VUX0RJUikvdXNyL2xpYmV4ZWMvamFpbGhvdXNlL2RlbW9zCj4gLQkkKElOU1RBTEwpIC1E
-IC1tIDA3NTUgJChARCkvaW5tYXRlcy9kZW1vcy8qLyouYmluICQoVEFSR0VUX0RJUikvdXNyL2xp
-YmV4ZWMvamFpbGhvdXNlL2RlbW9zCj4gLQo+IC0JJChKQUlMSE9VU0VfSU5TVEFMTF9IRUxQRVJf
-U0NSSVBUUykKPiAtZW5kZWYKPiAtCj4gLSQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4gZGlm
-ZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfamFpbGhvdXNlLnB5
-IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9qYWlsaG91c2UucHkKPiBkZWxl
-dGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCA0NjM0ZmM0ZGUyLi4wMDAwMDAwMDAwCj4gLS0t
-IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9qYWlsaG91c2UucHkKPiArKysg
-L2Rldi9udWxsCj4gQEAgLTEsMTAzICswLDAgQEAKPiAtaW1wb3J0IG9zCj4gLWltcG9ydCB0aW1l
-Cj4gLQo+IC1pbXBvcnQgaW5mcmEuYmFzZXRlc3QKPiAtCj4gLQo+IC1jbGFzcyBUZXN0SmFpbGhv
-dXNlKGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4gLSAgICAjIFRoaXMgdGVzdCB1c2VzIGEgc3Bl
-Y2lmaWMgY29uZmlndXJhdGlvbiwgbWFpbmx5IGZvciBtYXRjaGluZyB0aGUKPiAtICAgICMgcmVx
-dWlyZW1lbnRzIG9mIHRoZSBKYWlsaG91c2UgUWVtdSBpbm1hdGUgZGVtby4gV2UgYWxzbyB1c2Ug
-dGhlCj4gLSAgICAjIExpbnV4IGtlcm5lbCBmcm9tIFNpZW1lbnMsIHdoaWNoIGluY2x1ZGVzIHBh
-dGNoZXMgZm9yCj4gLSAgICAjIEphaWxob3VzZS4gRmluYWxseSwgd2UgdXNlIHRoZSBrZXJuZWwg
-Y29uZmlnIGZyb20KPiAtICAgICMgYm9hcmQvcWVtdS9hYXJjaDY0LXZpcnQgcmF0aGVyIHRoYW4g
-dGhlIEtlcm5lbCBkZWZjb25maWcsIGZvcgo+IC0gICAgIyBmYXN0ZXIgYnVpbGQgKGFzIGl0IGVu
-YWJsZSBsZXNzIGNvbXBvbmVudHMsIGJ1dCBpbmNsdWRlcwo+IC0gICAgIyBldmVyeXRoaW5nIG5l
-ZWRlZCBmb3IgdGhpcyB0ZXN0KS4KPiAtICAgIGtlcm5lbF92ZXIgPSAiZWI2OTI3ZjdlZWE3N2Y4
-MjNiOTZjMGMyMmFkOWQ0YTJkN2ZmZGZjZSIKPiAtICAgIGtlcm5lbF91cmwgPSBcCj4gLSAgICAg
-ICAgZiIkKGNhbGwgZ2l0aHViLHNpZW1lbnMsbGludXgse2tlcm5lbF92ZXJ9KS9saW51eC17a2Vy
-bmVsX3Zlcn0udGFyLmd6Igo+IC0gICAgY29uZmlnID0gXAo+IC0gICAgICAgIGYiIiIKPiAtICAg
-ICAgICBCUjJfYWFyY2g2ND15Cj4gLSAgICAgICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4g
-LSAgICAgICAgQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eUFNQTAiCj4gLSAgICAg
-ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4gLSAgICAgICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01f
-VEFSQkFMTD15Cj4gLSAgICAgICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NB
-VElPTj0ie2tlcm5lbF91cmx9Igo+IC0gICAgICAgIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RP
-TV9DT05GSUc9eQo+IC0gICAgICAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxF
-PSJib2FyZC9xZW11L2FhcmNoNjQtdmlydC9saW51eC5jb25maWciCj4gLSAgICAgICAgQlIyX1BB
-Q0tBR0VfSkFJTEhPVVNFPXkKPiAtICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiAt
-ICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+IC0gICAgICAgICMgQlIyX1RBUkdF
-VF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiAtICAgICAgICAiIiIKPiAtCj4gLSAgICBkZWYgdGVz
-dF9ydW4oc2VsZik6Cj4gLSAgICAgICAgZHJpdmUgPSBvcy5wYXRoLmpvaW4oc2VsZi5idWlsZGRp
-ciwgImltYWdlcyIsICJyb290ZnMuZXh0NCIpCj4gLSAgICAgICAga2VybiA9IG9zLnBhdGguam9p
-bihzZWxmLmJ1aWxkZGlyLCAiaW1hZ2VzIiwgIkltYWdlIikKPiAtICAgICAgICAjIFFlbXUgb3B0
-aW9uIGFuZCBLZXJuZWwgYXJncyBhcmUgdGFrZW4gZnJvbSBKYWlsaG91c2UgZGVtby4gU2VlOgo+
-IC0gICAgICAgICMgaHR0cHM6Ly9naXRodWIuY29tL3NpZW1lbnMvamFpbGhvdXNlL2Jsb2IvbWFz
-dGVyL1JFQURNRS5tZAo+IC0gICAgICAgICMgV2UgYWxzbyBhZGQgb29wcz1wYW5pYyB0byBpbXBy
-b3ZlIHRoZSB0ZXN0IGNvdmVyYWdlLgo+IC0gICAgICAgIHNlbGYuZW11bGF0b3IuYm9vdChhcmNo
-PSJhYXJjaDY0IiwKPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAga2VybmVsPWtlcm4sCj4g
-LSAgICAgICAgICAgICAgICAgICAgICAgICAgIGtlcm5lbF9jbWRsaW5lPVsicm9vdD0vZGV2L3Zk
-YSBjb25zb2xlPXR0eUFNQTAgbWVtPTc2OE0gb29wcz1wYW5pYyJdLAo+IC0gICAgICAgICAgICAg
-ICAgICAgICAgICAgICBvcHRpb25zPVsiLU0iLCAidmlydCxnaWMtdmVyc2lvbj0zLHZpcnR1YWxp
-emF0aW9uPW9uLGl0cz1vZmYiLAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAiLWNwdSIsICJjb3J0ZXgtYTU3IiwKPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIi1tIiwgIjFHIiwKPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-Ii1zbXAiLCAiMTYiLAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLWRy
-aXZlIiwgZiJmaWxlPXtkcml2ZX0saWY9bm9uZSxmb3JtYXQ9cmF3LGlkPWhkMCIsCj4gLSAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICItZGV2aWNlIiwgInZpcnRpby1ibGstZGV2
-aWNlLGRyaXZlPWhkMCJdKQo+IC0gICAgICAgIHNlbGYuZW11bGF0b3IubG9naW4oKQo+IC0KPiAt
-ICAgICAgICAjIENoZWNrIHRoZSBwcm9ncmFtIGNhbiBleGVjdXRlLgo+IC0gICAgICAgIHNlbGYu
-YXNzZXJ0UnVuT2soImphaWxob3VzZSAtLXZlcnNpb24iKQo+IC0KPiAtICAgICAgICAjIExvYWQg
-dGhlIGtlcm5lbCBtb2R1bGUuCj4gLSAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygibW9kcHJvYmUg
-amFpbGhvdXNlIikKPiAtCj4gLSAgICAgICAgIyBDaGVjayB0aGUgZGV2aWNlIGlzIHByZXNlbnQu
-Cj4gLSAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygibHMgLWFsIC9kZXYvamFpbGhvdXNlIikKPiAt
-Cj4gLSAgICAgICAgIyBMb2FkIHRoZSBjZWxsIGNvbmZpZyB0aGlzIHRoaXMgcWVtdSB0ZXN0Lgo+
-IC0gICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soImphaWxob3VzZSBlbmFibGUgL2V0Yy9qYWlsaG91
-c2UvcWVtdS1hcm02NC5jZWxsIikKPiAtCj4gLSAgICAgICAgIyBEdW1wIHRoZSBqYWlsaG91c2Ug
-Y29uc29sZSwgYW5kIGNoZWNrIHdlIHNlZSBpdHMKPiAtICAgICAgICAjIGluaXRpYWxpemF0aW9u
-IHN0cmluZy4KPiAtICAgICAgICBvdXQsIHJldCA9IHNlbGYuZW11bGF0b3IucnVuKCJqYWlsaG91
-c2UgY29uc29sZSIpCj4gLSAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChyZXQsIDApCj4gLSAgICAg
-ICAgc2VsZi5hc3NlcnRJbigiSW5pdGlhbGl6aW5nIEphaWxob3VzZSBoeXBlcnZpc29yIiwgIlxu
-Ii5qb2luKG91dCkpCj4gLQo+IC0gICAgICAgICMgQ3JlYXRlIHRoZSBjZWxsLgo+IC0gICAgICAg
-IGNlbGxfY2ZnID0gIi9ldGMvamFpbGhvdXNlL3FlbXUtYXJtNjQtaW5tYXRlLWRlbW8uY2VsbCIK
-PiAtICAgICAgICBjbWQgPSBmImphaWxob3VzZSBjZWxsIGNyZWF0ZSB7Y2VsbF9jZmd9Igo+IC0g
-ICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soY21kKQo+IC0KPiAtICAgICAgICAjIExvYWQgdGhlIGRl
-bW8gaW1hZ2UuCj4gLSAgICAgICAgY2VsbF9uYW1lID0gImlubWF0ZS1kZW1vIgo+IC0gICAgICAg
-IGltZyA9ICIvdXNyL2xpYmV4ZWMvamFpbGhvdXNlL2RlbW9zL2dpYy1kZW1vLmJpbiIKPiAtICAg
-ICAgICBjbWQgPSBmImphaWxob3VzZSBjZWxsIGxvYWQge2NlbGxfbmFtZX0ge2ltZ30iCj4gLSAg
-ICAgICAgc2VsZi5hc3NlcnRSdW5PayhjbWQpCj4gLQo+IC0gICAgICAgICMgTGlzdCBKYWlsaG91
-c2UgY2VsbHMgYW5kIGNoZWNrIHdlIHNlZSB0aGUgb25lIHdlIGxvYWRlZC4KPiAtICAgICAgICBv
-dXQsIHJldCA9IHNlbGYuZW11bGF0b3IucnVuKCJqYWlsaG91c2UgY2VsbCBsaXN0IikKPiAtICAg
-ICAgICBzZWxmLmFzc2VydEVxdWFsKHJldCwgMCkKPiAtICAgICAgICBzZWxmLmFzc2VydEluKGNl
-bGxfbmFtZSwgIlxuIi5qb2luKG91dCkpCj4gLQo+IC0gICAgICAgICMgV2Ugc2hvdWxkIGFsc28g
-c2VlIG91ciBjZWxsIGluIHN5c2ZzLgo+IC0gICAgICAgIGNtZCA9ICJjYXQgL3N5cy9kZXZpY2Vz
-L2phaWxob3VzZS9jZWxscy8xL25hbWUiCj4gLSAgICAgICAgb3V0LCByZXQgPSBzZWxmLmVtdWxh
-dG9yLnJ1bihjbWQpCj4gLSAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChyZXQsIDApCj4gLSAgICAg
-ICAgc2VsZi5hc3NlcnRFcXVhbChvdXRbMF0sIGNlbGxfbmFtZSkKPiAtCj4gLSAgICAgICAgIyBT
-dGFydCB0aGUgY2VsbC4KPiAtICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKGYiamFpbGhvdXNlIGNl
-bGwgc3RhcnQge2NlbGxfbmFtZX0iKQo+IC0KPiAtICAgICAgICAjIExldCB0aGUgZGVtbyBjZWxs
-IHJ1biBmb3IgZmV3IHNlY29uZHMuLi4KPiAtICAgICAgICB0aW1lLnNsZWVwKDMpCj4gLQo+IC0g
-ICAgICAgICMgU3RvcCBhbmQgdW5sb2FkIHRoZSBjZWxsLgo+IC0gICAgICAgIHNlbGYuYXNzZXJ0
-UnVuT2soZiJqYWlsaG91c2UgY2VsbCBzaHV0ZG93biB7Y2VsbF9uYW1lfSIpCj4gLSAgICAgICAg
-c2VsZi5hc3NlcnRSdW5PayhmImphaWxob3VzZSBjZWxsIGRlc3Ryb3kge2NlbGxfbmFtZX0iKQo+
-IC0KPiAtICAgICAgICAjIFN0b3AgYW5kIHVubG9hZCBqYWlsaG91c2UuCj4gLSAgICAgICAgc2Vs
-Zi5hc3NlcnRSdW5PaygiamFpbGhvdXNlIGRpc2FibGUiKQo+IC0gICAgICAgIHNlbGYuYXNzZXJ0
-UnVuT2soIm1vZHByb2JlIC1yIGphaWxob3VzZSIpCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+- CVE-2026-32239:
+    Cap'n Proto is a data interchange format and capability-based RPC
+    system. Prior to 1.4.0, a negative Content-Length value was converted
+    to unsigned, treating it as an impossibly large length instead. In
+    theory, this bug could enable HTTP request/response smuggling. This
+    vulnerability is fixed in 1.4.0.
+
+For more information, see:
+ - https://github.com/capnproto/capnproto/security/advisories/GHSA-qjx3-pp3m-9jpm
+ - https://www.cve.org/CVERecord?id=CVE-2026-32239
+
+- CVE-2026-32240:
+    Cap'n Proto is a data interchange format and capability-based RPC
+    system. Prior to 1.4.0, when using Transfer-Encoding: chunked, if a
+    chunk's size parsed to a value of 2^64 or larger, it would be
+    truncated to a 64-bit integer. In theory, this bug could enable HTTP
+    request/response smuggling. This vulnerability is fixed in 1.4.0.
+
+For more information, see:
+ - https://github.com/capnproto/capnproto/security/advisories/GHSA-vpcq-mx5v-32wm
+ - https://www.cve.org/CVERecord?id=CVE-2026-32240
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...http-body-size-integer-overflow-bugs.patch | 161 ++++++++++++++++++
+ package/capnproto/capnproto.mk                |   4 +
+ 2 files changed, 165 insertions(+)
+ create mode 100644 package/capnproto/0001-fix-http-body-size-integer-overflow-bugs.patch
+
+diff --git a/package/capnproto/0001-fix-http-body-size-integer-overflow-bugs.patch b/package/capnproto/0001-fix-http-body-size-integer-overflow-bugs.patch
+new file mode 100644
+index 0000000000..2389be01be
+--- /dev/null
++++ b/package/capnproto/0001-fix-http-body-size-integer-overflow-bugs.patch
+@@ -0,0 +1,161 @@
++From 6e5ee24ad92687a56a26ae596da45dc6c2f902c0 Mon Sep 17 00:00:00 2001
++From: Kenton Varda <kenton@cloudflare.com>
++Date: Tue, 10 Mar 2026 18:16:14 -0500
++Subject: [PATCH] Fix HTTP body size integer overflow bugs.
++
++The KJ-HTTP library was discovered to have two bugs related to integer overflows while handling message body sizes:
++1. A negative `Content-Length` value was converted to unsigned, treating it as an impossibly large length instead.
++2. When using `Transfer-Encoding: chunked`, if a chunk's size parsed to a value of 2^64 or larger, it would be truncated to a 64-bit integer.
++
++In theory, these bugs could enable HTTP request/response smuggling, although it would require integration with a proxy that has bugs of its own.
++
++For more details, see (in a future commit): security-advisories/2026-03-10-1-http-size-validation.md
++
++CVE: CVE-2026-32239
++CVE: CVE-2026-32240
++Upstream: https://github.com/capnproto/capnproto/commit/2744b3c012b4aa3c31cefb61ec656829fa5c0e36
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ c++/src/kj/compat/http-test.c++ | 64 +++++++++++++++++++++++++++++++++
++ c++/src/kj/compat/http.c++      | 28 +++++++++++----
++ 2 files changed, 86 insertions(+), 6 deletions(-)
++ 
++diff --git a/c++/src/kj/compat/http-test.c++ b/c++/src/kj/compat/http-test.c++
++index f10ff8d156..daf08992f0 100644
++--- a/c++/src/kj/compat/http-test.c++
+++++ b/c++/src/kj/compat/http-test.c++
++@@ -2659,6 +2659,70 @@ KJ_TEST("HttpServer invalid method") {
++   KJ_EXPECT(expectedResponse == response, expectedResponse, response);
++ }
++ 
+++KJ_TEST("HttpServer rejects negative Content-Length") {
+++  KJ_HTTP_TEST_SETUP_IO;
+++  kj::TimerImpl timer(kj::origin<kj::TimePoint>());
+++  auto pipe = KJ_HTTP_TEST_CREATE_2PIPE;
+++
+++  HttpHeaderTable table;
+++  BrokenHttpService service;
+++  HttpServer server(timer, table, service, {
+++    .canceledUploadGraceBytes = 1024 * 1024,
+++  });
+++
+++  auto listenTask = server.listenHttp(kj::mv(pipe.ends[0]));
+++
+++  auto msg =
+++      "POST / HTTP/1.1\r\n"
+++      "Content-Length: -1\r\n"
+++      "\r\n"
+++      "foo"_kj.asBytes();
+++
+++  auto writePromise = pipe.ends[1]->write(msg.begin(), msg.size());
+++  auto response = pipe.ends[1]->readAllText().wait(waitScope);
+++
+++  // The server should reject the negative Content-Length. The KJ_FAIL_REQUIRE in getEntityBody()
+++  // gets caught by the server loop and turned into a 500 error.
+++  KJ_EXPECT(response.startsWith("HTTP/1.1 500 Internal Server Error"), response);
+++
+++  KJ_EXPECT(writePromise.poll(waitScope));
+++  writePromise.catch_([](kj::Exception&&) {}).wait(waitScope);
+++}
+++
+++KJ_TEST("HttpServer rejects chunked body with overflowing chunk size") {
+++  KJ_HTTP_TEST_SETUP_IO;
+++  kj::TimerImpl timer(kj::origin<kj::TimePoint>());
+++  auto pipe = KJ_HTTP_TEST_CREATE_2PIPE;
+++
+++  HttpHeaderTable table;
+++  BrokenHttpService service;
+++  HttpServer server(timer, table, service, {
+++    .canceledUploadGraceBytes = 1024 * 1024,
+++  });
+++
+++  auto listenTask = server.listenHttp(kj::mv(pipe.ends[0]));
+++
+++  // 17 hex digits: 0x10000000000000000 = 2^64, which overflows uint64_t.
+++  auto msg =
+++      "POST / HTTP/1.1\r\n"
+++      "Transfer-Encoding: chunked\r\n"
+++      "\r\n"
+++      "10000000000000000\r\n"
+++      "x\r\n"
+++      "0\r\n"
+++      "\r\n"_kj.asBytes();
+++
+++  auto writePromise = pipe.ends[1]->write(msg.begin(), msg.size());
+++  auto response = pipe.ends[1]->readAllText().wait(waitScope);
+++
+++  // The chunk size overflow causes a KJ_REQUIRE failure during body reading, which the server
+++  // catches and turns into a 500 error.
+++  KJ_EXPECT(response.startsWith("HTTP/1.1 500 Internal Server Error"), response);
+++
+++  KJ_EXPECT(writePromise.poll(waitScope));
+++  writePromise.catch_([](kj::Exception&&) {}).wait(waitScope);
+++}
+++
++ // Ensure that HttpServerSettings can continue to be constexpr.
++ KJ_UNUSED static constexpr HttpServerSettings STATIC_CONSTEXPR_SETTINGS {};
++ 
++diff --git a/c++/src/kj/compat/http.c++ b/c++/src/kj/compat/http.c++
++index 6976335e9c..6dc1e48613 100644
++--- a/c++/src/kj/compat/http.c++
+++++ b/c++/src/kj/compat/http.c++
++@@ -1246,16 +1246,20 @@ public:
++ 
++       uint64_t value = 0;
++       for (char c: text) {
+++        uint64_t digit;
++         if ('0' <= c && c <= '9') {
++-          value = value * 16 + (c - '0');
+++          digit = c - '0';
++         } else if ('a' <= c && c <= 'f') {
++-          value = value * 16 + (c - 'a' + 10);
+++          digit = c - 'a' + 10;
++         } else if ('A' <= c && c <= 'F') {
++-          value = value * 16 + (c - 'A' + 10);
+++          digit = c - 'A' + 10;
++         } else {
++           KJ_FAIL_REQUIRE("invalid HTTP chunk size", text, text.asBytes()) { break; }
++           return value;
++         }
+++        KJ_REQUIRE(value <= (uint64_t(kj::maxValue) >> 4),
+++            "HTTP chunk size overflow", text, text.asBytes()) { break; }
+++        value = value * 16 + digit;
++       }
++ 
++       return value;
++@@ -1742,7 +1746,15 @@ kj::Own<kj::AsyncInputStream> HttpInputStreamImpl::getEntityBody(
++       // Body elided.
++       kj::Maybe<uint64_t> length;
++       KJ_IF_MAYBE(cl, headers.get(HttpHeaderId::CONTENT_LENGTH)) {
++-        length = strtoull(cl->cStr(), nullptr, 10);
+++        // Validate that the Content-Length is a non-negative integer. Note that strtoull() accepts
+++        // leading '-' signs and silently converts negative values to large unsigned values, so we
+++        // must explicitly check for a leading digit.
+++        char* end;
+++        uint64_t parsedValue = strtoull(cl->cStr(), &end, 10);
+++        if ((*cl)[0] >= '0' && (*cl)[0] <= '9' && end > cl->begin() && *end == '\0') {
+++          length = parsedValue;
+++        }
+++        // If invalid, we just leave `length` as nullptr, since the body is elided anyway.
++       } else if (headers.get(HttpHeaderId::TRANSFER_ENCODING) == nullptr) {
++         // HACK: Neither Content-Length nor Transfer-Encoding header in response to HEAD request.
++         //   Propagate this fact with a 0 expected body length.
++@@ -1786,12 +1798,16 @@ kj::Own<kj::AsyncInputStream> HttpInputStreamImpl::getEntityBody(
++     //   "Content-Length: 5, 5, 5". Hopefully no one actually does that...
++     char* end;
++     uint64_t length = strtoull(cl->cStr(), &end, 10);
++-    if (end > cl->begin() && *end == '\0') {
+++    // Note that strtoull() accepts leading '-' signs and silently converts negative values to
+++    // large unsigned values, so we must explicitly check for a leading digit.
+++    if ((*cl)[0] >= '0' && (*cl)[0] <= '9' && end > cl->begin() && *end == '\0') {
++       // #5
++       return kj::heap<HttpFixedLengthEntityReader>(*this, length);
++     } else {
++       // #4 (bad content-length)
++-      KJ_FAIL_REQUIRE("invalid Content-Length header value", *cl);
+++      KJ_FAIL_REQUIRE("invalid Content-Length header value", *cl) { break; }
+++      // To pass the -fno-exceptions test (but KJ-HTTP is really not safe to use in that mode).
+++      return kj::heap<HttpNullEntityReader>(*this, uint64_t(0));
++     }
++   }
++ 
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 7424a1420f..f51e037532 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -10,6 +10,10 @@ CAPNPROTO_LICENSE = MIT
+ CAPNPROTO_LICENSE_FILES = LICENSE
+ CAPNPROTO_CPE_ID_VENDOR = capnproto
+ CAPNPROTO_INSTALL_STAGING = YES
++
++# 0001-fix-http-body-size-integer-overflow-bugs.patch
++CAPNPROTO_IGNORE_CVES += CVE-2026-32239 CVE-2026-32240
++
+ # Fetched from Github with no configure script
+ CAPNPROTO_AUTORECONF = YES
+ CAPNPROTO_CONF_OPTS = --with-external-capnp
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
