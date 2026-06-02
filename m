@@ -4,81 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 532B0CD6E57
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 18:44:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4934BCD6E5D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 18:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C27EF610A0;
-	Tue,  2 Jun 2026 18:44:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 113C5610B3;
+	Tue,  2 Jun 2026 18:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ncOUigigTh5i; Tue,  2 Jun 2026 18:44:34 +0000 (UTC)
+ id Fss7X-AuTay4; Tue,  2 Jun 2026 18:44:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D180660E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 547E1610AF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780425873;
-	bh=UQep7ofi7zyvQzO/pnvVRESEAfji511i1EaCUGRVxgU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=OF9ODGjLIxisrUmIM0GbaubPVLAnXGekw6t99oR6AZyDJ4OO7FC4zY4YEP1Cz0HMR
-	 mM0K0eXsBEF3uLIWZs1m4gfk94HCuZ/Ln/153Gh33LKktmRoAQB3V6d8a9Ytcywk1f
-	 Ac1IYH3nzBznu9c/QRIXGL0hlXjbornWZIRlb4recKXqB/oIq/q/Wzq4BjFuYcVYuI
-	 ovcMdjw4NqzX/RTe2DYVu2/bA+Qh9ZKv5PmuPNkDzvTvBocqBI2pn+cl5H+QH8CAZH
-	 aVnWJkqU8PYPQSs5332Q4AkqqQ/J33ODZEc0yBvlX4Am5HC2dcx8n2/DJ+ek5q9KkY
-	 HWt5rvw9kimgQ==
+	s=default; t=1780425885;
+	bh=SwlBjznYMFbWXZgyunf2MmNcWDsYVje+rWkIeV0Mwm4=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=fBO3aQ+ZvosypIfO504DiCFZXp4gTttr7gOrEffjsYZMNcsWOyZztOHM70o+LoOJ4
+	 +wtB6LYTHnoDq84Qkifjiops4JOx2IJI3P2xsw+YWl7f/O/tvw+/qPotll7RbHuxzW
+	 3KbxdrbZldFG52ajq4HoKjok/dwkFkrXPobqDYHGHKJFTdpX36JSMFBNxaCvQeUps+
+	 ESLB4gacwP2LCikhLAmBDVDj4rg3f5uVl4BlqlEpIG+vwcZLlHOqwmtMiY7yQBZMy0
+	 qErqNwQ5AkP6nitcrEQX/FhcuORxbHjzWB/1h3EdfQzBSS47hyyY1nUGGy8zMhA5JF
+	 XE/VnjkUuHxbA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D180660E3E;
-	Tue,  2 Jun 2026 18:44:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10AE9187
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 547E1610AF;
+	Tue,  2 Jun 2026 18:44:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 87E92187
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01EEA41CF3
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7778F4004E
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPaNCGDS50T4 for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 18:44:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nl3CrOWyVsdr for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 18:44:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE9534129A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE9534129A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1761140026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1761140026
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE9534129A
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1761140026
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 18:44:42 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a08ef.dip0.t-ipconnect.de [91.58.8.239])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 90216A4C3A19
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9E98AA4C3A59
  for <buildroot@buildroot.org>; Tue,  2 Jun 2026 20:44:27 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:44618)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wUU6E-0000000035n-3H3u
+ (envelope-from <bernd@kuhls.net>) id 1wUU6E-0000000035n-3YEm
  for buildroot@buildroot.org; Tue, 02 Jun 2026 18:44:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  2 Jun 2026 20:44:26 +0200
-Message-ID: <20260602184427.1707888-1-bernd@kuhls.net>
+Date: Tue,  2 Jun 2026 20:44:27 +0200
+Message-ID: <20260602184427.1707888-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260602184427.1707888-1-bernd@kuhls.net>
+References: <20260602184427.1707888-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202605290044; t=1780425867;
- bh=hB+FP4QENadm5zr04fyS88b8TtySdPwZO0zCpJeiLwk=;
- h=From:To:Subject:Date:From;
- b=o2CFTYkDj//eYjKe10cdO4uS69f++MvlCzsD6Pve3uqsTEz9IFUqUGOk3fXdQnyG4
- krUrFbwTW6fuzKiV3lo6zfsu9bswTvEpA2rJJuWcB4guCsdU5pl3TyLoH4Oa4+rRQk
- z1AI9ymZMcmrjo8lH9BkVUS8dBrEFNeB2fIYQMiua5+EqcRudZDVyDE256SJ0veKR2
- VSUYxgb/YLCCEfuhDSF5rOLtBxoz0QqTXjrdyyo3ybzz5+iGon/W8PnCMiHMGI+RUe
- XBBTFF0FzvrbkrqAQipupW79F2tEstW+6DT2lfvGOuPf0SNVy6ObfspcvEI+Vcs1CG
- tGjMcPJl8ZJCw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=uA3Pq6y1ZANQZZFN1m5K2n2M56qVzfHBFfGOOSYZUk8=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=mi4MtP0P9hqamLwQi1uZkqPURiVqFOWGcVmsWU7kIBdruKBJoGZhz9KrdhqM4BzFR
+ 1Rn8UuNhUccKYvGCoBEpCS3B29p7RmT2mvZ5Kb0yShMZ1/ZUkvBaKV6XmaZ5FJfUN7
+ Av2GAyp2qVHreXcolQSz2rNOdSNWlX+/j/rygbjEEYpFIBoMO1u9R0hwALXremfkV7
+ gLf190iIwLXeclP/kLslDFtN7lixTur9F0y5N99KU7YSMOz0cKi6JEI9/hBFhftnke
+ mbqK9f+DJ+rXiSqjzY2z9fDf1AcXsMz5BMk1OueVLHM7RTVQPEY8juH0TmUMp+ViTk
+ gM/Tz1DaQPweg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=o2CFTYkD
-Subject: [Buildroot] [PATCH/next 1/2] package/alsa-lib: bump version to
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=mi4MtP0P
+Subject: [Buildroot] [PATCH/next 2/2] package/alsa-utils: bump version to
  1.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -96,40 +100,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.alsa-project.org/wiki/Changes_v1.2.15.3_v1.2.16#alsa-lib
+https://www.alsa-project.org/wiki/Changes_v1.2.15.3_v1.2.16#alsa-utils
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
 https://gitlab.com/bkuhls/buildroot/-/commits/b2539e30e573fb104243141866b5b755d047bc73
 
- package/alsa-lib/alsa-lib.hash | 2 +-
- package/alsa-lib/alsa-lib.mk   | 2 +-
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 1cefb08d5e..9544f1cafa 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index 5f6ecc2be6..699c8921d7 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  7b079d614d582cade7ab8db2364e65271d0877a37df8757ac4ac0c8970be861e  alsa-lib-1.2.15.3.tar.bz2
-+sha256  122b1e3166d55fe19bcde656535d7a36f2ab10e66c72c6ad2f43f20ffded0a96  alsa-lib-1.2.16.tar.bz2
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 50e54712d0..2530dae9db 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
+-sha256  7aaaafbfb01942113ec0c31e51f705910e81079205088ca2f8f137a3869e1a3a  alsa-utils-1.2.15.2.tar.bz2
++sha256  092399d5e8749a1d5e188e393157521cec4b75693b60ebb79bbce728cff2232c  alsa-utils-1.2.16.tar.bz2
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 5a5f18b64f..946f0d8059 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.2.15.3
-+ALSA_LIB_VERSION = 1.2.16
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-ALSA_UTILS_VERSION = 1.2.15.2
++ALSA_UTILS_VERSION = 1.2.16
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
 -- 
 2.47.3
 
