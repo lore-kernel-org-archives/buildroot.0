@@ -1,99 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 978D4CD6E68
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 13:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F916CD5BD1
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 14:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E8C881FDC;
-	Tue,  2 Jun 2026 13:39:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90C9560DA1;
+	Tue,  2 Jun 2026 14:07:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27sdICK41g8g; Tue,  2 Jun 2026 13:39:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NKtTBwGtuVWk; Tue,  2 Jun 2026 14:07:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F00681FDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29FD660D97
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780407563;
-	bh=BBvUKSXNEKyEiWnBOYek1WXYswLfaqjJlpVsyu1zYH0=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=F1dXtVbmBKbt61v/a4tU+HpPkp837t84yzmnK3Jo8GN7whfeegK+cfDypfH2D1h+o
-	 74r5IVgwnKmNruNTkHUWHIBe8YK8OiOYvq+J3m41s3JoCb3Y79Z2/ft7Of2gcBhiKo
-	 QGz+cCwoN+RDJXLdt9YgWgp6ywK8rHa85lf/nmh1UGOH47dJSqC3l9V5APlycUGcXU
-	 9PxN2RuKBFNRQUWKvvimZHz/drhiNtLLDrsG04JQmntIyTOLC7LkLqeVJYe2LiTsQ4
-	 em+/q8z9wSmSjfCc+MKLFWOKznR4+01KQURcYM3Q+ATL1YrDEUWmzArRfLBisLQEcE
-	 OUhC4XWTKaVdQ==
+	s=default; t=1780409269;
+	bh=29wGnA2GA6Gm7d3AWD0tuihPFec1MNdFHLPqkSNmpz8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Qsg/NPYvKqjMSKUnt/AxTz40+x9tEPj8Nmr2x5+d4EP6VzuJWOH1n3X9VdXK88JZn
+	 AG4d6AYFYaM5Z3N0UFa0pml0V1DTSew2C9eRtmktLV4Yorj1mTOurTPMfMKHfguADp
+	 LWkiKckqKONpwUWhbvmIuF3ooELEd/Glp3OQy3AaBbikp6cG2HHnJZ1tsqbsTyN6qT
+	 FEISP5bp4q9dynuoFzyFx9tw7agLe4dgzN09ZU2iJJUMINVnM8eGJtjRC0ukUzCSdc
+	 WeTxJX3kEynEu9e0pAle90tC7V/s/WTTjMIGij77eDauqKqdJa+z/58QkSsZyC6Y6S
+	 REzLsgHgKj8/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F00681FDE;
-	Tue,  2 Jun 2026 13:39:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 54B78223
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 13:39:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29FD660D97;
+	Tue,  2 Jun 2026 14:07:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FC62223
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 14:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46B4681FDA
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 13:39:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C35140B2D
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 14:07:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNoNGcLmlw93 for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 13:39:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.72.192.73;
- helo=mout.kundenserver.de;
- envelope-from=nicolas.cavallari@green-communications.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9062881FD9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9062881FD9
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9062881FD9
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 13:39:19 +0000 (UTC)
-Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue106
- [212.227.15.153]) with ESMTPSA (Nemesis) id 1MUGRh-1wuUZ515t5-00JoJi; Tue, 02
- Jun 2026 15:34:12 +0200
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Tue,  2 Jun 2026 15:29:15 +0200
-Message-ID: <20260602133156.13676-1-nicolas.cavallari@green-communications.fr>
-X-Mailer: git-send-email 2.53.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sRowIuRG0rQ6 for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 14:07:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B97C640B2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B97C640B2C
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B97C640B2C
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 14:07:43 +0000 (UTC)
+Received: from 91-154-227-245.elisa-laajakaista.fi ([91.154.227.245]
+ helo=kodama) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1wUPmN-00BjRQ-C6; Tue, 02 Jun 2026 16:07:39 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id e005353c;
+ Tue, 2 Jun 2026 14:07:38 +0000 (UTC)
+Date: Tue, 2 Jun 2026 17:07:38 +0300
+Message-ID: <20260602170738.GD1708212@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <20260528172818.26277-1-raphael.pavlidis@gmail.com>
+References: <20260528172818.26277-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:sww2QzOxm5tWgQrICLarXNxq5RGblVvgE/sI2gOpbmgnit0K/7t
- svaNraAyHnF/YLx9VtCqZCOHWFRrFCz0O4sadwhz/2Y15yXMP9aizaQB00TMOBtxWngq4sL
- k+oxHFeNHYwHy/EE0AYrezSQJ3En+x9CYJnwvWMbwQ45QWS+zhJsnKmFZE4HX/Z07KByXTv
- jKEKW4DgAKIsj6zWi2Beg==
-UI-OutboundReport: notjunk:1;M01:P0:n8VGNyy99Mo=;/xby55jWAIy1IoYohfn2xTr3ymY
- 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
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=green-communications.fr
-Subject: [Buildroot] [PATCH next 1/1] package/libgit2: bump version to 1.9.4
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=zQ5F/EEW3wOctS0mYTFeCyPsk5fJOtS2uQzVmFj5+OY=; b=GwwKe2Ys3wG6YjGybJ62y0lG7n
+ EI0+XmNNDv3fmq5+xPu2idid2jotGfrV1qTBi6PwbJMqHv2IyHWSIHMCLQKrTbBCZCRbsHLNM4HkQ
+ ncBSCbriv9tCAGsKj42sao0jcf8WtcbG2hOCOuCDhWypYgMx73dtEPNuOvvuQ5+vmFKQlXtpqD6vO
+ HgPgsMf8qplMpGaFi1/5kpmgheaf+5QhV3O37uhQJJ7ENEsmNK47egn5XydsuweC5QPliAeNfiVFj
+ YhXJqLEBlVAVHeJKvHrOBWr9pw0jzJL/7AJ2O2vqdHp6an0pgX321M49WgKZoXBJohBpwtZb0xeuq
+ P+hBClYw==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=GwwKe2Ys
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/sway: bump to version 1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,46 +95,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7856991831844178222=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libgit2/libgit2/releases/tag/v1.9.4
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--===============7856991831844178222==
+Content-Type: multipart/signed; boundary="XC3RBJdmyDH2GAlo"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 11eab3001c..f30f0c528c 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d532172d7ab24d2a25944e2434212d63ee85f3650e97b5f7579e7f201a78ad64  libgit2-1.9.3.tar.gz
-+sha256  824b73bd13647800fe4b566a1008ae77fea0e3e3424edab632fcfd8c0b14ba8b  libgit2-1.9.4.tar.gz
- sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index b2607a178a..844f4d705f 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 1.9.3
-+LIBGIT2_VERSION = 1.9.4
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
--- 
-2.53.0
+
+--XC3RBJdmyDH2GAlo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+T24gVGh1LCAyOCBNYXkgMjAyNiAxOToyODoxOCArMDIwMCBSYXBoYWVsIFBhdmxpZGlzIDxyYXBo
+YWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4gd3JvdGU6Cj4gQWxzbyBmaXggdGhlIGN1cnJlbnQgYnVp
+bGQgZXJyb3Igd2l0aCAxLjExLCBiZWNhdXNlIHN3YXkgMS4xMSBjYW5ub3QgYmUKPiBidWlsZCB3
+aXRoIHdscm9vdHMgMC4yMC4wLgo+IAo+IENoYW5nZWxvZzoKPiBodHRwczovL2dpdGh1Yi5jb20v
+c3dheXdtL3N3YXkvcmVsZWFzZXMvdGFnLzEuMTIKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYWVsIFBh
+dmxpZGlzIDxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4KPiAtLS0KPiAgcGFja2FnZS9zd2F5
+L3N3YXkuaGFzaCB8IDUgKysrLS0KPiAgcGFja2FnZS9zd2F5L3N3YXkubWsgICB8IDIgKy0KPiAg
+MiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2Uvc3dheS9zd2F5Lmhhc2ggYi9wYWNrYWdlL3N3YXkvc3dheS5oYXNo
+Cj4gaW5kZXggNDZmMmJlZTc1My4uMmI4YThlZTk5MCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3N3
+YXkvc3dheS5oYXNoCj4gKysrIGIvcGFja2FnZS9zd2F5L3N3YXkuaGFzaAo+IEBAIC0xLDUgKzEs
+NiBAQAo+ICAjIExvY2FsbHkgY2FsY3VsYXRlZCBhZnRlciBjaGVja2luZyBwZ3Agc2lnbmF0dXJl
+Cj4gLSMgaHR0cHM6Ly9naXRodWIuY29tL3N3YXl3bS9zd2F5L3JlbGVhc2VzL2Rvd25sb2FkLzEu
+MTEvc3dheS0xLjExLnRhci5nei5zaWcKPiArIyBodHRwczovL2dpdGh1Yi5jb20vc3dheXdtL3N3
+YXkvcmVsZWFzZXMvZG93bmxvYWQvMS4xMi9zd2F5LTEuMTIudGFyLmd6LnNpZwo+ICAjIHdpdGgg
+a2V5IDM0RkY5NTI2Q0ZFRjBFOTdBMzQwRTJFNDBGREU3QkUwRTg4RjVFNDggImVtZXJzaW9uIDxj
+b250YWN0QGVtZXJzaW9uLmZyPiIKPiAtc2hhMjU2ICAwZTM3YTU1YjdjMzM3OTIzMGU5N2UxYWQ5
+ODI1NDJiNzUwMTZhMGM3ZDY2NzYxOTg2MDRlNTU3ZjliMzczZGFlICBzd2F5LTEuMTEudGFyLmd6
+Cj4gKyMgVW5mb3J0dW5hdGVseSwgdGhlIGtleXMgZXhwaXJlZCBvbiAyMDI1LTA0LTAzLgo+ICtz
+aGEyNTYgIGE3YjFiZWNjMjE3NDMzYzExYzYyODRkMzZiY2VhMDY4N2I4N2I3N2IwZWQyNmEzODQ1
+NjUyOTJlYzMyMWYyYjEgIHN3YXktMS4xMi50YXIuZ3oKPiAgc2hhMjU2ICBiZDM1NzIyYmZmNDYz
+MjdmNWVkZWQxZDIxMTIwNzI3N2JiZTA0M2QyYTIyMDQ4YjI4MmM0MmVmODAxNTkzYjhiICBMSUNF
+TlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3dheS9zd2F5Lm1rIGIvcGFja2FnZS9zd2F5L3N3
+YXkubWsKPiBpbmRleCBhNDk3YTJjYmU3Li41NmQxOGVmNmY5IDEwMDY0NAo+IC0tLSBhL3BhY2th
+Z2Uvc3dheS9zd2F5Lm1rCj4gKysrIGIvcGFja2FnZS9zd2F5L3N3YXkubWsKPiBAQCAtNCw3ICs0
+LDcgQEAKPiAgIwo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAtU1dBWV9WRVJTSU9O
+ID0gMS4xMQo+ICtTV0FZX1ZFUlNJT04gPSAxLjEyCj4gIFNXQVlfU0lURSA9IGh0dHBzOi8vZ2l0
+aHViLmNvbS9zd2F5d20vc3dheS9yZWxlYXNlcy9kb3dubG9hZC8kKFNXQVlfVkVSU0lPTikKPiAg
+U1dBWV9MSUNFTlNFID0gTUlUCj4gIFNXQVlfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPiAtLSAK
+PiAyLjU0LjAKClJldmlld2VkLWJ5OiBBZHJpYW4gUGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdh
+bGlhLmNvbT4KCkNoZWVycywK4oCUQWRyacOhbgo=
+
+--XC3RBJdmyDH2GAlo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCah7jqgAKCRCRxVnb5MkS
+O+PkAJ9R19Zc2YkDTmER1NBK9lA6NOEG9gCfdzCrZNwszTzyYDrgFdsDcGC2kaY=
+=vfEX
+-----END PGP SIGNATURE-----
+
+--XC3RBJdmyDH2GAlo--
+
+--===============7856991831844178222==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7856991831844178222==--
