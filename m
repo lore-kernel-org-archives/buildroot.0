@@ -1,110 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9314CD6E4A
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 12:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6495ECD6E4A
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 12:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7494040F87;
-	Tue,  2 Jun 2026 12:40:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1775F60D5E;
+	Tue,  2 Jun 2026 12:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cix0g3efPcbQ; Tue,  2 Jun 2026 12:40:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SQWrBxzKTSuS; Tue,  2 Jun 2026 12:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EC5440F84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF93E60C29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780404041;
-	bh=vdwph+4Ni05HSJY1+Vs2gYnZXDdlG50ejz+KaQS2MGs=;
+	s=default; t=1780404052;
+	bh=FrfxXI5r0LhNic1ilaqg4gWFbXvf18pSfDPMyuymlU0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=IhcY2UXq4iXs3ejrp7HHvg0uebk/mPS/+enpVUbeigFQ2cq3Yts+VvgXKzRBZcntO
-	 OCoadQ09xqJ+xv4NKX8GcaxWOGVArdMm+lybs+XRWKwTmfnDk14CYmIbhUB1ycNuM3
-	 AUsBV/Sow5jpWybBELhvnEa9V8rM9MENuKIXtZ3aNOXGxOPbIbZdpSAo29UxjnynGh
-	 aak7z1nOSjkJQ5WH7Dh4WqDvxS00IVgHXiwYmDVF7bBkebc1xSOXavoCdRz7+nq4Xf
-	 GD0+3s8C9qJNYVChFFrWHTbs0EfpiVg6OuZbgu9J8jpInjPXP1kGsx5uuGOYV+Dtbq
-	 Xts3b+OmMXgeA==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Y0Yj32xWej1+SPDyhvMBzozs5BrkgPABEmysczPxXtiCi7ozZtyOmFAqZwoNERjG0
+	 aqKaewqW/ziH6SCgYQtaKB3euSIwV8CCBQyEjmdbCClbQHzRLYEEBtVLG6GtPeet5w
+	 C7vldwyhqgjEScRS4pO9XtkqlCBDdrHBNCvh9GHkaiD+/yxAkLngVVmJZlnmz1vXGU
+	 4TTCMUWd20bCAhUlOLJLHbmWY4diCgFLYmjwRawQ3PpRDGUZMyd9wp1PBzEpmd+Tio
+	 Qy7z29VE7zpAMAPrSqq1y2xZdTmroijEkdgUITI8Hghy281k94xbWgcZTV4Lw67Mjg
+	 pt/RwCXwbbqgQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EC5440F84;
-	Tue,  2 Jun 2026 12:40:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6836833C
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF93E60C29;
+	Tue,  2 Jun 2026 12:40:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15A96F4
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A22481F80
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF8FB40585
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jfLhBr1Wi6qh for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 12:40:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LnAttrqMa13o for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 12:40:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 537E881F74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 537E881F74
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 537E881F74
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:38 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-490a7678b2dso21897305e9.2
- for <buildroot@buildroot.org>; Tue, 02 Jun 2026 05:40:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EF3CC40577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF3CC40577
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EF3CC40577
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 12:40:49 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-45ef779c1c2so2534476f8f.1
+ for <buildroot@buildroot.org>; Tue, 02 Jun 2026 05:40:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780404036; x=1781008836;
+ d=1e100.net; s=20251104; t=1780404048; x=1781008848;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FU16e1qAR9rljeAbJO0jA05CZ6d2bbjdGu83Nmm0atk=;
- b=GB2tmn8ob7Px+ACV+ggeNq/580HwblLgTgKnLhLpWB/Kk6/JZ6pAB8YvLH14/cvSvE
- skpzoizlSY5bR0+6EyVr1mNHp+s5ByolZeNwhmMsEkmesEDK0Q+FFINI3Pj1EOdBdaxK
- f1stRgb1mrAXj2fHzmIoAFGbPh5lQA7r6p3Wjp4gKZ9nbmpHMtE+9BTqEgyJRsATIqcE
- 0VIR8z8jzOd0Kxr8jKcqfk8qMi9YQgM/5tdl/VPBD+mGRo4Tbo3UCrWqHv0azHUXwpKT
- woZ11PC1ruyNsTXAHEV9EYF0L0qiE4ZtFzEzwQJbVgYH8jALzt+XQtoVPZI+ltdqg/xW
- q8kw==
-X-Gm-Message-State: AOJu0Yyd27dJXde/6JThxiFQX07fPfaFPjRuQasRpxLzTXR6HmlxPDm4
- eY7CRuoxCcfkqKsdedbhimjCTarT04/f6Cmbev0wwPKG+ovNae2qx3FXHN2N+if9E0kyjRqgaYM
- dH2Cq
-X-Gm-Gg: Acq92OEcG8f3qaEu0uKpBQFKV4rsLr2OV9ToiBfvD9ryFDsNQqRlSzqV5Mfn9xF9tzf
- 894+eMYlEscFpBk1z5J5p4coQ1gSbGyEfiRbUoWz5/CFh5zWjmuvuucstzMSh6MExDc6si2f16F
- SxxODoecldGNOqsQOmj/JEyBjHvYaZTyfjm0gGNVVcXmFuGMubke4mKLRt2PwXJmeuZmTRUwXXl
- y7GLxdQzhMzM0f3C8Tw7rK4ZLh+tbW6q7y1gyY2TdbyqFp34iCJh/PN34fPJeThsUY8CT+sALyE
- vFKzs1E5ahQs1YA7VBgIqIri2Uff7sT76Xku4hPyEwOxNyCQdCE4U03sI+VeFAWSZAnxRir+n0Z
- 88CYGtPrs+0jKBigx/g3x5LjCAFl1mK9x48wfQgR/zg+JFoRht4rKE41x4/sRqgTzWWnefkOCP/
- 7fcyjeU3wzqCZfCwmeJzWSC1N9D0ImEkyxRkWwohj5C150giQ7w+4IdXju5Q==
-X-Received: by 2002:a05:600d:848c:20b0:488:904b:f31 with SMTP id
- 5b1f17b1804b1-490a2939559mr199239525e9.22.1780404036148; 
- Tue, 02 Jun 2026 05:40:36 -0700 (PDT)
+ bh=j70vp/Ke3dlBJWxoPs4To6m13gJ76thquMM6KFIPo3Q=;
+ b=kwBEYUhdvAMR4hPLwZzkTyzMJm8XWFMK+c816ZTmCpg2MWvWgIx014k3xKybSv5vOB
+ GTvd20ueK89W8OkD60kISUMlNW6vWEtFmNKbbwIYRhZ5H4vqtAlGMn+0/cwnlEu9q5lb
+ Cfs8Q2uzgKDcz0Vw/COD8ukhJJsa3npBspOZLg8cVwpEM5OCyWqHCDAGFeqUQTgojQ8F
+ PqwoGYpKzIgYiCZ4giwjMX+widFskP75YZSi5hGudtbUAv9eUbhOmL2ns3JO25zAJstI
+ p9pDgQ4AJDOLE0WmYaQcf6Y8Pv9gXdo44zIbekZQfGiroLtn65iSmcR2YyGx1VaCmxyf
+ 1IsA==
+X-Gm-Message-State: AOJu0Yy/1gsG89kXNucvoYowJynJt3gJ7sP/CD/YXADOo91vSJvK4TjI
+ eXDs9suHx3WJUbtHVprnzmHO8rOKiUOY8VmVgbJGEohSBDj0VkCyAmSf/BaaGbVIQAtEaqxq2it
+ f0K0J
+X-Gm-Gg: Acq92OEIDa87x9l1i2O/Yp1Bpf1ShtD0sggqXtdsICXM7t015XIUGBt6SOoZ+d47eHY
+ ELNrxK8qnmKKzs61KWHXRinOB7pEB2C0g+ReP4VXA3Jy5LvNPTqiHY9hK6kp5qcEGSEHUjvir1Q
+ i08qtIS5UHwcDDK9O1MVOTbceqGOQwAM6RFPoL9+pCApBQ0a1/W6uKA4DycPqfuWaVOIWJuuYh3
+ 3sP24aQ86dbF+4Knbyt2U+4tKPh6bVNl+RI5QykGmHMlgKY2xrg1FxZzSh9Z/kDjmwk5Zt8XhOj
+ Jc9HXglZwJfVwayE7yqQYLLxcWRbRBFP4ustHu0fay20PsBGGeJ18J+Si1OSOBOAlldrrEGTkW8
+ MTR6e8eES7djcGk8tD5maV1tddrtfmtMnlRS97wB3DAZUx5nyEkHAo07oCIp/rn0CuRvP/76R38
+ 5qQh8OyO2SG4CmB8ULZg2xSF839hFHgChK3MZsrI36juwwBN+rLd74hhQzRQ==
+X-Received: by 2002:a05:6000:4b08:b0:45e:fa17:a1d5 with SMTP id
+ ffacd0b85a97d-45efa17a416mr27431524f8f.33.1780404047820; 
+ Tue, 02 Jun 2026 05:40:47 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-45ef354b5bdsm32037723f8f.21.2026.06.02.05.40.35
+ ffacd0b85a97d-45ef34a037fsm34066780f8f.4.2026.06.02.05.40.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jun 2026 05:40:35 -0700 (PDT)
+ Tue, 02 Jun 2026 05:40:47 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue,  2 Jun 2026 14:40:35 +0200
-Message-ID: <20260602124035.287632-1-thomas.perale@mind.be>
+Date: Tue,  2 Jun 2026 14:40:47 +0200
+Message-ID: <20260602124047.287780-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780404036; x=1781008836; darn=buildroot.org;
+ d=mind.be; s=google; t=1780404048; x=1781008848; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FU16e1qAR9rljeAbJO0jA05CZ6d2bbjdGu83Nmm0atk=;
- b=WzIQAhim+29LUvsYGVpMkLsNqNCHk0Vucl++SQhHHAx8bQe99MxAK1ShLGidS7Olqp
- 2RftK+tS3JFZkkA+K6SFVYFC0kES6M4ghnLPi4cTSMkz2zh1HQCWsNstX+KaNKuOT9UP
- MHXcfT7GdoMOioHCzLFhjFR8QJsO9ciL04KytkOY+aIa1ii8awMkziH94dGBQP74Ky17
- jnVGysYcr2/DAlQpxj6hy1q2G40wYzodMFRBwPQGDMLkOZ37vJaDIGt3XJki2E66h8No
- Gkf5y2g2T0LD966eH+5rtxG+1jdvISwpWPWSEouJFfmB/HQ0D3EliU7Yu+ICO9loRhEK
- yUKw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=j70vp/Ke3dlBJWxoPs4To6m13gJ76thquMM6KFIPo3Q=;
+ b=AFERp2WsSShk8WZyKPNfButEY3ROYGRxuQ4g/VGXpP3gCdYdOIuy4BmYY/X3IeJl7e
+ qieuk0A6qXteEpvPzS5o4vX9SdEKXxpgBdLNWbQiZfQgISIIeWgHXjmQ/Dp+lsoVr1ZS
+ eAr6HujFskvrI+QUg8/CAAlQcKwi9mlluVSJtUG1ZNUyOVzu/XXwu/WHrf6tWEW94g9L
+ krNW4hPtQoAAoDwZNdmMiOc0LG1j32OnTvFaCWgD3Sm/QQ9D9WiBhvVKKx9pifmKle5+
+ ejmD1v5leQVBYrCY05zby9C+Z4YRZdqfCifiCUHYCAZZe6q/AgwTIlTdFMNmhwXuH1eN
+ PRjg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WzIQAhim
-Subject: [Buildroot] [PATCH] package/python-ecdsa: update CPE
+ header.a=rsa-sha256 header.s=google header.b=AFERp2Ws
+Subject: [Buildroot] [PATCH] package/sane-backends: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,39 +118,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE 'python-ecdsa_project:python-ecdsa' hasn't received new CVE
-since 2019 while 'tlsfuzzer:ecdsa' received two [1][2].
+The CPE 'sane-backends_project:sane-backends' only has a single CVE
+assigned in 2017 while 'sane-project:sane_backends' has 9 since 2017
+[1].
 
-See the package CVE history at [3].
+See the package CVE history at [2].
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2026-33936
-[2] https://nvd.nist.gov/vuln/detail/CVE-2024-23342
-[3] https://security-tracker.debian.org/tracker/source-package/python-ecdsa
+[1] https://nvd.nist.gov/vuln/detail/CVE-2023-46047
+[2] https://security-tracker.debian.org/tracker/source-package/sane-backends
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-ecdsa/python-ecdsa.mk | 3 ++-
+ package/sane-backends/sane-backends.mk | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
-index c94cc0512d..b1ac6fe1b8 100644
---- a/package/python-ecdsa/python-ecdsa.mk
-+++ b/package/python-ecdsa/python-ecdsa.mk
-@@ -10,6 +10,7 @@ PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/c0/1f/924e3caae75f47
- PYTHON_ECDSA_SETUP_TYPE = setuptools
- PYTHON_ECDSA_LICENSE = MIT
- PYTHON_ECDSA_LICENSE_FILES = LICENSE
--PYTHON_ECDSA_CPE_ID_VALID = YES
-+PYTHON_ECDSA_CPE_ID_VENDOR = tlsfuzzer
-+PYTHON_ECDSA_CPE_ID_PRODUCT = ecdsa
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index fe89e7747d..de1375550c 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -10,7 +10,8 @@ SANE_BACKENDS_SITE = \
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
+ SANE_BACKENDS_LICENSE = GPL-2.0+
+ SANE_BACKENDS_LICENSE_FILES = COPYING
+-SANE_BACKENDS_CPE_ID_VALID = YES
++SANE_BACKENDS_CPE_ID_VENDOR = sane-project
++SANE_BACKENDS_CPE_ID_PRODUCT = sane_backends
+ SANE_BACKENDS_INSTALL_STAGING = YES
  
- $(eval $(python-package))
+ SANE_BACKENDS_CONF_OPTS = \
 -- 
 2.54.0
 
