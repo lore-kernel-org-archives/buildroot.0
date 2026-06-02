@@ -1,116 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB098C5DF71
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 07:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5EBDCD6E4A
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jun 2026 07:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 787CA40F07;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52A4A81EC0;
 	Tue,  2 Jun 2026 07:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NzxSdw11gbpu; Tue,  2 Jun 2026 07:27:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pKZWXc7xZ2fP; Tue,  2 Jun 2026 07:27:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D05540809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7814C81EC4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780385231;
-	bh=Km6w9Ymfzz1oOKxa70E2Nhb54+T2RPiVYBca/ttUzK0=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=NbFiTtOukDgnTNSuIbPrVKceMaT59lEaZxyJZawa4QOfdS4GJ915SlG7iw36+mKp6
-	 Ot5eMKmlnw2j/dw7Twwt6u51OBEZePy6DB4OMRJ48Y1T+zsZAgcV82qYmk0JMaMWAg
-	 d1EwaDXnQn/CTsfLr8hkDzTJY6c2/V9dHbJzoKhC4+QUlgxQHW/QvGhsFtyokbOXMR
-	 xFubqRUfE0gFyanEFZT4PXZtoThkO+ihzR7ycKnHsyZ+HhLRu4QAREgiqfBqetE1oE
-	 z0uuzS8Zg6v1Slc9RNYqD0al8b2aDNcuzZwjes0daq/b/PtzUA0X9zB/4q8GzqiLv1
-	 rbSKHX2TPnrgQ==
+	s=default; t=1780385230;
+	bh=uBPR7XD6sq7op0Dv6VdGtqJt1pz+E9CL3U1r8MOd1E8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=e7OmoYr8fQQr+zRnxQ7MlbfQP6zg41pRGhxgpwdC7z6bymIExy5bAK7kkWRGgoUei
+	 k9/ngqkS5k8bGDBNTxJmSjKed+7+tUtAhE5UOJrm9OKcfCXaXu/YiXhNEQQ/cV64Tu
+	 kIiY4+cTyv9tl0H/kyJVk8fZYYn2IQLGia6G547baOwikecM8WuqbyVUqubBFmi8MZ
+	 Y7/GAJGc79tfS2zDDefEqYIKZDjWwfOsdEaEXAyrW3w34yW+UID3kQdNhVqmi9ap3i
+	 2QQ6r/NG193a3SCbpUKaifpyDyNcuoKqwCHoADH+NJYkeQeHeC7X7XApOURwNwBgIv
+	 euZEtj1+Grf2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D05540809;
-	Tue,  2 Jun 2026 07:27:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id ED94D223
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7814C81EC4;
+	Tue,  2 Jun 2026 07:27:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0808333C
  for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D372840809
- for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aAJBYFZcSh0U for <buildroot@buildroot.org>;
- Tue,  2 Jun 2026 07:27:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A9C8240721
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9C8240721
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A9C8240721
+ by smtp2.osuosl.org (Postfix) with ESMTP id E21D9404DC
  for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:08 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-490b12270b3so3211345e9.1
- for <buildroot@buildroot.org>; Tue, 02 Jun 2026 00:27:08 -0700 (PDT)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3uNH0fDWGtt2 for <buildroot@buildroot.org>;
+ Tue,  2 Jun 2026 07:27:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0F8D1402C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F8D1402C3
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F8D1402C3
+ for <buildroot@buildroot.org>; Tue,  2 Jun 2026 07:27:07 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4909e3fa4b2so38467595e9.0
+ for <buildroot@buildroot.org>; Tue, 02 Jun 2026 00:27:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1780385226; x=1780990026;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=0NC+4O0T0vQlONot+hcG8RvnGwQx5YNJUsd9xDSmlAc=;
- b=h0fzlmrJosKNLYLMoxstzHFIQxw7nWxSOXMIdszElHjprUg299U8jhOtbH+9u0wgRV
- B/aR2/QeVsQCPjj7LhsS+yPSOrnDu0AY14lV6fRTR60PyOeXCFD/cyfweqqxdAydCbfY
- l/nwRv4H6V1v1WMkQFVY7k6mHE/UPAgWu5bI//WGcMe7zeQykwqPjk4WxX5gWLxSDlqn
- nTjBuzuRN7B0QyyqKc7qTYMkJ7v9ezp5BB8U7+yzgpt+3j7FejJ/SAx53w6E/eFX2Fz7
- hmpbvKHoqBuHBww25GI5hI92MfWxd2MZ6FziRgjrFrCwMIT7Yd5n35XW5zERsKixvcTq
- bYiA==
-X-Gm-Message-State: AOJu0YyDoTfJJnCIVxxmutSZ4M7xzpzQXBD2YG/Uv535VutXpN4Nyoet
- DfzRGn9stXN6yHIvXA92+Jl0NTupzXe4AGNdLacHfR0YF9qCDKGxljSlpx1zir61P7x0CpBaRjk
- m3Y92
-X-Gm-Gg: Acq92OFY/WGqNAGOT5djyw6DGj4ed1u1qgGPaIznbxiiakhCkvzPDNkMnlHDsOb6Cfx
- cRiNGo+tcsQU0G4grZV2orlbTGb8vDOfgytvjmgS6RTXLS70QlTCuBd17Lt/G/9KIgxulIybPn9
- 2Uoyf9UQjxwZTX+nIg/H+6ibsJkDdtYWoA1WTHRiFVP/hI3guyfMHhSOdGIXJAwM0mnyE4UP69E
- SAlTxUlLB8e4h9GwWMo2q6xkz1Ny32S/p+Q9CCviPCGFG9frRTpuZKg/GrWA1tlbayGIWGwCg0I
- Q3HZiuv1HueX/y/7OKAmJQ/8qNlhljnf3V0tB9aG+0MwTfTeiEXZCUlPVdvecV/bBy0/D9mUawc
- sg2oYAYuDDsy3EhqsLPSGo67+glSGKiez2jP9PxIOTzQEa5YFE3eSQMnfBS/bArBEvf64Lq3iLV
- M45tjJYxk2rp16vs9aO5A2mvkdNdTvrRF5UqksLI3LJdC129za5UR+9MTj9w==
-X-Received: by 2002:a05:600c:8b30:b0:490:adb6:7957 with SMTP id
- 5b1f17b1804b1-490adb67fafmr99644635e9.33.1780385226493; 
- Tue, 02 Jun 2026 00:27:06 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=o3rnJ0FaQk5ggK1+y9bfLb4zqau2GygoG6Wz3YirpzU=;
+ b=EWh5D/wimZnLdp+43gN4LSZyE+q9EVO+Knq7BZm7WJPHe3yTuNM64Kw049XTONdGGi
+ XrzJJUxO1ea1A5U/llAPzJCqq9255yEALyEVwCkFkP83lo6z3uUMHIhpK3nxvqSNJL3C
+ IqwuRqbkDS4xFMDoNg/fq2cWb4SEVKaZyN0KUqgU4dVwQHnHzs/DJFpDDL3Aq18sGjak
+ pbTUYEhdyGPNMUXl9MOxOWHkaypyGdId90VMn5OYS2DJNHPD/uZhok/qvZntoxitgxJ4
+ EulZMAteUfUuDzDjOAArcb2N+UturI5CR34H7Y298wNdJST72WMNXOGFcDn8aTeX4mU8
+ f3kw==
+X-Gm-Message-State: AOJu0YxNOhm5O/gEOX+mQbOzT96nPJ0IpInlWGfFw/8SR/gskOY1pZrp
+ paIuGYj8rR/ZaL1rVZZu37qpCFhfRaO00brHpziuIVXnXjRn4uTBinUi7NFTYTofkB69B0tjjf4
+ 9Qpos
+X-Gm-Gg: Acq92OE7ONmpKPoB3fe1jSgv9d2yapJ3vb3yTPTL0pkDLE0R6psNVQ+QdDPd8+sepso
+ AsXdgi0LUbtg+cX7pHqT9K7TR/rfRJOQTQVW2IoIo1SWoTpy/NFye6wfn2wUrW3EollYVwip2aO
+ XJ6ovI6/i0yxMZMFY3QHzvYKIsoxC6n1qIensbpmAXkHD1YSmHn886lN79G3gNYW3Bdl4z+36TZ
+ gjz03VBMkYdttmcifoWMf3vkUqopls5JuGO6sumPFuc51Y5jUJL/adNRfXYbnDMUrvmstAjrtMr
+ ytDexRqePzYGmB1FEKaXjURtM1XPLSyCZOq9dIIBqrHcCCbdzAqN5znjjIGRdBMeQhKtzOE8SGM
+ b6gSl7TtJnZJhjnD+3rGpXx6yq/732AJSd0akOlY+c+sLDoLhnI0k4ttiXqvPZLmuFv6zOPSGGk
+ QSdY/f8pZIYPp+M7bH7rKCPlWc5zNTEn+88ZdAg2D8Vsq6vE0qO5HlJXv11g==
+X-Received: by 2002:a05:600c:4fd3:b0:48f:e230:d5ab with SMTP id
+ 5b1f17b1804b1-490b0704533mr55544965e9.31.1780385225850; 
+ Tue, 02 Jun 2026 00:27:05 -0700 (PDT)
 Received: from arch (94.105.119.128.dyn.edpnet.net. [94.105.119.128])
  by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-4909c09ab75sm93869395e9.6.2026.06.02.00.27.05
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jun 2026 00:27:06 -0700 (PDT)
+ Tue, 02 Jun 2026 00:27:05 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue,  2 Jun 2026 09:27:02 +0200
-Message-ID: <20260602072705.43945-2-thomas.perale@mind.be>
+Date: Tue,  2 Jun 2026 09:27:01 +0200
+Message-ID: <20260602072705.43945-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602072705.43945-1-thomas.perale@mind.be>
-References: <20260602072705.43945-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1780385226; x=1780990026; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0NC+4O0T0vQlONot+hcG8RvnGwQx5YNJUsd9xDSmlAc=;
- b=b91ubRwK9rkD/l103E44/xiDQY5lwnzEommcdHaR6RsCv/9yzDHmoci1JNvHrhuQV9
- PyULKQb7qHOyJAE+b796ek5qt2uv5OR1vdQsessM72M/aHGPjvKkMxUt2P+dFlXDvbiT
- BnMmNtC2mnG4KediQHrG7ha7VUKEn7Gwdc4wCNFIdxQvVt/R5kIdPaYPgoQGswLWhrD8
- 63JS+nEG9fieWpI35RC5gYNBkh0od2+l1QCayl8QVLyCXP/DTfKegM6JtVewXaJsrz8y
- UQWTbtvgjsegYGIYv1dlqJd2URGaHKKIbMh8rVn+kyP95vw1GgsdsP7SNM6KcqNkZ9of
- 6GNw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=o3rnJ0FaQk5ggK1+y9bfLb4zqau2GygoG6Wz3YirpzU=;
+ b=gsTUrG/TtimihVK3c39cUfb0/+Kih/vTlJ6G5pCPM9ABb8mAgJrahSLO3RGe9BPfLd
+ CoJnV4KyApb1ylGM2KHnMwr+sHR3Yc3/f3dueZF4E/Ht6tcqbxWqrf2pjuR7XM5zoYjd
+ zMovpC+MwvlORX/lpQmTvbVMA7m6dgPEY5D6jL6n/y+b0usMr1Tp395wPdMggIWe1cqi
+ olKWCXwcMmVt9cZTcN0X5SiJdwbphQ32FcvLuI8FHgtf0xbLS590STGt89cSN09yY5Hl
+ gZa12ykLbQyVC1sOn17D4mhItQtn9Ajm69TwtyY6vQp8291gbyDmw5an0eo7Ha9K6wYt
+ Oggg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=b91ubRwK
-Subject: [Buildroot] [PATCH 2025.02.x 2/5] package/busybox: patch
- CVE-2023-39810
+ header.a=rsa-sha256 header.s=google header.b=gsTUrG/T
+Subject: [Buildroot] [PATCH 2025.02.x 1/5] package/busybox: re-introduce
+ IGNORE_CVES for CVE-2023-42366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,166 +125,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Based on the work of the Debian community, this commit patches the
-following vulnerability.
+The patch `0008-awk.c-fix-CVE-2023-42366-bug-15874.patch` was introduced
+in [1]. The IGNORE_CVES entry was removed while the patch is still
+present in [2].
 
-- CVE-2023-39810:
-    An issue in the CPIO command of Busybox v1.33.2 allows attackers to
-    execute a directory traversal.
+Re-introduce this IGNORE_CVES entry.
 
-For more information, see:
-  - https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/archival-disallow-path-traversals-CVE-2023-39810.patch
-  - https://www.cve.org/CVERecord?id=CVE-2023-39810
+[1] 75c594d446 package/busybox: fix pending CVEs
+[2] f88537c46b package/busybox: drop stale IGNORE_CVES entries
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...allow-path-traversals-CVE-2023-39810.patch | 126 ++++++++++++++++++
- package/busybox/busybox.mk                    |   3 +
- 2 files changed, 129 insertions(+)
- create mode 100644 package/busybox/0015-archival-disallow-path-traversals-CVE-2023-39810.patch
+ package/busybox/busybox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/busybox/0015-archival-disallow-path-traversals-CVE-2023-39810.patch b/package/busybox/0015-archival-disallow-path-traversals-CVE-2023-39810.patch
-new file mode 100644
-index 0000000000..cea4e7de9a
---- /dev/null
-+++ b/package/busybox/0015-archival-disallow-path-traversals-CVE-2023-39810.patch
-@@ -0,0 +1,126 @@
-+Commit-ID: 9a8796436b9b0641e13480811902ea2ac57881d3
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Wed, 2 Oct 2024 10:12:05 +0200
-+Subject: archival: disallow path traversals (CVE-2023-39810)
-+Origin: upstream, https://git.busybox.net/busybox/commit/?id=9a8796436b9b0641e13480811902ea2ac57881d3
-+Forwarded: not-needed
-+Bug-Debian: https://bugs.debian.org/1055307
-+
-+Create new configure option for archival/libarchive based extractions to
-+disallow path traversals.
-+As this is a paranoid option and might introduce backward
-+incompatibility, default it to no.
-+
-+Based on the patch by Peter Kaestle <peter.kaestle@nokia.com>
-+
-+function                                             old     new   delta
-+data_extract_all                                     921     945     +24
-+strip_unsafe_prefix                                  101     102      +1
-+------------------------------------------------------------------------------
-+(add/remove: 0/0 grow/shrink: 2/0 up/down: 25/0)               Total: 25 bytes
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+CVE: CVE-2023-39810
-+Upstream: https://salsa.debian.org/installer-team/busybox/-/blob/master/debian/patches/archival-disallow-path-traversals-CVE-2023-39810.patch
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ archival/Config.src                        | 11 +++++++++++
-+ archival/libarchive/data_extract_all.c     |  8 ++++++++
-+ archival/libarchive/unsafe_prefix.c        |  6 +++++-
-+ scripts/kconfig/lxdialog/check-lxdialog.sh |  2 +-
-+ testsuite/cpio.tests                       | 23 ++++++++++++++++++++++
-+ 5 files changed, 48 insertions(+), 2 deletions(-)
-+
-+diff --git a/archival/Config.src b/archival/Config.src
-+index 6f4f30c43..cbcd7217c 100644
-+--- a/archival/Config.src
-++++ b/archival/Config.src
-+@@ -35,4 +35,15 @@ config FEATURE_LZMA_FAST
-+ 	This option reduces decompression time by about 25% at the cost of
-+ 	a 1K bigger binary.
-+ 
-++config FEATURE_PATH_TRAVERSAL_PROTECTION
-++	bool "Prevent extraction of filenames with /../ path component"
-++	default n
-++	help
-++	busybox tar and unzip remove "PREFIX/../" (if it exists)
-++	from extracted names.
-++	This option enables this behavior for all other unpacking applets,
-++	such as cpio, ar, rpm.
-++	GNU cpio 2.15 has NO such sanity check.
-++# try other archivers and document their behavior?
-++
-+ endmenu
-+diff --git a/archival/libarchive/data_extract_all.c b/archival/libarchive/data_extract_all.c
-+index 049c2c156..8a69711c1 100644
-+--- a/archival/libarchive/data_extract_all.c
-++++ b/archival/libarchive/data_extract_all.c
-+@@ -65,6 +65,14 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 		} while (--n != 0);
-+ 	}
-+ #endif
-++#if ENABLE_FEATURE_PATH_TRAVERSAL_PROTECTION
-++	/* Strip leading "/" and up to last "/../" path component */
-++	dst_name = (char *)strip_unsafe_prefix(dst_name);
-++#endif
-++// ^^^ This may be a problem if some applets do need to extract absolute names.
-++// (Probably will need to invent ARCHIVE_ALLOW_UNSAFE_NAME flag).
-++// You might think that rpm needs it, but in my tests rpm's internal cpio
-++// archive has names like "./usr/bin/FOO", not "/usr/bin/FOO".
-+ 
-+ 	if (archive_handle->ah_flags & ARCHIVE_CREATE_LEADING_DIRS) {
-+ 		char *slash = strrchr(dst_name, '/');
-+diff --git a/archival/libarchive/unsafe_prefix.c b/archival/libarchive/unsafe_prefix.c
-+index 33e487bf9..667081195 100644
-+--- a/archival/libarchive/unsafe_prefix.c
-++++ b/archival/libarchive/unsafe_prefix.c
-+@@ -14,7 +14,11 @@ const char* FAST_FUNC strip_unsafe_prefix(const char *str)
-+ 			cp++;
-+ 			continue;
-+ 		}
-+-		if (is_prefixed_with(cp, "/../"+1)) {
-++		/* We are called lots of times.
-++		 * is_prefixed_with(cp, "../") is slower than open-coding it,
-++		 * with minimal code growth (~few bytes).
-++		 */
-++		if (cp[0] == '.' && cp[1] == '.' && cp[2] == '/') {
-+ 			cp += 3;
-+ 			continue;
-+ 		}
-+diff --git a/testsuite/cpio.tests b/testsuite/cpio.tests
-+index 85e746589..a4462c53e 100755
-+--- a/testsuite/cpio.tests
-++++ b/testsuite/cpio.tests
-+@@ -154,6 +154,29 @@ testing "cpio -R with extract" \
-+ " "" ""
-+ SKIP=
-+ 
-++# Create an archive containing a file with "../dont_write" filename.
-++# See that it will not be allowed to unpack.
-++# NB: GNU cpio 2.15 DOES NOT do such checks.
-++optional FEATURE_PATH_TRAVERSAL_PROTECTION
-++rm -rf cpio.testdir
-++mkdir -p cpio.testdir/prepare/inner
-++echo "file outside of destination was written" > cpio.testdir/prepare/dont_write
-++echo "data" > cpio.testdir/prepare/inner/to_extract
-++mkdir -p cpio.testdir/extract
-++testing "cpio extract file outside of destination" "\
-++(cd cpio.testdir/prepare/inner && $ECHO -e '../dont_write\nto_extract' | cpio -o -H newc) | (cd cpio.testdir/extract && cpio -vi 2>&1)
-++echo \$?
-++ls cpio.testdir/dont_write 2>&1" \
-++"\
-++cpio: removing leading '../' from member names
-++../dont_write
-++to_extract
-++1 blocks
-++0
-++ls: cpio.testdir/dont_write: No such file or directory
-++" "" ""
-++SKIP=
-++
-+ # Clean up
-+ rm -rf cpio.testdir cpio.testdir2 2>/dev/null
-+ 
-+-- 
-+2.47.2
-+
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 215a69e51f..c5e56c7829 100644
+index a33548c355..215a69e51f 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
-@@ -19,6 +19,9 @@ BUSYBOX_IGNORE_CVES += CVE-2022-28391
- # 0008-awk.c-fix-CVE-2023-42366-bug-15874.patch
- BUSYBOX_IGNORE_CVES += CVE-2023-42366
+@@ -15,6 +15,10 @@ BUSYBOX_CPE_ID_VENDOR = busybox
+ # 0004-nslookup-sanitize-all-printed-strings-with-printable.patch
+ BUSYBOX_IGNORE_CVES += CVE-2022-28391
  
-+# 0015-archival-disallow-path-traversals-CVE-2023-39810.patch
-+BUSYBOX_IGNORE_CVES += CVE-2023-39810
++# This is not stale just wrong NVD entry.
++# 0008-awk.c-fix-CVE-2023-42366-bug-15874.patch
++BUSYBOX_IGNORE_CVES += CVE-2023-42366
 +
  # 0012-archival-libarchive-sanitize-filenames-on-output.patch
  # 0013-testsuite-tar-tests-fix-test-after-cve-2025-46394.patch
