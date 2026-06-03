@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F698CD6E57
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 521CBCD6E6B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA58A61B1D;
-	Wed,  3 Jun 2026 18:49:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A09442804;
+	Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S51cel-zJJug; Wed,  3 Jun 2026 18:49:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46C2642808
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780512595;
+	bh=+mVOoHK7N/8h71IRcwWnhbMwDLqLEP22gYG4OEeYVQM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=s6W9Rr69kVE/r42H/QJSINzhLmkR/kKBBM0TA55rdg64a3ZCuNoqh8dXF1o/MUgW5
+	 GSxLsUGwjkJNzngpi3YOinMg1YJ3Jg5RBWyAKw7B7nCGoj5L0/fa36Xebptg65ekM6
+	 3YlIv/Y2iRjTrTTlIGqWcIV/swUU5WAJ3+hdR5zpOtbfYQRcgDoK9x9oDgm/HJkMyq
+	 XocOQ+M2qazNWzORIaIORpP+kr1QVNmy/UlToVzpKsc7tDnQnNRB8HaJDEp1wsVGWg
+	 RmE+oJWRgLSjBLNPVydSLiumqXrrVCVzj/Z74JHkdpq75BCizPO308mXx1uGembASC
+	 s2pMbYHfKoidg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46C2642808;
+	Wed,  3 Jun 2026 18:49:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51C0E192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4056F61AF0
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zyg2vTLx5eUt; Wed,  3 Jun 2026 18:49:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7713861B10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780512593;
-	bh=jGDHbQMNMTDwDX2yubmXhQ8MGN5hfeTOQt/GtFu9wEA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rIiGAFEGR/kRKMoYEEkkP8EURR9Sp2OWuBHsKHLHeOsqZzgkX3RYs/9MV/KlY/5cz
-	 pNfNBNzZ/EXsW7kEkINIUFssQyq1+NhJcuhdpMbCfSyB4KYvXxbNJn6A59pf3hk8SC
-	 aEi/9jdCSF1RHSHuREsSfSEf4J7gDLViRumiVzCKqbZBTCC0H22fmYmTVt6JWWuZw4
-	 11DfBB6VkK+kRvTwla9zkGTR0JDZTP4NhULffENMD2BrMbJXunebKe3bU68/S/qsJ7
-	 k9dI4rA1nhBexA47DUxqdmh0Bxcr3G4zdFDZyMS+szUBEFACuJ6+Ywob9yGySmfMmX
-	 4ZOYdIsozVCeg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7713861B10;
-	Wed,  3 Jun 2026 18:49:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0861D192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5717B4011C
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xkl7Jeb1HRK3 for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 18:49:47 +0000 (UTC)
+ id eYTD3U4gWbLn for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB9F54229C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F88B61798
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB9F54229C
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F88B61798
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A075987991; Wed,  3 Jun 2026 18:49:32 +0000 (UTC)
+ id 3470387991; Wed,  3 Jun 2026 18:49:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 20:43:37 +0200
+Date: Wed, 3 Jun 2026 20:45:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2dce5a7844d061860810da4b77965d96d09eb2b4
-X-Git-Newrev: ab03ba7396017b8911944c3089c06c9b68822fbe
+X-Git-Oldrev: ab03ba7396017b8911944c3089c06c9b68822fbe
+X-Git-Newrev: 0c9ccb93275338b5a90cc2278e66790370e2f241
 X-Patchwork-Hint: ignore
-Message-Id: <20260603184932.A075987991@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/faad2: update CPE
+Message-Id: <20260603184934.3470387991@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good: add
+ CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,39 +76,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ab03ba7396017b8911944c3089c06c9b68822fbe
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c9ccb93275338b5a90cc2278e66790370e2f241
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The CPE audiocoding:freeware_advanced_audio_decoder_2 hasn't received
-any new CVEs since 2018 while faad2_project:faad2 received 9 new cves
-[1].
+The CPE 'freedesktop:gst-plugins-good' is correct for this package [1].
 
-See the full history in [2].
+Also used in conjunction of 'gstreamer:gstreamer', see the package
+vulnerability history [2].
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2023-38857
-[2] https://security-tracker.debian.org/tracker/source-package/faad2
+[1] https://nvd.nist.gov/vuln/detail/CVE-2026-46470
+[2] https://security-tracker.debian.org/tracker/source-package/gst-plugins-good1.0
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: set FAAD2_CPE_ID_VALID = YES for check-package]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/faad2/faad2.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 62c469e3ef..9aa767a5b2 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -8,8 +8,7 @@ FAAD2_VERSION = 2.11.2
- FAAD2_SITE = $(call github,knik0,faad2,$(FAAD2_VERSION))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
--FAAD2_CPE_ID_VENDOR = audiocoding
--FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
-+FAAD2_CPE_ID_VALID = YES
- FAAD2_INSTALL_STAGING = YES
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index cd1b9f45b9..1b48d83c8b 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -9,6 +9,8 @@ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+ GST1_PLUGINS_GOOD_LICENSE = LGPL-2.1+
++GST1_PLUGINS_GOOD_CPE_ID_VENDOR = freedesktop
++GST1_PLUGINS_GOOD_CPE_ID_PRODUCT = gst-plugins-good
  
- # faad2 contains assembly routines using ARM instructions not present in thumb1 mode:
+ GST1_PLUGINS_GOOD_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+ GST1_PLUGINS_GOOD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
