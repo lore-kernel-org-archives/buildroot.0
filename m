@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42482CD6E57
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 19:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE5DCD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 19:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E992E42800;
-	Wed,  3 Jun 2026 19:42:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A198427F4;
+	Wed,  3 Jun 2026 19:42:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zt_9kKkrXKIO; Wed,  3 Jun 2026 19:42:46 +0000 (UTC)
+ id hVVmxuLnA5UF; Wed,  3 Jun 2026 19:42:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 226E7427F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1866C42806
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780515766;
-	bh=KpbpCXLrGsQpReC4mfvgQsXwu1eCkGUIPAahxh5JWuU=;
+	s=default; t=1780515767;
+	bh=iIx1e6wmt0//06oDhqrkrBYskNq5/yUJOSMObBgvzrU=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=h7QLyjwgwBCBkhZzbvKa+J/f5qM0O7ZBRjc05qo9nvokUYwZc1bcLNAJ0bckYbB4r
-	 TVZ7tf3KCzZCJZ1yZRVn+5YTPSbYCSuHvFHusSk7QUYZgEm4DJrMurmKT75GIY4eZH
-	 EmSdC8NUsVdhLGYzcj/SELE6PxlezB7WCFHy4EB6cZEfqEyxRyFA8YShePGngLwvzQ
-	 cUNOrk4JDS1b0K2BcHQPcNcrFH0KvxL/vJsW16l+snMZb/MJYJ0EAkVRtBBd0vDJtm
-	 kt76bfMlgj2RCOAOyCrwbWkC/NFCuP4UkrkVUmMfwCW+QWdnygTJm9/zh3jtJZcVrA
-	 oFbd3oGMYbaDg==
+	b=jTgm7pqV8CzXVENefkfDtCvtO/eAqw3kyUR7ccCNn+10yy9wYn0PKVAtIOyxYiEgJ
+	 b0eBNAY5jNPH4Koxh60DDPYRXpBeuC7SU3VLD9qBxPTlN1w4j/gSft3V6HFA50CIug
+	 dg73zTJH5+Y4++3vV28297W5l13XDa2ertCaTFYl8d7dwoe8oWi1BspQVkU/f/pRcP
+	 aeH4qkCg5VbeF/2rAJNpEGPaWH7PzfLuSRc9mp29ooy/A/SS3OExHD7yMnbhIYXoxV
+	 oRRA/LQCxjASwxm0trmq1uDDMEuuxO9uxHV4TPonirQjS5jOJzr9OW8Zd36wv9wfAB
+	 H694OGKQnDd/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 226E7427F4;
-	Wed,  3 Jun 2026 19:42:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD5F32F5
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 19:42:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1866C42806;
+	Wed,  3 Jun 2026 19:42:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F68B2F5
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 19:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE7A942210
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9B4161AC6
  for <buildroot@buildroot.org>; Wed,  3 Jun 2026 19:42:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMb7nmoavgu5 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lu7f_v9u4PTg for <buildroot@buildroot.org>;
  Wed,  3 Jun 2026 19:42:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B1EF40077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A09961AC1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B1EF40077
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A09961AC1
  for <buildroot@buildroot.org>; Wed,  3 Jun 2026 19:42:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21ADD8799B; Wed,  3 Jun 2026 19:42:29 +0000 (UTC)
+ id 1341A8799A; Wed,  3 Jun 2026 19:42:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 21:31:16 +0200
+Date: Wed, 3 Jun 2026 21:29:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 990c39b588054390de8b0d9e9f049ee470655d2a
-X-Git-Newrev: daf49629376b0f61aeb330e4f25dee495d398bc5
+X-Git-Oldrev: 534ae54df967a94f7cfb07332ce803b5a7eb25d7
+X-Git-Newrev: 990c39b588054390de8b0d9e9f049ee470655d2a
 X-Patchwork-Hint: ignore
-Message-Id: <20260603194229.21ADD8799B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/esp-hosted: don't treat warnings
- as errors
+Message-Id: <20260603194229.1341A8799A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xwayland: security bump
+ version to 24.1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,38 +76,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/daf49629376b0f61aeb330e4f25dee495d398bc5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/990c39b588054390de8b0d9e9f049ee470655d2a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-This driver fails to build because warnings are treated as errors but
-this is too strict, breaking the build.
+Advisory (no CVEs yet):
+https://lists.x.org/archives/xorg-announce/2026-June/003702.html
 
-This used to be hidden by commit 6b56e0b4f0 ("linux: disable -Werror"),
-which was reverted in commit a966f5cde5 ("Revert "linux: disable -Werror""),
-so fix it by explicitly passing -Wno-error.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2026-June/003704.html
 
-Fixes:
-https://autobuild.buildroot.org/results/df3763e74de4071331a41140fb5528523af9e374/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Peter: add note about when issue was (re-)introduced]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/esp-hosted/esp-hosted.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
-index 3de8f24123..5cf6571481 100644
---- a/package/esp-hosted/esp-hosted.mk
-+++ b/package/esp-hosted/esp-hosted.mk
-@@ -29,5 +29,7 @@ else
- ESP_HOSTED_MODULE_MAKE_OPTS = target=sdio
- endif
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 6204400852..2bf2d19020 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2026-April/003697.html
+-sha256  27115a1a8819078409bf6fecfeb7724e8137bd36426de7005a5b3aae0a2138ff  xwayland-24.1.11.tar.xz
+-sha512  586d7e60c8bf0d92cec66451284c6c43b960010f14a1e204b5de722c610dc067481fd6ece0ffae615ca53ca2d0262e2a3dbb916d04811b8d57c1085bc363f5e9  xwayland-24.1.11.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2026-June/003704.html
++sha256  6df02c511b92c1b9848734d9d1b03a4c24f8375ba3cada44e9684a21b5f78e21  xwayland-24.1.12.tar.xz
++sha512  b4ee41761c2caa7332573be07d9143b60015bb4a7910c90b6ae079dde0a1bf6b0b4773ff4e6fba48279cdee83b4de5eb4a19b9369b5753e4147b94fa2deece96  xwayland-24.1.12.tar.xz
  
-+ESP_HOSTED_MODULE_MAKE_OPTS += KCFLAGS="-Wno-error"
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
+ # Locally calculated
+ sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 0643cc5c4c..2b8513602c 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XWAYLAND_VERSION = 24.1.11
++XWAYLAND_VERSION = 24.1.12
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
