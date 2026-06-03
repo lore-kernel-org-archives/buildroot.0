@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3673ACD8CAA
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CA9CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D369D85E12;
-	Tue,  9 Jun 2026 13:05:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xen4257uCj5f; Tue,  9 Jun 2026 13:05:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D225D858F3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010332;
-	bh=THgDBKCC7sDhYSTA1isV8Cdhn5ZcjcZCqxqUbiChfdA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=tA6kmj52jy4rvEwiwXtco9cV7tBBKkfJ7yFTPANHKs6gKCkAqv+ta5wW6GlbUZb7Q
-	 sJ+WnE/rLfY3o7zcXmsAd23FE55gl9af1f1/4DC24Cjs5gHtcTsnswHfX6rFM8naXq
-	 8J64UOie5i4mRmFttIlQDeIlyB8/HHnjaR2xvYE1N/qEQGLKRaTvHG+HPGzZZk7+Bd
-	 Pd/cGoklqkUtYagiO4kpgOiVC7DSgrkmPegw38C7//xux3TNBkA+HqGO+Y3Q2v36Qd
-	 +pz6rHK0b/39172K5h3TD6oNy21SMMSGRpxwcnUxb6PdDl/oA1N0c2yJ3hO48PkvNl
-	 oy935PYUQpafw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D225D858F3;
-	Tue,  9 Jun 2026 13:05:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 42B01190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9A2F455DD
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B21A485C2;
+	Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IE3VahWOOd0W for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:40 +0000 (UTC)
+ id vAvZUZiQhn4p; Tue,  9 Jun 2026 13:05:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D995488C8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781010349;
+	bh=oo/dZKq/OUlqH5XSpxa5HgStZRQEQ37v0G5fEpYvYos=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=jJ8v58TM6vzaeMJpkcHrqZDmcve8+hF3vfA3b+5dNA1NQRD9zyI8y9rr3Hm3uh1e0
+	 UOUpuI5c3EP1e7cLxGZolmMu3tiT2J4MLrzYMPKgnAkAmb3BrtnQIQL1BE3BZqBS4X
+	 Xo+caVNy6sfBZnADf8ZLhrz0U1PfxnlvyXgOmeKDcA8+5aU3o3Qx5pXCbU1knhY09Y
+	 VnBPoqPeXwqqIwhSlFy2SMgyzPSd3QgtMMnOPKzUG0iDzvUvFL3dlfZkJk9qKHqPA2
+	 XJ3Tgcjh6UYkYnAndy2ooCvQNZQ0oaZ2NwG4aMdTvYfkF8sjy5IUDB3IC3I+iGTqVe
+	 yMh8jECfQCJ2A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D995488C8;
+	Tue,  9 Jun 2026 13:05:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72E52190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F1B844C77
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sb391z_xJ8pP for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C0E64598A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 751C24639D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C0E64598A
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 751C24639D
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88A3E87E68; Tue,  9 Jun 2026 13:01:20 +0000 (UTC)
+ id B14D687E87; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 May 2026 20:18:59 +0200
+Date: Wed, 3 Jun 2026 23:03:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c2e0f1e9821c2e96b5060d003e773464ded62c2
-X-Git-Newrev: f0b43038a3a743156e4cbe447e54199c765d2ad8
+X-Git-Oldrev: 64f501c412a8633c79ac1d14851c8d40f2d925b3
+X-Git-Newrev: 32351f979822a0b3a45b82c2d82bdb2328b02f5a
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130120.88A3E87E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastapi: bump to version
- 0.136.3
+Message-Id: <20260609130126.B14D687E87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spirv-llvm-translator: bump
+ version to 22.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,78 +69,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f0b43038a3a743156e4cbe447e54199c765d2ad8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32351f979822a0b3a45b82c2d82bdb2328b02f5a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Add python-typing-inspection runtime dependency. This was added to
-fastapi as a dependency in 0.128.2[1] but in practice this doesn't break
-anything as fastapi depends on pydantic which already has a dependency
-on typing-inspection.
+https://github.com/KhronosGroup/SPIRV-LLVM-Translator/releases/tag/v22.1.3
 
-Release Notes:
-* https://fastapi.tiangolo.com/release-notes/#01362-2026-05-23
-* https://fastapi.tiangolo.com/release-notes/#01363-2026-05-23
-
-[1] https://github.com/fastapi/fastapi/commit/97145588f5442aa7c3830173813d5d1a2c893521
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Marcus: clarify when the dependency was added to fastapi, add release
-         notes]
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-fastapi/Config.in           | 1 +
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
+ package/spirv-llvm-translator/spirv-llvm-translator.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
-index 0dd4499a3f..01163c60f5 100644
---- a/package/python-fastapi/Config.in
-+++ b/package/python-fastapi/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_FASTAPI
- 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
- 	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_INSPECTION # runtime
- 	help
- 	  FastAPI framework, high performance, easy to learn, fast to
- 	  code, ready for production.
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 35988ef77c..3882212eed 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  ce568586b56db35b344df5c23d130ada  fastapi-0.136.1.tar.gz
--sha256  7af665ad7acfa0a3baf8983d393b6b471b9da10ede59c60045f49fbc89a0fa7f  fastapi-0.136.1.tar.gz
-+md5  5e22f728ab9ea5c99a29a0137b4b8b55  fastapi-0.136.3.tar.gz
-+sha256  e487fae93ad408e6f47641ee4dfe389864fd7bec92e547ea8498fc13f43e83ab  fastapi-0.136.3.tar.gz
- # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index d99a55c754..60e0a83369 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
+index 59edb3f70d..c511c79785 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  b37196b1a1a60282a24cf937ab7d6807d7d54dc718f2a37a78e211be26df57ac  spirv-llvm-translator-22.1.2.tar.gz
++sha256  8d3d5c31c1ff355dbbf87046f1b94cd1ab5390439a817679ec71484df74cac18  spirv-llvm-translator-22.1.3.tar.gz
+ sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+index 2d8170fc80..98e8f45037 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.136.1
-+PYTHON_FASTAPI_VERSION = 0.136.3
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/5d/45/c130091c2dfa061bbfe3150f2a5091ef1adf149f2a8d2ae769ecaf6e99a2
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/81/2d/ff8d91d7b564d464629a0fd50a4489c97fcb836ac230bf3a7269232a9b1f
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.2
++SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.3
+ SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,v$(SPIRV_LLVM_TRANSLATOR_VERSION))
+ SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
+ SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
