@@ -1,87 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71EBDCD6E6B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7672CD6E6B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C1CA427A4;
-	Wed,  3 Jun 2026 18:49:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QAvqnw0_oyjo; Wed,  3 Jun 2026 18:49:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80FDB427CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780512579;
-	bh=/LuNi2f53jecGQP2GD5xViH2EItwHzodi+32nFdGawA=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=OR2xNxCVf6ng4gqJAINAPQ1BEPYeUhMWG950iMbIDX4tySy9+ie26nKS/mwxMGmcG
-	 d6Z7RYOK2BncEPLF641JKZ9FhzNwKTz2Phe24scBQddKp6gkxRPUN9amNjhUj85thz
-	 l7+cClnIj0ZJYnQZuHZQfPdIepdYg38sQVzcdnheiOLnyYRpcy+BEE8untugzV0mXb
-	 zmLhsU3f6UfbLYk4CM2uf3i5PCUzg4Sl8WTWSZFWUxoULOBjXIbDAP0WwmW088/zWh
-	 DY3nmiw/sDBYz3ltnFkI3N9D2qQJUlw3uk0tG8Mk5/sWzveREt/nNckrcEo5m9NvvS
-	 MvUW4cLVB+tQg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80FDB427CB;
-	Wed,  3 Jun 2026 18:49:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DE1D192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEB5360C01
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF9C461AED;
+	Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fGL_NUCfDIGg for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 18:49:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id eQSuFvhk8vGh; Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D94C06157F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780512588;
+	bh=uDSMV2qlWMK6Lr7ryvoskONrCqJoFfWaE2Q1QQdkVBw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=qXb3/7JX8tHc94bZkz/AJpXwrh/SHvCcbEq5ly/CrCNg5Bh93GrpI5m9x5SuwosBv
+	 mo3e8e4WxENk+xQil1FdGJNBapCVWR8xmzaB/XCmCi/rP3itG+MkkWty/e1jHStTXx
+	 8PziO/EdV/4g+b6KSyPxOBBjA5kXjFjgK2Yh7pL66djZqaKDNUXOE439hytAQzEETU
+	 15jiuvzx5h/ptQ6Ot7+xOQvJBATMvHIGxmVoGnpGEYNE2rSpNiCdZAXHibB1qL0Lqb
+	 +kSh/4r0rabb5yOu7DuV27mffsEuZ+WLuRp0YPUtM8AItKImcbuOGnDXYbxUSViLJ3
+	 kQp/MPtYSci6Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D94C06157F;
+	Wed,  3 Jun 2026 18:49:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08544192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E274D427F3
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s28025__JyAK for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 18:49:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF4576157F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF4576157F
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF4576157F
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:37 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 238321252; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 03 Jun 2026 18:49:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wUqeh-0000000Cfnu-1VKa;
- Wed, 03 Jun 2026 20:49:31 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4377C427E1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4377C427E1
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 40BEE87992; Wed,  3 Jun 2026 18:49:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260602133156.13676-1-nicolas.cavallari@green-communications.fr>
- (Nicolas Cavallari's message of "Tue, 2 Jun 2026 15:29:15 +0200")
-References: <20260602133156.13676-1-nicolas.cavallari@green-communications.fr>
-Date: Wed, 03 Jun 2026 20:49:31 +0200
-Message-ID: <877bofo3wk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=QEpqun19myC7S3J9xlhJIqVLTB0Esq7ZRrTAVo0tXMaEt3XTkDN+/dbcFcsNeQoeA/ljXnmpad9Pq46dcDEp9CGsBdQpDndpBDiqhrgavel0OxdfgShDCKPGDEMbRq7xXlv17Z05pUrVn72wYqYrgChceTjCKJiykV5YFbnrrrIhYtzdYqDQuPERPEV/JnMynfzDdg6DmfXT3uxgVZlfTQVaDOgIqVFDEC+9g/0FYSla4P1bo8gpzYA1yXFzS3PS9wVEfkiBSAnkT47rit00biYbdzTo3DbXMgP92V0qjSvjzF2WZqWDBK9XTkNa9BZMbF2CAJei16YDPJ2+2bTYrA==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=4X75P9sickS4JLGWlaL2Yeq7xEC5F/nhMFRrrZkP+8w=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=QEpqun19
-Subject: Re: [Buildroot] [PATCH next 1/1] package/libgit2: bump version to
- 1.9.4
+To: buildroot@buildroot.org
+Date: Wed, 3 Jun 2026 20:26:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dd72456fc6af3266319f5ff15c5530d7e7097b10
+X-Git-Newrev: b9ccc1109c955f86e95afa0656220de6d7a4ebe3
+X-Patchwork-Hint: ignore
+Message-Id: <20260603184932.40BEE87992@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,22 +70,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b9ccc1109c955f86e95afa0656220de6d7a4ebe3
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > Release notes:
- > https://github.com/libgit2/libgit2/releases/tag/v1.9.4
+Release notes of this bugfix release:
+https://lists.freedesktop.org/archives/mesa-announce/2026-June/000853.html
 
- > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 83e0d6a5c7..3c6f2ee1f2 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.1.1
++MESA3D_HEADERS_VERSION = 26.1.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 93a9680a1b..deb7ea7f7b 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-May/000851.html
+-sha256  8bd36c031cc6d0edfec04617527609454ee3a09ad53bdf983b45fc2c1e129b2e  mesa-26.1.1.tar.xz
+-sha512  384a7db33d2f06e287337329f2f17503082ba6b1cd876a1884e940fdb6193ffae6d6b14344625256f3b3b39972ad697130a4d2ea25c40979f7aa76c2176f7988  mesa-26.1.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-June/000853.html
++sha256  bac2bca9121897a2b8162e79636b50ac998fca799c8e6cf914edd85962babdf0  mesa-26.1.2.tar.xz
++sha512  08e7b6357c27bf6e13f59e6fb0f84b73ec25c2d1a01cd09ffcc35ab263f278f10f3bd36fde419f60e78e781abcb315a432d0d5ceb3bab0bca26b8a2a39758e03  mesa-26.1.2.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b229b02378..905afece1b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.1.1
++MESA3D_VERSION = 26.1.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
