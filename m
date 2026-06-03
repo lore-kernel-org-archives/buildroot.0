@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ECFACD6E57
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78FD6CD6E57
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 548EC61AD5;
-	Wed,  3 Jun 2026 18:45:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aRPNDiF_5bg0; Wed,  3 Jun 2026 18:45:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F36561ACD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780512356;
-	bh=ClaCKNw0e6Lo3UzjI4wGIert+I7mbiPFF5Omk1t4usA=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=KqgXEIiBxjQChBCOf18YjkshYPVk7iLK4PgE8tazB2IVGjeWkTEDLHKucpCMJqNz1
-	 5rNls+NrJJiKwA/1KXt6TdgOnWYBfyY6XmiphC7xfR/eXrRA47AplzjI7LlAJeWtRw
-	 szt8/eEyLT+TCbZgHSUoEUopSg00BqFkihIEH6t701rupDdwkgA2dBNwb4acttWFtQ
-	 leOOphx86w6d1/n6xA3bME5L23Kc+gtCkjom1srhpXSCTc9oKftRiE/TbU6V8bnbfc
-	 hD+e8m2mc+MHrOs9iLpdkwO3nyddaYphLpA025aBSQhd1Ujj5MoVgTxPAwci8LruwJ
-	 saQMonr0xJpzQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F36561ACD;
-	Wed,  3 Jun 2026 18:45:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 694F8192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:45:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5ADD8843B4
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:45:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3188884422;
+	Wed,  3 Jun 2026 18:46:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xlRGw7-skGjl for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 18:45:54 +0000 (UTC)
+ id UXpWgm2yPWwQ; Wed,  3 Jun 2026 18:46:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F45883077
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780512404;
+	bh=5viX7QMsg3C8M/0i2e3vdvL3Nz6JTO1GsrKMJuPnGD8=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=ZTe2aktaCNyf77h98dj5C/fXQ28djZe+r1zET3okhrGbSzjv/spsPESlKTHYGBCST
+	 8KENAFVKUxD9xtj+CKZvSP+NclNYyvJzd6zGdbQd1cOIkOLqMb5Rdj3DVAvXbk+Thz
+	 OMAsniVc0Vc2q9BXmUdx6+7ogXu4iSD5kQ/V+KxtImdzA3ypddmsyOsUJLaLxQu0Wn
+	 iqrSszRRosZTvNJofiNYKFdjbkUAz7zBY92p8ICGtRgM2J5X3jsqCYVg8fSyvEuwI1
+	 28LhmV/rW81c/995j5pfL9Xc+X3BCsYgEnKWiPdOygI1ryQsgNTl/Sw4GJVlcP1lPv
+	 L61JCJ/aX4xFA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F45883077;
+	Wed,  3 Jun 2026 18:46:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E930192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:46:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23E284229C
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:46:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PCH5-jR9XWRR for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 18:46:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A09A821EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A09A821EF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 106C04011C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 106C04011C
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4A09A821EF
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:45:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 106C04011C
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:46:40 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -639261542; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1435687403; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 03 Jun 2026 18:45:52 +0000 (UTC)
+ Wed, 03 Jun 2026 18:46:38 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wUqb9-0000000CfPK-1oNl;
- Wed, 03 Jun 2026 20:45:51 +0200
+ (envelope-from <peter@korsgaard.com>) id 1wUqbs-0000000CfTQ-3gll;
+ Wed, 03 Jun 2026 20:46:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <20260602124101.287936-1-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Tue, 2 Jun 2026 14:41:01 +0200")
-References: <20260602124101.287936-1-thomas.perale@mind.be>
-Date: Wed, 03 Jun 2026 20:45:51 +0200
-Message-ID: <87o6hro42o.fsf@dell.be.48ers.dk>
+Cc: Thomas Perale <thomas.perale@mind.be>,  James Hilliard
+ <james.hilliard1@gmail.com>
+In-Reply-To: <20260602124035.287632-1-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Tue, 2 Jun 2026 14:40:35 +0200")
+References: <20260602124035.287632-1-thomas.perale@mind.be>
+Date: Wed, 03 Jun 2026 20:46:36 +0200
+Message-ID: <87jysfo41f.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=mgQIPhn4c83LzMWWOA7r11wXVkpskzOGJ1bXFt63B3ort58hG8uV0AsyJp5ARU168fUw1Jwt1JIdgpiE5WIriu3900Sik3Dji/9i3I3eECB2WamA2UMi7tXbRo1zh7PzLaV5CICPJAPsjVOqyPCvw/k+8Bnjmt4jZtbF/1C7Aqtea+zkBAK1nyI+UtAzlMn6c+UFrMect0ZJ0smODmS2Z072WdAgi/MpBwYheyY/rAzJLCPmxt1DcKK5uhWyIjqBZI7B/+U4nvx/e7ma/gftwdtity2N9kSSFWgm5wRVRSaAWmGKBiCOciwnnvfQXqSkJwLTAd1MAli3OV4ud1Nhgg==;
+ b=puAXXh9WsKt1yg15YMM6yd7gnd+3P+j94grFNqEio1ho1RP+MvQon/lfU8E8kNCOxYzcs/wcjEhBeuG1VEattHFGNhcb4Fi9cS3DoBy1pqRm2tkoEMxn7izwZM4BPSKF6cDVZ8oq75LlR5nq3gVZvKDsM66zXw30JbVhywyiMuUmofNDqfJM+KqN2rAKXioWDP3qKKKF7FWWnh91AamALFhthuxyTLqA1df0B9YprEKqvkVzDvgsWCAQ4oHIuAkSE2nvC8cl4NnGmWP4Bl1vWbL2GwGvmNAerMaPEPmSsPeb4kcvzlp7Z0xEGLrVedsEGOKfgMFQPUpPNcBxMwMjJw==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=zdSsmjMqZQIaOyCqGssG1uuqpeYEAYgbaf5RTOQgnaQ=;
+ bh=5M5uAJv0LpUxN8RYQ78F4BQFyMrxi6YBK6uA2ioEqN4=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=mgQIPhn4
-Subject: Re: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good: add
- CPE
+ header.a=rsa-sha256 header.s=purelymail2 header.b=puAXXh9W
+Subject: Re: [Buildroot] [PATCH] package/python-ecdsa: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,12 +100,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
- > The CPE 'freedesktop:gst-plugins-good' is correct for this package [1].
- > Also used in conjunction of 'gstreamer:gstreamer', see the package
- > vulnerability history [2].
+ > The CPE 'python-ecdsa_project:python-ecdsa' hasn't received new CVE
+ > since 2019 while 'tlsfuzzer:ecdsa' received two [1][2].
 
- > [1] https://nvd.nist.gov/vuln/detail/CVE-2026-46470
- > [2] https://security-tracker.debian.org/tracker/source-package/gst-plugins-good1.0
+ > See the package CVE history at [3].
+
+ > [1] https://nvd.nist.gov/vuln/detail/CVE-2026-33936
+ > [2] https://nvd.nist.gov/vuln/detail/CVE-2024-23342
+ > [3] https://security-tracker.debian.org/tracker/source-package/python-ecdsa
 
  > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
