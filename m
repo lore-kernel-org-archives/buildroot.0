@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A992DCD6E55
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 20:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B89CD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 20:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 604B861B46;
-	Wed,  3 Jun 2026 20:44:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C8AB844A1;
+	Wed,  3 Jun 2026 20:45:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fy2g8mxc_TMx; Wed,  3 Jun 2026 20:44:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 90jMwRH7fat0; Wed,  3 Jun 2026 20:45:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9448661B42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E73384474
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780519443;
-	bh=m00Rt1SgWlTxZxa5srcJkwq0thBYTjHNlToS7p5iizw=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ky3P04FuPJE2DrTY8v0yoSyxRtyVaig/lxrx3uys8USYaGkFfDXyFhM3VEw45wF7m
-	 tQDJc7xUd7hhYR1FC42CDKVWki37oZxR/o9cdMoDFp4oU+8joSf33SVm/UsukWURm0
-	 ptFRjoYiX13rOnC1z40y/fuW5UIPSqkm5rEM9EiB8IrhJAslXUL7mD4xdUaDM3qKpy
-	 DJAlhIjZJ1X/IbKRDkl3iLpTIJkg14ik0DwZ/oZeX9fusRL/VuNHZALBodK46KPNIQ
-	 Rgv8x44XqW6ODhlNQBi0Zt2Kn1X2n705AofMdDLtUe6Gag0nKgF5Z7mQvVM6uptFAH
-	 +rTK5cLE98wPQ==
+	s=default; t=1780519526;
+	bh=DVw/K1fEEGcWFK+mEUWcyGIT6ns7IAsuzmDq3UoD/OA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=nUoDBg5wEQRU57CKEcZmylx4AWX/VN8+o1G0x2qlqZBZq27RN//RI1c/uUHj8THpK
+	 /7FhfgMge7DK04ItaWRZJm2oRw1pSfOnihax844qqzLU8CQ7++3IhcItEgqx3Vwdrq
+	 dGbhsJTCemNPnaQdPDaUCbV76IU+VhE92QtPFot4dutp3dhGlHt9+cnOX6Km0YBEoM
+	 rvG24stdk5WaVl+nZphLYAUhEwfi2JYpNayKp9yf+O1Gr4deX42EDrOhpeMgEnHv9y
+	 g0gYqgdSfmK2VySBQ+/M5jgXOhGyGBwnoPBKA2Ns/qFWDP+tW3qVxgiqUnShxWOy5V
+	 J5rtHV2knvXXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9448661B42;
-	Wed,  3 Jun 2026 20:44:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E73384474;
+	Wed,  3 Jun 2026 20:45:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FCFE192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:44:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DCEE7192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:45:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71F6561B42
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:44:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C33F661B46
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:45:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M1xx5u9SdrgL for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 20:44:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id LYjYIVzDdNfS for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 20:45:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 07EDD61B41
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07EDD61B41
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 07EDD61B41
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:44:00 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 8842160;
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 03 Jun 2026 20:43:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wUsRN-0000000EOFS-3IlI;
- Wed, 03 Jun 2026 22:43:53 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25F7161B44
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25F7161B44
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:45:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 06B79879A3; Wed,  3 Jun 2026 20:45:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,  Daniel Lang <dalang@gmx.at>
-In-Reply-To: <20260603135119.3481791-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 3 Jun 2026 15:51:19 +0200")
-References: <20260603135119.3481791-1-bernd@kuhls.net>
-Date: Wed, 03 Jun 2026 22:43:53 +0200
-Message-ID: <87mrxbjqwm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=V6mH4ALhKKVvVRNPMFK/bTYMIksxoMOyYZIbkeoIyivySVFcMa41Jv29Ehf0TrHHVw1BEFiOHFeamiE0vV6KFspKJcIS9L9Jehrwd0G/UKaL8tCmye6jG5Irz/A5Vm9RMUpS3cvjMzKw5gllA6kuw54+vRzuvCGf3oAdK3uotKTAGaL5CniVsJL+1hcwyd8BNwAS4dkAjCXY9cvO9ORA197c3oAMWNDOd58ROZ9sPxyBe5mVvqKgMNVvE49jjCZb+2QqHqJ+15yW97mKrik6Iwv+QyBPcCoS0onXRarjohJ0TdbJtXkCF9EhzN0sND1O5UKMuEBnP6kpv245+fb2Xg==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=PefhNIBlWlDZF1ZVpygKW01lwKY9TUprT3rc81nKVQA=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=V6mH4ALh
-Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project: bump version to
+To: buildroot@buildroot.org
+Date: Wed, 3 Jun 2026 22:41:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9cba1cfaaf7acb64d7e73ffeb4ad455c784d7764
+X-Git-Newrev: efc8b141fe39b06ba21f3c2fe5ab2fdb2ddd4295
+X-Patchwork-Hint: ignore
+Message-Id: <20260603204509.06B79879A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: bump version to
  22.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -93,25 +70,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/efc8b141fe39b06ba21f3c2fe5ab2fdb2ddd4295
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > Release notes of this bugfix release:
- > https://discourse.llvm.org/t/llvm-22-1-7-released/90961
+Release notes of this bugfix release:
+https://discourse.llvm.org/t/llvm-22-1-7-released/90961
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- > Gitlab pipelines stopped after reaching the 3h timeout:
- > https://gitlab.com/bkuhls/buildroot/-/commits/2473c919145c6371ad8d51c0c44f4578b54ff998
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/llvm-project/llvm-project.hash | 4 ++--
+ package/llvm-project/llvm-project.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/llvm-project/llvm-project.hash b/package/llvm-project/llvm-project.hash
+index 4f2c07414e..d498fbe6e1 100644
+--- a/package/llvm-project/llvm-project.hash
++++ b/package/llvm-project/llvm-project.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.6
+-sha256  6e0b376a1f6d9873e7dfb09ae6e04b9c7024400f01733fa4c29be69d5c138bc2  llvm-project-22.1.6.src.tar.xz
++# From https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.7
++sha256  5cc4a3f12bba50b6bdfb4b61bdc852117a0ff2517807c3902fc13267fb93562e  llvm-project-22.1.7.src.tar.xz
+ # locally calculated
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 2f137b871b..7ddf25a37b 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LLVM_PROJECT_VERSION_MAJOR = 22
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.6
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.7
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ LLVM_PROJECT_SOURCE = llvm-project-$(LLVM_VERSION).src.tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
