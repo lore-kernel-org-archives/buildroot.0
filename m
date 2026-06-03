@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C7C6CD6E57
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 20:21:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEC94CD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 20:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 472878484E;
-	Wed,  3 Jun 2026 20:21:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7236A61B30;
+	Wed,  3 Jun 2026 20:27:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vvMJl8abN5D7; Wed,  3 Jun 2026 20:21:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SKXPw0sChig3; Wed,  3 Jun 2026 20:27:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B12F84840
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 440E161B2C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780518073;
-	bh=ROoJM/T+G5CWmrjJa5Qe1alYsXLTkfdGl9FDq11Mbs0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1780518468;
+	bh=z9EqP+iCfwKNZg9w9cgi/PF1f8GQ8Ob/fMDuXaeXbbM=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=qLs2D+5EKeXrhiLpTEzpRNsgE6qBUGmxrE62vOJRapxgK4Q0TKzTNz6qvsuSQgBKE
-	 wtjlkyvtMslWL65dZaDUZkTUIOwyyhFXdt8YVtJAH2H/xHw22Ql85owU4uuGiXVgNc
-	 NzU4weDlfi2k8eyyMFjcOwIchKgRGAZ9w35MVQNV7EjKKdRm+D5kJl/Jy/JSWGVc/g
-	 baiZSSVf5eBtzCRrfrnRUE57y0/1fpKM5GRff0cKxetVQeqdTcF3e6DSMzyFvX5Q43
-	 8Agpgqxsny3/uSUuB7VFQZEukBHnbw05hE7ETTD4pWZ+Jvk7sQk+A89sN0g3QwQ6+b
-	 Qa9eBVi91q2fw==
+	 From;
+	b=ULOdU5uaIvZbfAQf0MWMn1OjwBOpK6ogW9qPHaySOzGCJslyad90clUsE/StjDP0P
+	 f33FaetbZWHPS26lr62rtGWNANFOBKDgQFPvO5Hk3JCDmZNTvgUwLHNaJubaYrhvbi
+	 9AHwI95yyyQdiAm6iLfqmgODalY05auX8+rWhIpM2Go4xzVRbZQbeG9n0lLnUZHLWE
+	 5KwJjzOrOtlqJ0rKRFBCIp9ehZQr3ZPQhcvkUoEEkS2q1ta2LQ5IRhAcyqCck798JA
+	 H18fhfx7NM+5AapQHIH9NI/vYqv2WD59iSJ91unB2kJchdr4iW76rM/+bp9hVBiGV1
+	 0Eilvk4HmnY/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B12F84840;
-	Wed,  3 Jun 2026 20:21:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 604752F5
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:21:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 440E161B2C;
+	Wed,  3 Jun 2026 20:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88CE52F5
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5164540907
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:21:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A66A4234F
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cmrgJ0wnhEuE for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 20:21:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 764BA406CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 764BA406CB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 764BA406CB
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:21:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id F3B4978034D;
- Wed,  3 Jun 2026 22:21:07 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 03 Jun 2026 22:21:07 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wenR96fHoESi for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 20:27:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 765AA42342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 765AA42342
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 765AA42342
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 20:27:46 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 273401972; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 03 Jun 2026 20:27:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wUsBf-0000000EJp1-2cdS;
+ Wed, 03 Jun 2026 22:27:39 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20260603192009.4179993-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 3 Jun 2026 21:20:08 +0200")
+References: <20260603192009.4179993-1-bernd@kuhls.net>
+Date: Wed, 03 Jun 2026 22:27:39 +0200
+Message-ID: <87bjdrl684.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Date: Wed, 03 Jun 2026 22:21:07 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260602195538.2518105-1-romain.naour@smile.fr>
-References: <20260602195538.2518105-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <51671cde56716f7b450a6354a086cb60@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780518069;
- bh=cyGgECp8ohkO7H4M37i9KGT4qQVET1gktmRHcRtzJfU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ULbTymujwzIHuF5jCatrAsL+Q0GIr1jwT+zwo4uoxy6d+aeY+Y1npT1HBiAYpIxoy
- 3Ux4eFvDAaBGDHUiC75i24rIACBZlURS3cPeOw/QbesM81yX8bVJADvvyGJlPMghza
- RUdsC3kOWmL6qWmeq7+lK2r5ZI6iUD4n33gkVD5rM+pzsKSK81FzpeCFFn0XAX/utr
- DpJqD0bp2xWco4h9RPhuLAF/lq3BS9iMs4PFcSLznG86JVUocVjLviueDaAbNcTJbw
- buMgKEZQq7Pk2g45PNLhNAT18bvoBjAEXr/7EH9hzF1LjXgzfDn8Hr7oGzDZIIXdUx
- NVrCmDDvxOvbQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ULbTymuj
-Subject: Re: [Buildroot] [PATCH] support/testing: TestAtop: use the default
- toolchain (BASIC_TOOLCHAIN_CONFIG)
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=MphwbYAHayL3u6QC/KbKvTZwem3xDWyAezqLduDKLxBWY5wCp8gq8vLhwBYvUv8bt7zVeK3EuVMFLcse/Qq7TWpzDQJAqsegjfirSbf7RTIkXK8JUxkqs4usbbfFZr62Xk9T+jjIhcGlLSDW8K32EYgq0jQyCxTclvzjaEvyI2kUylKLTN8rz9MzgEe8pAM2RZxNib+SnatWs1j3QXbvtLwJ5SX9+PN7PMJ/vcytzJbHoPhf1+Bh1u4YVbMzdmSVPP13t0aUhAKF7ayRLqaf5QoLusKZMR5dk0ABdMXsrMNe+nlbPNOOZQtUKDh/avBx3fvcFJRvvYeVpiDmINji2w==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=k4zn+yh+/e2agjIBGmt9XNAlN/sqV0kVl2s8pd7/HeQ=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=MphwbYAH
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: patch CVE-2026-3276
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,48 +93,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/06/2026 21:55, Romain Naour via buildroot wrote:
-> The TestAtop use the really old toolchain br-arm-full-2019.05.1 because
-> BASIC_TOOLCHAIN_CONFIG from Buildroot 2019.08 provide an uClibc-ng
-> toolchain with 3.10 kernel headers (br-arm-full-2017.05-1078-g95b1dae)
-> [1].
-> 
-> Since then, we switched to glibc toolchains by default in Buildroot [2]
-> (2022.11) and BASIC_TOOLCHAIN_CONFIG was updated several time and now
-> use a Bootlin toolchain stable (2025.08-1). This toolchain use gcc 14,
-> 5.3 kernel headers, glibc 2.41.
-> 
-> We need to update the toolchain in TestAtop since Busybox 1.38.0 added
-> yescrypt algorithms that requires explicit_bzero() introduced in Glibc
-> 2.25 [4], uClibc-ng 1.0.47 [5] and musl 1.1.20 [6].
-> 
-> There is no real reason to keep this really old toolchain, so bump
-> the toolchain to Bootlin toolchain stable (2025.08-1).
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14622325905
-> 
-> [1] 9609a7c2c22160523bda5cb5b4417c9278ac27d9
-> [2] 4057e36ca9665edd5248512e4edba2c243b8f4be
-> [3] 
-> https://github.com/vda-linux/busybox_mirror/commit/80e676664e1d7a0b07f14bff44f93d1fef709cf4
-> [4] 
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=ea1bd74defcf9d5291d14972e63105168ca9eb4f
-> [5] 
-> https://github.com/wbx-github/uclibc-ng/commit/9e7b342fde5505c0a1d4968e9d70537ac406f640
-> [6] 
-> https://git.musl-libc.org/cgit/musl/commit/?id=05ac345f895098657cf44d419b5d572161ebaf43
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Applied to master, thanks.
+ > https://seclists.org/oss-sec/2026/q2/801
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed after extending the commit message to make it clear that this
+is already upstream, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
