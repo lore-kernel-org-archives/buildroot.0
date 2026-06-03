@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CA9CD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6991BCD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B21A485C2;
-	Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80B0E85E2A;
+	Tue,  9 Jun 2026 13:05:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vAvZUZiQhn4p; Tue,  9 Jun 2026 13:05:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e7EMbAHSw23O; Tue,  9 Jun 2026 13:05:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D995488C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 329C485E1B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010349;
-	bh=oo/dZKq/OUlqH5XSpxa5HgStZRQEQ37v0G5fEpYvYos=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jJ8v58TM6vzaeMJpkcHrqZDmcve8+hF3vfA3b+5dNA1NQRD9zyI8y9rr3Hm3uh1e0
-	 UOUpuI5c3EP1e7cLxGZolmMu3tiT2J4MLrzYMPKgnAkAmb3BrtnQIQL1BE3BZqBS4X
-	 Xo+caVNy6sfBZnADf8ZLhrz0U1PfxnlvyXgOmeKDcA8+5aU3o3Qx5pXCbU1knhY09Y
-	 VnBPoqPeXwqqIwhSlFy2SMgyzPSd3QgtMMnOPKzUG0iDzvUvFL3dlfZkJk9qKHqPA2
-	 XJ3Tgcjh6UYkYnAndy2ooCvQNZQ0oaZ2NwG4aMdTvYfkF8sjy5IUDB3IC3I+iGTqVe
-	 yMh8jECfQCJ2A==
+	s=default; t=1781010339;
+	bh=S4vXG8GzsjiigRmtY3coFxAka1upsdx2lFJ1Vk4r8tE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=iBa5Nv86Lclk2u3GdC9zej7kbWNkmLm0DNMEnBcrVLMrn0dGnqT767W85DdVL1O7+
+	 nlZixoQKsqeMJoAUnTRhomNWTh+LgI8jsLj8bOTrOVn9JNW/NjMBVyhtlPC30BLdxF
+	 9bz2foJfEc+1WGMBVqsKaPdGCTXxl/i5puIwAr6tsX5+ToxKm6uFsvAcS1HttKkf6l
+	 te2FxM09eribUWn5bcOw8T/fAaE8gHcTypxVipmWaeNZHmtGCdFoahOe4clgBCzBLo
+	 +tHj13wwk9q9BN9kAdm5DEmeqwIXMdkQFUqXULaxexvzh8r7IMQg7eyWGTstKdU1hd
+	 f7DQxqmgbipZw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D995488C8;
-	Tue,  9 Jun 2026 13:05:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 329C485E1B;
+	Tue,  9 Jun 2026 13:05:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 72E52190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5432D190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F1B844C77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AE80465AC
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sb391z_xJ8pP for <buildroot@buildroot.org>;
+ id Mi7-6BRLaN8q for <buildroot@buildroot.org>;
  Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 751C24639D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DFFE420E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 751C24639D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DFFE420E4
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B14D687E87; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+ id 7A24987E8E; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 23:03:46 +0200
+Date: Wed, 3 Jun 2026 20:53:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64f501c412a8633c79ac1d14851c8d40f2d925b3
-X-Git-Newrev: 32351f979822a0b3a45b82c2d82bdb2328b02f5a
+X-Git-Oldrev: 69060189f37c4a1a286c8e6120fad2ea9383d9a7
+X-Git-Newrev: e35ac186f1494f55fa83fdf1f3729f0d2a44edf0
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130126.B14D687E87@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spirv-llvm-translator: bump
- version to 22.1.3
+Message-Id: <20260609130126.7A24987E8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-vpl-gpu-rt: bump version to
+ 26.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,48 +70,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32351f979822a0b3a45b82c2d82bdb2328b02f5a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e35ac186f1494f55fa83fdf1f3729f0d2a44edf0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/KhronosGroup/SPIRV-LLVM-Translator/releases/tag/v22.1.3
+https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.2.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
- package/spirv-llvm-translator/spirv-llvm-translator.mk   | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-index 59edb3f70d..c511c79785 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index f7a2bcbc8c..d1e4c58fda 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
 @@ -1,3 +1,3 @@
- # locally calculated
--sha256  b37196b1a1a60282a24cf937ab7d6807d7d54dc718f2a37a78e211be26df57ac  spirv-llvm-translator-22.1.2.tar.gz
-+sha256  8d3d5c31c1ff355dbbf87046f1b94cd1ab5390439a817679ec71484df74cac18  spirv-llvm-translator-22.1.3.tar.gz
- sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 2d8170fc80..98e8f45037 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+ # Locally computed
+-sha256  597e72a77e9eba8d6efc79a083a775ac0cc47801b2bb7572749ec84acebb1917  intel-vpl-gpu-rt-26.2.0.tar.gz
++sha256  b9a84d5d2255cbea8586019a3bd03165f0269e06dba03e9c6f6cdf363b6b2fab  intel-vpl-gpu-rt-26.2.1.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index 4dd563d1bc..e812ca31cf 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.2
-+SPIRV_LLVM_TRANSLATOR_VERSION = 22.1.3
- SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,v$(SPIRV_LLVM_TRANSLATOR_VERSION))
- SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
- SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+-INTEL_VPL_GPU_RT_VERSION = 26.2.0
++INTEL_VPL_GPU_RT_VERSION = 26.2.1
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
