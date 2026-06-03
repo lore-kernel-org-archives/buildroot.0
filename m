@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E49ECCD6E69
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9016DCD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 981D7614DA;
-	Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FF8F841FF;
+	Wed,  3 Jun 2026 08:08:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DhMYVi5l6_b9; Wed,  3 Jun 2026 08:08:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E64C84223
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780474097;
+	bh=mSNFGEwE7jqSlxdylcPwqLV5hnVDqsYzjYOHibZ3d48=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HyqvmBEwPAR77jAAFqwCOeTG175CepUuUfJYpuM6rg7Sjm/4jFiNMTzYq+CCKDTtM
+	 GzLF7FpK8/7RsfLnMqHDxigGNeni/tZ+KEnAOV8iWjP71dKscSRMwFdqmtnYgYZFwz
+	 Qo3TTlyvN/8bOaGSKAMwBR9Aeh1bJi7VvKlKQzat8ANipxkaeFLsTPwFCOS6v7Gn6+
+	 EQ3LBB7kZ35gnG6MfrM6z3G0EZmbVvR7P+xIyds7Ukm6+Qs3aeSgV1S/oz5rTagrGK
+	 Cnblyt3/mk0PyT2p6Vku32ai5JF3ssFXby4ilvEwPM80I4s0AIvLBvoR1SRTeQvpAs
+	 k9NciUBiHGoEQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E64C84223;
+	Wed,  3 Jun 2026 08:08:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CEA14353
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97E1660D80
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohCyJUnIAN9d; Wed,  3 Jun 2026 08:08:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BEAF613F5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780474095;
-	bh=pJkYFtGF1SWXgwZ7acYK0GH87wEcU71M+6oPxrE5TNc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=nEt3ulxuO6aWNRZ4J6MD4ZW20V/yIn3Mpp76AamJH/pp6i2368kk6pPNhTg/Nsz0x
-	 9IHWanhylgPrj0Him7YD0uREOJb4780r2J2YanYEtPM1hOuXTlABDfGR+/HmTqEpux
-	 oc55aQxic+wHD9ZrYsg9b4cAnOiE1q+4owdNliYxwQPhoHlInNEhxN9jxM0dwyXSJ0
-	 HC8nt3TR3+8sb4YGmNXQOgkxqFPeEdkABJ/bjV5ID+nMr1kCgUEWZVxk0Z8MbF0C69
-	 3oRWV3tnNQslXThukuGnc/mdECGGAmp+s2NXVhIL4K55AN0Ci4sGCIYtxcyWYGyApt
-	 KhxnoeIU23b3w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BEAF613F5;
-	Wed,  3 Jun 2026 08:08:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFB4D353
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1AEE41E39
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ktuMhNoEVxfd for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
+ id adRe_OBQCb08 for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04C0841118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5E17610E7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04C0841118
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5E17610E7
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 300C9878BF; Wed,  3 Jun 2026 08:07:58 +0000 (UTC)
+ id 099E3878BF; Wed,  3 Jun 2026 08:07:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 10:05:25 +0200
+Date: Wed, 3 Jun 2026 09:48:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7f0749ce735646f29cddf1140b3b5ec137a64235
-X-Git-Newrev: 283a7a15b287bac53533eea140f9784648942df0
+X-Git-Oldrev: 20489205ea57a00f013c49f148c93c588b0713e1
+X-Git-Newrev: 061d6b121b116fff494901a964c813b68dc6d0de
 X-Patchwork-Hint: ignore
-Message-Id: <20260603080758.300C9878BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/privoxy: security bump version to
- 4.2.0
+Message-Id: <20260603080758.099E3878BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libssh2: add upstream security
+ patch for CVE-2026-7598
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,60 +76,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/283a7a15b287bac53533eea140f9784648942df0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/061d6b121b116fff494901a964c813b68dc6d0de
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Fixes the following security issues:
+This commit fixes the following vulnerability:
 
-- Parse the chunk-size with a dedicated function and reject "unreasonably"
-  large values to prevent silent truncation by sscanf(), integer overflows
-  and misinterpretation of the content later on. Heap buffer overflows on
-  platforms with 32-bit pointers were alleged as well.
-  Commit 5b3bb22b77. OVE-20260515-0002. Reported by @TristanInSec.
+- CVE-2026-7598:
+    A security vulnerability has been detected in libssh2 up to 1.11.1.
+    The impacted element is the function userauth_password of the file
+    src/userauth.c. Such manipulation of the argument
+    username_len/password_len leads to integer overflow. The attack may be
+    launched remotely. The name of the patch is
+    256d04b60d80bf1190e96b0ad1e91b2174d744b1. A patch should be applied to
+    remediate this issue.
 
-- ssl_send_certificate_error(): Store the generated message on the heap
-  instead of the stack to prevent an alleged segmentation fault if there
-  are enough certificates in the chain to exceed the stack size.
-  While at it, replace another variable-length array that was probably
-  unproblematic with a heap-based buffer as well.
-  Commit 4963aa4f08. OVE-20260515-0001. Reported by @TristanInSec.
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-7598
+  - https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
 
-https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob;f=ChangeLog;h=d62aa6bf0b2cb26100e4ba8e528638259502711d;hb=0c5225b6844dd1a838b80d09d715a6c4ccbda2c6
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Peter: add vulnerability info]
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/privoxy/privoxy.hash | 6 +++---
- package/privoxy/privoxy.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../libssh2/0001-username-len-bound-checking.patch | 57 ++++++++++++++++++++++
+ package/libssh2/libssh2.mk                         |  3 ++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-index cfb6f5a5c8..2678a4ec25 100644
---- a/package/privoxy/privoxy.hash
-+++ b/package/privoxy/privoxy.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/ijbswa/files/Sources/4.1.0%20%28stable%29/
--sha1  6afc12dc38781a37670c7e4bb69700900123084f  privoxy-4.1.0-stable-src.tar.gz
-+# From https://sourceforge.net/projects/ijbswa/files/Sources/4.2.0%20%28stable%29/
-+sha1  deb927b172a3b473bcf246ea848ba6ed931274bf  privoxy-4.2.0-stable-src.tar.gz
- # Locally computed
--sha256  23e4686e5848c74cb680c09c2811f0357739ecfe641f9c4072ee42399092c97b  privoxy-4.1.0-stable-src.tar.gz
-+sha256  6f91267f81f626c416994db89ab62f4d09246eebf4754b81186e13a18ee9028f  privoxy-4.2.0-stable-src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index bfd4996292..9bafc1385d 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libssh2/0001-username-len-bound-checking.patch b/package/libssh2/0001-username-len-bound-checking.patch
+new file mode 100644
+index 0000000000..f398260309
+--- /dev/null
++++ b/package/libssh2/0001-username-len-bound-checking.patch
+@@ -0,0 +1,57 @@
++From 256d04b60d80bf1190e96b0ad1e91b2174d744b1 Mon Sep 17 00:00:00 2001
++From: Will Cosgrove <will@panic.com>
++Date: Mon, 13 Apr 2026 11:18:25 -0700
++Subject: [PATCH] userauth.c: username_len bounds checking (#1858)
++
++Return errors when username_len will exceed bounds, fix existing bounds
++check.
++
++Credit:
++[dapickle](https://github.com/dapickle)
++
++CVE: CVE-2026-7598
++Upstream: https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/userauth.c | 13 ++++++++++++-
++ 1 file changed, 12 insertions(+), 1 deletion(-)
++ 
++diff --git a/src/userauth.c b/src/userauth.c
++index f8e02651..43d9ab9b 100644
++--- a/src/userauth.c
+++++ b/src/userauth.c
++@@ -80,6 +80,12 @@ static char *userauth_list(LIBSSH2_SESSION *session, const char *username,
++         memset(&session->userauth_list_packet_requirev_state, 0,
++                sizeof(session->userauth_list_packet_requirev_state));
++ 
+++        if(username_len > UINT32_MAX - 27) {
+++            _libssh2_error(session, LIBSSH2_ERROR_PROTO,
+++                           "username_len out of bounds");
+++            return NULL;
+++        }
+++
++         session->userauth_list_data_len = username_len + 27;
++ 
++         s = session->userauth_list_data =
++@@ -307,6 +313,11 @@ userauth_password(LIBSSH2_SESSION *session,
++          * 40 = packet_type(1) + username_len(4) + service_len(4) +
++          * service(14)"ssh-connection" + method_len(4) + method(8)"password" +
++          * chgpwdbool(1) + password_len(4) */
+++        if(username_len > UINT32_MAX - 40) {
+++            return _libssh2_error(session, LIBSSH2_ERROR_PROTO,
+++                                  "username_len out of bounds");
+++        }
+++
++         session->userauth_pswd_data_len = username_len + 40;
++ 
++         session->userauth_pswd_data0 =
++@@ -447,7 +458,7 @@ password_response:
++                         }
++ 
++                         /* basic data_len + newpw_len(4) */
++-                        if(username_len + password_len + 44 <= UINT_MAX) {
+++                        if(username_len <= UINT32_MAX - password_len - 44) {
++                             session->userauth_pswd_data_len =
++                                 username_len + password_len + 44;
++                             s = session->userauth_pswd_data =
++ 
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 1702d94c79..1843d25051 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -13,6 +13,9 @@ LIBSSH2_CPE_ID_VENDOR = libssh2
+ LIBSSH2_INSTALL_STAGING = YES
+ LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
  
--PRIVOXY_VERSION = 4.1.0
-+PRIVOXY_VERSION = 4.2.0
- PRIVOXY_SITE = https://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
- PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
- # configure not shipped
++# 0001-username-len-bound-checking.patch
++LIBSSH2_IGNORE_CVES += CVE-2026-7598
++
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+ LIBSSH2_DEPENDENCIES += mbedtls
+ LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
