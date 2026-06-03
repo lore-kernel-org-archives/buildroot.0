@@ -1,113 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B108CD6E69
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 17:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AE4ECD6E69
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 17:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABF426173A;
-	Wed,  3 Jun 2026 17:45:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE03E845C3;
+	Wed,  3 Jun 2026 17:47:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3MaSx7_LrvE; Wed,  3 Jun 2026 17:45:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 67KG3pi6-fcP; Wed,  3 Jun 2026 17:47:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7393561732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1D6E845BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780508711;
-	bh=HPDPpaZ0zp5ja4eSini+WinPT1p93l58/5jxpEThTK4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=O+o4LIRUxAvWfiBL+lNSwlklrtcb3lRbVtZfvrlVPo/cqDOoRViqn/N1i832NADkm
-	 HRw9VgU6T2K8KYQ8i1ZPHpKPzUuEmzT7MMt9FTMSc0Xn3A7aOGUGRIVglFw9ik8r3g
-	 bMe7Lp6jDpqL/+8qhZaMfTTRy+yope4070v9YVH+nHpDRpniXJOPRFprQaEwAM6k83
-	 qTfge8GjF4q4QGlijkiGeSnZP8H5ZAFALM1Jo9jIj1sR96vtMRjZTVKkKz8B0IAtl9
-	 nBM2Ra0Zty3JTo1XcmwFIL1eXyyXBYs3eIsq/vEptgq+AupHmRX3VPdxMdg3U0Ltta
-	 A2KTqtxoPePDQ==
+	s=default; t=1780508826;
+	bh=wUEbbMX70wf3LjtUkWQKUWWXgHHCmRoD0zWqXEt0Bvk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HEPqsDuZ9Lq+AgJo8GmD5nFVCsva3qkgGjh6BidoB8bTccqBOvYwDFFbGvkcT0Yl2
+	 97yTqcgHILUh9ywmaw50uYiSIfo3XtJr5ClXlIy3bUKKCx4H5Fm3VZu/7VHBpLtjvj
+	 WGi7ctsjRA7upIOXOyCV/ZFrRP3aQVneljq04FdB8HDOvu1ckSjk5kXMymy4ur93bg
+	 Pq3xxaF4b5+QB4QbRSvWG+oerfom8XbxCwbaeCO/ce8/2TzTZXpTWoHBd+eojVvNcJ
+	 KAeqjE7t5y5TbLwbNSHNzKCeCvCt8JHf7wQGQT79NtA8D4YWSJAgqsE/hHXm1YvqZF
+	 Deis83GAmQOSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7393561732;
-	Wed,  3 Jun 2026 17:45:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EA495192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:45:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1D6E845BC;
+	Wed,  3 Jun 2026 17:47:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF16C192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC78B61732
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:45:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A060342495
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:47:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GKyuE0gkeUHH for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 17:45:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32b; helo=mail-ot1-x32b.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BCD7861731
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCD7861731
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
- [IPv6:2607:f8b0:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BCD7861731
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:45:08 +0000 (UTC)
-Received: by mail-ot1-x32b.google.com with SMTP id
- 46e09a7af769-7e615efd7d7so9759966a34.2
- for <buildroot@buildroot.org>; Wed, 03 Jun 2026 10:45:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780508707; x=1781113507;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dTDGUGpy7262IbcPvp+dnH7Frt5Zn+X77/jJ2nGZAC0=;
- b=al3UUtKgtF7S6hfPnQMvSrjwe+F5nkgEL7bqBBJdOdc0OUJwoISxJIbHqW42SR+jgf
- GETw+0IYRcX3IVyZvwFCaZyRQOFRfFd/HUWoQWqBLyEA+JWwDITQFvNdTTUT/0l0HIps
- b/P7Xwg4eU/IBy5xb+2ofIuvARKYJ44df1Whyc5+jqz+Dhy5UR4oju0PwNDfJ8x4dWBR
- JyJJFpMSsgGRTmzSKH3YW0n/spYXtw7qViVpMwGQbaB9sQwswpf2QhCNz786Rzno/TvW
- CBsb9ZZdYzRIUDDzh3wnDsz0hQwAiDFVsuYWj4QnErIPiopQs1C6cVY8+2G+xGOKAxd8
- aVVA==
-X-Gm-Message-State: AOJu0Yx+7KTb3v6AfimaXMn6aebay8+Ip0CmDqH231pTwkNXRKB7vPcr
- 1c7jDFoZfUzSb+3/dyb+sOfVpqlX9y7mpjjWoxU98sRnVqB2bGAK4Oti6lQ/pxbu
-X-Gm-Gg: Acq92OGtW6cdE+rbXrk1wZhtp7SxkVmiSsi+bbrIDkM06R7tpLaxuPjuss6HGzbFJe1
- 5ZFZLd47Q0dTECI/5HdzsG23r5J7+oVaZnZpaXegT0Lr3bJcbTIZF3jNZJTkis3LrUf+Au81JCr
- ridREPvA7pGuYdjItlOG3LN4Bq+NlK+SKiOo3XP+dwco/MhybNr+QFEg+EVX/eP2ADZzNhnLNs+
- pyxT5Za75cQ+OLsbqTF8lC03JOZIRvpbO8W0HG+A2ilUrFjt8f6+eI/yczifuMuJ3nLpnQcggQK
- xOFNTwHQ8IqN1XISULCTRfmLQYiY7tKXphTUVYJo0+3lslXpaKrtzFzqhtL6S9Lz/3/zM2y4RRX
- uIWVpAu7VQRqVffQoPO8obkRlEH+DgZZLeQQe/pIo+tl9WQkxrGI1uPEryjG9idwFLEIjwenkez
- 2Z5o2d6y8O4GT6KzzU/AWGo+kcHdUcIRsm9BXnYWmqQWYatSOiY1YzY1+Mipwnin8lvo5y3DUwy
- XvnNZoMMo/W4Kr6bSNlnQUaYSRKTaEuXriF/MUeQDAoToj59LWp5Tz62pfNpWPKRSSaEnajNae4
- Od+tEEehM9JT16KJWaVrKyQkaP+li/7OEQmW
-X-Received: by 2002:a05:6830:6001:b0:7d7:ed69:81b2 with SMTP id
- 46e09a7af769-7e6e949d9afmr2691567a34.5.1780508707525; 
- Wed, 03 Jun 2026 10:45:07 -0700 (PDT)
-Received: from james-x399.tailafd1a.ts.net (184-96-155-24.hlrn.qwest.net.
- [184.96.155.24]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7e6e745fea5sm2042414a34.5.2026.06.03.10.45.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jun 2026 10:45:07 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ALbl0mbJQExw for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 17:47:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 590A5424A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 590A5424A3
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 590A5424A3
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 17:47:02 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0d62.dip0.t-ipconnect.de [91.58.13.98])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 17F52A4C26EB;
+ Wed,  3 Jun 2026 19:47:00 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44914)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wUpgB-000000006BU-34XM;
+ Wed, 03 Jun 2026 17:46:59 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Jun 2026 11:45:02 -0600
-Message-ID: <20260603174502.727547-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Cc: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  3 Jun 2026 19:46:59 +0200
+Message-ID: <20260603174659.3517903-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780508707; x=1781113507; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=dTDGUGpy7262IbcPvp+dnH7Frt5Zn+X77/jJ2nGZAC0=;
- b=QYtlJc3XmlYZb7fTZFuUB+IZRI7yjpObLrAkNq2UMpXFkvExCJl+1h19YDEw2/g1cb
- hfPD51OyiHdRaaTXgZqI0UENDszLlTL+PA18LGAw3vE3hKCsm4RFYldGRuYziKvaGzI/
- J92L/L56gxDbi+YkvphWDxeN94mx+GIwOxq06vY77FBvdpmSQ+h6k+ED+G1kToDbnVhZ
- NpQ4Y3kDgu+Ws/dCSkEXTx2vMRUBGi4wOgIqMzyvJwjM88Yk+syt1nnIqkDRdqDTRDOl
- Z2WHn8DaEJnWJ4nA2Wg88dEgw98oLK1ZHl4CBsxd1RPLXeqVBuDM8S2wnunHHu37yPjm
- 7xOA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202605290044; t=1780508820;
+ bh=0ayURaPMWEjl+d1iPxVm+vSGKtpykhB+qnxF0CiMKhk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=e4Pgii5eRurUTUuvEV1Ct0ovmUcM5Kxt2hROJ7KG8pHZI96XnXoOi129MIiEZ5N1G
+ Go8mZXd4f/635dfQY7irrITR8GkyC70TTll3swICG0rj2AqUQ1dEsfUOIu0rSpWbuD
+ hrTFbjqn6c+eUdiO8wlU2eU19KbpxKjMameut5gsGxaLCTN8Wt1OinCAr5NXCtDXW5
+ cysT72tyBodZiKHoZ6W//FEN54bMCBbWC0RVxKgJ62y34VnX1T38tTpqlvUdMZXOl4
+ 8CpJgz6k3KjFyvTVZk/Axbfn8sGqAAvKh6U16JmzLOs9hC8VPBdRh/ImtLskQS8DEW
+ Dx2lS7AxCh09w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=QYtlJc3X
-Subject: [Buildroot] [PATCH 1/1] package/python-uv-build: new host package
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=e4Pgii5e
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,59 +93,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are currently no in-tree users of this build backend, however
-as uv is a commonly used python build system we should add support
-for this pep517 build backend for use with external packages.
+Release notes of this bugfix release:
+https://lists.freedesktop.org/archives/mesa-announce/2026-June/000853.html
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-uv-build/python-uv-build.hash |  5 +++++
- package/python-uv-build/python-uv-build.mk   | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/python-uv-build/python-uv-build.hash
- create mode 100644 package/python-uv-build/python-uv-build.mk
+Gitlab pipeline passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/0bf4938946641faea4a0c654fe7ce5527eb25911
 
-diff --git a/package/python-uv-build/python-uv-build.hash b/package/python-uv-build/python-uv-build.hash
-new file mode 100644
-index 0000000000..81837a034a
---- /dev/null
-+++ b/package/python-uv-build/python-uv-build.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated after vendoring
-+sha256  bfe502ecbfa11661f74ec32d74689b26d53a1641cdd69c6462ba6e3faee1398b  python-uv-build-0.11.18-cargo5.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
-+sha256  860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c  LICENSE-MIT
-diff --git a/package/python-uv-build/python-uv-build.mk b/package/python-uv-build/python-uv-build.mk
-new file mode 100644
-index 0000000000..45e9753fe5
---- /dev/null
-+++ b/package/python-uv-build/python-uv-build.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-uv-build
-+#
-+################################################################################
-+
-+PYTHON_UV_BUILD_VERSION = 0.11.18
-+PYTHON_UV_BUILD_SOURCE_PYPI = uv_build-$(PYTHON_UV_BUILD_VERSION).tar.gz
-+PYTHON_UV_BUILD_SITE = $(PYTHON_UV_BUILD_SITE_PYPI)/$(PYTHON_UV_BUILD_SOURCE_PYPI)?buildroot-path=filename
-+PYTHON_UV_BUILD_SITE_PYPI = https://files.pythonhosted.org/packages/39/30/f7c499da67b9e55e4551f4a34f4c57e65fa8601f5502fd8b811a5594dcad
-+PYTHON_UV_BUILD_SETUP_TYPE = maturin
-+PYTHON_UV_BUILD_LICENSE = MIT or Apache-2.0
-+PYTHON_UV_BUILD_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+
-+$(eval $(host-python-package))
+I also tried to start a runtime test but failed:
+https://gitlab.com/bkuhls/buildroot/-/pipelines/2574086081
+"No matching runner available"
+
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 83e0d6a5c7..3c6f2ee1f2 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.1.1
++MESA3D_HEADERS_VERSION = 26.1.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 93a9680a1b..deb7ea7f7b 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-May/000851.html
+-sha256  8bd36c031cc6d0edfec04617527609454ee3a09ad53bdf983b45fc2c1e129b2e  mesa-26.1.1.tar.xz
+-sha512  384a7db33d2f06e287337329f2f17503082ba6b1cd876a1884e940fdb6193ffae6d6b14344625256f3b3b39972ad697130a4d2ea25c40979f7aa76c2176f7988  mesa-26.1.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-June/000853.html
++sha256  bac2bca9121897a2b8162e79636b50ac998fca799c8e6cf914edd85962babdf0  mesa-26.1.2.tar.xz
++sha512  08e7b6357c27bf6e13f59e6fb0f84b73ec25c2d1a01cd09ffcc35ab263f278f10f3bd36fde419f60e78e781abcb315a432d0d5ceb3bab0bca26b8a2a39758e03  mesa-26.1.2.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b229b02378..905afece1b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.1.1
++MESA3D_VERSION = 26.1.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
