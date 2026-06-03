@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76DE0CD6E6B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ACD7CD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E5E361B55;
-	Wed,  3 Jun 2026 18:55:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1CB761B4C;
+	Wed,  3 Jun 2026 18:55:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U4FuCBi1bUXZ; Wed,  3 Jun 2026 18:55:23 +0000 (UTC)
+ id bHSdCvSf0k3Q; Wed,  3 Jun 2026 18:55:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED3EF61B57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82E0761B62
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780512923;
-	bh=H0Hz6qxnW5S4N7Q8ZMUK/mwvIPtUguZAa+yQod7qNVE=;
+	s=default; t=1780512924;
+	bh=dzHDk+MxY4PrUCPrJTZbGwzqS/2nEUcY3WXfdtRxh7Q=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=L2aNdvqooiYeEqUM7sI+w5EHC7IaEwzUkrGpf+ly0gx5XUXHREtT7fNJlsNWDwz9v
-	 AjFqlQO/RG4icM5pdCoMNpDBW4DWvLo1GJBvxrLwqbmEm+RFSIVHIlHffkPqe+VIma
-	 zxXJ4RKft94aIOAj2t8dq88xOXrwmZAdL1hlRcTqtidvjskUjq59+7gm4CsxQwfF40
-	 5vgTDHeEAD2/zC9BP2aZLeG80VG9vyBn4WojEsjJEil97pcAYQ74Ua0wlTfyMLOPRH
-	 yNDcaNSspRSmmt6VaRSWN/RKLIAlJNnRAwgRXrvc0HpZIHVmLoRdQRcQzesHX2WPIz
-	 1FU3F8b7zVmow==
+	b=qyC4fRMfMdhFXdRXkyqwrGGCCjsZj84lZiG4SK5ZKgs9D9GMIwMgduYOVrAupaUcS
+	 ERLFCZVX4RzpwSqIwAx3qK0he1iJ96dI/R5OGUCEmSfctb2BbgRm/rxRGGZQHNsrKp
+	 xw4z/vu0UzsIr4Pu3MubB+t4uIM39xLCZ1V6GuA2K5bq83o8H1g4wj03HeB+W4KCPj
+	 Fh6eJLzcaF1MQiR8ceLbH7LKcX/mo03Ri/afD2UmAf/s+OX3yc5ZCs1tRY3xobblnK
+	 hfPVzsHs1WoeHHXXcszDq5Zb62MXoLA+zZmvE9ck+yawKLbLN7Q2opwnVuEsrBiWkI
+	 9HYb62n6ak74Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED3EF61B57;
-	Wed,  3 Jun 2026 18:55:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82E0761B62;
+	Wed,  3 Jun 2026 18:55:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B8C12F5
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:55:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 674F9192
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 906B781237
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:55:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0967C81228
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:55:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NZoggtI_C_8O for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 18:55:16 +0000 (UTC)
+ id j94ajQRQ4WoQ for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 18:55:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED3A843D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC50081B99
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EED3A843D1
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC50081B99
  for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:55:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E35C887992; Wed,  3 Jun 2026 18:55:00 +0000 (UTC)
+ id BDF4B87993; Wed,  3 Jun 2026 18:55:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 20:53:24 +0200
+Date: Wed, 3 Jun 2026 20:51:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 69060189f37c4a1a286c8e6120fad2ea9383d9a7
-X-Git-Newrev: e35ac186f1494f55fa83fdf1f3729f0d2a44edf0
+X-Git-Oldrev: f660c7bae3e0004958acb3a2518fb409c6315a75
+X-Git-Newrev: 71009e5890400fecd4eda9ee94552f59c9e1bdfa
 X-Patchwork-Hint: ignore
-Message-Id: <20260603185500.E35C887992@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-vpl-gpu-rt: bump
- version to 26.2.1
+Message-Id: <20260603185500.BDF4B87993@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/alsa-lib: bump version
+ to 1.2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,40 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e35ac186f1494f55fa83fdf1f3729f0d2a44edf0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/71009e5890400fecd4eda9ee94552f59c9e1bdfa
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/next
 
-https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.2.1
+https://www.alsa-project.org/wiki/Changes_v1.2.15.3_v1.2.16#alsa-lib
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index f7a2bcbc8c..d1e4c58fda 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  597e72a77e9eba8d6efc79a083a775ac0cc47801b2bb7572749ec84acebb1917  intel-vpl-gpu-rt-26.2.0.tar.gz
-+sha256  b9a84d5d2255cbea8586019a3bd03165f0269e06dba03e9c6f6cdf363b6b2fab  intel-vpl-gpu-rt-26.2.1.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 4dd563d1bc..e812ca31cf 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 1cefb08d5e..9544f1cafa 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  7b079d614d582cade7ab8db2364e65271d0877a37df8757ac4ac0c8970be861e  alsa-lib-1.2.15.3.tar.bz2
++sha256  122b1e3166d55fe19bcde656535d7a36f2ab10e66c72c6ad2f43f20ffded0a96  alsa-lib-1.2.16.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 50e54712d0..2530dae9db 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 26.2.0
-+INTEL_VPL_GPU_RT_VERSION = 26.2.1
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-ALSA_LIB_VERSION = 1.2.15.3
++ALSA_LIB_VERSION = 1.2.16
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
