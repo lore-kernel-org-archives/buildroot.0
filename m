@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 283E6CD8C92
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DDF2CD8CA4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6532A854E5;
-	Tue,  9 Jun 2026 13:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 736D085FAA;
+	Tue,  9 Jun 2026 13:06:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wYUW6FAPU30u; Tue,  9 Jun 2026 13:06:09 +0000 (UTC)
+ id Eus-Zl9nXe-s; Tue,  9 Jun 2026 13:06:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 401D285EC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B539A855B0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010365;
-	bh=cNb18C8YoHdLYvuUZhiSn4c06VP2Rkbim6cT9G0YYeo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DTFPt72Q4cFMZKxo0z/+niIKtr+QEse006/p2Z688OilbuZdQSKMIi2aldUDoXCaG
-	 o3KAqwFCMglALhfwnM1qR6qSldp+r46xTu0qcrLH6T6Sduim6uzvWAiIm0SBElsW4X
-	 s4dYEy3Q3w4Qw03G8NeDP1RFEEBuUACE4uAmyw3LvCCG7jtkTwJMoyOqL1qGYk+Wuk
-	 g91TYGL2EVBFNqTi3d9Yn3kTdLMrsR6XXMboiAY4mXdg8QDWG/mUCj30RlFXwLY49U
-	 OZ1Ns+pcKMtLHg6vlf5dTARRMLYNd/Zk2WZK2FP08WQbvosUo6khhuXMMQFg2xq7w6
-	 z+NZqjDjAArIQ==
+	s=default; t=1781010375;
+	bh=k6O+ohdb7y45iZyPtkZDhvCGGShmbSgcvc/r2+SkCOU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ryACj8g5ftw99q+lw1uW40KmhyrnM4Mwu4ut24GepIuulDKIYB/PU854USHwDZb4v
+	 eGwEfCtsmkoNk+bS98KtWYi+hWR7NIeSDWg1uT9GOlH4xXO7rk/E+XVJem+baVxpUB
+	 MqfhmiM9dY897Q+O2N/l5QH1EPyRmamA5cq6XDqr1h3MIGiLEAcRCZoNprADKFULk3
+	 A7YxT2kJOcyG1+Qg6EJMheimyJDFZ/BeYPUzrOFdWw3+Cid4BK7wx4yQeKwiGNm4M8
+	 d6z0S6puLWnEA9aDP6ElII9BJdchJ9uDTLlqRdoVMRW2KHetLY3PtcbzCv5+blnF2S
+	 dv3xC+oI+1atQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 401D285EC2;
-	Tue,  9 Jun 2026 13:06:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B539A855B0;
+	Tue,  9 Jun 2026 13:06:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D44E82EE
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C01C190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43E54426D6
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D109426DF
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hEOjOXySuhgn for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
+ id Fn39nuJ43l-Z for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2952C426F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8DD9426F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2952C426F5
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8DD9426F6
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5926687E79; Tue,  9 Jun 2026 13:01:24 +0000 (UTC)
+ id 1094587E8E; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 30 May 2026 22:48:26 +0200
+Date: Wed, 3 Jun 2026 20:49:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff4243147d54f37521b0af252695459f36d4350d
-X-Git-Newrev: 1607ed75dbe6981bf2d270b30ed68136463c1b3e
+X-Git-Oldrev: 5242ac9a144ef34b52241fb82903038c6f2b2721
+X-Git-Newrev: 7255e1ef0cc29a9449a957231a06ab83161d7b94
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130124.5926687E79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stellarium: add extra downloads
+Message-Id: <20260609130126.1094587E8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,100 +69,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1607ed75dbe6981bf2d270b30ed68136463c1b3e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7255e1ef0cc29a9449a957231a06ab83161d7b94
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Building Stellarium includes the download of external tarballs during
-configure.
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.4
 
-This fails with host-cmake during configure stage:
-
-CMake Error at md4c-subbuild/md4c-populate-prefix/src/md4c-populate-stamp/download-md4c-populate.cmake:163 (message):
-  Each download failed!
-
-    error: downloading 'https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz' failed
-          status_code: 1
-          status_string: "Unsupported protocol"
-          log:
-          --- LOG BEGIN ---
-          Protocol "https" not supported
-
-  closing connection #-1
-
-due to buildroot commit f87138339b17bc2b1d84c59ea176abb941413550 which
-disabled SSL support for host-cmake.
-
-This patch uses _EXTRA_DOWNLOADS to provide these tarball to allow
-offline builds.
-
-No autobuilder error was recorded, the build error can be reproduced
-with this defconfig:
-
-BR2_x86_64=y
-BR2_x86_corei7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
-BR2_FORCE_HOST_BUILD=y
-BR2_PACKAGE_STELLARIUM=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_XORG7=y
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stellarium/stellarium.hash |  4 ++++
- package/stellarium/stellarium.mk   | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index 67e053eff7..4298c3dcde 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,4 +1,8 @@
- # From https://github.com/Stellarium/stellarium/releases
- sha256  e376e0dc28eae0f7c4b3686fed9c2129c69a87a371b33e24bd79559a5142d613  stellarium-25.4.tar.xz
-+# From https://github.com/Stellarium/stellarium/blob/v25.4/CMakeLists.txt#L849
-+sha256  55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21  release-0.5.2.tar.gz
-+# From https://github.com/Stellarium/stellarium/blob/v25.4/plugins/LensDistortionEstimator/src/CMakeLists.txt
-+sha256  6e899e297485e457ec1bf84844de29921aeef674f9d5caf60277df45dca6ff76  v2.9.0.tar.gz
- # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 660d518860..8d915b094f 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
-@@ -9,6 +9,20 @@ STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
-+
-+STELLARIUM_EXTRA_DOWNLOADS = \
-+	https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz \
-+	https://github.com/stevengj/nlopt/archive/refs/tags/v2.9.0.tar.gz
-+
-+# Prevent stellarium from downloading stuff during its configure step
-+define STELLARIUM_COPY_EXTRA_DOWNLOADS
-+	mkdir -p $(@D)/_deps/md4c-subbuild/md4c-populate-prefix/src/
-+	cp $(STELLARIUM_DL_DIR)/release-0.5.2.tar.gz $(@D)/_deps/md4c-subbuild/md4c-populate-prefix/src/
-+	mkdir -p $(@D)/_deps/nlopt-subbuild/nlopt-populate-prefix/src/
-+	cp $(STELLARIUM_DL_DIR)/v2.9.0.tar.gz $(@D)/_deps/nlopt-subbuild/nlopt-populate-prefix/src/
-+endef
-+STELLARIUM_POST_EXTRACT_HOOKS += STELLARIUM_COPY_EXTRA_DOWNLOADS
-+
- STELLARIUM_DEPENDENCIES = \
- 	qt5base \
- 	qt5charts \
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 11eab3001c..f30f0c528c 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d532172d7ab24d2a25944e2434212d63ee85f3650e97b5f7579e7f201a78ad64  libgit2-1.9.3.tar.gz
++sha256  824b73bd13647800fe4b566a1008ae77fea0e3e3424edab632fcfd8c0b14ba8b  libgit2-1.9.4.tar.gz
+ sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index b2607a178a..844f4d705f 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.9.3
++LIBGIT2_VERSION = 1.9.4
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
