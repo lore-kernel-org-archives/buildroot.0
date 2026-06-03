@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 521CBCD6E6B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56B74CD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 18:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A09442804;
-	Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S51cel-zJJug; Wed,  3 Jun 2026 18:49:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46C2642808
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780512595;
-	bh=+mVOoHK7N/8h71IRcwWnhbMwDLqLEP22gYG4OEeYVQM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=s6W9Rr69kVE/r42H/QJSINzhLmkR/kKBBM0TA55rdg64a3ZCuNoqh8dXF1o/MUgW5
-	 GSxLsUGwjkJNzngpi3YOinMg1YJ3Jg5RBWyAKw7B7nCGoj5L0/fa36Xebptg65ekM6
-	 3YlIv/Y2iRjTrTTlIGqWcIV/swUU5WAJ3+hdR5zpOtbfYQRcgDoK9x9oDgm/HJkMyq
-	 XocOQ+M2qazNWzORIaIORpP+kr1QVNmy/UlToVzpKsc7tDnQnNRB8HaJDEp1wsVGWg
-	 RmE+oJWRgLSjBLNPVydSLiumqXrrVCVzj/Z74JHkdpq75BCizPO308mXx1uGembASC
-	 s2pMbYHfKoidg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46C2642808;
-	Wed,  3 Jun 2026 18:49:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 51C0E192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4056F61AF0
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AB1461B27;
+	Wed,  3 Jun 2026 18:49:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eYTD3U4gWbLn for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
+ id iaZzItztFEdJ; Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E52461B11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780512596;
+	bh=mGpA6tUUWQQDO/p/c8HTVDt/+WIP/cwFgCpztB2RQ+I=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=OvNyu5b+iNjcJoNAl2j+S+YD4Vi2VXx+ODwuS8bPGdNkx1trCL7U5VAdegomL7Yd0
+	 N/ihCvebTWn3f6ihwe3PVYl2ez//AsDKOv9EwSEDXK0XU8brxJWbS/AP7HKg3/+MbD
+	 y7gIqt4bnG5b/1lsKZeiXNmgEr5MBOX+Ai7UK/OYrACqlTGv1If13NlqZrqQu+6U8L
+	 lXLyxzzkmKLlvl6s+qYXmnHVVaLnhpUSz22hnsbbllNvJTX3T1Z6cUTSIcFUrNY1BE
+	 /mHiPLQLpBDyqg82p16YsaACU2r189jiui19Q9iix+8QSmG/KQ3XFuaPF692ngw/JN
+	 9xSvGkIP/Kdug==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E52461B11;
+	Wed,  3 Jun 2026 18:49:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BEE362F5
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B08F8427E0
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3nwGwcpHSQUv for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F88B61798
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3AC7427E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F88B61798
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3AC7427E1
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 18:49:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3470387991; Wed,  3 Jun 2026 18:49:34 +0000 (UTC)
+ id C98B887992; Wed,  3 Jun 2026 18:49:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 20:45:43 +0200
+Date: Wed, 3 Jun 2026 20:47:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab03ba7396017b8911944c3089c06c9b68822fbe
-X-Git-Newrev: 0c9ccb93275338b5a90cc2278e66790370e2f241
+X-Git-Oldrev: f3687ebafa0a3d97b094d5b972a9323e00345da4
+X-Git-Newrev: 41e76b356ceb3dbf8aeec5597e70d7a64605af47
 X-Patchwork-Hint: ignore
-Message-Id: <20260603184934.3470387991@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good: add
- CPE
+Message-Id: <20260603184935.C98B887992@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sane-backends: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,36 +75,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c9ccb93275338b5a90cc2278e66790370e2f241
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/41e76b356ceb3dbf8aeec5597e70d7a64605af47
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The CPE 'freedesktop:gst-plugins-good' is correct for this package [1].
+The CPE 'sane-backends_project:sane-backends' only has a single CVE
+assigned in 2017 while 'sane-project:sane_backends' has 9 since 2017
+[1].
 
-Also used in conjunction of 'gstreamer:gstreamer', see the package
-vulnerability history [2].
+See the package CVE history at [2].
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2026-46470
-[2] https://security-tracker.debian.org/tracker/source-package/gst-plugins-good1.0
+[1] https://nvd.nist.gov/vuln/detail/CVE-2023-46047
+[2] https://security-tracker.debian.org/tracker/source-package/sane-backends
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sane-backends/sane-backends.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index cd1b9f45b9..1b48d83c8b 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -9,6 +9,8 @@ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
- GST1_PLUGINS_GOOD_LICENSE = LGPL-2.1+
-+GST1_PLUGINS_GOOD_CPE_ID_VENDOR = freedesktop
-+GST1_PLUGINS_GOOD_CPE_ID_PRODUCT = gst-plugins-good
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index fe89e7747d..de1375550c 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -10,7 +10,8 @@ SANE_BACKENDS_SITE = \
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
+ SANE_BACKENDS_LICENSE = GPL-2.0+
+ SANE_BACKENDS_LICENSE_FILES = COPYING
+-SANE_BACKENDS_CPE_ID_VALID = YES
++SANE_BACKENDS_CPE_ID_VENDOR = sane-project
++SANE_BACKENDS_CPE_ID_PRODUCT = sane_backends
+ SANE_BACKENDS_INSTALL_STAGING = YES
  
- GST1_PLUGINS_GOOD_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
- GST1_PLUGINS_GOOD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ SANE_BACKENDS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
