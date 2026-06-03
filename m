@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43378CD6E55
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E49ECCD6E69
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F39B3841DA;
-	Wed,  3 Jun 2026 08:08:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9gCKXZXTmhmb; Wed,  3 Jun 2026 08:08:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CBEA841DF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780474094;
-	bh=V5+IdDUEXFgNrQBUTx8eJUJNWBtp3LA7Oy6rrWDdZro=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=qvqzIaarBhmM0ZcdeZS+mY6XZHmyRje2jt0kk9J3f3kpm9m1XwmK46fGmWfa/8AOK
-	 9uD+n3nlgOAArWtpGFUzPtukUYGyCmpOO8qcisqWwZfXoM3IjE6PBYkCN8MkAzOR3s
-	 vJJv8fhPYEWXplr5GWBOPcmSmHHs+u/YMGfDQQxUqh1PAtMpC3pb5ukTZ1nzFHFAyQ
-	 Ph7Srzgohlj/dzJWg88/gA1Hf+/GEIfn3989/ggqAx9SmKjTGsq8P6KUFvygr57Esc
-	 KIHOKP0OJ6KpndC517uY0VOe74IFcjrfVjXuevaMpFxacXkwAMIzDJIgbodvq39MJf
-	 vaqOdGRTHxClA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CBEA841DF;
-	Wed,  3 Jun 2026 08:08:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 93A53353
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79FC8613F8
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 981D7614DA;
+	Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HJGIImzd7dda for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
+ id ohCyJUnIAN9d; Wed,  3 Jun 2026 08:08:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BEAF613F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780474095;
+	bh=pJkYFtGF1SWXgwZ7acYK0GH87wEcU71M+6oPxrE5TNc=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=nEt3ulxuO6aWNRZ4J6MD4ZW20V/yIn3Mpp76AamJH/pp6i2368kk6pPNhTg/Nsz0x
+	 9IHWanhylgPrj0Him7YD0uREOJb4780r2J2YanYEtPM1hOuXTlABDfGR+/HmTqEpux
+	 oc55aQxic+wHD9ZrYsg9b4cAnOiE1q+4owdNliYxwQPhoHlInNEhxN9jxM0dwyXSJ0
+	 HC8nt3TR3+8sb4YGmNXQOgkxqFPeEdkABJ/bjV5ID+nMr1kCgUEWZVxk0Z8MbF0C69
+	 3oRWV3tnNQslXThukuGnc/mdECGGAmp+s2NXVhIL4K55AN0Ci4sGCIYtxcyWYGyApt
+	 KhxnoeIU23b3w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BEAF613F5;
+	Wed,  3 Jun 2026 08:08:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFB4D353
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1AEE41E39
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ktuMhNoEVxfd for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5AFF60D80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04C0841118
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5AFF60D80
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04C0841118
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2C4F87937; Wed,  3 Jun 2026 08:07:57 +0000 (UTC)
+ id 300C9878BF; Wed,  3 Jun 2026 08:07:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 09:44:26 +0200
+Date: Wed, 3 Jun 2026 10:05:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f93dbfca131d412c42ec3b1002d80861b9cfcb19
-X-Git-Newrev: 20489205ea57a00f013c49f148c93c588b0713e1
+X-Git-Oldrev: 7f0749ce735646f29cddf1140b3b5ec137a64235
+X-Git-Newrev: 283a7a15b287bac53533eea140f9784648942df0
 X-Patchwork-Hint: ignore
-Message-Id: <20260603080757.F2C4F87937@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
- security bump version to 21.1.23
+Message-Id: <20260603080758.300C9878BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/privoxy: security bump version to
+ 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,48 +76,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20489205ea57a00f013c49f148c93c588b0713e1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/283a7a15b287bac53533eea140f9784648942df0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Advisory (no CVEs yet):
-https://lists.x.org/archives/xorg-announce/2026-June/003702.html
+Fixes the following security issues:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2026-June/003703.html
+- Parse the chunk-size with a dedicated function and reject "unreasonably"
+  large values to prevent silent truncation by sscanf(), integer overflows
+  and misinterpretation of the content later on. Heap buffer overflows on
+  platforms with 32-bit pointers were alleged as well.
+  Commit 5b3bb22b77. OVE-20260515-0002. Reported by @TristanInSec.
+
+- ssl_send_certificate_error(): Store the generated message on the heap
+  instead of the stack to prevent an alleged segmentation fault if there
+  are enough certificates in the chain to exceed the stack size.
+  While at it, replace another variable-length array that was probably
+  unproblematic with a heap-based buffer as well.
+  Commit 4963aa4f08. OVE-20260515-0001. Reported by @TristanInSec.
+
+https://www.privoxy.org/gitweb/?p=privoxy.git;a=blob;f=ChangeLog;h=d62aa6bf0b2cb26100e4ba8e528638259502711d;hb=0c5225b6844dd1a838b80d09d715a6c4ccbda2c6
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Peter: add vulnerability info]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ package/privoxy/privoxy.hash | 6 +++---
+ package/privoxy/privoxy.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index b7adf1559d..5f10908c8a 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index cfb6f5a5c8..2678a4ec25 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
 @@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2026-April/003678.html
--sha256  1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3  xorg-server-21.1.22.tar.xz
--sha512  6cb37ff971e10eb4a7dfcb3e8071afd769c7632d50e4ad8bc948b810dc4847e152b8a05ec135f55e0695b35908abd07e7728ef85dd3135456fd532e919f440f4  xorg-server-21.1.22.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2026-June/003703.html
-+sha256  e39832e5617dadaf072fdf9f0e19e5d2e1c2a13607ac280bac1aba9f8fe14634  xorg-server-21.1.23.tar.xz
-+sha512  7eae854af1b5db1f5d1e59cb9d26b86d98fa176d4f80f70935c707f17982d0446a0a8ad8d29c922edbd208435f995b027604fbb72e62a7bf3ba79f2f570aa0bb  xorg-server-21.1.23.tar.xz
- # Locally calculated
- sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index d1e7267c27..cecbb821ae 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+-# From https://sourceforge.net/projects/ijbswa/files/Sources/4.1.0%20%28stable%29/
+-sha1  6afc12dc38781a37670c7e4bb69700900123084f  privoxy-4.1.0-stable-src.tar.gz
++# From https://sourceforge.net/projects/ijbswa/files/Sources/4.2.0%20%28stable%29/
++sha1  deb927b172a3b473bcf246ea848ba6ed931274bf  privoxy-4.2.0-stable-src.tar.gz
+ # Locally computed
+-sha256  23e4686e5848c74cb680c09c2811f0357739ecfe641f9c4072ee42399092c97b  privoxy-4.1.0-stable-src.tar.gz
++sha256  6f91267f81f626c416994db89ab62f4d09246eebf4754b81186e13a18ee9028f  privoxy-4.2.0-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index bfd4996292..9bafc1385d 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.22
-+XSERVER_XORG_SERVER_VERSION = 21.1.23
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+-PRIVOXY_VERSION = 4.1.0
++PRIVOXY_VERSION = 4.2.0
+ PRIVOXY_SITE = https://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
