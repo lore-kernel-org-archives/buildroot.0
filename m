@@ -1,63 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 629C9CD6E69
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0764CD6E55
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jun 2026 08:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF74A615FC;
-	Wed,  3 Jun 2026 08:08:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A0BD84241;
+	Wed,  3 Jun 2026 08:08:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EZWQPKYENLcT; Wed,  3 Jun 2026 08:08:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8JCCkVA2AUMb; Wed,  3 Jun 2026 08:08:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8786F61441
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B44284234
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780474101;
-	bh=U4eVyO///wBKa+rpWYx8hvbdLiVtWJGcYyPnlrZtyZE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=CLCF80QslHBXOTCT/Pg9Ndf7KUOOx29dh0XMPyeyuure7tLCDZHgxDbRCT6/VI5ex
-	 peDT8jnRUnEptJGY16SAY0/aPUw/jdVrawZxo0q5y733CVmS7d5FRDBFjyHCcptyub
-	 HJK5s1PtpkXI6gM0gAQnqTRl/rwpEMIA3WpTNpd7NV9VoL0j9a5FjILV+Gy/YZdD3V
-	 GnRTjz6Euq7bQFu6tVGN7II7qMnpIvnC3tByx9VVn6UsK/X8kz/sEIvYYNlyqRDGbL
-	 c+sWmmOIfcNE3DY4+VUWjVSbU3d466y6J7db4CJgN3rxO0yHc9jfBEG/Lx9meC4SGx
-	 2Sn62Vr/P6+7A==
+	s=default; t=1780474102;
+	bh=W6BgAtV8JmG/1EaCm9Ipj2T1Co3Pvz6B+h+j//yXVjY=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=ENWrQAH5iVwlAvyGYFToLEzBb5VE3LFqsvtW3a5Ewl0HcuSSGQUI2JYAyyUobEnOC
+	 R9IC9n12aJnUW3JgjinH96caCyUrH14ySSJXwBwx6bncSLbrnZsE/nnhou46AlF99s
+	 ZaqzznlNfKdhzCB297gyew5zhu9eJ3QwXJbZYbXLhs5hFN9oV3f244IPeN0xTeqqnN
+	 WxQWbsBR0FdC+1RkQbCzR012s9Al2Z+TZwbtkF6ZgnKkInHmQ2MiiFusi5HZwDE6hd
+	 LTrGdkoW0OuofJadcATRZqvjBOS7G549F31Crvy7xROvNwNpeny2bof4efN/FxMN+X
+	 R9fw1qN11zMyQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8786F61441;
-	Wed,  3 Jun 2026 08:08:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 037D7192
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B44284234;
+	Wed,  3 Jun 2026 08:08:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CC94353
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B51E8613E5
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A2F140820
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QPv7It9CTET9 for <buildroot@buildroot.org>;
- Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1UnNJ-K72YFw for <buildroot@buildroot.org>;
+ Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA1AA613F5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA1AA613F5
- for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15DF187939; Wed,  3 Jun 2026 08:07:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2FBB3402DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FBB3402DF
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FBB3402DF
+ for <buildroot@buildroot.org>; Wed,  3 Jun 2026 08:08:16 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1029997607; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 03 Jun 2026 08:08:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wUge4-0000000CIFO-3d4G;
+ Wed, 03 Jun 2026 10:08:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Jun 2026 09:58:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 061d6b121b116fff494901a964c813b68dc6d0de
-X-Git-Newrev: 4e73a15a7b64c409f91e1660d283965c2a3a3fd2
-X-Patchwork-Hint: ignore
-Message-Id: <20260603080758.15DF187939@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unzip: patch CVE-2021-4217
+Cc: Christian Stewart <christian@aperture.us>
+In-Reply-To: <20260602210756.2837692-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 2 Jun 2026 23:07:55 +0200")
+References: <20260602210756.2837692-1-peter@korsgaard.com>
+Date: Wed, 03 Jun 2026 10:08:12 +0200
+Message-ID: <87ik80oxlf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=qpZOxS5iBmJmN5psWtZ1+dUry/q4SpMSwYIDLaQ2E+hf2HNMtsgkRXq4LwRrbzLQylGQHLdiuOfT5tf18sw43SY5i1j8uoWqMDFU21+bVoBs22HjaxvEfmf11C6O5ZTCQYENZavnrYMWmmKV/oQxm27Bo/YS6Mf7t9P+MKrC0rtyhLnrd/IayE/BYp0QIj88xfnQvvpAvbnUmgIvJ/ZVSJgBX/yZJyr5fg3748LImZ4qOja7v8pUbSFaetfXv6nnbRqXcFkhiU6Vam57pjDSIGSAA/Wr18hcDvWTEYmJa/704ZDky+gdyHyUHfmjzjlVtauJkszddftSzC0mY+0cbA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=XNLYGSCfUo1JMsE6r0u+aI5CIVfwKfR6BGTJOgATTC0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=qpZOxS5i
+Subject: Re: [Buildroot] [PATCH] package/runc: security bump to version 1.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,113 +92,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e73a15a7b64c409f91e1660d283965c2a3a3fd2
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-The patch is provided thanks to the Ubuntu community.
+ > Fixes the following security issues (1.3.3):
+ > - CVE-2025-31133: container escape via "masked path" abuse due to mount race
+ >   conditions
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-9493-h29p-rfm2
 
-- CVE-2021-4217:
-    A flaw was found in unzip. The vulnerability occurs due to improper
-    handling of Unicode strings, which can lead to a null pointer
-    dereference. This flaw allows an attacker to input a specially crafted
-    zip file, leading to a crash or code execution.
+ > - CVE-2025-52565: container escape with malicious config due to /dev/console
+ >   mount and related races
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-qw9x-cqr3-wc7r
 
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2021-4217
- - https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
- - https://bugs.launchpad.net/ubuntu/+source/unzip/+bug/1957077
+ > - CVE-2025-52881: container escape and denial of service due to arbitrary
+ >   write gadgets and procfs write redirects
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-cgrx-mc8f-2prm
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: correct _IGNORE_CVES entry]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...dereference-and-use-of-uninitialized-data.patch | 57 ++++++++++++++++++++++
- package/unzip/unzip.mk                             |  3 ++
- 2 files changed, 60 insertions(+)
+ > In addition, 1.3.4 and 1.3.5 fixes a number of regressions.  For details,
+ > see the release notes:
 
-diff --git a/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-new file mode 100644
-index 0000000000..4f9c4c1858
---- /dev/null
-+++ b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-@@ -0,0 +1,57 @@
-+From 731d698377dbd1f5b1b90efeb8094602ed59fc40 Mon Sep 17 00:00:00 2001
-+From: Nils Bars <nils.bars@t-online.de>
-+Date: Mon, 17 Jan 2022 16:53:16 +0000
-+Subject: [PATCH] Fix null pointer dereference and use of uninitialized data
-+
-+This fixes a bug that causes use of uninitialized heap data if `readbuf` fails
-+to read as many bytes as indicated by the extra field length attribute.
-+Furthermore, this fixes a null pointer dereference if an archive contains an
-+`EF_UNIPATH` extra field but does not have a filename set.
-+
-+Upstream: https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-+CVE: CVE-2021-4217
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ fileio.c  | 5 ++++-
-+ process.c | 6 +++++-
-+ 2 files changed, 9 insertions(+), 2 deletions(-) 
-+ 
-+diff --git a/fileio.c b/fileio.c
-+index 14460f3..1dc319e 100644
-+--- a/fileio.c
-++++ b/fileio.c
-+@@ -2310,8 +2310,11 @@ int do_string(__G__ length, option)   /* return PK-type error code */
-+             seek_zipf(__G__ G.cur_zipfile_bufstart - G.extra_bytes +
-+                       (G.inptr-G.inbuf) + length);
-+         } else {
-+-            if (readbuf(__G__ (char *)G.extra_field, length) == 0)
-++            unsigned bytes_read = readbuf(__G__ (char *)G.extra_field, length);
-++            if (bytes_read == 0)
-+                 return PK_EOF;
-++            if (bytes_read != length)
-++                return PK_ERR;
-+             /* Looks like here is where extra fields are read */
-+             if (getZip64Data(__G__ G.extra_field, length) != PK_COOL)
-+             {
-+diff --git a/process.c b/process.c
-+index 5f8f6c6..de843a5 100644
-+--- a/process.c
-++++ b/process.c
-+@@ -2067,10 +2067,14 @@ int getUnicodeData(__G__ ef_buf, ef_len)
-+           G.unipath_checksum = makelong(offset + ef_buf);
-+           offset += 4;
-+ 
-++          if (!G.filename_full) {
-++            /* Check if we have a unicode extra section but no filename set */
-++            return PK_ERR;
-++          }
-++
-+           /*
-+            * Compute 32-bit crc
-+            */
-+-
-+           chksum = crc32(chksum, (uch *)(G.filename_full),
-+                          strlen(G.filename_full));
-+ 
-+-- 
-+2.25.1
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index 5436c7a46c..c362e6561f 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -51,6 +51,9 @@ UNZIP_IGNORE_CVES += CVE-2019-13232
- # 0028-cve-2022-0529-and-cve-2022-0530.patch
- UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
- 
-+# 0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-+UNZIP_IGNORE_CVES += CVE-2021-4217
-+
- # unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
- # necessary, redefining it on the command line causes some warnings.
- UNZIP_TARGET_CFLAGS = \
+ > https://github.com/opencontainers/runc/releases/tag/v1.3.1
+ > https://github.com/opencontainers/runc/releases/tag/v1.3.2
+ > https://github.com/opencontainers/runc/releases/tag/v1.3.3
+ > https://github.com/opencontainers/runc/releases/tag/v1.3.4
+ > https://github.com/opencontainers/runc/releases/tag/v1.3.5
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
