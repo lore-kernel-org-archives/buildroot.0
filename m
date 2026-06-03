@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4285CCD8CA4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A3F3CD8C92
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 13:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 260E085E7C;
-	Tue,  9 Jun 2026 13:05:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5480385E9D;
+	Tue,  9 Jun 2026 13:05:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qo2XB-HDaxoU; Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
+ id xv31bweKJUq4; Tue,  9 Jun 2026 13:05:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6E285E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A19785E8D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781010350;
-	bh=+4jCUOQDNXHH7HyllshTEnd490t/j6fRsZLh8MSz4Ks=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=kxT59o01JZmJFMSgTjZBvdeWHlaUvxN/eN1lRZ7ot/MwLHu5E6fQ08NbsAhUidJUK
-	 CCMGl2i+81RV9soitxlazUg9arEORkBBMi4bkdTmLzF461e82MGUs/djVP8IAwiaF/
-	 BqJnf0lKI/zeLJdWruNymnH2N9Q8pifhHyzAZEEEA00j4gBEs8Qy+RvUw0oCeGYM4/
-	 gRQmPsKbzm/M/u2Pvpjcr0r6VMcBKpncBlrM2NH0Xo8VRy266F3dWpXgC1xxV66ffC
-	 mTJLSllczGCR4zk0ZXzdtyYybXHsZg+WHAYe1RUjxnBcmitVRnAYUKv3ZryRL10XRI
-	 pB+KqNr/s5sEA==
+	s=default; t=1781010355;
+	bh=dMg6ACAqQa3SuIqSYPg1FZ2lmyaSIGRX1gcYItNJm4c=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ayCZ69jDeJG4iVUg6eWeLEnLXDRaQn30IekxQzCpKgYkv40O0ZPkRmB9fO2pn/A9T
+	 39R1jPIC4au8At1YI4Y/+UO3+zR12Yds2dzhM6uTnBZw3NcIPak3aLmq2OyGfj/FEe
+	 RsdumyhZv/8G9ykZ2jR6EL5QnHti0HN0t9cab5NZ0930sGPRC7yDbKz4r3WZArTiRr
+	 5aGczKhbhc5PmUAvKrKYqjvBUzF6qsI9YlA+ZiR1eAcrmKzCnoH/FA4X8AEgWh5OC9
+	 0KBZDgUD36olhjpL4qbBqeRep9q5wbbuhQZe+n71heP48vGyN94DftUqTNzXhf7V5s
+	 lXlBWN7xa9kIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F6E285E73;
-	Tue,  9 Jun 2026 13:05:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 99668190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A19785E8D;
+	Tue,  9 Jun 2026 13:05:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F7E8190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83C96423C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id B978D45F21
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aTakjrU4bKQ6 for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K2Hixex5jaGt for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 13:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0264E42726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8BCD4645A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0264E42726
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8BCD4645A
  for <buildroot@buildroot.org>; Tue,  9 Jun 2026 13:01:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EA5B87E68; Tue,  9 Jun 2026 13:01:25 +0000 (UTC)
+ id 1FD5287E87; Tue,  9 Jun 2026 13:01:26 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 May 2026 08:12:39 +0200
+Date: Wed, 3 Jun 2026 20:50:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a61f01a75a6dc88cfcc5cd259e83c19aca061c24
-X-Git-Newrev: 7a60724dc4490c7845ee446fd424c2be6ba11599
+X-Git-Oldrev: 7255e1ef0cc29a9449a957231a06ab83161d7b94
+X-Git-Newrev: f660c7bae3e0004958acb3a2518fb409c6315a75
 X-Patchwork-Hint: ignore
-Message-Id: <20260609130125.3EA5B87E68@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pine64_pinecube: switch to
- external Bootlin toolchain
+Message-Id: <20260609130126.1FD5287E87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/stress-ng: bump version to 0.21.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,38 +69,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7a60724dc4490c7845ee446fd424c2be6ba11599
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f660c7bae3e0004958acb3a2518fb409c6315a75
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Jan Havran <havran.jan@email.cz>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/pine64_pinecube_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+https://github.com/ColinIanKing/stress-ng/releases/tag/V0.21.02
+https://github.com/ColinIanKing/stress-ng/releases/tag/V0.21.01
 
-diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
-index 8fc55d80a5..742be94d17 100644
---- a/configs/pine64_pinecube_defconfig
-+++ b/configs/pine64_pinecube_defconfig
-@@ -1,7 +1,9 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_TARGET_GENERIC_HOSTNAME="pinecube"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Pine64 Pinecube"
- BR2_SYSTEM_DHCP="eth0"
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 81123b3587..706fed135a 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1339cbc6ccbff7e2ee2177bf0fd67e7b94e8ff7b07fe89bcfaec0280d800cf34  stress-ng-0.21.00.tar.gz
++sha256  71502d31f77987c3bda6931d47b44d7b03d8ac689e8154bbda676cf9d42e2b4e  stress-ng-0.21.02.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 4181c5ed1a..59cd249291 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.21.00
++STRESS_NG_VERSION = 0.21.02
+ STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
