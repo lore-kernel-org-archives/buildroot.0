@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 945D0CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DD86CD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 673E760AE2;
-	Fri,  5 Jun 2026 12:38:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4603240F47;
+	Fri,  5 Jun 2026 12:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BnQgRpkKZoDs; Fri,  5 Jun 2026 12:38:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XAsopVpgWrEH; Fri,  5 Jun 2026 12:38:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8706360AD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E64940F28
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663083;
-	bh=d5LZhGUg25Opp8UZYYF27GnagLDYlGOzqeTAngLYTS4=;
+	s=default; t=1780663085;
+	bh=Ne8ljhgjaVgZRqRauCrslmKkm3zYTDrnJ1AGh1XUaO4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=sNEY0MK5erBKwCalOBf3Xi/l9sY/9mQnO3+hfMiT/RuW0aDsDOfxGdcXW9evAvF7U
-	 tx5KR94nCT2UxQhuMrvs3s4HABtL1U32yOsIvHU6+vWfmQ5lzoZcH4RdpRMLTKEKrl
-	 iOs3cwMuEWKs5RVvzhUSq0KfGms+lwrKhyoetwqVtQCUa6Fzua5XMsfZAnl8en7UJO
-	 ra2lkZX/u09D9VRZpITF4jEJ37klMFQwp2Xi71TJnqVLP60Lm/2sOk8W2MwxVLHUWq
-	 cYTU1dtDVs6LO0fgZ2wV+M+zSi8Y21ZDypfs7+Zs0+HgFLNbPDvYf8aeH7jk+OuXxR
-	 eA8c31JWTrT9A==
+	b=rj5/0Fl4Hpiep2weO/Ur0hez7kL41FZKzh1Ml/oVnekPWuNHQ/lRoCYXKYn1AYMN9
+	 vtdYqvNR30f9sKViLr4m9o+ezgwb4WT4ifuZlRVp3eAfcsYBYUGhm3PHot8DpZj1Ip
+	 IdtSxc0a5Op4taBC+4hFZcE/3quAhzxjXyttaLi+j+S0e/bglrX91MUliMVwSFoeHZ
+	 fslpCbX2fZ2G36CfjQjIez0jesCl4nRpDRsu95QmE7dTXSK8tZSuZ4w9kPwidD3O+/
+	 MIBGEERGM/zjYcWJWHYN0LFwAmxLtnWszfeYnbuz5vRUsCJDGLL8WrJjjuGnxuuFGG
+	 6L24qTGieHboA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8706360AD0;
-	Fri,  5 Jun 2026 12:38:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E64940F28;
+	Fri,  5 Jun 2026 12:38:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D67BF4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10A5B388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C644B81E7A
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00F0281EBF
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DPZU6h8GNe_S for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
+ id 4q6_-Jted_Eq for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 196D081E5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97A1281E76
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 196D081E5D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97A1281E76
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43D2787B3F; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
+ id C18E987B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:04:18 +0200
+Date: Thu, 4 Jun 2026 11:44:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f055791f8c2a69f86331df3da289262bf9713c20
-X-Git-Newrev: 966548ef24ce4d9e30b3946eb7131614f398f84b
+X-Git-Oldrev: 5c8f39dda82f833b95a3201a917de3c3c05838d3
+X-Git-Newrev: 729efd317dcfa9efdb8c6f56c0ec00e7fc270d7b
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123711.43D2787B3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/pkg-generic.mk:
- replicate IGNORE_CVES to host packages
+Message-Id: <20260605123711.C18E987B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/exim: security
+ bump version to 4.99.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,50 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/966548ef24ce4d9e30b3946eb7131614f398f84b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/729efd317dcfa9efdb8c6f56c0ec00e7fc270d7b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For host packages, this commit adds the same `ignore_cves` list as their
-target counterpart and make it available from the `show-info` output.
+https://lists.exim.org/lurker/message/20260529.143857.4c75d7df.en.html
+https://www.exim.org/static/doc/security/EXIM-Security-2026-05-19.1/EXIM-Security-2026-05-19.1.txt
 
-When generating a CycloneDX SBOM with `make show-info-all |
-utils/generate-cyclonedx` and running an analysis over it with
-`support/script/cve-check`, multiple vulnerabilities
-entries would be created with different analysis for packages that have
-both a host and target variant that include IGNORE_CVES entries.
+Fixes CVE-2026-48840.
 
-This is the case for the grub2 package that include ignored
-vulnerabilities that patch both the target and host package but aren't
-declared as ignored for the host package. This resulted in
-vulnerabilities marked as 'exploitable' for the host variant while it
-is patched.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a5817137bfc57317adfdbd11e540c3a0dcd1c98)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 727c2981cb59ebf6a3ee4e3ef03829cc8ae48536)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pkg-generic.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 0a1e29a04e..f2b1c375d2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -745,6 +745,13 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
-  $(2)_CPE_ID = $$($(2)_CPE_ID_PREFIX):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_PRODUCT):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_UPDATE):*:*:*:*:*:*
- endif # ifeq ($$($(2)_CPE_ID_VALID),YES)
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index e95f7f5efe..cbf29c3f5d 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  663e76d2a0d9b8fc5b373d0008e44ae044f10feb22bc9dbae8c7f21345ebfb3b  exim-4.99.3.tar.xz
++sha256  87ff38815700dfb1ee4eb7e8dba7916df7a755905354d2d0faa1ae1790c4fd9d  exim-4.99.4.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  7c4109f499497e2432b71ad3f3f1cac358e63b1b693a352047e6990619d7fd619d3a966ba585482c58e0b23b3fa4f385d15720c455fda29633411e35db1d2e7f  exim-4.99.3.tar.xz
++sha512  30fa01a301f8f4fe0c069f3da9e5247f0e22b19f64119cb8cccaf10aada8280ce02061a4671d110ad29b08af9e23ba3c3e8c7483874c7b1c992d90b51681ca9a  exim-4.99.4.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index c72e25a2c4..60870474c4 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# replicate the target '_IGNORE_CVES' to the host variant
-+ifndef $(2)_IGNORE_CVES
-+ ifdef $(3)_IGNORE_CVES
-+  $(2)_IGNORE_CVES = $$($(3)_IGNORE_CVES)
-+ endif
-+endif
-+
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
- # dependency.
+-EXIM_VERSION = 4.99.3
++EXIM_VERSION = 4.99.4
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
