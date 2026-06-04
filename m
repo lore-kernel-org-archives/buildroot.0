@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEF46CD8C81
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85830CD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92B4E60B08;
-	Fri,  5 Jun 2026 12:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25D4A41054;
+	Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0D3fDghdDvqL; Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sdK-ZNya9zV7; Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BFF60B8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD5114105F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663138;
-	bh=FIVBdgUUIq8O9yE9qtzMR6c6OzA0TQ00AYQxaSAXP8Q=;
+	s=default; t=1780663133;
+	bh=6KSnXat9DjL9f6LkM+5H2yZATfeo88Ms1v4kkD3ZFJM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LV58BUobudmBnTwgCzlNyNljh/e48D7CxMnildca0Lz4NTNsbW7uArdOFzgkSTYy5
-	 0MAo9D08Qy+vXMuqeEIS7C8DtOE8Tea7ikdCYaCo28UJ6duc8tq6b5d2GWWS/OhDHb
-	 05OR033oETo4DeTtivuUEMc2B5u7SikICATR5PhX257PWY17NCnwgDrCCqfEbcePJZ
-	 j7pB0g46zimS2yuJ3+u5Sc8++U0fqbQzipY8iD0xFZ9DoIj1M+ymS/ZmGZfeUc1yGw
-	 VwPC6rkKs1h5sQETCMe2fpL5PeanoHCBatP3tmru+mudbN7bAeD2omdj/4gLYgusHN
-	 GD5ex771vs/xA==
+	b=Y1pxn9sXs42hVvYykKNF4f9+GwNE9uOZh6/WDV+KH+yEHsDrTVmFgOCMoTisAI4Mt
+	 y1YdAdV2BAq8Nh7+iiGzMsZqa7O8cRdAeslAdVkVrfuWXQEDvB05tj3FdyUaA4khrn
+	 3XFPzbYOqDc5E9Gov6vNo30j1fgfwrUF2cBedhWzxIl0jfUrSy0meMA0N6cQ0+zw2b
+	 H40YYFeCTOnFySdizoHAR9msMleBhnBelyrDt5x7Tl9hUV5fwICrnfc0kYDslDDUI4
+	 4lC7Yxzd9bbblxnbdAM8m6ZA+dsPPOQNYPMiDHRqQc1uIeKB02qe6nh9sgBa2Gg1xj
+	 YB/2IlK4Ql06g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5BFF60B8B;
-	Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD5114105F;
+	Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 01973388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ECD3388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DD5281EA6
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C660381EA3
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NzzKmbu5NTAl for <buildroot@buildroot.org>;
+ id w6tu9ckWBMov for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 541C681EBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16C3C81EAB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 541C681EBD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16C3C81EAB
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DE4787B3A; Fri,  5 Jun 2026 12:37:14 +0000 (UTC)
+ id 4124F87B3A; Fri,  5 Jun 2026 12:37:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:36:13 +0200
+Date: Thu, 4 Jun 2026 12:35:14 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d11cb6f5c7fbab656bc62cfcbe8ded1ff95f659f
-X-Git-Newrev: 75e9410eb8e21c9bffeaa171455ac5b57e1572da
+X-Git-Oldrev: adec6e4f9c39a439a21bd94c7c7f8296a6405e2a
+X-Git-Newrev: 2cb350c2b418927f76634f97fb002ea7e4a1a1ee
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123714.7DE4787B3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/wireless-regdb:
- bump version to 2026.05.30
+Message-Id: <20260605123714.4124F87B3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/crucible: needs
+ NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/75e9410eb8e21c9bffeaa171455ac5b57e1572da
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2cb350c2b418927f76634f97fb002ea7e4a1a1ee
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://lists.infradead.org/pipermail/wireless-regdb/2026-May/001917.html
+gcc_stack_unix.c: In function 'x_cgo_getstackbound':
+gcc_stack_unix.c:28:9: error: implicit declaration of function 'pthread_getattr_np';
+ did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
+   28 |         pthread_getattr_np(pthread_self(), &attr);  // GNU extension
+
+Fixes:
+https://autobuild.buildroot.net/results/e07/e07198d7864331027d21cd2109054d86e7ac1c3d/
+
+The build error also occured in Oct 2024 so a backport to buildroot
+LTS branches should be considered:
+https://autobuild.buildroot.net/results/ebb/ebbd051010c27f97fafc0b203b22c8b0af7e5ccd/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit df127aec63fc6ad456f7ca5e2878eb3f2e7405dd)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1eeed7e97867feaffff38bfac501eb3f5624e411)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/crucible/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index bdca077781..4c6b3bec78 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  5fc0000475d8c5368ccc5222827c16aef98b1eb6a69c9b5a3e7b7e98528945ac  wireless-regdb-2026.03.18.tar.xz
-+sha256  8a27bfc081bafed8c24dd70fab0d96f098e5a0bfcd08d3da672595f225ab8993  wireless-regdb-2026.05.30.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 7e0c585401..9761afc243 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/crucible/Config.in b/package/crucible/Config.in
+index 1e1b29c3df..f52f871d0b 100644
+--- a/package/crucible/Config.in
++++ b/package/crucible/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_CRUCIBLE
+ 	bool "crucible"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_getattr_np()
+ 	select BR2_PACKAGE_HOST_GO
+ 	help
+ 	  Crucible is a One-Time-Programmable (OTP) fusing tool for the
+ 	  i.MX family.
  
--WIRELESS_REGDB_VERSION = 2026.03.18
-+WIRELESS_REGDB_VERSION = 2026.05.30
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+ 	  https://github.com/usbarmory/crucible
++
++comment "crucible needs a toolchain w/ NPTL"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
