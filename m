@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4FACD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB68CD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D3A881FD1;
-	Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8075341022;
+	Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id icSl2mrt5KJ0; Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WOxphSOgiwN9; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42DDA81FB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F2644100F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663129;
-	bh=OHPq28DC9LM/dTr5Mm1zqEXknTH2VJ5UhvsXig2toV0=;
+	s=default; t=1780663130;
+	bh=jTolHGBlMLtdkXiDQENF/LdVPoZ7hRuQV3Rv7v66zgE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hXstIues2GijuypznAFKx3euZgNKj8F29/n4tIf/jfn3Frd08TI+zsTrsQbpoeZ2Z
-	 UzViLFtLLyr8bv79k9UxPIQA0VxxPmvAmqCS3PX4zSCOmXsGdlhW4U9q8IzfLL4cTy
-	 XciqUbO0RqB1fiqk/omNDq8uTRu2oWvxPLbpHQjqAWecswjuYUldd+yDdJP2XDvfSc
-	 /dFNaGytXdMOXb7wbug0/XPatrnm8PtKyRPOE3b+RSIgCIHQp6FaBuqWPO3jcmLh9J
-	 Slt8vSSmTNfkMfXVoEOtzazrk+XeqD8UvwIsxNk/EWo8l8wPk8QlAl+L0aEYOn/w4G
-	 YPtiHyi3dpxxw==
+	b=c8l5Gqa2A5W3YE57iFAyC6dgnR587EdbL5iAxcg5Xto8MSoBKE4yT0PVJp0Bc4TCP
+	 aOfI01hwSqi/TkfSkRxIaJy5rKLMFiMfhsHCFMZmF79kL76WNgCKfWz79HxlUk7/gd
+	 wlgYGsjciNAmJwfI/0b/SlLO9XbozvNibM+y6KEHDMStpzcUl0sFaOSV/U4vk4qs+H
+	 jHz6jX6YnfoDKYCQYXTTTH1SEzpnbzzB6rXZBP91uoZhBwWZKlMzVUHrOFE+WKGr1M
+	 zqD+tRObK2hOYrap/m0uRSwtUNr5PRFzNz5kAdLsBCMHSBlCrJTqSd03mQRizRx6Op
+	 sv886BKCAAbYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42DDA81FB0;
-	Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F2644100F;
+	Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 17096F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10687F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 874B181E8D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9480C81B7B
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NRh1uZwo0qPT for <buildroot@buildroot.org>;
+ id lx6step415EE for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:37:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2D9881B7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D004E81EB2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2D9881B7B
+ by smtp1.osuosl.org (Postfix) with ESMTP id D004E81EB2
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC6DE87B3B; Fri,  5 Jun 2026 12:37:13 +0000 (UTC)
+ id 061C187B3A; Fri,  5 Jun 2026 12:37:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:14:31 +0200
+Date: Thu, 4 Jun 2026 12:33:35 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 06baf64bf610e9588049bb613f340d114f5ddb41
-X-Git-Newrev: 1ed651ecde524490e9cfa69eb7ea3a45e31ea235
+X-Git-Oldrev: 1ed651ecde524490e9cfa69eb7ea3a45e31ea235
+X-Git-Newrev: cb4983942476020b7b237b3e6ac23728934dc01e
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123713.EC6DE87B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/qt5/qt5webengine-chromium: fix zlib license hash
+Message-Id: <20260605123714.061C187B3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/lrzsz: fix build
+ with gcc >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,54 +77,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1ed651ecde524490e9cfa69eb7ea3a45e31ea235
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cb4983942476020b7b237b3e6ac23728934dc01e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Commit c53455ea4ffa ("package/qt5/qt5webengine-chromium: bump version
-after qtwebengine bump") bumped qt5webengine-chromium but forgot to
-update the licenses.
+Fixes:
+https://autobuild.buildroot.net/results/2e3/2e33c61e1c9bee099f973c1e43b696c63e5eed4b/
 
-The diff of the license is reported by
-git diff 0ad2814370799a2161057d92231fe3ee00e2fe98..18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e -- chromium/third_party/zlib/LICENSE
-as the following:
+Building lrzsz with this defconfig works:
 
-  diff --git a/chromium/third_party/zlib/LICENSE b/chromium/third_party/zlib/LICENSE
-  index 9f056865b57..8aca25d8c7a 100644
-  --- a/chromium/third_party/zlib/LICENSE
-  +++ b/chromium/third_party/zlib/LICENSE
-  @@ -1,6 +1,6 @@
-  -version 1.2.11, January 15th, 2017
-  +version 1.2.12, March 27th, 2022
+BR2_GCC_VERSION_13_X=y
+BR2_PACKAGE_LRZSZ=y
 
-  -Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
-  +Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler
+and gets broken when switched to gcc 14:
 
-   This software is provided 'as-is', without any express or implied
-   warranty.  In no event will the authors be held liable for any damages
+BR2_PACKAGE_LRZSZ=y
 
-so it doesn't change its actual license, let's simply fix the sha256 to
-the new value.
-
-Fixes: c53455ea4ffa ("package/qt5/qt5webengine-chromium: bump version after qtwebengine bump")
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 28e52cde511f03317507835a33b3bd8362d08f5d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../lrzsz/0007-configure-fix-for-gcc-14.x.patch    | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-index 270da153c6..8026c3f697 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-@@ -1231,7 +1231,7 @@ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  chromi
- sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  chromium/third_party/xcbproto/src/COPYING
- sha256  b244f73c3d21edaf44ec253b9a7c389ec43313c417f52f8b71914b0c40d87325  chromium/third_party/xdg-utils/LICENSE
- sha256  1cf71700f3403ca26f002e2dc1d1861dcb3d2af9bb9d98d529a903be9d7f06fc  chromium/third_party/xstream/LICENSE
--sha256  942755efa272dbfbcd7afea7a38556801e36c16dcad002d572378367094a2593  chromium/third_party/zlib/LICENSE
-+sha256  e1cfcc55c325b3f78cf55df9664abaa066e2271dffe8213347d9fccdfbac8f2c  chromium/third_party/zlib/LICENSE
- sha256  1744e977d24e20e77b1e97d745fe43779430a1b84247b6c0e89d16e116e7ff92  chromium/third_party/zxcvbn-cpp/LICENSE.txt
- sha256  a4c8c5abf82b36c22f8c9f8bd6229584f32eb9f7a2429dd9664dda43e63e9fda  chromium/tools/grit/third_party/six/LICENSE
- sha256  63f0c0039b477857e54708d9501ed91b7a46e828ac3c623bedbc318129ceb174  chromium/tools/origin_trials/third_party/ed25519/LICENSE
+diff --git a/package/lrzsz/0007-configure-fix-for-gcc-14.x.patch b/package/lrzsz/0007-configure-fix-for-gcc-14.x.patch
+new file mode 100644
+index 0000000000..160cf73d62
+--- /dev/null
++++ b/package/lrzsz/0007-configure-fix-for-gcc-14.x.patch
+@@ -0,0 +1,55 @@
++From 791b757537d48a9e6beec4a1551d277b79b95f37 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Mon, 2 Mar 2026 20:09:25 +0100
++Subject: [PATCH] configure: fix for gcc >= 14.x
++
++The pre-generated configure script has a check that doesn't work with
++GCC >= 14.x:
++
++configure:1932: checking for ANSI C header files
++configure:1945: /home/bernd/buildroot/output/per-package/lrzsz/host/bin/i586-buildroot-linux-gnu-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_S
++OURCE -D_FILE_OFFSET_BITS=64 conftest.c >/dev/null 2>conftest.out
++configure:2012: /home/bernd/buildroot/output/per-package/lrzsz/host/bin/i586-buildroot-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_L
++ARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1 -std=gnu17 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BIT
++S=64  conftest.c  1>&5
++configure: In function 'main':
++configure:2007:67: error: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
++ 2007 | if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
++      |                                                                   ^~~~
++configure:2003:1: note: include '<stdlib.h>' or provide a declaration of 'exit'
++ 2002 | #include <ctype.h>
++  +++ |+#include <stdlib.h>
++
++Doing AUTORECONF = YES doesn't work as the configure.in is very old, so
++let's fix the configure script directly.
++
++Upstream: N/A, patching generated file
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ configure | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure b/configure
++index 16a259a..8601361 100755
++--- a/configure
+++++ b/configure
++@@ -1572,6 +1572,7 @@ else
++ #line 1573 "configure"
++ #include "confdefs.h"
++ #include <ctype.h>
+++#include <stdlib.h>
++ #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
++ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
++ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
++@@ -2000,6 +2001,7 @@ else
++ #line 2001 "configure"
++ #include "confdefs.h"
++ #include <ctype.h>
+++#include <stdlib.h>
++ #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
++ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
++ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
