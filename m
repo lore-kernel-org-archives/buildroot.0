@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B470CD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B77DCD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 218CB60B44;
-	Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9VE6O7sxKstx; Fri,  5 Jun 2026 12:38:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C8CC60B3C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663109;
-	bh=pc2uyTnK3gU+PRp3WlwbyDsxHkeUqHeWeQyVeowELvI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PWNwmuRZYVlrkCTDWCBuIGq8ORggd0Rbo6T5Rztid3VM18s9WllFI3+MogRgesPfY
-	 s1OprdGKQtV0VDOAkCXifnHTMDKY55fhItJpDTskKCa7qtp+gWY2c2/Zw1Os2M6hCN
-	 xrBYGvgXGP0jnfRWHMnwmaPrm6OnHJYJ4lKFs+jAFRkCFiposCJOcsvrN5U7Dgm+PK
-	 k0eEwX790X0RDsBG2GuHO2gBjA0oJE8Goiw8wfDGCJNaS93l0PMVnzvS1J353ySV/F
-	 mm6ftzkywjAktvRtnrYfjGi1N6VEIKJY+EzP+Lf1snSqgnD7tXMVJ5RjzVr10ptIaq
-	 n4fIbhEHaTDCQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C8CC60B3C;
-	Fri,  5 Jun 2026 12:38:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12A2A388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEB5981E8A
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2374481E2D;
+	Fri,  5 Jun 2026 12:38:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A35XuzPhDyac for <buildroot@buildroot.org>;
+ id kRtBXZnLIA8M; Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F62581F39
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663110;
+	bh=ESWlRmVwjXDdEAw4TutRwvCCVOJRPYk8j16aUQrbphs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ehzgWlPFYUn2hFlL2SO+jVo7lBVI2rD3k65dRA7ARH+lAU07JchRLETcT5SoKoj12
+	 ZrHvHr5jZkaAkubO5sCpjtf/FauZ7UMuoXi2S5oDhmWionT3yyyTpRGNZXOPxlke98
+	 WBKESNBgG0Oj4s98owz8+zXEvuFV8u9ecSn6kPDagPKZAgrGV9PaRF4FlGhKTzMoCo
+	 NGjUSgIIs5bKcSHYv8CGUHYQWNsg4+BJDq+WQEyCZIrwWdjU2vqelCo2dMkVQc6Xqp
+	 0LDY2qwChq6GUJvPzzUUMIwQCpXrDYzHX8q6DdB1tChS/Z/VcZaaBsQvpu02ETjx6O
+	 giJnxXML24yCQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F62581F39;
+	Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01CD3F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 223F781E9C
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hOObkOPh8eLK for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE08381E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C3DA81E7E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE08381E9C
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C3DA81E7E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 247EB87B3B; Fri,  5 Jun 2026 12:37:13 +0000 (UTC)
+ id 36F3D87B3F; Fri,  5 Jun 2026 12:37:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:04:25 +0200
+Date: Thu, 4 Jun 2026 12:05:21 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 97ac16c71cab8aa7388b3f52d0634e0b558b354d
-X-Git-Newrev: 0e83cfc75058196ba6b18c9f101a1317bce9c64e
+X-Git-Oldrev: 14d453e4f6b36639c6cd5582bd5d7405703a334c
+X-Git-Newrev: 8745d88263f1c76d49e684fd8567b4f683ba3ff3
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123713.247EB87B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cups-filters: add
- upstream patch to fix CVE-2025-64524
+Message-Id: <20260605123713.36F3D87B3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing/utils:
+ add basic tests for utils/generate-cyclonedx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,123 +77,188 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e83cfc75058196ba6b18c9f101a1317bce9c64e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8745d88263f1c76d49e684fd8567b4f683ba3ff3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add "CVE:" tag in patch]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ddde78c1bd251225c07f1910d6f9db2fc5189365)
+Introduce unit-tests for the generate-cyclonedx script, covering basic
+script invocation, patch CVE extraction and virtual packages.
+
+Signed-off-by: Martin Willi <martin@strongswan.org>
+Acked-By: Thomas Perale <thomas.perale@mind.be>
+[Arnout: fix check-package errors]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 929e7cb0056854061325ea4c7bf85405723dca3b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...x.c-Fix-infinite-loop-caused-by-crafted-f.patch | 84 ++++++++++++++++++++++
- package/cups-filters/cups-filters.mk               |  3 +
- 2 files changed, 87 insertions(+)
+ .../testing/tests/utils/test_generate_cyclonedx.py | 139 +++++++++++++++++++++
+ .../0001-cve_upstream.patch                        |  14 +++
+ 2 files changed, 153 insertions(+)
 
-diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
 new file mode 100644
-index 0000000000..8badcfd429
+index 0000000000..ddad92598b
 --- /dev/null
-+++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
-@@ -0,0 +1,84 @@
-+From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
-+From: Zdenek Dohnal <zdohnal@redhat.com>
-+Date: Wed, 12 Nov 2025 16:02:20 +0100
-+Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
++++ b/support/testing/tests/utils/test_generate_cyclonedx.py
+@@ -0,0 +1,139 @@
++"""Unit tests for utils/generate-cyclonedx."""
 +
-+Infinite loop happened because of crafted input raster file, which led
-+into heap buffer overflow of `CompressBuf` array.
++import json
++import os
++import subprocess
++import tempfile
++import unittest
++from pathlib import Path
 +
-+Based on comments there should be always some `count` when compressing
-+the data, and processing of crafted file ended with offset and count
-+being 0.
++import infra
 +
-+Fixes CVE-2025-64524
++PATCH = "support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch"
++SCHEMA_LICENSES = ["MIT", "Apache-2.0", "GPL-3.0-only"]
 +
-+Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
 +
-+CVE: CVE-2025-64524
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ filter/rastertopclx.c | 25 +++++++++++++++++++++++--
-+ 1 file changed, 23 insertions(+), 2 deletions(-)
++class TestGenerateCycloneDX(unittest.TestCase):
++    def setUp(self):
++        # Provide a fake SPDX schema so the script never hits the network.
++        self.schema_dir = tempfile.TemporaryDirectory()
++        self.addCleanup(self.schema_dir.cleanup)
 +
-+diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
-+index 3e7c129da..1015308da 100644
-+--- a/filter/rastertopclx.c
-++++ b/filter/rastertopclx.c
-+@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
-+   }
-+ 
-+   if (header->cupsCompression)
-+-    CompBuffer = malloc(DotBufferSize * 4);
-++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
-+ 
-+   if (header->cupsCompression >= 3)
-+-    SeedBuffer = malloc(DotBufferSize);
-++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
-+ 
-+   SeedInvalid = 1;
-+ 
-+@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+               seed ++;
-+               count ++;
-+             }
-++
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-+ 	  }
-+ 
-+          /*
-+@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+ 
-+             count = line_ptr - start;
-+ 
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-++
-+ #if 0
-+             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
-+ 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
-+@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
-+ 
-+             count = (line_ptr - start) / 3;
-+ 
-++	    //
-++	    // Bail out if we don't have count to compress
-++	    //
-++
-++	    if (count == 0)
-++	      break;
-++
-+            /*
-+             * Place mode 10 compression data in the buffer; each sequence
-+ 	    * starts with a command byte that looks like:
-+-- 
-+2.47.3
++        cyclonedx_dir = Path(self.schema_dir.name) / "cyclonedx"
++        cyclonedx_dir.mkdir(parents=True)
++        schema_path = cyclonedx_dir / "spdx-1.6.schema.json"
++        schema_path.write_text(json.dumps({"enum": SCHEMA_LICENSES}))
 +
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index f2b85aa9d5..da882ab838 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = openprinting
- # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
- CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
- 
-+# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
-+CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
++        self.env = os.environ.copy()
++        self.env["BR2_DL_DIR"] = self.schema_dir.name
++        self.script = infra.basepath("utils/generate-cyclonedx")
++        self.cwd = infra.basepath()
 +
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- 
- CUPS_FILTERS_CONF_OPTS = \
++    def _make_show_info(self) -> dict:
++        return {
++            "package-foo": {
++                "name": "foo",
++                "version": "1.2",
++                "type": "target",
++                "virtual": False,
++                "licenses": "MIT",
++                "cpe-id": "cpe:2.3:a:example:foo:1.2:*:*:*:*:*:*:*",
++                "patches": [PATCH],
++                "provides": ["package-virtual"],
++                "dependencies": ["skeleton-baz", "package-bar"],
++                "ignore_cves": ["CVE-2025-0001"],
++                "package_dir": "package/package-foo",
++            },
++            "skeleton-baz": {
++                "name": "skeleton-baz",
++                "version": "0.1",
++                "type": "target",
++                "virtual": False,
++                "licenses": "Apache-2.0",
++                "dependencies": [],
++                "package_dir": "package/skeleton-baz",
++            },
++            "package-bar": {
++                "name": "bar",
++                "version": "0.2",
++                "type": "target",
++                "virtual": False,
++                "licenses": "MIT",
++                "ignore_cves": ["CVE-2025-0002"],
++                "dependencies": ["package-virtual"],
++                "package_dir": "package/package-bar",
++            },
++            "host-tool": {
++                "name": "host-tool",
++                "version": "0.3",
++                "type": "host",
++                "virtual": False,
++                "licenses": "GPL-3.0-only",
++                "dependencies": [],
++                "package_dir": "package/host-tool",
++            },
++            "package-virtual": {
++                "name": "virtual-provider",
++                "virtual": True,
++                "type": "target",
++                "dependencies": ["package-foo"],
++                "package_dir": "package/package-virtual",
++            },
++        }
++
++    def _run_script(self, extra_args=(), show_info=None):
++        data = show_info if show_info is not None else self._make_show_info()
++        completed = subprocess.run(
++            [self.script, *extra_args],
++            cwd=self.cwd,
++            env=self.env,
++            input=json.dumps(data),
++            text=True,
++            capture_output=True,
++            check=True,
++        )
++        return json.loads(completed.stdout)
++
++    def _find_component(self, result: dict, name: str) -> dict:
++        for component in result["components"]:
++            if component["bom-ref"] == name:
++                return component
++        self.fail(f"component {name} missing")
++
++    def test_default(self):
++        result = self._run_script()
++
++        self.assertEqual(len(result["components"]), 4)
++        self.assertIn("vulnerabilities", result)
++        vulnerabilities = {v["id"]: v for v in result["vulnerabilities"]}
++        self.assertEqual(len(vulnerabilities), 2)
++        self.assertEqual(vulnerabilities["CVE-2025-0001"]["analysis"]["state"], "resolved_with_pedigree")
++        self.assertEqual(vulnerabilities["CVE-2025-0002"]["analysis"]["state"], "in_triage")
++
++        foo = self._find_component(result, "package-foo")
++        patch = foo["pedigree"]["patches"][0]
++        self.assertIn("text", patch["diff"])
++        self.assertIn("content", patch["diff"]["text"])
++
++        host = self._find_component(result, "host-tool")
++        self.assertEqual(host["properties"][0]["value"], "host")
++
++        names = {c["bom-ref"] for c in result["components"]}
++        self.assertIn("skeleton-baz", names)
++        self.assertIn("package-bar", names)
++        self.assertNotIn("package-virtual", names)
++
++        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
++        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
++
++        bar_deps = next(d for d in result["dependencies"] if d["ref"] == "package-bar")
++        self.assertEqual(bar_deps["dependsOn"], ["package-foo"])
++
++    def test_virtual(self):
++        result = self._run_script(["--virtual"])
++
++        names = {c["bom-ref"] for c in result["components"]}
++        self.assertEqual(names, {"package-foo", "skeleton-baz", "host-tool", "package-virtual", "package-bar"})
++
++        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
++        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
+diff --git a/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
+new file mode 100644
+index 0000000000..75d8830203
+--- /dev/null
++++ b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
+@@ -0,0 +1,14 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++
++CVE: CVE-2025-0001
++Upstream: https://patches.example/foo.patch
++
++Signed-off-by: the contributor
++
++diff --git a/foo.txt b/foo.txt
++index 0000001..0000002 100644
++--- a/foo.txt
+++++ b/foo.txt
++@@
++-foo
+++bar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
