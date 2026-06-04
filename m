@@ -1,87 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16EA9CD6E6E
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 19:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B69C6CD6E75
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 20:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAA3685657;
-	Thu,  4 Jun 2026 19:52:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6837C6F8CE;
+	Thu,  4 Jun 2026 20:05:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rD4diNQqxNV8; Thu,  4 Jun 2026 19:52:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KECFY9TKvzGh; Thu,  4 Jun 2026 20:05:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDB7A85655
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CD836F8CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780602750;
-	bh=5lpG0CxmCBk+Fca5rhwvKhDHFOhssatKgAUIugeHrcI=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ipGbYZhnnTjmFlicHEFQ5Hb8Yh5UwNsnycr8yT7pVLjVFGEXSoAmIYGA4OIXQkWqI
-	 p5OEDZvIQD8TacKA5+Nfxx1GVo32H/eIdwk1ELX39dB6xt3HSFzp4p4cqq4/KGSI0C
-	 Qn9kqFQorzAXaH4VGM52UJFlEev9uhc/rUnqiDNscQHveck1Nu/6tKv7wiWmdQvymD
-	 sMQ3iKaNSo68XsqgMkG1mxdc/2C9+Vzg9Nd/HiQvSqSIwHlxUEhcfDju1N63/WyEvW
-	 J9dJnANR+JlPvQkvZ02mj7WI0N0nmz9tOwS7Hfcoq7l/+4nW0FwA1dfUYB0DKrdpct
-	 9xOI46aqyM3jQ==
+	s=default; t=1780603550;
+	bh=otXGZmhVbZuwPDJXOoFbMGDZjlRZT4jJoqVi7vk3r6Q=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GJUlWQ/vQMg0Yna9O99ohkQ6Z7T3eiZ6KlyoWwoiUT7HgoXY/58oqNm5JjJ0eqBSo
+	 Q+HWdCp94FlBzu8tNjFckoz5LrO3p+RiEF3XeqmmXYlNPI/+K1EYDWketnEV2xCq9V
+	 o4Sd0RP5BHHnl7xPyMOal47S7/QjGIimGBZ+0tGTm4kvzy3EB7C6jQ93YuyYcAxAOv
+	 9yi2UHHncJPPMavDHePSqiUFGGT3QJARUYQlsBnMZMYL4XWQU9eMz5KMeIuD8LYkTL
+	 y1Q3DDCZZP2OugjFSOWwqekVZBktiFahhpRsas8qpMyVD5xkVBm4aHdl+QnyA8FF7X
+	 37U3OFotaTFJA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDB7A85655;
-	Thu,  4 Jun 2026 19:52:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E7F7A388
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 19:52:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CD836F8CF;
+	Thu,  4 Jun 2026 20:05:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97F6B26A
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 20:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA0BD85655
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 19:52:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7DE5F6F8D0
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 20:05:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dia3T4Px1ZXq for <buildroot@buildroot.org>;
- Thu,  4 Jun 2026 19:52:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F6C085313
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6C085313
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F6C085313
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 19:52:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A54AA13F89A;
- Thu,  4 Jun 2026 21:52:24 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 04 Jun 2026 21:52:24 +0200
-MIME-Version: 1.0
-Date: Thu, 04 Jun 2026 21:52:24 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260604173511.2134198-1-bernd@kuhls.net>
-References: <20260604173511.2134198-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <6a9cedc260016a00dd65361bf030f0f8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780602745;
- bh=2MCGcsbZQYQHzFuyDQ2XVHb83r+ES/8UvGFb4of7DV8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dZkApDD6kyDsBTOQ0lsMd7IVi5v8TI0dNjuK88u/m4avj+CT7Az80Moln/zL4r43W
- 0TsXyEBELFgJZU35Yvd/z2Mclt4zekXr0Tt/NTvPSYgkQScRH2iOk4oUbWcxJMKDD6
- xk3zkNztFZizBMvKliGrw01meQMqw+RcxminWtOePDd0cW3EifX+L0sL5ZQZ6OMA6/
- oNA/2DWkaQca02rhLPVD1HcTvsGOBwe/dYwTBn/fKRXV2VUU2oZmewlMM0gSr5Wz79
- VDjT5QH+o5zZiWJluMSOsH/q2+03hWVfI/qMqB6gW4L+wgIZTFgrNRPNayXJu17okF
- aljdzlZasM/eQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dZkApDD6
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 8.5.7
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cTiqBExLDmRQ for <buildroot@buildroot.org>;
+ Thu,  4 Jun 2026 20:05:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 945076F8CE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 945076F8CE
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 20:05:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 06DCC87A98; Thu,  4 Jun 2026 20:05:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 4 Jun 2026 21:53:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67ec0e9c202a1d0f3cd2d4780a23950ca64a1745
+X-Git-Newrev: d4be78ccb572f9e44271becb7af3c1987718456e
+X-Patchwork-Hint: ignore
+Message-Id: <20260604200532.06DCC87A98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: add upstream security
+ patch for CVE-2026-8328
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,21 +71,167 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/06/2026 19:35, Bernd Kuhls wrote:
-> https://www.php.net/ChangeLog-8.php#8.5.7
-> https://news-web.php.net/php.announce/493
-> https://github.com/php/php-src/blob/php-8.5.7/NEWS
-> 
-> Fixes CVE-2026-44927 & CVE-2026-44928.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d4be78ccb572f9e44271becb7af3c1987718456e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://mail.python.org/archives/list/security-announce@python.org/thread/ITF2BAPBQEPYK3LDMPRSY435JGNHYNDP/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...51-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch | 123 +++++++++++++++++++++
+ package/python3/python3.mk                         |   3 +
+ 2 files changed, 126 insertions(+)
+
+diff --git a/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch b/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
+new file mode 100644
+index 0000000000..7605e40722
+--- /dev/null
++++ b/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
+@@ -0,0 +1,123 @@
++From 7d95a1dc7382b55cba7fdd6a110336077584a4f0 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Wed, 13 May 2026 19:59:11 +0200
++Subject: [PATCH] [3.14] gh-87451: Apply CVE-2021-4189 PASV fix to
++ ftplib.ftpcp() (GH-149648) (#149793)
++
++gh-87451: Apply CVE-2021-4189 PASV fix to ftplib.ftpcp() (GH-149648)
++
++ftpcp() called parse227() directly and passed the source server's
++self-reported PASV IPv4 address to the target server's PORT command,
++bypassing the CVE-2021-4189 fix that was applied only to FTP.makepasv().
++A malicious source FTP server could use this to redirect the target
++server's data connection to an arbitrary host:port (SSRF).
++
++ftpcp() now uses the source server's actual peer address, honoring the
++existing trust_server_pasv_ipv4_address opt-out, the same as makepasv().
++
++Thanks to Qi Ding at Aurascape AI for the report. (GHSA-w8c5-q2xf-gf7c)
++(cherry picked from commit eac4fe3b2c77693790a5ef7dfab127c1fee81bf9)
++
++Co-authored-by: Gregory P. Smith <68491+gpshead@users.noreply.github.com>
++Upstream: https://github.com/python/cpython/commit/7d95a1dc7382b55cba7fdd6a110336077584a4f0
++CVE: CVE-2026-8328
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Lib/ftplib.py                                 | 11 +++++-
++ Lib/test/test_ftplib.py                       | 36 ++++++++++++++++++-
++ ...6-05-10-18-05-32.gh-issue-87451.XkKB6M.rst |  6 ++++
++ 3 files changed, 51 insertions(+), 2 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
++
++diff --git a/Lib/ftplib.py b/Lib/ftplib.py
++index 50771e8c17c..73882a38dce 100644
++--- a/Lib/ftplib.py
+++++ b/Lib/ftplib.py
++@@ -883,7 +883,16 @@ def ftpcp(source, sourcename, target, targetname = '', type = 'I'):
++     type = 'TYPE ' + type
++     source.voidcmd(type)
++     target.voidcmd(type)
++-    sourcehost, sourceport = parse227(source.sendcmd('PASV'))
+++    # Don't trust the IPv4 address the source server advertises in its PASV
+++    # reply: a malicious source could otherwise point the target's data
+++    # connection at an arbitrary host (SSRF).  A caller that needs the old
+++    # behavior can set trust_server_pasv_ipv4_address on the source FTP
+++    # object.  See FTP.makepasv(), which applies the same rule.
+++    untrusted_host, sourceport = parse227(source.sendcmd('PASV'))
+++    if source.trust_server_pasv_ipv4_address:
+++        sourcehost = untrusted_host
+++    else:
+++        sourcehost = source.sock.getpeername()[0]
++     target.sendport(sourcehost, sourceport)
++     # RFC 959: the user must "listen" [...] BEFORE sending the
++     # transfer request.
++diff --git a/Lib/test/test_ftplib.py b/Lib/test/test_ftplib.py
++index c864d401f9e..f1eff9430f7 100644
++--- a/Lib/test/test_ftplib.py
+++++ b/Lib/test/test_ftplib.py
++@@ -16,7 +16,7 @@
++ except ImportError:
++     ssl = None
++ 
++-from unittest import TestCase, skipUnless
+++from unittest import mock, TestCase, skipUnless
++ from test import support
++ from test.support import requires_subprocess
++ from test.support import threading_helper
++@@ -1145,6 +1145,40 @@ def testTimeoutDirectAccess(self):
++         ftp.close()
++ 
++ 
+++class TestFtpcpSecurity(TestCase):
+++    """ftpcp() must not trust the host a source server advertises in PASV.
+++
+++    A malicious source server can otherwise redirect the target server's
+++    data connection to an arbitrary host:port (SSRF), so ftpcp() uses the
+++    source server's actual peer address instead, the same as FTP.makepasv().
+++    """
+++
+++    def _make_pair(self, *, advertised_host, real_host, trust=False):
+++        source = mock.Mock(spec=ftplib.FTP)
+++        source.trust_server_pasv_ipv4_address = trust
+++        source.sock.getpeername.return_value = (real_host, 21)
+++        # PASV replies give the host as comma-separated octets, not dotted.
+++        advertised = advertised_host.replace('.', ',')
+++        source.sendcmd.side_effect = lambda cmd: (
+++            f'227 Entering Passive Mode ({advertised},1,2).'
+++            if cmd == 'PASV' else '150 ok')
+++        target = mock.Mock(spec=ftplib.FTP)
+++        target.sendcmd.return_value = '150 ok'
+++        return source, target
+++
+++    def test_ftpcp_ignores_untrusted_pasv_host(self):
+++        source, target = self._make_pair(advertised_host='10.0.0.5',
+++                                         real_host='198.51.100.7')
+++        ftplib.ftpcp(source, 'a', target, 'b')
+++        target.sendport.assert_called_once_with('198.51.100.7', 258)
+++
+++    def test_ftpcp_trust_server_pasv_ipv4_address(self):
+++        source, target = self._make_pair(advertised_host='10.0.0.5',
+++                                         real_host='198.51.100.7', trust=True)
+++        ftplib.ftpcp(source, 'a', target, 'b')
+++        target.sendport.assert_called_once_with('10.0.0.5', 258)
+++
+++
++ class MiscTestCase(TestCase):
++     def test__all__(self):
++         not_exported = {
++diff --git a/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst b/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
++new file mode 100644
++index 00000000000..21a79c3e0e7
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
++@@ -0,0 +1,6 @@
+++The :mod:`ftplib` module's undocumented ``ftpcp`` function no longer trusts
+++the IPv4 address value returned from the source server in response to the
+++``PASV`` command by default, completing the fix for CVE-2021-4189.  As with
+++:class:`ftplib.FTP`, the former behavior can be re-enabled by setting the
+++``trust_server_pasv_ipv4_address`` attribute on the source :class:`ftplib.FTP`
+++instance to ``True``.  Thanks to Qi Deng at Aurascape AI for the report.
++-- 
++2.47.3
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index e14ddf4f20..931ad3bae6 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -19,6 +19,9 @@ PYTHON3_IGNORE_CVES += CVE-2026-3276
+ # 0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
+ PYTHON3_IGNORE_CVES += CVE-2026-7774
+ 
++# 0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
++PYTHON3_IGNORE_CVES += CVE-2026-8328
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
