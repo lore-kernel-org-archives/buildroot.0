@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1159ECD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B470CD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D532440F57;
-	Fri,  5 Jun 2026 12:38:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 218CB60B44;
+	Fri,  5 Jun 2026 12:38:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hk9C1KynqwPZ; Fri,  5 Jun 2026 12:38:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9VE6O7sxKstx; Fri,  5 Jun 2026 12:38:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB7540F86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C8CC60B3C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663108;
-	bh=U563EUMFC6lZ0wezemc4HMBt2Hrco/W18EbKoV5i4pA=;
+	s=default; t=1780663109;
+	bh=pc2uyTnK3gU+PRp3WlwbyDsxHkeUqHeWeQyVeowELvI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CfYobQ3QmL3fU1HqGAiQ3oIJT9XfW+b3QZmj2zbag0aEUYZlqrALM/AHIDmUAVcPw
-	 yz7eSQhZcx7yqWkpmiDJGMlMZCHu+yGVQV9PiYPA5Ywa12z9e4bui8QXfztkV4RhOZ
-	 1RMaMnbmV5QVOzyQ75fIu4/sMRNSmPKymHAYd4qMIZ0kC8mxmTqkhCu9Ni06tYTO4b
-	 4diJjO1j/7weKUzPDGbdgLsYk1TfyzcDEcUEjvgZWqkkLSpDkxQlqAlDXtXNdl5qbG
-	 kKIxWimk4IAIyCyhXVKq1LVg0rLVdv4TqxmKXdK+kLNFxdz/tT2stBZ4mL3jxXMi0P
-	 ZGhoZnldJfk8w==
+	b=PWNwmuRZYVlrkCTDWCBuIGq8ORggd0Rbo6T5Rztid3VM18s9WllFI3+MogRgesPfY
+	 s1OprdGKQtV0VDOAkCXifnHTMDKY55fhItJpDTskKCa7qtp+gWY2c2/Zw1Os2M6hCN
+	 xrBYGvgXGP0jnfRWHMnwmaPrm6OnHJYJ4lKFs+jAFRkCFiposCJOcsvrN5U7Dgm+PK
+	 k0eEwX790X0RDsBG2GuHO2gBjA0oJE8Goiw8wfDGCJNaS93l0PMVnzvS1J353ySV/F
+	 mm6ftzkywjAktvRtnrYfjGi1N6VEIKJY+EzP+Lf1snSqgnD7tXMVJ5RjzVr10ptIaq
+	 n4fIbhEHaTDCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CB7540F86;
-	Fri,  5 Jun 2026 12:38:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C8CC60B3C;
+	Fri,  5 Jun 2026 12:38:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 03E87388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12A2A388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA24B81E88
+ by smtp1.osuosl.org (Postfix) with ESMTP id EEB5981E8A
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LGIghO1M3O_y for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:32 +0000 (UTC)
+ id A35XuzPhDyac for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89D6F81E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE08381E9C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89D6F81E8A
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE08381E9C
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4626872F5; Fri,  5 Jun 2026 12:37:12 +0000 (UTC)
+ id 247EB87B3B; Fri,  5 Jun 2026 12:37:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:01:19 +0200
+Date: Thu, 4 Jun 2026 12:04:25 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 47348d3d6a70a9106174dcfa60e5345a72c6cbcd
-X-Git-Newrev: 0873873977c8c73785c7efa398dfca7b3c56e7f2
+X-Git-Oldrev: 97ac16c71cab8aa7388b3f52d0634e0b558b354d
+X-Git-Newrev: 0e83cfc75058196ba6b18c9f101a1317bce9c64e
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123712.B4626872F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gstreamer1:
- update CPE vendor
+Message-Id: <20260605123713.247EB87B3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cups-filters: add
+ upstream patch to fix CVE-2025-64524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,41 +77,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0873873977c8c73785c7efa398dfca7b3c56e7f2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e83cfc75058196ba6b18c9f101a1317bce9c64e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPE "cpe:2.3:a:gstreamer:gstreamer:*:*:*:*:*:*:*:*" is valid for
-this package.
-
-The previous vendor `gstreamer_project` has no CVE assigned to it except
-"gstreamer_project:gst-rtsp-server" which target another package.
-
-See the CVEs [1][2] ...
-
-[1] https://nvd.nist.gov/vuln/detail/CVE-2026-3085
-[2] https://nvd.nist.gov/vuln/detail/CVE-2026-3086
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4a5b7d733c7391f39097d76eb95a6b761bc09d97)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add "CVE:" tag in patch]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit ddde78c1bd251225c07f1910d6f9db2fc5189365)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...x.c-Fix-infinite-loop-caused-by-crafted-f.patch | 84 ++++++++++++++++++++++
+ package/cups-filters/cups-filters.mk               |  3 +
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index e9299e9e93..535272ed25 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -10,7 +10,7 @@ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
- GSTREAMER1_LICENSE_FILES = COPYING
- GSTREAMER1_LICENSE = LGPL-2.1+
--GSTREAMER1_CPE_ID_VENDOR = gstreamer_project
-+GSTREAMER1_CPE_ID_VENDOR = gstreamer
- GSTREAMER1_CPE_ID_PRODUCT = gstreamer
+diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+new file mode 100644
+index 0000000000..8badcfd429
+--- /dev/null
++++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+@@ -0,0 +1,84 @@
++From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
++From: Zdenek Dohnal <zdohnal@redhat.com>
++Date: Wed, 12 Nov 2025 16:02:20 +0100
++Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
++
++Infinite loop happened because of crafted input raster file, which led
++into heap buffer overflow of `CompressBuf` array.
++
++Based on comments there should be always some `count` when compressing
++the data, and processing of crafted file ended with offset and count
++being 0.
++
++Fixes CVE-2025-64524
++
++Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
++
++CVE: CVE-2025-64524
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ filter/rastertopclx.c | 25 +++++++++++++++++++++++--
++ 1 file changed, 23 insertions(+), 2 deletions(-)
++
++diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
++index 3e7c129da..1015308da 100644
++--- a/filter/rastertopclx.c
+++++ b/filter/rastertopclx.c
++@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
++   }
++ 
++   if (header->cupsCompression)
++-    CompBuffer = malloc(DotBufferSize * 4);
+++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
++ 
++   if (header->cupsCompression >= 3)
++-    SeedBuffer = malloc(DotBufferSize);
+++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
++ 
++   SeedInvalid = 1;
++ 
++@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++               seed ++;
++               count ++;
++             }
+++
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
++ 	  }
++ 
++          /*
++@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = line_ptr - start;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++ #if 0
++             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
++ 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
++@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = (line_ptr - start) / 3;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++            /*
++             * Place mode 10 compression data in the buffer; each sequence
++ 	    * starts with a command byte that looks like:
++-- 
++2.47.3
++
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index f2b85aa9d5..da882ab838 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = openprinting
+ # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
  
- GSTREAMER1_CONF_OPTS = \
++# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
++CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
++
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
+ CUPS_FILTERS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
