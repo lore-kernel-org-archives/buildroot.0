@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3267CD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0294FCD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACE5C81E5E;
-	Fri,  5 Jun 2026 12:37:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7C7960A8E;
+	Fri,  5 Jun 2026 12:37:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2KM2S4CPlDkw; Fri,  5 Jun 2026 12:37:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2HVcidLj2gnL; Fri,  5 Jun 2026 12:37:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B1AD81ED9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C48DE60A97
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663064;
-	bh=cMIAUOuKa1UvcSFgjS0hWoNn0tSDVvK+gn+oy6gqUY0=;
+	s=default; t=1780663066;
+	bh=/krXjAJPZA8iQvNK62SUypo+s+UYxJfSSw45WzrtbsE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SIrh+U056Vu2V5KkhyEUjJHK6Rco+1DbrCZv8j5DbxaOIotoxL8TDhcyirB/A4/37
-	 rcMkysJjTbgYYfXHHtzOqiKP0ukt+Gm9dN+qPn87VCt/r257c9WrS+GIwJa3FWlRbC
-	 /vrFVjXi2+Mkd/sD8JMskU3tLyUkB1rQ2XyFRKEC6h6O0iYSa3abVmcltAeVxknmP3
-	 Y8ZBLEaHZqrX6Ct2AcPCcRrfrN0XZlpxYDVrSOvkJomDxPCsbwKrwriGJMu3cQkFFx
-	 g+CK1xm1uAoqezpIRelGhck3cUK6nLPmiFXhQqp9qhxa1YefkNhd4H9WUvK1Zyi9/7
-	 xJ4DEzPXR8iTg==
+	b=q2Jy8PnoBElTvgdLztvzdjjTVsM0E+Yi3Xp/j+lllPuaiEYcG1CFoLrv8ck+UWnNL
+	 YhdJzeR3DqqRsowRg9TFu/o/mn4svHetIhHfyZPL7NcK/xFnIcMHAo9DCEF/r7YZfK
+	 Hqyi79IROrJlNoo0/egmOrJAOCYr3Q+d2s4qIEEKyrz9mHBkLk8y95xMAli7L/dBMt
+	 1VUMnQbFAn6vP+XU6ZIsvhMyUrQ4EKAmnH+QIBzyY3ntcniQMkFGQNCxErIf79pdsG
+	 eHf2pR5GoDK+QIXzQZ0JdpSjEwLsYEiMecbyE+Aeq2ksX26nPrHC2JKO2hVct62gW7
+	 q2AX/ddQYI61g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B1AD81ED9;
-	Fri,  5 Jun 2026 12:37:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C48DE60A97;
+	Fri,  5 Jun 2026 12:37:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FB4F388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 06486F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 876E481E4D
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7CD281E6C
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N7qQbVJVX9O9 for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ id w9FY84X9dt8R for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0CD81E59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58A0481B7B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB0CD81E59
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58A0481B7B
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 215DE87B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
+ id 828FB87B42; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:03:23 +0200
+Date: Thu, 4 Jun 2026 10:30:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5ba5cd0106ca27e7a50052d8412126c0069a623b
-X-Git-Newrev: 5e59db94430713a64ee16c6c4859fa05c1abb450
+X-Git-Oldrev: bc86c8c52af5f502d41899aecdd301b7b45044a9
+X-Git-Newrev: b3a27e6850762d831a0ccdf123a0acfecc4807c1
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123711.215DE87B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/scripts/cve-check: fix vulnerability timestamp to RFC 3339
+Message-Id: <20260605123710.828FB87B42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libde265: disable
+ neon support for armv7m
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,106 +77,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5e59db94430713a64ee16c6c4859fa05c1abb450
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b3a27e6850762d831a0ccdf123a0acfecc4807c1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Normalize vulnerability timestamps to RFC 3339 format with explicit UTC
-timezone suffix for CycloneDX 1.6 compliance.
-This fixes validation errors in sbom-utility and makes the generated
-SBOM with vulnerabilities compatible with DependencyTrack VEX parsers.
+Buildroot commit d4b8a42fb253116befe539e5529ac4efd97ab421 bumped the
+package from 1.0.16 to 1.0.18.
+Upstream added optional neon support in version 1.0.17:
+https://github.com/strukturag/libde265/commit/f22cf00a86f4a47f9423deb3b1daa35d981b2ec9
 
-The NVD JSON data feeds provide timestamps in ISO 8601 format without timezone
-information (e.g., "1999-01-01T05:00:00.000"), but CycloneDX 1.6 requires
-RFC 3339 format with explicit timezone designation (e.g.,
-"1999-01-01T05:00:00.000Z").
+The configure check detects neon support:
 
-Add nvd_datetime_to_rfc3339() helper function to convert timestamps before
-serialization.
+-- Performing Test HAVE_NEON
+-- Performing Test HAVE_NEON - Success
 
-Validation results:
+but causes a build error at linking stage:
 
-Before fix:
-  $ sbom-utility validate -i cve/cve_report_current.json
-  [INFO] BOM valid against JSON schema: 'false'
-  [INFO] (234) schema errors detected.
+[100%] Linking CXX executable dec265
+/builds/bkuhls/buildroot/br-test-pkg/bootlin-armv7m-uclibc/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real:
+ error: ../libde265/libde265.a(hevcdsp_qpel_neon.S.o):
+ conflicting architecture profiles A/M
 
-  Error example:
-  {
-    "type": "format",
-    "field": "vulnerabilities.0.updated",
-    "context": "(root).vulnerabilities.0.updated",
-    "description": "Does not match format 'date-time'",
-    "value": "2025-04-03T01:03:51.193"
-  }
+so we add a configure option to disable neon support.
 
-After fix:
-  $ sbom-utility validate -i cve/cve_report_update.json
-  [INFO] BOM valid against JSON schema: 'true'
+The build error was not yet detected by the autobuilders but can be
+reproduced using this defconfig:
 
-Tested-with: sbom-utility v0.18.1
-Co-authored-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e46783d3a0f56c93c2ad28236162ff4b05c134df)
+BR2_arm=y
+BR2_cortex_m4=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE=y
+BR2_PACKAGE_LIBDE265=y
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f51769b7e9796906bc11d463c1436efe5de7073f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ package/libde265/libde265.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-index bcd970bad8..5047523ade 100755
---- a/support/scripts/cve-check
-+++ b/support/scripts/cve-check
-@@ -12,10 +12,10 @@
- from collections import defaultdict
- from pathlib import Path
- from typing import TypedDict
-+from datetime import datetime, timezone
- import argparse
- import sys
- import json
--
- import cve as cvecheck
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index d7e3df83ca..b559a9f607 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -16,4 +16,8 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LIBDE265_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
  
- 
-@@ -35,6 +35,24 @@ locally.
- brpath = Path(__file__).parent.parent.parent
- 
- 
-+def datetime_to_rfc3339(dt_string):
-+    """Normalize datetime string to RFC 3339 format with Z suffix.
++ifeq ($(BR2_ARM_CPU_ARMV7M):$(BR2_ARM_CPU_HAS_NEON),y:)
++LIBDE265_CONF_OPTS += -DHAVE_NEON=OFF
++endif
 +
-+    NVD dates are already in ISO format, just need to add the Z suffix.
-+
-+    Input:  "1999-01-01T05:00:00.000"
-+    Output: "1999-01-01T05:00:00.000Z"
-+    """
-+    dt = datetime.fromisoformat(dt_string.replace('Z', '+00:00'))
-+
-+    if dt.tzinfo is None:
-+        dt = dt.replace(tzinfo=timezone.utc)
-+    else:
-+        dt = dt.astimezone(timezone.utc)
-+
-+    return dt.isoformat().replace('+00:00', 'Z')
-+
-+
- def cve_api_get_lang_from_list(values, lang="en") -> (str | None):
-     for x in values:
-         if x.get("lang") == lang:
-@@ -134,10 +152,10 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
-             "url": f"https://nvd.nist.gov/vuln/detail/{nvd_cve['id']}"
-         },
-         **({
--            "published": nvd_cve["published"],
-+            "published": datetime_to_rfc3339(nvd_cve["published"]),
-         } if "published" in nvd_cve else {}),
-         **({
--            "updated": nvd_cve["lastModified"],
-+            "updated": datetime_to_rfc3339(nvd_cve["lastModified"]),
-         } if "lastModified" in nvd_cve else {}),
-         **({
-             "cwes": nvd_cve_weaknesses_to_cdx(nvd_cve["weaknesses"]),
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
