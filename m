@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C532ACD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E48CD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98AC3807D7;
-	Fri,  5 Jun 2026 12:40:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FACwOcSLZA0P; Fri,  5 Jun 2026 12:40:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFE00806F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663257;
-	bh=5ZRBfTXdonrLDs3T/z4xMQ+bqTEPj2ygVvcPEXCdZWI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IR6C0Wt21PVhUDqAc5HiE9PQjNbNvMKPeIV3oxpsRrvSh/baHnKLmmZ6EQi7hw/Sx
-	 fDOAn38D5OSWoKKGEaLavSgZcy7VnNZYFgzbPk/1I5KVmaYDYin2UK6NFlU523NaWk
-	 BOzPOQ89JhfemuJC80KLI2VWunMlmyYMj6x6Z97gPQVhEKtSzwErvvmqwAIqFIEx77
-	 anueE5YdBtmhvgqZwnWvsYYLk4wUFDj0yLBi24lzlK4Pp8vrEY9H6+KFIk4VHvuA8k
-	 npheIIyc5vmIlm7RU1I0+O9BnVTRzQ2YwMlMMEy9d/tYCEnEUHhFJCUiKQGpHjnrlJ
-	 qodzifXP32sTA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFE00806F2;
-	Fri,  5 Jun 2026 12:40:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 018D6388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E13F440EB8
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09D00407D7;
+	Fri,  5 Jun 2026 12:40:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MP9Dw0h5UzH3 for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
+ id Z9mqEERmAP6d; Fri,  5 Jun 2026 12:40:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 173B040790
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663258;
+	bh=mv2hOKpnAbNz9nts+gV7m60p8xJ4gmeYUeecVZf7jJs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hO8Md1Qcq+C51/OzYBN+qzORLsjp9PIrewF1Re/K91Mmql54R0olUx2u4UNzexM6A
+	 9bxfKqZQsKOWi7xVpqDOzryUSskegEKNzoMpUdfqMI7c880oJhWfrRYYK5n++SSmRS
+	 WPtDKcBOwVYSsRkhCVGS7s4tIsYJU06dy1KQY7GWqXMINzVLEZXcxGPujN6TUGcgxm
+	 DYQhaCt65wq6II/EX474nPSBoNkWOcngY158vbMlFoxyTaqlGkJMrL0zJ5gkeMjUZ8
+	 SvM++zN3HmkhagBUWMNHWqZtmfn3bRFR1g2nbp3g0U8ki7TTRV4sMuLYWCBFLcyAko
+	 iQ/QW24bdLiOQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 173B040790;
+	Fri,  5 Jun 2026 12:40:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 029903B7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C779981FB0
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bf_I1BW50l6J for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD1D340FD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DE9381FE0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD1D340FD0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9DE9381FE0
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0375887B3C; Fri,  5 Jun 2026 12:38:40 +0000 (UTC)
+ id C78D687B39; Fri,  5 Jun 2026 12:38:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:27:12 +0200
+Date: Thu, 4 Jun 2026 12:25:41 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 3edbe84c9364f6ef9ccb8d495117d959dc975fb2
-X-Git-Newrev: 4f501493834fc8854ed2e7081e125e9e7d0e8d44
+X-Git-Oldrev: ef803515ae318ca4956bc83c005decccdb6baa04
+X-Git-Newrev: 4da098bc7df12a408a14299f0241b857f0c0ddc6
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123840.0375887B3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/wireless-regdb:
- bump version to 2026.05.30
+Message-Id: <20260605123839.C78D687B39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/samba4: fix build
+ on uclibc with GCC 14+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4f501493834fc8854ed2e7081e125e9e7d0e8d44
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4da098bc7df12a408a14299f0241b857f0c0ddc6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://lists.infradead.org/pipermail/wireless-regdb/2026-May/001917.html
+iconv types are defined differently in glibc (as pointers) and uclibc
+(as integers). With changes in GCC14, -Wint-conversion has now become
+an error, which shed some light on the issue.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit df127aec63fc6ad456f7ca5e2878eb3f2e7405dd)
+The actual fix for that problem is released in uclibc 1.0.58 [1].
+However, because these type definitions are in toolchain headers,
+this means that the toolchain used to build samba must also include
+uclibc>=1.0.58 (either an external toolchain that includes the uclibc fix,
+or a Buildroot toolchain after the uclibc fix is merged in Buildroot [2]).
+
+Until then, provide a workaround for samba itself.
+
+No autobuilder failure on this (yet). It can be reproduced with
+    > ./utils/test-pkg -p samba4 -T bootlin-armv5-uclibc
+
+[1] https://github.com/wbx-github/uclibc-ng/commit/328e14e55f35ee333e5a19c5717cb4bbf426c3f1
+[2] https://lore.kernel.org/buildroot/ahPrm_0gVDGw5B5-@waldemar-brodkorb.de/
+
+Assisted-by: Claude:claude-opus-4.8
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+(cherry picked from commit e136494e918090296284214ca06736e2dafb83fe)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...arset-iconv-fix-build-when-iconv_t-is-not.patch | 98 ++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index bdca077781..4c6b3bec78 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  5fc0000475d8c5368ccc5222827c16aef98b1eb6a69c9b5a3e7b7e98528945ac  wireless-regdb-2026.03.18.tar.xz
-+sha256  8a27bfc081bafed8c24dd70fab0d96f098e5a0bfcd08d3da672595f225ab8993  wireless-regdb-2026.05.30.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 7e0c585401..9761afc243 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2026.03.18
-+WIRELESS_REGDB_VERSION = 2026.05.30
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+diff --git a/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch b/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch
+new file mode 100644
+index 0000000000..b270deaf98
+--- /dev/null
++++ b/package/samba4/0002-lib-util-charset-iconv-fix-build-when-iconv_t-is-not.patch
+@@ -0,0 +1,98 @@
++From aab0668cc358e443b243528939947c3eea93ca27 Mon Sep 17 00:00:00 2001
++From: Titouan Christophe <titouan.christophe@mind.be>
++Date: Sat, 30 May 2026 00:30:00 +0200
++Subject: [PATCH] charset: fix iconv_t int/pointer conversion on uClibc
++
++The iconv handles cd_pull, cd_push and cd_direct are stored as 'void *'
++in struct smb_iconv_s, but iconv_open() returns and iconv()/iconv_close()
++take an iconv_t. On glibc this is harmless because iconv_t is itself a
++'void *', so the implicit conversions are between identical types.
++
++On uClibc however iconv_t is a 'long int', so storing iconv_open()'s
++result into a 'void *' field (and passing those fields back to iconv()
++and iconv_close()) is an implicit integer<->pointer conversion. Since
++GCC 14 -Wint-conversion is an error by default, this breaks the build:
++
++  iconv.c: In function 'sys_iconv':
++  iconv.c:166:38: error: passing argument 1 of 'iconv' makes integer
++    from pointer without a cast [-Wint-conversion]
++  iconv.c: In function 'smb_iconv_open_ex':
++  iconv.c:403:30: error: assignment to 'void *' from 'iconv_t'
++    {aka 'long int'} makes pointer from integer without a cast
++    [-Wint-conversion]
++
++Add explicit casts between iconv_t and void * so the conversions are
++intentional and the code builds on both glibc and uClibc.
++
++Upstream: not applicable to samba, because uclibc has already released
++          a fix, but this isn't included yet in Buildroot prebuilt toolchains.
++          The problem is therefore to be patched in Buildroot itself.
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ lib/util/charset/iconv.c | 30 +++++++++++++++---------------
++ 1 file changed, 15 insertions(+), 15 deletions(-)
++
++diff --git a/lib/util/charset/iconv.c b/lib/util/charset/iconv.c
++index 074794a26e3..90389d6a954 100644
++--- a/lib/util/charset/iconv.c
+++++ b/lib/util/charset/iconv.c
++@@ -163,7 +163,7 @@ static size_t sys_iconv(void *cd,
++ 	size_t ret = iconv((iconv_t)cd,
++ 			   discard_const_p(char *, inbuf), inbytesleft,
++ 			   outbuf, outbytesleft);
++-	if (ret == (size_t)-1) iconv(cd, NULL, NULL, NULL, NULL);
+++	if (ret == (size_t)-1) iconv((iconv_t)cd, NULL, NULL, NULL, NULL);
++ 	return ret;
++ }
++ #endif
++@@ -345,12 +345,12 @@ static int smb_iconv_t_destructor(smb_iconv_t hwd)
++ 	}
++ #endif
++ #ifdef HAVE_NATIVE_ICONV
++-	if (hwd->cd_pull != NULL && hwd->cd_pull != (iconv_t)-1)
++-		iconv_close(hwd->cd_pull);
++-	if (hwd->cd_push != NULL && hwd->cd_push != (iconv_t)-1)
++-		iconv_close(hwd->cd_push);
++-	if (hwd->cd_direct != NULL && hwd->cd_direct != (iconv_t)-1)
++-		iconv_close(hwd->cd_direct);
+++	if (hwd->cd_pull != NULL && hwd->cd_pull != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_pull);
+++	if (hwd->cd_push != NULL && hwd->cd_push != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_push);
+++	if (hwd->cd_direct != NULL && hwd->cd_direct != (void *)(iconv_t)-1)
+++		iconv_close((iconv_t)hwd->cd_direct);
++ #endif
++ 
++ 	return 0;
++@@ -400,19 +400,19 @@ _PUBLIC_ smb_iconv_t smb_iconv_open_ex(TALLOC_CTX *mem_ctx, const char *tocode,
++ 	 * conversions */
++ 
++ 	if (from == NULL) {
++-		ret->cd_pull = iconv_open("UTF-16LE", fromcode);
++-		if (ret->cd_pull == (iconv_t)-1)
++-			ret->cd_pull = iconv_open("UCS-2LE", fromcode);
++-		if (ret->cd_pull != (iconv_t)-1) {
+++		ret->cd_pull = (void *)iconv_open("UTF-16LE", fromcode);
+++		if (ret->cd_pull == (void *)(iconv_t)-1)
+++			ret->cd_pull = (void *)iconv_open("UCS-2LE", fromcode);
+++		if (ret->cd_pull != (void *)(iconv_t)-1) {
++ 			ret->pull = sys_iconv;
++ 		}
++ 	}
++ 
++ 	if (to == NULL) {
++-		ret->cd_push = iconv_open(tocode, "UTF-16LE");
++-		if (ret->cd_push == (iconv_t)-1)
++-			ret->cd_push = iconv_open(tocode, "UCS-2LE");
++-		if (ret->cd_push != (iconv_t)-1) {
+++		ret->cd_push = (void *)iconv_open(tocode, "UTF-16LE");
+++		if (ret->cd_push == (void *)(iconv_t)-1)
+++			ret->cd_push = (void *)iconv_open(tocode, "UCS-2LE");
+++		if (ret->cd_push != (void *)(iconv_t)-1) {
++ 			ret->push = sys_iconv;
++ 		}
++ 	}
++-- 
++2.54.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
