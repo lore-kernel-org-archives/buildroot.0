@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42561CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F27CD8C80
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17DCC820B2;
-	Fri,  5 Jun 2026 12:39:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 383E14116F;
+	Fri,  5 Jun 2026 12:39:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5lmOZDL0ZH5X; Fri,  5 Jun 2026 12:39:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CqV4OhBjFsbx; Fri,  5 Jun 2026 12:39:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 303A5820A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61FB741149
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663170;
-	bh=O/qEVPdW9mC2aN+tYrrFRjnMfqxyh3jOTux3ZVTG18M=;
+	s=default; t=1780663171;
+	bh=jH5Qx4fKohTSPyejCm+3Das3zidfDsbfsTh++mWyyyY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bLxueJePx96Nev1k4EluEW3nTf2C81I9v4durVvilsnXl6EeZNmq0cq8zm6M7u8F0
-	 BI+Ar6Lr8MCmTOBrGzUUjpqfbTbNcCU3S9zBbMhQxN7TW+UF1T1/wViceXYI5RuEjP
-	 IcTPriC3zDf7YxN5YUPaSJRVURk1bDBa1Xn6+T7C/UfWe2k5pjU7nFMWMakeUtMhr2
-	 affpmjPBB4jkKhFN0jC+lse6dRsQLg4PI4iIVGtKch+RV+tS6KI1bYxhA1L/PpXK4f
-	 6ZON1YZ6EiM2OT09Max7IFAEjj6vuHjCRAqvLKxdMsB7gC6sSYnMRmUg4+3mz18NET
-	 XMKSsNgj34Ukw==
+	b=V9gWum3SFOamgmraPjFKjXoUVMpSj/4wTsk73Hfh96DNFMBxdNrpo+SeRVx/9YCBT
+	 ubZYA/uAD9sfEfepyIsWdG7GQAZ7hRl47MbEk1Uju4EJRUkcGP/6s1f7+WW53Wl3hD
+	 Fklhlwb7q7z+YRiN5b0p1TSiYbhJgSR20z/sacwFxHuG2oQ+Ql+7NWNhgosB3B86Pf
+	 Uyc89D7/HPpUxsCekbowc3s9Px8mYQmW60gwZKj+/noo0msUgz83lvtywTzP5V/fVR
+	 7Q+Yd7QYOQTxFiJ3DY2DXciG18ZgOk/YROlJW8BVwIV2Z8Ar2o3vUX/HUXc8UYKSXk
+	 92Iq9Z0EGWNBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 303A5820A6;
-	Fri,  5 Jun 2026 12:39:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02783388
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61FB741149;
+	Fri,  5 Jun 2026 12:39:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10A893B7
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FBF781FBE
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B22541054
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rcc8-iSnPlAw for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sKPom8VMygzk for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2A1E81FCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56FCC4100E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2A1E81FCA
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56FCC4100E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1727987B22; Fri,  5 Jun 2026 12:38:34 +0000 (UTC)
+ id 80D19872F5; Fri,  5 Jun 2026 12:38:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 10:30:21 +0200
+Date: Thu, 4 Jun 2026 11:36:32 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 3b435a1bab81742e1709da8ac609e5d635698ad0
-X-Git-Newrev: b362fa37e3c8c7c929d899eee9857c3d465ffa00
+X-Git-Oldrev: cd1c5871d17743898cf0cad6d7dd56d6e4fa8061
+X-Git-Newrev: 46794e33bc651e5ddd0f6fe5ffa84880e2b36207
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123834.1727987B22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libde265: disable
- neon support for armv7m
+Message-Id: <20260605123835.80D19872F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ package/gstreamer1/gst1-plugins-bad: disable qsv support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b362fa37e3c8c7c929d899eee9857c3d465ffa00
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46794e33bc651e5ddd0f6fe5ffa84880e2b36207
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot commit d4b8a42fb253116befe539e5529ac4efd97ab421 bumped the
-package from 1.0.16 to 1.0.18.
-Upstream added optional neon support in version 1.0.17:
-https://github.com/strukturag/libde265/commit/f22cf00a86f4a47f9423deb3b1daa35d981b2ec9
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/64ed6075b782578d57edd09b3463071d6e5a4342
+added support for the Intel Quick Sync Video Encoder with version 1.22.0
+that was added to buildroot with commit
+895840edd2784492d9b7066330b43842b703343b.
 
-The configure check detects neon support:
+On unsupported platform the build is broken:
 
--- Performing Test HAVE_NEON
--- Performing Test HAVE_NEON - Success
+In file included from ../sys/qsv/libmfx/api/vpl/mfxdispatcher.h:10,
+                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.h:24,
+                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.cpp:7:
+../sys/qsv/libmfx/api/vpl/mfxdefs.h:75:6: error: #error Unknown packing
+   75 |     #error Unknown packing
 
-but causes a build error at linking stage:
+caused by
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/1.24.13/subprojects/gst-plugins-bad/sys/qsv/libmfx/api/vpl/mfxdefs.h?ref_type=tags#L75
 
-[100%] Linking CXX executable dec265
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-armv7m-uclibc/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real:
- error: ../libde265/libde265.a(hevcdsp_qpel_neon.S.o):
- conflicting architecture profiles A/M
+For now we disable qsv support to fix build errors on
 
-so we add a configure option to disable neon support.
+arc: https://autobuild.buildroot.net/results/2d5/2d5666324db2fca7ab0419e28481829edca949b3/
+m68k: https://autobuild.buildroot.net/results/53b/53ba2e9d09c25fe85e96b6e1fc9adbfcf5a637b2/
+microblazeel: https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
+or1k: https://autobuild.buildroot.net/results/17e/17e3dac016a08da8db58d735d0f2d3acc259f81f/
+sparc: https://autobuild.buildroot.net/results/f07/f07995804faa0be38bbba462c52be86c6c69822b/
 
-The build error was not yet detected by the autobuilders but can be
-reproduced using this defconfig:
-
-BR2_arm=y
-BR2_cortex_m4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE=y
-BR2_PACKAGE_LIBDE265=y
+Fixes:
+https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f51769b7e9796906bc11d463c1436efe5de7073f)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit d0cacc6acfb9357bc5aec61f7d9e330c2e41a190)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libde265/libde265.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
-index d7e3df83ca..b559a9f607 100644
---- a/package/libde265/libde265.mk
-+++ b/package/libde265/libde265.mk
-@@ -16,4 +16,8 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- LIBDE265_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
-+ifeq ($(BR2_ARM_CPU_ARMV7M):$(BR2_ARM_CPU_HAS_NEON),y:)
-+LIBDE265_CONF_OPTS += -DHAVE_NEON=OFF
-+endif
-+
- $(eval $(cmake-package))
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index c6fb669e13..ac554749c9 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -39,6 +39,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	-Davtp=disabled \
+ 	-Dopensles=disabled \
+ 	-Dmsdk=disabled \
++	-Dqsv=disabled \
+ 	-Dvoamrwbenc=disabled \
+ 	-Dbs2b=disabled \
+ 	-Dchromaprint=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
