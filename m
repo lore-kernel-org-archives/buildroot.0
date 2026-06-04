@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E862CD6E77
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88BABCD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 538B04197C;
-	Fri,  5 Jun 2026 12:40:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6332660DD9;
+	Fri,  5 Jun 2026 12:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zzJFuDcxQwzx; Fri,  5 Jun 2026 12:40:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mZfOnY6MxbmK; Fri,  5 Jun 2026 12:40:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61C9C41971
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 702A960E67
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663223;
-	bh=/hjRoaLG4tpnzFHuWEcewLkJHKYtt2nyn592PbUgEsI=;
+	s=default; t=1780663224;
+	bh=yJBpM8DgWnbZC6BBGnok6Jt3QFrrKyJiLFDjuKgFzTM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pThcM71Ysk1pJrQBlgqFTVwzfBQuHGbvA4zYnFuChBR1yUNPvtE7NT3LOC1531LGI
-	 BsUzHU9D/Hu7YvhvSUoXDJGfmeaADYmtjTqEyZ1MqpFwYKmDToi/mZ52QWZViYdtHp
-	 E23VAwX/dG6W6DxgQ4m2HKj5w9VbOUv5022x6rGFShQ+V+2R6N90dn8H+D15mue+H2
-	 FmSnbIDxQCmwc30ggfDh0CO3tRY/joe2Q8EQxwovDJM04+t7RKxKWI4tHmiwhNM/k4
-	 QMa2lkx+1AdqcYmejHRC0H0+OYVpABbdHXroOTpSM17L/lQwh6b9y1WRRq/mix7THr
-	 RrpGS9NvAy0kw==
+	b=i3j0jp94gsLPNdZiwXl+Qy8SzN91Dnj5W1Yuo7+vsDlshw7eFTbPSpFQe3AYWx3/l
+	 3hqsYJDsW/tmb402kqkdX3GLX1p7vcXvQUzOIvg5UYkBcFfcZQ/sBDh9xdFaUDPiWb
+	 O8Gz5KBwsSCJnIVcndRrLyb8PBEjSOnoMrI9q7YAxf7XjnGueAy44ORNwVgMeiox0x
+	 w1cU82QMRj5m++jg82+QNeffJYUOUOZy14c6B63THHjjgsJhJac+p+FUgTR/yW02Fl
+	 vd7mFpg9RaA/BICQ9/nHTQVLJqIkT+GaffHCCWPSCmUYE0NC4HSrnDVzubbCqpjbd3
+	 EXIrvZP2DoMjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61C9C41971;
-	Fri,  5 Jun 2026 12:40:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03BE4F4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 702A960E67;
+	Fri,  5 Jun 2026 12:40:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D321388
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 338F340F18
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 801EE81FE2
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AD-oKrwTmiWL for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VfIU2WbmIPAR for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82C8B41072
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0DE381FC2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82C8B41072
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C0DE381FC2
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC77287B03; Fri,  5 Jun 2026 12:38:38 +0000 (UTC)
+ id EA5F087B22; Fri,  5 Jun 2026 12:38:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:09:33 +0200
+Date: Thu, 4 Jun 2026 10:23:23 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 49cc5deacd4d0d3e19b83a3b856ed66b02f7f9b7
-X-Git-Newrev: 7b9b53d1be767d29c470a633b94fddf03516e976
+X-Git-Oldrev: 66066ece804f4590fc5050a653f859b366f4806c
+X-Git-Newrev: 0c465e005f54dda1075703a97e7ad21a98ecfb6b
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123838.AC77287B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libbpf: fix
- bpftrace build with kernel headers 5.{9, 10}
+Message-Id: <20260605123833.EA5F087B22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libheif: security
+ bump version to 1.22.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,103 +77,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7b9b53d1be767d29c470a633b94fddf03516e976
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c465e005f54dda1075703a97e7ad21a98ecfb6b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot added the bpftrace package in 2024 with commit
-338acb27ff3e07560290085d7c6a2feab633c869
-which initially provided version 0.19.1.
+https://github.com/strukturag/libheif/releases/tag/v1.22.2
+"Fixes missing heif_image_get_bayer_pattern_size() function."
 
-This release includes upstream commit
-https://github.com/bpftrace/bpftrace/commit/fea31939899db48fa6d28f5ce880bfc39250ec9f
-which was added to version 0.17.0 in 2022 and makes use of certain
-variables of struct bpf_btf_info which were added to the linux kernel in
-2020 with version 5.11:
-https://github.com/torvalds/linux/commit/5329722057d41aebc31e391907a501feaa42f7d9
+https://github.com/strukturag/libheif/releases/tag/v1.22.1
+"Security
+- CVE TBD (GHSA-r7qj-cg5r-r6vf) - Wrapped icef compressed-unit range
+ check causes out-of-bounds read in uncompressed HEIF decoder
+ - (GHSA-5hqq-636x-r3cr) - Out-of-bounds write in inline mask region API
+                           when source mask exceeds declared region"
 
-+	__aligned_u64 name;
-+	__u32 name_len;
-+	__u32 kernel_btf;
-
-The libbpf package updates toolchain headers with its bundled version
-only when the toolchain headers are version 5.8 or older, this condition
-is part of the initial version of the package added in 2020 with
-buildroot commit f7b8508e4fe9c96bf679cc5423cc1500b6523e83. This version
-limit should have been raised when the bpftrace package was added to
-avoid build errors when the toolchain contains header versions 5.9 or
-5.10.
-
-This situation caused build errors in the autobuilder, the last one in
-February 2025:
-
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:
- In member function 'bool bpftrace::BPFfeature::has_module_btf()':
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:573:8:
- error: 'struct bpf_btf_info' has no member named 'name'
-  573 |   info.name = (__u64)name;
-      |        ^~~~
-/home/autobuild/autobuild/instance-18/output-1/build/bpftrace-0.19.1/src/bpffeature.cpp:574:8:
- error: 'struct bpf_btf_info' has no member named 'name_len'
-  574 |   info.name_len = sizeof(name);
-
-The problem disappeared from the autobuilders due to newer headers
-versions used for the buildroot toolchain or other build errors occurring
-earlier, like llvm version mismatches.
-
-The build error can today still be reproduced with this defconfig
-
-BR2_aarch64=y
-BR2_KERNEL_HEADERS_5_10=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_BPFTRACE=y
-
-on the 2026.02.x branch as of 0be927b89a319c9ac35249354558e9f4cb102fd0.
-
-To fix the problem we raise the BR2_TOOLCHAIN_HEADERS_AT_LEAST_ version
-number.
-
-Fixes:
-https://autobuild.buildroot.net/results/dbe/dbecf88c7edba357cee8fea31294ddb9f4d188ad/
-https://autobuild.buildroot.net/results/df5/df59e038de47f63d14e1be7bd12dd16a69636f79/
-https://autobuild.buildroot.net/results/359/3595d39dd53a686bbf996dd4e532ced44906b9e3/
-https://autobuild.buildroot.net/results/e4f/e4f95a5f30a605eadb81802075ea6bb1e2880684/
-https://autobuild.buildroot.net/results/bd0/bd075cb8c55f9f8a017711dc804b8d81ae89b4c5/
+Removed patch which is included in version 1.22.1.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 7e5241e14aab1b6ff31c30bca05f9fa2ce81b6c1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 08f3757b0f2133b0ed50e1ef3d7a5a1d9c80de1c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libbpf/libbpf.mk | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ ...001-heif_properties.h-fix-bad_pixels-type.patch | 28 ----------------------
+ package/libheif/libheif.hash                       |  4 ++--
+ package/libheif/libheif.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 31 deletions(-)
 
-diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index a4bd270cbd..4b742ab966 100644
---- a/package/libbpf/libbpf.mk
-+++ b/package/libbpf/libbpf.mk
-@@ -18,13 +18,14 @@ define LIBBPF_BUILD_CMDS
- 		-C $(@D)/src
- endef
+diff --git a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
+deleted file mode 100644
+index 69c5d170fe..0000000000
+--- a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From ef124f9988e57a06ad6d102c236d2bb4b82aef5d Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=C8=98tefan=20Talpalaru?= <stefantalpalaru@yahoo.com>
+-Date: Wed, 20 May 2026 00:37:24 +0200
+-Subject: [PATCH] heif_properties.h: fix "bad_pixels" type
+-
+-Upstream: https://github.com/strukturag/libheif/commit/ef124f9988e57a06ad6d102c236d2bb4b82aef5d
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- libheif/api/libheif/heif_properties.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libheif/api/libheif/heif_properties.h b/libheif/api/libheif/heif_properties.h
+-index 9432bd46..0dec3a37 100644
+---- a/libheif/api/libheif/heif_properties.h
+-+++ b/libheif/api/libheif/heif_properties.h
+-@@ -335,7 +335,7 @@ heif_error heif_image_add_sensor_bad_pixels_map(heif_image*,
+-                                                  uint32_t num_bad_columns,
+-                                                  const uint32_t* bad_columns,
+-                                                  uint32_t num_bad_pixels,
+--                                                 const heif_bad_pixel* bad_pixels);
+-+                                                 const struct heif_bad_pixel* bad_pixels);
+- 
+- // Returns the number of sensor bad pixels maps on this image (0 if none).
+- LIBHEIF_API
+--- 
+-2.47.3
+-
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index b88784b309..22697f307c 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/strukturag/libheif/releases/tag/v1.22.0
+-sha256  8bd20cfa3201997b8f63266cddfabea2e1481467d7f992e6a2595e0bec691fc2  libheif-1.22.0.tar.gz
++# From https://github.com/strukturag/libheif/releases/tag/v1.22.2
++sha256  eea48e4841f83fbe51d029337ffd2d14512d0203015dad40b90213d872958af3  libheif-1.22.2.tar.gz
+ # Locally computed:
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index e47620b167..4b23f1fda3 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# bpf/bpf.h installed by libbpf uses bpf_iter_link_info that was added since
--# kernel 5.9, so we need to update some uapi headers in STAGING_DIR if the
--# toolchain is build with linux-headers < 5.9.
--# Otherwise bpf/bpf.h is broken due to out of date linux/bpf.h installed by the
--# toolchain.
--# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a5cbe05a6673b85bed2a63ffcfea6a96c6410cff
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9),)
-+# bpftrace uses variables from bpf_btf_info that were added since kernel
-+# 5.11, so we need to update some uapi headers in STAGING_DIR if the
-+# toolchain is build with linux-headers < 5.11.
-+# Otherwise bpftrace is broken due to out of date linux/bpf.h installed
-+# by the toolchain.
-+# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=5329722057d41aebc31e391907a501feaa42f7d9
-+# https://github.com/bpftrace/bpftrace/commit/fea31939899db48fa6d28f5ce880bfc39250ec9f
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11),)
- LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
- 
- define LIBBPF_FIX_STAGING_PC
+-LIBHEIF_VERSION = 1.22.0
++LIBHEIF_VERSION = 1.22.2
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
