@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E262FCD8C80
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C404CCD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98D6540EC3;
-	Fri,  5 Jun 2026 12:37:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 914D260A63;
+	Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id prEqi4oYUZBj; Fri,  5 Jun 2026 12:37:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qdWsIlXSJ_MY; Fri,  5 Jun 2026 12:37:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A387C40EB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A72C760A64
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663054;
-	bh=hYNZw3ORzW1Q1b17X7ehlUyfB1MVq1Mo8szDu0m2dCo=;
+	s=default; t=1780663055;
+	bh=HzRXCnXTffbWthuSfb3NlEXrNAq/PMozrxapcUy67iA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HxREVOO7FAQ+b0mi/PvxWbfoQpI24eS8MgvVVSsSM30Xcd8jcXfIE/XOB62aEQWSm
-	 rQpjCoWfMVTByJy6Po+psPfNXXnEIhL3QIK81IR1yN5vfM2WaudiPMT9dPdOewzlBx
-	 UD9pZ5wj/NXJviBvhfxlZ7LG5SaJonF0dnzudBEFTTg5UNlIVpgyYTBwb4bDvTesol
-	 vtQe7UGY+75GEoxezOG4KUFHW0pUsM+TH3ymewnZqNSfKy5OXZtKBW1EBqzVJAFJhF
-	 Lz2YdkHOkXJrbGKDN+InXZ21VzPF1/oQJruO0Q4fjDjggvYClzWbkWR5Jh5T5I3Skc
-	 Z62evfO0Hpb/w==
+	b=XSWohnIg1hLuKaVbifvNjkZaSIWi77sN0HManO6pZfLclDBtPcUUKR8S3ONwzxWgX
+	 oSLehAc8GVnl2xFdNo3pszEJlSqN9doUu+QbipxWeOyGogfnodKtFv2/1GP63hQXiA
+	 /xMlEiozPuH25Kbjztk8gU1moJKfuR/ca3GYThgsAZq/yRjDrfH44s3GfpXOWlD0Iu
+	 4IpCpFk650fq1Ds4zfk+VJ1bh/4qeS1UCKmk8EASj3vqJvFxABLS5UhUs2fwUxjDBG
+	 a4K46LuC+jKHW9CzbHtD03CSgAolGYGNyRatdc0UvEQSrFa5Em5FI2Nj+EqHa4kKum
+	 zCUVVMA9mearQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A387C40EB8;
-	Fri,  5 Jun 2026 12:37:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4301C388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A72C760A64;
+	Fri,  5 Jun 2026 12:37:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0572FF4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D8B240334
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0543481E7E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iSuxn6pgCVCG for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Or7PcYuOoReD for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CEDE403A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81C9581E4E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CEDE403A4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81C9581E4E
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9819487B40; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
+ id AC0FA87B3F; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 10:31:51 +0200
+Date: Thu, 4 Jun 2026 10:44:57 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6199b9b9cba6e9387896cc94b052c0ae38ad68ac
-X-Git-Newrev: 14bfd4c3cf7b2b02d7dee357fb76502860d98aa7
+X-Git-Oldrev: 670eafbddb23455da264c05ecb2f2d67141d5814
+X-Git-Newrev: e7dc7490ee02f326ce7d8fc0cc6ccccf1fddc083
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123710.9819487B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/radvd: security
- bump to version 2.21
+Message-Id: <20260605123710.AC0FA87B3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk:
+ security bump to 22.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/14bfd4c3cf7b2b02d7dee357fb76502860d98aa7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e7dc7490ee02f326ce7d8fc0cc6ccccf1fddc083
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following vulnerability:
+See here for a changelog:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22-current.html
 
-CVE-2026-48715: Stack Buffer Overflow in radvdump Route Information Option
-Parser
+Pjsip was updated to 2.16.
 
-https://github.com/radvd-project/radvd/security/advisories/GHSA-52px-gh9p-m379
+Fixes some security issues in pjsip:
 
-Release notes:
-https://github.com/radvd-project/radvd/releases/tag/v2.21
+Author: Mike Bradeen Date: 2026-03-23
+Address the following pjproject security vulnerabilities
 
-The release is now done on github, and a .tar.xz version is available so use
-that. Notice that we cannot use the github macro.
+GHSA-j29p-pvh2-pvqp - Buffer overflow in ICE with long username
+GHSA-8fj4-fv9f-hjpc - Heap use-after-free in PJSIP presense subscription termination header
+GHSA-g88q-c2hm-q7p7 - ICE session use-after-free race conditions
+GHSA-x5pq-qrp4-fmrj - Out-of-bounds read in SIP multipart parsing
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f5601740113111269cd0717062fdef039b17763d)
+(cherry picked from commit 6add6e3cd87f2ac5c24a558427b8f4aaac6d34a5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/radvd/radvd.hash | 4 ++--
- package/radvd/radvd.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/asterisk/asterisk.hash | 4 ++--
+ package/asterisk/asterisk.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index 8415b8d854..a9937aa232 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,3 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.20.tar.gz.sha512
--sha512  798d8476ab5ff43083b181d6d6ec43c47d06e4067d30c71e038cfd890bcf1ca23e809f9e184c4363458bfa25a916625dd2d7553290fb3e5459034d477b80ebaa  radvd-2.20.tar.gz
-+# From https://github.com/radvd-project/radvd/releases/download/v2.21/radvd-2.21.tar.xz.sha256
-+sha256  91df2ed7faca0716bbd726a17d6467ed92fcb2b6e45b57d9e619f9686ab99e1b  radvd-2.21.tar.xz
- sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 89d8f55d51..32bbcf57ee 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 3a8274b458..8d620a0ee3 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,8 +1,8 @@
+ # Locally computed
+-sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asterisk-22.8.2.tar.gz
++sha256  dd664a9600874d0b0c0e63a8fda2e08efc9f5fdc95781022fbf39ed9b15196f6  asterisk-22.9.0.tar.gz
+ 
+ # Locally computed
+-sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
++sha256  633c3dc34ffb21af8ac9ee160245c9c174379391e35cace1b6c9f516a260f683  pjproject-2.16.tar.bz2
+ sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index e2fdb189fa..b15a83f6f8 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RADVD_VERSION = 2.20
--RADVD_SITE = http://www.litech.org/radvd/dist
-+RADVD_VERSION = 2.21
-+RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
-+RADVD_SITE = https://github.com/radvd-project/radvd/releases/download/v$(RADVD_VERSION)
- RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf libbsd
- # We need to ignore <linux/if_arp.h>, because radvd already includes
- # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
+-ASTERISK_VERSION = 22.8.2
++ASTERISK_VERSION = 22.9.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+@@ -12,13 +12,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ # compilation with the external pjsip produces a non-working asterisk, which
+ # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+-ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.16/
+ ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.16.tar.bz2 \
+ 	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
