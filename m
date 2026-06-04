@@ -4,60 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25233CD6E4A
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 13:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FCFBCD6E4A
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 13:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D109142A16;
-	Thu,  4 Jun 2026 13:37:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C441D42EE0;
+	Thu,  4 Jun 2026 13:55:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sarU3N4wvifP; Thu,  4 Jun 2026 13:37:58 +0000 (UTC)
+ id z1x_7cf1Xb5C; Thu,  4 Jun 2026 13:55:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCBA42A17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC12242EE6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780580278;
-	bh=pSgEqVWVdVz0MEfqZcFGr6s+5rc6LHYYJv+h4F5y8+Q=;
+	s=default; t=1780581350;
+	bh=IEO4J6vxVW5+GmVjCRYhoHU6FESs9kBbVj/jK6H1VVI=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=mH8IkQGlWn+TClFqbqyCgzDfadnyWdX1E/0LbqIlqQvktQTsUdkyXIOxDuYSvrFqW
-	 4/+oO+ltighq6lIDI7OU6vCmVJrEsCTT+8NCacWYdg3Tb0waU4wnvijwPBhDz84VTd
-	 JkNjFggYFjiNmtm7R+80Ka1g/q+ilQZJof+el4iSSdgwc+kp8TXKKIq2b1MLKUeSTR
-	 G/XZxc33RctxR0UBh7F8SeellDWfiP6FtHjawhZ0WoFWZSCQoLHfGja33dUAfOMDUQ
-	 5VNmSzXD68RfaIyzBq0kDhHaOBQvJNyVzj7f/uB6SIihp0tI85PkwXyn5pC66gZm2Q
-	 qdDOQs0oqcz+g==
+	b=U4fzJfznIfU61+20PWku+f1Qep/A/qy0qK7RJm8IKS0kkYnxHUAxd4rYpypOT976O
+	 4/CgWWkkB4c5N1VXGFNu1OP0PmF4CHqbecn4oLXpyqC2ZNbAgrTjOCuMpBhj0XYKGV
+	 naZsit1KIk43vK/K6+Hdmx73N/zEJuKNkU0XHDV3uzR8aJIc4n7oeaaekX9sh/osKT
+	 xpZf0Rn0eeyEBtX6P68eVFFlv5Qyp/WdQhsCnrzdgDifcajAEMp6QofsKPmk6JeZzi
+	 Ci+Z8Twr0mpe/vhe27PsaBacrgdHBRZhUpNDZRRH1tgLnRckuy/aDhc+SNnPUvBkhh
+	 HZymhFyRnO1tg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDCBA42A17;
-	Thu,  4 Jun 2026 13:37:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 363EDDE
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC12242EE6;
+	Thu,  4 Jun 2026 13:55:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C09E0192
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C7B36F50F
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B30216F541
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:55:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mNkw8jPd0lS1 for <buildroot@buildroot.org>;
- Thu,  4 Jun 2026 13:37:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id ukrrGPoh0Znu for <buildroot@buildroot.org>;
+ Thu,  4 Jun 2026 13:55:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7D8F6F50D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7D8F6F50D
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C65987A4B; Thu,  4 Jun 2026 13:37:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 828CF6F4BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 828CF6F4BC
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 828CF6F4BC
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:55:48 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 56917412
+ for <buildroot@buildroot.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 04 Jun 2026 13:55:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wV8Xx-0000000FhdY-2p5W
+ for buildroot@buildroot.org; Thu, 04 Jun 2026 15:55:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 15:36:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b168816cd85698ffb377bc1e06333d57a2ab4e4
-X-Git-Newrev: 443bec78114bfd9e7062fc59a633cb9568c55859
-X-Patchwork-Hint: ignore
-Message-Id: <20260604133740.6C65987A4B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2026.05-rc4
+Date: Thu, 04 Jun 2026 15:55:45 +0200
+Message-ID: <874ijijtpa.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=t9arKKTteeel0sVl6Ps9QTw5VIiLb3wQeQ4cr4UsoCNLPWGFyJgPP0YGExSDlygr9BCm1Nw1gzUOmQ5pw9Qg1kvgFV7HkWaz/tslHbAE4RHrx3hzRRlfontlCFRPzqrp6OM/IxLt1m6gJFGq/uNawfqObQ0DrDqGlMRK9ooLASEUM+irqqQpXIx1gulazJr0/Bp6W7fPfilLb8CCi7rZJFBIk4K8xKDYNczUY44dGMNaiw7sqE/7BKSpodPnwCGUIiLuZh0WcHddxn/oTdVS615N8GoMNAmCGwsxhUvltQ7Sk76kuDYoXgO3Q3y683hSC5F4Zp17YdEUSwee8TbzlA==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=9yk+llSoPdDvhS/HVZYIOsnTDSN060fzMVctovQSgv8=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=t9arKKTt
+Subject: [Buildroot] Buildroot 2026.05-rc4 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,168 +88,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/443bec78114bfd9e7062fc59a633cb9568c55859
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 50 ++++++++++++++++++++++++++++++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 14 ++++++-------
- docs/website/news.html     | 22 ++++++++++++++++++++
- 4 files changed, 81 insertions(+), 9 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 568908d144..9c5c08a360 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,53 @@
-+2026.05-rc4, released June 4th, 2026
-+
-+	Fixes all over the tree.
-+
-+        Infrastructure:
-+
-+        - dependencies: detect and reject buggy uutils 'install'
-+          program as used in Ubuntu 26.04
-+
-+        - pkg-generic: Cleanup /usr/share/info/dir in the target
-+
-+        - generate-cyclonedx / cve-check: Various fixes for better
-+          CycloneDX / BSI TR-03183-2 compliance
-+
-+        - linux: No longer forcibly disable CONFIG_WERROR
-+
-+        - 'make show-info-all' added, which works like 'make
-+          show-info' but for all packages. The package hash files are
-+          now also included in the show-info{,-all} output.
-+
-+        Architectures:
-+
-+        - Drop support for the (rare) PA-RISC 1.0 variant
-+
-+	Updated/fixed packages: aardvark-dns, arm-trusted-firmware,
-+	asterisk, babeld, bpftrace, busybox, ca-certificates, cairo,
-+	capnproto, collectd, cppdb, crucible, cups-filters,
-+	docker-cli, docker-engine, drm-info, efl, esp-hosted, exim,
-+	faad2, freeipmi, freeswitch, gcc-bare-metal, gdb, gerbera,
-+	glibc, graphene, gst1-plugins-bad, gst1-plugins-good,
-+	gstreamer1, harfbuzz, heirloom-mailx, hiredis, hplip, icu,
-+	jemalloc, jq, kodi, lcms2, libbpf, libdill, libdrm, libenca,
-+	libgit2, libheif, libks, libmad, libmicrohttpd,
-+	libmodsecurity, libpthsem, libssh2, liburing, llvm-project,
-+	lrzip, lrzsz, lua-sdl2, mesa3d, mpd, mrp, ndctl, netatalk,
-+	netavark, odhcp6c, openblas, opencv4, opendoas, openscap, php,
-+	podman, poppler, powerpc-utils, privoxy, python-ecdsa,
-+	python-gymnasium, python3, qt53d, qt5webengine-chromium,
-+	qt6base, readline, redis, rpcbind, rtl8188eu,
-+	rtl8812au-aircrack-ng, rtl8822cs, runc, rust, rust-bin,
-+	samba4, sane-airscan, sane-backends, sdl2_image, sqlite,
-+	sshfs, stellarium, suricata, sway, sysrepo, tor, unzip,
-+	ustream-ssl, util-linux, vlc, vorbis-tools, weston,
-+	wireless-regdb, xdriver_xf86-video-nv, xen, xerces,
-+	xserver_xorg-server, xwayland, zsh
-+
-+        Removed packages: daq, kodi-pvr-hdhomerun, libhdhomerun,
-+        libphidget, phidgetwebservice, pigpio, ptpd2, xml-security-c,
-+        zeek
-+
- 2026.05-rc3, released May 29th, 2026
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 14ea241dc4..63356e6901 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2026.05-rc3
-+export BR2_VERSION := 2026.05-rc4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1780006000
-+BR2_VERSION_EPOCH = 1780580000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 0b03034886..c7d15b2570 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -21,25 +21,25 @@
-           <th>2026.05.x</th>
-           <td>September 2026</td>
-           <td>
--            2026.05-rc3<br/>
--            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">
-+            2026.05-rc4<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc4/CHANGES">
-               Changelog
-             </a>
-           </td>
--          <td>2026-05-29</td>
-+          <td>2026-06-04</td>
-           <td>
--            <a href="/downloads/buildroot-2026.05-rc3.tar.gz">
-+            <a href="/downloads/buildroot-2026.05-rc4.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-               .tar.gz
-             </a><br/>
--            <a href="/downloads/buildroot-2026.05-rc3.tar.gz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2026.05-rc4.tar.gz.sign">[PGP sig]</a>
-           </td>
-           <td>
--            <a href="/downloads/buildroot-2026.05-rc3.tar.xz">
-+            <a href="/downloads/buildroot-2026.05-rc4.tar.xz">
-               <img src="images/package.png" width="24" alt="">
-               .tar.xz
-             </a><br/>
--            <a href="/downloads/buildroot-2026.05-rc3.tar.xz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2026.05-rc4.tar.xz.sign">[PGP sig]</a>
-           </td>
-         </tr>
-         <tr>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index b0b32892cd..3c9f914f0e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2026.05-rc4 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 June 2026</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>The Nice hackathon brought a large amount of (security) bugfixes, so here comes another
-+          release candidate. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc4/CHANGES">CHANGES</a>
-+	  file for more details.</p>
-+
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2026.05-rc4.tar.xz">2026.05-rc4
-+	  release</a>, and report any problems found to the
-+         <a href="support.html">mailing list</a> or
-+         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyNi4wNS1yYzQgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIwMjYuMDUtcmM0
+LnRhci5negoKb3IKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIw
+MjYuMDUtcmM0LnRhci54egoKT3IgZ2V0IGl0IGZyb20gR2l0OgoKaHR0cHM6Ly9naXRsYWIuY29t
+L2J1aWxkcm9vdC5vcmcvYnVpbGRyb290LmdpdCAoMjAyNi4wNS1yYzQgdGFnKQoKVGhlIGhhY2th
+dGhvbiBpbiBOaWNlIGJyb3VnaHQgYSBsYXJnZSBudW1iZXIgKH4xODApIG9mIChzZWN1cml0eSkg
+Zml4ZXMsCnNvIGhlcmUgY29tZXMgYW5vdGhlciByZWxlYXNlIGNhbmRpZGF0ZS4gRm9yIGRldGFp
+bHMsIHNlZSB0aGUgQ0hBTkdFUwpmaWxlOgoKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vYmxvYi8yMDI2LjA1LXJjNC9DSEFOR0VTCgpQbGVhc2UgZ2l2ZSBpdCBh
+IHNwaW4gYW5kIHJlcG9ydCBhbnkgcHJvYmxlbXMgdG8gdGhlIG1haWxpbmcgbGlzdCBvcgpidWcg
+dHJhY2tlci4gTWFueSB0aGFua3MgdG8gdGhlIHBlb3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyBy
+ZWxlYXNlOgoKZ2l0IHNob3J0bG9nIC1zbiAyMDI2LjA1LXJjMy4uCgogICAgNzcgIEJlcm5kIEt1
+aGxzCiAgICAyOCAgVGhvbWFzIFBlcmFsZQogICAgMTEgIFBldGVyIEtvcnNnYWFyZAogICAgIDkg
+IFF1ZW50aW4gU2NodWx6CiAgICAgOCAgUm9tYWluIE5hb3VyCiAgICAgNyAgVGhvbWFzIFBldGF6
+em9uaQogICAgIDYgIE1hcnRpbiBXaWxsaQogICAgIDUgIEdpdWxpbyBCZW5ldHRpCiAgICAgNCAg
+U2h1YmhhbSBDaGFrcmFib3J0eQogICAgIDQgIFRpdG91YW4gQ2hyaXN0b3BoZQogICAgIDMgIEFy
+bm91dCBWYW5kZWNhcHBlbGxlCiAgICAgMyAgSnVsaWVuIE9saXZhaW4KICAgICAyICBGcmFuY29p
+cyBQZXJyYWQKICAgICAyICBKb2huIEVybmJlcmcKICAgICAyICBNYXJjdXMgSG9mZm1hbm4KICAg
+ICAyICBSYXBoYWVsIFBhdmxpZGlzCiAgICAgMiAgVmluY2VudCBTdGVobMOpCiAgICAgMiAgV2Fs
+ZGVtYXIgQnJvZGtvcmIKICAgICAxICBBbGV4aXMgTG90aG9yw6kKICAgICAxICBDaHJpc3RpYW4g
+U3Rld2FydAogICAgIDEgIERhcmlvIEJpbmFjY2hpCiAgICAgMSAgRGV2cmVlc2UgSm9yaWsKICAg
+ICAxICBIZWlrbyBTdHVlYm5lcgogICAgIDEgIFBlbmdqaSBMaQogICAgIDEgIFZpYWNoZXNsYXYg
+Qm9jaGFyb3YKICAgICAxICBWaW5jZW50IENydXoKCkV4cGVjdCB0aGUgZmluYWwgMjAyNi4wNSBy
+ZWxlYXNlIHdpdGhpbiBhIGZldyBkYXlzLCB1bmxlc3MgYW55dGhpbmcgYmlnCnNob3dzIHVwLgoK
+LS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
