@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 472C2CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53A4BCD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1441781E9C;
-	Fri,  5 Jun 2026 12:38:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23A3B60AA6;
+	Fri,  5 Jun 2026 12:38:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1eQaknOiJQ9z; Fri,  5 Jun 2026 12:38:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bt3q3pMM9fmF; Fri,  5 Jun 2026 12:38:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B65E81EAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D05C60AD9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663093;
-	bh=B8eW2uJpfw5cwc807sK7U4c9CjDfMgVepZZF7bxmBKM=;
+	s=default; t=1780663095;
+	bh=0nyEsJfNOIr6j4hK7hkZTTVXuVsgUp69O7y7OoiUrSk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mBSmqolQgqUeTUmcBm2BCy9z+3BQ79LM/ITz7YM60jBmQLtJ+fG1K2VJNzPW3koRO
-	 Xexy87Qjlk8uzQjLtcdUZKL4aalCCKoAjCO+SLiVSZScVXpd6YpGSbo/vDC86+XG8p
-	 duVOpIJyUBDQCn8Q6XBiD6b8/+P33BHb2I0UAaIV8R9NRahySicUCT8JuZ+DMjnC3A
-	 7K5NhUhmL+x9bNcC6lElLgTw2w73H8Q9ohp9jCKJNug3be2ryd5pzYBr13hp1nTZfQ
-	 aC4i3YwlGPacJaxHMy7zHdi/umur7OciyUbP0vLS1B/ybH1iWxpHCIlt6Q2ryPCutH
-	 zYxe19OfeG/wQ==
+	b=GKn4/cpZo4Pp0sM8wyt8jdltIkYMtdTwfCxwKkTL0Sil8EwNJirkC+En9Aema3rqs
+	 BDOPyE+q7tF+u+nSBHy4ZCb4x3IpewYMpmpFPcdzsMwm004aKevuk72A/yJfi4CyrV
+	 okQRjV0Ag9tw+i1v2DBAmFGL4aC7wAOHRemoaKlnMczcqLmKKErptpViVzdH8cljjd
+	 T7xjk0gZ5Pra7+hY2asPqPplzSQeVagNKZFHJvhBTtaEswK54+uH4H6torHbMUXIbv
+	 1Yoj6IBUj8oZeWKrAUv4eKaefLV43vgf4fu1EPN0FVduki/Mf+r7IeL4dH9/sk0Xqm
+	 nQF9qziSDj5PQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B65E81EAD;
-	Fri,  5 Jun 2026 12:38:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D05C60AD9;
+	Fri,  5 Jun 2026 12:38:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EA8A3B7
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 131CB388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5B9881E87
+ by smtp1.osuosl.org (Postfix) with ESMTP id E120C81E52
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vXZ-ch6j3gHH for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:32 +0000 (UTC)
+ id heHrPr0OeKf8 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E46B81E88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3D6C81E55
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E46B81E88
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3D6C81E55
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A82EF87B03; Fri,  5 Jun 2026 12:37:12 +0000 (UTC)
+ id EE60E87B41; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:01:16 +0200
+Date: Thu, 4 Jun 2026 11:01:16 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 491004290faab165d3d886ff1e5cdb00a88f9f6e
-X-Git-Newrev: 47348d3d6a70a9106174dcfa60e5345a72c6cbcd
+X-Git-Oldrev: 9e7e4eb543af74a237054eead81fa4389652fb0e
+X-Git-Newrev: 4bc28f81f9a266e0323c9dead2355abc893dc357
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123712.A82EF87B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/icu: update CPE
- vendor
+Message-Id: <20260605123710.EE60E87B41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/kconfig: fix
+ compiler warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,48 +72,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4618541302632418727=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/47348d3d6a70a9106174dcfa60e5345a72c6cbcd
+--===============4618541302632418727==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4bc28f81f9a266e0323c9dead2355abc893dc357
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The CPE "cpe:2.3:a:unicode:international_components_for_unicode:*:*:*:*:*:*:*:*"
-is valid for this package.
+Commit 324612d68e09d0db44c51c451bc6b87466f7f874 fixed several compiler warnings,
+but actually introduced a new one by increasing the buffer size in confdata.c that gets passed
+along to file_write_dep in util.c, because buf2's size wasn't increased along with it.
 
-Also remove the no longer needed "ICU_CPE_ID_VERSION" subst since [1].
+./util.c: In function ‘file_write_dep’:
+./util.c:86:26: warning: ‘%s’ directive writing 10 or more bytes into a region of size between 1 and 4097 [-Wformat-overflow=]
+   86 |         sprintf(buf2, "%s%s", dir, name);
+      |                          ^~
+./util.c:86:9: note: ‘sprintf’ output 11 or more bytes (assuming 4107) into a destination of size 4097
+   86 |         sprintf(buf2, "%s%s", dir, name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The previous CPE hasn't been used since 2020. While the new one got two
-CVE assigned since 2020.
+Fix this by increasing the size of buf2 to match the passed buffer size.
 
-[1] 5bf0db998b package/icu: bump version to 78.1
-[2] https://nvd.nist.gov/vuln/detail/CVE-2025-5222
-[3] https://nvd.nist.gov/vuln/detail/CVE-2020-21913
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Devreese Jorik <jorik.devreese@barco.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4893eeefde33a3e7417a5e1889f08934671f3269)
+(cherry picked from commit 1f5095c1d304b38f014f9da0bf4351218f44a4b8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/icu/icu.mk | 2 +-
+ support/kconfig/util.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 73547a7537..e0dffd543c 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -13,7 +13,7 @@ ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
- ICU_LICENSE = ICU License
- ICU_LICENSE_FILES = LICENSE
--ICU_CPE_ID_VENDOR = icu-project
-+ICU_CPE_ID_VENDOR = unicode
- ICU_CPE_ID_PRODUCT = international_components_for_unicode
- ICU_CPE_ID_VERSION = $(subst -,.,$(ICU_VERSION))
- 
+diff --git a/support/kconfig/util.c b/support/kconfig/util.c
+index 8665f5bb89..c2e7979ac1 100644
+--- a/support/kconfig/util.c
++++ b/support/kconfig/util.c
+@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
+ int file_write_dep(const char *name)
+ {
+ 	char *str;
+-	char buf[PATH_MAX+20], buf2[PATH_MAX+1], dir[PATH_MAX+1];
++	char buf[PATH_MAX+20], buf2[PATH_MAX+20], dir[PATH_MAX+1];
+ 	struct symbol *sym, *env_sym;
+ 	struct expr *e;
+ 	struct file *file;
+
+--===============4618541302632418727==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4618541302632418727==--
