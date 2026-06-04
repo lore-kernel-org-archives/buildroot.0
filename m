@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2930ECD6E77
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971DBCD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED54960A72;
-	Fri,  5 Jun 2026 12:37:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 408A781E80;
+	Fri,  5 Jun 2026 12:37:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g8RFHk8JAv4s; Fri,  5 Jun 2026 12:37:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kqmTzdnK-IQX; Fri,  5 Jun 2026 12:37:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2719360A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B2F981EB2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663059;
-	bh=YzMGGqFh8yrpEoLMBI1EPHCVfuoWvkvQlZzwI1D4V0M=;
+	s=default; t=1780663056;
+	bh=6glPAJbgU4wQFgqzhtApRfvlKonJGGDuCRFDt2OYjnA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pZdcQVUMyL9QrUDTeKUrzKmUSkBmoic+A9sEdlcVn/3oDv65C29Zk3tVD/Ok3B4V4
-	 XecPjQMZG/5Z3u4lxsIEcS6O7462PJAuz1E2wwSQm60f9t+Za6H1Uy6ulKl/urYUYd
-	 OIKt1QpCrc5Q9gzr1ISmfQBqSXkiWNjmsrn5Lg74pgH44olD2ZaPAAOQS5gtUfvRTu
-	 Wy+CqnawQF2dZFa521DUz4cqEEu2OWNrzCP1djNcBLAoYDAyBSpL91OUtD9dLSzpRF
-	 ZtD73K2BiPQt9sVfRDupWBXAc9UBrnhhy9KbC2YNU+XAUKvJ/BKCX+2t9OFmFCjZgh
-	 XhxIk022Ao7DA==
+	b=HaaY8Edhj/pcHcsBvJHJ6ztjA7/TQ/4UGtTAhWMcrpTOjTAW4ikaE5PSa9yp1EWbV
+	 DWhe55Z/EPJfgaOJMgSLFg1ML362DOeqiuhPKNoIR/rWOwZqoV+mVcrCScmRwXs5Uq
+	 L4DT4xkYx1awcneaOFaY5/s8pzb1kOoIGiFoB4wAQUBCFqcCCFVV5JG72bvRpZHjRA
+	 Es/j2IDpr+J9QLftIuTSgSCIdMaX/DVVFKBIyl14kukytorlJmom8RAbm8HFG3h7ji
+	 KUJZ9mXfQOtQeIi6KKj7QIQ3hxe8f9ZD6dthDPy0Zlu7frOOs/s3iCLTdyOo9QT7ML
+	 IUFDIqa5OhXXg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2719360A81;
-	Fri,  5 Jun 2026 12:37:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B2F981EB2;
+	Fri,  5 Jun 2026 12:37:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A514B388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 95C9AF4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9209640334
+ by smtp2.osuosl.org (Postfix) with ESMTP id 259BE403A4
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ecS12MtKILzL for <buildroot@buildroot.org>;
+ id NwcSo96Znev3 for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A8704038B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E1E84039F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A8704038B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E1E84039F
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57B2687B42; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
+ id 6CBB587B40; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 10:21:42 +0200
+Date: Thu, 4 Jun 2026 10:23:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2c8bcb90fe22d2d00a4cccd9bc0c74f5ee0eb99b
-X-Git-Newrev: 5539ab24909e9a27437184122fcbab6a6bcb3944
+X-Git-Oldrev: 8201f3911108396ac58fabd333a56d9b08e15ca6
+X-Git-Newrev: f69e07002d7d2e39442494060df22e8eb3828d09
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123710.57B2687B42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/nginx: security
- bump version to 1.30.2
+Message-Id: <20260605123710.6CBB587B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: security
+ bump version to 1.22.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,54 +77,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5539ab24909e9a27437184122fcbab6a6bcb3944
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f69e07002d7d2e39442494060df22e8eb3828d09
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://nginx.org/en/CHANGES-1.30
+https://github.com/strukturag/libheif/releases/tag/v1.22.2
+"Fixes missing heif_image_get_bayer_pattern_size() function."
 
-https://nginx.org/en/security_advisories.html
+https://github.com/strukturag/libheif/releases/tag/v1.22.1
+"Security
+- CVE TBD (GHSA-r7qj-cg5r-r6vf) - Wrapped icef compressed-unit range
+ check causes out-of-bounds read in uncompressed HEIF decoder
+ - (GHSA-5hqq-636x-r3cr) - Out-of-bounds write in inline mask region API
+                           when source mask exceeds declared region"
 
-1.30.2: Fixes CVE-2026-9256
-1.30.1: Fixes CVE-2026-42926 (only from 1.29.4), CVE-2026-42945,
-CVE-2026-42946, CVE-2026-42934, CVE-2026-40460 & CVE-2026-40701.
-
-Updated license hash due to copyright year bump:
-https://github.com/nginx/nginx/commit/7fa941a55e211ebd57f512fbfb24d59dbb97940d
+Removed patch which is included in version 1.22.1.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Peter: clarify CVE-2026-42926]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0455e2571d35b642115e9122159ace0ce803fceb)
+(cherry picked from commit 08f3757b0f2133b0ed50e1ef3d7a5a1d9c80de1c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/nginx/nginx.hash | 4 ++--
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...001-heif_properties.h-fix-bad_pixels-type.patch | 28 ----------------------
+ package/libheif/libheif.hash                       |  4 ++--
+ package/libheif/libheif.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 31 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 1d11937987..5055b4bd57 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
+diff --git a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch b/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
+deleted file mode 100644
+index 69c5d170fe..0000000000
+--- a/package/libheif/0001-heif_properties.h-fix-bad_pixels-type.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From ef124f9988e57a06ad6d102c236d2bb4b82aef5d Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=C8=98tefan=20Talpalaru?= <stefantalpalaru@yahoo.com>
+-Date: Wed, 20 May 2026 00:37:24 +0200
+-Subject: [PATCH] heif_properties.h: fix "bad_pixels" type
+-
+-Upstream: https://github.com/strukturag/libheif/commit/ef124f9988e57a06ad6d102c236d2bb4b82aef5d
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- libheif/api/libheif/heif_properties.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libheif/api/libheif/heif_properties.h b/libheif/api/libheif/heif_properties.h
+-index 9432bd46..0dec3a37 100644
+---- a/libheif/api/libheif/heif_properties.h
+-+++ b/libheif/api/libheif/heif_properties.h
+-@@ -335,7 +335,7 @@ heif_error heif_image_add_sensor_bad_pixels_map(heif_image*,
+-                                                  uint32_t num_bad_columns,
+-                                                  const uint32_t* bad_columns,
+-                                                  uint32_t num_bad_pixels,
+--                                                 const heif_bad_pixel* bad_pixels);
+-+                                                 const struct heif_bad_pixel* bad_pixels);
+- 
+- // Returns the number of sensor bad pixels maps on this image (0 if none).
+- LIBHEIF_API
+--- 
+-2.47.3
+-
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index b88784b309..22697f307c 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  2c96a946bfb0882a21744ed429770a2123ae1828c7c48665092993ddee91a918  nginx-1.28.3.tar.gz
-+sha256  7df3090907fca3cc0e456d6dc00ceb230da74ea88026ceff0affc29dbbd9ac4c  nginx-1.30.2.tar.gz
- # License files, locally calculated
--sha256  77c01620abf36ed747b7eca4bd271e49023fe3a8e2b3525bcf4b09c8e3aa28e4  LICENSE
-+sha256  08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c  LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index a8b7ee7319..3f6aecebef 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+-# From https://github.com/strukturag/libheif/releases/tag/v1.22.0
+-sha256  8bd20cfa3201997b8f63266cddfabea2e1481467d7f992e6a2595e0bec691fc2  libheif-1.22.0.tar.gz
++# From https://github.com/strukturag/libheif/releases/tag/v1.22.2
++sha256  eea48e4841f83fbe51d029337ffd2d14512d0203015dad40b90213d872958af3  libheif-1.22.2.tar.gz
+ # Locally computed:
+ sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index e47620b167..4b23f1fda3 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.28.3
-+NGINX_VERSION = 1.30.2
- NGINX_SITE = https://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-LIBHEIF_VERSION = 1.22.0
++LIBHEIF_VERSION = 1.22.2
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
