@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0164FCD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B144CD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CECF960AA4;
-	Fri,  5 Jun 2026 12:37:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED5F281E76;
+	Fri,  5 Jun 2026 12:37:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m3hK6IOEEbGC; Fri,  5 Jun 2026 12:37:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id puiUkzA-gFlI; Fri,  5 Jun 2026 12:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C59B160AA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15F6E81E73
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663076;
-	bh=/9NVTghWTW8/ZhXyxpbv5y8r7vn51gU8PC8VgcE9/ig=;
+	s=default; t=1780663078;
+	bh=HqNM74wu9rmw5oDsTT+Y3MYY7y/zpa4LVRXXQZAzTL0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qW6g+APterG9M+fXcBA/5h2aZ6kDVQzV6/sFdA7uKjE532DL1IcLJmmTUKjmMS87C
-	 PgRbAUcGTqBNOS1yVS/SumvRZSbKhbOhErVZy2JCvi6vqyE61NYAKJBtMa21gx8Jsg
-	 5LjcT95TFPZJLBq2RtAj/azjywkEoRLbDI3UPAEPjE6lENuhZuytWb9neTYh/SSGGW
-	 OOiKqllmvaSg7dCVLVOyvXQxjihILbHXsur9AW/bSrWBdwukJ9WrosAgBYdyDPQt0+
-	 mbVG+k/i95ysBzYogqR0NhiOhRluuUKAuMFtxZawzaYVA9jgB40ZXSAsP8alWGzavy
-	 +nbzccSvpFQGQ==
+	b=Qks04eD70hjJALdoTs9IrHXYNnizVL6c78ctFUGSzb7+atULgoBu4TEj6P7XUjpAa
+	 rt99qQdD8/YkQD/T/Xa7errfHrd1WFqFpNJHX3nAIIa4sRXLVb7/SKsSxDYorBwMUh
+	 +croTa/7jYvV4Ra7CkuqjjfY9usBNQdGhqMjp/x0JGq4x57kIWDcbQoT4AejB92wAb
+	 x7yFt14seWOXU8bufzOF49CX6mWuJb8G7+5cIQIdtpsp3vg7nrL846iRZ8SFNunCgm
+	 v14UGj+yhFgCbqo+jJuMcl95w17Pmuh7y9MWtFbYQGVgBz3620vl+nGB5qh/blmVbE
+	 8bwfCCNd0UXUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C59B160AA8;
-	Fri,  5 Jun 2026 12:37:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15F6E81E73;
+	Fri,  5 Jun 2026 12:37:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0121A388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CEF1388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33F0981E57
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A96781E77
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9oSERGxPdm5 for <buildroot@buildroot.org>;
+ id L7dJy7-CcBM9 for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A673581E77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B415881E78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A673581E77
+ by smtp1.osuosl.org (Postfix) with ESMTP id B415881E78
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D035487B3F; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
+ id DE17787B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:45:20 +0200
+Date: Thu, 4 Jun 2026 11:45:58 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 729efd317dcfa9efdb8c6f56c0ec00e7fc270d7b
-X-Git-Newrev: 260f7ec2a9b461b0382c0d982ccbb07005fcf216
+X-Git-Oldrev: 260f7ec2a9b461b0382c0d982ccbb07005fcf216
+X-Git-Newrev: 3a51b577cecff333c0886479b95f5c2fc27f5c51
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123711.D035487B3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] Revert "linux: disable
- -Werror"
+Message-Id: <20260605123711.DE17787B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/dependencies/dependencies.sh: reject buggy uutils install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/260f7ec2a9b461b0382c0d982ccbb07005fcf216
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a51b577cecff333c0886479b95f5c2fc27f5c51
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This reverts commit 6b56e0b4f09b36140e2cb9e41072d5ac6074f375.
+uutils install 0.8.0 as used in Ubuntu 26.04 has a bug in the install
+applet, breaking a number of packages:
 
-commit 6b56e0b4f09b ("linux: disable -Werror") said we needed to disable
-CONFIG_WERROR in the kernel because it failed to build the esp-hosted
-kernel module. This was very much the hammer approach because a) it'd be
-better to fix the warnings in the kernel module or b) disable the
-kernel's CONFIG_WERROR *only* if esp-hosted is to be built, via the
-ESP_HOSTED_LINUX_CONFIG_FIXUPS variable in
-package/esp-hosted/esp-hosted.mk.
+https://github.com/uutils/coreutils/pull/11505
+https://bugs.launchpad.net/ubuntu/+source/rust-coreutils/+bug/2151454
 
-This is a simple revert without making any change to any kernel module
-(including esp-hosted) because all upstream Buildroot defconfigs with a
-kernel module enabled build fine today (albeit with warnings). The two
-defconfigs that were pointed at by the now-reverted commit all have been
-(updated for and) run on master without failing the build.
+The fix has been merged upstream but not yet released or packaged in Ubuntu,
+so detect and reject the buggy version and explain how to change to the
+coreutils version. Once fixed the version output will hopefully change.
 
-Suggested-by: Arnout Vandecappelle <arnout@rnout.be>
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+For simplicity, only check for the exact 0.8.0 version string. Hopefully
+when it is fixed in Ubuntu, they also update the version string. Note
+that earlier versions of uutils have the same issue of course, but those
+versions were never the default "install" on Ubuntu (or anywhere else).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit a966f5cde5beef557fed3a271895089e62649f6b)
+(cherry picked from commit 64cb69f1559bc56761c17045fef9b55838a2cbca)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/linux.mk | 1 -
- 1 file changed, 1 deletion(-)
+ support/dependencies/dependencies.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 65affbfa7f..98aed16861 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -470,7 +470,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
- 	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
--	$(call KCONFIG_DISABLE_OPT,CONFIG_WERROR)
- 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
- endef
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 9c2aeaf23f..8e97f0912d 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -190,6 +190,17 @@ if test "${missing_progs}" = "yes" ; then
+ 	exit 1
+ fi
  
++INSTALL_VERSION="$(install --version | sed -n 's/^install \(.*\)/\1/p')"
++if [ "${INSTALL_VERSION}" = "(uutils coreutils) 0.8.0" ]; then
++	echo
++	echo "You have an uutils 'install' version installed which is affected by:"
++	echo "  https://github.com/uutils/coreutils/issues/12166"
++	echo
++	echo "Please change to coreutils install with:"
++	echo "update-alternatives --install /usr/bin/install install /usr/bin/gnuinstall 100"
++	exit 1
++fi
++
+ PATCH_VERSION="$(patch -v 2>/dev/null | sed -n 's/^GNU patch \(.*\)/\1/p')"
+ if [ -z "${PATCH_VERSION}" ] ; then
+ 	echo
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
