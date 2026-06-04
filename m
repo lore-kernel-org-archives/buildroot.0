@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61D34CD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96B18CD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A36860A7B;
-	Fri,  5 Jun 2026 12:40:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42CBF8227B;
+	Fri,  5 Jun 2026 12:40:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vywyLttbUuwQ; Fri,  5 Jun 2026 12:40:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jeTrvwHuTIiW; Fri,  5 Jun 2026 12:40:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F8D860EAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A92F8226F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663246;
-	bh=3/LnP5GESg0A1N2aXyhlN36kw+NEf2yiRoGpj9L2eVE=;
+	s=default; t=1780663247;
+	bh=zzQYyW6JufyHXdrqCWg1f/2KkFxpvhIt+rRbQXhalD4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=R88M7Gx/PUqZ5ugrEqXYinIcBAkO2rQ7h0/shQD1lATbmXE8sUkqaqKV5O3MrHt06
-	 Tkvj38gMI527aT10r7XFNTDB55RV34BbMBy3lm7d0hsEvtNsaolCloCTmiHQpxD+VH
-	 EUSPRkosz58ZHCcISJfbnGLRyhsgl49yob3NQkFLEuUKmXgNbxUfqLvpgppsp+uiFM
-	 Xp2w9S8Vt5f5cePPi2p2ennCcSj3MLAyOIdEst7kI7O+SjL2V6PQs1K97mXR5AxoHs
-	 3ios6u0RB0n4ezqJjJq+gbOat2RJcVNOfOiGvBCKXQzEG2pq+tU2mavlpn0t7gXLa7
-	 WIJieJel27vaw==
+	b=o03hYhkY9dVcuAKvtk6Dx0/pkAHi6fSoCCEqpJhFqLeM+GMtiEHi71aicC7cWqbh8
+	 AS2zDqaLJE1USQSJ/PJ4znFLfaC+o2sGLXGfYcjB64+bdvkTojxvhyVQ7/mxt8hQoW
+	 tfXPnFc4+YhNc5w0Ixle5T/nEhuMjYDSGeCm/z7lCsB31AK/wbYb/JcESuk2zK9Fu9
+	 9QuALNJ2uaXiEpwp2Nh6gk/GiWYjaGi5j27BdFK8W+GyMoNPvqHxd+KMbz5I6kgFGF
+	 UAE54DC2mCDtZMWhvaYrAFObab8HalAqbbvh2YqtY9nwU//4Afzs6AFBx0Xi0wk9S/
+	 e0Xgz59YiQKEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F8D860EAF;
-	Fri,  5 Jun 2026 12:40:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05D78388
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A92F8226F;
+	Fri,  5 Jun 2026 12:40:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EDF03B7
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECB1F41062
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3ED4881F34
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r6zaIbSfNxbr for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vua8HVol2aAS for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B77494107D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36C5A82012
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B77494107D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36C5A82012
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E120B87B03; Fri,  5 Jun 2026 12:38:38 +0000 (UTC)
+ id 609F087B05; Fri,  5 Jun 2026 12:38:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:11:25 +0200
+Date: Thu, 4 Jun 2026 12:07:46 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: ead1a5b605b1a46f9ac6229304bc04b7af2f6a47
-X-Git-Newrev: f243d6b1514738cf7a198f749684c106eb5fda57
+X-Git-Oldrev: 7c7b4e3333e05cf03f6171244b1a4915edc24ca7
+X-Git-Newrev: ce4a8e5d075937cd59f161d718ee3f1001e18222
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123838.E120B87B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/cairo: Fix build
+Message-Id: <20260605123838.609F087B05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] utils/generate-cyclonedx:
+ better error message when host Python is built without ssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,90 +77,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f243d6b1514738cf7a198f749684c106eb5fda57
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ce4a8e5d075937cd59f161d718ee3f1001e18222
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot commit 29888ab35e047099d239f266b7b565cd4023503e bumped cairo
-to version 1.18.2.
+urllib will eventually complain that it does not know what https is:
+Traceback (most recent call last):
+  File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
+    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
+    with contextlib.closing(urlopen(url, data)) as fp:
+                            ~~~~~~~^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 509, in _open
+    return self._call_chain(self.handle_open, 'unknown',
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            'unknown_open', req)
+                            ^^^^^^^^^^^^^^^^^^^^
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1397, in unknown_open
+    raise URLError('unknown url type: %s' % type)
+urllib.error.URLError: <urlopen error unknown url type: https>
 
-This version includes commit
-https://gitlab.freedesktop.org/cairo/cairo/-/commit/87f7c60bf7c20079c34cfc54e4db05920d14db56
-"Add support for C11 atomics"
+It's quite confusing really but what it means is that host Python was
+built without ssl support.
 
-which causes build errors:
+This adds an additional check importing _ssl and if the module is not
+found, tell the user what to do. This still doesn't make Buildroot's
+host Python3 fully usable for utils/generate-cyclonedx as it'll then
+fail when trying to validate certificates, this will be handled in the
+next few commits.
 
-../src/cairo-image-source.c: In function '_pixman_transparent_image':
-../src/cairo-image-source.c:89:40: error: passing argument 1 of '_cairo_atomic_ptr_cmpxchg_impl'
- from incompatible pointer type [-Wincompatible-pointer-types]
-   89 |         if (_cairo_atomic_ptr_cmpxchg (&__pixman_transparent_image,
+Note that ssl Python library is always built in CPython, but itself
+imports the _ssl module which is the one that may be disabled with
+py_cv_module__ssl=n/a (which is what happens when
+BR2_PACKAGE_HOST_PYTHON3_SSL is not enabled), hence why _ssl is checked
+and not ssl.
 
-Fixes:
-1.18.2: https://autobuild.buildroot.net/results/5d4/5d4cd38d71008f385f92577b07f21dcfc3c19b38/
-1.18.4: https://autobuild.buildroot.net/results/0e9/0e962c66e1e96b5899e87c13ace824379adc09f9/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit b90127ee7174bc867a98a4c0a0eb164ae7b1fe47)
+(cherry picked from commit 3e2df83809ee200d1134f9a7a54fe7fe79b49cf9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...iro-Silence-some-Wincompatible-pointer-ty.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ utils/generate-cyclonedx | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch b/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch
-new file mode 100644
-index 0000000000..95f7924f12
---- /dev/null
-+++ b/package/cairo/0001-external-cairo-Silence-some-Wincompatible-pointer-ty.patch
-@@ -0,0 +1,49 @@
-+From 78258169cf0c380754804b5835203a199ba8efab Mon Sep 17 00:00:00 2001
-+From: Stephan Bergmann <stephan.bergmann@collabora.com>
-+Date: Mon, 22 Sep 2025 17:08:36 +0200
-+Subject: [PATCH] external/cairo: Silence some -Wincompatible-pointer-types
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 611a20127d..7cfeefbc5b 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -9,6 +9,7 @@
+ 
+ 
+ import argparse
++import importlib.util
+ import json
+ import os
+ from pathlib import Path
+@@ -44,6 +45,11 @@ VULN_WITH_PEDIGREE = set()
+ SPDX_LICENSES = []
+ 
+ if not SPDX_SCHEMA_PATH.exists():
++    if not importlib.util.find_spec("_ssl"):
++        print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
++              file=sys.stderr)
++        exit(1)
 +
-+Downloaded from
-+https://github.com/LibreOffice/core/blob/36e0812a01ae5b94a1bb7549b0db20812d0f821a/external/cairo/cairo/Wincompatible-pointer-types.patch.0
-+
-+Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/921
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/cairo-image-source.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/cairo-image-source.c b/src/cairo-image-source.c
-+index eaf72e2cc..05ffa5660 100644
-+--- a/src/cairo-image-source.c
-++++ b/src/cairo-image-source.c
-+@@ -86,7 +86,7 @@ _pixman_transparent_image (void)
-+ 	if (unlikely (image == NULL))
-+ 	    return NULL;
-+ 
-+-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_transparent_image,
-++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_transparent_image,
-+ 				       NULL, image))
-+ 	{
-+ 	    pixman_image_ref (image);
-+@@ -118,7 +118,7 @@ _pixman_black_image (void)
-+ 	if (unlikely (image == NULL))
-+ 	    return NULL;
-+ 
-+-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_black_image,
-++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_black_image,
-+ 				       NULL, image))
-+ 	{
-+ 	    pixman_image_ref (image);
-+@@ -150,7 +150,7 @@ _pixman_white_image (void)
-+ 	if (unlikely (image == NULL))
-+ 	    return NULL;
-+ 
-+-	if (_cairo_atomic_ptr_cmpxchg (&__pixman_white_image,
-++	if (_cairo_atomic_ptr_cmpxchg ((cairo_atomic_intptr_t *) &__pixman_white_image,
-+ 				       NULL, image))
-+ 	{
-+ 	    pixman_image_ref (image);
-+-- 
-+2.47.3
-+
+     # Download the CycloneDX SPDX schema JSON, and cache it locally
+     cyclonedxpath.mkdir(parents=True, exist_ok=True)
+     urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
