@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 863E6CD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A18ACD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6232E60E1B;
-	Fri,  5 Jun 2026 12:40:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2306F41225;
+	Fri,  5 Jun 2026 12:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwZl7nAMlg3Q; Fri,  5 Jun 2026 12:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0oYGAlu0rk8z; Fri,  5 Jun 2026 12:40:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17D3F60E15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35FD14123F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663205;
-	bh=WsrnFdAJAzCKOQGPTemhhDjlyD5HfEvZrGD4ohk6ThA=;
+	s=default; t=1780663207;
+	bh=sxiMp50Z4n4mL4xLm141FySdviW6EMIvATberIJCEgE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EfdtFn1hYGuZAM41/eZ4aSxY8owweLU59AyifOHX29/yVwx4oQfD86iKAAYoZJRVl
-	 x11f2nzzAfoiaS80X+Vq/FNX8OO4t3szDiR7hr5pwvwm/t9yshqtBZCjptaRi+SA+S
-	 aSsZvhjcrjkzIe/hHoARxO11aneShKSibR7s5h/Nd1YwIoKcz7YOdfKnF9hKsezY/W
-	 I07bBuDdN7EWfUKA/qA13jb4ysq89niM3EoVDYfGxP9Ptrv8CDWdFVUmJOR1xj8aVB
-	 6lD8wiO4LEsk7YIhYpG75kl4If252rsBWz6iHip3x2jE+bcJ+YAyjg4fdJjNpJui08
-	 Ck/rDFSuN/xKA==
+	b=emv0hJTHaEmYSaS8Em7Jjo8iBs0pSPsUVziH6K+N/7PU/JxgGjSnhvoiqlPHPLOYu
+	 TaVvmQsemh4BUm3DmczOIqchUMmEVewbA0WKJ4Vtjp6gQVch5W52cPDJtpC9J1zyDD
+	 Yc5QLXT7pc7kCpyQKECN6pUsrL1IeDCMxKMlWB32kwKc72htAjAC+I+SvpBqpNSuGL
+	 9/bmmHFv13uLmrdN8iIPvpdvHECI3pY1yQ8cJ05OEpa9YU8cFQ/8zL2qg+9PEseAgm
+	 1cytWroSyRS8l9AGO5/XT3duLJUFNqc4yoT+0EXOWa2CisEsEsprXXibiWq6bEFjpx
+	 Q287Sq99R+quw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17D3F60E15;
-	Fri,  5 Jun 2026 12:40:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C9E8388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35FD14123F;
+	Fri,  5 Jun 2026 12:40:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07630F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFCBB82021
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADA2241099
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9cUgXiKcbb55 for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id orUtcbKTfbVP for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DCDB81FB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC8CC4100C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DCDB81FB0
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC8CC4100C
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5751387AB1; Fri,  5 Jun 2026 12:38:36 +0000 (UTC)
+ id D63FC87B3B; Fri,  5 Jun 2026 12:38:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:46:34 +0200
+Date: Thu, 4 Jun 2026 12:05:24 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 60509603b8d19466b666a791cf6a6a51053aa502
-X-Git-Newrev: 4e360506605ef79d3f410fdd6c5a120049d50acd
+X-Git-Oldrev: cd2659ba042f89d287becec8f837b95b78be684a
+X-Git-Newrev: 063a47f2aa341511738c6f1e0b6eb2a3f4380396
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123836.5751387AB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x]
- utils/bump-stable-kernel-versions: update for split hash file
+Message-Id: <20260605123837.D63FC87B3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] support/testing/utils:
+ add basic tests for utils/generate-cyclonedx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,179 +77,188 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e360506605ef79d3f410fdd6c5a120049d50acd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/063a47f2aa341511738c6f1e0b6eb2a3f4380396
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Since Buildroot commit 0e3ddc9dc85e29cd00338cc79ea4be1d634a75ba,
-linux hash files are split between pre- and post-6.17.
+Introduce unit-tests for the generate-cyclonedx script, covering basic
+script invocation, patch CVE extraction and virtual packages.
 
-Since that commit, the script that automatically updates kernel
-versions in Buildroot was broken, as it assumed only a single linux
-hash file at a static location. Update the script to find all relevant
-files, even if a new split occurs in the future.
-
-In addition, this patch carries additional minor changes:
-- Fix some minor shellcheck issues found with a newer shellcheck version
-  than in the container (quoting, test -a -> -e)
-- Move from wget to curl, as I had some issue on my home connection
-  with the former (possibly ipv6 related or something)
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Martin Willi <martin@strongswan.org>
+Acked-By: Thomas Perale <thomas.perale@mind.be>
+[Arnout: fix check-package errors]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit da01b7271a4a9048ae8e8ae18753edc5da785a44)
+(cherry picked from commit 929e7cb0056854061325ea4c7bf85405723dca3b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/bump-stable-kernel-versions | 121 ++++++++++++++++++++------------------
- 1 file changed, 65 insertions(+), 56 deletions(-)
+ .../testing/tests/utils/test_generate_cyclonedx.py | 139 +++++++++++++++++++++
+ .../0001-cve_upstream.patch                        |  14 +++
+ 2 files changed, 153 insertions(+)
 
-diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
-index 577a6841c8..6303bf4010 100755
---- a/utils/bump-stable-kernel-versions
-+++ b/utils/bump-stable-kernel-versions
-@@ -16,7 +16,7 @@
- # OTHER DEALINGS IN THE SOFTWARE.
- 
- # Check for updates to Linux stable releases. The script uses the versions found in
--# linux/linux.hash. For each of the versions it downloads the related hash list and tries
-+# linux/*/linux.hash. For each of the versions it downloads the related hash list and tries
- # to find an updated stable release. If found it updates all related files and hashes.
- 
- set -euo pipefail
-@@ -26,70 +26,79 @@ latest_release_version=$(echo "${latest_version}" | cut -f 1-2 -d .)
- echo "${latest_version} -> ${latest_release_version}"
- 
- updated_releases_list=''
-+updated_versions='Update the latest kernel releases to:'
- 
--hash_list=
--while read -r line; do
--    # e.g.: # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--    url=$(echo "${line}" | sed -n 's|^# From \(https://www\.kernel\.org/pub/linux/kernel/.*/sha256sums.asc\)|\1|p')
--    # e.g.: sha256  f905f1238ea7a8e85314bacf283302e8097006010d25fcea726d0de0ea5bc9b6  linux-6.8.9.tar.xz
--    old_hash=$(echo "${line}" | sed -rn 's|^sha256 +([0-9a-f]+) +linux-.*$|\1|p')
--    old_version=$(echo "${line}" | sed -rn 's|^sha256 +[0-9a-f]+ +linux-(.+)\.tar\.xz$|\1|p')
--    if [ -n "${url}" ]; then
--        # Line contained a URL: Download hash list and use it.
--        if [ -a "${hash_list}" ]; then
--            rm "${hash_list}"
--        fi
-+update_linux_hash() {
-+    HASHFILE="$1"
-+    hash_list=
-+    while read -r line; do
-+        # e.g.: # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+        url=$(echo "${line}" | sed -n 's|^# From \(https://www\.kernel\.org/pub/linux/kernel/.*/sha256sums.asc\)|\1|p')
-+        # e.g.: sha256  f905f1238ea7a8e85314bacf283302e8097006010d25fcea726d0de0ea5bc9b6  linux-6.8.9.tar.xz
-+        old_hash=$(echo "${line}" | sed -rn 's|^sha256 +([0-9a-f]+) +linux-.*$|\1|p')
-+        old_version=$(echo "${line}" | sed -rn 's|^sha256 +[0-9a-f]+ +linux-(.+)\.tar\.xz$|\1|p')
-+        if [ -n "${url}" ]; then
-+            # Line contained a URL: Download hash list and use it.
-+            if [ -e "${hash_list}" ]; then
-+                rm "${hash_list}"
-+            fi
- 
--        hash_list=$(basename "${url}")
--        echo ">>> Downloading hash list from ${url}"
--        wget --no-verbose "${url}"
--        gpg --verify "${hash_list}"
-+            hash_list=$(basename "${url}")
-+            echo ">>> Downloading hash list from ${url}"
-+            curl -q "${url}" > "${hash_list}"
-+            gpg --verify "${hash_list}"
- 
--        echo "${line}" >> linux/linux.hash.new
--    elif [ -n "${old_version}" ]; then
--        # Line contained a hash entry: Search for newer versions.
--        release_version=$(echo "${old_version}" | cut -f 1-2 -d .) # e.g.: 6.8 instead of 6.8.9
--        # e.g.: 19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
--        new_hash_entry=$(grep "^[0-9a-f]\+ \+linux-${release_version//./\\.}\.[0-9]\+\.tar\.xz$" "${hash_list}" | sort -V --key '2' | tail -1)
--        new_hash=$(echo "${new_hash_entry}" | cut -f 1 -d ' ')
--        new_version=$(echo "${new_hash_entry}" | cut -f 3 -d ' ' | sed -rn 's|linux-(.+)\.tar\.xz|\1|p')
-+            echo "${line}" >> "$HASHFILE.new"
-+        elif [ -n "${old_version}" ]; then
-+            # Line contained a hash entry: Search for newer versions.
-+            release_version=$(echo "${old_version}" | cut -f 1-2 -d .) # e.g.: 6.8 instead of 6.8.9
-+            # e.g.: 19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
-+            new_hash_entry=$(grep "^[0-9a-f]\+ \+linux-${release_version//./\\.}\.[0-9]\+\.tar\.xz$" "${hash_list}" | sort -V --key '2' | tail -1)
-+            new_hash=$(echo "${new_hash_entry}" | cut -f 1 -d ' ')
-+            new_version=$(echo "${new_hash_entry}" | cut -f 3 -d ' ' | sed -rn 's|linux-(.+)\.tar\.xz|\1|p')
- 
--        if [ "$new_version" == "$old_version" ]; then
--            # Same version as before
--            echo ">>> Release ${release_version}.x already on newest version ${new_version}."
--            echo "${line}" >> linux/linux.hash.new
-+            if [ "$new_version" == "$old_version" ]; then
-+                # Same version as before
-+                echo ">>> Release ${release_version}.x already on newest version ${new_version}."
-+                echo "${line}" >> "$HASHFILE.new"
- 
--            if [ "${old_hash}" != "${new_hash}" ]; then
--                # Hash changed! This should never happen!
--                echo ">>> Version hash changed for ${release_version}.x!"
--                echo ">>> It was: ${old_hash}"
--                echo ">>> It is:  ${new_hash}"
--                exit 1
--            fi
--        else
--            # Different version: update hash list, default headers, and possibly latest
--            # version.
--            echo ">>> Updating hash for ${release_version}.x in linux/linux.hash"
--            echo "sha256  ${new_hash}  linux-${new_version}.tar.xz" >> linux/linux.hash.new
-+                if [ "${old_hash}" != "${new_hash}" ]; then
-+                    # Hash changed! This should never happen!
-+                    echo ">>> Version hash changed for ${release_version}.x!"
-+                    echo ">>> It was: ${old_hash}"
-+                    echo ">>> It is:  ${new_hash}"
-+                    exit 1
-+                fi
-+            else
-+                # Different version: update hash list, default headers, and possibly latest
-+                # version.
-+                echo ">>> Updating hash for ${release_version}.x in $HASHFILE"
-+                echo "sha256  ${new_hash}  linux-${new_version}.tar.xz" >> "$HASHFILE.new"
- 
--            echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
--            sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
--                package/linux-headers/Config.in.host linux/Config.in
-+                echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
-+                sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
-+                    package/linux-headers/Config.in.host linux/Config.in
- 
--            updated_releases_list="${updated_releases_list} ${release_version}.x"
--        fi
--    else
--        # Different line: Reset hash list and just copy this line over as is.
--        if [ -a "${hash_list}" ]; then
--            rm "${hash_list}"
--            hash_list=
-+                updated_releases_list="${updated_releases_list} ${release_version}.x"
-+                updated_versions="${updated_versions}\n - ${old_version} -> ${new_version}"
-+            fi
-+        else
-+            # Different line: Reset hash list and just copy this line over as is.
-+            if [ -e "${hash_list}" ]; then
-+                rm "${hash_list}"
-+                hash_list=
-+            fi
-+            echo "${line}" >> "$HASHFILE.new"
-         fi
--        echo "${line}" >> linux/linux.hash.new
--    fi
--done < linux/linux.hash
-+    done < "$HASHFILE"
+diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
+new file mode 100644
+index 0000000000..ddad92598b
+--- /dev/null
++++ b/support/testing/tests/utils/test_generate_cyclonedx.py
+@@ -0,0 +1,139 @@
++"""Unit tests for utils/generate-cyclonedx."""
 +
-+    # We were iterating over this file so we could not edit in-place.
-+    mv "$HASHFILE.new" "$HASHFILE"
-+}
- 
--# We were iterating over this file so we could not edit in-place.
--mv linux/linux.hash.new linux/linux.hash
-+while IFS= read -r -d '' hashfile; do
-+    update_linux_hash "$hashfile"
-+done < <(find linux/ -name '*.hash' -type f -print0)
- 
- if [ -n "${updated_releases_list}" ]; then
-     echo ">>> Suggested subject: {linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
++import json
++import os
++import subprocess
++import tempfile
++import unittest
++from pathlib import Path
++
++import infra
++
++PATCH = "support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch"
++SCHEMA_LICENSES = ["MIT", "Apache-2.0", "GPL-3.0-only"]
++
++
++class TestGenerateCycloneDX(unittest.TestCase):
++    def setUp(self):
++        # Provide a fake SPDX schema so the script never hits the network.
++        self.schema_dir = tempfile.TemporaryDirectory()
++        self.addCleanup(self.schema_dir.cleanup)
++
++        cyclonedx_dir = Path(self.schema_dir.name) / "cyclonedx"
++        cyclonedx_dir.mkdir(parents=True)
++        schema_path = cyclonedx_dir / "spdx-1.6.schema.json"
++        schema_path.write_text(json.dumps({"enum": SCHEMA_LICENSES}))
++
++        self.env = os.environ.copy()
++        self.env["BR2_DL_DIR"] = self.schema_dir.name
++        self.script = infra.basepath("utils/generate-cyclonedx")
++        self.cwd = infra.basepath()
++
++    def _make_show_info(self) -> dict:
++        return {
++            "package-foo": {
++                "name": "foo",
++                "version": "1.2",
++                "type": "target",
++                "virtual": False,
++                "licenses": "MIT",
++                "cpe-id": "cpe:2.3:a:example:foo:1.2:*:*:*:*:*:*:*",
++                "patches": [PATCH],
++                "provides": ["package-virtual"],
++                "dependencies": ["skeleton-baz", "package-bar"],
++                "ignore_cves": ["CVE-2025-0001"],
++                "package_dir": "package/package-foo",
++            },
++            "skeleton-baz": {
++                "name": "skeleton-baz",
++                "version": "0.1",
++                "type": "target",
++                "virtual": False,
++                "licenses": "Apache-2.0",
++                "dependencies": [],
++                "package_dir": "package/skeleton-baz",
++            },
++            "package-bar": {
++                "name": "bar",
++                "version": "0.2",
++                "type": "target",
++                "virtual": False,
++                "licenses": "MIT",
++                "ignore_cves": ["CVE-2025-0002"],
++                "dependencies": ["package-virtual"],
++                "package_dir": "package/package-bar",
++            },
++            "host-tool": {
++                "name": "host-tool",
++                "version": "0.3",
++                "type": "host",
++                "virtual": False,
++                "licenses": "GPL-3.0-only",
++                "dependencies": [],
++                "package_dir": "package/host-tool",
++            },
++            "package-virtual": {
++                "name": "virtual-provider",
++                "virtual": True,
++                "type": "target",
++                "dependencies": ["package-foo"],
++                "package_dir": "package/package-virtual",
++            },
++        }
++
++    def _run_script(self, extra_args=(), show_info=None):
++        data = show_info if show_info is not None else self._make_show_info()
++        completed = subprocess.run(
++            [self.script, *extra_args],
++            cwd=self.cwd,
++            env=self.env,
++            input=json.dumps(data),
++            text=True,
++            capture_output=True,
++            check=True,
++        )
++        return json.loads(completed.stdout)
++
++    def _find_component(self, result: dict, name: str) -> dict:
++        for component in result["components"]:
++            if component["bom-ref"] == name:
++                return component
++        self.fail(f"component {name} missing")
++
++    def test_default(self):
++        result = self._run_script()
++
++        self.assertEqual(len(result["components"]), 4)
++        self.assertIn("vulnerabilities", result)
++        vulnerabilities = {v["id"]: v for v in result["vulnerabilities"]}
++        self.assertEqual(len(vulnerabilities), 2)
++        self.assertEqual(vulnerabilities["CVE-2025-0001"]["analysis"]["state"], "resolved_with_pedigree")
++        self.assertEqual(vulnerabilities["CVE-2025-0002"]["analysis"]["state"], "in_triage")
++
++        foo = self._find_component(result, "package-foo")
++        patch = foo["pedigree"]["patches"][0]
++        self.assertIn("text", patch["diff"])
++        self.assertIn("content", patch["diff"]["text"])
++
++        host = self._find_component(result, "host-tool")
++        self.assertEqual(host["properties"][0]["value"], "host")
++
++        names = {c["bom-ref"] for c in result["components"]}
++        self.assertIn("skeleton-baz", names)
++        self.assertIn("package-bar", names)
++        self.assertNotIn("package-virtual", names)
++
++        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
++        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
++
++        bar_deps = next(d for d in result["dependencies"] if d["ref"] == "package-bar")
++        self.assertEqual(bar_deps["dependsOn"], ["package-foo"])
++
++    def test_virtual(self):
++        result = self._run_script(["--virtual"])
++
++        names = {c["bom-ref"] for c in result["components"]}
++        self.assertEqual(names, {"package-foo", "skeleton-baz", "host-tool", "package-virtual", "package-bar"})
++
++        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
++        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
+diff --git a/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
+new file mode 100644
+index 0000000000..75d8830203
+--- /dev/null
++++ b/support/testing/tests/utils/test_generate_cyclonedx/0001-cve_upstream.patch
+@@ -0,0 +1,14 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++
++CVE: CVE-2025-0001
++Upstream: https://patches.example/foo.patch
++
++Signed-off-by: the contributor
++
++diff --git a/foo.txt b/foo.txt
++index 0000001..0000002 100644
++--- a/foo.txt
+++++ b/foo.txt
++@@
++-foo
+++bar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
