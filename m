@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96C7ECD8C80
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980ADCD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A122820D7;
-	Fri,  5 Jun 2026 12:39:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FD9560A9C;
+	Fri,  5 Jun 2026 12:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fevSPvcqIiXs; Fri,  5 Jun 2026 12:39:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WpsjqI5cy8Vh; Fri,  5 Jun 2026 12:39:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 596C381EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74D1E60DC2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663184;
-	bh=GM9oiRNOBcz1CgNZjBmpM/HLg2A5EWJ5e9QeNHVd+hU=;
+	s=default; t=1780663186;
+	bh=C3WiYNIQ2b7hmC9YQMX6aRqlDb+wt02C72jSScCU3lg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=X6HkFO/HNEZ6Nbve12nQnJo+DjbY+EJLep4a7F92JiUuWSN1z+Ck/8u6Y7nXaaDwr
-	 YLQEkq9IZfVZx6EU0FKh+1D15WbQqlK6y9Pv+G1viCXD9sNHnjKBVyt6ejI4y+B2cd
-	 As8aae/vvwNZp4kTkuRyqPe98sizIN5kj4hyI6I2JwmDNAvxArGMvHu66CHNCOeri9
-	 fBKFo7E8CEABoBaE/60XRaEX+vGAYheltN13rPDqL1YN41LPF1mLuNJ1DCHNABIK6d
-	 hx/UERvDm80jFVgjJoDyrx6UYOSUW3Ah52/KW0CMpbvWnKvC+16u5TYNttQ9dXAITz
-	 XSmQem9pekQ+g==
+	b=OlAKLMYlb1tONTGDLSMlZHldzBp5CjG6WPN0zSuHSz7B8eAXD3A7RjK9B1Sfz3pAk
+	 I01/ijdQ8Qe811mWgu2MIl5rUnf3brwyaUlLDdFUEw6UX+lDOaruTFcaxev6mG1ZXh
+	 LeTW5mtj830Rs8rvgeMmYX7t08qlH5Jec4JtXMdXn+QcF/AoGPtkFpnUkCZYMMY8dm
+	 fQCjrHSoHx0wJwX//nLKsHF84cuhyIImuKpQM+BsJB2pd9jHOSK+/s7Czh+JIlLohY
+	 b7G/VDbYfQZwO9hzGxMEBYcdQ1H+37+7L4/nB7znTPBS6XZFAytabcjpAoie8OW3P3
+	 TB2PcnnhbDR3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 596C381EEA;
-	Fri,  5 Jun 2026 12:39:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74D1E60DC2;
+	Fri,  5 Jun 2026 12:39:46 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F596388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 044A5F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E64C81FF7
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2F3881FD3
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KmkTdrXqadlc for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ id qL7uSRJy-7AR for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73D181FD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4488D81F87
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A73D181FD3
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4488D81F87
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D19A887B03; Fri,  5 Jun 2026 12:38:34 +0000 (UTC)
+ id 6E33C836B6; Fri,  5 Jun 2026 12:38:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:02:34 +0200
+Date: Thu, 4 Jun 2026 11:35:46 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: bcee92838f831b54513ebf85a0cb4c9d21144e47
-X-Git-Newrev: 8bee785fc18c9880746ff094f0ca2da81789af48
+X-Git-Oldrev: 6f6a77b233ea21631cec5663fdd1f0e7a78ddb05
+X-Git-Newrev: cd1c5871d17743898cf0cad6d7dd56d6e4fa8061
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123834.D19A887B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/vlc: replace
- wayland-scanner patch with upstream commit
+Message-Id: <20260605123835.6E33C836B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/efl: re-add
+ patches to fix drm-related build errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,145 +77,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8bee785fc18c9880746ff094f0ca2da81789af48
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cd1c5871d17743898cf0cad6d7dd56d6e4fa8061
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
+Buildroot commit c7a1b73f1758855e47c188c38617dd309b2c2428 removed
+patches 0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+and 0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch.
+
+This defconfig
+
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_EFL=y
+BR2_PACKAGE_EFL_DRM=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_LUAJIT=y
+
+is broken now during configure stage
+
+output/build/efl-1.28.1/src/modules/ecore_evas/engines/drm/meson.build:6:18:
+ ERROR: Unknown variable "engine_gl_drm".
+
+which is fixed by former patch 0001.
+
+Later a build error occurs which is fixed by former patch 0002.
+
+The error was not yet caught by the autobuilders.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a659fa3bb501b1e8cbbd656ca456a93a59ae0573)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 526b89cfd883073c048e32cabe4597e2c83084bd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- ...ake-it-possible-to-override-wayland-scann.patch | 39 +++++++++++++++++
- ...c-also-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 ----------------------
- package/vlc/vlc.mk                                 |  1 +
- 4 files changed, 40 insertions(+), 51 deletions(-)
+ ...engines-drm-meson.build-use-gl_deps-as-en.patch | 37 +++++++++++++++++++++
+ ...engines-drm-meson.build-fix-gl_drm-includ.patch | 38 ++++++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 88d89d42ca..8f29e5a12d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -970,7 +970,6 @@ package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch lib_pa
- package/vlc/0005-Don-t-assume-strerror_l-is-available.patch lib_patch.Upstream
- package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch lib_patch.Upstream
- package/vlc/0007-Add-support-for-freerdp2.patch lib_patch.Upstream
--package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch lib_patch.Upstream
- package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch lib_patch.Upstream
- package/vlc/0010-opengl-missing-library-check.patch lib_patch.Upstream
- package/vpnc/0001-Makefile-allow-to-override-the-PREFIX-variable.patch lib_patch.Upstream
-diff --git a/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
+diff --git a/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
 new file mode 100644
-index 0000000000..b89687ec74
+index 0000000000..dd6ac1ae25
 --- /dev/null
-+++ b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
-@@ -0,0 +1,39 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Yann Lochet <yann@l0chet.fr>
-+Date: Fri, 25 Nov 2022 16:20:45 +0100
-+Subject: [PATCH] configure: make it possible to override wayland-scanner
++++ b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+@@ -0,0 +1,37 @@
++From 00833baac6935bd1e3e9856211bc165c5b02a7bd Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 1 Aug 2020 02:25:47 +0200
++Subject: [PATCH] ecore_evas/engines/drm/meson.build: use "gl_deps" as engine
++ dependencies
 +
-+When cross-compiling, PKG_CONFIG might pick up the wayland-scanner
-+from the sysroot.
++Meson trigger an error since "engine_gl_drm" variable doesn't exist.
 +
-+Upstream: https://code.videolan.org/videolan/vlc/-/commit/75e52f617bf3273f4883b56c4175d68211e02d14
++src/modules/ecore_evas/engines/drm/meson.build:10:2: ERROR: Unknown variable "engine_gl_drm".
 +
-+[Bernd: rebased for 3.0.23]
++Instead use "gl_deps" as engine dependencies.
++
++Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075016/
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Bernd: added Upstream: tag]
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/modules/ecore_evas/engines/drm/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index a91fc73172..5e8821dea9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3277,6 +3277,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-+     ])
++diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
++index 58071010d0..0741d7fccd 100644
++--- a/src/modules/ecore_evas/engines/drm/meson.build
+++++ b/src/modules/ecore_evas/engines/drm/meson.build
++@@ -3,7 +3,7 @@ engine_deps = [ecore_drm2, ecore_input, eeze, elput, libdrm, engine_drm]
 + 
-+     AC_MSG_CHECKING([for the Wayland scanner])
-++    AS_VAR_SET_IF(WAYLAND_SCANNER, [],[
-+     PKG_CHECK_EXISTS([wayland-scanner], [
-+       WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-+       AC_MSG_RESULT([${WAYLAND_SCANNER}])
-+@@ -3284,6 +3285,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-+       AC_MSG_RESULT([not found])
-+       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-+     ])
-++    ])
++ if get_option('opengl') != 'none'
++   config_h.set('BUILD_ECORE_EVAS_GL_DRM', '1')
++-  engine_deps += [engine_gl_drm]
+++  engine_deps += [gl_deps]
++ endif
 + 
-+     have_wayland="yes"
-+ 
++ engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
 +-- 
-+2.47.3
++2.31.1
 +
-diff --git a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-deleted file mode 100644
-index 2b74fe0d39..0000000000
---- a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 26 Aug 2018 12:51:04 +0200
--Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
-- wayland-scanner
--
--When cross-compiling the .pc file might point to the wrong
--wayland-scanner binary (target rather than host) resulting in a
--non-executable and wrong scanner.
--Try searching the PATH first, and if that fails fall back into
--pkg-config.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure.ac | 19 +++++++++++--------
-- 1 file changed, 11 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 4808b8becf..a18641ed23 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
--       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
--     ])
-- 
---    AC_MSG_CHECKING([for the Wayland scanner])
---    PKG_CHECK_EXISTS([wayland-scanner], [
---      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
---      AC_MSG_RESULT([${WAYLAND_SCANNER}])
---    ], [
---      AC_MSG_RESULT([not found])
---      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
---    ])
--+    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
--+    if test "x$WAYLAND_SCANNER" = x; then
--+        AC_MSG_CHECKING([for the Wayland scanner])
--+        PKG_CHECK_EXISTS([wayland-scanner], [
--+          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
--+          AC_MSG_RESULT([${WAYLAND_SCANNER}])
--+        ], [
--+          AC_MSG_RESULT([not found])
--+          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
--+        ])
--+    fi
-- 
--     have_wayland="yes"
-- 
---- 
--2.18.0
--
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 07aeefd193..0ce6662353 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -527,6 +527,7 @@ VLC_CONF_OPTS += --disable-udev
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS),yy)
-+VLC_CONF_ENV += WAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
- VLC_CONF_OPTS += --enable-wayland
- VLC_DEPENDENCIES += wayland wayland-protocols
- else
+diff --git a/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+new file mode 100644
+index 0000000000..e71a1705c0
+--- /dev/null
++++ b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+@@ -0,0 +1,38 @@
++From a21e71cc2284a19a34c913aff757e656e3a8c14a Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 1 Aug 2020 01:01:00 +0200
++Subject: [PATCH] ecore_evas/engines/drm/meson.build: fix "gl_drm" include
++ directory
++
++The Evas_Engine_GL_Drm.h file is in "gl_drm" directory, not "drm".
++
++../src/modules/ecore_evas/engines/drm/ecore_evas_drm.c:23:11: fatal error: Evas_Engine_GL_Drm.h: No such file or directory
++   23 | # include <Evas_Engine_GL_Drm.h>
++      |           ^~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++
++Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075004/
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Bernd: added Upstream: tag]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/modules/ecore_evas/engines/drm/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
++index 0741d7fccd..edda1abd71 100644
++--- a/src/modules/ecore_evas/engines/drm/meson.build
+++++ b/src/modules/ecore_evas/engines/drm/meson.build
++@@ -6,7 +6,7 @@ if get_option('opengl') != 'none'
++   engine_deps += [gl_deps]
++ endif
++ 
++-engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
+++engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'gl_drm'))
++ 
++ shared_module(mod_full_name, engine_src,
++   include_directories : config_dir + [engine_include_dir],
++-- 
++2.31.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
