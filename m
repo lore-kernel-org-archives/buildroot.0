@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BDACD6E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAB2CD6E79
 	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2119040ECF;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64B0260A6E;
 	Fri,  5 Jun 2026 12:37:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AZpixIkPGuIz; Fri,  5 Jun 2026 12:37:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GS0xWzu_vU4R; Fri,  5 Jun 2026 12:37:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4CAA40EB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 651A560A52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663061;
-	bh=yNBCyFRTgEBig6jRTz0FzNLBKJXoV54M+TrV43nBlTE=;
+	s=default; t=1780663063;
+	bh=UStei+fv5LiYIlrTt+vUOvN0X56OBQb14m9jinVohhg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OKDjw9xp3+GovLazQYh7Oji6/i5AO4Bu/QEybTFygbS5inrwL0SEx+NugVtqP4urj
-	 uOfGzeeCtPy8qx4Ss68Xxc+IT1HxIqvWK4x7TbkcD/UNaQz1k7yqOOJkONbrDv8go1
-	 HPjv5Jm3p1LNNH/xo+WWZK7CqOOvW4eUJyboOlBxp3Z+X6J1gABXxt9mN6PyZNB5VV
-	 wNBXhOw8ZRv2l+lhxXWOzajhGc0rPRMIePS3wAEd+SQEny8auroqf3QtZfvYJg4C1x
-	 /gb/iB+/nZYzUBDzL4pSN645P1F5U6VWBAYFSN6FGfYwFZblTwUb9dOqV4Llt3ixI+
-	 dIzwIlwIluj+g==
+	b=i5P6AgofEUnHb7opWridzqnMqjyWXWxZ99ijQdJy6Pfl6ZKxO9iZiBcJX/+Qv9mqT
+	 zAMFvq7y/x28m+5W0M0ImQ+ymS/P2r6O9zU7VOY3/HsHcR8ttqRv6K+YS/ueypF55E
+	 wXakFmAOPbuLrKc5XKn11PCVfH6FrhzYbFFZPVChRcxjEoVXoYuf8qeLeb3kLW6HWf
+	 sNTDGUitZhkV0HOiUWEl53W5RhjPA62514UA+dw56njLgruJVjbI6QcpUATCab6M1k
+	 CpODk9WqE3MBeMmdd3clcc/BsEh5xMdBNNNNJ0kgGzBdnFhp3g5SoOziZa9lcZG8PV
+	 aQNPSg3pqjkMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4CAA40EB5;
-	Fri,  5 Jun 2026 12:37:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 651A560A52;
+	Fri,  5 Jun 2026 12:37:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EF21F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F6C9388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC17981E94
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7181581EA9
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z1KmIu1u4RuB for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ id 1FHbWQwjS372 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7CC781E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7798281E4D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7CC781E51
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7798281E4D
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D24B487B41; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
+ id A225187B41; Fri,  5 Jun 2026 12:37:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 10:54:10 +0200
+Date: Thu, 4 Jun 2026 10:44:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 36f1cafd5e88c6f5bfd03f6dad176122f9291534
-X-Git-Newrev: 0574a09412026ba2d2943498e1cd7489428ba262
+X-Git-Oldrev: 14bfd4c3cf7b2b02d7dee357fb76502860d98aa7
+X-Git-Newrev: 670eafbddb23455da264c05ecb2f2d67141d5814
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123710.D24B487B41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libmad: remove
- Debian patches
+Message-Id: <20260605123710.A225187B41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk: fix
+ build caused by libjwt bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,75 +77,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0574a09412026ba2d2943498e1cd7489428ba262
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/670eafbddb23455da264c05ecb2f2d67141d5814
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-In Buildroot there are multiple way to apply patches on a package [1]
+In commit 770f9154978c40ce5b7718174108b37c5310869d, libjwt was bumped
+from 1.17.2 to 3.2.0, which is a big bump. And the libjwt website
+states "Version 3 of LibJWT is a complete overhaul of the code. Please
+see documentation for usage."
 
-- Adding `.patch` file in the package directory.
-- Define `<pkg>_PATCH` variable with the location of the patch tar.gz.
-    It used to download Debian patches tarball.
-- Implement custom patching logic with `PRE`/`POST` patches hooks.
+And indeed, this version bump breaks the build of Asterisk:
 
-The libmad package is downloading a diff file from the Debian
-mirror with the `<pkg>_PATCH` method [2] and then apply that diff to
-create a directory containing patches. The patches are then applied in
-the `PRE_PATCH_HOOK`.
+res_stir_shaken/attestation.c: In function 'pack_payload':
+res_stir_shaken/attestation.c:357:9: error: implicit declaration of function 'jwt_add_grants_json' [-Wimplicit-function-declaration]
+  357 |         jwt_add_grants_json(jwt, payload_str);
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from /home/autobuild/autobuild/instance-11/output-1/build/asterisk-22.3.0/include/asterisk/module.h:39,
+                 from res_stir_shaken/attestation.c:24:
+res_stir_shaken/attestation.c: In function '_dtor_jwt':
+res_stir_shaken/attestation.c:367:38: error: implicit declaration of function 'jwt_free'; did you mean 'jwks_free'? [-Wimplicit-function-declaration]
+  367 |         RAII_VAR(jwt_t *, jwt, NULL, jwt_free);
+      |                                      ^~~~~~~~
 
-The Debian patches were integrated in commit [4], in commit [5] the
-application of the patches was moved to the PRE_PATCH_HOOK.
-The problem is that in the PRE_PATCH step the `_PATCH` downloaded from
-Debian don't exist yet and end up not being applied at all.
+To fix this, let's use the bundled version of libjwt in Asterisk,
+since even Asterisk master hasn't been fixed to be compatible with
+libjwt 3.x.
 
-Since this is not used, remove the Debian patches.
+Of course, this raises the question of whether the separate libjwt
+package should be removed, as it is anyway only used by Asterisk.
 
-[1] https://buildroot.org/downloads/manual/manual.html#patch-policy
-[2] http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libm/libmad/libmad_0.15.1b-10.diff.gz
-[3] 1167d0ff3d docs/manual: mention CVE trailer
-[4] 858df3643f package/libmad: switch to debian to fix CVEs
-[5] b21184a877 package/libmad: update the patches to be applied with fuzz 0
+Fixes:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+  http://autobuild.buildroot.net/results/2d39791c65c5b71b0533d4b2bce5f073f5919552/
+
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 103f84b30fd8dfd4f8e27910d7136aa3cd7a6133)
+[Bernd: Added libopenssl dependency needed by bundled libjwt]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 61271a6c5589baffb0df9c245e4026c281afdf7e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libmad/libmad.mk | 15 ---------------
- 1 file changed, 15 deletions(-)
+ package/asterisk/Config.in     | 3 ++-
+ package/asterisk/asterisk.hash | 2 ++
+ package/asterisk/asterisk.mk   | 7 ++++---
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index db04d22e92..611f13eb67 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -5,7 +5,6 @@
- ################################################################################
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index 71c741acfd..3db6e5375a 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -10,10 +10,11 @@ config BR2_PACKAGE_ASTERISK
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBEDIT
+ 	select BR2_PACKAGE_LIBILBC
+-	select BR2_PACKAGE_LIBJWT
+ 	select BR2_PACKAGE_LIBPJSIP
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_OPENSSL # bundled libjwt
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # bundled libjwt
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 6343b0bdf2..3a8274b458 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -3,6 +3,8 @@ sha256  6669a8d2e50481a3b70c6099a21a100ab7d7ae9ac00e2182eabb94c68c94bcc9  asteri
  
- LIBMAD_VERSION = 0.15.1b
--LIBMAD_PATCH = libmad_$(LIBMAD_VERSION)-10.diff.gz
- LIBMAD_SOURCE = libmad_$(LIBMAD_VERSION).orig.tar.gz
- LIBMAD_SITE = \
- 	http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libm/libmad
-@@ -13,20 +12,6 @@ LIBMAD_INSTALL_STAGING = YES
- LIBMAD_LICENSE = GPL-2.0+
- LIBMAD_LICENSE_FILES = COPYING
+ # Locally computed
+ sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
++sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
++
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index b09df98494..e2fdb189fa 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -13,11 +13,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+ ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
++ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
++	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
  
--define LIBMAD_APPLY_DEBIAN_PATCHES
--	if [ -d $(@D)/debian/patches ]; then \
--		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.patch; \
--	fi
--endef
--
--LIBMAD_PRE_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
--
--# debian/patches/md_size.diff
--LIBMAD_IGNORE_CVES += CVE-2017-8372 CVE-2017-8373
--
--# debian/patches/length-check.patch
--LIBMAD_IGNORE_CVES += CVE-2017-8374
--
- # Force autoreconf to be able to use a more recent libtool script, that
- # is able to properly behave in the face of a missing C++ compiler.
- LIBMAD_AUTORECONF = YES
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -39,7 +41,6 @@ ASTERISK_DEPENDENCIES = \
+ 	jansson \
+ 	libcurl \
+ 	libedit \
+-	libjwt \
+ 	libpjsip \
+ 	libxml2 \
+ 	sqlite \
+@@ -94,7 +95,7 @@ ASTERISK_CONF_OPTS = \
+ 	--with-jansson \
+ 	--with-libcurl \
+ 	--with-ilbc \
+-	--with-libjwt="$(STAGING_DIR)/usr" \
++	--with-libjwt-bundled \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+ 	--with-pjproject-bundled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
