@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F88CD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8B12CD8C80
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58C63410AE;
-	Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C69660C13;
+	Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fD4XO_24ODpn; Fri,  5 Jun 2026 12:39:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d90zsGGxfx2t; Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 527BF4112F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 626DF60D6C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663164;
-	bh=3BlpUWIEklANbYGpxT5+qfBTX0DH3rT1WHmv7ikAh3E=;
+	s=default; t=1780663165;
+	bh=fhnsC4K1z9SJ98F0t6xSxsTihGXuGZLoQIcPV6lbuno=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=l0cvca60cDvbuhRLGj0pwShLVB+9rCKOUBqC+okAj5z4CglbORqby39m5WUIFzjhE
-	 TRjkeTbSlf5bazODIm1AhT6HF76zO/pwfcBDW2sibYaW3trhVC588nqrZkZxrkT4r2
-	 I/vjIbVhOqjROinkOVLkuhjAxZeeFgX3564BGfI7anTXVDwQhsAwqYLiGD+XF6t6Xf
-	 wGtoQrfTreI7eGugAFgNqH7AyCpqRY9aUJA4ybkJJeT5IeOUC3JYwtAz6YVW/NHFUT
-	 fdWqQMgqK1BzkXMpIaP5kykD4mOrao1KKWI+WCGwAqaRZjWPfzF1+fPqW57ZjMpx6W
-	 9Ku204mt4Iciw==
+	b=eZGOZKQPy7ps6lG7KF8VA/vINvAmjhQj/cAEBwsbc6gl+eTWHks9XT6gOts06vDkI
+	 URAmDsABlPOhsGGR9cxyZU/SynAKtUXgAA+h/9VE5HVddN4ipR6NwYl3e2vhlODgwm
+	 3Mp49OKw9+vsDfPG+UdFzQXDbx0mSCi1v04AMNsnl1JhRhuze/0T3BpOV7PfMMs8W2
+	 oPX52VxIY4cfFXhD8+fcj5oZ48XZ6WbvFS8Ab6aVjYMFVJ5xjXHHacDwXAi0K2379e
+	 smNOylioVgdUcRbkBG9t1nWKDF+AFO8IG+0waGJP6kN7d2wOeD67cyzgDikvX8zqB9
+	 e3AcdGdQW8uTA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 527BF4112F;
-	Fri,  5 Jun 2026 12:39:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 626DF60D6C;
+	Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02FF8F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F0C4388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5719A41032
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA60141051
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVedBfIzWk_j for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ id pmWS1tf0zmuM for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D831140FB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C18440FC9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D831140FB3
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C18440FC9
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E74387B22; Fri,  5 Jun 2026 12:38:35 +0000 (UTC)
+ id 35D1287B22; Fri,  5 Jun 2026 12:38:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:03:26 +0200
+Date: Thu, 4 Jun 2026 11:04:12 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: ee0ee0b33e906391a5bc6462548c0ddf7f043f84
-X-Git-Newrev: df418f0675f9da16fc5f88377be2084465813b2a
+X-Git-Oldrev: 5ecf3744f31d0746f7b1de8f16a3ed1d164ec593
+X-Git-Newrev: 8b76c781519b7692c85a9168a21e69ac3444c9e1
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123835.0E74387B22@busybox.osuosl.org>
+Message-Id: <20260605123835.35D1287B22@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2026.02.x]
- support/scripts/cve-check: fix vulnerability timestamp to RFC 3339
+ support/scripts/cve-check: fix vulnerabilities with different analysis
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,106 +77,175 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/df418f0675f9da16fc5f88377be2084465813b2a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8b76c781519b7692c85a9168a21e69ac3444c9e1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Normalize vulnerability timestamps to RFC 3339 format with explicit UTC
-timezone suffix for CycloneDX 1.6 compliance.
-This fixes validation errors in sbom-utility and makes the generated
-SBOM with vulnerabilities compatible with DependencyTrack VEX parsers.
+Before this commit, only one entry per vulnerability ID was added to the
+output. In CycloneDX, if you need to provide different analyses for
+different affected components with the same vulnerability ID, you must
+create multiple entries with the same ID.
 
-The NVD JSON data feeds provide timestamps in ISO 8601 format without timezone
-information (e.g., "1999-01-01T05:00:00.000"), but CycloneDX 1.6 requires
-RFC 3339 format with explicit timezone designation (e.g.,
-"1999-01-01T05:00:00.000Z").
+When running `cve-check` with the `--include-resolved` argument, the
+analysis of some vulnerabilities would get overwritten, which led to
+undefined analysis results.
 
-Add nvd_datetime_to_rfc3339() helper function to convert timestamps before
-serialization.
+This is especially true when running the analysis on multiple components
+with the same name but different versions. For instance, if the input
+SBOM includes both the `gnupg` and `gnupg2` packages, CVE-2025-68973
+could be included. This CVE might be exploitable for the `gnupg` package
+but resolved for `gnupg2`. Therefore, a single analysis entry cannot
+cover both cases.
 
-Validation results:
+This commit fixes the logic for adding vulnerabilities to the output
+SBOM. A vulnerability is now added as a new entry if:
 
-Before fix:
-  $ sbom-utility validate -i cve/cve_report_current.json
-  [INFO] BOM valid against JSON schema: 'false'
-  [INFO] (234) schema errors detected.
+1. A vulnerability with the same ID doesn't exist yet.
+2. The affect of the new vulnerability is not the same as the one
+   already present.
 
-  Error example:
-  {
-    "type": "format",
-    "field": "vulnerabilities.0.updated",
-    "context": "(root).vulnerabilities.0.updated",
-    "description": "Does not match format 'date-time'",
-    "value": "2025-04-03T01:03:51.193"
-  }
+For the CVE-2025-68973 example this would result in the following
+output:
 
-After fix:
-  $ sbom-utility validate -i cve/cve_report_update.json
-  [INFO] BOM valid against JSON schema: 'true'
+```json
+[
+    {
+        "id": "CVE-2025-68973",
+        "analysis": {
+            "state": "exploitable"
+        }
+        "affects": [
+            {"ref": "gnupg"}
+        ]
+    },
+    {
+        "id": "CVE-2025-68973",
+        "analysis": {
+            "state": "resolved"
+        }
+        "affects": [
+            {"ref": "gnupg2"}
+        ]
+    }
+]
+```
 
-Tested-with: sbom-utility v0.18.1
-Co-authored-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+45 vulnerabilities were concerned by this bug over the Buildroot tree.
+
+Co-Authored-By: Tim Soubry <tim.soubry@mind.be>
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e46783d3a0f56c93c2ad28236162ff4b05c134df)
+(cherry picked from commit d4ff747a2bb72ce31f789584a91d9ea064e394c0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ support/scripts/cve-check | 76 +++++++++++++++++++++++------------------------
+ 1 file changed, 37 insertions(+), 39 deletions(-)
 
 diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-index bcd970bad8..5047523ade 100755
+index 4d01fa5f23..af0971d06d 100755
 --- a/support/scripts/cve-check
 +++ b/support/scripts/cve-check
-@@ -12,10 +12,10 @@
- from collections import defaultdict
- from pathlib import Path
- from typing import TypedDict
-+from datetime import datetime, timezone
- import argparse
- import sys
- import json
--
- import cve as cvecheck
+@@ -175,55 +175,54 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+ 
+ def vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability):
+     """
+-    Append 'vulnerability' passed as argument to the 'vulnerabilities' argument
+-    if an entry with the same 'id' doesn't exist yet.
+-    If the vulnerability already exists, the input reference is added to the
+-    'affects' list of the existing entry.
++    Updates a matching 'vulnerability' from the 'vulnerabilities' list or
++    appends it as a new entry.
++
++    A vulnerability is considered 'matching' if it shares the same 'id' AND
++    either:
++
++    1. An identical 'affects' entry.
++    2. An identical 'analysis.state'.
+ 
+     Args:
+         vulnerabilities (list): The vulnerabilities array reference retrieved
+             from the input CycloneDX SBOM
+         vulnerability (dict): Vulnerability to add to the 'vulnerabilities' list.
+     """
+-    # Search if a vulnerability with the same identifier already exists in the
+-    # SBOM vulnerability list.
+-    matching_vuln = next(
+-        (vuln for vuln in vulnerabilities if vuln.get("id") == vulnerability["id"]),
+-        None
+-    )
++    new_analysis = vulnerability.get("analysis", {}).get("state")
++    new_ref = next((a.get("ref") for a in vulnerability.get("affects", [])), None)
+ 
+-    # bom-ref to the component is passed to the affects of the vulnerability
+-    # passed as argument
+-    bom_ref = next((a["ref"] for a in vulnerability.get("affects", [])), None)
++    # All vulnerabilities with same ID
++    matching_vulns = [v for v in vulnerabilities if v.get("id") == vulnerability.get("id")]
+ 
+-    if matching_vuln is not None:
+-        # Remove the affect to not use it while updating matching vuln.
+-        if "affects" in vulnerability:
+-            del vulnerability["affects"]
++    for curr_vuln in matching_vulns:
++        curr_vuln_analysis = curr_vuln.get("analysis", {}).get("state")
++        curr_vuln_refs = [a.get("ref") for a in curr_vuln.get("affects", [])]
+ 
+-        if matching_vuln.get("analysis") is not None and "analysis" in vulnerability:
+-            # We don't update vulnerabilities that already have an
+-            # 'analysis'.
+-            # Buildroot ignored vulnerabilities will already have
+-            # an analysis and need to remain as such.
+-            del vulnerability["analysis"]
++        is_same_ref = new_ref in curr_vuln_refs
++        is_same_analysis = curr_vuln_analysis == new_analysis
+ 
+-        affects = matching_vuln.setdefault("affects", [])
++        if not (is_same_ref or is_same_analysis):
++            continue
+ 
+-        if bom_ref is not None:
+-            ref = next((a["ref"] for a in affects if a["ref"] == bom_ref), None)
+-            if ref is None:
+-                # Add a 'ref' (bom reference) to the component if not
+-                # already present in the 'affects' list.
+-                affects.append({
+-                    "ref": bom_ref
+-                })
++        if is_same_ref:
++            # If same vulnerability id and same affect ref, keep the previous
++            # analysis. This is the case where a vulnerability was ignored from
++            # the generated SBOM.
++            del vulnerability["analysis"]
++            del vulnerability["affects"]
++        else:
++            # The same analysis, add a new affect
++            # reference.
++            if new_ref is not None:
++                curr_vuln.setdefault("affects", []).append({"ref": new_ref})
++                del vulnerability["affects"]
+ 
+-        # Update the metadata of the vulnerability with the one
+-        # downloaded from the database.
+-        matching_vuln.update(vulnerability)
+-    else:
+-        vulnerabilities.append(vulnerability)
++        curr_vuln.update(vulnerability)
++        return
++
++    # No same ID w/ same analysis or same ref.
++    vulnerabilities.append(vulnerability)
  
  
-@@ -35,6 +35,24 @@ locally.
- brpath = Path(__file__).parent.parent.parent
+ def check_package_cve_affects(cve: cvecheck.CVE, cpe_product_pkgs, sbom, opt: Options):
+@@ -297,8 +296,7 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
+             print(f"Warning: '{vuln_id}' doesn't exist in NVD database.", file=sys.stderr)
+             continue
+ 
+-        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
+-        vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
++        vuln.update(nvd_cve_to_cdx_vulnerability(cve.nvd_cve))
  
  
-+def datetime_to_rfc3339(dt_string):
-+    """Normalize datetime string to RFC 3339 format with Z suffix.
-+
-+    NVD dates are already in ISO format, just need to add the Z suffix.
-+
-+    Input:  "1999-01-01T05:00:00.000"
-+    Output: "1999-01-01T05:00:00.000Z"
-+    """
-+    dt = datetime.fromisoformat(dt_string.replace('Z', '+00:00'))
-+
-+    if dt.tzinfo is None:
-+        dt = dt.replace(tzinfo=timezone.utc)
-+    else:
-+        dt = dt.astimezone(timezone.utc)
-+
-+    return dt.isoformat().replace('+00:00', 'Z')
-+
-+
- def cve_api_get_lang_from_list(values, lang="en") -> (str | None):
-     for x in values:
-         if x.get("lang") == lang:
-@@ -134,10 +152,10 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
-             "url": f"https://nvd.nist.gov/vuln/detail/{nvd_cve['id']}"
-         },
-         **({
--            "published": nvd_cve["published"],
-+            "published": datetime_to_rfc3339(nvd_cve["published"]),
-         } if "published" in nvd_cve else {}),
-         **({
--            "updated": nvd_cve["lastModified"],
-+            "updated": datetime_to_rfc3339(nvd_cve["lastModified"]),
-         } if "lastModified" in nvd_cve else {}),
-         **({
-             "cwes": nvd_cve_weaknesses_to_cdx(nvd_cve["weaknesses"]),
+ def main():
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
