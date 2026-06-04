@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11DABCD8C81
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5821CCD8C80
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7CC14110C;
-	Fri,  5 Jun 2026 12:39:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25C9682002;
+	Fri,  5 Jun 2026 12:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6915-0wO9Lxf; Fri,  5 Jun 2026 12:39:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FomEJ82HAS_g; Fri,  5 Jun 2026 12:39:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 066704111F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30E2A82011
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663157;
-	bh=Db5kVxT7OPbnGpxlzRc3sMpUGOAeXn+dr0pZeq56pbg=;
+	s=default; t=1780663159;
+	bh=MIYVMcmVzUdjd0epSPVLkaVuXOY2aJ98uHgTd9NWWM4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XKHSetnRZZXKGwY9KWF3n0Y++eMiXxmLhd+scSfVdA4bCbbZ34/SBDHpJw3PZ5hYb
-	 WivwCFSG25+C4vyDtayI7kqn7L7OoC3qQUL21FJ3UIWi40E3aPicljWekUrkqzc/UI
-	 O/aDiyRhvH5YjTHEgOp43+PH+QqAUCkq8hUZioayMRK1ZVycWz3DSnUEjJ8knuC2DY
-	 ph2cUwJ4Z0eJkwmcTuckx1vWtFt4PdiLCKQh6UNZVc2yVv/E7I+rrO5+2reFecWRHT
-	 p8Ym9uPHEOfdwdebGiYuiOoGnB4KwUYp5lEtNpuW4jWmca2+84Qu+PnjY4vpDNQgri
-	 CgCPMLjxQjW/w==
+	b=Bf+u/j1RZjPv/CPFHcsVhfQ1b4+m39xlpWAXLSWkgSKCffUycZ1M+ix7nZg18FEIN
+	 77DDtv8mMDj6GA6sEMINgF1rZ+SpqK1Lnbigp3z3Yef8Vz5qaRmcQgIVJxisMivTRG
+	 Rkv8JAGvbxjACQnPQSMnEv9Ja32V8JPU7QsFAsyLI/3uahO9f4vZWSID7Cb9MxSD/J
+	 pyrrvfq0mr45ktFLS/EOlnUuZFfXVSKJ3kg1xS6JYDe43hIggSGODZ+s3EZrvxD1aF
+	 wvS/LlM1foKRze2eTnAlXmF+QmjEI5UMQvX0ZcWjIgpfb15E4Yv9jNK65+QX3qLnlE
+	 ywEkBgeYCgGUA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 066704111F;
-	Fri,  5 Jun 2026 12:39:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30E2A82011;
+	Fri,  5 Jun 2026 12:39:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13B0A3B7
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DAC6388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E37941021
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC50441024
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9UQiSPEH0v8h for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ id yp-3xh3B0zt7 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 948FE41012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE34E4100C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 948FE41012
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE34E4100C
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE9BA87B22; Fri,  5 Jun 2026 12:38:34 +0000 (UTC)
+ id 07A7F87AB1; Fri,  5 Jun 2026 12:38:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:01:19 +0200
+Date: Thu, 4 Jun 2026 10:28:56 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 8fec33c70d1be6cdba467470d22aca8d23cab520
-X-Git-Newrev: bcee92838f831b54513ebf85a0cb4c9d21144e47
+X-Git-Oldrev: 0c465e005f54dda1075703a97e7ad21a98ecfb6b
+X-Git-Newrev: 3b435a1bab81742e1709da8ac609e5d635698ad0
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123834.BE9BA87B22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] support/kconfig: fix
- compiler warnings
+Message-Id: <20260605123834.07A7F87AB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libde265: link
+ with libatomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,62 +72,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3454692102010337208=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3454692102010337208==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bcee92838f831b54513ebf85a0cb4c9d21144e47
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3b435a1bab81742e1709da8ac609e5d635698ad0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Commit 324612d68e09d0db44c51c451bc6b87466f7f874 fixed several compiler warnings,
-but actually introduced a new one by increasing the buffer size in confdata.c that gets passed
-along to file_write_dep in util.c, because buf2's size wasn't increased along with it.
+Buildroot commit d4b8a42fb253116befe539e5529ac4efd97ab421 bumped the
+package to version 1.0.18 which introduced build errors on sparc:
 
-./util.c: In function ‘file_write_dep’:
-./util.c:86:26: warning: ‘%s’ directive writing 10 or more bytes into a region of size between 1 and 4097 [-Wformat-overflow=]
-   86 |         sprintf(buf2, "%s%s", dir, name);
-      |                          ^~
-./util.c:86:9: note: ‘sprintf’ output 11 or more bytes (assuming 4107) into a destination of size 4097
-   86 |         sprintf(buf2, "%s%s", dir, name);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autobuild/autobuild/instance-21/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/15.2.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
+ ../libde265/libde265.so.0.1.12: undefined reference to
+ `__atomic_fetch_add_4'
 
-Fix this by increasing the size of buf2 to match the passed buffer size.
+Fixes:
+https://autobuild.buildroot.net/results/605/605dc19e86f113662cc35fe055c64c52698d70b4/
 
-Signed-off-by: Devreese Jorik <jorik.devreese@barco.com>
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1f5095c1d304b38f014f9da0bf4351218f44a4b8)
+(cherry picked from commit 38358daba978181f08a0b135782116f87c73562d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/kconfig/util.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libde265/libde265.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/kconfig/util.c b/support/kconfig/util.c
-index 8665f5bb89..c2e7979ac1 100644
---- a/support/kconfig/util.c
-+++ b/support/kconfig/util.c
-@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
- int file_write_dep(const char *name)
- {
- 	char *str;
--	char buf[PATH_MAX+20], buf2[PATH_MAX+1], dir[PATH_MAX+1];
-+	char buf[PATH_MAX+20], buf2[PATH_MAX+20], dir[PATH_MAX+1];
- 	struct symbol *sym, *env_sym;
- 	struct expr *e;
- 	struct file *file;
-
---===============3454692102010337208==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index 8c2fa4a3c3..d7e3df83ca 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -11,4 +11,9 @@ LIBDE265_LICENSE_FILES = COPYING
+ LIBDE265_CPE_ID_VENDOR = struktur
+ LIBDE265_INSTALL_STAGING = YES
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++LIBDE265_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3454692102010337208==--
