@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8B12CD8C80
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA258CD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C69660C13;
-	Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE0F6820A7;
+	Fri,  5 Jun 2026 12:39:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d90zsGGxfx2t; Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tptJDzBs6TKV; Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 626DF60D6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C965E820A3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663165;
-	bh=fhnsC4K1z9SJ98F0t6xSxsTihGXuGZLoQIcPV6lbuno=;
+	s=default; t=1780663166;
+	bh=rAZLRaA1rvZcb4kiUYSSWKTwBSGpVzySAAxiPlSJahQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eZGOZKQPy7ps6lG7KF8VA/vINvAmjhQj/cAEBwsbc6gl+eTWHks9XT6gOts06vDkI
-	 URAmDsABlPOhsGGR9cxyZU/SynAKtUXgAA+h/9VE5HVddN4ipR6NwYl3e2vhlODgwm
-	 3Mp49OKw9+vsDfPG+UdFzQXDbx0mSCi1v04AMNsnl1JhRhuze/0T3BpOV7PfMMs8W2
-	 oPX52VxIY4cfFXhD8+fcj5oZ48XZ6WbvFS8Ab6aVjYMFVJ5xjXHHacDwXAi0K2379e
-	 smNOylioVgdUcRbkBG9t1nWKDF+AFO8IG+0waGJP6kN7d2wOeD67cyzgDikvX8zqB9
-	 e3AcdGdQW8uTA==
+	b=eJycyWb0dkowz4SEOMbQ5H9eKkBpip3dHeJ/L+cxg+O/M3NNl3QygDQq5mjFxFT5I
+	 x1s7gVYhLxZXbs0zeeJ3H5vE3EjcjTOimb/YrQoTTfhu1FrKzzSNvwOv8BIABgynJr
+	 cOAZNEDWRpNnF933xEH/L92MgPb2bTn9AIt98tnM5zA1qzm+bvWVWuHGafnfL6p2qC
+	 f/AxBaR9WrWbh+lu5KJqKFaP8UjlfWxYZ171v//ONzBdhVc00XJv1DPJXggG9BkbG6
+	 d/xGXBHRm7OYqpyU5MHkdYDiS4PIwlmZ5MDthFnHifnY9nRZnL7lQglkAfiemCvK35
+	 B1dqWQ2eBB43g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 626DF60D6C;
-	Fri,  5 Jun 2026 12:39:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F0C4388
+	by smtp1.osuosl.org (Postfix) with ESMTP id C965E820A3;
+	Fri,  5 Jun 2026 12:39:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E68B49B
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA60141051
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F41B34039F
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmWS1tf0zmuM for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bzl7faQNIpyk for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C18440FC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AD4C40334
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C18440FC9
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AD4C40334
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35D1287B22; Fri,  5 Jun 2026 12:38:35 +0000 (UTC)
+ id 6837187B39; Fri,  5 Jun 2026 12:38:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:04:12 +0200
+Date: Thu, 4 Jun 2026 12:19:16 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 5ecf3744f31d0746f7b1de8f16a3ed1d164ec593
-X-Git-Newrev: 8b76c781519b7692c85a9168a21e69ac3444c9e1
+X-Git-Oldrev: d2910d13224afec58fc77ef0468d6a1278f912c0
+X-Git-Newrev: 641ae239a758c60586fbdb64e9f5432f984b52c2
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123835.35D1287B22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x]
- support/scripts/cve-check: fix vulnerabilities with different analysis
+Message-Id: <20260605123839.6837187B39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/stellarium: fix
+ qt5serialport dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,175 +77,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8b76c781519b7692c85a9168a21e69ac3444c9e1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/641ae239a758c60586fbdb64e9f5432f984b52c2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Before this commit, only one entry per vulnerability ID was added to the
-output. In CycloneDX, if you need to provide different analyses for
-different affected components with the same vulnerability ID, you must
-create multiple entries with the same ID.
+qt5serialport is only needed when GPS support is enabled:
+https://github.com/Stellarium/stellarium/blob/v25.4/CMakeLists.txt#L623,
+so having qt5serialport without gpsd doesn't bring anything.
 
-When running `cve-check` with the `--include-resolved` argument, the
-analysis of some vulnerabilities would get overwritten, which led to
-undefined analysis results.
+Please note that we disable telescope support by default so only gpsd
+enables the usage of qt5serialport.
 
-This is especially true when running the analysis on multiple components
-with the same name but different versions. For instance, if the input
-SBOM includes both the `gnupg` and `gnupg2` packages, CVE-2025-68973
-could be included. This CVE might be exploitable for the `gnupg` package
-but resolved for `gnupg2`. Therefore, a single analysis entry cannot
-cover both cases.
-
-This commit fixes the logic for adding vulnerabilities to the output
-SBOM. A vulnerability is now added as a new entry if:
-
-1. A vulnerability with the same ID doesn't exist yet.
-2. The affect of the new vulnerability is not the same as the one
-   already present.
-
-For the CVE-2025-68973 example this would result in the following
-output:
-
-```json
-[
-    {
-        "id": "CVE-2025-68973",
-        "analysis": {
-            "state": "exploitable"
-        }
-        "affects": [
-            {"ref": "gnupg"}
-        ]
-    },
-    {
-        "id": "CVE-2025-68973",
-        "analysis": {
-            "state": "resolved"
-        }
-        "affects": [
-            {"ref": "gnupg2"}
-        ]
-    }
-]
-```
-
-45 vulnerabilities were concerned by this bug over the Buildroot tree.
-
-Co-Authored-By: Tim Soubry <tim.soubry@mind.be>
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d4ff747a2bb72ce31f789584a91d9ea064e394c0)
+(cherry picked from commit 8e2238ccce83623c575446f11a84cc2712cdd225)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 76 +++++++++++++++++++++++------------------------
- 1 file changed, 37 insertions(+), 39 deletions(-)
+ package/stellarium/stellarium.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-index 4d01fa5f23..af0971d06d 100755
---- a/support/scripts/cve-check
-+++ b/support/scripts/cve-check
-@@ -175,55 +175,54 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 660d518860..48dadfec61 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -32,11 +32,8 @@ else
+ STELLARIUM_CONF_OPTS += -DENABLE_SCRIPTING=OFF
+ endif
  
- def vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability):
-     """
--    Append 'vulnerability' passed as argument to the 'vulnerabilities' argument
--    if an entry with the same 'id' doesn't exist yet.
--    If the vulnerability already exists, the input reference is added to the
--    'affects' list of the existing entry.
-+    Updates a matching 'vulnerability' from the 'vulnerabilities' list or
-+    appends it as a new entry.
-+
-+    A vulnerability is considered 'matching' if it shares the same 'id' AND
-+    either:
-+
-+    1. An identical 'affects' entry.
-+    2. An identical 'analysis.state'.
- 
-     Args:
-         vulnerabilities (list): The vulnerabilities array reference retrieved
-             from the input CycloneDX SBOM
-         vulnerability (dict): Vulnerability to add to the 'vulnerabilities' list.
-     """
--    # Search if a vulnerability with the same identifier already exists in the
--    # SBOM vulnerability list.
--    matching_vuln = next(
--        (vuln for vuln in vulnerabilities if vuln.get("id") == vulnerability["id"]),
--        None
--    )
-+    new_analysis = vulnerability.get("analysis", {}).get("state")
-+    new_ref = next((a.get("ref") for a in vulnerability.get("affects", [])), None)
- 
--    # bom-ref to the component is passed to the affects of the vulnerability
--    # passed as argument
--    bom_ref = next((a["ref"] for a in vulnerability.get("affects", [])), None)
-+    # All vulnerabilities with same ID
-+    matching_vulns = [v for v in vulnerabilities if v.get("id") == vulnerability.get("id")]
- 
--    if matching_vuln is not None:
--        # Remove the affect to not use it while updating matching vuln.
--        if "affects" in vulnerability:
--            del vulnerability["affects"]
-+    for curr_vuln in matching_vulns:
-+        curr_vuln_analysis = curr_vuln.get("analysis", {}).get("state")
-+        curr_vuln_refs = [a.get("ref") for a in curr_vuln.get("affects", [])]
- 
--        if matching_vuln.get("analysis") is not None and "analysis" in vulnerability:
--            # We don't update vulnerabilities that already have an
--            # 'analysis'.
--            # Buildroot ignored vulnerabilities will already have
--            # an analysis and need to remain as such.
--            del vulnerability["analysis"]
-+        is_same_ref = new_ref in curr_vuln_refs
-+        is_same_analysis = curr_vuln_analysis == new_analysis
- 
--        affects = matching_vuln.setdefault("affects", [])
-+        if not (is_same_ref or is_same_analysis):
-+            continue
- 
--        if bom_ref is not None:
--            ref = next((a["ref"] for a in affects if a["ref"] == bom_ref), None)
--            if ref is None:
--                # Add a 'ref' (bom reference) to the component if not
--                # already present in the 'affects' list.
--                affects.append({
--                    "ref": bom_ref
--                })
-+        if is_same_ref:
-+            # If same vulnerability id and same affect ref, keep the previous
-+            # analysis. This is the case where a vulnerability was ignored from
-+            # the generated SBOM.
-+            del vulnerability["analysis"]
-+            del vulnerability["affects"]
-+        else:
-+            # The same analysis, add a new affect
-+            # reference.
-+            if new_ref is not None:
-+                curr_vuln.setdefault("affects", []).append({"ref": new_ref})
-+                del vulnerability["affects"]
- 
--        # Update the metadata of the vulnerability with the one
--        # downloaded from the database.
--        matching_vuln.update(vulnerability)
--    else:
--        vulnerabilities.append(vulnerability)
-+        curr_vuln.update(vulnerability)
-+        return
-+
-+    # No same ID w/ same analysis or same ref.
-+    vulnerabilities.append(vulnerability)
- 
- 
- def check_package_cve_affects(cve: cvecheck.CVE, cpe_product_pkgs, sbom, opt: Options):
-@@ -297,8 +296,7 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
-             print(f"Warning: '{vuln_id}' doesn't exist in NVD database.", file=sys.stderr)
-             continue
- 
--        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
--        vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
-+        vuln.update(nvd_cve_to_cdx_vulnerability(cve.nvd_cve))
- 
- 
- def main():
+-ifeq ($(BR2_PACKAGE_QT5SERIALPORT),y)
+-STELLARIUM_DEPENDENCIES += qt5serialport
+-ifeq ($(BR2_PACKAGE_GPSD),y)
+-STELLARIUM_DEPENDENCIES += gpsd
+-endif
++ifeq ($(BR2_PACKAGE_GPSD)$(BR2_PACKAGE_QT5SERIALPORT),yy)
++STELLARIUM_DEPENDENCIES += gpsd qt5serialport
+ STELLARIUM_CONF_OPTS += -DENABLE_GPS=ON
+ else
+ STELLARIUM_CONF_OPTS += -DENABLE_GPS=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
