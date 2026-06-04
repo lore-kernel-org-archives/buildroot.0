@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71436CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E16CD6E77
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 362F260A8C;
-	Fri,  5 Jun 2026 12:37:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15C7781EF8;
+	Fri,  5 Jun 2026 12:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KSSTPW1YvDJQ; Fri,  5 Jun 2026 12:37:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QNtNUoq2qQa1; Fri,  5 Jun 2026 12:37:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 207E560A96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 321CE81E98
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663070;
-	bh=waij6VPTGnUSEFvuTkqWYysj7eVzD6K0d/07uZOhs80=;
+	s=default; t=1780663071;
+	bh=8YPnQHRFWWaLnyIc1bA0O0mddAio2lRTOJvus6Tqd4c=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gsSVPJr3cmsE4P0i6V9PeNF7wb1ceLbsDEmtuC1NUrR2Dgl34WfJpFbcCJjf/fvkB
-	 iOA/k34pgwiJIihf0oJr96lNVcG6JmQXEHOA3LVLo/1WoM+HxJSdAh1eK+E8LiLP/E
-	 rF6pM4FXq+Zm7lptBbhLtl3nvqLmPkPh6ocDj3l0ek3kKKABiGNb9XUeba35xq7vOT
-	 D6+V6yQzbQfNgIJub7s2BgCUl5p0svRir/mbmMy5lnDMVKdf3XjJ2lhzYDASXl4adm
-	 1yXgm64XGCws6/e8xvacar8TkntPu2EZZak2YzZKShkRgego9Rx4dnO415AkNAfjKc
-	 6MJvJ6nNKGXhw==
+	b=sDzfqz/1P1K1oh3Zck1mTzZlKjJwcKrYZdEfaupob139HRmIVNW6wS1HPtf0XfBeP
+	 q42zxib3MaSUYSM7aFEen2+oHG6sInBIzOmfx3puAF3VPCemYZF5037a5rIRDSb3R1
+	 43H7YLe2+3mZ7rTBP2EmMPvKhztduleaqEDB1XIcAfH/A0rg4hV1fiUSOK/pkEgg85
+	 7jF8mniR2CSV4nNfbpYJKcOa4wk3UTQ0818nryqgAke/bhP4ALz4dQmz76ME1R0vZh
+	 fqpW+4kE37lY06ZzyfiZ1PYC0IBakvbkSmu55I8sNCB+YUPVnD+DuVQ+jsP4nAhLcq
+	 hgXQJvq1cZgZg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 207E560A96;
-	Fri,  5 Jun 2026 12:37:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 321CE81E98;
+	Fri,  5 Jun 2026 12:37:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FF58F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10253F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14DE781E58
+ by smtp1.osuosl.org (Postfix) with ESMTP id 287D881E56
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hOGjDGR8YX7h for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:28 +0000 (UTC)
+ id Dxp7dkIz_unh for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE22C81E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 074DE81E5B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE22C81E56
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 074DE81E5B
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04AC187B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
+ id 31CD287B41; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:02:31 +0200
+Date: Thu, 4 Jun 2026 11:04:01 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4bc28f81f9a266e0323c9dead2355abc893dc357
-X-Git-Newrev: 68750227dfd788db0b76dce819347f6fdda90491
+X-Git-Oldrev: 4835cac7891c96524c7d21434c14c1995f98d360
+X-Git-Newrev: 1021ab9746515faca649143a5e5a0139f4ace28a
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123711.04AC187B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/vlc: replace
- wayland-scanner patch with upstream commit
+Message-Id: <20260605123711.31CD287B41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/scripts/cve-check: remove 'bom-ref' for vulnerabilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,145 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/68750227dfd788db0b76dce819347f6fdda90491
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1021ab9746515faca649143a5e5a0139f4ace28a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The 'bom-ref' are optional and since we don't reference the
+vulnerabilities from anywhere else in the SBOM they are not necessary in
+this case.
+
+In the following commit, cve-check will potentially emit multiple
+vulnerabilities that have the same id. So using the vulnerability id
+as 'bom-ref' won't be correct as the 'bom-ref' needs to be unique
+unlike the id property.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a659fa3bb501b1e8cbbd656ca456a93a59ae0573)
+(cherry picked from commit af55c1a39b34a4359edf9cc6f65244ff6a0738ee)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- ...ake-it-possible-to-override-wayland-scann.patch | 39 +++++++++++++++++
- ...c-also-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 ----------------------
- package/vlc/vlc.mk                                 |  1 +
- 4 files changed, 40 insertions(+), 51 deletions(-)
+ support/scripts/cve-check | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e72e59b644..199881eee8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1129,7 +1129,6 @@ package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch lib_pa
- package/vlc/0005-Don-t-assume-strerror_l-is-available.patch lib_patch.Upstream
- package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch lib_patch.Upstream
- package/vlc/0007-Add-support-for-freerdp2.patch lib_patch.Upstream
--package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch lib_patch.Upstream
- package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch lib_patch.Upstream
- package/vlc/0010-opengl-missing-library-check.patch lib_patch.Upstream
- package/vpnc/0001-Makefile-allow-to-override-the-PREFIX-variable.patch lib_patch.Upstream
-diff --git a/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
-new file mode 100644
-index 0000000000..b89687ec74
---- /dev/null
-+++ b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
-@@ -0,0 +1,39 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Yann Lochet <yann@l0chet.fr>
-+Date: Fri, 25 Nov 2022 16:20:45 +0100
-+Subject: [PATCH] configure: make it possible to override wayland-scanner
-+
-+When cross-compiling, PKG_CONFIG might pick up the wayland-scanner
-+from the sysroot.
-+
-+Upstream: https://code.videolan.org/videolan/vlc/-/commit/75e52f617bf3273f4883b56c4175d68211e02d14
-+
-+[Bernd: rebased for 3.0.23]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a91fc73172..5e8821dea9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3277,6 +3277,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-+     ])
-+ 
-+     AC_MSG_CHECKING([for the Wayland scanner])
-++    AS_VAR_SET_IF(WAYLAND_SCANNER, [],[
-+     PKG_CHECK_EXISTS([wayland-scanner], [
-+       WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-+       AC_MSG_RESULT([${WAYLAND_SCANNER}])
-+@@ -3284,6 +3285,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-+       AC_MSG_RESULT([not found])
-+       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-+     ])
-++    ])
-+ 
-+     have_wayland="yes"
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-deleted file mode 100644
-index 2b74fe0d39..0000000000
---- a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 26 Aug 2018 12:51:04 +0200
--Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
-- wayland-scanner
--
--When cross-compiling the .pc file might point to the wrong
--wayland-scanner binary (target rather than host) resulting in a
--non-executable and wrong scanner.
--Try searching the PATH first, and if that fails fall back into
--pkg-config.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- configure.ac | 19 +++++++++++--------
-- 1 file changed, 11 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 4808b8becf..a18641ed23 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
--       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
--     ])
-- 
---    AC_MSG_CHECKING([for the Wayland scanner])
---    PKG_CHECK_EXISTS([wayland-scanner], [
---      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
---      AC_MSG_RESULT([${WAYLAND_SCANNER}])
---    ], [
---      AC_MSG_RESULT([not found])
---      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
---    ])
--+    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
--+    if test "x$WAYLAND_SCANNER" = x; then
--+        AC_MSG_CHECKING([for the Wayland scanner])
--+        PKG_CHECK_EXISTS([wayland-scanner], [
--+          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
--+          AC_MSG_RESULT([${WAYLAND_SCANNER}])
--+        ], [
--+          AC_MSG_RESULT([not found])
--+          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
--+        ])
--+    fi
-- 
--     have_wayland="yes"
-- 
---- 
--2.18.0
--
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index a878a78181..58dade040a 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -539,6 +539,7 @@ VLC_CONF_OPTS += --disable-udev
- endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS),yy)
-+VLC_CONF_ENV += WAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
- VLC_CONF_OPTS += --enable-wayland
- VLC_DEPENDENCIES += wayland wayland-protocols
- else
+diff --git a/support/scripts/cve-check b/support/scripts/cve-check
+index 0d0ad833a2..4d01fa5f23 100755
+--- a/support/scripts/cve-check
++++ b/support/scripts/cve-check
+@@ -147,7 +147,6 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+     [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities
+     """
+     vulnerability = {
+-        "bom-ref": nvd_cve["id"],
+         "id": nvd_cve["id"],
+         "description": cve_api_get_lang_from_list(nvd_cve.get("descriptions", [])) or "",
+         "source": {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
