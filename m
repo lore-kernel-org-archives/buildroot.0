@@ -4,110 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B2F4CD6E6B
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 13:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25233CD6E4A
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jun 2026 13:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2632F42E64;
-	Thu,  4 Jun 2026 13:22:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D109142A16;
+	Thu,  4 Jun 2026 13:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gtc6nswYPaPq; Thu,  4 Jun 2026 13:22:38 +0000 (UTC)
+ id sarU3N4wvifP; Thu,  4 Jun 2026 13:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2739942E2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCBA42A17
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780579358;
-	bh=Jyeo2uffIkbxK1ZCNTkLGDzOs1AqqPARb7vPdWN8oag=;
+	s=default; t=1780580278;
+	bh=pSgEqVWVdVz0MEfqZcFGr6s+5rc6LHYYJv+h4F5y8+Q=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=LcNlBK8P+gXA7ck0WfC0Q4h0qxAKfRD8jCdUAIqKvvPje/qcBD0SPb2to09Dx3GYn
-	 UOryN3Z7s94KqIiad1m614BLjXE9/GDN3H3Eks26I7W+BdhBoJ2BHkd5Q0uodpMB+0
-	 Wwo3hTjiVstvtcI927KeWoDf5b1vvbEBpnSmjqJ6luD6F2yqV+FVGVpzB7ZKTXblFp
-	 4ZPMK1nRZCS+h8UjMwdG+Vg4TiGOV+r/Rf4cpeciT7BoSiWapfKr/fvFYEnSkuaKU8
-	 oZ8+dsGhug8MtWq29RMavFhy9ke6eK51IVIpxGH+39J5zwNBT5xAnCTNQOmVM3wrHa
-	 S0opVa6/5a2fQ==
+	 List-Post:List-Help:List-Subscribe:From;
+	b=mH8IkQGlWn+TClFqbqyCgzDfadnyWdX1E/0LbqIlqQvktQTsUdkyXIOxDuYSvrFqW
+	 4/+oO+ltighq6lIDI7OU6vCmVJrEsCTT+8NCacWYdg3Tb0waU4wnvijwPBhDz84VTd
+	 JkNjFggYFjiNmtm7R+80Ka1g/q+ilQZJof+el4iSSdgwc+kp8TXKKIq2b1MLKUeSTR
+	 G/XZxc33RctxR0UBh7F8SeellDWfiP6FtHjawhZ0WoFWZSCQoLHfGja33dUAfOMDUQ
+	 5VNmSzXD68RfaIyzBq0kDhHaOBQvJNyVzj7f/uB6SIihp0tI85PkwXyn5pC66gZm2Q
+	 qdDOQs0oqcz+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2739942E2A;
-	Thu,  4 Jun 2026 13:22:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 630DBDE
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:22:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDCBA42A17;
+	Thu,  4 Jun 2026 13:37:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 363EDDE
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C4E66F50D
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:22:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C7B36F50F
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mvuTDOhSczx5 for <buildroot@buildroot.org>;
- Thu,  4 Jun 2026 13:22:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
- envelope-from=lazzer@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7D9496F50B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D9496F50B
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D9496F50B
- for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:22:35 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-39677c80386so7465861fa.3
- for <buildroot@buildroot.org>; Thu, 04 Jun 2026 06:22:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780579353; x=1781184153;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
- :date:message-id:reply-to;
- bh=0EtsYA5NprElwme86PXMujnZWP98M5GNEeTmbQAil6k=;
- b=SJlVz8calQRPDXBnlyHQRNlWEXW1dbxaNlhtMbpmXvOis9JBcnNoeZTwvb7qVFFivB
- mFRHdIs+nbtN0PMPwPgGaUB6KYHCtv4cUOB32HXrjcczNGzGqYWI6x+iSQuIekkkQ7ww
- rqeGgkl9FKqfe33Y4QuORd+sXr8ldOfhbXkrWQC2exmb3K4yGQMqnphoGasThbk31cI3
- 8wlJFE3Le7n+PDG4SvYzRVSz1agDP+HklLUULshArZeZF//CdD9RwRALswayzb3CgnZQ
- HlJPhqwY9qbhwqYWPtS+B7GcfdyzHYFTi2WB5Pf8wGmSKH55juXcG3iiLfvrjSE8DgNG
- Cfmw==
-X-Gm-Message-State: AOJu0YzTCi+QocnoKtGlZwXDztyBPghM5g8kwrJhq4aA34xtAaFmi1sk
- 7OV9Rt9xiKGtOHEe10OHeePyr+ImsGY5YqYRw0SqEMJbE9awk142oJvD0UKPQw==
-X-Gm-Gg: Acq92OFOd7tXRj7Ye2zb339TS0krqeCrc6AGmxFyeSWmSIwyssh8iHOuzid+gPoNV6j
- m913sI3GH+Hg2MDcRWqQFsNEsrr2jJV3f2fKbPcD9kgBwgpF6MdgzmEJ8iDB1bSOHRL/TR8zuIw
- bvBMvg6qzTMVaFwrywFapEHZjNHHgUxEBasLTb3lWR+/wB9IRypfPrXiqnHvJWhpcZVOjVeUFQO
- 5yf9JFHr+gASw1sfAB9QNFmUBaCaGGNrhlF5swmLpilU2ovvJ27DEzNBe89ef3AULDF6QBHrgOF
- x4Rq1oIp3/NPDZyJkBH1V3Fj0uAqZzg2fHxKcxWECiaKje5Q8T0ceTNUKidLdv6Srm/9O8FfNVF
- li5RqotS5lhjylMOHrKNoJ9q5k5L1jnrJYOD2CBtD2LG+Crg9+/j9vK2P4ZamTg+dldkUmnPpSm
- vrZpcpIWRkkWhsUcL5He/xkxt344ETRX0GExruiSZv5uU2qFzzAz8Ks5olHVjnRk9M1RvKDcu6+
- so=
-X-Received: by 2002:a05:651c:150f:b0:396:8491:3133 with SMTP id
- 38308e7fff4ca-396af478488mr26112851fa.22.1780579352631; 
- Thu, 04 Jun 2026 06:22:32 -0700 (PDT)
-Received: from tollan.. (h-155-4-121-122.A259.priv.bahnhof.se. [155.4.121.122])
- by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-396ac091a90sm17350911fa.15.2026.06.04.06.22.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Jun 2026 06:22:31 -0700 (PDT)
-From: =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>
+ id mNkw8jPd0lS1 for <buildroot@buildroot.org>;
+ Thu,  4 Jun 2026 13:37:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7D8F6F50D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7D8F6F50D
+ for <buildroot@buildroot.org>; Thu,  4 Jun 2026 13:37:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6C65987A4B; Thu,  4 Jun 2026 13:37:40 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu,  4 Jun 2026 15:22:28 +0200
-Message-ID: <20260604132228.2977562-1-lazzer@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-Organization: Wires
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780579353; x=1781184153; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0EtsYA5NprElwme86PXMujnZWP98M5GNEeTmbQAil6k=;
- b=VM9pnSwBWx6xBhKO7/F+A5ReMmHySfypyAuRSDE0ZTC+l/tWSn3HlH9xKBCrsSOtpx
- CpZYpfL+y2bMi7T2WWyoqtsgQZc9M4uJkcV+nq+z9Se/e2IJSqHLfGwwatqUCwaG3Dfj
- lW5CMPvIZ+KzjOcKdbJHVOKo61WaThxWLVFeRUqjmo1F6Hhz4iu9v3SVAyvGn6FBlOv7
- 1M5yeATtnaI8lxCnmxKnh6PJsxeVSbFY4ZklKLi9kVBBkjNug6X6jlFsupsBaaiqZUS1
- a+5fAm6+0DZgnPvOv+ZguBig3Z4dGVsvHvh1jn6SJiJPrGxbAm7HT95qdf+sKOithVrr
- 7O1w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=VM9pnSwB
-Subject: [Buildroot] [PATCH 1/1] package/hostapd: add MBO (Wi-Fi Agile
- Multiband) support option
+Date: Thu, 4 Jun 2026 15:36:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b168816cd85698ffb377bc1e06333d57a2ab4e4
+X-Git-Newrev: 443bec78114bfd9e7062fc59a633cb9568c55859
+X-Patchwork-Hint: ignore
+Message-Id: <20260604133740.6C65987A4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2026.05-rc4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,49 +69,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIEJSMl9QQUNLQUdFX0hPU1RBUERfTUJPIHRvIGVuYWJsZSBNdWx0aWJhbmQgT3BlcmF0aW9u
-IChXaS1GaQpBZ2lsZSBNdWx0aWJhbmQpIG9uIHRoZSBBUCBzaWRlLCBwcm92aWRpbmcgc3RhbmRh
-cmRpemVkIGhpbnRzIHRoYXQKaGVscCBjbGllbnRzIHBpY2sgdGhlIGJlc3QgZnJlcXVlbmN5IGJh
-bmQgYW5kIEJTUy4KCk1CTyBidWlsZHMgb24gV05NIChJRUVFIDgwMi4xMXYpLCBzbyBCUjJfUEFD
-S0FHRV9IT1NUQVBEX1dOTSBpcwpzZWxlY3RlZCBhdXRvbWF0aWNhbGx5LgoKU2lnbmVkLW9mZi1i
-eTogTWF0dGlhcyBXYWxzdHLDtm0gPGxhenplckBnbWFpbC5jb20+Ci0tLQogcGFja2FnZS9ob3N0
-YXBkL0NvbmZpZy5pbiAgfCAxOSArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL2hvc3RhcGQv
-aG9zdGFwZC5tayB8ICA4ICsrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDI3IGluc2VydGlvbnMo
-KykKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2hvc3RhcGQvQ29uZmlnLmluIGIvcGFja2FnZS9ob3N0
-YXBkL0NvbmZpZy5pbgppbmRleCA2NjAyNzRkZGYwLi43NjdiMjRiYTE3IDEwMDY0NAotLS0gYS9w
-YWNrYWdlL2hvc3RhcGQvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvaG9zdGFwZC9Db25maWcuaW4K
-QEAgLTgzLDYgKzgzLDI1IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9IT1NUQVBEX1dQQTMKIAloZWxw
-CiAJICBFbmFibGUgV1BBMyBzdXBwb3J0IGluY2x1ZGluZyBPV0UsIFNBRSwgRFBQCiAKK2NvbmZp
-ZyBCUjJfUEFDS0FHRV9IT1NUQVBEX1dOTQorCWJvb2wgIkVuYWJsZSBXTk0gKFdpcmVsZXNzIE5l
-dHdvcmsgTWFuYWdlbWVudCkiCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUQVBEX0hBU19X
-SUZJX0RSSVZFUlMKKwloZWxwCisJICBFbmFibGUgc3VwcG9ydCBmb3IgV2lyZWxlc3MgTmV0d29y
-ayBNYW5hZ2VtZW50IChJRUVFIDgwMi4xMXYpCisJICBvbiB0aGUgQVAgc2lkZS4gVGhpcyBlbmFi
-bGVzIGZlYXR1cmVzIHN1Y2ggYXMgQlNTIFRyYW5zaXRpb24KKwkgIE1hbmFnZW1lbnQgd2hpY2gg
-YWxsb3dzIHRoZSBBUCB0byBzdWdnZXN0IG9yIHJlcXVlc3QgYSBzdGF0aW9uCisJICB0byBtb3Zl
-IHRvIGFub3RoZXIgQlNTLgorCitjb25maWcgQlIyX1BBQ0tBR0VfSE9TVEFQRF9NQk8KKwlib29s
-ICJFbmFibGUgTUJPIChNdWx0aWJhbmQgT3BlcmF0aW9uKSIKKwlkZXBlbmRzIG9uIEJSMl9QQUNL
-QUdFX0hPU1RBUERfSEFTX1dJRklfRFJJVkVSUworCXNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUQVBE
-X1dOTQorCWhlbHAKKwkgIEVuYWJsZSBzdXBwb3J0IGZvciBNQk8gKE11bHRpYmFuZCBPcGVyYXRp
-b24sIFdpLUZpIEFnaWxlCisJICBNdWx0aWJhbmQpLiBUaGlzIGZhY2lsaXRhdGVzIGVmZmljaWVu
-dCB1c2Ugb2YgdGhlIGZyZXF1ZW5jeQorCSAgYmFuZHMgYXZhaWxhYmxlIHRvIHRoZSBBUCwgZW5h
-YmxpbmcgYmFuZCBzdGVlcmluZyBvZiBzdGF0aW9ucworCSAgdG93YXJkIHRoZSBtb3N0IHN1aXRh
-YmxlIGJhbmQuCisKIGNvbmZpZyBCUjJfUEFDS0FHRV9IT1NUQVBEX1ZMQU4KIAlib29sICJFbmFi
-bGUgVkxBTiBzdXBwb3J0IgogCWRlZmF1bHQgeQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9ob3N0YXBk
-L2hvc3RhcGQubWsgYi9wYWNrYWdlL2hvc3RhcGQvaG9zdGFwZC5tawppbmRleCBkODNiNTc0ZmFk
-Li4xODQwZjczNjZlIDEwMDY0NAotLS0gYS9wYWNrYWdlL2hvc3RhcGQvaG9zdGFwZC5taworKysg
-Yi9wYWNrYWdlL2hvc3RhcGQvaG9zdGFwZC5tawpAQCAtMTAxLDYgKzEwMSwxNCBAQCBIT1NUQVBE
-X0NPTkZJR19ESVNBQkxFICs9IFwKIAlDT05GSUdfT1dFCiBlbmRpZgogCitpZmVxICgkKEJSMl9Q
-QUNLQUdFX0hPU1RBUERfV05NKSx5KQorSE9TVEFQRF9DT05GSUdfRU5BQkxFICs9IENPTkZJR19X
-Tk0KK2VuZGlmCisKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfSE9TVEFQRF9NQk8pLHkpCitIT1NUQVBE
-X0NPTkZJR19FTkFCTEUgKz0gQ09ORklHX01CTworZW5kaWYKKwogaWZlcSAoJChCUjJfUEFDS0FH
-RV9IT1NUQVBEX1ZMQU4pLCkKIEhPU1RBUERfQ09ORklHX0VOQUJMRSArPSBDT05GSUdfTk9fVkxB
-TgogZW5kaWYKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/443bec78114bfd9e7062fc59a633cb9568c55859
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 50 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 14 ++++++-------
+ docs/website/news.html     | 22 ++++++++++++++++++++
+ 4 files changed, 81 insertions(+), 9 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 568908d144..9c5c08a360 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,53 @@
++2026.05-rc4, released June 4th, 2026
++
++	Fixes all over the tree.
++
++        Infrastructure:
++
++        - dependencies: detect and reject buggy uutils 'install'
++          program as used in Ubuntu 26.04
++
++        - pkg-generic: Cleanup /usr/share/info/dir in the target
++
++        - generate-cyclonedx / cve-check: Various fixes for better
++          CycloneDX / BSI TR-03183-2 compliance
++
++        - linux: No longer forcibly disable CONFIG_WERROR
++
++        - 'make show-info-all' added, which works like 'make
++          show-info' but for all packages. The package hash files are
++          now also included in the show-info{,-all} output.
++
++        Architectures:
++
++        - Drop support for the (rare) PA-RISC 1.0 variant
++
++	Updated/fixed packages: aardvark-dns, arm-trusted-firmware,
++	asterisk, babeld, bpftrace, busybox, ca-certificates, cairo,
++	capnproto, collectd, cppdb, crucible, cups-filters,
++	docker-cli, docker-engine, drm-info, efl, esp-hosted, exim,
++	faad2, freeipmi, freeswitch, gcc-bare-metal, gdb, gerbera,
++	glibc, graphene, gst1-plugins-bad, gst1-plugins-good,
++	gstreamer1, harfbuzz, heirloom-mailx, hiredis, hplip, icu,
++	jemalloc, jq, kodi, lcms2, libbpf, libdill, libdrm, libenca,
++	libgit2, libheif, libks, libmad, libmicrohttpd,
++	libmodsecurity, libpthsem, libssh2, liburing, llvm-project,
++	lrzip, lrzsz, lua-sdl2, mesa3d, mpd, mrp, ndctl, netatalk,
++	netavark, odhcp6c, openblas, opencv4, opendoas, openscap, php,
++	podman, poppler, powerpc-utils, privoxy, python-ecdsa,
++	python-gymnasium, python3, qt53d, qt5webengine-chromium,
++	qt6base, readline, redis, rpcbind, rtl8188eu,
++	rtl8812au-aircrack-ng, rtl8822cs, runc, rust, rust-bin,
++	samba4, sane-airscan, sane-backends, sdl2_image, sqlite,
++	sshfs, stellarium, suricata, sway, sysrepo, tor, unzip,
++	ustream-ssl, util-linux, vlc, vorbis-tools, weston,
++	wireless-regdb, xdriver_xf86-video-nv, xen, xerces,
++	xserver_xorg-server, xwayland, zsh
++
++        Removed packages: daq, kodi-pvr-hdhomerun, libhdhomerun,
++        libphidget, phidgetwebservice, pigpio, ptpd2, xml-security-c,
++        zeek
++
+ 2026.05-rc3, released May 29th, 2026
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 14ea241dc4..63356e6901 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2026.05-rc3
++export BR2_VERSION := 2026.05-rc4
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1780006000
++BR2_VERSION_EPOCH = 1780580000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 0b03034886..c7d15b2570 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -21,25 +21,25 @@
+           <th>2026.05.x</th>
+           <td>September 2026</td>
+           <td>
+-            2026.05-rc3<br/>
+-            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc3/CHANGES">
++            2026.05-rc4<br/>
++            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc4/CHANGES">
+               Changelog
+             </a>
+           </td>
+-          <td>2026-05-29</td>
++          <td>2026-06-04</td>
+           <td>
+-            <a href="/downloads/buildroot-2026.05-rc3.tar.gz">
++            <a href="/downloads/buildroot-2026.05-rc4.tar.gz">
+               <img src="images/zip.png" width="24" alt="">
+               .tar.gz
+             </a><br/>
+-            <a href="/downloads/buildroot-2026.05-rc3.tar.gz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2026.05-rc4.tar.gz.sign">[PGP sig]</a>
+           </td>
+           <td>
+-            <a href="/downloads/buildroot-2026.05-rc3.tar.xz">
++            <a href="/downloads/buildroot-2026.05-rc4.tar.xz">
+               <img src="images/package.png" width="24" alt="">
+               .tar.xz
+             </a><br/>
+-            <a href="/downloads/buildroot-2026.05-rc3.tar.xz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2026.05-rc4.tar.xz.sign">[PGP sig]</a>
+           </td>
+         </tr>
+         <tr>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index b0b32892cd..3c9f914f0e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2026.05-rc4 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 June 2026</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>The Nice hackathon brought a large amount of (security) bugfixes, so here comes another
++          release candidate. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2026.05-rc4/CHANGES">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2026.05-rc4.tar.xz">2026.05-rc4
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
