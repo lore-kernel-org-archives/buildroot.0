@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55738CD6E79
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66B6ACD6E77
 	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 122EF60AD7;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35D2D81E4C;
 	Fri,  5 Jun 2026 12:38:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZQArQAV6a56K; Fri,  5 Jun 2026 12:38:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S9RFd8zNunq1; Fri,  5 Jun 2026 12:38:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F31460A90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B3881E52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663080;
-	bh=ZYf4Ns3Sy8zB+Da5p/8DUhB+xa5sAZ6tKXL29Lpq11k=;
+	s=default; t=1780663081;
+	bh=7HfhlncNB4+hl06pNKdy8dlD2cYy1dr84q7goiCYL54=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=q/FKrEWf0IZIOgbr/WCSdA5q7BE62OlfMXIXZ+H4d+XL7bW/e6XZCmgc46mOtCgY6
-	 XKJtCBhXAftSfND4WzCU+qXGN2Ww6lBTbs14fnrkotGXOi3RObi7s1iDVQ/9ezkGPo
-	 4Giuqho2PW77WR18Xdr+IHhhDEReHF3Q03jmV5D2TIWEHNsgldmAEbX5j9VGGy5TQC
-	 5cn53sg+iNFaVanytgAp4XriK9sJn+dYALtoe6gPXvHn21nCkPMyJDFuyV2qtZ4UuO
-	 D9nol2n2XAInHvF/n725Zzr5wmcDs2s+woWpF/xtI52XaR3tUugjzNear8+Q09oEWV
-	 vtttt9ZhFXV3Q==
+	b=dVG6dVkJQQSSNYjNWvaFULF+54BpOoW0GQQuoeRnCWP7wMO8V7ZkikFgFQDTD0mjB
+	 EZ/ka1ZRlelolYH9Hpc1V7avnzDF0IiQsU753tp1+yWy4iqNyhUP7yi3yu6DHoIF3F
+	 x342ABRBAo2nL01PV1zytrzIhtuqGAFJGGqHI7OBXcmLjFJeiQnpu+DGD0voXCWKUI
+	 EYJn/EvKvYgsktpjSCR1QfL8OAypzCpmnSkwHLRneT+OiT4bqY5+63k1mxv6DLOwi4
+	 ypW2Lfx0xpzAjdDsGvygdfPkZXnFkbFA6PYMGVCGHpOwhOC5Do33OdCD7ePTEFmSkR
+	 hqqIuN5fR97+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F31460A90;
-	Fri,  5 Jun 2026 12:38:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54B3881E52;
+	Fri,  5 Jun 2026 12:38:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DF3BF4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DE8A388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64CAF81B17
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97B9281E66
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IGpDj3N2Waun for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:37:30 +0000 (UTC)
+ id htANeqH57ybJ for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7314681E66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F54881E63
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7314681E66
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F54881E63
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:37:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CEF687B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
+ id 59A7187B40; Fri,  5 Jun 2026 12:37:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 11:43:05 +0200
+Date: Thu, 4 Jun 2026 11:36:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6152636d4a1397291ac5bf6676eb2285387322b9
-X-Git-Newrev: f55d4764f63223db159862bfdab592e5bb931924
+X-Git-Oldrev: 95faf0f8b808902da6b3353b8c1b2d4b794607e2
+X-Git-Newrev: 5a6f96794a5569e49cbb90b8ff04581a5103a9fd
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123711.9CEF687B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libmicrohttpd:
- needs host-pkgconf
+Message-Id: <20260605123711.59A7187B40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/gstreamer1/gst1-plugins-bad: disable qsv support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f55d4764f63223db159862bfdab592e5bb931924
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5a6f96794a5569e49cbb90b8ff04581a5103a9fd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Buildroot commit 712121326f84e2508ab161053c2b04e45511c79f bumped the
-package to 1.0.5 which includes upstream commit
-https://github.com/Karlson2k/libmicrohttpd/commit/a1f937422658d3c6d53853c587bc025274afac4d
-that breaks the build if pkgconf was not found:
-https://github.com/Karlson2k/libmicrohttpd/blame/master/m4/pkg.m4#L84
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/64ed6075b782578d57edd09b3463071d6e5a4342
+added support for the Intel Quick Sync Video Encoder with version 1.22.0
+that was added to buildroot with commit
+895840edd2784492d9b7066330b43842b703343b.
+
+On unsupported platform the build is broken:
+
+In file included from ../sys/qsv/libmfx/api/vpl/mfxdispatcher.h:10,
+                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.h:24,
+                 from ../sys/qsv/libmfx/dispatcher/vpl/mfx_dispatcher_vpl_log.cpp:7:
+../sys/qsv/libmfx/api/vpl/mfxdefs.h:75:6: error: #error Unknown packing
+   75 |     #error Unknown packing
+
+caused by
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/1.24.13/subprojects/gst-plugins-bad/sys/qsv/libmfx/api/vpl/mfxdefs.h?ref_type=tags#L75
+
+For now we disable qsv support to fix build errors on
+
+arc: https://autobuild.buildroot.net/results/2d5/2d5666324db2fca7ab0419e28481829edca949b3/
+m68k: https://autobuild.buildroot.net/results/53b/53ba2e9d09c25fe85e96b6e1fc9adbfcf5a637b2/
+microblazeel: https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
+or1k: https://autobuild.buildroot.net/results/17e/17e3dac016a08da8db58d735d0f2d3acc259f81f/
+sparc: https://autobuild.buildroot.net/results/f07/f07995804faa0be38bbba462c52be86c6c69822b/
 
 Fixes:
-https://autobuild.buildroot.net/results/e3e/e3e25753c670b5d86d042d850582e2e1e0eedca5/
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14386351826
+https://autobuild.buildroot.net/results/bc2/bc2b2324f385d2cafdae71ac19804f27f7a7414b/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 0ff8b74a0ce71f51579c88710a96390f548b83c9)
+(cherry picked from commit d0cacc6acfb9357bc5aec61f7d9e330c2e41a190)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libmicrohttpd/libmicrohttpd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 7a243b42cf..a3b24d363c 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -9,6 +9,7 @@ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
- LIBMICROHTTPD_INSTALL_STAGING = YES
-+LIBMICROHTTPD_DEPENDENCIES = host-pkgconf
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
- LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
-@@ -16,7 +17,7 @@ LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPL-2.1+
--LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls
-+LIBMICROHTTPD_DEPENDENCIES += gnutls
- LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr
- else
- LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 99aa258786..0e295a4927 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -39,6 +39,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	-Davtp=disabled \
+ 	-Dopensles=disabled \
+ 	-Dmsdk=disabled \
++	-Dqsv=disabled \
+ 	-Dvoamrwbenc=disabled \
+ 	-Dbs2b=disabled \
+ 	-Dchromaprint=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
