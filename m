@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DE2ECD6E77
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D12CD6E7C
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27BD881F5A;
-	Fri,  5 Jun 2026 12:40:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W6Nr9awo5LrM; Fri,  5 Jun 2026 12:40:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E5E582225
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663237;
-	bh=6NLXt9nY2D14BI+8QszX3ihGZLJWilIMkhO3rYrPqUs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aQzpVS3Rm13gIy2tnUqdMfXti/AetJnoqzoRRN7HuLLyQTVEqCJRqR3hQo7Byznnf
-	 4Zrk7WX3WLZQYtMWUYfFi6Mh3M7Q8n435fiwu3y1bqiJX2DV7REFbh4Cs02GQ9UoWU
-	 5rIt5QTNHjYsVeSuFfy4zY/UDvvO2lu2P1Y/n/PVmhCtI8wZGehQe0XGoHxVd/E94j
-	 artYysAlB7Wl4bAmuT0u2DOH5rngsnP/nUw0kOygGB4tGxNcgdThmQV5nY+iUn78mW
-	 jQce2Yn+LO+U4zcXgiqzV4OIzBEv907tHEDg0/l/XkD+AemabKd4Q1wBxfxnBuQ848
-	 FubgXWOCVSmwA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E5E582225;
-	Fri,  5 Jun 2026 12:40:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D6FB388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E108410CA
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA7C419D7;
+	Fri,  5 Jun 2026 12:40:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0p-mT5iPQSsM for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
+ id vM6OSLPuA-YN; Fri,  5 Jun 2026 12:40:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DB60419D8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663238;
+	bh=0CYaTcszgk7XQEw58zrpDlgkF1tvKcYuxvfH/VbjHA8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=CrkCDowXbRSoWqysZxVyGThK1+Kcf4T1kmT0yqREAZc1JbNPWfPoGS8tTUC+M92O8
+	 /kGfbbiNdxvuuixMusjUbwcoPjCLhnYHVLxVNJQeQZIA8qO6T2MTkBeszB6ZltziSD
+	 kjDSLf8nP4BX8CBmKBFzzx8rbzQsm8fTt5421/zq3i/vi6LbTxG2IqxWRIFgMx8nrD
+	 NWFOV+rKQdpEE6Fd4PATWKrbn8MjKISfdXITtIN31o/00zsof7ZxRnJrjgByznO+zl
+	 h9hbJNfgiWeLkIJdfoqUki1jAz1INUhSimHAdDm0SO3M0I5huoW2Y9TYC0nSY2/zx0
+	 3hJm/7dJJsI2g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DB60419D8;
+	Fri,  5 Jun 2026 12:40:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D3963B7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC9E282027
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f_hjRA0IciZS for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DDA84107C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9CED8202E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DDA84107C
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9CED8202E
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C7C8F87B03; Fri,  5 Jun 2026 12:38:38 +0000 (UTC)
+ id D3CEF87B39; Fri,  5 Jun 2026 12:38:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:10:30 +0200
+Date: Thu, 4 Jun 2026 12:10:51 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 280270c932a35e4b7678677dc37de96ff0e292a3
-X-Git-Newrev: d60cf9b1c653af1002748ab23f1c7bd2beff7291
+X-Git-Oldrev: d60cf9b1c653af1002748ab23f1c7bd2beff7291
+X-Git-Newrev: ead1a5b605b1a46f9ac6229304bc04b7af2f6a47
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123838.C7C8F87B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libbpf: fix
- bpftrace build with kernel headers 6.0
+Message-Id: <20260605123838.D3CEF87B39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/xerces: fix build
+ with recent versions of ICU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,78 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d60cf9b1c653af1002748ab23f1c7bd2beff7291
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ead1a5b605b1a46f9ac6229304bc04b7af2f6a47
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot commit 97e2f63bdf4cc992787c570b17b099c41c5535d2 bumped
-bpftrace from 0.23.3 to 0.24.2.
+Since Buildroot commit dcee99507c6767230fd1faeeefe95f5662eb03a3 in
+2025.11-rc1 that bumped package/icu to version 77-1, the build of xerces
+with ICU support enabled fails:
 
-This release includes upstream commit
-https://github.com/bpftrace/bpftrace/commit/7578314df67df6bbdffaf493ff3b4d182b235b34
-which was added to version 0.24.0 and makes use of
-bpf_iter_link_info.task that was added to the linux kernel in version
-6.1:
-https://github.com/torvalds/linux/commit/f0d74c4da1f060d2a66976193712a5e6abd361f5
+In file included from /home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/uset.h:38,
+                 from /home/bernd/buildroot/output/build/xerces-3.3.0/src/xercesc/util/regx/RangeToken.cpp:40:
+/home/bernd/buildroot/output/host/i586-buildroot-linux-gnu/sysroot/usr/include/unicode/char16ptr.h:271:55:
+ error: 'is_same_v' is not a member of 'std'; did you mean 'is_same'?
 
-causing build errors when the toolchain contains kernel headers version
-6.0 because the libbpf package does not update their headers:
+Indeed, ICU now requires C++17. Instead of using a patch from Gentoo[1]
+we use a backported upstream commit, limited to CMakeLists.txt, to raise
+the c++ version.
 
-output/build/bpftrace-0.24.2/src/attached_probe.cpp: In static member
- function 'static bpftrace::Result<std::unique_ptr<bpftrace::AttachedIterProbe> >
- bpftrace::AttachedIterProbe::make(bpftrace::Probe&,
- const bpftrace::BpfProgram&, std::optional<int>)':
-output/build/bpftrace-0.24.2/src/attached_probe.cpp:1437:11: error:
- 'union bpf_iter_link_info' has no member named 'task'
- 1437 |     linfo.task.pid = *pid;
+The build error was not recorded yet by the autobuilders but can be
+reproduced with this defconfig:
 
-The build error can be reproduced with this defconfig
-
-BR2_aarch64=y
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="6.0.19"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
 BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_PACKAGE_BPFTRACE=y
+BR2_PACKAGE_XERCES=y
+BR2_PACKAGE_ICU=y
 
-on the 2026.02.x branch as of 0be927b89a319c9ac35249354558e9f4cb102fd0.
-
-Fixes:
-https://autobuild.buildroot.net/results/146/14671c54fdf0a2e44bcce7ff61ca9b89a925eca9/
+[1] https://bugs.gentoo.org/931105
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 513f800cf32041274d0af3c8947a38aa89bbe57f)
+(cherry picked from commit 7d4e403f025607b47659a36ad4ed90e57d7bb4f8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libbpf/libbpf.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ ...nable-C++17-C++14-or-C++11-when-available.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index a141497d6c..5a6d574331 100644
---- a/package/libbpf/libbpf.mk
-+++ b/package/libbpf/libbpf.mk
-@@ -18,14 +18,14 @@ define LIBBPF_BUILD_CMDS
- 		-C $(@D)/src
- endef
- 
--# bpftrace uses btf_enum64 that was added since kernel 6.0 so we need to
--# update some uapi headers in STAGING_DIR if the toolchain is build with
--# linux-headers < 6.0.
-+# bpftrace uses bpf_iter_link_info.task that was added since kernel 6.1
-+# so we need to update some uapi headers in STAGING_DIR if the toolchain
-+# is build with linux-headers < 6.1.
- # Otherwise bpftrace is broken due to out of date linux/bpf.h installed
- # by the toolchain.
--# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6089fb325cf737eeb2c4d236c94697112ca860da
--# https://github.com/bpftrace/bpftrace/commit/d4f58382270c21b2c718aa0a6574c105f29e77a9
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_0),)
-+# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f0d74c4da1f060d2a66976193712a5e6abd361f5
-+# https://github.com/bpftrace/bpftrace/commit/7578314df67df6bbdffaf493ff3b4d182b235b34
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1),)
- LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers UAPIDIR=/usr/include/bpf
- 
- define LIBBPF_FIX_STAGING_PC
+diff --git a/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch b/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch
+new file mode 100644
+index 0000000000..24f7aef6ef
+--- /dev/null
++++ b/package/xerces/0001-XERCESC-2141-Enable-C++17-C++14-or-C++11-when-available.patch
+@@ -0,0 +1,32 @@
++From 6883e346fa88f48022edf84328a09a4653b8c2fe Mon Sep 17 00:00:00 2001
++From: Roger Leigh <rleigh@codelibre.net>
++Date: Sat, 10 Mar 2018 21:27:27 +0000
++Subject: [PATCH] XERCESC-2141: Enable C++17, C++14 or C++11 when available
++
++Upstream: https://github.com/apache/xerces-c/commit/6883e346fa88f48022edf84328a09a4653b8c2fe
++
++[Bernd: rebased for version 3.3.0, limited to CMakeLists.txt]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt              |   4 +-
++ configure.ac                |   9 +
++ m4/ax_cxx_compile_stdcxx.m4 | 982 ++++++++++++++++++++++++++++++++++++
++ 3 files changed, 993 insertions(+), 2 deletions(-)
++ create mode 100644 m4/ax_cxx_compile_stdcxx.m4
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 4254f89bb..f5cdb55cc 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -32,9 +32,9 @@ if (POLICY CMP0067)
++ 
++ cmake_minimum_required(VERSION 3.12.0)
++ 
++-# Try C++14, then fall back to C++11 and C++98.  Used for feature tests
+++# Try C++17, then fall back to C++14, C++11 then C++98.  Used for feature tests
++ # for optional features.
++-set(CMAKE_CXX_STANDARD 14)
+++set(CMAKE_CXX_STANDARD 17)
++ 
++ # Use folders (for IDE project grouping)
++ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
