@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE9BCD6E79
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2097CD6E7C
 	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6365C81EB5;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A69F60E37;
 	Fri,  5 Jun 2026 12:40:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pSyd4XC2gepb; Fri,  5 Jun 2026 12:40:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XLcgb86vb4V8; Fri,  5 Jun 2026 12:40:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82A7482164
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BF9660E2D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663209;
-	bh=9eLLyqz66teUNt4qZ4Mfin8Xih+yvKhNWiftXSVq/Vo=;
+	s=default; t=1780663208;
+	bh=WMWR6kzDnhheRcEmXTUT/tJLPWYshMbCbC3zq2Fawoo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=p1bEE9l2r/LnBxEuzrNW2NTyNzWeBcSNUQfChLO1OL1uPCnNHPkHV5DF3GPJ4U/Ou
-	 YweqFC+VyKuqwcSQKEYHtHZS4rAtAUWXRmw1Nie3TGN6oMmw5hvQURK20Y6sEpnzR7
-	 qa968REv5OjweFVvL0LWAtTOAgTF92mi3ht7xFvEafx0qSycb7crXYbOhg4QyQUFGB
-	 eI/UDK+pYqZgRfw4A+DwWY6HQ4Pw3rb/GMoAbux115anGUYrxgLs24kXeq3NOdJdiZ
-	 ouV3AFrz9SvJ2sLcCi7AdzM7YogIObZkOYJIkxdHiBA19OxO0UbAGLJea3YWJI1mVj
-	 rkhoLgMQ4Pq9w==
+	b=nbc6wSunoxNopQnu2bTqlwKN45+hZcPOPdqJLGt7NkDsRvU8nTa5HDBN7PbgJOLDb
+	 wZlRCAdYDIF2ZfQMHXQdDCFXwVQDUtofeQJgn1exmS+JwYU+XxcFqqMELqHCjDcoMb
+	 fSbaykRfq+QiYwx9RBdR7CEo4lXQjAzVfitTjvAT0UizFT0A6NsvRZiMT5joY9tdhz
+	 SegHOhfJR49wyH4kBBpzYkNB4UVfnb3jxFHVucsz7rNDz5iJAnGSmbDEAKEXGaQF5j
+	 1YcVTLx/rWHiTTNv66eCr+ZUm874mUPMvt5RmlKd3hie7MClWQQkmyHxP2XXND66kV
+	 6NBkB9+dCIEPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82A7482164;
-	Fri,  5 Jun 2026 12:40:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF9660E2D;
+	Fri,  5 Jun 2026 12:40:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0272E388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E9433B7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 178D281E78
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03A2382024
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ne9ejhcVqu8u for <buildroot@buildroot.org>;
+ id Z2KfgbbpJ67E for <buildroot@buildroot.org>;
  Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20E4681FE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBC0A8200D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20E4681FE9
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DBC0A8200D
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49F9C87B2F; Fri,  5 Jun 2026 12:38:37 +0000 (UTC)
+ id 0FE7087B3B; Fri,  5 Jun 2026 12:38:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 12:01:36 +0200
+Date: Thu, 4 Jun 2026 11:54:04 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: cf2b6482edb84e29d24f53c483521aece0fe5d86
-X-Git-Newrev: 516e0521e8b05103eb5112d7266a1962cb9a952f
+X-Git-Oldrev: 4039ed47718b5b4721913283f3aea2c71a114dd2
+X-Git-Newrev: ba410d9a153d24c7c2cc2c2995d9b2adfa24e869
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123837.49F9C87B2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/libdill:
- autoreconf needs host-pkgconf
+Message-Id: <20260605123837.0FE7087B3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] Makefile: add
+ 'show-info-all'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/516e0521e8b05103eb5112d7266a1962cb9a952f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ba410d9a153d24c7c2cc2c2995d9b2adfa24e869
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot commit 106e2b448c5249aa905aeaa0a5a1d1f87cf8f694 bumped libdill
-to include an upstream commit:
-https://github.com/sustrik/libdill/commit/b3b81d2c7bf4daf8a57925ddd40f5b6f13484187
-which added PKG_CHECK_MODULES to configure.ac causing an error during
-autoreconf when openssl, with host-pkgconf added as optional dependency,
-is not selected:
+The maintenance and testing workflow sometimes requires to output a
+list of every existing package on Buildroot:
 
-configure.ac:119: error: possibly undefined macro: AC_CHECK_LIB
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-configure.ac:127: error: possibly undefined macro: AC_MSG_ERROR
+- Generating an SBOM of the whole Buildroot tree, e.g. `for
+  security.buildroot.org
+- List every source for every package, e.g. for sources.buildroot.net
 
-Fixes:
-https://autobuild.buildroot.net/results/05c/05c6a3f5a9290f1e5e4f62fea13a0f4cb1278c04/
+The previous solution relied on `make allyesconfig` but always ran into
+conflicts that needed manual resolution. Also some packages would not be
+present because they are architecture dependent.
 
-The first build error of this kind occurred on 2022-08-21:
-https://autobuild.buildroot.net/results/a29/a294492db81b6fd105dac88d8f5c8bc1a222bb8e/
+To avoid having to manually modify the 'show-info' command this commit
+adds the 'show-info-all' command. It accesses the PACKAGES_ALL variable
+with all the packages present in Buildroot independently of the
+architecture or any config entries.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+It forces the `BR2_HAVE_DOT_CONFIG` variable to be set to force the
+reading of the package mk files.
+
+It is also added to noconfig_targets, to avoid the .config influencing
+the output of show-info-all.
+
+Note that this is not yet a complete solution - it doesn't take into
+account the multiple versions that are possible for some packages like
+GCC. Also for e.g. linux or uboot the version is empty and the URL is
+invalid.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Arnout: refactor with existing show-info]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 5b9a32dc7282787ab9d5a09afcb19241d7d600fb)
+(cherry picked from commit 723b321bb03d7526f7583d64ac1d34eca429920d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libdill/libdill.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Makefile                      | 32 ++++++++++++++++++++++++--------
+ docs/manual/common-usage.adoc | 12 ++++++++++++
+ 2 files changed, 36 insertions(+), 8 deletions(-)
 
-diff --git a/package/libdill/libdill.mk b/package/libdill/libdill.mk
-index 9dda81d085..bea9aaeecb 100644
---- a/package/libdill/libdill.mk
-+++ b/package/libdill/libdill.mk
-@@ -10,6 +10,7 @@ LIBDILL_LICENSE = MIT
- LIBDILL_LICENSE_FILES = COPYING
- LIBDILL_INSTALL_STAGING = YES
- # Fetched from Github, with no configure script
-+LIBDILL_DEPENDENCIES = host-pkgconf
- LIBDILL_AUTORECONF = YES
+diff --git a/Makefile b/Makefile
+index 6c1a4c417e..5a44df1fda 100644
+--- a/Makefile
++++ b/Makefile
+@@ -126,7 +126,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
+ 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	print-version olddefconfig distclean manual manual-% check-package \
+-	check-package-external
++	check-package-external show-info-all
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-@@ -19,7 +20,7 @@ LIBDILL_CONF_OPTS += --disable-threads
+ # Some global targets do not trigger a build, but are used to collect
+ # metadata, or do various checks. When such targets are triggered,
+@@ -142,7 +142,7 @@ nobuild_targets := source %-source \
+ 	clean distclean help show-targets graph-depends \
+ 	%-graph-depends %-show-depends %-show-version \
+ 	graph-build graph-size list-defconfigs \
+-	savedefconfig update-defconfig printvars show-vars
++	savedefconfig update-defconfig printvars show-vars show-info-all
+ ifeq ($(MAKECMDGOALS),)
+ BR_BUILDING = y
+ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -236,6 +236,13 @@ BR2_CONFIG = $(CONFIG_DIR)/.config
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
  endif
++# show-info-all needs to access the PACKAGES_ALL variable. This variable
++# contains a reference to every package present in Buildroot.
++# Since the 'show-info-all' command might be used without actually having a
++# dotconfig this condition is forced to be set true.
++ifeq ($(MAKECMDGOALS),show-info-all)
++BR2_HAVE_DOT_CONFIG = y
++endif
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBDILL_DEPENDENCIES += host-pkgconf openssl
-+LIBDILL_DEPENDENCIES += openssl
- LIBDILL_CONF_OPTS += --enable-tls
- else
- LIBDILL_CONF_OPTS += --disable-tls
+ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
+ # Disable top-level parallel build if per-package directories is not
+@@ -934,15 +941,22 @@ check-dependencies:
+ 	$(TOPDIR)/support/scripts/graph-depends -C
+ 
+ .PHONY: show-info
+-show-info:
++show-info: show-info-inner
++show-info: SHOW_INFO_PACKAGES = \
++	$(foreach i,$(PACKAGES) $(TARGETS_ROOTFS), \
++		$(i) $($(call UPPERCASE,$(i))_FINAL_RECURSIVE_DEPENDENCIES) \
++	)
++
++.PHONY: show-info-all
++show-info-all: show-info-inner
++show-info-all: SHOW_INFO_PACKAGES = $(PACKAGES_ALL)
++
++.PHONY: show-info-inner
++show-info-inner:
+ 	@:
+ 	$(info $(call clean-json, \
+ 			{ $(foreach p, \
+-				$(sort $(foreach i,$(PACKAGES) $(TARGETS_ROOTFS), \
+-						$(i) \
+-						$($(call UPPERCASE,$(i))_FINAL_RECURSIVE_DEPENDENCIES) \
+-					) \
+-				), \
++				$(sort $(SHOW_INFO_PACKAGES)), \
+ 				$(call json-info,$(call UPPERCASE,$(p)))$(comma) \
+ 			) } \
+ 		) \
+@@ -1213,6 +1227,8 @@ help:
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+ 	@echo '  show-info              - generate info about packages, as a JSON blurb'
++	@echo '  show-info-all          - generate info about all packages in Buildroot,'
++	@echo '                           regardless of configuration or target architecture'
+ 	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
+ 	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo '  show-vars              - dump all internal variables as a JSON blurb; use VARS=...'
+diff --git a/docs/manual/common-usage.adoc b/docs/manual/common-usage.adoc
+index 7437a7c3c0..631c2f7788 100644
+--- a/docs/manual/common-usage.adoc
++++ b/docs/manual/common-usage.adoc
+@@ -170,6 +170,18 @@ by using the +show-info+ make target:
+ make show-info
+ ----
+ 
++Buildroot can also produce information in the +show-info+ format about all
++packages regardless of the configuration or architecture by using
+++show-info-all+.
++This is used for maintenance tasks that require information about every
++package in the tree, such as generating a full-tree SBOM for
++https://security.buildroot.org[].
++It does not require a +.config+ file:
++
++----
++make show-info-all
++----
++
+ Buildroot can also produce details about packages as HTML and JSON
+ output using the +pkg-stats+ make target. Amongst other things, these
+ details include whether known CVEs (security vulnerabilities) affect
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
