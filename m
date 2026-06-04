@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C89CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260ADCD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27F3641239;
-	Fri,  5 Jun 2026 12:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F32BB4124F;
+	Fri,  5 Jun 2026 12:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KHwMARe3yzWr; Fri,  5 Jun 2026 12:40:01 +0000 (UTC)
+ id GYSyfnHov9Y1; Fri,  5 Jun 2026 12:40:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA18141212
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BE9841234
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663200;
-	bh=q3lFXBJvLVeJqhT3wQr2ni84A2PPeRgvhXz3RXXHZrM=;
+	s=default; t=1780663204;
+	bh=PgvgTCrrWwQMIgUVezu2bUIE95Lmchqj84WQyKeIv4s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iZwWZsRuEcZ1A1tXvMPoMl9GY5gYAHXSKpFgAjTv20iaHMNQu44TgsxzoENKlTqbx
-	 MDmujhAuwF2spIahcaX9EHKgWWyX0y9iyAINKrjM94YfEw1ou2Nqucq5Hk9RqYfYdi
-	 2vmGPW+1mWFZN4fNe3G6llRfuDChc47/HXAj7RT6s4AuvWFFevSWWUubfA8Iw9dXTG
-	 z8mNg9Y/uQUw4xkymC2v8TIk7N8Fkb2x/+jWJmVN6vnP5aiwJzMZ5Z3qs4fNNz1CIz
-	 IKzLsv1UHpT0X+2+1BDEaTEZgiD9Eg4+4E3mn2YqLtg1BUH4sbrQVgPNeRIilCatnE
-	 CtDNI/sa/mu1Q==
+	b=Y/BCaeGNl6vUkDKC9IJAbJU9M179SHZ+EphCI2PleV8JYThm8CV0+8VXr4CJHOD6Z
+	 fV4vnpKg1OqbaNjynxBzV3LQmPRZ50jJBh/0/mcfjQaigRE4/MQirzB5PnOYlLX9+F
+	 SIBGKTkVsJCBLT6fFZlcJJJRBOIkCQwe7TpSAsE/Kz67apiTg4OdFnLDMwmrXfDleq
+	 /90/1kA2OWjvk+xTl4fqJQHmrDe0eUudL/jNKu01pYuY58BxXqHpdCXz+pwPpnVgtA
+	 SBvyKb4S3t8AONMCvIpx/XOj0op+6f1H1KR/YYCn3BCU/OrIynGiavP5LwhhcPbQVU
+	 jNa2+/+9eUTVA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA18141212;
-	Fri,  5 Jun 2026 12:40:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 024DC388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BE9841234;
+	Fri,  5 Jun 2026 12:40:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 101833B7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A02B81E5B
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CD0641028
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J6VXnBT5-BlC for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lV1HrGQ4jYKi for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DC2B81FCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 909C841056
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DC2B81FCC
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 909C841056
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:38:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 355B187B03; Fri,  5 Jun 2026 12:38:34 +0000 (UTC)
+ id BAEC887B3B; Fri,  5 Jun 2026 12:38:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Jun 2026 10:31:54 +0200
+Date: Thu, 4 Jun 2026 12:04:27 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 1c16c1ed7e3ae39b71725392034fff602b526675
-X-Git-Newrev: 974176d5128755bd095670cd7c0db64d80ce6772
+X-Git-Oldrev: 5a29ec02f617b6fcefbf8d71aedb5f68b7e0c9be
+X-Git-Newrev: 4d3c8925b0f2199820fc25c6a30d77b31fc6cba0
 X-Patchwork-Hint: ignore
-Message-Id: <20260605123834.355B187B03@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/radvd: security
- bump to version 2.21
+Message-Id: <20260605123837.BAEC887B3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/cups-filters: add
+ upstream patch to fix CVE-2025-64524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,57 +77,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/974176d5128755bd095670cd7c0db64d80ce6772
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4d3c8925b0f2199820fc25c6a30d77b31fc6cba0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Fixes the following vulnerability:
-
-CVE-2026-48715: Stack Buffer Overflow in radvdump Route Information Option
-Parser
-
-https://github.com/radvd-project/radvd/security/advisories/GHSA-52px-gh9p-m379
-
-Release notes:
-https://github.com/radvd-project/radvd/releases/tag/v2.21
-
-The release is now done on github, and a .tar.xz version is available so use
-that. Notice that we cannot use the github macro.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add "CVE:" tag in patch]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f5601740113111269cd0717062fdef039b17763d)
+(cherry picked from commit ddde78c1bd251225c07f1910d6f9db2fc5189365)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/radvd/radvd.hash | 4 ++--
- package/radvd/radvd.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...x.c-Fix-infinite-loop-caused-by-crafted-f.patch | 84 ++++++++++++++++++++++
+ package/cups-filters/cups-filters.mk               |  3 +
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index 8415b8d854..a9937aa232 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,3 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.20.tar.gz.sha512
--sha512  798d8476ab5ff43083b181d6d6ec43c47d06e4067d30c71e038cfd890bcf1ca23e809f9e184c4363458bfa25a916625dd2d7553290fb3e5459034d477b80ebaa  radvd-2.20.tar.gz
-+# From https://github.com/radvd-project/radvd/releases/download/v2.21/radvd-2.21.tar.xz.sha256
-+sha256  91df2ed7faca0716bbd726a17d6467ed92fcb2b6e45b57d9e619f9686ab99e1b  radvd-2.21.tar.xz
- sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 89d8f55d51..32bbcf57ee 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+new file mode 100644
+index 0000000000..8badcfd429
+--- /dev/null
++++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+@@ -0,0 +1,84 @@
++From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
++From: Zdenek Dohnal <zdohnal@redhat.com>
++Date: Wed, 12 Nov 2025 16:02:20 +0100
++Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
++
++Infinite loop happened because of crafted input raster file, which led
++into heap buffer overflow of `CompressBuf` array.
++
++Based on comments there should be always some `count` when compressing
++the data, and processing of crafted file ended with offset and count
++being 0.
++
++Fixes CVE-2025-64524
++
++Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
++
++CVE: CVE-2025-64524
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ filter/rastertopclx.c | 25 +++++++++++++++++++++++--
++ 1 file changed, 23 insertions(+), 2 deletions(-)
++
++diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
++index 3e7c129da..1015308da 100644
++--- a/filter/rastertopclx.c
+++++ b/filter/rastertopclx.c
++@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
++   }
++ 
++   if (header->cupsCompression)
++-    CompBuffer = malloc(DotBufferSize * 4);
+++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
++ 
++   if (header->cupsCompression >= 3)
++-    SeedBuffer = malloc(DotBufferSize);
+++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
++ 
++   SeedInvalid = 1;
++ 
++@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++               seed ++;
++               count ++;
++             }
+++
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
++ 	  }
++ 
++          /*
++@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = line_ptr - start;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++ #if 0
++             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
++ 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
++@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
++ 
++             count = (line_ptr - start) / 3;
++ 
+++	    //
+++	    // Bail out if we don't have count to compress
+++	    //
+++
+++	    if (count == 0)
+++	      break;
+++
++            /*
++             * Place mode 10 compression data in the buffer; each sequence
++ 	    * starts with a command byte that looks like:
++-- 
++2.47.3
++
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index f2b85aa9d5..da882ab838 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = openprinting
+ # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
  
--RADVD_VERSION = 2.20
--RADVD_SITE = http://www.litech.org/radvd/dist
-+RADVD_VERSION = 2.21
-+RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
-+RADVD_SITE = https://github.com/radvd-project/radvd/releases/download/v$(RADVD_VERSION)
- RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf libbsd
- # We need to ignore <linux/if_arp.h>, because radvd already includes
- # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
++# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
++CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
++
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
+ CUPS_FILTERS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
