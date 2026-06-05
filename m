@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 144CDCD6E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98433CD6E74
 	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC9C741EAB;
-	Fri,  5 Jun 2026 12:49:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 716C260D6E;
+	Fri,  5 Jun 2026 12:49:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TAY47UsSp5c0; Fri,  5 Jun 2026 12:49:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MVzTL2TNlGwB; Fri,  5 Jun 2026 12:49:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4EEE41E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4597A60FAD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663774;
-	bh=IwdnZny34kl3LhUk45dXXPhVIKWjTYG4bxJZpocIRdc=;
+	s=default; t=1780663776;
+	bh=Yf7y2CoE6+MjuW0CJpWkQQ4qQwcL08aoUCwJdR2e5iw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=FgYPsd8T0L3vuSMVCieh7qiZusy60A8eiPkZ+lv/MRWue866iyiitiKWlj+QfwoCw
-	 fG+mtOeqWSyo75KduIeILgaJAFnmNUx6qfso0qlmOUiKFiT+8vhR2wbboXe2mq0EMY
-	 Eyit1OUWa+tyFwcCh2svIHybMQFYeMKFCG3oSRBbhJC5LWJTTMBsBI9JTIEjdy7nE3
-	 hui6DQ6RMPhVjZR9BHYt3wBrnVS4qPs3mtW055sZMMKGTMAFEgFR6cABEcacQJUnpp
-	 itYVceDFCDE0QGr+FUgAyQaNd0N6JbD1kNkkhsckSIoncX7k84mF/HDsqZDtfCwTjx
-	 asd3dsr5luy3Q==
+	b=m6Tv08AKnMvvVO9tgkwPwKHlglwxSL0eUn09nWdvOK4cEM4/OEWIWXlXsAyXlp3ts
+	 ZQYcLdjHMwbS80VLJQ3TWj2lODRKRZFnQxrN+nxN6BVfgm7Zpc0YmjidYVfnGVvGl1
+	 4KRbIw+akATQT29Ybns1pMCYQG3THoPnUg3O4LoPmOiMnpVqdKF3Mq6xVJ6Md2btjT
+	 b06XDhdn4sviRqHyChOMoyMoprrN4Uhf7syVerLAtzNn8qsNgWQhPjy59cmBxyODXo
+	 FGdPwUIm0NPB10D5vbXdNnf7EYCoY8GlfIVE25LS2SZDmWmdsyTn83EPY00rI6R3Qn
+	 JbPt1pDGNlg5A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4EEE41E8A;
-	Fri,  5 Jun 2026 12:49:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4597A60FAD;
+	Fri,  5 Jun 2026 12:49:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 82634388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 85A68388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D9F640382
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 801AA4037E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zdlQvISaGJgK for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:49:29 +0000 (UTC)
+ id Sto1h7JnUtEl for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:49:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 624DB4037E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 624DB4037E
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 624DB4037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:29 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-490acbb0f89so12644745e9.0
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 558824037F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 558824037F
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 558824037F
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:30 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-490b1bbcf3aso15189375e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663767; x=1781268567;
+ d=1e100.net; s=20251104; t=1780663768; x=1781268568;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=vZOXwYQeqB3vV+bwAuFpZCURQH4TbNmbZVrVeJlRyYk=;
- b=n3241JrdcOYWTuMJxZWWkOw1phBr2X7jph28SCFTjyYT2UTwT2wQiMztAnJY3DYCin
- EV/v37XLCalb6VyijYICWgkyR5r1XN9dxm4TZXAoEaZ8aWrfu+MSUq44F/bHZtYQa3E2
- 8AlY+TlQCajP0B4LTB6Hs/f56QXJjwGRSDOm7nPVH9gWIqCj+KM/v8Y25AKk5kAhTiBr
- 1+lRidHr0w0XP7Y5Pz8GA4UlyFkGaH+UYdHowq9w9dZM7V/nC2rA7xKYXldyILxxoa09
- pZ79VEwA2eGZ10SGBHxwgAigTrg/7t9wWGOVOoc/4D7GFJEZQrtGxJ9gqKWIDLEGsADs
- uPnQ==
+ bh=dHPEpFt0fFL7NdzpUUcOarTNxGO/+GynqlcnFOmidjo=;
+ b=TRI51TR9/YL0bc6sEs23pscq1/JoXFOpv+e3bQ2U7GrepKuuwU2QHoyFgEBEGxsKh+
+ cnSKZGOb7syBn81GTZ/YiwY8x2evt4pB66Ukv+/8NIi62vHo0Adbusz5rW10q+8PXcxe
+ n4zaOmCq2vzULEsCJiTwQVABUoXkOBamjbPyOJQBB8mzPUgsPldO77d+kqNew75ceDvz
+ +48WATTswTmLYR9zyIlIbejtLpiSt7QMP3EOkvAf1eoUg23Qw3N44knM7ufaYLjqwob6
+ E7k5yRuDdvmENinj9VWogJj4Ed43IQSJzv0ACDaBhGuM5BMT87T0bzyCwFQNBG/NN4WW
+ aGVA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/I7tN3fQmqUyjzwHkFn9yOhCv/sVR7Po6oWnoKdWDia+dj4Cl2uS9uEnFNpqKVMS3pk4lqa1BdCeI=@buildroot.org
-X-Gm-Message-State: AOJu0YwZ5TjvSF/JM7+0URn9nt6lTemgsngv+jmlUdURY8RNebAfkopf
- dASCSHBAyDEvCbMZh5QidYSbtIewKE6ay1vgYzxddQ8bBcwpZVYl8ROhHVSlesJ0Gcw=
-X-Gm-Gg: Acq92OG0hE+y9ji3LboVF2HyFCFDiNmZ4OH04e4YIGVL60TiAS72kdWYHq7nYqq5o8g
- v0ClypG9eQ4dXf4wc3gbM5Y2qec9BC8zzOA1CJztQB9GAyxcGNRproUEV3HM1Hbv0UN4dkTf4FR
- /mgkIt9lIhIUlgDuSaxyj0xeGs5gsPbqrYkuCHs6bSlXQH0RRknvR60/8Lzv3eJ57smv+y34lIY
- +W1gUl7hg5crifCZmgUjeLw/JD5ZM1mbR6vMiblKNlXSIpj1H1VWG/HLmplsPoVAJ1RFsUs3/aB
- Kofr8PUzj45cPUw6hM239JXGfW7eo6D8sdt0e0ub53BxW+7bAv/Ham1mgM3Myi5Inkvrou0G0Jp
- tc3ubVrKMGUn7M/JD8lyt5aOTEVzA/AjZNzVc2NL5mVeLG59AdTSymJnaniAlZhHy5ePIAPbNnr
- U5BzTnqcAgb4A+QvTLSYlN1QSLIA==
-X-Received: by 2002:a05:600c:4e55:b0:490:601f:d775 with SMTP id
- 5b1f17b1804b1-490c259a232mr55418175e9.5.1780663767468; 
- Fri, 05 Jun 2026 05:49:27 -0700 (PDT)
+ AFNElJ+uu8wwsNyN92gj5zcLOxmYizHBgsVDZVNCiS9Mz+MGMxsHBIZNP6rcBIkYTr/vK7qvxri7UHvxByY=@buildroot.org
+X-Gm-Message-State: AOJu0YzY5MILvCgKFoHXCc6gRrOIY8bZfc+eerWcwL6dNFIl2p2H2C1x
+ 0T9efUUeh0Bt6hic1y1Z+/VbypQLIN1NVyVFHm9PRBlyEwHrc84hBJAUUKwUaf2uYWa/jt6y+Iy
+ 7TEyo
+X-Gm-Gg: Acq92OHe1CFZYO+k/CmGcnfHhtxUixL4Eh4ROlueNbDRD0V+Y16sxf7tsMvgbfBWgsS
+ q2VfpnWlJ0UnlRhc1DTb6jcq+8urh59T7jRgWlfuhXFaPgZ2M0R9LV4MbnPSLzdJHsLZzsL7lps
+ zvKBEgTL/dWCpIj2bbn7RN1zw5rvY2FudZ8IfCcn+tqYt0gzteTERT0Nf4S5BbR1yuKRNPmSXCL
+ hm4FH3R0qDy9cqkppPBLF8GvZPDoSusVEcTaRkzzPhoq/jx4BfZBAw4FWGR/iEdFWlNLit1vL+7
+ rs5olpSLmA02QudoOtfQkTfoOejyhhj83RmmRtaVzt8pag3MpXe0Ef3+TupJlnzdPtQbhh8srSw
+ xm0hSrHcfZbQlML2xOY8+ok8M8WnG7A7J+YmcrzRL0QUuLwQWxjMfWxkKcbq/jtIWb3uHfr0JPD
+ IvB6pxC0IJIB108GJN6lMV7LtFTw==
+X-Received: by 2002:a05:600c:3b09:b0:490:b446:fb8 with SMTP id
+ 5b1f17b1804b1-490c25c66d2mr53434805e9.11.1780663768380; 
+ Fri, 05 Jun 2026 05:49:28 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc3d6c65sm150376015e9.12.2026.06.05.05.49.27
+ 5b1f17b1804b1-490bc3a87dasm141832495e9.7.2026.06.05.05.49.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:49:27 -0700 (PDT)
-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+ Fri, 05 Jun 2026 05:49:28 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:49:26 +0200
-Message-ID: <20260605124926.271246-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:49:27 +0200
+Message-ID: <20260605124927.271302-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260522-openscap_nptl_threads-v2-1-cb06d4d208da@bootlin.com>
-References: <20260522-openscap_nptl_threads-v2-1-cb06d4d208da@bootlin.com>
+In-Reply-To: <20260524063729.1193614-1-bernd@kuhls.net>
+References: <20260524063729.1193614-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663767; x=1781268567; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663768; x=1781268568; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vZOXwYQeqB3vV+bwAuFpZCURQH4TbNmbZVrVeJlRyYk=;
- b=R5Kce47RA/vTTnhZsd/GjF7QzZwno9Yn3rLGKwAqUWK0UacIKfvMKeZUWNMjKxQNHF
- uPcD1CyPbj0v2/Zf8w32dVNzZf37/q22WoIEHEV5rn/twO3A2t1LqBRJ5UmvjuKOXM0u
- KK9Noltu1pN2OeUpjXPWiZzQTjJ7Texk90dFw8oiQTdCyr7Y+Tsly5jxdLmp5SpGH+J8
- QuhQMVNxTbuvtJk6bo/gtbjeFa9IvUNLk44QIqqdk/jCvPqrwrTf3EjEEfwwW6BejssA
- 8cc/uaKSxWqGBybkH4W61URDNjLDTHV1/G3D2Z5aPkJSlsiFmRoHlsMlfbUApcpx2c0d
- kS2A==
+ bh=dHPEpFt0fFL7NdzpUUcOarTNxGO/+GynqlcnFOmidjo=;
+ b=doP1jfCLRabG2slq5L/B3j6AvW2rjB1qI9BSmWGC4VMlqhEMpoevyWsWrAwbtDAbO3
+ nbwRBaHOUWqAoQfmsAyj9p6l8zjINMVUARnWd0iRkjFcj4/DHeDs8D47zTkpLvmTD3Rx
+ +lRxF899zdv0eLRN9TlkXvLkuM70I7cLpvzAm5pcfBjq3I3QIc7CnXfG4lkoVUzXNLc8
+ NjVzgAlhdWd0U+39HfiSLKylxoUZBCbxYje4sEaqrs8yEEfJx0O8jCEtYq7NmETPtDAw
+ xgaxUmYdcRTIdHdfgegl161LBlqC7qOl5sqQWMmBvLzsSfVE/3zT6AnShpWqq1hZpBks
+ 69Bw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R5Kce47R
-Subject: Re: [Buildroot] [PATCH RESEND v2] package/openscap: add dependency
- on NPTL threads
+ header.a=rsa-sha256 header.s=google header.b=doP1jfCL
+Subject: Re: [Buildroot] [PATCH 1/1] package/efl: re-add patches to fix
+ drm-related build errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,47 +126,148 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gT3BlbnNjYXAgY29kZSBpcyBjYWxsaW5nIE5QVEwgZnVuY3Rpb25zIHN1
-Y2ggYXMgcHRocmVhZF9iYXJyaWVyX3dhaXQsCj4gd2hpY2ggYXJlIG5vdCBwcm92aWRlZCBieSBw
-dGhyZWFkcy4KPiAKPiBNYWtlIHRoZSByZXF1aXJlbWVudCBvbiBOUFRMIHRocmVhZHMgZXhwbGlj
-aXQgYnkgYWRkaW5nIHRoZQo+IGNvcnJlc3BvbmRpbmcgIGRlcGVuZGVuY3kgaW4gb3BlbnNjYXAg
-Q29uZmlnLmluLgo+IAo+IEZpeGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jl
-c3VsdHMvMmQ5NDc1YjdjZDJkNDEzYzk5ZDYyMzNlYmIyMTNiYzkzMmYxZTM5OC8KPiBTaWduZWQt
-b2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgoKQXBw
-bGllZCB0byAyMDI2LjAyLnguIFRoYW5rcwoKPiAtLS0KPiBDaGFuZ2VzIGluIHYyOgo+IC0gZHJv
-cCBib2d1cyBwYXRjaCAxLzIsIGFzIG9yaWdpbmFsIENvbmZpZy5pbiB3YXMgZmluZQo+IC0gcmVm
-b3JtYXQgbWlzc2luZyBkZXBlbmRlbmN5IGNvbW1lbnQKPiAtIExpbmsgdG8gdjE6IGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL3IvMjAyNjAzMDQtb3BlbnNjYXBfbnB0bF90aHJlYWRzLXYxLTAtOWRm
-ZjkyY2MzN2UwQGJvb3RsaW4uY29tCj4gLS0tCj4gIHBhY2thZ2Uvb3BlbnNjYXAvQ29uZmlnLmlu
-IHwgNSArKystLQo+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9u
-cygtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zY2FwL0NvbmZpZy5pbiBiL3BhY2th
-Z2Uvb3BlbnNjYXAvQ29uZmlnLmluCj4gaW5kZXggMzE3MDU1Yzc1MzI3Li4yNWMzODVkMTYzY2Yg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9vcGVuc2NhcC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdl
-L29wZW5zY2FwL0NvbmZpZy5pbgo+IEBAIC0yLDYgKzIsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0Vf
-T1BFTlNDQVAKPiAgCWJvb2wgIm9wZW5zY2FwIgo+ICAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9M
-SUJHUEdfRVJST1JfQVJDSF9TVVBQT1JUUyAgIyBsaWJnY3J5cHQKPiAgCWRlcGVuZHMgb24gIUJS
-Ml9TVEFUSUNfTElCUyAjIGRsZmNuLmgKPiArCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNf
-VEhSRUFEU19OUFRMCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCQ1VSTAo+ICAJIyBJbiB0aGVv
-cnkgc2hvdWxkIGJ1aWxkIHdpdGhvdXQgY3J5cHRvLCBidXQgaW4gcHJhY3RpY2UgaXQKPiAgCSMg
-ZG9lc24ndDogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQL29wZW5zY2FwL2lzc3Vlcy8yMzEw
-Cj4gQEAgLTE5LDYgKzIwLDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX09QRU5TQ0FQCj4gIAkgIGh0
-dHBzOi8vd3d3Lm9wZW4tc2NhcC5vcmcvCj4gIAkgIGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NB
-UC9vcGVuc2NhcAo+ICAKPiAtY29tbWVudCAib3BlbnNjYXAgbmVlZHMgYSB0b29sY2hhaW4gdy8g
-ZHluYW1pYyBsaWJyYXJ5Igo+ICtjb21tZW50ICJvcGVuc2NhcCBuZWVkcyBhIHRvb2xjaGFpbiB3
-LyBkeW5hbWljIGxpYnJhcnksIE5QVEwiCj4gIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQkdQ
-R19FUlJPUl9BUkNIX1NVUFBPUlRTCj4gLQlkZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElCUwo+ICsJ
-ZGVwZW5kcyBvbiBCUjJfU1RBVElDX0xJQlMgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNf
-TlBUTAo+IAo+IC0tLQo+IGJhc2UtY29tbWl0OiAzNDZkNjY2N2ZlYmRiZWM5YTNjNTdlNDcwMDlh
-YjIxZTEyMWI1YjFkCj4gY2hhbmdlLWlkOiAyMDI2MDMwNC1vcGVuc2NhcF9ucHRsX3RocmVhZHMt
-NDNmYTRiZTQzNTY2Cj4gCj4gQmVzdCByZWdhcmRzLAo+IC0tIAo+IEFsZXhpcyBMb3Rob3LDqSA8
-YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+Cj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> Buildroot commit c7a1b73f1758855e47c188c38617dd309b2c2428 removed
+> patches 0001-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+> and 0002-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch.
+> 
+> This defconfig
+> 
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_PACKAGE_EFL=y
+> BR2_PACKAGE_EFL_DRM=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+> BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_LUAJIT=y
+> 
+> is broken now during configure stage
+> 
+> output/build/efl-1.28.1/src/modules/ecore_evas/engines/drm/meson.build:6:18:
+>  ERROR: Unknown variable "engine_gl_drm".
+> 
+> which is fixed by former patch 0001.
+> 
+> Later a build error occurs which is fixed by former patch 0002.
+> 
+> The error was not yet caught by the autobuilders.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Applied to 2026.02.x. Thanks
+
+> ---
+>  ...es-drm-meson.build-use-gl_deps-as-en.patch | 37 ++++++++++++++++++
+>  ...es-drm-meson.build-fix-gl_drm-includ.patch | 38 +++++++++++++++++++
+>  2 files changed, 75 insertions(+)
+>  create mode 100644 package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+>  create mode 100644 package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+> 
+> diff --git a/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+> new file mode 100644
+> index 0000000000..dd6ac1ae25
+> --- /dev/null
+> +++ b/package/efl/0009-ecore_evas-engines-drm-meson.build-use-gl_deps-as-en.patch
+> @@ -0,0 +1,37 @@
+> +From 00833baac6935bd1e3e9856211bc165c5b02a7bd Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@gmail.com>
+> +Date: Sat, 1 Aug 2020 02:25:47 +0200
+> +Subject: [PATCH] ecore_evas/engines/drm/meson.build: use "gl_deps" as engine
+> + dependencies
+> +
+> +Meson trigger an error since "engine_gl_drm" variable doesn't exist.
+> +
+> +src/modules/ecore_evas/engines/drm/meson.build:10:2: ERROR: Unknown variable "engine_gl_drm".
+> +
+> +Instead use "gl_deps" as engine dependencies.
+> +
+> +Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075016/
+> +
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +[Bernd: added Upstream: tag]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + src/modules/ecore_evas/engines/drm/meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
+> +index 58071010d0..0741d7fccd 100644
+> +--- a/src/modules/ecore_evas/engines/drm/meson.build
+> ++++ b/src/modules/ecore_evas/engines/drm/meson.build
+> +@@ -3,7 +3,7 @@ engine_deps = [ecore_drm2, ecore_input, eeze, elput, libdrm, engine_drm]
+> + 
+> + if get_option('opengl') != 'none'
+> +   config_h.set('BUILD_ECORE_EVAS_GL_DRM', '1')
+> +-  engine_deps += [engine_gl_drm]
+> ++  engine_deps += [gl_deps]
+> + endif
+> + 
+> + engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
+> +-- 
+> +2.31.1
+> +
+> diff --git a/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+> new file mode 100644
+> index 0000000000..e71a1705c0
+> --- /dev/null
+> +++ b/package/efl/0010-ecore_evas-engines-drm-meson.build-fix-gl_drm-includ.patch
+> @@ -0,0 +1,38 @@
+> +From a21e71cc2284a19a34c913aff757e656e3a8c14a Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@gmail.com>
+> +Date: Sat, 1 Aug 2020 01:01:00 +0200
+> +Subject: [PATCH] ecore_evas/engines/drm/meson.build: fix "gl_drm" include
+> + directory
+> +
+> +The Evas_Engine_GL_Drm.h file is in "gl_drm" directory, not "drm".
+> +
+> +../src/modules/ecore_evas/engines/drm/ecore_evas_drm.c:23:11: fatal error: Evas_Engine_GL_Drm.h: No such file or directory
+> +   23 | # include <Evas_Engine_GL_Drm.h>
+> +      |           ^~~~~~~~~~~~~~~~~~~~~~
+> +compilation terminated.
+> +
+> +Upstream: https://sourceforge.net/p/enlightenment/mailman/message/37075004/
+> +
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +[Bernd: added Upstream: tag]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + src/modules/ecore_evas/engines/drm/meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/modules/ecore_evas/engines/drm/meson.build b/src/modules/ecore_evas/engines/drm/meson.build
+> +index 0741d7fccd..edda1abd71 100644
+> +--- a/src/modules/ecore_evas/engines/drm/meson.build
+> ++++ b/src/modules/ecore_evas/engines/drm/meson.build
+> +@@ -6,7 +6,7 @@ if get_option('opengl') != 'none'
+> +   engine_deps += [gl_deps]
+> + endif
+> + 
+> +-engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'drm'))
+> ++engine_include_dir += include_directories(join_paths('..', '..', '..', 'evas', 'engines', 'gl_drm'))
+> + 
+> + shared_module(mod_full_name, engine_src,
+> +   include_directories : config_dir + [engine_include_dir],
+> +-- 
+> +2.31.1
+> +
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
