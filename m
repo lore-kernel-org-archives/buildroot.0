@@ -1,114 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB5DCD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB781CD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7602960BE6;
-	Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9383C813CA;
+	Fri,  5 Jun 2026 12:51:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lSNIKQHx0Umk; Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1DO-KG4Ql6j7; Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 089E16130E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 115E3813AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663873;
-	bh=VABXSir3c3HhGDAUcdUWd+wTohEmccREnUSTZNOlBA0=;
+	s=default; t=1780663874;
+	bh=2vMNNjjCIYGYZOiQw6+ZvJ8o3/Pl2BG8CIOfnohcw0U=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=FUOoVu4TXJDwbqGrPCXXvAc07Lz+M9nlLlTIVk6Y/hkp+jqDC2492i+eHdKaXtRet
-	 bZTHb+2k2wehOGU/bR5/HQMAl0v9FWyJQFupJ31IdcRgyNjEMcbO7iAmShy09xuV3k
-	 94Ej8CCyM63ID4XSW9lYztfPRrxaur9Kv+BpXC+UdpJ2mtYnDy4L5/VSzFeogxn8Za
-	 4d6Jx0AXkxGO6SeXyhERl3vPvHkv3rQH5QEaKDjX+yemqbRNYYr/l9wP6+vzcuDzhs
-	 4Kaq1Sje40e/6dzLqZ5IATpHx27LMI5Q0NQ2py+zJuJXlHAWgUaDEzNR6bAKQAMw4O
-	 QBH7sYLxyF+ng==
+	b=MmpZoU90iYpM/cHXGK5HXlzbfagawCp2+FqE3mso8dlPn/sFV8yU4d7td2ZgJvXFd
+	 SKb8pT8mG/o4/ibpqJLIawI25oQNwbzikhYBj4D+tQ9yO6qGqP3T3pjeHuN1XOaYY/
+	 PnMYEHMKkpoSH4J4/6t841e8L5asQXgDuqIzZia98CV4sfzDwV6Ls7XRLgwchkKK28
+	 IMY7RdbXHNB4DY5mIQflgFkoHVtY4KLAZWJlitJurjROfPnLGfpSXibIQj7PtxvB9V
+	 amzQD11UzegdNJA1TR1bjvpVfVQNxfu61eoOheMkO1IYWkOQdNg1yIfDsWQwirBF6L
+	 WUC/l4oW23mGw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 089E16130E;
-	Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F47A388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 115E3813AB;
+	Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64064F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 419A24098C
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A6A58136E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yGWigk2Z7MHV for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7gP8qOl8Nent for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 430C840985
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 430C840985
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 430C840985
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-490b1bbcf3aso15207165e9.1
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:51:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 302E2812E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 302E2812E7
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 302E2812E7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-45ef82204c6so1051084f8f.3
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:51:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663866; x=1781268666;
+ d=1e100.net; s=20251104; t=1780663867; x=1781268667;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=m7d4uD9c39dZG/UwE9jjYwnW147WDadA5PokIg2mfkc=;
- b=c9nmN2A3IDJ7ZlEi2NIC6VRS0f4dHjN3j4BU9H+dFG67zyle0aG3tz/9eigXEa/04B
- dpp6hV521dRQt2qoyctyTesf2fSJFEF338Wv5NguvraCYcqMGK0zYL6hsPnUSOzs84EV
- sQIL3MGuF+bg0RDVh0c2gJiXXWSwk5fiXHJy/rV3FJDq3eNBPvk0Tsf8HRIegZEiM1/M
- bLxO/MqQdOaUd0hjERJJmAwMWaqtSFieQRqLvhgTvSracF+IQLrqvQoceWmpZ5B5BUie
- qhdZ6qerrsGvs0H5ZRnH04HpRAaq0NZIgo9FBWoC3vFB9p3mLiRnl9YNMJ0qzA5pzRUg
- 1jOg==
-X-Gm-Message-State: AOJu0YzD2mEH2bCiSJsvAs1163W+GBU/3ZvEGY7wwkc0jdbc9mcQGtME
- admVTo2YG98Copfu3FLJgyw+DRU0tqoD6acM4lYwwFDC0DptMy6TV88nBRIpuvzHLAYK2zLD1zb
- xeoew
-X-Gm-Gg: Acq92OHyQKAmfFRs1mEtqABfrtKd3noa6EnfhwR/o7zPPPh7MUJ++Om5F8XzeISaY2i
- OZcrFDClnx4PgB+CLYtlBGuvj6Nu4YjymWofizS9lDYeaVZAGAhIy+bqRu7QN7qan5y3w9sFGvw
- Jo5hJFZEhDeCj4Up9Jit3aZKI1TVC2zWGwNWgIs8ox42IRjGmSqB46F4mSOge+37Xfiaw0IScqh
- fqkMKOziE2XMRVAPnCblhk92xKCbUqugqagRJO2U+VR+CbG7lJnk46hx+r9KNSx8luCkYIynOlQ
- q+tWzgugjJ1omrs8E/9JqVUA9kZcdV3PCMLdD7l7NSq6oX0E0xBEzwZ2Nss8cd4sG80u1kUAGsk
- Y3SW+1oZPEvbzqhxBhg5DG57zU+3W07aNI0mwPRUSM9Ag52m8D6b8FemRijAyICrxsp/sYhuout
- +ovfvlYYoy99z+wgP5LVnqROG8SA==
-X-Received: by 2002:a05:600c:4506:b0:490:4973:91a0 with SMTP id
- 5b1f17b1804b1-490c25c0bd7mr56104575e9.10.1780663866130; 
- Fri, 05 Jun 2026 05:51:06 -0700 (PDT)
+ bh=HQSJ0nweAWfac2gfTwT+ob0XdJKwR4/0Va7zk2T9gJM=;
+ b=GnLKfg+YrYg5axD8nsiC5D8db4EhLeHKLqSZqS6Qkt8BBOWI6voeWu9/TdOr0Txjq2
+ 8WI2n+A7YpLUGjMAlDp+f72fiCPW8pQmScAW/hMteC2cLe9IkWvydTIX9o5MwBt9Iaiy
+ lAeUsyY1cMtiZm+gxXKCBqUQ2aqh+WglSNJdK0JxxEUsYNf812gDa9Tz47fSADrxx9R5
+ sbHDgnGKrd6pf9vFlmx1pG2f7tAqKLE6gQXlaG6jrT0IoCbyroC+XvOFbYwN3j+bKt5u
+ aO2RfYTww11FzmDVBrffT45D2SmbtZnJ5U5BaRn2UFa0EZjOyXvCW3t6exmpoE6+rq+R
+ XsWw==
+X-Gm-Message-State: AOJu0Yw2v+5SiEucYfsCUNVXv0DijCHUk6zobFOr+Bm5iWg3nGS2PV58
+ XChVGxLp+FPb0vkTX+Uy/Q0snRLWjZl6ZUNnhOsNadQAn78wyCLlOagM3pRjjSFlYgael5zcohH
+ 4jp58
+X-Gm-Gg: Acq92OEyXulvYYLgmKnLAa4Pkx8M763N5zVxhIXmQLOWuTzgymgAOMg+9yZIAxTF9VG
+ WeJ1P6vcPIZAiZshD3BgLTVmyXbmv1UFmWv5fQHch7cC+pcmzPVBBqWbwIpK2PbO4SQyhkARuq9
+ Egj0diPVWW4iXuGYHmgo5RzMfy1+vCrY1Nb7BS/Zuiu4Tf7EfFBeOthstvB8snq4ORwW4WytvkE
+ 0DA3SS/r9xhZ/9ZgIbfOhzbDyvo6PHPyTxn4X28oN+8Hl226xqqyv1lUAVvYqzNOM14QGXDT7SW
+ dWKmTqXEbI529l6hv3cF4ZHW/jJr9LWuLG/J+eh3M73OswQ4V0iODx2XvUh2knus+Q1ft1Va8yB
+ GF3UqecofDL0H6pgk7LiEE/vXhMQxa5uF03+DFrm7X+oSnzNMhmxj0kbU7yW6FFt3X6Pp3r/nNV
+ in9GpCqQ5MwC8Xs59e/LFHFnOF6A==
+X-Received: by 2002:adf:e406:0:b0:45e:eae7:7f4 with SMTP id
+ ffacd0b85a97d-460302e32c0mr4350527f8f.11.1780663867223; 
+ Fri, 05 Jun 2026 05:51:07 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490c4f73f62sm5450935e9.0.2026.06.05.05.51.05
+ ffacd0b85a97d-4601f3529e0sm25880170f8f.28.2026.06.05.05.51.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:51:05 -0700 (PDT)
+ Fri, 05 Jun 2026 05:51:06 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:51:05 +0200
-Message-ID: <20260605125105.275252-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:51:06 +0200
+Message-ID: <20260605125106.275301-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529094514.178266-3-thomas.perale@mind.be>
-References: <20260529094514.178266-3-thomas.perale@mind.be>
+In-Reply-To: <20260529175156.572429-2-thomas.perale@mind.be>
+References: <20260529175156.572429-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663866; x=1781268666; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663867; x=1781268667; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=m7d4uD9c39dZG/UwE9jjYwnW147WDadA5PokIg2mfkc=;
- b=WefE3+M50RtX/I0OoZMXok3Hlv9LU8CmB5VH+WyoQuaumpfAK5HpJyqvTQOD72zEEY
- jaNGJ2jBK3RJ8LCN4D8p+GwxZQaOctytiLgKJQtCERDa3Zy04U7SWdnAucJixdn86GJd
- Cow/zS/iqJmM/Z9OTRgNAaf2al5uRn7aRbLh3YDoEz+vbaD1c7AgO95TB2dPJav99UJL
- lzqcOotnMFXgUUaL++hZW3HMdHfJJZRgI8N1pXr8qF3GhycgAB+eN+a3fTDpP4VGGq6X
- 2OrNqRiLNOZGkc7HJFgTcXbGAfYt4agGUgWvaPHwKzbBqpWK88yqvP8P3zNB4SWSuD2n
- pZVg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=HQSJ0nweAWfac2gfTwT+ob0XdJKwR4/0Va7zk2T9gJM=;
+ b=QpjBv+bNcMxnFVOsOLJP8k1IRNE2Ym9hp0XBmljEU1UikLoKzuCMMXmxBeUDxjA9bB
+ KzIQSeK1EfDpcJW2UBSDN5z4y46VLhzE0/eoTfkiC/lXncHGsst2aHAn0V6WxRRyjLVU
+ Qt5ZU55tupP26+YyfB+mglG6Oy3WDvN0Q/0cPu4e/aEQPwgsJi60a1cSQ7/GSl7AuN9e
+ 5VBMjR5d6s/wzo23RrG8hxm6qOWAuLkJ30v+t/dLJjqPdObbamlt/a/wDUuLAMpaIQUp
+ 7C+V6mC7n3YqjqA6zcOrfSG+itqbmB8Anv8lvTv8LY4yCv3fNNqxNAYVjxxsq1PGh51H
+ xWsA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WefE3+M5
-Subject: Re: [Buildroot] [PATCH] package/redis: update CPE vendor
+ header.a=rsa-sha256 header.s=google header.b=QpjBv+bN
+Subject: Re: [Buildroot] [PATCH v3 2/2]
+ support/dependencies/check-host-cmake.sh: verify version argument
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,35 +129,57 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The CPE "cpe:2.3:a:redis:redis:*:*:*:*:*:*:*:*" is valid for this
-> package.
+> When running 'make show-info-all' without a '.config', it is possible to
+> trigger this script without passing a version number.
 > 
-> See the GHSA [1] and the associated CVE [2].
+> The 'show-info-all' target is special because it forces the reading of
+> all packages without requiring a .config, so BR2_HOST_CMAKE_AT_LEAST is
+> unset and the script is called as:
+>   check-host-cmake.sh cmake cmake3
 > 
-> [1] https://github.com/redis/redis/security/advisories/GHSA-c8h9-259x-jff4
-> [2] https://nvd.nist.gov/vuln/detail/CVE-2026-25243
+> Without validation, the integer comparisons below would produce errors
+> like:
+>   check-host-cmake.sh: line 37: [: cmake: integer expected
+> 
+> It's possible to trigger this by adding the following file somewhere in
+> you path:
+> 
+> cat >/bin/cmake3 <<EOF
+> echo "cmake version 4.3.3 CMake suite maintained and supported by Kitware (kitware.com/cmake)."
+> EOF
+> make show-info-all
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/redis/redis.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  support/dependencies/check-host-cmake.sh | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index 6ce9933029..9db7226675 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
-> @@ -10,7 +10,7 @@ REDIS_LICENSE = \
->  	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
->  	MIT and BSD family licenses (Bundled components)
->  REDIS_LICENSE_FILES = LICENSE.txt
-> -REDIS_CPE_ID_VENDOR = redislabs
-> +REDIS_CPE_ID_VENDOR = redis
->  REDIS_SELINUX_MODULES = redis
+> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+> index fadeae9f6b..ab577008c4 100755
+> --- a/support/dependencies/check-host-cmake.sh
+> +++ b/support/dependencies/check-host-cmake.sh
+> @@ -6,6 +6,18 @@
+>  major_min="${1%.*}"
+>  minor_min="${1#*.}"
 >  
->  define REDIS_USERS
+> +# When running 'make show-info-all', it is possible to trigger this script
+> +# without passing a version number. The 'show-info-all' target is special
+> +# because it forces the reading of all packages without requiring a .config,
+> +# so BR2_HOST_CMAKE_AT_LEAST is unset and the script is called as:
+> +#   check-host-cmake.sh cmake cmake3
+> +# Without validation, the integer comparisons below would produce errors like:
+> +#   check-host-cmake.sh: line 37: [: cmake: integer expected
+> +# The following lines checks we have a single digit number from $1 before
+> +# continuing the script.
+> +[ "${major_min}" -eq "${major_min}" ] 2>/dev/null || exit 1
+> +[ "${minor_min}" -eq "${minor_min}" ] 2>/dev/null || exit 1
+> +
+>  shift
+>  
+>  for candidate; do
 > -- 
 > 2.54.0
 > 
