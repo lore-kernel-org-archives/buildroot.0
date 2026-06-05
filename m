@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F11BCD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 20:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E405CD6E7C
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 21:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 519A6836C3;
-	Fri,  5 Jun 2026 20:59:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E4FE836A5;
+	Fri,  5 Jun 2026 21:00:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mtA3n9ZFy7qP; Fri,  5 Jun 2026 20:59:27 +0000 (UTC)
+ id l4nww5l4gXHT; Fri,  5 Jun 2026 21:00:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 223DD83696
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DFD683689
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780693167;
-	bh=DnHXMn7W3nbzTjJxHIspYB8jJ3hGArjmEbC11vR+TLE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=g7o7NhguAFrdPU2xjeM9Ven2TSILB3SNk2iD3jtatWJzmnU/1zP50Qi64lj5UwCqr
-	 CeJhP6n0zfaGoDKAuFTKQ9qMZpk6/84vmjvcHAVMLo+MOgAbvEJ5MRLqCT46ByoRaN
-	 +hFPzDYJ9FEw86YZKMg8rt4/M+c4a6JP8wII7gn1rNegZ2w3QaPOy4T+mWq02aNPyE
-	 dcH6LNPLcmwfeErPNfMEfwNDZx0xwt8cMhIxshti7TiPnSdKEhAyJGef/ZlQHyQgI/
-	 y1fUYnj2txdDLsG0zq5g+kazGH42A+49HFklWJqHlTWHxQYEcIe/furyVimhXD+EPN
-	 wHe8DaFFjOhQw==
+	s=default; t=1780693213;
+	bh=6KF5OD0LSKwWXVcqWz8Y5sZNnhRgdzhAxvfkTnHtjxQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=gm+VrG+mTRUaGtE7OwPsXj27htX+1AYUCiHefTRx7RXbQh2r1eV0w7j3B72E2c7Rt
+	 dhCFrlRhejsldudt9ooITWAUNE0mgQifn4Zvx/o2EIf2vQlBM+0za1aLXiRDn5xC66
+	 tSjDyvvwW2cc9RIp49WKTj+CVtzNInzM552AwFB9kaEb7JACsZ2zUoAblvvyl6/T/t
+	 jD0Tovlj1M/DWTZo5vYuN3rG4lSHAMm6c/PoKb+lPkNqdZ+CYqeV3MsXnRQA0TimqH
+	 y8sYDPpSB5W+7alIhdf6epEh3yWQxHqJhIIRNKOQ+e3bDSUHxcRYmKDFLEOveNEoPD
+	 ldQlGD38k9/NA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 223DD83696;
-	Fri,  5 Jun 2026 20:59:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F2AE4DE
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 20:59:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DFD683689;
+	Fri,  5 Jun 2026 21:00:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0B4FDE
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E26574073B
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 20:59:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B269741EEA
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1VChpR1r5JB1 for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 20:59:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9D2740736
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9D2740736
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 20:59:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA55087B89; Fri,  5 Jun 2026 20:59:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 5 Jun 2026 22:57:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a627f004f71c7516f7c01688dfdd039469b13fd4
-X-Git-Newrev: 907ebab6d9d1f4233071d1db3bb1fcf3fc365344
-X-Patchwork-Hint: ignore
-Message-Id: <20260605205906.AA55087B89@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libusb: security bump to version
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id phyR9OP4Y-8v for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6861541EE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6861541EE9
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6861541EE9
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 0C67A2003D3;
+ Fri,  5 Jun 2026 23:00:04 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 05 Jun 2026 23:00:04 +0200
+MIME-Version: 1.0
+Date: Fri, 05 Jun 2026 23:00:04 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+In-Reply-To: <20260605070003.3911896-1-peter@korsgaard.com>
+References: <20260605070003.3911896-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <a433bc2036e98d719277c87cafcc333a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1780693207;
+ bh=p57BB/zTfZJjx3H3q5DSjCb0dtqTRdx3EDDLG3XDCjw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lIGysC4vs2ETm/ilXsQ+FXGVzkJ7BiwuSbxf44Wq9nRz+j5SUCs+dDBP2/suD8EUG
+ 9r46d5I74lGUp5aGm9QDeBQVOEPkRmGNr3S/2TMrfde5lyWtY1GHb0PS9ScJ57rw5K
+ uVV3lQc7fTTSR+S4RHd+7q6G1OnU7RwF2KHnFuaEq5XGtrCAJN1fZ/HuqNs9s9etks
+ jO3+GjSoU2eOjRwXjz90mCdST9vE/Cz5Qr233Td/5aUHkgLrlynU2Ej+k1+Hq56nMW
+ iDkSkf4Yy+XbeBiexj0MN++1wzhLS2xd5qobiNNoIHuWYOo7xmh9BOwdO+gWtgL9yu
+ vqP0TNUtKHulA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lIGysC4v
+Subject: Re: [Buildroot] [PATCH] package/libusb: security bump to version
  1.0.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,75 +96,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/907ebab6d9d1f4233071d1db3bb1fcf3fc365344
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 05/06/2026 09:00, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+> CVE-2026-23679: libusb before version 1.0.30 contains a NULL pointer
+> dereference vulnerability that allows attackers to crash applications 
+> by
+> supplying a malformed USB configuration descriptor where an interface 
+> claims
+> bNumEndpoints greater than zero but is followed by a class-specific
+> descriptor whose bLength exceeds the remaining buffer size, causing
+> parse_interface() to return early without allocating the endpoint 
+> array.
+> Attackers can exploit this flaw through 
+> libusb_get_active_config_descriptor
+> or libusb_get_config_descriptor by providing crafted descriptors via
+> virtualized USB passthrough, file-based descriptor parsing, or network
+> sources, causing any application iterating over endpoints to 
+> dereference a
+> NULL endpoint pointer and crash.
+> 
+> https://nvd.nist.gov/vuln/detail/CVE-2026-23679
+> 
+> CVE-2026-47104: libusb before version 1.0.30 contains a one-byte
+> out-of-bounds read vulnerability in parse_iad_array() in descriptor.c 
+> that
+> allows attackers to trigger a denial of service by supplying a 
+> malformed USB
+> descriptor whose bLength equals size minus one, causing the bounds 
+> check to
+> use the original buffer size instead of the remaining size.  Attackers 
+> in
+> virtualized environments with USB passthrough can supply crafted 
+> descriptors
+> through libusb_get_active_interface_association_descriptors or
+> libusb_get_interface_association_descriptors to read one byte past the 
+> end
+> of the malloc allocation, resulting in a denial of service.
+> 
+> https://nvd.nist.gov/vuln/detail/CVE-2026-47104
+> 
+> For more details, see the announcement:
+> https://sourceforge.net/p/libusb/mailman/message/59335553/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Fixes the following security issues:
-
-CVE-2026-23679: libusb before version 1.0.30 contains a NULL pointer
-dereference vulnerability that allows attackers to crash applications by
-supplying a malformed USB configuration descriptor where an interface claims
-bNumEndpoints greater than zero but is followed by a class-specific
-descriptor whose bLength exceeds the remaining buffer size, causing
-parse_interface() to return early without allocating the endpoint array.
-Attackers can exploit this flaw through libusb_get_active_config_descriptor
-or libusb_get_config_descriptor by providing crafted descriptors via
-virtualized USB passthrough, file-based descriptor parsing, or network
-sources, causing any application iterating over endpoints to dereference a
-NULL endpoint pointer and crash.
-
-https://nvd.nist.gov/vuln/detail/CVE-2026-23679
-
-CVE-2026-47104: libusb before version 1.0.30 contains a one-byte
-out-of-bounds read vulnerability in parse_iad_array() in descriptor.c that
-allows attackers to trigger a denial of service by supplying a malformed USB
-descriptor whose bLength equals size minus one, causing the bounds check to
-use the original buffer size instead of the remaining size.  Attackers in
-virtualized environments with USB passthrough can supply crafted descriptors
-through libusb_get_active_interface_association_descriptors or
-libusb_get_interface_association_descriptors to read one byte past the end
-of the malloc allocation, resulting in a denial of service.
-
-https://nvd.nist.gov/vuln/detail/CVE-2026-47104
-
-For more details, see the announcement:
-https://sourceforge.net/p/libusb/mailman/message/59335553/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libusb/libusb.hash | 2 +-
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 4c76609930..7b4b92e6e9 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85  libusb-1.0.29.tar.bz2
-+sha256  fea36f34f9156400209595e300840767ab1a385ede1dc7ee893015aea9c6dbaf  libusb-1.0.30.tar.bz2
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 95ce8b17df..1352569f7b 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).29
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).30
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
