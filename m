@@ -1,113 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CEFDCD6E7D
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B717CCD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22C1B406D7;
-	Fri,  5 Jun 2026 12:51:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVfEFbSbyQqP; Fri,  5 Jun 2026 12:51:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13AE140543
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663862;
-	bh=M8OUnATVUJJG64Rl6YeAkQptyBVh3/KxS5uP6WJSrSk=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BuSDDg/q/5A95vS2wtKLIT1BMHpPqLynZqhoYpYkvvq89lv4RmUYIbC9uHNEeh7Ff
-	 FVM8jycCzoRWKOXGkswybBwKEtHCttsZGiSqzWMm06fgdUVxzNlgDTfunCQw3uInBh
-	 karRlkIfRMtDceKWbrIiaxfCzsO1SOFcuYfVCY0BwR+cOwvvl+1rv60yr3i0yE5W/D
-	 RGSh18UHFe3riArCkjiOuLhsyjW1v8VEzvcIKV1tHztFjwZQt7cFsnGY805IAwCvHN
-	 6GsG6ksBBpcG/jTaK1wmaVmWJ58zqZGU5KuHW1aERIQVBQcFSRY7I9uWyIWafG9/TX
-	 iiVeBCr/88DTQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13AE140543;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91C1780E1A;
 	Fri,  5 Jun 2026 12:51:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 673B4F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5848280C87
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tMvFtnpyIIwl for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F68C80B52
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F68C80B52
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F68C80B52
+ id j1BytsHlPbLj; Fri,  5 Jun 2026 12:51:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7DB80E0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663861;
+	bh=2wTq/qNrGtafN+Vpojp74tiZUpjzrdcDNa1w5ngSDb4=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=M9YZbs5WaTgPIBaLiIsLYwaGDsqf79Cv4AbbO+gemiKRYnpL17IgF8QINKmMqQAu6
+	 KOPYkNnKjgJVKxmnSuYptkzAwSw0OogGFzr9lDMtkV1+9hz7Y3ECeiF/U3eThmgGAq
+	 tH5uB7QyOiryxndHzINS8AQ7/jgo1F/YpeFXa/J2fQ1mHKS1zk6syp9O3XgMGmi2DR
+	 27HvAoSnOdk5h5+PEI+n2NK4meYFNMuyjzQC92oTAgmlxhsu+3x3j6LdYyurby2N3Y
+	 OL/dAT4+eWyZN2TLFYmUO28Z9c1CO4pbZHRnY/yaLfp8Y92i4p1DzDfR/OU4shNu2P
+	 nrLMhn9FqeWtw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA7DB80E0B;
+	Fri,  5 Jun 2026 12:51:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32494388
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:57 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-490b09e4cccso14175485e9.0
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 192D0405BB
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sLEYIrdji1tN for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0AF224014B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AF224014B
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0AF224014B
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:55 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-490ac10e337so15537715e9.3
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663855; x=1781268655;
+ d=1e100.net; s=20251104; t=1780663854; x=1781268654;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=jTNMDXXhYxF9cIWtkiYjx5Qm4VImdpVdClAeFiw6ywI=;
- b=s6hplmqns2nwhlYI6s3ZueNdOpAnAMS4ui0rqyP0F8KlkAdxiGXTNnJJWsrrSPL/1R
- qqtBnQXDsZrJrE7Kw5c6C+yX4csUd4dSMW/VVAusPnEVpCpEgGayjAU8IszS89QkAiVc
- ZoRHNhrlOkJTT0nIvm5JiKDKyfbfZTwzBloarsdo3nUshugMUyTBvNaH3tdrEKilJGNh
- uzWXdO8+QQvoKoUAWtJMJHV5G9s11mWtjzrkJhKL9EvJZdDpztVNoZ5kyYG2zh3iPcNa
- KrUUnP39URkcgSn2myvERVB4iIyv6ffwTSU2GrkFSqM61n9cCFqeZ090Hgghyd9iQKdC
- xQfA==
-X-Gm-Message-State: AOJu0Yz+O5x+mdSRV2/nPZht5BtsMY3rVjSmO1zsDe94PVyiwpnvdWpu
- tAzcXjIZRQKXwhbLmngzziuuZTI5WvAA4YUqiZ+hYjZKDdaOKZIhVoCFs26q4keqUAY=
-X-Gm-Gg: Acq92OEq1S65TfAHN3KwS4G65vKBEPs7gtVTUFvOzjXxySEg0FM5gla6E18hCTrGub+
- 1jo5T63DvMKoFnM6rIw4HEeF4BNL0O78n1gQk3oT/fa+ZfwyOqdaPFjtLQAr88fvRsKM6yBzaLx
- /VeJu/ptqxTiRqG9EFvzCfwdEzLPBAVmkCmUCJx3g3PplqodcmwKz4IuvQttw9JGm03ejnW4rov
- V2C/MfvzhlA4xn2RtdG5EI2/Ur9cAeaaaKz7vFtfXJPvl/abzSWoHj1p+6rB8PEXFUW1hO6Hqiy
- sO94W2iGKpO2nlXBhMExlFXl7Z9lNDQcxFSxOApEh0ZE2MVqqcUblUR5RF9yZCaAon25xLCqh/f
- lKr1ei2xOycdmu2owvMZvaFAiENJmlLDEmZHTHzD+0YPKjQvQdpmdFC3HG4s4soFRwS2r4BwXY1
- I8Dt5mv+kCOK3nfx9j9rD3UqedGoWQQ9iLCSCj
-X-Received: by 2002:a05:600c:8208:b0:490:bb37:9d49 with SMTP id
- 5b1f17b1804b1-490c25b136amr58507465e9.11.1780663855218; 
- Fri, 05 Jun 2026 05:50:55 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f35fd33sm27508428f8f.35.2026.06.05.05.50.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ bh=aPcuJunTO6AE/HWAykdER93tw2kbZgLn7+a3imlVcCM=;
+ b=e3uQIVBeaufNQnmzWLVyY46oAwM1WP/lwnKQAcIMQ1rNPC8Grg1/DfOxEHG34zYDmZ
+ Vs4NRU7ePR6gp5sb1wwYHJ8Y+ZPyzzbO4KrNRnm3O1laS77C4M3IIHVlsO0iiySAYwcH
+ z6qoIRbXZxmK92zYPa7ghElYC+SQgEf10JGImlu4vTSvv3l2nsh32rKjKcDLsU8FGv+K
+ lw3NJPzMkYx4zHUqmlOQLkpD+nH3k3ADsTzbhVdDXscZj2Dcb9hnjNqNDrostX5sjxff
+ AWfjw6zm1L1dtZyDJ4bKuyUXqqG4dN4b2lERWNIcyB6f44hWMS1ppj+t5X8daS1Fr/n4
+ BlFw==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ9A8z6e3nHLaMWCtGYeJBNOnMJ5O2dontzxCgXfmyIcd9fDRnIO53Hl4I/KkYTPi3L2yR2igdD500c=@buildroot.org
+X-Gm-Message-State: AOJu0YxKf8zHKwVnY0PjWfEg6pW00b+mEThRL/1UmTclACjsqsYZmR5r
+ nE+DGkP7sMFYYwMimLb8UET+O/Lsa+GND9HN/XeeRXiuERZyWilhrEjHJoUjyNZ+MFM=
+X-Gm-Gg: Acq92OE9wlcGSfl8l6eexlEwy5/X+3Py1pET6/fU765P1IHBOwVpkzRMHyQww7dPnYL
+ GrSBiPJXP8B3qQ6Sk7tgjfOqsI++v+GQQ8o45FcdaHN1fEVGDurSXjYIbPkviwOJU+DnaBPvn+m
+ kQzypDdDOlEonSs2AQp743kL8BGaM279AgNCuKT0Oq+Fr5ToaQitCCLGTlfGIrkfsg8s8xhflZh
+ SQFn1xxizIAGPlKskrgIUtJCJ0iDBtPRH/e+H5kmiB2tDmZNlQnafX6Tyfn8LoZunI/dEnne/YV
+ 04NkoIOZDH451gK2YZB03kURbr2+zAncKbAUZOixR9LgKdoRQT8MVMNZ6MmrwBQae73pwykjg5H
+ WWsxftfPywgb514u4IbgBj8krSJ8Q2GSFuQWuk03y0n1Qhs7T1c7wfCTrDZ0c39QfazloLkSZqE
+ SgN6XEW1G/W90HAIcb8lIRBlwfqg==
+X-Received: by 2002:a05:600c:3492:b0:490:aeae:1eea with SMTP id
+ 5b1f17b1804b1-490c2597362mr55215945e9.7.1780663854109; 
  Fri, 05 Jun 2026 05:50:54 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:54 +0200
-Message-ID: <20260605125054.274733-1-thomas.perale@mind.be>
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-490bc3d663csm167468895e9.11.2026.06.05.05.50.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 05 Jun 2026 05:50:53 -0700 (PDT)
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  5 Jun 2026 14:50:53 +0200
+Message-ID: <20260605125053.274684-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529175156.572429-1-thomas.perale@mind.be>
-References: <20260529175156.572429-1-thomas.perale@mind.be>
+In-Reply-To: <20260528172452.25273-1-raphael.pavlidis@gmail.com>
+References: <20260528172452.25273-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663855; x=1781268655; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663854; x=1781268654; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jTNMDXXhYxF9cIWtkiYjx5Qm4VImdpVdClAeFiw6ywI=;
- b=JoZcet5iDkMxgtmsdE/foHhfBhIwwcb5aMJBhj7XYFgvq9jrjXmtr5KDbNjsj/nL4G
- P9M6DjhU4o6bf9f7Jb92XZwZUW0jeIpQY9Ef+2aiJn4eDcUtLkguT+Sda8LSD+7HpwEb
- 82plsSwdZrsP1NipvgGdrmNtD+kV7RaOaSy8YScW7rCXNQTF5XYA27fzznmJI0r/Ali2
- j/2DpGhvwtw27G3cuBoiJNMVIM+B2dyK/tlbbiLYEsiYljSPmbPr22tCuaz9U/zKzEdn
- cN+UVLrY067kQRwpErAYFaQhIK3JhuXgL+v08ej8fCW4JCSzzn3qmhoLKJVugnnwcIxM
- fSbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=aPcuJunTO6AE/HWAykdER93tw2kbZgLn7+a3imlVcCM=;
+ b=ZSMDLgU6mPk4J5ElfAjsM19LaUYE1eLijeZa3CvktopaujXBf/DxwZF8XczfivdEYf
+ Th8BpUN3iH6QRbuWVd4OkPA+ktyGvoDlA9Je1/s8+ZI5mPy6gng8JnkyiEci91xxxuYE
+ JCfUYbGp0ZzSwNdrgXg6LZlv9iab6itzT1YbXChymY2ebC9dpsk9F56Rjt1VOBJUAZWs
+ cvMlruwW1nyJLCmVszcjWv41fb8nm0bJWkgCpEwYyOk9BnDBJi1bd/5PE9KBQoPqBetD
+ IGbL7e6JN8kv7tK1T6d3tqmVMdFmkB3MQw1bQVDXEJEj2dwZj+31syJjwBnHC5GWEcLS
+ aQAQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JoZcet5i
-Subject: Re: [Buildroot] [PATCH v3 1/2] Makefile: add 'show-info-all'
+ header.a=rsa-sha256 header.s=google header.b=ZSMDLgU6
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/xwayland: bump to version
+ 24.1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,134 +131,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The maintainance and testing workflow sometimes requires to output a
-> list of every existing packages on Buildroot:
-> 
-> - Generating an SBOM of the whole Buildroot tree for
->   security.buildroot.org
-> - List every sources for every packages for source.buildroot.org
-> 
-> The previous solution relied on `make allyesconfig` but always ran into
-> conflicts that needed manual resolution. Also some packages would not be
-> present because they are archicture dependant.
-> 
-> To avoid having to manually modify the 'show-info' command this commit
-> adds the 'show-info-all' command. It accesses the PACKAGES_ALL variable
-> with all the packages present on Buildroot independently of the
-> archicture or any config entries.
-> 
-> It forces the `BR2_HAVE_DOT_CONFIG` variable to be set to force the
-> reading of the packages mk files.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Changelog:
+> https://lists.x.org/archives/xorg-announce/2026-April/003697.html
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
+>  package/x11r7/xwayland/xwayland.hash | 6 +++---
+>  package/x11r7/xwayland/xwayland.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> v1 --> v2: removed TARGETS_ROOTFS and recursive dependencies. It
->   introduced "host-" package with no name that introduced an empty
->   entry when generating an sbom when `make show-info-all` is ran without
->   defconfig.
->   Checked the diff between the previous version and the new one and
->   except the empty entry nothing is changed by just iterating over
->   PACKAGES_ALL.
-> 
-> v2 --> v3: 
->  - add documentation to make help and manual
->  - fix the error message from check-host-cmake.sh when cmake3 is present
->    in the path
-> ---
->  Makefile                      | 24 ++++++++++++++++++++++--
->  docs/manual/common-usage.adoc | 12 ++++++++++++
->  2 files changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index cb52a1d668..b4ce363f5b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -126,7 +126,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
->  	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
->  	print-version olddefconfig distclean manual manual-% check-package \
-> -	check-package-external
-> +	check-package-external show-info-all
+> diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+> index ba84d20b9f..6204400852 100644
+> --- a/package/x11r7/xwayland/xwayland.hash
+> +++ b/package/x11r7/xwayland/xwayland.hash
+> @@ -1,6 +1,6 @@
+> -# From https://lists.x.org/archives/xorg-announce/2026-April/003679.html
+> -sha256  459762be8ea046c94386687d77a87add6073868bee14f02913eafebb945b7aa0  xwayland-24.1.10.tar.xz
+> -sha512  bceba1db7f4d7ac92d2b2a3c8f6f7ab0cc093f396fe89406f8dba25e32ffc3edfa552df246cbfb3b0708c1d28b3e179694d11870b063d5b8f9ab2db9fb861a8f  xwayland-24.1.10.tar.xz
+> +# From https://lists.x.org/archives/xorg-announce/2026-April/003697.html
+> +sha256  27115a1a8819078409bf6fecfeb7724e8137bd36426de7005a5b3aae0a2138ff  xwayland-24.1.11.tar.xz
+> +sha512  586d7e60c8bf0d92cec66451284c6c43b960010f14a1e204b5de722c610dc067481fd6ece0ffae615ca53ca2d0262e2a3dbb916d04811b8d57c1085bc363f5e9  xwayland-24.1.11.tar.xz
 >  
->  # Some global targets do not trigger a build, but are used to collect
->  # metadata, or do various checks. When such targets are triggered,
-> @@ -142,7 +142,7 @@ nobuild_targets := source %-source \
->  	clean distclean help show-targets graph-depends \
->  	%-graph-depends %-show-depends %-show-version \
->  	graph-build graph-size list-defconfigs \
-> -	savedefconfig update-defconfig printvars show-vars
-> +	savedefconfig update-defconfig printvars show-vars show-info-all
->  ifeq ($(MAKECMDGOALS),)
->  BR_BUILDING = y
->  else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-> @@ -236,6 +236,13 @@ BR2_CONFIG = $(CONFIG_DIR)/.config
->  ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
->  -include $(BR2_CONFIG)
->  endif
-> +# show-info-all needs to access the PACKAGES_ALL variable. This variable
-> +# contains a reference to every package present in Buildroot.
-> +# Since the 'show-info-all' command might be used without actually having a
-> +# dotconfig this condition is forced to be set true.
-> +ifeq ($(MAKECMDGOALS),show-info-all)
-> +BR2_HAVE_DOT_CONFIG = y
-> +endif
+>  # Locally calculated
+>  sha256  c9f90a6669109aad6c9a7c3b46cc2c574221a73b792afa419336816b49da5c11  COPYING
+> diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+> index 5902f85d4f..0643cc5c4c 100644
+> --- a/package/x11r7/xwayland/xwayland.mk
+> +++ b/package/x11r7/xwayland/xwayland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),)
->  # Disable top-level parallel build if per-package directories is not
-> @@ -948,6 +955,17 @@ show-info:
->  		) \
->  	)
->  
-> +.PHONY: show-info-all
-> +show-info-all:
-> +	@:
-> +	$(info $(call clean-json, \
-> +			{ $(foreach p, \
-> +				$(sort $(PACKAGES_ALL)), \
-> +				$(call json-info,$(call UPPERCASE,$(p)))$(comma) \
-> +			) } \
-> +		) \
-> +	)
-> +
->  .PHONY: pkg-stats
->  pkg-stats:
->  	@cd "$(CONFIG_DIR)" ; \
-> @@ -1213,6 +1231,8 @@ help:
->  	@echo '  external-deps          - list external packages used'
->  	@echo '  legal-info             - generate info about license compliance'
->  	@echo '  show-info              - generate info about packages, as a JSON blurb'
-> +	@echo '  show-info-all          - generate info about all packages in Buildroot,'
-> +	@echo '                           regardless of configuration or target architecture'
->  	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
->  	@echo '  printvars              - dump internal variables selected with VARS=...'
->  	@echo '  show-vars              - dump all internal variables as a JSON blurb; use VARS=...'
-> diff --git a/docs/manual/common-usage.adoc b/docs/manual/common-usage.adoc
-> index 7437a7c3c0..631c2f7788 100644
-> --- a/docs/manual/common-usage.adoc
-> +++ b/docs/manual/common-usage.adoc
-> @@ -170,6 +170,18 @@ by using the +show-info+ make target:
->  make show-info
->  ----
->  
-> +Buildroot can also produce information in the +show-info+ format about all
-> +packages regardless of the configuration or architecture by using
-> ++show-info-all+.
-> +This is used for maintenance tasks that require information about every
-> +package in the tree, such as generating a full-tree SBOM for
-> +https://security.buildroot.org[].
-> +It does not require a +.config+ file:
-> +
-> +----
-> +make show-info-all
-> +----
-> +
->  Buildroot can also produce details about packages as HTML and JSON
->  output using the +pkg-stats+ make target. Amongst other things, these
->  details include whether known CVEs (security vulnerabilities) affect
+> -XWAYLAND_VERSION = 24.1.10
+> +XWAYLAND_VERSION = 24.1.11
+>  XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+>  XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+>  XWAYLAND_LICENSE = MIT
 > -- 
 > 2.54.0
 > 
