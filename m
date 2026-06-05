@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AEE4CD6E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5366CD6E74
 	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5644282C5E;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79DBE61133;
 	Fri,  5 Jun 2026 12:50:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYVKyxiBW94F; Fri,  5 Jun 2026 12:50:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90DD182C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663842;
-	bh=0dhIKDsnHk21M8P9vHS/yS7tZwCvVBe9f3zkKvbgBJk=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=om04S6xSeixCA7Z0On5GG9XqwNBzz5NEYMtFI9H7DcC5a6YwJ2d51DAHeVDR7HaUn
-	 H47vFfsamd+o/UEwn4GLxQcBsSZ2M7QuLpLhwJZxaJKGGDt/JAdZxaJzYZuxH9ZA/9
-	 ACxWdGPUZldttzA4J4MVrIGWNzN50SyWvZS2W5vV6Z+749ObYgzbEa/iUcTxm87mQL
-	 1ZHwkhq06bd/SvOa8k14XWCWMh1alT8NokhDIpOPvNST+8mCpFJN33NsK7k8y5yoUi
-	 gzdXmxewHrwwI1Qg0NM8DQnSzxXhOJJcS7+1eTt9I41wKxIMzD/zTU2y+Q08U1hVwr
-	 QXTrLXRJrtwNA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90DD182C61;
-	Fri,  5 Jun 2026 12:50:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63CDF388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FE1761114
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3oT5EdkTSuI for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:36 +0000 (UTC)
+ id HCdk5zq-yiE2; Fri,  5 Jun 2026 12:50:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8495D61119
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663841;
+	bh=sf57/+eO+b6JUGNrefA92vScVMSaudLRkQC4vjykhuA=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=epasZBI4IQxORafFGMgfsGGOZPDT6RqpTwi3DYvQTreM4xk2XhLzJyc3pG4QC1Omy
+	 U3iZn0kR74oNd4MguV6hXWDG3G2OYPDhYpjJqjqNo0euRZ9Tg/zLQoyjU2maLo3tPT
+	 QlsfCE59k8FQZKAY9T/AXozWgFRlebeiyLAnX7HXSbmfzBY0mJ5hn+y+aWG0yfogHr
+	 OkOUMZMoh/nkxt3taU66o/p3qLudUKXKwPk01RA2twE/EhpsZrTtI1KwT0kudDe3CE
+	 me4wP02/3NJNpXH20fAwMXSLNdWDsT4/Ymy8LEDR91QwcCGRoYiZxCM+cit0cvHU3G
+	 7347uW82Bhcrg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8495D61119;
+	Fri,  5 Jun 2026 12:50:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0854EF4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDF5F4037F
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m3VfDt4ON9U6 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A092610CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A092610CA
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A092610CA
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:36 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-490b915ded5so15322665e9.3
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C71AD4037E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C71AD4037E
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C71AD4037E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-49068493267so14188635e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663834; x=1781268634;
+ d=1e100.net; s=20251104; t=1780663832; x=1781268632;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=8/+1T3CkRo4TObSqvXn/XeSCwhNc02qbGjPBSatBE0k=;
- b=B7QjwogxBeoviJfTa4ODLAA38tT5u5f6wL6tVOI+Ra+XWsXMpofM5LKOx/8INuheqB
- XeqFtRdAcPDUNXYjbfvl2RabPqwTVJDWJI9mB2RqmUDj2TLGaLLjfj5ZmlXesh7Q4eAq
- PagTl5DR0bp5JBEH99MtRK488irmNEiOG2ibVuDZF1Dq+TQsIBnGxumS9HjWnMBYAmYr
- wYFEX8lLsQHt6Hiz7I3sqDdlp/xb2FwUMXylwwf/0noECy2oz9jXeqRWDKIPN/GcMwDg
- ZCMpq6qEcvbUl9YaddP0xffbf+763oscFKkur3dqH7f9+7lgQ3mpBpOiCB2jcArZ5UAL
- FfWg==
+ bh=3uLw7gmtgcqarozzpDPNpdXFNcJUxMktbhY+DIo2t0g=;
+ b=iJzlM8UC1e7EHheaDKGUIIrSvG9K879O/6LTOAXMM5ouIlFCWjPjY8f1Bs/y2SRQ13
+ QaF389z754q0ULWAPuAoLnlJIuSYhHrew3FKtZFzFr78lLt6pYqzFBIvyZLAXvExGi/F
+ z3wT2tPkldg4IxZ+mGr6U4/l43YoXT+CHQ+EZoTjWYt4CArbK05hcoL2nMHSufBZ4hGI
+ iT85k2E3TcBb2RYSMnIgPBw3mFaqB9yzmcyURd3Fef24Nzffotq0DlwXpJK9+E1BQMqL
+ nh81/raCgBMncQqVHUto9qzazejOqDiPBdwr4ZqjMU5NOh7ALBAo98nmMQJDeHKn2UvE
+ nhsw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+cOksQ9z0HvTpnZukplvmBh7af+vqr2JQxv3x+EpkkakHNYi6hu8W+fAJm+jCxhrpdRP/WYsbqSF0=@buildroot.org
-X-Gm-Message-State: AOJu0Yx4L/oF7Pchxv++GWfKCqLb/1wiJq8SUNSNSKY0gvVJBTS4aFpU
- kVgJaQlbBvpcWn1iUOViNVY3B0iYDlvqYoYESsPJonvhCWI1HX3SRKUKR/aBcfrrlnZzhUlCwqc
- uNKFv
-X-Gm-Gg: Acq92OGVxRMueZ6i86mwsVYc4kysVOKwymf/Kvz+GX4NoMVTEA/e/7mwFGkVx7VnMGV
- 5dGgP0oJIKEU9unKW21duS/9w6nYfoeeVfjvaRp0adtuH8Paht68pW4hloVyivSfDcu5dXcwt0y
- FWP/hyzOh8UD4/MG0P+XvvCyOsM9YlmKQ85n73pM9IUkOPbfRmuXXzRIlkZAjsdECOgtZhoGc73
- izBOTHWTfN1dndYvRFRpEVLL8+zH8MmJQlh32Ek2MVQZHiArYncPbsYBb3CzYadOlK0cHSFbvIL
- m5q+f9+ylvGv3QMf66yGuuJDFozBBzJJiU8dlGlv/PqaZGEhfyhdnuyoUDe7tiNfFzlYu9DfnJF
- Qv/XD+TwCdff5FvipQb/LJoM6leCXyeis1kprvfX2DZfLykv6+WcWU3TaTmSFLU+zmY97eQoZqb
- cLJ/XySz5IN6AQHV0FPHiEW4yiUM5+69y0QZMZ
-X-Received: by 2002:a05:600c:83c8:b0:490:40f1:5314 with SMTP id
- 5b1f17b1804b1-490c25b2b7bmr53049165e9.1.1780663834275; 
- Fri, 05 Jun 2026 05:50:34 -0700 (PDT)
+ AFNElJ/PPx9SuslD9/jwtA54L2XcjU3Bre6BQ3mHKJ6gpKMK0aL3T/IwtO1atdpzdJDsNOz0ol8sfWbf3yE=@buildroot.org
+X-Gm-Message-State: AOJu0YyFu6mlIrcojdOo8cgo6xIgTJLRAUoC+MJuf3OfLX+WfQiXaq03
+ jPDrMqC4V9ID8utfXr8TAe9vauLWzIA7RVr+wBp8ofpuw0meBniIqMw6/tnpESDJT+g=
+X-Gm-Gg: Acq92OGDnU0b1bm2cDg8l9+Cr/+soOChA1VAGL8foJ2TMtRIUVoHils6yzDLDrqB/ta
+ FfCUygFXq+kQhgcvcVdue/hdXVVjFmrcsjT07GyV1R17zcUDajQAXBAFhv3Xrd2pzKdeGPxLpp3
+ 1x/yE5qgcySFYFxQfD8XbVA0F0xwJyZrDvWW0ZwM47TgdK7eG6AiTe2gn23RfyVEypUN56J6LXy
+ fUMe5xwVyJOicOufAlrLsNDu71BN/fnGg1ucKqM3UYN2g014oZxJFX1gPaAcSNf7KtvRGlTZWEn
+ iYBnomItUTk5ncG6NBNYAl8WEOk/2YFIQSye9dsH2oWv4xvVQBJZXNHz70vCqrfkn89Fft/z8RD
+ VGSo+0lxIb2CS3XZDcP3kY4csKJ9XYrIUus5YVyu5ymU751uFTwSTHInqzL+2IYmlLFdkUYTOfG
+ iAAlSBmf+sRxpaJQK3KiDQmTVkVw==
+X-Received: by 2002:a05:600c:4e09:b0:490:be14:bfda with SMTP id
+ 5b1f17b1804b1-490c259a003mr59499305e9.6.1780663831876; 
+ Fri, 05 Jun 2026 05:50:31 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc3a87dasm141896345e9.7.2026.06.05.05.50.33
+ 5b1f17b1804b1-490c4f73f62sm5436745e9.0.2026.06.05.05.50.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:50:34 -0700 (PDT)
-To: Thomas Devoogdt <thomas@devoogdt.com>
+ Fri, 05 Jun 2026 05:50:31 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:32 +0200
-Message-ID: <20260605125033.273756-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:50:30 +0200
+Message-ID: <20260605125030.273700-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260507123534.318763-1-thomas@devoogdt.com>
-References: <20260507123534.318763-1-thomas@devoogdt.com>
+In-Reply-To: <20260506163136.1330722-8-bernd@kuhls.net>
+References: <20260506163136.1330722-8-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663834; x=1781268634; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663832; x=1781268632; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8/+1T3CkRo4TObSqvXn/XeSCwhNc02qbGjPBSatBE0k=;
- b=P5Rvgg4sspbvqFvAC7xbPNJdD1k+pURqNQaqAIUp6zuUGxh/Vw4nbENmqNkrNzOLtd
- Alx+rPqP/NJ4NIV/AAQWy8piyTivIbdOFqBdp/cZiNN3S5QZjgjidGANTGuAtopioTE3
- M6JGZqlxZYn6YUHWalTX4Gw+bTqO/3MMY/8he8SEzgcEuV4pjNgXiKm/ROanxkL9VueM
- FDwGMwBlGDQpXV4IOSZ/BVl1sH452UKoNZOL6D5MmNuHGhWIr31WPMYd3V/vdgsQANoA
- mWqphCYz3IyqRX4ATuEbMqKnrzqqFJZMyV1SbTiEOHH6XuLkGvOD41nSPUnm5SFPgIGL
- P6CQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=3uLw7gmtgcqarozzpDPNpdXFNcJUxMktbhY+DIo2t0g=;
+ b=PrHBB267cbCslGrsTqu+MUCt+HBjjVjiRtoCxlam5AZEkRcVgaiGqBg6MRr5tbfcXZ
+ d560qIkA3JZWa1B2Sq6g6Cg73Ob4Rmx9doCWamXe6U1C3CW+7ur3bwbVFggMtg1u5E6P
+ MdqF1PiYqqDhJ5FWYpClnsOtoRMHQSYoTYRrmTqh/NCItGLZPT/uyrwtgU78YGFeTnTH
+ ShXj1BBLmsOrLEqpdPk1eKaDoln7TpxgScbEB2/TjTHxsP4FNtvwUcq0TG4a3PDwfUQF
+ a74mG7paAEk3YqEmHt/gzRFKJxbE/t9ZVUfHe3B8zLJh4oO0uL0yJ7wXEHSCvSPzveY0
+ ERKQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=P5Rvgg4s
-Subject: Re: [Buildroot] [PATCH v1] support/kconfig: fix compiler warnings
+ header.a=rsa-sha256 header.s=google header.b=PrHBB267
+Subject: Re: [Buildroot] [PATCH v5 07/22] package/cups-filters: add upstream
+ patch to fix CVE-2025-64524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,42 +125,133 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gQ29tbWl0IDMyNDYxMmQ2OGUwOWQwZGI0NGM1MWM0NTFiYzZiODc0NjZm
-N2Y4NzQgZml4ZWQgc2V2ZXJhbCBjb21waWxlciB3YXJuaW5ncywKPiBidXQgYWN0dWFsbHkgaW50
-cm9kdWNlZCBhIG5ldyBvbmUgYnkgaW5jcmVhc2luZyB0aGUgYnVmZmVyIHNpemUgaW4gY29uZmRh
-dGEuYyB0aGF0IGdldHMgcGFzc2VkCj4gYWxvbmcgdG8gZmlsZV93cml0ZV9kZXAgaW4gdXRpbC5j
-LCBiZWNhdXNlIGJ1ZjIncyBzaXplIHdhc24ndCBpbmNyZWFzZWQgYWxvbmcgd2l0aCBpdC4KPiAK
-PiAuL3V0aWwuYzogSW4gZnVuY3Rpb24g4oCYZmlsZV93cml0ZV9kZXDigJk6Cj4gLi91dGlsLmM6
-ODY6MjY6IHdhcm5pbmc6IOKAmCVz4oCZIGRpcmVjdGl2ZSB3cml0aW5nIDEwIG9yIG1vcmUgYnl0
-ZXMgaW50byBhIHJlZ2lvbiBvZiBzaXplIGJldHdlZW4gMSBhbmQgNDA5NyBbLVdmb3JtYXQtb3Zl
-cmZsb3c9XQo+ICAgIDg2IHwgICAgICAgICBzcHJpbnRmKGJ1ZjIsICIlcyVzIiwgZGlyLCBuYW1l
-KTsKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICBefgo+IC4vdXRpbC5jOjg2Ojk6
-IG5vdGU6IOKAmHNwcmludGbigJkgb3V0cHV0IDExIG9yIG1vcmUgYnl0ZXMgKGFzc3VtaW5nIDQx
-MDcpIGludG8gYSBkZXN0aW5hdGlvbiBvZiBzaXplIDQwOTcKPiAgICA4NiB8ICAgICAgICAgc3By
-aW50ZihidWYyLCAiJXMlcyIsIGRpciwgbmFtZSk7Cj4gICAgICAgfCAgICAgICAgIF5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gCj4gRml4IHRoaXMgYnkgaW5jcmVhc2luZyB0aGUg
-c2l6ZSBvZiBidWYyIHRvIG1hdGNoIHRoZSBwYXNzZWQgYnVmZmVyIHNpemUuCj4gCj4gU2lnbmVk
-LW9mZi1ieTogRGV2cmVlc2UgSm9yaWsgPGpvcmlrLmRldnJlZXNlQGJhcmNvLmNvbT4KPiBTaWdu
-ZWQtb2ZmLWJ5OiBUaG9tYXMgRGV2b29nZHQgPHRob21hcy5kZXZvb2dkdEBiYXJjby5jb20+CgpB
-cHBsaWVkIHRvIDIwMjUuMDIueCAmIDIwMjYuMDIueC4gVGhhbmtzCgo+IC0tLQo+ICBzdXBwb3J0
-L2tjb25maWcvdXRpbC5jIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
-IDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC9rY29uZmlnL3V0aWwuYyBi
-L3N1cHBvcnQva2NvbmZpZy91dGlsLmMKPiBpbmRleCA4NjY1ZjViYjg5Zi4uYzJlNzk3OWFjMTUg
-MTAwNjQ0Cj4gLS0tIGEvc3VwcG9ydC9rY29uZmlnL3V0aWwuYwo+ICsrKyBiL3N1cHBvcnQva2Nv
-bmZpZy91dGlsLmMKPiBAQCAtMzUsNyArMzUsNyBAQCBzdHJ1Y3QgZmlsZSAqZmlsZV9sb29rdXAo
-Y29uc3QgY2hhciAqbmFtZSkKPiAgaW50IGZpbGVfd3JpdGVfZGVwKGNvbnN0IGNoYXIgKm5hbWUp
-Cj4gIHsKPiAgCWNoYXIgKnN0cjsKPiAtCWNoYXIgYnVmW1BBVEhfTUFYKzIwXSwgYnVmMltQQVRI
-X01BWCsxXSwgZGlyW1BBVEhfTUFYKzFdOwo+ICsJY2hhciBidWZbUEFUSF9NQVgrMjBdLCBidWYy
-W1BBVEhfTUFYKzIwXSwgZGlyW1BBVEhfTUFYKzFdOwo+ICAJc3RydWN0IHN5bWJvbCAqc3ltLCAq
-ZW52X3N5bTsKPiAgCXN0cnVjdCBleHByICplOwo+ICAJc3RydWN0IGZpbGUgKmZpbGU7Cj4gLS0g
-Cj4gMi40My4wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Applied to 2025.02.x & 2026.02.x. Thanks
+
+> ---
+>  ...ix-infinite-loop-caused-by-crafted-f.patch | 83 +++++++++++++++++++
+>  package/cups-filters/cups-filters.mk          |  3 +
+>  2 files changed, 86 insertions(+)
+>  create mode 100644 package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+> 
+> diff --git a/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+> new file mode 100644
+> index 0000000000..e9900e5672
+> --- /dev/null
+> +++ b/package/cups-filters/0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+> @@ -0,0 +1,83 @@
+> +From b03866fd2e251a6d822a5e8c807c8d47b4d2dce2 Mon Sep 17 00:00:00 2001
+> +From: Zdenek Dohnal <zdohnal@redhat.com>
+> +Date: Wed, 12 Nov 2025 16:02:20 +0100
+> +Subject: [PATCH] rastertopclx.c: Fix infinite loop caused by crafted file
+> +
+> +Infinite loop happened because of crafted input raster file, which led
+> +into heap buffer overflow of `CompressBuf` array.
+> +
+> +Based on comments there should be always some `count` when compressing
+> +the data, and processing of crafted file ended with offset and count
+> +being 0.
+> +
+> +Fixes CVE-2025-64524
+> +
+> +Upstream: https://github.com/OpenPrinting/cups-filters/commit/b03866fd2e251a6d822a5e8c807c8d47b4d2dce2
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + filter/rastertopclx.c | 25 +++++++++++++++++++++++--
+> + 1 file changed, 23 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/filter/rastertopclx.c b/filter/rastertopclx.c
+> +index 3e7c129da..1015308da 100644
+> +--- a/filter/rastertopclx.c
+> ++++ b/filter/rastertopclx.c
+> +@@ -818,10 +818,10 @@ StartPage(ppd_file_t         *ppd,	/* I - PPD file */
+> +   }
+> + 
+> +   if (header->cupsCompression)
+> +-    CompBuffer = malloc(DotBufferSize * 4);
+> ++    CompBuffer = calloc(DotBufferSize * 4, sizeof(unsigned char));
+> + 
+> +   if (header->cupsCompression >= 3)
+> +-    SeedBuffer = malloc(DotBufferSize);
+> ++    SeedBuffer = calloc(DotBufferSize, sizeof(unsigned char));
+> + 
+> +   SeedInvalid = 1;
+> + 
+> +@@ -1152,6 +1152,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
+> +               seed ++;
+> +               count ++;
+> +             }
+> ++
+> ++	    //
+> ++	    // Bail out if we don't have count to compress
+> ++	    //
+> ++
+> ++	    if (count == 0)
+> ++	      break;
+> + 	  }
+> + 
+> +          /*
+> +@@ -1245,6 +1252,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
+> + 
+> +             count = line_ptr - start;
+> + 
+> ++	    //
+> ++	    // Bail out if we don't have count to compress
+> ++	    //
+> ++
+> ++	    if (count == 0)
+> ++	      break;
+> ++
+> + #if 0
+> +             fprintf(stderr, "DEBUG: offset=%d, count=%d, comp_ptr=%p(%d of %d)...\n",
+> + 	            offset, count, comp_ptr, comp_ptr - CompBuffer,
+> +@@ -1416,6 +1430,13 @@ CompressData(unsigned char *line,	/* I - Data to compress */
+> + 
+> +             count = (line_ptr - start) / 3;
+> + 
+> ++	    //
+> ++	    // Bail out if we don't have count to compress
+> ++	    //
+> ++
+> ++	    if (count == 0)
+> ++	      break;
+> ++
+> +            /*
+> +             * Place mode 10 compression data in the buffer; each sequence
+> + 	    * starts with a command byte that looks like:
+> +-- 
+> +2.47.3
+> +
+> diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+> index dcfb2e9500..6bc4610376 100644
+> --- a/package/cups-filters/cups-filters.mk
+> +++ b/package/cups-filters/cups-filters.mk
+> @@ -13,6 +13,9 @@ CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
+>  # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+>  CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
+>  
+> +# 0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+> +CUPS_FILTERS_IGNORE_CVES += CVE-2025-64524
+> +
+>  CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+>  
+>  CUPS_FILTERS_CONF_OPTS = \
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
