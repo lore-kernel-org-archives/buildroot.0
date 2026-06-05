@@ -4,114 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6B44CD6E74
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A339CD6E7C
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A261E6104D;
-	Fri,  5 Jun 2026 12:49:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D266760BB2;
+	Fri,  5 Jun 2026 12:49:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTF5AALKpOxh; Fri,  5 Jun 2026 12:49:42 +0000 (UTC)
+ id YeMQGl96NgY1; Fri,  5 Jun 2026 12:49:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B16AB60FB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E506461044
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663782;
-	bh=DJJw065mb3sa8fiJKgGmLulxvd0fjGUAncq7VxbbGus=;
+	s=default; t=1780663795;
+	bh=elUQTuc0mvn0ITwMztj5qBhb5KWX/yDD/8gB6rOcwG0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YRuXWVqURpNZX4Rv8vGCx0Q6jmoYczqaX4mONqDvHUnT+2nuAXi3Ppeh+fOyKRiQI
-	 Q5IBJ9BX4zvf/3qBiGcmxF68hxjP2S1/9z2F0/Cg13ArPLpoZ7rBm4BrNnkvz1gyBQ
-	 yK+8unlKLKsut2AyOnmZ1X8CZIfsSjAUFbcCLYRjA624qB2HEUjMl1voI5/7DKN+UU
-	 4AI7WKfbMndADuslJfHC4OeKeN1JKfADKdrDrqp2stO+LaI/BLERmpd2jWTPccAtJ7
-	 jxh88oMlMj+AlN+rGjuATSKdfibFxLMeFb8Dy3xq2laQ2zeXj0RMZt9WVmXXbuqnrj
-	 Qrnh5TU9rz47w==
+	b=BZVFK5qFrkMVBbu+hh37YJoyqNHCgallnSH3w7wETMxuEzQcPUpPYJCBUQ3HshEcP
+	 /OlapMDbxBMNRDghsTS3OUfm5eay+1EKOntTpjIvo5D9NaATsz8/16vhBYFyE5Gxpk
+	 rc3Q13ZCv2xg8WpAEC3Ag0EpiGFXQ52C3b1lytfp8OikG+FteTPkL0ooWw617AC6jb
+	 6zcbNI4eqyF8mR9S1Y65s2mZVpGOkwEXto1c4KJPEhBg3oIm87hwiYVTtVoZzxyS5M
+	 /ivqJmbAfs6PklAzdWSPM6wEe0UO5lmAaZi0X+4m6qnDBI3/ndA8nzZPDygHGBVe9M
+	 Qwg3/D+K0Td7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B16AB60FB1;
-	Fri,  5 Jun 2026 12:49:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E22549B
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E506461044;
+	Fri,  5 Jun 2026 12:49:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21998388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F41FA41EB4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0734982741
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FFWpjnldgkos for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:49:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2GcO7LgdJZvQ for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:49:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 10DC141E8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10DC141E8A
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 10DC141E8A
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:36 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-490be03d47bso15571135e9.0
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2C77282735
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C77282735
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2C77282735
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:52 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-490bb83a3f6so16003815e9.0
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663775; x=1781268575;
+ d=1e100.net; s=20251104; t=1780663790; x=1781268590;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=g6LbaxuyKHtRDa4+HvK89fD8uTLCnycgtD1v2845xqc=;
- b=tRQjwfk72cLAojx/5EqENDDdafkF3oUwMxbNAmL3TH4LBSNLoF3Uqi/CQjp50/A6mH
- OyK5MPdVkKD9skihE/E6jdE9fZR7WRnLdKtiUbT+94TPDBBgDU6bJWZVpWJKJYfkz6k9
- Cmoh7H0+edstOPBYs/lFv8r2d2qEAIOXSOHBzEujMQt99Lfq+55yjnBep5xmDCSwz1qU
- cIns5Ta2WfUgPscrAxbHoOl1SrjRcNeFlUhaNhMAurNKnJos5FN3/GVM8EV+YTpzZXNB
- J/XLf+YjsCJO1mWvkSE3gXda/TpAPL1bNGgzsnu1pS0n5f6C+Di8z20WteaaaEVbl2Ua
- up1Q==
-X-Forwarded-Encrypted: i=1;
- AFNElJ8XHBe/QoWnsA3Mmne6XGW5bO6lesCB9MEKpdEKjsAMIau35okVKPptKsxEoHB92F3t4aGLTF0wqu0=@buildroot.org
-X-Gm-Message-State: AOJu0YxCJUd2I+in8RDdwGlV7V87Sz0p+Bcvsbe8yxH8sjoqcCqCsqGq
- Sa95tRyu+jsvFkNUHaslB4nR+6u38KPR+TgMsNkA0s9MZwR+/+5dPth/+wzThWSKEZU=
-X-Gm-Gg: Acq92OGK9PLZaFoV66ap8nuj+VxnbnevPSptDe2eGdTSWL8uQof/58tF8rCUz/+Svzd
- ijY74mOcEAnvnBU2R2v/o4X/bRKVBJKFB8hY8MXr6wTkiv8IISljE503Rr7+xHwG4uq8iw30pam
- ReyPzoHzsL3y7QiveHMLJNuqQtRtRRQJVoZZlBQaPYkuTr/s9cmC3E9E6+/RK826Ycx3+6WE1pK
- KR9zI+pVP7szZeaUzH7xknSPZAvxxc97BJoBO4Gh14hfqJcz1znkU1Aj8INMM3tFE7Cq//3o0EK
- WS5/6oiHxl0hOiUQ6H/sA4/TfUv4MXwUX/iBqFa0kh7vVSGN923wWjPJyOHolRYCEl/ZsmKPCZ6
- u5w36J4jrqGYBe2G9UIWjcX3okU3A8+c/wuUrWE36l4l4uFovR86HL8f6mD5yWGjl5ZDr/lG0Dh
- /CJCvTCJdK/+nvj+IDqMcbUKSCFA==
-X-Received: by 2002:a05:600c:8b68:b0:490:bad7:3634 with SMTP id
- 5b1f17b1804b1-490c25e1104mr54810965e9.19.1780663775098; 
- Fri, 05 Jun 2026 05:49:35 -0700 (PDT)
+ bh=i2GaUyntatNXe1XmqgLBFMQ3vw7Yb1ONVoa0tOl/e/U=;
+ b=Pa+uviLy8CW94WzdkFXWn1/DDsgjOZELxKjas+UELOUify+GtDma/fMVYRGCRlC0xj
+ YgpVxbmvTESHKiESEokap3m0McSFcz9V7QnFpyi5kB1v6y2Zq6H3kIHEak4nZYPKvibY
+ k+CxQDuBuSB9AJCgCILLpv7/tpbyZF8mxyZ9DYGplmJZjB/X0eBn5enLcnG+808gYjMH
+ 8qCRFwVGEKmc07Cf66a+eMRLEk5+FxuhU3AmNBZh42ExhjKX1WWChbRRK71lXl1p8DVO
+ joU8WljPulLLnDh25Cym8K1GN8pMDDcE2hl8HOCZ4DeCqxpeZWRYSmGqWhAYsI9VBNzW
+ xcwA==
+X-Gm-Message-State: AOJu0YyQpNn5nTEATzxcOBxciAg4EuFrLx+LnHT7MyT24dsFQsa7fuqv
+ ydpeJucq56OS/Mb1JrFw/w9aCbv4ovMitKfJtlnIQTo43NwW2VPAnV4wZtPK4bVrhWI=
+X-Gm-Gg: Acq92OG4uspA3cYno1G6CVqOPloM6R0gQ/0gENpVikbVztYyzXvvTN489oeYIk73V1d
+ bob8DX/NLIwF/HAr2cJu70925hy1c/YWM1ElowgHyXesfHxO1+mR0I2NHUix0d2OgzAofg1DUvO
+ 40cM5Qr+d4c0NjRJy9oEnRYc+drgCnf+5cjTVfDx/X/QivY9e3nmeQGY2DWeFEsQRi/fC32Y+H2
+ FopD2nzSjsKDumMp3yklSEflJgjp9P6DifIp/9hgRiVzvlywCWt1tXmDgyxWdZ7Cwro0GOrr1LM
+ Bxn7NU6gDv0NX9nsyR39s4sD4tf6Zrqm1AP9bFYsikCqCCqG+PK0TU3Vje1j+I+mPdlouZEzm5L
+ zRTNtNxo5XFKaD6qzzgcuxTok/AM3KdbukB1dujImEnPmG/+QID8zXwuxqH7mMSX5Uz0Undjcnw
+ dq7oZ+OmOvDFCKnF17E6X3/7jx8g==
+X-Received: by 2002:a05:600c:5252:b0:490:5191:6e26 with SMTP id
+ 5b1f17b1804b1-490c260566emr56858585e9.18.1780663790158; 
+ Fri, 05 Jun 2026 05:49:50 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f3529e0sm25869001f8f.28.2026.06.05.05.49.34
+ 5b1f17b1804b1-490bc3cc0f8sm155400105e9.8.2026.06.05.05.49.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:49:34 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:49:34 +0200
-Message-ID: <20260605124934.271632-1-thomas.perale@mind.be>
+ Fri, 05 Jun 2026 05:49:49 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Fri,  5 Jun 2026 14:49:49 +0200
+Message-ID: <20260605124949.271940-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260530155718.657095-2-bernd@kuhls.net>
-References: <20260530155718.657095-2-bernd@kuhls.net>
+In-Reply-To: <20260204131841.282589-3-thomas.perale@mind.be>
+References: <20260204131841.282589-3-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663775; x=1781268575; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663790; x=1781268590; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=g6LbaxuyKHtRDa4+HvK89fD8uTLCnycgtD1v2845xqc=;
- b=Lbjhex8cizVbFcDgBebPQDftJkqLrwd1D9/O+z60F6WKWnmIGR/vYypKvkOX/Y7wwL
- QCoVT1fz/iZOU/Haby/+gnPPqU7KgMoo/9MyLHy0oLB2iu3hMpqKF4ShDoaslWKS48zu
- Q/tH3C8DMyML6/D5zhDMsNdi9Z7LQcQqqkZQmcKuq8eyKeFjfOeiHEYRvKbi7bjMk4Xp
- Ze2d+BieZ1QkE4dN1rr4gGyvXF6MvoH1hX8CZ+YePvML3uY46W1TjktK5nRYgtgKCQd7
- UX71s/gEkkMaco5b4BBE+4yAgwzChh6JE2u8AjmOUgZ026zpaR7xcGdY7FRrT5/iae7Q
- dvGQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=i2GaUyntatNXe1XmqgLBFMQ3vw7Yb1ONVoa0tOl/e/U=;
+ b=M4Ud5GZtPbGat3eNcxq5R8757JFsnKZo3cZCC2nP7P+1XzFhI3KGN0C1p3FQ2qKX+R
+ ilRMWK19fmxGfKBi7F6pJPKqsWiEVBPgTAFOs1lqH1ecXmldsurzA2U4G56DfQuMLel9
+ prixr9RbAM8xiFkxRLlHmfCIn3pzJbgMsn7yRgzf3CEfVsVnPcn00h63+XLPW/+BYQt7
+ mmLPQaBGwivMsBaiYirKRscNWoJJrryw0B+3CdjokJtokZdpQq23U122flXTrQUsYqV+
+ tHZqhPSfOtcSY/6HXWyac0Dya0CnhDJX/AmJe5fawvm4X7ON8ThLZl+5+uVvERlsHKS7
+ ThOA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Lbjhex8c
-Subject: Re: [Buildroot] [PATCH v2 2/5] package/stellarium: add extra
- downloads
+ header.a=rsa-sha256 header.s=google header.b=M4Ud5GZt
+Subject: Re: [Buildroot] [PATCH 3/4] package/libmad: remove Debian patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,96 +127,74 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Building Stellarium includes the download of external tarballs during
-> configure.
+> In Buildroot there are multiple way to apply patches on a package [1]
 > 
-> This fails with host-cmake during configure stage:
+> - Adding `.patch` file in the package directory.
+> - Define `<pkg>_PATCH` variable with the location of the patch tar.gz.
+>     It used to download Debian patches tarball.
+> - Implement custom patching logic with `PRE`/`POST` patches hooks.
 > 
-> CMake Error at md4c-subbuild/md4c-populate-prefix/src/md4c-populate-stamp/download-md4c-populate.cmake:163 (message):
->   Each download failed!
+> The libmad package is downloading a diff file from the Debian
+> mirror with the `<pkg>_PATCH` method [2] and then apply that diff to
+> create a directory containing patches. The patches are then applied in
+> the `PRE_PATCH_HOOK`.
 > 
->     error: downloading 'https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz' failed
->           status_code: 1
->           status_string: "Unsupported protocol"
->           log:
->           --- LOG BEGIN ---
->           Protocol "https" not supported
+> The Debian patches were integrated in commit [4], in commit [5] the
+> application of the patches was moved to the PRE_PATCH_HOOK.
+> The problem is that in the PRE_PATCH step the `_PATCH` downloaded from
+> Debian don't exist yet and end up not being applied at all.
 > 
->   closing connection #-1
+> Since this is not used, remove the Debian patches.
 > 
-> due to buildroot commit f87138339b17bc2b1d84c59ea176abb941413550 which
-> disabled SSL support for host-cmake.
+> [1] https://buildroot.org/downloads/manual/manual.html#patch-policy
+> [2] http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libm/libmad/libmad_0.15.1b-10.diff.gz
+> [3] 1167d0ff3d docs/manual: mention CVE trailer
+> [4] 858df3643f package/libmad: switch to debian to fix CVEs
+> [5] b21184a877 package/libmad: update the patches to be applied with fuzz 0
 > 
-> This patch uses _EXTRA_DOWNLOADS to provide these tarball to allow
-> offline builds.
-> 
-> No autobuilder error was recorded, the build error can be reproduced
-> with this defconfig:
-> 
-> BR2_x86_64=y
-> BR2_x86_corei7=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
-> BR2_FORCE_HOST_BUILD=y
-> BR2_PACKAGE_STELLARIUM=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-> BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_XORG7=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Applied to 2026.02.x. Thanks
+Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
-> v2: rephrased commit message
->     Series passed qt5-based Gitlab pipelines:
->     https://gitlab.com/bkuhls/buildroot/-/commits/d4c3a7f6096e3dc48fa33a27c697d76fc3f38d48
+>  package/libmad/libmad.mk | 15 ---------------
+>  1 file changed, 15 deletions(-)
 > 
->  package/stellarium/stellarium.hash |  4 ++++
->  package/stellarium/stellarium.mk   | 13 +++++++++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-> index 67e053eff7..4298c3dcde 100644
-> --- a/package/stellarium/stellarium.hash
-> +++ b/package/stellarium/stellarium.hash
-> @@ -1,4 +1,8 @@
->  # From https://github.com/Stellarium/stellarium/releases
->  sha256  e376e0dc28eae0f7c4b3686fed9c2129c69a87a371b33e24bd79559a5142d613  stellarium-25.4.tar.xz
-> +# From https://github.com/Stellarium/stellarium/blob/v25.4/CMakeLists.txt#L849
-> +sha256  55d0111d48fb11883aaee91465e642b8b640775a4d6993c2d0e7a8092758ef21  release-0.5.2.tar.gz
-> +# From https://github.com/Stellarium/stellarium/blob/v25.4/plugins/LensDistortionEstimator/src/CMakeLists.txt
-> +sha256  6e899e297485e457ec1bf84844de29921aeef674f9d5caf60277df45dca6ff76  v2.9.0.tar.gz
->  # Locally computed
->  sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-> diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-> index 48dadfec61..de992352a1 100644
-> --- a/package/stellarium/stellarium.mk
-> +++ b/package/stellarium/stellarium.mk
-> @@ -9,6 +9,19 @@ STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
->  STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
->  STELLARIUM_LICENSE = GPL-2.0+
->  STELLARIUM_LICENSE_FILES = COPYING
-> +
-> +STELLARIUM_EXTRA_DOWNLOADS += \
-> +	https://github.com/mity/md4c/archive/refs/tags/release-0.5.2.tar.gz \
-> +	https://github.com/stevengj/nlopt/archive/refs/tags/v2.9.0.tar.gz
-> +
-> +define STELLARIUM_COPY_EXTRA_DOWNLOADS
-> +	mkdir -p $(@D)/_deps/md4c-subbuild/md4c-populate-prefix/src/
-> +	cp $(STELLARIUM_DL_DIR)/release-0.5.2.tar.gz $(@D)/_deps/md4c-subbuild/md4c-populate-prefix/src/
-> +	mkdir -p $(@D)/_deps/nlopt-subbuild/nlopt-populate-prefix/src/
-> +	cp $(STELLARIUM_DL_DIR)/v2.9.0.tar.gz $(@D)/_deps/nlopt-subbuild/nlopt-populate-prefix/src/
-> +endef
-> +STELLARIUM_POST_EXTRACT_HOOKS = STELLARIUM_COPY_EXTRA_DOWNLOADS
-> +
->  STELLARIUM_DEPENDENCIES = \
->  	qt5base \
->  	qt5charts \
+> diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+> index db04d22e92..611f13eb67 100644
+> --- a/package/libmad/libmad.mk
+> +++ b/package/libmad/libmad.mk
+> @@ -5,7 +5,6 @@
+>  ################################################################################
+>  
+>  LIBMAD_VERSION = 0.15.1b
+> -LIBMAD_PATCH = libmad_$(LIBMAD_VERSION)-10.diff.gz
+>  LIBMAD_SOURCE = libmad_$(LIBMAD_VERSION).orig.tar.gz
+>  LIBMAD_SITE = \
+>  	http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libm/libmad
+> @@ -13,20 +12,6 @@ LIBMAD_INSTALL_STAGING = YES
+>  LIBMAD_LICENSE = GPL-2.0+
+>  LIBMAD_LICENSE_FILES = COPYING
+>  
+> -define LIBMAD_APPLY_DEBIAN_PATCHES
+> -	if [ -d $(@D)/debian/patches ]; then \
+> -		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.patch; \
+> -	fi
+> -endef
+> -
+> -LIBMAD_PRE_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
+> -
+> -# debian/patches/md_size.diff
+> -LIBMAD_IGNORE_CVES += CVE-2017-8372 CVE-2017-8373
+> -
+> -# debian/patches/length-check.patch
+> -LIBMAD_IGNORE_CVES += CVE-2017-8374
+> -
+>  # Force autoreconf to be able to use a more recent libtool script, that
+>  # is able to properly behave in the face of a missing C++ compiler.
+>  LIBMAD_AUTORECONF = YES
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
