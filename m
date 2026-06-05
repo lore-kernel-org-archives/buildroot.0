@@ -4,85 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E405CD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 21:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C37CD6E7B
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 21:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E4FE836A5;
-	Fri,  5 Jun 2026 21:00:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71F3C81E94;
+	Fri,  5 Jun 2026 21:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l4nww5l4gXHT; Fri,  5 Jun 2026 21:00:13 +0000 (UTC)
+ id kCCTX1yxPJ5V; Fri,  5 Jun 2026 21:15:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DFD683689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A6883955
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780693213;
-	bh=6KF5OD0LSKwWXVcqWz8Y5sZNnhRgdzhAxvfkTnHtjxQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=gm+VrG+mTRUaGtE7OwPsXj27htX+1AYUCiHefTRx7RXbQh2r1eV0w7j3B72E2c7Rt
-	 dhCFrlRhejsldudt9ooITWAUNE0mgQifn4Zvx/o2EIf2vQlBM+0za1aLXiRDn5xC66
-	 tSjDyvvwW2cc9RIp49WKTj+CVtzNInzM552AwFB9kaEb7JACsZ2zUoAblvvyl6/T/t
-	 jD0Tovlj1M/DWTZo5vYuN3rG4lSHAMm6c/PoKb+lPkNqdZ+CYqeV3MsXnRQA0TimqH
-	 y8sYDPpSB5W+7alIhdf6epEh3yWQxHqJhIIRNKOQ+e3bDSUHxcRYmKDFLEOveNEoPD
-	 ldQlGD38k9/NA==
+	s=default; t=1780694138;
+	bh=ljBHftn8+ziJo72HnqaY+4YJhhL7FIEaAVUDjjPj+xI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=p2oSoTsueAcvQFtQUCGnylwx9wnhzFKmH8pvj9A7U81pysU3MjypDr8O6q5xaRJEm
+	 zICg97LrV2kmBTUKZ8nivzdic7c0OEd2PVmy9LklaVh7sKPPEw9mJkJDGBhjquzVju
+	 wtLD9yKdR2eDV0LYbYBB7Qf78ETKWn4rzzsTDrUFeQoHvC5qExRsit6RS8yijmqfse
+	 fCFYdmPOa7gQxHoQ1JldfSQ4hRvA17tZ1ILSfnhpvG9p6a1XQXAmlvkGOnH/rPmGCH
+	 RAdRTuORX08vKKbVtVNxPQnYRn3EmhNxgqKiV3/c03tbDOvK+HW+49iSBlDWDn84xX
+	 +5XnZsbHwh6XA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DFD683689;
-	Fri,  5 Jun 2026 21:00:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C0B4FDE
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96A6883955;
+	Fri,  5 Jun 2026 21:15:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD64388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:15:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B269741EEA
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2AA940765
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:15:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id phyR9OP4Y-8v for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 21:00:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6861541EE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6861541EE9
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6861541EE9
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:00:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 0C67A2003D3;
- Fri,  5 Jun 2026 23:00:04 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 05 Jun 2026 23:00:04 +0200
-MIME-Version: 1.0
-Date: Fri, 05 Jun 2026 23:00:04 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-In-Reply-To: <20260605070003.3911896-1-peter@korsgaard.com>
-References: <20260605070003.3911896-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <a433bc2036e98d719277c87cafcc333a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780693207;
- bh=p57BB/zTfZJjx3H3q5DSjCb0dtqTRdx3EDDLG3XDCjw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lIGysC4vs2ETm/ilXsQ+FXGVzkJ7BiwuSbxf44Wq9nRz+j5SUCs+dDBP2/suD8EUG
- 9r46d5I74lGUp5aGm9QDeBQVOEPkRmGNr3S/2TMrfde5lyWtY1GHb0PS9ScJ57rw5K
- uVV3lQc7fTTSR+S4RHd+7q6G1OnU7RwF2KHnFuaEq5XGtrCAJN1fZ/HuqNs9s9etks
- jO3+GjSoU2eOjRwXjz90mCdST9vE/Cz5Qr233Td/5aUHkgLrlynU2Ej+k1+Hq56nMW
- iDkSkf4Yy+XbeBiexj0MN++1wzhLS2xd5qobiNNoIHuWYOo7xmh9BOwdO+gWtgL9yu
- vqP0TNUtKHulA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=lIGysC4v
-Subject: Re: [Buildroot] [PATCH] package/libusb: security bump to version
- 1.0.30
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dXhZ3K1HE904 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 21:15:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 398DB40323
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 398DB40323
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:15:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 284CF87A97; Fri,  5 Jun 2026 21:15:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 5 Jun 2026 23:10:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e9aefc702588c7aafb8b3bf605c4aed2ab8475ef
+X-Git-Newrev: 1cc0363191c33545adfe327881b32756aef9594b
+X-Patchwork-Hint: ignore
+Message-Id: <20260605211520.284CF87A97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: security bump version to
+ 1.31.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,57 +71,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05/06/2026 09:00, Peter Korsgaard wrote:
-> Fixes the following security issues:
-> 
-> CVE-2026-23679: libusb before version 1.0.30 contains a NULL pointer
-> dereference vulnerability that allows attackers to crash applications 
-> by
-> supplying a malformed USB configuration descriptor where an interface 
-> claims
-> bNumEndpoints greater than zero but is followed by a class-specific
-> descriptor whose bLength exceeds the remaining buffer size, causing
-> parse_interface() to return early without allocating the endpoint 
-> array.
-> Attackers can exploit this flaw through 
-> libusb_get_active_config_descriptor
-> or libusb_get_config_descriptor by providing crafted descriptors via
-> virtualized USB passthrough, file-based descriptor parsing, or network
-> sources, causing any application iterating over endpoints to 
-> dereference a
-> NULL endpoint pointer and crash.
-> 
-> https://nvd.nist.gov/vuln/detail/CVE-2026-23679
-> 
-> CVE-2026-47104: libusb before version 1.0.30 contains a one-byte
-> out-of-bounds read vulnerability in parse_iad_array() in descriptor.c 
-> that
-> allows attackers to trigger a denial of service by supplying a 
-> malformed USB
-> descriptor whose bLength equals size minus one, causing the bounds 
-> check to
-> use the original buffer size instead of the remaining size.  Attackers 
-> in
-> virtualized environments with USB passthrough can supply crafted 
-> descriptors
-> through libusb_get_active_interface_association_descriptors or
-> libusb_get_interface_association_descriptors to read one byte past the 
-> end
-> of the malloc allocation, resulting in a denial of service.
-> 
-> https://nvd.nist.gov/vuln/detail/CVE-2026-47104
-> 
-> For more details, see the announcement:
-> https://sourceforge.net/p/libusb/mailman/message/59335553/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1cc0363191c33545adfe327881b32756aef9594b
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+Release notes:
+https://lore.freedesktop.org/wayland-devel/aiDR_N7VUOSOfBUA@quokka/T/#u
+https://seclists.org/oss-sec/2026/q2/809
+
+Fixes:
+https://nvd.nist.gov/vuln/detail/CVE-2026-50265
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien:
+ - remove release notes link to 1.31.2 in commit log
+ - add link to CVE which is now assigned
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libinput/libinput.hash | 2 +-
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index c813993358..4ea45ead4d 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  1daebac6cb5b8946139c9669a7e5c0e4c8f17320de232a6b9bf470f37dc569e4  libinput-1.31.2.tar.bz2
++sha256  01414457befc3d1c68a328ebe01eacec8e7077a4ff08e181f5659daf9f50930e  libinput-1.31.3.tar.bz2
+ 
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 33fd012076..176a11e83d 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.31.2
++LIBINPUT_VERSION = 1.31.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
+ LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
