@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA7D1CD6E74
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F01E3CD8C81
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91451610B7;
-	Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C05F182AA7;
+	Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nU90hQDXEoBR; Fri,  5 Jun 2026 12:50:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WEP_J_UIYJAL; Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D32D2610D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB02182A7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663830;
-	bh=lw4sPWMEG69/PDChJyanPPLcbstnRUF4mLpa4GEcHd4=;
+	s=default; t=1780663832;
+	bh=DuGhMIWy7TgxqcFuiu/4mjyUDdzaUhrMcQbXniy3/lM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DUGDhZXlLf9XSqO8GIoXItUMDt2qPRPX3/J+HLaBtV3aQlnkqxhq7GFUI/GDUt8z1
-	 zmarRbH+v0NpuhZyXOHFmcv3zV3sA4/M3oDoi6vfztzXAwpy4GP8KDopTwByF8/oA/
-	 zXZyQNzf7TJBjA616r3BWdjzwQai7z979i2oC1vnvMJx7C3YKzDx67YQPBBnkRk9JB
-	 cyVZf0fRHINRes0rpNiHQl+Kmypm4AsFNsXIxi/QBQ+NeqtGdRi3Kq13xN6ICZFFRX
-	 oz4MbzHtMSaGJu/cpLDV1jG2qAWFnf2DJJpZv20FGG9USyRF4u2k4+KvBbmUEHgJQH
-	 Bz6Vhepnyo9Wg==
+	b=Etbv83kGlQhHEWhFq5oWWV+Mxcoyy0KkZ4nb+yRPNCAHnC6IV+PA8jpHrKH3vmFKk
+	 CAaIyD3f9NY6CMUCkLlBOjbBTvQ+E8PP9nKcGPiqLyYlfWiMQgQxBs/7DvWWcLIYoS
+	 tGVXqTh7PAGnD/Zloqc2n2rW5KIIBZk7I21FXgsUCHWrZEnuJeGhJoLYVXwFg6WDq3
+	 sFn759IjC5doTrIj+1i5dm+5sL5qBq3e9f2qpefn8CgWaMoBMmQt44KxNvil/xA+dA
+	 zGriVsV1r2x+tAuI9OAtg/KS1ANSI7wcebo0s3O/FbotPemGo7mp5ghpxWoyKjdBk1
+	 5CTdr9LLYSsag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D32D2610D7;
-	Fri,  5 Jun 2026 12:50:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB02182A7F;
+	Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1729EF4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 70356F4
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08B854037F
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D1B74037E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a_6XrBgcFECC for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:24 +0000 (UTC)
+ id M-mi-SZc4kvH for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ECD974037E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECD974037E
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ECD974037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:23 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-45efa80e0afso1495153f8f.2
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A01540381
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A01540381
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A01540381
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:24 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-490b1bbcf3aso15198645e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663822; x=1781268622;
+ d=1e100.net; s=20251104; t=1780663823; x=1781268623;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=Inoi/TbkL+wlVxie76ZbmQ4kq6u1t5QX3AChu9KE0Ys=;
- b=hNBlASb256R191lBK/vuX0KUfnJS9ReL5AaoozIyJFXzLY9exOANB+VliF3G8VYbVh
- NkOs4UBCYGJaFff5zP5fy5cMb5v9G7BwGJs3o9nfV7LW5yagO+kBQc+HXtbg69omjndw
- i144Ju0n2RzfRwf91tmJO+lngkseCWHfvoZYq+EoDsREQdS3ALmJ7McYdXZEYYlX1/De
- F7q8bFTMTjVX1fmIN6uQAgKbtd7MJCyWnCBdgNlLbZ2trKKIqYq5+ma4nnvO9ZKvXoiJ
- RjxLZJ5eiA1neXWoIgtLZ51rTk9yT1oHLy6aVXv5vWIhEa6YIm/FdE8p8jmaV7idTPF8
- pP2A==
+ bh=I/X51nJFm+uQr3R3V7OBINYV8iEXymxv1baL1RbrXFQ=;
+ b=Tzfg5E+jGzW734H/w6bk72g5WraVkyZ9fzB/Cqg40gBZBwkWJptLKZKsNGaIoxj5t3
+ 3bhqhhUjkFyFkORiqIUaXsI8c1Lf+7mR3teqBfIH4VOVviffXpw2tOrSimCMI/RUMxec
+ nadvBTWxabITCmtrv0Z4E0D5t5G2G6Wke1tYBP/OFfsf2/eQSsg2Hm/wco9NHh/hM7cn
+ KB++MjVNY2iAxAzQqeLb3egGUKMY2mB9OsGNLVjM27XNeOeaJP8D00dOWfB4YTT/HdMo
+ cCezyRSQImOSvi1BCG6/MTfkWsqPBXNjBYqI8EzAIA1hergtLwCa5eMR2XZpfLWA2OzL
+ Gt8w==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+aWCWjHpRns4EfbflqzUu/MHNfwQqBM6MJUQRZg9zX37UwpYhFa+ziBGHpalIqj9KkG6WWi3ISAV0=@buildroot.org
-X-Gm-Message-State: AOJu0YwBN3ITUmTqsPoRoxFNFjQiUwCxqqGmz8LtjPm/JqbgJPWOCuBa
- D75v+X8qIQUXBvUD/RktfznW6n7IPLNMRyIRuHdKKV3l2clIbEUBNtldTBf+B6h55h+e9gFxbkx
- 9y1xc
-X-Gm-Gg: Acq92OES7DmJBuIWeRlBggNywQYSxZ1/nCTULMZgHPMMJvTOkw4aeiAR+5Qda7+HZda
- o1Gw+tRmdPa/Tf395rRcIyw7nGO2mKeN4IEWpG8FSDoQxjk6lc1X62eY2kpwhvObCdSkSU1FRvi
- P9y+EpNQj1L1BqIqb89UXnktzX4dSnWVvzRv05pdamxt2x7Qi6fCe/ZNk0Ule7ZiVsbk6ap56B1
- 2OVxmds1Xc5D6zWsbMdeT528oBseJflj8Y9HYeMKPv8ekRUgYJqxKXUlBksPjilmoqNnE5/fwY9
- RixrqVucTAvhQDeWrUaQa5hJ5NKR46QSopPv13ajNEGiCCCltNUsXYrC2kswkfNM/I+m/p97a/x
- l6Z5601DcRMgOMF2G1kpNx14lZrOqctjHHO37oVo+ux5ACG9RpXAf3MGhEoXFMhYCof4rN/48//
- VhYUtSRptEMbJmKdTUmZime2PU9Q==
-X-Received: by 2002:adf:e743:0:b0:45e:f1c5:709 with SMTP id
- ffacd0b85a97d-4603076cb46mr4116685f8f.37.1780663821898; 
- Fri, 05 Jun 2026 05:50:21 -0700 (PDT)
+ AFNElJ+RWjW4kLcpJrTeZ35fNlanxCCQBioaZ05uqMy5/lDUlSnoKplK3ETstuwfXSeS39nZcNTtW5TdM8E=@buildroot.org
+X-Gm-Message-State: AOJu0Yx+FoIZz/33ho5nxS/oop0MdWM1S9qmv4iF+rpxe6SfPuS7GkGA
+ V/8oWdrWlpT10iSG/9oeyy+cLVCJE4FUMWpOkO9yIk+AHpCLtEwbw6TZH/YHtCAmp4U=
+X-Gm-Gg: Acq92OELFpaj/2JtWxahyWOK3ZDgNCarWUxIfYQZxebTSAIi3q6l/IznKhsA+S5Igtj
+ fWeHKnQFD6LnESzt5kq0knoEaOIlE81+fvL21n8bsVlM8RTqN/ULLMcrDOth7odMel2NKfC4xN9
+ X06f4zXXLhHO6s0XJsCP6A8l+wQXcf+0EDw7c+jdkW2F8B1vZUTjhqpzXparAlA1yDr3pICjH+s
+ TtMT2iP3ZFyMXKPW7sd9JLaDIIp9vxwg+sDP9VwWU6VuF2DPSIXOA9V0771C9uXGc/13X+Cl/mr
+ B1iG+ThJa9SZuDPXt0zRhu4bYGrup9f3EN3CKlrJZmUuxV5hGK5h5q5nMG+YcP3lu2sjp7ld7GD
+ DJDJtNR973eXBJos58fOEe5ulUtfEzEAXQ0v7aK32S39PhxByHRH/6aaPdviCruYlkFQwZ5rALT
+ GYA2ij0jIxh5mmJBV6+W+5TbLSTQ==
+X-Received: by 2002:a05:600c:4fc6:b0:488:aa33:dcbd with SMTP id
+ 5b1f17b1804b1-490c2615bdemr54353555e9.26.1780663822959; 
+ Fri, 05 Jun 2026 05:50:22 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f2f67c6sm25643587f8f.16.2026.06.05.05.50.21
+ 5b1f17b1804b1-490bc3e4b5asm158728255e9.13.2026.06.05.05.50.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:50:21 -0700 (PDT)
+ Fri, 05 Jun 2026 05:50:22 -0700 (PDT)
 To: Martin Willi <martin@strongswan.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:21 +0200
-Message-ID: <20260605125021.273172-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:50:22 +0200
+Message-ID: <20260605125022.273226-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260409081401.2060709-2-martin@strongswan.org>
-References: <20260409081401.2060709-2-martin@strongswan.org>
+In-Reply-To: <20260409081401.2060709-6-martin@strongswan.org>
+References: <20260409081401.2060709-6-martin@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663822; x=1781268622; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663823; x=1781268623; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Inoi/TbkL+wlVxie76ZbmQ4kq6u1t5QX3AChu9KE0Ys=;
- b=JWnGQO1tbXFrUsPZhWL3TEx8HnnMzZnJ80m3CspbWO9cfilvEjQE5DZyg3AHPxwF3Z
- b08kh0brGujbW+jW8FT56Y5dkGu3a/hNRxXXJRlKHBocB4zOWJHfT+0FnwL8eYtpoeSW
- PEalZPcwyOwUgXQEyBNel7Fg82hEbyOb7GmiSuijNDW4SOacR/92xPlUzF6n0fcrSOSp
- pRM8x4XOKMMuIxeXKwbbupLIfxmFyrrL8uaSlby4cfP5PzsURBwSScLLSD6nYvoEg3gS
- qLor7W4HOs51GDX2BWHoKyEeUS347xKbajpPvJQ6D6QRjzR5cIPxTXxBxwGZd9rwXczv
- Nq0Q==
+ bh=I/X51nJFm+uQr3R3V7OBINYV8iEXymxv1baL1RbrXFQ=;
+ b=D7WOpmevbeDKVIw3ixMZeWfYrUwmBBgxlawKkevSThVYPHfmhFEnPfSfSwVKdiY5Ub
+ DtKsoscSVHbfSKVZMZUUNRjFVC8e5seBLh7S50FwFyDXh39iNsXiw0TF/lk51nJCx3TG
+ GNpvxzgjWo46pM2ZpAqrdR5fziKQXlD+zk8waYse1lYQveEg3a6j+EHk/r1HV6s6ncu5
+ XFEbTy5+XriBq6cqBz8pKsVFI/bvaDWAp/sgYyv6o0BJNSCYDZJmZ9rKLN+ConXxpn+l
+ y9pvPxkQ+YzWBys0Pxv37HvbhXbfh6yTJDanymtgwW1MhlSLWqKpkGdq92j69vpKkN4/
+ 4aQQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JWnGQO1t
-Subject: Re: [Buildroot] [PATCH v4 1/6] support/testing/utils: add basic
- tests for utils/generate-cyclonedx
+ header.a=rsa-sha256 header.s=google header.b=D7WOpmev
+Subject: Re: [Buildroot] [PATCH v4 5/6] utils/generate-cyclonedx: add hashes
+ from .hash files to externalReferences
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,182 +131,130 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Introduce unit-tests for the generate-cyclonedx script, covering basic
-> script invocation, patch CVE extraction and virtual packages.
+> BSI TR-03183-2 5.2.5 [1] lists the "Hash value of the source code of the
+> component" under "Optional data fields for each component", and as such
+> CycloneDX "MAY additionally include the [...] information, if it exists".
+> 
+> As hash values are available in Buildroot, iterate over .hash file paths
+> from show-info input and read hash values for the source distribution. Add
+> all found hashes to externalReferences source-distribution entries.
+> 
+> [1] https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03183/BSI-TR-03183-2_v2_1_0.pdf?__blob=publicationFile&v=5
 > 
 > Signed-off-by: Martin Willi <martin@strongswan.org>
+> Acked-By: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .../tests/utils/test_generate_cyclonedx.py    | 139 ++++++++++++++++++
->  .../cve_upstream.patch                        |  11 ++
->  2 files changed, 150 insertions(+)
->  create mode 100644 support/testing/tests/utils/test_generate_cyclonedx.py
->  create mode 100644 support/testing/tests/utils/test_generate_cyclonedx/cve_upstream.patch
+>  .../tests/utils/test_generate_cyclonedx.py    | 44 +++++++++++++++++++
+>  utils/generate-cyclonedx                      | 34 ++++++++++++++
+>  2 files changed, 78 insertions(+)
 > 
 > diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-> new file mode 100644
-> index 000000000000..bfe5eaf054cf
-> --- /dev/null
+> index a071ff867923..84f94f050760 100644
+> --- a/support/testing/tests/utils/test_generate_cyclonedx.py
 > +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-> @@ -0,0 +1,139 @@
-> +"""Unit tests for utils/generate-cyclonedx."""
+> @@ -166,3 +166,47 @@ class TestGenerateCycloneDX(unittest.TestCase):
+>                  },
+>              ],
+>          )
 > +
-> +import json
-> +import os
-> +import subprocess
-> +import tempfile
-> +import unittest
-> +from pathlib import Path
+> +    def test_external_references_hashes(self):
+> +        with tempfile.TemporaryDirectory() as tmpdir:
+> +            hash_file = Path(tmpdir) / "foo.hash"
+> +            hash_file.write_text(
+> +                "# source archive checksums\n"
+> +                "sha256 1111111111111111111111111111111111111111111111111111111111111111 foo-1.2.tar.gz\n"
+> +                "sha1 2222222222222222222222222222222222222222 foo-1.2.tar.gz\n"
+> +                "sha256 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa LICENSE\n"
+> +            )
 > +
-> +import infra
+> +            info = self._make_show_info()
+> +            info["package-foo"]["hashes"] = [str(hash_file)]
+> +            info["package-foo"]["downloads"] = [
+> +                {
+> +                    "source": "foo-1.2.tar.gz",
+> +                    "uris": [
+> +                        "http|https+https://mirror.example.org/foo",
+> +                    ],
+> +                },
+> +            ]
 > +
-> +PATCH = "support/testing/tests/utils/test_generate_cyclonedx/cve_upstream.patch"
-> +SCHEMA_LICENSES = ["MIT", "Apache-2.0", "GPL-3.0-only"]
-> +
-> +
-> +class TestGenerateCycloneDX(unittest.TestCase):
-> +    def setUp(self):
-> +        # Provide a fake SPDX schema so the script never hits the network.
-> +        self.schema_dir = tempfile.TemporaryDirectory()
-> +        self.addCleanup(self.schema_dir.cleanup)
-> +
-> +        cyclonedx_dir = Path(self.schema_dir.name) / "cyclonedx"
-> +        cyclonedx_dir.mkdir(parents=True)
-> +        schema_path = cyclonedx_dir / "spdx-1.6.schema.json"
-> +        schema_path.write_text(json.dumps({"enum": SCHEMA_LICENSES}))
-> +
-> +        self.env = os.environ.copy()
-> +        self.env["BR2_DL_DIR"] = self.schema_dir.name
-> +        self.script = infra.basepath("utils/generate-cyclonedx")
-> +        self.cwd = infra.basepath()
-> +
-> +    def _make_show_info(self) -> dict:
-> +        return {
-> +            "package-foo": {
-> +                "name": "foo",
-> +                "version": "1.2",
-> +                "type": "target",
-> +                "virtual": False,
-> +                "licenses": "MIT",
-> +                "cpe-id": "cpe:2.3:a:example:foo:1.2:*:*:*:*:*:*:*",
-> +                "patches": [PATCH],
-> +                "provides": ["package-virtual"],
-> +                "dependencies": ["skeleton-baz", "package-bar"],
-> +                "ignore_cves": ["CVE-2025-0001"],
-> +                "package_dir": "package/package-foo",
-> +            },
-> +            "skeleton-baz": {
-> +                "name": "skeleton-baz",
-> +                "version": "0.1",
-> +                "type": "target",
-> +                "virtual": False,
-> +                "licenses": "Apache-2.0",
-> +                "dependencies": [],
-> +                "package_dir": "package/skeleton-baz",
-> +            },
-> +            "package-bar": {
-> +                "name": "bar",
-> +                "version": "0.2",
-> +                "type": "target",
-> +                "virtual": False,
-> +                "licenses": "MIT",
-> +                "ignore_cves": ["CVE-2025-0002"],
-> +                "dependencies": ["package-virtual"],
-> +                "package_dir": "package/package-bar",
-> +            },
-> +            "host-tool": {
-> +                "name": "host-tool",
-> +                "version": "0.3",
-> +                "type": "host",
-> +                "virtual": False,
-> +                "licenses": "GPL-3.0-only",
-> +                "dependencies": [],
-> +                "package_dir": "package/host-tool",
-> +            },
-> +            "package-virtual": {
-> +                "name": "virtual-provider",
-> +                "virtual": True,
-> +                "type": "target",
-> +                "dependencies": ["package-foo"],
-> +                "package_dir": "package/package-virtual",
-> +            },
-> +        }
-> +
-> +    def _run_script(self, extra_args=(), show_info=None):
-> +        data = show_info if show_info is not None else self._make_show_info()
-> +        completed = subprocess.run(
-> +            [self.script, *extra_args],
-> +            cwd=self.cwd,
-> +            env=self.env,
-> +            input=json.dumps(data),
-> +            text=True,
-> +            capture_output=True,
-> +            check=True,
-> +        )
-> +        return json.loads(completed.stdout)
-> +
-> +    def _find_component(self, result: dict, name: str) -> dict:
-> +        for component in result["components"]:
-> +            if component["bom-ref"] == name:
-> +                return component
-> +        self.fail(f"component {name} missing")
-> +
-> +    def test_default(self):
-> +        result = self._run_script()
-> +
-> +        self.assertEqual(len(result["components"]), 4)
-> +        self.assertIn("vulnerabilities", result)
-> +        vulnerabilities = {v["id"]: v for v in result["vulnerabilities"]}
-> +        self.assertEqual(len(vulnerabilities), 2)
-> +        self.assertEqual(vulnerabilities["CVE-2025-0001"]["analysis"]["state"], "resolved_with_pedigree")
-> +        self.assertEqual(vulnerabilities["CVE-2025-0002"]["analysis"]["state"], "in_triage")
+> +            result = self._run_script(show_info=info)
 > +
 > +        foo = self._find_component(result, "package-foo")
-> +        patch = foo["pedigree"]["patches"][0]
-> +        self.assertIn("text", patch["diff"])
-> +        self.assertIn("content", patch["diff"]["text"])
+> +        self.assertEqual(
+> +            foo["externalReferences"],
+> +            [
+> +                {
+> +                    "type": "source-distribution",
+> +                    "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
+> +                    "hashes": [
+> +                        {
+> +                            "alg": "SHA-256",
+> +                            "content": "1111111111111111111111111111111111111111111111111111111111111111",
+> +                        },
+> +                        {
+> +                            "alg": "SHA-1",
+> +                            "content": "2222222222222222222222222222222222222222",
+> +                        },
+> +                    ],
+> +                }
+> +            ],
+> +        )
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index a3b7293f9a5e..382d91ce55af 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -283,6 +283,39 @@ def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
+>                  yield scheme.split("|"), stripped_uri
+>  
+>  
+> +def cyclonedx_source_hashes(comp, source):
+> +    """Create CycloneDX hashes for a source distribution.
 > +
-> +        host = self._find_component(result, "host-tool")
-> +        self.assertEqual(host["properties"][0]["value"], "host")
+> +    Args:
+> +        comp (dict): The component information from the show-info output.
+> +        source (str): The source distribution filename to look for in the hash file.
+> +    Returns:
+> +        dict: Hash information in CycloneDX format, or empty dict
+> +    """
+> +    MAPPING = {
+> +        "sha1": "SHA-1",
+> +        "sha256": "SHA-256",
+> +        "sha512": "SHA-512",
+> +        "md5": "MD5",
+> +    }
 > +
-> +        names = {c["bom-ref"] for c in result["components"]}
-> +        self.assertIn("skeleton-baz", names)
-> +        self.assertIn("package-bar", names)
-> +        self.assertNotIn("package-virtual", names)
+> +    hashes = []
+> +    for hash_file in comp.get("hashes", []):
+> +        with Path(hash_file).open() as f:
+> +            for line in f:
+> +                line = line.strip()
+> +                if not line.startswith("#") and line.endswith(f" {source}"):
+> +                    parts = line.split()
+> +                    if len(parts) >= 3 and parts[0] in MAPPING:
+> +                        hashes.append({
+> +                            "alg": MAPPING[parts[0]],
+> +                            "content": parts[1],
+> +                        })
+> +    if hashes:
+> +        return {"hashes": hashes}
+> +    return {}
 > +
-> +        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
-> +        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
 > +
-> +        bar_deps = next(d for d in result["dependencies"] if d["ref"] == "package-bar")
-> +        self.assertEqual(bar_deps["dependsOn"], ["package-foo"])
-> +
-> +    def test_virtual(self):
-> +        result = self._run_script(["--virtual"])
-> +
-> +        names = {c["bom-ref"] for c in result["components"]}
-> +        self.assertEqual(names, {"package-foo", "skeleton-baz", "host-tool", "package-virtual", "package-bar"})
-> +
-> +        foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
-> +        self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
-> diff --git a/support/testing/tests/utils/test_generate_cyclonedx/cve_upstream.patch b/support/testing/tests/utils/test_generate_cyclonedx/cve_upstream.patch
-> new file mode 100644
-> index 000000000000..f18e51ebb9ec
-> --- /dev/null
-> +++ b/support/testing/tests/utils/test_generate_cyclonedx/cve_upstream.patch
-> @@ -0,0 +1,11 @@
-> +From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-> +CVE: CVE-2025-0001
-> +Upstream: https://patches.example/foo.patch
-> +
-> +diff --git a/foo.txt b/foo.txt
-> +index 0000001..0000002 100644
-> +--- a/foo.txt
-> ++++ b/foo.txt
-> +@@
-> +-foo
-> ++bar
+>  def cyclonedx_external_refs(comp):
+>      """Create CycloneDX external references for a component.
+>  
+> @@ -301,6 +334,7 @@ def cyclonedx_external_refs(comp):
+>                  refs.append({
+>                      "type": "source-distribution",
+>                      "url": f"{uri}/{source}",
+> +                    **cyclonedx_source_hashes(comp, source),
+>                  })
+>      if refs:
+>          return {"externalReferences": refs}
 > -- 
 > 2.43.0
 > 
