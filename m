@@ -1,114 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF36ACD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 200BFCD6E79
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4ABD82013;
-	Fri,  5 Jun 2026 12:49:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAB8941138;
+	Fri,  5 Jun 2026 12:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tjJ3V_U2mseV; Fri,  5 Jun 2026 12:49:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWWE9FIIcyud; Fri,  5 Jun 2026 12:49:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA7D81FD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E937D4105F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663747;
-	bh=mPKKdMzj8CKKSJX3NRwda/IeOkkuKPBQ3afVAbSEc9c=;
+	s=default; t=1780663752;
+	bh=EiA3Y4bkP2BeBiztquNBjsUh4Kv2vUXFevZ688XQ4P0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=CoH4U7ZFfDrE4XKnS/+h/fOCnPa9RGWAkmgdGiAEwrADq+j9r+tYvv/AinMboFW5n
-	 cL1P+ojJed4E5a1pn/EY238l9TCEIOygPFMKTc+cNiZMveas3ZlPGfwl//aubJFm8v
-	 h+zaMErvuMM3IMMxNZgtCABiFhEQpX/lOg4oKwsoqjxGis33p34ZCzS4mvMMBpUnd7
-	 6O9pF4wFU8lrSFI1ZUZsXpKnNprymM8IJh1enPXdUPgHIpuGxn0ZwMfP6tJvcyZHns
-	 ytl8i2HzUbe3PhCm2en8DNzdxpJYHDs3rygL7ZQ54kP9pCuBFyyApmRNfakSiUJOet
-	 JnhbY8BaUZ3QA==
+	b=YbsYOGX0QKGLSRRCaFcYKFjlyxm3OcK/a/p40gNWUDWz4e12Dqip/MU6sEZoStsiC
+	 GD6ZjELH4A0ZKZPLhMQTAoG/wu39fZ+rgDVvgSlURB/bavStrTH9x5sGmuu4YMdPNm
+	 QWrpCtQoktqmbUHbkMrIP1MaEsA/77dIQG0wbQbMMwF3K8OGvy4WrDvUJpBjAEZ6HY
+	 TOtD/AXKEuGilI6mV+HcJ9Z4P6amrZ6CzLTkBX5lyNLwxEMdGSHiBjYJJyuCivA/eH
+	 eQxJ7zMVGLKvees0/5JEcPvmz98VHyBRp9T7BNsvMWrOf7BSkbLNbLOrDFyOH7tJAa
+	 mtZrBimapjPKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBA7D81FD2;
-	Fri,  5 Jun 2026 12:49:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 87F68F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E937D4105F;
+	Fri,  5 Jun 2026 12:49:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 082C5388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 796894037F
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D09560AED
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fCSGltqMxlbG for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:49:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QsY2m390Q4RS for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:49:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9E2694037E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E2694037E
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9E2694037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:04 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-45ef1629ff4so1304748f8f.0
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F27560B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F27560B5B
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F27560B5B
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:08 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-490b1bbcf3aso15186175e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663743; x=1781268543;
+ d=1e100.net; s=20251104; t=1780663747; x=1781268547;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=5RJEzFMEhjNFiTHeh2/P5MHhsT/36IQBaq8vkddK1+w=;
- b=OFMoR/9Az4LGidPecDnPKU9G4SslQSKpLMha+FgHVLkiC0Wdmo1bH6VICOsnpMANp3
- NVFiVYNigxmPBgXhKi7Ukd5rPz84WoJh/3eRi/n8jazgWaYi/7VeuFmKm8QOphtvSj/B
- Yf8Yxh2lcHlS2rkf6lJLHmN3nuCCY4uv+i0RzGWEnj6JlTaVx+/1WN96Q8lveIviT72q
- xojN+N9Z0FChpI+zhev0eoouWLlKNUxgux5IQwbQs1U9KjBkkdLtAdrr+fiMNNJCzScM
- b2bDnzfJT/c27uohBhDkKt3A47CH4Auws2tfCS9QVlJTlWtJmPHfREQukDHLGVV63q5O
- zLaA==
-X-Gm-Message-State: AOJu0Yx00jdYbwdncqdPtjB0lw9LEpusuUJNU/7wxy3/a/yim1HKcyv+
- hQ1bpM6KH4udKmNJNRHElRTLMbuSQhipdTkHyLkiyUqXdcbqXyvwRi/53Sk6t8pYYh0=
-X-Gm-Gg: Acq92OHuoUs6Ls6i4x/BKp9xfN/hC80TVxiT2zkR+u1mn/LNtVuKDeSQM8x6gbPHt0P
- 2/2TSineeFktCtjpWC1zS5IHsnODSl9C8QFOGV+BAGzML31/nqcO2T6Yx8V8k0zu7E9BEDc5ehB
- 0V+ZEHpoW58jAGZ3aQ9ffJBqiLE/cPFafq/Jtoj9p38Vik1BUcDFezz6U/aCg5nQyGRUc+d6G2E
- ibDmCuFkm8kp1RsXxaiCztVl+dwuiTRDKiuH/DuvWOjMA37RBLWUp+uoFl+Gxvz3XtT1DpdHs97
- AS7f/aSe90NTTzI4AyK6F9amBsIGt2E9HLtutLwiBreLNTDIG7d0Ug6rLjAKhXu/P2ntWSG0r32
- l1wwDvGq/3E7qArG8pHFZOgyKi+QwGz4irKjQuA0hutxe9ppaWMYbHvemgH5pVrZIeSFzV7Jl1v
- XiRMPPLoD/ymDfrtG1GokIyjrpXA==
-X-Received: by 2002:a5d:688c:0:b0:460:3234:77d5 with SMTP id
- ffacd0b85a97d-460323478c0mr3322470f8f.43.1780663742587; 
- Fri, 05 Jun 2026 05:49:02 -0700 (PDT)
+ bh=ysoOvSTn5cvwu7trRJUZ/ts7csf89Teis3++NU/zgFs=;
+ b=ZU6pE08n3ESOkFdaIzes64kuu1IU459EAxK/1WL+jtK1dL3DIqODyqBKgufIeRbk5D
+ 8pNPSZgXMhRwAJXaukGasFpZh+hXObu+5vbefeOt2qRCpGUmS6jTuyUMidX3DnSsYRlm
+ CQhY0wnPxPhZwrengBX/Rr0r7bJP2851YZUqHHHLEuTuN7JoI6T9szTgZEruxERNoLeI
+ tXUBzq0MnoywA+UBAzIrUer9Jnis68bzU7i3HvQCa0yXtaZXIuxjmIzkmQX4s/HjyT/N
+ QrEVne+m2rHaSmUlBXQB7MwSUW9Nm9kJCCDI3438lj9eW08Ezpv8YJBswscpNG1Rji1f
+ YlDg==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ+5xcPVAJAlN6FbH3uY/LYgrZ8/ktDa7eBPdGUo3nC/dbr0ek529pgZlk4tqO4PLLAaZP8QnGFpUV0=@buildroot.org
+X-Gm-Message-State: AOJu0YytAHspTEhll8ZS8gBoM6XWcr2kjOuO0gtQhwFE1fa3fLC6/k8Y
+ Rg9cnk0mOJRwEG2b7XKgpoTUMl8hPtPj4ws4A7wnPYCN5jtql/BrATMZYT5UkC9TuIrugdS9z4+
+ 2uvLV
+X-Gm-Gg: Acq92OGVjtVaqNWgd69ie2Zpt8E79OogykzW6TOMqrYLYXTmuUCry+Yo/tlTBzCDVFY
+ 1baUKTFeaI5NNl45CAqFQfO5cRv613voVuiUvg4yjUypaEL+sceciJWIkqk2xb2etUTKAJjdaQg
+ dwU0zSxvWUhwGy0M6oiGe3W1YmhnK/BHfdV+WqS5UozqZxNjFZp2KeREQW4BsKKvQVV8IMurKNa
+ KJTI0O3wPhN6MmK+bO25ZjQkJ7g9aE6au5qvgjpTAPIK7cdmh5gHrJbo0mdPhWL5isDG8x0TI0L
+ yO/9Rj6MZC5lWtGa2T7fBDaQQ7HNTEh6BJetttNB2/G9KIS+lFtPVDgG/+AkkAOVulr5oxI9U7g
+ czNwqhrI27hCKY8tqsSvIVqd+7trgc/bz3usPfmAzK71V1PVtlNpv/xHY8rdrrhaVUDAyrMapxD
+ 5N9m5aWEOlqO+nTNpmeMULF0jQ3g==
+X-Received: by 2002:a05:600c:8b17:b0:490:c2a2:e91f with SMTP id
+ 5b1f17b1804b1-490c2a2ea7cmr50530535e9.35.1780663746966; 
+ Fri, 05 Jun 2026 05:49:06 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f2dcad5sm28020860f8f.5.2026.06.05.05.49.01
+ 5b1f17b1804b1-490bc3d6c65sm150350115e9.12.2026.06.05.05.49.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:49:01 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:49:01 +0200
-Message-ID: <20260605124901.270230-1-thomas.perale@mind.be>
+ Fri, 05 Jun 2026 05:49:06 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri,  5 Jun 2026 14:49:06 +0200
+Message-ID: <20260605124906.270399-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529143111.400662-1-thomas.perale@mind.be>
-References: <20260529143111.400662-1-thomas.perale@mind.be>
+In-Reply-To: <20260603072312.956030-1-giulio.benetti@benettiengineering.com>
+References: <20260603072312.956030-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663743; x=1781268543; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663747; x=1781268547; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5RJEzFMEhjNFiTHeh2/P5MHhsT/36IQBaq8vkddK1+w=;
- b=GV5HDLLV/p2HbIqgQX5s9wAxLaAfky0FcfrBL2Wq/1J5OCQEdUi9zxVkvwmOzy+OWa
- 4+bYnpd5stqHXwe3MqpVjs1cdv2JLxkcmmTNMzSpp8szfpcpSDItzmtHDYhZ0IR+fZUx
- cIlmLKik2G9oy3iF38HIMVA5qxRNZMdITIsJ0FeV/Oe/RMajGznrsqsGZUHoQdkgWYo4
- o7iST/stszs0BXcGUhza2/wPt9und5qIxWV0DFHXpeydsvlNMX0HhaQc8K8IKq73fsSz
- 4/fzduoSecCYSwCPH9T0qIlHRCcEG5HP9EthddMlCxw1kSnXh146FhPFyI46A/DtYtBj
- CNWw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ysoOvSTn5cvwu7trRJUZ/ts7csf89Teis3++NU/zgFs=;
+ b=QPCW0+kYth6EqGqEy8EQ7PsOo9wK0lBVm2dDDcI23HClwozH4LIHe0EPkOp7pRvMDI
+ K1kqGqT/SEYza0hxD5dmVHlbHbhKInEOwZOw7luDwgQi63brl/r2PKAzb3f/rCUfBnG2
+ bgGAyi+AvaUWU7RqOwCkiZrRffdX9bt0mNt590LzVhiOpPwRrb4R2KeLZ8AKFF1D83Z6
+ jAp4I2JIYg959nufswwx52abk694px0RGf+R+AVSEROwhoBp1qNcoIsr0XGetbUsBmqS
+ fZyDerEgxg4I37JTtnzfgGT/YH3xIIqiF1Ukq8BQ3ZjgSWhOAyIw8dodQNxesBXWuCte
+ tplw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=GV5HDLLV
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/openssh: add patch trailer
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=QPCW0+kY
+Subject: Re: [Buildroot] [for-2025.02.x] package/swupdate: fix build failure
+ due to missing limits.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,42 +132,59 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Commit [1] introduced a patch to fix CVE-2025-32728.
-> Since [2] the security patches neeed to reference the vulnerability with
-> the `CVE: ` trailer in the patch header.
+> Add local patche committed upstream to fix build failure due to missing
+> limits.h include.
 > 
-> This patch is no longer present on master branch with openssh bump [3]
-> but hasn't been cherry picked to 2025.02.x branch.
+> Fixes:
+> https://autobuild.buildroot.org/results/6ed019be7ff0144679f150dbd67cec4dd31fdb15/
 > 
-> The 2025.02.x version still had this patch present and thus need to add
-> the trailer to it.
-> 
-> [1] 211e822d43 package/openssh: apply security patch for CVE-2025-32728 (sshd)
-> [2] 1167d0ff3d docs/manual: mention CVE trailer
-> [3] a127b7e999 package/openssh: bump to version 10.0p1
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  .../0001-fix-logic-error-in-disableforwarding-option.patch       | 1 +
->  1 file changed, 1 insertion(+)
+>  ...001-lua-add-limits.h-to-set-PATH_MAX.patch | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/swupdate/0001-lua-add-limits.h-to-set-PATH_MAX.patch
 > 
-> diff --git a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
-> index 2c64ec1910..d068002638 100644
-> --- a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
-> +++ b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
-> @@ -9,6 +9,7 @@ Spotted by Tim Rice.
->  OpenBSD-Commit-ID: fffc89195968f7eedd2fc57f0b1f1ef3193f5ed1
->  
->  Upstream: https://github.com/openssh/openssh-portable/commit/fc86875e6acb36401dfc1dfb6b628a9d1460f367
-> +CVE: CVE-2025-32728
->  
->  Fixes the following CVE:
->    - CVE-2025-32728: In sshd in OpenSSH before 10.0, the DisableForwarding
+> diff --git a/package/swupdate/0001-lua-add-limits.h-to-set-PATH_MAX.patch b/package/swupdate/0001-lua-add-limits.h-to-set-PATH_MAX.patch
+> new file mode 100644
+> index 0000000000..4dcc88cbfb
+> --- /dev/null
+> +++ b/package/swupdate/0001-lua-add-limits.h-to-set-PATH_MAX.patch
+> @@ -0,0 +1,30 @@
+> +From 3de6491463f4b1ddf2e792771831acfb705e246d Mon Sep 17 00:00:00 2001
+> +From: Stefano Babic <stefano.babic@swupdate.org>
+> +Date: Tue, 11 Feb 2025 09:08:15 +0100
+> +Subject: [PATCH] lua: add limits.h to set PATH_MAX
+> +
+> +This fixes github action (debian slim), with other builds the file is
+> +automatically included.
+> +
+> +Upstream: https://github.com/sbabic/swupdate/commit/3de6491463f4b1ddf2e792771831acfb705e246d
+> +Signed-off-by: Stefano Babic <stefano.babic@swupdate.org>
+> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> +---
+> + corelib/lua_interface.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/corelib/lua_interface.c b/corelib/lua_interface.c
+> +index 02d48259..ffe62d88 100644
+> +--- a/corelib/lua_interface.c
+> ++++ b/corelib/lua_interface.c
+> +@@ -16,6 +16,7 @@
+> + #include <sys/sysmacros.h>
+> + #endif
+> + #include <sys/types.h>
+> ++#include <limits.h>
+> + 
+> + #include "lua.h"
+> + #include "lauxlib.h"
+> +-- 
+> +2.47.3
+> +
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
