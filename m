@@ -1,117 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D5BCD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67915CD6E74
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D8C860BBC;
-	Fri,  5 Jun 2026 12:50:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3ADFC80B19;
+	Fri,  5 Jun 2026 12:50:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7TTOFjF9ucRB; Fri,  5 Jun 2026 12:50:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eTpN3rszg1Ag; Fri,  5 Jun 2026 12:50:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E378961072
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E350C827F3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663813;
-	bh=3UwdQCTCe8Y847Q4lUIXYd2FnS/YtQ0quSKrSKLMEe4=;
+	s=default; t=1780663814;
+	bh=FqBuKoX3OUmrrCCBreD4mQ3m7axZzp76TF1wrMruseU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=N+h0RursWV4tChZooUTyEYuKb3pS48EDZPr4MvCE8tLauQkmv0G1rQS7bPKvayx0w
-	 +Y+dtypMn8eLPvlkBfiJD0gRtz0mDY2isfeGGBQju8q9wjd595NCoQCb4CAiqQD6FC
-	 3X8jqg9XcIvV9cBmrOtF+7wWpjCgHX1+22YDNwNZp7X0yg7u8dIkF+LlMLFF2Vh01E
-	 H6zc+ylyQhf9NXxxZQ2CYxOB2aSrLcwRtJwme9vqxhIYEQEp7zfhv6hlLVKOWEdzwa
-	 rZECOVbpGbLPAO5DhuHWyvxOmZpioVAjsAElHInjqHMmh76m2bk01znc/inDp5D1/N
-	 zdmPgmas6NZDA==
+	b=m81JXDzx5/J1wzPHZafsBkBkaVf958cFepF4nZugASwieSa6KElm2nVOTbUobyREx
+	 +TByxDS/w4WtF2Olw3lwLTcqj6Zkogtc5aW7D2QQtdal55Jw0VWIGIj4SLdVEa9nFw
+	 1XCKduATH2hjK7hvnaLFwHUZ779zyO8F879Boqjmra7yjp040Y2XHzugWG7IMeQXdk
+	 Ywa4hzMaKmUkwQ+vJKIWUPxIBXH7sYX3iN29iTvW5izRG/K1eGkYTtZIoCGF8iMAYe
+	 lmLB8t5ul8LqQ4TUAPTpsJPH76hKvCMM6RkKTVb2GaTGZ2T1GTsgdQoTd9HE6dr6oB
+	 LYd1tlhVOo8HQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E378961072;
-	Fri,  5 Jun 2026 12:50:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AC9AB388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E350C827F3;
+	Fri,  5 Jun 2026 12:50:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E3D5388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D9AF41EF4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 148EE61072
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9vCQGQZwFLMj for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tZcMKjvSJqIU for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3DD1841EEE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DD1841EEE
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3DD1841EEE
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:09 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-46013161068so944811f8f.2
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ADB2960BBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADB2960BBC
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ADB2960BBC
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:10 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-45fd464d51fso1082960f8f.3
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663807; x=1781268607;
+ d=1e100.net; s=20251104; t=1780663809; x=1781268609;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=QUHUd4vBprM0f3qJEijjyUNJdVUxHvgMWsi27ZStE1s=;
- b=Wg5E5EadB5cBVPCBSPi1p2BzGUOmYJtR8Klmp8YL0wfV3jnaOKz8npczDfRoabp1h2
- iufJHvaAVCEWO9Wl/Wk/xcFwn28PCFgwh/6lwKbCVxGQWZ8y4bEFY9tRPZ0xwufUjx9Q
- 6QVe+oTaB786PaqZDDjLo9WKSG53Lyq0wRQ8QsyvLdXEyjoM9CdYjugoxobL6TN07q5T
- 3nDNF7GIBWvwhPrNFu0J0vxiSMxqvpn+qpSKEE5GkzA9sCYJyuuWV+Bb1ZmilNDhPAKD
- VBEzZfHdHEFBPXWRfeku6V3jnXJpP5AlI33U7cUGWdoOG65/NIeJB7QjkdpNvuluwf3p
- 9u+w==
+ bh=OJTa1o6FhDPJ4HmLab9PmbZKDpV5pYpdeKm6rPiOHzs=;
+ b=ZpEdA2h3vGYMPz2FYX29QizzaTyfDpV1pcUIXO1rnrGDvr4klPTITASaqyVI6/xUSb
+ xwZVW3wJbsGy23C5RiyymqBLquD74iyzhdCx66WeJ24MnJN/npwHty6Q28fwfhMhUfgI
+ DLg+5MZyVzemhXInzad/VBIODq+Kl90tRQkXzS0ajI9fEVOSVR1YayjBhJN9G5QbLMSy
+ F3AdHjLZ3CEw4NoI5X722WZKY1bEwDIdNsmimUCvWbPSjR8MFReVvZU5NnwpmXx58W3T
+ 0G0/YnFqSDExkIqYyyMOiZJ+ynUulST0AUsoIjKneuAcLAai+zajRpylS9J2SuaHsmSz
+ xIHQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8+EG/24APz4xXr7Fk7/cfVyoVBeuMdM6CvXnYa4Aah6e8jLG3xF8wnoPZGOPGepuDQ9v91Wi9fJ6k=@buildroot.org
-X-Gm-Message-State: AOJu0YyY4mpbYaioS9EHxUxoa15x3oDcF+Bf5izqRwZy8ek74Q66HC52
- LVnCM6H6gOffd4xZYnUfZGTJf8n5OTdsYi81kkbhib+1bxhgkPihbSl8YmRxsg0iQI4=
-X-Gm-Gg: Acq92OESZlr0VJssflFXh8yZYIZoUExFtTnNR+gd7FzMofVE2LTqQcs+aGn2ofJJTx4
- 7kEBRNkZdYt4SObT937oYCLsrkSdpQAYYHuFZyWj7xvX20X/+3zi4kJETN98rmlbfpNWvRPxc9Q
- fZa6a3vh6el1H2ZlmMSkc01bacnWq8Vhb6u+kp8p7hvCzrQLNPXBl/8Ppmz92uWfhh8vdQOT4hb
- 7p16wOa38jHXiihWIkm86oVdpGpLK0PVDyhGz0iFlLerbxU0zIEjLtKQa9gDw1+RPnnaLlQx/XV
- /P0D728oxVzhQ1m0pRXFwa/eWANHJu1nkz13RlNZ0qeyZiZirVzUVNimyKSYHoht/ifXJn3zHlX
- oK3iIeZR+J++HH3amwmgV3si+23Ch2aH4uGgSv57udGGVv9FjJLQdYouo9Vdwh2Vjeb3/c2OVRv
- PtnbfXkKoVREaY/m8D83h0RCHbfw==
-X-Received: by 2002:adf:e509:0:b0:441:239e:2bb8 with SMTP id
- ffacd0b85a97d-460304f0ad9mr4696783f8f.7.1780663807199; 
- Fri, 05 Jun 2026 05:50:07 -0700 (PDT)
+ AFNElJ9pAIU7WD09vmPzFSVURVgF+9xuZKLzDnJQ3iJ5LY0CRV/v5H+N/3aX0/FuwPrsZGk05an4qn6LMXE=@buildroot.org
+X-Gm-Message-State: AOJu0YwdqdUV8mOO9Ocyh3Dmz3sBPUCXzodgDkGZVsbkjW+j8U6Fug1t
+ pEeC+uunW+4pByL2lg8pjohtIKD9L7zKX4hOcI/K4KO6AIiyaK3irIMXDWrpefVD3CA=
+X-Gm-Gg: Acq92OEAqagquBS9f7CYrjMUad0NhZBv0zmtUYWrKnXECO1t/IwTl+9gx/xEUwrPSsW
+ k47YaoJgL94Ue39UaK8wTM+5hpol2Fp7KjoOAXnlL7tmB5QM+C5bf4hYGbBq5IPENGZ8nZ+bgpg
+ L444pI2GdOBtZ58LxSKjoRxoB2xfU2LOsr+kvSJU5tB/6DsF73hbst7J6PEGRhh/Rsz6z5R6Shd
+ wcBsdc9GJn3haFoER2KYAMI1+cSOrbMoFnJUS3ry4jqtNTj1aMSI/3gbu0XY4WkNj0yfkH/Ofu7
+ jFKC3yrEcj215WhQHR5NIlX+exXoYYXCOxDh6XlEtQgl8FMCkwP5D3SJvueXfwyo33QNu00M4fo
+ dLUGOtzAuaV673YyBb2j6WleYdyy5tM4IXyOdhcyKfbp+yED8VbQ+c+u8iP0daSVw86fO8A5VIX
+ XWFPTrm/bRq9l0rMmwUiz1K4n9+jpAmLBzT1k/
+X-Received: by 2002:a05:6000:22c5:b0:45e:f68d:e791 with SMTP id
+ ffacd0b85a97d-46030182afdmr5772672f8f.0.1780663808510; 
+ Fri, 05 Jun 2026 05:50:08 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f2f5612sm24394400f8f.15.2026.06.05.05.50.06
+ ffacd0b85a97d-4601f344558sm25273181f8f.18.2026.06.05.05.50.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:50:06 -0700 (PDT)
+ Fri, 05 Jun 2026 05:50:07 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:05 +0200
-Message-ID: <20260605125005.272451-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:50:07 +0200
+Message-ID: <20260605125007.272507-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260224182016.2631828-1-bernd@kuhls.net>
-References: <20260224182016.2631828-1-bernd@kuhls.net>
+In-Reply-To: <20260224182016.2631828-2-bernd@kuhls.net>
+References: <20260224182016.2631828-2-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663807; x=1781268607; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663809; x=1781268609; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QUHUd4vBprM0f3qJEijjyUNJdVUxHvgMWsi27ZStE1s=;
- b=UWE3C0VKNQ7ypYqMYX5ReLy3peUz8IoIdWY7bqrkRCK8o9HPKMr/WbvR7MstqksjqH
- FEWT3YX9yApmF79vF0GzJnZLrwVd6DuvgQR29OKjaTCS8Z/Az5dOs7jQK+fxCuzQgNpX
- FamU74kPreATlIg3aHynuJwtQU4t73qzVByvp1/6kXC+b2oZC1pOn2qrkeX+s0IDBBWI
- 73DEFtJBQo6wTo6CMYwy1xex97vI4frEBRi6/ctTWPfLF+Qto85mUoH5z1qBm+1tALpc
- 5bt3efnUGVFVKKo24LxnuG4El7RMRHINBwanp28zV+8pyObVG5BKmMmKRROqDsALhwVu
- ILnQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=OJTa1o6FhDPJ4HmLab9PmbZKDpV5pYpdeKm6rPiOHzs=;
+ b=On3AhtLFjHQJ44l6XlB9nzhyOWQzQcH3u6UIoDhKhFSamTV+7jT7TjgkApGqiidnTv
+ n28TSqp+9TxpLpQ5P0KASDbhxOQE3FfSBfBvfv1TcbnhUwP0DGb4oBLsPmkQIBVGqIKf
+ wwJQqZbjdOOfsTPM/la13Mve8GML+EgrZX/pR9Oz5eBxyyRcDT/GWy6j/Kg1cCnrMzdz
+ Kuhrsq1yLURLOA2d7GMdlGFSbtdmz6VP7cAI4vsFA9WybZ8O00wxbyaAnAqa4dNy3aH/
+ SsZoYka4gy+y/GX/JL2D9aNwl39E5S6M/xq/cbhBtynPuwWCNJqwUQjRi3ZWV5SdTvbb
+ eh0Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UWE3C0VK
-Subject: Re: [Buildroot] [PATCH 1/3] package/vlc: replace wayland-scanner
- patch with upstream commit
+ header.a=rsa-sha256 header.s=google header.b=On3AhtLF
+Subject: Re: [Buildroot] [PATCH 2/3] package/vlc: update freerdp2 patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,144 +130,303 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
+> Replace Gentoo patch from 2018 with rebased version of an upstream
+> commit from 2022 which also fixes build errors introduced by gcc 14.x:
+> 
+> access/rdp.c: In function 'postConnectHandler':
+> access/rdp.c:238:39: error: assignment to 'pDesktopResize' {aka 'int
+>  (*)(struct rdp_context *)'} from incompatible pointer type 'void
+>  (*)(rdpContext *)' {aka 'void (*)(struct rdp_context *)'}
+>  [-Wincompatible-pointer-types]
+>   238 |     p_instance->update->DesktopResize = desktopResizeHandler;
+>       |                                       ^
+> 
+> No autobuilder error was recorded, the build error can be reproduced
+> with this defconfig:
+> 
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_PACKAGE_VLC=y
+> BR2_PACKAGE_FREERDP=y
+> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .checkpackageignore                           |  1 -
->  ...t-possible-to-override-wayland-scann.patch | 39 +++++++++++++++
->  ...o-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 -------------------
->  package/vlc/vlc.mk                            |  1 +
->  4 files changed, 40 insertions(+), 51 deletions(-)
->  create mode 100644 package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
->  delete mode 100644 package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+>  .checkpackageignore                           |   1 -
+>  .../vlc/0007-Add-support-for-freerdp2.patch   | 173 ++++++++++++++----
+>  2 files changed, 133 insertions(+), 41 deletions(-)
 > 
 > diff --git a/.checkpackageignore b/.checkpackageignore
-> index 695e0d50c6..3ad99d0eb1 100644
+> index 3ad99d0eb1..cf3702acf6 100644
 > --- a/.checkpackageignore
 > +++ b/.checkpackageignore
-> @@ -975,7 +975,6 @@ package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch lib_pa
+> @@ -974,7 +974,6 @@ package/vlc/0003-build-use-pkg-config-to-get-tremor-libs.patch lib_patch.Upstrea
+>  package/vlc/0004-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch lib_patch.Upstream
 >  package/vlc/0005-Don-t-assume-strerror_l-is-available.patch lib_patch.Upstream
 >  package/vlc/0006-posix-remove-ancient-run-time-fallback-to-real-time-.patch lib_patch.Upstream
->  package/vlc/0007-Add-support-for-freerdp2.patch lib_patch.Upstream
-> -package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch lib_patch.Upstream
+> -package/vlc/0007-Add-support-for-freerdp2.patch lib_patch.Upstream
 >  package/vlc/0009-modules-video_filter-opencv_example.cpp-fix-build-wi.patch lib_patch.Upstream
 >  package/vlc/0010-opengl-missing-library-check.patch lib_patch.Upstream
 >  package/vpnc/0001-Makefile-allow-to-override-the-PREFIX-variable.patch lib_patch.Upstream
-> diff --git a/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
-> new file mode 100644
-> index 0000000000..b89687ec74
-> --- /dev/null
-> +++ b/package/vlc/0008-configure-make-it-possible-to-override-wayland-scann.patch
-> @@ -0,0 +1,39 @@
+> diff --git a/package/vlc/0007-Add-support-for-freerdp2.patch b/package/vlc/0007-Add-support-for-freerdp2.patch
+> index 75f095545b..c3148600ca 100644
+> --- a/package/vlc/0007-Add-support-for-freerdp2.patch
+> +++ b/package/vlc/0007-Add-support-for-freerdp2.patch
+> @@ -1,32 +1,32 @@
+> -From 3780bbb20bf35aa8f21ac672da3f0c5f408468e9 Mon Sep 17 00:00:00 2001
+> -From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> -Date: Thu, 16 Aug 2018 12:27:40 +0200
+> -Subject: [PATCH] Add support for freerdp2
 > +From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-> +From: Yann Lochet <yann@l0chet.fr>
-> +Date: Fri, 25 Nov 2022 16:20:45 +0100
-> +Subject: [PATCH] configure: make it possible to override wayland-scanner
-> +
-> +When cross-compiling, PKG_CONFIG might pick up the wayland-scanner
-> +from the sysroot.
-> +
-> +Upstream: https://code.videolan.org/videolan/vlc/-/commit/75e52f617bf3273f4883b56c4175d68211e02d14
-> +
+> +From: Juliane de Sartiges <jill@videolabs.io>
+> +Date: Wed, 27 Jul 2022 09:32:25 +0200
+> +Subject: [PATCH] freerdp: update to freerdp2 api
+>  
+> -Downloaded from
+> -https://gitweb.gentoo.org/repo/gentoo.git/tree/media-video/vlc/files/vlc-2.2.8-freerdp-2.patch
+> +Upstream: https://code.videolan.org/videolan/vlc/-/commit/95e7bba6105bd8c2b8ea9cabc02c8dfe7411cab2
+>  
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > +[Bernd: rebased for 3.0.23]
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + configure.ac | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index a91fc73172..5e8821dea9 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -3277,6 +3277,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-> +     ])
-> + 
-> +     AC_MSG_CHECKING([for the Wayland scanner])
-> ++    AS_VAR_SET_IF(WAYLAND_SCANNER, [],[
-> +     PKG_CHECK_EXISTS([wayland-scanner], [
-> +       WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-> +       AC_MSG_RESULT([${WAYLAND_SCANNER}])
-> +@@ -3284,6 +3285,7 @@ AS_IF([test "${enable_wayland}" = "yes"], [
-> +       AC_MSG_RESULT([not found])
-> +       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-> +     ])
-> ++    ])
-> + 
-> +     have_wayland="yes"
-> + 
-> +-- 
-> +2.47.3
-> +
-> diff --git a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-> deleted file mode 100644
-> index 2b74fe0d39..0000000000
-> --- a/package/vlc/0008-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
-> -From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -Date: Sun, 26 Aug 2018 12:51:04 +0200
-> -Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
-> - wayland-scanner
-> -
-> -When cross-compiling the .pc file might point to the wrong
-> -wayland-scanner binary (target rather than host) resulting in a
-> -non-executable and wrong scanner.
-> -Try searching the PATH first, and if that fails fall back into
-> -pkg-config.
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ----
-> - configure.ac | 19 +++++++++++--------
-> - 1 file changed, 11 insertions(+), 8 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 4808b8becf..a18641ed23 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
-> -       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
-> -     ])
-> - 
-> --    AC_MSG_CHECKING([for the Wayland scanner])
-> --    PKG_CHECK_EXISTS([wayland-scanner], [
-> --      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-> --      AC_MSG_RESULT([${WAYLAND_SCANNER}])
-> --    ], [
-> --      AC_MSG_RESULT([not found])
-> --      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-> --    ])
-> -+    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-> -+    if test "x$WAYLAND_SCANNER" = x; then
-> -+        AC_MSG_CHECKING([for the Wayland scanner])
-> -+        PKG_CHECK_EXISTS([wayland-scanner], [
-> -+          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-> -+          AC_MSG_RESULT([${WAYLAND_SCANNER}])
-> -+        ], [
-> -+          AC_MSG_RESULT([not found])
-> -+          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-> -+        ])
-> -+    fi
-> - 
-> -     have_wayland="yes"
-> - 
-> --- 
-> -2.18.0
-> -
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 07aeefd193..0ce6662353 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -527,6 +527,7 @@ VLC_CONF_OPTS += --disable-udev
->  endif
+>  ---
+>   configure.ac         |  2 +-
+> - modules/access/rdp.c | 51 ++++++++++++++-------------------------------------
+> - 2 files changed, 15 insertions(+), 38 deletions(-)
+> + modules/access/rdp.c | 85 ++++++++++++++++++++------------------------
+> + 2 files changed, 40 insertions(+), 47 deletions(-)
 >  
->  ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS),yy)
-> +VLC_CONF_ENV += WAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
->  VLC_CONF_OPTS += --enable-wayland
->  VLC_DEPENDENCIES += wayland wayland-protocols
->  else
+>  diff --git a/configure.ac b/configure.ac
+> -index bfe43512a2..4808b8becf 100644
+> +index d96287d3e0..a91fc73172 100644
+>  --- a/configure.ac
+>  +++ b/configure.ac
+> -@@ -1992,7 +1992,7 @@ PKG_ENABLE_MODULES_VLC([VNC], [vnc], [libvncclient >= 0.9.9], (VNC/rfb client su
+> +@@ -2194,7 +2194,7 @@ PKG_ENABLE_MODULES_VLC([VNC], [vnc], [libvncclient >= 0.9.9], (VNC/rfb client su
+>   
+>   dnl  RDP/Remote Desktop access module
+>   dnl
+>  -PKG_ENABLE_MODULES_VLC([FREERDP], [rdp], [freerdp >= 1.0.1], (RDP/Remote Desktop client support) )
+> -+PKG_ENABLE_MODULES_VLC([FREERDP], [rdp], [freerdp2 >= 1.0.1], (RDP/Remote Desktop client support) )
+> ++PKG_ENABLE_MODULES_VLC([FREERDP], [rdp], [freerdp2 >= 2.0.0], (RDP/Remote Desktop client support) )
+>   
+>   dnl
+>   dnl  Real RTSP plugin
+>  diff --git a/modules/access/rdp.c b/modules/access/rdp.c
+> -index 2992090219..49986f5da9 100644
+> +index 0c39663c64..04ae005938 100644
+>  --- a/modules/access/rdp.c
+>  +++ b/modules/access/rdp.c
+>  @@ -45,18 +45,6 @@
+> @@ -48,37 +48,51 @@ index 2992090219..49986f5da9 100644
+>   #include <errno.h>
+>   #ifdef HAVE_POLL
+>   # include <poll.h>
+> -@@ -144,6 +132,7 @@ static void desktopResizeHandler( rdpContext *p_context )
+> +@@ -75,6 +63,8 @@
+> + 
+> + #define CFG_PREFIX "rdp-"
+> + 
+> ++#define FREERDP_PIXEL_BPP(_format) (_format >> 24)
+> ++
+> + /*****************************************************************************
+> +  * Module descriptor
+> +  *****************************************************************************/
+> +@@ -139,11 +129,12 @@ typedef struct vlcrdp_context_t vlcrdp_context_t;
+> + 
+> + /* updates handlers */
+> + 
+> +-static void desktopResizeHandler( rdpContext *p_context )
+> ++static BOOL desktopResizeHandler( rdpContext *p_context )
+> + {
+>       vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_context;
+>       demux_sys_t *p_sys = p_vlccontext->p_demux->p_sys;
+>       rdpGdi *p_gdi = p_context->gdi;
+> -+    unsigned bytesPerPixel;
+> ++    int i_colordepth = FREERDP_PIXEL_BPP( p_gdi->dstFormat );
+>   
+>       if ( p_sys->es )
+>       {
+> -@@ -153,17 +142,21 @@ static void desktopResizeHandler( rdpContext *p_context )
+> +@@ -151,11 +142,13 @@ static void desktopResizeHandler( rdpContext *p_context )
+> +         p_sys->es = NULL;
+> +     }
+>   
+> -     /* Now init and fill es format */
+> +-    /* Now init and fill es format */
+>       vlc_fourcc_t i_chroma;
+>  -    switch( p_gdi->bytesPerPixel )
+> -+    switch( p_gdi->dstFormat )
+> ++    /* Now init and fill es format */
+> ++    switch ( i_colordepth )
+>       {
+>           default:
+> --        case 16:
+> -+            msg_Dbg( p_vlccontext->p_demux, "unhandled dstFormat %x bpp", p_gdi->dstFormat);
+> -+        case PIXEL_FORMAT_BGR16:
+> ++            msg_Dbg( p_vlccontext->p_demux, "invalid color depth %d", i_colordepth);
+> ++            /* fallthrough */
+> +         case 16:
+>               i_chroma = VLC_CODEC_RGB16;
+> -+            bytesPerPixel = 16;
+>               break;
+> --        case 24:
+> -+        case PIXEL_FORMAT_BGR24:
+> +@@ -163,7 +156,7 @@ static void desktopResizeHandler( rdpContext *p_context )
+>               i_chroma = VLC_CODEC_RGB24;
+> -+            bytesPerPixel = 24;
+>               break;
+> --        case 32:
+> -+        case PIXEL_FORMAT_BGRA32:
+> -             i_chroma = VLC_CODEC_RGB32;
+> -+            bytesPerPixel = 32;
+> +         case 32:
+> +-            i_chroma = VLC_CODEC_RGB32;
+> ++            i_chroma = VLC_CODEC_ARGB;
+>               break;
+>       }
+>       es_format_t fmt;
+> @@ -87,11 +101,61 @@ index 2992090219..49986f5da9 100644
+>       fmt.video.i_frame_rate_base = 1000;
+>       fmt.video.i_frame_rate = 1000 * p_sys->f_fps;
+>  -    p_sys->i_framebuffersize = p_gdi->width * p_gdi->height * p_gdi->bytesPerPixel;
+> -+    p_sys->i_framebuffersize = p_gdi->width * p_gdi->height * bytesPerPixel;
+> ++    p_sys->i_framebuffersize = p_gdi->width * p_gdi->height * (i_colordepth >> 3);
+>   
+>       if ( p_sys->p_block )
+>           p_sys->p_block = block_Realloc( p_sys->p_block, 0, p_sys->i_framebuffersize );
+> -@@ -237,28 +230,19 @@ static bool postConnectHandler( freerdp *p_instance )
+> +@@ -184,20 +177,21 @@ static void desktopResizeHandler( rdpContext *p_context )
+> +         p_sys->p_block = block_Alloc( p_sys->i_framebuffersize );
+> + 
+> +     p_sys->es = es_out_Add( p_vlccontext->p_demux->out, &fmt );
+> ++    return TRUE;
+> + }
+> + 
+> +-static void beginPaintHandler( rdpContext *p_context )
+> ++static BOOL beginPaintHandler( rdpContext *p_context )
+> + {
+> +     vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_context;
+> +     demux_sys_t *p_sys = p_vlccontext->p_demux->p_sys;
+> +     rdpGdi *p_gdi = p_context->gdi;
+> +-    p_gdi->primary->hdc->hwnd->invalid->null = 1;
+> +-    p_gdi->primary->hdc->hwnd->ninvalid = 0;
+> ++    p_gdi->primary->hdc->hwnd->invalid->null = TRUE;
+> +     if ( ! p_sys->p_block && p_sys->i_framebuffersize )
+> +         p_sys->p_block = block_Alloc( p_sys->i_framebuffersize );
+> ++    return TRUE;
+> + }
+> + 
+> +-static void endPaintHandler( rdpContext *p_context )
+> ++static BOOL endPaintHandler( rdpContext *p_context )
+> + {
+> +     vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_context;
+> +     demux_sys_t *p_sys = p_vlccontext->p_demux->p_sys;
+> +@@ -208,11 +202,12 @@ static void endPaintHandler( rdpContext *p_context )
+> +         p_sys->p_block->i_buffer = p_sys->i_framebuffersize;
+> +         memcpy( p_sys->p_block->p_buffer, p_gdi->primary_buffer, p_sys->p_block->i_buffer );
+> +     }
+> ++    return TRUE;
+> + }
+> + 
+> + /* instance handlers */
+> + 
+> +-static bool preConnectHandler( freerdp *p_instance )
+> ++static BOOL preConnectHandler( freerdp *p_instance )
+> + {
+> +     vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_instance->context;
+> +     demux_sys_t *p_sys = p_vlccontext->p_demux->p_sys;
+> +@@ -229,49 +224,54 @@ static bool preConnectHandler( freerdp *p_instance )
+> +     p_instance->settings->EncryptionMethods =
+> +             var_InheritBool( p_vlccontext->p_demux, CFG_PREFIX "encrypt" );
+> + 
+> +-    return true;
+> ++    return TRUE;
+> + }
+> + 
+> +-static bool postConnectHandler( freerdp *p_instance )
+> ++static BOOL postConnectHandler( freerdp *p_instance )
+> + {
+>       vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_instance->context;
+>   
+>       msg_Dbg( p_vlccontext->p_demux, "connected to desktop %dx%d (%d bpp)",
+> @@ -109,22 +173,51 @@ index 2992090219..49986f5da9 100644
+>       p_instance->update->DesktopResize = desktopResizeHandler;
+>       p_instance->update->BeginPaint = beginPaintHandler;
+>       p_instance->update->EndPaint = endPaintHandler;
+> ++    UINT32 format;
+> ++    switch ( p_instance->settings->ColorDepth )
+> ++    {
+> ++        default:
+> ++            msg_Dbg( p_vlccontext->p_demux, "no valid pixel format found for color depth %d bpp", p_instance->settings->ColorDepth);
+> ++            /* fallthrough */
+> ++        case 16:
+> ++            format = PIXEL_FORMAT_RGB16;
+> ++            break;
+> ++        case 24:
+> ++            format = PIXEL_FORMAT_RGB24;
+> ++            break;
+> ++        case 32:
+> ++            format = PIXEL_FORMAT_ARGB32;
+> ++            break;
+> ++    }
+>   
+> --    gdi_init( p_instance,
+> +     gdi_init( p_instance,
+>  -                CLRBUF_16BPP |
+>  -#if defined(FREERDP_VERSION_MAJOR) && defined(FREERDP_VERSION_MINOR) && \
+>  -    !(FREERDP_VERSION_MAJOR > 1 || (FREERDP_VERSION_MAJOR == 1 && FREERDP_VERSION_MINOR >= 2))
+>  -                CLRBUF_24BPP |
+>  -#endif
+>  -                CLRBUF_32BPP, NULL );
+> -+    if ( p_instance->settings->ColorDepth > 16 )
+> -+        gdi_init( p_instance, PIXEL_FORMAT_XRGB32);
+> -+    else
+> -+        gdi_init( p_instance, PIXEL_FORMAT_RGB16);
+> ++                format );
+>   
+>       desktopResizeHandler( p_instance->context );
+> -     return true;
+> -@@ -432,10 +416,6 @@ static int Open( vlc_object_t *p_this )
+> +-    return true;
+> ++    return TRUE;
+> + }
+> + 
+> +-static bool authenticateHandler( freerdp *p_instance, char** ppsz_username,
+> ++static BOOL authenticateHandler( freerdp *p_instance, char** ppsz_username,
+> +                                  char** ppsz_password, char** ppsz_domain )
+> + {
+> +     VLC_UNUSED(ppsz_domain);
+> +     vlcrdp_context_t * p_vlccontext = (vlcrdp_context_t *) p_instance->context;
+> +     *ppsz_username = var_InheritString( p_vlccontext->p_demux, CFG_PREFIX "user" );
+> +     *ppsz_password = var_InheritString( p_vlccontext->p_demux, CFG_PREFIX "password" );
+> +-    return true;
+> ++    return TRUE;
+> + }
+> + 
+> + /*****************************************************************************
+> +@@ -432,10 +432,6 @@ static int Open( vlc_object_t *p_this )
+>       if ( p_sys->f_fps <= 0 ) p_sys->f_fps = 1.0;
+>       p_sys->i_frame_interval = 1000000 / p_sys->f_fps;
+>   
+> @@ -135,7 +228,7 @@ index 2992090219..49986f5da9 100644
+>       p_sys->p_instance = freerdp_new();
+>       if ( !p_sys->p_instance )
+>       {
+> -@@ -508,9 +488,6 @@ static void Close( vlc_object_t *p_this )
+> +@@ -512,9 +508,6 @@ static void Close( vlc_object_t *p_this )
+>   
+>       freerdp_disconnect( p_sys->p_instance );
+>       freerdp_free( p_sys->p_instance );
+> @@ -146,5 +239,5 @@ index 2992090219..49986f5da9 100644
+>       if ( p_sys->p_block )
+>           block_Release( p_sys->p_block );
+>  -- 
+> -2.14.4
+> +2.47.3
+>  
 > -- 
 > 2.47.3
 > 
