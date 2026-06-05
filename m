@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65713CD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46D4ECD6E74
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40F0F40FDE;
-	Fri,  5 Jun 2026 12:49:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1791382143;
+	Fri,  5 Jun 2026 12:49:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CMtqiU0b_0ME; Fri,  5 Jun 2026 12:49:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O1dA8wc3JRIN; Fri,  5 Jun 2026 12:49:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 391D541256
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DEE4820C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663760;
-	bh=7W3ZeAeteU+u2cXUc6XIRvD4u3y0V9uK9JaRBa4M5xE=;
+	s=default; t=1780663764;
+	bh=aAymMpQET/i77uXRC6XzD9lc+urZbQo5DpSmVVYwoHo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=g10y2i4Tqv0U1wlwMiGr9o9Zs8t6/SIPh0whpAWBgOP6bwRK2weKwcgbFci+1pbKn
-	 tytHrkkbFwLVOfTRtqQv7QJK0gv+DeC1Gk4Pwqx6Wqh32KXK0JTXwMdgClFZv/a+PJ
-	 MEqx3iKc5VhHBd0ILKCnwoLXsdOksG1IOv9yL1kWxMmEzYCOKXvc7G2QewG4f46qOi
-	 frvlCSYsaQ423zJNbKBQvQThAZoKkd8ymu7cc0pLFzsmPSWVGcj+n2YmxxSOSrb3iM
-	 9pGMixXNTP2Em8GRhDwXDrFGY3Ab3irLsiqcoZgKw7qx8rp3/EfP2+iGyEPiPYyzo2
-	 Yf0OcgfvSnYlQ==
+	b=Cclq0SLc0lsU/8wCpa7hYbGF3ut78aEi+39Lm1dWUHM1jkREeHtThHYvYRCyPnqyl
+	 vdhtSYbu5DtS2qtgnkS5mzLjHXlpo98TFvg1JCD43WvUgDWEvhP8rQRFHqeNaKGjr/
+	 joqyH54FQtp+91v5Kn/Pj4xjyjE5j2PhkuPwzf9oT7Mxk1y9Uz8MQzvY4ZACGnMdQ6
+	 wVGB/M2q9oW2BTW8vLuAkS1taviopErRdAqxg/WnlLti0SmqDnrAelPj99SI+6WbqZ
+	 rNKeDsZHxoXoG80Dl1kW721hvHsjVkb06lCaXfUFnmPqX13B+VMIqRCtaIvtdX9vg4
+	 MUvYxw+Ubpn5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 391D541256;
-	Fri,  5 Jun 2026 12:49:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A8632F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DEE4820C4;
+	Fri,  5 Jun 2026 12:49:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDA69388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E05340381
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3F17821D6
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1BFs73NVr8xs for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:49:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A6QuckjRh3-6 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:49:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7039C4037E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7039C4037E
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7039C4037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:17 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4903d730b1fso20488965e9.2
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E625782135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E625782135
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E625782135
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:49:19 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-45ef56d9b67so1464332f8f.2
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:49:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663755; x=1781268555;
+ d=1e100.net; s=20251104; t=1780663758; x=1781268558;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=abIdslBcL+DVPuam84o/qngLIPqs7eRV8Fw531GHEOs=;
- b=lYGGB3cJHpRVpat+V4hbptKTK4j+kBkoHLg2jWsoFsXyHpqwW9UtBsYtGQ5aR+2Em4
- h10f16IlmJiqKVsP0tpi9Wg0NFzRHC/dPBf39UXCqsolpSmdsXQJ9yNy6lDtWSHQZuzO
- jSSxq+IR/hdNUt2vGUqyQrYSA6uLydlnmtcrdnjlXAVzEYrWC40ateVOs6B5+fjNDfMe
- cp52m0w8iSEU8ZWtcfhrDFPlq3Ermo0O2xUZzL4mDxQNfwwPEo43S+f5wBy6psOzM2eh
- klTypaFmLvYOyKvd8qoA80MIhfDBFDs+uXLxv9669jm1cnhNcy45AYT813wW+mjdMc4t
- +p0g==
+ bh=loyc2rJ3jQUw1y7QsKcqLKgDLzrcOVCvreq8Gf0a2Bg=;
+ b=CShpb67ChHa0FxvShfPMGIbODC4MoFGhONQPb3ObvezCX010tyR/WE5uAQBEUryiAv
+ QdsDmUQ367+HJxocvPPLG+Ltsz939zaDUMsMbi3o3Dl1QKVJphDPIroxIxFMy42IKpP1
+ pvDyXUC6Cry/QOREmd44a+UO3pC4Wg24Axr4vncADSpm9NC02su1hXZlGxitMJDsA4ti
+ 7kGEHyhA8c0sR+ieeMvWug3h7sRS3L6B1d5FJ3f5Rjyev19QmTX6Mte5iQ7fCqeFOO2t
+ jLQOefJZ57IHcioD3HlJVJO7NnIdp4ggf1tK4AGn/LIGDyObl/bI8GmMFZbzsBdjRCD4
+ TbMA==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+rBZ0sBOQzrGEd8Y4+Nw3u8zyLW382ijY44fmDsrUJDs1QmxP6myrP3Sp2B9t2XUFVguqvIE9EP4I=@buildroot.org
-X-Gm-Message-State: AOJu0YzkCea5wkDeAEqa1Ywd6UvbeJZPtYshSbJQBiSdN71Id93LfosC
- oBhTVjzoU/OabICnWCbvFVa4HkzcDiLOPoXLna8og7JmzRNbPu3Eaw5nFCvqanSq87s=
-X-Gm-Gg: Acq92OG3Ktqymw0AUaAMzif6ZEV98omvhNmcGG+qmdqC00sV//5xmiW/iK/ogqdI54E
- Kw/NmmZwuKtk4gwY3Go+1oEh8/mmttfwTa/tgesSmJJ71A3smnXWxZ0iaKjGKDg1zX9mTEeCkWv
- oriV2XZurAxqCPrcmDLdrZfo2kPZ1ddhKet2Jles4mLibSmYNsRQUXvNkAzevnDPv1U6wsMDcwd
- GkUjIZVXtLEHaX/dOMa3hzvhAZajxpXCar8daQnkOOoshwdDrPnTVDkk686ZZUvdYDpPMKBtlX3
- ZBixFcafMPTbEiysZ/gij3ys4MCaKRXSAJOuwN7+wR6Gj6+IUegfgfQsR3AbgQDOAC/yHvsGQNT
- u/OO57zT42O1gKz6WvHXSzzlbh/+WLvIxUFwzSuVNkVZK12iFmNJNy2J6Pq7nAfoi8wIp7UpjH7
- yoBJAToTvmLSRwVYneY0eNfpbnzw==
-X-Received: by 2002:a05:600c:c491:b0:490:b9d3:a9ce with SMTP id
- 5b1f17b1804b1-490c2606a1fmr55693295e9.30.1780663755218; 
- Fri, 05 Jun 2026 05:49:15 -0700 (PDT)
+ AFNElJ/gFiXJNVY94dNrBq0s9+8uGuBY76gcPTCNT9rnvmv9ThePoXjso5HvcMztmBRlRqrfJmW4IZamHOg=@buildroot.org
+X-Gm-Message-State: AOJu0Yzeimiv5QNhDVYGPiItvHSjhIv5N9Hho06Pm8yA9/zt2cU+3b+z
+ ctz1Q2WZ+RMjYbxXy2IsUVecYwMyKOTxPBO4RoZRyRSMN/4NUktKfz9zv2oEOmllcKBbWsQ9Y6U
+ SKmNr
+X-Gm-Gg: Acq92OF4Qhlrirs/1BxKICxRksEnJ3d8JrsuUrYGbq60rCP5JOses/jUthMOaeFFuEt
+ XiF5AoulLyeQof7lm7CgK2QEXtii7qmGCic+kHeO0KWeilmPBtH2teNeShzAtMs9fZliEObtD4V
+ 3xyVNptJcuT5L0tHNwbk/2qPT3lcHt5dy2A46zYtkl4plev5RgL7BaRjEEmIIBaAkn6aVEgzri/
+ 5lDejyXFrr19GL08n2D8bMci3KHwDidlQX06G9lSLV5ZxxBCoDuJn+nN/dbYlNuF6RML+U+XpyO
+ ws7ZavxN69A5HdkyZGGuxkpl8a+tUthKE91BIoGoed7WlriKiWcsDLR2+29aEyXkMpDcszJtoG0
+ 1HRM/X+A4ti5pjnjX9QqHfZzNrd4Bm0IGwT7sj5JOyLJLYK85VE7mHiwvHEIPrLfW+yAC90Lv3q
+ bbdRC7qPJIxAfJl6ekrgYD+x43jg==
+X-Received: by 2002:a5d:4e05:0:b0:460:e2e:6e25 with SMTP id
+ ffacd0b85a97d-46030505e58mr4185600f8f.21.1780663757834; 
+ Fri, 05 Jun 2026 05:49:17 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc39eb04sm154957805e9.6.2026.06.05.05.49.14
+ ffacd0b85a97d-4601f351d69sm42538359f8f.29.2026.06.05.05.49.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:49:15 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 05 Jun 2026 05:49:17 -0700 (PDT)
+To: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:49:14 +0200
-Message-ID: <20260605124914.270585-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:49:17 +0200
+Message-ID: <20260605124917.270749-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260118140107.2331715-1-bernd@kuhls.net>
-References: <20260118140107.2331715-1-bernd@kuhls.net>
+In-Reply-To: <20260417060553.10171-1-chakrabortyshubham66@gmail.com>
+References: <20260417060553.10171-1-chakrabortyshubham66@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663755; x=1781268555; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663758; x=1781268558; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=abIdslBcL+DVPuam84o/qngLIPqs7eRV8Fw531GHEOs=;
- b=KyubcxBH5u90Zcyzam1qJRXdSjtZU3Nw42fUgxR5zwcdcg5YoEDXTvGqXLYtHfE9D3
- o5MZ36pwYiaJbnVIiSwAtdDGAdDx1kedzicf2zY2lrL8qMwUaaHda2hiDujnrjHlBRzH
- tw57+Shdk9TZ+4p+2QnbFt3iDhe9zdDi5eIQf01HsrF4deGpwcoKgO3A5G3+EYNtLhS3
- pogdxmRb7QOjP07ecIZuyS1D6/R9sm+hb7BFKHrqSTjZ1/7JPpvNcogYwdbtg1OUixdC
- xRSWfx3tRtOoqh/FgOVEQGb13fOO3WhNJiCsJ9QJa9+84DMGQQGs22YyL7cWJcJEKu2G
- Xx7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=loyc2rJ3jQUw1y7QsKcqLKgDLzrcOVCvreq8Gf0a2Bg=;
+ b=ZGqXjl4z3PSaM+5qX8UP7mFcjWnYr6WuBoPRxdr5ZKdA0KYMJnpyi3ANZWGmW6kwqH
+ XY/v4iwTIsDdNeq6/N6OCZ/4/t108KxlcPkLvj7YsnPooT2i6LpKEg13uaXCFnxZPoZ0
+ 22Lqvf4BqOr8TOOnQ0jnPBWboyc05BK2nKZ/R6+qfzhsXV3L3wz7sUPNFqnZ8O/KJ/Rb
+ yP62x3ynPE/lEQjq4pLK5y1ykpQiOzNeb3IgjR04Wi8/4pX9vpXPkgM4p2uzKv8fj8v1
+ oRoO/et7pqI3Ug4VLAloD76GS37CyaKMxbGLfEUXq1+saYiWBLg1QtZb6RphOqMDg1IM
+ IdWg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KyubcxBH
-Subject: Re: [Buildroot] [PATCH 1/1] package/lua-sdl2: fix cmake 4
- compatibility
+ header.a=rsa-sha256 header.s=google header.b=ZGqXjl4z
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/util-linux: fix LSMT_ROOT
+ fallback definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,55 +132,75 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes:
-> https://autobuild.buildroot.net/results/f75/f75d1d0b83c90c0cb5dc7781ea8ce7ff1d67512a/
+> The fallback definition for LSMT_ROOT was incorrectly guarded
+> with #ifdef instead of #ifndef, making it ineffective on systems
+> with older kernel headers that don't define this constant.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> This caused build failures with "LSMT_ROOT undeclared" errors on
+> autobuilders using older kernel headers.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/ac2/ac2bc633db0c605564c79bfdfa0e257a9b4f1b28/
+> 
+> Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> 
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  ...-better-FindSDL2-based-on-components.patch | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
+> Changes v1 -> v2:
+>   - Add missing 'Upstream:' tag to patches (fixes check-package failure)
+>   - Use symlink for util-linux-libs patch to avoid duplication
+> ---
+>  ...api-utils.h-fix-LSMT_ROOT-definition.patch | 27 +++++++++++++++++++
+>  ...api-utils.h-fix-LSMT_ROOT-definition.patch |  1 +
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+>  create mode 120000 package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
 > 
-> diff --git a/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
+> diff --git a/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
 > new file mode 100644
-> index 0000000000..ce3a96e5a3
+> index 0000000000..3d0de62bfd
 > --- /dev/null
-> +++ b/package/lua-sdl2/0003-cmake-use-a-better-FindSDL2-based-on-components.patch
-> @@ -0,0 +1,29 @@
-> +From 8bb1cbb2b346502d6285a40e25e52d3e41551afb Mon Sep 17 00:00:00 2001
-> +From: David Demelier <markand@malikania.fr>
-> +Date: Sun, 24 Jan 2021 14:28:15 +0100
-> +Subject: [PATCH] cmake: use a better FindSDL2 based on components
+> +++ b/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+> @@ -0,0 +1,27 @@
+> +From 72ff3b8998a675900fcb7c18c0e03f1552b13a8b Mon Sep 17 00:00:00 2001
+> +From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+> +Date: Tue, 14 Apr 2026 11:04:08 +0530
+> +Subject: [PATCH] include/mount-api-utils.h: fix LSMT_ROOT definition
 > +
-> +Upstream: https://github.com/Tangent128/luasdl2/commit/feb49bb1eea77aa953313f2a641576e515f0ec3b
-> +
-> +[Bernd: Partially backported to fix build error with cmake 4]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +Upstream: Pending
+> +Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
 > +---
-> + CMakeLists.txt | 2 +-
+> + include/mount-api-utils.h | 2 +-
 > + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index f5b59de..cc28bdf 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -17,7 +17,7 @@
-> + # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-> + #
+> +diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
+> +index a916f99..87e173e 100644
+> +--- a/include/mount-api-utils.h
+> ++++ b/include/mount-api-utils.h
+> +@@ -339,7 +339,7 @@ struct ul_statmount {
+> + /*
+> +  * Special @mnt_id values that can be passed to listmount
+> +  */
+> +-#ifdef LSMT_ROOT
+> ++#ifndef LSMT_ROOT
+> + # define LSMT_ROOT              0xffffffffffffffff    /* root mount */
+> + #endif
 > + 
-> +-cmake_minimum_required(VERSION 2.8)
-> ++cmake_minimum_required(VERSION 3.10)
-> + project(Lua-SDL2 C)
-> + 
-> + # Project information
 > +-- 
-> +2.47.3
+> +2.53.0
 > +
+> diff --git a/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+> new file mode 120000
+> index 0000000000..88f6b841f7
+> --- /dev/null
+> +++ b/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+> @@ -0,0 +1 @@
+> +../0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
+> \ No newline at end of file
 > -- 
-> 2.47.3
+> 2.53.0
 > 
 > _______________________________________________
 > buildroot mailing list
