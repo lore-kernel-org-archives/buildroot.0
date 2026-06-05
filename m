@@ -1,83 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE172CD6E74
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 07:00:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86E31CD6E74
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 09:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42F9B813D8;
-	Fri,  5 Jun 2026 07:00:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2658F40D76;
+	Fri,  5 Jun 2026 09:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RXEzVotOd3da; Fri,  5 Jun 2026 07:00:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m6aRYpSINcOl; Fri,  5 Jun 2026 09:52:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44A0D813C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6308D40D77
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780642814;
-	bh=+kEJzkiKdaTedMDoN87erJCje3MwgcriBfHaxkO+Ho8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=SRgdHPO+XHYtZEPy2D97fT8IAmNQn4PltmLPRvE+9ch1vx6C+EWU7Fx1kKnegB4ow
-	 FPziXiUa6Kj3JQDjakFz92HmK6xw4OwbZljdeXP8cKF62hjkXAFWjXiAxBexkv4GqN
-	 gfid4Dur1VcJFoj6UOQaCjGG97XTNUlP9+c683o++PHmEwqB2qKQ2fAnDAH15Yc7OD
-	 iG1rMs9qD7zRWMwAga9Q+pAs6wejoaidzObFu0kFlYcJz+6FdqjuPTWZkfaNOK+Uns
-	 4fKnK3zXhwNbXiA2j3mU8TrkIKFYdS0Lt+/vPcvzC3/VZT49JMzjdXXn9JJDuCZLWw
-	 8Bst3vn3SPf8g==
+	s=default; t=1780653163;
+	bh=Q9uVi7JULny/7dIafN45eccENLZMhEgBMxtQCf6LBhU=;
+	h=From:Date:References:In-Reply-To:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=XK9e97qklwPjGHECLPJDKKUWwBV4/EPMgKcIcaYFhJBzQPs3xEix2ADJFDgcGP13K
+	 tuTBO3cohuJLxU5W3Nx+ePAXT7N7nBn5pX53aH979XQ9/KpZXFFNh4NAAioriADTft
+	 3bmJeW1UGdXlvXbmAz1dMNFM+utDn41WUMcLsSTZJT8aJgKue84CccXvUvSM7wfdHn
+	 sWfHPQXPKO1N9u0stJ2eHnF6hv6lBvbrGimt26cn1DNWUI1WYVdZ5sbXAtrA26Y60S
+	 GNkJbJa+CrOFGeQNHDf/Of27FXBRURH1jhrglp2AKqJ7A8uVXyhu7MzJzMN69kN2eL
+	 D2aH8IMsJ42CA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44A0D813C9;
-	Fri,  5 Jun 2026 07:00:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6308D40D77;
+	Fri,  5 Jun 2026 09:52:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4EAD026A
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 07:00:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 096583B7
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 09:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3537D813C9
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 07:00:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E010181D24
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 09:52:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k8CJyL1Grp7I for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 07:00:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85B03813B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85B03813B5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 85B03813B5
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 07:00:11 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1871766380; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 05 Jun 2026 07:00:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wVOXG-0000000GPfO-0AV4;
- Fri, 05 Jun 2026 09:00:06 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 09:00:02 +0200
-Message-ID: <20260605070003.3911896-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+ id A_3koGlj-VsP for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 09:52:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DE9B381D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE9B381D21
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE9B381D21
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 09:52:39 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB8674CEB;
+ Fri,  5 Jun 2026 02:43:19 -0700 (PDT)
+Received: from [127.0.1.1] (X72Y076X74-2.nice.arm.com [10.34.129.16])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40C0C3F86F;
+ Fri,  5 Jun 2026 02:43:24 -0700 (PDT)
+From: =?utf-8?q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Fri, 05 Jun 2026 11:43:07 +0200
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=KQuADEUarcZzK1wN3OHDO6lOEHULdwpUJvpbhwpPn2Zo64j9Vw4vhPGCm0SFtorKeDHbZFCq0g05xLlMc6rZQGhTkOA1Web5h5aoa997jjY4tjzZuNxXRytldulRIYBrBe6yQkjflf4+cB1ktYi7C9IWPnmsOg08CY95vu6N8oImaHVJC02htu59Hy3PT2RRmZsgW7Mc1XWvkO2oqkcum8uaYBcjebSgEtVTCqUmzm6Bd7A84K4VPENL0wDZW3eD63hOvJ793u80K8O7a5OLN89T9rw8gVV6lEObxusLyAFa2aBXC5vEJMuDGnVtSb2dkpO8AgUZK7opsWGyW8C1nQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=OAq1c9TwEyoQHWnUt3ZQH4iZUACFBUspVvS7j8JcW+s=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Message-Id: <20260605-p11-v1-2-f3a206958d94@arm.com>
+References: <20260605-p11-v1-0-f3a206958d94@arm.com>
+In-Reply-To: <20260605-p11-v1-0-f3a206958d94@arm.com>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+X-Mailer: b4 0.14.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=arm.com; s=foss; 
+ t=1780652604; bh=8SribuQapANqRZTqo4PavhgCJL526NRclNdIB5FDOf0=;
+ h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+ b=g56zppxkefaH9csF+IwV9UQBPPs78Nbfu8VM9oscjcxMbjhlRZWyFpZy/4NI2jdsJ
+ hnA3Q91/EG/pI+FEnRByTggjRlaBez4nBbtg6QYLZhA2a0sdt1ka8gfjHGcGf/r27I
+ bb8gk5CmsDo4nJhdls62NIPkzPBR27Xt87vWljZU=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=none dis=none)
+ header.from=arm.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=KQuADEUa
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/libusb: security bump to version 1.0.30
+ dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com
+ header.a=rsa-sha256 header.s=foss header.b=g56zppxk
+Subject: [Buildroot] [PATCH next 2/2] package/gnutls: add host support for
+ pkcs11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,75 +90,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
-
-CVE-2026-23679: libusb before version 1.0.30 contains a NULL pointer
-dereference vulnerability that allows attackers to crash applications by
-supplying a malformed USB configuration descriptor where an interface claims
-bNumEndpoints greater than zero but is followed by a class-specific
-descriptor whose bLength exceeds the remaining buffer size, causing
-parse_interface() to return early without allocating the endpoint array.
-Attackers can exploit this flaw through libusb_get_active_config_descriptor
-or libusb_get_config_descriptor by providing crafted descriptors via
-virtualized USB passthrough, file-based descriptor parsing, or network
-sources, causing any application iterating over endpoints to dereference a
-NULL endpoint pointer and crash.
-
-https://nvd.nist.gov/vuln/detail/CVE-2026-23679
-
-CVE-2026-47104: libusb before version 1.0.30 contains a one-byte
-out-of-bounds read vulnerability in parse_iad_array() in descriptor.c that
-allows attackers to trigger a denial of service by supplying a malformed USB
-descriptor whose bLength equals size minus one, causing the bounds check to
-use the original buffer size instead of the remaining size.  Attackers in
-virtualized environments with USB passthrough can supply crafted descriptors
-through libusb_get_active_interface_association_descriptors or
-libusb_get_interface_association_descriptors to read one byte past the end
-of the malloc allocation, resulting in a denial of service.
-
-https://nvd.nist.gov/vuln/detail/CVE-2026-47104
-
-For more details, see the announcement:
-https://sourceforge.net/p/libusb/mailman/message/59335553/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libusb/libusb.hash | 2 +-
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 4c76609930..7b4b92e6e9 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85  libusb-1.0.29.tar.bz2
-+sha256  fea36f34f9156400209595e300840767ab1a385ede1dc7ee893015aea9c6dbaf  libusb-1.0.30.tar.bz2
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 95ce8b17df..1352569f7b 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).29
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).30
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnV0dXJlIFUtQm9vdCAyMDI2LjA3IHdpbGwgYnVpbGQgbWtlZmljYXBzdWxlIHdpdGggcGtjczEx
+IHN1cHBvcnQuIFsxXQoKVGhpcyBjYXVzZXMgbGluayBlcnJvcnMgd2l0aCBCdWlsZHJvb3QsIHN1
+Y2ggYXMgdGhlIGZvbGxvd2luZyBvbmU6CgogICBta2VmaWNhcHN1bGUuYzooLnRleHQuc3RhcnR1
+cCsweGNkMyk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGdudXRsc19wa2NzMTFfaW5pdCcKCihP
+dGhlciBzeW1ib2xzIHRoZSBsaW5rZXIgY29tcGxhaW5zIGFib3V0IGFyZTogZ251dGxzX3BrY3Mx
+MV9hZGRfcHJvdmlkZXIsCmdudXRsc19wa2NzMTFfb2JqX2xpc3RfaW1wb3J0X3VybDQsIGdudXRs
+c194NTA5X2NydF9pbXBvcnRfcGtjczExIGFuZApnbnV0bHNfcGtjczExX2RlaW5pdC4pCgpUaGUg
+Zm9sbG93aW5nIGV4YW1wbGUgY29tbWFuZHMgY2FuIGJlIHVzZWQgdG8gcmVwcm9kdWNlIHRoZSBp
+c3N1ZToKCiAgICAgbWFrZSBxZW11X2FhcmNoNjRfZWJicl9kZWZjb25maWcKICAgICBlY2hvICdC
+UjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDI2LjA3LXJjMyInID4+LmNv
+bmZpZwogICAgIGVjaG8gJ0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfR05VVExTPXknID4+LmNvbmZp
+ZwogICAgIGVjaG8gJyMgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUyBpcyBub3Qgc2V0
+JyA+Pi5jb25maWcKICAgICBtYWtlIG9sZGRlZmNvbmZpZwogICAgIG1ha2UgdWJvb3QKClRoaXMg
+Y29tbWl0IGFkZHMgdGhlIHBrY3MxMSBzdXBwb3J0IGZvciBob3N0LWdudXRscy4KCkluIEJ1aWxk
+cm9vdCwgc2luY2UgaG9zdC1nbnV0bHMgaXMgY3VycmVudGx5IG9ubHkgbmVlZGVkIGJ5IHVib290
+CihhbmQgb3RoZXIgdWJvb3QgZGVyaXZhdGl2ZXMgc3VjaCBhcyB1Ym9vdC10b29scykgdGhlIHBr
+Y3MxMSBzdXBwb3J0CmlzIGFkZGVkIHVuY29uZGl0aW9uYWxseSB0byBob3N0LWdudXRscy4KCkxp
+bms6IGh0dHBzOi8vZ2l0aHViLmNvbS91LWJvb3QvdS1ib290L2NvbW1pdC8wYzcxNmExNTdiZTQ2
+MDAwNmE0Yjc2MjYyNWRlMzI5YjVlMzZkYmY5IFsxXQpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0
+ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+Ci0tLQogcGFja2FnZS9nbnV0bHMvZ251dGxz
+Lm1rIHwgNSArKystLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2dudXRscy9nbnV0bHMubWsgYi9wYWNrYWdlL2du
+dXRscy9nbnV0bHMubWsKaW5kZXggNjQxMWE3ZDYyMS4uYWUxY2FhYTIyMSAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9nbnV0bHMvZ251dGxzLm1rCisrKyBiL3BhY2thZ2UvZ251dGxzL2dudXRscy5tawpA
+QCAtNDMsNyArNDMsOCBAQCBHTlVUTFNfQ09ORl9FTlYgPSBnbF9jdl9zb2NrZXRfaXB2Nj15ZXMg
+XAogCWdsX2N2X2Z1bmNfZ2V0dGltZW9mZGF5X2Nsb2JiZXI9bm8KIEdOVVRMU19JTlNUQUxMX1NU
+QUdJTkcgPSBZRVMKIAotSE9TVF9HTlVUTFNfREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIGhv
+c3QtbGlidGFzbjEgaG9zdC1saWJ1bmlzdHJpbmcgaG9zdC1uZXR0bGUKK0hPU1RfR05VVExTX0RF
+UEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBob3N0LWxpYnRhc24xIGhvc3QtbGlidW5pc3RyaW5n
+IFwKKwlob3N0LW5ldHRsZSBob3N0LXAxMS1raXQKIEhPU1RfR05VVExTX0NPTkZfT1BUUyA9IFwK
+IAktLWRpc2FibGUtZG9jIFwKIAktLWRpc2FibGUtbGliZGFuZSBcCkBAIC02NCw3ICs2NSw3IEBA
+IEhPU1RfR05VVExTX0NPTkZfT1BUUyA9IFwKIAktLWRpc2FibGUtb3BlbnNzbC1jb21wYXRpYmls
+aXR5IFwKIAktLXdpdGhvdXQtYnJvdGxpIFwKIAktLXdpdGhvdXQtaWRuIFwKLQktLXdpdGhvdXQt
+cDExLWtpdCBcCisJLS13aXRoLXAxMS1raXQgXAogCS0td2l0aG91dC16bGliIFwKIAktLXdpdGhv
+dXQtenN0ZAogCgotLSAKMi41My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
