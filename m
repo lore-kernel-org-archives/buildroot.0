@@ -1,115 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F72ECD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB5DCD6E7C
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD5FA4098C;
-	Fri,  5 Jun 2026 12:51:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8WM4GEeUnRer; Fri,  5 Jun 2026 12:51:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 164E6409AC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663872;
-	bh=l8wDI5jmJIy9ER7hJweZPUaJ8rTQ+0zJrQ8CEUpFXWA=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZJGv6j+4mjm+TFy+bSRLVfkKRy27RpPAj976PSU+vv2HEURMUHyMkJcPizgkE3hON
-	 3lc5u0DNb5XmGqWbHvB6LjIlr5xVH3XU1F1wQnYOSYE+UlIi8Bxi3o5ix4oraLxPoA
-	 UGg/g/Gty234IwoimCCIsS6rOPUik+O5RN04O8zrylVX9W3AkhYUSnEAHELKnDI12D
-	 fP7QoeOwlhTanESEiFy4aKEdHt15Kd1ZcKlJzb26nrNw0Em3by9x/AFyeNzhvKPH/b
-	 PA7v9zzcwKXKWj2loqNHXwfE5SWTKiwChN7ssIBrqnjew5s0mfw62CpG8zoxQkuK3p
-	 6X5MYxnKk3vbQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 164E6409AC;
-	Fri,  5 Jun 2026 12:51:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 609E1F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46CF461306
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7602960BE6;
+	Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ab6ytnpRjKIv for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:51:07 +0000 (UTC)
+ id lSNIKQHx0Umk; Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 089E16130E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780663873;
+	bh=VABXSir3c3HhGDAUcdUWd+wTohEmccREnUSTZNOlBA0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=FUOoVu4TXJDwbqGrPCXXvAc07Lz+M9nlLlTIVk6Y/hkp+jqDC2492i+eHdKaXtRet
+	 bZTHb+2k2wehOGU/bR5/HQMAl0v9FWyJQFupJ31IdcRgyNjEMcbO7iAmShy09xuV3k
+	 94Ej8CCyM63ID4XSW9lYztfPRrxaur9Kv+BpXC+UdpJ2mtYnDy4L5/VSzFeogxn8Za
+	 4d6Jx0AXkxGO6SeXyhERl3vPvHkv3rQH5QEaKDjX+yemqbRNYYr/l9wP6+vzcuDzhs
+	 4Kaq1Sje40e/6dzLqZ5IATpHx27LMI5Q0NQ2py+zJuJXlHAWgUaDEzNR6bAKQAMw4O
+	 QBH7sYLxyF+ng==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 089E16130E;
+	Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F47A388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 419A24098C
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yGWigk2Z7MHV for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E76CE612DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E76CE612DD
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E76CE612DD
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:06 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4903d730b1fso20515565e9.2
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:51:06 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 430C840985
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 430C840985
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 430C840985
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:08 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-490b1bbcf3aso15207165e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:51:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663865; x=1781268665;
+ d=1e100.net; s=20251104; t=1780663866; x=1781268666;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=sPkGTP5wyKD1oQaUmEQ9YxUAIHwKZmn3bAqjlvqnW14=;
- b=Q/OXIXVrR/+SmMIoe/JAKXEs0Pu/3YGgH9ZTmjXGUdS6L5nOxM/Am7n1og7FkD0V8V
- I5Xhn2N/7NuaHA73/4f78Z4faEqvVibZyEKCS0+xcbXqB7sSJW3gyf0ClVM537BDRM6U
- GZ23hDHKtPP8Vnmb4zPUeZueGzzAvXj/zGnQnYvqh5EmHoMlIvyDdBFo5A63MO+eajOv
- NmPmNRZc7dcmOwnw9UgZR8Z6FdZB5ZUAZx2W2gys3px6q1G71L7Yxdnr2KcfpZWvKkwy
- qnMmFNL8/wyijHgoqwtT11SY/D7RyL1oL7lc9EqTTroTEAMr5FpuD1RYfQi24rcGJE33
- pK3w==
-X-Gm-Message-State: AOJu0YytU6E3RLzUu+R71Q0tYsuNSA4HexgZ2YhSiDqb1ydiB8bdUqec
- 5GDg/4wPT50yNhIrZnTz6C+RNhzaJGP2IB5Y+cggwKcTTT3olE3V40YxVAFET7hefhq14OAjtJH
- kAFZh
-X-Gm-Gg: Acq92OFV7bfFlOh82nzBHZQYaYm1Gw84apsp1gFdh20Kx5dyeCPPURp7AkwVBl/0ulU
- E3YHJQrPm47h20Zx9n4300PF5MsOsg6kZJF1EtKknIq4NY6VzJiDGfbXNJoMlZhQOQDlKwYjyGv
- aANcTbkHD4jvKu42FvhfdxubtIHUUUqptzGSAwpaYavBKZfnwTvJrSTkpykZibHC58mrBYEDcq+
- tmCp7keUjwE6o178mBCaW4oU0/aJ6UODsxKf5hfEHA/nvjVdBYbgbynxekp44Je8nX+LlIk9/H1
- ReIzhxl72oMCqpU15V0KsaeU1DgKYSIB6mVlIQ/K/B6Zp4OmYPrcT/bzqinE9WVVDG+HifFz1Tq
- BznmMez24GA/9uPphwnDki6uljzu6q/LNAfPQYcXgGNz/4qwYrug5lZ06FGQPwUvKVt7BqmyU7G
- m4sd5/vJgRZe5vrzUHkphkI1UTOw==
-X-Received: by 2002:a05:600c:a011:b0:490:58ef:cea7 with SMTP id
- 5b1f17b1804b1-490c25ee058mr55687625e9.22.1780663865021; 
- Fri, 05 Jun 2026 05:51:05 -0700 (PDT)
+ bh=m7d4uD9c39dZG/UwE9jjYwnW147WDadA5PokIg2mfkc=;
+ b=c9nmN2A3IDJ7ZlEi2NIC6VRS0f4dHjN3j4BU9H+dFG67zyle0aG3tz/9eigXEa/04B
+ dpp6hV521dRQt2qoyctyTesf2fSJFEF338Wv5NguvraCYcqMGK0zYL6hsPnUSOzs84EV
+ sQIL3MGuF+bg0RDVh0c2gJiXXWSwk5fiXHJy/rV3FJDq3eNBPvk0Tsf8HRIegZEiM1/M
+ bLxO/MqQdOaUd0hjERJJmAwMWaqtSFieQRqLvhgTvSracF+IQLrqvQoceWmpZ5B5BUie
+ qhdZ6qerrsGvs0H5ZRnH04HpRAaq0NZIgo9FBWoC3vFB9p3mLiRnl9YNMJ0qzA5pzRUg
+ 1jOg==
+X-Gm-Message-State: AOJu0YzD2mEH2bCiSJsvAs1163W+GBU/3ZvEGY7wwkc0jdbc9mcQGtME
+ admVTo2YG98Copfu3FLJgyw+DRU0tqoD6acM4lYwwFDC0DptMy6TV88nBRIpuvzHLAYK2zLD1zb
+ xeoew
+X-Gm-Gg: Acq92OHyQKAmfFRs1mEtqABfrtKd3noa6EnfhwR/o7zPPPh7MUJ++Om5F8XzeISaY2i
+ OZcrFDClnx4PgB+CLYtlBGuvj6Nu4YjymWofizS9lDYeaVZAGAhIy+bqRu7QN7qan5y3w9sFGvw
+ Jo5hJFZEhDeCj4Up9Jit3aZKI1TVC2zWGwNWgIs8ox42IRjGmSqB46F4mSOge+37Xfiaw0IScqh
+ fqkMKOziE2XMRVAPnCblhk92xKCbUqugqagRJO2U+VR+CbG7lJnk46hx+r9KNSx8luCkYIynOlQ
+ q+tWzgugjJ1omrs8E/9JqVUA9kZcdV3PCMLdD7l7NSq6oX0E0xBEzwZ2Nss8cd4sG80u1kUAGsk
+ Y3SW+1oZPEvbzqhxBhg5DG57zU+3W07aNI0mwPRUSM9Ag52m8D6b8FemRijAyICrxsp/sYhuout
+ +ovfvlYYoy99z+wgP5LVnqROG8SA==
+X-Received: by 2002:a05:600c:4506:b0:490:4973:91a0 with SMTP id
+ 5b1f17b1804b1-490c25c0bd7mr56104575e9.10.1780663866130; 
+ Fri, 05 Jun 2026 05:51:06 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc3e59f5sm157434485e9.14.2026.06.05.05.51.04
+ 5b1f17b1804b1-490c4f73f62sm5450935e9.0.2026.06.05.05.51.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:51:04 -0700 (PDT)
+ Fri, 05 Jun 2026 05:51:05 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:51:04 +0200
-Message-ID: <20260605125104.275202-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:51:05 +0200
+Message-ID: <20260605125105.275252-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529150631.447940-5-thomas.perale@mind.be>
-References: <20260529150631.447940-5-thomas.perale@mind.be>
+In-Reply-To: <20260529094514.178266-3-thomas.perale@mind.be>
+References: <20260529094514.178266-3-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663865; x=1781268665; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663866; x=1781268666; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sPkGTP5wyKD1oQaUmEQ9YxUAIHwKZmn3bAqjlvqnW14=;
- b=V+IClazGUfL2dyeS+XHaEl/5b3uE5J268LCCj4G9SpUYAxvuCDynEc2vAm0v3wHSX9
- c+10ZgDYjkqIolmvV5W34wpKlugiA2YpICPR1PTQwNu2M0sIDgBrz/u2nqZpIQYX9Ynm
- 3XZ64NqDGwHSRL/hmoaNtY0+9+99RXnQj+YO3hVYNVQYtR0xiXgRyOjFgdjLlyipgOwZ
- 5PId9A+epyJ8DfyrEnMNoUUiLEyFYjssG5BM8+UV8A7DKn1H5vdTa8gacA3BNhtXXcJC
- LAcEEfriUrrTRZAzJt0QKLC0e38c9DBPx7bWrhdvzmGOzFXs9uVKPvExZtD2HcyCQ2u4
- kmrw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=m7d4uD9c39dZG/UwE9jjYwnW147WDadA5PokIg2mfkc=;
+ b=WefE3+M50RtX/I0OoZMXok3Hlv9LU8CmB5VH+WyoQuaumpfAK5HpJyqvTQOD72zEEY
+ jaNGJ2jBK3RJ8LCN4D8p+GwxZQaOctytiLgKJQtCERDa3Zy04U7SWdnAucJixdn86GJd
+ Cow/zS/iqJmM/Z9OTRgNAaf2al5uRn7aRbLh3YDoEz+vbaD1c7AgO95TB2dPJav99UJL
+ lzqcOotnMFXgUUaL++hZW3HMdHfJJZRgI8N1pXr8qF3GhycgAB+eN+a3fTDpP4VGGq6X
+ 2OrNqRiLNOZGkc7HJFgTcXbGAfYt4agGUgWvaPHwKzbBqpWK88yqvP8P3zNB4SWSuD2n
+ pZVg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=V+IClazG
-Subject: Re: [Buildroot] [PATCH v2 5/5] package/pkg-generic.mk: replicate
- IGNORE_CVES to host packages
+ header.a=rsa-sha256 header.s=google header.b=WefE3+M5
+Subject: Re: [Buildroot] [PATCH] package/redis: update CPE vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,47 +128,35 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For host packages, this commit adds the same `ignore_cves` list as their
-> target counterpart and make it available from the `show-info` output.
+> The CPE "cpe:2.3:a:redis:redis:*:*:*:*:*:*:*:*" is valid for this
+> package.
 > 
-> When generating a CycloneDX SBOM with `make show-info-all |
-> utils/generate-cyclonedx` and running an analysis over it with
-> `support/script/cve-check`, multiple vulnerabilities
-> entries would be created with different analysis for packages that have
-> both a host and target variant that include IGNORE_CVES entries.
+> See the GHSA [1] and the associated CVE [2].
 > 
-> This is the case for the grub2 package that include ignored
-> vulnerabilities that patch both the target and host package but aren't
-> declared as ignored for the host package. This resulted in
-> vulnerabilities marked as 'exploitable' for the host variant while it
-> is patched.
+> [1] https://github.com/redis/redis/security/advisories/GHSA-c8h9-259x-jff4
+> [2] https://nvd.nist.gov/vuln/detail/CVE-2026-25243
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  package/pkg-generic.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/redis/redis.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index dd440e4062..e5e0d49a16 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -745,6 +745,13 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
->   $(2)_CPE_ID = $$($(2)_CPE_ID_PREFIX):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_PRODUCT):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_UPDATE):*:*:*:*:*:*
->  endif # ifeq ($$($(2)_CPE_ID_VALID),YES)
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index 6ce9933029..9db7226675 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -10,7 +10,7 @@ REDIS_LICENSE = \
+>  	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+>  	MIT and BSD family licenses (Bundled components)
+>  REDIS_LICENSE_FILES = LICENSE.txt
+> -REDIS_CPE_ID_VENDOR = redislabs
+> +REDIS_CPE_ID_VENDOR = redis
+>  REDIS_SELINUX_MODULES = redis
 >  
-> +# replicate the target '_IGNORE_CVES' to the host variant
-> +ifndef $(2)_IGNORE_CVES
-> + ifdef $(3)_IGNORE_CVES
-> +  $(2)_IGNORE_CVES = $$($(3)_IGNORE_CVES)
-> + endif
-> +endif
-> +
->  # When a target package is a toolchain dependency set this variable to
->  # 'NO' so the 'toolchain' dependency is not added to prevent a circular
->  # dependency.
+>  define REDIS_USERS
 > -- 
 > 2.54.0
 > 
