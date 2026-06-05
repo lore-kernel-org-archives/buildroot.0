@@ -1,87 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F88CD6E7C
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 21:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5910DCD6E7B
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 22:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C36C880AC8;
-	Fri,  5 Jun 2026 21:16:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-8dTyKWi22u; Fri,  5 Jun 2026 21:16:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A33B180A96
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780694182;
-	bh=F83ND9slMLi+vO0jrG61+LXjSAw1+GT845BwWVZN44w=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Wz8jogwNQ768Bj0weWwDJYbnk87TpX6r8E0cWfMLtQhm0aI+WNSONlgJc1IHk0Mft
-	 2q09STYPUnAXXs9wkctLjVS8DxIXT195zs6sYUq/44hSygGSrNvcudyz84kfVbhgE9
-	 XVzzUJuYl0uHCAmk+DEo+6QmSErWNzIv2dikA9lTdt8WX+XT3AJXE+z20nG2yQTTm+
-	 b8jomspVWXzHHT/A1KUIO6suSHyfM6e7GOYNZ4n23jt09rVyHOgQOzxJtZ0GTfKI2l
-	 68algyyOEM2z3rNkzL94By1/OBT2WyjbLEjoqFxDAskrBr44E/2IjQ/9a8w/Vw07l8
-	 XSlObKF5r14IQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A33B180A96;
-	Fri,  5 Jun 2026 21:16:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 65431DE
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:16:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BF6060E3A
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:16:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FE9261131;
+	Fri,  5 Jun 2026 22:42:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYHvxGS7YhK9 for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 21:16:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1BA6460E25
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BA6460E25
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1BA6460E25
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 21:16:18 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 0627B20039E;
- Fri,  5 Jun 2026 23:16:14 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 05 Jun 2026 23:16:14 +0200
+ id TllyteBr0tqm; Fri,  5 Jun 2026 22:42:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F177E6137B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780699377;
+	bh=Z+pycdBNe+Cn8l/unDu0PEa89/fadoxD2MVIRCocOgA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=WjInPKBmVDsYY6VSgPpojRPSvNWkyINo6agN8548nWDBabeqGsPIwZdLsyyYTuJnS
+	 GvFFIS9zWti+Pqj0heSq5IKRgx2/NFh0egmwsMMAoyIyJBy4xLKFxRt2oSg+J+OqDG
+	 Y9lG1UkbNGoCQUgvyUv/FKuQ4TKiKcMyTR5YYETU11B7IWNHSDrTVV8DDW0BSJAmQv
+	 Lk/jC5u1GFUvDHIunckj9tOR+aGb5zh13KNvhUqe1A0KqgjW9eZHdnAV8CMb0SwJJr
+	 /HadkbJ3ymOi5/PsbQKbVi/9DHEwyTo7dwFc1kqlj/fTUSPOUVmfdbJzC+R+pqX5EU
+	 oEKJ0C7/qkjTw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F177E6137B;
+	Fri,  5 Jun 2026 22:42:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 686E0187
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 22:42:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51EAF405E1
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 22:42:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kevDD51pr2c8 for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 22:42:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5856540082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5856540082
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5856540082
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 22:42:53 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-490b613a17bso23458305e9.3
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 15:42:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1780699372; x=1781304172;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=5/fJONsnixwmphSpjhbVUNOkH6B3zE1hBN1ImFDIT5o=;
+ b=fMRXS+9MHAXOxowwWfFhrfohpdo1DfGcGbWKJnTE80CUaZy1eoxbXV/S6wMse2qdM2
+ kKYazgKwHFoexpLzUDgxFgseB2v6q8FcPsE1HE5I5WdpFYCjbmHm6IMjRHm/nJ6uwDGh
+ VZWK5OOYDbjSIy9PDjF/T1XINJS54rkSJcUZ5RE7qbkWrgvoG5xl8hKr5KLPDf4ZTgg+
+ qTpespQq5nuQaBvI6TS5Qzi7wD7Z1jwRBjTpdhlo9BdQrpwEViBpygpQ7DASfyEZlb1F
+ GlwmScBmFN7MN1fGgjXl3oiGMCFG3vsWXaSIe6xg1GVP48LGfLuG6YsX2FRfUfQN0e1o
+ 2eXA==
+X-Gm-Message-State: AOJu0YzyEulOWgQ+qbnw0iIjkgfzUHtKru8/DUWFWx6Lig4Il/oL+nZI
+ 5ybqzWTF+3x/q5CuZ2U9sh1ga9Gy3/pRo/m5Vqz4L1dCFcadSar6XlhcvDH+uMxhGnk2IpZFwUk
+ Cmz+R
+X-Gm-Gg: Acq92OHQsTjz7WqMNzJtAhk39c4ZEXaTUS9aK2Bx88xW8ltSuaK5mEGtSUAAg92JXD4
+ J3iy5u6vxpbii+X0+Mrp3xaCcUggqOsLl55zEBWhwT6327AdA5t6xPG6nMt4mDlI+am06PG1ELE
+ fTV3zEudpaRSQnbmU9Bm2125LNVgkaimwY+4RtdipouFDvRTnuCsTZYDgot4/tNTyyL1jGYOIqY
+ +CjV1ZF/oD3Ram9K4CmGeBKx7699mGZ2MyQj4QO/NzGd88S/j0uuKEl5ZsO8zoW8V1bO4nBqiml
+ lbuGhPjv2OaOzzD4rnVq4Gp4SDtXCTwXRG3vHhH6fBqztEOnUP1+Gls6Tsv0gtYatQY5t6pB6Qx
+ 6fOM7pLPFnOQO3mDYHwkiYA9vLJWa1kQZEy9f+c00u0NcbirHSrZqcYoXWrhOSbioCBtyyNBoZL
+ SCJslRKulqOoBgaCdgr1Ynf9d0NJCH/Wy4DF9l5wRkJpJF01dkDrDMCUo/CKjlIDiQc4zMFXOt+
+ dxg1s6/HQb5lSKhtZilUMrcmR2u/AaJ2Lih
+X-Received: by 2002:a05:600c:4506:b0:490:4973:91a0 with SMTP id
+ 5b1f17b1804b1-490c25c0bd7mr96832515e9.10.1780699372051; 
+ Fri, 05 Jun 2026 15:42:52 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4601f0a43e9sm29380248f8f.0.2026.06.05.15.42.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 05 Jun 2026 15:42:51 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Sat,  6 Jun 2026 00:42:49 +0200
+Message-ID: <20260605224249.2590975-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-Date: Fri, 05 Jun 2026 23:16:14 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260604191642.2162777-1-bernd@kuhls.net>
-References: <20260604191642.2162777-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <acd46546a70b6a7cdce5ab9cc7a1fb98@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1780694176;
- bh=JuSxdg+W8s5sU5DjJ7rzQmZbZaLAVTWlcEbd6qWRUDQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=pI9mFstvFmLNTqrm0hFvHN3ZjMZR3cZrOpwjl0wpYrgVLf038SgVXNTYmCVO/z5+f
- 3x3Qd5e3YkwpE5w/APFbksFGBcliyrudtlwckEe6GQhzb0ePIvGwmrqfGi1/v0PuTY
- xmm1DV4Ro2ly/j2+7XPr+Qt55oKsD7Hbe9IWu1ErHq6mgpAIHb2Lyf46suopMnkyo4
- Lu01hfTAip8ry8NjUgCOUkTwizcIzBjhRcm4Rm4sh/+PVmzGa+sHdmbKgqOsphR0D7
- p1jPKKFZDaKnYZVZwn033D2GOr/fDFbOw4KrlKo86yvWlRR2pvdOyNdm1kayHdqqtm
- mN5UXUKbIN1Ug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=pI9mFstv
-Subject: Re: [Buildroot] [PATCH 1/2] package/libinput: bump version to 1.31.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1780699372; x=1781304172; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=5/fJONsnixwmphSpjhbVUNOkH6B3zE1hBN1ImFDIT5o=;
+ b=pLg1Phup3s0hYBWdEzDX+d54M1FAxufXHPSMd4q/tqEGGoav1w027Q5zvYR3TdCAk2
+ /vVed19sG90wW/AFzNyvhXlfK5YpXwfz6wvkULHuNYagXwmSkH2dQmcDW9cMFcUwWBIB
+ jMh9Qt0ZiOgkMWLwTayFM2VN6C59effsywDys=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=pLg1Phup
+Subject: [Buildroot] [PATCH] package/runc: needs user namespace support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,20 +117,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/06/2026 21:16, Bernd Kuhls wrote:
-> https://lore.freedesktop.org/wayland-devel/agWtsIBqMXTVknR_@quokka/T/#u
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+Since the runc security bump to version 1.3.5 [1], the TestOci fail due
+to missing user namespace support in the kernel:
 
-Series applied to master, thanks.
+  proc/self/setgroups: no such file or directory
+
+Like for the docker-engine package, a script check-config.sh is
+provided to check any missing kernel support.
+
+  Generally Necessary:
+  - cgroup hierarchy: properly mounted [/sys/fs/cgroup]
+  - CONFIG_NAMESPACES: enabled
+  - CONFIG_NET_NS: missing
+  - CONFIG_PID_NS: enabled
+  - CONFIG_IPC_NS: enabled
+  - CONFIG_UTS_NS: enabled
+
+At least make sure that CONFIG_USER_NS is enabled for TestOci.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14696525946 (TestOci)
+
+[1] e013e2df84fb36985261d7b3c6e6af06afd40f93
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/runc/runc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 10ff98c9d7..94c7a3088e 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -26,5 +26,10 @@ endif
+ HOST_RUNC_LDFLAGS = $(RUNC_LDFLAGS)
+ HOST_RUNC_TAGS = cgo static_build
+ 
++# based on script/check-config.sh
++define RUNC_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
++endef
++
+ $(eval $(golang-package))
+ $(eval $(host-golang-package))
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
