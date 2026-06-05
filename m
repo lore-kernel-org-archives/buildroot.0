@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584F7CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D574CD6E7D
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 337A18294A;
-	Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75DA5610BD;
+	Fri,  5 Jun 2026 12:50:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bx_4URMj1LYQ; Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kss230hN_USV; Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4376C82950
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 493AA610B7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663825;
-	bh=mhT4cagV88VUGGHnQzOrw/4YXid/ntaD3tKOghY/fpk=;
+	s=default; t=1780663824;
+	bh=IDmJT2dcmYkm2bOVwzsNUoqUedPu8TLQeOyVeM6d+Ns=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Zs+By6wJmUzEIjhkrCZyAO7MzosIN/zAs3WfQXupfyh35T7qqVRhCRF8R3WAKFV/w
-	 xJ5/ESqxW8WFGhv2uTeafHu6e3krqhQz9UhW7drk/irdNzz0QGrKSmoOFp1RivXZcN
-	 7l8dBCj6DcfT0YszxB3TYri+QKmuDjq7WrbExLI4CpDrKzkYvcJVyLASfHlHDvKzyb
-	 Od7Re45XRgO1WreJmQmXFIquszVUPhe/5j/5PxF5Y/jIwn0emda+6/Xa6bZsqYnyvm
-	 GVBKPYn0BwEnypoMV1uEtSstUT8iQAebndsZp9RGl01Qpt6L9YJZCam7J0+WgwEAGP
-	 9IovxhuyyfuNQ==
+	b=XvCxqoaD7pX2c6vAlDfFo++ctGWPlHPBMgdQbZlmkpKprwpMXRUbsKv+DPxmEIOJa
+	 D7nXhjIPI7TjSz7x2IZvf1W65hF919S89ntwuexu5LisDno32k19uKmu5sgmlpVtxm
+	 M6z41FE1fg7t1LcHCa5jXoDpANo1IQAWgFBkMrskhi0A/2S52kbC7n8ZbX3suvj+yG
+	 3Yvm1ovpDns923/E6VV9X30EcciFz8Rng9DSRQAe4rxf3sDSl87CrMMDtPNYxuwTS5
+	 GIi1RsP9n9UdSdlPM+xZcew5dkxGqulFW16sPhEdrWkpx3bO5/ISBKLN/SWUIb6X7q
+	 J4LBAeNcHa8Tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4376C82950;
-	Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 386A6388
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E47941F28
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5BpZesTcdXhO for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90F5241F06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90F5241F06
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90F5241F06
+	by smtp3.osuosl.org (Postfix) with ESMTP id 493AA610B7;
+	Fri,  5 Jun 2026 12:50:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B0DDF4
  for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:18 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-45eea68dd6fso1000508f8f.2
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4CA124037F
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PZK7hcwAWcEb for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A6534037E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A6534037E
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A6534037E
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:17 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-490a765d410so19866285e9.1
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663816; x=1781268616;
+ d=1e100.net; s=20251104; t=1780663815; x=1781268615;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=zwLLwQU0BB/2YS2eC11bN11FOm76dAVSBtrvk90mBp4=;
- b=m1YRmvJzCNl6JynjWSXmduhCmvmm+QNxYVa6LT8fkRdpWg6Sn9TRfZX8+/I6VWqqFZ
- SojL5D16Zz0r8u4OvI8zYmHzzcQpJfF3Gx/nO7kGLTX1xBUhkv18Awa7tES6N1PHebpL
- GVoWpYWxY5JqOgObFPkaHZjfWv+Lpr9a/nF1lIWhk/Oa9Gggq6vz9EBu4bQbijqHz6Ka
- 7Pp/vZgx/LdypbY0fS+MrKiifYNdsZhcTZqJJp9qlJsIHugxoQgjYvyoUMsGZ6ZaWMo7
- zi6erJfFKwZbkSP66XMFUuSJISMBSCKwPZq5yFklIN063OYTuauROYbEF+2viAsAZq0G
- ZuDQ==
+ bh=/hCVNkwQT5hjg87Rm4TlrgkUkOt576JJYtGBiSLkRaU=;
+ b=IRcGiFFxIKrmlyNfPYx5fZeRiTyrVNEhlHpKpuLK77nhCb+CbbFO80PbKABcwLTg+j
+ W3PLtwK5TlbxGyncVcWaqFttdrZpXpftVA/EnwK14vfbzOxnxjIJJNaye0jV7EFYKzsh
+ r+pQ4vYts5TqwVUpuGevRHeuFaO6uihSvm2mWMtC7UrPHFmFsMT1fPfAdTehMFE2CXkg
+ xuh3OlLY2doERFLCG04f6Lji7KSB1xd3zPDUu4fgmOoiClsUSxyQqteodiw2qnTHMlge
+ kydDfUTOSyUqzFDcEM5IUXSqUBAxhGjhYlwr42PdMX9R/TcWobgD0wck6WbF/00+DxAx
+ juig==
 X-Forwarded-Encrypted: i=1;
- AFNElJ93nZF6Yx9zIOPg6/fj8t1dUA2MdcNPqJ68b14CjEN0LG2BQ8Q4CL4My+nNl14tPBtM0jpeioDxCdk=@buildroot.org
-X-Gm-Message-State: AOJu0YyVBN8Y8i1/IYOrbko65QKsiZsl5TOR35nnvIE3G1vDx5A7WcLt
- uZ1Sbt4luYi3KNnSNTBk/9FcnGSX4OIdbYoSV1F2KCna3Lw+zfFPDsCaefUOkyyBvaM=
-X-Gm-Gg: Acq92OHnV4XS+TU1bGihz/UhH+/TL2XXWH2WN9KX8zsZ5y2o0VWyCZyk2UlEFKvqKSX
- 90vksO2Hg0qoXM6rXksUD1eeRT3936XCbsCrB+O/lJxV1X2hR7oprw0YsXvAD0JkdU/2vEV4uGw
- RUC71cMklJObdl5+tuqL4ab3tdRwI4KSnvl+4UuQUfTUxP+H28j7EYVpzAriWVmHMes/tcLkprB
- awyK6M2ZXP8/eyenArGXXEcUppKQFMtztG8EMsE7I612FqV5P0n20M4HZo+/3GMLUyvOmBrzrs2
- qmYRjOaF0r+q6B+9DF/VbMaOTG5Zwfw8zSNQrwWO6tog0aCD1O7OARFJTwxHbodaW25H4JnVD4V
- 482oUsMEOORgiMEg/upx/OB1Aj43qraRWQfxi2Aw7VoE+3iKaOvQUwwPvgkHPNwIAx5wiSMG9zQ
- kSksPMpk3HHEJuGGu51ZR1kgz0Bw==
-X-Received: by 2002:adf:ef88:0:b0:460:1e9d:31a5 with SMTP id
- ffacd0b85a97d-46030631ba3mr4277863f8f.35.1780663816511; 
- Fri, 05 Jun 2026 05:50:16 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f2e4b18sm19364177f8f.10.2026.06.05.05.50.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ AFNElJ8DChYcpcNDmNpMHqP/9I05ZTDw/MYGQ4DlLqy9fyIU4oLrPoukr3MgvOWD49cwLKMf/Fgzz+xAEJo=@buildroot.org
+X-Gm-Message-State: AOJu0Yx/GDlC6PUNU0rVJappoKajHG68fFwTHEguS2VkCm4KPTzAi8Lo
+ uO/NEgR8LcgY8XlNC2YvtCR3SyD7QnExQ97+mV/ne7z1LLCj+h9n+6SpjwrSxjcAOT9TjuVM1dv
+ q0h2Q
+X-Gm-Gg: Acq92OE9pPuHhHJsOouBkBgG2XKgd0jJUfoOMpuNKn8WoQPYvPTBAOHU2EINwe4aQP+
+ hOSF6EGWUQtCAiO6j8XtKlQOAB3c5+2ViNtcgmL0b9r5V3WBEnnVPLqh/mBw3x3jNHbvGPMdUSI
+ xGB/3dSSI0M48z0BOfY0yYi9vf1m3CHnEnwH6c6fXE0DzATmMlnIUDzYpNkrd0Ka7PrKWuRZLkZ
+ Dd/WAhRWPw6VjwmTfzJvVwDBCsaogHtdgX7Rk60fBFANvaP+Xrmyzjv05I0A34unPsjUYBnMNNY
+ ZvS7fV7p7GbZFo1jvv4CE3EqJOI8Wuj4QJITqV2GVrB8O6bfnTzg1GNaoRZvi3bSZOOYlG0+nkt
+ pxcKGDdl5/NqQbxmluJ7AUGm6gGbhwHcZ8xVbQ9KZQaJbmejKDKJBC5iHxKb4190L2uNtng8+bn
+ 8J4xhrBIGMcR/LdARLKJNeP1gVKQ==
+X-Received: by 2002:a05:600c:34cb:b0:48e:6db3:ff3a with SMTP id
+ 5b1f17b1804b1-490c25b09a2mr57674005e9.16.1780663815241; 
  Fri, 05 Jun 2026 05:50:15 -0700 (PDT)
-To: Quentin Schulz <foss+buildroot@0leil.net>
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4601f35fb24sm26781631f8f.34.2026.06.05.05.50.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 05 Jun 2026 05:50:14 -0700 (PDT)
+To: Heiko Stuebner <heiko@sntech.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:15 +0200
-Message-ID: <20260605125015.272864-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:50:14 +0200
+Message-ID: <20260605125014.272815-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260407-generate-cyclonedx-br-v1-2-03c45ccba2ed@cherry.de>
-References: <20260407-generate-cyclonedx-br-v1-2-03c45ccba2ed@cherry.de>
+In-Reply-To: <20260326101033.587997-1-heiko@sntech.de>
+References: <20260326101033.587997-1-heiko@sntech.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663816; x=1781268616; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663815; x=1781268615; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zwLLwQU0BB/2YS2eC11bN11FOm76dAVSBtrvk90mBp4=;
- b=TFr6mZ2up0tNjkYYdaljIrEmcf9SNCuuJPWrZM5M6mPeJRmnm3ESn6LVoc2foaF3ol
- xBPG+vwsl2LbSwchgDO3UR8uul0StNO0sD19cVcltV01c3P73NKD0TW+wnwv10/WhjZK
- uU6xwTrKyN3Fn1HI1rvKfKdKjBnF6bGanFQWPeezXdxr4Ko7katul2XhCQfS59JgR+Wr
- P3JKCBpZHfpUOyY9XSCHbZKYvqHGEPhcR0intE+149MrDLkKGgL8gwcVWL7wDM6lxGqp
- UGONmMdu2m5+AlqbKEXDvbO2AuhUQpFFo2Cd1uGMKvHB6RQ2WaKywfx4rqIwb+rZtST8
- m+ag==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=/hCVNkwQT5hjg87Rm4TlrgkUkOt576JJYtGBiSLkRaU=;
+ b=fLst9zw6D88+d/b76/7YrS7QgjLboSymZSUvaFB/HtNDSELPa4XuS7MMFyDScpmMRp
+ fjCm3dl9+V7KJPdc9sE2uJ35CYjzCGWmoqEhYysn5jiIGnEUb68ykzbj0qD4HypVEloG
+ GhAGUKfy5d0WKKKLKY6Yugy+Rd/lQs+U4pyqnNDKzTOTw1DDu+r3j5GSC3OGP5+IOc0Q
+ MbpVBK70TZyezcWK75aPcgu8JgdS3sfHjELskSxdtJslYew3nQJnuKNhmUHZj+IfPETv
+ NBPBux8cywcmb66/hj4+/CXtcb0atpJrhBPxGBou8ntzHJ4HvBkO7kLDmL/jo99MeoQK
+ WoFw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TFr6mZ2u
-Subject: Re: [Buildroot] [PATCH 2/4] utils/generate-cyclonedx: better error
- message when host Python is built without ssl
+ header.a=rsa-sha256 header.s=google header.b=fLst9zw6
+Subject: Re: [Buildroot] [PATCH v2] package/arm-trusted-firmware: add
+ ARM_TRUSTED_FIRMWARE_CPE_ID_*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,80 +132,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> urllib will eventually complain that it does not know what https is:
-> Traceback (most recent call last):
->   File "/buildroot/utils/generate-cyclonedx", line 53, in <module>
->     urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 212, in urlretrieve
->     with contextlib.closing(urlopen(url, data)) as fp:
->                             ~~~~~~~^^^^^^^^^^^
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 187, in urlopen
->     return opener.open(url, data, timeout)
->            ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 487, in open
->     response = self._open(req, data)
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 509, in _open
->     return self._call_chain(self.handle_open, 'unknown',
->            ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->                             'unknown_open', req)
->                             ^^^^^^^^^^^^^^^^^^^^
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 464, in _call_chain
->     result = func(*args)
->   File "/buildroot/build/host/lib/python3.14/urllib/request.py", line 1397, in unknown_open
->     raise URLError('unknown url type: %s' % type)
-> urllib.error.URLError: <urlopen error unknown url type: https>
+> Trusted-Firmware has been using a number of CPE identifiers in the past
+> but especially after v2.4, the correct identifier would be similar
+> to cpe:2.3:o:arm:trusted_firmware-a:2.12:rc0:*:*:-:*:*:*
 > 
-> It's quite confusing really but what it means is that host Python was
-> built without ssl support.
+>   https://nvd.nist.gov/products/cpe/detail/65DEC230-1CD5-40DB-903A-22537D1E44FE
 > 
-> This adds an additional check importing _ssl and if the module is not
-> found, tell the user what to do. This still doesn't make Buildroot's
-> host Python3 fully usable for utils/generate-cyclonedx as it'll then
-> fail when trying to validate certificates, this will be handled in the
-> next few commits.
+> Add the relevant CPE fields to the trusted-firmware package.
 > 
-> Note that ssl Python library is always built in CPython, but itself
-> imports the _ssl module which is the one that may be disabled with
-> py_cv_module__ssl=n/a (which is what happens when
-> BR2_PACKAGE_HOST_PYTHON3_SSL is not enabled), hence why _ssl is checked
-> and not ssl.
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@cherry.de>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  utils/generate-cyclonedx | 6 ++++++
->  1 file changed, 6 insertions(+)
+> changes in v2:
+> - remove lts- from lts releases
+> - remove "v" from version, to actually match version used in CPEs
 > 
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index d17aa805b7..045bf14caa 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -9,6 +9,7 @@
->  
->  
->  import argparse
-> +import importlib.util
->  import json
->  import os
->  from pathlib import Path
-> @@ -42,6 +43,11 @@ VULN_WITH_PEDIGREE = set()
->  SPDX_LICENSES = []
->  
->  if not SPDX_SCHEMA_PATH.exists():
-> +    if not importlib.util.find_spec("_ssl"):
-> +        print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
-> +              file=sys.stderr)
-> +        exit(1)
-> +
->      # Download the CycloneDX SPDX schema JSON, and cache it locally
->      cyclonedxpath.mkdir(parents=True, exist_ok=True)
->      urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index b81ce0d827..c3c4a581da 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -5,6 +5,10 @@
+>  ################################################################################
+>  
+>  ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_PREFIX = cpe:2.3:o
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_VENDOR = arm
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_PRODUCT = trusted_firmware-a
+> +ARM_TRUSTED_FIRMWARE_CPE_ID_VERSION = $(subst v,,$(subst lts-,,$(ARM_TRUSTED_FIRMWARE_VERSION)))
+>  
+>  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL),y)
+>  # Handle custom ATF tarballs as specified by the configuration
 > -- 
-> 2.53.0
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
