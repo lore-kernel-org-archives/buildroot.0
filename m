@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F01E3CD8C81
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B014CD8C84
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C05F182AA7;
-	Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9B25410FE;
+	Fri,  5 Jun 2026 12:50:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WEP_J_UIYJAL; Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j4mENUB1a6lk; Fri,  5 Jun 2026 12:50:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB02182A7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA2E641F86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663832;
-	bh=DuGhMIWy7TgxqcFuiu/4mjyUDdzaUhrMcQbXniy3/lM=;
+	s=default; t=1780663834;
+	bh=LTl2qNUelZO4n6uYAougm+W3oPbqMLV8ARcyb1jdQnE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Etbv83kGlQhHEWhFq5oWWV+Mxcoyy0KkZ4nb+yRPNCAHnC6IV+PA8jpHrKH3vmFKk
-	 CAaIyD3f9NY6CMUCkLlBOjbBTvQ+E8PP9nKcGPiqLyYlfWiMQgQxBs/7DvWWcLIYoS
-	 tGVXqTh7PAGnD/Zloqc2n2rW5KIIBZk7I21FXgsUCHWrZEnuJeGhJoLYVXwFg6WDq3
-	 sFn759IjC5doTrIj+1i5dm+5sL5qBq3e9f2qpefn8CgWaMoBMmQt44KxNvil/xA+dA
-	 zGriVsV1r2x+tAuI9OAtg/KS1ANSI7wcebo0s3O/FbotPemGo7mp5ghpxWoyKjdBk1
-	 5CTdr9LLYSsag==
+	b=Y0iq/50SbCfxTtd/UocZkJ7x7gURSVmYQTlX7Kw4xKkSw9NC2lD1/Uz3g88NTdjz3
+	 5U33bbonHD3QQpGA0urFubq1zimILzk9iGO0cdRxR8F4D4c5KV2bOlQIcl0oBufUMm
+	 cfEXkzPgLWbvLHyCQqerDfxVyUAl6f4srzCUinJM5Av5sMMbAzEYAM5LEUYK8Kos7I
+	 VrX0fGZtFU6zEGLBJBDkLlGsPWbTilKj5JWzjuszAVX6zJL+vLmlJKos7vB9MIAOCn
+	 P+vk3dp2GI12K6iXo7D4q1jGnw7dz9Xe6euRzbomKE2ZpdVn7Z2CcqtrP0V8y5Ns1W
+	 t5WHhlv4Mlbmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB02182A7F;
-	Fri,  5 Jun 2026 12:50:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 70356F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA2E641F86;
+	Fri,  5 Jun 2026 12:50:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3FDE6388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D1B74037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24A1641F58
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M-mi-SZc4kvH for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4mcMfwVGZimC for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 12:50:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A01540381
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A01540381
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A01540381
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:24 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-490b1bbcf3aso15198645e9.1
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0219F41F06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0219F41F06
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0219F41F06
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:50:25 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4903d730b1fso20505935e9.2
+ for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:50:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663823; x=1781268623;
+ d=1e100.net; s=20251104; t=1780663824; x=1781268624;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=I/X51nJFm+uQr3R3V7OBINYV8iEXymxv1baL1RbrXFQ=;
- b=Tzfg5E+jGzW734H/w6bk72g5WraVkyZ9fzB/Cqg40gBZBwkWJptLKZKsNGaIoxj5t3
- 3bhqhhUjkFyFkORiqIUaXsI8c1Lf+7mR3teqBfIH4VOVviffXpw2tOrSimCMI/RUMxec
- nadvBTWxabITCmtrv0Z4E0D5t5G2G6Wke1tYBP/OFfsf2/eQSsg2Hm/wco9NHh/hM7cn
- KB++MjVNY2iAxAzQqeLb3egGUKMY2mB9OsGNLVjM27XNeOeaJP8D00dOWfB4YTT/HdMo
- cCezyRSQImOSvi1BCG6/MTfkWsqPBXNjBYqI8EzAIA1hergtLwCa5eMR2XZpfLWA2OzL
- Gt8w==
+ bh=eX8HCBc4b1SGmNltPLxsjpL8qvsUCoSMQ23lf6Ct+nw=;
+ b=hyCahuOuulyEclq2zfuslo+waNfVpGL65N6nuq8Xc+lU/Ii5Tw1+nWLpnJ39iy92Qu
+ 86KpGV3/J4UwE6bPUmDxdUSb/l4ZfjDec1d+w3CCH3VLr26DBtvaIM6xMDlK3o2MbfpD
+ vZme5w2t9IdNhhopRPmT6DCtdKQWfBQ5Wr/+qESFvqt4jiF1Vep880UexvbT2I8jTSfD
+ 3Lj3hbKN1iPBhxuWpT8dsbnp0rvrXYKvddia+2H0ItGb/8TGvRbzpQrZLKLyqIBiQP+R
+ pmXwByODQwttovFkISeF9RgqolgEsnBJX6t1Q341kE5r3+nDBop86O2bWGnpWLSbc5bU
+ UzRw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+RWjW4kLcpJrTeZ35fNlanxCCQBioaZ05uqMy5/lDUlSnoKplK3ETstuwfXSeS39nZcNTtW5TdM8E=@buildroot.org
-X-Gm-Message-State: AOJu0Yx+FoIZz/33ho5nxS/oop0MdWM1S9qmv4iF+rpxe6SfPuS7GkGA
- V/8oWdrWlpT10iSG/9oeyy+cLVCJE4FUMWpOkO9yIk+AHpCLtEwbw6TZH/YHtCAmp4U=
-X-Gm-Gg: Acq92OELFpaj/2JtWxahyWOK3ZDgNCarWUxIfYQZxebTSAIi3q6l/IznKhsA+S5Igtj
- fWeHKnQFD6LnESzt5kq0knoEaOIlE81+fvL21n8bsVlM8RTqN/ULLMcrDOth7odMel2NKfC4xN9
- X06f4zXXLhHO6s0XJsCP6A8l+wQXcf+0EDw7c+jdkW2F8B1vZUTjhqpzXparAlA1yDr3pICjH+s
- TtMT2iP3ZFyMXKPW7sd9JLaDIIp9vxwg+sDP9VwWU6VuF2DPSIXOA9V0771C9uXGc/13X+Cl/mr
- B1iG+ThJa9SZuDPXt0zRhu4bYGrup9f3EN3CKlrJZmUuxV5hGK5h5q5nMG+YcP3lu2sjp7ld7GD
- DJDJtNR973eXBJos58fOEe5ulUtfEzEAXQ0v7aK32S39PhxByHRH/6aaPdviCruYlkFQwZ5rALT
- GYA2ij0jIxh5mmJBV6+W+5TbLSTQ==
-X-Received: by 2002:a05:600c:4fc6:b0:488:aa33:dcbd with SMTP id
- 5b1f17b1804b1-490c2615bdemr54353555e9.26.1780663822959; 
- Fri, 05 Jun 2026 05:50:22 -0700 (PDT)
+ AFNElJ/kPWBL22twac0Zwpq7bjWP6jNvn+kQk7pb3lS7NEtSagDMhCNz9tkzEWdcCKrYUSJtlUY6VzwCrTg=@buildroot.org
+X-Gm-Message-State: AOJu0Ywx6UXmLKrY8citcODRxYNEq0KaHPcck+XRJFSYl4DQRWu+dwZS
+ nTlpa7fYGQoQETqR+yxXqXoRRwMADGRhJWrmaMZCpN1s8w/NRKz5HFnoQvqICQ+AV9U=
+X-Gm-Gg: Acq92OHcPp5i+UPJxmQG9mBd6fKNrtEpl3f9DlXAXOPasjNEmaDP86J7ZQjeLfvzsOC
+ 7/LbSa8tJPq0upnRrbXHQRp1vImfZ9uoKIm5ULrzQyH/NpHNF+a5v1mC/u1WswvWsQRZBclFlSh
+ l5e1Z9ilr3gXGXKjj799ItZJSEDymEa0PQ9eQwjBG6cj0dcwgMWxuhNVJ/R0B4IlGQUzcolgWu9
+ yLiQRrRbiD/Fo4WyF0ZH4DDtMfDySHBCuoumxzFAtjxtYV3P/AuVaT3O3RYpYNj6/WSdoqXQXV2
+ zepOg1o1evG4cLOa6v0sYsr7K/vxHPmQ//Y4Ylm839czxyoyd1WjY+gYuJU32xvMIaUFEt3sVS4
+ ogLarddwvfQs7s5e2Lonb0oaSWXBDJFaJVNd4PE8JOEkDDYTzHSMonKaSGZKVZ4PiychDpaSHfW
+ WleMKxMn3LL5J44u7eLJIX2fWNQw==
+X-Received: by 2002:a05:600c:a117:b0:490:c2a3:abaf with SMTP id
+ 5b1f17b1804b1-490c2a3abdemr36012555e9.35.1780663823997; 
+ Fri, 05 Jun 2026 05:50:23 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc3e4b5asm158728255e9.13.2026.06.05.05.50.22
+ ffacd0b85a97d-4601f2e4004sm25935580f8f.9.2026.06.05.05.50.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:50:22 -0700 (PDT)
+ Fri, 05 Jun 2026 05:50:23 -0700 (PDT)
 To: Martin Willi <martin@strongswan.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:50:22 +0200
-Message-ID: <20260605125022.273226-1-thomas.perale@mind.be>
+Date: Fri,  5 Jun 2026 14:50:23 +0200
+Message-ID: <20260605125023.273286-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260409081401.2060709-6-martin@strongswan.org>
-References: <20260409081401.2060709-6-martin@strongswan.org>
+In-Reply-To: <20260409081401.2060709-4-martin@strongswan.org>
+References: <20260409081401.2060709-4-martin@strongswan.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663823; x=1781268623; darn=buildroot.org;
+ d=mind.be; s=google; t=1780663824; x=1781268624; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=I/X51nJFm+uQr3R3V7OBINYV8iEXymxv1baL1RbrXFQ=;
- b=D7WOpmevbeDKVIw3ixMZeWfYrUwmBBgxlawKkevSThVYPHfmhFEnPfSfSwVKdiY5Ub
- DtKsoscSVHbfSKVZMZUUNRjFVC8e5seBLh7S50FwFyDXh39iNsXiw0TF/lk51nJCx3TG
- GNpvxzgjWo46pM2ZpAqrdR5fziKQXlD+zk8waYse1lYQveEg3a6j+EHk/r1HV6s6ncu5
- XFEbTy5+XriBq6cqBz8pKsVFI/bvaDWAp/sgYyv6o0BJNSCYDZJmZ9rKLN+ConXxpn+l
- y9pvPxkQ+YzWBys0Pxv37HvbhXbfh6yTJDanymtgwW1MhlSLWqKpkGdq92j69vpKkN4/
- 4aQQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=eX8HCBc4b1SGmNltPLxsjpL8qvsUCoSMQ23lf6Ct+nw=;
+ b=DAnjcycPe8U7nx9FVrzs7369k4lAkpFL31xPgbH61eLDg/J+N7EztdX2RGRdh4vC3L
+ ITzmPexbsT9a6fT4kG/VQf9z3carqbxzp8vO5I2f6uCYqhKUauRZBHD92Xw70hkmpyEv
+ 2GvxaWbt5lzo+Ke4XCYvCEVm8va0YS2W3SE5OhZokFKn+KuRob7Bj5rfCyX8y9DEwh+p
+ zaOTc6bZk+e6wzIgJzZVkedzs2iQ3K31PObs1B2GPIttZ4vz7FRpQSE2JGG1TB+zDckF
+ qfGljpdTr5vhoDXZmFeDFIQjosU5egOGlM5qgGj+VqlQMP3hgglj7YNPrGQtesdRNa42
+ 0zVg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=D7WOpmev
-Subject: Re: [Buildroot] [PATCH v4 5/6] utils/generate-cyclonedx: add hashes
- from .hash files to externalReferences
+ header.a=rsa-sha256 header.s=google header.b=DAnjcycP
+Subject: Re: [Buildroot] [PATCH v4 3/6] utils/generate-cyclonedx: generate
+ externalReferences with source-distribution
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,130 +131,130 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> BSI TR-03183-2 5.2.5 [1] lists the "Hash value of the source code of the
-> component" under "Optional data fields for each component", and as such
-> CycloneDX "MAY additionally include the [...] information, if it exists".
+> BSI TR-03183-2 5.4.2 [1] lists source code URIs under "Additional data fields
+> for each component", and as such "MUST additionally be provided, if it exists".
 > 
-> As hash values are available in Buildroot, iterate over .hash file paths
-> from show-info input and read hash values for the source distribution. Add
-> all found hashes to externalReferences source-distribution entries.
+> If a http or https source download URI is available from show-info, extract
+> it and include it as an externalReference of type "source-distribution" in the
+> CycloneDX output.
 > 
 > [1] https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03183/BSI-TR-03183-2_v2_1_0.pdf?__blob=publicationFile&v=5
 > 
 > Signed-off-by: Martin Willi <martin@strongswan.org>
-> Acked-By: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .../tests/utils/test_generate_cyclonedx.py    | 44 +++++++++++++++++++
->  utils/generate-cyclonedx                      | 34 ++++++++++++++
->  2 files changed, 78 insertions(+)
+>  .../tests/utils/test_generate_cyclonedx.py    | 26 ++++++++++
+>  utils/generate-cyclonedx                      | 47 +++++++++++++++++++
+>  2 files changed, 73 insertions(+)
 > 
 > diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-> index a071ff867923..84f94f050760 100644
+> index bf1b8e099bf9..a071ff867923 100644
 > --- a/support/testing/tests/utils/test_generate_cyclonedx.py
 > +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-> @@ -166,3 +166,47 @@ class TestGenerateCycloneDX(unittest.TestCase):
->                  },
->              ],
->          )
+> @@ -140,3 +140,29 @@ class TestGenerateCycloneDX(unittest.TestCase):
+>  
+>          foo_deps = next(d for d in result["dependencies"] if d["ref"] == "package-foo")
+>          self.assertEqual(foo_deps["dependsOn"], ["package-bar", "skeleton-baz"])
 > +
-> +    def test_external_references_hashes(self):
-> +        with tempfile.TemporaryDirectory() as tmpdir:
-> +            hash_file = Path(tmpdir) / "foo.hash"
-> +            hash_file.write_text(
-> +                "# source archive checksums\n"
-> +                "sha256 1111111111111111111111111111111111111111111111111111111111111111 foo-1.2.tar.gz\n"
-> +                "sha1 2222222222222222222222222222222222222222 foo-1.2.tar.gz\n"
-> +                "sha256 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa LICENSE\n"
-> +            )
+> +    def test_external_references(self):
+> +        info = self._make_show_info()
+> +        info["package-foo"]["downloads"] = [
+> +            {
+> +                "source": "foo-1.2.tar.gz",
+> +                "uris": [
+> +                    "https+https://sources.buildroot.net/foo",
+> +                    "http|https+https://mirror.example.org/foo",
+> +                ],
+> +            },
+> +        ]
 > +
-> +            info = self._make_show_info()
-> +            info["package-foo"]["hashes"] = [str(hash_file)]
-> +            info["package-foo"]["downloads"] = [
-> +                {
-> +                    "source": "foo-1.2.tar.gz",
-> +                    "uris": [
-> +                        "http|https+https://mirror.example.org/foo",
-> +                    ],
-> +                },
-> +            ]
-> +
-> +            result = self._run_script(show_info=info)
-> +
+> +        result = self._run_script(show_info=info)
 > +        foo = self._find_component(result, "package-foo")
+> +
+> +        self.assertIn("externalReferences", foo)
 > +        self.assertEqual(
 > +            foo["externalReferences"],
 > +            [
 > +                {
 > +                    "type": "source-distribution",
 > +                    "url": "https://mirror.example.org/foo/foo-1.2.tar.gz",
-> +                    "hashes": [
-> +                        {
-> +                            "alg": "SHA-256",
-> +                            "content": "1111111111111111111111111111111111111111111111111111111111111111",
-> +                        },
-> +                        {
-> +                            "alg": "SHA-1",
-> +                            "content": "2222222222222222222222222222222222222222",
-> +                        },
-> +                    ],
-> +                }
+> +                },
 > +            ],
 > +        )
 > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index a3b7293f9a5e..382d91ce55af 100755
+> index f4d5afd847e5..a3b7293f9a5e 100755
 > --- a/utils/generate-cyclonedx
 > +++ b/utils/generate-cyclonedx
-> @@ -283,6 +283,39 @@ def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
->                  yield scheme.split("|"), stripped_uri
+> @@ -14,6 +14,8 @@ import gzip
+>  import json
+>  import os
+>  from pathlib import Path
+> +from typing import Iterator
+> +import urllib.parse
+>  import urllib.request
+>  import subprocess
+>  import sys
+> @@ -261,6 +263,50 @@ def cyclonedx_patches(patch_list: list[str]):
+>      }
 >  
 >  
-> +def cyclonedx_source_hashes(comp, source):
-> +    """Create CycloneDX hashes for a source distribution.
+> +def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
+> +    """Parse download URIs into (schemes, url) tuples.
+> +
+> +    Splits the Buildroot URI format "scheme[|scheme]+url" and yields all
+> +    Buildroot schemes with the stripped URL, excluding
+> +    sources.buildroot.net mirrors.
+> +
+> +    Args:
+> +        uris (list): Array of URI strings from the show-info output.
+> +    Yields:
+> +        tuple[list[str], str]: (schemes, url) for each usable URI.
+> +    """
+> +    for uri in uris:
+> +        scheme, _, stripped_uri = uri.partition("+")
+> +        if stripped_uri:
+> +            parsed = urllib.parse.urlparse(stripped_uri)
+> +            if parsed.hostname != "sources.buildroot.net":
+> +                yield scheme.split("|"), stripped_uri
+> +
+> +
+> +def cyclonedx_external_refs(comp):
+> +    """Create CycloneDX external references for a component.
 > +
 > +    Args:
 > +        comp (dict): The component information from the show-info output.
-> +        source (str): The source distribution filename to look for in the hash file.
 > +    Returns:
-> +        dict: Hash information in CycloneDX format, or empty dict
+> +        dict: External reference information in CycloneDX format, or empty dict
 > +    """
-> +    MAPPING = {
-> +        "sha1": "SHA-1",
-> +        "sha256": "SHA-256",
-> +        "sha512": "SHA-512",
-> +        "md5": "MD5",
-> +    }
+> +    SOURCE_DIST_SCHEMES = {"http", "https"}
 > +
-> +    hashes = []
-> +    for hash_file in comp.get("hashes", []):
-> +        with Path(hash_file).open() as f:
-> +            for line in f:
-> +                line = line.strip()
-> +                if not line.startswith("#") and line.endswith(f" {source}"):
-> +                    parts = line.split()
-> +                    if len(parts) >= 3 and parts[0] in MAPPING:
-> +                        hashes.append({
-> +                            "alg": MAPPING[parts[0]],
-> +                            "content": parts[1],
-> +                        })
-> +    if hashes:
-> +        return {"hashes": hashes}
+> +    refs = []
+> +    for download in comp.get("downloads", []):
+> +        source = download.get("source")
+> +        for schemes, uri in parse_uris(download.get("uris", [])):
+> +            if set(schemes) & SOURCE_DIST_SCHEMES and source:
+> +                refs.append({
+> +                    "type": "source-distribution",
+> +                    "url": f"{uri}/{source}",
+> +                })
+> +    if refs:
+> +        return {"externalReferences": refs}
 > +    return {}
 > +
 > +
->  def cyclonedx_external_refs(comp):
->      """Create CycloneDX external references for a component.
+>  def cyclonedx_component(name, comp):
+>      """Translate a component from the show-info output, to a component entry in CycloneDX format.
 >  
-> @@ -301,6 +334,7 @@ def cyclonedx_external_refs(comp):
->                  refs.append({
->                      "type": "source-distribution",
->                      "url": f"{uri}/{source}",
-> +                    **cyclonedx_source_hashes(comp, source),
->                  })
->      if refs:
->          return {"externalReferences": refs}
+> @@ -284,6 +330,7 @@ def cyclonedx_component(name, comp):
+>          **({
+>              "cpe": comp["cpe-id"],
+>          } if "cpe-id" in comp else {}),
+> +        **cyclonedx_external_refs(comp),
+>          **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
+>          "properties": [{
+>              "name": "BR_TYPE",
 > -- 
 > 2.43.0
 > 
