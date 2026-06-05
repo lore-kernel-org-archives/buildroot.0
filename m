@@ -1,115 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069D7CD6E79
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 12:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AADCD6E7C
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jun 2026 15:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D650780E57;
-	Fri,  5 Jun 2026 12:51:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E434F60BBE;
+	Fri,  5 Jun 2026 15:19:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RN0moW8ULkzB; Fri,  5 Jun 2026 12:51:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qY9NYeWMXTS3; Fri,  5 Jun 2026 15:19:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70F4481467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42C4A60B45
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780663877;
-	bh=BQWjcGeZF5nW2clzOcRRU3Map1cQYLAPKdXTgOI86J0=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iDDUJJNYGsH4AtN0i0Sx5pCVB3nosD25o8sSzpcH+jjeJC3FGMrML5wWowTnecsXi
-	 kiZgXSrnzo2YlrBvF5mMK2AJbDapRUNwNmiS9P3OCTII/TfD/US3ez7XyHzpb9S99b
-	 M9UJTAo/u+SM3ojHupLhw56Se5P7MdDk0pn1oHBE331/j/JI/e+4lvxVOZDye0j7ev
-	 PQHhw53fHj9rQuIBlqJlKpKVA9+bwXsLHXGhdQSww9HFUn+iu8QX+/vjdi4UuvIpLG
-	 DV4fQQ1flT1NBb43C8Qw4mw4gRLGmS9oKmcpF5kMaArdyHdrWR44TsuqHF7slHojgY
-	 m/0jFR5lF7TPg==
+	s=default; t=1780672742;
+	bh=b4oJNZMOWjGwm1cLFkhkA+MT0N8ME8imrr9AEiXkmL0=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=VOzx+Fs+Gvfwbivekt3Itg7MVu0e3J9L4xNQn1b/kTEkJfo6yiRsuHXoAeyGPd5bE
+	 1iN9Np/IDFIpmg12cgW59HXb2VeqMVywBiTuLYVja+9ISFAIRyT39MTPHzXZyuiu1/
+	 w411x18BZHUwRnbC4oGJGd8ieI1z3Hp604zoqIDL7XH+xDG0SiNGhb+yl6hc08LQyQ
+	 LQQmTg29KAD6c2ufcb10XzrAERuYUq+ggNSGDz9jiz+F917bRJjuyfZiTEWXmz4O59
+	 XTZHksM4ihIEVHMzZBtNfFfF5BXU5GkV4Pm38/qlC9M0oiYxGTWcvvxH6xO9cge/pl
+	 y4bjrpB9kN3XA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70F4481467;
-	Fri,  5 Jun 2026 12:51:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A0193F4
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42C4A60B45;
+	Fri,  5 Jun 2026 15:19:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AB56388
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 15:19:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91DCC4037F
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00A6760B45
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 15:19:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0Na3vWWdXSD for <buildroot@buildroot.org>;
- Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84C604037E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84C604037E
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 84C604037E
- for <buildroot@buildroot.org>; Fri,  5 Jun 2026 12:51:13 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-490ac10e337so15541295e9.3
- for <buildroot@buildroot.org>; Fri, 05 Jun 2026 05:51:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780663872; x=1781268672;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=KZ9WO8sNGmRv2yan8e6TDEhbc0zCDwbHeN+K4WYOHg0=;
- b=WNozOU8TlDXKJepyvEA70PCQMzWJvgfbcAcHk4ZNL4Ap3DOQ3cAShDZjEqEJnSl12w
- F2fsEXHtcBTqVmP1Y7krkDlmTbhntHMntpvT1nn9pV/7yi4ys3hqf8RT3iTEansn136I
- oQt9mw0jmnmZG6YRS2KeMFB3UTXBa8QIdJj8+mth5aLmJTy+N6QG9uQc3XoNaGeP3bPr
- 3GY548Sx0UdvL6vr7s81A5dUx1tr6TaVMTBkrxdexXBiV1jg1wmp09FXlNquBna51082
- HnGib307QPGsnMHVXLZJRtTCGpMouWUyTEHjyd1GAOF4rlQDzwNv7ECDD5tjMvjVcnD0
- w1cw==
-X-Gm-Message-State: AOJu0YzmQIdW0O5kKryKGxPLhmZ8AbIq83Gdqfe71SSr7IlBAN0btuik
- /Gq4VGLyNRF/PvPhmD3LPoXHcYJuvYHCIj58TxxuaM+xEdC8JHR1zTHJ0q7ewmrA4bc+7YNJncK
- 2ozfP
-X-Gm-Gg: Acq92OHN5SNRxNljClLlxvtnfJYfiRUVb9QRzGY7OQyjfAPhFW2M8Uxo/VSXwi//i6Y
- Ajs3p1nnq9BYbobk2W2LS7qURv49JPKw3yPgur2bht3E/LEj+WSmvGdLzSY2gPnwKaHFe2LLNWR
- H7QqP55TDzUncWTawG0RyOtk6BKMMET0+IpFYS1l5U59H/TPy9BuNgCj+7ZMO2b+BwhB85/Riek
- 7wUFDvwtDVSsy3bbbVhkBMJYq6z+dwl/+YlhBX4DSNobO9jXUeEFU/eZIHCeJ3j5YYmiGNSbv0k
- nUV2V+Ef5vTgIZ1T3/j12po9udE0KWMdaWZyo3/29QKJIx60Ma3SW/p044QLHr4PDXxhXVakSW3
- qrtC6HUQ7Qb4aIlKUquXdy/kcHDg+lw+kJW5FOdOfBOEW1DicBsg21Q2W+sr2LvHOg4lWjq+2u7
- LZRqnUojZf0+LjALCrR84/qwXL5A==
-X-Received: by 2002:a05:600c:5248:b0:490:c024:2ec8 with SMTP id
- 5b1f17b1804b1-490c2522657mr55526855e9.0.1780663871597; 
- Fri, 05 Jun 2026 05:51:11 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f3444fesm27298564f8f.20.2026.06.05.05.51.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Jun 2026 05:51:10 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri,  5 Jun 2026 14:51:09 +0200
-Message-ID: <20260605125109.275465-1-thomas.perale@mind.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aA-fPN6Y5R2l for <buildroot@buildroot.org>;
+ Fri,  5 Jun 2026 15:19:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 87EF060B2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87EF060B2D
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 87EF060B2D
+ for <buildroot@buildroot.org>; Fri,  5 Jun 2026 15:18:55 +0000 (UTC)
+Received: from 91-154-227-245.elisa-laajakaista.fi ([91.154.227.245]
+ helo=kodama) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1wVWJv-00DFMR-BZ; Fri, 05 Jun 2026 17:18:51 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 54a77c61;
+ Fri, 5 Jun 2026 15:18:50 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri,  5 Jun 2026 18:18:49 +0300
+Message-ID: <20260605151850.2908568-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260529150631.447940-1-thomas.perale@mind.be>
-References: <20260529150631.447940-1-thomas.perale@mind.be>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780663872; x=1781268672; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KZ9WO8sNGmRv2yan8e6TDEhbc0zCDwbHeN+K4WYOHg0=;
- b=fEFxsX7DJR1VnTYSekdwWk4oA0qyEDJKE4nzRYxdvxxbZ9FtJrKg3ViN4V0eIkJUkr
- wSiM/2Dpbd3MlrEoHp2qDKX9ZSHe1ttAbkafgeKBDGeIa1I88UwCD3Lc+p+A2psy11ln
- 1TGbOC9f0wUu1fiP19eQPY/BG9zey9fb0RWnO277255f9F3dqTYlx319LBz6DS0KFn8g
- /EGjxMpRXG6qhA62cPglbHh9ZBs2Gzun2IWBfGmJUf+Big5F0xL/9LBrl7TioXUcBPd9
- thT/OEGnOSt+GuwiE/gDyn9WecgXKQXj1waQp4+xwpjmqkBeENzyQpFwutMLgWqVapgY
- 1Wug==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fEFxsX7D
-Subject: Re: [Buildroot] [PATCH v2 1/5] support/scripts/cve-check: fix
- vulnerability timestamp to RFC 3339
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=KbCcUGdQulpu1Tijps6SA6MwHphI4x2nGWlNoXvGF2E=; b=Qrjec7HB/EGjVi1ivNIMvc1hH8
+ tYmWUEfO/Gp/evatDoMhihPEbrRbNb91dbdftKroFKjx1mRaCScY25ur+NsmBWs2IaupGFmnx4mfD
+ JLD1TVL5kF27a9iKaFoNO7bDHyBfp3xr85fe7s4pNz2tsoyEts80W8Kyo06A0aDmv3QoFoCeronul
+ 44q3NNRkWECUdqWnmtLeiPaIy/K+rR8nNM2fp5Bah7gNpSEECSWFCJjYCP7PbPqO4ftdZrSAQUZAq
+ sfl5mA1tWQ61miEohUNW42wc4Ov0zeJ71SRHGoQ4DP5YsLfOPovcjPBto9XZ4S+cJ+pAD8BGiudaB
+ QymdW8OA==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=Qrjec7HB
+Subject: [Buildroot] [PATCH] package/libavif: bump to version 1.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,120 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Normalize vulnerability timestamps to RFC 3339 format with explicit UTC
-> timezone suffix for CycloneDX 1.6 compliance.
-> This fixes validation errors in sbom-utility and makes the generated
-> SBOM with vulnerabilities compatible with DependencyTrack VEX parsers.
-> 
-> The NVD JSON data feeds provide timestamps in ISO 8601 format without timezone
-> information (e.g., "1999-01-01T05:00:00.000"), but CycloneDX 1.6 requires
-> RFC 3339 format with explicit timezone designation (e.g.,
-> "1999-01-01T05:00:00.000Z").
-> 
-> Add nvd_datetime_to_rfc3339() helper function to convert timestamps before
-> serialization.
-> 
-> Validation results:
-> 
-> Before fix:
->   $ sbom-utility validate -i cve/cve_report_current.json
->   [INFO] BOM valid against JSON schema: 'false'
->   [INFO] (234) schema errors detected.
-> 
->   Error example:
->   {
->     "type": "format",
->     "field": "vulnerabilities.0.updated",
->     "context": "(root).vulnerabilities.0.updated",
->     "description": "Does not match format 'date-time'",
->     "value": "2025-04-03T01:03:51.193"
->   }
-> 
-> After fix:
->   $ sbom-utility validate -i cve/cve_report_update.json
->   [INFO] BOM valid against JSON schema: 'true'
-> 
-> Tested-with: sbom-utility v0.18.1
-> Co-authored-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+The most interesting changes are fixes for a memory leak, and for a
+couple of crashes. Otherwise, it is an incremental update. Release
+notes:
 
-Applied to 2025.02.x & 2026.02.x. Thanks
+  https://github.com/AOMediaCodec/libavif/releases/tag/v1.4.2
 
-> ---
-> v1 --> v2: add this patch at the base with comments from https://lore.kernel.org/r/<20260227091541.41760-1-thomas.perale@mind.be>
-> ---
->  support/scripts/cve-check | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-> index bcd970bad8..5047523ade 100755
-> --- a/support/scripts/cve-check
-> +++ b/support/scripts/cve-check
-> @@ -12,10 +12,10 @@
->  from collections import defaultdict
->  from pathlib import Path
->  from typing import TypedDict
-> +from datetime import datetime, timezone
->  import argparse
->  import sys
->  import json
-> -
->  import cve as cvecheck
->  
->  
-> @@ -35,6 +35,24 @@ locally.
->  brpath = Path(__file__).parent.parent.parent
->  
->  
-> +def datetime_to_rfc3339(dt_string):
-> +    """Normalize datetime string to RFC 3339 format with Z suffix.
-> +
-> +    NVD dates are already in ISO format, just need to add the Z suffix.
-> +
-> +    Input:  "1999-01-01T05:00:00.000"
-> +    Output: "1999-01-01T05:00:00.000Z"
-> +    """
-> +    dt = datetime.fromisoformat(dt_string.replace('Z', '+00:00'))
-> +
-> +    if dt.tzinfo is None:
-> +        dt = dt.replace(tzinfo=timezone.utc)
-> +    else:
-> +        dt = dt.astimezone(timezone.utc)
-> +
-> +    return dt.isoformat().replace('+00:00', 'Z')
-> +
-> +
->  def cve_api_get_lang_from_list(values, lang="en") -> (str | None):
->      for x in values:
->          if x.get("lang") == lang:
-> @@ -134,10 +152,10 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
->              "url": f"https://nvd.nist.gov/vuln/detail/{nvd_cve['id']}"
->          },
->          **({
-> -            "published": nvd_cve["published"],
-> +            "published": datetime_to_rfc3339(nvd_cve["published"]),
->          } if "published" in nvd_cve else {}),
->          **({
-> -            "updated": nvd_cve["lastModified"],
-> +            "updated": datetime_to_rfc3339(nvd_cve["lastModified"]),
->          } if "lastModified" in nvd_cve else {}),
->          **({
->              "cwes": nvd_cve_weaknesses_to_cdx(nvd_cve["weaknesses"]),
-> -- 
-> 2.54.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/libavif/libavif.hash | 2 +-
+ package/libavif/libavif.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libavif/libavif.hash b/package/libavif/libavif.hash
+index 4f9d899d27..8a37e5ba19 100644
+--- a/package/libavif/libavif.hash
++++ b/package/libavif/libavif.hash
+@@ -1,3 +1,3 @@
+-sha256  d4aea31a4becb3273ba7968221be2e48148ba05eb8a68d14e671963e17785648  libavif-1.4.1.tar.gz
++sha256  2b645287340ba5a631d268b551dc2d72bd73ac33335962dd36dcdb6d8366921d  libavif-1.4.2.tar.gz
+ 
+ sha256  165abf92cc04b39e80d29cadea7a6a7e8fddf59407d4ad2616507a7ebe8216f9  LICENSE
+diff --git a/package/libavif/libavif.mk b/package/libavif/libavif.mk
+index 8bd130fd65..7f178d0ff4 100644
+--- a/package/libavif/libavif.mk
++++ b/package/libavif/libavif.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBAVIF_VERSION = 1.4.1
++LIBAVIF_VERSION = 1.4.2
+ LIBAVIF_SITE = $(call github,AOMediaCodec,libavif,v$(LIBAVIF_VERSION))
+ LIBAVIF_LICENSE = BSD-2-Clause, IJG, Apache-2.0
+ LIBAVIF_LICENSE_FILES = LICENSE
+-- 
+2.54.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
