@@ -4,114 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6619DCD8C88
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB29DCD8C8E
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECE3F428CF;
-	Sat,  6 Jun 2026 22:51:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BE3C428E2;
+	Sat,  6 Jun 2026 22:51:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qiNDh3U2WiLe; Sat,  6 Jun 2026 22:51:37 +0000 (UTC)
+ id PRrjUToUN0h3; Sat,  6 Jun 2026 22:51:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 614F5428A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FCDB428C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780786297;
-	bh=GaoXy+XLieK9zAGFfsOuZgImamNrwAUxb5LpPf2thi4=;
+	s=default; t=1780786299;
+	bh=seghiLxgPms1hyRwPHQ3Z4D5ecnAPohJagjZ7Jg45+I=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Id37oBQLpsDIhtx72edRLci2KJdSojvtfPzUBJnFs2Qe4koFE0Mjk6CuDsag/wpnU
-	 s5xPWA7mcPuI4s5iTupFC7iv3+4CiYoCSojX3ucGfQB/SRkzpdk4dqwMs2k68ifYUh
-	 smiwJhgQ2MpG5u9dwrWtegP+1oYAR+69Y7hkOrJCcFflvL3aRqamHYQrOTPJZQuaHC
-	 M4fcRP9Z++IhtUX54jPwYZno171oEFXdiykuFVB7kATe7js/Bv9U/eeAz0sP6316eX
-	 8/uuHcGExyjKMw9RELMxef/cmAOgO9Ffss6OLgd853ycbGkMYawT993huOhcDkB8ZP
-	 GbLZyoQEqeSMQ==
+	b=RQNeqXD3XNGMc0HkB7AtRKMwVMWA0veRXm6GnaZVFjc7QS4NB87Kq3awj/AAifsEi
+	 2xIgByE27/LSIq6o8PQBLX74zv2DdnbUuwdrG66Dw4SYAtmrQyJI9tPcqXIfUcDIMw
+	 5/n8EmsENLUFNXkXX4ZCczb3xNlczPwTbk7ujvNBKgiBD2J9TvQtJVJcThaOlQwOmU
+	 QBSk9UlAQ7rqs8Oc3sFgFCM1eYxKYgoWLa3Zx8NTUP7WPnBCI0MAtVkuJ+X+Oacbs9
+	 8j9tWdDDoXpyo1wPBCZLKucsfwVNuGMSb815DNFgBJ2sCARZ/48IGtni1sqNHbKHmu
+	 WnuLQab5L3ROA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 614F5428A7;
-	Sat,  6 Jun 2026 22:51:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FCDB428C6;
+	Sat,  6 Jun 2026 22:51:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C38AD2EF
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CD1B42EF
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A78DE42879
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEC04428A6
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0THWRcJTdtoj for <buildroot@buildroot.org>;
- Sat,  6 Jun 2026 22:51:30 +0000 (UTC)
+ id IvqZBRf30Lhw for <buildroot@buildroot.org>;
+ Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6084142449
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6084142449
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6084142449
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:30 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-490ae94a89eso25580915e9.1
- for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E8E842637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E8E842637
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E8E842637
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-490b4e1ade7so33486105e9.0
+ for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780786288; x=1781391088;
+ d=1e100.net; s=20251104; t=1780786289; x=1781391089;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ypdQVjZfHpKGSuxqxJtUQlHm2mDHc/Ys4/x3XOlJxwI=;
- b=YMStiZkd9J8T26ctSea9EN78ewaGPW9gEb5NE7dbGzhA6zlHJMzS5bhfg8ICaksbM1
- fShOHkumAMl9+dDgcEs1zSp2QEL51fpJ5R3LDUhl8j0sgkRw9Hh5+jtMhDZIxyxjebfI
- OfirOAtxeJZZInxvz/UISdCiZdxCvBw4rvizjH1IP+oQusQA51YxQLkKk6arUcux4BxR
- XEbNyfDz2XPuwIRrR+QwSg+HnFJ0Afy2mZmM8okoh24arDJrIRW9i20Z3wydpoo8tC4R
- sraFDBp6ZSvIe/OXdy4mtF+83OaltOfE6JPLYcNA+71QoD40mFkiXbmHXyXqrZRFQt5H
- wWMw==
-X-Gm-Message-State: AOJu0Yw9yed9IcMuN1azc3xFqQUJTnsflJKRYXEQv4UnmaMmMyJdbzLO
- 7KV45p2OOFU86W6RvNGl/FBt/TFM/cwOcVDB5bnjVCt0Yj8V+TeaV62pjQ3ln1LSuAc94/6Nii1
- 9SLdi
-X-Gm-Gg: Acq92OETUBEWSPGOX0ZIADre0ptDsbV/qjw9zZqKwIKmoQJH54Jk12QbANUYXNznn8X
- rNuFuye8+17jWH2KrdwkYn/3YcL3lVT8FzFRPAzpYC0UzFgdk3IrdJ0fF04FJzgPkmc/nHEM4W8
- kFnuCfocHNhkrRHZLpPN/nY4yIoaIMAc2mSlzOWCjvlF73aZOVldJ3Qe9+muE0PUCJoc7/tmQwU
- G2FadBk1Qqdx30rJXNiuyOCg66WB/C4T4ueHj8XKjQ0r30lJ7ii/39F4soooeUFaP4vEwvdJ4DS
- hDHOL0obbw2Nifweoau3Ey6ds6dlUBAHZ4saX+wJnmleiIJ1hTW9gdaujt7wbJvpbHY0AfLbZVk
- nnkt+9vJzDNXB2XqXvpkv97866vQ8iscRGalLPPz6qGbsweLAW0CuzBlnpqQeDch47tRO3pCCAp
- ANz3KagskeulJbtonwr+UM6SIC/6fdM95m4n+gOXfp1GIeM1++FAP/nOLGTUmQyCfvgsLzqBlng
- g7mZQCwfo848x3QInw635HhYUO4ltPoO5Wp
-X-Received: by 2002:a05:600c:3492:b0:490:aeae:1eea with SMTP id
- 5b1f17b1804b1-490c2597362mr159269485e9.7.1780786288218; 
- Sat, 06 Jun 2026 15:51:28 -0700 (PDT)
+ bh=Frb19jJjflYesCwKGcmV/2kb0rvWuASnvRv7vjCBYb8=;
+ b=oPuZlL4ACT3om+gx+ltD4/ACl+vS5MJlDeJ0CrZQxRyp113ckW/25RmDzSNBGY+rRU
+ 7EjpKYCu6uU4fUkKI9t3kayIkoTvF/2fhncmu3BWFVkKfqjoCQsJFU6IgwLyNG9vKkur
+ smOPYvED7Dxa1cPN9TiA7uFCovkt9AiTCB503KWzDhpPpu7CWduBKoRZn0XPHVaur251
+ MWfIucopSpwVW/fT2aHRkDRZ/+6nHXEcgpDEawZUM90xnV8+pZqAtKfQbDhSUbJGmSiu
+ rV/wP/eFfrp59dEqcVlkMtsw0LSYJ6+j99/ESBc7vQk7qcYznlzY1jWqwezn2BtooJFH
+ zE2w==
+X-Gm-Message-State: AOJu0YzpT/gc/AFLb0Ak4zbWODrV0DqcVQkEgstEiNohNC8SYeuxPITu
+ qs6ZbNClBlaWN2tt1iu7WzG9bGo2yv7Dpx7qWH73WLFzJOqGVhfma8jq+vrpMehpw4t3Kskhc1w
+ tpRSp
+X-Gm-Gg: Acq92OEx9k3JtDCzePMuBibc1mbLnbQ1itH8AcEKYFR+yBE8VZMXex1bhqU8CE3tRCX
+ tMzvZIkdcQjqvYxuBh0KM4bP39iy2N8hegWGWH+GuAZuoO8Mn+SoWGz2O0gOTUhwBl/CfgRk0ZN
+ R5wHqVOD7hWSDOYffEBRBSyyk9c69buIRfATJxHgLXbpkl/VZApHH/gS3qrB95M4wRD/4cFSt/v
+ Cub8srzNPuJCJmgtoFU09CReQFScQUs4exoWRbLjDjECihdxU9vKkbVoPKN6E7lErNRHncAbUHY
+ Vk6k2NFAWztjda5s8bhtmGxNPBVewtopXWoqKwxymIcOPKc7bHDkOpaY0aMoZ13dabyO07jrFDj
+ W5QpCgHotVt3aEK+SsoAEEDjtIHshPLusXCR/PTqdBfnmHP8Y2Al4rnOWF2EzVmKkgRutg0KS+h
+ M1zRJPdHTbG2qlTzELUtnAzFoRIzxUxBTfRauq0bl4I8neXD4t32Q2pNa5g9Xf6r8mcMhcNX/oX
+ MiCzpHs5+eCPrKHIVMSZWAESrn573qo8Nwz
+X-Received: by 2002:a05:600c:348b:b0:490:be78:1861 with SMTP id
+ 5b1f17b1804b1-490c25af9bbmr152750895e9.4.1780786289420; 
+ Sat, 06 Jun 2026 15:51:29 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.27
+ ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Jun 2026 15:51:27 -0700 (PDT)
+ Sat, 06 Jun 2026 15:51:28 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>,
- Vivien Didelot <vivien.didelot@gmail.com>
-Date: Sun,  7 Jun 2026 00:51:15 +0200
-Message-ID: <20260606225120.409046-4-romain.naour@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sun,  7 Jun 2026 00:51:16 +0200
+Message-ID: <20260606225120.409046-5-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260606225120.409046-1-romain.naour@smile.fr>
 References: <20260606225120.409046-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780786288; x=1781391088; darn=buildroot.org;
+ d=smile.fr; s=google; t=1780786289; x=1781391089; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ypdQVjZfHpKGSuxqxJtUQlHm2mDHc/Ys4/x3XOlJxwI=;
- b=klJwV9c5yIag4X+RYnWMK7iyPPEGE8GeaNgt+MTz044wKjsAFHs2Ba34RobGDyA0jC
- jPVESqB328WRBCeh/XL1viPZ3a1uB/BfKff/0Sa5+WRVwrDZcPiloFFQ09u0nsZiG5NE
- UvBKSYPWZvMDBCxf4paiFIcs2j2P8LRjV+6EM=
+ bh=Frb19jJjflYesCwKGcmV/2kb0rvWuASnvRv7vjCBYb8=;
+ b=cXhTnTbiicOivBfDX2MzNmFTVIMaY+7VINbvQwATAjO5DZU4jIM7M/5jBsGsVVZx0B
+ XJSwYZWTvBdUI/eOKFerTL76HSObQl/rU3UYvSCORv37WLsWBjFuWnvjDITPyUmpZOYb
+ t1JdAZPkiyGE4Y3EIcN8SwS0AOWDoZiG3LN3I=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=klJwV9c5
-Subject: [Buildroot] [PATCH 4/7] configs/ts5500_defconfig: remove defconfig
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=cXhTnTbi
+Subject: [Buildroot] [PATCH 5/7] configs/acmesystems_aria_g25_{128mb,
+ 256mb}_defconfig: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,269 +129,219 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This configuration for the TS-5400 was added back in September
-2014 (commit 483e3bef47b3f024e4181403b3665702101c03e1), got some update
-in 2018 (commit 6461d76992ec2ceffabd7a5ccb59bb707ea2cb0a) and has not
-been updated in any significant way since then.
+This configuration for the acmesystems aria g25 were added back in July
+2015 (commit 2e52be798276fe0c28949f4a16fce0ca20e52153), and has not
+been updated in any significant way since 2019 (the last major kernel
+update [1]).
 
-This defconfig still use a 4.14 kernel that is no longer maintained.
+This defconfig still use a 4.19 kernel that is no longer maintained.
 
 Remove its support.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728914087 (ts5500_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913801 (acmesystems_aria_g25_256mb_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913800 (acmesystems_aria_g25_128mb_defconfig)
+
+[1] ab10b5b3ee6aa1e19aa6264153eeed9054d4c2e7
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Vivien Didelot <vivien.didelot@gmail.com>
 ---
- .checkpackageignore                           |   1 -
- DEVELOPERS                                    |   4 -
- .../fs-overlay/boot/syslinux/syslinux.cfg     |   9 --
- board/technologic/ts5500/linux-4.14.config    | 111 ------------------
- board/technologic/ts5500/readme.txt           |  52 --------
- configs/ts5500_defconfig                      |  13 --
- 6 files changed, 190 deletions(-)
- delete mode 100644 board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
- delete mode 100644 board/technologic/ts5500/linux-4.14.config
- delete mode 100644 board/technologic/ts5500/readme.txt
- delete mode 100644 configs/ts5500_defconfig
+ board/acmesystems/aria-g25/genimage.cfg       | 36 ---------------
+ .../at91bootstrap3/at91bootstrap3.hash        |  2 -
+ .../patches/linux-headers/linux-headers.hash  |  1 -
+ .../aria-g25/patches/linux/linux.hash         |  2 -
+ board/acmesystems/aria-g25/readme.txt         | 44 -------------------
+ configs/acmesystems_aria_g25_128mb_defconfig  | 26 -----------
+ configs/acmesystems_aria_g25_256mb_defconfig  | 26 -----------
+ 7 files changed, 137 deletions(-)
+ delete mode 100644 board/acmesystems/aria-g25/genimage.cfg
+ delete mode 100644 board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
+ delete mode 120000 board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
+ delete mode 100644 board/acmesystems/aria-g25/patches/linux/linux.hash
+ delete mode 100644 board/acmesystems/aria-g25/readme.txt
+ delete mode 100644 configs/acmesystems_aria_g25_128mb_defconfig
+ delete mode 100644 configs/acmesystems_aria_g25_256mb_defconfig
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5fe9b378c8..c5b5dc15fc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -151,7 +151,6 @@ configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
--configs/ts5500_defconfig lib_defconfig.ForceCheckHash
- configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
- configs/visionfive_defconfig lib_defconfig.ForceCheckHash
- configs/wandboard_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c5917d1e8..0af3d3615e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3378,10 +3378,6 @@ F:	support/testing/tests/package/test_zerofree.py
- N:	Vinicius Tinti <viniciustinti@gmail.com>
- F:	package/python-thrift/
- 
--N:	Vivien Didelot <vivien.didelot@gmail.com>
--F:	board/technologic/ts5500/
--F:	configs/ts5500_defconfig
--
- N:	Vladimir Oltean <olteanv@gmail.com>
- F:	package/qoriq-ddr-phy-binary/
- F:	package/qoriq-firmware-inphi/
-diff --git a/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg b/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
+diff --git a/board/acmesystems/aria-g25/genimage.cfg b/board/acmesystems/aria-g25/genimage.cfg
 deleted file mode 100644
-index 64f8187733..0000000000
---- a/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
+index 29dc697153..0000000000
+--- a/board/acmesystems/aria-g25/genimage.cfg
 +++ /dev/null
-@@ -1,9 +0,0 @@
--SERIAL 1 115200
--CONSOLE 0
+@@ -1,36 +0,0 @@
+-# Minimal SD card image for the Acmesystems Aria G25
 -
--DEFAULT linux
+-image boot.vfat {
+-	vfat {
+-		file zImage {
+-			image = "zImage"
+-		}
 -
--LABEL linux
--  SAY Now booting the kernel from SYSLINUX...
--  LINUX /boot/bzImage
--  APPEND console=ttyS1,115200n8 root=/dev/sda1 rootfstype=ext4 rw
-diff --git a/board/technologic/ts5500/linux-4.14.config b/board/technologic/ts5500/linux-4.14.config
+-		file at91-ariag25.dtb {
+-			image = "at91-ariag25.dtb"
+-		}
+-
+-		file boot.bin {
+-			image = "at91sam9x5_aria-sdcardboot-linux-zimage-dt-3.10.3.bin"
+-		}
+-	}
+-
+-	size = 16M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
 deleted file mode 100644
-index eb81596e25..0000000000
---- a/board/technologic/ts5500/linux-4.14.config
+index 6edf3d3345..0000000000
+--- a/board/acmesystems/aria-g25/patches/at91bootstrap3/at91bootstrap3.hash
 +++ /dev/null
-@@ -1,111 +0,0 @@
--# CONFIG_CROSS_MEMORY_ATTACH is not set
--CONFIG_PARTITION_ADVANCED=y
--# CONFIG_X86_EXTENDED_PLATFORM is not set
--CONFIG_MELAN=y
--CONFIG_X86_GENERIC=y
--CONFIG_X86_REBOOTFIXUPS=y
--CONFIG_NOHIGHMEM=y
--# CONFIG_COMPACTION is not set
--# CONFIG_BOUNCE is not set
--# CONFIG_RELOCATABLE is not set
--# CONFIG_SUSPEND is not set
--# CONFIG_ACPI is not set
--CONFIG_CPU_IDLE=y
--CONFIG_TS5500=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
--# CONFIG_WIRELESS is not set
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_BLK_DEV is not set
--CONFIG_BLK_DEV_SD=y
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_ATA=y
--# CONFIG_ATA_VERBOSE_ERROR is not set
--# CONFIG_SATA_PMP is not set
--CONFIG_ATA_GENERIC=y
--CONFIG_PATA_LEGACY=y
--CONFIG_NETDEVICES=y
--# CONFIG_NET_CORE is not set
--# CONFIG_NET_VENDOR_3COM is not set
--# CONFIG_NET_VENDOR_ADAPTEC is not set
--# CONFIG_NET_VENDOR_ALTEON is not set
--# CONFIG_NET_VENDOR_AMD is not set
--# CONFIG_NET_VENDOR_ARC is not set
--# CONFIG_NET_VENDOR_ATHEROS is not set
--# CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_BROCADE is not set
--# CONFIG_NET_VENDOR_CHELSIO is not set
--# CONFIG_NET_VENDOR_CISCO is not set
--CONFIG_NET_TULIP=y
--CONFIG_DM9102=y
--# CONFIG_NET_VENDOR_DLINK is not set
--# CONFIG_NET_VENDOR_EMULEX is not set
--# CONFIG_NET_VENDOR_EXAR is not set
--# CONFIG_NET_VENDOR_HP is not set
--# CONFIG_NET_VENDOR_INTEL is not set
--# CONFIG_NET_VENDOR_MARVELL is not set
--# CONFIG_NET_VENDOR_MELLANOX is not set
--# CONFIG_NET_VENDOR_MICREL is not set
--# CONFIG_NET_VENDOR_MYRI is not set
--# CONFIG_NET_VENDOR_NATSEMI is not set
--# CONFIG_NET_VENDOR_NVIDIA is not set
--# CONFIG_NET_VENDOR_OKI is not set
--# CONFIG_NET_PACKET_ENGINE is not set
--# CONFIG_NET_VENDOR_QLOGIC is not set
--# CONFIG_NET_VENDOR_REALTEK is not set
--# CONFIG_NET_VENDOR_RDC is not set
--# CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SILAN is not set
--# CONFIG_NET_VENDOR_SIS is not set
--# CONFIG_NET_VENDOR_SMSC is not set
--# CONFIG_NET_VENDOR_STMICRO is not set
--# CONFIG_NET_VENDOR_SUN is not set
--# CONFIG_NET_VENDOR_TEHUTI is not set
--# CONFIG_NET_VENDOR_TI is not set
--# CONFIG_NET_VENDOR_VIA is not set
--# CONFIG_NET_VENDOR_WIZNET is not set
--CONFIG_PHYLIB=y
--CONFIG_DAVICOM_PHY=y
--# CONFIG_WLAN is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--CONFIG_SERIAL_8250=y
--# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
--CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_HW_RANDOM is not set
--CONFIG_GPIOLIB=y
--CONFIG_GPIO_TS5500=y
--CONFIG_SENSORS_MAX197=y
--CONFIG_WATCHDOG=y
--CONFIG_SC520_WDT=y
--CONFIG_USB=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_SERIAL=y
--CONFIG_USB_SERIAL_FTDI_SIO=y
--CONFIG_USB_SERIAL_PL2303=y
--# CONFIG_X86_PLATFORM_DEVICES is not set
--# CONFIG_IOMMU_SUPPORT is not set
--# CONFIG_DMIID is not set
--CONFIG_EXT4_FS=y
--# CONFIG_DNOTIFY is not set
--# CONFIG_INOTIFY_USER is not set
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--# CONFIG_MISC_FILESYSTEMS is not set
--# CONFIG_NETWORK_FILESYSTEMS is not set
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_NLS_ISO8859_15=y
--CONFIG_NLS_UTF8=y
--# CONFIG_VIRTUALIZATION is not set
--CONFIG_XZ_DEC=y
-diff --git a/board/technologic/ts5500/readme.txt b/board/technologic/ts5500/readme.txt
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
+diff --git a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash b/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/acmesystems/aria-g25/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/acmesystems/aria-g25/patches/linux/linux.hash b/board/acmesystems/aria-g25/patches/linux/linux.hash
 deleted file mode 100644
-index 1fe384faae..0000000000
---- a/board/technologic/ts5500/readme.txt
+index 81824a41ee..0000000000
+--- a/board/acmesystems/aria-g25/patches/linux/linux.hash
 +++ /dev/null
-@@ -1,52 +0,0 @@
--Technologic Systems TS-5x00 SBCs
--================================
--
--This document explains how to set up a basic Buildroot system for the
--Technologic Systems TS-5x00 serie of x86-based Single Board Computers.
--
--TS-5x00 Single Board Computers are based on the AMD Elan520 processor. For more
--information please have a look at https://docs.embeddedTS.com/Documentation_Home#AMD
--
--The kernel configuration works for any AMD Elan520-based SBCs, but the support
--is enhanced for the TS-5500 and TS-5400 models (on-board devices registration
--and additional sysfs attributes under /sys/devices/platform/).
--
--To build the default configuration you only have to:
--
--    $ make ts5500_defconfig
--    $ make
--
--You will need a Compact Flash card of sufficient size and the first or only
--partition configured as Linux type, with the bootable flag.
--
--You can transfer the system on the partition then optionally resize it with:
--
--    # dd if=output/images/rootfs.ext4 of=/dev/sdX1
--    # resize2fs /dev/sdX1
--
--Or you can just extract the root filesystem to the partition with:
--
--    # mount /dev/sdX1 /mnt
--    # tar -pxf output/images/rootfs.tar -C /mnt
--    # umount /mnt
--
--To install the bootloader, you will need to copy the MBR:
--
--    # cat output/images/syslinux/mbr.bin > /dev/sdX
--
--Then install SYSLINUX in the mounted partition:
--
--    # mount /dev/sdX1 /mnt
--    # output/host/sbin/extlinux --install /mnt/boot/syslinux
--    # umount /mnt
--
--IMPORTANT: In order for the board to boot the Compact Flash with a recent
--config, the BIOS must use Logical Block Addressing (LBA). You can do it by
--choosing "Ide 0: AUTOCONFIG, LBA" under "IDE DRIVE GEOMETRY" in the "Basic CMOS
--Configuration" screen. Also, don't forget to set the 'active' (or 'bootable')
--flag on partition 1. For details about the CMOS setup, please see:
--https://docs.embeddedts.com/TS-5500#System_BIOS_Setup_Screens
--
--Connect a terminal program to the rs232 connector marked "COM2"
--with baudrate set to 115200, insert the Compact Flash card into the socket,
--power up the board, and enjoy.
-diff --git a/configs/ts5500_defconfig b/configs/ts5500_defconfig
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
+diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
 deleted file mode 100644
-index 62d80839b7..0000000000
---- a/configs/ts5500_defconfig
+index cb9e9abf77..0000000000
+--- a/board/acmesystems/aria-g25/readme.txt
 +++ /dev/null
-@@ -1,13 +0,0 @@
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
--BR2_ROOTFS_OVERLAY="board/technologic/ts5500/fs-overlay"
+@@ -1,44 +0,0 @@
+-Acme Systems Aria G25
+-
+-Build instructions
+-==================
+-
+-To build an image for the Aria G25 choose the configuration
+-corresponding to the Aria variant.
+-
+-For 128MB RAM variant type:
+-
+-$ make acmesystems_aria_g25_128mb_defconfig
+-
+-else for 256MB RAM variant type:
+-
+-$ make acmesystems_aria_g25_256mb_defconfig
+-
+-To customize the configuration choosed type:
+-
+-$ make menuconfig
+-
+-When you are ready to start building Buildroot type:
+-
+-$ make
+-
+-How to write the microSD card
+-=============================
+-
+-Once the build process is finished you will have an image called
+-"sdcard.img" in the output/images/ directory.
+-
+-Write the bootable SD card image "sdcard.img" onto an SD card with
+-"dd" command:
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-
+-Assuming your Aria G25 baseboard has a MicroSD socket, for example
+-with the Terra baseboard, insert the microSD card into the baseboard
+-slot and power it.
+-
+-To get the kernel log messages you can use a DPI cable
+-(http://www.acmesystems.it/DPI)
+-
+-You can find additional informations, tutorials and a very
+-comprehensive documentation on http://www.acmesystems.it/aria.
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+deleted file mode 100644
+index 0aff8f92e0..0000000000
+--- a/configs/acmesystems_aria_g25_128mb_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
 -BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5500/linux-4.14.config"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
+-BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_SYSLINUX=y
--BR2_TARGET_SYSLINUX_MBR=y
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+deleted file mode 100644
+index e75ca9cf34..0000000000
+--- a/configs/acmesystems_aria_g25_256mb_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_GLOBAL_PATCH_DIR="board/acmesystems/aria-g25/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/aria-g25/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
+-BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.54.0
 
