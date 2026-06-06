@@ -4,113 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61F13CD8C85
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B84CD8C88
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C113042870;
-	Sat,  6 Jun 2026 22:51:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B11F42888;
+	Sat,  6 Jun 2026 22:51:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TKzI6qZIOz5N; Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
+ id GgcY9p7nDYwo; Sat,  6 Jun 2026 22:51:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B899042449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9AAC4283F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780786291;
-	bh=UTnr3ez0vs5A60kCMPF4Rrc1nrKIkk+iRiJkuaSYnTk=;
+	s=default; t=1780786292;
+	bh=IG1McWPXt3y6+a11rRUuyvPBSBwviggewybRH19p03o=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XlslsnH1hIruMhTAwuPNpU1sORw+NmyQsXYpbk/R0TgqMVMhxBNiQBL3sX0COhiFk
-	 R++QZerLDIp3fTItreRXymU7YZn54mXBNJTHvCwnBl0f+gRkNTerMZoAue8SCL++My
-	 IvidDBtsqF80PdIP6vFHz8817bhFNvMNucfHUBglnR2VofhaoaW4Dolg3Src18A3cY
-	 NSyonTW3dBwNxpoWGhwqwh93fgqUjOKw70MZ18oXkCdYgRSmWQSdxjq1WLaqdF4agb
-	 Sax5mh79nKQTiAL2i9tAAd9u/SNfp5c8NLlBAnGVDwAxZ+Qkv/GxnUDGPTi8wuOoCK
-	 oKuJFE2DZZuRw==
+	b=cNtVwsF9bSZc9DUwL/3+iA5KcBX4jaRZbvo8SpBgxEPt7cy3EiJlH84io6kfR0T9H
+	 7svcW3xuuJNdMlzR8sZi4cQc2vWCM4vn4gjFOvnTW0U/e+rdbC4bCvfMnTomZTzrxs
+	 eGaLl1LrZlKmtHqMAKPTp8znq6EWHsZClK3rFoTg4XA+WxaID8wK9I/myg2SDOzhwg
+	 3ssyCpbAw2mFTyV7epEYNp5qnyTSfI9LK+wC+sspm+LevcOhLSvRxrtWs1DjfVgAoT
+	 QLsB+X9SOnkPvgeehZVFm5be1E6iqrGYRGgGFu45DPOKEHWwFtfA//rlfVB3KfPJAp
+	 HS/FUHMJUQcxg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B899042449;
-	Sat,  6 Jun 2026 22:51:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A721C2EF
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9AAC4283F;
+	Sat,  6 Jun 2026 22:51:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8ECF22EF
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90AE7848B0
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74CAF607A9
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMGMscjavdb7 for <buildroot@buildroot.org>;
- Sat,  6 Jun 2026 22:51:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C9Fjb-g1rPfi for <buildroot@buildroot.org>;
+ Sat,  6 Jun 2026 22:51:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6045E846BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6045E846BA
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6045E846BA
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:28 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-490aaeabdb4so18281215e9.1
- for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4908B60763
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4908B60763
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4908B60763
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:29 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-490b2b037d2so26580885e9.3
+ for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780786286; x=1781391086;
+ d=1e100.net; s=20251104; t=1780786287; x=1781391087;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=Mk0fjF3/AskAMfKIejYPftqrt8rei5ZGVNuwXlBMCyw=;
- b=lS9bTBG7So8uPP+KPOTHEALNI2BUo4S+fIXrtdqAYNG+FarygSCL0J78kJLRvPG78D
- lRWJRKU2XHIUhZRBNN1MAGFqA1bUK+hjfE9o4HVJI6q44LGcIFpyxY6A+8nrHjK/r0Ff
- h6Kmhdi4Kj+SH7Ilc1x2B3fFtxsX927dm6/4k0RXElPoSg8smA/aQ22V8OS+KeqlqBv6
- J3Z+HiSCDDrqTJcpBvJ7E9pAWPS7GZ+CqoyRPjU+RaqJaymCdSevmlg9Y/ew7ERimi9T
- eqs9ucdqLl+wwUOr2zdEsZIxjNGW9udlWh6LC1EN2fO1ZC37PiEGMcrV+4kTZxkAzaiB
- vgvg==
-X-Gm-Message-State: AOJu0YzgGOKdtopr4PUwXQhzZcg8ZU8BT9J9tUu666rmlT3hrYMBlNpd
- dTZjc4UVeuAEhzikVnsZ982l1fNuSOIPgxwgZ0UD77hUaSz7ycFu27oiaIExgEFMrA5GeRV8/hb
- TM57a
-X-Gm-Gg: Acq92OHBszpzNemjmq7Pf/5ZgPT7ZUW8r20iuCzwG8fantxa6CkIYASD6Q38PZuj+fl
- kBKJQTR/hL+IlPGmkOWM4j2grg3T4F3L1d84OoJpg76oE4aZOjI+QudZT7S/E+EgPutFWZaqixc
- GDRUt9mfdr17ICRfNqNPPvb+9QJ341Q3pw3qdPvlDVLAwnBUs6gyif0Q91gjfjAlIul1tqRUPfu
- Y0kofuthCWgBF2DIWkk5NpSL5S4cd4NXXnVZp9IW/XH9UWenLvYZ1BrP6mi9mQ4yVHnX7q6zG9w
- mV312ODhYcQDRRqG06zR5tjLUlc3Wan7b0OplREtYwa8RL/tLtU9vf5NvqZMCeZV+zNcKdPaO9c
- ThBQJr2Vp+v/KTt9YQ4fMtKu3L6FBmZeFpxNLlUMqPBUX/b9gM2OLciTLRE7wZ2Kq3eF2dSzn9e
- sYJDbPD5nLGghj59sb5HUcjUpQuSWVAWfwV3qoqpxRWjkBVE1C4A/NKXdF9XH3+wcpTiSzqJbxE
- 8xLHHy/lqUw7cY6pioAAx+TBy3vYDnhW6Qp
-X-Received: by 2002:a05:600c:1f90:b0:490:b00c:8e6a with SMTP id
- 5b1f17b1804b1-490c2602971mr160639725e9.28.1780786286388; 
- Sat, 06 Jun 2026 15:51:26 -0700 (PDT)
+ bh=MZ0AS6adzOnRgxZ3ZQTqJRfJanXgC+zun3wyOXlRpNE=;
+ b=X3JKcKY1Pfaj7LvupsHHvVB0EUo7C0nDO92E5Yqqw3u8kK8LDYv0eN/JOF4GCruxFQ
+ 1roKgYRCLClk3rfZWz/8Mls5bsi4tgHlo7j02QFFNw3LA9G+NqhlGdivNZUF/3QhewCV
+ HPJszfGbKCgdObce269dwS92XKut47DVE6bf2orsVXCe1n2WeuSGLF2KnLn27g2BENqd
+ jkcxj8dnCmxpoOLwsIFwIE2693+kP+EH0jY3111A5TYeCOsGqhvj4nXOaAcgozop8Nzs
+ KZ+yNwLXMznixwgoo322olKxYT8qUT8RT+obP4EV86qBI01AZ9ah+PFBd0iw5NABgUPX
+ SUXw==
+X-Gm-Message-State: AOJu0YwkRaTn4icWOw32kNnWZbJTtnMqwPaT06Yc6eDPaUKjY4+1gz5b
+ bC70tl5OkluzZxCniFZydVV5S5h+BKqW/51nbiqaBClbGz4RPzu0UYixpn3rHEMofwjnA/OiE5S
+ u02QU
+X-Gm-Gg: Acq92OHUrN+pAi8cJlgRaDpNL8vURcDkLkBJGASnthu2HMg3o2HaqSGJEpIE1n9fgX6
+ dSkVzJ7zpCYTitS8+ZNF1Mpjt835MNPupyvsX2z/b/5RLBmWOG7gnl6TzC04cxvKE+gW2urrz2z
+ nDLvj9h68gXY6c4e4hnxuN7l0DlMe2wOMxxl6iVuI/G+AX6bwdwahBneEiRVDh1DloW27x/gUKl
+ i4rYoC/Qn6fGbXyQ2J2jwW7jTIu1vzvio0AK8fflhkFDaZRw+VABRo8rSKoWwmZtiksBNiaP+4C
+ H1hvxg84wGNd2fMurGwbNtE+AE5eiA2EJ+jQFgSHAIS8VP6UWGfKE/lU6En8i7tepRt/PXRkuQK
+ 9wFyag3qCQfVxq3FzpNoyG7uMfDBIgLdSYyuFwN4aslbX6FhRzCJncWVMznPjiczyKNflSlEedf
+ P8d4guMZV6BKsAzAyjxia/P7msyltDHNIPspDFbuDBdv9/q/gdWJzM9+F8WjB8YltemyaYX/czX
+ U2Kzn/L5EcPPr0zEkTiP0fzCdLTx16Cb5FU
+X-Received: by 2002:a05:600c:8b6a:b0:490:44eb:c1d9 with SMTP id
+ 5b1f17b1804b1-490c26217damr140609575e9.28.1780786287145; 
+ Sat, 06 Jun 2026 15:51:27 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.25
+ ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sat, 06 Jun 2026 15:51:26 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sun,  7 Jun 2026 00:51:13 +0200
-Message-ID: <20260606225120.409046-2-romain.naour@smile.fr>
+Date: Sun,  7 Jun 2026 00:51:14 +0200
+Message-ID: <20260606225120.409046-3-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260606225120.409046-1-romain.naour@smile.fr>
 References: <20260606225120.409046-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780786286; x=1781391086; darn=buildroot.org;
+ d=smile.fr; s=google; t=1780786287; x=1781391087; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Mk0fjF3/AskAMfKIejYPftqrt8rei5ZGVNuwXlBMCyw=;
- b=bba63KTdf9SvBQ09gtz2fKkNFa/1ed2gL3o72OtLWZYbK1oqBXiARkPj91KQ/u3ZNc
- wT3xT2sRnWFaxqjcHXu1lb0weNz9jECgesk8lpIxwRlrr8hdfky7D7E0/XKf4Fo7R5Cm
- aVdIIucZJPojoU9BtXpzJCpd4/FQ8CfBu7sZw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=MZ0AS6adzOnRgxZ3ZQTqJRfJanXgC+zun3wyOXlRpNE=;
+ b=n/z5frq7mZRCgZ24qlkJow513vKkwYEhF5PFburee3PVpw8V0IMAgDk24UVSYd7nrA
+ xR15EE64V8sw5vclIfktzvnWKRH62/Yzp+fQGiHNBB3muL5tmmY1xYrUgtBEMx1i0OTf
+ ukqv5EWFv72pwuiexnIduPbm5pUGVzdghR6xg=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=bba63KTd
-Subject: [Buildroot] [PATCH 2/7] configs/ts4900_defconfig: remove defconfig
+ header.s=google header.b=n/z5frq7
+Subject: [Buildroot] [PATCH 3/7] package/ts4900-fpga: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,119 +124,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBjb25maWd1cmF0aW9uIGZvciB0aGUgVFMtNDkwMCB3YXMgYWRkZWQgYmFjayBpbiBTZXB0
-ZW1iZXIKMjAxNiAoY29tbWl0IDMxMzhhYjNmZWU3YjAyNTFlM2NiM2ZiYTlhMzczYmQzY2Y5ZDY0
-MjQpLCBhbmQgaGFzIG5vdApiZWVuIHVwZGF0ZWQgaW4gYW55IHNpZ25pZmljYW50IHdheSBzaW5j
-ZSB0aGVuLgoKVGhpcyBkZWZjb25maWcgc3RpbGwgdXNlIGEgNC4xMiBrZXJuZWwgdGhhdCBpcyBu
-byBsb25nZXIgbWFpbnRhaW5lZC4KClJlbW92ZSBpdHMgc3VwcG9ydC4KCkZpeGVzOgpodHRwczov
-L2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzE0NzI4OTE0MDg2ICh0
-czQ5MDBfZGVmY29uZmlnKQoKU2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFv
-dXJAc21pbGUuZnI+Ci0tLQogLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAg
-fCAgMiAtCiBib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvZ2VuaW1hZ2UuY2ZnICB8IDEwIC0tLS0t
-CiBib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvcG9zdC1pbWFnZS5zaCB8IDE3IC0tLS0tLS0tLQog
-Ym9hcmQvdGVjaG5vbG9naWMvdHM0OTAwL3JlYWRtZS50eHQgICAgfCA1MiAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQogY29uZmlncy90czQ5MDBfZGVmY29uZmlnICAgICAgICAgICAgICAgfCAx
-NiAtLS0tLS0tLQogNSBmaWxlcyBjaGFuZ2VkLCA5NyBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2Rl
-IDEwMDY0NCBib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvZ2VuaW1hZ2UuY2ZnCiBkZWxldGUgbW9k
-ZSAxMDA3NTUgYm9hcmQvdGVjaG5vbG9naWMvdHM0OTAwL3Bvc3QtaW1hZ2Uuc2gKIGRlbGV0ZSBt
-b2RlIDEwMDY0NCBib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvcmVhZG1lLnR4dAogZGVsZXRlIG1v
-ZGUgMTAwNjQ0IGNvbmZpZ3MvdHM0OTAwX2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhLy5jaGVja3Bh
-Y2thZ2VpZ25vcmUgYi8uY2hlY2twYWNrYWdlaWdub3JlCmluZGV4IDdhOTJlZGE3Y2YuLjVmZTli
-Mzc4YzggMTAwNjQ0Ci0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKKysrIGIvLmNoZWNrcGFja2Fn
-ZWlnbm9yZQpAQCAtNTIsNyArNTIsNiBAQCBib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJm
-NDI5LWRpc2NvL2ZsYXNoLnNoIFNoZWxsY2hlY2sKIGJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9z
-dG0zMmY0NjktZGlzY28vZmxhc2hfc2Quc2ggU2hlbGxjaGVjawogYm9hcmQvc3RtaWNyb2VsZWN0
-cm9uaWNzL3N0bTMyZjQ2OS1kaXNjby9mbGFzaF94aXAuc2ggU2hlbGxjaGVjawogYm9hcmQvc3lu
-b3BzeXMvYXhzMTB4L3Bvc3QtYnVpbGQuc2ggU2hlbGxjaGVjawotYm9hcmQvdGVjaG5vbG9naWMv
-dHM0OTAwL3Bvc3QtaW1hZ2Uuc2ggU2hlbGxjaGVjawogYm9hcmQvdWRvby9jb21tb24vcG9zdC1i
-dWlsZC5zaCBTaGVsbGNoZWNrCiBib290L2FmYm9vdC1zdG0zMi8wMDAzLU1ha2VmaWxlLWRpc2Fi
-bGUtc3RhY2stcHJvdGVjdG9yLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQogYm9vdC9vcHRlZS1v
-cy8zLjEzLjAvMDAwMS1jb3JlLXpsaWItZml4LWJ1aWxkLXdhcm5pbmctd2hlbi1fTEZTNjRfTEFS
-R0VGSUxFLWlzLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQpAQCAtMTUyLDcgKzE1MSw2IEBAIGNv
-bmZpZ3Mvc29saWRydW5fY2xlYXJmb2dfZ3RfOGtfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9y
-Y2VDaGVja0hhc2gKIGNvbmZpZ3Mvc29saWRydW5fbWFjY2hpYXRvYmluX2RlZmNvbmZpZyBsaWJf
-ZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL3N0bTMybXAxNTdjX29keXNzZXlfZGVm
-Y29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3MvdGVyYXNpY19kZTEw
-bmFub19jeWNsb25lNV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAotY29u
-Zmlncy90czQ5MDBfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZp
-Z3MvdHM1NTAwX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdz
-L3Vldm01NDMyX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdz
-L3Zpc2lvbmZpdmVfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKZGlmZiAt
-LWdpdCBhL2JvYXJkL3RlY2hub2xvZ2ljL3RzNDkwMC9nZW5pbWFnZS5jZmcgYi9ib2FyZC90ZWNo
-bm9sb2dpYy90czQ5MDAvZ2VuaW1hZ2UuY2ZnCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCA3ZTU4MGViMjdiLi4wMDAwMDAwMDAwCi0tLSBhL2JvYXJkL3RlY2hub2xvZ2ljL3RzNDkwMC9n
-ZW5pbWFnZS5jZmcKKysrIC9kZXYvbnVsbApAQCAtMSwxMCArMCwwIEBACi1pbWFnZSBzZGNhcmQu
-aW1nIHsKLQloZGltYWdlIHsKLQl9Ci0KLQlwYXJ0aXRpb24gcm9vdGZzIHsKLQkJcGFydGl0aW9u
-LXR5cGUgPSAweDgzCi0JCWltYWdlID0gInJvb3Rmcy5leHQyIgotCQlzaXplID0gMjU2TQotCX0K
-LX0KZGlmZiAtLWdpdCBhL2JvYXJkL3RlY2hub2xvZ2ljL3RzNDkwMC9wb3N0LWltYWdlLnNoIGIv
-Ym9hcmQvdGVjaG5vbG9naWMvdHM0OTAwL3Bvc3QtaW1hZ2Uuc2gKZGVsZXRlZCBmaWxlIG1vZGUg
-MTAwNzU1CmluZGV4IGNiOTY2ZDg4M2IuLjAwMDAwMDAwMDAKLS0tIGEvYm9hcmQvdGVjaG5vbG9n
-aWMvdHM0OTAwL3Bvc3QtaW1hZ2Uuc2gKKysrIC9kZXYvbnVsbApAQCAtMSwxNyArMCwwIEBACi0j
-IS9iaW4vYmFzaAotIwotIyBDb3B5cmlnaHQgKEMpIDIwMTUtMjAxNiBTYXZvaXItRmFpcmUgTGlu
-dXgKLSMgUG9zdCBpbWFnZSBnZW5lcmF0aW9uIHNjcmlwdC4KLQotQk9BUkRfRElSPSIkKGRpcm5h
-bWUgJDApIgotR0VOSU1BR0VfQ0ZHPSRCT0FSRF9ESVIvZ2VuaW1hZ2UuY2ZnCi1HRU5JTUFHRV9U
-TVA9JEJVSUxEX0RJUi8uZ2VuaW1hZ2VfdG1wCi0KLXJtIC1yZiAkR0VOSU1BR0VfVE1QCi0KLSR7
-SE9TVF9ESVJ9L2Jpbi9nZW5pbWFnZSBcCi0gICAgICAgIC0tY29uZmlnICR7R0VOSU1BR0VfQ0ZH
-fSBcCi0gICAgICAgIC0tcm9vdHBhdGggJFRBUkdFVF9ESVIgXAotICAgICAgICAtLXRtcHBhdGgg
-JEdFTklNQUdFX1RNUCBcCi0gICAgICAgIC0taW5wdXRwYXRoICRCSU5BUklFU19ESVIgXAotICAg
-ICAgICAtLW91dHB1dHBhdGggJEJJTkFSSUVTX0RJUgpkaWZmIC0tZ2l0IGEvYm9hcmQvdGVjaG5v
-bG9naWMvdHM0OTAwL3JlYWRtZS50eHQgYi9ib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvcmVhZG1l
-LnR4dApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMTIxZTYzOTc0OS4uMDAwMDAwMDAw
-MAotLS0gYS9ib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvcmVhZG1lLnR4dAorKysgL2Rldi9udWxs
-CkBAIC0xLDUyICswLDAgQEAKLVRlY2hub2xvZ2ljIFN5c3RlbXMgVFMtNDkwMAotPT09PT09PT09
-PT09PT09PT09PT09PT09PT09Ci0KLVRoaXMgZG9jdW1lbnQgZXhwbGFpbnMgaG93IHRvIHNldCB1
-cCBhIGJhc2ljIEJ1aWxkcm9vdCBzeXN0ZW0gZm9yIHRoZQotVGVjaG5vbG9naWMgU3lzdGVtcyBU
-Uy00OTAwIFN5c3RlbSBvbiBNb2R1bGUuCi0KLVRoZSBUUy00OTAwIGlzIGEgVFMtU09DS0VUIG1h
-Y3JvY29udHJvbGxlciBib2FyZCBiYXNlZCBvbiB0aGUKLUZyZWVzY2FsZSBpLk1YNiBTaW5nbGUg
-b3IgUXVhZCBDb3JlIEFSTSBDb3J0ZXgtQTkgQ1BVIGNsb2NrZWQgYXQKLTFHSHouIFRoZSBUUy00
-OTAwIGZlYXR1cmVzIEdpZ2FiaXQgRXRoZXJuZXQsIFNBVEEgSUkgUG9ydCwgUENJIEV4cHJlc3MK
-LUJ1cywgaGlnaCBzcGVlZCBVU0IgaG9zdCBhbmQgZGV2aWNlIChPVEcpLCBhbmQgbWljcm9TRCBj
-YXJkLgotTW9yZSBkZXRhaWxzIG9uIHRoZSBib2FyZCBoZXJlOgotICAgaHR0cHM6Ly9kb2NzLmVt
-YmVkZGVkVFMuY29tL1RTLTQ5MDAKLQotVGhlIFRTLTQ5MDAgaXMgbm90IGN1cnJlbnRseSBzdXBw
-b3J0ZWQgYnkgbWFpbmxpbmUgTGludXgsIHNvIGEKLVRlY2hub2xvZ2ljIFN5c3RlbXMgTGludXgg
-aXMgdXNlZCBiYXNlZCBvbiBMaW51eCA0LjEuCi1UaGUgZGVmYXVsdCBVLWJvb3QgY29uZmlndXJh
-dGlvbiBmbGFzaGVkIHNjYW5zIHRoZSBTRCBjYXJkIHRvIGZpbmQgdGhlCi0weDgzIHBhcnRpdGlv
-biB0eXBlLCBjb3JyZXNwb25kaW5nIHRvIHRoZSByb290ZnMuIFRoZW4gaXQgd2lsbCBsb2FkCi1i
-b3RoIHVJbWFnZSBhbmQgZHRzIGZyb20gdGhlIC9ib290IGRpcmVjdG9yeS4KLVRvIGJ1aWxkIHRo
-ZSBkZWZhdWx0IGNvbmZpZ3VyYXRpb24geW91IG9ubHkgaGF2ZSB0bzoKLQotICAgJCBtYWtlIHRz
-NDkwMF9kZWZjb25maWcKLSAgICQgbWFrZQotCi1UaGUgb3V0cHV0IGxvb2tzIGxpa2U6Ci1vdXRw
-dXQvaW1hZ2VzLwot4pSc4pSA4pSAIGlteDZxLXRzNDkwMC5kdGIKLeKUnOKUgOKUgCByb290ZnMu
-ZXh0Mgot4pSc4pSA4pSAIHJvb3Rmcy50YXIKLeKUnOKUgOKUgCBzZGNhcmQuaW1nCi3ilJTilIDi
-lIAgdUltYWdlCi0KLVNpbmNlIGJvdGggdGhlIHVJbWFnZSBhbmQgdGhlIGR0cyBhcmUgY29udGFp
-bmVkIGluIHRoZSAvYm9vdAotZGlyZWN0b3J5LCB0aGUgcHJvdmlkZWQgcG9zdC1pbWFnZSBzY3Jp
-cHQgZ2VuZXJhdGVzIGFuIGltYWdlIGZpbGUKLWNvbnRhaW5pbmcgb25seSBvbmUgcGFydGl0aW9u
-IGZvciB0aGUgcm9vdGZzOgotCi0gICAkIGZkaXNrIG91dHB1dC9pbWFnZXMvc2RjYXJkLmltZwot
-ICAgICAgICAgICAgICAgICAgICAgIERldmljZSBCb290IFN0YXJ0ICAgIEVuZCBCbG9ja3MgSWQg
-IFN5c3RlbQotb3V0cHV0L2ltYWdlcy9zZGNhcmQuaW1nMSAgICAgICAgICAgICAgIDEgICAgICA1
-MjQyODggICAgICAyNjIxNDQgICA4MyAgTGludXgKLQotVGhpcyBpbWFnZSBjYW4gYmUgZGlyZWN0
-bHkgd3JpdHRlbiB0byBhbiBTRCBjYXJkLgotCi0gICAkIHN1ZG8gZGQgaWY9b3V0cHV0L2ltYWdl
-cy9zZGNhcmQuaW1nIG9mPS9kZXYvbW1jYmxrMAotCi1JbiBvcmRlciB0byB0ZXN0IHRoZSBpbWFn
-ZSBvbiBUUy00OTAwIGJvYXJkLCBhIFRTIGJhc2Vib2FyZCwgc3VjaCBhcwotdGhlIFRTLTl4eHgg
-c2VyaWVzLCBpcyBuZWVkZWQgdG8gcHJvdmlkZSBwb3dlciwgY29uc29sZSBoZWFkZXIsIFJKNDUK
-LWNvbm5lY3RvciBldGMuCi0KLVRoZSBib290bG9hZGVyIGNvbWVzIHByZS1mbGFzaGVkIG9uIHRo
-ZSBib2FyZCBvbiBhbiBTUEkgZmxhc2guIFNpbmNlCi11cGRhdGluZyB0aGUgYm9vdGxvYWRlciBp
-cyByaXNreSBhbmQgbm90IHRyaXZpYWwsIGl0IGlzIG5vdCBpbmNsdWRlZAotaW4gdGhlIEJ1aWxk
-cm9vdCBkZWZjb25maWcuIFJlZmVyIHRvCi1odHRwczovL2RvY3MuZW1iZWRkZWRUUy5jb20vVFMt
-NDkwMCNVLUJvb3QgZm9yIGRldGFpbHMgb24gd2hpY2gKLVUtQm9vdCBjb25maWcgdG8gdXNlIGFu
-ZCBob3cgdG8gZmxhc2ggaXQuCmRpZmYgLS1naXQgYS9jb25maWdzL3RzNDkwMF9kZWZjb25maWcg
-Yi9jb25maWdzL3RzNDkwMF9kZWZjb25maWcKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IGU3OTUwY2VhNGIuLjAwMDAwMDAwMDAKLS0tIGEvY29uZmlncy90czQ5MDBfZGVmY29uZmlnCisr
-KyAvZGV2L251bGwKQEAgLTEsMTYgKzAsMCBAQAotQlIyX2FybT15Ci1CUjJfY29ydGV4X2E5PXkK
-LUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNF8xMj15Ci1CUjJfUk9PVEZT
-X1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC90ZWNobm9sb2dpYy90czQ5MDAvcG9zdC1pbWFnZS5z
-aCIKLUJSMl9MSU5VWF9LRVJORUw9eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15
-Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI0LjEyIgotQlIyX0xJTlVY
-X0tFUk5FTF9ERUZDT05GSUc9ImlteF92Nl92NyIKLUJSMl9MSU5VWF9LRVJORUxfVUlNQUdFPXkK
-LUJSMl9MSU5VWF9LRVJORUxfVUlNQUdFX0xPQURBRERSPSIweDEwMDA4MDAwIgotQlIyX0xJTlVY
-X0tFUk5FTF9EVFNfU1VQUE9SVD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0i
-aW14NnEtdHM0OTAwIgotQlIyX0xJTlVYX0tFUk5FTF9JTlNUQUxMX1RBUkdFVD15Ci1CUjJfUEFD
-S0FHRV9UUzQ5MDBfRlBHQT15Ci1CUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKLUJSMl9QQUNLQUdF
-X0hPU1RfR0VOSU1BR0U9eQotLSAKMi41NC4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+The ts4900 defconfig was removed, this package is no longer used.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ Config.in.legacy                     |  7 +++++++
+ package/Config.in                    |  1 -
+ package/ts4900-fpga/Config.in        | 11 -----------
+ package/ts4900-fpga/ts4900-fpga.hash |  5 -----
+ package/ts4900-fpga/ts4900-fpga.mk   | 21 ---------------------
+ 5 files changed, 7 insertions(+), 38 deletions(-)
+ delete mode 100644 package/ts4900-fpga/Config.in
+ delete mode 100644 package/ts4900-fpga/ts4900-fpga.hash
+ delete mode 100644 package/ts4900-fpga/ts4900-fpga.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a36e331593..140b85da97 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.05"
+ 
++config BR2_PACKAGE_TS4900_FPGA
++	bool "ts4900-fpga removed"
++	select BR2_LEGACY
++	help
++	  The ts4900 defconfig was removed, so ts4900-fpga package
++	  has been dropped.
++
+ config BR2_PACKAGE_PTPD2
+ 	bool "ptpd2 removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 630662477b..ab115451d9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -447,7 +447,6 @@ menu "Firmware"
+ 	source "package/rcw-smarc-sal28/Config.in"
+ 	source "package/rpi-firmware/Config.in"
+ 	source "package/sunxi-boards/Config.in"
+-	source "package/ts4900-fpga/Config.in"
+ 	source "package/ux500-firmware/Config.in"
+ 	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
+diff --git a/package/ts4900-fpga/Config.in b/package/ts4900-fpga/Config.in
+deleted file mode 100644
+index 9f704fbc8c..0000000000
+--- a/package/ts4900-fpga/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_TS4900_FPGA
+-	bool "ts4900-fpga"
+-	depends on BR2_arm
+-	help
+-	  TS-4900's FPGA implements clocks, UART MUX, and GPIOs. One
+-	  of these GPIOs is used to enable the wifi module.
+-
+-	  It is loaded by U-Boot during the boot sequence, the default
+-	  U-boot script expects to find it in the /boot folder.
+-
+-	  https://docs.embeddedts.com/TS-4900#FPGA_Changelog
+diff --git a/package/ts4900-fpga/ts4900-fpga.hash b/package/ts4900-fpga/ts4900-fpga.hash
+deleted file mode 100644
+index 1d3c62bfd1..0000000000
+--- a/package/ts4900-fpga/ts4900-fpga.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga//ts4900-fpga-20170510.bin.md5
+-md5  86c7c3d7fb9c607af1ef55e1222b4416  ts4900-fpga-20170510.bin
+-
+-# Locally calculated
+-sha256  f15edd6813ee5e93e7f380d85df2dc31e764ebca465093fb9006d56ee15b476b  ts4900-fpga-20170510.bin
+diff --git a/package/ts4900-fpga/ts4900-fpga.mk b/package/ts4900-fpga/ts4900-fpga.mk
+deleted file mode 100644
+index 73e7a28e31..0000000000
+--- a/package/ts4900-fpga/ts4900-fpga.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# ts4900-fpga
+-#
+-################################################################################
+-
+-TS4900_FPGA_VERSION = 20170510
+-TS4900_FPGA_SOURCE = ts4900-fpga-$(TS4900_FPGA_VERSION).bin
+-TS4900_FPGA_SITE = https://files.embeddedts.com/ts-socket-macrocontrollers/ts-4900-linux/fpga
+-# No license file provided, Yocto recipe from the vendor claims MIT.
+-# https://github.com/embeddedTS/meta-ts/blob/f31860f1204b64f765a5380d3b93a2cf18234f90/recipes-extras/ts4900-fpga/ts4900-fpga.bb#L6
+-
+-define TS4900_FPGA_EXTRACT_CMDS
+-	cp $(TS4900_FPGA_DL_DIR)/$(TS4900_FPGA_SOURCE) $(@D)
+-endef
+-
+-define TS4900_FPGA_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/$(TS4900_FPGA_SOURCE) $(TARGET_DIR)/boot/ts4900-fpga.bin
+-endef
+-
+-$(eval $(generic-package))
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
