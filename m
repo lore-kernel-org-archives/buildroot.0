@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15016CD8C85
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 447A2CD8C88
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jun 2026 22:51:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D30EF428C8;
-	Sat,  6 Jun 2026 22:51:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B24A2428EB;
+	Sat,  6 Jun 2026 22:51:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lZU1r13FMGiL; Sat,  6 Jun 2026 22:51:42 +0000 (UTC)
+ id Et44zpljVdMW; Sat,  6 Jun 2026 22:51:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81D5E428D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 860AA428DA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780786300;
-	bh=yzw2u2WhA/lqsqybgMbpj2NVxvIuDD62pjKa9lQvfA8=;
+	s=default; t=1780786301;
+	bh=AcLB+jZAa/AqrKytS/xHgHcIu9ODZgxLCt7Dwplv7NA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=jFJdQD8Tcky9QW/4EKFVdFzesAUOHsdkvVA3IOaMLCInpwJJJlny1fgWIQjPVToY6
-	 pC3UZ1KhwHImaIZqyVNv6NkBGW4gJEobUNEnj0obHpc1Ywu1dZavQ6jMSXeBMvS01u
-	 y/bJAd6n9tp5siPYtlJFy2rKC0DPEi/bH/KZSXEYUt9j4Dwt+dSH1kujx1w2qby82T
-	 Bf5eAZIilHhyALBaJRcps0QQtFt3o8Uxmu6jkJEWaZydR8JpoV7PLOSbGJiQQCyZQ6
-	 kAfTsykfJTJodHvxI5jBeixFmZI0sAYiQfKuaLeS4rcyaI4Q7/ThwYe2DaL3Uj2IpW
-	 3w4zYu1zCl7zw==
+	b=qzENhclvPow1T9ekcf/o9WjBeJaqk9mr4stUFu5pQL7XVeiMaiILxIrkBsd9NK97N
+	 lQyRe1UKL1iaFHVF8jfobMBZTy3iUtqOO1AkhbO2Z4F2moZfZ2ryDNL5hBhHzxH/94
+	 +PWLDprDCYBnDB3GY+ubmovJppkYTHCqHKa2Zf7T9wQ0eXkJiIgDpJ6M3BSJuF5/Jt
+	 zWftpXG4X+JWAYu4pHeyBibhOrsewXTeJ/sNabUi6Zvr9Rrrf5OiToqXV4EgEH9UwY
+	 +u8ztKxqB9KR3oCEUXWBJOIfdrtpq3unBGpmKri88HCS7EXnctX8CnbBMUXuc+Vfub
+	 5euA5Vg55EgDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81D5E428D2;
-	Sat,  6 Jun 2026 22:51:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C56E8345
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 860AA428DA;
+	Sat,  6 Jun 2026 22:51:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3431C2EF
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB99C40278
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E92A428BD
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6OZEjvXrxNg3 for <buildroot@buildroot.org>;
- Sat,  6 Jun 2026 22:51:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pOdmoj3zvscN for <buildroot@buildroot.org>;
+ Sat,  6 Jun 2026 22:51:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 89AD34020D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89AD34020D
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89AD34020D
- for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:32 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-45ef29c5561so1609816f8f.0
- for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2E4F4428A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E4F4428A7
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2E4F4428A7
+ for <buildroot@buildroot.org>; Sat,  6 Jun 2026 22:51:33 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-490b4a8e28bso24456365e9.1
+ for <buildroot@buildroot.org>; Sat, 06 Jun 2026 15:51:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780786290; x=1781391090;
+ d=1e100.net; s=20251104; t=1780786291; x=1781391091;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=zBwyXXmPG1HcWDCU91KJjYLswVYgOktXiC4W/A4zLzc=;
- b=WjSuEfEPcLSpNrrxCrVqiIitEBgs+q2n5M3VTVYx/gRXHex9K55DSstWE7Wp0BZSfe
- 2C8j1Yoyb18XORp3L2DCeRhhqr8bEczbIi/B6phtBJJTLgScxxID/1xy9KUyzHT8TMTV
- y6f4Z63BUXAZQsc14kkZqnykDIEZaMgJiBNohr3KiSEnTZ9IW7pxat3/YtuNuHSbMXae
- AMVrtixT/8hi5i8IfDKV4qolDhvRCnuMK8cadvi3hviETJnpYh3a/Apm4uDUw2WFArey
- enrWsoQ2oK0PHJ7pGjlvfk1oWg41uqZ6tm82vIOjFKIa+joYvJYSHg8kUrRyhvuZFO6j
- 9MsA==
-X-Gm-Message-State: AOJu0Yy1LL4Kkx2qO6LRyuBqHtG2NMZw6GYiEyY2oCLo/ia9M/QWIurC
- nmgSBqPpIbTn1tKU2uEme69IULSyXVVGoC6A4XBrKJGRhKC2I+vtw2QYeiG128Q0bpzvJkKKqd5
- DYRco
-X-Gm-Gg: Acq92OF6b9OzFdXjqwOs4Ck9gQ2YCR9cdrQAs8/Ty4wAcn4i/Mbxn/dm4RNSbM0WRxG
- pO5qIxuHmB6WG5kt6dFdEVPD9yTzEJRfkr6AbmMs5oAHbTnlOYCpJo4aFc4HrJ7Lj5X3p9UpYAu
- lWrnI1oWFQ6ld3gbz4JDHCraBLoc+tJWzb+9TPPXW4Pp9HWiS1DWLto+f3uH4wGfwupmQVtPWGs
- 1N/zqfPi+2+elt2mFUz0HH191ck/VD+22xe6CnpERV2WhmqsOCXUbrnCvCNzh7BOXv2LFSDAxmi
- 5DKzNPJmVkp5sfb5eH0dD+qqV7jfV6bu0InrfTL1HjAc+jfA6q9ZFV7BXZ00zgge+tgbZE79hX7
- fpYKac66pNXm3MBhxn2U7qQJZ2Uc7blpFV3EscnpjpoT0nJCwjmX9XSuOkCOLFDAVIz5xRkiixr
- 5w2JQ6zwVLCjrDhgghSxIbZ9AA0NbeMP2bf/VaM05fRGpCQ4LEzECLiJG83vbFhHPeEKuvwvqKG
- IyjW0N3dz/yxO05FlfyNF8K3GkzOpFTonGI
-X-Received: by 2002:a05:6000:161e:b0:45f:1bd:a053 with SMTP id
- ffacd0b85a97d-460302dc4f3mr9644639f8f.1.1780786290333; 
- Sat, 06 Jun 2026 15:51:30 -0700 (PDT)
+ bh=BMDI8hBnY9dcllsEiAv8T3Qug2/oAsVw2nVynU2RRXs=;
+ b=hewuJJukAagH5yiUXWxxWUJfc7RzXzWkMNUSpx7OLWnZfKaSyvXcNrbCg/aAaRkUZv
+ PUQgX2iO+xiN436Gay6ATRuWVTNWmshdt6aLUBSqb6+ze0KkD7LcZhue2jOt5mmsUB0t
+ Xr/CMSqu/bfOgva1pCRdBSllqKKk30V5RZiDZrL+t813QQY2RLSJfAiQnsdS5Ui7i5Ay
+ kUbAzlaZEFhPkll5Yghv0wsfBAiMmsPIxs74HNzUXQM1rN1UXT53sZFbu0DJNWu1l55A
+ iyx7uOtxHVlZqJPNdC/CGt+pTVMMNYWAVjVdau9/IrK1OBZdoybVfVjPFFff0Bre0gI+
+ +KUA==
+X-Gm-Message-State: AOJu0YwF6cv58RqJGDcm/5jGAJ72PVbEf8yISLOHDBGYvuAldI0JPNEJ
+ Y/bChIX4UREb6dNiM+xOcL9Qix+IjbV9B6r0wZilCTt3ETfEodjNq+wnrI87/F6lG1ieOO2MimW
+ bLSAs
+X-Gm-Gg: Acq92OFfMDSAhkGVUSSTEqyRzkaEguCEc+EWtkvExfTjGv+oPEkCm4uEuCRA0EiZ/Z7
+ vSnmhLb+P/PMg6X+ERY+LtJVTpuD49CWZOU3hU3Yzw5g9w+vOfS4iVXgCpLWkLZtM2fnqoEFkRV
+ cRsLJnMxylaNAxQYKBQ6cid4O517FpP1amQ+3Pa3sEJp0Q7lr4LV+Y2iem7eJFlFakfVWwS8TVg
+ J92lxDkbjkh+rPjsHkzTnZrzv/uPWJjBVHFXYPjnfMXNucX1AL8BJdBGwoJOpxZfwzM11S18uKs
+ Q7LJgCld9plKju8JAAGhYtHi3qPNHbwSapmkhYsTYAhEd74hGfMyOVivX94UGVsOPclTLYKrrvy
+ 4l9CWdGhm8gITw57z7AuBcsPszsRv1RottGT5c83x0QodV5dnAekdu1bRruVRcDiO3LmhtHyPRk
+ zrjf6Kk9doAxaRlgooFuA3uKDpUV02oewjgLKIG+TUDOeutLxamzM9yZ6VZXubPUoLNr+Kn68XH
+ +PT9vcQCv/t/woOBSSiHmPHtiPeyVNhsJ0L1ThQimHLHp8=
+X-Received: by 2002:a05:600c:6994:b0:490:3f7a:108b with SMTP id
+ 5b1f17b1804b1-490c25de6f1mr146433255e9.16.1780786291174; 
+ Sat, 06 Jun 2026 15:51:31 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.29
+ ffacd0b85a97d-4601f351ac0sm67014650f8f.27.2026.06.06.15.51.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Jun 2026 15:51:29 -0700 (PDT)
+ Sat, 06 Jun 2026 15:51:30 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sun,  7 Jun 2026 00:51:17 +0200
-Message-ID: <20260606225120.409046-6-romain.naour@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Michael Durrant <mdurrant@ArcturusNetworks.com>
+Date: Sun,  7 Jun 2026 00:51:18 +0200
+Message-ID: <20260606225120.409046-7-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260606225120.409046-1-romain.naour@smile.fr>
 References: <20260606225120.409046-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1780786290; x=1781391090; darn=buildroot.org;
+ d=smile.fr; s=google; t=1780786291; x=1781391091; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zBwyXXmPG1HcWDCU91KJjYLswVYgOktXiC4W/A4zLzc=;
- b=mZx6dTpbOY8MgoKNH+r0XNjuInIBW/Mid6+jDzlTsfooQZ+n8ZekHN0ELerIwVUwoo
- PC/IsFpKa53Xxj1AdafDd0RjQISNjaIBKxSz6SxCvp+ncOxLirkw0Zoqb9YStUBjdmne
- CNOssIPfq8WgbH0fjHg7kOu/szlAPNxE+5sCQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=BMDI8hBnY9dcllsEiAv8T3Qug2/oAsVw2nVynU2RRXs=;
+ b=HAH4QLmaPdq1WLwTo6j8Vssjt8F8WGzBNh3qV5IyoF2thbdaDGsRR3nI362rREiKkx
+ XPYHEVspUQb8rJPp5cVF3+v2RHfQ8KngvdBbuUk0o/VLswuNq6UnUjgyvGlbNsmvmAT7
+ ztLvl0rsDPS6DvIPFg6SKjuzVEdjAqnyta1Ig=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=mZx6dTpb
-Subject: [Buildroot] [PATCH 6/7] configs/acmesystems_arietta_g25_{128mb,
- 256mb}_defconfig: remove defconfig
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=HAH4QLma
+Subject: [Buildroot] [PATCH 7/7] configs/arcturus_ucp1020: specify Linux
+ license file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,224 +130,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This configuration for the acmesystems arietta g25 were added back in
-February 2016 (commit e173aeece51852d652c557546d9944ee42c91e4f), and has
-not been updated in any significant way since 2019 (the last major
-kernel update [1]).
+The used Linux kernel (4.4.144) does not contain the default license
+files as those were only added in 4.16 with commit e00a844aca
+("LICENSES: Add Linux syscall note exception"), so specify the correct
+license file to fix:
 
-This defconfig still use a 4.19 kernel that is no longer maintained.
+make legal-info
+..
+cp: cannot stat '/path/to/output/build/linux-headers-custom/LICENSES/preferred/GPL-2.0': No such file or directory
 
-Remove its support.
+And add the sha256sum to the .hash file.
+Enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913803 (acmesystems_arietta_g25_256mb_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913802 (acmesystems_arietta_g25_128mb_defconfig)
-
-[1] 42ea31c114f32a100923e51cb2b6b6d67c38ca3f
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913808 (arcturus_ucp1020_defconfig)
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Michael Durrant <mdurrant@ArcturusNetworks.com>
 ---
- board/acmesystems/arietta-g25/genimage.cfg    | 36 --------------
- .../at91bootstrap3/at91bootstrap3.hash        |  2 -
- .../patches/linux-headers/linux-headers.hash  |  1 -
- .../arietta-g25/patches/linux/linux.hash      |  2 -
- board/acmesystems/arietta-g25/readme.txt      | 49 -------------------
- .../acmesystems_arietta_g25_128mb_defconfig   | 26 ----------
- .../acmesystems_arietta_g25_256mb_defconfig   | 26 ----------
- 7 files changed, 142 deletions(-)
- delete mode 100644 board/acmesystems/arietta-g25/genimage.cfg
- delete mode 100644 board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
- delete mode 120000 board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
- delete mode 100644 board/acmesystems/arietta-g25/patches/linux/linux.hash
- delete mode 100644 board/acmesystems/arietta-g25/readme.txt
- delete mode 100644 configs/acmesystems_arietta_g25_128mb_defconfig
- delete mode 100644 configs/acmesystems_arietta_g25_256mb_defconfig
+Note: This defconfig still use a vendor 4.4.144 kernel
+(linux-v20190618.tar.gz), a vendor 2019.07-rc4 uboot
+(uboot-v20190618.tar.gz) and a gcc based toolchain since
+the support for ppc SPE has been removed from gcc.
+How long should we keep this defconfig?
+See commits:
+531b2a10cda6bae78ecc141c9fe48f2024f71dbc (2021)
+96e80ad214ced86c802d561946fa7da88c1595eb (2020)
+---
+ .../ppc-ucp1020/patches/linux-headers/linux-headers.hash       | 1 +
+ board/arcturus/ppc-ucp1020/patches/linux/linux.hash            | 2 ++
+ board/arcturus/ppc-ucp1020/patches/uboot/uboot.hash            | 2 ++
+ configs/arcturus_ucp1020_defconfig                             | 3 +++
+ 4 files changed, 8 insertions(+)
+ create mode 120000 board/arcturus/ppc-ucp1020/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/arcturus/ppc-ucp1020/patches/linux/linux.hash
+ create mode 100644 board/arcturus/ppc-ucp1020/patches/uboot/uboot.hash
 
-diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
-deleted file mode 100644
-index 3b67a474cd..0000000000
---- a/board/acmesystems/arietta-g25/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# Minimal SD card image for the Acmesystems Arietta G25
--
--image boot.vfat {
--	vfat {
--		file zImage {
--			image = "zImage"
--		}
--
--		file acme-arietta.dtb {
--			image = "at91-ariettag25.dtb"
--		}
--
--		file boot.bin {
--			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.10.3.bin"
--		}
--	}
--
--	size = 16M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
-deleted file mode 100644
-index 6edf3d3345..0000000000
---- a/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
-diff --git a/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash b/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
-deleted file mode 120000
-index 5808d92afe..0000000000
---- a/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../linux/linux.hash
+diff --git a/board/arcturus/ppc-ucp1020/patches/linux-headers/linux-headers.hash b/board/arcturus/ppc-ucp1020/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/arcturus/ppc-ucp1020/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
 \ No newline at end of file
-diff --git a/board/acmesystems/arietta-g25/patches/linux/linux.hash b/board/acmesystems/arietta-g25/patches/linux/linux.hash
-deleted file mode 100644
-index 81824a41ee..0000000000
---- a/board/acmesystems/arietta-g25/patches/linux/linux.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
-diff --git a/board/acmesystems/arietta-g25/readme.txt b/board/acmesystems/arietta-g25/readme.txt
-deleted file mode 100644
-index f356b0a264..0000000000
---- a/board/acmesystems/arietta-g25/readme.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Acme Systems Arietta G25
--
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Arietta G25. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--You can find additional informations, tutorials and a very comprehensive
--documentation on http://www.acmesystems.it/arietta.
--
--Build instructions
--==================
--
--To build an image for the Arietta G25 choose the configuration
--corresponding to the Arietta variant.
--
--For 128MB RAM variant type:
--
--$ make acmesystems_arietta_g25_128mb_defconfig
--
--else for 256MB RAM variant type:
--
--$ make acmesystems_arietta_g25_256mb_defconfig
--
--To customize the configuration chosen type:
--
--$ make menuconfig
--
--When you are ready to start building Buildroot type:
--
--$ make
--
--How to write the microSD card
--=============================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--
--Insert the microSD card into the Arietta slot and power it.
--
--The image just built is fairly basic and the only output
--you will get is on serial console, please consider to use a DPI
--cable (http://www.acmesystems.it/DPI)
-diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
-deleted file mode 100644
-index 788818c118..0000000000
---- a/configs/acmesystems_arietta_g25_128mb_defconfig
-+++ /dev/null
-@@ -1,26 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/arietta-g25/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariettag25"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
-deleted file mode 100644
-index c483ae4c57..0000000000
---- a/configs/acmesystems_arietta_g25_256mb_defconfig
-+++ /dev/null
-@@ -1,26 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/arietta-g25/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.315"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariettag25"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-256m"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/board/arcturus/ppc-ucp1020/patches/linux/linux.hash b/board/arcturus/ppc-ucp1020/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..eafb86d8cb
+--- /dev/null
++++ b/board/arcturus/ppc-ucp1020/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  5ad0192e5cd10eca5f9fabb3234f2bfcbafba3382a9577139cc66be629e5bafa  linux-v20190618.tar.gz
+diff --git a/board/arcturus/ppc-ucp1020/patches/uboot/uboot.hash b/board/arcturus/ppc-ucp1020/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..eb9744043c
+--- /dev/null
++++ b/board/arcturus/ppc-ucp1020/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  eba8aaf634affec7c27a55b899c404a85a0c219c3f814d576793e3c21b711b05  uboot-v20190618.tar.gz
+diff --git a/configs/arcturus_ucp1020_defconfig b/configs/arcturus_ucp1020_defconfig
+index 8e489f7f19..c0423032bc 100644
+--- a/configs/arcturus_ucp1020_defconfig
++++ b/configs/arcturus_ucp1020_defconfig
+@@ -1,6 +1,8 @@
+ BR2_powerpc=y
+ BR2_powerpc_8548=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_GLOBAL_PATCH_DIR="board/arcturus/ppc-ucp1020/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="UCP1020"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Arcturus uCP1020 System on Module"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+@@ -8,6 +10,7 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCP1020-kernel,v20190618)/linux-v20190618.tar.gz"
++BR2_LINUX_KERNEL_LICENSE_FILES="COPYING"
+ BR2_LINUX_KERNEL_DEFCONFIG="ucp1020"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ucp1020"
 -- 
 2.54.0
 
