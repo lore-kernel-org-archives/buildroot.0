@@ -4,90 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282E7CD8C8C
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 08:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE716CD8C8C
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 13:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D135A4294E;
-	Sun,  7 Jun 2026 08:58:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B0A7429B4;
+	Sun,  7 Jun 2026 13:02:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nc56W2AiquQG; Sun,  7 Jun 2026 08:58:54 +0000 (UTC)
+ id F95q-k8c3kx6; Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915D84292D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2814242950
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780822734;
-	bh=pbWGe31XpxcjhA6l099fScCZIPWNgWc9bxH7BKVsdkE=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1780837348;
+	bh=/EzQ28zq+6kUps9vURDhWN6G2ZQtqGydsFWXA53kzi0=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=drMLt1WM9pB9ad2Mjiy35MwhZrDXF+VQts5Kj4E88yDMiC8negDpaKE/cyYmclNJs
-	 XQp9TKDW/KTxrRDBeNwjdK6C9e8MKlCt6ilj46jH5F5HUqRKSc0vrI06qO8VYndxDW
-	 CtQC65MEAH5WOA6MnVMQ9TdJgirc00ANfbXEPu4y6CFQSl/tr5BEvvTZgD/rMDd8f5
-	 k62whTPo79Exa/vdCCyx8jn1uN6/Kg+bGzsIQBld3xs8CDd8H5ZB3HOk/5nMyd9fcZ
-	 D7LTEp9IO8/0yvooDpuyPajBwYx7LTn/F8Fu73Dk080H5P8KiBoVE0/YNckIJqB2R8
-	 A01Lkg0Cl5AxQ==
+	 Cc:From;
+	b=HGaoeuCpw8KaO1n0qAAzzl5ZdcjBLQCrIFQv5LDHYUtg+UCCamek2T0fhsTmGAyeS
+	 WX2FR8LaWZRdXs1Zgtng+S2OIdDjNghdULtV96sQN8P9W7kFCGmHDrGDfxOJQ3efD/
+	 0UeSuj0RP/UIga9AMgfEHUo/fX3r4jln62/3DNbNOLW8TfYBEa8vXUlKQnWwqYDRaW
+	 nEauOnNEv1wfRu5DSKvpuUMdD2HAfT/4VJvrAnO2vi3PH6qJx3JReORYsTX9WvJUfc
+	 2w/1mcpbtXEoHqtUM1D2Y9oKuW+5QSH9t/2Mq2AkPUK3GiJzarnUrFPLcANfG7UHPv
+	 YdMSHEpGLsOfA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 915D84292D;
-	Sun,  7 Jun 2026 08:58:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E24FB345
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 08:58:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2814242950;
+	Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7793B345
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D232B61AED
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 08:58:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D68841E96
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FSFX2fDWOZo5 for <buildroot@buildroot.org>;
- Sun,  7 Jun 2026 08:58:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0kq3QuPNC5U6 for <buildroot@buildroot.org>;
+ Sun,  7 Jun 2026 13:02:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E1F5A61011
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1F5A61011
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E1F5A61011
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 08:58:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E47C3EBD7;
- Sun,  7 Jun 2026 08:58:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3513040343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3513040343
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3513040343
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 416B43EB90;
+ Sun,  7 Jun 2026 13:02:20 +0000 (UTC)
 From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-Date: Sun,  7 Jun 2026 10:58:44 +0200
-Message-Id: <20260607085844.1334630-1-jeanmichel.hautbois@yoseli.org>
+Date: Sun,  7 Jun 2026 15:02:11 +0200
+Message-Id: <20260607130219.1350128-1-jeanmichel.hautbois@yoseli.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260604051221.317172-1-jeanmichel.hautbois@yoseli.org>
-References: <20260604051221.317172-1-jeanmichel.hautbois@yoseli.org>
+In-Reply-To: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
+References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
 MIME-Version: 1.0
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-X-GND-Cause: dmFkZTFYZN9ud3qaQX4euwlneu2trHRITgyEAAp68eSMr/rctqDPac0dvTfZDIjU98vBZaiIZf8vnxyy1bRSIRxaw3Es0VKtFca4sw1eqDKMgd1b5dJ5ora+AV6fxixS+O/oM2MX/szxsogpoRUCTgvTUlkBQlvRwn+8iWEdVz3roOWYwlvb4MpCj0E6oIPWB+nmrBhEmbBmOHwVipeJeTkzDSNwK9RPl5Du6UCUvTxMQ2W+TRfwMvY41kr6IBJfmO81UL7kbkgA2oiSFB6je6+MAEWAHycDG7w0ljfMU4ftoAvVEUaYzYgm9ZjuWFcuBvWYy+gMu9G79GVlGXl299EWcuAtj5xPu0ghKMQUkFD7I6dhpIIbPTIf5KJD1BrFVfZ5NAB4AWJikef9/M+js/oJ8wlCAowA+fkAyG8JJqon6X4oGS4cLVfqAD5TKfAEO6s8NGBeVWxXAnq39aDdou83hwYUAViJtqCGxSjWlkN6cXWCOinOtxpdKsNEMu2XNGtSO1hocY7IpujDG3A/1SszdQLtsdFmjPkwpAw9cvguhDmgv3ZQcTDfb4FHGgSUE1fiEQ/eg1jDg6lNVFYP72Zc/yI2mbt/HuJouQ07W0CcWSu8i1B8Y5x/myFABbzQN3rX8eL8srDCG3V/s7YobyscEpW0+iirML9Ogd9cNPlWvmRm5Q
-X-GND-State: clean
 X-GND-Score: -100
+X-GND-Cause: dmFkZTF6ZuMkpEt+Alv83M7SSgieYFOUd0bcSr+5BSYrpGi2zjRvGX7AG3gWEt4kA9GLoIQohjRMdIZrK5kIRe2Fq9BFWs2+vt/Hsl3qhiwoGlmrH1WhyKdBTu/tCo2Xk5HFlbhoKCJlY5TqQd10v6lk5/7a+aAyxh0+AWG8yhXSQXxA7kwg5f1fsBdy54QEUzX5Wwow43SbqFbDlXehp91TjqJe6uvaPq+reh0eE+GP4YYBAMByZVVxKNtQne8A3H3XfRwt/Om5SGG2rvEdPMg6aG7pxPnNMS/JJvGm2HxfVtJMk34w9z4/rjGplfP5z+KhZQm4rG4TZ/IoFWF4mVtgOnHdfOIBEgvPej9/8wLB4j+bntI+4gtxr1gTiJsrpTK82HEGIO8Y/N2Mb9ZLXWmIPIe/sqc9lJ6ImjhTnTosagbj+DyKEcy+g0Fs7QhwHtWtxsWJosQD7ligQJamL/Cz00t6/mFCP/X6xTxOzZSjr88QFq0OSrKh2G9fzsDvqXEjwsqDyOJ0a2fxvMQN5oTH9xHR7Ki1Hx34af/0uyRmNcJ2eT4klZV2Ni7RXRlE3LUoeaLtArfEg4M0u4NBp+zbqc+YCzzyFnc15WGWzP4a/dJpQaaPjdJTLc9q7zCck0GwFg6Vk6SKt+k+K51SmqrhwguuYz/UyTd+Bms9Qw/yk+ORrw
+X-GND-State: clean
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1780822724;
+ d=yoseli.org; s=gm1; t=1780837341;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=H6DhTTdpYpwqxHuJxuKMCZca7TMVqxO+1w0hY2P0Kt0=;
- b=Y0AcpNNl/8ANaC1x6G/hXvxpc+lsVX6bqrGjjwPXMJsJzAoGGAz8wMkzpBcsy2P9SfqDuk
- vSkT4O5qRdfgRgV5LR1DEk+Er3oXUYs7PYBTL7YvCnCNO80lt5Cp7KzuYcL0QRoAwD3Yui
- 06PAHI6CWteZya5CDF4KUy9agb9moGGGnz+SLNmoU9HlYg3WNlFPBKk19BfESoICscvWNi
- 85+qyQpthS54TqntYT3oeZc8mZGHbnfbMLZTgXlf632DpCCc1SNMUZ0r6qAKvj1GkQhQNb
- YvDlj6ENOSSJGB08ZjNrKb3+El0jX02k3b9YuFrF/LtqhqEUMMsXbinibrX/+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Us8t1FauUvqIbk+278vxWfPaaWKhxrf/HPXRTgCjbXc=;
+ b=Iuek3nHfIWCOUiyUmltsNH5V3zfBbRnv4Tm3exiw6TMQSOGuCepkfVJtrUcG6BGD0LlYbI
+ 0Rhf+L681fTYs1m4OIevOh0xPMinnprVw/K6vgDY6UYGzwEYao1HKb8FipSBTszxpqZrv+
+ uTK0BWBeOlGeFSxQe4WtAOGuPn7HM4jJkZ/UQBLMl255uf3E6j1JXfwbcyZmq+y1P9PsTM
+ b6oyP+3au/ULfLJr/oNa6n7ty3wI3k5Fb99CLz83uqicDfUSt87UiJikd5o8vgPSpyLfKF
+ JwYDBQBIeXt58yr+/XXBcSrmbOFa8FfY0ioI6tQWNOuiGy4ASBa+x1WolaL20w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=yoseli.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=Y0AcpNNl
-Subject: [Buildroot] [PATCH v2] package/libglib2: disable sysprof for the
- host build
+ header.s=gm1 header.b=Iuek3nHf
+Subject: [Buildroot] [PATCH v2 0/8] Add ColdFire MCF5441x (m68k) support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,44 +95,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Whether the host libglib2 picks up sysprof support depends on whether
-libsysprof-capture happens to be installed on the build machine, which
-makes the host build depend on the host environment. Disable sysprof
-explicitly for the host build so the result is deterministic.
+This series adds support for the NXP ColdFire MCF5441x family (m68k/cf:
+MMU, V4e core, no hardware FPU, no atomic builtins) on top of uClibc-ng.
 
-Keep sysprof enabled for the target build: it is useful to profile and
-measure the performance of applications running on the target.
+v2 is smaller and better justified after the v1 review (thanks Thomas
+and Baruch). The per-patch changelogs are under each patch.
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
----
-Changes since v1:
- - Disable sysprof only for the host build (HOST_LIBGLIB2_CONF_OPTS)
-   instead of disabling it globally, keeping it available on the
-   target, as suggested by Adrian Perez de Castro.
- - Reword the commit message accordingly.
+Main changes since v1:
+ - Dropped libopenssl, ntp and the nginx block: no real defect, the
+   existing logic already handles ColdFire.
+ - Makefile.in: keep only -mlong-jump-table-offsets; the scheduler
+   flags were dropped (they triggered the dropbear ICE).
+ - New pkg-meson.mk patch: restrict the b_staticpic workaround to the
+   5208 (GCC PR 101971), instead of the whole ColdFire family.
+ - gcc/gmp/gdb: commit messages reworded to the real root cause.
+ - libglib2 reduced to the ColdFire build fixes (-mxgot and static
+   libstdc++/libgcc).
 
- package/libglib2/libglib2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Two independent patches were split out of v1 and sent separately
+(mawk awk symlink, libglib2 host sysprof).
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index cae8a85a28..ae4b653a15 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -30,7 +30,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
- 	-Dsystemtap=false \
- 	-Dxattr=false \
- 	-Dtests=false \
--	-Doss_fuzz=disabled
-+	-Doss_fuzz=disabled \
-+	-Dsysprof=disabled
- 
- LIBGLIB2_DEPENDENCIES = \
- 	host-pkgconf host-libglib2 \
+Build-tested from scratch for cf5441x (V4e, uClibc-ng, gcc 14.3.0) and
+run on MCF54418 hardware. All changes are guarded by BR2_m68k_cf, so no
+impact on other m68k variants or architectures.
+
+Jean-Michel Hautbois (8):
+  arch/Config.in.m68k: add ColdFire MCF5441x support
+  package/pkg-meson.mk: restrict ColdFire b_staticpic workaround to 5208
+  package/gcc: force --with-arch=cf on m68k MCF5441x
+  package/Makefile.in: use 32-bit jump table offsets on m68k ColdFire
+  package/gmp: disable C++ bindings on m68k ColdFire
+  package/gdb: link libstdc++ and libgcc statically on m68k ColdFire
+  package/dropbear: disable ML-KEM768 on m68k
+  package/libglib2: add m68k ColdFire support
+
+ arch/Config.in.m68k          |  7 +++++++
+ package/Makefile.in          |  2 ++
+ package/dropbear/dropbear.mk |  7 +++++++
+ package/gcc/gcc.mk           |  4 ++++
+ package/gdb/gdb.mk           |  7 +++++++
+ package/gmp/gmp.mk           |  7 ++++++-
+ package/libglib2/libglib2.mk | 15 +++++++++++++++
+ package/pkg-meson.mk         |  2 +-
+ toolchain/Config.in          | 10 ++++++++++
+ 9 files changed, 59 insertions(+), 2 deletions(-)
+
 -- 
 2.39.5
 
