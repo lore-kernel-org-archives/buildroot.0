@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2404ECD8C8C
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 19:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E41EFCD8C89
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 19:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A57C084B30;
-	Sun,  7 Jun 2026 19:45:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97BAE84B37;
+	Sun,  7 Jun 2026 19:47:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OXCOlPobQzhf; Sun,  7 Jun 2026 19:45:13 +0000 (UTC)
+ id 4Opc5GzskYy4; Sun,  7 Jun 2026 19:47:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 684C784B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C78D684B33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780861513;
-	bh=fbgaPLaD+XceKD9aWFVUWx5gwzXXWwVsqWSoomKhpis=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=f5QdIrckK9q8fkQF2Q91oJD87AcoYw2KlbNQ29cmtb/dxRRUjP7tKt/LXpAU1LFkm
-	 pql4o7/CimvwyAFq7O8ce0bTk/B1QipecDoiSyfspTESe0dvFQMgrzpzGAQjiPFY0m
-	 9KGUWBXgBtEulR8tb3b4AzRYg5RSUWYsT06jLG7ZXuRcSBXuW29+GnadWgI9rwxiUC
-	 fGZaYZQNf5b8D2OSvZST9uqZlFt4xl/Yb0tXv5d5EaSvuvVgJtbtzYvU4alIrv0UuK
-	 mZzqvxv2G5dOHR122b6r0Hrj3Xihp2ywug+biTGYBDnJzc6doGRmcROAHForYI95Kj
-	 8dEfmlR/YBFBA==
+	s=default; t=1780861644;
+	bh=U62/6LQFZsrkjt7P3OsgMlPca+v5XBG9pBMLJT95fwY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ncg6Bdh02o+ZdrJOgzjBEAsEmv827pFG8T3KK2lozye747DEMzE+fdzLE7zF7/Sjf
+	 aBs4V93jsYtX/NvC6OKOxLeEW3+SRlAwrxM59eZtDjjJYT1wPxdkNqMrZR95MPcgBU
+	 uYfO+9LSsM8LNCiPLK45W11l4Ioqrdq5OzWuVgO3OCnYIajHDjPN/w5x7ymDXgjMXZ
+	 06Ja2QTbwYt42jiEKBwJ4Mz6zBIhBMIMKjUi2nmtetYb9Qg3feDaNLmGT0LjBHbEUI
+	 ebM17NFSpOivU8yABeD0SQSQAdIC8yfmEkr/qliads69vJcnGiyDNMs9UZso3wEFLK
+	 pd5Cb47tz0Jmg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 684C784B00;
-	Sun,  7 Jun 2026 19:45:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2101C345
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:45:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C78D684B33;
+	Sun,  7 Jun 2026 19:47:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91F392C1
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1310A84AF6
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:45:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 774FF84B33
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:47:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nWUccqP-68ud for <buildroot@buildroot.org>;
- Sun,  7 Jun 2026 19:45:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041D284AEE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 041D284AEE
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:45:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 080AE87CE8; Sun,  7 Jun 2026 19:44:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 7 Jun 2026 21:43:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1cc0363191c33545adfe327881b32756aef9594b
-X-Git-Newrev: 1339bba787deecda28461bff591e029a38d14b53
-X-Patchwork-Hint: ignore
-Message-Id: <20260607194454.080AE87CE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/at91sam9x5ek*: remove
+ id kugEhyu_Pvc5 for <buildroot@buildroot.org>;
+ Sun,  7 Jun 2026 19:47:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F323184B32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F323184B32
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F323184B32
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 19:47:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id A725F19F5C3;
+ Sun,  7 Jun 2026 21:47:18 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 07 Jun 2026 21:47:18 +0200
+MIME-Version: 1.0
+Date: Sun, 07 Jun 2026 21:47:18 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260607190044.850030-1-romain.naour@smile.fr>
+References: <20260607190044.850030-1-romain.naour@smile.fr>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <8b6434ce5fd19348ab0f5759566f7e07@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1780861639;
+ bh=x4BdNFOKEfQHceREp69y5PF9y8uazvRS3frQpPexsKc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JGXXemZfyAWoh3rxPv/eiv6ZdhuF73akoAmu3b8QNcWvD851Jfo7GVjqOPoTqKqD+
+ Txlhd4XQVuipSyapXaoe03pAMJh90ID76VZETOXwNDHIU3aQebuPkmirl4B1TyzzU2
+ z5EXUMaM3zjtPm6EF2GzXJweoyetD28VLNk6AS/3tlIVBGZfHZaG86xdcNsJSPWVLo
+ j7TY3K/9jDZMo5KdIi+rjc4DT1ogy1kYMc6JVC51Xw0NYRdUPlwylD8Xx2N/BqYxmj
+ MKuNsCm7UH6q5s5ShZaxhsFw3DR6sevDQjkOk2Goz9XlCzPzi39CoQFCFKP6c363yf
+ VeIV3WSqoZnCA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=JGXXemZf
+Subject: Re: [Buildroot] [PATCH] configs/at91sam9x5ek*: remove
  at91bootstrap3 license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,107 +96,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4695041244282945762=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4695041244282945762==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1339bba787deecda28461bff591e029a38d14b53
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-When using a specific git repo and version for at91bootstrap3,
-BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES defaults to "LICENSES/MIT.txt".
-However the git version we use (namely v3.10.3) does not provide this
-file. Actually, it does not provide a license file at all. This causes
-‘make legal-info’ to fail with:
-
-    >>> at91bootstrap3 v3.10.3 Collecting legal info
-    sha256sum: /builds/buildroot.org/buildroot/output/build/at91bootstrap3-v3.10.3/LICENSES/MIT.txt: No such file or directory
-    ERROR: while checking hashes from boot/at91bootstrap3/at91bootstrap3.hash
-    ERROR: LICENSES/MIT.txt has wrong sha256 hash:
-    ERROR: expected: 5a3809b1c2ba13b7242572322951311c584419f1f8516f665d6c06f0668d78de
-    ERROR: got     :
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-    make[1]: *** [boot/at91bootstrap3/at91bootstrap3.mk:112: at91bootstrap3-legal-info] Error 1
-
-Let's be explicit that there is no license file to check.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913821 (at91sam9x5ek_mmc_dev_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913820 (at91sam9x5ek_mmc_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913819 (at91sam9x5ek_dev_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913818 (at91sam9x5ek_defconfig)
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/at91sam9x5ek_defconfig         | 1 +
- configs/at91sam9x5ek_dev_defconfig     | 1 +
- configs/at91sam9x5ek_mmc_defconfig     | 1 +
- configs/at91sam9x5ek_mmc_dev_defconfig | 1 +
- 4 files changed, 4 insertions(+)
-
-diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
-index 775fcceae3..246d34edef 100644
---- a/configs/at91sam9x5ek_defconfig
-+++ b/configs/at91sam9x5ek_defconfig
-@@ -16,6 +16,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index 0f29216736..36441f38e7 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -67,6 +67,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/at91sam9x5ek_mmc_defconfig b/configs/at91sam9x5ek_mmc_defconfig
-index a6fd7e05fc..4c2a6255bc 100644
---- a/configs/at91sam9x5ek_mmc_defconfig
-+++ b/configs/at91sam9x5ek_mmc_defconfig
-@@ -17,6 +17,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index 344c6c2eae..908907acda 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -69,6 +69,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-
---===============4695041244282945762==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4695041244282945762==--
+T24gMDcvMDYvMjAyNiAyMTowMCwgUm9tYWluIE5hb3VyIHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4g
+V2hlbiB1c2luZyBhIHNwZWNpZmljIGdpdCByZXBvIGFuZCB2ZXJzaW9uIGZvciBhdDkxYm9vdHN0
+cmFwMywKPiBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX0xJQ0VOU0VfRklMRVMgZGVmYXVsdHMg
+dG8gIkxJQ0VOU0VTL01JVC50eHQiLgo+IEhvd2V2ZXIgdGhlIGdpdCB2ZXJzaW9uIHdlIHVzZSAo
+bmFtZWx5IHYzLjEwLjMpIGRvZXMgbm90IHByb3ZpZGUgdGhpcwo+IGZpbGUuIEFjdHVhbGx5LCBp
+dCBkb2VzIG5vdCBwcm92aWRlIGEgbGljZW5zZSBmaWxlIGF0IGFsbC4gVGhpcyBjYXVzZXMKPiDi
+gJhtYWtlIGxlZ2FsLWluZm/igJkgdG8gZmFpbCB3aXRoOgo+IAo+ICAgICA+Pj4gYXQ5MWJvb3Rz
+dHJhcDMgdjMuMTAuMyBDb2xsZWN0aW5nIGxlZ2FsIGluZm8KPiAgICAgc2hhMjU2c3VtOiAKPiAv
+YnVpbGRzL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290L291dHB1dC9idWlsZC9hdDkxYm9vdHN0cmFw
+My12My4xMC4zL0xJQ0VOU0VTL01JVC50eHQ6IAo+IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkK
+PiAgICAgRVJST1I6IHdoaWxlIGNoZWNraW5nIGhhc2hlcyBmcm9tIAo+IGJvb3QvYXQ5MWJvb3Rz
+dHJhcDMvYXQ5MWJvb3RzdHJhcDMuaGFzaAo+ICAgICBFUlJPUjogTElDRU5TRVMvTUlULnR4dCBo
+YXMgd3Jvbmcgc2hhMjU2IGhhc2g6Cj4gICAgIEVSUk9SOiBleHBlY3RlZDogCj4gNWEzODA5YjFj
+MmJhMTNiNzI0MjU3MjMyMjk1MTMxMWM1ODQ0MTlmMWY4NTE2ZjY2NWQ2YzA2ZjA2NjhkNzhkZQo+
+ICAgICBFUlJPUjogZ290ICAgICA6Cj4gICAgIEVSUk9SOiBJbmNvbXBsZXRlIGRvd25sb2FkLCBv
+ciBtYW4taW4tdGhlLW1pZGRsZSAoTUlUTSkgYXR0YWNrCj4gICAgIG1ha2VbMV06ICoqKiBbYm9v
+dC9hdDkxYm9vdHN0cmFwMy9hdDkxYm9vdHN0cmFwMy5tazoxMTI6IAo+IGF0OTFib290c3RyYXAz
+LWxlZ2FsLWluZm9dIEVycm9yIDEKPiAKPiBMZXQncyBiZSBleHBsaWNpdCB0aGF0IHRoZXJlIGlz
+IG5vIGxpY2Vuc2UgZmlsZSB0byBjaGVjay4KPiAKPiBGaXhlczoKPiBodHRwczovL2dpdGxhYi5j
+b20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzE0NzI4OTEzODIxIAo+IChhdDkxc2Ft
+OXg1ZWtfbW1jX2Rldl9kZWZjb25maWcpCj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vam9icy8xNDcyODkxMzgyMCAKPiAoYXQ5MXNhbTl4NWVrX21tY19kZWZj
+b25maWcpCj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9i
+cy8xNDcyODkxMzgxOSAKPiAoYXQ5MXNhbTl4NWVrX2Rldl9kZWZjb25maWcpCj4gaHR0cHM6Ly9n
+aXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xNDcyODkxMzgxOCAKPiAo
+YXQ5MXNhbTl4NWVrX2RlZmNvbmZpZykKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIg
+PHJvbWFpbi5uYW91ckBzbWlsZS5mcj4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
