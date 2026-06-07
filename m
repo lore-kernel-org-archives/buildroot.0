@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AED95CD8C93
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 13:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEE55CD8C8C
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 13:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8795D61B3C;
-	Sun,  7 Jun 2026 13:02:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEBD261B74;
+	Sun,  7 Jun 2026 13:02:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pO4wpgE5PUx6; Sun,  7 Jun 2026 13:02:38 +0000 (UTC)
+ id KTZW4fOM6z1R; Sun,  7 Jun 2026 13:02:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F71061B5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C405761B7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780837358;
-	bh=f2IhiS14LELqW62ZDsaHIrvBlDw+u0mnt4P++MmEKhM=;
+	s=default; t=1780837360;
+	bh=C6RSfJAaq/5Lw153dUp5sSFCexY0pOPju44TKbS5rsg=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ALS8cc81Ty495gIAgb6N/z75pVzOJEsFeJcIGFb1739E4KWbi1/kxi3ntNlK/52yj
-	 sDwflrndMHsRdN+II9/oDxIn4O6MVCYtJszDeSr9qQUvlOp/Jho6N6QJu8xVGaKfZg
-	 5VxD+a+Nsw24BO1qezuYYgs59lMcWX5umclgnPvhGOLnASrgyTLGVMQz2PIxy/wumb
-	 xa91VwrnmX/+Nf/DwAXLCB9yyHh3i/zkayaTr2oXVuNaK1QC7Fm9dp11XS6vK465y8
-	 fxuwGpFPAekGiE2wFhvIhBbWprHMbL+z/E+DUDc27KYd6IyL4GffqF6UXsVclHFg3c
-	 6iR1B2TFRvWBA==
+	b=BbcWZ5VcnIQCPWJtk4MJuyav5rCvL7AzVYGSuyDl81B0G3e3BDWmf+bt2esBwvuAy
+	 MAZkWCO+PzbwVOCwPdP/eO3uqp8baEBBkHDRpB/sOLjEFnafZgGAGHebEzPSUMc9P5
+	 cTQqr0rnrxQTVSufPuo2qlXklYJdTdpXK/ely7hsWFCabQB+gP2beyVl/6pJixOOYZ
+	 lH936wF/ZcMGfYeBLnAkeaXdRGIzmD+OL48rAnRFXEey6LKndcpDseyR8wub3r/qpq
+	 p9V7C4mUBAau7lknYrR9YmWGhVnlJcA1fHaKyiyAi917Ziw89EBYCKqRT/E4Ca2+Qx
+	 Ww9mtyLJgB6Pw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F71061B5A;
-	Sun,  7 Jun 2026 13:02:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B6512C1
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C405761B7F;
+	Sun,  7 Jun 2026 13:02:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93148345
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D03B84B8C
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79561429BE
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G2JtSsT2Hlto for <buildroot@buildroot.org>;
- Sun,  7 Jun 2026 13:02:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6MdMrmnTuD9v for <buildroot@buildroot.org>;
+ Sun,  7 Jun 2026 13:02:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECB5284B8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECB5284B8A
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ECB5284B8A
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 409243EBFD;
- Sun,  7 Jun 2026 13:02:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 93F51429D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93F51429D5
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 93F51429D5
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D5EAC3EC58;
+ Sun,  7 Jun 2026 13:02:32 +0000 (UTC)
 From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 To: buildroot@buildroot.org
-Date: Sun,  7 Jun 2026 15:02:18 +0200
-Message-Id: <20260607130219.1350128-8-jeanmichel.hautbois@yoseli.org>
+Date: Sun,  7 Jun 2026 15:02:19 +0200
+Message-Id: <20260607130219.1350128-9-jeanmichel.hautbois@yoseli.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
 References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
 MIME-Version: 1.0
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-X-GND-Cause: dmFkZTG35MyENKqFS0DuiPYUX9V3WsY3+FAmL+ImKoRLaUV02rcxcXLiKpJX/Kdx6SEqZQz2ekGfQ0jrmsx/WBwMlf2XOn2FbgS96Zs0spRyU989SGI8G7Cvds0Ybat6zfFO9fvNt3BfRCxGFRxtl7iKqavvPfB3yxxy+yQTyKH9MCP58OOla7Z8qUGxxcSWph48W1TPSPeP4XZvMp4ssF1ae/YycEv9NcGgSUbTkqro91isKUoq1wlurkCWxHLQOgIDHETMb0icYN/W5krwkf4adE4uv9Z388Sv+b4Bsdn4FglEHWeVY7X11Rb4h2XSRtTme54CTlFcl3QBQ8n+aBUTAmTYI3um3q4mXdn9g0L6DPuz8ppRt/znBnzyjPToiYljXqMmS1M0TiGFk1d0I8dMH6tcMB78yulI9z9slWyyq2YlGMXh3B4YjGY8dywK0itxraLaWKch+IoLbbRooiHLZ8MeNd7gEpG+wpWdUjfJHgnmcbp2CT6htAcHHSvPtOGogLaC22ndldUVBdIpUTAzT6Rp3hk033s08AGovTEb98p1LZVeJrvh/PJwFVxORiwxi+YAkiWWXAnH/3a6nlVw2ZM46xyGumCvrc1REphy3s9A+HDe4JFhFpCnTOR2EFfi1HAC+OpyMDaH6BRFmJyohEw3mzpVjlqdtyDDdKLKpKdYFw
+X-GND-Cause: dmFkZTGPQ6O7ncGBdU9QaWH45C0oFG0Hgb3k4OVTDqighmNR0sg3E5kucM6uTEsxjTOC1f3Z4DGPM+rrYUIiQ/SOltJ5N2vANV4LZ4wqmvcQmyNp2CvudXD4iHx26W2HjBiX8PVIcbS40AIEWPyxBzB2QuGMPPJhryHqGk7RjO0i3zFPTNAxqT2rNwxHyQgGRPJKfsRJmWADT0i2MXqR+6WErgrqSKlUk9FZGB8RVOXskf5mbIjGsor9YqJYUKN/8PMz5TBx3dMYbIZsHFldYPE1tVwnpVaQdBJeZEGaoYqW8NlYN20sZ/Qui8PWmC1lXosUtOlqAyXaTOkx9hxBuRcsGrvSj/7uKB48zNp0aHPYoeplOKL206lZSudHDtu7bJVZJ4P790jKayPcbWUSKfMXf1Dn/Vb0bpYwqQ92vcZ4vS0oqMm49Ij1aEVWEqTilF10gvJPFi/RMoWrhOfr6Ebyb7CCy4tShyrTovXZVOPNQqkoiI3KyGMHTfK0T7J0t604aYv2zBEnpIrlku//xBTXmM6xUCrZreJj8n1qCnUuuEcgtPrixckTJE+ooq/H3FHhnh/9au4sOWpgKMCrAHPfIZH1BZD1iuiY2WZucsxEgNIqAksGhbXWaD+ZDl97NOd8Dz/PeILdgGvfW12mpr/33gqOfv0E7HcV/GEME0aDZN2+LA
 X-GND-State: clean
 X-GND-Score: -100
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1780837352;
+ d=yoseli.org; s=gm1; t=1780837355;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=LWLS/n2hxSvzJ0C7Tv03uZ7UsFbrhNXJ/JbyQtody5M=;
- b=N7YKdUbPVTqwT1ABv5jJraNFCQ3iD9CsSCi9V2Zfrg2GkDhRS1bZMKLc/CW2LPS6y+P0hu
- p9pF5ilUsILCYItLJtQdR9CrqisHrINnXQwB+Nxhp1lqAHwN1+460mjeg1Y0q8vtR08O0F
- aSv/yz6SPVfUTXboz2JPWSwMJxubtpvkQzcViM7db4/Z/OTrqpZ26Jo8aanClp+92bFNDg
- cEf3tDSY6A8NRtLUAeiIEr8uH3BecU+7BPdcOVNL4kQxZqmLcZ7uyqcq2k0CE0r4jQBHHx
- 8Jh7Ufs90efTQDttQeNo0ufXEIgLWqDBaICU1da8Ph8ZEPq0XBWiC3Pi/8jeiw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=G7sGOPn26R/EgwU9h1bO2TvPN4BYrB8rMdhPZCW8w6s=;
+ b=Olo/QvLYJjYXJmTaMrWMehWgA9PLJUTuRskHL9rpyT5na10+f++iKTcgUyRssClHnUhHfe
+ JGZ4Z0fZbFAXeo3JYAD/XvGYuZaHHAwCj3HHqhugw8sSDYZZC5eC6NEDvSRmBANzZJCvIW
+ /JOlhSxogx3g+YGYsSQjOrVo9hBi67R4qbfWGv3x7/h/254PuvRJpFOWvf7a3PiAn0ERgR
+ wryS1QzF85HS19jLGjRrqgR2QJ6gCNfYU4q6FiHSjSQ0MvAiRk2bMZkAum7Jb44yyN6v8Q
+ xdB/0IWUnz7mL4xmvWlSd++/LKQW/pxxXcMMffrZ7cdya8mXgWCKrrMUZXuKXw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=yoseli.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=N7YKdUbP
-Subject: [Buildroot] [PATCH v2 7/8] package/dropbear: disable ML-KEM768 on
- m68k
+ header.s=gm1 header.b=Olo/QvLY
+Subject: [Buildroot] [PATCH v2 8/8] package/libglib2: add m68k ColdFire
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,74 +107,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ML-KEM768 post-quantum key exchange code (in the vendored header
-src/libcrux_mlkem768_sha3.h) triggers a GCC internal compiler error
-(ICE) in cselib_record_set during the postreload CSE pass when
-compiled at -O2 on m68k. Reproduced with the Buildroot default
-GCC 14.3.0 on ColdFire (cselib.cc:2727); GCC 15.2.0 hits the same ICE
-(cselib.cc:2869).
+On m68k ColdFire, two issues prevent libglib2 from building.
 
-The bug is tracked upstream as GCC PR rtl-optimization/125078:
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125078
+First, libgio's GOT exceeds the default 16-bit GOT entry limit (8192
+entries: its .got holds ~12800 entries), so the 16-bit R_68K_GOT16O
+relocation overflows. Add -mxgot to use 32-bit GOT offsets.
 
-A new BR2_TOOLCHAIN_HAS_GCC_BUG_125078 helper symbol is added in
-toolchain/Config.in following the convention used for other
-known-broken toolchains, and the dropbear build hook is gated on it so
-the workaround is removed automatically once GCC ships a fix. It is
-enabled for all m68k, conservatively, as the ICE is present in the
-default GCC 14.3.0.
-
-Standard key exchange algorithms remain available.
+Second, glib optionally enables a C++ language (add_languages()), so
+meson probes some dependencies (such as iconv) using the C++ compiler.
+On ColdFire that link pulls libstdc++, which references the __sync_*
+helpers that libgcc only provides as hidden symbols, so the link fails
+with "hidden symbol ... referenced by DSO" and the probe (and thus the
+whole configure step) fails. Link libstdc++ and libgcc statically to
+keep these probes working. This is the same root cause addressed for
+gmp and gdb earlier in this series.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 ---
 Changes since v1:
- - Gate on the new BR2_TOOLCHAIN_HAS_GCC_BUG_125078 (added in
-   toolchain/Config.in), as requested by Baruch on v1.
+ - Drop the b_staticpic hunk (moved to pkg-meson.mk) and the
+   sysprof hunk (sent separately). Add -static-libstdc++ and
+   -static-libgcc for glib's C++ iconv probe; keep -mxgot.
 
- package/dropbear/dropbear.mk |  7 +++++++
- toolchain/Config.in          | 10 ++++++++++
- 2 files changed, 17 insertions(+)
+ package/libglib2/libglib2.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index a7de8432af..f40520d4d8 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -62,6 +62,13 @@ endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_125078),y)
-+define DROPBEAR_DISABLE_MLKEM
-+	echo '#define DROPBEAR_MLKEM768 0'               >> $(@D)/localoptions.h
-+endef
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_MLKEM
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index cae8a85a28..77a7172392 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -55,6 +55,21 @@ endif
+ # containing ${libdir} in gio-2.0.pc. Indeed, a value depending on
+ # ${libdir} would be prefixed by the sysroot by pkg-config, causing a
+ # bogus installation path once combined with $(DESTDIR).
++# libgio's GOT exceeds the 16-bit offset window on m68k ColdFire
++# (relocation truncated to fit: R_68K_GOT16O); use 32-bit GOT offsets.
++#
++# glib optionally enables a C++ language (add_languages()), so meson
++# probes some dependencies (such as iconv) with the C++ compiler. On
++# ColdFire that link pulls libstdc++, which references the __sync_*
++# helpers that libgcc only provides as hidden symbols, so the link
++# fails ("hidden symbol ... referenced by DSO"). Link libstdc++ and
++# libgcc statically to keep these probes (and any C++ object) working.
++# See the gmp and gdb commits for the same root cause.
++ifeq ($(BR2_m68k_cf),y)
++LIBGLIB2_CFLAGS += -mxgot
++LIBGLIB2_LDFLAGS += -static-libstdc++ -static-libgcc
 +endif
 +
- ifeq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
- define DROPBEAR_ENABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 910cd103dc..3bb7ab269d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -246,6 +246,16 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_111001
- 		   BR2_OPTIMIZE_2 || \
- 		   BR2_OPTIMIZE_3
- 
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125078
-+# ICE in cselib_record_set during the postreload CSE pass when
-+# compiling ML-KEM code at -O2 on m68k (cselib.cc:2727 with gcc
-+# 14.3.0, cselib.cc:2869 with gcc 15.2.0). Reproduced at -O2 with the
-+# Buildroot default gcc 14.3.0 on ColdFire. Enabled for all m68k
-+# conservatively, as the bug is present in the default gcc 14.3.0.
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_125078
-+	bool
-+	default y if BR2_m68k
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
+ LIBGLIB2_CONF_OPTS = \
+ 	-Dglib_debug=disabled \
+ 	-Dlibelf=disabled \
 -- 
 2.39.5
 
