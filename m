@@ -1,137 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23053CD8C90
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 20:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BF16CD8C8C
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 21:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD624844DC;
-	Sun,  7 Jun 2026 20:43:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C109610F4;
+	Sun,  7 Jun 2026 21:19:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T8DD-2bCvGCi; Sun,  7 Jun 2026 20:43:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MXh6qkVyKwul; Sun,  7 Jun 2026 21:18:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8166684637
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA9CC610EB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780864998;
-	bh=zZhMbrEPpcKW9P/+UX1LonKSMKZM0mdUshvI05BYQ/U=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=BlTie92XEIKJXL0VYZeYE8jRwa0FMpZIZJL7xxFE4V821VWWR7RY+EhpIrEaxNK4o
-	 atUbLk9uilKnHeXcZc/hCaEcdwxC5djgYd+A3a2SaWLdkb7AaUpcdwI5fd+O6pZg6p
-	 VHokR5o3OLFHlzvBZRenqTCp1RM1kUMfdtyNvfMvP8CwqwNEPorkJts+1Z75dxPd00
-	 rgslDAoYsecq7Dp67A2GIXIvyR+6dnHChnZNZxMZWegrUyQL8/fxbqsTjh/aOGs2RC
-	 qPoU/LVA5ZWl9yS+kW3eYzPStgsXTF2oZtv4GrDaORLD6ZzIGHXyFqGEFaaZVSJ3Ob
-	 QHJRHd1DDafug==
+	s=default; t=1780867138;
+	bh=R4/g4HeY/IoWFl1rmiOOEiQLqqjJGqTDCLLLLoBAFNM=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=IpxoctS89OnHxeNq5n6N9fUVafngO9S8LCnDhTdibKXRo9uwq8XpwMm0YL4/LB39L
+	 VRUyuakaBiPKfx8o+SqkvTu9jwsuyNpnswbxyVZ0tMVTtyHnD3JKHw/72lrJ3nRelt
+	 urlKxoJu7kFUdIKGvcDKb5h7wznblNlwQbHW+aI4T955Mm2UGQhvBkjU0cmEJYurIW
+	 Sp0R9Sx+ZmUvpUYG7b8aaaRx3KSR77ihfuJDeHb89No13PI2F3JN8GtN74dHHgTbaa
+	 Jikq7fhdYAh6Cvp6PjuJAiUwGRVYDW4HPgs/YADWARiy9evZCqrmNSkDmFZ334TvjF
+	 zYHItS9OzxPVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8166684637;
-	Sun,  7 Jun 2026 20:43:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E6516187
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 20:43:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA9CC610EB;
+	Sun,  7 Jun 2026 21:18:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 753902C1
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 21:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBC44400BD
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 20:43:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 666D54213B
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 21:18:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMAEq__BMv_C for <buildroot@buildroot.org>;
- Sun,  7 Jun 2026 20:43:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RERXAjbI0FXy for <buildroot@buildroot.org>;
+ Sun,  7 Jun 2026 21:18:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c31; helo=mail-oo1-xc31.google.com;
- envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5C2CB40336
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C2CB40336
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com
- [IPv6:2607:f8b0:4864:20::c31])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5C2CB40336
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 20:43:15 +0000 (UTC)
-Received: by mail-oo1-xc31.google.com with SMTP id
- 006d021491bc7-69e402b625fso2504091eaf.1
- for <buildroot@buildroot.org>; Sun, 07 Jun 2026 13:43:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780864994; cv=none;
- d=google.com; s=arc-20240605;
- b=cq5l4+T6F87F0mLw0Oq8NtKXkLkknsnNr16sXc7jiTnfwHq5I1VkLIHGsdwNXzgHYx
- jUCiuQ5qRFOIPh0WVcWWCINsEOTHbkwXC4nuUpHqMR/huHFwJLJgrgZgwoN7nMepPNYE
- xtdNRzWv+Yw+75c69LNdNzNfgIoEvE3UgyLujXnT7IMPVda+Tb5NB5Jaxz87Y0ASlFdH
- 9H8QjjbOvpT6rftL/QLX1YRtw2xIereZhvdif3AeVPTSG6cb1btUTrnaGrhs6xLYCfdh
- ooGUWnCmWoc1rWM20MNgZixAgjd5Oi1RitDTygPwZf6p+xCb4QpgmAzbrbafL7Y/myN3
- FosA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20240605; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:dkim-signature;
- bh=lTo0Sj6K/J40fBGU9fuK6pGlqYqXLjmi2gwzjggZzxM=;
- fh=BFsedvD6LaVRB1KjXMhfkXd1HSLg/Uo2SrYrf48N4VA=;
- b=MnpADa17b6VpHxL3sgaZ7UFLQDm6iGapk0GWLgWRj8Q3cnwEFEFWckWx2Tb4ca/4gN
- KawAvMIC2ffEJtEu9nWYnl04LJBFuUjD931Nns/ruT/eAlrBi9ZdDUdMiCTGXGqyy9j8
- lj5omuYI93sHXNWWds8Ae0IDdGAOKt9jLgtqC751qxVI4iWMM7HbGPf7ei+2D6NBHlgC
- OP9iG6cCLNAoYshX4FLclc4QKY0igpZzvTv/6F7ll8UBsYiAt20EkAaLWhYcRq05sGXf
- THh0KeO9SDEydBA7m7OYAcpO2Er272Rj/18FfteLtkHRyVZRwCg1AMqu+52gQDSp38Ah
- pXRw==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F75D4211B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F75D4211B
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F75D4211B
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 21:18:55 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-46013161068so1705501f8f.2
+ for <buildroot@buildroot.org>; Sun, 07 Jun 2026 14:18:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780864994; x=1781469794;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=lTo0Sj6K/J40fBGU9fuK6pGlqYqXLjmi2gwzjggZzxM=;
- b=Jlff8DEC4zOvOSI0F/Xaqf8uBmr1bj4DZGTQoHxdLnZo8kvybfX2Cg66YOoI1rqJQw
- mgJEsOSNVHtU+iV7jHKtVIBNUAixDV9iMDbRCF5H7bYvhLId6PL1BsmwyIWUwPLhmkWa
- FYt4CVQsozU2B8yenRHEoHUXWoNgtV+CRCgo41h/88vHPIa5GktVobZ+N+BXvlTq6Mfh
- OSBZO/emaozfM2l/QTGbjA0EoZDjlcPWett4s1I36ImUw7R8qHrVwwrFXcZZ6GwDAMk7
- /he5kg825iKBn0tHIAe1qGU3ylCvOzQiHyXlJddiNZz1uxztaxxOj03BdT//IKqHW94v
- 8YoQ==
-X-Gm-Message-State: AOJu0YxsZzbS7OJFvy5OciNxaFwsHeNNX2G0UkkDZ1DKMnbxGT5Bikog
- h83Oe3xTUvgrEok/rmouqiF/juwGLj7Sk5IbG1bLG0rHOZ3bQWpdxLq8mD3sEDY4gB0lVQS7gGY
- XbOtRalq9/bwub8FrDSdu4mkz5GCfdH0=
-X-Gm-Gg: Acq92OE9KhKtuNT4suWSb2cuCphk4mW8nfY1jLGz+nFF1dW+LXi4wKLWzb4HzV6wlwl
- 7a8lNskmLaXu2SitaQPKO69h/vk1VsvXZrY63mSDBQ+2YH1YyFGEUsGUHJOQH0yuexdyt2SK/mB
- 5JKzYFDDq0WUZojCsK32OndWBLlq4O1RpmLf/zANJ1OvZ8DyF5G/yNJOhvGVTnkVRwNWlMhYpWz
- nBxaSHK0S3o3H5d9mh9QZEOtH1izGqjf3QPYdsi9gPb+FiTcgngdW/5P3H9NBsOT8D5x9dwxzrY
- enT82Yd5buJgxs5l8A==
-X-Received: by 2002:a05:6820:4c87:b0:69d:d87c:177 with SMTP id
- 006d021491bc7-69e68b08d9amr7524732eaf.12.1780864994183; Sun, 07 Jun 2026
- 13:43:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com>
- <20260515-virglrenderer-v7-4-1f1814b65ccd@gmail.com>
- <7551a523-03a3-4675-9719-36af502bf909@rnout.be>
-In-Reply-To: <7551a523-03a3-4675-9719-36af502bf909@rnout.be>
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 7 Jun 2026 13:42:37 -0700
-X-Gm-Features: AVVi8CehlPEhgS_9O2u641nBQ3bU65U0Bnal9Eg9qFAYKLTSWDgSCksEPNSmKQI
-Message-ID: <CAMWSM7hKS0zUixYGRvC-06YvAdOVfCSRSuqB_pV7PF8v_wcHGg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>, 
- Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Romain Naour <romain.naour@gmail.com>, 
- Raphael Pavlidis <raphael.pavlidis@gmail.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780864994; x=1781469794; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
+ d=1e100.net; s=20251104; t=1780867133; x=1781471933;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=lTo0Sj6K/J40fBGU9fuK6pGlqYqXLjmi2gwzjggZzxM=;
- b=JTMaHyuMtxN9Akv85vnnTzQx1EqZw0SjaJ/Auyi4gqdRqiuI9ht5y16dakT6pM88PH
- HuchyR0CpfIW2F2BbSsGBQ7Fpx3hPl9IigSBYzlr0TVZ3dxC2Ccr9N4eqM60CD4BBGM+
- 8t+qYDfvzYbFI8zKADum2weRCtd7XEKrhDGvCa++wevO6qfy7j9sdvW0bakD/+ocWNUD
- 3OPX59UCUo18wZqs2p4ksW4t+CLn3QT7NAGcuVZ/ONuKw8DVksGuGPbfBuhyF4rmlrAX
- ptA2qryUklN8a8kAB157sT+P72W3qPnZGFFWTCODdXV6pC8XwpnNcIGgkvXNBWoA/uBS
- do7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=JTMaHyuM
-Subject: Re: [Buildroot] [PATCH v7 4/8] package/virglrenderer: new package
+ bh=ueOjT2ed5jnnK4VZkzp+uNyQhwPyh3HmUgl9DKReCI8=;
+ b=gi2anOjXQC3/aOiTO1MTSgN+yCWXRqzemO7gvh1GBf/RnLC9JQSpb+/1WFRm1lSqS5
+ GTr2u08dC8jR1uuyITkNnsQnDKvn13G3Hl213xZvRVtId1zdd02/sHUBMAPPZxm8tAG+
+ rXB+lske2JpgAB34rHHUl9qnVLazlFyOtcZ1P7BGKUq6XYEP5IwFwAGtQ07+NslVlaQQ
+ UTYjin6fGd5y5ThSCAsv8B5wGA67DOyS8xDY0nQCSg3u0NTmrr76bn9Qx0yRKbpVVNTh
+ cQ/pIYmu3bvr4tzAO7jUvsULxEeyRa5sqMRJa2uSWDzy1MTf9eMFPLLBhRZmZGAm7m35
+ 5q6Q==
+X-Gm-Message-State: AOJu0Yy9DBcydL9VvustPbjF55pro9ad00myAIl6cz61yEo5HKko75Hj
+ SbispXzGTOZjQEw2ZXsM+0lMOUjZw0RHI8xT11WdvxqW3Ep2/dFpBkkNweV4PW0t2zh2wHUx4I2
+ yuCFL
+X-Gm-Gg: Acq92OHqyl8SHvLmNs351yOvefj5Zo3D62Im1ZpUQaD+qn/Pi63+2WdD8hqCvZDRhht
+ 3xdCUOAsrpQD2rHvuO2x39C9H3iY2HFpS4FwW+D7029HcDUQLPCoVHSAGENfV7TY25zkqbQY7C0
+ zf/Ez543gkyZ9AoN/S7MJD7zylHgtz3xwZSbFDfCJcSPKywAqlyN8xjBm8vVJ4pG0tgGQxsWbVy
+ htFUms1gm8WaJuNvyVV/QBJ2cYQ4Ym/fLC7B3WSD0rXW8cmRGW8ZF6XsHiW9FGxZ/Wys8QjL/8M
+ kgzPhy9upgDq4HjXDW/YzCBV6OZBuyq3i/WuA+fA+A9wlOlz9WNei/ausaXx9ZDL4fg3ZVrOVgF
+ QUw18C5BJHm7eyytmrUdIoa2iif8Ac+xqxEdbRfWgh3IkMRD8lddukI04GNzP51uv/7CswslpuG
+ aMJZymuihnb9qOgjUjUCRHgzbSwG+AtrGVsoheKp5sBQipS1aLTY/viW7hHuf87G/LhHKsDQnMp
+ wAXzgtZVjooSmDNW66I0Zune9DMMIs/dDc3
+X-Received: by 2002:a05:6000:dc9:b0:45e:64b3:af44 with SMTP id
+ ffacd0b85a97d-460307644ffmr14014725f8f.36.1780867132900; 
+ Sun, 07 Jun 2026 14:18:52 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4601f2dcad5sm50839066f8f.5.2026.06.07.14.18.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Jun 2026 14:18:52 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sun,  7 Jun 2026 23:18:49 +0200
+Message-ID: <20260607211849.1353654-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.54.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1780867133; x=1781471933; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ueOjT2ed5jnnK4VZkzp+uNyQhwPyh3HmUgl9DKReCI8=;
+ b=eDoaeTTS9AqbBnSsm+iT61mmdduJXEOX1rjrJRjmY1cAYUQlbv12FJY6VDzkQEpb7f
+ ASD8Hr4QEYk3uT7E5yAuMcYOpIcqOpJy/73/EIEXR1HrDTQB5jc0ivVgdoedB4cpUJ+C
+ SxNwkJnLU3vYoV1cpR0hlVk1mv3XMHkSLfm/Y=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=eDoaeTTS
+Subject: [Buildroot] [PATCHv3] package/runc: fix regression with kernel
+ without user namespace
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,263 +119,453 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQXJub3V0LAoKTG9va3MgbGlrZSBJIG1pc3NlZCB0aGlzIG1lc3NhZ2UgZWFybGllciB3
-aGlsZSBJIHdhcyBhdCBPcGVuIFNvdXJjZQpTdW1taXQgTkEsIHNvIEknbSBmb2xsb3dpbmcgdXAg
-bm93IHdoaWxlIEknbSBwcmVwYXJpbmcgdGhlIG5leHQKdmVyc2lvbiBvZiB0aGlzIHBhdGNoIHNl
-cmllcy4gSSB0aGluayB3ZSd2ZSBhbHJlYWR5IGNvdmVyZWQgc29tZSBvZgp0aGlzLCBidXQgSSds
-bCByZXNwb25kIGlubGluZSBhbnl3YXkgZm9yIHBvc3Rlcml0eS4KCk9uIFRodSwgTWF5IDIxLCAy
-MDI2IGF0IDE6MDjigK9QTSBBcm5vdXQgVmFuZGVjYXBwZWxsZSA8YXJub3V0QHJub3V0LmJlPiB3
-cm90ZToKPgo+Cj4KPiBPbiAxNi8wNS8yMDI2IDA0OjAzLCBKb3NlcGggS29ndXQgd3JvdGU6Cj4g
-PiBBZGQgdmlyZ2xyZW5kZXJlciwgYW4gb3B0aW9uYWwgZGVwZW5kZW5jeSBvZiBRRU1VLCB3aGlj
-aCBmYWNpbGl0YXRlcwo+ID4gYWNjZWxlcmF0aW9uIG9mIHJlbmRlcmluZyBhbmQgb3B0aW9uYWxs
-eSB2aWRlbyBkZWNvZGUgdGhyb3VnaAo+ID4gdmlydGlvLWdwdS4KPgo+ICAgSSdtIG5vdCBlbnRp
-cmVseSBzdXJlIGhvdyB0aGlzIHdvcmtzLiBEbyB5b3UganVzdCBoYXZlIHRoZSBkcml2ZXIgZm9y
-IHRoZQo+IGhvc3QncyBoYXJkd2FyZSBpbiB5b3VyIGd1ZXN0IE9TPyBTbyBlLmcuIHlvdSBoYXZl
-IHRpLXNneC11bSBhbmQgdmlyZ2xyZW5kZXJlcgo+IGluIHlvdXIgZ3Vlc3QgT1MsIGFuZCB2b2ls
-YSwgeW91IGdldCBhY2NlbGVyYXRpb24/Cj4KCkJhc2ljYWxseSB5ZXMsIGJ1dCBub3QganVzdCBh
-bnkgZHJpdmVyLiBGb3IgdGhlIG1vbWVudCwgdGhlIG9ubHkKc3VwcG9ydGVkIERSTSBiYWNrZW5k
-cyBhcmUgTWVzYSBkcml2ZXJzLiBUaGlzIGlzIGJlY2F1c2UgbW9kaWZ5aW5nIHRoZQpVTUQgdG8g
-c3VibWl0IERSTSBjb21tYW5kcyBvdmVyIHZpcnRpby1ncHUgaXMgcmVxdWlyZWQuIFZpcmdscmVu
-ZGVyZXIKcmVjZWl2ZXMgdGhlc2UgY29tbWFuZHMgb24gdGhlIGhvc3QgYW5kIHN1Ym1pdHMgdGhl
-bSB0byB0aGUgYWN0dWFsCmRldmljZSBub2RlLgoKPiAgIE9yIGlzIHZpcmdscmVuZGVyIGp1c3Qg
-dGhlIGxpYnJhcnkgdGhhdCB5b3UgaGF2ZSB0byBsaW5rIGludG8gcWVtdSB0byBlbmFibGUKPiB0
-aGlzIGZlYXR1cmUgdG8gYmVnaW4gd2l0aD8gV2hhdCBkbyB5b3UgbmVlZCBpbiB0aGUgZ3Vlc3Qg
-dGhlbiB0byBiZSBhYmxlIHRvCj4gbWFrZSB1c2Ugb2YgaXQ/IERvIHlvdSBuZWVkIHRoZSBzYW1l
-IGRyaXZlciBpbiB0aGUgaG9zdCBhbmQgdGhlIGd1ZXN0PyBXaGF0IGlmCj4gdGhleSBoYXZlIGRp
-ZmZlcmVudCB2ZXJzaW9ucz8gT3IgY2FuIHlvdSBoYXZlIGUuZy4gZXRuYXZpdiBpbiB0aGUgaG9z
-dCBhbmQKPiB2aXZhbnRlIGluIHRoZSBndWVzdD8KPgoKSW4gdGhlIGd1ZXN0LCB5b3UgbmVlZCBt
-ZXNhIHdpdGggdGhlIHZpcnRpby1ncHUgVU1EIGZvciBWaXJHTCBvcgpWZW51cy4gVmlyR0wgcmVx
-dWlyZXMgaG9zdCBzdXBwb3J0IGZvciBPcGVuR0wsIGFuZCB2ZW51cyByZXF1aXJlcyBob3N0CnN1
-cHBvcnQgZm9yIFZ1bGthbi4KCkZvciBsb3dlciBvdmVyaGVhZCBhbmQgYXJndWFibHkgYmV0dGVy
-IHNlY3VyaXR5LCB5b3UgY2FuIHVzZSB0aGUKbmF0aXZlIFVNRCAoZS5nLiByYWRlb25zaSwgZnJl
-ZWRyZW5vKSBpbiB0aGUgZ3Vlc3Qgd2l0aCBob3N0IG5hdGl2ZQpjb250ZXh0LCBidXQgdGhpcyBy
-ZXF1aXJlcyBib3RoIE1lc2EgYW5kIHZpcmdscmVuZGVyZXIgdG8gaGF2ZSB0aGlzCmVuYWJsZWQu
-Cgo+ICAgT3IgbWF5YmUgb24gdGhlIGhvc3QgeW91IGRvbid0IG5lZWQgYW55dGhpbmcgb3RoZXIg
-dGhhbiB2aXJnbHJlbmRlcmVyLCBhbmQgdGhlCj4gYWN0dWFsIGRyaXZlciBpcyBwdXJlbHkgaW4g
-dGhlIGd1ZXN0PyBJZiB0aGF0J3MgdGhlIGNhc2UsIGFsbCB0aGUgImRlZmF1bHQgeSBpZgo+IC4u
-LiIgaW4gdGhpcyBjb21taXQgYXJlIGluY29ycmVjdC4KPgoKVGhlIHZpcmdscmVuZGVyZXIgRFJN
-IGJhY2tlbmRzIG9ubHkgcmVxdWlyZSB0aGUgY29ycmVzcG9uZGluZyBEUk0gS01ECmxvYWRlZCBv
-biB0aGUgaG9zdCBhdCBydW50aW1lLiBJZiB5b3UncmUgdXNpbmcgYSBEUk0gYmFja2VuZCBhbmQK
-cnVubmluZyB0aGUgbmF0aXZlIFVNRCBpbnNpZGUgYSBndWVzdCwgeW91IGNhbiBnZXQgYWNjZWxl
-cmF0ZWQKcmVuZGVyL2NvbXB1dGUgaW4gdGhlIGd1ZXN0IHdpdGhvdXQgYW55IFVNRCBvbiB0aGUg
-aG9zdC4KCkluIHByYWN0aWNlLCBtYW55IHVzZXJzIHdpbGwgcHJvYmFibHkgYWxzbyBoYXZlIGEg
-Z3JhcGhpY3Mgc3RhY2sgKFVNRCkKb24gdGhlIGhvc3QsIGJlY2F1c2UgdGhleSdsbCB3YW50IGFu
-IGFjY2VsZXJhdGVkIHBpcGVsaW5lIGZvcgpwcmVzZW50aW5nIHJlbmRlcmVkIGZyYW1lcyBmcm9t
-IGd1ZXN0cy4gSW4gdGhpcyBjYXNlLCBlbmFibGluZyBlLmcuCnJhZGVvbnNpIG9yIHJhZHYgaW4g
-dGhlIGhvc3QgTWVzYSBidWlsZCBpbXBsaWVzIHRoYXQgdGhlIGhvc3QgaGFzIHRoZQphbWRncHUg
-S01EIChhbmQgdGhlIGhhcmR3YXJlIHRvIHVzZSBpdCksIHNvIHdlIGNhbiBzYWZlbHkgZW5hYmxl
-IHRoZQphbWRncHUgYmFja2VuZCBmb3IgdmlyZ2xyZW5kZXJlci4gVGhpcyBlbmFibGVzIGd1ZXN0
-cyB0byB1c2UKcmFkZW9uc2kvcmFkdiBkaXJlY3RseS4KCj4gICBJIGxvb2tlZCBhdCB0aGUgdGVz
-dCwgYnV0IGl0IGRvZXNuJ3QgaGVscCBtdWNoIGJlY2F1c2UgdGhlIHRlc3QgdXNlcyB0aGUgc2Ft
-ZQo+IGtlcm5lbC9yb290ZnMgZm9yIHRoZSBob3N0IGFuZCB0aGUgZ3Vlc3QuLi4KPgoKSSB3YXMg
-aG9waW5nIHRvIGF2b2lkIGJ1aWxkaW5nIHR3byBrZXJuZWxzL3Jvb3Rmc2VzIGZvciBleHBlZGll
-bmN5LApidXQgSSBzZWUgaG93IHRoaXMgd291bGQgaWxsdXN0cmF0ZSB0aGUgc2V0dXAgcG9vcmx5
-LgoKPiAgIEkgaGF2ZSBxdWl0ZSBhIGZldyBjb21tZW50cyB0byB0aGlzIHBhdGNoLiBJbiBzb21l
-IGNhc2VzLCBJIGV4cGVjdCB0aGF0IHdoYXQKPiB5b3Ugd3JvdGUgaXMgYWN0dWFsbHkgZ29vZCBi
-dXQgSSBtaXN1bmRlcnN0b29kIHRoaW5ncy4gSXQgd291bGQgYmUgZ29vZCB0byBhZGQKPiBtb3Jl
-IGV4cGxhbmF0aW9uIGluIHRoZSBjb21taXQgbWVzc2FnZSBhYm91dCBzdWNoIHNpdHVhdGlvbnMu
-Cj4KPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBKb3NlcGggS29ndXQgPGpvc2VwaC5rb2d1dEBnbWFp
-bC5jb20+Cj4gPiAtLS0KPiA+ICAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICAgMSArCj4gPiAgIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgIDEgKwo+ID4gICBwYWNrYWdlL3ZpcmdscmVuZGVyZXIvQ29uZmlnLmluICAgICAgICAg
-IHwgMTE3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiA+ICAgcGFja2FnZS92aXJn
-bHJlbmRlcmVyL3ZpcmdscmVuZGVyZXIuaGFzaCB8ICAgNSArKwo+ID4gICBwYWNrYWdlL3Zpcmds
-cmVuZGVyZXIvdmlyZ2xyZW5kZXJlci5tayAgIHwgIDYwICsrKysrKysrKysrKysrKysKPiA+ICAg
-NSBmaWxlcyBjaGFuZ2VkLCAxODQgaW5zZXJ0aW9ucygrKQo+ID4KPiA+IGRpZmYgLS1naXQgYS9E
-RVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+ID4gaW5kZXggMjVhMDQ3Y2IzZS4uNzc0ZWIwYjc0NiAx
-MDA2NDQKPiA+IC0tLSBhL0RFVkVMT1BFUlMKPiA+ICsrKyBiL0RFVkVMT1BFUlMKPiA+IEBAIC0x
-NzY1LDYgKzE3NjUsNyBAQCBGOiAgICAgIHBhY2thZ2UvcHl0aG9uLXhsaWIvCj4gPiAgIEY6ICBw
-YWNrYWdlL3NlbnRyeS1jbGkvCj4gPiAgIEY6ICBwYWNrYWdlL3NlbnRyeS1uYXRpdmUvCj4gPiAg
-IEY6ICBwYWNrYWdlL3VuY2x1dHRlci14Zml4ZXMvCj4gPiArRjogICBwYWNrYWdlL3ZpcmdscmVu
-ZGVyZXIvCj4gPgo+ID4gICBOOiAgSm9zaHVhIEhlbmRlcnNvbiA8am9zaHVhLmhlbmRlcnNvbkBt
-aWNyb2NoaXAuY29tPgo+ID4gICBGOiAgcGFja2FnZS9xdDUvcXQ1d2F5bGFuZC8KPiA+IGRpZmYg
-LS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gPiBpbmRleCA5
-Y2FlMzc3ZmI1Li4wMTI2M2U0YzQ0IDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4K
-PiA+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gPiBAQCAtMzY1LDYgKzM2NSw3IEBAIGNvbW1l
-bnQgIkdyYXBoaWMgbGlicmFyaWVzIgo+ID4gICAgICAgc291cmNlICJwYWNrYWdlL3NkbDJfdHRm
-L0NvbmZpZy5pbiIKPiA+ICAgICAgIHNvdXJjZSAicGFja2FnZS9zcGlydi1oZWFkZXJzL0NvbmZp
-Zy5pbiIKPiA+ICAgICAgIHNvdXJjZSAicGFja2FnZS90ay9Db25maWcuaW4iCj4gPiArICAgICBz
-b3VyY2UgInBhY2thZ2UvdmlyZ2xyZW5kZXJlci9Db25maWcuaW4iCj4gPiAgICAgICBzb3VyY2Ug
-InBhY2thZ2UvdnVsa2FuLWhlYWRlcnMvQ29uZmlnLmluIgo+ID4gICAgICAgc291cmNlICJwYWNr
-YWdlL3Z1bGthbi1sb2FkZXIvQ29uZmlnLmluIgo+ID4gICAgICAgc291cmNlICJwYWNrYWdlL3Z1
-bGthbi1zZGsvQ29uZmlnLmluIgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdmlyZ2xyZW5kZXJl
-ci9Db25maWcuaW4gYi9wYWNrYWdlL3ZpcmdscmVuZGVyZXIvQ29uZmlnLmluCj4gPiBuZXcgZmls
-ZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uMDQxYmI2M2ExYwo+ID4gLS0tIC9k
-ZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS92aXJnbHJlbmRlcmVyL0NvbmZpZy5pbgo+ID4gQEAg
-LTAsMCArMSwxMTcgQEAKPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUgo+ID4g
-KyAgICAgYm9vbCAidmlyZ2xyZW5kZXJlciIKPiA+ICsgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xD
-SEFJTl9HQ0NfQVRfTEVBU1RfNF85Cj4KPiAgIFdlIHVzdWFsbHkgaGF2ZSBhIGNvbW1lbnQgaGVy
-ZSB3aHkgaXQgbmVlZHMgR0NDIDQuOSAtIHR5cGljYWxseSBhIG1pbmltYWwgQysrCj4gc3RhbmRh
-cmQgdmVyc2lvbiwgb3IgQzExLgo+CgpBZ3JlZWQsIEknbGwgbG9vayBpbnRvIHRoaXMgYWdhaW4g
-YW5kIGFkZCBhIGNvbW1lbnQuCgo+ID4gKyAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hB
-U19USFJFQURTCj4gPiArICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZm9yaygpCj4gPiAr
-ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRVBPWFkKPiA+ICsgICAgIGhlbHAKPiA+ICsgICAg
-ICAgQSBsaWJyYXJ5IGZvciBhY2NlbGVyYXRlZCBncmFwaGljcyBhbmQgY29tcHV0ZSBpbgo+ID4g
-KyAgICAgICB2aXJ0dWFsaXplZCBndWVzdHMuCj4gPiArCj4gPiArICAgICAgIHZpcmdscmVuZGVy
-ZXIgY2FuIGJlIGJ1aWx0IHdpdGhvdXQgdmlyZ2wsIHZlbnVzLCBvciBEUk0KPgo+ICAgSSB3b3Vs
-ZG4ndCBlbnVtZXJhdGUgYWxsIHRoZSBiYWNrZW5kcyBoZXJlIGJ1dCBqdXN0IHNheSAiY2FuIGJl
-IGJ1aWx0IHdpdGhvdXQKPiBhbnkgYmFja2VuZCIuCj4KCisxCgo+ID4gKyAgICAgICBiYWNrZW5k
-cywgYWx0aG91Z2ggc3VjaCBhIGJ1aWxkIHdpbGwgbm90IHByb3ZpZGUgZ3Vlc3QKPiA+ICsgICAg
-ICAgZ3JhcGhpY3Mgb3IgY29tcHV0ZSBhY2NlbGVyYXRpb24gYnkgaXRzZWxmLgo+ID4gKwo+ID4g
-KyAgICAgICBodHRwczovL3FlbXUucmVhZHRoZWRvY3MuaW8vZW4vdjEwLjAuMy9zeXN0ZW0vZGV2
-aWNlcy92aXJ0aW8tZ3B1Lmh0bWwjdmlydGlvLWdwdS12aXJnbHJlbmRlcmVyCj4gPiArCj4gPiAr
-aWYgQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUgo+ID4gK2NvbW1lbnQgInZpcmdscmVuZGVyZXIg
-bmVlZHMgdmlyZ2wsIHZlbnVzLCBvciBhIERSTSBiYWNrZW5kIGZvciBndWVzdCBhY2NlbGVyYXRp
-b24iCj4KPiAgIFdlIGRvbid0IG5vcm1hbGx5IHB1dCBzdWNoIGNvbW1lbnRzIHRoYXQgYXJlIGp1
-c3QgYSBoaW50IGZvciBwZW9wbGUgd2hvIGRvbid0Cj4gd2FudCB0byByZWFkIHRoZSBoZWxwIHRl
-eHQuCj4KPiA+ICsgICAgIGRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX1ZJUkdMUkVOREVSRVJfSEFT
-X0JBQ0tFTkQKPiA+ICsKPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9WSVJH
-TAo+ID4gKyAgICAgYm9vbCAidmlyZ2wiCj4gPiArICAgICBkZWZhdWx0IHkKPiA+ICsgICAgIGRl
-cGVuZHMgb24gKEJSMl9QQUNLQUdFX0hBU19MSUJFR0wgJiYgQlIyX1BBQ0tBR0VfSEFTX0xJQkdC
-TSkgXAo+ID4gKyAgICAgICAgICAgICB8fCBCUjJfUEFDS0FHRV9IQVNfTElCR0wKPiA+ICsgICAg
-IHNlbGVjdCBCUjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVSX0hBU19CQUNLRU5ECj4gPiArICAgICBo
-ZWxwCj4gPiArICAgICAgIEVuYWJsZSBBUEktbGV2ZWwgT3BlbkdMIGFjY2VsZXJhdGlvbiBvdmVy
-IHZpcnRpby1ncHUuCj4gPiArCj4gPiArICAgICAgIFNheSAneScgaWYgeW91IHdhbnQgdG8gcnVu
-IGFwcGxpY2F0aW9ucyB3aXRoIE9wZW5HTAo+ID4gKyAgICAgICBhY2NlbGVyYXRpb24gaW4gdmly
-dHVhbGl6ZWQgZ3Vlc3RzLiBSZXF1aXJlcyBob3N0Cj4gPiArICAgICAgIHN1cHBvcnQgZm9yIE9w
-ZW5HTC4KPgo+ICAgV2UgZG9uJ3QgdXNlIHRoZSAiU2F5ICd5JyIgZm9ybXVsYXRpb24uIEkgYWxz
-byBkb24ndCBrbm93IHdoYXQgInZpcnR1YWxpemVkCj4gZ3Vlc3RzIiBtZWFucyAtIGd1ZXN0cyBh
-cmUgYWx3YXlzIHZpcnR1YWxpemVkLCByaWdodD8gQW5kICJSZXF1aXJlcyIgbWF5IHNvdW5kCj4g
-bGlrZSBhIGJ1aWxkLXRpbWUgZGVwZW5kZW5jeSBvbiB0aGUgYnVpbGQgc3lzdGVtLiBTbyBJJ2Qg
-anVzdCBtYWtlIHRoZSBoZWxwIHRleHQKPiAiRW5hYmxlIEFQSS1sZXZlbCBPcGVuR0wgYWNjZWxl
-cmF0aW9uIG92ZXIgdmlydGlvLWdwdS4gUmVxdWlyZXMgdGhlCj4gdmlydHVhbGl6YXRpb24gaG9z
-dCB0byBzdXBwb3J0IE9wZW5HTC4iIFNpbWlsYXJseSBmb3IgdGhlIG90aGVyIGhlbHAgdGV4dHMu
-Cj4KClllcCwgSSB0aGluayB0aGF0J3MgY2xlYXJlci4KCj4gPiArICAgICAgIGh0dHBzOi8vZG9j
-cy5tZXNhM2Qub3JnL2RyaXZlcnMvdmlyZ2wuaHRtbAo+ID4gKwo+ID4gK2NvbW1lbnQgInZpcmds
-IG5lZWRzIE9wZW5HTCBvciBPcGVuR0wgRUdMIGFuZCBsaWJnYm0iCj4gPiArICAgICBkZXBlbmRz
-IG9uICEoKEJSMl9QQUNLQUdFX0hBU19MSUJFR0wgJiYgQlIyX1BBQ0tBR0VfSEFTX0xJQkdCTSkg
-XAo+ID4gKyAgICAgICAgICAgICB8fCBCUjJfUEFDS0FHRV9IQVNfTElCR0wpCj4gPiArCj4gPiAr
-Y29uZmlnIEJSMl9QQUNLQUdFX1ZJUkdMUkVOREVSRVJfVkVOVVMKPiA+ICsgICAgIGJvb2wgInZl
-bnVzIgo+ID4gKyAgICAgZGVmYXVsdCB5IGlmIEJSMl9QQUNLQUdFX01FU0EzRF9WVUxLQU5fRFJJ
-VkVSCj4KPiAgIEkgZG9uJ3QgdW5kZXJzdGFuZCB0aGlzIGRlZmF1bHQgeS4gSXMgaXQganVzdCB0
-aGF0IHRoZXJlJ3Mgbm8gb3RoZXIgd2F5IHRvCj4ga25vdyBpZiB0aGUgaGFyZHdhcmUgc3VwcG9y
-dHMgVnVsa2FuPwo+CgpBcyBhYm92ZSwgVmVudXMgcmVxdWlyZXMgVnVsa2FuIHN1cHBvcnQgb24g
-dGhlIGhvc3QuIEl0IG1ha2VzIHNlbnNlIHRvCmVuYWJsZSB2aXJnbHJlbmRlcmVyIHN1cHBvcnQg
-d2hlbiB3ZSBrbm93IHdlIGhhdmUgaXQsIGV2ZW4gdGhvdWdoIHRoaXMKaXNuJ3QgdGhlIG9ubHkg
-VnVsa2FuIHByb3ZpZGVyLiBJZiBzb21lYm9keSBpcyB1c2luZywgZm9yIGV4YW1wbGUsIHRoZQpw
-cm9wcmlldGFyeSBOdmlkaWEgdnVsa2FuIGRyaXZlciwgdGhleSBjYW4gZXhwbGljaXRseSBzZWxl
-Y3QgdGhpcwpjb25maWcgdG8gZW5hYmxlIFZlbnVzIHN1cHBvcnQuCgo+ID4gKyAgICAgZGVwZW5k
-cyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAgIyB2dWxrYW4tbG9hZGVyCj4gPiArICAgICBkZXBl
-bmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyB2dWxrYW4tbG9hZGVyCj4gPiArICAgICBkZXBlbmRz
-IG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyB2dWxrYW4tbG9hZGVyCj4gPiArICAgICBz
-ZWxlY3QgQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9IQVNfQkFDS0VORAo+ID4gKyAgICAgc2Vs
-ZWN0IEJSMl9QQUNLQUdFX1ZVTEtBTl9IRUFERVJTCj4gPiArICAgICBzZWxlY3QgQlIyX1BBQ0tB
-R0VfVlVMS0FOX0xPQURFUgo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBFbmFibGUgQVBJLWxl
-dmVsIFZ1bGthbiBhY2NlbGVyYXRpb24gb3ZlciB2aXJ0aW8tZ3B1Lgo+ID4gKwo+ID4gKyAgICAg
-ICBTYXkgJ3knIGlmIHlvdSB3YW50IHRvIHJ1biBhcHBsaWNhdGlvbnMgd2l0aCBWdWxrYW4KPiA+
-ICsgICAgICAgYWNjZWxlcmF0aW9uIGluIHZpcnR1YWxpemVkIGd1ZXN0cy4gUmVxdWlyZXMgaG9z
-dAo+ID4gKyAgICAgICBzdXBwb3J0IGZvciBWdWxrYW4uCj4gPiArCj4gPiArICAgICAgIGh0dHBz
-Oi8vZG9jcy5tZXNhM2Qub3JnL2RyaXZlcnMvdmVudXMuaHRtbAo+ID4gKwo+ID4gK2NvbmZpZyBC
-UjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVSX1ZBQVBJCj4gPiArICAgICBib29sICJ2YWFwaSBzdXBw
-b3J0Igo+Cj4gICBJIHdvdWxkIG1vdmUgdGhpcyBlaXRoZXIgdG8gdGhlIGJlZ2lubmluZyBvciB0
-aGUgZW5kIHRvIHNlcGFyYXRlIGl0IGZyb20gdGhlCj4gYmFja2VuZHMuIEUuZy4KPgo+IGNvbW1l
-bnQgIlZpcnRpbyBiYWNrZW5kcyIKPgo+IC4uLgo+Cj4gY29tbWVudCAiRFJNIGJhY2tlbmRzIgo+
-Cj4gLi4uCj4KPiBjb21tZW50ICJPdGhlciBvcHRpb25zIgo+Cj4gYm9vbCAidmFhcGkgc3VwcG9y
-dCIKPgo+CgorMQoKPiA+ICsgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCR0JNX0hBU19G
-RUFUVVJFX0RNQV9CVUYKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk0KPiA+ICsg
-ICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJWQQo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBF
-bmFibGUgaGFyZHdhcmUgYWNjZWxlcmF0ZWQgdmlkZW8gZW5jb2RlL2RlY29kZSB0aHJvdWdoCj4g
-PiArICAgICAgIGxpYnZhIG92ZXIgdmlydGlvLWdwdS4KPiA+ICsKPiA+ICtjb21tZW50ICJEUk0g
-YmFja2VuZHMiCj4KPiAgIE5vdCBzdXJlIHdoYXQgaXMgdGhlIGRpc3RpbmN0aW9uIGJldHdlZW4g
-dmlydGlvIGFuZCBEUk0gYmFja2VuZHMsIGJ1dCBJIGRvbid0Cj4gc3VwcG9zZSBJIHJlYWxseSBu
-ZWVkIHRvIGtub3cgOi0pCj4KPiA+ICsKPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfVklSR0xSRU5E
-RVJFUl9EUk1fQkFDS0VORF9BTURHUFUKPiA+ICsgICAgIGJvb2wgImFtZGdwdSIKPiA+ICsgICAg
-IGRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfUkFERU9OU0kK
-PiA+ICsgICAgIGRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9NRVNBM0RfVlVMS0FOX0RSSVZFUl9B
-TUQKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVSX0hBU19CQUNLRU5E
-Cj4gPiArICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRFJNCj4gPiArICAgICBzZWxlY3QgQlIy
-X1BBQ0tBR0VfTElCRFJNX0FNREdQVQo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBFbmFibGUg
-RFJNIGJhY2tlbmQgZm9yIGFtZGdwdSwgdXNlZCBieSBHYWxsaXVtIHJhZGVvbnNpCj4gPiArICAg
-ICAgIGFuZCBSQURWIHZ1bGthbiBkcml2ZXJzLgo+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FH
-RV9WSVJHTFJFTkRFUkVSX0RSTV9CQUNLRU5EX0lOVEVMCj4gPiArICAgICBib29sICJpbnRlbCIK
-PiA+ICsgICAgIGRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJf
-STkxNQo+ID4gKyAgICAgZGVmYXVsdCB5IGlmIEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RS
-SVZFUl9JUklTCj4gPiArICAgICBkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfTUVTQTNEX1ZVTEtB
-Tl9EUklWRVJfSU5URUwKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVS
-X0hBU19CQUNLRU5ECj4gPiArICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRFJNCj4gPiArICAg
-ICBoZWxwCj4gPiArICAgICAgIEVuYWJsZSBEUk0gYmFja2VuZCBmb3IgaTkxNSwgdXNlZCBieSBH
-YWxsaXVtIGk5MTUvSXJpcwo+ID4gKyAgICAgICBhbmQgSW50ZWwgdnVsa2FuIGRyaXZlcnMuCj4g
-PiArCj4gPiArY29uZmlnIEJSMl9QQUNLQUdFX1ZJUkdMUkVOREVSRVJfRFJNX0JBQ0tFTkRfTVNN
-Cj4gPiArICAgICBib29sICJtc20iCj4gPiArICAgICBkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0Vf
-TUVTQTNEX0dBTExJVU1fRFJJVkVSX0ZSRUVEUkVOTwo+ID4gKyAgICAgZGVwZW5kcyBvbiAhQlIy
-X2FybQo+ID4gKyAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1ZJUkdMUkVOREVSRVJfSEFTX0JBQ0tF
-TkQKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk0KPiA+ICsgICAgIGhlbHAKPiA+
-ICsgICAgICAgRW5hYmxlIERSTSBiYWNrZW5kIGZvciBtc20sIHVzZWQgYnkgR2FsbGl1bSBmcmVl
-ZHJlbm8KPiA+ICsgICAgICAgZHJpdmVyLgo+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9W
-SVJHTFJFTkRFUkVSX0RSTV9CQUNLRU5EX1BBTkZST1NUCj4gPiArICAgICBib29sICJwYW5mcm9z
-dCIKPiA+ICsgICAgIGRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklW
-RVJfUEFORlJPU1QKPiA+ICsgICAgIGRlZmF1bHQgeSBpZiBCUjJfUEFDS0FHRV9NRVNBM0RfVlVM
-S0FOX0RSSVZFUl9QQU5GUk9TVAo+ID4gKyAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1ZJUkdMUkVO
-REVSRVJfSEFTX0JBQ0tFTkQKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk0KPiA+
-ICsgICAgIGhlbHAKPiA+ICsgICAgICAgRW5hYmxlIERSTSBiYWNrZW5kIGZvciBQYW5mcm9zdCwg
-dXNlZCBieSB0aGUgcGFuZnJvc3QKPiA+ICsgICAgICAgR2FsbGl1bS92dWxrYW4gZHJpdmVycy4K
-PiA+ICsKPiA+ICtlbmRpZgo+ID4gKwo+ID4gK2NvbW1lbnQgInZpcmdscmVuZGVyZXIgbmVlZHMg
-YSB0b29sY2hhaW4gdy8gZ2NjID49IDQuOSIKPiA+ICsgICAgIGRlcGVuZHMgb24gIUJSMl9UT09M
-Q0hBSU5fR0NDX0FUX0xFQVNUXzRfOQo+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9WSVJH
-TFJFTkRFUkVSX0hBU19CQUNLRU5ECj4gPiArICAgICBib29sCj4gPiBkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS92aXJnbHJlbmRlcmVyL3ZpcmdscmVuZGVyZXIuaGFzaCBiL3BhY2thZ2UvdmlyZ2xyZW5k
-ZXJlci92aXJnbHJlbmRlcmVyLmhhc2gKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRl
-eCAwMDAwMDAwMDAwLi4wM2RhNTk1MDkxCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9wYWNr
-YWdlL3ZpcmdscmVuZGVyZXIvdmlyZ2xyZW5kZXJlci5oYXNoCj4gPiBAQCAtMCwwICsxLDUgQEAK
-PiA+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ID4gK3NoYTI1NiAgMDY1YmM1NmU4OWU2ZjYzMWY5
-NjEwMWNkNjJlYmEwNzQ4ZTQ4ZWI4ODhiNDM0ZWRjODZlODlkMDUzOTVlNzZmMyAgdmlyZ2xyZW5k
-ZXJlci0xLjMuMC50YXIuZ3oKPiA+ICsKPiA+ICsjIExpY2Vuc2UKPiA+ICtzaGEyNTYgIDNiMzJj
-YWYxNmUyNDAyYzJhZmYyYjcxNjg1ODcxM2YzZTFmZWRlZDg1YzI1ZTcxYmY4Mjk4MTZlZTUwMDk0
-MDIgIENPUFlJTkcKPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3ZpcmdscmVuZGVyZXIvdmlyZ2xy
-ZW5kZXJlci5tayBiL3BhY2thZ2UvdmlyZ2xyZW5kZXJlci92aXJnbHJlbmRlcmVyLm1rCj4gPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAwMC4uNGU3YmNiYjg0OQo+ID4g
-LS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvcGFja2FnZS92aXJnbHJlbmRlcmVyL3ZpcmdscmVuZGVy
-ZXIubWsKPiA+IEBAIC0wLDAgKzEsNjAgQEAKPiA+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+
-ID4gKyMKPiA+ICsjIHZpcmdscmVuZGVyZXIKPiA+ICsjCj4gPiArIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMKPiA+ICsKPiA+ICtWSVJHTFJFTkRFUkVSX1ZFUlNJT04gPSAxLjMuMAo+ID4gK1ZJUkdM
-UkVOREVSRVJfU0lURSA9IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy92aXJnbC92aXJn
-bHJlbmRlcmVyLy0vYXJjaGl2ZS8kKFZJUkdMUkVOREVSRVJfVkVSU0lPTikKPiA+ICtWSVJHTFJF
-TkRFUkVSX0xJQ0VOU0UgPSBNSVQKPiA+ICtWSVJHTFJFTkRFUkVSX0xJQ0VOU0VfRklMRVMgPSBD
-T1BZSU5HCj4gPiArVklSR0xSRU5ERVJFUl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiA+ICtWSVJH
-TFJFTkRFUkVSX0RFUEVOREVOQ0lFUyA9IFwKPiA+ICsgICAgIGxpYmVwb3h5IFwKPiA+ICsgICAg
-IGhvc3QtcGtnY29uZiBcCj4gPiArICAgICBob3N0LXB5dGhvbjMgXAo+ID4gKyAgICAgaG9zdC1w
-eXRob24tcHl5YW1sCj4gPiArVklSR0xSRU5ERVJFUl9DUEVfSURfVkFMSUQgPSBZRVMKPiA+ICsK
-PiA+ICtpZmVxICgkKEJSMl9QQUNLQUdFX1ZJUkdMUkVOREVSRVJfVklSR0wpLHkpCj4gPiAraWZl
-cSAoJChCUjJfUEFDS0FHRV9IQVNfTElCRUdMKSQoQlIyX1BBQ0tBR0VfSEFTX0xJQkdCTSkseXkp
-Cj4gPiArVklSR0xSRU5ERVJFUl9QTEFURk9STVMgKz0gZWdsCj4gPiArVklSR0xSRU5ERVJFUl9E
-RVBFTkRFTkNJRVMgKz0gbGliZWdsIFwKPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBs
-aWJnYm0KPgo+ICAgVGhlIGluZGVudGF0aW9uIGlzIGEgYml0IHdvbmt5IGhlcmUuIEVpdGhlciBw
-dXQgaXQgYWxsIG9uIGEgc2luZ2xlIGxpbmUsIG9yCj4gcHV0IHRoZSB2YWx1ZXMgb24gc2VwYXJh
-dGUgbGluZXMgaW5kZW50ZWQgd2l0aCBhIHNpbmdsZSB0YWIgKHNvIDMgbGluZXMgdG90YWwpLgo+
-CgpZZXMsIGl0IGlzLi4uIEknbGwgZml4IGl0LCB0aGFua3MgZm9yIHRoZSBmZWVkYmFjay4KCj4g
-ICBSZWdhcmRzLAo+ICAgQXJub3V0Cj4KPgo+ID4gK2VuZGlmCj4gPiArCj4gPiAraWZlcSAoJChC
-UjJfUEFDS0FHRV9IQVNfTElCR0wpLHkpCj4gPiArVklSR0xSRU5ERVJFUl9QTEFURk9STVMgKz0g
-Z2x4Cj4gPiArVklSR0xSRU5ERVJFUl9ERVBFTkRFTkNJRVMgKz0gbGliZ2wKPiA+ICtlbmRpZgo+
-ID4gK2VuZGlmICMgQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9WSVJHTAo+ID4gKwo+ID4gK1ZJ
-UkdMUkVOREVSRVJfQ09ORl9PUFRTICs9IC1EcGxhdGZvcm1zPSQoc3Vic3QgJChzcGFjZSksJChj
-b21tYSksJChWSVJHTFJFTkRFUkVSX1BMQVRGT1JNUykpCj4gPiArCj4gPiAraWZlcSAoJChCUjJf
-UEFDS0FHRV9WSVJHTFJFTkRFUkVSX1ZFTlVTKSx5KQo+ID4gK1ZJUkdMUkVOREVSRVJfQ09ORl9P
-UFRTICs9IC1EdmVudXM9dHJ1ZQo+ID4gK1ZJUkdMUkVOREVSRVJfREVQRU5ERU5DSUVTICs9IHZ1
-bGthbi1oZWFkZXJzIFwKPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICB2dWxrYW4tbG9h
-ZGVyCj4gPiArZWxzZQo+ID4gK1ZJUkdMUkVOREVSRVJfQ09ORl9PUFRTICs9IC1EdmVudXM9ZmFs
-c2UKPiA+ICtlbmRpZgo+ID4gKwo+ID4gK1ZJUkdMUkVOREVSRVJfRFJNX0JBQ0tFTkRTLSQoQlIy
-X1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9EUk1fQkFDS0VORF9BTURHUFUpICs9IGFtZGdwdS1leHBl
-cmltZW50YWwKPiA+ICtWSVJHTFJFTkRFUkVSX0RSTV9CQUNLRU5EUy0kKEJSMl9QQUNLQUdFX1ZJ
-UkdMUkVOREVSRVJfRFJNX0JBQ0tFTkRfSU5URUwpICs9IGk5MTUtZXhwZXJpbWVudGFsCj4gPiAr
-VklSR0xSRU5ERVJFUl9EUk1fQkFDS0VORFMtJChCUjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVSX0RS
-TV9CQUNLRU5EX01TTSkgKz0gbXNtCj4gPiArVklSR0xSRU5ERVJFUl9EUk1fQkFDS0VORFMtJChC
-UjJfUEFDS0FHRV9WSVJHTFJFTkRFUkVSX0RSTV9CQUNLRU5EX1BBTkZST1NUKSArPSBwYW5mcm9z
-dC1leHBlcmltZW50YWwKPiA+ICsKPiA+ICtWSVJHTFJFTkRFUkVSX0NPTkZfT1BUUyArPSAtRGRy
-bS1yZW5kZXJlcnM9JChzdWJzdCAkKHNwYWNlKSwkKGNvbW1hKSwkKFZJUkdMUkVOREVSRVJfRFJN
-X0JBQ0tFTkRTLXkpKQo+ID4gKwo+ID4gK2lmbmVxICgkKFZJUkdMUkVOREVSRVJfRFJNX0JBQ0tF
-TkRTLXkpLCkKPiA+ICtWSVJHTFJFTkRFUkVSX0RFUEVOREVOQ0lFUyArPSBsaWJkcm0KPiA+ICtl
-bmRpZgo+ID4gKwo+ID4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfVklSR0xSRU5ERVJFUl9WQUFQSSks
-eSkKPiA+ICtWSVJHTFJFTkRFUkVSX0NPTkZfT1BUUyArPSAtRHZpZGVvPXRydWUKPiA+ICtWSVJH
-TFJFTkRFUkVSX0RFUEVOREVOQ0lFUyArPSBsaWJ2YSBsaWJkcm0KPiA+ICtlbHNlCj4gPiArVklS
-R0xSRU5ERVJFUl9DT05GX09QVFMgKz0gLUR2aWRlbz1mYWxzZQo+ID4gK2VuZGlmCj4gPiArCj4g
-PiArJChldmFsICQobWVzb24tcGFja2FnZSkpCj4gPgo+CgpCZXN0LApKb3NlcGgKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Since the runc security bump to version 1.3.5 [1], the TestOci fail due
+to missing user namespace support in the kernel:
+
+    proc/self/setgroups: no such file or directory
+
+The test was working well with runc 1.3.0. The regression is caused by
+this commit [2] from the 1.3.3 security release.
+
+The regression is fixed by a refactoring from the 1.4.1 release [3].
+
+Backport this commit on top of runc 1.3.5 (fixing some conflicts).
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14696525946 (TestOci)
+
+[1] e013e2df84fb36985261d7b3c6e6af06afd40f93
+[2] https://github.com/opencontainers/runc/commit/7762edc82c36ba69a4ea88b86483fcdcac93f5a2
+[3] https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+v3: backport upstream patch on top of runc 1.3.5
+v2: - fix commit log about USER_NS.
+        - Use a kconfig fragment instead of enabling CONFIG_USER_NS from
+          runc package.
+
+ ...ror-checking-functions-with-their-er.patch | 400 ++++++++++++++++++
+ 1 file changed, 400 insertions(+)
+ create mode 100644 package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
+
+diff --git a/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch b/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
+new file mode 100644
+index 0000000000..4e103099f9
+--- /dev/null
++++ b/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
+@@ -0,0 +1,400 @@
++From 87932aa3d01294886b71f9566f3bf881cf769c66 Mon Sep 17 00:00:00 2001
++From: Curd Becker <me@curd-becker.de>
++Date: Mon, 17 Nov 2025 00:28:05 +0100
++Subject: [PATCH] Replace os.Is* error checking functions with their errors.Is
++ counterpart
++
++Signed-off-by: Curd Becker <me@curd-becker.de>
++(cherry picked from commit 536e183451b7988316fdc37eecd7afd8570dc19b)
++Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
++(cherry picked from commit 323a54ef0d91a20f7d5be4308e5e65a98886bf4b)
++
++Since the runc security bump to version 1.3.5 [1], the TestOci fail due
++to missing user namespace support in the kernel:
++
++    proc/self/setgroups: no such file or directory
++
++The test was working well with runc 1.3.0. The regression is caused by
++this commit [2] from the 1.3.3 security release.
++
++The regression is fixed by a refactoring from the 1.4.1 release [3].
++
++Backport this commit on top of runc 1.3.5 (fixing some conflicts).
++
++Upstream: https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
++
++[1] https://gitlab.com/buildroot.org/buildroot/-/commit/e013e2df84fb36985261d7b3c6e6af06afd40f93
++[2] https://github.com/opencontainers/runc/commit/7762edc82c36ba69a4ea88b86483fcdcac93f5a2
++[3] https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
++[Romain:
++  rebase on 1.3.5
++  add comments about runc 1.3.5 regression
++]
++Conflicts:
++  libcontainer/configs/validate/validator_test.go
++  libcontainer/container_linux.go
++  libcontainer/intelrdt/intelrdt.go
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libcontainer/configs/validate/validator.go      |  6 +++---
++ libcontainer/configs/validate/validator_test.go |  7 ++++---
++ libcontainer/criu_linux.go                      | 10 +++++-----
++ libcontainer/devices/device_unix.go             |  2 +-
++ libcontainer/factory_linux.go                   |  4 ++--
++ libcontainer/init_linux.go                      |  4 ++--
++ libcontainer/integration/exec_test.go           |  6 +++---
++ libcontainer/notify_linux.go                    |  2 +-
++ libcontainer/process_linux.go                   |  2 +-
++ libcontainer/rootfs_linux.go                    |  8 ++++----
++ libcontainer/specconv/spec_linux_test.go        |  5 +++--
++ libcontainer/state_linux.go                     |  3 ++-
++ spec.go                                         |  4 ++--
++ 13 files changed, 33 insertions(+), 30 deletions(-)
++
++diff --git a/libcontainer/configs/validate/validator.go b/libcontainer/configs/validate/validator.go
++index e0052900..3b77617b 100644
++--- a/libcontainer/configs/validate/validator.go
+++++ b/libcontainer/configs/validate/validator.go
++@@ -104,7 +104,7 @@ func security(config *configs.Config) error {
++ 
++ func namespaces(config *configs.Config) error {
++ 	if config.Namespaces.Contains(configs.NEWUSER) {
++-		if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
+++		if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
++ 			return errors.New("user namespaces aren't enabled in the kernel")
++ 		}
++ 		hasPath := config.Namespaces.PathOf(configs.NEWUSER) != ""
++@@ -122,13 +122,13 @@ func namespaces(config *configs.Config) error {
++ 	}
++ 
++ 	if config.Namespaces.Contains(configs.NEWCGROUP) {
++-		if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
+++		if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
++ 			return errors.New("cgroup namespaces aren't enabled in the kernel")
++ 		}
++ 	}
++ 
++ 	if config.Namespaces.Contains(configs.NEWTIME) {
++-		if _, err := os.Stat("/proc/self/timens_offsets"); os.IsNotExist(err) {
+++		if _, err := os.Stat("/proc/self/timens_offsets"); errors.Is(err, os.ErrNotExist) {
++ 			return errors.New("time namespaces aren't enabled in the kernel")
++ 		}
++ 		hasPath := config.Namespaces.PathOf(configs.NEWTIME) != ""
++diff --git a/libcontainer/configs/validate/validator_test.go b/libcontainer/configs/validate/validator_test.go
++index d157feea..41412ba4 100644
++--- a/libcontainer/configs/validate/validator_test.go
+++++ b/libcontainer/configs/validate/validator_test.go
++@@ -1,6 +1,7 @@
++ package validate
++ 
++ import (
+++	"errors"
++ 	"os"
++ 	"path/filepath"
++ 	"testing"
++@@ -171,7 +172,7 @@ func TestValidateSecurityWithoutNEWNS(t *testing.T) {
++ }
++ 
++ func TestValidateUserNamespace(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires userns.")
++ 	}
++ 	config := &configs.Config{
++@@ -205,7 +206,7 @@ func TestValidateUsernsMappingWithoutNamespace(t *testing.T) {
++ }
++ 
++ func TestValidateTimeNamespace(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/time"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/time"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires timens.")
++ 	}
++ 	config := &configs.Config{
++@@ -224,7 +225,7 @@ func TestValidateTimeNamespace(t *testing.T) {
++ }
++ 
++ func TestValidateTimeNamespaceWithBothPathAndTimeOffset(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/time"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/time"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires timens.")
++ 	}
++ 	config := &configs.Config{
++diff --git a/libcontainer/criu_linux.go b/libcontainer/criu_linux.go
++index 53a0202a..ddf95445 100644
++--- a/libcontainer/criu_linux.go
+++++ b/libcontainer/criu_linux.go
++@@ -123,7 +123,7 @@ func (c *Container) addMaskPaths(req *criurpc.CriuReq) error {
++ 	for _, path := range c.config.MaskPaths {
++ 		fi, err := os.Stat(fmt.Sprintf("/proc/%d/root/%s", c.initProcess.pid(), path))
++ 		if err != nil {
++-			if os.IsNotExist(err) {
+++			if errors.Is(err, os.ErrNotExist) {
++ 				continue
++ 			}
++ 			return err
++@@ -304,7 +304,7 @@ func (c *Container) Checkpoint(criuOpts *CriuOpts) error {
++ 
++ 	// Since a container can be C/R'ed multiple times,
++ 	// the checkpoint directory may already exist.
++-	if err := os.Mkdir(criuOpts.ImagesDirectory, 0o700); err != nil && !os.IsExist(err) {
+++	if err := os.Mkdir(criuOpts.ImagesDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
++ 		return err
++ 	}
++ 
++@@ -339,7 +339,7 @@ func (c *Container) Checkpoint(criuOpts *CriuOpts) error {
++ 
++ 	// if criuOpts.WorkDirectory is not set, criu default is used.
++ 	if criuOpts.WorkDirectory != "" {
++-		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !os.IsExist(err) {
+++		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
++ 			return err
++ 		}
++ 		workDir, err := os.Open(criuOpts.WorkDirectory)
++@@ -698,7 +698,7 @@ func (c *Container) Restore(process *Process, criuOpts *CriuOpts) error {
++ 	if criuOpts.WorkDirectory != "" {
++ 		// Since a container can be C/R'ed multiple times,
++ 		// the work directory may already exist.
++-		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !os.IsExist(err) {
+++		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
++ 			return err
++ 		}
++ 		workDir, err := os.Open(criuOpts.WorkDirectory)
++@@ -1149,7 +1149,7 @@ func (c *Container) criuNotifications(resp *criurpc.CriuResp, process *Process,
++ 			return err
++ 		}
++ 		if err := os.Remove(filepath.Join(c.stateDir, "checkpoint")); err != nil {
++-			if !os.IsNotExist(err) {
+++			if !errors.Is(err, os.ErrNotExist) {
++ 				logrus.Error(err)
++ 			}
++ 		}
++diff --git a/libcontainer/devices/device_unix.go b/libcontainer/devices/device_unix.go
++index c533eb1c..409e58e9 100644
++--- a/libcontainer/devices/device_unix.go
+++++ b/libcontainer/devices/device_unix.go
++@@ -98,7 +98,7 @@ func GetDevices(path string) ([]*Device, error) {
++ 			if errors.Is(err, ErrNotADevice) {
++ 				continue
++ 			}
++-			if os.IsNotExist(err) {
+++			if errors.Is(err, os.ErrNotExist) {
++ 				continue
++ 			}
++ 			return nil, err
++diff --git a/libcontainer/factory_linux.go b/libcontainer/factory_linux.go
++index 94b55eaa..d8a2d8e3 100644
++--- a/libcontainer/factory_linux.go
+++++ b/libcontainer/factory_linux.go
++@@ -51,7 +51,7 @@ func Create(root, id string, config *configs.Config) (*Container, error) {
++ 	}
++ 	if _, err := os.Stat(stateDir); err == nil {
++ 		return nil, ErrExist
++-	} else if !os.IsNotExist(err) {
+++	} else if !errors.Is(err, os.ErrNotExist) {
++ 		return nil, err
++ 	}
++ 
++@@ -154,7 +154,7 @@ func loadState(root string) (*State, error) {
++ 	}
++ 	f, err := os.Open(stateFilePath)
++ 	if err != nil {
++-		if os.IsNotExist(err) {
+++		if errors.Is(err, os.ErrNotExist) {
++ 			return nil, ErrNotExist
++ 		}
++ 		return nil, err
++diff --git a/libcontainer/init_linux.go b/libcontainer/init_linux.go
++index 40529200..25c135f3 100644
++--- a/libcontainer/init_linux.go
+++++ b/libcontainer/init_linux.go
++@@ -311,7 +311,7 @@ func finalizeNamespace(config *initConfig) error {
++ 		switch {
++ 		case err == nil:
++ 			doChdir = false
++-		case os.IsPermission(err):
+++		case errors.Is(err, os.ErrPermission):
++ 			// If we hit an EPERM, we should attempt again after setting up user.
++ 			// This will allow us to successfully chdir if the container user has access
++ 			// to the directory, but the user running runc does not.
++@@ -477,7 +477,7 @@ func setupUser(config *initConfig) error {
++ 		setgroups, err = io.ReadAll(setgroupsFile)
++ 		_ = setgroupsFile.Close()
++ 	}
++-	if err != nil && !os.IsNotExist(err) {
+++	if err != nil && !errors.Is(err, os.ErrNotExist) {
++ 		return err
++ 	}
++ 
++diff --git a/libcontainer/integration/exec_test.go b/libcontainer/integration/exec_test.go
++index df99da26..14006922 100644
++--- a/libcontainer/integration/exec_test.go
+++++ b/libcontainer/integration/exec_test.go
++@@ -1097,7 +1097,7 @@ func TestHook(t *testing.T) {
++ 
++ 	for _, hook := range []string{"prestart", "createRuntime", "poststart"} {
++ 		fi, err := os.Stat(filepath.Join(config.Rootfs, hook))
++-		if err == nil || !os.IsNotExist(err) {
+++		if err == nil || !errors.Is(err, os.ErrNotExist) {
++ 			t.Fatalf("expected file '%s to not exists, but it does", fi.Name())
++ 		}
++ 	}
++@@ -1645,7 +1645,7 @@ func TestTmpfsCopyUp(t *testing.T) {
++ }
++ 
++ func TestCGROUPPrivate(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires cgroupns.")
++ 	}
++ 	if testing.Short() {
++@@ -1665,7 +1665,7 @@ func TestCGROUPPrivate(t *testing.T) {
++ }
++ 
++ func TestCGROUPHost(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires cgroupns.")
++ 	}
++ 	if testing.Short() {
++diff --git a/libcontainer/notify_linux.go b/libcontainer/notify_linux.go
++index a8762842..77e23157 100644
++--- a/libcontainer/notify_linux.go
+++++ b/libcontainer/notify_linux.go
++@@ -51,7 +51,7 @@ func registerMemoryEvent(cgDir string, evName string, arg string) (<-chan struct
++ 			}
++ 			// When a cgroup is destroyed, an event is sent to eventfd.
++ 			// So if the control path is gone, return instead of notifying.
++-			if _, err := os.Lstat(eventControlPath); os.IsNotExist(err) {
+++			if _, err := os.Lstat(eventControlPath); errors.Is(err, os.ErrNotExist) {
++ 				return
++ 			}
++ 			ch <- struct{}{}
++diff --git a/libcontainer/process_linux.go b/libcontainer/process_linux.go
++index baf3706c..6f10a6c2 100644
++--- a/libcontainer/process_linux.go
+++++ b/libcontainer/process_linux.go
++@@ -940,7 +940,7 @@ func getPipeFds(pid int) ([]string, error) {
++ 			// Ignore permission errors, for rootless containers and other
++ 			// non-dumpable processes. if we can't get the fd for a particular
++ 			// file, there's not much we can do.
++-			if os.IsPermission(err) {
+++			if errors.Is(err, os.ErrPermission) {
++ 				continue
++ 			}
++ 			return fds, err
++diff --git a/libcontainer/rootfs_linux.go b/libcontainer/rootfs_linux.go
++index 31d05174..abc372f3 100644
++--- a/libcontainer/rootfs_linux.go
+++++ b/libcontainer/rootfs_linux.go
++@@ -361,7 +361,7 @@ func mountCgroupV1(m mountEntry, c *mountConfig) error {
++ 			// symlink(2) is very dumb, it will just shove the path into
++ 			// the link and doesn't do any checks or relative path
++ 			// conversion. Also, don't error out if the cgroup already exists.
++-			if err := os.Symlink(mc, filepath.Join(c.root, m.Destination, ss)); err != nil && !os.IsExist(err) {
+++			if err := os.Symlink(mc, filepath.Join(c.root, m.Destination, ss)); err != nil && !errors.Is(err, os.ErrExist) {
++ 				return err
++ 			}
++ 		}
++@@ -613,7 +613,7 @@ func mountToRootfs(c *mountConfig, m mountEntry) error {
++ 			return err
++ 		}
++ 		if fi, err := os.Lstat(dest); err != nil {
++-			if !os.IsNotExist(err) {
+++			if !errors.Is(err, os.ErrNotExist) {
++ 				return err
++ 			}
++ 		} else if !fi.IsDir() {
++@@ -910,7 +910,7 @@ func setupDevSymlinks(rootfs string) error {
++ 			src = link[0]
++ 			dst = filepath.Join(rootfs, link[1])
++ 		)
++-		if err := os.Symlink(src, dst); err != nil && !os.IsExist(err) {
+++		if err := os.Symlink(src, dst); err != nil && !errors.Is(err, os.ErrExist) {
++ 			return err
++ 		}
++ 	}
++@@ -1132,7 +1132,7 @@ func setReadonly() error {
++ 
++ func setupPtmx(config *configs.Config) error {
++ 	ptmx := filepath.Join(config.Rootfs, "dev/ptmx")
++-	if err := os.Remove(ptmx); err != nil && !os.IsNotExist(err) {
+++	if err := os.Remove(ptmx); err != nil && !errors.Is(err, os.ErrNotExist) {
++ 		return err
++ 	}
++ 	if err := os.Symlink("pts/ptmx", ptmx); err != nil {
++diff --git a/libcontainer/specconv/spec_linux_test.go b/libcontainer/specconv/spec_linux_test.go
++index 66359f79..88156516 100644
++--- a/libcontainer/specconv/spec_linux_test.go
+++++ b/libcontainer/specconv/spec_linux_test.go
++@@ -1,6 +1,7 @@
++ package specconv
++ 
++ import (
+++	"errors"
++ 	"os"
++ 	"strings"
++ 	"testing"
++@@ -609,7 +610,7 @@ func TestDupNamespaces(t *testing.T) {
++ }
++ 
++ func TestUserNamespaceMappingAndPath(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires userns.")
++ 	}
++ 
++@@ -643,7 +644,7 @@ func TestUserNamespaceMappingAndPath(t *testing.T) {
++ }
++ 
++ func TestNonZeroEUIDCompatibleSpecconvValidate(t *testing.T) {
++-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
+++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
++ 		t.Skip("Test requires userns.")
++ 	}
++ 
++diff --git a/libcontainer/state_linux.go b/libcontainer/state_linux.go
++index 2b7b8b5b..1f758e2a 100644
++--- a/libcontainer/state_linux.go
+++++ b/libcontainer/state_linux.go
++@@ -1,6 +1,7 @@
++ package libcontainer
++ 
++ import (
+++	"errors"
++ 	"fmt"
++ 	"os"
++ 	"path/filepath"
++@@ -213,7 +214,7 @@ func (r *restoredState) transition(s containerState) error {
++ 
++ func (r *restoredState) destroy() error {
++ 	if _, err := os.Stat(filepath.Join(r.c.stateDir, "checkpoint")); err != nil {
++-		if !os.IsNotExist(err) {
+++		if !errors.Is(err, os.ErrNotExist) {
++ 			return err
++ 		}
++ 	}
++diff --git a/spec.go b/spec.go
++index d03d644e..15e933eb 100644
++--- a/spec.go
+++++ b/spec.go
++@@ -91,7 +91,7 @@ created by an unprivileged user.
++ 			if err == nil {
++ 				return fmt.Errorf("File %s exists. Remove it first", name)
++ 			}
++-			if !os.IsNotExist(err) {
+++			if !errors.Is(err, os.ErrNotExist) {
++ 				return err
++ 			}
++ 			return nil
++@@ -117,7 +117,7 @@ created by an unprivileged user.
++ func loadSpec(cPath string) (spec *specs.Spec, err error) {
++ 	cf, err := os.Open(cPath)
++ 	if err != nil {
++-		if os.IsNotExist(err) {
+++		if errors.Is(err, os.ErrNotExist) {
++ 			return nil, fmt.Errorf("JSON specification file %s not found", cPath)
++ 		}
++ 		return nil, err
++-- 
++2.54.0
++
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
