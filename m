@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE716CD8C8C
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 13:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32CD8CD8C88
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jun 2026 13:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B0A7429B4;
-	Sun,  7 Jun 2026 13:02:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7BF460DAA;
+	Sun,  7 Jun 2026 13:02:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F95q-k8c3kx6; Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aQOlpO-RlGeB; Sun,  7 Jun 2026 13:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2814242950
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 209C460C0E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780837348;
-	bh=/EzQ28zq+6kUps9vURDhWN6G2ZQtqGydsFWXA53kzi0=;
+	s=default; t=1780837350;
+	bh=pqdQ1RNcqCoKADCvxBT7yobR4q5cfFtxlqsIHRnDGDo=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=HGaoeuCpw8KaO1n0qAAzzl5ZdcjBLQCrIFQv5LDHYUtg+UCCamek2T0fhsTmGAyeS
-	 WX2FR8LaWZRdXs1Zgtng+S2OIdDjNghdULtV96sQN8P9W7kFCGmHDrGDfxOJQ3efD/
-	 0UeSuj0RP/UIga9AMgfEHUo/fX3r4jln62/3DNbNOLW8TfYBEa8vXUlKQnWwqYDRaW
-	 nEauOnNEv1wfRu5DSKvpuUMdD2HAfT/4VJvrAnO2vi3PH6qJx3JReORYsTX9WvJUfc
-	 2w/1mcpbtXEoHqtUM1D2Y9oKuW+5QSH9t/2Mq2AkPUK3GiJzarnUrFPLcANfG7UHPv
-	 YdMSHEpGLsOfA==
+	b=L1Cba4wwhUWzezzSOexpzKrvF/1ZVtsggBTRjs0Q7a0fC2fmzWarGuWmRl7VH2WN/
+	 qdUKw4ynk6g4NqH8/ObkbamugbodrSmFlD+GmNW0wYCYOz0J8gPGgdooWvqWawVbjb
+	 oYBQLvRmkipufHZ6r6fAU7JVCArmPV1hWtZYUmj/1wWM9TKb6KSA4ahzGb8gm3spJx
+	 iuQ/Ux8rApjyGqACijJftpLTDEmnVTvVBH08m1ls+q2ZVPaJVr148B/2gJrG4gzhDP
+	 b84nbaGf9W8jSNl0bek6perMUZyCFVRXNicNf1EKh4tCOXkjChbw6rY8ti1knq+fad
+	 2MmeHgz1yq7yw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2814242950;
-	Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7793B345
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 209C460C0E;
+	Sun,  7 Jun 2026 13:02:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C04F32C1
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D68841E96
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE33A60C0E
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0kq3QuPNC5U6 for <buildroot@buildroot.org>;
- Sun,  7 Jun 2026 13:02:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4WRjvGutSpWY for <buildroot@buildroot.org>;
+ Sun,  7 Jun 2026 13:02:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=jeanmichel.hautbois@yoseli.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3513040343
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3513040343
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3513040343
- for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 416B43EB90;
- Sun,  7 Jun 2026 13:02:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA97A60B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA97A60B0A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA97A60B0A
+ for <buildroot@buildroot.org>; Sun,  7 Jun 2026 13:02:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2975F3ECC0;
+ Sun,  7 Jun 2026 13:02:22 +0000 (UTC)
 From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
 To: buildroot@buildroot.org
-Date: Sun,  7 Jun 2026 15:02:11 +0200
-Message-Id: <20260607130219.1350128-1-jeanmichel.hautbois@yoseli.org>
+Date: Sun,  7 Jun 2026 15:02:12 +0200
+Message-Id: <20260607130219.1350128-2-jeanmichel.hautbois@yoseli.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
 References: <20260424132326.825570-1-jeanmichel.hautbois@yoseli.org>
 MIME-Version: 1.0
 X-GND-Sasl: jeanmichel.hautbois@yoseli.org
-X-GND-Score: -100
-X-GND-Cause: dmFkZTF6ZuMkpEt+Alv83M7SSgieYFOUd0bcSr+5BSYrpGi2zjRvGX7AG3gWEt4kA9GLoIQohjRMdIZrK5kIRe2Fq9BFWs2+vt/Hsl3qhiwoGlmrH1WhyKdBTu/tCo2Xk5HFlbhoKCJlY5TqQd10v6lk5/7a+aAyxh0+AWG8yhXSQXxA7kwg5f1fsBdy54QEUzX5Wwow43SbqFbDlXehp91TjqJe6uvaPq+reh0eE+GP4YYBAMByZVVxKNtQne8A3H3XfRwt/Om5SGG2rvEdPMg6aG7pxPnNMS/JJvGm2HxfVtJMk34w9z4/rjGplfP5z+KhZQm4rG4TZ/IoFWF4mVtgOnHdfOIBEgvPej9/8wLB4j+bntI+4gtxr1gTiJsrpTK82HEGIO8Y/N2Mb9ZLXWmIPIe/sqc9lJ6ImjhTnTosagbj+DyKEcy+g0Fs7QhwHtWtxsWJosQD7ligQJamL/Cz00t6/mFCP/X6xTxOzZSjr88QFq0OSrKh2G9fzsDvqXEjwsqDyOJ0a2fxvMQN5oTH9xHR7Ki1Hx34af/0uyRmNcJ2eT4klZV2Ni7RXRlE3LUoeaLtArfEg4M0u4NBp+zbqc+YCzzyFnc15WGWzP4a/dJpQaaPjdJTLc9q7zCck0GwFg6Vk6SKt+k+K51SmqrhwguuYz/UyTd+Bms9Qw/yk+ORrw
 X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: dmFkZTF6ZuMkpEt+Alv83M7SSgieYFOUd0bcSr+5BSYrpGi2zjRvGX7AG3gWEt4kA9GLoIQohjRMdIZrK5kIRe2Fq9BFWs2+vt/Hsl3qhiwoGlmrH1WhyKdBTu/tCo2Xk5HFlbhoKCJlY5TqQd10v6lk5/7a+aAyxh0+AWG8yhXSQXxA7kwg5f1fsBdy54QEUzX5Wwow43SbqFbDlXehp91TjqJe6uvaPq+reh0eE+GP4YYBAMByZVVxKNtQne8A3H3XfRwt/Om5SGG2rvEdPMg6aG7pxPnNMS/JJvGm2HxfVtJMk34w9z4/rjGplfP5z+KhZQm4rG4TZ/IoFWF4mVtgOnHdRkMgm3i6cdO3o28ujl5HqHeH+WC5a7AW5A0NMHP/FeQM/doCI47fXCsyU1XTu+SDrVhcMmGFAH1znZdAZ7GIxh9M4E6jJoemxUjt+nzGsOF7tCGjI7PrbpviS8DnoxGqM64uRDxaxyiDRcO7+0L9Yz34blcGBIvehQnJKxQC6CmBs/x39fieMPTpTk31+4MgVUw+XJqHS3Bhg3UB4ZZLOyjFvxus5gpAm7zd7TmoZchozVAV6CcPZ4p0/ASg6KYY0GNNPCwFtt9ffmjw1UqW61Uxs6RD0PRHozwpTEBc2pCJaJZO5nFKtmvPL9zg77XZwOn7Felk6rx1RhlpTjpTbw
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1780837341;
+ d=yoseli.org; s=gm1; t=1780837343;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Us8t1FauUvqIbk+278vxWfPaaWKhxrf/HPXRTgCjbXc=;
- b=Iuek3nHfIWCOUiyUmltsNH5V3zfBbRnv4Tm3exiw6TMQSOGuCepkfVJtrUcG6BGD0LlYbI
- 0Rhf+L681fTYs1m4OIevOh0xPMinnprVw/K6vgDY6UYGzwEYao1HKb8FipSBTszxpqZrv+
- uTK0BWBeOlGeFSxQe4WtAOGuPn7HM4jJkZ/UQBLMl255uf3E6j1JXfwbcyZmq+y1P9PsTM
- b6oyP+3au/ULfLJr/oNa6n7ty3wI3k5Fb99CLz83uqicDfUSt87UiJikd5o8vgPSpyLfKF
- JwYDBQBIeXt58yr+/XXBcSrmbOFa8FfY0ioI6tQWNOuiGy4ASBa+x1WolaL20w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=DjAxOvBLQ8CEE1VppsEeEWz2LC4ZysU7B9sWIqP9ihk=;
+ b=lWhwwhY3dOXPpYQ+vlij4O38A+yI2/tN6TGBU8MO0OQx43jtAxGMaOIP+8Xo5DkaH5LEm9
+ MQzmdQzDVlEl1xyrPcVrkofdASxas23+DelfQsYhqUJ2LUoC8C3aYxeaRpcIvumClUZpHh
+ uXFY3RRwYLwezY7Y1oVCUmf1Mcyark43hFPgKKooJHSCf5TKgKwyla7WoECq2K5O7ak8sJ
+ zOMEhdRGqikDtp5lAspB00cgCE9iKYKKkNdxWZavfyjXWKLsgtBYvOKngBI8EPPqWOai1S
+ 6AihTg37IupE0HCjY5RzUxsoLnE7Rj6GIRQOY6yhjH94xFeavAu5S5qds2iVpg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=yoseli.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=Iuek3nHf
-Subject: [Buildroot] [PATCH v2 0/8] Add ColdFire MCF5441x (m68k) support
+ header.s=gm1 header.b=lWhwwhY3
+Subject: [Buildroot] [PATCH v2 1/8] arch/Config.in.m68k: add ColdFire
+ MCF5441x support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,51 +107,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series adds support for the NXP ColdFire MCF5441x family (m68k/cf:
-MMU, V4e core, no hardware FPU, no atomic builtins) on top of uClibc-ng.
+Add the MCF5441x (54418) ColdFire V4e variant to the m68k architecture
+menu. The 5441x selects BR2_m68k_cf, BR2_USE_MMU (V4e has an MMU, unlike
+the 5208) and BR2_SOFT_FLOAT (no hardware FPU). The GCC target CPU is
+set to 54418.
 
-v2 is smaller and better justified after the v1 review (thanks Thomas
-and Baruch). The per-patch changelogs are under each patch.
+qemu-system-m68k does not emulate the 5441x family, so no qemu
+defconfig is added; the existing qemu_m68k_mcf5208_defconfig and
+qemu_m68k_q800_defconfig are not affected.
 
-Main changes since v1:
- - Dropped libopenssl, ntp and the nginx block: no real defect, the
-   existing logic already handles ColdFire.
- - Makefile.in: keep only -mlong-jump-table-offsets; the scheduler
-   flags were dropped (they triggered the dropbear ICE).
- - New pkg-meson.mk patch: restrict the b_staticpic workaround to the
-   5208 (GCC PR 101971), instead of the whole ColdFire family.
- - gcc/gmp/gdb: commit messages reworded to the real root cause.
- - libglib2 reduced to the ColdFire build fixes (-mxgot and static
-   libstdc++/libgcc).
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+---
+Changes since v1:
+ - No change since v1.
 
-Two independent patches were split out of v1 and sent separately
-(mawk awk symlink, libglib2 host sysprof).
+ arch/Config.in.m68k | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Build-tested from scratch for cf5441x (V4e, uClibc-ng, gcc 14.3.0) and
-run on MCF54418 hardware. All changes are guarded by BR2_m68k_cf, so no
-impact on other m68k variants or architectures.
-
-Jean-Michel Hautbois (8):
-  arch/Config.in.m68k: add ColdFire MCF5441x support
-  package/pkg-meson.mk: restrict ColdFire b_staticpic workaround to 5208
-  package/gcc: force --with-arch=cf on m68k MCF5441x
-  package/Makefile.in: use 32-bit jump table offsets on m68k ColdFire
-  package/gmp: disable C++ bindings on m68k ColdFire
-  package/gdb: link libstdc++ and libgcc statically on m68k ColdFire
-  package/dropbear: disable ML-KEM768 on m68k
-  package/libglib2: add m68k ColdFire support
-
- arch/Config.in.m68k          |  7 +++++++
- package/Makefile.in          |  2 ++
- package/dropbear/dropbear.mk |  7 +++++++
- package/gcc/gcc.mk           |  4 ++++
- package/gdb/gdb.mk           |  7 +++++++
- package/gmp/gmp.mk           |  7 ++++++-
- package/libglib2/libglib2.mk | 15 +++++++++++++++
- package/pkg-meson.mk         |  2 +-
- toolchain/Config.in          | 10 ++++++++++
- 9 files changed, 59 insertions(+), 2 deletions(-)
-
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 235cafacf5..b281f43a30 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -38,12 +38,19 @@ config BR2_m68k_cf5208
+ 	select BR2_m68k_cf
+ 	select BR2_SOFT_FLOAT
+ 
++config BR2_m68k_cf5441x
++	bool "5441x"
++	select BR2_m68k_cf
++	select BR2_USE_MMU
++	select BR2_SOFT_FLOAT
++
+ endchoice
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "68030"		if BR2_m68k_68030
+ 	default "68040"		if BR2_m68k_68040
+ 	default "5208"		if BR2_m68k_cf5208
++	default "54418"		if BR2_m68k_cf5441x
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "MC68000"
 -- 
 2.39.5
 
