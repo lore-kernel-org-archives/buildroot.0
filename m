@@ -1,122 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2931CD8C90
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 02:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB1CCD8C92
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 447C940511;
-	Mon,  8 Jun 2026 02:06:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86A0D60770;
+	Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5N4ruutzek_g; Mon,  8 Jun 2026 02:06:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC206089D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780884379;
+	bh=qjaOtbhcFYJpX31Pi/Dhenq3nUp8EqmAZaKS3tRtSuk=;
+	h=From:Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=AR/FL2NM2xjW+HTj3eE1d0oECEZT+RYSWqdZ34ocnPW9pswau8wfOPglcm875ags6
+	 GqO4SSbc4oxMejj6aijYanrhshdV9QKl5JMaDJ0ammljU/TE7rxKTo9n/irldCYHPK
+	 qStFhiJ+r5UwEhWajDA+QT/c4h6BLIGYgyQwlsFhc60mNiTgfBcyKEuJZdd/B5iYv6
+	 WHNvDcIHpuThY8F1ynGjClkct8hpsVYbJ3M/gcm+TwmtRfdLSEJAykuFEQ41Z6CszF
+	 pcpkfV7A74D718gGhmodTYtPM0URKzl7O9EK3C6kzfvtmH7fxNXG4ZQjAHVMceb6ti
+	 00FmGmvTpofsw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FC206089D;
+	Mon,  8 Jun 2026 02:06:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E905EC
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F5D840511
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ow9mf-kWAd3m; Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 611984056E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780884380;
-	bh=plCpPgOOo/xhM1eVkdFvARThqgVaZv3B4OpdOOOsi+A=;
-	h=From:Date:References:In-Reply-To:To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=B/qIJS6jqpS5QEAHRbmLdSbW1IGuH/6m8uAtH7ISMDploIx7JUb+dlgIh+Y2LO9cM
-	 0iUmlCU2/phZVe728Bkr/oM1yNnA0Kg/GhSLwcK9oQEyYJD8636mnzCurm34qnkZhc
-	 EoHDfDjgYx2nh8oiMS6l5yGESfGg3WL1+xLjdgf9QyCQCA7iEmRqCdI1C3KY1CEMJY
-	 mMOaFXlJ7FQe4450NHrTMkRlFRc1J+8Tk8RksdSU3lhpMmE/uUUrebVfXpZbCnJwIw
-	 pPM2ezZMEbRzwJx1nY4TNp/t1Q3KKugqalTQazDhKcfmg5zbQrLarErGmyFYBzwjVL
-	 XaA25F/bknxBA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 611984056E;
-	Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BFF23EC
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A592D8084C
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4pNgG0rm7-rY for <buildroot@buildroot.org>;
- Mon,  8 Jun 2026 02:06:18 +0000 (UTC)
+ id aziGI5oEEu7J for <buildroot@buildroot.org>;
+ Mon,  8 Jun 2026 02:06:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102a; helo=mail-pj1-x102a.google.com;
+ client-ip=2607:f8b0:4864:20::1029; helo=mail-pj1-x1029.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 08EAC80849
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08EAC80849
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 08EAC80849
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:17 +0000 (UTC)
-Received: by mail-pj1-x102a.google.com with SMTP id
- 98e67ed59e1d1-36da151a152so2581200a91.1
- for <buildroot@buildroot.org>; Sun, 07 Jun 2026 19:06:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F0882403F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0882403F0
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
+ [IPv6:2607:f8b0:4864:20::1029])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F0882403F0
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:16 +0000 (UTC)
+Received: by mail-pj1-x1029.google.com with SMTP id
+ 98e67ed59e1d1-36ba285e98bso3662531a91.2
+ for <buildroot@buildroot.org>; Sun, 07 Jun 2026 19:06:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780884377; x=1781489177;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=ZUPokL0CypCJ5L5zQ0yuf+SRPURzQRRo4HY+6Rk0PCQ=;
- b=MNIWy+SjZnjgqsryl9TxoaEVM8HqCTrOPo4uIZImoDjkYCkax1uG1YAIfSkwInIWGX
- yOlGT1/Tc+SbS1DSz/bfdtMP5DZLFxCvJMiw2VlXT0ciNqOx/lmTufgrmyoppUocwP/P
- hCvBYCT662zwy9FaVA/t4RmpfJ4m1angXEPJRRvQG8Eq8PiWwgMG6yAqPI1mjHSTI2A6
- ecCTYWRw9dvBD7+0LzVQUQau4dK/VXJlSGgYOTixoWnCf71iCs4+EWYPGNFfAfKXJPFw
- LoEwpwwMX6FX6tXNdzNh85CXKFWrY0tkt780kr80cRttxklGI8hsFfUIpBytdpzxcjLY
- aIQA==
-X-Gm-Message-State: AOJu0Yy9DUp+XdTyPBwCkP8isMjugBA0N66TXkxSA4WkMT1SakWZ3Cjv
- qCaZQR7JMv6ydhjD6fZOX3WQYNzNbrgkKhTpWkrroCnxgwjcbRWs8SNz
-X-Gm-Gg: Acq92OE4113GgGrzMPHMSAdyMEXmkOv+mOEFNssR/IyRxakCdOlRNLCZoC+LGVH+/qF
- xwAANLbLD3681/BfWT1/+I4HRHvoawtbRss1VMxApr3MfW4uSDUuEM60ZAtBWcgTV5ayCkjHX6N
- xu3nny5AkTgP+DmT4q2SKnUZVHEEqI/lu/Cpt/xdDYpoFP6vgw7g20opoRxegR633fRvTFNcb2M
- vLiRx1baFLzGdfBO00e5qT6HX2DaFOs/WVSfqv5B1Mk2atPokcy7Je0Sg0OwGmnNWe+azGb8Wui
- t+CfOQrKn9KqQP8xyMJnRz2/GxSW7y6AHz0SdXorWNgQE/4oZqcJPfohRBzgemXU10bf/XeC1pd
- Q2QItUu/IjnsscH7M33nQBv71Hp03TpHryRjJexfrVxIgyL3bXKpLH1INbJ/mfAS5rz9Kha/K0c
- 3nz9SajTqWgN/lwoS2UDs4hkjxLKFQ54Satzi6GvY=
-X-Received: by 2002:a17:90b:4fd0:b0:36d:66d4:270e with SMTP id
- 98e67ed59e1d1-370ee5450e3mr15423438a91.5.1780884377353; 
- Sun, 07 Jun 2026 19:06:17 -0700 (PDT)
+ d=1e100.net; s=20251104; t=1780884376; x=1781489176;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=E0mTWeGk+a5AfEsPPgZRy2RpI6Yb33nz36/Q3X85T/k=;
+ b=kQY8mAB6mzcKiunHAG1/mSLhPj5I48g70wmgSX+/UcNu4/JcoaZMRQH9Ok8DO4Az61
+ xHpxKwywT6l1EMxisCJeqtHlh9uNCAxkqIeVtcD/NJYt7SQn8EKZc3K2ErFaASlBs8oL
+ cp5ZYfBQ9lnMENHQrXNM0u6ra88Z9ns9iU2RQr6AAQgo4H0wE+4Y3uwsZBfgRC8z0180
+ ou2pi1ilVMlfe62IbNNOxm1Rlk9Y4pU9cIsqBzAa/UumGXnUnTSCQjtw057BvL8PYsoX
+ uh+6kcHZlo8eHbf/pfB5S6GVq2id/Cw/bofNB9HOZy+NYf7c1jB9MqLNFU01n+qZZgP4
+ qSfw==
+X-Gm-Message-State: AOJu0YzL/ZiO53EkIKomQl43uou27U7REGw2xfig7He2LmDMxlRiiPu9
+ 9ZIQp+4/tceB0nJTjo5qKjapUGBupjDX9UVMxUnVUfiR2eKuXps/2IRL
+X-Gm-Gg: Acq92OG7OCOQS1MVfyQ8uDetMxq04T58rf3c/9HhQxsUk41WL2ij+bI0gzjV6318c6B
+ jXYpLl6BWQXSr/VbG6vpsUztxSakstorGhzGZqUJjOoqM5zGw3WAPSVZph3kmme0hCqs+G0f5KB
+ dFgtaU6pIh5Pk1KegfaqmakZaMFsM8Ck0KDuYrMioAPjf/qJpx2VfPxVS9VDM/3gjri/Ad3EUrw
+ uiUlQVn+XiDRwBezPcSWce3yEK6mYESbsXDxbJXVmw5hJuKWkSbM6G+ANunSMYa7/b4odvNfiH7
+ +lrps36XaBVf6/j/cEvnI1HD6E8qSUSclhIeI1EFHnsPWgi/6TyN5fc09ltYCH4656F7n8darug
+ e64hofBhDc63lMQ6xBmw3skcM20B3wYujzcS6znVkwE7b+rxdf8ugolrkHY85VifxoZZU9y7DC3
+ qu9dSoN+D4hPtE3DeiXa8YxV+Q94WGavTCLhvwGIo=
+X-Received: by 2002:a17:90b:58e7:b0:36b:936e:73c8 with SMTP id
+ 98e67ed59e1d1-370f0e4ad33mr15769663a91.19.1780884376038; 
+ Sun, 07 Jun 2026 19:06:16 -0700 (PDT)
 Received: from wash-34.local ([50.47.124.161])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-36f6d109dcdsm15500399a91.9.2026.06.07.19.06.16
+ 98e67ed59e1d1-36f6d109dcdsm15500399a91.9.2026.06.07.19.06.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jun 2026 19:06:17 -0700 (PDT)
+ Sun, 07 Jun 2026 19:06:15 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 07 Jun 2026 19:06:05 -0700
+Date: Sun, 07 Jun 2026 19:06:03 -0700
+Message-Id: <20260607-b4-virglrenderer-v1-0-15cd736c623c@gmail.com>
 MIME-Version: 1.0
-Message-Id: <20260607-b4-virglrenderer-v1-2-15cd736c623c@gmail.com>
-References: <20260607-b4-virglrenderer-v1-0-15cd736c623c@gmail.com>
-In-Reply-To: <20260607-b4-virglrenderer-v1-0-15cd736c623c@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0QrCMBAEf6Xcs8E0SEr9FfEhadf0RK5yqaVQ+
+ u8m+jjLzuyUoYxM12YnxcqZZynQnhoapiAJhsfC5Kzz1tvOxItZWdNLISMUagI63/reefSOivZ
+ WPHj7JW/3P+dPfGJYaqc+YsgwUYMMU51m5cRyFmwLHccX5t2AD5IAAAA=
+X-Change-ID: 20260607-b4-virglrenderer-ae7616926e92
 To: buildroot@buildroot.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780884375; l=1163;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780884375; l=7299;
  i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
- bh=74rKK7cVN3RTlGgJZFe7NmjOSnswKvE1N7vAFN8Kpc4=;
- b=Sk6ruU8T2w7TsOzZsipzddFRQj26CnPsG5AP4v0I8MhQQtD/cutTTkn4idtobJuECRA6dDlML
- kTDywqhUQUiARBGRp7QuAKuNruv3OW9r7+nOahnK+m4/JxKmADZhP49
+ bh=76AaKL2eTLWCkV2k4rxOlsLARayZLvFyV+cYXTHZ0fo=;
+ b=Cu+l3cWzQdyMfpCwqiVCUocqFJTMWxbWTmAFA/E2v3QP8OX7orXTkEXiix3VPeGTJZUq/64O6
+ YCZeNUNe7o5DX/Jj36xhcH0zf3s6DmJDn4owx7tr9ka4POkTeGE0TCm
 X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
  pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780884377; x=1781489177; darn=buildroot.org;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZUPokL0CypCJ5L5zQ0yuf+SRPURzQRRo4HY+6Rk0PCQ=;
- b=bPDwCPCiZc8mnyV4DKDUL3bx+SiKeB1iHN0EIsmiF5QSynTKYuO3wChe1yny3WBXkF
- BkFs9IdHf5AkrNgZCcQNUHi1sSmPLlBfGDGOHyAY9uJpnEO1wmzV/EN+x+d9IACop9o7
- ma34UXqz2WM3o91aZTkE80gCAcNmL5bRtz0Tu3zBwrNC9vq5ICizqPIj+P1SUfTDtz9x
- MblN4tBtsI1epi9Q7AL4V4dLRViQxIyGicI6HTCA3Bo4u/6VX+t0ht5tedWlS2c98Ln+
- M9ZFAimfYT6KXajZzETyu4HgysHXUoQhHVHNY5yi2H8pnCWchrEIvU7OZuxHZYg8N/3x
- TCow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20251104; t=1780884376; x=1781489176; darn=buildroot.org;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=E0mTWeGk+a5AfEsPPgZRy2RpI6Yb33nz36/Q3X85T/k=;
+ b=TIk0jrWtzgQP7b5sQ1pRJvgQ3UNqkmi5XDAuKdckNS7xYruinSMlqlApND5EeTaUJv
+ DVtDD6h2b8aor5ZT8TG0zNORSCJbC4O4Eeup9QRNoRGtog42H7kIeXmpxt/0JW1gu99D
+ lOB3dHI3Uv5FK+P4HCjBwEGw3T712wOM6K7Q7JiOdeBk1zqKzcYpRx7V1G5iXZfsAlya
+ OBYBFOVd9HBX9lVykYg1uB8y17DfIqT3MSlgAltRSYdWzPlKidsQ98YMHlD1gkrQoU/k
+ bknfZBT/TcUxkJmqVMCo9R+Zk+1Y5RNg9GoTGNCnqjyAVvvSH9pIjsUKox/wCGN8kEoO
+ lhsg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=bPDwCPCi
-Subject: [Buildroot] [PATCH 2/7] package/wpewebkit: fix stale libepoxy
- dependency comments
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=TIk0jrWt
+Subject: [Buildroot] [PATCH 0/7] Add virglrenderer support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,35 +139,163 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-wpewebkit depends directly on OpenGL ES and EGL support, but those
-dependencies are not imposed by libepoxy itself. Update the inline
-comments so they describe the actual dependency source before relaxing
-libepoxy's package-level EGL/GL dependency.
+Hello,
+
+This patch series adds support for building the virglrenderer library in
+buildroot.
+
+Virglrenderer is a userspace library used to support rendering and
+compute in virtual machines over virtio-gpu. Virglrenderer supports
+serialized API level access to OpenGL and Vulkan through virgl and venus
+respectively, as well as mediated DRM level access using host native
+context [0]. Notably libkrun [1] and rutabaga_gfx [2] are also capable of
+utilizing virglrenderer.
+
+The first two patches prepare for removing libepoxy's dependency on
+GL/EGL, and the third patch removes it. This allows virglrenderer to
+build with its libepoxy dependency, without actually depending on
+EGL/GLX.
+
+This enables, for example, headless compute through Vulkan using Venus
+or host native context inside virtual machines.
+
+The fourth patch adds the new virglrenderer package. Optional configs
+enable VirGL (API-level OpenGL passthrough), Venus (API-level Vulkan
+passthrough), hardware accelerated video encode/decode through VA-API,
+and DRM driver specific backends for host native context support.
+
+The fifth patch adds an OpenGL config for qemu.
+
+The sixth patch adds a qemu virglrenderer config that selects OpenGL
+support, as virgl/venus support in qemu currently requires a GL
+accelerated display frontend (a patch series on the mailing list [3] is
+proposing decoupling display GL support from Venus). Other VMMs
+such as libkrun don't suffer from the same coupling currently.
+
+The seventh patch adds a new runtime test for virglrenderer with
+qemu using a software GL driver and a nested guest.
+
+[0] https://www.collabora.com/news-and-blog/blog/2025/01/15/the-state-of-gfx-virtualization-using-virglrenderer/
+[1] https://github.com/containers/libkrun
+[2] https://github.com/magma-gpu/rutabaga_gfx
+[3] https://lore.kernel.org/qemu-devel/20260317182049.33848-1-lucaaamaral@gmail.com/
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/wpewebkit/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v8:
+- Clean up Kconfig help, indentation, comments [Arnout]
+- Move virglrenderer vaapi cfg, under "Other options"
+  [Arnout]
+- Add placeholder comment for vaapi support
+- Squash glibc 2.43 build fix into virglrenderer [Arnout]
+- test: Split into inner/outer kernel/rootfs [Arnout]
+- test: Use aarch64 build [Arnout]
+- test: disable BR2_PACKAGE_QEMU_BLOBS in outer guest config
+- test: switch from glmark2 to kmscube (remove udev dep) [Arnout]
+- Link to v7: https://patch.msgid.link/20260515-virglrenderer-v7-0-1f1814b65ccd@gmail.com
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index c8602f1de6..c4ee5a27f7 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -38,8 +38,8 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_USE_WCHAR # icu, libsoup3
--	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
--	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL # wpebackend-fdo
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	select BR2_HOST_CMAKE_AT_LEAST_3_20
- 	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
+Changes in v7:
+- History cleanup
+- Link to v6: https://patch.msgid.link/20260515-virglrenderer-v6-0-d9081c13baf9@gmail.com
 
--- 
-2.54.0
+Changes in v6:
+- Add explicit EGL dependency for weston XWayland support, and only
+  enable XWayland glamor when libepoxy has EGL support
+- Fix stale libepoxy dependency comments in wpewebkit
+- Document why libepoxy can be built without GLX or EGL support
+- Improve qemu OpenGL dependency comment
+- Add qemu and virglrenderer comments warning when no virglrenderer
+  backend is enabled
+- Add a runtime test for virglrenderer using nested qemu and virgl
+- Link to v5: https://lore.kernel.org/r/20260318-virglrenderer-v5-0-09a3274852d6@gmail.com
+
+Changes in v5:
+- Fixed authorship, Signed-off-by, and sent from address
+- Link to v4: https://lore.kernel.org/r/20260317-virglrenderer-v4-0-ed223e222bb6@gmail.com
+
+Changes in v4:
+- Removed libepoxy dependency on GL/EGL
+- Introduce explicit configs for virglrenderer DRM backends, virgl
+  (see above note)
+- Moved virglrenderer Kconfig from Libraries -> Graphics to 'Graphics
+  libraries and applications' (next to mesa3d && X.org)
+- Add a patch from upstream virglrenderer to fix glibc 2.43 builds
+- select libdrm in virglrenderer only when required (drm backends,
+  video)
+- BR2_PACKAGE_VIRGLRENDERER_DRM_BACKEND_MSM depends on !BR2_arm
+- Explicitly configure GLX and/or EGL when
+  BR2_PACKAGE_VIRGLRENDERER_VIRGL=y
+- Separate comments for qemu GL/virglrenderer [Romain]
+- Split up qemu feature configs into separate commits [Romain]
+- Link to v3: https://lore.kernel.org/buildroot/20260219-virglrenderer-v3-0-e2ff1a23be3f@gmail.com/
+
+Changes in v3:
+- Bump version to v1.3.0
+- Add optional deps for panfrost and i915 native context (new)
+- Add config for vaapi support
+- Remove GLX in favor of EGL
+- Update qemu docs links, as previous ones 404 [Romain]
+- Fix invalid config reference in BR2_PACKAGE_QEMU_VIRGLRENDERER
+  [Romain]
+- Select libepoxy when enabling OpenGL support in qemu [Romain]
+- Add depends on gcc >= 4.1 to virglrenderer (from meson.build)
+- Add depends on libgbm to virglrenderer [Romain]
+- Add comments for missing dependencies to virglrenderer Kconfig
+- Select vulkan-headers when venus is enabled [Romain]
+- Disable venus explicitly when the symbol isn't selected
+- Link to v2: https://lore.kernel.org/buildroot/20251203-virglrenderer-v2-v2-0-2846fc1a579a@gmail.com
+
+Changes in v2:
+- Rebase onto next (python-glslang patch merged)
+- Bump version to v1.2.0
+- Remove hidden configs for virglrenderer vDRM backends [Romain]
+- Fixed typo in qemu/Config.in [Romain]
+- Split up configs for qemu OpenGL and virglrenderer support [Romain]
+- More detailed qemu config help messages
+- Link to v1: https://lore.kernel.org/r/20250618-virglrenderer-upstream-v1-0-57525ac8406e@gmail.com
+
+To: buildroot@buildroot.org
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+
+---
+Joseph Kogut (7):
+      package/weston: add EGL dependency for XWayland
+      package/wpewebkit: fix stale libepoxy dependency comments
+      package/libepoxy: remove gl/egl dependency
+      package/virglrenderer: new package
+      package/qemu: add OpenGL config
+      package/qemu: add virglrenderer integration
+      support/testing: add virglrenderer test
+
+ DEVELOPERS                                         |   2 +
+ package/Config.in                                  |   1 +
+ package/libepoxy/Config.in                         |   8 +-
+ package/qemu/Config.in                             |  35 +++++
+ package/qemu/qemu.mk                               |  15 +-
+ .../0001-fix-build-with-glibc-2.43.patch           |  39 +++++
+ package/virglrenderer/Config.in                    | 114 +++++++++++++++
+ package/virglrenderer/virglrenderer.hash           |   5 +
+ package/virglrenderer/virglrenderer.mk             |  62 ++++++++
+ package/weston/Config.in                           |   6 +-
+ package/wpewebkit/Config.in                        |   4 +-
+ package/x11r7/xwayland/xwayland.mk                 |   2 +-
+ .../testing/tests/package/test_virglrenderer.py    | 159 +++++++++++++++++++++
+ .../test_virglrenderer/linux-inner.fragment        |   4 +
+ .../test_virglrenderer/linux-outer.fragment        |   6 +
+ .../rootfs-overlay/etc/profile.d/stty-raw.sh       |   3 +
+ 16 files changed, 455 insertions(+), 10 deletions(-)
+---
+base-commit: 32351f979822a0b3a45b82c2d82bdb2328b02f5a
+change-id: 20260607-b4-virglrenderer-ae7616926e92
+
+Best regards,
+--  
+Joseph Kogut <joseph.kogut@gmail.com>
 
 _______________________________________________
 buildroot mailing list
