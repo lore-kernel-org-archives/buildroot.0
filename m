@@ -4,120 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73CBECD8C90
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 02:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0336CD8C9D
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 02:06:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3715403F0;
-	Mon,  8 Jun 2026 02:06:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B6D940723;
+	Mon,  8 Jun 2026 02:06:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gveoPOTzZC05; Mon,  8 Jun 2026 02:06:22 +0000 (UTC)
+ id chQldQ9KppYR; Mon,  8 Jun 2026 02:06:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72DA3405A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4FE940874
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780884381;
-	bh=kHuJ7td/RHLDn9Wk5n/7VmpMznBilOWC8iXNEp/u97g=;
+	s=default; t=1780884386;
+	bh=fksUivFC0vfD7f/gl9LLL5kYtYuhhlMaJ4FtIQEDWmg=;
 	h=From:Date:References:In-Reply-To:To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=K4Wmz85Ydk6s0xiwZDEVdXmQaPvQwFw/GUCWcG9fTcNak6qb1ybcZfaZlxRG9nqws
-	 K46GDWuvRmW/O1+oZNYXObtrCKIdmH2LF4dIFwx3plZ/5eRSADWdr2gLKQmkNZ3yw3
-	 H5aMZzvkiZ3ZLG0n1o5nrH8A9gjsiIWSwch2Zv+fybqj1MrY90AHjxwzu6zCiOf6Ht
-	 JXZv0rA5DxsFakXJ6DqokPLIUstTrBC32WkBk1qXIwyQidD65TKz2siEIPjjFjgZzM
-	 vUvEIsef7ZCrZ9fRVtY34Fa9QziLW7v0v79kPEaYW1qNFpkIJnkHKYFwIk0tRpVH6e
-	 /fFPAmafNxEUw==
+	b=BsqDdreIic5dM9C2i6BIgYzqjOz0Inl3s66BAKGbD9OY92prhp7PBp7ygSUehZOVf
+	 lz/OGfyH5wrcOif3g33CXalZj+4nYBtIcug7o+SpgdlZqCjS+sr/egr8nFW87av6Oy
+	 VOV5JWXwcxgF+ztPlkyr3HP5oKJ7K1y0uyaxhxCywtpm8c6SpHZw6VfadsavaRqk72
+	 0zgDwANOrAEFnQUyNv/mc0xBA+BUADNtHuvDNzRXF5YjFrmXwQR6mwXHTjind5Rjaz
+	 tIvvT0+7Iwe+FKYucxswe46uz9IhTjKykD7OODGK2zJ3Vs9YiorD6SnTrXBJRLTAkf
+	 wlejcYIgXx7QQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72DA3405A5;
-	Mon,  8 Jun 2026 02:06:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E0CD2C1
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4FE940874;
+	Mon,  8 Jun 2026 02:06:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 142C0EC
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 548BF4010F
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0459D405A5
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s3eKObhF_RgJ for <buildroot@buildroot.org>;
- Mon,  8 Jun 2026 02:06:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8V9tUA5dL_TZ for <buildroot@buildroot.org>;
+ Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102b; helo=mail-pj1-x102b.google.com;
+ client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 59B1040106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B1040106
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
- [IPv6:2607:f8b0:4864:20::102b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59B1040106
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:17 +0000 (UTC)
-Received: by mail-pj1-x102b.google.com with SMTP id
- 98e67ed59e1d1-36da8439078so3324806a91.2
- for <buildroot@buildroot.org>; Sun, 07 Jun 2026 19:06:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 48A4240511
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48A4240511
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
+ [IPv6:2607:f8b0:4864:20::102f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 48A4240511
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 02:06:20 +0000 (UTC)
+Received: by mail-pj1-x102f.google.com with SMTP id
+ 98e67ed59e1d1-36bb3551f6eso3229264a91.1
+ for <buildroot@buildroot.org>; Sun, 07 Jun 2026 19:06:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780884377; x=1781489177;
+ d=1e100.net; s=20251104; t=1780884379; x=1781489179;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
  :cc:subject:date:message-id:reply-to;
- bh=r72yXCn3vOrp5cUXMHdYrBZtn5GogsO9QcdFR1f3OLw=;
- b=KtFZc/BnLYuCM/kstisC2NKttAN1NGw7nxjnCky09wxyH4d/pRfzn9SdFge53X5L1q
- b+nyaD3r+U1JpJJKb0P5zEUiwsiiLha9Is3Qe8uE5GThBiHeSjzvKx5Hg0vjzyoKC8UF
- RrE3bfi/aqUEDMQcmA7MOB6VOaO24DkKsiXvgD4j3WmfSjDYadz8go7vcczy7vus1Gok
- KHMfF4+x1N1XB0niMVIsCZLTMvBdFhH/9yU/1ShONSHMrYPcgfGUHi3GGmbOCzaeJjB6
- ZXjwOXh/WnxZNm1xh9h8FIDuFiwgdjq3qyhIK3DHc9msjYO/zWg8KFkZrob8736sby4a
- MmbQ==
-X-Gm-Message-State: AOJu0YxrBl8brvoeEdq0wVGBUx0yedcUXDmTD4iIKbxnWZRfdVHBnqju
- 0XNUa29m+oXXGgRiHmHc95jGJDVuwnJa3Oqg3W2sn4ahWk6pQPSIPGdo
-X-Gm-Gg: Acq92OGH0vgSZUR65Ua1UQdYJFfcQ2RkZcLl/s/jWBQXhcO0BgO5zqH75xrG5GIEgd7
- Ax03nnO4bjyV2nzcgXpSr5I8T3c9wYmlM9lkGvHO7sBI4zf3tjH0YZWool+50VkcXadZTTGlp/4
- bUf0H1ynBDEq9tcYKd43zJiv0ziksLGTqrFiXD6vwEqClqI7DsEA4rPUsp5et31HXHNdvCob834
- S2lvqXzDRKpMag39ERcmvO5HqhvrVYo0vbsVv99dOsIXX8bmKOdP+cr7KivN/54G+u5WsOzO7UH
- 7MxMGCBtjtqdTmC5EbQkZWq+IZsgcFsqSkTB1HB6s7VObpqP3F80Fwz9OgoBRJX5eA911xCJzqb
- AFXLvBSR3oec/Z89ad7YDnitWqXxxwcD7+nfEHCDxnuxKbMF7apTtubdFzcXhgybQ+aWK+SRBuh
- 93TGqaSMqcqHKPTaXtwMszZMAJSEvkeyBpS+jhglc=
-X-Received: by 2002:a17:90b:5545:b0:36d:6315:1de5 with SMTP id
- 98e67ed59e1d1-370f0771c54mr15665943a91.18.1780884376642; 
- Sun, 07 Jun 2026 19:06:16 -0700 (PDT)
+ bh=KcuzwI3P8Z1h3jXmBQ1iHOriONQjwFQvdhFVSTU6ICA=;
+ b=AWiiS1lp7xFRpEKcvyLeW00SntGeziawYcqq9JZvQJbwXSwEtAcsZ9MdNX7g+sLJ7Z
+ HlMzhv0EtwqnfcSw/fhLnxi+s+itqqYKshuT7w7UDYhwCY8y4S/z6Ait+tRyWfbEMBm8
+ Af/1EdCr8Jg5D/2RVtMsw/tHhj9bzvRLVrahAP4/OpAJQM7Mo+5A/O/Cljbw6OWmJR/0
+ U+gC1RjQCP3clAXmjw47B7JlO0grYgzso0oqUdfWtjJ/UO5XwHqaHhtCKXIOT1akZz0Y
+ 6ZucrUXtMN7AHOHnHuCG6QRCq4DHdY0jebSDLglp4IFXdEkxU0Bi8Th8225hx0ry5sQV
+ z7/g==
+X-Gm-Message-State: AOJu0Yw6oXeebHxeJtK9mtO1uxs2wqxcwSgvh+AGdc/piGkwO/NLqu5F
+ swq4KhPbXDqszz/xSVmsQFHiqZepQUgylyokKFEP27ogMWR0JE3GM4nX
+X-Gm-Gg: Acq92OE7MlCKN8Q01fEutHMPLIZcid/hbZxd0d/eR3yWmfZkA63FsU51JPlyBHqvPTB
+ 5QUeRbLsZI17wuDPMU3OwyEg5S8h2TfBnfDMh6VWGHKD2CgRwqq+RJSaFEEgr+mUAy/4Sluuduz
+ 3MTw/uvKCG79Yh5fCswwJYMC648RMn9nt9zNJrmPgrerHPpZ6RcK5Cp+dfugjcxfKIYQls7t0On
+ 44ADykRtrHXufMySIh7p2VOPKc6AfPJul+WQVzZLkG167anhdZb7a/JT6EJIJlaQnoMN1N/qSeS
+ H4Nwr/vJfoIH62vGsxr1ZiGLzHqgYDaY1FRx/kcaiyELHqyA/l9JBKlkaV37yoQKkHJArq+yKZN
+ ChwaGWywEmWeU8TWfrEf5S/NeBeqdNHY2B8EZezhXfs9ryU/3Q5698tROVtRk4tF08SlfiI+xu2
+ D7fk/s0u3iZugkShOQNDjcSglgUwwE2bTXyplVKeo=
+X-Received: by 2002:a17:90b:5787:b0:36b:8824:d7cc with SMTP id
+ 98e67ed59e1d1-370f057a115mr14824603a91.20.1780884379349; 
+ Sun, 07 Jun 2026 19:06:19 -0700 (PDT)
 Received: from wash-34.local ([50.47.124.161])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-36f6d109dcdsm15500399a91.9.2026.06.07.19.06.16
+ 98e67ed59e1d1-36f6d109dcdsm15500399a91.9.2026.06.07.19.06.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jun 2026 19:06:16 -0700 (PDT)
+ Sun, 07 Jun 2026 19:06:18 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 07 Jun 2026 19:06:04 -0700
+Date: Sun, 07 Jun 2026 19:06:08 -0700
 MIME-Version: 1.0
-Message-Id: <20260607-b4-virglrenderer-v1-1-15cd736c623c@gmail.com>
+Message-Id: <20260607-b4-virglrenderer-v1-5-15cd736c623c@gmail.com>
 References: <20260607-b4-virglrenderer-v1-0-15cd736c623c@gmail.com>
 In-Reply-To: <20260607-b4-virglrenderer-v1-0-15cd736c623c@gmail.com>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1780884375; l=2553;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780884375; l=1803;
  i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
- bh=CqJT4MGvyXSeSU94YhoVaqdNY7KiwTnz1RwIcEBWJFE=;
- b=9LN3+5Aqsumsp7tGjAerPJgEcnMgtUnBldUDvbv4YDk5wIwrBatHXaNQLuirvJL3LC8LHVW3V
- 2YmYtiVFNRcAlI9aDYqOGwLJJD0byntViAPlJM9lJYXdB9ouZ7+LKcX
+ bh=pmMGlcMWh9kxQpVMMNkwPl+DxENi9zXc/ywjzo91VHU=;
+ b=kHQ6UcNB86Z1110bI3HoX7OGSAyTNKQzIGUYa0w1t9RFYXYxYt3yf/wRSaNjgt8VavuykrzeE
+ fgAFgCc6qO4BBaWvGs6ze+oUCbawu+xGr5EXLJe8XpENU0ZJxsJy2nm
 X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
  pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1780884377; x=1781489177; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1780884379; x=1781489179; darn=buildroot.org;
  h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
  :mime-version:subject:date:from:from:to:cc:subject:date:message-id
  :reply-to;
- bh=r72yXCn3vOrp5cUXMHdYrBZtn5GogsO9QcdFR1f3OLw=;
- b=JTSauqQyXydPeCUbpi0cafmHHsPolN/BQPj0PlvqMXUBeqfUcDzlU7TtDGJBgyA3bT
- BudTmM+NgEt2DIEmQHaI8IwNKONax4GUJjSHu9PgtQevGkA8HGHym/VrSQrHao8yB2kn
- jLhLlAs2/6Q4xkmj8DpLYuW6PxHk0h7gpBoUAjTz8hN9YScpSL/gx6KU4kzJF4237tIM
- JNIATWnuMVIU9AX+vG5UiXiudyc6Xszj8jLibvD7NFRwny3J6zNcpNTxHMMBR8ZGo3IX
- gSPVMVfAnEPfuAKwAMX6XsEF8To0J1KUDdq/xrexo+5JYHLohTOG02o6p9RHIxATNp7S
- G1OA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=KcuzwI3P8Z1h3jXmBQ1iHOriONQjwFQvdhFVSTU6ICA=;
+ b=elscnuTZuxL/8A/JZX7X3EmHyM+LYdPuu1zJphmxSP5feMY+2c1JJuJvjMJxJ6IIdi
+ jeAGEyYefpfHwUMXacVtCVF5AOTfyuj4TE95gapc1G2MUxjaLVcYfWwaNEY3hMT4yart
+ q4mMIHR8FuAmMUpywCXf72+i02qH9HCq3Tep7+rjFDguf8iRYvHMGn8dobDUjX18a74X
+ ML9f6kKphjlN+gb5YzY9ncrZ5xJHJA3JsTCL82P+jlqJdUMxWxIpDYG3Cs4OyIVcC7Kd
+ en1f3y1cEx0f55ntHjaNhT+4bXrb4Fa53ZmguSaRaduaBVhxXbfkM7KN2YaUgA/tfF4b
+ SBEA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=JTSauqQy
-Subject: [Buildroot] [PATCH 1/7] package/weston: add EGL dependency for
- XWayland
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=elscnuTZ
+Subject: [Buildroot] [PATCH 5/7] package/qemu: add OpenGL config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,74 +138,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-BR2_PACKAGE_WESTON_XWAYLAND currently depends on BR2_PACKAGE_LIBEPOXY,
-which implicitly requires either libGL or libEGL. However, the XWayland
-glamor support uses libepoxy with EGL, so express that dependency
-directly. With only libGL and no libEGL, it fails to build. E.g.,
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XWAYLAND=y
-BR2_PACKAGE_LIBEPOXY=y
-
-fails with:
-
-In file included from ../glamor/glamor_priv.h:73,
-from ../glamor/glamor_composite_glyphs.c:25:
-../glamor/glamor_context.h:27:10: fatal error: epoxy/egl.h: No such file or directory
-27 | #include <epoxy/egl.h>
-   |          ^~~~~~~~~~~~~
-
+Acked-by: Arnout Vandecappelle <arnout@rnout.be>
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/weston/Config.in           | 6 ++++--
- package/x11r7/xwayland/xwayland.mk | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/qemu/Config.in | 14 ++++++++++++++
+ package/qemu/qemu.mk   |  8 +++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 774b75d5fb..6f61c3c561 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -123,6 +123,7 @@ comment "X11 (nested) compositor needs X.org enabled"
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 2a6aa288d3..8e932c014f 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -112,6 +112,20 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical
+ 	  window presenting the VM's display.
  
- config BR2_PACKAGE_WESTON_XWAYLAND
- 	bool "XWayland support"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_LIBEPOXY
- 	depends on BR2_PACKAGE_XORG7 # xwayland
- 	depends on BR2_USE_MMU # xwayland
-@@ -136,8 +137,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XWAYLAND
++config BR2_PACKAGE_QEMU_OPENGL
++	bool "Enable OpenGL"
++	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_LIBEPOXY
++	help
++	  Say 'y' to enable OpenGL accelerated display frontend support.
++	  This is necessary to efficiently display frames rendered in a
++	  guest on the host.
++
++	  Run qemu with `-display sdl,gl=on`
++
++comment "OpenGL support needs an OpenGL and/or OpenGL EGL backend"
++	depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
++
+ config BR2_PACKAGE_QEMU_FDT
+ 	bool "Enable FDT"
+ 	select BR2_PACKAGE_DTC
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 2199db38cf..aff1762fb9 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -272,6 +272,13 @@ else
+ QEMU_OPTS += --disable-usb-redir
+ endif
  
--comment "XWayland support needs libepoxy and X.org enabled"
--	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
-+comment "XWayland support needs libepoxy w/ EGL and X.org enabled"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_XORG7 || \
-+		!BR2_PACKAGE_LIBEPOXY
- 
- comment "XWayland support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 8fa5260f47..5902f85d4f 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -30,7 +30,7 @@ XWAYLAND_CONF_OPTS = \
- 	-Ddtrace=false \
- 	-Ddocs=false
- 
--ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_LIBEPOXY),yy)
- XWAYLAND_CONF_OPTS += -Dglamor=true
- XWAYLAND_DEPENDENCIES += libepoxy
- else
++ifeq ($(BR2_PACKAGE_QEMU_OPENGL),y)
++QEMU_OPTS += --enable-opengl
++QEMU_DEPENDENCIES += libepoxy
++else
++QEMU_OPTS += --disable-opengl
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ QEMU_OPTS += --static
+ endif
+@@ -329,7 +336,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-membarrier \
+ 			--disable-mpath \
+ 			--disable-netmap \
+-			--disable-opengl \
+ 			--disable-oss \
+ 			--disable-pa \
+ 			--disable-plugins \
 
 -- 
 2.54.0
