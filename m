@@ -1,125 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32706CD8C9D
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 12:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2C28CD8C9D
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 13:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F3E4841B4;
-	Mon,  8 Jun 2026 12:48:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c0Iorx60Y4Um; Mon,  8 Jun 2026 12:48:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA5728414D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780922902;
-	bh=dySGjs8oX61RPdjeu9iZPfkwxX+SWQsYIWc3htLANbI=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=nziyEN0cxzp9ZyefId7bdrb82+uSn16wx4k9HHuUUL0GdgK8N9bty9uVwf28Bm7aQ
-	 Qv2l7n0SQWmfbAET2CexpG2gejowCO6wNE9g274AYhKv/8fm7SfUqhdXObP0/5d0KL
-	 9IPgL5v5bik5vtBCLo6FQ4XCf9gDOby5yNjyoYjZ5fNFGAQ1kNvtWnwYexGA1pzP+/
-	 aoA1rrT2uD7USotIPgQn65BS042DVD0OJNluEhke2XAibnhqXVHOv40fcoZgQuio0b
-	 3jidd583r3QkWaRs9/iGF3zjlu9bRUl11eIA18Pgnqad5n1aZWEuW4EiSpIMCslsEw
-	 eWDix8Lla8Heg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA5728414D;
-	Mon,  8 Jun 2026 12:48:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E3B3187
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 12:48:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0025340A98
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 12:48:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5296E42268;
+	Mon,  8 Jun 2026 13:17:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Ypb5xO22ZbH for <buildroot@buildroot.org>;
- Mon,  8 Jun 2026 12:48:20 +0000 (UTC)
+ id iOIjeZgoYGyG; Mon,  8 Jun 2026 13:17:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35D8C42272
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1780924642;
+	bh=9THEjxSjy9Wtgdbih61lRgTD3apFGNL2ZWRMQPfohXM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=i7d8oDsK/LZqgClSC4UtidGnepa6y6JzVZjVGPf7qWexs7g8MCD82vEIqnLY9lyug
+	 gqOayB/uqwNmiDh0gFA59vmnVq+kx/dGRVSn4aIUZapxTPcGnkC/TlYcAxoyQ8dupx
+	 krqlefEYKQIyhQXVQGpwDtdKU+9mrl34g/mBWF+CncQumnCboqSPYdrhUGgYaF7YTP
+	 3MyrucG8mZyA3+8zWShMSqYDDsOhoWfpSKTtVplLKmV1C5soFU1YvqE/DdLOFA6efi
+	 At5H+lSk104UZZjyCL74PlshPgnpX5CHGrY01wEJR1RcC/2qfM5Hh5ns18LdZyDYSw
+	 516gTDcBMsO2w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35D8C42272;
+	Mon,  8 Jun 2026 13:17:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76C30187
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 13:17:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7172242272
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 13:17:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t-dIflnU7Ajy for <buildroot@buildroot.org>;
+ Mon,  8 Jun 2026 13:17:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9003740624
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9003740624
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9003740624
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 12:48:18 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-4602e2a0372so2997472f8f.3
- for <buildroot@buildroot.org>; Mon, 08 Jun 2026 05:48:18 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 64E2442268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E2442268
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 64E2442268
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 13:17:19 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-45ef56d9b67so3321406f8f.2
+ for <buildroot@buildroot.org>; Mon, 08 Jun 2026 06:17:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780922897; x=1781527697;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=DLe+VObgfIOWfB3iPbhjsUHg5sGqd58EnvE3QIID2Ts=;
- b=VZW4W/rtbTUv5loTE9g6IlUJm7jrXa8mm1cW4Txqvrzo+Bw/Dhm2/IMq8hWj/5A/IP
- LBllavzYNTbGEPD4Jx9Xo4pqzlhIqZu8Xl7zcP2OfodwVzeUzcRJrRaNv7ZTr+bPvasy
- vgApUIL6t+p4WNo4xgOlpZB8YKj5bG8MMQV7Tpzqe67FfsDmMNqCyUKQ7RL0MJ6GGZAX
- 3iiR0DDF3hnCKAcTdJTMNE6pGa0CozXWEUf+5mkIlCMN2G9YIrG+ZedEAyewqPm1QuML
- mmXOqjq1vl6We8zDZPefPK7gGLMG1ZtjsF/Qsk8zpxs5remLvMSgBlDIKdVFAHa/mOrp
- l81A==
-X-Forwarded-Encrypted: i=1;
- AFNElJ+zqIR0VcUw5bp12XIvLmr/bEhlKBeKz+yLXOkDSBe9+eF/Ne8cXLgCJJzJiLsyq87uPKaOMjIruGA=@buildroot.org
-X-Gm-Message-State: AOJu0YytP4Ax0U3GKVbV+bryMGXqtg5EPgxwDbj64JRGh/1o51Zy/2sJ
- cMXUDd6I/AV7IxqabwZyIOx1SJ04oKEE3Whg9dVDt9N7R0YS2y4kZKS9l9k19u+OGek=
-X-Gm-Gg: Acq92OEevu/kOd6IRV2BOcqzzFQNvnH+p0K0e6ZZDr2I4qXg0OB1iC53Bjmk+MhkyzZ
- fGceSh8bSIJq65l32m9+q2n/6J1Jr2Zu7xX497U/mp1e/nSlg7eT+TN9+kZPgF93d5oJsg+fA9D
- 76+mhbktxUO1tGiK6F2O2zvF025dVnnYb8M8XVreovvbjsHr/xrsCm3cFSgIBW1FFckQvzc99Kk
- xEcNlMe6K2UbR2eT3LPeWrJUdLcuQuG/EaO7ykN+TIptWmKP8nMirUpKXbpqQIFCoCfPkNFD2q+
- g+ybnIS0P93yMsHpVGRgQlsEQaDg3UjweaR/THvwaJ1dZoOMl866X77trIyL+rOKjtoeTL6v8Jw
- jHRkEfqK7Ljj0LJiDfa9VgKpH4UbUmBtANuxrsCMLpvzxJbkHrTKY77ugyFbiHpLAxvH56s4BOj
- YP3KZHNDlx4Cc4pWYooA0QH/V8L0HVAc6JMqBO6byuV7DUFK/lnv0C7O09lQNczTRriB1kUqq7I
- KvZ+bB9pw==
-X-Received: by 2002:a05:600c:818c:b0:490:b0e1:2161 with SMTP id
- 5b1f17b1804b1-490c25b39fdmr282376305e9.2.1780922896925; 
- Mon, 08 Jun 2026 05:48:16 -0700 (PDT)
-Received: from mindpad (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ d=1e100.net; s=20251104; t=1780924637; x=1781529437;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=bqcBY/YHnFJdCqLEKq6MIUNE/YL+DhV4lmKpwFMTcKM=;
+ b=kunFhtYDot0iD2METRNa25Xw/N1Q3p3LWvNfoaD7sDOaTbpAsLAC1iskWghk+Nh5W/
+ hquUMrcVeZ97X19jlJEFS2pkeTopotYXjwRhgnZ7ocJtwdnaLYnhKFuFrQEIN1+2hgcA
+ 8dfEwps62VWKMZI065ek3u3pHk0Am+8NGNxn1C15MeaD7QSOd1Gw40j4ezAiuK+Nq9P2
+ J5RPCp/wtRCmeZPE8iAKdA39rOfVTz6KMpNJjnMhUuchGp5y2JiRW+DneWFEwxgd9Szc
+ BSoqxnspAuSEpdEQuRpqGBH1T68I6uWS50PzJ0XVYf/ASGAyyXWig8Ub1978ETK3B6f8
+ 4jYQ==
+X-Gm-Message-State: AOJu0Yzy3SJjmfe5j8oImYabIg8UebLQhZ2NyrPthw6/QknsbCDRY9Pq
+ LgNkVcOZIv6lcjuO9tNwYyClFso0p8LhMO2W1GWh4KSzSa0Pk/Ww0fbxRjXgf//Twtney0lIfKA
+ /ce/b
+X-Gm-Gg: Acq92OHa0OrVdqxg2pHRE5vxNPOjnrzpPkRgRVjkhmgfI1jtpGdXCSWKmWqzKCD/KFF
+ jt2UeADgnG4dMZpPuWZXFMZgQct/Kg3idIBGow8hHv/MaRlFx/cxemZ9hsXnL51HohVOo/R0cjK
+ rKjUwpynUJ09po2UWL/PGSZwvNdpw3XGi6PPYAEF67ton6pniGOxct8COlwrwbA2vO1m6kRUhIa
+ mkZ8xwHnoFFgPiDDvxb1WRCcIWXSPq67Ykvyz3OZgRSY04NXhoIKRQwExni3y3hHI9MF4yJtY3S
+ NsP8oYcerxHwI2CEhykdXf9DuxsODH9edWHrSwf5WCySKqOjf4oLJyVnVE5PMU9cVyo3UUyXaA9
+ ry2zoFCAuObZ2PmnDqkapkCTQlY9nVzjccW8S3Gzxr5Z3QGabwJuPdUuENQX5IE0/K+WgIFiAii
+ nsmxCv/O9CLtyRm8NUGRPq7wiOJ8uPnjsy4Md87UKEDaIOLV/ItgGBpmaudveFFqPmvUoOvmhxP
+ 440wd/wd8EJ4gl0bZ8s7C5FKk+PSKM=
+X-Received: by 2002:adf:e004:0:20b0:460:2eee:4e21 with SMTP id
+ ffacd0b85a97d-460302f0702mr17450190f8f.17.1780924637030; 
+ Mon, 08 Jun 2026 06:17:17 -0700 (PDT)
+Received: from P-NAN-NAPALM..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490bc23394asm389044565e9.0.2026.06.08.05.48.16
+ ffacd0b85a97d-4601f0a43e9sm52475247f8f.0.2026.06.08.06.17.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jun 2026 05:48:16 -0700 (PDT)
-To: Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org,
- Joshua Henderson <joshua.henderson@microchip.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Peter Seiderer <ps.report@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon,  8 Jun 2026 14:48:16 +0200
-Message-ID: <20260608124816.52927-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <dda9cedc-20ee-4b00-b912-f807bc24cd3c@cherry.de>
-References: <dda9cedc-20ee-4b00-b912-f807bc24cd3c@cherry.de>
+ Mon, 08 Jun 2026 06:17:16 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon,  8 Jun 2026 15:16:51 +0200
+Message-ID: <20260608131651.1413416-1-dowan.gullient@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1780922897; x=1781527697; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=DLe+VObgfIOWfB3iPbhjsUHg5sGqd58EnvE3QIID2Ts=;
- b=aYVepBYSjOsnqnNMePOFDxDanrQLrIW02VSBQqO7qWZJcPpZr29ldkv/Uy0BoZRZsd
- VXm+6t7WIPcVr6dl6FtxJ/oOksqj54r349QZiNqI+G6xjfulF84I6Byc4SABGloqlSFE
- ILwvkKB12YWQdl/Mc6NqekO8G3JfzgDGhWysx4I5i62GDVPPX9uPex/Bw92CNlkkAnzX
- nYwXghmG0ikyupzz2FB6itIL+dHZhanJXgByA/lwVQEFIhg6uNYD3Rd6d/xtl0Y1oSCN
- wSIYNyASrScqAMgwaLuRv8AFnE0mhVM6wDtZaLgBliQUvuuV4UgH8GyyGHIiBvwzdwIH
- SozQ==
+ d=smile.fr; s=google; t=1780924637; x=1781529437; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=bqcBY/YHnFJdCqLEKq6MIUNE/YL+DhV4lmKpwFMTcKM=;
+ b=t3PLSyD2Vb6AeTtlUz/7Pw3xbyHNZsUSjkeZFlxS2tNBrlk8+6verpfsYdM+qRa2nM
+ FlIbAagUeVtJQeosXNYPq2qP/jpd9JPiX6ER9g6B0mWgK0DtQGvjMw+u/ETer9FlD2oV
+ lAuM3S9aUnfOgCiN+RaNJY3oRbg8nFTwQHTbc=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=aYVepBYS
-Subject: Re: [Buildroot] [PATCH 2025.02.x 5/5] package/qt5: bump packages to
- latest 5.15 kde submodule version
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=t3PLSyD2
+Subject: [Buildroot] [PATCH v4 1/1] support/testing: test_podman: use latest
+ kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,74 +117,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Dowan Gullient via buildroot <buildroot@buildroot.org>
+Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
+Cc: Dowan GULLIENT <dowan.gullient@smile.fr>, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Quentin,
+From: Dowan GULLIENT <dowan.gullient@smile.fr>
 
-In reply of:
-> Hi Thomas,
-> 
-> On 4/10/26 12:09 PM, Thomas Perale wrote:
-> > Hi Quentin,
-> > > In reply of:
-> >> Note that I made a mistake in v1 of the series for master that I necessarily made when backporting for 2025.02, see...
-> >>
-> >> [...]
-> >>
-> >>> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> >>> index 3ad2bdfc04..0e375e83fe 100644
-> >>> --- a/package/qt5/qt5base/qt5base.mk
-> >>> +++ b/package/qt5/qt5base/qt5base.mk
-> >>> @@ -4,7 +4,7 @@
-> >>>    #
-> >>>    ################################################################################
-> >>>    > -QT5BASE_VERSION = 2b9835f5c9bcfe3105b60a8dd33c1db7d8611378
-> >>> +QT5BASE_VERSION = bebdfd54917e25d1c100e6bd9f5dd53c2e645fd8
-> >>>    QT5BASE_SITE = $(QT5_SITE)/qtbase
-> >>>    QT5BASE_SITE_METHOD = git
-> >>>    QT5BASE_CPE_ID_VENDOR = qt
-> >>
-> >> ... there should be a change to QT5BASE_CPE_ID_VERSION here too. See v2 here: https://lore.kernel.org/buildroot/20260327-qt5-5-15-18-v2-5-4c98e853266a@cherry.de/.
-> >>
-> >> I already didn't like much sending a backport series for 2025.02 before the series for master was merged so I will refrain from posting a v2 for the backport, but if the series for master gets merged, this one here only needs
-> >>
-> >> -QT5BASE_CPE_ID_VERSION = 5.15.14
-> >> +QT5BASE_CPE_ID_VERSION = 5.15.18
-> >>
-> >> If you want to modify when applying without going through a v2. Otherwise, lemme know I'll take care of the backport whenever possible.
-> > > I will keep this series open on patchwork and do the modification myself when
-> > applying so you don't have to bother resending. Thanks for the notice.
-> > > When the "master" series is applied feel free to ping me as a reminder for this
-> > series.
-> > 
-> Ping :) Note, the last commit is from the next branch and not master. I'm not sure what's the policy for backports, maybe it really needs to make it to master first, in which case we should probably wait a few more weeks/months before applying.
-> 
-> bc1a1dfece63 ("package/qt5/qt53d: disable assimp support when BR2_PACKAGE_ASSIMP is not set")
-> 79b13f6e675d ("package/qt5/qt53d: force using Buildroot's assimp when selected")
-> 11e380fb0300 ("package/qt5/qt53d: always disable assimp support")
-> 2deee0c87dfc ("package/qt5/qt5webengine-chromium: fix zlib license hash")
-> ff4243147d54 ("package/qt5: bump packages to latest 5.15 kde submodule version")
+The goal of this patch is to update the Podman test suite to use
+BR2_LINUX_KERNEL_LATEST_VERSION=y to ensure that podman and its
+network backends run correctly on recent upstream kernels.
 
-Thanks for the reminder, this series has been applied on 2025.02.x ... except
-for the last commit.
+Switching from the legacy 5.10 kernel to the latest kernel version
+exposed multiple missing kernel configurations, causing container
+networking setup to fail with the following Netavark execution errors:
 
-As you noted since the last commit ended up in the next branch I didn't applied
-it. But I do think that it should be part of the 2025.02 LTS though.
+  Error: netavark: code: 3, msg: modprobe: module ip_tables not found in
+  modules.dep iptables v1.8.11 (legacy): can't initialize iptables table
+  `nat': Table does not exist (do you need to insmod?) Perhaps iptables
+  or your kernel needs to be upgraded.
 
-> Let me know if I can help.
+Instead of fixing these errors via a localized test configuration
+fragment, the missing options are integrated directly into their
+respective packages as global KCONFIG_ENABLE_OPT fixups, ensuring all
+Buildroot users benefit from working kernel dependencies on modern
+kernels.
 
-Could you resend a v2 with just the last commit (and with the fix for the CPE
-id while we are at it) so I don't forget about it. I will wait for a bit make
-sure with the maintainer that there are no blockers to apply it later.
+The following package fixups are adjusted based on the new kernel
+requirements:
 
-Thanks Quentin,
-Best Regards,
-PERALE Thomas
+* iptables:
+  - Adds CONFIG_NETFILTER_ADVANCED to the base fixup to unlock sub-menus.
+  - Introduces a conditional IPTABLES_LINUX_CONFIG_FIXUPS_NFTABLES macro
+    triggered when BR2_PACKAGE_IPTABLES_NFTABLES=y is selected. This
+    forces the kernel to enable the modern nftables engine alongside
+    legacy compatibility layers (CONFIG_NF_TABLES, CONFIG_NF_TABLES_IPV4,
+    CONFIG_NFT_COMPAT, CONFIG_NETFILTER_XTABLES_LEGACY, and
+    CONFIG_IP_NF_IPTABLES_LEGACY), resolving "Protocol not supported"
+    and legacy table initialization crashes.
+
+* netavark:
+  - Enables core connection, routing, and packet mangling features
+    essential for stable container NAT operations on modern kernels
+    (CONFIG_NETFILTER_NETLINK, CONFIG_NF_NAT, CONFIG_NETFILTER_XT_NAT,
+    and CONFIG_IP_NF_MANGLE).
+
+Finally, the test cases utilizing the iptables backend inside
+test_podman.py (TestPodmanIptables, TestPodmanTini, and
+TestPodmanSlirpIptables) explicitly select
+BR2_PACKAGE_IPTABLES_NFTABLES=y to cleanly trigger the newly added
+compatibility fixups.
+
+The 5 test classes of the test_podman test were tested with the latest
+kernel version, and all passed successfully, confirming that the new
+fixups correctly address the issues encountered with modern kernels.
+
+Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
+---
+ package/iptables/iptables.mk                 | 12 ++++++++++++
+ package/netavark/netavark.mk                 |  4 ++++
+ support/testing/tests/package/test_podman.py | 10 +++++++---
+ 3 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index a9d912f6cc..09608c727f 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -49,11 +49,23 @@ else
+ IPTABLES_CONF_OPTS += --disable-bpf-compiler --disable-nfsynproxy
+ endif
+ 
++ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
++define IPTABLES_LINUX_CONFIG_FIXUPS_NFTABLES
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES_LEGACY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES_LEGACY)
++endef
++endif
++
+ define IPTABLES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
++	$(IPTABLES_LINUX_CONFIG_FIXUPS_NFTABLES)
+ endef
+ 
+ define IPTABLES_INSTALL_INIT_SYSV
+diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
+index d47cee0fe1..c9959845d4 100644
+--- a/package/netavark/netavark.mk
++++ b/package/netavark/netavark.mk
+@@ -72,6 +72,7 @@ endif
+ define NETAVARK_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_COMMENT)
+@@ -81,8 +82,11 @@ define NETAVARK_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_NAT)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
+diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
+index 9d86a06129..bfd24a51c3 100644
+--- a/support/testing/tests/package/test_podman.py
++++ b/support/testing/tests/package/test_podman.py
+@@ -14,11 +14,10 @@ class PodmanBase(infra.basetest.BRTest):
+         BR2_PER_PACKAGE_DIRECTORIES=y
+         BR2_SYSTEM_DHCP="eth0"
+         BR2_LINUX_KERNEL=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
++        BR2_LINUX_KERNEL_LATEST_VERSION=y
+         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+         BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
+         BR2_PACKAGE_PODMAN=y
+         BR2_PACKAGE_UTIL_LINUX=y
+         BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+@@ -212,6 +211,9 @@ class PodmanBase(infra.basetest.BRTest):
+ 
+ 
+ class TestPodmanIptables(PodmanBase):
++    config = PodmanBase.config + """
++    BR2_PACKAGE_IPTABLES_NFTABLES=y
++    """
+     def test_run(self):
+         self.do_test()
+ 
+@@ -228,6 +230,7 @@ class TestPodmanNftables(PodmanBase):
+ class TestPodmanTini(PodmanBase):
+     config = PodmanBase.config + """
+     BR2_PACKAGE_PODMAN_INIT_TINI=y
++    BR2_PACKAGE_IPTABLES_NFTABLES=y
+     """
+ 
+     def test_run(self):
+@@ -237,6 +240,7 @@ class TestPodmanTini(PodmanBase):
+ class TestPodmanSlirpIptables(PodmanBase):
+     config = PodmanBase.config + """
+     BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS=y
++    BR2_PACKAGE_IPTABLES_NFTABLES=y
+     """
+ 
+     def test_run(self):
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
