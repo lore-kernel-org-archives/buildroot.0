@@ -4,109 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 044CACD6E79
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 18:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 454F9CD8CA4
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jun 2026 20:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7BDB84D1F;
-	Mon,  8 Jun 2026 18:27:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB78083A72;
+	Mon,  8 Jun 2026 20:26:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tKSr4aqHGYPC; Mon,  8 Jun 2026 18:27:08 +0000 (UTC)
+ id 4ikpJoF0YOgh; Mon,  8 Jun 2026 20:26:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA30884D1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DBF583A79
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1780943228;
-	bh=ersbuZYwO15bJoZMfP+PDIVyrIsKVk1W8pEi/m++nB4=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Tfi3LbpFTdOLtlgAMVQXISer/ms0+yyesubii6VjdZhMGSJX458MRO/4sezyrA2kG
-	 hQg24ymgOuXX1g0DlD5pd0YeAFBUEng1jSu8dj+5XSuI6/3foc4QsdSjNNLMTEzR1G
-	 eHRmRaai4+bmBKkC/p4ajgpdwSnjtz7R+03jPYuKMwtjQeU6UT7ZKgUN27XW1720zw
-	 qj5xjrrgqYehqtCnYCfQgEjtoDo8pImRKToIM8oYjLleoZo4RyOWqGa0bS4ZnBufed
-	 R6AnH0i1wow9eJUDJ/ylgAODTB7FoEnHcKHFvDxvLn1BCdlQPbh6g9IhaXroJ0yaYF
-	 5kpuaJmcfNzww==
+	s=default; t=1780950379;
+	bh=zZDGOpCCKu23gWaphqCMYcCDzS34FJcx9a6kpb91Jro=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=hIaYoAiolXWg3C0c2I5V8VI6BVTECObZ5dw5LxU9bRX9ktuSryhKy9hCmNw+DtsOg
+	 Xv9wGHyBowaXI4iStl8xXwO+c0EaY3QEkOFUmgo79horgnILWj0eRan4zU7K0F/Q7E
+	 BGaVbRTySuyDBSyb4JD+dw84KSj9erl+TnSJcvJwr4uO0/mgU5GAwih6E/sezqYcRL
+	 LPKrByRyMoOuQHVE2n3cSt1fK6rFtgS448x6qmlCoLWQ+GhIoz+h1+hNOXVsPkNpIt
+	 GC/T/xkmz8+98YkJIru4LMJOeYWGpUISoLkBGgYh4jmcSWswP9yeQAEbqeEv1Td2Lc
+	 +J3hpU0hRI8GQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA30884D1C;
-	Mon,  8 Jun 2026 18:27:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4995FEC
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 18:27:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DBF583A79;
+	Mon,  8 Jun 2026 20:26:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A991BEC
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 20:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF66284CEA
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 18:27:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B53C40735
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 20:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tIj0g3LB1B_B for <buildroot@buildroot.org>;
- Mon,  8 Jun 2026 18:27:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9F5084D19
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9F5084D19
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9F5084D19
- for <buildroot@buildroot.org>; Mon,  8 Jun 2026 18:27:05 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-bec4639953dso838068666b.1
- for <buildroot@buildroot.org>; Mon, 08 Jun 2026 11:27:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1780943224; x=1781548024;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9GrdrBRBHg64yJ79gqSGgd6k990Xw1mEx1q6rDH0tO4=;
- b=hKxFlBXvZG+vyp71Zg9H2eGKHLEFT290Mz4OavBrNGCbZOfimINPd+9MaLdg3g+djk
- k3tw+MnzIf09jMeSr+zduqU4twb6jiPEnnMh4Xg+HakH0LCpZdDFuhmZ8KY8r+VkZLrX
- 5pmViocGyEsWnUQhEEfdzzaRkbFu2OSb79zqc/MW6GhSUUuMbT/dFXP+9s4UROf/rawX
- TmeZP/tfxJLeOjmM9nGa2avoYtUveHpQvVq+ekgYjezWStsopcuLLmWVUGoUp7IleDG+
- VAMkiQyW956usQslVgLBBYvzUXlM8zQnJhbaxY7whU8Vjhr0ZB+k3pMIJ1hYYULVDk/O
- 5z/Q==
-X-Gm-Message-State: AOJu0YzkirXksdM+YybsK45Cjt0Vl6asgnGla3xNzAERB/eiNoCIdNur
- SUrpi9Lpt5S3BbPE893WSMs1SMuUo1vcBp7UxqS/siniBlRi1zKUikLx7fBsMaKUA+iJ4UgtMGc
- Rs5s0
-X-Gm-Gg: Acq92OGq5FM+6IGMPepXPp8h9nIB8fdkb/dNxiqjCy1pX53OXhlksfSTOhjXrFEOM/G
- ywwB2hWMqeLmle17ylk2n9oDbvhoaLbflYiNL78PAkLsCFuRX8SkacsoEi+2Nm8sLotDdDyTpWS
- FefJrpTY8Rsbzj5yj/WBRCcQ4WkrUb2Mt7YcCHgN8DfacLdBNo9x81uVV6mnBgLWH41PeQA7wSU
- GRbEQAY9rDYGmd07j4/PLlZjKyZSXFU/YFgu9MrhfxYfkhE9h1uWJ1o5lnMgdZmG3JXJH5g/5Cf
- 9Fs9NbjlTCmbcNSOoUSkh8/GEewLM0+qjNzZoBAgls3uhu5ACyfbuDHo/0ZmgT4oT29JVFmnOmK
- If5IZTA0Jc/W4x5LXShjK9vbpDMIp0ekS4Jhe928O8LZQFS8WmcKRVjVoNP0dGvV7upGz5Y4MyD
- 981bQcMDayslmVLcmDm9r5Tqsg9xg96APGltSxsWB2mbwLH8CeCA9cjM1V5e3fvroSR+2qyoeBS
- 2o1WFrbPYkhT+8bVm4dMOYSciGFkxmja2wiihAsX8oQCm5oJueHbpHA8S4=
-X-Received: by 2002:a17:906:d552:b0:bd7:f75a:817c with SMTP id
- a640c23a62f3a-bf370477fcdmr845774666b.17.1780943223551; 
- Mon, 08 Jun 2026 11:27:03 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com ([2.196.42.139])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-bf051c83c93sm934943766b.16.2026.06.08.11.27.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Jun 2026 11:27:03 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon,  8 Jun 2026 20:26:56 +0200
-Message-ID: <20260608182656.1213082-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cij0zEyWZem1 for <buildroot@buildroot.org>;
+ Mon,  8 Jun 2026 20:26:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1AD10406D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AD10406D9
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1AD10406D9
+ for <buildroot@buildroot.org>; Mon,  8 Jun 2026 20:26:15 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -199637705; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 08 Jun 2026 20:26:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1wWgXz-00000009Noq-3KMW;
+ Mon, 08 Jun 2026 22:26:11 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Cc: Titouan Christophe <titouan.christophe@mind.be>,  Christian Stewart
+ <christian@aperture.us>,  thomas.perale@mind.be
+In-Reply-To: <20260608095745.737902-1-titouan.christophe@mind.be> (Titouan
+ Christophe via buildroot's message of "Mon, 8 Jun 2026 11:57:45
+ +0200")
+References: <20260608095745.737902-1-titouan.christophe@mind.be>
+Date: Mon, 08 Jun 2026 22:26:11 +0200
+Message-ID: <87jys8pyn0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1780943224; x=1781548024;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9GrdrBRBHg64yJ79gqSGgd6k990Xw1mEx1q6rDH0tO4=;
- b=myawsrHZjH3BXAaX+p9mJdL/7WRs6a7xuE+bhRK5iBr81ebab+84ERWVz1fakBUAAV
- 4XSJShqpu7HOR4MTu7yaczir9URm+6nf0VJbMmva0+QutqB+t4CrjwjOTna345Wxzmes
- GK9C+cVXrvS0wSuZwRZx0NeyzJB2+QGIic0dM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=myawsrHZ
-Subject: [Buildroot] [PATCH next] package/less: bump to version 704
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=MF9sVFApFQ+PF2uX0IEuKh7j8s3PaiijX6HJTK60dRCtGbj7wMRzjEwmR4Pvd3wo/dCAFqjDK5MvVsm66hvp21c0tVCipKFCQUIR8nAGpVCe4hdTU/AEPgCj1q47j2oY3tECcArJ9jBdyIRlSV/8J1DkZStSgnbG4KGyHcOzvU9ZyuwpX8D+3cmao+kg+p0nZ3xlhpYWjMANillnySDnYrjUjRCJneBqM1EZQMcH3gg5ibCeHn6HhZCn5bB19VEaW3S8xxFVUlMMowCX0p/qqhwQh2C3uoukY0dtY20DOl/4mfNdnPCs7yYwQxolWadZBrr3cHdngIkhqgvYauCAHQ==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=uJJEn4w5ZrbE3n99FuWt0yNISamsgXMc1ngQSe+GODw=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=MF9sVFAp
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/runc: security bump
+ to v1.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,44 +100,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://www.greenwoodsoftware.com/less/news.704.html
+>>>>> "Titouan" == Titouan Christophe via buildroot <buildroot@buildroot.org> writes:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/less/less.hash | 4 ++--
- package/less/less.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes the following security issues (in v1.2.8):
+ > - CVE-2025-31133: container escape via "masked path" abuse due to mount race
+ >   conditions
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-9493-h29p-rfm2
 
-diff --git a/package/less/less.hash b/package/less/less.hash
-index 8eafceabceff..8d29dbc87db6 100644
---- a/package/less/less.hash
-+++ b/package/less/less.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
- # using DSA key AE27252BD6846E7D6EAE1DD6F153A7C833235259
--# https://www.greenwoodsoftware.com/less/less-702.sig
--sha256  242a64c00f02d96f8ee208cf638ae1728b727c7f5fdf82a7d4f4cae32fb084e2  less-702.tar.gz
-+# https://www.greenwoodsoftware.com/less/less-704.sig
-+sha256  20a0b0a2bb2525fa53c7eee9beb854b4c9cf172eabb209af7020743547bfe9fb  less-704.tar.gz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/less/less.mk b/package/less/less.mk
-index 91c853009af7..d8ffadb8d204 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LESS_VERSION = 702
-+LESS_VERSION = 704
- LESS_SITE = http://www.greenwoodsoftware.com/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
+ > - CVE-2025-52565: container escape with malicious config due to /dev/console
+ >   mount and related races
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-qw9x-cqr3-wc7r
+
+ > - CVE-2025-52881: container escape and denial of service due to arbitrary
+ >   write gadgets and procfs write redirects
+ >   https://github.com/opencontainers/runc/security/advisories/GHSA-cgrx-mc8f-2prm
+
+ > There are also numerous bugfixes.
+
+ > See the releases notes:
+
+ > - https://github.com/opencontainers/runc/releases/v1.2.5
+ > - https://github.com/opencontainers/runc/releases/v1.2.6
+ > - https://github.com/opencontainers/runc/releases/v1.2.7
+ > - https://github.com/opencontainers/runc/releases/v1.2.8
+ > - https://github.com/opencontainers/runc/releases/v1.2.9
+
+ > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+
+LGTM, but maybe check if it breaks setups without CONFIG_USER_NS=y like
+the 1.3.5 bump did on master (test_oci.py is a good test).
+
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
