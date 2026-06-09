@@ -4,80 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64E94CD8CB9
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 16:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48954CD8CB2
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 18:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 572DA8580B;
-	Tue,  9 Jun 2026 16:44:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39E2E8596F;
+	Tue,  9 Jun 2026 18:07:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4hORemjkM5Us; Tue,  9 Jun 2026 16:43:59 +0000 (UTC)
+ id HZu2Bu-e2pOb; Tue,  9 Jun 2026 18:07:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4320A85808
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF2EF8596B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781023439;
-	bh=lIbqp5MU4LZ5jTlnRmHfjcIs3TEGvN2hrj5fIvI3USM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=iTA8NuPMxjQtPD06JjrTchR6pPdP/+z08DNkYvuCEMbA6ySxmvaOkOvSs5r8s5Odh
-	 Kcmkonf+DXeCtoB2dDquJc+1T5CkfYfm/VwTF2usykfkdxCEOKtjo+k9u7mmrYdSgh
-	 dZ5m7nMc5HKaP7PYjYh22P1Uz7o3EBgP1n2tBMlsBptT5ZLttP1plVvd44YaoFppVv
-	 AI+w0qw3PazeFjHcrYLJ/mDWvFOJRD/E/KDFn6CvEvh3f/A46b5mUxiVGpKoV1Y63z
-	 PUBBXNgMr2kkYETjRdkozdW/oIWJ+UGSXh7UC22RgCXVtxXugzbmhD4ATymqNtt95e
-	 INLWAAE8KtkmA==
+	s=default; t=1781028421;
+	bh=/8K+3vkrQLBhxA874lyabk9NOQmc+3XlZMymO4J5RrY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=WkEsuDpsww10f3YHuKztIhrPjGeUWGE5P3B6/q6MIxiJ6sn0bDwJlOR2Z3ec6c2A0
+	 bgjOgKzkmC0aJ3rezx+qcLjSSDGhZ3IDUk5TKdZB7bEQqAhWq+l9DYZM9n7QS9TXLd
+	 AETRk2IuIYCxZvyw67tz2tUUCbeRsPBCKgvCpzRULzc32PmlaeC+7t819KTirSk7V1
+	 w4oViyJFhvTQSB0ailBJtYthWRcGQiqwsWuFDt3Re0nSa2zBxep8SBxXE6ZEzmuZvd
+	 +NCXXoPkd2JLve7jX8aX3+BXx3PQDzJ8jS6/fzaVmhHf1YvZneotnpu7vhI5lVX/Iu
+	 IEpvNnqiTpHyA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4320A85808;
-	Tue,  9 Jun 2026 16:43:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 85394196
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 16:43:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF2EF8596B;
+	Tue,  9 Jun 2026 18:07:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 005DA190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 18:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76D404EB9C
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 16:43:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E54536F876
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 18:06:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C18FY8CcsWoG for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 16:43:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B16064EB9B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B16064EB9B
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B16064EB9B
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 16:43:55 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1366951443; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 09 Jun 2026 16:43:51 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wWzYM-0000000CcXm-0jXo;
- Tue, 09 Jun 2026 18:43:50 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O8_-gWwklPUm for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 18:06:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::336; helo=mail-ot1-x336.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AA7F06F875
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA7F06F875
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
+ [IPv6:2607:f8b0:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA7F06F875
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 18:06:58 +0000 (UTC)
+Received: by mail-ot1-x336.google.com with SMTP id
+ 46e09a7af769-7e6b5c374e5so5598485a34.0
+ for <buildroot@buildroot.org>; Tue, 09 Jun 2026 11:06:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781028417; x=1781633217;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=UIkIDbop+yYWBNDk1QJF+HUJVLaBTCV4I8rS4Ua4u3s=;
+ b=k0ZYJ+InHFie62InWwis9KhwNdIYoAqGetO9mqOtBF9xC0MMBXLGYhuV905RMd8uNB
+ sf/TyE51Y2I4UPQNiI7YZcW7NSQDEISm06YPt+b82PIbKDI6DY1Gh5hpo/ClEvAhexkl
+ iDpTKNhDY8WHmURDNufiAz/XqA4rT3MWFmr8jxoNPtHpoAdEJSfc3qY+QpESeuaNOSxI
+ cL6iJzzNiDSEcEL0qJ42UvSePUKWW0RRARGFNO4qQRIFVrKOSEjWkVALipVVbnWqR44C
+ wFuYtzy+lTreM3IB1wpDULrXM3Fmetas/Moh4We3KmxC4RNLj1XHQu2hmbt+t42ZmFDk
+ xHDQ==
+X-Gm-Message-State: AOJu0Yxdiz4HYsiMnW2wW/cIHJBck8Gh3/BZwgbsOwhO/aAhHQBYVX40
+ hjw0Nrr6oRWLri5waALuYRre9xtMZ00DX7xjWb0zPpy2UC+R0+Rpmiba9YHXgwfA
+X-Gm-Gg: Acq92OE7Dddeo3XGmxm95V7uDPw3AJ0ZJo+kiCPvaH/hfk8QfNv1+dFOoKJeTjmIzg5
+ HCJDEOus73hCNODBJFOsyu0OE9qSmGHeYMpb1YDZsd+x7bXvraOGqB2BL5jiTem4OccFjCDSc1K
+ R1FJ4W5Gvl6/usUQSL7/TvVnmbHL9SgZpXAwikiCo7xnhly7YhvkUgj21oxOuBQOvirFRVGVPH8
+ Hj6SKx+APZBdu6iiJHmnB9F+GvcVFo9zEIUahLSDLE5DfnH/rhgBhAReYX+wbx+UM+OSX+Bz59F
+ 6BGv4+EFl3ZKqEoq0r7Adefh7C3hrih+e08ZO/OTBcppxaYH/YZZEo3led+J7HXmLyRKf9jOXi+
+ HzflPs2s3ynM5LS+dZExNU1NoJ0ibRhCuR+QqKrhKjJM9bAt+foNJCuMXTEr3n0PkFd+BflLUai
+ /MucMaadCV08Xgagm+fR9VaPS1L8YJpsYSjNrStampGzkVg6aX9B2MBZrmsXfe4X+tGfNTDk7ls
+ owcrvaxlx4nAKsttux5WieYYwgxHrMTkaD1R4Wdz65ujWTr1dovQP8oO/7XTYul56A1FxFO+71h
+ MZn3FJJ3Ck2PL18G0FOeetpyo7UZTpIBiA==
+X-Received: by 2002:a05:6830:1295:b0:7e7:4a94:bace with SMTP id
+ 46e09a7af769-7e74a94ca5cmr2175200a34.13.1781028417265; 
+ Tue, 09 Jun 2026 11:06:57 -0700 (PDT)
+Received: from james-x399.tailafd1a.ts.net (97-118-5-210.hlrn.qwest.net.
+ [97.118.5.210]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-7e6e7923af1sm15024069a34.20.2026.06.09.11.06.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Jun 2026 11:06:56 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Jun 2026 18:43:47 +0200
-Message-ID: <20260609164349.3008084-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Tue,  9 Jun 2026 12:06:54 -0600
+Message-ID: <20260609180654.825304-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.53.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=lN3fImdw1ihlDGaRrWU8w0qVRfCX67uBigiEIKG1Rk2sDLEqmUwssPrRumdvd9W53mW2xxkupoqx3XqGTDJLoyvJDzS7sTVXaeq1mtOxgJxNqDRlcCBFzJJbLunFdTK4sccBZ6tgblohEFRGZAoAJYiIOG/Izm49HykiQyKjI5pVa+Xhr5QIG00jNMNFuTeonyxvuPbusu2Yh/kXSx8L0un0mon3w5PeO3px02epotcGPGDT6u88QPhfC1zkNL9kqkm/J4U10QePNUtBi+7GHB9Fxe2/BIwLrbXIsRDOoxMsy53O1UpoSEIQ9ZAQK7PAbMGGwBRZeJnMLmq308Gtng==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=9hATyEllkIlle+ePSRz/OBsEYH3VEcS2s1eGDe6DX+s=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1781028417; x=1781633217; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UIkIDbop+yYWBNDk1QJF+HUJVLaBTCV4I8rS4Ua4u3s=;
+ b=ODW2CDnoYkYv4mFVEcz/fatRLtNdo/XxIBqWiK75q9T28o09M6x9ceyktPsWkUj8DZ
+ 2+uuve/yBsXv0shn/HA+URWEbdThjn8ZKUVThBDHo7a1aLDW5Z3aNmbiJhWOPd1iZnHI
+ DZveAt4w4XMO/yNR0XqUhbvLzGBdvJZBXRVOGkh8DwRxtEgDU6z/i1I62f9nJXtkYEpR
+ YH7c1beLkvUetFtOgp6+F8cardsgjfP5CkyL0KkUPxI7NhVEaydCTbPEtgcrrOVLO9i2
+ vbqB1r/Wmhfnw/n1Nr0L1WiX0NmSpT+1xe1RHKQZAPBrQ3nYRTF87e/0H0aGzAHyJT4X
+ h8pQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=lN3fImdw
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/apache: security bump to version 2.4.68
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=ODW2CDno
+Subject: [Buildroot] [PATCH v2 1/1] package/dbus: bump to version 1.16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,137 +121,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZXM6CgogKikgU0VDVVJJVFk6IENWRS0y
-MDI2LTQ5OTc1OiBtb2RfaHR0cDIgZGVuaWFsIG9mIHNlcnZpY2UKICAgICAoY3ZlLm1pdHJlLm9y
-ZykKICAgICBNZW1vcnkgQWxsb2NhdGlvbiB3aXRoIEV4Y2Vzc2l2ZSBTaXplIFZhbHVlIHZ1bG5l
-cmFiaWxpdHkgaW4KICAgICBBcGFjaGUgSFRUUCBTZXJ2ZXIncyBtb2RfaHR0cCBsZWFkcyB0byBk
-ZW5pYWwgb2Ygc2VydmljZSB2aWEKICAgICBtYWxpY2lvdXMgSFRUUCByZXF1ZXN0cy4KICAgICBU
-aGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4xNyB0aHJvdWdo
-CiAgICAgMi40LjY3LgogICAgIENyZWRpdHM6IFF1YW5nIEx1b25nIG9mIENhbGlmLklPIGluIGNv
-bGxhYm9yYXRpb24gd2l0aCBPcGVuQUkKICAgICBDb2RleAoKICAqKSBTRUNVUklUWTogQ1ZFLTIw
-MjYtNDg5MTM6IG1vZF9odHRwMiBtZW1vcnkgY29ycnVwdGlvbiB3aGVuIGZpbGUKICAgICBoYW5k
-bGVzIGV4aGF1c3RlZCAoY3ZlLm1pdHJlLm9yZykKICAgICBVc2UgQWZ0ZXIgRnJlZSB2dWxuZXJh
-YmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlciBtb2R1bGUKICAgICBtb2RfaHR0cDIgd2hlbiBm
-aWxlIGhhbmRsZXMgYXJlIGFscmVhZHkgZXhoYXVzdGVkLgogICAgIFRoaXMgaXNzdWUgYWZmZWN0
-cyBBcGFjaGUgSFRUUCBTZXJ2ZXI6IGZyb20gMi40LjU1IHRocm91Z2gKICAgICAyLjQuNjcuCiAg
-ICAgQ3JlZGl0czogU2FtIExvdmVqb3ksIElCTSBYLUZvcmNlIE9mZmVuc2l2ZSBSZXNlYXJjaCAo
-WE9SKQoKICAqKSBTRUNVUklUWTogQ1ZFLTIwMjYtNDQ2MzE6IEhlYXAgVW5kZXJmbG93IGluIGBh
-cF9yZWduYW1lYCB2aWEKICAgICBTaWduZWQgQ2hhciBPdmVyZmxvdyAoY3ZlLm1pdHJlLm9yZykK
-ICAgICBCdWZmZXIgVW5kZXJ3cml0ZSB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZl
-ciBvbiBjcmFmdGVkCiAgICAgcmVndWxhciBleHByZXNzaW9ucyBpbiB0aGUgY29uZmlndXJhdGlv
-bi4KICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4w
-IHRocm91Z2ggMi40LjY3LgogICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1cGdyYWRlIHRv
-IHZlcnNpb24gMi40LjY4LCB3aGljaCBmaXhlcwogICAgIHRoZSBpc3N1ZS4KICAgICBDcmVkaXRz
-OiBaaGVucGVuZyAoTGVvKSBMaW4gYXQgZGVwdGhmaXJzdAoKICAqKSBTRUNVUklUWTogQ1ZFLTIw
-MjYtNDQxODY6IExvb3AgaW4gYHByb3h5X2Z0cF9oYW5kbGVyYCBpbgogICAgIG1vZF9wcm94eV9m
-dHAgKGN2ZS5taXRyZS5vcmcpCiAgICAgTG9vcCB3aXRoIFVucmVhY2hhYmxlIEV4aXQgQ29uZGl0
-aW9uICgnSW5maW5pdGUgTG9vcCcpCiAgICAgdnVsbmVyYWJpbGl0eSBpbiB0aGUgbW9kX3Byb3h5
-X2Z0cCBtb2R1bGUgaW4gQXBhY2hlIEhUVFAgU2VydmVyCiAgICAgd2l0aCBhbiBhdHRhY2tlciBj
-b250cm9sbGVkIGJhY2tlbmQgRlRQIHNlcnZlci4KICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgdW5k
-ZWZpbmVkOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY3LgogICAgIFVzZXJzIGFyZSByZWNvbW1l
-bmRlZCB0byB1cGdyYWRlIHRvIHZlcnNpb24gMi40LjY4LCB3aGljaCBmaXhlcwogICAgIHRoZSBp
-c3N1ZS4KICAgICBDcmVkaXRzOiBaaGVucGVuZyAoTGVvKSBMaW4gYXQgZGVwdGhmaXJzdAoKICAq
-KSBTRUNVUklUWTogQ1ZFLTIwMjYtNDQxODU6IFN0YWNrIEJ1ZmZlciBPdmVyLVJlYWQgaW4gbW9k
-X3NzbCBPQ1NQCiAgICAgYHNlbmRfcmVxdWVzdGAgKGN2ZS5taXRyZS5vcmcpCiAgICAgQnVmZmVy
-IE92ZXItcmVhZCB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQIFNlcnZlciB2aWEKICAgICBv
-dXRib3VuZCBPQ1NQIHJlcXVlc3RzIHRvIGFuIGF0dGFja2VyIGNvbnRyb2xsZWQgT0NTUCBzZXJ2
-ZXIKICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4w
-IHRocm91Z2ggMi40LjY3LgogICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1cGdyYWRlIHRv
-IHZlcnNpb24gMi40LjY4LCB3aGljaCBmaXhlcwogICAgIHRoZSBpc3N1ZS4KICAgICBDcmVkaXRz
-OiBaaGVucGVuZyAoTGVvKSBMaW4gYXQgZGVwdGhmaXJzdAoKICAqKSBTRUNVUklUWTogQ1ZFLTIw
-MjYtNDQxMTk6IGVzY2FsYXRpb24gb2YgcHJpdmlsZWdlIHRocm91Z2gKICAgICBleHByZXNzaW9u
-cyBpbiAuaHRhY2Nlc3MgaW4gbXVsdGlwbGUgbW9kdWxlcyAoY3ZlLm1pdHJlLm9yZykKICAgICBJ
-bXByb3BlciBQcml2aWxlZ2UgTWFuYWdlbWVudCB2dWxuZXJhYmlsaXR5IGluIEFwYWNoZSBIVFRQ
-CiAgICAgU2VydmVyIDIuNC42NyBhbmQgZWFybGllciBhbGxvd3MgbG9jYWwgLmh0YWNjZXNzIGF1
-dGhvcnMgdG8gcmVhZAogICAgIGZpbGVzIHdpdGggdGhlIHByaXZpbGVnZXMgb2YgdGhlIGh0dHBk
-IHVzZXIuCiAgICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQIFNlcnZlcjogZnJvbSB0
-aHJvdWdoIDIuNC42Ny4KICAgICBVc2VycyBhcmUgcmVjb21tZW5kZWQgdG8gdXBncmFkZSB0byB2
-ZXJzaW9uIDIuNC42OCwgd2hpY2ggZml4ZXMKICAgICB0aGUgaXNzdWUuCiAgICAgQ3JlZGl0czog
-THVjaWFuIE5pdGVzY3UKCiAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTQzOTUxOiBPT0IgUmVhZCBp
-biBgbWVyZ2VfcmVzcG9uc2VfaGVhZGVyc2AKICAgICBjYW4gY2F1c2UgY3Jhc2ggKGN2ZS5taXRy
-ZS5vcmcpCiAgICAgT3V0LW9mLWJvdW5kcyBSZWFkIHZ1bG5lcmFiaWxpdHkgaW4gQXBhY2hlIEhU
-VFAgU2VydmVyIHdpdGgKICAgICBtb2RfaGVhZGVycyBhbmQgbW9kX21pbWUgYW5kIG11bHRpcGxl
-IHJlc3BvbnNlIGxhbmd1YWdlcy4KICAgICBUaGlzIGlzc3VlIGFmZmVjdHMgQXBhY2hlIEhUVFAg
-U2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY3LgogICAgIENyZWRpdHM6IFpoZW5wZW5n
-IChMZW8pIExpbiBhdCBkZXB0aGZpcnN0CgogICopIFNFQ1VSSVRZOiBDVkUtMjAyNi00MjUzNjog
-bW9kX3htbDJlbmMgaGVhcCBvdmVyZmxvdwogICAgIChjdmUubWl0cmUub3JnKQogICAgIEhlYXAt
-YmFzZWQgQnVmZmVyIE92ZXJmbG93IHZ1bG5lcmFiaWxpdHkgaW4gQXBhY2hlIEhUVFAgU2VydmVy
-CiAgICAgd2l0aMOCIG1vZF94bWwyZW5jLCB4bWwyU3RhcnRQYXJzZSwgYW5kIHVudHJ1c3RlZCBj
-b250ZW50CiAgICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQIFNlcnZlcjogZnJvbSAy
-LjQuMCB0aHJvdWdoIDIuNC42Ny4KICAgICBVc2VycyBhcmUgcmVjb21tZW5kZWQgdG8gdXBncmFk
-ZSB0byB2ZXJzaW9uIDIuNC42OCwgd2hpY2ggZml4ZXMKICAgICB0aGUgaXNzdWUuCiAgICAgQ3Jl
-ZGl0czogWmhlbnBlbmcgKExlbykgTGluIGF0IGRlcHRoZmlyc3QKCiAgKikgU0VDVVJJVFk6IENW
-RS0yMDI2LTQyNTM1OiBtb2RfZGF2X2ZzIHByb3RlY3RlZCBkaXJlY3RvcnkgYWNjZXNzCiAgICAg
-KGN2ZS5taXRyZS5vcmcpCiAgICAgQSBwYXRoIGhhbmRsaW5nIGlzc3VlIGluIG1vZF9kYXZfZnMg
-aW4gQXBhY2hlIDIuNC42NyBhbmQKICAgICBlYXJsaWVyw4IgYWxsb3dzIGEgV2ViREFWIGNvbnRl
-bnQgYXV0aG9yIHRvIGRpcmVjdGx5IG1hbmlwdWxhdGUKICAgICB0cnVzdGVkIERBViBwcm9wZXJ0
-eSBkYXRhYmFzZXMsIHBvdGVudGlhbGx5IGNhdXNpbmcgY2hpbGQKICAgICBwcm9jZXNzIGNyYXNo
-ZXMuCiAgICAgVXNlcnMgYXJlIHJlY29tbWVuZGVkIHRvIHVwZ3JhZGUgdG8gdmVyc2lvbiAyLjQu
-NjgsIHdoaWNoIGZpeGVzCiAgICAgdGhpcyBpc3N1ZS4KICAgICBDcmVkaXRzOiBaaGVucGVuZyAo
-TGVvKSBMaW4gYXQgZGVwdGhmaXJzdAoKICAqKSBTRUNVUklUWTogQ1ZFLTIwMjYtMzQzNTY6IFBy
-b3h5UGFzc1JldmVyc2VDb29raWVNYXAgYnVmZmVyCiAgICAgb3ZlcmZsb3cgKGN2ZS5taXRyZS5v
-cmcpCiAgICAgSGVhcC1iYXNlZCBCdWZmZXIgT3ZlcmZsb3cgdnVsbmVyYWJpbGl0eSBpbiBBcGFj
-aGUgSFRUUCBTZXJ2ZXIKICAgICB3aXRoIG1hbGljaW91cyBiYWNrZW5kIHNlcnZlcnMgYW5kIFBy
-b3h5UGFzc1JldmVyc2VDb29raWUqCiAgICAgVGhpcyBpc3N1ZSBhZmZlY3RzIEFwYWNoZSBIVFRQ
-IFNlcnZlcjogZnJvbSAyLjQuMCB0aHJvdWdoIDIuNC42Ny4KICAgICBVc2VycyBhcmUgcmVjb21t
-ZW5kZWQgdG8gdXBncmFkZSB0byB2ZXJzaW9uIDIuNC42OCwgd2hpY2ggZml4ZXMKICAgICB0aGUg
-aXNzdWUuCiAgICAgQ3JlZGl0czogQXJrYWRpIFZhaW5icmFuZAoKICAqKSBTRUNVUklUWTogQ1ZF
-LTIwMjYtMzQzNTU6IG1vZF9wcm94eV9odG1sIGJ1ZmZlciBvdmVyZmxvdwogICAgIChjdmUubWl0
-cmUub3JnKQogICAgIEEgYnVmZmVyIG92ZXJmbG93IGluIG1vZF9wcm94eV9odG1sIGluIEFwYWNo
-ZSBIVFRQIFNlcnZlciAyLjQuNjcKICAgICBhbmQgZWFybGllciBhbGxvd3MgYW4gYXR0YWNrIGJ5
-IGFuIHVudHJ1c3RlZCBiYWNrZW5kLgogICAgIFVzZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1cGdy
-YWRlIHRvIHZlcnNpb24gMi40LjY4LCB3aGljaCBmaXhlcwogICAgIHRoaXMgaXNzdWUuCiAgICAg
-Q3JlZGl0czogRWxoYW5hbiBIYWVuZWwKCiAgKikgU0VDVVJJVFk6IENWRS0yMDI2LTI5MTcwOiBt
-b2RfcHJveHlfZnRwIFhTUyAoY3ZlLm1pdHJlLm9yZykKICAgICBBIGNyb3NzLXNpdGUgc2NyaXB0
-aW5nIHZ1bG5lcmFiaWxpdHkgZXhpc3RzIGluIG1vZF9wcm94eV9mdHAncwogICAgIEhUTUwgZGly
-ZWN0b3J5IGxpc3QgZ2VuZXJhdGlvbiBpbiBBcGFjaGUgSFRUUCBTZXJ2ZXIgMi40LjY3IGFuZAog
-ICAgIGVhcmxpZXIgd2hlbiBsaXN0aW5nIEZUUCBkaXJlY3RvcnkgY29udGVudHMgZWl0aGVyIHZp
-YSBmb3J3YXJkCiAgICAgb3IgcmV2ZXJzZSBwcm94eSBjb25maWd1cmF0aW9uLgogICAgIFVzZXJz
-IGFyZSByZWNvbW1lbmRlZCB0byB1cGdyYWRlIHRvIHZlcnNpb24gMi40LjY4LCB3aGljaCBmaXhl
-cwogICAgIHRoaXMgaXNzdWUuCiAgICAgQ3JlZGl0czogUGF2ZWwgS29ob3V0LCBBaXNsZSBSZXNl
-YXJjaCwgQWlzbGUuY29tCgogICopIFNFQ1VSSVRZOiBDVkUtMjAyNi0yOTE2NzogbW9kX2xkYXAg
-cGVyLWRpciB1c2UtYWZ0ZXItZnJlZQogICAgIChjdmUubWl0cmUub3JnKQogICAgIFVzZSBBZnRl
-ciBGcmVlIHZ1bG5lcmFiaWxpdHkgaW4gQXBhY2hlIEhUVFAgU2VydmVyIHdpdGggbW9kX2xkYXAK
-ICAgICBpbiBwZXItZGlyZWN0b3J5IGNvbmZpZ3VyYXRpb24KICAgICBUaGlzIGlzc3VlIGFmZmVj
-dHMgQXBhY2hlIEhUVFAgU2VydmVyOiBmcm9tIDIuNC4wIHRocm91Z2ggMi40LjY3LgogICAgIFVz
-ZXJzIGFyZSByZWNvbW1lbmRlZCB0byB1cGdyYWRlIHRvIHZlcnNpb24gMi40LjY4LCB3aGljaCBm
-aXhlcwogICAgIHRoZSBpc3N1ZS4KICAgICBDcmVkaXRzOiBQYXZlbCBLb2hvdXQsIEFpc2xlIFJl
-c2VhcmNoLCBBaXNsZS5jb20KCkZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgQ0hBTkdFUyBmaWxl
-OgpodHRwczovL2Rvd25sb2Fkcy5hcGFjaGUub3JnL2h0dHBkL0NIQU5HRVNfMi40LjY4CgpTaWdu
-ZWQtb2ZmLWJ5OiBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+Ci0tLQogcGFj
-a2FnZS9hcGFjaGUvYXBhY2hlLmhhc2ggfCA2ICsrKy0tLQogcGFja2FnZS9hcGFjaGUvYXBhY2hl
-Lm1rICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlv
-bnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2FwYWNoZS9hcGFjaGUuaGFzaCBiL3BhY2thZ2Uv
-YXBhY2hlL2FwYWNoZS5oYXNoCmluZGV4IDQ0ZTJhYzI0YjQuLmU4ZWQ4YzBkZjYgMTAwNjQ0Ci0t
-LSBhL3BhY2thZ2UvYXBhY2hlL2FwYWNoZS5oYXNoCisrKyBiL3BhY2thZ2UvYXBhY2hlL2FwYWNo
-ZS5oYXNoCkBAIC0xLDUgKzEsNSBAQAotIyBGcm9tIGh0dHBzOi8vYXJjaGl2ZS5hcGFjaGUub3Jn
-L2Rpc3QvaHR0cGQvaHR0cGQtMi40LjY3LnRhci5iejIue3NoYTI1NixzaGE1MTJ9Ci1zaGEyNTYg
-IDY2Y2QyMDY2MzdiMGQ1YzQ0NmZhN2RhYmU3NWZlMDM1MjVkYThmYjU1ODU1ODc2YzQ2Mjg4Y2Q4
-OGIxMzZhYTQgIGh0dHBkLTIuNC42Ny50YXIuYnoyCi1zaGE1MTIgIDVhZTI5ZmM4ZWRiMjUzNDUz
-MjcxNjEzY2IxODc1NGRlMGQ5NDNkMWY4MjM2MTA1OWM4MWY4ZWJlMWYwNTdiODk0Njc1NTA2NTUw
-YmQxMzQxYmZhOTQxNjIyNmI1NjlhN2JhYzA4ZjQ5N2M1M2U4YmI2ZGVkZTg3ZjRmNDFlYWU0ICBo
-dHRwZC0yLjQuNjcudGFyLmJ6MgorIyBGcm9tIGh0dHBzOi8vYXJjaGl2ZS5hcGFjaGUub3JnL2Rp
-c3QvaHR0cGQvaHR0cGQtMi40LjY4LnRhci5iejIue3NoYTI1NixzaGE1MTJ9CitzaGEyNTYgIDY4
-Yzc0ZDRkZjM4YzI2YmVkNGRmYmRiOGYzYmFmMWViNTMyZjM4NzIzNTdiZWNjMWJiYTVkMTM2ZjZi
-NjNjMDYgIGh0dHBkLTIuNC42OC50YXIuYnoyCitzaGE1MTIgIDEzNGE1YmJkM2ZmZTk3NTIzYWM3
-NTA0OTA1MzFiY2I5NDQxYzUzMmNlZGYwMjI5YWEwMDZhYTEzNjhlOWQyNTA0MDUwN2M2ZjUxOWJl
-ZDY3NTQwNDRmNjJjMzcxZjdjN2Y5YTExYjZhMzExZjc5Yjk2ODBkNDc4YmY0MzczZWIzICBodHRw
-ZC0yLjQuNjgudGFyLmJ6MgogIyBMb2NhbGx5IGNvbXB1dGVkCiBzaGEyNTYgIDQ3YjhjMmI2YzMz
-MDkyODJhOTlkNGEzMDAxNTc1Yzc5MGZlYWQ2OTBjYzE0NzM0NjI4YzQ2NjdkMmJiZmZjNDMgIExJ
-Q0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXBhY2hlL2FwYWNoZS5tayBiL3BhY2thZ2UvYXBh
-Y2hlL2FwYWNoZS5tawppbmRleCBlMTEzMDg4MzcyLi4yNDY2YmM5NDYxIDEwMDY0NAotLS0gYS9w
-YWNrYWdlL2FwYWNoZS9hcGFjaGUubWsKKysrIGIvcGFja2FnZS9hcGFjaGUvYXBhY2hlLm1rCkBA
-IC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotQVBBQ0hFX1ZFUlNJ
-T04gPSAyLjQuNjcKK0FQQUNIRV9WRVJTSU9OID0gMi40LjY4CiBBUEFDSEVfU09VUkNFID0gaHR0
-cGQtJChBUEFDSEVfVkVSU0lPTikudGFyLmJ6MgogQVBBQ0hFX1NJVEUgPSBodHRwczovL2FyY2hp
-dmUuYXBhY2hlLm9yZy9kaXN0L2h0dHBkCiBBUEFDSEVfTElDRU5TRSA9IEFwYWNoZS0yLjAKLS0g
-CjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Migrate from autotools to meson.
+
+The COPYING file now points to separate license texts under LICENSES/
+instead of embedding them, so update DBUS_LICENSE_FILES and hashes.
+Expand DBUS_LICENSE for the AFL-2.0 dbus/dbus-arch-deps.h.in header
+and the bundled TCL/pycrypto-origin code used by the library.
+
+Drop the stale optional xlib_libSM dependency: the meson build only
+checks for x11 for X11 autolaunch support.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - Enable user-session semantics for systemd init builds so the
+    systemd user service/socket units are installed. Keep it disabled
+    otherwise.
+  - Refer to dbus/dbus-arch-deps.h.in in DBUS_LICENSE instead of the
+    nonexistent dbus-arch-deps.h source file.
+---
+ package/dbus/dbus.hash |  12 +++--
+ package/dbus/dbus.mk   | 100 +++++++++++++++++++++++++----------------
+ 2 files changed, 70 insertions(+), 42 deletions(-)
+
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index a06ba50ccd..fae6b796e3 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,13 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.10.tar.xz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  ba1f21d2bd9d339da2d4aa8780c09df32fea87998b73da24f49ab9df1e36a50f  dbus-1.14.10.tar.xz
++sha256  0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2  dbus-1.16.2.tar.xz
+ 
+ # Locally calculated
+-sha256  e61807cd1c32ff4e7bd5b4b61dd21997c6dc5642cf19316124fe38d50e1f9fa3  COPYING
++sha256  150e5d08e1cb5e62b65967d7931acad2c42d98ec1bbb584bebb01921cbc853c2  COPYING
++sha256  7ecc7db84298adb05d2cf10339c63a5315a1c5c270a68d97d7d40a53b508ccde  LICENSES/AFL-2.0.txt
++sha256  93bb4f7417aa775bab9026cc3d0af28aeb64451fc5a8ec651876785edd8eaf9b  LICENSES/AFL-2.1.txt
++sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
++sha256  2cb8f4f410f0ffc5dcfbadd188e20c859fdbb161e616cf2f3d34dfbf8c740547  LICENSES/LicenseRef-pycrypto-orig.txt
++sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
++sha256  36fc2d8a56a2a014ded51e298a7e63635eb4ec62e8bedb99c82b892542ac5e7d  LICENSES/TCL.txt
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 7b97c7604d..6913b1e211 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,11 +6,22 @@
+ 
+ # When updating dbus, check if there are changes in session.conf and
+ # system.conf, and update the versions in the dbus-broker package accordingly.
+-DBUS_VERSION = 1.14.10
++DBUS_VERSION = 1.16.2
+ DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.xz
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+-DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+-DBUS_LICENSE_FILES = COPYING
++DBUS_LICENSE = \
++	AFL-2.0 or GPL-2.0+ (dbus/dbus-arch-deps.h.in), \
++	AFL-2.1 or GPL-2.0+ (library, daemon, some tools), \
++	GPL-2.0+ (some tools), MIT (some files), \
++	Public Domain (dbus-sha), TCL (dbus-hash)
++DBUS_LICENSE_FILES = \
++	COPYING \
++	LICENSES/AFL-2.0.txt \
++	LICENSES/AFL-2.1.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/LicenseRef-pycrypto-orig.txt \
++	LICENSES/MIT.txt \
++	LICENSES/TCL.txt
+ DBUS_CPE_ID_VENDOR = freedesktop
+ DBUS_INSTALL_STAGING = YES
+ 
+@@ -27,56 +38,59 @@ DBUS_DEPENDENCIES = host-pkgconf expat
+ DBUS_SELINUX_MODULES = dbus
+ 
+ DBUS_CONF_OPTS = \
+-	--with-dbus-user=dbus \
+-	--disable-tests \
+-	--disable-asserts \
+-	--disable-xml-docs \
+-	--disable-doxygen-docs \
+-	--with-system-socket=/run/dbus/system_bus_socket \
+-	--with-system-pid-file=/run/dbus-daemon.pid \
+-	--with-session-socket-dir=/tmp \
+-	--runstatedir=/run
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-DBUS_CONF_OPTS += LIBS='-pthread'
+-endif
++	-Dapparmor=disabled \
++	-Dasserts=false \
++	-Ddbus_user=dbus \
++	-Ddoxygen_docs=disabled \
++	-Dducktype_docs=disabled \
++	-Dinstalled_tests=false \
++	-Dintrusive_tests=false \
++	-Dlaunchd=disabled \
++	-Dmodular_tests=disabled \
++	-Dqt_help=disabled \
++	-Druntime_dir=/run \
++	-Dsession_socket_dir=/tmp \
++	-Dsystem_pid_file=/run/dbus-daemon.pid \
++	-Dsystem_socket=/run/dbus/system_bus_socket \
++	-Dxml_docs=disabled
+ 
+ ifeq ($(BR2_microblaze),y)
+ # microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
+-DBUS_CONF_OPTS += --disable-inotify
++DBUS_CONF_OPTS += -Dinotify=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+-DBUS_CONF_OPTS += --enable-selinux
++DBUS_CONF_OPTS += -Dselinux=enabled
+ DBUS_DEPENDENCIES += libselinux
+ else
+-DBUS_CONF_OPTS += --disable-selinux
++DBUS_CONF_OPTS += -Dselinux=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT)$(BR2_PACKAGE_LIBCAP_NG),yy)
+-DBUS_CONF_OPTS += --enable-libaudit
++DBUS_CONF_OPTS += -Dlibaudit=enabled
+ DBUS_DEPENDENCIES += audit libcap-ng
+ else
+-DBUS_CONF_OPTS += --disable-libaudit
++DBUS_CONF_OPTS += -Dlibaudit=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-DBUS_CONF_OPTS += --with-x
++DBUS_CONF_OPTS += -Dx11_autolaunch=enabled
+ DBUS_DEPENDENCIES += xlib_libX11
+-ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
+-DBUS_DEPENDENCIES += xlib_libSM
+-endif
+ else
+-DBUS_CONF_OPTS += --without-x
++DBUS_CONF_OPTS += -Dx11_autolaunch=disabled
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ DBUS_CONF_OPTS += \
+-	--enable-systemd \
+-	--with-systemdsystemunitdir=/usr/lib/systemd/system
++	-Dsystemd=enabled \
++	-Dsystemd_system_unitdir=/usr/lib/systemd/system \
++	-Dsystemd_user_unitdir=/usr/lib/systemd/user \
++	-Duser_session=true
+ DBUS_DEPENDENCIES += systemd
+ else
+-DBUS_CONF_OPTS += --disable-systemd
++DBUS_CONF_OPTS += \
++	-Dsystemd=disabled \
++	-Duser_session=false
+ endif
+ 
+ # fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
+@@ -122,14 +136,22 @@ endef
+ 
+ HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
+ HOST_DBUS_CONF_OPTS = \
+-	--with-dbus-user=dbus \
+-	--disable-tests \
+-	--disable-asserts \
+-	--disable-selinux \
+-	--disable-xml-docs \
+-	--disable-doxygen-docs \
+-	--disable-systemd \
+-	--without-x
++	-Dapparmor=disabled \
++	-Dasserts=false \
++	-Ddbus_user=dbus \
++	-Ddoxygen_docs=disabled \
++	-Dducktype_docs=disabled \
++	-Dinstalled_tests=false \
++	-Dintrusive_tests=false \
++	-Dlaunchd=disabled \
++	-Dlibaudit=disabled \
++	-Dmodular_tests=disabled \
++	-Dqt_help=disabled \
++	-Dselinux=disabled \
++	-Dsystemd=disabled \
++	-Duser_session=false \
++	-Dx11_autolaunch=disabled \
++	-Dxml_docs=disabled
+ 
+ # dbus for the host
+ DBUS_HOST_INTROSPECT = $(HOST_DBUS_DIR)/introspect.xml
+@@ -139,5 +161,5 @@ HOST_DBUS_GEN_INTROSPECT = \
+ 
+ HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(meson-package))
++$(eval $(host-meson-package))
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
