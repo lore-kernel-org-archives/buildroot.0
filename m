@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02159CD8CA8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 20:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62A1CD8CA8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jun 2026 20:51:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22EF56F989;
-	Tue,  9 Jun 2026 20:50:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8557885A05;
+	Tue,  9 Jun 2026 20:51:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X3-4vsJOlzBi; Tue,  9 Jun 2026 20:50:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cHkS5TYqMGDu; Tue,  9 Jun 2026 20:51:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62F8E6F975
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B373585A01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781038235;
-	bh=dj+nPt43D19IcCnmXuV2hU+K7zNJ0BbUjepRAoRJFFY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=csp25I2u7FK9o2bGvVqLyGoul7Ag1yUHd8W7Q/uIghfGhGV2tzfunWmS8+YA8AMkD
-	 l6kFWJ8XyKrn5snmop9+d72JPYl5NAShJoQndAV219JI8gCC6PLzVHBWQgbnv706Oc
-	 hWUkDWpy4e9b6aL0DxK67vbYhWabmwueSpU+e21RkmVidw6rt9EyanWGD4nnkO2nLn
-	 G+ro2/9KopqGlabO97z49SKssYMtkvdPn5iiJ4ylucqVPy9TQz9zZu9uMgIjjpK031
-	 iTAsDlxy33XFggIvohQsm4uZydX/GyMyFJF4n2xeoBdozl3mylPRQL109BqjSBRPns
-	 PfvBqoT7VFR6Q==
+	s=default; t=1781038304;
+	bh=iQtluimLN2pqzjIxE3xBL05STb1fJgL4rOCWnV+yiCU=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=efCfmctE6YhUKZoy3V/v0RqmPYToWY5FisqS/450WgPX/42aK3vIbQOHi9kEWY+Wa
+	 CI477QSCU5DEzLBW9tQcL/FNkO6jao6dNgo2asFOFMLXOuQLO0GPDotK8n6jCZsJoQ
+	 1qdtXz9x6jUygDloiBSEm154u9q9AFb5HpmIgf28pQwXefAFt7vOyagtqk5kaNYYNd
+	 qV9y4LUzYSEcb35c48yJLTvEFS+GiKmzUWPWQrttj9kJOYbsLv6WmE7tf43eMYUQ8P
+	 2JDT7F8fzvS8Pr6RAyy4odHZX6sV0Hf7GCMJ0CiasKpaGZyd4Xniz3kzvVd7gnR3Pb
+	 XFZsmgzpYmSPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62F8E6F975;
-	Tue,  9 Jun 2026 20:50:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E10D5190
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:50:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B373585A01;
+	Tue,  9 Jun 2026 20:51:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DFE08190
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:51:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6E126F8AE
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:50:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C560585A01
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:51:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTmWQKn1ef5I for <buildroot@buildroot.org>;
- Tue,  9 Jun 2026 20:50:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C906D6F916
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C906D6F916
- for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:50:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCA3987EBE; Tue,  9 Jun 2026 20:50:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 9 Jun 2026 22:47:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: be7b7821c665db35beea8763c50a49da76bef1f5
-X-Git-Newrev: 4184a1f082a645d7ee34f3f09c7e301b5dc4de6f
-X-Patchwork-Hint: ignore
-Message-Id: <20260609205014.CCA3987EBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtool: bump version to 2.5.4
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qw3CPR8vLF3F for <buildroot@buildroot.org>;
+ Tue,  9 Jun 2026 20:51:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 84A63859FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84A63859FB
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 84A63859FB
+ for <buildroot@buildroot.org>; Tue,  9 Jun 2026 20:51:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id BD48C780375;
+ Tue,  9 Jun 2026 22:51:38 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 09 Jun 2026 22:51:38 +0200
+MIME-Version: 1.0
+Date: Tue, 09 Jun 2026 22:51:38 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20260216071638.3456062-1-bernd@kuhls.net>
+References: <20260216071638.3456062-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <24863c0c50e75f0ac6c2c48826a1f25d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1781038299;
+ bh=gScINfBRjhynNRcD4LmFm1A/i5TA0zQ65PTT57Z5Dn4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=j4UIoIhQ2eghz8UjTyf109Eae/HVHLUFk1zknWR7EI4z7GnGKyn1NHLjaeh+rG8h9
+ lfurvNPNwBmlZiMW8zvdEodJdKs4x1NCFDnukLskZ6leh6dug/J6EOHlvJCKXsbcMJ
+ BUXCfN63fqyxbzDaLkTNYzxZG+/BrZPBGdNISsTHft+4SuOL2/k9vU9nHTCjIFuTXR
+ tuVt351m287sUqzVQXQEM8DSAT3xXG5y9/FlpkZ61FZAUyl7aXI19aMgxUZDvJpHz0
+ YhH+tUOcqF9rESnqoZ2AiyD9Fu9VFo+ST48+w3FkGRaHbJf9Njb1N78BYG47mI8x6K
+ JTMHE6kFkat8g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=j4UIoIhQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/libtool: bump version to 2.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,69 +95,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4184a1f082a645d7ee34f3f09c7e301b5dc4de6f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 16/02/2026 08:16, Bernd Kuhls wrote:
+> Updated license hashes due to address changes.
+> 
+> Disable help2man to fix build error which would be introduced by this
+> bump.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Updated license hashes due to address changes.
+Applied to master.
 
-Disable help2man to fix build error which would be introduced by this
-bump.
+Since libtool can be a tricky package, I was waiting to apply it at
+the beginning of a new release cycle, to give the maximum time to
+catch any issues.
 
-For change list since version 2.4.6, see:
-https://gitweb.git.savannah.gnu.org/gitweb/?p=libtool.git;a=blob;f=NEWS;h=07333e0cb35654dbb4ad930ba556aa6fde3d04f4;hb=v2.5.4
+Thanks!
 
-Release announce:
-https://lists.gnu.org/archive/html/info-gnu/2024-11/msg00002.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add links to NEWS and release announce in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libtool/libtool.hash | 6 +++---
- package/libtool/libtool.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/libtool/libtool.hash b/package/libtool/libtool.hash
-index 8deaf4fbf6..72281eb465 100644
---- a/package/libtool/libtool.hash
-+++ b/package/libtool/libtool.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f  libtool-2.4.6.tar.xz
-+sha256  f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675  libtool-2.5.4.tar.xz
- # License files, locally calculated
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libltdl/COPYING.LIB
-+sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  libltdl/COPYING.LIB
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 6342e70a39..ecadc3e696 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTOOL_VERSION = 2.4.6
-+LIBTOOL_VERSION = 2.5.4
- LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
- LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
- LIBTOOL_CPE_ID_VENDOR = gnu
-@@ -25,7 +25,7 @@ LIBTOOL_LICENSE_FILES = $(LIBTOOL_SUBDIR)/COPYING.LIB
- HOST_LIBTOOL_LICENSE = GPL-2.0+ (libtool), LGPL-2.1+ (libltdl)
- HOST_LIBTOOL_LICENSE_FILES = COPYING $(LIBTOOL_SUBDIR)/COPYING.LIB
- 
--HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
-+HOST_LIBTOOL_CONF_ENV = HELP2MAN=true MAKEINFO=true
- HOST_LIBTOOL_LIBTOOL_PATCH = NO
- 
- # We have a patch that affects libtool.m4, which triggers an autoreconf
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
