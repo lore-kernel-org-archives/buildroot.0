@@ -4,81 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A6F9CD8CB2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jun 2026 06:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22685CD8CB9
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jun 2026 08:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F27660818;
-	Wed, 10 Jun 2026 06:48:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3FAD60861;
+	Wed, 10 Jun 2026 08:40:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6yydarYBUCWD; Wed, 10 Jun 2026 06:48:03 +0000 (UTC)
+ id Pa2-3gS8K3kP; Wed, 10 Jun 2026 08:40:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 409D06070D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2BCF60856
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781074083;
-	bh=a2j3gUaK4Xj4yLJDayry3/Z8uCahP02+8LMqPoERI9M=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=DEuYC9jbm8S2tiulMVjKwzbNw4ahsfVwRH0LEFYHt+Cl71uZLMHF+De7FQXVTeH2r
-	 P34AvDa8JDtMPoQD47meQSlHN4FGBk8+6HQPhhBOx5OLnyuZPzK7OozzKhsV4eq9Eq
-	 koKUtXxfJjS8l5OFy/+BV2L12nqoik/BjzTXPJ+Q1jM38Xsb3PxVGSxEc2wt9wWzAQ
-	 xBdxXEqJKymp3rwdFCTw/XmkLda7kCPzDaPCxViIXpiKWXoSDUWeJoEUX0EA2/Vxso
-	 Jczf5IkzCom/MdbRwH3a5SnBn2VTZGR4bnEBFUG7kE7PKp0gWFQtQcOfgxIIhuVHkE
-	 10tnlg7U2U+zQ==
+	s=default; t=1781080858;
+	bh=/lD2em88F8cSQrAUC/KKdIrc2JD52g7GKPnN6XdMs9k=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=jAKTjI86Vr9EJCTGCg/rWSTNpr5pD9s3ONU77aPSlBuc+gG81W8OrIzdvSrjah92r
+	 ex/aQmjpMQ64ckzL6vssLZWIF9aApHkGXTvflJcFjB5GN0IfZFP4r/sK8YSQZL06RS
+	 72NT37FvAYeiIC4nwydmIzVXWMUWUBeSoPTESKad4b509a9QnyWrm0zl1EjIFskCJb
+	 6ujePknJOjhz/BSt2jFlVMnNjZ3ZXXzGJ9ZvNlL9D6ZvcpsPva+Ox+Ru/Qyc8YCj7N
+	 OpjdrwCT2wkkpAiP0N7rVGeOzdHrDhACERFj8wYjSqohZMEGy2/hCsIZBOXXQNcQRk
+	 cBD4ceBBX75Fw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 409D06070D;
-	Wed, 10 Jun 2026 06:48:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D7A7196
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 06:48:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2BCF60856;
+	Wed, 10 Jun 2026 08:40:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83647196
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 08:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F9EF606D3
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 06:48:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6836281A99
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 08:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 76jb7nNbp-6d for <buildroot@buildroot.org>;
- Wed, 10 Jun 2026 06:48:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C3A9260818
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3A9260818
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C3A9260818
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 06:48:00 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1487476332; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 10 Jun 2026 06:47:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wXCjD-0000000DIoe-3cJu;
- Wed, 10 Jun 2026 08:47:55 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Jun 2026 08:47:53 +0200
-Message-ID: <20260610064754.3170578-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KROh4apgQqco for <buildroot@buildroot.org>;
+ Wed, 10 Jun 2026 08:40:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B9A0F81A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9A0F81A95
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9A0F81A95
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 08:40:53 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-490ac357c55so69311975e9.1
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 01:40:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781080852; x=1781685652;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=de2CQyp7IvoYYWV8QmCC/QSpyzH0sw4aiHC/CrKg3l8=;
+ b=RheOYArrTzUxZeSUXPQdw5QctfYuw/J2O5sNAa3b7mM1gCvTroTfZhqPzQJKNq19Bk
+ Bp0+BFVv3jc6jzNK7vMMxaPCwudV8C6u6FC06pD8FQT4ldSGZNnNsoL1YClTYDhH+Teo
+ 1fG70+lXZBHbEvSKhWb3PHxTxEsCearvmrR7tajPvMdJdSgCjmU/UN2UR0ReuQaB13Ir
+ haiaN2jPmvi4JlUnw9Zt0omGI5BCabymI3KsNbSqcaAHjaXnkOJlybEHyHHQ7aI+BAZK
+ kDU1DiIMW4C8DkPoY50TkZUINgq4gjCpvGu/fRYvc11DmbZAts8/6vezYvFt1LQmNqI8
+ lZgg==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ+WisiBoeQh2fV2QPy7n20ItjhfaZwBdXJfsevls+qpAgzJ8Uu5/Gu5g7bTQerPdfTk71GdOmZbeuc=@buildroot.org
+X-Gm-Message-State: AOJu0Yyg/6Gj8nEOlLMzJUlV+90itEzrWjXa1fDmnukJ6yes6Ic5Nd7I
+ ocu4K5kFrGfqqnIr5AjZ44mSvhThAs0YxGRI+qw9qHXZ/XE7AEs1qt/KMNBaOtfTHkM=
+X-Gm-Gg: Acq92OHekmu0SxM9w7y+bn/7qYHDECa4TIWXZWo0MkkWY54mFs/KzprYIPb6MDogsAG
+ ISkFMM7WdF3KyEjC+/E43aonbd8PF5dgegNptVIcDnU6VTTMqHn90zp52hmorbMtwDrcfXiez+3
+ xcRpj3SPSgM/y4lx12oxAMZ4YND8Gv6iQHxtLijd3P0pGsqmFZCkRna1Qq4FynkL6buy+NjYmKK
+ GXTgd20cuG+1zyn6H6SF7FZjDZETP/WbJuMZCMSqyPBji8camnchlc8bvvI5kpnt+2hLuQFpsZb
+ 8PxbafUoq7JHAP3SYg3VS2S4MhNthfreM0wqXZFajSrjHZmIYLty2metSC0N5Q+8Ro0zuxvyuYG
+ uEVIWGF7B37yRBe3QtzVNAs5tz6UF+HoX4o7SL5w6e+USLxugGeClBSAggy2STLVTmRodZGcAo+
+ XiLwBbe2U6BByCUVcunO4kzQcAbA==
+X-Received: by 2002:a05:600c:35d4:b0:490:b8d3:5dcc with SMTP id
+ 5b1f17b1804b1-490c25e4634mr404514475e9.19.1781080851910; 
+ Wed, 10 Jun 2026 01:40:51 -0700 (PDT)
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4601f35fb24sm74800001f8f.34.2026.06.10.01.40.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 10 Jun 2026 01:40:51 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org,
+ Bernd Kuhls <bernd@kuhls.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin@orange.com>
+Date: Wed, 10 Jun 2026 10:40:25 +0200
+Message-ID: <20260610084025.103446-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260608221416.919015-1-titouan.christophe@mind.be>
+References: <20260608221416.919015-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=glSSfJ3LfrK2LQYVHSefKcKstl2pR0FFhL0jcnseOfJ7dDc+Yjas6kDy05qIES6tJfKiu1jdF0ZvhlbnVMqCUhVEc43sN570+8Mkmf0ibQuTRRsESOLd0UjFdlCge9z0cXDy+8QyYJyPmVio85WG8oGM16Q/Tnl8lSXodOHAizIsfGOyPJ3MzYJedzAUewo1APOB2HBpvz6KFqZQ9W+h1ZIJY+Ou9ECMqXh7Pn0YZch1HA6urYf2NDWs1BdBE7K8nM9QWyptA3BknOKGTDUe+2xyHbLcVNCUg+3DN9xv+JK4KWR5GIwEOK8TWgG6LHwBCKvJiCl9x8Fvttqjdgt6uw==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=v9Jk1JKj1nli85wH5EhavSzqqKpfrofbfbk1xJLgqGs=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1781080852; x=1781685652; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=de2CQyp7IvoYYWV8QmCC/QSpyzH0sw4aiHC/CrKg3l8=;
+ b=IRFaLRol0FWRcAH+G4hxtl3Qe/3tyEEUd21s4OmgTsvAkpzXB2g0C91JUHWXjcigTo
+ I8smvkN7U4LP+G7FpyVY/uv03hGBIpvelMAAQpDlluHxP5qwlc10UpvTnhgiOzIM0Af6
+ rLSxFlUj8x4/KxiZcWCRaQq+CFI0qdwWD0GjQWWVDQA3htRs8l3R1jfgLvomKmPZNLLr
+ NCCsq7kRx446q+x6Y6H8Q5ZHR5WPv93JxtuZpugOTCa6CvEYo+egoBkJ+knsspmrRb6e
+ I+V03gVMAGucdTBAtcIEbtYDYllYvdqoagnEmeRmUiDhWN2yRn3HinrirAlpg95n9TTt
+ QJCg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=glSSfJ3L
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
- 3.6.3
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=IRFaLRol
+Subject: Re: [Buildroot] [PATCH 1/2] utils/checkpackagelib: add new check
+ MissingCVEPatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,106 +128,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+Hi Titouan,
 
-    Fixed heap use-after-free in PKCS7_verify().
-    (CVE-2026-45447)
+In reply of:
+> When manually patching a vulnerability in a Buildroot package, it is a
+> common practice to mark the corresponding CVE as ignored for that package.
+> This is done by appending the CVE identifier to <PKG>_IGNORE_CVES, and
+> adding a comment above to reference the patch that contains the fix.
+> 
+> However, as packages get bumped and their patches are added, removed or
+> rebased; it happens that IGNORE_CVES get outdated. One important issue is
+> marking a CVE as ignored, while the corresponding patch is not in Buildroot.
+> 
+> To detect such cases, add a new checker to checkpackagelib that finds
+> occurences of:
+> 
+>     # 000x-some-patch.patch
+>     PKG_IGNORE_CVES += CVE-XXXX-YYYY
+> 
+> where the file 000x-some-patch.patch does not exist.
+> 
+> Assisted-by: Claude:claude-opus-4.8
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-    Fixed CMS AuthEnvelopedData processing may accept forged messages.
-    (CVE-2026-34182)
+> ---
+>  utils/checkpackagelib/lib_mk.py      | 35 ++++++++++++++++++++
+>  utils/checkpackagelib/test_lib_mk.py | 49 ++++++++++++++++++++++++++++
+>  2 files changed, 84 insertions(+)
+> 
+> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+> index 5d48e8929c..9c19e5acc5 100644
+> --- a/utils/checkpackagelib/lib_mk.py
+> +++ b/utils/checkpackagelib/lib_mk.py
+> @@ -6,6 +6,7 @@
+>  
+>  import os
+>  import re
+> +from pathlib import Path
+>  
+>  from checkpackagelib.base import _CheckFunction
+>  from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
+> @@ -117,6 +118,40 @@ class Indent(_CheckFunction):
+>                          text]
+>  
+>  
+> +class MissingCVEPatch(_CheckFunction):
+> +    PATCH_COMMENT = re.compile(r"^#\s*(\S+\.patch)\s*$")
+> +    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=")
+> +
+> +    def before(self):
+> +        self.pending_patch = None
+> +        self.package_dir = Path(self.filename).parent
+> +
+> +    def check_line(self, lineno, text):
+> +        m = self.PATCH_COMMENT.match(text.rstrip())
+> +        if m:
+> +            self.pending_patch = (lineno, m.group(1), text)
+> +            return
+> +
+> +        # other comments do not break the association between the patch
+> +        # comment and the following _IGNORE_CVES assignment
+> +        if text.lstrip().startswith("#"):
+> +            return
+> +
+> +        if self.IGNORE_CVES.search(text):
+> +            if self.pending_patch is None:
+> +                return
+> +            patch_lineno, patch_name, patch_text = self.pending_patch
+> +            self.pending_patch = None
+> +
+> +            if not (self.package_dir / patch_name).is_file():
+> +                return ["{}:{}: patch file '{}' mentioned for ignored CVEs is missing"
+> +                        .format(self.filename, patch_lineno, patch_name),
+> +                        patch_text]
+> +            return
+> +
+> +        self.pending_patch = None
 
-    Fixed unbounded memory growth in the QUIC PATH_CHALLENGE handler.
-    (CVE-2026-34183)
+I havn't thought about solving this check like this but since you are checking
+for the existance of the patch file, if the patch file exist you can also
+probably read the content and check for the `CVE: ` trailer presence in the
+patch body.
 
-    Fixed double-free when checking OCSP stapled response.
-    (CVE-2026-35188)
-
-    Fixed NULL pointer dereference in QUIC server initial packet handling.
-    (CVE-2026-42764)
-
-    Fixed AES-OCB IV ignored on EVP_Cipher() path.
-    (CVE-2026-45445)
-
-    Fixed possible heap buffer overflow in ASN.1 multibyte string conversion.
-    (CVE-2026-7383)
-
-    Fixed out-of-bounds read in CMS password-based decryption.
-    (CVE-2026-9076)
-
-    Fixed heap buffer over-read in ASN.1 content parsing.
-    (CVE-2026-34180)
-
-    Fixed PKCS#12 files with PBMAC1 are accepted with short HMAC keys.
-    (CVE-2026-34181)
-
-    Fixed NULL dereference in certificate verification with OCSP Checking.
-    (CVE-2026-42765)
-
-    Fixed possible NULL dereference in password-dased CMS decryption.
-    (CVE-2026-42766)
-
-    Fixed NULL pointer dereference in CRMF EncryptedValue decryption.
-    (CVE-2026-42767)
-
-    Fixed multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt()
-    and PKCS7_decrypt().
-    (CVE-2026-42768)
-
-    Fixed trust anchor substitution via cert/issuer typo in CMP
-    rootCaKeyUpdate.
-    (CVE-2026-42769)
-
-    Fixed FFC-DH peer validation uses attacker-supplied q.
-    (CVE-2026-42770)
-
-    Fixed incorrect tag processing for empty messages in AES-GCM-SIV
-    and AES-SIV modes.
-    (CVE-2026-45446)
-
-For more details, see the release notes and advisory:
-
-https://github.com/openssl/openssl/releases/tag/openssl-3.6.3
-https://openssl-library.org/news/secadv/20260609.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 05777cdac2..fc1a125521 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openssl/openssl/releases/download/openssl-3.6.2/openssl-3.6.2.tar.gz.sha256
--sha256  aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f  openssl-3.6.2.tar.gz
-+# From https://github.com/openssl/openssl/releases/download/openssl-3.6.3/openssl-3.6.3.tar.gz.sha256
-+sha256  243a86649cf6f23eeb6a2ff2456e09e5d77dd9018a54d3d96b0c6bdd6ba6c7f1  openssl-3.6.3.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index bd4b889c88..e9f795832a 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 3.6.2
-+LIBOPENSSL_VERSION = 3.6.3
- LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
--- 
-2.47.3
-
+Best regards,
+PERALE Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
