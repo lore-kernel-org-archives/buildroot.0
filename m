@@ -1,116 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F718CD98CC
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jun 2026 19:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 900F2CD98C7
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jun 2026 20:54:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C0AE40E36;
-	Wed, 10 Jun 2026 19:29:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 491F882309;
+	Wed, 10 Jun 2026 20:54:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vx-jAB1qTOoC; Wed, 10 Jun 2026 19:29:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U6cuKRccdaGt; Wed, 10 Jun 2026 20:54:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4607740E3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8BB882307
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781119781;
-	bh=4Gq06bJE6SJExbq/hV+nJMLEA10PswxEgBPnV+JedU8=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1781124876;
+	bh=qf3VsZsdhQ5zLPzrKDROoLIV+Fqyqz6qlKwyJ1GhPNk=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=docmIS+RjRkPinDCxAjFupCqykmgWFl/Cav9c2n/o5T+DbFeC5nqJ2nxdDU8I2QEB
-	 IanCF++ry6xivVYnvnDxvDAm8agCWED8iuDQreCNzOYRJG7jJUxHtONN8Rgkmi1IIY
-	 p6ZmsQNquUvMT0+zbjFnkgLtqbqLGCWBjWYDZxzdxcfpRAK15m7bcWnqlheYw7PCIN
-	 ROzJ/1m7OdmASFaqwsWG7rH5PZqKrJxGzsYqVhFOvezSagO+WO/wTlRSm9MGyhKw9S
-	 56OPCEaMY+oZUiotMSRwuBW8jHNYvuu3iEx/8WJbtqwBcjhgl/v/miyp5vi1wu7X4v
-	 zj4D1vScODNdg==
+	 From;
+	b=WRLorWo045uOcNhF4qr5fJE5VbGz59O337KnAF2ydec+TIK8DkghLmdtwtg2S4cQz
+	 1J+t8kY/B4bq6oF589wiTdGXEEROOzZB7mGYmwgRnS/ww59jP9QXchrUUaL2Cs3p7W
+	 0m+byPNdS2h0deb4hU/KYYv5uWtsUwzTZaDVVCu6c9q3eFdDSo6zq3/cxOzv5n0J0S
+	 FEHS1O8kqid79MZp1Jm1rNKis9txDv7Ed5oY+uUeduDTSP5krIh1CZfk/P0LWMUbbz
+	 Qny1TxnNmZXXBfvYGOR3ik9sJdz150sdgf4DfHHv0R/AlWXIDRlGTnWAXfIGfcSkBQ
+	 53IV3qqqVFHeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4607740E3C;
-	Wed, 10 Jun 2026 19:29:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A4C425E
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 19:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8BB882307;
+	Wed, 10 Jun 2026 20:54:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 546DF187
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 20:54:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60BE040E3C
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 19:29:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 466AB60D70
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 20:54:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lxAhIzo2bdUk for <buildroot@buildroot.org>;
- Wed, 10 Jun 2026 19:29:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c2b; helo=mail-oo1-xc2b.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7B7B640E36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B7B640E36
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com
- [IPv6:2607:f8b0:4864:20::c2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B7B640E36
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 19:29:38 +0000 (UTC)
-Received: by mail-oo1-xc2b.google.com with SMTP id
- 006d021491bc7-69e4d51b15dso4776369eaf.2
- for <buildroot@buildroot.org>; Wed, 10 Jun 2026 12:29:38 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V3WVxacFznlG for <buildroot@buildroot.org>;
+ Wed, 10 Jun 2026 20:54:33 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::829; helo=mail-qt1-x829.google.com;
+ envelope-from=ben.wolsieffer@hefring.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 00F0460D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00F0460D68
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com
+ [IPv6:2607:f8b0:4864:20::829])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 00F0460D68
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 20:54:32 +0000 (UTC)
+Received: by mail-qt1-x829.google.com with SMTP id
+ d75a77b69052e-517863a2edfso57862311cf.1
+ for <buildroot@buildroot.org>; Wed, 10 Jun 2026 13:54:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781119777; x=1781724577;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=VrmgN2FnMWjzFP8slUpLDJz6Ahd9fgtpEsbNztXYvsQ=;
- b=Nb9nBOxO4umDq6KK9663uKwf/w0RgRhe4/KSnM0F0NDsyiMYTje7N7JN7YxB9LnM/R
- W57BY+rfRZM9acM9qRAS2MVJWgAcyb5DM9mbNIcgfvNW5cnIfI4lCNE2VwZc70foz+P0
- HvPA8sHaAYbZCgn/GDw355eVj38Qd9Nhq3ZwwvIT7wHeknI3G7BosR9WLgIG+nWfLhSp
- 7GyC1m02TPSUKSOqZLDq+He/arzg5CQwnnJqg1kbCHKD98B2MApi08GwzRHqotH6/6uC
- lHGc14Ti92klh0Jkq2vK9gCMbUQ63eaq6hdX1Vh5C9JC726mrXTb1JtFzr5hZzYwl4y1
- z65A==
-X-Gm-Message-State: AOJu0YyW6jM5XyIbSLDWZinmy4GGcs51GfLOyIoWw6X9JpsCwEjeaB4Z
- 6iL2G3gULMmfhBbXU+uDSf2xIo71dL2m41MHzH85lUo2BIFpAXsMn3XsGYLoKEmJ
-X-Gm-Gg: Acq92OFmyqvR9NYXpMAEqp45hKnRaCSjavE5XaLLJ0k1Zur5sbFe1rDMZMe8aqy4WwG
- Zi1yHv+SeOJSP3DcSfgxUPb35TsfKEhb7mHUiI1NjUKWWFvDV/mF3w85o6FhaCpglePQeh9MyqZ
- FIVUmejh+83mqLIog2Qp3zUjxquQ3UZtVXY6EQJN3InC+GgjvBH5xrDduVjxRgkzNh7a9v5pJXe
- KvJbF2Z9kjSSg9wgqqbzdLwvc/Mwv/4AVCZ3wqvlnV/ceMGnK6A1v0mXaYyy+PTN1gMfNMoLhvM
- XivStqiEGA1D0TozUf+DyPLM9bgwDbDQpAj+4tKFeWnd5UNFoXp4ARIkWEPCjceYB1mASoN6TIU
- BILZHJ95O/56jo9CRTaDyhy+i0NB4G3zDFf6tNwWJaL1OiidhUm8KuVQnRw9Kx1xIiGdVUEftdJ
- KVhX1QH/YYZypA2ax7jrrN2ykqYsSoQYFM9jHIrY3TE66QoPDQ+MsZBzbauGR3gUnc3FODc40iy
- 0/deXZ+tlZrG6yE/xIfY/wvs3I8mQes/eXN6FLKjutolgt+OCxXLjkUh8EcaS14qZaIvqTZ8XI6
- Lz9jQnenqBt8+F0cUCzO8xyfUU9TqNp+ltmt
-X-Received: by 2002:a05:6820:1687:b0:696:89e4:5493 with SMTP id
- 006d021491bc7-69e68c06d10mr16346827eaf.34.1781119777222; 
- Wed, 10 Jun 2026 12:29:37 -0700 (PDT)
-Received: from james-x399.tailafd1a.ts.net (174-29-16-141.hlrn.qwest.net.
- [174.29.16.141]) by smtp.gmail.com with ESMTPSA id
- 006d021491bc7-69e4623cc02sm13572674eaf.4.2026.06.10.12.29.36
+ d=1e100.net; s=20251104; t=1781124871; x=1781729671;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=my1S3Q4Kas5n0ViUkzQxOg3grxHDdsbjBkCQlnCXN/Q=;
+ b=OFnwG6LcYPLUs/0p3+n2urlq/wfSNPoCoqp2nD+qT2nGOC8Nraw4VzsF9piQN6vJQg
+ QGXczXewMpHDqOVt+nu1ulgIIoLYngquIrHaUQcRxK1WjO0g6K9YBcF1PZoNS6v+xpA8
+ wFHCzMEtpwkHdMRFkuxGupgfHGlylDwCfEJGenqK7oOq7LsjQAZj3piU3MLIpmNwhALG
+ PBPpf61YTMslpMjDoPFL6okh87YK8SdEYJUN3O1SJxnlDYTEzParLVeC93TuLPtJNBHA
+ ZXl1AbKNfvQ9S8YsjBy3cJfcnDQIadtb+CLEBEzdAAvJcsSz2Svp7Ka2COL3gGGK8wdT
+ XPMg==
+X-Gm-Message-State: AOJu0YyqGne3ajMXZlzFI491sUiqrv0CIAwBP/PQtBXCoSP+IpADogKa
+ yXbSbwSKzneojuZWEThOy2GiANTBOKVZ6psP4CWCo7WxD4arRQxerNWdtTiy3DaVr4zQECQdL8h
+ I4ibl
+X-Gm-Gg: Acq92OGYcnhCG67stsB3/bL0jRGNHHPuFlF/GK1eFOoMEmMUOMcEYdJxRI+fFNS2S7q
+ LJExsaRE7D+0kI6i/FIAQW36byFKmPykm2zlrRX7QSegwoYld+eYKxYji5NChrvWv6H0pGZzfxu
+ hIgCqbOzA2U4xjvf9SsrqCdMSQc9AC3GuJy/fr+RQSmOF2e+p+Lh8YOZ9F4O2d32hB2eE+fLGer
+ KLOEPJOWIkm4UIpqjL9gAEsuoa1PwxVIOSiaFOxQYQ7y3E0lD98IerEhZ0z0xIxLcV6HHVSwlhL
+ iS3JH7rkPsFZlmNlrIACkwKRIqzebAFmmfix7vaROhwHwg5Myq3vXIqkvhfUAZmUQAjeYZJSQCL
+ rcEqrj+wy+FTntMLDoH12DZ9IOpCQoEQNbaczkUEchK4kMoya6LZjW1HSB9XSanwYYpXb6rjI3O
+ f9pMRU2PLFn0o2T1OWF/5v0nqTFZMN0lr9s1/9bXI=
+X-Received: by 2002:ac8:5702:0:b0:517:88a0:9b2e with SMTP id
+ d75a77b69052e-517ca51751dmr137713361cf.4.1781124871516; 
+ Wed, 10 Jun 2026 13:54:31 -0700 (PDT)
+Received: from dell-xps-15-9500 ([2601:18c:8002:3d41::5])
+ by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-51795d46f12sm170723591cf.16.2026.06.10.13.54.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jun 2026 12:29:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Jun 2026 13:29:33 -0600
-Message-ID: <20260610192933.1116376-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260610192933.1116376-1-james.hilliard1@gmail.com>
-References: <20260610192933.1116376-1-james.hilliard1@gmail.com>
+ Wed, 10 Jun 2026 13:54:30 -0700 (PDT)
+Date: Wed, 10 Jun 2026 16:54:28 -0400
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+Message-ID: <ainPBN-nPls65Mwg@dell-xps-15-9500>
+References: <20260603201439.3893380-2-ben.wolsieffer@hefring.com>
+ <87qzmnjr2g.fsf@dell.be.48ers.dk>
+ <aiCZpdX4M_muNuQG@dell-xps-15-9500>
+ <87ik7ykbex.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <87ik7ykbex.fsf@dell.be.48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1781119777; x=1781724577; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VrmgN2FnMWjzFP8slUpLDJz6Ahd9fgtpEsbNztXYvsQ=;
- b=LoSbf9ShzgPeH+IWIJtK6eWrfj29mkgR9OFPJ7ojlwB29xIDTZ+wvUjzUkiKPaeAzE
- 4nRf8OdYk/qRK+KQMfEfMrw7MxETUQE8hAF/xiAUtSskxhVO5Avo9be+pqHjQuY6FbFb
- t546t5Sl81kfIzdS+9//BqOUkelVRIcteasWm9CUJAGHgGtJ3stk0Lh9/qwTjE4UJnbk
- aAdg78Ot3Ux36fLdr0cpntu0lhqV8ghF7Y2u/MFZbPSLQMN5C+W1X8a4Ng4UUgFR2v/r
- 9h8+NRT3hVTW4oWG6oBHXwOl/+QCH1dxBkS7VyZc3quaaz41+nzE5ln6eMstIaCLpVz5
- /RtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=LoSbf9Sh
-Subject: [Buildroot] [PATCH v2 2/2] package/python-nats-py: new package
+ d=hefring-com.20251104.gappssmtp.com; s=20251104; t=1781124871; x=1781729671;
+ darn=buildroot.org; 
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=my1S3Q4Kas5n0ViUkzQxOg3grxHDdsbjBkCQlnCXN/Q=;
+ b=YNSJ5cxmhuTmD/ZWayZz6tg1ZWI2fVNq/BXgpMpLRpxJTScQUrHbSUYkGjSBllPf8a
+ LqePp3jElhwmet1nzoQPqmx/Cm3BE0vZ+ZxeJJmi0g7lkmcfskQqbesL3ZBsJvJE1Exi
+ Kpr2RsMfQp6djn62R7el3a3q6HRW0IuS/PQSaS5wbl2zMQlvdqNBYG+dVCRwdZPfpY5W
+ RELq3FK5WQ/oSGbJeqM85Gh4/KjwQQofyaCQxEzt7Zc4OjC22g6aKn4pgIF7f/0gMDKL
+ RbJjIaeT6sdtroxSA4Q+kSCCutipjaGU/joaLyrbEuw5l8O14ugXKFbaX/yXOQiI/rHu
+ S1cg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=hefring.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=hefring-com.20251104.gappssmtp.com
+ header.i=@hefring-com.20251104.gappssmtp.com header.a=rsa-sha256
+ header.s=20251104 header.b=YNSJ5cxm
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: allow installing only
+ sftp-server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,87 +128,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - bump to version 2.15.0
----
- package/Config.in                          |  1 +
- package/python-nats-py/Config.in           |  6 ++++++
- package/python-nats-py/python-nats-py.hash |  5 +++++
- package/python-nats-py/python-nats-py.mk   | 16 ++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-nats-py/Config.in
- create mode 100644 package/python-nats-py/python-nats-py.hash
- create mode 100644 package/python-nats-py/python-nats-py.mk
+On Thu, Jun 04, 2026 at 09:33:10AM +0200, Peter Korsgaard wrote:
+> >>>>> "Ben" == Ben Wolsieffer <ben.wolsieffer@hefring.com> writes:
+> 
+> Hi,
+> 
+>  >> Out of interest, what advantage does this have over gesftpserver?
+> 
+>  > I have come across gesftpserver, but I admit I have not used it. I was
+>  > dissuaded by the "experimental" label and the lack of recent development
+>  > activity, although the latter could just be that is not much work left
+>  > to do.
+> 
+>  > In general, using OpenSSH sftpserver provides full compatibilty with
+>  > common clients, because it is what most people test against. I see that
+>  > there are a few OpenSSH extensions not supported by gesftpserver.
+> 
+> I have so far never run into any compatibility issues with gesftpserver.
+> If you are concerned about openssh compatibility, why not use the full
+> openssh in the first place to get rid of all compatibility issues on the
+> ssh level?
 
-diff --git a/package/Config.in b/package/Config.in
-index 96e113e226..4a8d5cb9d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1254,6 +1254,7 @@ menu "External python modules"
- 	source "package/python-mwscrape2slob/Config.in"
- 	source "package/python-mypy/Config.in"
- 	source "package/python-mypy-extensions/Config.in"
-+	source "package/python-nats-py/Config.in"
- 	source "package/python-nested-dict/Config.in"
- 	source "package/python-netaddr/Config.in"
- 	source "package/python-netifaces/Config.in"
-diff --git a/package/python-nats-py/Config.in b/package/python-nats-py/Config.in
-new file mode 100644
-index 0000000000..cab8bb8bd2
---- /dev/null
-+++ b/package/python-nats-py/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_NATS_PY
-+	bool "python-nats-py"
-+	help
-+	  NATS client for Python.
-+
-+	  https://github.com/nats-io/nats.py
-diff --git a/package/python-nats-py/python-nats-py.hash b/package/python-nats-py/python-nats-py.hash
-new file mode 100644
-index 0000000000..9407f34c4c
---- /dev/null
-+++ b/package/python-nats-py/python-nats-py.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/nats-py/json
-+md5  8ee5750a5b26973b5da386e83b238530  nats_py-2.15.0.tar.gz
-+sha256  6622c547d9a7d2313d9c147d46c386188f4ec2c7b5c9f9a0438a4d1b55f54a93  nats_py-2.15.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-nats-py/python-nats-py.mk b/package/python-nats-py/python-nats-py.mk
-new file mode 100644
-index 0000000000..95f66c4cbb
---- /dev/null
-+++ b/package/python-nats-py/python-nats-py.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-nats-py
-+#
-+################################################################################
-+
-+PYTHON_NATS_PY_VERSION = 2.15.0
-+PYTHON_NATS_PY_SOURCE = nats_py-$(PYTHON_NATS_PY_VERSION).tar.gz
-+PYTHON_NATS_PY_SITE = https://files.pythonhosted.org/packages/02/f0/fc5e93f2b0dd14a202590ad9d30eda1955ea872039b5204357348d0f4b1e
-+PYTHON_NATS_PY_SETUP_TYPE = pep517
-+PYTHON_NATS_PY_LICENSE = Apache-2.0
-+PYTHON_NATS_PY_LICENSE_FILES = LICENSE
-+PYTHON_NATS_PY_BUILD_OPTS = --skip-dependency-check
-+PYTHON_NATS_PY_DEPENDENCIES = host-python-uv-build
-+
-+$(eval $(python-package))
--- 
-2.53.0
+I went ahead and tried gesftpserver. It does seem to work fine for my
+use case. When I originally made the decision (several years ago) to use
+dropbear and OpenSSH sftp-server in our system I didn't carefully weigh
+all the possible options. I didn't know about gesftpserver then. I
+defaulted to dropbear because I wanted a minimal solution for a no-MMU
+system with 64 MiB of RAM. It is probably possible to run OpenSSH sshd
+in inetd mode on no-MMU, but I haven't tried.
 
+> The two sftp-server implementations are more-or-less same size
+> statically linked, but with your patch openssh-sftpserver pulls in
+> openssl and zlib even though it (AFAIK) does not use it, so depending if
+> you already need those for other things it may end up being quite a bit
+> bigger.
+
+Yes, I forgot to mention that I also use a patch to make openssl
+optional (only enabled if BR2_PACKAGE_OPENSSL is explicitly enabled).
+zlib could also be made optional. Also, because I'm using a no-MMU
+system, I have patched out the BR2_USE_MMU requirement and enabled
+UCLIBC_HAS_STUBS to allow OpenSSH to compile. This works because fork()
+is not used by sftp-server.
+
+> With that said, if we can find a clean way to build openssh-sftpserver
+> without pulling in openssl then that would be nice.
+
+Since the vast majority of OpenSSH users will likely want zlib and
+OpenSSL support (to enable compression and a wider range of crypto
+algorithms), it probably doesn't make sense to require the user to
+manually enable BR2_PACKAGE_OPENSSL and BR2_PACKAGE_ZLIB to get support,
+as is necessary with my patch that makes OpenSSL optional. I want to
+reach for the Kconfig "imply" directive in this case, but it looks like
+Buildroot doesn't use this.
+
+An alternative is to have BR2_PACKAGE_OPENSSH_CLIENT,
+BR2_PACKAGE_OPENSSH_SERVER, and maybe BR2_PACKAGE_OPENSSH_KEY_UTILS all
+select BR2_PACKAGE_ZLIB and BR2_PACKAGE_OPENSSL. 
+
+Thanks, Ben
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
