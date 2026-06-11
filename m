@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0820ACD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8025DCD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE09F61145;
-	Fri, 12 Jun 2026 11:24:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41C1B610F7;
+	Fri, 12 Jun 2026 11:24:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id psHRXJ-ZM4nR; Fri, 12 Jun 2026 11:24:37 +0000 (UTC)
+ id 8O3OC10H6kVd; Fri, 12 Jun 2026 11:24:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 840B36112F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325006112F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263477;
-	bh=7gZ+zRNtz5TfpoY/r+NPFXATqB+h8HzJd1ULC39LDU4=;
+	s=default; t=1781263476;
+	bh=0vJNtengivXBn1Qo3cGI8FVdSvnhPYh+FqWRzmH15jw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=k6mP2lWhDGzMp4+9+sZyW8dvQAZvxQaCNghSUFYR4sDV1IR9jOndoj2KLB2nUGG2I
-	 icFVCFP9CyvfpM80uo7xEEC37V+5dTCTULGrZ6D25Gjy4GFYT/GnrB99M5YcxmOXm+
-	 UlR2T5kTNPiXkVThnE0gqClz/GXl/xAlvduj2NxMztHhidds3qotd+25mYHjaWaIXN
-	 EZqA3Yb62djeB7zdPyavSvOjSGjlWIGvzHnnWz3rO6CuzmVnstwAaHdM1GKpVmW7ke
-	 Ovd9ea3ZeX+J3Ocp4o/kBl1sGzmws5OEFwUJ/0BCWNBm8CWdmsP936MJnkAUrDlI6s
-	 z/nmMba1AOycw==
+	b=NfkLMaj8yOBlhSYtqaJuREoPZRsp2jvghLzL6OR2CF9nvUnhYOqiL8Fx61F/S0XWz
+	 EZQypAYBRM+u1rlHDhE/AsWVK/KETFKY5ueGrWxI/Jg92CA5I+1zxS81AitBEqvJtv
+	 NvXCgCJwJM32qIIJEhosB1pL3W1wKRLHzdcZb9QiPWVPymTOToa3zwaQ7IBmfpOU+I
+	 sNw9niV+pr8ewqQ71TOSz/H9sPiD7EBEiAbWO5kARVObE41Quwn06LK3uB3dGdJ241
+	 8MdS6ti57Ik56opMPM75V6v3mR8O5R0T9o1aHGNx1dDxvm4Z4HpB0HSnd0YTuEAVgj
+	 bd395Z8FXZp1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 840B36112F;
-	Fri, 12 Jun 2026 11:24:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 59560F4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 325006112F;
+	Fri, 12 Jun 2026 11:24:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02325F4
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1DF040673
+ by smtp3.osuosl.org (Postfix) with ESMTP id 943F060FB6
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7twCafKaKfS6 for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XI4a5RWTzyD2 for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1457640676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99DC860F77
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1457640676
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99DC860F77
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E21B4880EA; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
+ id 73803880E9; Fri, 12 Jun 2026 11:23:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 11:41:03 +0200
+Date: Thu, 11 Jun 2026 11:56:08 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 80e6c6271a377c1faa80709d2071cfdf7cbf3bf5
-X-Git-Newrev: 15c475247374873e5b8b307ece6e70b33b1b7071
+X-Git-Oldrev: be1ee6a0bc4c99960d04150c34e4f646ebbaf06f
+X-Git-Newrev: 364a271d9418fadbc503a99c80a95c24d01c51b7
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112349.E21B4880EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/python-ecdsa:
- update CPE
+Message-Id: <20260612112350.73803880E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] configs/at91sam9x5ek*:
+ remove at91bootstrap3 license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,45 +72,108 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5091547926683886528=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/15c475247374873e5b8b307ece6e70b33b1b7071
+--===============5091547926683886528==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/364a271d9418fadbc503a99c80a95c24d01c51b7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The CPE 'python-ecdsa_project:python-ecdsa' hasn't received new CVE
-since 2019 while 'tlsfuzzer:ecdsa' received two [1][2].
+When using a specific git repo and version for at91bootstrap3,
+BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES defaults to "LICENSES/MIT.txt".
+However the git version we use (namely v3.10.3) does not provide this
+file. Actually, it does not provide a license file at all. This causes
+‘make legal-info’ to fail with:
 
-See the package CVE history at [3].
+    >>> at91bootstrap3 v3.10.3 Collecting legal info
+    sha256sum: /builds/buildroot.org/buildroot/output/build/at91bootstrap3-v3.10.3/LICENSES/MIT.txt: No such file or directory
+    ERROR: while checking hashes from boot/at91bootstrap3/at91bootstrap3.hash
+    ERROR: LICENSES/MIT.txt has wrong sha256 hash:
+    ERROR: expected: 5a3809b1c2ba13b7242572322951311c584419f1f8516f665d6c06f0668d78de
+    ERROR: got     :
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+    make[1]: *** [boot/at91bootstrap3/at91bootstrap3.mk:112: at91bootstrap3-legal-info] Error 1
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2026-33936
-[2] https://nvd.nist.gov/vuln/detail/CVE-2024-23342
-[3] https://security-tracker.debian.org/tracker/source-package/python-ecdsa
+Let's be explicit that there is no license file to check.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f3687ebafa0a3d97b094d5b972a9323e00345da4)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913821 (at91sam9x5ek_mmc_dev_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913820 (at91sam9x5ek_mmc_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913819 (at91sam9x5ek_dev_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14728913818 (at91sam9x5ek_defconfig)
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 1339bba787deecda28461bff591e029a38d14b53)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-ecdsa/python-ecdsa.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/at91sam9x5ek_defconfig         | 1 +
+ configs/at91sam9x5ek_dev_defconfig     | 1 +
+ configs/at91sam9x5ek_mmc_defconfig     | 1 +
+ configs/at91sam9x5ek_mmc_dev_defconfig | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
-index c94cc0512d..b1ac6fe1b8 100644
---- a/package/python-ecdsa/python-ecdsa.mk
-+++ b/package/python-ecdsa/python-ecdsa.mk
-@@ -10,6 +10,7 @@ PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/c0/1f/924e3caae75f47
- PYTHON_ECDSA_SETUP_TYPE = setuptools
- PYTHON_ECDSA_LICENSE = MIT
- PYTHON_ECDSA_LICENSE_FILES = LICENSE
--PYTHON_ECDSA_CPE_ID_VALID = YES
-+PYTHON_ECDSA_CPE_ID_VENDOR = tlsfuzzer
-+PYTHON_ECDSA_CPE_ID_PRODUCT = ecdsa
- 
- $(eval $(python-package))
+diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
+index 775fcceae3..246d34edef 100644
+--- a/configs/at91sam9x5ek_defconfig
++++ b/configs/at91sam9x5ek_defconfig
+@@ -16,6 +16,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
++BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
+index 0f29216736..36441f38e7 100644
+--- a/configs/at91sam9x5ek_dev_defconfig
++++ b/configs/at91sam9x5ek_dev_defconfig
+@@ -67,6 +67,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
++BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/at91sam9x5ek_mmc_defconfig b/configs/at91sam9x5ek_mmc_defconfig
+index a6fd7e05fc..4c2a6255bc 100644
+--- a/configs/at91sam9x5ek_mmc_defconfig
++++ b/configs/at91sam9x5ek_mmc_defconfig
+@@ -17,6 +17,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
++BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 344c6c2eae..908907acda 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -69,6 +69,7 @@ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
++BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+
+--===============5091547926683886528==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5091547926683886528==--
