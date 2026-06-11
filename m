@@ -1,83 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E7AECD98CC
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jun 2026 10:54:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B76CD98D2
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jun 2026 11:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EB5180A92;
-	Thu, 11 Jun 2026 10:54:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C168540852;
+	Thu, 11 Jun 2026 11:53:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3bKmXPAY9JYQ; Thu, 11 Jun 2026 10:54:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Tfcln3Dz7bC; Thu, 11 Jun 2026 11:53:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4D6980E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 914CC40856
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781175291;
-	bh=vvFTFZfKXKBOxqfC7HwdHJgqPWAfXM8p8eILT56jb5c=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=bTvzo6L9CHNfjHCB08h8s+j29RGdsyDLnxLv6maflQc547UQ0loomZnTluTZYEmLo
-	 XDjlHP/YFBLqCvDlNv/XwgxFQkSmo7oqk6LH1GSKh0GSPUkapVaIfHv2Dy568slGfq
-	 bVDasp6qR3Wm3rMO9rIbouQ3/vBis1hvY5rbdWnr/EqilcLBRaYI8CPUiCZAjKgLYA
-	 ITHXepz1nP24Bv6UbLV10OaTVI3tJMaryILrPRKjPREMdr4UN1eQgABJ/pzE3QI1PG
-	 s83w1hZ4YdQ3Wu6D5h3ilceLF1NOCVxali/EXbVDinJoLLwiXzZMLQfuNG3aIzodcN
-	 D23cxhmVrUwzA==
+	s=default; t=1781178793;
+	bh=UI+MPdHQFgfHLBjdsWkDCa9lQaUMaXSxZ+kgK544qSY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=YV0tnBlCMHvk0PI/IkmtqrGnbEqOqy9jnbO+e2jl8JIW/5uQ0/mxmoVuB6Pw9I6cq
+	 vsXpLd/4g9vmUqGUfw4hp6PSeNN0y/nhibiMYCQYZquFpwO1ld/o0XGY3+vCZ6AEGu
+	 HYMeouBe+uB0+e6u3UQvppVni7lk6YKlCuJjiPqxdeC6r1+hLctngWgruFQd7S+II8
+	 axumhDxenckmdqosvlLtIluB/MqSvMPqQVCfdZzBeYsP+fbFrD7ZC13LvFn7ppGlFT
+	 AymsBLdEs7oXlmgnHbm/OIz3IWSDAWaLPgNll+8thd9iMT1pRPJ/552eO6EiJXs5r6
+	 5EXLUfShmnHVA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4D6980E19;
-	Thu, 11 Jun 2026 10:54:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with UTF8SMTP id A1F6D237
- for <buildroot@buildroot.org>; Thu, 11 Jun 2026 10:54:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 914CC40856;
+	Thu, 11 Jun 2026 11:53:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A89712F
+ for <buildroot@buildroot.org>; Thu, 11 Jun 2026 11:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with UTF8SMTP id 9180E80D3F
- for <buildroot@buildroot.org>; Thu, 11 Jun 2026 10:54:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A2F040849
+ for <buildroot@buildroot.org>; Thu, 11 Jun 2026 11:53:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id 7q1GhboG7xIY for <buildroot@buildroot.org>;
- Thu, 11 Jun 2026 10:54:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0ZxqqBs89dCo for <buildroot@buildroot.org>;
+ Thu, 11 Jun 2026 11:53:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2600:3c0a:e001:78e:0:1991:8:25; helo=sea.source.kernel.org;
- envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CB5F080593
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB5F080593
-Received: from sea.source.kernel.org (sea.source.kernel.org
- [IPv6:2600:3c0a:e001:78e:0:1991:8:25])
- by smtp1.osuosl.org (Postfix) with UTF8SMTPS id CB5F080593
- for <buildroot@buildroot.org>; Thu, 11 Jun 2026 10:54:48 +0000 (UTC)
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
- by sea.source.kernel.org (Postfix) with UTF8SMTP id 0008642B68
- for <buildroot@buildroot.org>; Thu, 11 Jun 2026 10:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 506A01F00893;
- Thu, 11 Jun 2026 10:54:47 +0000 (UTC)
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0DE240847
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0DE240847
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C0DE240847
+ for <buildroot@buildroot.org>; Thu, 11 Jun 2026 11:53:09 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-490a76757e5so52614915e9.2
+ for <buildroot@buildroot.org>; Thu, 11 Jun 2026 04:53:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781178787; x=1781783587;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GEaogRq2mO+2ULdh1tfdWDgINzLaKqO8kMUrbukEQvM=;
+ b=dTJnggShAi0QwDD/VI4QqhcxwDYGbZCJuEXJzcR6GUQxucxZpYm1UovP9TSYVEf/O/
+ lR9mj3QFPz2wAGmY7xo0ATfmkwVOGpecJhBgWI9Y4HKSfiUQ7n8+DKrHtz++7Nqe4arV
+ /vpdsY6E3R6nGZXnQx7nJJXGGEaVMvzOQNf9ug8g3czJ5pUgmNqKPJ9iL92PmSAN9hDN
+ 8pyE6+4uCX5xKMq1EBrglxlfjUsFu50WbyYntDc+yHp5qixPfRHT7H5qoA2MjxHGDvPm
+ 4+mohaepW81RdiAjRNsqYLvYs2LVwfIP3Au2+A9MVtwa74I/hESffn+l9HUp/3zFxx96
+ ebVg==
+X-Gm-Message-State: AOJu0YxgQPY1e0UQM4gKIF4Lg9AzQmnEz3hJGVP9mNlztIu0nXl+4DoH
+ rEal/3aP0kLe0i51k58TeORRyFPn00KZtpk/v84UKzKD4m1UydbnJ1REX9wzp7oo2r2A/NsGFEB
+ fxrC5
+X-Gm-Gg: Acq92OEPHepxvqe8O+4LuAgO1473n7aPvfwJqU8b1SkEtYAEgfN6jot2MbicqHlnQ18
+ 3R7zW4wzov/32pbhwUKP0RpvsrOCvw7gY51e+OjS2cDNgAbjVFDWMJszaibmX+/sZLGL/QrANoL
+ 7QcxQndlGJ46+VKoPQeulJpBVO457bhyqMQG+rLBCWNQSmwm+3TavzVgDfOtZsAwRB+Tr6pNMvQ
+ STExoCicZuwGIXgSIh6XDsStLSgtnuuBENZVEh1P5itz+iTeCYhKRmVzi+Z2IdirM1/hz1tL60h
+ evmwULaJ5Fi2ErEvh03Q9tW3AciF++GhktuwNCSSTKlW3hUpQ/eQ6xF81xByFnMhoyehSExqFAd
+ cLlfjiVCGtWyJBAt90fVId6RA4TdfuKHYIF9dc78FZix7ighE+HdRZNED4WSgR0TCFAsJ7M+SG9
+ NBHNlhGeM+TifUIXM8rJCqg6X6BQ==
+X-Received: by 2002:a05:600c:620b:b0:490:e342:127 with SMTP id
+ 5b1f17b1804b1-490e561e427mr30264755e9.34.1781178787216; 
+ Thu, 11 Jun 2026 04:53:07 -0700 (PDT)
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4601f2f2710sm62965075f8f.14.2026.06.11.04.53.06
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 11 Jun 2026 04:53:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Date: Thu, 11 Jun 2026 13:54:34 +0300
-Message-ID: <20260611105434.3164134-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
+Date: Thu, 11 Jun 2026 13:53:06 +0200
+Message-ID: <20260611115306.590527-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kernel.org; s=k20260515; t=1781175287;
- bh=yP0dr9/2Y/BhDaioe2rA8rOgXsv2WJ9cz/foolnhyKo=;
- h=From:To:Cc:Subject:Date;
- b=kZlsCn4IaEjwVvvDrHb5dwAIZ2Z8Cwcg+2z7wMluQQalnivpD0T7+e6Kk6RY0tUs8
- QsI4PoKSu7jX80kU5e6EgtWtscPaB1B68jUeK6AWhlBJZe2FOK9hl+2Ri2KA2G49Nb
- GAnQY9WFrxf1EboD1IZI96ug7qgx6SfnjXC65XswhUwp6mhipmYjAh7J63O1Tj65kx
- husKD/akWIMsQ9AXgZXAVGPEhSnxNFVE7B5R/uZ+SbTWbwkLu1fuq4kdN6SJwh1w3P
- AAYCdmB+9eV4T2YMbvjwNIaH20KDYfts1hkDh1wW8vqTedMF8KWPZSRly482aANyl9
- KdDnmrtT5Rrpw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1781178787; x=1781783587; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GEaogRq2mO+2ULdh1tfdWDgINzLaKqO8kMUrbukEQvM=;
+ b=ezlXvW6Tbe94dciKufvnKb7nQq1eEC8RLCYtfVj9KPfOhm0e5I+/D/LsheepJP8eVT
+ k0Izb4tjK2Z9X1TxM1Boky6DpPmLORFfLlIF5VAT5Vq8hXKrVsgAmmZXyylEPGZUWOPF
+ rJoWi94O0ZOs7qelAz46AeBwTD4MB9VB0+HXukDXW68oVJCFwOtUFESm1CiyLkI8nVKw
+ wAuFffQ44DJCdKNzM22ZJupBFfU86eSKJYsbWhc4T4m2y9baF/Ve8Jmpx6E9jGAbtZBP
+ 3zYm+5zCMM6+eH4WE42em+RomCw1ns/Go9PkfO/CFIYpsN3wXHvbt7rMpoAWxJi3AytR
+ M23A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20260515 header.b=kZlsCn4I
-Subject: [Buildroot] [PATCH] package/tpm2sh: new package tpm2sh 0.17.2
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ezlXvW6T
+Subject: [Buildroot] [PATCH 2025.02.x] package/libinput: backport patch
+ CVE-2026-50292
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,71 +117,283 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jarkko Sakkinen via buildroot <buildroot@buildroot.org>
-Reply-To: Jarkko Sakkinen <jarkko@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-dHBtMnNoIGlzIGEgVFBNIDIuMCBjb21tYW5kLWxpbmUgc2hlbGwgYW5kIHRyb3VibGVzaG9vdGlu
-ZyB0b29sIGZvciBMaW51eAp3aXRoIGxvdyBkZXBlbmRlbmNpZXMuIEl0IGNvbW11bmljYXRlcyBk
-aXJlY3RseSB3aXRoIC9kZXYvdHBte3JtfTAuIEl0CmlzIG1vc3QgdXNlZnVsIGluIGtlcm5lbCB0
-ZXN0aW5nLgoKQW1vbmcgb3RoZXIgdGhpbmdzIGl0IGNhbiBiZSB1c2VkIHRvIHF1ZXJ5IGFuZCBt
-YW5pcHVsYXRlIHRoZSBjaGlwCm1lbW9yeToKCn4gbWFpbgrina8gdHBtMnNoIG1lbW9yeQpIQU5E
-TEUgICAgIENMQVNTICAgICAgREVUQUlMUwowMWMwMDAwMiAgIG52LWluZGV4ICAgcnNhLTIwNDg6
-c2hhMjU2CjAxYzAwMDBhICAgbnYtaW5kZXggICBlY2MtbmlzdC1wMjU2OnNoYTI1NgoKfiBtYWlu
-CuKdryB0cG0yc2ggbWVtb3J5IDAxYzAwMDBhCi0tLS0tQkVHSU4gQ0VSVElGSUNBVEUtLS0tLQpb
-Q0VOU09SRURdCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KCkFuZCBhbGwgdGhpcyBtYWtlcyBp
-dCBhbHNvIHNvcnQgb2YgdXNlZnVsIGVtYmVkZGVkIGRlYnVnZ2luZyB0b29sIHRvby4KClNpZ25l
-ZC1vZmYtYnk6IEphcmtrbyBTYWtraW5lbiA8amFya2tvQGtlcm5lbC5vcmc+Ci0tLQpTb3JyeSBp
-ZiBJIG1pc3NlZCBzb21lIGRldGFpbC4gVHJpZWQgdG8gY2hlY2sgYnV0IHRoaXMgaXMgbXkgZmly
-c3QgUnVzdApwYWNrYWdlIGZvciBCUjIgc28gYW55dGhpbmcgaXMgcG9zc2libGUuCiBwYWNrYWdl
-L0NvbmZpZy5pbiAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvdHBtMnNoL0NvbmZpZy5pbiAgIHwg
-MTggKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL3RwbTJzaC90cG0yc2guaGFzaCB8ICAyICsr
-CiBwYWNrYWdlL3RwbTJzaC90cG0yc2gubWsgICB8IDE0ICsrKysrKysrKysrKysrCiA0IGZpbGVz
-IGNoYW5nZWQsIDM1IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Rw
-bTJzaC9Db25maWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3RwbTJzaC90cG0yc2gu
-aGFzaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvdHBtMnNoL3RwbTJzaC5tawoKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KaW5kZXggNjMwNjYy
-NDc3Yi4uMDViNTA2MDY1MSAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysrIGIvcGFj
-a2FnZS9Db25maWcuaW4KQEAgLTI4ODgsNiArMjg4OCw3IEBAIG1lbnUgIlN5c3RlbSB0b29scyIK
-IAlzb3VyY2UgInBhY2thZ2UvdHBtLXRvb2xzL0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2Uv
-dHBtMi1hYnJtZC9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3RwbTItdG9vbHMvQ29uZmln
-LmluIgorCXNvdXJjZSAicGFja2FnZS90cG0yc2gvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2Fn
-ZS90cG0yLXRvdHAvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS91Z2V0dHkvQ29uZmlnLmlu
-IgogCXNvdXJjZSAicGFja2FnZS91bnNjZC9Db25maWcuaW4iCmRpZmYgLS1naXQgYS9wYWNrYWdl
-L3RwbTJzaC9Db25maWcuaW4gYi9wYWNrYWdlL3RwbTJzaC9Db25maWcuaW4KbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNTI2OGQwZGY2ZQotLS0gL2Rldi9udWxsCisrKyBi
-L3BhY2thZ2UvdHBtMnNoL0NvbmZpZy5pbgpAQCAtMCwwICsxLDE4IEBACitjb25maWcgQlIyX1BB
-Q0tBR0VfVFBNMlNICisJYm9vbCAidHBtMnNoIgorCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9T
-VF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUworCXNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUX1JV
-U1RDCisJc2VsZWN0IEJSMl9QQUNLQUdFX0hPU1RfUEtHQ09ORgorCXNlbGVjdCBCUjJfUEFDS0FH
-RV9PUEVOU1NMCisJc2VsZWN0IEJSMl9QQUNLQUdFX09QRU5TU0xfRk9SQ0VfTElCT1BFTlNTTAor
-CXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJPUEVOU1NMCisJaGVscAorCSAgVFBNIDIuMCBjb21tYW5k
-LWxpbmUgaW50ZXJmYWNlLgorCisJICB0cG0yc2ggaXMgYSBjb21tYW5kLWxpbmUgaW50ZXJmYWNl
-IGZvciBpbnRlcmFjdGluZyB3aXRoIFRQTSAyLjAgY2hpcHMKKwkgIGRpcmVjdGx5IHRocm91Z2gg
-L2Rldi90cG0wIG9yIC9kZXYvdHBtcm0wLgorCisJICBodHRwczovL2dpdGxhYi5jb20vdHBtLXBy
-b3RvY29sL3RwbTJzaAorCitjb21tZW50ICJ0cG0yc2ggbmVlZHMgYSB0b29sY2hhaW4gd2l0aCBS
-dXN0IHN1cHBvcnQiCisJZGVwZW5kcyBvbiAhQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRf
-QVJDSF9TVVBQT1JUUwpkaWZmIC0tZ2l0IGEvcGFja2FnZS90cG0yc2gvdHBtMnNoLmhhc2ggYi9w
-YWNrYWdlL3RwbTJzaC90cG0yc2guaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAw
-MDAwMDAwLi41NjdhNzc1MWY5Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS90cG0yc2gvdHBt
-MnNoLmhhc2gKQEAgLTAsMCArMSwyIEBACitzaGEyNTYgIDkwYjU1N2I2ZDZhNmE4ZjhlMmJmOTQ2
-ZWRmNWRiMThjZDMzYjA5MjQ1YzExZDM4ZTg1NDNmZjBmNDg2ZjZhNDAgIHRwbTJzaC0wLjE3LjIt
-Z2l0NC1jYXJnbzUudGFyLmd6CitzaGEyNTYgIDM5NzJkYzk3NDRmNjQ5OWYwZjliMmRiZjc2Njk2
-ZjJhZTdhZDhhZjliMjNkZGU2NmQ2YWY4NmM5ZGZiMzY5ODYgIExJQ0VOU0UKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvdHBtMnNoL3RwbTJzaC5tayBiL3BhY2thZ2UvdHBtMnNoL3RwbTJzaC5tawpuZXcg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi41NzNlYjg4YWQ1Ci0tLSAvZGV2L251
-bGwKKysrIGIvcGFja2FnZS90cG0yc2gvdHBtMnNoLm1rCkBAIC0wLDAgKzEsMTQgQEAKKyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjCisjCisjIHRwbTJzaAorIworIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKKworVFBNMlNIX1ZFUlNJT04gPSAwLjE3LjIKK1RQTTJTSF9TSVRFID0gaHR0cHM6Ly9naXRs
-YWIuY29tL3RwbS1wcm90b2NvbC90cG0yc2gKK1RQTTJTSF9TSVRFX01FVEhPRCA9IGdpdAorVFBN
-MlNIX0xJQ0VOU0UgPSBHUEwtMy4wLW9yLWxhdGVyCitUUE0yU0hfTElDRU5TRV9GSUxFUyA9IExJ
-Q0VOU0UKK1RQTTJTSF9ERVBFTkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgb3BlbnNzbAorCiskKGV2
-YWwgJChjYXJnby1wYWNrYWdlKSkKLS0gCjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+- CVE-2026-50292:
+    In libinput before 1.30.4 and 1.31.x before 1.31.3, libinput-device-
+    group unescaped phys output can inject udev properties leading to
+    arbitrary root code execution
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2026-50292
+  - https://gitlab.freedesktop.org/libinput/libinput/-/commit/8c15a01d1692cf0301b25ec2ead1d15d8176ad29
+  - https://gitlab.freedesktop.org/libinput/libinput/-/commit/fc2262e1c1847021239065e84f39f15492ef05cc
+  - https://gitlab.freedesktop.org/libinput/libinput/-/commit/b2bde9504d42a5976d76e1f27c640dc561fbd99b
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...dont-call-function-in-macro-argument.patch | 30 +++++++
+ ...e-control-characters-in-str-sanitize.patch | 90 +++++++++++++++++++
+ ...oup-sanitize-phys-before-printing-it.patch | 90 +++++++++++++++++++
+ package/libinput/libinput.mk                  |  5 ++
+ 4 files changed, 215 insertions(+)
+ create mode 100644 package/libinput/0001-util-sanitize-control-characters-in-str-sanitize.patchdont-call-function-in-macro-argument.patch
+ create mode 100644 package/libinput/0002-util-sanitize-control-characters-in-str-sanitize.patch
+ create mode 100644 package/libinput/0003-libinput-device-group-sanitize-phys-before-printing-it.patch
+
+diff --git a/package/libinput/0001-util-sanitize-control-characters-in-str-sanitize.patchdont-call-function-in-macro-argument.patch b/package/libinput/0001-util-sanitize-control-characters-in-str-sanitize.patchdont-call-function-in-macro-argument.patch
+new file mode 100644
+index 0000000000..61791278d0
+--- /dev/null
++++ b/package/libinput/0001-util-sanitize-control-characters-in-str-sanitize.patchdont-call-function-in-macro-argument.patch
+@@ -0,0 +1,30 @@
++From 8c15a01d1692cf0301b25ec2ead1d15d8176ad29 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Kacper=20Piwi=C5=84ski?= <vfjpl1@gmail.com>
++Date: Sun, 29 Jun 2025 07:21:27 +0000
++Subject: [PATCH] util: don't call function in macro argument
++
++Part-of: <https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/1252>
++Upstream: https://gitlab.freedesktop.org/libinput/libinput/-/commit/8c15a01d1692cf0301b25ec2ead1d15d8176ad29
++CVE: CVE-2026-50292
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/util-strings.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/util-strings.h b/src/util-strings.h
++index 870995f5..fc37ac4b 100644
++--- a/src/util-strings.h
+++++ b/src/util-strings.h
++@@ -480,7 +480,8 @@ str_sanitize(const char *str)
++ 	if (!strchr(str, '%'))
++ 		return strdup(str);
++ 
++-	size_t slen = min(strlen(str), 512);
+++	size_t slen = strlen(str);
+++	slen = min(slen, 512);
++ 	char *sanitized = zalloc(2 * slen + 1);
++ 	const char *src = str;
++ 	char *dst = sanitized;
++-- 
++GitLab
++
+diff --git a/package/libinput/0002-util-sanitize-control-characters-in-str-sanitize.patch b/package/libinput/0002-util-sanitize-control-characters-in-str-sanitize.patch
+new file mode 100644
+index 0000000000..11107cc270
+--- /dev/null
++++ b/package/libinput/0002-util-sanitize-control-characters-in-str-sanitize.patch
+@@ -0,0 +1,90 @@
++From fc2262e1c1847021239065e84f39f15492ef05cc Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Mon, 1 Jun 2026 10:12:29 +1000
++Subject: [PATCH] util: sanitize control characters in str_sanitize()
++
++str_sanitize() only escaped '%' characters for format string safety.
++Device names from uinput devices can contain arbitrary bytes including
++ANSI escape sequences (ESC, 0x1b) and other control characters. When
++these strings are included in log messages and printed to a terminal,
++the escape sequences are interpreted by the terminal emulator. This
++could allow an attacker to manipulate terminal output (change colors,
++set window title, clear screen) when an administrator views libinput
++logs.
++
++Replace all control characters (0x00-0x1f and 0x7f) with '?' in
++addition to the existing '%' escaping. This prevents terminal escape
++sequence injection through device names in log output.
++
++Assisted-by: Claude:claude-opus-4-6
++(cherry picked from commit 71a2c5cae2a80a1e3bb29e3f3a07ccc3f3de5acb)
++
++Part-of: <https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/1489>
++Upstream: https://gitlab.freedesktop.org/libinput/libinput/-/commit/fc2262e1c1847021239065e84f39f15492ef05cc
++CVE: CVE-2026-50292
++[thomas: remove tests]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/util-strings.h | 30 ++++++++++++++++++++++++------
++ test/test-utils.c  | 10 ++++++++++
++ 2 files changed, 34 insertions(+), 6 deletions(-)
++
++diff --git a/src/util-strings.h b/src/util-strings.h
++index 94236c48..3c662633 100644
++--- a/src/util-strings.h
+++++ b/src/util-strings.h
++@@ -469,7 +469,10 @@ trunkname(const char *filename);
++ 
++ /**
++  * Return a copy of str with all % converted to %% to make the string
++- * acceptable as printf format.
+++ * acceptable as printf format, and all non-NUL control characters
+++ * (bytes 0x01-0x1f, 0x7f) replaced with '?' to prevent terminal
+++ * escape sequence injection. NUL bytes are excluded implicitly
+++ * because the string is null-terminated.
++  */
++ static inline char *
++ str_sanitize(const char *str)
++@@ -477,19 +480,34 @@ str_sanitize(const char *str)
++ 	if (!str)
++ 		return NULL;
++ 
++-	if (!strchr(str, '%'))
++-		return strdup(str);
++-
++ 	size_t slen = strlen(str);
++ 	slen = min(slen, 512);
+++
+++	bool needs_sanitization = false;
+++	for (size_t i = 0; i < slen; i++) {
+++		unsigned char c = str[i];
+++		if (c == '%' || c < 0x20 || c == 0x7f) {
+++			needs_sanitization = true;
+++			break;
+++		}
+++	}
+++	if (!needs_sanitization)
+++		return strdup(str);
+++
++ 	char *sanitized = zalloc(2 * slen + 1);
++ 	const char *src = str;
++ 	char *dst = sanitized;
++ 
++ 	for (size_t i = 0; i < slen; i++) {
++-		if (*src == '%')
+++		unsigned char c = *src++;
+++		if (c == '%') {
++ 			*dst++ = '%';
++-		*dst++ = *src++;
+++			*dst++ = '%';
+++		} else if (c < 0x20 || c == 0x7f) {
+++			*dst++ = '?';
+++		} else {
+++			*dst++ = c;
+++		}
++ 	}
++ 	*dst = '\0';
++ 
++-- 
++GitLab
++
+diff --git a/package/libinput/0003-libinput-device-group-sanitize-phys-before-printing-it.patch b/package/libinput/0003-libinput-device-group-sanitize-phys-before-printing-it.patch
+new file mode 100644
+index 0000000000..24ed91eae6
+--- /dev/null
++++ b/package/libinput/0003-libinput-device-group-sanitize-phys-before-printing-it.patch
+@@ -0,0 +1,90 @@
++From b2bde9504d42a5976d76e1f27c640dc561fbd99b Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Mon, 1 Jun 2026 10:48:24 +1000
++Subject: [PATCH] libinput-device-group: sanitize phys before printing it
++
++A malicious uinput device could set the phys value (via UI_SET_PHYS)
++to contain a '\n'. When the value is printed as part of the device group
++the udev rules will interpret it as separate property.
++
++Depending on the property this can cause local privilege escalation.
++
++Closes #1296
++
++Found-by: Csome
++(cherry picked from commit 76f0d8a7f57e2868882864b4611281f12f704b55)
++
++Part-of: <https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/1489>
++Upstream: https://gitlab.freedesktop.org/libinput/libinput/-/commit/b2bde9504d42a5976d76e1f27c640dc561fbd99b
++CVE: CVE-2026-50292
++[thomas: backport]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ udev/libinput-device-group.c | 13 +++++++------
++ 1 file changed, 7 insertions(+), 6 deletions(-)
++
++diff --git a/udev/libinput-device-group.c b/udev/libinput-device-group.c
++index cdb38c0b..f9188406 100644
++--- a/udev/libinput-device-group.c
+++++ b/udev/libinput-device-group.c
++@@ -109,7 +109,8 @@ wacom_handle_ekr(struct udev_device *device,
++ 
++ 	udev_list_entry_foreach(entry, udev_enumerate_get_list_entry(e)) {
++ 		struct udev_device *d;
++-		const char *path, *phys;
+++		char *phys = NULL;
+++		const char *path;
++ 		const char *pidstr, *vidstr;
++ 		int pid, vid, dist;
++ 
++@@ -124,7 +125,7 @@ wacom_handle_ekr(struct udev_device *device,
++ 
++ 		vidstr = udev_device_get_property_value(d, "ID_VENDOR_ID");
++ 		pidstr = udev_device_get_property_value(d, "ID_MODEL_ID");
++-		phys = udev_device_get_sysattr_value(d, "phys");
+++		phys = str_sanitize(udev_device_get_sysattr_value(d, "phys"));
++ 
++ 		if (vidstr && pidstr && phys &&
++ 		    safe_atoi_base(vidstr, &vid, 16) &&
++@@ -142,6 +143,9 @@ wacom_handle_ekr(struct udev_device *dev
++ 			}
++ 		}
++ 
+++		free(phys);
+++		phys = NULL;
+++
++ 		udev_device_unref(d);
++ 	}
++ 
++@@ -154,8 +154,8 @@ int main(int argc, char **argv)
++ 	int rc = 1;
++ 	struct udev *udev = NULL;
++ 	struct udev_device *device = NULL;
++-	const char *syspath,
++-	           *phys = NULL;
+++	const char *syspath;
+++	char *phys = NULL;
++ 	const char *product;
++ 	int bustype, vendor_id, product_id, version;
++ 	char group[1024];
++@@ -179,8 +180,7 @@ main(int argc, char **argv)
++ 	 * bit and use the remainder as device group identifier */
++ 	while (device != NULL) {
++ 		struct udev_device *parent;
++-
++-		phys = udev_device_get_sysattr_value(device, "phys");
+++		phys = str_sanitize(udev_device_get_sysattr_value(device, "phys"));
++ 		if (phys)
++ 			break;
++ 
++@@ -251,6 +272,7 @@ int main(int argc, char **argv)
++ 
++ 	rc = 0;
++ out:
+++	free(phys);
++ 	if (device)
++ 		udev_device_unref(device);
++ 	if (udev)
++-- 
++GitLab
++
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 1930a8cea5..bb7589e502 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -19,6 +19,11 @@ LIBINPUT_CONF_OPTS = -Dtests=false -Dlibwacom=false -Ddocumentation=false
+ # https://gitlab.freedesktop.org/libinput/libinput/-/commit/9e37bc0cfa4d975291e5a2899e148fb83526d4a2
+ LIBINPUT_IGNORE_CVES += CVE-2026-35093 CVE-2026-35094
+ 
++# 0001-util-sanitize-control-characters-in-str-sanitize.patchdont-call-function-in-macro-argument.patch
++# 0002-util-sanitize-control-characters-in-str-sanitize.patch
++# 0003-libinput-device-group-sanitize-phys-before-printing-it.patch
++LIBINPUT_IGNORE_CVES += CVE-2026-50292
++
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+ LIBINPUT_CONF_OPTS += -Ddebug-gui=true
+ LIBINPUT_DEPENDENCIES += libgtk3
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
