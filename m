@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66730CD98DA
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A726DCD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD89560F4D;
-	Fri, 12 Jun 2026 11:22:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E0B060F99;
+	Fri, 12 Jun 2026 11:22:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pNrlUEgQjB91; Fri, 12 Jun 2026 11:22:43 +0000 (UTC)
+ id ny8tFDp5Q5_j; Fri, 12 Jun 2026 11:22:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62D7F60F84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEDA860F8B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263363;
-	bh=Sgr58d6spoafSsyYBA7ncWmithd78M/XodZ0ZOTU9n0=;
+	s=default; t=1781263364;
+	bh=ta00W8UKTnmyIAFGj9b+XLQ7poj5GmqsfDbp3rqEqqw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Lyxxp64GXjnrXvZJknr8SSZzFbqllOO7TDvOAWGCeb4HZSEc8KZucpWf9Q5OZSvsG
-	 ChapM9NvUSta+bQcuvN/QslYXXidOvYLLwTTF7lux8KB7r4/wP042TZHydhpZgFEhx
-	 VshQw7DeTurJOfCEkSjpsn8fm1kXzA2r59arixLKJAGu2oq9rQM7S7cPAqDwyVe/qe
-	 VSYFKeOoQaJlGDunmtfu5N38BQVoHIr46IushjFp0nY7Nmu8mjkGe6sw5Kccu5Bv0Y
-	 BEZzBuBpj4OirOjNKRY1LCLrXT8vuKIUJ+rksgUX1EHHvUfCVEoqfyjLgLsqmqSd5j
-	 FeSmbKXealBtg==
+	b=IhAilGCUmbMyMgP4fLmiAkks1ZRVJcmJ62U0DOPQYuofy+8Z+RceVFI/5mmWvuoO0
+	 2RfPzJsxZ3qLbRh/cNx0I1nCcL5FAh0bIka8QbOyHFODkAoWrp3cK6qKdxellkd49u
+	 VX4oR6mbUi2Mxb+Z+a5TETkT+JN8AYBEL3PfAdrKJ+34w0ANNnpeaoY/AuUO0fQSm4
+	 zjaYjJWWU2AupjIexNfUwfD9fbc2+eLv6SsDKrCRRvsIdzWTTzeB90BHBVslIMBKay
+	 y6iHUJS4+4TsTyePnGw4E1rWSBWVL0TkGVIStKrdp49kVd8msZkUQHVC0ixwjXVBPE
+	 ZRKIdSmkh76ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62D7F60F84;
-	Fri, 12 Jun 2026 11:22:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1873B3B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEDA860F8B;
+	Fri, 12 Jun 2026 11:22:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13636394
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0DEC760F1B
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CEEE40655
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f0O3MswlK_wV for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:22:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O9kSrT0vu3Ng for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0069E60F16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71404403B2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0069E60F16
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71404403B2
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB66F880D5; Fri, 12 Jun 2026 11:22:06 +0000 (UTC)
+ id 3A515880E9; Fri, 12 Jun 2026 11:22:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:35:47 +0200
+Date: Thu, 11 Jun 2026 10:06:29 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 477c5c0510cf78412935da47b6e7e761822831b5
-X-Git-Newrev: b347285b1d8d5c9e1c07e8b138fbb5a1cd792b0f
+X-Git-Oldrev: c6c6ec9aa2a33b4b4ce89a568bb2c6f9f40d275b
+X-Git-Newrev: e71002ad10362f5317664a4486a7ec230a7be060
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112206.CB66F880D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/runc: security
- bump to v1.2.9
+Message-Id: <20260612112203.3A515880E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: TestXfs:
+ fix build on Gitlab runners
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,62 +77,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b347285b1d8d5c9e1c07e8b138fbb5a1cd792b0f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e71002ad10362f5317664a4486a7ec230a7be060
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following security issues (in v1.2.8):
+Our CI uses "/builds/buildroot.org/buildroot" as build directory.
+Unlikely the xfsprogs build system misbehave when a directory in
+the path contain ".o".
 
-- CVE-2025-31133: container escape via "masked path" abuse due to mount race
-  conditions
-  https://github.com/opencontainers/runc/security/advisories/GHSA-9493-h29p-rfm2
+While generating .ltdep, the sed command used to convert object file
+(.o) to libtool object(.lo) replace buildroot.org by buildroot.lorg.
 
-- CVE-2025-52565: container escape with malicious config due to /dev/console
-  mount and related races
-  https://github.com/opencontainers/runc/security/advisories/GHSA-qw9x-cqr3-wc7r
+  .ltdep: $(CFILES) $(HFILES)
+    $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
 
-- CVE-2025-52881: container escape and denial of service due to arbitrary
-  write gadgets and procfs write redirects
-  https://github.com/opencontainers/runc/security/advisories/GHSA-cgrx-mc8f-2prm
+Building libfrog
+    [CC]     gen_crc32table
+    [GENERATE] crc32table.h
+gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
 
-There are also numerous bugfixes.
+Update the sed command to avoid this effect.
 
-See the releases notes:
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
 
-- https://github.com/opencontainers/runc/releases/v1.2.5
-- https://github.com/opencontainers/runc/releases/v1.2.6
-- https://github.com/opencontainers/runc/releases/v1.2.7
-- https://github.com/opencontainers/runc/releases/v1.2.8
-- https://github.com/opencontainers/runc/releases/v1.2.9
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 0a9bc387b64e3f946f782af04418a15e43404225)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-include-buildrules-fix-ltdep.patch        | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index d25d8facfd..33850238f3 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9785c144c97974b52b6091b7a79168b73681ff574bc8438b44f3f5f8c112f171  runc-1.2.4-go2.tar.gz
-+sha256  8e298469fc729d37920a7ee45c7cd587a4139149abccca485e08d616b80d2fad  runc-1.2.9-go2.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 51ac32de26..0daffa1368 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 1.2.4
-+RUNC_VERSION = 1.2.9
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+diff --git a/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
+new file mode 100644
+index 0000000000..f17dc51edb
+--- /dev/null
++++ b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
+@@ -0,0 +1,48 @@
++From cddc06c0eef874c01293cdb6e60090771a347c56 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sun, 31 May 2026 21:08:09 +0200
++Subject: [PATCH] include/buildrules: fix ltdep
++
++Our CI uses "/builds/buildroot.org/buildroot" as build directory.
++Unlikely the xfsprogs build system misbehave when a directory in
++the path contain ".o".
++
++While generating .ltdep, the sed command used to convert object file
++(.o) to libtool object (.lo) replace buildroot.org by buildroot.lorg.
++
++  .ltdep: $(CFILES) $(HFILES)
++    $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
++
++Building libfrog
++    [CC]     gen_crc32table
++    [GENERATE] crc32table.h
++gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
++
++Update the sed command to avoid this effect.
++
++Upstream: https://lore.kernel.org/linux-xfs/20260531194553.1378795-1-romain.naour@smile.fr/T/#u
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ include/buildrules | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/buildrules b/include/buildrules
++index 871e92db..3fabbe5a 100644
++--- a/include/buildrules
+++++ b/include/buildrules
++@@ -140,7 +140,7 @@ rmltdep:
++ 	$(Q)rm -f .ltdep
++ 
++ .ltdep: $(CFILES) $(HFILES)
++-	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
+++	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o:,\1.lo:,' > .ltdep
++ 
++ depend: rmdep .dep
++ 
++-- 
++2.54.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
