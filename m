@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A719CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0CD2CD98CE
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0F0F61045;
-	Fri, 12 Jun 2026 11:24:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7934441111;
+	Fri, 12 Jun 2026 11:24:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id opT-kc_2SZhm; Fri, 12 Jun 2026 11:24:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 815F141118
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781263452;
+	bh=h5VelAb2s7T0n6tNtOxczXWI+ycR76YBHZjkK+1X/S4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=iVOR/57y88e1bkc4sqcwA840cJ6ma0vzeYf4JKg1rh9u1s0cfNoA4skjVyveIFFFM
+	 /dzrnoDEeZlyxK6/gSzj0D0fptyrCWWnY8l47JeQE1OWRXQH+L0lmMyZQWp4nGghF1
+	 8aMQOsLLlJ9DWnHKTT4oDwmLGrv31RwLMw2wEBHEzI30nFAINjQTPixowoOdnvFjoe
+	 MLzQp8kGd/SY4ClblFEwxWjhR9ZHb9AFVfpkuaI6+EZ0mYOaJmyB67zQTGMlfjCLvr
+	 uj3m39yhDGvDQxVLP6lwq7zGgXmz3mjlWVtC0cd5uBghdxsix0SM4HujjQR6rMvjMe
+	 3pFv8Nk1w2ZOg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 815F141118;
+	Fri, 12 Jun 2026 11:24:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40A3F237
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25CEC60F36
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHLFnnEJ78Ml; Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D1A460F12
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263450;
-	bh=oUHykqMRluJ41JGtkga8/TYU0cyH3EEEZXtkm9bwH44=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BXuDKBvYs+llg+26ju1O8OgS9PtGsp90WnADKrBKQxSa2I9T50NujU/P7lEk8v3Au
-	 oQNKkCxGlR/u2q6nPLmYosdRtHf2H5rUtF4aSaybnOrWItonwwwrD+51Op9Xx9TOGR
-	 9/V8n028L0JMLR3lCWgRp3B/LzADKUxt3CbDXm0ji0p24dMjBBJbkIq6jPTzxA9COJ
-	 7QM7u3oM/D83y7362/XjTxqD12P96kMQxga/+r4feibgYI8tVCtgngOeJ0Xti5fhHz
-	 nhOx8JHXwe78RiG/eoee10AvkLkivlmFV4odJET+nBGFp36mytVvd4/ZBKuLdWl9DH
-	 1bmQSPD9GbnjQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D1A460F12;
-	Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2145B237
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F3C940678
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIjFJJ4YFLLW for <buildroot@buildroot.org>;
+ id 4EMZSusjS5T3 for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FD9940148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D33860EA8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FD9940148
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D33860EA8
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C760880E8; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
+ id 35556880E8; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:05:29 +0200
+Date: Thu, 11 Jun 2026 10:09:35 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 2121a13066e52597896711066b1cf587b4c799b5
-X-Git-Newrev: 9191420db7666b898a325f8cd6d510fa0485a4ae
+X-Git-Oldrev: bdfdeea8e1cd6a87565cc738e32ff221e1f33f35
+X-Git-Newrev: cf5072ec131c937f22184f27329cb1dabc040804
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112349.0C760880E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/poppler: needs
- zlib
+Message-Id: <20260612112349.35556880E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/zsh: correct
+ download URL after 5.9.1 release
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9191420db7666b898a325f8cd6d510fa0485a4ae
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf5072ec131c937f22184f27329cb1dabc040804
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-Buildroot commit cdd1c5ca55620a4bdd1574d41fc5538d50f7359a bumped the
-package from version 22.12.0 to 25.10.0 but forgot to change zlib into
-a mandatory dependency. This is necessary due to upstream commit
-https://gitlab.freedesktop.org/poppler/poppler/-/commit/7d87c7d2c6ca4f814f87329534a17dbf30203313
-since version 23.07.0.
-
 Fixes:
-https://autobuild.buildroot.net/results/85f/85fb6c2945101b8d4ee86dbc32700293e7b35a86/
+https://autobuild.buildroot.net/results/9f0f50858b2f41c306f172bf011a34d2c0ad65dc/
 
-CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:290 (message):
-  Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-Call Stack (most recent call first):
-  /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:654 (_FPHSA_FAILURE_MESSAGE)
-  /usr/share/cmake/Modules/FindZLIB.cmake:242 (find_package_handle_standard_args)
-  CMakeLists.txt:309 (find_package)
+>>> zsh 5.9 Downloading
+wget -nd -t 3 --no-check-certificate -O '/home/autobuild/autobuild/instance-42/output-1/build/.zsh-5.9.tar.xz.FpXHXy/output' 'http://www.zsh.org/pub/zsh-5.9.tar.xz'
+URL transformed to HTTPS due to an HSTS policy
+--2026-06-01 01:46:35--  https://www.zsh.org/pub/zsh-5.9.tar.xz
+Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
+Resolving www.zsh.org (www.zsh.org)... 94.142.241.90
+Connecting to www.zsh.org (www.zsh.org)|94.142.241.90|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2026-06-01 01:46:36 ERROR 404: Not Found.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+zsh-5.9.1 was released on 2026-05-31 and 5.9.0 release tarball moved under
+old/, so update ZSH_SITE to match.
+
+https://zsh.sourceforge.io/News/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7a9486d7d6595d37b0a8c096408a51503a1d1f59)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 92cdec5a54a009ece181eaaa6446fadef0303a66)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/poppler/Config.in  | 1 +
- package/poppler/poppler.mk | 9 +--------
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ package/zsh/zsh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 21c4d86cf6..208126a327 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_POPPLER
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Poppler is a PDF rendering library based on the xpdf-3.0
- 	  code base.
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 08214d38b4..535c2b7b10 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -7,7 +7,7 @@
- POPPLER_VERSION = 25.10.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = https://poppler.freedesktop.org
--POPPLER_DEPENDENCIES = fontconfig host-pkgconf
-+POPPLER_DEPENDENCIES = fontconfig host-pkgconf zlib
- POPPLER_LICENSE = GPL-2.0+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_CPE_ID_VENDOR = freedesktop
-@@ -95,13 +95,6 @@ else
- POPPLER_CONF_OPTS += -DENABLE_UTILS=OFF
- endif
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 7e577fa9e1..b18788417c 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--POPPLER_DEPENDENCIES += zlib
--POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=ON
--else
--POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- POPPLER_DEPENDENCIES += cairo
- POPPLER_CONF_OPTS += -DWITH_Cairo=ON
+ ZSH_VERSION = 5.9
+-ZSH_SITE = http://www.zsh.org/pub
++ZSH_SITE = http://www.zsh.org/pub/old
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
+ ZSH_CONF_OPTS = --bindir=/bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
