@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03990CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F4FCD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD20441082;
-	Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 339D060F24;
+	Fri, 12 Jun 2026 11:22:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o7lNJ5XgmBBL; Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yJpdd9Vl7eVf; Fri, 12 Jun 2026 11:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E450C41110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E34D160EF8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263347;
-	bh=afYYIZDR+pSmuy58ke9yZgfz2Kh9aKilXR/XJKmWAQs=;
+	s=default; t=1781263348;
+	bh=alW+FlonkcSbk31vKEcIVNoUXlEygmMrr46pMtR4LCg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FKb/5ZxPf9ffDyLCs/SS/nG/QEsM+IViXHRGDlupMuQyOBy/d3S32w7hcTJvpksMD
-	 XjAc4CRJJe+sCXCGrJVosrdH3tkQesi5nDy70eVVJNxSigOuco9GR6HNFDQojqquWf
-	 wwA1rONj/ePwbytbeRkhUyY39J3+O5ygzTjnNPuqRUbOpgfncLJSkvVFUv6ccQOOhD
-	 b6Wtz64eY8AuLepFqRG/y72ebkSk8fx3v6ydA+9SAEzc/jP0/jg9W2TsmJnwPrcDQQ
-	 g9s0hL7nhcHUE5MbhIzwIZh/ZEkhW8aIitiIucSJkIDctJy/QsAfLT/H/pJ1Lf0AgM
-	 HvEsa6jd6+NLw==
+	b=b0PJtbsk5AnReaVmrZtgD8h6Ejn3A10DZw5vCL48MY8hXQ+QX6lsfXVOEpxtEkfFk
+	 I8txoaWNBlEE7P98xV95DMdAlXPbw5eV5ce7FuYP8goa6I4MFSwnpCOlu+SWE9+gY2
+	 OnfxdoRre6GZDihVzGsbH5Sf7n8VVcV4xXN39HfQLubFeBksSqq6S53d1BqOk7/QEU
+	 5phXjs4ES8IdAjfph7yeoeSgInPcrQk26a0J3fNjM7YtGR5I8u4RT3nPDAE084mgZu
+	 oShId+7jtZSYp1qygdVgSM0d95VuZc9wAAfN4vjFrsz8w9kRHw8v2nv/GgDFtst/La
+	 ZCOot4QDSRExA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E450C41110;
-	Fri, 12 Jun 2026 11:22:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E34D160EF8;
+	Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4455D321
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A856237
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2854F4065E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F65F40148
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OfZ7Rq3uCmRx for <buildroot@buildroot.org>;
+ id K-cJmq6a-2SI for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B9FE40148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9318240657
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B9FE40148
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9318240657
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23F8C880D5; Fri, 12 Jun 2026 11:22:03 +0000 (UTC)
+ id 6CA0E880D5; Fri, 12 Jun 2026 11:22:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:05:49 +0200
+Date: Thu, 11 Jun 2026 10:09:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 36067ebde25a1dfd4724d278baded0ae84a3faf0
-X-Git-Newrev: c6c6ec9aa2a33b4b4ce89a568bb2c6f9f40d275b
+X-Git-Oldrev: 116effbc600d745ad6bf90e7e6cdf13eb6209d8f
+X-Git-Newrev: dea44b42a7b07054d71f63108db70574eaec7efc
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112203.23F8C880D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libmodsecurity:
- needs host-pkgconf
+Message-Id: <20260612112203.6CA0E880D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] utils/generate-cyclonedx:
+ fix hash_file location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,38 +77,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c6c6ec9aa2a33b4b4ce89a568bb2c6f9f40d275b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dea44b42a7b07054d71f63108db70574eaec7efc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The configure script was regenerated for the 3.0.15 release but it now
-error out if pkg-config is missing.
+The 'show-info' output always the location relative to the Buildroot
+root directory.
+When running 'generate-cyclonedx' outside of the Buildroot root
+directory the hash file locations are not correct. Only using the
+'hash_file' variable coming from 'show-info' doesn't guarantee the
+script to succeed.
 
-Add host-pkgconf in build dependency.
+Use the 'brpath' variable to correctly reference the absolute path.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335870 (TestNginxModsecurity)
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit db75a8eea0bda678e651fe2b2ba85c3e0b2bed31)
+Fixes: 1791b79422 utils/generate-cyclonedx: add hashes from .hash files to externalReferences
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 2df4f1d573685234cc59361cde6c624885056c79)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libmodsecurity/libmodsecurity.mk | 2 +-
+ utils/generate-cyclonedx | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index c06d890979..8920cb012e 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -13,7 +13,7 @@ LIBMODSECURITY_LICENSE_FILES = LICENSE
- LIBMODSECURITY_CPE_ID_VENDOR = trustwave
- LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 11edc05d80..bade018cd4 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -302,7 +302,7 @@ def cyclonedx_source_hashes(comp, source):
  
--LIBMODSECURITY_DEPENDENCIES = pcre2
-+LIBMODSECURITY_DEPENDENCIES = pcre2 host-pkgconf
- LIBMODSECURITY_CONF_OPTS = \
- 	--without-pcre \
- 	--with-pcre2="$(STAGING_DIR)/usr" \
+     hashes = []
+     for hash_file in comp.get("hashes", []):
+-        with Path(hash_file).open() as f:
++        with (brpath / hash_file).open() as f:
+             for line in f:
+                 line = line.strip()
+                 if not line.startswith("#") and line.endswith(f" {source}"):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
