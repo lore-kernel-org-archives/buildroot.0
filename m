@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0CD2CD98CE
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE18CD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7934441111;
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1EA460F30;
 	Fri, 12 Jun 2026 11:24:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id opT-kc_2SZhm; Fri, 12 Jun 2026 11:24:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 815F141118
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263452;
-	bh=h5VelAb2s7T0n6tNtOxczXWI+ycR76YBHZjkK+1X/S4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iVOR/57y88e1bkc4sqcwA840cJ6ma0vzeYf4JKg1rh9u1s0cfNoA4skjVyveIFFFM
-	 /dzrnoDEeZlyxK6/gSzj0D0fptyrCWWnY8l47JeQE1OWRXQH+L0lmMyZQWp4nGghF1
-	 8aMQOsLLlJ9DWnHKTT4oDwmLGrv31RwLMw2wEBHEzI30nFAINjQTPixowoOdnvFjoe
-	 MLzQp8kGd/SY4ClblFEwxWjhR9ZHb9AFVfpkuaI6+EZ0mYOaJmyB67zQTGMlfjCLvr
-	 uj3m39yhDGvDQxVLP6lwq7zGgXmz3mjlWVtC0cd5uBghdxsix0SM4HujjQR6rMvjMe
-	 3pFv8Nk1w2ZOg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 815F141118;
-	Fri, 12 Jun 2026 11:24:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 40A3F237
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25CEC60F36
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4EMZSusjS5T3 for <buildroot@buildroot.org>;
+ id PUC4lPx7muCz; Fri, 12 Jun 2026 11:24:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63D4760F96
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781263451;
+	bh=vkQQ8Nwov58roHZMPJdcd3t1/KXbnqn4+ZYK0U38ORE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gvBpg/JqqJVlnj9MnIh/LvfDX5iel3O3abkfri6kPiJ2CgnbYvgAzC5Qu6m9WEsFC
+	 x/9vQ0l7TAAW2a07/PkGktk4B7pDpKCLDPKKZp5JWvMEc5o9YrL7v8cZodRrMyfaeb
+	 ix3ISypiA9X9be23GCdqUznFoCksum6OyW38bmy0Aara0kS7mme0R5owg9GpGbIh1D
+	 s5IusXSRAw1TlFs7Gw9qDlSPPfVE5++I7DR4zx8lt09jcA+HzmS0qEAVmXW+kgpjyF
+	 T6GmxERDJqghAeWtZfJ/bl6ga8TyHWdbuoqI76+olWrGT9jUaKksqWeNTbn0W4wDqH
+	 tz3angAZCiCMw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63D4760F96;
+	Fri, 12 Jun 2026 11:24:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2944A321
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C16B8329E
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RCHMc077DkpR for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D33860EA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D8E82CC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D33860EA8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47D8E82CC7
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35556880E8; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
+ id 1494E880E9; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:09:35 +0200
+Date: Thu, 11 Jun 2026 10:05:52 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: bdfdeea8e1cd6a87565cc738e32ff221e1f33f35
-X-Git-Newrev: cf5072ec131c937f22184f27329cb1dabc040804
+X-Git-Oldrev: 9191420db7666b898a325f8cd6d510fa0485a4ae
+X-Git-Newrev: dd2469fa708256ae7a3380c0cda256fc57e892fb
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112349.35556880E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/zsh: correct
- download URL after 5.9.1 release
+Message-Id: <20260612112349.1494E880E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/libmodsecurity:
+ needs host-pkgconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cf5072ec131c937f22184f27329cb1dabc040804
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd2469fa708256ae7a3380c0cda256fc57e892fb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
+The configure script was regenerated for the 3.0.15 release but it now
+error out if pkg-config is missing.
+
+Add host-pkgconf in build dependency.
+
 Fixes:
-https://autobuild.buildroot.net/results/9f0f50858b2f41c306f172bf011a34d2c0ad65dc/
+https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335870 (TestNginxModsecurity)
 
->>> zsh 5.9 Downloading
-wget -nd -t 3 --no-check-certificate -O '/home/autobuild/autobuild/instance-42/output-1/build/.zsh-5.9.tar.xz.FpXHXy/output' 'http://www.zsh.org/pub/zsh-5.9.tar.xz'
-URL transformed to HTTPS due to an HSTS policy
---2026-06-01 01:46:35--  https://www.zsh.org/pub/zsh-5.9.tar.xz
-Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
-Resolving www.zsh.org (www.zsh.org)... 94.142.241.90
-Connecting to www.zsh.org (www.zsh.org)|94.142.241.90|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2026-06-01 01:46:36 ERROR 404: Not Found.
-
-zsh-5.9.1 was released on 2026-05-31 and 5.9.0 release tarball moved under
-old/, so update ZSH_SITE to match.
-
-https://zsh.sourceforge.io/News/
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 92cdec5a54a009ece181eaaa6446fadef0303a66)
+(cherry picked from commit db75a8eea0bda678e651fe2b2ba85c3e0b2bed31)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/zsh/zsh.mk | 2 +-
+ package/libmodsecurity/libmodsecurity.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 7e577fa9e1..b18788417c 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index c06d890979..8920cb012e 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -13,7 +13,7 @@ LIBMODSECURITY_LICENSE_FILES = LICENSE
+ LIBMODSECURITY_CPE_ID_VENDOR = trustwave
+ LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
  
- ZSH_VERSION = 5.9
--ZSH_SITE = http://www.zsh.org/pub
-+ZSH_SITE = http://www.zsh.org/pub/old
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
- ZSH_CONF_OPTS = --bindir=/bin
+-LIBMODSECURITY_DEPENDENCIES = pcre2
++LIBMODSECURITY_DEPENDENCIES = pcre2 host-pkgconf
+ LIBMODSECURITY_CONF_OPTS = \
+ 	--without-pcre \
+ 	--with-pcre2="$(STAGING_DIR)/usr" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
