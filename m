@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B214CD98DA
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407FDCD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFF29610B7;
-	Fri, 12 Jun 2026 11:24:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 181994123D;
+	Fri, 12 Jun 2026 11:24:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BN_wUyFvvxz3; Fri, 12 Jun 2026 11:24:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id od-m_A7WQb6F; Fri, 12 Jun 2026 11:24:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C61A761119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 349044123F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263473;
-	bh=RrF0pl3ZorK4RACziO/Z8b9tj8JibxNWR/WIplrEPHo=;
+	s=default; t=1781263475;
+	bh=/6VWKr9kMWm7f5f6fvClUq7eOr7oCwfVIBWdpOv/rYk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EZ9SUvdj2bvpqKAdk9J2rk4Z+5Ehc8lK1MqsIeKfsjVBFkJ2F9X3ut0SueY/5ugVZ
-	 D7a8IoU/DTMrWvFPvATzOBPrwbqEBruCpcQq6eugO5ufnb4+lVKy9OqrFb3cVXryjU
-	 IITWQllBR/AivPQ1HRlmr3nuzyKOR8qZ6usorf7Z10S2qjvRlykh40Hjl3WFxjmpj5
-	 CLQ/Lx5Iate9ygSNaouwSbvIVUuUzeC89ZcPDo3/Rq1sOxq274apizeN0IBZG491wE
-	 0Xw+DtdQ1fgc0A2iLH6wipNjlO+Lw/3orio+eLhGyVQGpV+JViahBtHVpFMXv7MaLG
-	 IS4IqW7kp1GgQ==
+	b=rjeZEg5Xz1SOPgs9sycV0BshjVs6k/MfoAGFcAlgljwN0Zc4y1iaGMP5lB5ltFk9R
+	 81eVY67BEyOZ+o5o6+qVCqJWMO3ELEtNL13DtJhUNtN5cygkDOsikxS5QZtfJPnb7R
+	 No6bt3e8k5AYWPyFNJ96TK7GAPNIPDEXKMlZFbwrIMgTICm6m2M3WOx8ufJlrPCBGM
+	 joemSXu4IrjkPVBOP22jyZVNsYb63Opy1Fe1L9OEVrUFOWDugrwKD9zwo3T3nEIf5p
+	 5J9JPIN/fhqCYeR6AKhPs+5O23CIA9UrT7yhVyLA8E3erUbRpix/vkHdEK4yoxeU8U
+	 AvmBij2H8bb5g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C61A761119;
-	Fri, 12 Jun 2026 11:24:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DEBD237
+	by smtp4.osuosl.org (Postfix) with ESMTP id 349044123F;
+	Fri, 12 Jun 2026 11:24:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57452237
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F1A760F20
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC8FB4065E
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bc9M1y-QLApI for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TgoBug_yTUbJ for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6582260F12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F031740673
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6582260F12
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F031740673
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E3D9880EA; Fri, 12 Jun 2026 11:23:50 +0000 (UTC)
+ id C9ADD880EA; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 11:47:29 +0200
+Date: Thu, 11 Jun 2026 11:40:08 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: 42581bd3cf7708d4dd1b19c543157c013caae61a
-X-Git-Newrev: cb6bcec96a88129322682a991b1ff0fc606ae2fc
+X-Git-Oldrev: 1eb0e3f0d60622e8989fe32aacf8dd444471197f
+X-Git-Newrev: bb11e239f060b65b4f3ee0bc35b8515ba9f8061a
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112350.3E3D9880EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/php: security
- bump version to 8.5.7
+Message-Id: <20260612112349.C9ADD880EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x] package/lrzip: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,48 +76,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cb6bcec96a88129322682a991b1ff0fc606ae2fc
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bb11e239f060b65b4f3ee0bc35b8515ba9f8061a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-https://www.php.net/ChangeLog-8.php#8.5.7
-https://news-web.php.net/php.announce/493
-https://github.com/php/php-src/blob/php-8.5.7/NEWS
+The CPE long_range_zip_project:long_range_zip hasn't been used since
+2023. While ckolivas:lrzip got 3 CVEs that affect the current Buildroot
+version [1][2][3].
 
-Fixes CVE-2026-44927 & CVE-2026-44928.
+[1] https://nvd.nist.gov/vuln/detail/CVE-2025-9396
+[2] https://nvd.nist.gov/vuln/detail/CVE-2025-15570
+[2] https://nvd.nist.gov/vuln/detail/CVE-2025-15571
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 08f8c44d150c5fa2d9c8a639c076090cd6a76bba)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2dce5a7844d061860810da4b77965d96d09eb2b4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lrzip/lrzip.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c85df44d73..2a89d03ecd 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php?source=Y
--sha256  826c600b7c6f956bd335558ca3bdbcab23b22126c1cc8d9348be2280a2204bb7  php-8.5.6.tar.xz
-+sha256  01ba2ed1c2658dacf91bebc8be6a4885f69b811c7993831fc48e26107ab29985  php-8.5.7.tar.xz
+diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
+index 0375696414..03ad36c58b 100644
+--- a/package/lrzip/lrzip.mk
++++ b/package/lrzip/lrzip.mk
+@@ -9,8 +9,7 @@ LRZIP_SOURCE = lrzip-$(LRZIP_VERSION).tar.xz
+ LRZIP_SITE = http://ck.kolivas.org/apps/lrzip
+ LRZIP_LICENSE = GPL-2.0+
+ LRZIP_LICENSE_FILES = COPYING
+-LRZIP_CPE_ID_VENDOR = long_range_zip_project
+-LRZIP_CPE_ID_PRODUCT = long_range_zip
++LRZIP_CPE_ID_VENDOR = ckolivas
+ LRZIP_DEPENDENCIES = zlib lz4 lzo bzip2
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0eae93fac2..0bfb12a8eb 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.5.6
-+PHP_VERSION = 8.5.7
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
