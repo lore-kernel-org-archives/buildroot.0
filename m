@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0072BCD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49457CD98CE
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADEB360F01;
-	Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF4E360F0E;
+	Fri, 12 Jun 2026 11:22:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I43NKXRCKF8n; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
+ id C8-MXtQtDQWG; Fri, 12 Jun 2026 11:22:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D62F260EF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E82F960EF7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263342;
-	bh=Lr0agBaiWFO77IVDRqOpc7lVbj/PWa4aGQKb5LXsEwA=;
+	s=default; t=1781263345;
+	bh=W4YwNrzGtjxwzbaUHdOluYGLkZmJLOJsR7zLzZEE/Z4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IEGcozJ9YPy0nwWnDiE3LsoRaggxZq2qHxhK3qkotxGBcNXpxCSLWs66goQLpmhBw
-	 Vr+LTvjhB6HlGX1BVIM9CkJkPmb7XWp3lKWhQCQwe7QQmLz2+yodLdse1Vfcrfluth
-	 FUvo5ZKTIakGlIPWrArghUp22+ELYhYcqGFkgIBqqC9HiP8TFhiX1eqMsjrbtZqsSz
-	 wwz++CtYeu8VwyArV9OswMLB9GrKzM+pl7QN/+sRq7ckesY8w7hNqZQc3GBh7ac6fA
-	 gj6ksV+uDyxr+OHVsG8L+Qcj8rnedIN3utEvFS4RkRT5YOBuavr00cg0gz3IU+K06K
-	 eF7NdeO8ozyXQ==
+	b=KTPN970A4eOtbk1gn02PkkAIxqtseM8bX2woxn9vu4GFDfxg1Ti9ZjwurOg4WiJyQ
+	 ca7H/BJF0R9QeV+EeikGdUtdk5Odm9Xmj2LqqWWOPG7URfK8fNo5yN2OSG5mo3L4QB
+	 tm5KDvBuynl/xcKg9+mp6Qzb/1Rg/fNQsxrMLvZVeaOCgT+QRDICSRkujY9Yqy4UGD
+	 IYfPBCsABtN51huHAJc6LwCJfR0WIiq0bm5TQpQ4wkwHm/IzYxiZh/q8Un3+wJFsPs
+	 BCgIdxjuMNth+2vc3pe0FJQEaJhEvhDOGd5QdO3UyvLnk2TLb+pQ/0XYcaIQWdD7fI
+	 67enZKyjzh/rQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D62F260EF8;
-	Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 85084F4
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E82F960EF7;
+	Fri, 12 Jun 2026 11:22:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 321BDF4
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 772A260EF8
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22E998329E
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h1sjqOnJTLB1 for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:22:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cRypL3vTLyB3 for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3130C60EF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74E2082CC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3130C60EF3
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74E2082CC7
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:22:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1C04880E6; Fri, 12 Jun 2026 11:22:00 +0000 (UTC)
+ id 4C2FF880D5; Fri, 12 Jun 2026 11:22:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:05:24 +0200
+Date: Thu, 11 Jun 2026 10:07:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a20dafe5c190a7d083de3c1a219f27aff7450ebb
-X-Git-Newrev: 36067ebde25a1dfd4724d278baded0ae84a3faf0
+X-Git-Oldrev: e71002ad10362f5317664a4486a7ec230a7be060
+X-Git-Newrev: e55f89ffa43329063130498c2af0d1e93f2a03de
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112200.F1C04880E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/poppler: needs
- zlib
+Message-Id: <20260612112203.4C2FF880D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ utils/bump-stable-kernel-versions: update for split hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,73 +77,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/36067ebde25a1dfd4724d278baded0ae84a3faf0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e55f89ffa43329063130498c2af0d1e93f2a03de
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Buildroot commit cdd1c5ca55620a4bdd1574d41fc5538d50f7359a bumped the
-package from version 22.12.0 to 25.10.0 but forgot to change zlib into
-a mandatory dependency. This is necessary due to upstream commit
-https://gitlab.freedesktop.org/poppler/poppler/-/commit/7d87c7d2c6ca4f814f87329534a17dbf30203313
-since version 23.07.0.
+Since Buildroot commit 0e3ddc9dc85e29cd00338cc79ea4be1d634a75ba,
+linux hash files are split between pre- and post-6.17.
 
-Fixes:
-https://autobuild.buildroot.net/results/85f/85fb6c2945101b8d4ee86dbc32700293e7b35a86/
-
-CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:290 (message):
-  Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-Call Stack (most recent call first):
-  /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:654 (_FPHSA_FAILURE_MESSAGE)
-  /usr/share/cmake/Modules/FindZLIB.cmake:242 (find_package_handle_standard_args)
-  CMakeLists.txt:309 (find_package)
+With buildroot commit da01b7271a4a9048ae8e8ae18753edc5da785a44 the
+script was updated for the new situation but still needs to update the
+version-numbered links to the directories with the correct hash files.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7a9486d7d6595d37b0a8c096408a51503a1d1f59)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit bd633fe5b4785435d7822251d02289082a0d1b5e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/poppler/Config.in  | 1 +
- package/poppler/poppler.mk | 9 +--------
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ utils/bump-stable-kernel-versions | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 21c4d86cf6..208126a327 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_POPPLER
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Poppler is a PDF rendering library based on the xpdf-3.0
- 	  code base.
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 08214d38b4..535c2b7b10 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -7,7 +7,7 @@
- POPPLER_VERSION = 25.10.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = https://poppler.freedesktop.org
--POPPLER_DEPENDENCIES = fontconfig host-pkgconf
-+POPPLER_DEPENDENCIES = fontconfig host-pkgconf zlib
- POPPLER_LICENSE = GPL-2.0+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_CPE_ID_VENDOR = freedesktop
-@@ -95,13 +95,6 @@ else
- POPPLER_CONF_OPTS += -DENABLE_UTILS=OFF
- endif
+diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
+index 6303bf4010..0e76cd1168 100755
+--- a/utils/bump-stable-kernel-versions
++++ b/utils/bump-stable-kernel-versions
+@@ -78,6 +78,10 @@ update_linux_hash() {
+                 echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
+                 sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
+                     package/linux-headers/Config.in.host linux/Config.in
++                git mv package/linux-headers/"${old_version}" package/linux-headers/"${new_version}"
++                if [ -d linux/"${old_version}" ]; then
++                    git mv linux/"${old_version}" linux/"${new_version}"
++                fi
  
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--POPPLER_DEPENDENCIES += zlib
--POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=ON
--else
--POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- POPPLER_DEPENDENCIES += cairo
- POPPLER_CONF_OPTS += -DWITH_Cairo=ON
+                 updated_releases_list="${updated_releases_list} ${release_version}.x"
+                 updated_versions="${updated_versions}\n - ${old_version} -> ${new_version}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
