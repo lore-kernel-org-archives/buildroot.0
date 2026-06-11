@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B8D9CD8CA8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD40CD98D9
 	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E6FC41242;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F59161064;
 	Fri, 12 Jun 2026 11:24:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EMSo1JgyXXTX; Fri, 12 Jun 2026 11:24:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5B2F4122E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781263471;
-	bh=ExGE68BUqKhjWHwq/9FSJzxBRmpjKHi2etGGHa46DjY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GPtH3PqwjwMxSbqPbqaQ97USWob6n4y9InEc3SYaPHy51VHYqnWUGIuINxTbk2aJd
-	 +4vydm+EgSpwxs03f0/V191f8swdXKg6BfGo2jsNDKPemTvgXBB6J5WfAS/HsM8Jzt
-	 thGg8KSDQjM7RD1Ml44PsnyUh2WSU2fyO3zjFZ+9sJth6b92GS2RF4u6rOp2XCaFle
-	 bxdH/3d4q3WNcSoT4jDUGKXPJm3IK3NJq1ACYQUINhtykfhNOMiCcPt6wL3QpZvakK
-	 9FWE8dLoaJXFdmufAF4a9HU9PefMeAuuAFYSENYNkTuSIleTWAhHqwjJghfMWKyrYj
-	 yVWP5VnwRWRDw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5B2F4122E;
-	Fri, 12 Jun 2026 11:24:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E1A0F4
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 483FC60FA9
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F7LB-8jRJ4ax for <buildroot@buildroot.org>;
+ id 2-Vr694LJUrr; Fri, 12 Jun 2026 11:24:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9781D61119
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781263472;
+	bh=iC7x9VHDVe7MyC4EKZvC5jb9HrXMX4h8uOe3OF62KGo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=GswNdoco6XZdNworuA7DQT/Ojqbbs2AENOsL5vEe+8iXr3SL1F3EXGyOVjIiNde4M
+	 4hBhAb3SqfIKBMgUYjUauvwpZo6mQJRM2u9msBE+PtKzweBNhPC+n5y5dB3oO9bHGr
+	 9lZA6aNCZdSyj5HXweE57Jl02nAj6eqp1UBStwkpJyMHdxkkBHaFXnJiX45IE5g6en
+	 +VyTpWMm7wDU3Py/DIXiM5KHzWk8CqoVlXAZAxs08+M/lOK32+vO86YxKzwTJRvfq7
+	 sJ9aOMm4+DbyqkYgCo4LtysSfxnhiEbBf8WE8f1bMFQpINVIFKL/dqW9AiTknS78aI
+	 uQl5FYpx861EA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9781D61119;
+	Fri, 12 Jun 2026 11:24:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48C80F4
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A767D40657
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z0LEG5IQHJLp for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C56B760F20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76BB24065E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C56B760F20
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76BB24065E
  for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:24:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F0A0880E8; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
+ id 43F0A880EA; Fri, 12 Jun 2026 11:23:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jun 2026 10:33:15 +0200
+Date: Thu, 11 Jun 2026 10:10:12 +0200
 X-Git-Refname: refs/heads/2026.02.x
-X-Git-Oldrev: b19ea523d64619112e6a98d14434fe3cb29621cf
-X-Git-Newrev: ceffff2e53d811c940434db7fd1112fac2e7f1a7
+X-Git-Oldrev: 366039c7965cbece9d3bf15e6b90fa84fb38c87f
+X-Git-Newrev: 57a95f34b4e3cb0365ff006acccb9d6430340cda
 X-Patchwork-Hint: ignore
-Message-Id: <20260612112349.9F0A0880E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.02.x] package/unzip: patch
- CVE-2021-4217
+Message-Id: <20260612112349.43F0A880EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.02.x]
+ utils/bump-stable-kernel-versions: automatically commit result
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,109 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ceffff2e53d811c940434db7fd1112fac2e7f1a7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/57a95f34b4e3cb0365ff006acccb9d6430340cda
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.02.x
 
-The patch is provided thanks to the Ubuntu community.
+Since this script is often used to bump kernel versions in multiple
+Buildroot branches, it makes sense to simply commit changes directly
+rather than letting the developer do it by hand.
 
-- CVE-2021-4217:
-    A flaw was found in unzip. The vulnerability occurs due to improper
-    handling of Unicode strings, which can lead to a null pointer
-    dereference. This flaw allows an attacker to input a specially crafted
-    zip file, leading to a crash or code execution.
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2021-4217
- - https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
- - https://bugs.launchpad.net/ubuntu/+source/unzip/+bug/1957077
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: correct _IGNORE_CVES entry]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e73a15a7b64c409f91e1660d283965c2a3a3fd2)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit fab50ed3b1532037fa67582a6b47ac4084daaa88)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...dereference-and-use-of-uninitialized-data.patch | 57 ++++++++++++++++++++++
- package/unzip/unzip.mk                             |  3 ++
- 2 files changed, 60 insertions(+)
+ utils/bump-stable-kernel-versions | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-new file mode 100644
-index 0000000000..4f9c4c1858
---- /dev/null
-+++ b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-@@ -0,0 +1,57 @@
-+From 731d698377dbd1f5b1b90efeb8094602ed59fc40 Mon Sep 17 00:00:00 2001
-+From: Nils Bars <nils.bars@t-online.de>
-+Date: Mon, 17 Jan 2022 16:53:16 +0000
-+Subject: [PATCH] Fix null pointer dereference and use of uninitialized data
-+
-+This fixes a bug that causes use of uninitialized heap data if `readbuf` fails
-+to read as many bytes as indicated by the extra field length attribute.
-+Furthermore, this fixes a null pointer dereference if an archive contains an
-+`EF_UNIPATH` extra field but does not have a filename set.
-+
-+Upstream: https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-+CVE: CVE-2021-4217
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ fileio.c  | 5 ++++-
-+ process.c | 6 +++++-
-+ 2 files changed, 9 insertions(+), 2 deletions(-) 
-+ 
-+diff --git a/fileio.c b/fileio.c
-+index 14460f3..1dc319e 100644
-+--- a/fileio.c
-++++ b/fileio.c
-+@@ -2310,8 +2310,11 @@ int do_string(__G__ length, option)   /* return PK-type error code */
-+             seek_zipf(__G__ G.cur_zipfile_bufstart - G.extra_bytes +
-+                       (G.inptr-G.inbuf) + length);
-+         } else {
-+-            if (readbuf(__G__ (char *)G.extra_field, length) == 0)
-++            unsigned bytes_read = readbuf(__G__ (char *)G.extra_field, length);
-++            if (bytes_read == 0)
-+                 return PK_EOF;
-++            if (bytes_read != length)
-++                return PK_ERR;
-+             /* Looks like here is where extra fields are read */
-+             if (getZip64Data(__G__ G.extra_field, length) != PK_COOL)
-+             {
-+diff --git a/process.c b/process.c
-+index 5f8f6c6..de843a5 100644
-+--- a/process.c
-++++ b/process.c
-+@@ -2067,10 +2067,14 @@ int getUnicodeData(__G__ ef_buf, ef_len)
-+           G.unipath_checksum = makelong(offset + ef_buf);
-+           offset += 4;
-+ 
-++          if (!G.filename_full) {
-++            /* Check if we have a unicode extra section but no filename set */
-++            return PK_ERR;
-++          }
-++
-+           /*
-+            * Compute 32-bit crc
-+            */
-+-
-+           chksum = crc32(chksum, (uch *)(G.filename_full),
-+                          strlen(G.filename_full));
-+ 
-+-- 
-+2.25.1
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index 5436c7a46c..c362e6561f 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -51,6 +51,9 @@ UNZIP_IGNORE_CVES += CVE-2019-13232
- # 0028-cve-2022-0529-and-cve-2022-0530.patch
- UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
+diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
+index 0e76cd1168..af85d32852 100755
+--- a/utils/bump-stable-kernel-versions
++++ b/utils/bump-stable-kernel-versions
+@@ -25,6 +25,7 @@ latest_version=$(sed -rn 's|^\tdefault "(.+)" if BR2_LINUX_KERNEL_LATEST_VERSION
+ latest_release_version=$(echo "${latest_version}" | cut -f 1-2 -d .)
+ echo "${latest_version} -> ${latest_release_version}"
  
-+# 0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-+UNZIP_IGNORE_CVES += CVE-2021-4217
-+
- # unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
- # necessary, redefining it on the command line causes some warnings.
- UNZIP_TARGET_CFLAGS = \
++updated_files_list=()
+ updated_releases_list=''
+ updated_versions='Update the latest kernel releases to:'
+ 
+@@ -98,6 +99,7 @@ update_linux_hash() {
+ 
+     # We were iterating over this file so we could not edit in-place.
+     mv "$HASHFILE.new" "$HASHFILE"
++    updated_files_list+=("$HASHFILE")
+ }
+ 
+ while IFS= read -r -d '' hashfile; do
+@@ -105,7 +107,12 @@ while IFS= read -r -d '' hashfile; do
+ done < <(find linux/ -name '*.hash' -type f -print0)
+ 
+ if [ -n "${updated_releases_list}" ]; then
+-    echo ">>> Suggested subject: {linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
++    git add "${updated_files_list[@]}" linux/Config.in package/linux-headers/Config.in.host
++    git commit --verbose --edit --signoff --file=<( {
++        echo "{linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
++        echo
++        echo "${updated_versions}"
++    } )
+ else
+     echo '>>> Nothing happened.'
+ fi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
