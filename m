@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF2BFCD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D5DFCD98DA
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6DC6411AC;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 722CA60F6B;
 	Fri, 12 Jun 2026 11:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8bo_4Jisn1oX; Fri, 12 Jun 2026 11:36:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7S-UccqVGILr; Fri, 12 Jun 2026 11:36:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922FE411BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92A1560F79
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264214;
-	bh=qx0hMxJZg2bh0uKXOriIOifaX/L6SsFVWRr0Ju8YOxc=;
+	s=default; t=1781264213;
+	bh=v0l5PVM96sLlxP+gDqXE0nUy0T0ZCtfIuo4TVFww4qc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=gkNo6sdzHBiuK9cYQs57irYB5V2bot2Eyhn5qo6snE+d8B1HoAT7Izh/GDb5AjDfm
-	 hvLm6xunwvYrIMOTT+XaTlSYhskNKinusM4mVBYV6P4HQAFDQISC1xo8FAG6MzNQb7
-	 OFPwvnYeY13BUc/cebztTGelqY2LyzR8eN9Nqav734J8YfiWREoMwrTcbcaBQwdge+
-	 1DuaLEMQ4NUDtYSzPs3Oj3Dx3RbxDy6lMRwTmUscDsuLDyhzdXRLa0+zMrEFecqZF5
-	 Gwh5bsfbgHaab4yCMbPZE0jTzY+MuqRY9t/92qzeixJPucOl8/nD55qBWw3H2JnK4v
-	 o0/cOj+UWdqFw==
+	b=RKGsbWjXcvY50u+bcuL9pC0eIFGtqZd8wVq/FJjWvpV+kmYXeTv7x/Iw4VFaQN0YQ
+	 ufmGlxuEW3dyeQjDBEXeV082kteGOg4Rqpc0m8COEDfSTW3zr9y/EmN05warHLet78
+	 fLLyRtsBxIHB657Tu+fmD6YpJ3S7fHgm/xVEE1qex4vkQCO+dvRcrBeqHgoIrx34a4
+	 CzlpdWAxY1Yh/aMOO4z3KPKqjA9AOGFmkzXjaheepnGQQdPEwJTNNG+cQ466JDEBsl
+	 YwinZUXYvDsNq0v3ULxB2DHfgB0Zztejth3qg5MVr+QdhH06iTtbM22TdywFxO+JYo
+	 WLaIzcPHmnwoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 922FE411BC;
-	Fri, 12 Jun 2026 11:36:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 309C512F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92A1560F79;
+	Fri, 12 Jun 2026 11:36:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4304237
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 214D1406A5
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A672840690
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2xhtaDVA7WyQ for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:36:50 +0000 (UTC)
+ id OGNcwgHY9V_Z for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:36:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 738E94068E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 738E94068E
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 738E94068E
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:50 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-490b7866869so8430665e9.2
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:36:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8465E4068D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8465E4068D
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8465E4068D
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:49 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-490b8a97b11so10155305e9.0
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:36:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264208; x=1781869008;
+ d=1e100.net; s=20251104; t=1781264207; x=1781869007;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ZmOvQvPh4DTJG28ZBQc9P+LidEHGQL8Sv6tHeTG4fG4=;
- b=gJRWm2qMF0ZCf3cFrfFD2T1T1/gFY++M5eUREVG585q1EwfmYr0XwIbhtiVEz0fuSL
- HqKBQMfkl5cpBRBThB7oXA3xPUz9400JL/JIsyT5W3X5Bh96FEFHc8V4T4WwvQ8HLp5f
- 8+RHQm3q8Y5ZCTQzuPXYjqYnfDQK3fNQLckltA8Bz5Hjea4UZh9dq/5CLICmz9VulR+t
- KpIJo8tuEc6/GA5BZ3TvRn7JOc6cgDh5z+4i43CtQzCJNYtEMwxM6OwPgDpIqEucTVct
- WDblpNLlih5BJA1HNPUdcolwiqmH02iMmQF39VNtsmT1qAWOikxa9xlzEjfCjvWTqVlt
- xhWw==
+ bh=kgykUaZ3sOjDOd5YcvnSR2y7ZGRbBBn+1jePIxksW0Y=;
+ b=Idemrb0qxlMirbz0uVntkxV2WbbFF0EJqj1/v3J2JsxijLkA/mThmC3qXul8229S96
+ 4ncrt7+6LJRtwrccYiWtBsfqpWQcWnOkreHcAOW2IEFUDIUbQ+U3bi4WoYlDvp8A2yAu
+ +DnfALbqb3M91IlTenlmhUlBXvLcqpT0jogqsrtKw5mznPzOLBplMMfMAQKvxrUcM1ga
+ /u9w8LI/wGnvUQ4Mz4vh1dx3bD9uJwRqRyzvJIDpooWjC7uH33fH5/aZV6Too+sDpVNO
+ eA3Tnf5bOJB7k94AFrLEb5XY13eX2D7lbuN5ImPrD+IEP8ggE7wlXNyZYAp6tM1n/hRb
+ yBHw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ8S2voER49z9bUa3Y3D4ym5O8Vtp9vQ3QIsUw/6lI3trLnILk2C0LC8DcFlByYvxrs7sIyfu9HtZG4=@buildroot.org
-X-Gm-Message-State: AOJu0YyWJFI+GdkKG+ZpFNn/Eb2xrzj4KtXi80bjgZ0uIzBzuGIByysN
- pc7qnujJbl+7+kIluEjFx007rNIPBPSdcOp0BgglZAAIn41RJ3OQAxNZAQN9PFEhAuw=
-X-Gm-Gg: Acq92OGQ2rHvOGGP6p1CbU6xr9tKOdqbnreEG85gBqTL2gWz2u0B+UNegG65bHIK2G6
- iKfVcwXpTN/SubzGwoEXBpfpe2HjZaYuCinmyAzVrO/YOm4HKqqH97rrz7pu0jbQ6pIO5cpUC/b
- VsG6PA1NKjYR4Mvgh9kITAAqjSlWnChTY+ig3iGKQdSEn3W+N2m7OcBSpd9rig/c70OZgPqk8NW
- gbNODMnMEqWGbvJcUvW51JhQLb6TQFj8aTLFyoRQWlvqW7xzLppTotwxEH+2dCrg7AaUBaMfUYn
- uDuNijoa/cW/0adMqswizCSdTLbMGm5ov8EwAa++lNw38z1ISRrznbiIINbTaBWw9onPP5acqOU
- AUzKKoWLdDiErMz6YIvJOEa1kWOvzOEr4HtA7Z8RQMrjgsqrAuOkmSybyS1IClFEyrZcNZbZ/fa
- UIkuJQa7ZgfaRlACg=
-X-Received: by 2002:a05:600c:314a:b0:490:33b3:4be0 with SMTP id
- 5b1f17b1804b1-490ec504d2bmr30273785e9.20.1781264208321; 
- Fri, 12 Jun 2026 04:36:48 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490ea94f5b0sm40811875e9.1.2026.06.12.04.36.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ AFNElJ+0UiBimuSyl8MNTvS+bPorrM3VySLn8ykufaB2O3gM2rj21D4U5e/CH9h3PB1F4yMvextk0hnUEzA=@buildroot.org
+X-Gm-Message-State: AOJu0YxxZyEx2Dnm24Bod5wSh5oFnODTbUh6UJlzS5sUoy8Krnfpwwfh
+ A5CjXr4Bpjj6mhUHsE/lY014A7E++5ewdOofM3GH+SjKyo6Kx4Yy3F1W0Ju6AcNk6Uc=
+X-Gm-Gg: Acq92OGIU5J25BmVQQl8xXN4+irvOOdgtcPKX9boET+6zVliiYdF1reoBGgCXXNJKCu
+ e1+cePo7H9B1MqHcL8ULd6JQe5dLxbXUL+I7IMGq+YjqcmfGVm6Lt+nrPEOxl6FlmO3yQpyNKt9
+ 7Gnye4YP6yC3sM3F7oyM35oPLf1OC7vqcV1PaBpoYNBbXl7Qt1At8aAz5rDsWmQsgI9ddHCFmHv
+ 4dbYtJigDrBJAn2c3P3IN6g5HEoFrCRf5WIaql9w/dq6wDcRj+N0bIZCkO0lKWX1fvw67e1XC/w
+ iTBSC4cXhD09dSt+vxrDtRj2xZtBScb9ZFSUgGlVxAJZPtOqKaYm3vDxBIyEUJxcmcCMXFZCltd
+ gmNKcZK+tnccNQZ8b1ClZOPGzsO+EPMWQFQXhCjegHey+axRmBqRrqudBgHzaKW5mu8TF2lXHkE
+ JXz/3cVBKIlffhK90=
+X-Received: by 2002:a05:600c:4f91:b0:490:3fdd:d353 with SMTP id
+ 5b1f17b1804b1-490ec4c3991mr32448715e9.8.1781264207368; 
  Fri, 12 Jun 2026 04:36:47 -0700 (PDT)
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-490e2c7ea52sm149122675e9.2.2026.06.12.04.36.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Jun 2026 04:36:46 -0700 (PDT)
+To: Kadambini Nema <kadambini.nema@gmail.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:36:47 +0200
-Message-ID: <20260612113647.250726-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:36:46 +0200
+Message-ID: <20260612113646.250670-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20251006164955.1887486-1-dario.binacchi@amarulasolutions.com>
-References: <20251006164955.1887486-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20250607021849.37636-1-kadambini.nema@gmail.com>
+References: <20250607021849.37636-1-kadambini.nema@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264208; x=1781869008; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264207; x=1781869007; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZmOvQvPh4DTJG28ZBQc9P+LidEHGQL8Sv6tHeTG4fG4=;
- b=bnWb/GaRMhIUY5n7M1Vt7aab8jRpP2HvtzMDsRG8nhZMSRHQJbE93I2Nw1KjwlVJFq
- Lx3vhyDUI7wMaEUA3EXe+tQwAOVAbApJLomFj4Xwggyhl3L685EDEq4xOUVVn8DUbigH
- HxOEqNcWCrEWLpeC9E8MB0AKa6PJ40aTKROBCu6Ookkw7iaEqpuw2egaMi5TUwlfPXjf
- k9lw2WJ/3lVUiSsvyal6JFb7qB1agT4FdMmL5qnd6N7IjNwTGk7xMPl1LtzXvdk1lt8A
- HazAoyK8qCFX7cYGJGsyBhyNGIdzhtVEB80f45i0ejbmxT6Gsr+7TaUzcXDnTfkamUEo
- oeHA==
+ bh=kgykUaZ3sOjDOd5YcvnSR2y7ZGRbBBn+1jePIxksW0Y=;
+ b=b2ZON2PX51mr+ucifwGqV4kzU+QV29BzNlj918ZLHK6oQPUlOce8Fr8qIagRapO8AG
+ iaO977Cnei2MZ3WL/EuUhIEpI642F2VEEvL9eCVJeRhkgHzgSbNlci+Xb7m1wLUj1vwN
+ gg/sc9+KPOyU+8jgL5dquunjK6nzWLXa3mAqLgDESkbs+beCNJ4kRGIDRVoenMpFkA5L
+ bnbOJa/YDoq/1cW8CAedA3P4JIuP2mdqGl5Klmru6HMRWB8x/38QF5xflkPqZYIkR60/
+ DMhlPDH9F+Ur8cBWwbGV0vr8mHN4QBBsKopGiW/0wjkKtB8lGd0bYZGdO4eN2nHaCgT7
+ kG7Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bnWb/GaR
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: bump to version 1.6.16
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=b2ZON2PX
+Subject: Re: [Buildroot] [PATCH 1/1] package/libusb: bump version to 1.0.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,192 +131,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Removes the patches since they are all integrated upstream.
-> 
 > Release notes:
-> https://lists.gnu.org/archive/html/freeipmi-announce/2025-01/msg00000.html
-> https://lists.gnu.org/archive/html/freeipmi-announce/2025-09/msg00000.html
+> https://github.com/libusb/libusb/releases/tag/v1.0.29
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Changelog:
+> https://github.com/libusb/libusb/blob/v1.0.29/ChangeLog#L4
+> 
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  ...ipmi-sel-string-supermicro-common.h-.patch | 36 ------------
->  ...sensors-fix-header-guard-definitions.patch | 57 -------------------
->  ...003-ipmi-sensors-add-missing-include.patch | 28 ---------
->  package/freeipmi/freeipmi.hash                |  2 +-
->  package/freeipmi/freeipmi.mk                  |  2 +-
->  5 files changed, 2 insertions(+), 123 deletions(-)
->  delete mode 100644 package/freeipmi/0001-libfreeipmi-sel-ipmi-sel-string-supermicro-common.h-.patch
->  delete mode 100644 package/freeipmi/0002-ipmi-sensors-fix-header-guard-definitions.patch
->  delete mode 100644 package/freeipmi/0003-ipmi-sensors-add-missing-include.patch
+>  package/libusb/libusb.hash | 2 +-
+>  package/libusb/libusb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/freeipmi/0001-libfreeipmi-sel-ipmi-sel-string-supermicro-common.h-.patch b/package/freeipmi/0001-libfreeipmi-sel-ipmi-sel-string-supermicro-common.h-.patch
-> deleted file mode 100644
-> index 848539e7c31c..000000000000
-> --- a/package/freeipmi/0001-libfreeipmi-sel-ipmi-sel-string-supermicro-common.h-.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -From 9239a686e4bfd862145f4654017112a0f8cbbb0d Mon Sep 17 00:00:00 2001
-> -From: Albert Chu <chu11@llnl.gov>
-> -Date: Fri, 22 Mar 2024 21:07:28 -0700
-> -Subject: [PATCH] libfreeipmi/sel/ipmi-sel-string-supermicro-common.h: Add
-> - missing function prototype.
-> -
-> -Signed-off-by: Albert Chu <chu11@llnl.gov>
-> -[Waldemar: removed Changelog patching]
-> -Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> -Upstream: http://git.savannah.gnu.org/cgit/freeipmi.git/commit/?h=freeipmi-1-6-0-stable&id=9239a686e4bfd862145f4654017112a0f8cbbb0d
-> ----
-> - libfreeipmi/sel/ipmi-sel-string-supermicro-common.h | 10 ++++++++++
-> - 1 files changed, 15 insertions(+)
-> -
-> -diff --git a/libfreeipmi/sel/ipmi-sel-string-supermicro-common.h b/libfreeipmi/sel/ipmi-sel-string-supermicro-common.h
-> -index 5785f2b64..be5e41d7d 100644
-> ---- a/libfreeipmi/sel/ipmi-sel-string-supermicro-common.h
-> -+++ b/libfreeipmi/sel/ipmi-sel-string-supermicro-common.h
-> -@@ -39,4 +39,14 @@ int sel_string_output_supermicro_overheat_event_data1_class_oem (ipmi_sel_ctx_t
-> -                                                                  unsigned int *wlen,
-> -                                                                  struct ipmi_sel_system_event_record_data *system_event_record_data);
-> - 
-> -+int sel_string_output_supermicro_dimm_event_data2_event_data3 (ipmi_sel_ctx_t ctx,
-> -+                                                               struct ipmi_sel_entry *sel_entry,
-> -+                                                               uint8_t sel_record_type,
-> -+                                                               char *buf,
-> -+                                                               unsigned int buflen,
-> -+                                                               unsigned int flags,
-> -+                                                               unsigned int *wlen,
-> -+                                                               struct ipmi_sel_system_event_record_data *system_event_record_data,
-> -+                                                               int *oem_rv);
-> -+
-> - #endif /* IPMI_SEL_STRING_SUPERMICRO_COMMON_H */
-> --- 
-> -2.30.2
-> -
-> diff --git a/package/freeipmi/0002-ipmi-sensors-fix-header-guard-definitions.patch b/package/freeipmi/0002-ipmi-sensors-fix-header-guard-definitions.patch
-> deleted file mode 100644
-> index b04b3058358b..000000000000
-> --- a/package/freeipmi/0002-ipmi-sensors-fix-header-guard-definitions.patch
-> +++ /dev/null
-> @@ -1,57 +0,0 @@
-> -From c3d1a3f5c550940577076ce2c4595b470ae963c3 Mon Sep 17 00:00:00 2001
-> -From: Albert Chu <chu11@llnl.gov>
-> -Date: Sun, 24 Mar 2024 13:11:55 -0700
-> -Subject: [PATCH] ipmi-sensors: fix header guard definitions
-> -
-> -Signed-off-by: Albert Chu <chu11@llnl.gov>
-> -[Waldemar: removed Changelog patching]
-> -Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> -Upstream: https://git.savannah.gnu.org/cgit/freeipmi.git/commit/?h=freeipmi-1-6-0-stable&id=c3d1a3f5c550940577076ce2c4595b470ae963c3
-> ----
-> - ipmi-sensors/ipmi-sensors-oem-intel-s2600jf.h | 2 +-
-> - ipmi-sensors/ipmi-sensors-oem-intel-s2600wp.h | 2 +-
-> - ipmi-sensors/ipmi-sensors-oem-intel-s5500wb.h | 2 +-
-> - 3 files changed, 10 insertions(+), 3 deletions(-)
-> -
-> -diff --git a/ipmi-sensors/ipmi-sensors-oem-intel-s2600jf.h b/ipmi-sensors/ipmi-sensors-oem-intel-s2600jf.h
-> -index 0b11e61ce..4ae808cda 100644
-> ---- a/ipmi-sensors/ipmi-sensors-oem-intel-s2600jf.h
-> -+++ b/ipmi-sensors/ipmi-sensors-oem-intel-s2600jf.h
-> -@@ -17,7 +17,7 @@
-> -  */
-> - 
-> - #ifndef IPMI_SENSORS_OEM_INTEL_S2600JF_H
-> --#define IPMI_SENSORS_OEM_INTEL_H
-> -+#define IPMI_SENSORS_OEM_INTEL_S2600JF_H
-> - 
-> - #include "ipmi-sensors.h"
-> - 
-> -diff --git a/ipmi-sensors/ipmi-sensors-oem-intel-s2600wp.h b/ipmi-sensors/ipmi-sensors-oem-intel-s2600wp.h
-> -index 0607b125d..5c6410b7b 100644
-> ---- a/ipmi-sensors/ipmi-sensors-oem-intel-s2600wp.h
-> -+++ b/ipmi-sensors/ipmi-sensors-oem-intel-s2600wp.h
-> -@@ -17,7 +17,7 @@
-> -  */
-> - 
-> - #ifndef IPMI_SENSORS_OEM_INTEL_S2600WP_H
-> --#define IPMI_SENSORS_OEM_INTEL_H
-> -+#define IPMI_SENSORS_OEM_INTEL_S2600WP_H
-> - 
-> - #include "ipmi-sensors.h"
-> - 
-> -diff --git a/ipmi-sensors/ipmi-sensors-oem-intel-s5500wb.h b/ipmi-sensors/ipmi-sensors-oem-intel-s5500wb.h
-> -index f4f3dc85b..204295bd8 100644
-> ---- a/ipmi-sensors/ipmi-sensors-oem-intel-s5500wb.h
-> -+++ b/ipmi-sensors/ipmi-sensors-oem-intel-s5500wb.h
-> -@@ -17,7 +17,7 @@
-> -  */
-> - 
-> - #ifndef IPMI_SENSORS_OEM_INTEL_S5500WB_H
-> --#define IPMI_SENSORS_OEM_INTEL_H
-> -+#define IPMI_SENSORS_OEM_INTEL_S5500WB_H
-> - 
-> - #include "ipmi-sensors.h"
-> - 
-> --- 
-> -2.39.2
-> -
-> diff --git a/package/freeipmi/0003-ipmi-sensors-add-missing-include.patch b/package/freeipmi/0003-ipmi-sensors-add-missing-include.patch
-> deleted file mode 100644
-> index 8bc44165a02d..000000000000
-> --- a/package/freeipmi/0003-ipmi-sensors-add-missing-include.patch
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -From 6ac6f816dbfc83d8cd4f4f163b0f8ff1062d883e Mon Sep 17 00:00:00 2001
-> -From: Albert Chu <chu11@llnl.gov>
-> -Date: Mon, 25 Mar 2024 13:57:45 -0700
-> -Subject: [PATCH] ipmi-sensors: add missing include
-> -
-> -Signed-off-by: Albert Chu <chu11@llnl.gov>
-> -[Waldemar: removed Changelog patching]
-> -Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> -Upstream: https://git.savannah.gnu.org/cgit/freeipmi.git/commit/?h=freeipmi-1-6-0-stable&id=6ac6f816dbfc83d8cd4f4f163b0f8ff1062d883e
-> ----
-> - ipmi-sensors/ipmi-sensors-oem-intel.c | 1 +
-> - 1 files changed, 1 insertions(+)
-> -
-> -diff --git a/ipmi-sensors/ipmi-sensors-oem-intel.c b/ipmi-sensors/ipmi-sensors-oem-intel.c
-> -index 5e0f3733a..3fc022e3d 100644
-> ---- a/ipmi-sensors/ipmi-sensors-oem-intel.c
-> -+++ b/ipmi-sensors/ipmi-sensors-oem-intel.c
-> -@@ -34,6 +34,7 @@
-> - #include "ipmi-sensors-oem-intel.h"
-> - #include "ipmi-sensors-oem-intel-s5500wb.h"
-> - #include "ipmi-sensors-oem-intel-s2600jf.h"
-> -+#include "ipmi-sensors-oem-intel-s2600wp.h"
-> - #include "ipmi-sensors-oem-intel-quanta-qssc-s4r.h"
-> - #include "ipmi-sensors-oem-intel-node-manager.h"
-> - 
-> --- 
-> -2.39.2
-> -
-> diff --git a/package/freeipmi/freeipmi.hash b/package/freeipmi/freeipmi.hash
-> index 2f81d90c1d37..9d06be8cf939 100644
-> --- a/package/freeipmi/freeipmi.hash
-> +++ b/package/freeipmi/freeipmi.hash
-> @@ -1,5 +1,5 @@
+> diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+> index 3d51244b2c..4c76609930 100644
+> --- a/package/libusb/libusb.hash
+> +++ b/package/libusb/libusb.hash
+> @@ -1,3 +1,3 @@
 >  # Locally computed:
-> -sha256  1a3dac5c76b7ccc4d4f86aa12b8ef9b212baef7489bf05e899b89abb7e14edb5  freeipmi-1.6.14.tar.gz
-> +sha256  5bcef6bb9eb680e49b4a3623579930ace7899f53925b2045fe9f91ad6904111d  freeipmi-1.6.16.tar.gz
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.bmc-watchdog
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.ipmiconsole
-> diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
-> index fbbfd536e465..0581b931b09d 100644
-> --- a/package/freeipmi/freeipmi.mk
-> +++ b/package/freeipmi/freeipmi.mk
-> @@ -4,7 +4,7 @@
->  #
+> -sha256  966bb0d231f94a474eaae2e67da5ec844d3527a1f386456394ff432580634b29  libusb-1.0.28.tar.bz2
+> +sha256  5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85  libusb-1.0.29.tar.bz2
+>  sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+> index 3d809bfb6e..95ce8b17df 100644
+> --- a/package/libusb/libusb.mk
+> +++ b/package/libusb/libusb.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -FREEIPMI_VERSION = 1.6.14
-> +FREEIPMI_VERSION = 1.6.16
->  FREEIPMI_SITE = $(BR2_GNU_MIRROR)/freeipmi
->  FREEIPMI_LICENSE = GPL-3.0+, BSD-like (sunbmc)
->  FREEIPMI_LICENSE_FILES = \
+>  LIBUSB_VERSION_MAJOR = 1.0
+> -LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).28
+> +LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).29
+>  LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+>  LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+>  LIBUSB_LICENSE = LGPL-2.1+
 > -- 
-> 2.43.0
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
