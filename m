@@ -1,112 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB5A6CD4F2C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 08:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82F8BCD98CF
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 08:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75D9960DFA;
-	Fri, 12 Jun 2026 08:20:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GuzraGS-gcEW; Fri, 12 Jun 2026 08:20:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 983E360EDF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781252441;
-	bh=AhGJIwFQB6RrW1VyHDzxYi/ogJN0XjnFoJvYXbnG4z0=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=PzxI406iTJPrHxHIRzqpfKyFOU9NLle/ceDG54SffoEMSsCWKOd9mxo2Y0sEAl8O0
-	 DwlWGraV40I1HLilJ3orLbkr32lUMnxFHSyccK5jMgzG5tr5WpvJ0fHk+LINdWrUS6
-	 fSbIiC24a+cH3qXyuU82x99v6yb460oKFGS0Z0rJbxRcgXMbsa+ir33Uevae7KxjGP
-	 KHif7TyaMblQ4ULfvd9xjLrbGsCVGN6Q9LHzE0ou44NfaxTRwFX83uHfYup9QQZT4Q
-	 adK6ykxKRg5zGTtVaeMTtlh/nqK5WZYbNHcH49pSDZbmv3C1EoHvBWI8G5rBBJ3ekC
-	 A7cG7b5sN9J5w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 983E360EDF;
-	Fri, 12 Jun 2026 08:20:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C554DF4
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B741882119
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2873983264;
+	Fri, 12 Jun 2026 08:43:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZdzZx0H00Wc for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8CFF880FB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CFF880FB3
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8CFF880FB3
- for <buildroot@busybox.net>; Fri, 12 Jun 2026 08:20:38 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-490b1bbcf3aso5272745e9.1
- for <buildroot@busybox.net>; Fri, 12 Jun 2026 01:20:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781252436; x=1781857236;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KkcURtOuTbR5HX2vKQESqICfH2ululoqB3+DxRrX2rw=;
- b=eoecFABpX0kMjVdB6l9FqwoPEDi8TBpaiihD7fzbgCvGOurIjQgOIPfrlUAgyU3MYj
- +SPVb/7jXIOOIOVnhrBHxaVPB/UowScmFU64ZRQPvT4Df3yyZVonKwhCo/HuvTFQ9W/W
- WkgH+GVLZB+JQ/MQfwdTzY2XuuZSma22klG3ROLrC3N69PiYOarfV56u6l2B/kg/b21z
- CM0zfYfhxMYnh7j1ro4BNA8qj4SomL0sxJTgKloTYVw2FshmsszNqDIRIVTVODOdtpOt
- bJKYnIp7CSw5PLZAZO2LPDKxUsDTT0WoRUS2g2/B7mG5OVC1xmpeBeUDfUsd2NC2+obF
- pa0g==
-X-Gm-Message-State: AOJu0Yw3D3YgAKdbQUitFnkiC0MtKh6M3/RQcoVpfnWIsqiLVTRnJAgx
- 25PXNDGULEZahSjTiKBY/98VgdqJa1A9O4n2HZ4++hTl32iP1kuChL9mQODI7fwtXYcu/E8Q051
- VqGMtMg==
-X-Gm-Gg: Acq92OH/87iPnU/YPQf4xAEjEzU3GfDSgnG0aG3fd1UnZJ1Xxyq6W9v2ryl71nMw7No
- ddNClI4h+fTXRdxLA6pQNgS2PKNlFAnvAR5YSoxrs6Tn/+N/Z+vGgKlffPUqgjD28f9XtEZDwHy
- ecRxowmHBIL12UeB5jJmpv+I93nNYwqVYvY+X8oFo+lGFjdfk5nEY3bcF3P1lxRxbbSDoiW0NM5
- NS9JFARBP0V9fxNtPPmk9xr9gEljYWNr7T+Xbz7pfaTkqpp2/1TapDwhNTxA4445+90C8pJerFA
- Qg13DTCkR1iqzxzBzIEj85vH3D9JuGi/OPNUt865KSRvUW4HTlBsTkz07S/GgNNEQuFXN4dcATD
- E1pxNwRJvW7pmi5+UaAtm6nV6uPXL8/wSBCoW+00RdqtuotywEAKfI0kIOJ37VLyy0Wa//WNKL+
- /i+YYxNZuC1OkByD0ktSgMz/uQgLCbVIGWSIlNPvWiYxyEec9ViQ==
-X-Received: by 2002:a05:600c:3209:b0:490:b115:e03f with SMTP id
- 5b1f17b1804b1-490ec4d65b4mr12455175e9.8.1781252434745; 
- Fri, 12 Jun 2026 01:20:34 -0700 (PDT)
-Received: from vm-2404.. (165.186.66.37.rev.sfr.net. [37.66.186.165])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f2b1092sm3601942f8f.17.2026.06.12.01.20.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 01:20:34 -0700 (PDT)
-To: buildroot@busybox.net
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Date: Fri, 12 Jun 2026 10:20:21 +0200
-Message-ID: <20260612082022.268330-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
+ id geYyICcJTkS7; Fri, 12 Jun 2026 08:43:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C92683280
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781253805;
+	bh=T3qgLRigFcAdQP78sxLkgjyaWixcXXolbzz8W4f3kOw=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=ksI13uD/ANYR1X3DF/sMGizgfP2ySnOoq/OZ83SgxbmT/yxeenkQqewsoU1WKZ+81
+	 pYolTZ82WtGaoS77yYjwYlBXgeBk3BURCHjwKJ1d25QIeR1zz2hmar722E4BoQyIqf
+	 G8j+JGLTXRe+Z7+T8vN46VBZbm5J79Kqcz39z+R/fO60y9PA7JGMX212awznUuuJBr
+	 Fs22EEDagmIrIdXzQ8tuFX6XRMVLaWbxAvg3kESaINpqP3StiwWewVvU94QV7NJejn
+	 sxOJ7W0IY2OYtuGfttDpQVVWhklEE+umP27BFDTkgIqbCtbMs8v4x6YFM+s4GbbndK
+	 gNFfhhfU/zkGQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C92683280;
+	Fri, 12 Jun 2026 08:43:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 560EFF4
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:43:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47DD5607A0
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:43:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C2D6CB7jFV_g for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 08:43:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.10;
+ helo=smtp-190a.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 939876078D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 939876078D
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch
+ [185.125.25.10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 939876078D
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:43:20 +0000 (UTC)
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch
+ [10.7.10.108])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gcChh73w0zq4n
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 10:43:16 +0200 (CEST)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA
+ id 4gcChh3GMtz1RQ; Fri, 12 Jun 2026 10:43:16 +0200 (CEST)
+Date: Fri, 12 Jun 2026 10:39:25 +0200
 MIME-Version: 1.0
+Message-Id: <20260612-openssl-3-5-7-v1-1-093c128bb691@cherry.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMywqDMBAAf0X23JVkU1PsrxQPPlbdIlGytQjiv
+ zfW4zDM7KAchRWe2Q6Rv6IyhwT2lkE71mFglC4xkCFvvCWcFw6qEzos8IF3dt7WXVN6R5CaJXI
+ v2//3OpsiN5RvUF1K1+bN7ef8wXH8ABoUyEB8AAAA
+X-Change-ID: 20260612-openssl-3-5-7-4e361adb9632
+To: buildroot@buildroot.org
+Cc: Quentin Schulz <quentin.schulz@cherry.de>
+X-Mailer: b4 0.15-dev-47773
+X-Infomaniak-Routing: alpha
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1781252436; x=1781857236; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KkcURtOuTbR5HX2vKQESqICfH2ululoqB3+DxRrX2rw=;
- b=GwZd7Edzaby0o8RUERlsSWuhjHKTtp8np4fBGajNK3hbh4N/6wCJFsTvs8/949YxgJ
- MUHQBD2J5IRlb3eIAWEzXO7jh2w1WMcL4z8KXx75u3TxryL5sFv1Bib/bRTRF10s+luP
- YxgICpW6P+JEMNLFr/8n6Cx1z3JQSmRA5ciHH0VlYyFHFBVAzc8R372g0S0G2fO4jQjF
- 1SAqB+aO1W7bbrTgFogyBMoFT2bPQ/WmLkeEcenHjj/+gTPZpZOs27KYiTFWwxZpnDlo
- 9nB1Q653sZFA9SzFm2GOPaFhTfr9XZJUywMbyYomV0iLwK/6UKfmi95DOzC8V9Wwgs87
- MgkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=0leil.net; s=20231125; t=1781253796;
+ bh=3NqLFNkKc31ZFgR+Qhqn4YspEDeRz5sfbnpBepk3wEY=;
+ h=From:Date:Subject:To:Cc:From;
+ b=I7pB9KtHAIGwedZwXlC7SufKUVtko2gNjEZpNuSYqPdN3HNu3izmdnqYnUCcdzhw2
+ CxF3T56T6qp4tL4HzpW+bqxXXT53ovNKRNCihrTu1h+mbTYaasD8sr7mw/fyIHBMDi
+ Ezm+BuRVGQEA4C7X+U26Dtrc8hWsL6o+vOeuVhWnm1wcllHQbaYiR7iJ5ytPTfL2XC
+ z7ErBNLO2Wnvd8qftsxPThVVSWvQKJEIQ4Fx4aToeCDZvyjoF73VTT7fhpPRj/1jd1
+ 9ZqQCzeHYOYJYwdtvk0aQ0p9mpC/Jb5txphJXsyx6U/Id5G6MJQn9oG6kxzRTTkQv+
+ Sk0vpeRiqAuwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=0leil.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=GwZd7Edz
-Subject: [Buildroot] [PATCH] package/lsb-release-minimal: new package
+ unprotected) header.d=0leil.net header.i=@0leil.net header.a=rsa-sha256
+ header.s=20231125 header.b=I7pB9KtH
+Subject: [Buildroot] [PATCH 2025.02.x] package/libopenssl: security bump to
+ version 3.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,96 +96,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Francois Perrad via buildroot <buildroot@buildroot.org>
-Reply-To: Francois Perrad <francois.perrad@gadz.org>
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <foss+buildroot@0leil.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/lsb-release-minimal/Config.in          |  6 ++++++
- .../lsb-release-minimal.hash                   |  3 +++
- .../lsb-release-minimal/lsb-release-minimal.mk | 18 ++++++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/lsb-release-minimal/Config.in
- create mode 100644 package/lsb-release-minimal/lsb-release-minimal.hash
- create mode 100644 package/lsb-release-minimal/lsb-release-minimal.mk
+From: Quentin Schulz <quentin.schulz@cherry.de>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9aaffa29a..76c749831 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1185,6 +1185,7 @@ F:	package/lua-inotify/
- F:	package/lpeg/
- F:	package/lpty/
- F:	package/lrandom/
-+F:	package/lsb-release-minimal/
- F:	package/lsqlite3/
- F:	package/lua*
- F:	package/lynis/
-diff --git a/package/Config.in b/package/Config.in
-index 630662477..0b5e86904 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2739,6 +2739,7 @@ comment "Utilities"
- 	source "package/lockfile-progs/Config.in"
- 	source "package/logrotate/Config.in"
- 	source "package/lowdown/Config.in"
-+	source "package/lsb-release-minimal/Config.in"
- 	source "package/minisign/Config.in"
- 	source "package/neofetch/Config.in"
- 	source "package/opendoas/Config.in"
-diff --git a/package/lsb-release-minimal/Config.in b/package/lsb-release-minimal/Config.in
-new file mode 100644
-index 000000000..3d2e154bc
---- /dev/null
-+++ b/package/lsb-release-minimal/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LSB_RELEASE_MINIMAL
-+	bool "lsb-release-minimal"
-+	help
-+	  Minimal fake lsb-release that uses os-release.
-+
-+	  https://codeberg.org/gioele/lsb-release-minimal
-diff --git a/package/lsb-release-minimal/lsb-release-minimal.hash b/package/lsb-release-minimal/lsb-release-minimal.hash
-new file mode 100644
-index 000000000..3ad1785b6
---- /dev/null
-+++ b/package/lsb-release-minimal/lsb-release-minimal.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  87bdd39802a7c15753f5c5187f2901b6b9df4dd11721e3762ca4b1701a421c85  v12.1.tar.gz
-+sha256  89080b681f36c46c868001c21ec4b7f355acb517ce33719e0189d00c13175a95  LICENSE.txt
-diff --git a/package/lsb-release-minimal/lsb-release-minimal.mk b/package/lsb-release-minimal/lsb-release-minimal.mk
-new file mode 100644
-index 000000000..073b55637
---- /dev/null
-+++ b/package/lsb-release-minimal/lsb-release-minimal.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# lsb-release-minimal
-+#
-+################################################################################
-+
-+LSB_RELEASE_MINIMAL_VERSION = 12.1
-+LSB_RELEASE_MINIMAL_SOURCE = v$(LSB_RELEASE_MINIMAL_VERSION).tar.gz
-+LSB_RELEASE_MINIMAL_SITE = https://codeberg.org/gioele/lsb-release-minimal/archive
-+LSB_RELEASE_MINIMAL_LICENSE = ISC
-+LSB_RELEASE_MINIMAL_LICENSE_FILES = LICENSE.txt
-+
-+define LSB_RELEASE_MINIMAL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/lsb_release \
-+		$(TARGET_DIR)/usr/bin/lsb_release
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.43.0
+fixed CVE-2026-45447, CVE-2026-34182, CVE-2026-34183, CVE-2026-42764,
+CVE-2026-45445, CVE-2026-7383, CVE-2026-9076, CVE-2026-34180,
+CVE-2026-34181, CVE-2026-42766, CVE-2026-42767, CVE-2026-42768,
+CVE-2026-42769, CVE-2026-42770, CVE-2026-45446.
+https://github.com/openssl/openssl/releases/tag/openssl-3.5.7
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+---
+ .../0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 4 ++--
+ package/libopenssl/0003-Revert-Fix-static-builds.patch              | 6 +++---
+ package/libopenssl/libopenssl.hash                                  | 4 ++--
+ package/libopenssl/libopenssl.mk                                    | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+index f74576beae..8adf7e51b0 100644
+--- a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
++++ b/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+@@ -18,10 +18,10 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  1 file changed, 4 insertions(+)
+ 
+ diff --git a/Configure b/Configure
+-index 15054f9..ac3206e 100755
++index 1b020faadb..4614b5becf 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1686,6 +1686,10 @@ unless ($disabled{asm}) {
++@@ -1691,6 +1691,10 @@ unless ($disabled{asm}) {
+      }
+  }
+  
+diff --git a/package/libopenssl/0003-Revert-Fix-static-builds.patch b/package/libopenssl/0003-Revert-Fix-static-builds.patch
+index 10ca97a240..970626a725 100644
+--- a/package/libopenssl/0003-Revert-Fix-static-builds.patch
++++ b/package/libopenssl/0003-Revert-Fix-static-builds.patch
+@@ -15,10 +15,10 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+  1 file changed, 4 insertions(+), 4 deletions(-)
+ 
+ diff --git a/Configure b/Configure
+-index ac3206e..764ef89 100755
++index 4614b5becf..cac670405e 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1510,10 +1510,6 @@ if ($config{prefix} && !$config{CROSS_COMPILE}) {
++@@ -1515,10 +1515,6 @@ if ($config{prefix} && !$config{CROSS_COMPILE}) {
+          unless file_name_is_absolute($config{prefix});
+  }
+  
+@@ -29,7 +29,7 @@ index ac3206e..764ef89 100755
+  # Allow overriding the build file name
+  $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
+  
+-@@ -1808,6 +1804,10 @@ if ($strict_warnings)
++@@ -1813,6 +1809,10 @@ if ($strict_warnings)
+                  }
+          }
+  
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 781701532d..8a7186d669 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.5.6/openssl-3.5.6.tar.gz.sha256
+-sha256  deae7c80cba99c4b4f940ecadb3c3338b13cb77418409238e57d7f31f2a3b736  openssl-3.5.6.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-3.5.7/openssl-3.5.7.tar.gz.sha256
++sha256  a8c0d28a529ca480f9f36cf5792e2cd21984552a3c8e4aa11a24aa31aeac98e8  openssl-3.5.7.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 837c3f0346..a9e18f96ac 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.5.6
++LIBOPENSSL_VERSION = 3.5.7
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
+
+---
+base-commit: a20dafe5c190a7d083de3c1a219f27aff7450ebb
+change-id: 20260612-openssl-3-5-7-4e361adb9632
+
+Best regards,
+--  
+Quentin Schulz <quentin.schulz@cherry.de>
 
 _______________________________________________
 buildroot mailing list
