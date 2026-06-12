@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8048CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75FABCD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB139411AE;
-	Fri, 12 Jun 2026 11:37:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8vM-fgESgy-H; Fri, 12 Jun 2026 11:37:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0309B40657
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264220;
-	bh=jTnLh2E7MxjsDWLOPfrJ1CoXn71/T+Fp+TiZAopxM+g=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Si6uLDaJ/e1vDQ/6W/8Wt82TN0KZjgu0RuNkFjter3Mt2G0/yqggbLZ7DtS8unSpK
-	 yOF26oKd1i1O/TS7xZaFP2aim1F7jMatQgM+4XcymklBEAtli4PSDuUsuP8iMY0zgn
-	 vY8BVBoOv2RyRmSprBGyeDXyglv+MLM55qj/mZc4UY3rqsD6phbnK2fSUpBnfzlBcq
-	 RGjC2/RTvZkVgNwg0KXCFqiwIws4md7RjERlYFLo2kjtXkuLNsU3154zJ2qxz49Hoa
-	 rxuvYeoNPlGjQ9ZUvul8lN5UI0adUXZmsCx8DT5t8kRNRuue8kAr6edGzwDbHaZSx4
-	 VrHMWmnCnm7XQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0309B40657;
-	Fri, 12 Jun 2026 11:37:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DB817237
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9E7260F9A
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B5A160FB9;
+	Fri, 12 Jun 2026 11:37:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TZLrQT34LNkB for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:36:54 +0000 (UTC)
+ id hz_BEsvxvwfg; Fri, 12 Jun 2026 11:36:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30D9F60F56
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781264218;
+	bh=3ekTdLjSQdvjVcTc3ZJe8KkT5zKpVcaB8OGaz3arOUc=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=fSJEvlvASkHdCsPy4niziGoeeI2tcylBt0n9ozyWzuR+hRXQs2LiKGhCScU2/GIbu
+	 8rzN9Ui6mmryxeVcKiThE40R53R7WUFhRcJwjC5WNxA5IK66nRWPImur8ekRWSBsOm
+	 kakT9dzhKWkJ61gbEvufB0JgkupgXpCkOD9/GOIjFsykTibGj0Ue+eHSfL1VOKsG8t
+	 IibAASYbM95uclLUZ0i80JV2w+serW+FwsYFO2dHclU8v9bDs2fQBvzNJZjg/gN+61
+	 JlAUvWd60zFmCQacdpmssmhTfUTrPPgl3kOKKigz6lLxTL1qLnW2wUs6OrGV9A62CE
+	 486Ltv7KxQWeA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30D9F60F56;
+	Fri, 12 Jun 2026 11:36:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BBC012F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81F83406A3
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AcTSztJ2VRAD for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:36:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 958F660F7A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 958F660F7A
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 958F660F7A
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:53 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-490b4a8e28bso6406985e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:36:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5F9B140695
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F9B140695
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5F9B140695
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:36:55 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-45eec22fab7so371868f8f.3
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:36:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264211; x=1781869011;
+ d=1e100.net; s=20251104; t=1781264213; x=1781869013;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=EdhfbB60UqgonQHFGwnrSbePxjrlf+NqNBi+kid6zTI=;
- b=pItXExThjS6ia8LUrrW+NdJ53hjeR+g8EDZqxwT44IRrJuD12iFi2PfOnf/6kc5Peq
- tPSsO1cBOQKumRxF3iJLW4oVJeYklQ98ydUYyXUXIi4CE7uU9/QGtmMv1qNWDpJoYMPo
- IDTFntFH8ZlpvHN+s+tX5rZLJ2gTerixOd6a+NCY5swUwKSvlqvHYHF+VdBvB2i5lV6r
- ntE39ON+mq8PASpwZDY4IdZqwwlxfSY1tok0XHUZR78RTA+LR8tZUg6434vgcc+IPDMD
- 9ZcYeMJiMBpT5/GV3PtWkdjC98gKBg0I+OjoNMbNxfB0O3WTyxHZWD23C+Ty6w9mAQxF
- VD1w==
+ bh=5XCOPOV3ARlTutR1QDRQeDBjnhNIfDxbuq9UX//ebYg=;
+ b=n15ikK8eSj3N5gfxCCP5OE6z7qwLokdjCwAOCwGmqasEg3DNMp44qlU+u7KhQYuO7I
+ i75bIOCVcCUXsfvkD/ZQNuJiKbMT72HJCsQihzhN/NWs/qbPn9+xWXEwOSyrQests7Hy
+ 2aDiG5woYFuFDpZnMXGMCwPq1+MmW2etX9fNqkOkszjfWPPKV+YbakY/Mfcb1CaFtFEz
+ P7mcWwnV6NPlgWjNg5bLaQTyhRCUqXsPXDNIMxfejI/ztWaenV6cLoeAZdzbOLubTMEz
+ xSuKcbV/CmpiP6InvIXn71GFgw5FVWkO+OaFg7skI3JChuFxtv4FJLtE8rlI9SN8gLu1
+ v3/A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+xIaRB8VDLGMyHxe4QozcsA7FBbhgv6Q5DKMuAi4FyRF+GQlKLSFbsbitwYiOOC6U6kBGFuB3ecsw=@buildroot.org
-X-Gm-Message-State: AOJu0YzVUWhf0isFPsJZlvv1flgRrux5Fo2Y98fiW5slLZixfFLHXZOH
- 6VvGJdJA2W3s5qf0eqmAZSYG/yiZhEirFge2XXkXQsWpp+4fPUT93CEbHYE7AkaIaLI=
-X-Gm-Gg: Acq92OEryjeo8pIw/uydiMYkAbyFjWvF8hdosN4HHan/7Fyzr7MgSzEkQFtB/2NUwgQ
- JsHzVXB5xu8DxJyf1E6WQ5+QyN4qB7PVozgQ44HJF5DHnLQA8hyfTbnJ8cQlWuK1633fcdKC1E+
- RRrf+Mxd3XTy/9EJgqT8i5TvM2X2+7plnZLPSXpR2N4ZRbOJh3EMo0wnYbr18KuszyRKxnod9tO
- YGxqDkujI77yToOUL0Wp8UNy2R9/bmEiTSYKcdxaG/s37c+46QKhx9eXJ2Dp78wmULARenV1hxj
- W69M0U5zlVCxskhKqDgqW4HzsBC1VRsw9/hOkbBG46McaVxJzNd5cJ85jZv2lzx9HRO/2NkHCk9
- 82t+N5jAV8Lu88MKdheHafOyXtVYDPlFN3pHr6FvjEiwdYMyYn6xlHB1YE/dSQVb4tljl2Xa3hQ
- TcdyNCIvNYOGZLFZU=
-X-Received: by 2002:a05:600d:6452:20b0:490:bc46:1a58 with SMTP id
- 5b1f17b1804b1-490ec4fb6d6mr22349205e9.18.1781264211255; 
- Fri, 12 Jun 2026 04:36:51 -0700 (PDT)
+ AFNElJ+psc9p5iK8KS4BGbmiVY/DmU96bh+5qqrJwdV3+X7AF9y/kxuNfCGOAre4HkNKbNKyR3X5VBqhciQ=@buildroot.org
+X-Gm-Message-State: AOJu0YxYdXRGIxByLHGORGePMTy7/5hJ3WFQPu8ClvaSHmCzRsgQ8X9p
+ yjFIre0cGNAob2w2C09q0UfyQvg4gsLMFWWrJmKAuAza4nv5dmFIUJ3HxMK8pcFbFldeemQu0t0
+ OtNMZ
+X-Gm-Gg: Acq92OEWGxQjKBNein7G8XkIYAqWlgYJOTmrPOXsqhH/EGYo1LOjenmgQo9H7xS6R/U
+ 3I+6q0sRkGDWFyPmAB7CgjJrb4dbAbGIwwIRAX4KkDXv2uU4sJR1nTujhc8xcrFT65voGYcOkpu
+ gQyRu4e6/n9A/mMwKEEWQU3BsAi1J5ePRBNuzyHZpGIyijnhLFtvgXrmxaYg8+sIhisJGtQZvuW
+ UMMfomtLnhKRU+ptcuvCMvLVJdSsUwEFA5pqjj1Xd06OQ5H8wn2p/nvU2SYBLh52SpoDdLpCSte
+ kvJX3GAN5ip6UUHxq6xLxrlcKOL9wHFTxUh5RfKRFWKCYkmxsi2Xn0OU5fEKoP6FImf0mMqBmX7
+ b0evVLFkISpYP5D4yUXvBpgKfHuMxiYynFA4kr3G6/hFpaDk1Z4GQcGotfL15ZsEMgWJoGAO/rc
+ btcoc9mU10DNNNKlo=
+X-Received: by 2002:a05:6000:1acb:b0:455:fbb:28bb with SMTP id
+ ffacd0b85a97d-4606dbd7797mr3576680f8f.35.1781264213079; 
+ Fri, 12 Jun 2026 04:36:53 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490ea4a128csm72395185e9.0.2026.06.12.04.36.50
+ ffacd0b85a97d-4606f2cd6c2sm5104488f8f.30.2026.06.12.04.36.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:36:50 -0700 (PDT)
+ Fri, 12 Jun 2026 04:36:52 -0700 (PDT)
 To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:36:50 +0200
-Message-ID: <20260612113650.250831-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:36:51 +0200
+Message-ID: <20260612113652.250889-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260608212054.902018-4-titouan.christophe@mind.be>
-References: <20260608212054.902018-4-titouan.christophe@mind.be>
+In-Reply-To: <20260608212054.902018-5-titouan.christophe@mind.be>
+References: <20260608212054.902018-5-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264211; x=1781869011; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264213; x=1781869013; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=EdhfbB60UqgonQHFGwnrSbePxjrlf+NqNBi+kid6zTI=;
- b=DlTJDiV+m7tSEbZ0Hiq/4zaBkHPBA87uUNpRB6uWqXzn/ylO7Wko3ezewCGyc9Mray
- S/WUAamvvzHXG7HGb9Xvs8FU0onvU6IcFyH+06ZOOp5L3DYwjsNmF0eM7lQ9fml4GYLM
- v+4ybNTePKX27fJq5ZlJTp1hX1i8xpfcQfNl9d+CfH5zueywi2Np81CtS5kpXPaIu6NR
- SU6Y/hRd5iuPiKPoLu6LQWof0COpk2PLFjQVoeHhnDGtPK2TxIJDN+IquX8Vp3QxGDO2
- bD7QwWygs8rlS3HZhTk6S/ZU3TcgnNbaTD30g6LPt3Lc3cZqsYaKF1/oFvepFR5KsER3
- qnIg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5XCOPOV3ARlTutR1QDRQeDBjnhNIfDxbuq9UX//ebYg=;
+ b=Nw3pjk2useLQtwJA2LVPLDnHt3P4hXeCFyEr/Tc+C6WOP5LbqJC39W1uNVbCg6SbNG
+ +tBhE+CPIzyitYe3LZ9zCeX8KSXmdQjSNHB84JnFMqbzMCQw/CF638e8+I+jWQhrt6Cd
+ xoy64No9jljkiVmRS2L9ltRouS32QW0XRjgUBghjLeTZArHGfNVTuRz2xoSqezpRtzbi
+ wQKonHT4P0UNFPLHV8lQJW41amC43klWPKF2CIVSGQoohyLBKVQ5mNc3vVyhB642EJ3f
+ Kd0Yf+WTyhXClbD0LGvW433SUwu60kR9QqkLYGWcodPXkAzC10sPz0jC/j1vw5Tp3Phk
+ 7D3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DlTJDiV+
-Subject: Re: [Buildroot] [PATCH for 2025.02.x 3/4] package/python3: add
- patch for CVE-2026-7774
+ header.a=rsa-sha256 header.s=google header.b=Nw3pjk2u
+Subject: Re: [Buildroot] [PATCH for 2025.02.x 4/4] package/python3: add
+ patch for CVE-2026-8328
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,238 +126,150 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> This fixes the following vulnerability:
-> 
-> - CVE-2026-7774:
->     tarfile.data_filter could be bypassed using crafted link entries,
->     including symlinks with empty or directory-like names, to redirect
->     later archive members outside the intended extraction directory. This
->     allowed a malicious tar archive to cause tarfile.extractall() to write
->     files outside the destination directory, subject to the permissions of
->     the extracting process.
->     https://www.cve.org/CVERecord?id=CVE-2026-7774
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-
-Applied to 2025.02.x. Thanks
-
-> ---
->  ...le-data_filter-validate-written-link.patch | 178 ++++++++++++++++++
->  package/python3/python3.mk                    |   2 +
->  2 files changed, 180 insertions(+)
->  create mode 100644 package/python3/0014-tarfile-data_filter-validate-written-link.patch
-> 
-> diff --git a/package/python3/0014-tarfile-data_filter-validate-written-link.patch b/package/python3/0014-tarfile-data_filter-validate-written-link.patch
-> new file mode 100644
-> index 0000000000..b6337e9cbd
-> --- /dev/null
-> +++ b/package/python3/0014-tarfile-data_filter-validate-written-link.patch
-> @@ -0,0 +1,178 @@
-> +From 6df9892a802c124c4223e17c4a05ea7054166ac7 Mon Sep 17 00:00:00 2001
-> +From: Petr Viktorin <encukou@gmail.com>
-> +Date: Fri, 8 May 2026 14:16:06 +0200
-> +Subject: [PATCH] [3.12] gh-149486: tarfile.data_filter: validate written
-> + link target (GH-149487)
-> +
-> +The data filter rewrote linknames with normpath() but ran the
-> +containment check against the un-normalised value, and computed a
-> +symlink's directory before stripping trailing slashes.  Both let a
-> +crafted archive create links pointing outside the destination.  Also
-> +reject link members that resolve to the destination directory itself,
-> +which could otherwise replace it with a symlink and redirect all
-> +subsequent members.
-> +
-> +(Patch by Greg; Petr's just reviewing & merging.)
-> +(cherry picked from commit 578411982c16f753f4893532510099ef665117da)
-> +
-> +Co-authored-by: Petr Viktorin <encukou@gmail.com>
-> +Co-authored-by: Gregory P. Smith <greg@krypto.org>
-> +
-> +Upstream: https://github.com/python/cpython/pull/149556
-> +CVE: CVE-2026-7774
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + Lib/tarfile.py                                | 16 ++--
-> + Lib/test/test_tarfile.py                      | 87 ++++++++++++++++++-
-> + ...-05-03-21-00-00.gh-issue-149486.tarflt.rst |  5 ++
-> + 3 files changed, 99 insertions(+), 9 deletions(-)
-> + create mode 100644 Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
-> +
-> +diff --git a/Lib/tarfile.py b/Lib/tarfile.py
-> +index 59d3f6e5cce1650..fcb1040f2aefe29 100755
-> +--- a/Lib/tarfile.py
-> ++++ b/Lib/tarfile.py
-> +@@ -816,16 +816,22 @@ def _get_filtered_attrs(member, dest_path, for_data=True):
-> +         if member.islnk() or member.issym():
-> +             if os.path.isabs(member.linkname):
-> +                 raise AbsoluteLinkError(member)
-> ++            # A link member that resolves to the destination directory itself
-> ++            # would replace it with a (sym)link, redirecting the destination
-> ++            # for all subsequent members.
-> ++            if target_path == dest_path:
-> ++                raise OutsideDestinationError(member, target_path)
-> +             normalized = os.path.normpath(member.linkname)
-> +             if normalized != member.linkname:
-> +                 new_attrs['linkname'] = normalized
-> +             if member.issym():
-> +-                target_path = os.path.join(dest_path,
-> +-                                           os.path.dirname(name),
-> +-                                           member.linkname)
-> ++                # The symlink is created at `name` with trailing separators
-> ++                # stripped, so its target is relative to the directory
-> ++                # containing that path.
-> ++                link_dir = os.path.dirname(name.rstrip('/' + os.sep))
-> ++                target_path = os.path.join(dest_path, link_dir, normalized)
-> +             else:
-> +-                target_path = os.path.join(dest_path,
-> +-                                           member.linkname)
-> ++                target_path = os.path.join(dest_path, normalized)
-> +             target_path = os.path.realpath(target_path,
-> +                                            strict=os.path.ALLOW_MISSING)
-> +             if os.path.commonpath([target_path, dest_path]) != dest_path:
-> +diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
-> +index 759fa03ead70b04..fefae4b64c6182c 100644
-> +--- a/Lib/test/test_tarfile.py
-> ++++ b/Lib/test/test_tarfile.py
-> +@@ -3701,10 +3701,19 @@ def test_parent_symlink(self):
-> +                     + "which is outside the destination")
-> + 
-> +             with self.check_context(arc.open(), 'data'):
-> +-                self.expect_exception(
-> +-                    tarfile.LinkOutsideDestinationError,
-> +-                    """'parent' would link to ['"].*outerdir['"], """
-> +-                    + "which is outside the destination")
-> ++                if self.dotdot_resolves_early:
-> ++                    # 'current/../..' normalises to '..', which is rejected.
-> ++                    self.expect_exception(
-> ++                        tarfile.LinkOutsideDestinationError,
-> ++                        """'parent' would link to ['"].*outerdir['"], """
-> ++                        + "which is outside the destination")
-> ++                else:
-> ++                    # 'current/..' normalises to '.'; the rewritten link is
-> ++                    # created and 'parent/evil' lands harmlessly inside the
-> ++                    # destination.
-> ++                    self.expect_file('current', symlink_to='.')
-> ++                    self.expect_file('parent', symlink_to='.')
-> ++                    self.expect_file('evil')
-> + 
-> +         else:
-> +             # No symlink support. The symlinks are ignored.
-> +@@ -3978,6 +3987,76 @@ def test_sly_relative2(self):
-> +                     + """['"].*moo['"], which is outside the """
-> +                     + "destination")
-> + 
-> ++    @symlink_test
-> ++    @os_helper.skip_unless_symlink
-> ++    def test_normpath_realpath_mismatch(self):
-> ++        # The link-target check must validate the value that will actually
-> ++        # be written to disk (the normalised linkname), not the original.
-> ++        # Here 'a' is a symlink to a deep nonexistent path, so realpath()
-> ++        # of 'a/../../...' stays inside the destination while normpath()
-> ++        # collapses 'a/..' lexically and escapes.
-> ++        depth = len(self.destdir.parts) + 5
-> ++        deep = '/'.join(f'p{i}' for i in range(depth))
-> ++        sneaky = 'a/' + '../' * depth + 'flag'
-> ++        for kind in 'symlink_to', 'hardlink_to':
-> ++            with self.subTest(kind):
-> ++                with ArchiveMaker() as arc:
-> ++                    arc.add('a', symlink_to=deep)
-> ++                    arc.add('escape', **{kind: sneaky})
-> ++                with self.check_context(arc.open(), 'data'):
-> ++                    self.expect_exception(
-> ++                        tarfile.LinkOutsideDestinationError)
-> ++
-> ++    @symlink_test
-> ++    @os_helper.skip_unless_symlink
-> ++    def test_symlink_trailing_slash(self):
-> ++        # A trailing slash on a symlink member's name must not cause the
-> ++        # link target to be resolved relative to the wrong directory.
-> ++        with ArchiveMaker() as arc:
-> ++            t = tarfile.TarInfo('x/')
-> ++            t.type = tarfile.SYMTYPE
-> ++            t.linkname = '..'
-> ++            arc.tar_w.addfile(t)
-> ++            arc.add('x/escaped', content='hi')
-> ++
-> ++        with self.check_context(arc.open(), 'data'):
-> ++            self.expect_exception(tarfile.LinkOutsideDestinationError)
-> ++
-> ++    @symlink_test
-> ++    @os_helper.skip_unless_symlink
-> ++    def test_link_at_destination(self):
-> ++        # A link member whose name resolves to the destination directory
-> ++        # itself must be rejected: otherwise the destination is replaced
-> ++        # by a symlink and later members can be redirected through it.
-> ++        for name in '', '.', './':
-> ++            with ArchiveMaker() as arc:
-> ++                t = tarfile.TarInfo(name)
-> ++                t.type = tarfile.SYMTYPE
-> ++                t.linkname = '.'
-> ++                arc.tar_w.addfile(t)
-> ++
-> ++            with self.check_context(arc.open(), 'data'):
-> ++                self.expect_exception(tarfile.OutsideDestinationError)
-> ++
-> ++    @symlink_test
-> ++    @os_helper.skip_unless_symlink
-> ++    def test_empty_name_symlink_chain(self):
-> ++        # Regression test for a chain of empty-named symlinks that
-> ++        # incrementally redirects the destination outwards.
-> ++        with ArchiveMaker() as arc:
-> ++            for name, target in [('', ''), ('a/', '..'),
-> ++                                 ('', 'dummy'), ('', 'a'),
-> ++                                 ('b/', '..'),
-> ++                                 ('', 'dummy'), ('', 'a/b')]:
-> ++                t = tarfile.TarInfo(name)
-> ++                t.type = tarfile.SYMTYPE
-> ++                t.linkname = target
-> ++                arc.tar_w.addfile(t)
-> ++            arc.add('escaped', content='hi')
-> ++
-> ++        with self.check_context(arc.open(), 'data'):
-> ++            self.expect_exception(tarfile.FilterError)
-> ++
-> +     @symlink_test
-> +     def test_deep_symlink(self):
-> +         # Test that symlinks and hardlinks inside a directory
-> +diff --git a/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst b/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
-> +new file mode 100644
-> +index 000000000000000..7c69edb683cf80a
-> +--- /dev/null
-> ++++ b/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
-> +@@ -0,0 +1,5 @@
-> ++:func:`tarfile.data_filter` now validates link targets using the same
-> ++normalised value that is written to disk, strips trailing separators from
-> ++the member name when resolving a symlink's directory, and rejects link
-> ++members that would replace the destination directory itself. This closes
-> ++several path-traversal bypasses of the ``data`` extraction filter.
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 0881625ea3..96be4bd651 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -15,6 +15,8 @@ PYTHON3_CPE_ID_PRODUCT = python
->  
->  # 0013-Fix-O-n-2-canonical-ordering-in-unicodedata-normalize.patch
->  PYTHON3_IGNORE_CVES += CVE-2026-3276
-> +# 0014-tarfile-data_filter-validate-written-link.patch
-> +PYTHON3_IGNORE_CVES += CVE-2026-7774
->  
->  # This host Python is installed in $(HOST_DIR), as it is needed when
->  # cross-compiling third-party Python modules.
-> -- 
-> 2.54.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gVGhpcyBmaXhlcyB0aGUgZm9sbG93aW5nIHZ1bG5lcmFiaWxpdHk6Cj4g
+Cj4gLSBDVkUtMjAyNi04MzI4Ogo+ICAgICBUaGUgZnRwY3AoKSBmdW5jdGlvbiBpbiBMaWIvZnRw
+bGliLnB5IHdhcyBub3QgdXBkYXRlZCB3aGVuCj4gICAgIENWRS0yMDIxLTQxODkgd2FzIGZpeGVk
+LiBXaGlsZSBtYWtlcGFzdigpIHdhcyBwYXRjaGVkIHRvIHJlcGxhY2UKPiAgICAgc2VydmVyLXN1
+cHBsaWVkIFBBU1YgaG9zdCBhZGRyZXNzZXMgd2l0aCB0aGUgYWN0dWFsIHBlZXIgYWRkcmVzcwo+
+ICAgICAoZ2V0cGVlcm5hbWUoKVswXSksIGZ0cGNwKCkgc3RpbGwgY2FsbHMgcGFyc2UyMjcoKSBk
+aXJlY3RseSBhbmQgcGFzc2VzCj4gICAgIHRoZSByYXcgYXR0YWNrZXItY29udHJvbGxhYmxlIElQ
+IGFkZHJlc3MgYW5kIHBvcnQgdG8KPiAgICAgdGFyZ2V0LnNlbmRwb3J0KCkuIFRoaXMgcGF0Y2gg
+aXMgcmVsYXRlZCB0b8KgQ1ZFLTIwMjEtNDE4OS4KPiAgICAgaHR0cHM6Ly93d3cuY3ZlLm9yZy9D
+VkVSZWNvcmQ/aWQ9Q1ZFLTIwMjYtODMyOAo+IAo+IFNpZ25lZC1vZmYtYnk6IFRpdG91YW4gQ2hy
+aXN0b3BoZSA8dGl0b3Vhbi5jaHJpc3RvcGhlQG1pbmQuYmU+CgpBcHBsaWVkIHRvIDIwMjUuMDIu
+eC4gVGhhbmtzCgo+IC0tLQo+ICAuLi5FLTIwMjEtNDE4OS1QQVNWLWZpeC10by1mdHBsaWItZnRw
+Y3AucGF0Y2ggfCAxMTggKysrKysrKysrKysrKysrKysrCj4gIHBhY2thZ2UvcHl0aG9uMy9weXRo
+b24zLm1rICAgICAgICAgICAgICAgICAgICB8ICAgMiArCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTIw
+IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcHl0aG9uMy8wMDE1
+LUFwcGx5LUNWRS0yMDIxLTQxODktUEFTVi1maXgtdG8tZnRwbGliLWZ0cGNwLnBhdGNoCj4gCj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uMy8wMDE1LUFwcGx5LUNWRS0yMDIxLTQxODktUEFT
+Vi1maXgtdG8tZnRwbGliLWZ0cGNwLnBhdGNoIGIvcGFja2FnZS9weXRob24zLzAwMTUtQXBwbHkt
+Q1ZFLTIwMjEtNDE4OS1QQVNWLWZpeC10by1mdHBsaWItZnRwY3AucGF0Y2gKPiBuZXcgZmlsZSBt
+b2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmMzOWViZmExYzMKPiAtLS0gL2Rldi9udWxs
+Cj4gKysrIGIvcGFja2FnZS9weXRob24zLzAwMTUtQXBwbHktQ1ZFLTIwMjEtNDE4OS1QQVNWLWZp
+eC10by1mdHBsaWItZnRwY3AucGF0Y2gKPiBAQCAtMCwwICsxLDExOCBAQAo+ICtGcm9tIGIwMjZi
+ZTYwZjdlMDIzNzE5YTRkOGRlODlhZTNjMzI0OGI3YzVkNDAgTW9uIFNlcCAxNyAwMDowMDowMCAy
+MDAxCj4gK0Zyb206ICJHcmVnb3J5IFAuIFNtaXRoIiA8Njg0OTErZ3BzaGVhZEB1c2Vycy5ub3Jl
+cGx5LmdpdGh1Yi5jb20+Cj4gK0RhdGU6IFdlZCwgMTMgTWF5IDIwMjYgMTA6MzM6NDMgLTA3MDAK
+PiArU3ViamVjdDogW1BBVENIXSBnaC04NzQ1MTogQXBwbHkgQ1ZFLTIwMjEtNDE4OSBQQVNWIGZp
+eCB0byBmdHBsaWIuZnRwY3AoKQo+ICsgKEdILTE0OTY0OCkKPiArCj4gK2Z0cGNwKCkgY2FsbGVk
+IHBhcnNlMjI3KCkgZGlyZWN0bHkgYW5kIHBhc3NlZCB0aGUgc291cmNlIHNlcnZlcidzCj4gK3Nl
+bGYtcmVwb3J0ZWQgUEFTViBJUHY0IGFkZHJlc3MgdG8gdGhlIHRhcmdldCBzZXJ2ZXIncyBQT1JU
+IGNvbW1hbmQsCj4gK2J5cGFzc2luZyB0aGUgQ1ZFLTIwMjEtNDE4OSBmaXggdGhhdCB3YXMgYXBw
+bGllZCBvbmx5IHRvIEZUUC5tYWtlcGFzdigpLgo+ICtBIG1hbGljaW91cyBzb3VyY2UgRlRQIHNl
+cnZlciBjb3VsZCB1c2UgdGhpcyB0byByZWRpcmVjdCB0aGUgdGFyZ2V0Cj4gK3NlcnZlcidzIGRh
+dGEgY29ubmVjdGlvbiB0byBhbiBhcmJpdHJhcnkgaG9zdDpwb3J0IChTU1JGKS4KPiArCj4gK2Z0
+cGNwKCkgbm93IHVzZXMgdGhlIHNvdXJjZSBzZXJ2ZXIncyBhY3R1YWwgcGVlciBhZGRyZXNzLCBo
+b25vcmluZyB0aGUKPiArZXhpc3RpbmcgdHJ1c3Rfc2VydmVyX3Bhc3ZfaXB2NF9hZGRyZXNzIG9w
+dC1vdXQsIHRoZSBzYW1lIGFzIG1ha2VwYXN2KCkuCj4gKwo+ICtUaGFua3MgdG8gUWkgRGluZyBh
+dCBBdXJhc2NhcGUgQUkgZm9yIHRoZSByZXBvcnQuIChHSFNBLXc4YzUtcTJ4Zi1nZjdjKQo+ICso
+Y2hlcnJ5IHBpY2tlZCBmcm9tIGNvbW1pdCBlYWM0ZmUzYjJjNzc2OTM3OTBhNWVmN2RmYWIxMjdj
+MWZlZTgxYmY5KQo+ICsKPiArQ28tYXV0aG9yZWQtYnk6IEdyZWdvcnkgUC4gU21pdGggPDY4NDkx
+K2dwc2hlYWRAdXNlcnMubm9yZXBseS5naXRodWIuY29tPgo+ICsKPiArVXBzdHJlYW06IGh0dHBz
+Oi8vZ2l0aHViLmNvbS9weXRob24vY3B5dGhvbi9wdWxsLzE0OTc5NQo+ICtDVkU6IENWRS0yMDI2
+LTgzMjgKPiArU2lnbmVkLW9mZi1ieTogVGl0b3VhbiBDaHJpc3RvcGhlIDx0aXRvdWFuLmNocmlz
+dG9waGVAbWluZC5iZT4KPiArLS0tCj4gKyBMaWIvZnRwbGliLnB5ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAxMSArKysrKy0KPiArIExpYi90ZXN0L3Rlc3RfZnRwbGliLnB5ICAg
+ICAgICAgICAgICAgICAgICAgICB8IDM2ICsrKysrKysrKysrKysrKysrKy0KPiArIC4uLjYtMDUt
+MTAtMTgtMDUtMzIuZ2gtaXNzdWUtODc0NTEuWGtLQjZNLnJzdCB8ICA2ICsrKysKPiArIDMgZmls
+ZXMgY2hhbmdlZCwgNTEgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiArIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBNaXNjL05FV1MuZC9uZXh0L1NlY3VyaXR5LzIwMjYtMDUtMTAtMTgtMDUtMzIu
+Z2gtaXNzdWUtODc0NTEuWGtLQjZNLnJzdAo+ICsKPiArZGlmZiAtLWdpdCBhL0xpYi9mdHBsaWIu
+cHkgYi9MaWIvZnRwbGliLnB5Cj4gK2luZGV4IDEwYzVkMWVhMDhhYjExNS4uNDYzZGE1OGRlODVk
+NzIxIDEwMDY0NAo+ICstLS0gYS9MaWIvZnRwbGliLnB5Cj4gKysrKyBiL0xpYi9mdHBsaWIucHkK
+PiArQEAgLTg4Myw3ICs4ODMsMTYgQEAgZGVmIGZ0cGNwKHNvdXJjZSwgc291cmNlbmFtZSwgdGFy
+Z2V0LCB0YXJnZXRuYW1lID0gJycsIHR5cGUgPSAnSScpOgo+ICsgICAgIHR5cGUgPSAnVFlQRSAn
+ICsgdHlwZQo+ICsgICAgIHNvdXJjZS52b2lkY21kKHR5cGUpCj4gKyAgICAgdGFyZ2V0LnZvaWRj
+bWQodHlwZSkKPiArLSAgICBzb3VyY2Vob3N0LCBzb3VyY2Vwb3J0ID0gcGFyc2UyMjcoc291cmNl
+LnNlbmRjbWQoJ1BBU1YnKSkKPiArKyAgICAjIERvbid0IHRydXN0IHRoZSBJUHY0IGFkZHJlc3Mg
+dGhlIHNvdXJjZSBzZXJ2ZXIgYWR2ZXJ0aXNlcyBpbiBpdHMgUEFTVgo+ICsrICAgICMgcmVwbHk6
+IGEgbWFsaWNpb3VzIHNvdXJjZSBjb3VsZCBvdGhlcndpc2UgcG9pbnQgdGhlIHRhcmdldCdzIGRh
+dGEKPiArKyAgICAjIGNvbm5lY3Rpb24gYXQgYW4gYXJiaXRyYXJ5IGhvc3QgKFNTUkYpLiAgQSBj
+YWxsZXIgdGhhdCBuZWVkcyB0aGUgb2xkCj4gKysgICAgIyBiZWhhdmlvciBjYW4gc2V0IHRydXN0
+X3NlcnZlcl9wYXN2X2lwdjRfYWRkcmVzcyBvbiB0aGUgc291cmNlIEZUUAo+ICsrICAgICMgb2Jq
+ZWN0LiAgU2VlIEZUUC5tYWtlcGFzdigpLCB3aGljaCBhcHBsaWVzIHRoZSBzYW1lIHJ1bGUuCj4g
+KysgICAgdW50cnVzdGVkX2hvc3QsIHNvdXJjZXBvcnQgPSBwYXJzZTIyNyhzb3VyY2Uuc2VuZGNt
+ZCgnUEFTVicpKQo+ICsrICAgIGlmIHNvdXJjZS50cnVzdF9zZXJ2ZXJfcGFzdl9pcHY0X2FkZHJl
+c3M6Cj4gKysgICAgICAgIHNvdXJjZWhvc3QgPSB1bnRydXN0ZWRfaG9zdAo+ICsrICAgIGVsc2U6
+Cj4gKysgICAgICAgIHNvdXJjZWhvc3QgPSBzb3VyY2Uuc29jay5nZXRwZWVybmFtZSgpWzBdCj4g
+KyAgICAgdGFyZ2V0LnNlbmRwb3J0KHNvdXJjZWhvc3QsIHNvdXJjZXBvcnQpCj4gKyAgICAgIyBS
+RkMgOTU5OiB0aGUgdXNlciBtdXN0ICJsaXN0ZW4iIFsuLi5dIEJFRk9SRSBzZW5kaW5nIHRoZQo+
+ICsgICAgICMgdHJhbnNmZXIgcmVxdWVzdC4KPiArZGlmZiAtLWdpdCBhL0xpYi90ZXN0L3Rlc3Rf
+ZnRwbGliLnB5IGIvTGliL3Rlc3QvdGVzdF9mdHBsaWIucHkKPiAraW5kZXggMjA0YTc3ZDE0ZjAz
+YTUwLi43NTQyZjAxNWY3OGM0MjEgMTAwNjQ0Cj4gKy0tLSBhL0xpYi90ZXN0L3Rlc3RfZnRwbGli
+LnB5Cj4gKysrKyBiL0xpYi90ZXN0L3Rlc3RfZnRwbGliLnB5Cj4gK0BAIC0xNiw3ICsxNiw3IEBA
+Cj4gKyBleGNlcHQgSW1wb3J0RXJyb3I6Cj4gKyAgICAgc3NsID0gTm9uZQo+ICsgCj4gKy1mcm9t
+IHVuaXR0ZXN0IGltcG9ydCBUZXN0Q2FzZSwgc2tpcFVubGVzcwo+ICsrZnJvbSB1bml0dGVzdCBp
+bXBvcnQgbW9jaywgVGVzdENhc2UsIHNraXBVbmxlc3MKPiArIGZyb20gdGVzdCBpbXBvcnQgc3Vw
+cG9ydAo+ICsgZnJvbSB0ZXN0LnN1cHBvcnQgaW1wb3J0IHRocmVhZGluZ19oZWxwZXIKPiArIGZy
+b20gdGVzdC5zdXBwb3J0IGltcG9ydCBzb2NrZXRfaGVscGVyCj4gK0BAIC0xMTQyLDYgKzExNDIs
+NDAgQEAgZGVmIHRlc3RUaW1lb3V0RGlyZWN0QWNjZXNzKHNlbGYpOgo+ICsgICAgICAgICBmdHAu
+Y2xvc2UoKQo+ICsgCj4gKyAKPiArK2NsYXNzIFRlc3RGdHBjcFNlY3VyaXR5KFRlc3RDYXNlKToK
+PiArKyAgICAiIiJmdHBjcCgpIG11c3Qgbm90IHRydXN0IHRoZSBob3N0IGEgc291cmNlIHNlcnZl
+ciBhZHZlcnRpc2VzIGluIFBBU1YuCj4gKysKPiArKyAgICBBIG1hbGljaW91cyBzb3VyY2Ugc2Vy
+dmVyIGNhbiBvdGhlcndpc2UgcmVkaXJlY3QgdGhlIHRhcmdldCBzZXJ2ZXIncwo+ICsrICAgIGRh
+dGEgY29ubmVjdGlvbiB0byBhbiBhcmJpdHJhcnkgaG9zdDpwb3J0IChTU1JGKSwgc28gZnRwY3Ao
+KSB1c2VzIHRoZQo+ICsrICAgIHNvdXJjZSBzZXJ2ZXIncyBhY3R1YWwgcGVlciBhZGRyZXNzIGlu
+c3RlYWQsIHRoZSBzYW1lIGFzIEZUUC5tYWtlcGFzdigpLgo+ICsrICAgICIiIgo+ICsrCj4gKysg
+ICAgZGVmIF9tYWtlX3BhaXIoc2VsZiwgKiwgYWR2ZXJ0aXNlZF9ob3N0LCByZWFsX2hvc3QsIHRy
+dXN0PUZhbHNlKToKPiArKyAgICAgICAgc291cmNlID0gbW9jay5Nb2NrKHNwZWM9ZnRwbGliLkZU
+UCkKPiArKyAgICAgICAgc291cmNlLnRydXN0X3NlcnZlcl9wYXN2X2lwdjRfYWRkcmVzcyA9IHRy
+dXN0Cj4gKysgICAgICAgIHNvdXJjZS5zb2NrLmdldHBlZXJuYW1lLnJldHVybl92YWx1ZSA9IChy
+ZWFsX2hvc3QsIDIxKQo+ICsrICAgICAgICAjIFBBU1YgcmVwbGllcyBnaXZlIHRoZSBob3N0IGFz
+IGNvbW1hLXNlcGFyYXRlZCBvY3RldHMsIG5vdCBkb3R0ZWQuCj4gKysgICAgICAgIGFkdmVydGlz
+ZWQgPSBhZHZlcnRpc2VkX2hvc3QucmVwbGFjZSgnLicsICcsJykKPiArKyAgICAgICAgc291cmNl
+LnNlbmRjbWQuc2lkZV9lZmZlY3QgPSBsYW1iZGEgY21kOiAoCj4gKysgICAgICAgICAgICBmJzIy
+NyBFbnRlcmluZyBQYXNzaXZlIE1vZGUgKHthZHZlcnRpc2VkfSwxLDIpLicKPiArKyAgICAgICAg
+ICAgIGlmIGNtZCA9PSAnUEFTVicgZWxzZSAnMTUwIG9rJykKPiArKyAgICAgICAgdGFyZ2V0ID0g
+bW9jay5Nb2NrKHNwZWM9ZnRwbGliLkZUUCkKPiArKyAgICAgICAgdGFyZ2V0LnNlbmRjbWQucmV0
+dXJuX3ZhbHVlID0gJzE1MCBvaycKPiArKyAgICAgICAgcmV0dXJuIHNvdXJjZSwgdGFyZ2V0Cj4g
+KysKPiArKyAgICBkZWYgdGVzdF9mdHBjcF9pZ25vcmVzX3VudHJ1c3RlZF9wYXN2X2hvc3Qoc2Vs
+Zik6Cj4gKysgICAgICAgIHNvdXJjZSwgdGFyZ2V0ID0gc2VsZi5fbWFrZV9wYWlyKGFkdmVydGlz
+ZWRfaG9zdD0nMTAuMC4wLjUnLAo+ICsrICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICByZWFsX2hvc3Q9JzE5OC41MS4xMDAuNycpCj4gKysgICAgICAgIGZ0cGxpYi5mdHBj
+cChzb3VyY2UsICdhJywgdGFyZ2V0LCAnYicpCj4gKysgICAgICAgIHRhcmdldC5zZW5kcG9ydC5h
+c3NlcnRfY2FsbGVkX29uY2Vfd2l0aCgnMTk4LjUxLjEwMC43JywgMjU4KQo+ICsrCj4gKysgICAg
+ZGVmIHRlc3RfZnRwY3BfdHJ1c3Rfc2VydmVyX3Bhc3ZfaXB2NF9hZGRyZXNzKHNlbGYpOgo+ICsr
+ICAgICAgICBzb3VyY2UsIHRhcmdldCA9IHNlbGYuX21ha2VfcGFpcihhZHZlcnRpc2VkX2hvc3Q9
+JzEwLjAuMC41JywKPiArKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+cmVhbF9ob3N0PScxOTguNTEuMTAwLjcnLCB0cnVzdD1UcnVlKQo+ICsrICAgICAgICBmdHBsaWIu
+ZnRwY3Aoc291cmNlLCAnYScsIHRhcmdldCwgJ2InKQo+ICsrICAgICAgICB0YXJnZXQuc2VuZHBv
+cnQuYXNzZXJ0X2NhbGxlZF9vbmNlX3dpdGgoJzEwLjAuMC41JywgMjU4KQo+ICsrCj4gKysKPiAr
+IGNsYXNzIE1pc2NUZXN0Q2FzZShUZXN0Q2FzZSk6Cj4gKyAgICAgZGVmIHRlc3RfX2FsbF9fKHNl
+bGYpOgo+ICsgICAgICAgICBub3RfZXhwb3J0ZWQgPSB7Cj4gK2RpZmYgLS1naXQgYS9NaXNjL05F
+V1MuZC9uZXh0L1NlY3VyaXR5LzIwMjYtMDUtMTAtMTgtMDUtMzIuZ2gtaXNzdWUtODc0NTEuWGtL
+QjZNLnJzdCBiL01pc2MvTkVXUy5kL25leHQvU2VjdXJpdHkvMjAyNi0wNS0xMC0xOC0wNS0zMi5n
+aC1pc3N1ZS04NzQ1MS5Ya0tCNk0ucnN0Cj4gK25ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gK2luZGV4
+IDAwMDAwMDAwMDAwMDAwMC4uMjFhNzljM2UwZTdkYjc0Cj4gKy0tLSAvZGV2L251bGwKPiArKysr
+IGIvTWlzYy9ORVdTLmQvbmV4dC9TZWN1cml0eS8yMDI2LTA1LTEwLTE4LTA1LTMyLmdoLWlzc3Vl
+LTg3NDUxLlhrS0I2TS5yc3QKPiArQEAgLTAsMCArMSw2IEBACj4gKytUaGUgOm1vZDpgZnRwbGli
+YCBtb2R1bGUncyB1bmRvY3VtZW50ZWQgYGBmdHBjcGBgIGZ1bmN0aW9uIG5vIGxvbmdlciB0cnVz
+dHMKPiArK3RoZSBJUHY0IGFkZHJlc3MgdmFsdWUgcmV0dXJuZWQgZnJvbSB0aGUgc291cmNlIHNl
+cnZlciBpbiByZXNwb25zZSB0byB0aGUKPiArK2BgUEFTVmBgIGNvbW1hbmQgYnkgZGVmYXVsdCwg
+Y29tcGxldGluZyB0aGUgZml4IGZvciBDVkUtMjAyMS00MTg5LiAgQXMgd2l0aAo+ICsrOmNsYXNz
+OmBmdHBsaWIuRlRQYCwgdGhlIGZvcm1lciBiZWhhdmlvciBjYW4gYmUgcmUtZW5hYmxlZCBieSBz
+ZXR0aW5nIHRoZQo+ICsrYGB0cnVzdF9zZXJ2ZXJfcGFzdl9pcHY0X2FkZHJlc3NgYCBhdHRyaWJ1
+dGUgb24gdGhlIHNvdXJjZSA6Y2xhc3M6YGZ0cGxpYi5GVFBgCj4gKytpbnN0YW5jZSB0byBgYFRy
+dWVgYC4gIFRoYW5rcyB0byBRaSBEZW5nIGF0IEF1cmFzY2FwZSBBSSBmb3IgdGhlIHJlcG9ydC4K
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24zL3B5dGhvbjMubWsgYi9wYWNrYWdlL3B5dGhv
+bjMvcHl0aG9uMy5tawo+IGluZGV4IDk2YmU0YmQ2NTEuLjUyZjA2ZTA4ZGYgMTAwNjQ0Cj4gLS0t
+IGEvcGFja2FnZS9weXRob24zL3B5dGhvbjMubWsKPiArKysgYi9wYWNrYWdlL3B5dGhvbjMvcHl0
+aG9uMy5tawo+IEBAIC0xNyw2ICsxNyw4IEBAIFBZVEhPTjNfQ1BFX0lEX1BST0RVQ1QgPSBweXRo
+b24KPiAgUFlUSE9OM19JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNi0zMjc2Cj4gICMgMDAxNC10YXJm
+aWxlLWRhdGFfZmlsdGVyLXZhbGlkYXRlLXdyaXR0ZW4tbGluay5wYXRjaAo+ICBQWVRIT04zX0lH
+Tk9SRV9DVkVTICs9IENWRS0yMDI2LTc3NzQKPiArIyAwMDE1LUFwcGx5LUNWRS0yMDIxLTQxODkt
+UEFTVi1maXgtdG8tZnRwbGliLWZ0cGNwLnBhdGNoCj4gK1BZVEhPTjNfSUdOT1JFX0NWRVMgKz0g
+Q1ZFLTIwMjYtODMyOAo+ICAKPiAgIyBUaGlzIGhvc3QgUHl0aG9uIGlzIGluc3RhbGxlZCBpbiAk
+KEhPU1RfRElSKSwgYXMgaXQgaXMgbmVlZGVkIHdoZW4KPiAgIyBjcm9zcy1jb21waWxpbmcgdGhp
+cmQtcGFydHkgUHl0aG9uIG1vZHVsZXMuCj4gLS0gCj4gMi41NC4wCj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBs
+aXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
