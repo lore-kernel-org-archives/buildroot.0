@@ -1,115 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980E9CD98CE
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 20:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A638ACD98DA
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 20:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E4A26132B;
-	Fri, 12 Jun 2026 20:51:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49B9540639;
+	Fri, 12 Jun 2026 20:51:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VMpvjBxrDbrM; Fri, 12 Jun 2026 20:51:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qjbak2h9mQ7o; Fri, 12 Jun 2026 20:51:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BF366132D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7312540642
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781297475;
-	bh=Z7WBrZ6E6/jH9busqLMQTacQG1TPpIbD0XU+e6XBg0c=;
+	s=default; t=1781297476;
+	bh=dAzyGuVqkC0QvdkEqPOfrM9VC3QNK3FNKhrZgoTEFIU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=JaSPEut1wRfZf4leGtUwiQrlj5+3xXbYErkVW7QJyqLglh+2yutxhHLt3Ms3IsJLZ
-	 D4DCt94RgSLqZzlqh/HpeBvroLpRu/DgNrmATcYL4rc9Zaaxh6DDfDDkdSNCCe1WJm
-	 ZdPPX5A3Us6ADdf+zRhHwBlMHXxoaS91D2sO32MaFmcYwvya18Pc4JJ/QXjdYwQBUc
-	 gPveY1FZXO3lL6TjT7HI9Lz2UfAQx0GfS5wEPjmDZHh+AjMPvtlUD6n106LqPwZOb3
-	 c8kQOf4wQ1ixiQNVoCrJqZ0/lttxuZ6eE3Bev9buNUC3aAH2xWAL32gAk+D7AiElTV
-	 5tAzJ4G/13W6Q==
+	b=LH5gt5Qjarj2WwbeHFFa4zECy790Q25jFFXcAnb7fVcvRucH8ffljIS2WPE4aYKqP
+	 Ev4QUScpiRxCSffSuzeC39XSkiw6i6UbPPjexeDqmqRz+08pTyO7/wDzcrHc2LNV72
+	 6Tjp/QG5EvFODHvTHFto5XgPQTniP/WTFTHgch8ZzmAGoAAUxy77hdmEpxUDwzp3aJ
+	 nbAsT2w/hHh5bN4+jR0U3WhIP402/qxdQBMm4rGJF8MelyShJbqciWKWxYSciR+Vrr
+	 gsl3SW0hX3M9drAcdK7y/j8a1XdBT9g0NGcA8V8E4MbdbB3OdLiXwxLPJIiJNo2QJE
+	 EKc9rFNt9Jerw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BF366132D;
-	Fri, 12 Jun 2026 20:51:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7312540642;
+	Fri, 12 Jun 2026 20:51:16 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 30F9A237
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 20:51:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B9461E9D
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 20:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87FE7816EE
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 20:51:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1729983EDE
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 20:51:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OL_gFsn_plw7 for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 20:51:12 +0000 (UTC)
+ id 7_ERaQ7CEaCY for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 20:51:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68D888162E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68D888162E
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 68D888162E
- for <buildroot@busybox.net>; Fri, 12 Jun 2026 20:51:12 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4908b92904fso14835385e9.0
- for <buildroot@busybox.net>; Fri, 12 Jun 2026 13:51:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 35605815DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35605815DF
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 35605815DF
+ for <buildroot@busybox.net>; Fri, 12 Jun 2026 20:51:13 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-490bc6a7958so21691745e9.1
+ for <buildroot@busybox.net>; Fri, 12 Jun 2026 13:51:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781297470; x=1781902270;
+ d=1e100.net; s=20251104; t=1781297471; x=1781902271;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=sEm9SBKfZ8N4/t7lTtsWXrePOrgYZdwp1vtYIjqR0DY=;
- b=rtYhi6GUt8GnR7Azpdh+iyPuGvEu7qpK0rBEEmGKzZDFG4Haa0I3ZoGiXsatdbpCTG
- L4h4NMQxzBogZBtnGKZdXMbP7qJMYyz1Mzu1wlcg5YXFGe6L8qxEqf7ozvT3O9FIaod2
- Xo1z4NbKi+8ERh/JcO35n1TpTSl43sh2p89iWT/VwvQThJ0Fw/sJkFudfbmULc4QHMoc
- i0nMmHToXxzU42qkhTF5vcqL3iaBCejN/9lbu1u2oSeyskxtNDq7dbq2EMCjFeYgpL5w
- YKDA1I1GQEa5uSvj4kJtnuJ6jIx906fz056bNNaPmGtO5ubdfrZ67/XWtdiGO1p+7LmM
- Vi1w==
-X-Gm-Message-State: AOJu0YyjxrFduK+PnUA+9iIwvf7ziTjYN3hKPSnrog0IkeGsdPYBbSuw
- IQ0fVaTFYmqOlC5Q/PAS/rXhMauRTwAlgJ1GbI7/OI9rGHMzIcDTcHkTn7v9vDyqMz0Bhcyf+T5
- uvlKSPA==
-X-Gm-Gg: Acq92OHFjZDwp/VBpuVTVufvxwlmziPeKB3oSL5WO9Gmu4E2cZp+FvR6or8L6c0Zp15
- IKYQYrfOB80IBxYguZDof5prFY+ap++yWQV1Oe7zO/x54CcOw9YXQq9f4VK054jCVrJbDmb/uVG
- TIhYmE/U73TCgO/tqRYbH77k+x0i8cTN9Adv3LwWbQp+7qwXzhY3/JUx6yZOOndBkgp0uXIVlsZ
- VfICox10amM6RxB0SDa7IvJcfOvMLEiXi3ZXy7kLH+pZlfrzQqn5QtqLsuNSAL1TdTYprKbm0Y3
- CtcqlZKssjIohHqnLBY2MRTSqUZsycVa1LSwzyLNd83rimfYTdHtA6KbOf5/taXRG/dCLWdh6xK
- 5W214ly2bTRirdAYUh3qNAuyII3H405L+0yUD6Ih2kPoUnL4jgWngS8P0Fm9hUfoBJtQrI4I5MX
- JQ7LXNKIHi2Kjj4XsNdx+SMOdE2ZJQLWkvEiVq923LnMiZ338lznrjlG6xHsKy
-X-Received: by 2002:a05:600c:c3db:20b0:48f:d5a0:284e with SMTP id
- 5b1f17b1804b1-490ec50e024mr43269315e9.28.1781297469535; 
- Fri, 12 Jun 2026 13:51:09 -0700 (PDT)
+ bh=IsxXek7lIiY8iS/wBIW9xqQV6oqM0eULzQQNHQ+z4LI=;
+ b=b3Heeabs0CgbVaUxzNlPbu+lF9OjyUzKP4yoxbWeftoC2zfIDluGWewXRukuH8muOF
+ IUFz37FoHjjhJrlHdZz9ZEklsWmKO/mSXupFn+y0jfh2oDMFAOhnvn6kL9khIMi0AGQR
+ IvfTuKLqreUkYHUS9+1eED3WYuXK0qu084+JZmBe9F/mUmg/mzRobJ9HtwJrvWa03fBd
+ +EHKFxb4NZwAgrhG7GS6ieWGCUqYfP/MWahnwvVr2zZuIJFdfDi/WjLqhvFWDUW7Dx3T
+ qxAJahKLx5fMyyJAPGpwlh53lZQJcX99SEYy6Tk61Z+B3ZQYLIaTXpntj45wfW2xBKLv
+ JkJQ==
+X-Gm-Message-State: AOJu0YwOHkulsZAHfn6tQeALPDsrMTRD1qizF9gMjvc055gejXE5ul79
+ Lf/pUkz/uPg1kaGNz4pPg7Ef1ey4aihmF2kjCLU6uHcvQIKB3Im6ScGvs5ULlxQ6Nlv1DbuDx8z
+ yKTPGsw==
+X-Gm-Gg: Acq92OEYxiuNJZEdGQ9v/O8q0DS0l2GT3gTfLP+zz9VxcblCtLuR6R8mSOa5xh+CSP8
+ 2tVlQxdr+5jFIMviISN5BhOeasN4Xx+brxLHqe/azRad6v7IkBjnEiwSbLTz+siV+ituDmOTM4K
+ aMlq1OrmJ6Ww26BgqN3x3oH0DY/1keX5cBN1fm2cmIiMP+V74id0yJd1xshvv5eLkfGmoN6O0m/
+ LcDfHd2ycWFebCFpG4o1GZiIz40WCIWErLj3s6rTp0cPX9WW9vRxYBxv4Wdm2KKprRCFhTgCdf1
+ dQ4h9/2e+Vazq2fpzmbKeZFX/BthrN1qkgbHLY9G66fpv/PZ7yMrJQzuBCYCktdDweIUeMZ33pE
+ CHGO3s/DopGdNIB7YRe39Qjr8uLQqbpMc81BgwcZNlGMxGdve1Fmpx4RupJBNbpgsV0Vlb42DMn
+ Eh/JrUMGUXkZDNF9HrmrPz8Zskqz4lrhqB56XH9DKLaCIIreofbw==
+X-Received: by 2002:a05:6000:240f:b0:45e:8526:7dcb with SMTP id
+ ffacd0b85a97d-4606f219f31mr5569851f8f.7.1781297470338; 
+ Fri, 12 Jun 2026 13:51:10 -0700 (PDT)
 Received: from vm-2404.. (165.186.66.37.rev.sfr.net. [37.66.186.165])
  by smtp.gmail.com with ESMTPSA id
  ffacd0b85a97d-4606f26434dsm9353447f8f.1.2026.06.12.13.51.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 13:51:09 -0700 (PDT)
+ Fri, 12 Jun 2026 13:51:10 -0700 (PDT)
 To: buildroot@busybox.net
 Cc: Francois Perrad <francois.perrad@gadz.org>
-Date: Fri, 12 Jun 2026 22:50:20 +0200
-Message-ID: <20260612205029.269642-2-francois.perrad@gadz.org>
+Date: Fri, 12 Jun 2026 22:50:21 +0200
+Message-ID: <20260612205029.269642-3-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260612205029.269642-1-francois.perrad@gadz.org>
 References: <20260612205029.269642-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1781297470; x=1781902270; darn=busybox.net;
+ d=gadz.org; s=google; t=1781297471; x=1781902271; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sEm9SBKfZ8N4/t7lTtsWXrePOrgYZdwp1vtYIjqR0DY=;
- b=Oakkk1rw6oiaM0OjPyhiIDN6dUsIzVNg0fRxbuasPeJNxEXfnJlLWA1AfSKrJv3aj8
- OMAZMgcHTB3aE884BRifg4io/fi607TgVWFy+cCQv52lEnysFliunIaq1Hd1FpKZPdqc
- CKmw8S/nZ8sE7BBnRiFZr36QrXhvNYinvZ1BkyGJIUyzHDUmR/LnLqbASvUCnN1KWQ88
- 5lI1tYgr9XVnmWxs/AhSKrb0NLtMjJ8JVh4UyxGWNChWGxc0TGepcriJV1WkHSRCWTvM
- rVfO8JE/LSks/w6WXuAiBNKQnMlgsEKSAU3L7DHNlAGNIPHRFjgqHDQpMnfBnZyoQs0P
- ACuw==
+ bh=IsxXek7lIiY8iS/wBIW9xqQV6oqM0eULzQQNHQ+z4LI=;
+ b=ZtcgLo13d/s9mS8V1EUU90snHUA/nx62VVQogPjAzc18quDqPvoUERaEdFXzPODHHb
+ pRFZonoICQ6uWgeDhGRmSW4ZNrNts1Omj8310KsH1A/Y+3zm6RsaL3y4lY+Q3SK9CrVr
+ sRdtXLV1zkOhIXGrSOaDugBEbneztMb2rAzt4iMZrwLz4k/6lSqzE7UOyzIS3BRoCA2L
+ ahLXxKt/tGGjdXnZ6uiG8/KsUx4IXrK5kleaMasqslRsA6hx464JOPVBBa4L0OWqgmoH
+ uxVw6RoLeVC19LKVT2zAus+/9F6sUc8gW58hEzKib3FV0J15E/7hzKscbg/PiVjPMRtq
+ R/CQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=Oakkk1rw
-Subject: [Buildroot] [RFC PATCH 1/9] package/qbe: new host package
+ header.a=rsa-sha256 header.s=google header.b=ZtcgLo13
+Subject: [Buildroot] [RFC PATCH 2/9] package/scdoc: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,59 +132,57 @@ dependency for host-hare
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS           |  1 +
- package/qbe/qbe.hash |  5 +++++
- package/qbe/qbe.mk   | 22 ++++++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/qbe/qbe.hash
- create mode 100644 package/qbe/qbe.mk
+ DEVELOPERS               |  1 +
+ package/scdoc/scdoc.hash |  3 +++
+ package/scdoc/scdoc.mk   | 22 ++++++++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/scdoc/scdoc.hash
+ create mode 100644 package/scdoc/scdoc.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9aaffa29a..317b960da 100644
+index 317b960da..56be32544 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1177,6 +1177,7 @@ F:	package/coxpcall/
- F:	package/dado/
- F:	package/ficl/
- F:	package/janet/
-+F:	package/qbe/
- F:	package/libtomcrypt/
- F:	package/libtommath/
- F:	package/linenoise/
-diff --git a/package/qbe/qbe.hash b/package/qbe/qbe.hash
+@@ -1197,6 +1197,7 @@ F:	package/pkg-perl.mk
+ F:	package/pkg-luarocks.mk
+ F:	package/quickjs/
+ F:	package/rings/
++F:	package/scdoc/
+ F:	package/wsapi/
+ F:	package/wsapi-fcgi/
+ F:	package/wsapi-xavante/
+diff --git a/package/scdoc/scdoc.hash b/package/scdoc/scdoc.hash
 new file mode 100644
-index 000000000..2250c493a
+index 000000000..8917b4038
 --- /dev/null
-+++ b/package/qbe/qbe.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: https://c9x.me/compile/releases.html
-+sha256  a6d50eb952525a234bf76ba151861f73b7a382ac952d985f2b9af1df5368225d  qbe-1.2.tar.xz
-+
++++ b/package/scdoc/scdoc.hash
+@@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  2b026a9038be00b1102da922775ffea4857ea755f63694efc36dcbcbdebf23d6  LICENSE
-diff --git a/package/qbe/qbe.mk b/package/qbe/qbe.mk
++sha256  e1a9c2000f855123a1a50c8f897073e0ee95fc41787431efe3864c2f1c2e7092  1.11.4.tar.gz
++sha256  ad227c56bf22c9fa35be3d383789d065698904b61161f6a8339b91bde5a3e48b  COPYING
+diff --git a/package/scdoc/scdoc.mk b/package/scdoc/scdoc.mk
 new file mode 100644
-index 000000000..a6e3e4d57
+index 000000000..80ee9ce76
 --- /dev/null
-+++ b/package/qbe/qbe.mk
++++ b/package/scdoc/scdoc.mk
 @@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# qbe
++# scdoc
 +#
 +################################################################################
 +
-+QBE_VERSION = 1.2
-+QBE_SITE = https://c9x.me/compile/release
-+QBE_SOURCE = qbe-$(QBE_VERSION).tar.xz
-+QBE_LICENSE = MIT
-+QBE_LICENSE_FILES = LICENSE
++SCDOC_VERSION = 1.11.4
++SCDOC_SITE = https://git.sr.ht/~sircmpwn/scdoc/archive
++SCDOC_SOURCE = $(SCDOC_VERSION).tar.gz
++SCDOC_LICENSE = MIT
++SCDOC_LICENSE_FILES = COPYING
 +
-+define HOST_QBE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++define HOST_SCDOC_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) all
 +endef
 +
-+define HOST_QBE_INSTALL_CMDS
++define HOST_SCDOC_INSTALL_CMDS
 +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
 +		PREFIX=/usr DESTDIR="$(HOST_DIR)" install
 +endef
