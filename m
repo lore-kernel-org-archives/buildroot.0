@@ -4,185 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDDE1CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 08:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB5A6CD4F2C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 08:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C4F660ED4;
-	Fri, 12 Jun 2026 08:17:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75D9960DFA;
+	Fri, 12 Jun 2026 08:20:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tAlcJJUbFAi2; Fri, 12 Jun 2026 08:17:19 +0000 (UTC)
+ id GuzraGS-gcEW; Fri, 12 Jun 2026 08:20:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92BE160ED7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 983E360EDF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781252239;
-	bh=HG9Mv0DhJZDwb+t18gAbUZJiCIvtZGaH9kEHGV8hkfQ=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=s8126jgIEaD3sKJU3gIxDw5Zye5my3A/2LQaH8efhhr0uZyKz7s+bJo+I7aF8inPJ
-	 R1UawiOdgpPNbQpkYEH3dvRcXyfTvStQisjCQ1QeKxXoW31Vf3Q5ItwdYynyRGq15N
-	 HSRtplT9Hf1Gxz+1MvDSpB0juDu9/ZBjdBSbUOK77s/8PRE2zHodMeFe1ulHSuhveS
-	 VCj8DQXWit+akl9FjQfBFi6G7Q5SU9tgwe7cuNRWwwETCwmLCiiaX6/GK3zrMIF1sk
-	 RuZRMJ6hgvqr8BXpkvaxtYmTotiHdWbs24ffv8BYagYospCYvZyNDY1kgqAVvtqNQj
-	 +qOj+ry5w7ZMQ==
+	s=default; t=1781252441;
+	bh=AhGJIwFQB6RrW1VyHDzxYi/ogJN0XjnFoJvYXbnG4z0=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=PzxI406iTJPrHxHIRzqpfKyFOU9NLle/ceDG54SffoEMSsCWKOd9mxo2Y0sEAl8O0
+	 DwlWGraV40I1HLilJ3orLbkr32lUMnxFHSyccK5jMgzG5tr5WpvJ0fHk+LINdWrUS6
+	 fSbIiC24a+cH3qXyuU82x99v6yb460oKFGS0Z0rJbxRcgXMbsa+ir33Uevae7KxjGP
+	 KHif7TyaMblQ4ULfvd9xjLrbGsCVGN6Q9LHzE0ou44NfaxTRwFX83uHfYup9QQZT4Q
+	 adK6ykxKRg5zGTtVaeMTtlh/nqK5WZYbNHcH49pSDZbmv3C1EoHvBWI8G5rBBJ3ekC
+	 A7cG7b5sN9J5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92BE160ED7;
-	Fri, 12 Jun 2026 08:17:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DFD8F4
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:17:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 983E360EDF;
+	Fri, 12 Jun 2026 08:20:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C554DF4
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F3A941004
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:17:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B741882119
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aK_Q9fU-e-RZ for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 08:17:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PZdzZx0H00Wc for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 08:20:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c112::7;
- helo=cy3pr05cu001.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4EAD641002
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EAD641002
-Received: from CY3PR05CU001.outbound.protection.outlook.com
- (mail-westcentralusazlp170130007.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c112::7])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4EAD641002
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 08:17:17 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v9X8slRb4bq8nylcEG8nvmem0qjMXPNGKcbktAfupG3jmASeTuwH5pTmHZKCY0BxQxzvXvK9IH06Gl+QvoUMjh4dfLo73JDB1vLRwONKs9Hg39OMPTmMEYNxkOVuggs2adF9bq90mR1R6FRSwHkyWEr6jAcfh6O0mpAuwp6YbIyB976/b/JZautOFNh8P0PiuH74CqdbMMf7nqram78IPRHyTMDV/FAg7TgSo/EgPvguPwwBlCcFVInBCCop3QwKGNCoProfm2iNUVSj0XJpVqLXclAg4dbVzycO0sGQsKXVFo4zVtEbgOOnKwidtiCyiX7JoF3mfcS7zXByZhbDDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0FiBb7PR4jA/9B6gq1aKeJ49glDW7Yh4d+2GYrx7kMc=;
- b=tFufkBTUa5wZcVWmdeMj5b4a/OT0OqfpCjvMeXlUBIT3O282uted4cVWF8YB37AUqXCyW7D1bMVrypK/j9TfSiH5zOIkyLusgCuihg8yTo5sSF4Ni0rYCWXx0FHKXhy3y+ymlEcspqUmgDmD8Ys/sB69ouZqzb/z7uR+Rtd6I4bWj7Nm/e/HlXszXAKOZoZJpLfpdb5IdjTIcs1/nLM4hU1EFgrRiqm8ST7K/F0kT3C16oLjoFWo7HhcPrW2xyVOqYp6etzNN2NynjprRsHXbiTNzmyPSGzlWDvCUXSu1g7LXysdK+/59/lRyb46OP47Xai9yN8FX9dimT1apJ7FYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com (2603:10b6:208:30a::12)
- by MW6PR12MB9018.namprd12.prod.outlook.com (2603:10b6:303:241::6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.18; Fri, 12 Jun
- 2026 08:17:11 +0000
-Received: from BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d]) by BL1PR12MB5032.namprd12.prod.outlook.com
- ([fe80::3c13:eeb6:d9ef:c95d%4]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
- 08:17:11 +0000
-To: John Ernberg <john.ernberg@actia.se>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-CC: "alistair@alistair23.me" <alistair@alistair23.me>, "Stabellini, Stefano"
- <stefano.stabellini@amd.com>, "Erkiaga Elorza, Ibai"
- <ibai.erkiaga-elorza@amd.com>, "luca.ceresoli@bootlin.com"
- <luca.ceresoli@bootlin.com>, "Saleab, Micheal" <Micheal.Saleab@amd.com>,
- "yann.morin@orange.com" <yann.morin@orange.com>,
- "matthew.l.weber3@boeing.com" <matthew.l.weber3@boeing.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "brian.j.wood2@boeing.com" <brian.j.wood2@boeing.com>, "ju.o@free.fr"
- <ju.o@free.fr>, "thomas.petazzoni@bootlin.com"
- <thomas.petazzoni@bootlin.com>, "romain.naour@smile.fr"
- <romain.naour@smile.fr>, "Simek, Michal" <michal.simek@amd.com>,
- "romain.naour@gmail.com" <romain.naour@gmail.com>, "Hildebrand, Stewart"
- <Stewart.Hildebrand@amd.com>
-Thread-Topic: [Buildroot] [PATCH v1 1/3] package/xen: add custom version
- support
-Thread-Index: AQHc+YuX4ZbUnC0k4kGRj6Tu9c1iTLY6jHqAgAAGpkA=
-Date: Fri, 12 Jun 2026 08:17:11 +0000
-Message-ID: <BL1PR12MB503266705EAD51DC752299B2F0182@BL1PR12MB5032.namprd12.prod.outlook.com>
-References: <20260611101734.1968785-1-neal.frager@amd.com>
- <b2810e66-cb1b-434f-8991-3bffe94a5d80@actia.se>
-In-Reply-To: <b2810e66-cb1b-434f-8991-3bffe94a5d80@actia.se>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Enabled=True;
- MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SetDate=2026-06-12T08:11:44.0000000Z;
- MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Name=AMD General
- v26; MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_ContentBits=3;
- MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Method=Standard
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5032:EE_|MW6PR12MB9018:EE_
-x-ms-office365-filtering-correlation-id: 3cef6f72-17d8-4709-cb62-08dec85b00e0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|366016|7416014|376014|23010399003|13003099007|38070700021|22082099003|18002099003|11063799006|4143699003|56012099006|41080700001;
-x-microsoft-antispam-message-info: C/SGgW2OfphgvsOQNFv5NoLc7gq+UR6xb40SK7ghinC6wWUWIPM3PAO+lVpkQSxR2B5YuZ5kDjz5SOonp3Ih8Uz65GMjS0f5DQYBuyZRKmHV27XmJtSkWfdsT4MIAOiWtFNOru5NpVW1T4gPa1dlQyWDUt7ulbi6FP4u3UWEQ3W2qLnGP4U5buWfZtOVrhgMJzQlpD5zQYuRS5OtvkD5CuXESyxZ8C0B7O2Zbbx7WX8ZzJVV0hDxnPcRV7fgl/WZve+JSDNOmMwMwNFwXOpeX5/7VF0xWoegurDaPXBseup4frnY6+7Vn9wWNqAONGxSzHlRM8qZw54POlgvxssUqs3yLKqGAV+V27I1shjy0GIvhQ3qtcjFH+WjWRtE17GbRO+BkpoT3OwPRfiqrh7uWNaa6BmpauYCcVzS2wdpbbnwaBTvHwGycHIpiOihNR5RpTFDyD6ld2KS1G0Ov/UuLERyfcsGZAuAPGe5hPrKdoXZn3KlDnM3TLU8UitvQO1R2hKd+witAaa40QJjokuLUjgHuC5GHDUQpXdzOWv+bTrnf8xq2DXQNYoitQ9Js96KX062fbZNbgdard9RGqCQ7FYf9hnKUqVuuEn0LIGQvBeMDewu1KX0xauP4S8iF9GWvszRkKN4MNtzES+EWdYZzPujxpDrTlNR2BxrZPzMndZp5E+7aibT8qk688CAkdnj5wAGuG4o9LaVGodNKg4KaQ5q61vnyHLjEWVQXDbCjFg=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BL1PR12MB5032.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(13003099007)(38070700021)(22082099003)(18002099003)(11063799006)(4143699003)(56012099006)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlgrdlNyeE03QmFqeTFDTGRZYUZuRzVOQ0xIRnlyWS8wcW1XNEc4YVlnTnlK?=
- =?utf-8?B?OGU5K1JMQzRyRkJvbW13R0FocXo2UGNmeFR1M29YTm5NeWFCQWZkVDdhanBh?=
- =?utf-8?B?V0xPdHMvK2pYVUF5MnFKaUF6WVVIMUJVR1lyWHZjU05CMkxWclRZNW0xN0JY?=
- =?utf-8?B?aWE0SXBuWk41Nml6YW10MWdyeGFzWDdLeHJ6Smhvd1gvN21yaFJobVQ3Kzlq?=
- =?utf-8?B?ems2UkQ4bGtYNzhUUGNJQWdkek5Ma3M1T2pDWlRkMXhDZE5HUEE0elIxTjZD?=
- =?utf-8?B?YkFVMVV6YWlRL25WdlorVzNlM3dtUHMybEhjQVVmb3NkSzZVbnBSaWFLSStp?=
- =?utf-8?B?UHR6d05XaHdZdFg4eXZaK28yUEgyeUphVCtDZ3c0MUhwWDVXaVNSaDNUSFd4?=
- =?utf-8?B?WXhGT2FEcmJ4RmtBemtlWGxaRHcrQk9UQkFoU0Z4Zk9OSFdTVVRnR3RTdHNH?=
- =?utf-8?B?bUdBYlR0dW9MSkdvS2lTVnhqVm4zbjZPZzlpRVRLVjZaM0luSUpVQ3lVdFlJ?=
- =?utf-8?B?U1hRZGtvQkJIUkd6dFZibHUrRHE2dzlidXBnTzdlMDZ1dURIMDdXNHVQNFgr?=
- =?utf-8?B?R0hiYzFnRENCSU04Si85Y1VZSkVGdFluVC9aNjlhOG9MS3ZGeG5tbDY5VUMy?=
- =?utf-8?B?Ty9CbVZMQ0hMUnhjSDRjZTg0WEtwaXhFcGl3aXlaOU5jTFRIOGI2c1FDeCtm?=
- =?utf-8?B?OU52SzlnNXg0SUdmZlhNY1ovLzN3ZlRWdjZzWm9wNG9HR0NvbEtpZG0yem84?=
- =?utf-8?B?d1VPSk9BM3F1d0QwdzgrWCtVZXltQ1lud0lYdnErVXdCUmV4NGp5dTRReWlL?=
- =?utf-8?B?VFlITVZFa0cwdUlONlU4N3laVW56M3BCOXJYMUh5U2RkZ2tmeDNpT29GazBv?=
- =?utf-8?B?VWFPdHdybmtrRDBvRkxLYkp0UHBab0tKM1dMdVc4U1c1QnVSYllHbHFvNEJ3?=
- =?utf-8?B?bWxjbUlnbmVXWnozTDliV1hObzBvNE8zV3dTRmJrT0tXdVhrK2E1cVZ4MERH?=
- =?utf-8?B?RndVZVVjaXZ2ZVRYQkJhbkdBSHo1UGdRZnhDSHcyajBNU3EvRE96djh5ckd0?=
- =?utf-8?B?aEgzd3c5ek4zRVY2ZXAzSTlhd09BSWZLTzJNQ3lMZ2dVZ1BTQ3k0S1hoUms3?=
- =?utf-8?B?WVZqTS91bHdIY0hQN1R3RHpuS2FmVUR5ZXVZL3dSWDVWbWpac0hQNm9CT1lQ?=
- =?utf-8?B?Tm5LcU5MWVBoWkI1cGE1ZjNEeWR0eGg5N2QwencvYWVCWm1vc0RoVWRhNzZW?=
- =?utf-8?B?ekh0bnFPVGhyc09QeUowNjIwb3ZnbWNqcFBVT0RhMjZLY1lxeWEwVFBsMVBL?=
- =?utf-8?B?aFMrd1FQNytXVDdlQWlWaVZlR2NKdW12NWpOU09uMExQNnpJSllRU05WaDhG?=
- =?utf-8?B?ZGxBOHdhRjZlUy9vNU1FRnZ6MThTY3IwYU4rQUtEdFNITmgzV2JqaEJsWWE3?=
- =?utf-8?B?d2dZV3A3a1d4cGVBM0xQVlpaUWNZWm43enhCaVBWNXBZdFJtVlVDaVVkZk1T?=
- =?utf-8?B?YnJ6NHZ5U2kxQU12dis5ckhzUEc2dW5PWVIxa2RTUTArNHRiNkVoVzdQaFVl?=
- =?utf-8?B?eW81N09mc1UzbjdyUXRiZW85ZWFZQXpXd1hRdVIwMHZONndkYmtkaG5YRGwx?=
- =?utf-8?B?M05hdjZqdEwwT3IzWFd5WWdvcTROWVd4a1VhM2QvRElPYW1FdDJRUzFVa2ds?=
- =?utf-8?B?NEZ4YzVDVFVYaDVLUUdaajNkaTYwTkdNVkVHU1A2SGpNckNRNGcweDVKb000?=
- =?utf-8?B?VE5aeVZDcWY5ZFQrdk9kejV6dk0rdEppS24zU3dXUHhxZUtZeW5RbURvK0Y4?=
- =?utf-8?B?Q0FlU1BoZzRwaE43R3VlUFYrWFFkWlR5TGZ2ejFZRFUyOGJmUXJ2S1JoSG5W?=
- =?utf-8?B?SkpGdVhjNGtPZWI4N3VqVU0rcXdneE1ncmRmZ2FnK0VYWDk0MklNWVFQYW40?=
- =?utf-8?B?azlBQmU5RnF3N043YU03RlFsbHlObXRyMHdVNU9iTE03c0JCN0lBcndpVTZS?=
- =?utf-8?B?OVF2Q2VrTG04M1BLWnFVbmVSZGE0eFl3RUQ3MnQxWWlTOXR5NkRqem5FWkZG?=
- =?utf-8?B?SXd6UFpsR2d6bmYySnpiNWxPdnF2ODNBU0laUE1qTW9yaE1GNFd1MGc5eTZX?=
- =?utf-8?B?c2NwMC9XbERqRjNEcHVQVVBRWC9YZXdaTEpHQkVoMDRsR0p6SzRFVDQ5NDB3?=
- =?utf-8?B?blFNUHNBSTFMVjB2QkZvdUxmemE1c3pjaU00M2RRWDF3SmxwYjJkMHZUQUQ0?=
- =?utf-8?B?dFBwQjlvcEpiMzRDc1ozMWVTbFBpbXltYkVjT0xiUGZ1RnZTak1oVkZqSThm?=
- =?utf-8?Q?tNrsZBHdwuzhM6sC55?=
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8CFF880FB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CFF880FB3
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8CFF880FB3
+ for <buildroot@busybox.net>; Fri, 12 Jun 2026 08:20:38 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-490b1bbcf3aso5272745e9.1
+ for <buildroot@busybox.net>; Fri, 12 Jun 2026 01:20:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781252436; x=1781857236;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=KkcURtOuTbR5HX2vKQESqICfH2ululoqB3+DxRrX2rw=;
+ b=eoecFABpX0kMjVdB6l9FqwoPEDi8TBpaiihD7fzbgCvGOurIjQgOIPfrlUAgyU3MYj
+ +SPVb/7jXIOOIOVnhrBHxaVPB/UowScmFU64ZRQPvT4Df3yyZVonKwhCo/HuvTFQ9W/W
+ WkgH+GVLZB+JQ/MQfwdTzY2XuuZSma22klG3ROLrC3N69PiYOarfV56u6l2B/kg/b21z
+ CM0zfYfhxMYnh7j1ro4BNA8qj4SomL0sxJTgKloTYVw2FshmsszNqDIRIVTVODOdtpOt
+ bJKYnIp7CSw5PLZAZO2LPDKxUsDTT0WoRUS2g2/B7mG5OVC1xmpeBeUDfUsd2NC2+obF
+ pa0g==
+X-Gm-Message-State: AOJu0Yw3D3YgAKdbQUitFnkiC0MtKh6M3/RQcoVpfnWIsqiLVTRnJAgx
+ 25PXNDGULEZahSjTiKBY/98VgdqJa1A9O4n2HZ4++hTl32iP1kuChL9mQODI7fwtXYcu/E8Q051
+ VqGMtMg==
+X-Gm-Gg: Acq92OH/87iPnU/YPQf4xAEjEzU3GfDSgnG0aG3fd1UnZJ1Xxyq6W9v2ryl71nMw7No
+ ddNClI4h+fTXRdxLA6pQNgS2PKNlFAnvAR5YSoxrs6Tn/+N/Z+vGgKlffPUqgjD28f9XtEZDwHy
+ ecRxowmHBIL12UeB5jJmpv+I93nNYwqVYvY+X8oFo+lGFjdfk5nEY3bcF3P1lxRxbbSDoiW0NM5
+ NS9JFARBP0V9fxNtPPmk9xr9gEljYWNr7T+Xbz7pfaTkqpp2/1TapDwhNTxA4445+90C8pJerFA
+ Qg13DTCkR1iqzxzBzIEj85vH3D9JuGi/OPNUt865KSRvUW4HTlBsTkz07S/GgNNEQuFXN4dcATD
+ E1pxNwRJvW7pmi5+UaAtm6nV6uPXL8/wSBCoW+00RdqtuotywEAKfI0kIOJ37VLyy0Wa//WNKL+
+ /i+YYxNZuC1OkByD0ktSgMz/uQgLCbVIGWSIlNPvWiYxyEec9ViQ==
+X-Received: by 2002:a05:600c:3209:b0:490:b115:e03f with SMTP id
+ 5b1f17b1804b1-490ec4d65b4mr12455175e9.8.1781252434745; 
+ Fri, 12 Jun 2026 01:20:34 -0700 (PDT)
+Received: from vm-2404.. (165.186.66.37.rev.sfr.net. [37.66.186.165])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4606f2b1092sm3601942f8f.17.2026.06.12.01.20.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Jun 2026 01:20:34 -0700 (PDT)
+To: buildroot@busybox.net
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Date: Fri, 12 Jun 2026 10:20:21 +0200
+Message-ID: <20260612082022.268330-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5032.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cef6f72-17d8-4709-cb62-08dec85b00e0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2026 08:17:11.5013 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Wp98DUgaRA9zDkm29VsliBwpjyUGNpYQ+ghoW9g23x1g/oSEz8Nw7ajDNhQiRzxo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9018
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0FiBb7PR4jA/9B6gq1aKeJ49glDW7Yh4d+2GYrx7kMc=;
- b=bCiUTw4k3htApoSxinwixUWfQdL9726+g/DpE8MEbdI2FFAnZ6Vt3uTsdGCt6fuQjnLvj6UjcYCU1KXgaHettHurYVkg4LUUuohhnT8QOZVju9tRiX/KNA2HOTjQFbnvaQnIuLHAauDdY6GIYVDqG9Vq6AX7YQ9YrzUNNwmxpHw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=bCiUTw4k
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/3] package/xen: add custom version
- support
+ d=gadz.org; s=google; t=1781252436; x=1781857236; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KkcURtOuTbR5HX2vKQESqICfH2ululoqB3+DxRrX2rw=;
+ b=GwZd7Edzaby0o8RUERlsSWuhjHKTtp8np4fBGajNK3hbh4N/6wCJFsTvs8/949YxgJ
+ MUHQBD2J5IRlb3eIAWEzXO7jh2w1WMcL4z8KXx75u3TxryL5sFv1Bib/bRTRF10s+luP
+ YxgICpW6P+JEMNLFr/8n6Cx1z3JQSmRA5ciHH0VlYyFHFBVAzc8R372g0S0G2fO4jQjF
+ 1SAqB+aO1W7bbrTgFogyBMoFT2bPQ/WmLkeEcenHjj/+gTPZpZOs27KYiTFWwxZpnDlo
+ 9nB1Q653sZFA9SzFm2GOPaFhTfr9XZJUywMbyYomV0iLwK/6UKfmi95DOzC8V9Wwgs87
+ MgkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=GwZd7Edz
+Subject: [Buildroot] [PATCH] package/lsb-release-minimal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -194,130 +118,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
+From: Francois Perrad via buildroot <buildroot@buildroot.org>
+Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-AMD General
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/lsb-release-minimal/Config.in          |  6 ++++++
+ .../lsb-release-minimal.hash                   |  3 +++
+ .../lsb-release-minimal/lsb-release-minimal.mk | 18 ++++++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/lsb-release-minimal/Config.in
+ create mode 100644 package/lsb-release-minimal/lsb-release-minimal.hash
+ create mode 100644 package/lsb-release-minimal/lsb-release-minimal.mk
 
-Hi John,
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9aaffa29a..76c749831 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1185,6 +1185,7 @@ F:	package/lua-inotify/
+ F:	package/lpeg/
+ F:	package/lpty/
+ F:	package/lrandom/
++F:	package/lsb-release-minimal/
+ F:	package/lsqlite3/
+ F:	package/lua*
+ F:	package/lynis/
+diff --git a/package/Config.in b/package/Config.in
+index 630662477..0b5e86904 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2739,6 +2739,7 @@ comment "Utilities"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+ 	source "package/lowdown/Config.in"
++	source "package/lsb-release-minimal/Config.in"
+ 	source "package/minisign/Config.in"
+ 	source "package/neofetch/Config.in"
+ 	source "package/opendoas/Config.in"
+diff --git a/package/lsb-release-minimal/Config.in b/package/lsb-release-minimal/Config.in
+new file mode 100644
+index 000000000..3d2e154bc
+--- /dev/null
++++ b/package/lsb-release-minimal/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LSB_RELEASE_MINIMAL
++	bool "lsb-release-minimal"
++	help
++	  Minimal fake lsb-release that uses os-release.
++
++	  https://codeberg.org/gioele/lsb-release-minimal
+diff --git a/package/lsb-release-minimal/lsb-release-minimal.hash b/package/lsb-release-minimal/lsb-release-minimal.hash
+new file mode 100644
+index 000000000..3ad1785b6
+--- /dev/null
++++ b/package/lsb-release-minimal/lsb-release-minimal.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  87bdd39802a7c15753f5c5187f2901b6b9df4dd11721e3762ca4b1701a421c85  v12.1.tar.gz
++sha256  89080b681f36c46c868001c21ec4b7f355acb517ce33719e0189d00c13175a95  LICENSE.txt
+diff --git a/package/lsb-release-minimal/lsb-release-minimal.mk b/package/lsb-release-minimal/lsb-release-minimal.mk
+new file mode 100644
+index 000000000..073b55637
+--- /dev/null
++++ b/package/lsb-release-minimal/lsb-release-minimal.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# lsb-release-minimal
++#
++################################################################################
++
++LSB_RELEASE_MINIMAL_VERSION = 12.1
++LSB_RELEASE_MINIMAL_SOURCE = v$(LSB_RELEASE_MINIMAL_VERSION).tar.gz
++LSB_RELEASE_MINIMAL_SITE = https://codeberg.org/gioele/lsb-release-minimal/archive
++LSB_RELEASE_MINIMAL_LICENSE = ISC
++LSB_RELEASE_MINIMAL_LICENSE_FILES = LICENSE.txt
++
++define LSB_RELEASE_MINIMAL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/lsb_release \
++		$(TARGET_DIR)/usr/bin/lsb_release
++endef
++
++$(eval $(generic-package))
+-- 
+2.43.0
 
-> Add the ability to configure specific Xen versions while leaving the default
-> version unchanged to avoid breaking any builds already using Xen 4.19.5.
->
-> Since the version can be configured, the 3 patches need to be moved to the
-> 4.19.5 directory, so they are only applied when using this version.
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->   .../{ => 4.19.5}/0001-No-trace-backend.patch  |  0
->   ...2-Arm-platforms-fix-build-with-gcc15.patch |  0
->   .../0003-Update-linker-flags.patch            |  0
->   package/xen/Config.in                         | 25 +++++++++++++++++++
->   package/xen/xen.mk                            |  6 +++--
->   5 files changed, 29 insertions(+), 2 deletions(-)
->   rename package/xen/{ => 4.19.5}/0001-No-trace-backend.patch (100%)
->   rename package/xen/{ => 4.19.5}/0002-Arm-platforms-fix-build-with-gcc15.patch (100%)
->   rename package/xen/{ => 4.19.5}/0003-Update-linker-flags.patch (100%)
->
-> diff --git a/package/xen/0001-No-trace-backend.patch b/package/xen/4.19.5/0001-No-trace-backend.patch
-> similarity index 100%
-> rename from package/xen/0001-No-trace-backend.patch
-> rename to package/xen/4.19.5/0001-No-trace-backend.patch
-> diff --git a/package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch b/package/xen/4.19.5/0002-Arm-platforms-fix-build-with-gcc15.patch
-> similarity index 100%
-> rename from package/xen/0002-Arm-platforms-fix-build-with-gcc15.patch
-> rename to package/xen/4.19.5/0002-Arm-platforms-fix-build-with-gcc15.patch
-> diff --git a/package/xen/0003-Update-linker-flags.patch b/package/xen/4.19.5/0003-Update-linker-flags.patch
-> similarity index 100%
-> rename from package/xen/0003-Update-linker-flags.patch
-> rename to package/xen/4.19.5/0003-Update-linker-flags.patch
-> diff --git a/package/xen/Config.in b/package/xen/Config.in
-> index dc4d434810..bb44202824 100644
-> --- a/package/xen/Config.in
-> +++ b/package/xen/Config.in
-> @@ -10,6 +10,31 @@ config BR2_PACKAGE_XEN
->
->   if BR2_PACKAGE_XEN
->
-> +choice
-> +       prompt "Xen Version"
-> +       help
-> +         Select the specific Xen version you want to use
-> +
-> +config BR2_PACKAGE_XEN_LATEST_VERSION
-> +       bool "4.19.5"
-> +
-> +config BR2_PACKAGE_XEN_CUSTOM_VERSION
-> +       bool "Custom version"
-> +       help
-> +         This option allows to use a specific official version
-> +
-> +endchoice
-> +
-> +config BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE
-> +       string "Xen version"
-> +       depends on BR2_PACKAGE_XEN_CUSTOM_VERSION
-> +
-> +config BR2_PACKAGE_XEN_VERSION
-> +       string
-> +       default "4.19.5"        if BR2_PACKAGE_XEN_LATEST_VERSION
-> +       default BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE \
-> +                               if BR2_PACKAGE_XEN_CUSTOM_VERSION
-> +
->   config BR2_PACKAGE_XEN_HYPERVISOR
->          bool "Xen hypervisor"
->          help
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index 5756dfc68c..e354718021 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -4,8 +4,7 @@
->   #
->   ################################################################################
->
-> -XEN_VERSION = 4.19.5
-> -XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-> +XEN_VERSION = $(call qstrip,$(BR2_PACKAGE_XEN_VERSION))
->   XEN_SELINUX_MODULES = systemd udev xen
->   XEN_LICENSE = GPL-2.0
->   XEN_LICENSE_FILES = COPYING LICENSES/GPL-2.0
-> @@ -13,6 +12,9 @@ XEN_CPE_ID_VENDOR = xen
->   XEN_CPE_ID_PREFIX = cpe:2.3:o
->   XEN_DEPENDENCIES = host-acpica host-meson host-pkgconf host-python3
->
-> +# Handle stable official Xen versions
-> +XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-> +
-
-> Moving this seems like it should be part of the next patch.
-
-> But doesn't matter that much to me, so, with or without:
-
-> Reviewed-by: John Ernberg <john.ernberg@actia.se>
-
-I see your point.  If someone finds something that really does require a
-change, I will include this change in a v2. Otherwise, I agree that it is not
-so important.
-
-To be honest, my original development had patches 1 and 2 squashed together
-because the second patch was the one I really wanted to test and verify. This
-move in the first patch is a remnant of my splitting the patch in two before
-submission.
-
->   # Calculate XEN_ARCH
->   ifeq ($(ARCH),aarch64)
->   XEN_ARCH = arm64
-> --
-> 2.25.1
->
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
