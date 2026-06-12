@@ -1,114 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B961CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0ED3CD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA2E66139B;
-	Fri, 12 Jun 2026 11:38:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5A0C412FE;
+	Fri, 12 Jun 2026 11:38:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2vD-lzGzq2Uq; Fri, 12 Jun 2026 11:38:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id imlafzQ2T57O; Fri, 12 Jun 2026 11:38:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2524613AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B665A41378
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264307;
-	bh=w0X+H6T6U3DR00vmfA4O81W2VsqCtBBT/HFfmYJad1M=;
+	s=default; t=1781264310;
+	bh=JqtubefG9jLjsnBSuCzjM0vC0xdGIMORwAm4VaC7F7A=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ci5va2LXkYQKwONlr1WZzsJgjCxWULdb1O/ne3C11OxuuRBUAT0/UIEpPvhBe0eHG
-	 ASBfIobwihvxexeXwBXQ2p0l4Z8dw2k+gHZRnStGjm3XChVwIj4J3T/uW+wJKXArem
-	 Sl6DfKcTNn6tmt+pCUimM5mlz0fgP5Nl8IxjUPV9g3H9StGED4lxEvvxb5zFym36+H
-	 lhjgVuDZbx6CshAoCsszbrWk/uCUKnAeMObO4CozGTPBCuPdNSsJ538dQ+O9+vqEGN
-	 b+p0zuQ+olWdalM+t0cQXs8u4ekv0iV7jGfyciuO1ewBiSj7ptpgYqD+36RUZ/TvdL
-	 yD+aA2+0LFGIg==
+	b=NX+4hoRDr1TLj+FiVa5hfa0gr1PpYNch1mOxSv945MK5iCk9dWNytEFpG+NwqOFiH
+	 l37FuH5Q5tmY4DR31SerqwUDTWcux2LK7Tl8YCDFPJ7J2MpT5saBmOaVmMVFX/FRSs
+	 IIwR65sNEFnUE+mpNYHyeJEzVv5vcqOS4g1Q4pOLA5U1Ws1ebu9T1g7AXXK+0HZ7xI
+	 wKPNpEdHrAbTOU2fctlDD6YVAXTSZ0I4KzTB5df/AGqf/8O4moPDpLuqnxMlPXG+XY
+	 CbSK2ZwtjdB+UM+UTaxDD0ZuPhIHCfTRxTW0kQORHvIFa2e4iG3X5QcVJ3CwrrKwFg
+	 8xPwXmofRCZ+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2524613AA;
-	Fri, 12 Jun 2026 11:38:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9D1112F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B665A41378;
+	Fri, 12 Jun 2026 11:38:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACD3E237
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF9A040664
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93543412B7
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JYbsX-3HogqL for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:38:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aWCaJSgkKcR7 for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:38:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B11864066F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B11864066F
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B11864066F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:13 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-45fe59255beso487499f8f.1
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:38:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8083E412A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8083E412A6
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8083E412A6
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:16 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-490b915ded5so8422635e9.3
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:38:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264292; x=1781869092;
+ d=1e100.net; s=20251104; t=1781264294; x=1781869094;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=xm3cgo8ql8VCguRFWCwEKEYWPhfFWVDFKRYJJrfTLCc=;
- b=TNQ5qyxmN1Q7gszZob0qCEqiO4ZwhQ92fUEJ45i2lixFE7337G0+bzdUOObetxSsws
- X77d21lJV3nt5wzpAPQxbnW6QUiTqqRSk3JQWfiDT/xwnFYZ+gCqxeuIxLHNy5207XIE
- toTaeNp+wEJPPMUi5ORCeUqnKE9nIC0uiHWoCHyprzyXN6tCGEk0TR0mND8rqQh6wOzi
- mlQl8TVHQ641eGE7Zo2JCB195hI9fLZO7l+DkRZjq5CwJgA3kDal5zdTiPCeKkYFNfm6
- 3EsvRT3RedKeDtFh5VuMs/pNaGIQ7+UdPxkufI8AMvM/jSqHGxyftTsSJ+baJuyI291k
- CjHw==
-X-Gm-Message-State: AOJu0YzxWsQFwZggI0ceIlgBgEQXYGpYBI5NJNnpAdCjx4nKwtM39Ko0
- tvBEhpqL5qzwzUaNtXb5Y3oW6GWgSU+fk5O9UdRgAIiLLS7Vl8AEKm7SzgPVybip6J5YyZdHvXq
- B0iuI
-X-Gm-Gg: Acq92OEddpuMdQUWxZdUmAHXIh3xh2VKwEPLL0FAh+KpoqeLS0v27Io2TCoizQ2cuBy
- Al4e0BbwGi610TpVkOejBNOcQtpKU118rw6kw8V/cmzs4KbM4NfDkyQvEURQGvBXnGwb3s0h+AM
- wgWThdxNczuwFPYm1ml62GgjiIxG1rGq1OWRS7/3V2u987MwwWEzh85LgDaDfQDb6fNeLomcv6L
- SJm/nTDQru5Or3/52OIlxEnuejWX3d+NqWq5eskCvzVy42a6GnwaUd+yWk3urlcNTa3bBMesOzL
- uFoPlqt5eD4tLcjmZfVC9ZSTCB0lGs176522wG18YCoNKcdVpo6OJISZGJGRua5UibGz2IL8E2w
- RPTl8iKF5h+CJTwcadxPIsP5coE1R4GwaaDnVn0PpIy/J5ybFrzPJHoVWEAx+LiBjvZMmHRDv4Q
- OcfbUNBuwF4H7mqVc=
-X-Received: by 2002:a05:6000:4601:b0:45f:f142:d571 with SMTP id
- ffacd0b85a97d-4606da66d86mr3541938f8f.13.1781264291769; 
- Fri, 12 Jun 2026 04:38:11 -0700 (PDT)
+ bh=r6POKBOChMX3dQN3s4rbCD4q6WFyqssvfRvkn89+OGE=;
+ b=dryAgsieQfzqOVe7vGVL23oQ47YhFN0GOVhD+M/RdboUY1Wp8rzLI9AdomPs7GiMIC
+ EHFIR2AkwF8kqTqd554uSlooktrkPlZpb43FKCEakFIdBEJ0mvbOBu20xM0A5IJFsXEw
+ GYuyY2HSXTmfIMP94un8rP2ea6NMh4gq7AT0XUnSfglLreJtZBzNkPwp61m0G+32lcWO
+ gZR+OoFz7UdFDqyp9+yl/JT4vPzRPf2Zpely8EoV1fvILhm6ipTUHOOa5rOOZ+qeOyyl
+ 2KtHY6GK4Iob0t1y3FaTeZNCHyqGXOyhb8kR+WaLsyJizU8G+70Hwl/wm0VfzbZUbxE5
+ iquA==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ9rOXpBw8maisrjLUp6cjtBsl/va7wRgE5cBlMb9BTS+NLMpRVV40btSMSZ8de9LpJ8TRag6zwDA+c=@buildroot.org
+X-Gm-Message-State: AOJu0YytJPFhv/1Jeky35meyepXSeePahtwD216lo+SAZpyT0o3sXmi6
+ fnImjrxe3UjssvKjRkrETItL095WSXi5oNAZ0Gz6rayxomgoAjieUbv3BaBXgflOeBc=
+X-Gm-Gg: Acq92OGUiXi/TkQ8JNY0KUNtLS5UP5a8sSdMSVl4QNf3sqZrQgJXCe4DdpTIm+0Ng0M
+ DTwZhNR5/d0UgQvJHbx5Xj3jiLYXkyvcLpJDTPI4qx2eCHyKwA1mSK25NxQhUMwgyxXBsOSsVhD
+ YxQDCSCJltJAKXoEAcgAz/MDax3GUv3HmUTowIPUxqWZfWOCrIdZIF8psJIJKIk6Lft94WtiMsc
+ fOu1MeIBBKFArRu888NvByDHlIT4Fu7qin+cSvT+JDaCQj/2lz9d5lp79MRFtpsIJSeLXHN3+9a
+ CaVfTBpHYSvKcPNqAjBgC6nArfSGg2fnnlAzH3wFHigbVCoT+ki3kqw/UzBWuY19pFi3hZi0+L1
+ koooFIqr1Il/RV6qND02ucr7BgSZsDD+rMGcuGBIe/kAQAbkt008YcOW/227CDUFo8hVr2SE2YC
+ haz8ZPcWSfgnA5HeVQytIr4weP+w==
+X-Received: by 2002:a05:600c:1f8c:b0:490:4b89:535f with SMTP id
+ 5b1f17b1804b1-490ec4d6192mr32503845e9.8.1781264294583; 
+ Fri, 12 Jun 2026 04:38:14 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f2b0bbfsm5010987f8f.23.2026.06.12.04.38.11
+ ffacd0b85a97d-4606f2cf5d9sm4400657f8f.32.2026.06.12.04.38.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:38:11 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:38:10 +0200
-Message-ID: <20260612113810.253161-1-thomas.perale@mind.be>
+ Fri, 12 Jun 2026 04:38:13 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 12 Jun 2026 13:38:13 +0200
+Message-ID: <20260612113813.253291-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602202443.54352-1-thomas.perale@mind.be>
-References: <20260602202443.54352-1-thomas.perale@mind.be>
+In-Reply-To: <20260603180728.1392826-1-giulio.benetti@benettiengineering.com>
+References: <20260603180728.1392826-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264292; x=1781869092; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264294; x=1781869094; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=xm3cgo8ql8VCguRFWCwEKEYWPhfFWVDFKRYJJrfTLCc=;
- b=BXrpJ1nUAU3ry5pULxkORKKiqAcib2FqnqnfKDdZApXEeBJbTHnuARb5CT0swjvUNu
- 0kDehDeA48/fOF2UuSoK61dV0/wmB7X13JGjfTxjIPO+Z4c/81TOuYfwYK9lUnJd1EpI
- Mf6gPwX1DdIjGc9ww+cA55KlahK6rjB/NNSrtElnYCnKhWqmHqdnLpZ7Nn5Rou3bDAvt
- thdEbgnLwYXnl3Mz8qC32ZrYDaCocb2VxZA2FPgFpFEavRpptZgJ+BkiWx3U9uDtlvdS
- koyjMW1lchF1yH7hYYOFWjLAtQzZgTNUc/uwqPCi6vHgePTmNf+hsXwYQjPjM3nkZd+V
- EuTA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=r6POKBOChMX3dQN3s4rbCD4q6WFyqssvfRvkn89+OGE=;
+ b=Pako7/Q6N9CCjkbaN3/iuxgZuKcHdcnZjHIKy3igrdbJeSs8VSFfipwmLWtbYqqU70
+ cyWKu3OvrR1fr3kH8yZ+ujYQDeXKw2OZVCHLeQ9DuXIZPQl4v8QpYLmFrMYh6vUWLXp3
+ tYHpn+OnGarcOG/Xmm0JBDmuoNLBcHlK7wvgQt9yDlXVY7XzjnTr43b5r5oiYt81mfwx
+ hdWVtgtrLcsuladNhYPTiYl1VeXZRTR4+kVEEJ7TJEKx1XjBwqaMIxR+7W61a4nYsjPO
+ mSU0baCqc5xGPLixvBCyWpKUrtfREqA1YTa1HLFNZJ5lUFOtorJ7in26l00i8VQohuOL
+ jouw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=BXrpJ1nU
-Subject: Re: [Buildroot] [PATCH] package/unzip: patch CVE-2021-4217
+ header.a=rsa-sha256 header.s=google header.b=Pako7/Q6
+Subject: Re: [Buildroot] [PATCH] package/esp-hosted: don't treat warnings as
+ errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,108 +131,35 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The patch is provided thanks to the Ubuntu community.
+> This driver fails to build because warnings are treated as errors but
+> this is too strict, so let's disable this behavior by setting:
+> KCFLAGS="-Wno-error"
 > 
-> - CVE-2021-4217:
->     A flaw was found in unzip. The vulnerability occurs due to improper
->     handling of Unicode strings, which can lead to a null pointer
->     dereference. This flaw allows an attacker to input a specially crafted
->     zip file, leading to a crash or code execution.
+> Fixes:
+> https://autobuild.buildroot.org/results/df3763e74de4071331a41140fb5528523af9e374/
 > 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2021-4217
->  - https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
->  - https://bugs.launchpad.net/ubuntu/+source/unzip/+bug/1957077
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  ...erence-and-use-of-uninitialized-data.patch | 57 +++++++++++++++++++
->  package/unzip/unzip.mk                        |  3 +
->  2 files changed, 60 insertions(+)
->  create mode 100644 package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
+>  package/esp-hosted/esp-hosted.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-> new file mode 100644
-> index 0000000000..4f9c4c1858
-> --- /dev/null
-> +++ b/package/unzip/0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-> @@ -0,0 +1,57 @@
-> +From 731d698377dbd1f5b1b90efeb8094602ed59fc40 Mon Sep 17 00:00:00 2001
-> +From: Nils Bars <nils.bars@t-online.de>
-> +Date: Mon, 17 Jan 2022 16:53:16 +0000
-> +Subject: [PATCH] Fix null pointer dereference and use of uninitialized data
-> +
-> +This fixes a bug that causes use of uninitialized heap data if `readbuf` fails
-> +to read as many bytes as indicated by the extra field length attribute.
-> +Furthermore, this fixes a null pointer dereference if an archive contains an
-> +`EF_UNIPATH` extra field but does not have a filename set.
-> +
-> +Upstream: https://launchpadlibrarian.net/580782282/0001-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-> +CVE: CVE-2021-4217
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + fileio.c  | 5 ++++-
-> + process.c | 6 +++++-
-> + 2 files changed, 9 insertions(+), 2 deletions(-) 
-> + 
-> +diff --git a/fileio.c b/fileio.c
-> +index 14460f3..1dc319e 100644
-> +--- a/fileio.c
-> ++++ b/fileio.c
-> +@@ -2310,8 +2310,11 @@ int do_string(__G__ length, option)   /* return PK-type error code */
-> +             seek_zipf(__G__ G.cur_zipfile_bufstart - G.extra_bytes +
-> +                       (G.inptr-G.inbuf) + length);
-> +         } else {
-> +-            if (readbuf(__G__ (char *)G.extra_field, length) == 0)
-> ++            unsigned bytes_read = readbuf(__G__ (char *)G.extra_field, length);
-> ++            if (bytes_read == 0)
-> +                 return PK_EOF;
-> ++            if (bytes_read != length)
-> ++                return PK_ERR;
-> +             /* Looks like here is where extra fields are read */
-> +             if (getZip64Data(__G__ G.extra_field, length) != PK_COOL)
-> +             {
-> +diff --git a/process.c b/process.c
-> +index 5f8f6c6..de843a5 100644
-> +--- a/process.c
-> ++++ b/process.c
-> +@@ -2067,10 +2067,14 @@ int getUnicodeData(__G__ ef_buf, ef_len)
-> +           G.unipath_checksum = makelong(offset + ef_buf);
-> +           offset += 4;
-> + 
-> ++          if (!G.filename_full) {
-> ++            /* Check if we have a unicode extra section but no filename set */
-> ++            return PK_ERR;
-> ++          }
-> ++
-> +           /*
-> +            * Compute 32-bit crc
-> +            */
-> +-
-> +           chksum = crc32(chksum, (uch *)(G.filename_full),
-> +                          strlen(G.filename_full));
-> + 
-> +-- 
-> +2.25.1
-> diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-> index 5436c7a46c..129b749a9e 100644
-> --- a/package/unzip/unzip.mk
-> +++ b/package/unzip/unzip.mk
-> @@ -51,6 +51,9 @@ UNZIP_IGNORE_CVES += CVE-2019-13232
->  # 0028-cve-2022-0529-and-cve-2022-0530.patch
->  UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
+> diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+> index 3de8f24123..5cf6571481 100644
+> --- a/package/esp-hosted/esp-hosted.mk
+> +++ b/package/esp-hosted/esp-hosted.mk
+> @@ -29,5 +29,7 @@ else
+>  ESP_HOSTED_MODULE_MAKE_OPTS = target=sdio
+>  endif
 >  
-> +# 0032-Fix-null-pointer-dereference-and-use-of-uninitialized-data.patch
-> +UNZIP_IGNORE_CVES += CVE-2022-0529 CVE-2022-0530
+> +ESP_HOSTED_MODULE_MAKE_OPTS += KCFLAGS="-Wno-error"
 > +
->  # unzip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
->  # necessary, redefining it on the command line causes some warnings.
->  UNZIP_TARGET_CFLAGS = \
+>  $(eval $(kernel-module))
+>  $(eval $(generic-package))
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
