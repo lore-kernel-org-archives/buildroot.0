@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81636CD8CA8
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F093CD98D9
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 523CB6132B;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C3D76133E;
 	Fri, 12 Jun 2026 11:38:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sWINuZkIxicT; Fri, 12 Jun 2026 11:38:07 +0000 (UTC)
+ id 9QuJcUo8vc5q; Fri, 12 Jun 2026 11:38:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1336961154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1818B60F8F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264285;
-	bh=UR80jNi0mJuUxm+0LZ+Erv07Jda90Wqaqm+7umhBI2A=;
+	s=default; t=1781264287;
+	bh=tiwO9Yz9m6d5Zr3C+rmePoUrKxV1cqkY5se3URDntNo=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=rbXSBjMkFe/X1OkqtO78Le2sX7sNnsjXIx1RGVdMIC7c7u9qqcV0ruA4KdwUGO2ac
-	 EgON1aMUWDVHyHu3vgmZZEzhb3vYTYTzWhqzdoptehJDNHUoyaxHYBs8I0JRRoZt60
-	 gdxRm28K7uGR0wLLhviPpgXi+XGfVj9q2vNIDANoZTmpbXOKl+yu+LZdlqf3DGNEbi
-	 r4kHP8yvTwIUwTFXcvWVRRs+wKxvAD71qr6c52BjbgjkoSYBqmuKPBoBz4vGyvhTtr
-	 iQ/6/9J1WprbAFV2Ok5c/VZZO9sxVzh6oHaS8yQkAbfwtyst2l68iGgiUTzS7AWMmu
-	 5ppt9htNO+ewA==
+	b=E2Llu7ys4/XqjwPUohtHrruhLGiK8osWPdyQErqD/L4JJwd3GVol5JDXirTzEe/N9
+	 lhrHOekJaITL2v/JyvPUVWU3LIfgsa+cAokj83crGoZAGZFe7yABIc+mD9y/v3Po6C
+	 H7LEg9Fs1kmHm6ftTlICGgl1kjwqnSR/9NGRE19SKZSJW0u6MNFGZjWOxdYsKTPdia
+	 jpZz/Vu3ydXFr2XlcEQkyvyQFC6/tlYiRZ0bsfxDmvS1lDfE2x4kr3H8YwXVFPtQ39
+	 TT4MEX50dOlUnwyjgq0roSGnGHqrT1NJpdfP51T5c1VtSLtqUnVVrnVQNAIEAVctJQ
+	 W5hCkXbrt6zuA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1336961154;
-	Fri, 12 Jun 2026 11:38:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AF2B512F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1818B60F8F;
+	Fri, 12 Jun 2026 11:38:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD4D512F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94FBB6107C
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF66D4066F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0I4hq4R8XgyP for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:37:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RcjoWdzNS7Ra for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:38:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A03660F3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A03660F3E
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A03660F3E
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:58 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-490a76757e5so6452895e9.2
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:37:58 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9913940664
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9913940664
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9913940664
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:00 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-45ef616daf6so879066f8f.3
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:38:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264276; x=1781869076;
+ d=1e100.net; s=20251104; t=1781264278; x=1781869078;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=G9e4MO65ax4XM7WYTF/am2yq7MEWiGPSzUMYNFZuLmA=;
- b=JYwPvY4hsbmqdRkneZg9GXz8iTMkfvZHLRbtzNSc/2o6hkAG8Z5s6SomDW5qW0fLix
- iIR4FXI1a1HUU5lddZuEqT39ntWewkDjr3syz2NQ0uHXOYKAhQnuXZTs72pk/UPezOXI
- BDdb4RRn2AF3koi6V3zdZyRGdjY8CSAzFo5d2uDjIR6IquuVMLPP6rXyPtnYpw5JG/K4
- jRLZ+1TFxOnT2JYNnmHyCAUnLl6srdtPi/YM+1S4Yhh0xVe9nDW3kK9nWg6LBcdDYjCc
- h9QT/ZHCN2d527DWg97ZKqhcM8IB0cefeMUEz9IEtQMaMho46gaoq1qBCSmS/q1R++1a
- /ctQ==
+ bh=UzxA32CUOUaM1ZprX+nmtSfnaW6HRrj7Xtza2AFQ+Hk=;
+ b=av1yT4Zta2apt/Z/qPw70Usb4OqvcAk4rENc3laSRFGPimEEY5ELyCMkMGdyUgQSf6
+ E+K+WilL4gbjbLmyAQT5Dh4huSLlvw32biX2mMPMm6YcySZwfXlGPbpjl9yHn0d74qVI
+ f9W8NRJB66SgVxZyb+zmWvbRhSLenBUQ5jsm3bCphGOOxa40e9FzfELWV0s41Uv1HI2v
+ /pW4pi02fF6MEdfQEzHcTBBeUiDJRJ4/l7YbUuLY9/2VBTFipLUaICn3fjgbspuq2umA
+ AoK3RGNY6yTjaDx/WzbSNqTMkeU8y65WetPWXYquRPJma2+uwgFAWZrC2Sk6giVyxjQ9
+ 9djQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/bbUOlTECz84qfkQVReXlVewji638B5Gh56WDm5h8z89pkAi78caPUmEUU/7ATZmAM0C4QW9Chh7A=@buildroot.org
-X-Gm-Message-State: AOJu0YxSzfJdSf9ibuxuU0kxt2JjH3yahjo5HKGB1ziPnDE3+lDa4+o6
- uXS0mtPq6knEydOkH14ei89iLc47Eekmx6xB7+Dt2wQlr47sCgMbiBRrxN5oTuCyHHo=
-X-Gm-Gg: Acq92OE+wWyQ5mcTm1n0AAtZOCjpnf2YMdiS1POH7RZictIzTzGcEiqIoc5BudbHusw
- 4kxbP8a2OuQKjePn+tgmcDp+MvHbZKAKOdtJMtn0Webiy74FFIdflwLky3oTdXZy6dctEBzDX4F
- n7rxLhaCObkbjueLF+568SmQoYCVn319hr0MBiw9SpIYj771zsUvPcTA21VGxk+V+J2SJfWWdCb
- t3FBrNQmCkZnwctQ86d4mcP8MxHuDARWwnE8YNmb8WwfN/7rFCFN9WpLKQCuF9/Q6Q7pzfcfwj6
- 2eXPNZUqeKf8ZeVIRE0F6hKFQN+Ayc0IRlPpZZmY73hnRw+PWjyV1802r6sid3D5rGOUq9Det2L
- cgP7v3u0JXnf2mkLZgoVqczEZXmyaio1UZ/+oxpa2VhFZmI6fxLjdi9a6oodGDoOvCOm22niiSk
- cnI1BlDopiky2ewKY=
-X-Received: by 2002:a05:600c:820c:b0:490:bb37:9d49 with SMTP id
- 5b1f17b1804b1-490ec4d535amr29022275e9.11.1781264276369; 
- Fri, 12 Jun 2026 04:37:56 -0700 (PDT)
+ AFNElJ8GWx+/DyDiLGkRrBku/nKwrqUtjCMza0bj0nGQsBJKFWE2ilLHPOP4kbsR9oWiGfC/9Qz7NL9tIY8=@buildroot.org
+X-Gm-Message-State: AOJu0YwXDwKrJV1kzsIg5Bl9n63r2akZWsTLBb6X4SKs7yZLa0QYCal3
+ YUweIc+pmNmLj+T2S/yp4eKQM300cXHkG7ObptOZg/OyXG8O/qx0yYwF9IKILn+/hN9DBOHr4NC
+ yk3cY
+X-Gm-Gg: Acq92OE1Gp5ZVwjwkNNAvwsczQNdgiH3bU+JGBncAzolqqK528+J4TmJ7M/amAZuYv5
+ Bxhd62X8qKzba0syQmW2Qf3XwEiD68JQ++VnAGVrRmgyz1g6auXVhd0YpHCtx9YrFyPQyDw2zBJ
+ PPLAR/O2A7I+UPyzffUSXo6UKywvpTnACgTe6eE8RrR9W9fncWXUotVOFEU6ts2m+HNYEduhI5N
+ HPsyVy4+CcBY96CGdJcvBqxffDcLkyoICnXBwmBErJVX47TRSIfHz2WwThO/oqIn+K5fOpRhozX
+ VhafVnSV/3uvMhiO55oZKqzOU6UG/y919zkaPaJXRherlJAEY7jTyNuw0DF7d942CHP4rF0luP+
+ goxJNyIKsa4ddpzse6Y1hRO57Au/S0+U6Jrgkwx1ckcXCxdjqwLn8KAuJdIop4stY83N/escvYL
+ +8nP0wlXO43pJKXAE=
+X-Received: by 2002:a5d:6702:0:b0:452:c246:ab69 with SMTP id
+ ffacd0b85a97d-4606da7783dmr2755536f8f.13.1781264278512; 
+ Fri, 12 Jun 2026 04:37:58 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f263923sm5144311f8f.2.2026.06.12.04.37.55
+ ffacd0b85a97d-4606f2c473bsm5086973f8f.28.2026.06.12.04.37.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:37:55 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Fri, 12 Jun 2026 04:37:58 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:37:55 +0200
-Message-ID: <20260612113755.252388-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:37:57 +0200
+Message-ID: <20260612113757.252525-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260531194738.1379915-1-romain.naour@smile.fr>
-References: <20260531194738.1379915-1-romain.naour@smile.fr>
+In-Reply-To: <20260601192158.3687045-1-bernd@kuhls.net>
+References: <20260601192158.3687045-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264276; x=1781869076; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264278; x=1781869078; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=G9e4MO65ax4XM7WYTF/am2yq7MEWiGPSzUMYNFZuLmA=;
- b=DJgeO8EOQbAk4gvPjNpP1rhwEIL0gfcQK1EJjt/oqQNDcCVQWmXUl6TWStn+ZWyW4G
- OXYVCt+s4ReiXBM3DTFUvKdNd5XhpjzTdevNnc6NDT4FURk3IPPqBc0JiUkDQTTYguD3
- zRYki8BMQbEgOiNlk6pHkFQbM7jKGlFUOAlgjSFVgY4+fV6zZ6e+tEDljv8AyFy8oh7a
- AC3M06InnKuN2CA86LKtVbJWIXAa197Rbh8Z71maNaaHeAodklZQ61jgG9TUmzt5oBzi
- HAUGDWRGwueWuhGygsf9rrqAkmfoUwsmvqIwM8cDyNEqX2nqA4ZfYrXrRPIebPmBBHRE
- SsGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=UzxA32CUOUaM1ZprX+nmtSfnaW6HRrj7Xtza2AFQ+Hk=;
+ b=Fsto7dCM4wWiJV8lPiYgEgrtL60LVs56qhWjE3W3YD2VELCgx1rpnNtgdaS26hfaQl
+ fhAvERVSusa5mu0pVKtJlWe4xXJ2zxJ0d0zqTIPbGOTEbruHHh1WVphptvjgKwUTYsFO
+ luz2nZ1M27sMnRX8Cg7MXkZ99CxKvT6+E+0lLxH7DLWt+S7PWR97rAJXXC6GrBFygqyM
+ KKCc9hrSIu1Vq1EFMXrzhWJUr9XeQt/RlsWO+obxFGnTq1rbEF3OrT/eiAaZWdVe75EE
+ rLG6Vqm6GG93jbLAA71X/B2K/Vp4dlIAzy9fzoZlfDq0/NZsWErA998lmuwsFvj+iDdE
+ xFXQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DJgeO8EO
-Subject: Re: [Buildroot] [PATCH] support/testing: TestXfs: fix build on
- Gitlab runners
+ header.a=rsa-sha256 header.s=google header.b=Fsto7dCM
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: security bump version to
+ 0.4.9.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,91 +132,51 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Our CI uses "/builds/buildroot.org/buildroot" as build directory.
-> Unlikely the xfsprogs build system misbehave when a directory in
-> the path contain ".o".
+> https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.9/ReleaseNotes
 > 
-> While generating .ltdep, the sed command used to convert object file
-> (.o) to libtool object(.lo) replace buildroot.org by buildroot.lorg.
+> Fixes
+> TROVE-2026-013, TROVE-2026-014, TROVE-2026-015, TROVE-2026-016,
+> TROVE-2026-017, TROVE-2026-018, TROVE-2026-019, TROVE-2026-020,
+> TROVE-2026-021 & TROVE-2026-022.
 > 
->   .ltdep: $(CFILES) $(HFILES)
->     $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
-> 
-> Building libfrog
->     [CC]     gen_crc32table
->     [GENERATE] crc32table.h
-> gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
-> 
-> Update the sed command to avoid this effect.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .../0002-include-buildrules-fix-ltdep.patch   | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/48fe2acd75c1028cbe94598180882493ecd33550
 > 
-> diff --git a/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
-> new file mode 100644
-> index 0000000000..f17dc51edb
-> --- /dev/null
-> +++ b/package/xfsprogs/0002-include-buildrules-fix-ltdep.patch
-> @@ -0,0 +1,48 @@
-> +From cddc06c0eef874c01293cdb6e60090771a347c56 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@smile.fr>
-> +Date: Sun, 31 May 2026 21:08:09 +0200
-> +Subject: [PATCH] include/buildrules: fix ltdep
-> +
-> +Our CI uses "/builds/buildroot.org/buildroot" as build directory.
-> +Unlikely the xfsprogs build system misbehave when a directory in
-> +the path contain ".o".
-> +
-> +While generating .ltdep, the sed command used to convert object file
-> +(.o) to libtool object (.lo) replace buildroot.org by buildroot.lorg.
-> +
-> +  .ltdep: $(CFILES) $(HFILES)
-> +    $(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
-> +
-> +Building libfrog
-> +    [CC]     gen_crc32table
-> +    [GENERATE] crc32table.h
-> +gmake[4]: *** No rule to make target '/builds/buildroot.lorg/buildroot/test-output/TestXfs/host/include/urcu.h', needed by 'avl64.lo'.  Stop.
-> +
-> +Update the sed command to avoid this effect.
-> +
-> +Upstream: https://lore.kernel.org/linux-xfs/20260531194553.1378795-1-romain.naour@smile.fr/T/#u
-> +
-> +Fixes:
-> +https://gitlab.com/buildroot.org/buildroot/-/jobs/14607335648
-> +
-> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> +---
-> + include/buildrules | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/include/buildrules b/include/buildrules
-> +index 871e92db..3fabbe5a 100644
-> +--- a/include/buildrules
-> ++++ b/include/buildrules
-> +@@ -140,7 +140,7 @@ rmltdep:
-> + 	$(Q)rm -f .ltdep
-> + 
-> + .ltdep: $(CFILES) $(HFILES)
-> +-	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o,\1.lo,' > .ltdep
-> ++	$(Q)$(MAKEDEP) $(CFILES) | $(SED) -e 's,^\([^:]*\)\.o:,\1.lo:,' > .ltdep
-> + 
-> + depend: rmdep .dep
-> + 
-> +-- 
-> +2.54.0
-> +
+>  package/tor/tor.hash | 4 ++--
+>  package/tor/tor.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+> index f748afecfc..a6771b1fa1 100644
+> --- a/package/tor/tor.hash
+> +++ b/package/tor/tor.hash
+> @@ -1,4 +1,4 @@
+> -# From https://dist.torproject.org/tor-0.4.9.8.tar.gz.sha256sum
+> -sha256  ac1f394e2dd2ab0877d27d928fd0d9e86662fe3ca6afdffb9fd9b6f0f96d05de  tor-0.4.9.8.tar.gz
+> +# From https://dist.torproject.org/tor-0.4.9.9.tar.gz.sha256sum
+> +sha256  bd75ba7fd68f607c7806fcf70156a300aa926e9ad69a5e56a8e6414f5227e833  tor-0.4.9.9.tar.gz
+>  # Locally computed
+>  sha256  5dc29ea302cc75db6db4a7c88d7b5d4638b4e0f5f1d2e6d21ce71f707470b766  LICENSE
+> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+> index a24708ddad..ca5a4d026c 100644
+> --- a/package/tor/tor.mk
+> +++ b/package/tor/tor.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TOR_VERSION = 0.4.9.8
+> +TOR_VERSION = 0.4.9.9
+>  TOR_SITE = https://dist.torproject.org
+>  TOR_LICENSE = BSD-3-Clause
+>  TOR_LICENSE_FILES = LICENSE
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
