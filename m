@@ -4,111 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A075CD98D9
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 880DDCD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2752961313;
-	Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35E0761390;
+	Fri, 12 Jun 2026 11:38:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uI_PoezOTNz1; Fri, 12 Jun 2026 11:38:20 +0000 (UTC)
+ id rC3b-snhb5DK; Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F4361379
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F62361333
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264300;
-	bh=uYttgy77qQ07IXqI4WJ5LvqwBDrzGIIJzr6J4GAP1ao=;
+	s=default; t=1781264302;
+	bh=eJzAsjACat3rk9gajUOaIk77RxJC4/0INFJCzn9cCLw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=SRMS6R4IKQfJL+EjU55UePRH/Dslx5Ymv5hcYJ4tn6UxbYlLy2WS/MRRHif65bNGz
-	 GXfDdThHgEIPiVTb8hqshnw/SunpjbXO6z3TWMv9nTEZERy5owNLKoGPyH983IVSeL
-	 JwhsmUVvlyhkEL3dWvFmMEv3xzjfFjGxJ+SZqCIAOgQmyh5+9zB98kBG8OCDJr3aGA
-	 75hGSR5Z5KECaf3F2IGEIRmGy+O0zckIMDonvvJzlI19LRVeZSmQLetb5TZTEKxlLU
-	 t1Jpu7UJMxDR4pq01/Zj9cXPjE9pi56wZ4tE+xCBE6Scc5RdU84zxrDq9AF51nKiML
-	 84PTxQRxuaMwQ==
+	b=qHcN3NC1RZU3QGUgKC2UdeGkUf7l7mzJ23KKZr/lNvqpUhVS+kvfSpGNS+wAm5GGn
+	 9knKPp7I9KD/tNHMU/bTJRJLlbLr1IWgCm7Qj/+7/hbUngDdcYk4NLQkNUdOwAittW
+	 2iBh3IjqjaoqttG3b3MeYJ/V1/+qUtu7lQH5X3uLzml7nKFmqU1+tmAMFgKfi05wLn
+	 bH8pGLDlwH5H7FFY7QSBoZljWFNOWypzrToIc6X1EfBnDEjdSawACZUrVN5JI3H03s
+	 Ep0TOChRhEhVvMWwhnulemPzTwa6twuFS851oOwnzxJoIPI9Ik1h5FSK9w9W+AgERk
+	 kp/wWWN5hBlOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F4361379;
-	Fri, 12 Jun 2026 11:38:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EFEC12F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F62361333;
+	Fri, 12 Jun 2026 11:38:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16690237
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA27D8333F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8BBEA832FF
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JXhutsiNJPbd for <buildroot@buildroot.org>;
+ id tANNtx3fCrWY for <buildroot@buildroot.org>;
  Fri, 12 Jun 2026 11:38:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B83358330B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B83358330B
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B83358330B
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:09 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-490cf322ed0so5916885e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:38:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 881B8832EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881B8832EA
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 881B8832EA
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:38:10 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-45ef56d9b67so684208f8f.2
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:38:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20251104; t=1781264288; x=1781869088;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=QJe02dlO76Lg3/DMSuYw8wyxraYx2Xtwaf2zaigUojc=;
- b=NVpTJnp2RPkF9iZYQOpRxbjkWqqxCPuyLIPl3iREh/3ZshESHnHyRC+w28D/UQ5h51
- 8nDAu9eVvzWoBDSWnKCvVwS9owy5wimfllErrP3cfaRB7t19A4g0+PGZcC4cbT5dRza7
- Aofpp+x2hTy0FKnoXzYgxnDTcAhmnvuC4SIuI7M9kPH8f0NybpY7UjX+Sr1C5olOHkHx
- P5u4DanK+vCsSIA90Xh8GGFie+EmaPO+w+ESYkJozyND4cesLAUfMNCFi56G2FcFl3D/
- bgktLxjdcAHJsn0p+YW2/aLL3I6APYEMhUgd5M3Rrwz9VMunuySsk6jUvhGLwR3oPXb6
- LCaQ==
-X-Gm-Message-State: AOJu0YwExRQn3R1L0LOtSoFPax5PwUDUKnXJWe+lSt0wctAnPQCjt+ke
- QKMrJ2vAb78cJiyn29pLozYIiGDzcZ0XOLTdO7s56tS15BN3RIP2EnyWK83uhHU++1uYc13UV0y
- RpPZ/
-X-Gm-Gg: Acq92OHeBwa2V3VNB/YZXEJ0WsicRhsgT1hfGjR83ZgiQnLo/J1FBtrJOthAUlzB5Mc
- JC5l7RuLwFDctzeiHf8+lJK+h8b9p618Hn7W+DlrGv+Z328O2wGGeQbJGX6BQ6wcjC6zYR3G5ZX
- dHepXrWU2fGyYyHhErt/OM38mXHOgczCri8iPhtTfdWrFi9OfaSoMFiCDuqFByKmweMJV6aSfnL
- N3iYWKZ9yxHZ93IUoLjTCqZpGIy8sNKiuQ7qJJJ7XUNHAzKh9ILVmMQOVeIk/2mc84QGIg/OVQC
- QMSwMkJMOqfKopUuFzOPEtwsDpQpadfSclbx4AA7zd6RSiojV8rmNl7mnoBQa4wy3iM0kfmE/cV
- tiHoMytAJio8U9alsFrcfIcO3oJRgYgvpREvl+j5R3w9HEspA0a+nkHSqhBX3qtKSPrw5ohqEg4
- ryCaVoHk3ExIHGUNI=
-X-Received: by 2002:a05:600c:4e55:b0:492:10e8:3f92 with SMTP id
- 5b1f17b1804b1-49210e83fabmr1662575e9.17.1781264287663; 
- Fri, 12 Jun 2026 04:38:07 -0700 (PDT)
+ bh=CFFH5FbsRCHm4X/Sfev8vOZxr5324UPAOpykopGi82Y=;
+ b=SgJrAt9m+ApuNOyzQIpKLOYh1kRqI6IX5qXEzEaGYLECefQxiJ3gawnYzZTOVR/VzQ
+ u+KUxgkFRlvMLzSU4sprDwtcs8OFUfVrDBKPVna+XS9BjFGCBtgYNs5rTuzlPLOZBhid
+ VttqwmUJ5khWxRQb34At9KS02jpjnGshO7gxDF2p8R3LBWLMgkwljU4FZJ1oNvaWnJAp
+ ZJEG78LOseRA5crKZqVWJWO8QKLN2ijahr3F2kJAVNKbCCm3xlBecd/Qw3YRMlyBz6wD
+ 4LCd1B4GnqnF8ACqU/0+OVkC3qmUDReMNJMc/OSV7ECPRHbNW8RFJKEM9CR0V2uFrCIT
+ J2Ww==
+X-Gm-Message-State: AOJu0YyRIiUHQY2Gyfz1SwXEPJanyVzQL2M3+crlNJbZeKBoPnyivVBu
+ XGhAemJNIrEk+btrQM8/+HjdZJcEZV+baGL4qwdxa/G6RmwX4M/HhQtReGiNI0jcWJw=
+X-Gm-Gg: Acq92OFx5R62syAzX7jzPn0HKcPPWamrVgSfjRsn0PeuNbplzIi2NA+p0xa0IQTTU+e
+ s9M5uG5nAgbAO3OHgHBMuF8SyyNjsz582H7B5CkKymTwH9nJQtd+hzllxFu0/cBErehro2igspZ
+ gO6aEqxQqRR262Z0Dv/i4F39R2CDr07+K0Iy3Hg2fxfw0MN6OAUC2dxzy+qTg7NA/NDKViRhf/4
+ 8P5EJBzMJ1302dtrwBN1sc28e1bts+vBr4OSYDE0tiBADDTk+rbAduR3CDJY0QCYrplNrn35bvF
+ nXvUYl7kXWezSWIpno5SQsY2yiikRimWWrhMUKuaxDCIK5VnqBggM0SYC1xCct3a7DMhv91mfUE
+ Rh9MAmvz2QlYcemHKXp17zIdDqjyMOVBBfwcygnArgYznl9Jzc2t0+RdZqgEE8DnY1sPsKF+uZt
+ xLF7iBS7iugP8Ne/4=
+X-Received: by 2002:a05:6000:184b:b0:45e:ea68:523b with SMTP id
+ ffacd0b85a97d-4606da68f5fmr4133345f8f.10.1781264288490; 
+ Fri, 12 Jun 2026 04:38:08 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f26f23fsm5094138f8f.9.2026.06.12.04.38.07
+ ffacd0b85a97d-4606f20e77asm5470741f8f.0.2026.06.12.04.38.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:38:07 -0700 (PDT)
+ Fri, 12 Jun 2026 04:38:08 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:38:06 +0200
-Message-ID: <20260612113806.252948-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:38:07 +0200
+Message-ID: <20260612113807.252998-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260602202245.51928-1-thomas.perale@mind.be>
-References: <20260602202245.51928-1-thomas.perale@mind.be>
+In-Reply-To: <20260602124009.287330-1-thomas.perale@mind.be>
+References: <20260602124009.287330-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1781264288; x=1781869088; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QJe02dlO76Lg3/DMSuYw8wyxraYx2Xtwaf2zaigUojc=;
- b=TgKmIC09iMPcCnKSqHOsTJdScc5d7rpiAHwxIfVDRMPiwBFgewxHhKF5HXCbO54hcT
- gOyKqF9ubui9Sldp59RY468HGpSTZRxJTjVqrSWf/jBI/cCjhRwxmzrewlE6d11YCpMi
- jI9/Pp3FfSrANDqAYZW1211wUAz70WmnaBgY/iserz5eTdW4DNmOF9OWdfzFzN1VKWN5
- oPo5F9GZ92h0isMwPbHqkShqZ1On+mh3obJgZBV0CVK4gjC9j/VD1QAyRNB3OPAk50ly
- dAU96wn3/Js/NC410ZTWUuI8FCAvx+L6uN1trI04mJGVgxQiA9Zck2pEPFMRsTbUI0rY
- T34w==
+ bh=CFFH5FbsRCHm4X/Sfev8vOZxr5324UPAOpykopGi82Y=;
+ b=OBmrR5+n2oL2SVI/6ioigofBokMHLLjL52kbOwu6N7vtMk6hMw1frzVAMO4i2IqWz6
+ LXApiqiNFq8xW3ugf7YS26v5vKAZSG76wb+KpcW0AGPlGF9KTmSvGteQbMWsyFzE9Syi
+ SpagLSewT8IYG0aoRIgxe2vh1wh5tb3YhBTCJxLcGzrtwXS8Vh804kwWkt5+qbEzCQQA
+ hU1SnDv7X1V1dty9M3XfmvE2jVKzEdWYMYhvjoJna14PDUJCdYD1v3GoDIRNga4dO9Iw
+ zpr3XImZyenRecsYTofdHrAzAjhWDrphKyhbT/pCFT5UjJghEwWvqDSvnWTBOC8/zhtl
+ CVdg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TgKmIC09
-Subject: Re: [Buildroot] [PATCH] package/libssh2: patch CVE-2026-7598
+ header.a=rsa-sha256 header.s=google header.b=OBmrR5+n
+Subject: Re: [Buildroot] [PATCH] package/lrzip: update CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,108 +127,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit fixes the following vulnerability:
+> The CPE long_range_zip_project:long_range_zip hasn't been used since
+> 2023. While ckolivas:lrzip got 3 CVEs that affect the current Buildroot
+> version [1][2][3].
 > 
-> - CVE-2026-7598:
->     A security vulnerability has been detected in libssh2 up to 1.11.1.
->     The impacted element is the function userauth_password of the file
->     src/userauth.c. Such manipulation of the argument
->     username_len/password_len leads to integer overflow. The attack may be
->     launched remotely. The name of the patch is
->     256d04b60d80bf1190e96b0ad1e91b2174d744b1. A patch should be applied to
->     remediate this issue.
-> 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2026-7598
->   - https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-9396
+> [2] https://nvd.nist.gov/vuln/detail/CVE-2025-15570
+> [2] https://nvd.nist.gov/vuln/detail/CVE-2025-15571
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2026.02.x. Thanks
 
 > ---
->  .../0001-username-len-bound-checking.patch    | 57 +++++++++++++++++++
->  package/libssh2/libssh2.mk                    |  3 +
->  2 files changed, 60 insertions(+)
->  create mode 100644 package/libssh2/0001-username-len-bound-checking.patch
+> A follow-up series to fix those CVE will probably come.
+> ---
+>  package/lrzip/lrzip.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/package/libssh2/0001-username-len-bound-checking.patch b/package/libssh2/0001-username-len-bound-checking.patch
-> new file mode 100644
-> index 0000000000..f398260309
-> --- /dev/null
-> +++ b/package/libssh2/0001-username-len-bound-checking.patch
-> @@ -0,0 +1,57 @@
-> +From 256d04b60d80bf1190e96b0ad1e91b2174d744b1 Mon Sep 17 00:00:00 2001
-> +From: Will Cosgrove <will@panic.com>
-> +Date: Mon, 13 Apr 2026 11:18:25 -0700
-> +Subject: [PATCH] userauth.c: username_len bounds checking (#1858)
-> +
-> +Return errors when username_len will exceed bounds, fix existing bounds
-> +check.
-> +
-> +Credit:
-> +[dapickle](https://github.com/dapickle)
-> +
-> +CVE: CVE-2026-7598
-> +Upstream: https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/userauth.c | 13 ++++++++++++-
-> + 1 file changed, 12 insertions(+), 1 deletion(-)
-> + 
-> +diff --git a/src/userauth.c b/src/userauth.c
-> +index f8e02651..43d9ab9b 100644
-> +--- a/src/userauth.c
-> ++++ b/src/userauth.c
-> +@@ -80,6 +80,12 @@ static char *userauth_list(LIBSSH2_SESSION *session, const char *username,
-> +         memset(&session->userauth_list_packet_requirev_state, 0,
-> +                sizeof(session->userauth_list_packet_requirev_state));
-> + 
-> ++        if(username_len > UINT32_MAX - 27) {
-> ++            _libssh2_error(session, LIBSSH2_ERROR_PROTO,
-> ++                           "username_len out of bounds");
-> ++            return NULL;
-> ++        }
-> ++
-> +         session->userauth_list_data_len = username_len + 27;
-> + 
-> +         s = session->userauth_list_data =
-> +@@ -307,6 +313,11 @@ userauth_password(LIBSSH2_SESSION *session,
-> +          * 40 = packet_type(1) + username_len(4) + service_len(4) +
-> +          * service(14)"ssh-connection" + method_len(4) + method(8)"password" +
-> +          * chgpwdbool(1) + password_len(4) */
-> ++        if(username_len > UINT32_MAX - 40) {
-> ++            return _libssh2_error(session, LIBSSH2_ERROR_PROTO,
-> ++                                  "username_len out of bounds");
-> ++        }
-> ++
-> +         session->userauth_pswd_data_len = username_len + 40;
-> + 
-> +         session->userauth_pswd_data0 =
-> +@@ -447,7 +458,7 @@ password_response:
-> +                         }
-> + 
-> +                         /* basic data_len + newpw_len(4) */
-> +-                        if(username_len + password_len + 44 <= UINT_MAX) {
-> ++                        if(username_len <= UINT32_MAX - password_len - 44) {
-> +                             session->userauth_pswd_data_len =
-> +                                 username_len + password_len + 44;
-> +                             s = session->userauth_pswd_data =
-> + 
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index 1702d94c79..1843d25051 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -13,6 +13,9 @@ LIBSSH2_CPE_ID_VENDOR = libssh2
->  LIBSSH2_INSTALL_STAGING = YES
->  LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
+> diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
+> index 0375696414..03ad36c58b 100644
+> --- a/package/lrzip/lrzip.mk
+> +++ b/package/lrzip/lrzip.mk
+> @@ -9,8 +9,7 @@ LRZIP_SOURCE = lrzip-$(LRZIP_VERSION).tar.xz
+>  LRZIP_SITE = http://ck.kolivas.org/apps/lrzip
+>  LRZIP_LICENSE = GPL-2.0+
+>  LRZIP_LICENSE_FILES = COPYING
+> -LRZIP_CPE_ID_VENDOR = long_range_zip_project
+> -LRZIP_CPE_ID_PRODUCT = long_range_zip
+> +LRZIP_CPE_ID_VENDOR = ckolivas
+>  LRZIP_DEPENDENCIES = zlib lz4 lzo bzip2
 >  
-> +# 0001-username-len-bound-checking.patch
-> +LIBSSH2_IGNORE_CVES += CVE-2026-7598
-> +
->  ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
->  LIBSSH2_DEPENDENCIES += mbedtls
->  LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
+>  ifeq ($(BR2_i386)$(BR2_x86_64),y)
 > -- 
 > 2.54.0
 > 
