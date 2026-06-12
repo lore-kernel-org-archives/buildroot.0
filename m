@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA299CD98CE
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B91FFCD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C432611AD;
-	Fri, 12 Jun 2026 11:37:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BC1A611F1;
+	Fri, 12 Jun 2026 11:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id njMw7qkj80rf; Fri, 12 Jun 2026 11:37:24 +0000 (UTC)
+ id sHwyhs5tYusa; Fri, 12 Jun 2026 11:37:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5948610BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDA366107A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264241;
-	bh=QW88mvGd/DjWM3VhPKmWeuixw2rwJvNHnDKVHSgn314=;
+	s=default; t=1781264240;
+	bh=QS+iBM9gXRhhr4rGJHdIgkggDkJxBE/r6wDXa4fbyr0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=GOtq0JD8fyiA7JGS7gzKyPtAr//NMcYVb9XQk2HCg3K77SdyhoUH8nLWq5mieqxXi
-	 MZDxXfTSFAHr881B1UFbZym+RbCKHj4+q0zuoHCbAmVyJWUvtmknxNeZ8fDg65k671
-	 QXQIbLULvlcZ8cdYvlQArd4k+zJV66dQbwaxRdGQoZ1aC35/hJxShIkoikzCiSOE9Z
-	 WRr6mE3bb9+Le8TFdZf6Ub2rbsRISnDNfTkOrTbZmZSuU6QUT3Yq2Gffbf59al0Ydo
-	 FxZfm0OYqU0PKBcvvdbRmdXskRY3sAALOYG0rxuKPj3lI9HLTXcccVB0RefKY1RZsg
-	 2xaNYn5ZnVttw==
+	b=Y++V72uvxE0VqAKMH9h6JdlAN0+XbD6s3IB46Piq+F5Fs2LBMLKfA/kFL7OIWiXym
+	 CEvJuFZ2/MGAx2a5JP3izHJtRWCjACxVsfbF0dVbfd5ZVJmWUosP7s5anTsTUT1K67
+	 sMxGaZJCE4rYeztcfdlFi4TK4GXuToCDrS+f4iEVLHbyKRHQZEG0Kkt44BzbhnO8tO
+	 /V2QvbjDDhjWve/o8wLrgKYb5hCxiLo0WP/rlHBRJZ+2Zsiv5VaGYPz8eq3oUjZYSd
+	 UXvHuqWn1pgzGf+w5kB7TtphdMvd5BSUDQy32oJQHKb5l74QjP9uy8DQM16OKcA+Uj
+	 GXhZKaeIcxRuw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5948610BF;
-	Fri, 12 Jun 2026 11:37:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ED1812F
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDA366107A;
+	Fri, 12 Jun 2026 11:37:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE3F812F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 40CED8330B
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A018F4067C
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M5UivskwcEfy for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:37:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v2ARfiQsgxzo for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:37:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E63F832FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E63F832FF
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E63F832FF
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:14 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-45e9f4a3510so510899f8f.1
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:37:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 24FA74066F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24FA74066F
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24FA74066F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:13 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-490abf12f0fso4940035e9.0
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:37:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264233; x=1781869033;
+ d=1e100.net; s=20251104; t=1781264232; x=1781869032;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=dVCDweWged/TG5c2Ex9QsdScsHdU1r5koq3qSZHj+cU=;
- b=QDOVBfA27jRqmSriGpQZ5jjSbevPIbZvH7BIftpwh6EhRp34cb65PJdCyU3SIFBstJ
- Eitw+KsLIEoIAOcko9ERXITgTLZnpwEo1MTzHtS1AKxCHGfCD4531y3UdpIgwyvpMvAp
- r6z07eSTD6y09cw5Eo+v2+XouGREpWe9wdd55uHGXIr3ovJNnfI5DP9EXRDTM7Z0Vshw
- gU0YC8m/+yw5m5eliliWSIg+W2CCJ6CKiNW0rKqb4uR32C/eZ0NZ6f+PKFllcZO+LV9B
- H9t/t2u1loBlI2BMr4PTswzfMcPiBdyGKhncl3vooiVZhS3IXeYGFeALg5VylLelqnnv
- 2tvQ==
+ bh=X62m05p62/lSUOeBKzlcGN+g4rN8QhnWgqi88/75hL0=;
+ b=LIT+0I4ATVGfvU7CDUHdpDSKNXeQfafkRstvUlb7rFW730XQdXGr2om/atytpUL44y
+ ahKAHJO4RfF6OZs5Do6GFX0+aAqBGPWVbhQKCwjwfFZYYzp/wrSCkbBqfv/98bw/Ft+l
+ vJ8NMKwI6LJtbREF/vgi9Jzu69GtDGLezP7bJ7JmaApB6kHOriwinRZd0hLTvnSZH6xo
+ 2Nji1c586lP0TsvxDqCcH7edv99ItPxen5jELxQ4DYkSQLuPF2iO8pTXOI0YDmRja8ts
+ oVIVYiBscosdImltCS7Rxj0c4DCEAHoMUsv3Nm5IiKAnPi6Y2icDU7H5uPMvMGJQyhXr
+ ep9g==
 X-Forwarded-Encrypted: i=1;
- AFNElJ87/YjWfQT1/M83aQaO5FabQFJny5/tYbYRe/YphE3mgK/CXgpGnUXvB2e+pbS04y31FYK1LmOxd2o=@buildroot.org
-X-Gm-Message-State: AOJu0YxUgdMs5gwvWlxdP6aRQs/FxwAx7UghnHwXl2i6/NmuC0CV6Tql
- 8DqQ+VJkpCU/0PBzQJes+NU0irrrLas834tzz97xEfPZFgHJy/xHuL5toqzXesu6tyw=
-X-Gm-Gg: Acq92OGBx6nF29FRNGnK4aRIRotJQlFGdXzCWylIW8mEhbUVWglInSmKZ4+h66zp4xj
- LFs9loOSgdeKanCL73Ky6lxgK21KGulC7Z/SnvM42HUk9jQenD499IneMXB0WiEB7OZLSz+KtGk
- +I4FlvNXP5Ch9I6l/WBKWlW0ZZ29veixTCWaUpSkXpImuuhN4XHuAV65CauaXWaz6/wj9fjtNi4
- 40awtYZMiasE1Fp1JMkWCdRjMooR9twSwWVnIfgsRxFdAla4t+/UUcZZB0TUPVeJmp86Oil1KU0
- dHsJPnC+w0uU4k/kz8tJzflU4vGqDdryJfAx5yfZPRU2ocUmyEZuLNHt7MNCsHnP+BaPRLhwBcZ
- uJBWfc+zkZDlxR55ZK+v/ctG57ASSYh9IoTaQ4z/Au7JEcC/L5d2SuAiebaY1hIq6ypdiARi0W4
- UunIrElDqKQLE0+GI=
-X-Received: by 2002:a05:6000:250e:b0:45d:3aa3:7f76 with SMTP id
- ffacd0b85a97d-4606dba772fmr3921134f8f.33.1781264232961; 
- Fri, 12 Jun 2026 04:37:12 -0700 (PDT)
+ AFNElJ8zwRzCwg0UW33qKbt6Bw6ddz4NLmWSam2mrQ9X2uoVHDoYybvWIHAz1hLNFQcQ7G8rZVPMeDRa+wc=@buildroot.org
+X-Gm-Message-State: AOJu0YxzstPMNxUB8QEkgXJqfuQ+Y585t/gI2Aar/+2J/Cs+NKNPYDQK
+ SUOl0pa41/1bjMROY1LVAn8qM0Uv5b16wbB7sIQq9GhX2u0UW1BDjhrw4RVzPEnXoVDWs+6muSG
+ VYdc3
+X-Gm-Gg: Acq92OEmbv9YyYCMjnCM4RdQ5ErVCCIbfy5mFhl2lwVlURHzjRqeEDldOMPyyPlYDVi
+ ofL7OnKv11ganlNueHxvBCWLMzgcjK67tqrQIBrsFgF14hsD9h1i1PLsNK/gnMXBbuquxP1zXjV
+ Ko93y06dBEZVWSTBHoNCdzJWlhd1pCboDIkPYH07vCTGoxdiMKy1maLD0i84ojCbDBE2XzwURK0
+ t7/IMv4/cOuy4+QZIJ1mMV0LfyuL2nb7jD2iMjun8uqR1kmMbgWfjsT2/m9IMXY69+mwBI8GzkG
+ f3AwCf5zJgnNXnCOl7orAJiOtbKjFvPHKrgfTahlzzaBsHK0Youqrwi3KbdjeX5js9dvL8EU6aj
+ ddTzV4aN7QikZKXjX5Zbw6dwNXd8yLuq3ttcufPmSAsm9D94gCTYcsgUUYXbZUgqjOdi5wpg8Hz
+ 5BQSsLrJ0nTPIDqc8=
+X-Received: by 2002:a05:600c:820c:b0:490:b4cb:3866 with SMTP id
+ 5b1f17b1804b1-490ec4d77a4mr23953205e9.10.1781264231886; 
+ Fri, 12 Jun 2026 04:37:11 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f2b0c35sm5178418f8f.22.2026.06.12.04.37.12
+ 5b1f17b1804b1-490ea963cf8sm39154335e9.2.2026.06.12.04.37.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:37:12 -0700 (PDT)
+ Fri, 12 Jun 2026 04:37:11 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:37:12 +0200
-Message-ID: <20260612113712.251616-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:37:10 +0200
+Message-ID: <20260612113710.251522-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260604173707.2135315-2-bernd@kuhls.net>
-References: <20260604173707.2135315-2-bernd@kuhls.net>
+In-Reply-To: <20260604173707.2135315-1-bernd@kuhls.net>
+References: <20260604173707.2135315-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264233; x=1781869033; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264232; x=1781869032; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dVCDweWged/TG5c2Ex9QsdScsHdU1r5koq3qSZHj+cU=;
- b=cc7/76dxXZ5r3o16xa2BjtUkBDtvz6IY+ZmHu/rBpDPaTJQsxTE3oJ+4Mxbk/N9Bb6
- eiqeSVhTNnfuIY2VFZYybKN/bI0aldS7+EahjM0X9XfXQ50YGYn+QYcxRSqzOhriJJcG
- mJ8kc6nE9u1Gx9G8POyExXuMF44NBMYSpajsp+GRx7pxrMYAANQMgt3F50YY3/iYF1tq
- 2hvWKJn4OYe4LUqT+hWeyV30KeSzBhWSeq6QBpkTW0DXYZTKAToAyrmkJ4wmBqBbr0b3
- 5/6RB5mevWdtCQ4nfZg3ytzNSjaCY34NUtE8GltRlqg5fcSXOyWmeJbF1WoMeFa+Fsv/
- I3Ow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=X62m05p62/lSUOeBKzlcGN+g4rN8QhnWgqi88/75hL0=;
+ b=bmwMkWz7T992LMKZ8gP3AUou7awaVXQf0j7m6+McoIbWIf7Suj4jluiFTsvSDrzmgl
+ /AqP4AUbjfBmJrboSHDFlRvq6xvqU/Ag1xffmk078aPPjYO/8ov8EJ0CbTvsJ6VKsNIF
+ Mrc31L9SX0YRb70DwNZjMpdaJt29ISTehk4mYIkwK9xasQf8jx+wKNDdPu5K8/LuhVW6
+ wb5tlZf2TL8wQvEuCnCFSYAHliXR11GmZN1uJjTLbdNDaOh+KuzbiPGMV6xBc1Hj5OTO
+ GENG/5LjsW+k7x4NnDpupzxDuVLsYirmjbldu9xPDFsQ+/4iQoStta5d4/RjpojsVZHu
+ C2Zw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cc7/76dx
-Subject: Re: [Buildroot] [PATCH 2/2] package/python3: add upstream security
- patch for CVE-2026-8328
+ header.a=rsa-sha256 header.s=google header.b=bmwMkWz7
+Subject: Re: [Buildroot] [PATCH 1/2] package/python3: add upstream security
+ patch for CVE-2026-7774
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,7 +132,7 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://mail.python.org/archives/list/security-announce@python.org/thread/ITF2BAPBQEPYK3LDMPRSY435JGNHYNDP/
+> https://mail.python.org/archives/list/security-announce@python.org/thread/4FU62L2M6RMMHT2QPGQNPEHHUND7CEX5/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -141,150 +142,295 @@ Applied to 2026.02.x. Thanks
 > Series passed Gitlab pipeline:
 > https://gitlab.com/bkuhls/buildroot/-/commits/5b4549fd52313aa0caa2dbb919a8b98c11ab5768
 > 
->  ...ply-CVE-2021-4189-PASV-fix-to-ftplib.patch | 123 ++++++++++++++++++
+>  ...arfile.data_filter-validate-written-.patch | 268 ++++++++++++++++++
 >  package/python3/python3.mk                    |   3 +
->  2 files changed, 126 insertions(+)
->  create mode 100644 package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
+>  2 files changed, 271 insertions(+)
+>  create mode 100644 package/python3/0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
 > 
-> diff --git a/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch b/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
+> diff --git a/package/python3/0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch b/package/python3/0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
 > new file mode 100644
-> index 0000000000..7605e40722
+> index 0000000000..94377fb832
 > --- /dev/null
-> +++ b/package/python3/0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
-> @@ -0,0 +1,123 @@
-> +From 7d95a1dc7382b55cba7fdd6a110336077584a4f0 Mon Sep 17 00:00:00 2001
+> +++ b/package/python3/0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
+> @@ -0,0 +1,268 @@
+> +From 74cca9a92fb7d653e404843a56b8bdc7b0afdbbf Mon Sep 17 00:00:00 2001
 > +From: "Miss Islington (bot)"
 > + <31488909+miss-islington@users.noreply.github.com>
-> +Date: Wed, 13 May 2026 19:59:11 +0200
-> +Subject: [PATCH] [3.14] gh-87451: Apply CVE-2021-4189 PASV fix to
-> + ftplib.ftpcp() (GH-149648) (#149793)
+> +Date: Mon, 11 May 2026 11:57:50 +0200
+> +Subject: [PATCH] [3.14] gh-149486: tarfile.data_filter: validate written link
+> + target (GH-149487) (GH-149554)
 > +
-> +gh-87451: Apply CVE-2021-4189 PASV fix to ftplib.ftpcp() (GH-149648)
+> +* gh-149486: tarfile.data_filter: validate written link target (GH-149487)
 > +
-> +ftpcp() called parse227() directly and passed the source server's
-> +self-reported PASV IPv4 address to the target server's PORT command,
-> +bypassing the CVE-2021-4189 fix that was applied only to FTP.makepasv().
-> +A malicious source FTP server could use this to redirect the target
-> +server's data connection to an arbitrary host:port (SSRF).
+> +The data filter rewrote linknames with normpath() but ran the
+> +containment check against the un-normalised value, and computed a
+> +symlink's directory before stripping trailing slashes.  Both let a
+> +crafted archive create links pointing outside the destination.  Also
+> +reject link members that resolve to the destination directory itself,
+> +which could otherwise replace it with a symlink and redirect all
+> +subsequent members.
 > +
-> +ftpcp() now uses the source server's actual peer address, honoring the
-> +existing trust_server_pasv_ipv4_address opt-out, the same as makepasv().
+> +(Patch by Greg; Petr's just reviewing & merging.)
+> +(cherry picked from commit 578411982c16f753f4893532510099ef665117da)
 > +
-> +Thanks to Qi Ding at Aurascape AI for the report. (GHSA-w8c5-q2xf-gf7c)
-> +(cherry picked from commit eac4fe3b2c77693790a5ef7dfab127c1fee81bf9)
-> +
-> +Co-authored-by: Gregory P. Smith <68491+gpshead@users.noreply.github.com>
-> +Upstream: https://github.com/python/cpython/commit/7d95a1dc7382b55cba7fdd6a110336077584a4f0
-> +CVE: CVE-2026-8328
+> +Co-authored-by: Petr Viktorin <encukou@gmail.com>
+> +Co-authored-by: Gregory P. Smith <greg@krypto.org>
+> +Upstream: https://github.com/python/cpython/commit/74cca9a92fb7d653e404843a56b8bdc7b0afdbbf
+> +CVE: CVE-2026-7774
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > +---
-> + Lib/ftplib.py                                 | 11 +++++-
-> + Lib/test/test_ftplib.py                       | 36 ++++++++++++++++++-
-> + ...6-05-10-18-05-32.gh-issue-87451.XkKB6M.rst |  6 ++++
-> + 3 files changed, 51 insertions(+), 2 deletions(-)
-> + create mode 100644 Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
+> + Lib/tarfile.py                                |  16 +-
+> + Lib/test/test_tarfile.py                      | 151 ++++++++++++++----
+> + ...-05-03-21-00-00.gh-issue-149486.tarflt.rst |   5 +
+> + 3 files changed, 133 insertions(+), 39 deletions(-)
+> + create mode 100644 Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
 > +
-> +diff --git a/Lib/ftplib.py b/Lib/ftplib.py
-> +index 50771e8c17c..73882a38dce 100644
-> +--- a/Lib/ftplib.py
-> ++++ b/Lib/ftplib.py
-> +@@ -883,7 +883,16 @@ def ftpcp(source, sourcename, target, targetname = '', type = 'I'):
-> +     type = 'TYPE ' + type
-> +     source.voidcmd(type)
-> +     target.voidcmd(type)
-> +-    sourcehost, sourceport = parse227(source.sendcmd('PASV'))
-> ++    # Don't trust the IPv4 address the source server advertises in its PASV
-> ++    # reply: a malicious source could otherwise point the target's data
-> ++    # connection at an arbitrary host (SSRF).  A caller that needs the old
-> ++    # behavior can set trust_server_pasv_ipv4_address on the source FTP
-> ++    # object.  See FTP.makepasv(), which applies the same rule.
-> ++    untrusted_host, sourceport = parse227(source.sendcmd('PASV'))
-> ++    if source.trust_server_pasv_ipv4_address:
-> ++        sourcehost = untrusted_host
-> ++    else:
-> ++        sourcehost = source.sock.getpeername()[0]
-> +     target.sendport(sourcehost, sourceport)
-> +     # RFC 959: the user must "listen" [...] BEFORE sending the
-> +     # transfer request.
-> +diff --git a/Lib/test/test_ftplib.py b/Lib/test/test_ftplib.py
-> +index c864d401f9e..f1eff9430f7 100644
-> +--- a/Lib/test/test_ftplib.py
-> ++++ b/Lib/test/test_ftplib.py
-> +@@ -16,7 +16,7 @@
-> + except ImportError:
-> +     ssl = None
+> +diff --git a/Lib/tarfile.py b/Lib/tarfile.py
+> +index 414aefe9744..a9eca7579ef 100644
+> +--- a/Lib/tarfile.py
+> ++++ b/Lib/tarfile.py
+> +@@ -830,16 +830,22 @@ def _get_filtered_attrs(member, dest_path, for_data=True):
+> +         if member.islnk() or member.issym():
+> +             if os.path.isabs(member.linkname):
+> +                 raise AbsoluteLinkError(member)
+> ++            # A link member that resolves to the destination directory itself
+> ++            # would replace it with a (sym)link, redirecting the destination
+> ++            # for all subsequent members.
+> ++            if target_path == dest_path:
+> ++                raise OutsideDestinationError(member, target_path)
+> +             normalized = os.path.normpath(member.linkname)
+> +             if normalized != member.linkname:
+> +                 new_attrs['linkname'] = normalized
+> +             if member.issym():
+> +-                target_path = os.path.join(dest_path,
+> +-                                           os.path.dirname(name),
+> +-                                           member.linkname)
+> ++                # The symlink is created at `name` with trailing separators
+> ++                # stripped, so its target is relative to the directory
+> ++                # containing that path.
+> ++                link_dir = os.path.dirname(name.rstrip('/' + os.sep))
+> ++                target_path = os.path.join(dest_path, link_dir, normalized)
+> +             else:
+> +-                target_path = os.path.join(dest_path,
+> +-                                           member.linkname)
+> ++                target_path = os.path.join(dest_path, normalized)
+> +             target_path = os.path.realpath(target_path,
+> +                                            strict=os.path.ALLOW_MISSING)
+> +             if os.path.commonpath([target_path, dest_path]) != dest_path:
+> +diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
+> +index 8d9f8824f7c..837b6aa8c03 100644
+> +--- a/Lib/test/test_tarfile.py
+> ++++ b/Lib/test/test_tarfile.py
+> +@@ -3682,6 +3682,39 @@ class TestExtractionFilters(unittest.TestCase):
+> +     # The destination for the extraction, within `outerdir`
+> +     destdir = outerdir / 'dest'
 > + 
-> +-from unittest import TestCase, skipUnless
-> ++from unittest import mock, TestCase, skipUnless
-> + from test import support
-> + from test.support import requires_subprocess
-> + from test.support import threading_helper
-> +@@ -1145,6 +1145,40 @@ def testTimeoutDirectAccess(self):
-> +         ftp.close()
+> ++    @classmethod
+> ++    def setUpClass(cls):
+> ++        # Posix and Windows have different pathname resolution:
+> ++        # either symlink or a '..' component resolve first.
+> ++        # Let's see which we are on.
+> ++        if os_helper.can_symlink():
+> ++            testpath = os.path.join(TEMPDIR, 'resolution_test')
+> ++            os.mkdir(testpath)
+> ++
+> ++            # testpath/current links to `.` which is all of:
+> ++            #   - `testpath`
+> ++            #   - `testpath/current`
+> ++            #   - `testpath/current/current`
+> ++            #   - etc.
+> ++            os.symlink('.', os.path.join(testpath, 'current'))
+> ++
+> ++            # we'll test where `testpath/current/../file` ends up
+> ++            with open(os.path.join(testpath, 'current', '..', 'file'), 'w'):
+> ++                pass
+> ++
+> ++            if os.path.exists(os.path.join(testpath, 'file')):
+> ++                # Windows collapses 'current\..' to '.' first, leaving
+> ++                # 'testpath\file'
+> ++                cls.dotdot_resolves_early = True
+> ++            elif os.path.exists(os.path.join(testpath, '..', 'file')):
+> ++                # Posix resolves 'current' to '.' first, leaving
+> ++                # 'testpath/../file'
+> ++                cls.dotdot_resolves_early = False
+> ++            else:
+> ++                raise AssertionError('Could not determine link resolution')
+> ++        else:
+> ++            cls.dotdot_resolves_early = False
+> ++
+> +     @contextmanager
+> +     def check_context(self, tar, filter, *, check_flag=True):
+> +         """Extracts `tar` to `self.destdir` and allows checking the result
+> +@@ -3853,10 +3886,19 @@ def test_parent_symlink(self):
+> +                     + "which is outside the destination")
 > + 
+> +             with self.check_context(arc.open(), 'data'):
+> +-                self.expect_exception(
+> +-                    tarfile.LinkOutsideDestinationError,
+> +-                    """'parent' would link to ['"].*outerdir['"], """
+> +-                    + "which is outside the destination")
+> ++                if self.dotdot_resolves_early:
+> ++                    # 'current/../..' normalises to '..', which is rejected.
+> ++                    self.expect_exception(
+> ++                        tarfile.LinkOutsideDestinationError,
+> ++                        """'parent' would link to ['"].*outerdir['"], """
+> ++                        + "which is outside the destination")
+> ++                else:
+> ++                    # 'current/..' normalises to '.'; the rewritten link is
+> ++                    # created and 'parent/evil' lands harmlessly inside the
+> ++                    # destination.
+> ++                    self.expect_file('current', symlink_to='.')
+> ++                    self.expect_file('parent', symlink_to='.')
+> ++                    self.expect_file('evil')
 > + 
-> ++class TestFtpcpSecurity(TestCase):
-> ++    """ftpcp() must not trust the host a source server advertises in PASV.
+> +         else:
+> +             # No symlink support. The symlinks are ignored.
+> +@@ -3946,35 +3988,6 @@ def test_parent_symlink2(self):
+> +         # Test interplaying symlinks
+> +         # Inspired by 'dirsymlink2b' in jwilk/traversal-archives
+> + 
+> +-        # Posix and Windows have different pathname resolution:
+> +-        # either symlink or a '..' component resolve first.
+> +-        # Let's see which we are on.
+> +-        if os_helper.can_symlink():
+> +-            testpath = os.path.join(TEMPDIR, 'resolution_test')
+> +-            os.mkdir(testpath)
+> +-
+> +-            # testpath/current links to `.` which is all of:
+> +-            #   - `testpath`
+> +-            #   - `testpath/current`
+> +-            #   - `testpath/current/current`
+> +-            #   - etc.
+> +-            os.symlink('.', os.path.join(testpath, 'current'))
+> +-
+> +-            # we'll test where `testpath/current/../file` ends up
+> +-            with open(os.path.join(testpath, 'current', '..', 'file'), 'w'):
+> +-                pass
+> +-
+> +-            if os.path.exists(os.path.join(testpath, 'file')):
+> +-                # Windows collapses 'current\..' to '.' first, leaving
+> +-                # 'testpath\file'
+> +-                dotdot_resolves_early = True
+> +-            elif os.path.exists(os.path.join(testpath, '..', 'file')):
+> +-                # Posix resolves 'current' to '.' first, leaving
+> +-                # 'testpath/../file'
+> +-                dotdot_resolves_early = False
+> +-            else:
+> +-                raise AssertionError('Could not determine link resolution')
+> +-
+> +         with ArchiveMaker() as arc:
+> + 
+> +             # `current` links to `.` which is both the destination directory
+> +@@ -4010,7 +4023,7 @@ def test_parent_symlink2(self):
+> + 
+> +         with self.check_context(arc.open(), 'data'):
+> +             if os_helper.can_symlink():
+> +-                if dotdot_resolves_early:
+> ++                if self.dotdot_resolves_early:
+> +                     # Fail when extracting a file outside destination
+> +                     self.expect_exception(
+> +                             tarfile.OutsideDestinationError,
+> +@@ -4130,6 +4143,76 @@ def test_sly_relative2(self):
+> +                     + """['"].*moo['"], which is outside the """
+> +                     + "destination")
+> + 
+> ++    @symlink_test
+> ++    @os_helper.skip_unless_symlink
+> ++    def test_normpath_realpath_mismatch(self):
+> ++        # The link-target check must validate the value that will actually
+> ++        # be written to disk (the normalised linkname), not the original.
+> ++        # Here 'a' is a symlink to a deep nonexistent path, so realpath()
+> ++        # of 'a/../../...' stays inside the destination while normpath()
+> ++        # collapses 'a/..' lexically and escapes.
+> ++        depth = len(self.destdir.parts) + 5
+> ++        deep = '/'.join(f'p{i}' for i in range(depth))
+> ++        sneaky = 'a/' + '../' * depth + 'flag'
+> ++        for kind in 'symlink_to', 'hardlink_to':
+> ++            with self.subTest(kind):
+> ++                with ArchiveMaker() as arc:
+> ++                    arc.add('a', symlink_to=deep)
+> ++                    arc.add('escape', **{kind: sneaky})
+> ++                with self.check_context(arc.open(), 'data'):
+> ++                    self.expect_exception(
+> ++                        tarfile.LinkOutsideDestinationError)
 > ++
-> ++    A malicious source server can otherwise redirect the target server's
-> ++    data connection to an arbitrary host:port (SSRF), so ftpcp() uses the
-> ++    source server's actual peer address instead, the same as FTP.makepasv().
-> ++    """
+> ++    @symlink_test
+> ++    @os_helper.skip_unless_symlink
+> ++    def test_symlink_trailing_slash(self):
+> ++        # A trailing slash on a symlink member's name must not cause the
+> ++        # link target to be resolved relative to the wrong directory.
+> ++        with ArchiveMaker() as arc:
+> ++            t = tarfile.TarInfo('x/')
+> ++            t.type = tarfile.SYMTYPE
+> ++            t.linkname = '..'
+> ++            arc.tar_w.addfile(t)
+> ++            arc.add('x/escaped', content='hi')
 > ++
-> ++    def _make_pair(self, *, advertised_host, real_host, trust=False):
-> ++        source = mock.Mock(spec=ftplib.FTP)
-> ++        source.trust_server_pasv_ipv4_address = trust
-> ++        source.sock.getpeername.return_value = (real_host, 21)
-> ++        # PASV replies give the host as comma-separated octets, not dotted.
-> ++        advertised = advertised_host.replace('.', ',')
-> ++        source.sendcmd.side_effect = lambda cmd: (
-> ++            f'227 Entering Passive Mode ({advertised},1,2).'
-> ++            if cmd == 'PASV' else '150 ok')
-> ++        target = mock.Mock(spec=ftplib.FTP)
-> ++        target.sendcmd.return_value = '150 ok'
-> ++        return source, target
+> ++        with self.check_context(arc.open(), 'data'):
+> ++            self.expect_exception(tarfile.LinkOutsideDestinationError)
 > ++
-> ++    def test_ftpcp_ignores_untrusted_pasv_host(self):
-> ++        source, target = self._make_pair(advertised_host='10.0.0.5',
-> ++                                         real_host='198.51.100.7')
-> ++        ftplib.ftpcp(source, 'a', target, 'b')
-> ++        target.sendport.assert_called_once_with('198.51.100.7', 258)
+> ++    @symlink_test
+> ++    @os_helper.skip_unless_symlink
+> ++    def test_link_at_destination(self):
+> ++        # A link member whose name resolves to the destination directory
+> ++        # itself must be rejected: otherwise the destination is replaced
+> ++        # by a symlink and later members can be redirected through it.
+> ++        for name in '', '.', './':
+> ++            with ArchiveMaker() as arc:
+> ++                t = tarfile.TarInfo(name)
+> ++                t.type = tarfile.SYMTYPE
+> ++                t.linkname = '.'
+> ++                arc.tar_w.addfile(t)
 > ++
-> ++    def test_ftpcp_trust_server_pasv_ipv4_address(self):
-> ++        source, target = self._make_pair(advertised_host='10.0.0.5',
-> ++                                         real_host='198.51.100.7', trust=True)
-> ++        ftplib.ftpcp(source, 'a', target, 'b')
-> ++        target.sendport.assert_called_once_with('10.0.0.5', 258)
+> ++            with self.check_context(arc.open(), 'data'):
+> ++                self.expect_exception(tarfile.OutsideDestinationError)
 > ++
+> ++    @symlink_test
+> ++    @os_helper.skip_unless_symlink
+> ++    def test_empty_name_symlink_chain(self):
+> ++        # Regression test for a chain of empty-named symlinks that
+> ++        # incrementally redirects the destination outwards.
+> ++        with ArchiveMaker() as arc:
+> ++            for name, target in [('', ''), ('a/', '..'),
+> ++                                 ('', 'dummy'), ('', 'a'),
+> ++                                 ('b/', '..'),
+> ++                                 ('', 'dummy'), ('', 'a/b')]:
+> ++                t = tarfile.TarInfo(name)
+> ++                t.type = tarfile.SYMTYPE
+> ++                t.linkname = target
+> ++                arc.tar_w.addfile(t)
+> ++            arc.add('escaped', content='hi')
 > ++
-> + class MiscTestCase(TestCase):
-> +     def test__all__(self):
-> +         not_exported = {
-> +diff --git a/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst b/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
+> ++        with self.check_context(arc.open(), 'data'):
+> ++            self.expect_exception(tarfile.FilterError)
+> ++
+> +     @symlink_test
+> +     def test_deep_symlink(self):
+> +         # Test that symlinks and hardlinks inside a directory
+> +diff --git a/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst b/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
 > +new file mode 100644
-> +index 00000000000..21a79c3e0e7
+> +index 00000000000..7c69edb683c
 > +--- /dev/null
-> ++++ b/Misc/NEWS.d/next/Security/2026-05-10-18-05-32.gh-issue-87451.XkKB6M.rst
-> +@@ -0,0 +1,6 @@
-> ++The :mod:`ftplib` module's undocumented ``ftpcp`` function no longer trusts
-> ++the IPv4 address value returned from the source server in response to the
-> ++``PASV`` command by default, completing the fix for CVE-2021-4189.  As with
-> ++:class:`ftplib.FTP`, the former behavior can be re-enabled by setting the
-> ++``trust_server_pasv_ipv4_address`` attribute on the source :class:`ftplib.FTP`
-> ++instance to ``True``.  Thanks to Qi Deng at Aurascape AI for the report.
+> ++++ b/Misc/NEWS.d/next/Security/2026-05-03-21-00-00.gh-issue-149486.tarflt.rst
+> +@@ -0,0 +1,5 @@
+> ++:func:`tarfile.data_filter` now validates link targets using the same
+> ++normalised value that is written to disk, strips trailing separators from
+> ++the member name when resolving a symlink's directory, and rejects link
+> ++members that would replace the destination directory itself. This closes
+> ++several path-traversal bypasses of the ``data`` extraction filter.
 > +-- 
 > +2.47.3
 > +
 > diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index e14ddf4f20..931ad3bae6 100644
+> index 61fab7e350..e14ddf4f20 100644
 > --- a/package/python3/python3.mk
 > +++ b/package/python3/python3.mk
-> @@ -19,6 +19,9 @@ PYTHON3_IGNORE_CVES += CVE-2026-3276
->  # 0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
->  PYTHON3_IGNORE_CVES += CVE-2026-7774
+> @@ -16,6 +16,9 @@ PYTHON3_CPE_ID_PRODUCT = python
+>  # 0011-3.14-gh-149079-Fix-O-n-2-canonical-ordering-in-unico.patch
+>  PYTHON3_IGNORE_CVES += CVE-2026-3276
 >  
-> +# 0013-3.14-gh-87451-Apply-CVE-2021-4189-PASV-fix-to-ftplib.patch
-> +PYTHON3_IGNORE_CVES += CVE-2026-8328
+> +# 0012-3.14-gh-149486-tarfile.data_filter-validate-written-.patch
+> +PYTHON3_IGNORE_CVES += CVE-2026-7774
 > +
 >  # This host Python is installed in $(HOST_DIR), as it is needed when
 >  # cross-compiling third-party Python modules.
