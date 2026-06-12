@@ -1,118 +1,177 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC96CD98CE
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD225CD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 12:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 280EC61342;
-	Fri, 12 Jun 2026 11:39:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9ACFB411F3;
+	Fri, 12 Jun 2026 12:15:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b2VTPOeJ-W9Z; Fri, 12 Jun 2026 12:15:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB1C340CF9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781266540;
+	bh=KaSn5wernqmaiW6sRyjUf5l2J/GUM9LavS0Kg30s1aM=;
+	h=From:To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=r2VFi5dfy+IdQqQ6sX/Z6pphdkkW7ymAAd56Sx9v3SohN086Z6Dfz0y0IhhiNF0F9
+	 tc380Mj0Sm3v1QKg+qUDkJIXh8MirbejGWZVEhmsgfajS73xx3zLv9h338ssGuI6Sx
+	 bugJfrMAM+VdjhId86eTM6Ut+B8EQaFDQGjaYtwTwywAO1jFJfegPzU0AwHgTGtmBN
+	 8eST9s8pF2Exmdg0ycO9s9XPC59ZwFCNutZ5KtpsfOA1MYJO2rT3zPtXqJLY2uybSw
+	 DAsGZ8XFpbaPG37kXfmMwhwWpvVdUI0gLKnrTK4XoordXU7DueyWFAoo/aman2qWRA
+	 fbFbKCEgIV5Dg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB1C340CF9;
+	Fri, 12 Jun 2026 12:15:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 351B812F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 12:15:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26C4360E9C
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 12:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ybKc7A8z38D; Fri, 12 Jun 2026 11:39:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5FE46134E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264365;
-	bh=M2Xe+5RvOVgzVaIsxFpBsgZwtGptwcYe3gPXZ1NAzcI=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NA8amBOn5GwMGHtJXXBi/U2LuS7Gghu8h1v4slL6oeOJmnWaB0UDpEiwTaGPpGsno
-	 bFc/L7J2VZVzzNxNVMcxlu7GVOQgCjVAhNMAlK3Tt+viDBwY/B0aZXM+Me0oAyVPfd
-	 lF+L7UyQmmedQmwLB+MjISIS7QPNei56Xm7kEFdRH53NSV+Ts6oQaSV9qub5rNm5uD
-	 gyQKIOvpUoyY1uW5DeAoXW5wG/KZ0Ucolrv6brrY1uVlOr71aiUfOVc966KrTdytm2
-	 n223FtNKt8fQJKBxgHVJIGuYKE0+w0wX5oshC+UQ8HfDYjP+plOopPdEremnL6rwNq
-	 VFPMz7ajh6U3w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5FE46134E;
-	Fri, 12 Jun 2026 11:39:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 32DF0321
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:39:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 252DF80DB5
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:39:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nBOPNPMy39xS for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:39:20 +0000 (UTC)
+ id jE_6ThYj9w75 for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 12:15:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8138C80B99
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8138C80B99
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8138C80B99
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:39:20 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-45fe59255beso488311f8f.1
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:39:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264358; x=1781869158;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=HycTNbJNyFAKfC9nL42ncW93aS7Q/WGgjBDyKonh2YU=;
- b=BqztSd+4SoyNQ0RU8XdeO+dDg98IjfxSbwmvoG7mz6aOxD4n05sGDYEEZVZ8Rw3BC0
- N4EGr+MrOlBJGy0uLBeJD1T9F+Ldl5k93KASmlrSRnFxVoQe4o3Khty9RlNslRb7tnFB
- hWRC76AaP4TK4ZWK9tmfwJMeggEuty6VIAI/T0t5aI1Jl7EsFIy5XaEl72c0yo3ZENd5
- McoXp/32ZesV+rnW+5BgPQ4Ldsa2Fq1AfYZoG57C+fN+p3p+SkAu7lvOAb48X53KqI0e
- oIxf4VyJ75PEYR9yxaJ6a0hI80bPIE0EF6qdwUdYwk8FHrGyVY94WiXsKqcLgpPIrRTc
- zTuA==
-X-Forwarded-Encrypted: i=1;
- AFNElJ99oTKUw64oxH71I4v67gTbsDPlgFYMH16+ZNe13+gx6kYlCzuLJerd5giK/sUlOraSgbJNNjedx3g=@buildroot.org
-X-Gm-Message-State: AOJu0YzO5mDBbsoz+5H8DwblwtxHDJ+zOQSA1TXMO/7CHfyF3IWEVLab
- RZYo31FXHiTfYvr23tcmZYuqnxd54eKG5DEVygssFHNvPXf8rG3Mj0D8vZlrPrPryf/6x6+oBPQ
- U5ffz
-X-Gm-Gg: Acq92OEDzEU3ISw4YChtM2R/5MU212Dl8pGe1gF9G8dte0O2pR5xQ+knYCzW5/c7sZj
- ED+V9jrzjw33hSlCL9i/CTRxM5hpcMW46cpCd0wWfAUyxGZ9VmiM417EccN2c8H5ka/K6/CQ2p0
- FuZnboJWkUJ4ZklV88Hjt/FMFB+VvIPE9y3J7FXIObPYrDq5DX/w2q5BGfwEx/ZaKxsME2yyhV5
- mTt0eqq+2m2h5sGX6tarag1D9m1+hExjy9TU3NfKy4U6Zu/yYQBAoe4bfpF/LsCRXUlFonEqm6V
- CgwhdOo3MQ5vFJPtX6v0h1gRK66vVxb/q189Qap0Y/b1/1xqJi2O08iEXLE8Vbh2VcyCZKRAVvI
- J1R09dXL4DaVm8nfMKDtw3ycQjaOMKSzky+yaNsjsslMB5ccwEDn3K3ZtY6ElrTVEDnzT0daGTK
- Yy6eoqV8TPhQHPGV4=
-X-Received: by 2002:a05:6000:1885:b0:456:b23d:e57 with SMTP id
- ffacd0b85a97d-4606da071f0mr3761851f8f.0.1781264358358; 
- Fri, 12 Jun 2026 04:39:18 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4606f26f3dcsm5018388f8f.13.2026.06.12.04.39.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:39:18 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:39:17 +0200
-Message-ID: <20260612113917.253830-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260607211849.1353654-1-romain.naour@smile.fr>
-References: <20260607211849.1353654-1-romain.naour@smile.fr>
+ client-ip=2a01:111:f403:c207::1;
+ helo=mrzp264cu002.outbound.protection.outlook.com;
+ envelope-from=sebastien.guillaume@vendeeconcept.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E2AC60DE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E2AC60DE4
+Received: from MRZP264CU002.outbound.protection.outlook.com
+ (mail-francesouthazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c207::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E2AC60DE4
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 12:15:36 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iSEQWFpOlg35r6VF0bl4pmZ6Fsbdu5ssxSv5ypYfe7bMDAq6tMsSqIY4Vojvy3bVBxQo+i1n/a70Z2aFKXBhCMSPvwfaGthrihuDWjD4GcGXeQ7bh91N6dW83Kw++3XHyWs5F2uEbJ5gGl4PCKfQoJkipTSp4iq4KpmFYln3ZbHaSbM8I/oLXfCQE4EtOn2HFCkoldXNPFOss6IWmhLAwp3J8+gXS0pH+ApgsBXbbl5nzmiK81hR3HUkgviPiHPThOin3j7ngYcARyjHTFKZc/sGDE72u9ltioZ17AlhFFhGlGpcoFYQWpiW1qbtDs0zUCoz2F6d5WpyHBZeRy1C5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d5m0SkH0BMQIzJ0KpG+5mIb06oUWHjpBOETiwrKzxlE=;
+ b=JT/zQ1B20BhgKwlxj4Qt1aL23X6qKKm+sRdyGGL7SNZ5O9DzDEVYelJ5dNQ9nMiab88gX348AAEuzTA3kvAFicU8hONYtC46FvduZGCftGd2HBi1c11abb4J6SRbNEkL1pJEyLW/sRnkYJ3zwWRXdBQyrJ/aW7Dg983MMxx7P3TCNYdklvsT4IikshdGk+V3cIuaNR2qEkJqX9mZp0KXdoZAsIp3H0Xe11MWRNtAHDbxO66rgvFKDenMiE6ozMipco1EDhp1cFElKSqX72LrFZZxqMaT3cwR9ZijMsNZ110N4e98bsiF+ILPmZahbjfzj4z+JvucaCSRhiDdljSd3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vendeeconcept.com; dmarc=pass action=none
+ header.from=vendeeconcept.com; dkim=pass header.d=vendeeconcept.com; arc=none
+Received: from PAZP264MB3055.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f7::20)
+ by MR0P264MB7389.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:ad::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.14; Fri, 12 Jun
+ 2026 12:15:31 +0000
+Received: from PAZP264MB3055.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::dca8:c446:9027:e417]) by PAZP264MB3055.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::dca8:c446:9027:e417%5]) with mapi id 15.21.0113.013; Fri, 12 Jun 2026
+ 12:15:31 +0000
+From: =?utf-8?B?U8OpYmFzdGllbiBHdWlsbGF1bWU=?=
+ <sebastien.guillaume@vendeeconcept.com>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ =?utf-8?B?U8OpYmFzdGllbiBHdWlsbGF1bWU=?=
+ <sebastien.guillaume@vendeeconcept.com>
+CC: Giulio Benetti <giulio.benetti@benettiengineering.com>, Jesse Van Gavere
+ <jesseevg@gmail.com>, Romain Naour <romain.naour@gmail.com>, Roy Kollen
+ Svendsen <roykollensvendsen@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [PATCH v2 00/11] add CPE identifiers for pkg-stats
+Thread-Index: AQHc+mUpn8ZbTMIRjkCmbX1Qvv6xyw==
+Date: Fri, 12 Jun 2026 12:15:31 +0000
+Message-ID: <20260612121516.1634-1-sebastien.guillaume@vendeeconcept.com>
+References: <20260611125307.988195-1-thomas.perale@mind.be>
+In-Reply-To: <20260611125307.988195-1-thomas.perale@mind.be>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.47.3
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAZP264MB3055:EE_|MR0P264MB7389:EE_
+x-ms-office365-filtering-correlation-id: 2ee2c7be-1140-4bcb-625c-08dec87c4c3a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|23010399003|376014|366016|1800799024|56012099006|22082099003|38070700021|18002099003;
+x-microsoft-antispam-message-info: I5dyVQibb3nMAms8/plEax6ttvoU9IzJF89JQtWomFTpneGeyUFq28Sxa2UZswAW0k0OrnHGbSGau1xtDNQ62W+2yr7fN7NHIFL5Oh3WwJZjrYs79wiziFdPIqQZ05ypfktrwyuhziwu9azaFo1kQFfaNGUn61NuGkq9XoIxBSH6dIgtkTPNS3WvEn5nuPyOl5pstN5hRjGrpsqyjvd64qM/HEpTdMQddbWHCLzVCafPsu53uwgH05XXGz8awzRa2PTTFQeFVe4pDeO37T6uw41EkXGOaU64OBMhLGadqq92/sYOFeRRinyCErfxd+B997QPn7SKOdARMW955WYEBKoInnCiaFCNxdywsMm8c8FHmKotF7Ii/I25Sjwk6GpbeilDRRy65pFnFfDWhBFdU+rISyPONWlv4HeH54uqFC2li64sQZi27DHTXJqKKI8+OPF0jC6482/mZuHkKnpNIo0oCouP6MUX4mUNTBKbap9f9roQ9tRf2dgDDm6YUYJEV7zzvsszl1Zhqm8nrCBEkcxxSMaRRW0r1i1ZzHHonqZ6h8WtbX3zI/tOKRJ+VXDWPDw+aoFdLbYs6N8I1njdShpWeaBp8LWyyJy6JAnZ6Of1NfinXayomjZHfEb7Myx9lMKXwQA7Pu20wvdrmQp5e5cxm3plGn1PPKuc2wKY2O9s34YldPrkk/tRXNbbBnYUWhsysJHadt9Nl99Mo1P/ex0BZDZtOlEqTqeDr0MQ+yVnRHCCN6ITiI/2t7QlWrqj
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PAZP264MB3055.FRAP264.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(56012099006)(22082099003)(38070700021)(18002099003);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VVBJT2g1eEE3a0RiQ05TZFBxMUVyRjlQUEtHMSs3K1FqMFBBaUJiRWFVL0Ni?=
+ =?utf-8?B?V0dWaStZamJuSFZLVTk3L25GcXp3dFExWXIyVlNOUkpYTk1USVRvNjFjQ3Zu?=
+ =?utf-8?B?VDhNdFdxVW94TllUMGdYYkxTM0lSaGRycG1SQ1FqRmc2eTFuYWVtNW1PbXlk?=
+ =?utf-8?B?L1V4OUhlU3d2L2JuK3ppa0JCUDVnV2ZPdFhEdHgvM3Q4Z0lndTFUR1F5UjhL?=
+ =?utf-8?B?WHZWdENqZ3lrMkM3d2g1c1pCQlM5KzZpSVBqMjQxZWFYd21IVGtOZmVlRVR6?=
+ =?utf-8?B?cFRaSmtoYTlHWXdzMm8wUmRKL2xybkJ0VEY0WGJxUVl3d1VZVE5NVFJrTERM?=
+ =?utf-8?B?VFBhM256WGJqTmtGVXV3Vnk5amVvb2Y1WUxmVXhZc1pJUFl1cGlwcTg0elQy?=
+ =?utf-8?B?N1pzYk9aa0o2UFFXUDhvVDZMeVM2VER6dUFxRFZLblpyQVBnVFBJY0VpRnNy?=
+ =?utf-8?B?SEU1WUFDY1NYdkxyZ0tJNGNwTThpSWswd2ZucGJyUnRvdW5uZWRJZGwwSTd1?=
+ =?utf-8?B?RWJKZENFVzNhWkJncmVrQThEbXg2dWQ4STFmb2xTSGNGdmlmNHlkS00xYXZK?=
+ =?utf-8?B?TFhYd1BGN0xnWmZncEt0TmZxN3FXR2FkeXl1c0lYa3lqbUduSUc4VWZwM2xY?=
+ =?utf-8?B?N0VyQS9CSUpuMkxzUU5QTXJ3bzRwMFg1Yk5ENGhwLzRJdE9uK01wZnoxZ0ZS?=
+ =?utf-8?B?Z1pic0luNG9VWFRmb2VleUN3VDl4R2ZnYzl5NFhmakE0RHdnZWZKc1lqUm50?=
+ =?utf-8?B?WGxWdXBxN0NYblVqMHFvUGl1c0hBRkE1VkNOVkd6OW05R1MyK3hmRDZTb2wv?=
+ =?utf-8?B?R1U5VEZlMFpKMXBOWGgvZys2S1V0Yk00UDJBMkdBTjB5VEh3YkJGYzlhUm1U?=
+ =?utf-8?B?SUdFaE0vNW1SYUluQ2JTUldTN1hpTzE1RnluWmZFVzlhZHRqa1cycGVPRVJm?=
+ =?utf-8?B?Z0dwdkZHMFhDaktidllueTZ1TVg1NWlkejZoYXpEU25JM2l3N2lyMG5yaGUv?=
+ =?utf-8?B?V0hKYUR2UW5WZ3lzSEExTGpyTzJqM2NsUW5zaldIaC9EU2ZMaVM4YTh2emxP?=
+ =?utf-8?B?eVBaaEMxRzNadVY2RHdhMU03d1lYTEJ6bU1yTFF6a1lWZ2ZpSldRZUF0V2Jh?=
+ =?utf-8?B?TzZBekI5QlhuSlNRT0h3cWhKTDVJZXhHd01lUXp2S1hFU2pwUG43WURyZElU?=
+ =?utf-8?B?d0dxVEFkbjdFR1dJTU4wTWNkcWoyTVNOVFZOYS9iUzM4cHZoNVNtTXdTY05U?=
+ =?utf-8?B?Q1R3ZU5NQkZLQkJJZXkxQWIyeWdNVkFUNXlvRndzbDREOTl5QUp4M1hrOHZC?=
+ =?utf-8?B?SjcyTXBweWI3WG1wdnR5cGRZS1pSWFBaa2FGYS9YNHlSU1MySWkwTk40ODlt?=
+ =?utf-8?B?T054ZytmdVNreEpBdEZJbWlxREVOZFdaUittQTJtVEtzemptV0tRNjJYektG?=
+ =?utf-8?B?MjUrd25GdjVrcTVId05yeWt5NFhHdkdIdzRIZ1RkR2ZRWmcxa3V4Q1RVOFFC?=
+ =?utf-8?B?SmpVZDlObEQ5c2w0amhOMXVWejk5cHVRN0c3ZWtQd1VxcDdLTzZ5K1o1bGpL?=
+ =?utf-8?B?Z3Y0cWZ5cUhOOVBmOUEzc29ONUpHcm04L1Z3ejl0TkdxclNLNWlqcVU1YXA0?=
+ =?utf-8?B?ZFZyNHBHZkFvZlNZeCtjUkZGTkNBMndXOFBQSGlvaGt0aFRjb2pQU29UdVpn?=
+ =?utf-8?B?alpUMGJQVzMvdzU4SVlWRUU2T0EwTlAweU80VEdLMC9COEZ2UEo1bmRQU0pI?=
+ =?utf-8?B?WE5zTzU3QzJOUFRWWkpPZGNJdmhXcHNqaS95THd5NUk0RlhybFV6SUdNSjZ5?=
+ =?utf-8?B?Q2NaNWN5SHdqcTZjUFRxbFk0UTRETUNxTFBvQ3ltcGtadDdYL0x2RzR5M2Q5?=
+ =?utf-8?B?K0daKytwZ1hpOWsrN01WMDhLYnRQZDIvOHkxWSs2UDlMcnBEbmt4cmh1a21x?=
+ =?utf-8?B?eVJGeWlqeGJOcGVNVkFNeXV6R1JSdldpb0RabzFGRGZLYW1BWnV5Ry9XUzRN?=
+ =?utf-8?B?cUp0TjY5YTNBcHdOaDFEUzhtYXB6dXVyY2JCUDFyMDNEVERsNkxNVG5XZTBa?=
+ =?utf-8?B?bklVaC9OTDVKYXhRT3IrRWkzVnFhR0tlRFZtODA2YmJtdGYxTEJTMDVvVVVv?=
+ =?utf-8?B?RHFKN2RXNjBhWTFNaHB2V1BFTmpGWC81RTVYZTZhSjNyQlo3Ujc3dTdNWnVZ?=
+ =?utf-8?B?VUEyNVZKL0dBSG5BV1VoVDVzMUVCSDFNc1BjcVg2SWVZZ1JkaGFTMzdJQldj?=
+ =?utf-8?B?U09QUnRUbGlpVzZRQnhCaFhHTEpmK2ZXQkdJQkVwbFU3RVRkRFdmeHR1QVUr?=
+ =?utf-8?B?RkZxdjF6SWJXd1FrT2JHYmo4d0VIY0lhQ0NkWm8vTFQ0VWtjc1RIcFpQK2pO?=
+ =?utf-8?Q?IqsSIjZctV+0W7HOeC/7Wkhtyoituxms7o17z?=
+Content-ID: <82E14084B801B74789BEF66852883701@FRAP264.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
+X-OriginatorOrg: vendeeconcept.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAZP264MB3055.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ee2c7be-1140-4bcb-625c-08dec87c4c3a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2026 12:15:31.3365 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a6b96511-fa8e-42e4-9c26-268a53f67ab8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bSyZDDLmsGMNbk5Pd8HDNKKjhTqqwdOeOAQtli/ohb0sqDsw5uOpAf50yVAOhWcSp4VsnK6dvE4EOrdo0rQb2tIbYBA3+4prIzaYDjyMP6iK9QpCSKWG8pLeKQy/vOA9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR0P264MB7389
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264358; x=1781869158; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=HycTNbJNyFAKfC9nL42ncW93aS7Q/WGgjBDyKonh2YU=;
- b=Vi71CO4Me/HEpgn5bAuXZtbHqrE7A1LPniBs8pi8iVeMT8LOP4Bb9+ZaY2Tv2FE1OD
- iac/3ru6q/emx58RVnskYCw2upqGqrx0gM1BCyKA+xgvpeOc7Znt8rKJD6a2xWehWPYi
- fM/qQznpeSFC7sP/keRDb7Gk+PkG+93NkhYjDqVqikKUceKtfscP52bl2tvzFUmmbBgE
- PyyzjIWHyV9nyXNuPmTQzBdG6jI+XCFpRca2o6z0ZGGeEkgDg3srtONSJz1zOyIUaG+b
- mYKJdF181gqy+cNkAakip7j9eLHgZOc3jJKrPfT/1ULSEkMcsXEmi1GwC87zrM1MLLJs
- wKXg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Vi71CO4M
-Subject: Re: [Buildroot] [PATCHv3] package/runc: fix regression with kernel
- without user namespace
+ d=vdconcept.onmicrosoft.com; s=selector2-vdconcept-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d5m0SkH0BMQIzJ0KpG+5mIb06oUWHjpBOETiwrKzxlE=;
+ b=b98AeOuNXjvuwXXDsRPeBN3EHp+spiqvgZMM0mYsNP5a9ENStej+vsFruL1psF1/GkpsHfRiQ5K1+8ky5QL+vXKHydt2G4fjQ9SnbO5gqXR+ljNRXjcYcofpKaHWcwG543UhnY5OHR9CheEVgF10vPD1Ke3BaLakIukC8TtI1+o=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=vendeeconcept.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=vdconcept.onmicrosoft.com
+ header.i=@vdconcept.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector2-vdconcept-onmicrosoft-com header.b=b98AeOuN
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vendeeconcept.com;
+Subject: [Buildroot] [PATCH v2 00/11] add CPE identifiers for pkg-stats
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,461 +183,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Since the runc security bump to version 1.3.5 [1], the TestOci fail due
-> to missing user namespace support in the kernel:
-> 
->     proc/self/setgroups: no such file or directory
-> 
-> The test was working well with runc 1.3.0. The regression is caused by
-> this commit [2] from the 1.3.3 security release.
-> 
-> The regression is fixed by a refactoring from the 1.4.1 release [3].
-> 
-> Backport this commit on top of runc 1.3.5 (fixing some conflicts).
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/14696525946 (TestOci)
-> 
-> [1] e013e2df84fb36985261d7b3c6e6af06afd40f93
-> [2] https://github.com/opencontainers/runc/commit/7762edc82c36ba69a4ea88b86483fcdcac93f5a2
-> [3] https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-
-Applied to 2025.02.x & 2026.02.x. Thanks
-
-> ---
-> v3: backport upstream patch on top of runc 1.3.5
-> v2: - fix commit log about USER_NS.
->         - Use a kconfig fragment instead of enabling CONFIG_USER_NS from
->           runc package.
-> 
->  ...ror-checking-functions-with-their-er.patch | 400 ++++++++++++++++++
->  1 file changed, 400 insertions(+)
->  create mode 100644 package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
-> 
-> diff --git a/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch b/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
-> new file mode 100644
-> index 0000000000..4e103099f9
-> --- /dev/null
-> +++ b/package/runc/0001-Replace-os.Is-error-checking-functions-with-their-er.patch
-> @@ -0,0 +1,400 @@
-> +From 87932aa3d01294886b71f9566f3bf881cf769c66 Mon Sep 17 00:00:00 2001
-> +From: Curd Becker <me@curd-becker.de>
-> +Date: Mon, 17 Nov 2025 00:28:05 +0100
-> +Subject: [PATCH] Replace os.Is* error checking functions with their errors.Is
-> + counterpart
-> +
-> +Signed-off-by: Curd Becker <me@curd-becker.de>
-> +(cherry picked from commit 536e183451b7988316fdc37eecd7afd8570dc19b)
-> +Signed-off-by: Kir Kolyshkin <kolyshkin@gmail.com>
-> +(cherry picked from commit 323a54ef0d91a20f7d5be4308e5e65a98886bf4b)
-> +
-> +Since the runc security bump to version 1.3.5 [1], the TestOci fail due
-> +to missing user namespace support in the kernel:
-> +
-> +    proc/self/setgroups: no such file or directory
-> +
-> +The test was working well with runc 1.3.0. The regression is caused by
-> +this commit [2] from the 1.3.3 security release.
-> +
-> +The regression is fixed by a refactoring from the 1.4.1 release [3].
-> +
-> +Backport this commit on top of runc 1.3.5 (fixing some conflicts).
-> +
-> +Upstream: https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
-> +
-> +[1] https://gitlab.com/buildroot.org/buildroot/-/commit/e013e2df84fb36985261d7b3c6e6af06afd40f93
-> +[2] https://github.com/opencontainers/runc/commit/7762edc82c36ba69a4ea88b86483fcdcac93f5a2
-> +[3] https://github.com/opencontainers/runc/commit/323a54ef0d91a20f7d5be4308e5e65a98886bf4b
-> +[Romain:
-> +  rebase on 1.3.5
-> +  add comments about runc 1.3.5 regression
-> +]
-> +Conflicts:
-> +  libcontainer/configs/validate/validator_test.go
-> +  libcontainer/container_linux.go
-> +  libcontainer/intelrdt/intelrdt.go
-> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> +---
-> + libcontainer/configs/validate/validator.go      |  6 +++---
-> + libcontainer/configs/validate/validator_test.go |  7 ++++---
-> + libcontainer/criu_linux.go                      | 10 +++++-----
-> + libcontainer/devices/device_unix.go             |  2 +-
-> + libcontainer/factory_linux.go                   |  4 ++--
-> + libcontainer/init_linux.go                      |  4 ++--
-> + libcontainer/integration/exec_test.go           |  6 +++---
-> + libcontainer/notify_linux.go                    |  2 +-
-> + libcontainer/process_linux.go                   |  2 +-
-> + libcontainer/rootfs_linux.go                    |  8 ++++----
-> + libcontainer/specconv/spec_linux_test.go        |  5 +++--
-> + libcontainer/state_linux.go                     |  3 ++-
-> + spec.go                                         |  4 ++--
-> + 13 files changed, 33 insertions(+), 30 deletions(-)
-> +
-> +diff --git a/libcontainer/configs/validate/validator.go b/libcontainer/configs/validate/validator.go
-> +index e0052900..3b77617b 100644
-> +--- a/libcontainer/configs/validate/validator.go
-> ++++ b/libcontainer/configs/validate/validator.go
-> +@@ -104,7 +104,7 @@ func security(config *configs.Config) error {
-> + 
-> + func namespaces(config *configs.Config) error {
-> + 	if config.Namespaces.Contains(configs.NEWUSER) {
-> +-		if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
-> ++		if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
-> + 			return errors.New("user namespaces aren't enabled in the kernel")
-> + 		}
-> + 		hasPath := config.Namespaces.PathOf(configs.NEWUSER) != ""
-> +@@ -122,13 +122,13 @@ func namespaces(config *configs.Config) error {
-> + 	}
-> + 
-> + 	if config.Namespaces.Contains(configs.NEWCGROUP) {
-> +-		if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
-> ++		if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
-> + 			return errors.New("cgroup namespaces aren't enabled in the kernel")
-> + 		}
-> + 	}
-> + 
-> + 	if config.Namespaces.Contains(configs.NEWTIME) {
-> +-		if _, err := os.Stat("/proc/self/timens_offsets"); os.IsNotExist(err) {
-> ++		if _, err := os.Stat("/proc/self/timens_offsets"); errors.Is(err, os.ErrNotExist) {
-> + 			return errors.New("time namespaces aren't enabled in the kernel")
-> + 		}
-> + 		hasPath := config.Namespaces.PathOf(configs.NEWTIME) != ""
-> +diff --git a/libcontainer/configs/validate/validator_test.go b/libcontainer/configs/validate/validator_test.go
-> +index d157feea..41412ba4 100644
-> +--- a/libcontainer/configs/validate/validator_test.go
-> ++++ b/libcontainer/configs/validate/validator_test.go
-> +@@ -1,6 +1,7 @@
-> + package validate
-> + 
-> + import (
-> ++	"errors"
-> + 	"os"
-> + 	"path/filepath"
-> + 	"testing"
-> +@@ -171,7 +172,7 @@ func TestValidateSecurityWithoutNEWNS(t *testing.T) {
-> + }
-> + 
-> + func TestValidateUserNamespace(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires userns.")
-> + 	}
-> + 	config := &configs.Config{
-> +@@ -205,7 +206,7 @@ func TestValidateUsernsMappingWithoutNamespace(t *testing.T) {
-> + }
-> + 
-> + func TestValidateTimeNamespace(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/time"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/time"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires timens.")
-> + 	}
-> + 	config := &configs.Config{
-> +@@ -224,7 +225,7 @@ func TestValidateTimeNamespace(t *testing.T) {
-> + }
-> + 
-> + func TestValidateTimeNamespaceWithBothPathAndTimeOffset(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/time"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/time"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires timens.")
-> + 	}
-> + 	config := &configs.Config{
-> +diff --git a/libcontainer/criu_linux.go b/libcontainer/criu_linux.go
-> +index 53a0202a..ddf95445 100644
-> +--- a/libcontainer/criu_linux.go
-> ++++ b/libcontainer/criu_linux.go
-> +@@ -123,7 +123,7 @@ func (c *Container) addMaskPaths(req *criurpc.CriuReq) error {
-> + 	for _, path := range c.config.MaskPaths {
-> + 		fi, err := os.Stat(fmt.Sprintf("/proc/%d/root/%s", c.initProcess.pid(), path))
-> + 		if err != nil {
-> +-			if os.IsNotExist(err) {
-> ++			if errors.Is(err, os.ErrNotExist) {
-> + 				continue
-> + 			}
-> + 			return err
-> +@@ -304,7 +304,7 @@ func (c *Container) Checkpoint(criuOpts *CriuOpts) error {
-> + 
-> + 	// Since a container can be C/R'ed multiple times,
-> + 	// the checkpoint directory may already exist.
-> +-	if err := os.Mkdir(criuOpts.ImagesDirectory, 0o700); err != nil && !os.IsExist(err) {
-> ++	if err := os.Mkdir(criuOpts.ImagesDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
-> + 		return err
-> + 	}
-> + 
-> +@@ -339,7 +339,7 @@ func (c *Container) Checkpoint(criuOpts *CriuOpts) error {
-> + 
-> + 	// if criuOpts.WorkDirectory is not set, criu default is used.
-> + 	if criuOpts.WorkDirectory != "" {
-> +-		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !os.IsExist(err) {
-> ++		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
-> + 			return err
-> + 		}
-> + 		workDir, err := os.Open(criuOpts.WorkDirectory)
-> +@@ -698,7 +698,7 @@ func (c *Container) Restore(process *Process, criuOpts *CriuOpts) error {
-> + 	if criuOpts.WorkDirectory != "" {
-> + 		// Since a container can be C/R'ed multiple times,
-> + 		// the work directory may already exist.
-> +-		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !os.IsExist(err) {
-> ++		if err := os.Mkdir(criuOpts.WorkDirectory, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
-> + 			return err
-> + 		}
-> + 		workDir, err := os.Open(criuOpts.WorkDirectory)
-> +@@ -1149,7 +1149,7 @@ func (c *Container) criuNotifications(resp *criurpc.CriuResp, process *Process,
-> + 			return err
-> + 		}
-> + 		if err := os.Remove(filepath.Join(c.stateDir, "checkpoint")); err != nil {
-> +-			if !os.IsNotExist(err) {
-> ++			if !errors.Is(err, os.ErrNotExist) {
-> + 				logrus.Error(err)
-> + 			}
-> + 		}
-> +diff --git a/libcontainer/devices/device_unix.go b/libcontainer/devices/device_unix.go
-> +index c533eb1c..409e58e9 100644
-> +--- a/libcontainer/devices/device_unix.go
-> ++++ b/libcontainer/devices/device_unix.go
-> +@@ -98,7 +98,7 @@ func GetDevices(path string) ([]*Device, error) {
-> + 			if errors.Is(err, ErrNotADevice) {
-> + 				continue
-> + 			}
-> +-			if os.IsNotExist(err) {
-> ++			if errors.Is(err, os.ErrNotExist) {
-> + 				continue
-> + 			}
-> + 			return nil, err
-> +diff --git a/libcontainer/factory_linux.go b/libcontainer/factory_linux.go
-> +index 94b55eaa..d8a2d8e3 100644
-> +--- a/libcontainer/factory_linux.go
-> ++++ b/libcontainer/factory_linux.go
-> +@@ -51,7 +51,7 @@ func Create(root, id string, config *configs.Config) (*Container, error) {
-> + 	}
-> + 	if _, err := os.Stat(stateDir); err == nil {
-> + 		return nil, ErrExist
-> +-	} else if !os.IsNotExist(err) {
-> ++	} else if !errors.Is(err, os.ErrNotExist) {
-> + 		return nil, err
-> + 	}
-> + 
-> +@@ -154,7 +154,7 @@ func loadState(root string) (*State, error) {
-> + 	}
-> + 	f, err := os.Open(stateFilePath)
-> + 	if err != nil {
-> +-		if os.IsNotExist(err) {
-> ++		if errors.Is(err, os.ErrNotExist) {
-> + 			return nil, ErrNotExist
-> + 		}
-> + 		return nil, err
-> +diff --git a/libcontainer/init_linux.go b/libcontainer/init_linux.go
-> +index 40529200..25c135f3 100644
-> +--- a/libcontainer/init_linux.go
-> ++++ b/libcontainer/init_linux.go
-> +@@ -311,7 +311,7 @@ func finalizeNamespace(config *initConfig) error {
-> + 		switch {
-> + 		case err == nil:
-> + 			doChdir = false
-> +-		case os.IsPermission(err):
-> ++		case errors.Is(err, os.ErrPermission):
-> + 			// If we hit an EPERM, we should attempt again after setting up user.
-> + 			// This will allow us to successfully chdir if the container user has access
-> + 			// to the directory, but the user running runc does not.
-> +@@ -477,7 +477,7 @@ func setupUser(config *initConfig) error {
-> + 		setgroups, err = io.ReadAll(setgroupsFile)
-> + 		_ = setgroupsFile.Close()
-> + 	}
-> +-	if err != nil && !os.IsNotExist(err) {
-> ++	if err != nil && !errors.Is(err, os.ErrNotExist) {
-> + 		return err
-> + 	}
-> + 
-> +diff --git a/libcontainer/integration/exec_test.go b/libcontainer/integration/exec_test.go
-> +index df99da26..14006922 100644
-> +--- a/libcontainer/integration/exec_test.go
-> ++++ b/libcontainer/integration/exec_test.go
-> +@@ -1097,7 +1097,7 @@ func TestHook(t *testing.T) {
-> + 
-> + 	for _, hook := range []string{"prestart", "createRuntime", "poststart"} {
-> + 		fi, err := os.Stat(filepath.Join(config.Rootfs, hook))
-> +-		if err == nil || !os.IsNotExist(err) {
-> ++		if err == nil || !errors.Is(err, os.ErrNotExist) {
-> + 			t.Fatalf("expected file '%s to not exists, but it does", fi.Name())
-> + 		}
-> + 	}
-> +@@ -1645,7 +1645,7 @@ func TestTmpfsCopyUp(t *testing.T) {
-> + }
-> + 
-> + func TestCGROUPPrivate(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires cgroupns.")
-> + 	}
-> + 	if testing.Short() {
-> +@@ -1665,7 +1665,7 @@ func TestCGROUPPrivate(t *testing.T) {
-> + }
-> + 
-> + func TestCGROUPHost(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/cgroup"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/cgroup"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires cgroupns.")
-> + 	}
-> + 	if testing.Short() {
-> +diff --git a/libcontainer/notify_linux.go b/libcontainer/notify_linux.go
-> +index a8762842..77e23157 100644
-> +--- a/libcontainer/notify_linux.go
-> ++++ b/libcontainer/notify_linux.go
-> +@@ -51,7 +51,7 @@ func registerMemoryEvent(cgDir string, evName string, arg string) (<-chan struct
-> + 			}
-> + 			// When a cgroup is destroyed, an event is sent to eventfd.
-> + 			// So if the control path is gone, return instead of notifying.
-> +-			if _, err := os.Lstat(eventControlPath); os.IsNotExist(err) {
-> ++			if _, err := os.Lstat(eventControlPath); errors.Is(err, os.ErrNotExist) {
-> + 				return
-> + 			}
-> + 			ch <- struct{}{}
-> +diff --git a/libcontainer/process_linux.go b/libcontainer/process_linux.go
-> +index baf3706c..6f10a6c2 100644
-> +--- a/libcontainer/process_linux.go
-> ++++ b/libcontainer/process_linux.go
-> +@@ -940,7 +940,7 @@ func getPipeFds(pid int) ([]string, error) {
-> + 			// Ignore permission errors, for rootless containers and other
-> + 			// non-dumpable processes. if we can't get the fd for a particular
-> + 			// file, there's not much we can do.
-> +-			if os.IsPermission(err) {
-> ++			if errors.Is(err, os.ErrPermission) {
-> + 				continue
-> + 			}
-> + 			return fds, err
-> +diff --git a/libcontainer/rootfs_linux.go b/libcontainer/rootfs_linux.go
-> +index 31d05174..abc372f3 100644
-> +--- a/libcontainer/rootfs_linux.go
-> ++++ b/libcontainer/rootfs_linux.go
-> +@@ -361,7 +361,7 @@ func mountCgroupV1(m mountEntry, c *mountConfig) error {
-> + 			// symlink(2) is very dumb, it will just shove the path into
-> + 			// the link and doesn't do any checks or relative path
-> + 			// conversion. Also, don't error out if the cgroup already exists.
-> +-			if err := os.Symlink(mc, filepath.Join(c.root, m.Destination, ss)); err != nil && !os.IsExist(err) {
-> ++			if err := os.Symlink(mc, filepath.Join(c.root, m.Destination, ss)); err != nil && !errors.Is(err, os.ErrExist) {
-> + 				return err
-> + 			}
-> + 		}
-> +@@ -613,7 +613,7 @@ func mountToRootfs(c *mountConfig, m mountEntry) error {
-> + 			return err
-> + 		}
-> + 		if fi, err := os.Lstat(dest); err != nil {
-> +-			if !os.IsNotExist(err) {
-> ++			if !errors.Is(err, os.ErrNotExist) {
-> + 				return err
-> + 			}
-> + 		} else if !fi.IsDir() {
-> +@@ -910,7 +910,7 @@ func setupDevSymlinks(rootfs string) error {
-> + 			src = link[0]
-> + 			dst = filepath.Join(rootfs, link[1])
-> + 		)
-> +-		if err := os.Symlink(src, dst); err != nil && !os.IsExist(err) {
-> ++		if err := os.Symlink(src, dst); err != nil && !errors.Is(err, os.ErrExist) {
-> + 			return err
-> + 		}
-> + 	}
-> +@@ -1132,7 +1132,7 @@ func setReadonly() error {
-> + 
-> + func setupPtmx(config *configs.Config) error {
-> + 	ptmx := filepath.Join(config.Rootfs, "dev/ptmx")
-> +-	if err := os.Remove(ptmx); err != nil && !os.IsNotExist(err) {
-> ++	if err := os.Remove(ptmx); err != nil && !errors.Is(err, os.ErrNotExist) {
-> + 		return err
-> + 	}
-> + 	if err := os.Symlink("pts/ptmx", ptmx); err != nil {
-> +diff --git a/libcontainer/specconv/spec_linux_test.go b/libcontainer/specconv/spec_linux_test.go
-> +index 66359f79..88156516 100644
-> +--- a/libcontainer/specconv/spec_linux_test.go
-> ++++ b/libcontainer/specconv/spec_linux_test.go
-> +@@ -1,6 +1,7 @@
-> + package specconv
-> + 
-> + import (
-> ++	"errors"
-> + 	"os"
-> + 	"strings"
-> + 	"testing"
-> +@@ -609,7 +610,7 @@ func TestDupNamespaces(t *testing.T) {
-> + }
-> + 
-> + func TestUserNamespaceMappingAndPath(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires userns.")
-> + 	}
-> + 
-> +@@ -643,7 +644,7 @@ func TestUserNamespaceMappingAndPath(t *testing.T) {
-> + }
-> + 
-> + func TestNonZeroEUIDCompatibleSpecconvValidate(t *testing.T) {
-> +-	if _, err := os.Stat("/proc/self/ns/user"); os.IsNotExist(err) {
-> ++	if _, err := os.Stat("/proc/self/ns/user"); errors.Is(err, os.ErrNotExist) {
-> + 		t.Skip("Test requires userns.")
-> + 	}
-> + 
-> +diff --git a/libcontainer/state_linux.go b/libcontainer/state_linux.go
-> +index 2b7b8b5b..1f758e2a 100644
-> +--- a/libcontainer/state_linux.go
-> ++++ b/libcontainer/state_linux.go
-> +@@ -1,6 +1,7 @@
-> + package libcontainer
-> + 
-> + import (
-> ++	"errors"
-> + 	"fmt"
-> + 	"os"
-> + 	"path/filepath"
-> +@@ -213,7 +214,7 @@ func (r *restoredState) transition(s containerState) error {
-> + 
-> + func (r *restoredState) destroy() error {
-> + 	if _, err := os.Stat(filepath.Join(r.c.stateDir, "checkpoint")); err != nil {
-> +-		if !os.IsNotExist(err) {
-> ++		if !errors.Is(err, os.ErrNotExist) {
-> + 			return err
-> + 		}
-> + 	}
-> +diff --git a/spec.go b/spec.go
-> +index d03d644e..15e933eb 100644
-> +--- a/spec.go
-> ++++ b/spec.go
-> +@@ -91,7 +91,7 @@ created by an unprivileged user.
-> + 			if err == nil {
-> + 				return fmt.Errorf("File %s exists. Remove it first", name)
-> + 			}
-> +-			if !os.IsNotExist(err) {
-> ++			if !errors.Is(err, os.ErrNotExist) {
-> + 				return err
-> + 			}
-> + 			return nil
-> +@@ -117,7 +117,7 @@ created by an unprivileged user.
-> + func loadSpec(cPath string) (spec *specs.Spec, err error) {
-> + 	cf, err := os.Open(cPath)
-> + 	if err != nil {
-> +-		if os.IsNotExist(err) {
-> ++		if errors.Is(err, os.ErrNotExist) {
-> + 			return nil, fmt.Errorf("JSON specification file %s not found", cPath)
-> + 		}
-> + 		return nil, err
-> +-- 
-> +2.54.0
-> +
-> -- 
-> 2.54.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogU2ViYXN0aWVuIEd1aWxsYXVtZSA8c2ViYXN0aWVuLmd1aWxsYXVtZUB2ZW5kZWVjb25j
+ZXB0LmNvbT4KCkhpIFRob21hcywKClRoYW5rcyBmb3IgdGhlIHJldmlldy4KCkkgdGFnZ2VkIHRo
+ZSBzZXJpZXMgZm9yIDIwMjUuMDIueCBiZWNhdXNlIEkgaGFkIGFscmVhZHkgcHJlcGFyZWQgdGhl
+CmNvcnJlc3BvbmRpbmcgYmFja3BvcnRzIGZvciB0aGUgTFRTIGJyYW5jaCwgYW5kIEkgd2FudGVk
+IHRvIGluZGljYXRlCnRoYXQgdGhlc2UgZml4ZXMgd291bGQgYWxzbyBiZSBuZWVkZWQgdGhlcmUg
+b25jZSBhY2NlcHRlZC4gSSBhZ3JlZQp0aGF0IHRoZSBtaXNzaW5nIENQRSBpbmZvcm1hdGlvbiBh
+bHNvIGFmZmVjdHMgbWFzdGVyLCBzbyB0aGUgY2hhbmdlcwpzaG91bGQgbmF0dXJhbGx5IGJlIG1l
+cmdlZCB0aGVyZSBmaXJzdC4KCkJlc3QgcmVnYXJkcywKU8OpYmFzdGllbgoKClNlYmFzdGllbiBH
+dWlsbGF1bWUgKDExKToKICBwYWNrYWdlL2dhd2s6IGFkZCBDUEUKICBwYWNrYWdlL2djYy9nY2Mt
+aW5pdGlhbC9nY2MtaW5pdGlhbDogYWRkIENQRQogIHBhY2thZ2UvaHRvcDogYWRkIENQRQogIHBh
+Y2thZ2Uva2JkOiBhZGQgQ1BFCiAgcGFja2FnZS9tNDogYWRkIENQRQogIHBhY2thZ2UvbmFubzog
+YWRkIENQRQogIHBhY2thZ2UvcGF0Y2hlbGY6IGFkZCBDUEUKICBwYWNrYWdlL3F0Ni9xdDZkZWNs
+YXJhdGl2ZTogYWRkIENQRQogIHBhY2thZ2UvcXQ2L3F0NnN2ZzogYWRkIENQRQogIHBhY2thZ2Uv
+c2VhdGQ6IGFkZCBDUEUKICBwYWNrYWdlL3gxMXI3L3hrZXlib2FyZC1jb25maWc6IGFkZCBDUEUg
+ZXhlbXBsZSBvZiBkZXRlY3RlZCBDVkUKICAgIGh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0
+YWlsL0NWRS0yMDEyLTAwNjQKCiBwYWNrYWdlL2dhd2svZ2F3ay5tayAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8IDEgKwogcGFja2FnZS9nY2MvZ2NjLWluaXRpYWwvZ2NjLWluaXRpYWwu
+bWsgICAgICAgICAgICAgfCAzICsrKwogcGFja2FnZS9odG9wL2h0b3AubWsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgfCAyICstCiBwYWNrYWdlL2tiZC9rYmQubWsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICB8IDIgKy0KIHBhY2thZ2UvbTQvbTQubWsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgMSArCiBwYWNrYWdlL25hbm8vbmFuby5tayAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8IDIgKysKIHBhY2thZ2UvcGF0Y2hlbGYvcGF0Y2hlbGYu
+bWsgICAgICAgICAgICAgICAgICAgICAgIHwgMiArLQogcGFja2FnZS9xdDYvcXQ2ZGVjbGFyYXRp
+dmUvcXQ2ZGVjbGFyYXRpdmUubWsgICAgICAgfCAzICsrLQogcGFja2FnZS9xdDYvcXQ2c3ZnL3F0
+NnN2Zy5tayAgICAgICAgICAgICAgICAgICAgICAgfCAzICsrKwogcGFja2FnZS9zZWF0ZC9zZWF0
+ZC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxICsKIHBhY2thZ2UveDExcjcveGtl
+eWJvYXJkLWNvbmZpZy94a2V5Ym9hcmQtY29uZmlnLm1rIHwgMiArKwogMTEgZmlsZXMgY2hhbmdl
+ZCwgMTggaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCi0tIAoyLjQ3LjMKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
