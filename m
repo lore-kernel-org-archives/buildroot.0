@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D52FCD98CE
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8EACD8CA8
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jun 2026 11:37:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DCAC411ED;
-	Fri, 12 Jun 2026 11:37:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93DF560FE8;
+	Fri, 12 Jun 2026 11:37:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RbE3TPKRGh4m; Fri, 12 Jun 2026 11:37:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HwXbAEHY6K2k; Fri, 12 Jun 2026 11:37:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCC4411B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A000660D56
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781264228;
-	bh=bJI07oOVaj1BaxKnaWbdk0F9r0oaM1pCuy2IVUbm3is=;
+	s=default; t=1781264231;
+	bh=LogYeAdJDIhZVXosCvYP7B4R7GPkgSGfGVfbILtxZug=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=FTC9qOsFO027nkwL+BHPFNESxWs1Wazdftke/Cty/AELz+3yGwBQJSZwyGPLtVQMi
-	 w8cOu6gTNwExHaLShUTxyIN3czVpU2dQL56po6gKeiTUhUP1T8YhS7syuhhXeZ5/ZP
-	 /0oN6YWbpLMsv6Y8K1YjnUEgEZVwMbZquoVIV1OhJx7Syi1ndykho0mNvCitfpo39z
-	 UdMXEl3e4kW1vF5HI8TbPMmhEbPhBpvr/iYOxPfozE07+99iaPPHfm7DRGW4vfPUa3
-	 awINDvkGfRdlZM0w5BV0vq8SiXqPmUbeZVCJLONXjalkp1hGGbqiki436ROdaT07cL
-	 KqxJ0dm106yjA==
+	b=oJ+1y4hk9hI2oZlRfboIjdRgPJRhj4DzTtL2Fc4JgyqXWEMTXo4PBPKHawqXlL5NU
+	 NR3D6pTs5pOQL5zXlP5HZe9V0cQgmyzNPs/TPdukVPwqh9oNyyNF6ZYcErkY/WeWbq
+	 EY8r/EiNy49JToHlgLETcFCrhpA/eUJvN1211ITY1Dd3FUowLznoNW+pWdJnKkj665
+	 g7LZElg5rmxnqUdx85/38By7HDHPNc4/lnUUXGIZwFDAt2fntOSZCgKOIjXBGBpxhz
+	 9Qn1MmSPmQQOwwr3fgNY8HAzX3A788eKvi5s9JNhNr17S+0kjrJNJLdiCP9MLNCs3p
+	 CaF6qDsheJyvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADCC4411B2;
-	Fri, 12 Jun 2026 11:37:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A000660D56;
+	Fri, 12 Jun 2026 11:37:11 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 86041237
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D4ED212F
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 839E782FD5
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB6EF832FF
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XpVvaYJvWdYd for <buildroot@buildroot.org>;
- Fri, 12 Jun 2026 11:37:06 +0000 (UTC)
+ id d6DDWlDNSBGj for <buildroot@buildroot.org>;
+ Fri, 12 Jun 2026 11:37:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C99F83300
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C99F83300
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C99F83300
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:06 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-490cdae130cso4545195e9.0
- for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:37:06 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8D8B883300
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D8B883300
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8D8B883300
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 11:37:07 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-45ef1629ff4so576010f8f.0
+ for <buildroot@buildroot.org>; Fri, 12 Jun 2026 04:37:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781264224; x=1781869024;
+ d=1e100.net; s=20251104; t=1781264225; x=1781869025;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=r+LmLQ15F8FScsrz3EbvQSpOrkaAFq4ydBbCi6S8JHs=;
- b=aXTf2myo1WhmaptBO1I3g66aGzGPzW3k4pC8KNOkEiU6MW+tVW1N9ZYLlBoFiC0AsE
- es8VEYcfjNWWda50wkk89y+HV0tDin7u8CSv3NLUzAY3VRyAmEMuCqjB9Snjz/xtBeRm
- bnzfUmGon+1/IVDIPxK8jVVVhQxyCDIWmcxpQR4FwjvBHj+FIgfDqA6yML0DGg3ImPtV
- U8Bzbf4Ne/B/jICL9IL+X21+iho2xky8lrPwezd9l22ylnC5/06Fsndl9TGjHBEBIxRY
- 6J10mDkCl0IYlHs0g1T7BCiaoYAtP4IEVevlCKKmib6GSgKbxymzwF/b5RQ4/HVsx4W4
- 93dw==
+ bh=m6t8KtF2cE59VoYzKxqbxpToKlhhWRJDm7oqYR3jX3c=;
+ b=HzWnC69LxC8Ya+ol8AE8ef3m3xCaqEQTP1ZEtv4igZ53lIRa9ba6lX5ikCPh6YoVeh
+ VipngJ+Kaxd9EmuCLZxj7QaUkNu6Ee5GLtBzeMeilZy07p1x2vG/Ne7w6jNuKjNh+0cm
+ 30NzEHIi2Pq9uEZx+w/4xe18oqRBVaYTWQl9bGAj3AqEh7+nLLjAiP1f5fNHR6IwkFrO
+ 4UAHm+3Xb185Wnc/UXGwK9RgjTPCgwW3rm1pSdMXIcYXZUi/jQWFqJ3izv0Ky82nv9cr
+ 11aSUDbrlDRJIiTw0KdjJ3nCpXAIeR0vPtGSxjQlwvfXVHV2ziS/cOlSMJnqNs/w9m3+
+ BtfQ==
 X-Forwarded-Encrypted: i=1;
- AFNElJ+bmmv8pD5i8NGyva+yphYhMbnuy1lqYg1Eu5rn7b3J3gcVZ/MLhPjTcBp74GrS5QIymhxW5xCPA7o=@buildroot.org
-X-Gm-Message-State: AOJu0Yx9WsbJCHGYgoKZsbVWz+9k+Ma9ehhSffioJhlw1uMUHNFZc2oC
- XxCgmIvHp/eVou1PDwOTxj2N1J9fgZ7MuMwq1TDcZRbTXDr7b9PUxml41zChOYJoUU2qe4isPYH
- TIOcN
-X-Gm-Gg: Acq92OFrtkgfDjq1EaKtgnQ8Q+9wGYvymhxqBgqT1sV+6qI3+QJpaTShOxINQHexp8o
- Zs1UZ9A+EF7ecdtVRUyBxG1vVPAdVHwXDrzoqvXero8Lxfb73pIKOKBDbc825DNqDKlVBTWK/q3
- m5LX2mSRHMkfTE770azNk6EQCMMqWPNtAE0mnumBqZbwW5wClmIofZ8Q4vRdcfWA5yOLeLB3YHV
- Qm9PEVo9kTEQixoA5ARDk9r9AeJyTqEFwN1JC2CP0CIhcWzCsncLxGshlmRQ1/Zq93ytYAkSJYq
- kbq0nZETMDVkEI2YN/PCRvGWordLm9XSil0iNcr6LHxN4las6QSUeqbrnxuNaVzZB9zOa9y624W
- nqJWselXcxQY2DH/74lyOlkLQPmGX6nB4r+3HLR7vHK6LBLZiL7BKsIR8JBgjYFNCD1Jbm2S7vK
- 8ezs1s0uGSfAQ5meyuIulvhmd0xg==
-X-Received: by 2002:a05:600c:a310:b0:490:4b89:5362 with SMTP id
- 5b1f17b1804b1-490ec508b20mr22473195e9.24.1781264224591; 
- Fri, 12 Jun 2026 04:37:04 -0700 (PDT)
+ AFNElJ9T9EXLYMxy8ES4qTeK7e6WhUUNkDCfoVTU47Cok8AQLKXAOsEI6b2px0qAuC55mNLATt+FvBvfckI=@buildroot.org
+X-Gm-Message-State: AOJu0YzZXTy5f38Yh1JBrhh0pp4pUbaIgkp9kaIsE5jCWWP47L7vqir4
+ z2RfT5zzkgwRvHawDRlwf3uMHSF/xp6nmShFvCu+UV12/HkE+beKoakHY9AyyVLoBog=
+X-Gm-Gg: Acq92OFerngcuss4SQwzblH+sIo7s60hL5AndsyhV4+I/tzkArmSz4VbVUO/86BwY05
+ ZzGdfXH9yXvpzgh8ye/tBDp938IQ2TgRcYGvOJk+4I/W6CqZTRpSsA7cq0DzYgW/iLsOE6KYhRT
+ Nc94+yi6DTyKKtpmnb5ia9oUOOvoxzdzoc/fPGFe9e0RD7QAej+TUWzmwBQGA1OykNXt5OQ+dpQ
+ 5Gmp2w4nZNV5l/WgXYrbDNaQDtqbjWSS7POPgNTe4iBiPalrHGED6nmcricDbWvuu6YwYeh2K4m
+ hBpplciEwKC5CTOIS+7lEcPQgkkVK8BQn180vM4eMfLmYrJoNo3a9guT4veaEGPa72AtyU//Kme
+ TYHFjYcblVohuDyFQiiiejzdBW4fqDO8XPRCegX2cu19H12r4+pczz1bd3VYAEdcZqRWdrsarnR
+ eYfRu7iI/sgbv0nIU=
+X-Received: by 2002:a05:6000:4203:b0:45e:eec6:500c with SMTP id
+ ffacd0b85a97d-4606dbb6bb4mr3702069f8f.39.1781264225450; 
+ Fri, 12 Jun 2026 04:37:05 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-490ea7c8f49sm67681595e9.6.2026.06.12.04.37.04
+ ffacd0b85a97d-4606f263950sm5096902f8f.7.2026.06.12.04.37.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jun 2026 04:37:04 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Fri, 12 Jun 2026 04:37:05 -0700 (PDT)
+To: Pengji Li <wjjsn@qq.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 12 Jun 2026 13:37:03 +0200
-Message-ID: <20260612113704.251139-1-thomas.perale@mind.be>
+Date: Fri, 12 Jun 2026 13:37:04 +0200
+Message-ID: <20260612113704.251188-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260531143820.2967481-2-bernd@kuhls.net>
-References: <20260531143820.2967481-2-bernd@kuhls.net>
+In-Reply-To: <tencent_EA74B36C1735A9BED38BAF20690480CAAA08@qq.com>
+References: <tencent_EA74B36C1735A9BED38BAF20690480CAAA08@qq.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781264224; x=1781869024; darn=buildroot.org;
+ d=mind.be; s=google; t=1781264225; x=1781869025; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=r+LmLQ15F8FScsrz3EbvQSpOrkaAFq4ydBbCi6S8JHs=;
- b=ZKBrkaLetErzf9YXftKnLyvVAECKDzBnfUCG+9daZn2yzpdoxbnBqOHSMevwZlDdpt
- Gt1BlwmYJWXLiRf970EHpfvAXZAMTMWPn/lQNTjiLA5bqC7pcm9gSIwQ8Ma2CQLUMoD/
- crQ5mPfRptkmepA7FDB0/XEB5PEuINQSLpYxkcorME49uXS2yqUU60TaXOTnq4YDc9//
- qxHi5ZCC/BKPESwdphO5m6taR1gJdj1/deCSU9V1qgFDIDy/Ok0nLzUtEw3vaCgNEKAT
- HcCQzrl9ic0E2nmIV+Df4BKTWUdPekuH7kTEtyeHUzScNIr8riA6pwv0IjE3XOGzAcsn
- JKkw==
+ bh=m6t8KtF2cE59VoYzKxqbxpToKlhhWRJDm7oqYR3jX3c=;
+ b=ZFKad7ioVUW/urnKcxnjzBkIrBadeEA+/SDBTrTJMAixfzdPrU5UVJ2q1qpQ5ittoc
+ ZLKiJZAmjcmQNie1xeUxhKaJaXsMd117j5IRA/sdhndRp3AkfC+FPdQm0WmW5o406OSX
+ T6Uv+gjh5kKns2Z1mEAq3qHMhU92W2VYPLyTAqIPh+mUyPUxaoBsWyC7mvURX5owWmls
+ 6p3QDXl5rCW2AX+uPkdiK2ycD5tfiW3wsIDfNaKuwW5th6PFYrREwEOyoLCGwA9xNHmV
+ 4VkfDGAsbc8Od7zghNzz28nP2kZfv6cdmVI0mGsuDWPmhOtNGMgZQ3b9UKlu6ToQ1YGI
+ Dp3g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZKBrkaLe
-Subject: Re: [Buildroot] [PATCH 2/3] package/sane-airscan: needs
- BR2_TOOLCHAIN_HAS_SYNC_4
+ header.a=rsa-sha256 header.s=google header.b=ZFKad7io
+Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: respect LoongArch SIMD
+ selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,71 +131,78 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes a build error
+> OpenCV probes the host compiler for LSX/LASX by trying to compile a
+> small test program with '-mlsx' / '-mlasx'. With Buildroot's toolchain
+> this probe succeeds even when the target CPU lacks the matching ISA
+> extension, and the resulting libraries then contain LSX/LASX
+> instructions. This causes SIGILL at runtime on, e.g., the LA264.
 > 
-> output/per-package/sane-airscan/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
->  libsane-airscan.so.1.p/airscan-http.c.o: in function `http_data_ref':
-> airscan-http.c:(.text+0x1c88): undefined reference to `__sync_fetch_and_add_4'
-> output/per-package/sane-airscan/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
->  libsane-airscan.so.1.p/airscan-http.c.o: in function `http_data_unref':
-> airscan-http.c:(.text+0x1cd0): undefined reference to `__sync_sub_and_fetch_4'
-> output/per-package/sane-airscan/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
->  libsane-airscan.so.1.p/airscan-trace.c.o: in function `trace_ref':
-> airscan-trace.c:(.text+0x32c): undefined reference to `__sync_fetch_and_add_4'
-> output/per-package/sane-airscan/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
->  libsane-airscan.so.1.p/airscan-trace.c.o: in function `trace_unref':
-> airscan-trace.c:(.text+0x358): undefined reference to `__sync_sub_and_fetch_4'
+> Map Buildroot's BR2_LOONGARCH_SIMD_* selection to OpenCV's
+> CPU_BASELINE / CPU_DISPATCH knobs:
 > 
-> with this defconfig
+>   BR2_LOONGARCH_SIMD_NONE  -> no baseline, no dispatch
+>   BR2_LOONGARCH_SIMD_LSX   -> baseline = LSX,  no dispatch
+>   BR2_LOONGARCH_SIMD_LASX  -> baseline = LSX,  dispatch = LASX
 > 
-> BR2_sparc=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SPARCV8_UCLIBC_STABLE=y
-> BR2_PACKAGE_SANE_AIRSCAN=y
+> The block is gated on BR2_loongarch64, so the existing auto detection
+> remains in effect for every other architecture.
 > 
-> detected by the Gitlab pipelines while testing to bump of sane-backends
-> to 1.4.0 in this series.
-> 
-> The build error is caused by an upstream commit added in 2020 to version
-> 0.99.14:
-> https://github.com/alexpevzner/sane-airscan/commit/fccd8402a6bc5fce22805edf4e0fb6b0f24479e7
-> so a backport to LTS branches should be considered because the initial
-> version of the buildroot package was 0.99.33, added with commit
-> f78280bf262ceb1c1abbdade9de77fcc4add74ae.
-> 
-> An autobuilder error was not recorded yet because it is masked by various
-> build errors of the sane-backends package which are resolved by its bump
-> to 1.4.0 in this series.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Pengji Li <wjjsn@qq.com>
 
 Applied to 2026.02.x. Thanks
 
 > ---
->  package/sane-airscan/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/opencv4/opencv4.mk | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 > 
-> diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
-> index 2324a3f661..63ef06b582 100644
-> --- a/package/sane-airscan/Config.in
-> +++ b/package/sane-airscan/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_SANE_AIRSCAN
->  	bool "sane-airscan"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on !BR2_STATIC_LIBS # avahi, gnutls, sane-backends
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # avahi, dbus
->  	depends on BR2_USE_WCHAR # avahi, gnutls
->  	depends on BR2_USE_MMU # dbus, sane-backends
-> @@ -26,5 +27,6 @@ config BR2_PACKAGE_SANE_AIRSCAN
+> diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+> index 695355c308..0e2567eb6f 100644
+> --- a/package/opencv4/opencv4.mk
+> +++ b/package/opencv4/opencv4.mk
+> @@ -120,6 +120,41 @@ OPENCV4_CONF_OPTS += \
+>  	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
+>  	-DENABLE_VFPV3=OFF
 >  
->  comment "sane-airscan needs a toolchain w/ wchar, dynamic library, threads, C++"
->  	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> +# LoongArch: OpenCV probes the host compiler for LSX/LASX by trying to
+> +# compile a small test program with '-mlsx' / '-mlasx'. With Buildroot's
+> +# toolchain this check succeeds even when the target CPU does not have
+> +# the matching ISA extension, and the resulting OpenCV libraries end up
+> +# containing LSX/LASX instructions, causing SIGILL at runtime on CPUs
+> +# such as the LA264.
+> +#
+> +# Trust Buildroot's own LoongArch SIMD selection (BR2_LOONGARCH_SIMD_*)
+> +# as the source of truth and translate it to OpenCV's CPU_BASELINE /
+> +# CPU_DISPATCH knobs (OpenCV knows LSX and LASX on LoongArch):
+> +#
+> +#   BR2_LOONGARCH_SIMD_NONE  -> no baseline, no dispatch
+> +#   BR2_LOONGARCH_SIMD_LSX   -> baseline = LSX,  no dispatch
+> +#   BR2_LOONGARCH_SIMD_LASX  -> baseline = LSX,  dispatch = LASX
+> +#                              (LASX implies LSX; OpenCV's own upstream
+> +#                              combination matches BR2's choice above.)
+> +#
+> +# We only enter this block on LoongArch, so the existing OpenCV auto
+> +# detection still applies for all other architectures.
+> +ifeq ($(BR2_loongarch64),y)
+> +ifeq ($(BR2_LOONGARCH_SIMD_NONE),y)
+> +OPENCV4_CONF_OPTS += \
+> +	-DCPU_BASELINE= \
+> +	-DCPU_DISPATCH=
+> +else ifeq ($(BR2_LOONGARCH_SIMD_LSX),y)
+> +OPENCV4_CONF_OPTS += \
+> +	-DCPU_BASELINE=LSX \
+> +	-DCPU_DISPATCH=
+> +else ifeq ($(BR2_LOONGARCH_SIMD_LASX),y)
+> +OPENCV4_CONF_OPTS += \
+> +	-DCPU_BASELINE=LSX \
+> +	-DCPU_DISPATCH=LASX
+> +endif
+> +endif
+> +
+>  # Cuda stuff
+>  OPENCV4_CONF_OPTS += \
+>  	-DBUILD_CUDA_STUBS=OFF \
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
