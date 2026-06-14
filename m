@@ -1,117 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3DACD98C5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4198ACD98D2
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 16:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D27B983B0A;
-	Sun, 14 Jun 2026 15:54:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91ECC4112B;
+	Sun, 14 Jun 2026 16:58:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qRY1w8QVhno; Sun, 14 Jun 2026 15:54:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZaZJdvPLePVA; Sun, 14 Jun 2026 16:58:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C35683AEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A10E4110A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781452448;
-	bh=n1mV386fEt6ODdr6uMyXpcujGO5Dke/GAyLlgqCi28w=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1781456315;
+	bh=UDWXjH0bv51+ob0KKUFKU26zfmqMs2YuF9dQROMLzjg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=Wk4IKLHunKUgMxL4tTFZTe7SZttXleFq0YMyks5tHcOuTk72AR/uKwlSe2CydQdER
-	 T/OXUiZhS9pc5aCbdtXhQWaicP5UhSQTzOTKd51i/FK/9TZEwYnpv0PaMIVVMH9d5t
-	 PEJCcW6zoI2T0lGS92xF6xVMQcx/euBsqJyJrUh+PHbPE3EDyeFMWFIQjZ/igdAz3n
-	 FdcdzI8J1XYSwzQX6YiXTyMLAXdrxlJF7HMlpmjWKP0L+x6YuLEyWSgpQ+fSnOC1U2
-	 v99jsuTzahFxn1PYf/B4sT3q7SxhpOCvKy7nC+JlJrRrORypR7FfHFgLeLCenGo0kj
-	 1MmxN0kxbvGwA==
+	 From:Reply-To:From;
+	b=J8tMunAWNvq266rU6uff2eg8sWC3v1AGhaCWGmcREYILd7exJQrOqf9LcjZVcLInc
+	 Fd9Q6M3XVH+YCpd/QP/ap7+7WpVLVbEYwhUY3y4DwXtC2+zpNTt0eQCQZPvu/lnCHy
+	 7mdk/3Kmx2Oj2VO9+ScU4SMOoEFnn49CHoskqXjkH1xG5VJXJQRxMf4J3C0zKSD5/y
+	 MRuGZX+5yIPk6YwiE/oAoipb6sPRDOlZ7zvMpUjndBN8bhARQ7BaclkP1Npu3o+XS7
+	 2alFGe9FhQyzni1kpmFgW/+osddwlyMWJ6IGtPGM6TuB3KcKRAh+DrO0XSSEEqOGiu
+	 86w0wSgHd2qzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C35683AEA;
-	Sun, 14 Jun 2026 15:54:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ACFA1DE
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A10E4110A;
+	Sun, 14 Jun 2026 16:58:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86309DE
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9319840680
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 785534110A
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id btFF6V6S0PKx for <buildroot@buildroot.org>;
- Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
- envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2DE904039C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE904039C
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2DE904039C
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-5aa63628d26so2285782e87.0
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:54:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781452444; x=1782057244;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=gJPS7hDtENVU9YJxWlU90jX1G1+QNvNj4YEld9/1iQw=;
- b=qdbzD2aYykhOAWhKb+p/w0xoeaUivrCbM4qDrr13bX6MAScNaBj7FRJQwGAz16mFx3
- 9kinS3ZTY2BOvoQ1Qm6GK/YJ1SzVDB/jsgxpPj6y0UwgNgqaev9t6dZnoNak5/27E8It
- Wpf7t3yIEJv02Rif+UTj2FV8k9+TTZaZGPZAH2w9Q+MF9hsblRN2EM89yNXLdnIybE5a
- qDRFtN3hJZgcze9NbZTz2ZeUCLxA+a8WDd6KuT1cpgSrpJ19j6D+Nq2952eVn5UwksbK
- UZgr4umO+OgS95z0j6XRJdS94W9tgN6whA7riEATALsfsD0eI+FHDb1LD3OWaJEgVOJL
- D72w==
-X-Gm-Message-State: AOJu0YwrdkW5z7siV84ORwvawhEPYq0jG0RnSvgVFmamUsExN4brN8qU
- VIJy5Dl32gpr78GG4+Dk8Jhi2/J4iKDCj0X46svaYYEyY/1ai3i0XaAHu12aG9AaKEGm0AYsx5T
- GTOYmXOtyeg==
-X-Gm-Gg: Acq92OG606ff+x7odlhJD8PiKEOfYFRlInRBUEpnue9UjG6iEnB4ecOD69rg0AExse0
- 4K6ADP7QQULZFeFtZ3yIyjM8kH4t3Uq5XkILSufO9zHVmSydnLbJAUBLgKl5ajajnT7FKBmiy6a
- BHenXkl0hQXRLypqjAjjKWWOlF8wKhk3LNpkpJ+4GyGwEJMEYHQzkkWJw8JZ3Mr6kAS/ec+IPTp
- XVjIUaighlnnXKnDYU211znHrzBy03Bx43lRSMbyHNFzhxvCjdqBCKAkAiKkiNd4sYEd0WOwbT8
- m/DbDgYkcPo7pd/1l/7u0iy8CPCeZzWSWeNGG4sELEuSFOz3sWw63oug3Pa+DwuIkUpbna/nzhw
- Re6izYQONGZ2N3hxyaX35Y3aqYR+5d0ZDvnyLVGHJUkEt0odlBKAm15SZeMSPzCL0688TXiBZe3
- yhur9XSdxk7wWlhh2leys+iASW9ZUStRCwfAubqzOJry759a6UpAPzBQ==
-X-Received: by 2002:a05:6512:4846:b0:5ad:abf:1e1c with SMTP id
- 2adb3069b0e04-5ad30d99643mr1477655e87.3.1781452443807; 
- Sun, 14 Jun 2026 08:54:03 -0700 (PDT)
-Received: from localhost (81-226-112-165-no2360.tbcn.telia.com.
- [81.226.112.165]) by smtp.gmail.com with UTF8SMTPSA id
- 2adb3069b0e04-5ad2e1adf09sm2076607e87.58.2026.06.14.08.54.00
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jun 2026 08:54:02 -0700 (PDT)
-From: John Ernberg <j@j-ernberg.se>
-To: buildroot@buildroot.org
-Date: Sun, 14 Jun 2026 17:53:28 +0200
-Message-ID: <20260614155328.304282-9-j@j-ernberg.se>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260614155328.304282-1-j@j-ernberg.se>
-References: <20260614155328.304282-1-j@j-ernberg.se>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n_DY1qh1955x for <buildroot@buildroot.org>;
+ Sun, 14 Jun 2026 16:58:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BEA1141109
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA1141109
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BEA1141109
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 5E294B00571;
+ Sun, 14 Jun 2026 18:58:24 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 14 Jun 2026 18:58:24 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452444; x=1782057244;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=gJPS7hDtENVU9YJxWlU90jX1G1+QNvNj4YEld9/1iQw=;
- b=y798Czitrv+jrQO1RgegmZp0CmNrgFpCxg0BfOwzL8Z8oIS3EvQIw4KMPbHMMT8YD9
- DJQFTRoLZoRugvmVAfYL4wGUQZXQNZ5bfHNifgIM1VjojQ2u7QELnChCNyHl4yxHlwic
- 6qmIF4O48ygJDzaxhx1Zld6ll5pyV54SMdzIKKIvlbJEPvOGMZeyQjLanpKhnd2B4VOH
- zNOoXyTSvraI6knCUbqQM/bHVMTvqXnq3geasfaCujc5NrqSBkPZamSIkRNJV3rv9/RB
- uP8rzzO+lMiGuZRaOWYCYtuPgCTPMTKr6j/9qhUsIg7u8UCRVFoQZg06WX21k2Zx17Ij
- 1hLw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=j-ernberg.se
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=j-ernberg-se.20251104.gappssmtp.com
- header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=y798Czit
-Subject: [Buildroot] [PATCH v2 8/8] package/python-html5lib: Drop the package
+Date: Sun, 14 Jun 2026 18:58:24 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Michele Comignano <mcdev@playlinux.net>, buildroot@buildroot.org, Bernd
+ Kuhls <bernd@kuhls.net>
+In-Reply-To: <87wlw1l9cx.fsf@dell.be.48ers.dk>
+References: <20260613215558.978962-1-mcdev@playlinux.net>
+ <87wlw1l9cx.fsf@dell.be.48ers.dk>
+User-Agent: Webmail Free/1.6.16
+Message-ID: <2c64e76850f28ec44af165e020424b0a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1781456307;
+ bh=oRvrRoyBEqO/aTCBm+chx1vV2lbdsS2dGgEv+cUYVvE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ti4baTR6kHHKhRwQG79ov47KDXUWJ2xbKB9xRVAc+krRU0rm3Eb1ONymGXc75O3Go
+ iLtW2cQ1Y9NG6H2ENS0PQu7DBnF3PTd6NhEOychtklNDEO+K6Ys7gkTpuiespyC205
+ dTvPWP4wdNjnQihladXja+Nn47hIPYpMOygV6nscJ0nCFzz6Ls8vfeNb7KrqFtPUNy
+ EfImWdbMgVUkQHm5ZEjZdLm1pQ4b0O4I3ym/d37LTdqeMh+X0xRUvS6132kMECLF6b
+ ZHhghSeDBtCTlTtNgYJJwpjv4ikyHcEdkYoUESuHpd1sT4n/CZZwvEnvTkzWpjUIal
+ DFfT2zNSOymeA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ti4baTR6
+Subject: Re: [Buildroot] [PATCH] package/opus: don't use vcvtaq_s32_f32 on
+ 32 bit ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,170 +96,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, John Ernberg <j@j-ernberg.se>,
- John Ernberg <john.ernberg@actia.se>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream has not seen any activity since early 2024 [1], and hasn't made a
-release since 2020. [2]
+Hi Peter, All,
 
-The package will no longer build with setuptools >= 82. [3]
+On 14/06/2026 12:11, Peter Korsgaard wrote:
+>>>>>> "Michele" == Michele Comignano <mcdev@playlinux.net> writes:
+> 
+>  > From: Comick <mcdev@playlinux.net>
+>  > Upstream issues is waiting for feedback.
+> 
+>  > See here for details:
+>  > https://gitlab.xiph.org/xiph/opus/-/work_items/2397
+> 
+> 
+> Hmm, indeed - There is no vcvtaq_s32_f32 intrinsic in
+> gcc/config/arm/arm_neon.h but there is in gcc/config/aarch64/arm_neon.h
+> but I do not understand the finer details - Julien?
 
-Link: https://github.com/html5lib/html5lib-python/commits/master/ [1]
-Link: https://github.com/html5lib/html5lib-python/tags [2]
-Link: https://autobuild.buildroot.org/results/994ce8ace0b6704404c3b3df4538f38334c16593/ [3]
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: John Ernberg <j@j-ernberg.se>
+Armv8-A Aarch32 is in fact a superset of Armv7-A. This is why there
+is few 32bit Armv8-A instructions which are not available in original
+Armv7-A.
 
----
+See the column "Supported architectures" in the following table:
+https://arm-software.github.io/acle/neon_intrinsics/advsimd.html#conversions
 
-v2:
- - No changes
----
- Config.in.legacy                              |  7 ++++
- package/Config.in                             |  1 -
- ...y-fix-version-parsing-on-Python-3.14.patch | 42 -------------------
- package/python-html5lib/Config.in             |  8 ----
- package/python-html5lib/python-html5lib.hash  |  5 ---
- package/python-html5lib/python-html5lib.mk    | 16 -------
- 6 files changed, 7 insertions(+), 72 deletions(-)
- delete mode 100644 package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
- delete mode 100644 package/python-html5lib/Config.in
- delete mode 100644 package/python-html5lib/python-html5lib.hash
- delete mode 100644 package/python-html5lib/python-html5lib.mk
+vcvtaq_s32_f32 is maked "A32/A64", whereas, for example
+vcvt_s32_f32 is marked "v7/A32/A64".
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8992315454..8134e8ac6a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2026.08"
- 
-+config BR2_PACKAGE_PYTHON_HTML5LIB
-+	bool "python-html5lib removed"
-+	select BR2_LEGACY
-+	help
-+	  Upstream is no longer maintained, and the package does not
-+	  build with setuptools >= 82.
-+
- config BR2_PACKAGE_PYTHON_XLIB
- 	bool "python-xlib removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 73522de358..ee02d38ba5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1152,7 +1152,6 @@ menu "External python modules"
- 	source "package/python-hiredis/Config.in"
- 	source "package/python-hkdf/Config.in"
- 	source "package/python-hpack/Config.in"
--	source "package/python-html5lib/Config.in"
- 	source "package/python-httpcore/Config.in"
- 	source "package/python-httplib2/Config.in"
- 	source "package/python-httpx/Config.in"
-diff --git a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
-deleted file mode 100644
-index 0147aa1418..0000000000
---- a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From b90dafff1bf342d34d539098013d0b9f318c7641 Mon Sep 17 00:00:00 2001
--From: Andrew Sukach <andrew@sukach.org>
--Date: Fri, 12 Sep 2025 21:53:31 -0700
--Subject: [PATCH] `setup.py`: fix version parsing on Python 3.14 (ast.Str
-- removed)
--
--Python 3.14 removes the ast.Str node type. String literals now appear
--as ast.Constant(value=str).
--Update the AST check to accept both ast.Str (for older Pythons) and
--ast.Constant with a string value (for Python 3.8+), allowing html5lib to
--build successfully on Python 3.14 while remaining compatible with older
--version.
--
--Upstream: https://github.com/html5lib/html5lib-python/pull/589
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- setup.py | 11 ++++++++---
-- 1 file changed, 8 insertions(+), 3 deletions(-)
--
--diff --git a/setup.py b/setup.py
--index 30ee0575..42ab6f67 100644
----- a/setup.py
--+++ b/setup.py
--@@ -92,9 +92,14 @@ def default_environment():
--     for a in assignments:
--         if (len(a.targets) == 1 and
--                 isinstance(a.targets[0], ast.Name) and
---                a.targets[0].id == "__version__" and
---                isinstance(a.value, ast.Str)):
---            version = a.value.s
--+                a.targets[0].id == "__version__"):
--+            if hasattr(ast, "Str") and isinstance(a.value, ast.Str):
--+                version = a.value.s
--+            elif (hasattr(ast, "Constant")
--+                  and isinstance(a.value, ast.Constant)
--+                  and isinstance(a.value.value, str)):
--+                version = a.value.value
--+assert version is not None
-- 
-- setup(name='html5lib',
--       version=version,
-diff --git a/package/python-html5lib/Config.in b/package/python-html5lib/Config.in
-deleted file mode 100644
-index 34e22049ad..0000000000
---- a/package/python-html5lib/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_HTML5LIB
--	bool "python-html5lib"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
--	help
--	  HTML parser based on the WHATWG HTML specification.
--
--	  https://github.com/html5lib/html5lib-python
-diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
-deleted file mode 100644
-index 5023f5ab66..0000000000
---- a/package/python-html5lib/python-html5lib.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/html5lib/json
--md5  6748742e2ec4cb99287a6bc82bcfe2b0  html5lib-1.1.tar.gz
--sha256  b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f  html5lib-1.1.tar.gz
--# Locally computed sha256 checksums
--sha256  16a39991619e92f18680932da2a9199fdf7d95df3ecaedc52ea06218aabafd6f  LICENSE
-diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
-deleted file mode 100644
-index 320ef01c7a..0000000000
---- a/package/python-html5lib/python-html5lib.mk
-+++ /dev/null
-@@ -1,16 +0,0 @@
--################################################################################
--#
--# python-html5lib
--#
--################################################################################
--
--PYTHON_HTML5LIB_VERSION = 1.1
--PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
--PYTHON_HTML5LIB_SITE = https://files.pythonhosted.org/packages/ac/b6/b55c3f49042f1df3dcd422b7f224f939892ee94f22abcf503a9b7339eaf2
--PYTHON_HTML5LIB_LICENSE = MIT
--PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
--PYTHON_HTML5LIB_SETUP_TYPE = setuptools
--PYTHON_HTML5LIB_CPE_ID_VENDOR = html5lib
--PYTHON_HTML5LIB_CPE_ID_PRODUCT = html5lib
--
--$(eval $(python-package))
--- 
-2.53.0
+There is also a search engine for intrinsics available at:
+https://developer.arm.com/architectures/instruction-sets/intrinsics/
 
+>  > Signed-off-by: Michele Comignano <mcdev@playlinux.net>
+>  > ---
+>  >  ...use-vcvtaq_s32_f32-on-32-bit-systems.patch | 26 
+> +++++++++++++++++++
+>  >  1 file changed, 26 insertions(+)
+>  >  create mode 100644 
+> package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
+> 
+>  > diff --git 
+> a/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch 
+> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
+>  > new file mode 100644
+>  > index 0000000000..ddd572921f
+>  > --- /dev/null
+>  > +++ 
+> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
+>  > @@ -0,0 +1,26 @@
+>  > +From 321532001d59367466a6a4a60f5c6f0fe5fa2176 Mon Sep 17 00:00:00 
+> 2001
+>  > +From: Comick <mcdev@playlinux.net>
+>  > +Date: Sat, 13 Jun 2026 21:48:00 +0200
+>  > +Subject: [PATCH] celt/arm don't use vcvtaq_s32_f32 on 32 bit 
+> systems
+>  > +Upstream: N/A https://gitlab.xiph.org/xiph/opus/-/work_items/2397
+>  > +
+>  > +---
+>  > + celt/arm/mathops_arm.h | 2 +-
+>  > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>  > +
+>  > +diff --git a/celt/arm/mathops_arm.h b/celt/arm/mathops_arm.h
+>  > +index b1f9169..c612dae 100644
+>  > +--- a/celt/arm/mathops_arm.h
+>  > ++++ b/celt/arm/mathops_arm.h
+>  > +@@ -37,7 +37,7 @@
+>  > +
+>  > + static inline int32x4_t vroundf(float32x4_t x)
+>  > + {
+>  > +-#  if defined(__aarch64__) || (defined(__ARM_ARCH) && __ARM_ARCH 
+> >= 8)
+>  > ++#  if defined(__aarch64__)
+>  > +     return vcvtaq_s32_f32(x);
+>  > + #  else
+>  > +     uint32x4_t sign = vandq_u32(vreinterpretq_u32_f32(x), 
+> vdupq_n_u32(0x80000000));
+>  > +--
+>  > +2.54.0
+>  > +
+>  > --
+> 
+>  > 2.54.0
+> 
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot@buildroot.org
+>  > https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> 
+> --
+> Bye, Peter Korsgaard
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
