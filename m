@@ -4,119 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89FF4CD98C5
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C17D9CD98D8
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B5C860F00;
-	Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFE760ED2;
+	Sun, 14 Jun 2026 15:53:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VtV-kq9im9ET; Sun, 14 Jun 2026 15:53:53 +0000 (UTC)
+ id dzS4ytL8t4mr; Sun, 14 Jun 2026 15:53:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E7D760F04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EC7960F26
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781452433;
-	bh=Zz2Rd2APssam986GJ3C/xunIso0ZTtUuA732Z3tSRd8=;
+	s=default; t=1781452435;
+	bh=LS42nl5IRq1o30kPuM9O0ouB70LUn9ohHYtVSGAmjkg=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=bATOnyx/w2DY1YRzyzSeODxoamSE5uuw28/Yhq8+wfY2Ir1PHRHvc22zH3dsjDmYv
-	 wJhGNMFtK53ijhtgM2vcvT9R0HLL7wRh21IzX4tChLHSc4A0WATOmhTsP+BiapxRNY
-	 UfFYlyhBY2EuZvG8wFUaqL1rpLDGgsAst1oVupSg/C3WD9uCWZKQ7+pBD6f2Gs0v/5
-	 I4yrgx/bhhL6cJ0695zHpTF9J2YF1gtxOCywD/9ZkGXQ2RwYTD5/2KSY+/zgDtL9+l
-	 ibI5hMEMKxENw0L5Adtqfo/Y/m1HgmlB5pMCKHqXfI1UGBVxaaD+7M3JSX//BrHdyp
-	 T4vf5iP9dapxQ==
+	b=NlaZiZWJGEaYjQlsYWucuL+8LemaZrwHVoWkyCoDNQ4FtedwMt4w7qxo8P2yskwhV
+	 +roJj8QRk34PVtGLcejWtfNMnDaNZqy0yQG/dgmtadaBaVT84qGZOkRX56L3zDs8bp
+	 lfeU15G5LGa/AYRtzWa75S8M/WoGTSiJ6Oy4v+EVjKrnxIgHUCga4kR6hrVBb+UC11
+	 VQSph9dEs6VlrPfKGikpQVyDC4DblUhBGQwEicYIy60dkkolVuXfeRCDdpiNzcxF+V
+	 nNXR5zO4KE/0T/bQdUXJK2isK/JHutUdd1JgSIQiUXif62uKyhHBEFlrtTFSp2hJuQ
+	 N38D0LTGvVQSg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E7D760F04;
-	Sun, 14 Jun 2026 15:53:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 080A02EF
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EC7960F26;
+	Sun, 14 Jun 2026 15:53:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21F80DE
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E277740680
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1402841045
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9vcj2-ZQNE7N for <buildroot@buildroot.org>;
- Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TYHetsJq9xjs for <buildroot@buildroot.org>;
+ Sun, 14 Jun 2026 15:53:53 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
  envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A577E4039C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A577E4039C
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A577E4039C
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:50 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-5aa68d65d24so2349983e87.1
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:53:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 165EE407C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 165EE407C7
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 165EE407C7
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:52 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-5aa63628d26so2285696e87.0
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:53:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781452428; x=1782057228;
+ d=1e100.net; s=20251104; t=1781452431; x=1782057231;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=8KqZc0dHTPTxs80LXUdOttXZI4WFWTO5yLC6sCZ05hY=;
- b=mjdvW4fypg5YU1kOTyJ/LX0GcD7Ro9yj3W0iMUWEAX/Zr+HYj3yMAcXuF5cxrQfi4Y
- 2IFX/QRRfz5V3WxEDY55tpxad820EOEhEyKIYdOfJVOpZ5HYVUdpLiLR1FG0cymsZ277
- 8HVJGH+b8fFv4Jjpm1nNVsJ/shsMlDrxA3k1nxdWaZ0RswQZe1KGOSlxWLysLzs5afDE
- tfPurNRYzbmXQ0Em7BIApiElVqzKLe5HeMNK8Lvj+S6xMOa9qzCFLrjHrNlREzgSFvIK
- pC1o8Mi7VVu11FGEgz2fYSQpeQkWL0lUfadqJuYjZGM4UuHdzSCVvJKb4rV9EEJ6EhBd
- Ln1g==
-X-Gm-Message-State: AOJu0Yzg8a9asvlIv3rMJ5oyRIrv21CtrCs9DqZUsS7Vas9NXK3V8Zat
- yQpXXrMEUwtTAmqg6vnsNYMTD72YKAPDvyFm9nqrbBDm1CzIHwbg8VVhlnd4QAgg6AqzFSDJJTG
- b3Ew/+d7TSQ==
-X-Gm-Gg: Acq92OHdWLEZYS9tb0lOihs2MnibARXL9cZUxcbzWuV0GGzGyz9L2cPw7O6RGX/zUTN
- 5z4IgxQD1D5lqNWM+EXhzYcV3EjUaqY7snjYX/ZDwjzfSs9H8hqAHWZcyjDKgkywwOPuZHhxxT2
- ZgBN+PhDCv/32IkhspK6pFO/zsHWMze72stAkGDqv09Qg6nkrCe8d4ddcbwSQEIphfVPShamX12
- B5tyCgR+HQoc3X10hUexc5u2z2+BJej4cMSKnjm3AoOkXyGKGK7Ryv92ASIAAe6i71n/sv9fvuu
- eDrd5QDL/795CtcrTwABK/EqhD8iMePsrBNWuQoPEPrpvRjrq7DL8+8qaGlc1wNmcW5uTo63EJx
- nsMnN/YOlgYSTxMXcEhNgthl0UThn9JQ9ot+j+qdo+XvyuAqNMlSGbLPxV0+HY0IUxvJ9owK2BL
- UhiUEM0Dxriyf+N3g0AJfRiMjGAqx8v+M0KqsyAKxs5mcZe/MCoPXfMA==
-X-Received: by 2002:a05:6512:23f0:b0:5aa:5f11:ddb9 with SMTP id
- 2adb3069b0e04-5ad2db6cb24mr2124313e87.40.1781452428331; 
- Sun, 14 Jun 2026 08:53:48 -0700 (PDT)
+ bh=uVgjvceP5Dy4TkD6K6lWp3IEBk/hqDa/J5cYrj5q/z8=;
+ b=SJhuADG7KSDBBPsiB47sbz3UxwNqtPfRibfPXYL+0lB+e8CSKARSJP5eNKfJMRjofp
+ iOCBztnJM8Kpho0K8gGrcAwNYZhboY+zgJ5xr0TKDGHuGlNpajbdvxFczjwyVuPhijmA
+ 2YRQ2TYN3PCUzzj/ifmPC2VomlVoCWRL36HlLe0UD2FtWSzP8PYz1CZJr+1//SstQo5K
+ h9qWmdOGkoG07q5K+mnvxBe8stCbH0h9lIDw1mLyPLHmqaedzn4xeYJVF00pe+qoRTVL
+ S91wzukdStruBiYDirl8tG0MGdh9coVVkkGy9qq6Nvv4mMA32kTH94m7kn/uL10qQIR3
+ /PSw==
+X-Gm-Message-State: AOJu0Yz2KyE6iFSFCK6KQ+TZpcepAb+0a7hWtGYo2MnU4UBkLRHpJF5b
+ qJ4eKdhlAL0AZgnmpZ9RBPwCI0Dd8BGXi+4EGz67bUFB9n74bzhQ5as2l0ewPXV2nfTlJGdA7/e
+ mYw/Z9IskBw==
+X-Gm-Gg: Acq92OFZ6sFfRZnb0W44vSf/aJIjuhu4ch5fmbHmcwH1FWVL9PKnFfM2JUxDQ0GMvJa
+ k7Q1m5E0ALBF4ZXyweyK3rVT+7mZLnJxQFEBBstq+tOX8jP3yRuN16IlntV4DawijQFRdI/OdS6
+ Zl8QsDyO7sKRq4BM8bmaCoJP7FQu5mhKg/AFOYxIb1J9MxgblsA7Ze614zlKUJsUHKF22NoAQwm
+ AsgKAUh4xkxx0YlRSNXUAle4WQIHpG/yfEiqHKkPHNrp4mx01aBtu5XAP6qUTTQAS+wtj4FCWuP
+ t5jcb/Xd/u04ShiuL33Fq9C33GJAuPTu3EBVlN/Sds5YNN3ZziA2/QpDmLf0hPOE7Q5cZqNNt8i
+ G/Q9uRTC7eoxbEX2Kht/7giHUTDgW2+T7eKn9vFTpjW4mtNDo9CMFV+/D1LsafKGglgHNFFoPRd
+ +58VFOukxANX2WzwR/3zFHr+NybiWKptLfS1RJoJf5V3hJoyul+NE+p6NQ9feOfpj/
+X-Received: by 2002:ac2:5594:0:b0:5aa:6a5c:be3c with SMTP id
+ 2adb3069b0e04-5ad30da1264mr1408992e87.14.1781452430790; 
+ Sun, 14 Jun 2026 08:53:50 -0700 (PDT)
 Received: from localhost (81-226-112-165-no2360.tbcn.telia.com.
  [81.226.112.165]) by smtp.gmail.com with UTF8SMTPSA id
- 2adb3069b0e04-5ad2e1a7362sm2052386e87.43.2026.06.14.08.53.44
+ 2adb3069b0e04-5ad2e1717b2sm2058692e87.36.2026.06.14.08.53.48
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jun 2026 08:53:46 -0700 (PDT)
+ Sun, 14 Jun 2026 08:53:50 -0700 (PDT)
 From: John Ernberg <j@j-ernberg.se>
 To: buildroot@buildroot.org
 Cc: John Ernberg <john.ernberg@actia.se>, John Ernberg <j@j-ernberg.se>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Sun, 14 Jun 2026 17:53:23 +0200
-Message-ID: <20260614155328.304282-4-j@j-ernberg.se>
+ Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>
+Date: Sun, 14 Jun 2026 17:53:24 +0200
+Message-ID: <20260614155328.304282-5-j@j-ernberg.se>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260614155328.304282-1-j@j-ernberg.se>
 References: <20260614155328.304282-1-j@j-ernberg.se>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452428; x=1782057228;
+ d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452431; x=1782057231;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8KqZc0dHTPTxs80LXUdOttXZI4WFWTO5yLC6sCZ05hY=;
- b=FvKBLjxBRd18/uvGABqLAkOZ8gu6V1QxguVl+XT+XO4YXJumYR0JICHFZ8YfuTVfYP
- pvhVB/htAd21NCbXbleRhrhJUIUz49N1/NTBw65YPEuyqm5M9hjcP9zZmM3uoNxVKydn
- T1D1qSj2aDqwUlazA6aevKqNJiX3D7kpLnpYhh6vS+IhlplQtgmPH34mZB2XMeLYHo7B
- hqQuFJCfiKONxTHz7FEDTOSiLtLldxPkaSNfSdT+Fm2kiDC6NKoujB5QnuK9vej6L3cl
- rp29cacadZL5zk7evvkaP91Fa5Q8Y3W+UQey+8esmJTx4qtc5HWoihMOb796JafiulqE
- w0lA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=uVgjvceP5Dy4TkD6K6lWp3IEBk/hqDa/J5cYrj5q/z8=;
+ b=VmE0egUkgAVlpVh/vsrSBvnjMr5EsojrIYOtN1Jz0ea0iFCBbWJxnWIHX811mEG5cY
+ bPyKRgI1eSasBb4qzdIMi9Jf6qFAfg2Aq+o0rM5RFmwgqd8NbM9NIrbdrc1hZjPYhpN1
+ XpTaS/SVS8gyGm02PHk7K+yB8idTXF7I9FDhQM8Cc+SP0uxDAPMAkQG7Vjo+SbjHt9OT
+ zsdqyCRYD+v0I5Z1a6H9DjlwUn9w2rr6/fnANfQbyWCj3CHxVFEhGnBX9JL7JFNQFhXI
+ 0lvy1eK+Kf9Dkn8mE3YwNXiUWizU63iReBvAIneILv78ZQusTMciE5EWzQ9JnwwbB6LG
+ xRiQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=j-ernberg.se
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=j-ernberg-se.20251104.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=j-ernberg-se.20251104.gappssmtp.com
  header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=FvKBLjxB
-Subject: [Buildroot] [PATCH v2 3/8] package/rtl8188eu: Conflict with the
- linux-firmware rt81xx sub-package
+ header.s=20251104 header.b=VmE0egUk
+Subject: [Buildroot] [PATCH v2 4/8] package/{skeleton-init-,
+ }systemd: Install legacy.conf from the systemd package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,70 +131,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Due to partial rtl8188eu support in the upstream Linux kernel
-linux-firmware packages the firmware for this chip now, under the same
-filename and path. However that firmware is a much newer version.
+systemd since version 257 installs legacy.conf again, but a different
+version of the file compared to buildroot.  version 260 will once again
+stop installing it.
 
-linux-firmware carries version v28 from 2017 [1] while the firmware blob
-bundled in the repository is from over 13 years ago [2].
+Move the buildroot custom legacy.conf to the systemd package and install it
+from there ensuring the expected legacy.conf is the one installed in all
+cases.
 
-Since it cannot be confirmed that the newer firmware works with this
-driver, add a conflict with the specific firmware sub-package.
-
-The reverse conflict cannot be added since Kconfig sees that as a
-circular dependency.
-
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/WHENCE?id=fe1a0a75caa69da62849cbf549c32531c6d1da4b#n3628
-Link: https://github.com/Benetti-Engineering/rtl8188eu/commit/a27737ea39d72040d7421600949373982d78a0d2
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Sen Hastings <sen@hastings.org>
 Signed-off-by: John Ernberg <j@j-ernberg.se>
 
 ---
 
 v2:
- - Go with the alternate approach of adding a conflict since it was not
-   possible to obtain test results from anyone with hardware. (Arnout)
+ - Unchanged
 
-RFC/RFT: I don't have any of the hardware for this chip and cannot test
-that this doesn't break stuff.
+I don't know systemd well enough to judge if the legacy.conf from
+systemd should be used over the buildroot one.
+
+Norbert or Sen, please weigh in on this!
 ---
- package/rtl8188eu/Config.in    | 5 +++++
- package/rtl8188eu/rtl8188eu.mk | 1 +
- 2 files changed, 6 insertions(+)
+ .../skeleton-init-systemd/skeleton-init-systemd.mk  |  1 -
+ .../{skeleton-init-systemd => systemd}/legacy.conf  |  0
+ package/systemd/systemd.mk                          | 13 ++++++++++++-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+ rename package/{skeleton-init-systemd => systemd}/legacy.conf (100%)
 
-diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-index 102e8d7bf7..fc3199f303 100644
---- a/package/rtl8188eu/Config.in
-+++ b/package/rtl8188eu/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_RTL8188EU
- 	bool "rtl8188eu"
- 	depends on !BR2_s390x
- 	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX # conflicting firmware
- 	help
- 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
- 
-@@ -10,3 +11,7 @@ config BR2_PACKAGE_RTL8188EU
- comment "rtl8188eu needs a Linux kernel to be built"
- 	depends on !BR2_s390x
- 	depends on !BR2_LINUX_KERNEL
-+
-+comment "rtl8188eu bundled firmware conflicts with the linux-firmware firmware"
-+	depends on !BR_s390x
-+	depends on BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 5f378e0b6e..1f826266fd 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -16,6 +16,7 @@ define RTL8188EU_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_RTL8XXXU)
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index b312fe33e4..e06890fee8 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -93,7 +93,6 @@ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+ 	ln -s ../run $(TARGET_DIR)/var/run
+ 	# prevent install scripts to create var/lock as directory
+ 	ln -s ../run/lock $(TARGET_DIR)/var/lock
+-	install -D -m644 $(SKELETON_INIT_SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d/legacy.conf
+ 	$(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
  endef
  
- define RTL8188EU_INSTALL_FIRMWARE
+diff --git a/package/skeleton-init-systemd/legacy.conf b/package/systemd/legacy.conf
+similarity index 100%
+rename from package/skeleton-init-systemd/legacy.conf
+rename to package/systemd/legacy.conf
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 3223915d40..9e77ace2f8 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -670,12 +670,23 @@ endef
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_INIT_HOOK
+ endif
+ 
++# During the deprecation process of sysvinit support systemd has gone back and forth
++# on installing the legacy.conf file and to which extent.
++# Override it with a customized version.
++# See systemd commits:
++# - https://github.com/systemd/systemd/commit/5ca9149464c100548701ab0839712c57f67e2652
++# - https://github.com/systemd/systemd/commit/fcff83a5347679bde1e3bff1398cdc557a432f9d
++define SYSTEMD_INSTALL_CUSTOM_LEGACY_CONF_HOOK
++	$(INSTALL) -m 0644 $(SYSTEMD_PKGDIR)/legacy.conf $(TARGET_DIR)/usr/lib/tmpfiles.d
++endef
++
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+-	SYSTEMD_INSTALL_MACHINEID_HOOK
++	SYSTEMD_INSTALL_MACHINEID_HOOK \
++	SYSTEMD_INSTALL_CUSTOM_LEGACY_CONF_HOOK
+ 
+ define SYSTEMD_INSTALL_IMAGES_CMDS
+ 	$(SYSTEMD_INSTALL_BOOT_FILES)
 -- 
 2.53.0
 
