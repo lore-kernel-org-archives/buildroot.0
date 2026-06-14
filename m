@@ -1,119 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E613CD98D8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89FF4CD98C5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A36E83A63;
-	Sun, 14 Jun 2026 15:53:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B5C860F00;
+	Sun, 14 Jun 2026 15:53:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCoJuJ0iF6pP; Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtV-kq9im9ET; Sun, 14 Jun 2026 15:53:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 512DD83A64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E7D760F04
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781452431;
-	bh=X14D1gsi5X0N2FzuQqoW5l//nEurGOpZwTneIei4uzY=;
+	s=default; t=1781452433;
+	bh=Zz2Rd2APssam986GJ3C/xunIso0ZTtUuA732Z3tSRd8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=KJC5KZBVYpSTQGEMOSfSYcNWJDS3RP2rLXA4LSXRn0PxTS8ycEpUw4b+Tf++Gj94S
-	 Fs1qjNRniRHScaTTtTmehuHebVA04NH8O73n0DyAar2xrXOv1gM0WH0rc5iTdvf5mI
-	 S33sVlXnG3KxABvgnusFDQetomEbE+4oI6Ds6p6HJ7hvxJhm57q1k4Fs5es4xJHXAm
-	 nKIK8ygCJDXuEGpdq0ch1StXNWW8MGKr+WxwT6a16WQ6GQgpexCFSqmW7/2XfdmvW5
-	 KXJn7w1/hIhNuO4WYvu3VhaWXmROGTK27Ajj0103pvTYxc7tMaqEeLMTWck9GFOMZm
-	 tOHUxMFTTyMwg==
+	b=bATOnyx/w2DY1YRzyzSeODxoamSE5uuw28/Yhq8+wfY2Ir1PHRHvc22zH3dsjDmYv
+	 wJhGNMFtK53ijhtgM2vcvT9R0HLL7wRh21IzX4tChLHSc4A0WATOmhTsP+BiapxRNY
+	 UfFYlyhBY2EuZvG8wFUaqL1rpLDGgsAst1oVupSg/C3WD9uCWZKQ7+pBD6f2Gs0v/5
+	 I4yrgx/bhhL6cJ0695zHpTF9J2YF1gtxOCywD/9ZkGXQ2RwYTD5/2KSY+/zgDtL9+l
+	 ibI5hMEMKxENw0L5Adtqfo/Y/m1HgmlB5pMCKHqXfI1UGBVxaaD+7M3JSX//BrHdyp
+	 T4vf5iP9dapxQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 512DD83A64;
-	Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D137DE
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E7D760F04;
+	Sun, 14 Jun 2026 15:53:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 080A02EF
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B30C41045
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E277740680
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UI7EEQp74VPK for <buildroot@buildroot.org>;
- Sun, 14 Jun 2026 15:53:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9vcj2-ZQNE7N for <buildroot@buildroot.org>;
+ Sun, 14 Jun 2026 15:53:51 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02516407C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02516407C7
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02516407C7
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:46 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-5aa5f11deb2so2780450e87.3
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:53:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A577E4039C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A577E4039C
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A577E4039C
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:53:50 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5aa68d65d24so2349983e87.1
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:53:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781452424; x=1782057224;
+ d=1e100.net; s=20251104; t=1781452428; x=1782057228;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=j2rANytQjvarDjdoqSfXUVIS+NsiEYtl/y+4aPJQAeE=;
- b=crvrAzgfTkomenerPPwsALvbIG/5qa3/0A8arRcpFKyk6zJLHj4o4bgYL6MzAWkFLh
- wQHv73T+i6vrIajNYpSbDNrb5GIim55VTm3DRPLLhfVQBkoSkMUzj8AlGmysNP75qpWh
- EegrRlBo7BTXn6+FxzresF0q6PjigXIiM7zETP/HdL+st4JaB7mKe89AFiMGRIFGP8gQ
- 5wkSaXFL2tXAervSdXNuVIR4lCFXwKa/3TRmSQxq6kXs49diZGRmsZgiT1qgyFnbFDMA
- G+RXKewmipvUgM/4SDWylVKfrZX9GKcoFqPrHGrtLMlXQFrHAxwdMVuSSEGHFB1iCGhX
- VurQ==
-X-Gm-Message-State: AOJu0Yzp5NF7YTMoLWcZRFgni4Y16KXLdx3AnvZtdEkfvgBQXnUGrolv
- WeAi0Zd0BdgD9t5Iou4uZg77xxl6jfWR00hSCy6OmtGumiNtXw2YZL5LQfgA32EmTC517hMOQ4R
- 06fGoreWncA==
-X-Gm-Gg: Acq92OE2j5yxSlhBJc+U49RgNrTHmxuC7stHwxgPjJSDT7GwpDEnj91M6QXV0gPFI9c
- ov0JSMoMHi4vfVspE4Ir0807txSA0YJ8tiV7tJ/uxduAYEA54Alohjm/gJppztE695A5mnaXt4N
- YzPtU+HR5Dqdr7WOm91kafAWC9xQbAsZBCHJ9ElI2NWEf7LQD/i2+44sut+rGqJfRhKHmLfBzoJ
- Iobj6F/cNUAhpJaMhJ1qUcVp5eB0ghgjctDbo2ssLrmxGIyKnbmiUTX/DeMn2C4fzmuhalWJ9lj
- hyb6/aZw05j6TLKx2+G0NelpQ6xmZTb4shr7n3ogoLPTbVGTfJpm2oLKoi8mKTf5dHkDfau3uy8
- NxbSBr0trN8sJSMC6qZxMSyBj4jVpZny/SoQCdpZ6pDGj/wGYbdltEHlUvi7uT1wCuc4nbzcEzc
- zK1kbLm4eLleibgzQOBFuBCAIXVF1Kq1+y5HkGOFXpREnYd1drC3Aqrw==
-X-Received: by 2002:a05:6512:10d3:b0:5aa:753c:d8b6 with SMTP id
- 2adb3069b0e04-5ad2dab3c37mr3210061e87.0.1781452424490; 
- Sun, 14 Jun 2026 08:53:44 -0700 (PDT)
+ bh=8KqZc0dHTPTxs80LXUdOttXZI4WFWTO5yLC6sCZ05hY=;
+ b=mjdvW4fypg5YU1kOTyJ/LX0GcD7Ro9yj3W0iMUWEAX/Zr+HYj3yMAcXuF5cxrQfi4Y
+ 2IFX/QRRfz5V3WxEDY55tpxad820EOEhEyKIYdOfJVOpZ5HYVUdpLiLR1FG0cymsZ277
+ 8HVJGH+b8fFv4Jjpm1nNVsJ/shsMlDrxA3k1nxdWaZ0RswQZe1KGOSlxWLysLzs5afDE
+ tfPurNRYzbmXQ0Em7BIApiElVqzKLe5HeMNK8Lvj+S6xMOa9qzCFLrjHrNlREzgSFvIK
+ pC1o8Mi7VVu11FGEgz2fYSQpeQkWL0lUfadqJuYjZGM4UuHdzSCVvJKb4rV9EEJ6EhBd
+ Ln1g==
+X-Gm-Message-State: AOJu0Yzg8a9asvlIv3rMJ5oyRIrv21CtrCs9DqZUsS7Vas9NXK3V8Zat
+ yQpXXrMEUwtTAmqg6vnsNYMTD72YKAPDvyFm9nqrbBDm1CzIHwbg8VVhlnd4QAgg6AqzFSDJJTG
+ b3Ew/+d7TSQ==
+X-Gm-Gg: Acq92OHdWLEZYS9tb0lOihs2MnibARXL9cZUxcbzWuV0GGzGyz9L2cPw7O6RGX/zUTN
+ 5z4IgxQD1D5lqNWM+EXhzYcV3EjUaqY7snjYX/ZDwjzfSs9H8hqAHWZcyjDKgkywwOPuZHhxxT2
+ ZgBN+PhDCv/32IkhspK6pFO/zsHWMze72stAkGDqv09Qg6nkrCe8d4ddcbwSQEIphfVPShamX12
+ B5tyCgR+HQoc3X10hUexc5u2z2+BJej4cMSKnjm3AoOkXyGKGK7Ryv92ASIAAe6i71n/sv9fvuu
+ eDrd5QDL/795CtcrTwABK/EqhD8iMePsrBNWuQoPEPrpvRjrq7DL8+8qaGlc1wNmcW5uTo63EJx
+ nsMnN/YOlgYSTxMXcEhNgthl0UThn9JQ9ot+j+qdo+XvyuAqNMlSGbLPxV0+HY0IUxvJ9owK2BL
+ UhiUEM0Dxriyf+N3g0AJfRiMjGAqx8v+M0KqsyAKxs5mcZe/MCoPXfMA==
+X-Received: by 2002:a05:6512:23f0:b0:5aa:5f11:ddb9 with SMTP id
+ 2adb3069b0e04-5ad2db6cb24mr2124313e87.40.1781452428331; 
+ Sun, 14 Jun 2026 08:53:48 -0700 (PDT)
 Received: from localhost (81-226-112-165-no2360.tbcn.telia.com.
  [81.226.112.165]) by smtp.gmail.com with UTF8SMTPSA id
- 38308e7fff4ca-39929c29b0bsm19490181fa.2.2026.06.14.08.53.41
+ 2adb3069b0e04-5ad2e1a7362sm2052386e87.43.2026.06.14.08.53.44
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jun 2026 08:53:42 -0700 (PDT)
+ Sun, 14 Jun 2026 08:53:46 -0700 (PDT)
 From: John Ernberg <j@j-ernberg.se>
 To: buildroot@buildroot.org
 Cc: John Ernberg <john.ernberg@actia.se>, John Ernberg <j@j-ernberg.se>,
- Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-Date: Sun, 14 Jun 2026 17:53:22 +0200
-Message-ID: <20260614155328.304282-3-j@j-ernberg.se>
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Sun, 14 Jun 2026 17:53:23 +0200
+Message-ID: <20260614155328.304282-4-j@j-ernberg.se>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260614155328.304282-1-j@j-ernberg.se>
 References: <20260614155328.304282-1-j@j-ernberg.se>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452424; x=1782057224;
+ d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452428; x=1782057228;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=j2rANytQjvarDjdoqSfXUVIS+NsiEYtl/y+4aPJQAeE=;
- b=nvhUZzAmgPWIV970lFZkMW2R8mio28y9SmjWbchD79UzQMjBJTvhJX9RdXrp481KTt
- VwMMk342aPWc0McsvkzszwRRvSbCY5zknCrmhai3UHCvMw329d4cWPngnMY1PDL6JG7e
- yDWZz+U0u8TwJmq4NC6fo/0RfMKtm15v93hCBMHjHWFKVtFvxkMXtTP6xc5v2Zy6hg6n
- /ebXyCetdnwOQ78VdnBhI1SeP4gZFJ0aI7OGebYPpJPSbULhHeHCYWKQIJc6d8TQWZqD
- 9zvq4OqymV8vZSHaRxq3bGXm5CNKeC7kkaCBYGogjUCryb/0zxyDQSF24pSLSn3CHn1s
- MX9w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=8KqZc0dHTPTxs80LXUdOttXZI4WFWTO5yLC6sCZ05hY=;
+ b=FvKBLjxBRd18/uvGABqLAkOZ8gu6V1QxguVl+XT+XO4YXJumYR0JICHFZ8YfuTVfYP
+ pvhVB/htAd21NCbXbleRhrhJUIUz49N1/NTBw65YPEuyqm5M9hjcP9zZmM3uoNxVKydn
+ T1D1qSj2aDqwUlazA6aevKqNJiX3D7kpLnpYhh6vS+IhlplQtgmPH34mZB2XMeLYHo7B
+ hqQuFJCfiKONxTHz7FEDTOSiLtLldxPkaSNfSdT+Fm2kiDC6NKoujB5QnuK9vej6L3cl
+ rp29cacadZL5zk7evvkaP91Fa5Q8Y3W+UQey+8esmJTx4qtc5HWoihMOb796JafiulqE
+ w0lA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=j-ernberg.se
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=j-ernberg-se.20251104.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=j-ernberg-se.20251104.gappssmtp.com
  header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=nvhUZzAm
-Subject: [Buildroot] [PATCH v2 2/8] package/libest: Drop java support
+ header.s=20251104 header.b=FvKBLjxB
+Subject: [Buildroot] [PATCH v2 3/8] package/rtl8188eu: Conflict with the
+ linux-firmware rt81xx sub-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,61 +133,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package doesn't compile when Java is enabled.
+Due to partial rtl8188eu support in the upstream Linux kernel
+linux-firmware packages the firmware for this chip now, under the same
+filename and path. However that firmware is a much newer version.
 
-It has been broken since commit 3c66f65a6a54 ("package/libopenssl: bump
-version to 3.0.9") from 2023, and was left unfixed by commit 8dc7445056d1
-("package/libest: Add support for openssl v3") from 2024, which added a
-patch to support OpenSSL 3.0+ with libest.
+linux-firmware carries version v28 from 2017 [1] while the firmware blob
+bundled in the repository is from over 13 years ago [2].
 
-No one has complained yet, so remove the support as it's clearly unused.
+Since it cannot be confirmed that the newer firmware works with this
+driver, add a conflict with the specific firmware sub-package.
 
-Note that upstream has not made a single commit, nor responded to tickets
-or reviewed pull requests since 2022. [1]
+The reverse conflict cannot be added since Kconfig sees that as a
+circular dependency.
 
-Link: https://github.com/cisco/libest [1]
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/WHENCE?id=fe1a0a75caa69da62849cbf549c32531c6d1da4b#n3628
+Link: https://github.com/Benetti-Engineering/rtl8188eu/commit/a27737ea39d72040d7421600949373982d78a0d2
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: John Ernberg <j@j-ernberg.se>
 
 ---
 
 v2:
- - Add an explicit note about upstream
+ - Go with the alternate approach of adding a conflict since it was not
+   possible to obtain test results from anyone with hardware. (Arnout)
 
-RFC: upstream has not made a single commit, responded to any tickets nor
-reviewed any pull requests since 2022. Should we drop the package instead?
+RFC/RFT: I don't have any of the hardware for this chip and cannot test
+that this doesn't break stuff.
 ---
- package/libest/libest.mk | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ package/rtl8188eu/Config.in    | 5 +++++
+ package/rtl8188eu/rtl8188eu.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/libest/libest.mk b/package/libest/libest.mk
-index 9f3168767d..16cf40b203 100644
---- a/package/libest/libest.mk
-+++ b/package/libest/libest.mk
-@@ -21,6 +21,7 @@ LIBEST_CONF_OPTS = \
- 	$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthreads,--disable-pthreads) \
- 	$(if $(BR2_PACKAGE_LIBEST_BRSKI),--enable-brski,--disable-brski) \
- 	--disable-examples \
-+	--disable-jni \
- 	--without-libcoap-dir \
- 	--with-system-libsafec
+diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+index 102e8d7bf7..fc3199f303 100644
+--- a/package/rtl8188eu/Config.in
++++ b/package/rtl8188eu/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_RTL8188EU
+ 	bool "rtl8188eu"
+ 	depends on !BR2_s390x
+ 	depends on BR2_LINUX_KERNEL
++	depends on !BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX # conflicting firmware
+ 	help
+ 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
  
-@@ -35,15 +36,6 @@ else
- LIBEST_CONF_OPTS += --disable-client-only
- endif
+@@ -10,3 +11,7 @@ config BR2_PACKAGE_RTL8188EU
+ comment "rtl8188eu needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+ 	depends on !BR2_LINUX_KERNEL
++
++comment "rtl8188eu bundled firmware conflicts with the linux-firmware firmware"
++	depends on !BR_s390x
++	depends on BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 5f378e0b6e..1f826266fd 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -16,6 +16,7 @@ define RTL8188EU_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_RTL8XXXU)
+ endef
  
--ifeq ($(BR2_PACKAGE_OPENJDK),y)
--LIBEST_MAKE_ENV += JAVA_HOME=$(HOST_DIR)/lib/jvm
--LIBEST_CONF_ENV += JAVA_HOME=$(HOST_DIR)/lib/jvm
--LIBEST_CONF_OPTS += --enable-jni
--LIBEST_DEPENDENCIES += openjdk
--else
--LIBEST_CONF_OPTS += --disable-jni
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBEST_CONF_OPTS += --with-libcurl-dir=$(STAGING_DIR)/usr
- LIBEST_DEPENDENCIES += libcurl
+ define RTL8188EU_INSTALL_FIRMWARE
 -- 
 2.53.0
 
