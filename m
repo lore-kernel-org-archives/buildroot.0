@@ -1,117 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35EE9CD98D8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3DACD98C5
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 15:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B78960EE8;
-	Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D27B983B0A;
+	Sun, 14 Jun 2026 15:54:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NcXt2vewPlZa; Sun, 14 Jun 2026 15:54:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3qRY1w8QVhno; Sun, 14 Jun 2026 15:54:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5B5E61152
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C35683AEA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781452445;
-	bh=xeMsVaDzRmHPOoHe/zvOCZfeD8bfqHGLDjFedt3RRAc=;
+	s=default; t=1781452448;
+	bh=n1mV386fEt6ODdr6uMyXpcujGO5Dke/GAyLlgqCi28w=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=dw/94HuLap0nFwd5D4abpF2xcQ5XS7KEQm6BDiIGDThRwc/4TEoVGavzcpVIWYnJ3
-	 JRnT0kfx/xb2gNz1uBu/TfJv+tXaqibd3rj9+jSgjZ48pjFQYcnUHyojbQJNPuZjdZ
-	 hNRvT1n2qPH8+Gh2+7soFwO+T/kYwdwYduzfRanOyEwWmR9pYSX0K0nLGrN1NCKHO/
-	 LSmiW2aK3qyo1XKRgQztFZGTJiwo8ddc4fQX5tLdDLwYQOAvs1A7ia0ziAmgb72Fzn
-	 v3L6CACahuGxeZYtuZh0rI0vqCzA4DVL00t9ss/MQftTHSSfQmF0aO4ZoWbL3lNQu5
-	 x7y1H7oxJ7ktw==
+	b=Wk4IKLHunKUgMxL4tTFZTe7SZttXleFq0YMyks5tHcOuTk72AR/uKwlSe2CydQdER
+	 T/OXUiZhS9pc5aCbdtXhQWaicP5UhSQTzOTKd51i/FK/9TZEwYnpv0PaMIVVMH9d5t
+	 PEJCcW6zoI2T0lGS92xF6xVMQcx/euBsqJyJrUh+PHbPE3EDyeFMWFIQjZ/igdAz3n
+	 FdcdzI8J1XYSwzQX6YiXTyMLAXdrxlJF7HMlpmjWKP0L+x6YuLEyWSgpQ+fSnOC1U2
+	 v99jsuTzahFxn1PYf/B4sT3q7SxhpOCvKy7nC+JlJrRrORypR7FfHFgLeLCenGo0kj
+	 1MmxN0kxbvGwA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5B5E61152;
-	Sun, 14 Jun 2026 15:54:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9EF26DE
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C35683AEA;
+	Sun, 14 Jun 2026 15:54:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACFA1DE
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9173340680
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9319840680
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jMb_0pof2PgH for <buildroot@buildroot.org>;
- Sun, 14 Jun 2026 15:54:02 +0000 (UTC)
+ id btFF6V6S0PKx for <buildroot@buildroot.org>;
+ Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
+ client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
  envelope-from=j@j-ernberg.se; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 54CA14039C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54CA14039C
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 54CA14039C
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:02 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-5aa68dbb38aso2166719e87.2
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:54:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2DE904039C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE904039C
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2DE904039C
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 15:54:06 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-5aa63628d26so2285782e87.0
+ for <buildroot@buildroot.org>; Sun, 14 Jun 2026 08:54:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781452440; x=1782057240;
+ d=1e100.net; s=20251104; t=1781452444; x=1782057244;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=/bPMvTj4Xgcx1WQI7O3BjQkCF9L0PLmMCkv/iX98QME=;
- b=O8CExE2T/JnptnIWeMhJWbmEo3QUbUf4+QwKqZ/dkMdeaOTW9+n6WlYqmMW2/xGb27
- RpYoAH7/YjZU4JDqZ6bM2SdtVqOPb5YbQZfw0icNXDkWE62v4iRe1T6xnh43MK0qD/EV
- uCcgtx79zucTiD+msdsv9UmTGS5Xuu39xr08HBfqAfmpieh+avj2orZrvgV0j/l1Py7v
- jnJZjCe8zhAGpVSnfpoPkNvSxh/+ctH+3M4GyInnPsD9K5U1284g+Mf+OLrsm2KPziGm
- HHz/ZBCdglGmTc6yWleLqrw57Hzit4aTYA+Yibjql8PX6ox+xOCgFNI4U+CDR5CP+8QM
- m8SA==
-X-Gm-Message-State: AOJu0YzmrBDoTIxfs9iiNxZtJqLE2nLDxeptdfLY9IrUZ7y5JD4Zjanh
- vZT98uhKS3fnozAkmMDx3aGEji/GGanq1eIRDem0eLsY1GZGW5C3Mpa5uwGC/6kCwjLvxQT/mV7
- 2i1enrV/+Tw==
-X-Gm-Gg: Acq92OE/qBfLwOwPBDu+dHO+76myPiEn6/NeFw8wD/YmOa/GLt5I2UUNCGuujd8yEep
- deLeYPwSzUKURgSLru6FcIynyC0fyjtdbf1GUZouRV+DWbECOroFK6RdvPNhiw5pvK61igoj1z5
- LFLEAXz0t2eqmaiLJtPMKI9Ja+UISba8gdP6Tszf6AT7fYCEASkV3+WHmtqSe0AHyN+CC7XrZZh
- 6knYfP0uFUG03G1TRhWkK+kTg9y+TMqTHKOiv/rajp1J7SGVKc2ZutmISV+qHu4gaLXdoXz9bFJ
- X6YdX6E8qmaJ5cacYuV2RndTXdJO4nE2Tqg5fNE+lQMF8ZSqIxj/GfY+oJfOuBQ++8L+HJDyUfp
- lIS73GKTgJq/IbXhLjhXnjLftcAEUwMnp1Kc3S6b6IIyUqQCZOEynPd6B8ah2nfLNVtQ/OzG46n
- y06Fl9vJ7x+0HJSEhbKQN46LjbrJFb8AUtpg4oOm/zgN9yyN8GOXm9Tg==
-X-Received: by 2002:a05:6512:31cf:b0:5aa:690c:662f with SMTP id
- 2adb3069b0e04-5ad2db68b05mr2774543e87.23.1781452440027; 
- Sun, 14 Jun 2026 08:54:00 -0700 (PDT)
+ bh=gJPS7hDtENVU9YJxWlU90jX1G1+QNvNj4YEld9/1iQw=;
+ b=qdbzD2aYykhOAWhKb+p/w0xoeaUivrCbM4qDrr13bX6MAScNaBj7FRJQwGAz16mFx3
+ 9kinS3ZTY2BOvoQ1Qm6GK/YJ1SzVDB/jsgxpPj6y0UwgNgqaev9t6dZnoNak5/27E8It
+ Wpf7t3yIEJv02Rif+UTj2FV8k9+TTZaZGPZAH2w9Q+MF9hsblRN2EM89yNXLdnIybE5a
+ qDRFtN3hJZgcze9NbZTz2ZeUCLxA+a8WDd6KuT1cpgSrpJ19j6D+Nq2952eVn5UwksbK
+ UZgr4umO+OgS95z0j6XRJdS94W9tgN6whA7riEATALsfsD0eI+FHDb1LD3OWaJEgVOJL
+ D72w==
+X-Gm-Message-State: AOJu0YwrdkW5z7siV84ORwvawhEPYq0jG0RnSvgVFmamUsExN4brN8qU
+ VIJy5Dl32gpr78GG4+Dk8Jhi2/J4iKDCj0X46svaYYEyY/1ai3i0XaAHu12aG9AaKEGm0AYsx5T
+ GTOYmXOtyeg==
+X-Gm-Gg: Acq92OG606ff+x7odlhJD8PiKEOfYFRlInRBUEpnue9UjG6iEnB4ecOD69rg0AExse0
+ 4K6ADP7QQULZFeFtZ3yIyjM8kH4t3Uq5XkILSufO9zHVmSydnLbJAUBLgKl5ajajnT7FKBmiy6a
+ BHenXkl0hQXRLypqjAjjKWWOlF8wKhk3LNpkpJ+4GyGwEJMEYHQzkkWJw8JZ3Mr6kAS/ec+IPTp
+ XVjIUaighlnnXKnDYU211znHrzBy03Bx43lRSMbyHNFzhxvCjdqBCKAkAiKkiNd4sYEd0WOwbT8
+ m/DbDgYkcPo7pd/1l/7u0iy8CPCeZzWSWeNGG4sELEuSFOz3sWw63oug3Pa+DwuIkUpbna/nzhw
+ Re6izYQONGZ2N3hxyaX35Y3aqYR+5d0ZDvnyLVGHJUkEt0odlBKAm15SZeMSPzCL0688TXiBZe3
+ yhur9XSdxk7wWlhh2leys+iASW9ZUStRCwfAubqzOJry759a6UpAPzBQ==
+X-Received: by 2002:a05:6512:4846:b0:5ad:abf:1e1c with SMTP id
+ 2adb3069b0e04-5ad30d99643mr1477655e87.3.1781452443807; 
+ Sun, 14 Jun 2026 08:54:03 -0700 (PDT)
 Received: from localhost (81-226-112-165-no2360.tbcn.telia.com.
  [81.226.112.165]) by smtp.gmail.com with UTF8SMTPSA id
- 2adb3069b0e04-5ad2e169603sm2071722e87.22.2026.06.14.08.53.57
+ 2adb3069b0e04-5ad2e1adf09sm2076607e87.58.2026.06.14.08.54.00
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jun 2026 08:53:58 -0700 (PDT)
+ Sun, 14 Jun 2026 08:54:02 -0700 (PDT)
 From: John Ernberg <j@j-ernberg.se>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jun 2026 17:53:27 +0200
-Message-ID: <20260614155328.304282-8-j@j-ernberg.se>
+Date: Sun, 14 Jun 2026 17:53:28 +0200
+Message-ID: <20260614155328.304282-9-j@j-ernberg.se>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260614155328.304282-1-j@j-ernberg.se>
 References: <20260614155328.304282-1-j@j-ernberg.se>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452440; x=1782057240;
+ d=j-ernberg-se.20251104.gappssmtp.com; s=20251104; t=1781452444; x=1782057244;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/bPMvTj4Xgcx1WQI7O3BjQkCF9L0PLmMCkv/iX98QME=;
- b=gpw2zhoW5eRRJYL6y/AzkClAzREYkmHdP2qqj/KGC6t4AuC54Bg/lXXQDXyOfk2H9R
- 5IuXTZTNsQ59nMQ2JVz7HcBUdMGEsVf30KqJi+L/AS8KUUuggauUEET5YpNpBp2XbmvR
- +NSbjk1uxyccoTj8/pPHjjeGYjyg4E2MoXTFD8xZd0XKz0+eeIlQewSMgVzfDZxNqCNd
- sk0YTT3tFsL5ZIPyHarsFu9+qzAZIn9Pm5OaoptOeN0lo3qXCXxN/U4Xw3jyBgSve6vg
- YJphMX/OWDKmOr61tpGxDC0JW6yXwGqrQPDdK59bOjTbgNVneWT6TMQqd5q1gC0K3yw+
- 4hWA==
+ bh=gJPS7hDtENVU9YJxWlU90jX1G1+QNvNj4YEld9/1iQw=;
+ b=y798Czitrv+jrQO1RgegmZp0CmNrgFpCxg0BfOwzL8Z8oIS3EvQIw4KMPbHMMT8YD9
+ DJQFTRoLZoRugvmVAfYL4wGUQZXQNZ5bfHNifgIM1VjojQ2u7QELnChCNyHl4yxHlwic
+ 6qmIF4O48ygJDzaxhx1Zld6ll5pyV54SMdzIKKIvlbJEPvOGMZeyQjLanpKhnd2B4VOH
+ zNOoXyTSvraI6knCUbqQM/bHVMTvqXnq3geasfaCujc5NrqSBkPZamSIkRNJV3rv9/RB
+ uP8rzzO+lMiGuZRaOWYCYtuPgCTPMTKr6j/9qhUsIg7u8UCRVFoQZg06WX21k2Zx17Ij
+ 1hLw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=j-ernberg.se
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=j-ernberg-se.20251104.gappssmtp.com
  header.i=@j-ernberg-se.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=gpw2zhoW
-Subject: [Buildroot] [PATCH v2 7/8] package/python-xlib: Drop the package
+ header.s=20251104 header.b=y798Czit
+Subject: [Buildroot] [PATCH v2 8/8] package/python-html5lib: Drop the package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,129 +123,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, John Ernberg <j@j-ernberg.se>,
+Cc: James Hilliard <james.hilliard1@gmail.com>, John Ernberg <j@j-ernberg.se>,
  John Ernberg <john.ernberg@actia.se>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream has not seen any active work since late 2022. [1]
-There was an attempt at finding a new maintainer in 2024, which didn't
-lead anywhere. [2]
+Upstream has not seen any activity since early 2024 [1], and hasn't made a
+release since 2020. [2]
 
 The package will no longer build with setuptools >= 82. [3]
 
-Link: https://github.com/python-xlib/python-xlib/commits/master/ [1]
-Link: https://github.com/python-xlib/python-xlib/discussions/273 [2]
-Link: https://autobuild.buildroot.org/results/33ef2859c48f78552dd4a7d53b13955d3d9b05d3/ [3]
+Link: https://github.com/html5lib/html5lib-python/commits/master/ [1]
+Link: https://github.com/html5lib/html5lib-python/tags [2]
+Link: https://autobuild.buildroot.org/results/994ce8ace0b6704404c3b3df4538f38334c16593/ [3]
 Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: John Ernberg <j@j-ernberg.se>
-Reviewed-by: Joseph Kogut <joseph.kogut@gmail.com>
 
 ---
 
 v2:
- - Pick up review tag
+ - No changes
 ---
- Config.in.legacy                     |  7 +++++++
- DEVELOPERS                           |  1 -
- package/Config.in                    |  1 -
- package/python-xlib/Config.in        |  7 -------
- package/python-xlib/python-xlib.hash |  5 -----
- package/python-xlib/python-xlib.mk   | 14 --------------
- 6 files changed, 7 insertions(+), 28 deletions(-)
- delete mode 100644 package/python-xlib/Config.in
- delete mode 100644 package/python-xlib/python-xlib.hash
- delete mode 100644 package/python-xlib/python-xlib.mk
+ Config.in.legacy                              |  7 ++++
+ package/Config.in                             |  1 -
+ ...y-fix-version-parsing-on-Python-3.14.patch | 42 -------------------
+ package/python-html5lib/Config.in             |  8 ----
+ package/python-html5lib/python-html5lib.hash  |  5 ---
+ package/python-html5lib/python-html5lib.mk    | 16 -------
+ 6 files changed, 7 insertions(+), 72 deletions(-)
+ delete mode 100644 package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
+ delete mode 100644 package/python-html5lib/Config.in
+ delete mode 100644 package/python-html5lib/python-html5lib.hash
+ delete mode 100644 package/python-html5lib/python-html5lib.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index ee2e34822b..8992315454 100644
+index 8992315454..8134e8ac6a 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2026.08"
  
-+config BR2_PACKAGE_PYTHON_XLIB
-+	bool "python-xlib removed"
++config BR2_PACKAGE_PYTHON_HTML5LIB
++	bool "python-html5lib removed"
 +	select BR2_LEGACY
 +	help
 +	  Upstream is no longer maintained, and the package does not
 +	  build with setuptools >= 82.
 +
- config BR2_GCC_VERSION_13_X
- 	bool "gcc 13.x support removed"
+ config BR2_PACKAGE_PYTHON_XLIB
+ 	bool "python-xlib removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d591c62805..d956dd96e3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1759,7 +1759,6 @@ F:	package/python-raven/
- F:	package/python-schedule/
- F:	package/python-sentry-sdk/
- F:	package/python-websockets/
--F:	package/python-xlib/
- F:	package/sentry-cli/
- F:	package/sentry-native/
- F:	package/unclutter-xfixes/
 diff --git a/package/Config.in b/package/Config.in
-index 96e113e226..73522de358 100644
+index 73522de358..ee02d38ba5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1516,7 +1516,6 @@ menu "External python modules"
- 	source "package/python-wsaccel/Config.in"
- 	source "package/python-wsproto/Config.in"
- 	source "package/python-wtforms/Config.in"
--	source "package/python-xlib/Config.in"
- 	source "package/python-xlrd/Config.in"
- 	source "package/python-xlsxwriter/Config.in"
- 	source "package/python-xlutils/Config.in"
-diff --git a/package/python-xlib/Config.in b/package/python-xlib/Config.in
+@@ -1152,7 +1152,6 @@ menu "External python modules"
+ 	source "package/python-hiredis/Config.in"
+ 	source "package/python-hkdf/Config.in"
+ 	source "package/python-hpack/Config.in"
+-	source "package/python-html5lib/Config.in"
+ 	source "package/python-httpcore/Config.in"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-httpx/Config.in"
+diff --git a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch b/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
 deleted file mode 100644
-index 081af6a2fc..0000000000
---- a/package/python-xlib/Config.in
+index 0147aa1418..0000000000
+--- a/package/python-html5lib/0001-setup.py-fix-version-parsing-on-Python-3.14.patch
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_PYTHON_XLIB
--	bool "python-xlib"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	help
--	  XLib in pure Python (Py2/Py3 compatible)
+@@ -1,42 +0,0 @@
+-From b90dafff1bf342d34d539098013d0b9f318c7641 Mon Sep 17 00:00:00 2001
+-From: Andrew Sukach <andrew@sukach.org>
+-Date: Fri, 12 Sep 2025 21:53:31 -0700
+-Subject: [PATCH] `setup.py`: fix version parsing on Python 3.14 (ast.Str
+- removed)
 -
--	  https://github.com/python-xlib/python-xlib
-diff --git a/package/python-xlib/python-xlib.hash b/package/python-xlib/python-xlib.hash
+-Python 3.14 removes the ast.Str node type. String literals now appear
+-as ast.Constant(value=str).
+-Update the AST check to accept both ast.Str (for older Pythons) and
+-ast.Constant with a string value (for Python 3.8+), allowing html5lib to
+-build successfully on Python 3.14 while remaining compatible with older
+-version.
+-
+-Upstream: https://github.com/html5lib/html5lib-python/pull/589
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- setup.py | 11 ++++++++---
+- 1 file changed, 8 insertions(+), 3 deletions(-)
+-
+-diff --git a/setup.py b/setup.py
+-index 30ee0575..42ab6f67 100644
+---- a/setup.py
+-+++ b/setup.py
+-@@ -92,9 +92,14 @@ def default_environment():
+-     for a in assignments:
+-         if (len(a.targets) == 1 and
+-                 isinstance(a.targets[0], ast.Name) and
+--                a.targets[0].id == "__version__" and
+--                isinstance(a.value, ast.Str)):
+--            version = a.value.s
+-+                a.targets[0].id == "__version__"):
+-+            if hasattr(ast, "Str") and isinstance(a.value, ast.Str):
+-+                version = a.value.s
+-+            elif (hasattr(ast, "Constant")
+-+                  and isinstance(a.value, ast.Constant)
+-+                  and isinstance(a.value.value, str)):
+-+                version = a.value.value
+-+assert version is not None
+- 
+- setup(name='html5lib',
+-       version=version,
+diff --git a/package/python-html5lib/Config.in b/package/python-html5lib/Config.in
 deleted file mode 100644
-index f516d7b4c4..0000000000
---- a/package/python-xlib/python-xlib.hash
+index 34e22049ad..0000000000
+--- a/package/python-html5lib/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PYTHON_HTML5LIB
+-	bool "python-html5lib"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_WEBENCODINGS # runtime
+-	help
+-	  HTML parser based on the WHATWG HTML specification.
+-
+-	  https://github.com/html5lib/html5lib-python
+diff --git a/package/python-html5lib/python-html5lib.hash b/package/python-html5lib/python-html5lib.hash
+deleted file mode 100644
+index 5023f5ab66..0000000000
+--- a/package/python-html5lib/python-html5lib.hash
 +++ /dev/null
 @@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/python-xlib/json
--md5  20a687ac84ee632aea9b9861206aa0eb  python-xlib-0.33.tar.gz
--sha256  55af7906a2c75ce6cb280a584776080602444f75815a7aff4d287bb2d7018b32  python-xlib-0.33.tar.gz
+-# md5, sha256 from https://pypi.org/pypi/html5lib/json
+-md5  6748742e2ec4cb99287a6bc82bcfe2b0  html5lib-1.1.tar.gz
+-sha256  b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f  html5lib-1.1.tar.gz
 -# Locally computed sha256 checksums
--sha256  3bb6f6bec94b99e2927a8880bf49c401f5e8f48a20ddea96310860264cae20b0  LICENSE
-diff --git a/package/python-xlib/python-xlib.mk b/package/python-xlib/python-xlib.mk
+-sha256  16a39991619e92f18680932da2a9199fdf7d95df3ecaedc52ea06218aabafd6f  LICENSE
+diff --git a/package/python-html5lib/python-html5lib.mk b/package/python-html5lib/python-html5lib.mk
 deleted file mode 100644
-index 23c7b39974..0000000000
---- a/package/python-xlib/python-xlib.mk
+index 320ef01c7a..0000000000
+--- a/package/python-html5lib/python-html5lib.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,16 +0,0 @@
 -################################################################################
 -#
--# python-xlib
+-# python-html5lib
 -#
 -################################################################################
 -
--PYTHON_XLIB_VERSION = 0.33
--PYTHON_XLIB_SITE = https://files.pythonhosted.org/packages/86/f5/8c0653e5bb54e0cbdfe27bf32d41f27bc4e12faa8742778c17f2a71be2c0
--PYTHON_XLIB_SETUP_TYPE = setuptools
--PYTHON_XLIB_LICENSE = LGPL-2.1+
--PYTHON_XLIB_LICENSE_FILES = LICENSE
--PYTHON_XLIB_DEPENDENCIES = host-python-setuptools-scm
+-PYTHON_HTML5LIB_VERSION = 1.1
+-PYTHON_HTML5LIB_SOURCE = html5lib-$(PYTHON_HTML5LIB_VERSION).tar.gz
+-PYTHON_HTML5LIB_SITE = https://files.pythonhosted.org/packages/ac/b6/b55c3f49042f1df3dcd422b7f224f939892ee94f22abcf503a9b7339eaf2
+-PYTHON_HTML5LIB_LICENSE = MIT
+-PYTHON_HTML5LIB_LICENSE_FILES = LICENSE
+-PYTHON_HTML5LIB_SETUP_TYPE = setuptools
+-PYTHON_HTML5LIB_CPE_ID_VENDOR = html5lib
+-PYTHON_HTML5LIB_CPE_ID_PRODUCT = html5lib
 -
 -$(eval $(python-package))
 -- 
