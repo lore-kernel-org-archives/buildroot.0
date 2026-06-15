@@ -1,90 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 722ABCD98DE
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 21:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F4DCCD98CE
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 21:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43DC141B90;
-	Mon, 15 Jun 2026 21:30:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAE718466D;
+	Mon, 15 Jun 2026 21:31:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3ZvVEM8TjdPg; Mon, 15 Jun 2026 21:30:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sajmwLsFSwzZ; Mon, 15 Jun 2026 21:31:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63F3741B93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A351B8466E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781559049;
-	bh=gA3QngFyLNODQGpwVOj6OVPo4tqZb5DqVLHprtpTSzg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=iP4faCPobt4+zQpuFFFJEdzEkHUVbhBM5Hxyg/3ItZ5jHvTVyOs3qb+mXTSLBcLNm
-	 IcS2ao10Ccz1zEFUjwos3HxX4bxOXadKbQHPaaFzQqBp+0vN7hpoMfsuqF4uWXbKwk
-	 5/Ksa04UlsSn0zGZkszUrdO/7ej1N0BAHIUBB+FR5R1PdPvACurLuZUI1JZQ5OcmMH
-	 PiFbf4WuaW6eMcWcpYud9+UlU8UtiwTVG3sBZx8zsFNrs1UCl2VXVJmBSjI6lIrnOa
-	 S77ubzyZkg3DfXJVsdqgsU5oaHoXEUjwrQWVutMxVNGuFLYkw8NMYjiT82A/UHy+2h
-	 uwz7J2O7O1AsQ==
+	s=default; t=1781559097;
+	bh=weNHAWD+90YiuXWCYVDGAG09DGZO3iJ9nNrJ6gwFqAA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=PtwfWqXwJgw1a4dsq6JI4Tps1b6Dy6ySgvDkTkzXbs8lbpvbgwM71eryktiNsrj+8
+	 p1XWaUCCxps25Wepk6P2q2jZXc0vabvag67J9csDzhNlNWMpbEAPA98k35w/XomAi0
+	 Qf+wO0RRuZZ0WWQWWlhRV4kOThrFQlxnpPFoYJdxdlBcBY/F57xwVdY9BCKtUlwXLz
+	 dPoTzG5YZa7C2rHqrPNTNVb0JUK0L5SaaVLSILsUp5I2N9KVked5K400fED6vBVo7w
+	 CLw+N+262xfaMvhrDUg6xUA2vg68AET/Lc7zgNuZPjTfmOUtW60SDl26EUBiFKopwV
+	 /rTJ9b+TIFyGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63F3741B93;
-	Mon, 15 Jun 2026 21:30:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08F99169
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:30:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A351B8466E;
+	Mon, 15 Jun 2026 21:31:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A308F169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E377841B90
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:30:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91CFC41B90
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wuPbISIz6UTh for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 21:30:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 041B841B93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 041B841B93
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 041B841B93
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:30:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 82DA02003B4;
- Mon, 15 Jun 2026 23:30:39 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 15 Jun 2026 23:30:39 +0200
-MIME-Version: 1.0
-Date: Mon, 15 Jun 2026 23:30:39 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20260615202559.1465158-3-bernd@kuhls.net>
-References: <20260615202559.1465158-1-bernd@kuhls.net>
- <20260615202559.1465158-3-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <9082606ff7e046d77509548484b36907@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1781559043;
- bh=zxBTYM+1ysPfdN3aYq5BgEt2y1mYEwaR1ka46u80dh8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=fJKPQH0szDsZ43H8kLS4IsE6caw+4fAuvcJxqrUV3SYPYVbAsABuhqEqSF7gaWUg/
- rRpRVBtxhbCEq8/WLf1trV4OugNoxybKKMNRF37zynymliDNY50AyBSBdaCW6S1l5m
- TOG1nM6mexHWD5lz4MUQfDJ2nHRZrk8dzbRqczEzfeU6xxmBSzpi8hu09mkq3FWiyI
- hDX3b4mZxF9J3abzoZEBJRzwa7FPzEHBFLcNYpvqfV1AasZxstzit20ZozC6QrHV7Y
- aYLmR6mvmnZ/bcUjSEjHyEx2ipfdiG8erWEuY0cjEkTtGLzWGUPjH5FUSWikf/ZZ6j
- bUdIb0GKMPcWA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fJKPQH0s
-Subject: Re: [Buildroot] [PATCH 3/5] linux: select host-libelf for all
- architectures when building latest version
+ id sL8iMX3b6YOd for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 21:31:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2BB841B8F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2BB841B8F
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F233F7FF06; Mon, 15 Jun 2026 21:31:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 15 Jun 2026 22:55:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 96408d1313bface05f5dcc9e275eb118fce87fa9
+X-Git-Newrev: d609530d09c1018a3e579ff968778fbbee3867dc
+X-Patchwork-Hint: ignore
+Message-Id: <20260615213114.F233F7FF06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.12.x, 7.0.x,
+ 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,64 +71,105 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d609530d09c1018a3e579ff968778fbbee3867dc
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the patch.
+Update the latest kernel releases to:
+- 6.12.92 -> 6.12.93
+- 6.18.34 -> 6.18.35
+- 7.0.11 -> 7.0.12
 
-On 15/06/2026 22:25, Bernd Kuhls wrote:
-> Fixes:
-> loongarch64: 
-> https://autobuild.buildroot.net/results/d35/d350f09f06d43246284b4c0112544d79a9b0f083/
-> powerpc: 
-> https://autobuild.buildroot.net/results/638/63835fa811ad0566a3e373d79686405fdb5a0df0/
-> x86_64: 
-> https://autobuild.buildroot.net/results/711/7113e9d3e616733f2e98ea175ab80ccb718c90a1/
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ linux/{7.0.11 => 7.0.12}                   | 0
+ linux/Config.in                            | 2 +-
+ linux/before-6.17/linux.hash               | 2 +-
+ linux/from-6.17/linux.hash                 | 4 ++--
+ package/linux-headers/{6.12.92 => 6.12.93} | 0
+ package/linux-headers/{6.18.34 => 6.18.35} | 0
+ package/linux-headers/{7.0.11 => 7.0.12}   | 0
+ package/linux-headers/Config.in.host       | 6 +++---
+ 8 files changed, 7 insertions(+), 7 deletions(-)
 
-Could you provide a bit more info why we need to enable host-libelf
-for all architectures?
-
-Looking at the autobuilder logs, it seems to be related to the Kernel
-objtool, which seems to be enabled only on those three architectures.
-
-Shouldn't we select libelf only for those architectures only?
-
-For example, we ended up selecting host-openssl for all
-architectures because almost all needed it. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/bba86304b0ac4ae266cfb52e54a239b0850b10ca
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> Gitlab pipeline passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/9b6fe0892e0acd8d750f614656648fb51467f668
-> 
->  linux/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 0baa52de0f..51b0a3fcc5 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -192,6 +192,9 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
->  	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
->  	       BR2_LINUX_KERNEL_LATEST_VERSION || \
->  	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> +	select BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF if \
-> +	       BR2_LINUX_KERNEL_LATEST_VERSION || \
-> +	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  	help
->  	  This option will use the default configuration for the
->  	  selected architecture. I.e, it is equivalent to running
-> --
-> 2.47.3
-
-Best regards,
-
-Julien.
+diff --git a/linux/7.0.11 b/linux/7.0.12
+similarity index 100%
+rename from linux/7.0.11
+rename to linux/7.0.12
+diff --git a/linux/Config.in b/linux/Config.in
+index 8b17fece44..bbd0e491cd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -143,7 +143,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.0.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.0.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.254-cip72" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.254-cip72-rt32" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 93c36c9156..4ebc486eac 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  0fe376b7db3cac4456b38291bee4faa7091cb8befaa6f9870314f5d1282f9e3e  linux-6.12.92.tar.xz
++sha256  492648a87c0b69c5ac7f43be64792b9000e3439550d4e82e4a14710c49094fa3  linux-6.12.93.tar.xz
+ sha256  b2f6607a75cd27b2e368cf2d25e1637e1e0da9dfed4cda536658879eee6f2b70  linux-6.6.142.tar.xz
+ sha256  37e984a9e449eb15023b3063c3fd6f64fdd1d83af5bb6a944cd7244f40beca85  linux-6.1.175.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 03ed2d7876..8274594ec2 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  e56c8356dda01136a6041c6ef832bd0ec99bd2d35dff97832aa5ec10ed014304  linux-7.0.11.tar.xz
++sha256  57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da  linux-7.0.12.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  640c4732fb42842166db97e032c1fe7e5ff72c85a8982c75b40f74be3555d760  linux-6.18.34.tar.xz
++sha256  f78602932219125e211c5f5bfd84edcfd4ec5ce88fc944f8248413f665bef236  linux-6.18.35.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/6.12.92 b/package/linux-headers/6.12.93
+similarity index 100%
+rename from package/linux-headers/6.12.92
+rename to package/linux-headers/6.12.93
+diff --git a/package/linux-headers/6.18.34 b/package/linux-headers/6.18.35
+similarity index 100%
+rename from package/linux-headers/6.18.34
+rename to package/linux-headers/6.18.35
+diff --git a/package/linux-headers/7.0.11 b/package/linux-headers/7.0.12
+similarity index 100%
+rename from package/linux-headers/7.0.11
+rename to package/linux-headers/7.0.12
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1c00e2508b..3e3832b707 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -472,9 +472,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.15.209"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.175"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.142"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.92"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.34"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.11"	if BR2_KERNEL_HEADERS_7_0
++	default "6.12.93"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.35"	if BR2_KERNEL_HEADERS_6_18
++	default "7.0.12"	if BR2_KERNEL_HEADERS_7_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
