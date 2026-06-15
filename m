@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C77CD98CF
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 18:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7587CD98CF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 18:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A277B614BA;
-	Mon, 15 Jun 2026 18:29:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A52D3413D6;
+	Mon, 15 Jun 2026 18:29:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eA6jc63zNfwJ; Mon, 15 Jun 2026 18:29:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6qXzpugEJ70l; Mon, 15 Jun 2026 18:29:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D205A614B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4523417C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781548176;
-	bh=5e627ld9zxVgCxsPhT2ozP3NSOsY+gvFzItgoCVQ1No=;
+	s=default; t=1781548188;
+	bh=/2pwjx1TfTnQ5FArCHsadqZc52KFwLBq3wg0NpwMyug=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=gDx/dr1iqZ+8p6htKiOj/CI/ru20aBcR0x/8mTJpJnIi3AD/DrOsuzEPsCrIU7eTm
-	 FG2WKsIwP19dRgUGxJJJTm0pSFTHoFAeAX1Is0WhtP1S/X1ly3GB0tlrQBQGnaL+fQ
-	 I+MaN6RfqI1WTGA27MuyeHwCIFuCi4VjtHrYqHBCEk2y7KTOmjgaNT505n0AOoAbiF
-	 zsldkvYdhnXpB8ooTv+s34qvl0ig9fG/ag5Y3xbeQ6++BziyNQxwhsy/Ta7ztrUfYZ
-	 FLX5YvpinKghRQDYQyHyOFwMAHdHNUxUfnNakbJDOZukMC2mee90Mz+jEHJMSSiBKX
-	 BBIw0KxCmHOFA==
+	b=QvPem5kP5qzTEr9DzI4y2p7QiFp33uv1z+EylL4VYde4emqncP/c+Yj4nFjTlBhZh
+	 CM0gg7sTeSDsVDCtizzp/LIde9gQH9SKrZU3z0LkQo/DMXXK//IWOBxZykS8YnCAAw
+	 UC6YYR4QvCPOX/ak2Q0kfTB+S832LsKxp2zPUd24IqHMdOMB3YcGTip6VbX0GDEyKV
+	 4TWhHJZHyzy8o01va6NszzPmrneT8bz6gEbDEis3myUGGXgiSlPhbrhTJURTmx/MmS
+	 Rmlfb32BHAgXllsFwv9whVgjVAB9rwtyIPh1xi4Tt4ocBjBm3ZU2xFEdzJA6iISnhf
+	 IFGgt/YBHf2gg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D205A614B3;
-	Mon, 15 Jun 2026 18:29:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C2A4C2F3
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4523417C9;
+	Mon, 15 Jun 2026 18:29:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51CA22B8
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4951614B6
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43CE841367
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D6y0MiJN0JUa for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 18:29:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zjgYn7B8Kg_A for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 18:29:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8711E606EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8711E606EE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3BFEE4031A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BFEE4031A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8711E606EE
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3BFEE4031A
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:29:45 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a04de.dip0.t-ipconnect.de [91.58.4.222])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 57DEDA4C339B
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 49E00A4C322F
  for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:29:16 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50112)
  by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wZC3g-000000006g5-05Lg
+ (envelope-from <bernd@kuhls.net>) id 1wZC3f-000000006g5-3xys
  for buildroot@buildroot.org; Mon, 15 Jun 2026 18:29:16 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Jun 2026 20:29:14 +0200
-Message-ID: <20260615182915.1888004-3-bernd@kuhls.net>
+Date: Mon, 15 Jun 2026 20:29:13 +0200
+Message-ID: <20260615182915.1888004-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260615182915.1888004-1-bernd@kuhls.net>
 References: <20260615182915.1888004-1-bernd@kuhls.net>
@@ -67,23 +67,23 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202605290044; t=1781548156;
- bh=COgqPvmsHkdS3avSvPr8fyGKWTzF6+ElIgc8dqSIkrY=;
+ bh=danEeEsJtTRetwMMYbK13CAOuY1laeOb3+HcoFckzyE=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=SCBhdHuOHBkhxUEkZ/j6bHdfFZmsb0jjhDzLrS/Fw+1G/2Jq1AntYj149h7AWUF6Q
- 1VmYp2vi27lm7Egtsg634we+9256XJ/5pU5Ew3VrFepU2bCk/aHJO4F9KvLB/nXNbm
- mlfgXqNY4RmZLmPY/vnMURsZdv7GgD78cETFDLAxm6blX5Gj3AR8lK4FVO9UbT0A2j
- iu/Ox3x9VQ8nHJYQSZDSHNr07hCNsYldT+a0qH92zhAw7zrPkx/h+pc0Ybakh7XgHm
- O5ZFnROqxXPRNeygirgRbNfvkwgdpB7J6BpK21Y7TDKb2NZxmCGk/G68MVpHRaMitQ
- d/eH1WRnSQ7BA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Vnj8T4pqwj0E2ovQx7bBRQ7fl58P5cGW4BaLVHsJ+uyAGWsie60RPIr2vp4jFWqlf
+ FvCfeYeNU/fPp1W+wWe5xaDEiHKtq0UyOilxJUALrIkwbS3yyW57ts1+3pQ8zJ5I/r
+ prqlXsOfs6Y/lxoFlF2OcSlyY3GLckyRDvVl+himsP8pTrpG31oWHhzBldEA1+N0An
+ IonkZUlu8XqwHb/NJix/YAqNR0KnutTBmsR/fdu8c1gnJQoAr0l/w41WYpQ+FkhNEB
+ 1RCICOnV9CLb/AlX+U7ZNqME8Eg9bpmnyCBdKIv4Rac2MGFSK1wfBrQ5doMgGYZnkf
+ ilrAmYr1bSZQA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=SCBhdHuO
-Subject: [Buildroot] [PATCH 3/4] package/kodi-pvr-zattoo: bump version to
- 21.0.7-Omega
+ header.s=kas202605290044 header.b=Vnj8T4pq
+Subject: [Buildroot] [PATCH 2/4] package/kodi-screensaver-rsxs: remove
+ dependencies to gli & glm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,37 +100,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Upstream commit
+https://github.com/xbmc/screensavers.rsxs/commit/a00a3cce3c5f24ea7274968b5b16c8d2db656a8b
+added the code of gli & glm in-tree and removed the usage as external
+packages.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 Gitlab pipelines passed:
 https://gitlab.com/bkuhls/buildroot/-/commits/ad40439fbf81d306cc35d33bf35e93c320dbefa8
 
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-rsxs/Config.in                | 2 --
+ package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index ecec000e3d..8b5509d947 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f6df1fa29ec3778f591281f57190099bf5a510c293c711ea978497556765352f  kodi-pvr-zattoo-21.0.6-Omega.tar.gz
-+sha256  d57efceff2f451cc8864d429abed6c7d808ea5092fddf3ece3f598d4a5e26b1f  kodi-pvr-zattoo-21.0.7-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 2de33b26b5..12d2d5ff09 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+index e88df1fe49..8185f3c424 100644
+--- a/package/kodi-screensaver-rsxs/Config.in
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
+ 	bool "kodi-screensaver-rsxs"
+ 	depends on BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
+ 	select BR2_PACKAGE_BZIP2
+-	select BR2_PACKAGE_GLI
+-	select BR2_PACKAGE_GLM
+ 	help
+ 	  RSXS screensaver add-ons for Kodi
  
--KODI_PVR_ZATTOO_VERSION = 21.0.6-Omega
-+KODI_PVR_ZATTOO_VERSION = 21.0.7-Omega
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index ff554a2e1a..dcca031b51 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -8,6 +8,6 @@ KODI_SCREENSAVER_RSXS_VERSION = 21.1.2-Omega
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+ KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
+-KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm kodi
++KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.47.3
 
