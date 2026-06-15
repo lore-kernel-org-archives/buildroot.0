@@ -1,88 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2459CD98CF
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 18:30:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D4ACD98CF
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 19:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 950D5614B5;
-	Mon, 15 Jun 2026 18:30:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7142F418A9;
+	Mon, 15 Jun 2026 19:17:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U7gJ4Aak1uE8; Mon, 15 Jun 2026 19:17:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A82418A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781551032;
+	bh=GG8I+SbpHF0Y8+IEOPV+ftkiJ9P8eiYEZmWmP/bvJic=;
+	h=From:Date:References:Cc:In-Reply-To:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=UVGzqVJrBEY4pNtptwruCM0OVIpCGw2IEr16ADH5EDg/HlSmR5OmPTAhuLValG+qQ
+	 anjOnFyL4BotNqE9G9MgXm2loJ5NnDU+JhqtRiUGEB7kZBqQ3w+lCix4FL/u7vUoFL
+	 VPT3sfVaN3HnM9Fr8p8HbOxtq4HDCrXJnfszjQZSXSDqQ7+RE0NWxCSOGbBQWx7IiC
+	 wOSvO7vUmmChO8C6jF1vOCmzka5XsuySjtGoq4ET+qq2ai1VFCCt672oCEJ5F5ZdPk
+	 41bs+6+/UrYb+/NRNpNyxs53VG8BqNgFVguNpkk5OkgpVGZny8tQt6xSG2N7iwtJh9
+	 7dUTM1au5LMKA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24A82418A4;
+	Mon, 15 Jun 2026 19:17:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB172169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 19:17:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CD776148C
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 19:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V1xOlxHAP2tb; Mon, 15 Jun 2026 18:30:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5AD0614AF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781548206;
-	bh=kNVVEmI5uLbJp+zyaYDx1Ul0NZAwCmkCbUErKb+9q80=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=cGFU3hSU89diQT5NPxRVa82jlQeBfy+EX6HB4jaQ7coItGD1uIamtTDHzfbaI13/C
-	 FlNFyBrikrmtVu/9GAxe3XZOYokCD//vlfTl7kMdHe9ALO8lvgvR0875trKD92JwOL
-	 yIVwKnZ/9m/oJI5Xz+MHgRZkWu2J2FKA0Qai2zuVu3xxY1FYRZWKn+nZQu7FfJwhbL
-	 Ry82MsQltMoQqUqIRZsOAdUwCgvDNn4jUg+DUUDEFFUfhQ5gCvmc3ijqIWBzvvBip8
-	 Bhgu8rEc3VRUznWUA5K48hDsvyr2pKeEUifSoIkheYw96VBwaGkUPKCvCbbWbfnG61
-	 HUhsMjS29pEow==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5AD0614AF;
-	Mon, 15 Jun 2026 18:30:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A65832F3
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:30:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A40F64031A
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:30:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3I0HqbeLiwzH for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 18:30:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6330E4040A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6330E4040A
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6330E4040A
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:30:03 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04de.dip0.t-ipconnect.de [91.58.4.222])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8EF51A4C23BE
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:30:01 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50112)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wZC3g-000000006g5-0OK3
- for buildroot@buildroot.org; Mon, 15 Jun 2026 18:29:16 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Mon, 15 Jun 2026 20:29:15 +0200
-Message-ID: <20260615182915.1888004-4-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260615182915.1888004-1-bernd@kuhls.net>
-References: <20260615182915.1888004-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1781548201;
- bh=pvohGc+SoFGeIqatCL3ngWaR5Hs4NyFfHVqMNQkLvJM=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=FneYT3OMp1hIH5vF5l9TfGPayiQc0XHj1QIwn2pVDkW1x/fE5zvKvkR+BMTyGU9M8
- L0rYFZWXBH+nIKTKMEEA9YFX3LjXC4JhNYyYBpePfboEfbSFJVld0krIeCkvbfTXpk
- 6AjjsEN84OGS5nbHWHEl0IYwkuXq6E18ELvkRA52UQiCp1EpfR0zIFTJE3jNi7tGI4
- CjBNZtz+Y02VH2CvEH+X/kOElQKoh/dVy4WfzDomWW+eLdPRWDhsWlWOVdRK1rMBNh
- zBCVx012Mw021YeSqZUdmdAhrY9YXSqhd6db9paTTRpWrxDNuCS8K1O4ZMH+RjrP4l
- gUKkjZXEzGpvw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ id 8cfOnQYje3QS for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 19:17:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.116;
+ helo=smtpcmd11116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C12B060B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C12B060B6C
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C12B060B6C
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 19:17:07 +0000 (UTC)
+Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id ZCnww2VhoiOfFZCnwwsDyv; Mon, 15 Jun 2026 21:17:04 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Mon, 15 Jun 2026 21:17:04 +0200
+Message-Id: <693F01AA-53D9-41C3-BA83-F60917EBA4C4@benettiengineering.com>
+References: <157852b6-7396-404b-8153-5df134e899e3@bubu1.eu>
+Cc: buildroot@buildroot.org, Johan Oudinet <johan.oudinet@gmail.com>
+In-Reply-To: <157852b6-7396-404b-8153-5df134e899e3@bubu1.eu>
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+X-Mailer: iPhone Mail (23F77)
+X-CMAE-Envelope: MS4xfE9kdAA0k1aN9Hr+C5Q01unAD+C7xqnsgU7cbnnHxUp0nA045FAwVWe6khBDPxDeTeuuCSPUepKJ+Fi7XWmMVmw1l8XQU1K2puLj4JLHdl5ppGurKC7P
+ 0IO2fvb5UzJ2W120l9QHG0CqBZ8qn3ZRIPr4r8zdAXpXWP1TPjEK8ETQ6crlqzsqkZN5GmHTW1XiYReRr/pJRIZJWBvgjMYAUDmR8xiqfA5dn2/EFgBZSvw+
+ xFL3k85/1NzP0V9zbgMANRgwHbBnuCyqoacKp5PmEQd1X4wDpbY9CKiIqA0OOAPb
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1781551024; bh=t3LgA74luDysKrwoOKXJU8BlP0rUInN8UNsF1dtKk1k=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=X9feIZvxmwDw0MXeNLR0UGZSJFU5m/xBv9E0yy00IX4AxHx8sY9wN0nUHfFD3ghwe
+ efhUxXLio6wr27jYvcKb8fTrj0w4O0CZ6TEV0h904/lopQhmksrcxiaq4afwWghb/A
+ QXITS/16qTpBjnDW2ENxaK3ALD7shGfM7aFteOxT5GbM3hyrUHgsb6CbtR7P2u4F+N
+ r3XKUgjpvUciXJ/OazpyV5WufWiP8ADYcQ3hcSPBRNXAhOHAmeixd7Vsk+x7n8zO/f
+ 09PbHuwm2CIlifRQChZeldkHM0OempnywMuIuhTYQpTD7oc2pftu3jlokydvpikGs9
+ 596gaHXNzMmSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=FneYT3OM
-Subject: [Buildroot] [PATCH 4/4] package/kodi-inputstream-adaptive: bump
- version to 21.5.19-Omega
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=X9feIZvx
+Subject: Re: [Buildroot] [PATCH] package/erlang-jiffy: bump to version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,50 +92,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/xbmc/inputstream.adaptive/releases/tag/21.5.19-Omega
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/ad40439fbf81d306cc35d33bf35e93c320dbefa8
-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index c2339a3d33..d05e1c217f 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  a62ef86fc616c37ff7fa53ff7dfe2a73ee21f48af306a9f82c5bb5fe05245dad  kodi-inputstream-adaptive-21.5.18-Omega.tar.gz
-+sha256  20922de1891c9980f9807a10edbe2d1ae9224c298c438a3458d7b7105d5b7c21  kodi-inputstream-adaptive-21.5.19-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 3e0ead12c9..6afbb241a1 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.18-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.19-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTWFyY3VzLAoKPiBJbCBnaW9ybm8gMTUgZ2l1IDIwMjYsIGFsbGUgb3JlIDIwOjI2LCBNYXJj
+dXMgSG9mZm1hbm4gPGJ1aWxkcm9vdEBidWJ1MS5ldT4gaGEgc2NyaXR0bzoKPiAKPiDvu79IaSBH
+aXVsaW8sCj4gCj4+IE9uIDYvMTUvMjYgMTg6MTgsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+PiBS
+ZWxlYXNlIE5vdGVzOgo+PiBodHRwczovL2dpdGh1Yi5jb20vZGF2aXNwL2ppZmZ5L3JlbGVhc2Vz
+L3RhZy8yLjAuMQo+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0
+dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPj4gLS0tCj4gV2UgdXN1YWxseSB3YW50IG5ldyBw
+YXRjaGVzIHRvIG5vdCBkZXBlbmQgb24gYWxyZWFkeSBwZW5kaW5nIHBhdGNoZXMgaW4gcGF0Y2h3
+b3JrLCBzbyB0aGUgInByb3BlciIgd2F5IHdvdWxkIGhhdmUgYmVlbiB0byBzZW5kIHRoaXMgYnVt
+cCBzcXVhc2hlZCB0b2dldGhlciB3aXRoIHRoZSBwcmV2aW91cyAyLjAuMCBvbmUgYW5kIG1hcmsg
+dGhlIG90aGVyIG9uIGFzIHN1cGVyc2VkZWQgaW4gcGF0Y2h3b3JrLgoKTXkgYmFkIEkgaGF2ZW7i
+gJl0IGNoZWNrZWQgcGF0Y2h3b3JrLgoKVGhhbmtzIGZvciB0YWtpbmcgY2FyZS4KCkJlc3QgcmVn
+YXJkcwpHaXVsaW8KCj4gCj4gQW55d2F5LCBJIGFwcGxpZWQgYm90aCB0aGlzIGFuZCB0aGUgMi4w
+LjAgYnVtcCB0byBtYXN0ZXIsIHRoYW5rcyEKPiBNYXJjdXMKCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
