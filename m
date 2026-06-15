@@ -1,84 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B295CD98DA
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 20:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A464CD98CE
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 20:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46736419A2;
-	Mon, 15 Jun 2026 20:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BB3E84506;
+	Mon, 15 Jun 2026 20:26:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kwVB57v7uAaV; Mon, 15 Jun 2026 20:25:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dYePQAUDPZbV; Mon, 15 Jun 2026 20:26:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FEBE419A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 568C384503
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781555144;
-	bh=Fpu8li6vsAkS2b2WUPT2RkavGgPFa1xY3kbNa7UIBW8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oFe8sydvVBzIOIaxwKsx/cDoAcXnmcCpyg3B3mNIKWlG/zt95yRFdK64337d2MAFs
-	 FkZK2iBmcbauvF9lvGAIIBeC7X0mHotIsgG/WfgYknJASRT+ajO8AZEIJGO+RBqmcR
-	 Ub1pX0xncvewkE7SBb/FCoObvWrh5gLDcpFSwyjF8fYjAZlk1P1+gnO5WmhMxLY0Ia
-	 /4QM0QS1RF3YTkVIs2WpZzu/AKMZteCHVEIV2B4igSuoezVmSGPRcMLl67+iNDVbcp
-	 UCcd0bwCSKJaPpGkVGArMdD1F0QdcLreYvfn6W9gsK5CN1RzXfUMI9Lwf4y9hDbCXL
-	 QHuuc6Ysy2IkQ==
+	s=default; t=1781555163;
+	bh=WryX4V5U0RqgiJVjcfaOxfHpO3ckSAWvPCxsIBZ3NtE=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=jOA4JybOJ/Z2P1wub+kQlvaM26QDgA3qdH1zkmxaf6NJC9mqgyQMNP+4AB8z+HUlW
+	 fDMeLlbQCvFt4IaGrBQvjpboN7pGLJB6zLeejLE+fsxXt/WTKyfXyZNPn1JUPfgYoI
+	 qIWOb9G7nuT/fvpj8AHqcPXF9TLO513u9n+psUC5ZD8fRyUZNOHxg4yBYQ09RXcrsg
+	 1rQWmU06umBs/Dgroh50cAy64/BSszi4CG/SxXfo16kOFxbZ5S1cMIdBajVgVsxsYB
+	 tvXVyHVjGgldCRYAHEOFGMRhALB3oqOt3IBS1lDYdB0edKeBBBtZkxaBMNydtBeiY+
+	 9tvpKpmZnBvwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FEBE419A3;
-	Mon, 15 Jun 2026 20:25:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AA61A2F3
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:25:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 568C384503;
+	Mon, 15 Jun 2026 20:26:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6C942B8
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90D594199E
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:25:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98397419A3
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:26:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mt8bBsrd5Zph for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 20:25:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC9124197E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC9124197E
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC9124197E
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:25:40 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -355815260; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 15 Jun 2026 20:25:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1wZDsG-00000005NPK-485G;
- Mon, 15 Jun 2026 22:25:36 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id kCI3WJjF8qq0 for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 20:26:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 869F8419A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 869F8419A7
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 869F8419A7
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 20:26:01 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01c8.dip0.t-ipconnect.de [91.58.1.200])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A4ECFA4C3120;
+ Mon, 15 Jun 2026 22:25:59 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58352)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wZDsd-0000000017U-2WlP;
+ Mon, 15 Jun 2026 20:25:59 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 15 Jun 2026 22:25:31 +0200
-Message-ID: <20260615202534.1281579-1-peter@korsgaard.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Jun 2026 22:25:56 +0200
+Message-ID: <20260615202559.1465158-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260615202559.1465158-1-bernd@kuhls.net>
+References: <20260615202559.1465158-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Y1t8amX0Uhf+3n0oCzYq4D2UMp+acguxNHqAGiEslFD2HQ2HlcDvB3BS+7ESyyGmYeT+3TqcKN57cXCw0D0kOu063+9SMtoHeA7XeH1ZEhrfpCQysPaPnGw4futN8MlU1fu0cHgrxm7fMFOtR90moGhApNHK9VIuNMscdQEocnS7XvVeDEEwXIGz/5uONWdQgDDxppnVd7zjT9wTkdhYJeR0TyTaIIXWJqOxzCv78c7nOK3PLCwcdHfUJTPfpvC4O19DrdhPqLA+OdmgSbc6AxwkZAlcXETIQeDvBWgkJdfBt3hJycqQQ660odNYM/yuHQjAN43Kp/xe1hFWJ267Lw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=/JdJY990OlTEAU4F9//SFyNnw6wz0jPO5U+vk4JPeFI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1781555159;
+ bh=QLMFjcrhZJpJUUQp7HPMIGFhpRoXrKbAUKdKSR+Xv2g=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=Q+6fnsItJUFH2zaQAvvv13w5HXVjusb4mLCEbo1qg1OLJ4+y6cHz3H50fHN0xOzV+
+ R15rnggXd94LJSVc41nKmdJvutVkbBeTfJLJMMHozdKHOdwlsvnC7Ec+M2B8tUVUED
+ e8PmlIUPVC00rfW/HXvT3nyOFrxT9KJJ471rzFLciJR+UwlYjx6zAPSztg1c0Jq+mu
+ v05iQCXMwJOtZxmD+EaK8VSPNOwnrbfHMKDHtVtJGNxO6810IIi9q8bLEVYs1ZUW2+
+ aZkBw/uVzEDV0jRJKQZ421B7NigbmZLQGKG+ZhY0Ze7mZgkL5w0tH0DQjMys4H9g0G
+ pjSB9nRRaqX9w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=Y1t8amX0
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] boot/shim: add patch to fix builds with -O3 /
- -Ofast
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=Q+6fnsIt
+Subject: [Buildroot] [PATCH 2/5] linux: select host-openssl for all
+ architectures when building latest CIP version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,112 +102,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This is a follow-up for buildroot commit
+bba86304b0ac4ae266cfb52e54a239b0850b10ca to extend the fix to CIP
+kernels.
+
 Fixes:
-https://autobuild.buildroot.net/results/c6ad52a048ba030bb1adc3ee1aeb69ef880cbdad/
-https://autobuild.buildroot.net/results/136d1afc2ecacea6a4e12b915073e3eaf5c8ca01/
-https://autobuild.buildroot.net/results/a3f293371f6bd0125dc7baa5afb64373e4383f4f/
+aarch64: https://autobuild.buildroot.net/results/f91/f910c1e0e864055120e2deaf4d56b127cabb89bd/
+aarch64_be: https://autobuild.buildroot.net/results/6e6/6e651c586f9b2a1c9b39cafaf5bebc8b501e8369/
+arcbe: https://autobuild.buildroot.net/results/9fe/9fe7b4c66ac139926e9a3686bc951af703e78b29/
+arm: https://autobuild.buildroot.net/results/288/2888b0b6f5473e9c7ec7c443b02b42e1f5d4c814/
+armeb: https://autobuild.buildroot.net/results/d6c/d6cbbfdcbebe985d743232070824779e790aa5a8/
+microblazeel: https://autobuild.buildroot.net/results/bf3/bf3b4c61cdaf3527e9e315050bf21456bbb24a48/
+mips: https://autobuild.buildroot.net/results/c6b/c6b9c82352be01dd4bab2021a223e72dfaf1f522/
+or1k: https://autobuild.buildroot.net/results/231/23144a8108c5837e3a9cf26ad6ac73fa16dc740f/
+riscv: https://autobuild.buildroot.net/results/31c/31c3abdb23bfe16e248e094e9b0feafbbb0d6a94/
+s390x: https://autobuild.buildroot.net/results/bda/bdaaf6767f8c239bbf22e4619b2d6944ef951b2e/
+sparc: https://autobuild.buildroot.net/results/426/42614f77be9fa1b3a596cdcb40cfb81f5496b41b/
+sparc64: https://autobuild.buildroot.net/results/1f2/1f226d028d85c085d82f3890e804b39bccd2c2dc/
+x86_64: https://autobuild.buildroot.net/results/7be/7be86c261a42e1a16c3d38a640be226b5f51bccb/
 
-Shim contains an embedded copy of OpenSSL.  Depending on the optimization
-level, an error is triggered from make_kn():
+Supersedes
+https://patchwork.ozlabs.org/project/buildroot/patch/20251101102346.109307-1-bernd@kuhls.net/
+and includes Edgar's comment.
 
-In function 'make_kn',
-    inlined from 'make_kn' at crypto/cmac/cmac.c:81:13,
-    inlined from 'CMAC_Init' at crypto/cmac/cmac.c:205:9:
-crypto/cmac/cmac.c:92:20: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-   92 |         k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
-      |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-crypto/cmac/cmac.c: In function 'CMAC_Init':
-crypto/cmac/cmac.c:69:19: note: at offset 2147483647 into destination object 'k1' of size 32
-   69 |     unsigned char k1[EVP_MAX_BLOCK_LENGTH];
-      |                   ^~
-
-Fix it by including a patch submitted upstream which backports an upstream
-OpenSSL change to workaround this.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...make_kn-and-move-zero_iv-to-const-se.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch
+Gitlab pipeline passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/9b6fe0892e0acd8d750f614656648fb51467f668
 
-diff --git a/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch b/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch
-new file mode 100644
-index 0000000000..2baa0de56c
---- /dev/null
-+++ b/boot/shim/0002-cmac.c-optimize-make_kn-and-move-zero_iv-to-const-se.patch
-@@ -0,0 +1,72 @@
-+From 7aee873d6f6b0737dfe566fc8c5cd4eaada9bd5e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Apr 2024 11:56:06 +0200
-+Subject: [PATCH] cmac.c: optimize make_kn and move zero_iv to const segment.
-+
-+Backport
-+https://github.com/openssl/openssl/commit/03cf7e784caa4c61febbf249be63cbae3e368ac9
-+to fix the following k1 stringop-overflow:
-+
-+In function 'make_kn',
-+    inlined from 'make_kn' at crypto/cmac/cmac.c:81:13,
-+    inlined from 'CMAC_Init' at crypto/cmac/cmac.c:205:9:
-+crypto/cmac/cmac.c:92:20: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-+   92 |         k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
-+      |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-+crypto/cmac/cmac.c: In function 'CMAC_Init':
-+crypto/cmac/cmac.c:69:19: note: at offset [-2147483649, -1] into destination object 'k1' of size 32
-+   69 |     unsigned char k1[EVP_MAX_BLOCK_LENGTH];
-+      |                   ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/97b6333cdc7bad24aba7af1b04890679e0058299
-+
-+Upstream: https://github.com/rhboot/shim/pull/652
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Cryptlib/OpenSSL/crypto/cmac/cmac.c | 17 ++++++++---------
-+ 1 file changed, 8 insertions(+), 9 deletions(-)
-+
-+diff --git a/Cryptlib/OpenSSL/crypto/cmac/cmac.c b/Cryptlib/OpenSSL/crypto/cmac/cmac.c
-+index 2954b6eb..27dbfaac 100644
-+--- a/Cryptlib/OpenSSL/crypto/cmac/cmac.c
-++++ b/Cryptlib/OpenSSL/crypto/cmac/cmac.c
-+@@ -78,18 +78,17 @@ struct CMAC_CTX_st {
-+ 
-+ /* Make temporary keys K1 and K2 */
-+ 
-+-static void make_kn(unsigned char *k1, unsigned char *l, int bl)
-++static void make_kn(unsigned char *k1, const unsigned char *l, int bl)
-+ {
-+     int i;
-++    unsigned char c = l[0], carry = c>>7, cnext;
-++
-+     /* Shift block to left, including carry */
-+-    for (i = 0; i < bl; i++) {
-+-        k1[i] = l[i] << 1;
-+-        if (i < bl - 1 && l[i + 1] & 0x80)
-+-            k1[i] |= 1;
-+-    }
-++    for (i = 0; i < bl-1; i++, c = cnext)
-++        k1[i] = (c << 1) | ((cnext=l[i+1]) >> 7);
-++
-+     /* If MSB set fixup with R */
-+-    if (l[0] & 0x80)
-+-        k1[bl - 1] ^= bl == 16 ? 0x87 : 0x1b;
-++    k1[i] = (c << 1) ^ ((0-carry)&(bl==16?0x87:0x1b));
-+ }
-+ 
-+ CMAC_CTX *CMAC_CTX_new(void)
-+@@ -151,7 +150,7 @@ int CMAC_CTX_copy(CMAC_CTX *out, const CMAC_CTX *in)
-+ int CMAC_Init(CMAC_CTX *ctx, const void *key, size_t keylen,
-+               const EVP_CIPHER *cipher, ENGINE *impl)
-+ {
-+-    static unsigned char zero_iv[EVP_MAX_BLOCK_LENGTH];
-++    static const unsigned char zero_iv[EVP_MAX_BLOCK_LENGTH] = {0};
-+ #ifdef OPENSSL_FIPS
-+     if (FIPS_mode()) {
-+         /* If we have an ENGINE need to allow non FIPS */
-+-- 
-+2.47.3
-+
+ linux/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index bbd0e491cd..0baa52de0f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -187,9 +187,11 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+ 	bool "Use the architecture default configuration"
+ 	# We know that the default configuration on many architectures
+ 	# requires host-openssl, so select it for the latest kernel
+-	# version. This is mainly needed to fix autobuilder testing.
++	# version and the latest CIP version.
++	# This is mainly needed to fix autobuilder testing.
+ 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
+-	       BR2_LINUX_KERNEL_LATEST_VERSION
++	       BR2_LINUX_KERNEL_LATEST_VERSION || \
++	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	help
+ 	  This option will use the default configuration for the
+ 	  selected architecture. I.e, it is equivalent to running
 -- 
 2.47.3
 
