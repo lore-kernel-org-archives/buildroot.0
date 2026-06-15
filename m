@@ -1,76 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9FD4CD98C7
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 11:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF4C3CD98DA
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 11:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62A0682A0E;
-	Mon, 15 Jun 2026 11:13:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E9D76067D;
+	Mon, 15 Jun 2026 11:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WgFerCz6FQoB; Mon, 15 Jun 2026 11:13:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OMiLlN_2S0ld; Mon, 15 Jun 2026 11:13:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4484982A29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 697DB607FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781521984;
-	bh=mMwxIoFl9Nk3XaoYrZRMQ1gwQolHRjerGWJcj2U1dnA=;
-	h=Date:From:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1781522003;
+	bh=AT+phwlr/s4W1Q9isqQrJPT6kQpFQSxUXBAXRnulnIs=;
+	h=From:To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=VJM8GLqZ2CptrO2OmzMKlM01uPGTH2hXZWQE+K1Skd2GYJmZtAvWf+bmXjB3Esr/R
-	 LlVe/teRLdob2Eb0FDQr8+BfAksk4pRa6xwgFq6fTv6uvGljOsBw7XlBTKEnbF+K1k
-	 9s4M3kEXnUE7OiQQoKUyudGt+cC/5j4GKujlKBRErDad5rDfyP2L5YmKojFLdoqTOD
-	 nOrXgNFgfYqExzGLqw1pXLp1aKBfk8W9HoxtDQx/HYKqDSBCNMujMAKXm4NXs5kauG
-	 VkQDfXM8/njvFtoyTJqizUwnJXhUxDAKUY8HjrTUHhsabOr6A9fArvtMFdgN8/zVHv
-	 /tvwQkW92zELQ==
+	b=KDDaOoC+n7koYtHO7GvciZ+C90IQ51yxyqz8V2f2QV+AWw3k70Ngu7tRlPcnHegYb
+	 Kwx8IjW8wHAQp5DGIfyEGsOnbUwHl+MZMc8YPHBIjK4UeTYfSCVDyzaTvxhaKuGr0+
+	 7dYGMjLqeKOeXr72BKhEIshGrGkQQ5e7EJ0TOjhK9XGcYsPw1lz/2R3Jzc4govjgMx
+	 ZX7Kxo9TnO8dEsdpb3SEqQvBQuK5EkPI1ht/vHHE6NZaaHQFd7Kf9LVNXJEtsYapUj
+	 JvOR2SOCoe6OgzBpjfzQJfiK/wp5lcJo2MjhOeUljhbK+g/xdvIBZ+OHS7dj/AijbS
+	 z6CsOfLqG44xA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4484982A29;
-	Mon, 15 Jun 2026 11:13:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E37C4DE
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 697DB607FB;
+	Mon, 15 Jun 2026 11:13:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15977169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD13C82A0E
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07EC482BE5
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EdqZ_7DRJcpE for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 11:13:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E0198254A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E0198254A
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E0198254A
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:01 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 0698731E04AC; Mon, 15 Jun 2026 13:12:57 +0200 (CEST)
-Date: Mon, 15 Jun 2026 13:12:57 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Cc: Deividas Puplauskas <deividas.puplauskas@gmail.com>
-Message-ID: <ai_eOUXoKOC0S6yd@waldemar-brodkorb.de>
+ id MfL0OuJvwTwv for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 11:13:21 +0000 (UTC)
+X-Greylist: delayed 430 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 15 Jun 2026 11:13:20 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9EF8882A0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EF8882A0E
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9EF8882A0E
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 11:13:20 +0000 (UTC)
+X-CSE-ConnectionGUID: k30LBbYHTciEGykQOO2hMg==
+X-CSE-MsgGUID: Sl/xi9HDSmmi5zRBEMvU2w==
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 15 Jun 2026 13:06:08 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2026 13:06:07 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Mon, 15 Jun 2026 13:06:06 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Mon, 15 Jun 2026 13:06:05 +0200
+X-CSE-ConnectionGUID: jZwHwDjCTbGqN3Fn5mefXg==
+X-CSE-MsgGUID: xEaxbPrbTcq2Kq08gIAoIw==
+X-IronPort-AV: E=Sophos;i="6.24,206,1774306800"; d="scan'208";a="442342643"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+CC: <yann.morin@orange.com>, Fiona Klute <fiona.klute@gmx.de>, Marcus Hoffmann
+ <buildroot@bubu1.eu>
+Date: Mon, 15 Jun 2026 13:06:05 +0200
+Message-ID: <27c081656fb5af84e1919390565641af37485d91.1781521565.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1781521978; bh=1DHPy8Uf1EBu/RVveaotujJoMPblGY0pYubSpVtjKWM=;
- h=Date:From:To:Cc:Subject:From;
- b=Y8kCtXXgQaDQLk1gzdKCi8Ro1K7xsgFaq3iQZyvVTZ99Th78G18mFB6f4oI4/xZFe
- uNa380DpC5si8GiEvMsxri5iFU0jjHY7MqiY2M69PXQIfEmiR1rSYkbasjZkUY/E1W
- C/7l1ttWna2nwlAr6llX3AyHlx+10m6I08yt1p9ZBqa4X0abrgl13TKaGWMWCqh0Eu
- XHqq5PzJycGj3ALsJmuFJXFhv2kNH/ArjmyuUIDLWWKL6DRM0mG7UubJpVEYXhZ6Ju
- iNnzUDvWdxitnVYg4HqkV8En2Ody4J6SkUErowf9lbhBOWlrknmwnOslKq5lybxvML
- QkKXAWvagMFrA==
+X-Originating-IP: [10.115.26.53]
+X-ClientProxiedBy: OPE16NORMBX603.corporate.adroot.infra.ftgroup
+ (10.115.26.31) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1781522001; x=1813058001;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=BQVCowXbFd/pmPDG0JI7vR85z/Wz555ZAtfeFzwreXQ=;
+ b=DqvyxRnwYnLwNhiXzMEkS2gXDGMeSWqND8eLIrii0LcSgju7KYoibLFx
+ ne462CX1ySdzC8VgojjWFZwrZEH3QgXEHlm/oht8apoCsyKpieCmuHrUw
+ HuuHKCnr5KTXgUoeJXWl+4ZR9aT15XKdS9NKX2QCEtEsRq/ZbnhJxVSfB
+ JJOicEG5JSe1c2Q6cz19v6cWVNPOXCnM/Kh97u8bXBBOAnswtybiAFvHf
+ 5VAhoaeyc+x/4j9j8MlZoaIgf83sxJI7j9usWxpaX4isRaTIQY+TLIJnc
+ DmMUe6TJpg1FqStf5XtTaqChoSeKxiWYHH5QzEfn6vxTBL8PXYLsNQhNS
+ A==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH] package/perl-cgi-session: new package
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=DqvyxRnw
+Subject: [Buildroot] [PATCH] package/network-manager: drop initrd-related
+ services when unneeded
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,142 +119,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Deividas Puplauskas <deividas.puplauskas@gmail.com>
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-See here for a description:
-https://metacpan.org/pod/CGI::Session
+Since NetworkManager 1.54, packaged since commit 24827ae398db
+(package/network-manager: bump to 1.56.0), new services related to
+running in an initrd are now installed, which prevents proper startup,
+with systemd reporting that two units declare the same BusName.
 
-Signed-off-by: Deividas Puplauskas <deividas.puplauskas@gmail.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+When systemd is configured without initrd support, drop the
+NetworkManager initrd-related services.
+
+Fixes: 24827ae398db
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/perl-cgi-session/Config.in            | 11 ++++++
- .../perl-cgi-session/perl-cgi-session.hash    |  6 ++++
- package/perl-cgi-session/perl-cgi-session.mk  | 15 ++++++++
- .../tests/package/test_perl_cgi_session.py    | 34 +++++++++++++++++++
- 6 files changed, 68 insertions(+)
- create mode 100644 package/perl-cgi-session/Config.in
- create mode 100644 package/perl-cgi-session/perl-cgi-session.hash
- create mode 100644 package/perl-cgi-session/perl-cgi-session.mk
- create mode 100644 support/testing/tests/package/test_perl_cgi_session.py
+ package/network-manager/network-manager.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d591c62805..d9612a5e06 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3423,6 +3423,7 @@ F:	package/fbv/
- F:	package/libpam-pkcs11/
- F:	package/mksh/
- F:	package/perl-cgi/
-+F:	package/perl-cgi-session/
- F:	package/ruby/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
-diff --git a/package/Config.in b/package/Config.in
-index 96e113e226..388b9ff5ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -814,6 +814,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-appconfig/Config.in"
- 	source "package/perl-astro-suntime/Config.in"
- 	source "package/perl-cgi/Config.in"
-+	source "package/perl-cgi-session/Config.in"
- 	source "package/perl-class-inspector/Config.in"
- 	source "package/perl-class-load/Config.in"
- 	source "package/perl-class-method-modifiers/Config.in"
-diff --git a/package/perl-cgi-session/Config.in b/package/perl-cgi-session/Config.in
-new file mode 100644
-index 0000000000..42559cb2b3
---- /dev/null
-+++ b/package/perl-cgi-session/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PERL_CGI_SESSION
-+	bool "perl-cgi-session"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_CGI # runtime
-+	help
-+	  Persistent session data in CGI applications.
-+
-+	  https://metacpan.org/release/CGI-Session
-+
-+comment "perl-cgi-session needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-cgi-session/perl-cgi-session.hash b/package/perl-cgi-session/perl-cgi-session.hash
-new file mode 100644
-index 0000000000..1c5b7d2541
---- /dev/null
-+++ b/package/perl-cgi-session/perl-cgi-session.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  7f8983aaeb92a0ba77eca8bca6d8d43a  CGI-Session-4.48.tar.gz
-+sha256  46756461c24ce7666b8108ddb96dbab612699df3012c80ef11016619fe1554f7  CGI-Session-4.48.tar.gz
-+
-+# computed by scancpan
-+sha256  b9e52465669f1fc29b38ffbc4f39425654611982cbee971aef07f3070446ab28  README
-diff --git a/package/perl-cgi-session/perl-cgi-session.mk b/package/perl-cgi-session/perl-cgi-session.mk
-new file mode 100644
-index 0000000000..4de70cafec
---- /dev/null
-+++ b/package/perl-cgi-session/perl-cgi-session.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# perl-cgi-session
-+#
-+################################################################################
-+
-+PERL_CGI_SESSION_VERSION = 4.48
-+PERL_CGI_SESSION_SOURCE = CGI-Session-$(PERL_CGI_SESSION_VERSION).tar.gz
-+PERL_CGI_SESSION_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKSTOS
-+PERL_CGI_SESSION_DEPENDENCIES = host-perl-module-build
-+PERL_CGI_SESSION_LICENSE = Artistic-1.0_1
-+PERL_CGI_SESSION_LICENSE_FILES = README
-+PERL_CGI_SESSION_DISTNAME = CGI-Session
-+
-+$(eval $(perl-package))
-diff --git a/support/testing/tests/package/test_perl_cgi_session.py b/support/testing/tests/package/test_perl_cgi_session.py
-new file mode 100644
-index 0000000000..ad722b008e
---- /dev/null
-+++ b/support/testing/tests/package/test_perl_cgi_session.py
-@@ -0,0 +1,34 @@
-+from tests.package.test_perl import TestPerlBase
-+
-+
-+class TestPerlCGISession(TestPerlBase):
-+    """
-+    package:
-+        CGI-Session
-+    direct dependencies:
-+        CGI
-+    indirect dependencies:
-+        Clone   XS
-+        Encode-Locale
-+        HTML-Parser   XS
-+        HTML-Tagset
-+        HTTP-Date
-+        HTTP-Message
-+        IO-HTML
-+        LWP-MediaTypes
-+        MIME-Base32
-+        TimeDate
-+        URI
-+    """
-+
-+    config = TestPerlBase.config + \
-+        """
-+        BR2_PACKAGE_PERL=y
-+        BR2_PACKAGE_PERL_CGI_SESSION=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("Clone")
-+        self.module_test("HTML::Parser")
-+        self.module_test("CGI::Session")
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 301c1ad43e..bf4f29c3cc 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -151,6 +151,12 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dconfig_logging_backend_default=journal \
+ 	-Dsession_tracking=systemd \
+ 	-Dsuspend_resume=systemd
++ifneq ($(BR2_PACKAGE_SYSTEMD_INITRD),y)
++define NETWORK_MANAGER_CLEAN_INITRD
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system/NetworkManager-*initrd.service
++endef
++NETWORK_MANAGER_POST_INSTALL_TARGET_HOOKS += NETWORK_MANAGER_CLEAN_INITRD
++endif
+ else
+ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dsystemd_journal=false \
 -- 
-2.47.3
+2.34.1
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
