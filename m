@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC66CD98DE
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 21:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF792CD98E0
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 21:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD40F41B9C;
-	Mon, 15 Jun 2026 21:31:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tn37kBib6QnB; Mon, 15 Jun 2026 21:31:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C589E41B8F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781559098;
-	bh=QvsY6XM8+aYtQBYoyPFyX9nZxW2vjirJ49CZQvUFc9c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H+KId4EYKwaqxY+WYq47UR0vzPKyIMXkkV3pSDHVn+YBxcf+PDkSkFdZNZ9nNOYXd
-	 9BAwM1xLcrC4LjqD9NDVMYudvwmc3Sxai2M3XWiRDNQAaeeFbKlA0nVuTDVFVq7CkS
-	 gDI8g4PPfVmvv+l5P6SxW7rIi9xdgCCQ1DUhhkXNx8YLWe9ie1xCrSczEqBgYz0V01
-	 S2aSty+aRNE79QbuA7MUKjznYABDZi4yrzIgDagbCMy2t46X0NCPA2B4e0jiXiAPUf
-	 3AEi2QmOk/oOD9qkCcWeKL+8H9Dwex0jByxuxv4rN125iBqGuleQpce0hBfRuJC+hF
-	 rOpKrkadFvhLA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C589E41B8F;
-	Mon, 15 Jun 2026 21:31:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BDEC3169
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B03138466E
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE8E08466F;
+	Mon, 15 Jun 2026 21:31:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pKH0WoulGrlz for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
+ id lOKKupeu8uyC; Mon, 15 Jun 2026 21:31:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D554884671
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781559100;
+	bh=3vHQJF7w3SwDN6dwnaqgE3Gr1Bnd1Fk/Fnv49vJEmW4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JftvtwNWrlZy339fxfzxB9fXBttDl6zmY0MR76S2dbBHeRxycfD7zzOM6J1PUu3WQ
+	 kF/p7loJV5oC29HJjUKj8Y5BOAvGeSND9mlxIlj1PuLM3JBV42kMZcRBsCQHKIq6oc
+	 RduCi8X8nz6HdWi1eKe2mo8USX7vPYvL55dcl9m3nVJMC1+9SXrktsIF1uc7dCfZDu
+	 NyHxX9Tq63/q5dkftQNgGPD8HOlcKgTHdJR6MPFbx5KsoPrOHlkPwgLuMlUTn8mV0a
+	 mmnr+737hSbimHwFjaoNTYVMtBuI0wxm967j9pWNOXv6wu7qvK2HkCPP6JmQprR87A
+	 TWTRit26ZJA8g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D554884671;
+	Mon, 15 Jun 2026 21:31:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A2D4169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB68041B8F
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YUGFTF6YIxD4 for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 21:31:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF77B8466D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D24E141B8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF77B8466D
+ by smtp4.osuosl.org (Postfix) with ESMTP id D24E141B8D
  for <buildroot@buildroot.org>; Mon, 15 Jun 2026 21:31:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 181F77FF65; Mon, 15 Jun 2026 21:31:15 +0000 (UTC)
+ id 0B3F67FF5E; Mon, 15 Jun 2026 21:31:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jun 2026 23:17:55 +0200
+Date: Mon, 15 Jun 2026 22:55:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ee8e9f12a461c01ca6e26adc2293aae05cdd39e
-X-Git-Newrev: 9530d74ddb04d5fc81f9054ec0e76fbcb2a1e7d2
+X-Git-Oldrev: d609530d09c1018a3e579ff968778fbbee3867dc
+X-Git-Newrev: 7ee8e9f12a461c01ca6e26adc2293aae05cdd39e
 X-Patchwork-Hint: ignore
-Message-Id: <20260615213115.181F77FF65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {toolchain,
- linux-headers}: add support for 7.1 headers
+Message-Id: <20260615213115.0B3F67FF5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: select host-openssl for all
+ architectures when building latest CIP version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,124 +77,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9530d74ddb04d5fc81f9054ec0e76fbcb2a1e7d2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7ee8e9f12a461c01ca6e26adc2293aae05cdd39e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+This is a follow-up for buildroot commit
+bba86304b0ac4ae266cfb52e54a239b0850b10ca to extend the fix to CIP
+kernels.
+
+Fixes:
+aarch64: https://autobuild.buildroot.net/results/f91/f910c1e0e864055120e2deaf4d56b127cabb89bd/
+aarch64_be: https://autobuild.buildroot.net/results/6e6/6e651c586f9b2a1c9b39cafaf5bebc8b501e8369/
+arcbe: https://autobuild.buildroot.net/results/9fe/9fe7b4c66ac139926e9a3686bc951af703e78b29/
+arm: https://autobuild.buildroot.net/results/288/2888b0b6f5473e9c7ec7c443b02b42e1f5d4c814/
+armeb: https://autobuild.buildroot.net/results/d6c/d6cbbfdcbebe985d743232070824779e790aa5a8/
+microblazeel: https://autobuild.buildroot.net/results/bf3/bf3b4c61cdaf3527e9e315050bf21456bbb24a48/
+mips: https://autobuild.buildroot.net/results/c6b/c6b9c82352be01dd4bab2021a223e72dfaf1f522/
+or1k: https://autobuild.buildroot.net/results/231/23144a8108c5837e3a9cf26ad6ac73fa16dc740f/
+riscv: https://autobuild.buildroot.net/results/31c/31c3abdb23bfe16e248e094e9b0feafbbb0d6a94/
+s390x: https://autobuild.buildroot.net/results/bda/bdaaf6767f8c239bbf22e4619b2d6944ef951b2e/
+sparc: https://autobuild.buildroot.net/results/426/42614f77be9fa1b3a596cdcb40cfb81f5496b41b/
+sparc64: https://autobuild.buildroot.net/results/1f2/1f226d028d85c085d82f3890e804b39bccd2c2dc/
+x86_64: https://autobuild.buildroot.net/results/7be/7be86c261a42e1a16c3d38a640be226b5f51bccb/
+
+Supersedes
+https://patchwork.ozlabs.org/project/buildroot/patch/20251101102346.109307-1-bernd@kuhls.net/
+and includes Edgar's comment.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/from-6.17/linux.hash                                  |  1 +
- package/linux-headers/7.1                                   |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 5 files changed, 23 insertions(+), 3 deletions(-)
+ linux/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index 8274594ec2..9aa69b6e96 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
-+sha256  691f44797fbe790dc8a321604c927087526ad27b6d649925d60f8eed0a2564a0  linux-7.1.tar.xz
- sha256  57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da  linux-7.0.12.tar.xz
- 
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-diff --git a/package/linux-headers/7.1 b/package/linux-headers/7.1
-new file mode 120000
-index 0000000000..a4e1d3ec9c
---- /dev/null
-+++ b/package/linux-headers/7.1
-@@ -0,0 +1 @@
-+../../linux/from-6.17
-\ No newline at end of file
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3e3832b707..0b02c183c1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_7_0
-+	default BR2_KERNEL_HEADERS_7_1
+diff --git a/linux/Config.in b/linux/Config.in
+index bbd0e491cd..0baa52de0f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -187,9 +187,11 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+ 	bool "Use the architecture default configuration"
+ 	# We know that the default configuration on many architectures
+ 	# requires host-openssl, so select it for the latest kernel
+-	# version. This is mainly needed to fix autobuilder testing.
++	# version and the latest CIP version.
++	# This is mainly needed to fix autobuilder testing.
+ 	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
+-	       BR2_LINUX_KERNEL_LATEST_VERSION
++	       BR2_LINUX_KERNEL_LATEST_VERSION || \
++	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	help
- 	  Select the kernel version to get headers from.
- 
-@@ -55,6 +55,10 @@ config BR2_KERNEL_HEADERS_6_18
- config BR2_KERNEL_HEADERS_7_0
- 	bool "Linux 7.0.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
-+
-+config BR2_KERNEL_HEADERS_7_1
-+	bool "Linux 7.1.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -133,8 +137,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_1
-+	bool "7.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_0
--	bool "7.0.x or later"
-+	bool "7.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_19
-@@ -475,6 +483,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.12.93"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.18.35"	if BR2_KERNEL_HEADERS_6_18
- 	default "7.0.12"	if BR2_KERNEL_HEADERS_7_0
-+	default "7.1"		if BR2_KERNEL_HEADERS_7_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 5aa6cf8f6d..7762106bee 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -680,6 +680,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_19
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_19
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -693,6 +697,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "7.1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
- 	default "7.0" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
- 	default "6.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_19
- 	default "6.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index f69e09ecf0..003887f025 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -178,8 +178,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_7_1
-+	bool "7.1.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_7_0
--	bool "7.0.x or later"
-+	bool "7.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_19
+ 	  This option will use the default configuration for the
+ 	  selected architecture. I.e, it is equivalent to running
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
