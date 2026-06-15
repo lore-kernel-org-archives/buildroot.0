@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4198ACD98D2
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jun 2026 16:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B32DCD98CE
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 05:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91ECC4112B;
-	Sun, 14 Jun 2026 16:58:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30ADF406E2;
+	Mon, 15 Jun 2026 05:36:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZaZJdvPLePVA; Sun, 14 Jun 2026 16:58:35 +0000 (UTC)
+ id FEjtKZa4tO_5; Mon, 15 Jun 2026 05:36:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A10E4110A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D070B4036A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781456315;
-	bh=UDWXjH0bv51+ob0KKUFKU26zfmqMs2YuF9dQROMLzjg=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1781501764;
+	bh=z88SgANfrWBacIsah3RmaHCLatw87yTUcftNVgvZZic=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=J8tMunAWNvq266rU6uff2eg8sWC3v1AGhaCWGmcREYILd7exJQrOqf9LcjZVcLInc
-	 Fd9Q6M3XVH+YCpd/QP/ap7+7WpVLVbEYwhUY3y4DwXtC2+zpNTt0eQCQZPvu/lnCHy
-	 7mdk/3Kmx2Oj2VO9+ScU4SMOoEFnn49CHoskqXjkH1xG5VJXJQRxMf4J3C0zKSD5/y
-	 MRuGZX+5yIPk6YwiE/oAoipb6sPRDOlZ7zvMpUjndBN8bhARQ7BaclkP1Npu3o+XS7
-	 2alFGe9FhQyzni1kpmFgW/+osddwlyMWJ6IGtPGM6TuB3KcKRAh+DrO0XSSEEqOGiu
-	 86w0wSgHd2qzg==
+	 From;
+	b=iGttE8pCzmR7iP5B2V0DHH4FOXEzXHTjndExgHEcpl9lsUxT/3YchuJxropIA9v/y
+	 96vGNtTSXwzRUhgAlaKWTQsWeaPLLkz2wVKjR2VpsJLjae48atcdVn8pfYKP4ds6sf
+	 QL46pgyGhbbgypkFFbDaOOID6CxeTGqh4Q0PKyAkImdYERpm78nUUbJC43Vz0sQzZV
+	 DjCfHKcMPWFRMxXeel+KbMgaRB/4SEVNXFCRdsL9ZQ9NOtIBpFYdBAD2sWSXyBm4xK
+	 l5hg2U6sSha0hPSufTj92KaohUbhPz5Ed0sszXV5DCKpVRUY603lNin7YGxss4zp7O
+	 S5hoeX0RfZHlQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A10E4110A;
-	Sun, 14 Jun 2026 16:58:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 86309DE
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D070B4036A;
+	Mon, 15 Jun 2026 05:36:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E35CC169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 785534110A
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9AA540DB0
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:36:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n_DY1qh1955x for <buildroot@buildroot.org>;
- Sun, 14 Jun 2026 16:58:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BEA1141109
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEA1141109
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BEA1141109
- for <buildroot@buildroot.org>; Sun, 14 Jun 2026 16:58:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 5E294B00571;
- Sun, 14 Jun 2026 18:58:24 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 14 Jun 2026 18:58:24 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZhIiIWDULLX4 for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 05:36:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 15A9240D83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A9240D83
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 15A9240D83
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:35:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a04de.dip0.t-ipconnect.de [91.58.4.222])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 64576A4C3045
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 07:35:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33844)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wYzzH-00000000516-3xJk
+ for buildroot@buildroot.org; Mon, 15 Jun 2026 05:35:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jun 2026 07:35:55 +0200
+Message-ID: <20260615053555.1112644-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260615053555.1112644-1-bernd@kuhls.net>
+References: <20260615053555.1112644-1-bernd@kuhls.net>
 MIME-Version: 1.0
-Date: Sun, 14 Jun 2026 18:58:24 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Michele Comignano <mcdev@playlinux.net>, buildroot@buildroot.org, Bernd
- Kuhls <bernd@kuhls.net>
-In-Reply-To: <87wlw1l9cx.fsf@dell.be.48ers.dk>
-References: <20260613215558.978962-1-mcdev@playlinux.net>
- <87wlw1l9cx.fsf@dell.be.48ers.dk>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <2c64e76850f28ec44af165e020424b0a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1781456307;
- bh=oRvrRoyBEqO/aTCBm+chx1vV2lbdsS2dGgEv+cUYVvE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ti4baTR6kHHKhRwQG79ov47KDXUWJ2xbKB9xRVAc+krRU0rm3Eb1ONymGXc75O3Go
- iLtW2cQ1Y9NG6H2ENS0PQu7DBnF3PTd6NhEOychtklNDEO+K6Ys7gkTpuiespyC205
- dTvPWP4wdNjnQihladXja+Nn47hIPYpMOygV6nscJ0nCFzz6Ls8vfeNb7KrqFtPUNy
- EfImWdbMgVUkQHm5ZEjZdLm1pQ4b0O4I3ym/d37LTdqeMh+X0xRUvS6132kMECLF6b
- ZHhghSeDBtCTlTtNgYJJwpjv4ikyHcEdkYoUESuHpd1sT4n/CZZwvEnvTkzWpjUIal
- DFfT2zNSOymeA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1781501756;
+ bh=Hj4wr1RucUShwicllMe5sIN4SdmLPgLaUeuM/uCikPk=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=pxCGjM38KYHF7OGQBZ98Z07S493xBJpTiKwP6UO3qj3Fd0CUApuFEf+b4DRi9KPkH
+ WCy2h5e/V9lWigKV+Q994i5BP49Ps9YVE2fNG4A/FJlzPeHN1ZdlMxW3oqpaP/TLIr
+ MunZDur9Pp/8lKvFgh4WZmS0WHOJdoOxrx1TZyJ5apFvt3/CYFwcPVa9iUUaYGV762
+ mDDgFBPOHOJ3frtKP+HsAi+V40hm6Yjpkbb/ZL3fmzbaGDZMPSWGmsvmY6QbPsObJy
+ 6Qzx8436mQgwJYscG3OgOQ7oizmrAup0WFq8D8q8uHUlECVPOakxjQGBvwXW2L5JJv
+ l0SSwipvFGw0A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ti4baTR6
-Subject: Re: [Buildroot] [PATCH] package/opus: don't use vcvtaq_s32_f32 on
- 32 bit ARM
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=pxCGjM38
+Subject: [Buildroot] [PATCH 2/2] package/intel-vpl-gpu-rt: bump version to
+ 26.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,105 +95,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter, All,
+https://github.com/intel/vpl-gpu-rt/releases/tag/intel-onevpl-26.2.2
 
-On 14/06/2026 12:11, Peter Korsgaard wrote:
->>>>>> "Michele" == Michele Comignano <mcdev@playlinux.net> writes:
-> 
->  > From: Comick <mcdev@playlinux.net>
->  > Upstream issues is waiting for feedback.
-> 
->  > See here for details:
->  > https://gitlab.xiph.org/xiph/opus/-/work_items/2397
-> 
-> 
-> Hmm, indeed - There is no vcvtaq_s32_f32 intrinsic in
-> gcc/config/arm/arm_neon.h but there is in gcc/config/aarch64/arm_neon.h
-> but I do not understand the finer details - Julien?
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Gitlab pipeline passed for the series:
+https://gitlab.com/bkuhls/buildroot/-/commits/76453eef54ad48a74e9a80efc05fa023f04bca35
 
-Armv8-A Aarch32 is in fact a superset of Armv7-A. This is why there
-is few 32bit Armv8-A instructions which are not available in original
-Armv7-A.
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-See the column "Supported architectures" in the following table:
-https://arm-software.github.io/acle/neon_intrinsics/advsimd.html#conversions
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index d1e4c58fda..8ef29d2654 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b9a84d5d2255cbea8586019a3bd03165f0269e06dba03e9c6f6cdf363b6b2fab  intel-vpl-gpu-rt-26.2.1.tar.gz
++sha256  b2ae63ae7a26a59c8be0651b638ca1c1221fbf35768c485a240ddcdd9d353735  intel-vpl-gpu-rt-26.2.2.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index e812ca31cf..9a2f819982 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_VPL_GPU_RT_VERSION = 26.2.1
++INTEL_VPL_GPU_RT_VERSION = 26.2.2
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-- 
+2.47.3
 
-vcvtaq_s32_f32 is maked "A32/A64", whereas, for example
-vcvt_s32_f32 is marked "v7/A32/A64".
-
-There is also a search engine for intrinsics available at:
-https://developer.arm.com/architectures/instruction-sets/intrinsics/
-
->  > Signed-off-by: Michele Comignano <mcdev@playlinux.net>
->  > ---
->  >  ...use-vcvtaq_s32_f32-on-32-bit-systems.patch | 26 
-> +++++++++++++++++++
->  >  1 file changed, 26 insertions(+)
->  >  create mode 100644 
-> package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
-> 
->  > diff --git 
-> a/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch 
-> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->  > new file mode 100644
->  > index 0000000000..ddd572921f
->  > --- /dev/null
->  > +++ 
-> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->  > @@ -0,0 +1,26 @@
->  > +From 321532001d59367466a6a4a60f5c6f0fe5fa2176 Mon Sep 17 00:00:00 
-> 2001
->  > +From: Comick <mcdev@playlinux.net>
->  > +Date: Sat, 13 Jun 2026 21:48:00 +0200
->  > +Subject: [PATCH] celt/arm don't use vcvtaq_s32_f32 on 32 bit 
-> systems
->  > +Upstream: N/A https://gitlab.xiph.org/xiph/opus/-/work_items/2397
->  > +
->  > +---
->  > + celt/arm/mathops_arm.h | 2 +-
->  > + 1 file changed, 1 insertion(+), 1 deletion(-)
->  > +
->  > +diff --git a/celt/arm/mathops_arm.h b/celt/arm/mathops_arm.h
->  > +index b1f9169..c612dae 100644
->  > +--- a/celt/arm/mathops_arm.h
->  > ++++ b/celt/arm/mathops_arm.h
->  > +@@ -37,7 +37,7 @@
->  > +
->  > + static inline int32x4_t vroundf(float32x4_t x)
->  > + {
->  > +-#  if defined(__aarch64__) || (defined(__ARM_ARCH) && __ARM_ARCH 
-> >= 8)
->  > ++#  if defined(__aarch64__)
->  > +     return vcvtaq_s32_f32(x);
->  > + #  else
->  > +     uint32x4_t sign = vandq_u32(vreinterpretq_u32_f32(x), 
-> vdupq_n_u32(0x80000000));
->  > +--
->  > +2.54.0
->  > +
->  > --
-> 
->  > 2.54.0
-> 
->  > _______________________________________________
->  > buildroot mailing list
->  > buildroot@buildroot.org
->  > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> 
-> --
-> Bye, Peter Korsgaard
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
