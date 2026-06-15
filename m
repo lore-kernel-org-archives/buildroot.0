@@ -1,90 +1,218 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3662CCD98C5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 17:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 725A1CD98E1
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 18:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0487D6146E;
-	Mon, 15 Jun 2026 17:47:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C5CD842CF;
+	Mon, 15 Jun 2026 18:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6NqWMBshESIn; Mon, 15 Jun 2026 17:47:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 22_TvBCdntw7; Mon, 15 Jun 2026 18:07:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B572F61470
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44726842CE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781545633;
-	bh=zGAznw+k9UT7MKsYT++SEw8O23M2vLNQjdja6Fuzos0=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=qgic94yD6gUlCanmjpBIIHH+x6rrU+3I+6vDDgcUqf427UTFv1cBPM2hSQGFkeH7g
-	 HDOaeUW8U3CKYJ8g5r1A+OBtE2Ya3KSSHEDC/z1R/tFm7bkG0pMzj7okpnDUaeTue8
-	 SXNOvOFZwe3UQ7s5SfraumNU/38ENxz3TKN3vglBg0Iqbvc4cOVq/u+2IrtwO7r9Vu
-	 obU2KN3RpdOro/Us6pFqk3VA+/pgQL+U/ouy49Q4+TvarTUPgT3CkHghKhFOeKOmzK
-	 m40yOL4jzrFsHQdCTmvgOh0wUZs6Vr+BlJfL89NQLX3ciU3MOVJw0mm5crzojJL3Sl
-	 RTA3SQm4evRag==
+	s=default; t=1781546842;
+	bh=RxRC4Y1dgOryhBnsooQLiGWy7/PY/c7c2k/FUs4S7U4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lFUGOPnYv8hcQyB64TSrK0kj43GDPzqX3uObsc1t5/XFdMogTIKO9nmpAgXAb5G3X
+	 etObfFwilJj/P2Y4qjzbEgQCVHA45Cqe7kQxlJ98PrY4zvuZpzYUZcetHcIM7smp/Y
+	 q19WkZn9vLeVQ4ATOniEXrWVBv6Ag27RapJZfPNlOxBqiSscv3Bh0Ad61AW4aLqwTz
+	 cML/xNHFSHXWlmBaO9HNC1c+1pZ6+GEbzuE7dTz1XFqiGgA9s/dXJyQDgIWGUIYOma
+	 z1tB5gWRXMmzhY0TT259PIZKztgkSXltwtf4/ZPHVIYS/KMFgeOOgbmXDEyOp7sUEZ
+	 hUNiRhsFVGPjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B572F61470;
-	Mon, 15 Jun 2026 17:47:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 433AF2F3
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 17:47:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44726842CE;
+	Mon, 15 Jun 2026 18:07:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E254169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29D396146F
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 17:47:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FE5241350
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cWTcOK8wquEl for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 17:47:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B4516146E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B4516146E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B4516146E
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 17:47:10 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 4A36513F8A9;
- Mon, 15 Jun 2026 19:47:05 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 15 Jun 2026 19:47:05 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3e9YTe4UyKwG for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 18:07:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CD98F404E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD98F404E5
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CD98F404E5
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 18:07:17 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6Udt-1wXEhz1MFd-00GTAQ; Mon, 15
+ Jun 2026 20:07:10 +0200
+Message-ID: <abca804a-1a63-4319-9b7e-ff9cdfed053d@gmx.de>
+Date: Mon, 15 Jun 2026 20:07:09 +0200
 MIME-Version: 1.0
-Date: Mon, 15 Jun 2026 19:47:05 +0200
-To: Michele Comignano <mcdev@playlinux.net>
-In-Reply-To: <2c8f5ad9-1917-450c-a899-3bcdc130453b@app.fastmail.com>
-References: <20260613215558.978962-1-mcdev@playlinux.net>
- <87wlw1l9cx.fsf@dell.be.48ers.dk> <2c64e76850f28ec44af165e020424b0a@free.fr>
- <1d266f71-792d-4785-af20-aa53fc858325@app.fastmail.com>
- <2c8f5ad9-1917-450c-a899-3bcdc130453b@app.fastmail.com>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <f177ac01cfd1e52af17e06a2a44950df@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1781545628;
- bh=76IP1FIzuV5D1oOYnDepZF+sm5mUFbWjmP7M9nPSwzs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=crHjH6htIEKUMFzLmeIQtJwqwE4lok1P1OtJ6tLdp0pqHrmy1L99l8kZu74MWEqvA
- ndffzasxtLxgRFWnRtJN0we+SXtcmJm+wg3L36P+H/euPry/WxCCBOOaAiwSuGRijE
- 3oOfhCyx8XGx7dTDCZ2rzIn1jCwrRvSQYemFGCsfoyK3yPulUIbcnpWSIr52cFlu3m
- 3OAz/DzwtHoG8MWy/Q8Pw/Bk93jD7l+S/jS12jgM2IbzlUaGePXim1WgmLlr8XAADb
- O1AcAxFBNoHd/h2WH4hIUP+fmk480MrAfam4b9pxM/sAQhfBE7/duGDzhurCXW8kPr
- m3QmgsOeZu5LQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
+Cc: thomas.petazzoni@bootlin.com,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+References: <20260615123930.447-1-kory.maincent@bootlin.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20260615123930.447-1-kory.maincent@bootlin.com>
+X-Provags-ID: V03:K1:1Vo2/GZMVV4h0KVaorWNSzvn3jphwx3pgp4/4SGNHtxzaHJjds0
+ T5eXrxzRPOXYrI54IHmc0owaZBQjHn8nfqfrYhFh0Kna6V+F2GVFp6PoebzA9Ov3aQZLfp4
+ btvD5ym5oneEds6cNU7SdtFUgU4BNAvF3iFUdInNOzdteqdm8ehO3/A8BG07vbwRcIkVo5Y
+ 79H35ZzBLb0AEHtU+37WQ==
+UI-OutboundReport: notjunk:1;M01:P0:mf1/lHaNvus=;atjSDqOEMo9TwIo9i2qkKUcvQWc
+ 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
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1781546830; x=1782151630; i=fiona.klute@gmx.de;
+ bh=YBNFMswxv+RzJtzuxJ/ISu6p32q9mXtWS5J6afF55Mk=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=pYzlSJ3yChCOldytXui1godKniW1HCwRIyFl5cy5ePZ/sqR2nmHBvd/+NE1W/gRw
+ 48UHSUjciulEOwML4XFBP7nAelDdsWTJrkvL7r3ew9Y++ZraRkupJlxXJNXMeMZtB
+ Oua0KQw/+7aMeV1ItrHFMO5Wzd2otuwrP5npFGOmf3OiCWSu+ikocS+zMp1tlt0Q6
+ bCcZzNcAVOdecV4bCXlZ2lmG7Q9RRKTlOrsk7RFS84E5Q1oM2bBLCXRBr2GWTF2LQ
+ 3ETyPfP+XFHtuNxpj05sZwOiuoOCDrib+8C+AMHNtDcg8jTRS827LT+WJMeD+jNcs
+ RSin9kpKiBciJqHw6Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=crHjH6ht
-Subject: Re: [Buildroot] [PATCH] package/opus: don't use vcvtaq_s32_f32 on
- 32 bit ARM
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=pYzlSJ3y
+Subject: Re: [Buildroot] [PATCH] utils/docker-run: Support BR2_EXTERNAL with
+ relative paths
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,234 +224,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Michele,
-
-On 15/06/2026 11:38, Michele Comignano wrote:
-> Just noticed that I linked the wrong rust arm intrinsics docs.
-> The right link is
-> https://doc.rust-lang.org/core/arch/aarch64/fn.vcvtaq_s32_f32.html
-> which matches gcc observations (arm 64 only).
-> As for clang, the example code used another intrinsics, here is one
-> using exactly vcvtaq_s32_f32 https://godbolt.org/z/31f1xnjvz, which
-> also works.
+Am 15.06.26 um 14:39 schrieb Kory Maincent via buildroot:
+> The docker-run script did not handle the BR2_EXTERNAL environment variable,
+> preventing use of external trees in Docker builds.
 > 
-> Kind regards,
-> Michele
-> 
-> Il Lun, 15 Giu 2026, alle ore 11:23, Michele Comignano ha scritto:
-> 
->> Thanks for all the hints! I tried going a bit deeper.
->> 
->> Looking at GCC arm_neon.h
->> 
-> (https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/arm/arm_neon.h;h=6785dd2578a8ee0fd28b04d30934b764ea5fff3e;hb=HEAD),
->> vcvtaq_s32_f32 is not present, though the arm instrinsics search
->> suggests it is supported for the reference arch combo
->> 
-> https://developer.arm.com/architectures/instruction-sets/intrinsics/#f:@navigationhierarchiessimdisa=[Neon]&f:@navigationhierarchiesarchitectures=[A32]&q=vcvtaq_s32_f32
->> [1].
->> 
->> In a way, the ifdef from opus seems to match arm documentation,
->> though GCC is not making it available.
->> 
->> According to
->> https://gcc.gnu.org/pipermail/gcc-patches/2016-January/439845.html
->> the intrinsics vcvtaq_s32_f32 was added in circa 2016 to arm_neon.h,
->> yet reported as missing in circa 2020
->> https://gcc.gnu.org/pipermail/gcc-bugs/2020-May/703594.html.
->> The latter led to the creation of a GCC issue at
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95399 which still sits
->> new.
->> 
->> Interesting enough, rust (I wanted to check some other compiler)
->> seems to match arm docs, though arm instrisics are deemed as
->> experimental
->> https://doc.rust-lang.org/core/arch/arm/fn.vcvtq_s32_f32.html.
->> Clang as well seems to support vcvtaq_s32_f32
->> https://godbolt.org/z/xsMfSz (link taken from from gcc bug at
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95399).
->> 
->> So the problem seems to be GCC only.
->> 
->> After all the research, the problem arguably sits in either upstream
->> gcc or opus, but as a matter of fact opus package build through
->> buildroot is currently broken on 32 bit arm neon.
->> 
->> Do you think my proposed patch could apply as a buildroot-only quick
->> fix?
+> Add support by converting relative paths to absolute, mounting the directory
+> into the container, and passing the variable to the Docker environment.
 
- From Arm documentation, Armv8-A Aarch32 does support vcvtaq_s32_f32.
-Gcc apparently does not support it in 32-bit, but clang does.
+I've sent a patch a while ago that does pretty much the same thing, and 
+handles the possibilities of multiple external trees (space separated 
+list, or legacy colon separated) and empty BR2_EXTERNAL (to disable any 
+configured external trees):
+https://patchwork.ozlabs.org/project/buildroot/patch/20260405185608.1357633-1-fiona.klute@gmx.de/
 
-Since it seems it is just the gcc support which is missing, maybe
-your patch could changed for upstream as:
-
-/*
-  * 32bit Arm gcc does not support vcvtaq_s32_f32()
-  * See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71233
-  */
-#if defined(__aarch64__) || (defined(__ARM_ARCH) && (__ARM_ARCH >= 8) && 
-defined(__clang__))
-...
-
-It does not really change anything in Buildroot, since there is
-only Gcc. But for opus upstream, it will still allow other users
-to keep using this on Armv8-A Aarch32.
-
-Also, we try to avoid carrying Buildroot-specific package patches,
-so it's better the fix is accepted upstream (your initial proposal,
-or a revised one).
-
->> Best regards,
->> Michele
->> 
->> Il Dom, 14 Giu 2026, alle ore 18:58, Julien Olivain via buildroot ha
->> scritto:
->> 
->>> Hi Peter, All,
->>> 
->>> On 14/06/2026 12:11, Peter Korsgaard wrote:
->>>>>>>>> "Michele" == Michele Comignano <mcdev@playlinux.net>
->>> writes:
->>>> 
->>>>> From: Comick <mcdev@playlinux.net>
->>>>> Upstream issues is waiting for feedback.
->>>> 
->>>>> See here for details:
->>>>> https://gitlab.xiph.org/xiph/opus/-/work_items/2397
->>>> 
->>>> 
->>>> Hmm, indeed - There is no vcvtaq_s32_f32 intrinsic in
->>>> gcc/config/arm/arm_neon.h but there is in
->>> gcc/config/aarch64/arm_neon.h
->>>> but I do not understand the finer details - Julien?
->>> 
->>> Armv8-A Aarch32 is in fact a superset of Armv7-A. This is why
->>> there
->>> is few 32bit Armv8-A instructions which are not available in
->>> original
->>> Armv7-A.
->>> 
->>> See the column "Supported architectures" in the following table:
->>> 
->> 
-> https://arm-software.github.io/acle/neon_intrinsics/advsimd.html#conversions
->>> 
->>> vcvtaq_s32_f32 is maked "A32/A64", whereas, for example
->>> vcvt_s32_f32 is marked "v7/A32/A64".
->>> 
->>> There is also a search engine for intrinsics available at:
->>> 
->> https://developer.arm.com/architectures/instruction-sets/intrinsics/
->>> 
->>>>> Signed-off-by: Michele Comignano <mcdev@playlinux.net>
->>>>> ---
->>>>> ...use-vcvtaq_s32_f32-on-32-bit-systems.patch | 26
->>>> +++++++++++++++++++
->>>>> 1 file changed, 26 insertions(+)
->>>>> create mode 100644
->>>> 
->>> 
->> 
-> package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->>>> 
->>>>> diff --git
->>>> 
->>> 
->> 
-> a/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->>> 
->>>> 
->>> 
->> 
-> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->>>>> new file mode 100644
->>>>> index 0000000000..ddd572921f
->>>>> --- /dev/null
->>>>> +++
->>>> 
->>> 
->> 
-> b/package/opus/0001-celt-arm-don-t-use-vcvtaq_s32_f32-on-32-bit-systems.patch
->>>>> @@ -0,0 +1,26 @@
->>>>> +From 321532001d59367466a6a4a60f5c6f0fe5fa2176 Mon Sep 17
->>> 00:00:00
->>>> 2001
->>>>> +From: Comick <mcdev@playlinux.net>
->>>>> +Date: Sat, 13 Jun 2026 21:48:00 +0200
->>>>> +Subject: [PATCH] celt/arm don't use vcvtaq_s32_f32 on 32 bit
->>> 
->>>> systems
->>>>> +Upstream: N/A
->>> https://gitlab.xiph.org/xiph/opus/-/work_items/2397
->>>>> +
->>>>> +---
->>>>> + celt/arm/mathops_arm.h | 2 +-
->>>>> + 1 file changed, 1 insertion(+), 1 deletion(-)
->>>>> +
->>>>> +diff --git a/celt/arm/mathops_arm.h b/celt/arm/mathops_arm.h
->>>>> +index b1f9169..c612dae 100644
->>>>> +--- a/celt/arm/mathops_arm.h
->>>>> ++++ b/celt/arm/mathops_arm.h
->>>>> +@@ -37,7 +37,7 @@
->>>>> +
->>>>> + static inline int32x4_t vroundf(float32x4_t x)
->>>>> + {
->>>>> +-#  if defined(__aarch64__) || (defined(__ARM_ARCH) &&
->>> __ARM_ARCH
->>>>> = 8)
->>>>> ++#  if defined(__aarch64__)
->>>>> +     return vcvtaq_s32_f32(x);
->>>>> + #  else
->>>>> +     uint32x4_t sign = vandq_u32(vreinterpretq_u32_f32(x),
->>>> vdupq_n_u32(0x80000000));
->>>>> +--
->>>>> +2.54.0
->>>>> +
->>>>> --
->>>> 
->>>>> 2.54.0
->>>> 
->>>>> _______________________________________________
->>>>> buildroot mailing list
->>>>> buildroot@buildroot.org
->>>>> https://lists.buildroot.org/mailman/listinfo/buildroot
->>>> 
->>>> 
->>>> --
->>>> Bye, Peter Korsgaard
->>> 
->>> Best regards,
->>> 
->>> Julien.
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot@buildroot.org
->>> https://lists.buildroot.org/mailman/listinfo/buildroot
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> 
-> 
-> Links:
-> ------
-> [1] 
-> https://developer.arm.com/architectures/instruction-sets/intrinsics/#f:@navigationhierarchiessimdisa=[Neon]&f:@navigationhierarchiesarchitectures=[A32]&q=vcvtaq_s32_f32
+Could you test that one?
 
 Best regards,
+Fiona
 
-Julien.
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+>   utils/docker-run | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/utils/docker-run b/utils/docker-run
+> index 27c169db72..6e9693edd6 100755
+> --- a/utils/docker-run
+> +++ b/utils/docker-run
+> @@ -97,6 +97,12 @@ if [ "${BR2_DL_DIR}" ]; then
+>       docker_opts+=( --env BR2_DL_DIR )
+>   fi
+>   
+> +if [ "${BR2_EXTERNAL}" ]; then
+> +    BR2_EXTERNAL_DIR="$(cd "${MAIN_DIR}"; readlink -e "${BR2_EXTERNAL}")"
+> +    mountpoints+=( "${BR2_EXTERNAL_DIR}" )
+> +    docker_opts+=( --env BR2_EXTERNAL )
+> +fi
+> +
+>   # shellcheck disable=SC2013 # can't use while-read because of the assignment
+>   for dir in $(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u); do
+>       docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
