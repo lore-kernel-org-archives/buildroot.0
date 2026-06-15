@@ -1,85 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42DCBCD98C5
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 05:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86FBBCD98D6
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jun 2026 07:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04093408B5;
-	Mon, 15 Jun 2026 05:36:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3500182849;
+	Mon, 15 Jun 2026 07:40:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qr5PLN-tzHy8; Mon, 15 Jun 2026 07:40:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49D988275A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781509257;
+	bh=rPd23iAZh1DYIR6+7z/mi41RVwVfS0RI2ZnSzUiNjfE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=YBwqwi9Hjv2WZ3YtBymvE8V8AE3UTbKLzMpPs3m2veI2aYmhdV+zj0xYVQLlHvBCT
+	 hxf7XiNChyAlLYAnGHeb19ThfB0sZiMBHJYosx9h7FxeTSBz3z6ia6HDFQd16AHCSl
+	 lGHzRb0RXgizma8AMs93SWYHxQDKNsdSbqoDPvZkpbwJOVaUKsy94+GNl/Fqs/zEc+
+	 HXCh4qDFRWaisx9NBwwLJx5IzqEFfR9jKQpQLk/vrkJiCyY20ULOqPmfwgdemWlAir
+	 tCHIJM2Sc6df5ZwIeMhjTGC/ehhC49ok6ME4KtLwAdxnSpsQISpgrtEX9qjj7RMmTX
+	 zJneL1YGwrh0g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49D988275A;
+	Mon, 15 Jun 2026 07:40:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34E0A169
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 07:40:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F00A4107D
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 07:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bIcoy8NSSmQz; Mon, 15 Jun 2026 05:36:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF3024036A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781501776;
-	bh=IzRxtVCWzzKvFsylCgC+jKPmaeBOMz83Ah3UO4waLlo=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=jeZ3+ug/pDZFoP2aNG4IW8xgnd9JUk8AUSFsLw0s6zK1cN1pWEpv09ltfi6qRXSQN
-	 SAmhy94VAPNw6ikKDIROswVIYM/0TnGmpK9gh6GMTSgwnXjufkLvCd/Uugefme9FtC
-	 8kjphDqFl+9PinPcL56nzLakrt+M/k/PyTZRk3Gx6eNFjUNlbJcdkN5I/Ipm1Mx/p4
-	 N31FN3V9E0E34pI7Gnvvo8u3O2epkYc8PBAml2awEBg9GNcn/Ejeo05d+kQOtMnCGU
-	 3iNcWCJKvmolVrcAv9wvkCS9H7+osvq9fO88KSeDwW4p+UZM/dc4PHO5GS6aADj8k+
-	 YDaW6lwqsoOMg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF3024036A;
-	Mon, 15 Jun 2026 05:36:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E1C92B8
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:36:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B77140DB0
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:36:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9YNJcvqY8j6z for <buildroot@buildroot.org>;
- Mon, 15 Jun 2026 05:36:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19E6740D83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19E6740D83
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19E6740D83
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 05:36:13 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04de.dip0.t-ipconnect.de [91.58.4.222])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6374CA4C2EDF
- for <buildroot@buildroot.org>; Mon, 15 Jun 2026 07:35:56 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33844)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wYzzH-00000000516-3dip
- for buildroot@buildroot.org; Mon, 15 Jun 2026 05:35:55 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id Q95B6aoVpSWJ for <buildroot@buildroot.org>;
+ Mon, 15 Jun 2026 07:40:55 +0000 (UTC)
+X-Greylist: delayed 584 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 15 Jun 2026 07:40:54 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A22A841045
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A22A841045
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
+ envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A22A841045
+ for <buildroot@buildroot.org>; Mon, 15 Jun 2026 07:40:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 3AC241814BE; Mon, 15 Jun 2026 09:31:04 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jun 2026 07:35:54 +0200
-Message-ID: <20260615053555.1112644-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Mon, 15 Jun 2026 09:30:41 +0200
+Message-ID: <20260615073047.862958-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1781501756;
- bh=WKpwXhXJTCqZPtWEXSHtyQBg2YPq4lYKwSFltnNigzc=;
- h=From:To:Subject:Date:From;
- b=qWGPb0kpNPeBJ9Uh+Jqh1ZvsXvMlACJzL9MKKoAZHWH5OpOPEA1yxDJwAjG7aYZ9t
- iCQcDhuUHh9qwcRac2CPgXLd3GhvRlddK9nA08hpcpWGWUQMP/8VVyC7wPl4y0YSMH
- RFW/hS/AFD0fQDkyFnFIwzzFMiV/uAbVFNPJgnnA/PqpI0GTNXSth5sYXg/Wy9SRa5
- zb6U1+Ugs7ziF2xO2TZlhMnIRiAUU9z7LFdWBt667kQZIIjFtfnb5vRaTkxiEQpUm1
- F4jF2rHrUUTGI9LJfs575KVdo7ueGN7/qnkZHxBm+tUGT7p2n93XkIaWf1rD+WEO2u
- sxgxJ//ht2vwQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=qWGPb0kp
-Subject: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version to
- 26.2.2
+ d=heine.tech; s=dkim; 
+ t=1781508666; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=Ah5iiNUZUOagKlllsHNOaUuv1ZveSPt5MLpE9n07RXg=;
+ b=jtZ9m0k5ZU67Vi5VZFxDUAJHDRXc26Wds2cPHQA9r6BLfYHQH9Dk1fo3EGKh3YAylw5pZC
+ ZnfGsylVE4yYHop8VSug426+7pttCRyn2bhCdqQcs8GwZulOKFWQCkzibsXVX3JBef4djS
+ 6VHOBDw6+zRIMqUbgixB4cX7XwXVu2g=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=jtZ9m0k5
+Subject: [Buildroot] [PATCH] package/{python-}protobuf: bump to version 35.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,46 +84,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/intel/media-driver/releases/tag/intel-media-26.2.2
+Release Notes:
+https://github.com/protocolbuffers/protobuf/releases/tag/v35.0
+https://github.com/protocolbuffers/protobuf/releases/tag/v35.1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
+--
+
+This release contains a workaround for the issue in libabseil with gcc <= 12 [0].
+Buildroot introduced a patch in 955fb2f7c41f49e8d7fc8c60b8557f6f7c1d84c4 fixing this
+in libabseil-cpp.
+So for protobuf this patch is not needed anymore. But it might make sense to keep it
+for other consumers of libabseil-cpp.
+
+[0] https://github.com/protocolbuffers/protobuf/commit/78dc67e4d598d4e2ec8929105eb2ddbb4bf50935
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
-Gitlab pipeline passed for the series:
-https://gitlab.com/bkuhls/buildroot/-/commits/76453eef54ad48a74e9a80efc05fa023f04bca35
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ package/python-protobuf/python-protobuf.mk   | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index a5d012dc2e..d4ec60476e 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index be6484fb92..aaf5d77095 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  65bc05de32869ed73bcc6e7275d425987adfff792152565440f45d6b54fe1b9d  intel-media-26.2.1.tar.gz
-+sha256  48e7b2f6614041a4710f4f4d191a3dc7dd8b86d43de4ae7aa99ec24c3820f2c0  intel-media-26.2.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 2cc7372342..778470ef8e 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  e4e6ff10760cf747a2decd1867741f561b216bd60cc4038c87564713a6da1848  protobuf-34.1.tar.gz
++sha256  f0b6838e7522a8da96126d487068c959bc624926368f3024ac8fd03abd0a1ac4  protobuf-35.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 4f5911e794..d4d0e3e0d0 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 34.1
++PROTOBUF_VERSION = 35.1
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 346a2f3c54..714e2cf49b 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/protobuf/json
+-md5  7d860558dfbd2762140370c391285c35  protobuf-7.34.1.tar.gz
+-sha256  9ce42245e704cc5027be797c1db1eb93184d44d1cdd71811fb2d9b25ad541280  protobuf-7.34.1.tar.gz
++md5  e9074f4f40672c900f878be049f86cb8  protobuf-7.35.1.tar.gz
++sha256  ce115a26fe0c39a2c29973d914d327e516a6455464489fe3cd1e51a1b354f81a  protobuf-7.35.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index 3ba1b96514..17369d1462 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
 @@ -6,7 +6,7 @@
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+ PYTHON_PROTOBUF_SOURCE = protobuf-7.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/6b/6b/a0e95cad1ad7cc3f2c6821fcab91671bd5b78bd42afb357bb4765f29bc41
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/da/01/9ef0afd7999eb9badb3a768b4aedd78c86d4c65cfaf1958ab276199e76b4
  
--INTEL_MEDIADRIVER_VERSION = 26.2.1
-+INTEL_MEDIADRIVER_VERSION = 26.2.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
