@@ -4,83 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19721CD98E1
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 17:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA009CD98E1
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 17:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E32E342AAE;
-	Tue, 16 Jun 2026 17:00:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D8C742AB9;
+	Tue, 16 Jun 2026 17:04:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rv7462TqHY5z; Tue, 16 Jun 2026 17:00:02 +0000 (UTC)
+ id G20-KIJzUJbB; Tue, 16 Jun 2026 17:04:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E20F42AB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A0C842A0C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781629202;
-	bh=m34jGaTdNKXZ0QNlmR00joMDi8GqliWJXYM0gG56PEA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=FJ3ZEZy1zMG7bcJY6itZvbA3ugao0u7YlsWG7yV91X2DtrRxLj5SJoBpKNJH5aIPa
-	 eoOf69+8Jvs8zuYgc8D0NVn0DECrb6+WL/WK18c+kC12m9WkJIrXRMJmL26L8tG6oH
-	 DI6qYqfCkPGFecPXNSf/da05jHcp2rDA5KBvHHGBaNSLvrd0R0aHvzuegsMvGzHOHB
-	 TDfTf4iq8ie/a7nHn3Mo0VPE6KR2lcc4ZG9V3YJHrbx8qukyOVldcTqLbWzcV2aSPQ
-	 e2tmnmZRAl1pz9PrKy7dCX13WY2IgTCw3jIvpLyCL+hdeqq2evyBHOF7ivr6jbo7+p
-	 rCqCoD/L0VQgg==
+	s=default; t=1781629468;
+	bh=Gr+HNXzWAFDp6uFRClDrVuoPJjgxPDWxpMlg9VRTatU=;
+	h=Date:To:From:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fslBNVFsWWBulp2eEIvUlb0q9D4QhLLQVsbVIMX1f0GpibVur4m2X9yoDd+2bvjhH
+	 3ViaE7gdMt9g6Md5fZLZeXLVPUgsCY14ZGtWtdLCRn5THkEVHLPa7KNkvwwZ2p2IJ9
+	 zi8wSGnVQ09nNEHjEnqW4niqrFVidTOIfZnZxZCL/JwtDVHuIaaS2sYv7fF/ov9geI
+	 eMxbcww/broILWc9R1RXRms2iQ7y0lPcEqjh14uGysUmkhIcYntA5TAoP24bFSNxP8
+	 qjpMYea+s3xRHNG896lxDbIZY050OlhnHBO+2iCgrs57Ez1UdBmRk+brkrnlhgVrO/
+	 LQDkqP3L1bH/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E20F42AB2;
-	Tue, 16 Jun 2026 17:00:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A0C842A0C;
+	Tue, 16 Jun 2026 17:04:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 285D92F3
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 17:00:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E56742F3
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 17:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19F5040226
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 17:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D75D240235
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 17:04:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5k2DIOsyhMI1 for <buildroot@buildroot.org>;
- Tue, 16 Jun 2026 16:59:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 409D54021F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 409D54021F
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 409D54021F
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 16:59:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4016F19F5A7;
- Tue, 16 Jun 2026 18:59:56 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 16 Jun 2026 18:59:56 +0200
+ id VOOMMS5r9nV3 for <buildroot@buildroot.org>;
+ Tue, 16 Jun 2026 17:04:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1230; helo=mail-dl1-x1230.google.com;
+ envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1036140226
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1036140226
+Received: from mail-dl1-x1230.google.com (mail-dl1-x1230.google.com
+ [IPv6:2607:f8b0:4864:20::1230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1036140226
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 17:04:25 +0000 (UTC)
+Received: by mail-dl1-x1230.google.com with SMTP id
+ a92af1059eb24-13807d2f898so5243549c88.0
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 10:04:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781629465; x=1782234265;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=DAq6stbGznZdgMQ/vZ6UzIhFZg9mbhbKGvYe5QY+5WI=;
+ b=FRAwO2i/Wj/7rRdvO+O0gArGOAF7Tz2iE8XyQIg18o97aW8ImBi0MW2455R4c0X+C6
+ wSf6TyxcUS/6cOBg6MoEAuvV78F/PwUzMQ3Bh0Qk6KvSAPa/VwSTppgThgP+Mgio3tec
+ zG+PPoLkMGxHcD7Twi7ZpEW4I47XO+fzYu4wbhrrwy5fa1Yii+qwQUMFjpmM84rzEGne
+ YalVhM5n3V6mQY22W5z/J2NLCmY3LVN1JJbKw005EzQMFBkTVI17scewCXBBEAJpcIKK
+ 9U74D5i4SwsIDNKBh+So+Yr1W7aAN2RTV3Q74b65ZDlIshYT9Ic7KG2J8ugtBwERDbxi
+ FjVg==
+X-Gm-Message-State: AOJu0YyoQZ/jxyYSqLBioVI52Lsieb4TVF/lk6WqcQPFYUHOFD0pLNRv
+ RSRWvcqtxDtWIJgqONmLuusFTgQqvsIu14p9Z/95K9b80MhDB/IizTl7uxkwiyRP
+X-Gm-Gg: Acq92OGWDLcQ8hU5p7ZPyHs0M3T84MmoxTMxf6WfTEp+BZm91Qs1OPH4MCzAbgS4Ds0
+ Clu/Ewsyyh3AfkaBk1uZ4CGWBhOyUGaZLI3ADk7cG2omcW6Doj8/mvBEWle5/DPvo0NyXMf3BQK
+ XBy5dlgQlSMcf+isjpYzclGRb4ANcL2oRWpk05puaMQYXvcaEWlpN0BiAucANlFsWjm+gWBl9+y
+ ZF6AJSMKKaHNpakuhglgJsV5NPQeuwS42SUk1eAM/BKdlXsViwrpK1SJ1juns1eeNIdWqvSabnu
+ +DE6R9VBbld7tzfrqMOarvzN1uMRnF4zV0PbSrqTsrDk6kpzln1uTiq1pK0Y42+OnyFdcd4YT2R
+ YuL7A03MrKmPV/05t09Ty7kU/boMzMhjGcz7I52YY/PNR3puYEkDLj96G1t6MUfS/LGEml3XtRe
+ 7/ehbUOZdf0qGlkhCGbMOrg72GXEs4vIZaTPYfl8K86r9ZNBmG0hA=
+X-Received: by 2002:a05:7023:b16:b0:138:2c88:b3d6 with SMTP id
+ a92af1059eb24-1384bb69a3emr8251733c88.18.1781629464941; 
+ Tue, 16 Jun 2026 10:04:24 -0700 (PDT)
+Received: from [10.0.0.218] ([76.8.199.226]) by smtp.gmail.com with ESMTPSA id
+ a92af1059eb24-1384b97bf09sm14409884c88.14.2026.06.16.10.04.24
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 16 Jun 2026 10:04:24 -0700 (PDT)
+Message-ID: <4d0c25b9-6b7d-4104-9b7d-aec6dcf55f73@gmail.com>
+Date: Tue, 16 Jun 2026 11:04:23 -0600
 MIME-Version: 1.0
-Date: Tue, 16 Jun 2026 18:59:56 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20260616072106.1202605-1-bernd@kuhls.net>
-References: <20260616072106.1202605-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <faa48b53e6653326cdda84a49ecd94ba@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1781629197;
- bh=SO3jmEfKPQBpYXi74mvoDYQNgQpNy5HMgFLO/Qrz4PU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Flkn49fxLfYs2QIYRv1Y+xgXZEyN+dbUXEsiJU4utS5zU6pfvtvaDLu9F1ikiKK1f
- p94CxIM/t4TvZgMM7NxQ3XfL8U6uew5Usouof0AJgU93o6he4zTSFwbOZmgYRYzRp4
- uFIV8RwpsW8XW4010+JELggO5phOaUHHHdpT2Vqz2muBXz+sbAtQ9lYTO3ppd7xG6R
- rimJFt/U11izn6eXwmfCRln8iGVGc/k9VWHjzoSR/Z3SJ0MICTLxebw+DQ8jA96MST
- kmuxiXMYf6CDuaCMmJvvID9NhzEDy5VC9tkoAo+JF6ctavhZhmiVZECza66CRILght
- md/PKuRCsNONw==
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+From: Lance Fredrickson <lancethepants@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1781629465; x=1782234265; darn=buildroot.org;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=DAq6stbGznZdgMQ/vZ6UzIhFZg9mbhbKGvYe5QY+5WI=;
+ b=cEtcvrzYxv2qoJbIJol9WHAHqawtB6wLwg5rSzhJXjiqN2gHV5MLR/ONONzu8WKHx8
+ HhMhbPV+V8OgwTcsMg378YwQGH/pOkWEqTDJr24eYtj47PxFJa/Qs4LS89MN7P1MI1W+
+ p5hHEYRX41vDjFNqVZUlmn2Bf0dxorxbMRno8wzHEwZ2+SV6A6HJPxDwqH1RxOVHikXE
+ XSdhUq1mn5LLNyX+XQI/vGx9lD/3UupdjxbDEsMTHqREGE2ji62vwq9bptdn+hDBXVAi
+ tus5sSxyAIikK3esOhApasFvr+Poz0qJyk+p3pfIPCRLHC8VeXNBSeOHiOAo2iPxb89s
+ IbeA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Flkn49fx
-Subject: Re: [Buildroot] [PATCH 1/2] package/strace: needs headers >= 5.1
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=cEtcvrzY
+Subject: [Buildroot] Busybox concerns
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,37 +119,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/06/2026 09:21, Bernd Kuhls wrote:
-> Buildroot commit aa5e3eec6384cb73d902a4de3fffc279683ea5a5 bumped the
-> package to version 7.0 which includes commit
-> https://github.com/strace/strace/commit/33b950714a966bde816a1f1e75c127c3d3ae53cd
-> that adds an include of linux/time_types.h.
-> 
-> This header file was added in linux kernel version 5.1:
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=ca5e9aba753ed15d173c7a7b88e4d402b7ca8121
-> 
-> Fixes build errors:
-> 
-> In file included from 
-> ../bundled/linux/include/uapi/linux/cgroupstats.h:20:0,
->                  from netlink_nlctrl.c:11:
-> ../bundled/linux/include/uapi/linux/taskstats.h:21:30: fatal error:
->  linux/time_types.h: No such file or directory
-> 
-> detected by the Gitlab pipelines with the following defconfigs:
-> - br-arm-full-static
-> - bootlin-aarch64-glibc-old
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Someone just pointed me to this issue on the busybox github mirror that 
+alleges that control of busybox may be compromised. Wondering what your 
+guys' thoughts are and whether you have any other insights. I'm not sure 
+what to make of it all.
 
-Series applied to master, thanks.
+https://github.com/vda-linux/busybox_mirror/issues/12
+
+thanks!
+Lance Fredrickson
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
