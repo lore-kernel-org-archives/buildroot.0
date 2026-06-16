@@ -1,140 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A698ECD98DA
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 08:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B797CD98E1
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 09:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BA7785352;
-	Tue, 16 Jun 2026 08:39:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HeLi_oDf8I2o; Tue, 16 Jun 2026 08:39:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DE58853CF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781599188;
-	bh=Zn9LTxf5WMpdqHEnufkeladLa1BK6YiGeuMYhYQ9HQc=;
-	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=TldSghqg2c3UE0QtgBxzZCpIuBlsBiQdu8ckrsaXCd2Jt0XnlqjNTTDyM5BdYHryx
-	 4wt2bS3PPxLIQkniyXtnM+vq4Os+SPRVNm1XUvsL7DhdRDVZSJatXJ6hOf3KDc8WpV
-	 OjH4HAkiWC1+KnoDKETbncwKa1TugV3phcmJ/Ib6z7iU/Efb2u1XYdHfUFQV4nUThQ
-	 jc+mCRnQa52PVz6YIxLzRd4oZVepfBjYXO+2q3iVkx8k4a1RkIFN4yrbIMLApmjw2N
-	 y0fyJoRH7QFP5oSSdM7kvah1WhaD3P8DP8bdC9qFkM/6sVZrOUm4IHRVcFCKKlI1tn
-	 YJsgwD0r+I0VQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DE58853CF;
-	Tue, 16 Jun 2026 08:39:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FFA8169
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 08:39:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D9B76F499
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 08:39:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6EC66F4E4;
+	Tue, 16 Jun 2026 09:21:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hDTemvXAEuB6 for <buildroot@buildroot.org>;
- Tue, 16 Jun 2026 08:39:46 +0000 (UTC)
-Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::643; helo=mail-ej1-x643.google.com;
- envelope-from=bram.vlerick@openpixelsystems.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9ED346F498
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ED346F498
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com
- [IPv6:2a00:1450:4864:20::643])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9ED346F498
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 08:39:45 +0000 (UTC)
-Received: by mail-ej1-x643.google.com with SMTP id
- a640c23a62f3a-bf1cdcfd6deso503671166b.3
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 01:39:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781599183; x=1782203983;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=JtL7yXgSLP3vWmTmt0sPH9Cd80nCn0kKwVnkMybdr1M=;
- b=fwJTZu6i5VE4j82nVtEyenpdZXO1Z7yFnFlVRSa9zOctPiAozUTr+SxK6mofvsjKmd
- flRqMhszhzyrN//XrpJzkynrpqvgkbgxqcdSYXYyP/14Ix1IoKjZBzlXh5ZrhAfYw3+2
- BrlkoecMjs5FN0BosoUzgDxRnVHVgil8NKUbwPMq7iG6P0elpjDowGmXxlLfT1CRO/la
- +w3IDUadHqJwoX4EVBAOGxRJQsHuqhIgJrCM2WmTutmcmx9Qo2bKcwnpdLDtSZ4E3ho6
- AguEmRhPY6ZqcyMxH/JN1vsPbCvkttMR2hCVUN0ow3RYcsJk6LG+o41aK6S3hDH9xtXL
- rxnQ==
-X-Gm-Message-State: AOJu0YxBxdXYduvfpVm+hShI2OoJRzKd/6kfQ6wx53FiTqNeIdG1anmM
- 8t9bQVaaZLRIwFNJot5c2PfY6tpwZwMebNLLqZJixFjhI7XE81L3bruKgoTajz/iHDUhqo/xdwZ
- gJyIK/kyedTiS
-X-Gm-Gg: Acq92OFyeJNHFmhRkq5iTi/c6KG2rpf4gewK7pmiK0yC6QQ/buDO6SpQWb/ZZwhKt2g
- ijrF9pc9fp0MuLD0Ot23QMCM2NijoXNt7gyvYvpDlDhuz6BHnIM7dSCdP7wlynRpd1hV+Ot332E
- n0z0OBbIWZbad/+in2RNNYqdnMij9Kd1F64jkdBUtofc6mmhDHZ8Ei6n1GIZIrERKho6TsVyqv1
- JEenLeLF53GjE6xPPAzwvDtsf6iBf3Ojtvv0Y5FNmE+rvJh6gKIDwK3UcWXSXuVGyjgTyPbdBOT
- vFMI4vU3pJpQ30O5Qq6lDEvU112XXwLT8CCG/4cSuU0HeQ22ckiOMa/Ph5Xkl7xRepgenpjjXB1
- VbLxY0pLGX1n3WhMZZMOlUeTsolxNYUuRI0R6wUqhQir552bg5zegSChlQ1H/mXVkFNeTFYwCgF
- gszf5qqonVcHJ6X5yoGO6y4ytC8hQyXSkK0Z66bnrUlTZlQTTkwEWATxrUMxzQkz6QXTMWYS/uC
- AH7sepjFJx3/vAciJkG99kJp85ZcFTC8n0yBrcrUWudXTg5un47PIG5lW9bs7rOX0MMmZAdpODa
- ktCyZwaqLCC4aCaUl7Gw7LV2BT2Nlej1VzkUYRiuYG8sGjl/8tLfWB9iwg7sDqncwg7liMxk0+d
- nsVXLypjFVTX9QMogpBM=
-X-Received: by 2002:a17:907:25cb:b0:bed:441a:b26a with SMTP id
- a640c23a62f3a-c043ad41599mr109749166b.20.1781599182521; 
- Tue, 16 Jun 2026 01:39:42 -0700 (PDT)
-Received: from argon.opsys.be (253.124-78-194.adsl-static.isp.belgacom.be.
- [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-bfdb844060csm593608566b.46.2026.06.16.01.39.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Jun 2026 01:39:42 -0700 (PDT)
-From: Bram Vlerick <bram.vlerick@openpixelsystems.org>
-Date: Tue, 16 Jun 2026 10:39:39 +0200
-MIME-Version: 1.0
-Message-Id: <20260616-package-kernel-hardening-checker-v1-1-f12e90749b0f@openpixelsystems.org>
-X-B4-Tracking: v=1; b=H4sIAMoLMWoC/yWNMQ7CMAwAv1J5xlJShQ58BTE4rtuYIlMlgJCq/
- h0D491wt0GTqtLg1G1Q5aVN7+YQDx1wIZsFdXSGPvRDGGLAlXgh14tUkxsWqqOY2oxchF1iTlM
- 6ckyZYgbPrFUmff8W58uf2zNfhR/fLuz7B/5teP+EAAAA
-X-Change-ID: 20260610-package-kernel-hardening-checker-b4f45c14ba1b
+ id poKRZdzBdQPZ; Tue, 16 Jun 2026 09:21:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9CF06F4E5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781601683;
+	bh=JCmp5YA+ZLoMPc0pvfj823XxlhZiHWeCyPM/Nf6Az/g=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=EpCL3z6PYyUpF2n71BcfG97AxVtyj8YmD16ac/064iyRldp4gqVYwQwyrKWIEtXtu
+	 kSEwQ4rQzPoTjeK6j7Jz9cXmpSMK91mrNgAwff40mSqR0+z6irtrak0hYUs4nI7VeS
+	 A41F7/A3L/gM1vm62DargdRKUEez5tx7RVrDwe0FOInsmA+W6Mqk1yORvVM+EYHZl1
+	 10EcpElzRzRgiCMWSXnb+ltm2/Hf66mo+qJF/nSphHvBJTjp3xuy8nFrOL+COtvhPk
+	 51dlCXA8jVs6yUu+WH2yW60CoH0qcxQEWh7kQ1UPqatYNuZar5Xo/2VPuk1E1HOhB/
+	 ei2jQwVfHQi5Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9CF06F4E5;
+	Tue, 16 Jun 2026 09:21:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD2212F3
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 09:21:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEABB42D43
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 09:21:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wyry4Sl7nEON for <buildroot@buildroot.org>;
+ Tue, 16 Jun 2026 09:21:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E89A42D3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E89A42D3E
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E89A42D3E
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 09:21:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id D12081814BE; Tue, 16 Jun 2026 11:21:15 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Bram Vlerick <bram.vlerick@openpixelsystems.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2673;
- i=bram.vlerick@openpixelsystems.org; h=from:subject:message-id;
- bh=oo7cM+UFFEcoAB3JhH4OMPSr+ASz44LJeJZtrW4GKiI=;
- b=owEBiQJ2/ZANAwAIAd6tmkew/Z03AcsmYgBqMQvMcqM5W3EBgzPRum1DYRfB0zF3u0BmkiCSh
- avAdHU0uBWJAk8EAAEIADkWIQTzNzLrMhPFwtdXzrPerZpHsP2dNwUCajELzBsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQ3q2aR7D9nTfKDxAAmfucdaTvIwOsg+rpgkq03jTnepDWiRm
- bKDjGtU5JdaDq2EqD5L85cIe82l7165uIPATe1PHFefYgQczZ3fjVVs8ji3Z6mTdEWM8fXTkIGv
- fRclMxAOAJidLrGcRPxsKW7JRSDDctgs0ma/IrQxuVNFzs7wU0ExftofwIJwRnzsexv3F2fPkzl
- E/8/Y6N1vlsOc23aokJr01lU66+hkjCHL6MsjyOtpM/wgXSmquiLPabp3zKhH4GnAvu+6AyTdw2
- aoYzf2ve3I+n6P+nEWZ09vM2dbPMkQB88Fh5vk1gXKve3AvCXLf2bZH5OPPDQMOGiswi18An9pz
- 6UGJ1huQosw4T6ufLsTut1CJFWcdviaTrhbBnWU7lCY2buSRFnK3tDX1fnA4F+pG6dZ0QIiImJl
- Li5a3KantCC+UItp9WlLA7gnKFkIX2xV8I06EBTsIc5rJoYE0KJs7C7MNE/V0jqCORR/zbp21J5
- UvEhDD8MiML9V6+EHa+PZtV1QhYGwgiKfLaNhZnL/Ru2fZINnDs3/PCtiGBbffNa0W/PErHzXuH
- fdJVCdmTi18H+llhDFZmNNqWa7q9QK6u7G0ieKr7ve+rhkWmX/hTFZ79x0OpzO2Yijki4036kNP
- v83oGYMMAvnuV6OHmkVTjlQwHR73Ag2ztHlCd7wZ7i+vpeS38CfA=
-X-Developer-Key: i=bram.vlerick@openpixelsystems.org; a=openpgp;
- fpr=F33732EB3213C5C2D757CEB3DEAD9A47B0FD9D37
+Date: Tue, 16 Jun 2026 11:20:54 +0200
+Message-ID: <20260616092055.1129344-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=openpixelsystems-org.20251104.gappssmtp.com; s=20251104; t=1781599183;
- x=1782203983; darn=buildroot.org; 
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JtL7yXgSLP3vWmTmt0sPH9Cd80nCn0kKwVnkMybdr1M=;
- b=moZcLyJtt5gY0X1LFRXBu7IkgFR5jZdQyUteb93HTRS0Ku8c+EkwyuJu4PKP5/bleM
- ME+ifiPG8svlXmk/vzYyysuVJzqgGR6V6h4nXeuN+OTf9m6OmLHxcX+G+IT1qMbWc2pY
- 0oMaYEtWHrE6kxd55U9eiEpHKPi5k/ZX7t8LBt/WQUQ1EZA5T6qNLyk4ItXDDdX8yU0q
- 9UHt85xJAtUxoy6zhi2XVfFk/ZTyznqJf/sUKZ+wEScm1xtG29hiZBdjytW+Zd4v3nw4
- h/b2AKgRy+mlEYv/3cB44UfSutPkon1/WPiEG2cA30ZPfkh8z6XaV49QQg2Lx+GhAZM4
- hlGw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openpixelsystems.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openpixelsystems-org.20251104.gappssmtp.com
- header.i=@openpixelsystems-org.20251104.gappssmtp.com header.a=rsa-sha256
- header.s=20251104 header.b=moZcLyJt
-Subject: [Buildroot] [PATCH] package/kernel-hardening-checker: new package
+ d=heine.tech; s=dkim; 
+ t=1781601676; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=VzfbW0DFFWWUyvjGG05HtmvGqAMwiiY+UvKyOkQ70BQ=;
+ b=iBmFjagGahBNECeVpVnsh/Qz0XvjOKk705MwO06JUHLjPpmVdKgy5XfIU0Dk42loQeB+4Q
+ vLr5CqyOs6WZ7V2GA0k+0R3vtT2PiSgl8gsoMTSl4CJv9BAJdvkVKE8q0ODI/40GwbAp5A
+ gVmT0DMVDxuwnrbMYS2tc/D33Biio88=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=iBmFjagG
+Subject: [Buildroot] [PATCH] package/libabseil-cpp: bump to version
+ 20260526.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,76 +82,323 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Robert Rose <robertroyrose@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Francis Laniel <flaniel@linux.microsoft.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-kernel-hardening-checker (formerly kconfig-hardened-check) is a
-tool for checking the security hardening options of the Linux kernel.
+- libabseil now requires gcc >= 10
+- drop patch trying to fix build with gcc <= 12 as this is now handled
+  in protobuf >= 35 directly.
 
-https://github.com/a13xp0p0v/kernel-hardening-checker
+Changelog:
+https://github.com/abseil/abseil-cpp/releases/tag/20260526.0
 
-Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/Config.in.host                                      |  1 +
- package/kernel-hardening-checker/Config.in.host             |  8 ++++++++
- .../kernel-hardening-checker/kernel-hardening-checker.mk    | 13 +++++++++++++
- 3 files changed, 22 insertions(+)
+ package/collectd/Config.in                    |  2 +-
+ package/falcosecurity-libs/Config.in          |  2 +-
+ package/grpc/Config.in                        |  6 +-
+ ...SL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch | 55 -------------------
+ package/libabseil-cpp/Config.in               |  6 +-
+ package/libabseil-cpp/libabseil-cpp.hash      |  2 +-
+ package/libabseil-cpp/libabseil-cpp.mk        |  2 +-
+ package/protobuf/Config.in                    |  6 +-
+ package/re2/Config.in                         |  6 +-
+ package/sysdig/Config.in                      |  6 +-
+ package/tensorflow-lite/Config.in             |  6 +-
+ package/webrtc-audio-processing/Config.in     |  6 +-
+ 12 files changed, 25 insertions(+), 80 deletions(-)
+ delete mode 100644 package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index df57cc0c17..d8d295a5d8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -59,6 +59,7 @@ menu "Host utilities"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jh71xx-tools/Config.in.host"
- 	source "package/jq/Config.in.host"
-+	source "package/kernel-hardening-checker/Config.in.host"
- 	source "package/kmod/Config.in.host"
- 	source "package/libp11/Config.in.host"
- 	source "package/llvm-project/lld/Config.in.host"
-diff --git a/package/kernel-hardening-checker/Config.in.host b/package/kernel-hardening-checker/Config.in.host
-new file mode 100644
-index 0000000000..37d2775335
---- /dev/null
-+++ b/package/kernel-hardening-checker/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_KERNEL_HARDENING_CHECKER
-+	bool "host kernel-hardening-checker"
-+	help
-+	  kernel-hardening-checker (formerly kconfig-hardened-check)
-+	  is a tool for checking the security hardening options of the
-+	  Linux kernel.
-+
-+	  https://github.com/a13xp0p0v/kernel-hardening-checker
-diff --git a/package/kernel-hardening-checker/kernel-hardening-checker.mk b/package/kernel-hardening-checker/kernel-hardening-checker.mk
-new file mode 100644
-index 0000000000..3fdf72f471
---- /dev/null
-+++ b/package/kernel-hardening-checker/kernel-hardening-checker.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kernel-hardening-checker
-+#
-+################################################################################
-+
-+KERNEL_HARDENING_CHECKER_VERSION = 0.6.17.1
-+KERNEL_HARDENING_CHECKER_SITE = $(call github,a13xp0p0v,kernel-hardening-checker,v$(KERNEL_HARDENING_CHECKER_VERSION))
-+KERNEL_HARDENING_CHECKER_LICENSE = GPL-3.0
-+KERNEL_HARDENING_CHECKER_LICENSE_FILES = LICENSE.txt
-+KERNEL_HARDENING_CHECKER_SETUP_TYPE = setuptools
-+
-+$(eval $(host-python-package))
-
----
-base-commit: cbe867b895d19861cd809c953f88c576f2073223
-change-id: 20260610-package-kernel-hardening-checker-b4f45c14ba1b
-
-Best regards,
---  
-Bram Vlerick <bram.vlerick@openpixelsystems.org>
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index d1ed36ef5e..8df1f5fa9b 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -692,7 +692,7 @@ config BR2_PACKAGE_COLLECTD_GRPC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # grpc -> libabseil-cpp
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+ 	select BR2_PACKAGE_GRPC
+ 	help
+diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
+index 028a0ed28b..9e6c2d0227 100644
+--- a/package/falcosecurity-libs/Config.in
++++ b/package/falcosecurity-libs/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_FALCOSECURITY_LIBS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # grpc -> libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
+ 	depends on !BR2_STATIC_LIBS # protobuf, tbb
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index 7664948b40..bdb31fc899 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp, re2
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libabseil-cpp, re2
+ 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp, re2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+@@ -19,9 +19,9 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 10"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch b/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
+deleted file mode 100644
+index 8f5e255795..0000000000
+--- a/package/libabseil-cpp/0002-base-fix-ABSL_ATTRIBUTE_WARN_UNUSED-with-gcc-12.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 77326826119439c06e341c9d090633ecd9b520d6 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Mon, 27 Apr 2026 19:38:19 +0200
+-Subject: [PATCH] base: fix ABSL_ATTRIBUTE_WARN_UNUSED with gcc <= 12
+-
+-Gcc <= 12 does not support mixing standard C++ attributes with
+-GNU attributes. See [1].
+-
+-This can lead to build failures such as [2] [3] and [4]. In those
+-situations, the compilation fails with error such as:
+-
+-    /usr/include/absl/base/attributes.h:1076:36: error: expected identifier before '[' token
+-
+-Gcc maintainers mentioned in [1] comment 9 that this bugfix will
+-not be backported in Gcc 12. Gcc 12 is still used in LTS
+-distributions. For example, it is included in Debian 12 (Bookworm),
+-which is still supported until 2028. See [5].
+-
+-This commit adds a workaround for gcc <= 12 which uses
+-__attribute__ in that case, which fixes the compilation failure.
+-
+-[1] https://gcc.gnu.org/PR69585
+-[2] https://github.com/protocolbuffers/protobuf/issues/26383
+-[3] https://autobuild.buildroot.org/results/33f6cfd37cb48c15a53b3e7123d5ce8388a0f2ab/build-end.log
+-[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/13904066346
+-[5] https://www.debian.org/releases/bookworm/
+-
+-Upstream: https://github.com/abseil/abseil-cpp/pull/2044
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- absl/base/attributes.h | 7 +++++++
+- 1 file changed, 7 insertions(+)
+-
+-diff --git a/absl/base/attributes.h b/absl/base/attributes.h
+-index 5887fcaf..a26143e1 100644
+---- a/absl/base/attributes.h
+-+++ b/absl/base/attributes.h
+-@@ -1092,7 +1092,14 @@ struct AbslInternal_YouForgotToExplicitlyInitializeAField {
+- // See https://clang.llvm.org/docs/AttributeReference.html#warn-unused and
+- // https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Attributes.html#index-warn_005funused-type-attribute
+- #if ABSL_HAVE_CPP_ATTRIBUTE(gnu::warn_unused)
+-+// Only GCC >= 13 allows mixing standard and gnu attributes.
+-+// In case of gcc < 13, fallback on using __attribute__.
+-+// https://gcc.gnu.org/PR69585
+-+#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 13
+-+#define ABSL_ATTRIBUTE_WARN_UNUSED __attribute__((warn_unused))
+-+#else
+- #define ABSL_ATTRIBUTE_WARN_UNUSED [[gnu::warn_unused]]
+-+#endif
+- #else
+- #define ABSL_ATTRIBUTE_WARN_UNUSED
+- #endif
+--- 
+-2.54.0
+-
+diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
+index 6bbe9518b2..d13bf6e663 100644
+--- a/package/libabseil-cpp/Config.in
++++ b/package/libabseil-cpp/Config.in
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ config BR2_PACKAGE_LIBABSEIL_CPP
+ 	bool "libabseil-cpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++17
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+@@ -31,7 +31,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
+ 
+ 	  https://github.com/abseil/abseil-cpp
+ 
+-comment "libabseil-cpp needs a toolchain w/ gcc >= 8, C++, threads, dynamic library"
++comment "libabseil-cpp needs a toolchain w/ gcc >= 10, C++, threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 2c3e702743..c1603b7d70 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4314e2a7cbac89cac25a2f2322870f343d81579756ceff7f431803c2c9090195  libabseil-cpp-20260107.1.tar.gz
++sha256  6e1aee535473414164bf83e4ebc40240dec71a4701f8a642d906e95bea1aea0c  libabseil-cpp-20260526.0.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 2fdccee280..f239f8872e 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBABSEIL_CPP_VERSION = 20260107.1
++LIBABSEIL_CPP_VERSION = 20260526.0
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 633201b38c..ae4044ea32 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -45,7 +45,7 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libabseil-cpp
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	help
+@@ -55,7 +55,7 @@ config BR2_PACKAGE_PROTOBUF
+ 
+ 	  https://developers.google.com/protocol-buffers
+ 
+-comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
++comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 10"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/re2/Config.in b/package/re2/Config.in
+index acc4bdbe46..b2de476bad 100644
+--- a/package/re2/Config.in
++++ b/package/re2/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_RE2
+ 	bool "re2"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++17, libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # libabseil-cpp
+ 	select BR2_PACKAGE_LIBABSEIL_CPP
+@@ -14,8 +14,8 @@ config BR2_PACKAGE_RE2
+ 
+ 	  https://github.com/google/re2
+ 
+-comment "re2 needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
++comment "re2 needs a toolchain w/ C++, threads, dynamic library, gcc >= 10"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 3a3670f5cb..a6e6809d82 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
+ 	depends on BR2_LINUX_KERNEL # falcosecurity-libs
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # falcosecurity-libs -> grpc -> libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # falcosecurity-libs -> grpc -> libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
+ 	depends on !BR2_STATIC_LIBS # falcosecurity-libs
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
+@@ -23,12 +23,12 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  https://github.com/draios/sysdig/wiki
+ 
+-comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
++comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 10, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_USES_GLIBC \
+ 		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+diff --git a/package/tensorflow-lite/Config.in b/package/tensorflow-lite/Config.in
+index 99d219622d..751b963b22 100644
+--- a/package/tensorflow-lite/Config.in
++++ b/package/tensorflow-lite/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_TENSORFLOW_LITE
+ 	bool "tensorflow-lite"
+ 	depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libabseil-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_SHARED_LIBS
+@@ -30,9 +30,9 @@ config BR2_PACKAGE_TENSORFLOW_LITE
+ 
+ 	  https://www.tensorflow.org/
+ 
+-comment "tensorflow-lite needs a toolchain w/ gcc >= 8, C++, threads"
++comment "tensorflow-lite needs a toolchain w/ gcc >= 10, C++, threads"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
+-			!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS
++			!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "tensorflow-lite needs a toolchain w/ shared libraries"
+ 	depends on !BR2_SHARED_LIBS
+diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
+index cb3b21367b..051985f5e3 100644
+--- a/package/webrtc-audio-processing/Config.in
++++ b/package/webrtc-audio-processing/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # libabseil-cpp
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # libabseil-cpp
+@@ -18,8 +18,8 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 
+ 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+ 
+-comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 8"
++comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 10"
+ 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
