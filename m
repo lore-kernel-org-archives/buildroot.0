@@ -4,88 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC7E8CD98E4
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 18:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FE89CD98E4
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 18:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C396161BE4;
-	Tue, 16 Jun 2026 18:41:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A463661C6D;
+	Tue, 16 Jun 2026 18:56:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q5znxOmONQ4w; Tue, 16 Jun 2026 18:41:23 +0000 (UTC)
+ id 3R6iHLCtdVjN; Tue, 16 Jun 2026 18:56:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17A6160A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 281D461BA7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781635283;
-	bh=i8Yd05cIK+ninv0E3yGsEj1wmbfccjN2z89WWnXtZPQ=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=MEAj7Wkbjj9ksn2/X6cLVyfz4iS4teqxTc+BxE+MReowboUKgQfECZTzXld++m3Ci
-	 CmaOr6AzTnyvJpxnL0vKKWQoa0+R54hoFwAIZR/httDqvlRqBAONWsItyg5UvSNofh
-	 wBOJ4xTl+fhOm/ulcurvaVIi7WX6BiF4+Jdb8ft083ml7eEDMie7Cyk00H7PXJyVri
-	 /Obwa8W7I6sy82pawO1IOsBUX4SwiGgs3fibGttfe5XLuP0QmucMAH4yPKzmA7iqJ/
-	 flEROQjkHTx2oquOYXcylmjonrch9vZEysFslZO+IPNfd/a1ZM191yRZ0cVUWOEh58
-	 SF4IQSegbeKAA==
+	s=default; t=1781636180;
+	bh=7/uDP1xG8uQ6+AwqlP7/Hj8v3syApyjaq34Z8j6h68c=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=m0Z3p2O7J+fsPG2PWnrc/yaWUKeIK5pyOlt3uOaXz6CXlMWnBRcWZFGuMmVS03dKz
+	 wTD9YS/G+6prXhCl8WOMZYtJ/NqbqHkg4Xp5pUEQTmrnRhGQmP7zsGkuQdWsdKgyLU
+	 8JT5NEWfuV1f6tnXk0NblgJv8whPi9mcEKF5I85F7AZoM7gD6uuY5Z8QYy4EMx7XNg
+	 oE6X3rTx0apjOrO+Ij6eIYO+gW2O3N1yCqrRHByEQjhbqxQOnkuRp3FWS2jRD4y7wd
+	 9DoDjgFkW9LkIw5PxqzGTW7uzghy3XxqrLY36f4xwxlrFU7vZehBDFJwnMHv4Ji/JI
+	 vX4QeY7ZHulow==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17A6160A88;
-	Tue, 16 Jun 2026 18:41:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 354A02B8
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:41:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 281D461BA7;
+	Tue, 16 Jun 2026 18:56:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2DD5C2F3
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24C5385268
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:41:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13DAD4008A
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLQZEEbw2D90 for <buildroot@buildroot.org>;
- Tue, 16 Jun 2026 18:41:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A5AAE85267
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AAE85267
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A5AAE85267
- for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:41:20 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id D6B7A20039C;
- Tue, 16 Jun 2026 20:41:09 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 16 Jun 2026 20:41:09 +0200
-MIME-Version: 1.0
-Date: Tue, 16 Jun 2026 20:41:09 +0200
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-In-Reply-To: <20260616055422.3688535-1-neal.frager@amd.com>
-References: <20260616055422.3688535-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.16
-Message-ID: <fefb2dbfced24bda58bd733bef949fbd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1781635278;
- bh=bQSdmS8+ik2dWVsiFB3qe0ILLBJrPwNzbGcWPLpKXvU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Fv1PZj3GVMEe7qtFSHFYBX0sF5YDYabgWtj7Ys+4TKcQvqqb88WVkMYNmDy9LEAcw
- PM5U3CGJlFaNAmCpG/RisxIbv6+h4ecxe8bb7tjwgNbKrk6JaxSvl0MyvGK+TdVayf
- VTrIOIL6B4Xh6izULExb/FZfCkjqsBltJtmfF82FPFqy7T/jWXiSjqrRSVUtdA+sjV
- +O9tYRlyA8yCksEZ8Vpla8LzqsVXk9J03irwu0THUagv8R0EnqsDD5ppBnViAJCCxl
- fgg9fv8t+8tJW/ZAgMlpE4SFPWTF2G0yO7/G6Jhew9uHr6f8GU6FC24v+8tM3t0Stf
- klNsfEj1wfUgA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Fv1PZj3G
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/bootgen: bump to
- xilinx_v2026.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p0kZ6U2DgeX3 for <buildroot@buildroot.org>;
+ Tue, 16 Jun 2026 18:56:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50E934006E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50E934006E
+ for <buildroot@buildroot.org>; Tue, 16 Jun 2026 18:56:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0A26280DF0; Tue, 16 Jun 2026 18:55:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 16 Jun 2026 20:50:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 63dfdedd51cdd65a2444623de8197a39340c1e35
+X-Git-Newrev: dc43bd6f0590294e122324e1c4999db1400a446e
+X-Patchwork-Hint: ignore
+Message-Id: <20260616185557.0A26280DF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnvme: bump version to 1.16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,45 +70,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dc43bd6f0590294e122324e1c4999db1400a446e
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks for the patch. I have one comment, see below.
+Release notes:
+https://github.com/linux-nvme/libnvme/releases/tag/v1.16.2
 
-On 16/06/2026 07:54, Neal Frager via buildroot wrote:
-> Bump bootgen to xilinx_v2026.1 release.
-> 
-> The following patches are now included and can be removed:
-> 0001-lms-hash-sigs-hss_param.c-add-stdio.h-include.patch
-> 0002-flexlexer-use-embedded-win_include-flexlexer.h.patch
-> 
-> bootgen xilinx_v2026.1 now requires C++ version 14, so the build 
-> command has
-> been updated to reflect this.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Since this host package has a Config.in.host Kconfig entry,
-this new C++14 requirement could be reflected there. For ex:
-
-config BR2_PACKAGE_HOST_BOOTGEN
-	bool "host bootgen"
-	depends on BR2_HOST_GCC_AT_LEAST_5 # C++14
-	...
-
-comment "host-bootgen needs a host gcc >= 5"
-	depends on !BR2_HOST_GCC_AT_LEAST_5
-
-Could you send a v2 with those changes please?
-
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-
-Best regards,
-
-Julien.
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 29071da1bf..aa316fbf72 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  ce1d9d393feb84c4e82ca096db2bdb7dd4a5fd1997d711cc1904796944f2c579  libnvme-1.16.1.tar.gz
++sha256  1d850d5a871559abf641d6e6b63bb86047e4cb26f3ad144597c2c64b3cff7231  libnvme-1.16.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index f9bc0be371..55108cfc49 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.16.1
++LIBNVME_VERSION = 1.16.2
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
