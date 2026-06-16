@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 480E3CD98E1
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 16:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F6F9CD98E4
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jun 2026 16:59:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02E0442939;
-	Tue, 16 Jun 2026 16:59:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1005E6172F;
+	Tue, 16 Jun 2026 16:59:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cK9lNw4eu5nY; Tue, 16 Jun 2026 16:59:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DcRtXOMlc4gy; Tue, 16 Jun 2026 16:59:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FB414295E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A59661766
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781629175;
-	bh=HN1ms1OrnV9FkOrUe6dFUtzc/ZjIEn5CrjRqCL5RNCM=;
+	s=default; t=1781629176;
+	bh=5qJYCRR2C+1dMCgGW6rWvylCiynBCyq+iysNkWahnLc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ofwSDH1mZU+BlFIc9vSp2TASZPLsuOQXltmueG6V8xocWezQtS1Ff5L00Gh9vCEGT
-	 6uFmtdnk3fN2ToGAb1150G8dX3SOPvdxDrpvXM7UYE7VDXj+ZDiqT+p0Ew7ATVA/LB
-	 ofBnnLSJ8nNKe0xUZzBs1rlz4SKRWCFhJG4ckxTIDibncu1wGG+Xm2MDPn9wWnSAIg
-	 KgD1B4HpZLg0+GItKPnJRRKkI0uVg+Uuc1RApdsyyo2T2N6CoxzayWbEKeZ9MghHtT
-	 l1VhUPKK1dZIufo6KV7AyOs6Sgsfn3hF29v6IZiDnLPF6z8XOPea1YoIZb+VBJhBmA
-	 7X18xDprhUT/w==
+	b=cLCt6keLl/E0vyXbGoRwhQtPE8fHIIPTHxmrRSB9h+5A7tUT2u0sgmndBpjFG9wHl
+	 1ie4qOSB0G4lLi3Ek/cIDEtcBZaHdDKRcGfepS+u0wsmcK8SguvRs81QwUhmfDHmGf
+	 SSeLYq6HtUAZda3+hSmZR2g6wlgVTgh8Z7BymcdPusSOU8fksKpdFCL7Cl4lezDGC/
+	 HRlUY0SSO7+tiMmxnf6FTfKvW4iW7ttByV8UimX8TvumbtorB6HoH4Va+wpFKZfKu6
+	 H3rqZvza33ni0oXsfjk7ychdXiqkC+9hR1PmQovre9gMoxed94RRVeqtMBwf+V9ZYA
+	 C85KO1iGUe7BQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FB414295E;
-	Tue, 16 Jun 2026 16:59:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C3A7C169
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A59661766;
+	Tue, 16 Jun 2026 16:59:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D67BD42A
  for <buildroot@buildroot.org>; Tue, 16 Jun 2026 16:59:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5F8A42959
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC6B761766
  for <buildroot@buildroot.org>; Tue, 16 Jun 2026 16:59:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l-ofF1sDleHf for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fpjtmUsbWCiN for <buildroot@buildroot.org>;
  Tue, 16 Jun 2026 16:59:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E43C942939
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECA806172F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E43C942939
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECA806172F
  for <buildroot@buildroot.org>; Tue, 16 Jun 2026 16:59:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A759D80DA1; Tue, 16 Jun 2026 16:59:12 +0000 (UTC)
+ id B14FD80DA5; Tue, 16 Jun 2026 16:59:12 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 16 Jun 2026 18:52:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 206ac6a19f09071b0bdf0f1edbf0c87e89d347de
-X-Git-Newrev: 2dc34a18e74a1b12e02d0fb8b3b5433b983f5355
+X-Git-Oldrev: 2dc34a18e74a1b12e02d0fb8b3b5433b983f5355
+X-Git-Newrev: 63dfdedd51cdd65a2444623de8197a39340c1e35
 X-Patchwork-Hint: ignore
-Message-Id: <20260616165912.A759D80DA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: needs headers >= 5.1
+Message-Id: <20260616165912.B14FD80DA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump version to 7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,65 +76,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2dc34a18e74a1b12e02d0fb8b3b5433b983f5355
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/63dfdedd51cdd65a2444623de8197a39340c1e35
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit aa5e3eec6384cb73d902a4de3fffc279683ea5a5 bumped the
-package to version 7.0 which includes commit
-https://github.com/strace/strace/commit/33b950714a966bde816a1f1e75c127c3d3ae53cd
-that adds an include of linux/time_types.h.
+https://github.com/strace/strace/releases/tag/v7.1
 
-This header file was added in linux kernel version 5.1:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=ca5e9aba753ed15d173c7a7b88e4d402b7ca8121
-
-Fixes build errors:
-
-In file included from ../bundled/linux/include/uapi/linux/cgroupstats.h:20:0,
-                 from netlink_nlctrl.c:11:
-../bundled/linux/include/uapi/linux/taskstats.h:21:30: fatal error:
- linux/time_types.h: No such file or directory
-
-detected by the Gitlab pipelines with the following defconfigs:
-- br-arm-full-static
-- bootlin-aarch64-glibc-old
+Switched to sha256 tarball hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/strace/Config.in | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+ package/strace/strace.hash | 7 +++----
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index ff7d271c0c..e3e7018c65 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -1,11 +1,6 @@
- config BR2_PACKAGE_STRACE
- 	bool "strace"
--	# needs at least kernel headers 5.0 on xtensa
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_xtensa
--	# needs at least kernel headers 5.0 on musl aarch64
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || \
--		!(BR2_aarch64 || BR2_aarch64_be) || \
--		!BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 # time_types.h
- 	depends on !BR2_RISCV_32
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
-@@ -17,11 +12,5 @@ config BR2_PACKAGE_STRACE
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index ad164dfa5c..8df107c948 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,6 +1,5 @@
+-# Locally calculated after checking signature with RSA key from
+-# https://raw.githubusercontent.com/strace/strace/refs/tags/v7.0/GPG-KEY
+-# https://strace.io/files/7.0/strace-7.0.tar.xz.asc
+-sha256  6c92419be3f2ec560b31728a4652217c59864c8642ba7b1b3771b1b013ad074b  strace-7.0.tar.xz
++# From https://github.com/strace/strace/releases/tag/v7.1
++sha256  81743ecf2a5b44186b2f5038afdc8beda7e5c70aed15b4fbfbcc6e9ece24490f  strace-7.1.tar.xz
++# Locally computed
+ sha256  b897cf6bb865cdd72f49fba6ca7b66ad075b9bc51d3cf372923220ce18b5350f  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 5f39bba1bd..a0688939ca 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://strace.io
- 
--comment "strace needs a toolchain w/ headers >= 5.0 on xtensa"
--	depends on BR2_xtensa
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
--
--comment "strace needs a musl toolchain w/ headers >= 5.0 on aarch64"
--	depends on BR2_aarch64 || BR2_aarch64_be
--	depends on BR2_TOOLCHAIN_USES_MUSL
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-+comment "strace needs a toolchain w/ headers >= 5.1"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+-STRACE_VERSION = 7.0
++STRACE_VERSION = 7.1
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
