@@ -1,118 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0F6CD98E2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 17:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49B5FCD98F3
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 17:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF02440966;
-	Wed, 17 Jun 2026 17:42:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E30C606C9;
+	Wed, 17 Jun 2026 17:42:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YOYPQJq0mkYK; Wed, 17 Jun 2026 17:42:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aqBJ9aWJFp-e; Wed, 17 Jun 2026 17:42:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1D2E40967
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF99A606C2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781718144;
-	bh=/NOUCQvjkbRquKwCsf3YVoOjUi+C9EX+fxfpElbo+UU=;
+	s=default; t=1781718145;
+	bh=TzXpn2ahL9OTdT0uYyI2U7P5Vipl9IZep8B+Oi4Vw20=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=kje0cQmeJhGgkJyYbsJ0nnYnTGx1Q4kZpds3r1iYoroVJXWhkvy7Sr/LbOsrogokC
-	 gCj4TUuVEh+Q8GUyafOJOqELSQ+9Vu2Kpzl4be/lsAOidwWe/CiR9hUIyiZuE8rIIA
-	 G9uOk+b0esIuqrTGvhAMMcEsSf98ZX1qWZa3eHXQgb8PwVPj8r/Ap++iOL+FKLvvER
-	 YbordJ7rNySY8w9rt7psw/asxGXbDZIsWmOR+qMWfpgoGZfMR5iIGFc5dIzvTEY8Ce
-	 zsQuQDCUjU8/cK5hHkzlC8N8eigsiRVXIvjEzB3enHSkKeLBwj9sFHy1xb6iKjTXQQ
-	 tnMSdHb4z2Vqw==
+	b=PgooU7XriqyhC+E8R/APdTiVVRMvVR1dD4MV6pzNLmX7xrlmTLaP2wl+G5Y9a2buF
+	 5RrVPg6w3CXVhJFWw6Pbt3tyqCLs1BMFv8iKQFm56NTuipoffEfib7+6kOgTJrcFlf
+	 nc+GuMCwnCl7vuKXCrqfeI32rd7HWfbne8CyUA9tgxw5ugYpzarT0XcfsmurnpSiri
+	 uODU0MqKeFIHdMTgyxn/blQ4PhWU6SK5Bw/3kkg0h/DYR2cQSJpMnnrM9Ne3bU3jsZ
+	 mJ24k7TrK4kQWvq3UZC77/OIaF+la1vF20oRwwfR6m4i/O9HLDbRERrnX4RxWZK9/A
+	 IRv+Ztr/medLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1D2E40967;
-	Wed, 17 Jun 2026 17:42:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3958E3A9
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF99A606C2;
+	Wed, 17 Jun 2026 17:42:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C5E83A9
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1EF6F81264
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E0D34011F
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id juT8HQySLrCT for <buildroot@buildroot.org>;
- Wed, 17 Jun 2026 17:42:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2Ay-yCPfCsvA for <buildroot@buildroot.org>;
+ Wed, 17 Jun 2026 17:42:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::331; helo=mail-ot1-x331.google.com;
+ client-ip=2607:f8b0:4864:20::333; helo=mail-ot1-x333.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4537181263
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4537181263
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
- [IPv6:2607:f8b0:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4537181263
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:20 +0000 (UTC)
-Received: by mail-ot1-x331.google.com with SMTP id
- 46e09a7af769-7e6e41cf7aeso20345a34.0
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 10:42:20 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3AB34400FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AB34400FC
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
+ [IPv6:2607:f8b0:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AB34400FC
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 17:42:21 +0000 (UTC)
+Received: by mail-ot1-x333.google.com with SMTP id
+ 46e09a7af769-7e6b5c374e5so31806a34.0
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 10:42:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781718139; x=1782322939;
+ d=1e100.net; s=20251104; t=1781718140; x=1782322940;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=iS7SNuTHLRkmAG+dyPmweOYgWmKSvbXDXadzj46SIAQ=;
- b=U85Ynxi+j9Y/lMr+0NFLDltOYrvoJIDTZFdy99g29wiQdVQ2bxGWeTNoRCUiC6Vu2i
- VBfd+xHfy+BBVCwVTqPs9gqIBwW5yu2VijX877JhoOkPDsLQXYVFoP+3ohobTKvnAKa4
- HXOomRlUuRRDtfm83yn8woAuhIUOox56xqJBPs4/uY8YX0fZVVL8hkp6M5tu48uq0U2o
- mkZ2wRLkJdZZzsj90r+YJhZiQ3Nqh1Hd+Ok8fet0ngfgV63UhUmJT84icVsKyXXD01HY
- nVSWVbMmDFC6llnqR4iQloTXvHmX1Ur/QpKmW1jAkcfbylLUwo4vulWR6ZhqsWc9esrd
- pG0g==
-X-Gm-Message-State: AOJu0Yw5Zq4Q6WwntKxTy756ae7BM0CCWHWjuxRWMi+ZHWx+PfnuKnBN
- LVg3sETnAxeJjR4iVHX6K9VzyX32NFyXwKwYRBN+ScUpRM2uVNJTkKxcYem24tHO
-X-Gm-Gg: Acq92OFFjoTETIYZh5ePpCYQTGiFryYJyc+nM0kD3l29IMIE5VFP3tG32WdGG2PFBIC
- YM/y5n085rQaIWQ5qLjmPlVLhXl7enXhUj1FtdmPK9CMDy7Fqwjto9kNeLsz+lY/vYRFpzdM3LH
- RZKuRqMLHSA8ouE7D1zSz2qtTzavEijYpiCK1/8+0AZkO7alWdhYerZxM0wyWEeUEiiHKTz23YT
- t9K2l1MCHpdwL8l3noytfqNIP1s8oJY11RgIVgXK2SNLT1uqNnyB2oMejUmRrkcagjRQZMCf40E
- yaOm+uzyZuzCBN6tHMvZUdrwI9x8lnGC5kSA+1VFZ9BSwHkkKBEtfIgtdR+076uf6jBljhcuoO3
- 961TDLeFudokCO6himjXp2E/jnEdf6gtNrTPLuG0zzh0P/Wle7VdsFE32Pc67cptvFMueMbEIjt
- 7OPu4arpmukIu3oqzW786stCznfQ2XEFzSpZ0U3vktn6JAWPm5YYm/+hfLSLlPPP8c+NO5R4gXB
- LP01mkfxFQ9LJtrG8Nexu9FJTFSVHWOD5SiAVMvP3CZhMxHaQtsMzFfTHH4iqDWlo67AsBeEUm3
- nsZy6Lg3bRsLV1Y=
-X-Received: by 2002:a05:6830:3817:b0:7e7:990a:62a1 with SMTP id
- 46e09a7af769-7e90c9504b5mr3959883a34.19.1781718138886; 
- Wed, 17 Jun 2026 10:42:18 -0700 (PDT)
+ bh=MX2S6twXG+mVRkoVb5E4Gx/WKIFSFo607lCx8hDUtUU=;
+ b=TVIX2LX/gypkrLQQIPEA5a7Xm2Imst+emOYMiP0J1IrqL6i5n+1VMCP9QdaPP8NSSD
+ oiH0hQzoXtsQJGU+TtyR22ZI66M0kIOq7vsw5dFDpnnKV7ewUCrYoeso+DTvSZ/UhdyU
+ lOIEOTBapPRjcKAJzBPPz6n47CeTQuLizuo27QyY/Or60rRc0hzuDQ0b7jhsmCJDfyok
+ hAy+tkk/NcDStT3nvM2+vvLnJDvGwRhGE/HQrChu3aZg3rtYi7Aq5sj1Bi3vcZD+sjeQ
+ bugEGfIsSkIxc5Qf8Ict7bhk3okOLkJtpEwgwXnGyUonw4QLtG2YPvmT9W3bFTqXMqwr
+ GdAw==
+X-Gm-Message-State: AOJu0YybZl8Kcdh1pIFAw326R+HdGbzQ1+2gH51fusOb4+xknRkw/fBo
+ 8shc1kz9szReXcTCKov8b/VuF1OpJWGm4RhsWrWWAFvNnSDPqZ9AWCXDZFi9aMgG
+X-Gm-Gg: Acq92OFVJSdcj61koWLTWYN+z4VKJ/jDCXaQIjBRLlycV5jd7UB+f1zR0fSDnvYmfgi
+ RG4OGqcY7BzlfZMYjJU6Z/bmaffQe/59GPCz2mJ+wpHXrWlGTzbS2/UxlZ0e07oLRYxSx48g/M2
+ edj8Ks7DIbKBbflqn06vGjYHXzCBhuN+/yN54wyqCXmblWHrxLuy7r2RBQ39KlGIndyK1089zzR
+ rZVtQFaEMX8ePKsWp2jSmbJOHV70+mt4AAyOUPTts5dy+4lTauDa1v+QWptp/mPWzqD1Pl+lugF
+ DtcbD4TFMEAaw/M86b3dMNIXYnTQ0A0z5WsrnamV2UXwaMZgCQ55E0rHRTRTZVP2oO7Cx9SybTa
+ BuDzHkH5WUDVKmUwBX3mb64T3en3XWY2Iama+iMAnVZKVUf/vbENuIaDB7lGDejtvBvqXBkzwcc
+ K8vLo745i54c93nmkbzRTJKkZc3VwWPfcOGuP72OqQ6GpXtjZjhy7kgktwn7/DIZiQZqGSjOjfu
+ tLRP5Ez3v40RK32S2VLWwOrOPSOe4TkZUg9YRT54OHyMuWqgOzqpAmjWEwT9GdxSTAp0KtxVbRy
+ SmlLLT2NGLwqS2Q=
+X-Received: by 2002:a05:6830:6d24:b0:7d7:fd71:f2d4 with SMTP id
+ 46e09a7af769-7e91aaaeb61mr386929a34.3.1781718140076; 
+ Wed, 17 Jun 2026 10:42:20 -0700 (PDT)
 Received: from james-x399.tailafd1a.ts.net (174-29-16-141.hlrn.qwest.net.
  [174.29.16.141]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-7e79f5bb5fcsm10323561a34.9.2026.06.17.10.42.17
+ 46e09a7af769-7e79f5bb5fcsm10323561a34.9.2026.06.17.10.42.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Jun 2026 10:42:18 -0700 (PDT)
+ Wed, 17 Jun 2026 10:42:19 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Jun 2026 11:42:07 -0600
-Message-ID: <20260617174208.3968183-2-james.hilliard1@gmail.com>
+Date: Wed, 17 Jun 2026 11:42:08 -0600
+Message-ID: <20260617174208.3968183-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260617174208.3968183-1-james.hilliard1@gmail.com>
 References: <20260617174208.3968183-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1781718139; x=1782322939; darn=buildroot.org;
+ d=gmail.com; s=20251104; t=1781718140; x=1782322940; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=iS7SNuTHLRkmAG+dyPmweOYgWmKSvbXDXadzj46SIAQ=;
- b=XxsCe/b1MUV7ThXTc+uaz7hHsIHC9VWZd54kJpl46wU97xzvHqm/piESAKw35kAtPQ
- NtwHA4j3t6eQoJy1nEGcVa1DU/nC2CsFOByd3y534nxTs6iHTxYgMdPPOwKgxEm7Sikl
- 4zFp6Ivvq7zzWk7PjcvwVM6kYoEkSNgcCFWp7xh9Z2dc/wulUVt6XdnscF6aeiZM0P5I
- YnQn8bM7iPbZt3rN/6DWoKdc79HxKgephjrdai+jzq1o1QztiAjWl5YYPgM6hjbFKYL2
- b5gCyuq4dZT/3w15rPiDqs+O/nfK9HAItb6B0JN1NU+Dzmt0e2ddV3qQnhl63DU3MPhB
- Nd0A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=MX2S6twXG+mVRkoVb5E4Gx/WKIFSFo607lCx8hDUtUU=;
+ b=ToHIJX1HmCE/5uB8HeNSdqzbZkbCSNmi4vWmtRHFn6W+Q26BD85LytI1GEay0tKDKn
+ YT8oJAberi+x8H2MgF49tQ0HG3cd3yBHFgdpStHN9xHQJG3VEcIdXnaoz7sM0qkUq4HM
+ ZgzBuBU/vko6jETlijj3wwAijb2GO3s0BpWWnEV8Bv9YFMiRc1+QfRR2nAIegUX3lqA8
+ FubQ59ihBvhANOrH6lI+eQxjz1KqPEPv+9yfSY2B3NQENgz5aEeV8682D771fq0h2Ll2
+ lzgBn6Ry056wa/V/aXVDuY96ekwKyCyaumwjipItVF9EZnJ1bCWSD1V3CAhcFk9gZevc
+ hEwg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=XxsCe/b1
-Subject: [Buildroot] [PATCH v2 2/3] package/pkg-python: derive PyPI site
- from blake2b-256 hash
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=ToHIJX1H
+Subject: [Buildroot] [PATCH v2 3/3] package/python-async-timeout: use
+ hash-based PyPI site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,96 +132,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Python packages downloaded from PyPI currently store the complete
-files.pythonhosted.org package path in their .mk file. That path is
-hash-based, so it changes for every version bump and adds churn to
-updates and backports.
+Add the blake2b-256 digest from the PyPI metadata and drop the explicit
+PYTHON_ASYNC_TIMEOUT_SITE assignment.
 
-When a Python package does not define _SITE, derive the hash-based
-files.pythonhosted.org site from the blake2b-256 entry matching the
-package source archive in the package .hash file before the generic
-package infrastructure validates _SITE.
-
-Follow the usual target/host fallback pattern for _SITE, and raise an
-explicit error if no hash file is available or if the hash file does not
-contain a matching blake2b-256 entry.
-
-Update scanpypi to omit generated _SITE assignments so newly generated
-PyPI packages can use the resolver.
+The Python package infrastructure can now derive the hash-based
+files.pythonhosted.org site from the package .hash file.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v1 -> v2:
-  - Follow the usual target/host _SITE fallback pattern.
-  - Drop the /dev/null awk input and guard missing hash files explicitly.
-  - Error out when no matching blake2b-256 entry is found.
----
- docs/manual/adding-packages-python.adoc |  5 +++++
- package/pkg-python.mk                   | 14 ++++++++++++++
- utils/scanpypi                          |  9 ---------
- 3 files changed, 19 insertions(+), 9 deletions(-)
+ package/python-async-timeout/python-async-timeout.hash | 3 ++-
+ package/python-async-timeout/python-async-timeout.mk   | 1 -
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index d6bae299a0..a66af1e7e2 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -82,6 +82,11 @@ All the package metadata information variables that exist in the
- xref:generic-package-reference[generic package infrastructure] also
- exist in the Python infrastructure.
+diff --git a/package/python-async-timeout/python-async-timeout.hash b/package/python-async-timeout/python-async-timeout.hash
+index 451c07de5d..c812b9c6c3 100644
+--- a/package/python-async-timeout/python-async-timeout.hash
++++ b/package/python-async-timeout/python-async-timeout.hash
+@@ -1,5 +1,6 @@
+-# md5, sha256 from https://pypi.org/pypi/async-timeout/json
++# md5, sha256, blake2b-256 from https://pypi.org/pypi/async-timeout/json
+ md5  566a39011e87cb8044ee75369e69b327  async_timeout-5.0.1.tar.gz
+ sha256  d9321a7a3d5a6a5e187e824d2fa0793ce379a202935782d555d6e9d2735677d3  async_timeout-5.0.1.tar.gz
++blake2b-256  a5ae136395dfbfe00dfc94da3f3e136d0b13f394cba8f4841120e34226265780  async_timeout-5.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e18d7bb8f513e2c46bb585c94b585bd30720dd3ccb21ddb0786f72d16658f92c  LICENSE
+diff --git a/package/python-async-timeout/python-async-timeout.mk b/package/python-async-timeout/python-async-timeout.mk
+index 2835368003..017ea548b5 100644
+--- a/package/python-async-timeout/python-async-timeout.mk
++++ b/package/python-async-timeout/python-async-timeout.mk
+@@ -6,7 +6,6 @@
  
-+For Python packages downloaded from PyPI, the +PYTHON_FOO_SITE+ variable
-+can be omitted when the package +.hash+ file contains a +blake2b-256+
-+hash for the source archive. Buildroot derives the hash-based
-+files.pythonhosted.org URL from that hash.
-+
- Note that:
- 
-  * It is not necessary to add +python+ or +host-python+ in the
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 32ace4aac1..a301b0501c 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -454,6 +454,20 @@ endif
- 
- endif # host / target
- 
-+ifndef $(2)_SITE
-+ ifdef $(3)_SITE
-+  $(2)_SITE = $$($(3)_SITE)
-+ else
-+  $(2)_SITE = $$(strip $$(if $$(strip $$($(2)_HASH_FILES)),\
-+	$$(or $$(shell \
-+		awk -v filename="$$(notdir $$($(2)_SOURCE))" \
-+			'$$$$1 == "blake2b-256" && $$$$3 == filename { h = $$$$2; printf "https://files.pythonhosted.org/packages/%s/%s/%s", substr(h, 1, 2), substr(h, 3, 2), substr(h, 5); exit }' \
-+			$$($(2)_HASH_FILES)),\
-+		$$(error $(2)_SITE must be set or $$($(2)_HASH_FILES) must contain a blake2b-256 hash for $$($(2)_SOURCE))),\
-+	$$(error $(2)_SITE must be set or a hash file must exist to derive the PyPI site)))
-+ endif
-+endif
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
-diff --git a/utils/scanpypi b/utils/scanpypi
-index de658328fe..63b8f8f4d0 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -495,15 +495,6 @@ class BuildrootPackage():
-                 filename=targz)
-             lines.append(targz_line)
- 
--        if self.filename not in self.url:
--            # Sometimes the filename is in the url, sometimes it's not
--            site_url = self.url
--        else:
--            site_url = self.url[:self.url.find(self.filename)]
--        site_line = '{name}_SITE = {url}'.format(name=self.mk_name,
--                                                 url=site_url)
--        site_line = site_line.rstrip('/') + '\n'
--        lines.append(site_line)
-         return lines
- 
-     def __create_mk_setup(self):
+ PYTHON_ASYNC_TIMEOUT_VERSION = 5.0.1
+ PYTHON_ASYNC_TIMEOUT_SOURCE = async_timeout-$(PYTHON_ASYNC_TIMEOUT_VERSION).tar.gz
+-PYTHON_ASYNC_TIMEOUT_SITE = https://files.pythonhosted.org/packages/a5/ae/136395dfbfe00dfc94da3f3e136d0b13f394cba8f4841120e34226265780
+ PYTHON_ASYNC_TIMEOUT_LICENSE = Apache-2.0
+ PYTHON_ASYNC_TIMEOUT_LICENSE_FILES = LICENSE
+ PYTHON_ASYNC_TIMEOUT_SETUP_TYPE = setuptools
 -- 
 2.53.0
 
