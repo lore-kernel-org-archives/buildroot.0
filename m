@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232CFCD98E2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 13:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7C77CD98E4
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 13:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CDC04A397;
-	Wed, 17 Jun 2026 13:16:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7925385A52;
+	Wed, 17 Jun 2026 13:16:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DzwnizpZrNUM; Wed, 17 Jun 2026 13:16:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SeBCoxn9MtZe; Wed, 17 Jun 2026 13:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C5C24917A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF7E85A3A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781702213;
-	bh=m8/EvlDziHgvoga81Riu3KoKe1YiHAkdZp0EEdvboUY=;
+	s=default; t=1781702216;
+	bh=Yg1FepjT+lnLeUcCh1vpfSxlI8lUwUSckDFthb//bzM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FJJqqRcvDj/APwramnpp1MSHeYI3wpVkFbwE4rwtFRgWIvdibAnn0YS12qsfJdr/b
-	 QNCsGHhLMfFU25TLiP964qFxofD6OmCGBeKt2bslI+WPaEkIswMqd/8T0N8RJJbchO
-	 ppidwFgDzPAefyezLoSZfYOyvQUx5SoVltWR3GDPVb35VqUtTRFBYjVBRjbk4YHFJX
-	 PunvJY31zCNUf+XZt2sSZHCQ1MmYAPm0WZi1hM5fD5dCBVrRyuzOSaUkzlkG0cS/cN
-	 5/Bvb79hgnMPOQkQvknV+cFI1vTwz4+O1L+X3FXriv31IqfgdNYFKq/5aXPLFOTPKz
-	 ThZLPido09Q3g==
+	b=Pg+eMZUpSO64egoDkGIoFyi5oNK1cxmRWF6hdCjM3XjwEZlJB6cvcKtiyT7nXO4/9
+	 W35m8ngmNGzarz4wj3no7vaOyScWurVpocxgmw9O+oWlmFc9ucWEE3H/SwjvKod8fp
+	 /LGmsS944jOvuBEBjhQaEcFsaIGlk+R7wZIxU0H9/wEzPFigExNoBb23wVIDhTo/+u
+	 qaXz51OanCq38BheptU9zcKYPbotUsT5Wj+Em5zV6sWNm8AX7wOn37V8pNE1at7lgd
+	 HYOgt4QCt/JiwyE7DqhvW1+/jjS3mOjpZD81b0TqRTswuwVjszdfP1lh0D5/7vyASM
+	 xmZ48r8UV2h1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C5C24917A;
-	Wed, 17 Jun 2026 13:16:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DB30D8
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 13:16:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AF7E85A3A;
+	Wed, 17 Jun 2026 13:16:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6403D33C
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 13:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B827859FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5909285A24
  for <buildroot@buildroot.org>; Wed, 17 Jun 2026 13:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fqLO7MuAH3EP for <buildroot@buildroot.org>;
+ id SpsCBNr0wWlV for <buildroot@buildroot.org>;
  Wed, 17 Jun 2026 13:16:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6650859FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 991B3859EC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6650859FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 991B3859EC
  for <buildroot@buildroot.org>; Wed, 17 Jun 2026 13:16:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E63298121B; Wed, 17 Jun 2026 13:16:29 +0000 (UTC)
+ id EEC568121C; Wed, 17 Jun 2026 13:16:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Jun 2026 15:14:11 +0200
+Date: Wed, 17 Jun 2026 15:15:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c80df91c20b0d4dd5846a4f78ea90a6ab83c178
-X-Git-Newrev: 8536a5d04a6a83d9ec4b4922b99c14a7c4a8ae92
+X-Git-Oldrev: 8536a5d04a6a83d9ec4b4922b99c14a7c4a8ae92
+X-Git-Newrev: c0f95301ec29ae14a8b1ce36ab752e786d7397ab
 X-Patchwork-Hint: ignore
-Message-Id: <20260617131629.E63298121B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: install upstream main.conf
+Message-Id: <20260617131629.EEC568121C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iwd: make openresolv optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,51 +76,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8536a5d04a6a83d9ec4b4922b99c14a7c4a8ae92
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c0f95301ec29ae14a8b1ce36ab752e786d7397ab
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Note this changes EnableNetworkConfiguration from true to false
-according to the upstream default, users who want a standalone iwd
-setup which handles DHCP will need to adjust the config. Adjusting
-NameResolvingService according to selected packages is unlikely to
-have unexpected effects, so keep that.
-
-This makes iwd work as a drop-in replacement for wpa_supplicant with
-NetworkManager.
+In a standalone iwd setup having openresolv or systemd-resolved to
+apply DNS config is useful, but if iwd is used with another network
+management service (e.g. NetworkManager) the dependency is
+unnecessary.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/iwd/iwd.mk    | 4 ++--
- package/iwd/main.conf | 5 -----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/iwd/Config.in | 6 ++++--
+ package/iwd/iwd.mk    | 4 ++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+index d8fb6a6ea0..eaaae8d865 100644
+--- a/package/iwd/Config.in
++++ b/package/iwd/Config.in
+@@ -7,10 +7,12 @@ config BR2_PACKAGE_IWD
+ 	depends on BR2_USE_WCHAR # ell
+ 	select BR2_PACKAGE_DBUS # runtime
+ 	select BR2_PACKAGE_ELL
+-	select BR2_PACKAGE_OPENRESOLV if !BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	help
+ 	  iNet Wireless daemon (iwd)
+-	  Enable the readline package to enable the iwctl tool.
++
++	  Enable the readline package to enable the iwctl tool. If you
++	  want to use iwd standalone, you probably also want
++	  openresolv or systemd-resolved to handle DNS configuration.
+ 
+ 	  https://iwd.wiki.kernel.org/
+ 
 diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index caecb62d64..76cc00fd22 100644
+index 76cc00fd22..8f662ce5e5 100644
 --- a/package/iwd/iwd.mk
 +++ b/package/iwd/iwd.mk
-@@ -51,8 +51,8 @@ IWD_CONF_OPTS += --disable-monitor
+@@ -38,7 +38,11 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+ IWD_RESOLV_SERVICE = systemd
+ else
++ifeq ($(BR2_PACKAGE_OPENRESOLV),y)
+ IWD_RESOLV_SERVICE = resolvconf
++else
++IWD_RESOLV_SERVICE = none
++endif
  endif
  
- define IWD_INSTALL_CONFIG_FILE
--	$(INSTALL) -D -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
--	$(SED) 's,__RESOLV_SERVICE__,$(IWD_RESOLV_SERVICE),' $(TARGET_DIR)/etc/iwd/main.conf
-+	$(INSTALL) -D -m 644 $(@D)/doc/main.conf $(TARGET_DIR)/etc/iwd/main.conf
-+	$(SED) 's,#\?\(NameResolvingService\)=.*,\1=$(IWD_RESOLV_SERVICE),' $(TARGET_DIR)/etc/iwd/main.conf
- endef
- 
- IWD_POST_INSTALL_TARGET_HOOKS += IWD_INSTALL_CONFIG_FILE
-diff --git a/package/iwd/main.conf b/package/iwd/main.conf
-deleted file mode 100644
-index 22c1cd7339..0000000000
---- a/package/iwd/main.conf
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# use built-in dhcp client
--[General]
--EnableNetworkConfiguration=true
--[Network]
--NameResolvingService=__RESOLV_SERVICE__
+ ifeq ($(BR2_PACKAGE_IWD_IWMON),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
