@@ -4,60 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE628CD98E2
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 14:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D52CD98E2
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jun 2026 14:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EAB760F9A;
-	Wed, 17 Jun 2026 14:41:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C99C86F813;
+	Wed, 17 Jun 2026 14:43:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0STlUUREmTz; Wed, 17 Jun 2026 14:41:32 +0000 (UTC)
+ id 7nuppFAVrs0W; Wed, 17 Jun 2026 14:43:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC6D6F762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27F016F77A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781707292;
-	bh=9b/0LD/rAaxcos8F8MN8rpS4pVUML2har1ijXH7wraQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Yp3zRLuj45eKC/T3qhpJJI61wuEJL72p8hf+3fkWbSlsuUoSd3B1wBrrRcPp5+5MT
-	 vFfILM64ZWjwOpiawWsnItmaZF2iMJM7FKFV+ZO5AyfEeOT44HHoBo4N/dMCna6Y6w
-	 mqycOckmTCJCkoohdMl3YH4q1cFYrV7uyB+xMVVqXWO7GNu52e4/tZ5hUdAAtUfM/i
-	 yHNYa/hRelyqYHoYL1NLuLuah2igiA4LrF5FwJSU3VE7ntcGdC+0ibnvT/dffFolFe
-	 h+xK1cryjcsOPxiBKYmOj0puhmO3Z0094yDsL+ah8XLPeclS7noNEzibWWLUT7KAcz
-	 jfvO1QCRaFbVQ==
+	s=default; t=1781707381;
+	bh=58xJ0fJMVapyqZLaexZ6B9xBTKLetaAnBk6jgReaB8A=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=fm42hL5jkZtaSFVF/iEumYw6MsJE73tleQCAatGnuMX4XFaa+JlJrWTAVJ1YE0GSO
+	 eqf0eMe+VpYlOMt+vVBTiBSd56Qv2sEUV+ufvHKuqrBKhy0a65w+p4owH8JyM/RyIJ
+	 DSBEdRZNoz7av5WgRpjNQYnbhstTZ63dPuAVsbww8YdXyU9EGMDnUPwlFjvZJiwTg8
+	 wTZ0Qkok4gZN5HRAgPP05RFDvn+bvXaKW/++wTZNLF2Gm38An6P7KuoNm9LvapvKwl
+	 J5kbzUlfPe+byVxojsIliBLCIS5xzG9bOoaeLcwhQ+9scmtKFCckrJHJJYLfW0DS/l
+	 qXHCRaa+Yp+Cg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAC6D6F762;
-	Wed, 17 Jun 2026 14:41:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 730A4347
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:41:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27F016F77A;
+	Wed, 17 Jun 2026 14:43:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2E03D8
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:42:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59471406A3
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:41:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C89C24EDEB
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:42:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pnrj0l_t8Ndp for <buildroot@buildroot.org>;
- Wed, 17 Jun 2026 14:41:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CF3140145
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CF3140145
- for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:41:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D05D811E8; Wed, 17 Jun 2026 14:41:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 17 Jun 2026 16:41:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c0f95301ec29ae14a8b1ce36ab752e786d7397ab
-X-Git-Newrev: 67449130e9fdd71a38ca26539dddfa8c882b1977
-X-Patchwork-Hint: ignore
-Message-Id: <20260617144107.7D05D811E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual/migrating.adoc: document iwd
- network config change for 2026.08
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qtWvQglfn20d for <buildroot@buildroot.org>;
+ Wed, 17 Jun 2026 14:42:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1287E4ED18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1287E4ED18
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1287E4ED18
+ for <buildroot@buildroot.org>; Wed, 17 Jun 2026 14:42:58 +0000 (UTC)
+Received: from [192.168.178.20] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 608DD2C80C5F;
+ Wed, 17 Jun 2026 16:42:56 +0200 (CEST)
+Message-ID: <5b4df693-df59-4fc5-8a2f-a047eee3b386@bubu1.eu>
+Date: Wed, 17 Jun 2026 16:42:55 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+References: <20260617143527.1442235-1-fiona.klute@gmx.de>
+Content-Language: en-US
+In-Reply-To: <20260617143527.1442235-1-fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1781707376; bh=pdqV+1hU8SzwqWtuAKSrDr9WNvmNYU03KTo8RmWafYI=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=hyR8lQS4gS3367Th9v1QCbqslLJBVNz6vYsqBNjPX6FX9LLvWPHPI9sWIssBBDagD
+ 7vKFTD3058MwyYXg6C9RAcPzFLKk2/kJvYVnSBouZTc4uJ/06Id5Hmt/w0n9hqxTW3
+ k5kQAjIEIzL0jesKSs29oOOS+fQdFiRgPlk46mEGTPysu38Vrol8S81dgs1u1r4C8O
+ /slYiUYGSnybLtvceXEAGnK3K+Q10ymjEXsiHA8nsqUZHY1clmUzNvglszORuFLHl4
+ eO4VThq718Y62YlgsNlEm7tWFtRtme20DRJKP31sfJecg2T2iSGDb1KRkKeqXw0wxv
+ 4Pkp0F/9KY0JQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=hyR8lQS4
+Subject: Re: [Buildroot] [PATCH 1/1] docs/manual/migrating.adoc: document
+ iwd network config change for 2026.08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,43 +93,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/67449130e9fdd71a38ca26539dddfa8c882b1977
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-With 8536a5d04a6a83d9ec4b4922b99c14a7c4a8ae92 the upstream default
-config is used, changing EnableNetworkConfiguration.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- docs/manual/migrating.adoc | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index d8d86d8945..230754be76 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -247,3 +247,14 @@ In 2026.02, the network-manager package stopped selecting the gnutls package as
- a cryptography backend automatically. Manually enable the gnutls or libnss
- package if you require features that depend on a cryptography backend, such as
- certificate-based authentication.
-+
-+[[migrating-to-2026-08]]
-+=== Migration to 2026.08
-+
-+In 2026.08, the iwd package stopped installing a custom
-++/etc/iwd/main.conf+, and started using the upstream example
-+instead. With that the +EnableNetworkConfiguration+ setting changed
-+from +true+ to +false+, in line with upstream defaults. If you need
-++EnableNetworkConfiguration=true+ to let +iwd+ handle network
-+configuration for active wifi connections, adjust +/etc/iwd/main.conf+
-+in your build (see xref:rootfs-custom[] for options).
+On 6/17/26 16:35, Fiona Klute via buildroot wrote:
+> With 8536a5d04a6a83d9ec4b4922b99c14a7c4a8ae92 the upstream default
+> config is used, changing EnableNetworkConfiguration.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> ---
+Applied to master, thanks!
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
