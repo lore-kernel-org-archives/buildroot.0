@@ -1,76 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8231FCD98DE
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 06:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08B67CD98F2
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 06:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8182B83E13;
-	Thu, 18 Jun 2026 06:22:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E7284132D;
+	Thu, 18 Jun 2026 06:42:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dFdctFOJu4EN; Thu, 18 Jun 2026 06:22:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Mw4QT_hpapt; Thu, 18 Jun 2026 06:42:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A10C83BE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 951AF41326
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781763723;
-	bh=H/VLXJJ/8mUrW0Fm/EmSl8zvesubhHh09Rj1cy55WDE=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1781764948;
+	bh=+TOvEA+R2ZFxmimbKj/dB0qf984Oqd+iJ+4/2lU5nyA=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=PmVIbj4l+xjC3soq/ss8k3fVd63bWHBgE4ICXaxw4T7by6xrWosigN2IqKRb+lDoA
-	 r2Pc37Wx/91DSXjf5ILIfgphr+7ghd6R+oRtHoI0DckMWyeaHaT7j09AjQrcitzpC8
-	 P/8/dsX1y4IKMlTnV/ZVIdhdRDoC03SU/OtlB8kJrTDyGH59WEOz+z3JOmjgxzRo64
-	 5Uu1TjE6MmpFZgpokpF/Z8suqZqW0ot/KLmyaVMSD7Su+VEqYVaCdUu3oTi4T/nDO5
-	 scQNYNycBJ5fI+g+FtxKzmO7VbFKp4XEjEpN74veB3YI3QRG2PViUCVrqrqDfq6Uij
-	 NyxPze5ldpLKQ==
+	b=pg0uO2UC5LUhwn/pQgDWjPzRPZRbTO3OiqGt3pEt+p//lwV0tQXOTEOSHhHft0c0X
+	 WzhhyHYXjWvNZa3d0YcTY25DK+CrkUvqFQUne8LGlK+jWCTMX6+102Dsmx1q4//0g2
+	 iQoqzYGBWPbRjDvjDcFY0mw7hHy9jr3jA2cocvOMxMdkuuNQ9WBV/dXBvW6CKhNq5L
+	 agvmsdMnpVvS6FsLrDXZPBRa+kqN0yN+a6gV2Y5Ji+EaJwiOOhtBXv7XUbq6H5YU/+
+	 bcThqFil7GcmQdD3bgnsy47mKrfyRIfESZwuL/aV9d9gx6bG74qZLWs1OHWgjYXIKP
+	 jC4fayheDAPdw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A10C83BE5;
-	Thu, 18 Jun 2026 06:22:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 09FFC1F3
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:22:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 951AF41326;
+	Thu, 18 Jun 2026 06:42:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3969A358
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFA2D40D78
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:22:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 159CD41326
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:42:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhbHRInB3HWX for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 06:22:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CD67340D76
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD67340D76
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CD67340D76
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:22:00 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 503DB31E0BA3; Thu, 18 Jun 2026 08:21:58 +0200 (CEST)
-Date: Thu, 18 Jun 2026 08:21:58 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NzNm8YovuuBq for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 06:42:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6716841322
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6716841322
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6716841322
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 06:42:24 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a06cf.dip0.t-ipconnect.de [91.58.6.207])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 433DBA4C0369
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 08:42:21 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50284)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wa6SD-000000003b4-1IRW
+ for buildroot@buildroot.org; Thu, 18 Jun 2026 06:42:20 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Message-ID: <ajOOhpts_SyBkW3C@waldemar-brodkorb.de>
+Date: Thu, 18 Jun 2026 08:42:20 +0200
+Message-ID: <20260618064220.335254-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1781763718; bh=ZTD8gGMzLZSuSyAb2fD0ya9rBpsjoeHZatJ1QCmWpvQ=;
- h=Date:From:To:Subject:From;
- b=wFjwswRrJ3TmRnJsni65yTTYjmzZ1hMOZyvj1GdJxiilcJqDiT5UG2Tf+MpL1mHnT
- V/eiP2nppYGAzVyKU/NRFccfQ11ZADp4RZVE+AYYvtxILI5OcESMB5UEsaFxYTcfja
- yp6c1LyWcPk0B7k4bsoOpVG6RFjo7eGOz0HtX+yJUwM9Nz4K/wZ/P2+9S9e9sfhShw
- WGYL7T08Fq/uCl3H2CAAodmnR41/ye1A/zbIClsj6t4vWF2Md3jUVcKWSeztjS8A9S
- OBZIlEmMFTYXRo2NfF4ehwLRDXdVOo3W5aAP5fnf9CZQdHkZmcbH5Qjj/eQly3NC3q
- nLm4sXFDIkR1Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: [Buildroot] [PATCH 2025.02.x] package/openssl: security bump to
- 3.5.7
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1781764941;
+ bh=mQOlYFCyM9IIWSAjLYF6qOIGm63KVnn/f19gUf0PUM8=;
+ h=From:To:Subject:Date:From;
+ b=n6r+N7wyrsz2NbWzS1bmOOy53+6F66ZVxjhb9Rp9h9qWzgBOpO3KAaoV8YPo7/mIo
+ gXadrjey4ObZyNFzx4GcbSvXnkl3mgNFvr+x8hggdn5xONt77dWeuGSX7/lfyhH9Qq
+ KEhYe3wjTFB7xwghDhHU72ICGZD06D6qu4E+icOEdwjbTquAs4m9c1umLwYr6WYFJl
+ bBtIDAord61J+JGMEyaKa3ojjfs53/unSAuBpZKEad2ktivuPfRWe6klzNulXJAgPQ
+ hfq8vNsj0XbKpQzAbe8WYRl+ZNbBp+ILIULrRQvY6ZOOTqdhfRQG+4bpn4WVQ7v3dT
+ 91eL/VbpGJZuQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=n6r+N7wy
+Subject: [Buildroot] [PATCH 1/1] package/net-tools: fix build with linux 7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,90 +96,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for changes:
-https://github.com/openssl/openssl/releases/tag/openssl-3.5.7
+Fixes build error
 
-This release incorporates the following bug fixes and mitigations:
+rose.c:41:10: fatal error: linux/rose.h: No such file or directory
+   41 | #include <linux/rose.h>
 
-    Fixed heap use-after-free in PKCS7_verify().
-    (CVE-2026-45447)
+caused by the upstream removal of the ax25 and amateur radio (hamradio)
+subsystem:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-7.1.y&id=dd8d4bc28ad7252610d8e79c1313a2d1e3499a51
 
-    Fixed CMS AuthEnvelopedData processing may accept forged messages.
-    (CVE-2026-34182)
+which was added to buildroot with commit
+9530d74ddb04d5fc81f9054ec0e76fbcb2a1e7d2.
 
-    Fixed unbounded memory growth in the QUIC PATH_CHALLENGE handler.
-    (CVE-2026-34183)
+For details see https://github.com/ecki/net-tools/issues/69
 
-    Fixed NULL pointer dereference in QUIC server initial packet handling.
-    (CVE-2026-42764)
+Fixes:
+https://autobuild.buildroot.net/results/6c7/6c7783e3b6dad01b5dd725141ebed2b84242051e/
 
-    Fixed AES-OCB IV ignored on EVP_Cipher() path.
-    (CVE-2026-45445)
-
-    Fixed possible heap buffer overflow in ASN.1 multibyte string conversion.
-    (CVE-2026-7383)
-
-    Fixed out-of-bounds read in CMS password-based decryption.
-    (CVE-2026-9076)
-
-    Fixed heap buffer over-read in ASN.1 content parsing.
-    (CVE-2026-34180)
-
-    Fixed PKCS#12 files with PBMAC1 are accepted with short HMAC keys.
-    (CVE-2026-34181)
-
-    Fixed possible NULL dereference in password-dased CMS decryption.
-    (CVE-2026-42766)
-
-    Fixed NULL pointer dereference in CRMF EncryptedValue decryption.
-    (CVE-2026-42767)
-
-    Fixed multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt()
-    and PKCS7_decrypt().
-    (CVE-2026-42768)
-
-    Fixed trust anchor substitution via cert/issuer typo in CMP
-    rootCaKeyUpdate.
-    (CVE-2026-42769)
-
-    Fixed FFC-DH peer validation uses attacker-supplied q.
-    (CVE-2026-42770)
-
-    Fixed incorrect tag processing for empty messages in AES-GCM-SIV
-    and AES-SIV modes.
-    (CVE-2026-45446)
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/net-tools/net-tools.mk | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 781701532d..8a7186d669 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openssl/openssl/releases/download/openssl-3.5.6/openssl-3.5.6.tar.gz.sha256
--sha256  deae7c80cba99c4b4f940ecadb3c3338b13cb77418409238e57d7f31f2a3b736  openssl-3.5.6.tar.gz
-+# From https://github.com/openssl/openssl/releases/download/openssl-3.5.7/openssl-3.5.7.tar.gz.sha256
-+sha256  a8c0d28a529ca480f9f36cf5792e2cd21984552a3c8e4aa11a24aa31aeac98e8  openssl-3.5.7.tar.gz
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 344abee8b3..e208a78e71 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -32,7 +32,17 @@ define NET_TOOLS_ENABLE_IPV6
+ 	$(SED) 's:_AFINET6 0:_AFINET6 1:' $(@D)/config.h
+ endef
  
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 837c3f0346..a9e18f96ac 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1),y)
++define NET_TOOLS_DISABLE_ROSE
++	$(SED) 's:HAVE_AFROSE 1:HAVE_AFROSE 0:' \
++	-e 's:HAVE_HWROSE 1:HAVE_HWROSE 0:' $(@D)/config.h
++endef
++endif
++
++NET_TOOLS_POST_CONFIGURE_HOOKS += \
++	NET_TOOLS_DISABLE_ROSE \
++	NET_TOOLS_ENABLE_I18N \
++	NET_TOOLS_ENABLE_IPV6
  
--LIBOPENSSL_VERSION = 3.5.6
-+LIBOPENSSL_VERSION = 3.5.7
- LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+ define NET_TOOLS_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
 -- 
 2.47.3
 
