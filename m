@@ -4,106 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B326BCD98F6
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 15:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03623CD98F2
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 15:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 607D5611EB;
-	Thu, 18 Jun 2026 15:00:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B036661385;
+	Thu, 18 Jun 2026 15:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7reRPgQCgiJP; Thu, 18 Jun 2026 15:00:08 +0000 (UTC)
+ id P9IVBKVtApMk; Thu, 18 Jun 2026 15:38:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA71612D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD3306137E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781794808;
-	bh=p6LVhnHt7+guG827jppKZXPzk10A13ugnS2H4cteiI8=;
-	h=From:Date:To:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1781797130;
+	bh=P9hQDpjawXQKL4sKhq0A6v15E8dJD23SdrOmNdbR3vM=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=hSVgg3EjQdsPTmZFmsYi0Lo6FwHqJEscjifii+AhP1QoY2DxVCjSmwMYqLosSvTUT
-	 7XyZENKpBZyFJQSmCVO17bAd5HQtu6fQWPYXkAqo16CwbPRHVwrxY3+BtTQtc50suU
-	 dKETEKhpF5MdoNqLfPGRa2wuIM8DezIJjeLtZdhUE8iALUQ+gv0Ar2tsKG+UPgbHem
-	 zyMf+Du17d22ZWtJQKYeq6DIgAFTe83KRvOhNVAC8xak6giS/8EA92jPHPr1Wj7SHR
-	 DOlfsrue7XDjErLXaJ/r7qnSW7WHBBm9A9H8zNnDxVEska/iq9rlKYDobDTv6VkXFj
-	 ml8ERv13X2jKg==
+	 From;
+	b=Vhp3xv3WQeBho7YsjTeRumsUaI575TOCeK73PZiaPpUVOWO3LaHdZ56maL3WTSV1N
+	 m0efrra0l4nZkPrv+Se2sc91/F9y6z9Q26rIX4qxq5yMI4rC29uJbFUfw0esMOqO45
+	 lvKMbZfLhf8ok+oSGP58snqnvB7Gs2PjOLWE7hcBpmrx8IfMeWr/cjGloqh/NsAlkg
+	 dZRb3qMyTA8ZUA4u/JwUsyMRZZ9YcNQ738pRieLjSEyCfmhtQNUMlna4XpH5Ws5uT8
+	 mwVMYcPtrniE0/L2P2Choh8C0JL426/QjH2rCm4WZzHfgpmPJMYn4PjtKNjEMTA9TQ
+	 4W9+LKA9F4NkA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA71612D2;
-	Thu, 18 Jun 2026 15:00:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42ACB1F3
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:00:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD3306137E;
+	Thu, 18 Jun 2026 15:38:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 645DD2BA
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28A8083AA6
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:00:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E96640EEB
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:38:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6KlZMsP9R2El for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 15:00:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA9FD83AA0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA9FD83AA0
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA9FD83AA0
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:00:05 +0000 (UTC)
-X-CSE-ConnectionGUID: wuQa4/o5Qleer3vgQjBAwg==
-X-CSE-MsgGUID: F4tVuY9fTCOW4vvHwK4e3A==
-Received: from unknown (HELO opfedv3rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 18 Jun 2026 17:00:02 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2026 17:00:01 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Thu, 18 Jun 2026 17:00:00 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Thu, 18 Jun 2026 16:59:59 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: unxODyPCR/GabUZ2paxIJQ==
-X-CSE-MsgGUID: /lHL1Wz/Tn2SkkRIwmjt4w==
-X-IronPort-AV: E=Sophos;i="6.24,211,1774306800"; d="scan'208";a="436641211"
-X-Amp-Result: SKIPPED(no attachment in message)
-Date: Thu, 18 Jun 2026 16:59:59 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lRYtAwkeleMD for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 15:38:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6019140F35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6019140F35
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6019140F35
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 15:38:48 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-399389dae7fso11273901fa.0
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 08:38:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781797126; x=1782401926;
+ h=user-agent:mime-version:date:organization:references:in-reply-to:cc
+ :to:from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=+IDS1zrwlweO9q560r6OlyRDnJM6hhSQ56nhaf9mhCk=;
+ b=C0JbapGPOWbPAz+aWc4kgKszu6C+BrKqy2xaxtRfTn0wXeUmBiQ+mloLSVLbkhp9ga
+ xF9NTDAIRj0t6neclQaOxfj6vV//jbtuSWwR9y9vAkhYyR3uv0e82aCWo+1tGw6LRNQZ
+ WOe7RnJhqLpkMUr6/hg3tCQptCktXybENL5IIXC92GgUfRdFG+DUvu9oAaHgWHZmdlMw
+ E9qJNsUnqrjqg+6Kjg3eAtbHDzmJYarmk2TEA0LsdbQX+2VSzcEGAekXX4s1tYGZZ7RP
+ viueS2a+jfSdycMCuPB+Ajz+1z8iWt1rhVqF3n1Mi2y4YxMY+Qdh7HUW4NIetxyazcm5
+ +Q2Q==
+X-Gm-Message-State: AOJu0YwuhEopiP2WzM0a6xdv6cVstQycWeQ/x2fD/fGrS6gkN+u+7G4A
+ udd0iiTUks7dS5ePyBZ6cVPP9c1Cw4pvR5Ln6Yb51U1j5yTYULaeCViot0mB7Q==
+X-Gm-Gg: AfdE7cm6IfYZDm5IoO2vKmI1F3B+JviQ3t4OEyLCJt6TUovLqHdWDL4oEKcQs97wwty
+ qGDFV3ln5fpmorLvevY537O3uhfkJOQDThUlPuYKalee5q2HdD3urPG3G5m0XVnJdjvZcwy4QKn
+ Jumn1LAWPMLwZtX9xs7YgNiUW8PktdMDI/YcfM4rOrHdpYYGLvjW6As3QZMVFc6o2a6RAAdE1HO
+ ZpzaLdV3W8sU/C+2BDHppsMD0ZjHVi00Uy+5ZbtX3CIvodE5cLCDZTuJakGlJTQDmktUab2WOwk
+ KCKTGDzNpFChNwzRZKLEXEr991zUrmvClBRVZjYHEi3nKnwJSQxoU8woQod/pt/Gr/dLMKkkQIr
+ PwFuLvA6Cr90hqQyvGvn5x5TWXneB9C0OrnFgy1fzc1G51/bFddec/s2x+Wt2cBh5x+6anDyXFN
+ I6LdoJrjkfX5pGPI4C59cmCzwqRSiiR6oSv5Iz6HJCWZ0Yoqx5HNby
+X-Received: by 2002:a2e:bc28:0:b0:38e:8082:63fe with SMTP id
+ 38308e7fff4ca-3997761d4cdmr12859461fa.11.1781797125749; 
+ Thu, 18 Jun 2026 08:38:45 -0700 (PDT)
+Received: from [192.168.0.42] (h-158-174-22-86.NA.cust.bahnhof.se.
+ [158.174.22.86]) by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-39973801cedsm12504531fa.40.2026.06.18.08.38.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 18 Jun 2026 08:38:44 -0700 (PDT)
+Message-ID: <858fbaec338f0231fb1bdac2fd0bbcc645565add.camel@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
 To: Marcus Hoffmann <buildroot@bubu1.eu>
-Message-ID: <ajQH75Zam4xELadz@yd-6wlzhs3>
-References: <20260617174208.3968183-1-james.hilliard1@gmail.com>
- <ajOHeaIobPebbK+f@yd-6wlzhs3>
- <9b0c655b-ff65-4841-9390-43515fb06d56@bubu1.eu>
+Cc: buildroot@buildroot.org
+In-Reply-To: <61a708aa-e992-4b77-9d50-adff450cb378@bubu1.eu>
+References: <20260606182032.3803327-1-fiona.klute@gmx.de>
+ <61a708aa-e992-4b77-9d50-adff450cb378@bubu1.eu>
+Organization: wires.se
+Date: Thu, 18 Jun 2026 17:38:44 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <9b0c655b-ff65-4841-9390-43515fb06d56@bubu1.eu>
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX503.corporate.adroot.infra.ftgroup
- (10.115.26.27) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1781794806; x=1813330806;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=yz72WuhXixv39aGcKq/m35XhvUuexUjqmu6xKd7XOp4=;
- b=gTOTYlLFFh/aU6SB5vz0+GM1/R1b/ubZmVbeEouHltxlQDmWgMw775lK
- 3CEVgFT7JzUnIvFxu2SObACwcaATr4BP5C7hb6q0amtiJNHPSZS5X+agU
- ynSPlWMy9C2RB5Uh4Z5g2RuU64Ywm8VJbwrwzxhl/c6wHHKkyC4oPr3dO
- ryr7bmnYZ3+ZViJpWyBoLfNs0kfvEOfN7s/D4i5vOMduN9TAFfSyD3YPC
- 5SLqx5gvw2uG49v58avxr5CNLovlACBLzg4x/s7MIH4Io5g7403xln3cO
- Di7wxwTCo0I2ht3b8QDawu7X36FJGJNsjbM12JzztmfaQ+2qCcjs3feqW
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20251104; t=1781797126; x=1782401926; darn=buildroot.org;
+ h=user-agent:mime-version:date:organization:references:in-reply-to:cc
+ :to:from:subject:message-id:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+IDS1zrwlweO9q560r6OlyRDnJM6hhSQ56nhaf9mhCk=;
+ b=mvV3a0dX9V1SgFTQiQYObHOxOvURX/65bFAbPLN3I8FpZIj/g1EL4e45cRFx7kS51c
+ BZyb9+yw7WhuFD0g4pVDZrVvrj1CdwPiMIew16ka/2s7uBEyTAN7o9sjB/mbQUNFgv7x
+ nDAhZGpVNnZe7/AmNwfsi7IFLRKWGZYgVjsiRbQyU94jNbv0HByFHP2iRRU0xljkv8gv
+ ee1D1l9N0taIHXqX9UZ7nAJIZzK+YRmfzhOKhVZ9nBgZ8uiex/vR8xJb1030FziacCga
+ 2VOTPexK59zEqqb1cJiDK7hwyma4QYnTv8Sw9amwHxw+tZSthaOPpjCf4QaZKyZxeeKh
+ Pd3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=gTOTYlLF
-Subject: Re: [Buildroot] minimum system/coreutils requirements (was:
- support/download: add blake2b-256 hash support)
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=mvV3a0dX
+Subject: Re: [Buildroot] [PATCH 0/4] fix shellcheck 0.10 & 0.11 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,100 +124,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4316830180935415818=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Marcus, James, All,
 
-On 2026-06-18 16:04 +0200, Marcus Hoffmann spake thusly:
-> On 6/18/26 07:51, yann.morin@orange.com wrote:
-> > On 2026-06-17 11:42 -0600, James Hilliard spake thusly:
-[--SNIP--]
-> > b2sum was only introduced with coreutils 8.26, but we support running on
-> > systems that have an older version: we already check that ln supports
-> > --relative (introduced in 8.16) and that realpath exists (introduced in
-> > 8.15).
-> 
-> Coreutils 8.26 was released almost 10 years ago, 8.15 was released
-> (slightly) over 14 years ago. I wonder at what point we can assume that
-> having a version with the required functionality is a given. 10 years is not
-> thaaat long ago in lts distro terms, I suppose, but even debian
-> old-old-stable has b2sum already. I also wonder if buildroot actually fully
-> works on a 10 or 15 year old system. Without known users or actual automatic
-> tests being run it feels kind of weird to assume it does.
-> 
-> Anyway, thoughts about this? Anyone got actual experience on running
-> buildroot on these old systems? (I'm more on the side of running into
-> breakage on the newest stuff on archlinux)
+--===============4316830180935415818==
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-UHl16le9b+KIX+0XhMri"
 
-Thing is, either we clain we can run on such systems, and so we extend
-the existing checks for those, or we don't claim so and we can drop the
-tests.
 
-But since we have the tests for ln --relative and realpath, we either
-need to raise the requirement for coreutils on the host, or we also need
-to test for b2sum. We can't test for ln -relative and realpath on one
-hand, but not for b2sum on the other.
+--=-UHl16le9b+KIX+0XhMri
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[--SNIP--]
-> It's not super great though because if someone where to add a blake2b hash
-> for a non-python package which then someone would try to build on an old
-> distro it would still break, I think?
+On Wed, 2026-06-17 at 14:28 +0200, Marcus Hoffmann wrote:
+> Joachim, you submitted and are mentioned in the DEVELOPERS file for=20
+> mdnsd, do you think you can submit a runtime test for it?
+>=20
+> https://nightly.buildroot.org/manual.html#_using_the_runtime_tests_framew=
+ork
 
-Sure, but then it would be a bug in Buildroot; as I said, a package that
-adds a blake2 hash would have to have a dependency on
-BR2_COREUTILS_HOST_DEPENDENCY.
+Sure, just went on vacation, so this could a fun little project =F0=9F=99=
+=82
+I'll see what I can do.
 
-Unless of course we decide to raise the bar to require at least
-coreutils 8.26 or later... But since this is not currently the case, I
-think it is easier to also check for b2sum for now...
+Best regards
+ /Joachim
 
-> I guess I'd mostly like to know if this complexity is actually worth it and
-> if we would want to at least define a minimum supported coreutils version
-> which we could bump at some point to get rid of these checks again.
-> Opinions?
 
-Some people did complain in 2019-or-such that they were still running
-with system dating from before 8.15 (released 2012, 7 years before), so
-had issues with ln --relative and/or realpath. That makes for 14-year
-old systems today; even entreprise-grade distros that are that old and
-still in maintenance are few: RHEL 6, released 2011, got EOLed in 2024,
-while RHEL 7 was released 2014 and will get EOLed in 2028...
+--=-UHl16le9b+KIX+0XhMri
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
-In any case I was just pointing to a discrepancy betweeni how we handle
-various tools provided by coreutils... Whatever the eventual outcome, I
-don't care much, as long as it is homogeneous.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Yann E. MORIN.
+iQIzBAABCgAdFiEEShHhOTSGNO9JnOys7Kgmo3tsdAkFAmo0EQMACgkQ7Kgmo3ts
+dAnyKxAAj+CQd6hwCtv5h+8HGlB27x3OCDaA5YFORpY/FK40N3I0B8fsxQgQ3r7Z
+pLLXh3ZptxgAl2Xf2sWGdcqH9IRwJPAPHjgp8fMYT2KEuCrI5Q1Zol512kUQF6id
+3t2XKJa84kB1Jj7gddO4x+f/fFK52eIytAi+JQUwHs7b0GF9rVkk0DogdX9W+kUc
+0SEmkHBkQPM7PpOPwTbdYRHEPHjAA2s3i+dOz+i39gyz6vP+dgpVosE8M6DasXir
+/Yn/koQl0Tc6el+q+RgmbDhyr9rCGxNixg+s8+DI8q4uOaLQhbkL+EWFiYCE9cqu
+PePsCSzfGdDVZWoM9Wbdo8yx5qBGF0yJTmXk2hfyoQVUpJUKY/gehhppvMqEJ+mq
+9znfFGBWHifh7Cs/V/jMDl3iUeoMDFRC54b9tILP4R0JWnR5+QUpWMz8mXyOjmjw
+mJmePnMz/GxqJbCATigpIhn/kpYcRpC9q+lnw93ifM8KOwkPbkYaxSl75oosAk8s
+f5z7yfGQBhhpt12zzTKgUvt86BKswk/Krbv5/0f6wrP/XGD8gSBBH4CEGm33RQdF
+iSPCLCQ5PvWAEqstI4d7wgDieWO0o98jLTiY2Q+3g5sv0xqoZQy/qKE7TECwCf9c
+yJB+KL7xn9CnjhyqyCAh1+nc8HYr7L9E3wXsUxmaIWqPUpVQQNQ=
+=smS/
+-----END PGP SIGNATURE-----
 
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+--=-UHl16le9b+KIX+0XhMri--
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+--===============4316830180935415818==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4316830180935415818==--
