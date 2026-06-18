@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED36CD98F2
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 722A3CD98ED
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB7C6414BE;
-	Thu, 18 Jun 2026 12:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26F3B41673;
+	Thu, 18 Jun 2026 12:50:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fv_mnRzpZT8n; Thu, 18 Jun 2026 12:50:32 +0000 (UTC)
+ id hh9iRoEo2Fb3; Thu, 18 Jun 2026 12:50:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB5B14157B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37A4E4157B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781787032;
-	bh=FCIpBNCRl3zuf+Cr5Y3Ak98PLvOeRiAyGHfnX7rPkGk=;
+	s=default; t=1781787034;
+	bh=PnLUAu3ZVbksFp83VG54UqX4Y3Awhr3QJjzLX3ZyS64=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=hK7rzvy3j+HmTBXDuXfvjDBhk846VAleR/JMwYXPd9FOG6bedhJNr5hkk5Z2i1zbA
-	 o+kNeSieHhT7GuWmDb/6wDLDePCfbeISWmUMGfKMTWtforxh6h2nkxgOT3ap4X/CWp
-	 sRwV68gOQFcbCKQH0PapVHBgPZp5QYJv+yLhCwCDjXk5Ojelp7YLrFq0rCUCGppnk+
-	 /3p0wSVh7pMtCstQyCCd6VQWutlLDWidDp6Lgq7JTBsNAXlv3ninqrAyEMbvM3e6rW
-	 Z4m2Mt5U2HhovAczMY9i+KcC0lR7cet0iq5J8bPHHWuayY9Sk7P24wMAg1eqQc2IdG
-	 BD7sYA6BtVfbw==
+	b=SHUhKte12X01Hdlw8EvKv6FbF7V3/EMBwOIp5HC+El1S07J4eggc6eHIyZaJ0Lvi4
+	 T7QQNkpaOfLiWwTPr7WjLKpnYu4NX0mH7UTPK5PGzG4HXZ/GzqErrSMzK/2Rt041eT
+	 TjsPnU/PT7/mnH6UXrCMqs44TIrinJM30kFesZomiYVWNqS/ySPZgHrRFsMXEOuI6L
+	 XhL/JAgOdyUIzcMzlozHNyNwDNFvzkeAnFzW9qxRdvTh3WVtkBW02PNMVTrLiRfxn4
+	 B+J4yaYuGdd4MOzX4J8Phn1xtfr+aUvNnVnICm80sDEtGNv70nDzcWKbrNVbPp6P3A
+	 WRRJku1dQacYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB5B14157B;
-	Thu, 18 Jun 2026 12:50:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 11CE41F3
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A4E4157B;
+	Thu, 18 Jun 2026 12:50:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9E31131
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 043724063F
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC53F610D3
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OMHsZq3pFSmf for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 12:50:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 94W4YSLX9xq4 for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 12:50:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F72340DA7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F72340DA7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A62E160A97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A62E160A97
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4F72340DA7
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A62E160A97
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:29 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -668223858; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1781169358; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 18 Jun 2026 12:49:54 +0000 (UTC)
+ Thu, 18 Jun 2026 12:49:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1waCBt-0000000CJvp-21iz;
- Thu, 18 Jun 2026 14:49:53 +0200
+ (envelope-from <peko@dell.be.48ers.dk>) id 1waCBt-0000000CJvw-4C1j;
+ Thu, 18 Jun 2026 14:49:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 18 Jun 2026 14:48:11 +0200
-Message-ID: <20260618124835.2935850-20-peter@korsgaard.com>
+Date: Thu, 18 Jun 2026 14:48:12 +0200
+Message-ID: <20260618124835.2935850-21-peter@korsgaard.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260618124835.2935850-1-peter@korsgaard.com>
 References: <20260618124835.2935850-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=m/u/vvNNTXpZxPxVVGlwBq0nxqeunX3+O5jGKUgXfosATXnYL1mhiL/226LuClFe9bGmgMxlEjFpnb7eBnz8c8rCmhEOiuMjw2KxHsJJy57WfWt39ajV8p3vn/3hhEPXuGO4pzlRMhSm/IxyVT4NwvZqAjOkjDAAu9x1e3blhcf86/J1vIa2O3htItLapEDdJfo+nZ1VR0rhSN8aqY8XUMOszm/WyG7m7SjGq1dQnqC64JfzagGBetPK8k31UvKiZnm51/ao1k+BmCV7JTMWa59jIYKZKBCTNqUK8K/VXiQlVqxniuEsNi6L8yrBAWkYAK3+jt2bqOGHIobyZrEnXA==;
+ b=gVXUu8so8aShBWRVQh+qEsUyxqg4QiOXXjGo73Jw1OBGKnGMJZKTBJPpk7YhvBu9yJp5myc+sLdqfafs6UKcLybYiydnk2YlG8P0LMs+trIQv1wqDtDqwuAdcw1bltAagDplv9nUkiSH3dSwMWdYrJHHnKwgVh8zfdBY9Fa5A3jVZJCQA0bKe7skXRvjXUcy6U0RoDE4pI3tZj7mxWrSfH3KqNj1+j/IWggehcqHHDbxUSwifjtKVgVO068vKt/I3M/rsalykFvabSX/oz8DEnKnAGRc/VymiEjVXuZC55A5ZMemlWWFSf9LaZ7114iig18GDcKG6FopX2Y81r4gQg==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=wGpNnTUmboBCFrjqKKLLdZob7aKNb5SgQ67bS04SO9I=;
+ bh=YrMngqMdACjovOX8aMo5+sS0v5c4RNje4gje2CsQYC0=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=m/u/vvNN
+ header.a=rsa-sha256 header.s=purelymail1 header.b=gVXUu8so
 X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 20/29] support/testing: test_nftables.py: use
+Subject: [Buildroot] [PATCH 21/29] support/testing: test_octave.py: use
  assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -93,7 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,40 +103,23 @@ Use the helper to simplify the test.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_nftables.py | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ support/testing/tests/package/test_octave.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_nftables.py b/support/testing/tests/package/test_nftables.py
-index 2622c7e822..62e14d5d35 100644
---- a/support/testing/tests/package/test_nftables.py
-+++ b/support/testing/tests/package/test_nftables.py
-@@ -69,8 +69,7 @@ class TestNftables(infra.basetest.BRTest):
-         # A ping to 127.0.0.2 is expected to fail, because our rule is
-         # supposed to drop it.
-         ping_test_cmd = ping_cmd_prefix + "127.0.0.2"
--        _, exit_code = self.emulator.run(ping_test_cmd)
--        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk(ping_test_cmd)
+diff --git a/support/testing/tests/package/test_octave.py b/support/testing/tests/package/test_octave.py
+index 5c0b26a5fd..ef6516939e 100644
+--- a/support/testing/tests/package/test_octave.py
++++ b/support/testing/tests/package/test_octave.py
+@@ -51,8 +51,7 @@ class TestOctave(infra.basetest.BRTest):
  
-         # We completely delete the table. This should also delete the
-         # chain and the rule.
-@@ -128,8 +127,7 @@ class TestNftablesInit(TestNftables):
-         # should allow ping to 127.0.0.1, but not 127.0.0.2.
-         ping_cmd_prefix = "ping -c 3 -i 0.5 -W 2 "
-         self.assertRunOk(ping_cmd_prefix + "127.0.0.1")
--        _, exit_code = self.emulator.run(ping_cmd_prefix + "127.0.0.2")
+         # Check octave can fail
+         cmd = self.octave_cmd("assert(false)")
+-        _, exit_code = self.emulator.run(cmd)
 -        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk(ping_cmd_prefix + "127.0.0.2")
++        self.assertRunNotOk(cmd)
  
-         # Stop should flush the rules, ping to both addresses should
-         # work now.
-@@ -140,5 +138,4 @@ class TestNftablesInit(TestNftables):
-         # Start is essentially the same as reload, check that
-         # 127.0.0.2 gets blocked again.
-         self.assertRunOk("/etc/init.d/S35nftables start")
--        _, exit_code = self.emulator.run(ping_cmd_prefix + "127.0.0.2")
--        self.assertNotEqual(exit_code, 0)
-+        self.assertRunNotOk(ping_cmd_prefix + "127.0.0.2")
+         # Check string output
+         string = "Hello World"
 -- 
 2.47.3
 
