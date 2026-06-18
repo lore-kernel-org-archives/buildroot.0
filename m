@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4228CDB46F
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7171ACDB466
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:06:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D461861AA;
-	Sat, 20 Jun 2026 09:06:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 416C8861EF;
+	Sat, 20 Jun 2026 09:06:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WXB4e0FuLxDu; Sat, 20 Jun 2026 09:06:51 +0000 (UTC)
+ id 6KH9KZSj7Am0; Sat, 20 Jun 2026 09:06:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60349861C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E63861F8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781946411;
-	bh=H/8g8of6H5gpAPGe4J6ylBepPM8iBqv3FDAEKovKBWY=;
+	s=default; t=1781946413;
+	bh=q/qBJtVD5rqQNXoRjMUqgGUS3/web1cFaxfobp6qH7w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HLcg9xTQUPyd1XZe66rm0L7xBdfheSZ0xlNr5QZtHHQAnga3LdZoXGGVTJJYk7kwN
-	 tXnh50MekqrsDV9OsqOAYn3HtyHkN64YWWpA81ylSQE8LlCsomzzyVdUx67kWeHRXC
-	 VJY6JyYmSzEniPGzqXGN9lD2Y88dnUesId3yodHJ3nIcePRKPgT1tONfLqqC0YkxtY
-	 hqPO4YuwEpOBzBjhq/7FWkxAMqt5KQWA4GC5DwQ97nUZjvaa+bptn+yRcLL7W3JpEJ
-	 +ld2CoIJMGi8fAiBULSJ4ST/gpR4CVVkO7vqa6otyWSlYwUtMVtIIKairb+Cm7NZ16
-	 54zpgAZVcGl9w==
+	b=m0p7krYzaWWnVA8Se/Fq8Vj8slvp5+lW1PYWN6KNjN78Kr8gw7QrdkOCa4jd4ZCAt
+	 WL2gJgmd0267R+d1Lkk+ULrW5OeYTQOYyVUES8pdVz4+swg4HWT6CtMydcZ30Ity93
+	 m98g+kjn078WBa+5ZF2Jlyckis/684vr4AbjI6cxxEBz5VfoUafAdSr5Li+ErPc/g+
+	 clztlMtEu4NKPvphWP6woDmBDQ8hxxzhCZhHu/qyD1jOHIIVjWsnXwUuzdNL13xhXW
+	 CzXR5U+epHN5zE9ZknENLf2eEyAiNm7V1gdp58pcx+D1pFbg4ArsJ3MXo1j5R6xVyf
+	 ZYvqC9xNHrE2g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60349861C8;
-	Sat, 20 Jun 2026 09:06:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8E63861F8;
+	Sat, 20 Jun 2026 09:06:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1405B112A
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF88112A
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D1476FABE
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 768156FAB9
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ejONWBUNqa3m for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 09:06:39 +0000 (UTC)
+ id 2vk6pKroefPH for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 09:06:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 176856FAB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCA9D6FAC1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 176856FAB1
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCA9D6FAC1
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1277C81E43; Sat, 20 Jun 2026 09:06:15 +0000 (UTC)
+ id D86A381E43; Sat, 20 Jun 2026 09:06:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Jun 2026 14:54:02 +0200
+Date: Thu, 18 Jun 2026 14:44:45 +0200
 X-Git-Refname: refs/heads/2026.05.x
-X-Git-Oldrev: ec7ca21032ea54413e4d51aca4c86956ad7b43e1
-X-Git-Newrev: ffc2f56308b743cb1ec13d71b5970957f39363bc
+X-Git-Oldrev: 8b916532b38b6b8e9d1763afc6ff54ef4b55fc7d
+X-Git-Newrev: 9a327dc724931dcc67967ad24a140a2b6431d868
 X-Patchwork-Hint: ignore
-Message-Id: <20260620090615.1277C81E43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.05.x] package/python-django:
- security bump to v6.0.6
+Message-Id: <20260620090614.D86A381E43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.05.x] package/apache: security
+ bump to version 2.4.68
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,64 +72,183 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4850742755848624681=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ffc2f56308b743cb1ec13d71b5970957f39363bc
+--===============4850742755848624681==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a327dc724931dcc67967ad24a140a2b6431d868
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.05.x
 
-See the release notes:
-https://docs.djangoproject.com/en/6.0/releases/6.0.6/
+Fixes the following security issues:
 
-This fixes the following vulnerabilities:
-- CVE-2026-6873 : Signed cookie salt namespace collision
-- CVE-2026-7666 : Potential unencrypted email transmission via STARTTLS
-                  in the SMTP backend
-- CVE-2026-8404 : Potential exposure of private data via case-sensitive
-                  Cache-Control directives
-- CVE-2026-35193: Potential exposure of private data via missing
-                  Vary: Authorization
-- CVE-2026-48587: Potential exposure of private data via whitespace padding
-                  in Vary header
+ *) SECURITY: CVE-2026-49975: mod_http2 denial of service
+     (cve.mitre.org)
+     Memory Allocation with Excessive Size Value vulnerability in
+     Apache HTTP Server's mod_http leads to denial of service via
+     malicious HTTP requests.
+     This issue affects Apache HTTP Server: from 2.4.17 through
+     2.4.67.
+     Credits: Quang Luong of Calif.IO in collaboration with OpenAI
+     Codex
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+  *) SECURITY: CVE-2026-48913: mod_http2 memory corruption when file
+     handles exhausted (cve.mitre.org)
+     Use After Free vulnerability in Apache HTTP Server module
+     mod_http2 when file handles are already exhausted.
+     This issue affects Apache HTTP Server: from 2.4.55 through
+     2.4.67.
+     Credits: Sam Lovejoy, IBM X-Force Offensive Research (XOR)
+
+  *) SECURITY: CVE-2026-44631: Heap Underflow in `ap_regname` via
+     Signed Char Overflow (cve.mitre.org)
+     Buffer Underwrite vulnerability in Apache HTTP Server on crafted
+     regular expressions in the configuration.
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-44186: Loop in `proxy_ftp_handler` in
+     mod_proxy_ftp (cve.mitre.org)
+     Loop with Unreachable Exit Condition ('Infinite Loop')
+     vulnerability in the mod_proxy_ftp module in Apache HTTP Server
+     with an attacker controlled backend FTP server.
+     This issue affects undefined: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-44185: Stack Buffer Over-Read in mod_ssl OCSP
+     `send_request` (cve.mitre.org)
+     Buffer Over-read vulnerability in Apache HTTP Server via
+     outbound OCSP requests to an attacker controlled OCSP server
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-44119: escalation of privilege through
+     expressions in .htaccess in multiple modules (cve.mitre.org)
+     Improper Privilege Management vulnerability in Apache HTTP
+     Server 2.4.67 and earlier allows local .htaccess authors to read
+     files with the privileges of the httpd user.
+     This issue affects Apache HTTP Server: from through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Lucian Nitescu
+
+  *) SECURITY: CVE-2026-43951: OOB Read in `merge_response_headers`
+     can cause crash (cve.mitre.org)
+     Out-of-bounds Read vulnerability in Apache HTTP Server with
+     mod_headers and mod_mime and multiple response languages.
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-42536: mod_xml2enc heap overflow
+     (cve.mitre.org)
+     Heap-based Buffer Overflow vulnerability in Apache HTTP Server
+     withÂ mod_xml2enc, xml2StartParse, and untrusted content
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-42535: mod_dav_fs protected directory access
+     (cve.mitre.org)
+     A path handling issue in mod_dav_fs in Apache 2.4.67 and
+     earlierÂ allows a WebDAV content author to directly manipulate
+     trusted DAV property databases, potentially causing child
+     process crashes.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     this issue.
+     Credits: Zhenpeng (Leo) Lin at depthfirst
+
+  *) SECURITY: CVE-2026-34356: ProxyPassReverseCookieMap buffer
+     overflow (cve.mitre.org)
+     Heap-based Buffer Overflow vulnerability in Apache HTTP Server
+     with malicious backend servers and ProxyPassReverseCookie*
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Arkadi Vainbrand
+
+  *) SECURITY: CVE-2026-34355: mod_proxy_html buffer overflow
+     (cve.mitre.org)
+     A buffer overflow in mod_proxy_html in Apache HTTP Server 2.4.67
+     and earlier allows an attack by an untrusted backend.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     this issue.
+     Credits: Elhanan Haenel
+
+  *) SECURITY: CVE-2026-29170: mod_proxy_ftp XSS (cve.mitre.org)
+     A cross-site scripting vulnerability exists in mod_proxy_ftp's
+     HTML directory list generation in Apache HTTP Server 2.4.67 and
+     earlier when listing FTP directory contents either via forward
+     or reverse proxy configuration.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     this issue.
+     Credits: Pavel Kohout, Aisle Research, Aisle.com
+
+  *) SECURITY: CVE-2026-29167: mod_ldap per-dir use-after-free
+     (cve.mitre.org)
+     Use After Free vulnerability in Apache HTTP Server with mod_ldap
+     in per-directory configuration
+     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
+     Users are recommended to upgrade to version 2.4.68, which fixes
+     the issue.
+     Credits: Pavel Kohout, Aisle Research, Aisle.com
+
+For more details, see the CHANGES file:
+https://downloads.apache.org/httpd/CHANGES_2.4.68
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 00b9069f461075acdf49996b7ecd7c9175dc4ec3)
+(cherry picked from commit 07a690f00b1441cb58f31830beed374af1b016b2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 5af043f2c2..993b7b0d68 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  44c18a8f264c1326e6fe4f1053fea5fc  django-6.0.5.tar.gz
--sha256  bc6d6872e98a2864c836e42edd644b362db311147dd5aa8d5b82ba7a032f5269  django-6.0.5.tar.gz
-+md5  b45e074d29f85e1417fb2d2ea97c2df3  django-6.0.6.tar.gz
-+sha256  ad03916ba59523d781ae5c3f631960c23d69a9d9c43cecda52fc23b47e953713  django-6.0.6.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  be30dc0e3f7010af6c453d205feaece1f89494789b6e92f0c255ef597a1e6864  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index fe88128e24..764e72084c 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 44e2ac24b4..e8ed8c0df6 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://archive.apache.org/dist/httpd/httpd-2.4.67.tar.bz2.{sha256,sha512}
+-sha256  66cd206637b0d5c446fa7dabe75fe03525da8fb55855876c46288cd88b136aa4  httpd-2.4.67.tar.bz2
+-sha512  5ae29fc8edb253453271613cb18754de0d943d1f82361059c81f8ebe1f057b894675506550bd1341bfa9416226b569a7bac08f497c53e8bb6dede87f4f41eae4  httpd-2.4.67.tar.bz2
++# From https://archive.apache.org/dist/httpd/httpd-2.4.68.tar.bz2.{sha256,sha512}
++sha256  68c74d4df38c26bed4dfbdb8f3baf1eb532f3872357becc1bba5d136f6b63c06  httpd-2.4.68.tar.bz2
++sha512  134a5bbd3ffe97523ac750490531bcb9441c532cedf0229aa006aa1368e9d25040507c6f519bed6754044f62c371f7c7f9a11b6a311f79b9680d478bf4373eb3  httpd-2.4.68.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e113088372..2466bc9461 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 6.0.5
-+PYTHON_DJANGO_VERSION = 6.0.6
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js), CC-BY-4.0 (admin svg files)
+-APACHE_VERSION = 2.4.67
++APACHE_VERSION = 2.4.68
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
+
+--===============4850742755848624681==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4850742755848624681==--
