@@ -4,77 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7293DCD98F2
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0AE4CD98F2
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 14:04:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47D944180F;
-	Thu, 18 Jun 2026 12:52:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61AF1411C4;
+	Thu, 18 Jun 2026 14:04:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XF7kHp7T2gK3; Thu, 18 Jun 2026 12:52:44 +0000 (UTC)
+ id vX4YlNZY5Opp; Thu, 18 Jun 2026 14:04:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6357A41813
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6600141118
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781787164;
-	bh=KGdO8ViObMkbXeHXHXutd7Ax8bGIVJ0j6istI7U7CfQ=;
-	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1781791492;
+	bh=47SAgOAhETTN40Gf1YN5bddLz0QbH6Ip6eUxJV5ZEHI=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=ivUhkFS2Cvs+mt9zOAJkCy1+fyv3pwaaNmDYQYUkbtzwNB5kzk7f5O27S544ox3HD
-	 e4UF5qQ361bNQf27IDGjXp6J+6msf4z0sMY5AiDl8gR4gB1GWOsUvJxp+D2aGC0tcG
-	 PG+U1xTnpB3t7Ab7OgQ0OGEzqSk81l9gezCQL91w7Z6CDJTLx3eQMBVZqQlQZbIQn8
-	 cRanrkfGfBK/W8odzb3kfvthYI5IAAFZ0u2kREmbRYF5J4wFy6qXy3UwWoVwWGgYCq
-	 jdoj5D3GGJ6iSOzfCoE5bysbIgpPOLdgIZrabgCXQ82eO+s2iP0Zdwkq58y6F21qmQ
-	 90mQjZ+XiYLTA==
+	 From:Reply-To:From;
+	b=tEaV9xXP00wqUiea7wgcmwu3whZv+YD2cQh/rMKAYFntYx92ObBNfWlLlP5njMMII
+	 CeQ3qExmUKh2YVFsINftZWM6g/Et6WN72txmOjhTxexGdm34EnKvxBE6w/o/dGRk47
+	 tUCMid5GJnBEPprXoPjTFOOmAJScJ8l1zrgLZtl5WU8ppy8RRaWLlyT3dC3AYgS6ZG
+	 tnYM49f+ldM4Xl2kfk0RDI8Qq70b6EAjMazrsVqo1zOE0vd+HXOWl5E+xjsxyEOw/5
+	 hzPoNbwkNrR32kWXk2HeT4yJ6JYodyioLH+2vN3PlXFy8K9wnfouJOAPOt2lzLtYtt
+	 NPLk74TuDAfGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6357A41813;
-	Thu, 18 Jun 2026 12:52:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6600141118;
+	Thu, 18 Jun 2026 14:04:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 55EBF131
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:52:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 301CC183
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 14:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C9438417C
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:52:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21BA083B1B
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 14:04:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c_mhYQhC-CDo for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 12:52:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 317DF83C51
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 317DF83C51
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 317DF83C51
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:52:42 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id A045831E0AFD; Thu, 18 Jun 2026 14:52:39 +0200 (CEST)
-Date: Thu, 18 Jun 2026 14:52:39 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Perale <thomas.perale@mind.be>
-Message-ID: <ajPqFz0Cv0yjCB1b@waldemar-brodkorb.de>
-References: <ajOOhpts_SyBkW3C@waldemar-brodkorb.de>
- <20260618124934.134574-1-thomas.perale@mind.be>
+ id u4jUZ9h8wEiL for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 14:04:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACA6983ADC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACA6983ADC
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACA6983ADC
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 14:04:49 +0000 (UTC)
+Received: from [10.14.240.133] (unknown [45.156.240.98])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id BBEFE2C88EF4;
+ Thu, 18 Jun 2026 16:04:45 +0200 (CEST)
+Message-ID: <9b0c655b-ff65-4841-9390-43515fb06d56@bubu1.eu>
+Date: Thu, 18 Jun 2026 16:04:42 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260618124934.134574-1-thomas.perale@mind.be>
-X-Operating-System: Linux 6.12.90+deb13.1-amd64 x86_64
+User-Agent: Mozilla Thunderbird
+To: yann.morin@orange.com, James Hilliard <james.hilliard1@gmail.com>,
+ Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Thomas Perale <thomas.perale@mind.be>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+References: <20260617174208.3968183-1-james.hilliard1@gmail.com>
+ <ajOHeaIobPebbK+f@yd-6wlzhs3>
+Content-Language: en-US
+In-Reply-To: <ajOHeaIobPebbK+f@yd-6wlzhs3>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1781787159; bh=YTNA2jroQ9EUBET4gcyl1CEpnPvbASvGhzKAbm/HisI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=fWDTh1JjV1UICOi9PP7+qmv7sypzXQQLNr23fx1gJ+tkraUKjPfWnrQt6E8YcnOr5
- sWP/rGcZfOLdJYe+lfY31OdQyPh8vaIlNPuTU8RfZiVGv2MD9vL8GT0bAjndRbeg6b
- c92UDiWkFR4YAGqYd4Z/dQabjOto4o4WVW7sloTe5HzJMU8znQpSHY2ozYm/n8phzc
- 8cYDmEysNtO0GYkmfGOp0XTN+Vo5Zkzjjim+n7Y60NLD/DtZUSz7ce1icOeCItMehF
- yRpR01XoYTFBdJ0W0vYmm3qmrsBhbGe9dHHJYvx7bXhfgHWBtqu3pxT0hYnRVpmms7
- Ui+qTsT/B602A==
+ d=bubu1.eu; s=bubu; 
+ t=1781791486; bh=za17xVBJc0fLVlgkwz5FD0ivFsGT68gm3Gkxmkqp8NY=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=n9w5vhi/Hy3Eg2fnauCQ8aUd9Y+qUmOe7Et1RDcfRgbg01erm9+nDubnvuyCnvQe0
+ JNQ2+kTk8FSs/KW/nFUUn3M9xJESEB8ULfwTkizL1q8Y9CIFm6j2tF4q76QBnkeEIT
+ tkP5I9BwO+gvtDSB2UzbAIfX8k74Bgr4aXdBY00wY/3SSOQdDnChiSH+v0G4UqdcQ2
+ E9GLFJQ9JfjNLucITVoPtuIcZjKIAaTc2sNAYDUHvQkCqJZ2UJjiWD7qQup4xtsrdn
+ P4a8B5hcfiDexGO1qss+P2Hin9SmAk1mesKpzPyZslZSio2bZxyhT+itEVy9gIUgyj
+ Az096xD0pSeOg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/openssl: security bump to
- 3.5.7
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=n9w5vhi/
+Subject: [Buildroot] minimum system/coreutils requirements (was:
+ support/download: add blake2b-256 hash support)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,124 +97,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Hi Yann, James, (Peter et. all),
 
-oh, there was already a patch, I missed it.
-Thanks for applying the openssl update.
+I wondered about the b2sum dependency as well but the conclusion was "a 
+version from 10 years ago is probably fine".
 
-best regards
- Waldemar
+Some discussion on this below.
 
-Thomas Perale wrote,
+On 6/18/26 07:51, yann.morin@orange.com wrote:
+> James, All,
+> 
+> On 2026-06-17 11:42 -0600, James Hilliard spake thusly:
+> [--SNIP--]
+>> Teach the download hash checker to validate blake2b-256 entries using
+>> b2sum -l 256, and update check-package so the new hash type and length
+>> are accepted. Also add the CycloneDX hash spelling so generated SBOMs
+>> can include blake2b-256 hashes from .hash files.
+> [--SNIP--]
+>> +    if [ "${_h}" = "blake2b-256" ]; then
+>> +        _hash="$( b2sum -l 256 "${_file}" |cut -d ' ' -f 1 )"
+> 
+> b2sum was only introduced with coreutils 8.26, but we support running on
+> systems that have an older version: we already check that ln supports
+> --relative (introduced in 8.16) and that realpath exists (introduced in
+> 8.15).
 
-> Hi Waldemar,
+Coreutils 8.26 was released almost 10 years ago, 8.15 was released 
+(slightly) over 14 years ago. I wonder at what point we can assume that 
+having a version with the required functionality is a given. 10 years is 
+not thaaat long ago in lts distro terms, I suppose, but even debian 
+old-old-stable has b2sum already. I also wonder if buildroot actually 
+fully works on a 10 or 15 year old system. Without known users or actual 
+automatic tests being run it feels kind of weird to assume it does.
+
+Anyway, thoughts about this? Anyone got actual experience on running 
+buildroot on these old systems? (I'm more on the side of running into 
+breakage on the newest stuff on archlinux)
+
 > 
-> Will apply https://lore.kernel.org/r/<20260612-openssl-3-5-7-v1-1-093c128bb691@cherry.de>
-> with your comment.
+> So, we probably want to add b2sum to the list of tools to check in
+> support/dependencies/check-host-coreutils.s and then add
+> $(BR2_COREUTILS_HOST_DEPENDENCY) to the dependencies of packages that
+> have a blake2 hash (the python infra can do so, for example).
+
+James already sent a version which does that and it seems okay to merge 
+if anyone actually needs this on old versions.
+
+It's not super great though because if someone where to add a blake2b 
+hash for a non-python package which then someone would try to build on 
+an old distro it would still break, I think?
+
+I guess I'd mostly like to know if this complexity is actually worth it 
+and if we would want to at least define a minimum supported coreutils 
+version which we could bump at some point to get rid of these checks again.
+
+Opinions?
+
 > 
-> Thanks for sending the update.
-> PERALE Thomas
+> Regards,
+> Yann E. MORIN.
 > 
-> In reply of:
-> > See here for changes:
-> > https://github.com/openssl/openssl/releases/tag/openssl-3.5.7
-> > 
-> > This release incorporates the following bug fixes and mitigations:
-> > 
-> >     Fixed heap use-after-free in PKCS7_verify().
-> >     (CVE-2026-45447)
-> > 
-> >     Fixed CMS AuthEnvelopedData processing may accept forged messages.
-> >     (CVE-2026-34182)
-> > 
-> >     Fixed unbounded memory growth in the QUIC PATH_CHALLENGE handler.
-> >     (CVE-2026-34183)
-> > 
-> >     Fixed NULL pointer dereference in QUIC server initial packet handling.
-> >     (CVE-2026-42764)
-> > 
-> >     Fixed AES-OCB IV ignored on EVP_Cipher() path.
-> >     (CVE-2026-45445)
-> > 
-> >     Fixed possible heap buffer overflow in ASN.1 multibyte string conversion.
-> >     (CVE-2026-7383)
-> > 
-> >     Fixed out-of-bounds read in CMS password-based decryption.
-> >     (CVE-2026-9076)
-> > 
-> >     Fixed heap buffer over-read in ASN.1 content parsing.
-> >     (CVE-2026-34180)
-> > 
-> >     Fixed PKCS#12 files with PBMAC1 are accepted with short HMAC keys.
-> >     (CVE-2026-34181)
-> > 
-> >     Fixed possible NULL dereference in password-dased CMS decryption.
-> >     (CVE-2026-42766)
-> > 
-> >     Fixed NULL pointer dereference in CRMF EncryptedValue decryption.
-> >     (CVE-2026-42767)
-> > 
-> >     Fixed multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt()
-> >     and PKCS7_decrypt().
-> >     (CVE-2026-42768)
-> > 
-> >     Fixed trust anchor substitution via cert/issuer typo in CMP
-> >     rootCaKeyUpdate.
-> >     (CVE-2026-42769)
-> > 
-> >     Fixed FFC-DH peer validation uses attacker-supplied q.
-> >     (CVE-2026-42770)
-> > 
-> >     Fixed incorrect tag processing for empty messages in AES-GCM-SIV
-> >     and AES-SIV modes.
-> >     (CVE-2026-45446)
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> > ---
-> >  package/libopenssl/libopenssl.hash | 4 ++--
-> >  package/libopenssl/libopenssl.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-> > index 781701532d..8a7186d669 100644
-> > --- a/package/libopenssl/libopenssl.hash
-> > +++ b/package/libopenssl/libopenssl.hash
-> > @@ -1,5 +1,5 @@
-> > -# From https://github.com/openssl/openssl/releases/download/openssl-3.5.6/openssl-3.5.6.tar.gz.sha256
-> > -sha256  deae7c80cba99c4b4f940ecadb3c3338b13cb77418409238e57d7f31f2a3b736  openssl-3.5.6.tar.gz
-> > +# From https://github.com/openssl/openssl/releases/download/openssl-3.5.7/openssl-3.5.7.tar.gz.sha256
-> > +sha256  a8c0d28a529ca480f9f36cf5792e2cd21984552a3c8e4aa11a24aa31aeac98e8  openssl-3.5.7.tar.gz
-> >  
-> >  # License files
-> >  sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-> > diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-> > index 837c3f0346..a9e18f96ac 100644
-> > --- a/package/libopenssl/libopenssl.mk
-> > +++ b/package/libopenssl/libopenssl.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -LIBOPENSSL_VERSION = 3.5.6
-> > +LIBOPENSSL_VERSION = 3.5.7
-> >  LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
-> >  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
-> >  LIBOPENSSL_LICENSE = Apache-2.0
-> > -- 
-> > 2.47.3
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
