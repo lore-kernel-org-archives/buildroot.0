@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C7BECDB46B
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF04ACDB466
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1DC16FAC3;
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD36B86184;
 	Sat, 20 Jun 2026 09:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bySL-q7pKLmy; Sat, 20 Jun 2026 09:06:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FYgS6TT50HlS; Sat, 20 Jun 2026 09:06:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 057D36FAB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A0188618D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781946397;
-	bh=L+6HmTULNFLqcHYb7b2fZSaS32O9XmzOsxGwyxE3YcE=;
+	s=default; t=1781946395;
+	bh=q3/FyHbDRRLi0Dl8hZs74bt7ZD5jO1uwB8ULjPd7ee4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bmVOI5Cq4PdBNgK/B6oFC+k25/MN0NP2lxAjd4AuqhtRKEUiuPc07rkrn96DW962E
-	 z+bK3XvuCTziBa5/0dCcrSreFr143llM0G7Kqnihf8puPoOpTMa97gi78wciDu7YDX
-	 xKYKYSLJgZBSq220kCDhR2HWQwduMg3voifOwY8+xm0IKkaBuh9XnVieYDxKdexlKf
-	 edusqD6R4yiZfLGpR3A7kdzXqhdmjwlpus6W1TNejr0xD/3vNN1oT4phnG531epOjF
-	 OjjIShI5g4BFybrmz+yqjUi3VXWREGOCJenyFz7dUR2qbn0DDZdDGcvXeF6hcQGPVg
-	 WNJILz1cg5d9w==
+	b=F74/7nAUJc/XXY6MxVK2RWCpKcr7Oxg1OHEEExGVcgJappH0XZVPCF19CySD/H1ZM
+	 S0LsJ+ABo2PMHADosLxki3tWk6eWGoBCsEfoU6/8E7+L3uK/l7Zaia4TOLJmuF9+DA
+	 mtY2KwP2aFc8oavbTSc++Cadi765XOoEYT2C3QlIn2tKOAHgU5rV1590WztCMA20Nk
+	 ZMM84q94BigMsgm9ekBEyhrGpwEXKldTy2uepr6DmeoxVNfOTDytDPSEJ5TX2hyZUH
+	 ZmnqeVMKvbRzcA4Sf1lefpu/uY5sKhgtLmh+DH1nrjOT5c/8sMlAr1ccji6cMoJZT/
+	 phTkfE5RZAhTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 057D36FAB1;
-	Sat, 20 Jun 2026 09:06:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 38DBF367
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A0188618D;
+	Sat, 20 Jun 2026 09:06:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13112112A
  for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F57E401EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0506441A48
  for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W2UtKuqEu6y6 for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 09:06:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LYwA2-o7McAl for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 09:06:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFF9C4019A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2EE240875
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFF9C4019A
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2EE240875
  for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC2CF81E3E; Sat, 20 Jun 2026 09:06:08 +0000 (UTC)
+ id A67B281E3E; Sat, 20 Jun 2026 09:06:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Jun 2026 14:44:42 +0200
+Date: Thu, 18 Jun 2026 14:39:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ef4ba987c5c24e8bcbb50d499cabdcf7511f74c3
-X-Git-Newrev: abd2e88f62aa688a8d147ca2f19d5cb46ee2c0a6
+X-Git-Oldrev: c49ae7216786d3cb62a8e8de5556007b4b539233
+X-Git-Newrev: ef4ba987c5c24e8bcbb50d499cabdcf7511f74c3
 X-Patchwork-Hint: ignore
-Message-Id: <20260620090608.DC2CF81E3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/apache: security
- bump to version 2.4.68
+Message-Id: <20260620090607.A67B281E3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/redis: security
+ bump to v7.2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,183 +72,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0442875261746132562=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0442875261746132562==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/abd2e88f62aa688a8d147ca2f19d5cb46ee2c0a6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ef4ba987c5c24e8bcbb50d499cabdcf7511f74c3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Fixes the following security issues:
+See the release notes:
+https://github.com/redis/redis/blob/7.2.14/00-RELEASENOTES
 
- *) SECURITY: CVE-2026-49975: mod_http2 denial of service
-     (cve.mitre.org)
-     Memory Allocation with Excessive Size Value vulnerability in
-     Apache HTTP Server's mod_http leads to denial of service via
-     malicious HTTP requests.
-     This issue affects Apache HTTP Server: from 2.4.17 through
-     2.4.67.
-     Credits: Quang Luong of Calif.IO in collaboration with OpenAI
-     Codex
+This fixes the following vulnerabilites:
+- CVE-2026-23479:
+    Redis is an in-memory data structure store. In redis-server from 7.2.0
+    until 8.6.3, the unblock client flow does not handle an error return
+    from `processCommandAndResetClient` when re-executing a blocked
+    command. If a blocked client is evicted during this flow, an
+    authenticated attacker can trigger a use-after-free that may lead to
+    remote code execution. This has been patched in version 8.6.3.
+    https://www.cve.org/CVERecord?id=CVE-2026-23479
 
-  *) SECURITY: CVE-2026-48913: mod_http2 memory corruption when file
-     handles exhausted (cve.mitre.org)
-     Use After Free vulnerability in Apache HTTP Server module
-     mod_http2 when file handles are already exhausted.
-     This issue affects Apache HTTP Server: from 2.4.55 through
-     2.4.67.
-     Credits: Sam Lovejoy, IBM X-Force Offensive Research (XOR)
+- CVE-2026-23631:
+    Redis is an in-memory data structure store. In all versions of redis-
+    server with Lua scripting, an authenticated attacker can exploit the
+    master-replica synchronization mechanism to trigger a use-after-free
+    on replicas where replica-read-only is disabled or can be disabled,
+    which may lead to remote code execution. A workaround is to prevent
+    users from executing Lua scripts or avoid using replicas where
+    replica-read-only is disabled. This is patched in version 8.6.3.
+    https://www.cve.org/CVERecord?id=CVE-2026-23631
 
-  *) SECURITY: CVE-2026-44631: Heap Underflow in `ap_regname` via
-     Signed Char Overflow (cve.mitre.org)
-     Buffer Underwrite vulnerability in Apache HTTP Server on crafted
-     regular expressions in the configuration.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
+- CVE-2026-25243:
+    Redis is an in-memory data structure store. In versions of redis-
+    server up to 8.6.3, the RESTORE command does not properly validate
+    serialized values. An authenticated attacker with permission to
+    execute RESTORE can supply a crafted serialized payload that triggers
+    invalid memory access and may lead to remote code execution. A
+    workaround is to restrict access to the RESTORE command with ACL
+    rules. This is patched in version 8.6.3.
+    https://www.cve.org/CVERecord?id=CVE-2026-25243
 
-  *) SECURITY: CVE-2026-44186: Loop in `proxy_ftp_handler` in
-     mod_proxy_ftp (cve.mitre.org)
-     Loop with Unreachable Exit Condition ('Infinite Loop')
-     vulnerability in the mod_proxy_ftp module in Apache HTTP Server
-     with an attacker controlled backend FTP server.
-     This issue affects undefined: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-44185: Stack Buffer Over-Read in mod_ssl OCSP
-     `send_request` (cve.mitre.org)
-     Buffer Over-read vulnerability in Apache HTTP Server via
-     outbound OCSP requests to an attacker controlled OCSP server
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-44119: escalation of privilege through
-     expressions in .htaccess in multiple modules (cve.mitre.org)
-     Improper Privilege Management vulnerability in Apache HTTP
-     Server 2.4.67 and earlier allows local .htaccess authors to read
-     files with the privileges of the httpd user.
-     This issue affects Apache HTTP Server: from through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Lucian Nitescu
-
-  *) SECURITY: CVE-2026-43951: OOB Read in `merge_response_headers`
-     can cause crash (cve.mitre.org)
-     Out-of-bounds Read vulnerability in Apache HTTP Server with
-     mod_headers and mod_mime and multiple response languages.
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-42536: mod_xml2enc heap overflow
-     (cve.mitre.org)
-     Heap-based Buffer Overflow vulnerability in Apache HTTP Server
-     withÂ mod_xml2enc, xml2StartParse, and untrusted content
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-42535: mod_dav_fs protected directory access
-     (cve.mitre.org)
-     A path handling issue in mod_dav_fs in Apache 2.4.67 and
-     earlierÂ allows a WebDAV content author to directly manipulate
-     trusted DAV property databases, potentially causing child
-     process crashes.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     this issue.
-     Credits: Zhenpeng (Leo) Lin at depthfirst
-
-  *) SECURITY: CVE-2026-34356: ProxyPassReverseCookieMap buffer
-     overflow (cve.mitre.org)
-     Heap-based Buffer Overflow vulnerability in Apache HTTP Server
-     with malicious backend servers and ProxyPassReverseCookie*
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Arkadi Vainbrand
-
-  *) SECURITY: CVE-2026-34355: mod_proxy_html buffer overflow
-     (cve.mitre.org)
-     A buffer overflow in mod_proxy_html in Apache HTTP Server 2.4.67
-     and earlier allows an attack by an untrusted backend.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     this issue.
-     Credits: Elhanan Haenel
-
-  *) SECURITY: CVE-2026-29170: mod_proxy_ftp XSS (cve.mitre.org)
-     A cross-site scripting vulnerability exists in mod_proxy_ftp's
-     HTML directory list generation in Apache HTTP Server 2.4.67 and
-     earlier when listing FTP directory contents either via forward
-     or reverse proxy configuration.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     this issue.
-     Credits: Pavel Kohout, Aisle Research, Aisle.com
-
-  *) SECURITY: CVE-2026-29167: mod_ldap per-dir use-after-free
-     (cve.mitre.org)
-     Use After Free vulnerability in Apache HTTP Server with mod_ldap
-     in per-directory configuration
-     This issue affects Apache HTTP Server: from 2.4.0 through 2.4.67.
-     Users are recommended to upgrade to version 2.4.68, which fixes
-     the issue.
-     Credits: Pavel Kohout, Aisle Research, Aisle.com
-
-For more details, see the CHANGES file:
-https://downloads.apache.org/httpd/CHANGES_2.4.68
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 07a690f00b1441cb58f31830beed374af1b016b2)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit be7b7821c665db35beea8763c50a49da76bef1f5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 44e2ac24b4..e8ed8c0df6 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 9e5be53969..055276a270 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
 @@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/httpd/httpd-2.4.67.tar.bz2.{sha256,sha512}
--sha256  66cd206637b0d5c446fa7dabe75fe03525da8fb55855876c46288cd88b136aa4  httpd-2.4.67.tar.bz2
--sha512  5ae29fc8edb253453271613cb18754de0d943d1f82361059c81f8ebe1f057b894675506550bd1341bfa9416226b569a7bac08f497c53e8bb6dede87f4f41eae4  httpd-2.4.67.tar.bz2
-+# From https://archive.apache.org/dist/httpd/httpd-2.4.68.tar.bz2.{sha256,sha512}
-+sha256  68c74d4df38c26bed4dfbdb8f3baf1eb532f3872357becc1bba5d136f6b63c06  httpd-2.4.68.tar.bz2
-+sha512  134a5bbd3ffe97523ac750490531bcb9441c532cedf0229aa006aa1368e9d25040507c6f519bed6754044f62c371f7c7f9a11b6a311f79b9680d478bf4373eb3  httpd-2.4.68.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index f7420d3a22..85a7d0754e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  b3eeef15ea90a41c568f1f97a78d3370400baad55566869bbbf1af9f9106d85c  redis-7.2.13.tar.gz
++sha256  21326da3f66c0aead4c8204c0ac52ff905337a77cadd169f75ac22835ea30025  redis-7.2.14.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index b9702eb6e0..62f70b352b 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.67
-+APACHE_VERSION = 2.4.68
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
-
---===============0442875261746132562==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-REDIS_VERSION = 7.2.13
++REDIS_VERSION = 7.2.14
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0442875261746132562==--
