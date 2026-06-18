@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73AA0CDB46B
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 07:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A3EDCD98E4
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 807FA80F6B;
-	Sat, 20 Jun 2026 07:04:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4587A860D5;
+	Sat, 20 Jun 2026 09:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wcl1Ns0QRLcM; Sat, 20 Jun 2026 07:04:20 +0000 (UTC)
+ id KjF51cXn5Vnw; Sat, 20 Jun 2026 09:06:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D9EB80D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DBB386184
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781939060;
-	bh=bF9JxzwP3a4BkhTBkvrcdyOgRxXKiplNT6zxG2k96A0=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=U3t08i5DKhH+AJ05JF34XD7VjwVY/T2bqBsUmyLlbfjMTqwb44k28W/ULGS+lzCOs
-	 HNfbaXoUz2MEJNw+lEeDEISrFHS/8a7m2ZvjF4v/aPYXDzLkenxTJucBQv8+sa59pi
-	 rLFGF+l4lnvnaiBwzt5BczMZIZ0Vryvn/ucU9wPD3Z9FD5QTs+AbiaKm7DZ/DMzXw4
-	 IdWN/5Gn3JOZFocgVUPxiHJ1uKUiF8/7JdqtJi55bYPsDxePOTil7LNDLZex46QDBb
-	 vtKBNIMdnt2zfmcSURXGDJKcZvnU4o5i89KfOZ4aRh/4ASm74wMpmxdVO2tKpbS8m7
-	 xhR7Emr5NHFtA==
+	s=default; t=1781946394;
+	bh=+lNl5CFyV0qOIN2Aw4k9bke53BMRfKu/uOD5fEPlEb4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=iMNJpNQUgHbjY2pGkryL+73kxwTcAXyp5gfqOo71t141+Nq03sfQ8RNswrnQCYZAc
+	 guOr6VuLApx9PG/xujz6OSrEgnbnjU17qGbSEAtOVRr2UTExUXgEY5K0RVMT2MVAfx
+	 UlZb7NcqrFMiwnhNjnnm5hP2rB33XKbLJqBBe9t2nbJ6ZyNAUkJDOLgFzo+ZDZbD/m
+	 emNQDLBnfPIDco+XHJUE5HUR65Xf6GTq3fMEF07q7ylBnF2dOUxrsYFr7VYwJUh/sl
+	 IOkzdOTLLZhDI4SsHmoWJuXb6XpthG7eI5oMtBHwjZLcZeGpW+D2jHzc/yzwRVAoxX
+	 Gul3jxMjnnBLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D9EB80D9F;
-	Sat, 20 Jun 2026 07:04:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 41269367
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 07:04:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DBB386184;
+	Sat, 20 Jun 2026 09:06:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0904C367
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27450428AF
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 07:04:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0689D6FAB1
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L0rclsodoqVT for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 07:04:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0297C401EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0297C401EF
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0297C401EF
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 07:04:16 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c132.dip0.t-ipconnect.de [79.214.193.50])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 26BFBA4C112E;
- Sat, 20 Jun 2026 09:04:15 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60882)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wapkU-000000004fI-3Rg9;
- Sat, 20 Jun 2026 07:04:14 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X4Eqzs77Qak8 for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 09:06:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 103B56FA13
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 103B56FA13
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:06:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0B4FA81E43; Sat, 20 Jun 2026 09:06:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
-Date: Sat, 20 Jun 2026 09:04:14 +0200
-Message-ID: <20260620070414.86981-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1781939055;
- bh=vi9maINu0wqDLaEob7pUesdOGh0GQPQ4myXxuDBpMtw=;
- h=From:To:Cc:Subject:Date:From;
- b=qZ630qGxiDeeeNZsr6ODQU/J2smgDGVbJ+dQaoTNkm2/ZezU7OdYe2mVhiqJU4wMD
- Sv8h0VgmfJ+GuLHMq2RtRg8LHLfVEyulNGm8cpJqYOWArBJw/hGfQZT1Lqztq7j14i
- 3Z9892nYHfCczMZL3KWnVGlGLEFOYyL74EK3Re0q1N43Dy2I5v3LuiQG/ePRzPBlxA
- cW9004200clArBfl700BqfFXzH87D2e3tdDsB1uot0ffNpW6uL+AC5B9+9DJSewDT2
- 9XaqVc+R7O9xC/rXtNYSL1Hd9UR724Ds/K3pQpwLI6xMBlxamgMMnzLz/wMBESky6o
- YMT9Ejxr3s9ZQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=qZ630qGx
-Subject: [Buildroot] [PATCH 1/1] package/cpp-httplib: security bump version
- to 0.48.0
+Date: Thu, 18 Jun 2026 14:44:51 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: abd2e88f62aa688a8d147ca2f19d5cb46ee2c0a6
+X-Git-Newrev: 1836d7f6abe371a63261d9d03f4f68ce7dc96a00
+X-Patchwork-Hint: ignore
+Message-Id: <20260620090609.0B4FA81E43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rsync: bump
+ version to 3.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,65 +69,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.48.0
-- this bump includes a security fix for the Mbed TLS and wolfSSL
-  backends which are unused by buildroot
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.47.0
-- this bump includes a security fix for the Mbed TLS and wolfSSL
-  backends which are unused by buildroot
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.1
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.46.0
-- this bump includes a security fix
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.1
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.45.0
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.44.0
-- fixes CVE-2026-45372 & CVE-2026-46527
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.4
-- fixes CVE-2026-45352
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.3
-https://github.com/yhirose/cpp-httplib/releases/tag/v0.43.2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1836d7f6abe371a63261d9d03f4f68ce7dc96a00
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/yhirose/cpp-httplib/compare/v0.43.1...v0.48.0
+Bugfix release containing a number of fixes for regressions introduced in
+the 3.4.3 release.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+For details, see:
+https://download.samba.org/pub/rsync/NEWS#3.4.4
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a9f7f918e06c16b8afa27526b0908c08f488aead)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/8fcef356cfff282f19aea18a7ef8f1c214bcefc1
+ package/rsync/rsync.hash | 4 ++--
+ package/rsync/rsync.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/cpp-httplib/cpp-httplib.hash | 2 +-
- package/cpp-httplib/cpp-httplib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-index f3e05951e9..842b96f3eb 100644
---- a/package/cpp-httplib/cpp-httplib.hash
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  000832a5b50b67b82a77845c09d832f6e492011cd0ef1d4f72f808eb6a4fbeb3  cpp-httplib-0.43.1.tar.gz
-+sha256  d9ed142d319c6e19a961f477257e67f846909ce15288502188df2281941be84e  cpp-httplib-0.48.0.tar.gz
- sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index e8bc0a56fe..94f270df94 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 666bb5cf99..2deaed0674 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.3.tar.gz.asc
+-sha256  c72e63ca3021cbc80ba86ec30102773f4c5631fbc492b52e773b3958f82a53d3  rsync-3.4.3.tar.gz
++# https://rsync.samba.org/ftp/rsync/src/rsync-3.4.4.tar.gz.asc
++sha256  bd88cf82fa653da32314fb229136407c5c90f80d1758d8f4b091767877d8fa96  rsync-3.4.4.tar.gz
+ # Locally calculated
+ sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 5b4345d036..5dd89a82d2 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CPP_HTTPLIB_VERSION = 0.43.1
-+CPP_HTTPLIB_VERSION = 0.48.0
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
--- 
-2.47.3
-
+-RSYNC_VERSION = 3.4.3
++RSYNC_VERSION = 3.4.4
+ RSYNC_SITE = https://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+ with exceptions
+ RSYNC_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
