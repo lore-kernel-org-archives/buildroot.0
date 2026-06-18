@@ -1,83 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98A3CD98F2
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 11:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1174CCD98F2
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C7B583BF5;
-	Thu, 18 Jun 2026 11:28:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88C8240F63;
+	Thu, 18 Jun 2026 12:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ur7dk1fV_gMq; Thu, 18 Jun 2026 11:28:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dL_WwYYhcrwJ; Thu, 18 Jun 2026 12:49:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA74083BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89F7240F51
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781782101;
-	bh=rqyP/+Q3kwrAU0EkXlUJTMxkAKbl0wkG9UmngrDS9RA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=iKM7ytx1tBlirNx240bm8GDLQyVn10ZX9HOFdi0qPOfCxweCTFA4PsNyU636XSNEG
-	 vYM21KGPffGyjoskk9Da4UM4df9s9n+XGPtpg8v7PIgY38K4lHWk06XlticEfR8bxe
-	 6a3ix77cP3kaJzOaOygDyrcDx0rq36NqJgzjeV63IitTL6MysUMVpqdOkwntdpmQsO
-	 VtojQ31TBAj1ZZayzsCg3nFn35o9uUrLHxSbdjHILnT5AsVyMZYgSBNPpUdB5GqLIM
-	 dRuCTCDLDjLbC8EbYZuSUUN9lLqkbsJSKsA/bXhdvErq3QxvTYuGE2w+1TD4Pz4I5x
-	 KXYgrHlF0MA2A==
+	s=default; t=1781786981;
+	bh=iRF4b8u67gDNQoYzDKLvWm6LTCjRMDeRFhmfo4qDNgg=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=n3r8zxispw/q6emm3Q4I8SnaVmF7k3VVkKFf4sSfr8Bawbv4cG2PlHI2OAnnzI7AI
+	 8uIXRGqvKyFZA/SMUgstcPyI9A7DTj9Rh+zgaqj3luqTJ+syrIsqlEwis73O8K6TYB
+	 BrSldFQLVg2L7MXVKSHx39TQ57S5HVvErBgddlxnwfZ5RfQDD/a2teu9BbPKuSp7Cm
+	 LgKOr0girCLBf8DTYVPd0FfQu8fE3M2C+AQJRW90ZjXQlEKt2CYgbAd1NV/rxNJ7m7
+	 18n+kvGo9zQwU1ZYTjSu3ndj02Rmeviu13X3P3Gn8gP5FDfaH4FP/p76EryZXZXlsB
+	 /A7DKF30UoxEw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA74083BEE;
-	Thu, 18 Jun 2026 11:28:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FFF9131
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 11:28:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89F7240F51;
+	Thu, 18 Jun 2026 12:49:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00A6D131
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:49:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05FEF83BE7
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 11:28:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9C4040F51
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:49:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UpM7dLa-mLx5 for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 11:28:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 64E2483BE6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64E2483BE6
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 64E2483BE6
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 11:28:18 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1752647974; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 18 Jun 2026 11:28:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1waAuq-0000000CD5b-1OdT;
- Thu, 18 Jun 2026 13:28:12 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 18 Jun 2026 13:28:09 +0200
-Message-ID: <20260618112810.2910199-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s_y4vXJ7qarY for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 12:49:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0CF6B40F4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CF6B40F4F
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CF6B40F4F
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:49:37 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4903d730b1fso10364505e9.2
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 05:49:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781786975; x=1782391775;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=fYrEGNGj6q7EcitWsO39q6gjB9RVyPopijYueSMLN0k=;
+ b=iUi8EMLzqRCla7G9GEbKRx0iPXRQWz6ErenTIeLlgfbfRUh5djf+LSsalkperv3WfI
+ SpHJuPS0ej43zBbptd9BfiuSNeTKZBDnsdgA1Kc7ygMWPC9A2Pg+M6hHqx/ULeirfDEI
+ iTj9IUhOhcSylIupjcSdTSHFbNDVzfreYdEYtXRq7YiotatlwPOZ1WS0VOySlWAujb7w
+ xFf6Wf4zEo/wS2QRwIYSySRcU6RCH/6AuVt9aEKcZya7SUuMQ4jJ9BBDWJPISy+eWqBr
+ hUrQZG+mv1o04+MxOMMZtTnRqhcMdLNkbIj6ahwBdZEfG1bXKziXV18aBFah3oKAWCgm
+ beyA==
+X-Forwarded-Encrypted: i=1;
+ AFNElJ8BZ0UZX2ec+Ehabo8FDhCrdS7EnEWdAi9An7eWLSX3SbuFT5Z7Dyw8GmcjKv8xwgZbpdlLidEwfGU=@buildroot.org
+X-Gm-Message-State: AOJu0YxeybOUnf+Zl9ZIalFVdxJDS7let8d9P7tEUzlnsxqTtWNz0UP8
+ KgoDvXJC7brfOAq/OQZka0nHzUViETOTsxNddE5Rr5zexzzWV92OkliXKCHSLRDgRrs=
+X-Gm-Gg: AfdE7cmSv0i+Htf3WytRj4TyUIfIlNKdK17B0AtZSBYKjcM/6lVl2FUpDUYpE+K9QfO
+ AoKdYsnRGXEM/iRmc0UhUE0XDS+4bNJaX5aKdsruc+Djsam1sQqQIZOJCZliCgCjKK7a08zonGP
+ XtscckvlBYVkHxPsfnxgnW0wQG+asRJ8HW5eqHA1+DwEL531aE4L2wBWBGsJjoapi5eha/T8gHk
+ k4M9Ujf5vMDXebanCIC+5Yrv0osA/48tGMdVAI6gFsXMP81RgScTAnMHHhKxsB0AH+eWOkNJsBa
+ emGVRGsP69Ln27FHHzBdZwG9+GwfxYwmTj8+CHfMP2K7U01iiSdGoSVNfmxG7wEiq3IMatbEBux
+ HNjXyebuWfD8HupDfYfmIFkHxD1FPOHXO6xrJWHWR9xIYnbId5h95uLCQH0/JWImCOJQEISeh15
+ 8Cd1eL
+X-Received: by 2002:a05:600c:e547:10b0:491:9969:739d with SMTP id
+ 5b1f17b1804b1-4923822eed4mr40255875e9.29.1781786975262; 
+ Thu, 18 Jun 2026 05:49:35 -0700 (PDT)
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4606f2c3fcfsm57011226f8f.26.2026.06.18.05.49.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 18 Jun 2026 05:49:34 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Thu, 18 Jun 2026 14:49:34 +0200
+Message-ID: <20260618124934.134574-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <ajOOhpts_SyBkW3C@waldemar-brodkorb.de>
+References: <ajOOhpts_SyBkW3C@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=mWlS9OIOU/so0XwezE8QWJ+mJ/Hlzya7uTduW53af/bwVVyysQr/d11eGKepfJ881PNq/UZ5fxiMBwzcjlzE/s0HGLw9BcnDDRTe1+yjnJzPSbA57emLY6pa0J105Ssxvzu4qdpt/M8Y6k5n94qGKEHlw38I0ogglQ3Hv9Qb7GDdFcqJRreP/nmlQQbtTTt4Q8TJxd6767Kj8+Wpb/sHnWHOtq4+/OBOhi/qwCkn9hiYysQYinNH7q/F8dsP5/niwws8l+Tn3xHAZV8gyy6NbBtJwjCRdhJdV76wRVpIWVbCXuBhPNv2WNeYD0UZhshkuyNIGih8H1/dVt2bh0bCpw==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=PfS0fVTTeVVTTZmr1tdVaXNjxp5k87pCn6S+CoKibL8=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1781786975; x=1782391775; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fYrEGNGj6q7EcitWsO39q6gjB9RVyPopijYueSMLN0k=;
+ b=L4CQINy9aookyHLCoGRP39Hx3eCydV6+gTEBBHva/wrUV/5djRSa6GZdvysihsQzs1
+ g26Pk7pRVb0gGwrB4bQF/tZyy/SwBdVemZv8eyxykQLuaFUb0jcdnLSVtHFWJQViROXP
+ +2OXT/JwPsK6eIcBvtSp/8QGczS8GZBVxkCSG6UZ6MuYOVnvFzYBiKLLPj4gteZ9A6nS
+ tgZmgHZOLF5jAMH/SOlQ8FZBvjQH54Z8jyMfLkCRrsX6M6ZI1phsbdbrH56mGGKClQok
+ bhzTWXXVv5mpALFChNLPRX9DdiBFuJBmx+tpi1jy6VDNs8AUZlkW99HgM+n+genEeZIO
+ Zzew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=mWlS9OIO
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/agec: new package
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=L4CQINy9
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/openssl: security bump to
+ 3.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,114 +124,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Agec is a simple file encryption tool that implements the
-age format in C with minimal dependencies. The tool supports
-asymmetric encryption based on X25519, and a passphrase
-encryption based on scrypt.
+Hi Waldemar,
 
-https://git.sr.ht/~min/agec
-https://age-encryption.org
+Will apply https://lore.kernel.org/r/<20260612-openssl-3-5-7-v1-1-093c128bb691@cherry.de>
+with your comment.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/agec/Config.in | 10 ++++++++++
- package/agec/agec.hash |  3 +++
- package/agec/agec.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/agec/Config.in
- create mode 100644 package/agec/agec.hash
- create mode 100644 package/agec/agec.mk
+Thanks for sending the update.
+PERALE Thomas
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d591c62805..7e101c1eb1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2647,6 +2647,7 @@ F:	configs/orangepi_pc_defconfig
- F:	configs/orangepi_r1_defconfig
- F:	configs/sheevaplug_defconfig
- F:	configs/visionfive_defconfig
-+F:	package/agec/
- F:	package/bats-core/
- F:	package/dfu-programmer/
- F:	package/docker-compose/
-diff --git a/package/Config.in b/package/Config.in
-index 96e113e226..b8374fbab5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2728,6 +2728,7 @@ comment "Shells"
- 	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
-+	source "package/agec/Config.in"
- 	source "package/apg/Config.in"
- 	source "package/at/Config.in"
- 	source "package/bash-completion/Config.in"
-diff --git a/package/agec/Config.in b/package/agec/Config.in
-new file mode 100644
-index 0000000000..8ca9240917
---- /dev/null
-+++ b/package/agec/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_AGEC
-+	bool "agec"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Agec is a simple file encryption tool that implements the
-+	  age format in C with minimal dependencies. The tool supports
-+	  asymmetric encryption based on X25519, and a passphrase
-+	  encryption based on scrypt.
-+
-+	  https://git.sr.ht/~min/agec
-diff --git a/package/agec/agec.hash b/package/agec/agec.hash
-new file mode 100644
-index 0000000000..0b6982f913
---- /dev/null
-+++ b/package/agec/agec.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97958ff82eaa6aa89328f4319d585e362130168c478cf6a85ba3f4d05e453669  0.1.0.tar.gz
-+sha256  f7f37a8bb7d993825b10f5ce2838c1c452d902eda63cd180fdabc7c3a5dd0341  LICENSE
-diff --git a/package/agec/agec.mk b/package/agec/agec.mk
-new file mode 100644
-index 0000000000..b19eac94a4
---- /dev/null
-+++ b/package/agec/agec.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# agec
-+#
-+################################################################################
-+
-+AGEC_VERSION = 0.1.0
-+AGEC_SOURCE = $(AGEC_VERSION).tar.gz
-+AGEC_SITE = https://git.sr.ht/~min/agec/archive
-+AGEC_LICENSE = BSD-0-Clause
-+AGEC_LICENSE_FILES = LICENSE
-+AGEC_DEPENDENCIES = host-pkgconf openssl
-+
-+define AGEC_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+endef
-+
-+define AGEC_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		PREFIX=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.47.3
+In reply of:
+> See here for changes:
+> https://github.com/openssl/openssl/releases/tag/openssl-3.5.7
+> 
+> This release incorporates the following bug fixes and mitigations:
+> 
+>     Fixed heap use-after-free in PKCS7_verify().
+>     (CVE-2026-45447)
+> 
+>     Fixed CMS AuthEnvelopedData processing may accept forged messages.
+>     (CVE-2026-34182)
+> 
+>     Fixed unbounded memory growth in the QUIC PATH_CHALLENGE handler.
+>     (CVE-2026-34183)
+> 
+>     Fixed NULL pointer dereference in QUIC server initial packet handling.
+>     (CVE-2026-42764)
+> 
+>     Fixed AES-OCB IV ignored on EVP_Cipher() path.
+>     (CVE-2026-45445)
+> 
+>     Fixed possible heap buffer overflow in ASN.1 multibyte string conversion.
+>     (CVE-2026-7383)
+> 
+>     Fixed out-of-bounds read in CMS password-based decryption.
+>     (CVE-2026-9076)
+> 
+>     Fixed heap buffer over-read in ASN.1 content parsing.
+>     (CVE-2026-34180)
+> 
+>     Fixed PKCS#12 files with PBMAC1 are accepted with short HMAC keys.
+>     (CVE-2026-34181)
+> 
+>     Fixed possible NULL dereference in password-dased CMS decryption.
+>     (CVE-2026-42766)
+> 
+>     Fixed NULL pointer dereference in CRMF EncryptedValue decryption.
+>     (CVE-2026-42767)
+> 
+>     Fixed multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt()
+>     and PKCS7_decrypt().
+>     (CVE-2026-42768)
+> 
+>     Fixed trust anchor substitution via cert/issuer typo in CMP
+>     rootCaKeyUpdate.
+>     (CVE-2026-42769)
+> 
+>     Fixed FFC-DH peer validation uses attacker-supplied q.
+>     (CVE-2026-42770)
+> 
+>     Fixed incorrect tag processing for empty messages in AES-GCM-SIV
+>     and AES-SIV modes.
+>     (CVE-2026-45446)
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
+> ---
+>  package/libopenssl/libopenssl.hash | 4 ++--
+>  package/libopenssl/libopenssl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+> index 781701532d..8a7186d669 100644
+> --- a/package/libopenssl/libopenssl.hash
+> +++ b/package/libopenssl/libopenssl.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/openssl/openssl/releases/download/openssl-3.5.6/openssl-3.5.6.tar.gz.sha256
+> -sha256  deae7c80cba99c4b4f940ecadb3c3338b13cb77418409238e57d7f31f2a3b736  openssl-3.5.6.tar.gz
+> +# From https://github.com/openssl/openssl/releases/download/openssl-3.5.7/openssl-3.5.7.tar.gz.sha256
+> +sha256  a8c0d28a529ca480f9f36cf5792e2cd21984552a3c8e4aa11a24aa31aeac98e8  openssl-3.5.7.tar.gz
+>  
+>  # License files
+>  sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index 837c3f0346..a9e18f96ac 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBOPENSSL_VERSION = 3.5.6
+> +LIBOPENSSL_VERSION = 3.5.7
+>  LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+>  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+>  LIBOPENSSL_LICENSE = Apache-2.0
+> -- 
+> 2.47.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
