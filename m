@@ -4,83 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38339CD98F7
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB57CD98F2
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 12:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDC4A41400;
-	Thu, 18 Jun 2026 12:50:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C8274140D;
+	Thu, 18 Jun 2026 12:50:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cUqgzIWU25i7; Thu, 18 Jun 2026 12:50:09 +0000 (UTC)
+ id kREio0xPLGST; Thu, 18 Jun 2026 12:50:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF728413F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5171C413F4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781787009;
-	bh=DI6g9LKah50Y0kyHDWb5y9dP8EIIapLq6UwoJwa2Zek=;
+	s=default; t=1781787010;
+	bh=BivPEzHgVX7c7MoT6st3vFSG8mMHr/RRQtGdoBOp0tM=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=Ftsn8yWX2rIDfuRf8nfA1/sOZ9ye/fO11FbHGPV1XDeaTGvaMZZkHscxVsxePBt9y
-	 FtKo/ZcRhxUThgb7BCjW4JxTwGkwondPSIdqnJLQP7fVphEiP2HdSf03I/VVv2YImb
-	 qUtvty9yXvNM267uay3NuZR0UeCiVC89y5i209x4C5ZmPsgB5kr8mVXe11XDSa4O9X
-	 Le/3zb/Xk45E92e0rMSaX3Lnhx7QfeCE5fiwLejDUMRFNyBBuRVvUp664i4l/FX0jx
-	 Jrm+K7eGFqkqsa0necDkEhjuBkLSpZbHT6APh7db2nXq/+mSUxUqN1EV3c+zYdW91b
-	 cHQU2qSVmekLg==
+	b=ssDu7li9LYVs2VDDPk2Ti4UIJN+nHBwY9B3b0GpNykjCkrwr4H3XU1OFCnYMEdtK3
+	 Ya5dUqXXfir2gyKTklbWzVzT4m+qEs/qkhzX6st7mhs+PIqeqfYgA2s2P/iur4lWsH
+	 W3r5iqkcKkmb08LrZ91CpKDnPDqUXrGqjFLI63Ja4tfVE+dbg7MrQsZDtuSTTEhWhU
+	 kJQV7ePLF8g9t/w/jGOMkNf7z719sa22y9m7/CAmnnqzQ8Z5dHTy6XQn7fp03lTheP
+	 aPzQTU0M53zmjumvV0QVp+4jWfJSZbTj6StzJlOW/wITEsN7MAosu+8mEeBjciCDiM
+	 KNKrISZp5LqWA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF728413F4;
-	Thu, 18 Jun 2026 12:50:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 804A31F3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5171C413F4;
+	Thu, 18 Jun 2026 12:50:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 992D7358
  for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E0D740DA1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F721413E9
  for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bs2hOa2lPa1a for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2hOjt93CeDGg for <buildroot@buildroot.org>;
  Thu, 18 Jun 2026 12:50:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 75E3D4063F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E3D4063F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6C867413E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C867413E5
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 75E3D4063F
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C867413E5
  for <buildroot@buildroot.org>; Thu, 18 Jun 2026 12:50:06 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2021711152; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1297506266; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 18 Jun 2026 12:49:47 +0000 (UTC)
+ Thu, 18 Jun 2026 12:49:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1waCBm-0000000CJuB-0yC7;
- Thu, 18 Jun 2026 14:49:46 +0200
+ (envelope-from <peko@dell.be.48ers.dk>) id 1waCBl-0000000CJu3-310r;
+ Thu, 18 Jun 2026 14:49:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 18 Jun 2026 14:47:57 +0200
-Message-ID: <20260618124835.2935850-6-peter@korsgaard.com>
+Date: Thu, 18 Jun 2026 14:47:56 +0200
+Message-ID: <20260618124835.2935850-5-peter@korsgaard.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260618124835.2935850-1-peter@korsgaard.com>
 References: <20260618124835.2935850-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=EYQ8JUVyeFz1OjYrRGe3+B6NojoNqw1GmbVsk3HIxtvQpVdVy91Uj/ZOP2rsEznbJDjlzNzCiMDytPvvcyJOK9pDF0MBmwUM7rcSn+zwKYd342olNXMDqTmqgSJp6Gt6ZqG0VFrXRSL2KXw/teTBgmu0Rc05PWO+y1i8cdNhL2jtIlfnOdZdwtSjtFbGmt2nz446gj40T7+GnOkA2NBXi6GnMhH7LBO7APD7Wla03cozhQhEpRHU0mpLJC/Pq/OwuPRT/+cpczV3Ih/7JLCBlHYZop2PsiDYVXzhhwHdwO3Ol3BBhk6zH+Yf1m2yMCwfqRBQ7BaTv96xFCsLtcZj7Q==;
+ b=fyKF49hEm8Or6bnD3hnYdSVtY/UNk5xAdHIu7TlqbSfoXwmsrnfjCMapCbpVC0opo8CM1/Aej/6OOLlo4sF7234LNOQbtqPAZ4G0w7hELc4JvTv7aI1dJWgAxSfNW3Hw4S8edk+1jRmKBfYazNq4U68ouFUiESv1jNG3JJNGrf55EYM3FYSyRKmYVo0PXeedo6U1byZgkBWucpUIzyqsdW8hfGYjl9Gg6cHrn8jLpVJisoUx/QhLpaTTowwXn5Z9CNsB+paAn++SctTX1HrjFy/twxYInPd7YCNM2TZJ5ezKkT0XyKRwaJtlF8noHmKBVxTWpyRM9f81HAURTW1uMA==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=1Pt/JcG2o+Lgl11A+7PWlqbhXFCBY3/9l4WLsY1VEw4=;
+ bh=eaHRse1FwGn7RwsBz4tjY/t8zyhXIfLAWBwCo24lKVQ=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=EYQ8JUVy
+ header.a=rsa-sha256 header.s=purelymail1 header.b=fyKF49hE
 X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 06/29] support/testing: test_connman.py: use
+Subject: [Buildroot] [PATCH 05/29] support/testing: test_bitcoin.py: use
  assertRunNotOk()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -103,23 +103,23 @@ Use the helper to simplify the test.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_connman.py | 3 +--
+ support/testing/tests/package/test_bitcoin.py | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_connman.py b/support/testing/tests/package/test_connman.py
-index 6fef95104c..2e53135208 100644
---- a/support/testing/tests/package/test_connman.py
-+++ b/support/testing/tests/package/test_connman.py
-@@ -47,8 +47,7 @@ class TestConnMan(infra.basetest.BRTest):
- 
-         # If we try to ping again the qemu gateway,
-         # it should now fail.
+diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+index 186240b280..9a7d78e5e8 100644
+--- a/support/testing/tests/package/test_bitcoin.py
++++ b/support/testing/tests/package/test_bitcoin.py
+@@ -108,8 +108,7 @@ class TestBitcoin(infra.basetest.BRTest):
+         # The bitcoin daemon is not started. A client ping is expected
+         # to fail.
+         ping_cmd = f"{self.cli_cmd} ping"
 -        _, ret = self.emulator.run(ping_cmd)
 -        self.assertNotEqual(ret, 0)
 +        self.assertRunNotOk(ping_cmd)
  
-         # We ask connman to re-enable Ethernet.
-         self.assertRunOk("connmanctl enable ethernet")
+         # Start the daemon.
+         cmd = f"bitcoind -regtest -daemonwait -fallbackfee={btc_fee:f}"
 -- 
 2.47.3
 
