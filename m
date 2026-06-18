@@ -1,84 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99870CD98ED
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 08:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95FF3CD98ED
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 09:29:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F29D610B8;
-	Thu, 18 Jun 2026 08:00:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QfP_lvk_7Nnd; Thu, 18 Jun 2026 08:00:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76472610BB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781769609;
-	bh=NN0Arau3U+a5iNr4Z7hoy6GdD1kQuCTu8rmuEEcoHjA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=a1zeZjgXyjnmJYSJekD+Is4Y9juzWs2jZ9Ka8r+e/wW7NONpJr4r+FmXToCPLJ6a+
-	 FeEfWh0lit9rXQZ/b7C6G1fny4JthZB60CUVUcpM5cgDriGy0FebkB8bvrhmcVEcp1
-	 XVR9PUdJ0A9uhuZho57jHvkiXXuYgQ7JQy0PxS6sn/rF8C3bSiTrN9NvF0M9u7LXER
-	 VNq+Gw73AX52xG1lLubiDZmMhiylGoxEEE/0DWJMDY67equV8k76g50QKU4pb+1lCW
-	 /VIchCP1wEnMrS8MTsNWQHEhMy1TBPv7HKWszOaODfaFOUyMKXF9PnjJvbHAozz9zs
-	 /QowmMtVsdRNg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76472610BB;
-	Thu, 18 Jun 2026 08:00:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 87D29131
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 08:00:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 772A483C86
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 08:00:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48CB181EF4;
+	Thu, 18 Jun 2026 09:29:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6c3C_d9qFnit for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 08:00:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
- helo=smtpcmd03116.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF83683C85
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF83683C85
-Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DF83683C85
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 08:00:02 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id a7fLwIh6D5gYja7fMw1R2S; Thu, 18 Jun 2026 10:00:00 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id Q_iaaSAEROd4; Thu, 18 Jun 2026 09:29:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EA4281F20
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781774974;
+	bh=7sAzTvNy5faQpQkgLigOlQx5Iw+NgZ9mCw9UmigQGMM=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=MfRzDMSvgV8/X+dBU+58grwi2ZoRH/y4F8wtvsBJo1fQxZYhGC9gIoT08cPe6jZiL
+	 LzX1N3A46KfY6YDcvUweS0t0K1qRDJykxAc6dGNcbJ0Ct2ta9TwuYh6uvIsf2HLdYZ
+	 QYyPnHugDyI8f2IvWQX+JiUXW1xiH6zBAK14S0QOUOBCXPdd17XmvQyORh9tanZcc0
+	 gf80sN997VgOz6R1BIr2Jbj6KsdjBgvYn00AaTUCE2XB7lXHciV+9x8u0Rf56+wyCm
+	 CY1aCr42bdHQ5LwaRm6AsrbfYI68zJ3iBZ02UCvMAwpnZICaOUZ+4gQL/jvqLX17AP
+	 1cWd9BdPhAcpA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EA4281F20;
+	Thu, 18 Jun 2026 09:29:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EB4BB183
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 09:29:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7B0B6109F
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 09:29:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-C0FO5gl-5N for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 09:29:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ACE4C61083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE4C61083
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ACE4C61083
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 09:29:31 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-68f36e1663cso1102826a12.3
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 02:29:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1781774969; x=1782379769;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=HK3GlrW6DhfkoKMld3V8cxm3+cGkeE/T2p9KM4ZFUCE=;
+ b=rSyt48QbX2JSwATXZBaQywJY2hqr9jcS8zPvQJ9dBFDH7tOrBypqUPsoAcFa+J/bpV
+ KMG9wmW+NdcjSte9XqQ2LmOYHqFQkILxmYOrUzHJO71+vDFlIqoVy1jCxlkzUb4ALsLP
+ /8OkMikoHU9RSaC0tKL5G20DnK45k3XC3GVueqp9G30qvW6QZ2CsTUbgnf/PreCHioTw
+ 2WJDBxg5IPtUcP3iDyGYhpimdgGsXRDAvtGMROkuvQIHKWciumxkOC5qXVSlSiclHHRH
+ llg1TvJDz/ayz2EeOepz9p8jKChX1Mi+9sS9lRK2MGEOxVIBt/AZfY0ReISjYs4lqgtF
+ jaIw==
+X-Gm-Message-State: AOJu0YxswREQVQA377EowfoXJjJDYLiWSZo+q+RcmilULsWSHFC1iprR
+ BmTbRlBFckX1Dy4KmfKYGDzUgReJVmXaZa6u84KD1xj79FiA1fczId/zR1H/
+X-Gm-Gg: AfdE7ckC3f4fJcPZy7RpbrY0JUSL/SkQUESrCwNlm+aRW7JnR2Voj/mEq09PHNcavQY
+ blFh+lduwzQ4nCQR2Z5+BfK9kF5mTAOiVW/ANolFJtcH/Sh+V8DgaiCOrYMIc3Db/ezOuOeOlw4
+ JagLIb1HbBkRTDohkVGCH1shG4rftFVgITVPyN/wcbcAPjCELJPIiOIQNcrATdXNz7gRlPD9QOG
+ 69S2lw99wk6tJf7QeYthECcOhKCvI+mTinLn1oqWDdWBxV2VlJzF4v+bCPBTFILERC8sy0U7/KN
+ psMCCDPe7SnamLfdIra0AXfInJvx5ei1sKE8cI421yyVKyK/4VtiBwwHIZJC3cvLxnf4NfSrVSk
+ 7TgVzEOfi8TMXNaGBm6sOTrhDdPaFMA/49ezhnjbcwA6bP3wzSr/2Q+Lc5xpdURa1karE4PntVM
+ gOWyEVp2nayye5EkEfhMUKAXVEHu0=
+X-Received: by 2002:a17:906:5189:20b0:c06:1310:21cc with SMTP id
+ a640c23a62f3a-c06131023b0mr281387366b.47.1781774969283; 
+ Thu, 18 Jun 2026 02:29:29 -0700 (PDT)
+Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6958486e233sm1525282a12.12.2026.06.18.02.29.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 18 Jun 2026 02:29:28 -0700 (PDT)
+From: Alexander Shirokov <shirokovalexs@gmail.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 18 Jun 2026 09:59:58 +0200
-Message-ID: <20260618075958.1072765-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Cc: shirokovalexs@gmail.com
+Date: Thu, 18 Jun 2026 11:29:26 +0200
+Message-ID: <20260618092926.41905-1-shirokovalexs@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260617161331.141666-1-shirokovalexs@gmail.com>
+References: <20260617161331.141666-1-shirokovalexs@gmail.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfB+ogNKRD7IDBBmRldMJFDotgdxtitbPi73LMAcrijgyctUZle+MVgFgVwGMjAV8DXS8gMLPMyZF59ruQnhrdIXRNic+Q1lOAJZMl39OKdxfZ36VgbAA
- uelVk5hPqSbS2IOpx/+cQfWH/FdqsVntZ0Db5YukBGnDETm8NQdslVGpi+ucbiDHB9bWewbr6wa9GSGmGEuH8aJvR4yRf+246uXQUW3bHLDHxS+73b/iSOvJ
- dRoQRDJPj/bV5FNuNEYGLCOtjvpHWmiclh3uU4J4EnQ=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1781769600; bh=YpbMPmicv0Vp/tC+14nc4g2+kxm6fWAiVr0u+7xzDgA=;
- h=From:To:Subject:Date:MIME-Version;
- b=DK3i3L0aK/4EzGMXeDR1+1Oxnl+dN7DkQNrTdQdHE4q7Q1zD28l336PQVSFl5j6ee
- bQrgW5SDgoXSwpDs/EZFfeoYVvbfXv0CPRuz7QBKwxG+n+qIl/HUaAOy78SnJ1F0eE
- z5GSmS7OsZMYyCP3QOmOknuPytuhAHNhhVZ6Xj2ZPiKMlRppa/6VceH4jjCJmU0fo4
- xX/iWk0zJvF3hnfobuEaCRIw7PadrVRAsp8QiI1ajyLlH26RVdk18boTwTQXjqb9+h
- es5zIscAvybBx4gLi8Kj9LQ813V/BBOGz4z863NG7CkBaqSCQ5x8r2jsm16nWYbt0p
- lEPUFPAg4Y68w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1781774969; x=1782379769; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=HK3GlrW6DhfkoKMld3V8cxm3+cGkeE/T2p9KM4ZFUCE=;
+ b=Kb8klKakis30qgrs9TFIiL8lsfoI8wLA3/KuIpRuYhmA8ekgaIEYt/wR+BuqPiNacR
+ xOWJPqWaC95IDL+19FjFhBMAGCLyoK6yyH7eQLsy0qWlULUkapzJdGOVdn0Ck7vEH8XB
+ Q4GP8esVF0/F8k/Ae4YL5AkLejA3GTlvk0H3O//lb5tSEU6JyXRQGOGWT6hTZkWVpau8
+ 1dm5Bi3Fpz3Luv0BpL5V4qgZaaQFzreBu579DMmdlTetJMymQ4hWlsfgNnndi9Aau/Uq
+ LBihvnJztkICPeoffTqsjOjR5rUWpb3wuHxsg74rfPcUt39im7jkcWHmZDEfHCsdN9jK
+ F+pw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=DK3i3L0a
-Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.18.50
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Kb8klKak
+Subject: [Buildroot] [v1,1/2] package/aichat: require SSE2 on i386 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,49 +127,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.50/doc/arm/html/notes.html
+Hi All,
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.50/doc/arm/html/changelog.html
+Just a brief note: while I started with the simplest fix (disabling the
+package), the root cause may lie in a different area.
 
-Security fix:
-GL #5934
-https://gitlab.isc.org/isc-projects/bind9/-/issues/5934
+As I can see, the broot package is now failing as well. It appears to be related
+to SSE too (at least according to the function names).
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+For example [1]:
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index b719012de7..766540ee22 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.49/bind-9.18.49.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.50/bind-9.18.50.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  c43ce4548ebed788cd9df63658a7de105ceafba43fcd63fa352b1093e525cd24  bind-9.18.49.tar.xz
-+sha256  a24f93be94712a8c11752294410f2f8a2510ec7fdc931d207fc61cdf30e54f4d  bind-9.18.50.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 6c0d2f8a03..54870bfa4e 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.49
-+BIND_VERSION = 9.18.50
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
--- 
-2.47.3
+	error[E0425]: cannot find function `defilter_avg_sse2_inner` in this scope
+   	--> /home/thomas/autobuild/instance-1/output-1/build/broot-1.55.0/VENDOR/zune-png/src/filters/sse4.rs:332:9
+    	|
+	213 | / unsafe fn de_filter_paeth_sse41_inner<const SIZE: usize>(
+	214 | |     prev_row: &[u8], raw: &[u8], current: &mut [u8]
+	215 | | ) {
+	216 | |     let zero = _mm_setzero_si128();
+	...   |
+	266 | | }
+    	| |_- similarly named function `de_filter_paeth_sse41_inner` defined here
+	...
+	332 |           defilter_avg_sse2_inner::<SIZE>(prev_row, raw, current);
+    	|           ^^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `de_filter_paeth_sse41_inner`
 
+I'll investigate more carefully to avoid having to fix or work around the issue
+in each package individually.
+
+I'm also sure that if this is a common problem, it will affect other Rust
+packages as well.
+
+If you have any thoughts or ideas, feel free to share.
+
+Thank you
+
+[1] https://autobuild.buildroot.org/results/156abd4e214e230d36426fd407a7edb030fe0f31/build-end.log
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
