@@ -1,91 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D1BBCD98ED
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 22:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38466CD98ED
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jun 2026 23:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0148E6179F;
-	Thu, 18 Jun 2026 22:37:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF484427A1;
+	Thu, 18 Jun 2026 23:02:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ERyxA63hLnMY; Thu, 18 Jun 2026 22:37:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id udZwbhX2Hoo2; Thu, 18 Jun 2026 23:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF93D61791
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0181642441
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781822229;
-	bh=s82MrsMVU978QHZ5pFy2ADtKijqFK8bl1fnFhVy2ew0=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=XxeOo9CZtngyWcT131SGPmfXvUhzcWL+Xsrid6m0e296MJSmjzx9HvMhvUm7GuJPd
-	 p5pqoTkzB6UPt7FonFJfVcYZRecFC4RaS2B6FPoEZaJWnQkJYaEvIMYAFuwhS3fXeO
-	 SOXd+Az7P783hck3C6P7i8Mkdg4rme57K6gwUTYcMVEKryZFEaxydKYa8sn+CkxlKq
-	 onCcmaJsdK5g+E9y6WXd7290mMn4oh9Thj7C6Gh+fqvmsbQpmnVwoXvxqEwlLFE6Fh
-	 8Y3+oXYz/5oGn8NDGZEx6OVeCo7YCRjCbSVvX74sJ8KPMo5X7C/78/+FPF94M786YV
-	 4Ai/L7CtaY6pg==
+	s=default; t=1781823750;
+	bh=LHvxTG/BaaEvIBSADeAwqZK6Mh9rSA9Sw2wPxK+HgHw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NpsSSkn6jqnt/Fm6Kze1QLon+jCRtXrqRv+GsqxqqBjEg/11M+t6TQlKnt/SVxA6R
+	 WPXa4Ffls9CoEvWS00iA+Nhhw7SXW0tUonDhBWrZSoJnVZOIevMsxil0gcpdEq1aHe
+	 aQrFqlHeL2O//KZ0y4TkdflnarTXivb/QeQhkrIbpHDPzNDjJCTRUW6S5blaoLL9bc
+	 3bdBz8xHqzXh/4CDQzK/MBDgwLEAeBxFIR+CifKg+LpYAD2W1sQ1KtoafMeJLWcuye
+	 JubjYgL27c/CX8NetgIRjL7wJh20D3eS4Bz7hCeafLgX0qJbWiI74QgKJBPYiv2jCb
+	 ZfJ338WfFA/hw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF93D61791;
-	Thu, 18 Jun 2026 22:37:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A4198367
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 22:37:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0181642441;
+	Thu, 18 Jun 2026 23:02:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72D39367
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 23:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A39261791
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 22:37:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 643BA42441
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 23:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZZCGRQ4hwBCY for <buildroot@buildroot.org>;
- Thu, 18 Jun 2026 22:37:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AC9626178D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC9626178D
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AC9626178D
- for <buildroot@buildroot.org>; Thu, 18 Jun 2026 22:37:07 +0000 (UTC)
-Received: from [10.42.0.16] (ip-109-41-112-134.web.vodafone.de
- [109.41.112.134])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A5F2D2C891C0;
- Fri, 19 Jun 2026 00:37:04 +0200 (CEST)
-Message-ID: <1a082889-dd93-4289-a631-11c7e92a72d7@bubu1.eu>
-Date: Fri, 19 Jun 2026 00:37:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: yann.morin@orange.com
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Thomas Perale <thomas.perale@mind.be>
-References: <20260617174208.3968183-1-james.hilliard1@gmail.com>
- <ajOHeaIobPebbK+f@yd-6wlzhs3> <9b0c655b-ff65-4841-9390-43515fb06d56@bubu1.eu>
- <ajQH75Zam4xELadz@yd-6wlzhs3>
-Content-Language: en-US
-In-Reply-To: <ajQH75Zam4xELadz@yd-6wlzhs3>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1781822225; bh=CQuLQNCRQUk9M5wWyZydXw6NkRrtHls1m+DqYneDHKc=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=ZNV5KDGWy0LWagu9YpAgLIyX7xgtet5QKh4RCZMDBJVs53Yc0yn4mjmY7nW9RJYg7
- UqIPMFbsnrsOObwXYgat+6c3ERswQn7FPowkQx55qa4tel/LrPMUCYlSDdB34Xpldm
- 3YzNJU+rBSR4h4kPrISpUmwlkM/As+2NuL1Mw099MrwnmRbf04DegXy/43P4+OElId
- 4+Vsl/bz2CPXj4AWYeOEdSuP7dxBS5j8iEE+vzWQCCJEAYRP29x5H1wEllpt26p/0P
- Bx+hFwrXlCc+BnFquXWqafY2OqgYYvbLmHhYcLCoCFwxRw+OnWQSY7SyEYjzqYgWTU
- bOk/biVhQt1Gg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=ZNV5KDGW
-Subject: Re: [Buildroot] minimum system/coreutils requirements
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BTE9Yfop4P8Q for <buildroot@buildroot.org>;
+ Thu, 18 Jun 2026 23:02:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 241AA4243D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 241AA4243D
+ for <buildroot@buildroot.org>; Thu, 18 Jun 2026 23:02:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C3633814DA; Thu, 18 Jun 2026 23:02:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 19 Jun 2026 01:00:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1e7187e1adc395c76c6abb54bb9127d1ddd8a35b
+X-Git-Newrev: 32bdc4710a483c3ea7b0d5a805b2a857f9a11872
+X-Patchwork-Hint: ignore
+Message-Id: <20260618230204.C3633814DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: drop
+ initrd-related services when unneeded
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,35 +69,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32bdc4710a483c3ea7b0d5a805b2a857f9a11872
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 6/18/26 16:59, yann.morin@orange.com wrote:
-[...]
-> 
-> In any case I was just pointing to a discrepancy betweeni how we handle
-> various tools provided by coreutils... Whatever the eventual outcome, I
-> don't care much, as long as it is homogeneous.
+Since NetworkManager 1.54, packaged since commit 24827ae398db
+(package/network-manager: bump to 1.56.0), new services related to
+running in an initrd are now installed, which prevents proper startup,
+with systemd reporting that two units declare the same BusName.
 
-Got it, makes sense!
-So I think at this point it's easiest to apply James' series with the 
-check included and then I send a follow-up to remove all the coreutils 
-checks and add a note to the docs that we require 8.26 for the upcoming 
-version.
+When systemd is configured without initrd support, drop the
+NetworkManager initrd-related services.
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Fixes: 24827ae398db
 
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Fiona Klute <fiona.klute@gmx.de>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
+Acked-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ package/network-manager/network-manager.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Marcus
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 301c1ad43e..bf4f29c3cc 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -151,6 +151,12 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dconfig_logging_backend_default=journal \
+ 	-Dsession_tracking=systemd \
+ 	-Dsuspend_resume=systemd
++ifneq ($(BR2_PACKAGE_SYSTEMD_INITRD),y)
++define NETWORK_MANAGER_CLEAN_INITRD
++	rm -f $(TARGET_DIR)/usr/lib/systemd/system/NetworkManager-*initrd.service
++endef
++NETWORK_MANAGER_POST_INSTALL_TARGET_HOOKS += NETWORK_MANAGER_CLEAN_INITRD
++endif
+ else
+ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dsystemd_journal=false \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
