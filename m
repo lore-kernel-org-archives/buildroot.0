@@ -4,80 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92B65CD98F2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 09:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A81CD98F2
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 09:31:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65EA66F601;
-	Fri, 19 Jun 2026 09:20:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65A566F624;
+	Fri, 19 Jun 2026 09:31:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CnNPuJDxHxNH; Fri, 19 Jun 2026 09:20:29 +0000 (UTC)
+ id hTeY6PEs_gGa; Fri, 19 Jun 2026 09:31:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 612FE6F602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9A66F614
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781860829;
-	bh=1r6nL1L19cL7a0FRpcy/iF8zaCgis00soNPtLkm3UXE=;
+	s=default; t=1781861516;
+	bh=8pIDXWXXu+ZdHekV7d6CidIfSdL+Vukn0MTTQ8nsL4Y=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=brqFRcZVG2DWgWM9f8VkDZYafCTo6moDaak7U1AHg305d/78mEB/4d7Iwv0krmh9u
-	 IeLUqPN96zrk8oMhVUJX/Q/5AI+z85WypN5u//s79B+qzCJ1MCuwxcP5CO1Sg23nCA
-	 0iZtk4uITxww6qH4LB54QiMLAD83VX8wJ1ZK75M1vvzxN9VgXE0GImjk1Mmu3n6/HL
-	 xSrqiMtLWn6ZynzQrJELmTXa2BjyJ0G075lwD43xi1O4pbfgMFVmZ2eFlVEUJO85Fa
-	 C49tXw0J4sSDutU1oz+kCX90zrleeBIEqOiO4zKyaNsCddvkirxRjDJJOsz/+yvS5F
-	 tyYVZKs7qGC6Q==
+	b=oXYYF6vW5juw1lVxAgbcrUs43FxGCox6+mcksFuBDYSC+bFYiD7R2CmG31mzaqyg9
+	 4GYF9E2bFd4luFfu28eitSmAPs69vggn+CMzFX+tMUvIGivU5S4MHaf5v580mKzZY0
+	 SHi0xKpBv+VrBeQ44DDj3/LkZm43X9K5Y1lcy+y+4TDrhuLZWw3CFjC9e9nlY4LaFC
+	 XV1hcfqFyecGZQw9lCiE6ITREzRT/tKHV3AzDjXrg3BPEc/706sAxA+BCRpb0F/WWL
+	 ykVcGFnTFrHWrB1TDMMMHsZcE114pyGztrKe6ZGtjcAZxXEge38sAG65ZK3Z04Cq1r
+	 Dt7L62QByRzYA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 612FE6F602;
-	Fri, 19 Jun 2026 09:20:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E4E1367
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:20:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9A66F614;
+	Fri, 19 Jun 2026 09:31:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 562D2367
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 645F36F602
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:20:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47D9842622
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wy74Mgn8FDtL for <buildroot@buildroot.org>;
- Fri, 19 Jun 2026 09:20:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7KCaPv5_j7b9 for <buildroot@buildroot.org>;
+ Fri, 19 Jun 2026 09:31:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1899A6F601
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1899A6F601
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1899A6F601
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:20:26 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -530246013; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 19 Jun 2026 09:20:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1waVOg-0000000DFaa-47pL;
- Fri, 19 Jun 2026 11:20:22 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 19 Jun 2026 11:20:03 +0200
-Message-ID: <20260619092004.3158146-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC36B41088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC36B41088
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DC36B41088
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:52 +0000 (UTC)
+X-CSE-ConnectionGUID: 2g/hP8mNTKytGuWu3AgU2Q==
+X-CSE-MsgGUID: 4GSaBGYXRB+wFfPG8Zal9g==
+Received: from unknown (HELO opfedv1rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 19 Jun 2026 11:31:49 +0200
+Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0b.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2026 11:31:49 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Fri, 19 Jun 2026 11:31:48 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Fri, 19 Jun 2026 11:31:47 +0200
+X-CSE-ConnectionGUID: 5ACqkPeGRjW4ejD40gVd6w==
+X-CSE-MsgGUID: PtIlZXvKS4qjlibucNDL8w==
+X-IronPort-AV: E=Sophos;i="6.24,213,1774306800"; d="scan'208";a="441963954"
+X-Amp-Result: SKIPPED(no attachment in message)
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Fri, 19 Jun 2026 11:31:47 +0200
+Message-ID: <5eb533070f62b66decb39cb42067e453ef577bfc.1781861320.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=VU4FOsSRbZFLVnlj8cFY1zlPQSmyLz50zg6l2erknb5Z3/JRq9qOOSTnzkhOj9pOeSI4dJkwjpwvQM5oyEZbOs44KyPy81M96KGwOslCsPvJLl9+wOal1QzZePWbjcLv/9zKSJvXLM4RIF/uWu78AsBRX5L5pQRzrDLy3pxbqFw29NPJJ+n8WCOJF+EjL7QJTo0P03G8wA3NRcX/Ga7H6K2T/oEm4NpgaDHEmeIQyQO+1khC5if9uRWRJhwoGTQ0zLDV4DaimL8tzB60ipaysc4kRSB1e0fWmws72rTO3OEBrkhlqOiaS0b49znVCLVluhAlMVPRy58+SuIpcz70wQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=9XqFQ5N4hdZvTmCxXvj7LJzz3/WM8Q7zyyoumoQhe9o=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX607.corporate.adroot.infra.ftgroup
+ (10.115.27.31) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
+ (10.115.27.26)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1781861513; x=1813397513;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=6dy3dhEL7Yo9MIOkLzFvK3rpgb7GKnvFDdCbZh+pLlI=;
+ b=HUD202+DXNYJV/+zphBlJZYNzN+rMkSS0ED7LY876Dq+R23dzApYUnfW
+ VtqORQ+p9UNx8CPglL+/OdNK6gNGWw8j400nuUaJKligJuOtTxTyjZyfF
+ jPmlk+y5jcglc1e73zJga78xUt6dkdO0x+XbIQid2GJRBP56evzjy440A
+ 1LJxYlHVRCcgTGJ08dqL2W1sYoon/w8r1JgNqqCgMf/p0+cqNfHtYT87q
+ 9HZ7B/aXk2f/Kz/cG9rZwHAuyBTSG3000V1STij06XDVe5E0nucoeRP6G
+ DmzR50VhahSbvu9dcskk70lMI/4GDATJQGRZX2z+2egwuNoSqzI6USYF+
+ g==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=VU4FOsSR
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH v2] package/agec: new package
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=HUD202+D
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: requires cmake >= 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,240 +109,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: yann.morin@orange.com, Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Agec is a simple file encryption tool that implements the
-age format in C with minimal dependencies. The tool supports
-asymmetric encryption based on X25519, and a passphrase
-encryption based on scrypt.
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-https://git.sr.ht/~min/agec
-https://age-encryption.org
+With an older cmake version, like the 3.25.1 as available in the docker
+reference image, mosquitto fails to build when ccache is enabled:
 
-Encryption is silently broken for files <35 bytes, so add a patch submitted
-upstream to fix that.
+    [ 98%] Building CXX object lib/cpp/CMakeFiles/mosquittopp.dir/mosquittopp.cpp.o
+    In file included from [...]/buildroot/output/build/mosquitto-2.1.2/lib/cpp/mosquittopp.cpp:17:
+    [...]/buildroot/output/host/opt/ext-toolchain/i686-buildroot-linux-gnu/include/c++/15.1.0/cstdlib:83:15: fatal error: stdlib.h: No such file or directory
+       83 | #include_next <stdlib.h>
+          |               ^~~~~~~~~~
+    compilation terminated.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Officially, mosquitto only requires cmake 3.18, but that proves to not
+be enough, in fact...
+
+We workaround that by requiring cmake 4.3, which is the one version that
+could be tested with our host-cmake.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Titouan Christophe <titouan.christophe@mind.be>
 ---
-Changes since v1:
-- Add patch submitted upstream fixing encryption of files <35 bytes
-- Add runtime test
+ package/mosquitto/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- DEVELOPERS                                    |  2 +
- package/Config.in                             |  1 +
- ...mor-do-not-set-eof-for-35-byte-files.patch | 35 +++++++++++
- package/agec/Config.in                        | 10 +++
- package/agec/agec.hash                        |  3 +
- package/agec/agec.mk                          | 24 ++++++++
- support/testing/tests/package/test_agec.py    | 61 +++++++++++++++++++
- 7 files changed, 136 insertions(+)
- create mode 100644 package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch
- create mode 100644 package/agec/Config.in
- create mode 100644 package/agec/agec.hash
- create mode 100644 package/agec/agec.mk
- create mode 100644 support/testing/tests/package/test_agec.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d591c62805..7bc4768ca7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2647,6 +2647,7 @@ F:	configs/orangepi_pc_defconfig
- F:	configs/orangepi_r1_defconfig
- F:	configs/sheevaplug_defconfig
- F:	configs/visionfive_defconfig
-+F:	package/agec/
- F:	package/bats-core/
- F:	package/dfu-programmer/
- F:	package/docker-compose/
-@@ -2681,6 +2682,7 @@ F:	package/triggerhappy/
- F:	package/ugetty/
- F:	package/wireguard-linux-compat/
- F:	package/wireguard-tools/
-+F:	support/testing/tests/package/test_agec.py
- F:	support/testing/tests/package/test_docker_compose.py
- F:	support/testing/tests/package/test_python_hid.py
- 
-diff --git a/package/Config.in b/package/Config.in
-index 96e113e226..b8374fbab5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2728,6 +2728,7 @@ comment "Shells"
- 	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
-+	source "package/agec/Config.in"
- 	source "package/apg/Config.in"
- 	source "package/at/Config.in"
- 	source "package/bash-completion/Config.in"
-diff --git a/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch b/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch
-new file mode 100644
-index 0000000000..fa4af2a9c0
---- /dev/null
-+++ b/package/agec/0001-io.c-isarmor-do-not-set-eof-for-35-byte-files.patch
-@@ -0,0 +1,35 @@
-+From eb8ccfe5bb32273226d80236caab7a9386d71071 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Thu, 18 Jun 2026 15:12:38 +0200
-+Subject: [PATCH] io.c: isarmor(): do not set eof for <35 byte files
-+
-+Encryption is silently broken for <35 byte files since commit b374d8de5a
-+("stop reading after first EOF"), as readall() sets the eof flag when it was
-+unable to read the entire 35 bytes in isarmor(), causing bread() to return
-+EOF and ignore the <35 bytes already read.
-+
-+Fix it by only setting the eof flag in isarmor() if nothing could be read.
-+
-+Upstream: mailed to amin@firemail.cc
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ io.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/io.c b/io.c
-+index 15ed4f7..2773022 100644
-+--- a/io.c
-++++ b/io.c
-+@@ -128,8 +128,7 @@ isarmor(Ibuf *b)
-+ 	nr = readall(b->fd, b->buf, sizeof(armorfirst) - 1, &b->eof);
-+ 	if(nr == -1)
-+ 		return -1;
-+-	if(nr == 0)
-+-		b->eof = 1;
-++	b->eof = (nr == 0);
-+ 	b->size = nr;
-+ 	if((usize)nr < sizeof(armorfirst) - 1)
-+ 		return 0;
-+-- 
-+2.47.3
-+
-diff --git a/package/agec/Config.in b/package/agec/Config.in
-new file mode 100644
-index 0000000000..8ca9240917
---- /dev/null
-+++ b/package/agec/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_AGEC
-+	bool "agec"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Agec is a simple file encryption tool that implements the
-+	  age format in C with minimal dependencies. The tool supports
-+	  asymmetric encryption based on X25519, and a passphrase
-+	  encryption based on scrypt.
-+
-+	  https://git.sr.ht/~min/agec
-diff --git a/package/agec/agec.hash b/package/agec/agec.hash
-new file mode 100644
-index 0000000000..0b6982f913
---- /dev/null
-+++ b/package/agec/agec.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97958ff82eaa6aa89328f4319d585e362130168c478cf6a85ba3f4d05e453669  0.1.0.tar.gz
-+sha256  f7f37a8bb7d993825b10f5ce2838c1c452d902eda63cd180fdabc7c3a5dd0341  LICENSE
-diff --git a/package/agec/agec.mk b/package/agec/agec.mk
-new file mode 100644
-index 0000000000..b19eac94a4
---- /dev/null
-+++ b/package/agec/agec.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# agec
-+#
-+################################################################################
-+
-+AGEC_VERSION = 0.1.0
-+AGEC_SOURCE = $(AGEC_VERSION).tar.gz
-+AGEC_SITE = https://git.sr.ht/~min/agec/archive
-+AGEC_LICENSE = BSD-0-Clause
-+AGEC_LICENSE_FILES = LICENSE
-+AGEC_DEPENDENCIES = host-pkgconf openssl
-+
-+define AGEC_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+endef
-+
-+define AGEC_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		PREFIX=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_agec.py b/support/testing/tests/package/test_agec.py
-new file mode 100644
-index 0000000000..7f43e60b1f
---- /dev/null
-+++ b/support/testing/tests/package/test_agec.py
-@@ -0,0 +1,61 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestAgec(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + """
-+    BR2_PACKAGE_AGEC=y
-+    BR2_TARGET_ROOTFS_CPIO=y
-+    """
-+
-+    # generate keypair in file and return pubkey
-+    def generate_keypair(self, filename):
-+        self.assertRunOk(f"agec-keygen > {filename}")
-+
-+        output, exit_code = self.emulator.run(f"agec-keygen -y < {filename}")
-+        self.assertEqual(exit_code, 0)
-+        pubkey = output[0].strip()
-+        self.assertNotEqual(pubkey, "")
-+        return pubkey
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We define two keypairs
-+        key1 = "/tmp/key1.txt"
-+        key2 = "/tmp/key2.txt"
-+
-+        # And files to work on
-+        orig_file = "/bin/busybox"
-+        decrypted_file = "/tmp/busybox"
-+        encrypted_file = decrypted_file + ".age"
-+
-+        # should output a valid looking keypair to stdout
-+        output, exit_code = self.emulator.run("agec-keygen")
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("public key:", output[0])
-+        self.assertIn("AGE-SECRET-KEY-", output[1])
-+
-+        # generate keypairs and extract pubkeys
-+        pubkey1 = self.generate_keypair(key1)
-+        pubkey2 = self.generate_keypair(key2)
-+
-+        # encrypt file
-+        self.assertRunOk(f"agec -r {pubkey1} {orig_file} > {encrypted_file}")
-+
-+        # should be encrypted
-+        self.assertRunNotOk(f"cmp {orig_file} {encrypted_file}")
-+
-+        # should be decryptable with key1
-+        self.assertRunOk(f"agec -d -i {key1} {encrypted_file} > {decrypted_file}")
-+
-+        # and equal to original
-+        self.assertRunOk(f"cmp {orig_file} {decrypted_file} ")
-+
-+        # should NOT be decryptable with key2
-+        self.assertRunNotOk(f"agec -d -i {key2} {encrypted_file} > {decrypted_file}")
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 08223bc5db..d553d2fe5c 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MOSQUITTO
+ 	bool "mosquitto"
+ 	depends on BR2_USE_MMU  # lib peeks in malloc() internals; broker fork()s
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_HOST_CMAKE_AT_LEAST_4_3
+ 	select BR2_PACKAGE_CJSON
+ 	help
+ 	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
 -- 
-2.47.3
+2.34.1
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
