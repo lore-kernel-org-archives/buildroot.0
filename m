@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F4EACD98F6
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 23:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF436CD98F6
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 23:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E91F78601B;
-	Fri, 19 Jun 2026 23:03:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFDED6F8EA;
+	Fri, 19 Jun 2026 23:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CsWpIWbg4XV8; Fri, 19 Jun 2026 23:03:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7c-E9opND6G8; Fri, 19 Jun 2026 23:03:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20A7286017
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 374B66F8B7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781910192;
-	bh=DUzjhayzGjArOt7ZfjnCA8lMTmSeI7gfTyA5ceYd5UQ=;
+	s=default; t=1781910216;
+	bh=38bKIvOH2cxKZQ9Jc1DcphEVmL0/o9QALWC8v1vCDd8=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=kPgLlVpvIqscfeGBwFuFBmhjYvhqBcoVyzIyC2sgoYRzlK/xh6fQaL0hmd5WrGDkC
-	 ksf1R3P4R+K+UfQY67IetqlvxISbDe5qdGwFt/4yNApkLM03BmjOR/eI3B0N9QarC+
-	 RIx1XDz5EbHPBDiSynvpGxkPaDiAxPvfQz4lUVrOD1fRvT1AsY6MYwSuXnXYwJGk3Q
-	 AYmNt4oKKqbYCVIfCZlaU9SVaCwDKwuXCN2Ew8RAv5uUbQUdAqykvOSAk1trZjvdID
-	 kv0KbJCrInK5XkZUGNgxqu9ZvsZgadatFCTKk0FcF5G5LBB+jg6vRSJGdvel6e1vnM
-	 ms9JgDmwB6SYg==
+	b=cz+PZNUc3sD5r5trMnuNT0nXxog2Ykdp8G3L6xlRULcqhV8bwVxt06Gd2iN5Kb2hu
+	 pgCPldbQMI6691hgcJd20xhz7rdzqwTmXO7K5WERt9ZwZhBkKqmIezhxg9cv6FwBO4
+	 mz5itaL4+9SeOM2uaxL9YxDjXY0SvkPkBWsy33kjnucSawqkAmVI3jnpdCN7kejFsT
+	 eeDV66sbVOUDFPfTqBUN0Uflpx2BQaLvUwbazMfL50pCJUFThtpafuQMT9j38eFWtG
+	 JvwuVc0WmRO5Bqef+qG0vNQXEQ/lYFNzeJkqIs9nmAoZqI9LR+fOrkdrbjff7Ubymh
+	 JYha6qexizSVA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20A7286017;
-	Fri, 19 Jun 2026 23:03:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C8AF2D7
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 374B66F8B7;
+	Fri, 19 Jun 2026 23:03:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91896367
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F26AB4ED1B
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82DDB4ED24
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5y42MGaHaiSZ for <buildroot@buildroot.org>;
- Fri, 19 Jun 2026 23:03:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id 9Va7ad_Le8vw for <buildroot@buildroot.org>;
+ Fri, 19 Jun 2026 23:03:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A48F14ED09
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A48F14ED09
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A48F14ED09
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E9494ED09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E9494ED09
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E9494ED09
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:03:32 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIMfW-1wMT9i1rIC-00FuZw; Sat, 20
- Jun 2026 01:03:06 +0200
-Message-ID: <58b7ae7b-049b-4cfd-9198-b6b0d010a1cc@gmx.de>
-Date: Sat, 20 Jun 2026 01:03:05 +0200
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0G1d-1xM68i0jCx-00yKdm; Sat, 20
+ Jun 2026 01:03:31 +0200
+Message-ID: <afadb29d-d0e3-4c7a-bc97-64705fcc1470@gmx.de>
+Date: Sat, 20 Jun 2026 01:03:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20260619181321.3345513-1-bernd@kuhls.net>
+References: <20260619063906.3467492-1-bernd@kuhls.net>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -102,116 +102,114 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
  6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
  FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20260619181321.3345513-1-bernd@kuhls.net>
-X-Provags-ID: V03:K1:OHoA9bBK5vDdfTS150wbQug9O6LQvFSztgTVb9Fep0c57vQ25Wp
- nCBLRlWFGZ2LfZqvK+0+/66cHvZWiwWd7JWwwsggm4SiqC3uH9tERWszOUyiU2914UFHQf+
- 9pwUku2YJ8v6qGZVNJqr/bQqHJjSKNGzki485PKNBEO1R1A9+z+Kskug0rN8FYd/l8U4MmB
- RfkYj0ZPK50Eo/F06TbMw==
-UI-OutboundReport: notjunk:1;M01:P0:WAKBFAR1g9M=;zNm71Y2+B0P7bTn3dyluMfEbrmE
- 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
- dSGI+Ftgo=
+In-Reply-To: <20260619063906.3467492-1-bernd@kuhls.net>
+X-Provags-ID: V03:K1:i0r/XOYTnVxhG/BIjemw3WK+zHpOIyHFdaVovt+h+g2CLFuXdQD
+ z/1gG/JRK8xbTo+qbK9iimC0aTfcKSHQKDIe7UIPXJ7/S44xXGYjA751uj+MSWeJbIzpccw
+ r1hqpSumTZg7QRhwOcbhgJzZdWE5Qls5DqXnz1sTrw1GDqRGnPkQkcJfpvIdvS16Pb64wKq
+ sw2TC6hjpOVSWLIc8cUoQ==
+UI-OutboundReport: notjunk:1;M01:P0:IulD58FaGvg=;MSGuphpbd82qmT8T56Al0CLg/GQ
+ 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
+ mhiNV98DgeDnbHFXSif0kKUs/4ruHE
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1781910186; x=1782514986; i=fiona.klute@gmx.de;
- bh=xpW4cgM2tT3ZcBYBiz3W5uPB4bWxdydY+uaIgO2p8iI=;
+ s=s31663417; t=1781910211; x=1782515011; i=fiona.klute@gmx.de;
+ bh=Ymj3Rxk3LR68gi9bF/Cy4vhyxDFzxwIqePL/I32+xoA=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=EFrQdgaCCNnIMLO1RKBPftQT1xUlRrsmRQwdpoMJ45qheVgU44WuvuF23GG/OF4s
- 0Bjq/hPNgC2gevdIv52STMMs2Vf7EqiSNB1K7FUO70hoIsmtchvx2tKFbpgq1YoEQ
- AhCjh77ZnplmUF3O5vflwzkHFYIlbuOa//UCpQUB29jS751w/BNKN+gbdoSLnCXEp
- swqsAOikbaCWl102z7oKpwQTnMIRX8A/g3x2qk+shmfWl8tlAuDolMKeIDwGiWIHI
- PTBrWGOZFqKaWhaRfLdaYVFGprUwW86reo7Ahzj9+7cHY0Vxz2v1qeV1tPA+tmnCf
- aWg5oAB4mmI/zDYUuA==
+ b=Y1x/mxpEIqfhGycWRoI3KLs8i1pOLotbKSf3MhF3+VS6DgzXDAbfz6owlIQCUtOH
+ THC9lJ59JAoFqY+47Dn3Fj25R41RLMSLljwzpx0GHytPlx038irQwmkhl+cq7XnPQ
+ k9cP23/mzUTVQchz1+SAstnrhq77BZZMxobbJImlgxY/xV/2s+UWVAbYFboFgiQjf
+ F370mtbPtljSHyQxZVhSWPedEsBoirOdcJAxSDEhJx45vPWmdbJgKORles6vPNb4+
+ 267GFK9FykZezGZJaNgd3v3Mjr/YA5QRjlP9DnwPnyf1mwk+kqdJ8ZpZ8rVMrzbAi
+ BkWl9f9iwlhUf9eCjw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=EFrQdgaC
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgsasl: security bump version
- to 2.2.4
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=Y1x/mxpE
+Subject: Re: [Buildroot] [PATCH 1/1] package/rrdtool: bump version to 1.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -230,66 +228,46 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 19.06.26 um 20:13 schrieb Bernd Kuhls:
-> 2.2.3: https://lists.gnu.org/archive/html/help-gsasl/2026-05/msg00001.html
->         Fixes CVE-2026-48829: https://www.cvedetails.com/cve/CVE-2026-48829/
-> 
-> 2.2.4: https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00001.html
->         https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00002.html
->         "GNU SASL Security Advisory: NTLM client use-of-uninitialized-value"
-> 
-> Upstream does not provide sha1/sha256 hashes anymore.
-> 
-> Updated license hash due to copyright year bump:
-> https://gitlab.com/gsasl/gsasl/-/commit/ec96bad53988cb79060964cf1f1568da4e301fd6
+Am 19.06.26 um 08:39 schrieb Bernd Kuhls:
+> https://github.com/oetiker/rrdtool-1.x/blob/v1.10.3/CHANGES
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Upstream still provides sha256 hashes, they're just a little differently 
-formatted than before. Converting base64 -> hex gives exactly the value 
-you calculated. :-)
-
-Applied to master with that fixed, thank you!
+Applied to master, thank you!
 
 > ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/cacbb2a74a1a47440ad8e193de23bc645f99817d
+> Gitlab pipeline passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/a9ea38c90edfa70108dfa66d77f3b3e9f5a14cf1
 > 
->   package/libgsasl/libgsasl.hash | 8 ++------
->   package/libgsasl/libgsasl.mk   | 2 +-
->   2 files changed, 3 insertions(+), 7 deletions(-)
+>   package/rrdtool/rrdtool.hash | 4 ++--
+>   package/rrdtool/rrdtool.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
-> index de24d73c2d..4995ffe823 100644
-> --- a/package/libgsasl/libgsasl.hash
-> +++ b/package/libgsasl/libgsasl.hash
-> @@ -1,11 +1,7 @@
-> -# From https://lists.gnu.org/archive/html/help-gsasl/2025-03/msg00000.html
-> -sha1  8a845b7ec78e5f27bf69438074ad23867c00d4fe  gsasl-2.2.2.tar.gz
-> -sha256  d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075  gsasl-2.2.1.tar.gz
-> -
->   # Locally calculated after checking pgp signature
-> -sha256  41e8e442648eccaf6459d9ad93d4b18530b96c8eaf50e3f342532ef275eff3ba  gsasl-2.2.2.tar.gz
-> +sha256  d32be15efd3a04cb19b232f721bdca02cc6ad7ab415df7d79fb2dd2c0da3e0be  gsasl-2.2.4.tar.gz
->   
->   # Hash for license files:
-> -sha256  e3d1b8a82b97dc6083b2600a6beb0396bbefbe384fc1cd39d0e8cb04bbf2bd33  README
-> +sha256  16a8258f525326a71cba997365505ad32089be4be7a7100f64f308ed01419a11  README
->   sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSER
->   sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-> diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-> index 8670f43b6f..db3b64e282 100644
-> --- a/package/libgsasl/libgsasl.mk
-> +++ b/package/libgsasl/libgsasl.mk
+> diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+> index ce1186cb18..85e894a642 100644
+> --- a/package/rrdtool/rrdtool.hash
+> +++ b/package/rrdtool/rrdtool.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/oetiker/rrdtool-1.x/releases/tag/v1.10.2
+> -sha256  9787114551ee9b5db7c72722736388dcc54bf00ded51b5dd47feed11fb179fe4  rrdtool-1.10.2.tar.gz
+> +# From https://github.com/oetiker/rrdtool-1.x/releases/tag/v1.10.3
+> +sha256  843b7caa2a80a815d44ac5c65daa42920cb64586fe804e36d0bc0783554e0635  rrdtool-1.10.3.tar.gz
+>   # Locally calculated
+>   sha256  ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320  COPYRIGHT
+>   sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  LICENSE
+> diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+> index 73832cb635..f911d54623 100644
+> --- a/package/rrdtool/rrdtool.mk
+> +++ b/package/rrdtool/rrdtool.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -LIBGSASL_VERSION = 2.2.2
-> +LIBGSASL_VERSION = 2.2.4
->   LIBGSASL_SOURCE = gsasl-$(LIBGSASL_VERSION).tar.gz
->   LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
->   LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
+> -RRDTOOL_VERSION = 1.10.2
+> +RRDTOOL_VERSION = 1.10.3
+>   RRDTOOL_SITE = https://github.com/oetiker/rrdtool-1.x/releases/download/v$(RRDTOOL_VERSION)
+>   RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+>   RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
 
 _______________________________________________
 buildroot mailing list
