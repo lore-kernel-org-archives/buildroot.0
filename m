@@ -1,103 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A81CD98F2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 09:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DFD4CD98F6
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 09:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65A566F624;
-	Fri, 19 Jun 2026 09:31:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59B5385729;
+	Fri, 19 Jun 2026 09:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTeY6PEs_gGa; Fri, 19 Jun 2026 09:31:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a6fVtyFbXY3K; Fri, 19 Jun 2026 09:52:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9A66F614
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2BF385723
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781861516;
-	bh=8pIDXWXXu+ZdHekV7d6CidIfSdL+Vukn0MTTQ8nsL4Y=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=oXYYF6vW5juw1lVxAgbcrUs43FxGCox6+mcksFuBDYSC+bFYiD7R2CmG31mzaqyg9
-	 4GYF9E2bFd4luFfu28eitSmAPs69vggn+CMzFX+tMUvIGivU5S4MHaf5v580mKzZY0
-	 SHi0xKpBv+VrBeQ44DDj3/LkZm43X9K5Y1lcy+y+4TDrhuLZWw3CFjC9e9nlY4LaFC
-	 XV1hcfqFyecGZQw9lCiE6ITREzRT/tKHV3AzDjXrg3BPEc/706sAxA+BCRpb0F/WWL
-	 ykVcGFnTFrHWrB1TDMMMHsZcE114pyGztrKe6ZGtjcAZxXEge38sAG65ZK3Z04Cq1r
-	 Dt7L62QByRzYA==
+	s=default; t=1781862766;
+	bh=0U0jfGrUSWkrurJ0CzZZebxS02Wrz6fh2evdIZrxvYI=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=blDkTZaGc34vdN8bph4a0y/GgIq3WQAS1rrZFIQLyro+PxjF3Qfyc6jg02w38ZMPQ
+	 snSbTztL3lY/dAuwV9FhkoQvo6YiHEufMpBzvIz+IVriUnktwux01widzUGbCkDHmm
+	 13kHAi9g/AjjwnPs3eapQ6ZenNUzj1rag/6wkh00r4FLNo2AppvwVUJT2S8SMkDVCX
+	 stsUL9DYv+961RhcUcBzKcqv+8WAE24oufZG8OcfmPjHwVYMRx6MJBDCWxJ0VQptBg
+	 nNJ5FSdQIo1i4kP/TX46ocK1gifu19QZS0igahLxb4kDLbxPhMD3RV30aZNP3aulr2
+	 qveXFwzBI7sVQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9A66F614;
-	Fri, 19 Jun 2026 09:31:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 562D2367
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2BF385723;
+	Fri, 19 Jun 2026 09:52:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E817D279
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47D9842622
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8F2942E35
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7KCaPv5_j7b9 for <buildroot@buildroot.org>;
- Fri, 19 Jun 2026 09:31:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cx721MYtfyLE for <buildroot@buildroot.org>;
+ Fri, 19 Jun 2026 09:52:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC36B41088
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC36B41088
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC36B41088
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:31:52 +0000 (UTC)
-X-CSE-ConnectionGUID: 2g/hP8mNTKytGuWu3AgU2Q==
-X-CSE-MsgGUID: 4GSaBGYXRB+wFfPG8Zal9g==
-Received: from unknown (HELO opfedv1rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 19 Jun 2026 11:31:49 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2026 11:31:49 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
- Fri, 19 Jun 2026 11:31:48 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 19 Jun 2026 11:31:47 +0200
-X-CSE-ConnectionGUID: 5ACqkPeGRjW4ejD40gVd6w==
-X-CSE-MsgGUID: PtIlZXvKS4qjlibucNDL8w==
-X-IronPort-AV: E=Sophos;i="6.24,213,1774306800"; d="scan'208";a="441963954"
-X-Amp-Result: SKIPPED(no attachment in message)
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Fri, 19 Jun 2026 11:31:47 +0200
-Message-ID: <5eb533070f62b66decb39cb42067e453ef577bfc.1781861320.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 086DC42D2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 086DC42D2D
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 086DC42D2D
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 09:52:43 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 86BA34E42FC7;
+ Fri, 19 Jun 2026 09:52:40 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5B554601AD;
+ Fri, 19 Jun 2026 09:52:40 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C9F5E106C8938; 
+ Fri, 19 Jun 2026 11:52:34 +0200 (CEST)
+Date: Fri, 19 Jun 2026 11:52:33 +0200
+To: Cherniaev Andrei <dungeonlords789@naver.com>
+Message-ID: <20260619115233.01b6546b@kmaincent-XPS-13-7390>
+In-Reply-To: <20260611130409.2841176-1-dungeonlords789@naver.com>
+References: <20260611130409.2841176-1-dungeonlords789@naver.com>
+Organization: bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX607.corporate.adroot.infra.ftgroup
- (10.115.27.31) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1781861513; x=1813397513;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=6dy3dhEL7Yo9MIOkLzFvK3rpgb7GKnvFDdCbZh+pLlI=;
- b=HUD202+DXNYJV/+zphBlJZYNzN+rMkSS0ED7LY876Dq+R23dzApYUnfW
- VtqORQ+p9UNx8CPglL+/OdNK6gNGWw8j400nuUaJKligJuOtTxTyjZyfF
- jPmlk+y5jcglc1e73zJga78xUt6dkdO0x+XbIQid2GJRBP56evzjy440A
- 1LJxYlHVRCcgTGJ08dqL2W1sYoon/w8r1JgNqqCgMf/p0+cqNfHtYT87q
- 9HZ7B/aXk2f/Kz/cG9rZwHAuyBTSG3000V1STij06XDVe5E0nucoeRP6G
- DmzR50VhahSbvu9dcskk70lMI/4GDATJQGRZX2z+2egwuNoSqzI6USYF+
- g==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1781862759; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=FCZrK/EEGth9N9QakVjGCBCzF9qJ1/UtlGVWBb3St40=;
+ b=gtr4wSST+2Bec7IyGRurOq+SfbGMUicyQCpX+tuZ7/+5ViXaeZaw/LdWj9yO0WPNUdKluH
+ 1ombAFMj5YmLplHtSu28Wj0AMWt9mOy5bgbpdxOx8iLg+MqmaeoNubhe9uVJinXcQVsfv9
+ xfzE4ANZAB6za8EWL0A11Ob4wZZk0dbIjBnHAE6IxB1AsqE7wAiKNlZ7dka2XMYKQnzZqV
+ ZEJrEVoqS+935N6qvNR/KJQitZA3cl7d9RuWzAXIMnMyZSi/LtkPpf0cbJtG24V+m6JXuN
+ qfNirzr5+qBKVf2k7fXNBVQ+v6GXoqzbjLvl4jskva2o93+LDWTAShUS1As29A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=HUD202+D
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: requires cmake >= 4.3
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=gtr4wSST
+Subject: Re: [Buildroot] [PATCH 1/1] boot/edk2: fix description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,65 +96,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: vincent.stehle@arm.com, buildroot@buildroot.org, jiaxun.yang@flygoat.com,
+ fiona.klute@gmx.de, ju.o@free.fr, hi@senzilla.io, romain.naour@gmail.com,
+ fancp2007@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-With an older cmake version, like the 3.25.1 as available in the docker
-reference image, mosquitto fails to build when ccache is enabled:
-
-    [ 98%] Building CXX object lib/cpp/CMakeFiles/mosquittopp.dir/mosquittopp.cpp.o
-    In file included from [...]/buildroot/output/build/mosquitto-2.1.2/lib/cpp/mosquittopp.cpp:17:
-    [...]/buildroot/output/host/opt/ext-toolchain/i686-buildroot-linux-gnu/include/c++/15.1.0/cstdlib:83:15: fatal error: stdlib.h: No such file or directory
-       83 | #include_next <stdlib.h>
-          |               ^~~~~~~~~~
-    compilation terminated.
-
-Officially, mosquitto only requires cmake 3.18, but that proves to not
-be enough, in fact...
-
-We workaround that by requiring cmake 4.3, which is the one version that
-could be tested with our host-cmake.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Titouan Christophe <titouan.christophe@mind.be>
----
- package/mosquitto/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 08223bc5db..d553d2fe5c 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MOSQUITTO
- 	bool "mosquitto"
- 	depends on BR2_USE_MMU  # lib peeks in malloc() internals; broker fork()s
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_HOST_CMAKE_AT_LEAST_4_3
- 	select BR2_PACKAGE_CJSON
- 	help
- 	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
--- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVGh1LCAxMSBKdW4gMjAyNiAyMjowNDowOSArMDkwMApDaGVybmlhZXYgQW5kcmVpIDxkdW5n
+ZW9ubG9yZHM3ODlAbmF2ZXIuY29tPiB3cm90ZToKCj4gMSkgdXN1YWxseSB1c2VyIHNob3VsZCBu
+b3QgdHJ5IHRvIGZpbmQgT1ZNRi5mZCBzb21ld2hlcmUgbWFudWFsbHkKPiAyKSBib2FyZC9xZW11
+L3g4Nl82NC1lZmkvcmVhZG1lLnR4dCBpcyB0cnlpbmcgdG8gYmUgZHVwbGljYXRlIG9mCj4gYm9h
+cmQvcGMvcmVhZG1lLnR4dC4gV2Ugc2hvdWxkIG5vdCBkdXBsaWNhdGUgaW5mbwoKUmV2aWV3ZWQt
+Ynk6IEtvcnkgTWFpbmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+CgpUaGFuayB5b3Uh
+Ci0tIApLw7ZyeSBNYWluY2VudCwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQga2VybmVsIGVu
+Z2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
