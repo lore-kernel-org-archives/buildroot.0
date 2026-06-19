@@ -1,63 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E848CD98F2
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 23:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 750DDCD98F6
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jun 2026 23:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 314DB6F9F8;
-	Fri, 19 Jun 2026 23:01:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tefNUxkE3loJ; Fri, 19 Jun 2026 23:01:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51FD86F9F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781910097;
-	bh=VKMwY55e4O6LdZzGy4Kha3tg6fEv05IQVY3aaG3U4Ko=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EC9Pq209rfLfTFvIQRgpU5N4pTWsHPTXxqSgEnGsN4bhPdYFi5X6+oyGYzG1cvqBj
-	 0T61A3/wDQrkb2tXIOYjLX3QtvbV3LDqU5oLlNxfgbEy4pZJqPAweLM2AUudz0Bgfq
-	 fB31NuBiWbpXQHayxEtYjixfvErdsAyXQ2OByGm+JExYpP+8BHY+dnMX5ZyeO2P1oI
-	 RCRPOIM0xiejIIlqLmQKtpijqLy6FKAjZE9SV9BA40C8lQ3eLOptBNzwOFVH55pF+A
-	 c2IeUByVC4wQnJth7sqhwLuM/o7szjjFvc4b/FRBR8XHo/sKH8bWQvhgFGqkpZC1nk
-	 PerB5pGB9LoHA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51FD86F9F9;
-	Fri, 19 Jun 2026 23:01:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 86A10367
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:01:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84A5585EF2
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:01:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D5C085EF3;
+	Fri, 19 Jun 2026 23:01:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AHuATsx8SihG for <buildroot@buildroot.org>;
+ id 44arWz_BuKrc; Fri, 19 Jun 2026 23:01:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AA5B85EF4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1781910098;
+	bh=lmudjtd+SNMxSFk6VXDv9aCSbETTZ/3EAQl05SEGkQs=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LU0vP3WfNpAg8fidBpTV3YorxRw6gAXcV1IbHlWb9uymDwl+g8iIfh3MZFs9/g6rh
+	 aRHLwU03OH4xWnhTRWvZb7iXfb1GLjzb4F/NIsEWq10FdFsxQfIDoTK8Ana1LhwDzP
+	 PddWO4xRenHgBDibroc/xk+gDJSi1FsqpRDItvZ5XO0wiuv5hzXlmOM+uMctfqcuBu
+	 KCYV7TnFSW1gvUySka68nqBGNiQPt7peWS51nfR7orJUccD2QHVC3BIiMW2w/uc6dq
+	 BlbM/afq5ZKPAUXMdT1LyII5yJW+VPkpNSNKGlVd/RmHRTYK2lO/vKwMyXFs3H4ZZx
+	 VkUYLV3de2emg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AA5B85EF4;
+	Fri, 19 Jun 2026 23:01:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C92DD06
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:01:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7EB2942AF1
+ for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:01:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FHeHFe7fbJvN for <buildroot@buildroot.org>;
  Fri, 19 Jun 2026 23:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D41C85EF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99ABE4004B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D41C85EF1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99ABE4004B
  for <buildroot@buildroot.org>; Fri, 19 Jun 2026 23:01:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C69EF8192E; Fri, 19 Jun 2026 23:01:11 +0000 (UTC)
+ id D259F8192F; Fri, 19 Jun 2026 23:01:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 20 Jun 2026 00:44:34 +0200
+Date: Sat, 20 Jun 2026 00:53:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28c6fc47b45dd219b20640efc201a15d72370bf2
-X-Git-Newrev: 61056c34b4cda499e884aa31eb99862ed5fc2eb9
+X-Git-Oldrev: 61056c34b4cda499e884aa31eb99862ed5fc2eb9
+X-Git-Newrev: d06e45b67bb573f6ed5bf45ea0bef4acd01f2fb0
 X-Patchwork-Hint: ignore
-Message-Id: <20260619230111.C69EF8192E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgsasl: security bump version to
- 2.2.4
+Message-Id: <20260619230111.D259F8192F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rrdtool: bump version to 1.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +76,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/61056c34b4cda499e884aa31eb99862ed5fc2eb9
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d06e45b67bb573f6ed5bf45ea0bef4acd01f2fb0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-2.2.3: https://lists.gnu.org/archive/html/help-gsasl/2026-05/msg00001.html
-       Fixes CVE-2026-48829: https://www.cvedetails.com/cve/CVE-2026-48829/
-
-2.2.4: https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00001.html
-       https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00002.html
-       "GNU SASL Security Advisory: NTLM client use-of-uninitialized-value"
-
-Upstream does not provide sha1 hashes anymore.
-
-Updated license hash due to copyright year bump:
-https://gitlab.com/gsasl/gsasl/-/commit/ec96bad53988cb79060964cf1f1568da4e301fd6
+https://github.com/oetiker/rrdtool-1.x/blob/v1.10.3/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Fiona: fix notice about upstream hashes, sha256 is still provided]
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- package/libgsasl/libgsasl.hash | 10 +++-------
- package/libgsasl/libgsasl.mk   |  2 +-
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ package/rrdtool/rrdtool.hash | 4 ++--
+ package/rrdtool/rrdtool.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
-index de24d73c2d..eedb9adf03 100644
---- a/package/libgsasl/libgsasl.hash
-+++ b/package/libgsasl/libgsasl.hash
-@@ -1,11 +1,7 @@
--# From https://lists.gnu.org/archive/html/help-gsasl/2025-03/msg00000.html
--sha1  8a845b7ec78e5f27bf69438074ad23867c00d4fe  gsasl-2.2.2.tar.gz
--sha256  d45b562e13bd13b9fc20b372f4b53269740cf6279f836f09ce11b9d32bcee075  gsasl-2.2.1.tar.gz
--
--# Locally calculated after checking pgp signature
--sha256  41e8e442648eccaf6459d9ad93d4b18530b96c8eaf50e3f342532ef275eff3ba  gsasl-2.2.2.tar.gz
-+# From https://lists.gnu.org/archive/html/help-gsasl/2026-06/msg00001.html
-+sha256  d32be15efd3a04cb19b232f721bdca02cc6ad7ab415df7d79fb2dd2c0da3e0be  gsasl-2.2.4.tar.gz
- 
- # Hash for license files:
--sha256  e3d1b8a82b97dc6083b2600a6beb0396bbefbe384fc1cd39d0e8cb04bbf2bd33  README
-+sha256  16a8258f525326a71cba997365505ad32089be4be7a7100f64f308ed01419a11  README
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSER
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-index 8670f43b6f..db3b64e282 100644
---- a/package/libgsasl/libgsasl.mk
-+++ b/package/libgsasl/libgsasl.mk
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index ce1186cb18..85e894a642 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/oetiker/rrdtool-1.x/releases/tag/v1.10.2
+-sha256  9787114551ee9b5db7c72722736388dcc54bf00ded51b5dd47feed11fb179fe4  rrdtool-1.10.2.tar.gz
++# From https://github.com/oetiker/rrdtool-1.x/releases/tag/v1.10.3
++sha256  843b7caa2a80a815d44ac5c65daa42920cb64586fe804e36d0bc0783554e0635  rrdtool-1.10.3.tar.gz
+ # Locally calculated
+ sha256  ab6b4646e9e01f1ec287c29c351c886c4cb7f945c11efc0a1be9f6e5e6cc5320  COPYRIGHT
+ sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  LICENSE
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 73832cb635..f911d54623 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGSASL_VERSION = 2.2.2
-+LIBGSASL_VERSION = 2.2.4
- LIBGSASL_SOURCE = gsasl-$(LIBGSASL_VERSION).tar.gz
- LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
- LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
+-RRDTOOL_VERSION = 1.10.2
++RRDTOOL_VERSION = 1.10.3
+ RRDTOOL_SITE = https://github.com/oetiker/rrdtool-1.x/releases/download/v$(RRDTOOL_VERSION)
+ RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
