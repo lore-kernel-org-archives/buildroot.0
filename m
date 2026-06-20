@@ -1,117 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB8B8CD98E4
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8447CCDB466
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84B9460E78;
-	Sat, 20 Jun 2026 09:10:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 510C84EC98;
+	Sat, 20 Jun 2026 09:28:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6y4j0QOn8ZS; Sat, 20 Jun 2026 09:10:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZMpUVVS_tmDc; Sat, 20 Jun 2026 09:28:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A3B76FB04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E2084EC94
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781946654;
-	bh=YY/TBX2tirdBBachJlHutr/GjOKkITA8BMMOKIGhkkc=;
+	s=default; t=1781947716;
+	bh=IEqFVcFLVjr5OiJxW6nd2fA2MUBVYRLBReVgRkCrcrA=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=f3SHIe9APFNFjAK+QW9vI/0SmLEwRDdF0sUOWQnLtduGHMm4I5PU9RGjxVMwZ/fPP
-	 W18sEw1hwiB+4i+NeiGa4ViTuRA2zH5cJv6FnmdfI4wgBChk11ghAG4qBoA1af8So9
-	 2QyHnzUtYm8HsNBgwlUBxAUJ9ofuDv5hjTaiRaIi1lT165Nn7+NTLnlehTtECRCaT7
-	 5GnN0uMxc0SQePo3qH7W8pKDsCtkBas4vx+HgwAHmB6SUdUhnl+7hlG/yxFhygklHU
-	 59KBjr6PBfuJJKT/4Ci5u+ba37iXIXGo/hw3tRvdQ4HVWx/1yPA7YbASpHBBchnfsf
-	 5xUij7VxwAYpA==
+	b=cvCGGcj13DY0V7B7Wgz5mtAfKBaSsFF/9S0RAohzj7aya3/rsg2avH+AOnYyGCOjz
+	 y6D3EP4zX2egKO7Rf85lx+fnBCP/JthxxuVtNBDWpZvhX/uQvQpfQzJlGGsSPrYTHa
+	 8ds3OemWrfjBkwevVPUp41iOCKJtZOr0L9UIjc8MdaRk0tlxi+iB2sHooiv5N05fE/
+	 IfZri3C88QhDIZCF/TFJuXcMwHv3QZ1hH+vvYQLUPVmQt1VvgZ8AaPRpA9cCz49D2J
+	 AiB3j3pJ6VxzRRMZ1ppCUg4OF5Sj36bK3AuPFVs3siS9TyzZGWyjI0GgV4bQ1kCUi6
+	 UYP4kCR4f42sA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A3B76FB04;
-	Sat, 20 Jun 2026 09:10:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E2084EC94;
+	Sat, 20 Jun 2026 09:28:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B3711D06
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9DFCAD06
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 999C74019A
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83E54401EF
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:28:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D0n1JhvmkMNd for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
+ id OFsbQcb5u0Pd for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 09:28:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 975AD401EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 975AD401EF
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 975AD401EF
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-490b613a17bso22256095e9.3
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 02:10:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E26140154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E26140154
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E26140154
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:28:32 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-49230a567a9so13662215e9.0
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 02:28:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781946648; x=1782551448;
+ d=1e100.net; s=20251104; t=1781947711; x=1782552511;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=JhNHsXftEN6El8g6vfwP+WGytc1uXp8xqBzLMaNAUTA=;
- b=kmS7VD7eveohtO9GYlLALD0JBuGhi3pc6JtaNRyMO2sHEh+bZ80Q/2oZKQbR9vICcD
- yZIzmsI7/hix9AR5mD0aCkhYTLcQJsQPTCewQ1cc6DwNErEeyR7fIuKPFTF2qKggTyoW
- oSURRtLBzBJsqBv9b2PSPl4khct4PTkq6ytOSDMyyo6yQ2i5S99mmp9WPdnqxmF3ktDH
- kjzXd/NKTkqwpx3lQLktNncQoTj8p0i6pttipCDuKgt5ct6fHSXkUb8x30h5v3tREjgU
- BDVC/LOhkB04txEWwEpMG6DceVW6mCTF8/Rq/41puBF3a0DuUDyddf3rGSscEiMSdGjx
- P1sg==
+ bh=n++7ahT2vZ6GwUCFgsRxnzLxAUcTxDRt6H3izIhyja0=;
+ b=YXucy34Dh7Q5L2DQLLZmrNODeRAwCVqSeVlDLiuGc3LMjvfFYfCnfXbl53h7d350sl
+ mkVvH6ibtFhq89ZcjFDPvaByHFMpqKiipV1tOjeU6MVjbil4+rYJwoKHHj3oUhd5p9E+
+ 6R4UkcKYlwos6UI2/X2byMQXiG5c5JmXS8wOanW7FF4xzXXVYQEXPql7164F+v7zC6t9
+ QFmVChN4OWsaTmeDWXXxL/gnib3krEdO4q9LNLt4CzahuOLFAOCcyEYOG/aHOOHSyca2
+ aWiLWnE74Abyhrdfrp4DRKW4MVjpLw3CyzPB6Xbw/5zmT3aZ9ORtMD0h4Xj7YcO0Oksa
+ C46A==
 X-Forwarded-Encrypted: i=1;
- AFNElJ9neld0k57c1qDcX8Sgw/SS/d1f7K9XocX5nLC2yO3AO9v52uDLmR1HxOdzjlKZDQiWjY38PTUSEVc=@buildroot.org
-X-Gm-Message-State: AOJu0YwYdy9FnZ4ij9KFluvNG1p4VaEeqHLxduHZE1kj/yMtFg2r6cuC
- qb0xH26upkOkd9UCq2b7M6L3yIygzGgxs6c281YzYjph3XDKxD667XwOFpeXIKYstZk=
-X-Gm-Gg: AfdE7clpjJx1OTJQlKst3szSuDnSVcY9TmkrTLUfE51CKXqx2/cOjb3JaxzC8JtR3+4
- y7fe0AUEL+gtggD2dnenbNFuiQ33kHRZUOLChbjWP1ugya2ylmm2NnntteHG1rAFrJ0Yfw9CVQ9
- NcJIXDmrhjPRiHcxUrH2ncZjBPJnUrpMsw90DSVUIKekNZs3ICBjzjLDOC3EG263VwH7RPJyRcj
- Ul96iHRT3oB9RqHhLsOp6VJdGgOakA3IR74r5+EXiPwxi8CO43NsvICBq+rkkkVxh/ddgxZu6EJ
- ocCMF8gjgWKCjse/Qw5cd3wEWqkkWGLA6HZXUfBePnxH/ZgTB9A9i+sPiCWxnSxdf3nfRItTg3h
- xN3Z3bHy0ZrcatwOsnkzsHgTM6rTwT4NDWU0EpL9NaZI63QfNggv2obks2uvfjdYUcvkwwrCynf
- jplhSI
-X-Received: by 2002:a05:600c:6211:b0:490:688b:f9f8 with SMTP id
- 5b1f17b1804b1-492490af44amr37793465e9.27.1781946648649; 
- Sat, 20 Jun 2026 02:10:48 -0700 (PDT)
+ AFNElJ/bHQcwXytsXHBG7jVGEvy+DUpr38O1xI5k5l9uHd2mQA0uDpPjSysrYcLP3oqiDJqZrGTiqaZSmj0=@buildroot.org
+X-Gm-Message-State: AOJu0YwN2zGaoSbeR3iNJqetjaEWDmDh0Kya4OVnHm0FmqVdjgGMSksK
+ 630F2Ok93bXfNCR4ifsPfwNhL0DuO8MSYfUGB1pn2F6n7som3tZhOFMkYGCvDCTPcGqw6pTLCUE
+ F6zvV
+X-Gm-Gg: AfdE7ck1rk0WZEIrE01MZYrx8rbaKe/ZQZZkWR8rUQGO+OcQaW5HitOCxeZmT3zdDTp
+ uwMRS6exP0AJ/SE/wro+JkVPFjadYlT6q20Pgdz5p/0nJPiaikz1OXakvDbFWeGUUGtfCcqE+g3
+ hK01rRV7nn+4Bq7gr4JHPXhrk+jRKAAttDTQ/nwpDC2xEM9mS6esZ16f4VgRjUy7zK2e72p8QPP
+ y9EZEQU3zWQfT/wbal1NyXrMjSIjdIWdd0mykrg5Rp41MbBnaGh+8cYWMqP/cWw0sCdeTbXgEcU
+ ztOhLCuENBdnlCxTMp4pR04uIeraxgY32WE0+zi+QMIQNNmWxOwbuPrEmpt4bB4Niyht2wxqU86
+ f2MktESwKoNCWMb9SmCo5ISrVxq/YPk1B2/DkvTxMGU0twfdmerEIYzGfPazUsD43CqmcLOY53y
+ TXEX/r
+X-Received: by 2002:a05:600c:8716:b0:490:c032:ae92 with SMTP id
+ 5b1f17b1804b1-49240ea870emr104820975e9.33.1781947710940; 
+ Sat, 20 Jun 2026 02:28:30 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4666712ce9asm6012825f8f.37.2026.06.20.02.10.48
+ 5b1f17b1804b1-4923ff8a9e3sm140050705e9.14.2026.06.20.02.28.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Jun 2026 02:10:48 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Sat, 20 Jun 2026 11:10:47 +0200
-Message-ID: <20260620091047.22405-1-thomas.perale@mind.be>
+ Sat, 20 Jun 2026 02:28:30 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org,
+ Joris Lijssens <joris.lijssens@gmail.com>
+Date: Sat, 20 Jun 2026 11:28:30 +0200
+Message-ID: <20260620092830.24422-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260612090819.1195510-1-titouan.christophe@mind.be>
-References: <20260612090819.1195510-1-titouan.christophe@mind.be>
+In-Reply-To: <20260620062539.28289-1-bernd@kuhls.net>
+References: <20260620062539.28289-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781946648; x=1782551448; darn=buildroot.org;
+ d=mind.be; s=google; t=1781947711; x=1782552511; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JhNHsXftEN6El8g6vfwP+WGytc1uXp8xqBzLMaNAUTA=;
- b=EzfCynDiNDPNCRgTJ9sGkuqD+FJHkRNxUSeQBhe7qJWDhNbBQBhJJQ+ReExMQ81rzu
- KacI0+sH8+hpKf2WVYFj+36zWgvP2RiQOCq/+zz+RGhULS8xkj5LlLV3LC6PbwicR28y
- SrmxMTZq5xA8v52OFqn3PkhC+CZOGWQE/VhMRSD9ceRxHwnHzgTlB26fPHRmzQ/sIiV0
- 15SRTWLSM94r7CJOCLyx0ldjUeV8eTxp6bZAiaHcH94y57QQFmJVfemFYT3Cu7S/sgJn
- nT5Q+KgI+HWE7iPhhzhaEoL9o9dAJGCJsWZwcyWsVhNokFYxm0gVVc2mKZjrEDSJRy0y
- C3wA==
+ bh=n++7ahT2vZ6GwUCFgsRxnzLxAUcTxDRt6H3izIhyja0=;
+ b=DFS44qZ7Z6buCr4aU/TV/ReQ+wLSH5uCNv24/2MW5nJOsOnEWiknEnt6qV8pcLT+cM
+ MqXtALg1ka+iNqvXRE4aEeOFE1QkVy6HQolH4G2mcgno9Upmq5z+ywJkcr/he/GcHI7K
+ 0w3luCgotPKI8I2LT6A70IARTZ37B1NItoUUNmBB1kp0HyungRKJ0mXv4FIMUnsU1DEt
+ cMVH082bE1uIIHAMHXaRBnTm2RHkRADHPUAj0ch+eEbdvCCU9cqxyqhFVCkyHqHN9vpc
+ 25kkRL++iBghwuMdujsRATPwjoPTWAEDa0mj1JTOcj46boCCXiwQOQB/TOcy8jbiqwg5
+ w3hQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EzfCynDi
-Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
- v6.0.6
+ header.a=rsa-sha256 header.s=google header.b=DFS44qZ7
+Subject: Re: [Buildroot] [PATCH 1/1] package/emlog: annotate more
+ misclassified CVEs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,63 +131,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> See the release notes:
-> https://docs.djangoproject.com/en/6.0/releases/6.0.6/
-> 
-> This fixes the following vulnerabilities:
-> - CVE-2026-6873 : Signed cookie salt namespace collision
-> - CVE-2026-7666 : Potential unencrypted email transmission via STARTTLS
->                   in the SMTP backend
-> - CVE-2026-8404 : Potential exposure of private data via case-sensitive
->                   Cache-Control directives
-> - CVE-2026-35193: Potential exposure of private data via missing
->                   Vary: Authorization
-> - CVE-2026-48587: Potential exposure of private data via whitespace padding
->                   in Vary header
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Hi Bernd,
 
-Applied to 2026.05.x. Thanks
+In reply of:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 > ---
->  package/python-django/python-django.hash | 4 ++--
->  package/python-django/python-django.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Gitlab pipeline passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/21de893608162adf032f0fda309e91bab2d5654c
 > 
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index 5af043f2c2..993b7b0d68 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
-> @@ -1,6 +1,6 @@
->  # md5, sha256 from https://pypi.org/pypi/django/json
-> -md5  44c18a8f264c1326e6fe4f1053fea5fc  django-6.0.5.tar.gz
-> -sha256  bc6d6872e98a2864c836e42edd644b362db311147dd5aa8d5b82ba7a032f5269  django-6.0.5.tar.gz
-> +md5  b45e074d29f85e1417fb2d2ea97c2df3  django-6.0.6.tar.gz
-> +sha256  ad03916ba59523d781ae5c3f631960c23d69a9d9c43cecda52fc23b47e953713  django-6.0.6.tar.gz
->  # Locally computed sha256 checksums
->  sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
->  sha256  be30dc0e3f7010af6c453d205feaece1f89494789b6e92f0c255ef597a1e6864  django/contrib/gis/measure.py
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index fe88128e24..764e72084c 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  package/emlog/emlog.mk | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
+> index 7d63916ab2..ca29643c62 100644
+> --- a/package/emlog/emlog.mk
+> +++ b/package/emlog/emlog.mk
+> @@ -9,9 +9,18 @@ EMLOG_SITE = $(call github,nicupavel,emlog,emlog-$(EMLOG_VERSION))
+>  EMLOG_LICENSE = GPL-2.0
+>  EMLOG_LICENSE_FILES = COPYING
 >  
-> -PYTHON_DJANGO_VERSION = 6.0.5
-> +PYTHON_DJANGO_VERSION = 6.0.6
->  PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
->  PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
->  PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js), CC-BY-4.0 (admin svg files)
-> -- 
-> 2.54.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> -# CVE-2019-16868 and CVE-2019-17073 are misclassified (by our CVE tracker) as
+> -# affecting emlog, while in fact it affects http://www.emlog.net.
+> -EMLOG_IGNORE_CVES += CVE-2019-16868 CVE-2019-17073
+> +# Add CVEs misclassified (by our CVE tracker) as affecting emlog,
+> +# while in fact it affects http://www.emlog.net.
+> +EMLOG_IGNORE_CVES += CVE-2019-16868 CVE-2019-17073 CVE-2021-44584 \
+> +	CVE-2022-1526 CVE-2022-3968 CVE-2023-43291 CVE-2024-12841 \
+> +	CVE-2024-12842 CVE-2024-12843 CVE-2024-12844 CVE-2024-12845 \
+> +	CVE-2024-12846 CVE-2024-46540 CVE-2024-50655 CVE-2025-30372 \
+> +	CVE-2025-47784 CVE-2025-47785 CVE-2025-47787 CVE-2025-53923 \
+> +	CVE-2025-53924 CVE-2025-53925 CVE-2025-53926 CVE-2025-5886 \
+> +	CVE-2025-61597 CVE-2025-61599 CVE-2025-61769 CVE-2025-61930 \
+> +	CVE-2025-9296 CVE-2026-21433 CVE-2026-22799 CVE-2026-31954 \
+> +	CVE-2026-34228 CVE-2026-34229 CVE-2026-34607 CVE-2026-34787 \
+> +	CVE-2026-34788
+
+Imo the previous 'misclassified' CVE should just be dropped. The package
+metadata are correct in this case. This emlog package doesn't have any CPE and
+most of security trackers will threat it as such.
+
+It's just the behavior of 'pkg-stats' that will use `*:<pkg-name>` if no CPE is
+assigned which should probably be changed.
+
+By adding those CVEs to the `IGNORE_CVES` variable when you generate an SBOM
+those will be linked to the emlog package as if they were related which I find
+odd.
+
+Best regards,
+PERALE Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
