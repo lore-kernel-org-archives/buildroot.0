@@ -1,111 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E186CD98F6
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 03:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49D5FCD98E4
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 05:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB9E58053B;
-	Sat, 20 Jun 2026 03:24:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D726861760;
+	Sat, 20 Jun 2026 05:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xhAXuLtwOVHv; Sat, 20 Jun 2026 03:24:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vzEqb2G3RG2Q; Sat, 20 Jun 2026 05:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56FED86168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8C006F9FA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781925857;
-	bh=L03dF0M3KBlI9/JjTdAY0sH/0DGAt52zh8RSs9udYwk=;
-	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1781933619;
+	bh=L0i4rBnyJ38Ax7Nm1DmaBUCYKoTUdSYEzwGSS82wkNM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Z2MgqOeXZ/Ex3fVUr+eLSlDHM/k2em4EglQlYt0CyxU/iUSjTonDVs3An5Y3IV5kL
-	 KreRD1QB1gXYHQheZieH9fxSXrle8IIqx4wpLYDZNjvjw/xTafyujbrXhOMLeXJjeE
-	 k9vqVcBy7VyI5n7MYSVYFUWhsnubHnc67QlKt2G71IRCp2yl8KIjIZcMRjaVaJxqsG
-	 Cr8GPHviqME4sSd+F0phQ1jEfLCXx25k5a4nILhDbLfisqvxvc0RofGCiXis9dYOQE
-	 VE6JlcVdFP/kC3GcJPtRhXnEmQ7OR7LoUr4ZI1/jSXgqQsm7Y+oBFYLtSShAo8wpxK
-	 0+MecgpVpyeFQ==
+	b=YxTM28so9ZpIN9McT9BBHctjUhg3hZEZ4lEHUZ4y1/JolTCsWumTnH9wl4lSE2eIU
+	 QEUdM+dAKsLnh3oJW+kxLsxsCUHdH9jJeUJtegsVB+F64DAx0KAFo9H43V4Zgao62P
+	 09KLLi4PQeu8Ezli+DYhomA7++n8TvmeT6fi52Jht2HN49m8ncvFaG3l46ELkeE8xf
+	 BH96SRlZw9ucBnvFMD7+aEcH3S9x0WNH6kz5RZRJqsEnmNhlPZU5ls1n7E4aAqCyGu
+	 PcV9b637pHBWK2ObAXGQPl9+MfeLmMzUQsIZLadtMp8m0DC58qN+2+9ZzcGGPLX+Nm
+	 TlNP+JMLv4+vw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56FED86168;
-	Sat, 20 Jun 2026 03:24:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14C6D2D7
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 03:24:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8C006F9FA;
+	Sat, 20 Jun 2026 05:33:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEBB6367
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 05:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E66FF4EDF7
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 03:24:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCFE24EDB0
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 05:33:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AQjNSayDLbRz for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 03:24:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8CEAE4EDF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CEAE4EDF5
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8CEAE4EDF5
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 03:24:13 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-4626fdc829aso1951629f8f.3
- for <buildroot@buildroot.org>; Fri, 19 Jun 2026 20:24:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781925851; x=1782530651;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=M6n4odYfc8AkJ8uHlxWN5ppiP6+pLc9ONfgGWe8EFQg=;
- b=OjyISFLkol4ulX2UpYrwsreX+xyG9ppqmuEwQbYeXIWgxognXpBNcZ053qBjKJL76a
- 9OxzVUygmsG7QiPPPkZE2vaZ3KIGC080dVb9rlBnanreyzLkkFvT+ItsBGPcXYfUnlVG
- yAahixJlpF8PnvZgAbk6Qxkrfbo0oonDT4+3g82uOlbcWZqlNEu/a7d49Y00l7ddtjAj
- pE38TqNF2Wy/jxF5OmsSKGq1207xCPxQpccMrCjXr6RoxqYCwtb6TSd1pfp4F4EYBFke
- O2BmVDbcYVJXYMGjKeoDebPeRq/ZKYHotnIsuwvQQH2CRv4It83i349lSMqBLucSb4m1
- OvSA==
-X-Gm-Message-State: AOJu0Yz8+yTONCyd3pnY2oH306eD1Dx5MRnaYgKsuA1OoVpUOIgXSLcb
- VpiBg1RtIsMJxetiIR+eHwXQTMKuxgs9FcyJG/7zeCvbVWFP8N0OspY2ub+6gLit
-X-Gm-Gg: AfdE7clyVqC2KFxC7dSoPeaQdB/LwbSQZ5AFlBhgjv8DRJltg9kbhE2vnG8nwrJ9vxB
- HNz8b/bxSu1rBydiulTJR2Quwk+GBT1rGqm5t5x0djamBBm0fPNRXi6m6Oc2A2aiCmAu9HfBwkt
- M8bWGH114XfuiXuuGASpoZrcbQ+Uz3P44txlPIIudzIfYHl6x9ujU6vJFra0KFAuf7IyjInSLpQ
- NABdgKHl33//lO54yFJycEulvgY7G8SWdpjxZxfj07YyZIrgEXRo0bk8UhPXa8IuNZhPnmoOBEI
- KJYbcHNu0hkBsvdCIdGWn3XoYZpTNCnDvcJYP3cnR+lXycwsV2kO1zSFAoXFlAWyPR6CQMe14ce
- XY6Z0J3/RdhU2u98u5b6tfHGV8RWNPxDL+Da15aDMG6z14lF70lLouD7jMqn3BljSHFhJyA+fae
- jO3ztM7+6gENhFqkaDwaenpkAk4Q==
-X-Received: by 2002:a05:6000:982:b0:441:1c18:f779 with SMTP id
- ffacd0b85a97d-4656ff20dd0mr6580609f8f.37.1781925851088; 
- Fri, 19 Jun 2026 20:24:11 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-466648c5397sm4374049f8f.13.2026.06.19.20.24.10
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Jun 2026 20:24:10 -0700 (PDT)
-Message-ID: <6a3607da.06c236eb.2556ae.56e7@mx.google.com>
-MIME-Version: 1.0
+ id L7Hs7yfWoiRL for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 05:33:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 391C74EDA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 391C74EDA7
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 391C74EDA7
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 05:33:34 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c132.dip0.t-ipconnect.de [79.214.193.50])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 05B7FA4C027C
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 07:33:30 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41970)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1waoKg-000000005r9-0Yd7
+ for buildroot@buildroot.org; Sat, 20 Jun 2026 05:33:30 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Sat, 20 Jun 2026 03:24:10 -0000
+Date: Sat, 20 Jun 2026 07:33:30 +0200
+Message-ID: <20260620053330.7619-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1781925851; x=1782530651; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=M6n4odYfc8AkJ8uHlxWN5ppiP6+pLc9ONfgGWe8EFQg=;
- b=VTn9EPkfFheitJIliO7nTI7QanlXMxDuZy2ugb5Yvi83hOIVh98Lxg/W/ucREonxdD
- y3Ly164KlNMmXXz4+B5ToNSgLKozHK1AcXnGnF3TQCWyQHryy9ersqLzcoKBy0ZSshA5
- qi8io9qDg9v5dSsALpnjiwRQVI+bRQlWkBvu5wRsD32CmX+bFpzlvpz8i9kXq3uR/5qp
- VTZSnyGVgPcG72vRIA5LZb22gH0wlSojsQ7Y3l44RmusZEjc9/sWOXzPr8VISy6qbVAi
- bSNn10VpXZyUVV8i2R5U8ti31t2uz0KUiY1lv624MCZ4W30ZOKXat9o0SWxZEdDFLqEC
- vHew==
+ d=kuhls.net; 
+ s=kas202605290044; t=1781933611;
+ bh=4ijlEmjHLp8vTHlj21xTN9YFtEtca+WksTu2+DzhrXw=;
+ h=From:To:Subject:Date:From;
+ b=UG/5xUKGsn0W5Id1E+hbGr4R4Aszgjl8KVAafNpO0tnUuaGRAh2VKzSz4xkKy/lSv
+ f8/JeDefpT6bxLogyETXBPdwD/EpvVKgW8MlIyUJKBa+7nzk5hb/McK4YckFLgQOBR
+ DD1QG8ItNWgYcrkQaNABfjrWtV6n6pyPKcTy+oR/a89k6mejX3s5mHM2rBmF7t6Atf
+ dfBBWIVRnIkm5EFFkW3pGH+Ko3Rd9jVEJqOC2Xt/KjzcPiIx5a0byiPcn+m5YOzaGu
+ ObNMvw6wxnWdVGKLbW72XJ5GW03qzPxXkSsJ1llwsKOyraXDNQORMlkPwMWtDNeAfx
+ nzMq81N4y7EBw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=VTn9EPkf
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-19
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=UG/5xUKG
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.12.x, 6.6.x,
+ 6.1.x, 5.15.x, 5.10.x, 7.1.x, 7.0.x, 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,170 +97,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Update the latest kernel releases to:
+ - 7.1 -> 7.1.1
+ - 7.0.12 -> 7.0.13
+ - 6.18.35 -> 6.18.36
+ - 6.12.93 -> 6.12.94
+ - 6.6.142 -> 6.6.143
+ - 6.1.175 -> 6.1.176
+ - 5.15.209 -> 5.15.210
+ - 5.10.258 -> 5.10.259
 
-Autobuild statistics for 2026-06-19
-===================================
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/{7.1 => 7.1.1}                         |  0
+ linux/Config.in                              |  2 +-
+ linux/before-6.17/linux.hash                 | 10 +++++-----
+ linux/from-6.17/linux.hash                   |  6 +++---
+ package/linux-headers/{5.10.258 => 5.10.259} |  0
+ package/linux-headers/{5.15.209 => 5.15.210} |  0
+ package/linux-headers/{6.1.175 => 6.1.176}   |  0
+ package/linux-headers/{6.12.93 => 6.12.94}   |  0
+ package/linux-headers/{6.18.35 => 6.18.36}   |  0
+ package/linux-headers/{6.6.142 => 6.6.143}   |  0
+ package/linux-headers/{7.0.12 => 7.0.13}     |  0
+ package/linux-headers/{7.1 => 7.1.1}         |  0
+ package/linux-headers/Config.in.host         | 16 ++++++++--------
+ 13 files changed, 17 insertions(+), 17 deletions(-)
+ rename linux/{7.1 => 7.1.1} (100%)
+ rename package/linux-headers/{5.10.258 => 5.10.259} (100%)
+ rename package/linux-headers/{5.15.209 => 5.15.210} (100%)
+ rename package/linux-headers/{6.1.175 => 6.1.176} (100%)
+ rename package/linux-headers/{6.12.93 => 6.12.94} (100%)
+ rename package/linux-headers/{6.18.35 => 6.18.36} (100%)
+ rename package/linux-headers/{6.6.142 => 6.6.143} (100%)
+ rename package/linux-headers/{7.0.12 => 7.0.13} (100%)
+ rename package/linux-headers/{7.1 => 7.1.1} (100%)
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  3  |  6  |  0  |  9  |
-  2026.02.x  |  2  |  2  |  0  |  4  |
-  2026.05.x  |  0  |  1  |  0  |  1  |
-    master   | 29  | 49  |  0  | 78  |
-
-Classification of failures by reason for master
------------------------------------------------
-
-amazon-ecr-credential-helpe... | 3 
-  gobject-introspection-1.84.0 | 3 
-              host-pahole-1.28 | 3 
-                       unknown | 3 
-                   ccrypt-1.11 | 2 
-          cloudflared-2025.8.1 | 2 
-                   dante-1.4.4 | 2 
-        edk2-edk2-stable202602 | 2 
-                    frr-10.5.4 | 2 
-      passt-2025_06_11.0293c6f | 2 
-                  bitcoin-31.0 | 1 
-                  broot-1.57.0 | 1 
-             dahdi-linux-3.3.0 | 1 
-                flannel-0.26.0 | 1 
-               freeipmi-1.6.18 | 1 
-            host-binutils-2.44 | 1 
-          host-binutils-2.45.1 | 1 
-       host-gcc-initial-16.1.0 | 1 
-host-gcc-initial-arc-2024.1... | 1 
-                 host-gdb-14.2 | 1 
-              host-guile-3.0.9 | 1 
-host-vboot-utils-7dfa482d6a... | 1 
-                iproute2-7.0.0 | 1 
-      libabseil-cpp-20260107.1 | 1 
-               libsigsegv-2.14 | 1 
-                     linux-7.1 | 1 
-                net-tools-2.10 | 1 
-               openblas-0.3.33 | 1 
-                   perl-5.42.2 | 1 
-                  prboom-2.5.0 | 1 
-                 s6-rc-0.5.5.0 | 1 
-               tipidee-0.0.5.1 | 1 
-           uboot-tools-2026.04 | 1 
-                 uclibc-1.0.58 | 1 
-uhttpd-15346de8d3ba42200249... | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/0069a0af29373d29ec7b40903b82b5c0c7049f29 | ORPH
-    i586     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/96134d919810dd606e05c0c176de860b33c37d92 | ORPH
-    i686     | amazon-ecr-credential-helpe... | NOK | https://autobuild.buildroot.org/results/134fa27fa3d2172e78000073d9c48794dd435271 | ORPH
-    i686     |          bitcoin-31.0          | NOK | https://autobuild.buildroot.org/results/59589c97daf93dc70de7ce5ad5c64a46a760e2d8 |     
-    i586     |          broot-1.57.0          | NOK | https://autobuild.buildroot.org/results/6cbc651cff99fa96b08d1fe028ad8f18c1400552 |     
-    i686     |          ccrypt-1.11           | NOK | https://autobuild.buildroot.org/results/d3afc0b73b35f37b01ee92fd893761f0d7115aae | ORPH
-    i686     |          ccrypt-1.11           | NOK | https://autobuild.buildroot.org/results/d65e12077629a9c1feed5189ba708deb8ab139ee | ORPH
-    i586     |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/2088e125fc70f238d287e21f63fb5f859e133143 |     
-    i686     |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/669b3d80a88f3d1692e274fbf7e27e75d06983e6 |     
-    i686     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/87501f3203273ba55188ad9862ad9be86e23cb1d | ORPH
-    i686     |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/4883d05513eb7866c086c215a31931bec4514e4a | ORPH
-  mips64el   |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/acc099e295f21b434a00c5b894d491e3da006a6b | ORPH
-    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/9c99af006030b9f0ff9b8dfbb2ec3dbfd7bc731c |     
-    i686     |     edk2-edk2-stable202602     | NOK | https://autobuild.buildroot.org/results/7412e9963256984aa71ff237bc709a8a2648fd88 |     
-    i686     |         flannel-0.26.0         | NOK | https://autobuild.buildroot.org/results/6e5168486fc42fa72e2c1904f85d949cb8ee58ac |     
-  riscv64    |        freeipmi-1.6.18         | NOK | https://autobuild.buildroot.org/results/f6436ef2fc41cddd951de8b9dbef8203ea29e926 |     
-    i686     |           frr-10.5.4           | NOK | https://autobuild.buildroot.org/results/22dd13f9c97b6d5586ce172b3bd576d71b180151 |     
-    m68k     |           frr-10.5.4           | NOK | https://autobuild.buildroot.org/results/6ea8ced6c5cb8c6d3eaa63769932f62af2e2b918 |     
-    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/97e2d416464dc6bdd9acd0ca4012d3bcc31c628e | ORPH
-    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/0772f9a62495bedd3d7eeda26ff9a12280cbb562 | ORPH
-    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/71460dbd6bad7dba2535513c5eae0931acb87170 | ORPH
-    i686     |       host-binutils-2.44       | NOK | https://autobuild.buildroot.org/results/fb1ae650324043882a78a8d9ec5e3a4289d0c4c1 |     
-  aarch64    |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/f565a58cf01d0b986889c4f93406175a09e4f249 |     
-   s390x     |    host-gcc-initial-16.1.0     | NOK | https://autobuild.buildroot.org/results/80c34398266472aa2e93bc1a63c968d5028bc7be |     
-    arc      | host-gcc-initial-arc-2024.1... | NOK | https://autobuild.buildroot.org/results/fe9ac164ddf3872ccc8c013c7a2052c01f2ed971 |     
-  mips64el   |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/b57ffdc5fd550bff8c85a6199396d5981aa8ef7d | ORPH
-    i686     |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/5620d0a3c3603a378d7c6d7c16c22d158bf20e15 |     
-    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/72717bcc8fcf9e9d510b1d319334c7095dfdfaac |     
-   s390x     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/68bd7a1044a829cd359f076fefce70018b87c201 |     
-    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/5c99d8a583011611c444871dc576dbe37a886a5d |     
-powerpc64le  | host-vboot-utils-7dfa482d6a... | NOK | https://autobuild.buildroot.org/results/0bf6715fff6d1c5f0e4b880ba66ed3be0c3549c4 |     
-    i686     |         iproute2-7.0.0         | NOK | https://autobuild.buildroot.org/results/0f84638d6c057923030581c95b6ae05e3b0f4875 |     
-    i686     |    libabseil-cpp-20260107.1    | NOK | https://autobuild.buildroot.org/results/c65dfcd8a006317003d216099d92a982fc27df86 |     
-    i586     |        libsigsegv-2.14         | NOK | https://autobuild.buildroot.org/results/c3106b6ff8924726891dbc0e37ff100335e673e2 |     
-    m68k     |           linux-7.1            | NOK | https://autobuild.buildroot.org/results/460ea98c3fa86e409484277c1102b562bf3cdc99 | ORPH
-  mips64el   |         net-tools-2.10         | NOK | https://autobuild.buildroot.org/results/2319d6a76b1857babf8c515254cf1619c7a582ec | ORPH
-  mips64el   |        openblas-0.3.33         | NOK | https://autobuild.buildroot.org/results/e84a19ae66e146d302d3f6e4969c388e225c51b9 |     
-    i686     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/264b09161c5498a1a7e624ca083619ea5ca3b741 | ORPH
-    i686     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/2ba6ff8d5cbdc35064e75e6305d43429f3f334f3 | ORPH
-  riscv64    |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/665f2982eaa36691a03d02f2383e6c42976918e3 |     
-    i686     |          prboom-2.5.0          | NOK | https://autobuild.buildroot.org/results/cc595d1d49b314d5fae1174b0a8321d572584354 | ORPH
-    i586     |         s6-rc-0.5.5.0          | NOK | https://autobuild.buildroot.org/results/97a28ac9f69e8d9db7480a1de43b9f6d8338bac3 |     
-    i686     |        tipidee-0.0.5.1         | NOK | https://autobuild.buildroot.org/results/c5f073b34d84b16703dbe435e394085ec17add42 |     
-    i686     |      uboot-tools-2026.04       | NOK | https://autobuild.buildroot.org/results/61ed2428cc4ed02b7cba16050ce66b5d4398e487 | ORPH
-  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/de679eaf287d2d1fd1403df80e0c936fef382405 |     
-    i686     | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/985d8b0131636e13f9b78318ec47856b769cfb4b | ORPH
-   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/d1150926810d3873b86c10f61e49243ce634879f |     
-powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/4bb0bc01dd050c5272aff34ebbe83a43de4d2b25 |     
-  aarch64    |            unknown             | NOK | https://autobuild.buildroot.org/results/19d37aed54bf14c6211b1ded4fed508e47ef2815 |     
-
-
-Classification of failures by reason for 2026.05.x
---------------------------------------------------
-
-        ltp-testsuite-20260130 | 1 
-
-
-Detail of failures for 2026.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |     ltp-testsuite-20260130     | NOK | https://autobuild.buildroot.org/results/63b80738ffd4798a74dbca65fb1c83909a16c42b |     
-
-
-Classification of failures by reason for 2026.02.x
---------------------------------------------------
-
-                 fwts-25.11.00 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2026.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |         fwts-25.11.00          | NOK | https://autobuild.buildroot.org/results/3f849a883184502bc3a2674d03297a42936611b4 | ORPH
-    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/53ccba801bb9f9496703b5cef913b145fff9b3ea |     
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-                  delve-1.22.1 | 1 
-                  ffmpeg-6.1.5 | 1 
-                 fwts-25.03.00 | 1 
-                 php-zmq-1.1.3 | 1 
-             python-lxml-5.3.0 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    i686     |          delve-1.22.1          | NOK | https://autobuild.buildroot.org/results/82a90a5a96960e9ab4e385e75dc23242724318b7 |     
-   arceb     |          ffmpeg-6.1.5          | NOK | https://autobuild.buildroot.org/results/ee4733c34ac9276b9f2f736df1051f31cc6f627a |     
-    i686     |         fwts-25.03.00          | NOK | https://autobuild.buildroot.org/results/9041877ab7438b88f2dcd85bdd397e234eca37ed | ORPH
-    i686     |         php-zmq-1.1.3          | NOK | https://autobuild.buildroot.org/results/627761c1e91182e1bebd4b24345ff09e087edf10 |     
-powerpc64le  |       python-lxml-5.3.0        | NOK | https://autobuild.buildroot.org/results/c2c6a95cbd09cb71fedf2a867c7a6892495ff6cf |     
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/8678645beaae5d03248c2315c8b0373a09cdf763 |     
-
-
-
+diff --git a/linux/7.1 b/linux/7.1.1
+similarity index 100%
+rename from linux/7.1
+rename to linux/7.1.1
+diff --git a/linux/Config.in b/linux/Config.in
+index b328d87de1..e79708d6d0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -143,7 +143,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "7.1.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.254-cip72" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.254-cip72-rt32" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
+index 4ebc486eac..688b99ded6 100644
+--- a/linux/before-6.17/linux.hash
++++ b/linux/before-6.17/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  492648a87c0b69c5ac7f43be64792b9000e3439550d4e82e4a14710c49094fa3  linux-6.12.93.tar.xz
+-sha256  b2f6607a75cd27b2e368cf2d25e1637e1e0da9dfed4cda536658879eee6f2b70  linux-6.6.142.tar.xz
+-sha256  37e984a9e449eb15023b3063c3fd6f64fdd1d83af5bb6a944cd7244f40beca85  linux-6.1.175.tar.xz
++sha256  e998a232b9418db3301cb58468e291a4f41d6ab8306029b30d991f56251dc8d2  linux-6.12.94.tar.xz
++sha256  dace1f8dc9c0dbf5df14f47e3229cd62c298e83049681731ef229f2ba7592932  linux-6.6.143.tar.xz
++sha256  aa19772dba40e9737356c00d0671cdedbe26cc895eff062868f0a1f688ae44f6  linux-6.1.176.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  346d77c7eac2cd8d719a2530b4f858bf99bc956b25f80995fd214f8aef821eb4  linux-5.15.209.tar.xz
+-sha256  9e7ccb1efc5796e6f8398b778a8b25f7e227e7c54ef5caf6377b8c37d66fb4e5  linux-5.10.258.tar.xz
++sha256  910ba46ae15e7495a9624f89d7f11b24ccc8bc1ee4b3abdd502e75b055290a01  linux-5.15.210.tar.xz
++sha256  aa5e8e580a555e55176658b78fb6759f9c84654462b735119d4e819b5c46b609  linux-5.10.259.tar.xz
+ # Locally computed
+ sha256  bd5db7fe3b0475cce4fc72db7a7f7df1c22b970aabe5ebff6ddd48098973bdf2  linux-cip-5.10.254-cip72.tar.gz
+ sha256  97d7d5139900c10ff7435779be4857dda531e7cf6abba52c12a5f39aae195411  linux-cip-5.10.254-cip72-rt32.tar.gz
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index 9aa69b6e96..33ee9dc232 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,9 +1,9 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  691f44797fbe790dc8a321604c927087526ad27b6d649925d60f8eed0a2564a0  linux-7.1.tar.xz
+-sha256  57edc9a41efc1ca6b797afa8f4a587a30da2af6bca7356eb56e1e1a4ada265da  linux-7.0.12.tar.xz
++sha256  5215fa3541dc7e7f5bcd51bf7e57f169cec6fce508ca54e3dc85fdee14371d7d  linux-7.1.1.tar.xz
++sha256  3c81edd0f716aca3dd48dff691681827580cc53d35a8eec3be47d346d1f89913  linux-7.0.13.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f78602932219125e211c5f5bfd84edcfd4ec5ce88fc944f8248413f665bef236  linux-6.18.35.tar.xz
++sha256  fbab86c9f471c81075b280cca30bd85d790c060063a1245859b6344b07c9c44e  linux-6.18.36.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/5.10.258 b/package/linux-headers/5.10.259
+similarity index 100%
+rename from package/linux-headers/5.10.258
+rename to package/linux-headers/5.10.259
+diff --git a/package/linux-headers/5.15.209 b/package/linux-headers/5.15.210
+similarity index 100%
+rename from package/linux-headers/5.15.209
+rename to package/linux-headers/5.15.210
+diff --git a/package/linux-headers/6.1.175 b/package/linux-headers/6.1.176
+similarity index 100%
+rename from package/linux-headers/6.1.175
+rename to package/linux-headers/6.1.176
+diff --git a/package/linux-headers/6.12.93 b/package/linux-headers/6.12.94
+similarity index 100%
+rename from package/linux-headers/6.12.93
+rename to package/linux-headers/6.12.94
+diff --git a/package/linux-headers/6.18.35 b/package/linux-headers/6.18.36
+similarity index 100%
+rename from package/linux-headers/6.18.35
+rename to package/linux-headers/6.18.36
+diff --git a/package/linux-headers/6.6.142 b/package/linux-headers/6.6.143
+similarity index 100%
+rename from package/linux-headers/6.6.142
+rename to package/linux-headers/6.6.143
+diff --git a/package/linux-headers/7.0.12 b/package/linux-headers/7.0.13
+similarity index 100%
+rename from package/linux-headers/7.0.12
+rename to package/linux-headers/7.0.13
+diff --git a/package/linux-headers/7.1 b/package/linux-headers/7.1.1
+similarity index 100%
+rename from package/linux-headers/7.1
+rename to package/linux-headers/7.1.1
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0b02c183c1..a890c8f161 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -476,14 +476,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.10.258"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.209"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.175"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.142"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.93"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.35"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.0.12"	if BR2_KERNEL_HEADERS_7_0
+-	default "7.1"		if BR2_KERNEL_HEADERS_7_1
++	default "5.10.259"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.210"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.176"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.143"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.94"	if BR2_KERNEL_HEADERS_6_12
++	default "6.18.36"	if BR2_KERNEL_HEADERS_6_18
++	default "7.0.13"	if BR2_KERNEL_HEADERS_7_0
++	default "7.1.1"		if BR2_KERNEL_HEADERS_7_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-https://autobuild.buildroot.org
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
