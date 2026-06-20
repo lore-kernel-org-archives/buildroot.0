@@ -1,116 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F63CD98E4
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8E01CDB46B
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 09:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F5DB6FB07;
-	Sat, 20 Jun 2026 09:10:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9225D4EE45;
+	Sat, 20 Jun 2026 09:10:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lz1nmLTxHW8H; Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6fn1S7xcOy7O; Sat, 20 Jun 2026 09:10:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4B5E6FADD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A61604EE4E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781946650;
-	bh=5Hy+Hh6+z2uQ1DBn9OVMkniQVLVXbrJEqoPrcoVJuWo=;
+	s=default; t=1781946653;
+	bh=N9eN0BLu7u6wV5JNRcDhE49rFxaeMhdwM4lCDUUBhjI=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=HJI9KABfmw/PRdO5c8RownciEqKsDmczQBzDXs0TxWpFikSyDpswvSh+gkMzea9SP
-	 nieqrgsc4jD5W4hJku3+sErE9MfiYresEhm4mi79ya2sOx6ljbnx/MJ+uyCIKwQNxZ
-	 cw41ui9EF2F8HD0StihagD51Vg0dqD1HStVOBpJ6J5mRv5YfTojn+Y99xg6Unaly8i
-	 TtLuB23owHABPRl8cZ5SY5bmrxkq7AmOYbSvmpPDrEH7hWCxJ004xBNcIN6hmrlKfs
-	 fYxYUEvcPSYPyvB5YN3CA7x8uXOramD214ulkpgN5M4c65Ok563g7Sjwc4OOQsgU65
-	 4bhH1U9oae82A==
+	b=FsIg7NY7moFAN4GIrls27XUnG6o8r0CQ5WmOO0k2lu5YyVuNq1MyTjZ+RxFitOl95
+	 wCkGkrQjaJjvribmY1RnhUSr+SsbLQIVCroqjKDAglOKMA/Lccri+l5QH5LUjhGHC6
+	 WHcjrebUMLusr82CUKa5vmBORhvw37ZeoOk8Q9aCRQR+ZER3faTHAzmwS2oWst4jWT
+	 odHbt3W15+Y4YdLqu4w6f5OggJ9iHbkmNKAtDlF9mqP13sFxSWNrR2lukzQP27M1ct
+	 AFzgeo9HY/I3YV+xOoDAzTdGSKRfzUoi6bZ+p/FveCUwBKtBomDLI9vdZsgeWHxE6p
+	 HhPCUer1XipnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4B5E6FADD;
-	Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 18C2F367
+	by smtp4.osuosl.org (Postfix) with ESMTP id A61604EE4E;
+	Sat, 20 Jun 2026 09:10:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EECA7367
  for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2DA4401EF
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E03426FB04
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QgleSIYH94gV for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 09:10:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EPCyt6fS-xQo for <buildroot@buildroot.org>;
+ Sat, 20 Jun 2026 09:10:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 60C094019A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60C094019A
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 60C094019A
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:48 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-4624a44e152so2328477f8f.2
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 02:10:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C836860E78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C836860E78
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C836860E78
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 09:10:49 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-490b3637b90so21283805e9.3
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 02:10:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1781946646; x=1782551446;
+ d=1e100.net; s=20251104; t=1781946648; x=1782551448;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=6pxilf6pVVnR60yoJiVKEYaINHo9wMfNHGCqHcQhFfs=;
- b=Stdqf+k0AVZF4PoSCUOOhPq6AHDNw5FC7+1iJgD4xSWXj+Pi0I3W9jQif+Pk88pu/Z
- 3tlb2OwG6h18UlbT+QH3K23DJo04mrVkatYJ1p6cxxlsfrorwyUMNE83F1TVzUXc145f
- ARVgyFF76RpjZfaYqDZLe6KPHZthN1xe3UJtCb6KR75pMuTQ4hdF63GC975+LBclnkJ5
- j0W2ze7yaCsCXEpEc2P+g8eZcArEQFZZ3tWv5XboiA1qvSQur3Pqy4c3PF7ayYwYhQru
- A6eT1Wd82brIWsYJGdel1zxPfuGU66rMlFW1VpkDwfiRKPDKQ5R1hUVGzC9Chg4Ai4tp
- sOwA==
+ bh=2tgptd70ZTIuLE1yfeqxvma8GdQIDMwkg1XxVGhfPq0=;
+ b=n4p8YVRnfMEtvc4Wj0wrEo9JohPhVmVvrbvDV9aDSyPyLw++RpAjGPgnq4ukacFQWx
+ RqxSnP4b/BsnqCYjfB64L5ohn6g3j5CwCGzmm6JZdZOlV5SMRBJ7YZeZTbDiYu7aZEua
+ PLoA1IXB5L16ZP5+MAaNPKesFvi/BsZ4ZoT0G1blJrLDWu4S1kJsxpKoc0ikpqMqzs0I
+ Gl1QUp8A0W3K+oTKoe3BHIUV2YxkIh2IPpx9p9AEUbTaUELK2sd9KpH4ngXidxMIZqCi
+ ek3SjJ6NnkT/Khvve5vZJlDXfFuMcHVRnxnoq6w5bt7BXjpZffZuAVpJ0hMmM992fS8r
+ 3ARw==
 X-Forwarded-Encrypted: i=1;
- AFNElJ/vdEkm6KQwRe6OUouRAMnSewMbMLD0ifyfhDxH2wFnIgH22qnnaVXq+NkZW0UxNfwqH3e7pa8eth0=@buildroot.org
-X-Gm-Message-State: AOJu0YyATQ3RxnvLI+3KGY+HDvd3Qqh65cUxb5V/WpR2qtXcA2ocn0ir
- MXS8Kours85KD9mYATWRU8R49QWySL73ORwuzwBdBocgshPhqAiC/SUtlspnAij+xx4=
-X-Gm-Gg: AfdE7cnnr4LA5anJFu+Ap/ed0ddVF3RE8Is0L5hj8a2Hk14aFIwfKFhxvI3o6grtwUM
- GQqiAxHwL3GXeaqfNSaIfikSwnpWI3Nt9WtnXaYCyzG0cZIMpJNrsuFHE52thKs312294CiGPGP
- klixMJBs7qU7c9ohUNtnMjh9RWiF8/yv2qFlsrjnc6oLK0ysx3DCD150zFJh5hamKK2TE7VKEJv
- Ax0ZerR4bj9omesQiNpPN1CCLqHDIXs+r9HK+3esSQJoOHesIqXOSCASeEYd/Jo0kBDl7fDpeiV
- 4Cr2dNv70ZlGqiwfwbx2EGsHyEgZJCTd4/mp9sObA/eXVx/6LL9Qla9fJIs/S8GfbG35jLH5yke
- 4FjZVKDgqIJs+HIP7XfFv9n3bftZv7ScJjLxSQUHdBuFqpe18bODYRBwCy7ikChvukfkfNUXacT
- jiRshF
-X-Received: by 2002:a5d:51c6:0:b0:460:3234:293f with SMTP id
- ffacd0b85a97d-465097863f5mr9279044f8f.42.1781946646334; 
- Sat, 20 Jun 2026 02:10:46 -0700 (PDT)
+ AFNElJ/8VHGUo/kQl6L8NOb//Qg12hiyGHX+VuVtojhap6EVwz46HRxkXtvcA41qS7r8zw4kxR6Od4VRHxo=@buildroot.org
+X-Gm-Message-State: AOJu0YwpqRCcOanRaAfdA3Fs9yA05bmeGOJhRgUuPBQLpgnSQCJesGe7
+ WkG6bHmOW4jhvZBmydvAevxX63ysK7z4cWTKr6skWM9DIc18sFiJ+sL0SAsKtHTX1ss=
+X-Gm-Gg: AfdE7ckJglEIFiyuYnjapeS5i48mIjQfBpZeZCX0/LKm4oDh0SG4ZnXy/HDsJRqJrfu
+ 9mgkSfmKnWDCBBAG1WhlEJxU5h2WCF/RDR5aNH+lJ9QTHLBW/XXYi4xyJXmgaqRkJasIyBERhpm
+ EWZEzdqK7G+M2Zy3D3rp+j0PX0U/IP69Ncz1c2dK0AWK0ffjpB2TjWmqpbcOoZx+Y6cllrEqLUY
+ /bB3LET0I91WTKkx5jnJ98AAwXYdUHj+Eammw9wx8GCI03lAVO7XrD4xQVBjaJTuuxgvSVsWyZR
+ 7hkzNWSWtYKN1nAAWFU97Y8nP0lENbNEFj96NgvMyQNqpOYAnlFyc/7CJKf1FIQarlZ4aKO3xuJ
+ i5+mfIc/2VS17MfAZori3T/mAJ/51i3YSWS847rQJ7VaMfEXIb3fdbCVHRBM6J7tYDscpQfOOTw
+ +gfqIr
+X-Received: by 2002:a05:600c:1389:b0:492:1eed:3e67 with SMTP id
+ 5b1f17b1804b1-4923f5829aamr113963155e9.26.1781946647779; 
+ Sat, 20 Jun 2026 02:10:47 -0700 (PDT)
 Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-466648c53fdsm6670799f8f.10.2026.06.20.02.10.45
+ 5b1f17b1804b1-49249238900sm47020205e9.4.2026.06.20.02.10.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Jun 2026 02:10:46 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Sat, 20 Jun 2026 02:10:47 -0700 (PDT)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Sat, 20 Jun 2026 11:10:45 +0200
-Message-ID: <20260620091045.22302-1-thomas.perale@mind.be>
+Date: Sat, 20 Jun 2026 11:10:46 +0200
+Message-ID: <20260620091046.22356-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260608223458.950479-1-titouan.christophe@mind.be>
-References: <20260608223458.950479-1-titouan.christophe@mind.be>
+In-Reply-To: <20260610064754.3170578-1-peter@korsgaard.com>
+References: <20260610064754.3170578-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1781946646; x=1782551446; darn=buildroot.org;
+ d=mind.be; s=google; t=1781946648; x=1782551448; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6pxilf6pVVnR60yoJiVKEYaINHo9wMfNHGCqHcQhFfs=;
- b=F7k5kYnSmdmWUMEnlMFxta8ZBTQJyVIXXuFzrHcg1f4ut0sqbpKp1oRzOBD4GryReD
- kU+JFLgod9K78qylM65asVo2HnTClnsO1v4Zrrgt/qNvu2kBSYwSqCkS7OLg+U1dGBnX
- 3Yg3hJLFEz6a3d3Chcmy97amHxZhUGsUlLLqXeazLbUm5jwZdywzGqZOLDyJLczHvc6+
- q4R3B6U+n0f7huVElv8Fg4qJ6ZFLOcC0MiTgFoN+qviUaH3h2sgj0+1OznLIr4Duuchy
- fMMAfgOIKQM46PDiXMzKCvEM4I1WPdXwTsUuW4KOPHbdqlVDJyonUfHVnqgwyXeBZP/E
- +ALA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=2tgptd70ZTIuLE1yfeqxvma8GdQIDMwkg1XxVGhfPq0=;
+ b=MNh7sGyO+ZPwdsT8TAWFitKsUm8umkSgLQuWGeUSK/JDuDjcF7CfW/QfBKLPzb91fZ
+ Z+SRcJXlCyXH3IRuGTaFHCfCPp7StdPR4QaJbBz4HaFkhg5b+WHJ8C6HETYadhbfggJl
+ GYa8CnPd3HO30dIgEetQSJxKxWJDSnDfpK9F8uns6E9Hh5NU4sA+NS1wregnMuSuvR1+
+ B9s7luzqa3dM1WdrReiRgIGNH573LJugLkLV3T6qJbjVVmaAZawE5I5OWds6VsEKJ5rC
+ aKIrj2yJmJ0jvSaUrAh5sNj9aAxXB73/SI1D+Ezjpy2MOxPDxWXEc8Pma1k8TflWVcHc
+ b2aA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=F7k5kYnS
-Subject: Re: [Buildroot] [PATCH] package/redis: bump to v8.8.0
+ header.a=rsa-sha256 header.s=google header.b=MNh7sGyO
+Subject: Re: [Buildroot] [PATCH] package/libopenssl: security bump to
+ version 3.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,47 +131,103 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This is a new feature release of Redis Open Source. See the release notes:
-> https://github.com/redis/redis/blob/8.8.0/00-RELEASENOTES
+> Fixes the following security issues:
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+>     Fixed heap use-after-free in PKCS7_verify().
+>     (CVE-2026-45447)
+> 
+>     Fixed CMS AuthEnvelopedData processing may accept forged messages.
+>     (CVE-2026-34182)
+> 
+>     Fixed unbounded memory growth in the QUIC PATH_CHALLENGE handler.
+>     (CVE-2026-34183)
+> 
+>     Fixed double-free when checking OCSP stapled response.
+>     (CVE-2026-35188)
+> 
+>     Fixed NULL pointer dereference in QUIC server initial packet handling.
+>     (CVE-2026-42764)
+> 
+>     Fixed AES-OCB IV ignored on EVP_Cipher() path.
+>     (CVE-2026-45445)
+> 
+>     Fixed possible heap buffer overflow in ASN.1 multibyte string conversion.
+>     (CVE-2026-7383)
+> 
+>     Fixed out-of-bounds read in CMS password-based decryption.
+>     (CVE-2026-9076)
+> 
+>     Fixed heap buffer over-read in ASN.1 content parsing.
+>     (CVE-2026-34180)
+> 
+>     Fixed PKCS#12 files with PBMAC1 are accepted with short HMAC keys.
+>     (CVE-2026-34181)
+> 
+>     Fixed NULL dereference in certificate verification with OCSP Checking.
+>     (CVE-2026-42765)
+> 
+>     Fixed possible NULL dereference in password-dased CMS decryption.
+>     (CVE-2026-42766)
+> 
+>     Fixed NULL pointer dereference in CRMF EncryptedValue decryption.
+>     (CVE-2026-42767)
+> 
+>     Fixed multi-RecipientInfo Bleichenbacher Oracle in CMS_decrypt()
+>     and PKCS7_decrypt().
+>     (CVE-2026-42768)
+> 
+>     Fixed trust anchor substitution via cert/issuer typo in CMP
+>     rootCaKeyUpdate.
+>     (CVE-2026-42769)
+> 
+>     Fixed FFC-DH peer validation uses attacker-supplied q.
+>     (CVE-2026-42770)
+> 
+>     Fixed incorrect tag processing for empty messages in AES-GCM-SIV
+>     and AES-SIV modes.
+>     (CVE-2026-45446)
+> 
+> For more details, see the release notes and advisory:
+> 
+> https://github.com/openssl/openssl/releases/tag/openssl-3.6.3
+> https://openssl-library.org/news/secadv/20260609.txt
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2026.05.x. Thanks
 
 > ---
-> NB: This patch is based on the previous security bump to Redis 8.6.4,
->     but I had already sent the former before making this one
-> ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libopenssl/libopenssl.hash | 4 ++--
+>  package/libopenssl/libopenssl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-> index 2bbbc9e2a7..00aa3e4497 100644
-> --- a/package/redis/redis.hash
-> +++ b/package/redis/redis.hash
+> diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+> index 05777cdac2..fc1a125521 100644
+> --- a/package/libopenssl/libopenssl.hash
+> +++ b/package/libopenssl/libopenssl.hash
 > @@ -1,5 +1,5 @@
->  # From https://github.com/redis/redis-hashes/blob/master/README
-> -sha256  559c2e50c496b2d4afcfb491af27763a1b170037317789ecf309025d0caece24  redis-8.6.4.tar.gz
-> +sha256  88422181efb0c9c0abba332e3e391d409e1e13714b838931669235e5796f704b  redis-8.8.0.tar.gz
+> -# From https://github.com/openssl/openssl/releases/download/openssl-3.6.2/openssl-3.6.2.tar.gz.sha256
+> -sha256  aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f  openssl-3.6.2.tar.gz
+> +# From https://github.com/openssl/openssl/releases/download/openssl-3.6.3/openssl-3.6.3.tar.gz.sha256
+> +sha256  243a86649cf6f23eeb6a2ff2456e09e5d77dd9018a54d3d96b0c6bdd6ba6c7f1  openssl-3.6.3.tar.gz
 >  
->  # Locally calculated
->  sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index ba41b3f922..a876c56f08 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
+>  # License files
+>  sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index bd4b889c88..e9f795832a 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -REDIS_VERSION = 8.6.4
-> +REDIS_VERSION = 8.8.0
->  REDIS_SITE = http://download.redis.io/releases
->  REDIS_LICENSE = \
->  	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+> -LIBOPENSSL_VERSION = 3.6.2
+> +LIBOPENSSL_VERSION = 3.6.3
+>  LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+>  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+>  LIBOPENSSL_LICENSE = Apache-2.0
 > -- 
-> 2.54.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
