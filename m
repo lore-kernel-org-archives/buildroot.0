@@ -1,85 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 231F6CD98F2
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jun 2026 19:57:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6C9CD4F26
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 03:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEA186FA5B;
-	Sat, 20 Jun 2026 19:57:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QSyprcKzJOok; Sat, 20 Jun 2026 19:57:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71A6B6FA58
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1781985472;
-	bh=4gBMurWillNtYta92JMYCZy6hOczZgaL1nU4yczq8Po=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=dRi63w4PCqb9fu0Y/XC0+A+lq5gTyC2blB+67b75vYfeBQv+V5wpYmOl0yYGNOnvn
-	 stz4mMhmUnYulyaNvxw33ki4CuK0xubLZ+fzVt8g/KJgIAV0YF36BxbznCf+1buu0Z
-	 mQ3rGtEtgJBbD0mD7pxBvaM4ZYBh7dbAjlxoc9VlJBIx1x3tUYIUsiX4trbiY/x/GX
-	 Rl8sLZitNWcEdI3mOmx7I9kJz4XK/kxuRGbp2B8QcCntka2qZyZ6ZcbI1o+ELIv9aY
-	 QGA/WwtKuOGmpx1roiRMseVBhtYYel3HBRtOI1GS7TNF/5pYNhD6gXFgobQbp3jXID
-	 x1iIyLQgLflcA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71A6B6FA58;
-	Sat, 20 Jun 2026 19:57:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CD7224D
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 19:57:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EF9D4EBDA
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 19:57:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57CF547709;
+	Sun, 21 Jun 2026 03:27:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hU0Pb4h66HsP for <buildroot@buildroot.org>;
- Sat, 20 Jun 2026 19:57:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA0B84EBD4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA0B84EBD4
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA0B84EBD4
- for <buildroot@buildroot.org>; Sat, 20 Jun 2026 19:57:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c132.dip0.t-ipconnect.de [79.214.193.50])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 64957A4C16D7;
- Sat, 20 Jun 2026 21:57:46 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33406)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wb1p3-000000002A1-3VKC;
- Sat, 20 Jun 2026 19:57:46 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 20 Jun 2026 21:57:45 +0200
-Message-ID: <20260620195745.3841147-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id iw6gwgNy2vyk; Sun, 21 Jun 2026 03:26:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52BD042BD0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782012419;
+	bh=oK/LkOHksvH4RjwV8seoIEFVEu3wcFGwJj80fU+GYog=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=n7+w1lNVxrrBHZkXr0G+xU2/H7Tq5JOITm4EMMpvW+0MZgz2qog4ZjQFNPFAVUhyP
+	 /leHo0mpm/qydlsnnafD1UW4I7YsLsXRTn0vloKYfZq/ChAK8OjfqDDjqY6/gHOmnI
+	 0SRaO9PpnRmNbCw/uzSnP2EbViWyFuEDxz/DdWbGcuiXbLL53UNn0GcnbCntn3Z7N/
+	 dRGBXh8uV7y99pagya3/xWaq4WeD2q795rYrM09IacMRhD4JuKaAmjkBLr7Ndcpqzz
+	 szufxzmVs923y04mrY/JePOb6Yqe8kQL7xVtj7iQgUVeI6l39kmIxjFw+TmlYOkCsV
+	 A7AC78kJmeyUQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52BD042BD0;
+	Sun, 21 Jun 2026 03:26:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DEC6118
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 03:26:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B4E842BD0
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 03:26:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u8o4zckmm1gW for <buildroot@buildroot.org>;
+ Sun, 21 Jun 2026 03:26:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29F89406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F89406F3
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 29F89406F3
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 03:26:57 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4922244f7c7so28052155e9.0
+ for <buildroot@buildroot.org>; Sat, 20 Jun 2026 20:26:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782012415; x=1782617215;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YgcKNh4Mw5Dxa75AF+qrvXM0HIiRh9DskVMBdwslURM=;
+ b=BApSnwTHaYScPvcA+l/kNP7HgHtReSdEKeqoseSmR8czAIBt0kW++rH3rtaqdoFIjf
+ yheiwh1TjpcmjlI03scgjsdwujih1tl9qA6yu6apKb9OtDJ+Uh48TpvhJ7+7u1i6lYxu
+ 6yIPTG/gALVvBssWn17UhWYXjTsgdejAFK1ASEgwCnzdCrYVaoorOtxVgJloVyTJ25D+
+ NrkP5xKrQhMOkibUBWwH6SiRFcTqab1Lt3XiejwiDJQZei6tzypdFeBay1Pz6DezI4Sc
+ E35gh2T9t8zqlvS7r+UXIs6OCA9XvYa/Nubme2eHtJ+l44Lmadtl75PDeG38Vw9tzETq
+ lcyQ==
+X-Gm-Message-State: AOJu0Yz8diTPtv2Jr1rQbWiGGM87J1sIklxGf/c7SI6TIPZB666SMt4V
+ mlUK7ZDp6XBqH5lYaCddW5FfVwNc1LznjzIElcFYVS3/wkxGESgHi1/s5OWIczqP
+X-Gm-Gg: AfdE7clZFPRFFGAT1emj6mXIVHyXRphXIIOXbLY0NF5GZ34Ggc5l2G+CztMcMbDtMUg
+ WGT+Ka0nnONfD1Vekkt5cHNjl7w8v0kdtl0ge9ccJEgEKrDUcEv3SKjI3x49+GRBmi2DU3XemfA
+ Yv4I7Kq1GA7OnFvNJMuOyV4MdnugaG2qxaopKSjlALoZuYeP8Yga6Uvci9jtK6uRHsRToH5+osu
+ ZWWM0Phjup6ujHbWY5tH31NUoL64qLcjgNqX1VFnFOZT8bsJlWrxyIxx0GlfXqGxpdeKDCM8/r2
+ LoAUPh8LuueOl6JFRi9uvEykf/IrRf29fP5un5yQBm65sG6lr0dA/eQdUYkltK0NJqsZGW89r1A
+ +GQmYPfG/KHQEbCXfFE2RkKqFiZ5lM1IW+R9mC9gXDmafgiEzpzFh+7zbjkikBCeGTziK2VLLKS
+ l/lE9L102eIloiR5w=
+X-Received: by 2002:a05:600c:2a81:b0:492:40e2:358d with SMTP id
+ 5b1f17b1804b1-49240e23c30mr103140655e9.16.1782012414756; 
+ Sat, 20 Jun 2026 20:26:54 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4924923c862sm98938575e9.7.2026.06.20.20.26.54
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 20 Jun 2026 20:26:54 -0700 (PDT)
+Message-ID: <6a3759fe.7f42fb59.3ca272.1d8d@mx.google.com>
 MIME-Version: 1.0
-X-Spamd-Bar: --
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sun, 21 Jun 2026 03:26:54 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1781985466;
- bh=N6Dwe25f8AJKTiOt6hw/p1ekFNfyRa8kPRzBh9X3qaw=;
- h=From:To:Cc:Subject:Date:From;
- b=i9AoANO82OorI/65eN1PSPpvNcoUVqXxVtP9sXZoVfwR0E2Ogs117cCV8J8C+vbjZ
- aSTSQmXC8wm1vMJ9Cv/1WVdXLt51ZEatnW0n2wpPMswiMwAW2CZyo2KqcuaQ55qb3x
- rVRWjtQJo9ypTGmIa2c7l6SUunybNhOp3Lui+Ig7v7pmEJgaZ0XQ5vVS7vIGzpODCh
- ilXp2fU5MhOa4WYAmLP5ZYhKZM9B3xiFT1qNXxuOpVae+n1DKkdRfZc0Rets/zg/g9
- 5ZXj9dpzgxgd0sZv+Fo/nKKbeamEojpKmd0AV7LgEkuXYWkqTPOv7k4skwiiX+eycj
- /Hg1flqH8pY+g==
+ d=gmail.com; s=20251104; t=1782012415; x=1782617215; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=YgcKNh4Mw5Dxa75AF+qrvXM0HIiRh9DskVMBdwslURM=;
+ b=s57PRuUL/7le9643FLAUwZFZSoXjgfryy4MJtaOIpTlsw0usfOUN0aIop7RhjNFJRL
+ 810RDFimGwGbhJblKp0F0mppKQNe/YYC98kqKtKCpUqJ1WKYfE9efdYEeklRCgld5J4i
+ I6fy96ahihyQUUxVhYqyl28KmUcGPww/MQ3T0NYNo9W9aEe6NFNnxKFM+o4BbQiwJ3/1
+ TmOh6eoXAiB1/ZGuL4cSbrHz6XPBBIic5Rf57Q5FuAlDDlXq4X1DDjuUyi4LP3YW/RFu
+ W6Bz5nmbzWMmXna49g1XLb+7GMD+QAXVNxk3Gd1PbUmRCC9vI7dOCYggRu7XahL14DsC
+ DolQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=i9AoANO8
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.42.2
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=s57PRuUL
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-06-20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,362 +122,159 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42.2-ReleaseNotes
-https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42.1-ReleaseNotes
-https://www.kernel.org/pub/linux/utils/util-linux/v2.42/v2.42-ReleaseNotes
+Hello,
 
-Removed patches which were applied upstream, also remove autoreconf.
+Autobuild statistics for 2026-06-20
+===================================
 
-Patch 0001 was applied as
-https://github.com/util-linux/util-linux/commit/57dab03caf941bf01544cc4548e36cc0c3357d2c
-after the rename of the original header with commit
-https://github.com/util-linux/util-linux/commit/f419d67de67610180fb04e64d21323ce8927d31d
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  1  |  4  |  0  |  5  |
+  2026.02.x  |  1  |  2  |  0  |  3  |
+  2026.05.x  |  0  |  1  |  0  |  1  |
+    master   | 19  | 44  |  0  | 63  |
 
-Added Config.in options for new commands copyfilerange & getino.
+Classification of failures by reason for master
+-----------------------------------------------
 
-copyfilerange is broken according to the Gitlab pipelines only with the
-br-arm-full-static defconfig:
+              erlang-26.2.5.15 | 3 
+                net-tools-2.10 | 3 
+                 uclibc-1.0.58 | 3 
+                 gnupg2-2.5.20 | 2 
+  gobject-introspection-1.84.0 | 2 
+                   perl-5.42.2 | 2 
+               tcf-agent-1.8.0 | 2 
+uhttpd-15346de8d3ba42200249... | 2 
+                 binutils-2.44 | 1 
+          cloudflared-2025.8.1 | 1 
+      docker-cli-buildx-0.25.0 | 1 
+                easydbus-0.1.0 | 1 
+                    grub2-2.14 | 1 
+          host-binutils-2.45.1 | 1 
+       host-gcc-initial-15.2.0 | 1 
+                 host-gdb-16.3 | 1 
+               host-grub2-2.14 | 1 
+              host-guile-3.0.9 | 1 
+              host-pahole-1.28 | 1 
+          host-tipidee-0.0.5.1 | 1 
+          host-xfsprogs-6.19.0 | 1 
+           libmicrohttpd-1.0.5 | 1 
+        ltp-testsuite-20260529 | 1 
+               madplay-0.15.2b | 1 
+   openvmtools-11.3.5-18557794 | 1 
+package/mender-update-modul... | 1 
+          pkcs11-helper-1.31.0 | 1 
+                  prboom-2.5.0 | 1 
+                 rtl_433-25.02 | 1 
+        s6-linux-utils-2.6.2.1 | 1 
+                tinifier-4.1.0 | 1 
+           uboot-tools-2026.04 | 1 
+                       unknown | 1 
 
-  configure: WARNING: Unable to detect syscall copy_file_range.
-  configure: error: copyfilerange selected but copy_file_range syscall
-    not found
 
-so we disable copyfilerange for uClibc for now.
+Detail of failures for master
+-----------------------------
 
-getino builds when current uClibc is built from source but fails on the
-Gitlab pipelines with all uClibc-based toolchains:
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |         binutils-2.44          | NOK | https://autobuild.buildroot.org/results/892160174d9be0da680cc9067aefc35fdf9c840d |     
+    i586     |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/caba15bba850b79b201c644dd9b95325e6360aef |     
+    i686     |    docker-cli-buildx-0.25.0    | NOK | https://autobuild.buildroot.org/results/b43101007b634c08d40e4639e30767435d4c673b | ORPH
+powerpc64le  |         easydbus-0.1.0         | NOK | https://autobuild.buildroot.org/results/917ab068379940b265587fa12d0214d0e95e13c9 |     
+    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/7bc173a938ed49a728227a09ca1040d017c0fac2 |     
+    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/1a038a739bca984cf80313d96e8bc34369401dcf |     
+    i686     |        erlang-26.2.5.15        | NOK | https://autobuild.buildroot.org/results/127e2aa26bf24839e4780fe8bbd5db6a9e03c05d |     
+   x86_64    |         gnupg2-2.5.20          | NOK | https://autobuild.buildroot.org/results/467b9802a8d6669c25f96f974b6ca0cce93e2a35 |     
+    i686     |         gnupg2-2.5.20          | NOK | https://autobuild.buildroot.org/results/66b6f36386a13ce583daf329eae2913072ab5b94 |     
+    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/9fa3b0f15fd41ff3507bf7805e2484971fe7e305 | ORPH
+    i686     |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/0afbe87f4042236293d6525989fa5cf56f8d73c2 | ORPH
+    i686     |           grub2-2.14           | NOK | https://autobuild.buildroot.org/results/0a73e8e77b3b6bea682c794c30baf18b7104ea51 |     
+    i686     |      host-binutils-2.45.1      | NOK | https://autobuild.buildroot.org/results/c007bfa1193717d8f7041f6b2023764ccf527191 |     
+    i686     |    host-gcc-initial-15.2.0     | NOK | https://autobuild.buildroot.org/results/838481bbfb2a3cb5e28113ff66f4360e983898f7 |     
+    i686     |         host-gdb-16.3          | NOK | https://autobuild.buildroot.org/results/849c23f6ee0ebdb789d039b41e755b03e064b861 | ORPH
+    i686     |        host-grub2-2.14         | NOK | https://autobuild.buildroot.org/results/ec1d28fb86b405a532e5ab9e3763fd399d77b154 |     
+  aarch64    |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/e3fc1271792f9e0acb71459f73f5da0014c30bc3 |     
+    i686     |        host-pahole-1.28        | NOK | https://autobuild.buildroot.org/results/7aafe4c59b0920d21969eada97b709aeec1e9021 |     
+    i686     |      host-tipidee-0.0.5.1      | NOK | https://autobuild.buildroot.org/results/3bc7f4ca197d7f6f5d90e8aeeebb2b97081fc180 |     
+    i686     |      host-xfsprogs-6.19.0      | NOK | https://autobuild.buildroot.org/results/368d343f9b4c679735bc55ee8ccff7b645cb0e57 | ORPH
+    i686     |      libmicrohttpd-1.0.5       | NOK | https://autobuild.buildroot.org/results/35d8e7aa76d98c13418078f044e0bcddd2c8a7ee |     
+    i686     |     ltp-testsuite-20260529     | NOK | https://autobuild.buildroot.org/results/4b684ece4f61b328c87e00cc28e168347bda2f02 |     
+    i686     |        madplay-0.15.2b         | NOK | https://autobuild.buildroot.org/results/d02c9eeb99742b7f66bf1c7f2ad7aa2f70ace518 | ORPH
+   x86_64    |         net-tools-2.10         | NOK | https://autobuild.buildroot.org/results/e686273eb41e3d4b5df41ca52c8117593b6df440 | ORPH
+    i686     |         net-tools-2.10         | NOK | https://autobuild.buildroot.org/results/4072b9acf19973d45f1b7da61bead0c0aebbbfd9 | ORPH
+   x86_64    |         net-tools-2.10         | NOK | https://autobuild.buildroot.org/results/c76783126c933f16e4d02f9560b269c70e93bb9c | ORPH
+    i686     |  openvmtools-11.3.5-18557794   | NOK | https://autobuild.buildroot.org/results/c31f98f470b4649c860afb45d58494051d6e20c2 |     
+powerpc64le  | package/mender-update-modul... | NOK | https://autobuild.buildroot.org/results/3697f691eb48033cb1324ac720c2c3754583e561 |     
+  riscv64    |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/30c53a4499b3ab2f04f846e3aca5c20f8b9f1f10 |     
+    i686     |          perl-5.42.2           | NOK | https://autobuild.buildroot.org/results/1e5b92f78b22fd4146c01cd59c45558d5bff883d |     
+    i686     |      pkcs11-helper-1.31.0      | NOK | https://autobuild.buildroot.org/results/35090aa372eeabd451a24b4c9bcac3997afede5c | ORPH
+  aarch64    |          prboom-2.5.0          | NOK | https://autobuild.buildroot.org/results/0912d216be2b66c4306d98e8fc788de3a4a5bf18 | ORPH
+    i686     |         rtl_433-25.02          | NOK | https://autobuild.buildroot.org/results/2971d1e3395da7b00d115037ad8e5acab654310a |     
+    i686     |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/95405e99e044f80bf4f3ff0b9acbd1df322ef298 |     
+powerpc64le  |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/eec822c63c2f607ed4b510e2ca9923bd0e8554c1 |     
+    i686     |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/46dc7a7f00066a3a70d83547c96c82182a82e84d |     
+    i686     |         tinifier-4.1.0         | NOK | https://autobuild.buildroot.org/results/c506fe849c39bc251642da54a3fd32ceeae153b3 |     
+    i686     |      uboot-tools-2026.04       | NOK | https://autobuild.buildroot.org/results/c7a64a58f66170435a69394d3f985348c1d9be72 | ORPH
+  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/5762037d2affc4eec656249df6cc4747ee5f5734 |     
+  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/bd63765e8ac0d1de57e2d491353e649c774510f3 |     
+  riscv64    |         uclibc-1.0.58          | NOK | https://autobuild.buildroot.org/results/568fa33fa3d0a2b59ed4f1a5d15dde547ade6f81 |     
+  aarch64    | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/a4ad01bdadbc18585bd6e552c9e88b331075dad0 | ORPH
+    i686     | uhttpd-15346de8d3ba42200249... | NOK | https://autobuild.buildroot.org/results/dd4a54e5550c7df6445ee73c4dc3bf6fcad1778d | ORPH
+    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/dad4f5ce5398648160eb77a56afd60b295c53226 |     
 
-  configure: error: getino selected, but required statx function not
-    available
 
-so we disable getino for uClibc for now.
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Various Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/a30b9957573521f2a92ce6e0d9a8f1c12ca373d1
+                openssh-10.3p1 | 1 
 
- ...api-utils.h-fix-LSMT_ROOT-definition.patch | 44 -------------------
- ...optionally-add-libpthread-to-uuid.pc.patch | 42 ------------------
- package/util-linux/Config.in                  | 25 +++++++++++
- ...api-utils.h-fix-LSMT_ROOT-definition.patch | 44 -------------------
- ...optionally-add-libpthread-to-uuid.pc.patch | 42 ------------------
- .../util-linux-libs/util-linux-libs.mk        |  3 --
- package/util-linux/util-linux.hash            |  4 +-
- package/util-linux/util-linux.mk              |  9 ++--
- 8 files changed, 31 insertions(+), 182 deletions(-)
- delete mode 100644 package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
- delete mode 100644 package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
- delete mode 100644 package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
- delete mode 100644 package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
 
-diff --git a/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-deleted file mode 100644
-index d98c225500..0000000000
---- a/package/util-linux/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 72ff3b8998a675900fcb7c18c0e03f1552b13a8b Mon Sep 17 00:00:00 2001
--From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
--Date: Tue, 14 Apr 2026 11:04:08 +0530
--Subject: [PATCH] include/mount-api-utils.h: fix LSMT_ROOT definition
--
--Commit
--ded434a63f3eee7fd7805b18d6c9bb912016c3c8 ("include/mount-api-utils:
--add statmount and listmount") introduce a fallback definition for the
--LSMT_ROOT defined, but a small typo makes this fallback definition
--ineffective:
--
-- #ifdef LSMT_ROOT
-- # define LSMT_ROOT ...
-- #endif
--
--Should obviously have been:
--
-- #ifndef LSMT_ROOT
-- # define LSMT_ROOT ...
-- #endif
--
--Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
--Upstream: https://lore.kernel.org/util-linux/20260530094932.2351791-1-thomas.petazzoni@bootlin.com/T/#u
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- include/mount-api-utils.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
--index a916f99..87e173e 100644
----- a/include/mount-api-utils.h
--+++ b/include/mount-api-utils.h
--@@ -339,7 +339,7 @@ struct ul_statmount {
-- /*
--  * Special @mnt_id values that can be passed to listmount
--  */
---#ifdef LSMT_ROOT
--+#ifndef LSMT_ROOT
-- # define LSMT_ROOT              0xffffffffffffffff    /* root mount */
-- #endif
-- 
---- 
--2.53.0
--
-diff --git a/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch b/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
-deleted file mode 100644
-index ef59e458e1..0000000000
---- a/package/util-linux/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From a06adacd1009174b7ca35f529a2db165f6c1f3aa Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Fri, 16 Jan 2026 23:33:34 +0100
--Subject: [PATCH] autotools: optionally add libpthread to uuid.pc
--
--Fixes https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
--
--Upstream: https://github.com/util-linux/util-linux/commit/d88a62e4cd385e07b3cb8fb309bbb03981ea2970
--
--[Bernd: backported to 2.41.3]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- Makefile.am        | 1 +
-- libuuid/uuid.pc.in | 2 +-
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 01e99701d..cd1d157ce 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -189,6 +189,7 @@ edit_cmd = sed \
-- 	 -e 's|@usrbin_execdir[@]|$(usrbin_execdir)|g' \
-- 	 -e 's|@usrsbin_execdir[@]|$(usrsbin_execdir)|g' \
-- 	 -e 's|@SOCKET_LIBS[@]|$(SOCKET_LIBS)|g' \
--+	 -e 's|@PTHREAD_LIBS[@]|$(PTHREAD_LIBS)|g' \
-- 	 -e 's|@VERSION[@]|$(VERSION)|g' \
-- 	 -e 's|@ADJTIME_PATH[@]|$(ADJTIME_PATH)|g' \
-- 	 -e 's|@LIBUUID_VERSION[@]|$(LIBUUID_VERSION)|g' \
--diff --git a/libuuid/uuid.pc.in b/libuuid/uuid.pc.in
--index 51929fe80..a40dc6644 100644
----- a/libuuid/uuid.pc.in
--+++ b/libuuid/uuid.pc.in
--@@ -7,5 +7,5 @@ Name: uuid
-- Description: Universally unique id library
-- Version: @LIBUUID_VERSION@
-- Cflags: -I${includedir}/uuid
---Libs.private: @SOCKET_LIBS@ -lpthread
--+Libs.private: @SOCKET_LIBS@ @PTHREAD_LIBS@
-- Libs: -L${libdir} -luuid
---- 
--2.47.3
--
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index df7435e71a..590a0607e8 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -106,6 +106,17 @@ config BR2_PACKAGE_UTIL_LINUX_CHMEM
- 	help
- 	  Sets a particular size or range of memory online or offline
- 
-+config BR2_PACKAGE_UTIL_LINUX_COPYFILERANGE
-+	bool "copyfilerange"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # copy_file_range
-+	help
-+	  Copy file ranges using the copy_file_range() syscall
-+
-+comment "copyfilerange needs a musl or glibc toolchain"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	depends on BR2_USE_MMU # fork()
-@@ -144,6 +155,20 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
- 	help
- 	  Check and repair a linux filesystem
- 
-+config BR2_PACKAGE_UTIL_LINUX_GETINO
-+	bool "getino"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3 # pidfd_open
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # statx
-+	help
-+	  Print the unique inode number associated with a process
-+	  file descriptor or namespace for a given PID.
-+
-+comment "getino needs a musl or glibc toolchain w/ headers >= 5.3"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3 \
-+		|| BR2_TOOLCHAIN_USES_UCLIBC
-+
- config BR2_PACKAGE_UTIL_LINUX_HARDLINK
- 	bool "hardlink"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch b/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-deleted file mode 100644
-index d98c225500..0000000000
---- a/package/util-linux/util-linux-libs/0001-include-mount-api-utils.h-fix-LSMT_ROOT-definition.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 72ff3b8998a675900fcb7c18c0e03f1552b13a8b Mon Sep 17 00:00:00 2001
--From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
--Date: Tue, 14 Apr 2026 11:04:08 +0530
--Subject: [PATCH] include/mount-api-utils.h: fix LSMT_ROOT definition
--
--Commit
--ded434a63f3eee7fd7805b18d6c9bb912016c3c8 ("include/mount-api-utils:
--add statmount and listmount") introduce a fallback definition for the
--LSMT_ROOT defined, but a small typo makes this fallback definition
--ineffective:
--
-- #ifdef LSMT_ROOT
-- # define LSMT_ROOT ...
-- #endif
--
--Should obviously have been:
--
-- #ifndef LSMT_ROOT
-- # define LSMT_ROOT ...
-- #endif
--
--Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
--Upstream: https://lore.kernel.org/util-linux/20260530094932.2351791-1-thomas.petazzoni@bootlin.com/T/#u
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- include/mount-api-utils.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/mount-api-utils.h b/include/mount-api-utils.h
--index a916f99..87e173e 100644
----- a/include/mount-api-utils.h
--+++ b/include/mount-api-utils.h
--@@ -339,7 +339,7 @@ struct ul_statmount {
-- /*
--  * Special @mnt_id values that can be passed to listmount
--  */
---#ifdef LSMT_ROOT
--+#ifndef LSMT_ROOT
-- # define LSMT_ROOT              0xffffffffffffffff    /* root mount */
-- #endif
-- 
---- 
--2.53.0
--
-diff --git a/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch b/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
-deleted file mode 100644
-index ef59e458e1..0000000000
---- a/package/util-linux/util-linux-libs/0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From a06adacd1009174b7ca35f529a2db165f6c1f3aa Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Fri, 16 Jan 2026 23:33:34 +0100
--Subject: [PATCH] autotools: optionally add libpthread to uuid.pc
--
--Fixes https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
--
--Upstream: https://github.com/util-linux/util-linux/commit/d88a62e4cd385e07b3cb8fb309bbb03981ea2970
--
--[Bernd: backported to 2.41.3]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- Makefile.am        | 1 +
-- libuuid/uuid.pc.in | 2 +-
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 01e99701d..cd1d157ce 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -189,6 +189,7 @@ edit_cmd = sed \
-- 	 -e 's|@usrbin_execdir[@]|$(usrbin_execdir)|g' \
-- 	 -e 's|@usrsbin_execdir[@]|$(usrsbin_execdir)|g' \
-- 	 -e 's|@SOCKET_LIBS[@]|$(SOCKET_LIBS)|g' \
--+	 -e 's|@PTHREAD_LIBS[@]|$(PTHREAD_LIBS)|g' \
-- 	 -e 's|@VERSION[@]|$(VERSION)|g' \
-- 	 -e 's|@ADJTIME_PATH[@]|$(ADJTIME_PATH)|g' \
-- 	 -e 's|@LIBUUID_VERSION[@]|$(LIBUUID_VERSION)|g' \
--diff --git a/libuuid/uuid.pc.in b/libuuid/uuid.pc.in
--index 51929fe80..a40dc6644 100644
----- a/libuuid/uuid.pc.in
--+++ b/libuuid/uuid.pc.in
--@@ -7,5 +7,5 @@ Name: uuid
-- Description: Universally unique id library
-- Version: @LIBUUID_VERSION@
-- Cflags: -I${includedir}/uuid
---Libs.private: @SOCKET_LIBS@ -lpthread
--+Libs.private: @SOCKET_LIBS@ @PTHREAD_LIBS@
-- Libs: -L${libdir} -luuid
---- 
--2.47.3
--
-diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-index 6716a656d2..9340d5ae4f 100644
---- a/package/util-linux/util-linux-libs/util-linux-libs.mk
-+++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-@@ -21,9 +21,6 @@ UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.BSD-3-Clause \
- 	Documentation/licenses/COPYING.LGPL-2.1-or-later
- 
--# 0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
--UTIL_LINUX_LIBS_AUTORECONF = YES
--
- UTIL_LINUX_LIBS_INSTALL_STAGING = YES
- UTIL_LINUX_LIBS_DEPENDENCIES = \
- 	host-pkgconf \
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index b6393d6ec0..b65527408b 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
--# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/sha256sums.asc
--sha256  f586e35d320ff537aab3ffeca37e9ecd482ccbe013590db4429a414d8aa6a728  util-linux-2.41.5.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/util-linux/v2.42/sha256sums.asc
-+sha256  03a05d3adf9602ef128f2da05b84b3205ce60c351e5737c0370f74000679ce8a  util-linux-2.42.2.tar.xz
- # License files, locally calculated
- sha256  4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3  README.licensing
- sha256  527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1  Documentation/licenses/COPYING.BSD-2-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 20bdcc5c3f..b8567b6992 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -7,8 +7,8 @@
- # When making changes to this file, please check if
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
- 
--UTIL_LINUX_VERSION_MAJOR = 2.41
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).5
-+UTIL_LINUX_VERSION_MAJOR = 2.42
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
-@@ -37,9 +37,6 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
- 
- UTIL_LINUX_CPE_ID_VENDOR = kernel
- 
--# 0002-autotools-optionally-add-libpthread-to-uuid.pc.patch
--UTIL_LINUX_AUTORECONF = YES
--
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = \
- 	host-pkgconf \
-@@ -166,11 +163,13 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CHMEM),--enable-chmem,--disable-chmem) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_COPYFILERANGE),--enable-copyfilerange,--disable-copyfilerange) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_GETINO),--enable-getino,--disable-getino) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_HARDLINK),--enable-hardlink,--disable-hardlink) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock --disable-hwclock-gplv3,--disable-hwclock) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCMK),--enable-ipcmk,--disable-ipcmk) \
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |         openssh-10.3p1         | NOK | https://autobuild.buildroot.org/results/279f53e5fc4f3042263337d393deb8e7a2d3a507 | ORPH
+
+
+Classification of failures by reason for 2026.02.x
+--------------------------------------------------
+
+                 fwts-25.11.00 | 1 
+                     kbd-2.9.0 | 1 
+
+
+Detail of failures for 2026.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |         fwts-25.11.00          | NOK | https://autobuild.buildroot.org/results/2ef219108d73eb500d507c1b3c0570d2512ba702 | ORPH
+    i586     |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/5f95f4a2ba579ca78c20c4a8f7147a6b5b323f33 | ORPH
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+  gobject-introspection-1.82.0 | 1 
+        host-python-lxml-5.3.0 | 1 
+           libmicrohttpd-1.0.5 | 1 
+             netsniff-ng-0.6.8 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/823e47ad67cfcdac566f801b72ce1983a0ac19b9 | ORPH
+    i586     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/726840a343238239afff8b99f8d034561ccee45e |     
+   x86_64    |      libmicrohttpd-1.0.5       | NOK | https://autobuild.buildroot.org/results/cdcc21d5b84ca54daf274bd71929b4a970276e8c |     
+    i686     |       netsniff-ng-0.6.8        | NOK | https://autobuild.buildroot.org/results/9e067d1175fe228240cabc7b90e49d6f5744dfd7 |     
+
+
+
 -- 
-2.47.3
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
