@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D4CCD98F0
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 10:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F8FACD98F2
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 10:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 652494F01A;
-	Sun, 21 Jun 2026 10:36:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36A006FCFA;
+	Sun, 21 Jun 2026 10:37:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74BO2kcJQxlK; Sun, 21 Jun 2026 10:36:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xVGVnT0Z9xY6; Sun, 21 Jun 2026 10:37:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66F7242ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 702886FC85
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782038216;
-	bh=LsKCk/w6lJiygA2KMR/wfevCyfkl1wUCVatjtkXBppw=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=jRTTphRq8H4MpblmB8yv2RZaytQDRCIEbJuJEdar2gZrzFY6qo0hB6Vpxuqi0U5DS
-	 shMbnzHUJKSG6PnT+381f9QoVKe0RuvN42qKsb0rTcghEt0fv1u7Vd8Y117lHfz11W
-	 RR72netl52MYrWz6Ente3jvKq3sobg3D0EpWG9lmB1hdc40ztwiW/S9yiAo9wk0u1B
-	 zvPHLI70pAGhMKjcBAGnf1LuLl5WsVq8CkPnFKUYRQHic53BL5tgBGrlNeDb6nIo7a
-	 o8uTcvRgKacmHY5egzbeShFYH1B0Xb9WRfVx2wt/POIAxbEsqT3lLN85NrqjtD4fF9
-	 9Jxx6jD95Rejg==
+	s=default; t=1782038239;
+	bh=LmIZKCfEuUBUVI9sqKloiXYQLq0KJY4BR+1M4SWs6jI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=hXTT7EJ2k2utII7ex3+tVdjwPDG/FvOtG2wCol9bTPq4XQOILywDRflxQQsWqKM/J
+	 cv1jmYKPE/63L+62QCT+GSpuaGyc5VMUcgKiRILKkn9n/HXF6lAGoXydQ2/HKnprf5
+	 S1tew+3RHrGT5LaPOuJkIUc28bldXND3c3i9zDn1oKgylzRHAVbxftu+1lRjx/p0Cr
+	 HgTLS46X2dVAaU3HixSzsip8IchSdbiQjLs57bgzU++ORSfAGGyJSaVzy/axv2dpa5
+	 9LWPSpVSGReFgxdbJ5EJ4A70mM8X8Zv5J/uUrH0Xsiq4eDbI4jxNCdzsxAAvPYhAEE
+	 82agNpDyuoOEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66F7242ECE;
-	Sun, 21 Jun 2026 10:36:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 702886FC85;
+	Sun, 21 Jun 2026 10:37:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B7BC24D
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:36:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 74790118
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16E0842ECE
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:36:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71E1142ECE
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:37:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HzAs9xtXnDiw for <buildroot@buildroot.org>;
- Sun, 21 Jun 2026 10:36:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id e130-ctiUzIF for <buildroot@buildroot.org>;
+ Sun, 21 Jun 2026 10:37:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4BAC342C07
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BAC342C07
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4BAC342C07
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:36:52 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1963950893; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 21 Jun 2026 10:36:51 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1wbFXl-0000000E0Ot-3nmU;
- Sun, 21 Jun 2026 12:36:49 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B984742C07
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B984742C07
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:37:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 34C31832B0; Sun, 21 Jun 2026 10:36:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <20260619090027.3145553-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 19 Jun 2026 11:00:26 +0200")
-References: <20260619090027.3145553-1-peter@korsgaard.com>
-Date: Sun, 21 Jun 2026 12:36:49 +0200
-Message-ID: <87eci0b2ny.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Cl5kQU67VysaIb3sc8wLqo/6eAp9LpoMwPodrRxbJ20676gCM1+Y6ysBWHFeONX2bGVlA2h7gq470HW0asHDlZBgVicPams+eQHFL3OcTnoV00ilJsS+HXZzL6zJtnyPpXOqBSvZm11D4nip5QOVE7utC9KxDkdi92/7NOKCnUJPqfKqnuH4m/8Lpjc2QLaRsROYDZJNHTsGimPAerpMREmiRoHZqBMyEMKmZgVAHO6+74E0Ud4PmnsVaE4qS2YSB/i+i9tzw/bl+eI5lRftDAobrXchwAn/c4M/WWIHpEmvi+NkkP6S+hIMc4Dm71aixC0eLo8J7kznRH3flJs2VA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=5tzFhX/H4jKFlmKXoJvIGTz6eYJHMlcicF8J4f443Bc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Cl5kQU67
-Subject: Re: [Buildroot] [PATCH] utils/generate-cyclonedx: fixup scp-style
+Date: Sun, 21 Jun 2026 12:36:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7f72bec788a9206dbfc7079df4dcbdb49817d486
+X-Git-Newrev: ebcfdb8b0ae0077525558376ff9199ba6b6a34f5
+X-Patchwork-Hint: ignore
+Message-Id: <20260621103653.34C31832B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/generate-cyclonedx: fixup scp-style
  git sites
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -93,57 +70,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4208443591864924845=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlBldGVyIiA9PSBQZXRlciBLb3JzZ2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdy
-aXRlczoKCiA+IENvbW1pdCBlOGM1NGZmYjNkICgidXRpbHMvZ2VuZXJhdGUtY3ljbG9uZWR4OiBn
-ZW5lcmF0ZSB2Y3MKID4gZXh0ZXJuYWxSZWZlcmVuY2VzIGZvciBzb3VyY2UgcmVwb3MiKSBhZGRl
-ZCBleHRlcm5hbFJlZmVyZW5jZXMgdG8gdGhlIHNvdXJjZQogPiBjb2RlIG9mIHBhY2thZ2VzLgoK
-ID4gVGhpcyB1bmZvcnR1bmF0ZWx5IGNhdXNlcyBpc3N1ZXMgd2l0aCBwYWNrYWdlcyAoaW4gYnIy
-LWV4dGVybmFsKSBmZXRjaGluZwogPiBmcm9tIGdpdCB1c2luZyB0aGUgc2NwLWxpa2Ugc3ludGF4
-LCBFLkcuOgoKID4gIEZPT19TSVRFX01FVEhPRCA9IGdpdAogPiAgRk9PX1NJVEUgPSBnaXRAZ2l0
-aHViLmNvbTo8cHJvamVjdD4vPHJlcG8+LmdpdAoKID4gV2hpY2ggZW5kcyB1cCBpbiB0aGUgU0JP
-TSBhczoKCiA+IFsKID4gICB7CiA+ICAgICAidHlwZSI6ICJ2Y3MiLAogPiAgICAgInVybCI6ICJn
-aXRAZ2l0aHViLmNvbTo8cHJvamVjdD4vPHJlcG8+LmdpdCIsCiA+ICAgICAiY29tbWVudCI6ICJn
-aXQgcmVwb3NpdG9yeSIKID4gICB9CiA+IF0KCiA+IFRoaXMgKGNvcnJlY3RseSkgY2F1c2VzIERl
-cGVuZGVuY3kgdHJhY2sgdG8gcmVqZWN0IHRoZSBTQk9NIGltcG9ydCB3aXRoOgoKID4gewogPiAg
-ICJzdGF0dXMiOiA0MDAsCiA+ICAgInRpdGxlIjogIlRoZSB1cGxvYWRlZCBCT00gaXMgaW52YWxp
-ZCIsCiA+ICAgImRldGFpbCI6ICJTY2hlbWEgdmFsaWRhdGlvbiBmYWlsZWQiLAogPiAgICJlcnJv
-cnMiOiBbCiA+ICAgICAiJC5jb21wb25lbnRzWzJdLmV4dGVybmFsUmVmZXJlbmNlc1swXS51cmw6
-IGRvZXMgbm90IG1hdGNoIHRoZSBpcmktcmVmZXJlbmNlIHBhdHRlcm4gbXVzdCBiZSBhIHZhbGlk
-IFJGQyAzOTg3IElSSS1yZWZlcmVuY2UiLAogPiAgICAgIiQuY29tcG9uZW50c1syXS5leHRlcm5h
-bFJlZmVyZW5jZXNbMF0udXJsOiBkb2VzIG5vdCBtYXRjaCB0aGUgaXJpLXJlZmVyZW5jZSBwYXR0
-ZXJuIG11c3QgYmUgYSB2YWxpZCBSRkMgMzk4NyBJUkktcmVmZXJlbmNlIiwKID4gICAgICIkLmNv
-bXBvbmVudHNbMl0uZXh0ZXJuYWxSZWZlcmVuY2VzWzBdLnVybDogZG9lcyBub3QgbWF0Y2ggdGhl
-IHJlZ2V4IHBhdHRlcm4gXnVybjpjZHg6WzAtOWEtZl17OH0tWzAtOWEtZl17NH0tWzAtOWEtZl17
-NH0tWzAtOWEtZl17NH0tWzAtOWEtZl17MTJ9L1sxLTldWzAtOV0qJCIsCiA+ICAgIF0KID4gfQoK
-ID4gVGhlIEN5Y2xvbmVEWCBzcGVjIGluZGVlZCByZXF1aXJlcyBhIFVSSToKCiA+IFRoZSBVUkkg
-KFVSTCBvciBVUk4pIHRvIHRoZSBleHRlcm5hbCByZWZlcmVuY2UuICBFeHRlcm5hbCByZWZlcmVu
-Y2VzIGFyZQogPiBVUklzIGFuZCB0aGVyZWZvcmUgY2FuIGFjY2VwdCBhbnkgVVJMIHNjaGVtZSBp
-bmNsdWRpbmcgaHR0cHMgKFJGQy03MjMwKSwKID4gbWFpbHRvIChSRkMtMjM2OCksIHRlbCAoUkZD
-LTM5NjYpLCBhbmQgZG5zIChSRkMtNDUwMSkKCiA+IGh0dHBzOi8vY3ljbG9uZWR4Lm9yZy9kb2Nz
-LzEuNi9qc29uLyNtZXRhZGF0YV90b29sc19vbmVPZl9pMF9jb21wb25lbnRzX2l0ZW1zX2V4dGVy
-bmFsUmVmZXJlbmNlc19pdGVtc191cmwKCiA+IFRoZSB1c2VyQGhvc3Q6cHJvamVjdC9yZXBvLmdp
-dCBpcyBhIGdpdC1zcGVjaWZpYyBzaG9ydGhhbmQgZm9yIGEgZ2l0LW92ZXItc3NoIFVSTC4gRnJv
-bSBtYW4gZ2l0LWNsb25lOgoKID4gIEdpdCBzdXBwb3J0cyBzc2gsIGdpdCwgaHR0cCwgYW5kIGh0
-dHBzIHByb3RvY29scyAoaW4gYWRkaXRpb24sIGZ0cCBhbmQgZnRwcwogPiAgY2FuIGJlIHVzZWQg
-Zm9yIGZldGNoaW5nLCBidXQgdGhpcyBpcyBpbmVmZmljaWVudCBhbmQgZGVwcmVjYXRlZDsgZG8g
-bm90IHVzZQogPiAgdGhlbSkuCgogPiAgVGhlIG5hdGl2ZSB0cmFuc3BvcnQgKGkuZS4gIGdpdDov
-LyBVUkwpIGRvZXMgbm8gYXV0aGVudGljYXRpb24gYW5kIHNob3VsZAogPiAgYmUgdXNlZCB3aXRo
-IGNhdXRpb24gb24gdW5zZWN1cmVkIG5ldHdvcmtzLgoKID4gIFRoZSBmb2xsb3dpbmcgc3ludGF4
-ZXMgbWF5IGJlIHVzZWQgd2l0aCB0aGVtOgoKID4gIOKAoiAgIHNzaDovL1t1c2VyQF1ob3N0Lnh6
-Wzpwb3J0XS9wYXRoL3RvL3JlcG8uZ2l0LwogPiAg4oCiICAgZ2l0Oi8vaG9zdC54els6cG9ydF0v
-cGF0aC90by9yZXBvLmdpdC8KID4gIOKAoiAgIGh0dHBbc106Ly9ob3N0Lnh6Wzpwb3J0XS9wYXRo
-L3RvL3JlcG8uZ2l0LwogPiAg4oCiICAgZnRwW3NdOi8vaG9zdC54els6cG9ydF0vcGF0aC90by9y
-ZXBvLmdpdC8KCiA+ICBBbiBhbHRlcm5hdGl2ZSBzY3AtbGlrZSBzeW50YXggbWF5IGFsc28gYmUg
-dXNlZCB3aXRoIHRoZSBzc2ggcHJvdG9jb2w6CgogPiAg4oCiICAgW3VzZXJAXWhvc3QueHo6cGF0
-aC90by9yZXBvLmdpdC8KCiA+IFNvIGNvbnZlcnQgdGhlIHNjcC1saWtlIHN5bnRheCB0byBzc2g6
-Ly8gVVJMcyBpbiBwYXJzZV91cmlzKCkgZm9yIHNwZWMKID4gY29tcGxpYW5jZS4KCiA+IFNpZ25l
-ZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KCkNvbW1pdHRl
-ZCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+--===============4208443591864924845==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ebcfdb8b0ae0077525558376ff9199ba6b6a34f5
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Commit e8c54ffb3d ("utils/generate-cyclonedx: generate vcs
+externalReferences for source repos") added externalReferences to the source
+code of packages.
+
+This unfortunately causes issues with packages (in br2-external) fetching
+from git using the scp-like syntax, E.G.:
+
+ FOO_SITE_METHOD = git
+ FOO_SITE = git@github.com:<project>/<repo>.git
+
+Which ends up in the SBOM as:
+
+[
+  {
+    "type": "vcs",
+    "url": "git@github.com:<project>/<repo>.git",
+    "comment": "git repository"
+  }
+]
+
+This (correctly) causes Dependency track to reject the SBOM import with:
+
+{
+  "status": 400,
+  "title": "The uploaded BOM is invalid",
+  "detail": "Schema validation failed",
+  "errors": [
+    "$.components[2].externalReferences[0].url: does not match the iri-reference pattern must be a valid RFC 3987 IRI-reference",
+    "$.components[2].externalReferences[0].url: does not match the iri-reference pattern must be a valid RFC 3987 IRI-reference",
+    "$.components[2].externalReferences[0].url: does not match the regex pattern ^urn:cdx:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[1-9][0-9]*$",
+   ]
+}
+
+The CycloneDX spec indeed requires a URI:
+
+The URI (URL or URN) to the external reference.  External references are
+URIs and therefore can accept any URL scheme including https (RFC-7230),
+mailto (RFC-2368), tel (RFC-3966), and dns (RFC-4501)
+
+https://cyclonedx.org/docs/1.6/json/#metadata_tools_oneOf_i0_components_items_externalReferences_items_url
+
+The user@host:project/repo.git is a git-specific shorthand for a git-over-ssh URL. From man git-clone:
+
+ Git supports ssh, git, http, and https protocols (in addition, ftp and ftps
+ can be used for fetching, but this is inefficient and deprecated; do not use
+ them).
+
+ The native transport (i.e.  git:// URL) does no authentication and should
+ be used with caution on unsecured networks.
+
+ The following syntaxes may be used with them:
+
+ •   ssh://[user@]host.xz[:port]/path/to/repo.git/
+ •   git://host.xz[:port]/path/to/repo.git/
+ •   http[s]://host.xz[:port]/path/to/repo.git/
+ •   ftp[s]://host.xz[:port]/path/to/repo.git/
+
+ An alternative scp-like syntax may also be used with the ssh protocol:
+
+ •   [user@]host.xz:path/to/repo.git/
+
+So convert the scp-like syntax to ssh:// URLs in parse_uris() for spec
+compliance.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-By: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/generate-cyclonedx | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index bade018cd4..df12ee84c0 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -280,6 +280,12 @@ def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
+         scheme, _, stripped_uri = uri.partition("+")
+         if stripped_uri:
+             parsed = urllib.parse.urlparse(stripped_uri)
++
++            # convert scp-style host:path site to ssh:// uri
++            if scheme == "git" and not parsed.scheme:
++                host, _, path = stripped_uri.partition(":")
++                stripped_uri = "ssh://" + host + "/" + path
++
+             if parsed.hostname != "sources.buildroot.net":
+                 yield scheme.split("|"), stripped_uri
+ 
+
+--===============4208443591864924845==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4208443591864924845==--
