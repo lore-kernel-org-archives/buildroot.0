@@ -4,61 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC7B3CD98F2
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 10:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 037F1CD98F0
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 11:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A56AB6FD02;
-	Sun, 21 Jun 2026 10:39:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAB316FCB9;
+	Sun, 21 Jun 2026 11:09:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GW9FTL7gPsX1; Sun, 21 Jun 2026 10:39:35 +0000 (UTC)
+ id Q-Qv46VlZdJ5; Sun, 21 Jun 2026 11:09:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D0D96FCFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96D986FCC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782038375;
-	bh=B2Adc5b4xlJzCY0tAIb0jmZHIExKR3XXP0c7v3b2hew=;
+	s=default; t=1782040171;
+	bh=ImGbSYGzuawddswxPgXAZmo8ezbt8e/Lq/LtuiH0yL8=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=JIgykjtpQNc4m386jKyukr2VqQXyOMt8GPwf+wsFzqaZn3M+Ham2Yjt2p0NWP23jk
-	 /bF336AdH/WKDc3bcQUZn8HRYxGTgAZsE2NfVOh/GBCpQf5dgjkFncudP9ER9iXTBh
-	 TA+YoOaEaZ/YbpC6R8bw7R0abtA3IpoYRWY/Z4bAUI6Z9XrLbvHq0cjLHpLkauiZ3u
-	 DNuTpI0GRHf4BBt2efXkkQ3cV/DJhgDDiuKrH8IHfLElFkRxLYt/qZINj7BKlJ/wdE
-	 pEHq335hB74qk7HSmxkotiimn8KJlTmutbRyh3wkIHsTyINfK/Rycu7RbUwU6GHacx
-	 qb/Jz5Fvt593g==
+	b=HvdkRn2OE0GTXvK7h8/deCtw7r9/jUY3bW0O40n14ZJDb4XiLapWUOYBpfsOzrrql
+	 kagSOFlDZ7W5mMIMt8e1czBlVYef193ndgc0JpZLLG2IMOViu/wqLyPS4hE/5l9ZA8
+	 LMRZqiE7iKIWJdSDB3PrsbjC+Qp6I3hQdEye8jIFhHs5TwjDSXKWXWejFAdPV7Bi92
+	 BCFxiiSWK2P+tizuqfREY2JX1bR1tQ/36hyecdLOJ6RBhgmjUTt3pxnEBq3LoCsvwO
+	 7mdRoXf0Rld+O0P4QZckfavK2rSAvRGNZxcfXRTcFTPamzNk9vigT1pZxKSNcgmkrP
+	 5as6TYjTIngDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D0D96FCFC;
-	Sun, 21 Jun 2026 10:39:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EC65C118
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:39:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96D986FCC3;
+	Sun, 21 Jun 2026 11:09:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE25B118
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 11:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2BB2424C8
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:39:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 979AA4019B
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 11:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id orKy3u546EdA for <buildroot@buildroot.org>;
- Sun, 21 Jun 2026 10:39:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1FB04018E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1FB04018E
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 10:39:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 78142832B3; Sun, 21 Jun 2026 10:39:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7Bm3Wc0RsWwE for <buildroot@buildroot.org>;
+ Sun, 21 Jun 2026 11:09:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 411E840156
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 411E840156
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 411E840156
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 11:09:27 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c132.dip0.t-ipconnect.de [79.214.193.50])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9237BA4C0E86
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 13:09:24 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50170)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
+ (envelope-from <bernd@kuhls.net>) id 1wbG3I-0000000027J-0uGx
+ for buildroot@buildroot.org; Sun, 21 Jun 2026 11:09:24 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jun 2026 12:37:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebcfdb8b0ae0077525558376ff9199ba6b6a34f5
-X-Git-Newrev: 183c52448d77586aeba30ca9e5b1b7a9342b144c
-X-Patchwork-Hint: ignore
-Message-Id: <20260621103909.78142832B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fetchmail: security bump version
- to 6.6.5
+Date: Sun, 21 Jun 2026 13:09:24 +0200
+Message-ID: <20260621110924.1041212-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202605290044; t=1782040164;
+ bh=MFEuyiGO1C0lvGfByC/3L1y+yxVREqgwPBvU8frRlak=;
+ h=From:To:Subject:Date:From;
+ b=n1KHplPAwMQbJIni+um7Fb+LDS9j+YF1NSBTJfF+h0/jkOV950cfwuuxExX/jrfnX
+ l8EpAaSELqRNA5EWKd3p2wZNDzpgytVnC43i8cR9Q3j06/7MAG96O0Cxs9EVPID71P
+ jgpvKDyr5sJ9IgpCcj5bW0qWzoKCg4ISE0eorHcMBvw6B04ePApDz8EiHH32Bh3CYS
+ YtQSVr/QTWMtggZDrq97DVF9u+tFLRHwACwWz9QtCDr8b2h+hK/dsUZ+aE6KPRRQqi
+ sCO6zjti3WMH1btO9yNd92n2H9L/7EV+8NG8xP7FFTAgSzgcEC+/uN7z6D/sJpV1Ng
+ 1wlcrFxrtK5tg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=n1KHplPA
+Subject: [Buildroot] [PATCH 1/1] package/linux-pam: don't treat ld warnings
+ as errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,52 +92,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/183c52448d77586aeba30ca9e5b1b7a9342b144c
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Microblaze ld emits warnings like:
 
-https://sourceforge.net/p/fetchmail/mailman/message/59347909/
+/home/autobuild/autobuild/instance-32/output-1/host/lib/gcc/microblaze-buildroot-linux-gnu/15.2.0/../../../../microblaze-buildroot-linux-gnu/bin/ld:
+ FDE encoding in /home/autobuild/autobuild/instance-32/output-1/host/lib/gcc/microblaze-buildroot-linux-gnu/15.2.0/libgcc.a(_udivdi3.o)(.eh_frame)
+ prevents .eh_frame_hdr table being created
+/home/autobuild/autobuild/instance-32/output-1/host/lib/gcc/microblaze-buildroot-linux-gnu/15.2.0/../../../../microblaze-buildroot-linux-gnu/bin/ld:
+ FDE encoding in /home/autobuild/autobuild/instance-32/output-1/host/lib/gcc/microblaze-buildroot-linux-gnu/15.2.0/libgcc.a(_umoddi3.o)(.eh_frame)
+ prevents .eh_frame_hdr table being created
+collect2: error: ld returned 1 exit status
 
-"## SECURITY BUGFIX
-* POP3 with RPA: fix calculation of buffer sizes to avoid buffer
-  overflow on long service challenges with long user IDs"
+Since the bump of the package to 1.7.1 with buildroot commit
+30e38505e4bc6f8313509bdee2418024693088fa and the switch to meson as
+build system '-Wl,--fatal-warnings' is passed by default:
+https://github.com/linux-pam/linux-pam/blob/v1.7.2/meson.build#L153
+
+The build fails, so don't treat warnings as errors by appending
+"-Wl,--no-fatal-warnings" to LDFLAGS.
+
+Fixes:
+https://autobuild.buildroot.net/results/ce2/ce20c52c8972e9d836d033913d2a913120df4549/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/e14a88bfc320675b21a43ccb630fc460136fccfc
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 60c950476c..cbf1ef2afb 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/59332343/
--sha256  efe01690d22bda359a579c77e2b0072658a092bff490ec0478a212c6b7d0eb70  fetchmail-6.6.4.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/59347909/
-+sha256  ab0320fe4df0b5ee8659189e66590d9de96aadbf929fe59f353ae7a317e9ef1e  fetchmail-6.6.5.tar.xz
- # Locally computed:
- sha256  48aea24325e55932dbd79b30f558b9c87a416d675fe5f94445e8be5cb6606fde  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index d021c2c7bd..9b3c035844 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ package/linux-pam/linux-pam.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index a4be4fa3b6..69bc7b1541 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -26,6 +26,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LINUX_PAM_LIBS += -latomic
+ endif
  
- FETCHMAIL_VERSION_MAJOR = 6.6
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).4
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).5
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
++ifeq ($(BR2_microblaze),y)
++# Microblaze ld emits warnings, make warnings not to be treated as errors
++LINUX_PAM_LDFLAGS += -Wl,--no-fatal-warnings
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ LINUX_PAM_CONF_OPTS += -Dselinux=enabled
+ LINUX_PAM_DEPENDENCIES += libselinux
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
