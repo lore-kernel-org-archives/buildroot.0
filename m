@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 923DACD98F0
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 19:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA4F2CD98F2
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jun 2026 19:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61543865C1;
-	Sun, 21 Jun 2026 19:38:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A10AA6FC70;
+	Sun, 21 Jun 2026 19:38:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R_u3nA4dfNJj; Sun, 21 Jun 2026 19:38:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dLAFOTZL4XBD; Sun, 21 Jun 2026 19:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72ED986626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A04C6FB13
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782070733;
-	bh=7EFdZr2eIKxhl64hjqcO0pU3aaPVJv+hTevxzI3bW6s=;
+	s=default; t=1782070734;
+	bh=PqP2/H+ZWSpvYINg3bhnkzo2kb9Z86cI3VAzPSYQTAs=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=sKH3f8sMl4GO0GJXMey4RQ5MY0kGxtq7pqNv206eWhIofPGzJ4t/yJs1reXfBsgR9
-	 pEOnxQ80F3HCjolak8q/x/u/KJaQlRtZk7S0G04zNVQNkIMZ5KpKvJJ6C469aRGv1q
-	 DYzI/+1sous09uxPmB7tVuE6iO3tnIohUcy0UCG8yWasBK41JoF8wZMYIE/xaFmZhS
-	 jEo5yvn1iScgChO+nLnWJAlKEeSFyIbDEsBt7WKoux7PibvzsaQpBmORepWChou4I0
-	 TrIgQvkC38KcUpGdW8H9IEehQ51DGIFRo6r0L5y/IMo6dNliDba8XTaPE8O9rw6ymS
-	 V0mZjadhzZo+w==
+	b=eHoVPSGeQe7hA3yHSN3oeVM3gmjZiVrT8yCDIXAwuMedjR2bDlFeYIClTeQ0EXsEt
+	 1xEmYe3K+PWaf2BrJR9g+yE8IOL/Gyq24Anx46jkvaH1CeHPOag2BooCvZuOpLQmn0
+	 UKv/Jcfx20LM/4UtmVRjVR5RMGUpEESVTxOYDcD7/kXsa3MsoGgzYfYWX9Ld8yhQUT
+	 B6apoXMI80o5tsmpBEN/GV0jhznkt5NDDu0Y9P0ShwoHZQ8MmdSxgrycCPgnEezyPi
+	 vB9bD4J3vgyRAyZOXCsu9yBmpeku2DvOjZTBb4cgLhJSPNTmXpWZsgw6GGf5W3M3bk
+	 xbl6RRb6Tiuxg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72ED986626;
-	Sun, 21 Jun 2026 19:38:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8971624D
- for <buildroot@buildroot.org>; Sun, 21 Jun 2026 19:38:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A04C6FB13;
+	Sun, 21 Jun 2026 19:38:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 870DDF4
+ for <buildroot@buildroot.org>; Sun, 21 Jun 2026 19:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B09986626
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77A714014E
  for <buildroot@buildroot.org>; Sun, 21 Jun 2026 19:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WF8Od1Y1o2qJ for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y9m3c8GegkXh for <buildroot@buildroot.org>;
  Sun, 21 Jun 2026 19:38:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9517885F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98AFE4020B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9517885F77
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98AFE4020B
  for <buildroot@buildroot.org>; Sun, 21 Jun 2026 19:38:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E20A7838E4; Sun, 21 Jun 2026 19:38:27 +0000 (UTC)
+ id E9CEA838E5; Sun, 21 Jun 2026 19:38:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jun 2026 21:35:52 +0200
+Date: Sun, 21 Jun 2026 21:37:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 113def36967926e6a401cf4ec3cdcdfbd6423cfd
-X-Git-Newrev: d7fefa678beb44338bab6695477946ba97d9b896
+X-Git-Oldrev: d7fefa678beb44338bab6695477946ba97d9b896
+X-Git-Newrev: aed60cba39aa2e3e189f8520412c807bf7fcb768
 X-Patchwork-Hint: ignore
-Message-Id: <20260621193827.E20A7838E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmake: bump version to 4.3.4
+Message-Id: <20260621193827.E9CEA838E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,43 +75,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d7fefa678beb44338bab6695477946ba97d9b896
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/aed60cba39aa2e3e189f8520412c807bf7fcb768
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://cmake.org/cmake/help/latest/release/4.3.html#id4
+https://www.alsa-project.org/wiki/Changes_v1.2.16_v1.2.16.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index af7c7dd72b..8b6572c558 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,5 +1,5 @@
--# From https://cmake.org/files/v4.3/cmake-4.3.3-SHA-256.txt
--sha256  cba4bb7a44edf2877bb6f059932896383babe435b3a8c3b5df48b4aa41c9bb85  cmake-4.3.3.tar.gz
-+# From https://cmake.org/files/v4.3/cmake-4.3.4-SHA-256.txt
-+sha256  fdeff897b9eb49d764539f2b1edc6eb7e1440df325678a97c1978499e931adda  cmake-4.3.4.tar.gz
- 
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 9544f1cafa..9bb686583a 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
- sha256  4382e7c1879ac90e3f101a395d23846fa4dbcaa1eed7265b43681e348754825d  LICENSE.rst
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 6971232f76..1422f80a70 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -6,7 +6,7 @@
+-sha256  122b1e3166d55fe19bcde656535d7a36f2ab10e66c72c6ad2f43f20ffded0a96  alsa-lib-1.2.16.tar.bz2
++sha256  f740db7f488255944ffd4428416ee3390a96742856916433df468c281436480e  alsa-lib-1.2.16.1.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 2530dae9db..b6000b3cf3 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
- CMAKE_VERSION_MAJOR = 4.3
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).4
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = LICENSE.rst
+-ALSA_LIB_VERSION = 1.2.16
++ALSA_LIB_VERSION = 1.2.16.1
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
