@@ -1,117 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D4B1CDB46B
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jun 2026 08:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DB82CDB46F
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jun 2026 09:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F7406F87B;
-	Mon, 22 Jun 2026 08:50:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IAFU65MXtugf; Mon, 22 Jun 2026 08:50:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F1486FB04
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782118228;
-	bh=8rbyRQuQO9v3MfCsrU/bM3HEgPoKIz2wWvxc+Qe5cY8=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=UGtSYlici8nNQxzKQNf1v3AXTfc+Xzi5dZN3WPzrD6qF+5l85xKoEU9SpFQNxyDE+
-	 U5UFtA7Xy8c3qXMqgdJzYygvVYp0F3sLZL3mF9pZzRjWHTFlp2I2BDPZMSLHbvie1G
-	 L7c3j+kKED8Cgy+Uik7ZosQV+gywkq0prZ8tkh5Hxc4/ImN/+dOlOqB66YclG+ZRP/
-	 /BEa7I9QCC9FKtYYNxja2Yhqi5EYkTYtDC69lOglEtk9uC0uUTdu9va8ZTlIXZXPYu
-	 eQ/sZu11tCBZwqZx9kSEWsqd47zxmDb2ZniH2SnyuctJgaQR/OoKBN3jlvYaPDMp1M
-	 vjC0OreMx4WBw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F1486FB04;
-	Mon, 22 Jun 2026 08:50:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 250C5F4
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 08:50:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B39684FDC
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 08:50:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE4578601C;
+	Mon, 22 Jun 2026 09:45:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q711Zou05yZ0 for <buildroot@buildroot.org>;
- Mon, 22 Jun 2026 08:50:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::643; helo=mail-ej1-x643.google.com;
- envelope-from=thi.zirnstein@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A6AB84FC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A6AB84FC0
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com
- [IPv6:2a00:1450:4864:20::643])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4A6AB84FC0
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 08:50:26 +0000 (UTC)
-Received: by mail-ej1-x643.google.com with SMTP id
- a640c23a62f3a-c0b97e268f3so332509366b.1
- for <buildroot@buildroot.org>; Mon, 22 Jun 2026 01:50:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782118224; x=1782723024;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=4nv0lx+QKKNSbvwy8C9oQ2pPy4+2khsaVstZi4ChEvs=;
- b=S+697gfBFbAGi/fA8KsxqAAoLztdrHkMimSPQWCn543j2zORCoZc3eSH5Qxk2xPc5Y
- IqBKrfmdgZstruqhvT5wF6a8jLuqT9Dzk6OFlGguTbyv4PrgZcuMwW6n9/9PwqNPavUH
- xT61OtPsur+wquQUVyGQw2DbKuLtDzlPMfLWPccOk2an/dr4J/Sxl6BLkP37GfsoJoT5
- 37WsxifMB5UoPfE8W2kqd4VuCaqzr0ikjoL02BoaygcSzXH6L1jaDDcrUjdXXyLtgi38
- SLfcnoqs8GlVyQAVE+C+AyhAhGkO0KlBn+BEGvFKxYcKGaOAYrFdoDU8yc9NsNQy0dXw
- IOiQ==
-X-Gm-Message-State: AOJu0YzItN7ojYl2A4UO7AfO0Z0bjdG1GBVBUBjIicqEG0GXPWIqi8V4
- rF/uscnnc2TYpZi+b7V5IWHRc2uNcQV324KM6JXBzSt/sQdWMp7jOEkGrvo3si4i
-X-Gm-Gg: AfdE7cl7Q1JHnoHhKQYqXm9C6vwrjXhdmwn75YnZJwFD6Wq5P6m1DAR7D8pgzGpKO6G
- fK2Grx+GsRfUjHtQTcdgoD9Uj6FJGStzeReld5tbEPM/TxQgtg1kihyedA3oswN4y9Xq26x4qRW
- u9hWTq5Od/7Mq/Kh6i2ddxOeCZwgdTik2BC9kEd4xTSM+SuCAXJrZwDhSILXdebB6nzbisT++kI
- Ycfq20YaYZTlVto/8w8DhiYvm/hjimw2XKM8699NCLcRZr6bATxoiXiuTcf2n9F2P6Ax++gBFxg
- 6b1q2RTeDKCwq8w+BQdR9dbUah6MdtjcOCA1y9pUXCnGEq+N0si7vBuCtKS5sVTODMNgqFoufSr
- tUuH65KFrDag5RaUlEak5YpPIyN8cVcjxjK/kNRSxC2xEydq5SdqAgrs+2Ds44isc4uZgX7Y2C9
- IcFGk/eJeA5/XsHQ8XdMvq/nM4awZ7bIqOhvPP3V0iFGoVN6eZr6Mj5leikuKBHHBEwEfbos9p5
- YENOWuAWn8Qkw==
-X-Received: by 2002:a17:906:ef0a:b0:bfe:ed35:e85d with SMTP id
- a640c23a62f3a-c098f33f303mr618911166b.53.1782118223984; 
- Mon, 22 Jun 2026 01:50:23 -0700 (PDT)
-Received: from thi-server.fritz.box
- (dslb-002-204-230-174.002.204.pools.vodafone-ip.de. [2.204.230.174])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c0c5e998decsm317374266b.22.2026.06.22.01.50.23
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Jun 2026 01:50:23 -0700 (PDT)
-From: thilo zirnstein <thi.zirnstein@gmail.com>
+ id bVP-PA-y_To2; Mon, 22 Jun 2026 09:45:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B394085FE6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782121544;
+	bh=7sVxyx3BkJ1yKQPE8+XF16qLcSTV7onsCaO5F04FEXE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=Sef4wcUj7NFeZEVyPSUHFkBPUAY8wyzhFk3cYjZkXa+Q9VjzC4v/a9gdCHr2lq5Wt
+	 9L2LTb9ap4XZm7J80DF5gg4j29dNCP1gl3BPzjobTW7NyR79wMFnkOEk8Ire8ta5V1
+	 OaUw6EaI9vu8DnE31TYJkLpaJh712K+PmfVopFMIEOnNj+1K0J+k5zTRTmJHYls7QB
+	 mwwUF63C7nntuMM3xu+pph7zTFrw+gOs/9XeKIDP7ku2Q4VaqzmmvPsFLFnaLHowA6
+	 W95PhJiBQYnLwE4PQWn1USC9gVkSwiLNeo7ngi7uu75sjjK5a73Z8g17NXHaEwdRWS
+	 +lKxtlQegM6+g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B394085FE6;
+	Mon, 22 Jun 2026 09:45:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75C8E24D
+ for <buildroot@buildroot.org>; Mon, 22 Jun 2026 09:45:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6795340262
+ for <buildroot@buildroot.org>; Mon, 22 Jun 2026 09:45:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e-V2DtPqjRly for <buildroot@buildroot.org>;
+ Mon, 22 Jun 2026 09:45:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.10.208.50;
+ helo=mout-b-105.mailbox.org; envelope-from=manuel.diener@oss.othermo.de;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC6FE4006B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC6FE4006B
+Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AC6FE4006B
+ for <buildroot@buildroot.org>; Mon, 22 Jun 2026 09:45:40 +0000 (UTC)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org
+ [IPv6:2001:67c:2050:b231:465::202])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4gkNbz0t6Lz9xyR;
+ Mon, 22 Jun 2026 11:45:35 +0200 (CEST)
+From: Manuel Diener <manuel.diener@oss.othermo.de>
 To: buildroot@buildroot.org
-Cc: thilo zirnstein <thi.zirnstein@gmail.com>
-Date: Mon, 22 Jun 2026 10:50:12 +0200
-Message-ID: <20260622085013.802927-2-thi.zirnstein@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260622085013.802927-1-thi.zirnstein@gmail.com>
-References: <20260622085013.802927-1-thi.zirnstein@gmail.com>
+Date: Mon, 22 Jun 2026 11:45:16 +0200
+Message-ID: <20260622094517.1342785-1-manuel.diener@oss.othermo.de>
 MIME-Version: 1.0
+X-Rspamd-Queue-Id: 4gkNbz0t6Lz9xyR
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1782118224; x=1782723024; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4nv0lx+QKKNSbvwy8C9oQ2pPy4+2khsaVstZi4ChEvs=;
- b=ZCbHmaEFBbsFqZqNOv6HWbajNnDcI/TddmdKH4JYzNRFQwecDd/VXhHGP5ajfa2V2l
- wZBCnozDczOStFBXdK9e3WNwpbz4HFIxIFZ+bif+ZnzgDqoOBcX2dS3FPc3a9Mn4FWyD
- L9oMVkRXOV/gkG3gzck1lZ6H05A8e8t6ymAXBg9ALw4hmkOMYRfPYDGq8D7yhonlDmlb
- eL/cUEfdplYs4jWmvUCxrL1AQAUl4zZJDK7eR1co63lc7xVHD8zv36C/ilgxC+VlHbbq
- ri8C5Au6xorqWcabYu4Jjd0G13ndwYcMVSfxp2iRVIcldnJSvtdj301Kn/z6GH9F5NAw
- grNw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=oss.othermo.de; s=MBO0001; t=1782121535;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=WJO2B2IrVoT7t2AfBBbYR8mWmLuzdpiHX0AO9JWCVuY=;
+ b=iatTldXmFg5hqrR870AQ03ZBFFgRPbXmRab7un69kzeQ60NTRZ90EKqUkGKm1j4kYgStuI
+ SuG/nUeSDDvkzmgqmb8M1NVqVcLwNlJ1rV2M6P6i64lKt1DK6HgiRBVuCZi4p8rpdcsmrl
+ DjiiIO/v7tgpzQ/9Pha2iLdRAQzaQ2KUMPpSuoCdGzonexxjkQhnR/nlkdL9TsQPaTuGn2
+ 9nrwOrBcDmX4T9KKg3p72GB2YaPZYyMM8tg29xnUqF+jNgI8CWqzm67bbF5ipDX3bDXCx5
+ IxfRXCYg56Mad1PE8FEwnEQf7TvMX6jU4+LAvVH8S9ZnwvDiIp+1QWD6FUCvhw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=ZCbHmaEF
-Subject: [Buildroot] [PATCH 1/1] linux: pass host-pahole to make
+ header.from=oss.othermo.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=oss.othermo.de header.i=@oss.othermo.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=iatTldXm
+X-Mailman-Original-Authentication-Results: outgoing_mbo_mout; dkim=none;
+ spf=pass (outgoing_mbo_mout: domain of manuel.diener@oss.othermo.de designates
+ 2001:67c:2050:b231:465::202 as permitted sender)
+ smtp.mailfrom=manuel.diener@oss.othermo.de
+Subject: [Buildroot] [PATCH] package/python-jc: bump to version 1.25.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,33 +95,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Manuel Diener <manuel.diener@oss.othermo.de>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: thilo zirnstein <thi.zirnstein@gmail.com>
----
- linux/linux.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+See the release notes here: https://github.com/kellyjonbrazil/jc/blob/master/CHANGELOG
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e790daff66..1c9d3fcdf8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -166,6 +166,10 @@ LINUX_MAKE_FLAGS = \
- 	REGENERATE_PARSERS=1 \
- 	DEPMOD=true
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+---
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index d2eb47d41c..49372996e8 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  f3fbc012843d192e446462e45ab2ebe1  jc-1.25.6.tar.gz
+-sha256  27f58befc7ae0a4c63322926c5f1ec892e3eac4a065eff3b07cfe420a6924a07  jc-1.25.6.tar.gz
++md5  9cf85817e3a9553b19d413f9d1ce3687  jc-1.25.7.tar.gz
++sha256  63481e34d92715781e1b094eca7d76d122a14489463d45b7f3e8180f44ea3a10  jc-1.25.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index 0404275277..e07fe671a2 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE),y)
-+LINUX_MAKE_FLAGS += PAHOLE=$(HOST_DIR)/bin/pahole
-+endif
-+
- ifeq ($(BR2_REPRODUCIBLE),y)
- LINUX_MAKE_ENV += \
- 	KBUILD_BUILD_VERSION=1 \
+-PYTHON_JC_VERSION = 1.25.6
++PYTHON_JC_VERSION = 1.25.7
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/7c/fa/f174bfb1ecfd3bdc6259b2de32052f09cccba11c9a1b733aedf618fadd05
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/a9/da/7827d3389d87fa645556d595a2a437576de83f7a7d4a5fceda9c32208c0b
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
 -- 
-2.43.0
+2.54.0
 
 _______________________________________________
 buildroot mailing list
