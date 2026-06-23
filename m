@@ -4,113 +4,121 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC29CDB470
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 08:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A939CDB46F
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 15:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B22B8151E;
-	Tue, 23 Jun 2026 08:45:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3A3680C10;
+	Tue, 23 Jun 2026 15:58:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xWyu_W8AudS2; Tue, 23 Jun 2026 08:45:09 +0000 (UTC)
+ id TQDrWvb-sTfr; Tue, 23 Jun 2026 15:58:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43EDE81510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CEE7817AD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782204309;
-	bh=obsg8yBJ9Aep0Ez2bAfWEU/I747z4kLS4XoE3IQbZog=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=JpGKp0s50qf+nH7KqEM/aZ5UC0v6G6XomBZARuEYh8IEGEuk0p82TuuqI5PaTO4zN
-	 bdwrsPBUMsJ3SATGDQGN2AhU/noy2SHbAABRzUN8MTod/opGitEi5DxccM33ADw0K0
-	 3AYCKWl4xDwBZYauCTYz7A1Ix6ZQTqOpmclM4berD7piGMzdIZEVll8sOv/S4YhW4Q
-	 hSE2THXDndPiHF0savciiaRilCm+Gp1xdaboEG1EG7NpOaV34SQ67OgTB+vK7sMBLa
-	 wqazwcXHVHpHOLV32+uGj7Paj9Py9pt1In2MyYzqokfoTHkeNdBBee3jxw3LKUhVvw
-	 RhQ+ESe+YEMLw==
+	s=default; t=1782230290;
+	bh=/U7XWTl6D2AyAsMDcX/St4ACtD/WN+AvSx+hhgW7ZVg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=gNgYadvUVMfhMLaGOUblOQOhQADmSI0pD3m0yoE6+8OUGDQQRERufT0yLeq2gH9QP
+	 2dgFYOVuKeGpVwXl1GSW712/mVX4zFdye0hLnHb8/S/denRQWmvh1bX5zgUnYFN45u
+	 AJ1luD34l4h2k/uSifAoA5lUfeWEd1DvCD+Yk4aqNIWn2QKC1HC32qLn+WcO/YiYgc
+	 pfwOFefl4RPOLhhcwUn2cdf/6YllJmU+bSGmnwebhGPpMMfEowhWlaZhLZ40aWD8QD
+	 puSEELopDe0V3Q1i8BhtCirca3ya5GXp133am3d4Kr4rcxPaSU80ZPSgZxCuitWe/5
+	 Gni8kwZpRiTLA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43EDE81510;
-	Tue, 23 Jun 2026 08:45:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CEE7817AD;
+	Tue, 23 Jun 2026 15:58:10 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9694D367
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:45:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DA64B256
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 15:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8906160841
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:45:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C052260651
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 15:58:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id chYzPDF7McKy for <buildroot@buildroot.org>;
- Tue, 23 Jun 2026 08:45:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=dowan.gullient@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A59260840
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A59260840
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A59260840
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:45:07 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-490b8ac62baso6701755e9.0
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 01:45:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782204305; x=1782809105;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=NKijKXdYbln0BUzgfRgmvomLZhIugKM0KBy7sVwg7Pw=;
- b=M5v2lkhTwr0cgILPWGemK7BpXRWDkmK9Y6PJU1wo7scvID7WViZBK/MRJcF7ZTDd6O
- uusAKd4rL/+v4YyxsJGr7MpHMxjBYDbsIRrWHCQUa2MCx/B7/OLmeaPzxnC0uj6xyrQp
- 5bhoWX6GLN3SznDkzSz6N/icSUWEyMAwhgEXxeWSznxfZYBzL0TqpO7z8Mt9Q8blhoTC
- NNV1XdaqIs1LtPylknvazIKRVRNzUwPh7dbKum7+4awPgw0j6ok/WcCe8NbWPSCqepP1
- uX421VJjVHTdRY/2V6g2qJLRjXU6dVxpLxjnO8esQ6Z9vDMciGbf22zuIJHKIjFXsUcl
- 4F4g==
-X-Gm-Message-State: AOJu0Yxxq3Lx9pJsel6DpMvLR3ZPDR7pd2GyJjkUjcgoT4F6h3k7awtX
- 1DFdBJgAJYhqvrNlpr0oTwqbcy6McgU1uVV8isR2Puhb+cAhyXltNZA6FYvB+GZCfXZvnEUJQ/H
- ZdxNuwno=
-X-Gm-Gg: AfdE7cm23K6xRo2Tw69g4A/qaxAERGw/0PPJuN0fHF0BXFhiWnWnyD0cYnyx/FqtS9W
- xv7UYoqQi3BYYp89zQsPj+JlONeUJZeu0Zq6K9agHxz2I4XfCXyzBEZL/urZICyNwk1RWPLens7
- s7HjFsUnQ0VrJ7r38d4keDkC5AajKadQnVgplKaqR1mSPypVXtKhWUZYGlj/0nyV/MoBw9QskfA
- NIdM6toNT1fSwRcP7B2iGkwQ5VGHdwPXQ+I7C9sytnMg6FxeCKYxOeTMyCYyFBDSlP6zcoMFlHb
- sFA7aR6RgdqNTIzi/S+mU6+wpbilM8WE+B12oKgUeiL/HNNBmBIyYvcQSxu33kTs70IiGMaguXZ
- w5p5Q7LCGGpU8h9Y6SJMCEmsYFdMaqExNKpCf37702KHk3IJcef2cCGffQsVworm5dkMjqAHJt2
- 6FVhCsgFRU/3zjMtO7mIk2STcaLlQvaifWZvyCNaUyFQ5FMxuVZ94qvl/lEwfwy0xW7TJAHgdDy
- ImKmL00r8BaCpgCU6P5
-X-Received: by 2002:a05:600c:3b2a:b0:490:af63:2cb1 with SMTP id
- 5b1f17b1804b1-4925a0a9b8bmr37381405e9.7.1782204305443; 
- Tue, 23 Jun 2026 01:45:05 -0700 (PDT)
-Received: from P-NAN-NAPALM..
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49249207dabsm490734505e9.0.2026.06.23.01.45.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jun 2026 01:45:05 -0700 (PDT)
+ id OrOgw0kbqZRC for <buildroot@buildroot.org>;
+ Tue, 23 Jun 2026 15:58:07 +0000 (UTC)
+X-Greylist: delayed 308 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 23 Jun 2026 15:58:06 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AD64360646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD64360646
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.72.192.73;
+ helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
+ receiver=<UNKNOWN> 
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AD64360646
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 15:58:06 +0000 (UTC)
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue108
+ [212.227.15.152]) with ESMTPSA (Nemesis) id 1MWAWq-1wdkF800pW-00UEkX; Tue, 23
+ Jun 2026 17:52:48 +0200
+From: Pedro Aguilar <paguilar@paguilar.org>
 To: buildroot@buildroot.org
-Cc: romain.naour@smile.fr,
-	Dowan Gullient <dowan.gullient@smile.fr>
-Date: Tue, 23 Jun 2026 10:44:39 +0200
-Message-ID: <20260623084439.2321675-3-dowan.gullient@smile.fr>
+Cc: Pedro Aguilar <paguilar@paguilar.org>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ thomas.petazzoni@bootlin.com, ju.o@free.fr
+Date: Tue, 23 Jun 2026 17:52:31 +0200
+Message-ID: <20260623155231.3827936-1-paguilar@paguilar.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260623084439.2321675-1-dowan.gullient@smile.fr>
-References: <20260623084439.2321675-1-dowan.gullient@smile.fr>
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:RRMkUXR6QEnMfU5iH2kExXULxw7CyaTBE9IYD+Qa6hEgKJ1IYuX
+ eamahjeRYaWbq03uEKmOlxkSexvFeLVy1T4HSUo7HsUxmtEHah98NmEcAHecroN/Fk1QgdG
+ hOWXnH67timCirtc2+EwG7yauK7LrvDXxpwKgsvZTB4UuS4M5igOqwrO54edCQd4f+ps6KN
+ oBIXGR5ywYmnmVIO5UOIg==
+UI-OutboundReport: notjunk:1;M01:P0:qUZd9tYm3Xw=;/bJ3tecF9enivWYicBLCzdJCmAL
+ 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
+ =
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1782204305; x=1782809105; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=NKijKXdYbln0BUzgfRgmvomLZhIugKM0KBy7sVwg7Pw=;
- b=zlSsP+NZWVlbz0n1+Y2K4d1SreKaPyMs9UmlaJABWDajnKIfexK235/asW0xzvQtSR
- YZHGSKgQ327Z8z/9LkjmgfuJ8/xIG+RZvljFRY51QKIbaxs3rSBBgJJLM2LCEYQuo6cw
- TOVEOwqqbA6kD1JSQhuGUf2wbrkLeCipFjrDw=
+ d=paguilar.org; 
+ s=s1-ionos; t=1782230284; x=1782835084; i=paguilar@paguilar.org;
+ bh=I7t+4GUespA8aXzG1zz5g1NI67uzuxVSW0LeHe6rDZc=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=EBhW+KXChJsPdLHS7eRbKf/HRj5rvPWPrK3lMIuYH/UEXwqMac7AzrQBR7fF2yvN
+ +Te+3xl5+4rElx3OwE+jBauOZC1cvmBcS91kY94YonJk229FkUL3ANCyxn5kdBEWc
+ m5w7VboVZCDjiK9+nBG50fBBvWvnDX95BpVDcFi0CyBitnsBYAKEQzt9jRsBRxrnI
+ 2EazTPdtDaXliVN098j9nlFs1xMYGjUiKZP+jm0WRNfDGaJ0AZhCjRAIAANgNKfwO
+ beDxLp5ce8TBGre3M7LkKxA83++tpcBcdSn/Qb5BwaVGq3YVmSgebtjFX6E8b+sxw
+ 3z4x8yysciy3+lfIJw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=none dis=none)
+ header.from=paguilar.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=zlSsP+NZ
-Subject: [Buildroot] [PATCH 2/2] support/scripts/{gitlab-ci.yml.in,
- generate-gitlab-ci-yml}: build runtime kernel in Gitlab CI job
+ dkim=pass (2048-bit key,
+ unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
+ header.a=rsa-sha256 header.s=s1-ionos header.b=EBhW+KXC
+Subject: [Buildroot] [PATCH 1/1] package/guile: bump to version 3.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,167 +130,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dowan Gullient via buildroot <buildroot@buildroot.org>
-Reply-To: Dowan Gullient <dowan.gullient@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds manual trigged jobs in GitLab CI to generate pre-built
-kernels to be used later by Builroot runtime testsuite.
+The patch 0002-Makefile.am-fix-build-without-makeinfo.patch is not longer
+needed since it builds even if 'makeinfo' is not installed, so it's removed.
 
-For now build only one kernel (aarch64/cortex-a53 for Qemu aarch64 virt
-target) but we will add more architectures later (x86_64-q35), thus the
-'all' option in generate-gitlab-ci-yml.
+Changelog:
+Changes are detailed in the git repo logs:
+$ git clone git://git.sv.gnu.org/guile.git
+$ git whatchanged
 
-We rely on the BR_PREBUILT_KERNELS variable to provide the list of
-kernels to build. For convenience we can use "all" to build all
-supported kernels. When BR_PREBUILT_KERNELS is set, we use its
-information to generate the a new job for each requested kernel using
-.runtime_prebuilt_kernels template.
-
-The .runtime_prebuilt_kernels use the job name to retrieve the
-defconfig used to build the prebuilt kernel. Such defconfig files
-are located in support/testing/builtin-kernels/<qemu-arch>/ directory.
-They are not usual defconfigs from configs directory.
-
-The generated kernel is located in the output directory, sorted by
-architecture & creation date, and named kernel-${BOARD_NAME}-${LINUX_VERSION}
-to be added to the build artifacts and then moved to the gitlab package
-registry.
-We will later update ARTIFACTS_URL in infra/__init__.py to use the URL
-of the freshly-generated kernel, with this URL format:
-https://gitlab.com/api/v4//projects/<project-id>/packages/generic/prebuilt-kernels-<arch>/<date>/kernel-<name>-<version>
-
-Regarding the package registry, we do not need to create tokens as when a
-maintainer will launch the job, it will automatically create a temporary
-token to push the generated kernel in the registry.
-
-The goal is to later use this generated kernel in the testsuite instead
-of the old ones while preventing to build a kernel for each test.
-
-We use "armv8" as alias to aarch64 cortex-a53 cpu target. "aarch64" is not
-specific enough since it could be any of the armv8 or armv9 cores.
-
-Signed-off-by: Dowan Gullient <dowan.gullient@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
 ---
- support/misc/gitlab-ci.yml.in          | 50 ++++++++++++++++++++++++++
- support/scripts/generate-gitlab-ci-yml | 21 ++++++++++-
- 2 files changed, 70 insertions(+), 1 deletion(-)
+ ...kefile.am-fix-build-without-makeinfo.patch | 51 -------------------
+ package/guile/guile.hash                      |  2 +-
+ package/guile/guile.mk                        |  2 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
+ delete mode 100644 package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 81c380a4ed..4410377ad2 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -176,3 +176,53 @@ before_script:
-             - br-test-pkg/*/defconfig
-             - br-test-pkg/*/build/build-time.log
-             - br-test-pkg/*/build/packages-file-list*.txt
-+
-+.runtime_prebuilt_kernels:
-+    stage: test
-+    script:
-+        - |
-+            {
-+                case ${CI_JOB_NAME} in
-+                armv8)
-+                    DEFCONFIG_NAME="support/testing/builtin-kernels/aarch64-virt/kernel_aarch64_virt_defconfig"
-+                    ;;
-+                *)
-+                    echo "${CI_JOB_NAME} not supported"
-+                    exit 1
-+                esac
-+            }
-+        - OUTPUT_DIR=output
-+        - mkdir -p ${OUTPUT_DIR}
-+        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - make defconfig BR2_DEFCONFIG=${DEFCONFIG_NAME}
-+        - echo "Build ${CI_JOB_NAME} kernel"
-+        - *run_make
-+        - echo "Upload of the kernel to Package Registry..."
-+        - |
-+          KERNEL_FILE=$(ls output/images/kernel-* 2>/dev/null | head -n 1)
-+          if [ -n "$KERNEL_FILE" ]; then
-+           FILENAME=$(basename ${KERNEL_FILE})
-+           KERNEL_DATE=$(date +%Y-%m-%d)
-+           echo "Upload of artifact for date : ${KERNEL_DATE}"
-+           curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-+                --upload-file "${KERNEL_FILE}" \
-+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/prebuilt-kernels-${CI_JOB_NAME}/${KERNEL_DATE}/${FILENAME}"
-+          else
-+            echo "Error : No kernel found in output/images/"
-+            exit 1
-+          fi
-+    retry:
-+        max: 2
-+        when:
-+            - runner_system_failure
-+            - stuck_or_timeout_failure
-+    artifacts:
-+        when: always
-+        expire_in: 2 weeks
-+        paths:
-+            - .config
-+            - build.log
-+            - output/images/kernel-*
-+            - output/build/build-time.log
-+            - output/build/packages-file-list.txt
-+            - output/build/generated-kernel-fragments/linux-gen-pkgs.fragment
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 48c272e6f5..48922a5d93 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -23,7 +23,7 @@ _EOF_
+diff --git a/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch b/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch
+deleted file mode 100644
+index 0d16f92387..0000000000
+--- a/package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 9304ad88a5f4b083d348563c5de00da53b34cf46 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 6 Mar 2020 23:20:39 +0100
+-Subject: [PATCH] Makefile.am: fix build without makeinfo
+-
+-Don't build doc subdir if makeinfo is not available otherwise build
+-fails on:
+-
+-make[4]: Entering directory '/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/doc/ref'
+-  MAKEINFO guile.info
+-/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/build-aux/missing: line 81: makeinfo: command not found
+-WARNING: 'makeinfo' is missing on your system.
+-         You should only need it if you modified a '.texi' file, or
+-         any other file indirectly affecting the aspect of the manual.
+-         You might want to install the Texinfo package:
+-         <http://www.gnu.org/software/texinfo/>
+-         The spurious makeinfo call might also be the consequence of
+-         using a buggy 'make' (AIX, DU, IRIX), in which case you might
+-         want to install GNU make:
+-         <http://www.gnu.org/software/make/>
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to bug-guile@gnu.org]
+----
+- Makefile.am | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index ebbf6d476..2270afb9f 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -38,8 +38,12 @@ SUBDIRS =					\
+- 	test-suite				\
+- 	benchmark-suite				\
+- 	gc-benchmarks				\
+--	am					\
+-+	am
+-+
+-+if HAVE_MAKEINFO
+-+SUBDIRS +=					\
+- 	doc
+-+endif
+- 
+- DIST_SUBDIRS = $(SUBDIRS) prebuilt
+- 
+--- 
+-2.25.0
+-
+diff --git a/package/guile/guile.hash b/package/guile/guile.hash
+index b671edad9d..4db8b1855b 100644
+--- a/package/guile/guile.hash
++++ b/package/guile/guile.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  1a2625ac72b2366e95792f3fe758fd2df775b4044a90a4a9787326e66c0d750d  guile-3.0.9.tar.xz
++sha256  818c79d236657a7fa96fb364137cc7b41b3bdee0d65c6174ca03769559579460  guile-3.0.11.tar.xz
+ # Locally computed
+ sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 82daaf5ad4..467a21f5a2 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- gen_tests() {
-     local -a basics defconfigs runtimes
--    local do_basics do_defconfigs do_runtime do_testpkg
-+    local do_basics do_defconfigs do_prebuilt_kernels do_runtime do_testpkg
-     local defconfigs_ext cfg runner tst
- 
-     basics=( check-package check-symbol DEVELOPERS package symbol )
-@@ -56,6 +56,17 @@ gen_tests() {
-             do_runtime=true
-             ;;
-         esac
-+    elif [ -n "${BR_PREBUILT_KERNELS}" ]; then
-+        case "${BR_PREBUILT_KERNELS}" in
-+            (all)
-+                prebuilt_kernels=( "armv8" )
-+                do_prebuilt_kernels=true
-+                ;;
-+            (armv8)
-+                prebuilt_kernels=( "${BR_PREBUILT_KERNELS}" )
-+                do_prebuilt_kernels=true
-+                ;;
-+        esac
-     else
-         case "${CI_COMMIT_REF_NAME}" in
-           (*-basics)
-@@ -113,6 +124,7 @@ gen_tests() {
-     if [    -z "${do_defconfigs}" \
-          -a -z "${do_runtime}" \
-          -a -z "${do_testpkg}" \
-+         -a -z "${do_prebuilt_kernels}" \
-        ]
-     then
-         do_basics=true
-@@ -147,6 +159,13 @@ gen_tests() {
-     if [ -n "${do_testpkg}" ]; then
-         printf '%s: { extends: .test_pkg }\n' "${do_testpkg[@]}"
-     fi
-+
-+    if [ -n "${do_prebuilt_kernels}" ]; then
-+        printf '%s: { extends: .runtime_prebuilt_kernels }\n' \
-+               "${prebuilt_kernels[@]}"
-+    fi
-+
-+
- }
- 
- main "${@}"
+-GUILE_VERSION = 3.0.9
++GUILE_VERSION = 3.0.11
+ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
 -- 
 2.43.0
 
