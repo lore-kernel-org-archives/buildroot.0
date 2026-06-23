@@ -1,86 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71C4CCD98F0
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 05:17:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C96BDCD4F26
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 08:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE3C3607C7;
-	Tue, 23 Jun 2026 05:17:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZlvpEyREl89G; Tue, 23 Jun 2026 05:17:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F102607C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782191854;
-	bh=sVHNPzNGvkkDN9KdKTLT74rTRv4A12elVfmJACosyUM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=NIUBbbroscQ9Te2bycz02J8WPJL9vW8b1Ut/o2CBe0NoP+/Nn8zfRAOhjvV8HXD7i
-	 17nJ1O5QP/RIFaMgMotNdUn1PCleRMHDthgzy60qbMakpFD5Eu9JlgW/EDtowEa9ar
-	 jtFsT9OmBF8KEiK/E23pU5g7g2FogaX8LHdDA0WSo3xHjAQArdWayUkfc40Ldzj2HN
-	 erXJk1SV42O2efsVZg4Pt2uSbGhp4AbQxH7JgknA9Fcog5liDcc5E8sftjNtyegRut
-	 OOpmo+wfxKBwa3h7LoAeShko/CypE3LIg2Uz7TKnS72CdcWps6xIzUS9MD/HrrVwwQ
-	 Zw2FO90AwfxYA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F102607C3;
-	Tue, 23 Jun 2026 05:17:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DEDEB157
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 05:17:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC468407D4
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 05:17:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FBBF409EE;
+	Tue, 23 Jun 2026 08:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ddV25HcXJJRv for <buildroot@buildroot.org>;
- Tue, 23 Jun 2026 05:17:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F5A7407B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F5A7407B2
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F5A7407B2
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 05:17:30 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c132.dip0.t-ipconnect.de [79.214.193.50])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B40C4A4C06B9
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 07:17:26 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33940)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wbtVl-000000000bh-3mX3
- for buildroot@buildroot.org; Tue, 23 Jun 2026 05:17:26 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id PqhxM9EjIcLW; Tue, 23 Jun 2026 08:19:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6157240A07
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1782202786;
+	bh=I4urZPKexUxHv+FQ7ZyEgTvcopM+nGLWncisziX0aME=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=lJUOnze0tb+kZ74CG6QCq+rHavdaPjo3zWqjldyxH/wjUy/HFwIpttFAtb48Zlo3P
+	 Wb+W4A1Ffs/mUIwy+ZC9h22m0l2Keq1R/n1YkdykY+He1ncuOLrJI2WyHsGlGd7nmE
+	 NwmGIKdD2RsxngS1gnf5fAP3d/SJJyoGb+16OwAt6K+ExWtm/agKIozKixvoSBxRIF
+	 02aXT/fyXMsDi7Lga71OHbgQwoPrpdbPnD6F0GVDq6yvWQsLfZIofiwLFZ8jk9fFTN
+	 A+Ala9WPJXyWJNw2fkiKSXOo/RfgSe7iOaRBm0Kr1ogDrvZdxb81DbKiqS9lABYTI9
+	 vC7+sMz3TbzKQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6157240A07;
+	Tue, 23 Jun 2026 08:19:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 979EA367
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:19:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D2B1409EE
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:19:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eC4yL-6Kfqik for <buildroot@buildroot.org>;
+ Tue, 23 Jun 2026 08:19:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EF640409CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF640409CA
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF640409CA
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 08:19:42 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-463f1165e16so5245891f8f.0
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 01:19:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782202780; x=1782807580;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GG4aR1WVtwkAChPYNz9kfHivx0YvxHwZGurjX0kIyJk=;
+ b=VfBnFzQYn1GWoxMFCyAOW+OlkKtIYJEWfITzwGXKp79IcurUECxyb5W8MwjTXKj8WV
+ fv2+Yk3LnTB3oDVsQUXCqSisvSrXwwhtp4OyWqrng4W3q9lvMP5OWxGKB18lBl1RFq/k
+ t48trcbnMJGSSaTl0cn4KLzdRRT5z5UM0teHghbqldp7zN0qJ1jzgnh/s37kCeHxxAwl
+ TbmHs6IysGl91WBAD25MUGuiw1+C3C5/U3EqapixvLemcEC8+ZCBP7DR+ybM7h4r9hWj
+ KWaJCr3Ol8FMcvSjAFnLumqq4xFR6q3BG3opO4aOfEGXLDqs1sVEbP33YSeKYKkYbJMV
+ VXYQ==
+X-Gm-Message-State: AOJu0Yx2E6b0MXzO+JTFE25SFQY+ll1ZdqwSo1FHpi6sP/cKVamBpxdX
+ KAB62FbrFr0CmG9Ag1evobVrTLFePGaoEOaS12G4HKhbx2RT2eG9mWrM+SFZ2NgA/VDM9alMad0
+ K9/2z
+X-Gm-Gg: AfdE7ckO38NC/F6+/dV+xtRzQkuvSkGgY+BfVzrhLLv43tztG4WILz1T0Jirc6691vC
+ ib759YANDH06ol2RVrsB4MdtettKk6ejIGnAggLdo4X4cEvf5PyW2ZOQjAPGYCgqCoQAvDKBh8F
+ UufApL1E1zK+KhLufjarzjrXDbdxiFmZfQ70Nbvf6+IPLf0gShC2xlbPow8pvJyG/3ToB4Qs8rB
+ Wp/AAAC8hbw18/ItnVsIOAuZX69IBeL0wa34yJrqHgMtGGXAG56O2XobeZqeD6ElVTxBh6+cqeZ
+ BAtS8WNOLN20sw9mfTrLuGadsWs+cI0oNnxv40CfNOyOs9Y5FZH1juqFuBKUwKTFVX+e/0yym9X
+ hFyInRFl3Dq5ZcAHWy7EnOg0xVk441AK9AbsJs4eI7ly3CTQSuF6aOvLF/51/pRIg6v/22kpaL9
+ 7GLanFYXPRWyZ6jJjmAOZYg4RMpbT0Rj1UgsSlBiff3OJiVGguttEBzBfpz2i+t/hWtGTw7htf7
+ LAP
+X-Received: by 2002:adf:fe89:0:b0:460:67e0:563e with SMTP id
+ ffacd0b85a97d-46508afa904mr22053153f8f.35.1782202780272; 
+ Tue, 23 Jun 2026 01:19:40 -0700 (PDT)
+Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
+ [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-466648c5de7sm32889353f8f.15.2026.06.23.01.19.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jun 2026 01:19:39 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 23 Jun 2026 07:17:25 +0200
-Message-ID: <20260623051725.4526-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Tue, 23 Jun 2026 10:19:19 +0200
+Message-ID: <20260623081919.2342535-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1782191846;
- bh=piq/qfd1d59Dzc9vyfsDoTjFXktWk0c6xIEc1sQfvds=;
- h=From:To:Subject:Date:From;
- b=Lb/V6ADLXyIVJh/ebwhev9FwGk4eCbXrmOerfZXikJMugBZgnzxeSkoyQQHWB4tLX
- QgtAvjynxnZ9nNx98rOIkK40PbywjVmtlIAbFqTGT4uvr/VDl2Xg0AuY1fiAEksAqG
- 9lih/BM6rtYiA/o0w0e5v7bo5Y804nBRFi4OhmET0/H8MiTz395p32yrKC5MtmIKTU
- FvcDct+5sS6RjAj9BQi/VKckvNnWst/yQa+isdZV/9sfwqH/O17B+BBlcxWN1XllhV
- xFhPq2aT6NZvWh7PyPB42Bd5kOx8fcDxq5mMOgeXKr5gRBSklN0G+2ijHFDdGBJ0i+
- 3XAv54d3K53uA==
+ d=mind.be; s=google; t=1782202780; x=1782807580; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GG4aR1WVtwkAChPYNz9kfHivx0YvxHwZGurjX0kIyJk=;
+ b=eRRsSBRj5vYKUW7gNy5QGZUhjDGiTM4iddc042seJ3C9VsSc+XbnCfppfZC08TLXjG
+ V3AB5dhhElbc2ZWALLHBb+A9K8kkECNE1nmZrE3ZbvGChBDCy9MXoDFuzLq6tv0avj59
+ g6vVf3wtKzstRbfwWRqgtl+mix3QVfHEsPCVugoVN7aXpWO8IX7ncrN5ORR1J7s/eoOq
+ doOKwGxKzv+b0CmNSAtnYDO5tWNfcWcfKneTTmafzkDnilmN4mHB5VsiEP/hymd93HdU
+ ot7rDYBHhtyM37Fd51fBW/u4uq4MYi9WtGf6n3Hhm6vGlZfaV6mL26sGRXaitQ9zJIWC
+ EoFQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Lb/V6ADL
-Subject: [Buildroot] [PATCH 1/1] package/kodi: add upstream patch to fix
- build on s390, mark unavailable on m68k
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=eRRsSBRj
+Subject: [Buildroot] [PATCH for 2025.02.x] package/python3: add patch for
+ CVE-2026-9669
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,73 +119,163 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QnVpbGQgZXJyb3JzIHdlcmUgZm91bmQgYnkgdGhlIEdpdGxhYiBwaXBlbGluZXMgd2l0aCB0aGVz
-ZSBkZWZjb25maWdzOgoKLSBib290bGluLW02OGstNjgwNDAtdWNsaWJjCiAgQ01ha2UgRXJyb3Ig
-YXQgY21ha2Uvc2NyaXB0cy9saW51eC9BcmNoU2V0dXAuY21ha2U6NTAgKG1lc3NhZ2UpOgogICAg
-VW5rbm93biBDUFU6IG02OGsKCi0gYm9vdGxpbi1zMzkweC16MTMtZ2xpYmMKICBDTWFrZSBFcnJv
-ciBhdCBjbWFrZS9zY3JpcHRzL2xpbnV4L0FyY2hTZXR1cC5jbWFrZTo1MCAobWVzc2FnZSk6CiAg
-ICBVbmtub3duIENQVTogczM5MHgKCkJhY2twb3J0IGFuIHVwc3RyZWFtIGNvbW1pdCBmcm9tIHRo
-ZSB1cGNvbWluZyBQaWVycyBicmFuY2ggdG8gZml4IHRoZQpyZXN0cmljdGlvbiBpbiBBcmNoU2V0
-dXAuY21ha2UuCgpUaGlzIGNhdXNlZCBhIGRpZmZlcmVudCBidWlsZCBlcnJvciBvbiBtNjhrIGxh
-dGVyIG9uOgoKL2J1aWxkcy9ia3VobHMvYnVpbGRyb290L2JyLXRlc3QtcGtnL2Jvb3RsaW4tbTY4
-ay02ODA0MC11Y2xpYmMvYnVpbGQva29kaS0yMS4zLU9tZWdhL3hibWMvdXRpbHMvTWF0aFV0aWxz
-Lmg6MTQyOjU6CiBlcnJvcjogdW5rbm93biByZWdpc3RlciBuYW1lIOKAmHN04oCZIGluIOKAmGFz
-beKAmQogIDE0MiB8ICAgICBfX2FzbV9fIF9fdm9sYXRpbGVfXyAoCgpiZWNhdXNlIG02OGsgaXMg
-bm90IHBhcnQgb2YgdGhlIGxpc3Qgb2YgYXJjaHMgdG8gZGlzYWJsZSBhc20gY29kZToKaHR0cHM6
-Ly9naXRodWIuY29tL3hibWMveGJtYy9ibG9iL09tZWdhL3hibWMvdXRpbHMvTWF0aFV0aWxzLmgj
-TDI2CgpVcHN0cmVhbSByZWplY3RlZCB0byBhZGQgbTY4ayB0aGVyZToKaHR0cHM6Ly9naXRodWIu
-Y29tL3hibWMveGJtYy9wdWxsLzIyNTE5Cmh0dHBzOi8vZ2l0aHViLmNvbS94Ym1jL3hibWMvcHVs
-bC8yMjM1NyNpc3N1ZWNvbW1lbnQtMTM2ODM1ODQ3MQoKc28gd2UgZGlzYWJsZSBtNjhrIGluIEJS
-Ml9QQUNLQUdFX0tPRElfQVJDSF9TVVBQT1JUUy4KClNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
-IDxiZXJuZEBrdWhscy5uZXQ+Ci0tLQpHaXRsYWIgcGlwZWxpbmVzIHBhc3NlZDoKaHR0cHM6Ly9n
-aXRsYWIuY29tL2JrdWhscy9idWlsZHJvb3QvLS9jb21taXRzLzg1ZGRkNmI0ZjgxM2U0Y2Q3MTk3
-YTYzMDM3YzNjYjI4YjJjMjU2OTEKCiAuLi4wMDYtY21ha2UtU2V0LUFSQ0gtdG8tQ1BVLWJ5LWRl
-ZmF1bHQucGF0Y2ggfCA0MSArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL2tvZGkvQ29uZmln
-LmluICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArCiAyIGZpbGVzIGNoYW5nZWQsIDQzIGlu
-c2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2tvZGkvMDAwNi1jbWFrZS1T
-ZXQtQVJDSC10by1DUFUtYnktZGVmYXVsdC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uva29k
-aS8wMDA2LWNtYWtlLVNldC1BUkNILXRvLUNQVS1ieS1kZWZhdWx0LnBhdGNoIGIvcGFja2FnZS9r
-b2RpLzAwMDYtY21ha2UtU2V0LUFSQ0gtdG8tQ1BVLWJ5LWRlZmF1bHQucGF0Y2gKbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYzViYmJlOTYzNgotLS0gL2Rldi9udWxsCisr
-KyBiL3BhY2thZ2Uva29kaS8wMDA2LWNtYWtlLVNldC1BUkNILXRvLUNQVS1ieS1kZWZhdWx0LnBh
-dGNoCkBAIC0wLDAgKzEsNDEgQEAKK0Zyb20gMTY5NWJhMTIzODAyNzIwNTZmMzY5ZjQzNDc0Nzgz
-OWIyYWUzOGQ5MSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IGZvc3NkZCA8Zm9zc2Rk
-QHB3bmVkLmxpZmU+CitEYXRlOiBTYXQsIDIyIEZlYiAyMDI1IDIwOjU5OjI4ICswMTAwCitTdWJq
-ZWN0OiBbUEFUQ0hdIFtjbWFrZV0gU2V0IEFSQ0ggdG8gQ1BVIGJ5IGRlZmF1bHQKKworUmVkdWNl
-cyBjb21wbGV4aXR5IG9mIHJlZHVuZGFudCBhcmNoaXRlY3R1cmUgbmFtZXMgYW5kIGFsbG93cyBi
-dWlsZGluZworZm9yIG90aGVyIGFyY2hpdGVjdHVyZXMgaW1wbGljaXRseS4KKworVXBzdHJlYW06
-IGh0dHBzOi8vZ2l0aHViLmNvbS94Ym1jL3hibWMvY29tbWl0LzE2OTViYTEyMzgwMjcyMDU2ZjM2
-OWY0MzQ3NDc4MzliMmFlMzhkOTEKKworU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5k
-QGt1aGxzLm5ldD4KKy0tLQorIGNtYWtlL3NjcmlwdHMvbGludXgvQXJjaFNldHVwLmNtYWtlIHwg
-MTEgKy0tLS0tLS0tLS0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEwIGRlbGV0
-aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvY21ha2Uvc2NyaXB0cy9saW51eC9BcmNoU2V0dXAuY21h
-a2UgYi9jbWFrZS9zY3JpcHRzL2xpbnV4L0FyY2hTZXR1cC5jbWFrZQoraW5kZXggYWIxNDIxNzdj
-OC4uZjI5YTg3MGExZSAxMDA2NDQKKy0tLSBhL2NtYWtlL3NjcmlwdHMvbGludXgvQXJjaFNldHVw
-LmNtYWtlCisrKysgYi9jbWFrZS9zY3JpcHRzL2xpbnV4L0FyY2hTZXR1cC5jbWFrZQorQEAgLTM3
-LDE3ICszNyw4IEBAIGVsc2UoKQorICAgZWxzZWlmKENQVSBNQVRDSEVTIGFhcmNoNjQgT1IgQ1BV
-IE1BVENIRVMgYXJtNjQpCisgICAgIHNldChBUkNIIGFhcmNoNjQpCisgICAgIHNldChORU9OIFRy
-dWUpCistICBlbHNlaWYoQ1BVIE1BVENIRVMgcmlzY3Y2NCkKKy0gICAgc2V0KEFSQ0ggcmlzY3Y2
-NCkKKy0gICAgc2V0KE5FT04gRmFsc2UpCistICBlbHNlaWYoQ1BVIE1BVENIRVMgcHBjNjRsZSkK
-Ky0gICAgc2V0KEFSQ0ggcHBjNjRsZSkKKy0gICAgc2V0KE5FT04gRmFsc2UpCistICBlbHNlaWYo
-Q1BVIE1BVENIRVMgbG9vbmdhcmNoNjQpCistICAgIHNldChBUkNIIGxvb25nYXJjaDY0KQorLSAg
-ICBzZXQoTkVPTiBGYWxzZSkKKyAgIGVsc2UoKQorLSAgICBtZXNzYWdlKFNFTkRfRVJST1IgIlVu
-a25vd24gQ1BVOiAke0NQVX0iKQorKyAgICBzZXQoQVJDSCAke0NQVX0pCisgICBlbmRpZigpCisg
-ZW5kaWYoKQorIAorLS0gCisyLjQ3LjMKKwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9rb2RpL0NvbmZp
-Zy5pbiBiL3BhY2thZ2Uva29kaS9Db25maWcuaW4KaW5kZXggNmYyNTZhZGE0My4uMDhhN2NhYWUy
-YyAxMDA2NDQKLS0tIGEvcGFja2FnZS9rb2RpL0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL2tvZGkv
-Q29uZmlnLmluCkBAIC00LDYgKzQsOCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfS09ESV9BUkNIX1NV
-UFBPUlRTCiAJZGVmYXVsdCB5IGlmIEJSMl9QQUNLQUdFX0hPU1RfT1BFTkpES19CSU5fQVJDSF9T
-VVBQT1JUUwogCSMgaTM4NjogbmVlZHMgc3NlIChzZWUgdXBzdHJlYW0gUFIgMTAzNTEpCiAJZGVw
-ZW5kcyBvbiAhKEJSMl9pMzg2ICYmICFCUjJfWDg2X0NQVV9IQVNfU1NFKQorCSMgbTY4ayBub3Qg
-c3VwcG9ydGVkIHVwc3RyZWFtCisJZGVwZW5kcyBvbiAhQlIyX202OGsKIAlkZXBlbmRzIG9uIEJS
-Ml9VU0VfTU1VICMgbGliY2RpbywgYW5kIG90aGVycwogCiBjb21tZW50ICJrb2RpIG5lZWRzIHB5
-dGhvbjMgdy8gLnB5IG1vZHVsZXMsIGEgdUNsaWJjIG9yIGdsaWJjIHRvb2xjaGFpbiB3LyBDKyss
-IHRocmVhZHMsIHdjaGFyLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA5LngsIGhvc3QgZ2NjID49
-IDkueCIKLS0gCjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This fixes the following vulnerability:
+- CVE-2026-9669:
+    bz2.BZ2Decompressor objects could be reused after a decompression
+    error. If an application caught the resulting OSError and retried with
+    the same decompressor, crafted input could cause the decompressor to
+    resume from an invalid internal state and perform out-of-bounds writes
+    to a stack buffer. This could crash the process when processing
+    untrusted data.
+    https://www.cve.org/CVERecord?id=CVE-2026-9669
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ ...-bz2-decompressor-reuse-after-errors.patch | 108 ++++++++++++++++++
+ package/python3/python3.mk                    |   2 +
+ 2 files changed, 110 insertions(+)
+ create mode 100644 package/python3/0016-prevent-bz2-decompressor-reuse-after-errors.patch
+
+diff --git a/package/python3/0016-prevent-bz2-decompressor-reuse-after-errors.patch b/package/python3/0016-prevent-bz2-decompressor-reuse-after-errors.patch
+new file mode 100644
+index 0000000000..3fecf86ab7
+--- /dev/null
++++ b/package/python3/0016-prevent-bz2-decompressor-reuse-after-errors.patch
+@@ -0,0 +1,108 @@
++From c36ef35e7e5601739755d883f5dab5c6e02b2e30 Mon Sep 17 00:00:00 2001
++From: Stan Ulbrych <stan@python.org>
++Date: Sun, 7 Jun 2026 19:37:10 +0100
++Subject: [PATCH] [3.12] gh-150599: Prevent bz2 decompressor reuse after
++ errors (#150600) (#151054)
++
++(cherry picked from commit 5755d0f083949ff3c5bf3a37e673e24e306b036e)
++
++Upstream: https://github.com/python/cpython/pull/151057
++CVE: CVE-2026-9669
++[Titouan: Squash fixup commit 0c2466a0fc2270c87e9f67c250c9454c28c09c3
++          from the upstream PR in the patch below]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ Lib/test/test_bz2.py                           | 15 +++++++++++++++
++ ...6-05-30-09-36-20.gh-issue-150599.nlHqU-.rst |  3 +++
++ Modules/_bz2module.c                           | 18 +++++++++++++++---
++ 3 files changed, 33 insertions(+), 3 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2026-05-30-09-36-20.gh-issue-150599.nlHqU-.rst
++
++diff --git a/Lib/test/test_bz2.py b/Lib/test/test_bz2.py
++index cb730a1a46e25a1..dcbf6a298264a40 100644
++--- a/Lib/test/test_bz2.py
+++++ b/Lib/test/test_bz2.py
++@@ -958,6 +958,21 @@ def test_failure(self):
++         # Previously, a second call could crash due to internal inconsistency
++         self.assertRaises(Exception, bzd.decompress, self.BAD_DATA * 30)
++ 
+++    def test_decompress_after_data_error(self):
+++        data = bytes.fromhex(
+++            "425a6839314159265359000000000000007fffff000000000000000000000000"
+++            "00000000000000000000000000000000000000e0370000000000000000000000"
+++            "000000000000000000000000000000000000000000000000000083f3"
+++        )
+++        bzd = BZ2Decompressor()
+++        with self.assertRaisesRegex(OSError, "Invalid data stream"):
+++            bzd.decompress(data)
+++        # Previously, a second call could crash due to internal inconsistency
+++        self.assertFalse(bzd.needs_input)
+++        self.assertFalse(bzd.eof)
+++        with self.assertRaisesRegex(ValueError, "previous error"):
+++            bzd.decompress(b'\x00' * 18)
+++
++     @support.refcount_test
++     def test_refleaks_in___init__(self):
++         gettotalrefcount = support.get_attribute(sys, 'gettotalrefcount')
++diff --git a/Misc/NEWS.d/next/Security/2026-05-30-09-36-20.gh-issue-150599.nlHqU-.rst b/Misc/NEWS.d/next/Security/2026-05-30-09-36-20.gh-issue-150599.nlHqU-.rst
++new file mode 100644
++index 000000000000000..a37d86cf423f820
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2026-05-30-09-36-20.gh-issue-150599.nlHqU-.rst
++@@ -0,0 +1,3 @@
+++Fix a possible stack buffer overflow in :mod:`bz2` when a
+++:class:`bz2.BZ2Decompressor` is reused after a decompression error.
+++The decompressor now becomes unusable after libbz2 reports an error.
++diff --git a/Modules/_bz2module.c b/Modules/_bz2module.c
++index 97bd44b4ac96944..0b0916142f575be 100644
++--- a/Modules/_bz2module.c
+++++ b/Modules/_bz2module.c
++@@ -114,6 +114,7 @@ typedef struct {
++ typedef struct {
++     PyObject_HEAD
++     bz_stream bzs;
+++    int bzerror;
++     char eof;           /* T_BOOL expects a char */
++     PyObject *unused_data;
++     char needs_input;
++@@ -453,8 +454,11 @@ decompress_buf(BZ2Decompressor *d, Py_ssize_t max_length)
++ 
++         d->bzs_avail_in_real += bzs->avail_in;
++ 
++-        if (catch_bz2_error(bzret))
+++        if (catch_bz2_error(bzret)) {
+++            d->bzerror = bzret;
+++            d->needs_input = 0;
++             goto error;
+++        }
++         if (bzret == BZ_STREAM_END) {
++             d->eof = 1;
++             break;
++@@ -621,10 +625,17 @@ _bz2_BZ2Decompressor_decompress_impl(BZ2Decompressor *self, Py_buffer *data,
++     PyObject *result = NULL;
++ 
++     ACQUIRE_LOCK(self);
++-    if (self->eof)
+++    if (self->eof) {
++         PyErr_SetString(PyExc_EOFError, "End of stream already reached");
++-    else
+++    }
+++    else if (self->bzerror) {
+++        // Re-entering BZ2_bzDecompress() after an error can write out of bounds.
+++        PyErr_SetString(PyExc_ValueError,
+++                        "Decompressor is unusable after a previous error");
+++    }
+++    else {
++         result = decompress(self, data->buf, data->len, max_length);
+++    }
++     RELEASE_LOCK(self);
++     return result;
++ }
++@@ -658,6 +669,7 @@ _bz2_BZ2Decompressor_impl(PyTypeObject *type)
++         return NULL;
++     }
++ 
+++    self->bzerror = 0;
++     self->needs_input = 1;
++     self->bzs_avail_in_real = 0;
++     self->input_buffer = NULL;
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 52f06e08df..1c181f0d33 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -19,6 +19,8 @@ PYTHON3_IGNORE_CVES += CVE-2026-3276
+ PYTHON3_IGNORE_CVES += CVE-2026-7774
+ # 0015-Apply-CVE-2021-4189-PASV-fix-to-ftplib-ftpcp.patch
+ PYTHON3_IGNORE_CVES += CVE-2026-8328
++# 0016-prevent-bz2-decompressor-reuse-after-errors.patch
++PYTHON3_IGNORE_CVES += CVE-2026-9669
+ 
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+-- 
+2.54.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
