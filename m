@@ -1,86 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36F66CDB470
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 18:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB1BDCDB471
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jun 2026 20:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A496240AA8;
-	Tue, 23 Jun 2026 18:20:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 534316088F;
+	Tue, 23 Jun 2026 20:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBPiSFVHRIA0; Tue, 23 Jun 2026 18:20:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VEGMce-J5clX; Tue, 23 Jun 2026 20:49:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688CF40A83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FF7E6083C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782238833;
-	bh=hVQOd4z/t0fKaDcXuZqu4fRJ5BZ+ml8JY0HeSK+JYLY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=RSBnG1VNPncHlGESwglIxmxlvDApjiBIsKa/tmKWq+gwVGCptFo+DTI95E+ojM63m
-	 UcpoL+CG9y76Z45aGOUqKys2HbRCS0UY0832CB+9l5/E6n41pksL2kF1BGh7cLnmIV
-	 W90I40TpU8sH5laG7T/1hSgF7rQenLfPndByyLTrKx0A6eceLB0DOS7wizW9abg1Nt
-	 tRAXUnF/dz8K+YoWrkls5af68WHCH/E1jiWzSeHawbupBP7Os0e0rXRbV5XQy43ECv
-	 iCzde1t8oXYg6e4XlffSGrSNeXzVXMNGNl8EY8e6MRnageDSkIm16XSCfmDP6T27Sa
-	 uE4GxcFrH0FHQ==
+	s=default; t=1782247786;
+	bh=47lXmEINNTA2neVYket4Vw+tlzqzRTJaqswtI8boOrI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=ncHS+ZfSDDevyS0LVAcCdPypphX4WZZxR6ydfu7P4JhlYynFgo+/eeGHd1nCy8+Bs
+	 i7JElhXq8mt5zBM8dtmVUlU4lTD7j427xXshPnWwNPc8a9gTxtutIoQgOQEf1Jyvp8
+	 iHCSo7Z9jeXYUerrT76/HA9WiB6VPcAZQnnceWljxUa0BTLXrsWZ/75PKC3G0uVg/q
+	 M7w0XaOdmJ4CpfZU4v0Ss6fH73Ax+rZjd4HZk9+Rig79tjt+CxF5A6T4AwoHvwdUPX
+	 4oZpCVc/tE1h0JLRNcXcvwMKbniWie/Cb4ZKBnPfOz+clHtIg/gPMEgr815LM8nYdE
+	 xsSwWlsMnkP5g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 688CF40A83;
-	Tue, 23 Jun 2026 18:20:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C197157
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 18:20:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FF7E6083C;
+	Tue, 23 Jun 2026 20:49:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 444BE363
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 20:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 048BE40A83
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 18:20:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29FC14038E
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 20:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f2HFIQQAhUSS for <buildroot@buildroot.org>;
- Tue, 23 Jun 2026 18:20:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DAE8440A82
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAE8440A82
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAE8440A82
- for <buildroot@buildroot.org>; Tue, 23 Jun 2026 18:20:28 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c817.dip0.t-ipconnect.de [79.214.200.23])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 37380A4C226A;
- Tue, 23 Jun 2026 20:20:25 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56850)
- by fli4l.lan.fli4l with esmtp (Exim 4.99.4)
- (envelope-from <bernd@kuhls.net>) id 1wc5jU-000000000HQ-3bvo;
- Tue, 23 Jun 2026 18:20:24 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pWdYFgJPnyB1 for <buildroot@buildroot.org>;
+ Tue, 23 Jun 2026 20:49:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::f41; helo=mail-qv1-xf41.google.com;
+ envelope-from=frcomdev@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DAC9340336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAC9340336
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com
+ [IPv6:2607:f8b0:4864:20::f41])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DAC9340336
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 20:49:43 +0000 (UTC)
+Received: by mail-qv1-xf41.google.com with SMTP id
+ 6a1803df08f44-8de7bfa323bso2906316d6.1
+ for <buildroot@buildroot.org>; Tue, 23 Jun 2026 13:49:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782247782; x=1782852582;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=HkWbZmBsHvxvoKCsCvHBMyKKQ0/DFh7WQYQmy33z3g4=;
+ b=II6AR1Eb9xM0WysLuSFMt6FamB6i6cLtAgSznPpPpeO8zfWb7WJwH9pr77bmhfxm8L
+ xAxpq0/gHCx8fB0tuXFaqeyv9nqdAWTX0cmIF89NEF1rSEY8xM3ZbuRQCupgJZeOiCVm
+ qOe5z44S0z4cd0OkA+6+V0/pg2ZqTY/Ve47ZfD9FbfZ4trsgpZY1sKDZScY09gCR6wkC
+ bexSNHgvardbonFzab1SngSjLXPABIJ+8HWFkAPXO05mupTN2xzkcZg0wPOa9rNpHgaW
+ dton2TO0PGKOuNV16x+hGydCUIFkqik2wfw2ysgQJPfp77Yw0mzYNSJIbuA93DjMOo1U
+ cu1g==
+X-Gm-Message-State: AOJu0Yx7qFOAQfdrnnHYdGDE8U7z5nS975TpKVm8sWshjSItswv/HB7I
+ /3zlgRzppBKlzuHXKPa0sDDqVLDd7Bi0cSkxAKnWE/W1aHGBJOVYkg/g8aHqnwkL
+X-Gm-Gg: AfdE7cnILSuPRr7Rd+MKz7YF+ODjD6yNvwgkp6zarPGhMwz97Q1uZuddlJqF9LeAN6t
+ OdHb7NA0JBtqkap356VnJ64hS3iwGpoIxV7Zk4Pf326f00z+YhABoz+wlT+mEZUonwqDHUgBHDf
+ lAweBZhkVojAKImKEnH9jHDEM0Rd7eogWtFfJZ2k8iC0SHEXjf3uevmOSnzaQO8tYw1ESHYCnP6
+ BTqdEk1jASKrDrV+oeFfcVDM32mwuqEGnkODaVaxvp+2dGZ8zQBrq/aIOOPVvVqkYyEe08Y+Zvv
+ lqMVwc8pTxyT6kMjoCM1N5RRlrVa7YTUsAW1DozWoIulFBMdxjHkUs+2gHb9Wem23ZLyQFdSXjI
+ jxCF62qnqoPr9IJI/ZfXyczZG/tJv64uhOmmEoLzVGAg7fHuma4ZlRJVtMZ5913N6VwGO1GD47M
+ Mb9VUDJ7YVHHjXFRml8uULveecR//xe1uvkwsQGwLmWKzHr1Gj/mS82o/7Hg==
+X-Received: by 2002:a05:6214:29e9:b0:8d1:8cfd:b00c with SMTP id
+ 6a1803df08f44-8e535df618amr12521066d6.31.1782247782426; 
+ Tue, 23 Jun 2026 13:49:42 -0700 (PDT)
+Received: from precialexwin (24-226-155-142.static.cgocable.ca.
+ [24.226.155.142]) by smtp.gmail.com with ESMTPSA id
+ 6a1803df08f44-8df82692405sm134588966d6.39.2026.06.23.13.49.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jun 2026 13:49:41 -0700 (PDT)
+From: Alexandre Ondet <frcomdev@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jun 2026 20:20:24 +0200
-Message-ID: <20260623182024.2068785-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: buildroot@bubu1.eu, james.hilliard1@gmail.com, thomas.petazzoni@bootlin.com
+Date: Tue, 23 Jun 2026 15:49:33 -0500
+Message-ID: <20260623204933.1251-1-frcomdev@gmail.com>
+X-Mailer: git-send-email 2.53.0.windows.2
+In-Reply-To: <4392c04e-203a-447a-9160-370717fe6099@bubu1.eu>
+References: <4392c04e-203a-447a-9160-370717fe6099@bubu1.eu>
 MIME-Version: 1.0
-X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202605290044; t=1782238825;
- bh=EKVjx/bW0WIwDJRK6gqWWRCrIKG4CWYXgCb4wFDTWMo=;
- h=From:To:Cc:Subject:Date:From;
- b=EkxOp+50vJ7YEWT+aFcZdqgpENLm/KTvnn9x9DjCR/3TX+DysbEIVB2QVJeOcqDHh
- 0iOw6IF60H0pt5LCJZsc6IrzqcbQngSIwFDBHVvXoud8Ed/M7W6EpqLjc/i74i8Ckn
- twp/65DliUkNCFhlV+VgUMIWaka+Xrxj+bx7VB3vogsHfSEvKlGMdsIao1n0Be3PAT
- v9RqEkZ4zhjZYw8Rjy7EJE5+N37G/CrceCkwSgjTZxw9wNkVEPNBiUOq9wtgYgchNT
- k+IIliEBS+5OrpDnenVml7pOk1uOYCk32pnZaRKQmS7YR9Ohk+l/J/1KlI/0U6BWCl
- BvP30LdNGd5dw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20251104; t=1782247782; x=1782852582; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=HkWbZmBsHvxvoKCsCvHBMyKKQ0/DFh7WQYQmy33z3g4=;
+ b=D4ZKgN8U2+ezKZE1RkVXG1Rf63MwAvbWcj63XvJWMGHd7PMfm+NMmTs82OncCaere9
+ FUXPC2Y0gx/ItO40n8LP3bj3unLApzwTGvBoRpPawdd7m2BglhvbUkDOmhu7eUgsIX2q
+ fOif5uaH2kEX3lCDK+xuW6CRvf0qQ84Q6xxx+mu5aQxqIlqWeizpat6nz8Tu9+DsiU+y
+ 9Zd27WwTuRQ4MwUunfHOUwi+6UJv8ePjOtcrsBst2IaAz66sjApQEQwaVzxgU0ngDfP5
+ UUJKQzmhhausArtVWo6QiFFCGxO0VKisEOtQqSm3ufgcW8rcK/AwlTFTUKmO+l3PP+p/
+ Wmdg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=EkxOp+50
-Subject: [Buildroot] [PATCH 1/1] package/python3: add upstream security
- patch for CVE-2026-11940
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=D4ZKgN8U
+Subject: [Buildroot] [PATCH v2 06/13] package/python-nmcli: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,132 +122,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://seclists.org/oss-sec/2026/q2/1006
-https://www.cve.org/CVERecord?id=CVE-2026-11940
-https://github.com/python/cpython/pull/151559
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Alexandre Ondet <frcomdev@gmail.com>
 ---
-Gitlab pipeline passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/8200789782546a265af81c894a442a2e64091bcc
+Changes v1 -> v2:
+- depend on network-manager and select nmcli support
+- add a runtime test for the python nmcli module
+- add DEVELOPERS entries for the package and runtime test
+- fix missing trailing newlines in package files
 
- ...ix-symlink-escape-via-tarfile-hardli.patch | 83 +++++++++++++++++++
- package/python3/python3.mk                    |  3 +
- 2 files changed, 86 insertions(+)
- create mode 100644 package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
+ DEVELOPERS                                    |  5 ++++
+ package/Config.in                             |  1 +
+ package/python-nmcli/Config.in                |  8 +++++++
+ package/python-nmcli/python-nmcli.hash        |  3 +++
+ package/python-nmcli/python-nmcli.mk          | 14 +++++++++++
+ .../tests/package/sample_python_nmcli.py      |  8 +++++++
+ .../tests/package/test_python_nmcli.py        | 24 +++++++++++++++++++
+ 7 files changed, 63 insertions(+)
+ create mode 100644 package/python-nmcli/Config.in
+ create mode 100644 package/python-nmcli/python-nmcli.hash
+ create mode 100644 package/python-nmcli/python-nmcli.mk
+ create mode 100644 support/testing/tests/package/sample_python_nmcli.py
+ create mode 100644 support/testing/tests/package/test_python_nmcli.py
 
-diff --git a/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch b/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c6c228ae91..fb26c25928 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -147,6 +147,11 @@ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
+ F:	package/kvazaar/
+ F:	package/v4l2loopback/
+ 
++N:	Alexandre Ondet <frcomdev@gmail.com>
++F:	package/python-nmcli/
++F:	support/testing/tests/package/sample_python_nmcli.py
++F:	support/testing/tests/package/test_python_nmcli.py
++
+ N:	Alexey Brodkin <alexey.brodkin@synopsys.com>
+ F:	board/cubietech/cubieboard2/
+ F:	configs/cubieboard2_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 754bdee9f4..83c9e0809c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1261,6 +1261,7 @@ menu "External python modules"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+ 	source "package/python-networkx/Config.in"
++	source "package/python-nmcli/Config.in"
+ 	source "package/python-numpy/Config.in"
+ 	source "package/python-oauthlib/Config.in"
+ 	source "package/python-opcua-asyncio/Config.in"
+diff --git a/package/python-nmcli/Config.in b/package/python-nmcli/Config.in
 new file mode 100644
-index 0000000000..d3454a7a6b
+index 0000000000..a860f511c4
 --- /dev/null
-+++ b/package/python3/0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-@@ -0,0 +1,83 @@
-+From 79c06bd5c6afa3c440d50faf7ee1b147c8832b4c Mon Sep 17 00:00:00 2001
-+From: "Miss Islington (bot)"
-+ <31488909+miss-islington@users.noreply.github.com>
-+Date: Tue, 23 Jun 2026 15:58:47 +0200
-+Subject: [PATCH] [3.14] gh-151558: Fix symlink escape via `tarfile`
-+ hardlink-extraction fallback (GH-151559)
++++ b/package/python-nmcli/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_NMCLI
++	bool "python-nmcli"
++	depends on BR2_PACKAGE_NETWORK_MANAGER # runtime
++	select BR2_PACKAGE_NETWORK_MANAGER_CLI # runtime
++	help
++	  Python wrapper for nmcli (NetworkManager).
 +
-+(cherry picked from commit 27dd970bf6b17ebca7c8ed486a40ab043ed7af8f)
++	  https://github.com/ushiboy/nmcli
+diff --git a/package/python-nmcli/python-nmcli.hash b/package/python-nmcli/python-nmcli.hash
+new file mode 100644
+index 0000000000..a93e026dce
+--- /dev/null
++++ b/package/python-nmcli/python-nmcli.hash
+@@ -0,0 +1,3 @@
++# From https://pypi.org/pypi/nmcli/1.7.0/json
++sha256  4fb17b6c33d276a264a27b7109fa1d70987570536fa8852b51830f9f7732f982  nmcli-1.7.0.tar.gz
++sha256  9dbbc4debacc85f5f5f074614cd9cadd61da09eaa19f98f6bbb5463c34133820  LICENSE.txt
+diff --git a/package/python-nmcli/python-nmcli.mk b/package/python-nmcli/python-nmcli.mk
+new file mode 100644
+index 0000000000..005519f0c1
+--- /dev/null
++++ b/package/python-nmcli/python-nmcli.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-nmcli
++#
++################################################################################
 +
-+Co-authored-by: Stan Ulbrych <stan@python.org>
++PYTHON_NMCLI_VERSION = 1.7.0
++PYTHON_NMCLI_SOURCE = nmcli-$(PYTHON_NMCLI_VERSION).tar.gz
++PYTHON_NMCLI_SITE = https://files.pythonhosted.org/packages/source/n/nmcli
++PYTHON_NMCLI_SETUP_TYPE = setuptools
++PYTHON_NMCLI_LICENSE = MIT
++PYTHON_NMCLI_LICENSE_FILES = LICENSE.txt
 +
-+Upstream: https://github.com/python/cpython/commit/79c06bd5c6afa3c440d50faf7ee1b147c8832b4c
-+CVE: CVE-2026-11940
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_nmcli.py b/support/testing/tests/package/sample_python_nmcli.py
+new file mode 100644
+index 0000000000..5fa8dee0c4
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_nmcli.py
+@@ -0,0 +1,8 @@
++#!/usr/bin/env python3
 +
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Lib/tarfile.py                                |  3 +++
-+ Lib/test/test_tarfile.py                      | 24 +++++++++++++++++++
-+ ...-06-10-13-08-19.gh-issue-151558.mL74i2.rst |  3 +++
-+ 3 files changed, 30 insertions(+)
-+ create mode 100644 Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
++import nmcli
 +
-+diff --git a/Lib/tarfile.py b/Lib/tarfile.py
-+index 39b1cd6514c..399f906efdf 100644
-+--- a/Lib/tarfile.py
-++++ b/Lib/tarfile.py
-+@@ -2784,6 +2784,9 @@ def makelink_with_filter(self, tarinfo, targetpath,
-+                     "makelink_with_filter: if filter_function is not None, "
-+                     + "extraction_root must also not be None")
-+             try:
-++                filter_function(
-++                    unfiltered.replace(name=tarinfo.name, deep=False),
-++                    extraction_root)
-+                 filtered = filter_function(unfiltered, extraction_root)
-+             except _FILTER_ERRORS as cause:
-+                 raise LinkFallbackError(tarinfo, unfiltered.name) from cause
-+diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
-+index 8503024a690..045377d620c 100644
-+--- a/Lib/test/test_tarfile.py
-++++ b/Lib/test/test_tarfile.py
-+@@ -4344,6 +4344,30 @@ def test_sneaky_hardlink_fallback(self):
-+                     self.expect_file("boom", symlink_to='../../link_here')
-+                     self.expect_file("c", symlink_to='b')
-+ 
-++    @symlink_test
-++    def test_sneaky_hardlink_fallback_deep(self):
-++        # (CVE-2026-11940)
-++        with ArchiveMaker() as arc:
-++            arc.add("a/b/s", symlink_to=os.path.join("..", "escape"))
-++            arc.add("s", hardlink_to=os.path.join("a", "b", "s"))
-++
-++        with self.check_context(arc.open(), 'data'):
-++            e = self.expect_exception(
-++                tarfile.LinkFallbackError,
-++                "link 's' would be extracted as a copy of "
-++                + "'a/b/s', which was rejected")
-++            self.assertIsInstance(e.__cause__,
-++                                  tarfile.LinkOutsideDestinationError)
-++
-++        for filter in 'tar', 'fully_trusted':
-++            with self.subTest(filter), self.check_context(arc.open(), filter):
-++                if not os_helper.can_symlink():
-++                    self.expect_file("a/")
-++                    self.expect_file("a/b/")
-++                else:
-++                    self.expect_file("a/b/s", symlink_to=os.path.join('..', 'escape'))
-++                    self.expect_file("s", symlink_to=os.path.join('..', 'escape'))
-++
-+     @symlink_test
-+     def test_exfiltration_via_symlink(self):
-+         # (CVE-2025-4138)
-+diff --git a/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst b/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
-+new file mode 100644
-+index 00000000000..74459d5680e
-+--- /dev/null
-++++ b/Misc/NEWS.d/next/Security/2026-06-10-13-08-19.gh-issue-151558.mL74i2.rst
-+@@ -0,0 +1,3 @@
-++Fixed an vulnerability in the :mod:`tarfile` ``data`` and ``tar`` extraction
-++filters where crafted archives could create a symlink pointing outside the
-++destination directory. This was a bypass of :cve:`2025-4330`.
-+-- 
-+2.47.3
++general = nmcli.general.status()
++print(general)
 +
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ff9afbb5a9..fabbdac384 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
- PYTHON3_CPE_ID_VENDOR = python
- PYTHON3_CPE_ID_PRODUCT = python
- 
-+# 0011-3.14-gh-151558-Fix-symlink-escape-via-tarfile-hardli.patch
-+PYTHON3_IGNORE_CVES += CVE-2026-11940
++assert general.state is not None
+diff --git a/support/testing/tests/package/test_python_nmcli.py b/support/testing/tests/package/test_python_nmcli.py
+new file mode 100644
+index 0000000000..20fffa2356
+--- /dev/null
++++ b/support/testing/tests/package/test_python_nmcli.py
+@@ -0,0 +1,24 @@
++from tests.package.test_python import TestPythonPackageBase
 +
- # This host Python is installed in $(HOST_DIR), as it is needed when
- # cross-compiling third-party Python modules.
- 
++
++class TestPythonPy3Nmcli(TestPythonPackageBase):
++    __test__ = True
++    # Can't use TestPythonPackageBase.config because we need headers
++    # >= 5.4 for network-manager, so we have to use the bleeding-edge
++    # toolchain.
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_NETWORK_MANAGER=y
++        BR2_PACKAGE_PYTHON_NMCLI=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_nmcli.py"]
++
++    timeout = 30
 -- 
-2.47.3
+2.53.0.windows.2
 
 _______________________________________________
 buildroot mailing list
