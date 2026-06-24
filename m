@@ -4,113 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EB78CDB481
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 12:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F77CDB481
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 13:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF1760BA9;
-	Wed, 24 Jun 2026 12:52:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B737E6084C;
+	Wed, 24 Jun 2026 13:55:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PCMSZ58aB8oU; Wed, 24 Jun 2026 12:52:11 +0000 (UTC)
+ id B2Dp5Mu52ipt; Wed, 24 Jun 2026 13:55:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62DC660BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE4F607E4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782305531;
-	bh=4JVaEt95jCJqYCOH0mPlcGL2xpRmGJx6dKybOqrCFpw=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=bedCLrWQgGt9zJSnuDFkjLnO76sIIfn3oOCIiXsoS+rYGItfKydbR2T2s0fZcppsL
-	 3zmcjxeuOxhCJJC71nX2gu1KRBTksK9HXcEKjEnO6agIXqOwAVnqWzmYIiCNaSupls
-	 2Fud5J15jekCO6gELs1+cAAGpB4D4fiPm8XbGIhVqQ3KRs9/rLv4kW8r20TglSBB0G
-	 eroDk9tnJe6dcgsNVZcS5NJRsIe6JmBK1w0OgLpm6ChRA/RkLYAZMmH9i9/yq874d8
-	 heO5k37/OJ/HNCoE7vTnOBLwjdts8izWZW+bsPpd1kyPbf9hw/THaN4S8Unvw59u+S
-	 iizhTpnwWY7iw==
+	s=default; t=1782309355;
+	bh=5+818MhK0CHgsNSrPgpcXs5GvvvsGOLMSxSCQgsgc5Y=;
+	h=Date:To:From:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=YK1Av232LJKsYxhPPgMKKJclg3KB6joJBkAOGsISfrxhNVDuad/DlsR6gx0ajHZdV
+	 Wx6Kw//NbRuYnd0TiXtCer0exvW7jQCPVZ5WDG1GXmG6B1dnxWjodfw9s0LmQsgE+F
+	 AMmcXXPi/QGQusH50dYdC4Qyhx95J5YGnc8c1AkxvV/kJrpx34cRl/wqlnbAKyBfDR
+	 6m/TbTUs9NUZtqTo63ggQVLKARGJJB+giqp8cxj8I03MSjpmwvL28rE03STKUO/Qs8
+	 XsSkjQ0BBQtgwRgfVk1Mp3q2LiFiHutQpx/pNYsS2N5mge0SlVKY5o4rZnclYY6EkF
+	 HVNawTs0yESMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62DC660BDC;
-	Wed, 24 Jun 2026 12:52:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B730256
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 12:52:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACE4F607E4;
+	Wed, 24 Jun 2026 13:55:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EC51363
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 13:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDAAE818DC
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 12:52:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 252A0401C2
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 13:55:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kumWtXkCpRSY for <buildroot@buildroot.org>;
- Wed, 24 Jun 2026 12:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nBQZ0nzmzr1R for <buildroot@buildroot.org>;
+ Wed, 24 Jun 2026 13:55:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3154F81A58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3154F81A58
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3154F81A58
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 12:52:08 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-46019edc13dso614425f8f.1
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 05:52:08 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ envelope-from=vale7uz@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3D1B9401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D1B9401B1
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3D1B9401B1
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 13:55:53 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-697bd21fdc2so619153a12.1
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 06:55:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782305526; x=1782910326;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=dvTWDZTiAVFRapBpPaOkPnsB2R+RxIYEy817Y2Qlgp8=;
- b=HRlcLEF/+Jf6pevyu5MordIBtEWIeBdHynb417WDHP/AvQ3cix/u8FP4udP9qDUxa6
- zsc7SyG9sndOQtIRNzGf05iPEx1Tcr0Yr7XpqRZxSJP/5689K6xKzpDXkSx2Z483zZX4
- YJRwC8JU2gt+W0xnc21QlR/z0x/eZrsrhDby71jPcS1A/UjQ9K5BY28L4ip0ekB1irtp
- tdKKrmSj/frLs+M4yjV4WZ6M3/kKdV3/uD02XSrFYH4g2ALxps6q54P65OIiz5MSNYkO
- iTDz+J6IPViTrlJRQf32RHufN/a6paFCwNZczJK2DAs7y2+qUQewwgn0XeaBf6/OHgE2
- 0vRA==
-X-Gm-Message-State: AOJu0Yw6eCQ44Hxcy6TYLM613zk6rf9DniL+nZ7+nBBMM0lEMr+mCY5t
- SOuNTbf2eOpeDhSsiYOdTZh51THZOK7iB8hD3A8cyMpp0Xjt6v7vaALA3/hcEGrfUpzOJ/4kT3W
- h1r3X
-X-Gm-Gg: AfdE7cnpVOqrGuWlSFhhILh+BPcbxcF2wbDb6/60KPGvcssz5QONOCRuUoqWCqdcUB5
- t8VLUaMoE4uJg8InCcL3zwF+GUzUTAHkztJUkaAKIolYbxxcO4SY0AV4ALAv+kZ+j5yCOEfv7Kq
- tQwNxQTTN2KKvguhCBsOuNyVYVGdcHCRYerm4Sz59/pIsVcGkEf9fOqlQawn13GKAE/M9wB+gfC
- oxtpG8vNtdZ3m3GoafnrCFceI8xHZcFV7xxgqyHihDwRwFi1en7qkeb7GdrLM0S6pPuiu4TJzRr
- tiERzNEHYLjSmLENciv49ocX/LQFAuFiJeYcLvRUE7F54WlltyjIPdUq2ZNp55Bck3q5mXeoMtk
- eUXGgwkoXOpx7i/ZG33CH3Q0ZZmyw39BarW9UEvneXVWZkib/bSh7JFZMPfrZY6MCpwCAj4gEyK
- i8YBJYdrkJNGloEJPEqN+2x7fDtdMjNl3OCtuuB4LraHJlCacF4G4L/ZmhHr8xeRAeCBBHKPTXA
- go=
-X-Received: by 2002:a05:600c:548d:b0:492:4a50:41fe with SMTP id
- 5b1f17b1804b1-4925b37eb43mr101919305e9.22.1782305526167; 
- Wed, 24 Jun 2026 05:52:06 -0700 (PDT)
-Received: from P-NTS-Evian
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ d=1e100.net; s=20251104; t=1782309351; x=1782914151;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=FU/l8h9ZM9WdEqUY8/Sw6TTQhfV837LKVSS0KW1ZtXQ=;
+ b=rz99W76sQTG/SF4P7f4sPbyIin7Q9Wsv3h+zCZguheDwtQ1i0xLfC/pRM6+R/5IcEm
+ 7dOEYhd1fviKvH4SiAMi27Ng82uugdEYoEyy/ERs9ofkrDNfl9kngApYglkEqRgUOJyg
+ aoF+xEafzMfSiLDWIuIEwJV9ivtonC6vAfSjgHXvQPY4Pw1ZjdbfqwzVOqZGc/i6XmcM
+ NnCkQhNItGI5b5FWCd6TRAp6ZJAhP9Pxq6WhZS6dDCjkkHqwbki5fcSEcDUmeRy1UpSl
+ E8MnaP7Vvw+gWFgKmdRAYjRdHF0e8zwHPD5/vBCvzFTEqyjUZnFejU6kf96pLXqogNCI
+ qDsA==
+X-Gm-Message-State: AOJu0YwJXNJBHE1GPFWgXddes+xWQN2KrJdLeVOnb2yB0XEPa2Y0vsVU
+ gPHXLK04AHnFRjPGgbsNEY5ZY2fMD0Se/x1d0YQ5OP/wKCNNJ0wll7Z1fdbxxA==
+X-Gm-Gg: AfdE7clyrsXZacsdN31BmoqFnl1vg8mlUiCbCLPx6VyHsIg4DPWpGRRj/Lx3C0wKTi6
+ H6dPvXQ5qqWHS/00lNeCrHe8WwF82gZ126Pbf0JUiccnoUeQIYKCg9BPpqCZdMont2GTE34dQfU
+ Typ8VoHHwCdxmz/LKmMfcu8Z7F/Nm5m0JmfrFPf2z/IZKMO9yND2LemEtZRuNsQoSN9nrCUR+hs
+ aZNZwKoplkCk48REdaMR990yKpMGrkXr8UeVyiSBqj5ulPnPaHKR/zpxDULbhRsztU1jo7hl1Vv
+ cITqtExVY7xHDu3F8BXUY5aVkoudemc0TFUlM5qunoXcikEK9qad8GgMFn/ESlfY/qf79FYqgC6
+ 4rYP7nB51nLB0kg1De54FZPHbL9fshonsD+DSmdPH5IqGz+ID9MdEZA+CWwwKhmg02oDjoap3iJ
+ ryZjT26PSTwqem
+X-Received: by 2002:a05:6402:42c2:b0:697:d557:f9c5 with SMTP id
+ 4fb4d7f45d1cf-697f37700a7mr1953360a12.3.1782309350927; 
+ Wed, 24 Jun 2026 06:55:50 -0700 (PDT)
+Received: from [192.168.3.100] ([151.61.238.34])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4924923392dsm722946235e9.2.2026.06.24.05.52.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Jun 2026 05:52:05 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>,
-	Fiona Klute <fiona.klute@gmx.de>
-Date: Wed, 24 Jun 2026 14:51:54 +0200
-Message-ID: <20260624125154.1869177-3-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260624125154.1869177-1-romain.naour@smile.fr>
-References: <20260624125154.1869177-1-romain.naour@smile.fr>
+ 4fb4d7f45d1cf-697f3ac5df0sm1346224a12.1.2026.06.24.06.55.50
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 24 Jun 2026 06:55:50 -0700 (PDT)
+Message-ID: <12f77d8d-838e-4a9c-8d8e-dc218052688c@gmail.com>
+Date: Wed, 24 Jun 2026 15:55:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+From: Valerio Setti <vale7uz@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1782305526; x=1782910326; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=gmail.com; s=20251104; t=1782309351; x=1782914151; darn=buildroot.org;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dvTWDZTiAVFRapBpPaOkPnsB2R+RxIYEy817Y2Qlgp8=;
- b=sof7b/i3NY+Ap8BJh6C1gkJJA/Ihj2ATeL0RW6N6fiu01aEPcLGh8u1BSq7eo9JK60
- 7mz58uiCZF92qwTYOJ3mqFf9sBSX2AtCQvxld04GQFq4l+8NxB8WmDV4C/7Rdsq9CvKe
- ZpwuVzeiJqnEFwhCjjeLVoyDzzUN7UjUdLIE4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=sof7b/i3
-Subject: [Buildroot] [PATCHv2 3/3] support/testing: TestIptables: bump
- kernel to 6.18 LTS
+ bh=FU/l8h9ZM9WdEqUY8/Sw6TTQhfV837LKVSS0KW1ZtXQ=;
+ b=c2m196YPOf3TKiFxWWYsvb2CGWEldjAV3Y8r1EM1yBoqdho3fElTaRwtH0w4m4Hyzc
+ DD6A1PSf2w4tWLkpJ/5CkHUFK2MLPCmyrrt7+r2iTnHOyY3xhpRaes31Poo1nR9NjxQ7
+ wSkTkMYhOhR7nWeoEkNykT3vIxuIst94ZKT/bK8GYBU1gkmHdU8LGDmZLX1rdo46BaZN
+ Kax0Zezmjzrdl0qoCJZ4broD9SH+4jmr3/rR3/WAde1LO2uZ86aaApVoPc8aTKLSyhlr
+ kU9r8yurjjG8dskFZKW7R/d3NzlJUu/JQUENNcXvjSBLMzt9DTqMfdckmtRZ1lWlF6ct
+ 3jug==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=c2m196YP
+Subject: [Buildroot] odroidc2_defconfig: gcc/libsanitizer build failure with
+ kernel 7.1 headers + C++ (missing linux/scc.h)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,38 +120,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tested-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-v2: update to the latest LTS 6.18.36 (from 6.18.21)
----
- support/testing/tests/package/test_iptables.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index eeb4ccb5dd..918fa4fb29 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -15,7 +15,7 @@ class TestIptables(infra.basetest.BRTest):
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.82"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.36"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--- 
-2.54.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpJJ2QgbGlrZSB0byByZXBvcnQgYSByZXByb2R1Y2libGUgYnVpbGQgZmFpbHVyZSB0aGF0
+IGFmZmVjdHMgdGhlIAppbnRlcm5hbCB0b29sY2hhaW4gd2hlbiBidWlsZGluZyBhZ2FpbnN0IExp
+bnV4IDcuMSBrZXJuZWwgaGVhZGVycyB3aXRoIApDKysgc3VwcG9ydCBlbmFibGVkLCBhbmQgYXNr
+IHdoZXRoZXIgeW91J2QgYWNjZXB0IGEgZml4IGZvciBpdC4KCiMgSG93IHRvIHJlcHJvZHVjZQoK
+U3RhcnRpbmcgZnJvbSB0aGUgb2ZmaWNpYWwgb2Ryb2lkYzJfZGVmY29uZmlnLCB3aXRoIHRoZSBm
+b2xsb3dpbmcgY2hhbmdlczoKCi0ga2VybmVsIGJ1bXBlZCB0byA3LjEgKEJSMl9MSU5VWF9LRVJO
+RUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjcuMSIpLCAKd2l0aCBrZXJuZWwgaGVhZGVycyB0YWtl
+biBmcm9tIHRoYXQgc2FtZSBrZXJuZWwgCihCUjJfS0VSTkVMX0hFQURFUlNfQVNfS0VSTkVMPXkp
+LAotIEMrKyBzdXBwb3J0IGVuYWJsZWQgKEJSMl9UT09MQ0hBSU5fQlVJTERST09UX0NYWD15KS4K
+ClRoZSBidWlsZCBmYWlscyB3aGlsZSBidWlsZGluZyBnY2MtZmluYWwsIGluIGxpYnNhbml0aXpl
+ciwgd2l0aCBhIAptaXNzaW5nIGxpbnV4L3NjYy5oIGtlcm5lbCBoZWFkZXIuCgpJJ20gdXNpbmcg
+dGhlIGN1cnJlbnQgJ21haW4nIGJyYW5jaCBhdCAKNGFiOTFhMjlkODkzMTEwNWQzZmY4ZjYyNjNj
+NTlhNTQzOGFkYTFhMQoKIyBSb290IGNhdXNlCgpMaW51eCA3LjEgcmVtb3ZlZCB0aGUgQVguMjUg
+LyBoYW1yYWRpbyBzdWJzeXN0ZW0gKGluIApkZDhkNGJjMjhhZDcyNTI2MTBkOGU3OWMxMzEzYTJk
+MWUzNDk5YTUxKSwgd2hpY2ggZGVsZXRlZCB0aGUgVUFQSSBoZWFkZXIgCidpbmNsdWRlL3VhcGkv
+bGludXgvc2NjLmgnLiBnY2MncyBsaWJzYW5pdGl6ZXIgc3RpbGwgaW5jbHVkZXMgaXQgCnVuY29u
+ZGl0aW9uYWxseSBpbiAKJ2xpYnNhbml0aXplci9zYW5pdGl6ZXJfY29tbW9uL3Nhbml0aXplcl9w
+bGF0Zm9ybV9saW1pdHNfcG9zaXguY3BwJywgc28gCnRoZSBoZWFkZXIgaXMgbm8gbG9uZ2VyIGF2
+YWlsYWJsZSB3aGVuIHRoZSB0b29sY2hhaW4gaXMgYnVpbHQgYWdhaW5zdCAKNy4xIGhlYWRlcnMu
+CgpUaGlzIG9ubHkgdHJpZ2dlcnMgd2hlbiBDKysgaXMgZW5hYmxlZCwgYmVjYXVzZSBsaWJzYW5p
+dGl6ZXIgKHdoaWNoIGlzIApDKysgY29kZSkgaXMgb25seSBidWlsdCB3aGVuIGMrKyBpcyBwYXJ0
+IG9mIC0tZW5hYmxlLWxhbmd1YWdlcyBpbiAKZ2NjLWZpbmFsLiBXaXRoIGEgQy1vbmx5IHRvb2xj
+aGFpbiBsaWJzYW5pdGl6ZXIgaXMgbmV2ZXIgY29tcGlsZWQsIHNvIAp0aGUgc2FtZSBjb25maWd1
+cmF0aW9uIGJ1aWxkcyBmaW5lIOKAlCB3aGljaCBpcyB3aHkgdGhlIGRlZmF1bHQgCm9kcm9pZGMy
+X2RlZmNvbmZpZyBkb2Vzbid0IGhpdCBpdC4KCkl0IGlzIG5vdCBzcGVjaWZpYyB0byBPRFJPSUQt
+QzIgSSB0aGluazsgYW55IGRlZmNvbmZpZyBjb21iaW5pbmcgNy4xIAprZXJuZWwgaGVhZGVycyB3
+aXRoIGEgQysrLWVuYWJsZWQgaW50ZXJuYWwgdG9vbGNoYWluIHNob3VsZCByZXByb2R1Y2UgaXQu
+CgojIEZpeAoKVGhlcmUgaXMgYW4gdXBzdHJlYW0gZ2NjIGZpeCB0aGF0IGRyb3BzIHRoZSBsaW51
+eC9zY2MuaCBpbmNsdWRlOgoKICAgZ2NjIGNvbW1pdCAyNTlkNWM2ZWY3Y2EwYjdmYjA3YWNmOTc1
+MzhmYTdiYTU5MGM4ZThiCiAgICJsaWJzYW5pdGl6ZXI6IEZpeCB1cCBidWlsZCBhZ2FpbnN0IGxh
+dGVzdCBrZXJuZWwgaGVhZGVycyIKICAgKEpha3ViIEplbGluZWssIGNoZXJyeS1waWNrZWQgZnJv
+bSBMTFZNIAozZGM0ZmQ2ZGQ0MTEwMGYwNTFhNjM2NDJmNDQ5YjE2MzI0Mzg5Yzk2KQoKSWYgeW91
+J3JlIE9LIHdpdGggdGhpcyByZXBvcnQsIEknbSBoYXBweSB0byBzdWJtaXQgYSBwYXRjaCBiYWNr
+cG9ydGluZyAKdGhhdCBnY2MgY29tbWl0IHRvIHRoZSBhZmZlY3RlZCBnY2MgdmVyc2lvbnMgaW4g
+QnVpbGRyb290LgoKVGhhbmtzLAoKVmFsZXJpbwpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
