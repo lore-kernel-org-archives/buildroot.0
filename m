@@ -4,214 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA3DCDB479
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 17:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 918A2CDB479
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 18:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2238681E62;
-	Wed, 24 Jun 2026 17:37:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0FE581EAC;
+	Wed, 24 Jun 2026 18:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KkRBWzw5R8jP; Wed, 24 Jun 2026 17:37:05 +0000 (UTC)
+ id ZvFyVphdbGQz; Wed, 24 Jun 2026 18:21:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 009F581E4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B4081EA8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782322625;
-	bh=Dmad/OQnaDg8toVM8AG/t5MS7KgS8YsGA/xyvIgfLbw=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=ngYCIiIWq0rFDhy9ufp6NDte2MLj0hjEHlkUM986BQCjVSTSbbe0IiM6u/LmloQq+
-	 pOUrQHibfF5DtUi7E9uEeawsupDUpJ0xAV07WNGQn5KNI/SWB+Wnu69miS5qaz0juv
-	 400wJEruE+xpXM/T+MuyU1OLuDd7EgrFGjhOwRV8J7hUJWa/STB+ajzmrZ8kzoMFPi
-	 exkSXGTgb/u4WGWGz1lcN+zTWl2wSYRVDeWS/NEcQFBQzEfUUDiBgVGhlOlJv82Aak
-	 ZklwRK7Cp4JFvjFiL0Wv0b4XSV4SZDQTAbCpWEhjPRrlbSxgmNAPMlPyyDUOek1r7H
-	 HvoxHKIH5EUbg==
+	s=default; t=1782325284;
+	bh=YFG7HSfSWM+DTaiIzXJ0NiqOqog3Err5/p91R/6ehro=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=hPV8HsnyK5GlyE71TNdzphP8/YZTk8sV8PsX8dgtc5WkNpRRjqHfTEt8qlcmCBZMp
+	 nHQY84YBtO1P/+PPGmaISjWRTtFTJnkkUDTY4gjeD9R0r2nZT2ZdmDjhiWaXn/ZZGh
+	 zxZDgx4vbFXs7IPv13rH7aFy66irCcx8LNMsP3Au6Q4paoW8OJMb7maRuTpc0cQp1L
+	 6Q/xs/SleVtt0YCIYX8dslXUnc2IKCCKtMyHF9ccJt3v26xBrPw6xhwQRrNgUrcQd5
+	 FBnXhlSH9SnjyLeem5xCSLaP5mVeq8y1LCRQn3nWwypPYJVJ8AzsnL3V84VX7sO9/l
+	 9pCFrwrKxwUog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 009F581E4F;
-	Wed, 24 Jun 2026 17:37:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8261AF4
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 17:37:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4B4081EA8;
+	Wed, 24 Jun 2026 18:21:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF50C256
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 18:21:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6819660B30
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 17:37:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4D3140454
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 18:21:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KCJZjc-nGia1 for <buildroot@buildroot.org>;
- Wed, 24 Jun 2026 17:37:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DB5F760B10
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB5F760B10
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB5F760B10
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 17:36:59 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7QxB-1xDF3d0bcr-015yQc; Wed, 24
- Jun 2026 19:36:56 +0200
-Message-ID: <1de61d9e-316f-482a-a5ca-c3040f437f71@gmx.de>
-Date: Wed, 24 Jun 2026 19:36:54 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K6hMptd8ln5u for <buildroot@buildroot.org>;
+ Wed, 24 Jun 2026 18:21:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=thomas.devoogdt@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D50B4025C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D50B4025C
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7D50B4025C
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 18:21:22 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-4624a44e152so1170986f8f.2
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 11:21:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1782325280; x=1782930080;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=VN3jwoJ7zWEmIZXFjdIj0ZBhKRO59TbuiYhN1lrg710=;
+ b=iSFvgQgI7dLsr6Tzl34OxALVf0iv1T/GsiC7xRKOdIbpv6EXr8VveRD7++v/W18x20
+ F63g98XmTSQe52qZEXpKMxiciVNNYZr3aHVj8hdtJBEGJ1tVChWAkP38hrMq3OyKb7Fk
+ Q+XMTjMKc60iAlDp+sjftXv6u7qBE5RC4Lih3mwmcsIUG9ZS9ud5OJpS1oJU0GK3dQ4O
+ QiUdnAXfbADqepH4srKnZ4Kt3l/HFBH/xAv70FaSRplw8m2/e1fmXCztdvEZypSei6NE
+ Dkf38lTSsxk0rBnhXDJHPw5URobxEFi3Y1zmcJShgXydTewryeFUdzgx/eJrbLqG8Do0
+ H/Ag==
+X-Gm-Message-State: AOJu0Yz9nsDVtBiKYo7WKG5xc2DhNexEhfjYx5rrhXDPNGKErGZ66pvL
+ 8jE++EpXf2sHEKPYwQcHMwlbKxKNuO9WynO565sjtAySEbwClurwaG/JR/aN98udN7k=
+X-Gm-Gg: AfdE7cmsG81o2RkopwlNnJyF6CgsWwAQ0vz2WF4PNldr0OAQVWjGtsnIaFFijAEMphy
+ 8FmXaBL3iv5eYfrGlS24Nun0um8KInbfK1uOgfbk+6FhRQ3juP6B43i73fKUeJ+4IqyYB3uHce7
+ ohB6oyr3WLoDFqg5jtkAn4DAFzpQcG1bPOEGkRYaGlP5HOauqgh2/3nlTRssa8H70iQp9IA2PHk
+ r8m+LfdJ0nU5KxhprmiPxLPPIBeEpyRnWfSjM7cIyy3KvvHz6i9FoHLkg3KBwwtMYj2P2vah2Jh
+ qpRMf4xxzxMdu/eaNnJaQguOeLfiW0IfuMS7gfIR8+tTBhYClbNTtnv8TbBcit5cOedzhxehF0H
+ 53yFUW0ltOKGqXmSogEPi5PzBCbC7aoND0pnmaYPA805TCqhLX9lDpHXPfCvfGFqEDu6RTZMnM/
+ zgYBFA74+bbKSDgqItlXxl/X+0XnPya1k/+W70BmyIOmnrCTj65RlUTT6RQnie7fQklIb38XEY5
+ +V3hRYVjpI+ZUGPGAeFG7XObich8KMME/7y8OzdfxQjAj7E+PzT7AJy
+X-Received: by 2002:adf:ec82:0:b0:45e:ec47:aa10 with SMTP id
+ ffacd0b85a97d-46c06faa525mr5494364f8f.32.1782325279782; 
+ Wed, 24 Jun 2026 11:21:19 -0700 (PDT)
+Received: from KORLIN44614.barco.com ([2a02:a03f:eb5f:fa00:60:56e0:9fee:b2ee])
+ by smtp.googlemail.com with ESMTPSA id
+ ffacd0b85a97d-46c1ee01d51sm7417741f8f.15.2026.06.24.11.21.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 24 Jun 2026 11:21:19 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+To: buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
+Date: Wed, 24 Jun 2026 20:21:17 +0200
+Message-ID: <20260624182117.362190-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-References: <20260624125154.1869177-1-romain.naour@smile.fr>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20260624125154.1869177-1-romain.naour@smile.fr>
-X-Provags-ID: V03:K1:M+0ycbcl2QLMnE4bu0Uz3JLFJcl0DwU3k6IonzonN61xbRcYkWP
- isF8IMFJ+UktZ8jAESsM7e4VOsOjlCME51iy0w/K6WPHOJeaOWkydajWkP9r5kIZs91EG1j
- cMrqIxjhDQ+IhFQKHmB5rL492SVnOlwnq47eA1BlgU2rqTJuIUzq7CN4wssKduGH4NQteW4
- /jLwIQEcG/nsb2WihHk+g==
-UI-OutboundReport: notjunk:1;M01:P0:/aE9nroJQ3c=;pAR/Cde8JLi6vDGF4yYLXHf79aa
- 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1782322616; x=1782927416; i=fiona.klute@gmx.de;
- bh=WRrjhGEWGQehmjCquEhUH8xI5uS9MXqTJIqCkrB+xCk=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=ECkI505q+MyCWbshD7PtbacsTnVYLV1WE4Jno02dD7+nxRLn3S4o38bSOXL+jCea
- QWui/i2OBwLXW0Y2WHyOXq3KRXgVBX6UNIQsfVo/4sxYjm/1RV0uGYnm9e89+/hYS
- OOo4wZoNfELyKoW/G1woKNam6OYHtjLyh8juhbsC2aZRqKSlaRCwAWdtoVMP2/mI5
- CAMoXHIOgGpFRUQyeW7jDKS2lLNWxWCl38vGU7TaaYJol0+kXi+9FsHTzjKAP/c+S
- nqN+iSP2G082nNnowmBsvAVbcsrJ9yGOydMAF0tmI6WoNzAAoHQQfezeHmHeTErcF
- V1bmxFOz5Qq5rnPc+Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=ECkI505q
-Subject: Re: [Buildroot] [PATCHv2 1/3] package/iptables: improve kernel
- support for iptables-legacy and iptables-nft
+ d=gmail.com; s=20251104; t=1782325280; x=1782930080; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=VN3jwoJ7zWEmIZXFjdIj0ZBhKRO59TbuiYhN1lrg710=;
+ b=FwnadT1XCUO7Dgo76LvLPNrYoC8Ve2yOsJKIcokoq63IOBiW0i836bM8ZJ37E0cBfl
+ PBkBGauq2ZhRCtOic/sRn7s5QSCOQdWafBb85CIt5Skkr1VYM0Dsaaa5x0V8gcK6qVZ9
+ rTZh7pxuASy2VhLVbUfVFybRd3gs0EIfncPfopb8FcIZ4bSATXl8Qr+NgQkAcSc6qtJ9
+ wHq3CV7ruON5D+1TRzs6eudaGpijKVETRrOyVBUASdi+orIYfK4Pjh4shNYoiXMO2yeY
+ tm9fXhgCY5DCOROFZn97j0YmareGyW1b/xbdy8z2bcrxlwgSUVCsRHkZVMTelzchJJ7k
+ jqng==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=FwnadT1X
+Subject: [Buildroot] [PATCH] package/webkitgtk: bump to version 2.52.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -223,118 +120,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Romain,
+Release notes:
 
-one small question below.
+https://webkitgtk.org/2026/06/02/webkitgtk2.52.4-released.html
 
-Am 24.06.26 um 14:51 schrieb Romain Naour via buildroot:
-> Since kernels 6.17, support for netfilter legacy tables were disabled
-> by default [1] but iptables package needs Netfilter legacy tables
-> support enabled in the kernel when nftables compat is not enabled.
-> 
-> Make sure to enable CONFIG_IP_NF_IPTABLES_LEGACY and
-> CONFIG_NETFILTER_XTABLES_LEGACY for kernels >= 6.17.
-> 
-> Fixes:
-> 
->    [BRTEST# iptables --flush
->    modprobe: module ip_tables not found in modules.dep
->    iptables v1.8.11 (legacy): can't initialize iptables table `filter': Table does not exist (do you need to insmod?)
->    Perhaps iptables or your kernel needs to be upgraded.
-> 
-> On the other hand, when nftables compat (iptables-nft) is used by
-> default (BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT=y) we have to enable
-> nft protocol support in the kernel.
-> 
->    iptables --version
->    iptables: Failed to initialize nft: Protocol not supported
-> 
-> Enable CONFIG_NF_TABLES and CONFIG_NF_TABLES_INET as for
-> NFTABLES_LINUX_CONFIG_FIXUPS and complete the list with
-> CONFIG_NFT_SOCKET needed to pass the TestIptables with
-> nftables compat (iptables-nft) enabled.
-> 
-> Without CONFIG_NFT_SOCKET:
-> 
->    iptables --policy INPUT ACCEPT
->    iptables v1.8.11 (nf_tables):  TABLE_ADD failed (Operation not supported): table filter
-> 
-> So, disable iptables-legacy support only when nftables compat is not
-> enabled by default. Enable iptables-nft support when nftables compat is
-> enabled, even if not used by default.
+Fixes the following security issues:
 
-I guess the "not" in the first sentence is a typo? "Disable 
-iptables-legacy support only when nftables compat is enabled by default" 
-is what's happening. I can fix that when applying, just want to be sure 
-about your intention.
+https://webkitgtk.org/security/WSA-2026-0003.html
 
-Maybe at some point we should merge BR2_PACKAGE_IPTABLES_NFTABLES and 
-BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT? I can't really think of a 
-situation where someone would want to enable the nftables backend but 
-not use it by default, mixing legacy with nftables is a recipe for 
-trouble. But that's a separate thing. :-)
+Includes fixes (among others) for CVE-2026-28847, CVE-2026-28883,
+CVE-2026-28901, CVE-2026-28902, CVE-2026-28903, CVE-2026-28904,
+CVE-2026-28905, CVE-2026-28907, CVE-2026-28942, CVE-2026-28946,
+CVE-2026-28947, CVE-2026-28953, CVE-2026-28955, CVE-2026-28958,
+CVE-2026-43658, and CVE-2026-43660.
 
-Best regards,
-Fiona
+Also added 0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch,
+to get webkitgtk compiled when -DUSE_SYSTEM_MALLOC=ON is in use.
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9fce66583f06c212e95e4b76dd61d8432ffa56b6
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
-> v2:
->   - Enable kernel support for iptables-nft even if nftables compat is not
->     enabled by default (Fiona Klute).
->   - Enable kernel support for iptables-legacy only if nftables compat is not
->     enabled by default (Fiona Klute).
-> ---
->   package/iptables/iptables.mk | 22 ++++++++++++++++++++++
->   1 file changed, 22 insertions(+)
-> 
-> diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-> index a9d912f6cc..bb01c07a43 100644
-> --- a/package/iptables/iptables.mk
-> +++ b/package/iptables/iptables.mk
-> @@ -49,11 +49,33 @@ else
->   IPTABLES_CONF_OPTS += --disable-bpf-compiler --disable-nfsynproxy
->   endif
->   
-> +# Enable kernel support for iptables-nft even if nftables compat is not
-> +# enabled by default.
-> +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),y)
-> +define IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_NFT
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET)
-> +endef
-> +endif
-> +
-> +# Enable kernel support for iptables-legacy only if nftables compat is not
-> +# enabled by default.
-> +ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),)
-> +define IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_LEGACY
-> +	# [for Linux kernel versions 6.17 and later]
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES_LEGACY)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES_LEGACY)
-> +endef
-> +endif
-> +
->   define IPTABLES_LINUX_CONFIG_FIXUPS
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-> +	$(IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_LEGACY)
-> +	$(IPTABLES_LINUX_CONFIG_FIXUPS_IPTABLES_NFT)
->   endef
->   
->   define IPTABLES_INSTALL_INIT_SYSV
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ ...6-main-Fails-to-build-with-system-ma.patch | 52 +++++++++++++++++++
+ package/webkitgtk/webkitgtk.hash              |  6 +--
+ package/webkitgtk/webkitgtk.mk                |  2 +-
+ 3 files changed, 56 insertions(+), 4 deletions(-)
+ create mode 100644 package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
+
+diff --git a/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
+new file mode 100644
+index 00000000000..decdba68148
+--- /dev/null
++++ b/package/webkitgtk/0001-REGRESSION-313606-main-Fails-to-build-with-system-ma.patch
+@@ -0,0 +1,52 @@
++From 146cdc86b7345ac8f513fdf649979e80db01a2ca Mon Sep 17 00:00:00 2001
++From: Alberto Garcia <berto@igalia.com>
++Date: Tue, 2 Jun 2026 07:24:38 -0700
++Subject: [PATCH] REGRESSION(313606@main): Fails to build with system malloc
++ https://bugs.webkit.org/show_bug.cgi?id=316083
++
++Reviewed by Fujii Hironori.
++
++Don't add bmalloc_CopyHeaders to LLIntOffsetsExtractor_DEPENDENCIES if
++USE_SYSTEM_MALLOC is on.
++
++* Source/JavaScriptCore/CMakeLists.txt:
++
++Canonical link: https://commits.webkit.org/305877.698@webkitglib/2.52
++
++Upstream: https://github.com/WebKit/WebKit/commit/a6bc685a685c8f16c919dc6310a62a26971d396e
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ Source/JavaScriptCore/CMakeLists.txt | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
++index a2a6d724608a..ea9ea17802f2 100644
++--- a/Source/JavaScriptCore/CMakeLists.txt
+++++ b/Source/JavaScriptCore/CMakeLists.txt
++@@ -412,8 +412,10 @@ set(LLIntSettingsExtractor_DEPENDENCIES
++     JavaScriptCore_CopyHeaders
++     JavaScriptCore_CopyPrivateHeaders
++     WTF_CopyHeaders
++-    bmalloc_CopyHeaders
++ )
+++if (NOT USE_SYSTEM_MALLOC)
+++    list(APPEND LLIntSettingsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
+++endif ()
++ WEBKIT_EXECUTABLE(LLIntSettingsExtractor)
++ 
++ # LLIntSettingsExtractor target needs to have a direct or indirect
++@@ -439,8 +441,10 @@ set(LLIntOffsetsExtractor_DEPENDENCIES
++     JavaScriptCore_CopyHeaders
++     JavaScriptCore_CopyPrivateHeaders
++     WTF_CopyHeaders
++-    bmalloc_CopyHeaders
++ )
+++if (NOT USE_SYSTEM_MALLOC)
+++    list(APPEND LLIntOffsetsExtractor_DEPENDENCIES bmalloc_CopyHeaders)
+++endif ()
++ WEBKIT_EXECUTABLE(LLIntOffsetsExtractor)
++ 
++ # The build system will execute asm.rb every time LLIntOffsetsExtractor's mtime is newer than
++-- 
++2.43.0
++
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 03b8d0a9bec..f8c0e0297a3 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.52.3.tar.xz.sums
+-sha1  17f9b127618040a5f3fcbb70e37ea16ab6d69b0b  webkitgtk-2.52.3.tar.xz
+-sha256  5b3e0d174e63dcc28848b1194e0e7448d5948c3c2427ecd931c2c5be5261aebb  webkitgtk-2.52.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.52.4.tar.xz.sums
++sha1  1bfaa562ae46a420abaad2b3b9175dc823cc7a93  webkitgtk-2.52.4.tar.xz
++sha256  cf4076a1ca2a64788edca8c452d8ebb68d5e2965e588fe46a388a016513edce4  webkitgtk-2.52.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 54e769d5892..6cab2c6a247 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.52.3
++WEBKITGTK_VERSION = 2.52.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
