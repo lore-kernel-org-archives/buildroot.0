@@ -4,111 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45163CDE003
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E7ECDE002
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jun 2026 14:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F08F260BA4;
-	Wed, 24 Jun 2026 14:07:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1E6C60858;
+	Wed, 24 Jun 2026 14:07:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pjq-Zhb3VFMn; Wed, 24 Jun 2026 14:07:05 +0000 (UTC)
+ id Bnm0ZlwBgSUi; Wed, 24 Jun 2026 14:07:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C55E160BDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E05B860B08
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1782310024;
-	bh=MXXCSaP3QmX7ndzGbW7soOmOHYzsnrUpnIMC6srYE1I=;
+	s=default; t=1782310022;
+	bh=HSy+WKqYzGF5OFsPZ6A5v7qD8gpuN8BjvpXEiU4bgYo=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=K6VZjTmwpoJBa1S3UewTOYXSr2Y975Gc1Z0LsVvKneKS7ZMbvhDVQTS0VWMGYuNGr
-	 5VuMg1gvj7KAiJMEYAkwOqy6MCEhlNwHhuZtJnRopa77unb/k3tU503Ou+zX8zkpL5
-	 FCJpiC7NOnbNH/tmqnxdxT1soGx4403U277iWKmrNSM1xRiYuXNOiwtzWZBa4V3MEH
-	 RL7sA0jjGA0SWy1qK9ZwdU7cX4XTq9ukdYug101HB5JpZ5s1GS/3ZbTTBK4Sgja+Rd
-	 YpRWi9yrl1CQmtslXPSQbTqz9dym+LPWdrEAbrI1ut7vRhAA3XDMF2Nw9zrzlglZxk
-	 kHn4YAngzJNYg==
+	b=F/k+jszodr8K+ldNlGDvfqcTDE7IXAkGWnToWKNaeI83QoIYER0NcIrO1iwrRkPz2
+	 kixinaLQdkjxROTqRaunGXpZqGE3L8dlFhpVtxlAqBYqGjfyFz22cq08TEG9+sfHBo
+	 M0wbBrFLjrTc3L+twCDmor6Df++8QMRE60mWdDVi1eRj1sFM4cJKY4dEOmzCxFTTbI
+	 wu3Ai0UGCac3Cr23bgHnffaLlXfN9DGI8gEUWHhcFEE8UiAPUDFxNk/NwrTTQoJDBx
+	 91q1frs8sK3rh7+brXl5J55gUEte1hnCFraaG+ey0H+AlzYTCB0XflT9GWw8A1PrZ9
+	 +VlT49xn4zRjA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C55E160BDF;
-	Wed, 24 Jun 2026 14:07:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id F29AA367
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D825D408EE
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQvumOhruVit for <buildroot@buildroot.org>;
- Wed, 24 Jun 2026 14:06:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C5010408AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5010408AF
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C5010408AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id E05B860B08;
+	Wed, 24 Jun 2026 14:07:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CB1F367
  for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:54 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4923fb1f095so11232075e9.1
- for <buildroot@buildroot.org>; Wed, 24 Jun 2026 07:06:54 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EA8C401CC
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id byPO-CYjHavv for <buildroot@buildroot.org>;
+ Wed, 24 Jun 2026 14:06:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D4BA40120
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D4BA40120
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2D4BA40120
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 14:06:53 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-490c0c92cffso8046315e9.2
+ for <buildroot@buildroot.org>; Wed, 24 Jun 2026 07:06:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20251104; t=1782310013; x=1782914813;
+ d=1e100.net; s=20251104; t=1782310011; x=1782914811;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=WcBggOKzgi6R67IpzfiFK7PhO4Okv0TrdjSTazJ4C0M=;
- b=J7di9pr5e2lIKyQaxta8SRaKjNgNb5+xvbflP3oos0KJ2am/I0iu3NYfaKPfzILcgd
- OxcVsHQvx/yEl19cQpGFatNY0uZcPN8QtcjjVhaIqdSHeEHDMI1Kbq5+zFGRI4WP74S1
- WLBEGT16dB1a2UxRqfkI9V+vAayUmEaG67WYYmoFWDTQmoUJJX2n1RS4ToOVn+voU9s0
- XaRWGA05VwoOfraYN5X7Kimuz/auuiLOi9LB7/3zxUyrDunEKkF3mpOD1nEpHixrI9+C
- qvmYO46wcqkTp8CfRgsvgkm9iHva6w6Yh0TKa3VIuJQaS4/Wc0+apLdtBvQFAujJjPIb
- 6XXw==
-X-Gm-Message-State: AOJu0YyxF2SkLtc/MgYfbJcuV+KP42j11ZuJKGFxqUnYqPoUA01KFJm3
- wGNIwNeape0yaULMzacpe0Hj99wJddt7gegESp2+BHyBMmFn8KikI+HJibmH5SuooEowxKxSBFD
- jd4FZ
-X-Gm-Gg: AfdE7cnIpdSF1j65FO1wZucNm9DaC2FBBgRXUT9ZWNBPyg0mfie9LE0bVOrC1RWFrQf
- Auar+BKpdhKFlFPYpBqzIEXGishmTWf5a2uf/RpqyGyAews4fpndGCu1gOEpUkCjkGBLrfGDkQH
- llklNCEg+qqY71IOrpGKBSY1oVGYC/GPs//k9i/oPqm17Qg0ppvNbP3spX2+nAHK2ll3ouubd00
- hqU1P5cIQTi8wfIpfYi8w7exfFbdgCg9opq6f9BSDS++dDYrWCnSTX8zSfp7yDi9Z3kvg1hhSHr
- nlKMSOQgI8JudaEgxMer8Kc6e6Z2D9fRVD0puKplFfg0n+MNipzaR58IW5ip/vn9Jx43Prtjpeu
- wT9nt0MbYDh1yBsz/N5NFd5xYjhRjFHU3BiR/psB4pRDHE7ornYegnmPj+Owzgob9U3mr4ipg2b
- 8SZb4usXLBx+2Mprk=
-X-Received: by 2002:a05:600c:8b32:b0:492:4a70:fa9b with SMTP id
- 5b1f17b1804b1-4925b37c0b1mr115438605e9.24.1782310012718; 
- Wed, 24 Jun 2026 07:06:52 -0700 (PDT)
-Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-49260e14d0asm43700205e9.0.2026.06.24.07.06.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ bh=q1BXhBzKzRPy1lztCfv3hvZeQUi+mgzHQTYOieYnt+M=;
+ b=Iwu5CT5UxZCsQJtYNVfgcCMMTMqPSMmeROJYwAigmxFcuz/3xrDA9R34W3WuwlA/ha
+ 5aQwHLZ/gRvpOBNuJmZV0yN1CDu+dFY2ctK5d6LKZpGnlqOEGQ/1MsdF4p2VjA+6GlJF
+ igiIFaJWALs5x8RZXJOaioDoWimq2oEhmZQgDaGsiexaOEXfTX5nx4feGdNVOBo1VNL4
+ ZY0hz9hXVfKnmrwWc2gkPoeO2t3h5Dk/jh74NiQLXuJWH1RSk0+nhQ1cNBWBT/F9NDTD
+ HM9hAPT5rWhdRkR3pBPCGaDWBJYrsPbvkfhl2//fAlTa1EcvLSGYT+vVOtrZkVKTt2bV
+ sd4A==
+X-Gm-Message-State: AOJu0YzG2La0fgtdHfMnkfQnlNqljP1jwcjtYzktveCssnlTTlRE5fGg
+ 9tyQ4KDQ4AWUsYcp3Q4pwlgcKs6FhBhvKRGsmVieFEDzUvvhjXcZTXONy79Ft5MVOsB3ZX/ItyX
+ Ikgne
+X-Gm-Gg: AfdE7ck8m1FlEP+zmG4qkaFxFw9hsVhogF10kDSo4p5lpC4IBP1H2Gor0bxmzjt2djD
+ DRHGd9lbHqbSNOry8g44CWi9ZrkrfnjP23WIL0xnLY7NGYOfI52IHG16GfqeWYYr1iRH7HzMg61
+ RfWk05UKF/SGmJcajg9r6CBCsZNFQyJHK/Pw20hZ210VBWf96L7W5sF98p17BZdQXW6Y93mOHAg
+ bof+B1+nXI3rhWp5jQi9A0xWOLsFkb3agmT0RMojhoBVXTl8Ehgu1dL7Mo3RusPRyZIxl34EpLx
+ 9hCnq96he50ziJLbRaGkiCFgjE9AMdqMvB18MRypbZ7sJdIM/LLsMAe1OC1aw+VpdU/4n4NShfL
+ Zx74PYnahhXV5rgcCVChRCd4lJ9S17pqoM2kIXLp1yfOWIHxsrOh8KjVMZAdWDih5cus+B26tUl
+ qZ9f0+
+X-Received: by 2002:a05:600c:34c2:b0:490:cf76:dea4 with SMTP id
+ 5b1f17b1804b1-49260845390mr51411045e9.2.1782310011180; 
  Wed, 24 Jun 2026 07:06:51 -0700 (PDT)
+Received: from arch ([77.109.126.38]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-49260e14d0asm43700205e9.0.2026.06.24.07.06.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 24 Jun 2026 07:06:50 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 24 Jun 2026 16:06:39 +0200
-Message-ID: <20260624140645.185318-9-thomas.perale@mind.be>
+Date: Wed, 24 Jun 2026 16:06:37 +0200
+Message-ID: <20260624140645.185318-7-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260624140645.185318-1-thomas.perale@mind.be>
 References: <20260624140645.185318-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1782310013; x=1782914813; darn=buildroot.org;
+ d=mind.be; s=google; t=1782310011; x=1782914811; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=WcBggOKzgi6R67IpzfiFK7PhO4Okv0TrdjSTazJ4C0M=;
- b=Jo32FczNIlS2AWSggjklqAUb7uBTRpbnR+De8VxPTFg01IkJxLGE//BQ1sM4Jw3aYC
- SDnttrgsQ+X8UZ29gXcbzjko7VYy0Qdf5GuLwhTR1cSWhXXT8wBOAOpKukro4ommKmxJ
- jAyQ94hejXxCV0sZmp4yMzVVhJmlMwyzb9d8mLPcgMallhrbxx4Ba+Zzm9TVtGJOEAsp
- nUvN8MU6PonEepoujaY8cW9bTvIUDV6+2fMMbvVeG9b5qA6nyjiMaB6UGVpplIhA0b0y
- yYb2boYtmPZo0x+m2ZBe56bgCFVTKCmKFjbuFlCOHrd1Ih4CfF4GN1cJOdUbPpDSBAEz
- R88g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=q1BXhBzKzRPy1lztCfv3hvZeQUi+mgzHQTYOieYnt+M=;
+ b=V9/aJXLmrzswxcNVrUKafYUT3Ag2cekB+Ac7gu9SClyuUoGFGXXAClZICF+MSW1BSY
+ 3T5r6VDDwDPgl8tdIolHW0RuKlDUccgGI6FEgldw2jnxHqhN3KrMTbaTMytg2TopfjyE
+ d2Pi4bkUtodbfET+S6IchPH4buGCGfDRDawjR8VHvtvI6CSWAku7/bMAx+Zf3HO4Z5zU
+ x7/WHSMy0T/vz4vceOzjzBcz7rD4smSmo5vsBonEyHFi3IW4mi69G8JyPuqQopGUgJ0F
+ +kDVQ8c3WiAdtRpHa+mx/dZjNfNSmvKd8RynQVgpTfmDCBTSrv+jNY4DY2k3tlPOCgCQ
+ gTPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Jo32FczN
-Subject: [Buildroot] [RFC PATCH 08/14] package/python-pip: add detail to
- vulnerability
+ header.a=rsa-sha256 header.s=google header.b=V9/aJXLm
+Subject: [Buildroot] [RFC PATCH 06/14] package/php: add vulnerability details
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,31 +128,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The vulnerability is marked as fixed as it work as expected according to
-the upstream project.
+Mark the vulnerability as 'not-affected-vulnerable-code-not-present' as
+the vulnerability only affect windows systems.
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-pip/python-pip.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/php/php.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index d12bea3225..ae9a4225eb 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -12,9 +12,10 @@ PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
- PYTHON_PIP_CPE_ID_VENDOR = pypa
- PYTHON_PIP_CPE_ID_PRODUCT = pip
--# Disputed CVE: things work as designed, and only affects the
--# --extra-index-url option. This CVE will never be fixed.
-+
- PYTHON_PIP_IGNORE_CVES += CVE-2018-20225
-+PYTHON_PIP_CVE-2018-20225_STATUS = fixed
-+PYTHON_PIP_CVE-2018-20225_DETAIL = Disputed CVE: things work as designed, and only affects the --extra-index-url option. This CVE will never be fixed.
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0bfb12a8eb..6160248c51 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -15,8 +15,9 @@ PHP_LICENSE = PHP-3.01
+ PHP_LICENSE_FILES = LICENSE
+ PHP_CPE_ID_VENDOR = php
  
- $(eval $(python-package))
- $(eval $(host-python-package))
+-# Only affects the Windows operating system
+ PHP_IGNORE_CVES += CVE-2024-3566
++PHP_CVE-2024-3566_STATUS = not-affected-vulnerable-code-not-present
++PHP_CVE-2024-3566_DETAIL = Only affects the Windows operating system but cve.py doesn't support environment check
+ 
+ PHP_CONF_OPTS = \
+ 	--mandir=/usr/share/man \
 -- 
 2.54.0
 
